@@ -14,6 +14,7 @@ var _agentAsisstSocket = null;
 var _agentAssistComponents = {};
 var agentAssistSocketUrl ="https://dev-smartassist.kore.ai"
 var btnCount = 0;
+var _userTranscript = false;
 
 function koreGenerateUUID() {
         console.info("generating UUID");
@@ -30,6 +31,7 @@ function koreGenerateUUID() {
     }
 window._agentAssisteventListenerAdded = false;
 window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId, _botId) {
+    _userTranscript = false;
     console.log("AgentAssist >>> no of agent assist instances", _agentAssistComponents);
     if (!window._agentAssisteventListenerAdded) {
         btnInit();
@@ -141,7 +143,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             btnList.innerHTML += iHtml;
         }
     }
-    var _userTranscript = false;
     function btnInit() {
         document.addEventListener("click", (evt) => {
             var target = evt.target;
