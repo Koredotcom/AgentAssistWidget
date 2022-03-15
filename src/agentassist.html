@@ -13,26 +13,26 @@
 
         </div>
 
-        <div id="agentassist-maincontainer2" style="width: 30%;padding-right: 10px;">
+        <!-- <div id="agentassist-maincontainer2" style="width: 30%;padding-right: 10px;">
 
         </div>
         <div id="agentassist-maincontainer3" style="width: 30%;">
 
-        </div>
+        </div> -->
     </div>
 
     <script type="text/javascript">
-        var a1 = new AgentAssist('agentassist-maincontainer', 'conv1', 'user1', 'st-6e9d43c3-33f6-5b44-a8c3-5dfe5d08ffd1');
-        var a2 = new AgentAssist('agentassist-maincontainer2', 'conv200', 'user100', 'st-6e9d43c3-33f6-5b44-a8c3-5dfe5d08ffd1');
-        var a3 = new AgentAssist('agentassist-maincontainer3', 'conv3', 'user1', 'st-6e9d43c3-33f6-5b44-a8c3-5dfe5d08ffd1');
-        a1.getPubSub().subscribe('agent_assist_text', (msg, data) => {
-            console.log(data);
-        })
-        setTimeout(() => {
-            a1.sendText("hello");
-            a2.sendText("what is my balance");
-            a3.runIntent("what is my balance");
-        }, 2000);
+        var a1 = new AgentAssist('agentassist-maincontainer', '9849254208', 'user100', 'st-6e9d43c3-33f6-5b44-a8c3-5dfe5d08ffd1');
+        // var a2 = new AgentAssist('agentassist-maincontainer2', 'conv200', 'user100', 'st-6e9d43c3-33f6-5b44-a8c3-5dfe5d08ffd1');
+        // var a3 = new AgentAssist('agentassist-maincontainer3', 'conv3', 'user1', 'st-6e9d43c3-33f6-5b44-a8c3-5dfe5d08ffd1');
+        // a1.getPubSub().subscribe('agent_assist_text', (msg, data) => {
+        //     console.log(data);
+        // })
+        // setTimeout(() => {
+        //     a1.sendText("hello");
+        //     a2.sendText("what is my balance");
+        //     a3.runIntent("what is my balance");
+        // }, 2000);
     </script>
 </body>
 
