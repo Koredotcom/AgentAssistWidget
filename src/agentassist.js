@@ -141,9 +141,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             btnList.innerHTML += iHtml;
         }
     }
+    var _userTranscript = false;
     function btnInit() {
         document.addEventListener("click", (evt) => {
             var target = evt.target;
+            if (target.id === 'userTranscript') {
+                _userTranscript=  target.checked;
+                return;
+            }
            // console.log("inside click event of ", target);
             var sendButton = target.dataset.asSend;
             var copyButton = target.dataset.asCopy;
@@ -193,6 +198,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         window._agentAssisteventListenerAdded = true;
     }
     function processUserMessage(data, _conversationId, botId, user) {
+        if (!_userTranscript) {
+            return;
+        }
         console.log("AgentAssist >>> processUserMessage", data, _conversationId, botId, user);
         var mainText = data.value;
         if (!mainText && mainText.length === 0) {
@@ -404,8 +412,24 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                                 
                             </ul>
                             -->
-                            Agent Assist
-                        </div>
+                            <div class="title-bar">
+                                <div class="top-title">
+                                    Agent Assist
+                                </div>
+                                <!-- Rounded switch -->
+                                <div class="switch-container">
+                                    <div class="user-transcript">
+                                        User Transcript
+                                    </div>
+                                    <div>
+                                        <label class="switch">
+                                            <input type="checkbox" id="userTranscript">
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        
                         <div class="tab-content">
                                             <div id="botlist-${conversationId}" data-conversation-id="${conversationId}" style="overflow-y:scroll;height:80%;padding-right:10px" class="tab-pane fade active show">
                                 <!-- all text messages will be appended here -->
