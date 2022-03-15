@@ -417,7 +417,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                                     Agent Assist
                                 </div>
                                 <!-- Rounded switch -->
-                                <div class="switch-container">
+                                <div class="switch-container" style="left:calc(100% - 264px)">
                                     <div class="user-transcript">
                                         User Transcript
                                     </div>

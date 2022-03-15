@@ -190,7 +190,7 @@ li {
   .switch-container {
       display:flex;
       position: relative;
-      left: calc(100% - 264px)
+      
   }
   .user-transcript {
       margin-right: 10px;
