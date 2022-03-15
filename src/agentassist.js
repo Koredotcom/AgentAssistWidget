@@ -36,10 +36,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
     }
     var _agentAssistDataObj = this;
     var publicAPIs = {};
-    _agentAssistDataObj.botId = _botId;
-    _agentAssistDataObj.userId = _userId;
-    _agentAssistDataObj.containerId = containerId;
-    _agentAssistDataObj.conversationId = _conversationId;
+
+    publicAPIs.botId = _agentAssistDataObj.botId = _botId;
+    publicAPIs.userId = _agentAssistDataObj.userId = _userId;
+    publicAPIs.containerId = _agentAssistDataObj.containerId = containerId;
+    publicAPIs._conversationId = _agentAssistDataObj.conversationId = _conversationId;
 
     if (!_agentAssistComponents[_agentAssistDataObj.conversationId]) {
         _agentAssistComponents[_agentAssistDataObj.conversationId] = _agentAssistDataObj;
@@ -58,7 +59,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             console.log("AgentAssist >>> socket connected")
         });
         _agentAsisstSocket.on('agent_assist_response', (data) => {
-            processAgentAssistResponse(data, data.conversationId, _agentAssistDataObj.botId, _agentAssistDataObj.userId);
+            processAgentAssistResponse(data, data.conversationId, _botId, _agentAssistDataObj.userId);
+        })
+        _agentAsisstSocket.on('user_message', (data) => {
+            processUserMessage(data, data.conversationId, _botId, _agentAssistDataObj.userId);
         })
     }
     console.log("AgentAssist >>> creating container for user", _agentAssistDataObj.userId)
@@ -126,7 +130,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                     <div  class="intent-info-text">"${data.value}"</div>
                     <div  class="d-flex align-items-center justify-content-between">
                         <div  class="intent-tag col-9 p-0">${data.intentName}</div>
-                        <div data-conv-id="${data.conversationId}" data-bot-id="${data.botId}" data-intent-name="${data.intentName}" data-agent-id=${data.agentId} data-run="true" class="run" >Run</div>
+                        <div data-conv-id="${data.conversationId}" data-bot-id="${_botId}" data-intent-name="${data.intentName}" data-agent-id=${data.agentId} data-run="true" class="run" >Run</div>
                     </div>
                 </div>
         
@@ -187,6 +191,128 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             }
         })
         window._agentAssisteventListenerAdded = true;
+    }
+    function processUserMessage(data, _conversationId, botId, user) {
+        console.log("AgentAssist >>> processUserMessage", data, _conversationId, botId, user);
+        var mainText = data.value;
+        if (!mainText && mainText.length === 0) {
+            return;
+        }
+        var convId = data.conversationId;
+        var btnList = document.getElementById('botlist-' + convId);
+        if (!btnList) {
+            console.log(`AgentAssist >>> botlist-${convId} not found, creating it`)
+            createAgentAssistContainer(containerId, convId, botId, userId);
+            btnList = document.getElementById('botlist-' + convId);
+        }
+        
+            //clearNode(btnList);
+            var btnListHtml = `
+                <div class="logo-with-desc-text">
+                    <img src="data:image/svg+xml;base64,${agentLogo}">
+                    <span class="text_info">${mainText}</span>
+                </div>`;
+            btnList.innerHTML += btnListHtml;
+    }
+    
+    function clearNode(node) {
+        while (node.firstChild) {
+            node.removeChild(node.lastChild);
+        }
+    }
+    function createAgentAssistContainer(containerId, conversationId, botId, userId) {
+        console.log("AgentAssist >>> finding container ", containerId);
+        console.log("AgentAssist >>> userId in createAgentAssistContainer", containerId, conversationId, userId, botId)
+        var container = document.getElementById(containerId);
+        if (container) {
+            console.log("AgentAssist >>> found container", container);
+            var cHtml = `<div class="agent-with-bots">
+                <div class="inner-bots-container">
+                    <div class="agent-bot-types">
+                        <div class="bot-list-accr">
+                        <!--
+                            <ul class="nav nav-tabs">
+                                <li placement="top-center" tooltipclass="tooltip-global-">
+                                    <a data-toggle="tab" href="#botlist" class="active">
+                                        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIiIGhlaWdodD0iMTIiIHZpZXdCb3g9IjAgMCAxMiAxMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTAuNDkyMjQ5IDYuMDU0MjFlLTA1QzAuNDI2NTg3IDAuMDAxMDczODMgMC4zNjE3NzEgMC4wMTQ4NjkgMC4zMDE1IDAuMDQwNjU4MUMwLjI0MTIyOSAwLjA2NjQ0NzMgMC4xODY2ODQgMC4xMDM3MjUgMC4xNDA5OCAwLjE1MDM2NEMwLjA5NTI3NjEgMC4xOTcwMDMgMC4wNTkzMDc3IDAuMjUyMDg4IDAuMDM1MTI4OCAwLjMxMjQ3NkMwLjAxMDk0OTggMC4zNzI4NjMgLTAuMDAwOTY2MiAwLjQzNzM2OSA2LjEyMDY5ZS0wNSAwLjUwMjMxMlY2LjQzNjZWMTAuNTE2NEMtMC4wMDAxMzk1ODMgMTAuNjA0NiAwLjAyMzQ3MzQgMTAuNjkxMSAwLjA2ODQ1NzEgMTAuNzY3MkMwLjExMzQ0MSAxMC44NDMzIDAuMTc4MTYxIDEwLjkwNjEgMC4yNTU5MjEgMTAuOTQ5MUMwLjI1NTkyMSAxMC45NDkxIDAuNzczNDI3IDExLjIyOTUgMS43MjY2MiAxMS40ODgxQzIuNjc5ODIgMTEuNzQ2NyA0LjEwMTExIDEyIDYuMDAwMDYgMTJDNy44OTkwMSAxMiA5LjMyMDMgMTEuNzQ2NyAxMC4yNzM1IDExLjQ4ODFDMTEuMjI2NyAxMS4yMjk1IDExLjc0NDIgMTAuOTQ5MSAxMS43NDQyIDEwLjk0OTFDMTEuODIyIDEwLjkwNjEgMTEuODg2NyAxMC44NDMzIDExLjkzMTcgMTAuNzY3MkMxMS45NzY2IDEwLjY5MTEgMTIuMDAwMyAxMC42MDQ2IDEyLjAwMDEgMTAuNTE2NFY3LjA2NDQyQzEyLjAwMDUgNy4wNTI4MyAxMi4wMDA1IDcuMDQxMjMgMTIuMDAwMSA3LjAyOTY0VjUuOTQyMDhWMC41MDIzMTJDMTIuMDAxMSAwLjQzNjA2OSAxMS45ODg3IDAuMzcwMjkzIDExLjk2MzUgMC4zMDg4ODlDMTEuOTM4NCAwLjI0NzQ4NSAxMS45MDEgMC4xOTE3MDQgMTEuODUzNyAwLjE0NDg1N0MxMS44MDYzIDAuMDk4MDExIDExLjc0OTkgMC4wNjEwNTQxIDExLjY4NzggMC4wMzYxODA2QzExLjYyNTcgMC4wMTEzMDcxIDExLjU1OTIgLTAuMDAwOTc1OTQyIDExLjQ5MjIgNi4wNTQyMWUtMDVDMTEuNDI2NiAwLjAwMTA3Mzc3IDExLjM2MTggMC4wMTQ4Njg4IDExLjMwMTUgMC4wNDA2NTc5QzExLjI0MTIgMC4wNjY0NDcgMTEuMTg2NyAwLjEwMzcyNSAxMS4xNDEgMC4xNTAzNjRDMTEuMDk1MyAwLjE5NzAwMiAxMS4wNTkzIDAuMjUyMDg4IDExLjAzNTEgMC4zMTI0NzZDMTEuMDEwOSAwLjM3Mjg2MyAxMC45OTkgMC40MzczNjkgMTEuMDAwMSAwLjUwMjMxMlYyLjY5MDk3QzkuOTUyNDYgMS4xNDI5NyA4LjE4MjU4IDAuMTA2NTUxIDYuMTc3OCAwLjA0NDQ5MDVDNi4xMjEzMSAwLjAyMTYzMTUgNi4wNjEwNyAwLjAwOTE5MjEzIDYuMDAwMDYgMC4wMDc3ODc0OEMzLjkxOTMyIDAuMDA3Nzg3NDggMi4wNzc0NyAxLjA3MjgyIDEuMDAwMDYgMi42Nzc0NVYwLjUwMjMxMkMxLjAwMTExIDAuNDM2MDY5IDAuOTg4NjkgMC4zNzAyOTMgMC45NjM1NDEgMC4zMDg4ODlDMC45MzgzOTIgMC4yNDc0ODUgMC45MDEwMjYgMC4xOTE3MDQgMC44NTM2NjEgMC4xNDQ4NTdDMC44MDYyOTYgMC4wOTgwMTA4IDAuNzQ5ODk3IDAuMDYxMDU0MSAwLjY4NzgxMyAwLjAzNjE4MDZDMC42MjU3MjkgMC4wMTEzMDcxIDAuNTU5MjI1IC0wLjAwMDk3NjAwOSAwLjQ5MjI0OSA2LjA1NDIxZS0wNVpNNi4wMDAwNiAwLjk5NjgzNkM4Ljc1MjMzIDAuOTk2ODM2IDExLjAwMDEgMy4yMTk5NSAxMS4wMDAxIDUuOTQyMDhWNy4wMjk2NFYxMC4xNzY0QzEwLjg3MjkgMTAuMjM5NyAxMC42OTkzIDEwLjM0NjMgMTAuMDA3OSAxMC41MzM4QzkuMTM4MDcgMTAuNzY5OCA3LjgwOTExIDExLjAxMSA2LjAwMDA2IDExLjAxMUM0LjE5MTAxIDExLjAxMSAyLjg2MjA1IDEwLjc2OTggMS45OTIyNSAxMC41MzM4QzEuMzAwODYgMTAuMzQ2MyAxLjEyNzIxIDEwLjIzOTcgMS4wMDAwNiAxMC4xNzY0VjYuNDcxMzdDMS4wMDA0NyA2LjQ1OTc5IDEuMDAwNDcgNi40NDgxOSAxLjAwMDA2IDYuNDM2NlY1Ljk0MjA4QzEuMDAwMDYgMy4yMTk5NSAzLjI0Nzc5IDAuOTk2ODM2IDYuMDAwMDYgMC45OTY4MzZaTTMuNTAwMDYgNC45NTMwM0MyLjY3NTA2IDQuOTUzMDMgMi4wMDAwNiA1LjYyMDY0IDIuMDAwMDYgNi40MzY2QzIuMDAwMDYgNy4yNTI1NyAyLjY3NTA2IDcuOTIwMTggMy41MDAwNiA3LjkyMDE4SDguNTAwMDZDOS4zMjUwNiA3LjkyMDE4IDEwLjAwMDEgNy4yNTI1NyAxMC4wMDAxIDYuNDM2NkMxMC4wMDAxIDUuNjIwNjQgOS4zMjUwNiA0Ljk1MzAzIDguNTAwMDYgNC45NTMwM0gzLjUwMDA2Wk0zLjQ3NjYyIDUuOTQyMDhDMy43NTI2MiA1Ljk0MjA4IDMuOTc2NjIgNi4xNjM2MyAzLjk3NjYyIDYuNDM2NkMzLjk3NjYyIDYuNzA5NTggMy43NTM2MiA2LjkzMTEzIDMuNDc2NjIgNi45MzExM0MzLjIwMDYyIDYuOTMxMTMgMi45NzY2MiA2LjcwOTU4IDIuOTc2NjIgNi40MzY2QzIuOTc2NjIgNi4xNjM2MyAzLjIwMDYyIDUuOTQyMDggMy40NzY2MiA1Ljk0MjA4Wk04LjUwMDA2IDUuOTQyMDhDOC43NzYwNiA1Ljk0MjA4IDkuMDAwMDYgNi4xNjM2MyA5LjAwMDA2IDYuNDM2NkM5LjAwMDA2IDYuNzA5NTggOC43NzYwNiA2LjkzMTEzIDguNTAwMDYgNi45MzExM0M4LjIyNDA2IDYuOTMxMTMgOC4wMDAwNiA2LjcwOTU4IDguMDAwMDYgNi40MzY2QzguMDAwMDYgNi4xNjM2MyA4LjIyNDA2IDUuOTQyMDggOC41MDAwNiA1Ljk0MjA4WiIgZmlsbD0iIzIwMjEyNCIvPgo8L3N2Zz4K" class="inactive-img">
+                                        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIiIGhlaWdodD0iMTIiIHZpZXdCb3g9IjAgMCAxMiAxMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTAuNDkyMjQ5IDYuMDU0MjFlLTA1QzAuNDI2NTg3IDAuMDAxMDczODMgMC4zNjE3NzEgMC4wMTQ4NjkgMC4zMDE1IDAuMDQwNjU4MUMwLjI0MTIyOSAwLjA2NjQ0NzMgMC4xODY2ODQgMC4xMDM3MjUgMC4xNDA5OCAwLjE1MDM2NEMwLjA5NTI3NjEgMC4xOTcwMDMgMC4wNTkzMDc3IDAuMjUyMDg4IDAuMDM1MTI4OCAwLjMxMjQ3NkMwLjAxMDk0OTggMC4zNzI4NjMgLTAuMDAwOTY2MiAwLjQzNzM2OSA2LjEyMDY5ZS0wNSAwLjUwMjMxMlY2LjQzNjZWMTAuNTE2NEMtMC4wMDAxMzk1ODMgMTAuNjA0NiAwLjAyMzQ3MzQgMTAuNjkxMSAwLjA2ODQ1NzEgMTAuNzY3MkMwLjExMzQ0MSAxMC44NDMzIDAuMTc4MTYxIDEwLjkwNjEgMC4yNTU5MjEgMTAuOTQ5MUMwLjI1NTkyMSAxMC45NDkxIDAuNzczNDI3IDExLjIyOTUgMS43MjY2MiAxMS40ODgxQzIuNjc5ODIgMTEuNzQ2NyA0LjEwMTExIDEyIDYuMDAwMDYgMTJDNy44OTkwMSAxMiA5LjMyMDMgMTEuNzQ2NyAxMC4yNzM1IDExLjQ4ODFDMTEuMjI2NyAxMS4yMjk1IDExLjc0NDIgMTAuOTQ5MSAxMS43NDQyIDEwLjk0OTFDMTEuODIyIDEwLjkwNjEgMTEuODg2NyAxMC44NDMzIDExLjkzMTcgMTAuNzY3MkMxMS45NzY2IDEwLjY5MTEgMTIuMDAwMyAxMC42MDQ2IDEyLjAwMDEgMTAuNTE2NFY3LjA2NDQyQzEyLjAwMDUgNy4wNTI4MyAxMi4wMDA1IDcuMDQxMjMgMTIuMDAwMSA3LjAyOTY0VjUuOTQyMDhWMC41MDIzMTJDMTIuMDAxMSAwLjQzNjA2OSAxMS45ODg3IDAuMzcwMjkzIDExLjk2MzUgMC4zMDg4ODlDMTEuOTM4NCAwLjI0NzQ4NSAxMS45MDEgMC4xOTE3MDQgMTEuODUzNyAwLjE0NDg1N0MxMS44MDYzIDAuMDk4MDExIDExLjc0OTkgMC4wNjEwNTQxIDExLjY4NzggMC4wMzYxODA2QzExLjYyNTcgMC4wMTEzMDcxIDExLjU1OTIgLTAuMDAwOTc1OTQyIDExLjQ5MjIgNi4wNTQyMWUtMDVDMTEuNDI2NiAwLjAwMTA3Mzc3IDExLjM2MTggMC4wMTQ4Njg4IDExLjMwMTUgMC4wNDA2NTc5QzExLjI0MTIgMC4wNjY0NDcgMTEuMTg2NyAwLjEwMzcyNSAxMS4xNDEgMC4xNTAzNjRDMTEuMDk1MyAwLjE5NzAwMiAxMS4wNTkzIDAuMjUyMDg4IDExLjAzNTEgMC4zMTI0NzZDMTEuMDEwOSAwLjM3Mjg2MyAxMC45OTkgMC40MzczNjkgMTEuMDAwMSAwLjUwMjMxMlYyLjY5MDk3QzkuOTUyNDYgMS4xNDI5NyA4LjE4MjU4IDAuMTA2NTUxIDYuMTc3OCAwLjA0NDQ5MDVDNi4xMjEzMSAwLjAyMTYzMTUgNi4wNjEwNyAwLjAwOTE5MjEzIDYuMDAwMDYgMC4wMDc3ODc0OEMzLjkxOTMyIDAuMDA3Nzg3NDggMi4wNzc0NyAxLjA3MjgyIDEuMDAwMDYgMi42Nzc0NVYwLjUwMjMxMkMxLjAwMTExIDAuNDM2MDY5IDAuOTg4NjkgMC4zNzAyOTMgMC45NjM1NDEgMC4zMDg4ODlDMC45MzgzOTIgMC4yNDc0ODUgMC45MDEwMjYgMC4xOTE3MDQgMC44NTM2NjEgMC4xNDQ4NTdDMC44MDYyOTYgMC4wOTgwMTA4IDAuNzQ5ODk3IDAuMDYxMDU0MSAwLjY4NzgxMyAwLjAzNjE4MDZDMC42MjU3MjkgMC4wMTEzMDcxIDAuNTU5MjI1IC0wLjAwMDk3NjAwOSAwLjQ5MjI0OSA2LjA1NDIxZS0wNVpNNi4wMDAwNiAwLjk5NjgzNkM4Ljc1MjMzIDAuOTk2ODM2IDExLjAwMDEgMy4yMTk5NSAxMS4wMDAxIDUuOTQyMDhWNy4wMjk2NFYxMC4xNzY0QzEwLjg3MjkgMTAuMjM5NyAxMC42OTkzIDEwLjM0NjMgMTAuMDA3OSAxMC41MzM4QzkuMTM4MDcgMTAuNzY5OCA3LjgwOTExIDExLjAxMSA2LjAwMDA2IDExLjAxMUM0LjE5MTAxIDExLjAxMSAyLjg2MjA1IDEwLjc2OTggMS45OTIyNSAxMC41MzM4QzEuMzAwODYgMTAuMzQ2MyAxLjEyNzIxIDEwLjIzOTcgMS4wMDAwNiAxMC4xNzY0VjYuNDcxMzdDMS4wMDA0NyA2LjQ1OTc5IDEuMDAwNDcgNi40NDgxOSAxLjAwMDA2IDYuNDM2NlY1Ljk0MjA4QzEuMDAwMDYgMy4yMTk5NSAzLjI0Nzc5IDAuOTk2ODM2IDYuMDAwMDYgMC45OTY4MzZaTTMuNTAwMDYgNC45NTMwM0MyLjY3NTA2IDQuOTUzMDMgMi4wMDAwNiA1LjYyMDY0IDIuMDAwMDYgNi40MzY2QzIuMDAwMDYgNy4yNTI1NyAyLjY3NTA2IDcuOTIwMTggMy41MDAwNiA3LjkyMDE4SDguNTAwMDZDOS4zMjUwNiA3LjkyMDE4IDEwLjAwMDEgNy4yNTI1NyAxMC4wMDAxIDYuNDM2NkMxMC4wMDAxIDUuNjIwNjQgOS4zMjUwNiA0Ljk1MzAzIDguNTAwMDYgNC45NTMwM0gzLjUwMDA2Wk0zLjQ3NjYyIDUuOTQyMDhDMy43NTI2MiA1Ljk0MjA4IDMuOTc2NjIgNi4xNjM2MyAzLjk3NjYyIDYuNDM2NkMzLjk3NjYyIDYuNzA5NTggMy43NTM2MiA2LjkzMTEzIDMuNDc2NjIgNi45MzExM0MzLjIwMDYyIDYuOTMxMTMgMi45NzY2MiA2LjcwOTU4IDIuOTc2NjIgNi40MzY2QzIuOTc2NjIgNi4xNjM2MyAzLjIwMDYyIDUuOTQyMDggMy40NzY2MiA1Ljk0MjA4Wk04LjUwMDA2IDUuOTQyMDhDOC43NzYwNiA1Ljk0MjA4IDkuMDAwMDYgNi4xNjM2MyA5LjAwMDA2IDYuNDM2NkM5LjAwMDA2IDYuNzA5NTggOC43NzYwNiA2LjkzMTEzIDguNTAwMDYgNi45MzExM0M4LjIyNDA2IDYuOTMxMTMgOC4wMDAwNiA2LjcwOTU4IDguMDAwMDYgNi40MzY2QzguMDAwMDYgNi4xNjM2MyA4LjIyNDA2IDUuOTQyMDggOC41MDAwNiA1Ljk0MjA4WiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+Cg==" class="active-img">
+                                    </a>
+                                    <div class="kr-sg-checkbox">
+                                        <input id="checkbox-100" type="checkbox"
+                                            class="checkbox-custom ng-untouched ng-pristine ng-valid">
+                                        <label for="checkbox-100" class="checkbox-custom-label">Auto Suggestion off</label>
+                                    </div>
+                                    
+                                </li>
+                                
+                                <li placement="top-center" tooltipclass="tooltip-global-" class="">
+                                    <a data-toggle="tab" href="#listaccr" class="">
+                                        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTIgMi41QzEuNzIzODYgMi41IDEuNSAyLjcyMzg2IDEuNSAzQzEuNSAzLjI3NjE0IDEuNzIzODYgMy41IDIgMy41SDE0QzE0LjI3NjEgMy41IDE0LjUgMy4yNzYxNCAxNC41IDNDMTQuNSAyLjcyMzg2IDE0LjI3NjEgMi41IDE0IDIuNUgyWk0yIDcuNUMxLjcyMzg2IDcuNSAxLjUgNy43MjM4NiAxLjUgOEMxLjUgOC4yNzYxNCAxLjcyMzg2IDguNSAyIDguNUgxNEMxNC4yNzYxIDguNSAxNC41IDguMjc2MTQgMTQuNSA4QzE0LjUgNy43MjM4NiAxNC4yNzYxIDcuNSAxNCA3LjVIMlpNMiAxMi41QzEuNzIzODYgMTIuNSAxLjUgMTIuNzIzOSAxLjUgMTNDMS41IDEzLjI3NjEgMS43MjM4NiAxMy41IDIgMTMuNUgxNEMxNC4yNzYxIDEzLjUgMTQuNSAxMy4yNzYxIDE0LjUgMTNDMTQuNSAxMi43MjM5IDE0LjI3NjEgMTIuNSAxNCAxMi41SDJaIiBmaWxsPSIjMjAyMTI0Ii8+Cjwvc3ZnPgo="
+                                            class="inactive-img">
+                                        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTIgMi41QzEuNzIzODYgMi41IDEuNSAyLjcyMzg2IDEuNSAzQzEuNSAzLjI3NjE0IDEuNzIzODYgMy41IDIgMy41SDE0QzE0LjI3NjEgMy41IDE0LjUgMy4yNzYxNCAxNC41IDNDMTQuNSAyLjcyMzg2IDE0LjI3NjEgMi41IDE0IDIuNUgyWk0yIDcuNUMxLjcyMzg2IDcuNSAxLjUgNy43MjM4NiAxLjUgOEMxLjUgOC4yNzYxNCAxLjcyMzg2IDguNSAyIDguNUgxNEMxNC4yNzYxIDguNSAxNC41IDguMjc2MTQgMTQuNSA4QzE0LjUgNy43MjM4NiAxNC4yNzYxIDcuNSAxNCA3LjVIMlpNMiAxMi41QzEuNzIzODYgMTIuNSAxLjUgMTIuNzIzOSAxLjUgMTNDMS41IDEzLjI3NjEgMS43MjM4NiAxMy41IDIgMTMuNUgxNEMxNC4yNzYxIDEzLjUgMTQuNSAxMy4yNzYxIDE0LjUgMTNDMTQuNSAxMi43MjM5IDE0LjI3NjEgMTIuNSAxNCAxMi41SDJaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4K"
+                                            class="active-img">
+                                    </a>
+                                </li>
+                                
+                            </ul>
+                            -->
+                            Agent Assist
+                        </div>
+                        <div class="tab-content">
+                                            <div id="botlist-${conversationId}" data-conversation-id="${conversationId}" style="overflow-y:scroll;height:80%;padding-right:10px" class="tab-pane fade active show">
+                                <!-- all text messages will be appended here -->
+
+                            </div>
+                            <!-- <div id="listaccr" class="tab-pane fade">
+                                <div id="accordion" class="">
+                                    <div class="card-">
+                                        <div class="card_header">
+                                            <a data-toggle="collapse" href="#collapseOne" class="collapsed card_link col-12">
+                                                <div title="" class="title-name col-10 text-truncate">Business Inquiry</div>
+                                                <div class="count col-2">1</div>
+                                            </a>
+                                        </div>
+                                        <div id="collapseOne" class="collapse show">
+                                            <div class="card-body">
+                                                <div class="item-list">
+                                                    close account
+                                                </div>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-">
+                                        <div class="card_header">
+                                            <a data-toggle="collapse" href="#collapseOne" class="collapsed card_link col-12">
+                                                <div title="" class="title-name col-10 text-truncate">General Information</div>
+                                                <div class="count col-2">1</div>
+                                            </a>
+                                        </div>
+                                        <div id="collapseOne" class="collapse show">
+                                            <div class="card-body">
+                                                <div class="item-list">
+                                                    what is my balance
+                                                </div>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+                <div class="kr-sg-input-text ask-input-assist">
+                     <input tabindex="0" type="text" id="input-${conversationId}" data-user-id="${userId}" data-bot-id="${_botId}" data-conv-id="${conversationId}" 
+                         data-agent-assist-input="true" class="input-text" placeholder="Ask Agent Assist..." style="width: calc(100% - 14px);">
+                </div>
+            </div>`;
+            console.log("AgentAssist >>> adding html")
+            container.innerHTML = cHtml;
+        } else {
+            console.log(`AgentAssist >>> container ${containerId} not found`)
+        }
     }
     function addButtons(data, _conversationId, botId, userId) {
         console.log("AgentAssist >>> addingButton", data);
@@ -281,7 +407,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                             Agent Assist
                         </div>
                         <div class="tab-content">
-                                            <div id="botlist-${conversationId}" data-conversation-id="${conversationId}" style="overflow:scroll;height:96%" class="tab-pane fade active show">
+                                            <div id="botlist-${conversationId}" data-conversation-id="${conversationId}" style="overflow-y:scroll;height:80%;padding-right:10px" class="tab-pane fade active show">
                                 <!-- all text messages will be appended here -->
 
                             </div>
@@ -326,8 +452,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                     </div>
                 </div>
                 <div class="kr-sg-input-text ask-input-assist">
-                     <input tabindex="0" type="text" id="input-${conversationId}" data-user-id="${userId}" data-bot-id="${botId}" data-conv-id="${conversationId}" 
-                         data-agent-assist-input="true" class="input-text" placeholder="Ask Agent Assist...">
+                     <input tabindex="0" type="text" id="input-${conversationId}" data-user-id="${userId}" data-bot-id="${_botId}" data-conv-id="${conversationId}" 
+                         data-agent-assist-input="true" class="input-text" placeholder="Ask Agent Assist..." style="width: calc(100% - 14px);">
                 </div>
             </div>`;
             console.log("AgentAssist >>> adding html")
@@ -369,10 +495,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         return AgentAssistPubSub;
     }
     publicAPIs.sendText = function(value) {
-        AgentAssistPubSub.publish('agent_assist_send_text', {conversationId:_agentAssistDataObj.conversationId, agentId: _agentAssistDataObj.userId, botId: _agentAssistDataObj.botId, value : value })
+        AgentAssistPubSub.publish('agent_assist_send_text', {conversationId:_agentAssistDataObj.conversationId, agentId: _agentAssistDataObj.userId, botId: _botId, value : value })
     }
     publicAPIs.runIntent = function(value) {
-        AgentAssistPubSub.publish('agent_assist_send_text', {conversationId:_agentAssistDataObj.conversationId, agentId: _agentAssistDataObj.userId, botId: _agentAssistDataObj.botId, value : value, intentName:value })
+        AgentAssistPubSub.publish('agent_assist_send_text', {conversationId:_agentAssistDataObj.conversationId, agentId: _agentAssistDataObj.userId, botId: _botId, value : value, intentName:value })
     }
 
     return publicAPIs;
