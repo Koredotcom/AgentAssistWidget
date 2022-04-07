@@ -1,0 +1,28 @@
+<div class="unidentified-utter-wrapper">
+  <div class="utter-header">
+    {{"ANALYTICS.UNIDENTIFIED_UTTERANCES" | translate }}
+    <div class="info-icon">
+      <img src="assets/images/dashboard-icons/Info.svg">
+      <span class="tooltiptext">{{"UNIDENTIFIED_UTTER.VIRTUAL_ASSIST_COULDNT_IDENTIFY_INTENT" | translate}}</span>
+    </div>
+  </div>
+  <div class="utter-body">
+    <div class="utter-list">
+      <div class="list-ele" *ngFor="let utter of utterancesToShow; let i=index">
+        <div (click)="scrollChat(utter.messageStoreId)" *ngIf="utter.status != 'divide'">
+          {{utter.userInput}}
+        </div>
+        <div class="parti" *ngIf="utter.status == 'divide'">
+          {{"UNIDENTIFIED_UTTER.DEFLECT_VOICE_CHAT" | translate}}
+        </div>
+      </div>
+    </div>
+  </div>
+  <mat-paginator 
+        (page)="onPageChange($event)"
+        [length]="utterancesList.length"
+        [pageSize]="5">
+        <!-- [pageSizeOptions]="[5, 10, 25, 100]" -->
+  </mat-paginator>
+
+</div>

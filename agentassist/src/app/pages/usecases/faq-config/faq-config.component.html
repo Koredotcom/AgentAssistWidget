@@ -1,0 +1,117 @@
+<div class="slider-sec-data">
+    <form>
+        <div class="header-sec row m-0">
+            <div class="lef-sec col-8 p-0">
+                <img src="assets/images/utterances.svg">
+                <span class="main-title">{{inputData.usecaseName}}</span>
+            </div>
+            <div class="close-link col-4 p-0" (click)="showConfirmation()"><img src="assets/images/close.svg"></div>
+        </div>
+        <perfect-scrollbar class="scroll-content">
+            <div class="body-sec-data">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li (click)="viewType = 'preview'">
+                        <div class="tab-name active" data-toggle="tab" href="#call"><img src="assets/icons/call-inactive.svg" class="call-inactive"><img src="assets/icons/call-active.svg" class="call-active">{{ "USECASES.CALL_EXPERIENCE" | translate }}</div>
+                    </li>
+                    <li (click)="viewType = 'preview'">
+                        <div class="tab-name" data-toggle="tab" href="#chat"><img src="assets/icons/comment-active.svg" class="chat-active"><img src="assets/icons/comment-inactive.svg" class="chat-inactive">{{ "USECASES.CHAT_EXPERIENCE" | translate }}</div>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="call" class="tab-pane fade show active">
+                        <div class="main-title">{{ "USECASES.CALL_EXPERIENCE" | translate }}</div>
+                        <ng-container *ngFor="let responseObj of inputData.callExperience.responses; let i = index">
+                            <div class="response-view" *ngIf="responseObj.viewType !== 'edit'" (click)="isEditable ? responseObj.viewType = 'edit': ''">
+                                <div class="res-tille">{{ "USECASES.RESPONSE" | translate }} {{i + 1}}</div>
+                                <div class="copy-rom-call d-none" (click)="copyFormChat(responseObj, i, $event)" *ngIf="showCopyBtn(responseObj, i , 'phone')">
+                                    <img src="assets/icons/copy.svg">{{'USECASES.COPY_FROM_CHAT' | translate}}
+                                </div>
+                                <!-- <div class="dropdown kr-sg-overflow-menu" *ngIf="isEditable">
+                                    <div class="dropdown-toggle" id="menu1" data-toggle="dropdown"><img class="action_icon" src="assets/icons/overflow-black.svg"></div>
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                                        <li (click)="responseObj.viewType = 'edit'"><a><img src="assets/icons/edit-black.svg">{{ "USECASES.EDIT" | translate }}</a></li>
+                                        <li (click)="removeAnotherResponse(i, 'phone')" *ngIf="inputData.callExperience.responses.length !== 1"><a><img src="assets/icons/delete-black.svg">{{ "USECASES.DELETE" | translate }}</a></li>
+                                    </ul>
+                                </div> -->
+
+                                <div class="delete-respose-view" (click)="removeAnotherResponse(i, 'phone')" *ngIf="isEditable && inputData.callExperience.responses.length !== 1">
+                                    <img src="assets/icons/settings/delete.svg">
+                                </div>                                
+
+                                <div class="response-info">
+                                    {{(responseObj.truncate)? (responseObj.answer | slice:0:300) :  (responseObj.answer)}} 
+                                    <span *ngIf="responseObj.truncate && responseObj.answer.length >= 300">...</span>
+                                    <span class="more-link" (click)="handleMoreText(responseObj)" *ngIf="responseObj.answer.length >= 300">{{responseObj.truncate?  ("USECASES.MORE" | translate) : ("USECASES.LESS" | translate) }}</span>
+                                </div>
+                            </div>
+                            <!-- <div class="edit-view" *ngIf="viewType === 'edit'">
+                                <md-editor [formControlName]="i" [options]="options" [type]="responseMode" required height="300px" *ngIf="responseMode === 'standard'"></md-editor>
+                                <md-editor [formControlName]="i" [options]="options" [type]="responseMode" [hideToolbar]="true" required height="300px" *ngIf="responseMode === 'advanced'"></md-editor>                
+                            </div> -->
+                            <div class="edit-view" *ngIf="responseObj.viewType === 'edit'">
+                                <div class="kr-sg-input-text-area">
+                                    <div class="edit-response-title-sec">
+                                        <div class="title">{{ "USECASES.RESPONSE" | translate }} {{ i + 1}}</div>
+                                        <div class="btn-sec">
+                                            <button class="kr-sg-buttonicon-secondary-two btn_md ml-2" [disabled]="!responseObj.answer || !responseObj.answer.trim()" (click)="onClickDone(responseObj, i, 'phone')"><img src="assets/icons/check-blue.svg">{{ "USECASES.DONE" | translate }}</button>
+                                            <button class="kr-sg-buttonicon-danger btn_md ml-2" (click)="closeAnotherResponse(responseObj, i, 'phone')" *ngIf="inputData.callExperience.responses.length !== 1"><img src="assets/icons/close-red.svg">{{ "USECASES.CLOSE" | translate }}</button>
+                                        </div>
+                                    </div>
+                                    <textarea [placeholder]="'USECASES.CALL_RESPONSE_PLACEHOLDER' | translate" class="input-text" [value]="responseObj.answer" (keydown.enter)="onClickDone(responseObj, i, 'phone')" (input)="responseObj.answer = $event.target.value;"></textarea>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <div class="footer-btns">
+                            <div class="add-btn" (click)="addAnotherResponse('phone')" [class.d-none]="hideAddBtn('phone')" *ngIf="isEditable"><img src="assets/images/plus.svg">{{ "USECASES.ADD_ANOTHER" | translate }}</div>
+                        </div>
+                    </div>
+                    <div id="chat" class="tab-pane fade">
+                        <div class="main-title">{{ "USECASES.CHAT_EXPERIENCE" | translate }}</div>
+                        <ng-container *ngFor="let responseObj of inputData.chatExperience.responses; let i = index">
+                            <div class="response-view" *ngIf="responseObj.viewType !== 'edit'" (click)="isEditable ? responseObj.viewType = 'edit': ''">
+                                <div class="res-tille">{{ "USECASES.RESPONSE" | translate }} {{i + 1}}</div>
+                                <div class="copy-rom-call d-none" (click)="copyFormCall(responseObj, i, $event)" *ngIf="showCopyBtn(responseObj, i , 'chat')">
+                                    <img src="assets/icons/copy.svg">{{'USECASES.COPY_FROM_CALL' | translate}}
+                                </div>
+                                <!-- <div class="dropdown kr-sg-overflow-menu" *ngIf="isEditable">
+                                    <div class="dropdown-toggle" id="menu1" data-toggle="dropdown"><img class="action_icon" src="assets/icons/overflow-black.svg"></div>
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                                        <li (click)="responseObj.viewType = 'edit';"><a><img src="assets/icons/edit-black.svg">{{ "USECASES.EDIT" | translate }}</a></li>
+                                        <li (click)="removeAnotherResponse(i)" *ngIf="inputData.chatExperience.responses.length !== 1"><a><img src="assets/icons/delete-black.svg">{{ "USECASES.DELETE" | translate }}</a></li>
+                                    </ul>
+                                </div> -->
+
+                                <div class="delete-respose-view" (click)="removeAnotherResponse(i)" *ngIf="isEditable && inputData.chatExperience.responses.length !== 1">
+                                    <img src="assets/icons/settings/delete.svg">
+                                </div>  
+
+                                <div class="response-info">
+                                    {{(responseObj.truncate)? (responseObj.answer | slice:0:300) :  (responseObj.answer)}} 
+                                    <span *ngIf="responseObj.truncate && responseObj.answer.length >= 300">...</span>
+                                    <span class="more-link" (click)="handleMoreText(responseObj)" *ngIf="responseObj.answer.length >= 300">{{responseObj.truncate?  ("USECASES.MORE" | translate)  : ("USECASES.LESS" | translate) }}</span>
+                                </div>
+                            </div>
+                            <div class="edit-view-editor-custom" *ngIf="responseObj.viewType === 'edit'">
+                                <div class="edit-response-title-sec">
+                                    <div class="title">{{ "USECASES.RESPONSE" | translate }} {{i + 1}}</div>
+                                    <div class="btn-sec">
+                                        <button class="kr-sg-buttonicon-secondary-two btn_md ml-2" [disabled]="!responseObj.answer || !responseObj.answer.trim()" (click)="onClickDone(responseObj, i)"><img src="assets/icons/check-blue.svg">{{ "USECASES.DONE" | translate }}</button>
+                                        <button class="kr-sg-buttonicon-danger btn_md ml-2" (click)="closeAnotherResponse(responseObj, i)" *ngIf="inputData.chatExperience.responses.length !== 1"><img src="assets/icons/close-red.svg">{{ "USECASES.CLOSE" | translate }}</button>
+                                    </div>
+                                </div>
+                                <md-editor [(ngModel)]="responseObj.answer" [options]="options" [type]="responseMode" (onEnter)="chatOnEnterKey(responseObj, i)" required height="300px" name="activeResponse"></md-editor>
+                            </div>
+                        </ng-container>
+                        <div class="footer-btns mt-5">
+                            <div class="add-btn" (click)="addAnotherResponse()" [class.d-none]="hideAddBtn()" *ngIf="isEditable"><img src="assets/images/plus.svg">{{ "USECASES.ADD_ANOTHER" | translate }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </perfect-scrollbar>
+        <div class="footer-sec" *ngIf="isEditable">
+            <button class="kr-sg-button-primary btn_lg mr-2" [disabled]="saveInProgress" (click)="save()">{{saveInProgress ? ("USECASES.SAVING" | translate) :  ("USECASES.SAVE" | translate) }}</button>
+            <button class="kr-sg-button-secondary btn_lg ml-1" (click)="showConfirmation()">{{ "USECASES.CANCEL" | translate }}</button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,30 @@
+<mat-form-field class="example-chip-list" appearance="fill">
+  <!-- <mat-label>Agents</mat-label> -->
+  <mat-chip-list #chipList aria-label="Agents selection" [disabled]="disabled">
+    <mat-chip
+      *ngFor="let agent of selectedAgents"
+      (removed)="remove(agent)">
+      {{agent.name}}
+      <!-- <button matChipRemove>
+        <mat-icon>cancel</mat-icon>
+      </button> -->
+    </mat-chip>
+    <input
+      class="agents-dd-input"
+      [disabled]="disabled"
+      [placeholder]="(selectedAgents.length? 'TYPE_AND_SELECT_TO_ADD' : 'AGENTS_DD_PLACEHOLDER') | translate"
+      #searchInput
+      [formControl]="agentCtrl"
+      [matAutocomplete]="auto"
+      [matChipInputFor]="chipList"
+      [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+      (matChipInputTokenEnd)="add($event)">
+  </mat-chip-list>
+  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+    <ng-container  *ngFor="let agent of filteredAgents | async" >
+      <mat-option [value]="agent" *ngIf="!checkIfAdded(agent) && !disabled">
+        {{agent.name}}
+      </mat-option>
+    </ng-container>
+  </mat-autocomplete>
+</mat-form-field>

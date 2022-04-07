@@ -1,0 +1,292 @@
+@import '../../../../scss/variables/variables.scss';
+
+
+.slider-sec-data{
+    position: relative;
+    .header-sec{
+        background: $whiteColor;
+        box-shadow: 0px 4px 4px rgba(168, 200, 221, 0.25);
+        border-radius: 4px 0px 0px 4px;
+        padding: 25px 20px 20px 20px;
+        align-items: center;
+        margin-bottom: 6px !important;
+        .lef-sec{
+            display: flex;
+            align-items: center;
+            .main-title{
+                color: $primaryFontColor;
+                font-weight: bold;
+                font-size: 18px;
+                line-height: 22px;
+                margin-left: 20px;                
+            }
+            img{
+                cursor: pointer;
+            }
+        }
+        .delete-widget{
+            position: absolute;
+            top: 27px;
+            color: $warningColor;
+            font-weight: normal;
+            font-size: 14px;
+            line-height: 20px;
+            padding: 3px 10px;
+            display: flex;
+            align-items: center;
+            right: 70px;
+            cursor: pointer;
+            z-index: 1;
+            img{
+                margin-right: 12px;
+            }
+        }
+        .close-link{
+            text-align: right;
+            img{
+                cursor: pointer;
+                padding: 7px;
+                border-radius: 100px;
+                transition: 0.2s all ease-in;
+                &:hover{
+                    background: $hoverImgcolor;
+                }
+            }
+        }
+    }
+    .scroll-content{
+        height: calc(100vh - 136px);            
+    } 
+    .add-widget-container{
+        padding: 30px 50px;
+        .label-text{
+            font-weight: 500;
+            font-size: 12px;
+            line-height: 15px;
+            color: $primaryFontColor;
+            margin-bottom: 8px !important;
+        }
+        .widget-label-sec{
+            display: flex;
+            align-items: center;
+            position: relative;
+            .label-widget{
+                background: #A1C3FC;
+                border-radius: 20px;
+                border: 2px solid $whiteColor;
+                box-shadow: 0px 3px 7px rgba(0, 0, 0, 0.11);
+                font-weight: bold;
+                font-size: 20px;
+                line-height: 24px;
+                color: $whiteColor;
+                padding: 5px 12px;
+                margin-right: 10px;
+            }
+            .added-img-widget{
+                width: 40px;
+                height: 40px;
+                border-radius: 100%;
+                margin-right: 10px;
+                img{
+                    width: 100%;
+                    height: 100%;
+                    // object-fit: contain;
+                    border-radius: 100%;
+                }
+            }
+            .inputfile{
+                opacity: 0;
+                overflow: hidden;
+                position: absolute;
+                padding: 0;
+                border: 0;
+                height: 22px;
+                left: 0;
+                right: 0;
+                text-align: center;
+                width: 100%;
+                font-size: 0;
+                cursor: pointer;
+            }         
+            .edit-widget{
+                background: $whiteColor;
+                border-radius: 4px;
+                padding: 7px 10px;
+                font-weight: normal;
+                font-size: 12px;
+                line-height: 15px;
+                color: $primaryActionColor;
+                display: inline-flex;
+                align-items: center;
+                cursor: pointer;
+                img{
+                    margin-right: 8px;
+                }
+            }
+        }
+        .kr-sg-input-text-area{
+            textarea{
+                height: 90px;
+                resize: none;
+                padding: 8px 10px;
+                font-weight: normal;
+                font-size: 14px;
+                line-height: 20px;
+                &::placeholder{
+                    color: $borderColor;
+                }
+            }
+            .url-disclaimer {
+                font-family: Inter;
+                font-style: italic;
+                font-weight: normal;
+                font-size: 12px;
+                line-height: 140%;
+                color: #64717C;
+            }
+        }
+        .add-parameters{
+            display: inline-flex;
+            align-items: center;
+            background: $whiteColor;
+            border: 1px solid $primaryActionColor;
+            border-radius: 4px;
+            padding: 6px 10px;
+            font-weight: normal;
+            font-size: 12px;
+            line-height: 15px;
+            color: $primaryActionColor;
+            cursor: pointer;
+            img{
+                margin-right: 9px;
+            }
+        }
+    }
+    .show-visited-parameetrs-container{
+        height: calc(100vh - 136px);
+        .visited-parameetrs{
+            position: absolute;
+            background: $utteraneHovercolor;
+            border-radius: 4px 4px 0px 0px;
+            width: calc(100% - 60px);
+            height: calc(100% - 105px);
+            top: 105px;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            .header_sec{
+                padding: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                .h-title{
+                    font-weight: 600;
+                    font-size: 18px;
+                    line-height: 22px;
+                    color: $primaryFontColor;
+                }
+                .close-link{
+                    cursor: pointer;
+                }
+            }
+            .desc_text{
+                font-weight: normal;
+                font-size: 14px;
+                line-height: 20px;
+                color: $primaryFontColor;
+                padding: 0 20px;
+            }
+            .parameter-adding-input{
+                padding: 30px 0px 20px 0;
+                display: flex;
+                align-items: center;
+                border-bottom: 1px solid $borderColor;
+                margin: 0 20px;
+                .equals-to{
+                    margin: 0 10px;                  
+                }
+                .kr-sg-dropdowns {
+                    .dropdown-open {
+                        .dropdown-input{
+                            padding-right: 30px;
+                            .added-title{
+                                max-width: 130px;
+                                line-height: normal;
+                                position: relative;
+                                top: 3px;
+                            }
+                        }
+                    }
+                }  
+                .add-param{
+                    margin-left: 13px;
+                    cursor: pointer;
+                    line-height: normal;
+                }
+                .dropdown-scroll{
+                    max-height: 150px;
+                }
+            }
+            .params-scroll{                
+                // height: calc(100vh - 353px);      
+                height: calc(100vh - 265px);         
+                .added-info-parameters{
+                    padding: 15px 20px;
+                    .parameter-adding-input{
+                        padding: 0px 0px 12px 0;
+                        display: flex;
+                        align-items: center;
+                        border-bottom: 0px solid $borderColor;
+                        margin: 0;
+                        .added-param{
+                            background: $bg-secondary-color;
+                            border-radius: 4px;
+                            width: 100%;
+                            height: 34px;
+                            padding: 7px 10px;
+                            font-weight: normal;
+                            font-size: 14px;
+                            line-height: 18px;
+                            color: $primaryFontColor;                         
+                        }     
+                        .kr-sg-dropdowns {
+                            .dropdown-open {
+                                .dropdown-input{
+                                    padding-right: 30px;
+                                    .added-title{
+                                        max-width: 130px;
+                                        line-height: normal;
+                                        position: relative;
+                                        top: 3px;
+                                    }
+                                }
+                            }
+                        }                   
+                        .equals-to{
+                            margin: 0 10px;
+                        }
+                        .delete-param{
+                            margin-left: 13px;
+                            cursor: pointer;
+                        }
+                    }
+                }
+            }
+            .footer-params{
+                margin: 0 20px;
+                padding: 13px 0;
+                border-top: 1px solid $borderColor;                
+            }
+        }
+    }
+
+    .footer-sec{
+        padding: 8px 50px;
+        background: $whiteColor;
+        border-top: 0.5px solid transparent;
+        box-shadow: 0px -4px 4px rgba(168, 200, 221, 0.25);        
+        box-sizing: border-box;
+        border-radius: 4px 0px 0px 4px;  
+        margin-top: 4px;
+    }
+}

@@ -1,0 +1,49 @@
+@import './../../../../app/scss/variables/variables.scss';
+
+.editor-url-popup{
+    position: relative;
+    height: 100%;
+    .m-header{
+        font-size: 24px;
+        font-weight: 300;
+        color: $primaryFontColor;
+        border-radius: 4px;
+        background-color: $primaryBackgroundColor;
+        padding: 12px;
+    }
+    .m-body{
+        padding: 20px;
+        .info-text{
+            color: $secondaryFontColor;
+            font-size: 14px;
+        }
+        .clickable-text {
+            color: $primaryActionColor;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .c-mb-15 {
+            margin-bottom: 15px;
+        }
+        .kr-sg-input-text{
+            position: relative;
+            .error-msg{
+                position: absolute;
+                bottom: -14px;
+            }
+        }
+    }
+    .m-footer{
+        border-radius: 4px;
+        background-color: $primaryBackgroundColor;
+        padding: 17px;
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        text-align: center;
+        button{
+            margin-right: 10px;
+        }
+    }
+}

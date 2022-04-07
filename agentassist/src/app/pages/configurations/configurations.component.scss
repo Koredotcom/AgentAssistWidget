@@ -1,0 +1,27 @@
+.check-list-content{
+    padding: 25px 40px 0px 40px;
+    .remains-check-list{
+        padding: 19px 20px;
+        background: #FFFFFF;
+        border: 2px solid #E5E8EC;
+        box-sizing: border-box;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .info-text{
+            font-weight: normal;
+            font-size: 14px;
+            line-height: 17px;
+            color: #202124;
+            padding-right: 15px;
+        }
+        .link-settings{
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 17px;
+            color: #009DAB;
+            cursor: pointer;
+        }
+    }
+}

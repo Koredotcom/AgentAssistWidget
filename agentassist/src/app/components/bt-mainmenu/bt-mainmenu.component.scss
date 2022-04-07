@@ -1,0 +1,358 @@
+@font-face {
+    font-family: 'builder';
+    src: url(/smartassist/assets/fonts/builder/builder.ttf) format('truetype');
+}
+@import './../../../app/scss/variables/variables.scss';
+[class^="btx-"], [class*=" btx-"] {
+	/* use !important to prevent issues with browser extensions that change fonts */
+	font-family: 'builder' !important;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+  
+	/* Better Font Rendering =========== */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+  }
+
+.btx-summary:before {
+	content: "\e9a7";
+}
+.btx-channels:before {
+	content: "\e90d";
+}
+.btx-conversationalSkills:before {
+	content: "\e9ab";
+}
+.btx-storyboard:before {
+	content: "\e96e";
+}
+.btx-dialog-task:before {
+	content: "\e9d9";
+}
+.btx-help:before {
+	content: "\e934";
+}
+.btx-alert-task:before {
+	content: "\e999";
+}
+.btx-small-talk:before {
+	content: "\e99e";
+}
+.btx-left-menu-publish:before {
+	content: "\e9d5";
+}
+.btx-left-menu-changeLogs:before {
+	content: "\e9a9";
+}
+.btx-left-menu-digitalSkills:before {
+	content: "\e9ac";
+}
+.btx-left-menu-form:before {
+	content: "\e9b1";
+}
+.btx-left-menu-views:before {
+	content: "\e9b2";
+}
+.btx-left-menu-training:before {
+	content: "\e9af";
+}
+.btx-testing:before {
+	content: "\e974";
+}
+.btx-range-slider:before {
+	content: "\e95d";
+}
+.btx-settings:before {
+	content: "\e965";
+}
+.btx-left-menu-intelligence:before {
+	content: "\e9ae";
+}
+.btx-default-dialog:before {
+	content: "\e9a0";
+}
+.btx-calendar:before {
+	content: "\e906";
+}
+.btx-interuptions:before {
+	content: "\e93a";
+}
+.btx-amend-edit:before {
+	content: "\e983";
+}
+.btx-multi-intent:before {
+	content: "\e94d";
+}
+.btx-sentiment:before {
+	content: "\e99d";
+}
+.btx-standard-response:before {
+	content: "\e99f";
+}
+.btx-ignore-words:before {
+	content: "\e99c";
+}
+.btx-left-menu-botTesting:before {
+	content: "\e9a8";
+}
+.btx-left-menu-botTesting:before {
+	content: "\e9a8";
+}
+.btx-conversation-testing:before {
+	content: "\e9d8";
+}
+.btx-left-menu-configurations:before {
+	content: "\e9aa";
+}
+.btx-settings:before {
+	content: "\e965";
+}
+.btx-language-management:before {
+	content: "\e93c";
+}
+.btx-lock:before {
+	content: "\e942";
+}
+.btx-bot-functions:before {
+	content: "\e98e";
+}
+.btx-authorization-profiles:before {
+	content: "\e98c";
+}
+.btx-time:before {
+	content: "\e978";
+}
+.btx-global-variable:before {
+	content: "\e92e";
+}
+.btx-content-variables:before {
+	content: "\e918";
+}
+.btx-left-menu-apiExtensions:before {
+	content: "\e9b6";
+}
+.btx-agent-transfer:before {
+	content: "\e982";
+}
+.btx-botKit:before {
+	content: "\e903";
+}
+.btx-api-extensions:before {
+	content: "\e986";
+}
+.btx-apk:before {
+	content: "\e987";
+}
+.btx-api-scopes:before {
+	content: "\e9bd";
+}
+.btx-left-menu-botManagement:before {
+	content: "\e9b7";
+}
+.btx-impExp:before {
+	content: "\e937";
+}
+.btx-delete-1:before {
+	content: "\e921";
+}
+.btx-carrot:before {
+	content: "\e90a";
+}
+.btx-carrot-down {
+	transform: rotate(90deg);
+    position: relative;
+}
+.btx-carrot-up {
+	transform: rotate(-90deg);
+    position: relative;
+}
+.btx-bot-version:before {
+	content: "\e901";
+}
+.active {
+	color : #009DAB;
+}
+.bold {
+	font-weight: bold;
+}
+app-mainmenu .sidebar-fixed .list-group .group-links {
+    margin-bottom: 0px;
+}
+app-mainmenu .sidebar-fixed .list-group .group-links .submenu {
+    padding-left: 45px;
+}
+app-mainmenu .sidebar-fixed .list-group .link-router {
+	display: flex;
+    align-items: center;
+    padding: 8px 10px 8px 16px;
+    border-radius: 4px;
+    margin-bottom: 5px;
+    transition: 0.2s all ease-in;
+    cursor: pointer;
+    outline: 0;
+    width: 230px;
+}
+app-mainmenu .sidebar-fixed .list-group .link-router .bt-link-name{
+	margin-left: 16px;
+	color: $primaryFontColor;
+	font-weight: normal;
+	font-size: 10px;
+	line-height: 10px;
+	text-overflow: ellipsis;
+    white-space: nowrap;
+	width: 200px;
+}
+
+.regular-user-bots-dropdown{
+    &.kr-sg-dropdowns {
+        .dropdown-open {
+            .dropdown-input{
+                background: #FFFFFF;
+                border: 2px solid #E9EFF4;
+                border-radius: 4px;
+                box-shadow: none;
+                width: 100%;
+                display: flex;
+                align-items: center;
+                padding: 5px 12px;
+                height: 44px;
+                line-height: normal;
+                &::before{
+                    display: none;
+                }
+                .empty-text{
+                    font-weight: 500;
+                    font-size: 14px;
+                    line-height: 17px;
+                    color: #000000;
+                }
+                .icon-sa-arrow-down{
+                    position: absolute;
+                    right: 11px;
+                    top: 13px;
+                    color: #009DAB;
+                    font-size: 12px;
+                }
+                .bot-icon{
+                    width: 30px;
+                    height: 30px;
+                    line-height: normal;
+                    img{
+                        width: 30px;
+                        height: 30px;
+                    }
+                }
+                .bot-name{
+                    width: 115px;
+                    margin-left: 15px;
+                    margin-left: 12px;
+                    font-weight: 600;
+                    font-size: 14px;
+                    line-height: 17px;
+                    color: #202124;
+                }
+            }
+        }
+        &.show{
+            .dropdown-open{
+                .dropdown-input{
+                    .icon-sa-arrow-down{
+                        transform:rotate(180deg);
+                    }
+                }
+            }
+        }
+        .regular-user-bots{  
+			width: 95%;  
+            margin: 2px 0 0 2px;
+            background: $whiteColor;
+            border: 0;
+            box-shadow: 0px 4px 12px 2px rgba(32, 33, 36, 0.12);
+            border-radius: 4px;
+            // width: 240px;
+            padding: 0;
+            .bots-scroll{
+                max-height: 300px;
+            }
+            .user-bots-details{
+                .kr-sg-input-search{
+                    margin-bottom: 10px;
+                    input{
+                        background: $whiteColor;
+                        border: 0;
+                        border-bottom: 1px solid $border2-color;
+                        box-sizing: border-box;
+                        border-radius: 0px;
+                        font-weight: normal;
+                        font-size: 14px;
+                        line-height: 20px;
+                        padding: 0 10px 0 36px;
+                        &::placeholder{
+                            color: $borderColor;
+                            font-size: 14px;
+                        }
+                    }
+                    .search-icon{
+                        height: auto;
+                        width: auto;
+                        left: 12px;
+                        top: 10px;
+                    }
+                }
+                .bot-name-icon{
+                    display: flex;
+                    align-items: center;
+                    height: 50px;
+                    padding: 10px 20px;
+                    cursor: pointer;
+                    .bot-icon{
+                        width: 30px;
+                        height: 30px;
+                        img{
+                            width: 30px;
+                            height: 30px;
+                        }            
+                    }
+                    .bot-name{
+                        color: $primaryFontColor;
+                        font-weight: 500;
+                        font-size: 12px;
+                        line-height: 15px;
+                        margin-left: 15px;
+                    }
+                }
+                .new-bot-btn{
+                    display: inline-flex;
+                    align-items: center;
+                    height: 50px;
+                    padding: 0 20px;
+                    color: #2498AD;
+                    font-weight: normal;
+                    font-size: 14px;
+                    line-height: 20px;
+                    cursor: pointer;
+                    img{
+                        margin-right: 12px;
+                    }
+                }
+                .update-bot-btn{
+                    display: inline-flex;
+                    align-items: center;
+                    height: 50px;
+                    padding: 0 20px;
+                    color: #2498AD;
+                    font-weight: normal;
+                    font-size: 14px;
+                    line-height: 20px;
+                    cursor: pointer;
+                    img{
+                        margin-right: 12px;
+                    }
+                }
+            }
+        }
+    }
+}

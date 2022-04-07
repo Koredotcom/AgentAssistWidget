@@ -1,0 +1,41 @@
+<div class="slider-sec-data">
+    <form>
+        <div class="header-sec row m-0">
+            <div class="lef-sec col-8 p-0">
+                <img src="assets/images/usecases/new_conv.png" alt="new_conv">
+                <span class="main-title">{{inputData.usecaseName}}</span>
+            </div>
+            <div class="col-3 p-0 text-right">
+                <label class="kr-sg-toggle">
+                    <input type="checkbox" [checked]="inputData.isEnabled" (click)="true" #confToggle>
+                    <div class="slider"><span class="enabled" *ngIf="confToggle.checked">{{ "USECASES.ENABLED" | translate}}</span><span *ngIf="!confToggle.checked" class="disabled">{{"USECASES.DISABLED" | translate}}</span></div>
+                </label>
+            </div>
+
+            <div class="close-link col-1 p-0" (click)="onClose()"><img src="assets/images/close.svg"></div>
+        </div>
+        <perfect-scrollbar class="scroll-content">
+            <div class="body-sec-data">
+                <div class="tab-content">
+                    <div class="main-title">{{"CONFIG_CONV.EXP_DEF" | translate}}</div>
+                    <div class="desc-info mb-4">{{"CONFIG_CONV.AUTO_EXP_USECASE" | translate}}</div>
+                    <div class="config-cards-sec justify-content-start">
+                        <div class="cards-data selected" style="margin-right: 40px;">
+                            <div class="selected-title">{{'USECASES.SELECTED' | translate}}</div>
+                            <div class="title-sec">
+                                <div class="img_block"><img src="assets/icons/conversations/automated-dialog-call.svg"></div>
+                                <div class="title">{{'USECASES.AUTOMATED_DIALOG' | translate}}</div>
+                            </div>
+                            <div class="desc-info">{{'USECASES.AD_DESC' | translate}}</div>
+                        </div>
+                        <div class="ext-link" (click)="launchPlatform()"><img src="assets/icons/ext-link.svg">{{'USECASES.EDIT_IN_BOT_PLATFORM' | translate}}</div>
+                    </div>
+                </div>
+            </div>
+        </perfect-scrollbar>
+        <div class="footer-sec" *ngIf="isEditable">
+            <button class="kr-sg-button-primary btn_lg mr-2" [disabled]="saveInProgress" (click)="save()">{{(saveInProgress ? 'BUTTONS.SAVING': 'BUTTONS.SAVE') | translate}}</button>
+            <button class="kr-sg-button-secondary btn_lg ml-1" (click)="onClose()">{{'BUTTONS.CANCEL' | translate}}</button>
+        </div>
+    </form>
+</div>

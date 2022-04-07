@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="10px" height="10px" viewBox="0 0 10 10" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.3 (67297) - http://www.bohemiancoding.com/sketch -->
+    <title>copyJson-white</title>
+    <desc>Created with Sketch.</desc>
+    <g id="copyJson-white" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="copy-copy" transform="translate(1.000000, 1.000000)" stroke="#FFFFFF">
+            <rect id="Rectangle" x="2.8" y="2.8" width="5.2" height="5.2" rx="1"></rect>
+            <path d="M1.2,5.2 L0.8,5.2 C0.3581722,5.2 5.41083001e-17,4.8418278 0,4.4 L0,0.8 C-5.41083001e-17,0.3581722 0.3581722,8.11624501e-17 0.8,0 L4.4,0 C4.8418278,2.705415e-17 5.2,0.3581722 5.2,0.8 L5.2,1.2" id="Path"></path>
+        </g>
+    </g>
+</svg>

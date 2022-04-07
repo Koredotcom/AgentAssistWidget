@@ -1,0 +1,159 @@
+@import './../../scss/variables/variables.scss';
+.agent-main-section {
+    background: $bg-color-primary;
+    padding-top: 5px;
+    overflow: scroll;
+    height: 94vh;
+    .first-col {
+        width: 30%;
+        .sentiments-wrap {
+            background: $whiteColor;
+            margin-top: 5px;
+            padding: 20px;
+            .sentiments-header {
+                position: relative;
+                h4 {
+                    font-size: 18px;
+                    font-weight: 400;
+                }
+                .info-icon{
+                    position: absolute;
+                    right: 13px;
+                    top: 0;
+                    cursor: pointer;
+                    .tooltiptext{
+                        visibility: hidden;
+                        width: 200px;
+                        padding: 15px;
+                        background-color: $primaryFontColor;
+                        color: $whiteColor;
+                        text-align: center;
+                        font-weight: normal;
+                        border-radius: 6px;                        
+                        position: absolute;                        
+                        bottom: 125%;
+                        z-index: 100;
+                        left: 50%;
+                        margin-left: -30px;
+                        opacity: 0;
+                        transition: opacity 0.3s;   
+                        line-height: 18px;                 
+                        &::after{
+                            content: "";
+                            position: absolute;
+                            top: 100%;
+                            left: 29px;
+                            margin-left: -5px;
+                            border-width: 6px;
+                            border-style: solid;
+                            border-color: $primaryFontColor transparent transparent transparent;
+                        }
+                    }
+                    &:hover{
+                        .tooltiptext{
+                            visibility: visible;
+                            opacity: 1;
+                            font-size: 14px;
+                            padding: 8px;
+                        }
+                    }
+                }   
+            }
+            .sentiments-body {
+                display: flex;
+                justify-content: space-between;
+                .smileys {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    .image {
+                        margin-bottom: 4px;
+                        opacity: 0.5;
+                        &.active {
+                            opacity: unset;
+                        }
+                    }
+                    .title {
+                        color: $descFontColor;
+                    }
+                }
+            }
+        }
+    }
+    .second-col {
+        width: 30%;
+        .intent-bef {
+            background: $whiteColor;
+            padding: 20px;
+            position: relative;
+            h4 {
+                font-weight: 400;
+                font-size: 18px;
+            }
+            h6 {
+                font-weight: 700;
+                font-size: 20px;
+            }
+            .info-icon{
+                position: absolute;
+                right: 13px;
+                top: 10px;
+                cursor: pointer;
+                .tooltiptext{
+                    bottom: -425%;
+                    width: 300px;
+                    visibility: hidden;
+                    padding: 15px;
+                    background-color: $primaryFontColor;
+                    color: $whiteColor;
+                    text-align: center;
+                    font-weight: normal;
+                    border-radius: 6px;                        
+                    position: absolute;                        
+                    z-index: 100;
+                    left: -100px;
+                    margin-left: -30px;
+                    opacity: 0;
+                    transition: opacity 0.3s;   
+                    line-height: 18px;                 
+                    &::after{
+                        content: "";
+                        position: absolute;
+                        top: -12px;
+                        left: 137px;
+                        margin-left: -5px;
+                        border-width: 6px;
+                        border-style: solid;
+                        border-color: transparent transparent $primaryFontColor transparent;
+                    }
+                }
+                &:hover{
+                    .tooltiptext{
+                        visibility: visible;
+                        opacity: 1;
+                    }
+                }
+            }   
+        }
+    }
+    .third-col {
+        width: 30%;
+        height: 90vh;
+    }
+}
+
+.loading-agent {
+    .loaderLogoImage {
+        width: 50px;
+        height: 50px;
+        display: block;
+        position: absolute;
+        top: calc(50% - 25px);
+        left: calc(50% - 25px);
+        margin: auto;
+        outline: 1px solid transparent;
+        -webkit-animation: spin 0.5s linear infinite;
+        -moz-animation: spin 0.5s linear infinite;
+        animation: spin 0.5s linear infinite;
+      }
+}

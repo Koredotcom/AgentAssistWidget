@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>SmartAssist</title>
+  <base href="/">
+
+  <meta name="viewport" content="width=device-width, user-scalable=no">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="stylesheet" href="assets/smartAssist-icons/style.css">
+</head>
+<body class="smart-assist">
+  <video id="local_video" autoplay="autoplay" playsinline style="width:0px;height:0px; top:-100px; position: absolute;"></video>
+  <video id="remote_video" autoplay="autoplay" playsinline style="width:0px;height:0px; top:-100px; position: absolute;"></video>
+
+  <app-root>
+    <!--LOADER-->
+    <style>
+      .loaderLogoImage {   
+        width: 20px;
+        height: 20px;
+        display: block;
+        position: absolute;
+        top: -29px;
+        left: 142px;
+        margin: auto;
+        margin: auto;
+        outline: 1px solid transparent;
+        -webkit-animation: spin 0.5s linear infinite;
+        animation: spin 0.5s linear infinite;
+      }
+      </style>
+  <div class="loaderContainer">
+      <img src="assets/images/logoIcon.png" class="loaderLogoImage" >
+  </div>
+<!--LOADER-->
+  </app-root>
+</body>
+</html>

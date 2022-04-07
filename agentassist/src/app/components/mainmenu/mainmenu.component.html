@@ -1,0 +1,151 @@
+<perfect-scrollbar [config]="config" class="sidebar-fixed" [ngClass]="{'is-upgrade-true': isPlan && !workflowService.onPremise}">
+	<div class="list-group list-group-flush" *ngIf="false">
+		<div class="group-links"  *hasPermission="['admin']">
+			<div class="group-heading">{{"ANALYTICS.AUTOMATION" | translate}}</div>
+			<div class="link-router" [routerLink]="['usecases']" routerLinkActive="active" >
+				<img src="assets/icons/leftmenu/usecase.svg"><span class="link-name">{{'NAV.USECASES' | translate}}</span>
+			</div>
+			<div class="link-router" [routerLink]="['defaults']" routerLinkActive="active">
+				<img src="assets/icons/leftmenu/defaults.svg"><span class="link-name">{{'NAV.DEFAULTS' | translate}}</span>
+			</div>
+			<div class="link-router" [routerLink]="['testing']" routerLinkActive="active">
+				<img src="assets/icons/leftmenu/testing.svg"><span class="link-name">{{'NAV.TESTING' | translate}}</span>
+			</div>
+			<div class="link-router" [routerLink]="['deployment']" routerLinkActive="active">
+				<img src="assets/icons/leftmenu/deployment.svg"><span class="link-name">{{'NAV.DEPLOYMENT' | translate}}</span>
+			</div>
+			<div class="link-router" [routerLink]="['settings', 'in']" routerLinkActive="active">
+				<img src="assets/icons/leftmenu/settings.svg"><span class="link-name">{{'NAV.SETTINGS' | translate}}</span>
+			</div>
+			<div class="link-router" [routerLink]="['conversationalLogs']" routerLinkActive="active">
+				<img src="assets/icons/leftmenu/conv-logs.svg"><span class="link-name">{{'NAV.CONVERSATIONAL_LOGS' | translate}}</span>
+			</div>
+			<!-- <div *ngIf="isAgentDesktopEnabled" class="link-router" [routerLink]="['channels']" routerLinkActive="active">
+				<img src="assets/icons/leftmenu/channels.svg"><span class="link-name">{{'NAV.CHANNELS' | translate}}</span>
+			</div> -->
+			<!-- channels -->
+			<div class="link-router" [routerLink]="['channels']" routerLinkActive="active" >
+				<img src="assets/icons/leftmenu/channels.svg"><span class="link-name">{{'NAV.CHANNELS' | translate}}</span>
+				<!-- <i class="btx-channels" [ngClass]="{'active' : active.channels}"></i>
+				<span class="bt-link-name" [ngClass]="{'active' : active.channels}">
+					{{'BTMENU_CHANNELS' | translate}}
+				</span> -->
+			</div>
+
+			<!-- channels -->
+		</div>
+
+	</div>
+
+	<div class="list-group list-group-flush" *ngIf="type === 'config'">
+		<div class="group-links">
+			<div class="group-heading">EXPERIENCES</div>
+
+			<div class="link-router" [routerLink]="['usecases']" routerLinkActive="active" *hasPermission="['admin']">
+				<img src="assets/icons/leftmenu/usecase.svg"><span class="link-name">{{'NAV.USECASES' | translate}}</span>
+			</div>
+		</div>
+
+		<!-- <div class="group-links">
+			<div class="group-heading">User MANAGEMENT</div>
+			<div class="link-router" [routerLink]="['agents']" routerLinkActive="active" *hasPermission="['AGENT_VIEW', 'AGENT_GROUP_VIEW']">
+				<img src="assets/icons/leftmenu/agent.svg"><span class="link-name">{{'NAV.AGENTS' | translate}}</span>
+			</div>
+			<div *hasPermission="['ROLE_MANAGEMENT_VIEW']" class="link-router" [routerLink]="['roleManagement']" routerLinkActive="active">
+				<img src="assets/icons/leftmenu/new/role-managment.svg"><span class="link-name">Role Management</span>
+			</div>
+			<div *hasPermission="['AGENT_STATUS_SETTINGS_VIEW']" class="link-router" [routerLink]="['agentStatus']" routerLinkActive="active">
+				<img src="assets/icons/leftmenu/new/agent-status.svg"><span class="link-name">Agent Status</span>
+			</div>
+		</div> -->
+		<div class="group-links">
+			<div class="group-heading">System SETUP</div>
+			<div class="link-router" [routerLink]="['channels']" routerLinkActive="active" *hasPermission="['admin']">
+				<img src="assets/icons/leftmenu/new/network.svg"><span class="link-name">{{'NAV.CHANNELS' | translate}}</span>
+			</div>
+			<div class="link-router" [routerLink]="['agents']" routerLinkActive="active" *hasPermission="['AGENT_VIEW', 'AGENT_GROUP_VIEW']">
+				<img src="assets/icons/leftmenu/agent.svg"><span class="link-name">{{'NAV.AGENTS' | translate}}</span>
+			</div>
+			<div *hasPermission="['ROLE_MANAGEMENT_VIEW']" class="link-router" [routerLink]="['roleManagement']" routerLinkActive="active">
+				<img src="assets/icons/leftmenu/new/role-managment.svg"><span class="link-name">Role Management</span>
+			</div>
+			<!-- <div class="link-router" [routerLink]="['surveys']" routerLinkActive="active" *hasPermission="['admin']">
+				<img src="assets/icons/leftmenu/new/dispositions.svg"><span class="link-name">{{'NAV.SURVEYS' | translate}}</span>
+			</div>
+			<div class="link-router d-none" [routerLink]="['deployment']" routerLinkActive="active">
+				<img src="assets/icons/leftmenu/new/dispositions.svg"><span class="link-name">Deployment</span>
+			</div> -->
+			<div class="link-router" [routerLink]="['languages']" routerLinkActive="active" *hasPermission="['LANGUAGE_SETTINGS_VIEW', 'WAITING_EXPERIENCE_FULL']">
+				<img src="assets/icons/leftmenu/languages-speech.svg"><span class="link-name">ASR Engine</span>
+			</div>
+			<!-- <div class="link-router" [routerLink]="['agent-assist']" routerLinkActive="active" *hasPermission="['STANDARD_RESPONSE_VIEW']">
+				<img src="assets/icons/leftmenu/agent-assist.svg"><span class="link-name">{{'ONBOARDING.STD_RESPONSE' | translate}}</span>
+			</div>
+			<div class="link-router" [routerLink]="['widgets']" routerLinkActive="active" *hasPermission="['AGENT_WIDGET_MANAGEMENT_VIEW']">
+				<img src="assets/icons/leftmenu/settings.svg"><span class="link-name">Widgets</span>
+			</div> -->
+		</div>
+	</div>
+
+	<div class="list-group list-group-flush" *ngIf="type === 'today'">
+
+	</div>
+
+	<!-- <div class="list-group list-group-flush" *ngIf="type === 'history'">
+		<div class="group-links">
+			<div class="group-heading">{{"BTMENU_SUMMARY" | translate}}	</div>
+			
+		</div>
+		<div class="group-links">
+			<div class="group-heading">{{"ANALYZE_AUTO" | translate}}	</div>
+			<div class="link-router" [routerLink]="['sessiontrends']" routerLinkActive="active" >
+				<img src="assets/icons/leftmenu/session-trend.svg"><span class="link-name">{{ "SESSION_TREND" | translate }}</span>
+			</div>
+			<div class="link-router" [routerLink]="['containment']" routerLinkActive="active">
+				<img src="assets/icons/leftmenu/containment.svg"><span class="link-name">{{"CONTAINMENT" | translate}}</span>
+			</div>
+		</div>
+		<div class="group-links">
+			<div class="group-heading">{{"LOG_HISTORY" | translate}}	</div>
+			<div class="link-router" [routerLink]="['conversationalLogs']" routerLinkActive="active">
+				<img src="assets/icons/leftmenu/conversation-log.svg"><span class="link-name">{{'NAV.CONVERSATIONAL_LOGS' | translate}}</span>
+			</div>
+		</div>
+	</div> -->
+
+	<bt-mainmenu *ngIf="type === 'bt'">
+	</bt-mainmenu>
+</perfect-scrollbar>
+
+<div class="bottom-upgrade" *ngIf="isPlan && !workflowService.onPremise">
+	<div *ngIf="isPlanLoading" fxFlex fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px">
+		<div style="font-weight: 400;">{{'NAV.LOAD_AVAIL_BAL' | translate}}</div>
+		<mat-spinner diameter="18"></mat-spinner>
+	</div>
+	<div *ngIf="!isPlanLoading" class="w-100">
+		<div class="balance-with-bar">
+			<div class="progress_bar_data">
+				<mat-progress-bar class="balance-progress" [hidden]="!isPlan" mode="determinate" [ngClass]="{'very-low': planLeftPer <= 10, 'low': planLeftPer < 25 && planLeftPer > 10}" [value]="planLeftPer"></mat-progress-bar>
+			</div>
+			<div class="content-data">
+				<div class="balance" [hidden]="!isPlan">{{planDetails?.totalCredits - planDetails?.usedCredits | number: '1.2-2'}} <span>$</span></div>
+				<div class="d-flex align-items-center">
+					<div class="title" [hidden]="!isPlan">{{'NAV.AVAILABLE_BALANCE' | translate}}</div>
+					<div class="refresh" (click)="getBalance()" [hidden]="!isPlan">
+						<img class="refreshIcon" src="assets/icons/leftmenu/refresh.svg">
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="upgrade-btn text-truncate" *ngIf="planDetails?.planType == 'Free'" [routerLink]="['usage', 'current']" title="{{'NAV.SETUP_PAYMENT' | translate}}">{{'NAV.SETUP_PAYMENT' | translate}} <img src="assets/icons/leftmenu/currency.svg"></div>
+		<div class="upgrade-btn" *ngIf="planDetails?.planType != 'Free'" [routerLink]="['usage', 'current']" title="{{'NAV.BILLING_USAGE' | translate}}">{{'NAV.BILLING_USAGE' | translate}}</div>
+	</div>
+</div>
+
+<ng-template #wUpdateBot>
+    <app-update-bot (wSel)="wSHide()"></app-update-bot>
+</ng-template>
+
+<ng-template #wSContent>
+    <app-w-sel-dialog (wSel)="wSHide()"></app-w-sel-dialog>
+</ng-template>

@@ -1,0 +1,44 @@
+<div class="app-lang-data-sec">
+    <div class="title-sec">
+        <div class="title">{{'HEADER.APP_LANG' | translate}}</div>
+        <div class="close-dialog" mat-dialog-close><img src="assets/icons/close.svg"></div>
+    </div>
+
+    <div class="kr-sg-dropdowns">
+        <div class="label-text">{{'HEADER.CHOOSE_AN_APP_LANGUAGE' | translate}}</div>
+        <div class="dropdown dropdown-open">
+            <button class="dropdown-toggle dropdown-input" data-toggle="dropdown">
+                <div class="selected-lang">
+                    <img [src]="'assets/icons/appLang/' + selectedLang.icon">
+                    <span class="lang-name">{{selectedLang.label}}</span>
+                </div>
+            </button>                                            
+            <ul class="dropdown-menu content-menu">
+                <div class="search-box d-none">
+                    <input type="text" [placeholder]="'PLACEHOLDERS.SEARCH' | translate" class="seach-input">
+                    <img src="assets/icons/search_gray.svg">
+                </div>   
+                <div class="selected-lang-list" (click)="onChange(lang)" *ngFor="let lang of languages">
+                    <img [src]="'assets/icons/appLang/' + lang.icon">
+                    <span class="lang-name">{{lang.label}}</span>
+                </div>                                                           
+                <!-- <div class="selected-lang-list" (click)="onChange('ja')">
+                    <img src="assets/icons/appLang/japanese.svg">
+                    <span class="lang-name">Japanese (Japan)</span>
+                </div>
+                <div class="selected-lang-list" (click)="onChange('ko')">
+                    <img src="assets/icons/appLang/korean.svg">
+                    <span class="lang-name">Korean (South Korea)</span>
+                </div> -->
+            </ul>
+        </div>
+    </div>
+
+    <div class="note-title">{{'COMMON.NOTE' | translate}}:</div>
+    <div class="note-info">{{'COMMON.RELOAD_APP_PREFERENCES' | translate}}</div>
+
+    <div class="button-sec">
+        <button class="kr-sg-button-primary btn_lg" (click)="onSave()" [disabled]="saveInProgress">{{(saveInProgress? 'BUTTONS.SAVING': 'BUTTONS.SAVE') | translate}}</button>
+        <button class="kr-sg-button-secondary btn_lg" mat-dialog-close>{{'BUTTONS.CANCEL' | translate}}</button>
+    </div>
+</div>

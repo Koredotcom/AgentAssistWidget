@@ -1,0 +1,178 @@
+
+@import './../../../scss/variables/variables.scss';
+.slider-sec-data{
+    .header-sec{
+        background: $whiteColor;
+        box-shadow: 0px 4px 4px rgba(168, 200, 221, 0.25);
+        border-radius: 4px 0px 0px 4px;
+        padding: 25px 20px;
+        align-items: center;
+        margin-bottom: 6px !important;
+        .lef-sec{
+            .main-title{
+                color: $primaryFontColor;
+                font-weight: bold;
+                font-size: 18px;
+                line-height: 22px;
+                margin-left: 20px;
+            }
+        }
+        .close-link{
+            text-align: right;
+            img{
+                cursor: pointer;
+                padding: 7px;
+                border-radius: 100px;
+                transition: 0.2s all ease-in;
+                &:hover{
+                    background: $hoverImgcolor;
+                }
+            }
+        }
+    }
+    .scroll-content{
+        height: calc(100vh - 142px);
+        .body-sec-data{
+            padding: 15px 70px;
+            .info-title{
+                color: #F2994A;
+                font-weight: normal;
+                font-size: 12px;
+                line-height: 15px;
+                img{
+                    margin-right: 5px;
+                    position: relative;
+                    top: -1px;
+                }
+            }
+            .title{
+                color: $primaryFontColor;
+                font-weight: 600;
+                font-size: 16px;
+                line-height: 19px;                
+            }
+            .alternative-utterances{
+                align-items: center;
+                padding: 8px 15px;
+                background: $utteraneHovercolor;
+                border-radius: 4px;
+                .lef-sec{
+                    .al-title{
+                        color: $primaryFontColor;
+                        font-weight: bold;
+                        font-size: 12px;
+                        line-height: 15px;
+                        padding-right: 20px;
+                    }                    
+                }
+                .search-block{
+                    .kr-sg-input-search{
+                        float: right;
+                        width: 369px;
+                        input{
+                            padding: 4px 30px 4px 30px;
+                        }
+                        .search-icon{
+                            right: auto;
+                            left: 10px;
+                            top: 10px;
+                            width: auto;
+                            height: auto;
+                        }
+                        .close-icon{
+                            right: 10px;
+                            position: absolute;
+                            top: 9px;
+                            cursor: pointer;
+                        }
+                    }
+                }
+            }
+            .delete-icon{
+                position: absolute;
+                right: -34px;
+                top: 4px;
+                cursor: pointer;
+            }
+            .footer-btns{
+                // display: flex;
+                // align-items: center;
+                // justify-content: space-between;
+                text-align: right;
+                margin: 25px 0;
+                .add-btn{
+                    color: $primaryActionColor;
+                    font-weight: normal;
+                    font-size: 14px;
+                    line-height: 20px;
+                    cursor: pointer;
+                    display: inline-block;
+                    img{
+                        margin-right: 12px;
+                    }
+
+                    &.disabled {
+                        opacity: 0.5;
+                        pointer-events: none;
+                    }
+                }
+            }
+            .kr-sg-input-text{
+                .input-text{
+                    &.err{
+                        padding-right: 35px !important;
+                    }
+                }
+            }
+        }
+        .empty-search-image{
+            padding: 50px 0;
+        }
+    }
+    .footer-sec{
+        padding: 8px 70px;
+        background: $whiteColor;
+        border-top: 0.5px solid transparent;
+        box-shadow: 0px -4px 4px rgba(168, 200, 221, 0.25);
+        box-sizing: border-box;
+        border-radius: 4px 0px 0px 4px;   
+        margin-top: 4px; 
+        .info-success-message{
+            font-weight: normal;
+            font-size: 12px;
+            line-height: 15px;
+            margin-left: 35px;
+            .info-green{
+                color: #28A745;
+            }
+            .info-red{
+                color: $warningColor;
+            }
+        }
+    }
+    .label-text{
+        color: $primaryFontColor;
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 15px;
+    }
+}
+.mb-10{
+    margin-bottom: 10px;
+}
+.mb-34{
+    margin-bottom: 34px;
+}
+
+input.ng-invalid.ng-touched, input.err {
+    border: 1px solid $warningRed;
+}
+
+
+.info-icon{
+    position: absolute;
+    right: 15px;
+    top: 7px;
+    line-height: normal;
+    cursor: pointer;
+}   

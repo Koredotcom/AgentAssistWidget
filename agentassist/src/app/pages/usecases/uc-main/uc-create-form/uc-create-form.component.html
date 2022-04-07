@@ -1,0 +1,54 @@
+<div class="usecases-create-form-wrapper">
+    <div class="ucf-header">
+        <div class="head">
+            <div class="usecase-icon">
+                <img [src]="currentType.imgSrc" [alt]="currentType.id">
+            </div>
+            <div class="title">
+                {{currentType.title}}
+            </div>
+        </div>
+        <div class="close-u">
+            <img src="assets/images/close.svg" alt="close" (click)="usecaseService.closeNewUsecase()">
+        </div>
+    </div>
+    <div class="ucf-section">
+        <form [formGroup]="ucForm" autocomplete='off'>
+            <div class="single-row">
+                <div class="form-group w-75">
+                    <label for="usecaseName" class="w-100">
+                        <ng-container *ngIf="currentType.id == 'faq'">{{ "USECASES.PRIM_QUES" | translate }}</ng-container>
+                        <ng-container *ngIf="currentType.id == 'dialog'">{{ "USECASES.NAME" | translate }}</ng-container>
+                        <input type="text" maxlength="120" class="form-control" id="usecaseName" #ucName formControlName="usecaseName" [placeholder]="'PLACEHOLDERS.ADD_UC_HERE' | translate">
+                    </label>
+                    <div class="error-message" *ngIf="ucForm.get('usecaseName').invalid && ucForm.get('usecaseName').touched">
+                        <ng-container *ngIf="currentType.id == 'faq'">{{ "USECASES.PLS_VALID_PRIM_QUES" | translate }}</ng-container>
+                        <ng-container *ngIf="currentType.id == 'dialog'">{{ "USECASES.PLS_VALID_NAME" | translate }}</ng-container>
+                    </div>
+                </div>
+                <div class="form-group w-50">
+                    <label for="category" class="w-100">
+                        {{ "USECASES.CATEGORY" | translate }}
+                        <div class="inp-block">
+                            <input type="text" id="category" (keydown)="createCategory($event)" class="form-control" [placeholder]="'PLACEHOLDERS.TYPE_ENTER' | translate" maxlength="30" [matAutocomplete]="auto" #aComp #autoCompleteInput="matAutocompleteTrigger" formControlName="category">
+                            <div class="inp-stamp" [ngStyle]="{'background-color': selectedPallete}"></div>
+                        </div>
+                        <mat-autocomplete #auto="matAutocomplete" (opened)="selectedPallete = '';" (optionSelected)="onCategory($event?.option.value)">
+                            <mat-option *ngFor="let category of filteredOptions | async" class="usecase-category-option" [value]="category.category">
+                                <div>{{category.category}}</div>
+                                <div class="stamp" [ngStyle]="{'background-color': category.colorCode}"></div>
+                            </mat-option>
+                        </mat-autocomplete>
+                    </label>
+                    <div class="error-message" *ngIf="ucForm.get('category').invalid && ucForm.get('category').touched">
+                        {{ "USECASES.PLS_SELECT" | translate }}
+                    </div>
+                </div>
+                <div class="button-group">
+                    <button class="smart-border-btn btn_md mr-10" [disabled]='ucForm.invalid' type="button" (click)="onSubmit(false)">{{ "USECASES.ADD_ANOTHER" | translate }}</button>
+                    <button class="smart-primary-btn btn_md" [disabled]='ucForm.invalid' (click)="onSubmit(true)" type="button">{{ "USECASES.SAVE_FINISH" | translate }}</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

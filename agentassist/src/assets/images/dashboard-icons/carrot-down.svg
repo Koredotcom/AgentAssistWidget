@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="9px" viewBox="0 0 16 9" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 53.2 (72643) - https://sketchapp.com -->
+    <title>carrot-down</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="carrot-down" transform="translate(0.000000, -4.000000)" fill-rule="nonzero">
+            <polygon id="Path" fill-opacity="0" fill="#D8D8D8" points="0 0 16 0 16 16 0 16"></polygon>
+            <path d="M7.628,11.928 C7.821,12.122 8.128,12.133 8.335,11.962 L8.372,11.928 L14.957,5.344 C15.163,5.138 15.163,4.804 14.957,4.599 C14.763,4.405 14.457,4.394 14.249,4.565 L14.212,4.599 L8,10.81 L1.788,4.599 C1.594,4.405 1.288,4.394 1.081,4.565 L1.043,4.599 C0.85,4.792 0.838,5.099 1.009,5.306 L1.043,5.344 L7.628,11.928 Z" id="Path" fill="#26344A"></path>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="9px" height="16px" viewBox="0 0 9 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 53.2 (72643) - https://sketchapp.com -->
+    <title>chevron-right-dark</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="chevron-right-dark" transform="translate(-3.000000, 0.000000)" fill-rule="nonzero">
+            <g id="chevron-right-gray" transform="translate(8.000000, 8.000000) scale(-1, 1) rotate(-90.000000) translate(-8.000000, -8.000000) ">
+                <polygon id="Path" fill-opacity="0" fill="#D8D8D8" points="0 0 16 0 16 16 0 16"></polygon>
+                <path d="M7.628,4.599 C7.821,4.405 8.128,4.394 8.335,4.565 L8.372,4.599 L14.957,11.183 C15.163,11.389 15.163,11.723 14.957,11.928 C14.763,12.122 14.457,12.133 14.249,11.962 L14.212,11.928 L8,5.716 L1.788,11.928 C1.594,12.122 1.288,12.133 1.081,11.962 L1.043,11.928 C0.85,11.734 0.838,11.428 1.009,11.221 L1.043,11.183 L7.628,4.6 L7.628,4.599 Z" id="Path" fill="#26344A"></path>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,15 @@
+<div class="new-delete-popup">
+    <div class="header-sec row m-0">
+      <div class="title col-11 pl-0 pr-3">{{data.title}}</div>
+      <div class="col-1 p-0 close-popup" (click)="dialogRef.close()"><img src="assets/icons/close.svg"></div>
+    </div>
+    <div class="body-info">{{data.text}}</div>
+    <div class="btns-data" *ngIf="data?.buttons?.length > 1">
+      <button (click)="onClickOption(data.buttons[0])"  class="kr-sg-button-primary btn_lg mr-10" *ngIf="data.buttons[0].type !== 'danger'">{{data.buttons[0].label}}</button>
+      <button (click)="onClickOption(data.buttons[0])"  class="kr-sg-button-danger border-0 btn_lg mr-10" *ngIf="data.buttons[0].type === 'danger'">{{data.buttons[0].label}}</button>
+      <button (click)="onClickOption(data.buttons[1])"  class="kr-sg-button-secondary btn_lg mr-10">{{data.buttons[1].label}}</button>
+    </div>
+    <div class="btns-data" *ngIf="data?.buttons?.length == 1">
+      <button (click)="onClickOption(data.buttons[0])"  class="kr-sg-button-secondary btn_lg mr-10">{{data.buttons[0].label}}</button>
+    </div>
+</div>

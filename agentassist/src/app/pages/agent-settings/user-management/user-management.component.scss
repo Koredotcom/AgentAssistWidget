@@ -1,0 +1,228 @@
+@import './../../../scss/variables/variables.scss';
+
+.settings-wrapper {
+    .uc-tabs {
+        font-weight: normal;
+        margin-bottom: 0;
+        margin-left: 70px;
+        width: 100%;
+        position: relative;
+        border: 0;
+        li{
+            padding: 0 10px;
+        }
+        .new-hours-btn{
+            position: absolute;
+            right: 0;
+            top: -10px;
+            img{
+                margin-right: 12px;
+            }
+        }
+        .tab-name {
+            margin-right: 10px;
+            padding: 10px 0;
+            cursor: pointer;
+            position: relative;
+            &.active {
+                &::before{
+                    content: "";
+                    position: absolute;
+                    width: 100%;
+                    height: 2px;
+                    background: $primaryActionColor;
+                    left: 0;
+                    bottom: -1px;
+                }                
+            }
+            > img {
+                width: 18px;
+                margin-right: 10px;
+            }
+        }
+    }
+    header {
+        display: flex;
+        padding: 40px 50px 0px;
+        flex-direction: column;
+        .heading{
+            font-size: 26px;
+            font-weight: bold;
+            color: $primaryFontColor;
+            line-height: 30px;
+            margin-bottom: 0px;
+            white-space: nowrap;
+        }
+    }
+    section {        
+        .scroll-tabs{
+            height: calc(100vh - 161px);
+        } 
+    }
+}
+.user-management-container{
+    padding: 15px 50px;
+    .header-actions{
+        display: flex;
+        align-items: center;
+        padding: 5px;
+        width: 100%;
+        background: $utteraneHovercolor;
+        border-radius: 4px;
+        justify-content: space-between;
+        .left-sec{
+            display: flex;
+            align-items: center;
+            width: 70%;
+            .kr-sg-dropdowns {
+                width: 200px;
+                margin-right: 5px;
+                .dropdown-open {
+                    .dropdown-input{
+                        border: 0;
+                        background: #A6DCE1;
+                        border-radius: 3px;
+                        padding: 0 15px;
+                        .name{
+                            font-weight: normal;
+                            font-size: 12px;
+                            line-height: 15px;
+                            color: $primaryFontColor;
+                            padding-left: 10px;
+                        }
+                        &::before{
+                            background-size: 10px;
+                        }
+                    }
+                }
+                .content-menu{
+                    li{
+                        a{
+                            span{
+                                font-weight: normal;
+                                font-size: 12px;
+                                line-height: 15px;
+                                color: $primaryFontColor;
+                                padding-left: 10px;
+                            }
+                        }
+                    }
+                }
+            }
+            .kr-sg-input-search{
+                width: 400px;
+                right: 55px;
+                position: absolute;
+                input{
+                    background: $whiteColor;
+                    border: 1px solid $border2-color;
+                    box-sizing: border-box;
+                    border-radius: 4px;
+                    &::placeholder{
+                        font-weight: normal;
+                        font-size: 14px;
+                        line-height: 20px;
+                        color: $borderColor;
+                    }
+                }
+            }
+        }
+        .right-sec{
+            display: flex;
+            align-items: center;
+            width: 35%;
+            justify-content: flex-end;
+            .invite-new-user{
+                display: flex;
+                align-items: center;
+                cursor: pointer;
+                span{
+                    color: $primaryActionColor;
+                    font-weight: normal;
+                    font-size: 14px;
+                    line-height: 20px;
+                    margin: 0 12px;
+                }
+            }
+            .kr-sg-dropdowns{
+                width: auto;
+                .dropdown-open{
+                    .dropdown-input{
+                        border: 0;
+                        padding: 0;
+                        background: transparent;
+                        line-height: normal;
+                        width: 34px;
+                        height: 34px;
+                        text-align: center;
+                        border-radius: 4px;
+                        &::before{
+                            display: none;
+                        }
+                    }
+                }
+            }            
+        }
+    }
+    .table-user-managment{
+        height: calc(100vh - 161px);
+        .table-header{
+            margin: 0;
+            padding: 10px 5px;
+            border-bottom: 1px solid rgba(167, 199, 221, 0.5);
+            .title {
+                padding: 0 10px;
+                color: $primaryFontColor;
+                letter-spacing: 0.714286px;
+                text-transform: uppercase;
+                font-weight: 500;
+                font-size: 10px;
+                line-height: 14px;
+            }
+        }
+        .table-body-user{
+            margin: 0 0 5px 0;
+            padding: 10px 5px;
+            align-items: center;
+            background: $whiteColor;
+            box-shadow: 0px 0px 6px rgba(168, 200, 221, 0.3);
+            min-height: 80px;
+            transition: 0.2s all ease;
+            &:hover{
+                background: $primaryBackgroundColor;
+            }
+            .with-checkbox{
+                padding: 0 10px;
+                color: $primaryFontColor;
+                font-weight: normal;
+                font-size: 12px;
+                line-height: 16px;
+                display: flex;
+                align-items: center;                
+            }
+            .title{
+                padding: 0 10px;
+                color: $primaryFontColor;
+                font-weight: normal;
+                font-size: 12px;
+                line-height: 16px;
+            }
+            .date-time{
+                padding: 0 10px;
+                color: $primaryFontColor;
+                font-weight: normal;
+                font-size: 12px;
+                line-height: 16px;
+                .time{
+                    color: $optionalText;
+                }
+            }
+            .delete-user-mang{
+                position: absolute;
+                right: 18px;
+                top: calc(50% - 14px);
+                cursor: pointer;
+            }
+        }
+    }
+}

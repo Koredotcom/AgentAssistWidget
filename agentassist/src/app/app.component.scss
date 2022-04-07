@@ -1,0 +1,50 @@
+@import './scss/variables/variables.scss';
+
+.spin-wait {
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+    align-items: center;
+}
+
+.testing-bot-icon-bottom{
+    position: fixed;
+    bottom: 40px;
+    right: 20px;
+    width: 59px;
+    height: 59px;
+    background: #009DAB;
+    border-radius: 29.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    cursor: pointer;
+    i{
+        color: #FFFFFF;
+        font-size: 24px;
+    }
+    .status-indications{
+        background: #0D6EFD;
+        border: 4px solid #FFFFFF;
+        border-radius: 12.5px;
+        display: inline-block;
+        width: 19px;
+        height: 19px;
+        position: absolute;
+        top: 1px;
+        right: -6px;
+        &.chat-running{
+            background: #0D6EFD;
+        }
+        &.call-running{
+            background: #28A745;
+        }
+    }
+}
+
+// app-content{
+// &.container-fluid{
+// 	@extend %noPadding;
+// }
+// }

@@ -1,0 +1,32 @@
+<div class="skill-optional-dropdown">
+  <div class="label-text" *ngIf="type !== 'floweditor'">{{'AGENT_SKILLS' | translate}} <span>( {{'RECOMMENDED' | translate}} )</span></div>
+  <div class="label-text floweditor" *ngIf="type === 'floweditor'">{{'CHOOSE_SKILLS' | translate}}</div>
+  <mat-form-field class="example-chip-list" chipListAutocompleteFix>
+    <mat-chip-list #chipList>                          
+        <mat-chip *ngFor="let skill of addedSkills" 
+                  [selectable]="selectable" 
+                  [ngStyle]="{'background': skill.color}" 
+                  [removable]="removable" 
+                  (removed)="remove(skill.name)">        
+          <span class="skill-name-chip">{{skill.name}}</span>
+          <img class="close-btn" *ngIf="removable" src="assets/icons/skills/close-chip.png" matChipRemove>
+        </mat-chip>
+      <input
+        placeholder="{{'PLACEHOLDERS.SKILLS_LIST' | translate}}"
+        #skillInput
+        [formControl]="skillCtrl"
+        [matAutocomplete]="auto"
+        [matChipInputFor]="chipList"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        (matChipInputTokenEnd)="add($event)">
+    </mat-chip-list>    
+      <mat-autocomplete #auto="matAutocomplete" class="chips-dropdown-data" (optionSelected)="onOptSelect($event)"> <!-- (optionSelected)="selected($event)"-->
+        <perfect-scrollbar>
+          <mat-option *ngFor="let sk of filteredSkills | async | lookup:addedSkills" [value]="sk.id">
+            <span class="skills-name">{{sk.name}}</span>
+            <span class="skills-count" *ngIf="sk.type == 'skillGp'">{{sk.count}} {{'NAV.SKILLS' | translate}}</span>
+          </mat-option>
+        </perfect-scrollbar>        
+      </mat-autocomplete>     
+  </mat-form-field>
+</div>

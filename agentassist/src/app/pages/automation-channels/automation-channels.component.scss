@@ -1,0 +1,115 @@
+@import './../../scss/variables/variables.scss';
+
+.settings-wrapper {
+    padding: 0 30px;
+    header {
+        display: flex;
+        // padding: 40px 50px 0px;
+        flex-direction: column;
+        .heading{
+            font-size: 26px;
+            font-weight: bold;
+            color: $primaryFontColor;
+            line-height: 30px;
+            // margin-bottom: 32px;
+        }
+    }
+    .header-sec-with-tabs{
+        display: flex;
+        align-items: center;
+        margin-bottom: 30px;
+        padding: 40px 10px 0px 10px;
+        .channels-nav-section {
+            margin-left: 40px;
+            .nav-tabs{
+                border: 0;
+                .tabs{
+                    cursor: pointer;
+                    margin-right: 20px;
+                    a{
+                        padding: 10px;
+                        font-weight: normal;
+                        font-size: 14px;
+                        line-height: 17px;
+                        color: #202124;
+                    }
+                    &.active{
+                        a{
+                            border-bottom: 2px solid #009DAB;
+                        }
+                    }
+                }
+            }
+            .tabs {
+                cursor: pointer;
+                font-size: 14px;
+                line-height: 17px;
+                color: #000000;
+            }
+            .active {
+        
+            }
+        }   
+    }
+}
+
+.scroll-channels{
+    height: calc(100vh - 165px);
+}
+.channels-layouts-sec{
+    padding: 0 45px;
+    .channels-category{
+        margin-bottom: 40px;
+        .main-title{
+            font-weight: 600;
+            font-size: 16px;
+            color: $primaryFontColor;
+            line-height: 19px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-left: 5px;
+            img{
+                margin-right: 8px;
+            }
+        }
+        .channels-block{
+            display: flex;
+            flex-wrap: wrap;
+            .channel{
+                display: flex;
+                align-items: center;
+                background: $whiteColor;
+                border: 1px solid #D7D6DF;
+                box-sizing: border-box;                
+                border-radius: 8px;
+                width: 244px;
+                margin: 5px;
+                padding: 10px 18px;
+                min-height: 76px;
+                cursor: pointer;
+                transition: 0.2s all ease;
+                &:hover{
+                    box-shadow: 0px 4px 4px rgba(168, 200, 221, 0.25);
+                }
+                .channel-img{
+                    width: 36px;
+                    height: 36px;
+                    img{
+                        width: 36px;
+                        height: 36px;
+                    }
+                }
+                .channel-name{
+                    padding-left: 20px;
+                    letter-spacing: 0.02em;
+                    font-weight: 500;
+                    font-size: 14px;
+                    line-height: 17px;
+                    color: $primaryFontColor;
+                }
+            }
+        }
+
+    }
+}

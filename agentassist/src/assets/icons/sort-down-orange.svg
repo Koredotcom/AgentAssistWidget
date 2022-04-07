@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="8px" height="14px" viewBox="0 0 8 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 53.2 (72643) - https://sketchapp.com -->
+    <title>sort-down-orange</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard" transform="translate(-293.000000, -150.000000)" fill-rule="nonzero">
+            <g id="sort-down-orange" transform="translate(289.000000, 149.000000)">
+                <polygon id="Path" fill-opacity="0" fill="#D8D8D8" points="0 0 16 0 16 16 0 16"></polygon>
+                <path d="M8.032,1.778 C8.314,1.778 8.546,1.994 8.571,2.269 L8.573,2.319 L8.573,12.468 L10.719,10.537 C10.929,10.347 11.245,10.353 11.448,10.542 L11.482,10.577 C11.672,10.787 11.666,11.103 11.477,11.306 L11.442,11.341 L8.395,14.083 C8.201,14.258 7.913,14.268 7.708,14.114 L7.671,14.084 L4.623,11.341 C4.401,11.141 4.383,10.799 4.583,10.577 C4.772,10.367 5.088,10.339 5.309,10.505 L5.347,10.537 L7.491,12.467 L7.491,2.319 C7.491,2.019 7.734,1.778 8.032,1.778 Z" id="Path" fill="#F5A623"></path>
+            </g>
+        </g>
+    </g>
+</svg>

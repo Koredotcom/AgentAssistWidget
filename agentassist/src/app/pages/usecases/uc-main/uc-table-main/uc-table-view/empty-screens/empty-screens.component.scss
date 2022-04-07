@@ -1,0 +1,25 @@
+@import './../../../../../../scss/variables/variables.scss';
+
+.empty-screen {
+    display: flex;
+    height: auto;
+    align-items: center;
+    border-top: 1px solid $agentAccordionBorder;
+    padding: 60px 115px;
+    .image {
+        margin-right: 40px;
+    }
+    .infor {
+        .head {
+            font-size: 20px;
+            font-weight: 700;
+            color: $descColor;
+            margin-bottom: 20px;
+        }
+        .desc {
+            font-size: 14px;
+            line-height: 20px;
+            color: $descColor;
+        }
+    }
+}

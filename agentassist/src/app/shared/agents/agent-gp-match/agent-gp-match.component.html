@@ -1,0 +1,48 @@
+<mat-form-field class="agent-group-match-chip-list">
+    <mat-chip-list #chipList>
+        <mat-chip *ngFor="let agentGrp of selectedAgentGroups" 
+                [selectable]="true" 
+                [removable]="true" 
+                (removed)="remove(agentGrp)">                                                    
+            <span class="chip-name">
+                <img class="agent-name-starts" *ngIf="agentGrp?.managers.length && (agentGrp?.managers[0].profImage != 'no-avatar')" [src]="agentGrp?.managers[0].profImage">
+                <span *ngIf="agentGrp?.managers.length == 0 || (agentGrp?.managers.length && agentGrp?.managers[0].profImage == 'no-avatar')" class="agent-name-starts">{{agentGrp?.name[0]}}</span>
+                <!-- <span class="agent-name-starts">U</span> -->
+                <div class="content-data">
+                    <div class="g-name">{{agentGrp?.name}}</div>
+                    <div class="g-members">{{agentGrp?.totalAgents}} {{'AGENTASSIST.MEMBERS' | translate}}</div>
+                </div>
+            </span>
+        </mat-chip>
+        <input placeholder="{{'PLACEHOLDERS.AGENT_GROUP_NAME' | translate}}"
+                [matChipInputFor]="chipList"
+                [formControl]="itemCtrl"
+                [matAutocomplete]="auto"
+                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                [matChipInputAddOnBlur]="true"
+                (matChipInputTokenEnd)="add($event)"
+                #ii>
+    </mat-chip-list>
+    <mat-autocomplete class="agent-group-match-chip-list-autocomplete-dropdown" #auto="matAutocomplete" (optionSelected)="selected($event,ii)">
+        <perfect-scrollbar class="scroll-type-skill-drpdown">
+            <div class="content-mat-options">
+                <ng-container *ngIf="filteredAgentGroups?.length; else noAgentGpElseBlock">
+                    <mat-option *ngFor="let item of filteredAgentGroups | filter: [ ii.value, 'name']" [value]="item">
+                        <img class="agent-name-starts" *ngIf="item?.managers.length && (item?.managers[0].profImage != 'no-avatar')" [src]="item?.managers[0].profImage">
+                        <!-- <span class="agent-name-starts">U</span> -->
+                        <span *ngIf="item?.managers.length == 0 || (item?.managers.length && item?.managers[0].profImage == 'no-avatar')" class="agent-name-starts">{{item?.name[0]}}</span>                                  
+                        <div class="content-data">
+                            <div class="g-name">{{item?.name}}</div>
+                            <div class="g-members">{{item?.totalAgents}} members</div>
+                        </div>
+                    </mat-option>
+                </ng-container>
+                <ng-template #noAgentGpElseBlock>
+                    <mat-option>
+                        <span class="noAgentGpsOption">No more Agent Groups to add..</span>
+                    </mat-option>
+                </ng-template>
+            </div>
+        </perfect-scrollbar>
+    </mat-autocomplete>
+</mat-form-field>

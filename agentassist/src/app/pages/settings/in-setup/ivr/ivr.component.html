@@ -1,0 +1,116 @@
+<div class="slider-sec-data">
+    <form #ivrForm="ngForm">
+        <div class="header-sec row m-0">
+            <div class="lef-sec col-8 p-0">
+                <img src="assets/icons/deployment-icons/voice-id.svg" class="iconDefault">
+                <span class="main-title">{{'SETTINGS.TRANSFER_FROM_IVR' | translate}}</span>
+            </div>
+            <div class="close-link col-4 p-0" (click)="close()"><img src="assets/images/close.svg"></div>
+        </div>
+        <perfect-scrollbar class="scroll-content">
+            <div class="ivr-container-data">
+                <div class="main-title">{{'SETTINGS.SIP_CALL_TRANSFER_SETUP' | translate}}</div>
+                <div class="sub-info">{{'SETTINGS.IVR_DESC' | translate}}</div>
+                <div class="kr-sg-input-text mb-23">
+                    <div class="label-text">SIP URI</div>
+                    <input type="text" name="sipDomainName" class="input-text" readonly [(ngModel)]="model.sipURI">                                
+                </div>
+                <div class="network-component mb-23">
+                    <div class="label-text">{{'SETTINGS.NETWORK' | translate}}</div>
+                    <div class="box-data">
+                        <div class="group-radiobutton">                      
+                            <div class="kr-sg-radiobutton">
+                                <input id="radio-22" name="network" class="radio-custom" type="radio" (change)="model.network = 'listofIp'" [checked]="model.network === 'listofIp'">
+                                <label for="radio-22" class="radio-custom-label">{{'SETTINGS.LIST_OF_IP_ADDRESS' | translate}}</label>
+                            </div>
+                            <div class="kr-sg-radiobutton">
+                                <input id="radio-23" name="network" class="radio-custom" type="radio" (change)="model.network = 'domainName'" [checked]="model.network === 'domainName'">
+                                <label for="radio-23" class="radio-custom-label">{{'SETTINGS.DOMAIN_NAME' | translate}}</label>
+                            </div>
+                        </div>
+                        <div class="kr-sg-input-text-area" *ngIf="model.network === 'listofIp'">
+                            <div class="label-text">{{'SETTINGS.INCOMING_IP_ADDRESS' | translate}}</div>
+                            <textarea [placeholder]="'SETTINGS.IPADDRESS_PLACEHOLDER' | translate" class="input-text" name="incomingIpAddresses" [(ngModel)]="model.incomingIpAddresses" #ipAddress="ngModel" onkeypress='return (event.charCode >= 32 && event.charCode <= 58) || (event.charCode == 43)' required ></textarea>                                
+                            <div class="error-msg" *ngIf="ipAddress.touched && ipAddress.errors && ipAddress.errors.required">{{"SETTINGS.IP_ADDRESS_REQUIRED" | translate}}</div>
+                            <div class="error-msg" *ngIf="ipAddress.touched && ipAddress.errors && ipAddress.errors.pattern">{{"SETTINGS.VALID_IP_ADDRESS" | translate}}</div>
+                        </div>
+                        <div class="domain-data" *ngIf="model.network === 'domainName'">
+                            <div class="kr-sg-input-text mb-3">
+                                <div class="label-text">{{'SETTINGS.FULLY_QUALIFIED_DOMAIN_NAME' | translate}}</div>
+                                <input type="text" placeholder="xyz.com" class="input-text" [(ngModel)]="model.fqdn" name="fqdn" #fqdn="ngModel" required>   
+                                <div class="error-msg" *ngIf="fqdn.touched && fqdn.errors && fqdn.errors.required">{{'SETTINGS.FQDN_REQUIRED' | translate}} </div>                             
+                            </div>
+                            <div class="kr-sg-dropdowns">
+                                <div class="label-text">{{'SETTINGS.DNS_RESOLVE_METHOD' | translate}}<span class="optional">( {{'SETTINGS.OPTIONAL' | translate}} )</span></div>
+                                <div class="dropdown dropdown-open">
+                                    <button class="dropdown-toggle dropdown-input" data-toggle="dropdown">{{model.dnsResolveMethod || ('COMMON.SELECT' | translate)}}</button>                                            
+                                    <ul class="dropdown-menu content-menu">                                                                          
+                                      <li *ngFor="let method of dnsResolveMethods" (click)="model.dnsResolveMethod = method"><a>{{method}}</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>                    
+                    </div>                
+                </div>
+                <div class="kr-sg-dropdowns mb-23 d-none">
+                    <div class="label-text">{{"IVR.LANG_PREF" | translate}}</div>
+                    <div class="dropdown dropdown-open">
+                        <button class="dropdown-toggle dropdown-input" data-toggle="dropdown">{{"IVR.ENG" | translate}}</button>                                            
+                        <ul class="dropdown-menu content-menu">                                                                          
+                          <li><a>{{"IVR.ENG" | translate}}</a></li>
+                        </ul>
+                      </div>
+                </div>
+                <div class="kr-sg-input-text mb-23 d-none">
+                    <div class="label-text">{{'SETTINGS.DID_NUMBER' | translate}}</div>
+                    <input type="text" placeholder="9876543210" class="input-text">                                
+                </div>
+                <div *ngIf="showAudioCodes" class="mb-23">
+                    <div class="label-text font-weight-bold">{{'SETTINGS.DID_NUMBER' | translate}}</div>    
+                    <mat-form-field class="example-chip-list" [floatLabel]="'never'">
+                        <mat-chip-list #chipList>
+                            <mat-chip *ngFor="let tag of didNumbers"
+                                         (removed)="onDIDNumberRemove(tag)">
+                                        {{tag}}
+                                <mat-icon matChipRemove><img src="assets/images/close.svg"></mat-icon>
+                            </mat-chip>
+                            <input type="text" id="didNumber" name="" class="sys-input" [(ngModel)]="model.didNumber" [ngModelOptions]="{updateOn: 'blur', standalone: true}" #didNumber="ngModel" required onkeypress='return (event.charCode >= 48 && event.charCode <= 57) || (event.charCode == 43)' [placeholder]="'SETTINGS.DID_NUMBER_PLACEHOLDER' | translate"
+                                    (focus)="onDidNumberFocus($event)"
+                                    [matChipInputFor]="chipList"
+                                    matChipInputAddOnBlur= "true"
+                                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                    (matChipInputTokenEnd)="OnDidNumberUpdated($event)">  
+                            </mat-chip-list>
+                    </mat-form-field>
+                    <div class="kr-sg-input-text">                                                             
+                        <div class="error-msg" *ngIf="didNumber.touched && didNumber.errors && didNumber.errors.required && !didNumbers.length">{{'SETTINGS.DID_NUMBER_REQUIRED' | translate}}</div>              
+                    </div>
+                </div>              
+                <div class="kr-sg-dropdowns mb-23">
+                    <div class="label-text">{{'SETTINGS.SIP_TRANSPORT_TYPE' | translate}}<span class="optional"></span></div>
+                    <div class="dropdown dropdown-open">
+                        <button class="dropdown-toggle dropdown-input" data-toggle="dropdown">{{model.sipTransportType || ('COMMON.SELECT' | translate)}}</button>                                            
+                        <ul class="dropdown-menu content-menu">                                                                          
+                            <li (click)="onChangeSIPTransportType(transport)" *ngFor="let transport of sipTransportTypes"><a>{{transport}}</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="sip-credentials mb-23">
+                    <div class="label-text mb-2">{{'SETTINGS.SIP_CREDENTIALS' | translate}}<span class="optional">( {{'SETTINGS.OPTIONAL' | translate}} )</span></div>
+                    <div class="inputs-box">
+                        <div class="kr-sg-input-text mb-20">                             
+                            <input type="text" [placeholder]="'COMMON.USER_NAME' | translate" class="input-text" name="username" [(ngModel)]="model.sipUserName">                                
+                        </div>
+                        <div class="kr-sg-input-text">                                
+                            <input type="text" [placeholder]="'COMMON.PASSWORD' | translate" class="input-text" name="password" [(ngModel)]="model.sipPassword">                                
+                        </div>
+                    </div>
+                </div>
+            </div>     
+        </perfect-scrollbar>  
+        <div class="footer-sec">
+            <button class="kr-sg-button-primary btn_lg mr-2" [disabled]="saveInProgress || ivrForm.invalid || !didNumbers.length" (click)="SipTransferConfig()">{{(saveInProgress ? 'BUTTONS.SAVING' : 'BUTTONS.SAVE') | translate}}</button>        
+            <button class="kr-sg-button-secondary btn_lg ml-1" (click)="onCancel()">{{'BUTTONS.CANCEL' | translate}}</button>        
+        </div>
+    </form>
+</div>

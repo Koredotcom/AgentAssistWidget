@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="17px" height="2px" viewBox="0 0 17 2" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 53.2 (72643) - https://sketchapp.com -->
+    <title>inter</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard" transform="translate(-318.000000, -232.000000)" fill-rule="nonzero">
+            <g id="inter" transform="translate(317.000000, 224.000000)">
+                <polygon id="Path" fill-opacity="0" fill="#D8D8D8" points="0 1 16 1 16 17 0 17"></polygon>
+                <path d="M13.8819984,3.1036463 C14.0819984,2.8886463 14.4149984,2.8786463 14.6269984,3.0796463 C14.8269984,3.2686463 14.8469984,3.5776463 14.6839984,3.7916463 L14.6509984,3.8316463 L4.36700164,14.8963537 C4.17700164,15.1013537 3.86300164,15.1203537 3.65100164,14.9463537 L3.61300164,14.9113537 L3.61300164,14.8963537 C3.40800164,14.6903537 3.41000164,14.3200158 3.61300164,14.1100158 C3.80600164,13.9130158 3.90126141,13.6791281 4.10926141,13.8501281 L4.35800164,14.1040158 L3.84070672,13.8501281 L13.8819984,3.1036463 Z" id="Path" fill="#FFFFFF" transform="translate(9.126577, 9.000021) rotate(47.000000) translate(-9.126577, -9.000021) "></path>
+            </g>
+        </g>
+    </g>
+</svg>

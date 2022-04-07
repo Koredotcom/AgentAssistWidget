@@ -1,0 +1,31 @@
+<div class="settings-wrapper">
+    <div class="header-sec-with-tabs">
+        <header>
+            <div class="heading">{{'NAV.CHANNELS' | translate}}</div>        
+        </header>
+        <div class="channels-nav-section">
+            <ul class="nav nav-tabs">
+                <li class="tabs active" [ngClass]="{'active' : showVoiceSection}" (click)="showHideSec('voice')">
+                    <a data-toggle="tab" href="#voice">Voice</a>
+                </li>                                
+                <li class="tabs" [ngClass]="{'active' : showChatSection}" (click)="showHideSec('chat')">
+                    <a data-toggle="tab" href="#chat">Chat</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    
+    <div id="voice" *ngIf="showVoiceSection">
+        <div class="scroll-channels">
+            <app-voice-settings></app-voice-settings>
+        </div>
+    </div>
+    
+    <div id="chat" *ngIf="showChatSection">
+        <app-bt-container hideMenu="true"></app-bt-container>
+    </div>
+</div>
+
+
+
+

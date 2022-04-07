@@ -1,0 +1,49 @@
+<div *ngIf="agentDetails && !isLoading">
+  <div>
+    <app-header-agent></app-header-agent>
+  </div>
+  <div class="agent-main-section row">
+    <div class="first-col col">
+      <app-call-details></app-call-details>
+      <div class="sentiments-wrap">
+        <div class="sentiments-header">
+          <h4>{{"MAIN_AGENT.SENTIMENTS_IN_CURRENT_CONVS" | translate}}</h4>
+          <div class="info-icon">
+            <img src="assets/images/dashboard-icons/Info.svg">
+            <span class="tooltiptext">{{"UNIDENTIFIED_UTTER.VIRTUAL_ASSIST_COULDNT_IDENTIFY_INTENT" | translate}}</span>
+          </div>
+        </div>
+        <div class="sentiments-body">
+          <div class='smileys' *ngFor="let smiley of smileyList">
+            <div class="image" [ngClass]="{'active': activeSmiley.indexOf(smiley.title.toLowerCase()) > -1}" ><img [src]="smiley.imgSrc" alt=""></div>
+            <div class="title">{{smiley.title}}</div>
+          </div>
+        </div>
+      </div>
+  
+    </div>
+    <div class="second-col col">
+      <div class="intent-bef">
+        <h4>{{"MAIN_AGENT.INTENT_BEFORE_AGENT_TRANSFER" | translate}}</h4>
+        <h6>{{agentDetails.conversationInfo?.currentTask}}</h6>
+        <div class="info-icon">
+          <img src="assets/images/dashboard-icons/Info.svg">
+          <span class="tooltiptext">{{"MAIN_AGENT.LAST_TASK_VIRTUAL ASSIST_BEFORE_TRANSFER_TO_AGENT" | translate}}</span>
+        </div>
+      </div>
+      <!-- <app-conversation-flow></app-conversation-flow> -->
+      <app-agent-conver-flow></app-agent-conver-flow>
+  
+      <app-unidentified-utter></app-unidentified-utter>
+    </div>
+    <div class="third-col col">
+      <app-agent-chat-history></app-agent-chat-history>
+    </div>
+  </div>
+</div>
+<div *ngIf="!agentDetails && !isLoading">
+  {{"MAIN_AGENT.ERR_LOADING_AGENT_CHAT_HISTORY" | translate}}
+</div>
+<div *ngIf="isLoading" class="loading-agent">
+  <img src="assets/images/logoIcon.png" class="loaderLogoImage" >
+</div>

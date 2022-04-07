@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="14px" height="12px" viewBox="0 0 14 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Icon / 16x16 / UI Forms / Image</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Custom-Preset-Copy" transform="translate(-716.000000, -95.000000)">
+            <g id="Icon-/-16x16-/-UI-Forms-/-Image" transform="translate(715.000000, 93.000000)">
+                <rect id="Rectangle-Copy" fill-opacity="0" fill="#D8D8D8" x="0" y="0" width="16" height="16"></rect>
+                <path d="M2.5,2 C1.675781,2 1,2.675781 1,3.5 L1,12.5 C1,13.324219 1.675781,14 2.5,14 L13.5,14 C14.324219,14 15,13.324219 15,12.5 L15,3.5 C15,2.675781 14.324219,2 13.5,2 L2.5,2 Z M2.5,3 L13.5,3 C13.78125,3 14,3.21875 14,3.5 L14,10.765625 L10.496094,7.066406 L8.542969,9.265625 L5.53125,6.089844 L2,10.066406 L2,3.5 C2,3.21875 2.21875,3 2.5,3 Z M11,4 C10.449219,4 10,4.449219 10,5 C10,5.550781 10.449219,6 11,6 C11.550781,6 12,5.550781 12,5 C12,4.449219 11.550781,4 11,4 Z M5.554688,7.566406 L10.707031,13 L2.5,13 C2.21875,13 2,12.78125 2,12.5 L2,11.574219 L5.554688,7.566406 Z M10.515625,8.546875 L14,12.21875 L14,12.5 C14,12.78125 13.78125,13 13.5,13 L12.082031,13 L9.234375,9.992188 L10.515625,8.546875 Z" id="Shape" fill="#FFFFFF"></path>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,317 @@
+@import './../../../scss/variables/variables.scss';
+
+
+.slider-sec-data{
+    .header-sec{
+        background: $whiteColor;
+        box-shadow: 0px 4px 4px rgba(168, 200, 221, 0.25);
+        border-radius: 4px 0px 0px 4px;
+        padding: 25px 20px 20px 20px;
+        align-items: center;
+        margin-bottom: 6px !important;
+        .lef-sec{
+            display: flex;
+            align-items: center;
+            .main-title{
+                color: $primaryFontColor;
+                font-weight: bold;
+                font-size: 18px;
+                line-height: 22px;
+                margin-left: 20px;
+                .small-text{
+                    color: $primaryFontColor;
+                    font-weight: 500;
+                    font-size: 15px;
+                    line-height: 18px;
+                    padding-left: 5px;
+                }
+            }
+        }
+        .close-link{
+            text-align: right;
+            img{
+                cursor: pointer;
+                padding: 7px;
+                border-radius: 100px;
+                transition: 0.2s all ease-in;
+                &:hover{
+                    background: $hoverImgcolor;
+                }
+            }
+        }
+    }
+    .scroll-content{
+        height: calc(100vh - 142px);            
+    }  
+
+    .new-agent-container{
+        position: relative;
+        padding: 45px 70px;
+        textarea{
+            resize: none;
+        }
+        .label-text{
+            font-size: 14px;
+            color: $primaryFontColor;
+            margin-bottom: 7px;
+            font-weight: 500;           
+            line-height: 17px;
+        }
+      
+        .agent-data-inputs{
+            margin: 0 0 30px 0;
+        }
+       
+
+        .language-support-table-data{
+            margin: 30px 0;
+            .title{
+                color: $primaryFontColor;
+                font-weight: 600;
+                font-size: 14px;
+                line-height: 17px;
+                margin-bottom: 18px;
+            }
+            .table-header-sec{
+                background: #F9FBFF;
+                padding: 10px 0;
+                margin: 0;
+                border-bottom: 1px solid rgba(167, 199, 221, 0.5);
+                .header-title{
+                    color: $primaryFontColor;
+                    letter-spacing: 0.714286px;
+                    text-transform: uppercase;
+                    font-weight: 500;
+                    font-size: 10px;
+                    line-height: 14px;
+                }
+            }
+            .table-body-sec{
+                padding: 15px 0;
+                margin: 0 0 5px 0;
+                align-items: center;
+                background: $whiteColor;
+                box-shadow: 0px 0px 6px rgb(168 200 221 / 30%);     
+                min-height: 80px;
+                .group-manager{
+                    display: flex;
+                    align-items: center;
+                    width: calc(100% - 30px);
+                    .img-manager{
+                        width: 40px;
+                        height: 40px;
+                        img{
+                            width: 40px;
+                            height: 40px;
+                            border: 2px solid $whiteColor;
+                            border-radius: 100%;
+                        }
+                    }
+                    .manager-data{
+                        padding-left: 12px;
+                        width: calc(100% - 40px);
+                        .m-name{
+                            color: $primaryFontColor;
+                            font-weight: 500;
+                            font-size: 14px;
+                            line-height: 16px;
+                            margin-bottom: 4px;
+                        }
+                        .m-email{
+                            color: $descFontColor;
+                            font-weight: 500;
+                            font-size: 12px;
+                            line-height: 16px;
+                        }
+                    }
+                }         
+                .profiency_level{
+                    display: flex;
+                    align-items: center;
+                    .delete-access{
+                        margin-left: 30px;
+                        cursor: pointer;
+                    }
+                    .level-type{
+                        font-weight: 500;
+                        font-size: 14px;
+                        line-height: 17px;
+                        text-align: center;
+                        display: flex;
+                        align-items: center;
+                        position: relative;
+                        height: 40px;
+                        color: $primaryActionColor;
+                        cursor: pointer;
+                        &.active-type{
+                            height: 44px !important;
+                            box-shadow: 0px 3px 5px rgb(0 0 0 / 15%);
+                            &::before{
+                                content: "";
+                                position: absolute;
+                                width: calc(100% - 20px);
+                                height: 2px;
+                                bottom: -9px;
+                                left: 0;
+                                background: #007D88;
+                                margin: 0 auto;
+                                right: 0;
+                            }
+                        }
+                        &.view{
+                            background: #D5F0F2;
+                            border-radius: 10px 0px 0px 10px;
+                            height: 40px;
+                            padding: 10px 14px;                                                     
+                        }
+                        &.interact{
+                            background: #BFE8EC;
+                            border-radius: 0px;
+                            height: 40px;                                              
+                            padding: 10px;
+                        }
+                     
+                        &.full{
+                            background: $primaryActionColor;
+                            border-radius: 0px 10px 10px 0px;                                                                              
+                            padding: 10px 14px;
+                            color: $whiteColor;      
+                        }
+                    }
+                }
+            }
+        }
+        .type-skill-name-block{  
+            position: relative;  
+            top: -2px;
+            background: #F9FBFF;
+            padding: 22px 15px;                
+            .kr-sg-dropdowns{
+                .dropdown-open {
+                    .dropdown-input{
+                        &::before{
+                            display: none !important;
+                        }
+                    }
+                }
+                .kr-sg-input-inline-search{
+                    .search-with-dropdown{
+                        position: absolute;
+                        border: 0;
+                    }
+                    input{
+                        height: 34px;
+                        padding-left: 10px;
+                        padding-right: 30px;                        
+                    }
+                    .search-icon{
+                        top: 10px;
+                        width: auto;
+                        height: auto;
+                        left: auto;
+                        right: 8px;
+                    }
+                    .content-menu{
+                        margin: 5px 0 0 0;
+                        padding: 0;
+                        border: 0;
+                        max-height: 250px;
+                        .skill-agent-dropdown-scroll{
+                            max-height: 250px;
+                        }
+                        .inside-data-content{
+                            background: $whiteColor;                            
+                            box-sizing: border-box;                            
+                            max-height: 250px;
+                            li{
+                                display: flex;
+                                align-items: center;
+                                height: 50px;
+                                padding: 10px 10px;
+                                border: 1px solid #E7F1FF;
+                                cursor: pointer;
+                                transition: 0.2s all ease;
+                                &:hover{
+                                    background: #E7F1FF;
+                                }
+                                &.selected-typing{
+                                    background: #E7F1FF;
+                                }
+                                .agent-img-block{
+                                    width: 30px;
+                                    height: 30px;
+                                    position: relative;
+                                    img{
+                                        width: 30px;
+                                        height: 30px;
+                                    }
+                                    .user-online{
+                                        position: absolute;
+                                        width: 8px;
+                                        height: 8px;
+                                        background: #27AE60;
+                                        border: 1px solid $whiteColor;
+                                        border-radius: 100%;
+                                        bottom: 1px;
+                                        right: -1px;
+                                        &.away{
+                                            background: #FFA726;
+                                        }                                        
+                                    }
+                                }
+                                .content-block{
+                                    padding-left: 10px;
+                                    .agent-name{
+                                        color: $primaryFontColor;
+                                        font-weight: 500;
+                                        font-size: 12px;
+                                        line-height: 15px;
+                                        margin-bottom: 1px;
+                                    }
+                                    .agent-email{
+                                        color: $primaryFontColor;
+                                        font-weight: normal;
+                                        font-size: 10px;
+                                        line-height: 12px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }                            
+                // ul{             
+                //     li{
+                //         position: relative;                                                                                                      
+                //     }
+                // }
+            }
+        } 
+    }
+    .delete-agent-group{
+        position: absolute;
+        top: 27px;
+        color: $warningColor;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 20px;
+        padding: 3px 10px;
+        display: flex;
+        align-items: center;
+        right: 70px;
+        cursor: pointer;
+        z-index: 1;
+        img{
+            margin-right: 12px;
+        }
+    }
+       
+    .footer-sec{
+        padding: 8px 70px;
+        background: $whiteColor;
+        border-top: 0.5px solid transparent;
+        box-shadow: 0px -4px 4px rgba(168, 200, 221, 0.25);        
+        box-sizing: border-box;
+        border-radius: 4px 0px 0px 4px;  
+        margin-top: 4px;
+    }
+}

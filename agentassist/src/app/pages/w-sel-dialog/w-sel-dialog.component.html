@@ -1,0 +1,531 @@
+
+<div class="welcome-selection-container">  
+    <div (click)="close()" *ngIf="regularUser" [hidden]="(activeMod.import && importBotMod.second) || (activeMod.import && importBotMod.fifth)" class="close-modal">
+      <img src="assets/icons/welcome/close.svg">
+    </div>
+    <perfect-scrollbar class="perfect-scrollbar-welcome" *ngIf="step == 1">
+        <div class="conatiner-sec">
+            <div *ngIf="!isNewBot">
+                <div class="titles-header">
+                    <div class="main-title" *ngIf="!regularUser">{{ "ONBOARDING.HI" | translate }}  {{userName | titlecase}}, {{ "ONBOARDING.WELCOME_SMART" | translate }}</div>
+                    <div class="main-title" *ngIf="regularUser">{{ "ONBOARDING.HI" | translate }}  {{userName | titlecase}}</div>
+                    <div class="desc_info" *ngIf="!regularUser">{{ "ONBOARDING.WELCOME_DESC_UP" | translate }}</div>
+                    <div class="desc_info" *ngIf="regularUser">{{ "ONBOARDING.WELCOME_DESC_UP" | translate }}</div>
+                </div>
+                <div class="cards-data">
+                    <div class="card_sec" [ngClass]="{'active': activeMod.createNew}" (click)="modSwitch('createNew'); step = 2;">
+                        <div class="img-block"><img src="assets/icons/welcome/new-bot.svg"></div>
+                        <div class="title">{{ "ONBOARDING.CREATE_NEW" | translate }}</div>
+                        <div class="desc-text">{{ "ONBOARDING.CREATE_NEW_DESC" | translate }}</div>
+                    </div>
+                    <div class="card_sec disabled" [ngClass]="{'active': activeMod.selectBot}" (click)="convertBotSelection();">
+                        <div class="img-block"><img src="assets/icons/welcome/existing.svg"></div>
+                        <div class="title">{{ "ONBOARDING.SELECT_EXISTING" | translate }}</div>
+                        <div class="desc-text">{{ "ONBOARDING.SELECT_EXISTING_DESC" | translate }}</div>
+                    </div>
+                    <div class="card_sec disabled" [ngClass]="{'active': activeMod.import}" (click)="importSelect()">
+                        <div class="img-block"><img src="assets/icons/welcome/create-templates.svg"></div>
+                        <div class="title">{{ "USECASES.NEW_PRE_BOT" | translate }}</div>
+                        <div class="desc-text">{{ "ONBOARDING.CREATE_TEMPLATES_DESC" | translate }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </perfect-scrollbar>
+
+    <div class="container-selection-bots p-0" *ngIf="step == 2 && activeMod.selectBot">
+        <div class="selection-loading" *ngIf="existingBotsFetching">
+            <mat-spinner diameter="20"></mat-spinner>
+            <span class="pl-3">{{ 'ONBOARDING.FETCHING_EXISITING_BOTS' | translate}}</span>
+        </div>
+
+        <ng-container *ngIf="!existingBotsFetching">
+            <div *ngIf='selectBotMod.first' [ngClass]="{'backing-up': isBackInProgress}" class="existing-bot-data">
+                <div class="header-sec">
+                    <div class="title-arrow"><img src="assets/icons/welcome/arrow-back.svg" (click)="selectBackStep()" class="d-none">{{ "ONBOARDING.SELECT_EXISTING_BOTS" | translate }}</div>
+                    <div class="kr-sg-input-search" [hidden]="!botList?.length">                                                 
+                        <input type="text" [placeholder]="'PLACEHOLDERS.SEARCH_BOT' | translate" maxlength="50" [(ngModel)]="searchBot" class="input-search">
+                        <img src="assets/icons/search_gray.svg" class="search-icon">
+                    </div>
+                </div>
+                <perfect-scrollbar class="scroll-content">
+                    <div class="c-body-sec">
+                        <div class="bots-cards">
+                            <div class="no-search" [hidden]="botList.length == 0" *ngIf="(botList | filter:[searchBot, 'name']).length === 0">
+                                <img src="assets/icons/welcome/warning.svg">
+                                {{ "ONBOARDING.NO_SEARCH_RESULTS" | translate }}
+                            </div>
+                            <div class="b-card" [ngClass]="{'active': b._id == selectedBot}" (click)="selectedBot = b._id; selectedBotName = b.name;" *ngFor="let b of botList | filter:[searchBot, 'name']">
+                                <div class="img_sec" *ngIf="!b.icon">
+                                    <img src="assets/icons/welcome/botdummy.svg">
+                                </div>
+                                <div class="img_sec" *ngIf="b.icon">
+                                    <img [src]="b.icon">
+                                </div>
+                                <div class="info-titles">
+                                    <div class="bot-name" [title]="b.name">{{b.name}}</div>
+                                    <div class="bot-desc" *ngIf="b.faqsCount > 1">{{b.faqsCount}} {{ "ONBOARDING.QnA" | translate }}</div>
+                                    <div class="bot-desc" *ngIf="b.faqsCount == 1">{{b.faqsCount}} {{ "ONBOARDING.QnA_SINGLE" | translate }}</div>
+                                    <div class="bot-desc" *ngIf="b.dialogsCount > 1">{{b.dialogsCount}} {{ "ONBOARDING.DIALOGS" | translate }}</div>
+                                    <div class="bot-desc" *ngIf="b.dialogsCount == 1">{{b.dialogsCount}} {{ "ONBOARDING.DIALOG" | translate }}</div>
+                                    <div class="bot-desc" *ngIf="b.faqsCount == 0">{{ "ONBOARDING.NO_QnA" | translate }}</div>
+                                    <div class="bot-desc" *ngIf="b.dialogsCount == 0">{{ "ONBOARDING.NO_DIALOGS" | translate }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="!botList?.length" class="empty-sel-bots">   
+                            <div class="no-existing-head">
+                                <img src="assets/icons/welcome/warning.svg">
+                                {{ "ONBOARDING.NO_BOTS_AVAILABLE" | translate }}
+                            </div>
+                            <div class="no-existing-message">
+                                {{ "ONBOARDING.PLS_CREATE_NEW_BOT" | translate }}
+                            </div>
+                        </div>
+                        <div class="create-backup">
+                            <div class="kr-sg-checkbox">
+                                <input id="checkbox-1" checked class="checkbox-custom" [(ngModel)]="isBackup" type="checkbox">
+                                <label for="checkbox-1" class="checkbox-custom-label">{{ "ONBOARDING.CREATE_BACKUP" | translate }}</label>
+                            </div> 
+                            <div class="sub-desc">
+                                ({{ "ONBOARDING.UR_BOT_WILL_MODIFIED" | translate }})
+                            </div>
+                        </div>
+                    </div>
+                </perfect-scrollbar>
+                <div class="please-wait" *ngIf='isBackInProgress'>
+                    <mat-spinner diameter="18" strokeWidth="2"></mat-spinner>
+                    <span class="wait-message">{{'BACKINGUP' | translate}}</span>
+                </div>
+            </div>
+    
+            <ng-container *ngIf="selectBotMod.second">
+                <div class="header-sec-title">{{ "ONBOARDING.CONVERTING_DOTS" | translate }}</div>                
+                <perfect-scrollbar class="scroll-content">
+                    <div class="converting-bot-sec">
+                        <div class="img_block">
+                            <img src="assets/icons/welcome/convering-bot.svg">
+                        </div>
+                        <div class="progress-slider">
+                            <mat-progress-bar mode="indeterminate" class="conver-progress"></mat-progress-bar>
+                        </div>
+                        <div class="selected-bot">
+                            {{ "ONBOARDING.CONVERTING" | translate }}  <span class="bt-name">{{selectedBt}}</span>
+                        </div>
+                    </div>
+                </perfect-scrollbar>
+            </ng-container>
+    
+            <ng-container *ngIf="selectBotMod.third">          
+                <div class="header-sec-title">{{ "ONBOARDING.CONVERT_BOT_CAPS" | translate }}</div>   
+                <perfect-scrollbar class="scroll-content">
+                    <div class="convert-bot-success">
+                        <div class="img_block">
+                            <img src="assets/icons/welcome/bot-convert-success.svg">
+                        </div>
+                        <div class="bot-import-name">{{selectedBt}}</div>
+                        <div class="success-info">{{ "ONBOARDING.HAS_BEEN_CONVERTED" | translate }}</div>
+    
+                        <div class="converting-task-info">
+                            <div *ngFor="let logs of stLogsConversion" class="type-task">
+                                <img *ngIf="logs.status == 'success'" src="assets/icons/welcome/check.svg">
+                                <img *ngIf="logs.status == 'failed'" src="assets/icons/failed.svg">
+                                <div [innerHTML]="logs.taskName"></div>
+                            </div>
+                        </div>
+    
+                        <div class="donload-log-file" [hidden]="!stLogsConversion" (click)="downloadConverLog()">
+                            <img src="assets/icons/welcome/download.svg"> {{ "ONBOARDING.DOWNLOAD_LOG_FILE" | translate }}
+                        </div>
+                    </div>
+                </perfect-scrollbar>
+            </ng-container>
+    
+            <ng-container *ngIf="selectBotMod.fourth">
+                <div class="header-sec-title">{{ "ONBOARDING.CONVERT_BOT" | translate }}</div>   
+                <perfect-scrollbar class="scroll-content">
+                    <div class="convert-bot-failed">
+                        <img src="assets/icons/welcome/failed-bot.svg">
+                        <div class="bot-import-name">{{selectedBt}}</div>
+                        <div class="success-info">{{ "ONBOARDING.CONVERSION_FAILED" | translate }}</div>
+                        <div class="warning-msg">
+                            <img src="assets/icons/welcome/warning.svg"> {{selectedBtError}}
+                        </div>
+                    </div>
+                </perfect-scrollbar>
+            </ng-container>    
+    
+            <div class="btn_sec text-center" *ngIf="selectBotMod.fourth && !regularUser">
+                <button class="kr-sg-button-secondary btn_lg"  (click)="selectBackStep()">{{ "ONBOARDING.BACK" | translate }}</button>
+            </div>
+        </ng-container>
+
+        <div class="btn_sec text-center" [ngClass]="{'backing-up': isBackInProgress}" [hidden]="!regularUser && !selectBotMod.first && !selectBotMod.third">
+            <button class="kr-sg-button-secondary btn_lg" [hidden]="selectBotMod.third || !regularUser || selectBotMod.second || selectBotMod.first" (click)="selectBackStep()">{{ "ONBOARDING.BACK" | translate }}</button>
+            <button class="kr-sg-button-primary btn_lg" [disabled]="selectedBot == ''" *ngIf="selectBotMod.first" (click)="convertBot();">{{ "ONBOARDING.CONVERT_BOT" | translate }}</button>
+            <button class="kr-sg-button-secondary btn_lg" *ngIf="selectBotMod.second" (click)="close()">{{ "ONBOARDING.CLOSE_WINDOW" | translate }}</button>
+            <button class="kr-sg-button-primary btn_lg" *ngIf="selectBotMod.third" (click)="conversionDone();">{{ "ONBOARDING.DONE" | translate }}</button>
+        </div>
+    </div>
+
+    <div class="container-selection-bots p-0" *ngIf="step == 2 && activeMod.createNew">
+        <div class="createnew-bot-container" *ngIf='!isNewBot'>
+            <div class="header-sec-new-bot">
+                <img src="assets/icons/welcome/arrow-back.svg" (click)="backStep()" class="d-none">{{ "ONBOARDING.CREATE_A_NEW_BOT" | translate }}
+            </div>
+            <perfect-scrollbar class="create-new-scroll">
+                <div class="bot-add-inputs">
+                    <div class="kr-sg-input-text mb-20">
+                        <div class="label-text">{{ "ONBOARDING.SMARTASIST_BT_NAME" | translate }}</div>
+                        <input type="text" [placeholder]="'ONBOARDING.GIVE_UR_BOT_NAME' | translate" maxlength="50" [(ngModel)]="botName" class="input-text">
+                    </div>
+                    <div class="kr-sg-checkbox mb-3">
+                        <input id="checkbox-create" (change)="modSwitchCreate($event)" class="checkbox-custom" type="checkbox">
+                        <label for="checkbox-create" class="checkbox-custom-label">{{ "ONBOARDING.I_WANT_IMPORT" | translate}}</label>
+                    </div> 
+                    <div class="kr-sg-dropdowns mb-20">
+                        <div class="label-text">{{ "ONBOARDING.DEFAULT_BOT_LANGUAGE" | translate }}</div>
+                        <div class="dropdown dropdown-open">
+                            <button class="dropdown-toggle dropdown-input" data-toggle="dropdown">{{selectedLang?.name || "ONBOARDING.SEL_A_LANG"| translate}}</button>                                            
+                            <ul class="dropdown-menu content-menu">   
+                              <li *ngFor="let lang of supportedLang" (click)="onLangSelect(lang)"><a>{{lang.name}}</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="bot-icon mb-2 pb-2">
+                        <div class="label-text mb-2">{{ "ONBOARDING.BOT_ICON" | translate }}</div>
+                        <img [src]="selectedImg" style="width: 30px"> 
+                    </div>
+                    <div class="uploaded-images-sec">   
+                       <div class="upload-img-previous" *ngFor="let bIcon of botIconsList" (click)="btSelected(bIcon)" [ngClass]="{'selected': bIcon.isSelected}">
+                            <img [src]="bIcon.icon" style="width: 30px">
+                            <img src="assets/icons/welcome/selected-bot-icon.svg" class="selcted-bot-latest">
+                       </div> 
+                       <div class="btn-upload">
+                            <img src="assets/icons/add.svg" class="add-icon">
+                            <input type="file" #imgFile (change)="upImgFile(imgFile.files[0])" accept=".png">
+                        </div>
+                    </div>
+                </div>
+            </perfect-scrollbar>
+            <div class="back-create-btns">
+                <button class="kr-sg-button-secondary btn_lg d-none" (click)="backStep()">{{ "ONBOARDING.BACK" | translate }}</button>
+                <button class="kr-sg-button-primary btn_lg" (click)="createApp()">{{ "ONBOARDING.CREATE" | translate }}</button>
+            </div>
+        </div>       
+        <div class="createnew-loading" *ngIf="isNewBot">
+            <mat-spinner diameter="20"></mat-spinner>
+        </div>
+    </div>
+
+    <div class="container-selection-bots p-0" *ngIf="step == 2 && activeMod.import">
+        <div *ngIf="importBotMod.first" class="import-bot-data">
+            <div class="import-header">
+                <img src="assets/icons/welcome/arrow-back.svg" (click)="step = 1" class="d-none">{{ "ONBOARDING.IMPORT_BT" | translate }}
+            </div>
+            <perfect-scrollbar class="import-bot-scroll">
+                <div class="import-input-data">
+                    <div class="kr-sg-input-text mb-20">
+                        <div class="label-text">{{ "ONBOARDING.SMARTASSIST_BT_NAME" | translate }}</div>
+                        <input type="text" maxlength="50" [placeholder]="'ONBOARDING.GIVE_UR_BOT_NAME' | translate" [(ngModel)]="impBtName" class="input-text">
+                    </div>
+                    <div class="kr-sg-checkbox mb-3">
+                        <input id="checkbox-import" checked (change)="modSwitchCreate($event)" class="checkbox-custom" type="checkbox">
+                        <label for="checkbox-import" class="checkbox-custom-label">{{ "ONBOARDING.I_WANT_IMPORT" | translate}}</label>
+                    </div> 
+                    <div class="kr-sg-fileupload mb-20">
+                        <div class="label-text">{{ "ONBOARDING.BT_DEF_FILE" | translate }}</div>
+                        <div class="custom_file">
+                            <input type="file" class="custom_file_input" #btDef id="inputGroupFile01" (change)="upDefFile(btDef.files[0])" accept=".json" aria-describedby="inputGroupFileAddon01">
+                            <label class="custom_file_label" for="inputGroupFile01" [attr.data-content]="chooseFile">
+                                <span [hidden]="!btDef.value.length" style="color: #202124">{{btDef.files[0]?.name}}</span>
+                                <span [hidden]="btDef.value.length">{{ "ONBOARDING.CHOOSE_BT_DEF_FILE" | translate }}</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="kr-sg-fileupload mb-20">
+                        <div class="label-text">{{ "ONBOARDING.BT_CONFIG_FILE" | translate }}</div>
+                        <div class="custom_file">
+                            <input type="file" class="custom_file_input" #cgFile id="inputGroupFile01" (change)="upVarFile(cgFile.files[0])" aria-describedby="inputGroupFileAddon01" accept=".json">
+                            <label class="custom_file_label" for="inputGroupFile01" [attr.data-content]="chooseFile">
+                                <span [hidden]="!cgFile.value.length" style="color: #202124">{{cgFile.files[0]?.name}}</span>
+                                <span [hidden]="cgFile.value.length">{{ "ONBOARDING.CHOOSE_A_BT_CONFIG" | translate }}</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="kr-sg-fileupload mb-20">
+                        <div class="label-text">{{ "ONBOARDING.CUSTOM_SCRIPT_FILE" | translate }}</div>
+                        <div class="custom_file">
+                            <input type="file" class="custom_file_input" id="inputGroupFile01" #scptFile (change)="upScriptFile(scptFile.files[0])" accept=".js" aria-describedby="inputGroupFileAddon01">
+                            <label class="custom_file_label" for="inputGroupFile01" [attr.data-content]="chooseFile">
+                                <span [hidden]="!scptFile.value.length" style="color: #202124">{{scptFile.files[0]?.name}}</span>
+                                <span [hidden]="scptFile.value.length">{{ "ONBOARDING.CHOOSE_CUSTOM_SCRIPT" | translate }}</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="bot-icon mb-2 pb-2">
+                        <div class="label-text mb-2">{{ "ONBOARDING.BOT_ICON" | translate }}</div>
+                        <img [src]="selectedImg" style="width: 30px"> 
+                    </div>
+
+                    <div class="uploaded-images-sec">   
+                        <div class="upload-img-previous" *ngFor="let bIcon of botIconsList" (click)="btSelected(bIcon)" [ngClass]="{'selected': bIcon.isSelected}">
+                             <img [src]="bIcon.icon" style="width: 30px">
+                             <img src="assets/icons/welcome/selected-bot-icon.svg" class="selcted-bot-latest">
+                        </div> 
+                        <div class="btn-upload">
+                             <img src="assets/icons/add.svg" class="add-icon">
+                             <input type="file" #imgFile (change)="upImgFile(imgFile.files[0])" accept=".png">
+                        </div>
+                     </div>
+                </div>
+            </perfect-scrollbar>
+            <div class="back-create-btns">
+                <button class="kr-sg-button-secondary btn_lg d-none" (click)="importBackStep()">{{ "ONBOARDING.BACK" | translate }}</button>
+                <button class="kr-sg-button-primary btn_lg" (click)="importBot();">{{ "ONBOARDING.IMPORT" | translate }}</button>
+            </div>            
+        </div>       
+        
+        <div class="import-bot-data" *ngIf="importBotMod.second">
+            <div class="header-sec-title">{{ "ONBOARDING.IMPORTING_DOTS" | translate }}</div>                
+            <perfect-scrollbar class="scroll-content">
+                <div class="converting-bot-sec">
+                    <div class="img_block">
+                        <img src="assets/icons/welcome/convering-bot.svg">
+                    </div>
+                    <div class="progress-slider">
+                        <mat-progress-bar mode="indeterminate" class="conver-progress"></mat-progress-bar>
+                    </div>
+                    <div class="selected-bot">
+                        {{ "ONBOARDING.IMPORTING" | translate }}  <span class="bt-name">{{importedBt}}</span>
+                    </div>
+                </div>
+                <div class="converting-task-info">
+                    <div *ngFor="let logs of stLogs" class="type-task">
+                        <img *ngIf="logs.status == 'success'" src="assets/icons/welcome/check.svg">
+                        <img *ngIf="logs.status == 'failed'" src="assets/icons/failed.svg">
+                        <div [innerHTML]="logs.taskName"></div>
+                    </div>
+
+                    <div class="converting-task-info">
+                        <div *ngFor="let logs of stLogsConversion" class="type-task">
+                            <img *ngIf="logs.status == 'success'" src="assets/icons/welcome/check.svg">
+                            <img *ngIf="logs.status == 'failed'" src="assets/icons/failed.svg">
+                            <div [innerHTML]="logs.taskName"></div>
+                        </div>
+                    </div>
+                </div>
+            </perfect-scrollbar>
+            <div class="back-create-btns"  [hidden]="!regularUser">
+                <button class="kr-sg-button-secondary btn_lg" disabled (click)="close()">{{ "ONBOARDING.CLOSE_WINDOW" | translate }}</button>
+            </div>
+        </div>
+
+        <div class="import-bot-data"  *ngIf="importBotMod.third">          
+            <div class="header-sec-title">{{ "ONBOARDING.IMPORT_BT" | translate }}</div>   
+            <perfect-scrollbar class="scroll-content">
+                <div class="convert-bot-success">
+                    <div class="img_block">
+                        <img src="assets/icons/welcome/bot-convert-success.svg">
+                    </div>
+                    <div class="bot-import-name">{{importedBt}}</div>
+                    <div class="success-info">{{ "ONBOARDING.HAS_BEEN_IMPORTED" | translate }}</div>
+                    <div class="converting-task-info">
+                        <div *ngFor="let logs of stLogs" class="type-task">
+                            <img *ngIf="logs.status == 'success'" src="assets/icons/welcome/check.svg">
+                            <img *ngIf="logs.status == 'failed'" src="assets/icons/failed.svg">
+                            <div [innerHTML]="logs.taskName"></div>
+                        </div>
+                    </div>
+                    <div class="donload-log-file" [hidden]="!stLogs" (click)="downloadLog()">
+                        <img src="assets/icons/welcome/download.svg"> {{ "ONBOARDING.DOWNLOAD_LOG_FILE" | translate }}
+                    </div>
+                </div>           
+            </perfect-scrollbar>
+            <div class="back-create-btns">
+                <button class="kr-sg-button-primary btn_lg" (click)="importDone()">{{ "ONBOARDING.DONE" | translate }}</button>
+            </div>
+        </div>
+
+        <div class="import-bot-data" *ngIf="importBotMod.fourth">
+            <div class="header-sec-title">{{ "ONBOARDING.IMPORT_BT" | translate }}</div>   
+            <perfect-scrollbar class="scroll-content">
+                <div class="convert-bot-failed">
+                    <img src="assets/icons/welcome/failed-bot.svg">
+                    <div class="bot-import-name">{{importedBt}}</div>
+                    <div class="success-info">{{ "ONBOARDING.IMPORT_FAILED" | translate }}</div>
+                    <div class="warning-msg">
+                        <img src="assets/icons/welcome/warning.svg"> {{importedBtError}}
+                    </div>
+                    <div class="converting-task-info">
+                        <div *ngFor="let logs of stLogs" class="type-task">
+                            <img *ngIf="logs.status == 'success'" src="assets/icons/welcome/check.svg">
+                            <img *ngIf="logs.status == 'failed'" src="assets/icons/failed.svg">
+                            <div [innerHTML]="logs.taskName"></div>
+                        </div>
+                    </div>
+                    <div class="donload-log-file" [hidden]="!stLogs" (click)="downloadLog()">
+                        <img src="assets/icons/welcome/download.svg"> {{ "ONBOARDING.DOWNLOAD_LOG_FILE" | translate }}
+                    </div>
+                </div>
+            </perfect-scrollbar>
+            <div class="back-create-btns">                
+                <!-- <button class="kr-sg-button-primary btn_lg" *ngIf="regularUser" (click)="close()">{{ "ONBOARDING.OKAY" | translate }}</button> -->
+                <button class="kr-sg-button-primary btn_lg" (click)="importBackStep()">{{ "ONBOARDING.BACK" | translate }}</button>
+            </div>
+        </div>  
+
+        <div class="import-bot-data"  *ngIf="importBotMod.fifth">
+            <div class="header-sec-title">{{ "ONBOARDING.IMPORTING_DOTS" | translate }}</div>                
+            <perfect-scrollbar class="scroll-content">
+                <div class="importing-bot-new">
+                    <div class="img_block">
+                        <img src="assets/icons/welcome/convering-bot.svg">
+                    </div>
+                    <div class="progress-slider">
+                        <mat-progress-bar mode="indeterminate" class="conver-progress"></mat-progress-bar>
+                    </div> 
+                    
+                    <div class="steps-importing">
+                        <div class="left-sec col-6">
+                            <div class="step-count">1</div>
+                            <div class="importing-title-bot">
+                                <span [hidden]="isImported">{{ "ONBOARDING.IMPORTING" | translate }}</span>
+                                <span class="name-of-bot">{{impBtName}}<span [hidden]="isImported">...</span></span>
+                            </div>    
+                            <div class="success-of-message" *ngIf="isImported">{{ "ONBOARDING.HAS_BEEN_IMPORTED" | translate }}</div>
+                            <div class="success-task-list">
+                                <div *ngFor="let logs of stLogs" class="task-success">
+                                    <img *ngIf="logs.status == 'success'" src="assets/icons/welcome/check.svg">
+                                    <img *ngIf="logs.status == 'failed'" src="assets/icons/failed.svg">
+                                    <div class="success-tak-name" [innerHTML]="logs.taskName"></div>
+                                </div>
+                            </div>                      
+                        </div>
+                        <div class="right-sec col-6">
+                            <div class="step-count">2</div>
+                            <div class="importing-title-bot">
+                                <span [hidden]="isConverted">{{ "ONBOARDING.CONVERTING" | translate }}</span> 
+                                <span class="name-of-bot">{{impBtName}}<span [hidden]="isConverted">...</span></span>
+                            </div>    
+                            <div class="success-of-message" *ngIf="isConverted">{{ "ONBOARDING.HAS_BEEN_CONVERTED" | translate }}</div>
+                            <div class="success-task-list">
+                                <div *ngFor="let logs of stLogsConversion" class="task-success">
+                                    <img *ngIf="logs.status == 'success'" src="assets/icons/welcome/check.svg">
+                                    <img *ngIf="logs.status == 'failed'" src="assets/icons/failed.svg">
+                                    <div class="success-tak-name" [innerHTML]="logs.taskName">
+                                    </div>
+                                </div>
+                            </div>                        
+                        </div>
+                    </div>
+                </div>                
+            </perfect-scrollbar>
+            <div class="back-create-btns"  [hidden]="!regularUser">
+                <button class="kr-sg-button-secondary btn_lg" disabled (click)="close()">{{ "ONBOARDING.CLOSE_WINDOW" | translate }}</button>
+            </div>            
+        </div>
+
+        <div class="import-bot-data"  *ngIf="importBotMod.sixth">
+            <div class="header-sec-title">{{ "ONBOARDING.IMPORT_AND_CONVERT_BOT" | translate }}</div>                
+            <perfect-scrollbar class="scroll-content">
+                <div class="importing-bot-new">
+                    <div class="img_block">
+                        <img src="assets/icons/welcome/convering-bot.svg">
+                    </div>                   
+                    
+                    <div class="steps-importing">
+                        <div class="left-sec col-6">
+                            <div class="step-count">1</div>                            
+                            <div class="success-bot-name">{{impBtName}}</div>
+                            <div class="success-of-message">{{ "ONBOARDING.HAS_BEEN_IMPORTED" | translate }}</div>
+                            <div class="success-task-list">
+                                <div *ngFor="let logs of stLogs" class="task-success">
+                                    <img *ngIf="logs.status == 'success'" src="assets/icons/welcome/check.svg">
+                                    <img *ngIf="logs.status == 'failed'" src="assets/icons/failed.svg">
+                                    <div class="success-tak-name" [innerHTML]="logs.taskName"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="right-sec col-6">
+                            <div class="step-count">2</div>                            
+                            <div class="success-bot-name">{{impBtName}}</div>
+                            <div class="success-of-message">{{ "ONBOARDING.HAS_BEEN_CONVERTED" | translate }}</div>
+                            <div class="success-task-list">
+                                <div *ngFor="let logs of stLogsConversion" class="task-success">
+                                    <img *ngIf="logs.status == 'success'" src="assets/icons/welcome/check.svg">
+                                    <img *ngIf="logs.status == 'failed'" src="assets/icons/failed.svg">
+                                    <div class="success-tak-name" [innerHTML]="logs.taskName"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="donload-log-file"  [hidden]="!stLogs && !stLogsConversion"  (click)="downloadBothLogs()">
+                        <img src="assets/icons/welcome/download.svg"> {{ "ONBOARDING.DOWNLOAD_LOG_FILE" | translate }}
+                    </div>
+                </div>                
+            </perfect-scrollbar>
+            <div class="back-create-btns">
+                <button class="kr-sg-button-secondary btn_lg" (click)="importDone()">{{ "ONBOARDING.DONE" | translate }}</button>
+            </div>
+        </div>    
+        
+        <div class="import-bot-data"  *ngIf="importBotMod.seventh">
+            <div class="header-sec-title">{{ "ONBOARDING.BT_IMPORT_CONV" | translate }}</div>                
+            <perfect-scrollbar class="scroll-content">
+                <div class="importing-bot-new">
+                    <div class="img_block">
+                        <img src="assets/icons/welcome/failed-bot.svg">
+                    </div>                   
+                    <div class="steps-importing">
+                        <div class="left-sec col-6">
+                            <div class="step-count">1</div>                            
+                            <div class="success-bot-name">{{impBtName}}</div>
+                            <!-- <div class="success-of-message">{{ "ONBOARDING.HAS_BEEN_IMPORTED" | translate }}</div> -->
+                            <div class="success-task-list">
+                                <div *ngFor="let logs of stLogs" class="task-success">
+                                    <img *ngIf="logs.status == 'success'" src="assets/icons/welcome/check.svg">
+                                    <img *ngIf="logs.status == 'failed'" src="assets/icons/failed.svg">
+                                    <div class="success-tak-name"  [innerHTML]="logs.taskName"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="right-sec col-6">
+                            <div class="step-count">2</div>                            
+                            <div class="success-bot-name">{{impBtName}}</div>
+                            <!-- <div class="success-of-message">{{ "ONBOARDING.HAS_BEEN_CONVERTED" | translate }}</div> -->
+                            <div class="success-task-list">
+                                <div *ngFor="let logs of stLogsConversion" class="task-success">
+                                    <img *ngIf="logs.status == 'success'" src="assets/icons/welcome/check.svg">
+                                    <img *ngIf="logs.status == 'failed'" src="assets/icons/failed.svg">
+                                    <div class="success-tak-name" [innerHTML]="logs.taskName"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="donload-log-file" *ngIf="stLogs && stLogsConversion"  (click)="downloadBothLogs()">
+                        <img src="assets/icons/welcome/download.svg"> {{ "ONBOARDING.DOWNLOAD_LOG_FILE" | translate }}
+                    </div>
+                    <div class="donload-log-file"  *ngIf="stLogs &&  !stLogsConversion"  (click)="downloadLog()">
+                        <img src="assets/icons/welcome/download.svg"> {{ "ONBOARDING.DOWNLOAD_LOG_FILE" | translate }}
+                    </div>
+                    <div class="donload-log-file"  *ngIf="!stLogs && stLogsConversion"  (click)="downloadConverLog()">
+                        <img src="assets/icons/welcome/download.svg"> {{ "ONBOARDING.DOWNLOAD_LOG_FILE" | translate }}
+                    </div>
+                    <div *ngIf="!stLogs && !stLogsConversion">
+                        {{ "ONBOARDING.SORRY_SOMETHING_WENT_WRONG" | translate }}
+                    </div>
+                    <div class="error-message-import-conv" *ngIf="!stLogs && !stLogsConversion">
+                        <i>
+                            {{importedBtError}}
+                        </i>
+                    </div>
+                </div>                
+            </perfect-scrollbar>
+            <div class="back-create-btns">
+                <button class="kr-sg-button-secondary btn_lg" *ngIf="!regularUser" (click)="importBackStep()">{{ "ONBOARDING.BACK" | translate }}</button>
+                <button class="kr-sg-button-secondary btn_lg" *ngIf="regularUser" (click)="close()">{{ "ONBOARDING.CLOSE_WINDOW" | translate }}</button>
+            </div>
+        </div>    
+    </div>
+</div>

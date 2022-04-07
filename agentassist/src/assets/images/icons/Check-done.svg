@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18px" height="13px" viewBox="0 0 18 13" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Icon / 20x20 / Check</title>
+    <g id="Post-onbarding-screen-" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Custom-Preset-Copy" transform="translate(-945.000000, -422.000000)">
+            <g id="Group" transform="translate(944.000000, 418.000000)">
+                <rect id="Rectangle" fill-opacity="0" fill="#D8D8D8" x="0" y="0" width="20" height="20"></rect>
+                <path d="M17.2657979,4.36356995 C17.499013,4.11249312 17.8896548,4.09984626 18.1383207,4.3353224 C18.3723593,4.55694701 18.3972215,4.91937425 18.2049037,5.17057027 L18.166297,5.2163045 L7.71341487,16.4697646 C7.49007276,16.7102123 7.12337384,16.7313885 6.87501218,16.5280882 L6.82989503,16.4873375 L1.85068038,11.5331113 C1.60785323,11.2915027 1.60498464,10.8968815 1.8442732,10.6517001 C2.06948596,10.4209412 2.4289379,10.4048014 2.67289365,10.6051317 L2.71722091,10.6452308 L7.24575558,15.1509979 L17.2657979,4.36356995 Z" id="Path-10" fill="#09A624"></path>
+            </g>
+        </g>
+    </g>
+</svg>

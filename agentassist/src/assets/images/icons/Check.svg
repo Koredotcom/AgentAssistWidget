@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="14px" height="10px" viewBox="0 0 14 10" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Icon / 16x16 / Check</title>
+    <g id="Post-onbarding-screen-" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="POST-onboarding-screen--with-floating-save" transform="translate(-95.000000, -253.000000)">
+            <g id="Group-8" transform="translate(95.000000, 250.000000)">
+                <g id="Icon-/-16x16-/-Check" transform="translate(0.000000, 1.000000)">
+                    <g id="Group">
+                        <rect id="Rectangle" fill-opacity="0" fill="#D8D8D8" x="0" y="0" width="14" height="14"></rect>
+                        <path d="M12.4251291,2.48035445 C12.599263,2.29288375 12.8909422,2.28344076 13.0766128,2.45926295 C13.2513616,2.62474265 13.2699254,2.895355 13.1263281,3.08291469 L13.0975018,3.11706292 L5.2926831,11.5196464 C5.125921,11.6991807 4.85211913,11.7149923 4.66667576,11.5631947 L4.63298829,11.5327676 L0.915174681,7.83361196 C0.733863745,7.65321094 0.731721863,7.35856044 0.910390656,7.17549166 C1.07854952,7.00319163 1.3469403,6.99114064 1.52909393,7.14072057 L1.56219161,7.17066125 L4.9434975,10.5349673 L12.4251291,2.48035445 Z" id="Path-10" fill="#009DAB"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

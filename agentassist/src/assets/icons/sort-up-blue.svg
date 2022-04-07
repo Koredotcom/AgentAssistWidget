@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="8px" height="14px" viewBox="0 0 8 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 53.2 (72643) - https://sketchapp.com -->
+    <title>sort-up-blue</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard" transform="translate(-335.000000, -234.000000)" fill-rule="nonzero">
+            <g id="sort-up-blue" transform="translate(331.000000, 233.000000)">
+                <polygon id="Path" fill-opacity="0" fill="#D8D8D8" points="0 0 16 0 16 16 0 16"></polygon>
+                <path d="M8.357,1.886 L8.395,1.916 L11.442,4.659 C11.664,4.859 11.682,5.201 11.482,5.423 C11.294,5.633 10.978,5.661 10.757,5.495 L10.719,5.464 L8.573,3.533 L8.573,13.68 C8.573,13.98 8.332,14.221 8.033,14.221 C7.751,14.221 7.519,14.005 7.494,13.73 L7.492,13.68 L7.492,3.533 L5.347,5.463 C5.137,5.653 4.821,5.647 4.617,5.458 L4.583,5.423 C4.395,5.213 4.4,4.897 4.588,4.694 L4.623,4.659 L7.671,1.917 C7.865,1.742 8.153,1.732 8.357,1.886 L8.357,1.886 Z" id="Path" fill="#009DAB"></path>
+            </g>
+        </g>
+    </g>
+</svg>

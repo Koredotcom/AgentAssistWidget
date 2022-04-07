@@ -1,0 +1,26 @@
+<div class="editor-url-popup">
+  <form #f="ngForm" (ngSubmit)="f.form.valid && onSubmit(f.value)" novalidate autocomplete="off">
+    <div class="m-header text-center">{{ data.type === 'link' ? 'Hyper Link Info' : 'Image Source Info'}}</div>
+    <div class="m-body">
+        <div class="kr-sg-input-text mb-15 c-mb-15">
+          <div class="label-text font-weight-bold">{{ data.type === 'link' ? 'Hyper Link' : 'Image Source Url'}}
+          </div>
+          <input type="text" placeholder="http://something.com" class="input-text" [(ngModel)]="urlForm.url" name="url" required pattern="^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$" #url="ngModel">
+          <div class="error-msg" *ngIf="f.submitted && url.invalid">
+            {{ data.type === 'link' ? 'Please provide Hyper Link' : ' Please provide Image Source Url'}}
+          </div>
+        </div>
+        <div class="kr-sg-input-text mb-15">
+          <div class="label-text font-weight-bold">{{ data.type === 'link' ? 'Hyper Link Text' : 'Image Alt Text'}}
+          </div>
+          <input type="text" class="input-text" [(ngModel)]="urlForm.altText" name="altText" [required]="data.type === 'image'" #altText="ngModel">
+          <div class="error-msg" *ngIf="f.submitted && altText.invalid">Please provide Image Alt Text</div>
+        </div>
+
+    </div>
+    <div class="m-footer">
+      <button class="kr-sg-button-primary btn_md" type="submit">{{"BUTTONS.OK" | translate}}</button>
+      <button class="kr-sg-button-secondary btn_md" mat-dialog-close>{{"BUTTONS.CANCEL" | translate}}</button>
+    </div>
+  </form>
+</div>

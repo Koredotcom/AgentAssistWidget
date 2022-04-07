@@ -1,0 +1,345 @@
+@import './../../../../scss/variables/variables.scss';
+.slider-sec-data{
+    .header-sec{
+        background: $whiteColor;
+        box-shadow: 0px 4px 4px rgba(168, 200, 221, 0.25);
+        border-radius: 4px 0px 0px 4px;
+        padding: 25px 20px;
+        align-items: center;
+        margin-bottom: 6px !important;
+        .lef-sec{
+            .main-title{
+                color: $primaryFontColor;
+                font-weight: bold;
+                font-size: 18px;
+                line-height: 22px;
+                margin-left: 20px;
+            }
+        }
+        .close-link{
+            text-align: right;
+            img{
+                cursor: pointer;
+                padding: 7px;
+                border-radius: 100px;
+                transition: 0.2s all ease-in;
+                &:hover{
+                    background: $hoverImgcolor;
+                }
+            }
+        }
+    }
+    .scroll-content{
+        height: calc(100vh - 142px);             
+    }    
+    .footer-sec{
+        padding: 8px 70px;
+        background: $whiteColor;
+        border-top: 0.5px solid transparent;
+        box-shadow: 0px -4px 4px rgba(168, 200, 221, 0.25);        
+        box-sizing: border-box;
+        border-radius: 4px 0px 0px 4px;  
+        margin-top: 4px;
+    }
+    .label-text{
+        color: $primaryFontColor;
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 15px;
+        margin-bottom: 7px;
+    }
+    .chat-widget-personalization-data{
+        height: calc(100vh - 142px);
+        display: flex;
+        .left-sec-data{
+            width: 700px;
+            display: flex;
+            padding: 20px 70px 0 70px;
+            .content-sec{
+                padding-right: 30px;
+                .m-title{
+                    color: $primaryFontColor;
+                    font-weight: normal;
+                    font-size: 14px;
+                    line-height: 20px;
+                }
+                .tabs-vertical{
+                    margin: 30px 0;
+                    .tab_name{
+                        color: $primaryFontColor;
+                        font-weight: normal;
+                        font-size: 14px;
+                        line-height: 14px;
+                        padding: 18px 22px;
+                        position: relative;
+                        cursor: pointer;
+                        transition: 0.2s all ease-in;
+                        &:hover{
+                            color: $primaryActionColor;
+                            &::before{
+                                content: "";
+                                position: absolute;
+                                background: $primaryActionColor;
+                                height: 100%;
+                                width: 2px;
+                                left: 0;
+                                top: 0;
+                            } 
+                        }
+                        &::before{
+                            content: "";
+                            position: absolute;
+                            background: $borderlite;
+                            height: 100%;
+                            width: 2px;
+                            left: 0;
+                            top: 0;
+                        }
+                        &.active-tab{
+                            color: $primaryActionColor;
+                            &::before{
+                                content: "";
+                                position: absolute;
+                                background: $primaryActionColor;
+                            }
+                        }
+                    }
+                }
+            }
+            .chat-data{
+                perfect-scrollbar{
+    
+                }
+                .phone-test{
+                    padding: 10px;
+                    .p-boxshadow{
+                        background: $whiteColor;
+                        box-shadow: 0px 5px 10px $agentAccordionBorder, inset 0px -5px 10px rgba(168, 200, 221, 0.1);
+                        border-radius: 30px;
+                        padding: 10px;
+                        width: 289px;
+                        height: 589px;
+                        margin: auto;
+                        .p-inner-data{
+                            height: 100%;
+                            background: $whiteColor;
+                            border: 1px solid $borderlite;
+                            box-sizing: border-box;
+                            border-radius: 20px;
+                            position: relative;
+                            .top-header-data{
+                                display: flex;
+                                align-items: center;
+                                justify-content: space-between;
+                                padding: 7px 10px;
+                                .time{
+                                    color: $secondaryFontColor;
+                                    letter-spacing: -0.3px;
+                                    font-weight: 500;
+                                    font-size: 12px;
+                                    line-height: 15px;
+                                }
+                                .info-phone{
+                                    display: flex;
+                                    align-items: center;
+                                    img{
+                                        margin-left: 4px;                                
+                                    }
+                                }   
+                            }                                           
+                        }
+                    }
+                }
+            }
+        }  
+        .right-sec-data{
+            width: 420px;
+            background: $utteraneHovercolor;
+            perfect-scrollbar{
+
+            }
+            .input-data-sec{
+                padding: 40px;
+                .kr-sg-toggle {
+                    .slider {
+                        span{
+                            // width: 200px;
+                            white-space: nowrap;
+                            padding-left:44px;
+                            top:0px;
+                        }
+                    }
+                }
+                .kr-sg-dropdowns {
+                    .dropdown-open {
+                        .content-menu{
+                            max-height: 260px;
+                            overflow: auto;
+                            .dropdown-scroll{
+                                max-height: 260px;
+                            }
+                        }
+                    }
+                }
+                .custom-file{
+                    height: 100%;
+                    width: 100%;
+                    cursor: pointer;
+                    input{
+                        &:focus{
+                            box-shadow: none !important;
+                            outline: 0 !important;
+                        }
+                    }
+                    .custom-file-label{
+                        height: 100%;
+                        &::after{
+                            content: "Upload";
+                            background: $primaryActionColor;
+                            border-radius: 4px;
+                            font-weight: normal;
+                            font-size: 12px;
+                            line-height: 20px;
+                            color: $whiteColor;
+                            height: 100%;
+                        }
+                    }
+                    .custom-file-input:focus~.custom-file-label{
+                        box-shadow: none !important;
+                        outline: 0 !important;
+                    }                    
+                }
+                .input-bg-text-color-actions{
+                    justify-content: space-between;
+                    .kr-sg-input-text{
+                        width: 165px;
+                        input{
+                            padding-left: 36px !important;
+                        }                        
+                    }
+                }
+                .bg-clr{
+                    background: $primaryFontColor;
+                    box-sizing: border-box;
+                    border-radius: 3px;
+                    display: inline-block;
+                    width: 18px;
+                    height: 18px;
+                    position: absolute;
+                    left: 8px;
+                    margin-top: 8px;
+                    cursor: pointer;
+                }
+                .template-sdks{
+                    .template-cards{
+                        margin: 0 -5px;
+                        .sdk_card{
+                            background: $whiteColor;
+                            border-radius: 5px;
+                            width: 165px;
+                            padding: 9px 10px;
+                            display: flex;
+                            align-items: center;
+                            margin: 5px;
+                            cursor: pointer;
+                            border: 1px solid transparent;
+                            &.selected{
+                                border: 1px solid $primaryActionColor;
+                            }
+                            .img_block{
+                                width: 30px;
+                                height: 30px;
+                                background: $primaryBackgroundColor;
+                                border-radius: 100%;
+                                margin-right: 10px;       
+                                img{
+                                    width: 100%;
+                                    height: 100%;
+                                }                     
+                            }
+                            .titles-sec{
+                                .p-title{
+                                    color: $primaryFontColor;
+                                    font-weight: normal;
+                                    font-size: 11.2px;
+                                    line-height: 14px;
+                                    margin-bottom: 2px;
+                                }
+                                .s-title{
+                                    color: $primaryFontColor;
+                                    font-weight: normal;
+                                    font-size: 9px;
+                                    line-height: 14px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }             
+    }
+    .confirm-dialog-bottom{
+        background: $whiteColor;
+        box-shadow: 0px -4px 4px rgba(168, 200, 221, 0.25);
+        border-radius: 4px 0px 0px 4px;
+        position: absolute;
+        bottom: 0px;
+        padding: 40px 70px;
+        z-index: 9999;
+        transform: translateY(100%);
+        transition: 0.5s all ease;
+        .main-title{
+            color: $primaryFontColor;
+            font-weight: normal;
+            font-size: 22px;
+            line-height: 34px;
+            margin-bottom: 8px;
+        }
+        .desc_info{
+            font-weight: normal;
+            font-size: 14px;
+            line-height: 24px;
+            color: #605E5C;
+        }
+        .kr-sg-input-text{
+            width: 340px;
+            margin: 20px 0;
+        }
+        .btn_sec{
+
+        }
+
+        &.show {
+            transform: none;
+        }
+    }
+}
+
+.f-weight-600{
+    font-weight: 600 !important;
+}
+.pl-36{
+    padding-left: 36px !important;
+}
+
+
+.please-wait-all {
+    position: absolute;
+    top: 40%;
+    left: 48%;
+    box-shadow: 0 5px 10px 0 #e9eff5;
+    background: transparent;
+    width: 105px;
+    height: 36px;
+    padding-top: 10px;
+    border-radius: 4px;
+    opacity: 0.8;
+    padding-left: 5px;
+    .please-wait-message {
+        position: relative;
+        color: #29293b;
+        top: -20px;
+        left: 25px;
+        font-size: 12px;
+    }  
+}

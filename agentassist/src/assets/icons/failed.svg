@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 53.2 (72643) - https://sketchapp.com -->
+    <title>failed</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <circle id="path-1" cx="20" cy="20" r="20"></circle>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="failed">
+            <mask id="mask-2" fill="white">
+                <use xlink:href="#path-1"></use>
+            </mask>
+            <use id="Mask" fill="#FF001F" xlink:href="#path-1"></use>
+            <path d="M18.7353516,33 L18.7353516,29.7294922 L22.0058594,29.7294922 L22.0058594,33 L18.7353516,33 Z M19.1503906,26.4423828 L18.7353516,13.34375 L18.7353516,8.4296875 L22.0058594,8.4296875 L22.0058594,13.34375 L21.6074219,26.4423828 L19.1503906,26.4423828 Z" id="!" fill="#FFFFFF" fill-rule="nonzero" mask="url(#mask-2)"></path>
+        </g>
+    </g>
+</svg>

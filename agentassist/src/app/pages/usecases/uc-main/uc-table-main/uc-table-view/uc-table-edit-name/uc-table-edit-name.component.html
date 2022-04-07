@@ -1,0 +1,22 @@
+<div class="usecases-table-edit-name-content" (click)="$event.stopPropagation()">
+    <form (ngSubmit)="onUpdate(f)" #f="ngForm" autocomplete='off'>
+        <div class="kr-sg-input-text mb-3">
+            <div class="label-text"> {{ "USECASES.UC_NAME" | translate }}</div>
+            <input type="text" id="usecaseName" ngModel #usecaseName='ngModel' #inp [placeholder]="'PLACEHOLDERS.PLS_ENTER' | translate" name="usecaseName" required autocomplete="off" class="input-text">
+            <div class="error-msg" *ngIf="usecaseName.invalid && usecaseName.touched">{{ 'PLACEHOLDERS.PLS_ENTER' | translate }}</div>
+        </div>
+        <!-- <div class="kr-sg-dropdowns mb-3">
+            <div class="label-text">Category</div>
+            <div class="dropdown dropdown-open">
+                <button class="dropdown-toggle dropdown-input" (click)="dropdownToggle($event)" data-toggle="dropdown">
+                    {{selectedCategory}}
+                </button>                                            
+                <ul class="dropdown-menu content-menu" #dropdownCategory>            
+                  <li (click)="onSelectCategory(category)" *ngFor="let category of categoryList"><a>{{category}}</a></li>
+                </ul>
+            </div>
+        </div> -->
+        <button class="kr-sg-button-primary btn_lg mr-2" [disabled]="f.invalid" type="submit">{{ "USECASES.UPDATE" | translate }}</button>
+        <button class="kr-sg-button-secondary btn_lg" (click)="closeMatMenu()" type="button">{{ "USECASES.CANCEL" | translate }}</button>
+    </form>    
+</div>

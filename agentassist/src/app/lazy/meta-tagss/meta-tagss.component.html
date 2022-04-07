@@ -1,0 +1,12 @@
+<div class="meta-tagss-wrap sliderContainer width500 ">
+  <div class="meta-tagss-header">
+    <img src="assets/images/closeCross.png" class="closeCross" (click)="closeSlider()">
+    <h5>{{heading}}</h5>
+  </div>
+  <div class="meta-tagss-body">
+    <div class="tagss-list" *ngFor="let tags of metaTagsData">
+      <div class="tagss-key d-inline-block">{{tags.tagName}}</div>
+      <div class="tagss-value d-inline-block">: {{tags.tagValue}}</div>
+    </div>
+  </div>
+</div>

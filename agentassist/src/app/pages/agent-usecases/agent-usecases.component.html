@@ -1,0 +1,154 @@
+<div class="agent-assist-main-container">
+    <header>
+        <div class="d-flex align-items-center mb-3 position-relative">
+            <!-- <div class="heading">{{"AGENT_USE_CASES" | translate}}</div> -->
+           
+            <ul class="nav nav-tabs uc-tabs" role="tablist">
+                <li>
+                    <div class="kr-sg-dropdowns regular-user-bots-dropdown" ngbDropdown [placement]="'bottom-left'">
+                        <div class="dropdown dropdown-open">
+                            <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>
+                                <i class="icon-sa-arrow-down"></i>
+                                <ng-container *ngIf="!currentBt">
+                                    <span class="empty-text">Select a bot</span>
+                                </ng-container>
+                                <ng-container *ngIf="currentBt">
+                                    <div class="bot-icon">
+                                        <img [src]="currentBt?.icon">
+                                    </div>
+                                    <div class="bot-name text-truncate" [innerHTML]="currentBt?.name" [title]="currentBt?.name"></div>
+                                </ng-container>
+                            </button>
+                            <ul class="dropdown-menu content-menu regular-user-bots" ngbDropdownMenu>
+                                <div class="user-bots-details">
+                                    <div class="kr-sg-input-search">                               
+                                    <input type="text" placeholder="{{'PLACEHOLDERS.SEARCH' | translate}}" class="input-search" [(ngModel)]="searchBt">
+                                        <img src="assets/icons/search_gray.svg" class="search-icon">
+                                    </div>
+                                    <perfect-scrollbar class="bots-scroll">
+                                        <div class="bot-name-icon" (click)="switchBots(bt)" *ngFor="let bt of smartABots | filter: [ searchBt, 'name']">
+                                            <div class="bot-icon">
+                                                <img [src]="bt?.icon ? bt?.icon : (this.workflowService.resolveHostUrl() + '/botbuilder/assets/images/brokenImageSmall.png')">
+                                            </div>
+                                            <div class="bot-name text-truncate" [title]="bt.name">{{bt.name}}</div>
+                                        </div>
+                                    </perfect-scrollbar>
+                                    <div class="kr-sg-dropdowns add-a-bot-inside-dropdown" ngbDropdown [placement]="'top-left'">
+                                        <div class="dropdown dropdown-open">
+                                            <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>
+                                                <div class="new-bot-btn"><img src="assets/icons/add-blue.svg">Add a bot</div>
+                                            </button>
+                                            <ul class="dropdown-menu content-menu" ngbDropdownMenu [class.adjust-top-dropdown]="smartABots?.length === 0">
+                                                <div class="bot-select-source" (click)="newBot('selectBot')">
+                                                    <div class="img-block">
+                                                        <img src="assets/icons/use-case/attachbot1.svg">
+                                                    </div>
+                                                    <div class="content-data">
+                                                        <div class="title">Attach a bot from library</div>
+                                                        <div class="desc-text">Use a bot you already created on bot platform</div>
+                                                    </div>
+                                                </div>
+                                                <!-- <div class="bot-select-source" (click)="choosePreBot()">
+                                                    <div class="img-block">
+                                                        <img src="assets/icons/use-case/attachbot2.svg">
+                                                    </div>
+                                                    <div class="content-data">
+                                                        <div class="title">Choose a template bot</div>
+                                                        <div class="desc-text">Choose a template from our store</div>
+                                                    </div>
+                                                </div> -->
+                                                <div class="bot-select-source" (click)="newBot('createNew')">
+                                                    <div class="img-block">
+                                                        <img src="assets/icons/use-case/attachbot3.svg">
+                                                    </div>
+                                                    <div class="content-data">
+                                                        <div class="title">Create a bot from scratch</div>
+                                                        <div class="desc-text">Design your own bot from scratch.</div>
+                                                    </div>
+                                                </div>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+                <li [class.disabled]="!currentBt">
+                    <div class="tab-name active" data-toggle="tab" href="#qa" (click)="ucType = 'faq'; selectGroup('')">{{"AGENTASSIST.QUEST_ANSWER" | translate}}</div>
+                </li>               
+                <li [class.disabled]="!currentBt">
+                    <div class="tab-name" data-toggle="tab" href="#convers" (click)="ucType = 'dialog'; selectGroup('')">{{"ANALYTICS.CONVERSATIONS" | translate}}</div>
+                </li>
+            </ul>
+            <button (click)="openConversation()" type="button" class="kr-sg-button-primary btn_lg new-hours-btn" [disabled]="!currentBt"><img src="assets/icons/add.svg">{{"USECASES.NEW_UC" | translate}}</button>
+        </div>
+    </header>
+
+    <ng-container *ngIf="smartABots.length">
+        <div class="dep-uc-table mt-2">
+            <div class="smart-filters">
+                <!--Left Column-->
+                <div class="col-5 filterLeft">
+                    <!--Filter by-->
+                    <div class="kr-sg-dropdowns" ngbDropdown [placement]="'bottom-left'">
+                        <div class="dropdown dropdown-open">
+                            <button class="dropdown-toggle dropdown-input" ngbDropdownToggle [disabled]="!currentBt">
+                                <img src="assets/icons/filterBy.svg">
+                                <span class="name">{{selectedGroup}}</span>
+                                <img src="assets/icons/bropdown-green.svg" class="dropdown-green">
+                            </button>
+                            <ul class="dropdown-menu content-menu header_in_development_drpdown" ngbDropdownMenu>
+                                <li ngbDropdownItem (click)="selectGroup('')"><a>{{ "USECASES.NONE" | translate }}</a></li>
+                                <li ngbDropdownItem (click)="selectGroup('category')"><a>{{ "USECASES.CATEGORY" | translate }}</a></li>
+                                <li ngbDropdownItem (click)="selectGroup('state')"><a>{{ "USECASES.STATUS_SMALL" | translate }}</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!--Filter by-->
+                </div>
+                <!--Left Column-->
+
+                <!--Right Column-->
+                <div class="col-7 filterRight" [hidden]="groupBy">
+                    <!--Search-->
+                    <div class="kr-sg-input-inline-search">
+                        <input type="text" placeholder="{{'PLACEHOLDERS.SEARCH' | translate}}" #searchTerm class="input-search" [disabled]="!currentBt">
+                        <img src="assets/icons/search.svg" class="search-icon">
+                    </div>
+                    <!--Search-->
+                </div>
+                <!--Right Column-->
+            </div>
+            <!--FILTERS-->
+        </div>
+        <ng-container>
+            <section>
+                <perfect-scrollbar class="scroll-tabs">
+                    <div class="tab-content">
+                        <div id="qa" class="tab-pane fade active show">
+                            <app-conversations #convComp [ucType]="ucType" (clearSearch)="searchTerm.value = ''" *ngIf="currentBt && ucType === 'faq'"></app-conversations>
+                        </div>
+        
+                        <div id="convers" class="tab-pane fade">
+                            <app-conversations #convComp [ucType]="ucType" (clearSearch)="searchTerm.value = ''" *ngIf="currentBt && ucType === 'dialog'"></app-conversations>
+                        </div>
+                    </div>
+                </perfect-scrollbar>
+            </section>
+        </ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="!smartABots.length">
+        <perfect-scrollbar class="scroll-empty-container">
+            <div class="empty-no-bots-available">
+                <div class="img-block">
+                    <img src="assets/icons/emptyplaceholders/empty-usecase.svg">
+                </div>
+                <div class="title">Select your bot!</div>
+                <div class="desc-text">Select your bot and add usecases to your bot right away. <br/>You can even add utterances for intent identification.</div>
+            </div>
+        </perfect-scrollbar>
+    </ng-container>
+
+</div>

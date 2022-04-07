@@ -1,0 +1,121 @@
+@import '../../../../../../app/scss/variables/variables.scss';
+
+/*-----Filters-----*/
+.smart-filters{
+	background-color: $primaryBackgroundColor;
+	display: flex;
+    padding: 5px;
+    margin-bottom: 10px;
+	.filterLeft{
+		display: flex;
+		padding-left: 0;
+		.kr-sg-dropdowns{
+			width: 200px;
+			padding: 0 10px 0 0;
+			.dropdown{
+				.dropdown-input{
+					background: $whiteColor;
+					box-shadow: 0px 2px 9px rgba(0, 0, 0, 0.03);
+					border-radius: 3px;
+					font-size: 12px;
+					color: $primaryFontColor;
+					border: 0;
+					&.light-shade {
+						opacity: 0.7;
+					}
+					img{
+						margin-right: 15px;
+					}
+					.name{
+						position: relative;
+						top: 2px;
+						text-transform: capitalize;
+					}
+					.dropdown-green{
+						position: absolute;
+						right: 0px;
+						top: 15px;
+					}
+				}
+				.dropdown-input:before{
+					display: none;
+				}
+			}
+			.dropdown-menu.content-menu.header_in_development_drpdown {
+				min-width: 190px !important;
+				left: 0px !important;
+			}
+			.dropdown-menu{
+				box-shadow: 0px 10px 35px rgba(32, 33, 36, 0.2);
+				min-width: 163px !important;
+				padding: 10px 0px;
+				border: 0;
+				margin: 0;
+				li{
+					font-size: 13px;
+					color: $primaryFontColor;
+					padding: 8px 20px;
+					cursor: pointer;
+					position: relative;
+					&:hover{
+						background-color:$primaryHoverColor;
+					}
+				}
+			}
+		}
+	}
+	.filterRight{
+		display: flex;
+		padding: 0;
+		align-items: center;
+       justify-content: flex-end;
+		.kr-sg-input-inline-search{
+			max-width: 300px;
+			.input-search{
+				background: $whiteColor;
+				/* Kora Grey / Grey Light 3 */
+
+				border: 1px solid $border2-color;
+				box-sizing: border-box;
+                border-radius: 4px;
+                padding: 5px 5px 5px 30px;
+                color:$primaryFontColor;
+            }
+            .search-icon{
+				top: 10px;
+				width: auto;
+				height: auto;
+                opacity: 0.5;
+            }
+		}
+		.kr-sg-overflow-menu{
+			width: 20px;
+			margin-left: 10px;
+			.dropdown-menu{
+				box-shadow: 0px 10px 35px rgba(32, 33, 36, 0.2);
+				min-width: 163px !important;
+				padding: 10px 0px;
+				border: 0;
+				margin: 0;
+				li{
+					font-size: 13px;
+					color: $primaryFontColor;
+					padding: 0;
+					cursor: pointer;
+					position: relative;
+					a{
+						display: block;
+						&:hover{
+							background-color:$primaryHoverColor;
+							text-decoration: none;
+						}
+					}
+				}
+			}
+			&.show{
+				box-shadow: none;
+			}
+		}
+	}
+}
+/*-----Filters-----*/

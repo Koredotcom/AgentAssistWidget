@@ -1,0 +1,18 @@
+@import './../../../../../../scss/variables/variables.scss';
+
+.usecases-table-edit-name-content{
+    padding: 22px 20px 20px 20px;
+    background: $whiteColor;
+    // border: 0.5px solid $primaryActionColor;
+    box-sizing: border-box;
+    // box-shadow: 0px 4px 6px rgba(168, 200, 221, 0.25);
+    border-radius: 4px;
+    width: 425px;  
+    .input-text.ng-invalid.ng-touched {
+        border: 1px red solid;
+    }
+    .label-text{
+        font-weight: 500;
+        font-size: 12px;
+    }
+}

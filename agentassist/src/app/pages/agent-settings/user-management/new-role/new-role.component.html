@@ -1,0 +1,91 @@
+<div class="slider-sec-data">
+    <form (ngSubmit)="onSubmit(formRole)" #formRole="ngForm">
+        <div class="header-sec row m-0">
+            <div class="lef-sec col-8 p-0">
+                <img (click)="closeSlider()" src="assets/icons/agent-settings/arrow-back.svg">
+                <div class="main-title">{{(mode === 'edit' ? "EDIT_ROLE" : "USER.MANAGE.NEWROLE") | translate}}</div>
+            </div>
+            <div class="close-link col-4 p-0"><img src="assets/images/close.svg" (click)="closeSlider()"></div>
+        </div>
+        <perfect-scrollbar class="scroll-content">
+            <div class="body-sec-data">
+                <div class="col-12 row mb-4 pb-1">
+                    <div class="kr-sg-input-text col-6 pl-0">
+                        <div class="label-text">{{"RM.TABLE.ROLE_NAME" | translate}}</div>
+                        <input type="text" #roleName="ngModel" #roleField [ngModel]="mode == 'new'?'':role?.role"
+                            name="role" [disabled]="workflowService.appState == 'published'" required placeholder="{{'PLACEHOLDERS.TYPE_ROLE_NAME' | translate}}" class="input-text" minlength="3"
+                            maxlength="200">
+                        <div *ngIf="roleName.touched && roleName.invalid">
+                            <div class="error-msg" *ngIf="roleName.errors?.required">
+                                {{"NEW_ROLE.FIELD_REQ" | translate}}
+                            </div>
+                            <div class="error-msg" *ngIf="roleName.errors?.minlength">
+                                {{"NEW_ROLE.FIELD_NEED_ATLEAST_CHAR" | translate}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="kr-sg-dropdowns col-6 pr-0">
+                        <div class="label-text">{{"RM.TABLE.ROLE_TYPE" | translate}}</div>
+                        <div class="dropdown dropdown-open">
+                            <button class="dropdown-toggle dropdown-input" disabled style="opacity: 0.5"
+                                data-toggle="dropdown">AgentDesktop</button>
+                            <ul class="dropdown-menu content-menu">
+                                <li><a>Option 1</a></li>
+                                <li><a>Option 2</a></li>
+                                <li><a>Option 3</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="kr-sg-input-text-area">
+                    <div class="label-text">{{"SETTINGS.DESCRIPTION" | translate}}</div>
+                    <textarea #rDesc="ngModel" [ngModel]="mode == 'new'?'':role?.rDesc" name="desc" required
+                        placeholder="{{'PLACEHOLDERS.PROVIDE_DESC_EXPLAINS_ROLE_AND_RESPONSIBILITES' | translate}}" class="input-text"
+                        minlength="3" [disabled]="workflowService.appState == 'published'" maxlength="200"></textarea>
+                    <div *ngIf="rDesc.touched && rDesc.invalid">
+                        <div class="error-msg" *ngIf="rDesc.errors?.required">
+                            {{"NEW_ROLE.FIELD_REQ" | translate}}
+                        </div>
+                        <div class="error-msg" *ngIf="rDesc.errors?.minlength">
+                            {{"NEW_ROLE.FIELD_NEED_ATLEAST_CHAR" | translate}}
+                        </div>
+                    </div>
+                </div>
+                <div class="language-support-table-data" [ngClass]="{'freeze-section': workflowService.appState == 'published'}">
+                    <div class="col-12 row table-header-sec">
+                        <div class="col-8 header-title">{{"NEW_ROLE.PERMISSION" | translate}}</div>
+                        <div class="col-4 header-title text-center">{{"NEW.AGENTGROUP.ACCESS_LVL" | translate}}</div>
+                    </div>
+                    <ng-container>
+                        <div class="col-12 row table-body-sec" *ngFor="let permit of permissions">
+                            <div class="col-7 permissons">
+                                <div class="permission-type">{{permit.name}}</div>
+                                <div class="permission-desc">{{permit.description}}</div>
+                            </div>
+                            <div class="col-5 profiency_level">
+                                <!-- no, view, full -->
+                                <div class="level-type {{access | lowercase}}"
+                                    (click)="permissionsAdded(permit, access)"
+                                    [ngClass]="{'order-1': access.toLowerCase() == 'no', 'order-2': access.toLowerCase() == 'view', 'order-3': (access.toLowerCase() == 'full' || access.toLowerCase() == 'yes'), 'active-type': checkActiveType(permit, access)}" *ngFor="let access of permit.operations">{{access | titlecase}}</div>
+                            </div>
+                        </div>
+                        <!-- <div class="col-12 row table-body-sec">
+                            <div class="col-7 permissons">
+                               <div class="permission-type">Dashboard</div>
+                               <div class="permission-desc">View & export dashboard data</div>
+                            </div>
+                            <div class="col-5 profiency_level">
+                                <div class="level-type no">No</div>                                                 
+                                <div class="level-type yes active-type">Yes</div>                       
+                            </div>
+                        </div> -->
+                    </ng-container>
+                </div>
+            </div>
+        </perfect-scrollbar>
+        <div class="footer-sec">
+            <button class="kr-sg-button-primary btn_lg" type="submit" [disabled]="formRole.invalid || role?.createdBy == 'system' || workflowService.appState == 'published'">{{"BUTTONS.SAVE" |
+                translate}}</button>
+        </div>
+    </form>
+</div>

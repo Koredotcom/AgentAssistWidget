@@ -1,0 +1,29 @@
+<div class="table-header row col-12">
+    <div class="title col-3 pl-5">{{"RM.TABLE.ROLE_NAME" | translate}}</div>
+    <div class="title col-2">{{"RM.TABLE.ROLE_TYPE" | translate}}</div>
+    <div class="title col-3">{{"SETTINGS.DESCRIPTION" | translate}}</div>
+    <div class="title col-2">{{"RM.TABLE.CREATED_BY" | translate}}</div>
+    <div class="title col-2">{{"RM.TABLE.LAST_UPDATE" | translate}}</div>
+</div>
+<ng-container>
+    <div class="table-body-user row col-12" *ngFor="let role of roles | filter: [ search, 'role']; let i=index" [ngClass]="{'system-role': role.createdBy == 'system', 'published-state': workflowService.appState == 'published'}" (click)="openRoleSlider(role)">
+        <div class="with-checkbox col-3">
+            <div class="kr-sg-checkbox p-0 m-0 invisible" (click)="$event.stopPropagation()" [hidden]="workflowService.appState == 'published'">
+                <input id="rm-table-{{i}}" [(ngModel)]="role.isChecked" class="checkbox-custom" type="checkbox">
+                <label for="rm-table-{{i}}" class="checkbox-custom-label"></label>
+            </div>
+            <div class="role-name">{{role.role}}</div>
+        </div>
+        <div class="title col-2">{{"RM.TABLE.AGENTDESK" | translate}}</div>
+        <div class="title col-3">{{role.rDesc}}</div>
+        <div class="title col-2">{{role.createdBy}}</div>
+        <div class="date-time col-2">
+            <!-- {{role.modifiedDate}} -->
+            <div class="date">{{role.modifiedDate | dateFormat}}</div>
+            <div class="time">{{role.modifiedDate | date:'mediumTime'}}</div>
+        </div>
+        <div class="delete-user-mang" (click)="deleteRole($event, role.id)" *hasPermission="['ROLE_MANAGEMENT_FULL']">
+            <img src="assets/icons/agent-settings/delete.svg">
+        </div>
+    </div>
+</ng-container>

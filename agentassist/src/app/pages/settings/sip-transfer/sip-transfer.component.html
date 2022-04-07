@@ -1,0 +1,104 @@
+<app-slider-component id="sipSlider" class="widthAdjust" #sipSlider="app-slider">
+    <div class="slider-sec-data">
+        <form [formGroup]="sipForm" (ngSubmit)="onSave()">
+            <div class="header-sec row m-0">
+                <div class="lef-sec col-8 p-0">
+                    <div class="main-title">{{ "SETTINGS.SIP_TRANSFER_SETTINGS" | translate }}</div>
+                </div>
+                <div class="close-link col-4 p-0"><img [src]="assets.close"  (click)="closeSlider()"></div>
+            </div>
+            <perfect-scrollbar class="scroll-content">
+                <div class="outging-v-agent-transfer">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li>
+                            <div class="tab-name active" data-toggle="tab" href="#config">
+                                <img [src]="assets.settingsGray" class="gray-settings">
+                                <img [src]="assets.settingsGreen" class="green-settings">{{ "SETTINGS.CONFIG" | translate }}
+                            </div>
+                        </li>
+                        <li>
+                            <div class="tab-name" data-toggle="tab" href="#inst">
+                                <img [src]="assets.workspacesGray" class="inst-gray">
+                                <img [src]="assets.workspacesGreen" class="inst-green">{{ "SETTINGS.INSTRUCTION" | translate }}
+                            </div>
+                        </li>                               
+                    </ul> 
+                    <div class="tab-content">
+                        <div id="config" class="tab-pane fade show active">
+                            <div class="kr-sg-input-text mb-3 pb-2">
+                                <div class="label-text">{{ "SETTINGS.SIP_TRANSFER_URI" | translate }}</div>
+                                <input type="text" [placeholder]="'PLACEHOLDERS.USUALLY' | translate" class="input-text" formControlName="sipTransferId">
+                            </div>
+                            <div class="text m-tb">
+                                <div class="label_text">{{ "SETTINGS.SIP_HEADER_SETTINGS" | translate }}</div>
+                                <div class="desc">{{ "SETTINGS.SIP_HEADER_DESC" | translate }}</div>
+                            </div>
+                            <div class="additional-context" formArrayName="additionalContext">
+                                <div class="add-head">
+                                    <div class="label_text m-0">{{ "SETTINGS.ADD_CONTEXT" | translate }}</div>
+                                    <div class="add_header" (click)="onAddHeader()">
+                                        <img src="assets/icons/settings/plus.svg">{{ "SETTINGS.ADD_HEADER" | translate }}
+                                    </div>
+                                </div>
+                                <div *ngFor="let context of sipForm.get('additionalContext')['controls']; let i = index;">
+                                    <div class="context-list" [ngClass]="{'disabled-context-list': !context.get('enabled').value}" [formGroupName]="i">
+                                        <div class="kr-sg-checkbox">
+                                            <input id="checkbox-{{i}}" formControlName='enabled' class="checkbox-custom" type="checkbox">
+                                            <label for="checkbox-{{i}}" class="checkbox-custom-label"></label>
+                                        </div> 
+                                        <div class="kr-sg-input-text">
+                                            <input type="text" [placeholder]="'PLACEHOLDERS.CONTEXT_KEY' | translate" formControlName='name' class="input-text">
+                                        </div>
+                                        <div class="kr-sg-input-text">
+                                            <input type="text" [placeholder]="'PLACEHOLDERS.CONTEXT_VALUE' | translate" formControlName='value' class="input-text">
+                                        </div>
+                                        <div class="delete-context-gray">
+                                            <img src="assets/images/trashIconGray.svg">
+                                        </div>
+                                        <div class="delete-context-red" (click)="deleteContext(i)">
+                                            <img src="assets/icons/settings/delete.svg">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="user-interface" formGroupName="userToUser">
+                                <div class="user-header">
+                                    <div class="toggle-switch d-flex align-items-center">
+                                        <div class="text-label">{{ "SETTINGS.USER_INTERFACE" | translate }}</div>
+                                        <label class="kr-sg-toggle large">
+                                            <input type="checkbox" (change)="onChangeInterface()" [checked]="true" formControlName="enabled">
+                                            <div class="slider"></div>
+                                        </label>
+                                    </div>
+                                    <div class="warning">
+                                        <img src="assets/icons/settings/info.svg">{{ "SETTINGS.IF_UNSURE" | translate }}
+                                    </div>
+                                </div>
+                                <div class="user-section">
+                                    <div class="kr-sg-input-text-area">
+                                        <textarea [placeholder]="'PLACEHOLDERS.PLACEHOLDER_TEXT' | translate" 
+                                                class="input-text"
+                                                formControlName="payload"></textarea>                                
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="inst" class="tab-pane fade incommingTabContent">
+                            <div class="desc-info-text">{{ "SETTINGS.CUSTOM_VOICE_IP" | translate }}</div>
+                            <div class="label-text font-weight-bold">{{ "SETTINGS.STEP_1" | translate }}</div>
+                            <div class="desc-info-text">{{ "SETTINGS.DEFINE_SIP_ID" | translate }}</div>
+                            <div class="label-text font-weight-bold">{{ "SETTINGS.STEP_2" | translate }}</div>
+                            <div class="desc-info-text">{{ "SETTINGS.CLICK_DONE" | translate }}</div>
+                        </div>
+                    </div>
+                </div>
+            </perfect-scrollbar>
+            <div class="footer-sec" *ngIf="workflowService.appState !== 'published'">
+                <button class="kr-sg-button-primary btn_lg mr-2" 
+                        [disabled]="sipForm.invalid" 
+                        type="submit">{{ "SETTINGS.DONE" | translate }}</button>
+            </div>
+        </form>
+    
+    </div>
+</app-slider-component>

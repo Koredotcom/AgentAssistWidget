@@ -1,0 +1,146 @@
+<div class="slider-sec-data">
+    <form #newHoursOperationForm="ngForm" [ngClass]="{'submitted' : submitted}">
+        <div class="header-sec row m-0">
+            <div class="lef-sec col-8 p-0">
+                <img (click)="close()" src="assets/icons/agent-settings/arrow-back.svg">
+                <div class="main-title">
+                    <ng-container *ngIf="!editMode">{{"AGENTSETTINGS.NEW_HOURS_OPER" | translate}}</ng-container>
+                    <ng-container *ngIf="editMode">{{"AGENTSETTINGS.EDIT_HOURS_OPER" | translate}}</ng-container>
+                </div>
+            </div>
+            <div class="close-link col-4 p-0"><img src="assets/images/close.svg" (click)="close()"></div>
+        </div>
+        <perfect-scrollbar class="scroll-content">
+            <div class="body-sec-data" *ngIf="!loading" [@fadeInOutAnimation]>
+
+                <div class="col-12 row time-zone-block">
+                    <div class="kr-sg-input-text col-6 pl-0">
+                        <div class="label-text">{{"AGENTSETTINGS.NAME" | translate}}</div>
+                        <input type="text" [(ngModel)]="hoursOperation.name" required #name="ngModel" name="name" [placeholder]="'AGENTSETTINGS.PLACEHOLDER_NAME' | translate" class="input-text">                        
+                        <div class="error-message" *ngIf="name?.invalid && name?.touched">
+                            {{ "AGENTSETTINGS.PLS_ENTER_NAME" | translate }}
+                        </div>
+                    </div>
+                    <div class="kr-sg-dropdowns col-6 pr-0">
+                        <div class="label-text">{{ "AGENTSETTINGS.TIME_ZONE" | translate }}</div>
+                        <div class="dropdown dropdown-open">
+                            <button class="dropdown-toggle dropdown-input" data-toggle="dropdown">{{hoursOperation.timezone}}</button>                                            
+                            <ul class="dropdown-menu content-menu">
+                                <li class="search-box">
+                                    <input type="text" required #timezoneSearchTerm name="timezoneSearchTerm" placeholder="{{'PLACEHOLDERS.SEARCH' | translate}}" class="seach-input" (input)="timezoneSearchTerm.value = $event.target.value" autocomplete="chrome-off">
+                                </li>
+                                <perfect-scrollbar class="timezone-perfect-scroll">
+                                    <ng-container *ngFor="let timezone of timeZones | filter: [timezoneSearchTerm.value]">
+                                        <li (click)="hoursOperation.timezone = timezone; timezoneSearchTerm.value = ''" *ngIf="hoursOperation.timezone !== timezone"><a>{{timezone}}</a></li>
+                                    </ng-container>    
+                                </perfect-scrollbar>                              
+                            </ul>
+                        </div>
+                        <!-- <div class="error-message" *ngIf="timezoneSearchTerm?.invalid && timezoneSearchTerm?.touched">
+                            {{ "AGENTSETTINGS.PLS_SELECT_TIMEZONE" | translate }}
+                        </div> -->
+                    </div>
+                </div>
+                <ul class="nav nav-tabs" role="tablist">
+                    <li>
+                        <div class="tab-name active" data-toggle="tab" href="#standard-hours">
+                            <img src="assets/icons/agent-settings/date-time.svg" class="call-inactive">
+                            <img src="assets/icons/agent-settings/date-time.svg" class="call-active">{{ "AGENTSETTINGS.STANDARD_HOURS" | translate }}
+                        </div>
+                    </li>
+                    <li>
+                        <div class="tab-name" data-toggle="tab" href="#date-time">
+                            <img src="assets/icons/agent-settings/calendar.svg" class="call-inactive">
+                            <img src="assets/icons/agent-settings/calendar.svg" class="call-active">{{"HOURS_OF_OPERATION.HOLIDAYS_SPECIAL_DAYS" | translate}}                            
+                        </div>
+                    </li>                    
+                </ul>
+                <div class="tab-content">
+                    <div id="standard-hours" class="tab-pane fade show active">
+                        <div class="standard-hours-content">
+                            <div class="header-table col-12 row">
+                                <div class="col-2 title">{{"AGENTSETTINGS.DAY" | translate}}</div>
+                                <div class="col-2 title">{{"CONVERSATIONAL_LOGS.STATUS" | translate}}</div>
+                                <div class="col-4 title">{{"HOURS_OF_OPERATION.START_TIME" | translate}}</div>
+                                <div class="col-4 title">{{"HOURS_OF_OPERATION.END_TIME" | translate}}</div>
+                            </div>
+                            <div class="body-table col-12 row" *ngFor="let day of standardDays; let i=index">
+                                <div class="col-2 day-title">{{day?.day}}</div>
+                                <div class="col-2 status-toggle">
+                                    <label class="kr-sg-toggle">                                       
+                                        <input type="checkbox" [(ngModel)]="day.isOpen" [ngModelOptions]="{standalone: true}" [checked]="day.isOpen">
+                                        <div class="slider"><span class="enabled">{{"HOURS_OF_OPERATION_OPEN" | translate}}</span><span class="disabled">{{"HOURS_OF_OPERATION.CLOSED" | translate}}</span></div>
+                                    </label>
+                                </div>
+                                <ng-container *ngIf="day.isOpen">
+                                    <div class="col-4 start-end-time-inputs">
+                                        <input [ngxTimepicker]="startDatePicker" readonly class="input-text" [(ngModel)]="day.startTime" [ngModelOptions]="{standalone: true}">
+                                        <ngx-material-timepicker #startDatePicker></ngx-material-timepicker>
+                                    </div>
+                                    <div class="col-4 start-end-time-inputs">
+                                        <input [ngxTimepicker]="endDatePicker" readonly class="input-text" [(ngModel)]="day.endTime" [ngModelOptions]="{standalone: true}">
+                                        <ngx-material-timepicker #endDatePicker></ngx-material-timepicker>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="date-time" class="tab-pane fade">
+                        <div class="standard-hours-content">
+                            <div class="header-table col-12 row">
+                                <div class="col-2 title">{{"HOURS_OF_OPERATION.DATE" | translate}}</div>
+                                <div class="col-2 title">{{"USECASES.NAME" | translate}}</div>
+                                <div class="col-2 title">{{"HOURS_OF_OPERATION.PERIOD" | translate}}</div>
+                                <div class="col-3 title">{{"HOURS_OF_OPERATION.START_WORK_TIME" | translate}}</div>
+                                <div class="col-3 title">{{"HOURS_OF_OPERATION.END_WORK_TIME" | translate}}</div>
+                            </div>
+                            
+                            <div class="body-table col-12 row" *ngFor="let day of specialDays;let i=index">
+                                <div class="col-2 input-box">
+                                    <input type="text" ngxDaterangepickerMd [(ngModel)]="day.date"  [name]="'specialDate'+i"
+                                        [locale]="{format: 'MM/DD/YYYY', displayFormat: 'ddd, MMM DD'}" required
+                                        [singleDatePicker]="true"  [autoApply]="true" readonly [ngClass]="{'border-danger': submitted && !day?.date?.startDate}" />
+                                </div>
+                                <div class="col-2 input-box">
+                                    <input type="text" [(ngModel)]="day.name" [name]="'specialName'+i" required >
+                                </div>
+                                <div class="col-2 status-toggle">
+                                    <label class="kr-sg-toggle">                                       
+                                        <input type="checkbox" [(ngModel)]="day.period" [ngModelOptions]="{standalone: true}" [checked]="day.period">
+                                        <div class="slider"><span class="enabled">{{"NEW.AGENTGROUP.FULL" | translate}}</span><span class="disabled">{{"HOURS_OF_OPERATION.PARTIAL" | translate}}</span></div>
+                                    </label>
+                                </div>
+                                <ng-container *ngIf="!day.period">
+                                    <div class="col-3 start-end-time-inputs">
+                                        <input [ngxTimepicker]="startTimePicker" readonly class="input-text" [(ngModel)]="day.startTime" [ngModelOptions]="{standalone: true}">
+                                        <ngx-material-timepicker #startTimePicker></ngx-material-timepicker>
+                                    </div>
+                                    <div class="col-3 start-end-time-inputs">
+                                        <input [ngxTimepicker]="endTimePicker" readonly class="input-text" [(ngModel)]="day.endTime" [ngModelOptions]="{standalone: true}">
+                                        <ngx-material-timepicker #endTimePicker></ngx-material-timepicker>
+                                    </div>
+                                </ng-container>
+                                
+                                <div class="delete-holiday" (click)="deleteSpecialDay(i)">
+                                    <img src="assets/icons/settings/delete.svg">
+                                </div>
+                            </div>
+                            
+                            <div class="add-another-action">
+                                <div class="btn-another" (click)="addSpecialDay()">
+                                    <img src="assets/icons/agent-settings/add.svg">
+                                    <span *ngIf="specialDays && specialDays?.length" class="title">{{"DEFAULTS.ADD_ANOTHER" | translate}}</span>
+                                    <span *ngIf="specialDays && specialDays?.length == 0" class="title">{{"AGENTSETTINGS.ADD_NEW_HOUR" | translate}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                                     
+                </div>
+            </div>
+        </perfect-scrollbar>
+        <div class="footer-sec" *ngIf="!loading" [@fadeInOutAnimation]>
+            <button *hasPermission="['HOURS_OF_OPERATION_FULL']" (click)="saveHoursOperation(newHoursOperationForm?.invalid)" class="kr-sg-button-primary btn_lg" type="submit">{{"BUTTONS.SAVE" | translate}}</button>
+        </div>
+    </form>
+
+</div>

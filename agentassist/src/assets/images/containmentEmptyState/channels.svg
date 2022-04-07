@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="500" height="212" viewBox="0 0 500 212">
+    <g fill="none" fill-rule="evenodd" transform="translate(1)">
+        <path fill="#E5E8EC" d="M236 7.5v15H50v-15z"/>
+        <rect width="30" height="30" x="7" fill="#E5E8EC" rx="15" transform="rotate(90 22 15)"/>
+        <path fill="#E5E8EC" d="M236 63.5v15H50v-15z"/>
+        <rect width="30" height="30" x="7" y="56" fill="#E5E8EC" rx="15" transform="rotate(90 22 71)"/>
+        <path fill="#E5E8EC" d="M236 119.5v15H50v-15z"/>
+        <rect width="30" height="30" x="7" y="112" fill="#E5E8EC" rx="15" transform="rotate(90 22 127)"/>
+        <path fill="#E5E8EC" d="M236 175.5v15H50v-15z"/>
+        <rect width="30" height="30" x="7" y="168" fill="#E5E8EC" rx="15" transform="rotate(90 22 183)"/>
+        <path fill="#E5E8EC" d="M498 7.5v15h-24v-15zM498 63.5v15h-24v-15zM498 119.5v15h-24v-15zM498 175.5v15h-24v-15z"/>
+        <path stroke="#E5E8EC" stroke-linecap="square" d="M.384 43h497.519M.384 99h497.519M.384 155h497.519M.384 211h497.519"/>
+    </g>
+</svg>

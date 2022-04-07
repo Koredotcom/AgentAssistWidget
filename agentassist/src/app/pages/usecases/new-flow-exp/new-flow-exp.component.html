@@ -1,0 +1,148 @@
+<div class="slider-sec-data">
+    <form #expeirenceForm="ngForm">
+        <div class="header-sec row m-0">
+            <div class="lef-sec col-8 p-0">
+                <img src="assets/icons/use-case/new-flow.png">
+                <span class="main-title">{{modalTitle}}</span>
+            </div>
+            <div class="close-link col-4 p-0" (click)="close()"><img src="assets/images/close.svg"></div>
+        </div>
+        <perfect-scrollbar class="scroll-content">
+            <div class="body-sec-data">
+                <div class="kr-sg-input-text mb-4">
+                    <div class="label-text">{{'EXP_FLOW_INPUT_TITLE' | translate}}</div>
+                    <input type="text" [disabled]="isEditMode" placeholder="Type your experience flow name" class="input-text" [(ngModel)]="model.name" name="name" required>
+                </div>
+                <div class="kr-sg-input-text-area mb-4">
+                    <div class="label-text">Description</div>
+                    <textarea placeholder="{{'PLACEHOLDER_EXP_FLOW_DESC' | translate}}" class="input-text" [(ngModel)]="model.description" name="description"></textarea>                                
+                </div>
+                <div class="group-radiobutton" (change) = "unCheckOthersBasedOnModelType(model.source.type)">
+                    <div class="heading-title">{{'EXP_FLOW_ATTACH_CHANNEL' | translate}}</div>
+                    <div class="info-radio-sec">{{'EXPFLOW_CHANNEL_SLIDER' | translate}}</div>
+                    <div class="kr-sg-radiobutton">
+                        <input #tradio1 id="radio-22" [disabled]="isEditMode && model.source.type !== 'call'" name="call" value="call" class="radio-custom" type="radio" [(ngModel)]="model.source.type">
+                        <label for="radio-22" class="radio-custom-label">{{'SURVEYS.VOICE' | translate}}</label>
+                    </div>
+                    <div class="kr-sg-radiobutton">
+                        <input #tradio2 id="radio-23" [disabled]="isEditMode && model.source.type !== 'chat'" name="chat" value="chat" class="radio-custom" type="radio" [(ngModel)]="model.source.type">
+                        <label for="radio-23" class="radio-custom-label">{{'TESTING.CHAT' | translate}}</label>
+                    </div>
+                    <div class="kr-sg-radiobutton d-none">
+                        <input #tradio3 id="radio-24" [disabled]="isEditMode && model.source.type !== 'email'" name="email" value="email" class="radio-custom" type="radio" [(ngModel)]="model.source.type">
+                        <label for="radio-24" class="radio-custom-label">{{'EMAIL_CHANNEL.TITLE' | translate}}</label>
+                    </div>
+                </div> 
+                <div class="info-data-radio-buttons">
+                    <ng-container *ngIf="model.source.type === 'call'">
+                        <div class="row col-12 choose-phone-number">
+                            <!-- <div class="kr-sg-dropdowns col-7">
+                                <div class="label-text">Choose a Phone Number</div>
+                                <div class="dropdown dropdown-open">
+                                    <button class="dropdown-toggle dropdown-input" data-toggle="dropdown">{{model.source.phoneNumbers.length? model.source.phoneNumbers[0].phoneNumber : ('EXPFLOW_CHANNEL_PHONE_NUM_SIP_TRANSFER' | translate)}}</button>               
+                                    <ul class="dropdown-menu content-menu"> 
+                                        <perfect-scrollbar class="phone-number-scroll">
+                                            <div class="dropdown_scroll_perfect_inside">
+                                            <li *ngFor="let phoneNumber of phoneNumbers" (click)="onChangePhonenumber(phoneNumber);">
+                                                <a class="text-truncate" title="{{phoneNumber.phoneNumber}}">
+                                                    <img style="width: 20px;" [src]="isFlagAvailable(phoneNumber.countryCode)? 'assets/icons/flags/' + (phoneNumber.countryCode).toLowerCase() + '.svg' :'assets/icons/flags/default_flag.svg'">
+                                                    <span class="phone-number">{{phoneNumber.phoneNumber}}</span>
+                                                </a>
+                                              </li>
+                                            </div>
+                                        </perfect-scrollbar>                                             
+                                    </ul>
+                                </div>
+                            </div>
+                            -->
+                            <div class="chat-data-content">
+                                <div class="kr-sg-checkbox d-block" *ngFor="let phoneNumber of phoneNumbers,let index = index" >
+                                    <input id="checkbox_drp1{{index}}" class="checkbox-custom" type="checkbox" name="{{phoneNumber.phoneNumber}}" [(ngModel)]="phoneNumber.isChecked" (change)="getSelectedPhoneNumbers(phoneNumber)">
+                                    <label for="checkbox_drp1{{index}}" class="checkbox-custom-label">
+                                        <img style="width: 20px;" [src]="isFlagAvailable(phoneNumber.countryCode)? 'assets/icons/flags/' + (phoneNumber.countryCode).toLowerCase() + '.svg' :'assets/icons/flags/sip.svg'">{{phoneNumber.phoneNumber}}
+                                    </label>
+                                </div>
+                                <div class="error-label" *ngIf="(!isCheckBoxChecked && !modelSourceType && phoneNumbers.length>0)">Please select a phone number to proceed</div>
+                                <div class="error-label" *ngIf="(phoneNumbers.length===0)">No phone numbers available</div>
+                            </div>
+                            <!--  -->
+                            <div class="col-5 not-yet-purchased" (click)="navigateToPhonenumberPurchase()"><img src="assets/icons/use-case/call.svg">Purchase a Phone Number</div>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="model.source.type === 'chat'">
+                        <div class="chat-data-content">
+                            <div class="kr-sg-checkbox d-block" *ngIf="channels.length > 1">
+                                <input id="all" class="checkbox-custom" type="checkbox" name="all.name" [(ngModel)]="all.checkAllChannels" (change)="toggleCheckboxAll($event)">
+                                <label for="all" class="checkbox-custom-label"><label class="ml-2"></label> All</label>
+                            </div>
+                            <div class="kr-sg-checkbox d-block" *ngFor="let channel of channels,let index = index" >
+                                <input id="checkbox_drp1{{index}}" class="checkbox-custom" type="checkbox" name="{{channel.type}}" [(ngModel)]="channel.isChecked" (change)="getSelectedChannels(channel)">
+                                <label for="checkbox_drp1{{index}}" class="checkbox-custom-label">
+                                    <img style="width: 20px;" [src]="workflowService?.resolveHostUrl() + '/agents/' + ((channel?.type).includes('ivrInst')? 'ivr': (channel?.type)) + '.svg'">{{channel.name}}
+                                </label>
+                            </div>
+                            <div class="error-label" *ngIf="(!isCheckBoxChecked && !modelSourceType && channels.length>0)">Please select a channel to proceed</div>
+                            <div class="error-label" *ngIf="(channels.length===0)">No channels available</div>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="model.source.type === 'email'">
+                        <div mat-dialog-content fxFlex fxLayout="column" class="kr-sg-input-text">
+                            <div class="label-text">Assigned Email</div>
+                            <!-- <input type="text" placeholder="Email Id to recieve the query" class="input-text"> -->
+                            <mat-form-field class="example-chip-list" appearance="outline">
+                                <mat-chip-list #chipList>
+                                    <mat-chip *ngFor="let email of emailList" [ngClass]="{'chip-error': email.invalid}" (removed)="remove(email)">
+                                      <span class="mat-val">{{email.email}}</span>
+                                      <mat-icon matChipRemove [selectable]="'true'"
+                                      [removable]="'true'"><img src="assets/icons/close.svg"></mat-icon>
+                                    </mat-chip>
+                                    <input placeholder="{{'PLACEHOLDERS_EMAIL_RECIEVE_QUERY' | translate}}"
+                                           [matChipInputFor]="chipList"
+                                           [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                           [matChipInputAddOnBlur]="'true'"
+                                           (matChipInputTokenEnd)="add($event)"
+                                           autocomplete="off">
+                                  </mat-chip-list>
+                            </mat-form-field>
+                            <div class="error-label" *ngIf="!isValidList">{{ "HEADER.ENTER_VALID_EMAIL" | translate }}</div>
+                        </div>
+                    </ng-container>
+                </div>
+                <div class=" hours-operation-section col-7 p-0 d-none">
+                    <div class="heading-title">Hours of Operation</div>
+                    <div class="kr-sg-dropdowns hours-override-dp-dw ">
+                        <div class="title label-text">
+                            <!-- {{hoursOperationList[0].name}} -->
+                        </div>
+                        <!-- <div class="dropdown dropdown-open">
+                            <button class="dropdown-toggle dropdown-input" data-toggle="dropdown">
+                                {{model.operationHours.length? model.operationHours[0].name : hoursOperationList[0].name}}
+                            </button>               
+                            <ul class="dropdown-menu content-menu"> 
+                                <perfect-scrollbar class="operation-hours-scroll">
+                                    <div class="dropdown_scroll_perfect_inside">
+                                    <li *ngFor="let workingHours of hoursOperationList" (click)="onChangehoursOfOperation(workingHours);">
+                                        <a class="text-truncate" title="{{workingHours.name}}">
+                                            <span class="phone-number">{{workingHours.name}}</span>
+                                        </a>
+                                      </li>
+                                    </div>
+                                </perfect-scrollbar>                                             
+                            </ul>
+                        </div> -->
+                        <div class="override-hours-of-operation-btn">
+                            <img src="assets/icons/override.svg">
+                            Override
+                        </div>
+                    </div>
+                    <div class="override-note">Respective “hours of operation” is already selected as “default” as per the pre-defined logic. </div>
+                </div>
+            </div>
+        </perfect-scrollbar>
+        <div class="footer-sec">
+            <button class="kr-sg-button-primary btn_lg ml-1" style="margin-right: 14px;" [disabled]="!(model.name)" (click)="isEditMode ? updateExpeirenceFlow(model, true) : createExpeirenceFlow(model, true);">{{flowButton}}</button>
+            <button *ngIf="!isEditMode" class="kr-sg-button-secondary btn_lg mr-2" [disabled]="!(model.name)" (click)="createExpeirenceFlow(model)">Create</button>
+            <button *ngIf="isEditMode" class="kr-sg-button-secondary btn_lg mr-2" (click)="updateExpeirenceFlow(model)">Update</button>
+        </div>
+    </form>
+</div>

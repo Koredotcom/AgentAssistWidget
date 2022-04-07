@@ -1,0 +1,154 @@
+<div class="internal-chat-container">
+    <div class="internal-chat-window" [class.show]="!isMinimized">
+		<div class="static-header-text-icons">
+			<div class="main-heading">Test your flow</div>
+			<div class="actions-close-minimize">
+				<i class="icon-sa-minus" (click)="minimizeWindow()"></i>
+				<i class="icon-sa-close" (click)="closeWindow()"></i>
+			</div>
+		</div>
+
+		<!-- Default Tabs -->
+		<div class="tabs-header-data" *ngIf="displayMode == 'home'">
+			<div class="tab-name" [ngClass]="{'active-tab-name': activeTabIndex == 0}" (click)="onTabChange(0)">Live</div>
+			<div class="tab-name" [ngClass]="{'active-tab-name': activeTabIndex == 1}" (click)="onTabChange(1)">All flows</div>
+		</div>
+
+		<div class="chat-container-app">
+
+			<!-- Call container block -->
+
+			<ng-container>
+				<ng-container *ngIf="displayMode == 'home' && activeTabIndex == 0">
+					<div class="select-chat-call-sec">
+						<div class="info-text">Click on call to make a test call and chat to test a chat interaction.</div>
+						<div class="call-chat-data">
+							<div class="call_chat" (click)="onSourceSelect('call')">
+								<div class="img-block"><img src="assets/icons/testing/call.svg"></div>
+								<div class="c-m-title">{{'TESTING.CALL' | translate}}</div>
+							</div>
+							<div class="call_chat" (click)="onSourceSelect('chat')">
+								<div class="img-block"><img src="assets/icons/testing/chat.svg"></div>
+								<div class="c-m-title">{{'TESTING.CHAT' | translate}}</div>
+							</div>
+						</div>  
+					</div>
+				</ng-container>
+
+				<ng-container *ngIf="activeTabIndex == 1 && !isCallFlowSelected">
+					<perfect-scrollbar>
+						<div class="all-flow-tab-sec">
+							<div class="info-desc">Select the contact flow and its status to test.</div>
+							<ng-container>
+								<div *ngFor="let callFlow of callFlows" class="contact-flow-data" (click)="onSelectCallFlow(callFlow)">{{callFlow?.name}}</div>
+							</ng-container>
+						</div>
+					</perfect-scrollbar>
+				</ng-container>
+
+				<ng-container *ngIf="activeTabIndex == 1 && isCallFlowSelected && !isFlowStateSelected && selectedCallFlow?.source?.type == 'call'">
+					<div class="tabs-header-data back-btn-sec">
+						<div class="back-with-title" (click)="backToCallFlows()">
+							<i class="icon-sa-arrow-left"></i>
+							<span class="title-back">{{selectedCallFlow?.name}}</span>
+						</div>
+					</div>
+					<perfect-scrollbar>
+						<div class="contact-flow-tab-sec">
+							<div class="info-desc">Select the version you want to test</div>
+							<ng-container>
+								<div *ngIf="selectedCallFlow?.isPublished" class="contact-flow-data" (click)="onSelectFlowVersion('published')">
+									<div class="left-title">Last Published</div>
+									<div class="date-time">{{selectedCallFlow?.publishedOn | date: 'MMM dd, yyyy'}}</div>
+								</div>
+								<div class="contact-flow-data" (click)="onSelectFlowVersion('configured')">
+									<div class="left-title">Draft</div>
+									<div class="date-time">{{selectedCallFlow?.lModOn | date: 'MMM dd, yyyy'}}</div>
+								</div>
+							</ng-container>
+						</div>
+					</perfect-scrollbar>
+				</ng-container>
+
+				<ng-container *ngIf="activeTabIndex == 0 && displayMode == 'call' && !selectedPhoneNum?.phoneNumber">
+					<!-- Back button with itle -->
+					<div class="tabs-header-data back-btn-sec">
+						<div class="back-with-title" (click)="backToMainTabs()">
+							<i class="icon-sa-arrow-left"></i>
+							<span class="title-back">Call</span>
+						</div>
+					</div>
+					<perfect-scrollbar>
+						<div class="call-phone-number-flow">
+							<div class="title">Choose a phone number you want to test</div>
+							<ng-container>
+								<div *ngFor="let phone of phoneNumbers" class="phone-nmuber-box" (click)="onSelectNumber(phone)">
+									<img [src]="phone?.countryCode ? 'assets/icons/flags/' + (phone.countryCode).toLowerCase() + '.svg' : 'assets/icons/flags/sip.svg'">
+									<span class="number-phone">{{phone?.phoneNumber}}</span>
+								</div>
+							</ng-container>
+						</div>
+					</perfect-scrollbar>
+				</ng-container>
+				<ng-container *ngIf="displayMode == 'call' && ((activeTabIndex == 0 && selectedPhoneNum?.phoneNumber) || (activeTabIndex == 1 && isFlowStateSelected))">
+					<div class="call-flow-number-">
+						<div class="phone-number-sec">
+							<div *ngIf="selectedPhoneNum?.phoneNumber" class="number-p">{{selectedPhoneNum?.phoneNumber}}</div>
+							<div *ngIf="isFlowStateSelected" class="number-p">Experience flow number</div>
+							<div class="dialing-title">{{callStatus}}</div>
+						</div>
+						<!-- <div class="chat-btn">
+							<i class="icon-sa-round-chat"></i>
+							<span class="count-msg">1</span>
+						</div> -->
+					</div>
+					<perfect-scrollbar class="scroll-kepad-data-call">
+						<div class="keypad-numbers-data">
+							<input class="numbers" id="dtmfInput" [(ngModel)]="phoneNumber" onkeypress='return (event.charCode >= 48 && event.charCode <= 57) || (event.charCode == 35) || (event.charCode == 42)' (input)="onInput($event)"/>
+							<div class="keypad-num">
+								<div class="num" (click)="onClickDigit(1)">1</div>
+								<div class="num" (click)="onClickDigit(2)">2</div>
+								<div class="num" (click)="onClickDigit(3)">3</div>
+								<div class="num" (click)="onClickDigit(4)">4</div>
+								<div class="num" (click)="onClickDigit(5)">5</div>
+								<div class="num" (click)="onClickDigit(6)">6</div>
+								<div class="num" (click)="onClickDigit(7)">7</div>
+								<div class="num" (click)="onClickDigit(8)">8</div>
+								<div class="num" (click)="onClickDigit(9)">9</div>
+								<div class="num pt-2" (click)="onClickDigit('*')">*</div>
+								<div class="num" (click)="onClickDigit('0')">0</div>
+								<div class="num" (click)="onClickDigit('#')">#</div>
+							</div>
+							<div class="bottom-actions">
+								<div class="speaker-icon" (click)="toggleVoice()">
+									<img src="assets/icons/testing/speaker.svg">
+								</div>
+								<div (click)="onClickHome(true)">
+									<img src="assets/icons/testing/endcall.svg">
+								</div>
+							</div>
+						</div>
+					</perfect-scrollbar>
+				</ng-container>
+			</ng-container>
+
+			<!-- End -->
+
+			<!-- Chat container Block -->
+			<ng-container>
+				<div  class="live-chat-container-app">                            
+
+				</div>
+			</ng-container>
+
+			<!-- End -->
+		</div>
+	</div>
+</div>
+
+<div id="video_view" class="d-none">
+    <video id="local_video"></video>
+    <video id="remote_video" autoplay></video>
+</div>
+
+<div  id="status_line" class="d-none">

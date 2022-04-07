@@ -1,0 +1,67 @@
+@import './../../scss/variables/variables.scss';
+.call-details-agent {
+    padding: 40px 10px;
+    background: $whiteColor;
+    .call-details-header{
+        display: flex;
+        justify-content: space-evenly;
+        align-items: baseline;
+        height: 100px;
+        .phone {
+            display: flex;
+            align-items: center;
+            >img {
+                padding-right: 10px;
+            }
+            .number {
+                font-size: 24px;
+            }
+        }
+    }
+    .call-details-section {
+        padding: 0 10px;
+        .call-row {
+            display: flex;
+            padding: 10px;
+            &:nth-of-type(2n+1) {
+                background: #F9F9FB;
+            }
+            .call-left {
+                width: 40%;
+                .ft {
+                    color: $optionalText;
+                    font-weight: 700;
+                }
+                .sd {
+                    font-size: 12px;
+                    color: $optionalText;
+                }
+            }
+            .call-right {
+                position: relative;
+                width: 60%;
+                .sd {
+                    font-size: 12px;
+                    color: $optionalText;
+                }
+                .more {
+                    position: absolute;
+                    color: $primaryActionColor;
+                    bottom: 0px;
+                    right: -20px;
+                    cursor: pointer;
+                }
+                .ft {
+                    word-break: break-word;
+                }
+                .val {
+                    color: $optionalText;
+                }
+            }
+        }
+    }
+}
+
+#userMetaTagsListSlider, #sessionMetaTagsListSlider {
+    display: unset;
+}

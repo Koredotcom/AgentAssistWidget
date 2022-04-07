@@ -1,0 +1,39 @@
+{
+  "/accounts": {
+    "target": "https://dev-smartassist.kore.ai",
+    "pathRewrite": {
+      "^/accounts/": "/accounts/"
+    },
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/botbuilder": {
+    "target": "https://dev-smartassist.kore.ai",
+    "pathRewrite": {
+      "^/botbuilder/": "/botbuilder/"
+    },
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/agentassist/api/v1": {
+    "target": {
+      "host": "uat-smartassist.kore.ai",
+      "protocol": "https:",
+      "port": 443
+    },
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/api/*": {
+    "target": "https://dev-smartassist.kore.ai/",
+    "pathRewrite": {
+      "^/api/": "/api/"
+    },
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  }
+}

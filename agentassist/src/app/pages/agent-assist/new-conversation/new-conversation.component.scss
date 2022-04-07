@@ -1,0 +1,174 @@
+@import './../../../scss/variables/variables.scss';
+
+.new-agent-question-answers{
+    // margin: 0 50px;
+    padding: 25px 30px;
+    background: $primaryBackgroundColor;
+    border: 1px solid $primaryActionColor;
+    box-sizing: border-box;
+    border-radius: 10px;
+    position: relative;
+    .close-qa{
+        position: absolute;
+        right: 30px;
+        top: 15px;
+        width: 38px;
+        height: 38px;
+        text-align: center;
+        padding: 7px 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+    .header-title{
+        display: flex;
+        align-items: center;
+        color: $primaryFontColor;
+        font-weight: bold;
+        font-size: 16px;
+        line-height: 19px;
+        margin-bottom: 15px;
+        img{
+            margin-right: 10px;
+        }
+    }
+    .l-text{
+        color: $primaryFontColor;
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 15px;
+        margin-bottom: 8px;
+    }
+    .toggle-info-btn-sec{
+        display: flex;
+        align-items: center;
+        margin-bottom: 12px;
+        .btn-toggle{
+            display: flex;
+            background: $whiteColor;
+            border: 1px solid $primaryActionColor;
+            box-sizing: border-box;
+            border-radius: 20px;
+            align-items: center;
+            .btn-t{                                     
+                box-sizing: border-box;
+                border-radius: 20px;
+                height: 32px;
+                display: flex;
+                align-items: center;
+                padding: 8px 12px;
+                font-weight: 600;
+                font-size: 10px;
+                line-height: 18px;     
+                color: $primaryActionColor;
+                cursor: pointer;
+                transition: 0.2s all ease;              
+                &.active-b{
+                    background: $primaryActionColor;
+                    color: $whiteColor;
+                }
+                // &:hover{
+                //     background: $primaryActionColor;
+                //     color: $whiteColor;
+                // }
+            }
+        }
+        .desc-text{
+            width: 600px;
+            font-weight: normal;
+            font-size: 12px;
+            color: #828282;
+            line-height: 15px;
+            padding-left: 30px;
+        }
+    }
+    .row-input-data{
+        padding: 0;
+        margin: 0 0 12px 0;
+        .kr-sg-input-text-area {
+            textarea{
+                height: 90px;
+                resize: none;
+                min-height: 90px; 
+                padding: 10px;
+                &::placeholder{
+                    font-weight: normal;
+                    font-size: 14px;
+                    line-height: 20px;
+                    color: $borderColor;
+                }                   
+            }
+        }
+        .btn-save-finish-sec{
+            position: relative;
+            top: -5px;
+            .kr-sg-button-primary{
+                &:disabled{
+                    background: $bg-secondary-color;
+                    color: $borderColor;
+                }
+            }
+            .kr-sg-button-secondary{
+                &:disabled{
+                    color: $borderColor;                    
+                }
+            }
+        }            
+    }
+    .label-text{
+        color: $primaryFontColor;
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 15px;
+        margin-bottom: 6px;
+    }
+
+    .form-group-cat {
+        label {
+            font-size: 12px;
+            font-weight: 500;
+            color: $primaryFontColor;
+            .form-control{
+                margin-top: 5px;
+                &:focus{
+                    box-shadow: none !important;
+                }
+            }
+            .inp-block {
+                position: relative;
+                .inp-stamp {
+                    // background: red;
+                    width: 20px;
+                    height: 20px;
+                    position: absolute;
+                    top: 7px;
+                    border-radius: 50%;
+                    right: 20px;
+                }
+            }
+        }
+        .error-message {
+            color: $warningRed;
+            font-size: 12px;
+        }
+        .form-control.ng-invalid.ng-touched {
+            border: 1px solid $warningRed;
+        }
+    }
+}
+
+::ng-deep {
+    .usecase-category-option {
+        .mat-option-text {
+            display: flex !important;
+            align-items: center;
+            justify-content: space-between;
+            .stamp {
+                width: 20px;
+                height: 20px;
+                border-radius: 50%;
+            }
+        }
+    }
+}

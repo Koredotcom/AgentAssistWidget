@@ -1,0 +1,47 @@
+<div class="slider-sec-data">
+    <div class="header-sec row m-0">
+        <div class="lef-sec col-8 p-0">
+            <img (click)="close()" src="assets/icons/agent-settings/arrow-back.svg">
+            <div class="main-title">{{'EXT_WIDGET.TITLE' | translate}}</div>
+        </div>
+        <div class="close-link col-4 p-0"><img src="assets/images/close.svg" (click)="close()"></div>
+    </div>
+    <perfect-scrollbar class="scroll-content">
+        <div class="body-sec-data">
+            <ng-container *ngIf="allWidgets.length > 0">
+                <div class="title-main">{{'EXT_WIDGET.ADD_EXT_WIDGET' | translate}}</div>
+                <div class="info-text">{{'EXT_WIDGET.ADD_EXT_DESC' | translate}}</div>
+                <button (click)="addExternalWidget(null)" class="kr-sg-button-primary btn_lg" *hasPermission="['AGENT_WIDGET_MANAGEMENT_FULL']"><img
+                        src="assets/icons/add.svg" class="mr-2">{{'EXT_WIDGET.NEW_EXT_WIDGET' | translate}}</button>
+
+                <ng-container>
+                    <div class="widget-list-data">
+                        <div class="widget_card" (click)="addExternalWidget(widget)" *ngFor="let widget of allWidgets">
+                            <img [hidden]="!widget.label" [src]="widget.label" class="img-size">
+                            <div [hidden]="widget.label" class="label-widget">
+                                {{getInitials(widget.title) || "NW"}}
+                            </div>
+                            <div class="w-title text-truncate w-100" title="{{widget.title}}">{{widget.title}}</div>
+                        </div>
+                    </div>
+                </ng-container>
+            </ng-container>
+        </div>
+
+        <div class="external-widget-container-empty" *ngIf="allWidgets.length === 0">
+            <div class="img-block">
+                <img src="assets/icons/agent-settings/new-external-widget.png">
+            </div>
+            <div class="ain-title" *hasPermission="['AGENT_WIDGET_MANAGEMENT_FULL']">{{'EXT_WIDGET.ADD_EXT_WIDGET' | translate}}</div>
+            <div class="desc-text">{{'EXT_WIDGET.NEW_EXT_WIDGET_DESC' | translate}}</div>
+            <button (click)="addExternalWidget(null)" class="kr-sg-button-primary btn_lg" *hasPermission="['AGENT_WIDGET_MANAGEMENT_FULL']"><img
+                    src="assets/icons/add.svg" class="mr-2">{{'EXT_WIDGET.NEW_EXT_WIDGET' | translate}}</button>
+        </div>
+        <!-- <button (click)="addExternalWidget()" class="kr-sg-button-primary btn_lg" type="submit">New External Widget </button> -->
+    </perfect-scrollbar>
+</div>
+
+<app-slider-component id="slider" #slider='app-slider'>
+    <app-add-widget *ngIf="showSlider" [data]="selectedWidget" [isEdit]="isEdit" (closed)="closeSlider()">
+    </app-add-widget>
+</app-slider-component>

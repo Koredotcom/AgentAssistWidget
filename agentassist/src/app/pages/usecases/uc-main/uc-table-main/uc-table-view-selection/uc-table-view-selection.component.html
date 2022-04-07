@@ -1,0 +1,34 @@
+<div class="smart-filters">
+    <div class="col-5 filterLeft">
+        <div class="kr-sg-dropdowns" ngbDropdown [placement]="'bottom-left'" [class.d-none]="ucMainService.tabActive === 'exp'">
+            <div class="dropdown dropdown-open">
+                <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>                 
+                    <img src="assets/icons/filterBy.svg">
+                    <span class="name">{{selectedGroup}}</span>              
+                    <img src="assets/icons/bropdown-green.svg" class="dropdown-green">          
+                </button>
+                <ul class="dropdown-menu content-menu header_in_development_drpdown" ngbDropdownMenu>
+                    <li ngbDropdownItem (click)="selectGroup('');ucTableService.isGrouped = false"><a>{{ "USECASES.NONE" | translate }}</a></li>
+                    <li ngbDropdownItem (click)="selectGroup('category')"><a>{{ "USECASES.CATEGORY" | translate }}</a></li>
+                    <li ngbDropdownItem (click)="selectGroup('state')"><a>{{ "USECASES.STATUS_SMALL" | translate }}</a></li>                 
+                </ul>
+            </div>
+        </div>   
+    </div>
+    <div class="col-7 filterRight">
+        <div class="kr-sg-input-inline-search" *ngIf="!this.ucTableService.isGrouped">
+            <input type="text" [placeholder]="'PLACEHOLDERS.SEARCH' | translate" (focus)="ucTableService.isSrchFocus = true" (blur)="ucTableService.isSrchFocus = false" #iSearch class="input-search">
+            <img src="assets/icons/search.svg" class="search-icon">
+        </div>
+        <span class="dropdown kr-sg-overflow-menu open d-none">
+            <div class="dropdown-toggle" id="menu1" data-toggle="dropdown"><img class="action_icon" src="assets/icons/overflow-elipse.svg">
+            </div>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+              <li><a href="#">Option1</a></li>
+              <li><a href="#">Option1</a></li>
+              <li><a href="#" class="disable">Option1</a></li>
+              <li><a href="#">Option1</a></li>
+            </ul>
+        </span>
+    </div>
+</div>

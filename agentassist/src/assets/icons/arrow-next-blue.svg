@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="12px" height="10px" viewBox="0 0 12 10" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 53.2 (72643) - https://sketchapp.com -->
+    <title>arrow-next-blue</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard" transform="translate(-187.000000, -213.000000)" fill-rule="nonzero">
+            <g id="arrow-next-blue" transform="translate(185.000000, 210.000000)">
+                <polygon id="Path" fill-opacity="0" fill="#D8D8D8" points="0 0 16 0 16 16 0 16"></polygon>
+                <path d="M9.7,3.451 L9.736,3.485 L13.849,7.597 L13.859,7.609 C13.874,7.624 13.888,7.641 13.901,7.658 L13.849,7.598 C13.876,7.625 13.899,7.654 13.919,7.685 C13.929,7.7 13.938,7.715 13.946,7.732 L13.963,7.769 L13.98,7.82 L13.99,7.857 L13.997,7.907 L14,7.948 L14,7.962 L13.998,8.005 C13.998,8.018 13.996,8.03 13.994,8.042 L14,7.962 C14,8.008 13.994,8.053 13.983,8.096 L13.973,8.128 C13.953,8.185 13.925,8.237 13.888,8.283 L13.882,8.291 L13.849,8.327 L9.736,12.44 C9.534,12.642 9.208,12.642 9.006,12.44 C8.816,12.25 8.806,11.95 8.973,11.747 L9.006,11.71 L12.237,8.478 L2.517,8.478 C2.231,8.478 2,8.248 2,7.962 C2,7.693 2.206,7.472 2.47,7.448 L2.516,7.446 L12.236,7.446 L9.006,4.214 C8.816,4.024 8.806,3.724 8.973,3.521 L9.006,3.485 C9.196,3.295 9.496,3.284 9.699,3.451 L9.7,3.451 Z" id="Path" fill="#009DAB"></path>
+            </g>
+        </g>
+    </g>
+</svg>

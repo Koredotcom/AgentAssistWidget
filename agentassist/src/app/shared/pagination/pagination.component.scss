@@ -1,0 +1,69 @@
+@import './../../scss/variables/variables.scss';    
+::ng-deep .paginations_list{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;   
+    bottom: 10px;
+    right: 15px;   
+    margin-top: 10px;  
+    .pagination{
+        margin: 0;
+        .page-item{
+            &.active {
+                .page-link{
+                    z-index: 1;                   
+                    background-color: transparent;
+                    border-color: transparent;
+                    color: $primaryActionColor;
+                    border: 0;
+                    padding: 0 5px;
+                    border-bottom: 1px solid $primaryActionColor;
+                    line-height: normal;
+                    font-size: 14px;
+                }
+            }
+            .page-link{
+                z-index: 1;                
+                background-color: transparent;
+                border-color: transparent;                
+                border: 0;
+                padding: 0 5px;
+                border:0;
+                line-height: normal;
+                font-size: 14px;
+                color: $primaryFontColor;
+                cursor: pointer;
+                outline: 0 !important;
+                box-shadow: none !important;
+                &[aria-label="Previous"]{
+                    background-image: url('/assets/icons/move-left.svg');                    
+                    height: 16px;
+                    width: 16px;
+                    border: 0;
+                    background-repeat: no-repeat !important;
+                    background-position: center; 
+                    margin-right: 6px;
+                    padding: 0;
+                    background-size: contain;
+                    span{
+                        display: none;
+                    }
+                } 
+                &[aria-label="Next"]{
+                    background-image: url('/assets/icons/move-right.svg'); 
+                    height: 16px;
+                    width: 16px;
+                    border: 0;
+                    background-repeat: no-repeat !important;
+                    background-position: center;
+                    margin-left: 6px;
+                    padding: 0;
+                    background-size: contain;
+                    span{
+                        display: none;
+                    }
+                }                        
+            }
+        }
+    }
+}

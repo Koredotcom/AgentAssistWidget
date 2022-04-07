@@ -1,0 +1,143 @@
+@import './../../../scss/variables/variables.scss';
+
+ .incommingTabContent{
+
+    .processing {
+        opacity: 0.8;
+        pointer-events: none;
+    }
+    .helpInfo{
+        background: $hoverImgcolor;
+        border: 1px solid #85B7FE;
+        box-sizing: border-box;
+        border-radius: 4px;
+        display: flex;
+        padding: 10px 45px 10px 10px;
+        margin-bottom: 40px;
+        .infoImg{
+            width: 14px;
+        }
+        .infoText{
+            font-weight: normal;
+            font-size: 14px;
+            color: #07377F;
+            padding-left: 10px;
+        }
+    }
+    .incomingDiv{
+        display: flex;
+        margin-bottom: 30px;
+        .incomingImg{
+            width: 35px;
+            padding-top: 3px;
+        }
+        .incomingDetails{
+            padding-left: 25px;
+            .headTitle{
+                font-weight: 600;
+                font-size: 16px;
+                color: $primaryFontColor;
+                margin: 0;
+                margin-bottom: 6px;
+            }
+            .desc{
+                font-weight: normal;
+                font-size: 14px;
+                color: $primaryFontColor;
+                margin: 0;
+            }
+        }
+    }
+    .sliderTabs{
+        display: flex;
+        .sliderTab{
+            border: 1px solid #D7D6DF;
+            box-sizing: border-box;
+            border-radius: 8px;
+            padding: 28px 25px 25px;
+            width: 450px;
+            position: relative;
+            .edit-tab{
+                display: none;
+                position: absolute;
+                right: 12px;
+                top: 12px;
+                cursor: pointer;
+            }
+            &.mr-10{
+                margin-right: 10px;
+            }
+            &.disabled{
+                opacity: 0.5;
+                pointer-events: none;
+            }
+            cursor: pointer;
+            .iconHead{
+                font-weight: 500;
+                font-size: 14px;
+                color: $primaryFontColor;
+                .number-pad{
+                    margin-right: 15px;
+                }
+                .selected-number{
+                    color: $primaryFontColor;
+                    font-weight: bold;
+                    font-size: 16px;
+                    line-height: 19px;
+                    letter-spacing: 0.02em;
+                    padding-left: 10px;
+                }
+                .voice-id{
+                    margin-right: 15px;
+                }
+            }
+            .sliderDesc{
+                font-weight: normal;
+                font-size: 12px;
+                color: $optionalText;
+                margin: 0;
+            }
+            &:hover{
+                box-shadow: 0px 4px 4px rgba(168, 200, 221, 0.25);
+            }
+            &.active-tab{
+                border: 1px solid $primaryActionColor;
+                box-shadow: none;
+                .edit-tab{
+                    display: block;
+                }
+            }
+
+            .disabled {
+                pointer-events: none;
+                opacity: 0.5;
+            }
+        }
+        
+        &.disabled {
+            pointer-events: none;
+        }
+    }
+}
+
+.please-wait-all {
+    position: absolute;
+    top: 10%;
+    left: 43%;
+    box-shadow: 0 5px 10px 0 #e9eff5;
+    background: transparent;
+    width: 105px;
+    height: 36px;
+    padding-top: 10px;
+    border-radius: 4px;
+    opacity: 0.8;
+    padding-left: 5px;
+    .please-wait-message {
+        position: relative;
+        color: #29293b;
+        top: -20px;
+        left: 25px;
+        font-size: 12px;
+    }  
+}
+

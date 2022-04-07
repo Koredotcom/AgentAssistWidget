@@ -1,0 +1,34 @@
+<div fxFlex="530px" class="invite-dialog" fxLayout='column' fxLayoutGap="15px">
+    <div mat-title-dialog fxLayoutAlign="space-between">
+        <h1 style="font-size: 22px">{{ "HEADER.INVITE_ACCOUNT" | translate }}</h1>
+        <mat-icon mat-dialog-close style="cursor: pointer;">close</mat-icon>
+    </div>
+    <div mat-dialog-content fxFlex fxLayout="column">
+        <div class="label">{{ "HEADER.ENTER_EMAIL" | translate }}</div>
+        <mat-form-field class="example-chip-list" appearance="outline">
+            <mat-chip-list #chipList>
+                <mat-chip *ngFor="let email of emailList" [ngClass]="{'chip-error': email.invalid}" (removed)="remove(email)">
+                  {{email.email}}
+                  <mat-icon matChipRemove [selectable]="'true'"
+                  [removable]="'true'">
+                <img src="assets/icons/use-case/close-info.svg"></mat-icon>
+                </mat-chip>
+                <input placeholder="{{'PLACEHOLDERS.TYPE_ENTER_TO_SAVE' | translate}}"
+                       [matChipInputFor]="chipList"
+                       [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                       [matChipInputAddOnBlur]="'true'"
+                       (matChipInputTokenEnd)="add($event)"
+                       autocomplete="off">
+              </mat-chip-list>
+        </mat-form-field>
+        <div class="error-label" *ngIf="!isValidList">{{ "HEADER.ENTER_VALID_EMAIL" | translate }}</div>
+    </div>  
+    <!-- <div mat-dialog-actions>
+        <button mat-button color='primary' [disabled]="!isValidList || emailList.length == 0" [mat-dialog-close]="emailList">{{ "HEADER.INVITE_BUTTON" | translate }}</button>
+        <button mat-button color='stroked' mat-dialog-close>{{ "HEADER.CANCEL" | translate }}</button>
+    </div> -->
+    <div mat-dialog-actions>
+        <button class="kr-sg-button-primary btn_lg mr-2" [mat-dialog-close]="emailList">{{ "HEADER.INVITE_BUTTON" | translate }}</button>
+        <button class="kr-sg-button-secondary btn_lg" mat-dialog-close>{{ "HEADER.CANCEL" | translate }}</button>
+    </div>
+</div>

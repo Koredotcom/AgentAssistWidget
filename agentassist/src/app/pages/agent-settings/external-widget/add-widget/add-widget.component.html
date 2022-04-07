@@ -1,0 +1,163 @@
+<div class="slider-sec-data">
+    <form [formGroup]="formWidget">
+        <div class="header-sec row m-0">
+            <div class="lef-sec col-8 p-0">
+                <img (click)="close()" src="assets/icons/agent-settings/arrow-back.svg">
+                <div class="main-title">{{'EXT_WIDGET.ADD_WIDGET' | translate}}</div>
+            </div>
+            <ng-container *hasPermission="['AGENT_WIDGET_MANAGEMENT_FULL']">
+                <div *ngIf="isEdit" (click)="deleteWidget()" class="delete-widget">
+                    <img src="assets/icons/settings/delete.svg">{{'EXT_WIDGET.DELETE_WIDGET' | translate}}
+                 </div>
+            </ng-container>
+            
+            <div class="close-link col-4 p-0"><img src="assets/images/close.svg" (click)="close()"></div>
+        </div>
+        <div [hidden]="showVisitParameters">
+            <perfect-scrollbar class="scroll-content">
+                <!-- <div *ngIf="!showVisitParameters">
+                    <button  (click)="addVisitParameters()" class="kr-sg-button-primary btn_lg" type="submit">Add visit Info Parameter </button>
+                </div>
+                <div *ngIf="showVisitParameters">
+                    <div>Visit Info Parameter</div>
+                    <button  (click)="cancel()" class="kr-sg-button-primary btn_lg" type="submit">Cancel</button>
+                </div> -->
+                <div class="add-widget-container">
+                    <div class="kr-sg-input-text mb-4">
+                        <div class="label-text">{{'EXT_WIDGET.WIDGET_NAME' | translate}}</div>
+                        <input type="text" [placeholder]="'PLACE.NEW_WIDGET' | translate" maxlength="50" formControlName="title" #widgetTitle
+                            class="input-text">
+                        <div class="error-msg"
+                            *ngIf="formWidget.get('title').touched && formWidget.get('title').errors?.required">
+                            {{'EXT_WIDGET.FIELD_CANNOT_EMPTY' | translate}}
+                        </div>
+                    </div>
+                    <div class="widget-label-data mb-4">
+                        <div class="label-text">{{'EXT_WIDGET.WIDGET_LABEL' | translate}}</div>
+                        <div class="widget-label-sec">
+                            <div [hidden]="widgetImg" class="label-widget">{{getInitials(widgetTitle?.value) || "NW"}}</div>
+                            <div [hidden]="!widgetImg" class="added-img-widget">
+                                <img [src]="widgetImg">
+                            </div>
+                            <!-- <input type="file" > Edit Widget -->
+                            <div class="position-relative" *hasPermission="['AGENT_WIDGET_MANAGEMENT_FULL']">
+                                <input type="file" class="inputfile" id="inputFile" #imgFile
+                                    (change)="uploadImg(imgFile.files[0])" accept=".png">
+                                <div class="edit-widget">
+                                    <img src="assets/icons/agent-settings/edit-blue.svg">{{'EXT_WIDGET.EDIT_WIDGET' | translate}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="kr-sg-input-text mb-4">
+                        <div class="label-text">Assigned Skills</div>
+                        <input type="text" placeholder="Select skills or leave blank to select all" class="input-text">                
+                    </div> -->
+                    <div class="kr-sg-input-text-area mb-2">
+                        <div class="label-text">{{'EXT_WIDGET.URL' | translate}}</div>
+                        <textarea
+                            [placeholder]="'PLACE.ENTER_URL_WEBPAGE' | translate"
+                            class="input-text" formControlName="url"></textarea>
+                        <div class="error-msg"
+                            *ngIf="formWidget.get('url').touched && formWidget.get('url').errors?.required">
+                            {{'EXT_WIDGET.FIELD_CANNOT_EMPTY' | translate}}
+                        </div>
+                        <div class="error-msg"
+                            *ngIf="formWidget.get('url').touched && formWidget.get('url').errors?.pattern">
+                            {{'EXT_WIDGET.ENTER_VALID_URL' | translate}}
+                        </div>
+                    </div>
+                    <div class="add-parameters mt-1" (click)="addVisitParameters()" *hasPermission="['AGENT_WIDGET_MANAGEMENT_FULL']">
+                        <img src="assets/icons/agent-settings/edit-blue.svg">
+                        <span *ngIf="paramsList[0]?.value.path == selectParameter">{{'EXT_WIDGET.ADD_VISIT_INFO_PARAMS' | translate}}</span>
+                        <span *ngIf="paramsList[0]?.value.path !== selectParameter && paramsList.length == 1">{{'EXT_WIDGET.VISIT_INFO_ADDED' | translate:{ X: paramsList.length} }}</span>
+                        <span *ngIf="paramsList[0]?.value.path !== selectParameter && paramsList.length > 1">{{'EXT_WIDGET.VISIT_INFOS_ADDED' | translate:{ X: paramsList.length} }}</span>
+                    </div>
+                    <div class="kr-sg-input-text-area mt-5">
+                        <div class="label-text">{{'EXT_WIDGET.IN_CASE_WIDGET' | translate}}</div>
+                        <textarea
+                            [placeholder]="'PLACE.WIDGET_FAILS_TO_LOAD' | translate"
+                            class="input-text" formControlName="alternativeUrl"></textarea>
+                        <div class="error-msg"
+                            *ngIf="formWidget.get('alternativeUrl').touched && formWidget.get('alternativeUrl').errors?.required">
+                            {{'EXT_WIDGET.FIELD_CANNOT_EMPTY' | translate}}
+                        </div>
+                        <div class="error-msg"
+                            *ngIf="formWidget.get('alternativeUrl').touched && formWidget.get('alternativeUrl').errors?.pattern">
+                            {{'EXT_WIDGET.ENTER_VALID' | translate}}
+                        </div>
+                        <div class="url-disclaimer">
+                            {{"ADDWIDGET.URL_DISCLAIMER" | translate}}
+                        </div>
+                    </div>
+                </div>
+            </perfect-scrollbar>
+        </div>
+        <div [hidden]="!showVisitParameters" class="show-visited-parameetrs-container" formGroupName="metaInfo">
+            <div class="visited-parameetrs" formArrayName="params">
+                <div class="header_sec">
+                    <div class="h-title">{{'EXT_WIDGET.VISIT_INFO' | translate}}</div>
+                    <div class="close-link"><img src="assets/images/close.svg" (click)="cancel()"></div>
+                </div>
+                <div class="desc_text">{{'EXT_WIDGET.VISIT_INFO_MAP' | translate}}</div>
+                <perfect-scrollbar class="params-scroll">
+                    <ng-container *ngFor="let p of paramsList; let i=index">
+                        <div class="parameter-adding-input" [formGroupName]="i">
+                            <div class="kr-sg-input-text">
+                                <input type="text" formControlName="key" [placeholder]="'PLACE.PARAMETER_NAME' | translate"
+                                    class="input-text">
+                            </div>
+                            <div class="equals-to">=</div>
+                            <div class="kr-sg-dropdowns">
+                                <div class="dropdown dropdown-open">
+                                    <button class="dropdown-toggle dropdown-input" data-toggle="dropdown">
+                                        <span class="text-truncate d-inline-block added-title"
+                                            *ngIf="!isEdit" title="{{p.value.path}}">{{p.value.path}}</span>
+                                        <span class="text-truncate d-inline-block added-title"
+                                            title="{{p.value.path}}" *ngIf="isEdit" >{{hashVariableM2N[p.value.path] || p.value.path}}</span>
+                                            
+                                    </button>
+                                    <ul class="dropdown-menu content-menu">
+                                        <perfect-scrollbar class="dropdown-scroll">
+                                            <li *ngFor="let variable of wdgtVariables" (click)="selectVar(i, variable)">
+                                                <a class="text-truncate" title="{{variable.name}}">{{variable.name}}</a>
+                                            </li>
+                                        </perfect-scrollbar>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="add-param" *ngIf="i == 0" (click)="addInfoParam()">
+                                <img src="assets/icons/agent-settings/square-plus.svg">
+                            </div>
+                            <div class="add-param" *ngIf="i !== 0" (click)="deleteParam(i)">
+                                <img src="assets/icons/agent-settings/delete.svg">
+                            </div>
+                        </div>
+                    </ng-container>
+                    <div class="added-info-parameters d-none">
+                        <div class="parameter-adding-input">
+                            <div class="added-param text-truncate">entry.131279678</div>
+                            <div class="equals-to">=</div>
+                            <div class="added-param text-truncate">{{"ADD_WIDGET.AGENT_NODE" | translate}}</div>
+                            <div class="delete-param">
+                                <img src="assets/icons/agent-settings/delete.svg">
+                            </div>
+                        </div>
+                    </div>
+                </perfect-scrollbar>
+                <div class="footer-params" *hasPermission="['AGENT_WIDGET_MANAGEMENT_FULL']">
+                    <button class="kr-sg-button-primary btn_lg mr-2" *ngIf="paramsList.length < 2" (click)="saveParameter()">{{'EXT_WIDGET.SAVE_PARAMETER' | translate}}</button>
+                    <button class="kr-sg-button-primary btn_lg mr-2" *ngIf="paramsList.length > 1"(click)="saveParameter()">{{'EXT_WIDGET.SAVE_PARAMETERS' | translate}}</button>
+                    <button class="kr-sg-button-secondary btn_lg" (click)="cancel()">{{'EXT_WIDGET.CANCEL' | translate}}</button>
+                </div>
+            </div>
+        </div>
+        <div class="footer-sec" *hasPermission="['AGENT_WIDGET_MANAGEMENT_FULL']">
+            <button type="submit" *ngIf="!isEdit" [disabled]="formWidget.invalid" (click)="addWidget()"
+                class="kr-sg-button-primary btn_lg">{{'EXT_WIDGET.ADD' | translate}}</button>
+            <button type="submit" *ngIf="isEdit" [disabled]="formWidget.invalid" (click)="editWidget()"
+                class="kr-sg-button-primary btn_lg">{{'EXT_WIDGET.SAVE' | translate}}</button>
+        </div>
+    </form>
+
+</div>

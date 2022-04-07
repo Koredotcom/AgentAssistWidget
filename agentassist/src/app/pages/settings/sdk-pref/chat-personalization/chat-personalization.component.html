@@ -1,0 +1,319 @@
+
+<div class="slider-sec-data">
+    <form [formGroup]="widgetForm">
+        <div class="header-sec row m-0">
+            <div class="lef-sec col-8 p-0 d-flex align-items-center">
+                <img src="assets/icons/arrow-back.svg" class="cursor-pointer" (click)="close()">
+                <span class="main-title">{{'SETTINGS.CHAT_WIDGET_PERSONALISATION' | translate}}</span>
+            </div>
+            <div class="close-link col-4 p-0" (click)="close()"><img src="assets/images/close.svg"></div>
+        </div>
+        <!-- <perfect-scrollbar class="scroll-content">
+            
+        </perfect-scrollbar> -->
+        <div class="chat-widget-personalization-data" *ngIf="!loading" [@fadeInAnimation]>
+            <div class="left-sec-data">
+                <div class="content-sec">
+                    <div class="m-title">{{'SETTINGS.CWP_DESC' | translate}}</div>
+                    <div class="tabs-vertical">
+                        <div class="tab_name" [class.active-tab]="sectionType === 'general'" (click)="highlightTab('general')">{{'SETTINGS.GENERAL_SETTINGS' | translate}}</div>
+                        <div class="tab_name" [class.active-tab]="sectionType === 'header'" (click)="highlightTab('header')">{{'SETTINGS.HEADER_DESIGN' | translate}}</div>
+                        <div class="tab_name" [class.active-tab]="sectionType === 'body'" (click)="highlightTab('body')">{{'SETTINGS.BODY_DESIGN' | translate}}</div>
+                        <div class="tab_name" [class.active-tab]="sectionType === 'user'" (click)="highlightTab('user')">{{'SETTINGS.USER_MESSAGE' | translate}}</div>
+                        <div class="tab_name" [class.active-tab]="sectionType === 'bot'" (click)="highlightTab('bot')">{{'SETTINGS.BOT_MESSAGE' | translate}}</div>                    
+                    </div>
+                </div>
+                <div class="chat-data">
+                    <perfect-scrollbar>
+                        <div class="phone-test">
+                            <div class="p-boxshadow">
+                                <div class="p-inner-data">
+                                    <div class="top-header-data">
+                                        <div class="time">9:41</div>
+                                        <div class="info-phone">
+                                            <img src="assets/icons/testing/mobilesignal.svg">
+                                            <img src="assets/icons/testing/wifi.svg">
+                                            <img src="assets/icons/testing/battery.svg">
+                                        </div>
+                                    </div>                                                                                  
+                                    <div  class="chat-container-app">
+                                        <div class="static-header">
+                                            <div class="arrow-back"><img src="assets/icons/arrowBack.svg"></div>
+                                            <div class="static-title">{{hostname}}</div>
+                                        </div>
+                                    </div>                
+                                </div>
+                            </div>
+                        </div> 
+                    </perfect-scrollbar>                
+                </div>
+            </div>
+            <div class="right-sec-data">
+                <perfect-scrollbar (wheel)="scrollHandler($event)">
+                    <div class="input-data-sec">
+                        <div class="mt-4" *ngIf="sectionType === 'general'">
+                            <div class="kr-sg-dropdowns mb-4 pb-1">     
+                                <div class="label-text">{{'SETTINGS.THEME' | translate}}</div>                                   
+                                <div class="dropdown dropdown-open">
+                                    <button class="dropdown-toggle dropdown-input" data-toggle="dropdown">{{activeWidget?.theme || 'choose'}}</button>                                            
+                                    <ul class="dropdown-menu content-menu">
+                                        <perfect-scrollbar class="dropdown-scroll">
+                                            <li *ngFor="let widget of widgets" (click)="onChangeTheme(widget)"><a [class.selected]="widget._id === activeWidget?._id">{{widget.theme}}</a></li>
+                                        </perfect-scrollbar>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="kr-sg-dropdowns mb-4 pb-1">     
+                                <div class="label-text">{{'SETTINGS.FONT' | translate}}</div>                                   
+                                <div class="dropdown dropdown-open">
+                                    <button class="dropdown-toggle dropdown-input" data-toggle="dropdown">{{widgetForm.value.font || 'choose'}}</button>                                            
+                                    <ul class="dropdown-menu content-menu">
+                                      <li *ngFor="let font of fontTypes" (click)="onChangeFont(font)"><a [class.selected]="widgetForm.value.font === font.id">{{font.label}}</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4" *ngIf="sectionType === 'header'">
+                            <div class="kr-sg-input-text mb-4 pb-1">
+                                <div class="label-text">{{'SETTINGS.ASSISTANCE_NAME' | translate}}</div>
+                                <input type="text" [placeholder]="'COMMON.PLACEHOLDER_TEXT' | translate"  class="input-text" formControlName="assistantName">
+                            </div>                   
+                            <div class="kr-sg-input-text mb-4 pb-1">
+                                <div class="label-text d-flex align-items-center">{{'SETTINGS.DESCRIPTION' | translate}}
+                                    <label class="kr-sg-toggle ml-2 d-none">
+                                        <input type="checkbox" formControlName="descEnabled">
+                                        <div class="slider"></div>
+                                    </label>
+                                </div>
+                                <input type="text" [placeholder]="'COMMON.PLACEHOLDER_TEXT' | translate" class="input-text" formControlName="desc">
+                            </div>                                     
+                            <div class="kr-sg-input-text mb-4 pb-1">
+                                <div class="label-text d-flex align-items-center">{{'SETTINGS.LOGO' | translate}}
+                                    <label class="kr-sg-toggle ml-2 d-none">
+                                        <input type="checkbox" formControlName="logoEnabled">
+                                        <div class="slider"></div>
+                                    </label>
+                                </div>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="logo" name="logoInput" #logoInput (change)="onFileChange(logoInput.files[0], 'logo')">
+                                    <label class="custom-file-label" for="logo">{{logoFileName || 'choose file'}}</label>
+                                </div>
+                            </div>                        
+                            <div class="row col-12 p-0 ml-0 mr-0 mb-4 pb-1 input-bg-text-color-actions">
+                                <div class="kr-sg-input-text">
+                                    <div class="label-text">{{'SETTINGS.BACKGROUND_COLOR' | translate}}</div>
+                                    <input readonly 
+                                        id="headerBgColor" #colorPicker name="headerBgColor"
+                                        [colorPicker]="widgetForm.value.headerBgColor"
+                                        cpOutputFormat="hex" [cpOKButton]="true" cpOKButtonText="Apply"
+                                        [cpCancelButton]="true"
+                                        [cpPosition]="'top'"
+                                        [value]="widgetForm.value.headerBgColor | uppercase"
+                                        (colorPickerChange)="onChangeColorPicker('headerBgColor', $event)"
+                                        formControlName="headerBgColor" />
+                                    <span class="bg-clr" [style.backgroundColor]="widgetForm.value.headerBgColor" (click)="openColorPicker('headerBgColor')"></span>
+                                </div>
+                                <div class="kr-sg-input-text">
+                                    <div class="label-text">{{'SETTINGS.TEXT_COLOR' | translate}}</div>
+                                    <input readonly 
+                                        id="headerTextColor" #colorPicker name="headerTextColor"
+                                        [colorPicker]="widgetForm.value.headerTextColor"
+                                        cpOutputFormat="hex" [cpOKButton]="true" cpOKButtonText="Apply"
+                                        [cpCancelButton]="true"
+                                        [cpPosition]="'top-left'"
+                                        [value]="widgetForm.value.headerTextColor | uppercase"
+                                        (colorPickerChange)="onChangeColorPicker('headerTextColor', $event)"
+                                        formControlName="headerTextColor" />
+                                    <span class="bg-clr" [style.backgroundColor]="widgetForm.value.headerTextColor" (click)="openColorPicker('headerTextColor')"></span>
+                                </div>                           
+                            </div>
+                            <div class="template-sdks">
+                                <div class="label-text">{{'SETTINGS.TEMPLATE' | translate}}</div>
+                                <div class="template-cards row">
+                                    <div class="sdk_card" [class.selected]="widgetForm.value.headerTemplate === 'type1'" (click)="onChangeHeaderTempl('type1')">
+                                        <div class="img_block"></div>
+                                        <div class="titles-sec">
+                                            <div class="p-title">{{'SETTINGS.CHAT_HEADER' | translate}}</div>
+                                            <div class="s-title">{{'SETTINGS.DESCRIPTION_TEXT' | translate}}</div>
+                                        </div>
+                                    </div>
+                                    <div class="sdk_card" [class.selected]="widgetForm.value.headerTemplate === 'type2'" (click)="onChangeHeaderTempl('type2')">                                
+                                        <div class="titles-sec">
+                                            <div class="p-title">{{'SETTINGS.CHAT_HEADER' | translate}}</div>
+                                            <div class="s-title">{{'SETTINGS.DESCRIPTION_TEXT' | translate}}</div>
+                                        </div>
+                                    </div>
+                                    <div class="sdk_card" [class.selected]="widgetForm.value.headerTemplate === 'type3'" (click)="onChangeHeaderTempl('type3')">
+                                        <div class="img_block"></div>
+                                        <div class="titles-sec">
+                                            <div class="p-title">{{'SETTINGS.CHAT_HEADER' | translate}}</div>                                    
+                                        </div>
+                                    </div>
+                                    <div class="sdk_card" [class.selected]="widgetForm.value.headerTemplate === 'type4'" (click)="onChangeHeaderTempl('type4')">                                
+                                        <div class="titles-sec">
+                                            <div class="p-title">{{'SETTINGS.CHAT_HEADER' | translate}}</div>                                    
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>   
+                        </div>
+                       
+                        <div class="mt-4" *ngIf="sectionType === 'body'">
+                            <div class="kr-sg-input-text mb-4 pb-1">
+                                <div class="label-text">{{'SETTINGS.BACKGROUND_COLOR' | translate}}</div>
+                                <input readonly class="pl-36"
+                                        id="bodyBgColor" #colorPicker name="bodyBgColor"
+                                        [colorPicker]="widgetForm.value.bodyBgColor"
+                                        cpOutputFormat="hex" [cpOKButton]="true" cpOKButtonText="Apply"
+                                        [cpCancelButton]="true"
+                                        [cpPosition]="'bottom'"
+                                        [value]="widgetForm.value.bodyBgColor | uppercase"
+                                        (colorPickerChange)="onChangeColorPicker('bodyBgColor', $event)"
+                                        formControlName="bodyBgColor" />
+                                <span class="bg-clr" [style.backgroundColor]="widgetForm.value.bodyBgColor" (click)="openColorPicker('bodyBgColor')"></span>
+                            </div>
+                            <div class="mb-4 pb-1">
+                                <div class="label-text">{{'SETTINGS.DO_YOU_WANT_TO_DISPAY_THE_TIME_OF_DELIVERY' | translate}}</div>          
+                                <label class="kr-sg-toggle">                                       
+                                    <input type="checkbox" formControlName="timeStampEnabled">
+                                    <div class="slider"><span class="enabled">{{'SETTINGS.YES' | translate}}</span><span class="disabled">{{'SETTINGS.NO' | translate}}</span></div>
+                                </label> 
+                            </div> 
+                        </div>
+                        <div class="mt-4" *ngIf="sectionType === 'user'">
+                            <div class="kr-sg-input-text mb-4 pb-1">
+                                <div class="label-text">{{'SETTINGS.BACKGROUND_COLOR' | translate}}</div>
+                                <input readonly class="pl-36"
+                                        id="userchatBgColor" #colorPicker name="userchatBgColor"
+                                        [colorPicker]="widgetForm.value.userchatBgColor"
+                                        cpOutputFormat="hex" [cpOKButton]="true" cpOKButtonText="Apply"
+                                        [cpCancelButton]="true"
+                                        [cpPosition]="'bottom'"
+                                        [value]="widgetForm.value.userchatBgColor | uppercase"
+                                        (colorPickerChange)="onChangeColorPicker('userchatBgColor', $event)"
+                                        formControlName="userchatBgColor" />
+                                <span class="bg-clr" [style.backgroundColor]="widgetForm.value.userchatBgColor" (click)="openColorPicker('userchatBgColor')"></span>
+                            </div>
+                            <div class="kr-sg-input-text mb-4 pb-1">
+                                <div class="label-text">{{'SETTINGS.TEXT_COLOR' | translate}}</div>
+                                <input readonly class="pl-36"
+                                        id="userchatTextColor" #colorPicker name="userchatTextColor"
+                                        [colorPicker]="widgetForm.value.userchatTextColor"
+                                        cpOutputFormat="hex" [cpOKButton]="true" cpOKButtonText="Apply"
+                                        [cpCancelButton]="true"
+                                        [cpPosition]="'bottom'"
+                                        [value]="widgetForm.value.userchatTextColor | uppercase"
+                                        (colorPickerChange)="onChangeColorPicker('userchatTextColor', $event)"
+                                        formControlName="userchatTextColor" />
+                                <span class="bg-clr" [style.backgroundColor]="widgetForm.value.userchatTextColor" (click)="openColorPicker('userchatTextColor')"></span>
+                            </div>
+                            <div class="mb-4 pb-1">
+                                <div class="label-text">{{'SETTINGS.DO_YOU_WANT_TO_USE_USER_ICON_IN_CHAT_WINDOW' | translate}}</div>          
+                                <label class="kr-sg-toggle">                                       
+                                    <input type="checkbox" formControlName="userIconEnabled">
+                                    <div class="slider"><span class="enabled">{{'SETTINGS.YES' | translate}}</span><span class="disabled">{{'SETTINGS.NO' | translate}}</span></div>
+                                </label> 
+                            </div>
+                            <div class="kr-sg-input-text mb-4 pb-1">
+                                <div class="label-text">{{'SETTINGS.USER_ICON' | translate}}</div>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="customFile" name="userIconInput" #userIconInput (change)="onFileChange(userIconInput.files[0], 'userIcon')">
+                                    <label class="custom-file-label" for="customFile">{{userIconFileName || ('SETTINGS.UPLOAD_YOUR_USER_ICON' | translate)}}</label>
+                                </div>
+                            </div>   
+                        </div>
+                        <div class="mt-4" *ngIf="sectionType === 'bot'">
+                            <div class="kr-sg-input-text mb-4 pb-1">
+                                <div class="label-text">{{'SETTINGS.BACKGROUND_COLOR' | translate}}</div>
+                                <input readonly class="pl-36"
+                                        id="botchatBgColor" #colorPicker name="botchatBgColor"
+                                        [colorPicker]="widgetForm.value.botchatBgColor"
+                                        cpOutputFormat="hex" [cpOKButton]="true" cpOKButtonText="Apply"
+                                        [cpCancelButton]="true"
+                                        [cpPosition]="'bottom'"
+                                        [value]="widgetForm.value.botchatBgColor | uppercase"
+                                        (colorPickerChange)="onChangeColorPicker('botchatBgColor', $event)"
+                                        formControlName="botchatBgColor" />
+                                <span class="bg-clr" [style.backgroundColor]="widgetForm.value.botchatBgColor" (click)="openColorPicker('botchatBgColor')"></span>
+                            </div>
+                            <div class="kr-sg-input-text mb-4 pb-1">
+                                <div class="label-text">{{'SETTINGS.TEXT_COLOR' | translate}}</div>
+                                <input readonly class="pl-36"
+                                        id="botchatTextColor" #colorPicker name="botchatTextColor"
+                                        [colorPicker]="widgetForm.value.botchatTextColor"
+                                        cpOutputFormat="hex" [cpOKButton]="true" cpOKButtonText="Apply"
+                                        [cpCancelButton]="true"
+                                        [cpPosition]="'bottom'"
+                                        [value]="widgetForm.value.botchatTextColor | uppercase"
+                                        (colorPickerChange)="onChangeColorPicker('botchatTextColor', $event)"
+                                        formControlName="botchatTextColor" />
+                                <span class="bg-clr" [style.backgroundColor]="widgetForm.value.botchatTextColor" (click)="openColorPicker('botchatTextColor')"></span>
+                            </div>
+                            <div class="kr-sg-input-text mb-4 pb-1">
+                                <div class="label-text">{{'SETTINGS.BUTTON_COLOR' | translate}}</div>
+                                <input readonly class="pl-36"
+                                        id="buttonBgColor" #colorPicker name="buttonBgColor"
+                                        [colorPicker]="widgetForm.value.buttonBgColor"
+                                        cpOutputFormat="hex" [cpOKButton]="true" cpOKButtonText="Apply"
+                                        [cpCancelButton]="true"
+                                        [cpPosition]="'bottom'"
+                                        [value]="widgetForm.value.buttonBgColor | uppercase"
+                                        (colorPickerChange)="onChangeColorPicker('buttonBgColor', $event)"
+                                        formControlName="buttonBgColor" />
+                                <span class="bg-clr" [style.backgroundColor]="widgetForm.value.buttonBgColor" (click)="openColorPicker('buttonBgColor')"></span>
+                            </div>
+                            <div class="kr-sg-input-text mb-4 pb-1">
+                                <div class="label-text">{{'SETTINGS.BUTTON_TEXT_COLOR' | translate}}</div>
+                                <input readonly class="pl-36"
+                                        id="buttonTextColor" #colorPicker name="buttonTextColor"
+                                        [colorPicker]="widgetForm.value.buttonTextColor"
+                                        cpOutputFormat="hex" [cpOKButton]="true" cpOKButtonText="Apply"
+                                        [cpCancelButton]="true"
+                                        [cpPosition]="'top'"
+                                        [value]="widgetForm.value.buttonTextColor | uppercase"
+                                        (colorPickerChange)="onChangeColorPicker('buttonTextColor', $event)"
+                                        formControlName="buttonTextColor" />
+                                <span class="bg-clr" [style.backgroundColor]="widgetForm.value.buttonTextColor" (click)="openColorPicker('buttonTextColor')"></span>
+                            </div>
+                            <div class="mb-4 pb-1">
+                                <div class="label-text">{{'SETTINGS.DO_YOU_WANT_TO_USE_BOT_ICON_IN_CHAT_WINDOW' | translate}}</div>          
+                                <label class="kr-sg-toggle">                                       
+                                    <input type="checkbox" formControlName="botIconEnabled">
+                                    <div class="slider"><span class="enabled">{{'SETTINGS.YES' | translate}}</span><span class="disabled">{{'SETTINGS.NO' | translate}}</span></div>
+                                </label> 
+                            </div>
+                            <div class="kr-sg-input-text mb-4 pb-1">
+                                <div class="label-text">{{'SETTINGS.BOT_ICON' | translate}}</div>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="customFile" name="botIconInput" #botIconInput (change)="onFileChange(botIconInput.files[0], 'botIcon')">
+                                    <label class="custom-file-label" for="customFile">{{botIconFileName || ('SETTINGS.UPLOAD_YOUR_BOT_ICON' | translate)}}</label>
+                                </div>
+                            </div>   
+                        </div>          
+                    </div>
+                </perfect-scrollbar>
+            </div>
+        </div>
+        <div class="confirm-dialog-bottom" [class.show]="showConfirmation" *ngIf="!loading">
+            <div class="main-title">{{'SETTINGS.DO_WANT_TO_SAVE_THE_THEME_AS' | translate : ({'themeName': activeWidget.theme})}}</div>
+            <div class="desc_info">{{'SETTINGS.DO_WANT_TO_SAVE_THE_THEME_AS_INFO' | translate : ({'themeName': activeWidget.theme})}}</div>
+            <div class="kr-sg-input-text">           
+                <input type="text" placeholder="{{'PLACEHOLDERS.THEME_NAME' | translate}}" class="input-text" formControlName="theme">            
+            </div>
+            <div class="btn_sec">
+                <button class="kr-sg-button-primary btn_lg mr-2" [disabled]="!widgetForm.value.theme.trim() || isLogoUploading || isUserIconUploading || isBotIconUploading" (click)="onDone()">{{'BUTTONS.DONE' | translate}}</button>        
+                <button class="kr-sg-button-secondary btn_lg ml-1" (click)="showConfirmation = false">{{'BUTTONS.CANCEL' | translate}}</button>        
+            </div>
+        </div>
+        <div class="footer-sec" [class.d-none]="loading" *ngIf="workflowService.appState !== 'published'">
+            <button class="kr-sg-button-primary btn_lg mr-2" [disabled]="saveInProgress || widgetForm.pristine || isLogoUploading || isUserIconUploading || isBotIconUploading" (click)="onSave()">{{(saveInProgress? 'BUTTONS.SAVING': 'BUTTONS.SAVE') | translate}}</button>        
+            <button class="kr-sg-button-secondary btn_lg ml-1 d-none" (click)="onCancel()">{{'BUTTONS.CANCEL' | translate}}</button>        
+        </div>
+
+        <div class="please-wait-all" *ngIf="loading" [@fadeInAnimation] [@fadeInOutAnimation]>
+            <mat-spinner diameter="18" strokeWidth="2"></mat-spinner>
+            <span class="please-wait-message">{{'NOTIFY.PLEASE_WAIT' | translate}}</span>
+        </div>
+    </form>
+</div>

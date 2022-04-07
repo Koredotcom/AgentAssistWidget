@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="8px" height="16px" viewBox="0 0 8 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 53.2 (72643) - https://sketchapp.com -->
+    <title>chevron-left-dark</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="chevron-left-dark" transform="translate(-5.000000, 0.000000)" fill-rule="nonzero">
+            <g id="chevron-left-gray" transform="translate(8.000000, 8.000000) rotate(-90.000000) translate(-8.000000, -8.000000) ">
+                <polygon id="Path" fill-opacity="0" fill="#D8D8D8" points="0 0 16 0 16 16 0 16"></polygon>
+                <path d="M7.628,5.2238976 C7.821,5.04609748 8.128,5.03601603 8.335,5.19273675 L8.372,5.2238976 L14.957,11.2581036 C15.163,11.4469017 15.163,11.7530111 14.957,11.9408927 C14.763,12.1186928 14.457,12.1287743 14.249,11.9720535 L14.212,11.9408927 L8,6.24762301 L1.788,11.9408927 C1.594,12.1186928 1.288,12.1287743 1.081,11.9720535 L1.043,11.9408927 C0.85,11.7630926 0.838,11.482645 1.009,11.2929304 L1.043,11.2581036 L7.628,5.2248141 L7.628,5.2238976 Z" id="Path" fill="#26344A"></path>
+            </g>
+        </g>
+    </g>
+</svg>

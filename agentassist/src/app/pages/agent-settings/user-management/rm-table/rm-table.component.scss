@@ -1,0 +1,72 @@
+@import './../../../../scss/variables/variables.scss';
+
+.table-header{
+    margin: 0;
+    padding: 10px 5px;
+    border-bottom: 1px solid rgba(167, 199, 221, 0.5);
+    .title {
+        padding: 0 10px;
+        color: $primaryFontColor;
+        letter-spacing: 0.714286px;
+        text-transform: uppercase;
+        font-weight: 500;
+        font-size: 10px;
+        line-height: 14px;
+    }
+}
+.table-body-user{
+    margin: 0 0 5px 0;
+    padding: 10px 5px;
+    align-items: center;
+    background: $whiteColor;
+    box-shadow: 0px 0px 6px rgba(168, 200, 221, 0.3);
+    min-height: 80px;
+    transition: 0.2s all ease;
+    cursor: pointer;
+    &.system-role {
+        opacity: 0.7;
+        .delete-user-mang {
+            display: none;
+        }
+    }
+    &.published-state {
+        .delete-user-mang {
+            display: none;
+        }
+    }
+    &:hover{
+        background: $primaryBackgroundColor;
+    }
+    .with-checkbox{
+        padding: 0 10px;
+        color: $primaryFontColor;
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 16px;
+        display: flex;
+        align-items: center;         
+    }
+    .title{
+        padding: 0 10px;
+        color: $primaryFontColor;
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 16px;
+    }
+    .date-time{
+        padding: 0 10px;
+        color: $primaryFontColor;
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 16px;
+        .time{
+            color: $optionalText;
+        }
+    }
+    .delete-user-mang{
+        position: absolute;
+        right: 18px;
+        top: calc(50% - 14px);
+        cursor: pointer;
+    }
+}

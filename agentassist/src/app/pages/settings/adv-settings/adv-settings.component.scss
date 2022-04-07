@@ -1,0 +1,175 @@
+@import './../../../scss/variables/variables.scss';
+
+.adv-settings-container{
+    .main-title{
+        color: $primaryFontColor;
+        font-weight: bold;
+        font-size: 26px;
+        line-height: 26px;
+        display: flex;
+        align-items: center;
+        margin-bottom: 35px;
+        img{
+            margin-right: 12px; 
+        }
+
+        &.sub {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 35px 0 20px 0;
+        }
+    }
+    .sdk-cards-data{
+        margin: 0 -5px;
+        .card-data{
+            background: $whiteColor;
+            border: 1px solid #D7D6DF;
+            box-sizing: border-box;
+            border-radius: 8px;
+            width: 395px;
+            min-height: 138px;
+            display: flex;
+            // align-items: center;
+            padding: 25px;
+            justify-content: space-between;
+            margin: 5px 18px 5px 5px;
+            transition: 0.2s all ease-in;
+            height: 100%;
+            cursor: pointer;
+            &:hover{
+                box-shadow: 0px 4px 4px rgba(168, 200, 221, 0.25);
+            }
+            .titles-sec{
+                width: 210px;
+                .primary-title{
+                    color: $primaryFontColor;
+                    font-weight: 500;
+                    font-size: 14px;
+                    line-height: 17px;
+                    letter-spacing: 0.02em;
+                    margin-bottom: 15px;
+                }
+                .secondary-title{
+                    color: $optionalText;
+                    letter-spacing: 0.01em;
+                    font-weight: normal;
+                    font-size: 12px;
+                    line-height: 17px;
+                }
+                .bottom-data{
+                    margin-top: 28px;
+                    padding: 19px 0 5px 0;                    
+                    width: 342px;
+                    position: relative;
+                    &::before{
+                        content: "";
+                        position: absolute;
+                        border-top: 1px solid rgba(215, 214, 223, 0.5);
+                        width: 235px;
+                        left: 0;
+                        top: 0;
+                    }
+                    .title{
+                        color: $primaryFontColor;
+                        letter-spacing: 0.02em;
+                        font-weight: 600;
+                        font-size: 14px;
+                        line-height: 17px;
+                        margin-bottom: 10px;
+                    }
+                    .faq-desc{
+                        color: $descFontColor;
+                        letter-spacing: 0.02em;
+                        font-weight: 600;
+                        font-size: 14px;
+                        line-height: 17px;
+                    }
+                    .v-audio-title{
+                        color: $primaryFontColor;
+                        letter-spacing: 0.02em;
+                        font-weight: 600;
+                        font-size: 14px;
+                        line-height: 17px;
+                        margin-bottom: 5px;
+                        .v-title-audio{
+                            color: $descFontColor;
+                            letter-spacing: 0.02em;
+                            font-weight: 600;
+                            font-size: 14px;
+                            line-height: 17px;
+                        }
+                        
+                    }
+                    .status-title{
+                        width: 345px;
+                        color: $primaryFontColor;
+                        letter-spacing: 0.02em;
+                        font-weight: 600;
+                        font-size: 14px;
+                        line-height: 17px;
+                        margin-bottom: 10px;
+                    }
+                    .status-codes-info{
+                        width: 345px;
+                        display: flex;
+                        align-items: center;
+                        flex-wrap: wrap;
+                        .status-type{
+                            display: flex;
+                            align-items: center;
+                            margin-right: 5px;
+                            .status-bg{                                
+                                width: 8px;
+                                height: 8px;
+                                border-radius: 100%;
+                                &.available{
+                                    background: #23D473;
+                                }
+                                &.offline{
+                                    background: $optionalText;
+                                }
+                                &.busy{
+                                    background: $warningColor;
+                                }
+                                &.away{
+                                    background: #FFDA2D;
+                                }
+                            }   
+                            .status-name{
+                                color: $primaryFontColor;
+                                opacity: 0.8;
+                                margin: 0px 5px;
+                                font-weight: normal;
+                                font-size: 12px;
+                                line-height: 15px;
+                            }
+                            .language-name{
+                                color: $primaryFontColor;
+                                opacity: 0.8;
+                                margin: 0px 0px;
+                                font-weight: normal;
+                                font-size: 12px;
+                                line-height: 15px;
+                            }                         
+                        }
+                    }
+                }
+            }
+            .img-block{
+                line-height: normal;
+                position: relative;
+                top: 10px;
+            }
+
+            &.disabled {
+                cursor: default;
+                opacity: 0.5;
+            }
+
+            &.noEvents {
+                pointer-events: none;
+            }
+        }
+
+    }
+}

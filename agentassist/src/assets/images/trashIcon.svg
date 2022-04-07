@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="12px" height="13px" viewBox="0 0 12 13" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.2 (57519) - http://www.bohemiancoding.com/sketch -->
+    <title>trashIcon</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="PII" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="PII-3" transform="translate(-1324.000000, -268.000000)" stroke="#FF001F" stroke-width="1.5">
+            <g id="trashIcon" transform="translate(1325.000000, 269.000000)">
+                <g id="Group-51">
+                    <polyline id="Shape" points="0 2.22285716 1.11142858 2.22285716 10.0028572 2.22285716"></polyline>
+                    <path d="M8.89142863,2.22285716 L8.89142863,10.0028572 C8.89142863,10.6166823 8.39382511,11.1142858 7.78000005,11.1142858 L2.22285716,11.1142858 C1.6090321,11.1142858 1.11142858,10.6166823 1.11142858,10.0028572 L1.11142858,2.22285716 M2.77857145,2.22285716 L2.77857145,1.11142858 C2.77857145,0.497603524 3.27617497,0 3.89000003,0 L6.11285718,0 C6.72668224,0 7.22428576,0.497603524 7.22428576,1.11142858 L7.22428576,2.22285716" id="Shape"></path>
+                    <path d="M3.89000003,5.0014286 L3.89000003,8.33571434" id="Shape"></path>
+                    <path d="M6.11285718,5.0014286 L6.11285718,8.33571434" id="Shape"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
