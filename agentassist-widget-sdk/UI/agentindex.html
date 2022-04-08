@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.1, maximum-scale=1.0">
+        <title>Agentassist</title>
+        <link rel="icon" id="favicon" type="image/x-icon" href="favicon.ico">
+        <!-- <script src=""></script> -->
+        <link href="./css/reset.css" rel="stylesheet"></link>
+        <link href="./fonts/inter.css" rel="stylesheet"></link>
+        <link href="./css/styles.css" rel="stylesheet"></link>
+        <link href="fonts/AgentAssist-icons/style.css" rel="stylesheet"></link>
+    </head>
+    <body>
+        <div class="agent-assist-chat-container">
+            <div class="header-top-bar">
+                <!-- Header -->
+                <div class="header-data">
+                    <div class="main-title">Agent Assist</div>
+                    <div class="powerdby">
+                        <span>Powered by</span>
+                        <img src="./images/korelogo.svg">
+                    </div>
+                </div>
+                <!-- Tabs -->
+                <div class="tab-toggles-sec">
+                    <div class="top-tabs-actions">
+                        <div class="tab-icon active-tab">
+                            <i class="ast-bot"></i>
+                        </div>
+                        <div class="tab-icon">
+                            <i class="ast-breadcum"></i>
+                        </div>
+                        <div class="tab-icon">
+                            <i class="ast-automation"></i>
+                        </div>
+                        <div class="tab-icon">
+                            <i class="ast-transcipt"></i>
+                        </div>
+                    </div>
+                    <label class="kr-sg-toggle">
+                        <input id="check1" type="checkbox" checked>
+                        <div for="check1" class="slider"></div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="body-data-container">
+                <div class="dialog-task-data">
+                    <div class="agent-utt-info">
+                        <div class="user-img">
+                            <img src="./images/profile.svg">
+                        </div>
+                        <div class="text-user">I want to edit my order</div>
+                    </div>
+                    <div class="dynamic-block-content">
+                        <div class="dialog-task-run-sec hide">
+                            <div class="task-type">
+                                <div class="img-block-info">
+                                    <img src="./images/dialogtask.svg">
+                                </div>
+                                <div class="content-dialog-task-type">
+                                    <div class="type-with-img-title">Dialog task (2)</div>
+                                    <div class="type-info-run-send">
+                                        <div class="left-content">
+                                            <div class="title-text">Add/Remove items from order</div>
+                                        </div>
+                                        <div class="action-links">
+                                            <button class="send-run-btn">RUN</button>
+                                            <div class="elipse-dropdown-info">
+                                                <div class="elipse-icon">
+                                                    <i class="ast-overflow"></i>
+                                                </div>
+                                                <div class="dropdown-content-elipse">
+                                                    <div class="list-option">Run Bot for Agent</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="type-info-run-send">
+                                        <div class="left-content">
+                                            <div class="title-text">Bundle my orders</div>
+                                        </div>
+                                        <div class="action-links">
+                                            <button class="send-run-btn">RUN</button>
+                                            <div class="elipse-dropdown-info">
+                                                <div class="elipse-icon">
+                                                    <i class="ast-overflow"></i>
+                                                </div>
+                                                <div class="dropdown-content-elipse">
+                                                    <div class="list-option">Run Bot for Agent</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="task-type">
+                                <div class="img-block-info">
+                                    <img src="./images/kg.svg">
+                                </div>
+                                <div class="content-dialog-task-type">
+                                    <div class="type-with-img-title">Knowledge graph (2)</div>
+                                    <div class="type-info-run-send">
+                                        <div class="left-content show-text-on-hover">
+                                            <div class="title-text">Why you shouldn't close...</div>
+                                            <div class="desc-text">Here is how you get if you stay...</div>
+                                        </div>
+                                        <div class="action-links">
+                                            <button class="send-run-btn">RUN</button>
+                                            <div class="copy-btn">
+                                                <i class="ast-copy"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dialog-task-accordiaon-info">
+                            <div class="accordion-header">
+                                <div class="icon-info">
+                                    <i class="ast-rule"></i>
+                                </div>
+                                <div class="header-text">“Add/remove items from order”</div>
+                                <i class="ast-carrotup"></i>
+                            </div>
+                            <div class="collapse-acc-data">
+                                <div class="steps-run-data">
+                                    <div class="icon_block">
+                                        <i class="ast-agent"></i>
+                                    </div>
+                                    <div class="run-info-content">
+                                        <div class="title">Ask customer...</div>
+                                        <div class="agent-utt">
+                                            <div class="title-data text-truncate">“Please share your order number for me to check”</div>
+                                            <div class="action-links">
+                                                <button class="send-run-btn">Send</button>
+                                                <div class="copy-btn">
+                                                    <i class="ast-copy"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="steps-run-data">
+                                    <div class="icon_block_img">
+                                        <img src="./images/profile.svg">
+                                    </div>
+                                    <div class="run-info-content">
+                                        <div class="title">Customer Said - </div>
+                                        <div class="agent-utt">
+                                            <div class="title-data">The order number is 12345</div>
+                                        </div>
+                                        <div class="order-number-info">Order number : 12345</div>
+                                    </div>
+                                </div>
+                                <div class="steps-run-data">
+                                    <div class="icon_block">
+                                        <i class="ast-agent"></i>
+                                    </div>
+                                    <div class="run-info-content">
+                                        <div class="title">Tell Customer</div>
+                                        <div class="agent-utt">
+                                            <div class="title-data">Sorry, we cannot edit your order as it is en route to shipment.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="feedback-data">
+                                    <div class="feedback-icon">
+                                        <i class="ast-thumbup"></i>
+                                    </div>
+                                    <div class="feedback-icon">
+                                        <i class="ast-thumbdown"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-info">
+                <div class="event-bucket">
+                    <img src="./images/bucket.svg">
+                </div>
+                <div class="customer-feeling-text">
+                    <img src="./images/smile-online.svg">
+                    <span>Customer is feeling <b>happy</b></span>
+                </div>
+            </div>
+
+            <div class="entity-bucket-data">
+                <div class="data-content-info">
+                    <div class="scroll-data-bucket">
+                        <div class="inner-data-content-cards">
+                            <div class="entity-card">
+                                <div class="icon-block">
+                                    <i class="ast-entity-rule"></i>
+                                </div>
+                                <div class="content-info-block">
+                                    <div class="title-main">“Book a Flight”</div>
+                                    <div class="info-data">
+                                        <div class="left-title">Source</div>
+                                        <div class="right-title">: Hyderabad</div>
+                                    </div>
+                                    <div class="info-data">
+                                        <div class="left-title">Destination</div>
+                                        <div class="right-title">: London</div>
+                                    </div>
+                                    <div class="info-data">
+                                        <div class="left-title">Date</div>
+                                        <div class="right-title">: 03 06 2022</div>
+                                    </div>
+                                    <div class="info-data">
+                                        <div class="left-title">Class</div>
+                                        <div class="right-title">:  -</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="entity-card">
+                                <div class="icon-block">
+                                    <i class="ast-entity-rule"></i>
+                                </div>
+                                <div class="content-info-block">
+                                    <div class="title-main">“Book a Flight”</div>
+                                    <div class="info-data">
+                                        <div class="left-title">Source</div>
+                                        <div class="right-title">: Hyderabad</div>
+                                    </div>
+                                    <div class="info-data">
+                                        <div class="left-title">Destination</div>
+                                        <div class="right-title">: London</div>
+                                    </div>
+                                    <div class="info-data">
+                                        <div class="left-title">Date</div>
+                                        <div class="right-title">: 03 06 2022</div>
+                                    </div>
+                                    <div class="info-data">
+                                        <div class="left-title">Class</div>
+                                        <div class="right-title">:  -</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="footer-buckets">
+                        <div class="title-block">
+                            <img src="./images/bucket.svg">
+                            <span>ENtity Bucket</span>
+                        </div>
+                        <div class="arrow-close-bucket">
+                            <i class="ast-move-arrow"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
