@@ -66,9 +66,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 botId: "st-6e9d43c3-33f6-5b44-a8c3-5dfe5d08ffd1",
                 conversationId: "123489",
                 event: "agent_assist_response",
-                intentName: "my laptop is not switching on",
+                intentName: "what are interest rates",
                 type: "intent",
-                value: "can't switch on my laptop"
+                value: "interest rates"
             }
             ++count;
             console.log("===inside if=count value -======", count);
