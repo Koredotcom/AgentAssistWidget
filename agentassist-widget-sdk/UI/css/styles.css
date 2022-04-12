@@ -405,6 +405,7 @@ html, body{
     position: relative;
     width: 100%;
     display: inline-block;
+    height: 400px;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data {
     width: 100%;

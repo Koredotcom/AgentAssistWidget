@@ -9,6 +9,67 @@
         <link href="./fonts/inter.css" rel="stylesheet"></link>
         <link href="./css/styles.css" rel="stylesheet"></link>
         <link href="fonts/AgentAssist-icons/style.css" rel="stylesheet"></link>
+            <script src="libs/kore-no-conflict-start.js" type="text/javascript"></script>		
+            <script src="libs/jquery.js" type="text/javascript"></script>
+            <script src="libs/jquery.tmpl.min.js" type="text/javascript"></script>
+            <script src="libs/jquery-ui.min.js" type="text/javascript"></script>
+            <link href="libs/jquery-ui.min.css" rel="stylesheet"></link>
+            <script src="libs/moment.js" type="text/javascript"></script>
+            <script src="../libs/ie11CustomProperties.js"></script>
+            <script src="../libs/lodash.min.js"></script>
+            <script src="../libs/d3.v4.min.js"></script>
+            <script src="../libs/KoreGraphAdapter.js" type="text/javascript"></script>
+            <script src='../libs/anonymousassertion.js'></script>
+            <script src="../kore-bot-sdk-client.js"></script>
+            <script src="../libs/perfect-scrollbar.js" type="text/javascript"></script>
+        
+            <!-- Uncomment these lines for amazon polly -->
+            <!-- <script src="../plugins/aws-sdk-2.668.0.min.js"></script>
+            <script src="../plugins/kore-aws-polly.js" type="text/javascript"></script> -->
+    
+    
+            <!-- Uncomment these lines for AgentDestop plugin -->
+            <!-- <link href="../plugins/agentdestop/agentdesktop.css" rel="stylesheet"></link>
+            <script src="../plugins/agentdestop/libs/ac_webrtc.min.js"></script>
+            <script src="../plugins/agentdestop/libs/audio_player.js"></script>
+            <script src="../plugins/agentdestop/config.js"></script>
+            <script src="../plugins/agentdestop/libs/c2c.js"></script>
+            <script src="../plugins/agentdestop/agentdesktop.js" ></script> -->
+    
+            
+            <script src="chatWindow.js" type="text/javascript"></script>
+            <script src="libs/jquery.daterangepicker.js" type="text/javascript"></script>
+            <link href="libs/daterangepicker.css" rel="stylesheet"></link>
+            <script src="libs/jquery-clockpicker.js" type="text/javascript"></script>
+            <link href="libs/jquery-clockpicker.css" rel="stylesheet"></link>
+            <link href="../libs/kore-pickers.css" rel="stylesheet"></link>
+            <script src="../libs/kore-pickers.js" type="text/javascript"></script>
+            <script src="../libs/emoji.js" type="text/javascript"></script>
+            <script src="../libs/recorder.js" type="text/javascript"></script>
+            <script src="../libs/recorderWorker.js" type="text/javascript"></script>
+            <link href="chatWindow.css" rel="stylesheet"></link>
+            <link href="../libs/emojione.sprites.css" rel="stylesheet"></link>
+            <link href="../libs/purejscarousel.css" rel="stylesheet"></link>
+            <script src="../libs/purejscarousel.js" type="text/javascript"></script>
+            <script src="custom/customTemplate.js" type="text/javascript"></script>
+            <link href="../libs/prefect-scrollbar.css" rel="stylesheet"></link>
+            <link href="custom/customTemplate.css" rel="stylesheet"></link>
+            <!-- <link href="./agentassist.css" rel="stylesheet"></link> -->
+            <!-- <script type="text/javascript" src="libs/loader.js"></script>  -->
+            
+            <!-- Uncomment these lines for Google Speech. -->
+            <!-- <script type="text/javascript" src="../libs/speech/app.js"></script>
+            <script type="text/javascript" src="../libs/speech/key.js"></script>
+            <script type="text/javascript" src="https://apis.google.com/js/client.js"></script> -->
+            
+            <script src="kore-config.js" type="text/javascript"></script>
+            <!-- <script src="kore-118n-config.js" type="text/javascript"></script> --> <!-- Uncomment for i18n support -->
+            <script src="kore-main.js" type="text/javascript"></script>	
+            <script src="libs/kore-no-conflict-end.js" type="text/javascript"></script>
+                
+            <script src="agentindex.js" type="text/javascript">
+            </script>
+            
     </head>
     <body>
         <div class="agent-assist-chat-container">
@@ -50,10 +111,10 @@
                         <div class="user-img">
                             <img src="./images/profile.svg">
                         </div>
-                        <div class="text-user">I want to edit my order</div>
+                        <div class="text-user" id="userTest">I want to edit my order</div>
                     </div>
                     <div class="dynamic-block-content">
-                        <div class="dialog-task-run-sec hide">
+                        <div class="dialog-task-run-sec hide" id="automationSuggestions">
                             <div class="task-type">
                                 <div class="img-block-info">
                                     <img src="./images/dialogtask.svg">
@@ -62,7 +123,7 @@
                                     <div class="type-with-img-title">Dialog task (2)</div>
                                     <div class="type-info-run-send">
                                         <div class="left-content">
-                                            <div class="title-text">Add/Remove items from order</div>
+                                            <div class="title-text" id="automation-${uuids}">Add/Remove items from order</div>
                                         </div>
                                         <div class="action-links">
                                             <button class="send-run-btn">RUN</button>
@@ -116,15 +177,15 @@
                             </div>
                         </div>
 
-                        <div class="dialog-task-accordiaon-info">
-                            <div class="accordion-header">
+                        <div class="dialog-task-accordiaon-info hide" id="addRemoveDropDown">
+                            <div class="accordion-header" id="dropDownHeader">
                                 <div class="icon-info">
                                     <i class="ast-rule"></i>
                                 </div>
-                                <div class="header-text">“Add/remove items from order”</div>
+                                <div class="header-text" id="dropDownTitle">“Add/remove items from order”</div>
                                 <i class="ast-carrotup"></i>
                             </div>
-                            <div class="collapse-acc-data">
+                            <div class="collapse-acc-data" id="dropDownData">
                                 <div class="steps-run-data">
                                     <div class="icon_block">
                                         <i class="ast-agent"></i>
@@ -132,7 +193,7 @@
                                     <div class="run-info-content">
                                         <div class="title">Ask customer...</div>
                                         <div class="agent-utt">
-                                            <div class="title-data text-truncate">“Please share your order number for me to check”</div>
+                                            <div class="title-data text-truncate" ></div>
                                             <div class="action-links">
                                                 <button class="send-run-btn">Send</button>
                                                 <div class="copy-btn">
