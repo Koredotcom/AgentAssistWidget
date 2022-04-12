@@ -2237,7 +2237,7 @@
 
             chatWindow.prototype.renderMessage = function (msgData) {
                 console.log("---- message response====",msgData)
-                var me = this, messageHtml = '',modifiedMessageHtml = '', extension = '', _extractedFileName = '';
+                var me = this, messageHtml = '', extension = '', _extractedFileName = '';
                 var helpers=me.helpers;
                 msgData.createdOnTimemillis=new Date(msgData.createdOn).valueOf();
                 me.customTemplateObj.helpers = me.helpers;

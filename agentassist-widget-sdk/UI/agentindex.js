@@ -175,7 +175,28 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
           
         
         chatInitialize.renderMessage(_msgsResponse);
+        let fromCurrentUsers = document.getElementsByClassName('fromCurrentUser');
+        for (let ele of fromCurrentUsers) {
+            ele.remove();
+        }
+
+        let fromOtherUsers = document.getElementsByClassName('fromOtherUsers');
+        for (let ele of fromOtherUsers) {
+            if (ele.hasAttribute('aria-live')) {
+                ele.remove();
+            }
+        }
+        let profilephoto = document.getElementsByClassName('profile-photo');
+        for (let ele of profilephoto) {
+            ele.remove();
+        }
+        let extrainfo = document.getElementsByClassName('extra-info');
+        for (let ele of extrainfo) {
+            ele.remove();
+        }
+    
     }
+
     function processData(data, convId, botId, userId,resp) {
         console.log("==== message response",resp)
         if (data.type === 'button' && data.buttons && data.buttons.length > 0) {
@@ -691,24 +712,23 @@ AgentAssistPubSub.subscribe('agent_assist_send_text', (msg, data) => {
         "createdOnTimemillis":1648189648267
     }
     _agentAsisstSocket.emit('agent_assist_request', agent_assist_request);
-    const observer = new MutationObserver(function(mutationList){
-        mutationList.forEach(function(mutation) {
-            console.log("====muation list",mutation);
-            mutation.addedNodes.forEach(function(added_node) {
-              if(added_node.nodeName === 'LI'){
-                for(let nodes of added_node.children){
-                    if(nodes.className.includes('extra-info')){
-                        nodes.remove();
-                    }
-                }
-            }
-            });
-        });
-        observer.disconnect();
-    });
-    observer.observe(document.body,{childList:true,subtree:true});
+    // const observer = new MutationObserver(function(mutationList){
+    //     mutationList.forEach(function(mutation) {
+    //         console.log("====muation list",mutation);
+    //         mutation.addedNodes.forEach(function(added_node) {
+    //           if(added_node.nodeName === 'LI'){
+    //             for(let nodes of added_node.children){
+    //                 if(nodes.className.includes('extra-info')){
+    //                     nodes.remove();
+    //                 }
+    //             }
+    //         }
+    //         });
+    //     });
+    //     observer.disconnect();
+    // });
+    // observer.observe(document.body,{childList:true,subtree:true});
     let contentDisplayDiv = document.getElementById('dropDownTitle');
-    console.log("===== message display div=====", contentDisplayDiv)
     contentDisplayDiv.innerHTML = data.value;
     chatInitialize.renderMessage(agentsss);
 });
