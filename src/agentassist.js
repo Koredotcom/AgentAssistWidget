@@ -14,6 +14,7 @@ var _agentAsisstSocket = null;
 var _agentAssistComponents = {};
 var agentAssistSocketUrl ="https://dev-smartassist.kore.ai"
 var btnCount = 0;
+var _userTranscript = false;
 
 function koreGenerateUUID() {
         console.info("generating UUID");
@@ -30,6 +31,7 @@ function koreGenerateUUID() {
     }
 window._agentAssisteventListenerAdded = false;
 window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId, _botId) {
+    _userTranscript = false;
     console.log("AgentAssist >>> no of agent assist instances", _agentAssistComponents);
     if (!window._agentAssisteventListenerAdded) {
         btnInit();
@@ -141,7 +143,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             btnList.innerHTML += iHtml;
         }
     }
-    var _userTranscript = false;
     function btnInit() {
         document.addEventListener("click", (evt) => {
             var target = evt.target;
@@ -348,10 +349,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                     var btn = data.buttons[i];
                     if (btn && btn.type === 'text') {
                         var btnValue = btn.value;
+                        btnValue  = btnValue.replaceAll("|", "<br/>")
                         var btnHtml = `
             				<div class="btn-template-data" data-text-value="${btnValue}" data-conv-id="${convId}" 
                                     data-btn-id="${btnCount}">
-                                <div class="info-template curser-pointer">"${btnValue}"</div>
+                                <div class="info-template curser-pointer">${btnValue}</div>
             					<div class="overlay-send-copy-">
                                     <div class="send-copy" aura:id="btn-send-${convId}-${btnCount}" id="btn-send-${convId}-${btnCount}" 
                                                 data-as-send="true" 
