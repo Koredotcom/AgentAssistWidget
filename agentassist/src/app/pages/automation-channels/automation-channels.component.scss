@@ -113,3 +113,79 @@
 
     }
 }
+
+.scroll-chat-list{
+    height: calc(100vh - 160px);
+    .chat-data-input-containers{
+        padding: 0 10px;
+        display: inline-block;
+        width: 100%;
+        .title-main{
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 18px;
+            color: #202124;
+        }
+        .input-box-data{
+            margin: 12px 0 18px 0;
+            background: #F5F8FA;
+            border-radius: 10px;
+            display: inline-block;
+            width: 100%;
+            padding: 20px;
+            .text-heading{
+                font-weight: 600;
+                font-size: 14px;
+                line-height: 18px;
+                color: #202124;
+                margin-bottom: 6px;
+            }
+            .sub-text{
+                font-weight: 400;
+                font-size: 14px;
+                line-height: 18px;
+                color: #202124;
+                margin-bottom: 15px;
+            }
+            .row-data{
+                margin-bottom: 22px;
+                display: inline-block;
+                width: 100%;
+                &:last-child{
+                    margin-bottom: 0;
+                }
+                .label-text{
+                    font-weight: 500;
+                    font-size: 12px;
+                    line-height: 15px;
+                    color: #202124;
+                    margin-bottom: 4px;
+                }
+                .kr-sg-input-text{
+                    display: flex;
+                    align-items: center;
+                    .copy-btn{
+                        background: #FFFFFF;
+                        border: 1px solid #0D6EFD;
+                        box-sizing: border-box;
+                        border-radius: 4px;
+                        height: 34px;
+                        display: flex;
+                        align-items: center;
+                        padding: 6px 12px;
+                        font-weight: 400;
+                        font-size: 14px;
+                        line-height: 20px;
+                        color: #0D6EFD;
+                        flex-shrink: 0;
+                        margin-left: 20px;
+                        cursor: pointer;
+                        img{
+                            margin-right: 6px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
