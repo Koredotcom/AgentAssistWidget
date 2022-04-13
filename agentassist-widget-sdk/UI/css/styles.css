@@ -195,15 +195,12 @@ html, body{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 10px 15px;
+    padding: 8px 15px 0px 15px;
     background: #FFFFFF;
 }
 .agent-assist-chat-container .header-top-bar .tab-toggles-sec .top-tabs-actions {
     display: inline-flex;
     align-items: center;
-    background: #E9EFF4;
-    box-shadow: 0px 2px 9px rgba(0,0,0,0.03);
-    border-radius: 2px;
 }
 .agent-assist-chat-container .header-top-bar .tab-toggles-sec .top-tabs-actions .tab-icon {
     width: 36px;
@@ -215,21 +212,77 @@ html, body{
     font-size: 14px;
     cursor: pointer;
     transition: 0.2s all ease;
+    border-radius: 3px 3px 0px 0px;
+    position: relative;
+    margin-right: 4px;
+}
+.agent-assist-chat-container .header-top-bar .tab-toggles-sec .top-tabs-actions .tab-icon::before{
+    content: "";
+    position: absolute;
+    border-left: 1px solid #E5E8EC;
+    right: -3px;
+    width: 1px;
+    height: 16px;
+}
+.agent-assist-chat-container .header-top-bar .tab-toggles-sec .top-tabs-actions .tab-icon:last-child::before{
+    display: none;
 }
 .agent-assist-chat-container .header-top-bar .tab-toggles-sec .top-tabs-actions .tab-icon:hover {
-    background: #0077D2;
-    box-shadow: 0px 2px 9px rgba(0,0,0,0.03);
-    border-radius: 3px;
-    color: #FFFFFF;
+    background: #F5F8FA;
+    color: #0077D2;
+}
+.agent-assist-chat-container .header-top-bar .tab-toggles-sec .top-tabs-actions .tab-icon:hover .custom-tootltip-tabs{
+    visibility: visible;
+    opacity: 1;
 }
 .agent-assist-chat-container .header-top-bar .tab-toggles-sec .top-tabs-actions .tab-icon.active-tab {
     background: #0077D2;
-    box-shadow: 0px 2px 9px rgba(0,0,0,0.03);
-    border-radius: 3px;
     color: #FFFFFF;
 }
 
+.agent-assist-chat-container .header-top-bar .tab-toggles-sec .top-tabs-actions .tab-icon .custom-tootltip-tabs{
+    visibility: hidden;
+    position: absolute;
+    width: auto;
+    color: #fff;
+    text-align: center;
+    padding: 10px 15px;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.3s;
+    background: #202124;
+    box-shadow: 0px -4px 4px rgba(32, 33, 36, 0.2);
+    border-radius: 4px;
+    top: -40px;
+    left: 0;
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 14px;
+    color: #FFFFFF;
+}
 
+.agent-assist-chat-container .header-top-bar .tab-toggles-sec .top-tabs-actions .tab-icon .custom-tootltip-tabs::after{
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 18px;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #202124 transparent transparent transparent;
+}
+
+.agent-assist-chat-container .header-top-bar .tab-toggles-sec .taoggle-with-text{
+    display: flex;
+    align-items: center;
+}
+.agent-assist-chat-container .header-top-bar .tab-toggles-sec .taoggle-with-text .t-title{
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 20px;
+    color: #000000;
+    margin-right: 8px;
+}
 /* Footer */
 
 
@@ -251,6 +304,8 @@ html, body{
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    visibility: hidden;
+    opacity: 0;
 }
 .agent-assist-chat-container .footer-info .customer-feeling-text {
     background: #FFFFFF;
@@ -405,11 +460,13 @@ html, body{
     position: relative;
     width: 100%;
     display: inline-block;
-    height: 400px;
+    height: calc(100% - 82px);
+    background: #F5F8FA;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data {
     width: 100%;
     display: inline-block;
+    padding-bottom: 100px;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .agent-utt-info {
     display: flex;
@@ -417,6 +474,7 @@ html, body{
     margin-top: 20px;
     padding: 0 15px;
     position: relative;
+    z-index: 1;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .agent-utt-info .user-img {
     width: 30px;
@@ -445,13 +503,14 @@ html, body{
     margin-top: -16px;
     display: inline-block;
     width: 100%;
-    padding: 40px 12px 0px 12px;
+    padding: 40px 0px 0px 0px;
+    position: relative;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec {
     display: inline-block;
     width: 100%;
     position: relative;
-    padding: 12px;
+    padding: 12px 15px;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type {
     display: flex;
@@ -621,7 +680,7 @@ html, body{
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info {
     display: inline-block;
     width: 100%;
-    padding: 0 3px;
+    padding: 0 15px;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .accordion-header {
     background: #FFFFFF;
@@ -825,4 +884,434 @@ html, body{
     justify-content: center;
     cursor: pointer;
     margin-right: 6px;
+}
+
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dilog-task-end{
+    position: absolute;
+    bottom: -40px;
+    width: 100%;
+    left: 0;
+    text-align: center;
+}
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dilog-task-end .text-dialog-task-end{
+    display: inline-block;
+    background: #DCE3EA;
+    border-radius: 40px;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 20px;
+    color: #000000;
+    padding: 2px 15px;
+    cursor: pointer;
+}
+
+
+
+
+/* Transcript only for calls */
+
+
+
+.agent-assist-chat-container .body-data-container .transcipt-only-calls-data {
+    display: inline-block;
+    width: 100%;
+    padding-bottom: 30px;
+}
+.agent-assist-chat-container .body-data-container .transcipt-only-calls-data .data-contnet {
+    padding: 20px 15px;
+    display: inline-block;
+    width: 100%;
+}
+.agent-assist-chat-container .body-data-container .transcipt-only-calls-data .data-contnet .other-user-bubble {
+    display: inline-block;
+    max-width: 100%;
+    margin-bottom: 12px;
+    padding-right: 40px;
+}
+.agent-assist-chat-container .body-data-container .transcipt-only-calls-data .data-contnet .other-user-bubble .name-with-time {
+    display: flex;
+    align-items: center;
+    margin-bottom: 4px;
+}
+.agent-assist-chat-container .body-data-container .transcipt-only-calls-data .data-contnet .other-user-bubble .name-with-time .u-name {
+    font-weight: 600;
+    font-size: 10px;
+    line-height: 20px;
+    color: #8A959F;
+    margin-right: 10px;
+}
+.agent-assist-chat-container .body-data-container .transcipt-only-calls-data .data-contnet .other-user-bubble .name-with-time .u-time {
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 20px;
+    color: #BDC1C6;
+    margin-left: 10px;
+}
+.agent-assist-chat-container .body-data-container .transcipt-only-calls-data .data-contnet .other-user-bubble .bubble-data {
+    background: #FFFFFF;
+    border-radius: 5px 15px 15px 15px;
+    padding: 8px 15px;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 20px;
+    color: #000000;
+    position: relative;
+}
+.agent-assist-chat-container .body-data-container .transcipt-only-calls-data .data-contnet .other-user-bubble .bubble-data .buld-count-utt {
+    width: 28px;
+    height: 28px;
+    background: #0077D2;
+    border-radius: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    right: -38px;
+    bottom: 3px;
+    color: #FFFFFF;
+    font-size: 12px;
+    cursor: pointer;
+}
+.agent-assist-chat-container .body-data-container .transcipt-only-calls-data .data-contnet .other-user-bubble .bubble-data .buld-count-utt .count-number {
+    position: absolute;
+    background: #F3BC4D;
+    width: 13px;
+    height: 13px;
+    border-radius: 100%;
+    bottom: -5px;
+    right: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 10px;
+    line-height: 20px;
+    color: #000000;
+}
+.agent-assist-chat-container .body-data-container .transcipt-only-calls-data .data-contnet .current-user-bubble {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    padding-left: 40px;
+    margin-bottom: 12px;
+}
+.agent-assist-chat-container .body-data-container .transcipt-only-calls-data .data-contnet .current-user-bubble .name-with-time {
+    display: flex;
+    align-items: center;
+    margin-bottom: 4px;
+}
+.agent-assist-chat-container .body-data-container .transcipt-only-calls-data .data-contnet .current-user-bubble .name-with-time .u-time {
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 20px;
+    color: #BDC1C6;
+    margin-right: 10px;
+}
+.agent-assist-chat-container .body-data-container .transcipt-only-calls-data .data-contnet .current-user-bubble .name-with-time .u-name {
+    font-weight: 600;
+    font-size: 10px;
+    line-height: 20px;
+    color: #8A959F;
+    margin-left: 10px;
+}
+.agent-assist-chat-container .body-data-container .transcipt-only-calls-data .data-contnet .current-user-bubble .bubble-data {
+    background: #0077D2;
+    border-radius: 15px 5px 15px 15px;
+    padding: 8px 15px;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 19px;
+    color: #FFFFFF;
+}
+
+
+/* Library search */
+
+.agent-assist-chat-container .body-data-container .library-search-data-container {
+    display: inline-block;
+    width: 100%;
+}
+.agent-assist-chat-container .body-data-container .library-search-data-container .search-block {
+    padding: 15px;
+    background: #E9EFF4;
+    display: inline-block;
+    width: 100%;
+}
+
+
+.agent-assist-chat-container .body-data-container .library-search-data-container {
+    display: inline-block;
+    width: 100%;
+}
+.agent-assist-chat-container .body-data-container .library-search-data-container .search-block {
+    padding: 15px;
+    background: #E9EFF4;
+    display: inline-block;
+    width: 100%;
+}
+.agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data {
+    display: inline-block;
+    width: 100%;
+    padding: 15px;
+}
+.agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .searched-intent {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+    color: #64717C;
+    margin-bottom: 20px;
+}
+.agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .heading-title {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    color: #000000;
+    margin-bottom: 4px;
+}
+.agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec {
+    display: inline-block;
+    width: 100%;
+    position: relative;
+    padding: 12px;
+}
+.agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec.p-0 {
+    padding: 0;
+}
+.agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type {
+    display: flex;
+    position: relative;
+    margin-bottom: 20px;
+}
+.agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type:last-child {
+    margin: 0;
+}
+.agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .img-block-info {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+.agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type {
+    width: 100%;
+    padding-left: 24px;
+    display: inline-block;
+}
+.agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type.pl-0 {
+    padding-left: 0;
+}
+.agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-with-img-title {
+    font-weight: 400;
+    font-size: 11px;
+    line-height: 13px;
+    color: #202124;
+    margin-bottom: 10px;
+}
+.agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send {
+    background: #FFFFFF;
+    border: 0.5px dashed #8A959F;
+    box-sizing: border-box;
+    border-radius: 8px;
+    margin: 7px 0;
+    display: flex;
+    align-items: center;
+    padding: 5px 12px;
+    min-height: 33px;
+}
+.agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content {
+    width: 100%;
+    font-weight: 400;
+    font-size: 11px;
+    line-height: 13px;
+    color: #202124;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding-right: 15px;
+    transition: 0.2s all ease;
+}
+.agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content.show-text-on-hover:hover {
+    overflow: inherit;
+    white-space: normal;
+    text-overflow: unset;
+}
+.agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content.show-text-on-hover:hover .title-text {
+    overflow: inherit;
+    white-space: normal;
+    text-overflow: unset;
+}
+.agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content.show-text-on-hover:hover .desc-text {
+    overflow: inherit;
+    white-space: normal;
+    text-overflow: unset;
+}
+.agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content .title-text {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content .desc-text {
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 12px;
+    color: #979797;
+    font-style: italic;
+    margin-top: 4px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+.agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .send-run-btn {
+    border: 0;
+    background: #0077D2;
+    box-shadow: 0px 2px 8px rgba(0,0,0,0.05);
+    border-radius: 5px;
+    outline: 0;
+    font-weight: 700;
+    font-size: 9px;
+    line-height: 12px;
+    color: #FFFFFF;
+    height: 24px;
+    cursor: pointer;
+    padding: 3px 10px;
+    text-transform: uppercase;
+}
+.agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .copy-btn {
+    background: #E9EFF4;
+    box-shadow: 0px 2px 8px rgba(0,0,0,0.05);
+    border-radius: 5px;
+    width: 24px;
+    height: 24px;
+    color: #202124;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    margin-left: 6px;
+    cursor: pointer;
+}
+.agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .elipse-dropdown-info {
+    margin-left: 6px;
+    position: relative;
+}
+.agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .elipse-dropdown-info.active-elipse .elipse-icon {
+    background: #BDC1C6;
+}
+.agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .elipse-dropdown-info.active-elipse .dropdown-content-elipse {
+    display: block;
+}
+.agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .elipse-dropdown-info .elipse-icon {
+    width: 24px;
+    height: 24px;
+    background: #EFF0F1;
+    font-size: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 100%;
+    color: #202124;
+}
+.agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .elipse-dropdown-info .dropdown-content-elipse {
+    z-index: 1;
+    position: absolute;
+    display: none;
+    right: 0;
+    background: #FFFFFF;
+    box-shadow: 0px 2px 8px rgba(0,0,0,0.15);
+    border-radius: 4px;
+    top: auto;
+    margin-top: 3px;
+    min-width: 110px;
+}
+.agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .elipse-dropdown-info .dropdown-content-elipse .list-option {
+    font-weight: 500;
+    font-size: 9px;
+    line-height: 11px;
+    padding: 8px 10px;
+    cursor: pointer;
+    transition: 0.2s all ease;
+}
+.agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .elipse-dropdown-info .dropdown-content-elipse .list-option:hover {
+    background: #EFF0F1;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Search INput */
+
+.agent-assist-chat-container .input-text-search {
+    width: 100%;
+    position: relative;
+}
+.agent-assist-chat-container .input-text-search input {
+    background-color: #FFFFFF;
+    border: solid 1px #BDC1C6;
+    border-radius: 4px;
+    height: 34px;
+    padding: 6px 10px 6px 30px;
+    font-size: 14px;
+    color: #000000;
+    width: 100%;
+    line-height: normal;
+    margin: 0 !important;
+    outline: 0 !important;
+}
+.agent-assist-chat-container .input-text-search input::placeholder {
+    color: #BDC1C6;
+}
+.agent-assist-chat-container .input-text-search input:focus {
+    border: solid 1px #1372ff;
+}
+.agent-assist-chat-container .input-text-search input:active {
+    border: solid 1px #0077D2;
+}
+.agent-assist-chat-container .input-text-search input:disabled {
+    border: solid 1px #f3f3f4;
+    color: #BDC1C6;
+}
+.agent-assist-chat-container .input-text-search input.error {
+    border: solid 1px #DD3646;
+}
+.agent-assist-chat-container .input-text-search input.error::placeholder {
+    color: #000000;
+    opacity: 1;
+}
+.agent-assist-chat-container .input-text-search input:read-only {
+    background-color: #f2f3f5;
+}
+.agent-assist-chat-container .input-text-search input:-moz-read-only {
+    background-color: #f2f3f5;
+}
+.agent-assist-chat-container .input-text-search i {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    color: #0077D2;
 }
