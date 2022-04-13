@@ -349,10 +349,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                     var btn = data.buttons[i];
                     if (btn && btn.type === 'text') {
                         var btnValue = btn.value;
+                        btnValue  = btnValue.replaceAll("|", "<br/>")
                         var btnHtml = `
             				<div class="btn-template-data" data-text-value="${btnValue}" data-conv-id="${convId}" 
                                     data-btn-id="${btnCount}">
-                                <div class="info-template curser-pointer">"${btnValue}"</div>
+                                <div class="info-template curser-pointer">${btnValue}</div>
             					<div class="overlay-send-copy-">
                                     <div class="send-copy" aura:id="btn-send-${convId}-${btnCount}" id="btn-send-${convId}-${btnCount}" 
                                                 data-as-send="true" 
