@@ -87,21 +87,28 @@
                     <div class="top-tabs-actions">
                         <div class="tab-icon active-tab">
                             <i class="ast-bot"></i>
+                            <div class="custom-tootltip-tabs">Transcript</div>
                         </div>
                         <div class="tab-icon">
-                            <i class="ast-breadcum"></i>
+                            <i class="ast-search"></i>
+                            <div class="custom-tootltip-tabs">Transcript</div>
                         </div>
                         <div class="tab-icon">
                             <i class="ast-automation"></i>
+                            <div class="custom-tootltip-tabs">Transcript</div>
                         </div>
                         <div class="tab-icon">
                             <i class="ast-transcipt"></i>
+                            <div class="custom-tootltip-tabs">Transcript</div>
                         </div>
                     </div>
-                    <label class="kr-sg-toggle">
-                        <input id="check1" type="checkbox" checked>
-                        <div for="check1" class="slider"></div>
-                    </label>
+                    <div class="taoggle-with-text">
+                        <div class="t-title">Proactive mode</div>
+                        <label class="kr-sg-toggle">
+                            <input id="check1" type="checkbox" checked>
+                            <div for="check1" class="slider"></div>
+                        </label>
+                    </div>
                 </div>
             </div>
 
@@ -232,6 +239,180 @@
                                     </div>
                                     <div class="feedback-icon">
                                         <i class="ast-thumbdown"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dilog-task-end">
+                            <div class="text-dialog-task-end">Dialog Task ended</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="transcipt-only-calls-data hide">
+                    <div class="data-contnet">
+                        <div class="other-user-bubble">
+                            <div class="name-with-time">
+                                <div class="u-name">John Wick</div>
+                                <div class="u-time">2:29pm</div>
+                            </div>
+                            <div class="bubble-data">
+                                <div class="b-text">Hey jane, can you help me?</div>
+                            </div>
+                        </div>
+                        <div class="current-user-bubble">
+                            <div class="name-with-time">
+                                <div class="u-time">2:41pm</div>
+                                <div class="u-name">You</div>
+                            </div>
+                            <div class="bubble-data">
+                                <div class="b-text">How can I help you?</div>
+                            </div>
+                        </div>
+                        <div class="other-user-bubble">
+                            <div class="name-with-time">
+                                <div class="u-name">John Wick</div>
+                                <div class="u-time">2:29pm</div>
+                            </div>
+                            <div class="bubble-data">
+                                <div class="b-text">I want to return an item</div>
+                            </div>
+                        </div>
+                        <div class="current-user-bubble">
+                            <div class="name-with-time">
+                                <div class="u-time">2:41pm</div>
+                                <div class="u-name">You</div>
+                            </div>
+                            <div class="bubble-data">
+                                <div class="b-text">Yes, I'll help you with it</div>
+                            </div>
+                        </div>
+                        <div class="other-user-bubble">
+                            <div class="name-with-time">
+                                <div class="u-name">John Wick</div>
+                                <div class="u-time">2:29pm</div>
+                            </div>
+                            <div class="bubble-data">
+                                <div class="b-text">Sorry, I mean, edit my order</div>
+                                <div class="buld-count-utt">
+                                    <i class="ast-bulb"></i>
+                                    <span class="count-number">1</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="library-search-data-container hide">
+                    <div class="search-block">
+                        <div class="input-text-search">
+                            <input type="text" placeholder="Ask AgentAssist" class="input-text">
+                            <i class="ast-search"></i>
+                        </div>
+                    </div>
+                    <div class="dynamic-searchlibrary-data">
+                        <div class="frequently-asked hide">
+                            <div class="heading-title">Frequently  Used</div>
+                            <div class="dialog-task-run-sec p-0">
+                                <div class="task-type">
+                                    <div class="content-dialog-task-type pl-0">
+                                        <div class="type-info-run-send">
+                                            <div class="left-content">
+                                                <div class="title-text" id="automation-${uuids}">Add/Remove items from order</div>
+                                            </div>
+                                            <div class="action-links">
+                                                <button class="send-run-btn">RUN</button>
+                                                <div class="elipse-dropdown-info">
+                                                    <div class="elipse-icon">
+                                                        <i class="ast-overflow"></i>
+                                                    </div>
+                                                    <div class="dropdown-content-elipse">
+                                                        <div class="list-option">Run Bot for Agent</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="type-info-run-send">
+                                            <div class="left-content">
+                                                <div class="title-text">Bundle my orders</div>
+                                            </div>
+                                            <div class="action-links">
+                                                <button class="send-run-btn">RUN</button>
+                                                <div class="elipse-dropdown-info">
+                                                    <div class="elipse-icon">
+                                                        <i class="ast-overflow"></i>
+                                                    </div>
+                                                    <div class="dropdown-content-elipse">
+                                                        <div class="list-option">Run Bot for Agent</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="intent-based-search">
+                            <div class="searched-intent">Search results for “ I want to edit my order”</div>
+                            <div class="dialog-task-run-sec p-0">
+                                <div class="task-type">
+                                    <div class="img-block-info">
+                                        <img src="./images/dialogtask.svg">
+                                    </div>
+                                    <div class="content-dialog-task-type">
+                                        <div class="type-with-img-title">Dialog task (2)</div>
+                                        <div class="type-info-run-send">
+                                            <div class="left-content">
+                                                <div class="title-text" id="automation-${uuids}">Add/Remove items from order</div>
+                                            </div>
+                                            <div class="action-links">
+                                                <button class="send-run-btn">RUN</button>
+                                                <div class="elipse-dropdown-info">
+                                                    <div class="elipse-icon">
+                                                        <i class="ast-overflow"></i>
+                                                    </div>
+                                                    <div class="dropdown-content-elipse">
+                                                        <div class="list-option">Run Bot for Agent</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="type-info-run-send">
+                                            <div class="left-content">
+                                                <div class="title-text">Bundle my orders</div>
+                                            </div>
+                                            <div class="action-links">
+                                                <button class="send-run-btn">RUN</button>
+                                                <div class="elipse-dropdown-info">
+                                                    <div class="elipse-icon">
+                                                        <i class="ast-overflow"></i>
+                                                    </div>
+                                                    <div class="dropdown-content-elipse">
+                                                        <div class="list-option">Run Bot for Agent</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="task-type">
+                                    <div class="img-block-info">
+                                        <img src="./images/kg.svg">
+                                    </div>
+                                    <div class="content-dialog-task-type">
+                                        <div class="type-with-img-title">Knowledge graph (2)</div>
+                                        <div class="type-info-run-send">
+                                            <div class="left-content show-text-on-hover">
+                                                <div class="title-text">Why you shouldn't close...</div>
+                                                <div class="desc-text">Here is how you get if you stay...</div>
+                                            </div>
+                                            <div class="action-links">
+                                                <button class="send-run-btn">RUN</button>
+                                                <div class="copy-btn">
+                                                    <i class="ast-copy"></i>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
