@@ -7,7 +7,7 @@ import reducers, { namespace } from './states';
 //import * as AgentAssist from './utils/AgentAssist';
 
 const PLUGIN_NAME = 'SamplePlugin';
-var ctr = 0;
+var agentId = '';
 export default class SamplePlugin extends FlexPlugin {
   constructor() {
     super(PLUGIN_NAME);
@@ -26,6 +26,8 @@ export default class SamplePlugin extends FlexPlugin {
    */
   async init(flex, manager) {
     this.registerReducers(manager);
+    console.log("1111111111111111111 manager", manager.user.identity);
+    agentId = manager.user.identity;
 
     const options = { sortOrder: -1 };
     flex.AgentDesktopView.Panel2.Content.add(<CustomTaskListContainer key="agent-assist" />, {sortOrder: -1});
@@ -49,7 +51,7 @@ export default class SamplePlugin extends FlexPlugin {
       
       
       return new Promise((resolve, reject) => {
-          var a1 = new AgentAssist('agentassist-maincontainer', _convId, 'user110', 'st-8b945818-1b69-5e5b-9504-34a9652e1516');
+          var a1 = new AgentAssist('agentassist-maincontainer', _convId, agentId, 'st-8b945818-1b69-5e5b-9504-34a9652e1516');
           resolve();
       }).then(() => original(payload));
     });
