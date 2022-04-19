@@ -2235,7 +2235,7 @@
                 });
             };
 
-            chatWindow.prototype.renderMessage = function (msgData) {
+            chatWindow.prototype.renderMessage = function (msgData,elementID) {
                 console.log("---- message response====",msgData)
                 var me = this, messageHtml = '', extension = '', _extractedFileName = '';
                 var helpers=me.helpers;
@@ -2261,7 +2261,7 @@
                 else {
                     waiting_for_message = false;
                 }
-                var _chatContainer = $('.agent-assist-chat-container').find('.text-truncate  ');
+                var _chatContainer = $('.agent-assist-chat-container').find(`#displayData-${elementID}`);
                 if (msgData.message && msgData.message[0] && msgData.message[0].cInfo && msgData.message[0].cInfo.attachments) {
                     extension = strSplit(msgData.message[0].cInfo.attachments[0].fileName);
                 }
@@ -2915,7 +2915,7 @@
                     bottomSliderAction('show',messageHtml);
                 }else{
                     //ignore message(msgId) if it is already in viewport                     
-                    if ($('.agent-assist-chat-container .text-truncate   div#' + msgData.messageId).length < 1 || (msgData.renderType==='inline')) {
+                    if ($(`.agent-assist-chat-container  #displayData-${elementID}  div#` + msgData.messageId).length < 1 || (msgData.renderType==='inline')) {
                         if (msgData.type === "bot_response" && msgData.fromHistorySync) {
                             var msgTimeStamps = [];
                             var msgEles = $('.agent-assist-chat-container .text-truncate  >div');

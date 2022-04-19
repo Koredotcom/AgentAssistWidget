@@ -66,7 +66,10 @@
         var koreBot = koreBotChat();
         koreBot.show(chatConfig);
         if(chatConfig.agentAssist){
-            new AgentAssist('agent-assist-chat-container', '123489', 'user101', chatConfig.botOptions.botInfo._id);
+           let agentAssistObj =  new AgentAssist('agent-assist-chat-container', '123489', 'user101', chatConfig.botOptions.botInfo._id);
+           chatConfig.agentAssistArray.push(agentAssistObj);
+           console.log("-------", chatConfig.agentAssistArray);
+           localStorage.setItem('currentConId', JSON.stringify(chatConfig.agentAssistArray))
         }
 
         $('.openChatWindow').click(function () {
