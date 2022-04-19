@@ -887,8 +887,8 @@ html, body{
 }
 
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dilog-task-end{
-    position: absolute;
-    bottom: -40px;
+    /* position: absolute;
+    bottom: -40px; */
     width: 100%;
     left: 0;
     text-align: center;
