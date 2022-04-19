@@ -85,20 +85,20 @@
                 <!-- Tabs -->
                 <div class="tab-toggles-sec">
                     <div class="top-tabs-actions">
-                        <div class="tab-icon active-tab">
-                            <i class="ast-bot"></i>
-                            <div class="custom-tootltip-tabs">Transcript</div>
+                        <div class="tab-icon active-tab" id="userAutoIcon">
+                            <i class="ast-bot" id="userBotIcon"></i>
+                            <div class="custom-tootltip-tabs">User Automation</div>
                         </div>
-                        <div class="tab-icon">
-                            <i class="ast-search"></i>
-                            <div class="custom-tootltip-tabs">Transcript</div>
+                        <div class="tab-icon" id="searchAutoIcon" >
+                            <i class="ast-search" id="searchIcon"></i>
+                            <div class="custom-tootltip-tabs">Search Automation</div>
                         </div>
-                        <div class="tab-icon">
-                            <i class="ast-automation"></i>
-                            <div class="custom-tootltip-tabs">Transcript</div>
+                        <div class="tab-icon" id="agentAutoIcon">
+                            <i class="ast-automation" id="agentBotIcon"></i>
+                            <div class="custom-tootltip-tabs">Agent Automation</div>
                         </div>
-                        <div class="tab-icon">
-                            <i class="ast-transcipt"></i>
+                        <div class="tab-icon" id="transcriptIcon">
+                            <i class="ast-transcipt" id="scriptIcon"></i>
                             <div class="custom-tootltip-tabs">Transcript</div>
                         </div>
                     </div>
@@ -113,7 +113,7 @@
             </div>
 
             <div class="body-data-container">
-                <div class="dialog-task-data">
+                <div class="dialog-task-data" id="dialogTaskContainer">
                     <div class="agent-utt-info">
                         <div class="user-img">
                             <img src="./images/profile.svg">
@@ -126,7 +126,7 @@
                                 <div class="img-block-info">
                                     <img src="./images/dialogtask.svg">
                                 </div>
-                                <div class="content-dialog-task-type">
+                                <div class="content-dialog-task-type" >
                                     <div class="type-with-img-title">Dialog task (2)</div>
                                     <div class="type-info-run-send">
                                         <div class="left-content">
@@ -249,7 +249,7 @@
                     </div>
                 </div>
 
-                <div class="transcipt-only-calls-data hide">
+                <div class="transcipt-only-calls-data hide" id="scriptContainer">
                     <div class="data-contnet">
                         <div class="other-user-bubble">
                             <div class="name-with-time">
@@ -303,7 +303,7 @@
                     </div>
                 </div>
 
-                <div class="library-search-data-container hide">
+                <div class="library-search-data-container hide" id="LibraryContainer">
                     <div class="search-block">
                         <div class="input-text-search">
                             <input type="text" placeholder="Ask AgentAssist" class="input-text">
