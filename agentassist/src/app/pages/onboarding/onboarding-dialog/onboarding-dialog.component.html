@@ -1,104 +1,139 @@
 <!-- <p>onboarding-dialog works!</p>
 <button (click)="closeDialog()">close</button> -->
 
+<!-- For smartassist onoarding screen not required in agent assist -->
+<ng-container *ngIf="false">
+    <div class="onboarding-data-">
+        <perfect-scrollbar class="scroll-popup">
 
-<div class="onboarding-data-">
-    <perfect-scrollbar class="scroll-popup">
-
-        <ng-container *ngIf="!appService.isMigrated">
-            <form #onboardingForm="ngForm" class="form-data">
-                <ngb-carousel [interval]="'0'" #carousel="ngbCarousel" activeId="slide0">
-                    <ng-template ngbSlide id="slide0">
-                        <div class="img-block">
-                            <img src="assets/icons/home/welcome-onboarding.svg">
-                        </div>   
-                        <div class="main-heading">Welcome aboard!</div>
-                        <div class="info-text">Work with the only AI-Native CCaaS Platform, delivering extraordinary experiences through your contact center. It's just a few more clicks away!</div>
-                    </ng-template>
-                    <ng-template ngbSlide id="slide1">
-                        <div class="img-block">
-                            <img src="assets/icons/home/welcome-onboarding-1.png">
-                        </div>   
-                        <div class="main-heading">Let's take a look around</div>
-                        <div class="info-text">Before we begin, let's start by naming your SmartAssist instance.</div>
-
-                        <div class="kr-sg-input-text mb-0">
-                            <input type="text" placeholder="Enter the name here.." class="input-text" name="instanceName" [(ngModel)]="model.name" required>
-                        </div>
-
-                    </ng-template>
-                    <!-- <ng-template ngbSlide id="slide2">
-                        <ng-container *ngIf="!showSetUpOption">
+            <ng-container *ngIf="!appService.isMigrated">
+                <form #onboardingForm="ngForm" class="form-data">
+                    <ngb-carousel [interval]="'0'" #carousel="ngbCarousel" activeId="slide0">
+                        <ng-template ngbSlide id="slide0">
                             <div class="img-block">
                                 <img src="assets/icons/home/welcome-onboarding.svg">
                             </div>   
-                            <div class="main-heading">Let's see if you want automation</div>
-                            <div class="info-text">Smartassist helps you automate conversation and flows with the help of bots. Just configure and train your bot using smartassist bot builder and you are done! <br/>For more details, check out the <a href="https://docs.kore.ai/smartassist/" target="_blank">documentation</a>. </div>
-                        </ng-container>
-                        <ng-container *ngIf="showSetUpOption">
-                            <div class="last-enable">
-                                <div class="main-heading">What are you most interested in?</div>
-                                <div class="info-text">Smartassist helps you automate conversation and flows with the help of bots. Just configure and train your bot using smartassist bot builder and you are done! <br/> For more details, check out the <a href="https://docs.kore.ai/smartassist/" target="_blank">documentation</a> </div>
-                                <div class="procedd-data-next-check">
-                                    <div class="check-data">
-                                        <div class="kr-sg-checkbox">
-                                            <input id="checkbox-1" class="checkbox-custom" type="checkbox" name="isAutomationRequired" [(ngModel)]="model.isAutomationRequired">
-                                            <label for="checkbox-1" class="checkbox-custom-label">I want to automate conversations</label>
-                                        </div> 
-                                        <div class="desc-text">Use templates or custom-built bots to interact with customers</div>
-                                    </div>
-                                    <div class="check-data">
-                                        <div class="kr-sg-checkbox">
-                                            <input id="checkbox-11" class="checkbox-custom" type="checkbox" name="isAgentDesktopRequired" [(ngModel)]="model.isAgentDesktopRequired">
-                                            <label for="checkbox-11" class="checkbox-custom-label">I want to setup agent chat</label>
-                                        </div> 
-                                        <div class="desc-text">Use the natively built SmartAssist agent desktop</div>
+                            <div class="main-heading">Welcome aboard!</div>
+                            <div class="info-text">Work with the only AI-Native CCaaS Platform, delivering extraordinary experiences through your contact center. It's just a few more clicks away!</div>
+                        </ng-template>
+                        <ng-template ngbSlide id="slide1">
+                            <div class="img-block">
+                                <img src="assets/icons/home/welcome-onboarding-1.png">
+                            </div>   
+                            <div class="main-heading">Let's take a look around</div>
+                            <div class="info-text">Before we begin, let's start by naming your SmartAssist instance.</div>
+
+                            <div class="kr-sg-input-text mb-0">
+                                <input type="text" placeholder="Enter the name here.." class="input-text" name="instanceName" [(ngModel)]="model.name" required>
+                            </div>
+
+                        </ng-template>
+                        <!-- <ng-template ngbSlide id="slide2">
+                            <ng-container *ngIf="!showSetUpOption">
+                                <div class="img-block">
+                                    <img src="assets/icons/home/welcome-onboarding.svg">
+                                </div>   
+                                <div class="main-heading">Let's see if you want automation</div>
+                                <div class="info-text">Smartassist helps you automate conversation and flows with the help of bots. Just configure and train your bot using smartassist bot builder and you are done! <br/>For more details, check out the <a href="https://docs.kore.ai/smartassist/" target="_blank">documentation</a>. </div>
+                            </ng-container>
+                            <ng-container *ngIf="showSetUpOption">
+                                <div class="last-enable">
+                                    <div class="main-heading">What are you most interested in?</div>
+                                    <div class="info-text">Smartassist helps you automate conversation and flows with the help of bots. Just configure and train your bot using smartassist bot builder and you are done! <br/> For more details, check out the <a href="https://docs.kore.ai/smartassist/" target="_blank">documentation</a> </div>
+                                    <div class="procedd-data-next-check">
+                                        <div class="check-data">
+                                            <div class="kr-sg-checkbox">
+                                                <input id="checkbox-1" class="checkbox-custom" type="checkbox" name="isAutomationRequired" [(ngModel)]="model.isAutomationRequired">
+                                                <label for="checkbox-1" class="checkbox-custom-label">I want to automate conversations</label>
+                                            </div> 
+                                            <div class="desc-text">Use templates or custom-built bots to interact with customers</div>
+                                        </div>
+                                        <div class="check-data">
+                                            <div class="kr-sg-checkbox">
+                                                <input id="checkbox-11" class="checkbox-custom" type="checkbox" name="isAgentDesktopRequired" [(ngModel)]="model.isAgentDesktopRequired">
+                                                <label for="checkbox-11" class="checkbox-custom-label">I want to setup agent chat</label>
+                                            </div> 
+                                            <div class="desc-text">Use the natively built SmartAssist agent desktop</div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </ng-container>
-                    </ng-template> -->
-                </ngb-carousel>
-                <!-- <div class="welcome-onboarding-new-screen">
-                    <div class="img-block">
-                        <img src="assets/icons/home/welcome-onboarding.svg">
-                    </div>   
-                    <div class="main-heading">Start by creating an instance</div>
-                    <div class="info-text">Let's name your instance. <br/>Make it something meaningful, like Acne Inc.</div>
-                    <div class="kr-sg-input-text">
-                        <input type="text" placeholder="Enter the name here.." class="input-text" name="instanceName" [(ngModel)]="model.name" required>
+                            </ng-container>
+                        </ng-template> -->
+                    </ngb-carousel>
+                    <!-- <div class="welcome-onboarding-new-screen">
+                        <div class="img-block">
+                            <img src="assets/icons/home/welcome-onboarding.svg">
+                        </div>   
+                        <div class="main-heading">Start by creating an instance</div>
+                        <div class="info-text">Let's name your instance. <br/>Make it something meaningful, like Acne Inc.</div>
+                        <div class="kr-sg-input-text">
+                            <input type="text" placeholder="Enter the name here.." class="input-text" name="instanceName" [(ngModel)]="model.name" required>
+                        </div>
+                    </div> -->
+                    <div class="bottom-sticky-data">
+                        <ul class="carousel-indicators">
+                            <li [ngClass]="{'active': carousel.activeId === 'slide0', disabled: saveInProgress}" (click)="carousel.select('slide0')"></li>
+                            <li [ngClass]="{'active': carousel.activeId === 'slide1', disabled: onboardingForm.invalid || saveInProgress}" (click)="carousel.select('slide1')"></li>
+                            <!-- <li [ngClass]="{'active': carousel.activeId === 'slide2', disabled: onboardingForm.invalid || saveInProgress}" (click)="carousel.select('slide2')"></li> -->
+                        </ul>
+                        <div class="btn-actions">
+                            <!-- <button class="kr-sg-button-primary btn_lg" (click)="createInstance()" [disabled]="saveInProgress || onboardingForm.invalid">Next</button> -->
+                            <button class="kr-sg-button-primary btn_lg" (click)="carousel.next();" *ngIf="carousel.activeId !== 'slide1'" [disabled]="onboardingForm.invalid && carousel.activeId === 'slide1'">Next</button>
+                            <ng-container *ngIf="carousel.activeId === 'slide1'">
+                                <div class="skip-now" (click)="onLater()" [class.disabled]="saveInProgress || onboardingForm.invalid">Skip for now >></div>
+                                <button class="kr-sg-button-primary btn_lg d-flex align-items-center mx-auto" (click)="onEnable()" [disabled]="saveInProgress || onboardingForm.invalid">Start <span class="loader-in-button ml-2" *ngIf="saveInProgress"><img src="assets/images/icons/fa-spinner.svg"></span></button>
+                                <!-- <button class="kr-sg-button-secondary btn_lg ml-2" (click)="onLater()" [disabled]="saveInProgress">Later</button> -->
+                            </ng-container>
+                        </div>
                     </div>
-                </div> -->
-                <div class="bottom-sticky-data">
-                    <ul class="carousel-indicators">
-                        <li [ngClass]="{'active': carousel.activeId === 'slide0', disabled: saveInProgress}" (click)="carousel.select('slide0')"></li>
-                        <li [ngClass]="{'active': carousel.activeId === 'slide1', disabled: onboardingForm.invalid || saveInProgress}" (click)="carousel.select('slide1')"></li>
-                        <!-- <li [ngClass]="{'active': carousel.activeId === 'slide2', disabled: onboardingForm.invalid || saveInProgress}" (click)="carousel.select('slide2')"></li> -->
-                    </ul>
-                    <div class="btn-actions">
-                        <!-- <button class="kr-sg-button-primary btn_lg" (click)="createInstance()" [disabled]="saveInProgress || onboardingForm.invalid">Next</button> -->
-                        <button class="kr-sg-button-primary btn_lg" (click)="carousel.next();" *ngIf="carousel.activeId !== 'slide1'" [disabled]="onboardingForm.invalid && carousel.activeId === 'slide1'">Next</button>
-                        <ng-container *ngIf="carousel.activeId === 'slide1'">
-                            <div class="skip-now" (click)="onLater()" [class.disabled]="saveInProgress || onboardingForm.invalid">Skip for now >></div>
-                            <button class="kr-sg-button-primary btn_lg d-flex align-items-center mx-auto" (click)="onEnable()" [disabled]="saveInProgress || onboardingForm.invalid">Start <span class="loader-in-button ml-2" *ngIf="saveInProgress"><img src="assets/images/icons/fa-spinner.svg"></span></button>
-                            <!-- <button class="kr-sg-button-secondary btn_lg ml-2" (click)="onLater()" [disabled]="saveInProgress">Later</button> -->
-                        </ng-container>
-                    </div>
-                </div>
-            </form>
-        </ng-container>
+                </form>
+            </ng-container>
 
-        <!-- Upgrade Success -->
-        <ng-container *ngIf="appService.isMigrated">
-            <div class="upgrade-version-sec">
-                <div class="skip-now" (click)="closeDialog(false, true)">Skip to the app >></div>
-                <div class="img-block">
-                    <img src="assets/images/onboarding/upgrade-mg.svg">
+            <!-- Upgrade Success -->
+            <ng-container *ngIf="appService.isMigrated">
+                <div class="upgrade-version-sec">
+                    <div class="skip-now" (click)="closeDialog(false, true)">Skip to the app >></div>
+                    <div class="img-block">
+                        <img src="assets/images/onboarding/upgrade-mg.svg">
+                    </div>
+                    <div class="title-main">You are using Version 2.0</div>
+                    <div class="desc-text">Check out what are the cool new features and specs that we have in Version 2.0</div>
+                    <button class="kr-sg-button-primary btn_lg mt-5" (click)="closeDialog(true, true)">Start product tour</button>
                 </div>
-                <div class="title-main">You are using Version 2.0</div>
-                <div class="desc-text">Check out what are the cool new features and specs that we have in Version 2.0</div>
-                <button class="kr-sg-button-primary btn_lg mt-5" (click)="closeDialog(true, true)">Start product tour</button>
+            </ng-container>
+        </perfect-scrollbar>
+    </div>
+</ng-container>
+
+
+<!-- For Agentassist new screen -->
+
+<div class="onboarding-data-agent-assist">
+    <perfect-scrollbar class="scroll-popup">
+        <div class="inner-scroll-content">
+            <div class="main-title">Hi User, Welcome to AgentAssist</div>
+            <div class="sub-heading">You can choose to create a new bot, convert an existing bot on the Kore.ai Platform to a SmartAssist automation bot or import a bot.</div>
+            <div class="cards-agent-assist-info">
+                <div class="card-tile">
+                    <div class="inner-data">
+                        <div class="img-block">
+                            <img src="assets/images/onboarding/ast-onboarding-1.svg">
+                        </div>
+                        <div class="title">Create Bot From Scratch</div>
+                        <div class="text-desc">Create your SmartAssist bot from scratch here</div>
+                    </div>
+                </div>
+                <div class="card-tile">
+                    <div class="inner-data">
+                        <div class="img-block">
+                            <img src="assets/images/onboarding/ast-onboarding-2.svg">
+                        </div>
+                        <div class="title">Select Existing Bot</div>
+                        <div class="text-desc">Already have an account on the Bot Platform? Convert it to a SmartAssist bot here</div>
+                    </div>
+                </div>
             </div>
-        </ng-container>
+        </div>
     </perfect-scrollbar>
 </div>
+

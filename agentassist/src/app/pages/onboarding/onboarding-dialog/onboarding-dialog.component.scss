@@ -1,3 +1,4 @@
+// Smartassist Screen
 
 .onboarding-data-{
     height: 100%;
@@ -201,5 +202,86 @@
     }
     .carousel-control-next{
         display: none;
+    }
+}
+
+
+
+// Aggent Assist Screen
+
+.onboarding-data-agent-assist{
+    height: 100%;
+    .scroll-popup{
+
+    }
+    .inner-scroll-content{
+        padding: 60px 0;
+        width: 520px;
+        margin: 0 auto;
+        .main-title{
+            font-weight: 400;
+            font-size: 20px;
+            line-height: 18px;
+            color: #202124;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .sub-heading{
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 20px;
+            color: #677180;
+            text-align: center;
+        }
+        .cards-agent-assist-info{
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+            .card-tile{
+                width: 242px;
+                padding: 10px;
+                .inner-data{
+                    background: #FFFFFF;
+                    border: 1px solid #D7D6DF;
+                    box-sizing: border-box;
+                    border-radius: 8px;
+                    height: 100%;
+                    padding: 31px 20px;
+                    text-align: center;
+                    word-break: break-word;
+                    transition: 0.2s all ease;
+                    cursor: pointer;
+                    &.selected-item{
+                        box-shadow: 0px 4px 4px rgba(168, 200, 221, 0.25);
+                    }
+                    &:hover{
+                        box-shadow: 0px 4px 4px rgba(168, 200, 221, 0.25);
+                    }
+                    .img-block{
+                        margin-bottom: 15px;
+                        img{
+
+                        }
+                    }
+                    .title{
+                        font-weight: 400;
+                        font-size: 14px;
+                        line-height: 17px;
+                        letter-spacing: 0.02em;
+                        color: #202124;
+                        margin-bottom: 10px;
+                    }
+                    .text-desc{
+                        font-weight: 400;
+                        font-size: 12px;
+                        line-height: 16px;
+                        text-align: center;
+                        letter-spacing: 0.01em;
+                        color: #9AA0A6;
+                        word-break: break-word;
+                    }
+                }
+            }
+        }
     }
 }
