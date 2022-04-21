@@ -426,11 +426,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
     }
 
     function addSearchBar() {
-        let searchblock = document.getElementById('search-block');
-        let librarySearchHtml = `
-                <input type="text" placeholder="Ask AgentAssist" class="input-text" id="input-${_agentAssistDataObj.conversationId}" data-user-id="${_agentAssistDataObj.userId}" data-bot-id="${_agentAssistDataObj.botId}"  data-conv-id="${_agentAssistDataObj.conversationId}" data-agent-assist-input="true">
-                <i class="ast-search"></i>`
-        searchblock.innerHTML = searchblock.innerHTML + librarySearchHtml;
+        let searchblock = document.getElementById('librarySearch');
+        searchblock.setAttribute('data-conv-id', _agentAssistDataObj.conversationId);
+        searchblock.setAttribute('data-bot-id', _agentAssistDataObj.botId);
+        searchblock.setAttribute('data-user-id',_agentAssistDataObj.userId);
+        searchblock.setAttribute('data-agent-assist-input', true)
+        
     }
 
     function btnInit() {
@@ -562,6 +563,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         })
 
         document.addEventListener("keydown", (evt) => {
+            console.log(evt);
             var target = evt.target;
             var agentAssistInput = target.dataset.agentAssistInput;
             if (agentAssistInput) {
@@ -698,7 +700,7 @@ function AgentAssist_run_click(e) {
 }
 
 function AgentAssist_input_keydown(e) {
-    let input_taker = document.getElementById(`input-${e.target.dataset.convId}`).value;
+    let input_taker = document.getElementById('librarySearch').value;
     let searchTextDisplay = document.getElementById('search-text-display');
     let searchTextHtml = `<div class="searched-intent" id="librarySearchText">Search results for '${input_taker}'</div>`
     if (e.keyCode == 8 && input_taker.length == 0) {
@@ -708,7 +710,7 @@ function AgentAssist_input_keydown(e) {
         searchTextDisplay.innerHTML = searchTextDisplay.innerHTML + searchTextHtml
         var convId = e.target.dataset.convId;
         var botId = e.target.dataset.botId;
-        var agentId = e.target.dataset.agentId;
+        var agentId = e.target.dataset.userId;
         var intentName = input_taker;
         console.log('=========================', agentId)
         AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: convId, agentId: agentId, botId: botId, value: intentName, intentName: intentName });
