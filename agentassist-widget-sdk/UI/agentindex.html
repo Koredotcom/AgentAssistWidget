@@ -87,15 +87,15 @@
                     <div class="top-tabs-actions">
                         <div class="tab-icon active-tab" id="userAutoIcon">
                             <i class="ast-bot" id="userBotIcon"></i>
-                            <div class="custom-tootltip-tabs">User Automation</div>
+                            <div class="custom-tootltip-tabs">User Auto</div>
                         </div>
                         <div class="tab-icon" id="searchAutoIcon" >
                             <i class="ast-search" id="searchIcon"></i>
-                            <div class="custom-tootltip-tabs">Search Automation</div>
+                            <div class="custom-tootltip-tabs">Search</div>
                         </div>
                         <div class="tab-icon" id="agentAutoIcon">
                             <i class="ast-automation" id="agentBotIcon"></i>
-                            <div class="custom-tootltip-tabs">Agent Automation</div>
+                            <div class="custom-tootltip-tabs">Agent Auto</div>
                         </div>
                         <div class="tab-icon" id="transcriptIcon">
                             <i class="ast-transcipt" id="scriptIcon"></i>
@@ -282,9 +282,7 @@
 
                 <div class="library-search-data-container hide" id="LibraryContainer">
                     <div class="search-block">
-                        <div class="input-text-search">
-                            <input type="text" placeholder="Ask AgentAssist" class="input-text">
-                            <i class="ast-search"></i>
+                        <div class="input-text-search" id="search-block">
                         </div>
                     </div>
                     <div class="dynamic-searchlibrary-data">
@@ -330,7 +328,7 @@
                             </div>
                         </div>
                         <div class="intent-based-search">
-                            <div class="searched-intent">Search results for “ I want to edit my order”</div>
+                            <div id="search-text-display"></div>
                             <div class="dialog-task-run-sec p-0">
                                 <div class="task-type">
                                     <div class="img-block-info">

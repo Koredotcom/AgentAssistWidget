@@ -10,7 +10,6 @@ var runBtArrayIds = ['123'];
 var dropdownHeaderUuids;
 var responseId;
 var count = 0;
-var dataObj = {};
 function koreGenerateUUID() {
     console.info("generating UUID");
     var d = new Date().getTime();
@@ -65,7 +64,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             console.log("AgentAssist >>> socket connected")
         });
         _agentAsisstSocket.on('agent_assist_response', (data) => {
-            if (count === 0 ){
+            if (count === 0) {
                 data = {
                     "botId": _botId,
                     "orgId": "o-1158ce5e-f159-50c6-a198-530f59e2e1d4",
@@ -111,12 +110,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         _agentAsisstSocket.on('user_message', (data) => {
             processUserMessage(data, data.conversationId, _botId, _agentAssistDataObj.userId);
         });
-        _agentAsisstSocket.on('agent_assist_user_message', (data)=>{
-            if(isAutomationOnGoing){
+        _agentAsisstSocket.on('agent_assist_user_message', (data) => {
+            if (isAutomationOnGoing) {
                 processUserMessages(data, data.conversationId, data.botId);
             }
-           
+
         });
+
     }
     console.log("AgentAssist >>> creating container for user", _agentAssistDataObj.userId)
     createAgentAssistContainer(_agentAssistDataObj.containerId, _agentAssistDataObj.conversationId, _agentAssistDataObj.botId, _agentAssistDataObj.userId)
@@ -129,7 +129,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
     _agentAsisstSocket.emit('welcome_message_request', welcome_message_request);
 
 
-    function processUserMessages(data, conversationId, botId){
+    function processUserMessages(data, conversationId, botId) {
         var _msgsResponse = {
             "type": "bot_response",
             "from": "bot",
@@ -159,8 +159,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         };
         _msgsResponse.message.push(body);
         chatInitialize.renderMessage(_msgsResponse);
-            let addUserQueryTodropdownData = document.getElementById(`dropDownData-${dropdownHeaderUuids}`);
-            let userQueryHtml = `
+        let addUserQueryTodropdownData = document.getElementById(`dropDownData-${dropdownHeaderUuids}`);
+        let userQueryHtml = `
             <div class="steps-run-data">
                                         <div class="icon_block_img">
                                             <img src="./images/profile.svg">
@@ -173,8 +173,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                                             <!---<div class="order-number-info">Order number : 12345</div>-->
                                         </div>
                                     </div>`;
-            addUserQueryTodropdownData.innerHTML = addUserQueryTodropdownData.innerHTML+userQueryHtml;                  
-            
+        addUserQueryTodropdownData.innerHTML = addUserQueryTodropdownData.innerHTML + userQueryHtml;
+
     }
 
     function processAgentAssistResponse(data, convId, botId, userId) {
@@ -367,14 +367,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         chatInitialize.renderMessage(_msgsResponse, dropdownHeaderUuids);
 
 
-       // setTimeout(() => {
-            removeElementFromDom();
+        // setTimeout(() => {
+        removeElementFromDom();
         // }, 1000);
-        if(data.endOfFaq || data.endOfTask){
+        if (data.endOfFaq || data.endOfTask) {
             isAutomationOnGoing = false;
             addFeedbackHtmlToDom(data, botId, userId);
         }
-        
+
     }
 
     function removeElementFromDom() {
@@ -425,9 +425,18 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
 
     }
 
+    function addSearchBar() {
+        let searchblock = document.getElementById('search-block');
+        let librarySearchHtml = `
+                <input type="text" placeholder="Ask AgentAssist" class="input-text" id="input-${_agentAssistDataObj.conversationId}" data-user-id="${_agentAssistDataObj.userId}" data-bot-id="${_agentAssistDataObj.botId}"  data-conv-id="${_agentAssistDataObj.conversationId}" data-agent-assist-input="true">
+                <i class="ast-search"></i>`
+        searchblock.innerHTML = searchblock.innerHTML + librarySearchHtml;
+    }
+
     function btnInit() {
         var hideDropDownToggel = false;
-        let dialogTaskContainer = document.getElementById(`dialogTaskContainer`);
+        let dialogTaskContainer = document.getElementById(`userDataWithTask`);
+        let dynamicBlock = document.getElementById(`dynamicBlock`);
         let libraryContainer = document.getElementById('LibraryContainer');
         let agentAutoContainer = document.getElementById('agentAutoContainer');
         let scriptContainer = document.getElementById('scriptContainer');
@@ -435,14 +444,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         document.addEventListener("click", (evt) => {
             var target = evt.target;
             var runButton = target.dataset.run;
-            console.log(target.id);
             if ((target.id === `searchAutoIcon`) || (target.id === `searchIcon`)) {
                 let searchIcon = document.getElementById(`searchAutoIcon`);
+                addSearchBar();
                 document.getElementById(`userAutoIcon`).classList.remove(`active-tab`);
                 document.getElementById(`agentAutoIcon`).classList.remove(`active-tab`);
                 document.getElementById(`transcriptIcon`).classList.remove(`active-tab`);
                 searchIcon.classList.add('active-tab');
                 dialogTaskContainer.classList.add('hide');
+                dynamicBlock.classList.add('hide');
                 scriptContainer.classList.add('hide');
                 libraryContainer.classList.remove('hide');
             }
@@ -453,16 +463,18 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 document.getElementById(`transcriptIcon`).classList.remove(`active-tab`);
                 document.getElementById(`searchAutoIcon`).classList.remove('active-tab');
                 dialogTaskContainer.classList.add('hide');
+                dynamicBlock.classList.add('hide');
                 libraryContainer.classList.add('hide');
-                agentAutoContainer.classList.remove('hide');
+                // agentAutoContainer.classList.remove('hide');
             }
-            else if(target.id === `transcriptIcon` || target.id === `scriptIcon`) {
+            else if (target.id === `transcriptIcon` || target.id === `scriptIcon`) {
                 let transcriptIcon = document.getElementById(`transcriptIcon`);
                 document.getElementById(`userAutoIcon`).classList.remove(`active-tab`);
                 document.getElementById(`agentAutoIcon`).classList.remove(`active-tab`);
                 transcriptIcon.classList.add(`active-tab`);
                 document.getElementById(`searchAutoIcon`).classList.remove('active-tab');
                 dialogTaskContainer.classList.add('hide');
+                dynamicBlock.classList.add('hide');
                 libraryContainer.classList.add('hide');
                 scriptContainer.classList.remove('hide');
             }
@@ -473,6 +485,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 document.getElementById(`searchAutoIcon`).classList.remove('active-tab');
                 dialogTaskContainer.classList.remove('hide');
                 libraryContainer.classList.add('hide');
+                dynamicBlock.classList.remove('hide');
                 scriptContainer.classList.add('hide');
             }
             console.log(`runButton, ${runButton}`);
@@ -533,12 +546,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 let targetIDs = (target.id).split('-');
                 hideDropDownToggel = !hideDropDownToggel;
                 let dropDownData = document.getElementById(`dropDownData-${targetIDs[targetIDs.length - 1]}`);
-               // let endOfDialoge = document.getElementById('endTaks');
+                // let endOfDialoge = document.getElementById('endTaks');
                 if (hideDropDownToggel) {
-                   // endOfDialoge.classList.add('hide')
+                    // endOfDialoge.classList.add('hide')
                     dropDownData.classList.add('hide');
                 } else {
-                  //  endOfDialoge.classList.remove('hide');
+                    //  endOfDialoge.classList.remove('hide');
                     dropDownData.classList.remove('hide');
                 }
 
@@ -577,7 +590,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
        </div>`;
         dropDownData.innerHTML = feedbackHtml;
         let endOfDialoge = document.getElementById(`endTaks-${dropdownHeaderUuids}`);
-        let endofDialogeHtml  = `
+        let endofDialogeHtml = `
             <div class="text-dialog-task-end">Dialog Task ended</div>
         `;
         endOfDialoge.innerHTML += endofDialogeHtml;
@@ -682,6 +695,24 @@ function AgentAssist_run_click(e) {
     var agentId = e.target.dataset.agentId;
     var intentName = e.target.dataset.intentName;
     AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: convId, agentId: agentId, botId: botId, value: intentName, intentName: intentName });
+}
+
+function AgentAssist_input_keydown(e) {
+    let input_taker = document.getElementById(`input-${e.target.dataset.convId}`).value;
+    let searchTextDisplay = document.getElementById('search-text-display');
+    let searchTextHtml = `<div class="searched-intent" id="librarySearchText">Search results for '${input_taker}'</div>`
+    if (e.keyCode == 8 && input_taker.length == 0) {
+        searchTextDisplay.innerHtml = document.getElementById('librarySearchText').remove();
+    }
+    if (e.keyCode == 13) {
+        searchTextDisplay.innerHTML = searchTextDisplay.innerHTML + searchTextHtml
+        var convId = e.target.dataset.convId;
+        var botId = e.target.dataset.botId;
+        var agentId = e.target.dataset.agentId;
+        var intentName = input_taker;
+        console.log('=========================', agentId)
+        AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: convId, agentId: agentId, botId: botId, value: intentName, intentName: intentName });
+    }
 }
 
 
