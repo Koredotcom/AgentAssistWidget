@@ -93,6 +93,8 @@ import { LanguagesSpeechComponent } from './pages/languages-speech/languages-spe
 import { LanguageSettingsComponent } from './pages/agent-settings/language-settings/language-settings.component';
 import { ExternalWidgetComponent } from './pages/agent-settings/external-widget/external-widget.component';
 import { AddWidgetComponent } from './pages/agent-settings/external-widget/add-widget/add-widget.component';
+import { OnboardingComponent } from './pages/onboarding/onboarding.component';
+import { OnboardingDialogComponent } from './pages/onboarding/onboarding-dialog/onboarding-dialog.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -161,6 +163,8 @@ import { AddWidgetComponent } from './pages/agent-settings/external-widget/add-w
     LanguageSettingsComponent,
     ExternalWidgetComponent,
     AddWidgetComponent,
+    OnboardingComponent,
+    OnboardingDialogComponent,
   ],
   imports: [
     BrowserModule,

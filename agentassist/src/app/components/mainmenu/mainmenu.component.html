@@ -63,12 +63,12 @@
 			<div class="link-router" [routerLink]="['channels']" routerLinkActive="active" *hasPermission="['admin']">
 				<img src="assets/icons/leftmenu/new/network.svg"><span class="link-name">{{'NAV.CHANNELS' | translate}}</span>
 			</div>
-			<div class="link-router" [routerLink]="['agents']" routerLinkActive="active" *hasPermission="['AGENT_VIEW', 'AGENT_GROUP_VIEW']">
+			<!-- <div class="link-router" [routerLink]="['agents']" routerLinkActive="active" *hasPermission="['AGENT_VIEW', 'AGENT_GROUP_VIEW']">
 				<img src="assets/icons/leftmenu/agent.svg"><span class="link-name">{{'NAV.AGENTS' | translate}}</span>
-			</div>
-			<div *hasPermission="['ROLE_MANAGEMENT_VIEW']" class="link-router" [routerLink]="['roleManagement']" routerLinkActive="active">
+			</div> -->
+			<!-- <div *hasPermission="['ROLE_MANAGEMENT_VIEW']" class="link-router" [routerLink]="['roleManagement']" routerLinkActive="active">
 				<img src="assets/icons/leftmenu/new/role-managment.svg"><span class="link-name">Role Management</span>
-			</div>
+			</div> -->
 			<!-- <div class="link-router" [routerLink]="['surveys']" routerLinkActive="active" *hasPermission="['admin']">
 				<img src="assets/icons/leftmenu/new/dispositions.svg"><span class="link-name">{{'NAV.SURVEYS' | translate}}</span>
 			</div>
@@ -76,7 +76,7 @@
 				<img src="assets/icons/leftmenu/new/dispositions.svg"><span class="link-name">Deployment</span>
 			</div> -->
 			<div class="link-router" [routerLink]="['languages']" routerLinkActive="active" *hasPermission="['LANGUAGE_SETTINGS_VIEW', 'WAITING_EXPERIENCE_FULL']">
-				<img src="assets/icons/leftmenu/languages-speech.svg"><span class="link-name">ASR Engine</span>
+				<img src="assets/icons/leftmenu/languages-speech.svg"><span class="link-name">Speech Recognition</span>
 			</div>
 			<!-- <div class="link-router" [routerLink]="['agent-assist']" routerLinkActive="active" *hasPermission="['STANDARD_RESPONSE_VIEW']">
 				<img src="assets/icons/leftmenu/agent-assist.svg"><span class="link-name">{{'ONBOARDING.STD_RESPONSE' | translate}}</span>

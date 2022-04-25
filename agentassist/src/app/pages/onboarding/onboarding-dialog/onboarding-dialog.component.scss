@@ -1,0 +1,287 @@
+// Smartassist Screen
+
+.onboarding-data-{
+    height: 100%;
+    .form-data{
+        padding: 40px 30px;
+        position: relative;
+    }
+    .skip-now{
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 20px;
+        color: #64717C;
+        font-style: italic;
+        cursor: pointer;
+        &.disabled{
+            pointer-events: none;
+            opacity: 0.5;
+        }
+    }
+    .welcome-onboarding-new-screen{
+        .img-block{
+            text-align: center;
+            margin-bottom: 35px;
+        }
+        .main-heading{
+            font-weight: normal;
+            font-size: 20px;
+            line-height: 18px;
+            color: #202124;
+            margin: auto auto 15px auto;
+            max-width: 450px;
+            text-align: center;
+        }
+        .info-text{
+            font-weight: normal;
+            font-size: 14px;
+            line-height: 20px;
+            color: #677180;
+            max-width: 450px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .kr-sg-input-text{
+            max-width: 500px;
+            margin: 20px auto 35px auto;
+        }
+    }
+    .bottom-sticky-data{
+        .carousel-indicators{
+            width: 100px;
+            margin: 0 auto;
+            position: relative;
+            li{
+                border-radius: 100%;
+                border: 0;
+                margin: 25px 5px;
+                opacity: 1;
+                width: 12px;
+                height: 12px;
+                background-color: #E5E8EC;
+                &.active{
+                    background: #009DAB;
+                }
+
+                &.disabled {
+                    opacity: 0.5;
+                    pointer-events: none;
+                }
+            }
+        }
+        .btn-actions{
+            text-align: center;
+        }
+    }
+    // perfect-scrollbar{
+    //     height: calc(100vh - 202px);
+    //     max-height: 468px;
+    // }
+
+    .upgrade-version-sec{
+        padding: 20px 20px;
+        text-align: center;
+        width: 432px;
+        margin: 30px auto;
+        .img-block{
+            margin-bottom: 22px;
+        }
+        .title-main{
+            font-weight: 600;
+            font-size: 20px;
+            line-height: 18px;
+            color: #202124;
+            margin-bottom: 12px;
+        }
+        .desc-text{
+            font-weight: normal;
+            font-size: 14px;
+            line-height: 20px;
+            color: #677180;
+        }
+        
+    }
+}
+
+::ng-deep.carousel{
+    margin: 0;
+    width: 100%;
+    overflow: initial;
+    height: 100%;
+    padding: 0px;
+    border: 0;
+    outline: 0;
+    .carousel-inner{
+        height: 100%;
+        .carousel-item{
+            text-align: center;
+            .img-block{
+                margin-bottom: 30px;
+                min-height: 220px;
+                // background: #EEEEEE;
+                img{
+
+                }
+            }
+            .main-heading{
+                font-weight: normal;
+                font-size: 20px;
+                line-height: 18px;
+                color: #202124;
+                margin: auto auto 15px auto;
+                max-width: 495px;
+            }
+            .info-text{
+                font-weight: normal;
+                font-size: 14px;
+                line-height: 20px;
+                color: #677180;
+                max-width: 495px;
+                margin: 0 auto;
+            }
+            .kr-sg-input-text{
+                max-width: 390px;
+                margin: 20px auto;
+            }
+            .last-enable{
+                padding: 70px 0 20px 0;
+                .procedd-data-next-check{
+                    text-align: left;
+                    display: flex;
+                    padding: 0 44px;
+                    justify-content: space-between;
+                    margin-top: 60px;
+                    .check-data{
+                        background: #FFFFFF;
+                        border: 1px solid #D7D6DF;
+                        box-sizing: border-box;
+                        border-radius: 8px;
+                        width: 280px;
+                        height: auto;
+                        padding: 20px 14px;
+                        .kr-sg-checkbox {
+                            margin: 0;
+                            padding: 0;
+                            .checkbox-custom {
+                                + .checkbox-custom-label{
+                                    font-style: normal;
+                                    font-weight: 500;
+                                    font-size: 14px;
+                                    line-height: 17px;
+                                    padding-left: 25px;
+                                    &::before{
+                                        position: absolute;
+                                        top: 1px;
+                                        margin: 0;
+                                        left: 0;
+                                    }
+                                }
+                            }
+                        }
+                        .desc-text{
+                            font-weight: normal;
+                            font-size: 12px;
+                            line-height: 140%;
+                            color: #9AA0A6;
+                            margin-top: 12px;
+                            padding-left: 9px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .carousel-indicators{
+        display: none;
+    }
+    .carousel-control-prev{
+        display: none;
+    }
+    .carousel-control-next{
+        display: none;
+    }
+}
+
+
+
+// Aggent Assist Screen
+
+.onboarding-data-agent-assist{
+    height: 100%;
+    .scroll-popup{
+
+    }
+    .inner-scroll-content{
+        padding: 60px 0;
+        width: 520px;
+        margin: 0 auto;
+        .main-title{
+            font-weight: 400;
+            font-size: 20px;
+            line-height: 18px;
+            color: #202124;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .sub-heading{
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 20px;
+            color: #677180;
+            text-align: center;
+        }
+        .cards-agent-assist-info{
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+            .card-tile{
+                width: 242px;
+                padding: 10px;
+                .inner-data{
+                    background: #FFFFFF;
+                    border: 1px solid #D7D6DF;
+                    box-sizing: border-box;
+                    border-radius: 8px;
+                    height: 100%;
+                    padding: 31px 20px;
+                    text-align: center;
+                    word-break: break-word;
+                    transition: 0.2s all ease;
+                    cursor: pointer;
+                    &.selected-item{
+                        box-shadow: 0px 4px 4px rgba(168, 200, 221, 0.25);
+                    }
+                    &:hover{
+                        box-shadow: 0px 4px 4px rgba(168, 200, 221, 0.25);
+                    }
+                    .img-block{
+                        margin-bottom: 15px;
+                        img{
+
+                        }
+                    }
+                    .title{
+                        font-weight: 400;
+                        font-size: 14px;
+                        line-height: 17px;
+                        letter-spacing: 0.02em;
+                        color: #202124;
+                        margin-bottom: 10px;
+                    }
+                    .text-desc{
+                        font-weight: 400;
+                        font-size: 12px;
+                        line-height: 16px;
+                        text-align: center;
+                        letter-spacing: 0.01em;
+                        color: #9AA0A6;
+                        word-break: break-word;
+                    }
+                }
+            }
+        }
+    }
+}
