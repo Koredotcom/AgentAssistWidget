@@ -471,7 +471,8 @@ html, body{
 .agent-assist-chat-container .body-data-container .dialog-task-data .agent-utt-info {
     display: flex;
     align-items: center;
-    margin-top: 20px;
+    /* margin-top: 20px; */
+    margin-bottom: 16px;
     padding: 0 15px;
     position: relative;
     z-index: 1;
