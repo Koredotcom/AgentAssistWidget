@@ -454,6 +454,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 searchIcon.classList.add('active-tab');
                 dialogTaskContainer.classList.add('hide');
                 dynamicBlock.classList.add('hide');
+                agentAutoContainer.classList.add('hide');
                 scriptContainer.classList.add('hide');
                 libraryContainer.classList.remove('hide');
             }
@@ -466,7 +467,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 dialogTaskContainer.classList.add('hide');
                 dynamicBlock.classList.add('hide');
                 libraryContainer.classList.add('hide');
-                // agentAutoContainer.classList.remove('hide');
+                agentAutoContainer.classList.remove('hide');
             }
             else if (target.id === `transcriptIcon` || target.id === `scriptIcon`) {
                 let transcriptIcon = document.getElementById(`transcriptIcon`);
@@ -476,6 +477,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 document.getElementById(`searchAutoIcon`).classList.remove('active-tab');
                 dialogTaskContainer.classList.add('hide');
                 dynamicBlock.classList.add('hide');
+                agentAutoContainer.classList.add('hide');
                 libraryContainer.classList.add('hide');
                 scriptContainer.classList.remove('hide');
             }
@@ -488,6 +490,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 libraryContainer.classList.add('hide');
                 dynamicBlock.classList.remove('hide');
                 scriptContainer.classList.add('hide');
+                agentAutoContainer.classList.add('hide');
             }
             console.log(`runButton, ${runButton}`);
             if (target.className === 'copy-btn') {
