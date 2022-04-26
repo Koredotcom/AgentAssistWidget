@@ -852,14 +852,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
     }
 
     function btnInit() {
-        let runFromLibrary = false;
         var hideDropDownToggel = false;
-        let showHistory = document.getElementById(`showHistory`);
-        let dynamicBlock = document.getElementById(`dynamicBlock`);
-        let libraryContainer = document.getElementById('LibraryContainer');
-        let agentAutoContainer = document.getElementById('agentAutoContainer');
-        let scriptContainer = document.getElementById('scriptContainer');
-        let custSentimentAnalysis =document.getElementById(`cust-feeling`);
         dropdownHeaderUuids = '123'
         document.addEventListener("click", (evt) => {
             var target = evt.target;
@@ -867,47 +860,18 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             var libraryRunBtn = target.dataset.libraryRun
             if ((target.id === `searchAutoIcon`) || (target.id === `searchIcon`)) {
                 runFromLibrary = true;
-                let searchIcon = document.getElementById(`searchAutoIcon`);
-                addAttriburesToSearch();
-                document.getElementById(`userAutoIcon`).classList.remove(`active-tab`);
-                document.getElementById(`agentAutoIcon`).classList.remove(`active-tab`);
-                document.getElementById(`transcriptIcon`).classList.remove(`active-tab`);
-                searchIcon.classList.add('active-tab');
-                
+                libraryTabActive();
             }
             else if (target.id === `agentAutoIcon` || target.id === `agentBotIcon`) {
-                let agentIcon = document.getElementById(`agentAutoIcon`);
-                document.getElementById(`userAutoIcon`).classList.remove(`active-tab`);
-                agentIcon.classList.add(`active-tab`);
-                document.getElementById(`transcriptIcon`).classList.remove(`active-tab`);
-                document.getElementById(`searchAutoIcon`).classList.remove('active-tab');
-                dynamicBlock.classList.add('hide');
-                libraryContainer.classList.add('hide');
-                agentAutoContainer.classList.remove('hide');
-                custSentimentAnalysis.classList.add('hide');
+                agentTabActive();
             }
             else if (target.id === `transcriptIcon` || target.id === `scriptIcon`) {
-                let transcriptIcon = document.getElementById(`transcriptIcon`);
-                document.getElementById(`userAutoIcon`).classList.remove(`active-tab`);
-                document.getElementById(`agentAutoIcon`).classList.remove(`active-tab`);
-                transcriptIcon.classList.add(`active-tab`);
-                document.getElementById(`searchAutoIcon`).classList.remove('active-tab');
-                dynamicBlock.classList.add('hide');
-                agentAutoContainer.classList.add('hide');
-                libraryContainer.classList.add('hide');
-                scriptContainer.classList.remove('hide');
-                custSentimentAnalysis.classList.add('hide');
+                transcriptionTabActive();
+                
             }
             if (target.id === `userAutoIcon` || target.id === `userBotIcon`) {
-                document.getElementById(`userAutoIcon`).classList.add(`active-tab`);
-                document.getElementById(`agentAutoIcon`).classList.remove(`active-tab`);
-                document.getElementById(`transcriptIcon`).classList.remove(`active-tab`);
-                document.getElementById(`searchAutoIcon`).classList.remove('active-tab');
-                libraryContainer.classList.add('hide');
-                dynamicBlock.classList.remove('hide');
-                scriptContainer.classList.add('hide');
-                agentAutoContainer.classList.add('hide');
-                custSentimentAnalysis.classList.remove('hide');
+                userTabActive();
+                
             }
             var seeMoreButton = target.dataset.seeMore;
             var seeLessButton = target.dataset.seeLess;
@@ -1020,9 +984,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             if (runButton || libraryRunBtn) {
                 if(libraryRunBtn) {
                     // hide library show User automation logic
-                    libraryContainer.classList.add('hide');
-                    document.getElementById(`dynamicBlock`).classList.remove('hide');
-                    custSentimentAnalysis.classList.remove('hide');
+                    // libraryContainer.classList.add('hide');
+                    userTabActive();
+                    // document.getElementById(`dynamicBlock`).classList.remove('hide');
+                    // custSentimentAnalysis.classList.remove('hide');
 
                 }
                 console.log(555);
@@ -1110,26 +1075,71 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         window._agentAssisteventListenerAdded = true;
     }
 
-    function addAttriburesToSearch() {
-        let dynamicBlock = document.getElementById(`dynamicBlock`);
-        let libraryContainer = document.getElementById('LibraryContainer');
-        let agentAutoContainer = document.getElementById('agentAutoContainer');
-        let scriptContainer = document.getElementById('scriptContainer');
+    function userTabActive() {
+        console.log('User Automation Tab Active State');
+        document.getElementById(`agentAutoIcon`).classList.remove(`active-tab`);
+        document.getElementById(`transcriptIcon`).classList.remove(`active-tab`);
+        document.getElementById(`searchAutoIcon`).classList.remove('active-tab');
+        document.getElementById('userAutoIcon').classList.add('active-tab');
+        document.getElementById('LibraryContainer').classList.add('hide');
+        document.getElementById('scriptContainer').classList.add('hide');
+        document.getElementById('agentAutoContainer').classList.add('hide');
+        document.getElementById(`showHistory`).classList.remove('hide');
+        document.getElementById(`dynamicBlock`).classList.remove('hide');
+        document.getElementById(`cust-feeling`).classList.remove('hide');
+    }
+
+    function libraryTabActive() {
+        console.log('Library Tab Active State');
         let searchblock = document.getElementById('librarySearch');
-        let showHistory = document.getElementById(`showHistory`);
-        let custSentimentAnalysis =document.getElementById(`cust-feeling`);
-        let searchedDialogs_faqs = document.getElementById('dialogs-faqs');
-        searchedDialogs_faqs.classList.add('hide');
-        showHistory.classList.add('hide');
-        dynamicBlock.classList.add('hide');
-        agentAutoContainer.classList.add('hide');
-        scriptContainer.classList.add('hide');
-        custSentimentAnalysis.classList.add('hide');
-        libraryContainer.classList.remove('hide');
         searchblock.setAttribute('data-conv-id', _agentAssistDataObj.conversationId);
         searchblock.setAttribute('data-bot-id', _agentAssistDataObj.botId);
         searchblock.setAttribute('data-user-id',_agentAssistDataObj.userId);
         searchblock.setAttribute('data-agent-assist-input', true)
+        document.getElementById(`userAutoIcon`).classList.remove(`active-tab`);
+        document.getElementById(`agentAutoIcon`).classList.remove(`active-tab`);
+        document.getElementById(`transcriptIcon`).classList.remove(`active-tab`);
+        document.getElementById(`searchAutoIcon`).classList.add('active-tab');
+        document.getElementById('dialogs-faqs').classList.add('hide');
+        document.getElementById(`showHistory`).classList.add('hide');
+        document.getElementById(`dynamicBlock`).classList.add('hide');
+        document.getElementById('agentAutoContainer').classList.add('hide');
+        document.getElementById('scriptContainer').classList.add('hide');
+        document.getElementById(`cust-feeling`).classList.add('hide');
+        document.getElementById('LibraryContainer').classList.remove('hide');
+        
+        
+    }
+
+    function agentTabActive() {
+        var showHistory = document.getElementById(`showHistory`);
+        console.log('Agent Automation Tab Active State')
+        document.getElementById(`userAutoIcon`).classList.remove(`active-tab`);
+        document.getElementById(`transcriptIcon`).classList.remove(`active-tab`);
+        document.getElementById(`searchAutoIcon`).classList.remove('active-tab');
+        document.getElementById(`agentAutoIcon`).classList.add(`active-tab`);
+        document.getElementById(`dynamicBlock`).classList.add('hide');
+        document.getElementById('LibraryContainer').classList.add('hide');
+        document.getElementById('agentAutoContainer').classList.remove('hide');
+        document.getElementById(`cust-feeling`).classList.add('hide');
+        document.getElementById('scriptContainer').classList.add('hide');
+    }
+
+    function transcriptionTabActive() {
+        var showHistory = document.getElementById(`showHistory`);
+        console.log('Transcription Tab Active State')
+        document.getElementById(`userAutoIcon`).classList.remove(`active-tab`);
+        document.getElementById(`agentAutoIcon`).classList.remove(`active-tab`);
+        document.getElementById(`searchAutoIcon`).classList.remove('active-tab');
+        document.getElementById(`transcriptIcon`).classList.add(`active-tab`);
+        document.getElementById(`dynamicBlock`).classList.add('hide');
+        document.getElementById('agentAutoContainer').classList.add('hide');
+        document.getElementById('LibraryContainer').classList.add('hide');
+        document.getElementById('scriptContainer').classList.remove('hide');
+        document.getElementById(`cust-feeling`).classList.add('hide');
+    }
+
+    function addAttriburesToSearch() {
         
     }
 
