@@ -390,12 +390,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                             data-bot-id="${botId}" data-intent-name="${ele.name}"
                             data-agent-id="${data.agentId}" data-library-run="true" 
                             >RUN</button>
-                            <div class="elipse-dropdown-info">
+                            <div class="elipse-dropdown-info" id="show-run-for-agent-btn">
                                 <div class="elipse-icon">
                                     <i class="ast-overflow"></i>
                                 </div>
                                 <div class="dropdown-content-elipse">
-                                    <div class="list-option">Run Bot for Agent</div>
+                                    <div class="list-option" data-conv-id="${data.conversationId}"
+                                    data-bot-id="${botId}" data-intent-name="${ele.name}"
+                                    data-agent-id="${data.agentId}" data-library-agent-auto-run="true">Run Bot for Agent</div>
                                 </div>
                             </div>
                         </div>
@@ -407,7 +409,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         }
     
         if(data.isSearch) {
-            searchTextDisplay.innerHtml = document.getElementById('librarySearchText').remove();
+            // searchTextDisplay.innerHtml = document.getElementById('librarySearchText').remove();
             searchResultBlock.classList.add('hide')
             freqAndAutoDialogList.classList.remove('hide');
             searchedDialogs_faqs.classList.add('hide');
