@@ -352,8 +352,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 if(data.suggestions.dialogs.length > 0 ) {
                     let automationSuggestions = document.getElementById(`allAutomations-Exhaustivelist`);
                     let listAreaHtml = `<div class="heading-title">Automations Exhaustive list</div>
-                                            <div class="dialog-task-run-sec p-0" id="usecases-list">
-                                                <div class="task-type" id="usecases-suggestions"></div>
+                                            <div class="dialog-task-run-sec p-0" >
+                                                <div class="task-type" id="usecases-list">
+                                                <div class="content-dialog-task-type p1-0" id="usecases-suggestions"></div>
+                                                </div>
                                             </div>`
                     automationSuggestions.innerHTML += listAreaHtml;
                 } else {
@@ -858,7 +860,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         let runFromLibrary = false;
         var hideDropDownToggel = false;
         let showHistory = document.getElementById(`showHistory`);
-        let dynamicBlock = document.getElementById(`dynamicBlocksData`);
+        let dynamicBlock = document.getElementById(`dynamicBlock`);
         let libraryContainer = document.getElementById('LibraryContainer');
         let agentAutoContainer = document.getElementById('agentAutoContainer');
         let scriptContainer = document.getElementById('scriptContainer');
@@ -869,6 +871,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             var runButton = target.dataset.run;
             var libraryRunBtn = target.dataset.libraryRun
             if ((target.id === `searchAutoIcon`) || (target.id === `searchIcon`)) {
+                runFromLibrary = true;
                 let searchIcon = document.getElementById(`searchAutoIcon`);
                 addAttriburesToSearch();
                 document.getElementById(`userAutoIcon`).classList.remove(`active-tab`);
@@ -1027,8 +1030,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 if(libraryRunBtn) {
                     // hide library show User automation logic
                     libraryContainer.classList.add('hide');
-                    custSentimentAnalysis.classList.remove('hide');
                     dynamicBlock.classList.remove('hide');
+                    custSentimentAnalysis.classList.remove('hide');
 
                 }
                 console.log(555);
@@ -1117,16 +1120,17 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
     }
 
     function addAttriburesToSearch() {
+        let dynamicBlock = document.getElementById(`dynamicBlock`);
+        let libraryContainer = document.getElementById('LibraryContainer');
         let agentAutoContainer = document.getElementById('agentAutoContainer');
         let scriptContainer = document.getElementById('scriptContainer');
         let searchblock = document.getElementById('librarySearch');
         let showHistory = document.getElementById(`showHistory`);
         let custSentimentAnalysis =document.getElementById(`cust-feeling`);
         let searchedDialogs_faqs = document.getElementById('dialogs-faqs');
-        let libraryContainer = document.getElementById('LibraryContainer')
         searchedDialogs_faqs.classList.add('hide');
         showHistory.classList.add('hide');
-       
+        dynamicBlock.classList.add('hide');
         agentAutoContainer.classList.add('hide');
         scriptContainer.classList.add('hide');
         custSentimentAnalysis.classList.add('hide');
