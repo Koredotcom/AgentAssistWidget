@@ -1038,7 +1038,10 @@
                 }
             }
             chatWindow.prototype.setCollapsedModeStyles = function (){
-                $('.kore-chat-window').css({left:$('body').width()-400,width:'400px'});
+                let me = this;
+                if(!me.config.agentAssist){
+                    $('.kore-chat-window').css({left:$('body').width()-400,width:'400px'});
+                }
             }
             chatWindow.prototype.setLocalStoreItem = function (key,value){
                 var me=this;
@@ -1268,53 +1271,52 @@
             };
 
             chatWindow.prototype.bindEvents = function () {
-                console.log("======= bind event for all times=====line no 1269")
                 var me = this;
                 me.bindCustomEvents();
                 
                 var _chatContainer = me.config.chatContainer;
-                _chatContainer.draggable({
-                    handle: _chatContainer.find(".kore-chat-header .header-title"),
-                    containment: "document",
-                })
-                    .resizable({
-                        handles: "n, e, w, s",
-                        containment: "document",
-                        minWidth: 400
-                    });
-                _chatContainer.off('keyup', '.chatInputBox').on('keyup', '.chatInputBox', function (event) {
-                    var _footerContainer = $(me.config.container).find('.kore-chat-footer');
-                    var _bodyContainer = $(me.config.container).find('.kore-chat-body');
-                    _bodyContainer.css('bottom', _footerContainer.outerHeight());
-                    me.prevComposeSelection = window.getSelection();
-                    prevRange = me.prevComposeSelection.rangeCount > 0 && me.prevComposeSelection.getRangeAt(0);
-                    if (this.innerText.length > 0) {
-                        _chatContainer.find('.chatInputBoxPlaceholder').css('display', 'none');
-                        _chatContainer.find('.sendButton').removeClass('disabled');
-                    } else {
-                        _chatContainer.find('.chatInputBoxPlaceholder').css('display', 'block');
-                        _chatContainer.find('.sendButton').addClass('disabled');
-                    }
-                });
-                _chatContainer.on('click', '.chatInputBoxPlaceholder', function (event) {
-                    _chatContainer.find('.chatInputBox').trigger('click');
-                    _chatContainer.find('.chatInputBox').trigger('focus');
-                });
-                _chatContainer.on('change', '.lang-selector', function (e) {
-                    var selectedValue=$(e.target).val();
-                    me.seti18n(selectedValue);
-                    me.updatei18nDirection();
-                });
-                _chatContainer.on('click', '.chatInputBox', function (event) {
-                    me.prevComposeSelection = window.getSelection();
-                    prevRange = me.prevComposeSelection.rangeCount > 0 && me.prevComposeSelection.getRangeAt(0);
-                });
-                _chatContainer.on('blur', '.chatInputBox', function (event) {
-                    _escPressed = 0;
-                });
-                _chatContainer.off('click', '.botResponseAttachments').on('click', '.botResponseAttachments', function (event) {
-                    window.open($(this).attr('fileid'), '_blank');
-                });
+                // _chatContainer.draggable({
+                //     handle: _chatContainer.find(".kore-chat-header .header-title"),
+                //     containment: "document",
+                // })
+                    // .resizable({
+                    //     handles: "n, e, w, s",
+                    //     containment: "document",
+                    //     minWidth: 400
+                    // });
+                // _chatContainer.off('keyup', '.chatInputBox').on('keyup', '.chatInputBox', function (event) {
+                //     var _footerContainer = $(me.config.container).find('.kore-chat-footer');
+                //     var _bodyContainer = $(me.config.container).find('.kore-chat-body');
+                //     _bodyContainer.css('bottom', _footerContainer.outerHeight());
+                //     me.prevComposeSelection = window.getSelection();
+                //     prevRange = me.prevComposeSelection.rangeCount > 0 && me.prevComposeSelection.getRangeAt(0);
+                //     if (this.innerText.length > 0) {
+                //         _chatContainer.find('.chatInputBoxPlaceholder').css('display', 'none');
+                //         _chatContainer.find('.sendButton').removeClass('disabled');
+                //     } else {
+                //         _chatContainer.find('.chatInputBoxPlaceholder').css('display', 'block');
+                //         _chatContainer.find('.sendButton').addClass('disabled');
+                //     }
+                // });
+                // _chatContainer.on('click', '.chatInputBoxPlaceholder', function (event) {
+                //     _chatContainer.find('.chatInputBox').trigger('click');
+                //     _chatContainer.find('.chatInputBox').trigger('focus');
+                // });
+                // _chatContainer.on('change', '.lang-selector', function (e) {
+                //     var selectedValue=$(e.target).val();
+                //     me.seti18n(selectedValue);
+                //     me.updatei18nDirection();
+                // });
+                // _chatContainer.on('click', '.chatInputBox', function (event) {
+                //     me.prevComposeSelection = window.getSelection();
+                //     prevRange = me.prevComposeSelection.rangeCount > 0 && me.prevComposeSelection.getRangeAt(0);
+                // });
+                // _chatContainer.on('blur', '.chatInputBox', function (event) {
+                //     _escPressed = 0;
+                // });
+                // _chatContainer.off('click', '.botResponseAttachments').on('click', '.botResponseAttachments', function (event) {
+                //     window.open($(this).attr('fileid'), '_blank');
+                // });
                 /*_chatContainer.off('click', '.attachments').on('click', '.attachments', function (event) {
                     var attachFileID = $(this).attr('fileid');
                     var auth = (bearerToken) ? bearerToken : assertionToken;
@@ -1336,162 +1338,162 @@
                             document.body.appendChild(save);
                             save.href = downloadUrl;
                             save.target = '_blank';
-                            save.download = 'unknown file';
-                            save.style.dislay = 'none !important;';
-                            save.click();
-                            save.remove();
-                        },
-                        error: function (msg) {
-                            console.log("Oops, something went horribly wrong");
-                        }
-                    });
-                });*/
-                _chatContainer.off('keydown', '.chatInputBox').on('keydown', '.chatInputBox', function (event) {
-                    var _this = $(this);
-                    var _footerContainer = $(me.config.container).find('.kore-chat-footer');
-                    var _bodyContainer = $(me.config.container).find('.kore-chat-body');
-                    _bodyContainer.css('bottom', _footerContainer.outerHeight());
-                    if (event.keyCode === 13) {
-                        if (event.shiftKey) {
-                            return;
-                        }
-                        if ($('.upldIndc').is(':visible')) {
-                            alert('Uploading file, please wait...');
-                            return;
-                        }
-                        if ($('.recordingMicrophone').is(':visible')) {
-                            $('.recordingMicrophone').trigger('click');
-                        }
-                        event.preventDefault();
+                //             save.download = 'unknown file';
+                //             save.style.dislay = 'none !important;';
+                //             save.click();
+                //             save.remove();
+                //         },
+                //         error: function (msg) {
+                //             console.log("Oops, something went horribly wrong");
+                //         }
+                //     });
+                // });*/
+                // _chatContainer.off('keydown', '.chatInputBox').on('keydown', '.chatInputBox', function (event) {
+                //     var _this = $(this);
+                //     var _footerContainer = $(me.config.container).find('.kore-chat-footer');
+                //     var _bodyContainer = $(me.config.container).find('.kore-chat-body');
+                //     _bodyContainer.css('bottom', _footerContainer.outerHeight());
+                //     if (event.keyCode === 13) {
+                //         if (event.shiftKey) {
+                //             return;
+                //         }
+                //         if ($('.upldIndc').is(':visible')) {
+                //             alert('Uploading file, please wait...');
+                //             return;
+                //         }
+                //         if ($('.recordingMicrophone').is(':visible')) {
+                //             $('.recordingMicrophone').trigger('click');
+                //         }
+                //         event.preventDefault();
 
-                        me.sendMessage(_this, me.attachmentInfo);
-                        return;
-                    }
-                    else if (event.keyCode === 27) {
-                        _escPressed++;
-                        if (_escPressed > 1) {
-                            _escPressed = 0;
-                            stop();
-                            this.innerText = "";
-                            $('.attachment').empty();
-                            fileUploaderCounter = 0;
-                            setTimeout(function () {
-                                setCaretEnd((document.getElementsByClassName("chatInputBox")));
-                            }, 100);
-                        }
-                    }
-                });
-                _chatContainer.off('click', '.sendButton').on('click', '.sendButton', function (event) {
-                    var _this = $('.chatInputBox');
-                    if ($('.upldIndc').is(':visible')) {
-                        alert('Uploading file, please wait...');
-                        return;
-                    }
-                    if ($('.recordingMicrophone').is(':visible')) {
-                        $('.recordingMicrophone').trigger('click');
-                    }
-                    event.preventDefault();
-                    console.log("---- line no 1390------")
-                    me.sendMessage(_this, me.attachmentInfo);
-                    return;
-                });
-                _chatContainer.off('click', '.notRecordingMicrophone').on('click', '.notRecordingMicrophone', function (event) {
-                    if (ttsAudioSource) {
-                        ttsAudioSource.stop();
-                    }
-                    if (me.config.isSpeechEnabled) {
-                        getSIDToken();
-                    }
-                });
-                _chatContainer.off('click', '.recordingMicrophone').on('click', '.recordingMicrophone', function (event) {
-                    stop();
-                    setTimeout(function () {
-                        setCaretEnd(document.getElementsByClassName("chatInputBox"));
-                    }, 350);
-                });
-                _chatContainer.off('click', '.attachmentBtn').on('click', '.attachmentBtn', function (event) {
-                    if (fileUploaderCounter == 1) {
-                        alert('You can upload only one file');
-                        return;
-                    }
-                    if ($('.upldIndc').is(':visible')) {
-                        alert('Uploading file, please wait...');
-                        return;
-                    }
-                    $('#captureAttachmnts').trigger('click');
-                });
-                _chatContainer.off('click', '.removeAttachment').on('click', '.removeAttachment', function (event) {
-                    $(this).parents('.msgCmpt').remove();
-                    $('.kore-chat-window').removeClass('kore-chat-attachment');
-                    fileUploaderCounter = 0;
-                    me.attachmentInfo = {};
-                    $('.sendButton').addClass('disabled');
-                    document.getElementById("captureAttachmnts").value = "";
-                });
-                _chatContainer.off('change', '#captureAttachmnts').on('change', '#captureAttachmnts', function (event) {
-                    var file = $('#captureAttachmnts').prop('files')[0];
-                    if (file && file.size) {
-                        if (file.size > filetypes.file.limit.size) {
-                            alert(filetypes.file.limit.msg);
-                            return;
-                        }
-                    }
-                    cnvertFiles(this, file);
-                });
-                _chatContainer.off('paste', '.chatInputBox').on('paste', '.chatInputBox', function (event) {
-                    event.preventDefault();
-                    var _this = document.getElementsByClassName("chatInputBox");
-                    var _clipboardData = event.clipboardData || (event.originalEvent && event.originalEvent.clipboardData) || window.clipboardData;
-                    var _htmlData = '';
-                    if (_clipboardData) {
-                        _htmlData = me.helpers.nl2br(_clipboardData.getData('text').escapeHTML(), false);
-                        if (_htmlData) {
-                            insertHtmlData(_this, _htmlData);
-                        }
-                    }
-                    setTimeout(function () {
-                        setCaretEnd(_this);
-                    }, 100);
-                });
-                _chatContainer.off('click', '.sendChat').on('click', '.sendChat', function (event) {
-                    var _footerContainer = $(me.config.container).find('.kore-chat-footer');
-                    me.sendMessage(_footerContainer.find('.chatInputBox'));
-                });
+                //         me.sendMessage(_this, me.attachmentInfo);
+                //         return;
+                //     }
+                //     else if (event.keyCode === 27) {
+                //         _escPressed++;
+                //         if (_escPressed > 1) {
+                //             _escPressed = 0;
+                //             stop();
+                //             this.innerText = "";
+                //             $('.attachment').empty();
+                //             fileUploaderCounter = 0;
+                //             setTimeout(function () {
+                //                 setCaretEnd((document.getElementsByClassName("chatInputBox")));
+                //             }, 100);
+                //         }
+                //     }
+                // });
+                // _chatContainer.off('click', '.sendButton').on('click', '.sendButton', function (event) {
+                //     var _this = $('.chatInputBox');
+                //     if ($('.upldIndc').is(':visible')) {
+                //         alert('Uploading file, please wait...');
+                //         return;
+                //     }
+                //     if ($('.recordingMicrophone').is(':visible')) {
+                //         $('.recordingMicrophone').trigger('click');
+                //     }
+                //     event.preventDefault();
+                //     console.log("---- line no 1390------")
+                //     me.sendMessage(_this, me.attachmentInfo);
+                //     return;
+                // });
+                // _chatContainer.off('click', '.notRecordingMicrophone').on('click', '.notRecordingMicrophone', function (event) {
+                //     if (ttsAudioSource) {
+                //         ttsAudioSource.stop();
+                //     }
+                //     if (me.config.isSpeechEnabled) {
+                //         getSIDToken();
+                //     }
+                // });
+                // _chatContainer.off('click', '.recordingMicrophone').on('click', '.recordingMicrophone', function (event) {
+                //     stop();
+                //     setTimeout(function () {
+                //         setCaretEnd(document.getElementsByClassName("chatInputBox"));
+                //     }, 350);
+                // });
+                // _chatContainer.off('click', '.attachmentBtn').on('click', '.attachmentBtn', function (event) {
+                //     if (fileUploaderCounter == 1) {
+                //         alert('You can upload only one file');
+                //         return;
+                //     }
+                //     if ($('.upldIndc').is(':visible')) {
+                //         alert('Uploading file, please wait...');
+                //         return;
+                //     }
+                //     $('#captureAttachmnts').trigger('click');
+                // });
+                // _chatContainer.off('click', '.removeAttachment').on('click', '.removeAttachment', function (event) {
+                //     $(this).parents('.msgCmpt').remove();
+                //     $('.kore-chat-window').removeClass('kore-chat-attachment');
+                //     fileUploaderCounter = 0;
+                //     me.attachmentInfo = {};
+                //     $('.sendButton').addClass('disabled');
+                //     document.getElementById("captureAttachmnts").value = "";
+                // });
+                // _chatContainer.off('change', '#captureAttachmnts').on('change', '#captureAttachmnts', function (event) {
+                //     var file = $('#captureAttachmnts').prop('files')[0];
+                //     if (file && file.size) {
+                //         if (file.size > filetypes.file.limit.size) {
+                //             alert(filetypes.file.limit.msg);
+                //             return;
+                //         }
+                //     }
+                //     cnvertFiles(this, file);
+                // });
+                // _chatContainer.off('paste', '.chatInputBox').on('paste', '.chatInputBox', function (event) {
+                //     event.preventDefault();
+                //     var _this = document.getElementsByClassName("chatInputBox");
+                //     var _clipboardData = event.clipboardData || (event.originalEvent && event.originalEvent.clipboardData) || window.clipboardData;
+                //     var _htmlData = '';
+                //     if (_clipboardData) {
+                //         _htmlData = me.helpers.nl2br(_clipboardData.getData('text').escapeHTML(), false);
+                //         if (_htmlData) {
+                //             insertHtmlData(_this, _htmlData);
+                //         }
+                //     }
+                //     setTimeout(function () {
+                //         setCaretEnd(_this);
+                //     }, 100);
+                // });
+                // _chatContainer.off('click', '.sendChat').on('click', '.sendChat', function (event) {
+                //     var _footerContainer = $(me.config.container).find('.kore-chat-footer');
+                //     me.sendMessage(_footerContainer.find('.chatInputBox'));
+                // });
 
-                _chatContainer.off('click', 'li a').on('click', 'li a', function (e) {
-                    e.preventDefault();
-                    var a_link = $(this).attr('href');
-                    var _trgt = $(this).attr('target');
-                    var msgDataText = $(event.currentTarget).closest('span.simpleMsg').attr('msgData') || '';
-                    var msgData;
-                    if(msgDataText){
-                        try {
-                         msgData = JSON.parse(msgDataText);
-                        } catch (err) {
+                // _chatContainer.off('click', 'li a').on('click', 'li a', function (e) {
+                //     e.preventDefault();
+                //     var a_link = $(this).attr('href');
+                //     var _trgt = $(this).attr('target');
+                //     var msgDataText = $(event.currentTarget).closest('span.simpleMsg').attr('msgData') || '';
+                //     var msgData;
+                //     if(msgDataText){
+                //         try {
+                //          msgData = JSON.parse(msgDataText);
+                //         } catch (err) {
         
-                        }
-                    }
-                    if(msgData && msgData.message && msgData.message[0].component && msgData.message[0].component.payload && msgData.message[0].component.payload.formData){
-                        me.renderWebForm(msgData);
-                    } else if (_trgt === "_self") {
-                        callListener("provideVal", { link: a_link });
-                        return;
-                    }
-                    if (me.config.allowIframe === true) {
-                         var popupHtml = $(me.getChatTemplate("iframe")).tmpl({
-                            'msgData': msgData,
-                            'helpers': me.helpers,
-                            "link_url": url
-                        });
-                         popupHtml[0].onload = function(iFrameEvent){
-                            console.log(iFrameEvent);
-                         }
-                         openModal(popupHtml[0],true);
-                    }
-                    else {
-                        me.openExternalLink(a_link)
-                    }
-                });
+                //         }
+                //     }
+                //     if(msgData && msgData.message && msgData.message[0].component && msgData.message[0].component.payload && msgData.message[0].component.payload.formData){
+                //         me.renderWebForm(msgData);
+                //     } else if (_trgt === "_self") {
+                //         callListener("provideVal", { link: a_link });
+                //         return;
+                //     }
+                //     if (me.config.allowIframe === true) {
+                //          var popupHtml = $(me.getChatTemplate("iframe")).tmpl({
+                //             'msgData': msgData,
+                //             'helpers': me.helpers,
+                //             "link_url": url
+                //         });
+                //          popupHtml[0].onload = function(iFrameEvent){
+                //             console.log(iFrameEvent);
+                //          }
+                //          openModal(popupHtml[0],true);
+                //     }
+                //     else {
+                //         me.openExternalLink(a_link)
+                //     }
+                // });
                 _chatContainer.off('click', '.buttonTmplContentBox li,.listTmplContentChild .buyBtn,.viewMoreList .viewMore,.listItemPath,.quickReply,.carouselImageContent,.listRightContent,.checkboxBtn,.likeDislikeDiv').on('click', '.buttonTmplContentBox li,.listTmplContentChild .buyBtn, .viewMoreList .viewMore,.listItemPath,.quickReply,.carouselImageContent,.listRightContent,.checkboxBtn,.likeDislikeDiv', function (e) {
                     e.preventDefault();
                     e.stopPropagation();
@@ -1500,7 +1502,6 @@
                         type = type.toLowerCase();
                     }
                     if (type == "postback" || type == "text") {
-                        console.log("============== line 1503---- in chatwindow--")
                         if(!me.config.agentAssist){
                             $('.chatInputBox').text($(this).attr('actual-value') || $(this).attr('value'));
                         //var _innerText = $(this)[0].innerText.trim() || $(this).attr('data-value').trim();
@@ -2029,7 +2030,6 @@
             };
 
             chatWindow.prototype.sendMessage = function (chatInput, renderMsg,msgObject) {
-                console.log("-----")
                 var me = this;
                 me.stopSpeaking();
                 if (chatInput.text().trim() === "" && $('.attachment').html().trim().length == 0) {
@@ -2945,7 +2945,6 @@
                                 _chatContainer.append(messageHtml);
                             }
                         } else {
-                            console.log(typeof messageHtml,"onside else in side render message", messageHtml);
                            _chatContainer.append(messageHtml);
                         }
                     }
@@ -3113,7 +3112,7 @@
                      <div class="steps-run-data">\
                                     <div class="run-info-content">\
                                         <div class="agent-utt">\
-                                            <div class="title-data text-truncate" ></div>\
+                                            <div class="title-data text-truncate" ><ul class="chat-container"></ul></div>\
                                         </div>\
                                     </div>\
                                 </div>\

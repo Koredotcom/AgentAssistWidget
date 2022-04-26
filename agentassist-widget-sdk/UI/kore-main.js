@@ -66,10 +66,21 @@
         var koreBot = koreBotChat();
         koreBot.show(chatConfig);
         if(chatConfig.agentAssist){
-           let agentAssistObj =  new AgentAssist('agent-assist-chat-container', '123489', 'user101', chatConfig.botOptions.botInfo._id);
-           chatConfig.agentAssistArray.push(agentAssistObj);
-           console.log("-------", chatConfig.agentAssistArray);
-           localStorage.setItem('currentConId', JSON.stringify(chatConfig.agentAssistArray))
+           let agentAssistObj =  new AgentAssist('agent-assist-chat-container', '123489457', 'user101', chatConfig.botOptions.botInfo._id);
+           
+           let userIds;
+           userIds = agentAssistObj.userId;
+           let agentObj ={};
+           agentObj[userIds] = agentAssistObj;
+            if(localStorage.getItem('users') == null){
+                localStorage.setItem('users', '[]');
+            }
+            let old_users = []; 
+            old_users = JSON.parse(localStorage.getItem('users'));
+            old_users.push(agentObj)
+            console.log("--old_users--",(old_users))
+            localStorage.setItem('users', JSON.stringify(old_users));
+        
         }
 
         $('.openChatWindow').click(function () {

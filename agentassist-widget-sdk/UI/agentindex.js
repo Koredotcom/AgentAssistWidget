@@ -2,6 +2,7 @@
 var chatConfig = window.KoreSDK.chatConfig;
 var _agentAsisstSocket = null;
 var _agentAssistComponents = {};
+//var agentAssistSocketUrl = "https://5f8f-49-206-62-14.ngrok.io";
 var agentAssistSocketUrl = "https://dev-smartassist.kore.ai";
 var dataTypeIsIntent;
 var isAutomationOnGoing = false;
@@ -31,7 +32,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
     var koreBot = koreBotChat();
     chatInitialize = new koreBot.chatWindow(chatConfig);
     chatInitialize.customTemplateObj = new customTemplate(chatConfig, chatInitialize);
-
     // let docs = document.getElementById('koreChatHeader');
     // docs.remove();
     let docs = document.getElementById('chat-window-footer');
@@ -39,8 +39,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
     _userTranscript = false;
     console.log("AgentAssist >>> no of agent assist instances", _agentAssistComponents);
     if (!window._agentAssisteventListenerAdded) {
-        btnInit();
-    }
+        btnInit(containerId);
+    }  
     var _agentAssistDataObj = this;
     var publicAPIs = {};
 
@@ -56,7 +56,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
     }
     var korecookie = localStorage.getItem("korecom");
     var uuid = (korecookie) || koreGenerateUUID();
-    console.log(uuid);
     console.log("AgentAssist >>> uuId", _agentAssistDataObj.userId);
     if (_agentAsisstSocket === null) {
         _agentAsisstSocket = io(agentAssistSocketUrl + "/koreagentassist", {
@@ -65,6 +64,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         _agentAsisstSocket.on("connect", () => {
             console.log("AgentAssist >>> socket connected")
         });
+        
         _agentAsisstSocket.on('agent_assist_response', (data) => {
             if (count === 0) {
                 data = {
@@ -81,7 +81,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                     },
                     "event": "agent_assist_response",
                     "_id": "ms-e9ac44c7-38c4-58ad-9158-50298176d6ff",
-                    "intentName": "interest rates",
+                    "intentName": "button templates",
                     entityName: "Order Number", // For entity extraction
                     entityValue: "12345", // For entity extraction
                     isPrompt : false,// true represents Ask customer and false represents Tell customer
@@ -90,15 +90,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                     suggestions: {
                         dialogs: [
                             {
-                                name: "what are interest rates"
+                                name: "button templates"
                             },
                             {
-                                name: "List loans"
+                                name: "Carousel Template"
                             }
                         ],
                         faqs: [
                             {
-                                name: "what are the loan rates",
+                                question: "what are the loan rates",
                                 answer: `Loan rates are 10% 
                                 Here is how to check your eligibility for refund : 
                                     Verify the status of order. 
@@ -122,7 +122,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                                     See more`
                             },
                             {
-                                name: "what are the rates of loan",
+                                question: "what are the rates of loan",
                                 answer: `Loan rates are 10% 
                                 Here is how to check your eligibility for refund : 
                                 Verify the status of order. 
@@ -183,10 +183,17 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         const channel = new BroadcastChannel('app-data');
         channel.addEventListener ('message', (event) => {
         console.log("event recived",event.data);
-        if(isAutomationOnGoing){
+        if(isAutomationOnGoing && !event.data.event){
             processUserMessages(event.data, event.data.conversationId, event.data.botId);
-        }
-        
+        }else{
+            let agent_assist_request = {
+                'conversationId' : _agentAssistDataObj.conversationId,
+                'query' : event.data.value,
+                'botId' : _agentAssistDataObj.botId,
+                'agentId' : _agentAssistDataObj.userId
+            }
+            _agentAsisstSocket.emit('agent_assist_request',agent_assist_request);
+          }
         });
     }
     console.log("AgentAssist >>> creating container for user", _agentAssistDataObj.userId)
@@ -222,11 +229,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             "type": 'text',
             "payload": {
                 "type": 'text',
-                "text": data.value
+                "text": data.userInput
             }
         };
         body['cInfo'] = {
-            "body": data.value
+            "body": data.userInput
         };
         _msgsResponse.message.push(body);
         
@@ -239,7 +246,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                                         <div class="run-info-content">
                                             <div class="title">Customer Said - </div>
                                             <div class="agent-utt">
-                                                <div class="title-data">${data.value}</div>
+                                                <div class="title-data">${data.userInput}</div>
                                             </div>
                                             <div class="order-number-info">${data.entityName} : ${data.entityValue}</div>
                                         </div>
@@ -692,7 +699,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                     let faqHtml = `
                     <div class="type-info-run-send">
                         <div class="left-content" id="faqSection-${index}">
-                            <div class="title-text" id="title-${index}">${ele.name}</div>
+                            <div class="title-text" id="title-${index}">${ele.question}</div>
                             <div class="desc-text" id="desc-${index}">${ele.answer}</div>
                             
                         </div>
@@ -707,12 +714,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                     faqsSuggestions.innerHTML += faqHtml;
                     if(ele.answer.length>200){
                         let faqs = $(`.type-info-run-send #faqSection-${index}`);
-                        faqs.each((i, ele)=>{
                           let seeMoreButtonHtml = `
-                          <button class="see-more" id="seeMore-${index}" data-see-more="true">See more</button>
+                          <button class="ghost-btn" style="font-style: italic;" id="seeMore-${index}" data-see-more="true">See more</button>
                           `;
                           faqs.append(seeMoreButtonHtml);
-                        })
                     }
                     _msgsResponse.message.push(body);
                 })
@@ -728,7 +733,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             if (payloadType.includes('payload')) {
                 let withoutSpecials = payloadType.replace(/^\s+|\s+$/g, "");
                 parsedPayload = JSON.parse(withoutSpecials);
-                console.log(parsedPayload);
             }
 
             let body = {};
@@ -783,7 +787,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             let tellToUserHtml = `
             <div class="title">Tell Customer</div>
             <div class="agent-utt">
-                <div class="title-data" id="displayData-${dropdownHeaderUuids}"></div>
+                <div class="title-data" ><ul class="chat-container" id="displayData-${dropdownHeaderUuids}"></ul></div>
                 <div class="action-links">
                     <button class="send-run-btn">Send</button>
                     <div class="copy-btn">
@@ -801,17 +805,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         }
         chatInitialize.renderMessage(_msgsResponse, dropdownHeaderUuids);
 
-       // setTimeout(() => {
-            removeElementFromDom();
-        // }, 1000);
+        removeElementFromDom();
         let noOfSteps = $(`.body-data-container`).find('.steps-run-data').not('.hide');
         if(noOfSteps.length>2){
             $(noOfSteps).addClass('hide');
             $(noOfSteps[noOfSteps.length-2]).removeClass('hide');
             $(noOfSteps[noOfSteps.length-1]).removeClass('hide');
         }
-        
-        console.log("================no fo steps ran----", noOfSteps)
         if(data.endOfFaq || data.endOfTask){
             console.log("===== came to add the feedback and end of dialog")
             isAutomationOnGoing = false;
@@ -821,7 +821,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
     }
 
     function removeElementFromDom() {
-        console.log("======came to delete the tags====")
         let fromCurrentUsers = document.getElementsByClassName('fromCurrentUser');
         for (let ele of fromCurrentUsers) {
             ele.remove();
@@ -851,23 +850,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             }
         }
     }
-
-
-
-    function processData(data, convId, botId, userId, resp) {
-        console.log("==== message response", resp)
-        if (data.type === 'button' && data.buttons && data.buttons.length > 0) {
-            // addButtons(data, convId, botId, userId,resp);
-        } else if (data.type === 'intent') {
-            addIntent(data, resp);
-        }
-    }
-    function addIntent(data, resp) {
-
-
-    }
-
-    
 
     function btnInit() {
         let runFromLibrary = false;
@@ -929,14 +911,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             }
             var seeMoreButton = target.dataset.seeMore;
             var seeLessButton = target.dataset.seeLess;
-            console.log(`runButton, ${runButton}`);
+            console.log(`runButton`);
             if (target.className === 'copy-btn') {
                 // Hello();
             }
             if(seeMoreButton){
                 let targets = target.id.split('-');
                 let faqs = $(`.type-info-run-send #faqSection-${targets[targets.length-1]}`);
-                let seelessHtml = `<button class="see-less" id="seeLess-${targets[targets.length-1]}" data-see-less="true">See less</button>`;
+                let seelessHtml = `<button class="ghost-btn" style="font-style: italic;" id="seeLess-${targets[targets.length-1]}" data-see-less="true">See less</button>`;
                 evt.target.classList.add('hide')
                 faqs.find(`#title-${targets[targets.length-1]}`).attr('style', `overflow: inherit; white-space: normal; text-overflow: unset;`);
                 faqs.find(`#desc-${targets[targets.length-1]}`).attr('style', `overflow: inherit; white-space: normal; text-overflow: unset;`);
@@ -965,11 +947,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             }
             if(target.id==='showHistory'){
                 isShowHistoryEnable = true;
-                let showHistory = document.getElementById('showHistory');
-                showHistory.classList.add('hide');
-                let back = document.getElementById('backToRecommendation');
-                back.classList.remove('hide');
-                let bodyContainer = document.getElementById('bodyContainer');
+                $('.show-history-block').addClass('hide');
+                $('.show-back-recommendation-block').removeClass('hide');
+                let bodyContainer = document.getElementById('dynamicBlocksData');
                 let dom = document.getElementById('dynamicBlock');
                 let automationSuggestions =  dom.getElementsByClassName('dialog-task-accordiaon-info');
 
@@ -990,7 +970,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                         a.classList.remove('hide');
                     }
                     
-                    let currentdomHtml = `<div class="dialog-task-data history" id="historyData">${dom.innerHTML}</div>`;
+                    let currentdomHtml = `<div class="dynamic-block-content history" id="historyData">${dom.innerHTML}</div>`;
                     bodyContainer.innerHTML+=currentdomHtml;
                     
                     let doms = document.getElementById('dynamicBlock');
@@ -1004,10 +984,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 isShowHistoryEnable = false;
                 let dom = document.getElementById('dynamicBlock');
                 dom.classList.remove('hide');
-                let showHistory = document.getElementById('showHistory');
-                showHistory.classList.remove('hide');
-                let back = document.getElementById('backToRecommendation');
-                back.classList.add('hide');
+                $('.show-history-block').removeClass('hide');
+                $('.show-back-recommendation-block').addClass('hide');
                 document.getElementById("historyData")?.remove();
                 let automationSuggestions =  document.getElementsByClassName('dialog-task-accordiaon-info');
                 let dialogSpace = document.getElementsByClassName('dialog-task-run-sec hide');
@@ -1182,7 +1160,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
     }
 
     function feedbackLoop(type, evt) {
-        console.log("======type of feedback-=====", type);
         let feedBackIDs = type.split('-');
         console.log("======feeback id-=====", feedBackIDs[0]);
         AgentAssist_feedback_click(evt);
@@ -1208,8 +1185,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         }
     }
     function createAgentAssistContainer(containerId, conversationId, botId, userId) {
-        console.log("AgentAssist >>> finding container ", containerId);
-        console.log("AgentAssist >>> userId in createAgentAssistContainer", containerId, conversationId, userId, botId)
     }
 
     function clearNode(node) {
@@ -1218,8 +1193,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         }
     }
     function createAgentAssistContainer(containerId, conversationId, botId, userId) {
-        console.log("AgentAssist >>> finding container ", containerId,'hereeeeeeeeeeeeeeeeee');
-        console.log("AgentAssist >>> userId in createAgentAssistContainer", containerId, conversationId, userId, botId)
     }
     function generateUserId() {
         console.info("generating user id");
@@ -1698,7 +1671,6 @@ AgentAssistPubSub.subscribe('agent_assist_send_text', (msg, data) => {
         "createdOnTimemillis": 1648189648267
     }
     _agentAsisstSocket.emit('agent_assist_request', agent_assist_request);
-
     let contentDisplayDiv = document.getElementById(`dropDownTitle-${dropdownHeaderUuids}`);
     contentDisplayDiv.innerHTML = data.value;
     //chatInitialize.renderMessage(agentsss);
