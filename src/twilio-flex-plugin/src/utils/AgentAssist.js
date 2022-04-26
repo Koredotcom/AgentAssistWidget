@@ -428,7 +428,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                             </div>
                         
                         <div class="tab-content">
-                                            <div id="botlist-${conversationId}" data-conversation-id="${conversationId}" style="overflow-y:scroll;height:80%;padding-right:10px" class="tab-pane fade active show">
+                                            <div id="botlist-${conversationId}" data-conversation-id="${conversationId}" style="overflow-y:scroll;height:95%;padding-right:10px" class="tab-pane fade active show">
                                 <!-- all text messages will be appended here -->
 
                             </div>

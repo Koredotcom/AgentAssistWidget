@@ -2,6 +2,11 @@ import styled from 'react-emotion';
 
 export const CustomTaskListComponentStyles = styled('div')
 `
+height: 100%;
+
+#agentassist-maincontainer {
+  height: 100%
+}
 ul {
   list-style-type: disc;
   margin-block-start: 1em;
@@ -61,7 +66,7 @@ li {
   height: 100%;
 }
 .agent-with-bots .inner-bots-container .agent-bot-types {
-  height: 300px;
+  height: 92%;
 }
 .agent-with-bots .inner-bots-container .agent-bot-types .bot-list-accr {
   padding: 10px 15px;

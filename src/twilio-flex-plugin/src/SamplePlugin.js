@@ -30,7 +30,7 @@ export default class SamplePlugin extends FlexPlugin {
     agentId = manager.user.identity;
 
     const options = { sortOrder: -1 };
-    flex.AgentDesktopView.Panel2.Content.add(<CustomTaskListContainer key="agent-assist" />, {sortOrder: -1});
+    flex.AgentDesktopView.Panel2.Content.replace(<CustomTaskListContainer key="agent-assist" />, {sortOrder: -1});
     //flex.AgentDesktopView.Panel1.Content.add(<CustomTaskListContainer key="SamplePlugin-component" />, options);
     /*flex.CRMContainer.defaultProps.uriCallback = (task) => {
       if (task) {
@@ -51,7 +51,7 @@ export default class SamplePlugin extends FlexPlugin {
       
       
       return new Promise((resolve, reject) => {
-          var a1 = new AgentAssist('agentassist-maincontainer', _convId, agentId, 'st-8b945818-1b69-5e5b-9504-34a9652e1516');
+          var a1 = new AgentAssist('agentassist-maincontainer', _convId, agentId, 'st-8b3ca668-244a-5f38-aff9-768ebc1f10bb');
           resolve();
       }).then(() => original(payload));
     });
