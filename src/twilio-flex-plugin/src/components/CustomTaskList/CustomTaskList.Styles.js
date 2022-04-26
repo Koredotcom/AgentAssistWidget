@@ -25,10 +25,11 @@ li {
   list-style: none;
 }
 .kr-sg-input-text {
-  width: 100%;
-  position: relative;
-  padding-top: 10px;
-  padding-left: 0px;
+    width: 98%;
+    position: relative;
+    padding-top: 10px;
+    padding-left: 5px;
+    padding-right: 5px;
 }
 .kr-sg-input-text input {
   background-color: #fff;
@@ -63,17 +64,17 @@ li {
   background: #fff;
   box-shadow: 0px 0px 6px #a8c8dd;
   border-radius: 10px;
-  height: 100%;
+  height: 99%;
 }
 .agent-with-bots .inner-bots-container .agent-bot-types {
-  height: 92%;
+  height: 93%;
 }
 .agent-with-bots .inner-bots-container .agent-bot-types .bot-list-accr {
   padding: 10px 15px;
   background: #f8f9fa;
   border-radius: 4px;
   position: relative;
-  height: 100%;
+  height: 98%;
 }
 .agent-with-bots .inner-bots-container .agent-bot-types .bot-list-accr .nav {
   border: 0;
