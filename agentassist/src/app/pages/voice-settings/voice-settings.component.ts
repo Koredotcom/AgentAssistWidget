@@ -181,37 +181,39 @@ export class VoiceSettingsComponent implements OnInit, AfterViewInit, OnDestroy 
 
   getListOfPhoneNumbers(searchTerm = '') {
     const params = {
-      instanceId: this.instanceAppDetails._id
+     // instanceId: this.instanceAppDetails._id,
+     instanceId:this.authService.smartAssistBots.map(x=>x._id),
+      'isAgentAssist':true
     }
     const qparams = {
       s: searchTerm
     }
-
+ console.log(this.authService.smartAssistBots.map(x=>x._id));
     if (this.voiceListSub) this.voiceListSub.unsubscribe();
     this.voiceListSub = this.service.invoke('get.voiceList', params, qparams).subscribe(voiceList => {
       this.phoneNumandSipDetailsList = voiceList;
-      for (let numData of this.phoneNumandSipDetailsList.phoneNumbers) {
-        // for (let flowData of this.expFlowList) {
-        //   if('cfId' in numData) {
-        //     if (numData.cfId === flowData._id) {
-        //       numData.cfName = flowData.name;
-        //     }
-        //   } else {
-        //     numData.cfId = '';
-        //   }
-        // }
-      }
-      for (let sipData of this.phoneNumandSipDetailsList.sipTransfers) {
-        // for (let flowData of this.expFlowList) {
-        //   if('cfId' in sipData) {
-        //     if (sipData.cfId === flowData._id) {
-        //       sipData.cfName = flowData.name;
-        //     }
-        //   } else {
-        //     sipData.cfId = '';
-        //   }
-        // }
-      }
+      // for (let numData of this.phoneNumandSipDetailsList.phoneNumbers) {
+      //   // for (let flowData of this.expFlowList) {
+      //   //   if('cfId' in numData) {
+      //   //     if (numData.cfId === flowData._id) {
+      //   //       numData.cfName = flowData.name;
+      //   //     }
+      //   //   } else {
+      //   //     numData.cfId = '';
+      //   //   }
+      //   // }
+      // }
+      // for (let sipData of this.phoneNumandSipDetailsList.sipTransfers) {
+      //   // for (let flowData of this.expFlowList) {
+      //   //   if('cfId' in sipData) {
+      //   //     if (sipData.cfId === flowData._id) {
+      //   //       sipData.cfName = flowData.name;
+      //   //     }
+      //   //   } else {
+      //   //     sipData.cfId = '';
+      //   //   }
+      //   // }
+      // }
     })
   }
 

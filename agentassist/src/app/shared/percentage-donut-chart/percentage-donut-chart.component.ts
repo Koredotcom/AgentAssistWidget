@@ -24,7 +24,7 @@ export class PercentageDonutChartComponent implements OnInit, OnChanges {
 
   setOptions() {
     this.data = [
-      { value: this.value, name: 'A', itemStyle: { color: this.isActive ? '#A6DCE1' : '#009DAB' } },
+      { value: this.value, name: 'A', itemStyle: { color: this.isActive ? '#A6DCE1' : '#3366ff' } },
       { value: (100 - this.value), name: 'B', itemStyle: { color: this.isActive ? '#ffffff' : '#E5E8EC' } },
     ];
     this.option = {

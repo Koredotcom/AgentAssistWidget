@@ -84,7 +84,7 @@ li {
     cursor: pointer;
 }
 .agent-with-bots .inner-bots-container .agent-bot-types .bot-list-accr .nav li a:hover {
-    background: #009dab;
+    background: #3366ff;
 }
 .agent-with-bots .inner-bots-container .agent-bot-types .bot-list-accr .nav li a:hover .inactive-img {
     display: none;
@@ -96,7 +96,7 @@ li {
     display: none;
 }
 .agent-with-bots .inner-bots-container .agent-bot-types .bot-list-accr .nav li a.active {
-    background: #009dab;
+    background: #3366ff;
 }
 .agent-with-bots .inner-bots-container .agent-bot-types .bot-list-accr .nav li a.active .inactive-img {
     display: none;
@@ -242,7 +242,7 @@ li {
 }
 .agent-with-bots .inner-bots-container .agent-bot-types .tab-content .btn-template-data .info-template {
     background: linear-gradient(0deg, #fff, #fff);
-    border: 0.5px solid #009dab;
+    border: 0.5px solid #3366ff;
     box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.05);
     border-radius: 5px;
     margin-bottom: 8px;
@@ -255,7 +255,7 @@ li {
 }
 .info-template {
     background: linear-gradient(0deg, #fff, #fff);
-    border: 0.5px solid #009dab;
+    border: 0.5px solid #3366ff;
     box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.05);
     border-radius: 5px;
     margin-bottom: 8px;
@@ -268,7 +268,7 @@ li {
 }
 .btn-template-data {
     background: linear-gradient(0deg, #fff, #fff);
-    border: 0.5px solid #009dab;
+    border: 0.5px solid #3366ff;
     box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.05);
     border-radius: 5px;
     margin-bottom: 8px;
@@ -295,7 +295,7 @@ li {
     font-weight: 500;
     font-size: 11px;
     line-height: 13px;
-    color: #009dab;
+    color: #3366ff;
     text-transform: uppercase;
     padding: 5px;
     margin-right: 8px;
@@ -318,7 +318,7 @@ li {
     font-weight: 500;
     font-size: 11px;
     line-height: 13px;
-    color: #009dab;
+    color: #3366ff;
     text-transform: uppercase;
     padding: 5px;
     margin-right: 8px;
@@ -417,7 +417,7 @@ li {
     color: #979797;
 }
 .agent-with-bots .inner-bots-container .agent-bot-types .tab-content .intent-text .run {
-    background: #009dab;
+    background: #3366ff;
     box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.05);
     border-radius: 5px;
     padding: 6px 10px;
@@ -428,7 +428,7 @@ li {
     cursor: pointer;
 }
 .intent-text .run {
-    background: #009dab;
+    background: #3366ff;
     box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.05);
     border-radius: 5px;
     padding: 6px 10px;
@@ -575,7 +575,7 @@ li {
     right: 42px;
     top: 218px;
     background: #e9eff4;
-    border: 0.5px solid #009dab;
+    border: 0.5px solid #3366ff;
    /* Super Light Shadow */
     box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.05);
     border-radius: 5px;

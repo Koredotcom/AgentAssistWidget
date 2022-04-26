@@ -362,7 +362,7 @@
     position: absolute;
     right: 0;
     top: 39px;
-    color: #009DAB;
+    color: #3366ff;
     text-decoration-line: underline;
     font-weight: normal;
     font-size: 12px;
@@ -374,7 +374,7 @@
     position: absolute;
     left: 0;
     top: 39px;
-    color: #009DAB;
+    color: #3366ff;
     text-decoration-line: underline;
     font-weight: normal;
     font-size: 12px;
@@ -435,7 +435,7 @@
 
 .agent-bot {
     display: block;
-    background: #009dab;
+    background: #3366ff;
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
     border-radius: 50%;

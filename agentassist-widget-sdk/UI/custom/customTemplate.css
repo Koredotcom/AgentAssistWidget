@@ -2,7 +2,7 @@
 .liteTheme-one { /*--Theme one kore lite--*/
    --sdk-chat-widow-default-white: #ffffff;
    --sdk-chat-widow-primary-font-color: #26344a;
-   --sdk-chat-widow-primary-blue-color: #009dab;
+   --sdk-chat-widow-primary-blue-color: #3366ff;
    --sdk-chat-widow-primary-border-color: #e5e8ec;
    --sdk-chat-widow-primary-bg-color: #f2f3f5;
     --sdk-chat-widow-primary-border-color: #e5e8ec;
@@ -45,7 +45,7 @@
     --sdk-chat-widow-default-white: #262626;
     --sdk-chat-widow-primary-font-color: #ffffff;
     --sdk-chat-widow-primary-border-color: rgba(255, 255, 255, .2);
-    --sdk-chat-widow-primary-blue-color: #009dab;
+    --sdk-chat-widow-primary-blue-color: #3366ff;
     --sdk-chat-widow-primary-bg-color: #000000;
     --sdk-chat-widow-panel-header-bg-color:#262626;
     --sdk-chat-widow-secondary-font-color: #7c7c7c;
@@ -2058,7 +2058,7 @@
 
 .kore-chat-window .clickableButton{
     cursor: pointer !important;
-    color: #009dab !important;
+    color: #3366ff !important;
 }
 .kore-chat-window .clickableLink{
     text-decoration: underline !important;
