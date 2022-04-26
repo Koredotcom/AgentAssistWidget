@@ -2016,9 +2016,15 @@
                     $(me.config.chatContainer).addClass('pos-absolute');
                 }
                 me.setCollapsedModeStyles();
-                me.chatPSObj=new KRPerfectScrollbar($('.agent-assist-chat-container').find('.body-data-container').get(0), {
-                    suppressScrollX: true
-                  });
+                if(me.config.agentAssist){
+                    me.chatPSObj=new KRPerfectScrollbar($('.agent-assist-chat-container').find('.body-data-container').get(0), {
+                        suppressScrollX: true
+                      });
+                }else{
+                    me.chatPSObj=new KRPerfectScrollbar(me.config.chatContainer.find('.chat-container').get(0), {
+                        suppressScrollX: true
+                      });
+                }
                 me.bindEvents();
             };
 
@@ -2261,7 +2267,7 @@
                 else {
                     waiting_for_message = false;
                 }
-                var _chatContainer = $('.agent-assist-chat-container').find(`#displayData-${elementID}`);
+                var _chatContainer = me.config.agentAssist? $('.agent-assist-chat-container').find(`#displayData-${elementID}`):$(me.config.chatContainer).find('.chat-container');
                 if (msgData.message && msgData.message[0] && msgData.message[0].cInfo && msgData.message[0].cInfo.attachments) {
                     extension = strSplit(msgData.message[0].cInfo.attachments[0].fileName);
                 }
@@ -2915,10 +2921,10 @@
                     bottomSliderAction('show',messageHtml);
                 }else{
                     //ignore message(msgId) if it is already in viewport                     
-                    if ($(`.agent-assist-chat-container  #displayData-${elementID}  div#` + msgData.messageId).length < 1 || (msgData.renderType==='inline')) {
+                    if ($(`${me.config.agentAssist?`.agent-assist-chat-container  #displayData-${elementID}  div#`:`.kore-chat-window .chat-container li#`}` + msgData.messageId).length < 1 || (msgData.renderType==='inline')) {
                         if (msgData.type === "bot_response" && msgData.fromHistorySync) {
                             var msgTimeStamps = [];
-                            var msgEles = $('.agent-assist-chat-container .text-truncate  >div');
+                            var msgEles = $(`${me.config.agentAssist?`.agent-assist-chat-container #displayData-${elementID}  >div`:'.kore-chat-window .chat-container>li'}`);
                             if (msgEles.length) {
                                 msgEles.each(function (i, ele) {
                                     msgTimeStamps.push(parseInt($(ele).attr('data-time')));
@@ -3057,7 +3063,8 @@
                 $(a).remove();
             };
 
-            chatWindow.prototype.getChatTemplate = function (tempType) {               
+            chatWindow.prototype.getChatTemplate = function (tempType) {  
+                var me = this;             
                 var chatFooterTemplate =
                 '<div class="footerContainer pos-relative" id="id123"> \
                     {{if userAgentIE}} \
@@ -3707,7 +3714,7 @@
                 return iframe;
             }
             else {
-                return chatWindowTemplateForAgentAssist;
+                return me.config.agentAssist?chatWindowTemplateForAgentAssist:chatWindowTemplate;
             }
             };
 

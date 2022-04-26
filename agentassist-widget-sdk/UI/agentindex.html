@@ -36,7 +36,7 @@
             <script src="../plugins/agentdestop/libs/c2c.js"></script>
             <script src="../plugins/agentdestop/agentdesktop.js" ></script> -->
     
-            
+
             <script src="chatWindow.js" type="text/javascript"></script>
             <script src="libs/jquery.daterangepicker.js" type="text/javascript"></script>
             <link href="libs/daterangepicker.css" rel="stylesheet"></link>
@@ -66,13 +66,16 @@
             <!-- <script src="kore-118n-config.js" type="text/javascript"></script> --> <!-- Uncomment for i18n support -->
             <script src="kore-main.js" type="text/javascript"></script>	
             <script src="libs/kore-no-conflict-end.js" type="text/javascript"></script>
-                
+            <script
+            src="https://code.jquery.com/jquery-3.1.1.js"
+            integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA="
+            crossorigin="anonymous"></script>
             <script src="agentindex.js" type="text/javascript">
             </script>
             
     </head>
     <body>
-        <div class="agent-assist-chat-container">
+        <div class="agent-assist-chat-container agent-assist">
             <div class="header-top-bar">
                 <!-- Header -->
                 <div class="header-data">
@@ -111,11 +114,23 @@
                     </div>
                 </div>
             </div>
-
-            <div class="body-data-container">
-                <div class="dialog-task-data">
-                    <div class="agent-utt-info" id="userDataWithTask"></div>
+            <div>
+                <button id="showHistory">show history</button>
+            </div>
+            <div>
+                <button class="hide" id="backToRecommendation">back to recommendation</button>
+            </div>
+            <div class="body-data-container" id="bodyContainer">
+                
+                <div class="dialog-task-data" id="dynamicBlocksData">
+                    
                     <div class="dynamic-block-content" id="dynamicBlock">
+                        <div class="agent-utt-info hide" id="agentUttInfo-123">
+                            <div class="user-img">
+                                <img src="./images/profile.svg">
+                            </div>
+                            <div class="text-user" >${data.value}</div>
+                        </div>
                         <!-- <div class="dialog-task-run-sec hide" id="automationSuggestions">
                             <div class="task-type">
                                 <div class="img-block-info">
@@ -163,7 +178,7 @@
                             </div> 
                         </div> -->
 
-                        <!-- <div class="dialog-task-accordiaon-info ">
+                         <!-- <div class="dialog-task-accordiaon-info hide">
                             <div class="accordion-header" id="dropDownHeader-123">
                                 <div class="icon-info">
                                     <i class="ast-rule"></i>
@@ -219,11 +234,11 @@
                                     <div class="feedback-icon">
                                         <i class="ast-thumbdown"></i>
                                     </div>
-                                </div> 
+                                </div>
                             </div>
-                        </div> -->
+                        </div> 
                       
-                    </div>
+                    </div> -->
                 </div>
 
                 <div class="agent-body-data-container hide" id="agentAutoContainer">
@@ -356,8 +371,93 @@
                         </div>
                     </div>
                     
-                    <div class="dynamic-searchlibrary-data">
-                        <div class="frequently-asked hide">
+                    <div class="dynamic-searchlibrary-data" >
+                        <div id="frequently-exhaustive">
+                            <!-- Frequently used html -->
+                            <!-- <div class="frequently-asked" id="frequently-used">
+                                <div class="heading-title">Frequently  Used</div>
+                                <div class="dialog-task-run-sec p-0">
+                                    <div class="task-type">
+                                        <div class="content-dialog-task-type pl-0">
+                                            <div class="type-info-run-send">
+                                                <div class="left-content">
+                                                    <div class="title-text" id="automation-${uuids}">Add/Remove items from order</div>
+                                                </div>
+                                                <div class="action-links">
+                                                    <button class="send-run-btn">RUN</button>
+                                                    <div class="elipse-dropdown-info">
+                                                        <div class="elipse-icon">
+                                                            <i class="ast-overflow"></i>
+                                                        </div>
+                                                        <div class="dropdown-content-elipse">
+                                                            <div class="list-option">Run Bot for Agent</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="type-info-run-send">
+                                                <div class="left-content">
+                                                    <div class="title-text">Bundle my orders</div>
+                                                </div>
+                                                <div class="action-links">
+                                                    <button class="send-run-btn">RUN</button>
+                                                    <div class="elipse-dropdown-info">
+                                                        <div class="elipse-icon">
+                                                            <i class="ast-overflow"></i>
+                                                        </div>
+                                                        <div class="dropdown-content-elipse">
+                                                            <div class="list-option">Run Bot for Agent</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> -->
+                            <div class="frequently-asked" id="allAutomations-Exhaustivelist">
+                                <!-- <div class="heading-title">Automations Exhaustive list</div>
+                                <div class="dialog-task-run-sec p-0" id="usecases-list">
+                                    <div class="task-type" id="usecases-suggestions">
+                                        <div class="content-dialog-task-type pl-0">
+                                            <div class="type-info-run-send">
+                                                <div class="left-content">
+                                                    <div class="title-text" id="automation-${uuids}">Add/Remove items from order</div>
+                                                </div>
+                                                <div class="action-links">
+                                                    <button class="send-run-btn">RUN</button>
+                                                    <div class="elipse-dropdown-info">
+                                                        <div class="elipse-icon">
+                                                            <i class="ast-overflow"></i>
+                                                        </div>
+                                                        <div class="dropdown-content-elipse">
+                                                            <div class="list-option">Run Bot for Agent</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="type-info-run-send">
+                                                <div class="left-content">
+                                                    <div class="title-text">Bundle my orders</div>
+                                                </div>
+                                                <div class="action-links">
+                                                    <button class="send-run-btn">RUN</button>
+                                                    <div class="elipse-dropdown-info">
+                                                        <div class="elipse-icon">
+                                                            <i class="ast-overflow"></i>
+                                                        </div>
+                                                        <div class="dropdown-content-elipse">
+                                                            <div class="list-option">Run Bot for Agent</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> -->
+                            </div>
+                        </div>
+                        <!-- <div class="frequently-asked" id="frequently-used">
                             <div class="heading-title">Frequently  Used</div>
                             <div class="dialog-task-run-sec p-0">
                                 <div class="task-type">
@@ -398,11 +498,53 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="intent-based-search">
-                            <div id="search-text-display"></div>
-                            <!-- <div class="searched-intent" id="librarySearchText">Search results for “ I want to edit my order”</div> -->
+                        <div class="frequently-asked" id="allAutomations-Exhaustivelist">
+                            <div class="heading-title">Automations Exhaustive list</div>
                             <div class="dialog-task-run-sec p-0">
                                 <div class="task-type">
+                                    <div class="content-dialog-task-type pl-0">
+                                        <div class="type-info-run-send">
+                                            <div class="left-content">
+                                                <div class="title-text" id="automation-${uuids}">Add/Remove items from order</div>
+                                            </div>
+                                            <div class="action-links">
+                                                <button class="send-run-btn">RUN</button>
+                                                <div class="elipse-dropdown-info">
+                                                    <div class="elipse-icon">
+                                                        <i class="ast-overflow"></i>
+                                                    </div>
+                                                    <div class="dropdown-content-elipse">
+                                                        <div class="list-option">Run Bot for Agent</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="type-info-run-send">
+                                            <div class="left-content">
+                                                <div class="title-text">Bundle my orders</div>
+                                            </div>
+                                            <div class="action-links">
+                                                <button class="send-run-btn">RUN</button>
+                                                <div class="elipse-dropdown-info">
+                                                    <div class="elipse-icon">
+                                                        <i class="ast-overflow"></i>
+                                                    </div>
+                                                    <div class="dropdown-content-elipse">
+                                                        <div class="list-option">Run Bot for Agent</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+                        <div class="intent-based-search" id="searchResults">
+                            <div id="search-text-display"></div>
+                            <!-- <div class="searched-intent" id="librarySearchText">Search results for “ I want to edit my order”</div> -->
+                            <!-- <div id="dialogs-faqs"></div> -->
+                            <div class="dialog-task-run-sec p-0" id="dialogs-faqs">
+                                <!-- <div class="task-type">
                                     <div class="img-block-info">
                                         <img src="./images/dialogtask.svg">
                                     </div>
@@ -461,14 +603,14 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="footer-info">
+            <div class="footer-info" id="cust-feeling">
                 <div class="event-bucket">
                     <img src="./images/bucket.svg">
                 </div>
