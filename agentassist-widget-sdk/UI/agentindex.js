@@ -2,6 +2,7 @@
 var chatConfig = window.KoreSDK.chatConfig;
 var _agentAsisstSocket = null;
 var _agentAssistComponents = {};
+//var agentAssistSocketUrl = "https://5f8f-49-206-62-14.ngrok.io";
 var agentAssistSocketUrl = "https://dev-smartassist.kore.ai";
 var dataTypeIsIntent;
 var isAutomationOnGoing = false;
@@ -32,7 +33,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
     var koreBot = koreBotChat();
     chatInitialize = new koreBot.chatWindow(chatConfig);
     chatInitialize.customTemplateObj = new customTemplate(chatConfig, chatInitialize);
-
     // let docs = document.getElementById('koreChatHeader');
     // docs.remove();
     let docs = document.getElementById('chat-window-footer');
@@ -40,8 +40,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
     _userTranscript = false;
     console.log("AgentAssist >>> no of agent assist instances", _agentAssistComponents);
     if (!window._agentAssisteventListenerAdded) {
-        btnInit();
-    }
+        btnInit(containerId);
+    }  
     var _agentAssistDataObj = this;
     var publicAPIs = {};
 
@@ -57,108 +57,108 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
     }
     var korecookie = localStorage.getItem("korecom");
     var uuid = (korecookie) || koreGenerateUUID();
-    console.log(uuid);
     console.log("AgentAssist >>> uuId", _agentAssistDataObj.userId);
     if (_agentAsisstSocket === null) {
         _agentAsisstSocket = io(agentAssistSocketUrl + "/koreagentassist", {
-            "path": "/agentassist/api/v1/chat/", 'query': 'userId=' + uuid + '&orgId=o-da05dbea-6573-5399-ba58-22035a3122f3', transports: ['websocket', 'polling', 'flashsocket']
+            "path": "/agentassist/api/v1/chat/", 'query': 'userId=' + uuid + '&orgId=o-da05dbea-6573-5399-ba58-22035a3122f3'+'&authToken=urwMfUsk0wF3DG7mNf6usJrLEtGvpmGgXzdRB94Rn1b2OyjCHbHdueP0SrWE7rHD', transports: ['websocket', 'polling', 'flashsocket']
         });
         _agentAsisstSocket.on("connect", () => {
             console.log("AgentAssist >>> socket connected")
         });
+        
         _agentAsisstSocket.on('agent_assist_response', (data) => {
-            if (count === 0 ){
-                data = {
-                    "botId": _botId,
-                    "agentId": _agentAssistDataObj.userId,
-                    "orgId": "o-1158ce5e-f159-50c6-a198-530f59e2e1d4",
-                    "accountId": "622efb179b25b1a23ef05da2",
-                    "type": "intent",
-                    "conversationId": _conversationId,
-                    "value": "i want to apply loan",
-                    "author": {
-                        "id": "u-7b9bbe6b-2602-54c3-bb2c-200a2e60a774",
-                        "type": "USER"
-                    },
-                    "event": "agent_assist_response",
-                    "_id": "ms-e9ac44c7-38c4-58ad-9158-50298176d6ff",
-                    "intentName": "interest rates",
-                    entityName: "Order Number", // For entity extraction
-                    entityValue: "12345", // For entity extraction
-                    isPrompt : false,// true represents Ask customer and false represents Tell customer
-                    endOfTask: false,
-                    endOfFaq: false,
-                    suggestions: {
-                        dialogs: [
-                            {
-                                name: "what are interest rates"
-                            },
-                            {
-                                name: "List loans"
-                            }
-                        ],
-                        faqs: [
-                            {
-                                name: "what are the loan rates",
-                                answer: `Loan rates are 10% 
-                                Here is how to check your eligibility for refund : 
-Verify the status of order. 
-If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-Verify the status of order. 
-If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-Verify the status of order. 
-If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-Verify the status of order. 
-If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-Verify the status of order. 
-If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-Verify the status of order. 
-If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-Verify the status of order. 
-If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-Verify the status of order. 
-If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-Verify the status of order. 
-If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-See more`
-                            },
-                            {
-                                name: "what are the rates of loan",
-                                answer: `Loan rates are 10% 
-                                Here is how to check your eligibility for refund : 
-Verify the status of order. 
-If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-Verify the status of order. 
-If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-Verify the status of order. 
-If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-Verify the status of order. 
-If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-Verify the status of order. 
-If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-Verify the status of order. 
-If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-Verify the status of order. 
-If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-Verify the status of order. 
-If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-Verify the status of order. 
-If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-See more`
-                            }
-                        ]
-                    }
-                }
+//             if (count === 0 ){
+//                 data = {
+//                     "botId": _botId,
+//                     "agentId": _agentAssistDataObj.userId,
+//                     "orgId": "o-1158ce5e-f159-50c6-a198-530f59e2e1d4",
+//                     "accountId": "622efb179b25b1a23ef05da2",
+//                     "type": "intent",
+//                     "conversationId": _conversationId,
+//                     "value": "i want to apply loan",
+//                     "author": {
+//                         "id": "u-7b9bbe6b-2602-54c3-bb2c-200a2e60a774",
+//                         "type": "USER"
+//                     },
+//                     "event": "agent_assist_response",
+//                     "_id": "ms-e9ac44c7-38c4-58ad-9158-50298176d6ff",
+//                     "intentName": "button templates",
+//                     entityName: "Order Number", // For entity extraction
+//                     entityValue: "12345", // For entity extraction
+//                     isPrompt : false,// true represents Ask customer and false represents Tell customer
+//                     endOfTask: false,
+//                     endOfFaq: false,
+//                     suggestions: {
+//                         dialogs: [
+//                             {
+//                                 name: "button templates"
+//                             },
+//                             {
+//                                 name: "Carousel Template"
+//                             }
+//                         ],
+//                         faqs: [
+//                             {
+//                                 question: "what are the loan rates",
+//                                 answer: `Loan rates are 10% 
+//                                 Here is how to check your eligibility for refund : 
+// Verify the status of order. 
+// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+// Verify the status of order. 
+// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+// Verify the status of order. 
+// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+// Verify the status of order. 
+// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+// Verify the status of order. 
+// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+// Verify the status of order. 
+// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+// Verify the status of order. 
+// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+// Verify the status of order. 
+// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+// Verify the status of order. 
+// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+// See more`
+//                             },
+//                             {
+//                                 question: "what are the rates of loan",
+//                                 answer: `Loan rates are 10% 
+//                                 Here is how to check your eligibility for refund : 
+// Verify the status of order. 
+// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+// Verify the status of order. 
+// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+// Verify the status of order. 
+// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+// Verify the status of order. 
+// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+// Verify the status of order. 
+// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+// Verify the status of order. 
+// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+// Verify the status of order. 
+// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+// Verify the status of order. 
+// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+// Verify the status of order. 
+// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+// See more`
+//                             }
+//                         ]
+//                     }
+//                 }
 
-                ++count;
-                console.log("===inside if=count value -======", count);
-            }else{
-                data['endOfTask'] = true;
-                data['endOfFaq'] = true;
-            }
-            setTimeout(()=>{
+//                 ++count;
+//                 console.log("===inside if=count value -======", count);
+//             }else{
+//                 data['endOfTask'] = true;
+//                 data['endOfFaq'] = true;
+//             }
+            // setTimeout(()=>{
                 processAgentAssistResponse(data, data.conversationId, _botId, _agentAssistDataObj.userId);
-            },3000)
+            // },3000)
             
         })
         _agentAsisstSocket.on('user_message', (data) => {
@@ -173,11 +173,13 @@ See more`
         const channel = new BroadcastChannel('app-data');
         channel.addEventListener ('message', (event) => {
         console.log("event recived",event.data);
-        if(isAutomationOnGoing){
+        if(isAutomationOnGoing && !event.data.event){
             processUserMessages(event.data, event.data.conversationId, event.data.botId);
+        }else{
+            _agentAsisstSocket.emit('user_message',event.data)
+            console.log("event emitted",event.data);
         }
-        
-        });
+       });
     }
     console.log("AgentAssist >>> creating container for user", _agentAssistDataObj.userId)
     createAgentAssistContainer(_agentAssistDataObj.containerId, _agentAssistDataObj.conversationId, _agentAssistDataObj.botId, _agentAssistDataObj.userId);
@@ -212,11 +214,11 @@ See more`
             "type": 'text',
             "payload": {
                 "type": 'text',
-                "text": data.value
+                "text": data.userInput
             }
         };
         body['cInfo'] = {
-            "body": data.value
+            "body": data.userInput
         };
         _msgsResponse.message.push(body);
         
@@ -229,7 +231,7 @@ See more`
                                         <div class="run-info-content">
                                             <div class="title">Customer Said - </div>
                                             <div class="agent-utt">
-                                                <div class="title-data">${data.value}</div>
+                                                <div class="title-data">${data.userInput}</div>
                                             </div>
                                             <div class="order-number-info">${data.entityName} : ${data.entityValue}</div>
                                         </div>
@@ -428,7 +430,7 @@ See more`
                     let faqHtml = `
                     <div class="type-info-run-send">
                         <div class="left-content" id="faqSection-${index}">
-                            <div class="title-text" id="title-${index}">${ele.name}</div>
+                            <div class="title-text" id="title-${index}">${ele.question}</div>
                             <div class="desc-text" id="desc-${index}">${ele.answer}</div>
                             
                         </div>
@@ -443,12 +445,10 @@ See more`
                     faqsSuggestions.innerHTML += faqHtml;
                     if(ele.answer.length>200){
                         let faqs = $(`.type-info-run-send #faqSection-${index}`);
-                        faqs.each((i, ele)=>{
                           let seeMoreButtonHtml = `
-                          <button class="see-more" id="seeMore-${index}" data-see-more="true">See more</button>
+                          <button class="ghost-btn" style="font-style: italic;" id="seeMore-${index}" data-see-more="true">See more</button>
                           `;
                           faqs.append(seeMoreButtonHtml);
-                        })
                     }
                     _msgsResponse.message.push(body);
                 })
@@ -464,7 +464,6 @@ See more`
             if (payloadType.includes('payload')) {
                 let withoutSpecials = payloadType.replace(/^\s+|\s+$/g, "");
                 parsedPayload = JSON.parse(withoutSpecials);
-                console.log(parsedPayload);
             }
 
             let body = {};
@@ -519,7 +518,7 @@ See more`
             let tellToUserHtml = `
             <div class="title">Tell Customer</div>
             <div class="agent-utt">
-                <div class="title-data" id="displayData-${dropdownHeaderUuids}"></div>
+                <div class="title-data" ><ul class="chat-container" id="displayData-${dropdownHeaderUuids}"></ul></div>
                 <div class="action-links">
                     <button class="send-run-btn">Send</button>
                     <div class="copy-btn">
@@ -537,17 +536,13 @@ See more`
         }
         chatInitialize.renderMessage(_msgsResponse, dropdownHeaderUuids);
 
-       // setTimeout(() => {
-            removeElementFromDom();
-        // }, 1000);
+        removeElementFromDom();
         let noOfSteps = $(`.body-data-container`).find('.steps-run-data').not('.hide');
         if(noOfSteps.length>2){
             $(noOfSteps).addClass('hide');
             $(noOfSteps[noOfSteps.length-2]).removeClass('hide');
             $(noOfSteps[noOfSteps.length-1]).removeClass('hide');
         }
-        
-        console.log("================no fo steps ran----", noOfSteps)
         if(data.endOfFaq || data.endOfTask){
             console.log("===== came to add the feedback and end of dialog")
             isAutomationOnGoing = false;
@@ -557,7 +552,6 @@ See more`
     }
 
     function removeElementFromDom() {
-        console.log("======came to delete the tags====")
         let fromCurrentUsers = document.getElementsByClassName('fromCurrentUser');
         for (let ele of fromCurrentUsers) {
             ele.remove();
@@ -588,37 +582,22 @@ See more`
         }
     }
 
-
-
-    function processData(data, convId, botId, userId, resp) {
-        console.log("==== message response", resp)
-        if (data.type === 'button' && data.buttons && data.buttons.length > 0) {
-            // addButtons(data, convId, botId, userId,resp);
-        } else if (data.type === 'intent') {
-            addIntent(data, resp);
-        }
-    }
-    function addIntent(data, resp) {
-
-
-    }
-
     function btnInit() {
         var hideDropDownToggel = false;
-        dropdownHeaderUuids = '123'
+        dropdownHeaderUuids = '123';
         document.addEventListener("click", (evt) => {
             var target = evt.target;
             var runButton = target.dataset.run;
             var seeMoreButton = target.dataset.seeMore;
             var seeLessButton = target.dataset.seeLess;
-            console.log(`runButton, ${runButton}`);
+            console.log(`runButton`);
             if (target.className === 'copy-btn') {
                 // Hello();
             }
             if(seeMoreButton){
                 let targets = target.id.split('-');
                 let faqs = $(`.type-info-run-send #faqSection-${targets[targets.length-1]}`);
-                let seelessHtml = `<button class="see-less" id="seeLess-${targets[targets.length-1]}" data-see-less="true">See less</button>`;
+                let seelessHtml = `<button class="ghost-btn" style="font-style: italic;" id="seeLess-${targets[targets.length-1]}" data-see-less="true">See less</button>`;
                 evt.target.classList.add('hide')
                 faqs.find(`#title-${targets[targets.length-1]}`).attr('style', `overflow: inherit; white-space: normal; text-overflow: unset;`);
                 faqs.find(`#desc-${targets[targets.length-1]}`).attr('style', `overflow: inherit; white-space: normal; text-overflow: unset;`);
@@ -647,10 +626,8 @@ See more`
             }
             if(target.id==='showHistory'){
                 isShowHistoryEnable = true;
-                let showHistory = document.getElementById('showHistory');
-                showHistory.classList.add('hide');
-                let back = document.getElementById('backToRecommendation');
-                back.classList.remove('hide');
+                $('.show-history-block').addClass('hide');
+                $('.show-back-recommendation-block').removeClass('hide');
                 let bodyContainer = document.getElementById('bodyContainer');
                 let dom = document.getElementById('dynamicBlocksData');
                 let automationSuggestions =  dom.getElementsByClassName('dialog-task-accordiaon-info');
@@ -686,10 +663,8 @@ See more`
                 isShowHistoryEnable = false;
                 let dom = document.getElementById('dynamicBlocksData');
                 dom.classList.remove('hide');
-                let showHistory = document.getElementById('showHistory');
-                showHistory.classList.remove('hide');
-                let back = document.getElementById('backToRecommendation');
-                back.classList.add('hide');
+                $('.show-history-block').removeClass('hide');
+                $('.show-back-recommendation-block').addClass('hide');
                 document.getElementById("historyData")?.remove();
                 let automationSuggestions =  document.getElementsByClassName('dialog-task-accordiaon-info');
                 let dialogSpace = document.getElementsByClassName('dialog-task-run-sec hide');
@@ -833,7 +808,6 @@ See more`
     }
 
     function feedbackLoop(type, evt) {
-        console.log("======type of feedback-=====", type);
         let feedBackIDs = type.split('-');
         console.log("======feeback id-=====", feedBackIDs[0]);
         AgentAssist_feedback_click(evt);
@@ -859,8 +833,6 @@ See more`
         }
     }
     function createAgentAssistContainer(containerId, conversationId, botId, userId) {
-        console.log("AgentAssist >>> finding container ", containerId);
-        console.log("AgentAssist >>> userId in createAgentAssistContainer", containerId, conversationId, userId, botId)
     }
 
     function clearNode(node) {
@@ -869,8 +841,6 @@ See more`
         }
     }
     function createAgentAssistContainer(containerId, conversationId, botId, userId) {
-        console.log("AgentAssist >>> finding container ", containerId,'hereeeeeeeeeeeeeeeeee');
-        console.log("AgentAssist >>> userId in createAgentAssistContainer", containerId, conversationId, userId, botId)
     }
     function generateUserId() {
         console.info("generating user id");
@@ -1326,7 +1296,6 @@ AgentAssistPubSub.subscribe('agent_assist_send_text', (msg, data) => {
         "createdOnTimemillis": 1648189648267
     }
     _agentAsisstSocket.emit('agent_assist_request', agent_assist_request);
-
     let contentDisplayDiv = document.getElementById(`dropDownTitle-${dropdownHeaderUuids}`);
     contentDisplayDiv.innerHTML = data.value;
     //chatInitialize.renderMessage(agentsss);

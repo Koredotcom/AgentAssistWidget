@@ -75,7 +75,7 @@
             
     </head>
     <body>
-        <div class="agent-assist-chat-container agent-assist">
+        <div class="agent-assist-chat-container kore-chat-window">
             <div class="header-top-bar">
                 <!-- Header -->
                 <div class="header-data">
@@ -114,11 +114,12 @@
                     </div>
                 </div>
             </div>
-            <div>
-                <button id="showHistory">show history</button>
+            <div class="show-history-block">
+                <button id="showHistory" class="ghost-btn">Show history</button>
             </div>
-            <div>
-                <button class="hide" id="backToRecommendation">back to recommendation</button>
+            <div class="show-back-recommendation-block hide" >
+                <button id="backToRecommendation" class="ghost-btn"><span class="back-icon"><i class="ast-carrotup
+                    " style="font-size: 6px;"></i></span>Back to recommendation</button>
             </div>
             <div class="body-data-container" id="bodyContainer">
                 
@@ -423,7 +424,7 @@
                 </div>
             </div>
 
-            <div class="entity-bucket-data">
+            <div class="entity-bucket-data hide">
                 <div class="data-content-info">
                     <div class="scroll-data-bucket">
                         <div class="inner-data-content-cards">
