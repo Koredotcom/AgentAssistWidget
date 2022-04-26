@@ -1468,6 +1468,11 @@ export class EndPointsService {
       method: 'get'
     }
 
+    this.serviceList['get.chatList'] = {
+      endpoint: this.API_SERVER_URL + '/smartassist/apps/instances/:instanceId/channels/chat?isAgentAssist=true',
+      method: 'get'
+    }
+
     this.serviceList['post.voiceType'] = {
       endpoint: this.API_SERVER_URL + '/smartassist/apps/instances/:instanceId/channels/voice',
       method: 'post'

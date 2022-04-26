@@ -1,9 +1,11 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { workflowService } from '@kore.services/workflow.service';
 import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
-import { INewChatsTransfer, CHATCHANNEL_TRASFER_MOCKDATA } from 'src/app/data/chats.mock';
+import { INewChatsTransfer } from 'src/app/data/chats.mock';
 import { Subscription,Observable } from 'rxjs';
 import { NotificationService } from '@kore.services/notification.service';
+import { ServiceInvokerService } from '@kore.services/service-invoker.service';
+import { AuthService } from '@kore.services/auth.service';
 
 @Component({
   selector: 'app-automation-channels',
@@ -19,20 +21,23 @@ export class AutomationChannelsComponent implements OnInit {
   showEmailSection = false;
   chatList : INewChatsTransfer;
   chatValues : any;
+  chatChannelData: Subscription;
+  chatData: any;
+  webhookUrl: any;
   
   constructor( public workflowService: workflowService,
     private notificationService: NotificationService,
+    private service: ServiceInvokerService,
+    private authService: AuthService,
               ) { }
   
   ngOnInit(): void {  
     this.showVoiceSection = true;
     this.showChatSection = false;
     this.showEmailSection = false;
-    // this.performBTNavigation('deploy',"channels");
-    this.getChatData();
+    this.getChatChannelData();
   }
 
-  chatTransferData: typeof CHATCHANNEL_TRASFER_MOCKDATA = CHATCHANNEL_TRASFER_MOCKDATA;
   
   openEmailSlider(e) {
     console.log(e);
@@ -72,7 +77,7 @@ export class AutomationChannelsComponent implements OnInit {
     this.workflowService.link = link;
     this.workflowService.btNavigation$.next(navData);
   }
-//copy to chat variables
+
   copyInputMessage(inputElement){
     var dummy = document.createElement("textarea");
     document.body.appendChild(dummy);
@@ -83,8 +88,19 @@ export class AutomationChannelsComponent implements OnInit {
     this.notificationService.notify("copied successfully", "success");
   }
 
-  getChatData(){
-  this.chatValues = this.chatTransferData.chatVariables;
-  }
 
+ getChatChannelData() {
+
+    const params = {
+            instanceId:this.authService.smartAssistBots.map(x=>x._id),
+            'isAgentAssist':true
+          };
+    this.chatChannelData = this.service.invoke('get.chatList', params).subscribe(data => {
+    
+    this.chatList = data.app;
+    this.webhookUrl = data.webhookUrl;
+   });
+ }
+ 
 }
+
