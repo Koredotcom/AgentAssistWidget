@@ -67,95 +67,95 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         });
         
         _agentAsisstSocket.on('agent_assist_response', (data) => {
-//             if (count === 0 ){
-//                 data = {
-//                     "botId": _botId,
-//                     "agentId": _agentAssistDataObj.userId,
-//                     "orgId": "o-1158ce5e-f159-50c6-a198-530f59e2e1d4",
-//                     "accountId": "622efb179b25b1a23ef05da2",
-//                     "type": "intent",
-//                     "conversationId": _conversationId,
-//                     "value": "i want to apply loan",
-//                     "author": {
-//                         "id": "u-7b9bbe6b-2602-54c3-bb2c-200a2e60a774",
-//                         "type": "USER"
-//                     },
-//                     "event": "agent_assist_response",
-//                     "_id": "ms-e9ac44c7-38c4-58ad-9158-50298176d6ff",
-//                     "intentName": "button templates",
-//                     entityName: "Order Number", // For entity extraction
-//                     entityValue: "12345", // For entity extraction
-//                     isPrompt : false,// true represents Ask customer and false represents Tell customer
-//                     endOfTask: false,
-//                     endOfFaq: false,
-//                     suggestions: {
-//                         dialogs: [
-//                             {
-//                                 name: "button templates"
-//                             },
-//                             {
-//                                 name: "Carousel Template"
-//                             }
-//                         ],
-//                         faqs: [
-//                             {
-//                                 question: "what are the loan rates",
-//                                 answer: `Loan rates are 10% 
-//                                 Here is how to check your eligibility for refund : 
-// Verify the status of order. 
-// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-// Verify the status of order. 
-// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-// Verify the status of order. 
-// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-// Verify the status of order. 
-// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-// Verify the status of order. 
-// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-// Verify the status of order. 
-// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-// Verify the status of order. 
-// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-// Verify the status of order. 
-// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-// Verify the status of order. 
-// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-// See more`
-//                             },
-//                             {
-//                                 question: "what are the rates of loan",
-//                                 answer: `Loan rates are 10% 
-//                                 Here is how to check your eligibility for refund : 
-// Verify the status of order. 
-// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-// Verify the status of order. 
-// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-// Verify the status of order. 
-// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-// Verify the status of order. 
-// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-// Verify the status of order. 
-// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-// Verify the status of order. 
-// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-// Verify the status of order. 
-// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-// Verify the status of order. 
-// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-// Verify the status of order. 
-// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-// See more`
-//                             }
-//                         ]
-//                     }
-//                 }
+            if (count === 0 ){
+                data = {
+                    "botId": _botId,
+                    "agentId": _agentAssistDataObj.userId,
+                    "orgId": "o-1158ce5e-f159-50c6-a198-530f59e2e1d4",
+                    "accountId": "622efb179b25b1a23ef05da2",
+                    "type": "intent",
+                    "conversationId": _conversationId,
+                    "value": "i want to apply loan",
+                    "author": {
+                        "id": "u-7b9bbe6b-2602-54c3-bb2c-200a2e60a774",
+                        "type": "USER"
+                    },
+                    "event": "agent_assist_response",
+                    "_id": "ms-e9ac44c7-38c4-58ad-9158-50298176d6ff",
+                    "intentName": "button templates",
+                    entityName: "Order Number", // For entity extraction
+                    entityValue: "12345", // For entity extraction
+                    isPrompt : false,// true represents Ask customer and false represents Tell customer
+                    endOfTask: false,
+                    endOfFaq: false,
+                    suggestions: {
+                        dialogs: [
+                            {
+                                name: "button templates"
+                            },
+                            {
+                                name: "Carousel Template"
+                            }
+                        ],
+                        faqs: [
+                            {
+                                question: "what are the loan rates",
+                                answer: `Loan rates are 10% 
+                                Here is how to check your eligibility for refund : 
+Verify the status of order. 
+If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+Verify the status of order. 
+If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+Verify the status of order. 
+If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+Verify the status of order. 
+If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+Verify the status of order. 
+If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+Verify the status of order. 
+If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+Verify the status of order. 
+If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+Verify the status of order. 
+If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+Verify the status of order. 
+If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+See more`
+                            },
+                            {
+                                question: "what are the rates of loan",
+                                answer: `Loan rates are 10% 
+                                Here is how to check your eligibility for refund : 
+Verify the status of order. 
+If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+Verify the status of order. 
+If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+Verify the status of order. 
+If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+Verify the status of order. 
+If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+Verify the status of order. 
+If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+Verify the status of order. 
+If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+Verify the status of order. 
+If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+Verify the status of order. 
+If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+Verify the status of order. 
+If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+See more`
+                            }
+                        ]
+                    }
+                }
 
-//                 ++count;
-//                 console.log("===inside if=count value -======", count);
-//             }else{
-//                 data['endOfTask'] = true;
-//                 data['endOfFaq'] = true;
-//             }
+                ++count;
+                console.log("===inside if=count value -======", count);
+            }else{
+                data['endOfTask'] = true;
+                data['endOfFaq'] = true;
+            }
             // setTimeout(()=>{
                 processAgentAssistResponse(data, data.conversationId, _botId, _agentAssistDataObj.userId);
             // },3000)
@@ -176,7 +176,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         if(isAutomationOnGoing && !event.data.event){
             processUserMessages(event.data, event.data.conversationId, event.data.botId);
         }else{
-            _agentAsisstSocket.emit('user_message',event.data)
+             let agent_assist_request = {
+                'conversationId' : _agentAssistDataObj.conversationId,
+                'query' : event.data.value,
+                'botId' : _agentAssistDataObj.botId,
+                'agentId' : _agentAssistDataObj.userId
+            }
+            _agentAsisstSocket.emit('agent_assist_request',agent_assist_request)
             console.log("event emitted",event.data);
         }
        });
@@ -628,8 +634,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 isShowHistoryEnable = true;
                 $('.show-history-block').addClass('hide');
                 $('.show-back-recommendation-block').removeClass('hide');
-                let bodyContainer = document.getElementById('bodyContainer');
-                let dom = document.getElementById('dynamicBlocksData');
+                let bodyContainer = document.getElementById('dynamicBlocksData');
+                let dom = document.getElementById('dynamicBlock');
                 let automationSuggestions =  dom.getElementsByClassName('dialog-task-accordiaon-info');
 
                 let dialogSuggestion = document.getElementsByClassName('dialog-task-run-sec');
@@ -649,11 +655,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                         a.classList.remove('hide');
                     }
                     
-                    let currentdomHtml = `<div class="dialog-task-data history" id="historyData">${dom.innerHTML}</div>`;
+                    let currentdomHtml = `<div class="dynamic-block-content history" id="historyData">${dom.innerHTML}</div>`;
                     bodyContainer.innerHTML+=currentdomHtml;
                     
-                    let doms = document.getElementById('dynamicBlocksData');
-                    doms.classList.add('hide');
+                    document.getElementById('dynamicBlock').classList.add('hide');
                     $(`.history`).find('.steps-run-data.hide').removeClass('hide');;
                     $('.history').find('.action-links').addClass('hide');
                 }
@@ -661,7 +666,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             }
             if(target.id==='backToRecommendation'){
                 isShowHistoryEnable = false;
-                let dom = document.getElementById('dynamicBlocksData');
+                let dom = document.getElementById('dynamicBlock');
                 dom.classList.remove('hide');
                 $('.show-history-block').removeClass('hide');
                 $('.show-back-recommendation-block').addClass('hide');
