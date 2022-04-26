@@ -9,7 +9,6 @@ var isShowHistoryEnable = false;
 var idsOfDropDown;
 var countRequest = 0;
 var runBtArrayIds = ['123'];
-var respArray = [];
 var dropdownHeaderUuids;
 var responseId;
 var count = 0;
@@ -156,10 +155,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 data['endOfTask'] = true;
                 data['endOfFaq'] = true;
             }
-            setTimeout(()=>{
+            // setTimeout(()=>{
                 processAgentAssistResponse(data, data.conversationId, _botId, _agentAssistDataObj.userId);
                 ProcessAgentIntentResults(data, data.conversationId, _botId, _agentAssistDataObj.userId);
-            },3000)
+            // },3000)
             
         })
         _agentAsisstSocket.on('user_message', (data) => {
@@ -301,6 +300,21 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
     }
 
     function ProcessAgentIntentResults(data, convId, botId) {
+        var _msgsResponse = {
+            "type": "bot_response",
+            "from": "bot",
+            "message": [
+
+            ],
+            "messageId": data._id,
+            "botInfo": {
+                "chatBot": "sample Bot",
+                "taskBotId": botId
+            },
+            "createdOn": "2022-03-21T07:56:18.225Z",
+            "icon": "https://uat.kore.ai:443/api/getMediaStream/market/f-cb381255-9aa1-5ce2-95e3-71233aef7084.png?n=17648985&s=IlRvUlUwalFVaFVMYm9sZStZQnlLc0l1UlZvdlNUUDcxR2o3U2lscHRrL3M9Ig$$",
+            "traceId": "873209019a5adc26"
+        }
         console.log(data);
         console.log("AgentAssist >>> intentsearch_response", data);
         let freqAndAutoDialogList = document.getElementById('frequently-exhaustive');
@@ -311,9 +325,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         let searchTextHtml = `<div class="searched-intent" id="librarySearchText">Search results for '${input_taker}'</div>`
         let uuids = Math.floor(Math.random() * 100);
         libraryResponseId = uuids;
-        respArray.push(libraryResponseId+'');
         data = {
-            "isSearch" : true,
+            "isSearch" : false,
             "botId": "st-924bd71e-247e-58ec-bfe4-81e0f8b3e0fc",
             "orgId": "o-1158ce5e-f159-50c6-a198-530f59e2e1d4",
             "accountId": "622efb179b25b1a23ef05da2",
@@ -357,14 +370,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                                                 <div class="content-dialog-task-type p1-0" id="usecases-suggestions"></div>
                                                 </div>
                                             </div>`
-                    automationSuggestions.innerHTML += listAreaHtml;
+                    automationSuggestions.innerHTML = listAreaHtml;
                 } else {
                     let automationSuggestions = document.getElementById(`allAutomations-Exhaustivelist`);
                     let listAreaHtml = `<div class="heading-title">Automations Exhaustive list</div>
                                             <div class="dialog-task-run-sec p-0" id="usecases-list">
                                                 No UseCase are Present
                                             </div>`
-                    automationSuggestions.innerHTML += listAreaHtml; 
+                    automationSuggestions.innerHTML = listAreaHtml; 
                 }
                 data.suggestions.dialogs?.forEach((ele, index) => {
                     let body = {};
@@ -409,7 +422,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         }
     
         if(data.isSearch) {
-            // searchTextDisplay.innerHtml = document.getElementById('librarySearchText').remove();
             searchResultBlock.classList.add('hide')
             freqAndAutoDialogList.classList.remove('hide');
             searchedDialogs_faqs.classList.add('hide');
@@ -553,7 +565,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         }
         let uuids = Math.floor(Math.random() * 100);
         responseId = uuids;
-        respArray.push(responseId+'');
         var _msgsResponse = {
             "type": "bot_response",
             "from": "bot",
@@ -959,7 +970,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 let back = document.getElementById('backToRecommendation');
                 back.classList.remove('hide');
                 let bodyContainer = document.getElementById('bodyContainer');
-                let dom = document.getElementById('dynamicBlocksData');
+                let dom = document.getElementById('dynamicBlock');
                 let automationSuggestions =  dom.getElementsByClassName('dialog-task-accordiaon-info');
 
                 let dialogSuggestion = document.getElementsByClassName('dialog-task-run-sec');
@@ -982,7 +993,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                     let currentdomHtml = `<div class="dialog-task-data history" id="historyData">${dom.innerHTML}</div>`;
                     bodyContainer.innerHTML+=currentdomHtml;
                     
-                    let doms = document.getElementById('dynamicBlocksData');
+                    let doms = document.getElementById('dynamicBlock');
                     doms.classList.add('hide');
                     $(`.history`).find('.steps-run-data.hide').removeClass('hide');;
                     $('.history').find('.action-links').addClass('hide');
@@ -991,7 +1002,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             }
             if(target.id==='backToRecommendation'){
                 isShowHistoryEnable = false;
-                let dom = document.getElementById('dynamicBlocksData');
+                let dom = document.getElementById('dynamicBlock');
                 dom.classList.remove('hide');
                 let showHistory = document.getElementById('showHistory');
                 showHistory.classList.remove('hide');
@@ -1032,7 +1043,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 if(libraryRunBtn) {
                     // hide library show User automation logic
                     libraryContainer.classList.add('hide');
-                    dynamicBlock.classList.remove('hide');
+                    document.getElementById(`dynamicBlock`).classList.remove('hide');
                     custSentimentAnalysis.classList.remove('hide');
 
                 }
@@ -1072,7 +1083,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 dynamicBlock.innerHTML = dynamicBlock.innerHTML + dropdownHtml;
                 let automationSuggestions = document.getElementById(`automationSuggestions-${responseId}`);
                 idsOfDropDown = `automationSuggestions-${responseId}`;
-                automationSuggestions.remove();
+                automationSuggestions?.remove();
                 let addRemoveDropDown = document.getElementById(`addRemoveDropDown-${uuids}`);
                 addRemoveDropDown.classList.remove('hide');
                 AgentAssist_run_click(evt);
