@@ -60,7 +60,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
     console.log("AgentAssist >>> uuId", _agentAssistDataObj.userId);
     if (_agentAsisstSocket === null) {
         _agentAsisstSocket = io(agentAssistSocketUrl + "/koreagentassist", {
-            "path": "/agentassist/api/v1/chat/", 'query': 'userId=' + uuid + '&orgId=o-da05dbea-6573-5399-ba58-22035a3122f3'+'&authToken=urwMfUsk0wF3DG7mNf6usJrLEtGvpmGgXzdRB94Rn1b2OyjCHbHdueP0SrWE7rHD', transports: ['websocket', 'polling', 'flashsocket']
+            "path": "/agentassist/api/v1/chat/", 'query': 'userId=' + uuid + '&orgId=o-da05dbea-6573-5399-ba58-22035a3122f3', transports: ['websocket', 'polling', 'flashsocket']
         });
         _agentAsisstSocket.on("connect", () => {
             console.log("AgentAssist >>> socket connected")
@@ -176,16 +176,15 @@ See more`
         if(isAutomationOnGoing && !event.data.event){
             processUserMessages(event.data, event.data.conversationId, event.data.botId);
         }else{
-             let agent_assist_request = {
+            let agent_assist_request = {
                 'conversationId' : _agentAssistDataObj.conversationId,
                 'query' : event.data.value,
                 'botId' : _agentAssistDataObj.botId,
                 'agentId' : _agentAssistDataObj.userId
             }
-            _agentAsisstSocket.emit('agent_assist_request',agent_assist_request)
-            console.log("event emitted",event.data);
-        }
-       });
+            _agentAsisstSocket.emit('agent_assist_request',agent_assist_request);
+          }
+        });
     }
     console.log("AgentAssist >>> creating container for user", _agentAssistDataObj.userId)
     createAgentAssistContainer(_agentAssistDataObj.containerId, _agentAssistDataObj.conversationId, _agentAssistDataObj.botId, _agentAssistDataObj.userId);
@@ -658,7 +657,8 @@ See more`
                     let currentdomHtml = `<div class="dynamic-block-content history" id="historyData">${dom.innerHTML}</div>`;
                     bodyContainer.innerHTML+=currentdomHtml;
                     
-                    document.getElementById('dynamicBlock').classList.add('hide');
+                    let doms = document.getElementById('dynamicBlock');
+                    doms.classList.add('hide');
                     $(`.history`).find('.steps-run-data.hide').removeClass('hide');;
                     $('.history').find('.action-links').addClass('hide');
                 }
