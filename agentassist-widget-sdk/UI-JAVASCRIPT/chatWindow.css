@@ -244,7 +244,7 @@
     padding:20px;
 }
 a {
-    color: #009dab;
+    color: #3366ff;
     text-decoration: none;
 }
 ul.chat-container li:first-child{
@@ -306,12 +306,12 @@ ul.chat-container li .profile-photo .user-account{
     border: none;
 }
 .buttonTmplContent .buttonTmplContentChild .quickReply{
-    border: 1px solid #009dab;
+    border: 1px solid #3366ff;
     padding: 4px 13px;
     border-radius: 20px;
     display: table;
     white-space: nowrap;
-    color: #009dab;
+    color: #3366ff;
     background: #fff;
 	transition: background-color 200ms linear;
     -webkit-transition: background-color 200ms linear;
@@ -330,7 +330,7 @@ ul.chat-container li .profile-photo .user-account{
     margin: 0px 7px -2px -8px;
 }
 .buttonTmplContent .buttonTmplContentChild .quickReply:hover{
-    background: #009dab;
+    background: #3366ff;
     color: #fff;
 }
 .quickreplyText {
@@ -363,7 +363,7 @@ ul.chat-container li.fromCurrentUser .messageBubble{
     padding: 12px 15px;
     max-width: 70%;
     font-size: 16px;
-    background-color: #009DAB;
+    background-color: #3366ff;
     color: white;
     border-radius: 12px;
     border-bottom-right-radius: 2px;
@@ -436,9 +436,9 @@ ul.chat-container li.fromOtherUsers.with-icon .extra-info{
     opacity: 0.3;
 } 
 .sendBtnCnt .sendButton {
-    background: #009DAB;
+    background: #3366ff;
     padding: 5px;
-    border: 1px solid #009DAB;
+    border: 1px solid #3366ff;
     border-radius: 3px;
     color: #fff;
     font-size: 12px;

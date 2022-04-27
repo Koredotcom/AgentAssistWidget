@@ -21,7 +21,7 @@
                                 <img src="assets/icons/home/welcome-onboarding-1.png">
                             </div>   
                             <div class="main-heading">Let's take a look around</div>
-                            <div class="info-text">Before we begin, let's start by naming your SmartAssist instance.</div>
+                            <div class="info-text">Before we begin, let's start by naming your AgentAssist instance.</div>
 
                             <div class="kr-sg-input-text mb-0">
                                 <input type="text" placeholder="Enter the name here.." class="input-text" name="instanceName" [(ngModel)]="model.name" required>
@@ -112,24 +112,24 @@
     <perfect-scrollbar class="scroll-popup">
         <div class="inner-scroll-content">
             <div class="main-title">Hi User, Welcome to AgentAssist</div>
-            <div class="sub-heading">You can choose to create a new bot, convert an existing bot on the Kore.ai Platform to a SmartAssist automation bot or import a bot.</div>
+            <div class="sub-heading">You can choose to create a new bot, convert an existing bot on the Kore.ai Platform to a AgentAssist automation bot or import a bot.</div>
             <div class="cards-agent-assist-info">
-                <div class="card-tile">
+                <div class="card-tile" (click)="newBot('createNew')">
                     <div class="inner-data">
                         <div class="img-block">
                             <img src="assets/images/onboarding/ast-onboarding-1.svg">
                         </div>
                         <div class="title">Create Bot From Scratch</div>
-                        <div class="text-desc">Create your SmartAssist bot from scratch here</div>
+                        <div class="text-desc">Create your AgentAssist bot from scratch here</div>
                     </div>
                 </div>
-                <div class="card-tile">
+                <div class="card-tile" (click)="newBot('selectBot')">
                     <div class="inner-data">
                         <div class="img-block">
                             <img src="assets/images/onboarding/ast-onboarding-2.svg">
                         </div>
                         <div class="title">Select Existing Bot</div>
-                        <div class="text-desc">Already have an account on the Bot Platform? Convert it to a SmartAssist bot here</div>
+                        <div class="text-desc">Already have an account on the Bot Platform? Convert it to a AgentAssist bot here</div>
                     </div>
                 </div>
             </div>

@@ -7,8 +7,7 @@
                 <li>
                     <div class="kr-sg-dropdowns regular-user-bots-dropdown" ngbDropdown [placement]="'bottom-left'">
                         <div class="dropdown dropdown-open">
-                            <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>
-                                <i class="icon-sa-arrow-down"></i>
+                            <div class="dropdown-toggle dropdown-input">
                                 <ng-container *ngIf="!currentBt">
                                     <span class="empty-text">Select a bot</span>
                                 </ng-container>
@@ -18,7 +17,7 @@
                                     </div>
                                     <div class="bot-name text-truncate" [innerHTML]="currentBt?.name" [title]="currentBt?.name"></div>
                                 </ng-container>
-                            </button>
+                            </div>
                             <ul class="dropdown-menu content-menu regular-user-bots" ngbDropdownMenu>
                                 <div class="user-bots-details">
                                     <div class="kr-sg-input-search">                               

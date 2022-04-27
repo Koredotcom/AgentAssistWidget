@@ -180,12 +180,16 @@ export class AppComponent implements OnDestroy {
         //     $(".toShowAppHeader").addClass('d-none');
         //   }, 350);
         // }
-
-        if (_self.appService.instanceApps.length === 0) {
+        if (!_self.authService.smartAssistBots) {
           const route = _self.getAuthorizedRoute(_self.url);
           _self.router.navigate([(route || 'onboarding')]);
-          // return _self.router.navigate(['onboarding']);
         }
+
+        //  if (_self.appService.instanceApps.length === 0) {
+        //   const route = _self.getAuthorizedRoute(_self.url);
+        //   _self.router.navigate([(route || 'onboarding')]);
+        //   // return _self.router.navigate(['onboarding']);
+        // }
 
         if (_self.workflowService.doOpenInstallTemps || _self.authService.hasToken) {
           const route = _self.getAuthorizedRoute(_self.url);

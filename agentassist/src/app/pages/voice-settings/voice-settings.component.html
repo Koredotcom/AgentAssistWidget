@@ -164,8 +164,8 @@
                         <div id="collapse2" class="collapse inside-accordioncontent">
                             <div class="card-body inner-accordion-table">
                                 <div class="inner-accordion-table-header row col-12 m-0">
-                                    <div class="col-4 title text-truncate pl-5">SIP URL</div>
-                                    <!-- <div class="col-6 title text-truncate">Attached Experience Flow</div> -->
+                                    <div class="col-10                                                                                                                                                                                                              `                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               `    title text-truncate pl-5">SIP URL</div>
+                                    <!-- <div class="col-6 title text-truncate"></div> -->
                                     <div class="col-2 title text-truncate text-center"> Status</div>
                                 </div>
 
@@ -175,7 +175,7 @@
                                     </div>
                                     <div *ngIf="phoneNumandSipDetailsList?.sipTransfers.length > 0">
                                         <div class="row m-0 col-12 inner-accordion-table-body sipDetails" *ngFor="let sipDetails of phoneNumandSipDetailsList?.sipTransfers; let index = index">
-                                            <div class="col-4 phone-numbers">
+                                            <div class="col-10 phone-numbers">
                                                 <div class="phone-number-text p-0">{{sipDetails.sipURI}}</div>
                                             </div>
                                             <!-- <div class="col-6 attach-contact-flow">
@@ -192,12 +192,12 @@
                                                         <ng-container *ngIf="cf.didNumber === didNumber" >
                                                             <div (click)="openAFSlider('SIP',sipDetails, cf?._id, didNumber)">
                                                                 <div *ngIf="sipDetails.callFlowDetails.length > 0" class="attch-flow-btn">{{cf.name}}</div>
-                                                                <!-- <img src="assets/icons/agent/edit.svg" alt="" class="ml-2 cursor-pointer"> -->
+                                                             <img src="assets/icons/agent/edit.svg" alt="" class="ml-2 cursor-pointer"> -->
                                                             <!-- </div>
                                                         </ng-container>
                                                     </div>
                                                 </div>
-                                            </div> --> -->
+                                            </div> -->
                                             <div class="col-2 text-center status-type d-flex align-items-center justify-content-center">
                                                 <div class="status-box" [ngClass]="{'status-completed': (sipDetails?.callFlowDetails.length>0 && sipDetails?.callFlowDetails[0]?.state === 'published')}"
                                                 [ngbTooltip]="(sipDetails.callFlowDetails.length>0? sipDetails.callFlowDetails[0].state: 'No flow attached') | titlecase">

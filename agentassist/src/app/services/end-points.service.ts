@@ -530,7 +530,7 @@ export class EndPointsService {
     }
 
     this.serviceList['post.importbot'] = {
-      endpoint: this.API_SERVER_URL + '/users/:userId/builder/importBot',
+      endpoint: this.API_SERVER_URL + '/users/:userId/builder/importBot?isAgentAssist=true',
       method: 'post'
     };
 
@@ -1437,12 +1437,12 @@ export class EndPointsService {
     }
 
     this.serviceList['get.automationbots'] = {
-      endpoint: this.API_SERVER_URL + '/smartassist/apps/automationbots',
+      endpoint: this.API_SERVER_URL + '/smartassist/apps/automationbots?isAgentAssist=true',
       method: 'get'
     }
 
     this.serviceList['post.automationbots'] = {
-      endpoint: this.API_SERVER_URL + '/smartassist/apps/automationbots',
+      endpoint: this.API_SERVER_URL + '/smartassist/apps/automationbots?isAgentAssist=true',
       method: 'post'
     }
 
@@ -1464,7 +1464,12 @@ export class EndPointsService {
     }
 
     this.serviceList['get.voiceList'] = {
-      endpoint: this.API_SERVER_URL + '/smartassist/apps/instances/:instanceId/channels/voice',
+      endpoint: this.API_SERVER_URL + '/smartassist/apps/instances/:instanceId/channels/voice?isAgentAssist=true',
+      method: 'get'
+    }
+
+    this.serviceList['get.chatList'] = {
+      endpoint: this.API_SERVER_URL + '/smartassist/apps/instances/:instanceId/channels/chat?isAgentAssist=true',
       method: 'get'
     }
 

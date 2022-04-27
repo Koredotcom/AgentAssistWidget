@@ -373,8 +373,8 @@ var KoreGraphAdapter = (function($) {
                 .append('text')
                 .text('More...')
                 .attr('class', 'more-legend')
-                // .attr('color', '#009dab')
-                .attr("fill", "#009dab")
+                // .attr('color', '#3366ff')
+                .attr("fill", "#3366ff")
                 .attr("font-weight", "bold")
                 .attr("cursor", "pointer")
                 .attr('transform', function(d){
@@ -778,8 +778,8 @@ var KoreGraphAdapter = (function($) {
                     .append('text')
                     .text('More...')
                     .attr('class', 'more-legend')
-                    // .attr('color', '#009dab')
-                    .attr("fill", "#009dab")
+                    // .attr('color', '#3366ff')
+                    .attr("fill", "#3366ff")
                     .attr("font-weight", "bold")
                     .attr("cursor", "pointer")
                     .attr('transform', function(d){

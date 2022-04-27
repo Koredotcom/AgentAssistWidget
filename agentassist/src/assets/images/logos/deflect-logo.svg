@@ -9,7 +9,7 @@
         <use fill="#F9F9F9" xlink:href="#prefix__a"/>
         <use fill="#000" xlink:href="#prefix__b"/>
         <use fill="#F9F9F9" xlink:href="#prefix__b"/>
-        <circle cx="14.552" cy="14.552" r="14.552" fill="#009DAB"/>
+        <circle cx="14.552" cy="14.552" r="14.552" fill="#3366ff"/>
         <path fill="#F9F9F9" d="M14.65 6.712L6.76 14.6l7.89 7.889 7.888-7.89-7.889-7.888zm0 4.116l3.772 3.773-3.773 3.773-3.773-3.773 3.773-3.773z"/>
     </g>
 </svg>

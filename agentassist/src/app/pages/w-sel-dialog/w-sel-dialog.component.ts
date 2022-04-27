@@ -13,6 +13,9 @@ import { WSelectionService } from './w-sel.service';
 import { Subscription } from 'rxjs';
 import { AppService } from '@kore.services/app.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { HttpParams } from '@angular/common/http';
+import { OnboardingDialogComponent } from '../onboarding/onboarding-dialog/onboarding-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 declare const $: any;
 
@@ -197,6 +200,8 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
               private wSelService: WSelectionService,
               private appService: AppService,
               private modalService: NgbModal,
+              private dialog: MatDialog,
+              
               ) { }
 
   ngOnInit(): void {
@@ -337,13 +342,12 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
     this.config = {
       name: this.botName.trim(),
       icon: this.newStreamData.icon.fileId,
-      defaultLanguage: this.selectedLang.value,
-      instanceBotId: this.appService.selectedInstanceApp$.value?._id
+      defaultLanguage: this.selectedLang.value
     }
     this.headerService.isOnboardingPage = true;
     this.appsData = this.workflowService.deflectApps();
     this.isNewBot = true;
-    this.onSubmit()
+    this.onSubmit();
   }
 
   proceedBackup(cb) {
@@ -374,7 +378,7 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
       res => {
         console.log(res);
         if(res.status == 'success') {
-
+        this.close();
         } else if(res.status == 'pending') {
           this.importExportStatus = setInterval(() => {
               pollStatus();
@@ -731,7 +735,7 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
       this.conversionNeeded = false;
     }
 
-    this.importedVariablesData.color = '#009dab';
+    this.importedVariablesData.color = '#3366ff';
     this.importedVariablesData.name = this.impBtName.trim();
     this.importedVariablesData.purpose = "customer";
     this.importedVariablesData.icon = this.newStreamData.icon.fileId;
@@ -909,28 +913,32 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
 
   
   onSubmit() {
+    this.dialog.closeAll();
     const payload = this.config;
     // payload.deflectAppStatus.virtualAssistant.enabled = !!this.config.deflectAppStatus.virtualAssistant.type;
-    this.service.invoke('post.automationbots', {}, payload).subscribe(
+    this.service.invoke('post.automationbots',{params:{'isAgentAssist':true}}, payload).subscribe(
       res => {
         if(_.isArray(this.appsData)) {
           this.appsData.unshift(res);
         }
-        this.authService.smartAssistBots = this.appsData;
+        this.wSel.emit();
+       this.authService.smartAssistBots = this.appsData;
         this.authService.deflectApps.next(this.appsData);
         this.workflowService.deflectApps(this.appsData);
         this.notificationService.notify(this.translate.instant("ONBOARDING.BT_CREATION_SUCCESS"), 'success');
         setTimeout(() => {
-          this.workflowService.switchBt$.next(res);
-          this.wSel.emit();
-          this.isNewBot = false;
+             this.workflowService.switchBt$.next(res);
+             this.wSel.emit();
+             this.isNewBot = false;
         }, 500);
       },
       errRes => {
         this.isNewBot = false;
         this.showError(errRes, this.translate.instant("ONBOARDING.FAILED_CREATE"));
       }
+    
     );
+  
   }
 
   showError(err: any, msg: string) {
