@@ -457,7 +457,7 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
         self.selectedBt = selectedBotDetails.name;
       }
 
-      selectedBotDetails.instanceBotId = self.appService.selectedInstanceApp$.value?._id;
+      selectedBotDetails.instanceBotId = this.authService.smartAssistBots.map(x=>x._id);
       self.service.invoke('post.convertbot', {}, selectedBotDetails)
           .subscribe(res=>{
             self.getConvStatus(res._id);

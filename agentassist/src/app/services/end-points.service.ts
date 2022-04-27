@@ -520,7 +520,7 @@ export class EndPointsService {
     };
 
     this.serviceList['post.convertbot'] = {
-      endpoint: this.API_SERVER_URL + '/smartassist/apps/automationbots/convertbot',
+      endpoint: this.API_SERVER_URL + '/smartassist/apps/automationbots/convertbot?isAgentAssist=true',
       method: 'post'
     };
 
