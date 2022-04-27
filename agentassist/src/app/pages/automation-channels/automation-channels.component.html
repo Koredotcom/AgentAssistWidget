@@ -22,7 +22,67 @@
     </div>
     
     <div id="chat" *ngIf="showChatSection">
-        <app-bt-container hideMenu="true"></app-bt-container>
+        <!-- <app-bt-container hideMenu="true"></app-bt-container> -->
+        <perfect-scrollbar class="scroll-chat-list">
+            <div class="chat-data-input-containers">
+                <div class="title-main">Your bot is associated with AgentAssist.</div>
+                <div class="input-box-data">
+                    <div class="row-data">
+                        <div class="label-text">Bot Name</div>
+                        <div class="kr-sg-input-text">
+                            <input type="text" placeholder="Placeholder text" class="input-text" [(ngModel)]="chatList.botName" readonly>
+                                <button class="copy-btn" (click)="copyInputMessage(chatList.botName)" value="click to copy">
+                                <img src="assets/icons/copyblue.svg">
+                                Copy
+                                </button> 
+                        </div>
+                    </div>
+                    <div class="row-data">
+                        <div class="label-text">Bot ID</div>
+                        <div class="kr-sg-input-text">
+                            <input type="text" placeholder="Placeholder text" class="input-text" [(ngModel)]="chatList.botId" readonly>
+                                <button class="copy-btn" (click)="copyInputMessage(chatList.botId)" value="click to copy">
+                                <img src="assets/icons/copyblue.svg">
+                                Copy
+                                </button> 
+                        </div>
+                    </div>
+                    <div class="row-data">
+                        <div class="label-text">Client ID</div>
+                        <div class="kr-sg-input-text">
+                            <input type="text" placeholder="Placeholder text" class="input-text" [(ngModel)]="chatList.cI" readonly>
+                                <button class="copy-btn" (click)="copyInputMessage(chatList.cI)" value="click to copy">
+                                <img src="assets/icons/copyblue.svg">
+                                Copy
+                                </button> 
+                        </div>
+                    </div>
+                    <div class="row-data">
+                        <div class="label-text">Client Secret</div>
+                        <div class="kr-sg-input-text">
+                            <input type="text" placeholder="Placeholder text" class="input-text" [(ngModel)]="chatList.cS" readonly>
+                                <button class="copy-btn" (click)="copyInputMessage(chatList.cS)" value="click to copy">
+                                <img src="assets/icons/copyblue.svg">
+                                Copy
+                                </button> 
+                        </div>
+                    </div>
+                </div>
+                <div class="input-box-data">
+                    <div class="text-heading">Webhook URL</div>
+                    <div class="sub-text">Configure the following Webhook URL in your external application.</div>
+                    <div class="row-data">
+                        <div class="kr-sg-input-text">
+                            <input type="text" placeholder="https://uat.kotr.ai.44334" class="input-text" [(ngModel)]="webhookUrl" readonly>
+                            <button class="copy-btn" (click)="copyInputMessage(webhookUrl)" value="click to copy">
+                                <img src="assets/icons/copyblue.svg">
+                                Copy
+                            </button> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </perfect-scrollbar>
     </div>
 </div>
 

@@ -424,7 +424,7 @@ V6.2.0.1 [Minor] on 26-JUNE-2018: Master branch
       jquery-ui.min.css - 1.12.1.
     2.Minor bug fixes.
 
-    NOTE: New Jquery version upgrade requires below change in Index.html
+    NOTE: New Jquery version upgrade requires below change in 
     
     $(document).on("ready", function () { 
         TO 

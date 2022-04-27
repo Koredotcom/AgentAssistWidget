@@ -9,7 +9,7 @@ export class ConversationFlowComponent implements OnInit {
   
   converFlowLegend = [{
     title: "Voice",
-    color: "#009DAB",
+    color: "#3366ff",
     type: 'square'
   },{
     title: "Chat",

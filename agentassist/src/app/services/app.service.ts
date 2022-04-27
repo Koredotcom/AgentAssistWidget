@@ -32,8 +32,10 @@ export class AppService {
     getInstaceApps(): Observable<any> {
         return this.service.invoke('get.instances')
             .pipe(tap((res) => {
-                this.instanceApps = res;
+                this.instanceApps = res;       
+                console.log(res);         
                 this.selectedInstanceApp$.next(res[0]);
+                
             }, err => {
                 this.notificationService.showError(err);
             }));
@@ -49,7 +51,7 @@ export class AppService {
         return this.service.invoke('get.smartassist.version')
             .pipe(tap((res) => {
                 if (!res.newUI) {
-                    window.location.href = window.location.href.replace('/smartassist', '/smartassistv1');
+                    window.location.href = window.location.href.replace('/agentassist', '/agentassistv1');
                 }
             }, err => {
                 this.notificationService.showError(err);

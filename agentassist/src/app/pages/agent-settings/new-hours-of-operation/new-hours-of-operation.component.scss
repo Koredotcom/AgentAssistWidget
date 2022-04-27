@@ -275,18 +275,18 @@
  ::ng-deep ngx-material-timepicker-container {
     --body-background-color: #fff;
     --primary-font-family: 'Roboto',sans-serif;
-    --button-color: #009dab !important;
+    --button-color: #3366ff !important;
     --dial-active-color: #fff;
     --dial-inactive-color: rgba(255, 255, 255, .5);
-    --dial-background-color: #009dab !important;
-    --dial-editable-active-color: #009dab !important;
+    --dial-background-color: #3366ff !important;
+    --dial-editable-active-color: #3366ff !important;
     --dial-editable-background-color: #fff;
     --clock-face-time-active-color: #fff;
     --clock-face-time-inactive-color: #6c6c6c;
     --clock-face-inner-time-inactive-color: #929292 !important;
     --clock-face-time-disabled-color: #c5c5c5;
     --clock-face-background-color: #f0f0f0;
-    --clock-hand-color: #009dab !important;
+    --clock-hand-color: #3366ff !important;
 
     .timepicker-backdrop-overlay, .timepicker-overlay {
         z-index: 9999 !important;

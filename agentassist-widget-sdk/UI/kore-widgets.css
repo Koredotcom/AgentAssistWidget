@@ -1,7 +1,7 @@
 .defaultTheme-kore {
     --sdk-default-white: #ffffff;
     --sdk-primary-font-color: #26344a;
-    --sdk-primary-blue-color: #009dab;
+    --sdk-primary-blue-color: #3366ff;
     --sdk-primary-blue-color-opacity: rgba(0, 157, 171, .2);
     --sdk-primary-border-color: #e5e8ec;
     --sdk-primary-bg-color: #f2f3f5;
@@ -34,7 +34,7 @@
     --sdk-default-white: #262626;
     --sdk-primary-font-color: #ffffff;
     --sdk-primary-border-color: rgba(255, 255, 255, .2);
-    --sdk-primary-blue-color: #009dab;
+    --sdk-primary-blue-color: #3366ff;
     --sdk-primary-blue-color-opacity: rgba(0, 157, 171, .2);
     --sdk-primary-bg-color: #000000;
     --sdk-panel-header-bg-color:#262626;
@@ -250,7 +250,7 @@
 }
 .kr-wiz-content-css .listTableContainerDiv .listTableContainerDivRepet .seeMoreFooter .seeMoreLink{
     cursor: pointer;
-    color: #009dab;
+    color: #3366ff;
     font-size: 14px;
     font-weight: normal;  
     border-top: 1px solid #e5e8ec;
@@ -7034,12 +7034,12 @@
 .kore-chat-window .widgetPanel .widgetContParent .webFormWidget .sucessMsg .sucessDoneBtn{
     font-size: 14px;
     color: #fff;
-    background: #009dab;
+    background: #3366ff;
     height: 30px;
     padding: 0px 20px !important;
     width: auto;
     border-radius: 3px;
-    border: 1px solid #009dab;
+    border: 1px solid #3366ff;
     line-height: 30px;
     position: relative;
 }

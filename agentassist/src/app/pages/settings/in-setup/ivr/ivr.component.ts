@@ -10,6 +10,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { pipe } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { IncomingSetupModel } from '../../settings.model';
+import { AuthService } from '@kore.services/auth.service';
 declare const $: any;
 @Component({
   selector: 'app-ivr',
@@ -71,7 +72,8 @@ export class IvrComponent implements OnInit {
     private service: ServiceInvokerService,
     private notificationService: NotificationService,
     private translate: TranslateService,
-    private dockStatusService: DockStatusService
+    private dockStatusService: DockStatusService,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
@@ -258,7 +260,8 @@ export class IvrComponent implements OnInit {
   SipTransferConfig() {
     this.saveInProgress = true;
     const params = {
-      instanceId: this.instanceAppDetails._id
+      instanceId: this.authService.smartAssistBots.map(x=>x._id),
+      'isAgentAssist':true
     }
     if (!this.updateSipConfig) {
       const payload = {

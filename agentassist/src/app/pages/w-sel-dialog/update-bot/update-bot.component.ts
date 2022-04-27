@@ -255,7 +255,7 @@ export class UpdateBotComponent implements OnInit {
       self.importedVariablesData = JSON.parse(self.importedVariablesData);
       self.importedBotData = JSON.parse(self.importedBotData);
   
-      self.importedVariablesData.color = '#009dab';
+      self.importedVariablesData.color = '#3366ff';
       // self.importedVariablesData.name = ''; //self.impBtName.trim();
       self.importedVariablesData.purpose = "customer";
       self.importedVariablesData.icon = ''; //self.newStreamData.icon.fileId;

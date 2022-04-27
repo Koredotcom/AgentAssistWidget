@@ -18,8 +18,8 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "aot": true,
-            "baseHref": "/smartassist/",
-            "deployUrl": "/smartassist/",
+            "baseHref": "/agentassist/",
+            "deployUrl": "/agentassist/",
             "outputPath": "dist/src",
             "index": "src/index.html",
             "main": "src/main.ts",
