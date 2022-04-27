@@ -307,6 +307,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
     }
 
     function ProcessAgentIntentResults(data, convId, botId) {
+        console.log("AgentAssist >>> intentsearch_response", data);
+        let uuids = Math.floor(Math.random() * 100);
+        libraryResponseId = uuids;
         var _msgsResponse = {
             "type": "bot_response",
             "from": "bot",
@@ -322,18 +325,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             "icon": "https://uat.kore.ai:443/api/getMediaStream/market/f-cb381255-9aa1-5ce2-95e3-71233aef7084.png?n=17648985&s=IlRvUlUwalFVaFVMYm9sZStZQnlLc0l1UlZvdlNUUDcxR2o3U2lscHRrL3M9Ig$$",
             "traceId": "873209019a5adc26"
         }
-        console.log(data);
-        console.log("AgentAssist >>> intentsearch_response", data);
-        let freqAndAutoDialogList = document.getElementById('frequently-exhaustive');
-        let searchedDialogs_faqs = document.getElementById('dialogs-faqs');
-        let input_taker = document.getElementById('librarySearch').value;
-        let searchResultBlock = document.getElementById('searchResults');
-        let searchTextDisplay = document.getElementById('search-text-display');
-        let searchTextHtml = `<div class="searched-intent" id="librarySearchText">Search results for '${input_taker}'</div>`
-        let uuids = Math.floor(Math.random() * 100);
-        libraryResponseId = uuids;
         data = {
-            "isSearch" : false,
+            "isSearch" : true,
             "botId": "st-924bd71e-247e-58ec-bfe4-81e0f8b3e0fc",
             "orgId": "o-1158ce5e-f159-50c6-a198-530f59e2e1d4",
             "accountId": "622efb179b25b1a23ef05da2",
@@ -366,7 +359,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 ]		
             }
         }
-        if(true) {
+       
+        // search related --> don't remove below two lines
+        // let input_taker = document.getElementById('librarySearch').value;
+        // let searchTextHtml = `<div class="searched-intent" id="librarySearchText">Search results for '${input_taker}'</div>`
+        
+        
+        if(!data.isSearch) {
             if(data.suggestions) {
                 // dialogs body 
                 if(data.suggestions.dialogs.length > 0 ) {
@@ -429,53 +428,68 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         }
     
         if(data.isSearch) {
-            searchResultBlock.classList.add('hide')
-            freqAndAutoDialogList.classList.remove('hide');
-            searchedDialogs_faqs.classList.add('hide');
-            searchTextDisplay.innerHTML = searchTextHtml;
-            freqAndAutoDialogList.classList.add('hide');
-            searchedDialogs_faqs.classList.remove('hide');
-            console.log(data);
-            let dynamicBlock = document.getElementById('dialogs-faqs');
-            
-            let htmls = `
-            <div class="agent-uttr-info" id="agentsearchInfo-${libraryResponseId}">
-            </div>
-            <div class="task-type" >
-                <div class="dialog-img">
-                    <img src="./images/profile.svg">
-                </div>
-                <div class="text-user" >${data.value}</div>
-            </div>
-            <div class="dialog-task-run-sec hide" id="automationSuggestions-${libraryResponseId}">
-            </div>`;
-            dynamicBlock.innerHTML = dynamicBlock.innerHTML + htmls
-            if (data.suggestions.dialogs.length > 0) {
+            ShowSearchContent();
+            console.log(data.value.length);
+            if(data.value.length > 0) {
+                console.log(data.value);
+                let searchTextDisplay = document.getElementById('search-text-display');
+                html = `<div class="searched-intent" id="librarySearchText">Search results for ("${data.value}") </div>
+                <div class="dialog-task-run-sec p-0" id="dialogs-faqs"></div>`
+                searchTextDisplay.innerHTML = searchTextHtml;
+            } else {
+                console.log(data.value);
+                let searchTextDisplay = document.getElementById('search-text-display');
+                html = `<div class="searched-intent" id="librarySearchText">Search results for "${data.value}" </div>
+                <div class="dialog-task-run-sec p-0" id="dialogs-faqs">No Results found</div>`
+                searchTextDisplay.innerHTML = searchTextHtml;
+            }
 
-                let automationSuggestions = document.getElementById(`automationSuggestions-${libraryResponseId}`);
-                let dialogAreaHtml = `<div class="task-type" id="dialoguesArea">
-              <div class="img-block-info">
-                  <img src="./images/dialogtask.svg">
-              </div>
-              <div class="content-dialog-task-type" id="dialogSuggestions">
-                <div class="type-with-img-title">Dialog task (${data.suggestions.dialogs.length})</div>
-              </div>
-            </div>`;
+            if (data.suggestions.dialogs.length > 0) {
+                let automationSuggestions = document.getElementById(`search-text-display`);
+                let dialogAreaHtml = `<div class="dialog-task-run-sec p-0">
+                                        <div class="task-type" id="dialoguesArea">
+                                            <div class="img-block-info">
+                                                <img src="./images/dialogtask.svg">
+                                            </div>
+                                            
+                                            <div class="content-dialog-task-type" id="dialogSuggestions-results">
+                                                <div class="type-with-img-title">Dialog task (${data.suggestions.dialogs.length})</div>
+                                            </div>
+                                        </div>
+                                    </div>`;
                 automationSuggestions.innerHTML += dialogAreaHtml;
             }
+
             if (data.suggestions.faqs.length > 0) {
-                let automationSuggestions = document.getElementById(`automationSuggestions-${libraryResponseId}`);
-                let dialogAreaHtml = `<div class="task-type" id="faqssArea">
-            <div class="img-block-info">
-                <img src="./images/kg.svg">
-            </div>
-            <div class="content-dialog-task-type" id="faqsSuggestions">
-                <div class="type-with-img-title">Knowledge graph (${data.suggestions.faqs.length})</div>
-                
-            </div>
-        </div>`;
+                let automationSuggestions = document.getElementById(`search-text-display`);
+                let dialogAreaHtml = `<div class="dialog-task-run-sec p-0">
+                                        <div class="task-type" id="faqssArea">
+                                            <div class="img-block-info">
+                                                <img src="./images/kg.svg">
+                                            </div>
+                                            <div class="content-dialog-task-type" id="faqsSuggestions-results">
+                                                <div class="type-with-img-title">Knowledge graph (${data.suggestions.faqs.length})</div>
+                                            </div>
+                                        </div>
+                                    </div>`;
                 automationSuggestions.innerHTML += dialogAreaHtml;
             }
+            
+            // let dynamicBlock = document.getElementById('dialogs-faqs');            
+            // let htmls = `
+            // <div class="agent-uttr-info" id="agentsearchInfo-${libraryResponseId}">
+            // </div>
+            // <div class="task-type" >
+            //     <div class="dialog-img">
+            //         <img src="./images/profile.svg">
+            //     </div>
+            //     <div class="text-user" >${data.value}</div>
+            // </div>
+            // <div class="dialog-task-run-sec hide" id="automationSuggestions-${libraryResponseId}">
+            // </div>`;
+            // dynamicBlock.innerHTML = dynamicBlock.innerHTML + htmls
+            
+           
             // dialogs body
             data.suggestions.dialogs?.forEach((ele, index) => {
                 let body = {};
@@ -490,7 +504,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 body['cInfo'] = {
                     "body": data.value
                 };
-                let dialogSuggestions = document.getElementById('dialogSuggestions');
+                let dialogSuggestions = document.getElementById('dialogSuggestions-results');
                 let dialogsHtml = `
                 <div class="type-info-run-send">
                     <div class="left-content">
@@ -499,7 +513,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                     <div class="action-links">
                         <button class="send-run-btn" data-conv-id="${data.conversationId}"
                         data-bot-id="${botId}" data-intent-name="${ele.name}"
-                        data-agent-id="${data.agentId}" data-run="true" 
+                        data-agent-id="${data.agentId}" data-library-run="true" 
                         >RUN</button>
                         <div class="elipse-dropdown-info">
                             <div class="elipse-icon">
@@ -529,7 +543,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 body['cInfo'] = {
                     "body": data.value
                 };
-                let faqsSuggestions = document.getElementById('faqsSuggestions');
+                let faqsSuggestions = document.getElementById('faqsSuggestions-results');
             
                 let faqHtml = `
                 <div class="type-info-run-send">
@@ -558,6 +572,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 }
                 _msgsResponse.message.push(body);
             })
+        }
+        function ShowSearchContent() {
+            document.getElementById('searchResults').classList.remove('hide');
+            document.getElementById('allAutomations-Exhaustivelist').classList.remove('hide');
         }
     }
 
@@ -1100,7 +1118,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         document.getElementById(`agentAutoIcon`).classList.remove(`active-tab`);
         document.getElementById(`transcriptIcon`).classList.remove(`active-tab`);
         document.getElementById(`searchAutoIcon`).classList.add('active-tab');
-        document.getElementById('dialogs-faqs').classList.add('hide');
+        // document.getElementById('dialogs-faqs').classList.add('hide');
         document.getElementById(`showHistory`).classList.add('hide');
         document.getElementById(`dynamicBlock`).classList.add('hide');
         document.getElementById('agentAutoContainer').classList.add('hide');
