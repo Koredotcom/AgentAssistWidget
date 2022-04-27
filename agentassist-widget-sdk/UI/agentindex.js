@@ -67,95 +67,95 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         });
         
         _agentAsisstSocket.on('agent_assist_response', (data) => {
-            if (count === 0 ){
-                data = {
-                    "botId": _botId,
-                    "agentId": _agentAssistDataObj.userId,
-                    "orgId": "o-1158ce5e-f159-50c6-a198-530f59e2e1d4",
-                    "accountId": "622efb179b25b1a23ef05da2",
-                    "type": "intent",
-                    "conversationId": _conversationId,
-                    "value": "i want to apply loan",
-                    "author": {
-                        "id": "u-7b9bbe6b-2602-54c3-bb2c-200a2e60a774",
-                        "type": "USER"
-                    },
-                    "event": "agent_assist_response",
-                    "_id": "ms-e9ac44c7-38c4-58ad-9158-50298176d6ff",
-                    "intentName": "button templates",
-                    entityName: "Order Number", // For entity extraction
-                    entityValue: "12345", // For entity extraction
-                    isPrompt : false,// true represents Ask customer and false represents Tell customer
-                    endOfTask: false,
-                    endOfFaq: false,
-                    suggestions: {
-                        dialogs: [
-                            {
-                                name: "button templates"
-                            },
-                            {
-                                name: "Carousel Template"
-                            }
-                        ],
-                        faqs: [
-                            {
-                                question: "what are the loan rates",
-                                answer: `Loan rates are 10% 
-                                Here is how to check your eligibility for refund : 
-Verify the status of order. 
-If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-Verify the status of order. 
-If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-Verify the status of order. 
-If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-Verify the status of order. 
-If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-Verify the status of order. 
-If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-Verify the status of order. 
-If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-Verify the status of order. 
-If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-Verify the status of order. 
-If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-Verify the status of order. 
-If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-See more`
-                            },
-                            {
-                                question: "what are the rates of loan",
-                                answer: `Loan rates are 10% 
-                                Here is how to check your eligibility for refund : 
-Verify the status of order. 
-If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-Verify the status of order. 
-If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-Verify the status of order. 
-If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-Verify the status of order. 
-If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-Verify the status of order. 
-If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-Verify the status of order. 
-If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-Verify the status of order. 
-If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-Verify the status of order. 
-If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-Verify the status of order. 
-If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
-See more`
-                            }
-                        ]
-                    }
-                }
+//             if (count === 0 ){
+//                 data = {
+//                     "botId": _botId,
+//                     "agentId": _agentAssistDataObj.userId,
+//                     "orgId": "o-1158ce5e-f159-50c6-a198-530f59e2e1d4",
+//                     "accountId": "622efb179b25b1a23ef05da2",
+//                     "type": "intent",
+//                     "conversationId": _conversationId,
+//                     "value": "i want to apply loan",
+//                     "author": {
+//                         "id": "u-7b9bbe6b-2602-54c3-bb2c-200a2e60a774",
+//                         "type": "USER"
+//                     },
+//                     "event": "agent_assist_response",
+//                     "_id": "ms-e9ac44c7-38c4-58ad-9158-50298176d6ff",
+//                     "intentName": "button templates",
+//                     entityName: "Order Number", // For entity extraction
+//                     entityValue: "12345", // For entity extraction
+//                     isPrompt : false,// true represents Ask customer and false represents Tell customer
+//                     endOfTask: false,
+//                     endOfFaq: false,
+//                     suggestions: {
+//                         dialogs: [
+//                             {
+//                                 name: "button templates"
+//                             },
+//                             {
+//                                 name: "Carousel Template"
+//                             }
+//                         ],
+//                         faqs: [
+//                             {
+//                                 question: "what are the loan rates",
+//                                 answer: `Loan rates are 10% 
+//                                 Here is how to check your eligibility for refund : 
+// Verify the status of order. 
+// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+// Verify the status of order. 
+// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+// Verify the status of order. 
+// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+// Verify the status of order. 
+// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+// Verify the status of order. 
+// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+// Verify the status of order. 
+// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+// Verify the status of order. 
+// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+// Verify the status of order. 
+// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+// Verify the status of order. 
+// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+// See more`
+//                             },
+//                             {
+//                                 question: "what are the rates of loan",
+//                                 answer: `Loan rates are 10% 
+//                                 Here is how to check your eligibility for refund : 
+// Verify the status of order. 
+// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+// Verify the status of order. 
+// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+// Verify the status of order. 
+// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+// Verify the status of order. 
+// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+// Verify the status of order. 
+// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+// Verify the status of order. 
+// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+// Verify the status of order. 
+// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+// Verify the status of order. 
+// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+// Verify the status of order. 
+// If order is yet to be dispatched, It can be cancelled and full refund can be provided to customer.
+// See more`
+//                             }
+//                         ]
+//                     }
+//                 }
 
-                ++count;
-                console.log("===inside if=count value -======", count);
-            }else{
-                data['endOfTask'] = true;
-                data['endOfFaq'] = true;
-            }
+//                 ++count;
+//                 console.log("===inside if=count value -======", count);
+//             }else{
+//                 data['endOfTask'] = true;
+//                 data['endOfFaq'] = true;
+//             }
             // setTimeout(()=>{
                 processAgentAssistResponse(data, data.conversationId, _botId, _agentAssistDataObj.userId);
             // },3000)
@@ -173,7 +173,7 @@ See more`
         const channel = new BroadcastChannel('app-data');
         channel.addEventListener ('message', (event) => {
         console.log("event recived",event.data);
-        if(isAutomationOnGoing && !event.data.event){
+        if(isAutomationOnGoing){
             processUserMessages(event.data, event.data.conversationId, event.data.botId);
         }else{
             let agent_assist_request = {
@@ -299,11 +299,12 @@ See more`
     function processAgentAssistResponse(data, convId, botId, userId) {
         console.log("AgentAssist >>> agentassist_response:", data, userId);
         let automationSuggestions =  document.getElementsByClassName('dialog-task-accordiaon-info');
-        if(automationSuggestions.length>1){
+        if(data.suggestions){
             for(let ele of automationSuggestions){
                 ele.classList.add('hide');
             }
-            automationSuggestions[automationSuggestions.length-1].classList.remove('hide');
+        }else{
+            automationSuggestions.length>1?automationSuggestions[automationSuggestions.length-1].classList.remove('hide'):'';
         }
         let uuids = Math.floor(Math.random() * 100);
         responseId = uuids;
@@ -367,7 +368,7 @@ See more`
                 </div>`;
                     automationSuggestions.innerHTML += dialogAreaHtml;
                 }
-                if (data.suggestions.faqs.length > 0) {
+                if (data.suggestions.faqs?.length > 0) {
                     let automationSuggestions = document.getElementById(`automationSuggestions-${responseId}`);
                     let dialogAreaHtml = `<div class="task-type" id="faqssArea">
                 <div class="img-block-info">
@@ -511,7 +512,7 @@ See more`
             let askToUserHtml = `
             <div class="title">Ask customer...</div>
                                <div class="agent-utt">
-                                   <div class="title-data text-truncate" id="displayData-${dropdownHeaderUuids}"></div>
+                                   <div class="title-data text-truncate" id="displayData-${uuids}"></div>
                                    <div class="action-links">
                                        <button class="send-run-btn">Send</button>
                                        <div class="copy-btn">
@@ -523,7 +524,7 @@ See more`
             let tellToUserHtml = `
             <div class="title">Tell Customer</div>
             <div class="agent-utt">
-                <div class="title-data" ><ul class="chat-container" id="displayData-${dropdownHeaderUuids}"></ul></div>
+                <div class="title-data" ><ul class="chat-container" id="displayData-${uuids}"></ul></div>
                 <div class="action-links">
                     <button class="send-run-btn">Send</button>
                     <div class="copy-btn">
@@ -539,7 +540,7 @@ See more`
             }
             
         }
-        chatInitialize.renderMessage(_msgsResponse, dropdownHeaderUuids);
+        chatInitialize.renderMessage(_msgsResponse, uuids);
 
         removeElementFromDom();
         let noOfSteps = $(`.body-data-container`).find('.steps-run-data').not('.hide');
@@ -676,10 +677,11 @@ See more`
                     for(let ele of automationSuggestions){
                         ele.classList.add('hide');
                     }
-                    if(automationSuggestions.length>=1 && idsOfDropDown){
+
+                    if(idsOfDropDown && automationSuggestions.length>=1 ){
                         automationSuggestions[automationSuggestions.length-1].classList.remove('hide');
                     }
-                
+
                 if(idsOfDropDown){
                     for(let a of document.getElementsByClassName('agent-utt-info')){ 
                         a.classList.add('hide');
@@ -699,7 +701,7 @@ See more`
                });
                 for(let a of dialogSpace){
                     a.classList.remove('hide');
-                } 
+                }
             }
             if (runButton) {
                 let uuids = Math.floor(Math.random() * 100);
@@ -730,16 +732,18 @@ See more`
                        </div>
                       
                    </div>
-                   </div>
-                   <div class="dilog-task-end" id="endTaks-${uuids}">
+                   <div class="dilog-task-end hide" id="endTaks-${uuids}">
                             
-                   </div>`;
+                   </div>
+                   </div>
+                   `;
                 dynamicBlock.innerHTML = dynamicBlock.innerHTML + dropdownHtml;
                 let automationSuggestions = document.getElementById(`automationSuggestions-${responseId}`);
                 idsOfDropDown = `automationSuggestions-${responseId}`;
                 automationSuggestions.remove();
                 let addRemoveDropDown = document.getElementById(`addRemoveDropDown-${uuids}`);
                 addRemoveDropDown.classList.remove('hide');
+                $(`#endTaks-${uuids}`).removeClass('hide')
                 AgentAssist_run_click(evt);
                 return;
             }

@@ -681,7 +681,7 @@ html, body{
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info {
     display: inline-block;
     width: 100%;
-    padding: 0 15px;
+    padding: 0 15px 16px 15px;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .accordion-header {
     background: #FFFFFF;
@@ -698,7 +698,7 @@ html, body{
     content: "";
     position: absolute;
     height: 22px;
-    border-left: 1px solid #BDC1C6;
+    /* border-left: 1px solid #BDC1C6; */
     left: 15px;
     top: 37px;
 }
