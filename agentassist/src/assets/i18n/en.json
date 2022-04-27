@@ -1337,7 +1337,7 @@
     "INSTALL_TEMPLATES.NO_I_SETUP": "No, I’ll Setup now",
     "INSTALL_TEMPLATES.YES_ABORT": "Yes, Abort",
     "USECASES.NEW_PRE_BOT": "Choose Pre-trained Bot",
-    "ONBOARDING.WELCOME_DESC_UP": "You can choose to create a new bot, convert an existing bot on the Kore.ai Platform to a SmartAssist automation bot or choose a pre-trained bot.",
+    "ONBOARDING.WELCOME_DESC_UP": "You can choose to create a new bot, convert an existing bot on the Kore.ai Platform to a AgentAssist automation bot or choose a pre-trained bot.",
     "INSTALL_TEMPLATES.BOT_DETAILS": "Bot Details",
     "INSTALL_TEMPLATES.INSTALLATION_DESC": "For a complete installation guide for {{name}}",
     "INSTALL_TEMPLATES.CLICK_HERE": "Click here",

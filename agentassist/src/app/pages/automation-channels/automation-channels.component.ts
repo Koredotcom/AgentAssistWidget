@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { workflowService } from '@kore.services/workflow.service';
 import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
-import { INewChatsTransfer } from 'src/app/data/chats.mock';
+import { INewChatsTransfer } from 'src/app/data/channels-chat.model';
 import { Subscription,Observable } from 'rxjs';
 import { NotificationService } from '@kore.services/notification.service';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';

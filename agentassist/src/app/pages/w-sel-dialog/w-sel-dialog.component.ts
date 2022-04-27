@@ -928,6 +928,7 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
         this.notificationService.notify(this.translate.instant("ONBOARDING.BT_CREATION_SUCCESS"), 'success');
         setTimeout(() => {
              this.workflowService.switchBt$.next(res);
+             this.router.navigate(['/config/usecases']);
              this.wSel.emit();
              this.isNewBot = false;
         }, 500);

@@ -107,7 +107,7 @@ export class EndPointsService {
     }
 
     this.serviceList['post.deploy.publish'] = {
-      endpoint: this.API_SERVER_URL + '/smartassist/apps/:appId/deployments/publish',
+      endpoint: this.API_SERVER_URL + '/smartassist/apps/:appId/deployments/publish?isAgentAssist=true',
       method: 'post'
     }
 
@@ -1474,7 +1474,7 @@ export class EndPointsService {
     }
 
     this.serviceList['post.voiceType'] = {
-      endpoint: this.API_SERVER_URL + '/smartassist/apps/instances/:instanceId/channels/voice',
+      endpoint: this.API_SERVER_URL + '/smartassist/apps/instances/:instanceId/channels/voice?isAgentAssist=true',
       method: 'post'
     }
 
