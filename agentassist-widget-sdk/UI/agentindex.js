@@ -7,6 +7,8 @@ var agentAssistSocketUrl = "https://dev-smartassist.kore.ai";
 var dataTypeIsIntent;
 var isAutomationOnGoing = false;
 var isShowHistoryEnable = false;
+var autoExhaustiveList;
+var frequentlyUsedList;
 var idsOfDropDown;
 var countRequest = 0;
 var runBtArrayIds = ['123'];
@@ -157,7 +159,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             }
             // setTimeout(()=>{
                 processAgentAssistResponse(data, data.conversationId, _botId, _agentAssistDataObj.userId);
-                // ProcessAgentIntentResults(data, data.conversationId, _botId);
+                // processAgentIntentResults(data, data.conversationId, _botId);
             // },3000)
             
         })
@@ -174,8 +176,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         // Library Automation list, Search and Agent-Automation tabs related webSockets
         // Response
         _agentAsisstSocket.on('agent_assist_agent_response', (data) => {
-            console.log(data);
-            ProcessAgentIntentResults(data, data.conversationId, data.botId);
+            processAgentIntentResults(data, data.conversationId, data.botId);
         })
         // Get useCases List Data
         _agentAsisstSocket.on('agent_menu_response', (data) => {
@@ -193,10 +194,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             // payloadData.botId = data.usercases.map(dialog => dialog.streamId)[0];
             usecasesArr = (data.usecases);
             payloadData.suggestions.dialogs = (usecasesArr.map(dialog => dialog.usecaseName)).map(dlg => ({'name': dlg}))
-            console.log(payloadData);
+            autoExhaustiveList = payloadData;
 
-            ProcessAgentIntentResults(payloadData, payloadData.conversationId, payloadData.botId);
-        })
+            processAgentIntentResults(payloadData, payloadData.conversationId, payloadData.botId);
+        });
         const channel = new BroadcastChannel('app-data');
         channel.addEventListener ('message', (event) => {
         console.log("event recived",event.data);
@@ -323,7 +324,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             chatInitialize.renderMessage(_msgsResponse);
     }
 
-    function ProcessAgentIntentResults(data, convId, botId) {
+    processAgentIntentResults = function(data, convId, botId) {
         console.log("AgentAssist >>> intentsearch_response", data);
         let uuids = Math.floor(Math.random() * 100);
         libraryResponseId = uuids;
@@ -378,8 +379,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
        
         if(!data.isSearch) {
             if(data.suggestions) {
-                // dialogs body 
+                document.getElementById('allAutomations-Exhaustivelist').classList.remove('hide');
+                document.getElementById('searchResults').classList.add('hide');
+                // dialogs body
                 if(data.suggestions.dialogs.length > 0 ) {
+                    
                     let allAutomationSuggestions = document.getElementById(`allAutomations-Exhaustivelist`);
                     let listAreaHtml = `<div class="heading-title">Automations Exhaustive list</div>
                                             <div class="dialog-task-run-sec p-0" >
@@ -552,7 +556,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                     let faqHtml = `
                     <div class="type-info-run-send">
                         <div class="left-content" id="faqSection-${index}">
-                            <div class="title-text" id="title-${index}">${ele.name}</div>
+                            <div class="title-text" id="title-${index}">${ele.question}</div>
                             <div class="desc-text" id="desc-${index}">${ele.answer}</div>
                             
                         </div>
@@ -1086,7 +1090,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             }
         })
 
-        document.addEventListener("keydown", (evt) => {
+        document.addEventListener("keyup", (evt) => {
             var target = evt.target;
             var agentAssistInput = target.dataset.agentAssistInput;
             if (agentAssistInput) {
@@ -1254,6 +1258,21 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         console.log("AgentAssist >>> conversationId", convId);
         return convId;
     }
+
+    function AgentAssist_input_keydown(e) {  
+        let input_taker = document.getElementById('librarySearch').value;
+        if(input_taker.trim().length == 0) {
+            console.log('-----> window <-----', window);
+            processAgentIntentResults(autoExhaustiveList, autoExhaustiveList.conversationId, autoExhaustiveList.botId);
+        }
+        if (e.keyCode == 13 && input_taker.trim().length > 0) {
+            var convId = e.target.dataset.convId;
+            var botId = e.target.dataset.botId;
+            var intentName = input_taker;
+            AgentAssistPubSub.publish('searched_Automation_details', { conversationId: convId, botId: botId, value: intentName, isSearch: true });
+        }
+    }
+
     publicAPIs.getPubSub = function () {
         return AgentAssistPubSub;
     }
@@ -1285,15 +1304,6 @@ function AgentAssist_run_click(e) {
     AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: convId, agentId: agentId, botId: botId, value: intentName, intentName: intentName });
 }
 
-function AgentAssist_input_keydown(e) {  
-    let input_taker = document.getElementById('librarySearch').value;  
-    if (e.keyCode == 13 && input_taker.length > 0) {
-        var convId = e.target.dataset.convId;
-        var botId = e.target.dataset.botId;
-        var intentName = input_taker;
-        AgentAssistPubSub.publish('searched_Automation_details', { conversationId: convId, botId: botId, value: intentName, isSearch: true });
-    }
-}
 
 
 (function (root, factory) {
