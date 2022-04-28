@@ -159,7 +159,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             }
             // setTimeout(()=>{
                 processAgentAssistResponse(data, data.conversationId, _botId, _agentAssistDataObj.userId);
-                // processAgentIntentResults(data, data.conversationId, _botId);
             // },3000)
             
         })
@@ -191,7 +190,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             }
 
             // dataTransformation
-            // payloadData.botId = data.usercases.map(dialog => dialog.streamId)[0];
             usecasesArr = (data.usecases);
             payloadData.suggestions.dialogs = (usecasesArr.map(dialog => dialog.usecaseName)).map(dlg => ({'name': dlg}))
             autoExhaustiveList = payloadData;
@@ -325,7 +323,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
     }
 
     processAgentIntentResults = function(data, convId, botId) {
-        console.log("AgentAssist >>> intentsearch_response", data);
         let uuids = Math.floor(Math.random() * 100);
         libraryResponseId = uuids;
         var _msgsResponse = {
@@ -342,40 +339,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             "icon": "https://uat.kore.ai:443/api/getMediaStream/market/f-cb381255-9aa1-5ce2-95e3-71233aef7084.png?n=17648985&s=IlRvUlUwalFVaFVMYm9sZStZQnlLc0l1UlZvdlNUUDcxR2o3U2lscHRrL3M9Ig$$",
             "traceId": "873209019a5adc26"
         }
-        // data = {
-        //     "isSearch" : false,
-        //     "botId": "st-924bd71e-247e-58ec-bfe4-81e0f8b3e0fc",
-        //     "orgId": "o-1158ce5e-f159-50c6-a198-530f59e2e1d4",
-        //     "accountId": "622efb179b25b1a23ef05da2",
-        //     "type": "intent",
-        //     "conversationId": "c-853a0b6-d747-43d7-8ec9-ec1d24c0028b",
-        //     "value": "I want to apply loan",
-        //     "author": {
-        //     "id": "u-7b9bbe6b-2602-54c3-bb2c-200a2e60a774",
-        //     "type": "USER"
-        //     },
-        //     "event": "agent_assist_response",
-        //     "_id": "ms-e9ac44c7-38c4-58ad-9158-50298176d6ff",
-        //     "intentName": "Apply loan",
-        //     "isPrompt" : true,
-        //     "endOfTask" : true,
-        //     "endOfFaq" : true,
-        //     "suggestions" : {
-        //         "dialogs" : [
-        //             {
-        //                 "name" : "Apply loan"
-        //             },
-        //             {
-        //                 "name" : "List loans"
-        //             }
-        //         ],
-        //         "faqs": [
-        //             {  "name": "what are the loan rates",
-        //                 "answer": "Loan rates are 10%" 
-        //             }
-        //         ]		
-        //     }
-        // }
        
         if(!data.isSearch) {
             if(data.suggestions) {
@@ -443,7 +406,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         }
     
         if(data.isSearch) {
-            console.log(data.isSearch);
             ShowSearchContent();
             if(data.value.length > 0) {
                 document.getElementById('allAutomations-Exhaustivelist').classList.add('hide');
@@ -451,13 +413,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 html = `<div class="searched-intent" id="librarySearchText">Search results for '${data.value}' </div>
                 <div class="dialog-task-run-sec p-0" id="dialogs-faqs"></div>`
                 searchTextDisplay.innerHTML = html;
-            } 
-            // else {
-            //     let searchTextDisplay = document.getElementById('search-text-display');
-            //     html = `<div class="searched-intent" id="librarySearchText">Search results for "${data.value}" </div>
-            //     <div class="dialog-task-run-sec p-0" id="dialogs-faqs">No Results found</div>`
-            //     searchTextDisplay.innerHTML = html;
-            // }
+            }
 
             if (data?.suggestions?.dialogs.length > 0) {
                 let automationSuggestions = document.getElementById(`search-text-display`);
@@ -888,7 +844,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             var runButton = target.dataset.run;
             var libraryRunBtn = target.dataset.libraryRun
             if ((target.id === `searchAutoIcon`) || (target.id === `searchIcon`)) {
-                console.log(_agentAssistDataObj);
                 data = _agentAssistDataObj
                 AgentAssistPubSub.publish('automation_exhaustive_list', { conversationId: _agentAssistDataObj.conversationId, botId: _agentAssistDataObj.botId, 'experience': 'chat' });
                 libraryTabActive();
@@ -1262,7 +1217,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
     function AgentAssist_input_keydown(e) {  
         let input_taker = document.getElementById('librarySearch').value;
         if(input_taker.trim().length == 0) {
-            console.log('-----> window <-----', window);
             processAgentIntentResults(autoExhaustiveList, autoExhaustiveList.conversationId, autoExhaustiveList.botId);
         }
         if (e.keyCode == 13 && input_taker.trim().length > 0) {
@@ -1705,8 +1659,9 @@ AgentAssistPubSub.subscribe('agent_assist_send_text', (msg, data) => {
     //chatInitialize.renderMessage(agentsss);
 });
 
+// Usecase list request call
 AgentAssistPubSub.subscribe('automation_exhaustive_list', (msg, data) => {
-    console.log("===== data for the Usecase list ====", data);
+    console.log("===== Request data for the Usecase list ====", data);
     var agent_assist_request = {
         "botId": data.botId,
         "conversationId": data.conversationId,
@@ -1719,7 +1674,7 @@ AgentAssistPubSub.subscribe('automation_exhaustive_list', (msg, data) => {
 // LibrarySearch and Agent Automation tabs related webSockets
 // Request
 AgentAssistPubSub.subscribe('searched_Automation_details', (msg, data) => {
-    console.log("===== data for the searched Automation list ====", data);
+    console.log("===== Request data for the searched Automation list ====", data);
     let agent_assist_request = {
         'isSearch' : data.isSearch,
         'conversationId' : data.conversationId,
