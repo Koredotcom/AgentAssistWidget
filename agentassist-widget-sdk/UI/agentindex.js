@@ -197,6 +197,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         if(!data.isSearch) {
             if(data.suggestions) {
                 document.getElementById('allAutomations-Exhaustivelist').classList.remove('hide');
+                $('#dialogs-faqs').removeClass('hide');
                 document.getElementById('searchResults').classList.add('hide');
                 // dialogs body
                 if(data.suggestions.dialogs.length > 0 ) {
@@ -261,16 +262,19 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             }
         }
     
-        if(data.isSearch) {
+        if(data.isSearch && !data.buttons) {
             ShowSearchContent();
             if(data.value.length > 0) {
                 document.getElementById('allAutomations-Exhaustivelist').classList.add('hide');
+                $('#dialogs-faqs').addClass('hide');
+            }
+            if(data.suggestions){
                 let searchTextDisplay = document.getElementById('search-text-display');
                 html = `<div class="searched-intent" id="librarySearchText">Search results for '${data.value}' </div>`
                 searchTextDisplay.innerHTML = html;
             }
 
-            if (data?.suggestions?.dialogs.length > 0) {
+            if (data?.suggestions?.dialogs?.length > 0) {
                 console.log(libraryResponseId);
                 let automationSuggestions = document.getElementById(`search-text-display`);
                 let dialogAreaHtml = `<div class="dialog-task-run-sec p-0" id="searchedDialogs-${libraryResponseId}">
@@ -326,16 +330,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                     _msgsResponse.message.push(body);
                 });
 
-            } else {
-                let automationSuggestions = document.getElementById(`dialogs-faqs`);
-                let dialogAreaHtml = `<div class="dialog-task-run-sec p-0">
-                                        <div class="task-type" id="dialoguesArea">
-                                            No Results found
-                                        </div>
-                                    </div>`
-                automationSuggestions.innerHTML = dialogAreaHtml;
             }
-
             if (data?.suggestions?.faqs?.length > 0) {
                 let automationSuggestions = document.getElementById(`search-text-display`);
                 let dialogAreaHtml = `<div class="dialog-task-run-sec p-0">
@@ -382,7 +377,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                     </div>`;
                     
                     faqsSuggestions.innerHTML += faqHtml;
-                    if(ele.answer.length>200){
+                    if(ele.answer?.length>200){
                         let faqs = $(`.type-info-run-send #faqSection-${index}`);
                         faqs.each((i, ele)=>{
                         let seeMoreButtonHtml = `
@@ -396,10 +391,23 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
 
             }
             
+        }else if(data.buttons && data.isSearch){
+            document.getElementById('allAutomations-Exhaustivelist').classList.add('hide');
+
+                let automationSuggestions = document.getElementById(`dialogs-faqs`);
+                let dialogAreaHtml = `<div class="dialog-task-run-sec p-0">
+                                        <div class="task-type" id="dialoguesArea">
+                                            No Results found
+                                        </div>
+                                    </div>`
+                automationSuggestions.innerHTML = dialogAreaHtml;
+        }else{
+            //
         }
         function ShowSearchContent() {
             document.getElementById('searchResults').classList.remove('hide');
             document.getElementById('allAutomations-Exhaustivelist').classList.remove('hide');
+            $('#dialogs-faqs').removeClass('hide');
         }
     }
 
