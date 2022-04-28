@@ -345,6 +345,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                     var btn = data.buttons[i];
                     if (btn && btn.type === 'text') {
                         var btnValue = btn.value;
+                        btnValue  = btnValue.replaceAll("|", "<br/>")
                         var btnHtml = `
             				<div class="btn-template-data" data-text-value="${btnValue}" data-conv-id="${convId}" 
                                     data-btn-id="${btnCount}">
