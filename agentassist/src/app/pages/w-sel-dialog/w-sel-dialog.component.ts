@@ -457,7 +457,7 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
         self.selectedBt = selectedBotDetails.name;
       }
 
-      selectedBotDetails.instanceBotId = self.appService.selectedInstanceApp$.value?._id;
+      selectedBotDetails.instanceBotId = this.authService.smartAssistBots.map(x=>x._id);
       self.service.invoke('post.convertbot', {}, selectedBotDetails)
           .subscribe(res=>{
             self.getConvStatus(res._id);
@@ -928,6 +928,7 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
         this.notificationService.notify(this.translate.instant("ONBOARDING.BT_CREATION_SUCCESS"), 'success');
         setTimeout(() => {
              this.workflowService.switchBt$.next(res);
+             this.router.navigate(['/config/usecases']);
              this.wSel.emit();
              this.isNewBot = false;
         }, 500);

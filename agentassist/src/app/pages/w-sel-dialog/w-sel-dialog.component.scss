@@ -1,7 +1,9 @@
 @import './../../scss/variables/variables.scss';
 .welcome-selection-container{
     width: 100%;
-    position: relative;    
+    position: relative;  
+    overflow-y: auto;    
+    overflow-x: auto;  
     .close-modal{
         cursor: pointer;
         position: absolute;
@@ -45,7 +47,7 @@
             align-items: center;
             justify-content: space-between;
             // margin: 50px 0 80px 0;
-            width: 706px;
+            width: 470px;
             margin: 50px auto;
             .card_sec{
                 background: $whiteColor;
@@ -95,7 +97,7 @@
         }
     }
     .container-selection-bots{
-        padding: 20px 0;                
+        padding: 20px 0;     
         overflow: hidden;
         &.move-right{
             transform: translateX(-105%);

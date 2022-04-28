@@ -194,9 +194,10 @@ export class DockStatusService {
         };
 
         const params = {
-            appId: this.workflowService.getCurrentBt()._id
+            appId: this.authService.smartAssistBots.map(x=>x._id),
+            'isAgentAssist':true
         };
-        return new Promise((reslove, reject) => {
+        return new Promise((resolve, reject) => {
             this.service.invoke('post.deploy.publish', params, payload).subscribe(res => {
                 this.isAnyRecordInprogress$.next(true);
                 this.getDockStatus('PUBLISH_BOT')
@@ -207,7 +208,7 @@ export class DockStatusService {
                             this.notificationService.notify(this.translate.instant("PUBLISHING_COMPLETED"), 'success');
                             this.appService.getInstaceApps();
                             this.workflowService.updateAvailBal$.next();
-                            reslove("");
+                            resolve("");
                         } else if (res instanceof Error) {
                             this.notificationService.notify(this.translate.instant("PUBLISHING_FAILED"), 'error');
                             this.isAnyRecordInprogress$.next(false);

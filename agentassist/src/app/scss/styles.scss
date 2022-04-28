@@ -887,15 +887,16 @@ body{
         align-items: center;
         justify-content: center;
         background: transparent;
+        border:0;
         app-w-sel-dialog{
             height: 100%;
-            width: 100%;
+            width: 90%;
             background: $whiteColor;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-direction: column;
-            overflow: auto;      
+            overflow: auto; 
         }
     }
 }
