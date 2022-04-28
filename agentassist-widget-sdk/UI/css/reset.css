@@ -46,3 +46,7 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+
+html{
+	--sdk-chat-custom--botMessage-bubbleColor:#F3F5F8; --sdk-chat-custom--botMessage-fontColor:#202124; --sdk-chat-custom--botMessage-borderColor:#F3F5F8; --sdk-chat-custom--buttons-defaultButtonColor:#0D6EFD; --sdk-chat-custom--buttons-defaultFontColor:#ffffff; --sdk-chat-custom--buttons-borderColor:#0D6EFD; --sdk-chat-custom--buttons-onHoverButtonColor:#0659d2; --sdk-chat-custom--buttons-onHoverFontColor:#ffffff; --sdk-chat-custom--generalAttributes-fontStyle:arial; --sdk-chat-custom--generalAttributes-bubbleShape:12px 12px 2px 12px; --sdk-chat-custom--generalAttributes-borderColor:#F3F5F8; --sdk-chat-custom--generalAttributes-backgroundColor:F3F5F8; --sdk-chat-custom--userMessage-bubbleColor:#0D6EFD; --sdk-chat-custom--userMessage-fontColor:#ffffff; --sdk-chat-custom--userMessage-borderColor:#0D6EFD; --sdk-chat-custom--widgetBody-backgroundColor:#ffffff; --sdk-chat-custom--widgetFooter-borderColor:#FFFFFF; --sdk-chat-custom--widgetFooter-fontColor:#262626; --sdk-chat-custom--widgetFooter-backgroundColor:#FFFFFF; --sdk-chat-custom--widgetFooter-placeHolderColor:#262626; --sdk-chat-custom--widgetHeader-backgroundColor:#0D6EFD; --sdk-chat-custom--widgetHeader-fontColor:#ffffff; --sdk-chat-custom--widgetHeader-borderColor:#e5e8ec;
+}

@@ -1274,6 +1274,7 @@
                 var me = this;
                 me.bindCustomEvents();
                 
+                console.log('======================came here===========')
                 var _chatContainer = me.config.chatContainer;
                 // _chatContainer.draggable({
                 //     handle: _chatContainer.find(".kore-chat-header .header-title"),
@@ -2242,6 +2243,7 @@
             };
 
             chatWindow.prototype.renderMessage = function (msgData,elementID) {
+                $(".kore-chat-window").addClass('customBranding-theme');
                 console.log("---- message response====",msgData)
                 var me = this, messageHtml = '', extension = '', _extractedFileName = '';
                 var helpers=me.helpers;
@@ -2921,10 +2923,10 @@
                     bottomSliderAction('show',messageHtml);
                 }else{
                     //ignore message(msgId) if it is already in viewport                     
-                    if ($(`${me.config.agentAssist?`.agent-assist-chat-container  #displayData-${elementID}  div#`:`.kore-chat-window .chat-container li#`}` + msgData.messageId).length < 1 || (msgData.renderType==='inline')) {
+                    if ($(`${me.config.agentAssist?`.agent-assist-chat-container  #displayData-${elementID}  li#`:`.kore-chat-window .chat-container li#`}` + msgData.messageId).length < 1 || (msgData.renderType==='inline')) {
                         if (msgData.type === "bot_response" && msgData.fromHistorySync) {
                             var msgTimeStamps = [];
-                            var msgEles = $(`${me.config.agentAssist?`.agent-assist-chat-container #displayData-${elementID}  >div`:'.kore-chat-window .chat-container>li'}`);
+                            var msgEles = $(`${me.config.agentAssist?`.agent-assist-chat-container #displayData-${elementID}  >li`:'.kore-chat-window .chat-container>li'}`);
                             if (msgEles.length) {
                                 msgEles.each(function (i, ele) {
                                     msgTimeStamps.push(parseInt($(ele).attr('data-time')));
