@@ -218,6 +218,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                     automationSuggestions.innerHTML = listAreaHtml; 
                 }
                 data.suggestions.dialogs?.forEach((ele, index) => {
+                    let libUuid = Math.floor(Math.random() * 100);
                     let body = {};
                     body['type'] = 'text';
                     body['component'] = {
@@ -232,7 +233,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                     };
                     let useCasesSuggestionsList = document.getElementById('usecases-suggestions');
                     let dialogsHtml = `
-                    <div class="type-info-run-send">
+                    <div class="type-info-run-send" id="useCaseList-${libUuid}">
                         <div class="left-content">
                             <div class="title-text" id="automation-${uuids}">${ele.name}</div>
                         </div>
@@ -240,6 +241,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                             <button class="send-run-btn" data-conv-id="${data.conversationId}"
                             data-bot-id="${botId}" data-intent-name="${ele.name}"
                             data-agent-id="${data.agentId}" data-library-run="true" 
+                            data-use-case-list="true" id="useCase-${libUuid}"
                             >RUN</button>
                             <div class="elipse-dropdown-info" id="show-run-for-agent-btn">
                                 <div class="elipse-icon">
@@ -264,8 +266,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             if(data.value.length > 0) {
                 document.getElementById('allAutomations-Exhaustivelist').classList.add('hide');
                 let searchTextDisplay = document.getElementById('search-text-display');
-                html = `<div class="searched-intent" id="librarySearchText">Search results for '${data.value}' </div>
-                <div class="dialog-task-run-sec p-0" id="dialogs-faqs"></div>`
+                html = `<div class="searched-intent" id="librarySearchText">Search results for '${data.value}' </div>`
                 searchTextDisplay.innerHTML = html;
             }
 
@@ -309,6 +310,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                             <button class="send-run-btn" data-conv-id="${data.conversationId}"
                             data-bot-id="${botId}" data-intent-name="${ele.name}"
                             data-agent-id="${data.agentId}" data-library-run="true" 
+                            id="run-${libraryResponseId}"
                             >RUN</button>
                             <div class="elipse-dropdown-info">
                                 <div class="elipse-icon">
@@ -334,7 +336,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 automationSuggestions.innerHTML = dialogAreaHtml;
             }
 
-            if (data?.suggestions?.faqs.length > 0) {
+            if (data?.suggestions?.faqs?.length > 0) {
                 let automationSuggestions = document.getElementById(`search-text-display`);
                 let dialogAreaHtml = `<div class="dialog-task-run-sec p-0">
                                         <div class="task-type" id="faqssArea">
@@ -923,7 +925,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 //         }
                 //     })
                 // }
-                $('.dialog-task-run-sec').each((i, ele) => {
+
+                $(`${target.dataset.useCaseList}`?'.content-dialog-task-type .type-info-run-send':'.dialog-task-run-sec').each((i, ele) => {
                     let id = ele.id?.split('-');
                     if (ids.includes(id[1])) {
                         idsOfDropDown = ele.id;
