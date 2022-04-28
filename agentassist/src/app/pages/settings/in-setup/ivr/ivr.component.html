@@ -110,7 +110,7 @@
         </perfect-scrollbar>  
         <div class="footer-sec">
             <button class="kr-sg-button-primary btn_lg mr-2" [disabled]="saveInProgress || ivrForm.invalid || !didNumbers.length" (click)="SipTransferConfig()">{{(saveInProgress ? 'BUTTONS.SAVING' : 'BUTTONS.SAVE') | translate}}</button>        
-            <button class="kr-sg-button-secondary btn_lg ml-1" (click)="onCancel()">{{'BUTTONS.CANCEL' | translate}}</button>        
+            <button class="kr-sg-button-secondary btn_lg ml-1" (click)="close()">{{'BUTTONS.CANCEL' | translate}}</button>        
         </div>
     </form>
 </div>
