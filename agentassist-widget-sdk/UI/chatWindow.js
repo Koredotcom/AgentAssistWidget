@@ -1024,9 +1024,9 @@
                 var span = document.getElementsByClassName("closeImagePreview")[0];
 
                 // When the user clicks on <span> (x), close the modal
-                span.onclick = function () {
-                    modal.style.display = "none";
-                }
+                // span.onclick = function () {
+                //     modal.style.display = "none";
+                // }
             }
             chatWindow.prototype.isMobile = function() {
                 try {
@@ -1038,7 +1038,10 @@
                 }
             }
             chatWindow.prototype.setCollapsedModeStyles = function (){
-                $('.kore-chat-window').css({left:$('body').width()-400,width:'400px'});
+                let me = this;
+                if(!me.config.agentAssist){
+                    $('.kore-chat-window').css({left:$('body').width()-400,width:'400px'});
+                }
             }
             chatWindow.prototype.setLocalStoreItem = function (key,value){
                 var me=this;
@@ -1268,53 +1271,53 @@
             };
 
             chatWindow.prototype.bindEvents = function () {
-                console.log("======= bind event for all times=====line no 1269")
                 var me = this;
                 me.bindCustomEvents();
                 
+                console.log('======================came here===========')
                 var _chatContainer = me.config.chatContainer;
-                _chatContainer.draggable({
-                    handle: _chatContainer.find(".kore-chat-header .header-title"),
-                    containment: "document",
-                })
-                    .resizable({
-                        handles: "n, e, w, s",
-                        containment: "document",
-                        minWidth: 400
-                    });
-                _chatContainer.off('keyup', '.chatInputBox').on('keyup', '.chatInputBox', function (event) {
-                    var _footerContainer = $(me.config.container).find('.kore-chat-footer');
-                    var _bodyContainer = $(me.config.container).find('.kore-chat-body');
-                    _bodyContainer.css('bottom', _footerContainer.outerHeight());
-                    me.prevComposeSelection = window.getSelection();
-                    prevRange = me.prevComposeSelection.rangeCount > 0 && me.prevComposeSelection.getRangeAt(0);
-                    if (this.innerText.length > 0) {
-                        _chatContainer.find('.chatInputBoxPlaceholder').css('display', 'none');
-                        _chatContainer.find('.sendButton').removeClass('disabled');
-                    } else {
-                        _chatContainer.find('.chatInputBoxPlaceholder').css('display', 'block');
-                        _chatContainer.find('.sendButton').addClass('disabled');
-                    }
-                });
-                _chatContainer.on('click', '.chatInputBoxPlaceholder', function (event) {
-                    _chatContainer.find('.chatInputBox').trigger('click');
-                    _chatContainer.find('.chatInputBox').trigger('focus');
-                });
-                _chatContainer.on('change', '.lang-selector', function (e) {
-                    var selectedValue=$(e.target).val();
-                    me.seti18n(selectedValue);
-                    me.updatei18nDirection();
-                });
-                _chatContainer.on('click', '.chatInputBox', function (event) {
-                    me.prevComposeSelection = window.getSelection();
-                    prevRange = me.prevComposeSelection.rangeCount > 0 && me.prevComposeSelection.getRangeAt(0);
-                });
-                _chatContainer.on('blur', '.chatInputBox', function (event) {
-                    _escPressed = 0;
-                });
-                _chatContainer.off('click', '.botResponseAttachments').on('click', '.botResponseAttachments', function (event) {
-                    window.open($(this).attr('fileid'), '_blank');
-                });
+                // _chatContainer.draggable({
+                //     handle: _chatContainer.find(".kore-chat-header .header-title"),
+                //     containment: "document",
+                // })
+                    // .resizable({
+                    //     handles: "n, e, w, s",
+                    //     containment: "document",
+                    //     minWidth: 400
+                    // });
+                // _chatContainer.off('keyup', '.chatInputBox').on('keyup', '.chatInputBox', function (event) {
+                //     var _footerContainer = $(me.config.container).find('.kore-chat-footer');
+                //     var _bodyContainer = $(me.config.container).find('.kore-chat-body');
+                //     _bodyContainer.css('bottom', _footerContainer.outerHeight());
+                //     me.prevComposeSelection = window.getSelection();
+                //     prevRange = me.prevComposeSelection.rangeCount > 0 && me.prevComposeSelection.getRangeAt(0);
+                //     if (this.innerText.length > 0) {
+                //         _chatContainer.find('.chatInputBoxPlaceholder').css('display', 'none');
+                //         _chatContainer.find('.sendButton').removeClass('disabled');
+                //     } else {
+                //         _chatContainer.find('.chatInputBoxPlaceholder').css('display', 'block');
+                //         _chatContainer.find('.sendButton').addClass('disabled');
+                //     }
+                // });
+                // _chatContainer.on('click', '.chatInputBoxPlaceholder', function (event) {
+                //     _chatContainer.find('.chatInputBox').trigger('click');
+                //     _chatContainer.find('.chatInputBox').trigger('focus');
+                // });
+                // _chatContainer.on('change', '.lang-selector', function (e) {
+                //     var selectedValue=$(e.target).val();
+                //     me.seti18n(selectedValue);
+                //     me.updatei18nDirection();
+                // });
+                // _chatContainer.on('click', '.chatInputBox', function (event) {
+                //     me.prevComposeSelection = window.getSelection();
+                //     prevRange = me.prevComposeSelection.rangeCount > 0 && me.prevComposeSelection.getRangeAt(0);
+                // });
+                // _chatContainer.on('blur', '.chatInputBox', function (event) {
+                //     _escPressed = 0;
+                // });
+                // _chatContainer.off('click', '.botResponseAttachments').on('click', '.botResponseAttachments', function (event) {
+                //     window.open($(this).attr('fileid'), '_blank');
+                // });
                 /*_chatContainer.off('click', '.attachments').on('click', '.attachments', function (event) {
                     var attachFileID = $(this).attr('fileid');
                     var auth = (bearerToken) ? bearerToken : assertionToken;
@@ -1336,162 +1339,162 @@
                             document.body.appendChild(save);
                             save.href = downloadUrl;
                             save.target = '_blank';
-                            save.download = 'unknown file';
-                            save.style.dislay = 'none !important;';
-                            save.click();
-                            save.remove();
-                        },
-                        error: function (msg) {
-                            console.log("Oops, something went horribly wrong");
-                        }
-                    });
-                });*/
-                _chatContainer.off('keydown', '.chatInputBox').on('keydown', '.chatInputBox', function (event) {
-                    var _this = $(this);
-                    var _footerContainer = $(me.config.container).find('.kore-chat-footer');
-                    var _bodyContainer = $(me.config.container).find('.kore-chat-body');
-                    _bodyContainer.css('bottom', _footerContainer.outerHeight());
-                    if (event.keyCode === 13) {
-                        if (event.shiftKey) {
-                            return;
-                        }
-                        if ($('.upldIndc').is(':visible')) {
-                            alert('Uploading file, please wait...');
-                            return;
-                        }
-                        if ($('.recordingMicrophone').is(':visible')) {
-                            $('.recordingMicrophone').trigger('click');
-                        }
-                        event.preventDefault();
+                //             save.download = 'unknown file';
+                //             save.style.dislay = 'none !important;';
+                //             save.click();
+                //             save.remove();
+                //         },
+                //         error: function (msg) {
+                //             console.log("Oops, something went horribly wrong");
+                //         }
+                //     });
+                // });*/
+                // _chatContainer.off('keydown', '.chatInputBox').on('keydown', '.chatInputBox', function (event) {
+                //     var _this = $(this);
+                //     var _footerContainer = $(me.config.container).find('.kore-chat-footer');
+                //     var _bodyContainer = $(me.config.container).find('.kore-chat-body');
+                //     _bodyContainer.css('bottom', _footerContainer.outerHeight());
+                //     if (event.keyCode === 13) {
+                //         if (event.shiftKey) {
+                //             return;
+                //         }
+                //         if ($('.upldIndc').is(':visible')) {
+                //             alert('Uploading file, please wait...');
+                //             return;
+                //         }
+                //         if ($('.recordingMicrophone').is(':visible')) {
+                //             $('.recordingMicrophone').trigger('click');
+                //         }
+                //         event.preventDefault();
 
-                        me.sendMessage(_this, me.attachmentInfo);
-                        return;
-                    }
-                    else if (event.keyCode === 27) {
-                        _escPressed++;
-                        if (_escPressed > 1) {
-                            _escPressed = 0;
-                            stop();
-                            this.innerText = "";
-                            $('.attachment').empty();
-                            fileUploaderCounter = 0;
-                            setTimeout(function () {
-                                setCaretEnd((document.getElementsByClassName("chatInputBox")));
-                            }, 100);
-                        }
-                    }
-                });
-                _chatContainer.off('click', '.sendButton').on('click', '.sendButton', function (event) {
-                    var _this = $('.chatInputBox');
-                    if ($('.upldIndc').is(':visible')) {
-                        alert('Uploading file, please wait...');
-                        return;
-                    }
-                    if ($('.recordingMicrophone').is(':visible')) {
-                        $('.recordingMicrophone').trigger('click');
-                    }
-                    event.preventDefault();
-                    console.log("---- line no 1390------")
-                    me.sendMessage(_this, me.attachmentInfo);
-                    return;
-                });
-                _chatContainer.off('click', '.notRecordingMicrophone').on('click', '.notRecordingMicrophone', function (event) {
-                    if (ttsAudioSource) {
-                        ttsAudioSource.stop();
-                    }
-                    if (me.config.isSpeechEnabled) {
-                        getSIDToken();
-                    }
-                });
-                _chatContainer.off('click', '.recordingMicrophone').on('click', '.recordingMicrophone', function (event) {
-                    stop();
-                    setTimeout(function () {
-                        setCaretEnd(document.getElementsByClassName("chatInputBox"));
-                    }, 350);
-                });
-                _chatContainer.off('click', '.attachmentBtn').on('click', '.attachmentBtn', function (event) {
-                    if (fileUploaderCounter == 1) {
-                        alert('You can upload only one file');
-                        return;
-                    }
-                    if ($('.upldIndc').is(':visible')) {
-                        alert('Uploading file, please wait...');
-                        return;
-                    }
-                    $('#captureAttachmnts').trigger('click');
-                });
-                _chatContainer.off('click', '.removeAttachment').on('click', '.removeAttachment', function (event) {
-                    $(this).parents('.msgCmpt').remove();
-                    $('.kore-chat-window').removeClass('kore-chat-attachment');
-                    fileUploaderCounter = 0;
-                    me.attachmentInfo = {};
-                    $('.sendButton').addClass('disabled');
-                    document.getElementById("captureAttachmnts").value = "";
-                });
-                _chatContainer.off('change', '#captureAttachmnts').on('change', '#captureAttachmnts', function (event) {
-                    var file = $('#captureAttachmnts').prop('files')[0];
-                    if (file && file.size) {
-                        if (file.size > filetypes.file.limit.size) {
-                            alert(filetypes.file.limit.msg);
-                            return;
-                        }
-                    }
-                    cnvertFiles(this, file);
-                });
-                _chatContainer.off('paste', '.chatInputBox').on('paste', '.chatInputBox', function (event) {
-                    event.preventDefault();
-                    var _this = document.getElementsByClassName("chatInputBox");
-                    var _clipboardData = event.clipboardData || (event.originalEvent && event.originalEvent.clipboardData) || window.clipboardData;
-                    var _htmlData = '';
-                    if (_clipboardData) {
-                        _htmlData = me.helpers.nl2br(_clipboardData.getData('text').escapeHTML(), false);
-                        if (_htmlData) {
-                            insertHtmlData(_this, _htmlData);
-                        }
-                    }
-                    setTimeout(function () {
-                        setCaretEnd(_this);
-                    }, 100);
-                });
-                _chatContainer.off('click', '.sendChat').on('click', '.sendChat', function (event) {
-                    var _footerContainer = $(me.config.container).find('.kore-chat-footer');
-                    me.sendMessage(_footerContainer.find('.chatInputBox'));
-                });
+                //         me.sendMessage(_this, me.attachmentInfo);
+                //         return;
+                //     }
+                //     else if (event.keyCode === 27) {
+                //         _escPressed++;
+                //         if (_escPressed > 1) {
+                //             _escPressed = 0;
+                //             stop();
+                //             this.innerText = "";
+                //             $('.attachment').empty();
+                //             fileUploaderCounter = 0;
+                //             setTimeout(function () {
+                //                 setCaretEnd((document.getElementsByClassName("chatInputBox")));
+                //             }, 100);
+                //         }
+                //     }
+                // });
+                // _chatContainer.off('click', '.sendButton').on('click', '.sendButton', function (event) {
+                //     var _this = $('.chatInputBox');
+                //     if ($('.upldIndc').is(':visible')) {
+                //         alert('Uploading file, please wait...');
+                //         return;
+                //     }
+                //     if ($('.recordingMicrophone').is(':visible')) {
+                //         $('.recordingMicrophone').trigger('click');
+                //     }
+                //     event.preventDefault();
+                //     console.log("---- line no 1390------")
+                //     me.sendMessage(_this, me.attachmentInfo);
+                //     return;
+                // });
+                // _chatContainer.off('click', '.notRecordingMicrophone').on('click', '.notRecordingMicrophone', function (event) {
+                //     if (ttsAudioSource) {
+                //         ttsAudioSource.stop();
+                //     }
+                //     if (me.config.isSpeechEnabled) {
+                //         getSIDToken();
+                //     }
+                // });
+                // _chatContainer.off('click', '.recordingMicrophone').on('click', '.recordingMicrophone', function (event) {
+                //     stop();
+                //     setTimeout(function () {
+                //         setCaretEnd(document.getElementsByClassName("chatInputBox"));
+                //     }, 350);
+                // });
+                // _chatContainer.off('click', '.attachmentBtn').on('click', '.attachmentBtn', function (event) {
+                //     if (fileUploaderCounter == 1) {
+                //         alert('You can upload only one file');
+                //         return;
+                //     }
+                //     if ($('.upldIndc').is(':visible')) {
+                //         alert('Uploading file, please wait...');
+                //         return;
+                //     }
+                //     $('#captureAttachmnts').trigger('click');
+                // });
+                // _chatContainer.off('click', '.removeAttachment').on('click', '.removeAttachment', function (event) {
+                //     $(this).parents('.msgCmpt').remove();
+                //     $('.kore-chat-window').removeClass('kore-chat-attachment');
+                //     fileUploaderCounter = 0;
+                //     me.attachmentInfo = {};
+                //     $('.sendButton').addClass('disabled');
+                //     document.getElementById("captureAttachmnts").value = "";
+                // });
+                // _chatContainer.off('change', '#captureAttachmnts').on('change', '#captureAttachmnts', function (event) {
+                //     var file = $('#captureAttachmnts').prop('files')[0];
+                //     if (file && file.size) {
+                //         if (file.size > filetypes.file.limit.size) {
+                //             alert(filetypes.file.limit.msg);
+                //             return;
+                //         }
+                //     }
+                //     cnvertFiles(this, file);
+                // });
+                // _chatContainer.off('paste', '.chatInputBox').on('paste', '.chatInputBox', function (event) {
+                //     event.preventDefault();
+                //     var _this = document.getElementsByClassName("chatInputBox");
+                //     var _clipboardData = event.clipboardData || (event.originalEvent && event.originalEvent.clipboardData) || window.clipboardData;
+                //     var _htmlData = '';
+                //     if (_clipboardData) {
+                //         _htmlData = me.helpers.nl2br(_clipboardData.getData('text').escapeHTML(), false);
+                //         if (_htmlData) {
+                //             insertHtmlData(_this, _htmlData);
+                //         }
+                //     }
+                //     setTimeout(function () {
+                //         setCaretEnd(_this);
+                //     }, 100);
+                // });
+                // _chatContainer.off('click', '.sendChat').on('click', '.sendChat', function (event) {
+                //     var _footerContainer = $(me.config.container).find('.kore-chat-footer');
+                //     me.sendMessage(_footerContainer.find('.chatInputBox'));
+                // });
 
-                _chatContainer.off('click', 'li a').on('click', 'li a', function (e) {
-                    e.preventDefault();
-                    var a_link = $(this).attr('href');
-                    var _trgt = $(this).attr('target');
-                    var msgDataText = $(event.currentTarget).closest('span.simpleMsg').attr('msgData') || '';
-                    var msgData;
-                    if(msgDataText){
-                        try {
-                         msgData = JSON.parse(msgDataText);
-                        } catch (err) {
+                // _chatContainer.off('click', 'li a').on('click', 'li a', function (e) {
+                //     e.preventDefault();
+                //     var a_link = $(this).attr('href');
+                //     var _trgt = $(this).attr('target');
+                //     var msgDataText = $(event.currentTarget).closest('span.simpleMsg').attr('msgData') || '';
+                //     var msgData;
+                //     if(msgDataText){
+                //         try {
+                //          msgData = JSON.parse(msgDataText);
+                //         } catch (err) {
         
-                        }
-                    }
-                    if(msgData && msgData.message && msgData.message[0].component && msgData.message[0].component.payload && msgData.message[0].component.payload.formData){
-                        me.renderWebForm(msgData);
-                    } else if (_trgt === "_self") {
-                        callListener("provideVal", { link: a_link });
-                        return;
-                    }
-                    if (me.config.allowIframe === true) {
-                         var popupHtml = $(me.getChatTemplate("iframe")).tmpl({
-                            'msgData': msgData,
-                            'helpers': me.helpers,
-                            "link_url": url
-                        });
-                         popupHtml[0].onload = function(iFrameEvent){
-                            console.log(iFrameEvent);
-                         }
-                         openModal(popupHtml[0],true);
-                    }
-                    else {
-                        me.openExternalLink(a_link)
-                    }
-                });
+                //         }
+                //     }
+                //     if(msgData && msgData.message && msgData.message[0].component && msgData.message[0].component.payload && msgData.message[0].component.payload.formData){
+                //         me.renderWebForm(msgData);
+                //     } else if (_trgt === "_self") {
+                //         callListener("provideVal", { link: a_link });
+                //         return;
+                //     }
+                //     if (me.config.allowIframe === true) {
+                //          var popupHtml = $(me.getChatTemplate("iframe")).tmpl({
+                //             'msgData': msgData,
+                //             'helpers': me.helpers,
+                //             "link_url": url
+                //         });
+                //          popupHtml[0].onload = function(iFrameEvent){
+                //             console.log(iFrameEvent);
+                //          }
+                //          openModal(popupHtml[0],true);
+                //     }
+                //     else {
+                //         me.openExternalLink(a_link)
+                //     }
+                // });
                 _chatContainer.off('click', '.buttonTmplContentBox li,.listTmplContentChild .buyBtn,.viewMoreList .viewMore,.listItemPath,.quickReply,.carouselImageContent,.listRightContent,.checkboxBtn,.likeDislikeDiv').on('click', '.buttonTmplContentBox li,.listTmplContentChild .buyBtn, .viewMoreList .viewMore,.listItemPath,.quickReply,.carouselImageContent,.listRightContent,.checkboxBtn,.likeDislikeDiv', function (e) {
                     e.preventDefault();
                     e.stopPropagation();
@@ -1500,7 +1503,6 @@
                         type = type.toLowerCase();
                     }
                     if (type == "postback" || type == "text") {
-                        console.log("============== line 1503---- in chatwindow--")
                         if(!me.config.agentAssist){
                             $('.chatInputBox').text($(this).attr('actual-value') || $(this).attr('value'));
                         //var _innerText = $(this)[0].innerText.trim() || $(this).attr('data-value').trim();
@@ -1840,7 +1842,7 @@
                         alert('You can upload only one file');
                     }
                 }
-                me.makeDroppable(element, callback);
+               // me.makeDroppable(element, callback);
                 me.bindSDKEvents()
             };
             
@@ -2016,14 +2018,19 @@
                     $(me.config.chatContainer).addClass('pos-absolute');
                 }
                 me.setCollapsedModeStyles();
-                me.chatPSObj=new KRPerfectScrollbar(me.config.chatContainer.find('.chat-container').get(0), {
-                    suppressScrollX: true
-                  });
+                if(me.config.agentAssist){
+                    me.chatPSObj=new KRPerfectScrollbar($('.agent-assist-chat-container').find('.body-data-container').get(0), {
+                        suppressScrollX: true
+                      });
+                }else{
+                    me.chatPSObj=new KRPerfectScrollbar(me.config.chatContainer.find('.chat-container').get(0), {
+                        suppressScrollX: true
+                      });
+                }
                 me.bindEvents();
             };
 
             chatWindow.prototype.sendMessage = function (chatInput, renderMsg,msgObject) {
-                console.log("-----")
                 var me = this;
                 me.stopSpeaking();
                 if (chatInput.text().trim() === "" && $('.attachment').html().trim().length == 0) {
@@ -2235,7 +2242,8 @@
                 });
             };
 
-            chatWindow.prototype.renderMessage = function (msgData) {
+            chatWindow.prototype.renderMessage = function (msgData,elementID) {
+                $(".kore-chat-window").addClass('customBranding-theme');
                 console.log("---- message response====",msgData)
                 var me = this, messageHtml = '', extension = '', _extractedFileName = '';
                 var helpers=me.helpers;
@@ -2261,7 +2269,7 @@
                 else {
                     waiting_for_message = false;
                 }
-                var _chatContainer = $(me.config.chatContainer).find('.chat-container');
+                var _chatContainer = me.config.agentAssist? $('.agent-assist-chat-container').find(`#displayData-${elementID}`):$(me.config.chatContainer).find('.chat-container');
                 if (msgData.message && msgData.message[0] && msgData.message[0].cInfo && msgData.message[0].cInfo.attachments) {
                     extension = strSplit(msgData.message[0].cInfo.attachments[0].fileName);
                 }
@@ -2915,10 +2923,10 @@
                     bottomSliderAction('show',messageHtml);
                 }else{
                     //ignore message(msgId) if it is already in viewport                     
-                    if ($('.kore-chat-window .chat-container li#' + msgData.messageId).length < 1 || (msgData.renderType==='inline')) {
+                    if ($(`${me.config.agentAssist?`.agent-assist-chat-container  #displayData-${elementID}  li#`:`.kore-chat-window .chat-container li#`}` + msgData.messageId).length < 1 || (msgData.renderType==='inline')) {
                         if (msgData.type === "bot_response" && msgData.fromHistorySync) {
                             var msgTimeStamps = [];
-                            var msgEles = $('.kore-chat-window .chat-container>li');
+                            var msgEles = $(`${me.config.agentAssist?`.agent-assist-chat-container #displayData-${elementID}  >li`:'.kore-chat-window .chat-container>li'}`);
                             if (msgEles.length) {
                                 msgEles.each(function (i, ele) {
                                     msgTimeStamps.push(parseInt($(ele).attr('data-time')));
@@ -2939,8 +2947,7 @@
                                 _chatContainer.append(messageHtml);
                             }
                         } else {
-                            console.log("onside else in side render message")
-                            _chatContainer.append(messageHtml);
+                           _chatContainer.append(messageHtml);
                         }
                     }
                 }
@@ -3057,7 +3064,8 @@
                 $(a).remove();
             };
 
-            chatWindow.prototype.getChatTemplate = function (tempType) {               
+            chatWindow.prototype.getChatTemplate = function (tempType) {  
+                var me = this;             
                 var chatFooterTemplate =
                 '<div class="footerContainer pos-relative" id="id123"> \
                     {{if userAgentIE}} \
@@ -3096,65 +3104,83 @@
                 {{if !(isSendButton)}}<div class="chatSendMsg">${botMessages.entertosend}</div>{{/if}} \
                 </div>';
 
-            var chatWindowTemplate = '<script id="chat_window_tmpl" type="text/x-jqury-tmpl"> \
-                <div class="kore-chat-window droppable liteTheme-one" id="chat-window-footer"> \
-                <div class="kr-wiz-menu-chat defaultTheme-kore">\
-                </div>	\
-                    <div class="minimized-title"></div> \
-                    <div class="minimized"><span class="messages"></span></div> \
-                    <div class="kore-chat-header" id="koreChatHeader"> \
-                        <div id="botHeaderTitle" aria-labelledby="botHeaderTitle" class="header-title" title="${chatTitle}">${chatTitle}</div> \
-                        <div class="chat-box-controls"> \
-                            {{if botMessages.availableLanguages}}\
-                                <select class="lang-selector" >\
-                                    {{each(key, lang) botMessages.availableLanguages}} \
-                                        <option  {{if botMessages.selectedLanguage===lang}}selected{{/if}} value="${lang}">${lang}</option>\
-                                    {{/each}}\
-                                </select>\
-                            {{/if}}\
-                            <button class="reload-btn" title="${botMessages.reconnectText}"><img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iMTNweCIgaGVpZ2h0PSIxNHB4IiB2aWV3Qm94PSIwIDAgMTMgMTQiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiAgICA8IS0tIEdlbmVyYXRvcjogU2tldGNoIDUyLjMgKDY3Mjk3KSAtIGh0dHA6Ly93d3cuYm9oZW1pYW5jb2RpbmcuY29tL3NrZXRjaCAtLT4KICAgIDx0aXRsZT5yZWxvYWQ8L3RpdGxlPgogICAgPGRlc2M+Q3JlYXRlZCB3aXRoIFNrZXRjaC48L2Rlc2M+CiAgICA8ZyBpZD0iUGFnZS0xIiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4KICAgICAgICA8ZyBpZD0iQXJ0Ym9hcmQiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0zNTcuMDAwMDAwLCAtMjQxLjAwMDAwMCkiIGZpbGw9IiM4QTk1OUYiIHN0cm9rZT0iIzhBOTU5RiI+CiAgICAgICAgICAgIDxnIGlkPSJyZWxvYWQiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDM1OC4wMDAwMDAsIDI0Mi4wMDAwMDApIj4KICAgICAgICAgICAgICAgIDxwYXRoIGQ9Ik0xMC44LDUuMjczNTc2NTggQzEwLjgsMi4zNjU3MTQyIDguMzc3NTg1NzEsMCA1LjQwMDAyMzg3LDAgQzIuNDIyNDYyMDMsMCAwLDIuMzY1NzE0MiAwLDUuMjczNTc2NTggQzAsNS40NDYzMTE0MiAwLjE0MzQwNjM1Myw1LjU4NjM1OTc2IDAuMzIwMjgyOTQyLDUuNTg2MzU5NzYgQzAuNDk3MTU5NTMsNS41ODYzNTk3NiAwLjY0MDU2NTg4Myw1LjQ0NjI4ODEgMC42NDA1NjU4ODMsNS4yNzM1NzY1OCBDMC42NDA1NjU4ODMsMi43MTA2NDc2NSAyLjc3NTY0MjI2LDAuNjI1NTg5NjY4IDUuNCwwLjYyNTU4OTY2OCBDOC4wMjQzNTc3NCwwLjYyNTU4OTY2OCAxMC4xNTk0MzQxLDIuNzEwNjcwOTYgMTAuMTU5NDM0MSw1LjI3MzU3NjU4IEMxMC4xNTk0MzQxLDcuODM2NDU4ODkgOC4wMjQzNTc3NCw5LjkyMTU0MDE4IDUuNCw5LjkyMTU0MDE4IEw0Ljg0NDMyNzI0LDkuOTIxNTQwMTggTDUuNjM4ODc1MzEsOS4wNTI5NzAwMyBDNS43NTY3MzczMyw4LjkyNDE1OTEyIDUuNzQ1MzAyMDYsOC43MjY0MDgxNiA1LjYxMzQwMjYsOC42MTEzMDYgQzUuNDgxNTAzMTMsOC40OTYyMDM4NSA1LjI3ODk4NjcyLDguNTA3Mzk0NjYgNS4xNjExNDg1Nyw4LjYzNjIwNTU2IEw0LjAyNTM1Njg4LDkuODc3ODAyNzYgQzMuODM5NDMyMzUsMTAuMDgxMDU1OSAzLjgzOTQzMjM1LDEwLjM4NzU5MDggNC4wMjUzNTY4OCwxMC41OTA4NDQgTDUuMTYxMTQ4NTcsMTEuODMyNDQxMiBDNS4yMjQ0MzY0NCwxMS45MDE2Mzc3IDUuMzEyMDc0OTgsMTEuOTM2ODQyMSA1LjQwMDExOTM3LDExLjkzNjg0MjEgQzUuNDc2MDYwMDQsMTEuOTM2ODQyMSA1LjU1MjMxMTA2LDExLjkxMDU5MDMgNS42MTM0MDI2LDExLjg1NzM0MDcgQzUuNzQ1MzI1OTQsMTEuNzQyMjM4NiA1Ljc1NjczNzMzLDExLjU0NDQ4NzYgNS42Mzg4NzUzMSwxMS40MTU2NzY3IEw0Ljg0NDMyNzI0LDEwLjU0NzEwNjUgTDUuNCwxMC41NDcxMDY1IEM4LjM3NzU4NTcxLDEwLjU0NzEwNjUgMTAuOCw4LjE4MTM5MjM0IDEwLjgsNS4yNzM1NzY1OCBaIiBpZD0iUGF0aCI+PC9wYXRoPgogICAgICAgICAgICA8L2c+CiAgICAgICAgPC9nPgogICAgPC9nPgo8L3N2Zz4="></button> \
-                            <button class="minimize-btn" title="${botMessages.minimizeText}"><img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iMTRweCIgaGVpZ2h0PSIycHgiIHZpZXdCb3g9IjAgMCAxNCAyIiB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiPgogICAgPCEtLSBHZW5lcmF0b3I6IFNrZXRjaCA1Mi4zICg2NzI5NykgLSBodHRwOi8vd3d3LmJvaGVtaWFuY29kaW5nLmNvbS9za2V0Y2ggLS0+CiAgICA8dGl0bGU+bWluaW1pemU8L3RpdGxlPgogICAgPGRlc2M+Q3JlYXRlZCB3aXRoIFNrZXRjaC48L2Rlc2M+CiAgICA8ZyBpZD0iUGFnZS0xIiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4KICAgICAgICA8ZyBpZD0iQXJ0Ym9hcmQiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0zMjYuMDAwMDAwLCAtMjMzLjAwMDAwMCkiIGZpbGw9IiM4QTk1OUYiPgogICAgICAgICAgICA8ZyBpZD0ibWluaW1pemUiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDMyNi4wMDAwMDAsIDIzMy4wMDAwMDApIj4KICAgICAgICAgICAgICAgIDxwb2x5Z29uIGlkPSJQYXRoIiBwb2ludHM9IjAgMCAxMy45Mzk5OTk2IDAgMTMuOTM5OTk5NiAxLjk5OTk5OTk0IDAgMS45OTk5OTk5NCI+PC9wb2x5Z29uPgogICAgICAgICAgICA8L2c+CiAgICAgICAgPC9nPgogICAgPC9nPgo8L3N2Zz4="></button> \
-                            <button class="expand-btn" title="${botMessages.expandText}"><img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iMTRweCIgaGVpZ2h0PSIxNHB4IiB2aWV3Qm94PSIwIDAgMTQgMTQiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiAgICA8IS0tIEdlbmVyYXRvcjogU2tldGNoIDUyLjMgKDY3Mjk3KSAtIGh0dHA6Ly93d3cuYm9oZW1pYW5jb2RpbmcuY29tL3NrZXRjaCAtLT4KICAgIDx0aXRsZT5leHBhbmQ8L3RpdGxlPgogICAgPGRlc2M+Q3JlYXRlZCB3aXRoIFNrZXRjaC48L2Rlc2M+CiAgICA8ZyBpZD0iUGFnZS0xIiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4KICAgICAgICA8ZyBpZD0iQXJ0Ym9hcmQiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0zMDUuMDAwMDAwLCAtMjUyLjAwMDAwMCkiIGZpbGw9IiM4QTk1OUYiIGZpbGwtcnVsZT0ibm9uemVybyI+CiAgICAgICAgICAgIDxnIGlkPSJleHBhbmQiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDMwNS4wMDAwMDAsIDI1Mi4wMDAwMDApIj4KICAgICAgICAgICAgICAgIDxwYXRoIGQ9Ik0xLjg2NjY2NjY3LDkuMzMzMzMzMzMgTDAsOS4zMzMzMzMzMyBMMCwxNCBMNC42NjY2NjY2NywxNCBMNC42NjY2NjY2NywxMi4xMzMzMzMzIEwxLjg2NjY2NjY3LDEyLjEzMzMzMzMgTDEuODY2NjY2NjcsOS4zMzMzMzMzMyBaIE0wLDQuNjY2NjY2NjcgTDEuODY2NjY2NjcsNC42NjY2NjY2NyBMMS44NjY2NjY2NywxLjg2NjY2NjY3IEw0LjY2NjY2NjY3LDEuODY2NjY2NjcgTDQuNjY2NjY2NjcsMCBMMCwwIEwwLDQuNjY2NjY2NjcgWiBNMTIuMTMzMzMzMywxMi4xMzMzMzMzIEw5LjMzMzMzMzMzLDEyLjEzMzMzMzMgTDkuMzMzMzMzMzMsMTQgTDE0LDE0IEwxNCw5LjMzMzMzMzMzIEwxMi4xMzMzMzMzLDkuMzMzMzMzMzMgTDEyLjEzMzMzMzMsMTIuMTMzMzMzMyBaIE05LjMzMzMzMzMzLDAgTDkuMzMzMzMzMzMsMS44NjY2NjY2NyBMMTIuMTMzMzMzMywxLjg2NjY2NjY3IEwxMi4xMzMzMzMzLDQuNjY2NjY2NjcgTDE0LDQuNjY2NjY2NjcgTDE0LDAgTDkuMzMzMzMzMzMsMCBaIiBpZD0iU2hhcGUiPjwvcGF0aD4KICAgICAgICAgICAgPC9nPgogICAgICAgIDwvZz4KICAgIDwvZz4KPC9zdmc+"></button>\
-                            <button class="close-btn" title="${botMessages.expandText}"><img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iMTRweCIgaGVpZ2h0PSIxNHB4IiB2aWV3Qm94PSIwIDAgMTQgMTQiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiAgICA8IS0tIEdlbmVyYXRvcjogU2tldGNoIDUyLjMgKDY3Mjk3KSAtIGh0dHA6Ly93d3cuYm9oZW1pYW5jb2RpbmcuY29tL3NrZXRjaCAtLT4KICAgIDx0aXRsZT5jbG9zZTwvdGl0bGU+CiAgICA8ZGVzYz5DcmVhdGVkIHdpdGggU2tldGNoLjwvZGVzYz4KICAgIDxnIGlkPSJQYWdlLTEiIHN0cm9rZT0ibm9uZSIgc3Ryb2tlLXdpZHRoPSIxIiBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPgogICAgICAgIDxnIGlkPSJBcnRib2FyZCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTM0NC4wMDAwMDAsIC0yMjkuMDAwMDAwKSIgZmlsbD0iIzhBOTU5RiI+CiAgICAgICAgICAgIDxnIGlkPSJjbG9zZSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzQ0LjAwMDAwMCwgMjI5LjAwMDAwMCkiPgogICAgICAgICAgICAgICAgPHBvbHlnb24gaWQ9IlNoYXBlIiBwb2ludHM9IjE0IDEuNCAxMi42IDAgNyA1LjYgMS40IDAgMCAxLjQgNS42IDcgMCAxMi42IDEuNCAxNCA3IDguNCAxMi42IDE0IDE0IDEyLjYgOC40IDciPjwvcG9seWdvbj4KICAgICAgICAgICAgPC9nPgogICAgICAgIDwvZz4KICAgIDwvZz4KPC9zdmc+"></button> \
-                        </div>\
-                    </div>\
-                    <div class="kore-chat-header historyLoadingDiv"> \
-                        <div class="historyWarningTextDiv displayTable"> \
-                            <span><img class = "loadingHistory" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAARCAYAAAA7bUf6AAAAAXNSR0IArs4c6QAAAYZJREFUOBGtVLFKA0EQfbMiiERQEgjpRQt/wULB/opIFCuJvb1iKdprbbASDaa4L9DCX7BQ7CVwQcEggph13t7t3RlivMKBsDsz701mZ9+eYNjaNyX0e9saDmCxZJv1mrQ6zxDcayxEqXyOxmo/TzN5B2fXDbxFT7D2VH9rgK3FeV3pM848cTnLirQ6e0q60lw1lx+11bziHD5Oi1tcZVfAkyIYOYRM3GF69gHvr4uwX8sY2AMFVDwIkA3srLcFnAFb9B2I3GJqchNbQTcDJ7uLsIqPz0s91koS6WKmMm+SIfojRL8WIIuF+QdAlBSpks+ZBEkA7gijOkgBumGeR80sMLzG1OcMilgep3wDseWUxyEWsTnzmMKUr51ILw3wForYy2AhhSlfO3FKjGO8xiKWxymfgw1THnXAaxxnzMd68ajQuLcAeE1UnA5+K+R1kgmuS/4/KdY3xbdgB0fe/XMVs49m/Zi4uBPPiN/Qibrj5qJHl12+GU/7WYTRoe+J0xFlMOZ78g1n4achujvX7QAAAABJRU5ErkJggg=="></span> \
-                            <p class="headerTip warningTip">${botMessages.loadinghistory}</p> \
-                        </div> \
-                    </div> \
-                    <div class="kore-chat-header trainWarningDiv"> \
-                        <div class="trainWarningTextDiv displayTable"> \
-                            <span class="exclamation-circle"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></span> \
-                            <p class="headerTip warningTip">Something went wrong.Please try again later.</p> \
-                        </div> \
-                    </div> \
-                    <div role="log" aria-live="polite" aria-atomic="true" class="kore-chat-body" > \
+            var chatWindowTemplateForAgentAssist  = '<script id="chat_window_tmpl" type="text/x-jqury-tmpl"> \
+                <div class="agent-assist-chat-container droppable" id="chat-window-footer"> \
+                    <div role="log" aria-live="polite" aria-atomic="true" > \
                         <div class="errorMsgBlock"> \
                         </div> \
-                        <ul class="chat-container" id="chatContainers"></ul> \
                     </div> \
-                    <div class="typingIndicatorContent"><div class="typingIndicator"></div><div class="movingDots"></div></div> \
-                    <div class="kore-chat-footer disableFooter" id ="123"> '+ chatFooterTemplate + '{{if isSendButton}}<div class="sendBtnCnt"><button class="sendButton disabled" type="button">${botMessages.sendText}</button></div>{{/if}}</div>\
-                     <div id="myModal" class="modalImagePreview">\
-                          <span class="closeImagePreview">&times;</span>\
-                          <img class="modal-content-imagePreview" id="img01">\
-                          <div id="caption"></div>\
-                    </div>\
-                    <div id="chatBodyModal" class="chatBodyModal animate-bottom">\
-                    <span class="closeChatBodyModal" aira-label="Close Form" role="button" tabindex="0" aria-atomic="true"></span>\
-                    <div id="closeInlineModel" class="loading_form iframeLoader"></div>\
-                    <div id="chatBodyModalContent"></div>\
-                    </div>\
-                    <div id="myPreviewModal" class="modalImagePreview">\
-                          <span class="closeElePreview">&times;</span>\
-                          <div class="largePreviewContent"></div>\
-                    </div>\
-                    <div class="kr-wiz-content-chat defaultTheme-kore">\
-                    </div>\
+                    <div class = "collapse-acc-data" >\
+                     <div class="steps-run-data">\
+                                    <div class="run-info-content">\
+                                        <div class="agent-utt">\
+                                            <div class="title-data text-truncate" ><ul class="chat-container"></ul></div>\
+                                        </div>\
+                                    </div>\
+                                </div>\
+                    </div> \
                 </div> \
             </script>';
+
+            var chatWindowTemplate ='<script id="chat_window_tmpl" type="text/x-jqury-tmpl"> \
+            <div class="kore-chat-window droppable liteTheme-one" id="chat-window-footer"> \
+            <div class="kr-wiz-menu-chat defaultTheme-kore">\
+            </div>	\
+                <div class="minimized-title"></div> \
+                <div class="minimized"><span class="messages"></span></div> \
+                <div class="kore-chat-header" id="koreChatHeader"> \
+                    <div id="botHeaderTitle" aria-labelledby="botHeaderTitle" class="header-title" title="${chatTitle}">${chatTitle}</div> \
+                    <div class="chat-box-controls"> \
+                        {{if botMessages.availableLanguages}}\
+                            <select class="lang-selector" >\
+                                {{each(key, lang) botMessages.availableLanguages}} \
+                                    <option  {{if botMessages.selectedLanguage===lang}}selected{{/if}} value="${lang}">${lang}</option>\
+                                {{/each}}\
+                            </select>\
+                        {{/if}}\
+                        <button class="reload-btn" title="${botMessages.reconnectText}"><img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iMTNweCIgaGVpZ2h0PSIxNHB4IiB2aWV3Qm94PSIwIDAgMTMgMTQiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiAgICA8IS0tIEdlbmVyYXRvcjogU2tldGNoIDUyLjMgKDY3Mjk3KSAtIGh0dHA6Ly93d3cuYm9oZW1pYW5jb2RpbmcuY29tL3NrZXRjaCAtLT4KICAgIDx0aXRsZT5yZWxvYWQ8L3RpdGxlPgogICAgPGRlc2M+Q3JlYXRlZCB3aXRoIFNrZXRjaC48L2Rlc2M+CiAgICA8ZyBpZD0iUGFnZS0xIiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4KICAgICAgICA8ZyBpZD0iQXJ0Ym9hcmQiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0zNTcuMDAwMDAwLCAtMjQxLjAwMDAwMCkiIGZpbGw9IiM4QTk1OUYiIHN0cm9rZT0iIzhBOTU5RiI+CiAgICAgICAgICAgIDxnIGlkPSJyZWxvYWQiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDM1OC4wMDAwMDAsIDI0Mi4wMDAwMDApIj4KICAgICAgICAgICAgICAgIDxwYXRoIGQ9Ik0xMC44LDUuMjczNTc2NTggQzEwLjgsMi4zNjU3MTQyIDguMzc3NTg1NzEsMCA1LjQwMDAyMzg3LDAgQzIuNDIyNDYyMDMsMCAwLDIuMzY1NzE0MiAwLDUuMjczNTc2NTggQzAsNS40NDYzMTE0MiAwLjE0MzQwNjM1Myw1LjU4NjM1OTc2IDAuMzIwMjgyOTQyLDUuNTg2MzU5NzYgQzAuNDk3MTU5NTMsNS41ODYzNTk3NiAwLjY0MDU2NTg4Myw1LjQ0NjI4ODEgMC42NDA1NjU4ODMsNS4yNzM1NzY1OCBDMC42NDA1NjU4ODMsMi43MTA2NDc2NSAyLjc3NTY0MjI2LDAuNjI1NTg5NjY4IDUuNCwwLjYyNTU4OTY2OCBDOC4wMjQzNTc3NCwwLjYyNTU4OTY2OCAxMC4xNTk0MzQxLDIuNzEwNjcwOTYgMTAuMTU5NDM0MSw1LjI3MzU3NjU4IEMxMC4xNTk0MzQxLDcuODM2NDU4ODkgOC4wMjQzNTc3NCw5LjkyMTU0MDE4IDUuNCw5LjkyMTU0MDE4IEw0Ljg0NDMyNzI0LDkuOTIxNTQwMTggTDUuNjM4ODc1MzEsOS4wNTI5NzAwMyBDNS43NTY3MzczMyw4LjkyNDE1OTEyIDUuNzQ1MzAyMDYsOC43MjY0MDgxNiA1LjYxMzQwMjYsOC42MTEzMDYgQzUuNDgxNTAzMTMsOC40OTYyMDM4NSA1LjI3ODk4NjcyLDguNTA3Mzk0NjYgNS4xNjExNDg1Nyw4LjYzNjIwNTU2IEw0LjAyNTM1Njg4LDkuODc3ODAyNzYgQzMuODM5NDMyMzUsMTAuMDgxMDU1OSAzLjgzOTQzMjM1LDEwLjM4NzU5MDggNC4wMjUzNTY4OCwxMC41OTA4NDQgTDUuMTYxMTQ4NTcsMTEuODMyNDQxMiBDNS4yMjQ0MzY0NCwxMS45MDE2Mzc3IDUuMzEyMDc0OTgsMTEuOTM2ODQyMSA1LjQwMDExOTM3LDExLjkzNjg0MjEgQzUuNDc2MDYwMDQsMTEuOTM2ODQyMSA1LjU1MjMxMTA2LDExLjkxMDU5MDMgNS42MTM0MDI2LDExLjg1NzM0MDcgQzUuNzQ1MzI1OTQsMTEuNzQyMjM4NiA1Ljc1NjczNzMzLDExLjU0NDQ4NzYgNS42Mzg4NzUzMSwxMS40MTU2NzY3IEw0Ljg0NDMyNzI0LDEwLjU0NzEwNjUgTDUuNCwxMC41NDcxMDY1IEM4LjM3NzU4NTcxLDEwLjU0NzEwNjUgMTAuOCw4LjE4MTM5MjM0IDEwLjgsNS4yNzM1NzY1OCBaIiBpZD0iUGF0aCI+PC9wYXRoPgogICAgICAgICAgICA8L2c+CiAgICAgICAgPC9nPgogICAgPC9nPgo8L3N2Zz4="></button> \
+                        <button class="minimize-btn" title="${botMessages.minimizeText}"><img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iMTRweCIgaGVpZ2h0PSIycHgiIHZpZXdCb3g9IjAgMCAxNCAyIiB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiPgogICAgPCEtLSBHZW5lcmF0b3I6IFNrZXRjaCA1Mi4zICg2NzI5NykgLSBodHRwOi8vd3d3LmJvaGVtaWFuY29kaW5nLmNvbS9za2V0Y2ggLS0+CiAgICA8dGl0bGU+bWluaW1pemU8L3RpdGxlPgogICAgPGRlc2M+Q3JlYXRlZCB3aXRoIFNrZXRjaC48L2Rlc2M+CiAgICA8ZyBpZD0iUGFnZS0xIiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4KICAgICAgICA8ZyBpZD0iQXJ0Ym9hcmQiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0zMjYuMDAwMDAwLCAtMjMzLjAwMDAwMCkiIGZpbGw9IiM4QTk1OUYiPgogICAgICAgICAgICA8ZyBpZD0ibWluaW1pemUiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDMyNi4wMDAwMDAsIDIzMy4wMDAwMDApIj4KICAgICAgICAgICAgICAgIDxwb2x5Z29uIGlkPSJQYXRoIiBwb2ludHM9IjAgMCAxMy45Mzk5OTk2IDAgMTMuOTM5OTk5NiAxLjk5OTk5OTk0IDAgMS45OTk5OTk5NCI+PC9wb2x5Z29uPgogICAgICAgICAgICA8L2c+CiAgICAgICAgPC9nPgogICAgPC9nPgo8L3N2Zz4="></button> \
+                        <button class="expand-btn" title="${botMessages.expandText}"><img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iMTRweCIgaGVpZ2h0PSIxNHB4IiB2aWV3Qm94PSIwIDAgMTQgMTQiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiAgICA8IS0tIEdlbmVyYXRvcjogU2tldGNoIDUyLjMgKDY3Mjk3KSAtIGh0dHA6Ly93d3cuYm9oZW1pYW5jb2RpbmcuY29tL3NrZXRjaCAtLT4KICAgIDx0aXRsZT5leHBhbmQ8L3RpdGxlPgogICAgPGRlc2M+Q3JlYXRlZCB3aXRoIFNrZXRjaC48L2Rlc2M+CiAgICA8ZyBpZD0iUGFnZS0xIiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4KICAgICAgICA8ZyBpZD0iQXJ0Ym9hcmQiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0zMDUuMDAwMDAwLCAtMjUyLjAwMDAwMCkiIGZpbGw9IiM4QTk1OUYiIGZpbGwtcnVsZT0ibm9uemVybyI+CiAgICAgICAgICAgIDxnIGlkPSJleHBhbmQiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDMwNS4wMDAwMDAsIDI1Mi4wMDAwMDApIj4KICAgICAgICAgICAgICAgIDxwYXRoIGQ9Ik0xLjg2NjY2NjY3LDkuMzMzMzMzMzMgTDAsOS4zMzMzMzMzMyBMMCwxNCBMNC42NjY2NjY2NywxNCBMNC42NjY2NjY2NywxMi4xMzMzMzMzIEwxLjg2NjY2NjY3LDEyLjEzMzMzMzMgTDEuODY2NjY2NjcsOS4zMzMzMzMzMyBaIE0wLDQuNjY2NjY2NjcgTDEuODY2NjY2NjcsNC42NjY2NjY2NyBMMS44NjY2NjY2NywxLjg2NjY2NjY3IEw0LjY2NjY2NjY3LDEuODY2NjY2NjcgTDQuNjY2NjY2NjcsMCBMMCwwIEwwLDQuNjY2NjY2NjcgWiBNMTIuMTMzMzMzMywxMi4xMzMzMzMzIEw5LjMzMzMzMzMzLDEyLjEzMzMzMzMgTDkuMzMzMzMzMzMsMTQgTDE0LDE0IEwxNCw5LjMzMzMzMzMzIEwxMi4xMzMzMzMzLDkuMzMzMzMzMzMgTDEyLjEzMzMzMzMsMTIuMTMzMzMzMyBaIE05LjMzMzMzMzMzLDAgTDkuMzMzMzMzMzMsMS44NjY2NjY2NyBMMTIuMTMzMzMzMywxLjg2NjY2NjY3IEwxMi4xMzMzMzMzLDQuNjY2NjY2NjcgTDE0LDQuNjY2NjY2NjcgTDE0LDAgTDkuMzMzMzMzMzMsMCBaIiBpZD0iU2hhcGUiPjwvcGF0aD4KICAgICAgICAgICAgPC9nPgogICAgICAgIDwvZz4KICAgIDwvZz4KPC9zdmc+"></button>\
+                        <button class="close-btn" title="${botMessages.expandText}"><img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iMTRweCIgaGVpZ2h0PSIxNHB4IiB2aWV3Qm94PSIwIDAgMTQgMTQiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiAgICA8IS0tIEdlbmVyYXRvcjogU2tldGNoIDUyLjMgKDY3Mjk3KSAtIGh0dHA6Ly93d3cuYm9oZW1pYW5jb2RpbmcuY29tL3NrZXRjaCAtLT4KICAgIDx0aXRsZT5jbG9zZTwvdGl0bGU+CiAgICA8ZGVzYz5DcmVhdGVkIHdpdGggU2tldGNoLjwvZGVzYz4KICAgIDxnIGlkPSJQYWdlLTEiIHN0cm9rZT0ibm9uZSIgc3Ryb2tlLXdpZHRoPSIxIiBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPgogICAgICAgIDxnIGlkPSJBcnRib2FyZCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTM0NC4wMDAwMDAsIC0yMjkuMDAwMDAwKSIgZmlsbD0iIzhBOTU5RiI+CiAgICAgICAgICAgIDxnIGlkPSJjbG9zZSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzQ0LjAwMDAwMCwgMjI5LjAwMDAwMCkiPgogICAgICAgICAgICAgICAgPHBvbHlnb24gaWQ9IlNoYXBlIiBwb2ludHM9IjE0IDEuNCAxMi42IDAgNyA1LjYgMS40IDAgMCAxLjQgNS42IDcgMCAxMi42IDEuNCAxNCA3IDguNCAxMi42IDE0IDE0IDEyLjYgOC40IDciPjwvcG9seWdvbj4KICAgICAgICAgICAgPC9nPgogICAgICAgIDwvZz4KICAgIDwvZz4KPC9zdmc+"></button> \
+                    </div>\
+                </div>\
+                <div class="kore-chat-header historyLoadingDiv"> \
+                    <div class="historyWarningTextDiv displayTable"> \
+                        <span><img class = "loadingHistory" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAARCAYAAAA7bUf6AAAAAXNSR0IArs4c6QAAAYZJREFUOBGtVLFKA0EQfbMiiERQEgjpRQt/wULB/opIFCuJvb1iKdprbbASDaa4L9DCX7BQ7CVwQcEggph13t7t3RlivMKBsDsz701mZ9+eYNjaNyX0e9saDmCxZJv1mrQ6zxDcayxEqXyOxmo/TzN5B2fXDbxFT7D2VH9rgK3FeV3pM848cTnLirQ6e0q60lw1lx+11bziHD5Oi1tcZVfAkyIYOYRM3GF69gHvr4uwX8sY2AMFVDwIkA3srLcFnAFb9B2I3GJqchNbQTcDJ7uLsIqPz0s91koS6WKmMm+SIfojRL8WIIuF+QdAlBSpks+ZBEkA7gijOkgBumGeR80sMLzG1OcMilgep3wDseWUxyEWsTnzmMKUr51ILw3wForYy2AhhSlfO3FKjGO8xiKWxymfgw1THnXAaxxnzMd68ajQuLcAeE1UnA5+K+R1kgmuS/4/KdY3xbdgB0fe/XMVs49m/Zi4uBPPiN/Qibrj5qJHl12+GU/7WYTRoe+J0xFlMOZ78g1n4achujvX7QAAAABJRU5ErkJggg=="></span> \
+                        <p class="headerTip warningTip">${botMessages.loadinghistory}</p> \
+                    </div> \
+                </div> \
+                <div class="kore-chat-header trainWarningDiv"> \
+                    <div class="trainWarningTextDiv displayTable"> \
+                        <span class="exclamation-circle"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></span> \
+                        <p class="headerTip warningTip">Something went wrong.Please try again later.</p> \
+                    </div> \
+                </div> \
+                <div role="log" aria-live="polite" aria-atomic="true" class="kore-chat-body" > \
+                    <div class="errorMsgBlock"> \
+                    </div> \
+                    <ul class="chat-container" id="chatContainers"></ul> \
+                </div> \
+                <div class="typingIndicatorContent"><div class="typingIndicator"></div><div class="movingDots"></div></div> \
+                <div class="kore-chat-footer disableFooter" id ="123"> '+ chatFooterTemplate + '{{if isSendButton}}<div class="sendBtnCnt"><button class="sendButton disabled" type="button">${botMessages.sendText}</button></div>{{/if}}</div>\
+                 <div id="myModal" class="modalImagePreview">\
+                      <span class="closeImagePreview">&times;</span>\
+                      <img class="modal-content-imagePreview" id="img01">\
+                      <div id="caption"></div>\
+                </div>\
+                <div id="chatBodyModal" class="chatBodyModal animate-bottom">\
+                <span class="closeChatBodyModal" aira-label="Close Form" role="button" tabindex="0" aria-atomic="true"></span>\
+                <div id="closeInlineModel" class="loading_form iframeLoader"></div>\
+                <div id="chatBodyModalContent"></div>\
+                </div>\
+                <div id="myPreviewModal" class="modalImagePreview">\
+                      <span class="closeElePreview">&times;</span>\
+                      <div class="largePreviewContent"></div>\
+                </div>\
+                <div class="kr-wiz-content-chat defaultTheme-kore">\
+                </div>\
+            </div> \
+        </script>';
 
             var msgTemplate = '<script id="chat_message_tmpl" type="text/x-jqury-tmpl"> \
                     {{if msgData.message}} \
@@ -3689,7 +3715,7 @@
                 return iframe;
             }
             else {
-                return chatWindowTemplate;
+                return me.config.agentAssist?chatWindowTemplateForAgentAssist:chatWindowTemplate;
             }
             };
 
