@@ -922,14 +922,14 @@
 }
 
 .kore-chat-window ul.chat-container li.fromOtherUsers .messageBubble {
-    background-color: var(--sdk-chat-window-bot-bubble-bg);
+    /* background-color: var(--sdk-chat-window-bot-bubble-bg);
     color: var(--sdk-chat-window-bot-bubble-font-clr);
     border-radius: var(--sdk-chat-window-bot-bubble-shape);
     border: 1px solid var(--sdk-chat-window-bot-bubble-border-clr);
     padding: 12px 15px;
     max-width: 95%;
     line-height: 1.5;
-    font-size: 14px;
+    font-size: 14px; */
     -webkit-animation: message-left ease-in-out 2s forwards;
     -moz-animation: message-left ease-in-out 2s forwards;
     animation: message-left ease-in-out 2s forwards;
