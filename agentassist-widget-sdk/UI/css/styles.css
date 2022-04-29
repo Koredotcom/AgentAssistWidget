@@ -2,6 +2,7 @@
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
+    font-family: 'Inter' !important;
 }
 html, body{
     font-family: 'Inter' !important;
@@ -173,7 +174,7 @@ html, body{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 11px 15px;
+    padding: 8px 15px 7px 15px;
     border-bottom: 1px solid #E5E8EC;
 }
 .agent-assist-chat-container .header-top-bar .header-data .main-title {
@@ -181,15 +182,37 @@ html, body{
     font-size: 14px;
     line-height: 17px;
     color: #000000;
+    display: inline-flex;
+    align-items: center;
+}
+
+.agent-assist-chat-container .header-top-bar .header-data .main-title .logo-icon{
+    background: #07377F;
+    border-radius: 5px 5px 1px 5px;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 12px;
+}
+.agent-assist-chat-container .header-top-bar .header-data .main-title span{
+    margin-left: 8px;
 }
 .agent-assist-chat-container .header-top-bar .header-data .powerdby {
     font-weight: 400;
     font-size: 10px;
     line-height: 12px;
     color: #64717C;
+    display: inline-flex;
+    align-items: center;
 }
 .agent-assist-chat-container .header-top-bar .header-data .powerdby span {
     margin-right: 5px;
+}
+.agent-assist-chat-container .header-top-bar .header-data .powerdby img{
+    height: 9px;
 }
 .agent-assist-chat-container .header-top-bar .tab-toggles-sec {
     display: flex;
@@ -203,16 +226,17 @@ html, body{
     align-items: center;
 }
 .agent-assist-chat-container .header-top-bar .tab-toggles-sec .top-tabs-actions .tab-icon {
-    width: 36px;
-    height: 34px;
+    min-width: 55px;
+    height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
     color: #202124;
     font-size: 14px;
     cursor: pointer;
     transition: 0.2s all ease;
-    border-radius: 3px 3px 0px 0px;
+    border-radius: 4px 4px 0px 0px;
     position: relative;
     margin-right: 4px;
 }
@@ -235,11 +259,21 @@ html, body{
     visibility: visible;
     opacity: 1;
 }
+.agent-assist-chat-container .header-top-bar .tab-toggles-sec .top-tabs-actions .tab-icon .title-tab{
+    font-weight: 400;
+    font-size: 10px;
+    line-height: normal;
+    text-align: center;
+    color: #000000;
+    margin-top: 5px;
+}
 .agent-assist-chat-container .header-top-bar .tab-toggles-sec .top-tabs-actions .tab-icon.active-tab {
     background: #0077D2;
     color: #FFFFFF;
 }
-
+.agent-assist-chat-container .header-top-bar .tab-toggles-sec .top-tabs-actions .tab-icon.active-tab .title-tab{
+    color: #FFFFFF;
+}
 .agent-assist-chat-container .header-top-bar .tab-toggles-sec .top-tabs-actions .tab-icon .custom-tootltip-tabs{
     visibility: hidden;
     position: absolute;
@@ -254,11 +288,12 @@ html, body{
     box-shadow: 0px -4px 4px rgba(32, 33, 36, 0.2);
     border-radius: 4px;
     top: -40px;
-    left: 0;
+    left: 12px;
     font-weight: 400;
     font-size: 10px;
     line-height: 14px;
     color: #FFFFFF;
+    white-space: nowrap;
 }
 
 .agent-assist-chat-container .header-top-bar .tab-toggles-sec .top-tabs-actions .tab-icon .custom-tootltip-tabs::after{
@@ -307,7 +342,7 @@ html, body{
     visibility: hidden;
     opacity: 0;
 }
-.agent-assist-chat-container .footer-info .customer-feeling-text {
+/* .agent-assist-chat-container .footer-info .customer-feeling-text {
     background: #FFFFFF;
     box-shadow: -4px -2px 9px rgba(0,0,0,0.15);
     border-radius: 10px 0px 0px 0px;
@@ -324,7 +359,7 @@ html, body{
 }
 .agent-assist-chat-container .footer-info .customer-feeling-text span b {
     font-weight: 600;
-}
+} */
 
 
 /* Entity Bucket */
@@ -473,7 +508,7 @@ html, body{
     align-items: center;
     /* margin-top: 20px; */
     margin-bottom: 16px;
-    padding: 0 15px;
+    padding: 15px 10px 0 10px;
     position: relative;
     z-index: 1;
 }
@@ -501,17 +536,17 @@ html, body{
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content {
     min-height: 100px;
     background: #E9EFF4;
-    margin-top: -16px;
+    margin-top: 0px;
     display: inline-block;
     width: 100%;
-    padding: 40px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
     position: relative;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec {
     display: inline-block;
     width: 100%;
     position: relative;
-    padding: 12px 15px;
+    padding: 12px 15px 12px 25px;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type {
     display: flex;
@@ -583,6 +618,19 @@ html, body{
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    display: inline-block;
+    max-width: 95%;
+}
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content .ast-carrotup{
+    display: inline-block;
+    font-size: 6px;
+    position: relative;
+    top: -2px;
+    cursor: pointer;
+}
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content .ast-carrotup.rotate-carrot{
+    top: -4px;
+    transform: rotate(180deg);
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content .desc-text {
     font-weight: 400;
@@ -681,7 +729,7 @@ html, body{
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info {
     display: inline-block;
     width: 100%;
-    padding: 0 15px 16px 15px;
+    padding: 40px 15px 16px 15px;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .accordion-header {
     background: #FFFFFF;
@@ -717,8 +765,8 @@ html, body{
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .accordion-header .header-text {
     font-weight: 400;
-    font-size: 11px;
-    line-height: 13px;
+    font-size: 12px;
+    line-height: 15px;
     color: #202124;
     padding-right: 15px;
     overflow: hidden;
@@ -811,6 +859,9 @@ html, body{
     color: #202124;
     font-style: italic;
 }
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data .run-info-content .agent-utt .title-data li{
+    margin: 0 !important;
+}
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data .run-info-content .agent-utt .action-links {
     display: none;
     align-items: center;
@@ -888,11 +939,13 @@ html, body{
 }
 
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dilog-task-end{
-    /* position: absolute;
-    bottom: -40px; */
     width: 100%;
     left: 0;
     text-align: center;
+    position: absolute;
+    bottom: -55px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #DCE3EA;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dilog-task-end .text-dialog-task-end{
     display: inline-block;
@@ -1064,8 +1117,8 @@ html, body{
 }
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .heading-title {
     font-weight: 500;
-    font-size: 16px;
-    line-height: 19px;
+    font-size: 14px;
+    line-height: 17px;
     color: #000000;
     margin-bottom: 4px;
 }
@@ -1096,7 +1149,7 @@ html, body{
 }
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type {
     width: 100%;
-    padding-left: 24px;
+    padding-left: 0px;
     display: inline-block;
 }
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type.pl-0 {
@@ -1316,27 +1369,66 @@ html, body{
     top: 10px;
     color: #0077D2;
 }
-.agent-assist-chat-container .ghost-btn{
-    border: 1px solid transparent;
-    background: #fff;
-    height: 26px;
-    font-size: 12px;
-    border-radius: 4px;
-    color: #0077D2;
-    min-width: 60px;
-    text-align: center;
-    transition: 0.2s all ease-in;
-}
+
+/* Show history */
 .agent-assist-chat-container .show-history-block{
     text-align: right;
-    padding: 20px 10px 15px 0px;
+    padding: 12px 10px;
+    background: #FFFFFF;
+    display: inline-block;
+    width: 100%;
 }
+.agent-assist-chat-container .ghost-btn{
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 15px;
+    color: #0077D2;
+    padding: 5px;
+    border: 0;
+    outline: 0;
+    height: auto;
+    cursor: pointer;
+    transition: 0.2s all ease-in;
+    background: transparent;
+}
+
 .agent-assist-chat-container .show-back-recommendation-block{
     text-align: left;
-    padding: 20px 0px 15px 6px;
+    padding: 12px 8px;
+    background: #FFFFFF;
+    display: inline-block;
+    width: 100%;
 }
-.agent-assist-chat-container .back-icon{
+.agent-assist-chat-container .show-back-recommendation-block .ghost-btn{
+    display: inline-flex;
+    align-items: center;
+}
+.agent-assist-chat-container .show-back-recommendation-block .back-icon{
     transform: rotate(90deg);
     display: inline-block;
-    padding: 2px;
+    margin-right: 5px;
+    font-size: 6px;
+}
+
+
+/* Customer Feeling Happy */
+
+.agent-assist-chat-container .customer-feeling-text{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 20px;
+    color: #64717C;
+    padding: 5px 15px;
+    position: absolute;
+    bottom: -40px;
+    right: 0;
+}
+.agent-assist-chat-container .customer-feeling-text.bottom-95{
+    bottom: -95px;
+}
+.agent-assist-chat-container .customer-feeling-text span{
+    margin-left: 6px;
 }

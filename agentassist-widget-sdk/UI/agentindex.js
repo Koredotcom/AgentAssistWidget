@@ -15,6 +15,7 @@ var runBtArrayIds = ['123'];
 var dropdownHeaderUuids;
 var responseId;
 var userIntentInput;
+var answerPlaceableID;
 var dialogName;
 var count = 0;
 function koreGenerateUUID() {
@@ -437,7 +438,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             "icon": "https://uat.kore.ai:443/api/getMediaStream/market/f-cb381255-9aa1-5ce2-95e3-71233aef7084.png?n=17648985&s=IlRvUlUwalFVaFVMYm9sZStZQnlLc0l1UlZvdlNUUDcxR2o3U2lscHRrL3M9Ig$$",
             "traceId": "873209019a5adc26"
         }
-        if (!isAutomationOnGoing && data.suggestions) {
+        if (!isAutomationOnGoing && data.suggestions && !answerPlaceableID) {
             let dynamicBlock = document.getElementById('dynamicBlock');
             let suggestionsblock = $('#dynamicBlock .dialog-task-run-sec');
             if (suggestionsblock.length >= 1) {
@@ -549,32 +550,35 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                     let faqsSuggestions = document.getElementById(`faqsSuggestions-${responseId}`);
 
                     let faqHtml = `
-                    <div class="type-info-run-send">
+                    <div class="type-info-run-send" id="faqDiv-${index}">
                         <div class="left-content" id="faqSection-${index}">
                             <div class="title-text" id="title-${index}">${ele.question}</div>
                             
                             
                         </div>
-                        <div class="action-links">
-                            <button class="send-run-btn">Send</button>
-                            <div class="copy-btn">
-                                <i class="ast-copy"></i>
-                            </div>
-                        </div>
+                        
                     </div>`;
 
                     faqsSuggestions.innerHTML += faqHtml;
                     let faqs = $(`.type-info-run-send #faqSection-${index}`);
                     if (!ele.answer) {
-                        let checkHtml = `<div class="action-links"><button class="send-run-btn"
-                        data-conv-id="${data.conversationId}"
-                            data-bot-id="${botId}" data-intent-name="${ele.question}"
-                            data-agent-id="${data.agentId}" data-check="true" id="check-${index}">Check answer</button></div>`;
+                        let checkHtml = `
+                        <i class="ast-carrotup" data-conv-id="${data.conversationId}"
+                        data-bot-id="${botId}" data-intent-name="${ele.question}"
+                        data-agent-id="${data.agentId}" data-check="true" id="check-${index}"></i>`;
                         faqs.append(checkHtml);
                     } else {
+                        let a = $(`#faqDiv-${index}`);
+                        let faqActionHtml = `<div class="action-links">
+                        <button class="send-run-btn">Send</button>
+                        <div class="copy-btn">
+                            <i class="ast-copy"></i>
+                        </div>
+                    </div>`;
+                       a.append(faqActionHtml);
                         faqs.append(`<div class="desc-text" id="desc-${index}">${ele.answer}</div>`);
                     }
-                    if (ele.answer?.length > 200) {
+                    if ((ele.question?.length + ele.answer?.length) > 70) {
                         let faqs = $(`.type-info-run-send #faqSection-${index}`);
                         let seeMoreButtonHtml = `
                           <button class="ghost-btn" style="font-style: italic;" id="seeMore-${index}" data-see-more="true">See more</button>
@@ -585,6 +589,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 })
             }
         } else {
+            if(data.type === 'text' && data.suggestions){
+                data.suggestions.faqs.forEach((ele)=>{
+                    $(`#${answerPlaceableID}`).html(ele.answer);
+                    $(`#${answerPlaceableID}`).attr('data-answer-render','true')
+                })
+                answerPlaceableID = undefined
+            }
             console.log("agent need to take action whether to intrup or continue")
         }
 
@@ -688,7 +699,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             $(noOfSteps[noOfSteps.length - 2]).removeClass('hide');
             $(noOfSteps[noOfSteps.length - 1]).removeClass('hide');
         }
-        if (data.endOfFaq || data.endOfTask) {
+        if ((data.endOfFaq || data.endOfTask) && data.type !== 'text') {
             console.log("===== came to add the feedback and end of dialog")
             isAutomationOnGoing = false;
             addFeedbackHtmlToDom(data, botId, userId, userIntentInput);
@@ -912,29 +923,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                    </div>
                    `;
                 dynamicBlock.innerHTML = dynamicBlock.innerHTML + dropdownHtml;
-                // let automationSuggestions = document.getElementById(`automationSuggestions-${responseId}`);
-                // idsOfDropDown = `automationSuggestions-${responseId}`;
-                // automationSuggestions?.remove();
                 let ids = target.id.split('-');
-                // if(libraryRunBtn) {
-                //     $('.type-info-run-send').each((i, ele) => {
-                //         let id = ele.id?.split('-');
-                //         if (ids.includes(id[1])) {
-                //             idsOfDropDown = ele.id;
-                //             $(ele).remove()
-                //         }
-                //     })
-                // } else {
-                //     $('.dialog-task-run-sec').each((i, ele) => {
-                //         let id = ele.id?.split('-');
-                //         if (ids.includes(id[1])) {
-                //             idsOfDropDown = ele.id;
-                //             $(ele).remove()
-                //         }
-                //     })
-                // }
+               
 
-                $(`${target.dataset.useCaseList}`?'.content-dialog-task-type .type-info-run-send':'.dialog-task-run-sec').each((i, ele) => {
+                $(`${!target?.dataset?.useCaseList}`?'.dialog-task-run-sec':'.content-dialog-task-type .type-info-run-send').each((i, ele) => {
                     let id = ele.id?.split('-');
                     if (ids.includes(id[1])) {
                         idsOfDropDown = ele.id;
@@ -951,12 +943,34 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             }
             if (checkButton) {
                 let id = target.id.split('-')[1];
-                let faq = $(`.type-info-run-send #faqSection-${id}`);
-                let answerHtml = `<div class="desc-text" id="desc-${id}"></div>`
-                faq.append(answerHtml);
-                AgentAssist_run_click(evt);
-                (target.id).classList.add('hide');
-                return;
+               
+                if(!target.dataset.answerRender){
+                    let faq = $(`.type-info-run-send #faqSection-${id}`);
+                    let answerHtml = `<div class="desc-text" id="desc-${id}"></div>`
+                    let faqDiv = $(`#faqDiv-${id}`);
+                    let faqaction = `<div class="action-links">
+                    <button class="send-run-btn">Send</button>
+                    <div class="copy-btn">
+                        <i class="ast-copy"></i>
+                    </div>
+                </div>`;
+                    faq.append(answerHtml);
+                    $(`#${target.id}`).attr('data-answer-render', 'false');
+                    faqDiv.append(faqaction);
+                    answerPlaceableID= `desc-${id}`;
+                    $(`#${target.id}`).addClass('rotate-carrot');
+                    AgentAssist_run_click(evt);
+                    return
+                }
+                if($(`.ast-carrotup.rotate-carrot`).length<=0){
+                    $(`#${target.id}`).addClass('rotate-carrot');
+                    $(`#faqDiv-${id} .action-links`).removeClass('hide');
+                    $(`#desc-${id}`).removeClass('hide');
+                }else{
+                    $(`#${target.id}`).removeClass('rotate-carrot');
+                    $(`#faqDiv-${id} .action-links`).addClass('hide');
+                    $(`#desc-${id}`).addClass('hide');
+                }
             }
             if (check(target.id)) {
                 let targetIDs = (target.id).split('-');

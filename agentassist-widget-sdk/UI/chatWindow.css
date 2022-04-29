@@ -782,7 +782,7 @@
     top: 50px;
     bottom: 53px;
     background-color: var(--sdk-chat-window-body-bg);
-    font-family: "Lato", sans-serif;
+    font-family: 'Inter' !important;
     font-size: 14px;
     background-repeat: no-repeat;
     background-size: 100% 100%;
