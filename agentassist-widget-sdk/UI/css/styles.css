@@ -1326,6 +1326,7 @@ html, body{
     min-width: 60px;
     text-align: center;
     transition: 0.2s all ease-in;
+    cursor: pointer;
 }
 .agent-assist-chat-container .show-history-block{
     text-align: right;
