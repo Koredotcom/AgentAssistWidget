@@ -563,7 +563,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                     let faqs = $(`.type-info-run-send #faqSection-${index}`);
                     if (!ele.answer) {
                         let checkHtml = `
-                        <i class="ast-carrotup"data-conv-id="${data.conversationId}"
+                        <i class="ast-carrotup" data-conv-id="${data.conversationId}"
                         data-bot-id="${botId}" data-intent-name="${ele.question}"
                         data-agent-id="${data.agentId}" data-check="true" id="check-${index}"></i>`;
                         faqs.append(checkHtml);
@@ -578,7 +578,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                        a.append(faqActionHtml);
                         faqs.append(`<div class="desc-text" id="desc-${index}">${ele.answer}</div>`);
                     }
-                    if (ele.answer?.length > 50) {
+                    if ((ele.question?.length + ele.answer?.length) > 70) {
                         let faqs = $(`.type-info-run-send #faqSection-${index}`);
                         let seeMoreButtonHtml = `
                           <button class="ghost-btn" style="font-style: italic;" id="seeMore-${index}" data-see-more="true">See more</button>
@@ -592,6 +592,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             if(data.type === 'text' && data.suggestions){
                 data.suggestions.faqs.forEach((ele)=>{
                     $(`#${answerPlaceableID}`).html(ele.answer);
+                    $(`#${answerPlaceableID}`).attr('data-answer-render','true')
                 })
                 answerPlaceableID = undefined
             }
@@ -698,7 +699,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             $(noOfSteps[noOfSteps.length - 2]).removeClass('hide');
             $(noOfSteps[noOfSteps.length - 1]).removeClass('hide');
         }
-        if (data.endOfFaq || data.endOfTask) {
+        if ((data.endOfFaq || data.endOfTask) && data.type !== 'text') {
             console.log("===== came to add the feedback and end of dialog")
             isAutomationOnGoing = false;
             addFeedbackHtmlToDom(data, botId, userId, userIntentInput);
@@ -942,21 +943,34 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             }
             if (checkButton) {
                 let id = target.id.split('-')[1];
-                let faq = $(`.type-info-run-send #faqSection-${id}`);
-                let answerHtml = `<div class="desc-text" id="desc-${id}"></div>`
-                let faqDiv = $(`#faqDiv-${id}`);
-                let faqaction = `<div class="action-links">
-                <button class="send-run-btn">Send</button>
-                <div class="copy-btn">
-                    <i class="ast-copy"></i>
-                </div>
-            </div>`;
-                faq.append(answerHtml);
-                faqDiv.append(faqaction);
-                answerPlaceableID= `desc-${id}`;
-                AgentAssist_run_click(evt);
-                $(`#${target.id}`).addClass('rotate-carrot');
-                return;
+               
+                if(!target.dataset.answerRender){
+                    let faq = $(`.type-info-run-send #faqSection-${id}`);
+                    let answerHtml = `<div class="desc-text" id="desc-${id}"></div>`
+                    let faqDiv = $(`#faqDiv-${id}`);
+                    let faqaction = `<div class="action-links">
+                    <button class="send-run-btn">Send</button>
+                    <div class="copy-btn">
+                        <i class="ast-copy"></i>
+                    </div>
+                </div>`;
+                    faq.append(answerHtml);
+                    $(`#${target.id}`).attr('data-answer-render', 'false');
+                    faqDiv.append(faqaction);
+                    answerPlaceableID= `desc-${id}`;
+                    $(`#${target.id}`).addClass('rotate-carrot');
+                    AgentAssist_run_click(evt);
+                    return
+                }
+                if($(`.ast-carrotup.rotate-carrot`).length<=0){
+                    $(`#${target.id}`).addClass('rotate-carrot');
+                    $(`#faqDiv-${id} .action-links`).removeClass('hide');
+                    $(`#desc-${id}`).removeClass('hide');
+                }else{
+                    $(`#${target.id}`).removeClass('rotate-carrot');
+                    $(`#faqDiv-${id} .action-links`).addClass('hide');
+                    $(`#desc-${id}`).addClass('hide');
+                }
             }
             if (check(target.id)) {
                 let targetIDs = (target.id).split('-');
