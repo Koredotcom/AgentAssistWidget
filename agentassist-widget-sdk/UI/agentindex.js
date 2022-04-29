@@ -562,10 +562,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                     faqsSuggestions.innerHTML += faqHtml;
                     let faqs = $(`.type-info-run-send #faqSection-${index}`);
                     if (!ele.answer) {
-                        let checkHtml = `<div>
-                        <i class="ast-carrotup rotate-carrot"data-conv-id="${data.conversationId}"
+                        let checkHtml = `
+                        <i class="ast-carrotup"data-conv-id="${data.conversationId}"
                         data-bot-id="${botId}" data-intent-name="${ele.question}"
-                        data-agent-id="${data.agentId}" data-check="true" id="check-${index}"></i></div>`;
+                        data-agent-id="${data.agentId}" data-check="true" id="check-${index}"></i>`;
                         faqs.append(checkHtml);
                     } else {
                         let a = $(`#faqDiv-${index}`);
@@ -955,7 +955,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 faqDiv.append(faqaction);
                 answerPlaceableID= `desc-${id}`;
                 AgentAssist_run_click(evt);
-                $(`#${target.id}`).addClass('hide');
+                $(`#${target.id}`).addClass('rotate-carrot');
                 return;
             }
             if (check(target.id)) {

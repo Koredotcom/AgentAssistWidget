@@ -227,7 +227,7 @@
     top: 50px;
     bottom: 53px;
     background-color: white;
-    font-family: "Lato", sans-serif;
+    font-family: 'Inter' !important;
     font-size: 14px;
 }
 .lineChartChildDiv .mouse-over-effects .mouse-per-line text{
@@ -458,13 +458,13 @@ ul.chat-container li.fromOtherUsers.with-icon .extra-info{
     max-height: 70px;
     overflow-x: hidden;
     overflow-y: auto;
-	font-family: "Lato", sans-serif;
+	font-family: 'Inter' !important;
 }
 .kore-chat-window .kore-chat-footer .chatInputBoxPlaceholder {
 	position: absolute;
 	color: #aaa;
 	font-size: 16px;
-	font-family: "Lato", sans-serif;
+	font-family: 'Inter' !important;
 	position: absolute;
 	top: 4px;
 }

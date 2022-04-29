@@ -1,5 +1,5 @@
 .header-sec-sdk-{
-    font-family: "Lato", sans-serif;
+    font-family: 'Inter' !important;
     background: #FFFFFF;
     box-shadow: 0px 0px 6px #a8c8dd;
     display: flex;
@@ -7,7 +7,7 @@
     padding: 15px 20px;
 }
 .header-sec-sdk- .name-agent{
-    font-family: "Lato", sans-serif;
+    font-family: 'Inter' !important;
     font-weight: bold;
     font-size: 16px;
     color: #26344A;
@@ -16,7 +16,6 @@
 }
 
 .initial-video-audio-container{
-    font-family: "Lato", sans-serif;
     display: flex;
     align-items: center;
     padding: 15px;
@@ -63,7 +62,7 @@
     cursor: pointer;
 }
 .cobrowse-toolbar {
-    font-family: "Lato", sans-serif;
+    font-family: 'Inter' !important;
     display: flex;
     align-items: flex-start;
     z-index: 100000;
@@ -98,7 +97,7 @@
     top: 1%;
 }
 .video-audio-chat-container{
-    font-family: "Lato", sans-serif;
+    font-family: 'Inter' !important;
     background: #FFFFFF;
     border: 1px solid #A8C8DD;
     box-sizing: border-box;
