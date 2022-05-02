@@ -1152,8 +1152,11 @@ html, body{
     padding-left: 0px;
     display: inline-block;
 }
+.agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .arr-cont-dialogtask {
+    padding-left : 24px;
+}
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type.pl-0 {
-    padding-left: 0;
+    padding-left: 24px;
 }
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-with-img-title {
     font-weight: 400;
