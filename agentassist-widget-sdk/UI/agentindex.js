@@ -743,22 +743,21 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         dropdownHeaderUuids = '123'
         document.addEventListener("click", (evt) => {
             var target = evt.target;
-            tabId = target.closest('.tab-icon').id;
             var runButton = target.dataset.run;
             var libraryRunBtn = target.dataset.libraryRun
-            if (tabId === `searchAutoIcon`) {
+            if (target.id === `searchAutoIcon` || target.id === `searchIcon` || target.id === `LibraryLabel`) {
                 data = _agentAssistDataObj
                 AgentAssistPubSub.publish('automation_exhaustive_list', { conversationId: _agentAssistDataObj.conversationId, botId: _agentAssistDataObj.botId, 'experience': 'chat' });
                 libraryTabActive();
             }
-            else if (tabId === `agentAutoIcon`) {
+            else if (target.id === `agentAutoIcon` || target.id === `agentBotIcon` || target.id === `MybotLabel`) {
                 agentTabActive();
             }
-            else if (tabId === `transcriptIcon`) {
+            else if (target.id === `transcriptIcon` || target.id === `scriptIcon` || target.id === `transcriptLabel`) {
                 transcriptionTabActive();
                 
             }
-            if (tabId === `userAutoIcon`) {
+            if (target.id === `userAutoIcon` || target.id === `userBotIcon` || target.id === `AssistLabel`) {
                 userTabActive();
                 
             }
