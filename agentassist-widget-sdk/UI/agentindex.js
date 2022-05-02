@@ -163,7 +163,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         let userQueryHtml = `
             <div class="steps-run-data">
                                         <div class="icon_block_img">
-                                            <img src="./images/profile.svg">
+                                            <img src="./images/userIcon.svg">
                                         </div>
                                         <div class="run-info-content">
                                             <div class="title">Customer Said - </div>
@@ -284,7 +284,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                                                 <img src="./images/dialogtask.svg">
                                             </div>
                                             
-                                            <div class="content-dialog-task-type" id="dialogSuggestions-results">
+                                            <div class="content-dialog-task-type arr-cont-dialogtask" id="dialogSuggestions-results">
                                                 <div class="type-with-img-title">Dialog task (${data.suggestions.dialogs.length})</div>
                                             </div>
                                         </div>
@@ -455,7 +455,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             let htmls = `
             <div class="agent-utt-info" id="agentUttInfo-${responseId}">
                 <div class="user-img">
-                    <img src="./images/profile.svg">
+                    <img src="./images/userIcon.svg">
                 </div>
                 <div class="text-user" >${data.value}</div>
             </div>
@@ -743,21 +743,22 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         dropdownHeaderUuids = '123'
         document.addEventListener("click", (evt) => {
             var target = evt.target;
+            tabId = target.closest('.tab-icon').id;
             var runButton = target.dataset.run;
             var libraryRunBtn = target.dataset.libraryRun
-            if ((target.id === `searchAutoIcon`) || (target.id === `searchIcon`)) {
+            if (tabId === `searchAutoIcon`) {
                 data = _agentAssistDataObj
                 AgentAssistPubSub.publish('automation_exhaustive_list', { conversationId: _agentAssistDataObj.conversationId, botId: _agentAssistDataObj.botId, 'experience': 'chat' });
                 libraryTabActive();
             }
-            else if (target.id === `agentAutoIcon` || target.id === `agentBotIcon`) {
+            else if (tabId === `agentAutoIcon`) {
                 agentTabActive();
             }
-            else if (target.id === `transcriptIcon` || target.id === `scriptIcon`) {
+            else if (tabId === `transcriptIcon`) {
                 transcriptionTabActive();
                 
             }
-            if (target.id === `userAutoIcon` || target.id === `userBotIcon`) {
+            if (tabId === `userAutoIcon`) {
                 userTabActive();
                 
             }
