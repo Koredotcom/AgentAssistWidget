@@ -271,11 +271,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             }
             if (data.suggestions) {
                 let searchTextDisplay = document.getElementById('search-text-display');
-                html = `<div class="searched-intent" id="librarySearchText">Search results for '${data.value}' </div>`
+                html = `<div class="searched-intent" id="librarySearchText">Search results for '${data.userInput}' </div>`
                 searchTextDisplay.innerHTML = html;
             } else {
                 let searchTextDisplay = document.getElementById('search-text-display');
-                html = `<div class="searched-intent" id="librarySearchText">0 Search results for '${data.value}' </div>`
+                html = `<div class="searched-intent" id="librarySearchText">0 Search results for '${data.userInput}' </div>`
                 searchTextDisplay.innerHTML = html; 
             }
 
@@ -1009,14 +1009,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
     }
 
     function userTabActive() {
-        // if(isShowHistoryEnable) {
-        //     document.getElementById(`history-details-btn`).classList.add('hide');
-        // } else {
-        //     document.getElementById(`history-details-btn`).classList.remove('hide');
-        // }
+        console.log('-----> User Automation Tab Active State <-----');
         document.getElementById(`history-details-btn`).classList.remove('hide');
         $('.show-back-recommendation-block').addClass('hide');
-        console.log('-----> User Automation Tab Active State <-----');
         document.getElementById(`agentAutoIcon`).classList.remove(`active-tab`);
         document.getElementById(`transcriptIcon`).classList.remove(`active-tab`);
         document.getElementById(`searchAutoIcon`).classList.remove('active-tab');
@@ -1024,9 +1019,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         document.getElementById('LibraryContainer').classList.add('hide');
         document.getElementById('scriptContainer').classList.add('hide');
         document.getElementById('agentAutoContainer').classList.add('hide');
-
         document.getElementById(`dynamicBlock`).classList.remove('hide');
         document.getElementById(`cust-feeling`).classList.remove('hide');
+        emptySearchBarDuringTabShift();
     }
 
     function libraryTabActive() {
@@ -1050,7 +1045,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         document.getElementById('scriptContainer').classList.add('hide');
         document.getElementById(`cust-feeling`).classList.add('hide');
         document.getElementById('LibraryContainer').classList.remove('hide');
-        // document.getElementById('historyData').classList.add('hide');
 
     }
 
@@ -1066,7 +1060,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         document.getElementById(`cust-feeling`).classList.add('hide');
         document.getElementById('scriptContainer').classList.add('hide');
         document.getElementById(`history-details-btn`).classList.add('hide');
-    }
+        emptySearchBarDuringTabShift();
+    } 
 
     function transcriptionTabActive() {
         console.log('-----> Transcription Tab Active State <-----')
@@ -1080,6 +1075,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         document.getElementById('scriptContainer').classList.remove('hide');
         document.getElementById(`cust-feeling`).classList.add('hide');
         document.getElementById(`history-details-btn`).classList.add('hide');
+        emptySearchBarDuringTabShift();
+    }
+
+    function emptySearchBarDuringTabShift() {
+        if(document.getElementById('librarySearch').value.length !== 0) {
+            const agentSearchVal = document.getElementById('librarySearch');
+            console.log(agentSearchVal.value);
+            agentSearchVal.value = '';
+        }
     }
 
     function addFeedbackHtmlToDom(data, botId, userId, userIntentInput) {
