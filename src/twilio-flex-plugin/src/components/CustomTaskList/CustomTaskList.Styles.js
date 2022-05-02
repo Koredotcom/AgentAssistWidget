@@ -333,6 +333,11 @@ input:checked + .slider:before {
   color: #fff;
   cursor: pointer;
 }
+
+.agent-with-bots .inner-bots-container .agent-bot-types .tab-content .intent-text .run:active {
+  background-color: #009dab;
+  transform: translateY(1px);
+}
 .agent-with-bots .inner-bots-container .agent-bot-types .tab-content .intent-text .run.disabled {
   pointer-events: none;
   opacity: 0.5;

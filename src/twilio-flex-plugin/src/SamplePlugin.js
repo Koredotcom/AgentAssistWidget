@@ -41,7 +41,7 @@ export default class SamplePlugin extends FlexPlugin {
         ? `https://bing.com/?q=${task.attributes.name}`
         : 'https://bing.com';
     }*/
-    flex.Actions.replaceAction("AcceptTask", (payload, original) => {
+    flex.Actions.replaceAction("AcceptTask", (payload, original) => { 
       console.log("11111111111111111111 AcceptTask", payload);
       let _convId = '';
       if (payload.task.attributes["channelType"] === 'sms') {
