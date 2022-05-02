@@ -28,6 +28,7 @@ export default class SamplePlugin extends FlexPlugin {
     this.registerReducers(manager);
     console.log("1111111111111111111 manager", manager.user.identity);
     agentId = manager.user.identity;
+    new AgentAssist('agentassist-maincontainer', 'dummy-conv', agentId, 'st-8b3ca668-244a-5f38-aff9-768ebc1f10bb');
 
     const options = { sortOrder: -1 };
     flex.AgentDesktopView.Panel2.Content.replace(<CustomTaskListContainer key="agent-assist" />, {sortOrder: -1});

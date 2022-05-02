@@ -55,8 +55,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             console.log("AgentAssist >>> socket connected")
         });
         _agentAsisstSocket.on('agent_assist_response', (data) => {
-            data.conversationId = sanitize(data.conversationId);
-            processAgentAssistResponse(data, data.conversationId, _botId, _agentAssistDataObj.userId);
+            if (data.conversationId !== 'dummy-conv') {
+                data.conversationId = sanitize(data.conversationId);
+                processAgentAssistResponse(data, data.conversationId, _botId, _agentAssistDataObj.userId);
+            }
         })
         _agentAsisstSocket.on('user_message', (data) => {
             data.conversationId = sanitize(data.conversationId);
@@ -198,7 +200,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         if (!_userTranscript) {
             return;
         }
-        console.log("AgentAssist >>> processUserMessage", data, _conversationId, botId, user);
+        console.log(`${(new Date())}AgentAssist >>> processUserMessage`, data, _conversationId, botId, user);
         var mainText = data.value;
         if (!mainText && mainText.length === 0) {
             return;
