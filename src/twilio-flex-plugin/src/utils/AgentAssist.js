@@ -93,7 +93,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
     }*/
     var welcome_message_request = {
         'waitTime' : 2000,
-        'userName' : 'test',
+        'userName' : 'Wayne',
         'id' : deSanitize(_agentAssistDataObj.conversationId)
     }
     console.log("AgentAssist >>> sending welcome_message_request")
