@@ -245,11 +245,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                             data-agent-id="${data.agentId}" data-library-run="true" 
                             data-use-case-list="true" id="useCase-${libUuid}"
                             >RUN</button>
-                            <div class="elipse-dropdown-info" id="exhaustiveListAgentRun">
-                                <div class="elipse-icon">
-                                    <i class="ast-overflow"></i>
+                            <div class="elipse-dropdown-info" id="showRunForAgentBtn-${libUuid}">
+                                <div class="elipse-icon" id="elipseIcon-${libUuid}">
+                                    <i class="ast-overflow" id="overflowIcon-${libUuid}"></i>
                                 </div>
-                                <div class="dropdown-content-elipse">
+                                <div class="dropdown-content-elipse agent-auto-run-btn">
                                     <div class="list-option" data-conv-id="${data.conversationId}"
                                     data-bot-id="${botId}" data-intent-name="${ele.name}"
                                     data-agent-id="${data.agentId}" id="agentSelect-${libUuid}" data-exhaustivelist-run="true">Run Bot for Agent</div>
@@ -276,7 +276,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             } else {
                 let searchTextDisplay = document.getElementById('search-text-display');
                 html = `<div class="searched-intent" id="librarySearchText">0 Search results for '${data.userInput}' </div>`
-                searchTextDisplay.innerHTML = html; 
+                searchTextDisplay.innerHTML = html;
             }
 
             if (data?.suggestions?.dialogs?.length > 0) {
@@ -396,8 +396,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
 
             }
 
-        } 
-        
+        }
+
         function ShowSearchContent() {
             document.getElementById('searchResults').classList.remove('hide');
             document.getElementById('allAutomations-Exhaustivelist').classList.remove('hide');
@@ -733,6 +733,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
 
     function btnInit() {
         var hideDropDownToggel = false;
+        var openRunForAgentBtn = false;
+        var selectedRunbotForAgentElementId;
         dropdownHeaderUuids = '123'
         document.addEventListener("click", (evt) => {
             var target = evt.target;
@@ -869,6 +871,28 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 for (let a of dialogSpace) {
                     a.classList.remove('hide');
                 }
+            }
+            console.log(target.id.split("-")[0]);
+            // if (target.id.split("-")[0] == 'elipseIcon' || target.id.split("-")[0] == 'overflowIcon') {
+            //     selectedRunbotForAgentElementId = target.id
+            //     // openRunForAgentBtn = true
+            //     console.log('');
+            //     debugger;
+            // }
+            if (target.id.split("-")[0] == 'elipseIcon') {
+                if (document.getElementsByClassName('.dropdown-content-elipse').length !== 0) {
+                    console.log('Inside class name');
+                    document.getElementsByClassName('.dropdown-content-elipse').style.display = 'none';
+                }
+                debugger;
+                target.nextElementSibling.style.display = 'block';
+            } else if (target.id.split("-")[0] == 'overflowIcon') {
+                if (document.getElementsByClassName('.dropdown-content-elipse').length !== 0) {
+                    console.log('Inside else class name');
+                    document.getElementsByClassName('.dropdown-content-elipse').style.display = 'none';
+                }
+                debugger;
+                target.parentElement.nextElementSibling.style.display = 'block';
             }
             if (runButton || libraryRunBtn) {
                 if (libraryRunBtn) {
@@ -1061,7 +1085,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         document.getElementById('scriptContainer').classList.add('hide');
         document.getElementById(`history-details-btn`).classList.add('hide');
         emptySearchBarDuringTabShift();
-    } 
+    }
 
     function transcriptionTabActive() {
         console.log('-----> Transcription Tab Active State <-----')
@@ -1079,7 +1103,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
     }
 
     function emptySearchBarDuringTabShift() {
-        if(document.getElementById('librarySearch').value.length !== 0) {
+        if (document.getElementById('librarySearch').value.length !== 0) {
             const agentSearchVal = document.getElementById('librarySearch');
             console.log(agentSearchVal.value);
             agentSearchVal.value = '';
