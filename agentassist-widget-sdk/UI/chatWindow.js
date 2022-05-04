@@ -1270,11 +1270,10 @@
                 }               
             };
 
-            chatWindow.prototype.bindEvents = function () {
+            chatWindow.prototype.bindEvents = function (isEventEnable,e) {
                 var me = this;
                 me.bindCustomEvents();
                 
-                console.log('======================came here===========')
                 var _chatContainer = me.config.chatContainer;
                 // _chatContainer.draggable({
                 //     handle: _chatContainer.find(".kore-chat-header .header-title"),
@@ -1495,25 +1494,29 @@
                 //         me.openExternalLink(a_link)
                 //     }
                 // });
-                _chatContainer.off('click', '.buttonTmplContentBox li,.listTmplContentChild .buyBtn,.viewMoreList .viewMore,.listItemPath,.quickReply,.carouselImageContent,.listRightContent,.checkboxBtn,.likeDislikeDiv').on('click', '.buttonTmplContentBox li,.listTmplContentChild .buyBtn, .viewMoreList .viewMore,.listItemPath,.quickReply,.carouselImageContent,.listRightContent,.checkboxBtn,.likeDislikeDiv', function (e) {
+                //_chatContainer.off('click', '.buttonTmplContentBox li,.listTmplContentChild .buyBtn,.viewMoreList .viewMore,.listItemPath,.quickReply,.carouselImageContent,.listRightContent,.checkboxBtn,.likeDislikeDiv').on('click', '.buttonTmplContentBox li,.listTmplContentChild .buyBtn, .viewMoreList .viewMore,.listItemPath,.quickReply,.carouselImageContent,.listRightContent,.checkboxBtn,.likeDislikeDiv', function (e) {
+                if(isEventEnable){
                     e.preventDefault();
+                    console.log('=======================here inside click========')
                     e.stopPropagation();
-                    var type = $(this).attr('type');
+                    var type = $(e.target).attr('type');
                     if (type) {
                         type = type.toLowerCase();
                     }
                     if (type == "postback" || type == "text") {
-                        if(!me.config.agentAssist){
-                            $('.chatInputBox').text($(this).attr('actual-value') || $(this).attr('value'));
-                        //var _innerText = $(this)[0].innerText.trim() || $(this).attr('data-value').trim();
-                        var _innerText = ($(this)[0] && $(this)[0].innerText) ? $(this)[0].innerText.trim() : "" || ($(this) && $(this).attr('data-value')) ? $(this).attr('data-value').trim() : "";
-                        me.sendMessage($('.chatInputBox'), _innerText);
-                        } 
+                        //if(!me.config.agentAssist){
+                         //   $('.chatInputBox').text($(e.target).attr('actual-value') || $(e.target).attr('value'));
+                        //var _innerText = $(e.target)[0].innerText.trim() || $(e.target).attr('data-value').trim();
+                        var _innerText = ($(e.target)[0] && $(e.target)[0].innerText) ? $(e.target)[0].innerText.trim() : "" || ($(e.target) && $(e.target).attr('data-value')) ? $(e.target).attr('data-value').trim() : "";
+                       // me.sendMessage($('.chatInputBox'), _innerText);
+                       
+                       localStorage.setItem('innerTextValue', JSON.stringify(_innerText));
+                       // } 
                     } else if (type == "url" || type == "web_url") {
-                        if($(this).attr('msgData')!==undefined){
+                        if($(e.target).attr('msgData')!==undefined){
                             var msgData;
                             try {
-                                msgData = JSON.parse($(this).attr('msgData'));
+                                msgData = JSON.parse($(e.target).attr('msgData'));
                                } catch (err) {
                
                             }
@@ -1525,7 +1528,7 @@
                                 return;
                             }
                         }
-                        var a_link = $(this).attr('url');
+                        var a_link = $(e.target).attr('url');
                         if (a_link.indexOf("http:") < 0 && a_link.indexOf("https:") < 0) {
                             a_link = "http:////" + a_link;
                         }
@@ -1550,7 +1553,7 @@
                             selectedValue.push($(checkboxSelection[i]).attr('value'));
                             toShowText.push($(checkboxSelection[i]).attr('text'));
                         }
-                        $('.chatInputBox').text($(this).attr('title') +': '+ selectedValue.toString());
+                        $('.chatInputBox').text($(e.target).attr('title') +': '+ selectedValue.toString());
                         me.sendMessage($('.chatInputBox'),toShowText.toString());
                     }
                     if (e.currentTarget.classList && e.currentTarget.classList.length > 0 && e.currentTarget.classList[0] === 'quickReply') {
@@ -1568,7 +1571,8 @@
                         var _chatInput = _chatContainer.find('.kore-chat-footer .chatInputBox');
                         _chatInput.focus();
                     }, 600);
-                });
+                }
+                //});
 
                 _chatContainer.off('click', '.close-btn').on('click', '.close-btn', function (event) {
                     $('.recordingMicrophone').trigger('click');
@@ -3105,7 +3109,7 @@
                 </div>';
 
             var chatWindowTemplateForAgentAssist  = '<script id="chat_window_tmpl" type="text/x-jqury-tmpl"> \
-                <div class="agent-assist-chat-container droppable" id="chat-window-footer"> \
+                <div class="agent-assist-chat-container kore-chat-window" id="chat-window-footer"> \
                     <div role="log" aria-live="polite" aria-atomic="true" > \
                         <div class="errorMsgBlock"> \
                         </div> \
