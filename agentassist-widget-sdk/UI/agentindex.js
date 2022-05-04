@@ -53,7 +53,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
     publicAPIs.userId = _agentAssistDataObj.userId = _userId;
     publicAPIs.containerId = _agentAssistDataObj.containerId = containerId;
     publicAPIs._conversationId = _agentAssistDataObj.conversationId = _conversationId;
-
+    $(`.agent-assist-chat-container.kore-chat-window`).attr('id', `userIDs-${_userId}`);
     if (!_agentAssistComponents[_agentAssistDataObj.conversationId]) {
         _agentAssistComponents[_agentAssistDataObj.conversationId] = _agentAssistDataObj;
     } else {
@@ -249,7 +249,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                                 <div class="elipse-icon" id="elipseIcon-${libUuid}">
                                     <i class="ast-overflow" id="overflowIcon-${libUuid}"></i>
                                 </div>
-                                <div class="dropdown-content-elipse agent-auto-run-btn">
+                                <div class="dropdown-content-elipse agent-auto-run-btn hide">
                                     <div class="list-option" data-conv-id="${data.conversationId}"
                                     data-bot-id="${botId}" data-intent-name="${ele.name}"
                                     data-agent-id="${data.agentId}" id="agentSelect-${libUuid}" data-exhaustivelist-run="true">Run Bot for Agent</div>
@@ -585,9 +585,17 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             if (data.type === 'text' && data.suggestions) {
                 data.suggestions.faqs.forEach((ele) => {
                     $(`#${answerPlaceableID}`).html(ele.answer);
-                    $(`#${answerPlaceableID}`).attr('data-answer-render', 'true')
+                    $(`#${answerPlaceableID}`).attr('data-answer-render', 'true');
+                    if ((ele.question?.length + ele.answer?.length) > 70) {
+                        let faqs = $(`.type-info-run-send #faqSection-${answerPlaceableID.split('-')[1]}`);
+                        let seeMoreButtonHtml = `
+                          <button class="ghost-btn" style="font-style: italic;" id="seeMore-${answerPlaceableID.split('-')[1]}" data-see-more="true">See more</button>
+                          `;
+                        faqs.append(seeMoreButtonHtml);
+                    }
                 })
-                answerPlaceableID = undefined
+                answerPlaceableID = undefined;
+
             }
             console.log("agent need to take action whether to intrup or continue")
         }
@@ -740,6 +748,22 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             var target = evt.target;
             var runButton = target.dataset.run;
             var libraryRunBtn = target.dataset.libraryRun
+            $('.agent-assist-chat-container.kore-chat-window').off('click', '.buttonTmplContentBox li,.listTmplContentChild .buyBtn,.viewMoreList .viewMore,.listItemPath,.quickReply,.carouselImageContent,.listRightContent,.checkboxBtn,.likeDislikeDiv').on('click', '.buttonTmplContentBox li,.listTmplContentChild .buyBtn, .viewMoreList .viewMore,.listItemPath,.quickReply,.carouselImageContent,.listRightContent,.checkboxBtn,.likeDislikeDiv', function (e) {
+
+                chatInitialize.bindEvents(true, e);
+                if (JSON.parse(localStorage.getItem('innerTextValue'))) {
+                    AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: _agentAssistDataObj.conversationId, agentId: '', botId: _agentAssistDataObj.botId, value: JSON.parse(localStorage.getItem('innerTextValue')), check: true });
+                    localStorage.setItem('innerTextValue', null);
+                    e.stopImmediatePropagation();
+                    e.preventDefault();
+                    e.stopPropagation();
+                } else {
+                    e.stopImmediatePropagation();
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+            });
+
             if (target.id === `searchAutoIcon` || target.id === `searchIcon` || target.id === `LibraryLabel`) {
                 data = _agentAssistDataObj
                 AgentAssistPubSub.publish('automation_exhaustive_list', { conversationId: _agentAssistDataObj.conversationId, botId: _agentAssistDataObj.botId, 'experience': 'chat' });
@@ -802,9 +826,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 let automationSuggestions = dom.getElementsByClassName('dialog-task-accordiaon-info');
 
                 let dialogSuggestion = document.getElementsByClassName('dialog-task-run-sec');
-                if (automationSuggestions.length <= 0) {
-                    dom.classList.add('hide');
-                } else {
+                if (automationSuggestions.length >= 0) {
 
                     if (dialogSuggestion.length >= 1) {
                         for (let ele of dialogSuggestion) {
@@ -1138,7 +1160,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             <div class="text-dialog-task-end">Dialog Task ended</div>
         `;
         endOfDialoge.innerHTML += endofDialogeHtml;
-
+        $(`.customer-feeling-text`).addClass('bottom-95')
     }
 
     function feedbackLoop(type, evt) {
