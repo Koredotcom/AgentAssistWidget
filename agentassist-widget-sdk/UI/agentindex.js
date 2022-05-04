@@ -245,14 +245,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                             data-agent-id="${data.agentId}" data-library-run="true" 
                             data-use-case-list="true" id="useCase-${libUuid}"
                             >RUN</button>
-                            <div class="elipse-dropdown-info" id="show-run-for-agent-btn">
+                            <div class="elipse-dropdown-info" id="exhaustiveListAgentRun">
                                 <div class="elipse-icon">
                                     <i class="ast-overflow"></i>
                                 </div>
                                 <div class="dropdown-content-elipse">
                                     <div class="list-option" data-conv-id="${data.conversationId}"
                                     data-bot-id="${botId}" data-intent-name="${ele.name}"
-                                    data-agent-id="${data.agentId}" data-library-agent-auto-run="true">Run Bot for Agent</div>
+                                    data-agent-id="${data.agentId}" id="agentSelect-${libUuid}" data-exhaustivelist-run="true">Run Bot for Agent</div>
                                 </div>
                             </div>
                         </div>
