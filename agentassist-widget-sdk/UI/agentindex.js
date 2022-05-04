@@ -249,10 +249,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                                 <div class="elipse-icon" id="elipseIcon-${libUuid}">
                                     <i class="ast-overflow" id="overflowIcon-${libUuid}"></i>
                                 </div>
-                                <div class="dropdown-content-elipse agent-auto-run-btn hide">
+                                <div class="dropdown-content-elipse hide" id="runAgtBtn-${libUuid}">
                                     <div class="list-option" data-conv-id="${data.conversationId}"
                                     data-bot-id="${botId}" data-intent-name="${ele.name}"
-                                    data-agent-id="${data.agentId}" id="agentSelect-${libUuid}" data-exhaustivelist-run="true">Run Bot for Agent</div>
+                                    data-agent-id="${data.agentId}" id="agentSelect-${libUuid}"
+                                    data-run-autoagent="false" data-exhaustivelist-run="true">Run Bot for Agent</div>
                                 </div>
                             </div>
                         </div>
@@ -783,6 +784,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             var seeMoreButton = target.dataset.seeMore;
             var seeLessButton = target.dataset.seeLess;
             var checkButton = target.dataset.check;
+
             console.log(`runButton`);
             if (target.className === 'copy-btn') {
                 // Hello();
@@ -894,27 +896,16 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                     a.classList.remove('hide');
                 }
             }
-            console.log(target.id.split("-")[0]);
-            // if (target.id.split("-")[0] == 'elipseIcon' || target.id.split("-")[0] == 'overflowIcon') {
-            //     selectedRunbotForAgentElementId = target.id
-            //     // openRunForAgentBtn = true
-            //     console.log('');
-            //     debugger;
-            // }
-            if (target.id.split("-")[0] == 'elipseIcon') {
-                if (document.getElementsByClassName('.dropdown-content-elipse').length !== 0) {
+            if (target.id.split("-")[0] == 'elipseIcon' || target.id.split("-")[0] == 'overflowIcon') {
+                if ($('.dropdown-content-elipse').length !== 0) {
                     console.log('Inside class name');
-                    document.getElementsByClassName('.dropdown-content-elipse').style.display = 'none';
+                    $('.dropdown-content-elipse').addClass('hide');
                 }
-                debugger;
-                target.nextElementSibling.style.display = 'block';
-            } else if (target.id.split("-")[0] == 'overflowIcon') {
-                if (document.getElementsByClassName('.dropdown-content-elipse').length !== 0) {
-                    console.log('Inside else class name');
-                    document.getElementsByClassName('.dropdown-content-elipse').style.display = 'none';
+                if (target.id.split("-")[0] == 'elipseIcon') {
+                    (target.nextElementSibling).classList.remove('hide');
+                } else if (target.id.split("-")[0] == 'overflowIcon') {
+                    (target.parentElement.nextElementSibling).classList.remove('hide');
                 }
-                debugger;
-                target.parentElement.nextElementSibling.style.display = 'block';
             }
             if (runButton || libraryRunBtn) {
                 if (libraryRunBtn) {
@@ -1012,6 +1003,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 }
             }
             if (check(target.id)) {
+                console.log(target.id);
                 let targetIDs = (target.id).split('-');
                 if (!isShowHistoryEnable) {
                     hideDropDownToggel = !hideDropDownToggel;
