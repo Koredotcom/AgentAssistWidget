@@ -908,6 +908,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 }
             }
             if (runAutoForAgent) {
+                console.log("dataset Value=====================",target.dataset);
+                data = target.dataset;
+                AgentAssistPubSub.publish('searched_Automation_details', { conversationId: data.convId, botId: data.botId, value: data.intentName, isSearch: false });
                 agentTabActive();
             }
             if (runButton || libraryRunBtn) {
