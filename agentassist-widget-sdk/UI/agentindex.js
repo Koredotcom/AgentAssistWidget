@@ -281,7 +281,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             }
 
             if (data?.suggestions?.dialogs?.length > 0) {
-                console.log(libraryResponseId);
                 let automationSuggestions = document.getElementById(`search-text-display`);
                 let dialogAreaHtml = `<div class="dialog-task-run-sec p-0" id="searchedDialogs-${libraryResponseId}">
                                         <div class="task-type" id="dialoguesArea">
@@ -900,7 +899,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             }
             if (target.id.split("-")[0] == 'elipseIcon' || target.id.split("-")[0] == 'overflowIcon') {
                 if ($('.dropdown-content-elipse').length !== 0) {
-                    console.log('Inside class name');
                     $('.dropdown-content-elipse').addClass('hide');
                 }
                 if (target.id.split("-")[0] == 'elipseIcon') {
@@ -909,8 +907,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                     (target.parentElement.nextElementSibling).classList.remove('hide');
                 }
             }
-            if(runAutoForAgent) {
-                console.log(target.dataset);
+            if (runAutoForAgent) {
                 agentTabActive();
             }
             if (runButton || libraryRunBtn) {
@@ -1009,7 +1006,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 }
             }
             if (check(target.id)) {
-                console.log(target.id);
                 let targetIDs = (target.id).split('-');
                 if (!isShowHistoryEnable) {
                     hideDropDownToggel = !hideDropDownToggel;
@@ -1125,7 +1121,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
     function emptySearchBarDuringTabShift() {
         if (document.getElementById('librarySearch').value.length !== 0) {
             const agentSearchVal = document.getElementById('librarySearch');
-            console.log(agentSearchVal.value);
             agentSearchVal.value = '';
         }
     }
