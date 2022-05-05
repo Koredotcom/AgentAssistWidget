@@ -498,6 +498,9 @@ html, body{
     height: calc(100% - 82px);
     background: #F5F8FA;
 }
+.agent-assist-chat-container .body-data-container.if-suggestion-search{
+    height: calc(100% - 148px);
+}
 .agent-assist-chat-container .body-data-container .dialog-task-data {
     width: 100%;
     display: inline-block;
@@ -541,6 +544,9 @@ html, body{
     width: 100%;
     padding: 0px 0px 0px 0px;
     position: relative;
+}
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content.no-bg-block{
+    background-color: transparent;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec {
     display: inline-block;
@@ -768,7 +774,7 @@ html, body{
     font-size: 12px;
     line-height: 15px;
     color: #202124;
-    padding-right: 15px;
+    padding-right: 70px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -778,6 +784,19 @@ html, body{
     right: 12px;
     font-size: 6px;
     top: auto;
+}
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .accordion-header .btn-danger{
+    position: absolute;
+    right: 8px;
+    top: 7px;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.05);
+    border-radius: 5px;
+    font-weight: 600;
+    font-size: 9px;
+    line-height: 11px;
+    color: #FFFFFF;
+    height: 22px;
+    padding: 4px 10px;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data {
     padding: 10px 30px 0px 8px;
@@ -1433,4 +1452,399 @@ html, body{
 }
 .agent-assist-chat-container .customer-feeling-text span{
     margin-left: 6px;
+}
+
+
+/* Overlay Input styles */
+
+.sugestions-info-data{
+    padding: 10px;
+    position: relative;
+    z-index: 2;
+    display: inline-block;
+    width: 100%;
+    background: #fff;
+}
+.sugestions-info-data .suggestion-input{
+    background: #FFFFFF;
+    border: 1px solid #BDC1C6;
+    box-sizing: border-box;
+    border-radius: 4px;
+    width: 100%;
+    height: 34px;
+    padding: 5px 30px 5px 30px;
+    outline: 0;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #000000;
+}
+.sugestions-info-data .search-icon{
+    position: absolute;
+    top: 21px;
+    left: 20px;
+    font-size: 12px;
+    color: #0077D2;
+    cursor: pointer;
+}
+.sugestions-info-data .close-search{
+    position: absolute;
+    top: 21px;
+    right: 20px;
+    font-size: 12px;
+    color: #202124;
+    cursor: pointer;
+}
+
+.overlay-suggestions{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    bottom: -100%;
+    left: 0;
+    z-index: 1;
+    background: rgba(0, 0, 0, 0.16);
+    transition: 0.3s all ease;
+    display: none;
+}
+.overlay-suggestions.open-suggestions{
+    bottom: 0;
+}
+.overlay-suggestions .suggestion-content{
+    width: 100%;
+    background: #FFFFFF;
+    box-shadow: 0px -4px 32px rgba(0, 0, 0, 0.12);
+    border-radius: 10px 10px 0px 0px;
+    max-height: 90%;
+    position: absolute;
+    bottom: 0px;
+    padding: 15px 15px 55px 15px;
+}
+
+.overlay-suggestions .suggestion-content .search-results-text{
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 15px;
+    color: #64717C;
+    margin: 0px 0 8px 0;
+}
+.overlay-suggestions .suggestion-content .search-results-text .show-all{
+    color: #0077D2;
+    cursor: pointer;
+}
+
+.overlay-suggestions .suggestion-content .dialog-task-run-sec {
+    display: inline-block;
+    width: 100%;
+    position: relative;
+    padding: 12px 0px 12px 0px;
+}
+.overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type {
+    display: flex;
+    position: relative;
+    margin-bottom: 20px;
+}
+.overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type:last-child {
+    margin: 0;
+}
+.overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .img-block-info {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+.overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type {
+    width: 100%;
+    padding-left: 24px;
+    display: inline-block;
+}
+.overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-with-img-title {
+    font-weight: 400;
+    font-size: 11px;
+    line-height: 13px;
+    color: #202124;
+    margin-bottom: 10px;
+}
+.overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send {
+    background: #FFFFFF;
+    border: 0.5px dashed #8A959F;
+    box-sizing: border-box;
+    border-radius: 8px;
+    margin: 7px 0;
+    display: flex;
+    align-items: center;
+    padding: 5px 12px;
+    min-height: 33px;
+}
+.overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content {
+    width: 100%;
+    font-weight: 400;
+    font-size: 11px;
+    line-height: 13px;
+    color: #202124;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding-right: 15px;
+    transition: 0.2s all ease;
+}
+.overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content.show-text-on-hover:hover {
+    overflow: inherit;
+    white-space: normal;
+    text-overflow: unset;
+}
+.overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content.show-text-on-hover:hover .title-text {
+    overflow: inherit;
+    white-space: normal;
+    text-overflow: unset;
+}
+.overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content.show-text-on-hover:hover .desc-text {
+    overflow: inherit;
+    white-space: normal;
+    text-overflow: unset;
+}
+.overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content .title-text {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    display: inline-block;
+    max-width: 95%;
+}
+.overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content .ast-carrotup{
+    display: inline-block;
+    font-size: 6px;
+    position: relative;
+    top: -2px;
+    cursor: pointer;
+}
+.overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content .ast-carrotup.rotate-carrot{
+    top: -4px;
+    transform: rotate(180deg);
+}
+.overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content .desc-text {
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 12px;
+    color: #979797;
+    font-style: italic;
+    margin-top: 4px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+.overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .send-run-btn {
+    border: 0;
+    background: #0077D2;
+    box-shadow: 0px 2px 8px rgba(0,0,0,0.05);
+    border-radius: 5px;
+    outline: 0;
+    font-weight: 700;
+    font-size: 9px;
+    line-height: 12px;
+    color: #FFFFFF;
+    height: 24px;
+    cursor: pointer;
+    padding: 3px 10px;
+    text-transform: uppercase;
+}
+.overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .copy-btn {
+    background: #E9EFF4;
+    box-shadow: 0px 2px 8px rgba(0,0,0,0.05);
+    border-radius: 5px;
+    width: 24px;
+    height: 24px;
+    color: #202124;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    margin-left: 6px;
+    cursor: pointer;
+}
+.overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .elipse-dropdown-info {
+    margin-left: 6px;
+    position: relative;
+}
+.overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .elipse-dropdown-info.active-elipse .elipse-icon {
+    background: #BDC1C6;
+}
+.overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .elipse-dropdown-info.active-elipse .dropdown-content-elipse {
+    display: block;
+}
+.overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .elipse-dropdown-info .elipse-icon {
+    width: 24px;
+    height: 24px;
+    background: #EFF0F1;
+    font-size: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 100%;
+    color: #202124;
+}
+.overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .elipse-dropdown-info .dropdown-content-elipse {
+    position: absolute;
+    display: none;
+    right: 0;
+    background: #FFFFFF;
+    box-shadow: 0px 2px 8px rgba(0,0,0,0.15);
+    border-radius: 4px;
+    top: auto;
+    margin-top: 3px;
+    min-width: 110px;
+}
+.overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .elipse-dropdown-info .dropdown-content-elipse .list-option {
+    font-weight: 500;
+    font-size: 9px;
+    line-height: 11px;
+    padding: 8px 10px;
+    cursor: pointer;
+    transition: 0.2s all ease;
+}
+.overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .elipse-dropdown-info .dropdown-content-elipse .list-option:hover {
+    background: #EFF0F1;
+}
+
+
+
+
+/* Overlay Delete */
+
+.overlay-delete-popup {
+    position: absolute;
+    background: rgba(0,0,0,0.16);
+    z-index: 2;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+}
+.overlay-delete-popup .delete-box-content {
+    background: #FFFFFF;
+    border-radius: 8px;
+    padding: 15px;
+    position: relative;
+}
+.overlay-delete-popup .delete-box-content .header-text {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 34px;
+    color: #202124;
+    padding-right: 25px;
+}
+.overlay-delete-popup .delete-box-content .close-popup {
+    position: absolute;
+    top: 28px;
+    right: 15px;
+    font-size: 11px;
+    cursor: pointer;
+}
+.overlay-delete-popup .delete-box-content .desc-text-info {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 24px;
+    color: #605E5C;
+    margin: 15px 0 15px 0;
+}
+.overlay-delete-popup .delete-box-content .btn-footer-info {
+    margin-top: 35px;
+}
+
+.overlay-delete-popup .delete-box-content .btn-footer-info .btn-danger {
+    margin-right: 10px;
+}
+
+/* Empty Agent */
+.empty-data-no-agents{
+    height: calc(100vh - 300px);
+    padding: 20px 70px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+.empty-data-no-agents .title{
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 17px;
+    color: #64717C;
+    margin-bottom: 8px;
+}
+.empty-data-no-agents .desc-text{
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 15px;
+    color: #64717C;
+    margin-bottom: 10px;
+}
+
+
+/* Empty Library */
+
+.empty-library-data{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 50px 0;
+}
+.empty-library-data .img-block{
+    margin-bottom: 10px;
+}
+.empty-library-data .title-empty{
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 17px;
+    color: #64717C;
+}
+.empty-library-data .desc-text{
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 15px;
+    margin: 5px 0;
+    color: #64717C;
+}
+
+
+/* Buttons */
+
+
+.btn-danger {
+    background: #D2000D;
+    border-radius: 4px;
+    height: 34px;
+    outline: 0;
+    padding: 7px 20px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #FFFFFF;
+    cursor: pointer;
+    border: 1px solid transparent;
+}
+.btn-cancel {
+    border-radius: 4px;
+    height: 34px;
+    outline: 0;
+    padding: 7px 20px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    cursor: pointer;
+    border: 1px solid #BDC1C6;
+    background: #FFFFFF;
+    color: #202124;
 }
