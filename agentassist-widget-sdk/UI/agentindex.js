@@ -415,8 +415,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             for (let ele of automationSuggestions) {
                 ele.classList.add('hide');
             }
+            $('.empty-data-no-agents').addClass('hide');
         } else {
-            automationSuggestions.length > 1 ? automationSuggestions[automationSuggestions.length - 1].classList.remove('hide') : '';
+            automationSuggestions.length > 1 ? (automationSuggestions[automationSuggestions.length - 1].classList.remove('hide'), $('.empty-data-no-agents').addClass('hide')) : '';
         }
 
         let uuids = Math.floor(Math.random() * 100);
@@ -704,7 +705,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             $(noOfSteps[noOfSteps.length - 1]).removeClass('hide');
         }
         if ((data.endOfFaq || data.endOfTask) && data.type !== 'text') {
-            console.log("===== came to add the feedback and end of dialog")
             isAutomationOnGoing = false;
             addFeedbackHtmlToDom(data, botId, userId, userIntentInput);
         }
@@ -750,6 +750,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             var runButton = target.dataset.run;
             var libraryRunBtn = target.dataset.libraryRun;
             var runAutoForAgent = target.dataset.exhaustivelistRun;
+            $('.agent-assist-chat-container.kore-chat-window').on('click', '.botResponseAttachments', function (event) {
+                window.open($(this).attr('fileid'), '_blank');
+            });
             $('.agent-assist-chat-container.kore-chat-window').off('click', '.buttonTmplContentBox li,.listTmplContentChild .buyBtn,.viewMoreList .viewMore,.listItemPath,.quickReply,.carouselImageContent,.listRightContent,.checkboxBtn,.likeDislikeDiv').on('click', '.buttonTmplContentBox li,.listTmplContentChild .buyBtn, .viewMoreList .viewMore,.listItemPath,.quickReply,.carouselImageContent,.listRightContent,.checkboxBtn,.likeDislikeDiv', function (e) {
 
                 chatInitialize.bindEvents(true, e);
@@ -842,13 +845,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                     for (let a of document.getElementsByClassName('agent-utt-info')) {
                         a.classList.remove('hide');
                     }
-                   if($('.history').length>=1){
-                       $('.history').removeClass('hide').html(dom.innerHTML);
-                   }else{
-                    let currentdomHtml = `<div class="dynamic-block-content history" id="historyData">${dom.innerHTML}</div>`;
-                    bodyContainer.innerHTML += currentdomHtml;
-                   }
-                   
+                    if ($('.history').length >= 1) {
+                        $('.history').removeClass('hide').html(dom.innerHTML);
+                    } else {
+                        let currentdomHtml = `<div class="dynamic-block-content history" id="historyData">${dom.innerHTML}</div>`;
+                        bodyContainer.innerHTML += currentdomHtml;
+                    }
+
 
                     let doms = document.getElementById('dynamicBlock');
                     doms.classList.add('hide');
@@ -878,8 +881,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                     ele.classList.add('hide');
                 }
 
-                $(document).ready(()=>{
-                    if(automationSuggestions.length >= 1 && suggestionsLength.length <= 0) {
+                $(document).ready(() => {
+                    if (automationSuggestions.length >= 1 && suggestionsLength.length <= 0) {
                         automationSuggestions[automationSuggestions.length - 1].classList.remove('hide');
                         for (let a of document.getElementsByClassName('agent-utt-info')) {
                             a.classList.add('hide');
@@ -952,8 +955,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 })
                 let dynamicBlock = document.getElementById('dynamicBlock');
                 let dropdownHtml = `
-               <div class="dialog-task-accordiaon-info hide" id="addRemoveDropDown-${uuids}">
-                   <div class="accordion-header" id="dropDownHeader-${uuids}">
+               <div class="dialog-task-accordiaon-info hide" id="addRemoveDropDown-${uuids}" >
+                   <div class="accordion-header" id="dropDownHeader-${uuids}"
+                   data-drop-down-opened="false">
                        <div class="icon-info">
                            <i class="ast-rule"></i>
                        </div>
@@ -1019,21 +1023,19 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                     $(`#desc-${id}`).addClass('hide');
                 }
             }
-            if (check(target.id)) {
+            if (target.id.split('-')[0] === 'dropDownHeader') {
                 let targetIDs = (target.id).split('-');
                 if (!isShowHistoryEnable) {
-                    hideDropDownToggel = !hideDropDownToggel;
-                    let dropDownData = document.getElementById(`dropDownData-${targetIDs[targetIDs.length - 1]}`);
-                    let endOfDialoge = document.getElementById(`endTaks-${targetIDs[targetIDs.length - 1]}`);
-                    if (hideDropDownToggel) {
-                        endOfDialoge !== null ? endOfDialoge.classList.add('hide') : '';
-                        dropDownData.classList.add('hide');
+                    if (target.dataset.dropDownOpened === 'false') {
+                        $(`#${target.id}`).attr('data-drop-down-opened', 'true');
+                        $(`#dropDownData-${targetIDs[targetIDs.length - 1]}`).addClass('hide');
+                        $(`#endTaks-${targetIDs[targetIDs.length - 1]}`).addClass('hide');
                     } else {
-                        endOfDialoge !== null ? endOfDialoge.classList.remove('hide') : '';
-                        dropDownData.classList.remove('hide');
+                        $(`#${target.id}`).attr('data-drop-down-opened', 'false');
+                        $(`#dropDownData-${targetIDs[targetIDs.length - 1]}`).removeClass('hide');
+                        $(`#endTaks-${targetIDs[targetIDs.length - 1]}`).removeClass('hide');
                     }
                 }
-
                 let a = $(`.history #dropDownData-${targetIDs[targetIDs.length - 1]}`)
                 let b = $(`.history #endTaks-${targetIDs[targetIDs.length - 1]}`)
                 a.each(function (i, ele) {
@@ -1046,9 +1048,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                     }
 
                 });
-
-
-
             }
         })
 
