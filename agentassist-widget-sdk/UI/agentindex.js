@@ -249,10 +249,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                                 <div class="elipse-icon" id="elipseIcon-${libUuid}">
                                     <i class="ast-overflow" id="overflowIcon-${libUuid}"></i>
                                 </div>
-                                <div class="dropdown-content-elipse agent-auto-run-btn hide">
+                                <div class="dropdown-content-elipse hide" id="runAgtBtn-${libUuid}">
                                     <div class="list-option" data-conv-id="${data.conversationId}"
                                     data-bot-id="${botId}" data-intent-name="${ele.name}"
-                                    data-agent-id="${data.agentId}" id="agentSelect-${libUuid}" data-exhaustivelist-run="true">Run Bot for Agent</div>
+                                    data-agent-id="${data.agentId}" id="agentSelect-${libUuid}"
+                                    data-exhaustivelist-run="true">Run Bot for Agent</div>
                                 </div>
                             </div>
                         </div>
@@ -280,7 +281,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             }
 
             if (data?.suggestions?.dialogs?.length > 0) {
-                console.log(libraryResponseId);
                 let automationSuggestions = document.getElementById(`search-text-display`);
                 let dialogAreaHtml = `<div class="dialog-task-run-sec p-0" id="searchedDialogs-${libraryResponseId}">
                                         <div class="task-type" id="dialoguesArea">
@@ -321,12 +321,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                             data-agent-id="${data.agentId}" data-library-run="true" 
                             id="run-${libraryResponseId}"
                             >RUN</button>
-                            <div class="elipse-dropdown-info">
-                                <div class="elipse-icon">
-                                    <i class="ast-overflow"></i>
+                            <div class="elipse-dropdown-info" id="showRunForAgentBtn-${uuids}">
+                                <div class="elipse-icon" id="elipseIcon-${uuids}">
+                                    <i class="ast-overflow" id="overflowIcon-${uuids}"></i>
                                 </div>
-                                <div class="dropdown-content-elipse">
-                                    <div class="list-option">Run Bot for Agent</div>
+                                <div class="dropdown-content-elipse hide" id="runsearchAgtBtn-${uuids}">
+                                    <div class="list-option" data-conv-id="${data.conversationId}"
+                                    data-bot-id="${botId}" data-intent-name="${ele.name}"
+                                    data-agent-id="${data.agentId}" id="agentSearchSelect-${uuids}"
+                                    data-exhaustivelist-run="true">Run Bot for Agent</div>
                                 </div>
                             </div>
                         </div>
@@ -741,13 +744,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
 
     function btnInit() {
         var hideDropDownToggel = false;
-        var openRunForAgentBtn = false;
-        var selectedRunbotForAgentElementId;
         dropdownHeaderUuids = '123'
         document.addEventListener("click", (evt) => {
             var target = evt.target;
             var runButton = target.dataset.run;
-            var libraryRunBtn = target.dataset.libraryRun
+            var libraryRunBtn = target.dataset.libraryRun;
+            var runAutoForAgent = target.dataset.exhaustivelistRun;
             $('.agent-assist-chat-container.kore-chat-window').off('click', '.buttonTmplContentBox li,.listTmplContentChild .buyBtn,.viewMoreList .viewMore,.listItemPath,.quickReply,.carouselImageContent,.listRightContent,.checkboxBtn,.likeDislikeDiv').on('click', '.buttonTmplContentBox li,.listTmplContentChild .buyBtn, .viewMoreList .viewMore,.listItemPath,.quickReply,.carouselImageContent,.listRightContent,.checkboxBtn,.likeDislikeDiv', function (e) {
 
                 chatInitialize.bindEvents(true, e);
@@ -783,6 +785,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             var seeMoreButton = target.dataset.seeMore;
             var seeLessButton = target.dataset.seeLess;
             var checkButton = target.dataset.check;
+
             console.log(`runButton`);
             if (target.className === 'copy-btn') {
                 // Hello();
@@ -894,27 +897,18 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                     a.classList.remove('hide');
                 }
             }
-            console.log(target.id.split("-")[0]);
-            // if (target.id.split("-")[0] == 'elipseIcon' || target.id.split("-")[0] == 'overflowIcon') {
-            //     selectedRunbotForAgentElementId = target.id
-            //     // openRunForAgentBtn = true
-            //     console.log('');
-            //     debugger;
-            // }
-            if (target.id.split("-")[0] == 'elipseIcon') {
-                if (document.getElementsByClassName('.dropdown-content-elipse').length !== 0) {
-                    console.log('Inside class name');
-                    document.getElementsByClassName('.dropdown-content-elipse').style.display = 'none';
+            if (target.id.split("-")[0] == 'elipseIcon' || target.id.split("-")[0] == 'overflowIcon') {
+                if ($('.dropdown-content-elipse').length !== 0) {
+                    $('.dropdown-content-elipse').addClass('hide');
                 }
-                debugger;
-                target.nextElementSibling.style.display = 'block';
-            } else if (target.id.split("-")[0] == 'overflowIcon') {
-                if (document.getElementsByClassName('.dropdown-content-elipse').length !== 0) {
-                    console.log('Inside else class name');
-                    document.getElementsByClassName('.dropdown-content-elipse').style.display = 'none';
+                if (target.id.split("-")[0] == 'elipseIcon') {
+                    (target.nextElementSibling).classList.remove('hide');
+                } else if (target.id.split("-")[0] == 'overflowIcon') {
+                    (target.parentElement.nextElementSibling).classList.remove('hide');
                 }
-                debugger;
-                target.parentElement.nextElementSibling.style.display = 'block';
+            }
+            if (runAutoForAgent) {
+                agentTabActive();
             }
             if (runButton || libraryRunBtn) {
                 if (libraryRunBtn) {
@@ -1127,7 +1121,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
     function emptySearchBarDuringTabShift() {
         if (document.getElementById('librarySearch').value.length !== 0) {
             const agentSearchVal = document.getElementById('librarySearch');
-            console.log(agentSearchVal.value);
             agentSearchVal.value = '';
         }
     }

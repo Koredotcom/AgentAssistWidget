@@ -1297,7 +1297,6 @@ html, body{
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .elipse-dropdown-info .dropdown-content-elipse {
     z-index: 1;
     position: absolute;
-    display: none;
     right: 0;
     background: #FFFFFF;
     box-shadow: 0px 2px 8px rgba(0,0,0,0.15);
