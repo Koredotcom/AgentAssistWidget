@@ -53,7 +53,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
     publicAPIs.userId = _agentAssistDataObj.userId = _userId;
     publicAPIs.containerId = _agentAssistDataObj.containerId = containerId;
     publicAPIs._conversationId = _agentAssistDataObj.conversationId = _conversationId;
-    $(`.agent-assist-chat-container.kore-chat-window`).attr('id', `userIDs-${_userId}`);
+    $(`.agent-assist-chat-container.kore-chat-window`).attr('id', `userIDs-${_conversationId}`);
     if (!_agentAssistComponents[_agentAssistDataObj.conversationId]) {
         _agentAssistComponents[_agentAssistDataObj.conversationId] = _agentAssistDataObj;
     } else {
@@ -839,9 +839,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                     for (let a of document.getElementsByClassName('agent-utt-info')) {
                         a.classList.remove('hide');
                     }
-
+                   if($('.history').length>=1){
+                       $('.history').removeClass('hide').html(dom.innerHTML);
+                   }else{
                     let currentdomHtml = `<div class="dynamic-block-content history" id="historyData">${dom.innerHTML}</div>`;
                     bodyContainer.innerHTML += currentdomHtml;
+                   }
+                   
 
                     let doms = document.getElementById('dynamicBlock');
                     doms.classList.add('hide');
@@ -863,13 +867,23 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 dom.classList.remove('hide');
                 $('.show-history-block').removeClass('hide');
                 $('.show-back-recommendation-block').addClass('hide');
-                document.getElementById("historyData")?.remove();
+                $('.history').addClass('hide');
                 let automationSuggestions = $('#dynamicBlock .dialog-task-accordiaon-info');
                 let dialogSpace = document.getElementsByClassName('dialog-task-run-sec hide');
                 let suggestionsLength = $(`#dynamicBlock .dialog-task-run-sec`);
                 for (let ele of automationSuggestions) {
                     ele.classList.add('hide');
                 }
+
+                $(document).ready(()=>{
+                    if(automationSuggestions.length >= 1 && suggestionsLength.length <= 0) {
+                        automationSuggestions[automationSuggestions.length - 1].classList.remove('hide');
+                        for (let a of document.getElementsByClassName('agent-utt-info')) {
+                            a.classList.add('hide');
+                        }
+                    }
+
+                })
 
                 if (idsOfDropDown && automationSuggestions.length >= 1 && suggestionsLength.length <= 0) {
                     automationSuggestions[automationSuggestions.length - 1].classList.remove('hide');
@@ -894,13 +908,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                     a.classList.remove('hide');
                 }
             }
-            console.log(target.id.split("-")[0]);
-            // if (target.id.split("-")[0] == 'elipseIcon' || target.id.split("-")[0] == 'overflowIcon') {
-            //     selectedRunbotForAgentElementId = target.id
-            //     // openRunForAgentBtn = true
-            //     console.log('');
-            //     debugger;
-            // }
             if (target.id.split("-")[0] == 'elipseIcon') {
                 if (document.getElementsByClassName('.dropdown-content-elipse').length !== 0) {
                     console.log('Inside class name');
@@ -1268,7 +1275,6 @@ function AgentAssist_feedback_click(e) {
 }
 
 function AgentAssist_run_click(e) {
-    console.log(e.target);
     var convId = e.target.dataset.convId;
     var botId = e.target.dataset.botId;
     var agentId = e.target.dataset.agentId;
