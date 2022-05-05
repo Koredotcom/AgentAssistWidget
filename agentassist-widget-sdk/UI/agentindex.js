@@ -253,7 +253,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                                     <div class="list-option" data-conv-id="${data.conversationId}"
                                     data-bot-id="${botId}" data-intent-name="${ele.name}"
                                     data-agent-id="${data.agentId}" id="agentSelect-${libUuid}"
-                                    data-run-autoagent="false" data-exhaustivelist-run="true">Run Bot for Agent</div>
+                                    data-exhaustivelist-run="true">Run Bot for Agent</div>
                                 </div>
                             </div>
                         </div>
@@ -322,12 +322,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                             data-agent-id="${data.agentId}" data-library-run="true" 
                             id="run-${libraryResponseId}"
                             >RUN</button>
-                            <div class="elipse-dropdown-info">
-                                <div class="elipse-icon">
-                                    <i class="ast-overflow"></i>
+                            <div class="elipse-dropdown-info" id="showRunForAgentBtn-${uuids}">
+                                <div class="elipse-icon" id="elipseIcon-${uuids}">
+                                    <i class="ast-overflow" id="overflowIcon-${uuids}"></i>
                                 </div>
-                                <div class="dropdown-content-elipse">
-                                    <div class="list-option">Run Bot for Agent</div>
+                                <div class="dropdown-content-elipse hide" id="runsearchAgtBtn-${uuids}">
+                                    <div class="list-option" data-conv-id="${data.conversationId}"
+                                    data-bot-id="${botId}" data-intent-name="${ele.name}"
+                                    data-agent-id="${data.agentId}" id="agentSearchSelect-${uuids}"
+                                    data-exhaustivelist-run="true">Run Bot for Agent</div>
                                 </div>
                             </div>
                         </div>
@@ -742,13 +745,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
 
     function btnInit() {
         var hideDropDownToggel = false;
-        var openRunForAgentBtn = false;
-        var selectedRunbotForAgentElementId;
         dropdownHeaderUuids = '123'
         document.addEventListener("click", (evt) => {
             var target = evt.target;
             var runButton = target.dataset.run;
-            var libraryRunBtn = target.dataset.libraryRun
+            var libraryRunBtn = target.dataset.libraryRun;
+            var runAutoForAgent = target.dataset.exhaustivelistRun;
             $('.agent-assist-chat-container.kore-chat-window').off('click', '.buttonTmplContentBox li,.listTmplContentChild .buyBtn,.viewMoreList .viewMore,.listItemPath,.quickReply,.carouselImageContent,.listRightContent,.checkboxBtn,.likeDislikeDiv').on('click', '.buttonTmplContentBox li,.listTmplContentChild .buyBtn, .viewMoreList .viewMore,.listItemPath,.quickReply,.carouselImageContent,.listRightContent,.checkboxBtn,.likeDislikeDiv', function (e) {
 
                 chatInitialize.bindEvents(true, e);
@@ -906,6 +908,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 } else if (target.id.split("-")[0] == 'overflowIcon') {
                     (target.parentElement.nextElementSibling).classList.remove('hide');
                 }
+            }
+            if(runAutoForAgent) {
+                console.log(target.dataset);
+                agentTabActive();
             }
             if (runButton || libraryRunBtn) {
                 if (libraryRunBtn) {
