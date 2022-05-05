@@ -141,7 +141,13 @@
                         <div class="customer-feeling-text">
                             <img src="./images/smile-online.svg">
                             <span>Customer is feeling <b>happy</b></span>
-                        </div>                
+                        </div>   
+                        
+                        <div class="empty-data-no-agents">
+                            <div class="title">No intent identified yet</div>
+                            <div class="desc-text">The bot will automatically suggest tasks here.</div>
+                            <div class="desc-text">To start a manual task, go to “Library” and run a task as “Run with Agent Input”</div>
+                        </div>
                             <!-- <div class="agent-utt-info hide" id="agentUttInfo-123">
                                 <div class="user-img">
                                     <img src="./images/profile.svg">
@@ -268,6 +274,7 @@
                                         </div>
                                         <div class="header-text">“Add/remove items from order”</div>
                                         <i class="ast-carrotup"></i>
+                                        <button class="btn-danger">Terminate</button>
                                     </div>
                                     <div class="collapse-acc-data">
                                         <div class="steps-run-data">
@@ -386,7 +393,14 @@
                             </div>
                         </div>
                         
-                        <div class="dynamic-searchlibrary-data" >
+                        <div class="dynamic-searchlibrary-data">
+                            <div class="empty-library-data">
+                                <div class="img-block">
+                                    <img src="./images/emptylibrary.svg">
+                                </div>
+                                <div class="title-empty">No items found</div>
+                                <div class="desc-text">No usecases are configured for the bot.</div>
+                            </div>
                             <div id="frequently-exhaustive">
                                 <!-- Frequently used html -->
                                 <!-- <div class="frequently-asked" id="frequently-used">
@@ -626,8 +640,79 @@
                     </div>
                     
                 </div>
-
             </div>
+            <div class="sugestions-info-data hide">
+                <input type="text" class="suggestion-input">
+                <i class="ast-search search-icon"></i>
+                <i class="ast-close close-search"></i>
+            </div>
+
+            <div class="overlay-suggestions hide">
+                <div class="suggestion-content">
+                    <div class="search-results-text">12 Search results for “Edit my order” <span class="show-all">Show all</span></div>
+                    <div class="dialog-task-run-sec" id="automationSuggestions">
+                        <div class="task-type">
+                            <div class="img-block-info">
+                                <img src="./images/dialogtask.svg">
+                            </div>
+                            <div class="content-dialog-task-type" >
+                                <div class="type-with-img-title">Dialog task (2)</div>
+                                <div class="type-info-run-send">
+                                    <div class="left-content">
+                                        <div class="title-text" id="automation-${uuids}">Add/Remove items from order</div>
+                                    </div>
+                                    <div class="action-links">
+                                        <button class="send-run-btn">RUN</button>
+                                        <div class="elipse-dropdown-info">
+                                            <div class="elipse-icon">
+                                                <i class="ast-overflow"></i>
+                                            </div>
+                                            <div class="dropdown-content-elipse">
+                                                <div class="list-option">Run Bot for Agent</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="task-type">
+                            <div class="img-block-info">
+                                <img src="./images/kg.svg">
+                            </div>
+                            <div class="content-dialog-task-type">
+                                <div class="type-with-img-title">Knowledge graph (2)</div>
+                                <div class="type-info-run-send">
+                                    <div class="left-content show-text-on-hover">
+                                        <div class="title-text">Why you shouldn't close...</div>
+                                        <div class="desc-text">Here is how you get if you stay...</div>
+                                    </div>
+                                    <div class="action-links">
+                                        <button class="send-run-btn">RUN</button>
+                                        <div class="copy-btn">
+                                            <i class="ast-copy"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+
+            <div class="overlay-delete-popup hide">
+                <div class="delete-box-content">
+                    <div class="header-text">You are interrupting the current task</div>
+                    <div class="close-popup">
+                        <i class="ast-close"></i>
+                    </div>
+                    <div class="desc-text-info">If you run the select task, the current task will be completely terminated. Are you sure you want to continue with the selected task?</div>
+                    <div class="btn-footer-info">
+                        <button class="btn-danger">Yes, continue</button>
+                        <button class="btn-cancel">Cancel</button>
+                    </div>
+                </div>
+            </div>
+
             <div class="footer-info" id="cust-feeling">
                 <div class="event-bucket">
                     <img src="./images/bucket.svg">
