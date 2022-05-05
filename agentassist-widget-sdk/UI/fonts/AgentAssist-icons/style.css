@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'AgentAssist-icons';
-  src:  url('fonts/AgentAssist-icons.eot?4qtn8a');
-  src:  url('fonts/AgentAssist-icons.eot?4qtn8a#iefix') format('embedded-opentype'),
-    url('fonts/AgentAssist-icons.ttf?4qtn8a') format('truetype'),
-    url('fonts/AgentAssist-icons.woff?4qtn8a') format('woff'),
-    url('fonts/AgentAssist-icons.svg?4qtn8a#AgentAssist-icons') format('svg');
+  src:  url('fonts/AgentAssist-icons.eot?a41sin');
+  src:  url('fonts/AgentAssist-icons.eot?a41sin#iefix') format('embedded-opentype'),
+    url('fonts/AgentAssist-icons.ttf?a41sin') format('truetype'),
+    url('fonts/AgentAssist-icons.woff?a41sin') format('woff'),
+    url('fonts/AgentAssist-icons.svg?a41sin#AgentAssist-icons') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.ast-close:before {
+  content: "\e911";
+}
 .ast-agentlogo:before {
   content: "\e910";
 }
