@@ -1110,8 +1110,6 @@
                 }
                 var chatWindowHtml = $(me.getChatTemplate()).tmpl(me.config);
                 me.config.chatContainer = chatWindowHtml;
-                
-                console.log("====== line no 1110====",me.config.chatContainer)
                 me.updatei18nDirection();
 
                 me.config.chatTitle = tempTitle;
@@ -2248,7 +2246,6 @@
 
             chatWindow.prototype.renderMessage = function (msgData,elementID) {
                 $(".kore-chat-window").addClass('customBranding-theme');
-                console.log("---- message response====",msgData)
                 var me = this, messageHtml = '', extension = '', _extractedFileName = '';
                 var helpers=me.helpers;
                 msgData.createdOnTimemillis=new Date(msgData.createdOn).valueOf();
