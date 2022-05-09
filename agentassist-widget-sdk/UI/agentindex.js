@@ -9,6 +9,8 @@ var isAutomationOnGoing = false;
 var isShowHistoryEnable = false;
 var autoExhaustiveList;
 var frequentlyUsedList;
+var isMyBotAutomationOnGoing = false;
+var noAutomationrunninginMyBot = true;
 var idsOfDropDown;
 var countRequest = 0;
 var runBtArrayIds = ['123'];
@@ -86,12 +88,17 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         // Library Automation list, Search and Agent-Automation tabs related webSockets
         // Response
         _agentAsisstSocket.on('agent_assist_agent_response', (data) => {
-            processAgentIntentResults(data, data.conversationId, data.botId);
+            if (data.isSearch) {
+                processAgentIntentResults(data, data.conversationId, data.botId);
+            } else {
+                runBotForAnAgentDisplay();
+            }
+            // processAgentIntentResults(data, data.conversationId, data.botId);
         })
         // Get useCases List Data
         _agentAsisstSocket.on('agent_menu_response', (data) => {
             payloadData = {
-                "isSearch": false,
+                "useCases": true,
                 "botId": data.botId,
                 "conversationId": data.conversationId,
                 "event": "agent_menu_response",
@@ -103,6 +110,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             // dataTransformation
             usecasesArr = (data.usecases);
             payloadData.suggestions.dialogs = (usecasesArr.map(dialog => dialog.usecaseName)).map(dlg => ({ 'name': dlg }))
+            // payloadData.suggestions.dialogs = []
             autoExhaustiveList = payloadData;
 
             processAgentIntentResults(payloadData, payloadData.conversationId, payloadData.botId);
@@ -191,6 +199,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         return $('.tab-icon.active-tab').attr('id');
     }
 
+    function runBotForAnAgentDisplay() {
+        console.log("runBotForAnAgent");
+    }
+
     processAgentIntentResults = function (data, convId, botId) {
         let uuids = Math.floor(Math.random() * 100);
         libraryResponseId = uuids;
@@ -209,7 +221,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             "traceId": "873209019a5adc26"
         }
 
-        if (!data.isSearch) {
+        if (data.useCases) {
             if (data.suggestions) {
                 document.getElementById('allAutomations-Exhaustivelist').classList.remove('hide');
                 $('#dialogs-faqs').removeClass('hide');
@@ -226,12 +238,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                                             </div>`
                     allAutomationSuggestions.innerHTML = listAreaHtml;
                 } else {
-                    let automationSuggestions = document.getElementById(`allAutomations-Exhaustivelist`);
-                    let listAreaHtml = `<div class="heading-title">Automations Exhaustive list</div>
-                                            <div class="dialog-task-run-sec p-0" id="usecases-list">
-                                                No UseCase are Present
-                                            </div>`
-                    automationSuggestions.innerHTML = listAreaHtml;
+                    $('#noLibraryList').removeClass('hide');
                 }
                 data.suggestions.dialogs?.forEach((ele, index) => {
                     let libUuid = Math.floor(Math.random() * 100);
@@ -1010,7 +1017,64 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 }
             }
             if (runAutoForAgent) {
-                agentTabActive();
+                if (!isMyBotAutomationOnGoing) {
+                    console.log("dataset Value=====================", target.dataset);
+                    data = target.dataset;
+                    AgentAssistPubSub.publish('searched_Automation_details', { conversationId: data.convId, botId: data.botId, value: data.intentName, isSearch: false });
+                    isMyBotAutomationOnGoing = true;
+                    noAutomationrunninginMyBot = false;
+                    agentTabActive();
+                    let myBotuuids = Math.floor(Math.random() * 100);
+                    myBotDropdownHeaderUuids = myBotuuids;
+                    runBtArrayIds.push(dropdownHeaderUuids + '');
+                    if (isMyBotAutomationOnGoing) {
+                        $('#noAutoRunning').addClass('hide');
+                        console.log('logic for showing dropdown');
+                    }
+                    // 
+                    let dynamicBlock = document.getElementById('agent-myBot');
+                    let dropdownHtml = `
+                    <div class="dialog-task-accordiaon-info hide" id="addRemoveDropDown-${myBotuuids}">
+                        <div class="accordion-header" id="dropDownHeader-${myBotuuids}">
+                            <div class="icon-info">
+                                <i class="ast-rule"></i>
+                            </div>
+                            <div class="header-text" id="dropDownTitle-${myBotuuids}">${target.dataset.intentName}</div>
+                            <i class="ast-carrotup"></i>
+                            <button class="btn-danger" id="TerminateAgentDialog-${myBotuuids}">Terminate</button>
+                        </div>
+                        <div class="collapse-acc-data" id="dropDownData-${myBotuuids}">
+
+
+                        </div>
+                        <div class="dilog-task-end hide" id="endTaks-${myBotuuids}">
+
+                        </div>
+                    </div>`;
+                    dynamicBlock.innerHTML = dynamicBlock.innerHTML + dropdownHtml;
+                    let ids = target.id.split('-');
+
+
+                    $('.dialog-task-run-sec').each((i, ele) => {
+                        let id = ele.id?.split('-');
+                        if (ids.includes(id[1])) {
+                            idsOfDropDown = ele.id;
+                            $(ele).remove()
+                        }
+                    })
+
+                    let addRemoveDropDown = document.getElementById(`addRemoveDropDown-${myBotuuids}`);
+                    addRemoveDropDown?.classList.remove('hide');
+                    $(`#endTaks-${myBotuuids}`).removeClass('hide')
+                    AgentAssist_run_click(evt);
+                    return;
+                    // 
+                } else if (isMyBotAutomationOnGoing && !noAutomationrunninginMyBot) {
+                    // condition for if an automation is already running in the agent automation
+                    console.log(isMyBotAutomationOnGoing);
+                    $('#warningPopupForMyBot').removeClass('hide');
+                }
+
             }
             if (runButton || libraryRunBtn) {
                 if (libraryRunBtn) {
@@ -1216,6 +1280,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         $('.sugestions-info-data').removeClass('hide');
         $('#bodyContainer').addClass('if-suggestion-search');
         emptySearchBarDuringTabShift();
+        if (!isAutomationOnGoing && noAutomationrunninginMyBot) {
+            $('#noAutoRunning').removeClass('hide');
+        }
+
     }
 
     function transcriptionTabActive() {

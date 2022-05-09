@@ -265,9 +265,20 @@
                     </div>
 
                     <div class="agent-body-data-container hide" id="agentAutoContainer">
+                        <div class="show-history-block" id="agent-ran-history-details-btn">
+                            <button id="agent-showHistory" class="ghost-btn">Show history</button>
+                        </div>
+                        <div class="show-back-recommendation-block hide">
+                            <button id="agent-backToRecommendation" class="ghost-btn">
+                                <span class="back-icon">
+                                    <i class="ast-carrotup"></i>
+                                </span>
+                                Back to recommendation
+                            </button>
+                        </div>   
                         <div class="dialog-task-data">
-                            <div class="dynamic-block-content">
-                                <div class="dialog-task-accordiaon-info">
+                            <div class="dynamic-block-content" id="agent-myBot">
+                                <!-- <div class="dialog-task-accordiaon-info">
                                     <div class="accordion-header">
                                         <div class="icon-info">
                                             <i class="ast-rule"></i>
@@ -326,6 +337,11 @@
                                             </div>
                                         </div>
                                     </div>
+                                </div> -->
+                                <div class="empty-data-no-agents hide" id="noAutoRunning">
+                                    <div class="title">No intent identified yet</div>
+                                    <div class="desc-text">The bot will automatically suggest tasks here.</div>
+                                    <div class="desc-text">To start a manual task, go to “Library” and run a task as “Run with Agent Input”</div>
                                 </div>
                             </div>
                         </div>
@@ -403,7 +419,7 @@
                         </div>
 
                         <div class="dynamic-searchlibrary-data">
-                            <div class="empty-library-data">
+                            <div class="empty-library-data hide" id="noLibraryList">
                                 <div class="img-block">
                                     <img src="./images/emptylibrary.svg">
                                 </div>
@@ -493,6 +509,32 @@
                                             </div>
                                         </div>
                                     </div> -->
+                                </div>
+                                <div class="overlay-delete-popup hide" id="warningPopupForMyBot">
+                                    <div class="delete-box-content">
+                                        <div class="header-text">You are interrupting the current task</div>
+                                        <div class="close-popup" >
+                                            <i class="ast-close" id="closeMyBotInterruptionPopup"></i>
+                                        </div>
+                                        <div class="desc-text-info">If you run the select task, the current task will be completely terminated. Are you sure you want to continue with the selected task?</div>
+                                        <div class="btn-footer-info">
+                                            <button class="btn-danger" id="interruptMyBot">Yes, continue</button>
+                                            <button class="btn-cancel" id="cancelInterruptMyBot">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="overlay-delete-popup hide" id="WarningPopupForAssist">
+                                    <div class="delete-box-content">
+                                        <div class="header-text">You are interrupting the current task</div>
+                                        <div class="close-popup" >
+                                            <i class="ast-close" id="closeAssistInterruptionPopup"></i>
+                                        </div>
+                                        <div class="desc-text-info">If you run the select task, the current task will be completely terminated. Are you sure you want to continue with the selected task?</div>
+                                        <div class="btn-footer-info">
+                                            <button class="btn-danger" id="interruptAssist">Yes, continue</button>
+                                            <button class="btn-cancel" id="cancelInterruptAssist">Cancel</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <!-- <div class="frequently-asked" id="frequently-used">
