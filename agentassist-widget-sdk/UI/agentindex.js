@@ -18,6 +18,8 @@ var userIntentInput;
 var answerPlaceableID;
 var dialogName;
 var count = 0;
+var currentTabActive;
+var previousTabActive;
 function koreGenerateUUID() {
     console.info("generating UUID");
     var d = new Date().getTime();
@@ -33,7 +35,6 @@ function koreGenerateUUID() {
 }
 
 window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId, _botId) {
-
     var koreBot = koreBotChat();
     chatInitialize = new koreBot.chatWindow(chatConfig);
     chatInitialize.customTemplateObj = new customTemplate(chatConfig, chatInitialize);
@@ -118,7 +119,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             _agentAsisstSocket.emit('agent_assist_request', agent_assist_request);
         });
     }
-    console.log("AgentAssist >>> creating container for user", _agentAssistDataObj.userId)
+    console.log("AgentAssist >>> creating container for user", _agentAssistDataObj.userId);
     createAgentAssistContainer(_agentAssistDataObj.containerId, _agentAssistDataObj.conversationId, _agentAssistDataObj.botId, _agentAssistDataObj.userId)
     var welcome_message_request = {
         'waitTime': 2000,
@@ -175,6 +176,19 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                                 </div>`;
         addUserQueryTodropdownData.innerHTML = addUserQueryTodropdownData.innerHTML + userQueryHtml;
         chatInitialize.renderMessage(_msgsResponse);
+    }
+    $('body').bind('mousedown keydown', function(event) {
+            currentTabActive = detectCurrentTab();
+            if(currentTabActive === 'userAutoIcon'){
+                let agentSearchBlock = $("#agentSearch");
+                agentSearchBlock.attr('data-conv-id', _agentAssistDataObj.conversationId);
+                agentSearchBlock.attr('data-bot-id', _agentAssistDataObj.botId);
+                agentSearchBlock.attr('data-user-id', _agentAssistDataObj.userId);
+                agentSearchBlock.attr('data-agent-assist-input', true)
+            }
+    });
+    detectCurrentTab = ()=>{ 
+        return $('.tab-icon.active-tab').attr('id');
     }
 
     processAgentIntentResults = function (data, convId, botId) {
@@ -266,145 +280,160 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
 
         if (data.isSearch) {
             ShowSearchContent();
-            if (data.value.length > 0) {
+            if (data.value.length > 0 && currentTabActive == 'searchAutoIcon') {
                 document.getElementById('allAutomations-Exhaustivelist').classList.add('hide');
                 $('#dialogs-faqs').addClass('hide');
             }
             if (data.suggestions) {
-                let searchTextDisplay = document.getElementById('search-text-display');
-                html = `<div class="searched-intent" id="librarySearchText">Search results for '${data.userInput}' </div>`
-                searchTextDisplay.innerHTML = html;
+                if(currentTabActive == 'searchAutoIcon'){
+                    let searchTextDisplay = document.getElementById('search-text-display');
+                    html = `<div class="searched-intent" id="librarySearchText">Search results for '${data.userInput}' </div>`
+                    searchTextDisplay.innerHTML = html;
+                }else{
+                    $('#overLaySearch').html(`<div class="search-results-text">${data.suggestions.dialogs?.length+data.suggestions.faqs?.length} Search results for '${data.userInput}' <span class="show-all">Show all</span></div>`)
+                }
+               
             } else {
-                let searchTextDisplay = document.getElementById('search-text-display');
-                html = `<div class="searched-intent" id="librarySearchText">0 Search results for '${data.userInput}' </div>`
-                searchTextDisplay.innerHTML = html;
+                if(currentTabActive == 'searchAutoIcon'){
+                    let searchTextDisplay = document.getElementById('search-text-display');
+                    html = `<div class="searched-intent" id="librarySearchText">0 Search results for '${data.userInput}' </div>`
+                    searchTextDisplay.innerHTML = html;
+                }else{
+                    $('#overLaySearch').html(`<div class="search-results-text">0 Search results for '${data.userInput}'</div>`)
+                    console.log("active tab is different", currentTabActive)
+                }
+                
             }
 
             if (data?.suggestions?.dialogs?.length > 0) {
-                let automationSuggestions = document.getElementById(`search-text-display`);
-                let dialogAreaHtml = `<div class="dialog-task-run-sec p-0" id="searchedDialogs-${libraryResponseId}">
-                                        <div class="task-type" id="dialoguesArea">
-                                            <div class="img-block-info">
-                                                <img src="./images/dialogtask.svg">
+                    let automationSuggestions = currentTabActive == 'searchAutoIcon'?$(`#search-text-display`):$('#overLaySearch');
+                    let dialogAreaHtml = `<div class="dialog-task-run-sec p-0" id="searchedDialogs-${libraryResponseId}">
+                                            <div class="task-type" id="dialoguesArea">
+                                                <div class="img-block-info">
+                                                    <img src="./images/dialogtask.svg">
+                                                </div>
+                                                
+                                                <div class="content-dialog-task-type arr-cont-dialogtask" id="dialogSuggestions-results">
+                                                    <div class="type-with-img-title">Dialog task (${data.suggestions.dialogs.length})</div>
+                                                </div>
                                             </div>
-                                            
-                                            <div class="content-dialog-task-type arr-cont-dialogtask" id="dialogSuggestions-results">
-                                                <div class="type-with-img-title">Dialog task (${data.suggestions.dialogs.length})</div>
-                                            </div>
-                                        </div>
-                                    </div>`;
-                automationSuggestions.innerHTML += dialogAreaHtml;
-
-                // dialogs body 
-                data.suggestions.dialogs?.forEach((ele, index) => {
-                    let body = {};
-                    body['type'] = 'text';
-                    body['component'] = {
-                        "type": 'text',
-                        "payload": {
+                                        </div>`;
+                    automationSuggestions.append(dialogAreaHtml);
+    
+                    // dialogs body 
+                    data.suggestions.dialogs?.forEach((ele, index) => {
+                        let body = {};
+                        body['type'] = 'text';
+                        body['component'] = {
                             "type": 'text',
-                            "text": ele.name
-                        }
-                    };
-                    body['cInfo'] = {
-                        "body": data.value
-                    };
-                    let dialogSuggestions = document.getElementById('dialogSuggestions-results');
-                    let dialogsHtml = `
-                    <div class="type-info-run-send">
-                        <div class="left-content">
-                            <div class="title-text" id="automation-${uuids}">${ele.name}</div>
-                        </div>
-                        <div class="action-links">
-                            <button class="send-run-btn" data-conv-id="${data.conversationId}"
-                            data-bot-id="${botId}" data-intent-name="${ele.name}"
-                            data-agent-id="${data.agentId}" data-library-run="true" 
-                            id="run-${libraryResponseId}"
-                            >RUN</button>
-                            <div class="elipse-dropdown-info" id="showRunForAgentBtn-${uuids}">
-                                <div class="elipse-icon" id="elipseIcon-${uuids}">
-                                    <i class="ast-overflow" id="overflowIcon-${uuids}"></i>
-                                </div>
-                                <div class="dropdown-content-elipse hide" id="runsearchAgtBtn-${uuids}">
-                                    <div class="list-option" data-conv-id="${data.conversationId}"
-                                    data-bot-id="${botId}" data-intent-name="${ele.name}"
-                                    data-agent-id="${data.agentId}" id="agentSearchSelect-${uuids}"
-                                    data-exhaustivelist-run="true">Run Bot for Agent</div>
+                            "payload": {
+                                "type": 'text',
+                                "text": ele.name
+                            }
+                        };
+                        body['cInfo'] = {
+                            "body": data.value
+                        };
+                        let dialogSuggestions = currentTabActive == 'searchAutoIcon'?$('#search-text-display #dialogSuggestions-results'): $('#overLaySearch #dialogSuggestions-results');
+                        let dialogsHtml = `
+                        <div class="type-info-run-send">
+                            <div class="left-content">
+                                <div class="title-text" id="automation-${uuids}">${ele.name}</div>
+                            </div>
+                            <div class="action-links">
+                                <button class="send-run-btn" data-conv-id="${data.conversationId}"
+                                data-bot-id="${botId}" data-intent-name="${ele.name}"
+                                data-agent-id="${data.agentId}" data-library-run="true" 
+                                id="run-${libraryResponseId}"
+                                >RUN</button>
+                                <div class="elipse-dropdown-info" id="showRunForAgentBtn-${uuids}">
+                                    <div class="elipse-icon" id="elipseIcon-${uuids}">
+                                        <i class="ast-overflow" id="overflowIcon-${uuids}"></i>
+                                    </div>
+                                    <div class="dropdown-content-elipse hide" id="runsearchAgtBtn-${uuids}">
+                                        <div class="list-option" data-conv-id="${data.conversationId}"
+                                        data-bot-id="${botId}" data-intent-name="${ele.name}"
+                                        data-agent-id="${data.agentId}" id="agentSearchSelect-${uuids}"
+                                        data-exhaustivelist-run="true">Run Bot for Agent</div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>`;
-                    dialogSuggestions.innerHTML += dialogsHtml;
-                    _msgsResponse.message.push(body);
-                });
-
-            }
-            if (data?.suggestions?.faqs?.length > 0) {
-                let automationSuggestions = document.getElementById(`search-text-display`);
-                let dialogAreaHtml = `<div class="dialog-task-run-sec p-0">
-                                        <div class="task-type" id="faqssArea">
-                                            <div class="img-block-info">
-                                                <img src="./images/kg.svg">
+                        </div>`;
+                        dialogSuggestions.append(dialogsHtml);
+                        _msgsResponse.message.push(body);
+                    });
+    
+                }
+                if (data?.suggestions?.faqs?.length > 0) {
+                    let automationSuggestions = currentTabActive == 'searchAutoIcon'? $(`#search-text-display`):$('#overLaySearch');
+                    let dialogAreaHtml = `<div class="dialog-task-run-sec p-0">
+                                            <div class="task-type" id="faqssArea">
+                                                <div class="img-block-info">
+                                                    <img src="./images/kg.svg">
+                                                </div>
+                                                <div class="content-dialog-task-type arr-cont-dialogtask" id="faqsSuggestions-results">
+                                                    <div class="type-with-img-title">Knowledge graph (${data.suggestions.faqs.length})</div>
+                                                </div>
                                             </div>
-                                            <div class="content-dialog-task-type arr-cont-dialogtask" id="faqsSuggestions-results">
-                                                <div class="type-with-img-title">Knowledge graph (${data.suggestions.faqs.length})</div>
-                                            </div>
-                                        </div>
-                                    </div>`;
-                automationSuggestions.innerHTML += dialogAreaHtml;
-
-                // faqs body
-                data.suggestions.faqs?.forEach((ele, index) => {
-                    let body = {};
-                    body['type'] = 'text';
-                    body['component'] = {
-                        "type": 'text',
-                        "payload": {
+                                        </div>`;
+                    automationSuggestions.append(dialogAreaHtml);
+    
+                    // faqs body
+                    data.suggestions.faqs?.forEach((ele, index) => {
+                        let body = {};
+                        body['type'] = 'text';
+                        body['component'] = {
                             "type": 'text',
-                            "text": ele
-                        }
-                    };
-                    body['cInfo'] = {
-                        "body": data.value
-                    };
-                    let faqsSuggestions = document.getElementById('faqsSuggestions-results');
-
-                    let faqHtml = `
-                    <div class="type-info-run-send">
-                        <div class="left-content" id="faqSection-${index}">
-                            <div class="title-text" id="title-${index}">${ele.question}</div>
-                            <div class="desc-text" id="desc-${index}">${ele.answer}</div>
-                            
-                        </div>
-                        <div class="action-links">
-                            <button class="send-run-btn">Send</button>
-                            <div class="copy-btn">
-                                <i class="ast-copy"></i>
+                            "payload": {
+                                "type": 'text',
+                                "text": ele
+                            }
+                        };
+                        body['cInfo'] = {
+                            "body": data.value
+                        };
+                        let faqsSuggestions = currentTabActive == 'searchAutoIcon'? $('#search-text-display #faqsSuggestions-results'):$('#overLaySearch #faqsSuggestions-results');
+    
+                        let faqHtml = `
+                        <div class="type-info-run-send">
+                            <div class="left-content" id="faqSection-${index}">
+                                <div class="title-text" id="title-${index}">${ele.question}</div>
+                                <div class="desc-text" id="desc-${index}">${ele.answer}</div>
+                                
                             </div>
-                        </div>
-                    </div>`;
-
-                    faqsSuggestions.innerHTML += faqHtml;
-                    if (ele.answer?.length > 200) {
-                        let faqs = $(`.type-info-run-send #faqSection-${index}`);
-                        faqs.each((i, ele) => {
-                            let seeMoreButtonHtml = `
-                        <button class="see-more" id="seeMore-${index}" data-see-more="true">See more</button>
-                        `;
-                            faqs.append(seeMoreButtonHtml);
-                        })
-                    }
-                    _msgsResponse.message.push(body);
-                });
-
-            }
-
+                            <div class="action-links">
+                                <button class="send-run-btn">Send</button>
+                                <div class="copy-btn">
+                                    <i class="ast-copy"></i>
+                                </div>
+                            </div>
+                        </div>`;
+    
+                        faqsSuggestions.append(faqHtml);
+                        if (ele.answer?.length > 200) {
+                            let faqs = $(`.type-info-run-send #faqSection-${index}`);
+                            faqs.each((i, ele) => {
+                                let seeMoreButtonHtml = `
+                            <button class="see-more" id="seeMore-${index}" data-see-more="true">See more</button>
+                            `;
+                                faqs.append(seeMoreButtonHtml);
+                            })
+                        }
+                        _msgsResponse.message.push(body);
+                    });
+    
+                }
         }
 
         function ShowSearchContent() {
-            document.getElementById('searchResults').classList.remove('hide');
-            document.getElementById('allAutomations-Exhaustivelist').classList.remove('hide');
-            $('#dialogs-faqs').removeClass('hide');
+            if(currentTabActive == 'searchAutoIcon'){
+                document.getElementById('searchResults').classList.remove('hide');
+                document.getElementById('allAutomations-Exhaustivelist').classList.remove('hide');
+                $('#dialogs-faqs').removeClass('hide');
+            }else{
+                $('.overlay-suggestions').removeClass('hide').attr('style', 'bottom:0; display:block;');
+                
+            }  
         }
     }
 
@@ -769,6 +798,62 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 }
             });
 
+            if(target.className == 'ast-close close-search'){
+                $('#agentSearch').val('');
+                $('.overlay-suggestions').addClass('hide').removeAttr('style');
+                $('#overLaySearch').html('')
+            }
+
+            if(target.className == 'show-all'){
+                let showAllClicked = true;
+                previousTabActive = currentTabActive;
+                $(`#${currentTabActive}`).removeClass('active-tab');
+                currentTabActive = 'searchAutoIcon';
+                $(`#searchAutoIcon`).addClass('active-tab');
+                $(`#dynamicBlock`).addClass('hide');
+                $('#LibraryContainer').removeClass('hide');
+                $('.overlay-suggestions').addClass('hide').removeAttr('style');
+                $('#backButton').removeClass('hide');
+                $('#librarySearch').val($('#agentSearch').val());
+                $('.sugestions-info-data').addClass('hide');
+                $('#bodyContainer').removeClass('if-suggestion-search');
+                $('#librarySearch').keyup(function (evt) {
+                    
+                    if(!showAllClicked){
+                        console.log('if ',evt);
+                        evt.stopImmediatePropagation();
+                    }else{
+                        console.log('else hello',evt);
+                        var target = evt.target;
+                        target.dataset.convId =_agentAssistDataObj.conversationId;
+                        target.dataset.botId =_agentAssistDataObj.botId;
+                        target.dataset.userId =_agentAssistDataObj.userId;
+                        target.dataset.agentAssistInput = true;
+                    var agentAssistInput = target.dataset.agentAssistInput;
+                    evt.keyCode = 13;
+                    if (agentAssistInput) {
+                        AgentAssist_input_keydown(evt);
+                    }
+                    }
+                });
+                
+                $('#librarySearch').keyup();
+
+            }
+            if(target.id == 'backToPreviousTab'){
+
+                $(`#${currentTabActive}`).removeClass('active-tab');
+                $(`#${previousTabActive}`).addClass('active-tab');
+                previousTabActive = currentTabActive;
+                previousTabActive = 'userAutoIcon';
+                $(`#dynamicBlock`).removeClass('hide');
+                $('#LibraryContainer').addClass('hide');
+                $('.overlay-suggestions').removeClass('hide').attr('style', 'bottom:0; display:block');
+                $('#backButton').addClass('hide');
+                $('.sugestions-info-data').removeClass('hide');
+                $('#bodyContainer').addClass('if-suggestion-search');
+            }
+
             if (target.id === `searchAutoIcon` || target.id === `searchIcon` || target.id === `LibraryLabel`) {
                 data = _agentAssistDataObj
                 AgentAssistPubSub.publish('automation_exhaustive_list', { conversationId: _agentAssistDataObj.conversationId, botId: _agentAssistDataObj.botId, 'experience': 'chat' });
@@ -929,6 +1014,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             }
             if (runButton || libraryRunBtn) {
                 if (libraryRunBtn) {
+                    $('#agentSearch').val('');
+                    $('.overlay-suggestions').addClass('hide').removeAttr('style');
+                    $('#overLaySearch').html('')
                     userTabActive();
                     let suggestionsblock = $('#dynamicBlock .dialog-task-run-sec');
                     if (suggestionsblock.length >= 1) {
@@ -1017,10 +1105,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                     $(`#${target.id}`).addClass('rotate-carrot');
                     $(`#faqDiv-${id} .action-links`).removeClass('hide');
                     $(`#desc-${id}`).removeClass('hide');
+                    $(`#seeMore-${id}`).removeClass('hide');
                 } else {
                     $(`#${target.id}`).removeClass('rotate-carrot');
                     $(`#faqDiv-${id} .action-links`).addClass('hide');
                     $(`#desc-${id}`).addClass('hide');
+                    $(`#seeMore-${id}`).addClass('hide');
                 }
             }
             if (target.id.split('-')[0] === 'dropDownHeader') {
@@ -1054,6 +1144,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         document.addEventListener("keyup", (evt) => {
             var target = evt.target;
             var agentAssistInput = target.dataset.agentAssistInput;
+            let val = $('#agentSearch').val();
+            evt.target.dataset.val = val;
+            if(val == ''){
+                $('#overLaySearch').html('');
+                $('.overlay-suggestions').addClass('hide').removeAttr('style');
+            }
             if (agentAssistInput) {
                 AgentAssist_input_keydown(evt);
             }
@@ -1074,6 +1170,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         document.getElementById('agentAutoContainer').classList.add('hide');
         document.getElementById(`dynamicBlock`).classList.remove('hide');
         document.getElementById(`cust-feeling`).classList.remove('hide');
+        $('.sugestions-info-data').removeClass('hide');
+        $('#bodyContainer').addClass('if-suggestion-search');
         emptySearchBarDuringTabShift();
     }
 
@@ -1098,6 +1196,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         document.getElementById('scriptContainer').classList.add('hide');
         document.getElementById(`cust-feeling`).classList.add('hide');
         document.getElementById('LibraryContainer').classList.remove('hide');
+        $('.sugestions-info-data').addClass('hide');
+        $('#bodyContainer').removeClass('if-suggestion-search');
 
     }
 
@@ -1113,6 +1213,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         document.getElementById(`cust-feeling`).classList.add('hide');
         document.getElementById('scriptContainer').classList.add('hide');
         document.getElementById(`history-details-btn`).classList.add('hide');
+        $('.sugestions-info-data').removeClass('hide');
+        $('#bodyContainer').addClass('if-suggestion-search');
         emptySearchBarDuringTabShift();
     }
 
@@ -1128,6 +1230,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         document.getElementById('scriptContainer').classList.remove('hide');
         document.getElementById(`cust-feeling`).classList.add('hide');
         document.getElementById(`history-details-btn`).classList.add('hide');
+        $('.sugestions-info-data').removeClass('hide');
+        $('#bodyContainer').addClass('if-suggestion-search');
         emptySearchBarDuringTabShift();
     }
 
@@ -1236,13 +1340,17 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
 
     function AgentAssist_input_keydown(e) {
         let input_taker = document.getElementById('librarySearch').value;
-        if (input_taker.trim().length == 0) {
+        if(e.target.dataset?.val){
+            input_taker = ''
+        }
+        if (input_taker.trim().length == 0 && e.target.dataset?.val?.trim().length == 0) {
             processAgentIntentResults(autoExhaustiveList, autoExhaustiveList.conversationId, autoExhaustiveList.botId);
         }
-        if (e.keyCode == 13 && input_taker.trim().length > 0) {
+       
+        if (e.keyCode == 13 && (input_taker.trim().length > 0 || e.target.dataset.val.trim().length > 0 )) {
             var convId = e.target.dataset.convId;
             var botId = e.target.dataset.botId;
-            var intentName = input_taker;
+            var intentName = input_taker?input_taker:e.target.dataset.val;
             AgentAssistPubSub.publish('searched_Automation_details', { conversationId: convId, botId: botId, value: intentName, isSearch: true });
         }
     }
