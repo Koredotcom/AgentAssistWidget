@@ -123,7 +123,7 @@
                     </div>
                 </div>
             </div>
-            <div class="body-data-container" id="bodyContainer">
+            <div class="body-data-container if-suggestion-search" id="bodyContainer">
                 <div class="dialog-task-data" id="dynamicBlocksData">
                     
                     <div class="dynamic-block-content" id="dynamicBlock">   
@@ -409,6 +409,15 @@
                             </div>
                         </div>
                         
+                        <div class="show-back-recommendation-block  hide" id="backButton">
+                            <button id="backToPreviousTab" class="ghost-btn">
+                                <span class="back-icon">
+                                    <i class="ast-carrotup"></i>
+                                </span>
+                                Back
+                            </button>
+                        </div>
+
                         <div class="dynamic-searchlibrary-data">
                             <div class="empty-library-data hide" id="noLibraryList">
                                 <div class="img-block">
@@ -683,17 +692,17 @@
                     
                 </div>
             </div>
-            <div class="sugestions-info-data hide">
-                <input type="text" class="suggestion-input">
+            <div class="sugestions-info-data">
+                <input type="text" class="suggestion-input" id="agentSearch" placeholder="Ask AgentAssist" >
                 <i class="ast-search search-icon"></i>
                 <i class="ast-close close-search"></i>
             </div>
 
             <div class="overlay-suggestions hide">
-                <div class="suggestion-content">
-                    <div class="search-results-text">12 Search results for “Edit my order” <span class="show-all">Show all</span></div>
-                    <div class="dialog-task-run-sec" id="automationSuggestions">
-                        <div class="task-type">
+                <div class="suggestion-content" id="overLaySearch">
+                    <!-- <div class="search-results-text"></div> -->
+                    <!-- <div class="dialog-task-run-sec" id="overLaySuggestions">
+                        <!-- <div class="task-type">
                             <div class="img-block-info">
                                 <img src="./images/dialogtask.svg">
                             </div>
@@ -737,7 +746,7 @@
                                 </div>
                             </div>
                         </div> 
-                    </div>
+                    </div> -->
                 </div>
             </div>
 
