@@ -374,7 +374,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             if (data?.suggestions?.faqs?.length > 0) {
                 let automationSuggestions = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display`) : $('#overLaySearch');
                 let dialogAreaHtml = `<div class="dialog-task-run-sec p-0">
-                                            <div class="task-type" id="faqssArea">
+                                            <div class="task-type" id="faqssAreas">
                                                 <div class="img-block-info">
                                                     <img src="./images/kg.svg">
                                                 </div>
@@ -1195,16 +1195,16 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                     AgentAssist_run_click(evt);
                     return
                 }
-                if ($(`.ast-carrotup.rotate-carrot`).length <= 0) {
+                if ($(`#faqssArea .ast-carrotup.rotate-carrot`).length <= 0) {
                     $(`#${target.id}`).addClass('rotate-carrot');
-                    $(`#faqDiv-${id} .action-links`).removeClass('hide');
-                    $(`#desc-${id}`).removeClass('hide');
-                    $(`#seeMore-${id}`).removeClass('hide');
+                    $(`#faqssArea #faqDiv-${id} .action-links`).removeClass('hide');
+                    $(`#faqssArea #desc-${id}`).removeClass('hide');
+                    $(`#faqssArea #seeMore-${id}`).removeClass('hide');
                 } else {
                     $(`#${target.id}`).removeClass('rotate-carrot');
-                    $(`#faqDiv-${id} .action-links`).addClass('hide');
-                    $(`#desc-${id}`).addClass('hide');
-                    $(`#seeMore-${id}`).addClass('hide');
+                    $(`#faqssArea #faqDiv-${id} .action-links`).addClass('hide');
+                    $(`#faqssArea #desc-${id}`).addClass('hide');
+                    $(`#faqssArea #seeMore-${id}`).addClass('hide');
                 }
 
             }
