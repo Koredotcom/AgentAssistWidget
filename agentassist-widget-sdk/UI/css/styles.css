@@ -736,6 +736,7 @@ html, body{
     display: inline-block;
     width: 100%;
     padding: 40px 15px 16px 15px;
+    position: relative;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .accordion-header {
     background: #FFFFFF;

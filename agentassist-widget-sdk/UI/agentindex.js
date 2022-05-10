@@ -718,7 +718,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                            <div class="run-info-content" >
                            <div class="title">Ask customer...</div>
                            <div class="agent-utt">
-                               <div class="title-data text-truncate"><ul class="chat-container" id="displayData-${uuids}"></ul></div>
+                               <div class="title-data"><ul class="chat-container" id="displayData-${uuids}"></ul></div>
                                <div class="action-links">
                                    <button class="send-run-btn">Send</button>
                                    <div class="copy-btn">
@@ -759,9 +759,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
 
         removeElementFromDom();
         let noOfSteps = $(`.body-data-container #dynamicBlock`).find('.steps-run-data').not('.hide');
-        if (noOfSteps.length > 2) {
+        if (noOfSteps.length >=2) {
             $(noOfSteps).addClass('hide');
-            $(noOfSteps[noOfSteps.length - 2]).removeClass('hide');
+            $(noOfSteps[noOfSteps.length - 2]).removeClass('hide').attr('style', 'color:gray');
             $(noOfSteps[noOfSteps.length - 1]).removeClass('hide');
         }
         if ((data.endOfFaq || data.endOfTask) && data.type !== 'text') {
@@ -803,7 +803,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
     }
 
     function btnInit() {
-        var hideDropDownToggel = false;
         dropdownHeaderUuids = '123'
         document.addEventListener("click", (evt) => {
             var target = evt.target;
@@ -1146,14 +1145,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                        </div>
                        <div class="header-text" id="dropDownTitle-${uuids}">${target.dataset.intentName}</div>
                        <i class="ast-carrotup"></i>
+                       <button class="btn-danger">Terminate</button>
                    </div>
                    <div class="collapse-acc-data" id="dropDownData-${uuids}">
                        
                       
                    </div>
-                   <div class="dilog-task-end hide" id="endTaks-${uuids}">
-                            
-                   </div>
+                   
                    </div>
                    `;
                 dynamicBlock.innerHTML = dynamicBlock.innerHTML + dropdownHtml;
@@ -1408,7 +1406,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
     }
 
     function addFeedbackHtmlToDom(data, botId, userId, userIntentInput) {
-        console.log("--- iside feedback ading html data-------", data)
+        $(`#addRemoveDropDown-${dropdownHeaderUuids} .btn-danger`).remove();
         let dropDownData = document.getElementById(`dropDownData-${dropdownHeaderUuids}`);
         let feedbackHtml = ` 
         <div class="feedback-data">
@@ -1430,9 +1428,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             </div>
        </div>`;
         dropDownData.innerHTML += feedbackHtml;
-        let endOfDialoge = document.getElementById(`endTaks-${dropdownHeaderUuids}`);
+        let endOfDialoge = document.getElementById(`addRemoveDropDown-${dropdownHeaderUuids}`);
         let endofDialogeHtml = `
-            <div class="text-dialog-task-end">Dialog Task ended</div>
+        <div class="dilog-task-end" id="endTaks-${dropdownHeaderUuids}">
+        <div class="text-dialog-task-end">Dialog Task ended</div>     
+                   </div>
+            
         `;
         endOfDialoge.innerHTML += endofDialogeHtml;
         $(`.customer-feeling-text`).addClass('bottom-95')
