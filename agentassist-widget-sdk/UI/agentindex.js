@@ -185,17 +185,17 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         addUserQueryTodropdownData.innerHTML = addUserQueryTodropdownData.innerHTML + userQueryHtml;
         chatInitialize.renderMessage(_msgsResponse);
     }
-    $('body').bind('mousedown keydown', function(event) {
-            currentTabActive = detectCurrentTab();
-            if(currentTabActive === 'userAutoIcon'){
-                let agentSearchBlock = $("#agentSearch");
-                agentSearchBlock.attr('data-conv-id', _agentAssistDataObj.conversationId);
-                agentSearchBlock.attr('data-bot-id', _agentAssistDataObj.botId);
-                agentSearchBlock.attr('data-user-id', _agentAssistDataObj.userId);
-                agentSearchBlock.attr('data-agent-assist-input', true)
-            }
+    $('body').bind('mousedown keydown', function (event) {
+        currentTabActive = detectCurrentTab();
+        if (currentTabActive === 'userAutoIcon') {
+            let agentSearchBlock = $("#agentSearch");
+            agentSearchBlock.attr('data-conv-id', _agentAssistDataObj.conversationId);
+            agentSearchBlock.attr('data-bot-id', _agentAssistDataObj.botId);
+            agentSearchBlock.attr('data-user-id', _agentAssistDataObj.userId);
+            agentSearchBlock.attr('data-agent-assist-input', true)
+        }
     });
-    detectCurrentTab = ()=>{ 
+    detectCurrentTab = () => {
         return $('.tab-icon.active-tab').attr('id');
     }
 
@@ -285,36 +285,36 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             }
         }
 
-        if (data.isSearch) {
+        if (data.isSearch && !answerPlaceableID) {
             ShowSearchContent();
             if (data.value.length > 0 && currentTabActive == 'searchAutoIcon') {
                 document.getElementById('allAutomations-Exhaustivelist').classList.add('hide');
                 $('#dialogs-faqs').addClass('hide');
             }
             if (data.suggestions) {
-                if(currentTabActive == 'searchAutoIcon'){
+                if (currentTabActive == 'searchAutoIcon') {
                     let searchTextDisplay = document.getElementById('search-text-display');
                     html = `<div class="searched-intent" id="librarySearchText">Search results for '${data.userInput}' </div>`
                     searchTextDisplay.innerHTML = html;
-                }else{
-                    $('#overLaySearch').html(`<div class="search-results-text">${data.suggestions.dialogs?.length+data.suggestions.faqs?.length} Search results for '${data.userInput}' <span class="show-all">Show all</span></div>`)
+                } else {
+                    $('#overLaySearch').html(`<div class="search-results-text">${data.suggestions.dialogs?.length + data.suggestions.faqs?.length} Search results for '${data.userInput}' <span class="show-all">Show all</span></div>`)
                 }
-               
+
             } else {
-                if(currentTabActive == 'searchAutoIcon'){
+                if (currentTabActive == 'searchAutoIcon') {
                     let searchTextDisplay = document.getElementById('search-text-display');
                     html = `<div class="searched-intent" id="librarySearchText">0 Search results for '${data.userInput}' </div>`
                     searchTextDisplay.innerHTML = html;
-                }else{
+                } else {
                     $('#overLaySearch').html(`<div class="search-results-text">0 Search results for '${data.userInput}'</div>`)
                     console.log("active tab is different", currentTabActive)
                 }
-                
+
             }
 
             if (data?.suggestions?.dialogs?.length > 0) {
-                    let automationSuggestions = currentTabActive == 'searchAutoIcon'?$(`#search-text-display`):$('#overLaySearch');
-                    let dialogAreaHtml = `<div class="dialog-task-run-sec p-0" id="searchedDialogs-${libraryResponseId}">
+                let automationSuggestions = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display`) : $('#overLaySearch');
+                let dialogAreaHtml = `<div class="dialog-task-run-sec p-0" id="searchedDialogs-${libraryResponseId}">
                                             <div class="task-type" id="dialoguesArea">
                                                 <div class="img-block-info">
                                                     <img src="./images/dialogtask.svg">
@@ -325,24 +325,24 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                                                 </div>
                                             </div>
                                         </div>`;
-                    automationSuggestions.append(dialogAreaHtml);
-    
-                    // dialogs body 
-                    data.suggestions.dialogs?.forEach((ele, index) => {
-                        let body = {};
-                        body['type'] = 'text';
-                        body['component'] = {
+                automationSuggestions.append(dialogAreaHtml);
+
+                // dialogs body 
+                data.suggestions.dialogs?.forEach((ele, index) => {
+                    let body = {};
+                    body['type'] = 'text';
+                    body['component'] = {
+                        "type": 'text',
+                        "payload": {
                             "type": 'text',
-                            "payload": {
-                                "type": 'text',
-                                "text": ele.name
-                            }
-                        };
-                        body['cInfo'] = {
-                            "body": data.value
-                        };
-                        let dialogSuggestions = currentTabActive == 'searchAutoIcon'?$('#search-text-display #dialogSuggestions-results'): $('#overLaySearch #dialogSuggestions-results');
-                        let dialogsHtml = `
+                            "text": ele.name
+                        }
+                    };
+                    body['cInfo'] = {
+                        "body": data.value
+                    };
+                    let dialogSuggestions = currentTabActive == 'searchAutoIcon' ? $('#search-text-display #dialogSuggestions-results') : $('#overLaySearch #dialogSuggestions-results');
+                    let dialogsHtml = `
                         <div class="type-info-run-send">
                             <div class="left-content">
                                 <div class="title-text" id="automation-${uuids}">${ele.name}</div>
@@ -366,14 +366,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                                 </div>
                             </div>
                         </div>`;
-                        dialogSuggestions.append(dialogsHtml);
-                        _msgsResponse.message.push(body);
-                    });
-    
-                }
-                if (data?.suggestions?.faqs?.length > 0) {
-                    let automationSuggestions = currentTabActive == 'searchAutoIcon'? $(`#search-text-display`):$('#overLaySearch');
-                    let dialogAreaHtml = `<div class="dialog-task-run-sec p-0">
+                    dialogSuggestions.append(dialogsHtml);
+                    _msgsResponse.message.push(body);
+                });
+
+            }
+            if (data?.suggestions?.faqs?.length > 0) {
+                let automationSuggestions = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display`) : $('#overLaySearch');
+                let dialogAreaHtml = `<div class="dialog-task-run-sec p-0">
                                             <div class="task-type" id="faqssArea">
                                                 <div class="img-block-info">
                                                     <img src="./images/kg.svg">
@@ -383,64 +383,88 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                                                 </div>
                                             </div>
                                         </div>`;
-                    automationSuggestions.append(dialogAreaHtml);
-    
-                    // faqs body
-                    data.suggestions.faqs?.forEach((ele, index) => {
-                        let body = {};
-                        body['type'] = 'text';
-                        body['component'] = {
+                automationSuggestions.append(dialogAreaHtml);
+
+                // faqs body
+                data.suggestions.faqs?.forEach((ele, index) => {
+                    let body = {};
+                    body['type'] = 'text';
+                    body['component'] = {
+                        "type": 'text',
+                        "payload": {
                             "type": 'text',
-                            "payload": {
-                                "type": 'text',
-                                "text": ele
-                            }
-                        };
-                        body['cInfo'] = {
-                            "body": data.value
-                        };
-                        let faqsSuggestions = currentTabActive == 'searchAutoIcon'? $('#search-text-display #faqsSuggestions-results'):$('#overLaySearch #faqsSuggestions-results');
-    
-                        let faqHtml = `
-                        <div class="type-info-run-send">
-                            <div class="left-content" id="faqSection-${index}">
-                                <div class="title-text" id="title-${index}">${ele.question}</div>
-                                <div class="desc-text" id="desc-${index}">${ele.answer}</div>
-                                
-                            </div>
-                            <div class="action-links">
-                                <button class="send-run-btn">Send</button>
-                                <div class="copy-btn">
-                                    <i class="ast-copy"></i>
-                                </div>
+                            "text": ele
+                        }
+                    };
+                    body['cInfo'] = {
+                        "body": data.value
+                    };
+                    let faqsSuggestions = currentTabActive == 'searchAutoIcon' ? $('#search-text-display #faqsSuggestions-results') : $('#overLaySearch #faqsSuggestions-results');
+
+                    let faqHtml = `
+                        <div class="type-info-run-send" id="faqDivLib-${index}">
+                            <div class="left-content" id="faqSectionLib-${index}">
+                                <div class="title-text" id="titleLib-${index}">${ele.question}</div>
                             </div>
                         </div>`;
-    
-                        faqsSuggestions.append(faqHtml);
-                        if (ele.answer?.length > 200) {
-                            let faqs = $(`.type-info-run-send #faqSection-${index}`);
-                            faqs.each((i, ele) => {
-                                let seeMoreButtonHtml = `
-                            <button class="see-more" id="seeMore-${index}" data-see-more="true">See more</button>
-                            `;
-                                faqs.append(seeMoreButtonHtml);
-                            })
-                        }
-                        _msgsResponse.message.push(body);
-                    });
-    
-                }
+
+                    faqsSuggestions.append(faqHtml);
+                    let faqs = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${index}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${index}`);
+                    if (!ele.answer) {
+                        let checkHtml = `
+                            <i class="ast-carrotup" data-conv-id="${data.conversationId}"
+                            data-bot-id="${botId}" data-intent-name="${ele.question}"
+                            data-agent-id="${data.agentId}" data-check-lib="true" id="checkLib-${index}"></i>`;
+                        faqs.append(checkHtml);
+                    } else {
+                        let a = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display #faqDivLib-${index}`) : $(`#overLaySearch #faqDivLib-${index}`);
+                        let faqActionHtml = `<div class="action-links">
+                            <button class="send-run-btn">Send</button>
+                            <div class="copy-btn">
+                                <i class="ast-copy"></i>
+                            </div>
+                        </div>`;
+                        a.append(faqActionHtml);
+                        faqs.append(`<div class="desc-text" id="descLib-${index}">${ele.answer}</div>`);
+                    }
+                    if ((ele.question?.length + ele.answer?.length) > 70) {
+                        let faqs = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${index}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${index}`);
+                        let seeMoreButtonHtml = `
+                              <button class="ghost-btn" style="font-style: italic;" id="seeMore-${index}" data-see-more="true">See more</button>
+                              `;
+                        faqs.append(seeMoreButtonHtml);
+                    }
+                    _msgsResponse.message.push(body);
+                });
+
+            }
+        } else {
+            if (data.type === 'text' && data.suggestions) {
+                data.suggestions.faqs.forEach((ele) => {
+                    $(`${currentTabActive == 'searchAutoIcon' ? `#search-text-display #${answerPlaceableID}` : `#overLaySearch #${answerPlaceableID}`}`).html(ele.answer);
+                    $(`${currentTabActive == 'searchAutoIcon' ? `#search-text-display #${answerPlaceableID}` : `#overLaySearch #${answerPlaceableID}`}`).attr('data-answer-render', 'true');
+                    if ((ele.question?.length + ele.answer?.length) > 70) {
+                        let faqs = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${answerPlaceableID.split('-')[1]}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${answerPlaceableID.split('-')[1]}`);
+                        let seeMoreButtonHtml = `
+                          <button class="ghost-btn" style="font-style: italic;" id="seeMore-${answerPlaceableID.split('-')[1]}" data-see-more="true">See more</button>
+                          `;
+                        faqs.append(seeMoreButtonHtml);
+                    }
+                })
+                answerPlaceableID = undefined;
+
+            }
         }
 
         function ShowSearchContent() {
-            if(currentTabActive == 'searchAutoIcon'){
+            if (currentTabActive == 'searchAutoIcon') {
                 document.getElementById('searchResults').classList.remove('hide');
                 document.getElementById('allAutomations-Exhaustivelist').classList.remove('hide');
                 $('#dialogs-faqs').removeClass('hide');
-            }else{
+            } else {
                 $('.overlay-suggestions').removeClass('hide').attr('style', 'bottom:0; display:block;');
-                
-            }  
+
+            }
         }
     }
 
@@ -805,13 +829,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 }
             });
 
-            if(target.className == 'ast-close close-search'){
+            if (target.className == 'ast-close close-search') {
                 $('#agentSearch').val('');
                 $('.overlay-suggestions').addClass('hide').removeAttr('style');
-                $('#overLaySearch').html('')
+                $('#overLaySearch').html('');
             }
 
-            if(target.className == 'show-all'){
+            if (target.className == 'show-all') {
                 let showAllClicked = true;
                 previousTabActive = currentTabActive;
                 $(`#${currentTabActive}`).removeClass('active-tab');
@@ -825,29 +849,30 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 $('.sugestions-info-data').addClass('hide');
                 $('#bodyContainer').removeClass('if-suggestion-search');
                 $('#librarySearch').keyup(function (evt) {
-                    
-                    if(!showAllClicked){
-                        console.log('if ',evt);
+
+                    if (!showAllClicked) {
+                        console.log('if ', evt);
                         evt.stopImmediatePropagation();
-                    }else{
-                        console.log('else hello',evt);
+                    } else {
+                        console.log('else hello', evt);
                         var target = evt.target;
-                        target.dataset.convId =_agentAssistDataObj.conversationId;
-                        target.dataset.botId =_agentAssistDataObj.botId;
-                        target.dataset.userId =_agentAssistDataObj.userId;
+                        target.dataset.convId = _agentAssistDataObj.conversationId;
+                        target.dataset.botId = _agentAssistDataObj.botId;
+                        target.dataset.userId = _agentAssistDataObj.userId;
                         target.dataset.agentAssistInput = true;
-                    var agentAssistInput = target.dataset.agentAssistInput;
-                    evt.keyCode = 13;
-                    if (agentAssistInput) {
-                        AgentAssist_input_keydown(evt);
-                    }
+                        var agentAssistInput = target.dataset.agentAssistInput;
+                        evt.keyCode = 13;
+                        if (agentAssistInput) {
+                            AgentAssist_input_keydown(evt);
+                        }
+                        evt.stopImmediatePropagation();
                     }
                 });
-                
+
                 $('#librarySearch').keyup();
 
             }
-            if(target.id == 'backToPreviousTab'){
+            if (target.id == 'backToPreviousTab') {
 
                 $(`#${currentTabActive}`).removeClass('active-tab');
                 $(`#${previousTabActive}`).addClass('active-tab');
@@ -880,6 +905,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             var seeMoreButton = target.dataset.seeMore;
             var seeLessButton = target.dataset.seeLess;
             var checkButton = target.dataset.check;
+            var checkLibButton = target.dataset.checkLib;
 
             console.log(`runButton`);
             if (target.className === 'copy-btn') {
@@ -887,26 +913,31 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             }
             if (seeMoreButton) {
                 let targets = target.id.split('-');
-                let faqs = $(`.type-info-run-send #faqSection-${targets[targets.length - 1]}`);
+                let faqs = (currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ?
+                    $(`.type-info-run-send #faqSection-${targets[targets.length - 1]}`) :
+                    (currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${targets[targets.length - 1]}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${targets[targets.length - 1]}`));
                 let seelessHtml = `<button class="ghost-btn" style="font-style: italic;" id="seeLess-${targets[targets.length - 1]}" data-see-less="true">See less</button>`;
                 evt.target.classList.add('hide')
-                faqs.find(`#title-${targets[targets.length - 1]}`).attr('style', `overflow: inherit; white-space: normal; text-overflow: unset;`);
-                faqs.find(`#desc-${targets[targets.length - 1]}`).attr('style', `overflow: inherit; white-space: normal; text-overflow: unset;`);
+                faqs.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#title-${targets[targets.length - 1]}` :
+                    `#titleLib-${targets[targets.length - 1]}`}`).attr('style', `overflow: inherit; white-space: normal; text-overflow: unset;`);
+                faqs.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#desc-${targets[targets.length - 1]}` : `#descLib-${targets[targets.length - 1]}`}`).attr('style', `overflow: inherit; white-space: normal; text-overflow: unset;`);
+
                 faqs.append(seelessHtml);
             }
             if (seeLessButton) {
                 let targets = target.id.split('-');
-                let faqs = $(`.type-info-run-send #faqSection-${targets[targets.length - 1]}`);
+                let faqs = (currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? $(`.type-info-run-send #faqSection-${targets[targets.length - 1]}`) :
+                    (currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${targets[targets.length - 1]}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${targets[targets.length - 1]}`));
 
                 faqs.find(`#seeMore-${targets[targets.length - 1]}`).each((i, ele) => {
                     if ($(ele).attr('id').includes(`seeMore-${targets[targets.length - 1]}`)) {
                         ele.classList.remove('hide')
                     }
                 })
-                faqs.find(`#title-${targets[targets.length - 1]}`).attr('style', `overflow: hidden;
+                faqs.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#title-${targets[targets.length - 1]}` : `#titleLib-${targets[targets.length - 1]}`}`).attr('style', `overflow: hidden;
                 white-space: nowrap;
                 text-overflow: ellipsis;`);
-                faqs.find(`#desc-${targets[targets.length - 1]}`).attr('style', `overflow: hidden;
+                faqs.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#desc-${targets[targets.length - 1]}` : `#descLib-${targets[targets.length - 1]}`}`).attr('style', `overflow: hidden;
                 white-space: nowrap;
                 text-overflow: ellipsis;`);
                 evt.target.classList.add('hide')
@@ -1066,7 +1097,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                     let addRemoveDropDown = document.getElementById(`addRemoveDropDown-${myBotuuids}`);
                     addRemoveDropDown?.classList.remove('hide');
                     $(`#endTaks-${myBotuuids}`).removeClass('hide')
-                    AgentAssist_run_click(evt);
                     return;
                     // 
                 } else if (isMyBotAutomationOnGoing && !noAutomationrunninginMyBot) {
@@ -1078,6 +1108,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             }
             if (runButton || libraryRunBtn) {
                 if (libraryRunBtn) {
+                    $('.empty-data-no-agents').addClass('hide');
                     $('#agentSearch').val('');
                     $('.overlay-suggestions').addClass('hide').removeAttr('style');
                     $('#overLaySearch').html('')
@@ -1146,7 +1177,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             }
             if (checkButton) {
                 let id = target.id.split('-')[1];
-
                 if (!target.dataset.answerRender) {
                     let faq = $(`.type-info-run-send #faqSection-${id}`);
                     let answerHtml = `<div class="desc-text" id="desc-${id}"></div>`
@@ -1176,7 +1206,74 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                     $(`#desc-${id}`).addClass('hide');
                     $(`#seeMore-${id}`).addClass('hide');
                 }
+
             }
+
+            if (checkLibButton) {
+                let id = target.id.split('-')[1];
+                if ((!target.dataset.answerRender && (currentTabActive == 'userAutoIcon' || currentTabActive == 'agentAutoIcon' || currentTabActive == 'transcriptIcon'))) {
+                    let faq = $(`#overLaySearch .type-info-run-send #faqSectionLib-${id}`);
+                    let answerHtml = `<div class="desc-text" id="descLib-${id}"></div>`
+                    let faqDiv = $(`#overLaySearch #faqDivLib-${id}`);
+                    let faqaction = `<div class="action-links">
+                    <button class="send-run-btn">Send</button>
+                    <div class="copy-btn">
+                        <i class="ast-copy"></i>
+                    </div>
+                </div>`;
+                    faq.append(answerHtml);
+                    $(`#overLaySearch #${target.id}`).attr('data-answer-render', 'false');
+                    faqDiv.append(faqaction);
+                    answerPlaceableID = `descLib-${id}`;
+                    $(`#${target.id}`).addClass('rotate-carrot');
+                    AgentAssistPubSub.publish('searched_Automation_details', { conversationId: evt.target.dataset.convId, botId: evt.target.dataset.botId, value: evt.target.dataset.intentName, isSearch: true });
+                    return
+                }
+
+                if ((!target.dataset.answerRender && currentTabActive == 'searchAutoIcon')) {
+                    let faq = $(`#search-text-display .type-info-run-send #faqSectionLib-${id}`);
+                    let answerHtml = `<div class="desc-text" id="descLib-${id}"></div>`
+                    let faqDiv = $(`#search-text-display #faqDivLib-${id}`);
+                    let faqaction = `<div class="action-links">
+                    <button class="send-run-btn">Send</button>
+                    <div class="copy-btn">
+                        <i class="ast-copy"></i>
+                    </div>
+                </div>`;
+                    faq.append(answerHtml);
+                    $(`#search-text-display #${target.id}`).attr('data-answer-render', 'false');
+                    faqDiv.append(faqaction);
+                    answerPlaceableID = `descLib-${id}`;
+                    $(`#${target.id}`).addClass('rotate-carrot');
+                    AgentAssistPubSub.publish('searched_Automation_details', { conversationId: evt.target.dataset.convId, botId: evt.target.dataset.botId, value: evt.target.dataset.intentName, isSearch: true });
+                    return
+                }
+                if ($(`#search-text-display .ast-carrotup.rotate-carrot`).length <= 0) {
+                    $(`#search-text-display #${target.id}`).addClass('rotate-carrot');
+                    $(`#search-text-display #faqDivLib-${id} .action-links`).removeClass('hide');
+                    $(`#search-text-display #descLib-${id}`).removeClass('hide');
+                    $(`#search-text-display #seeMore-${id}`).removeClass('hide');
+                } else {
+                    $(`#search-text-display #${target.id}`).removeClass('rotate-carrot');
+                    $(`#search-text-display #faqDivLib-${id} .action-links`).addClass('hide');
+                    $(`#search-text-display #descLib-${id}`).addClass('hide');
+                    $(`#search-text-display #seeMore-${id}`).addClass('hide');
+                }
+
+                if ($(`#overLaySearch .ast-carrotup.rotate-carrot`).length <= 0) {
+                    $(`#overLaySearch #${target.id}`).addClass('rotate-carrot');
+                    $(`#overLaySearch #faqDivLib-${id} .action-links`).removeClass('hide');
+                    $(`#overLaySearch #descLib-${id}`).removeClass('hide');
+                    $(`#overLaySearch #seeMore-${id}`).removeClass('hide');
+                } else {
+                    $(`#overLaySearch #${target.id}`).removeClass('rotate-carrot');
+                    $(`#overLaySearch #faqDivLib-${id} .action-links`).addClass('hide');
+                    $(`#overLaySearch #descLib-${id}`).addClass('hide');
+                    $(`#overLaySearch #seeMore-${id}`).addClass('hide');
+                }
+
+            }
+
             if (target.id.split('-')[0] === 'dropDownHeader') {
                 let targetIDs = (target.id).split('-');
                 if (!isShowHistoryEnable) {
@@ -1210,7 +1307,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             var agentAssistInput = target.dataset.agentAssistInput;
             let val = $('#agentSearch').val();
             evt.target.dataset.val = val;
-            if(val == ''){
+            if (val == '') {
                 $('#overLaySearch').html('');
                 $('.overlay-suggestions').addClass('hide').removeAttr('style');
             }
@@ -1408,17 +1505,17 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
 
     function AgentAssist_input_keydown(e) {
         let input_taker = document.getElementById('librarySearch').value;
-        if(e.target.dataset?.val){
+        if (e.target.dataset?.val) {
             input_taker = ''
         }
         if (input_taker.trim().length == 0 && e.target.dataset?.val?.trim().length == 0) {
             processAgentIntentResults(autoExhaustiveList, autoExhaustiveList.conversationId, autoExhaustiveList.botId);
         }
-       
-        if (e.keyCode == 13 && (input_taker.trim().length > 0 || e.target.dataset.val.trim().length > 0 )) {
+
+        if (e.keyCode == 13 && (input_taker.trim().length > 0 || e.target.dataset.val.trim().length > 0)) {
             var convId = e.target.dataset.convId;
             var botId = e.target.dataset.botId;
-            var intentName = input_taker?input_taker:e.target.dataset.val;
+            var intentName = input_taker ? input_taker : e.target.dataset.val;
             AgentAssistPubSub.publish('searched_Automation_details', { conversationId: convId, botId: botId, value: intentName, isSearch: true });
         }
     }
@@ -1455,7 +1552,7 @@ function AgentAssist_run_click(e) {
     var agentId = e.target.dataset.agentId;
     var intentName = e.target.dataset.intentName;
     dialogName = intentName;
-    if (e.target.dataset.check) {
+    if (e.target.dataset.check || e.target.dataset.checkLib) {
         AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: convId, agentId: agentId, botId: botId, value: intentName, check: true });
     } else {
         AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: convId, agentId: agentId, botId: botId, value: intentName, intentName: intentName });
