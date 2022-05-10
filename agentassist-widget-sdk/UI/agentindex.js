@@ -1272,7 +1272,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
 
             }
 
-            if (target.id.split('-')[0] === 'dropDownHeader') {
+            if (target.id.split('-')[0] === 'dropDownHeader' || target.id.split('-')[0] === 'dropDownTitle') {
                 let targetIDs = (target.id).split('-');
                 if (!isShowHistoryEnable) {
                     if (target.dataset.dropDownOpened === 'false') {
@@ -1290,10 +1290,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 a.each(function (i, ele) {
                     if (!$(ele).attr('class').includes('hide')) {
                         targetIDs.includes($(ele).attr('id').split('-')[1]) ? ele.classList.add('hide') : '';
-                        b.length > 0 ? targetIDs.includes($(b[i]).attr('id').split('-')[1]) ? b[i].classList.add('hide') : '' : '';
+                     //   b.length > 0 ? targetIDs.includes($(b[i]).attr('id').split('-')[1]) ? b[i].classList.add('hide') : '' : '';
                     } else {
                         targetIDs.includes($(ele).attr('id').split('-')[1]) ? ele.classList.remove('hide') : '';
-                        b.length > 0 ? targetIDs.includes($(b[i]).attr('id').split('-')[1]) ? b[i].classList.remove('hide') : '' : '';
+                      //  b.length > 0 ? targetIDs.includes($(b[i]).attr('id').split('-')[1]) ? b[i].classList.remove('hide') : '' : '';
                     }
 
                 });
