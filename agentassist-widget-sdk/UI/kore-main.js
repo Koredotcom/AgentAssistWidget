@@ -1,4 +1,4 @@
-(function($){
+(function ($) {
 
     $(document).ready(function () {
         function assertion(options, callback) {
@@ -42,7 +42,7 @@
                     type: 'get',
                     dataType: 'json',
                     success: function (data) {
-                        if(koreBot && koreBot.applySDKBranding) {
+                        if (koreBot && koreBot.applySDKBranding) {
                             koreBot.applySDKBranding(data);
                         }
                         if (koreBot && koreBot.initToken) {
@@ -56,58 +56,85 @@
             }
 
         }
-        function onJWTGrantSuccess(options){
+        function onJWTGrantSuccess(options) {
             getBrandingInformation(options);
         }
-        var chatConfig=window.KoreSDK.chatConfig;
-        chatConfig.botOptions.assertionFn=assertion;
+        var chatConfig = window.KoreSDK.chatConfig;
+        chatConfig.botOptions.assertionFn = assertion;
         chatConfig.botOptions.jwtgrantSuccessCB = onJWTGrantSuccess;
         var koreBot = koreBotChat();
         koreBot.show(chatConfig);
-        if(chatConfig.agentAssist){
-           let agentAssistObj =  new AgentAssist('agent-assist-chat-container', '123489457123', 'user105', chatConfig.botOptions.botInfo._id);
-           
-           let userIds;
-           userIds = agentAssistObj._conversationId+'_'+agentAssistObj.userId+'_'+agentAssistObj.botId;
-           let agentObj ={};
-           agentObj[userIds] = agentAssistObj;
-            if(sessionStorage.getItem('users') == null){
-                sessionStorage.setItem('users', '{}');
-            }
-            
 
-            window.onbeforeunload= function(){
-                let old_users = {};
-
-                old_users = JSON.parse(sessionStorage.getItem('users'));
-                let splitRes = userIds.split('_');
-                old_users[userIds]=$(`#userIDs-${splitRes[0]}`).html();
-                sessionStorage.setItem('users', JSON.stringify(old_users));             
+        function koreGenerateUUID() {
+            console.info("generating UUID");
+            var d = new Date().getTime();
+            if (window.performance && typeof window.performance.now === "function") {
+                d += performance.now(); //use high-precision timer if available
             }
-            
-           $(document).ready(function(){
-                let result = JSON.parse(sessionStorage.getItem('users'));
-                for(let res in result){
-                    let splitRess = res.split('_');
-                    let bodyContainer = $(`#userIDs-${splitRess[0]}`);
-                    
-                    if(splitRess[0]==(userIds.split('_')[0])){
-                        bodyContainer.html(result[res]);
-                       var hasVerticalScrollbar = $('.agent-assist-chat-container').scrollHeight - 3 > $('.agent-assist-chat-container').clientHeight;
-                       if(!hasVerticalScrollbar){
-                        var KRPerfectScrollbar;
-                        if(window.PerfectScrollbar && typeof PerfectScrollbar ==='function'){
-                        KRPerfectScrollbar=window.PerfectScrollbar;
-                        }
-                        new KRPerfectScrollbar($('.agent-assist-chat-container').find('.body-data-container').get(0), {
-                            suppressScrollX: true
-                        });
-                       }
-                        
-                    } 
-                }
-           });
-           
+            var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                var r = (d + Math.random() * 16) % 16 | 0;
+                d = Math.floor(d / 16);
+                return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+            });
+            return uuid;
+        }
+
+        if (chatConfig.agentAssist) {
+            var korecookie = localStorage.getItem("korecom");
+            var userID = (korecookie) || koreGenerateUUID();
+            var webSocketConnection = {
+                "path": "/agentassist/api/v1/chat/", 'query': 'userId=' + userID + '&orgId=o-da05dbea-6573-5399-ba58-22035a3122f3', transports: ['websocket', 'polling', 'flashsocket']
+            };
+
+            var connectionObj = {
+                webSocketConnectionDomain: chatConfig.agentAssistSocketUrl + "/koreagentassist",
+                webSocketConnectionDetails: webSocketConnection,
+                botDetails: chatConfig.botOptions
+            }
+
+            let agentAssistObj = new AgentAssist('agent-assist-chat-container', '1234894571234', 'user106', userID, chatConfig.botOptions.botInfo._id, connectionObj);
+
+            let userIds;
+            userIds = agentAssistObj._conversationId + '_' + agentAssistObj.userId + '_' + agentAssistObj.botId;
+            let agentObj = {};
+            agentObj[userIds] = agentAssistObj;
+            // if(sessionStorage.getItem('users') == null){
+            //     sessionStorage.setItem('users', '{}');
+            // }
+
+
+            // window.onbeforeunload= function(){
+            //     let old_users = {};
+
+            //     old_users = JSON.parse(sessionStorage.getItem('users'));
+            //     let splitRes = userIds.split('_');
+            //     old_users[userIds]=$(`#userIDs-${splitRes[0]}`).html();
+            //     // sessionStorage.setItem('users', JSON.stringify(old_users));             
+            // }
+
+            //    $(document).ready(function(){
+            //         let result = JSON.parse(sessionStorage.getItem('users'));
+            //         for(let res in result){
+            //             let splitRess = res.split('_');
+            //             let bodyContainer = $(`#userIDs-${splitRess[0]}`);
+
+            //             if(splitRess[0]==(userIds.split('_')[0])){
+            //                 bodyContainer.html(result[res]);
+            //                var hasVerticalScrollbar = $('.agent-assist-chat-container').scrollHeight - 3 > $('.agent-assist-chat-container').clientHeight;
+            //                if(!hasVerticalScrollbar){
+            //                 var KRPerfectScrollbar;
+            //                 if(window.PerfectScrollbar && typeof PerfectScrollbar ==='function'){
+            //                 KRPerfectScrollbar=window.PerfectScrollbar;
+            //                 }
+            //                 new KRPerfectScrollbar($('.agent-assist-chat-container').find('.body-data-container').get(0), {
+            //                     suppressScrollX: true
+            //                 });
+            //                }
+
+            //             } 
+            //         }
+            //    });
+
         }
 
         $('.openChatWindow').click(function () {
