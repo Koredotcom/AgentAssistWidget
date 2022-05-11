@@ -11,9 +11,12 @@ var autoExhaustiveList;
 var frequentlyUsedList;
 var isMyBotAutomationOnGoing = false;
 var noAutomationrunninginMyBot = true;
+var myBotShowHistory = false;
+var idsOfMyBotDropDown;
+var myBotDropdownHeaderUuids;
+var myBotResponseId;
 var idsOfDropDown;
 var countRequest = 0;
-var runBtArrayIds = ['123'];
 var dropdownHeaderUuids;
 var responseId;
 var userIntentInput;
@@ -89,9 +92,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         // Response
         _agentAsisstSocket.on('agent_assist_agent_response', (data) => {
             if (data.isSearch) {
-                processAgentIntentResults(data, data.conversationId, data.botId);
+                processAgentIntentResults(data, data.conversationId, data.botId, data.userId);
             } else {
-                runBotForAnAgentDisplay();
+                processMybotDataResponse(data, data.conversationId, data.botId, data.userId);
             }
             // processAgentIntentResults(data, data.conversationId, data.botId);
         })
@@ -137,6 +140,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
     console.log("AgentAssist >>> sending welcome_message_request")
     _agentAsisstSocket.emit('welcome_message_request', welcome_message_request);
 
+    // var agent_menu_request = {
+    //     "botId": _agentAssistDataObj.botId,
+    //     "conversationId": _agentAssistDataObj.conversationId,
+    //     "experience": "chat"
+    // }
+    // _agentAsisstSocket.emit('agent_menu_request', agent_menu_request)
 
     function processUserMessages(data, conversationId, botId) {
         var _msgsResponse = {
@@ -185,25 +194,26 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         addUserQueryTodropdownData.innerHTML = addUserQueryTodropdownData.innerHTML + userQueryHtml;
         chatInitialize.renderMessage(_msgsResponse);
     }
-    $('body').bind('mousedown keydown', function(event) {
-            currentTabActive = detectCurrentTab();
-            if(currentTabActive === 'userAutoIcon'){
-                let agentSearchBlock = $("#agentSearch");
-                agentSearchBlock.attr('data-conv-id', _agentAssistDataObj.conversationId);
-                agentSearchBlock.attr('data-bot-id', _agentAssistDataObj.botId);
-                agentSearchBlock.attr('data-user-id', _agentAssistDataObj.userId);
-                agentSearchBlock.attr('data-agent-assist-input', true)
-            }
+    $('body').bind('mousedown keydown', function (event) {
+        currentTabActive = detectCurrentTab();
+        if (currentTabActive === 'userAutoIcon') {
+            let agentSearchBlock = $("#agentSearch");
+            agentSearchBlock.attr('data-conv-id', _agentAssistDataObj.conversationId);
+            agentSearchBlock.attr('data-bot-id', _agentAssistDataObj.botId);
+            agentSearchBlock.attr('data-user-id', _agentAssistDataObj.userId);
+            agentSearchBlock.attr('data-agent-assist-input', true)
+        }
     });
-    detectCurrentTab = ()=>{ 
+    detectCurrentTab = () => {
         return $('.tab-icon.active-tab').attr('id');
     }
 
-    function runBotForAnAgentDisplay() {
-        console.log("runBotForAnAgent");
+    // Add input field to the userResponse manually by the agent
+    function agentManualentryMsg(data, convId, botId) {
+
     }
 
-    processAgentIntentResults = function (data, convId, botId) {
+    processAgentIntentResults = function (data, convId, botId, userId) {
         let uuids = Math.floor(Math.random() * 100);
         libraryResponseId = uuids;
         var _msgsResponse = {
@@ -274,7 +284,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                                     <div class="list-option" data-conv-id="${data.conversationId}"
                                     data-bot-id="${botId}" data-intent-name="${ele.name}"
                                     data-agent-id="${data.agentId}" id="agentSelect-${libUuid}"
-                                    data-exhaustivelist-run="true">Run Bot for Agent</div>
+                                    data-exhaustivelist-run="true" data-run-myBot="true">Run Bot for Agent</div>
                                 </div>
                             </div>
                         </div>
@@ -292,29 +302,29 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 $('#dialogs-faqs').addClass('hide');
             }
             if (data.suggestions) {
-                if(currentTabActive == 'searchAutoIcon'){
+                if (currentTabActive == 'searchAutoIcon') {
                     let searchTextDisplay = document.getElementById('search-text-display');
                     html = `<div class="searched-intent" id="librarySearchText">Search results for '${data.userInput}' </div>`
                     searchTextDisplay.innerHTML = html;
-                }else{
-                    $('#overLaySearch').html(`<div class="search-results-text">${data.suggestions.dialogs?.length+data.suggestions.faqs?.length} Search results for '${data.userInput}' <span class="show-all">Show all</span></div>`)
+                } else {
+                    $('#overLaySearch').html(`<div class="search-results-text">${data.suggestions.dialogs?.length + data.suggestions.faqs?.length} Search results for '${data.userInput}' <span class="show-all">Show all</span></div>`)
                 }
-               
+
             } else {
-                if(currentTabActive == 'searchAutoIcon'){
+                if (currentTabActive == 'searchAutoIcon') {
                     let searchTextDisplay = document.getElementById('search-text-display');
                     html = `<div class="searched-intent" id="librarySearchText">0 Search results for '${data.userInput}' </div>`
                     searchTextDisplay.innerHTML = html;
-                }else{
+                } else {
                     $('#overLaySearch').html(`<div class="search-results-text">0 Search results for '${data.userInput}'</div>`)
                     console.log("active tab is different", currentTabActive)
                 }
-                
+
             }
 
             if (data?.suggestions?.dialogs?.length > 0) {
-                    let automationSuggestions = currentTabActive == 'searchAutoIcon'?$(`#search-text-display`):$('#overLaySearch');
-                    let dialogAreaHtml = `<div class="dialog-task-run-sec p-0" id="searchedDialogs-${libraryResponseId}">
+                let automationSuggestions = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display`) : $('#overLaySearch');
+                let dialogAreaHtml = `<div class="dialog-task-run-sec p-0" id="searchedDialogs-${libraryResponseId}">
                                             <div class="task-type" id="dialoguesArea">
                                                 <div class="img-block-info">
                                                     <img src="./images/dialogtask.svg">
@@ -325,24 +335,24 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                                                 </div>
                                             </div>
                                         </div>`;
-                    automationSuggestions.append(dialogAreaHtml);
-    
-                    // dialogs body 
-                    data.suggestions.dialogs?.forEach((ele, index) => {
-                        let body = {};
-                        body['type'] = 'text';
-                        body['component'] = {
+                automationSuggestions.append(dialogAreaHtml);
+
+                // dialogs body 
+                data.suggestions.dialogs?.forEach((ele, index) => {
+                    let body = {};
+                    body['type'] = 'text';
+                    body['component'] = {
+                        "type": 'text',
+                        "payload": {
                             "type": 'text',
-                            "payload": {
-                                "type": 'text',
-                                "text": ele.name
-                            }
-                        };
-                        body['cInfo'] = {
-                            "body": data.value
-                        };
-                        let dialogSuggestions = currentTabActive == 'searchAutoIcon'?$('#search-text-display #dialogSuggestions-results'): $('#overLaySearch #dialogSuggestions-results');
-                        let dialogsHtml = `
+                            "text": ele.name
+                        }
+                    };
+                    body['cInfo'] = {
+                        "body": data.value
+                    };
+                    let dialogSuggestions = currentTabActive == 'searchAutoIcon' ? $('#search-text-display #dialogSuggestions-results') : $('#overLaySearch #dialogSuggestions-results');
+                    let dialogsHtml = `
                         <div class="type-info-run-send">
                             <div class="left-content">
                                 <div class="title-text" id="automation-${uuids}">${ele.name}</div>
@@ -361,19 +371,19 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                                         <div class="list-option" data-conv-id="${data.conversationId}"
                                         data-bot-id="${botId}" data-intent-name="${ele.name}"
                                         data-agent-id="${data.agentId}" id="agentSearchSelect-${uuids}"
-                                        data-exhaustivelist-run="true">Run Bot for Agent</div>
+                                        data-exhaustivelist-run="true" data-run-myBot="true">Run Bot for Agent</div>
                                     </div>
                                 </div>
                             </div>
                         </div>`;
-                        dialogSuggestions.append(dialogsHtml);
-                        _msgsResponse.message.push(body);
-                    });
-    
-                }
-                if (data?.suggestions?.faqs?.length > 0) {
-                    let automationSuggestions = currentTabActive == 'searchAutoIcon'? $(`#search-text-display`):$('#overLaySearch');
-                    let dialogAreaHtml = `<div class="dialog-task-run-sec p-0">
+                    dialogSuggestions.append(dialogsHtml);
+                    _msgsResponse.message.push(body);
+                });
+
+            }
+            if (data?.suggestions?.faqs?.length > 0) {
+                let automationSuggestions = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display`) : $('#overLaySearch');
+                let dialogAreaHtml = `<div class="dialog-task-run-sec p-0">
                                             <div class="task-type" id="faqssArea">
                                                 <div class="img-block-info">
                                                     <img src="./images/kg.svg">
@@ -383,25 +393,25 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                                                 </div>
                                             </div>
                                         </div>`;
-                    automationSuggestions.append(dialogAreaHtml);
-    
-                    // faqs body
-                    data.suggestions.faqs?.forEach((ele, index) => {
-                        let body = {};
-                        body['type'] = 'text';
-                        body['component'] = {
+                automationSuggestions.append(dialogAreaHtml);
+
+                // faqs body
+                data.suggestions.faqs?.forEach((ele, index) => {
+                    let body = {};
+                    body['type'] = 'text';
+                    body['component'] = {
+                        "type": 'text',
+                        "payload": {
                             "type": 'text',
-                            "payload": {
-                                "type": 'text',
-                                "text": ele
-                            }
-                        };
-                        body['cInfo'] = {
-                            "body": data.value
-                        };
-                        let faqsSuggestions = currentTabActive == 'searchAutoIcon'? $('#search-text-display #faqsSuggestions-results'):$('#overLaySearch #faqsSuggestions-results');
-    
-                        let faqHtml = `
+                            "text": ele
+                        }
+                    };
+                    body['cInfo'] = {
+                        "body": data.value
+                    };
+                    let faqsSuggestions = currentTabActive == 'searchAutoIcon' ? $('#search-text-display #faqsSuggestions-results') : $('#overLaySearch #faqsSuggestions-results');
+
+                    let faqHtml = `
                         <div class="type-info-run-send">
                             <div class="left-content" id="faqSection-${index}">
                                 <div class="title-text" id="title-${index}">${ele.question}</div>
@@ -415,32 +425,154 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                                 </div>
                             </div>
                         </div>`;
-    
-                        faqsSuggestions.append(faqHtml);
-                        if (ele.answer?.length > 200) {
-                            let faqs = $(`.type-info-run-send #faqSection-${index}`);
-                            faqs.each((i, ele) => {
-                                let seeMoreButtonHtml = `
+
+                    faqsSuggestions.append(faqHtml);
+                    if (ele.answer?.length > 200) {
+                        let faqs = $(`.type-info-run-send #faqSection-${index}`);
+                        faqs.each((i, ele) => {
+                            let seeMoreButtonHtml = `
                             <button class="see-more" id="seeMore-${index}" data-see-more="true">See more</button>
                             `;
-                                faqs.append(seeMoreButtonHtml);
-                            })
-                        }
-                        _msgsResponse.message.push(body);
-                    });
-    
-                }
+                            faqs.append(seeMoreButtonHtml);
+                        })
+                    }
+                    _msgsResponse.message.push(body);
+                });
+
+            }
         }
 
         function ShowSearchContent() {
-            if(currentTabActive == 'searchAutoIcon'){
+            if (currentTabActive == 'searchAutoIcon') {
                 document.getElementById('searchResults').classList.remove('hide');
                 document.getElementById('allAutomations-Exhaustivelist').classList.remove('hide');
                 $('#dialogs-faqs').removeClass('hide');
-            }else{
+            } else {
                 $('.overlay-suggestions').removeClass('hide').attr('style', 'bottom:0; display:block;');
-                
-            }  
+
+            }
+        }
+    }
+
+    function processMybotDataResponse(data, convId, botId, userId) {
+        console.log("when an dialog is ran for the agent", data);
+        let myBotuuids = Math.floor(Math.random() * 100);
+        myBotresponseId = myBotuuids;
+        var _msgsResponse = {
+            "type": "bot_response",
+            "from": "bot",
+            "message": [],
+            "messageId": myBotuuids,
+            "botInfo": {
+                "chatBot": "sample Bot",
+                "taskBotId": botId
+            },
+            "createdOn": "2022-03-21T07:56:18.225Z",
+            "icon": "https://uat.kore.ai:443/api/getMediaStream/market/f-cb381255-9aa1-5ce2-95e3-71233aef7084.png?n=17648985&s=IlRvUlUwalFVaFVMYm9sZStZQnlLc0l1UlZvdlNUUDcxR2o3U2lscHRrL3M9Ig$$",
+            "traceId": "873209019a5adc26"
+        }
+        let parsedPayload;
+        data.buttons?.forEach((elem) => {
+            let payloadType = (elem.value).replace(/(&quot\;)/g, "\"");
+
+            if (payloadType.includes('payload')) {
+                let withoutSpecials = payloadType.replace(/^\s+|\s+$/g, "");
+                parsedPayload = JSON.parse(withoutSpecials);
+            }
+
+            let body = {};
+            body['type'] = elem.type;
+            if (!parsedPayload) {
+                body['component'] = {
+                    "type": elem.type,
+                    "payload": {
+                        "type": elem.type,
+                        "text": elem.value
+                    }
+                };
+            } else {
+                body['component'] = parsedPayload
+            }
+
+            body['cInfo'] = {
+                "body": elem.value
+            };
+
+            _msgsResponse.message.push(body);
+        });
+        if (data.intentName) {
+            let body = {};
+            body['type'] = 'text';
+            body['component'] = {
+                "type": 'text',
+                "payload": {
+                    "type": 'text',
+                    "text": data.intentName
+                }
+            };
+            body['cInfo'] = {
+                "body": data.value
+            };
+            _msgsResponse.message.push(body);
+            console.log(_msgsResponse);
+        }
+        if (data.buttons && !data.value.includes('Customer has waited')) {
+            let runInfoContent = $(`#myBotDropDownData-${myBotDropdownHeaderUuids}`);
+            let askToUserHtml = `
+            <div class="steps-run-data">
+                           <div class="icon_block">
+                               <i class="ast-agent"></i>
+                           </div>
+                           <div class="run-info-content" >
+                           <div class="title">Ask customer...</div>
+                           <div class="agent-utt">
+                               <div class="title-data text-truncate"><ul class="chat-container" id="displayData-${myBotuuids}"></ul></div>
+                               <div class="action-links">
+                                   <button class="send-run-btn">Send</button>
+                                   <div class="copy-btn">
+                                       <i class="ast-copy"></i>
+                                   </div>
+                               </div>
+                           </div>
+                           </div>
+                       </div>
+            `;
+            let tellToUserHtml = `
+            <div class="steps-run-data">
+                           <div class="icon_block">
+                               <i class="ast-agent"></i>
+                           </div>
+                           <div class="run-info-content" >
+                           <div class="title">Tell Customer</div>
+                           <div class="agent-utt">
+                               <div class="title-data" ><ul class="chat-container" id="displayData-${myBotuuids}"></ul></div>
+                               <div class="action-links">
+                                   <button class="send-run-btn">Send</button>
+                                   <div class="copy-btn">
+                                       <i class="ast-copy"></i>
+                                   </div>
+                               </div>
+                           </div>
+                           </div>
+                       </div>
+            `;
+            if (data.isPrompt) {
+                runInfoContent.append(askToUserHtml);
+            } else {
+                runInfoContent.append(tellToUserHtml);
+            }
+        }
+        chatInitialize.renderMessage(_msgsResponse, myBotuuids);
+        removeElementFromDom();
+        let noOfSteps = $(`.body-data-container #agentAutoContainer`).find('.steps-run-data').not('.hide');
+        if (noOfSteps.length > 2) {
+            $(noOfSteps).addClass('hide');
+            $(noOfSteps[noOfSteps.length - 2]).removeClass('hide');
+            $(noOfSteps[noOfSteps.length - 1]).removeClass('hide');
+        }
+        if ((data.endOfFaq || data.endOfTask) && data.type !== 'text') {
+            isMyBotAutomationOnGoing = false;
+            // addFeedbackHtmlToDom(data, botId, userId, userIntentInput);
         }
     }
 
@@ -763,6 +895,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             ele.remove();
         }
         let fromOtherUsers = document.getElementsByClassName('fromOtherUsers');
+        console.log(111)
         let eleIds;
         for (let ele of fromOtherUsers) {
             if (eleIds === ele.getAttribute('id')) {
@@ -779,13 +912,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
     }
 
     function btnInit() {
-        var hideDropDownToggel = false;
         dropdownHeaderUuids = '123'
         document.addEventListener("click", (evt) => {
             var target = evt.target;
             var runButton = target.dataset.run;
             var libraryRunBtn = target.dataset.libraryRun;
             var runAutoForAgent = target.dataset.exhaustivelistRun;
+            console.log(target.id, target.dataset);
             $('.agent-assist-chat-container.kore-chat-window').on('click', '.botResponseAttachments', function (event) {
                 window.open($(this).attr('fileid'), '_blank');
             });
@@ -805,13 +938,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 }
             });
 
-            if(target.className == 'ast-close close-search'){
+            if (target.className == 'ast-close close-search') {
                 $('#agentSearch').val('');
                 $('.overlay-suggestions').addClass('hide').removeAttr('style');
                 $('#overLaySearch').html('')
             }
 
-            if(target.className == 'show-all'){
+            if (target.className == 'show-all') {
                 let showAllClicked = true;
                 previousTabActive = currentTabActive;
                 $(`#${currentTabActive}`).removeClass('active-tab');
@@ -825,29 +958,29 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 $('.sugestions-info-data').addClass('hide');
                 $('#bodyContainer').removeClass('if-suggestion-search');
                 $('#librarySearch').keyup(function (evt) {
-                    
-                    if(!showAllClicked){
-                        console.log('if ',evt);
+
+                    if (!showAllClicked) {
+                        console.log('if ', evt);
                         evt.stopImmediatePropagation();
-                    }else{
-                        console.log('else hello',evt);
+                    } else {
+                        console.log('else hello', evt);
                         var target = evt.target;
-                        target.dataset.convId =_agentAssistDataObj.conversationId;
-                        target.dataset.botId =_agentAssistDataObj.botId;
-                        target.dataset.userId =_agentAssistDataObj.userId;
+                        target.dataset.convId = _agentAssistDataObj.conversationId;
+                        target.dataset.botId = _agentAssistDataObj.botId;
+                        target.dataset.userId = _agentAssistDataObj.userId;
                         target.dataset.agentAssistInput = true;
-                    var agentAssistInput = target.dataset.agentAssistInput;
-                    evt.keyCode = 13;
-                    if (agentAssistInput) {
-                        AgentAssist_input_keydown(evt);
-                    }
+                        var agentAssistInput = target.dataset.agentAssistInput;
+                        evt.keyCode = 13;
+                        if (agentAssistInput) {
+                            AgentAssist_input_keydown(evt);
+                        }
                     }
                 });
-                
+
                 $('#librarySearch').keyup();
 
             }
-            if(target.id == 'backToPreviousTab'){
+            if (target.id == 'backToPreviousTab') {
 
                 $(`#${currentTabActive}`).removeClass('active-tab');
                 $(`#${previousTabActive}`).addClass('active-tab');
@@ -1018,60 +1151,50 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             }
             if (runAutoForAgent) {
                 if (!isMyBotAutomationOnGoing) {
-                    console.log("dataset Value=====================", target.dataset);
                     data = target.dataset;
-                    AgentAssistPubSub.publish('searched_Automation_details', { conversationId: data.convId, botId: data.botId, value: data.intentName, isSearch: false });
+                    AgentAssistPubSub.publish('searched_Automation_details', { conversationId: data.convId, botId: data.botId, value: data.intentName, isSearch: false, intentName: data.intentName });
                     isMyBotAutomationOnGoing = true;
                     noAutomationrunninginMyBot = false;
-                    agentTabActive();
-                    let myBotuuids = Math.floor(Math.random() * 100);
-                    myBotDropdownHeaderUuids = myBotuuids;
-                    runBtArrayIds.push(dropdownHeaderUuids + '');
-                    if (isMyBotAutomationOnGoing) {
-                        $('#noAutoRunning').addClass('hide');
-                        console.log('logic for showing dropdown');
-                    }
-                    // 
-                    let dynamicBlock = document.getElementById('agent-myBot');
+                    let agentBotuuids = Math.floor(Math.random() * 100);
+                    myBotDropdownHeaderUuids = agentBotuuids;
+                    console.log(myBotDropdownHeaderUuids);
+                    $('#noAutoRunning').addClass('hide');
+                    console.log('logic for showing dropdown');
+                    let dynamicBlock = document.getElementById('myBotAutomationBlock');
                     let dropdownHtml = `
-                    <div class="dialog-task-accordiaon-info hide" id="addRemoveDropDown-${myBotuuids}">
-                        <div class="accordion-header" id="dropDownHeader-${myBotuuids}">
-                            <div class="icon-info">
-                                <i class="ast-rule"></i>
-                            </div>
-                            <div class="header-text" id="dropDownTitle-${myBotuuids}">${target.dataset.intentName}</div>
-                            <i class="ast-carrotup"></i>
-                            <button class="btn-danger" id="TerminateAgentDialog-${myBotuuids}">Terminate</button>
-                        </div>
-                        <div class="collapse-acc-data" id="dropDownData-${myBotuuids}">
+                            <div class="dialog-task-accordiaon-info hide" id="MyBotaddRemoveDropDown-${agentBotuuids}">
+                                <div class="accordion-header" id="MyBotdropDownHeader-${agentBotuuids}">
+                                    <div class="icon-info">
+                                        <i class="ast-rule"></i>
+                                    </div>
+                                    <div class="header-text" id="MyBotdropDownTitle-${agentBotuuids}">${target.dataset.intentName}</div>
+                                    <i class="ast-carrotup"></i>
+                                    <button class="btn-danger" id="myBotTerminateAgentDialog-${agentBotuuids}">Terminate</button>
+                                </div>
+                                <div class="collapse-acc-data" id="myBotDropDownData-${agentBotuuids}">
 
 
-                        </div>
-                        <div class="dilog-task-end hide" id="endTaks-${myBotuuids}">
+                                </div>
+                                <div class="dilog-task-end hide" id="myBotendTaks-${agentBotuuids}">
 
-                        </div>
-                    </div>`;
-                    dynamicBlock.innerHTML = dynamicBlock.innerHTML + dropdownHtml;
+                                </div>
+                            </div>`;
+                    dynamicBlock.innerHTML += dropdownHtml;
                     let ids = target.id.split('-');
-
-
-                    $('.dialog-task-run-sec').each((i, ele) => {
+                    $(`${!target?.dataset?.runMybot}` ? '.dialog-task-run-sec' : '.content-dialog-task-type .type-info-run-send').each((i, ele) => {
                         let id = ele.id?.split('-');
                         if (ids.includes(id[1])) {
-                            idsOfDropDown = ele.id;
+                            idsOfMyBotDropDown = ele.id;
                             $(ele).remove()
                         }
-                    })
-
-                    let addRemoveDropDown = document.getElementById(`addRemoveDropDown-${myBotuuids}`);
+                    });
+                    let addRemoveDropDown = document.getElementById(`MyBotaddRemoveDropDown-${agentBotuuids}`);
                     addRemoveDropDown?.classList.remove('hide');
-                    $(`#endTaks-${myBotuuids}`).removeClass('hide')
-                    AgentAssist_run_click(evt);
+                    $(`#myBotendTaks-${agentBotuuids}`).removeClass('hide')
+                    agentTabActive();
                     return;
-                    // 
                 } else if (isMyBotAutomationOnGoing && !noAutomationrunninginMyBot) {
                     // condition for if an automation is already running in the agent automation
-                    console.log(isMyBotAutomationOnGoing);
                     $('#warningPopupForMyBot').removeClass('hide');
                 }
 
@@ -1097,7 +1220,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 let uuids = Math.floor(Math.random() * 100);
                 dropdownHeaderUuids = uuids;
                 isAutomationOnGoing = true;
-                runBtArrayIds.push(dropdownHeaderUuids + '');
                 for (let a of document.getElementsByClassName('agent-utt-info')) {
                     a.classList.add('hide');
                 }
@@ -1127,8 +1249,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                    `;
                 dynamicBlock.innerHTML = dynamicBlock.innerHTML + dropdownHtml;
                 let ids = target.id.split('-');
-
-
+                console.log(target.dataset)
                 $(`${!target?.dataset?.useCaseList}` ? '.dialog-task-run-sec' : '.content-dialog-task-type .type-info-run-send').each((i, ele) => {
                     let id = ele.id?.split('-');
                     if (ids.includes(id[1])) {
@@ -1136,7 +1257,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                         $(ele).remove()
                     }
                 })
-
 
                 let addRemoveDropDown = document.getElementById(`addRemoveDropDown-${uuids}`);
                 addRemoveDropDown?.classList.remove('hide');
@@ -1210,7 +1330,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             var agentAssistInput = target.dataset.agentAssistInput;
             let val = $('#agentSearch').val();
             evt.target.dataset.val = val;
-            if(val == ''){
+            if (val == '') {
                 $('#overLaySearch').html('');
                 $('.overlay-suggestions').addClass('hide').removeAttr('style');
             }
@@ -1347,14 +1467,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         AgentAssist_feedback_click(evt);
     }
 
-    function check(id) {
-        const match = runBtArrayIds.find(element => {
-            if (id.indexOf(element) > 0 && id.includes('dropDownHeader')) {
-                return true;
-            }
-        });
-        return match ? true : false;
-    }
+    // this method is removed due to implementation is done
+    // function check(id) {
+    //     const match = runBtArrayIds.find(element => {
+    //         if (id.indexOf(element) > 0 && id.includes('dropDownHeader')) {
+    //             return true;
+    //         }
+    //     });
+    //     return match ? true : false;
+    // }
 
     function processUserMessage(data, _conversationId, botId, user) {
         console.log("AgentAssist >>> processUserMessage", data, _conversationId, botId, user);
@@ -1408,17 +1529,17 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
 
     function AgentAssist_input_keydown(e) {
         let input_taker = document.getElementById('librarySearch').value;
-        if(e.target.dataset?.val){
+        if (e.target.dataset?.val) {
             input_taker = ''
         }
         if (input_taker.trim().length == 0 && e.target.dataset?.val?.trim().length == 0) {
             processAgentIntentResults(autoExhaustiveList, autoExhaustiveList.conversationId, autoExhaustiveList.botId);
         }
-       
-        if (e.keyCode == 13 && (input_taker.trim().length > 0 || e.target.dataset.val.trim().length > 0 )) {
+
+        if (e.keyCode == 13 && (input_taker.trim().length > 0 || e.target.dataset.val.trim().length > 0)) {
             var convId = e.target.dataset.convId;
             var botId = e.target.dataset.botId;
-            var intentName = input_taker?input_taker:e.target.dataset.val;
+            var intentName = input_taker ? input_taker : e.target.dataset.val;
             AgentAssistPubSub.publish('searched_Automation_details', { conversationId: convId, botId: botId, value: intentName, isSearch: true });
         }
     }
@@ -1893,6 +2014,7 @@ AgentAssistPubSub.subscribe('searched_Automation_details', (msg, data) => {
         'conversationId': data.conversationId,
         'query': data.value,
         'botId': data.botId,
+        'intentName': data.intentName
     }
     _agentAsisstSocket.emit('agent_assist_agent_request', agent_assist_request);
 });
