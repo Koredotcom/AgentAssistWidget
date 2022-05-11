@@ -71,42 +71,42 @@
            userIds = agentAssistObj._conversationId+'_'+agentAssistObj.userId+'_'+agentAssistObj.botId;
            let agentObj ={};
            agentObj[userIds] = agentAssistObj;
-            if(sessionStorage.getItem('users') == null){
-                sessionStorage.setItem('users', '{}');
-            }
+            // if(sessionStorage.getItem('users') == null){
+            //     sessionStorage.setItem('users', '{}');
+            // }
             
 
-            window.onbeforeunload= function(){
-                let old_users = {};
+            // window.onbeforeunload= function(){
+            //     let old_users = {};
 
-                old_users = JSON.parse(sessionStorage.getItem('users'));
-                let splitRes = userIds.split('_');
-                old_users[userIds]=$(`#userIDs-${splitRes[0]}`).html();
-                sessionStorage.setItem('users', JSON.stringify(old_users));             
-            }
+            //     old_users = JSON.parse(sessionStorage.getItem('users'));
+            //     let splitRes = userIds.split('_');
+            //     old_users[userIds]=$(`#userIDs-${splitRes[0]}`).html();
+            //     // sessionStorage.setItem('users', JSON.stringify(old_users));             
+            // }
             
-           $(document).ready(function(){
-                let result = JSON.parse(sessionStorage.getItem('users'));
-                for(let res in result){
-                    let splitRess = res.split('_');
-                    let bodyContainer = $(`#userIDs-${splitRess[0]}`);
+        //    $(document).ready(function(){
+        //         let result = JSON.parse(sessionStorage.getItem('users'));
+        //         for(let res in result){
+        //             let splitRess = res.split('_');
+        //             let bodyContainer = $(`#userIDs-${splitRess[0]}`);
                     
-                    if(splitRess[0]==(userIds.split('_')[0])){
-                        bodyContainer.html(result[res]);
-                       var hasVerticalScrollbar = $('.agent-assist-chat-container').scrollHeight - 3 > $('.agent-assist-chat-container').clientHeight;
-                       if(!hasVerticalScrollbar){
-                        var KRPerfectScrollbar;
-                        if(window.PerfectScrollbar && typeof PerfectScrollbar ==='function'){
-                        KRPerfectScrollbar=window.PerfectScrollbar;
-                        }
-                        new KRPerfectScrollbar($('.agent-assist-chat-container').find('.body-data-container').get(0), {
-                            suppressScrollX: true
-                        });
-                       }
+        //             if(splitRess[0]==(userIds.split('_')[0])){
+        //                 bodyContainer.html(result[res]);
+        //                var hasVerticalScrollbar = $('.agent-assist-chat-container').scrollHeight - 3 > $('.agent-assist-chat-container').clientHeight;
+        //                if(!hasVerticalScrollbar){
+        //                 var KRPerfectScrollbar;
+        //                 if(window.PerfectScrollbar && typeof PerfectScrollbar ==='function'){
+        //                 KRPerfectScrollbar=window.PerfectScrollbar;
+        //                 }
+        //                 new KRPerfectScrollbar($('.agent-assist-chat-container').find('.body-data-container').get(0), {
+        //                     suppressScrollX: true
+        //                 });
+        //                }
                         
-                    } 
-                }
-           });
+        //             } 
+        //         }
+        //    });
            
         }
 

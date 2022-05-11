@@ -735,7 +735,16 @@ html, body{
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info {
     display: inline-block;
     width: 100%;
-    padding: 40px 15px 16px 15px;
+    padding: 20px 15px 0px 15px;
+    position: relative;
+}
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info:last-child{
+    padding-bottom: 16px;
+}
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info:last-child .dilog-task-end{
+    position: absolute;
+    bottom: -55px;
+    margin: 0;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .accordion-header {
     background: #FFFFFF;
@@ -961,8 +970,9 @@ html, body{
     width: 100%;
     left: 0;
     text-align: center;
-    position: absolute;
-    bottom: -55px;
+    position: relative;
+    /* bottom: -55px; */
+    margin-top: 10px;
     padding-bottom: 15px;
     border-bottom: 1px solid #DCE3EA;
 }
