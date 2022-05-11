@@ -3,8 +3,7 @@ var chatConfig = window.KoreSDK.chatConfig;
 var _agentAsisstSocket = null;
 var _agentAssistComponents = {};
 //var agentAssistSocketUrl = "https://5f8f-49-206-62-14.ngrok.io";
-var agentAssistSocketUrl = "https://dev-smartassist.kore.ai";
-var dataTypeIsIntent;
+
 var isAutomationOnGoing = false;
 var isShowHistoryEnable = false;
 var autoExhaustiveList;
@@ -12,36 +11,19 @@ var frequentlyUsedList;
 var isMyBotAutomationOnGoing = false;
 var noAutomationrunninginMyBot = true;
 var idsOfDropDown;
-var countRequest = 0;
-var runBtArrayIds = ['123'];
 var dropdownHeaderUuids;
 var responseId;
 var userIntentInput;
 var answerPlaceableID;
 var dialogName;
-var count = 0;
 var currentTabActive;
 var previousTabActive;
-function koreGenerateUUID() {
-    console.info("generating UUID");
-    var d = new Date().getTime();
-    if (window.performance && typeof window.performance.now === "function") {
-        d += performance.now(); //use high-precision timer if available
-    }
-    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-        var r = (d + Math.random() * 16) % 16 | 0;
-        d = Math.floor(d / 16);
-        return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
-    });
-    return uuid;
-}
 
-window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId, _botId) {
+
+window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId, usersID, _botId, connectionDetails) {
     var koreBot = koreBotChat();
     chatInitialize = new koreBot.chatWindow(chatConfig);
     chatInitialize.customTemplateObj = new customTemplate(chatConfig, chatInitialize);
-    // let docs = document.getElementById('koreChatHeader');
-    // docs.remove();
     let docs = document.getElementById('chat-window-footer');
     docs.hidden = true;
     _userTranscript = false;
@@ -62,13 +44,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
     } else {
         _agentAssistDataObj = _agentAssistComponents[_agentAssistDataObj.conversationId];
     }
-    var korecookie = localStorage.getItem("korecom");
-    var uuid = (korecookie) || koreGenerateUUID();
+    
     console.log("AgentAssist >>> uuId", _agentAssistDataObj.userId);
     if (_agentAsisstSocket === null) {
-        _agentAsisstSocket = io(agentAssistSocketUrl + "/koreagentassist", {
-            "path": "/agentassist/api/v1/chat/", 'query': 'userId=' + uuid + '&orgId=o-da05dbea-6573-5399-ba58-22035a3122f3', transports: ['websocket', 'polling', 'flashsocket']
-        });
+        _agentAsisstSocket = io(connectionDetails.webSocketConnectionDomain, connectionDetails.webSocketConnectionDetails);
         _agentAsisstSocket.on("connect", () => {
             console.log("AgentAssist >>> socket connected")
         });
@@ -1056,7 +1035,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                     agentTabActive();
                     let myBotuuids = Math.floor(Math.random() * 100);
                     myBotDropdownHeaderUuids = myBotuuids;
-                    runBtArrayIds.push(dropdownHeaderUuids + '');
                     if (isMyBotAutomationOnGoing) {
                         $('#noAutoRunning').addClass('hide');
                         console.log('logic for showing dropdown');
@@ -1107,11 +1085,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             }
             if (runButton || libraryRunBtn) {
                 if (libraryRunBtn) {
+                    console.log("======================libb----------------")
                     $('.empty-data-no-agents').addClass('hide');
                     $('#agentSearch').val('');
                     $('.overlay-suggestions').addClass('hide').removeAttr('style');
                     $('#overLaySearch').html('')
                     userTabActive();
+   
                     let suggestionsblock = $('#dynamicBlock .dialog-task-run-sec');
                     if (suggestionsblock.length >= 1) {
                         suggestionsblock.each((i, ele) => {
@@ -1127,7 +1107,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 let uuids = Math.floor(Math.random() * 100);
                 dropdownHeaderUuids = uuids;
                 isAutomationOnGoing = true;
-                runBtArrayIds.push(dropdownHeaderUuids + '');
                 for (let a of document.getElementsByClassName('agent-utt-info')) {
                     a.classList.add('hide');
                 }
@@ -1171,6 +1150,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 addRemoveDropDown?.classList.remove('hide');
                 $(`#endTaks-${uuids}`).removeClass('hide')
                 AgentAssist_run_click(evt);
+                if(libraryRunBtn){
+                    let automationSuggestions = document.getElementsByClassName('dialog-task-accordiaon-info');
+                    for (let ele of automationSuggestions) {
+                        ele.classList.add('hide');
+                    }
+                    automationSuggestions.length >= 1 ? (automationSuggestions[automationSuggestions.length - 1].classList.remove('hide')) : '';
+                }
                 return;
             }
             if (checkButton) {
@@ -1443,15 +1429,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         let feedBackIDs = type.split('-');
         console.log("======feeback id-=====", feedBackIDs[0]);
         AgentAssist_feedback_click(evt);
-    }
-
-    function check(id) {
-        const match = runBtArrayIds.find(element => {
-            if (id.indexOf(element) > 0 && id.includes('dropDownHeader')) {
-                return true;
-            }
-        });
-        return match ? true : false;
     }
 
     function processUserMessage(data, _conversationId, botId, user) {
