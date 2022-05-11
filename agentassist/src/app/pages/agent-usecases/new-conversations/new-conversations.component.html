@@ -21,14 +21,14 @@
                             General Setup
                         </div>
                     </li>
-                    <li *ngIf="!(ucType === 'dialog' && (conv.isAgentAssistOnly || conv.hasAgentAssistAccess))">
+                    <li *ngIf="!conv.isAgentAssistOnly">
                         <div class="tab-name" data-toggle="tab" href="#call">
                             <!-- <img src="assets/icons/call-inactive.svg" class="call-inactive">
                             <img src="assets/icons/call-active.svg" class="call-active"> -->
                             {{ "USECASES.CALL_EXPERIENCE" | translate }}
                         </div>
                     </li>
-                    <li *ngIf="!(ucType === 'dialog' && (conv.isAgentAssistOnly || conv.hasAgentAssistAccess))">
+                    <li *ngIf="!conv.isAgentAssistOnly">
                         <div class="tab-name" data-toggle="tab" href="#chat">
                             <!-- <img src="assets/icons/comment-active.svg" class="chat-active">
                             <img src="assets/icons/comment-inactive.svg" class="chat-inactive"> -->
@@ -118,15 +118,16 @@
                                     <div class="utterances-block">
                                         <div class="header-utterances">
                                             <div class="d-flex align-items-center">
-                                                <div class="left-sec col-10 p-0">{{"ANALYTICS.UTTERANCES" | translate}} ({{altUtterances.valid ? altUtterances.controls.length: altUtterances.controls.length - 1}})</div>
-                                                <div class="kr-sg-input-search ml-5 col-5 p-0">
+                                                <div class="left-sec">{{altUtterances.valid ? altUtterances.controls.length: altUtterances.controls.length - 1}} {{"ANALYTICS.UTTERANCES" | translate}}</div>
+                                                <div class="kr-sg-input-search ml-5">
                                                     <input type="text" [placeholder]="'COMMON.SEARCH' | translate" class="input-search" #searchTerm (keyup)="0">
                                                     <img src="assets/icons/search_gray.svg" class="search-icon">
                                                     <img src="assets/icons/close.svg" class="close-icon" *ngIf="searchTerm.value" (click)="searchTerm.value = ''">
                                                 </div>
                                             </div>
                                            
-                                       </div>
+                                            <div class="add-btn" (click)="addAltUtterance('', true)" *ngIf="workflowService.appState !== 'published'" [class.disabled]="altUtterances.invalid"><img src="assets/images/plus.svg">{{'USECASES.ADD_ANOTHER' | translate}}</div>
+                                        </div>
                                         <!-- <ng-container>
                                             <div class="kr-sg-input-text utt-input">
                                                 <input type="text" placeholder="Add utterance" class="input-text">
@@ -151,9 +152,6 @@
                                         <div class="empty-search-image text-center" *ngIf="isNoSearchResultFound(searchTerm.value)">
                                             <img src="assets/icons/empty-utterance-search.svg">
                                         </div>
-
-                                         <div class="add-btn" (click)="addAltUtterance('', true)" *ngIf="workflowService.appState !== 'published'" [class.disabled]="altUtterances.invalid"><img src="assets/images/plus.svg"> {{'USECASES.ADD_ANOTHER' | translate}}</div>
-                                   
                                     </div>
                                 </form>
                                 
@@ -480,67 +478,67 @@
                             </div>
                             <div class="desc-text-info">{{"ENABLED_MANUALLY_AUTOMATICALLY_PHONE_CALL" | translate}}</div>
 
-                            <!-- <div class="d-flex align-items-center">
+                            <div class="d-flex align-items-center">
                                 <div class="title-with-toggle mr-3">{{"DURINGEMAILS" | translate}}</div>
                                 <label class="kr-sg-toggle">
                                     <input type="checkbox" [(ngModel)]="conv.triggerPoints.isEmailEnabled" name="isEmailEnabled">
                                     <div class="slider"><span class="enabled" *ngIf="conv.triggerPoints.isEmailEnabled">{{"DEFAULTS.ENABLED" | translate}}</span><span class="disabled" *ngIf="!conv.triggerPoints.isEmailEnabled">{{"DEFAULTS.DISABLED" | translate}}</span></div>
                                 </label>
                             </div>
-                            <div class="desc-text-info">{{"DURINGEMAILS_DESC" | translate}}</div> -->
+                            <div class="desc-text-info">{{"DURINGEMAILS_DESC" | translate}}</div>
 
-                            <!-- <div class="d-flex align-items-center">
+                            <div class="d-flex align-items-center">
                                 <div class="title-with-toggle mr-3">{{"AGENTASSIST.SKILL_MATCH" | translate}}</div>
                                 <label class="kr-sg-toggle">
                                     <input type="checkbox" [(ngModel)]="conv.triggerPoints.isSkillMatchEnabled" name="isSkillMatchEnabled">
                                     <div class="slider"><span class="enabled" *ngIf="conv.triggerPoints.isSkillMatchEnabled">{{"DEFAULTS.ENABLED" | translate}}</span><span class="disabled" *ngIf="!conv.triggerPoints.isSkillMatchEnabled">{{"DEFAULTS.DISABLED" | translate}}</span></div>
                                 </label>
-                            </div> -->
-                            <!-- <div class="desc-text-info">{{"ENABLED_AGENTS_MATCH_SKILLS" | translate}}</div> -->
-                            <!-- <ng-container *ngIf="conv.triggerPoints.isSkillMatchEnabled">
-                                <div class="mb-3"> -->
+                            </div>
+                            <div class="desc-text-info">{{"ENABLED_AGENTS_MATCH_SKILLS" | translate}}</div>
+                            <ng-container *ngIf="conv.triggerPoints.isSkillMatchEnabled">
+                                <div class="mb-3">
                                     <!-- <app-routing-rules [rr]="routingList" 
                                     [asl]='allSkillsList' 
                                     [asgl]='allSkillGpsList' 
                                     [ssg]='shortenSkGp'
                                     [as]='allSkills'>
                                     </app-routing-rules> -->
-                                    <!-- <app-skills-routing [routingList]="conv.triggerPoints.skillMatchRules" #routingComp></app-skills-routing>
+                                    <app-skills-routing [routingList]="conv.triggerPoints.skillMatchRules" #routingComp></app-skills-routing>
                                 </div>
-                            </ng-container> -->
-                            <!-- <div class="d-flex align-items-center">
+                            </ng-container>
+                            <div class="d-flex align-items-center">
                                 <div class="title-with-toggle mr-3">{{"AGENTASSIST.AGENT_GROUP_MATCH" | translate}}</div>
                                 <label class="kr-sg-toggle">
                                     <input type="checkbox" [(ngModel)]="conv.triggerPoints.isAgentGroupMatchEnabled" name="isAgentGroupMatchEnabled">
                                     <div class="slider"><span class="enabled" *ngIf="conv.triggerPoints.isAgentGroupMatchEnabled">{{"DEFAULTS.ENABLED" | translate}}</span><span class="disabled" *ngIf="!conv.triggerPoints.isAgentGroupMatchEnabled">{{"DEFAULTS.DISABLED" | translate}}</span></div>
                                 </label>
-                            </div> -->
-                            <!-- <div class="desc-text-info">{{"ENABLED_USECASE_TRIGGER_AGENTS_SPECIFIED_GROUP" | translate}}</div> -->
-                            <!-- <ng-container *ngIf="conv.triggerPoints.isAgentGroupMatchEnabled">
+                            </div>
+                            <div class="desc-text-info">{{"ENABLED_USECASE_TRIGGER_AGENTS_SPECIFIED_GROUP" | translate}}</div>
+                            <ng-container *ngIf="conv.triggerPoints.isAgentGroupMatchEnabled">
                                 <div class="mb-3">
                                     <div class="label-text">{{"AGENTS_DEFAULTS.AGENT_GROUPS" | translate}}</div>
                                     <app-agent-gp-match *ngIf="agentGroups?.length" [sag]="selectedAgentGroups" [ag]="agentGroups"></app-agent-gp-match>
                                 </div>
-                            </ng-container> -->
-                            <div class="d-flex align-items-center">
+                            </ng-container>
+                            <!-- <div class="d-flex align-items-center">
                                 <div class="title-with-toggle mr-3">{{"AUTO_DETECT_INTENT" | translate}}</div>
                                 <label class="kr-sg-toggle">
                                     <input type="checkbox" [(ngModel)]="conv.triggerPoints.isAutoDetectIntentEnabled" name="isAutoDetectIntentEnabled">
                                     <div class="slider"><span class="enabled" *ngIf="conv.triggerPoints.isAutoDetectIntentEnabled">{{"DEFAULTS.ENABLED" | translate}}</span><span class="disabled" *ngIf="!conv.triggerPoints.isAutoDetectIntentEnabled">{{"DEFAULTS.DISABLED" | translate}}</span></div>
                                 </label>
                             </div>
-                            <div class="desc-text-info">{{"ENABLED_CONVS_AGENT_CUST_CONTINIOUSLY_MONITORED" | translate}}</div>
-                            <!-- <ng-container>
+                            <div class="desc-text-info">{{"ENABLED_CONVS_AGENT_CUST_CONTINIOUSLY_MONITORED" | translate}}</div> -->
+                            <ng-container>
 
-                            </ng-container> -->
-                            <!-- <div class="d-flex align-items-center">
+                            </ng-container>
+                            <div class="d-flex align-items-center">
                                 <div class="title-with-toggle mr-3">{{"LAUNCH_MENU" | translate}}</div>
                                 <label class="kr-sg-toggle">
                                     <input type="checkbox" [(ngModel)]="conv.triggerPoints.isLaunchByMenuEnabled" name="isLaunchByMenuEnabled">
                                     <div class="slider"><span class="enabled" *ngIf="conv.triggerPoints.isLaunchByMenuEnabled">{{"DEFAULTS.ENABLED" | translate}}</span><span class="disabled" *ngIf="!conv.triggerPoints.isLaunchByMenuEnabled">{{"DEFAULTS.DISABLED" | translate}}</span></div>
                                 </label>
                             </div>
-                            <div class="desc-text-info">{{"ENABLED_LISTED_MENU_USECASES_AGENTASSIST_WINDOW_BROWSER" | translate}}</div> -->
+                            <div class="desc-text-info">{{"ENABLED_LISTED_MENU_USECASES_AGENTASSIST_WINDOW_BROWSER" | translate}}</div>
                         </div>
                     </div>
                 </div>

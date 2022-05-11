@@ -9,7 +9,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { MatDialog } from '@angular/material/dialog';
 import { UcDeleteConfirmComponent } from 'src/app/helpers/components/uc-delete-confirm/uc-delete-confirm.component';
 import { DockStatusService } from '@kore.services/dockstatusService/dock-status.service';
-import { AuthService } from '@kore.services/auth.service';
 
 declare const $: any;
 @Component({
@@ -53,8 +52,7 @@ export class VoicePreferencesComponent implements OnInit {
     private notificationService: NotificationService,
     private translate: TranslateService,
     private dialog: MatDialog,
-    private dockService: DockStatusService,
-    private authService: AuthService
+    private dockService: DockStatusService
   ) { }
 
   ngOnInit(): void {
@@ -87,14 +85,13 @@ export class VoicePreferencesComponent implements OnInit {
   getDafaultWelcomeMsg() {
     this.selectedApp = this.workflowService.deflectApps();
     const _params = {
-      'appId': this.authService.smartAssistBots.map(x=>x._id),
-      'isAgentAssist':true
+      'appId': this.workflowService.getCurrentBt()._id,
     }
 
     const _payload = {
       "experience": "voice",
       "type": "voice_welcome",
-      "language": "en",
+      "language": "en", //
     }
     this.loading = true;
     this.service.invoke('get.default.messages', _params, _payload)
@@ -222,7 +219,8 @@ export class VoicePreferencesComponent implements OnInit {
   }
 
   configureVoicePreferenaces() {
-    let _params: any = { streamId:this.authService.smartAssistBots.map(x=>x._id),'isAgentAssist':true };
+    let _params: any = { streamId: this.streamId }
+
     if (!this.voicePreferences?.voicePreference) {
       this.notificationService.notify(this.translate.instant('SELECT_VOICE_NAME'), 'warning');
       return;

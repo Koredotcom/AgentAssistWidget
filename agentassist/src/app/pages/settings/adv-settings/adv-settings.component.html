@@ -1,4 +1,4 @@
-<div class="adv-settings-container" *ngIf="showVoicePreferences">
+<div class="adv-settings-container">
     <div class="main-title">
         <!-- <img src="assets/icons/settings/adv-settings.svg"> -->
         {{'LANGUAGE_SPEECH' | translate}}
@@ -34,15 +34,6 @@
     </div>
     
 </div>
-    <div *ngIf="!showVoicePreferences" class="empty-sel-bots">   
-        <div class="no-existing-head">
-            <img src="assets/icons/welcome/warning.svg">
-            {{ "SPEECH.NO_VOICE_PREFERENCE" | translate }}
-        </div>
-        <div class="no-existing-message">
-            {{ "SPEECH.CREATE_VOICE_CONFIG" | translate }}
-        </div>
-    </div>
 
 <!-- <button class="kr-sg-button-secondary-two btn_lg mt-3" (click)="openVPSlider()">Voice Preferances</button> -->
 <app-slider-component id="voicePreferenace" #vpSlider='app-slider'>

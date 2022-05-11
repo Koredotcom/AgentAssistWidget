@@ -8,7 +8,7 @@ import { Subscription } from 'rxjs';
 import { BillingPlan } from '../../data/billing.model';
 import { NotificationService } from '@kore.services/notification.service';
 import { TranslateService } from '@ngx-translate/core';
-import { VoicePreferencesModel } from 'src/app/pages/settings/settings.model';
+
 import * as _ from 'underscore';
 import { AuthService } from '../../services/auth.service';
 import { NavigationEnd, Router } from '@angular/router';
@@ -17,7 +17,6 @@ import { LocalStoreService } from '@kore.services/localstore.service';
 import { SubSink } from 'subsink';
 import { AppService } from '@kore.services/app.service';
 import { InteractiveHelpService } from '@kore.services/interactive-help.service';
-import { finalize, take, takeUntil } from 'rxjs/operators';
 @Component({
   selector: 'app-mainmenu',
   templateUrl: './mainmenu.component.html',
@@ -41,9 +40,6 @@ export class MainmenuComponent implements OnInit, OnDestroy {
   searchBt = "";
   isAgentDesktopEnabled: boolean;
   subs = new SubSink();
-  channelList: any;
-  loading: boolean = false;
-  voicePreferences: VoicePreferencesModel;
 
   @ViewChild('wUpdateBot', { static: false }) private wUpdateBot;
   @ViewChild('wSContent', { static: false }) private wSContent;
@@ -220,22 +216,6 @@ export class MainmenuComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.router.navigate(['/config/liveboard']);
     });
-  }
-
-  getAdvSettings() {
-    this.channelList = this.authService.smartAssistBots.map(x=>x.channels.length);
-    if(this.channelList > 1){
-    const _params = { streamId:this.authService.smartAssistBots.map(x=>x._id),
-                      'isAgentAssist':true }
-    this.loading = true;
-    this.subs.sink = this.service.invoke('get.settings.voicePreferences', _params)
-      .pipe(finalize(() => this.loading = false))
-      .subscribe(res => {
-        this.voicePreferences = res;
-      }, err => {
-        this.notificationService.showError(err, 'Failed to fetch voice preferences')
-      })
-    }
   }
 
 
