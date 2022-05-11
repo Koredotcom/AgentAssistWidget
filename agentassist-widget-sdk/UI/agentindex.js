@@ -557,14 +557,16 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                             data-bot-id="${botId}" data-intent-name="${ele.name}"
                             data-agent-id="${data.agentId}" data-run="true" id="run-${uuids}"
                             >RUN</button>
-                            <div class="elipse-dropdown-info">
-                                <div class="elipse-icon">
-                                    <i class="ast-overflow"></i>
+                            <div class="elipse-dropdown-info" id="showRunForAgentBtn-${uuids}">
+                                <div class="elipse-icon" id="elipseIcon-${uuids}">
+                                    <i class="ast-overflow" id="overflowIcon-${uuids}"></i>
                                 </div>
-                                <div class="dropdown-content-elipse">
-                                    <div class="list-option">Run Bot for Agent</div>
+                                <div class="dropdown-content-elipse hide" id="runAgtBtn-${uuids}">
+                                    <div class="list-option" data-conv-id="${data.conversationId}"
+                                    data-bot-id="${botId}" data-intent-name="${ele.name}"
+                                    data-agent-id="${data.agentId}" id="agentSelect-${uuids}"
+                                    data-exhaustivelist-run="true">Run Bot for Agent</div>
                                 </div>
-                            </div>
                         </div>
                     </div>`;
                     dialogSuggestions.innerHTML += dialogsHtml;
@@ -1020,12 +1022,18 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                     $('.dropdown-content-elipse').addClass('hide');
                 }
                 if (target.id.split("-")[0] == 'elipseIcon') {
+                    $(`#showRunForAgentBtn-${target.id.split('-')[1]}`).attr('class').includes('active-elipse')?
+                    $(`#showRunForAgentBtn-${target.id.split('-')[1]}`).removeClass('active-elipse'):
+                    $(`#showRunForAgentBtn-${target.id.split('-')[1]}`).addClass('active-elipse');
                     (target.nextElementSibling).classList.remove('hide');
                 } else if (target.id.split("-")[0] == 'overflowIcon') {
                     (target.parentElement.nextElementSibling).classList.remove('hide');
                 }
             }
             if (runAutoForAgent) {
+                $('#agentSearch').val('');
+                $('.overlay-suggestions').addClass('hide').removeAttr('style');
+                $('#overLaySearch').html('')
                 if (!isMyBotAutomationOnGoing) {
                     console.log("dataset Value=====================", target.dataset);
                     data = target.dataset;
@@ -1085,7 +1093,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             }
             if (runButton || libraryRunBtn) {
                 if (libraryRunBtn) {
-                    console.log("======================libb----------------")
                     $('.empty-data-no-agents').addClass('hide');
                     $('#agentSearch').val('');
                     $('.overlay-suggestions').addClass('hide').removeAttr('style');
