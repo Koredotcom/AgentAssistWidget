@@ -514,7 +514,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 "body": data.value
             };
             _msgsResponse.message.push(body);
-            console.log(_msgsResponse);
         }
         if (data.buttons && !data.value.includes('Customer has waited')) {
             let runInfoContent = $(`#myBotDropDownData-${myBotDropdownHeaderUuids}`);
@@ -895,7 +894,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             ele.remove();
         }
         let fromOtherUsers = document.getElementsByClassName('fromOtherUsers');
-        console.log(111)
         let eleIds;
         for (let ele of fromOtherUsers) {
             if (eleIds === ele.getAttribute('id')) {
@@ -918,7 +916,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             var runButton = target.dataset.run;
             var libraryRunBtn = target.dataset.libraryRun;
             var runAutoForAgent = target.dataset.exhaustivelistRun;
-            console.log(target.id, target.dataset);
             $('.agent-assist-chat-container.kore-chat-window').on('click', '.botResponseAttachments', function (event) {
                 window.open($(this).attr('fileid'), '_blank');
             });
@@ -1157,9 +1154,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                     noAutomationrunninginMyBot = false;
                     let agentBotuuids = Math.floor(Math.random() * 100);
                     myBotDropdownHeaderUuids = agentBotuuids;
-                    console.log(myBotDropdownHeaderUuids);
                     $('#noAutoRunning').addClass('hide');
-                    console.log('logic for showing dropdown');
                     let dynamicBlock = document.getElementById('myBotAutomationBlock');
                     let dropdownHtml = `
                             <div class="dialog-task-accordiaon-info hide" id="MyBotaddRemoveDropDown-${agentBotuuids}">
@@ -1249,7 +1244,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                    `;
                 dynamicBlock.innerHTML = dynamicBlock.innerHTML + dropdownHtml;
                 let ids = target.id.split('-');
-                console.log(target.dataset)
                 $(`${!target?.dataset?.useCaseList}` ? '.dialog-task-run-sec' : '.content-dialog-task-type .type-info-run-send').each((i, ele) => {
                     let id = ele.id?.split('-');
                     if (ids.includes(id[1])) {
