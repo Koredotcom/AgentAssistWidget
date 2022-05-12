@@ -380,7 +380,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                                     <div class="elipse-icon" id="elipseIcon-${uuids}">
                                         <i class="ast-overflow" id="overflowIcon-${uuids}"></i>
                                     </div>
-                                    <div class="dropdown-content-elipse" id="runsearchAgtBtn-${uuids}">
+                                    <div class="dropdown-content-elipse hide" id="runsearchAgtBtn-${uuids}">
                                         <div class="list-option" data-conv-id="${data.conversationId}"
                                         data-bot-id="${botId}" data-intent-name="${ele.name}"
                                         data-agent-id="${data.agentId}" id="agentSearchSelect-${uuids}"
