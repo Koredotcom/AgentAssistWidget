@@ -91,8 +91,10 @@
                 webSocketConnectionDetails: webSocketConnection,
                 botDetails: chatConfig.botOptions
             }
-
-            let agentAssistObj = new AgentAssist('agent-assist-chat-container', '1234894571234', 'agent106', userID, chatConfig.botOptions.botInfo._id, connectionObj);
+            let agentID = koreGenerateUUID();
+            let conversationId = (new Date()).getTime()+'';
+            $('#details').val(`AgentID: ${agentID}\n\rUserID: ${userID}\n\rConversationID: ${conversationId}`)
+            let agentAssistObj = new AgentAssist('agent-assist-chat-container',conversationId , agentID, userID, chatConfig.botOptions.botInfo._id, connectionObj);
 
             let userIds;
             userIds = agentAssistObj._conversationId + '_' + agentAssistObj.userId + '_' + agentAssistObj.botId;
