@@ -71,7 +71,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         // Library Automation list, Search and Agent-Automation tabs related webSockets
         // Response
         _agentAsisstSocket.on('agent_assist_agent_response', (data) => {
-            console.log(data);
             if (data.isSearch) {
                 processAgentIntentResults(data, data.conversationId, data.botId, data.userId);
             } else {
@@ -191,7 +190,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
 
     // Add input field to the userResponse manually by the agent
     function agentManualentryMsg(data, convId, botId) {
-        console.log(data);
         var _msgsResponse = {
             "type": "bot_response",
             "from": "bot",
@@ -492,7 +490,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
     }
 
     function processMybotDataResponse(data, convId, botId, userId) {
-        console.log("when an dialog is ran for the agent", data);
         let myBotuuids = Math.floor(Math.random() * 100);
         myBotresponseId = myBotuuids;
         var _msgsResponse = {
