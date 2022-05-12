@@ -750,14 +750,16 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                             data-bot-id="${botId}" data-intent-name="${ele.name}"
                             data-agent-id="${data.agentId}" data-run="true" id="run-${uuids}"
                             >RUN</button>
-                            <div class="elipse-dropdown-info">
-                                <div class="elipse-icon">
-                                    <i class="ast-overflow"></i>
+                            <div class="elipse-dropdown-info" id="showRunForAgentBtn-${uuids}">
+                                <div class="elipse-icon" id="elipseIcon-${uuids}">
+                                    <i class="ast-overflow" id="overflowIcon-${uuids}"></i>
                                 </div>
-                                <div class="dropdown-content-elipse">
-                                    <div class="list-option">Run Bot for Agent</div>
+                                <div class="dropdown-content-elipse" id="runAgtBtn-${uuids}">
+                                    <div class="list-option" data-conv-id="${data.conversationId}"
+                                    data-bot-id="${botId}" data-intent-name="${ele.name}"
+                                    data-agent-id="${data.agentId}" id="agentSelect-${uuids}"
+                                    data-exhaustivelist-run="true">Run Bot for Agent</div>
                                 </div>
-                            </div>
                         </div>
                     </div>`;
                     dialogSuggestions.innerHTML += dialogsHtml;
@@ -831,7 +833,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                     }
                 })
                 answerPlaceableID = undefined;
-
             }
             console.log("agent need to take action whether to intrup or continue")
         }
@@ -1212,13 +1213,27 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 if ($('.dropdown-content-elipse').length !== 0) {
                     $('.dropdown-content-elipse').addClass('hide');
                 }
+                let elementClicked;
                 if (target.id.split("-")[0] == 'elipseIcon') {
-                    (target.nextElementSibling).classList.remove('hide');
+                    (target.nextElementSibling)?.classList.remove('hide');
+                    elementClicked = target.parentElement;
+
                 } else if (target.id.split("-")[0] == 'overflowIcon') {
-                    (target.parentElement.nextElementSibling).classList.remove('hide');
+                    elementClicked = target.parentElement.parentElement;
+                    (target.parentElement.nextElementSibling)?.classList.remove('hide');
                 }
+                if (currentTabActive !== 'searchAutoIcon') {
+                    $('.elipse-dropdown-info').each((i, ele) => {
+                        $(ele).attr('class').includes('active-elipse') ? $(ele).removeClass('active-elipse') : elementClicked.classList.add('active-elipse')
+                    })
+                }
+
+
             }
             if (runAutoForAgent) {
+                $('#agentSearch').val('');
+                $('.overlay-suggestions').addClass('hide').removeAttr('style');
+                $('#overLaySearch').html('')
                 if (!isMyBotAutomationOnGoing) {
                     data = target.dataset;
                     AgentAssistPubSub.publish('searched_Automation_details', { conversationId: data.convId, botId: data.botId, value: data.intentName, isSearch: false, intentName: data.intentName });
@@ -1262,82 +1277,90 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                     return;
                 } else if (isMyBotAutomationOnGoing && !noAutomationrunninginMyBot) {
                     // condition for if an automation is already running in the agent automation
-                    $('#warningPopupForMyBot').removeClass('hide');
+                  //  $('#bodyContainer #warningPopupForMyBot').removeClass('hide');
+                    $('.overlay-delete-popup.hide').removeClass('hide');
                 }
 
             }
             if (runButton || libraryRunBtn) {
-                if (libraryRunBtn) {
-                    console.log("======================libb----------------")
-                    $('.empty-data-no-agents').addClass('hide');
-                    $('#agentSearch').val('');
-                    $('.overlay-suggestions').addClass('hide').removeAttr('style');
-                    $('#overLaySearch').html('')
-                    userTabActive();
-   
-                    let suggestionsblock = $('#dynamicBlock .dialog-task-run-sec');
-                    if (suggestionsblock.length >= 1) {
-                        suggestionsblock.each((i, ele) => {
-                            $('#dynamicBlock .agent-utt-info').each((i, elem) => {
-                                if (ele.id.split('-').includes(elem.id.split('-')[1])) {
-                                    elem.remove();
-                                }
-                            })
-                            ele.remove();
-                        })
-                    }
-                }
-                let uuids = Math.floor(Math.random() * 100);
-                dropdownHeaderUuids = uuids;
-                isAutomationOnGoing = true;
-                for (let a of document.getElementsByClassName('agent-utt-info')) {
-                    a.classList.add('hide');
-                }
-                let suggestionsLength = $(`#dynamicBlock .dialog-task-run-sec`);
-                suggestionsLength.each((i, ele) => {
-                    $(ele).addClass('hide');
-                })
-                let dynamicBlock = document.getElementById('dynamicBlock');
-                let dropdownHtml = `
-               <div class="dialog-task-accordiaon-info hide" id="addRemoveDropDown-${uuids}" >
-                   <div class="accordion-header" id="dropDownHeader-${uuids}"
-                   data-drop-down-opened="false">
-                       <div class="icon-info">
-                           <i class="ast-rule"></i>
-                       </div>
-                       <div class="header-text" id="dropDownTitle-${uuids}">${target.dataset.intentName}</div>
-                       <i class="ast-carrotup"></i>
-                       <button class="btn-danger">Terminate</button>
-                   </div>
-                   <div class="collapse-acc-data" id="dropDownData-${uuids}">
-                       
-                      
-                   </div>
-                   
-                   </div>
-                   `;
-                dynamicBlock.innerHTML = dynamicBlock.innerHTML + dropdownHtml;
-                let ids = target.id.split('-');
-                $(`${!target?.dataset?.useCaseList}` ? '.dialog-task-run-sec' : '.content-dialog-task-type .type-info-run-send').each((i, ele) => {
-                    let id = ele.id?.split('-');
-                    if (ids.includes(id[1])) {
-                        idsOfDropDown = ele.id;
-                        $(ele).remove()
-                    }
-                })
+                if (!isAutomationOnGoing) {
+                    if (libraryRunBtn) {
+                        $('.empty-data-no-agents').addClass('hide');
+                        $('#agentSearch').val('');
+                        $('.overlay-suggestions').addClass('hide').removeAttr('style');
+                        $('#overLaySearch').html('')
+                        userTabActive();
 
-                let addRemoveDropDown = document.getElementById(`addRemoveDropDown-${uuids}`);
-                addRemoveDropDown?.classList.remove('hide');
-                $(`#endTaks-${uuids}`).removeClass('hide')
-                AgentAssist_run_click(evt);
-                if(libraryRunBtn){
-                    let automationSuggestions = document.getElementsByClassName('dialog-task-accordiaon-info');
-                    for (let ele of automationSuggestions) {
-                        ele.classList.add('hide');
+                        let suggestionsblock = $('#dynamicBlock .dialog-task-run-sec');
+                        if (suggestionsblock.length >= 1) {
+                            suggestionsblock.each((i, ele) => {
+                                $('#dynamicBlock .agent-utt-info').each((i, elem) => {
+                                    if (ele.id.split('-').includes(elem.id.split('-')[1])) {
+                                        elem.remove();
+                                    }
+                                })
+                                ele.remove();
+                            })
+                        }
                     }
-                    automationSuggestions.length >= 1 ? (automationSuggestions[automationSuggestions.length - 1].classList.remove('hide')) : '';
+
+                    let uuids = Math.floor(Math.random() * 100);
+                    dropdownHeaderUuids = uuids;
+                    isAutomationOnGoing = true;
+                    for (let a of document.getElementsByClassName('agent-utt-info')) {
+                        a.classList.add('hide');
+                    }
+                    let suggestionsLength = $(`#dynamicBlock .dialog-task-run-sec`);
+                    suggestionsLength.each((i, ele) => {
+                        $(ele).addClass('hide');
+                    })
+                    let dynamicBlock = document.getElementById('dynamicBlock');
+                    let dropdownHtml = `
+                   <div class="dialog-task-accordiaon-info hide" id="addRemoveDropDown-${uuids}" >
+                       <div class="accordion-header" id="dropDownHeader-${uuids}"
+                       data-drop-down-opened="false">
+                           <div class="icon-info">
+                               <i class="ast-rule"></i>
+                           </div>
+                           <div class="header-text" id="dropDownTitle-${uuids}">${target.dataset.intentName}</div>
+                           <i class="ast-carrotup"></i>
+                           <button class="btn-danger">Terminate</button>
+                       </div>
+                       <div class="collapse-acc-data" id="dropDownData-${uuids}">
+                           
+                          
+                       </div>
+                       
+                       </div>
+                       `;
+                    dynamicBlock.innerHTML = dynamicBlock.innerHTML + dropdownHtml;
+                    let ids = target.id.split('-');
+                    $(`${!target?.dataset?.useCaseList}` ? '.dialog-task-run-sec' : '.content-dialog-task-type .type-info-run-send').each((i, ele) => {
+                        let id = ele.id?.split('-');
+                        if (ids.includes(id[1])) {
+                            idsOfDropDown = ele.id;
+                            $(ele).remove()
+                        }
+                    })
+
+                    let addRemoveDropDown = document.getElementById(`addRemoveDropDown-${uuids}`);
+                    addRemoveDropDown?.classList.remove('hide');
+                    $(`#endTaks-${uuids}`).removeClass('hide')
+                    AgentAssist_run_click(evt);
+
+
+                    if (libraryRunBtn) {
+                        let automationSuggestions = document.getElementsByClassName('dialog-task-accordiaon-info');
+                        for (let ele of automationSuggestions) {
+                            ele.classList.add('hide');
+                        }
+                        automationSuggestions.length >= 1 ? (automationSuggestions[automationSuggestions.length - 1].classList.remove('hide')) : '';
+                    }
+                    return;
                 }
-                return;
+                else {
+                    $('.overlay-delete-popup.hide').removeClass('hide');
+                }
             }
             if (checkButton) {
                 let id = target.id.split('-')[1];
