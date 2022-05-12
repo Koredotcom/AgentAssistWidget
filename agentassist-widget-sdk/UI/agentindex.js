@@ -219,7 +219,22 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         };
         _msgsResponse.message.push(body);
         let addAgentQueryTodropdownData = document.getElementById(`myBotDropDownData-${myBotDropdownHeaderUuids}`);
-        let agentQueryHtml = `<div class="order-number-info">${data.entityName} : ${data.entityValue}</div>`;
+        let agentQueryHtml = 
+                            // `<div class="run-info-content">
+                            //     <div class="order-number-info">${data.entityName} : ${data.entityValue}</div>
+                            // </div>`;
+                            `<div class="steps-run-data">
+                                        <div class="icon_block_img">
+                                            <img src="./images/userIcon.svg">
+                                        </div>
+                                        <div class="run-info-content">
+                                            <div class="title">Input value- </div>
+                                            <div class="agent-utt">
+                                                <div class="title-data">${data.query}</div>
+                                            </div>
+                                            <div class="order-number-info">${data.entityName} : ${data.entityValue}</div>
+                                        </div>
+                                </div>`;
         addAgentQueryTodropdownData.innerHTML = addAgentQueryTodropdownData.innerHTML + agentQueryHtml;
         chatInitialize.renderMessage(_msgsResponse);
     }
@@ -490,6 +505,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
     }
 
     function processMybotDataResponse(data, convId, botId, userId) {
+        console.log("when an dialog is ran for the agent", data);
         let myBotuuids = Math.floor(Math.random() * 100);
         myBotresponseId = myBotuuids;
         var _msgsResponse = {
