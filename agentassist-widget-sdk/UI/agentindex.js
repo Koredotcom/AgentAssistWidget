@@ -71,6 +71,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         // Library Automation list, Search and Agent-Automation tabs related webSockets
         // Response
         _agentAsisstSocket.on('agent_assist_agent_response', (data) => {
+            console.log(data);
             if (data.isSearch) {
                 processAgentIntentResults(data, data.conversationId, data.botId, data.userId);
             } else {
@@ -190,7 +191,39 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
 
     // Add input field to the userResponse manually by the agent
     function agentManualentryMsg(data, convId, botId) {
-
+        console.log(data);
+        var _msgsResponse = {
+            "type": "bot_response",
+            "from": "bot",
+            "message": [
+        
+            ],
+            "messageId": data._id,
+            "botInfo": {
+                "chatBot": "sample Bot",
+                "taskBotId": botId
+            },
+            "createdOn": "2022-03-21T07:56:18.225Z",
+            "icon": "https://uat.kore.ai:443/api/getMediaStream/market/f-cb381255-9aa1-5ce2-95e3-71233aef7084.png?n=17648985&s=IlRvUlUwalFVaFVMYm9sZStZQnlLc0l1UlZvdlNUUDcxR2o3U2lscHRrL3M9Ig$$",
+            "traceId": "873209019a5adc26"
+        }
+        let body = {};
+        body['type'] = 'text';
+        body['component'] = {
+            "type": 'text',
+            "payload": {
+                "type": 'text',
+                "text": data.intentName
+            }
+        };
+        body['cInfo'] = {
+            "body": data.userInput
+        };
+        _msgsResponse.message.push(body);
+        let addAgentQueryTodropdownData = document.getElementById(`myBotDropDownData-${myBotDropdownHeaderUuids}`);
+        let agentQueryHtml = `<div class="order-number-info">${data.entityName} : ${data.entityValue}</div>`;
+        addAgentQueryTodropdownData.innerHTML = addAgentQueryTodropdownData.innerHTML + agentQueryHtml;
+        chatInitialize.renderMessage(_msgsResponse);
     }
 
     processAgentIntentResults = function (data, convId, botId, userId) {
@@ -559,8 +592,23 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                            </div>
                        </div>
             `;
+            let agentInputToBotHtml = `
+            <div class="steps-run-data">
+                <div class="icon_block">
+                    <i class="ast-agent"></i>
+                </div>
+                <div class="run-info-content">
+                <div class="title">Input</div>
+                <div class="agent-utt">
+                <div class="title-data" ><span>EnterDetails: </span>
+                <input type="text" placeholder="Enter Value" class="input-text chat-container" id="agentInput" data-conv-id="${convId}" data-bot-id="${botId}" data-user-id="${userId}" data-mybot-input="true">
+                </div>
+                </div>
+                </div>
+            </div>`
             if (data.isPrompt) {
                 runInfoContent.append(askToUserHtml);
+                runInfoContent.append(agentInputToBotHtml);
             } else {
                 runInfoContent.append(tellToUserHtml);
             }
@@ -1408,13 +1456,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         document.addEventListener("keyup", (evt) => {
             var target = evt.target;
             var agentAssistInput = target.dataset.agentAssistInput;
+            var mybotInput = target.dataset.mybotInput;
             let val = $('#agentSearch').val();
             evt.target.dataset.val = val;
             if (val == '') {
                 $('#overLaySearch').html('');
                 $('.overlay-suggestions').addClass('hide').removeAttr('style');
             }
-            if (agentAssistInput) {
+            if (agentAssistInput || mybotInput) {
                 AgentAssist_input_keydown(evt);
             }
         })
@@ -1601,20 +1650,44 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
     }
 
     function AgentAssist_input_keydown(e) {
-        let input_taker = document.getElementById('librarySearch').value;
-        if (e.target.dataset?.val) {
-            input_taker = ''
+        console.log(e.target.id, e);
+        if(e.target.id == 'librarySearch') {
+            var input_taker = document.getElementById('librarySearch').value;
+            if (e.target.dataset?.val) {
+                input_taker = ''
+            }
+            if (input_taker.trim().length == 0 && e.target.dataset?.val?.trim().length == 0) {
+                processAgentIntentResults(autoExhaustiveList, autoExhaustiveList.conversationId, autoExhaustiveList.botId);
+            }
+            if (e.keyCode == 13 && (input_taker.trim().length > 0 || e.target.dataset.val.trim().length > 0)) {
+                var convId = e.target.dataset.convId;
+                var botId = e.target.dataset.botId;
+                var intentName = input_taker ? input_taker : e.target.dataset.val;
+                AgentAssistPubSub.publish('searched_Automation_details', { conversationId: convId, botId: botId, value: intentName, isSearch: true });
+            }
         }
-        if (input_taker.trim().length == 0 && e.target.dataset?.val?.trim().length == 0) {
-            processAgentIntentResults(autoExhaustiveList, autoExhaustiveList.conversationId, autoExhaustiveList.botId);
+        if(e.target.id == 'agentInput') {
+            var agentInput = document.getElementById('agentInput').value;
+            if (agentInput.trim().length == 0 && e.target.dataset?.val?.trim().length == 0) {
+                console.log('no input, please enter a proper value');
+            }
+            if (e.keyCode == 13 && (agentInput.trim().length > 0 || e.target.dataset.val.trim().length > 0)) {
+                let data = {
+                    convId: e.target.convId,
+                    botId: e.target.botId,
+                    entityName: "entered Value",
+                    entityValue: agentInput,
+                } 
+                console.log(e.target.dataset.val);
+                agentManualentryMsg(e.target.dataset, e.target.dataset.convId, e.target.dataset.botId);
+                var convId = e.target.dataset.convId;
+                var botId = e.target.dataset.botId;
+                var intentName = agentInput ? agentInput : e.target.dataset.val;
+                AgentAssistPubSub.publish('searched_Automation_details', { conversationId: convId, botId: botId, value: intentName, isSearch: false });
+            }
         }
 
-        if (e.keyCode == 13 && (input_taker.trim().length > 0 || e.target.dataset.val.trim().length > 0)) {
-            var convId = e.target.dataset.convId;
-            var botId = e.target.dataset.botId;
-            var intentName = input_taker ? input_taker : e.target.dataset.val;
-            AgentAssistPubSub.publish('searched_Automation_details', { conversationId: convId, botId: botId, value: intentName, isSearch: true });
-        }
+        
     }
 
     publicAPIs.getPubSub = function () {
