@@ -87,12 +87,12 @@
             };
 
             var connectionObj = {
-                webSocketConnectionDomain: chatConfig.agentAssistSocketUrl + "/koreagentassist",
+                webSocketConnectionDomain: chatConfig.agentAssistUrl + "/koreagentassist",
                 webSocketConnectionDetails: webSocketConnection,
                 botDetails: chatConfig.botOptions
             }
 
-            let agentAssistObj = new AgentAssist('agent-assist-chat-container', '1234894571234', 'user106', userID, chatConfig.botOptions.botInfo._id, connectionObj);
+            let agentAssistObj = new AgentAssist('agent-assist-chat-container', '1234894571234', 'agent106', userID, chatConfig.botOptions.botInfo._id, connectionObj);
 
             let userIds;
             userIds = agentAssistObj._conversationId + '_' + agentAssistObj.userId + '_' + agentAssistObj.botId;
