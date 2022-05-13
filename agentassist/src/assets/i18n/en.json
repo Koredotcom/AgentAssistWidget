@@ -903,7 +903,7 @@
     "ONBOARDING.QnA_SINGLE": "QnA",
     "ONBOARDING.NO_DIALOGS": "No Dialogs",
     "SPEECH.NO_VOICE_PREFERENCE": "No Voice Preferences available",
-    "SPEECH.CREATE_VOICE_CONFIG": "Please configure one channel in Voice Channel configuration",
+    "SPEECH.CREATE_VOICE_CONFIG": "You need to configure a voice channel for enabling speech recognition settings.",
     "ONBOARDING.NO_BOTS_AVAILABLE": "No bots available for conversion",
     "ONBOARDING.PLS_CREATE_NEW_BOT": "Please create a new bot in Bot Platform environment to start the conversion.",
     "ONBOARDING.CLOSE_WINDOW": "Close Window",
