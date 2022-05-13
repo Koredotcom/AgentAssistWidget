@@ -407,7 +407,7 @@
 }
 
 .kore-chat-window {
-    position: fixed;
+    position: absolute;
     bottom: 10px;
     right: 10px;
     /* width: 400px; */
@@ -1731,7 +1731,7 @@
 
 .kore-chat-window .carousel {
     margin: 0 !important;
-    width: 300px !important;
+    /* width: 300px !important; */
 }
 .kore-chat-window .carousel:hover .purejscarousel-btn.purejscarousel-btn-prev{
     display: block;

@@ -22,12 +22,11 @@ var answerPlaceableID;
 var dialogName;
 var currentTabActive;
 var previousTabActive;
-
-
+var AgentChatInitialize;
 window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId, usersID, _botId, connectionDetails) {
     var koreBot = koreBotChat();
-    chatInitialize = new koreBot.chatWindow(chatConfig);
-    chatInitialize.customTemplateObj = new customTemplate(chatConfig, chatInitialize);
+    AgentChatInitialize = new koreBot.chatWindow(chatConfig);
+    AgentChatInitialize.customTemplateObj = new customTemplate(chatConfig, AgentChatInitialize); 
     let docs = document.getElementById('chat-window-footer');
     docs.hidden = true;
     _userTranscript = false;
@@ -172,7 +171,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                                         </div>
                                 </div>`;
         addUserQueryTodropdownData.innerHTML = addUserQueryTodropdownData.innerHTML + userQueryHtml;
-        chatInitialize.renderMessage(_msgsResponse);
+        AgentChatInitialize.renderMessage(_msgsResponse);
     }
     $('body').bind('mousedown keydown', function (event) {
         currentTabActive = detectCurrentTab();
@@ -236,7 +235,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                                         </div>
                                 </div>`;
         addAgentQueryTodropdownData.innerHTML = addAgentQueryTodropdownData.innerHTML + agentQueryHtml;
-        chatInitialize.renderMessage(_msgsResponse);
+        AgentChatInitialize.renderMessage(_msgsResponse);
     }
 
     processAgentIntentResults = function (data, convId, botId, userId) {
@@ -626,7 +625,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 runInfoContent.append(tellToUserHtml);
             }
         }
-        chatInitialize.renderMessage(_msgsResponse, myBotuuids);
+        AgentChatInitialize.renderMessage(_msgsResponse, myBotuuids);
         removeElementFromDom();
         let noOfSteps = $(`.body-data-container #agentAutoContainer`).find('.steps-run-data').not('.hide');
         if (noOfSteps.length > 2) {
@@ -928,7 +927,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             }
 
         }
-        chatInitialize.renderMessage(_msgsResponse, uuids);
+        AgentChatInitialize.renderMessage(_msgsResponse, uuids);
 
         removeElementFromDom();
         let noOfSteps = $(`.body-data-container #dynamicBlock`).find('.steps-run-data').not('.hide');
@@ -987,7 +986,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             });
             $('.agent-assist-chat-container.kore-chat-window').off('click', '.buttonTmplContentBox li,.listTmplContentChild .buyBtn,.viewMoreList .viewMore,.listItemPath,.quickReply,.carouselImageContent,.listRightContent,.checkboxBtn,.likeDislikeDiv').on('click', '.buttonTmplContentBox li,.listTmplContentChild .buyBtn, .viewMoreList .viewMore,.listItemPath,.quickReply,.carouselImageContent,.listRightContent,.checkboxBtn,.likeDislikeDiv', function (e) {
 
-                chatInitialize.bindEvents(true, e);
+                AgentChatInitialize.bindEvents(true, e);
                 if (JSON.parse(localStorage.getItem('innerTextValue'))) {
                     AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: _agentAssistDataObj.conversationId, agentId: '', botId: _agentAssistDataObj.botId, value: JSON.parse(localStorage.getItem('innerTextValue')), check: true });
                     localStorage.setItem('innerTextValue', null);
@@ -1350,11 +1349,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
 
 
                     if (libraryRunBtn) {
-                        let automationSuggestions = document.getElementsByClassName('dialog-task-accordiaon-info');
-                        for (let ele of automationSuggestions) {
-                            ele.classList.add('hide');
-                        }
-                        automationSuggestions.length >= 1 ? (automationSuggestions[automationSuggestions.length - 1].classList.remove('hide')) : '';
+                        let automationSuggestions = $('#dynamicBlock .dialog-task-accordiaon-info');
+                        automationSuggestions.each((i,ele)=>{
+                            $(ele).addClass('hide');
+                        });
+                        automationSuggestions.length >= 1 ? $(automationSuggestions[automationSuggestions.length - 1]).removeClass('hide') : '';
                     }
                     return;
                 }
@@ -2171,7 +2170,7 @@ AgentAssistPubSub.subscribe('agent_assist_send_text', (msg, data) => {
         contentDisplayDiv.innerHTML = data.value;
     }
 
-    //chatInitialize.renderMessage(agentsss);
+    //AgentChatInitialize.renderMessage(agentsss);
 });
 
 // Usecase list request call
