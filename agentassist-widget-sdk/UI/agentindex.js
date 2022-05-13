@@ -1686,8 +1686,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
     }
 
     function AgentAssist_input_keydown(e) {
-        console.log(e.target.id, e);
-        if(e.target.id == 'librarySearch') {
+        if(e.target.id == 'librarySearch' || e.target.id =='agentSearch') {
             var input_taker = document.getElementById('librarySearch').value;
             if (e.target.dataset?.val) {
                 input_taker = ''
