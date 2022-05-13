@@ -287,6 +287,7 @@ export class IvrComponent implements OnInit {
         this.newSipData.emit(true);
         this.notificationService.notify(this.translate.instant("NOTIFY.CONFIGURED_SUCCESSFULLY"), "success")
         this.close(true);
+        this.authService.getDeflectApps();
       }, err => {
         this.notificationService.showError(err, this.translate.instant("NOTIFY.FAILED_TO_CONFIGURE_IVR"));
       })

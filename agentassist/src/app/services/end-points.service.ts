@@ -389,7 +389,7 @@ export class EndPointsService {
 
     /** Default Messages START */
     this.serviceList['get.default.messages'] = {
-      endpoint: this.API_SERVER_URL + '/smartassist/apps/:appId/messages',
+      endpoint: this.API_SERVER_URL + '/smartassist/apps/:appId/messages?isAgentAssist=true',
       method: 'get'
     };
 
@@ -437,12 +437,12 @@ export class EndPointsService {
     };
 
     this.serviceList['get.settings.voicePreferences'] = {
-      endpoint: this.API_SERVER_URL + '/smartassist/apps/:streamId/settings/voicePreferences',
+      endpoint: this.API_SERVER_URL + '/smartassist/apps/:streamId/settings/voicePreferences?isAgentAssist=true',
       method: 'get'
     };
 
     this.serviceList['post.settings.voicePreferences'] = {
-      endpoint: this.API_SERVER_URL + '/smartassist/apps/:streamId/settings/voicePreferences',
+      endpoint: this.API_SERVER_URL + '/smartassist/apps/:streamId/settings/voicePreferences?isAgentAssist=true',
       method: 'post'
     };
 
