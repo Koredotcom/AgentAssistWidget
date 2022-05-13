@@ -61,7 +61,6 @@
         }
         var chatConfig = window.KoreSDK.chatConfig;
         function initAgentAssist(){
-        
         chatConfig.botOptions.assertionFn = assertion;
         chatConfig.botOptions.jwtgrantSuccessCB = onJWTGrantSuccess;
         var koreBot = koreBotChat();
