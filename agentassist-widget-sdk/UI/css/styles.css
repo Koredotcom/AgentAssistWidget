@@ -149,7 +149,7 @@ html, body{
 /* Chnat container start */
 
 .agent-assist-chat-container {
-    position: fixed;
+    position: relative;
     background: #F5F8FA;
     width: 408px;
     margin: 0 auto;

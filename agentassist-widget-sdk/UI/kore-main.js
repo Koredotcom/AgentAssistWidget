@@ -60,6 +60,8 @@
             getBrandingInformation(options);
         }
         var chatConfig = window.KoreSDK.chatConfig;
+        function initAgentAssist(){
+        
         chatConfig.botOptions.assertionFn = assertion;
         chatConfig.botOptions.jwtgrantSuccessCB = onJWTGrantSuccess;
         var koreBot = koreBotChat();
@@ -87,12 +89,16 @@
             };
 
             var connectionObj = {
-                webSocketConnectionDomain: chatConfig.agentAssistSocketUrl + "/koreagentassist",
+                webSocketConnectionDomain: chatConfig.agentAssistUrl + "/koreagentassist",
                 webSocketConnectionDetails: webSocketConnection,
                 botDetails: chatConfig.botOptions
             }
+            let agentID = koreGenerateUUID();
+            let conversationId = (new Date()).getTime()+'';
+            $('#details').val(`AgentID: ${agentID}\n\rUserID: ${userID}\n\rConversationID: ${conversationId}`);
+            let botID =  $(`#botid`).val()? $(`#botid`).val(): chatConfig.botOptions.botInfo._id;
 
-            let agentAssistObj = new AgentAssist('agent-assist-chat-container', '1234894571234', 'user106', userID, chatConfig.botOptions.botInfo._id, connectionObj);
+            let agentAssistObj = new AgentAssist('agent-assist-chat-container',conversationId , agentID, userID, botID, connectionObj);
 
             let userIds;
             userIds = agentAssistObj._conversationId + '_' + agentAssistObj.userId + '_' + agentAssistObj.botId;
@@ -140,6 +146,11 @@
         $('.openChatWindow').click(function () {
             koreBot.show(chatConfig);
         });
+     }
+     $('#botid').val(chatConfig.botOptions.botInfo._id)
+     $('#connect').click(()=>{
+         initAgentAssist();
+     })
     });
 
 })(jQuery || (window.KoreSDK && window.KoreSDK.dependencies && window.KoreSDK.dependencies.jQuery));
