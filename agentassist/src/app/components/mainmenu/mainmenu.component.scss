@@ -63,6 +63,22 @@ app-mainmenu{
 				}
 			}
 		}		
+		.empty-sel-bots {               
+			margin: 70px 0;
+			text-align: center;
+			.no-existing-head {
+				color: $orange;
+				font-size: 16px;
+				font-style: italic;                   
+				img {
+					padding-right: 10px;
+				}
+			}
+			.no-existing-message {
+				padding-top: 10px;
+				font-weight: 500;
+			}
+		}
 		.ps-content{
 			height: 100%;
 			display: flex;

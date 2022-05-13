@@ -19,6 +19,27 @@
             margin: 35px 0 20px 0;
         }
     }
+    .info-tip{
+        width: 560px;
+        display: flex;
+        background: $hoverImgcolor;
+        border: 1px solid #85B7FE;
+        box-sizing: border-box;
+        border-radius: 4px;
+        padding: 10px;
+        align-items: flex-start;
+        img{
+            position: relative;
+            top: 3px;
+        }
+        .info-text{
+            font-weight: normal;
+            font-size: 12px;
+            line-height: 17px;
+            color: #07377F;
+            padding-left: 12px;
+        }
+    }
     .sdk-cards-data{
         margin: 0 -5px;
         .card-data{

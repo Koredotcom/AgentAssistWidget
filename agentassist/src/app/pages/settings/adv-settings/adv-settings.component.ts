@@ -32,6 +32,8 @@ export class AdvSettingsComponent implements OnInit, OnDestroy {
   showLangSlider: boolean = false;
 
   showPhHoldAudio = false;
+  showVoicePreferences:boolean = false;
+  channelList: any;
 
   subs = new SubSink();
 
@@ -56,6 +58,7 @@ export class AdvSettingsComponent implements OnInit, OnDestroy {
       "voicePreference": ""
     }
 
+    //console.log(this.authService.smartAssistBots.map(x=>x.channels.length),"oiuytrertyuiop");
     // combineLatest([this.settingsService.incomingSetupConfigured$, this.settingsService.enableVoicePreview$,])
     //   .pipe(
     //     takeUntil(this.destroyed$)
@@ -78,9 +81,13 @@ export class AdvSettingsComponent implements OnInit, OnDestroy {
     this.getLanguages();
   }
 
-
   getAdvSettings() {
-    const _params = { streamId: this.streamId }
+    this.channelList = this.authService.smartAssistBots.map(x=>x.channels.length);
+    if(this.channelList > 1){
+      this.showVoicePreferences = true;
+   // const _params = { streamId: this.streamId }
+    const _params = { streamId:this.authService.smartAssistBots.map(x=>x._id),
+                      'isAgentAssist':true }
     this.loading = true;
     this.subs.sink = this.service.invoke('get.settings.voicePreferences', _params)
       .pipe(finalize(() => this.loading = false))
@@ -89,6 +96,7 @@ export class AdvSettingsComponent implements OnInit, OnDestroy {
       }, err => {
         this.notificationService.showError(err, 'Failed to fetch voice preferences')
       })
+    }
   }
 
   getLanguages() {
@@ -114,8 +122,11 @@ export class AdvSettingsComponent implements OnInit, OnDestroy {
 
     if ($event) { this.voicePreferences = $event }
   }
+  
   openVPSlider() {
-
+    if(this.showVoicePreferences==false){
+      this.showVPSlider = false;
+    }
     if (this.incomingSetupConfigured) {
       this.vpSlider.openSlider("#voicePreferenace", "width940");
       this.showVPSlider = true;
