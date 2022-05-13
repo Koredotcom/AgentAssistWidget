@@ -75,7 +75,7 @@
 			<div class="link-router d-none" [routerLink]="['deployment']" routerLinkActive="active">
 				<img src="assets/icons/leftmenu/new/dispositions.svg"><span class="link-name">Deployment</span>
 			</div> -->
-			<div class="link-router" [routerLink]="['languages']" routerLinkActive="active" *hasPermission="['LANGUAGE_SETTINGS_VIEW', 'WAITING_EXPERIENCE_FULL']">
+			<div class="link-router" [routerLink]="['languages']" routerLinkActive="active" *hasPermission="['LANGUAGE_SETTINGS_VIEW', 'WAITING_EXPERIENCE_FULL']" (click)="getAdvSettings()">
 				<img src="assets/icons/leftmenu/languages-speech.svg"><span class="link-name">Speech Recognition</span>
 			</div>
 			<!-- <div class="link-router" [routerLink]="['agent-assist']" routerLinkActive="active" *hasPermission="['STANDARD_RESPONSE_VIEW']">
