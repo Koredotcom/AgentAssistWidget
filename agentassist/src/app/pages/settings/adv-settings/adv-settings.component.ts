@@ -122,8 +122,11 @@ export class AdvSettingsComponent implements OnInit, OnDestroy {
 
     if ($event) { this.voicePreferences = $event }
   }
+  
   openVPSlider() {
-
+    if(this.showVoicePreferences==false){
+      this.showVPSlider = false;
+    }
     if (this.incomingSetupConfigured) {
       this.vpSlider.openSlider("#voicePreferenace", "width940");
       this.showVPSlider = true;

@@ -1,10 +1,14 @@
-<div class="adv-settings-container" *ngIf="showVoicePreferences">
+<div class="adv-settings-container">
     <div class="main-title">
         <!-- <img src="assets/icons/settings/adv-settings.svg"> -->
         {{'LANGUAGE_SPEECH' | translate}}
     </div>
+    <div class="info-tip" *ngIf="!showVoicePreferences">
+        <img src="assets/icons/info-blue.svg">
+        <div class="info-text">{{"SPEECH.CREATE_VOICE_CONFIG" | translate}}</div>
+    </div>
     <div class="sdk-cards-data row col-12 p-0">
-        <div class="card-data d-none">
+        <div class="card-data d-none" [class.disabled] = "!showVoicePreferences">
             <div class="titles-sec">
                 <div class="primary-title">{{"ADV.SETTINGS.BOT_ASSO" | translate}}</div>
                 <div class="secondary-title">{{"ADV.SETTINGS.CHANGE_BOT_ASSO" | translate}}</div>
@@ -18,7 +22,7 @@
             </div>
         </div>
 
-        <div class="card-data" [class.disabled]="!incomingSetupConfigured || !enableVoicePreview" [class.noEvents]="!enableVoicePreview" placement="bottom-center" [ngbTooltip]="!incomingSetupConfigured? ('VOICE_PREF_WARNING' | translate): ''" [container]='"body"' tooltipClass="tooltip_settings" (click)="openVPSlider()" *hasPermission="['admin']">
+        <div class="card-data" [class.disabled]="!incomingSetupConfigured || !enableVoicePreview || !showVoicePreferences" [class.noEvents]="!enableVoicePreview || !showVoicePreferences" placement="bottom-center" [ngbTooltip]="!incomingSetupConfigured? ('VOICE_PREF_WARNING' | translate): ''" [container]='"body"' tooltipClass="tooltip_settings" (click)="openVPSlider()" *hasPermission="['admin']">
             <div class="titles-sec">
                 <div class="primary-title">{{'SETTINGS.VOICE_PREFERENCES' | translate}}</div>
                 <div class="secondary-title">{{'SETTINGS.VOICE_PREFERENCES_DESC' | translate}}</div>
@@ -32,17 +36,8 @@
             </div>
         </div>
     </div>
-    
 </div>
-    <div *ngIf="!showVoicePreferences" class="empty-sel-bots">   
-        <div class="no-existing-head">
-            <img src="assets/icons/welcome/warning.svg">
-            {{ "SPEECH.NO_VOICE_PREFERENCE" | translate }}
-        </div>
-        <div class="no-existing-message">
-            {{ "SPEECH.CREATE_VOICE_CONFIG" | translate }}
-        </div>
-    </div>
+   
 
 <!-- <button class="kr-sg-button-secondary-two btn_lg mt-3" (click)="openVPSlider()">Voice Preferances</button> -->
 <app-slider-component id="voicePreferenace" #vpSlider='app-slider'>
