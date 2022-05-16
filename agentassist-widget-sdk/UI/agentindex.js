@@ -611,8 +611,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 </div>
                 <div class="run-info-content">
                 <div class="title">Input</div>
-                <div class="agent-utt">
-                <div class="title-data" ><span>EnterDetails: </span>
+                <div class="agent-utt enter-details-block">
+                <div class="title-data" ><span class="enter-details-title">EnterDetails: </span>
                 <input type="text" placeholder="Enter Value" class="input-text chat-container" id="agentInput" data-conv-id="${convId}" data-bot-id="${botId}" data-user-id="${userId}" data-mybot-input="true">
                 </div>
                 </div>
