@@ -217,7 +217,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             "body": data.userInput
         };
         _msgsResponse.message.push(body);
-        let addAgentQueryTodropdownData = document.getElementById(`myBotDropDownData-${myBotDropdownHeaderUuids}`);
+        let addAgentQueryTodropdownData = document.getElementById(`dropDownData-${myBotDropdownHeaderUuids}`);
         let agentQueryHtml = 
                             // `<div class="run-info-content">
                             //     <div class="order-number-info">${data.entityName} : ${data.entityValue}</div>
@@ -565,7 +565,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             _msgsResponse.message.push(body);
         }
         if (data.buttons && !data.value.includes('Customer has waited')) {
-            let runInfoContent = $(`#myBotDropDownData-${myBotDropdownHeaderUuids}`);
+            let runInfoContent = $(`#dropDownData-${myBotDropdownHeaderUuids}`);
             let askToUserHtml = `
             <div class="steps-run-data">
                            <div class="icon_block">
@@ -635,7 +635,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         }
         if ((data.endOfFaq || data.endOfTask) && data.type !== 'text') {
             isMyBotAutomationOnGoing = false;
-            // addFeedbackHtmlToDom(data, botId, userId, userIntentInput);
+            addFeedbackHtmlToDom(data, botId, userId, userIntentInput);
         }
     }
 
@@ -1244,19 +1244,16 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                     let dynamicBlock = document.getElementById('myBotAutomationBlock');
                     let dropdownHtml = `
                             <div class="dialog-task-accordiaon-info hide" id="MyBotaddRemoveDropDown-${agentBotuuids}">
-                                <div class="accordion-header" id="MyBotdropDownHeader-${agentBotuuids}">
+                                <div class="accordion-header" id="dropDownHeader-${agentBotuuids}" data-drop-down-opened="false">
                                     <div class="icon-info">
                                         <i class="ast-rule"></i>
                                     </div>
-                                    <div class="header-text" id="MyBotdropDownTitle-${agentBotuuids}">${target.dataset.intentName}</div>
+                                    <div class="header-text" id="dropDownTitle-${agentBotuuids}">${target.dataset.intentName}</div>
                                     <i class="ast-carrotup"></i>
                                     <button class="btn-danger" id="myBotTerminateAgentDialog-${agentBotuuids}">Terminate</button>
                                 </div>
-                                <div class="collapse-acc-data" id="myBotDropDownData-${agentBotuuids}">
+                                <div class="collapse-acc-data" id="dropDownData-${agentBotuuids}">
 
-
-                                </div>
-                                <div class="dilog-task-end hide" id="myBotendTaks-${agentBotuuids}">
 
                                 </div>
                             </div>`;
@@ -1595,8 +1592,18 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
     }
 
     function addFeedbackHtmlToDom(data, botId, userId, userIntentInput) {
-        $(`#addRemoveDropDown-${dropdownHeaderUuids} .btn-danger`).remove();
-        let dropDownData = document.getElementById(`dropDownData-${dropdownHeaderUuids}`);
+        var dropDownData;
+        var endOfDialoge;
+        if(currentTabActive == 'agentAutoIcon') {
+            $(`#addRemoveDropDown-${myBotDropdownHeaderUuids} .btn-danger`).remove();
+            dropDownData = document.getElementById(`dropDownData-${myBotDropdownHeaderUuids}`);
+            endOfDialoge = document.getElementById(`MyBotaddRemoveDropDown-${myBotDropdownHeaderUuids}`);
+        } else {
+            $(`#addRemoveDropDown-${dropdownHeaderUuids} .btn-danger`).remove();
+            dropDownData = document.getElementById(`dropDownData-${dropdownHeaderUuids}`);
+            endOfDialoge = document.getElementById(`addRemoveDropDown-${dropdownHeaderUuids}`);
+        }
+        // $(`#addRemoveDropDown-${dropdownHeaderUuids} .btn-danger`).remove();
         let feedbackHtml = ` 
         <div class="feedback-data">
             <div class="feedback-icon" >
@@ -1617,7 +1624,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             </div>
        </div>`;
         dropDownData.innerHTML += feedbackHtml;
-        let endOfDialoge = document.getElementById(`addRemoveDropDown-${dropdownHeaderUuids}`);
         let endofDialogeHtml = `
         <div class="dilog-task-end" id="endTaks-${dropdownHeaderUuids}">
         <div class="text-dialog-task-end">Dialog Task ended</div>     
