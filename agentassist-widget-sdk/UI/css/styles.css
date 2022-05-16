@@ -877,6 +877,36 @@ html, body{
     transition: 0.2s all ease;
     margin: 0 0 8px 0;
 }
+
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data .run-info-content .agent-utt.enter-details-block{
+    background: #E9EFF4;
+    border: 1px dashed #64717C;
+    border-radius: 8px;
+}
+
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data .run-info-content .agent-utt.enter-details-block .title-data .input-text{
+background: #FFFFFF;
+border: 1px solid transparent;
+height: 25px;
+border-radius: 4px;
+}
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data .run-info-content .agent-utt.enter-details-block .title-data .input-text:focus{
+box-shadow: none !important;
+outline: none !important;
+border: 1px solid transparent !important;
+}
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data .run-info-content .agent-utt.enter-details-block .title-data .input-text:focus-within{
+box-shadow: none !important;
+outline: none !important;
+border: 1px solid transparent !important;
+}
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data .run-info-content .agent-utt.enter-details-block .title-data .enter-details-title{
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 15px;
+    color: #000000;
+    font-style: normal;
+}
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data .run-info-content .agent-utt:hover .action-links {
     display: flex;
 }
@@ -1857,4 +1887,25 @@ html, body{
     border: 1px solid #BDC1C6;
     background: #FFFFFF;
     color: #202124;
+}
+
+
+.override-input-div{
+    padding-left: 28px;
+    margin: 10px 0;
+    display: inline-block;
+    width: 100%;
+}
+.override-input-btn{
+    background: #FFFFFF;
+    border: 1px solid #5D5FEF;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.05);
+    border-radius: 5px;
+    padding: 5px 8px;
+    font-weight: 600;
+    font-size: 9px;
+    line-height: 11px;
+    color: #5D5FEF;
+    outline: 0;
+    cursor: pointer;
 }

@@ -922,15 +922,15 @@
                 }, me._pingTime);
             }
             window.onresize = function (event) {
-                var me=chatInitialize;
+                var me=AgentChatInitialize;
                 if (event.target === window) {
-                     chatInitialize.setCollapsedModeStyles();
+                    AgentChatInitialize.setCollapsedModeStyles();
                     var _width = $('#chatContainer').width() - 400;
                     //$('.kore-chat-window').attr('style','left: '+_width+'+px');
                 }
-                if (($('.kore-chat-window').width() > 400) || (document.getElementsByClassName('kore-chat-window').length && document.getElementsByClassName('kore-chat-window')[0].classList.contains('expanded'))) {
-                    var _koreChatWindowHeight = $('.kore-chat-window').width();
-                    $('.carousel').attr('style', 'width: ' + (_koreChatWindowHeight - 85) + 'px !important');
+                if (($('.agent-assist-chat-container').width() > 400) || (document.getElementsByClassName('agent-assist-chat-container').length && document.getElementsByClassName('agent-assist-chat-container')[0].classList.contains('expanded'))) {
+                    var _koreChatWindowHeight = $('.agent-assist-chat-container').width();
+                  //  $('.carousel').attr('style', 'width: ' + (_koreChatWindowHeight - 85) + 'px !important');
                 } else {
                     $('.carousel').attr('style', 'width: 300px !important');
                 }
@@ -961,7 +961,7 @@
                 }
 
                 /* Handling for full size table */
-                if ($('.kore-chat-window').width() > 460) {
+                if ($('.agent-assist-chat-container').width() > 460) {
                     $(".accordionTable").each(function () {
                         if ($(this).hasClass("responsive")) {
                             $(this).addClass("hide")
