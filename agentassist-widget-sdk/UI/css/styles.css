@@ -1858,3 +1858,24 @@ html, body{
     background: #FFFFFF;
     color: #202124;
 }
+
+
+.override-input-div{
+    padding-left: 28px;
+    margin: 10px 0;
+    display: inline-block;
+    width: 100%;
+}
+.override-input-btn{
+    background: #FFFFFF;
+    border: 1px solid #5D5FEF;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.05);
+    border-radius: 5px;
+    padding: 5px 8px;
+    font-weight: 600;
+    font-size: 9px;
+    line-height: 11px;
+    color: #5D5FEF;
+    outline: 0;
+    cursor: pointer;
+}
