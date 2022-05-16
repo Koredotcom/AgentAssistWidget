@@ -1,4 +1,4 @@
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { COMMA, ENTER, X } from '@angular/cdk/keycodes';
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { DockStatusService } from '@kore.services/dockstatusService/dock-status.service';
@@ -11,6 +11,8 @@ import { pipe } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { IncomingSetupModel } from '../../settings.model';
 import { AuthService } from '@kore.services/auth.service';
+import { fromEvent, Subscription } from 'rxjs';
+import { analyzeAndValidateNgModules } from '@angular/compiler';
 declare const $: any;
 @Component({
   selector: 'app-ivr',
@@ -21,15 +23,18 @@ export class IvrComponent implements OnInit {
 
   selectedApp: any;
   saveInProgress: boolean = false;
-
+  sipMerge: any;
+  sipValue: any;
+  sipDID: any;
+  sipNewURI: any;
   showAudioCodes: boolean = true;
   didNumbers: any[] = [];
   sipTransportTypes: any[] = []
-
+  voiceListSub: Subscription;
   asrPreferences: any[] = [];
   ttsPreferences: any[] = [];
   voiceNames: any[] = []
-
+  sipDetailsList: any;
   voiceDataURI: string = "";
   voicePreviewInProgress: boolean = false;
 
@@ -54,7 +59,6 @@ export class IvrComponent implements OnInit {
     network: 'listofIp' | 'domainName',
     dnsResolveMethod: string,
     fqdn: string,
-
     voiceChannel: string,
     previewVoiceEnabled: boolean,
     asrPreference: string,
@@ -77,16 +81,38 @@ export class IvrComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+   
+   
     this.instanceAppDetails = this.voiceService.instantAppData();
     this.selectedApp = this.workflowService.deflectApps();
+
     this.workflowService.seedData$.subscribe(res => {
+      this.sipDetailsList = this.incomingSetup;
+     
       if (this.model) {
         this.model.sipURI = res.smartAssistSeedData.sipURI;
-      } else {
+      } 
+      else { 
+        if(this.sipDetailsList){
+         alert("outside");
+          this.sipValue = res.smartAssistSeedData.sipURI.split(/[:]/);
+          this.sipMerge = this.sipDetailsList.didNumber +'@'+ this.sipValue[1];
+          this.sipValue.splice(1,1);
+          this.sipValue.splice(1,0,this.sipMerge);
+          this.sipNewURI = this.sipValue.join(':');
+          this.model = {
+          ... this.model,
+          'sipURI': this.sipNewURI,
+          }
+         }
+        else {
+         alert("inside");
+         
         this.model = {
           ... this.model,
           'sipURI': res.smartAssistSeedData.sipURI,
         }
+       }
       }
       if (!res) return;
       this.ttsPreferences = res.deflectSeedData.ttsPreferences;
@@ -94,6 +120,7 @@ export class IvrComponent implements OnInit {
       this.sipTransportTypes = res.deflectSeedData.sipTransportTypes;
 
       this.dnsResolveMethods = res.deflectSeedData.dnsResolveMethods;
+    
     })
 
     if (this.incomingSetup && this.incomingSetup['_id']) {
@@ -228,8 +255,8 @@ export class IvrComponent implements OnInit {
     const _payload = {
       "type": "IVR",
       "sipDomainConfigDetails": {
-        "sipURI": this.model.sipURI,
-        "network": this.model.network,
+        "sipURI": this.model.sipURI.split(/[.\:]/).concat(this.didNumbers).join(':'),
+         "network": this.model.network,
         "languagePreference": "en_US",
         "didNumber": this.didNumbers,
         "sipTransportType": this.model.sipTransportType,
@@ -292,10 +319,10 @@ export class IvrComponent implements OnInit {
         this.notificationService.showError(err, this.translate.instant("NOTIFY.FAILED_TO_CONFIGURE_IVR"));
       })
     } else {
-      let payload = {'type': "IVR"}
+      let payload = {'type': "IVR"}     
       let config = {
         "_id": this.selectedSipInfo._id,
-        "sipURI": this.model.sipURI,
+        "sipURI": this.model.sipURI.split(/[.\:]/).concat(this.didNumbers).join(':'),
         "network": this.model.network,
         "didNumber": this.didNumbers,
         "sipTransportType": this.model.sipTransportType,
