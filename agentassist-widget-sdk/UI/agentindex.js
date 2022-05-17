@@ -218,6 +218,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         };
         _msgsResponse.message.push(body);
         let addAgentQueryTodropdownData = document.getElementById(`dropDownData-${myBotDropdownHeaderUuids}`);
+        let agentEntityInput = document.getElementById('agentInput').value ;
         let agentQueryHtml = 
                             // `<div class="run-info-content">
                             //     <div class="order-number-info">${data.entityName} : ${data.entityValue}</div>
@@ -227,11 +228,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                                             <img src="./images/userIcon.svg">
                                         </div>
                                         <div class="run-info-content">
-                                            <div class="title">Input value- </div>
-                                            <div class="agent-utt">
-                                                <div class="title-data">${data.query}</div>
-                                            </div>
-                                            <div class="order-number-info">${data.entityName} : ${data.entityValue}</div>
+                                            <div class="title">You Entered- </div>
+                                            <div class="order-number-info">value : ${agentEntityInput}</div>
                                         </div>
                                 </div>`;
         addAgentQueryTodropdownData.innerHTML = addAgentQueryTodropdownData.innerHTML + agentQueryHtml;
@@ -1000,10 +998,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 }
             });
 
-            if (target.className == 'ast-close close-search') {
+            if (target.className == 'ast-close close-search' ) {
                 $('#agentSearch').val('');
                 $('.overlay-suggestions').addClass('hide').removeAttr('style');
                 $('#overLaySearch').html('');
+            }
+
+            if (target.className == 'ast-close close-search'&& currentTabActive == 'searchAutoIcon' ) {
+                // Logic to reset the search library on cancel
             }
 
             if (target.className == 'show-all') {
@@ -1735,7 +1737,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             if (e.target.dataset?.val) {
                 input_taker = ''
             }
-            if (input_taker.trim().length == 0 && e.target.dataset?.val?.trim().length == 0) {
+            if (e.target.id == 'librarySearch' && input_taker.trim().length == 0 && e.target.dataset?.val?.trim().length == 0) {
                 processAgentIntentResults(autoExhaustiveList, autoExhaustiveList.conversationId, autoExhaustiveList.botId);
             }
             if (e.keyCode == 13 && (input_taker.trim().length > 0 || e.target.dataset.val.trim().length > 0)) {
