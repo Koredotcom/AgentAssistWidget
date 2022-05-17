@@ -736,7 +736,7 @@
                     </div>
                 </div>
 
-                <div class="overlay-delete-popup hide">
+                <div class="overlay-delete-popup hide" id="interruptPopUp">
                     <div class="delete-box-content">
                         <div class="header-text">You are interrupting the current task</div>
                         <div class="close-popup">
@@ -744,8 +744,23 @@
                         </div>
                         <div class="desc-text-info">If you run the select task, the current task will be completely terminated.
                             Are you sure you want to continue with the selected task?</div>
-                        <div class="btn-footer-info">
+                        <div class="btn-footer-info" id="interruptCancel">
                             <button class="btn-danger">Yes, continue</button>
+                            <button class="btn-cancel">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="overlay-delete-popup hide" id="terminatePopUp">
+                    <div class="delete-box-content">
+                        <div class="header-text">Are you sure you want to terminate the current on going task?</div>
+                        <div class="close-popup">
+                            <i class="ast-close"></i>
+                        </div>
+                        <div class="desc-text-info">If you run the select task, the current task will be completely terminated.
+                            Are you sure you want to continue with the selected task?</div>
+                        <div class="btn-footer-info">
+                            <button class="btn-danger">Yes</button>
                             <button class="btn-cancel">Cancel</button>
                         </div>
                     </div>
