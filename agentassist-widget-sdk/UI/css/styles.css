@@ -1266,6 +1266,8 @@ border: 1px solid transparent !important;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    display: inline-block;
+    max-width: 95%;
 }
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content .desc-text {
     font-weight: 400;
@@ -1277,6 +1279,19 @@ border: 1px solid transparent !important;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+}
+
+.agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content .ast-carrotup{
+    display: inline-block;
+    font-size: 6px;
+    position: relative;
+    top: -3px;
+    cursor: pointer;
+}
+
+.agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content .ast-carrotup.rotate-carrot{
+    top: -4px;
+    transform: rotate(180deg);
 }
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links {
     display: flex;
