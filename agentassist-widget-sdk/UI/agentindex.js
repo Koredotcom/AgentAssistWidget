@@ -162,15 +162,27 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                                         <div class="icon_block_img">
                                             <img src="./images/userIcon.svg">
                                         </div>
-                                        <div class="run-info-content">
+                                        <div class="run-info-content" id="userInput-${data._id}">
                                             <div class="title">Customer Said - </div>
                                             <div class="agent-utt">
                                                 <div class="title-data">${data.query}</div>
                                             </div>
-                                            <div class="order-number-info">${data.entityName} : ${data.entityValue}</div>
+                                            
                                         </div>
                                 </div>`;
         addUserQueryTodropdownData.innerHTML = addUserQueryTodropdownData.innerHTML + userQueryHtml;
+        let entityHtml = $(`#dropDownData-${dropdownHeaderUuids}`).find(`#userInput-${data._id}`);
+        if(data.entityValue && !data.isErrorPrompt){ 
+           entityHtml.append(`<div class="order-number-info">${data.entityName} : ${data.entityValue}</div>`);
+        }else{
+            if(data.isErrorPrompt){
+               let entityHtmls = `<div class="order-number-info">${data.entityName} : <span style="color:red">Value unidentified</span></div>
+               <div><img src="./images/warning.svg" style="padding-right: 8px;"><span style="font-size: 12px;
+               line-height: 18px;
+               color: #202124;">Incorrect input format<span></div>`
+                entityHtml.append(entityHtmls);
+            }
+        }
         AgentChatInitialize.renderMessage(_msgsResponse);
     }
     $('body').bind('mousedown keydown', function (event) {
@@ -1132,7 +1144,30 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             }
             let targetIds = (target.id).split('-');
             if (['feedbackup', 'feedbackdown'].includes(targetIds[0])) {
-                feedbackLoop(target.id, evt);
+                if (targetIds.includes('feedbackup')) {
+                    if (target.dataset.feedbacklike == 'false') {
+                        target.dataset.feedbacklike = 'true';
+                        ($(target.parentElement.parentElement).find('#feedbackdown')?.attr('style')) ? (
+                            $(target.parentElement.parentElement).find('#feedbackdown')?.removeAttr('style'),
+                            $(target.parentElement.parentElement).find('.ast-thumbdown').attr('data-feedbackdislike', 'false')) : ''
+                        $(target.parentElement).attr('style', 'background-color:#0077D2;');
+                    } else {
+                        target.dataset.feedbacklike = 'false';
+                        $(target.parentElement).removeAttr('style');
+                    }
+                }
+                if (targetIds.includes('feedbackdown')) {
+                    if (target.dataset.feedbackdislike == 'false') {
+                        ($(target.parentElement.parentElement).find('#feedbackup')?.attr('style')) ? (
+                            $(target.parentElement.parentElement).find('#feedbackup')?.removeAttr('style'),
+                            $(target.parentElement.parentElement).find('.ast-thumbup').attr('data-feedbacklike', 'false')) : ''
+                        target.dataset.feedbackdislike = 'true';
+                        $(target.parentElement).attr('style', 'background-color:#0077D2;');
+                    } else {
+                        target.dataset.feedbackdislike = 'false';
+                        $(target.parentElement).removeAttr('style');
+                    }
+                }
             }
             if (target.id === 'showHistory') {
                 isShowHistoryEnable = true;
@@ -1226,10 +1261,22 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 }
             }
             if(target.className == 'btn-danger'){
-                $('.overlay-delete-popup.hide').removeClass('hide');
+                $('#terminatePopUp').removeClass('hide');
+                if(target.innerHTML == 'Yes'){
+                    $('#terminatePopUp').addClass('hide');
+                    AgentAssistPubSub.publish('agent_assist_send_text', 
+                    { conversationId: _agentAssistDataObj.conversationId,
+                         botId: _botId, value: 'discard all', check: true });
+                }
+                
             }
             if(target.className == 'btn-cancel' || target.className == 'ast-close'){
-                $('.overlay-delete-popup').addClass('hide');
+                if(target.parentElement.id == 'interruptCancel'){
+                    $('#interruptPopUp').addClass('hide');
+                }else{
+                    $('#terminatePopUp').addClass('hide');
+                }
+                
             }
             if (target.id.split("-")[0] == 'elipseIcon' || target.id.split("-")[0] == 'overflowIcon') {
                 if ($('.dropdown-content-elipse').length !== 0) {
@@ -1296,8 +1343,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                     return;
                 } else if (isMyBotAutomationOnGoing && !noAutomationrunninginMyBot) {
                     // condition for if an automation is already running in the agent automation
-                  //  $('#bodyContainer #warningPopupForMyBot').removeClass('hide');
-                    $('.overlay-delete-popup.hide').removeClass('hide');
+                    $('#interruptPopUp').removeClass('hide');
                 }
 
             }
@@ -1378,7 +1424,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                     return;
                 }
                 else {
-                    $('.overlay-delete-popup.hide').removeClass('hide');
+                    $('#interruptPopUp').removeClass('hide');
                 }
             }
             if (checkButton) {
@@ -1647,16 +1693,18 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         // $(`#addRemoveDropDown-${dropdownHeaderUuids} .btn-danger`).remove();
         let feedbackHtml = ` 
         <div class="feedback-data">
-            <div class="feedback-icon" >
+            <div class="feedback-icon" id="feedbackup">
                 <i class="ast-thumbup" id="feedbackup-${dropdownHeaderUuids}"
+                data-feedbacklike="false"
                 data-conv-id="${data.conversationId}"
                         data-bot-id="${botId}" data-feedback="like"
                         data-agent-id="${data.agentId}" 
                         data-dialog-name="${dialogName}"
                         data-user-input="${userIntentInput}"></i>
             </div>
-            <div class="feedback-icon" >
+            <div class="feedback-icon" id="feedbackdown">
                 <i class="ast-thumbdown" id="feedbackdown-${dropdownHeaderUuids}"
+                data-feedbackdislike="false"
                 data-conv-id="${data.conversationId}"
                         data-bot-id="${botId}" data-feedback="dislike"
                         data-agent-id="${data.agentId}"
