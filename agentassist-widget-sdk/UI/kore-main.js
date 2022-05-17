@@ -1,5 +1,5 @@
 (function ($) {
-
+    var agentID, botID,conversationId=''; 
     $(document).ready(function () {
         function assertion(options, callback) {
             var jsonData = {
@@ -92,10 +92,11 @@
                 webSocketConnectionDetails: webSocketConnection,
                 botDetails: chatConfig.botOptions
             }
-            let agentID = koreGenerateUUID();
-            let conversationId = (new Date()).getTime()+'';
+             agentID = koreGenerateUUID();
+             conversationId = (new Date()).getTime()+'';
             $('#details').val(`AgentID: ${agentID}\n\rUserID: ${userID}\n\rConversationID: ${conversationId}`);
-            let botID =  $(`#botid`).val()? $(`#botid`).val(): chatConfig.botOptions.botInfo._id;
+            botID =  $(`#botid`).val()? $(`#botid`).val(): chatConfig.botOptions.botInfo._id;
+
 
             let agentAssistObj = new AgentAssist('agent-assist-chat-container',conversationId , agentID, userID, botID, connectionObj);
 
@@ -149,7 +150,37 @@
      $('#botid').val(chatConfig.botOptions.botInfo._id)
      $('#connect').click(()=>{
          initAgentAssist();
-     })
+     });
+     $('#sendMsg').click(() => {
+        let msg = $('#userInput').val();
+        console.log("--------->"+msg);
+        let payload = {
+            "agentId": agentID,
+            "botId": botID,
+            "conversationId": conversationId,
+            "query" : msg,
+        }
+        $.ajax({
+            url: 'https://dev-smartassist.kore.ai/agentassist/api/v1/hooks/st-6e9d43c3-33f6-5b44-a8c3-5dfe5d08ffd1',
+            type: 'POST',
+            crossDomain: true,
+            contentType: 'application/json',
+            headers: {
+               'token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.k-EU2xyO3gpQUg4yO7fkjdG1kSE_y5TCmpkB3WBfgcQ',
+               "accept": "application/json",
+              "Access-Control-Allow-Origin":"*",
+            },
+            data:  JSON.stringify(payload),
+            dataType: "json",
+            success: function (result) {
+                console.log(result);
+            },
+            error: function (error) {
+                console.log(error);
+            }
+         });
+         $('#userInput').val('');
+    })
     });
 
 })(jQuery || (window.KoreSDK && window.KoreSDK.dependencies && window.KoreSDK.dependencies.jQuery));

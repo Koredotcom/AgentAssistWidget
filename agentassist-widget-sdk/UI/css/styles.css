@@ -1424,6 +1424,15 @@ border: 1px solid transparent !important;
 .agent-assist-chat-container .input-text-search input:-moz-read-only {
     background-color: #f2f3f5;
 }
+.search-block .input-text-search .close-search {
+    position: absolute;
+    font-size: 12px;
+    right: 0px;
+    left: 390px;
+    top: 12px;
+    color: #202124;
+    cursor: pointer;
+}
 .agent-assist-chat-container .input-text-search i {
     position: absolute;
     left: 10px;
