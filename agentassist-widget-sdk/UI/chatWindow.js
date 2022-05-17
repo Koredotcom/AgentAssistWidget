@@ -3106,7 +3106,7 @@
                 </div>';
 
             var chatWindowTemplateForAgentAssist  = '<script id="chat_window_tmpl" type="text/x-jqury-tmpl"> \
-                <div class="agent-assist-chat-container kore-chat-window" id="chat-window-footer"> \
+                <div class="agent-assist-chat-container kore-chat-window hide" id="chat-window-footer"> \
                     <div role="log" aria-live="polite" aria-atomic="true" > \
                         <div class="errorMsgBlock"> \
                         </div> \

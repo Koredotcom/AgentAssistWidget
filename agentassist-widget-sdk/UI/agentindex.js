@@ -635,7 +635,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         }
         if ((data.endOfFaq || data.endOfTask) && data.type !== 'text') {
             isMyBotAutomationOnGoing = false;
-            addFeedbackHtmlToDom(data, botId, userId, userIntentInput);
+            addFeedbackHtmlToDom(data, botId, userId, userIntentInput, 'runForAgentBot');
         }
     }
 
@@ -1012,10 +1012,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 $(`#${currentTabActive}`).removeClass('active-tab');
                 currentTabActive = 'searchAutoIcon';
                 $(`#searchAutoIcon`).addClass('active-tab');
-                $(`#dynamicBlock`).addClass('hide');
                 $('#LibraryContainer').removeClass('hide');
+                $('allAutomations-Exhaustivelist').addClass('hide');
                 $('.overlay-suggestions').addClass('hide').removeAttr('style');
                 $('#backButton').removeClass('hide');
+                
+                $(`#dynamicBlock`).addClass('hide');
+                document.getElementById('agentAutoContainer').classList.add('hide');
+                document.getElementById('scriptContainer').classList.add('hide');
+
                 $('#librarySearch').val($('#agentSearch').val());
                 $('.sugestions-info-data').addClass('hide');
                 $('#bodyContainer').removeClass('if-suggestion-search');
@@ -1047,14 +1052,24 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
 
                 $(`#${currentTabActive}`).removeClass('active-tab');
                 $(`#${previousTabActive}`).addClass('active-tab');
+
+                if(previousTabActive == 'agentAutoIcon'){
+                    document.getElementById('agentAutoContainer').classList.remove('hide');
+                }else if(previousTabActive == 'userAutoIcon'){
+                    $(`#dynamicBlock`).removeClass('hide');
+                }else if(previousTabActive == 'transcriptIcon'){
+                    document.getElementById('scriptContainer').classList.remove('hide');
+                }
+
                 previousTabActive = currentTabActive;
                 previousTabActive = 'userAutoIcon';
-                $(`#dynamicBlock`).removeClass('hide');
+            
                 $('#LibraryContainer').addClass('hide');
                 $('.overlay-suggestions').removeClass('hide').attr('style', 'bottom:0; display:block');
                 $('#backButton').addClass('hide');
                 $('.sugestions-info-data').removeClass('hide');
                 $('#bodyContainer').addClass('if-suggestion-search');
+             
             }
 
             if (target.id === `searchAutoIcon` || target.id === `searchIcon` || target.id === `LibraryLabel`) {
@@ -1207,6 +1222,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 for (let a of dialogSpace) {
                     a.classList.remove('hide');
                 }
+            }
+            if(target.className == 'btn-danger'){
+                $('.overlay-delete-popup.hide').removeClass('hide');
+            }
+            if(target.className == 'btn-cancel' || target.className == 'ast-close'){
+                $('.overlay-delete-popup').addClass('hide');
             }
             if (target.id.split("-")[0] == 'elipseIcon' || target.id.split("-")[0] == 'overflowIcon') {
                 if ($('.dropdown-content-elipse').length !== 0) {
@@ -1463,11 +1484,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                     if (target.dataset.dropDownOpened === 'false') {
                         $(`#${target.id}`).attr('data-drop-down-opened', 'true');
                         $(`#dropDownData-${targetIDs[targetIDs.length - 1]}`).addClass('hide');
-                        $(`#endTaks-${targetIDs[targetIDs.length - 1]}`).addClass('hide');
+                        $(`#${target.parentElement.parentElement.id}`).find(`.dilog-task-end`).addClass('hide');
                     } else {
                         $(`#${target.id}`).attr('data-drop-down-opened', 'false');
                         $(`#dropDownData-${targetIDs[targetIDs.length - 1]}`).removeClass('hide');
-                        $(`#endTaks-${targetIDs[targetIDs.length - 1]}`).removeClass('hide');
+                        $(`#${target.parentElement.parentElement.id}`).find(`.dilog-task-end`).removeClass('hide');
                     }
                 }
                 let a = $(`.history #dropDownData-${targetIDs[targetIDs.length - 1]}`)
@@ -1500,6 +1521,24 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             }
         })
         window._agentAssisteventListenerAdded = true;
+    }
+
+    // Example POST method implementation:
+    async function getData(url = '', data = {}) {
+        // Default options are marked with *
+        const response = await fetch(url, {
+            method: 'GET', // *GET, POST, PUT, DELETE, etc.
+            mode: 'cors', // no-cors, *cors, same-origin
+            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: 'same-origin', // include, *same-origin, omit
+            headers: {
+                'Content-Type': 'application/json'
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            redirect: 'follow', // manual, *follow, error
+            referrerPolicy: 'no-referrer' // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+        });
+        return response.json(); // parses JSON response into native JavaScript objects
     }
 
     function userTabActive() {
@@ -1591,17 +1630,17 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         }
     }
 
-    function addFeedbackHtmlToDom(data, botId, userId, userIntentInput) {
+    function addFeedbackHtmlToDom(data, botId, userId, userIntentInput, runForAgentBot) {
         var dropDownData;
         var endOfDialoge;
-        if(currentTabActive == 'agentAutoIcon') {
-            $(`#addRemoveDropDown-${myBotDropdownHeaderUuids} .btn-danger`).remove();
-            dropDownData = document.getElementById(`dropDownData-${myBotDropdownHeaderUuids}`);
-            endOfDialoge = document.getElementById(`MyBotaddRemoveDropDown-${myBotDropdownHeaderUuids}`);
+        if(runForAgentBot) {
+            $(`#myBotTerminateAgentDialog-${myBotDropdownHeaderUuids}.btn-danger`).remove();
+            dropDownData = $(`#dropDownData-${myBotDropdownHeaderUuids}`);
+            endOfDialoge = $(`#MyBotaddRemoveDropDown-${myBotDropdownHeaderUuids}`);
         } else {
             $(`#addRemoveDropDown-${dropdownHeaderUuids} .btn-danger`).remove();
-            dropDownData = document.getElementById(`dropDownData-${dropdownHeaderUuids}`);
-            endOfDialoge = document.getElementById(`addRemoveDropDown-${dropdownHeaderUuids}`);
+            dropDownData = $(`#dropDownData-${dropdownHeaderUuids}`);
+            endOfDialoge = $(`#addRemoveDropDown-${dropdownHeaderUuids}`);
         }
         // $(`#addRemoveDropDown-${dropdownHeaderUuids} .btn-danger`).remove();
         let feedbackHtml = ` 
@@ -1623,14 +1662,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                         data-user-input="${userIntentInput}"></i>
             </div>
        </div>`;
-        dropDownData.innerHTML += feedbackHtml;
+        dropDownData.append(feedbackHtml);
         let endofDialogeHtml = `
         <div class="dilog-task-end" id="endTaks-${dropdownHeaderUuids}">
         <div class="text-dialog-task-end">Dialog Task ended</div>     
                    </div>
             
         `;
-        endOfDialoge.innerHTML += endofDialogeHtml;
+        endOfDialoge.append(endofDialogeHtml);
         $(`.customer-feeling-text`).addClass('bottom-95')
     }
 
