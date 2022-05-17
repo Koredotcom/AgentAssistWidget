@@ -151,6 +151,7 @@
      $('#connect').click(()=>{
          initAgentAssist();
      });
+    //  need to change the Token by using the current bot clientId and client sceret
      $('#sendMsg').click(() => {
         let msg = $('#userInput').val();
         console.log("--------->"+msg);
