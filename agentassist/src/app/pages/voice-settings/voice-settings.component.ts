@@ -138,7 +138,7 @@ export class VoiceSettingsComponent implements OnInit, AfterViewInit, OnDestroy 
     this.updatePhNumberSlider = false;
     this.updateIVRSlider = false;
     this.updateCallFlowList = false;
-    this.streamId = this.workflowService.getCurrentBt()._id;
+    this.streamId = this.authService.smartAssistBots.map(x=>x._id);
     this.instanceAppDetails = this.voiceService.instantAppData();
     this.getFlows();
     this.route.queryParams.subscribe(params => {
@@ -278,7 +278,8 @@ export class VoiceSettingsComponent implements OnInit, AfterViewInit, OnDestroy 
           //TODO
           console.log(numDetail);
           const params = {
-            instanceId: this.instanceAppDetails._id
+            instanceId: this.authService.smartAssistBots.map(x=>x._id),
+            'isAgentAssist':true
           }
           const payload = {
             "type": numDetail.sipURI ? "IVR" : "phoneNumber",
@@ -321,7 +322,7 @@ export class VoiceSettingsComponent implements OnInit, AfterViewInit, OnDestroy 
       panelClass: "delete-phone-sip-config",
       data: {
         title: this.translate.instant('NOTIFY.ARE_YOU_SURE', { Sip: sipDetails.sipURI }),
-        text: this.translate.instant("PhoneNum_DELETE_CONFORMATION_NOTE"),
+        text: this.translate.instant("SIPURL_DELETE_CONFORMATION_NOTE"),
         buttons: [{ key: 'yes', label: this.translate.instant("BUTTONS.DELETE"), type: 'danger' }, { key: 'no', label: this.translate.instant("BUTTONS.CANCEL") }]
       }
     });
@@ -331,7 +332,8 @@ export class VoiceSettingsComponent implements OnInit, AfterViewInit, OnDestroy 
           //TODO
           console.log(sipDetails);
           const params = {
-            instanceId: this.instanceAppDetails._id
+            instanceId: this.authService.smartAssistBots.map(x=>x._id),
+            'isAgentAssist':true
           }
           const payload = {
             "type": "IVR",
@@ -353,7 +355,7 @@ export class VoiceSettingsComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   deleteSipConfig(sipDetails) {
-    this.deletePhoneNumberConfig(sipDetails)
+    this.deleteSipConfiguration(sipDetails)
   }
 
   openPhSlider() {

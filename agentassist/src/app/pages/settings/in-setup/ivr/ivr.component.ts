@@ -1,4 +1,4 @@
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { COMMA, ENTER, X } from '@angular/cdk/keycodes';
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { DockStatusService } from '@kore.services/dockstatusService/dock-status.service';
@@ -11,6 +11,8 @@ import { pipe } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { IncomingSetupModel } from '../../settings.model';
 import { AuthService } from '@kore.services/auth.service';
+import { fromEvent, Subscription } from 'rxjs';
+import { analyzeAndValidateNgModules } from '@angular/compiler';
 declare const $: any;
 @Component({
   selector: 'app-ivr',
@@ -21,18 +23,23 @@ export class IvrComponent implements OnInit {
 
   selectedApp: any;
   saveInProgress: boolean = false;
-
+  sipMerge: any;
+  sipValue: any;
+  sipDID: any;
+  sipNewURI: any;
   showAudioCodes: boolean = true;
+  isDidExist:boolean = false;
+  didLengthSet:boolean = false;
   didNumbers: any[] = [];
   sipTransportTypes: any[] = []
-
+  voiceListSub: Subscription;
   asrPreferences: any[] = [];
   ttsPreferences: any[] = [];
   voiceNames: any[] = []
-
+  sipDetailsList: any;
   voiceDataURI: string = "";
   voicePreviewInProgress: boolean = false;
-
+  showMoreDIDNumbers:boolean = false;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
 
   dnsResolveMethods: any[] = [];
@@ -54,7 +61,6 @@ export class IvrComponent implements OnInit {
     network: 'listofIp' | 'domainName',
     dnsResolveMethod: string,
     fqdn: string,
-
     voiceChannel: string,
     previewVoiceEnabled: boolean,
     asrPreference: string,
@@ -77,16 +83,32 @@ export class IvrComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+   
     this.instanceAppDetails = this.voiceService.instantAppData();
-    this.selectedApp = this.workflowService.deflectApps();
+    this.selectedApp = this.workflowService.deflectApps(); 
     this.workflowService.seedData$.subscribe(res => {
+      this.sipDetailsList = this.incomingSetup;
       if (this.model) {
         this.model.sipURI = res.smartAssistSeedData.sipURI;
-      } else {
+      } 
+      else { 
+        if(this.sipDetailsList){
+          this.sipValue = res.smartAssistSeedData.sipURI.split(/[:]/);
+          this.sipMerge = this.sipDetailsList.didNumber +'@'+ this.sipValue[1];
+          this.sipValue.splice(1,1);
+          this.sipValue.splice(1,0,this.sipMerge);
+          this.sipNewURI = this.sipValue.join(':');
+          this.model = {
+          ... this.model,
+          'sipURI': this.sipNewURI,
+          }
+         }
+        else {  
         this.model = {
           ... this.model,
           'sipURI': res.smartAssistSeedData.sipURI,
         }
+       }
       }
       if (!res) return;
       this.ttsPreferences = res.deflectSeedData.ttsPreferences;
@@ -94,19 +116,21 @@ export class IvrComponent implements OnInit {
       this.sipTransportTypes = res.deflectSeedData.sipTransportTypes;
 
       this.dnsResolveMethods = res.deflectSeedData.dnsResolveMethods;
+    
     })
 
     if (this.incomingSetup && this.incomingSetup['_id']) {
       this.selectedSipInfo = this.incomingSetup;
       console.log(this.selectedSipInfo);
-      this.updateSipConfig = true
-      this.model.didNumber = this.selectedSipInfo.didNumber
-      this.model.fqdn = this.selectedSipInfo.fqdn
-      this.model.incomingIpAddresses = this.selectedSipInfo.incomingIpAddresses
-      this.model.network = this.selectedSipInfo.network
-      this.model.sipPassword = this.selectedSipInfo.sipPassword
-      this.model.sipTransportType = this.selectedSipInfo.sipTransportType
-      this.model.sipUserName = this.selectedSipInfo.sipUserName
+      this.updateSipConfig = true;
+      this.model.sipURI = this.sipNewURI;
+      this.model.didNumber = this.selectedSipInfo.didNumber;
+      this.model.fqdn = this.selectedSipInfo.fqdn;
+      this.model.incomingIpAddresses = this.selectedSipInfo.incomingIpAddresses;
+      this.model.network = this.selectedSipInfo.network;
+      this.model.sipPassword = this.selectedSipInfo.sipPassword;
+      this.model.sipTransportType = this.selectedSipInfo.sipTransportType;
+      this.model.sipUserName = this.selectedSipInfo.sipUserName;
     } else {
       this.model = {
         ...{
@@ -142,8 +166,13 @@ export class IvrComponent implements OnInit {
   }
 
   onDIDNumberRemove(tag): void {
+    this.isDidExist = true;
+    this.sipValue = this.sipNewURI.split(/[@:]/);
+    if(this.didNumbers.length == 1){
+    this.sipValue.splice(1,1);
+    }
+    this.sipNewURI = this.sipValue.join(':');
     const index = this.didNumbers.indexOf(tag);
-
     if (index >= 0) {
       this.didNumbers.splice(index, 1);
     }
@@ -157,18 +186,31 @@ export class IvrComponent implements OnInit {
   OnDidNumberUpdated(event: MatChipInputEvent): void {
     const input = event.input;
     const value = event.value;
-
     if ((value || '').trim()) {
-      
-      if (this.didNumbers.length >= 4) {
-        this.notificationService.notify("SIP doesn't support more than 4 numbers", 'warning');
+     
+      this.didLengthSet = true;
+      if (this.didNumbers.length >= 1) {
+        
+        this.notificationService.notify("SIP doesn't support more than 1 number", 'warning');
         return;
       }
 
       if (this.didNumbers.indexOf(value.trim()) > -1) {
         return;
       }
+      this.isDidExist = true;
+      if(this.sipNewURI){
+      this.sipValue = this.sipNewURI.split(/[@:]/);
+      }
+      else{
+        this.sipValue = this.model.sipURI.split(/[@:]/);
+      }
+      this.sipMerge = value +'@'+ this.sipValue[1];
+      this.sipValue.splice(1,1);
+      this.sipValue.splice(1,0,this.sipMerge);
+      this.sipNewURI = this.sipValue.join(':');
       this.didNumbers.push(value.trim());
+     
     }
 
     // Reset the input value
@@ -224,11 +266,18 @@ export class IvrComponent implements OnInit {
   }
   onSave() {
     this.saveInProgress = true;
-    const _params = { streamId: this.workflowService.getCurrentBt()._id }
+    const _params = { streamId: this.authService.smartAssistBots.map(x=>x._id),
+      'isAgentAssist':true }
+      this.sipValue = this.model.sipURI.split(/[:]/);
+      this.sipMerge = this.didNumbers[0] +'@';
+      //this.sipValue.splice(1,1);
+      this.sipValue.splice(1,0,this.sipMerge);
+      this.sipNewURI = this.sipValue.join(':');
+      
     const _payload = {
       "type": "IVR",
       "sipDomainConfigDetails": {
-        "sipURI": this.model.sipURI,
+        "sipURI": this.sipNewURI,
         "network": this.model.network,
         "languagePreference": "en_US",
         "didNumber": this.didNumbers,
@@ -240,7 +289,6 @@ export class IvrComponent implements OnInit {
       "isSetUpCompleted": true
 
     }
-
     if (this.model.network === 'listofIp') {
       _payload["sipDomainConfigDetails"]["incomingIpAddresses"] = this.model.incomingIpAddresses.split(",");
     } else {
@@ -256,25 +304,35 @@ export class IvrComponent implements OnInit {
         this.notificationService.showError(err, this.translate.instant("NOTIFY.FAILED_TO_CONFIGURE_IVR"));
       })
   }
+  
 
   SipTransferConfig() {
+   
     this.saveInProgress = true;
     const params = {
       instanceId: this.authService.smartAssistBots.map(x=>x._id),
       'isAgentAssist':true
     }
+    
+    this.sipValue = this.model.sipURI.split(/[:]/);
+    this.sipMerge = this.didNumbers[0] +'@'+ this.sipValue[1];
+    this.sipValue.splice(1,1);
+    this.sipValue.splice(1,0,this.sipMerge);
+    this.sipNewURI = this.sipValue.join(':');
     if (!this.updateSipConfig) {
       const payload = {
         "type": "IVR",
         "settings": {
-          "sipURI": this.model.sipURI,
+          "sipURI": this.sipNewURI,
           "network": this.model.network,
           "didNumber": this.didNumbers,
           "sipTransportType": this.model.sipTransportType,
           "sipUserName": this.model.sipUserName,
           "sipPassword": this.model.sipPassword,
         }
+        
       }
+          
       if (this.model.network === 'listofIp') {
         payload["settings"]["incomingIpAddresses"] = this.model.incomingIpAddresses.split(",");
       } else {
@@ -292,10 +350,15 @@ export class IvrComponent implements OnInit {
         this.notificationService.showError(err, this.translate.instant("NOTIFY.FAILED_TO_CONFIGURE_IVR"));
       })
     } else {
-      let payload = {'type': "IVR"}
+      let payload = {'type': "IVR"}     
+      this.sipValue = this.model.sipURI.split(/[@:]/);
+      this.sipMerge = this.didNumbers +'@'+ this.sipValue[2];
+      this.sipValue.splice(1,1);
+      this.sipValue.splice(1,1,this.sipMerge);
+      this.sipNewURI = this.sipValue.join(':');
       let config = {
         "_id": this.selectedSipInfo._id,
-        "sipURI": this.model.sipURI,
+        "sipURI": this.sipNewURI,
         "network": this.model.network,
         "didNumber": this.didNumbers,
         "sipTransportType": this.model.sipTransportType,
