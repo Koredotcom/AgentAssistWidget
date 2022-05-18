@@ -256,6 +256,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                                         </div>
                                 </div>`;
         addAgentQueryTodropdownData.innerHTML = addAgentQueryTodropdownData.innerHTML + agentQueryHtml;
+
         AgentChatInitialize.renderMessage(_msgsResponse);
     }
 
@@ -962,7 +963,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         if ((data.endOfFaq || data.endOfTask) && data.type !== 'text') {
             isAutomationOnGoing = false;
             isOverRideMode = false;
-            $('#overRideBtn').addClass('hide');
+            $('.override-input-div').addClass('hide');
             addFeedbackHtmlToDom(data, botId, userId, userIntentInput);
         }
 
