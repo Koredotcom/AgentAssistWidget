@@ -12,6 +12,7 @@ var isMyBotAutomationOnGoing = false;
 var noAutomationrunninginMyBot = true;
 var myBotShowHistory = false;
 var idsOfMyBotDropDown;
+var isOverRideMode = false;
 var myBotDropdownHeaderUuids;
 var myBotResponseId;
 var idsOfDropDown;
@@ -142,6 +143,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             "icon": "https://uat.kore.ai:443/api/getMediaStream/market/f-cb381255-9aa1-5ce2-95e3-71233aef7084.png?n=17648985&s=IlRvUlUwalFVaFVMYm9sZStZQnlLc0l1UlZvdlNUUDcxR2o3U2lscHRrL3M9Ig$$",
             "traceId": "873209019a5adc26"
         }
+        let _id = Math.floor(Math.random()*100);
         let body = {};
         body['type'] = 'text';
         body['component'] = {
@@ -162,7 +164,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                                         <div class="icon_block_img">
                                             <img src="./images/userIcon.svg">
                                         </div>
-                                        <div class="run-info-content" id="userInput-${data._id}">
+                                        <div class="run-info-content" id="userInput-${_id}">
                                             <div class="title">Customer Said - </div>
                                             <div class="agent-utt">
                                                 <div class="title-data">${data.query}</div>
@@ -171,7 +173,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                                         </div>
                                 </div>`;
         addUserQueryTodropdownData.innerHTML = addUserQueryTodropdownData.innerHTML + userQueryHtml;
-        let entityHtml = $(`#dropDownData-${dropdownHeaderUuids}`).find(`#userInput-${data._id}`);
+        let entityHtml = $(`#dropDownData-${dropdownHeaderUuids}`).find(`#userInput-${_id}`);
         if(data.entityValue && !data.isErrorPrompt){ 
            entityHtml.append(`<div class="order-number-info">${data.entityName} : ${data.entityValue}</div>`);
         }else{
@@ -200,7 +202,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
     }
 
     // Add input field to the userResponse manually by the agent
-    function agentManualentryMsg(data, convId, botId) {
+    function agentManualentryMsg(agentInput,data, convId, botId) {
         var _msgsResponse = {
             "type": "bot_response",
             "from": "bot",
@@ -229,8 +231,17 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             "body": data.userInput
         };
         _msgsResponse.message.push(body);
-        let addAgentQueryTodropdownData = document.getElementById(`dropDownData-${myBotDropdownHeaderUuids}`);
-        let agentEntityInput = document.getElementById('agentInput').value ;
+        let addAgentQueryTodropdownData;
+        let agentEntityInput;
+        if(currentTabActive == 'userAutoIcon'){
+             addAgentQueryTodropdownData = document.getElementById(`dropDownData-${dropdownHeaderUuids}`);
+             agentEntityInput = agentInput;
+        }else{
+             addAgentQueryTodropdownData = document.getElementById(`dropDownData-${myBotDropdownHeaderUuids}`);
+             agentEntityInput = agentInput
+        }
+
+
         let agentQueryHtml = 
                             // `<div class="run-info-content">
                             //     <div class="order-number-info">${data.entityName} : ${data.entityValue}</div>
@@ -623,7 +634,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 <div class="title">Input</div>
                 <div class="agent-utt enter-details-block">
                 <div class="title-data" ><span class="enter-details-title">EnterDetails: </span>
-                <input type="text" placeholder="Enter Value" class="input-text chat-container" id="agentInput" data-conv-id="${convId}" data-bot-id="${botId}" data-user-id="${userId}" data-mybot-input="true">
+                <input type="text" placeholder="Enter Value" class="input-text chat-container" id="agentInput-${Math.floor(Math.random()*100)}" data-conv-id="${convId}" data-bot-id="${botId}" data-user-id="${userId}" data-mybot-input="true">
                 </div>
                 </div>
                 </div>
@@ -891,6 +902,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             _msgsResponse.message.push(body);
         }
         if (data.buttons && !data.value.includes('Customer has waited')) {
+            $('#overRideBtn').removeClass('disable-btn').removeAttr('disabled').addClass('override-input-btn');
             let runInfoContent = $(`#dropDownData-${dropdownHeaderUuids}`);
             let askToUserHtml = `
             <div class="steps-run-data">
@@ -932,7 +944,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             `;
             if (data.isPrompt) {
                 runInfoContent.append(askToUserHtml);
-            } else {
+            }else{
                 runInfoContent.append(tellToUserHtml);
             }
 
@@ -948,6 +960,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         }
         if ((data.endOfFaq || data.endOfTask) && data.type !== 'text') {
             isAutomationOnGoing = false;
+            isOverRideMode = false;
+            $('#overRideBtn').addClass('hide');
             addFeedbackHtmlToDom(data, botId, userId, userIntentInput);
         }
 
@@ -1261,12 +1275,18 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 }
             }
             if(target.className == 'btn-danger'){
-                $('#terminatePopUp').removeClass('hide');
+                target.innerHTML =='Terminate'?$('#terminatePopUp').removeClass('hide'):'';
                 if(target.innerHTML == 'Yes'){
                     $('#terminatePopUp').addClass('hide');
-                    AgentAssistPubSub.publish('agent_assist_send_text', 
-                    { conversationId: _agentAssistDataObj.conversationId,
-                         botId: _botId, value: 'discard all', check: true });
+                    if(currentTabActive == 'userAutoIcon'){
+                        AgentAssistPubSub.publish('agent_assist_send_text', 
+                        { conversationId: _agentAssistDataObj.conversationId,
+                             botId: _botId, value: 'discard all', check: true });
+                    } else {
+                        AgentAssistPubSub.publish('searched_Automation_details', 
+                        { conversationId: _agentAssistDataObj.conversationId, botId: _botId, value: 'discard all', isSearch: false });
+                    }
+                   
                 }
                 
             }
@@ -1392,7 +1412,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                            <button class="btn-danger">Terminate</button>
                        </div>
                        <div class="collapse-acc-data" id="dropDownData-${uuids}">
-                           
+                        <div class="override-input-div">
+                        <button class="override-input-btn" id="overRideBtn">Override Input</button>
+                        </div>
                           
                        </div>
                        
@@ -1426,6 +1448,26 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 else {
                     $('#interruptPopUp').removeClass('hide');
                 }
+            }
+            if(target.className =='override-input-btn'){
+                isOverRideMode = true;
+                let runInfoContent = $(`#dropDownData-${dropdownHeaderUuids}`);
+                let agentInputToBotHtml = `
+                <div class="steps-run-data">
+                    <div class="icon_block">
+                        <i class="ast-agent"></i>
+                    </div>
+                    <div class="run-info-content">
+                    <div class="title">Input</div>
+                    <div class="agent-utt enter-details-block">
+                    <div class="title-data" ><span class="enter-details-title">EnterDetails: </span>
+                    <input type="text" placeholder="Enter Value" class="input-text chat-container" id="agentInput-${Math.floor(Math.random()*100)}" data-conv-id="${_agentAssistDataObj.conversationId}" data-bot-id="${_botId}" data-user-id="${_agentAssistDataObj.userId}" data-mybot-input="true">
+                    </div>
+                    </div>
+                    </div>
+                </div>`
+                runInfoContent.append(agentInputToBotHtml);
+                $('#overRideBtn').attr('disabled','disabled').removeClass('override-input-btn').addClass('disable-btn');
             }
             if (checkButton) {
                 let id = target.id.split('-')[1];
@@ -1795,12 +1837,18 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 AgentAssistPubSub.publish('searched_Automation_details', { conversationId: convId, botId: botId, value: intentName, isSearch: true });
             }
         }
-        if(e.target.id == 'agentInput') {
-            var agentInput = document.getElementById('agentInput').value;
-            if (agentInput.trim().length == 0 && e.target.dataset?.val?.trim().length == 0) {
+        if(e.target.id.split('-').includes('agentInput')) {
+            var agentInput; 
+            if(currentTabActive == 'userAutoIcon'){
+                agentInput = document.getElementById(e.target.id).value;
+            }else{
+                agentInput = document.getElementById(e.target.id).value;
+            }
+            
+            if (agentInput.trim().length == 0) {
                 console.log('no input, please enter a proper value');
             }
-            if (e.keyCode == 13 && (agentInput.trim().length > 0 || e.target.dataset.val.trim().length > 0)) {
+            if (e.keyCode == 13 && (agentInput.trim().length > 0)) {
                 let data = {
                     convId: e.target.convId,
                     botId: e.target.botId,
@@ -1808,11 +1856,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                     entityValue: agentInput,
                 } 
                 console.log(e.target.dataset.val);
-                agentManualentryMsg(e.target.dataset, e.target.dataset.convId, e.target.dataset.botId);
+                agentManualentryMsg(agentInput,e.target.dataset, e.target.dataset.convId, e.target.dataset.botId);
                 var convId = e.target.dataset.convId;
                 var botId = e.target.dataset.botId;
-                var intentName = agentInput ? agentInput : e.target.dataset.val;
-                AgentAssistPubSub.publish('searched_Automation_details', { conversationId: convId, botId: botId, value: intentName, isSearch: false });
+                var intentName = agentInput 
+                if(currentTabActive === 'userAutoIcon'){
+                    AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: convId, agentId: '', botId: botId, value: intentName, check: true });
+                }else{
+                    AgentAssistPubSub.publish('searched_Automation_details', { conversationId: convId, botId: botId, value: intentName, isSearch: false });
+                }
             }
         }
 

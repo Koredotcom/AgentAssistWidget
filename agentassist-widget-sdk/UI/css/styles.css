@@ -1933,3 +1933,15 @@ border: 1px solid transparent !important;
     outline: 0;
     cursor: pointer;
 }
+.disable-btn{
+    background-color: lightgray;
+    color: white;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.05);
+    border-radius: 5px;
+    padding: 5px 8px;
+    font-weight: 600;
+    font-size: 9px;
+    line-height: 11px;
+    border: 1px;
+    cursor: not-allowed;
+}
