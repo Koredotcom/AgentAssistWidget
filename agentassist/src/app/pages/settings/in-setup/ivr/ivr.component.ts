@@ -28,6 +28,8 @@ export class IvrComponent implements OnInit {
   sipDID: any;
   sipNewURI: any;
   showAudioCodes: boolean = true;
+  isDidExist:boolean = false;
+  didLengthSet:boolean = false;
   didNumbers: any[] = [];
   sipTransportTypes: any[] = []
   voiceListSub: Subscription;
@@ -101,7 +103,7 @@ export class IvrComponent implements OnInit {
           'sipURI': this.sipNewURI,
           }
          }
-        else {     
+        else {  
         this.model = {
           ... this.model,
           'sipURI': res.smartAssistSeedData.sipURI,
@@ -164,8 +166,13 @@ export class IvrComponent implements OnInit {
   }
 
   onDIDNumberRemove(tag): void {
+    this.isDidExist = true;
+    this.sipValue = this.sipNewURI.split(/[@:]/);
+    if(this.didNumbers.length == 1){
+    this.sipValue.splice(1,1);
+    }
+    this.sipNewURI = this.sipValue.join(':');
     const index = this.didNumbers.indexOf(tag);
-
     if (index >= 0) {
       this.didNumbers.splice(index, 1);
     }
@@ -179,10 +186,11 @@ export class IvrComponent implements OnInit {
   OnDidNumberUpdated(event: MatChipInputEvent): void {
     const input = event.input;
     const value = event.value;
-
     if ((value || '').trim()) {
-      
+     
+      this.didLengthSet = true;
       if (this.didNumbers.length >= 1) {
+        
         this.notificationService.notify("SIP doesn't support more than 1 number", 'warning');
         return;
       }
@@ -190,7 +198,19 @@ export class IvrComponent implements OnInit {
       if (this.didNumbers.indexOf(value.trim()) > -1) {
         return;
       }
+      this.isDidExist = true;
+      if(this.sipNewURI){
+      this.sipValue = this.sipNewURI.split(/[@:]/);
+      }
+      else{
+        this.sipValue = this.model.sipURI.split(/[@:]/);
+      }
+      this.sipMerge = value +'@'+ this.sipValue[1];
+      this.sipValue.splice(1,1);
+      this.sipValue.splice(1,0,this.sipMerge);
+      this.sipNewURI = this.sipValue.join(':');
       this.didNumbers.push(value.trim());
+     
     }
 
     // Reset the input value

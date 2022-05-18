@@ -322,7 +322,7 @@ export class VoiceSettingsComponent implements OnInit, AfterViewInit, OnDestroy 
       panelClass: "delete-phone-sip-config",
       data: {
         title: this.translate.instant('NOTIFY.ARE_YOU_SURE', { Sip: sipDetails.sipURI }),
-        text: this.translate.instant("PhoneNum_DELETE_CONFORMATION_NOTE"),
+        text: this.translate.instant("SIPURL_DELETE_CONFORMATION_NOTE"),
         buttons: [{ key: 'yes', label: this.translate.instant("BUTTONS.DELETE"), type: 'danger' }, { key: 'no', label: this.translate.instant("BUTTONS.CANCEL") }]
       }
     });
@@ -355,7 +355,7 @@ export class VoiceSettingsComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   deleteSipConfig(sipDetails) {
-    this.deletePhoneNumberConfig(sipDetails)
+    this.deleteSipConfiguration(sipDetails)
   }
 
   openPhSlider() {
