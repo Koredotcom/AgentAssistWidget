@@ -903,6 +903,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
         }
         if (data.buttons && !data.value.includes('Customer has waited')) {
             $('#overRideBtn').removeClass('disable-btn').removeAttr('disabled').addClass('override-input-btn');
+            $("#inputFieldForAgent").remove();
             let runInfoContent = $(`#dropDownData-${dropdownHeaderUuids}`);
             let askToUserHtml = `
             <div class="steps-run-data">
@@ -962,7 +963,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
             isAutomationOnGoing = false;
             isOverRideMode = false;
             $('#overRideBtn').addClass('hide');
-            $('.steps-run-data').filter('[id]').remove()
             addFeedbackHtmlToDom(data, botId, userId, userIntentInput);
         }
 
@@ -1454,7 +1454,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _userId,
                 isOverRideMode = true;
                 let runInfoContent = $(`#dropDownData-${dropdownHeaderUuids}`);
                 let agentInputToBotHtml = `
-                <div class="steps-run-data" id="inputFieldForAgent-${Math.floor(Math.random()*100)}">
+                <div class="steps-run-data" id="inputFieldForAgent">
                     <div class="icon_block">
                         <i class="ast-agent"></i>
                     </div>
