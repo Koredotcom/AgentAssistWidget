@@ -11,9 +11,13 @@
             <div class="ivr-container-data">
                 <div class="main-title">{{'SETTINGS.SIP_CALL_TRANSFER_SETUP' | translate}}</div>
                 <div class="sub-info">{{'SETTINGS.IVR_DESC' | translate}}</div>
-                <div class="kr-sg-input-text mb-23">
+                <div class="kr-sg-input-text mb-23" *ngIf="isDidExist">
                     <div class="label-text">SIP URI</div>
-                    <input type="text" name="sipDomainName" class="input-text" readonly [(ngModel)]="model.sipURI">                                
+                    <input type="text" name="sipDomainName" class="input-text" readonly [(ngModel)]="sipNewURI">                             
+                </div>
+                <div class="kr-sg-input-text mb-23" *ngIf="!isDidExist">
+                    <div class="label-text">SIP URI</div>
+                    <input type="text" name="sipDomainName" class="input-text" readonly [(ngModel)]="model.sipURI">                             
                 </div>
                 <div class="network-component mb-23">
                     <div class="label-text">{{'SETTINGS.NETWORK' | translate}}</div>
