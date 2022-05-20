@@ -739,7 +739,7 @@ html, body{
     position: relative;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info:last-child{
-    padding-bottom: 16px;
+    padding-bottom: 30px;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info:last-child .dilog-task-end{
     position: absolute;
@@ -812,6 +812,11 @@ html, body{
     position: relative;
     display: inline-block;
     width: 100%;
+}
+
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .override-input-div {
+    position: absolute;
+    bottom: -30px;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data::before {
     content: "";
