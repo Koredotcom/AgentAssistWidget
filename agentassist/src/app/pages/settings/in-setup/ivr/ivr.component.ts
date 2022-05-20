@@ -87,13 +87,14 @@ export class IvrComponent implements OnInit {
     this.instanceAppDetails = this.voiceService.instantAppData();
     this.selectedApp = this.workflowService.deflectApps(); 
     this.workflowService.seedData$.subscribe(res => {
+     
       this.sipDetailsList = this.incomingSetup;
       if (this.model) {
-        this.model.sipURI = res.smartAssistSeedData.sipURI;
+        this.model.sipURI = res.agentAssistSeedData.agentAssistSipURI;
       } 
       else { 
         if(this.sipDetailsList){
-          this.sipValue = res.smartAssistSeedData.sipURI.split(/[:]/);
+          this.sipValue = res.agentAssistSeedData.agentAssistSipURI.split(/[:]/);
           this.sipMerge = this.sipDetailsList.didNumber +'@'+ this.sipValue[1];
           this.sipValue.splice(1,1);
           this.sipValue.splice(1,0,this.sipMerge);
@@ -106,7 +107,7 @@ export class IvrComponent implements OnInit {
         else {  
         this.model = {
           ... this.model,
-          'sipURI': res.smartAssistSeedData.sipURI,
+          'sipURI': res.agentAssistSeedData.agentAssistSipURI,
         }
        }
       }

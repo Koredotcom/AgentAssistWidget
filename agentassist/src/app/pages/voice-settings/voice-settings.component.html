@@ -152,7 +152,7 @@
                                     <div class="col-8 team-with-profile row m-0">
                                         <div class="text-title">SIP transfer</div>
                                     </div>
-                                    <div class="col-4 new-skill-btn p-0" (click)="openIVRSlider()">
+                                    <div class="col-4 new-skill-btn p-0" (click)="openIVRSlider()" *ngIf="showNewSIPTransfers">
                                         <button class="kr-sg-button-primary btn_md"><img src="assets/icons/add.svg" class="addPlus">New</button>
                                     </div>
                                     <div class="col-4 agent-counts">
