@@ -13,6 +13,7 @@ import { IncomingSetupModel } from '../../settings.model';
 import { AuthService } from '@kore.services/auth.service';
 import { fromEvent, Subscription } from 'rxjs';
 import { analyzeAndValidateNgModules } from '@angular/compiler';
+import { event } from 'd3';
 declare const $: any;
 @Component({
   selector: 'app-ivr',
@@ -41,7 +42,7 @@ export class IvrComponent implements OnInit {
   voicePreviewInProgress: boolean = false;
   showMoreDIDNumbers:boolean = false;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
-
+  sipTransferList: any;
   dnsResolveMethods: any[] = [];
   data: any;
   instanceAppDetails;
@@ -83,12 +84,10 @@ export class IvrComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-   
     this.instanceAppDetails = this.voiceService.instantAppData();
     this.selectedApp = this.workflowService.deflectApps(); 
     this.workflowService.seedData$.subscribe(res => {
-     
-      this.sipDetailsList = this.incomingSetup;
+    this.sipDetailsList = this.incomingSetup;
       if (this.model) {
         this.model.sipURI = res.agentAssistSeedData.agentAssistSipURI;
       } 
@@ -104,11 +103,29 @@ export class IvrComponent implements OnInit {
           'sipURI': this.sipNewURI,
           }
          }
-        else {  
-        this.model = {
-          ... this.model,
-          'sipURI': res.agentAssistSeedData.agentAssistSipURI,
-        }
+        else {
+          const params = {
+            instanceId:this.authService.smartAssistBots.map(x=>x._id),
+            'isAgentAssist':true
+           }
+          this.voiceListSub = this.service.invoke('get.voiceList', params).subscribe(voiceList => {
+            this.sipTransferList = voiceList;
+            this.sipValue = res.agentAssistSeedData.agentAssistSipURI.split(/[:]/);
+            if(this.sipTransferList.sipRecId){
+            this.sipMerge = this.sipTransferList.sipRecId +'@'+ this.sipValue[1];  
+            }
+            else{       
+            this.sipMerge = this.didNumbers +'@'+ this.sipValue[1];
+            }
+            this.sipValue.splice(1,1);
+            this.sipValue.splice(1,0,this.sipMerge);
+            this.sipNewURI = this.sipValue.join(':');
+            this.model.didNumber = this.sipTransferList.sipRecId;
+            this.model = {
+              ... this.model,
+              'sipURI': this.sipNewURI,
+            }
+          })
        }
       }
       if (!res) return;
@@ -206,8 +223,15 @@ export class IvrComponent implements OnInit {
       else{
         this.sipValue = this.model.sipURI.split(/[@:]/);
       }
+      if(this.sipValue[1] == this.model.didNumber){
+      this.sipValue.splice(1,1);
       this.sipMerge = value +'@'+ this.sipValue[1];
       this.sipValue.splice(1,1);
+      }
+      else if(this.sipValue[1] != this.model.didNumber){
+      this.sipMerge = value +'@'+ this.sipValue[1];
+      this.sipValue.splice(1,1);
+      }
       this.sipValue.splice(1,0,this.sipMerge);
       this.sipNewURI = this.sipValue.join(':');
       this.didNumbers.push(value.trim());
@@ -315,8 +339,9 @@ export class IvrComponent implements OnInit {
       'isAgentAssist':true
     }
     
-    this.sipValue = this.model.sipURI.split(/[:]/);
-    this.sipMerge = this.didNumbers[0] +'@'+ this.sipValue[1];
+    this.sipValue = this.model.sipURI.split(/[@:]/);
+    this.sipValue.splice(1,1);
+    this.sipMerge = this.model.didNumber +'@'+ this.sipValue[1];   
     this.sipValue.splice(1,1);
     this.sipValue.splice(1,0,this.sipMerge);
     this.sipNewURI = this.sipValue.join(':');
