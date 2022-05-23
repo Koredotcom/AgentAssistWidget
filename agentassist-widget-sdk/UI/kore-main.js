@@ -98,7 +98,7 @@
             botID =  $(`#botid`).val()? $(`#botid`).val(): chatConfig.botOptions.botInfo._id;
 
 
-            let agentAssistObj = new AgentAssist('agent-assist-chat-container',conversationId , agentID, userID, botID, connectionObj);
+            let agentAssistObj = new AgentAssist('agent-assist-chat-container',conversationId , botID, connectionObj);
 
             let userIds;
             userIds = agentAssistObj._conversationId + '_' + agentAssistObj.userId + '_' + agentAssistObj.botId;
