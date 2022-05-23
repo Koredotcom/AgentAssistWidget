@@ -65,9 +65,7 @@
                 console.error("token or botid not specified");
                 alert("error")
             } else {
-                alert('success')
                 grantCall();
-               
             }
             function grantCall(){
                 var payload = {
@@ -90,12 +88,9 @@
                     data: JSON.stringify(payload),
                     dataType: "json",
                     success: function (result) {
-                        document.getElementById('agentWidget').remove("hide");
                         var chatConfig = window.KoreSDK.chatConfig;
                         var koreBot = koreBotChat();
-                       // koreBot.show(chatConfig);
                         if (chatConfig.agentAssist) {
-
                             var webSocketConnection = {
                                 "path": "/agentassist/api/v1/chat/", transports: ['websocket', 'polling', 'flashsocket']
                             };
@@ -106,27 +101,19 @@
                                 botDetails: chatConfig.botOptions
                             }
                             conversationId = (new Date()).getTime() + '';
-
-
-
                             new AgentAssist('agent-assist-chat-container', conversationId, botID, connectionObj);
                         }
-
                     },
                     error: function (error) {
                         console.error("given token is wrong")
                     }
-                });
-                
+                });  
            }
-        
-                
-            
         </script>
     </head>
     <body>
        
-        <div class="agent-assist-chat-container kore-chat-window" id="agentWidget">
+        <div class="agent-assist-chat-container kore-chat-window " id="agentWidget">
             <div class="header-top-bar">
                 <!-- Header -->
                 <div class="header-data">
