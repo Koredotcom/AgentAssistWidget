@@ -152,9 +152,14 @@
          initAgentAssist();
      });
     //  need to change the Token by using the current bot clientId and client sceret
-     $('#sendMsg').click(() => {
-        let msg = $('#userInput').val();
-        console.log("--------->"+msg);
+    let staticToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NTMzMTEyMTc0OTYsImV4cCI6MTY1MzM5NzYxNzQ5NiwiYXVkIjoiaHR0cHM6Ly9pZHByb3h5LmtvcmUuY29tL2F1dGhvcml6ZSIsImlzcyI6ImNzLTdmZTQ2NmUyLWE3ZWItNTIwMS04NGZlLTE4Mjk5NmExY2Q3NSIsInN1YiI6InVhLTdmZjVlODQ2LTFkZWYtNDhhYS1hZTc2LTU3ZjlhYjNkZDZjOSIsImlzQW5vbnltb3VzIjoiZmFsc2UifQ.t0q117vvnLmc-g044KbtO0WznQ8zgi4l26321Mboteo';
+    $('#jwt-token').val(staticToken);
+    let token = $('#jwt-token').val()? $('#jwt-token').val(): staticToken;
+     $('#userInput').keypress(function(event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if(keycode == '13'){
+            let msg = $('#userInput').val();
+        console.log("--------->", msg, token);
         let payload = {
             "agentId": agentID,
             "botId": botID,
@@ -167,20 +172,23 @@
             crossDomain: true,
             contentType: 'application/json',
             headers: {
-               'token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.k-EU2xyO3gpQUg4yO7fkjdG1kSE_y5TCmpkB3WBfgcQ',
+               'token': token,
                "accept": "application/json",
               "Access-Control-Allow-Origin":"*",
             },
             data:  JSON.stringify(payload),
             dataType: "json",
             success: function (result) {
+                console.log(payload, token);
                 console.log(result);
             },
             error: function (error) {
+                console.log(payload, token);
                 console.log(error);
             }
          });
          $('#userInput').val('');
+        }
     })
     });
 

@@ -5,6 +5,7 @@ var _agentAssistComponents = {};
 var isAutomationOnGoing = false;
 var isShowHistoryEnable = false;
 var autoExhaustiveList;
+var searchedVal;
 var frequentlyUsedList;
 var isMyBotAutomationOnGoing = false;
 var noAutomationrunninginMyBot = true;
@@ -58,6 +59,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             processAgentAssistResponse(data, data.conversationId, _botId);
 
         })
+        AgentAssistPubSub.publish('automation_exhaustive_list', 
+            { conversationId: _agentAssistDataObj.conversationId, botId: _agentAssistDataObj.botId, 'experience': 'chat' });
         _agentAsisstSocket.on('user_message', (data) => {
             processUserMessage(data, data.conversationId, _botId);
 
@@ -1025,10 +1028,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 $('#overLaySearch').html('');
             }
 
-            if (target.className == 'ast-close close-search'&& currentTabActive == 'searchAutoIcon' ) {
-                // Logic to reset the search library on cancel
-            }
-
             if (target.className == 'show-all') {
                 let showAllClicked = true;
                 previousTabActive = currentTabActive;
@@ -1070,6 +1069,16 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 $('#librarySearch').keyup();
 
             }
+
+            if (target.className == 'ast-close close-search' && currentTabActive == 'searchAutoIcon' ) {
+                // Logic to reset the search library on cancel
+                searchedVal = '';
+                $('#librarySearch').val('');
+                $('#backButton').addClass('hide');
+                $('#searchResults').addClass('hide');
+                $('#allAutomations-Exhaustivelist').removeClass('hide');
+            }
+
             if (target.id == 'backToPreviousTab') {
 
                 $(`#${currentTabActive}`).removeClass('active-tab');
@@ -1096,7 +1105,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
             if (target.id === `searchAutoIcon` || target.id === `searchIcon` || target.id === `LibraryLabel`) {
                 data = _agentAssistDataObj
-                AgentAssistPubSub.publish('automation_exhaustive_list', { conversationId: _agentAssistDataObj.conversationId, botId: _agentAssistDataObj.botId, 'experience': 'chat' });
                 libraryTabActive();
             }
             else if (target.id === `agentAutoIcon` || target.id === `agentBotIcon` || target.id === `MybotLabel`) {
@@ -1652,6 +1660,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             document.getElementById("historyData")?.remove();
         }
         $('.show-back-recommendation-block').addClass('hide');
+        if(searchedVal?.length > 0) {
+            $('#librarySearch').val(searchedVal);
+        }
         let searchblock = document.getElementById('librarySearch');
         searchblock.setAttribute('data-conv-id', _agentAssistDataObj.conversationId);
         searchblock.setAttribute('data-bot-id', _agentAssistDataObj.botId);
@@ -1777,8 +1788,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             }
             if (e.target.id == 'librarySearch' && input_taker.trim().length == 0 && e.target.dataset?.val?.trim().length == 0) {
                 processAgentIntentResults(autoExhaustiveList, autoExhaustiveList.conversationId, autoExhaustiveList.botId);
+                console.log(444);
             }
             if (e.keyCode == 13 && (input_taker.trim().length > 0 || e.target.dataset.val.trim().length > 0)) {
+                console.log(555, input_taker);
+                searchedVal =$('#librarySearch').val();
                 var convId = e.target.dataset.convId;
                 var botId = e.target.dataset.botId;
                 var intentName = input_taker ? input_taker : e.target.dataset.val;
