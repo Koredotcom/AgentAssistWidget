@@ -78,7 +78,7 @@
                                         {{tag}}
                                 <mat-icon matChipRemove><img src="assets/images/close.svg"></mat-icon>
                             </mat-chip>
-                            <input type="text" id="didNumber" name="" class="sys-input" [(ngModel)]="model.didNumber" [ngModelOptions]="{updateOn: 'blur', standalone: true}" #didNumber="ngModel" required onkeypress='return (event.charCode >= 48 && event.charCode <= 57) || (event.charCode == 43)' [placeholder]="'SETTINGS.DID_NUMBER_PLACEHOLDER' | translate"
+                            <input type="text" id="didNumber" name="" class="sys-input" [(ngModel)]="model.didNumber" [ngModelOptions]="{updateOn: 'blur', standalone: true}" #didNumber="ngModel" required onkeypress='return ((event.charCode >= 48 && event.charCode <= 57) || (event.charCode >= 65 && event.charCode <= 90) || (event.charCode >= 97 && event.charCode <= 122) || (event.charCode == 32))'
                                     (focus)="onDidNumberFocus($event)"
                                     [matChipInputFor]="chipList"
                                     matChipInputAddOnBlur= "true"

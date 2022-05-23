@@ -34,6 +34,7 @@ export class VoiceSettingsComponent implements OnInit, AfterViewInit, OnDestroy 
   updatePhNumberSlider = false;
   updateCallFlowList = false;
   updateIVRSlider = false;
+  showNewSIPTransfers: boolean = false;
   @ViewChild('attacheFlowSlider', { static: true }) attacheFlowSlider: SliderComponentComponent;
   @ViewChild('incomingPhNumberSlider', { static: true }) incomingPhNumberSlider: SliderComponentComponent;
   @ViewChild('incomingIVRSlider', { static: true }) incomingIVRSlider: SliderComponentComponent;
@@ -185,13 +186,19 @@ export class VoiceSettingsComponent implements OnInit, AfterViewInit, OnDestroy 
      instanceId:this.authService.smartAssistBots.map(x=>x._id),
       'isAgentAssist':true
     }
+    
     const qparams = {
       s: searchTerm
     }
- console.log(this.authService.smartAssistBots.map(x=>x._id));
     if (this.voiceListSub) this.voiceListSub.unsubscribe();
     this.voiceListSub = this.service.invoke('get.voiceList', params, qparams).subscribe(voiceList => {
       this.phoneNumandSipDetailsList = voiceList;
+      if(this.phoneNumandSipDetailsList?.sipTransfers.length == 0){
+        this.showNewSIPTransfers = true;
+      }
+      else{
+        this.showNewSIPTransfers = false;
+      }
       // for (let numData of this.phoneNumandSipDetailsList.phoneNumbers) {
       //   // for (let flowData of this.expFlowList) {
       //   //   if('cfId' in numData) {
