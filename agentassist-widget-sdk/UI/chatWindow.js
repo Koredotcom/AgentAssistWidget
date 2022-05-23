@@ -1146,6 +1146,7 @@
                 if (me.config.allowLocation) {
                     me.bot.fetchUserLocation();
                 }
+                console.log("======me=====",me)
                 me.render(chatWindowHtml);
                 me.unfreezeUIOnHistoryLoadingFail.call(me);
             };
@@ -1220,7 +1221,7 @@
                 _this.bot=bot;
                 //_this._chatContainer =  _this.config.chatContainer;
                 _this.EVENTS=EVENTS;
-                _this.chatInitialize=chatInitialize;
+                _this.chatInitialize=AgentChatInitialize;
                 _this.botMessages=botMessages;
                 _this.attachmentInfo=attachmentInfo;
                 _this._botInfo=_botInfo;
@@ -2172,7 +2173,7 @@
                 if (msgsData && msgsData.length) {
                     msgsData.forEach(function (msgData, index) {
                         setTimeout(function () {
-                            chatInitialize.renderMessage(msgData);
+                            AgentChatInitialize.renderMessage(msgData);
                         }, (index >= 1) ? SUBSEQUENT_RENDER_DELAY : 0);
                     });
                 }
@@ -3932,7 +3933,7 @@
                 }
             };
             this.applySDKBranding = function (res) {
-                chatInitialize.applySDKBranding.call(chatInitialize,res);
+                AgentChatInitialize.applySDKBranding.call(AgentChatInitialize,res);
             }
             function IsJsonString() {
                 try {
@@ -4034,8 +4035,8 @@
                 }
             }*/
             window.onbeforeunload = function () {
-                if (chatInitialize && $(chatInitialize.config.chatContainer).length > 0) {
-                    chatInitialize.destroy();
+                if (AgentChatInitialize && $(AgentChatInitialize.config.chatContainer).length > 0) {
+                    AgentChatInitialize.destroy();
                     //return null;
                 }
             }
@@ -4090,21 +4091,21 @@
                     var wizSDK = cfg.widgetSDKInstace;
                     wizSDK.events.onPostback = function (data) {
                             $('.chatInputBox').text(data.payload);
-                            chatInitialize.sendMessage($('.chatInputBox'), data.utterance, data);
+                            AgentChatInitialize.sendMessage($('.chatInputBox'), data.utterance, data);
                     };
                 }
             };
             
             this.setWidgetInstance=function(widgetSDKInstace){
                 if(widgetSDKInstace){
-                    chatInitialize.config.widgetSDKInstace=widgetSDKInstace;
-                    this.addWidgetEvents(chatInitialize.config);
+                    AgentChatInitialize.config.widgetSDKInstace=widgetSDKInstace;
+                    this.addWidgetEvents(AgentChatInitialize.config);
                 }
             }           
             this.destroy = function () {
-                if (chatInitialize && chatInitialize.destroy) {
+                if (AgentChatInitialize && AgentChatInitialize.destroy) {
                     _eventQueue = {};
-                    chatInitialize.destroy();
+                    AgentChatInitialize.destroy();
                 }
                 if (_ttsContext) {
                     _ttsContext.close();
@@ -4146,7 +4147,7 @@
                 }, 50);*/
             }
             this.chatHistory = function (res) {
-                chatInitialize.chatHistory.call(chatInitialize,res);
+                AgentChatInitialize.chatHistory.call(AgentChatInitialize,res);
             }
             // chatWindow.prototype.chatHistory = function (res) {
             //     var me = this;
@@ -4273,8 +4274,8 @@
             //     }
             // }
             this.closeConversationSession = function () {
-               if(chatInitialize){
-                    chatInitialize.closeConversationSession();
+               if(AgentChatInitialize){
+                    AgentChatInitialize.closeConversationSession();
                } 
             }
             /*************************************       Microphone code      **********************************************/
@@ -4283,7 +4284,7 @@
             var recognition = null;
             var prevStr = "";
             setTimeout(function(){
-                if(chatInitialize && chatInitialize.config && chatInitialize.config.allowGoogleSpeech) {
+                if(AgentChatInitialize && AgentChatInitialize.config && AgentChatInitialize.config.allowGoogleSpeech) {
                     if(window.initGapi){
                         initGapi();
                     }else{
@@ -4408,7 +4409,7 @@
                     intervalKey = setInterval(function () {
                         rec.export16kMono(function (blob) {
                             console.log(new Date());
-                            if (chatInitialize.config.allowGoogleSpeech) {
+                            if (AgentChatInitialize.config.allowGoogleSpeech) {
                                 sendBlobToSpeech(blob, 'LINEAR16', 16000);
                             }
                             else {
@@ -4421,7 +4422,7 @@
             }
 
             function getSIDToken() {
-                if(chatInitialize.config.allowGoogleSpeech) {
+                if(AgentChatInitialize.config.allowGoogleSpeech) {
                     if(recognition) { // using webkit speech recognition
                         startGoogleWebKitRecognization();
                     }
@@ -4517,7 +4518,7 @@
                 });
                 console.log('Recorder Initialized');
                 _permission = true;
-                if (!chatInitialize.config.allowGoogleSpeech) {
+                if (!AgentChatInitialize.config.allowGoogleSpeech) {
                     afterMicEnable();
                 }
                 else {
@@ -4648,7 +4649,7 @@
                 };
                 // If server is closed
                 _connection.onclose = function (e) {
-                    if ($('.chatInputBox').text() !== '' && chatInitialize.config.autoEnableSpeechAndTTS) {
+                    if ($('.chatInputBox').text() !== '' && AgentChatInitialize.config.autoEnableSpeechAndTTS) {
                         var me = window.chatContainerConfig;
                         me.sendMessage($('.chatInputBox'));
                     }
@@ -4665,7 +4666,7 @@
             }
 
             function stop() {
-                if ($('.chatInputBox').text() !== '' && chatInitialize.config.autoEnableSpeechAndTTS) {
+                if ($('.chatInputBox').text() !== '' && AgentChatInitialize.config.autoEnableSpeechAndTTS) {
                     var me = window.chatContainerConfig;
                     me.sendMessage($('.chatInputBox'));
                 }
@@ -4762,7 +4763,7 @@
                         // do nothing
                     } else {
                         var _data = msg.data
-                        if (chatInitialize.isTTSOn) {
+                        if (AgentChatInitialize.isTTSOn) {
                             playsound(_data);
                         }
                     }
@@ -4832,7 +4833,7 @@
                         ttsAudioSource.start(0);
                         ttsAudioSource.addEventListener('ended', function () {
                             setTimeout(function () {
-                                if (chatInitialize.isTTSOn && chatInitialize.config.autoEnableSpeechAndTTS) {
+                                if (AgentChatInitialize.isTTSOn && AgentChatInitialize.config.autoEnableSpeechAndTTS) {
                                     $('.notRecordingMicrophone').trigger('click');
                                 }
                             }, 350);
@@ -5021,7 +5022,7 @@
                 }
             };
             function getFileToken(_obj, _file, recState) {
-                var me=chatInitialize;
+                var me=AgentChatInitialize;
                 var auth = (bearerToken) ? bearerToken : assertionToken;
                 var url=koreAPIUrl + "1.1/attachment/file/token";
                 if(me.config && me.config && me.config.botOptions && me.config.botOptions.webhookConfig && me.config.botOptions.webhookConfig.enable){
@@ -5040,7 +5041,7 @@
                         acceptAndUploadFile(_obj, _file, recState);
                     },
                     error: function (msg) {
-                        chatInitialize.config.botOptions._reconnecting=true;
+                        AgentChatInitialize.config.botOptions._reconnecting=true;
                         _self.showError("Failed to upload file.Please try again");
                         if(msg.responseJSON && msg.responseJSON.errors && msg.responseJSON.errors.length && msg.responseJSON.errors[0].httpStatus==="401"){
                             setTimeout(function(){
@@ -5053,13 +5054,13 @@
                 });
             }
             function getfileuploadConf(_recState) {
-                var me=chatInitialize;
+                var me=AgentChatInitialize;
                 appConsts.UPLOAD = {
                     "FILE_ENDPOINT": koreAPIUrl + "1.1/attachment/file",
                     "FILE_TOKEN_ENDPOINT": koreAPIUrl + "1.1/attachment/file/token",
                     "FILE_CHUNK_ENDPOINT": koreAPIUrl + "1.1/attachment/file/:fileID/chunk"
                 };
-                _accessToke = "bearer " + chatInitialize.accessToken;
+                _accessToke = "bearer " + AgentChatInitialize.accessToken;
                 if(me.config && me.config && me.config.botOptions && me.config.botOptions.webhookConfig && me.config.botOptions.webhookConfig.enable){
                     //appConsts.UPLOAD.FILE_ENDPOINT=koreAPIUrl + "attachments/file/"+me.config.botOptions.webhookConfig.streamId+"/"+me.config.botOptions.webhookConfig.channelType;
                     _accessToke='bearer '+me.config.botOptions.webhookConfig.token;
@@ -5197,8 +5198,8 @@
                 _cmpt.append('<div class="removeAttachment"><span>&times;</span></div>');
                 $('.footerContainer').find('.attachment').html(_cmpt);
                 $('.chatInputBox').focus();
-                chatInitialize.attachmentInfo.fileName = data.values.componentData.filename;
-                chatInitialize.attachmentInfo.fileType = data.values.componentType;
+                AgentChatInitialize.attachmentInfo.fileName = data.values.componentData.filename;
+                AgentChatInitialize.attachmentInfo.fileType = data.values.componentType;
                 $('.sendButton').removeClass('disabled');
             };
             function acceptFileRecording(_this, _recState, ele) {
@@ -5683,7 +5684,7 @@
                 getSDKInstance:function(){
                     return bot;
                 },
-                instance:chatInitialize,
+                instance:AgentChatInitialize,
                 sdkInstance:bot,
                 chatWindow:chatWindow,
                 addWidgetEvents:addWidgetEvents,
