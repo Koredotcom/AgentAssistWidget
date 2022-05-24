@@ -67,17 +67,30 @@
         <!-- Uncomment for i18n support -->
         <script src="kore-main.js" type="text/javascript"></script>
         <script src="libs/kore-no-conflict-end.js" type="text/javascript"></script>
-        <script src="https://code.jquery.com/jquery-3.1.1.js"
-            integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA=" crossorigin="anonymous"></script>
+        <!-- <script src="https://code.jquery.com/jquery-3.1.1.js"
+            integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA=" crossorigin="anonymous"></script> -->
+        <script src="libs/jquery-3.1.1.js"></script>
         <script src="agentindex.js" type="text/javascript"></script>
 
     </head>
     <body>
 		<div style="display: inline-flex; margin: 10px 0 0 10px">
             <textarea id="details" readonly style="height: 100px; margin-right: 50px; width: 420px;"></textarea>
-			<div style="position: absolute; top: 25%;">Bot id: <input type="text" id="botid" style="width: 200px;"/></div>
-			<button style="position: absolute; top: 32%;" id="connect">Connect</button>
-            <div style="position: absolute; top: 40%;">
+			<div style="position: absolute; top: 20%;">Bot id: <input type="text" id="botid" style="width: 200px;"/></div>
+			<button style="position: absolute; top: 25%;" id="connect">Connect</button>
+            <!-- <div style="position: absolute; top:30%">
+                <b>if you change the botId then you need to provide respective <br>botId related "ClientId", "Client Secret" and <br>genarated "JWT Token".</b>
+            </div>
+            <div style="position: absolute; top: 38%">
+                <div>
+                    clientId: <input type="text" id="cliendIdDetails">
+                </div>
+                <div>
+                    clientSecret: <input type="text" id="clinetSecretDetails">
+                </div>
+                
+            </div> -->
+            <div style="position: absolute; top: 45%;">
                 JWT Token: <input type="text" id="jwt-token">
             </div>
             <div style="position: absolute; top:50%;">
