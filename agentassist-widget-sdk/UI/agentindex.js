@@ -6,6 +6,7 @@ var isAutomationOnGoing = false;
 var isShowHistoryEnable = false;
 var autoExhaustiveList;
 var searchedVal;
+var custTone;
 var frequentlyUsedList;
 var isMyBotAutomationOnGoing = false;
 var noAutomationrunninginMyBot = true;
@@ -56,6 +57,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
         });
 
         _agentAsisstSocket.on('agent_assist_response', (data) => {
+            displayCustomerFeels(data, data.conversationId, _botId);
             processAgentAssistResponse(data, data.conversationId, _botId);
 
         })
@@ -72,6 +74,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
         // Library Automation list, Search and Agent-Automation tabs related webSockets
         // Response
         _agentAsisstSocket.on('agent_assist_agent_response', (data) => {
+            displayCustomerFeels(data, data.conversationId, data.botId);
             if (data.isSearch) {
                 processAgentIntentResults(data, data.conversationId, data.botId);
             } else {
@@ -196,6 +199,48 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
     });
     detectCurrentTab = () => {
         return $('.tab-icon.active-tab').attr('id');
+    }
+
+    function displayCustomerFeels(data, convId, botId) {
+        if(data.sentimentTone) {
+            custTone = data;
+        }
+        let userTabtoneId = document.getElementById('userTab-custSentimentAnalysis');
+        let agentTabtoneId = document.getElementById('agentTab-custSentimentAnalysis');
+        if(custTone?.sentimentTone) {
+            console.log(custTone);
+            $('#custEmoji').innerHtml = custTone?.emoji;
+            $('#customerTone').innerHTML = custTone?.sentiment;
+            let toneinnerHTML = `
+            <div id="custEmoji" class="emojis">${custTone?.sentimentTone?.emoji}</div>
+                <div [ngStyle]="{'background-color' : (custTone?.strength > 0 && custTone?.strength <=33) ? '#28A745' : '#E5E8EC'}" class="strength-bar strength-bar-sm"></div>
+                <div [ngStyle]="{'background-color' : (custTone?.strength > 33 && custTone?.strength <=66) ? '#28A745' : '#E5E8EC'}" class="strength-bar strength-bar-md"></div>
+                <div [ngStyle]="{'background-color' : (custTone?.strength > 66 && custTone?.strength <=100) ? '#28A745' : '#E5E8EC'}" class="strength-bar strength-bar-lg"></div>
+            </div>
+            <span id="customerTone">Customer is feeling <b>${custTone?.sentimentTone?.sentiment}</b></span>
+            `
+            userTabtoneId.innerHTML = toneinnerHTML;
+            agentTabtoneId.innerHTML = toneinnerHTML;
+        } 
+        $(document).ready(() => {
+            if(!custTone?.sentimentTone) {
+                let staticToneData = {
+                    emoji: "&#128512;",
+                    sentiment: "Happy",
+                    strength: 3
+                }
+                staticToneInnerHtml = `
+                <div id="custEmoji" class="emojis">${staticToneData.emoji}</div>
+                    <div [ngStyle]="{'background-color' : (staticToneData?.strength > 0 && staticToneData?.strength <=33) ? '#28A745' : '#E5E8EC'}" class="strength-bar strength-bar-sm"></div>
+                    <div [ngStyle]="{'background-color' : (staticToneData?.strength > 33 && staticToneData?.strength <=66) ? '#28A745' : '#E5E8EC'}" class="strength-bar strength-bar-md"></div>
+                    <div [ngStyle]="{'background-color' : (staticToneData?.strength > 66 && staticToneData?.strength <=100) ? '#28A745' : '#E5E8EC'}" class="strength-bar strength-bar-lg"></div>
+                </div>
+                <span id="customerTone">Customer is feeling <b>${staticToneData.sentiment}</b></span>
+                `
+                userTabtoneId.innerHTML = staticToneInnerHtml;
+                agentTabtoneId.innerHTML = staticToneInnerHtml;
+            }
+        });
     }
 
     // Add input field to the userResponse manually by the agent
@@ -1788,10 +1833,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             }
             if (e.target.id == 'librarySearch' && input_taker.trim().length == 0 && e.target.dataset?.val?.trim().length == 0) {
                 processAgentIntentResults(autoExhaustiveList, autoExhaustiveList.conversationId, autoExhaustiveList.botId);
-                console.log(444);
             }
             if (e.keyCode == 13 && (input_taker.trim().length > 0 || e.target.dataset.val.trim().length > 0)) {
-                console.log(555, input_taker);
                 searchedVal =$('#librarySearch').val();
                 var convId = e.target.dataset.convId;
                 var botId = e.target.dataset.botId;

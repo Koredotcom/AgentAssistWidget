@@ -159,7 +159,6 @@
         var keycode = (event.keyCode ? event.keyCode : event.which);
         if(keycode == '13'){
             let msg = $('#userInput').val();
-        console.log("--------->", msg, token);
         let payload = {
             "agentId": agentID,
             "botId": botID,
@@ -179,11 +178,9 @@
             data:  JSON.stringify(payload),
             dataType: "json",
             success: function (result) {
-                console.log(payload, token);
                 console.log(result);
             },
             error: function (error) {
-                console.log(payload, token);
                 console.log(error);
             }
          });
