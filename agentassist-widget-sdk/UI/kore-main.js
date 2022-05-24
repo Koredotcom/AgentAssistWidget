@@ -84,13 +84,15 @@
             var korecookie = localStorage.getItem("korecom");
             var userID = (korecookie) || koreGenerateUUID();
             var webSocketConnection = {
-                "path": "/agentassist/api/v1/chat/", 'query': 'userId=' + userID + '&orgId=o-da05dbea-6573-5399-ba58-22035a3122f3', transports: ['websocket', 'polling', 'flashsocket']
+                "path": "/agentassist/api/v1/chat/", transports: ['websocket', 'polling', 'flashsocket']
             };
 
             var connectionObj = {
+                envinormentUrl: chatConfig.agentAssistUrl,
                 webSocketConnectionDomain: chatConfig.agentAssistUrl + "/koreagentassist",
                 webSocketConnectionDetails: webSocketConnection,
-                botDetails: chatConfig.botOptions
+                botDetails: chatConfig.botOptions,
+                isAuthentication: true
             }
              agentID = koreGenerateUUID();
              conversationId = (new Date()).getTime()+'';
@@ -167,7 +169,7 @@
             crossDomain: true,
             contentType: 'application/json',
             headers: {
-               'token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.k-EU2xyO3gpQUg4yO7fkjdG1kSE_y5TCmpkB3WBfgcQ',
+               'token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NTMzMTA0MTkxNjYsImV4cCI6MTY1MzM5NjgxOTE2NiwiYXVkIjoiaHR0cHM6Ly9pZHByb3h5LmtvcmUuY29tL2F1dGhvcml6ZSIsImlzcyI6ImNzLTdmZTQ2NmUyLWE3ZWItNTIwMS04NGZlLTE4Mjk5NmExY2Q3NSIsInN1YiI6InVhLWJiZjA1ZjQwLTcyMmMtNDllZS1iMDc0LTllZDk4YTYzMDg2YiIsImlzQW5vbnltb3VzIjoiZmFsc2UifQ.U3HUQM7qHekA7IXT3fewCx9tzADt_DXd08oggvHQos0',
                "accept": "application/json",
               "Access-Control-Allow-Origin":"*",
             },
