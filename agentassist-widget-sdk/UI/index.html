@@ -148,9 +148,15 @@
                                     Back to recommendation
                                 </button>
                             </div>
-                            <div class="customer-feeling-text">
-                                <img src="./images/smile-online.svg">
-                                <span>Customer is feeling <b>happy</b></span>
+                            <div id="userTab-custSentimentAnalysis" class="customer-feeling-text">
+                                <!-- <div class="col-2 sentiments">
+                                    <div id="custEmoji" class="emojis"></div>
+                                    <div [ngStyle]="{'background-color' : (custTone?.strength > 0 && custTone?.strength <=1) ? '#28A745' : '#E5E8EC'}" class="strength-bar strength-bar-sm"></div>
+                                    <div [ngStyle]="{'background-color' : (custTone?.strength > 0.33 && custTone?.strength <=1) ? '#28A745' : '#E5E8EC'}" class="strength-bar strength-bar-md"></div>
+                                    <div [ngStyle]="{'background-color' : (custTone?.strength > 0.66 && custTone?.strength <=1) ? '#28A745' : '#E5E8EC'}" class="strength-bar strength-bar-lg"></div>
+                                </div> -->
+                                <!-- <img src="./images/smile-online.svg"> -->
+                                <!-- <span id="customerTone">Customer is feeling <b></b></span> -->
                             </div>
 
                             <div class="empty-data-no-agents">
@@ -288,9 +294,9 @@
                                         Back to recommendation
                                     </button>
                                 </div>
-                                <div class="customer-feeling-text">
-                                    <img src="./images/smile-online.svg">
-                                    <span>Customer is feeling <b>happy</b></span>
+                                <div id="agentTab-custSentimentAnalysis" class="customer-feeling-text">
+                                    <!-- <img src="./images/smile-online.svg">
+                                    <span>Customer is feeling <b>happy</b></span> -->
                                 </div>
                                 <div class="empty-data-no-agents hide" id="noAutoRunning">
                                     <div class="title">No intent identified yet</div>
@@ -774,10 +780,10 @@
                     <div class="event-bucket">
                         <img src="./images/bucket.svg">
                     </div>
-                    <div class="customer-feeling-text">
+                    <!-- <div class="customer-feeling-text">
                         <img src="./images/smile-online.svg">
                         <span>Customer is feeling <b>happy</b></span>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="entity-bucket-data hide">
                     <div class="data-content-info">

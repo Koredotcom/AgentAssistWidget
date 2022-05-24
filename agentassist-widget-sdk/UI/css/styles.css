@@ -1952,3 +1952,57 @@ border: 1px solid transparent !important;
     border: 1px;
     cursor: not-allowed;
 }
+
+.agent-assist-chat-container .customer-feeling-text .sentiments {
+    padding: 0 5px;
+}
+.agent-assist-chat-container .customer-feeling-text .sentiments .emojis {
+    margin-right: 3px;
+    display: inline-block;
+    width: 19px;
+    height: 20px;
+}
+.agent-assist-chat-container .customer-feeling-text .sentiments .strength-bar {
+    display: inline-block;
+    width: 4px;
+}
+.agent-assist-chat-container .customer-feeling-text .sentiments .strength-bar-sm {
+    height: 5px;
+    margin-right: 2px;
+}
+.agent-assist-chat-container .customer-feeling-text .sentiments .strength-bar-md {
+    height: 10px;
+    margin-right: 2px;
+}
+.agent-assist-chat-container .customer-feeling-text .sentiments .strength-bar-lg {
+    height: 15px;
+}
+/*  */
+/* .sentiments{
+    padding: 0 5px;
+    .emojis {
+        margin-right: 3px;
+        display: inline-block;
+        width: 19px;
+        height: 20px;
+    }
+    .strength-bar {
+        display: inline-block;
+        width: 4px;
+    }
+    .strength-bar-sm {
+        height: 5px;
+        margin-right: 2px;
+    }
+    .strength-bar-md {
+        height: 10px;
+        margin-right: 2px;
+    }
+    .strength-bar-lg {
+        height: 15px;
+    }
+    img{
+        margin-right: 3px;
+    }
+} */
+/*  */
