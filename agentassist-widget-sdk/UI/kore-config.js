@@ -6,16 +6,16 @@
     var KoreSDK=KoreSDK||{};
 
     var botOptions = {};
-    botOptions.logLevel = 'debug';
-    botOptions.koreAPIUrl = "https://uat.kore.ai/api/";
-    botOptions.koreSpeechAPIUrl = "";//deprecated
-    //botOptions.bearer = "bearer xyz-------------------";
-    //botOptions.ttsSocketUrl = '';//deprecated
-    botOptions.koreAnonymousFn = koreAnonymousFn;
-    botOptions.recorderWorkerPath = '../libs/recorderWorker.js';
+    // botOptions.logLevel = 'debug';
+    // botOptions.koreAPIUrl = "https://uat.kore.ai/api/";
+    // botOptions.koreSpeechAPIUrl = "";//deprecated
+    // //botOptions.bearer = "bearer xyz-------------------";
+    // //botOptions.ttsSocketUrl = '';//deprecated
+    // botOptions.koreAnonymousFn = koreAnonymousFn;
+    // botOptions.recorderWorkerPath = '../libs/recorderWorker.js';
 
-    botOptions.JWTUrl = "https://demo.kore.net/users/sts";
-    botOptions.userIdentity = 'testing1';// Provide users email id here
+    // botOptions.JWTUrl = "https://demo.kore.net/users/sts";
+    // botOptions.userIdentity = 'testing1';// Provide users email id here
     botOptions.botInfo = { name: "sample Bot", "_id": "st-6e9d43c3-33f6-5b44-a8c3-5dfe5d08ffd1" }; // bot name is case sensitive
 
     /* 
@@ -23,10 +23,10 @@
     Refer below document for JWT token generation at server side. Client Id and Client secret should maintained at server end.
     https://developer.kore.ai/docs/bots/sdks/user-authorization-and-assertion/
     **/
-    botOptions.clientId = "cs-9ac9adfd-4111-5e61-8efa-1439dfdd0e5a";
-    botOptions.clientSecret = "gy+lHzOdokKQKsn80J+Lk01NdaKgmHXfy9eCkSLZLh0=";
-    botOptions.brandingAPIUrl = botOptions.koreAPIUrl +'websdkthemes/'+  botOptions.botInfo._id+'/activetheme';
-    botOptions.enableThemes = true;
+    botOptions.clientId = "cs-7fe466e2-a7eb-5201-84fe-182996a1cd75";
+    botOptions.clientSecret = "zrRRu1s2W2wCzE7O3L8xsMGMQhoR6w4Mt+0uLrrOKEc=";
+    // botOptions.brandingAPIUrl = botOptions.koreAPIUrl +'websdkthemes/'+  botOptions.botInfo._id+'/activetheme';
+    // botOptions.enableThemes = true;
 // for webhook based communication use following option 
 // botOptions.webhookConfig={
 //     enable:true,
