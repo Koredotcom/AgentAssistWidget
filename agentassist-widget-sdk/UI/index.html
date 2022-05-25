@@ -61,7 +61,9 @@
     <script>
         $(document).ready(function () {
             var chatConfig = window.KoreSDK.chatConfig;
-            $('#botid').val(chatConfig.botOptions.botInfo._id)
+            $('#botid').val(chatConfig.botOptions.botInfo._id);
+            $('#clientid').val(chatConfig.botOptions.clientId)
+            $('#clientsecret').val(chatConfig.botOptions.clientSecret)
             $('#connect').click(() => {
                 initAgentAssist(chatConfig);
             });
@@ -77,6 +79,8 @@
                 conversationId = (new Date()).getTime() + '';
                 $('#details').val(`ConversationID: ${conversationId}`);
                 botID = $(`#botid`).val() ? $(`#botid`).val() : chatConfig.botOptions.botInfo._id;
+                connectionObj.botDetails.clientId = $(`#clientid`).val() ? $(`#clientid`).val() : connectionObj.botDetails.clientId;
+                connectionObj.botDetails.clientSecret = $(`#clientsecret`).val() ? $(`#clientsecret`).val() : connectionObj.botDetails.clientSecret;
                 new AgentAssist('agent-assist-chat-container', conversationId, botID, connectionObj);
             }
         }
@@ -89,7 +93,9 @@
     <div style="display: inline-flex; margin: 10px 0 0 10px">
         <textarea id="details" readonly style="height: 100px; margin-right: 50px; width: 420px;"></textarea>
         <div style="position: absolute; top: 20%;">Bot id: <input type="text" id="botid" style="width: 200px;" /></div>
-        <button style="position: absolute; top: 25%;" id="connect">Connect</button>
+            <div style="position: absolute; top: 25%;">Client id: <input type="text" id="clientid" style="width: 200px;" /></div>
+            <div style="position: absolute; top: 30%;">Client  secret: <input type="text" id="clientsecret" style="width: 200px;" /></div>
+        <button style="position: absolute; top: 35%;" id="connect">Connect</button>
         <div style="position: absolute; top: 45%;">
             JWT Token: <input type="text" id="jwt-token">
         </div>

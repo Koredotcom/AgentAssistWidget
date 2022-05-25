@@ -300,13 +300,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     let agentTabtoneId = document.getElementById('agentTab-custSentimentAnalysis');
                     if (custTone?.sentimentTone) {
                         console.log(custTone);
-                        if (cusTone?.sentiment.strength > 0 && cusTone?.sentiment.strength <= 33) {
+                        // if (cusTone?.sentiment.strength > 0 && cusTone?.sentiment.strength <= 33) {
 
-                        } else if (cusTone?.sentiment.strength > 33 && cusTone?.sentiment.strength <= 66) {
+                        // } else if (cusTone?.sentiment.strength > 33 && cusTone?.sentiment.strength <= 66) {
 
-                        } else if (cusTone?.sentiment.strength > 66 && cusTone?.sentiment.strength <= 100) {
+                        // } else if (cusTone?.sentiment.strength > 66 && cusTone?.sentiment.strength <= 100) {
 
-                        }
+                        // }
                         let toneinnerHTML = `
             <div id="custEmoji" class="emojis">${custTone?.sentimentTone?.emoji}</div>
             <div id="strengthDisplay"></div>
