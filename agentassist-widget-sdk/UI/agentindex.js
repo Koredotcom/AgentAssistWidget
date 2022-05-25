@@ -25,6 +25,7 @@ var currentTabActive;
 var previousTabActive;
 var AgentChatInitialize;
 var chatConfig;
+var agentContainer;
 function koreGenerateUUID() {
     console.info("generating UUID");
     var d = new Date().getTime();
@@ -39,6 +40,8 @@ function koreGenerateUUID() {
     return uuid;
 }
 window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, connectionDetails) {
+    agentContainer = containerId;
+    createAgentAssistContainer(agentContainer, _conversationId, _botId, connectionDetails);
     var token, botID, agentAssistUrl;
     if (connectionDetails.isAuthentication) {
         var jsonData = {
@@ -123,7 +126,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 publicAPIs.botId = _agentAssistDataObj.botId = _botId;
                 publicAPIs.containerId = _agentAssistDataObj.containerId = containerId;
                 publicAPIs._conversationId = _agentAssistDataObj.conversationId = _conversationId;
-                $(`.agent-assist-chat-container.kore-chat-window`).attr('id', `userIDs-${_conversationId}`);
                 if (!_agentAssistComponents[_agentAssistDataObj.conversationId]) {
                     _agentAssistComponents[_agentAssistDataObj.conversationId] = _agentAssistDataObj;
                 } else {
@@ -192,6 +194,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
                         _agentAsisstSocket.emit('agent_assist_request', agent_assist_request);
                     });
+
                 }
 
                 var welcome_message_request = {
@@ -208,6 +211,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 //     "experience": "chat"
                 // }
                 // _agentAsisstSocket.emit('agent_menu_request', agent_menu_request)
+
+
 
                 function processUserMessages(data, conversationId, botId) {
                     var _msgsResponse = {
@@ -1989,6 +1994,262 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 return false;
             }
         });
+    }
+
+    function createAgentAssistContainer(containerId, conversationId, botId, connectionDetails) {
+        console.log("AgentAssist >>> finding container ", containerId);
+        console.log("AgentAssist >>> userId in createAgentAssistContainer", containerId, conversationId, connectionDetails, botId)
+        var container = $(`#${containerId}`);
+        container.attr('class', 'agent-assist-chat-container');
+        container.addClass('kore-chat-window')
+        if (container) {
+            console.log("AgentAssist >>> found container", container);
+            var cHtml = `<div class="header-top-bar">
+            <!-- Header -->
+            <div class="header-data">
+                <div class="main-title">
+                    <img src="./images/agentassist_new_logo.svg">
+                </div>
+                <div class="powerdby">
+                    <span>Powered by</span>
+                    <img src="./images/kore_new_logo.svg">
+                </div>
+            </div>
+            <!-- Tabs -->
+            <div class="tab-toggles-sec">
+                <div class="top-tabs-actions">
+                    <div class="tab-icon active-tab" id="userAutoIcon">
+                        <i class="ast-bot" id="userBotIcon"></i>
+                        <div class="title-tab" id="AssistLabel">Assist</div>
+                        <div class="custom-tootltip-tabs">User Automation</div>
+                    </div>
+                    <div class="tab-icon" id="searchAutoIcon">
+                        <i class="ast-library" id="searchIcon"></i>
+                        <div class="title-tab" id="LibraryLabel">Library</div>
+                        <div class="custom-tootltip-tabs">Search</div>
+                    </div>
+                    <div class="tab-icon" id="agentAutoIcon">
+                        <i class="ast-automation" id="agentBotIcon"></i>
+                        <div class="title-tab" id="MybotLabel">My Bot</div>
+                        <div class="custom-tootltip-tabs">Agent Automation</div>
+                    </div>
+                    <div class="tab-icon" id="transcriptIcon">
+                        <i class="ast-transcipt" id="scriptIcon"></i>
+                        <div class="title-tab" id="transcriptLabel">Transcript</div>
+                        <div class="custom-tootltip-tabs">Transcript</div>
+                    </div>
+                </div>
+                <div class="taoggle-with-text">
+                    <div class="t-title">Pro-active</div>
+                    <label class="kr-sg-toggle">
+                        <input id="check1" type="checkbox" checked>
+                        <div for="check1" class="slider"></div>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="body-data-container if-suggestion-search" id="bodyContainer">
+            <div class="dialog-task-data" id="dynamicBlocksData">
+
+                <div class="dynamic-block-content" id="dynamicBlock">
+                    <div class="show-history-block" id="history-details-btn">
+                        <button id="showHistory" class="ghost-btn">Show history</button>
+                    </div>
+                    <div class="show-back-recommendation-block hide">
+                        <button id="backToRecommendation" class="ghost-btn">
+                            <span class="back-icon">
+                                <i class="ast-carrotup"></i>
+                            </span>
+                            Back to recommendation
+                        </button>
+                    </div>
+                    <div id="userTab-custSentimentAnalysis" class="customer-feeling-text">
+                    </div>
+
+                    <div class="empty-data-no-agents">
+                        <div class="title">No intent identified yet</div>
+                        <div class="desc-text">The bot will automatically suggest tasks here.</div>
+                        <div class="desc-text">To start a manual task, go to "Library" and run a task as "Run with
+                            Agent
+                            Input"</div>
+                    </div>
+                </div>
+
+                <div class="agent-body-data-container hide" id="agentAutoContainer">
+                    <div class="dynamic-block-content" id="myBotAutomationBlock">
+                        <div class="show-history-block" id="agent-ran-history-details-btn">
+                            <button id="agent-showHistory" class="ghost-btn">Show history</button>
+                        </div>
+                        <div class="show-back-recommendation-block hide">
+                            <button id="agent-backToRecommendation" class="ghost-btn">
+                                <span class="back-icon">
+                                    <i class="ast-carrotup"></i>
+                                </span>
+                                Back to recommendation
+                            </button>
+                        </div>
+                        <div id="agentTab-custSentimentAnalysis" class="customer-feeling-text">
+                        </div>
+                        <div class="empty-data-no-agents hide" id="noAutoRunning">
+                            <div class="title">No intent identified yet</div>
+                            <div class="desc-text">The bot will automatically suggest tasks here.</div>
+                            <div class="desc-text">To start a manual task, go to "Library" and run a task as "Run
+                                with Agent Input"</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="transcipt-only-calls-data hide" id="scriptContainer">
+                    <div class="data-contnet">
+                        <div class="other-user-bubble">
+                            <div class="name-with-time">
+                                <div class="u-name">John Wick</div>
+                                <div class="u-time">2:29pm</div>
+                            </div>
+                            <div class="bubble-data">
+                                <div class="b-text">Hey jane, can you help me?</div>
+                            </div>
+                        </div>
+                        <div class="current-user-bubble">
+                            <div class="name-with-time">
+                                <div class="u-time">2:41pm</div>
+                                <div class="u-name">You</div>
+                            </div>
+                            <div class="bubble-data">
+                                <div class="b-text">How can I help you?</div>
+                            </div>
+                        </div>
+                        <div class="other-user-bubble">
+                            <div class="name-with-time">
+                                <div class="u-name">John Wick</div>
+                                <div class="u-time">2:29pm</div>
+                            </div>
+                            <div class="bubble-data">
+                                <div class="b-text">I want to return an item</div>
+                            </div>
+                        </div>
+                        <div class="current-user-bubble">
+                            <div class="name-with-time">
+                                <div class="u-time">2:41pm</div>
+                                <div class="u-name">You</div>
+                            </div>
+                            <div class="bubble-data">
+                                <div class="b-text">Yes, I'll help you with it</div>
+                            </div>
+                        </div>
+                        <div class="other-user-bubble">
+                            <div class="name-with-time">
+                                <div class="u-name">John Wick</div>
+                                <div class="u-time">2:29pm</div>
+                            </div>
+                            <div class="bubble-data">
+                                <div class="b-text">Sorry, I mean, edit my order</div>
+                                <div class="buld-count-utt">
+                                    <i class="ast-bulb"></i>
+                                    <span class="count-number">1</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="library-search-data-container hide" id="LibraryContainer">
+                    <div class="search-block">
+                        <div class="input-text-search library-search-div" id="search-block">
+                            <input type="text" placeholder="Ask AgentAssist" class="input-text" id="librarySearch">
+                            <i class="ast-search"></i>
+                            <i class="ast-close close-search"></i>
+                        </div>
+                    </div>
+
+                    <div class="show-back-recommendation-block  hide" id="backButton">
+                        <button id="backToPreviousTab" class="ghost-btn">
+                            <span class="back-icon">
+                                <i class="ast-carrotup"></i>
+                            </span>
+                            Back
+                        </button>
+                    </div>
+
+                    <div class="dynamic-searchlibrary-data">
+                        <div class="empty-library-data hide" id="noLibraryList">
+                            <div class="img-block">
+                                <img src="./images/emptylibrary.svg">
+                            </div>
+                            <div class="title-empty">No items found</div>
+                            <div class="desc-text">No usecases are configured for the bot.</div>
+                        </div>
+                        <div id="frequently-exhaustive">
+                            <div class="frequently-asked" id="allAutomations-Exhaustivelist">
+                            </div>
+
+                        </div>
+
+                        <div class="intent-based-search" id="searchResults">
+                            <div id="search-text-display"></div>
+
+                        </div>
+                    </div>
+                    <div id="dialogs-faqs">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="sugestions-info-data">
+            <input type="text" class="suggestion-input" id="agentSearch" placeholder="Ask AgentAssist">
+            <i class="ast-search search-icon"></i>
+            <i class="ast-close close-search"></i>
+        </div>
+
+        <div class="overlay-suggestions hide">
+            <div class="suggestion-content" id="overLaySearch">
+            </div>
+        </div>
+
+        <div class="overlay-delete-popup hide" id="interruptPopUp">
+            <div class="delete-box-content">
+                <div class="header-text">You are interrupting the current task</div>
+                <div class="close-popup">
+                    <i class="ast-close"></i>
+                </div>
+                <div class="desc-text-info">If you run the select task, the current task will be completely
+                    terminated.
+                    Are you sure you want to continue with the selected task?</div>
+                <div class="btn-footer-info" id="interruptCancel">
+                    <button class="btn-danger">Yes, continue</button>
+                    <button class="btn-cancel">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="overlay-delete-popup hide" id="terminatePopUp">
+            <div class="delete-box-content">
+                <div class="header-text">Are you sure you want to terminate the current on going task?</div>
+                <div class="close-popup">
+                    <i class="ast-close"></i>
+                </div>
+                <div class="desc-text-info">If you run the select task, the current task will be completely
+                    terminated.
+                    Are you sure you want to continue with the selected task?</div>
+                <div class="btn-footer-info">
+                    <button class="btn-danger">Yes</button>
+                    <button class="btn-cancel">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-info" id="cust-feeling">
+            <div class="event-bucket">
+                <img src="./images/bucket.svg">
+            </div>
+        </div>`;
+            console.log("AgentAssist >>> adding html")
+            // var hrml = `<div>Hello</div>`
+            container.append(cHtml);
+        } else {
+            console.log(`AgentAssist >>> container ${containerId} not found`)
+        }
     }
 }
 
