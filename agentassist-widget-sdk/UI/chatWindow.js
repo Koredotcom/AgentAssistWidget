@@ -928,8 +928,8 @@
                     var _width = $('#chatContainer').width() - 400;
                     //$('.kore-chat-window').attr('style','left: '+_width+'+px');
                 }
-                if (($('.agent-assist-chat-container').width() > 400) || (document.getElementsByClassName('agent-assist-chat-container').length && document.getElementsByClassName('agent-assist-chat-container')[0].classList.contains('expanded'))) {
-                    var _koreChatWindowHeight = $('.agent-assist-chat-container').width();
+                if (($(`#${agentContainer}`).width() > 400) || (document.getElementsByClassName(`#${agentContainer}`).length && document.getElementsByClassName(`#${agentContainer}`)[0].classList.contains('expanded'))) {
+                    var _koreChatWindowHeight = $(`#${agentContainer}`).width();
                   //  $('.carousel').attr('style', 'width: ' + (_koreChatWindowHeight - 85) + 'px !important');
                 } else {
                     $('.carousel').attr('style', 'width: 300px !important');
@@ -961,7 +961,7 @@
                 }
 
                 /* Handling for full size table */
-                if ($('.agent-assist-chat-container').width() > 460) {
+                if ($(`#${agentContainer}`).width() > 460) {
                     $(".accordionTable").each(function () {
                         if ($(this).hasClass("responsive")) {
                             $(this).addClass("hide")
@@ -2022,7 +2022,7 @@
                 }
                 me.setCollapsedModeStyles();
                 if(me.config.agentAssist){
-                    me.chatPSObj=new KRPerfectScrollbar($('.agent-assist-chat-container').find('.body-data-container').get(0), {
+                    me.chatPSObj=new KRPerfectScrollbar($(`#${agentContainer}`).find('.body-data-container').get(0), {
                         suppressScrollX: true
                       });
                 }else{
@@ -2271,7 +2271,7 @@
                 else {
                     waiting_for_message = false;
                 }
-                var _chatContainer = me.config.agentAssist? $('.agent-assist-chat-container').find(`#displayData-${elementID}`):$(me.config.chatContainer).find('.chat-container');
+                var _chatContainer = me.config.agentAssist? $(`#${agentContainer}`).find(`#displayData-${elementID}`):$(me.config.chatContainer).find('.chat-container');
                 if (msgData.message && msgData.message[0] && msgData.message[0].cInfo && msgData.message[0].cInfo.attachments) {
                     extension = strSplit(msgData.message[0].cInfo.attachments[0].fileName);
                 }
@@ -2925,10 +2925,10 @@
                     bottomSliderAction('show',messageHtml);
                 }else{
                     //ignore message(msgId) if it is already in viewport                     
-                    if ($(`${me.config.agentAssist?`.agent-assist-chat-container  #displayData-${elementID}  li#`:`.kore-chat-window .chat-container li#`}` + msgData.messageId).length < 1 || (msgData.renderType==='inline')) {
+                    if ($(`${me.config.agentAssist?`#${agentContainer} #displayData-${elementID}  li#`:`.kore-chat-window .chat-container li#`}` + msgData.messageId).length < 1 || (msgData.renderType==='inline')) {
                         if (msgData.type === "bot_response" && msgData.fromHistorySync) {
                             var msgTimeStamps = [];
-                            var msgEles = $(`${me.config.agentAssist?`.agent-assist-chat-container #displayData-${elementID}  >li`:'.kore-chat-window .chat-container>li'}`);
+                            var msgEles = $(`${me.config.agentAssist?`#${agentContainer} #displayData-${elementID}  >li`:'.kore-chat-window .chat-container>li'}`);
                             if (msgEles.length) {
                                 msgEles.each(function (i, ele) {
                                     msgTimeStamps.push(parseInt($(ele).attr('data-time')));
