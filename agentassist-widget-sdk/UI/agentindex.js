@@ -40,6 +40,11 @@ function koreGenerateUUID() {
     return uuid;
 }
 window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, connectionDetails) {
+    var webSocketConnection = {
+        "path": "/agentassist/api/v1/chat/", transports: ['websocket', 'polling', 'flashsocket']
+    };
+    connectionDetails['webSocketConnectionDomain'] = connectionDetails.envinormentUrl + "/koreagentassist",
+    connectionDetails['webSocketConnectionDetails'] = webSocketConnection,
     agentContainer = containerId;
     createAgentAssistContainer(agentContainer, _conversationId, _botId, connectionDetails);
     var token, botID, agentAssistUrl;
