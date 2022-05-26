@@ -7,102 +7,51 @@ module.exports = function (grunt) {
     var cssFiles=[];
 
     
-    if(_type==='widgets'){
-        //Below js and css set of files will be used to minify widgets only sdk 
-        jsFiles=[
-            'libs/kore-no-conflict-start.js',
-            'libs/jquery.js',
-            'libs/jquery.tmpl.min.js',
-            'libs/jquery-ui.min.js',
-            '../libs/jstz.js',
-            '../libs/perfect-scrollbar.js',
-            'kore-widgets.js',
-            'kore-widgets-config.js',
-            'kore-widgets-main.js',
-            '../libs/ie11CustomProperties.js',
-            'libs/kore-no-conflict-end.js'
-        ];
-        cssFiles=[
-            'libs/jquery-ui.min.css',
-            '../libs/prefect-scrollbar.css',
-            'kore-widgets.css'
-        ]
-
-    }else if(_type==='widgets_chat'){
-         //Below js and css set of files will be used to minify Widgets with chat window sdk 
-        jsFiles=[
-            'libs/kore-no-conflict-start.js',
-            'libs/jquery.js',
-            'libs/jquery.tmpl.min.js',
-            'libs/jquery-ui.min.js',
-            '../libs/lodash.min.js',
-            '../libs/d3.v4.min.js',
-            '../libs/KoreGraphAdapter.js',
-            '../libs/anonymousassertion.js',
-            '../kore-bot-sdk-client.js',
-            '../libs/perfect-scrollbar.js',
-            'kore-widgets.js',
-            'chatWindow.js',
-            '../libs/emoji.js',
-            '../libs/recorder.js',
-            '../libs/recorderWorker.js',
-            '../libs/purejscarousel.js',
-            'custom/customTemplate.js',
-            '../libs/ie11CustomProperties.js',
-            '../libs/speech/app.js',
-            '../libs/speech/key.js',
-            '../libs/client_api.js',
-            'kore-config.js',
-            'kore-widgets-config.js',
-            'kore-widgets-chat-main.js',
-            'libs/kore-no-conflict-end.js'
-        ];
-        cssFiles=[
-            'libs/jquery-ui.min.css',
-            'libs/emojione.sprites.css',
-            '../libs/purejscarousel.css',
-            'chatWindow.css',
-            'custom/customTemplate.css',
-            '../libs/prefect-scrollbar.css',
-            'kore-widgets.css'
-        ]
-
-    }else{
+   
         //Below js and css set of files will be used to minify chatwindow sdk  
         jsFiles=[
             'libs/kore-no-conflict-start.js',
             'libs/jquery.js',
             'libs/jquery.tmpl.min.js',
-            'libs/jquery-ui.min.js',
+            "libs/jquery-ui.min.js",
+            'libs/moment.js',
+            '../libs/ie11CustomProperties.js',
             '../libs/lodash.min.js',
             '../libs/d3.v4.min.js',
             '../libs/KoreGraphAdapter.js',
             '../libs/anonymousassertion.js',
             '../kore-bot-sdk-client.js',
             '../libs/perfect-scrollbar.js',
-            '../libs/emoji.js',
-            '../libs/purejscarousel.js',
             'chatWindow.js',
-            'custom/customTemplate.js',
-            '../libs/ie11CustomProperties.js',
+            'libs/jquery.daterangepicker.js',
+            'libs/jquery-clockpicker.js',
+            '../libs/kore-pickers.js',
+            '../libs/emoji.js',
             '../libs/recorder.js',
             '../libs/recorderWorker.js',
-            '../libs/speech/app.js',
-            '../libs/speech/key.js',
-            '../libs/client_api.js',
+            '../libs/purejscarousel.js',
+            './custom/customTemplate.js',
             'kore-config.js',
-            'kore-main.js',
-            'libs/kore-no-conflict-end.js'
+            'libs/kore-no-conflict-end.js',
+            'libs/jquery-3.1.1.js',
+            'agentindex.js'
         ];
         cssFiles=[
+            './css/reset.css',
+            './fonts/inter.css',
+            './css/styles.css',
+            'fonts/AgentAssist-icons/style.css',
             'libs/jquery-ui.min.css',
-            'libs/emojione.sprites.css',
+            'libs/daterangepicker.css',
+            'libs/jquery-clockpicker.css',
+            '../libs/kore-pickers.css',
+            'chatWindow.css',
+            '../libs/emojione.sprites.css',
             '../libs/purejscarousel.css',
             '../libs/prefect-scrollbar.css',
-            'chatWindow.css',
-            'custom/customTemplate.css'
+            './custom/customTemplate.css'
         ]
-    }
+    //}
 
     // Project configuration.
     grunt.initConfig({
@@ -114,8 +63,17 @@ module.exports = function (grunt) {
             },
             js: {
                 src: jsFiles,
-                dest: 'dist/kore-ai-sdk' + '.min.js'
+                dest: '../dist/kore-ai-agentassist-sdk' + '.min.js'
             }
+        },
+        concat:{
+           options:{
+               separator: ';'
+           },
+           js: {
+               src:jsFiles,
+               dest: '../dist/kore-ai-agentassist-sdk' + '.min.js'
+           }
         },
         cssmin: {
             options: {
@@ -124,10 +82,29 @@ module.exports = function (grunt) {
             },
             target: {
               files: {
-                'dist/kore-ai-sdk.min.css':cssFiles 
+                '../dist/kore-ai-agentassist-sdk.min.css':cssFiles 
               }
             }
           }, 
+
+          concat_css: {
+            options: {},
+            target:{
+                files: {
+                    '../dist/compiled.css': cssFiles,
+                }
+            }
+           
+          },
+          copy: {
+            main: {
+              expand: true,
+              src: cssFiles,
+              dest: '../dist/main.min.css',
+              flatten: true,
+              filter: 'isFile',
+            },
+          },
 
         //clean task definition
         clean: {
@@ -151,8 +128,9 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-concat-css');
 
     // the default task can be run just by typing "grunt" on the command line
-    grunt.registerTask('default', ['clean', 'uglify','cssmin']);
+    grunt.registerTask('default', ['clean','concat','cssmin']);
 
 };
