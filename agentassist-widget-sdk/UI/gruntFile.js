@@ -5,7 +5,8 @@ module.exports = function (grunt) {
     var cacheBustConst = '-' + new Date().getTime();
     var jsFiles=[];
     var cssFiles=[];
-
+    var fontFiles = [];
+    var iconFiles = [];
     
    
         //Below js and css set of files will be used to minify chatwindow sdk  
@@ -50,7 +51,29 @@ module.exports = function (grunt) {
             '../libs/purejscarousel.css',
             '../libs/prefect-scrollbar.css',
             './custom/customTemplate.css'
-        ]
+        ];
+        fontFiles = [
+            'Inter-Bold.woff',
+            'Inter-Bold.woff2',
+            'Inter-Regular.woff',
+            'Inter-Regular.woff2',
+            'Inter-BoldItalic.woff',
+            'Inter-BoldItalic.woff2',
+            'Inter-italic.var.woff2',
+            'Inter-Italic.woff',
+            'Inter-Italic.woff2',
+            'Inter-Light.woff',
+            'Inter-Light.woff2',
+            'Inter-Medium.woff',
+            'Inter-Medium.woff2',
+            'Inter-SemiBold.woff',
+            'Inter-SemiBold.woff2',
+            'Inter-SemiBoldItalic.woff',
+            'Inter-SemiBoldItalic.woff2',
+        ];
+        iconFiles = [
+
+        ];
     //}
 
     // Project configuration.
@@ -72,7 +95,7 @@ module.exports = function (grunt) {
            },
            js: {
                src:jsFiles,
-               dest: '../dist/kore-ai-agentassist-sdk' + '.min.js'
+               dest: '../dist/kore-ai-agentassist-sdk' + '.combined.js'
            }
         },
         cssmin: {
@@ -98,12 +121,24 @@ module.exports = function (grunt) {
           },
           copy: {
             main: {
-              expand: true,
-              src: cssFiles,
-              dest: '../dist/main.min.css',
-              flatten: true,
-              filter: 'isFile',
-            },
+                files : [
+                    {
+                        expand: true,
+                        src: './fonts/*',
+                        dest: '../dist/fonts',
+                        flatten: true,
+                        filter: 'isFile'
+                    },
+                    {
+                        expand: true,
+                        src: './fonts/AgentAssist-icons/fonts/*',
+                        dest: '../dist/fonts/AgentAssist-icons/fonts/',
+                        flatten: true,
+                        filter: 'isFile'
+                    }
+                ]
+              
+            }
           },
 
         //clean task definition
@@ -131,6 +166,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-concat-css');
 
     // the default task can be run just by typing "grunt" on the command line
-    grunt.registerTask('default', ['clean','concat','cssmin']);
+    grunt.registerTask('default', ['clean','concat','copy', 'cssmin', 'uglify']);
 
 };
