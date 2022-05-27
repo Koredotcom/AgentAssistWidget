@@ -59,6 +59,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
         callSts(jsonData)
 
     } else if (getToken()) {
+        console.log("------get in else if----")
         grantCall(token, botID, agentAssistUrl);
     } else {
         console.error("authentication failed")
