@@ -21,17 +21,37 @@
         });
         function initAgentAssist(chatConfig) {
             if (chatConfig.agentAssist) {
-               var connectionObj = {
-                    envinormentUrl: chatConfig.agentAssistUrl,
-                    botDetails: chatConfig.botOptions,
+            //    var connectionObj = {
+            //         envinormentUrl: chatConfig.agentAssistUrl,
+            //         botDetails: chatConfig.botOptions,
+            //         isAuthentication: false
+            //     }
+            var token, botID, agentAssistUrl;
+                function getToken() {
+                    const params = new Proxy(new URLSearchParams(window.location.search), {
+                        get: (searchParams, prop) => searchParams.get(prop),
+                    });
+                    token = params.token;
+                    botID = params.botid;
+                    agentAssistUrl = params.agentassisturl;
+                    if (token && botID && agentAssistUrl) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+                   var connectionObj = {
+                    envinormentUrl: agentAssistUrl,
+                    jwtToken:token,
+                    botDetails: {},
                     isAuthentication: false
                 }
                 var conversationId;
                 conversationId = (new Date()).getTime() + '';
-                $('#details').val(`ConversationID: ${conversationId}`);
-                botID = $(`#botid`).val() ? $(`#botid`).val() : chatConfig.botOptions.botInfo._id;
-                connectionObj.botDetails.clientId = $(`#clientid`).val() ? $(`#clientid`).val() : connectionObj.botDetails.clientId;
-                connectionObj.botDetails.clientSecret = $(`#clientsecret`).val() ? $(`#clientsecret`).val() : connectionObj.botDetails.clientSecret;
+                // $('#details').val(`ConversationID: ${conversationId}`);
+                // botID = $(`#botid`).val() ? $(`#botid`).val() : chatConfig.botOptions.botInfo._id;
+                // connectionObj.botDetails.clientId = $(`#clientid`).val() ? $(`#clientid`).val() : connectionObj.botDetails.clientId;
+                // connectionObj.botDetails.clientSecret = $(`#clientsecret`).val() ? $(`#clientsecret`).val() : connectionObj.botDetails.clientSecret;
                 new AgentAssist('agent-assist-chat-container', conversationId, botID, connectionObj);
             }
         }
@@ -41,23 +61,11 @@
 </head>
 
 <body>
-    <div style="display: inline-flex; margin: 10px 0 0 10px">
-        <textarea id="details" readonly style="height: 100px; margin-right: 50px; width: 420px;"></textarea>
-        <div style="position: absolute; top: 20%;">Bot id: <input type="text" id="botid" style="width: 200px;" /></div>
-            <div style="position: absolute; top: 25%;">Client id: <input type="text" id="clientid" style="width: 200px;" /></div>
-            <div style="position: absolute; top: 30%;">Client  secret: <input type="text" id="clientsecret" style="width: 200px;" /></div>
-        <button style="position: absolute; top: 35%;" id="connect">Connect</button>
-        <div style="position: absolute; top: 45%;">
-            JWT Token: <input type="text" id="jwt-token">
-        </div>
-        <div style="position: absolute; top:50%;">
-            <div>User Input:</div>
-            <input type="text" id="userInput" placeholder="enter value here...">
-        </div>
+    
         <div id="agent-assist-chat-container">
 
         </div>
-    </div>
+    
 </body>
 
 </html>

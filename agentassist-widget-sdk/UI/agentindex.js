@@ -47,7 +47,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
     connectionDetails['webSocketConnectionDetails'] = webSocketConnection,
     agentContainer = containerId;
     createAgentAssistContainer(agentContainer, _conversationId, _botId, connectionDetails);
-    var token, botID, agentAssistUrl;
+    // var token, botID, agentAssistUrl;
     if (connectionDetails.isAuthentication) {
         var jsonData = {
             "clientId": connectionDetails.botDetails.clientId,
@@ -58,9 +58,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
         };
         callSts(jsonData)
 
-    } else if (getToken()) {
+    } else if (connectionDetails.jwtToken) {
         console.log("------get in else if----")
-        grantCall(token, botID, agentAssistUrl);
+        grantCall(connectionDetails.jwtToken, botID, connectionDetails.envinormentUrl);
     } else {
         console.error("authentication failed")
     }
