@@ -15,16 +15,16 @@
             $('#botid').val(chatConfig.botOptions.botInfo._id);
             $('#clientid').val(chatConfig.botOptions.clientId)
             $('#clientsecret').val(chatConfig.botOptions.clientSecret)
-            $('#connect').click(() => {
+            // $('#connect').click(() => {
                 initAgentAssist(chatConfig);
-            });
+            // });
         });
         function initAgentAssist(chatConfig) {
             if (chatConfig.agentAssist) {
                var connectionObj = {
                     envinormentUrl: chatConfig.agentAssistUrl,
                     botDetails: chatConfig.botOptions,
-                    isAuthentication: true
+                    isAuthentication: false
                 }
                 var conversationId;
                 conversationId = (new Date()).getTime() + '';
