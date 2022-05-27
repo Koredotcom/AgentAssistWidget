@@ -34,13 +34,14 @@
                     token = params.token;
                     botID = params.botid;
                     agentAssistUrl = params.agentassisturl;
-                    if (token && botID && agentAssistUrl) {
-                        return true;
-                    } else {
-                        return false;
-                    }
+                  
                 }
-                   var connectionObj = {
+                getToken();
+                if(!token || !botID || !agentAssistUrl) {
+                  console.error("failed");
+                }
+
+                var connectionObj = {
                     envinormentUrl: agentAssistUrl,
                     jwtToken:token,
                     botDetails: {},
