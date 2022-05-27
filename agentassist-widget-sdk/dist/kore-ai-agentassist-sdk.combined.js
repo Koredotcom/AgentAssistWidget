@@ -81640,7 +81640,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
     } else if (connectionDetails.jwtToken) {
         console.log("------get in else if----")
-        grantCall(connectionDetails.jwtToken, botID, connectionDetails.envinormentUrl);
+        grantCall(connectionDetails.jwtToken, _botId, connectionDetails.envinormentUrl);
     } else {
         console.error("authentication failed")
     }

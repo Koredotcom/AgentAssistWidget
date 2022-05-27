@@ -8,13 +8,13 @@
     <link href="./../dist/kore-ai-agentassist-sdk.min.css" rel="stylesheet">
     </link>
     
-    <script src="./../dist/kore-ai-agentassist-sdk.min.js" type="text/javascript"></script>
+    <script src="./../dist/kore-ai-agentassist-sdk.combined.js" type="text/javascript"></script>
     <script>
         $(document).ready(function () {
             var chatConfig = window.KoreSDK.chatConfig;
-            $('#botid').val(chatConfig.botOptions.botInfo._id);
-            $('#clientid').val(chatConfig.botOptions.clientId)
-            $('#clientsecret').val(chatConfig.botOptions.clientSecret)
+            // $('#botid').val(chatConfig.botOptions.botInfo._id);
+            // $('#clientid').val(chatConfig.botOptions.clientId)
+            // $('#clientsecret').val(chatConfig.botOptions.clientSecret)
             // $('#connect').click(() => {
                 initAgentAssist(chatConfig);
             // });
