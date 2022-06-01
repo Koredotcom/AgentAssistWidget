@@ -83577,6 +83577,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             },
             error: function (error) {
                 console.error("token is wrong");
+                $(`#${containerId}`).html("provided token is wrong")
                 return false;
             }
         });

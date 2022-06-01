@@ -7,7 +7,7 @@
     <link rel="icon" id="favicon" type="image/x-icon" href="favicon.ico">
     <link href="./../dist/kore-ai-agentassist-sdk.min.css" rel="stylesheet">
     </link>
-    
+
     <script src="./../dist/kore-ai-agentassist-sdk.combined.js" type="text/javascript"></script>
     <script>
         $(document).ready(function () {
@@ -16,17 +16,17 @@
             // $('#clientid').val(chatConfig.botOptions.clientId)
             // $('#clientsecret').val(chatConfig.botOptions.clientSecret)
             // $('#connect').click(() => {
-                initAgentAssist(chatConfig);
+            initAgentAssist(chatConfig);
             // });
         });
         function initAgentAssist(chatConfig) {
             if (chatConfig.agentAssist) {
-            //    var connectionObj = {
-            //         envinormentUrl: chatConfig.agentAssistUrl,
-            //         botDetails: chatConfig.botOptions,
-            //         isAuthentication: false
-            //     }
-            var token, botID, agentAssistUrl, conversationId;
+                var token, botID, agentAssistUrl, conversationId;
+                var connectionObj = {
+                    envinormentUrl: chatConfig.agentAssistUrl,
+                    botDetails: {},
+                    isAuthentication: true
+                }
                 function getToken() {
                     const params = new Proxy(new URLSearchParams(window.location.search), {
                         get: (searchParams, prop) => searchParams.get(prop),
@@ -35,26 +35,48 @@
                     botID = params.botid;
                     agentAssistUrl = params.agentassisturl;
                     conversationId = params.conversationid;
-                  console.log("---conversation id -----", conversationId);
+                    console.log("---conversation id -----", conversationId);
                 }
                 getToken();
-                if(!token || !botID || !agentAssistUrl) {
-                  console.error("failed");
+                function koreGenerateUUID() {
+                    console.info("generating UUID");
+                    var d = new Date().getTime();
+                    if (window.performance && typeof window.performance.now === "function") {
+                        d += performance.now(); //use high-precision timer if available
+                    }
+                    var uuid = 'ua-xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                        var r = (d + Math.random() * 16) % 16 | 0;
+                        d = Math.floor(d / 16);
+                        return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+                    });
+                    return uuid;
+                }
+                if (!token || !botID || !agentAssistUrl || !conversationId) {
+                    if (connectionObj.isAuthentication) {
+                        connectionObj.botDetails['clientId'] = chatConfig.botOptions.clientId;
+                        connectionObj.botDetails['clientSecret'] = chatConfig.botOptions.clientSecret;
+                        connectionObj.botDetails['botId'] = chatConfig.botOptions.botInfo._id;
+                        conversationId = koreGenerateUUID();
+                        new AgentAssist('agent-assist-chat-container', conversationId, connectionObj.botDetails.botId, connectionObj);
+                    } else {
+                        console.error("failed");// invalid configuration
+                        $(`#agent-assist-chat-container`).html('Something went wrong. Please check the configurations once again.')
+                    }
+
+                } else {
+                    connectionObj['envinormentUrl'] = agentAssistUrl;
+                    connectionObj['jwtToken'] = token;
+                    new AgentAssist('agent-assist-chat-container', conversationId, botID, connectionObj);
                 }
 
-                var connectionObj = {
-                    envinormentUrl: agentAssistUrl,
-                    jwtToken:token,
-                    botDetails: {},
-                    isAuthentication: false
-                }
+
                 // var conversationId;
                 // conversationId = (new Date()).getTime() + '';
                 // $('#details').val(`ConversationID: ${conversationId}`);
                 // botID = $(`#botid`).val() ? $(`#botid`).val() : chatConfig.botOptions.botInfo._id;
                 // connectionObj.botDetails.clientId = $(`#clientid`).val() ? $(`#clientid`).val() : connectionObj.botDetails.clientId;
                 // connectionObj.botDetails.clientSecret = $(`#clientsecret`).val() ? $(`#clientsecret`).val() : connectionObj.botDetails.clientSecret;
-                new AgentAssist('agent-assist-chat-container', conversationId, botID, connectionObj);
+
             }
         }
 
@@ -63,11 +85,11 @@
 </head>
 
 <body>
-    
-        <div id="agent-assist-chat-container">
 
-        </div>
-    
+    <div id="agent-assist-chat-container">
+
+    </div>
+
 </body>
 
 </html>
