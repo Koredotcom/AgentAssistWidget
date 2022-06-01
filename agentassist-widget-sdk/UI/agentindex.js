@@ -1342,7 +1342,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             let bodyContainer = document.getElementById('dynamicBlocksData');
                             let currentdomHtml = `<div class="dynamic-block-content history" id="historyData"></div>`;
                             bodyContainer.innerHTML += currentdomHtml;
-                             getData(`${connectionDetails.envinormentUrl}/api/1.1/botmessages/agentAssist/chatwidgethistory?botId=${_agentAssistDataObj.botId}&convId=${_agentAssistDataObj.conversationId}`)
+                            // /api/public/bot/:botId/agentassist/chatwidgethistory?convId=:convId&agentHistory=true
+                             getData(`https://dev-smartassist.kore.ai/api/public/bot/${_agentAssistDataObj.botId}/agentassist/chatwidgethistory?convId=${_agentAssistDataObj.conversationId}&agentHistory=true`)
                                 .then(response => response)
                                 .then(json => {
             
@@ -1904,7 +1905,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         headers: {
                             'Accept': 'application/json',
                             'Origin':'*',
-                            "apiKey":"ydsjyderjdzfwhhM3wQkjhsfiaHqSBxTpc4XXOP7v/rHdPYfD",
+                            'auth':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBJZCI6ImNzLTdmZTQ2NmUyLWE3ZWItNTIwMS04NGZlLTE4Mjk5NmExY2Q3NSJ9.G9XpennZv3JQiTnwHZCdManVt3nwrmeidU4IWejvlwg',
                             'Content-Type': 'application/json',
                         },
            
