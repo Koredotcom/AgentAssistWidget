@@ -5,96 +5,78 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.1, maximum-scale=1.0">
     <title>Agentassist</title>
     <link rel="icon" id="favicon" type="image/x-icon" href="favicon.ico">
-        <!-- <script src=""></script> -->
-        <link href="./css/reset.css" rel="stylesheet"></link>
-        <link href="./fonts/inter.css" rel="stylesheet"></link>
-        <link href="./css/styles.css" rel="stylesheet"></link>
-        <link href="fonts/AgentAssist-icons/style.css" rel="stylesheet"></link>
-        <script src="libs/kore-no-conflict-start.js" type="text/javascript"></script>
-        <script src="libs/jquery.js" type="text/javascript"></script>
-        <script src="libs/jquery.tmpl.min.js" type="text/javascript"></script>
-        <script src="libs/jquery-ui.min.js" type="text/javascript"></script>
-        <link href="libs/jquery-ui.min.css" rel="stylesheet"></link>
-        <script src="libs/moment.js" type="text/javascript"></script>
-        <script src="../libs/ie11CustomProperties.js"></script>
-        <script src="../libs/lodash.min.js"></script>
-        <script src="../libs/d3.v4.min.js"></script>
-        <script src="../libs/KoreGraphAdapter.js" type="text/javascript"></script>
-        <script src='../libs/anonymousassertion.js'></script>
-        <script src="../kore-bot-sdk-client.js"></script>
-        <script src="../libs/perfect-scrollbar.js" type="text/javascript"></script>
+    <link href="./../dist/kore-ai-agentassist-sdk.min.css" rel="stylesheet">
+    </link>
 
-        <!-- Uncomment these lines for amazon polly -->
-        <!-- <script src="../plugins/aws-sdk-2.668.0.min.js"></script>
-                <script src="../plugins/kore-aws-polly.js" type="text/javascript"></script> -->
-
-
-        <!-- Uncomment these lines for AgentDestop plugin -->
-        <!-- <link href="../plugins/agentdestop/agentdesktop.css" rel="stylesheet"></link>
-                <script src="../plugins/agentdestop/libs/ac_webrtc.min.js"></script>
-                <script src="../plugins/agentdestop/libs/audio_player.js"></script>
-                <script src="../plugins/agentdestop/config.js"></script>
-                <script src="../plugins/agentdestop/libs/c2c.js"></script>
-                <script src="../plugins/agentdestop/agentdesktop.js" ></script> -->
-
-
-        <script src="chatWindow.js" type="text/javascript"></script>
-        <script src="libs/jquery.daterangepicker.js" type="text/javascript"></script>
-        <link href="libs/daterangepicker.css" rel="stylesheet"></link>
-        <script src="libs/jquery-clockpicker.js" type="text/javascript"></script>
-        <link href="libs/jquery-clockpicker.css" rel="stylesheet"></link>
-        <link href="../libs/kore-pickers.css" rel="stylesheet"></link>
-        <script src="../libs/kore-pickers.js" type="text/javascript"></script>
-        <script src="../libs/emoji.js" type="text/javascript"></script>
-        <script src="../libs/recorder.js" type="text/javascript"></script>
-        <script src="../libs/recorderWorker.js" type="text/javascript"></script>
-        <link href="chatWindow.css" rel="stylesheet"></link>
-        <link href="../libs/emojione.sprites.css" rel="stylesheet"></link>
-        <link href="../libs/purejscarousel.css" rel="stylesheet"></link>
-        <script src="../libs/purejscarousel.js" type="text/javascript"></script>
-        <script src="./custom/customTemplate.js" type="text/javascript"></script>
-        <link href="../libs/prefect-scrollbar.css" rel="stylesheet"></link>
-        <link href="./custom/customTemplate.css" rel="stylesheet"></link>
-        <!-- <link href="./agentassist.css" rel="stylesheet"></link> -->
-        <!-- <script type="text/javascript" src="libs/loader.js"></script>  -->
-
-        <!-- Uncomment these lines for Google Speech. -->
-        <!-- <script type="text/javascript" src="../libs/speech/app.js"></script>
-                <script type="text/javascript" src="../libs/speech/key.js"></script>
-                <script type="text/javascript" src="https://apis.google.com/js/client.js"></script> -->
-
-        <script src="kore-config.js" type="text/javascript"></script>
-        <!-- <script src="kore-118n-config.js" type="text/javascript"></script> -->
-        <!-- Uncomment for i18n support -->
-        <script src="kore-main.js" type="text/javascript"></script>
-        <script src="libs/kore-no-conflict-end.js" type="text/javascript"></script>
-        <script src="https://code.jquery.com/jquery-3.1.1.js"
-            integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA=" crossorigin="anonymous"></script>
-        <script src="agentindex.js" type="text/javascript"></script>
+    <script src="./../dist/kore-ai-agentassist-sdk.combined.js" type="text/javascript"></script>
     <script>
         $(document).ready(function () {
             var chatConfig = window.KoreSDK.chatConfig;
-            $('#botid').val(chatConfig.botOptions.botInfo._id);
-            $('#clientid').val(chatConfig.botOptions.clientId)
-            $('#clientsecret').val(chatConfig.botOptions.clientSecret)
-            $('#connect').click(() => {
-                initAgentAssist(chatConfig);
-            });
+            // $('#botid').val(chatConfig.botOptions.botInfo._id);
+            // $('#clientid').val(chatConfig.botOptions.clientId)
+            // $('#clientsecret').val(chatConfig.botOptions.clientSecret)
+            // $('#connect').click(() => {
+            initAgentAssist(chatConfig);
+            // });
         });
         function initAgentAssist(chatConfig) {
             if (chatConfig.agentAssist) {
-               var connectionObj = {
+                var token, botID, agentAssistUrl, conversationId;
+                var connectionObj = {
                     envinormentUrl: chatConfig.agentAssistUrl,
-                    botDetails: chatConfig.botOptions,
-                    isAuthentication: true
+                    botDetails: {},
+                    isAuthentication: false
                 }
-                var conversationId;
-                conversationId = (new Date()).getTime() + '';
-                $('#details').val(`ConversationID: ${conversationId}`);
-                botID = $(`#botid`).val() ? $(`#botid`).val() : chatConfig.botOptions.botInfo._id;
-                connectionObj.botDetails.clientId = $(`#clientid`).val() ? $(`#clientid`).val() : connectionObj.botDetails.clientId;
-                connectionObj.botDetails.clientSecret = $(`#clientsecret`).val() ? $(`#clientsecret`).val() : connectionObj.botDetails.clientSecret;
-                new AgentAssist('agent-assist-chat-container', conversationId, botID, connectionObj);
+                function getToken() {
+                    const params = new Proxy(new URLSearchParams(window.location.search), {
+                        get: (searchParams, prop) => searchParams.get(prop),
+                    });
+                    token = params.token;
+                    botID = params.botid;
+                    agentAssistUrl = params.agentassisturl;
+                    conversationId = params.conversationid;
+                    console.log("---conversation id -----", conversationId);
+                }
+                getToken();
+                function koreGenerateUUID() {
+                    console.info("generating UUID");
+                    var d = new Date().getTime();
+                    if (window.performance && typeof window.performance.now === "function") {
+                        d += performance.now(); //use high-precision timer if available
+                    }
+                    var uuid = 'ua-xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                        var r = (d + Math.random() * 16) % 16 | 0;
+                        d = Math.floor(d / 16);
+                        return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+                    });
+                    return uuid;
+                }
+                if (!token || !botID || !agentAssistUrl || !conversationId) {
+                    if (connectionObj.isAuthentication) {
+                        connectionObj.botDetails['clientId'] = chatConfig.botOptions.clientId;
+                        connectionObj.botDetails['clientSecret'] = chatConfig.botOptions.clientSecret;
+                        connectionObj.botDetails['botId'] = chatConfig.botOptions.botInfo._id;
+                        conversationId = koreGenerateUUID();
+                        new AgentAssist('agent-assist-chat-container', conversationId, connectionObj.botDetails.botId, connectionObj);
+                    } else {
+                        console.error("failed");// invalid configuration
+                        $(`#agent-assist-chat-container`).html('Issue identified in configuration settings! Please reach out to AgentAssist Admin.')
+                    }
+
+                } else {
+                    connectionObj['envinormentUrl'] = agentAssistUrl;
+                    connectionObj['jwtToken'] = token;
+                    new AgentAssist('agent-assist-chat-container', conversationId, botID, connectionObj);
+                }
+
+
+                // var conversationId;
+                // conversationId = (new Date()).getTime() + '';
+                // $('#details').val(`ConversationID: ${conversationId}`);
+                // botID = $(`#botid`).val() ? $(`#botid`).val() : chatConfig.botOptions.botInfo._id;
+                // connectionObj.botDetails.clientId = $(`#clientid`).val() ? $(`#clientid`).val() : connectionObj.botDetails.clientId;
+                // connectionObj.botDetails.clientSecret = $(`#clientsecret`).val() ? $(`#clientsecret`).val() : connectionObj.botDetails.clientSecret;
+
             }
         } 
 
@@ -103,23 +85,11 @@
 </head>
 
 <body>
-    <div style="display: inline-flex; margin: 10px 0 0 10px">
-        <textarea id="details" readonly style="height: 100px; margin-right: 50px; width: 420px;"></textarea>
-        <div style="position: absolute; top: 20%;">Bot id: <input type="text" id="botid" style="width: 200px;" /></div>
-            <div style="position: absolute; top: 25%;">Client id: <input type="text" id="clientid" style="width: 200px;" /></div>
-            <div style="position: absolute; top: 30%;">Client  secret: <input type="text" id="clientsecret" style="width: 200px;" /></div>
-        <button style="position: absolute; top: 35%;" id="connect">Connect</button>
-        <div style="position: absolute; top: 45%;">
-            JWT Token: <input type="text" id="jwt-token">
-        </div>
-        <div style="position: absolute; top:50%;">
-            <div>User Input:</div>
-            <input type="text" id="userInput" placeholder="enter value here...">
-        </div>
-        <div id="agent-assist-chat-container">
 
-        </div>
+    <div id="agent-assist-chat-container">
+
     </div>
+
 </body>
 
 </html>

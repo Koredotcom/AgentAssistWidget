@@ -47,7 +47,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
     connectionDetails['webSocketConnectionDetails'] = webSocketConnection,
     agentContainer = containerId;
     createAgentAssistContainer(agentContainer, _conversationId, _botId, connectionDetails);
-    var token, botID, agentAssistUrl;
+    // var token, botID, agentAssistUrl;
     if (connectionDetails.isAuthentication) {
         var jsonData = {
             "clientId": connectionDetails.botDetails.clientId,
@@ -58,8 +58,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
         };
         callSts(jsonData)
 
-    } else if (getToken()) {
-        grantCall(token, botID, agentAssistUrl);
+    } else if (connectionDetails.jwtToken) {
+        console.log("------get in else if----")
+        grantCall(connectionDetails.jwtToken, _botId, connectionDetails.envinormentUrl);
     } else {
         console.error("authentication failed")
     }
@@ -2140,6 +2141,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             },
             error: function (error) {
                 console.error("token is wrong");
+                if(error.status === 500){
+                    $(`#${containerId}`).html("Issue identified with the backend services! Please reach out to AgentAssist Admin.")
+                }else{
+                    $(`#${containerId}`).html("Issue identified in configuration settings! Please reach out to AgentAssist Admin.")
+                }
                 return false;
             }
         });

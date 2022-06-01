@@ -486,7 +486,6 @@
         height: auto!important;
         min-width: 100px;
         max-height: 100%;
-        margin-left:68px;
     }
 }
 @media(max-width: 479px) {
