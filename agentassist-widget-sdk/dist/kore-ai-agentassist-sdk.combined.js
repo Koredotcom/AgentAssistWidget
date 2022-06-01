@@ -82921,44 +82921,170 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $('.show-history-block').addClass('hide');
                             $('.show-back-recommendation-block').removeClass('hide');
                             let bodyContainer = document.getElementById('dynamicBlocksData');
-                            let dom = document.getElementById('dynamicBlock');
-                            let automationSuggestions = dom.getElementsByClassName('dialog-task-accordiaon-info');
-
-                            let dialogSuggestion = document.getElementsByClassName('dialog-task-run-sec');
-                            if (automationSuggestions.length >= 0) {
-
-                                if (dialogSuggestion.length >= 1) {
-                                    for (let ele of dialogSuggestion) {
-                                        ele.classList.add('hide')
-                                    }
-                                }
-                                for (let ele of automationSuggestions) {
-                                    ele.classList.remove('hide');
-                                }
-                                for (let a of document.getElementsByClassName('agent-utt-info')) {
-                                    a.classList.remove('hide');
-                                }
-                                if ($('.history').length >= 1) {
-                                    $('.history').removeClass('hide').html(dom.innerHTML);
-                                } else {
-                                    let currentdomHtml = `<div class="dynamic-block-content history" id="historyData">${dom.innerHTML}</div>`;
-                                    bodyContainer.innerHTML += currentdomHtml;
-                                }
-
-
-                                let doms = document.getElementById('dynamicBlock');
-                                doms.classList.add('hide');
-                                $(`.history`).find('.steps-run-data.hide').removeClass('hide');
-                                $('.history').find('.action-links').addClass('hide');
-                                $('.history').find('.agent-utt-info').each((i, ele) => {
-                                    $('.history').find('.dialog-task-run-sec').each((i, elem) => {
-                                        if (ele.id?.split('-').includes(elem.id?.split('-')[1])) {
-                                            ele.remove();
-                                        }
-                                    });
-                                })
-                            }
-
+                            let currentdomHtml = `<div class="dynamic-block-content history" id="historyData"></div>`;
+                            bodyContainer.innerHTML += currentdomHtml;
+                            // /api/public/bot/:botId/agentassist/chatwidgethistory?convId=:convId&agentHistory=true
+                             getData(`https://dev-smartassist.kore.ai/api/public/bot/${_agentAssistDataObj.botId}/agentassist/chatwidgethistory?convId=${_agentAssistDataObj.conversationId}&agentHistory=true`)
+                                .then(response => response)
+                                .then(json => {
+            
+                                    console.log("===json===", json);
+            
+                        //             json.forEach(res => {
+                        //                 var _msgsResponse = {
+                        //                     "type": "bot_response",
+                        //                     "from": "bot",
+                        //                     "message": [],
+                        //                     "messageId": res._id,
+                        //                     "botInfo": {
+                        //                         "chatBot": "sample Bot",
+                        //                         "taskBotId": res.botId
+                        //                     },
+                        //                     "createdOn": "2022-03-21T07:56:18.225Z",
+                        //                     "icon": "https://uat.kore.ai:443/api/getMediaStream/market/f-cb381255-9aa1-5ce2-95e3-71233aef7084.png?n=17648985&s=IlRvUlUwalFVaFVMYm9sZStZQnlLc0l1UlZvdlNUUDcxR2o3U2lscHRrL3M9Ig$$",
+                        //                     "traceId": "873209019a5adc26"
+                        //                 }
+                        //                 if (res.type == 'outgoing') {
+                        //                     let historyData = $('#historyData');
+                        //                     let dropdownHtml = `
+                        //                                 <div class="dialog-task-accordiaon-info hide" id="addRemoveDropDown-${res._id}" >
+                        //                                     <div class="accordion-header" id="dropDownHeader-${res._id}"
+                        //                                     data-drop-down-opened="false">
+                        //                                         <div class="icon-info">
+                        //                                             <i class="ast-rule"></i>
+                        //                                         </div>
+                        //                                         <div class="header-text" id="dropDownTitle-${res._id}">${res.tN}</div>
+                        //                                         <i class="ast-carrotup"></i>
+                        //                                     </div>
+                        //                                     <div class="collapse-acc-data" id="dropDownData-${res._id}">
+                                                                
+                                                                
+                        //                                     </div>
+                                                            
+                        //                                     </div>
+                        //                                 `;
+                        //                     historyData.append(dropdownHtml);
+                        //                     let parsedPayload;
+                        //                     res.component?.forEach((elem) => {
+                        //                         let payloadType = (elem.data?.text).replace(/(&quot\;)/g, "\"");
+            
+                        //                         if (payloadType.includes('payload')) {
+                        //                             let withoutSpecials = payloadType.replace(/^\s+|\s+$/g, "");
+                        //                             parsedPayload = JSON.parse(withoutSpecials);
+                        //                         }
+            
+                        //                         let body = {};
+                        //                         body['type'] = elem.cT;
+                        //                         if (!parsedPayload) {
+                        //                             body['component'] = {
+                        //                                 "type": elem.cT,
+                        //                                 "payload": {
+                        //                                     "type": elem.cT,
+                        //                                     "text": elem.data?.text
+                        //                                 }
+                        //                             };
+                        //                         } else {
+                        //                             body['component'] = parsedPayload
+                        //                         }
+            
+                        //                         body['cInfo'] = {
+                        //                             "body": res.tN
+                        //                         };
+            
+                        //                         _msgsResponse.message.push(body);
+                        //                     });
+                        //                     let runInfoContent = $(`#dropDownData-${res._id}`);
+                        //                     let askToUserHtml = `
+                        // <div class="steps-run-data">
+                        //                <div class="icon_block">
+                        //                    <i class="ast-agent"></i>
+                        //                </div>
+                        //                <div class="run-info-content" >
+                        //                <div class="title">Ask customer...</div>
+                        //                <div class="agent-utt">
+                        //                    <div class="title-data"><ul class="chat-container" id="displayData-${res._id}"></ul></div>
+                        //                    <div class="action-links">
+                        //                        <button class="send-run-btn">Send</button>
+                        //                        <div class="copy-btn">
+                        //                            <i class="ast-copy"></i>
+                        //                        </div>
+                        //                    </div>
+                        //                </div>
+                        //                </div>
+                        //            </div>
+                        // `;
+                        //                     let tellToUserHtml = `
+                        // <div class="steps-run-data">
+                        //                <div class="icon_block">
+                        //                    <i class="ast-agent"></i>
+                        //                </div>
+                        //                <div class="run-info-content" >
+                        //                <div class="title">Tell Customer</div>
+                        //                <div class="agent-utt">
+                        //                    <div class="title-data" ><ul class="chat-container" id="displayData-${res._id}"></ul></div>
+                        //                    <div class="action-links">
+                        //                        <button class="send-run-btn">Send</button>
+                        //                        <div class="copy-btn">
+                        //                            <i class="ast-copy"></i>
+                        //                        </div>
+                        //                    </div>
+                        //                </div>
+                        //                </div>
+                        //            </div>
+                        // `;
+                        //                     if (data.isPrompt) {
+                        //                         runInfoContent.append(askToUserHtml);
+                        //                     } else {
+                        //                         runInfoContent.append(tellToUserHtml);
+                        //                     }
+                        //                     AgentChatInitialize.renderMessage(_msgsResponse, uuids);
+                        //                 }
+            
+                        //             });
+            
+            
+                                    // JSON data parsed by `data.json()` call
+                                });
+            
+            
+                            // let dom = document.getElementById('dynamicBlock');
+                            // let automationSuggestions = dom.getElementsByClassName('dialog-task-accordiaon-info');
+            
+                            // let dialogSuggestion = document.getElementsByClassName('dialog-task-run-sec');
+                            // if (automationSuggestions.length >= 0) {
+            
+                            //     if (dialogSuggestion.length >= 1) {
+                            //         for (let ele of dialogSuggestion) {
+                            //             ele.classList.add('hide')
+                            //         }
+                            //     }
+                            //     for (let ele of automationSuggestions) {
+                            //         ele.classList.remove('hide');
+                            //     }
+                            //     for (let a of document.getElementsByClassName('agent-utt-info')) {
+                            //         a.classList.remove('hide');
+                            //     }
+                            //     if ($('.history').length >= 1) {
+                            //         $('.history').removeClass('hide').html(dom.innerHTML);
+                            //     } else {
+                            //         let currentdomHtml = `<div class="dynamic-block-content history" id="historyData">${dom.innerHTML}</div>`;
+                            //         bodyContainer.innerHTML += currentdomHtml;
+                            //     }
+            
+            
+                            //     let doms = document.getElementById('dynamicBlock');
+                            //     doms.classList.add('hide');
+                            //     $(`.history`).find('.steps-run-data.hide').removeClass('hide');
+                            //     $('.history').find('.action-links').addClass('hide');
+                            //     $('.history').find('.agent-utt-info').each((i, ele) => {
+                            //         $('.history').find('.dialog-task-run-sec').each((i, elem) => {
+                            //             if (ele.id?.split('-').includes(elem.id?.split('-')[1])) {
+                            //                 ele.remove();
+                            //             }
+                            //         });
+                            //     })
+                            // }
+            
                         }
                         if (target.id === 'backToRecommendation') {
                             isShowHistoryEnable = false;
@@ -83351,19 +83477,37 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 // Example POST method implementation:
                 async function getData(url = '', data = {}) {
                     // Default options are marked with *
-                    const response = await fetch(url, {
-                        method: 'GET', // *GET, POST, PUT, DELETE, etc.
-                        mode: 'cors', // no-cors, *cors, same-origin
-                        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-                        credentials: 'same-origin', // include, *same-origin, omit
+                    
+
+                    const response =  await fetch(url, {
+                        mode: 'cors',
+                        credentials: 'include',
+                        method: 'GET',
                         headers: {
-                            'Content-Type': 'application/json'
-                            // 'Content-Type': 'application/x-www-form-urlencoded',
+                            'Accept': 'application/json',
+                            'Origin':'*',
+                            'auth':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBJZCI6ImNzLTdmZTQ2NmUyLWE3ZWItNTIwMS04NGZlLTE4Mjk5NmExY2Q3NSJ9.G9XpennZv3JQiTnwHZCdManVt3nwrmeidU4IWejvlwg',
+                            'Content-Type': 'application/json',
                         },
-                        redirect: 'follow', // manual, *follow, error
-                        referrerPolicy: 'no-referrer' // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+           
                     });
-                    return response.json(); // parses JSON response into native JavaScript objects
+                    //  const response = $.ajax({
+                    //      url: url,
+                    //      type: 'GET',
+                    //      crossDomain: false,
+                    //      contentType: 'application/json',
+                    //      headers: {
+                    //         "apiKey":"ydsjyderjdzfwhhM3wQkjhsfiaHqSBxTpc4XXOP7v/rHdPYfD" 
+                    //      },
+                    //      success: function (result){
+                    //          alert('success')
+                    //          return result;
+                    //      },
+                    //      error: function (err){
+                    //         alert('error');
+                    //      }
+                    //  })
+                    return response; // parses JSON response into native JavaScript objects
                 }
 
                 function userTabActive() {
