@@ -1997,7 +1997,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             },
             error: function (error) {
                 console.error("token is wrong");
-                $(`#${containerId}`).html("provided token is wrong")
+                if(error.status === 500){
+                    $(`#${containerId}`).html("Issue identified with the backend services! Please reach out to AgentAssist Admin.")
+                }else{
+                    $(`#${containerId}`).html("Issue identified in configuration settings! Please reach out to AgentAssist Admin.")
+                }
                 return false;
             }
         });
