@@ -83567,6 +83567,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 document.getElementById("loader").style.display = "block";
                             } else {
                                 AgentAssistPubSub.publish('searched_Automation_details', { conversationId: convId, botId: botId, value: intentName, isSearch: false });
+                                document.getElementById("loader").style.display = "block";
                             }
                         }
                     }

@@ -1906,6 +1906,17 @@ border: 1px solid transparent !important;
     cursor: pointer;
     border: 1px solid transparent;
 }
+
+.btn-danger:hover 
+{background-color: #D2000D}
+
+.btn-danger:active 
+{
+  background-color: #D2000D;
+  box-shadow: 0 1px #666;
+  transform: translateY(1px);
+}
+
 .btn-cancel {
     border-radius: 4px;
     height: 34px;
@@ -1918,6 +1929,16 @@ border: 1px solid transparent !important;
     border: 1px solid #BDC1C6;
     background: #FFFFFF;
     color: #202124;
+}
+
+.btn-cancel:hover 
+{background-color: #FFFFFF}
+
+.btn-cancel:active 
+{
+  background-color: #FFFFFF;
+  box-shadow: 0 1px #666;
+  transform: translateY(1px);
 }
 
 /* #loader {
@@ -2019,7 +2040,6 @@ border: 1px solid transparent !important;
   box-shadow: 0 1px #666;
   transform: translateY(1px);
 }
-
 
 /*  */
 /* .sentiments{
