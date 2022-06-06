@@ -81627,6 +81627,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
     connectionDetails['webSocketConnectionDetails'] = webSocketConnection,
     agentContainer = containerId;
     createAgentAssistContainer(agentContainer, _conversationId, _botId, connectionDetails);
+    document.getElementById("loader").style.display = "none";
     // var token, botID, agentAssistUrl;
     if (connectionDetails.isAuthentication) {
         var jsonData = {
@@ -81725,8 +81726,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     });
 
                     _agentAsisstSocket.on('agent_assist_response', (data) => {
+                        
                         displayCustomerFeels(data, data.conversationId, _botId);
                         processAgentAssistResponse(data, data.conversationId, _botId);
+                        
+                        document.getElementById("loader").style.display = "none";
+                       // document.getElementById("addRemoveDropDown").style.display = "block";
 
                     })
                     AgentAssistPubSub.publish('automation_exhaustive_list',
@@ -81743,8 +81748,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     // Response
                     _agentAsisstSocket.on('agent_assist_agent_response', (data) => {
                         displayCustomerFeels(data, data.conversationId, data.botId);
-                        if (data.isSearch) {
+                        if (data.isSearch) {                           
                             processAgentIntentResults(data, data.conversationId, data.botId);
+                            document.getElementById("loader").style.display = "none";
+                            document.getElementById("overLaySearch").style.display = "block";
                         } else {
                             processMybotDataResponse(data, data.conversationId, data.botId);
                         }
@@ -82629,7 +82636,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }
                     if (dropdownHeaderUuids && data.buttons && !data.value.includes('Customer has waited')) {
                         $('#overRideBtn').removeClass('disable-btn').removeAttr('disabled').addClass('override-input-btn');
-                        $("#inputFieldForAgent").remove();
+                        $("#inputFieldForAgent").remove();                        
                         let runInfoContent = $(`#dropDownData-${dropdownHeaderUuids}`);
                         let askToUserHtml = `
             <div class="steps-run-data">
@@ -83017,9 +83024,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             conversationId: _agentAssistDataObj.conversationId,
                                             botId: _botId, value: 'discard all', check: true
                                         });
+                                        document.getElementById("loader").style.display = "block";
                                 } else {
                                     AgentAssistPubSub.publish('searched_Automation_details',
                                         { conversationId: _agentAssistDataObj.conversationId, botId: _botId, value: 'discard all', isSearch: false });
+                                        document.getElementById("loader").style.display = "block";
                                 }
 
                             }
@@ -83061,6 +83070,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             if (!isMyBotAutomationOnGoing) {
                                 data = target.dataset;
                                 AgentAssistPubSub.publish('searched_Automation_details', { conversationId: data.convId, botId: data.botId, value: data.intentName, isSearch: false, intentName: data.intentName });
+                                
                                 isMyBotAutomationOnGoing = true;
                                 noAutomationrunninginMyBot = false;
                                 let agentBotuuids = Math.floor(Math.random() * 100);
@@ -83525,6 +83535,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             var botId = e.target.dataset.botId;
                             var intentName = input_taker ? input_taker : e.target.dataset.val;
                             AgentAssistPubSub.publish('searched_Automation_details', { conversationId: convId, botId: botId, value: intentName, isSearch: true });
+                            document.getElementById("loader").style.display = "block";
+                            document.getElementById("overLaySearch").style.display = "none";
                         }
                     }
                     if (e.target.id.split('-').includes('agentInput')) {
@@ -83552,6 +83564,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             var intentName = agentInput
                             if (currentTabActive === 'userAutoIcon') {
                                 AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: convId, botId: botId, value: intentName, check: true });
+                                document.getElementById("loader").style.display = "block";
                             } else {
                                 AgentAssistPubSub.publish('searched_Automation_details', { conversationId: convId, botId: botId, value: intentName, isSearch: false });
                             }
@@ -83792,7 +83805,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             <i class="ast-search search-icon"></i>
             <i class="ast-close close-search"></i>
         </div>
-
+        
+        <div id="loader">
+        <img src="./images/loaderIcon.png">
+        </div>
         <div class="overlay-suggestions hide">
             <div class="suggestion-content" id="overLaySearch">
             </div>
@@ -83863,8 +83879,12 @@ function AgentAssist_run_click(e) {
     dialogName = intentName;
     if (e.target.dataset.check || e.target.dataset.checkLib) {
         AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: convId, botId: botId, value: intentName, check: true });
-    } else {
+
+    } else {        
+        
+        //document.getElementById("addRemoveDropDown").style.display = "none";
         AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: convId, botId: botId, value: intentName, intentName: intentName });
+        document.getElementById("loader").style.display = "block";
     }
 
 }

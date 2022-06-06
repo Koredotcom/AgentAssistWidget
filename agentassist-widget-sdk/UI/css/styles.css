@@ -1920,7 +1920,39 @@ border: 1px solid transparent !important;
     color: #202124;
 }
 
-
+/* #loader {
+    position: absolute;
+    left: 56%;
+    top: 50%;
+    z-index: 1;
+    width: 80px;
+    height: 80px;
+    margin: -70px 0 0 -70px;
+    border: 10px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 10px solid #3498db;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+  } */
+  #loader{
+    position: absolute;
+    z-index: 1;
+    display: block;
+    top: 40%;
+    left: 42%;
+    margin: auto;
+    outline: 1px solid transparent;
+    -webkit-animation:spin 1s linear infinite;
+    -moz-animation:spin 1s linear infinite;
+    animation:spin 1s linear infinite;
+    -webkit-animation-direction: normal;
+    -moz-animation-direction: normal;
+    animation-direction: normal;
+}
+@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+  
 .override-input-div{
     padding-left: 28px;
     margin: 10px 0;
@@ -1977,6 +2009,18 @@ border: 1px solid transparent !important;
 .agent-assist-chat-container .customer-feeling-text .sentiments .strength-bar-lg {
     height: 15px;
 }
+
+.send-run-btn:hover 
+{background-color: #0000CD}
+
+.send-run-btn:active 
+{
+  background-color: #0000CD;
+  box-shadow: 0 1px #666;
+  transform: translateY(1px);
+}
+
+
 /*  */
 /* .sentiments{
     padding: 0 5px;
