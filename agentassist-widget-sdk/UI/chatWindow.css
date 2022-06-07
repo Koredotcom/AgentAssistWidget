@@ -411,9 +411,9 @@
     bottom: 10px;
     right: 10px;
     /* width: 400px; */
-    min-width: 400px;
-    max-height: 90%;
-    height: 90%;
+    min-width: 100%;
+    /* max-height: 90%; */
+    height: 100%;
     min-height: 200px;
     font-family: var(--sdk-chat-window-font-style);
     border: 1px solid var(--sdk-chat-window-border-color);
@@ -476,7 +476,7 @@
 .kore-chat-window .only-show {
     display: block;
 }
-@media(max-width: 767px) {
+/* @media(max-width: 767px) {
     .kore-chat-window {
         left: 5px!important;
         right: 5px!important;
@@ -487,8 +487,8 @@
         min-width: 100px;
         max-height: 100%;
     }
-}
-@media(max-width: 479px) {
+} */
+/* @media(max-width: 479px) {
     .kr-wiz-container{
         position: absolute;
         left: 0;
@@ -508,7 +508,6 @@
         position: absolute;
         margin-left: 0;
         float: left;
-        /* z-index: 9; */
         height: 48px;
         box-shadow: none;
         border: 0;
@@ -551,7 +550,6 @@
     .kr-wiz-content.kr-wiz-content-css{
         float: left;
         width: calc(100% - 68px);
-        /* overflow-x: auto; */
     }
     .kr-wiz-content.kr-wiz-content-css .widgetTitle .panelWidgetName{
         max-width: 246px;
@@ -602,7 +600,7 @@
         top: -10px;
         margin-left: 5px;
     }
-}
+} */
 .kore-chat-window.expanded {
     min-width: 330px;
     width: 50%!important;

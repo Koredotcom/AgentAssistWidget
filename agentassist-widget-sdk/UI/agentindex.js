@@ -2030,7 +2030,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             console.log("AgentAssist >>> found container", container);
             var cHtml = `<div class="header-top-bar">
             <!-- Header -->
-            <div class="header-data">
+            <div class="header-data hide">
                 <div class="main-title">
                     <img src="./images/agentassist_new_logo.svg">
                 </div>
@@ -2042,13 +2042,16 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             <!-- Tabs -->
             <div class="tab-toggles-sec">
                 <div class="top-tabs-actions">
+                    <div class="logo-assist">
+                        <img src="./images/logo-agent.svg">
+                    </div>
                     <div class="tab-icon active-tab" id="userAutoIcon">
-                        <i class="ast-bot" id="userBotIcon"></i>
+                        <i class="ast-bot font-13" id="userBotIcon"></i>
                         <div class="title-tab" id="AssistLabel">Assist</div>
                         <div class="custom-tootltip-tabs">User Automation</div>
                     </div>
                     <div class="tab-icon" id="searchAutoIcon">
-                        <i class="ast-library" id="searchIcon"></i>
+                        <i class="ast-library font-13" id="searchIcon"></i>
                         <div class="title-tab" id="LibraryLabel">Library</div>
                         <div class="custom-tootltip-tabs">Search</div>
                     </div>
@@ -2058,14 +2061,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         <div class="custom-tootltip-tabs">Agent Automation</div>
                     </div>
                     <div class="tab-icon" id="transcriptIcon">
-                        <i class="ast-transcipt" id="scriptIcon"></i>
+                        <i class="ast-transcipt font-15" id="scriptIcon"></i>
                         <div class="title-tab" id="transcriptLabel">Transcript</div>
                         <div class="custom-tootltip-tabs">Transcript</div>
                     </div>
                 </div>
                 <div class="taoggle-with-text">
-                    <div class="t-title">Pro-active</div>
+                    <div class="t-title">Proactive</div>
                     <label class="kr-sg-toggle">
+                        <div class="hover-tooltip">Proactive</div>
                         <input id="check1" type="checkbox" checked>
                         <div for="check1" class="slider"></div>
                     </label>
