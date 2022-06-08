@@ -2245,7 +2245,8 @@
                 });
             };
 
-            chatWindow.prototype.renderMessage = function (msgData,elementID) {
+            chatWindow.prototype.renderMessage = function (msgData,elementID, runInfoContent) {
+                console.log("came inside render message function with id", elementID);
                 $(".kore-chat-window").addClass('customBranding-theme');
                 var me = this, messageHtml = '', extension = '', _extractedFileName = '';
                 var helpers=me.helpers;
@@ -2271,7 +2272,7 @@
                 else {
                     waiting_for_message = false;
                 }
-                var _chatContainer = me.config.agentAssist? $(`#${agentContainer}`).find(`#displayData-${elementID}`):$(me.config.chatContainer).find('.chat-container');
+                var _chatContainer = me.config.agentAssist? $(`#${agentContainer}`).find(`#${runInfoContent} #displayData-${elementID}`):$(me.config.chatContainer).find('.chat-container');
                 if (msgData.message && msgData.message[0] && msgData.message[0].cInfo && msgData.message[0].cInfo.attachments) {
                     extension = strSplit(msgData.message[0].cInfo.attachments[0].fileName);
                 }
@@ -2924,11 +2925,12 @@
                 if(msgData && msgData.message[0] && msgData.message[0].component && msgData.message[0].component.payload && msgData.message[0].component.payload.sliderView && !msgData.message[0].component.payload.fromHistory){
                     bottomSliderAction('show',messageHtml);
                 }else{
-                    //ignore message(msgId) if it is already in viewport                     
-                    if ($(`${me.config.agentAssist?`#${agentContainer} #displayData-${elementID}  li#`:`.kore-chat-window .chat-container li#`}` + msgData.messageId).length < 1 || (msgData.renderType==='inline')) {
+                    //ignore message(msgId) if it is already in viewport        
+                    console.log("-------------came to first else conditions--- line no 2929", _chatContainer)             
+                    if ($(`${me.config.agentAssist?`#${agentContainer} #${runInfoContent} #displayData-${elementID}  li#`:`.kore-chat-window .chat-container li#`}` + msgData.messageId).length < 1 || (msgData.renderType==='inline')) {
                         if (msgData.type === "bot_response" && msgData.fromHistorySync) {
                             var msgTimeStamps = [];
-                            var msgEles = $(`${me.config.agentAssist?`#${agentContainer} #displayData-${elementID}  >li`:'.kore-chat-window .chat-container>li'}`);
+                            var msgEles = $(`${me.config.agentAssist?`#${agentContainer} #${runInfoContent} #displayData-${elementID}  >li`:'.kore-chat-window .chat-container>li'}`);
                             if (msgEles.length) {
                                 msgEles.each(function (i, ele) {
                                     msgTimeStamps.push(parseInt($(ele).attr('data-time')));
@@ -2940,17 +2942,23 @@
                                     if (insertAfterEle) {
                                         $(messageHtml).insertBefore(insertAfterEle);
                                     } else {
+                                        console.log(_chatContainer,"===========line no 2945=====", messageHtml)
                                         _chatContainer.append(messageHtml);
                                     }
                                 } else {
+                                    console.log(_chatContainer,"===========line no 2949=====", messageHtml)
                                     _chatContainer.prepend(messageHtml);
                                 }
                             } else {
+                                console.log(_chatContainer,"===========line no 2953=====", messageHtml)
                                 _chatContainer.append(messageHtml);
                             }
                         } else {
+                            console.log(_chatContainer,"===========line no 2957=====", messageHtml)
                            _chatContainer.append(messageHtml);
                         }
+                    }else{
+                        console.log($(`#${agentContainer} #${runInfoContent} #displayData-${elementID}  li#`).length,"----<============================else=======================>came here out of else main if condition===",$(`${me.config.agentAssist?`#${agentContainer} #displayData-${elementID}  li#`:`.kore-chat-window .chat-container li#`}` + msgData.messageId).length,msgData.messageId, msgData.renderType);
                     }
                 }
                 me.handleImagePreview();
