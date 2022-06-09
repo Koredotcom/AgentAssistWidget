@@ -11,10 +11,10 @@
     </div>
     <!-- <app-mainmenu class="toShowAppHeader"  [hidden]="showIframe"></app-mainmenu> -->
     <app-content class="container-fluid p-0" [hidden]="showIframe"></app-content>
-    <div class="testing-bot-icon-bottom" (click)="onBotClick()" [hidden]="workflowService.hideTestFlow">
+    <!-- <div class="testing-bot-icon-bottom" (click)="onBotClick()" [hidden]="workflowService.hideTestFlow">
         <i class="icon-sa-testing-icon"></i>
         <span *ngIf="isInCall || isInChat" [ngClass]="{'status-indications': (isInCall || isInChat), 'call-running' : isInCall, 'chat-running': isInChat}"></span>
-    </div>
+    </div> -->
 </div>
 
 <div class="loaderContainer" *ngIf="loading && !isFullScreen">

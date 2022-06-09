@@ -4,8 +4,9 @@
             <div class="title col-2 d-flex align-items-center">{{"USECASES.USECASE" | translate}} <img class="d-none" src="assets/icons/sort-down.svg"></div>
             <div class="title col-2"></div>
             <div class="title col-2">{{"USECASES.FORCALLERS" | translate}}</div>
-            <div class="title col-1">{{"USECASES.FORCHATS" | translate}}</div>
-            <div class="title col-2">{{"USECASES.FOREMAILS" | translate}}</div>
+            <div class="title col-1"></div>
+            <div class="title col-2">{{"USECASES.FORCHATS" | translate}}</div>
+            <!-- <div class="title col-2">{{"USECASES.FOREMAILS" | translate}}</div> -->
             <div class="title col-2"></div>
             <div class="title col-1">{{"CONVERSATIONAL_LOGS.STATUS" | translate}}</div>
         </div>
@@ -110,8 +111,9 @@
                 </ng-container> -->
             </div>
             <div class="title- col-2">{{(conv.triggerPoints?.isVoiceEnabled && (this.conv.isAgentAssistOnly || this.conv.hasAgentAssistAccess) ? 'DEFAULTS.ENABLED' : 'DEFAULTS.DISABLED') | translate}}</div>
-            <div class="title- col-1">{{(conv.triggerPoints?.isChatEnabled && (this.conv.isAgentAssistOnly || this.conv.hasAgentAssistAccess) ? 'DEFAULTS.ENABLED' : 'DEFAULTS.DISABLED') | translate}}</div>
-            <div class="title- col-2">{{(conv.triggerPoints?.isEmailEnabled && (this.conv.isAgentAssistOnly || this.conv.hasAgentAssistAccess) ? 'DEFAULTS.ENABLED' : 'DEFAULTS.DISABLED') | translate}}</div>
+            <div class="col-1"></div>
+            <div class="title- col-2">{{(conv.triggerPoints?.isChatEnabled && (this.conv.isAgentAssistOnly || this.conv.hasAgentAssistAccess) ? 'DEFAULTS.ENABLED' : 'DEFAULTS.DISABLED') | translate}}</div>
+            <!-- <div class="title- col-2">{{(conv.triggerPoints?.isEmailEnabled && (this.conv.isAgentAssistOnly || this.conv.hasAgentAssistAccess) ? 'DEFAULTS.ENABLED' : 'DEFAULTS.DISABLED') | translate}}</div> -->
             <div class="col-2 skills-title">
                 <!-- <span class="pr-1" [ngStyle]="{'color': item?.color}" *ngFor="let item of conv.skills">
                     {{item?.value}}
