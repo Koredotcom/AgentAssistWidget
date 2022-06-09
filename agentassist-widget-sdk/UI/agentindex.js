@@ -559,7 +559,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             <div class="action-links">
                                 <button class="send-run-btn" data-conv-id="${data.conversationId}"
                                 data-bot-id="${botId}" data-intent-name="${ele.name}"
-                                 data-library-run="true" 
+                                 data-library-run="true"
                                 id="run-${libraryResponseId}"
                                 >RUN</button>
                                 <div class="elipse-dropdown-info" id="showRunForAgentBtn-${uuids}">
@@ -1315,14 +1315,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
                         let targetIds = (target.id).split('-');
                         if (['feedbackup', 'feedbackdown'].includes(targetIds[0])) {
-                            console.log("=====event===============", evt.target)
+                            console.log("=====event===============", evt.target);
                             if (targetIds.includes('feedbackup')) {
                                 if (target.dataset.feedbacklike == 'false') {
                                     target.dataset.feedbacklike = 'true';
-                                    ($(target.parentElement.parentElement).find('#feedbackdown')?.attr('style')) ? (
-                                        $(target.parentElement.parentElement).find('#feedbackdown')?.removeAttr('style'),
-                                        $(target.parentElement.parentElement).find('.ast-thumbdown').attr('data-feedbackdislike', 'false')) : ''
-                                    $(target.parentElement).attr('style', 'background-color:#0077D2;');
+                                    ($(target.parentElement.parentElement.parentElement).find('#feedbackdown')?.attr('style')) ? (
+                                    $(target.parentElement.parentElement.parentElement).find('#feedbackdown')?.removeAttr('style'),
+                                    $(target.parentElement.parentElement).find('.ast-thumbdown').attr('data-feedbackdislike', 'false')) : '';
+                                    $(target.parentElement).attr('style', 'color:#0077D2;border-color:#0077D2;');
                                     feedbackLoop(evt);
                                 } else {
                                     target.dataset.feedbacklike = 'false';
@@ -1331,11 +1331,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             }
                             if (targetIds.includes('feedbackdown')) {
                                 if (target.dataset.feedbackdislike == 'false') {
-                                    ($(target.parentElement.parentElement).find('#feedbackup')?.attr('style')) ? (
-                                        $(target.parentElement.parentElement).find('#feedbackup')?.removeAttr('style'),
-                                        $(target.parentElement.parentElement).find('.ast-thumbup').attr('data-feedbacklike', 'false')) : ''
                                     target.dataset.feedbackdislike = 'true';
-                                    $(target.parentElement).attr('style', 'background-color:#0077D2;');
+                                    ($(target.parentElement.parentElement.parentElement).find('#feedbackup')?.attr('style')) ? (
+                                    $(target.parentElement.parentElement.parentElement).find('#feedbackup')?.removeAttr('style'),
+                                    $(target.parentElement.parentElement).find('.ast-thumbup').attr('data-feedbacklike', 'false')) : '';
+                                    $(target.parentElement).attr('style', 'color:#0077D2;border-color:#0077D2;');
                                     feedbackLoop(evt);
                                 } else {
                                     target.dataset.feedbackdislike = 'false';
@@ -1902,6 +1902,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     // $(`#addRemoveDropDown-${dropdownHeaderUuids} .btn-danger`).remove();
                     let feedbackHtml = ` 
         <div class="feedback-data">
+        <div class="feedbackup-data">
             <div class="feedback-icon" id="feedbackup">
                 <i class="ast-thumbup" id="feedbackup-${dropdownHeaderUuids}"
                 data-feedbacklike="false"
@@ -1910,6 +1911,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         data-dialog-name="${dialogName}"
                         data-user-input="${userIntentInput}"></i>
             </div>
+            <span class="tootltip-tabs">Like</span>
+            </div>
+            <div class="feedbackdown-data">
             <div class="feedback-icon" id="feedbackdown">
                 <i class="ast-thumbdown" id="feedbackdown-${dropdownHeaderUuids}"
                 data-feedbackdislike="false"
@@ -1917,6 +1921,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         data-bot-id="${botId}" data-feedback="dislike"
                         data-dialog-name="${dialogName}"
                         data-user-input="${userIntentInput}"></i>
+            </div>
+            <span class="tootltip-tabs">Dislike</span>
             </div>
        </div>`;
                     dropDownData.append(feedbackHtml);
