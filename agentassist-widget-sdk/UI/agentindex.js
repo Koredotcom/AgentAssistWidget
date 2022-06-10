@@ -1071,7 +1071,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         _msgsResponse.message.push(body);
                     }
                     if (dropdownHeaderUuids && data.buttons && !data.value.includes('Customer has waited')) {
-                        $('#overRideBtn').removeClass('disable-btn').removeAttr('disabled').addClass('override-input-btn');
+                        $('#overRideBtn').removeClass('hide');
+                        $('#cancelOverRideBtn').addClass('hide');
                         $("#inputFieldForAgent").remove();
                         let runInfoContent = $(`#dropDownData-${dropdownHeaderUuids}`);
                         let askToUserHtml = `
@@ -1801,6 +1802,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                        <div class="collapse-acc-data" id="dropDownData-${uuids}">
                         <div class="override-input-div hide">
                         <button class="override-input-btn" id="overRideBtn">Override Input</button>
+                        <button class="cancel-override-input-btn hide" id="cancelOverRideBtn">Cancel Override</button>
                         </div>
                           
                        </div>
@@ -1835,7 +1837,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 $('#interruptPopUp').removeClass('hide');
                             }
                         }
-                        if (target.className == 'override-input-btn') {
+                        if (target.id == 'overRideBtn') {
                             isOverRideMode = true;
                             var overRideObj = {
                                 "agentId": "",
@@ -1861,7 +1863,22 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     </div>
                 </div>`
                             runInfoContent.append(agentInputToBotHtml);
-                            $('#overRideBtn').attr('disabled', 'disabled').removeClass('override-input-btn').addClass('disable-btn').html('Override mode');
+                            $('#overRideBtn').addClass('hide');
+                            $('#cancelOverRideBtn').removeClass('hide');
+                        }
+                        if(target.id == 'cancelOverRideBtn'){
+                            isOverRideMode = false;
+                            var overRideObj = {
+                                "agentId": "",
+                                "botId": _botId,
+                                "conversationId": _agentAssistDataObj.conversationId,
+                                "query": "",
+                                "enable_override_userinput": false
+                            }
+                            _agentAsisstSocket.emit('enable_override_userinput', overRideObj);
+                            $('#overRideBtn').removeClass('hide');
+                            $('#cancelOverRideBtn').addClass('hide');
+                            $('#inputFieldForAgent').remove();
                         }
                         if (checkButton) {
                             let id = target.id.split('-')[1];
