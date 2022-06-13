@@ -1423,24 +1423,20 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                                         
                                                                         
                                                                     </div>
-                                                                    <div class="feedback-data">
-                                                                    <div class="feedback-icon" id="feedbackup">
-                                                                        <i class="ast-thumbup" id="feedbackup-${res._id}"
-                                                                        data-feedbacklike="false"
-                                                                        data-conv-id="${_agentAssistDataObj.conversationId}"
-                                                                                data-bot-id="${_agentAssistDataObj.botId}" data-feedback="like"
-                                                                                data-dialog-name="${res.tN}"
-                                                                                data-user-input="${userIntentInput}"></i>
+                                                                    <div class="feedback-data show-history-feedback">
+                                                                        <div class="feedbackup-data">
+                                                                            <div class="feedback-icon" id="feedbackup">
+                                                                                <i class="ast-thumbup" id="feedbackup-${res._id}" data-feedbacklike="false" data-conv-id="${_agentAssistDataObj.conversationId}"data-bot-id="${_agentAssistDataObj.botId}" data-feedback="like" data-dialog-name="${res.tN}" data-user-input="${userIntentInput}"></i>
+                                                                            </div>
+                                                                            <span class="tootltip-tabs">Like</span>
+                                                                        </div>
+                                                                        <div class="feedbackdown-data">
+                                                                            <div class="feedback-icon" id="feedbackdown">
+                                                                                <i class="ast-thumbdown" id="feedbackdown-${res._id}" data-feedbackdislike="false" data-conv-id="${_agentAssistDataObj.conversationId}" data-bot-id="${_agentAssistDataObj.botId}" data-feedback="dislike" data-dialog-name="${res.tN}" data-user-input="${userIntentInput}"></i>
+                                                                            </div>
+                                                                            <span class="tootltip-tabs">Dislike</span>
+                                                                        </div>
                                                                     </div>
-                                                                    <div class="feedback-icon" id="feedbackdown">
-                                                                        <i class="ast-thumbdown" id="feedbackdown-${res._id}"
-                                                                        data-feedbackdislike="false"
-                                                                        data-conv-id="${_agentAssistDataObj.conversationId}"
-                                                                                data-bot-id="${_agentAssistDataObj.botId}" data-feedback="dislike"
-                                                                                data-dialog-name="${res.tN}"
-                                                                                data-user-input="${userIntentInput}"></i>
-                                                                    </div>
-                                                            </div>
                                                             <div class="dilog-task-end" id="endTaks-${res._id}">
                                                             <div class="text-dialog-task-end">Dialog Task ended</div>     
                                                                         </div>

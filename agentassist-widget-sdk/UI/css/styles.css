@@ -1033,13 +1033,13 @@ border: 1px solid transparent !important;
     line-height: 15px;
     color: #000000;
 }
-.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .feedback-data {
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .feedback-data {
     padding-left: 28px;
     margin: 12px 0 15px 0;
     display: inline-flex;
     align-items: center;
 }
-.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .feedback-data .feedback-icon {
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .feedback-data .feedback-icon {
     width: 26px;
     height: 26px;
     background: #FFFFFF;
@@ -1608,7 +1608,7 @@ border: 1px solid transparent !important;
     position: absolute;
     top: 21px;
     left: 20px;
-    font-size: 0.75em;
+    font-size: 14px;
     color: #0077D2;
     cursor: pointer;
 }
