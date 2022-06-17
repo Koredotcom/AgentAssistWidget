@@ -82516,7 +82516,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         </div>
                     </div>`;
                                 dialogSuggestions.innerHTML += dialogsHtml;
-                                dialogSuggestions.innerHTML+= `<div>hello</div>`;
+                                let entitiesHtml = `<div>hello</div>`;
+                                dialogSuggestions.innerHTML+= entitiesHtml;
                                 _msgsResponse.message.push(body);
                             });
                             data.suggestions.faqs?.forEach((ele, index) => {
