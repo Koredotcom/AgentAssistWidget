@@ -936,6 +936,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         </div>
                     </div>`;
                                 dialogSuggestions.innerHTML += dialogsHtml;
+                                dialogSuggestions.innerHTML+= `<div>hello</div>`;
                                 _msgsResponse.message.push(body);
                             });
                             data.suggestions.faqs?.forEach((ele, index) => {
