@@ -44,8 +44,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
         "path": "/agentassist/api/v1/chat/", transports: ['websocket', 'polling', 'flashsocket']
     };
     connectionDetails['webSocketConnectionDomain'] = connectionDetails.envinormentUrl + "/koreagentassist",
-    connectionDetails['webSocketConnectionDetails'] = webSocketConnection,
-    agentContainer = containerId;
+        connectionDetails['webSocketConnectionDetails'] = webSocketConnection,
+        agentContainer = containerId;
     createAgentAssistContainer(agentContainer, _conversationId, _botId, connectionDetails);
     document.getElementById("loader").style.display = "none";
     // var token, botID, agentAssistUrl;
@@ -146,12 +146,40 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     });
 
                     _agentAsisstSocket.on('agent_assist_response', (data) => {
-                        
+                        data = {
+                            "botId": "st-6e9d43c3-33f6-5b44-a8c3-5dfe5d08ffd1",
+                            "conversationId": "123456789",
+                            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NTQwNzc1ODM2NzQsImV4cCI6MTY1NDE2Mzk4MzY3NCwiYXVkIjoiaHR0cHM6Ly9pZHByb3h5LmtvcmUuY29tL2F1dGhvcml6ZSIsImlzcyI6ImNzLTdmZTQ2NmUyLWE3ZWItNTIwMS04NGZlLTE4Mjk5NmExY2Q3NSIsInN1YiI6InVhLTk4ZmMyNGNlLWI5OTctNDAzYS1hMjQ1LTA0MGY2NjcyMGMzOCIsImlzQW5vbnltb3VzIjoiZmFsc2UifQ.VTtpqYDHxTU6rp_GbjZ1ohTCSnfuTBqZg6i15WypgQE&botid=st-6e9d43c3-33f6-5b44-a8c3-5dfe5d08ffd1",
+                            "userrequest": true,
+                            "type": "intent",
+                            "value": "ticket booking from banglore to mysore",
+                            "event": "agent_assist_response",
+                            "suggestions": {
+                                "dialogs": [
+                                    {
+                                        "name": "Ticket Booking",
+                                        "entities": [
+                                            {
+                                                "name": "source",
+                                                "value": "Hyderabad"
+                                            },
+                                            {
+                                                "name": "destination",
+                                                "value": "Delhi"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            "isPrompt": false,
+                            "userInput": "ticket booking from banglore to mysore",
+                            "intentName": "Ticket Booking"
+                        }
                         displayCustomerFeels(data, data.conversationId, _botId);
                         processAgentAssistResponse(data, data.conversationId, _botId);
-                        
+
                         document.getElementById("loader").style.display = "none";
-                       // document.getElementById("addRemoveDropDown").style.display = "block";
+                        // document.getElementById("addRemoveDropDown").style.display = "block";
 
                     })
                     AgentAssistPubSub.publish('automation_exhaustive_list',
@@ -168,7 +196,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     // Response
                     _agentAsisstSocket.on('agent_assist_agent_response', (data) => {
                         displayCustomerFeels(data, data.conversationId, data.botId);
-                        if (data.isSearch) {                           
+                        if (data.isSearch) {
                             processAgentIntentResults(data, data.conversationId, data.botId);
                             document.getElementById("loader").style.display = "none";
                             document.getElementById("overLaySearch").style.display = "block";
@@ -930,15 +958,56 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 <div class="dropdown-content-elipse" id="runAgtBtn-${uuids}">
                                     <div class="list-option" data-conv-id="${data.conversationId}"
                                     data-bot-id="${botId}" data-intent-name="${ele.name}"
-                                     id="agentSelect-${uuids}"
+                                    id="agentSelect-${uuids}" data-entitiesObj="${ele.entities}"
                                     data-exhaustivelist-run="true">Run Bot for Agent</div>
                                 </div>
                         </div>
                     </div>`;
                                 dialogSuggestions.innerHTML += dialogsHtml;
-                                let entitiesHtml = `<div>hello</div>`;
+                                let entitiesHtml = `<div class="entity-values-container">
+                                <fieldset>
+                                    <legend>ENTITY VALUES</legend>
+                                    <div class="entity-row-data">
+                                        <div class="label-data">Order Number:</div>
+                                        <div class="entity-input-content-data">
+                                            <div class="entity-value">PO12345</div>
+                                            <div class="entity-input">
+                                                <input type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="entity-row-data">
+                                        <div class="label-data">Items:</div>
+                                        <div class="edited-status">
+                                            <i class="ast-edited"></i>
+                                            <span>edited</span>
+                                        </div>
+                                        <div class="entity-input-content-data">
+                                            <div class="entity-value">3</div>
+                                            <div class="entity-input">
+                                                <input type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="save-reset-cancel">
+                                        <div class="save-reset">
+                                            <i class="ast-check-right"></i>
+                                            <span>Save</span>
+                                        </div>
+                                        <div class="save-reset">
+                                            <i class="ast-reset"></i>
+                                            <span>Reset</span>
+                                        </div>
+                                        <div class="cancel-btn">Cancel</div>
+                                    </div>
+                                </fieldset>
+                                <div class="edit-values-btn">Edit Values</div>
+                            </div>`;
                                 dialogSuggestions.innerHTML+= entitiesHtml;
                                 _msgsResponse.message.push(body);
+                                //added for entity display
+                                ele.entities.forEach((e) => { console.log(e.name, e.value); });
+                                console.log("entity object names");
                             });
                             data.suggestions.faqs?.forEach((ele, index) => {
                                 let body = {};
@@ -1058,7 +1127,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }
                     if (dropdownHeaderUuids && data.buttons && !data.value.includes('Customer has waited')) {
                         $('#overRideBtn').removeClass('disable-btn').removeAttr('disabled').addClass('override-input-btn');
-                        $("#inputFieldForAgent").remove();                        
+                        $("#inputFieldForAgent").remove();
                         let runInfoContent = $(`#dropDownData-${dropdownHeaderUuids}`);
                         let askToUserHtml = `
             <div class="steps-run-data">
@@ -1322,8 +1391,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 if (target.dataset.feedbacklike == 'false') {
                                     target.dataset.feedbacklike = 'true';
                                     ($(target.parentElement.parentElement.parentElement).find('#feedbackdown')?.attr('style')) ? (
-                                    $(target.parentElement.parentElement.parentElement).find('#feedbackdown')?.removeAttr('style'),
-                                    $(target.parentElement.parentElement).find('.ast-thumbdown').attr('data-feedbackdislike', 'false')) : '';
+                                        $(target.parentElement.parentElement.parentElement).find('#feedbackdown')?.removeAttr('style'),
+                                        $(target.parentElement.parentElement).find('.ast-thumbdown').attr('data-feedbackdislike', 'false')) : '';
                                     $(target.parentElement).attr('style', 'color:#0077D2;border-color:#0077D2;');
                                     feedbackLoop(evt);
                                 } else {
@@ -1335,8 +1404,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 if (target.dataset.feedbackdislike == 'false') {
                                     target.dataset.feedbackdislike = 'true';
                                     ($(target.parentElement.parentElement.parentElement).find('#feedbackup')?.attr('style')) ? (
-                                    $(target.parentElement.parentElement.parentElement).find('#feedbackup')?.removeAttr('style'),
-                                    $(target.parentElement.parentElement).find('.ast-thumbup').attr('data-feedbacklike', 'false')) : '';
+                                        $(target.parentElement.parentElement.parentElement).find('#feedbackup')?.removeAttr('style'),
+                                        $(target.parentElement.parentElement).find('.ast-thumbup').attr('data-feedbacklike', 'false')) : '';
                                     $(target.parentElement).attr('style', 'color:#0077D2;border-color:#0077D2;');
                                     feedbackLoop(evt);
                                 } else {
@@ -1446,11 +1515,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             conversationId: _agentAssistDataObj.conversationId,
                                             botId: _botId, value: 'discard all', check: true
                                         });
-                                        document.getElementById("loader").style.display = "block";
+                                    document.getElementById("loader").style.display = "block";
                                 } else {
                                     AgentAssistPubSub.publish('searched_Automation_details',
                                         { conversationId: _agentAssistDataObj.conversationId, botId: _botId, value: 'discard all', isSearch: false });
-                                        document.getElementById("loader").style.display = "block";
+                                    document.getElementById("loader").style.display = "block";
                                 }
 
                             }
@@ -1492,7 +1561,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             if (!isMyBotAutomationOnGoing) {
                                 data = target.dataset;
                                 AgentAssistPubSub.publish('searched_Automation_details', { conversationId: data.convId, botId: data.botId, value: data.intentName, isSearch: false, intentName: data.intentName });
-                                
+
                                 isMyBotAutomationOnGoing = true;
                                 noAutomationrunninginMyBot = false;
                                 let agentBotuuids = Math.floor(Math.random() * 100);
@@ -2018,9 +2087,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             },
             error: function (error) {
                 console.error("token is wrong");
-                if(error.status === 500){
+                if (error.status === 500) {
                     $(`#${containerId}`).html("Issue identified with the backend services! Please reach out to AgentAssist Admin.")
-                }else{
+                } else {
                     $(`#${containerId}`).html("Issue identified in configuration settings! Please reach out to AgentAssist Admin.")
                 }
                 return false;
@@ -2312,8 +2381,8 @@ function AgentAssist_run_click(e) {
     if (e.target.dataset.check || e.target.dataset.checkLib) {
         AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: convId, botId: botId, value: intentName, check: true });
 
-    } else {        
-        
+    } else {
+
         //document.getElementById("addRemoveDropDown").style.display = "none";
         AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: convId, botId: botId, value: intentName, intentName: intentName });
         document.getElementById("loader").style.display = "block";

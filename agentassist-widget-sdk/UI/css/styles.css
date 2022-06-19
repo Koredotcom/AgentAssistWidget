@@ -1608,7 +1608,7 @@ border: 1px solid transparent !important;
     position: absolute;
     top: 21px;
     left: 20px;
-    font-size: 0.75em;
+    font-size: 14px;
     color: #0077D2;
     cursor: pointer;
 }
@@ -2241,4 +2241,148 @@ border: 1px solid transparent !important;
 }
 .font-15{
     font-size: 15px;
+}
+
+
+
+
+
+/* Entity values */
+
+
+.entity-values-container.edit-entity-rules legend {
+    display: none;
+}
+.entity-values-container.edit-entity-rules .entity-row-data .label-data {
+    width: 120px;
+}
+.entity-values-container.edit-entity-rules .entity-row-data .entity-input-content-data .entity-value {
+    display: none;
+}
+.entity-values-container.edit-entity-rules .entity-row-data .entity-input-content-data .entity-input {
+    display: block !important;
+}
+.entity-values-container.edit-entity-rules .edit-values-btn {
+    display: none;
+}
+.entity-values-container.edit-entity-rules .save-reset-cancel {
+    display: flex;
+}
+.entity-values-container.edit-entity-rules .edited-status {
+    display: none !important;
+}
+.entity-values-container fieldset {
+    border: 1px dashed #64717C;
+    border-radius: 8px;
+    padding: 14px 10px 10px 14px;
+}
+.entity-values-container legend {
+    font-weight: 600;
+    font-size: 11px;
+    line-height: 13px;
+    color: #9AA0A6;
+    padding: 0 3px;
+}
+.entity-values-container .entity-row-data {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    position: relative;
+}
+.entity-values-container .entity-row-data:last-child {
+    margin: 0;
+}
+.entity-values-container .entity-row-data .label-data {
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 15px;
+    color: #000000;
+    flex-shrink: 0;
+}
+.entity-values-container .entity-row-data .edited-status {
+    position: absolute;
+    right: 0;
+    display: flex;
+    align-items: center;
+    top: auto;
+    font-weight: 400;
+    font-size: 11px;
+    line-height: 13px;
+    color: #5F6368;
+    font-style: italic;
+}
+.entity-values-container .entity-row-data .edited-status i {
+    margin-right: 5px;
+}
+.entity-values-container .entity-row-data .entity-input-content-data {
+    padding-left: 8px;
+    width: 100%;
+}
+.entity-values-container .entity-row-data .entity-input-content-data .entity-value {
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 15px;
+    color: #9AA0A6;
+}
+.entity-values-container .entity-row-data .entity-input-content-data .entity-input {
+    display: none;
+}
+.entity-values-container .entity-row-data .entity-input-content-data .entity-input input {
+    background: #FFFFFF;
+    border-radius: 4px;
+    outline: 0;
+    border: 0;
+    min-height: 25px;
+    padding: 2px 10px;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 20px;
+    color: #000000;
+    width: 100%;
+}
+.entity-values-container .edit-values-btn {
+    background: #FFFFFF;
+    border: 1px solid #5D5FEF;
+    box-shadow: 0px 2px 8px rgba(0,0,0,0.05);
+    border-radius: 5px;
+    display: inline-block;
+    padding: 6px 15px;
+    font-weight: 600;
+    font-size: 9px;
+    line-height: 11px;
+    color: #5D5FEF;
+    cursor: pointer;
+    margin-top: 12px;
+}
+.entity-values-container .save-reset-cancel {
+    display: none;
+    align-items: center;
+    position: relative;
+    padding: 12px 0 5px 0px;
+    border-top: 1px solid rgba(0,119,210,0.1);
+    margin-top: 15px;
+}
+.entity-values-container .save-reset-cancel .save-reset {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 15px;
+    color: #0077D2;
+    cursor: pointer;
+    flex-shrink: 0;
+    margin-right: 20px;
+}
+.entity-values-container .save-reset-cancel .save-reset i {
+    margin-right: 4px;
+}
+.entity-values-container .save-reset-cancel .cancel-btn {
+    font-weight: 400;
+    font-size: 12px;
+    color: #DD3646;
+    line-height: 15px;
+    width: auto;
+    text-align: right;
+    cursor: pointer;
+    position: absolute;
+    right: 0;
+    top: auto;
 }
