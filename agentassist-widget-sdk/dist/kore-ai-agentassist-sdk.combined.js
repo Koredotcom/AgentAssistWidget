@@ -83517,16 +83517,16 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         $('#historyData .agent-utt-info').each((i, elem) => {
                                             let eleID = ele.id.split('-');
                                             eleID.shift();
-                                            eleID.join('-');
                                             let elemids = elem.id.split('-');
                                             elemids.shift();
-                                            elemids.join('-');
-                                            if (eleID.includes(elemids)) {
-
+                                            let targetIDS = target.id.split('-');
+                                            targetIDS.shift();
+                                            if (targetIDS.join('-').includes(eleID.join('-')) && (eleID.join('-').includes(elemids.join('-')))) {
                                                 elem.remove();
+                                                ele.remove();
                                             }
                                         })
-                                        ele.remove();
+                                        
                                     })
                                 }
                                 if (libraryRunBtn) {
@@ -83540,11 +83540,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         $('#dynamicBlock .agent-utt-info').each((i, elem) => {
                                             let eleID = ele.id.split('-');
                                             eleID.shift();
-                                            eleID.join('-');
                                             let elemids = elem.id.split('-');
                                             elemids.shift();
-                                            elemids.join('-');
-                                            if (eleID.includes(elemids)) {
+                                            if (eleID.join('-').includes(elemids.join('-'))) {
                                                 $(`#historyData`).append(`
                                                 <div class="agent-utt-info">
                                                    ${$(elem).html()}
@@ -83594,12 +83592,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 dynamicBlock.innerHTML = dynamicBlock.innerHTML + dropdownHtml;
                                 let ids = target.id.split('-');
                                 ids.shift();
-                                ids.join('-');
+                                let joinedIds = ids.join('-');
                                 $(`${!target?.dataset?.useCaseList}` ? '.dialog-task-run-sec' : '.content-dialog-task-type .type-info-run-send').each((i, ele) => {
                                     let id = ele.id?.split('-');
                                     id.shift();
-                                    id.join('-')
-                                    if (ids.includes(id[1])) {
+                                    if (joinedIds.includes(id.join('-'))) {
                                         idsOfDropDown = ele.id;
                                         $(ele).remove()
                                     }
