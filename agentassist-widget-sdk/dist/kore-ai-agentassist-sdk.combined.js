@@ -81637,10 +81637,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             "aud": "",
             "isAnonymous": false
         };
+
         callSts(jsonData)
 
     } else if (connectionDetails.jwtToken) {
         console.log("------get in else if----")
+        console.log(connectionDetails.jwtToken, _botId)
         grantCall(connectionDetails.jwtToken, _botId, connectionDetails.envinormentUrl);
     } else {
         console.error("authentication failed")
@@ -81685,7 +81687,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             "token": {}
         }
         $.ajax({
-            url: url + '/api/oAuth/token/jwtgrant',
+            url: url + '/api/1.1/oAuth/token/jwtgrant',
             type: 'POST',
             crossDomain: true,
             contentType: 'application/json',
