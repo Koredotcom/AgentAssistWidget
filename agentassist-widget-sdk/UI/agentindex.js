@@ -871,14 +871,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     console.log("xxxxxxxxxxxxxxxxxxxxxxxxx automation list", elem.innerText)
                                     if (ele.id.split('-').includes(elem.id.split('-')[1])) {
                                         automationNotRanArray.push(elem.innerText.trim());
-                                        // $(`#historyData`).append(`
-                                        // <div class="agent-utt-info">
-                                        //    ${$(elem).html()}
-                                        // </div>
-                                        // <div class="dialog-task-run-sec">
-                                        // ${$(ele).html()}
-                                        // </div>`)
-
                                         elem.remove();
                                     }
                                 })
@@ -1410,8 +1402,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         $(`#historyData .show-history-feedback.hide`)[$(`#historyData .show-history-feedback.hide`).length - 1]?.classList.remove('hide');
 
                                     } else {
-                                        let resp = response.slice(previousResp?.length - 1, response.length);
-                                        resp.forEach((res, index) => {
+                                        let resp = response.length>0?response?.slice(previousResp?.length - 1, response.length): undefined;
+                                        resp?.forEach((res, index) => {
                                             if (res.type == 'incoming') {
                                                 res.components?.forEach((ele) => {
                                                     if (ele.data.text == previousTaskName) {
@@ -1425,7 +1417,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             if ((res.agentAssistDetails?.suggestions || res.agentAssistDetails?.ambiguityList) && res.type == 'outgoing') {
 
                                                 automationNotRanArray?.forEach((eleName, i) => {
-                                                    console.log("55555555555555555555 came isnide automation llopp", res.agentAssistDetails?.userInput)
                                                     let historyDataHtml = $('#historyData');
                                                     if (eleName === res.agentAssistDetails?.userInput) {
                                                         let uniqueID = res._id;
@@ -1455,7 +1446,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                             automationSuggestions.innerHTML += dialogAreaHtml;
                                                         }
                                                         if (res.agentAssistDetails?.ambiguityList?.faqs?.length > 0 || res.agentAssistDetails?.suggestions?.faqs?.length > 0) {
-                                                            // let automationSuggestions = document.getElementById(`automationSuggestions-${res._id}`);
                                                             let dialogAreaHtml = `<div class="task-type" id="faqssArea">
                                         <div class="img-block-info">
                                             <img src="./images/kg.svg">
@@ -1939,16 +1929,16 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         $('#historyData .agent-utt-info').each((i, elem) => {
                                             let eleID = ele.id.split('-');
                                             eleID.shift();
-                                            eleID.join('-');
                                             let elemids = elem.id.split('-');
                                             elemids.shift();
-                                            elemids.join('-');
-                                            if (eleID.includes(elemids)) {
-
+                                            let targetIDS = target.id.split('-');
+                                            targetIDS.shift();
+                                            if (targetIDS.join('-').includes(eleID.join('-')) && (eleID.join('-').includes(elemids.join('-')))) {
                                                 elem.remove();
+                                                ele.remove();
                                             }
                                         })
-                                        ele.remove();
+                                        
                                     })
                                 }
                                 if (libraryRunBtn) {
@@ -1962,11 +1952,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         $('#dynamicBlock .agent-utt-info').each((i, elem) => {
                                             let eleID = ele.id.split('-');
                                             eleID.shift();
-                                            eleID.join('-');
                                             let elemids = elem.id.split('-');
                                             elemids.shift();
-                                            elemids.join('-');
-                                            if (eleID.includes(elemids)) {
+                                            if (eleID.join('-').includes(elemids.join('-'))) {
                                                 $(`#historyData`).append(`
                                                 <div class="agent-utt-info">
                                                    ${$(elem).html()}
@@ -2016,12 +2004,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 dynamicBlock.innerHTML = dynamicBlock.innerHTML + dropdownHtml;
                                 let ids = target.id.split('-');
                                 ids.shift();
-                                ids.join('-');
+                                let joinedIds = ids.join('-');
                                 $(`${!target?.dataset?.useCaseList}` ? '.dialog-task-run-sec' : '.content-dialog-task-type .type-info-run-send').each((i, ele) => {
                                     let id = ele.id?.split('-');
                                     id.shift();
-                                    id.join('-')
-                                    if (ids.includes(id[1])) {
+                                    if (joinedIds.includes(id.join('-'))) {
                                         idsOfDropDown = ele.id;
                                         $(ele).remove()
                                     }
