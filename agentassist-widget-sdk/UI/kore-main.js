@@ -84,7 +84,7 @@
             var korecookie = localStorage.getItem("korecom");
             var userID = (korecookie) || koreGenerateUUID();
             var webSocketConnection = {
-                "path": "/agentassist/api/v1/chat/", 'query': 'userId=' + userID + '&orgId=o-da05dbea-6573-5399-ba58-22035a3122f3', transports: ['websocket', 'polling', 'flashsocket']
+                "path": "/agentassist/api/v1/chat/", transports: ['websocket', 'polling', 'flashsocket']
             };
 
             var connectionObj = {

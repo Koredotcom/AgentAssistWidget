@@ -2995,3 +2995,9 @@
 #chatContainer{
     display: none;/*remove this minimizeMode false*/
 }
+.extra-info{
+    display: none !important;
+}
+.profile-photo{
+    display: none !important;
+}

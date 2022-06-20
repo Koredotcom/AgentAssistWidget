@@ -25,7 +25,7 @@
                 var connectionObj = {
                     envinormentUrl: chatConfig.agentAssistUrl,
                     botDetails: {},
-                    isAuthentication: false
+                    isAuthentication: true 
                 }
                 function getToken() {
                     const params = new Proxy(new URLSearchParams(window.location.search), {
@@ -78,7 +78,7 @@
                 // connectionObj.botDetails.clientSecret = $(`#clientsecret`).val() ? $(`#clientsecret`).val() : connectionObj.botDetails.clientSecret;
 
             }
-        }
+        } 
 
     </script>
 
