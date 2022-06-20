@@ -82459,14 +82459,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     console.log("xxxxxxxxxxxxxxxxxxxxxxxxx automation list", elem.innerText)
                                     if (ele.id.split('-').includes(elem.id.split('-')[1])) {
                                         automationNotRanArray.push(elem.innerText.trim());
-                                        // $(`#historyData`).append(`
-                                        // <div class="agent-utt-info">
-                                        //    ${$(elem).html()}
-                                        // </div>
-                                        // <div class="dialog-task-run-sec">
-                                        // ${$(ele).html()}
-                                        // </div>`)
-
                                         elem.remove();
                                     }
                                 })
@@ -82998,8 +82990,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         $(`#historyData .show-history-feedback.hide`)[$(`#historyData .show-history-feedback.hide`).length - 1]?.classList.remove('hide');
 
                                     } else {
-                                        let resp = response.slice(previousResp?.length - 1, response.length);
-                                        resp.forEach((res, index) => {
+                                        let resp = response.length>0?response?.slice(previousResp?.length - 1, response.length): undefined;
+                                        resp?.forEach((res, index) => {
                                             if (res.type == 'incoming') {
                                                 res.components?.forEach((ele) => {
                                                     if (ele.data.text == previousTaskName) {
@@ -83013,7 +83005,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             if ((res.agentAssistDetails?.suggestions || res.agentAssistDetails?.ambiguityList) && res.type == 'outgoing') {
 
                                                 automationNotRanArray?.forEach((eleName, i) => {
-                                                    console.log("55555555555555555555 came isnide automation llopp", res.agentAssistDetails?.userInput)
                                                     let historyDataHtml = $('#historyData');
                                                     if (eleName === res.agentAssistDetails?.userInput) {
                                                         let uniqueID = res._id;
@@ -83043,7 +83034,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                             automationSuggestions.innerHTML += dialogAreaHtml;
                                                         }
                                                         if (res.agentAssistDetails?.ambiguityList?.faqs?.length > 0 || res.agentAssistDetails?.suggestions?.faqs?.length > 0) {
-                                                            // let automationSuggestions = document.getElementById(`automationSuggestions-${res._id}`);
                                                             let dialogAreaHtml = `<div class="task-type" id="faqssArea">
                                         <div class="img-block-info">
                                             <img src="./images/kg.svg">
