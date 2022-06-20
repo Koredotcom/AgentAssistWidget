@@ -1146,7 +1146,6 @@
                 if (me.config.allowLocation) {
                     me.bot.fetchUserLocation();
                 }
-                console.log("======me=====",me)
                 me.render(chatWindowHtml);
                 me.unfreezeUIOnHistoryLoadingFail.call(me);
             };
@@ -1496,7 +1495,6 @@
                 //_chatContainer.off('click', '.buttonTmplContentBox li,.listTmplContentChild .buyBtn,.viewMoreList .viewMore,.listItemPath,.quickReply,.carouselImageContent,.listRightContent,.checkboxBtn,.likeDislikeDiv').on('click', '.buttonTmplContentBox li,.listTmplContentChild .buyBtn, .viewMoreList .viewMore,.listItemPath,.quickReply,.carouselImageContent,.listRightContent,.checkboxBtn,.likeDislikeDiv', function (e) {
                 if(isEventEnable){
                     e.preventDefault();
-                    console.log('=======================here inside click========')
                     e.stopPropagation();
                     var type = $(e.target).attr('type');
                     if (type) {
@@ -2246,7 +2244,7 @@
             };
 
             chatWindow.prototype.renderMessage = function (msgData,elementID, runInfoContent) {
-                console.log("came inside render message function with id", elementID);
+                console.log("came inside render message function with id", msgData);
                 $(".kore-chat-window").addClass('customBranding-theme');
                 var me = this, messageHtml = '', extension = '', _extractedFileName = '';
                 var helpers=me.helpers;
@@ -2325,17 +2323,21 @@
                         });
 
                         setTimeout(function () {
-                            $('.carousel:last').addClass("carousel" + carouselTemplateCount);
+                            $(`#carousel-one-by-one-${msgData.messageId}`).addClass("carousel" + carouselTemplateCount);
                             var count = $(".carousel" + carouselTemplateCount).children().length;
                             if (count >= 1) {
                                 var carouselOneByOne = new PureJSCarousel({
-                                    carousel: '.carousel' + carouselTemplateCount,
+                                    carousel: ".carousel" + carouselTemplateCount,
                                     slide: '.slide',
                                     oneByOne: true
                                 });
-                                $('.carousel' + carouselTemplateCount).parent().show();
-                                $('.carousel' + carouselTemplateCount).attr('style', 'height: 100% !important');
+                                $(`#carousel-one-by-one-${msgData.messageId}`).parent().show();
+                                $(`#carousel-one-by-one-${msgData.messageId}`).attr('style', 'height: 100% !important');
                                 carouselEles.push(carouselOneByOne);
+                                console.log("xxxxxxxxxxxxxxxxx carousels", carouselEles)
+                                for (var i = 0; i < carouselEles.length; i++) {
+                                    $(carouselEles[i].carousel).parent().show();
+                                }
                             }
                             //window.dispatchEvent(new Event('resize'));
                             var evt = document.createEvent("HTMLEvents");
@@ -2401,17 +2403,20 @@
                                 'extension': extension
                             });
                             setTimeout(function () {
-                                $('.carousel:last').addClass("carousel" + carouselTemplateCount);
+                                $(`#carousel-one-by-one-${msgData.messageId}`).addClass("carousel" + carouselTemplateCount);
                                 var count = $(".carousel" + carouselTemplateCount).children().length;
-                                if (count > 1) {
+                                if (count >= 1) {
                                     var carouselOneByOne = new PureJSCarousel({
-                                        carousel: '.carousel' + carouselTemplateCount,
+                                        carousel: ".carousel" + carouselTemplateCount,
                                         slide: '.slide',
                                         oneByOne: true
                                     });
-                                    $('.carousel' + carouselTemplateCount).parent().show();
-                                    $('.carousel' + carouselTemplateCount).attr('style', 'height: 100% !important');
+                                    $(`#carousel-one-by-one-${msgData.messageId}`).parent().show();
+                                    $(`#carousel-one-by-one-${msgData.messageId}`).attr('style', 'height: 100% !important');
                                     carouselEles.push(carouselOneByOne);
+                                    for (var i = 0; i < carouselEles.length; i++) {
+                                        $(carouselEles[i].carousel).parent().show();
+                                    }
                                 }
                                 //window.dispatchEvent(new Event('resize'));
                                 var evt = document.createEvent("HTMLEvents");
@@ -2925,8 +2930,7 @@
                 if(msgData && msgData.message[0] && msgData.message[0].component && msgData.message[0].component.payload && msgData.message[0].component.payload.sliderView && !msgData.message[0].component.payload.fromHistory){
                     bottomSliderAction('show',messageHtml);
                 }else{
-                    //ignore message(msgId) if it is already in viewport        
-                    console.log("-------------came to first else conditions--- line no 2929", _chatContainer)             
+                    //ignore message(msgId) if it is already in viewport           
                     if ($(`${me.config.agentAssist?`#${agentContainer} #${runInfoContent} #displayData-${elementID}  li#`:`.kore-chat-window .chat-container li#`}` + msgData.messageId).length < 1 || (msgData.renderType==='inline')) {
                         if (msgData.type === "bot_response" && msgData.fromHistorySync) {
                             var msgTimeStamps = [];
@@ -2942,19 +2946,15 @@
                                     if (insertAfterEle) {
                                         $(messageHtml).insertBefore(insertAfterEle);
                                     } else {
-                                        console.log(_chatContainer,"===========line no 2945=====", messageHtml)
                                         _chatContainer.append(messageHtml);
                                     }
                                 } else {
-                                    console.log(_chatContainer,"===========line no 2949=====", messageHtml)
                                     _chatContainer.prepend(messageHtml);
                                 }
                             } else {
-                                console.log(_chatContainer,"===========line no 2953=====", messageHtml)
                                 _chatContainer.append(messageHtml);
                             }
                         } else {
-                            console.log(_chatContainer,"===========line no 2957=====", messageHtml)
                            _chatContainer.append(messageHtml);
                         }
                     }else{
@@ -3413,7 +3413,7 @@
                     {{if msgData.message[0].component.payload.text}}<div class="messageBubble tableChart">\
                         <span>{{html helpers.convertMDtoHTML(msgData.message[0].component.payload.text, "bot")}}</span>\
                     </div>{{/if}}\
-                    <div class="carousel" id="carousel-one-by-one" style="height: 0px;">\
+                    <div class="carousel" id="carousel-one-by-one-${msgData.messageId}" style="height: 0px;">\
                         {{each(key, table) msgData.message[0].component.payload.elements}}\
                             <div class="slide">\
                                 <div class="minitableDiv">\
@@ -3507,7 +3507,7 @@
                         {{if msgData.message[0].component.payload.text}}<div class="messageBubble tableChart">\
                             <span>{{html helpers.convertMDtoHTML(msgData.message[0].component.payload.text, "bot")}}</span>\
                         </div>{{/if}}\
-                        <div class="carousel" id="carousel-one-by-one" style="height: 0px;">\
+                        <div class="carousel" id="carousel-one-by-one-${msgData.messageId}" style="height: 0px;">\
                             {{each(key, msgItem) msgData.message[0].component.payload.elements}} \
                                 <div class="slide">\
                                     {{if msgItem.image_url}} \
