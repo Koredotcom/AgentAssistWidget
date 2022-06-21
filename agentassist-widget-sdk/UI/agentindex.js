@@ -2025,7 +2025,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     automationSuggestions.each((i, ele) => {
                                         $(ele).addClass('hide');
                                     });
-                                    automationSuggestions.length >= 1 ? $(automationSuggestions[automationSuggestions.length - 1]).removeClass('hide') : '';
+                                    (automationSuggestions.length >= 1 && $('#dynamicBlock .dialog-task-run-sec').length<=0) ? $(automationSuggestions[automationSuggestions.length - 1]).removeClass('hide') : '';
                                 }
                                 return;
                             }
@@ -2271,8 +2271,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     $('.sugestions-info-data').removeClass('hide');
                     $('#bodyContainer').addClass('if-suggestion-search');
                     emptySearchBarDuringTabShift();
-                    let automationSuggestions = $('#dynamicBlock .dialog-task-accordiaon-info');
-                    if (automationSuggestions.length >= 1) {
+                    let automationSuggestions = $('#dynamicBlock .dialog-task-accordiaon-info');  
+                    if (automationSuggestions.length >= 1 && $('#dynamicBlock .dialog-task-run-sec').length<=0) {
                         automationSuggestions[automationSuggestions.length - 1].classList.remove('hide');
                     }
 
