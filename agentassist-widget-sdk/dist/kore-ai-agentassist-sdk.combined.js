@@ -81630,6 +81630,7 @@ function koreGenerateUUID() {
     return uuid;
 }
 window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, connectionDetails) {
+    console.log('agent assist inside contructor', new Date());
     var webSocketConnection = {
         "path": "/agentassist/api/v1/chat/", transports: ['websocket', 'polling', 'flashsocket']
     };
@@ -81686,6 +81687,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
     }
 
     function grantCall(jwtID, botid, url) {
+        console.log('agent assist inside grantCall', new Date());
         document.getElementById("loader").style.display = "block";
         var payload = {
             "assertion": jwtID,
