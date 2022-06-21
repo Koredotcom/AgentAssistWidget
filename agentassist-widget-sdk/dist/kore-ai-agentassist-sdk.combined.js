@@ -83613,7 +83613,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     automationSuggestions.each((i, ele) => {
                                         $(ele).addClass('hide');
                                     });
-                                    
                                     (automationSuggestions.length >= 1 && $('#dynamicBlock .dialog-task-run-sec').length<=0) ? $(automationSuggestions[automationSuggestions.length - 1]).removeClass('hide') : '';
                                 }
                                 return;

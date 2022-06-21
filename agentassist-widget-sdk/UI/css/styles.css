@@ -548,12 +548,13 @@ html, body{
     position: relative;
     width: 100%;
     display: inline-block;
-    height: calc(100% - 82px);
+    /* height: calc(100% - 82px); */
+    height: calc(100% - 38px);
     background: #F5F8FA;
 }
 .agent-assist-chat-container .body-data-container.if-suggestion-search{
-    /* height: calc(100% - 148px); */
-    height: calc(100% - 137px);
+    /* height: calc(100% - 137px); */
+    height: calc(100% - 93px);
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data {
     width: 100%;
