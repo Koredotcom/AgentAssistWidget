@@ -82225,7 +82225,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 } else {
                                     let a = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display #faqDivLib-${index}`) : $(`#overLaySearch #faqDivLib-${index}`);
                                     let faqActionHtml = `<div class="action-links">
-                            <button class="send-run-btn">Send</button>
+                            <button class="send-run-btn" id="sendMsg" data-msg-id="${index}">Send</button>
                             <div class="copy-btn">
                                 <i class="ast-copy"></i>
                             </div>
@@ -82361,7 +82361,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                            <div class="agent-utt">
                                <div class="title-data text-truncate"><ul class="chat-container" id="displayData-${myBotuuids}"></ul></div>
                                <div class="action-links">
-                                   <button class="send-run-btn">Send</button>
+                                   <button class="send-run-btn" id="sendMsg" data-msg-id="${myBotuuids}">Send</button>
                                    <div class="copy-btn">
                                        <i class="ast-copy"></i>
                                    </div>
@@ -82380,7 +82380,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                            <div class="agent-utt">
                                <div class="title-data" ><ul class="chat-container" id="displayData-${myBotuuids}"></ul></div>
                                <div class="action-links">
-                                   <button class="send-run-btn">Send</button>
+                                   <button class="send-run-btn" id="sendMsg" data-msg-id="${myBotuuids}">Send</button>
                                    <div class="copy-btn">
                                        <i class="ast-copy"></i>
                                    </div>
@@ -82587,7 +82587,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 } else {
                                     let a = $(`#faqDiv-${index}`);
                                     let faqActionHtml = `<div class="action-links">
-                        <button class="send-run-btn">Send</button>
+                        <button class="send-run-btn" id="sendMsg" data-msg-id="${index}">Send</button>
                         <div class="copy-btn">
                             <i class="ast-copy"></i>
                         </div>
@@ -82694,7 +82694,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                            <div class="agent-utt">
                                <div class="title-data"><ul class="chat-container" id="displayData-${uuids}"></ul></div>
                                <div class="action-links">
-                                   <button class="send-run-btn">Send</button>
+                                   <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}">Send</button>
                                    <div class="copy-btn">
                                        <i class="ast-copy"></i>
                                    </div>
@@ -82713,7 +82713,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                            <div class="agent-utt">
                                <div class="title-data" ><ul class="chat-container" id="displayData-${uuids}"></ul></div>
                                <div class="action-links">
-                                   <button class="send-run-btn">Send</button>
+                                   <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}">Send</button>
                                    <div class="copy-btn">
                                        <i class="ast-copy"></i>
                                    </div>
@@ -82991,7 +82991,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         $(`#historyData .show-history-feedback.hide`)[$(`#historyData .show-history-feedback.hide`).length - 1]?.classList.remove('hide');
 
                                     } else {
-                                        let resp = response.length>0?response?.slice(previousResp?.length - 1, response.length): undefined;
+                                        let resp = response.length > 0 ? response?.slice(previousResp?.length - 1, response.length) : undefined;
                                         resp?.forEach((res, index) => {
                                             if (res.type == 'incoming') {
                                                 res.components?.forEach((ele) => {
@@ -83100,7 +83100,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                             } else {
                                                                 let a = $(`#faqDiv-${uniqueID}`);
                                                                 let faqActionHtml = `<div class="action-links">
-                                                <button class="send-run-btn">Send</button>
+                                                <button class="send-run-btn" id="sendMsg" data-msg-id="${uniqueID}">Send</button>
                                                 <div class="copy-btn">
                                                     <i class="ast-copy"></i>
                                                 </div>
@@ -83527,7 +83527,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                 ele.remove();
                                             }
                                         })
-                                        
+
                                     })
                                 }
                                 if (libraryRunBtn) {
@@ -83613,7 +83613,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     automationSuggestions.each((i, ele) => {
                                         $(ele).addClass('hide');
                                     });
-                                    (automationSuggestions.length >= 1 && $('#dynamicBlock .dialog-task-run-sec').length<=0) ? $(automationSuggestions[automationSuggestions.length - 1]).removeClass('hide') : '';
+                                    (automationSuggestions.length >= 1 && $('#dynamicBlock .dialog-task-run-sec').length <= 0) ? $(automationSuggestions[automationSuggestions.length - 1]).removeClass('hide') : '';
                                 }
                                 return;
                             }
@@ -83679,7 +83679,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 let answerHtml = `<div class="desc-text" id="desc-${latestId}"></div>`
                                 let faqDiv = $(`#faqDiv-${latestId}`);
                                 let faqaction = `<div class="action-links">
-                    <button class="send-run-btn">Send</button>
+                    <button class="send-run-btn" id="sendMsg" data-msg-id="${latestId}">Send</button>
                     <div class="copy-btn">
                         <i class="ast-copy"></i>
                     </div>
@@ -83713,7 +83713,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 let answerHtml = `<div class="desc-text" id="descLib-${id}"></div>`
                                 let faqDiv = $(`#overLaySearch #faqDivLib-${id}`);
                                 let faqaction = `<div class="action-links">
-                    <button class="send-run-btn">Send</button>
+                    <button class="send-run-btn" id="sendMsg data-msg-id="${id}"">Send</button>
                     <div class="copy-btn">
                         <i class="ast-copy"></i>
                     </div>
@@ -83732,7 +83732,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 let answerHtml = `<div class="desc-text" id="descLib-${id}"></div>`
                                 let faqDiv = $(`#search-text-display #faqDivLib-${id}`);
                                 let faqaction = `<div class="action-links">
-                    <button class="send-run-btn">Send</button>
+                    <button class="send-run-btn" id="sendMsg" data-msg-id="${id}">Send</button>
                     <div class="copy-btn">
                         <i class="ast-copy"></i>
                     </div>
@@ -83859,8 +83859,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     $('.sugestions-info-data').removeClass('hide');
                     $('#bodyContainer').addClass('if-suggestion-search');
                     emptySearchBarDuringTabShift();
-                    let automationSuggestions = $('#dynamicBlock .dialog-task-accordiaon-info');  
-                    if (automationSuggestions.length >= 1 && $('#dynamicBlock .dialog-task-run-sec').length<=0) {
+                    let automationSuggestions = $('#dynamicBlock .dialog-task-accordiaon-info');
+                    if (automationSuggestions.length >= 1 && $('#dynamicBlock .dialog-task-run-sec').length <= 0) {
                         automationSuggestions[automationSuggestions.length - 1].classList.remove('hide');
                     }
 
@@ -84005,7 +84005,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
 
                 function processUserMessage(data, _conversationId, botId) {
-                    console.log("AgentAssist >>> processUserMessage", data, _conversationId, botId, user);
+                    console.log("AgentAssist >>> processUserMessage", data, _conversationId, botId);
 
                 }
 
