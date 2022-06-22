@@ -81616,6 +81616,7 @@ var chatConfig;
 var agentContainer;
 var previousResp;
 var automationNotRanArray = [];
+var jwtToken;
 function koreGenerateUUID() {
     console.info("generating UUID");
     var d = new Date().getTime();
@@ -81652,6 +81653,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
         callSts(jsonData)
 
     } else if (connectionDetails.jwtToken) {
+        jwtToken = connectionDetails.jwtToken;
         grantCall(connectionDetails.jwtToken, _botId, connectionDetails.envinormentUrl);
     } else {
         console.error("authentication failed")
@@ -81664,6 +81666,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             data: jsonData,
             dataType: 'json',
             success: function (data) {
+                jwtToken = data.jwt;
                 grantCall(data.jwt, _botId, connectionDetails.envinormentUrl);
             },
             error: function (err) {
@@ -82979,7 +82982,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $('#dynamicBlock .agent-utt-info').addClass('hide');
                             $('#dynamicBlock .dialog-task-run-sec').addClass('hide');
                             $('#historyData').removeClass('hide');
-                            getData(`https://dev-smartassist.kore.ai/api/public/bot/${_agentAssistDataObj.botId}/agentassist/chatwidgethistory?convId=${_agentAssistDataObj.conversationId}`)
+                            getData(`${connectionDetails.envinormentUrl}/api/public/bot/${_agentAssistDataObj.botId}/agentassist/chatwidgethistory?convId=${_agentAssistDataObj.conversationId}`)
                                 .then(response => {
 
                                     document.getElementById("loader").style.display = "none";
@@ -83828,20 +83831,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 // Example POST method implementation:
                 async function getData(url = '', data = {}) {
                     document.getElementById("loader").style.display = "block";
-                    const response = await fetch(url, {
-                        mode: 'cors',
-                        credentials: 'include',
-                        method: 'GET',
-                        headers: {
-                            'Accept': 'application/json',
-                            'Origin': '*',
-                            'auth': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NTQ1ODY3NTcwODUsImV4cCI6MTY1NDY3MzE1NzA4NSwiYXVkIjoiaHR0cHM6Ly9pZHByb3h5LmtvcmUuY29tL2F1dGhvcml6ZSIsImlzcyI6ImNzLTdmZTQ2NmUyLWE3ZWItNTIwMS04NGZlLTE4Mjk5NmExY2Q3NSIsInN1YiI6InVhLTY0NzJhODc4LTViN2YtNGE0OS1hOTExLTkzODQ4NjYyMWM1YyIsImlzQW5vbnltb3VzIjoiZmFsc2UifQ.6qncodTl1OZuc3Nqvwhuc733lwxywqxyRQ5ZGrtSKN8',
-                            'Content-Type': 'application/json',
-                        },
-
-                    });
-                    const jsonsResp = await response.json(); // parses JSON response into native JavaScript objects
-                    return jsonsResp;
+                    const response = await $.ajax({
+                        method:'GET',
+                        url:url,
+                        headers:{
+                            'auth':jwtToken,
+                            'Access-Control-Allow-Origin':'*'
+                        }
+                    }) // parses JSON response into native JavaScript objects
+                    return response;
                 }
 
                 function userTabActive() {

@@ -28,6 +28,7 @@ var chatConfig;
 var agentContainer;
 var previousResp;
 var automationNotRanArray = [];
+var jwtToken;
 function koreGenerateUUID() {
     console.info("generating UUID");
     var d = new Date().getTime();
@@ -64,6 +65,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
         callSts(jsonData)
 
     } else if (connectionDetails.jwtToken) {
+        jwtToken = connectionDetails.jwtToken;
         grantCall(connectionDetails.jwtToken, _botId, connectionDetails.envinormentUrl);
     } else {
         console.error("authentication failed")
@@ -76,6 +78,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             data: jsonData,
             dataType: 'json',
             success: function (data) {
+                jwtToken = data.jwt;
                 grantCall(data.jwt, _botId, connectionDetails.envinormentUrl);
             },
             error: function (err) {
@@ -2244,7 +2247,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         method:'GET',
                         url:url,
                         headers:{
-                            'auth':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NTU4Nzk2Nzk0NjYsImV4cCI6MTY1NTk2NjA3OTQ2NiwiYXVkIjoiaHR0cHM6Ly9pZHByb3h5LmtvcmUuY29tL2F1dGhvcml6ZSIsImlzcyI6ImNzLTdmZTQ2NmUyLWE3ZWItNTIwMS04NGZlLTE4Mjk5NmExY2Q3NSIsInN1YiI6InVhLTczYWVjODJkLWI2ZTQtNDNlYy05ZDNlLTFmNzFmZTJiZGYxYSIsImlzQW5vbnltb3VzIjoiZmFsc2UifQ.gbr_SNlmKja3qFcXI0Ke07HxmBsVRa3FeeSKlv7ZJ_8',
+                            'auth':jwtToken,
                             'Access-Control-Allow-Origin':'*'
                         }
                     }) // parses JSON response into native JavaScript objects
