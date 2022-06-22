@@ -2420,8 +2420,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         method:'GET',
                         url:url,
                         headers:{
-                            'auth':jwtToken,
-                            'Access-Control-Allow-Origin':'*'
+                            'auth':jwtToken
                         }
                     }) // parses JSON response into native JavaScript objects
                     return response;
