@@ -151,6 +151,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     });
 
                     _agentAsisstSocket.on('agent_assist_response', (data) => {
+
                         var overRideObj = {
                             "agentId": "",
                             "botId": _botId,
@@ -166,6 +167,36 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         // document.getElementById("addRemoveDropDown").style.display = "block";
 
                     })
+                    data = {
+                        "botId": "st-6e9d43c3-33f6-5b44-a8c3-5dfe5d08ffd1",
+                        "conversationId": "123456789",
+                        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NTQwNzc1ODM2NzQsImV4cCI6MTY1NDE2Mzk4MzY3NCwiYXVkIjoiaHR0cHM6Ly9pZHByb3h5LmtvcmUuY29tL2F1dGhvcml6ZSIsImlzcyI6ImNzLTdmZTQ2NmUyLWE3ZWItNTIwMS04NGZlLTE4Mjk5NmExY2Q3NSIsInN1YiI6InVhLTk4ZmMyNGNlLWI5OTctNDAzYS1hMjQ1LTA0MGY2NjcyMGMzOCIsImlzQW5vbnltb3VzIjoiZmFsc2UifQ.VTtpqYDHxTU6rp_GbjZ1ohTCSnfuTBqZg6i15WypgQE&botid=st-6e9d43c3-33f6-5b44-a8c3-5dfe5d08ffd1",
+                        "userrequest": true,
+                        "type": "intent",
+                        "value": "ticket booking from banglore to mysore",
+                        "event": "agent_assist_response",
+                        "suggestions": {
+                            "dialogs": [
+                                {
+                                    "name": "Ticket Booking",
+                                    "entities": [
+                                        {
+                                            "name": "source",
+                                            "value": "Hyderabad"
+                                        },
+                                        {
+                                            "name": "destination",
+                                            "value": "Delhi"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        "isPrompt": false,
+                        "userInput": "ticket booking from banglore to mysore",
+                        "intentName": "Ticket Booking"
+                    }
+                       
                     AgentAssistPubSub.publish('automation_exhaustive_list',
                         { conversationId: _agentAssistDataObj.conversationId, botId: _agentAssistDataObj.botId, 'experience': 'chat' });
                     _agentAsisstSocket.on('user_message', (data) => {
@@ -957,13 +988,57 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 <div class="dropdown-content-elipse" id="runAgtBtn-${uuids}">
                                     <div class="list-option" data-conv-id="${data.conversationId}"
                                     data-bot-id="${botId}" data-intent-name="${ele.name}"
-                                     id="agentSelect-${uuids}"
+                                    id="agentSelect-${uuids}" data-entitiesObj="${ele.entities}"
                                     data-exhaustivelist-run="true">Run Bot for Agent</div>
                                 </div>
                         </div>
                     </div>`;
                                 dialogSuggestions.innerHTML += dialogsHtml;
                                 // _msgsResponse.message.push(body);
+                                let entitiesHtml = `<div class="entity-values-container">
+                                <fieldset>
+                                    <legend>ENTITY VALUES</legend>
+                                    <div class="entity-row-data">
+                                        <div class="label-data">Order Number:</div>
+                                        <div class="entity-input-content-data">
+                                            <div class="entity-value">PO12345</div>
+                                            <div class="entity-input">
+                                                <input type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="entity-row-data">
+                                        <div class="label-data">Items:</div>
+                                        <div class="edited-status">
+                                            <i class="ast-edited"></i>
+                                            <span>edited</span>
+                                        </div>
+                                        <div class="entity-input-content-data">
+                                            <div class="entity-value">3</div>
+                                            <div class="entity-input">
+                                                <input type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="save-reset-cancel">
+                                        <div class="save-reset">
+                                            <i class="ast-check-right"></i>
+                                            <span>Save</span>
+                                        </div>
+                                        <div class="save-reset">
+                                            <i class="ast-reset"></i>
+                                            <span>Reset</span>
+                                        </div>
+                                        <div class="cancel-btn">Cancel</div>
+                                    </div>
+                                </fieldset>
+                                <div class="edit-values-btn">Edit Values</div>
+                            </div>`;
+                                dialogSuggestions.innerHTML+= entitiesHtml;
+                                _msgsResponse.message.push(body);
+                                //added for entity display
+                                ele.entities.forEach((e) => { console.log(e.name, e.value); });
+                                console.log("entity object names");
                             });
                             data.suggestions.faqs?.forEach((ele, index) => {
                                 let body = {};
