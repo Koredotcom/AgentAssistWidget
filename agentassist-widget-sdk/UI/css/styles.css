@@ -2400,3 +2400,37 @@ border: 1px solid transparent !important;
     right: 0;
     top: auto;
 }
+.btn-restore {
+    background: #0077D2;
+    border-radius: 4px;
+    height: 34px;
+    outline: 0;
+    padding: 7px 20px;
+    font-weight: 400;
+    font-size: 0.875em;
+    line-height: 20px;
+    color: #FFFFFF;
+    cursor: pointer;
+    border: 1px solid transparent;
+}
+.btn-restore:hover 
+{background-color: #0077D2}
+
+.btn-restore:active 
+{
+  background-color: #0077D2;
+  box-shadow: 0 1px #666;
+  transform: translateY(1px);
+}
+.entity-values-container .save-reset-cancel .save-reset-disabled {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 15px;
+    color: #5F6368;
+    cursor: not-allowed;
+    flex-shrink: 0;
+    margin-right: 20px;
+}
+.entity-values-container .save-reset-cancel .save-reset-disabled i {
+    margin-right: 4px;
+}

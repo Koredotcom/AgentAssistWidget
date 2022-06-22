@@ -33,6 +33,10 @@
   content: "\e90c";
   color: #0077d2;
 }
+.ast-check-right-disabled:before {
+  content: "\e90c";
+  color: #5F6368;
+}
 .ast-reset:before {
   content: "\e912";
   color: #0077d2;
