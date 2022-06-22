@@ -1394,7 +1394,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $('#dynamicBlock .agent-utt-info').addClass('hide');
                             $('#dynamicBlock .dialog-task-run-sec').addClass('hide');
                             $('#historyData').removeClass('hide');
-                            getData(`https://dev-agentassist.kore.ai/api/public/bot/${_agentAssistDataObj.botId}/agentassist/chatwidgethistory?convId=${_agentAssistDataObj.conversationId}`)
+                            getData(`${connectionDetails.envinormentUrl}/api/public/bot/${_agentAssistDataObj.botId}/agentassist/chatwidgethistory?convId=${_agentAssistDataObj.conversationId}`)
                                 .then(response => {
 
                                     document.getElementById("loader").style.display = "none";
@@ -2247,8 +2247,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         method:'GET',
                         url:url,
                         headers:{
-                            'auth':jwtToken,
-                            'Access-Control-Allow-Origin':connectionDetails.envinormentUrl
+                            'auth':jwtToken
                         }
                     }) // parses JSON response into native JavaScript objects
                     return response;
