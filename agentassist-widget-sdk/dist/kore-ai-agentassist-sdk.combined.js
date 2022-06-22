@@ -81635,6 +81635,20 @@ function koreGenerateUUID() {
 }
 window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, connectionDetails) {
     console.log('agent assist inside contructor', new Date());
+    
+    try {
+        const params = new Proxy(new URLSearchParams(window.location.search), {
+            get: (searchParams, prop) => searchParams.get(prop),
+        });
+        sourceType = params.source
+        console.log('================source============: ', sourceType)
+        if(sourceType) {
+            console.log('sourceType: ',params.source);
+            $('body').addClass(sourceType);
+        }
+    } catch (err) {
+        console.log(err);
+    }
     var webSocketConnection = {
         "path": "/agentassist/api/v1/chat/", transports: ['websocket', 'polling', 'flashsocket']
     };
@@ -81762,35 +81776,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         // document.getElementById("addRemoveDropDown").style.display = "block";
 
                     })
-                        data = {
-                            "botId": "st-6e9d43c3-33f6-5b44-a8c3-5dfe5d08ffd1",
-                            "conversationId": _agentAssistDataObj.conversationId,
-                            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NTQwNzc1ODM2NzQsImV4cCI6MTY1NDE2Mzk4MzY3NCwiYXVkIjoiaHR0cHM6Ly9pZHByb3h5LmtvcmUuY29tL2F1dGhvcml6ZSIsImlzcyI6ImNzLTdmZTQ2NmUyLWE3ZWItNTIwMS04NGZlLTE4Mjk5NmExY2Q3NSIsInN1YiI6InVhLTk4ZmMyNGNlLWI5OTctNDAzYS1hMjQ1LTA0MGY2NjcyMGMzOCIsImlzQW5vbnltb3VzIjoiZmFsc2UifQ.VTtpqYDHxTU6rp_GbjZ1ohTCSnfuTBqZg6i15WypgQE&botid=st-6e9d43c3-33f6-5b44-a8c3-5dfe5d08ffd1",
-                            "userrequest": true,
-                            "type": "intent",
-                            "value": "ticket booking from Hyderabad to Delhi",
-                            "event": "agent_assist_response",
-                            "suggestions": {
-                                "dialogs": [
-                                    {
-                                        "name": "Ticket Booking",
-                                        "entities": [
-                                            {
-                                                "name": "source",
-                                                "value": "Hyderabad"
-                                            },
-                                            {
-                                                "name": "destination",
-                                                "value": "Delhi"
-                                            }
-                                        ]
-                                    }
-                                ]
-                            },
-                            "isPrompt": false,
-                            "userInput": "ticket booking from banglore to mysore",
-                            "intentName": "Ticket Booking"
-                        }
                         
                        
                     AgentAssistPubSub.publish('automation_exhaustive_list',
@@ -82592,7 +82577,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         </div>
                     </div>`;
                                 dialogSuggestions.innerHTML += dialogsHtml;
-                                // _msgsResponse.message.push(body);
                                 if(ele.entities.length>0){
                                     previousEntitiesValue = JSON.stringify(ele.entities);
                                     let entitesDiv = `<div class="entity-values-container" id="entitesDiv-${uuids}">

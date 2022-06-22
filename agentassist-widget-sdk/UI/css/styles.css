@@ -1,3 +1,15 @@
+.smartassist {
+    --sdk-chat-window-bg-color:#009dab;
+    --sdk-chat-window-color: #009dab;
+    --sdk-chat-window-boxshadow-color: #009dab;
+    --sdk-chat-window-border-color: #009dab;
+    
+}
+
+.salesforce {
+    --sdk-chat-window-bg-color:#ffffff;
+}
+
 *{
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -167,6 +179,8 @@ html, body{
     height: auto!important;
     min-width: 100px;
     max-height: 100% !important;
+    width: 400px !important;
+    min-width: 400px !important;
 }
 
 
@@ -271,7 +285,7 @@ html, body{
 }
 .agent-assist-chat-container .header-top-bar .tab-toggles-sec .top-tabs-actions .tab-icon:hover {
     background: #F5F8FA;
-    color: #0077D2;
+    color: var(--sdk-chat-window-color);
 }
 .agent-assist-chat-container .header-top-bar .tab-toggles-sec .top-tabs-actions .tab-icon:hover .custom-tootltip-tabs{
     visibility: visible;
@@ -285,7 +299,7 @@ html, body{
     display: none;
 }
 .agent-assist-chat-container .header-top-bar .tab-toggles-sec .top-tabs-actions .tab-icon.active-tab {
-    background: #0077D2;
+    background: var(--sdk-chat-window-color);
     color: #FFFFFF;
 }
 .agent-assist-chat-container .header-top-bar .tab-toggles-sec .top-tabs-actions .tab-icon.active-tab .title-tab{
@@ -711,7 +725,7 @@ html, body{
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .send-run-btn {
     border: 0;
-    background: #0077D2;
+    background: var(--sdk-chat-window-bg-color);
     box-shadow: 0px 2px 8px rgba(0,0,0,0.05);
     border-radius: 5px;
     outline: 0;
@@ -893,7 +907,7 @@ html, body{
     left: 0;
     width: 16px;
     height: 16px;
-    background: #0077D2;
+    background: var(--sdk-chat-window-bg-color);
     border-radius: 100%;
     font-size: 8px;
     display: flex;
@@ -994,7 +1008,7 @@ border: 1px solid transparent !important;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data .run-info-content .agent-utt .action-links .send-run-btn {
     border: 0;
-    background: #0077D2;
+    background: var(--sdk-chat-window-bg-color);
     box-shadow: 0px 2px 8px rgba(0,0,0,0.05);
     border-radius: 5px;
     outline: 0;
@@ -1133,7 +1147,7 @@ border: 1px solid transparent !important;
 .agent-assist-chat-container .body-data-container .transcipt-only-calls-data .data-contnet .other-user-bubble .bubble-data .buld-count-utt {
     width: 28px;
     height: 28px;
-    background: #0077D2;
+    background: var(--sdk-chat-window-bg-color);
     border-radius: 64px;
     display: flex;
     align-items: center;
@@ -1188,7 +1202,7 @@ border: 1px solid transparent !important;
     margin-left: 10px;
 }
 .agent-assist-chat-container .body-data-container .transcipt-only-calls-data .data-contnet .current-user-bubble .bubble-data {
-    background: #0077D2;
+    background: var(--sdk-chat-window-bg-color);
     border-radius: 15px 5px 15px 15px;
     padding: 8px 15px;
     font-weight: 400;
@@ -1370,7 +1384,7 @@ border: 1px solid transparent !important;
 }
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .send-run-btn {
     border: 0;
-    background: #0077D2;
+    background: var(--sdk-chat-window-bg-color);
     box-shadow: 0px 2px 8px rgba(0,0,0,0.05);
     border-radius: 5px;
     outline: 0;
@@ -1490,7 +1504,7 @@ border: 1px solid transparent !important;
     border: solid 1px #1372ff;
 }
 .agent-assist-chat-container .input-text-search input:active {
-    border: solid 1px #0077D2;
+    border: solid 1px var(--sdk-chat-window-border-color);
 }
 .agent-assist-chat-container .input-text-search input:disabled {
     border: solid 1px #f3f3f4;
@@ -1514,7 +1528,7 @@ border: 1px solid transparent !important;
     position: absolute;
     left: 10px;
     top: 10px;
-    color: #0077D2;
+    color: var(--sdk-chat-window-color);
 }
 
 /* Show history */
@@ -1529,7 +1543,7 @@ border: 1px solid transparent !important;
     font-weight: 500;
     font-size: 0.75em;
     line-height: 15px;
-    color: #0077D2;
+    color: var(--sdk-chat-window-color);
     padding: 5px;
     border: 0;
     outline: 0;
@@ -1610,7 +1624,7 @@ border: 1px solid transparent !important;
     top: 21px;
     left: 20px;
     font-size: 14px;
-    color: #0077D2;
+    color: var(--sdk-chat-window-color);
     cursor: pointer;
 }
 .sugestions-info-data .close-search{
@@ -1655,7 +1669,7 @@ border: 1px solid transparent !important;
     margin: 0px 0 8px 0;
 }
 .overlay-suggestions .suggestion-content .search-results-text .show-all{
-    color: #0077D2;
+    color: var(--sdk-chat-window-color);
     cursor: pointer;
 }
 
@@ -1767,7 +1781,7 @@ border: 1px solid transparent !important;
 }
 .overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .send-run-btn {
     border: 0;
-    background: #0077D2;
+    background: var(--sdk-chat-window-bg-color);
     box-shadow: 0px 2px 8px rgba(0,0,0,0.05);
     border-radius: 5px;
     outline: 0;
@@ -2380,7 +2394,7 @@ border: 1px solid transparent !important;
     font-weight: 400;
     font-size: 12px;
     line-height: 15px;
-    color: #0077D2;
+    color: var(--sdk-chat-window-color);
     cursor: pointer;
     flex-shrink: 0;
     margin-right: 20px;
@@ -2401,7 +2415,7 @@ border: 1px solid transparent !important;
     top: auto;
 }
 .btn-restore {
-    background: #0077D2;
+    background: var(--sdk-chat-window-bg-color);
     border-radius: 4px;
     height: 34px;
     outline: 0;
@@ -2414,11 +2428,11 @@ border: 1px solid transparent !important;
     border: 1px solid transparent;
 }
 .btn-restore:hover 
-{background-color: #0077D2}
+{background-color: var(--sdk-chat-window-bg-color)}
 
 .btn-restore:active 
 {
-  background-color: #0077D2;
+  background-color: var(--sdk-chat-window-bg-color);
   box-shadow: 0 1px #666;
   transform: translateY(1px);
 }
