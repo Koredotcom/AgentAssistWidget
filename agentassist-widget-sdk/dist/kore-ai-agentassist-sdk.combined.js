@@ -81606,6 +81606,9 @@ var previousTabActive;
 var AgentChatInitialize;
 var chatConfig;
 var agentContainer;
+var entitiestValueArray;
+var previousEntitiesValue;
+var isRetore = false;
 function koreGenerateUUID() {
     console.info("generating UUID");
     var d = new Date().getTime();
@@ -81728,11 +81731,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     _agentAsisstSocket.on('agent_assist_response', (data) => {
                         data = {
                             "botId": "st-6e9d43c3-33f6-5b44-a8c3-5dfe5d08ffd1",
-                            "conversationId": "123456789",
+                            "conversationId": _agentAssistDataObj.conversationId,
                             "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NTQwNzc1ODM2NzQsImV4cCI6MTY1NDE2Mzk4MzY3NCwiYXVkIjoiaHR0cHM6Ly9pZHByb3h5LmtvcmUuY29tL2F1dGhvcml6ZSIsImlzcyI6ImNzLTdmZTQ2NmUyLWE3ZWItNTIwMS04NGZlLTE4Mjk5NmExY2Q3NSIsInN1YiI6InVhLTk4ZmMyNGNlLWI5OTctNDAzYS1hMjQ1LTA0MGY2NjcyMGMzOCIsImlzQW5vbnltb3VzIjoiZmFsc2UifQ.VTtpqYDHxTU6rp_GbjZ1ohTCSnfuTBqZg6i15WypgQE&botid=st-6e9d43c3-33f6-5b44-a8c3-5dfe5d08ffd1",
                             "userrequest": true,
                             "type": "intent",
-                            "value": "ticket booking from banglore to mysore",
+                            "value": "ticket booking from Hyderabad to Delhi",
                             "event": "agent_assist_response",
                             "suggestions": {
                                 "dialogs": [
@@ -81756,6 +81759,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             "intentName": "Ticket Booking"
                         }
                         displayCustomerFeels(data, data.conversationId, _botId);
+
                         processAgentAssistResponse(data, data.conversationId, _botId);
 
                         document.getElementById("loader").style.display = "none";
@@ -82520,6 +82524,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 body['cInfo'] = {
                                     "body": data.value
                                 };
+                                ele.entities.length>0?(entitiestValueArray = ele.entities):'';
+                                
                                 let dialogSuggestions = document.getElementById(`dialogSuggestions-${responseId}`);
                                 let dialogsHtml = `
                     <div class="type-info-run-send">
@@ -82538,12 +82544,52 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 <div class="dropdown-content-elipse" id="runAgtBtn-${uuids}">
                                     <div class="list-option" data-conv-id="${data.conversationId}"
                                     data-bot-id="${botId}" data-intent-name="${ele.name}"
-                                    id="agentSelect-${uuids}" data-entitiesObj="${ele.entities}"
+                                    id="agentSelect-${uuids}"
                                     data-exhaustivelist-run="true">Run Bot for Agent</div>
                                 </div>
                         </div>
                     </div>`;
                                 dialogSuggestions.innerHTML += dialogsHtml;
+                                if(ele.entities.length>0){
+                                    previousEntitiesValue = JSON.stringify(ele.entities);
+                                    let entitesDiv = `<div class="entity-values-container" id="entitesDiv-${uuids}">
+                                    <fieldset class="fieldsets">
+                                        <legend>ENTITY VALUES</legend>
+                                        </fieldset>
+                                <div class="edit-values-btn" id="entityEdit-${uuids}">Edit Values</div>
+                                <div class="edit-values-btn restore hide" id="restorebtn-${uuids}">Restore Values</div>
+                            </div>`;
+                                 dialogSuggestions.innerHTML+= entitesDiv;
+                                 let enentiesDomDiv = $(`#entitesDiv-${uuids}`).find('.fieldsets');
+                                 ele.entities.forEach((eleData, i)=>{
+
+                                     let eachEntitiesDiv = `
+                                     <div class="entity-row-data" id="enityNameAndValue-${i}">
+                                        <div class="label-data">${eleData.name}</div>
+                                        <div class="edited-status hide">
+                                            <i class="ast-edited"></i>
+                                            <span>edited</span>
+                                        </div>
+                                        <div class="entity-input-content-data">
+                                            <div class="entity-value" id="initialentityValue-${i}" >${eleData.value}</div>
+                                            <div class="entity-input">
+                                                <input type="text" id="entityValue-${i}" data-isentity-values='true'
+                                                 value='${eleData.value}'>
+                                            </div>
+                                        </div>
+                                    </div>`;
+                                    enentiesDomDiv.append(eachEntitiesDiv);
+
+                                 });
+                                 let entiteSaveAndCancelDiv = `<div class="save-reset-cancel hide" id='saveAndCancel-${uuids}'>
+                                 <div class="save-reset-disabled" >
+                                     <i class="ast-check-right-disabled"></i>
+                                     <span id='savebtn-${uuids}'>Save</span>
+                                 </div>
+                                 <div class="cancel-btn" id="cancelBtn-${uuids}">Cancel</div>
+                             </div>`;
+                                 enentiesDomDiv.append(entiteSaveAndCancelDiv);
+                                }
                                 let entitiesHtml = `<div class="entity-values-container">
                                 <fieldset>
                                     <legend>ENTITY VALUES</legend>
@@ -82583,7 +82629,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 </fieldset>
                                 <div class="edit-values-btn">Edit Values</div>
                             </div>`;
-                                dialogSuggestions.innerHTML+= entitiesHtml;
+                                // dialogSuggestions.innerHTML+= entitiesHtml;
                                 _msgsResponse.message.push(body);
                                 //added for entity display
                                 ele.entities.forEach((e) => { console.log(e.name, e.value); });
@@ -83106,8 +83152,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                         }
                         if (target.className == 'btn-cancel' || target.className == 'ast-close') {
-                            if (target.parentElement.id == 'interruptCancel') {
+                            if (target.parentElement.id == 'interruptCancel' || target.parentElement.parentElement.parentElement.id=='interruptPopUp') {
                                 $('#interruptPopUp').addClass('hide');
+                            } else if(target.parentElement.id == 'restoreCancel' || target.parentElement.parentElement.parentElement.id =='restorePopUp'){
+                                $('#restorePopUp').addClass('hide');
                             } else {
                                 $('#terminatePopUp').addClass('hide');
                             }
@@ -83410,21 +83458,86 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                             });
                         }
+
+                        if(target.id.split('-')[0] == 'entityEdit'){
+                            let id = target.id.split('-');
+                            id.shift();
+                            $(`#entitesDiv-${id.join('-')}`).addClass('edit-entity-rules');
+                            $(`#saveAndCancel-${id.join('-')}`).removeClass('hide');
+                           
+                        }
+                        if(target.className == 'cancel-btn'){
+                            let id = target.id.split('-');
+                            id.shift();
+                            $(`#entitesDiv-${id.join('-')}`).removeClass('edit-entity-rules');
+                            $(`#saveAndCancel-${id.join('-')}`).addClass('hide');
+                            entitiestValueArray.forEach((e,i)=>{
+                                $(`#entityValue-${i}`).val(e.value);
+                            });
+                        }
+                        if(target.id.split('-')[0] == 'restorebtn'){
+                            $('#restorePopUp').removeClass('hide');
+        
+                        }
+                        if(target.className == 'btn-restore'){
+                            $('#restorePopUp').addClass('hide');
+                            isRetore = true;
+                            entitiestValueArray = JSON.parse(previousEntitiesValue);
+                            JSON.parse(previousEntitiesValue).forEach((e,i)=>{
+                                $(`#enityNameAndValue-${i}`).find('.edited-status').addClass('hide');
+                                $(`#initialentityValue-${i}`).html(e.value); 
+                                $(`#entityValue-${i}`).val(e.value);
+                                $(`.edit-values-btn.restore`).addClass('hide');
+                            });
+                        }
+                        if(target.id.split('-')[0] == 'savebtn'|| target.className == 'ast-check-right' || target.className == 'save-reset'){
+                            entitiestValueArray.forEach((e,i)=>{
+                                if(e.editedValue){
+                                    e.value = e.editedValue;
+                                    delete e.editedValue;
+                                    $(`#enityNameAndValue-${i}`).find('.edited-status').removeClass('hide');
+                                    $(`#initialentityValue-${i}`).html(e.value);
+                                } 
+                            });
+                            let id = target.id.split('-');
+                            if(id == ''){
+                                id = target.nextElementSibling.id.split('-') 
+                                if(id == ''){
+                                    id = target.target.lastElementChild.id.split('-');
+                                }
+                            }
+                            id.shift();
+                            $(`#entitesDiv-${id.join('-')}`).removeClass('edit-entity-rules');
+                            $(`#saveAndCancel-${id.join('-')}`).addClass('hide');
+                            $(`.edit-values-btn.restore`).removeClass('hide');
+                            isRetore = false;
+                            $('.ast-check-right').removeClass('ast-check-right').addClass('ast-check-right-disabled')
+                            $('.save-reset').removeClass('save-reset').addClass('save-reset-disabled');
+                        }
                     })
 
                     document.addEventListener("keyup", (evt) => {
                         var target = evt.target;
-                        var agentAssistInput = target.dataset.agentAssistInput;
-                        var mybotInput = target.dataset.mybotInput;
-                        let val = $('#agentSearch').val();
-                        evt.target.dataset.val = val;
-                        if (val == '') {
-                            $('#overLaySearch').html('');
-                            $('.overlay-suggestions').addClass('hide').removeAttr('style');
+                        if(target.dataset.isentityValues){
+                            let targetid = target.id.split('-');
+                            evt.target.dataset.eachvalue = $(`#${target.id}`).val();
+                            entitiestValueArray[targetid[1]]['editedValue'] = $(`#${target.id}`).val();
+                            $('.ast-check-right-disabled').removeClass('ast-check-right-disabled').addClass('ast-check-right')
+                            $('.save-reset-disabled').removeClass('save-reset-disabled').addClass('save-reset');
+                        }else{
+                            var agentAssistInput = target.dataset.agentAssistInput;
+                            var mybotInput = target.dataset.mybotInput;
+                            let val = $('#agentSearch').val();
+                            evt.target.dataset.val = val;
+                            if (val == '') {
+                                $('#overLaySearch').html('');
+                                $('.overlay-suggestions').addClass('hide').removeAttr('style');
+                            }
+                            if (agentAssistInput || mybotInput) {
+                                AgentAssist_input_keydown(evt);
+                            }
                         }
-                        if (agentAssistInput || mybotInput) {
-                            AgentAssist_input_keydown(evt);
-                        }
+         
                     })
                     window._agentAssisteventListenerAdded = true;
                 }
@@ -83926,6 +84039,19 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 </div>
             </div>
         </div>
+        <div class="overlay-delete-popup hide" id="restorePopUp">
+            <div class="delete-box-content">
+                <div class="header-text">Restore Values?</div>
+                <div class="close-popup">
+                    <i class="ast-close"></i>
+                </div>
+                <div class="desc-text-info">You made changes to the entity values. Are you sure you want to restore values?</div>
+                <div class="btn-footer-info" id="restoreCancel">
+                    <button class="btn-restore">Yes, restore</button>
+                    <button class="btn-cancel">Cancel</button>
+                </div>
+            </div>
+        </div>
 
         <div class="footer-info" id="cust-feeling">
             <div class="event-bucket">
@@ -83964,7 +84090,7 @@ function AgentAssist_run_click(e) {
     } else {
 
         //document.getElementById("addRemoveDropDown").style.display = "none";
-        AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: convId, botId: botId, value: intentName, intentName: intentName });
+        AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: convId, botId: botId, value: intentName, intentName: intentName, 'entities': isRetore?JSON.parse(previousEntitiesValue):entitiestValueArray });
         document.getElementById("loader").style.display = "block";
     }
 
@@ -84350,6 +84476,9 @@ AgentAssistPubSub.subscribe('agent_assist_send_text', (msg, data) => {
     }
     if (data.intentName) {
         agent_assist_request['intentName'] = data.value;
+    }
+    if(data.entities){
+        agent_assist_request['entities'] = data.entities;
     }
     var agentsss = {
         "type": "currentUser",
