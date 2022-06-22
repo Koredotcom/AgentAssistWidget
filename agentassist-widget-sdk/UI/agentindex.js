@@ -73,7 +73,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
     function callSts() {
         $.ajax({
-            url: "https://demo.kore.net/users/sts",
+            url: "https://mk2r2rmj21.execute-api.us-east-1.amazonaws.com/dev/users/sts",
             type: 'post',
             data: jsonData,
             dataType: 'json',
