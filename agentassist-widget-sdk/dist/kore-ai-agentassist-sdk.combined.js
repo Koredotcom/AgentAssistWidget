@@ -83836,7 +83836,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         url:url,
                         headers:{
                             'auth':jwtToken,
-                            'Access-Control-Allow-Origin':'https://dev-agentassist.kore.ai'
+                            'Access-Control-Allow-Origin':connectionDetails.envinormentUrl
                         }
                     }) // parses JSON response into native JavaScript objects
                     return response;
