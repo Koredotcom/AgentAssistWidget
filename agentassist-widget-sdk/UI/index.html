@@ -25,7 +25,7 @@
                 var connectionObj = {
                     envinormentUrl: chatConfig.agentAssistUrl,
                     botDetails: {},
-                    isAuthentication: true
+                    isAuthentication: false
                 }
                 function getToken() {
                     const params = new Proxy(new URLSearchParams(window.location.search), {
@@ -56,7 +56,7 @@
                         connectionObj.botDetails['clientId'] = chatConfig.botOptions.clientId;
                         connectionObj.botDetails['clientSecret'] = chatConfig.botOptions.clientSecret;
                         connectionObj.botDetails['botId'] = chatConfig.botOptions.botInfo._id;
-                        conversationId = "2345678";
+                        conversationId = koreGenerateUUID();
                         new AgentAssist('agent-assist-chat-container', conversationId, connectionObj.botDetails.botId, connectionObj);
                     } else {
                         console.error("failed");// invalid configuration
@@ -78,7 +78,7 @@
                 // connectionObj.botDetails.clientSecret = $(`#clientsecret`).val() ? $(`#clientsecret`).val() : connectionObj.botDetails.clientSecret;
 
             }
-        }
+        } 
 
     </script>
 

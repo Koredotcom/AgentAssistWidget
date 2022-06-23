@@ -548,12 +548,13 @@ html, body{
     position: relative;
     width: 100%;
     display: inline-block;
-    height: calc(100% - 82px);
+    /* height: calc(100% - 82px); */
+    height: calc(100% - 38px);
     background: #F5F8FA;
 }
 .agent-assist-chat-container .body-data-container.if-suggestion-search{
-    /* height: calc(100% - 148px); */
-    height: calc(100% - 137px);
+    /* height: calc(100% - 137px); */
+    height: calc(100% - 93px);
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data {
     width: 100%;
@@ -1033,13 +1034,13 @@ border: 1px solid transparent !important;
     line-height: 15px;
     color: #000000;
 }
-.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .feedback-data {
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .feedback-data {
     padding-left: 28px;
     margin: 12px 0 15px 0;
     display: inline-flex;
     align-items: center;
 }
-.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .feedback-data .feedback-icon {
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .feedback-data .feedback-icon {
     width: 26px;
     height: 26px;
     background: #FFFFFF;
@@ -2044,6 +2045,19 @@ border: 1px solid transparent !important;
     font-size: 9px;
     line-height: 11px;
     color: #5D5FEF;
+    outline: 0;
+    cursor: pointer;
+}
+.cancel-override-input-btn{
+    background: #FFFFFF;
+    border: 1px solid #D2000D;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.05);
+    border-radius: 5px;
+    padding: 5px 8px;
+    font-weight: 600;
+    font-size: 9px;
+    line-height: 11px;
+    color: #D2000D;
     outline: 0;
     cursor: pointer;
 }

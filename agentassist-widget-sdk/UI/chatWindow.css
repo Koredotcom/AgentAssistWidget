@@ -1974,10 +1974,10 @@
 .kore-chat-window .tablechart .tablechartDiv,
 .kore-chat-window .largePreviewContent .tablehartDiv {
     clear: both;
-    left: -30px;
+    left: 0px !important;
     position: relative;
-    top: 18px;
-    margin: 0px -22px 13px 0px;
+    top: 0px !important;
+    margin: 0px !important;
     border-radius: 4px;
     background-color: var(--sdk-chat-widow-default-white);
     box-shadow: 0 1px 5px 0 rgba(179, 186, 200, 0.58);
@@ -2052,7 +2052,7 @@
     /*border: 13px solid #F1F0F0;*/
     border-radius: 4px;
     clear: both;
-    margin-left: -45px;
+    margin-left: 0px !important;
     width: 353px;
     box-shadow: 0 1px 5px 0 rgba(179, 186, 200, 0.58);
     cursor: pointer;
@@ -2074,7 +2074,7 @@
     display: block;
     border-radius: 4px;
     clear: both;
-    margin-left: -45px;
+    margin-left: 0px !important;
     width: 353px;
     box-shadow: 0 1px 5px 0 rgba(179, 186, 200, 0.58);
     cursor: pointer;
@@ -2714,7 +2714,7 @@
     border-radius: 4px;
     clear: both;
     width: 353px;
-    margin-left: -45px;
+    margin-left: 0px !important;
     box-shadow: 0 1px 5px 0 rgba(179, 186, 200, 0.58);
     cursor: pointer;
     background: #fff;
@@ -2994,4 +2994,10 @@
 }
 #chatContainer{
     display: none;/*remove this minimizeMode false*/
+}
+.extra-info{
+    display: none !important;
+}
+.profile-photo{
+    display: none !important;
 }
