@@ -2404,7 +2404,7 @@ border: 1px solid transparent !important;
     font-weight: 400;
     font-size: 12px;
     line-height: 15px;
-    color: var(--sdk-chat-window-color);
+    color: var(--theme-color);
     cursor: pointer;
     flex-shrink: 0;
     margin-right: 20px;
