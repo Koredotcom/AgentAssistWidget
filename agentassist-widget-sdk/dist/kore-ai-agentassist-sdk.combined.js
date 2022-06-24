@@ -82828,9 +82828,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                <div class="title-data" ><ul class="chat-container" id="displayData-${uuids}"></ul></div>
                                <div class="action-links">
                                    <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}">Send</button>
-                                   <div class="copy-btn">
-                                       <i class="ast-copy"></i>
-                                   </div>
                                </div>
                            </div>
                            </div>
@@ -83058,7 +83055,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             console.log("=====event===============", evt.target);
                             if (targetIds.includes('feedbackup')) {
                                 if (target.dataset.feedbacklike == 'false') {
-                                    target.dataset.feedbacklike = 'true';
+                                  //  target.dataset.feedbacklike = 'true';
                                     ($(target.parentElement.parentElement.parentElement).find('#feedbackdown')?.attr('style')) ? (
                                         $(target.parentElement.parentElement.parentElement).find('#feedbackdown')?.removeAttr('style'),
                                         $(target.parentElement.parentElement).find('.ast-thumbdown').attr('data-feedbackdislike', 'false')) : '';
@@ -83071,7 +83068,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             }
                             if (targetIds.includes('feedbackdown')) {
                                 if (target.dataset.feedbackdislike == 'false') {
-                                    target.dataset.feedbackdislike = 'true';
+                                   // target.dataset.feedbackdislike = 'true';
                                     ($(target.parentElement.parentElement.parentElement).find('#feedbackup')?.attr('style')) ? (
                                         $(target.parentElement.parentElement.parentElement).find('#feedbackup')?.removeAttr('style'),
                                         $(target.parentElement.parentElement).find('.ast-thumbup').attr('data-feedbacklike', 'false')) : '';
@@ -83277,14 +83274,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                                     </div>
                                                                     <div class="feedback-data show-history-feedback hide">
                                                                         <div class="feedbackup-data">
-                                                                            <div class="feedback-icon" id="feedbackup">
-                                                                                <i class="ast-thumbup" id="feedbackup-${res._id}" data-feedbacklike="false" data-conv-id="${_agentAssistDataObj.conversationId}"data-bot-id="${_agentAssistDataObj.botId}" data-feedback="like" data-dialog-name="${res.tN}" data-user-input="${userIntentInput}"></i>
+                                                                            <div class="feedback-icon" id="feedbackup-${res._id}" data-feedbacklike="false" data-conv-id="${_agentAssistDataObj.conversationId}"data-bot-id="${_agentAssistDataObj.botId}" data-feedback="like" data-dialog-name="${res.tN}" data-user-input="${userIntentInput}">
+                                                                                <i class="ast-thumbup"></i>
                                                                             </div>
                                                                             <span class="tootltip-tabs">Like</span>
                                                                         </div>
                                                                         <div class="feedbackdown-data">
-                                                                            <div class="feedback-icon" id="feedbackdown">
-                                                                                <i class="ast-thumbdown" id="feedbackdown-${res._id}" data-feedbackdislike="false" data-conv-id="${_agentAssistDataObj.conversationId}" data-bot-id="${_agentAssistDataObj.botId}" data-feedback="dislike" data-dialog-name="${res.tN}" data-user-input="${userIntentInput}"></i>
+                                                                            <div class="feedback-icon" id="feedbackdown-${res._id}" data-feedbackdislike="false" data-conv-id="${_agentAssistDataObj.conversationId}" data-bot-id="${_agentAssistDataObj.botId}" data-feedback="dislike" data-dialog-name="${res.tN}" data-user-input="${userIntentInput}">
+                                                                                <i class="ast-thumbdown"></i>
                                                                             </div>
                                                                             <span class="tootltip-tabs">Dislike</span>
                                                                         </div>

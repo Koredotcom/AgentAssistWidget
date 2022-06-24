@@ -24,12 +24,12 @@
 
         <div class="card-data" [class.disabled]="!incomingSetupConfigured || !enableVoicePreview || !showVoicePreferences" [class.noEvents]="!enableVoicePreview || !showVoicePreferences" placement="bottom-center" [ngbTooltip]="!incomingSetupConfigured? ('VOICE_PREF_WARNING' | translate): ''" [container]='"body"' tooltipClass="tooltip_settings" (click)="openVPSlider()" *hasPermission="['admin']">
             <div class="titles-sec">
-                <div class="primary-title">{{'SETTINGS.VOICE_PREFERENCES' | translate}}</div>
-                <div class="secondary-title">{{'SETTINGS.VOICE_PREFERENCES_DESC' | translate}}</div>
-                <div class="bottom-data" *ngIf="voicePreferences.asrPreference">
+                <div class="primary-title">{{'SETTINGS.SPEECH_RECOGNITION' | translate}}</div>
+                <div class="secondary-title">{{'SETTINGS.SPEECH_PREFERENCES_DESC' | translate}}</div>
+                <!-- <div class="bottom-data" *ngIf="voicePreferences.asrPreference">
                     <div class="v-audio-title"><span class="bold-title">{{"ADV.SETTONGS.ASR" | translate}} :</span><span class="v-title-audio">{{voicePreferences.asrPreference}}</span></div>
                     <div class="v-audio-title"><span class="bold-title">{{"ADV.SETTONGS.TTR" | translate}} :</span><span class="v-title-audio">{{voicePreferences.ttsPreference}}</span></div>
-                </div>
+                </div> -->
             </div>
             <div class="img-block">
                 <img src="assets/icons/settings/voice-ref.svg">
