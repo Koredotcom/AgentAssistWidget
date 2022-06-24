@@ -1,4 +1,4 @@
-.smartassist {
+.smartassist-color-scheme {
     --sdk-chat-window-bg-color:#009dab;
     --sdk-chat-window-color: #009dab;
     --sdk-chat-window-boxshadow-color: #009dab;
@@ -6,7 +6,11 @@
     
 }
 
-.salesforce {
+/* .salesforce-color-scheme {
+    --sdk-chat-window-bg-color:#ffffff;
+} */
+
+.default-color-scheme {
     --sdk-chat-window-bg-color:#ffffff;
 }
 
@@ -74,9 +78,9 @@ html, body{
     height: 0;
 }
 .kr-sg-toggle input:checked + .slider {
-    background-color: #0D6EFD;
-    box-shadow: 0 0 1px #0D6EFD;
-    border: 1px solid #0D6EFD;
+    background-color: var(--sdk-chat-window-bg-color);
+    box-shadow: 0 0 1px var(--sdk-chat-window-boxshadow-color);
+    border: 1px solid var(--sdk-chat-window-border-color);
 }
 .kr-sg-toggle input:checked + .slider::before {
     -webkit-transform: translateX(20px);
