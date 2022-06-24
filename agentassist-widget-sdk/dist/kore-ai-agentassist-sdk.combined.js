@@ -81642,9 +81642,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
         });
         sourceType = params.source
         console.log('================source============: ', sourceType)
-        if(sourceType) {
+        if(sourceType === 'smartassist-color-scheme') {
             console.log('sourceType: ',params.source);
             $('body').addClass(sourceType);
+        } else {
+            console.log(params.source);
+            $('body').addClass('default-color-scheme')
         }
     } catch (err) {
         console.log(err);
