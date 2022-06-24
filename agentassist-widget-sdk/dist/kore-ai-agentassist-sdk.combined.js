@@ -71284,15 +71284,15 @@ var advancedListTemplate = '<script id="chat_message_tmpl" type="text/x-jqury-tm
 
     // botOptions.JWTUrl = "https://demo.kore.net/users/sts";
     // botOptions.userIdentity = 'testing1';// Provide users email id here
-    botOptions.botInfo = { name: "sample Bot", "_id": "st-6e9d43c3-33f6-5b44-a8c3-5dfe5d08ffd1" }; // bot name is case sensitive
+    botOptions.botInfo = { name: "agentAssist1", "_id": "st-aeb8ec40-2c05-54a4-bebb-2530b0ba844a" }; // bot name is case sensitive
 
     /* 
     Important Note: These keys are provided here for quick demos to generate JWT token at client side but not for Production environment.
     Refer below document for JWT token generation at server side. Client Id and Client secret should maintained at server end.
     https://developer.kore.ai/docs/bots/sdks/user-authorization-and-assertion/
     **/
-    botOptions.clientId = "cs-7fe466e2-a7eb-5201-84fe-182996a1cd75";
-    botOptions.clientSecret = "zrRRu1s2W2wCzE7O3L8xsMGMQhoR6w4Mt+0uLrrOKEc=";
+    botOptions.clientId = "cs-c9b3c0e2-4147-57f3-b214-630e9e0b96b7";
+    botOptions.clientSecret = "IZEYvirq0BDBNhDRqh3tkzIsuJA3BW8taInTUX7oQsk=";
     // botOptions.brandingAPIUrl = botOptions.koreAPIUrl +'websdkthemes/'+  botOptions.botInfo._id+'/activetheme';
     // botOptions.enableThemes = true;
 // for webhook based communication use following option 
@@ -81771,6 +81771,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         processUserMessages(data, data.conversationId, data.botId);
 
                     });
+
+                    _agentAsisstSocket.on('user_message', (data)=>{
+                        processTranscriptData(data,data.conversationId, data.botId)
+                    })
+
+                    _agentAsisstSocket.on('agent_message',(data)=>{
+                        processAgentMessages(data);
+                    })
                     // Library Automation list, Search and Agent-Automation tabs related webSockets
                     // Response
                     _agentAsisstSocket.on('agent_assist_agent_response', (data) => {
@@ -82447,6 +82455,21 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                     let uuids = koreGenerateUUID();
                     responseId = uuids;
+                    if(data.suggestions){
+                        let buldHtml = `
+                        <div class="buld-count-utt" id="buldCount-${uuids}">
+                                    <i class="ast-bulb" id="buldCountAst-${uuids}"></i>
+                                    <span class="count-number" id="buldCountNumber-${uuids}">${(data.suggestions.dialogs?data.suggestions.dialogs?.length:0) + (data.suggestions.faqs? data.suggestions.faqs?.length:0)}</span>
+                                </div>`;
+                        
+                        let attrs = $('.other-user-bubble .bubble-data');
+                        $(attrs).last().attr('id',uuids)
+                        attrs.each((i,data)=>{
+                            if(data.id === uuids){
+                               $(`#${data.id}`).append(buldHtml);
+                            }
+                        });
+                    }
                     var _msgsResponse = {
                         "type": "bot_response",
                         "from": "bot",
@@ -82534,7 +82557,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 body['cInfo'] = {
                                     "body": data.value
                                 };
-                                ele.entities.length>0?(entitiestValueArray = ele.entities):'';
+                                ele.entities?.length>0?(entitiestValueArray = ele.entities):'';
                                 
                                 let dialogSuggestions = document.getElementById(`dialogSuggestions-${responseId}`);
                                 let dialogsHtml = `
@@ -82560,7 +82583,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         </div>
                     </div>`;
                                 dialogSuggestions.innerHTML += dialogsHtml;
-                                if(ele.entities.length>0){
+                                if(ele.entities?.length>0){
                                     previousEntitiesValue = JSON.stringify(ele.entities);
                                     let entitesDiv = `<div class="entity-values-container" id="entitesDiv-${uuids}">
                                     <fieldset class="fieldsets">
@@ -82571,7 +82594,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             </div>`;
                                  dialogSuggestions.innerHTML+= entitesDiv;
                                  let enentiesDomDiv = $(`#entitesDiv-${uuids}`).find('.fieldsets');
-                                 ele.entities.forEach((eleData, i)=>{
+                                 ele.entities?.forEach((eleData, i)=>{
 
                                      let eachEntitiesDiv = `
                                      <div class="entity-row-data" id="enityNameAndValue-${i}">
@@ -82641,9 +82664,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             </div>`;
                                 // dialogSuggestions.innerHTML+= entitiesHtml;
                                 _msgsResponse.message.push(body);
-                                //added for entity display
-                                ele.entities.forEach((e) => { console.log(e.name, e.value); });
-                                console.log("entity object names");
                             });
                             data.suggestions.faqs?.forEach((ele, index) => {
                                 let body = {};
@@ -82715,7 +82735,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             answerPlaceableID = undefined;
                         }
                     }
-
+                 
                     let parsedPayload;
                     data.buttons?.forEach((elem) => {
                         let payloadType = (elem.value).replace(/(&quot\;)/g, "\"");
@@ -82755,6 +82775,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             }
 
                         }
+                        // if((data.type == 'text' || data.type == 'button')&& elem.type == 'text'){
+                        //      processTranscriptData(data, uuids, _msgsResponse);
+                        //      isTranscript = true;
+                        // }
 
                         _msgsResponse.message.push(body);
                     });
@@ -82841,6 +82865,70 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         addFeedbackHtmlToDom(data, botId, userIntentInput);
                     }
 
+                }
+
+               function processTranscriptData(data, conversationId, botid){
+                   console.log("---- data====",data)
+                 //  ["user_message", { "botId": "st-760d56df-7303-5968-baae-fc4b3a6d5057", "orgId": "o-e8bde714-ea18-5b2a-8d59-648fb1ba49ee", "accountId": "62b400e7e8d0a17ed980fc3f", "type": "text", "conversationId": "c-423773d-0e9b-4510-93c3-5a492e75ae08", "value": "Operator.", "author": { "type": "USER", "id": "u-cb358b24-cc42-5843-9040-d0a61d1f7cc7", "firstName": "Kore", "lastName": "User" }, "event": "user_message", "_id": "ms-3ceba4be-0870-567a-a36d-236c749d4edb" }]
+                   let transcriptTab = $(`#scriptContainer .data-contnet`);
+                   let transcriptHtml = `
+                        <div class="other-user-bubble">
+                            <div class="name-with-time">
+                                <div class="u-name">${data.author.firstName + data.author.lastName}</div>
+                                <div class="u-time">2:29pm</div>
+                            </div>
+                            <div class="bubble-data" id="userInputMsg">
+                                <div class="b-text">${data.value}</div>
+                            </div>
+                        </div>`;
+                    transcriptTab.append(transcriptHtml);
+                    // if(data.suggestions){
+                    //     let buldHtml = `
+                    //     <div class="buld-count-utt" id="buldCount-${uuids}">
+                    //                 <i class="ast-bulb" id="buldCountAst-${uuids}"></i>
+                    //                 <span class="count-number" id="buldCountNumber-${uuids}">${(data.suggestions.dialogs?data.suggestions.dialogs?.length:0) + (data.suggestions.faqs? data.suggestions.faqs?.length:0)}</span>
+                    //             </div>`;
+                        
+                    //     let attrs = $('.other-user-bubble .bubble-data');
+                    //     attrs.each((i,data)=>{
+                    //         if(data.id === uuids){
+                    //            $(`#${data.id}`).append(buldHtml);
+                    //         }
+                    //     });
+                    // }
+                    // let body = {};
+                    //     body['type'] = data.buttons[0].type;
+                    //         body['component'] = {
+                    //             "type": data.buttons[0].type,
+                    //             "payload": {
+                    //                 "type": data.buttons[0].type,
+                    //                 "text": data.buttons[0].value
+                    //             }
+                    //         };
+                    //         body['cInfo'] = {
+                    //             "body": data.buttons[0].value
+                    //         };
+
+                        
+                  //  msg.message.push(body);
+                    
+              //  AgentChatInitialize.renderMessage(_msgsResponse, uuids, `dropDownData-${dropdownHeaderUuids}`)
+                }
+
+                function processAgentMessages(data){
+                  //  ["agent_message",{"botId":"st-760d56df-7303-5968-baae-fc4b3a6d5057","orgId":"o-e8bde714-ea18-5b2a-8d59-648fb1ba49ee","accountId":"62b400e7e8d0a17ed980fc3f","type":"text","conversationId":"c-0ead79b-28a0-422a-ab91-bab8372345e2","value":"One night.","author":{"type":"AGENT","id":"u-0609dd49-12b7-5432-9cc6-afb2f41128fe","firstName":"dev","lastName":"test"},"event":"agent_message","_id":"ms-1b113b73-d52e-5807-a990-5286b79f81a3"}]
+                    let dataConetentTabOfTranscript = $('#scriptContainer .data-contnet');
+                    let currentBubbleHtml = `
+                    <div class="current-user-bubble">
+                    <div class="name-with-time">
+                        <div class="u-time">2:41pm</div>
+                        <div class="u-name">You</div>
+                    </div>
+                    <div class="bubble-data">
+                        <div class="b-text">${data.value}</div>
+                    </div>
+                </div>`;
+                dataConetentTabOfTranscript.append(currentBubbleHtml)
                 }
 
                 function removeElementFromDom() {
@@ -83956,6 +84044,20 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $('.ast-check-right').removeClass('ast-check-right').addClass('ast-check-right-disabled')
                             $('.save-reset').removeClass('save-reset').addClass('save-reset-disabled');
                         }
+
+                        if(target.id.split('-')[0] == 'buldCount' || target.className == 'ast-bulb' || target.className == 'count-number'){
+                            let bulbDiv = $('.other-user-bubble .bubble-data');
+                            let bulbid = target.id.split('-');
+                            bulbid.shift();
+                            if($(bulbDiv).last().attr('id') === bulbid.join('-')){
+                                userTabActive();
+                            }else{
+                                userTabActive();
+                               // $( "#historyData" ).trigger( "click" );
+                               document.getElementById('showHistory').click();
+                            }
+                            
+                        }
                     })
 
                     document.addEventListener("keyup", (evt) => {
@@ -84352,57 +84454,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 </div>
 
                 <div class="transcipt-only-calls-data hide" id="scriptContainer">
-                    <div class="data-contnet">
-                        <div class="other-user-bubble">
-                            <div class="name-with-time">
-                                <div class="u-name">John Wick</div>
-                                <div class="u-time">2:29pm</div>
-                            </div>
-                            <div class="bubble-data">
-                                <div class="b-text">Hey jane, can you help me?</div>
-                            </div>
-                        </div>
-                        <div class="current-user-bubble">
-                            <div class="name-with-time">
-                                <div class="u-time">2:41pm</div>
-                                <div class="u-name">You</div>
-                            </div>
-                            <div class="bubble-data">
-                                <div class="b-text">How can I help you?</div>
-                            </div>
-                        </div>
-                        <div class="other-user-bubble">
-                            <div class="name-with-time">
-                                <div class="u-name">John Wick</div>
-                                <div class="u-time">2:29pm</div>
-                            </div>
-                            <div class="bubble-data">
-                                <div class="b-text">I want to return an item</div>
-                            </div>
-                        </div>
-                        <div class="current-user-bubble">
-                            <div class="name-with-time">
-                                <div class="u-time">2:41pm</div>
-                                <div class="u-name">You</div>
-                            </div>
-                            <div class="bubble-data">
-                                <div class="b-text">Yes, I'll help you with it</div>
-                            </div>
-                        </div>
-                        <div class="other-user-bubble">
-                            <div class="name-with-time">
-                                <div class="u-name">John Wick</div>
-                                <div class="u-time">2:29pm</div>
-                            </div>
-                            <div class="bubble-data">
-                                <div class="b-text">Sorry, I mean, edit my order</div>
-                                <div class="buld-count-utt">
-                                    <i class="ast-bulb"></i>
-                                    <span class="count-number">1</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="data-contnet"></div>
                 </div>
 
                 <div class="library-search-data-container hide" id="LibraryContainer">
@@ -84932,6 +84984,8 @@ AgentAssistPubSub.subscribe('agent_assist_send_text', (msg, data) => {
     }
     if(data.entities){
         agent_assist_request['entities'] = data.entities;
+    }else{
+        agent_assist_request['entities'] = [];
     }
     var agentsss = {
         "type": "currentUser",

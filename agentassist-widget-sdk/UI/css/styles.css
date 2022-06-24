@@ -1096,7 +1096,9 @@ border: 1px solid transparent !important;
     width: 100%;
 }
 .agent-assist-chat-container .body-data-container .transcipt-only-calls-data .data-contnet .other-user-bubble {
-    display: inline-block;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
     max-width: 100%;
     margin-bottom: 12px;
     padding-right: 40px;
