@@ -1118,7 +1118,7 @@
     color: #333;
     border-radius: 12px;
     padding: 0;
-    font-size: 14px;
+    font-size: 12px;
     -webkit-animation: message-left ease-in-out 2s forwards;
     -moz-animation: message-left ease-in-out 2s forwards;
     animation: message-left ease-in-out 2s forwards;
@@ -1140,7 +1140,7 @@
 
 .kore-chat-window .buttonTmplContent .buttonTmplContentHeading.quickReply {
     display: table;
-    font-size: 14px;
+    font-size: 12px;
 }
 .kore-chat-window .buttonTmplContent .buttonTmplContentBox a:last-child .buttonTmplContentChild{
     border-radius: 0px 0px 10px 10px;
@@ -1150,7 +1150,8 @@
     color: var(--sdk-chat-window-btn-font-clr);
     border-top: 1px solid var(--sdk-chat-widow-primary-bg-color);
     padding: 10px;
-    margin: 0 !important;
+    margin: 0 !important;    
+    font-style: normal;
     text-align: center;
     cursor: pointer;
     background-color: var(--sdk-chat-window-btn-default-bg);
@@ -1269,6 +1270,7 @@
 
 .kore-chat-window .listTmplContent .listItemPath {
     font-size: 12px;
+    font-style: normal;
     color: #0079FF;
     cursor: pointer;
 }
@@ -1282,6 +1284,7 @@
     font-weight: bold;
     letter-spacing: -0.3px;
     font-size: 12px;
+    font-style: normal;
     text-align: right;
 }
 
@@ -1295,18 +1298,19 @@
     background: #f4f4f4;
     margin-bottom: 0;
     border-radius: 12px 12px 0 0;
-    font-size: 15px;
+    font-size: 12px;
+    font-style: normal;
 }
 
 .kore-chat-window .listTmplContent .listItemTitle,
 .kore-chat-window .listItemSubtitle,
 .listItemPath {
     padding: 3px 0;
-    font-size: 13px;
+    font-size: 12px;
 }
 
 .kore-chat-window .listItemTitle {
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 600;
     line-height: 1.54;
     letter-spacing: -0.1px;
@@ -1324,7 +1328,8 @@
     border: 0;
     background: none;
     color: #0079FF!important;
-    font-size: 15px;
+    font-size: 12px;
+    font-style: normal;
     cursor: pointer;
 }
 
@@ -1502,7 +1507,8 @@
     width: 100%;
     text-align: center;
     min-width: 80px;
-    font-size: 14px;
+    font-size: 12px;
+    font-style: normal;
     padding: 3px 0px 3px 0px;
 }
 
@@ -1772,7 +1778,8 @@
 }
 
 .kore-chat-window .carouselTitleBox .carouselTitle {
-    font-size: 13px;
+    font-size: 12px;
+    font-style: normal;
     font-weight: 600;
     line-height: 1.54;
     letter-spacing: -0.1px;
@@ -1787,6 +1794,7 @@
 
 .kore-chat-window .carouselTitleBox .carouselDescription {
     font-size: 12px;
+    font-style: normal;
     letter-spacing: -0.1px;
     text-align: left;
     line-height: 1.54;
@@ -1797,6 +1805,7 @@
 
 .kore-chat-window .carouselTitleBox .carouselDefaultAction {
     font-size: 12px;
+    font-style: normal;
     letter-spacing: -0.1px;
     text-align: left;
     line-height: 1.54;
@@ -1811,7 +1820,8 @@
     height: 48px;
     background-color: transparent;
     border-top: solid 1px var(--sdk-chat-widow-primary-border-color);
-    font-size: 15px;
+    font-size: 12px;
+    font-style: normal;
     letter-spacing: -0.3px;
     text-align: center;
     line-height: 1.54;
@@ -2455,8 +2465,9 @@
 .kore-chat-window .minitableDiv table th {
     text-align: left;
     padding: 10px;
-    font-size: 15px;
-    color: var(--sdk-chat-window-bot-bubble-font-clrr);
+    font-size: 12px;
+    font-style: normal;
+    color: #8a959f;
     font-weight: bold;
 }
 
@@ -2465,7 +2476,8 @@
     padding: 10px;
     text-align: left;
     padding: 10px;
-    font-size: 15px;
+    font-size: 12px;
+    font-style: normal;
     color: #8a959f;
     max-width: 190px !important;
     white-space: nowrap;
