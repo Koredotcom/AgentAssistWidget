@@ -71284,15 +71284,15 @@ var advancedListTemplate = '<script id="chat_message_tmpl" type="text/x-jqury-tm
 
     // botOptions.JWTUrl = "https://demo.kore.net/users/sts";
     // botOptions.userIdentity = 'testing1';// Provide users email id here
-    botOptions.botInfo = { name: "sample Bot", "_id": "st-6e9d43c3-33f6-5b44-a8c3-5dfe5d08ffd1" }; // bot name is case sensitive
+    botOptions.botInfo = { name: "agentAssist1", "_id": "st-aeb8ec40-2c05-54a4-bebb-2530b0ba844a" }; // bot name is case sensitive
 
     /* 
     Important Note: These keys are provided here for quick demos to generate JWT token at client side but not for Production environment.
     Refer below document for JWT token generation at server side. Client Id and Client secret should maintained at server end.
     https://developer.kore.ai/docs/bots/sdks/user-authorization-and-assertion/
     **/
-    botOptions.clientId = "cs-7fe466e2-a7eb-5201-84fe-182996a1cd75";
-    botOptions.clientSecret = "zrRRu1s2W2wCzE7O3L8xsMGMQhoR6w4Mt+0uLrrOKEc=";
+    botOptions.clientId = "cs-c9b3c0e2-4147-57f3-b214-630e9e0b96b7";
+    botOptions.clientSecret = "IZEYvirq0BDBNhDRqh3tkzIsuJA3BW8taInTUX7oQsk=";
     // botOptions.brandingAPIUrl = botOptions.koreAPIUrl +'websdkthemes/'+  botOptions.botInfo._id+'/activetheme';
     // botOptions.enableThemes = true;
 // for webhook based communication use following option 
@@ -81619,7 +81619,7 @@ var previousEntitiesValue;
 var isRetore = false;
 var previousResp;
 var automationNotRanArray = [];
-var jwtToken;
+var jwtToken,isCallConversation;
 function koreGenerateUUID() {
     console.info("generating UUID");
     var d = new Date().getTime();
@@ -81640,8 +81640,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
         const params = new Proxy(new URLSearchParams(window.location.search), {
             get: (searchParams, prop) => searchParams.get(prop),
         });
-        sourceType = params.source
-        console.log('================source============: ', sourceType)
+        sourceType = params.source;
+        isCallConversation = params.isCall;
+        console.log('================source============: ', sourceType, typeof isCallConversation)
         if(sourceType === 'smartassist-color-scheme') {
             console.log('sourceType: ',params.source);
             $('body').addClass(sourceType);
@@ -81792,11 +81793,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     });
 
                     _agentAsisstSocket.on('user_message', (data)=>{
-                        processTranscriptData(data,data.conversationId, data.botId)
+                        isCallConversation === 'true'?processTranscriptData(data,data.conversationId, data.botId):'';
                     })
 
                     _agentAsisstSocket.on('agent_message',(data)=>{
-                        processAgentMessages(data);
+                        isCallConversation === 'true'?processAgentMessages(data):'';
                     })
                     // Library Automation list, Search and Agent-Automation tabs related webSockets
                     // Response
@@ -81851,6 +81852,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
                 console.log("AgentAssist >>> sending welcome_message_request")
                 _agentAsisstSocket.emit('welcome_message_request', welcome_message_request);
+                if(isCallConversation === 'true'){
+                    transcriptionTabActive();
+                }
 
                 // var agent_menu_request = {
                 //     "botId": _agentAssistDataObj.botId,
@@ -81927,6 +81931,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                 $('body').bind('mousedown keydown', function (event) {
                     currentTabActive = detectCurrentTab();
+                    document.getElementById("loader").style.display = "none";
                     if (currentTabActive === 'userAutoIcon') {
                         let agentSearchBlock = $("#agentSearch");
                         agentSearchBlock.attr('data-conv-id', _agentAssistDataObj.conversationId);
@@ -82474,7 +82479,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                     let uuids = koreGenerateUUID();
                     responseId = uuids;
-                    if(data.suggestions){
+                    if(isCallConversation === 'true' && data.suggestions){
                         let buldHtml = `
                         <div class="buld-count-utt" id="buldCount-${uuids}">
                                     <i class="ast-bulb" id="buldCountAst-${uuids}"></i>
@@ -82517,13 +82522,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 ele.remove();
                             })
                         }
-                        userIntentInput = data.value;
+                        userIntentInput = data.userInput;
                         let htmls = `
             <div class="agent-utt-info" id="agentUttInfo-${responseId}">
                 <div class="user-img">
                     <img src="./images/userIcon.svg">
                 </div>
-                <div class="text-user" >${data.value}</div>
+                <div class="text-user" >${data.userInput}</div>
             </div>
             <div class="dialog-task-run-sec hide" id="automationSuggestions-${responseId}">
             </div>`;
@@ -82574,7 +82579,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     }
                                 };
                                 body['cInfo'] = {
-                                    "body": data.value
+                                    "body": data.userInput
                                 };
                                 ele.entities?.length>0?(entitiestValueArray = ele.entities):'';
                                 
@@ -82642,46 +82647,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                              </div>`;
                                  enentiesDomDiv.append(entiteSaveAndCancelDiv);
                                 }
-                                let entitiesHtml = `<div class="entity-values-container">
-                                <fieldset>
-                                    <legend>ENTITY VALUES</legend>
-                                    <div class="entity-row-data">
-                                        <div class="label-data">Order Number:</div>
-                                        <div class="entity-input-content-data">
-                                            <div class="entity-value">PO12345</div>
-                                            <div class="entity-input">
-                                                <input type="text">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="entity-row-data">
-                                        <div class="label-data">Items:</div>
-                                        <div class="edited-status">
-                                            <i class="ast-edited"></i>
-                                            <span>edited</span>
-                                        </div>
-                                        <div class="entity-input-content-data">
-                                            <div class="entity-value">3</div>
-                                            <div class="entity-input">
-                                                <input type="text">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="save-reset-cancel">
-                                        <div class="save-reset">
-                                            <i class="ast-check-right"></i>
-                                            <span>Save</span>
-                                        </div>
-                                        <div class="save-reset">
-                                            <i class="ast-reset"></i>
-                                            <span>Reset</span>
-                                        </div>
-                                        <div class="cancel-btn">Cancel</div>
-                                    </div>
-                                </fieldset>
-                                <div class="edit-values-btn">Edit Values</div>
-                            </div>`;
-                                // dialogSuggestions.innerHTML+= entitiesHtml;
                                 _msgsResponse.message.push(body);
                             });
                             data.suggestions.faqs?.forEach((ele, index) => {
@@ -82794,28 +82759,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             }
 
                         }
-                        // if((data.type == 'text' || data.type == 'button')&& elem.type == 'text'){
-                        //      processTranscriptData(data, uuids, _msgsResponse);
-                        //      isTranscript = true;
-                        // }
-
                         _msgsResponse.message.push(body);
                     });
-                    // if (data.intentName) {
-                    //     let body = {};
-                    //     body['type'] = 'text';
-                    //     body['component'] = {
-                    //         "type": 'text',
-                    //         "payload": {
-                    //             "type": 'text',
-                    //             "text": data.intentName
-                    //         }
-                    //     };
-                    //     body['cInfo'] = {
-                    //         "body": ''
-                    //     };
-                    //     _msgsResponse.message.push(body);
-                    // }
                     if (dropdownHeaderUuids && data.buttons && !data.value.includes('Customer has waited')) {
                         $(`#overRideBtn-${dropdownHeaderUuids}`).removeClass('hide');
                         $(`#cancelOverRideBtn-${dropdownHeaderUuids}`).addClass('hide');
@@ -82898,37 +82843,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             </div>
                         </div>`;
                     transcriptTab.append(transcriptHtml);
-                    // if(data.suggestions){
-                    //     let buldHtml = `
-                    //     <div class="buld-count-utt" id="buldCount-${uuids}">
-                    //                 <i class="ast-bulb" id="buldCountAst-${uuids}"></i>
-                    //                 <span class="count-number" id="buldCountNumber-${uuids}">${(data.suggestions.dialogs?data.suggestions.dialogs?.length:0) + (data.suggestions.faqs? data.suggestions.faqs?.length:0)}</span>
-                    //             </div>`;
-                        
-                    //     let attrs = $('.other-user-bubble .bubble-data');
-                    //     attrs.each((i,data)=>{
-                    //         if(data.id === uuids){
-                    //            $(`#${data.id}`).append(buldHtml);
-                    //         }
-                    //     });
-                    // }
-                    // let body = {};
-                    //     body['type'] = data.buttons[0].type;
-                    //         body['component'] = {
-                    //             "type": data.buttons[0].type,
-                    //             "payload": {
-                    //                 "type": data.buttons[0].type,
-                    //                 "text": data.buttons[0].value
-                    //             }
-                    //         };
-                    //         body['cInfo'] = {
-                    //             "body": data.buttons[0].value
-                    //         };
-
-                        
-                  //  msg.message.push(body);
-                    
-              //  AgentChatInitialize.renderMessage(_msgsResponse, uuids, `dropDownData-${dropdownHeaderUuids}`)
                 }
 
                 function processAgentMessages(data){
@@ -83550,6 +83464,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         });
                                     }
                                     previousResp = response;
+                                }).catch(err=>{
+                                    document.getElementById("loader").style.display = "block";
+                                    console.log("error",err)
                                 });
                         }
                         if (target.id === 'backToRecommendation') {
@@ -84064,14 +83981,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
 
                         if(target.id.split('-')[0] == 'buldCount' || target.className == 'ast-bulb' || target.className == 'count-number'){
-                            let bulbDiv = $('.other-user-bubble .bubble-data');
+                            let bulbDiv = $('.other-user-bubble .bubble-data .buld-count-utt');
                             let bulbid = target.id.split('-');
                             bulbid.shift();
-                            if($(bulbDiv).last().attr('id') === bulbid.join('-')){
-                                userTabActive();
+                            let idOfBuld = $(bulbDiv).last().attr('id').split('-');
+                            idOfBuld.shift();
+                            if(idOfBuld.join('-') === bulbid.join('-')){
+                               userTabActive();
                             }else{
-                                userTabActive();
-                               // $( "#historyData" ).trigger( "click" );
+                               userTabActive();
                                document.getElementById('showHistory').click();
                             }
                             
@@ -84138,6 +84056,22 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     if (automationSuggestions.length >= 1 && $('#dynamicBlock .dialog-task-run-sec').length <= 0) {
                         automationSuggestions[automationSuggestions.length - 1].classList.remove('hide');
                     }
+                    let dialogs = $(`#dynamicBlock .dialog-task-run-sec`);
+                    dialogs?.each(function (i, ele) {
+                        $('#dynamicBlock .agent-utt-info').each((i, elem) => {
+                            let ids = elem.id?.split('-');
+                            ids.shift();
+                            let taskIds = ele.id.split('-');
+                            taskIds.shift();
+
+                            if (taskIds.join('-').includes(ids.join('-'))) {
+                                $(elem).removeClass('hide');
+                                $(ele).removeClass('hide');
+                            } else {
+                                $(elem).addClass('hide')
+                            }
+                        })
+                    });
 
                 }
 
