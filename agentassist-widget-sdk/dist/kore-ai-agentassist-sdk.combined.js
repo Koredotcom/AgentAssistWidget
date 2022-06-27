@@ -81635,6 +81635,23 @@ function koreGenerateUUID() {
 }
 window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, connectionDetails) {
     console.log('agent assist inside contructor', new Date());
+    
+    try {
+        const params = new Proxy(new URLSearchParams(window.location.search), {
+            get: (searchParams, prop) => searchParams.get(prop),
+        });
+        sourceType = params.source
+        console.log('================source============: ', sourceType)
+        if(sourceType === 'smartassist-color-scheme') {
+            console.log('sourceType: ',params.source);
+            $('body').addClass(sourceType);
+        } else {
+            console.log(params.source);
+            $('body').addClass('default-color-scheme')
+        }
+    } catch (err) {
+        console.log(err);
+    }
     var webSocketConnection = {
         "path": "/agentassist/api/v1/chat/", transports: ['websocket', 'polling', 'flashsocket']
     };
@@ -81761,6 +81778,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         // document.getElementById("addRemoveDropDown").style.display = "block";
 
                     })
+                        
+                       
                     AgentAssistPubSub.publish('automation_exhaustive_list',
                         { conversationId: _agentAssistDataObj.conversationId, botId: _agentAssistDataObj.botId, 'experience': 'chat' });
                     _agentAsisstSocket.on('user_message', (data) => {
@@ -82616,7 +82635,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                  });
                                  let entiteSaveAndCancelDiv = `<div class="save-reset-cancel hide" id='saveAndCancel-${uuids}'>
                                  <div class="save-reset-disabled" >
-                                     <i class="ast-check-right-disabled"></i>
+                                     <i class="ast-check-right  disabled-color"></i>
                                      <span id='savebtn-${uuids}'>Save</span>
                                  </div>
                                  <div class="cancel-btn" id="cancelBtn-${uuids}">Cancel</div>
@@ -84001,6 +84020,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             entitiestValueArray.forEach((e,i)=>{
                                 $(`#entityValue-${i}`).val(e.value);
                             });
+                            $('.ast-check-right').addClass('disabled-color')
+                            $('.save-reset').removeClass('save-reset').addClass('save-reset-disabled');
                         }
                         if(target.id.split('-')[0] == 'restorebtn'){
                             $('#restorePopUp').removeClass('hide');
@@ -84038,7 +84059,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $(`#saveAndCancel-${id.join('-')}`).addClass('hide');
                             $(`.edit-values-btn.restore`).removeClass('hide');
                             isRetore = false;
-                            $('.ast-check-right').removeClass('ast-check-right').addClass('ast-check-right-disabled')
+                            $('.ast-check-right').addClass('disabled-color')
                             $('.save-reset').removeClass('save-reset').addClass('save-reset-disabled');
                         }
 
@@ -84063,7 +84084,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             let targetid = target.id.split('-');
                             evt.target.dataset.eachvalue = $(`#${target.id}`).val();
                             entitiestValueArray[targetid[1]]['editedValue'] = $(`#${target.id}`).val();
-                            $('.ast-check-right-disabled').removeClass('ast-check-right-disabled').addClass('ast-check-right')
+                            $('.ast-check-right.disabled-color').removeClass('disabled-color');
                             $('.save-reset-disabled').removeClass('save-reset-disabled').addClass('save-reset');
                         }else{
                             var agentAssistInput = target.dataset.agentAssistInput;
