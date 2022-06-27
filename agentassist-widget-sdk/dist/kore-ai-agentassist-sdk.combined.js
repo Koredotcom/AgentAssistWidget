@@ -82136,12 +82136,27 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $('#dialogs-faqs').addClass('hide');
                         }
                         if (data.suggestions) {
+                            console.log('Agent search: ',data.suggestions);
                             if (currentTabActive == 'searchAutoIcon') {
                                 let searchTextDisplay = document.getElementById('search-text-display');
                                 html = `<div class="searched-intent" id="librarySearchText">Search results for '${data.userInput}' </div>`
                                 searchTextDisplay.innerHTML = html;
                             } else {
-                                $('#overLaySearch').html(`<div class="search-results-text">${data.suggestions.dialogs?.length + data.suggestions.faqs?.length} Search results for '${data.userInput}' <span class="show-all">Show all</span></div>`)
+                                let dialogsLength = data.suggestions.dialogs?.length;
+                                let faqsLength = data.suggestions.faqs?.length
+                                console.log('Agent search: ',dialogsLength, faqsLength)
+                                if((dialogsLength > 0) && (faqsLength > 0 )) {
+                                    console.log('Agent search: ',dialogsLength, faqsLength)
+                                    $('#overLaySearch').html(`<div class="search-results-text">${dialogsLength + faqsLength} Search results for '${data.userInput}' <span class="show-all">Show all</span></div>`)
+                                }
+                                 if((dialogsLength > 0) && (faqsLength === 0 || faqsLength === undefined)) {
+                                    console.log('Agent search: ',dialogsLength, faqsLength)
+                                    $('#overLaySearch').html(`<div class="search-results-text">${dialogsLength} Search results for '${data.userInput}' <span class="show-all">Show all</span></div>`)
+                                } 
+                                if((dialogsLength === 0 || dialogsLength === undefined) && (faqsLength > 0)) {
+                                    console.log('Agent search: ',dialogsLength, faqsLength)
+                                    $('#overLaySearch').html(`<div class="search-results-text">${faqsLength} Search results for '${data.userInput}' <span class="show-all">Show all</span></div>`)
+                                }
                             }
 
                         } else {
