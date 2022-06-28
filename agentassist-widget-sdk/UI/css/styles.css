@@ -19,6 +19,8 @@
     --shadow-color:#666;
     --btn-color:#5D5FEF;
     --btn-ganger-color:#D2000D;
+    --bubble-count-bg-color: var(--default-text-color2);
+    --bubble-count-text-color: var(--default-white-color);
 }
 
 .smartassist-color-scheme {
@@ -40,6 +42,8 @@
     --shadow-color:#666;
     --btn-color:#5D5FEF;
     --btn-ganger-color:#D2000D;
+    --bubble-count-bg-color: var(--default-text-color);
+    --bubble-count-text-color: var(--default-white-color);
 }
 
 
@@ -1194,7 +1198,7 @@ border: 1px solid transparent !important;
 }
 .agent-assist-chat-container .body-data-container .transcipt-only-calls-data .data-contnet .other-user-bubble .bubble-data .buld-count-utt .count-number {
     position: absolute;
-    background: #F3BC4D;
+    background: var(--bubble-count-bg-color);
     width: 13px;
     height: 13px;
     border-radius: 100%;
@@ -1206,7 +1210,7 @@ border: 1px solid transparent !important;
     font-weight: 700;
     font-size: 10px;
     line-height: 20px;
-    color: var(--default-text-color2);
+    color: var(--bubble-count-text-color);
 }
 .agent-assist-chat-container .body-data-container .transcipt-only-calls-data .data-contnet .current-user-bubble {
     display: flex;
@@ -2475,7 +2479,7 @@ border: 1px solid transparent !important;
 .smartassist-color-scheme .agent-assist-chat-container .header-top-bar .tab-toggles-sec .top-tabs-actions{
     padding-left: 12px;
 }
-.buld-count-utt-after-click {
+.agent-assist-chat-container .body-data-container .transcipt-only-calls-data .data-contnet .other-user-bubble .bubble-data .buld-count-utt-after-click {
     width: 28px;
     height: 28px;
     background: var(--default-white-color);
@@ -2490,4 +2494,20 @@ border: 1px solid transparent !important;
     color: var(--theme-color);
     font-size: 12px;
     cursor: pointer;
+}
+.buld-count-utt-after-click .count-number {
+    position: absolute;
+    background: var(--theme-color);
+    width: 13px;
+    height: 13px;
+    border-radius: 100%;
+    bottom: -5px;
+    right: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 10px;
+    line-height: 20px;
+    color: var(--default-white-color);
 }

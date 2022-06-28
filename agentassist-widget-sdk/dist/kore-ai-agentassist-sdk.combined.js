@@ -84003,6 +84003,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                document.getElementById('showHistory').click();
                             }
                             $(`#buldCount-${bulbid.join('-')}`).removeClass('buld-count-utt').addClass('buld-count-utt-after-click');
+                            $(`#buldCountNumber-${bulbid.join('-')}`).html(`<span>&#10003;</span>`);
                         }
                     })
 
