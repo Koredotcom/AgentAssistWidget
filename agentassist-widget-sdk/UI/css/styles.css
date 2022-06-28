@@ -2475,3 +2475,19 @@ border: 1px solid transparent !important;
 .smartassist-color-scheme .agent-assist-chat-container .header-top-bar .tab-toggles-sec .top-tabs-actions{
     padding-left: 12px;
 }
+.buld-count-utt-after-click {
+    width: 28px;
+    height: 28px;
+    background: var(--default-white-color);
+    border-radius: 64px;
+    border: 1px solid var(--theme-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    right: -38px;
+    bottom: 3px;
+    color: var(--theme-color);
+    font-size: 0.75em;
+    cursor: pointer;
+}
