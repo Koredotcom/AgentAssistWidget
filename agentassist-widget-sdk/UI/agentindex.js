@@ -855,6 +855,23 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                     let uuids = koreGenerateUUID();
                     responseId = uuids;
+                    if( data.suggestions){
+                        processTranscriptData(data)
+                        let buldHtml = `
+                        <div class="buld-count-utt" id="buldCount-${uuids}">
+                                    <i class="ast-bulb" id="buldCountAst-${uuids}"></i>
+                                    <span class="count-number" id="buldCountNumber-${uuids}">${(data.suggestions.dialogs?data.suggestions.dialogs?.length:0) + (data.suggestions.faqs? data.suggestions.faqs?.length:0)}</span>
+                                </div>`;
+                        
+                        let attrs = $('.other-user-bubble .bubble-data');
+                        $(attrs).last().attr('id',uuids)
+                        attrs.each((i,data)=>{
+                            if(data.id === uuids){
+                               $(`#${data.id}`).append(buldHtml);
+                            }
+                        });
+                       
+                    }
                     var _msgsResponse = {
                         "type": "bot_response",
                         "from": "bot",
@@ -1164,6 +1181,39 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         addFeedbackHtmlToDom(data, botId, userIntentInput);
                     }
 
+                }
+
+               function processTranscriptData(data, conversationId, botid){
+                   console.log("---- data====",data)
+                 //  ["user_message", { "botId": "st-760d56df-7303-5968-baae-fc4b3a6d5057", "orgId": "o-e8bde714-ea18-5b2a-8d59-648fb1ba49ee", "accountId": "62b400e7e8d0a17ed980fc3f", "type": "text", "conversationId": "c-423773d-0e9b-4510-93c3-5a492e75ae08", "value": "Operator.", "author": { "type": "USER", "id": "u-cb358b24-cc42-5843-9040-d0a61d1f7cc7", "firstName": "Kore", "lastName": "User" }, "event": "user_message", "_id": "ms-3ceba4be-0870-567a-a36d-236c749d4edb" }]
+                   let transcriptTab = $(`#scriptContainer .data-contnet`);
+                   let transcriptHtml = `
+                        <div class="other-user-bubble">
+                            <div class="name-with-time">
+                                <div class="u-name">${data.author.firstName + data.author.lastName}</div>
+                                <div class="u-time">2:29pm</div>
+                            </div>
+                            <div class="bubble-data" id="userInputMsg">
+                                <div class="b-text">${data.userInput}</div>
+                            </div>
+                        </div>`;
+                    transcriptTab.append(transcriptHtml);
+                }
+
+                function processAgentMessages(data){
+                  //  ["agent_message",{"botId":"st-760d56df-7303-5968-baae-fc4b3a6d5057","orgId":"o-e8bde714-ea18-5b2a-8d59-648fb1ba49ee","accountId":"62b400e7e8d0a17ed980fc3f","type":"text","conversationId":"c-0ead79b-28a0-422a-ab91-bab8372345e2","value":"One night.","author":{"type":"AGENT","id":"u-0609dd49-12b7-5432-9cc6-afb2f41128fe","firstName":"dev","lastName":"test"},"event":"agent_message","_id":"ms-1b113b73-d52e-5807-a990-5286b79f81a3"}]
+                    let dataConetentTabOfTranscript = $('#scriptContainer .data-contnet');
+                    let currentBubbleHtml = `
+                    <div class="current-user-bubble">
+                    <div class="name-with-time">
+                        <div class="u-time">2:41pm</div>
+                        <div class="u-name">You</div>
+                    </div>
+                    <div class="bubble-data">
+                        <div class="b-text">${data.value}</div>
+                    </div>
+                </div>`;
+                dataConetentTabOfTranscript.append(currentBubbleHtml)
                 }
 
                 function removeElementFromDom() {
@@ -2220,6 +2270,81 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                                 });
                             }
+                        }
+
+                        if(target.id.split('-')[0] == 'entityEdit'){
+                            let id = target.id.split('-');
+                            id.shift();
+                            $(`#entitesDiv-${id.join('-')}`).addClass('edit-entity-rules');
+                            $(`#saveAndCancel-${id.join('-')}`).removeClass('hide');
+                           
+                        }
+                        if(target.className == 'cancel-btn'){
+                            let id = target.id.split('-');
+                            id.shift();
+                            $(`#entitesDiv-${id.join('-')}`).removeClass('edit-entity-rules');
+                            $(`#saveAndCancel-${id.join('-')}`).addClass('hide');
+                            entitiestValueArray.forEach((e,i)=>{
+                                $(`#entityValue-${i}`).val(e.value);
+                            });
+                            $('.ast-check-right').addClass('disabled-color')
+                            $('.save-reset').removeClass('save-reset').addClass('save-reset-disabled');
+                        }
+                        if(target.id.split('-')[0] == 'restorebtn'){
+                            $('#restorePopUp').removeClass('hide');
+        
+                        }
+                        if(target.className == 'btn-restore'){
+                            $('#restorePopUp').addClass('hide');
+                            isRetore = true;
+                            entitiestValueArray = JSON.parse(previousEntitiesValue);
+                            JSON.parse(previousEntitiesValue).forEach((e,i)=>{
+                                $(`#enityNameAndValue-${i}`).find('.edited-status').addClass('hide');
+                                $(`#initialentityValue-${i}`).html(e.value); 
+                                $(`#entityValue-${i}`).val(e.value);
+                                $(`.edit-values-btn.restore`).addClass('hide');
+                            });
+                        }
+                        if(target.id.split('-')[0] == 'savebtn'|| target.className == 'ast-check-right' || target.className == 'save-reset'){
+                            entitiestValueArray.forEach((e,i)=>{
+                                if(e.editedValue){
+                                    e.value = e.editedValue;
+                                    delete e.editedValue;
+                                    $(`#enityNameAndValue-${i}`).find('.edited-status').removeClass('hide');
+                                    $(`#initialentityValue-${i}`).html(e.value);
+                                } 
+                            });
+                            let id = target.id.split('-');
+                            if(id == ''){
+                                id = target.nextElementSibling.id.split('-') 
+                                if(id == ''){
+                                    id = target.target.lastElementChild.id.split('-');
+                                }
+                            }
+                            id.shift();
+                            $(`#entitesDiv-${id.join('-')}`).removeClass('edit-entity-rules');
+                            $(`#saveAndCancel-${id.join('-')}`).addClass('hide');
+                            $(`.edit-values-btn.restore`).removeClass('hide');
+                            isRetore = false;
+                            $('.ast-check-right').addClass('disabled-color')
+                            $('.save-reset').removeClass('save-reset').addClass('save-reset-disabled');
+                        }
+
+                        if(target.id.split('-')[0] == 'buldCount' || target.className == 'ast-bulb' || target.className == 'count-number'){
+                            let bulbDiv = $('.other-user-bubble .bubble-data .buld-count-utt');
+                            let bulbid = target.id.split('-');
+                            bulbid.shift();
+                            let idOfBuld = $(bulbDiv).last().attr('id').split('-');
+                            idOfBuld.shift();
+                            if(idOfBuld.join('-') === bulbid.join('-')){
+                               userTabActive();
+                            }else{
+                               userTabActive();
+                               document.getElementById('showHistory').click();
+                            }
+
+                            $(bulbDiv).removeClass('buld-count-utt').addClass('buld-count-utt-after-click');
+                            
                         }
                     })
 
