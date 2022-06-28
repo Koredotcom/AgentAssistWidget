@@ -84002,7 +84002,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                userTabActive();
                                document.getElementById('showHistory').click();
                             }
-                            $('.other-user-bubble .bubble-data .buld-count-utt').removeClass('buld-count-utt').addClass('buld-count-utt-after-click')
+                            $(`#buldCount-${bulbid.join('-')}`).removeClass('buld-count-utt').addClass('buld-count-utt-after-click')
                         }
                     })
 
