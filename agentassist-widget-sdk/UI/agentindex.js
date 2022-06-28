@@ -319,7 +319,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         <div class="run-info-content" id="userInput-${_id}">
                                             <div class="title">Customer Said - </div>
                                             <div class="agent-utt">
-                                                <div class="title-data">${data.query}</div>
+                                                <div class="title-data">${data.userInput}</div>
                                             </div>
                                             
                                         </div>
@@ -2414,7 +2414,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                userTabActive();
                                document.getElementById('showHistory').click();
                             }
-                            $(`#buldCount-${bulbid.join('-')}`).removeClass('buld-count-utt').addClass('buld-count-utt-after-click')
+                            $(`#buldCount-${bulbid.join('-')}`).removeClass('buld-count-utt').addClass('buld-count-utt-after-click');
                         }
                     })
 
