@@ -51,7 +51,7 @@
 }
 html, body{
     font-family: 'Inter' !important;
-    font-size: 0.875em;
+    font-size: 14px;
 }
 
 .hide{
@@ -152,7 +152,7 @@ html, body{
     border: 1px solid var(--border-color);
 }
 .kr-sg-toggle .slider span {
-    font-size: 0.75em;
+    font-size: 12px;
     color: #9B9B9B;
 }
 .kr-sg-toggle .slider span.yes {
@@ -232,7 +232,7 @@ html, body{
 }
 .agent-assist-chat-container .header-top-bar .header-data .main-title {
     font-weight: 700;
-    font-size: 0.875em;
+    font-size: 14px;
     line-height: 17px;
     color: var(--default-text-color2);
     display: inline-flex;
@@ -248,14 +248,14 @@ html, body{
     align-items: center;
     justify-content: center;
     color: var(--default-white-color);
-    font-size: 0.75em;
+    font-size: 12px;
 }
 .agent-assist-chat-container .header-top-bar .header-data .main-title span{
     margin-left: 8px;
 }
 .agent-assist-chat-container .header-top-bar .header-data .powerdby {
     font-weight: 400;
-    font-size: 0.625em;
+    font-size: 10px;
     line-height: 12px;
     color: var(--color-grey-text);
     display: inline-flex;
@@ -294,7 +294,7 @@ html, body{
     align-items: center;
     justify-content: center;
     color: var(--default-text-color);
-    font-size: 0.875em;
+    font-size: 14px;
     cursor: pointer;
     transition: 0.2s all ease;
     border-radius: 5px 5px 0px 0px;
@@ -324,7 +324,7 @@ html, body{
 }
 .agent-assist-chat-container .header-top-bar .tab-toggles-sec .top-tabs-actions .tab-icon .title-tab{
     font-weight: 500;
-    font-size: 0.75em;
+    font-size: 12px;
     line-height: 20px;
     padding-left: 6px;
     display: none;
@@ -353,7 +353,7 @@ html, body{
     bottom: -40px;
     left: 0;
     font-weight: 600;
-    font-size: 0.625em;
+    font-size: 10px;
     line-height: 14px;
     color: var(--default-white-color);
     white-space: nowrap;
@@ -376,7 +376,7 @@ html, body{
 }
 .agent-assist-chat-container .header-top-bar .tab-toggles-sec .taoggle-with-text .t-title{
     font-weight: 400;
-    font-size: 0.75em;
+    font-size: 12px;
     line-height: 20px;
     color: var(--default-text-color2);
     margin-right: 8px;
@@ -402,7 +402,7 @@ html, body{
     box-shadow: 0px 4px 4px rgba(32, 33, 36, 0.2);
     border-radius: 4px;
     font-weight: 600;
-    font-size: 0.625em;
+    font-size: 10px;
     color: var(--default-white-color);
     line-height: 14px;
 }
@@ -447,7 +447,7 @@ html, body{
     height: 38px;
     padding: 0px 15px;
     font-weight: 400;
-    font-size: 0.75em;
+    font-size: 12px;
     line-height: 20px;
     display: flex;
     align-items: center;
@@ -511,7 +511,7 @@ html, body{
     align-items: center;
     justify-content: center;
     color: var(--default-white-color);
-    font-size: 0.75em;
+    font-size: 12px;
 }
 .agent-assist-chat-container .entity-bucket-data .data-content-info .scroll-data-bucket .inner-data-content-cards .entity-card .content-info-block {
     width: 100%;
@@ -519,7 +519,7 @@ html, body{
 }
 .agent-assist-chat-container .entity-bucket-data .data-content-info .scroll-data-bucket .inner-data-content-cards .entity-card .content-info-block .title-main {
     font-weight: 400;
-    font-size: 0.6875em;
+    font-size: 11px;
     line-height: 13px;
     color: var(--default-text-color);
     margin-bottom: 15px;
@@ -534,7 +534,7 @@ html, body{
 .agent-assist-chat-container .entity-bucket-data .data-content-info .scroll-data-bucket .inner-data-content-cards .entity-card .content-info-block .info-data .left-title {
     width: 30%;
     font-weight: 400;
-    font-size: 0.75em;
+    font-size: 12px;
     line-height: 15px;
     color: var(--default-text-color2);
 }
@@ -542,7 +542,7 @@ html, body{
     width: 70%;
     color: var(--default-text-color2);
     font-weight: 400;
-    font-size: 0.75em;
+    font-size: 12px;
     line-height: 15px;
     padding-left: 10px;
 }
@@ -564,7 +564,7 @@ html, body{
     width: auto;
     padding: 10px;
     font-weight: 600;
-    font-size: 0.625em;
+    font-size: 10px;
     line-height: 14px;
     letter-spacing: 1px;
     text-transform: uppercase;
@@ -677,7 +677,7 @@ html, body{
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-with-img-title {
     font-weight: 400;
-    font-size: 0.6875em;
+    font-size: 11px;
     line-height: 13px;
     color: var(--default-text-color);
     margin-bottom: 10px;
@@ -696,7 +696,7 @@ html, body{
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content {
     width: 100%;
     font-weight: 400;
-    font-size: 0.6875em;
+    font-size: 11px;
     line-height: 13px;
     color: var(--default-text-color);
     overflow: hidden;
@@ -740,7 +740,7 @@ html, body{
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content .desc-text {
     font-weight: 400;
-    font-size: 0.625em;
+    font-size: 10px;
     line-height: 12px;
     color: var(--secondary-color-3);
     font-style: italic;
@@ -779,7 +779,7 @@ html, body{
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.75em;
+    font-size: 12px;
     margin-left: 6px;
     cursor: pointer;
 }
@@ -873,14 +873,14 @@ html, body{
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.75em;
+    font-size: 12px;
     color: var(--default-white-color);
     flex-shrink: 0;
     margin-right: 8px;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .accordion-header .header-text {
     font-weight: 400;
-    font-size: 0.75em;
+    font-size: 12px;
     line-height: 15px;
     color: var(--default-text-color);
     padding-right: 70px;
@@ -969,7 +969,7 @@ html, body{
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data .run-info-content .title {
     font-weight: 400;
-    font-size: 0.75em;
+    font-size: 12px;
     line-height: 15px;
     color: var(--default-text-color);
     margin-bottom: 8px;
@@ -1007,7 +1007,7 @@ border: 1px solid transparent !important;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data .run-info-content .agent-utt.enter-details-block .title-data .enter-details-title{
     font-weight: 500;
-    font-size: 0.75em;
+    font-size: 12px;
     line-height: 15px;
     color: var(--default-text-color2);
     font-style: normal;
@@ -1017,7 +1017,7 @@ border: 1px solid transparent !important;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data .run-info-content .agent-utt .title-data {
     font-weight: 400;
-    font-size: 0.75em;
+    font-size: 12px;
     line-height: 15px;
     color: var(--default-text-color);
     font-style: italic;
@@ -1062,7 +1062,7 @@ border: 1px solid transparent !important;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.75em;
+    font-size: 12px;
     margin-left: 6px;
     cursor: pointer;
 }
@@ -1075,7 +1075,7 @@ border: 1px solid transparent !important;
     display: inline-flex;
     padding: 10px;
     font-weight: 500;
-    font-size: 0.75em;
+    font-size: 12px;
     line-height: 15px;
     color: var(--default-text-color2);
 }
@@ -1093,7 +1093,7 @@ border: 1px solid transparent !important;
     box-sizing: border-box;
     border-radius: 4px;
     color: var(--default-text-color2);
-    font-size: 0.875em;
+    font-size: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1116,7 +1116,7 @@ border: 1px solid transparent !important;
     background: #DCE3EA;
     border-radius: 40px;
     font-weight: 400;
-    font-size: 0.75em;
+    font-size: 12px;
     line-height: 20px;
     color: var(--default-text-color2);
     padding: 2px 15px;
@@ -1155,14 +1155,14 @@ border: 1px solid transparent !important;
 }
 .agent-assist-chat-container .body-data-container .transcipt-only-calls-data .data-contnet .other-user-bubble .name-with-time .u-name {
     font-weight: 600;
-    font-size: 0.625em;
+    font-size: 10px;
     line-height: 20px;
     color: var(--secondary-color);
     margin-right: 10px;
 }
 .agent-assist-chat-container .body-data-container .transcipt-only-calls-data .data-contnet .other-user-bubble .name-with-time .u-time {
     font-weight: 400;
-    font-size: 0.625em;
+    font-size: 10px;
     line-height: 20px;
     color: var(--border-color);
     margin-left: 10px;
@@ -1172,7 +1172,7 @@ border: 1px solid transparent !important;
     border-radius: 5px 15px 15px 15px;
     padding: 8px 15px;
     font-weight: 400;
-    font-size: 0.75em;
+    font-size: 12px;
     line-height: 20px;
     color: var(--default-text-color2);
     position: relative;
@@ -1189,7 +1189,7 @@ border: 1px solid transparent !important;
     right: -38px;
     bottom: 3px;
     color: var(--default-white-color);
-    font-size: 0.75em;
+    font-size: 12px;
     cursor: pointer;
 }
 .agent-assist-chat-container .body-data-container .transcipt-only-calls-data .data-contnet .other-user-bubble .bubble-data .buld-count-utt .count-number {
@@ -1204,7 +1204,7 @@ border: 1px solid transparent !important;
     align-items: center;
     justify-content: center;
     font-weight: 700;
-    font-size: 0.625em;
+    font-size: 10px;
     line-height: 20px;
     color: var(--default-text-color2);
 }
@@ -1222,14 +1222,14 @@ border: 1px solid transparent !important;
 }
 .agent-assist-chat-container .body-data-container .transcipt-only-calls-data .data-contnet .current-user-bubble .name-with-time .u-time {
     font-weight: 400;
-    font-size: 0.625em;
+    font-size: 10px;
     line-height: 20px;
     color: var(--border-color);
     margin-right: 10px;
 }
 .agent-assist-chat-container .body-data-container .transcipt-only-calls-data .data-contnet .current-user-bubble .name-with-time .u-name {
     font-weight: 600;
-    font-size: 0.625em;
+    font-size: 10px;
     line-height: 20px;
     color: var(--secondary-color);
     margin-left: 10px;
@@ -1239,7 +1239,7 @@ border: 1px solid transparent !important;
     border-radius: 15px 5px 15px 15px;
     padding: 8px 15px;
     font-weight: 400;
-    font-size: 0.75em;
+    font-size: 12px;
     line-height: 19px;
     color: var(--default-white-color);
 }
@@ -1274,7 +1274,7 @@ border: 1px solid transparent !important;
     left: auto;
     cursor: pointer;
     color: var(--default-text-color);
-    font-size: 0.75em;
+    font-size: 12px;
     top: 11px;
 
 }
@@ -1286,14 +1286,14 @@ border: 1px solid transparent !important;
 }
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .searched-intent {
     font-weight: 500;
-    font-size: 0.875em;
+    font-size: 14px;
     line-height: 17px;
     color: var(--color-grey-text);
     margin-bottom: 20px;
 }
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .heading-title {
     font-weight: 500;
-    font-size: 0.875em;
+    font-size: 14px;
     line-height: 17px;
     color: var(--default-text-color2);
     margin-bottom: 4px;
@@ -1336,7 +1336,7 @@ border: 1px solid transparent !important;
 }
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-with-img-title {
     font-weight: 400;
-    font-size: 0.6875em;
+    font-size: 11px;
     line-height: 13px;
     color: var(--default-text-color);
     margin-bottom: 10px;
@@ -1355,7 +1355,7 @@ border: 1px solid transparent !important;
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content {
     width: 100%;
     font-weight: 400;
-    font-size: 0.6875em;
+    font-size: 11px;
     line-height: 13px;
     color: var(--default-text-color);
     overflow: hidden;
@@ -1388,7 +1388,7 @@ border: 1px solid transparent !important;
 }
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content .desc-text {
     font-weight: 400;
-    font-size: 0.625em;
+    font-size: 10px;
     line-height: 12px;
     color: var(--secondary-color-3);
     font-style: italic;
@@ -1440,7 +1440,7 @@ border: 1px solid transparent !important;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.75em;
+    font-size: 12px;
     margin-left: 6px;
     cursor: pointer;
 }
@@ -1502,7 +1502,7 @@ border: 1px solid transparent !important;
     border-radius: 4px;
     height: 34px;
     padding: 6px 10px 6px 30px;
-    font-size: 0.875em;
+    font-size: 14px;
     color: var(--default-text-color2);
     width: 100%;
     line-height: normal;
@@ -1554,7 +1554,7 @@ border: 1px solid transparent !important;
 }
 .agent-assist-chat-container .ghost-btn{
     font-weight: 500;
-    font-size: 0.75em;
+    font-size: 12px;
     line-height: 15px;
     color: var(--theme-color);
     padding: 5px;
@@ -1592,7 +1592,7 @@ border: 1px solid transparent !important;
     align-items: center;
     justify-content: flex-end;
     font-weight: 400;
-    font-size: 0.625em;
+    font-size: 10px;
     line-height: 20px;
     color: var(--color-grey-text);
     padding: 5px 15px;
@@ -1628,7 +1628,7 @@ border: 1px solid transparent !important;
     padding: 5px 30px 5px 30px;
     outline: 0;
     font-weight: 400;
-    font-size: 0.875em;
+    font-size: 14px;
     line-height: 20px;
     color: var(--default-text-color2);
 }
@@ -1644,7 +1644,7 @@ border: 1px solid transparent !important;
     position: absolute;
     top: 21px;
     right: 20px;
-    font-size: 0.75em;
+    font-size: 12px;
     color: var(--default-text-color);
     cursor: pointer;
 }
@@ -1676,7 +1676,7 @@ border: 1px solid transparent !important;
 
 .overlay-suggestions .suggestion-content .search-results-text{
     font-weight: 500;
-    font-size: 0.75em;
+    font-size: 12px;
     line-height: 15px;
     color: var(--color-grey-text);
     margin: 0px 0 8px 0;
@@ -1715,7 +1715,7 @@ border: 1px solid transparent !important;
 }
 .overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-with-img-title {
     font-weight: 400;
-    font-size: 0.6875em;
+    font-size: 11px;
     line-height: 13px;
     color: var(--default-text-color);
     margin-bottom: 10px;
@@ -1734,7 +1734,7 @@ border: 1px solid transparent !important;
 .overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content {
     width: 100%;
     font-weight: 400;
-    font-size: 0.6875em;
+    font-size: 11px;
     line-height: 13px;
     color: var(--default-text-color);
     overflow: hidden;
@@ -1778,7 +1778,7 @@ border: 1px solid transparent !important;
 }
 .overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content .desc-text {
     font-weight: 400;
-    font-size: 0.625em;
+    font-size: 10px;
     line-height: 12px;
     color: var(--secondary-color-3);
     font-style: italic;
@@ -1817,7 +1817,7 @@ border: 1px solid transparent !important;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.75em;
+    font-size: 12px;
     margin-left: 6px;
     cursor: pointer;
 }
@@ -1892,7 +1892,7 @@ border: 1px solid transparent !important;
 }
 .overlay-delete-popup .delete-box-content .header-text {
     font-weight: 400;
-    font-size: 1em;
+    font-size: 16px;
     line-height: 34px;
     color: var(--default-text-color);
     padding-right: 25px;
@@ -1901,12 +1901,12 @@ border: 1px solid transparent !important;
     position: absolute;
     top: 28px;
     right: 15px;
-    font-size: 0.6875em;
+    font-size: 11px;
     cursor: pointer;
 }
 .overlay-delete-popup .delete-box-content .desc-text-info {
     font-weight: 400;
-    font-size: 0.875em;
+    font-size: 14px;
     line-height: 24px;
     color: #605E5C;
     margin: 15px 0 15px 0;
@@ -1931,14 +1931,14 @@ border: 1px solid transparent !important;
 }
 .empty-data-no-agents .title{
     font-weight: 600;
-    font-size: 0.875em;
+    font-size: 14px;
     line-height: 17px;
     color: var(--color-grey-text);
     margin-bottom: 8px;
 }
 .empty-data-no-agents .desc-text{
     font-weight: 400;
-    font-size: 0.75em;
+    font-size: 12px;
     line-height: 15px;
     color: var(--color-grey-text);
     margin-bottom: 10px;
@@ -1959,13 +1959,13 @@ border: 1px solid transparent !important;
 }
 .empty-library-data .title-empty{
     font-weight: 600;
-    font-size: 0.875em;
+    font-size: 14px;
     line-height: 17px;
     color: var(--color-grey-text);
 }
 .empty-library-data .desc-text{
     font-weight: 400;
-    font-size: 0.75em;
+    font-size: 12px;
     line-height: 15px;
     margin: 5px 0;
     color: var(--color-grey-text);
@@ -1982,7 +1982,7 @@ border: 1px solid transparent !important;
     outline: 0;
     padding: 7px 20px;
     font-weight: 400;
-    font-size: 0.875em;
+    font-size: 14px;
     line-height: 20px;
     color: var(--default-white-color);
     cursor: pointer;
@@ -2005,7 +2005,7 @@ border: 1px solid transparent !important;
     outline: 0;
     padding: 7px 20px;
     font-weight: 400;
-    font-size: 0.875em;
+    font-size: 14px;
     line-height: 20px;
     cursor: pointer;
     border: 1px solid var(--border-color);
@@ -2230,7 +2230,7 @@ border: 1px solid transparent !important;
     .agent-assist-chat-container .header-top-bar .tab-toggles-sec .taoggle-with-text .t-title{
         /* margin-left: 8px; */
         font-weight: 500;
-        font-size: 0.75em;
+        font-size: 12px;
         line-height: 20px;
         /* margin-right: 0; */
     }
@@ -2434,7 +2434,7 @@ border: 1px solid transparent !important;
     outline: 0;
     padding: 7px 20px;
     font-weight: 400;
-    font-size: 0.875em;
+    font-size: 14px;
     line-height: 20px;
     color: var(--default-white-color);
     cursor: pointer;
@@ -2488,6 +2488,6 @@ border: 1px solid transparent !important;
     right: -38px;
     bottom: 3px;
     color: var(--theme-color);
-    font-size: 0.75em;
+    font-size: 12px;
     cursor: pointer;
 }
