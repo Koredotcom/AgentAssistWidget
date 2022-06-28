@@ -404,7 +404,7 @@
     "USECASES.USER_UTTERANCES": "User Utterances",
     "USECASES.PRIMARY_QUESTION": "Primary Question",
     "USECASES.ALTERNATE_UTTERANCES": "Alternate Utterances",
-    "USECASES.ADD_ANOTHER": "Add Utterance",
+    "USECASES.ADD_ANOTHER": "Add Another",
     "USECASES.NEEDS_MORE_UTTERANCES_TO_BE_EFFECTIVE": "Needs more utterances to be effective",
     "USECASES.CALL_EXPERIENCE": "Call Experience",
     "USECASES.CHAT_EXPERIENCE": "Chat Experience",

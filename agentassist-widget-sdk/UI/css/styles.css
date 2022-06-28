@@ -835,7 +835,7 @@ html, body{
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info {
     display: inline-block;
     width: 100%;
-    padding: 20px 15px 0px 15px;
+    padding: 12px 15px 0px 15px;
     position: relative;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info:last-child{
@@ -908,7 +908,7 @@ html, body{
     padding: 4px 10px;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data {
-    padding: 10px 30px 0px 8px;
+    padding: 5px 30px 0px 8px;
     position: relative;
     display: inline-block;
     width: 100%;
@@ -1081,7 +1081,7 @@ border: 1px solid transparent !important;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .feedback-data {
     padding-left: 28px;
-    margin: 12px 0 15px 0;
+    margin: -10px 0 15px 0;
     display: inline-flex;
     align-items: center;
 }
@@ -1475,7 +1475,7 @@ border: 1px solid transparent !important;
     border-radius: 4px;
     top: auto;
     margin-top: 3px;
-    min-width: 110px;
+    min-width: 115px;
 }
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .elipse-dropdown-info .dropdown-content-elipse .list-option {
     font-weight: 500;
@@ -1546,8 +1546,9 @@ border: 1px solid transparent !important;
 /* Show history */
 .agent-assist-chat-container .show-history-block{
     text-align: right;
-    padding: 12px 10px;
     background: var(--default-white-color);
+    padding: 4px 10px;
+    background: #FFFFFF;
     display: inline-block;
     width: 100%;
 }
@@ -2041,7 +2042,7 @@ border: 1px solid transparent !important;
     z-index: 1;
     display: block;
     top: 40%;
-    left: 42%;
+    left: 45%;
     margin: auto;
     outline: 1px solid transparent;
     -webkit-animation:spin 1s linear infinite;

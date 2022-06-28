@@ -536,7 +536,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     <div class="list-option" data-conv-id="${data.conversationId}"
                                     data-bot-id="${botId}" data-intent-name="${ele.name}"
                                     id="agentSelect-${libUuid}"
-                                    data-exhaustivelist-run="true" data-run-myBot="true">Run Bot for Agent</div>
+                                    data-exhaustivelist-run="true" data-run-myBot="true">Run with Agent Inputs</div>
                                 </div>
                             </div>
                         </div>
@@ -630,7 +630,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         <div class="list-option" data-conv-id="${data.conversationId}"
                                         data-bot-id="${botId}" data-intent-name="${ele.name}"
                                          id="agentSearchSelect-${uuids}"
-                                        data-exhaustivelist-run="true" data-run-myBot="true">Run Bot for Agent</div>
+                                        data-exhaustivelist-run="true" data-run-myBot="true">Run with Agent Inputs</div>
                                     </div>
                                 </div>
                             </div>
@@ -1023,8 +1023,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 <div class="dropdown-content-elipse" id="runAgtBtn-${uuids}">
                                     <div class="list-option" data-conv-id="${data.conversationId}"
                                     data-bot-id="${botId}" data-intent-name="${ele.name}"
-                                    id="agentSelect-${uuids}"
-                                    data-exhaustivelist-run="true">Run Bot for Agent</div>
+                                     id="agentSelect-${uuids}"
+                                    data-exhaustivelist-run="true">Run with Agent Inputs</div>
                                 </div>
                         </div>
                     </div>`;
@@ -1602,7 +1602,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                             <div class="list-option" data-conv-id="${_agentAssistDataObj.conversationId}"
                                                             data-bot-id="${res.botId}" data-intent-name="${ele.name}"
                                                              id="agentSelect-${uniqueID}"
-                                                            data-exhaustivelist-run="true">Run Bot for Agent</div>
+                                                            data-exhaustivelist-run="true">Run with Agent Inputs</div>
                                                         </div>
                                                 </div>
                                             </div>`;
