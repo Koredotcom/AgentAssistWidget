@@ -82824,11 +82824,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                     // removeElementFromDom();
                     let noOfSteps = $(`.body-data-container #dynamicBlock`).find('.steps-run-data').not('.hide');
-                    // if (noOfSteps.length >= 2) {
-                    //     $(noOfSteps).addClass('hide');
-                    //     $(noOfSteps[noOfSteps.length - 2]).removeClass('hide').attr('style', 'color:gray');
-                    //     $(noOfSteps[noOfSteps.length - 1]).removeClass('hide');
-                    // }
+                    if (noOfSteps.length >= 2) {
+                        $(noOfSteps).addClass('hide');
+                        $(noOfSteps[noOfSteps.length - 2]).removeClass('hide').attr('style', 'color:gray');
+                        $(noOfSteps[noOfSteps.length - 1]).removeClass('hide');
+                    }
                     if ((data.endOfFaq || data.endOfTask) && data.type !== 'text') {
                         isAutomationOnGoing = false;
                         //  isOverRideMode = false;
