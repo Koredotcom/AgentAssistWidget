@@ -266,6 +266,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 console.log("AgentAssist >>> sending welcome_message_request")
                 _agentAsisstSocket.emit('welcome_message_request', welcome_message_request);
                 if(isCallConversation === 'true'){
+                    $('#transcriptIcon').removeClass('hide');
                     transcriptionTabActive();
                 }
 
@@ -2402,7 +2403,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
 
                         if(target.id.split('-')[0] == 'buldCount' || target.className == 'ast-bulb' || target.className == 'count-number'){
-                            let bulbDiv = $('.other-user-bubble .bubble-data .buld-count-utt');
+                            let bulbDiv = $('.other-user-bubble .bubble-data .buld-count-utt').length<=0? $('.other-user-bubble .bubble-data .buld-count-utt-after-click'):$('.other-user-bubble .bubble-data .buld-count-utt') ;
                             let bulbid = target.id.split('-');
                             bulbid.shift();
                             let idOfBuld = $(bulbDiv).last().attr('id').split('-');
@@ -2413,7 +2414,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                userTabActive();
                                document.getElementById('showHistory').click();
                             }
-                            
+                            $(`#buldCount-${bulbid.join('-')}`).removeClass('buld-count-utt').addClass('buld-count-utt-after-click')
                         }
                     })
 
@@ -2744,6 +2745,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     <div class="logo-assist">
                         <img src="./images/logo-agent.svg">
                     </div>
+                    <div class="tab-icon hide" id="transcriptIcon">
+                        <i class="ast-transcipt font-15" id="scriptIcon"></i>
+                        <div class="title-tab" id="transcriptLabel">Transcript</div>
+                        <div class="custom-tootltip-tabs">Transcript</div>
+                    </div>
                     <div class="tab-icon active-tab" id="userAutoIcon">
                         <i class="ast-bot font-13" id="userBotIcon"></i>
                         <div class="title-tab" id="AssistLabel">Assist</div>
@@ -2758,12 +2764,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         <i class="ast-automation font-13" id="agentBotIcon"></i>
                         <div class="title-tab" id="MybotLabel">My Bot</div>
                         <div class="custom-tootltip-tabs">My Bot</div>
-                    </div>
-                    <div class="tab-icon" id="transcriptIcon">
-                        <i class="ast-transcipt font-15" id="scriptIcon"></i>
-                        <div class="title-tab" id="transcriptLabel">Transcript</div>
-                        <div class="custom-tootltip-tabs">Transcript</div>
-                    </div>
+                    </div>    
                 </div>
                 <div class="taoggle-with-text">
                     <div class="t-title">Proactive</div>
