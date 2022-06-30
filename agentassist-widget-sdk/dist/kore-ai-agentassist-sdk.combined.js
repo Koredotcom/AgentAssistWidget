@@ -81595,6 +81595,7 @@ var isShowHistoryEnable = false;
 var isShowHistoryEnableForMyBot = false;
 var autoExhaustiveList;
 var searchedVal;
+var agentSearchVal;
 var custTone;
 var frequentlyUsedList;
 var isMyBotAutomationOnGoing = false;
@@ -82957,7 +82958,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             document.getElementById('agentAutoContainer').classList.add('hide');
                             document.getElementById('scriptContainer').classList.add('hide');
 
-                            $('#librarySearch').val($('#agentSearch').val());
+                            $('#librarySearch').val(agentSearchVal);
                             $('.sugestions-info-data').addClass('hide');
                             $('#bodyContainer').removeClass('if-suggestion-search');
                             $('#librarySearch').keyup(function (evt) {
@@ -84567,7 +84568,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             processAgentIntentResults(autoExhaustiveList, autoExhaustiveList.conversationId, autoExhaustiveList.botId);
                         }
                         if (e.keyCode == 13 && (input_taker.trim().length > 0 || e.target.dataset.val.trim().length > 0)) {
+                            console.log('input',input_taker);
                             searchedVal = $('#librarySearch').val();
+                            agentSearchVal = $('#agentSearch').val()
+                            console.log('input',searchedVal);
                             var convId = e.target.dataset.convId;
                             var botId = e.target.dataset.botId;
                             var intentName = input_taker ? input_taker : e.target.dataset.val;
