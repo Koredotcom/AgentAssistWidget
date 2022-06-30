@@ -84568,10 +84568,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             processAgentIntentResults(autoExhaustiveList, autoExhaustiveList.conversationId, autoExhaustiveList.botId);
                         }
                         if (e.keyCode == 13 && (input_taker.trim().length > 0 || e.target.dataset.val.trim().length > 0)) {
-                            console.log('input',input_taker);
                             searchedVal = $('#librarySearch').val();
                             agentSearchVal = $('#agentSearch').val()
-                            console.log('input',searchedVal);
                             var convId = e.target.dataset.convId;
                             var botId = e.target.dataset.botId;
                             var intentName = input_taker ? input_taker : e.target.dataset.val;
@@ -84831,9 +84829,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 <div class="close-popup">
                     <i class="ast-close"></i>
                 </div>
-                <div class="desc-text-info">If you run the select task, the current task will be completely
-                    terminated.
-                    Are you sure you want to continue with the selected task?</div>
+                <div class="desc-text-info">Are you sure you want to terminate the dialog task ? If you terminate this task, you cannot continue with this task. To restart, 
+                you will have to run this task manually in Library.</div>
                 <div class="btn-footer-info">
                     <button class="btn-danger">Yes</button>
                     <button class="btn-cancel">Cancel</button>
