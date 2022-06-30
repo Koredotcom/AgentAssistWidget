@@ -818,7 +818,7 @@ html, body{
     border-radius: 4px;
     top: auto;
     margin-top: 3px;
-    min-width: 110px;
+    min-width: 115px;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .elipse-dropdown-info .dropdown-content-elipse .list-option {
     font-weight: 500;
@@ -1856,7 +1856,7 @@ border: 1px solid transparent !important;
     border-radius: 4px;
     top: auto;
     margin-top: 3px;
-    min-width: 110px;
+    min-width: 115px;
 }
 .overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .elipse-dropdown-info .dropdown-content-elipse .list-option {
     font-weight: 500;

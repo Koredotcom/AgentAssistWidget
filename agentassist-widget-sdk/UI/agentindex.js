@@ -2301,8 +2301,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             }
                             if (currentTabActive !== 'searchAutoIcon') {
                                 $('.elipse-dropdown-info').each((i, ele) => {
-                                    $(ele).attr('class').includes('active-elipse') ? $(ele).removeClass('active-elipse') : elementClicked.classList.add('active-elipse')
-                                })
+                                    $(ele).attr('class').includes('active-elipse') ? $(ele).removeClass('active-elipse') : elementClicked.classList.add('active-elipse');
+                                });
+                                $(`#overLaySearch .type-info-run-send`).find(elementClicked).length>0? elementClicked.classList.add('active-elipse'):'';
                             }
 
 
