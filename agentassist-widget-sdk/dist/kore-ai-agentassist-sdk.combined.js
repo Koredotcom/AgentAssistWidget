@@ -82958,7 +82958,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             document.getElementById('agentAutoContainer').classList.add('hide');
                             document.getElementById('scriptContainer').classList.add('hide');
 
-                            $('#librarySearch').val(agentSearchVal);
+                            let libSearch =$('#librarySearch').val(agentSearchVal);
+                            console.log('searched Val');
+                            if(libSearch.length > 0) {
+                                $('#cancelLibrarySearch').removeClass('hide');
+                            } else {
+                                $('#cancelLibrarySearch').addClass('hide');
+                            }
                             $('.sugestions-info-data').addClass('hide');
                             $('#bodyContainer').removeClass('if-suggestion-search');
                             $('#librarySearch').keyup(function (evt) {
@@ -84561,6 +84567,18 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 function AgentAssist_input_keydown(e) {
                     if (e.target.id == 'librarySearch' || e.target.id == 'agentSearch') {
                         var input_taker = document.getElementById('librarySearch').value;
+                        var agent_search = document.getElementById('agentSearch').value;
+                        console.log('searched Val', input_taker, agent_search);
+                        if(input_taker.length > 0) {
+                            $('#cancelLibrarySearch').removeClass('hide');
+                        } else {
+                            $('#cancelLibrarySearch').addClass('hide');
+                        }
+                        if(agent_search.length > 0) {
+                            $('#cancelAgentSearch').removeClass('hide');
+                        } else {
+                            $('#cancelAgentSearch').addClass('hide');
+                        }
                         if (e.target.dataset?.val) {
                             input_taker = ''
                         }
@@ -84755,7 +84773,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         <div class="input-text-search library-search-div" id="search-block">
                             <input type="text" placeholder="Ask AgentAssist" class="input-text" id="librarySearch">
                             <i class="ast-search"></i>
-                            <i class="ast-close close-search"></i>
+                            <i class="ast-close close-search hide" id="cancelLibrarySearch"></i>
                         </div>
                     </div>
 
@@ -84796,7 +84814,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
         <div class="sugestions-info-data">
             <input type="text" class="suggestion-input" id="agentSearch" placeholder="Ask AgentAssist">
             <i class="ast-search search-icon"></i>
-            <i class="ast-close close-search"></i>
+            <i class="ast-close close-search hide" id="cancelAgentSearch"></i>
         </div>
         
         <div id="loader">
