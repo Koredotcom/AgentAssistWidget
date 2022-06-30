@@ -81592,6 +81592,7 @@ var _agentAsisstSocket = null;
 var _agentAssistComponents = {};
 var isAutomationOnGoing = false;
 var isShowHistoryEnable = false;
+var isShowHistoryEnableForMyBot = false;
 var autoExhaustiveList;
 var searchedVal;
 var custTone;
@@ -82328,6 +82329,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 function processMybotDataResponse(data, convId, botId) {
                     console.log("when an dialog is ran for the agent", data);
                     let myBotuuids = Math.floor(Math.random() * 100);
+                    let automationSuggestions = $('#agentAutoContainer .dialog-task-accordiaon-info');
+                    for (let ele of automationSuggestions) {
+                        ele.classList.add('hide');
+                    }
+                    if (automationSuggestions.length >= 1) {
+                        automationSuggestions[automationSuggestions.length - 1].classList.remove('hide');
+                    }
                     myBotresponseId = myBotuuids;
                     var _msgsResponse = {
                         "type": "bot_response",
@@ -83532,6 +83540,309 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 a.classList.remove('hide');
                             }
                         }
+                        if(target.id === 'agent-showHistory'){
+                                isShowHistoryEnableForMyBot = true;
+                                $('#agentAutoContainer .show-history-block').addClass('hide');
+                                $('#agentAutoContainer .show-back-recommendation-block').removeClass('hide');
+                                $('#agentAutoContainer .dialog-task-accordiaon-info').addClass('hide');
+                                $('#agentAutoContainer .agent-utt-info').addClass('hide');
+                                $('#historyDataForMyBot').removeClass('hide');
+                                getData(`${connectionDetails.envinormentUrl}/api/1.1/botmessages/agentassist/${_agentAssistDataObj.botId}/history?convId=${_agentAssistDataObj.conversationId}&agentHistory=true`)
+                                    .then(response => {
+                                        document.getElementById("loader").style.display = "none";
+                                        $(`#historyDataForMyBot .collapse-acc-data`)?.addClass('hide');
+                                        $(`#historyDataForMyBot .show-history-feedback`)?.addClass('hide');
+    
+                                        let previousId;
+                                        let previousTaskName, currentTaskName;
+                                        if (JSON.stringify(response) === JSON.stringify(previousResp)) {
+                                            $(`#historyDataForMyBot .collapse-acc-data.hide`)[$(`#historyDataForMyBot .collapse-acc-data.hide`).length - 1]?.classList.remove('hide');
+                                            $(`#historyDataForMyBot .show-history-feedback.hide`)[$(`#historyDataForMyBot .show-history-feedback.hide`).length - 1]?.classList.remove('hide');
+    
+                                        } else {
+                                            let resp = response.length > 0 ? response?.slice(previousResp?.length - 1, response.length) : undefined;
+                                            resp?.forEach((res, index) => {
+                                                if (res.type == 'incoming') {
+                                                    res.components?.forEach((ele) => {
+                                                        if (ele.data.text == previousTaskName) {
+                                                            previousTaskName = undefined;
+                                                            previousId = undefined;
+                                                            console.log("xxxxxxxxxxxxxxxxxxxxx incoming task same")
+                                                        }
+                                                    })
+                                                }
+                                                if ((!res.agentAssistDetails?.suggestions && !res.agentAssistDetails?.ambiguityList && !res.agentAssistDetails?.ambiguity) && res.type == 'outgoing') {
+                                                    let _msgsResponse = {
+                                                        "type": "bot_response",
+                                                        "from": "bot",
+                                                        "message": [],
+                                                        "messageId": res._id,
+                                                        "botInfo": {
+                                                            "chatBot": "sample Bot",
+                                                            "taskBotId": res.botId
+                                                        },
+                                                        "createdOn": "2022-03-21T07:56:18.225Z",
+                                                        "icon": "https://uat.kore.ai:443/api/getMediaStream/market/f-cb381255-9aa1-5ce2-95e3-71233aef7084.png?n=17648985&s=IlRvUlUwalFVaFVMYm9sZStZQnlLc0l1UlZvdlNUUDcxR2o3U2lscHRrL3M9Ig$$",
+                                                        "traceId": "873209019a5adc26",
+                                                        "createdOnTimemillis": res._id
+                                                    }
+                                                    currentTaskName = res.tN ? res.tN : currentTaskName;
+                                                    let historyData = $('#historyDataForMyBot');
+                                                    let userInputHtml;
+                                                    if (res.agentAssistDetails.userInput) {
+                                                        userInputHtml = `<div class="agent-utt-info" id="agentUttInfo-${res._id}">
+                                                            <div class="user-img">
+                                                                <img src="./images/userIcon.svg">
+                                                            </div>
+                                                            <div class="text-user" >${res.agentAssistDetails.userInput}</div>
+                                                        </div>`;
+                                                    }
+                                                    let dropdownHtml = `
+                                                        
+                                                                    <div class="dialog-task-accordiaon-info" id="addRemoveDropDown-${res._id}" >
+                                                                        <div class="accordion-header" id="dropDownHeader-${res._id}"
+                                                                        data-drop-down-opened="false">
+                                                                            <div class="icon-info">
+                                                                                <i class="ast-rule"></i>
+                                                                            </div>
+                                                                            <div class="header-text" id="dropDownTitle-${res._id}">${res.tN}</div>
+                                                                            <i class="ast-carrotup"></i>
+                                                                        </div>
+                                                                        <div class="collapse-acc-data hide" id="dropDownData-${res._id}">
+                                                                            
+                                                                            
+                                                                        </div>
+                                                                        <div class="feedback-data show-history-feedback hide">
+                                                                            <div class="feedbackup-data">
+                                                                                <div class="feedback-icon" id="feedbackup-${res._id}" data-feedbacklike="false" data-conv-id="${_agentAssistDataObj.conversationId}"data-bot-id="${_agentAssistDataObj.botId}" data-feedback="like" data-dialog-name="${res.tN}" data-user-input="${userIntentInput}">
+                                                                                    <i class="ast-thumbup"></i>
+                                                                                </div>
+                                                                                <span class="tootltip-tabs">Like</span>
+                                                                            </div>
+                                                                            <div class="feedbackdown-data">
+                                                                                <div class="feedback-icon" id="feedbackdown-${res._id}" data-feedbackdislike="false" data-conv-id="${_agentAssistDataObj.conversationId}" data-bot-id="${_agentAssistDataObj.botId}" data-feedback="dislike" data-dialog-name="${res.tN}" data-user-input="${userIntentInput}">
+                                                                                    <i class="ast-thumbdown"></i>
+                                                                                </div>
+                                                                                <span class="tootltip-tabs">Dislike</span>
+                                                                            </div>
+                                                                        </div>
+                                                                <div class="dilog-task-end" id="endTaks-${res._id}">
+                                                                <div class="text-dialog-task-end">Dialog Task ended</div>     
+                                                                            </div>
+                                                                        </div>
+                                                                    `;
+    
+                                                    if (previousTaskName && currentTaskName !== previousTaskName) {
+                                                        previousId = undefined;
+                                                    }
+    
+                                                    if (res.tN && !previousId && previousTaskName !== currentTaskName) {
+                                                        let divExist = $(`#addRemoveDropDown-${res._id}`);
+                                                        previousTaskName = currentTaskName;
+                                                        if (divExist.length >= 1) {
+                                                            console.log("---->>>>>>>>>>>>>>>>>>>>>already exsit===in the dom");
+                                                        } else {
+                                                            historyData.append(userInputHtml);
+                                                            historyData.append(dropdownHtml);
+                                                            previousId = res._id;
+                                                            previousTaskName = res.tN;
+                                                        }
+                                                    }
+                                                    if (res.agentAssistDetails.entityName && res.agentAssistDetails.entityResponse && res.agentAssistDetails.entityValue) {
+                                                        let runInfoContent = $(`#dropDownData-${previousId}`);
+                                                        let userQueryHtml = `
+                                                            <div class="steps-run-data">
+                                                                <div class="icon_block_img">
+                                                                    <img src="./images/userIcon.svg">
+                                                                </div>
+                                                                <div class="run-info-content" id="userInput-${res._id}">
+                                                                    <div class="title">Customer Said - </div>
+                                                                    <div class="agent-utt">
+                                                                        <div class="title-data">${res.agentAssistDetails.entityValue}</div>
+                                                                    </div>
+                                                                    
+                                                                </div>
+                                                            </div>`;
+                                                        runInfoContent.append(userQueryHtml);
+                                                        let entityHtml = $(`#dropDownData-${previousId}`).find(`#userInput-${res._id}`);
+                                                        if (res.agentAssistDetails.entityValue && !res.agentAssistDetails.isErrorPrompt) {
+                                                            entityHtml.append(`<div class="order-number-info">${res.agentAssistDetails.entityName} : ${res.agentAssistDetails.entityValue}</div>`);
+                                                        } else {
+                                                            if (res.agentAssistDetails.isErrorPrompt) {
+                                                                let entityHtmls = `<div class="order-number-info">${res.agentAssistDetails.entityName} : 
+                                                                            <span style="color:red">Value unidentified</span>
+                                                                        </div>
+                                                                        <div>
+                                                                            <img src="./images/warning.svg" style="padding-right: 8px;">
+                                                                            <span style="font-size: 12px; line-height: 18px; color: #202124;">Incorrect input format<span>
+                                                                        </div>`
+                                                                entityHtml.append(entityHtmls);
+                                                            }
+                                                        }
+                                                    }
+                                                    let parsedPayload;
+                                                    res.components?.forEach((elem) => {
+                                                        let payloadType = (elem.data?.text).replace(/(&quot\;)/g, "\"");
+    
+                                                        if (payloadType.indexOf('text') !== -1 || payloadType.indexOf('payload') !== -1) {
+                                                            let withoutSpecials = payloadType.replace(/^\s+|\s+$/g, "");
+                                                            parsedPayload = JSON.parse(withoutSpecials);
+                                                        }
+    
+                                                        let body = {};
+                                                        body['type'] = elem.cT;
+                                                        if (!parsedPayload) {
+                                                            body['component'] = {
+                                                                "type": elem.cT,
+                                                                "payload": {
+                                                                    "type": elem.cT,
+                                                                    "text": elem.data.text
+                                                                }
+                                                            };
+                                                            body['cInfo'] = {
+                                                                "body": elem.data.text
+                                                            };
+    
+                                                        } else {
+                                                            body['component'] = parsedPayload.payload ? parsedPayload : parsedPayload.text;
+                                                            if (parsedPayload?.type === 'message') {
+                                                                body['cInfo'] = {
+                                                                    "body": ''
+                                                                };
+                                                            } else if (parsedPayload?.text) {
+                                                                body['cInfo'] = {
+                                                                    "body": parsedPayload.text
+                                                                };
+                                                            } else {
+                                                                body['cInfo'] = {
+                                                                    "body": parsedPayload
+                                                                };
+                                                            }
+    
+                                                        }
+    
+                                                        _msgsResponse.message.push(body);
+                                                    });
+                                                    let runInfoContent = $(`#dropDownData-${previousId}`);
+                                                    let askToUserHtml = `
+                                                        <div class="steps-run-data">
+                                                                    <div class="icon_block">
+                                                                        <i class="ast-agent"></i>
+                                                                    </div>
+                                                                    <div class="run-info-content" >
+                                                                    <div class="title">Ask customer...</div>
+                                                                    <div class="agent-utt">
+                                                                        <div class="title-data"><ul class="chat-container" id="displayData-${res._id}"></ul></div>
+                                                                        
+                                                                    </div>
+                                                                    </div>
+                                                                </div>
+                                                        `;
+                                                    let tellToUserHtml = `
+                                                        <div class="steps-run-data">
+                                                                    <div class="icon_block">
+                                                                        <i class="ast-agent"></i>
+                                                                    </div>
+                                                                    <div class="run-info-content" >
+                                                                    <div class="title">Tell Customer</div>
+                                                                    <div class="agent-utt">
+                                                                        <div class="title-data" ><ul class="chat-container" id="displayData-${res._id}"></ul></div>
+                                                                        
+                                                                    </div>
+                                                                    </div>
+                                                                </div>
+                                                        `;
+                                                    if (res.agentAssistDetails.isPrompt || res.agentAssistDetails.entityRequest) {
+                                                        runInfoContent.append(askToUserHtml);
+                                                    } else {
+                                                        runInfoContent.append(tellToUserHtml);
+                                                    }
+                                                    AgentChatInitialize.renderMessage(_msgsResponse, res._id, `dropDownData-${previousId}`);
+                                                    //  removeElementFromDom();
+                                                    //if (res.agentAssistDetails.endOfTask) { // need this block of code once the endofTask flag received from backend
+                                                    //                                                    let dropDownData = $(`#dropDownData-${previousId}`);
+                                                    //                    let endOfDialoge = $(`#addRemoveDropDown-${previousId}`);
+    
+                                                    //                 // $(`#addRemoveDropDown-${dropdownHeaderUuids} .btn-danger`).remove();
+                                                    //                 let feedbackHtml = ` 
+                                                    //     <div class="feedback-data">
+                                                    //         <div class="feedback-icon" id="feedbackup">
+                                                    //             <i class="ast-thumbup" id="feedbackup-${previousId}"
+                                                    //             data-feedbacklike="false"
+                                                    //             data-conv-id="${_agentAssistDataObj.conversationId}"
+                                                    //                     data-bot-id="${_agentAssistDataObj.botId}" data-feedback="like"
+                                                    //                     data-dialog-name="${previousTaskName}"
+                                                    //                     data-user-input="${userIntentInput}"></i>
+                                                    //         </div>
+                                                    //         <div class="feedback-icon" id="feedbackdown">
+                                                    //             <i class="ast-thumbdown" id="feedbackdown-${previousId}"
+                                                    //             data-feedbackdislike="false"
+                                                    //             data-conv-id="${_agentAssistDataObj.conversationId}"
+                                                    //                     data-bot-id="${_agentAssistDataObj.botId}" data-feedback="dislike"
+                                                    //                     data-dialog-name="${previousTaskName}"
+                                                    //                     data-user-input="${userIntentInput}"></i>
+                                                    //         </div>
+                                                    //    </div>`;
+                                                    //                 dropDownData.append(feedbackHtml);
+                                                    //                 let endofDialogeHtml = `
+                                                    //     <div class="dilog-task-end" id="endTaks-${previousId}">
+                                                    //     <div class="text-dialog-task-end">Dialog Task ended</div>     
+                                                    //                </div>
+    
+                                                    //     `;
+                                                    //                 endOfDialoge.append(endofDialogeHtml);
+                                                    //     previousId = undefined;
+                                                    //     previousTaskName = undefined;
+                                                    // }
+    
+                                                }
+                                                if (index == resp.length - 1 || index == 0) {
+                                                    $(`#historyDataForMyBot .collapse-acc-data.hide`)[$(`#historyDataForMyBot .collapse-acc-data.hide`).length - 1]?.classList.remove('hide');
+                                                    $(`#historyDataForMyBot .show-history-feedback.hide`)[$(`#historyDataForMyBot .show-history-feedback.hide`).length - 1]?.classList.remove('hide');
+                                                }
+                                            });
+                                        }
+                                        previousResp = response;
+                                    }).catch(err=>{
+                                        document.getElementById("loader").style.display = "block";
+                                        console.log("error",err)
+                                    });
+                            
+                        }
+                        if(target.id === 'agent-backToRecommendation'){
+                                isShowHistoryEnableForMyBot = false;
+                                let dom = document.getElementById('agentAutoContainer');
+                                dom.classList.remove('hide');
+                                $('#agentAutoContainer .show-history-block').removeClass('hide');
+                                $('#agentAutoContainer .show-back-recommendation-block').addClass('hide');
+                                $('#historyDataForMyBot').addClass('hide');
+    
+                                let automationSuggestions = $('#agentAutoContainer .dialog-task-accordiaon-info');
+                                for (let ele of automationSuggestions) {
+                                    ele.classList.add('hide');
+                                }
+    
+                                $(document).ready(() => {
+                                    if (automationSuggestions.length >= 1) {
+                                        automationSuggestions[automationSuggestions.length - 1].classList.remove('hide');
+                                        for (let a of $('#agentAutoContainer .agent-utt-info')) {
+                                            a.classList.add('hide');
+                                        }
+                                    }
+    
+                                })
+    
+                                if (idsOfDropDown && automationSuggestions.length >= 1) {
+                                    automationSuggestions[automationSuggestions.length - 1].classList.remove('hide');
+                                }
+    
+                                if (idsOfDropDown) {
+                                    for (let a of $('#dynamicBlock .agent-utt-info')) {
+                                        a.classList.add('hide');
+                                    }
+                                }
+                            
+                        }
                         if (target.className == 'btn-danger') {
                             target.innerHTML == 'Terminate' ? $('#terminatePopUp').removeClass('hide') : '';
                             if (target.innerHTML == 'Yes') {
@@ -83902,7 +84213,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             let targetIDs = (target.id).split('-');
                             targetIDs.shift();
                             let targetsss = targetIDs.join('-');
-                            if (!isShowHistoryEnable) {
+                            if (!isShowHistoryEnable && !isShowHistoryEnableForMyBot) {
                                 if (target.dataset.dropDownOpened === 'false') {
                                     $(`#${target.id}`).attr('data-drop-down-opened', 'true');
                                     $(`#dropDownData-${targetsss}`).addClass('hide');
@@ -83913,7 +84224,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     $(`#${target.parentElement.parentElement.id}`).find(`.dilog-task-end`).removeClass('hide');
                                 }
                             }
-                            if (isShowHistoryEnable) {
+                            if (isShowHistoryEnable || isShowHistoryEnableForMyBot) {
                                 let a = $(`.history #dropDownData-${targetsss}`);
                                 let b = $(`.history #addRemoveDropDown-${targetsss}`).find('.show-history-feedback ');
                                 a.each(function (i, ele) {
@@ -84048,6 +84359,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                 function userTabActive() {
                     $("#historyData").addClass('hide');
+                    $("#historyDataForMyBot").addClass('hide');
+                    isShowHistoryEnable = false;
                     console.log('-----> User Automation Tab Active State <-----');
                     document.getElementById(`history-details-btn`).classList.remove('hide');
                     $('.show-back-recommendation-block').addClass('hide');
@@ -84092,6 +84405,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         $("#historyData").addClass('hide');
                         isShowHistoryEnable = false;
                     }
+                    if (isShowHistoryEnableForMyBot) {
+                        $("#historyDataForMyBot").addClass('hide');
+                        isShowHistoryEnableForMyBot = false;
+                    }
                     $('.show-back-recommendation-block').addClass('hide');
                     if (searchedVal?.length > 0) {
                         $('#librarySearch').val(searchedVal);
@@ -84120,6 +84437,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         $("#historyData").addClass('hide');
                         isShowHistoryEnable = false;
                     }
+                    isShowHistoryEnableForMyBot = false;
+                    $("#historyDataForMyBot").addClass('hide');
                     $('.show-back-recommendation-block').addClass('hide');
                     console.log('-----> Agent Automation Tab Active State <-----')
                     document.getElementById(`userAutoIcon`).classList.remove(`active-tab`);
@@ -84138,6 +84457,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     if (!isAutomationOnGoing && noAutomationrunninginMyBot) {
                         $('#noAutoRunning').removeClass('hide');
                     }
+                    let automationSuggestions = $('#agentAutoContainer .dialog-task-accordiaon-info');
+                    if (automationSuggestions.length >= 1) {
+                        automationSuggestions[automationSuggestions.length - 1].classList.remove('hide');
+                    }
 
                 }
 
@@ -84145,6 +84468,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     if (isShowHistoryEnable) {
                         $("#historyData").addClass('hide');
                         isShowHistoryEnable = false;
+                    }
+                    if (isShowHistoryEnableForMyBot) {
+                        $("#historyDataForMyBot").addClass('hide');
+                        isShowHistoryEnableForMyBot = false;
                     }
                     $('#dynamicBlock .show-back-recommendation-block').addClass('hide');
                     console.log('-----> Transcription Tab Active State <-----')
@@ -84415,7 +84742,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         </div>
                     </div>
                 </div>
-
+                <div class="dynamic-block-content history hide" id="historyDataForMyBot" style='top: -46px;'></div>
                 <div class="transcipt-only-calls-data hide" id="scriptContainer">
                 <div class="data-contnet"></div>
                 </div>
