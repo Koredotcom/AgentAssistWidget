@@ -81622,6 +81622,7 @@ var jwtToken,isCallConversation;
 var entitiestValueArray;
 var previousEntitiesValue;
 var isRetore = false;
+var convosId;
 function koreGenerateUUID() {
     console.info("generating UUID");
     var d = new Date().getTime();
@@ -81655,6 +81656,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
     } catch (err) {
         console.log(err);
     }
+
     var webSocketConnection = {
         "path": "/agentassist/api/v1/chat/", transports: ['websocket', 'polling', 'flashsocket']
     };
@@ -81676,6 +81678,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
         callSts(jsonData)
 
     } else if (connectionDetails.jwtToken) {
+        console.log('Conversation Details: ',connectionDetails);
         jwtToken = connectionDetails.jwtToken;
         grantCall(connectionDetails.jwtToken, _botId, connectionDetails.envinormentUrl);
     } else {
@@ -81735,6 +81738,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             data: JSON.stringify(payload),
             dataType: "json",
             success: function (result) {
+                if(sessionStorage.getItem('agentAssistState') == null) {
+                    sessionStorage.setItem('agentAssistState', '{}');
+                }
                 chatConfig = window.KoreSDK.chatConfig;
                 var koreBot = koreBotChat();
                 AgentChatInitialize = new koreBot.chatWindow(chatConfig);
@@ -81748,6 +81754,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
                 var _agentAssistDataObj = this;
                 var publicAPIs = {};
+                $(`#${containerId}`).attr('id', `userIDs-${_conversationId}`);
 
                 publicAPIs.botId = _agentAssistDataObj.botId = _botId;
                 publicAPIs.containerId = _agentAssistDataObj.containerId = containerId;
@@ -82959,7 +82966,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             document.getElementById('scriptContainer').classList.add('hide');
 
                             let libSearch =$('#librarySearch').val(agentSearchVal);
-                            console.log('searched Val');
                             if(libSearch.length > 0) {
                                 $('#cancelLibrarySearch').removeClass('hide');
                             } else {
@@ -84568,7 +84574,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     if (e.target.id == 'librarySearch' || e.target.id == 'agentSearch') {
                         var input_taker = document.getElementById('librarySearch').value;
                         var agent_search = document.getElementById('agentSearch').value;
-                        console.log('searched Val', input_taker, agent_search);
                         if(input_taker.length > 0) {
                             $('#cancelLibrarySearch').removeClass('hide');
                         } else {
@@ -84656,6 +84661,45 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             }
         });
     }
+
+    
+    let userIds;
+    userIds = _conversationId;
+    window.onbeforeunload= function(){
+        let old_users = {};
+        console.log('conversation Details: ');
+        old_users = JSON.parse(sessionStorage.getItem('agentAssistState'));
+        debugger
+        old_users[userIds]=$(`#userIDs-${userIds}`).html();
+        debugger
+        sessionStorage.setItem('agentAssistState', JSON.stringify(old_users));    
+        console.log('conversation Details: ', sessionStorage);         
+    }
+
+    $(document).ready(function(){
+        let result = JSON.parse(sessionStorage.getItem('agentAssistState'));
+        for(let res in result){
+            // let splitRess = res.split('_');
+            let bodyContainer = $(`#userIDs-${res}`);
+
+            if(splitRess[0]==(userIds)){
+                bodyContainer.html(result[res]);
+                var hasVerticalScrollbar = $('.agent-assist-chat-container').scrollHeight - 3 > $('.agent-assist-chat-container').clientHeight;
+                if(!hasVerticalScrollbar){
+                var KRPerfectScrollbar;
+                if(window.PerfectScrollbar && typeof PerfectScrollbar ==='function'){
+                KRPerfectScrollbar=window.PerfectScrollbar;
+                }
+                new KRPerfectScrollbar($('.agent-assist-chat-container').find('.body-data-container').get(0), {
+                    suppressScrollX: true
+                });
+                }
+
+            } 
+        }
+    });
+
+
 
     function createAgentAssistContainer(containerId, conversationId, botId, connectionDetails) {
         console.log("AgentAssist >>> finding container ", containerId);
