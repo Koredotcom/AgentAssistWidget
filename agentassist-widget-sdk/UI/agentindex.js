@@ -1221,7 +1221,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                            </div>
                            </div>
                        </div>
-            `;
+            `;           
+                        let msgStringify = JSON.stringify(_msgsResponse);
                         let tellToUserHtml = `
             <div class="steps-run-data">
                            <div class="icon_block">
@@ -1232,7 +1233,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                            <div class="agent-utt">
                                <div class="title-data" ><ul class="chat-container" id="displayData-${uuids}"></ul></div>
                                <div class="action-links">
-                                   <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data='${JSON.stringify(_msgsResponse)}'>Send</button>
+                                   <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data='${msgStringify}'>Send</button>
                                    <div class="copy-btn hide" data-msg-id="${uuids}">
                                        <i class="ast-copy" data-msg-id="${uuids}"></i>
                                    </div>
