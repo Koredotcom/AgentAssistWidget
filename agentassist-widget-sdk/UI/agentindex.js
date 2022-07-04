@@ -149,8 +149,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             data: JSON.stringify(payload),
             dataType: "json",
             success: function (result) {
-                if(sessionStorage.getItem('agentAssistState') == null) {
-                    sessionStorage.setItem('agentAssistState', '{}');
+                if(localStorage.getItem('agentAssistState') == null) {
+                    localStorage.setItem('agentAssistState', '{}');
                 }
                 chatConfig = window.KoreSDK.chatConfig;
                 var koreBot = koreBotChat();
@@ -3182,16 +3182,16 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
     window.onbeforeunload= function(){
         let old_users = {};
         console.log('conversation Details: ');
-        old_users = JSON.parse(sessionStorage.getItem('agentAssistState'));
+        old_users = JSON.parse(localStorage.getItem('agentAssistState'));
         debugger
         old_users[userIds]=$(`#userIDs-${userIds}`).html();
         debugger
-        sessionStorage.setItem('agentAssistState', JSON.stringify(old_users));    
-        console.log('conversation Details: ', sessionStorage);         
+        localStorage.setItem('agentAssistState', JSON.stringify(old_users));    
+        console.log('conversation Details: ', localStorage);         
     }
 
     $(document).ready(function(){
-        let result = JSON.parse(sessionStorage.getItem('agentAssistState'));
+        let result = JSON.parse(localStorage.getItem('agentAssistState'));
         for(let res in result){
             // let splitRess = res.split('_');
             let bodyContainer = $(`#userIDs-${res}`);
