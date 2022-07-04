@@ -352,7 +352,8 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
 
   proceedBackup(cb) {
     const params = {
-      streamId: this.selectedBot
+      streamId: this.selectedBot,
+      'isAgentAssist':true
     };
     const self = this;
     let payload = {
@@ -457,7 +458,7 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
         self.selectedBt = selectedBotDetails.name;
       }
 
-      selectedBotDetails.instanceBotId = this.authService.smartAssistBots.map(x=>x._id);
+      selectedBotDetails.streamId = self.selectedBot;      
       self.service.invoke('post.convertbot', {}, selectedBotDetails)
           .subscribe(res=>{
             self.getConvStatus(res._id);
