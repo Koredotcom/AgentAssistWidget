@@ -1204,6 +1204,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         _msgsResponse.message.push(body);
                     });
                     if (dropdownHeaderUuids && data.buttons && !data.value.includes('Customer has waited')) {
+                        let msgStringify = JSON.stringify(_msgsResponse);
+                        let newTemp = encodeURI(msgStringify);
                         $(`#overRideBtn-${dropdownHeaderUuids}`).removeClass('hide');
                         $(`#cancelOverRideBtn-${dropdownHeaderUuids}`).addClass('hide');
                         $("#inputFieldForAgent").remove();
@@ -1218,7 +1220,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                            <div class="agent-utt">
                                <div class="title-data"><ul class="chat-container" id="displayData-${uuids}"></ul></div>
                                <div class="action-links">
-                                   <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}">Send</button>
+                                   <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data="${newTemp}">Send</button>
                                    <div class="copy-btn hide" data-msg-id="${uuids}">
                                        <i class="ast-copy" data-msg-id="${uuids}"></i>
                                    </div>
@@ -1227,8 +1229,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                            </div>
                        </div>
             `;           
-                        let msgStringify = JSON.stringify(_msgsResponse);
-                        let newTemp = encodeURI(msgStringify);
+                        
                         let tellToUserHtml = `
             <div class="steps-run-data">
                            <div class="icon_block">
