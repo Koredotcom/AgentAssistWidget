@@ -2511,3 +2511,171 @@ border: 1px solid transparent !important;
     line-height: 20px;
     color: var(--default-white-color);
 }
+
+.collapse-acc-data {
+    padding: 5px 30px 0px 8px;
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+.collapse-acc-data::before {
+    content: "";
+    position: absolute;
+    border-left: 1px solid var(--border-color);
+    height: 100%;
+    top: 0;
+    left: 16px;
+}
+.collapse-acc-data .steps-run-data {
+    margin: 10px 0;
+    padding-left: 28px;
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+.collapse-acc-data .steps-run-data .icon_block {
+    position: absolute;
+    left: 0;
+    width: 16px;
+    height: 16px;
+    background: var(--theme-color);
+    border-radius: 100%;
+    font-size: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--default-white-color);
+}
+.collapse-acc-data .steps-run-data .icon_block_img {
+    position: absolute;
+    left: 0;
+    width: 16px;
+    height: 16px;
+    border-radius: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--default-white-color);
+    flex-shrink: 0;
+}
+.collapse-acc-data .steps-run-data .icon_block_img img {
+    width: 16px;
+    height: 16px;
+    border-radius: 100%;
+}
+.collapse-acc-data .steps-run-data .run-info-content {
+    display: inline-block;
+    width: 100%;
+}
+.collapse-acc-data .steps-run-data .run-info-content .title {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 15px;
+    color: var(--default-text-color);
+    margin-bottom: 8px;
+}
+.collapse-acc-data .steps-run-data .run-info-content .agent-utt {
+    background: linear-gradient(0deg,var(--default-white-color),var(--default-white-color)), var(--bg-hover-tabs-color);
+    border-radius: 10px 5px 10px 10px;
+    padding: 8px 15px;
+    position: relative;
+    transition: 0.2s all ease;
+    margin: 0 0 8px 0;
+}
+
+.collapse-acc-data .steps-run-data .run-info-content .agent-utt.enter-details-block{
+    background: var(--bg-color-containers);
+    border: 1px dashed var(--color-grey-text);
+    border-radius: 8px;
+}
+
+.collapse-acc-data .steps-run-data .run-info-content .agent-utt.enter-details-block .title-data .input-text{
+background: var(--default-white-color);
+border: 1px solid transparent;
+height: 25px;
+border-radius: 4px;
+}
+.collapse-acc-data .steps-run-data .run-info-content .agent-utt.enter-details-block .title-data .input-text:focus{
+box-shadow: none !important;
+outline: none !important;
+border: 1px solid transparent !important;
+}
+.collapse-acc-data .steps-run-data .run-info-content .agent-utt.enter-details-block .title-data .input-text:focus-within{
+box-shadow: none !important;
+outline: none !important;
+border: 1px solid transparent !important;
+}
+.collapse-acc-data .steps-run-data .run-info-content .agent-utt.enter-details-block .title-data .enter-details-title{
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 15px;
+    color: var(--default-text-color2);
+    font-style: normal;
+}
+.collapse-acc-data .steps-run-data .run-info-content .agent-utt:hover .action-links {
+    display: flex;
+}
+.collapse-acc-data .steps-run-data .run-info-content .agent-utt .title-data {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 15px;
+    color: var(--default-text-color);
+    font-style: italic;
+}
+.collapse-acc-data .steps-run-data .run-info-content .agent-utt .title-data li{
+    margin: 0 !important;
+}
+.collapse-acc-data .steps-run-data .run-info-content .agent-utt .action-links {
+    display: none;
+    align-items: center;
+    justify-content: flex-end;
+    flex-shrink: 0;
+    position: absolute;
+    right: 8px;
+    top: 3px;
+    border-radius: 0px 8px 8px 0px;
+    width: 185px;
+    background: linear-gradient(270deg,var(--default-white-color) 0%,rgba(255,255,255,0.8173) 78.65%,rgba(255,255,255,0) 100%);
+}
+.collapse-acc-data .steps-run-data .run-info-content .agent-utt .action-links .send-run-btn {
+    border: 0;
+    background: var(--theme-color);
+    box-shadow: 0px 2px 8px rgba(0,0,0,0.05);
+    border-radius: 5px;
+    outline: 0;
+    font-weight: 700;
+    font-size: 9px;
+    line-height: 12px;
+    color: var(--default-white-color);
+    height: 24px;
+    cursor: pointer;
+    padding: 3px 10px;
+    text-transform: uppercase;
+}
+.collapse-acc-data .steps-run-data .run-info-content .agent-utt .action-links .copy-btn {
+    background: var(--bg-color-containers);
+    box-shadow: 0px 2px 8px rgba(0,0,0,0.05);
+    border-radius: 5px;
+    width: 24px;
+    height: 24px;
+    color: var(--default-text-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    margin-left: 6px;
+    cursor: pointer;
+}
+.collapse-acc-data .steps-run-data .run-info-content .order-number-info {
+    background: var(--bg-hover-tabs-color);
+    border: 1px dashed var(--color-grey-text);
+    box-sizing: border-box;
+    border-radius: 8px;
+    margin: 0 0 8px 0;
+    display: inline-flex;
+    padding: 10px;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 15px;
+    color: var(--default-text-color2);
+}
