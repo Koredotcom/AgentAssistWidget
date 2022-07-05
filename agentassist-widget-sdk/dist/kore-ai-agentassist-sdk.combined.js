@@ -81753,7 +81753,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
                 var _agentAssistDataObj = this;
                 var publicAPIs = {};
-               // $(`#${containerId}`).attr('id', `userIDs-${_conversationId}`);
 
                 publicAPIs.botId = _agentAssistDataObj.botId = _botId;
                 publicAPIs.containerId = _agentAssistDataObj.containerId = containerId;
@@ -82307,10 +82306,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         if (data.type === 'text' && data.suggestions) {
                             data.suggestions.faqs.forEach((ele) => {
                                 if(currentTabActive == 'searchAutoIcon'){
-                                    let faqAnswerSendMsg =  $(`#search-text-display #faqDiv-${answerPlaceableID.split('-')[1]}`).find("[id='${sendMsg}']");
+                                    let faqAnswerSendMsg =  $(`#search-text-display #faqDivLib-${answerPlaceableID.split('-')[1]}`).find("[id='sendMsg']");
                                     $(faqAnswerSendMsg).attr('data-msg-data',ele.answer)
                                 }else{
-                                    let faqAnswerSendMsg =  $(`#overLaySearch #faqDiv-${answerPlaceableID.split('-')[1]}`).find("[id='${sendMsg}']");
+                                    let faqAnswerSendMsg =  $(`#overLaySearch #faqDivLib-${answerPlaceableID.split('-')[1]}`).find("[id='sendMsg']");
                                     $(faqAnswerSendMsg).attr('data-msg-data',ele.answer)
                                 }
                                 
@@ -82744,7 +82743,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     } else {
                         if (data.type === 'text' && data.suggestions) {
                             data.suggestions.faqs.forEach((ele) => {
-                               let faqAnswerSendMsg =  $(`#faqDiv-${answerPlaceableID.split('-')[1]}`).find("[id='${sendMsg}']");
+                               let faqAnswerSendMsg =  $(`#faqDiv-${answerPlaceableID.split('-')[1]}`).find("[id='sendMsg']");
                                $(faqAnswerSendMsg).attr('data-msg-data',ele.answer)
                                 $(`#${answerPlaceableID}`).html(ele.answer);
                                 $(`#${answerPlaceableID}`).attr('data-answer-render', 'true');
@@ -82883,7 +82882,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     welcomeMsgdiv.append(welcomeMsgHtml);
                                     let runInfoDivOfwelcome = $(`#welcomeMsg .run-info-content`);
                                     let contentHtml = `
-                                <div class="title">Tell Customer</div>
+                                <div class="title">Customer has waited for an agent for few seconds.<br/>Here are some appropriate opening lines.</div>
                             <div class="agent-utt">
                                 <div class="title-data" id="displayData-${uuids}">${ele.value}</div>
                                 <div class="action-links">

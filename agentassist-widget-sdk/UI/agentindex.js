@@ -1294,7 +1294,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     welcomeMsgdiv.append(welcomeMsgHtml);
                                     let runInfoDivOfwelcome = $(`#welcomeMsg .run-info-content`);
                                     let contentHtml = `
-                                <div class="title">Tell Customer</div>
+                                <div class="title">Customer has waited for an agent for few seconds.<br/>Here are some appropriate opening lines.</div>
                             <div class="agent-utt">
                                 <div class="title-data" id="displayData-${uuids}">${ele.value}</div>
                                 <div class="action-links">
