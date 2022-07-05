@@ -81753,7 +81753,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
                 var _agentAssistDataObj = this;
                 var publicAPIs = {};
-                $(`#${containerId}`).attr('id', `userIDs-${_conversationId}`);
 
                 publicAPIs.botId = _agentAssistDataObj.botId = _botId;
                 publicAPIs.containerId = _agentAssistDataObj.containerId = containerId;
@@ -82284,7 +82283,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 } else {
                                     let a = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display #faqDivLib-${index}`) : $(`#overLaySearch #faqDivLib-${index}`);
                                     let faqActionHtml = `<div class="action-links">
-                            <button class="send-run-btn" id="sendMsg" data-msg-id="${index}">Send</button>
+                            <button class="send-run-btn" id="sendMsg" data-msg-id="${index}"  data-msg-data="${ele.answer}">Send</button>
                             <div class="copy-btn" data-msg-id="${index}">
                                 <i class="ast-copy" data-msg-id="${index}"></i>
                             </div>
@@ -82306,6 +82305,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     } else {
                         if (data.type === 'text' && data.suggestions) {
                             data.suggestions.faqs.forEach((ele) => {
+                                if(currentTabActive == 'searchAutoIcon'){
+                                    let faqAnswerSendMsg =  $(`#search-text-display #faqDivLib-${answerPlaceableID.split('-')[1]}`).find("[id='sendMsg']");
+                                    $(faqAnswerSendMsg).attr('data-msg-data',ele.answer)
+                                }else{
+                                    let faqAnswerSendMsg =  $(`#overLaySearch #faqDivLib-${answerPlaceableID.split('-')[1]}`).find("[id='sendMsg']");
+                                    $(faqAnswerSendMsg).attr('data-msg-data',ele.answer)
+                                }
+                                
                                 $(`${currentTabActive == 'searchAutoIcon' ? `#search-text-display #${answerPlaceableID}` : `#overLaySearch #${answerPlaceableID}`}`).html(ele.answer);
                                 $(`${currentTabActive == 'searchAutoIcon' ? `#search-text-display #${answerPlaceableID}` : `#overLaySearch #${answerPlaceableID}`}`).attr('data-answer-render', 'true');
                                 if ((ele.question?.length + ele.answer?.length) > 70) {
@@ -82416,6 +82423,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         //  _msgsResponse.message.push(body);
                     }
                     if (data.buttons && !data.value.includes('Customer has waited')) {
+                        let sendMsgData = encodeURI(JSON.stringify(_msgsResponse));
                         let runInfoContent = $(`#dropDownData-${myBotDropdownHeaderUuids}`);
                         let askToUserHtml = `
             <div class="steps-run-data">
@@ -82427,8 +82435,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                            <div class="agent-utt">
                                <div class="title-data text-truncate"><ul class="chat-container" id="displayData-${myBotuuids}"></ul></div>
                                <div class="action-links">
-                                   <button class="send-run-btn" id="sendMsg" data-msg-id="${myBotuuids}">Send</button>
-                                   <div class="copy-btn" data-msg-id="${myBotuuids}">
+                                   <button class="send-run-btn" id="sendMsg" data-msg-id="${myBotuuids}" data-msg-data="${sendMsgData}">Send</button>
+                                   <div class="copy-btn hide" data-msg-id="${myBotuuids}">
                                        <i class="ast-copy" data-msg-id="${myBotuuids}"></i>
                                    </div>
                                </div>
@@ -82446,8 +82454,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                            <div class="agent-utt">
                                <div class="title-data" ><ul class="chat-container" id="displayData-${myBotuuids}"></ul></div>
                                <div class="action-links">
-                                   <button class="send-run-btn" id="sendMsg" data-msg-id="${myBotuuids}">Send</button>
-                                   <div class="copy-btn" data-msg-id="${myBotuuids}">
+                                   <button class="send-run-btn" id="sendMsg" data-msg-id="${myBotuuids}" data-msg-data="${sendMsgData}">Send</button>
+                                   <div class="copy-btn hide" data-msg-id="${myBotuuids}">
                                        <i class="ast-copy" data-msg-id="${myBotuuids}"></i>
                                    </div>
                                </div>
@@ -82474,6 +82482,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             runInfoContent.append(agentInputToBotHtml);
                         } else {
                             runInfoContent.append(tellToUserHtml);
+                        }
+                        if (!parsedPayload) {
+                            $(runInfoContent).find('.copy-btn').removeClass('hide');
                         }
                     }
                     AgentChatInitialize.renderMessage(_msgsResponse, myBotuuids, `dropDownData-${myBotDropdownHeaderUuids}`);
@@ -82711,7 +82722,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 } else {
                                     let a = $(`#faqDiv-${index}`);
                                     let faqActionHtml = `<div class="action-links">
-                        <button class="send-run-btn" id="sendMsg" data-msg-id="${index}">Send</button>
+                        <button class="send-run-btn" id="sendMsg" data-msg-id="${index}" data-msg-data="${ele.answer}">Send</button>
                         <div class="copy-btn" data-msg-id="${index}">
                             <i class="ast-copy" data-msg-id="${index}"></i>
                         </div>
@@ -82732,6 +82743,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     } else {
                         if (data.type === 'text' && data.suggestions) {
                             data.suggestions.faqs.forEach((ele) => {
+                               let faqAnswerSendMsg =  $(`#faqDiv-${answerPlaceableID.split('-')[1]}`).find("[id='sendMsg']");
+                               $(faqAnswerSendMsg).attr('data-msg-data',ele.answer)
                                 $(`#${answerPlaceableID}`).html(ele.answer);
                                 $(`#${answerPlaceableID}`).attr('data-answer-render', 'true');
                                 if ((ele.question?.length + ele.answer?.length) > 70) {
@@ -82869,7 +82882,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     welcomeMsgdiv.append(welcomeMsgHtml);
                                     let runInfoDivOfwelcome = $(`#welcomeMsg .run-info-content`);
                                     let contentHtml = `
-                                <div class="title">Tell Customer</div>
+                                <div class="title">Customer has waited for an agent for few seconds.<br/>Here are some appropriate opening lines.</div>
                             <div class="agent-utt">
                                 <div class="title-data" id="displayData-${uuids}">${ele.value}</div>
                                 <div class="action-links">
@@ -83345,7 +83358,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                             } else {
                                                                 let a = $(`#faqDiv-${uniqueID}`);
                                                                 let faqActionHtml = `<div class="action-links">
-                                                <button class="send-run-btn" id="sendMsg" data-msg-id="${uniqueID}">Send</button>
+                                                <button class="send-run-btn" id="sendMsg" data-msg-id="${uniqueID}"  data-msg-data="${ele.answer}">Send</button>
                                                 <div class="copy-btn" data-msg-id="${uniqueID}">
                                                     <i class="ast-copy" data-msg-id="${uniqueID}"></i>
                                                 </div>
@@ -84197,7 +84210,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         <i class="ast-agent"></i>
                     </div>
                     <div class="run-info-content">
-                    <div class="title">Input</div>
+                    <div class="title">Input ovrridden. Please provide the input</div>
                     <div class="agent-utt enter-details-block">
                     <div class="title-data" ><span class="enter-details-title">EnterDetails: </span>
                     <input type="text" placeholder="Enter Value" class="input-text chat-container" id="agentInput-${Math.floor(Math.random() * 100)}" data-conv-id="${_agentAssistDataObj.conversationId}" data-bot-id="${_botId}"  data-mybot-input="true">
@@ -84235,7 +84248,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 let answerHtml = `<div class="desc-text" id="desc-${latestId}"></div>`
                                 let faqDiv = $(`#faqDiv-${latestId}`);
                                 let faqaction = `<div class="action-links">
-                    <button class="send-run-btn" id="sendMsg" data-msg-id="${latestId}">Send</button>
+                    <button class="send-run-btn" id="sendMsg" data-msg-id="${latestId}"  data-msg-data="">Send</button>
                     <div class="copy-btn" data-msg-id="${latestId}">
                         <i class="ast-copy" data-msg-id="${latestId}"></i>
                     </div>
@@ -84269,7 +84282,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 let answerHtml = `<div class="desc-text" id="descLib-${id}"></div>`
                                 let faqDiv = $(`#overLaySearch #faqDivLib-${id}`);
                                 let faqaction = `<div class="action-links">
-                    <button class="send-run-btn" id="sendMsg data-msg-id="${id}"">Send</button>
+                    <button class="send-run-btn" id="sendMsg" data-msg-id="${id}"  data-msg-data="">Send</button>
                     <div class="copy-btn" data-msg-id="${id}">
                         <i class="ast-copy" data-msg-id="${id}"></i>
                     </div>
@@ -84288,7 +84301,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 let answerHtml = `<div class="desc-text" id="descLib-${id}"></div>`
                                 let faqDiv = $(`#search-text-display #faqDivLib-${id}`);
                                 let faqaction = `<div class="action-links">
-                    <button class="send-run-btn" id="sendMsg" data-msg-id="${id}">Send</button>
+                    <button class="send-run-btn" id="sendMsg" data-msg-id="${id}"  data-msg-data="">Send</button>
                     <div class="copy-btn" data-msg-id="${id}">
                         <i class="ast-copy" data-msg-id="${id}"></i>
                     </div>
