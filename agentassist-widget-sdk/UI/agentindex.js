@@ -720,12 +720,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 if(currentTabActive == 'searchAutoIcon'){
                                     let faqAnswerSendMsg =  $(`#search-text-display #faqDivLib-${answerPlaceableID.split('-')[1]}`).find("[id='sendMsg']");
                                     $(faqAnswerSendMsg).attr('data-msg-data',ele.answer);
-                                    let faqAnswerCopyMsg =  $(`#search-text-display #faqDivLib-${answerPlaceableID.split('-')[1]}`).find("[class='copy-btn']");
+                                    let faqAnswerCopyMsg =  $(`#search-text-display #faqDivLib-${answerPlaceableID.split('-')[1]}`).find(".copy-btn");
                                     $(faqAnswerCopyMsg).attr('data-msg-data',ele.answer)
                                 }else{
                                     let faqAnswerSendMsg =  $(`#overLaySearch #faqDivLib-${answerPlaceableID.split('-')[1]}`).find("[id='sendMsg']");
                                     $(faqAnswerSendMsg).attr('data-msg-data',ele.answer)
-                                    let faqAnswerCopyMsg =  $(`#search-text-display #faqDivLib-${answerPlaceableID.split('-')[1]}`).find("[class='copy-btn']");
+                                    let faqAnswerCopyMsg =  $(`#overLaySearch #faqDivLib-${answerPlaceableID.split('-')[1]}`).find(".copy-btn");
                                     $(faqAnswerCopyMsg).attr('data-msg-data',ele.answer)
                                 }
                                 
@@ -1161,7 +1161,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             data.suggestions.faqs.forEach((ele) => {
                                let faqAnswerSendMsg =  $(`#faqDiv-${answerPlaceableID.split('-')[1]}`).find("[id='sendMsg']");
                                $(faqAnswerSendMsg).attr('data-msg-data',ele.answer)
-                               let faqAnswerCopyMsg =  $(`#faqDiv-${answerPlaceableID.split('-')[1]}`).find("[class='copy-btn']");
+                               let faqAnswerCopyMsg =  $(`#faqDiv-${answerPlaceableID.split('-')[1]}`).find(".copy-btn");
                                $(faqAnswerCopyMsg).attr('data-msg-data',ele.answer)
                                 $(`#${answerPlaceableID}`).html(ele.answer);
                                 $(`#${answerPlaceableID}`).attr('data-answer-render', 'true');
@@ -1473,7 +1473,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             let ele = document.getElementById(`displayData-${target.dataset.msgId}`) ? document.getElementById(`displayData-${target.dataset.msgId}`) : document.getElementById(target.dataset.msgId);
                             window.parent.postMessage({
                                 method: "copy",
-                                text: target.dataset.msgData && target.dataset.msgData!==''?target.dataset.msgData:ele.innerText
+                                text: target.dataset.msgData && target.dataset.msgData!==''?target.dataset.msgData:(target.parentNode.dataset.msgData && target.parentNode.dataset.msgData!==''?target.parentNode.dataset.msgData:ele.innerText)
                             }, "*")
                         }
                         if (target.className == 'ast-close close-search') {
