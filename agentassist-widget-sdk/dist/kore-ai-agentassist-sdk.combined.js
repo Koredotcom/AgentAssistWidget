@@ -82312,16 +82312,16 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     } else {
                         if (data.type === 'text' && data.suggestions) {
                             data.suggestions.faqs.forEach((ele) => {
-                                if (currentTabActive == 'searchAutoIcon') {
-                                    let faqAnswerSendMsg = $(`#search-text-display #faqDivLib-${answerPlaceableID.split('-')[1]}`).find("[id='sendMsg']");
-                                    $(faqAnswerSendMsg).attr('data-msg-data', ele.answer);
-                                    let faqAnswerCopyMsg = $(`#search-text-display #faqDivLib-${answerPlaceableID.split('-')[1]}`).find("[class='copy-btn']");
-                                    $(faqAnswerCopyMsg).attr('data-msg-data', ele.answer)
-                                } else {
-                                    let faqAnswerSendMsg = $(`#overLaySearch #faqDivLib-${answerPlaceableID.split('-')[1]}`).find("[id='sendMsg']");
-                                    $(faqAnswerSendMsg).attr('data-msg-data', ele.answer)
-                                    let faqAnswerCopyMsg = $(`#search-text-display #faqDivLib-${answerPlaceableID.split('-')[1]}`).find("[class='copy-btn']");
-                                    $(faqAnswerCopyMsg).attr('data-msg-data', ele.answer)
+                                if(currentTabActive == 'searchAutoIcon'){
+                                    let faqAnswerSendMsg =  $(`#search-text-display #faqDivLib-${answerPlaceableID.split('-')[1]}`).find("[id='sendMsg']");
+                                    $(faqAnswerSendMsg).attr('data-msg-data',ele.answer);
+                                    let faqAnswerCopyMsg =  $(`#search-text-display #faqDivLib-${answerPlaceableID.split('-')[1]}`).find(".copy-btn");
+                                    $(faqAnswerCopyMsg).attr('data-msg-data',ele.answer)
+                                }else{
+                                    let faqAnswerSendMsg =  $(`#overLaySearch #faqDivLib-${answerPlaceableID.split('-')[1]}`).find("[id='sendMsg']");
+                                    $(faqAnswerSendMsg).attr('data-msg-data',ele.answer)
+                                    let faqAnswerCopyMsg =  $(`#overLaySearch #faqDivLib-${answerPlaceableID.split('-')[1]}`).find(".copy-btn");
+                                    $(faqAnswerCopyMsg).attr('data-msg-data',ele.answer)
                                 }
 
                                 $(`${currentTabActive == 'searchAutoIcon' ? `#search-text-display #${answerPlaceableID}` : `#overLaySearch #${answerPlaceableID}`}`).html(ele.answer);
@@ -82754,10 +82754,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     } else {
                         if (data.type === 'text' && data.suggestions) {
                             data.suggestions.faqs.forEach((ele) => {
-                                let faqAnswerSendMsg = $(`#faqDiv-${answerPlaceableID.split('-')[1]}`).find("[id='sendMsg']");
-                                $(faqAnswerSendMsg).attr('data-msg-data', ele.answer)
-                                let faqAnswerCopyMsg = $(`#faqDiv-${answerPlaceableID.split('-')[1]}`).find("[class='copy-btn']");
-                                $(faqAnswerCopyMsg).attr('data-msg-data', ele.answer)
+                               let faqAnswerSendMsg =  $(`#faqDiv-${answerPlaceableID.split('-')[1]}`).find("[id='sendMsg']");
+                               $(faqAnswerSendMsg).attr('data-msg-data',ele.answer)
+                               let faqAnswerCopyMsg =  $(`#faqDiv-${answerPlaceableID.split('-')[1]}`).find(".copy-btn");
+                               $(faqAnswerCopyMsg).attr('data-msg-data',ele.answer)
                                 $(`#${answerPlaceableID}`).html(ele.answer);
                                 $(`#${answerPlaceableID}`).attr('data-answer-render', 'true');
                                 if ((ele.question?.length + ele.answer?.length) > 70) {
@@ -83108,7 +83108,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             let ele = document.getElementById(`displayData-${target.dataset.msgId}`) ? document.getElementById(`displayData-${target.dataset.msgId}`) : document.getElementById(target.dataset.msgId);
                             window.parent.postMessage({
                                 method: "copy",
-                                text: target.dataset.msgData && target.dataset.msgData !== '' ? target.dataset.msgData : ele.innerText
+                                text: target.dataset.msgData && target.dataset.msgData!==''?target.dataset.msgData:(target.parentNode.dataset.msgData && target.parentNode.dataset.msgData!==''?target.parentNode.dataset.msgData:ele.innerText)
                             }, "*")
                         }
                         if (target.className == 'ast-close close-search') {
@@ -83750,6 +83750,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     if (JSON.stringify(response) === JSON.stringify(previousResp)) {
                                         $(`#historyDataForMyBot .collapse-acc-data.hide`)[$(`#historyDataForMyBot .collapse-acc-data.hide`).length - 1]?.classList.remove('hide');
                                         $(`#historyDataForMyBot .show-history-feedback.hide`)[$(`#historyDataForMyBot .show-history-feedback.hide`).length - 1]?.classList.remove('hide');
+                                        $(`#historyDataForMyBot .dilog-task-end.hide`)[$(`#historyDataForMyBot .dilog-task-end.hide`).length - 1]?.classList.remove('hide');
 
                                     } else {
                                         let resp = response.length > 0 ? response?.slice(previousResp?.length - 1, response.length) : undefined;
@@ -83806,19 +83807,19 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                                         </div>
                                                                         <div class="feedback-data show-history-feedback hide">
                                                                             <div class="feedbackup-data">
-                                                                                <div class="feedback-icon" id="feedbackup-${res._id}" data-feedbacklike="false" data-conv-id="${_agentAssistDataObj.conversationId}"data-bot-id="${_agentAssistDataObj.botId}" data-feedback="like" data-dialog-name="${res.tN}" data-user-input="${res?.agentAssistDetails?.userInput}">
-                                                                                    <i class="ast-thumbup"></i>
+                                                                                <div class="feedback-icon" id="feedbackup">
+                                                                                    <i class="ast-thumbup" id="feedbackup-${res._id}" data-feedbacklike="false" data-conv-id="${_agentAssistDataObj.conversationId}"data-bot-id="${_agentAssistDataObj.botId}" data-feedback="like" data-dialog-name="${res.tN}" data-user-input="${res?.agentAssistDetails?.userInput}"></i>
                                                                                 </div>
                                                                                 <span class="tootltip-tabs">Like</span>
                                                                             </div>
                                                                             <div class="feedbackdown-data">
-                                                                                <div class="feedback-icon" id="feedbackdown-${res._id}" data-feedbackdislike="false" data-conv-id="${_agentAssistDataObj.conversationId}" data-bot-id="${_agentAssistDataObj.botId}" data-feedback="dislike" data-dialog-name="${res.tN}" data-user-input="${res?.agentAssistDetails?.userInput}">
-                                                                                    <i class="ast-thumbdown"></i>
+                                                                                <div class="feedback-icon" id="feedbackdown">
+                                                                                    <i class="ast-thumbdown" id="feedbackdown-${res._id}" data-feedbackdislike="false" data-conv-id="${_agentAssistDataObj.conversationId}" data-bot-id="${_agentAssistDataObj.botId}" data-feedback="dislike" data-dialog-name="${res.tN}" data-user-input="${res?.agentAssistDetails?.userInput}"></i>
                                                                                 </div>
                                                                                 <span class="tootltip-tabs">Dislike</span>
                                                                             </div>
                                                                         </div>
-                                                                <div class="dilog-task-end" id="endTaks-${res._id}">
+                                                                <div class="dilog-task-end hide" id="endTaks-${res._id}">
                                                                 <div class="text-dialog-task-end">Dialog Task ended</div>     
                                                                             </div>
                                                                         </div>
@@ -83990,7 +83991,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             }
                                             if (index == resp.length - 1 || index == 0) {
                                                 $(`#historyDataForMyBot .collapse-acc-data.hide`)[$(`#historyDataForMyBot .collapse-acc-data.hide`).length - 1]?.classList.remove('hide');
-                                                $(`#historyDataForMyBot .show-history-feedback.hide`)[$(`#historyDataForMyBot .show-history-feedback.hide`).length - 1]?.classList.remove('hide');
                                             }
                                         });
                                     }
