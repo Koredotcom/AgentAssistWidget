@@ -277,6 +277,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     $('#transcriptIcon').removeClass('hide');
                     transcriptionTabActive();
                 }
+                updateUIState(_conversationId, isCallConversation);
 
                 // var agent_menu_request = {
                 //     "botId": _agentAssistDataObj.botId,
@@ -349,6 +350,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
                     }
                     AgentChatInitialize.renderMessage(_msgsResponse);
+                    // HtmlRenderMethod(_convId, _msgsResponse) {}
+                    // setTimeout(() => {
+                    //     // store HTML
+                    // }, 500)
+                    // 
                 }
 
                 $('body').bind('mousedown keydown', function (event) {
@@ -1437,6 +1443,46 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }
                 }
 
+                function updateUIState(_convId, _isCallConv) {
+                    var appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                    var appState = JSON.parse(appStateStr);
+                    var convState = appState[_convId] || {};
+                    if(!appState[_convId]) {
+                        convState=appState[_convId] = {}
+                        if(_isCallConv) {
+                            convState.currentTab = 'transcriptTab';
+                        } else {
+                            convState.currentTab = 'assistTab';
+                        }
+                    }
+                    if (convState.currentTab == 'librarySearch') {
+                        libraryTabActive();
+                    }
+                    else if (convState.currentTab == 'myBotTab') {  
+                        agentTabActive();
+                    }
+                    else if (convState.currentTab == 'transcriptTab') {
+                        transcriptionTabActive();
+            
+                    }
+                    else if (convState.currentTab == 'assistTab') {
+                        userTabActive();
+                    }
+                    updateCurrentTabInState(_convId,  convState.currentTab)
+            
+                }
+
+                function updateCurrentTabInState(convosId, currentTab) {
+                    var appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                    var appState = JSON.parse(appStateStr);
+                    var convState = appState[convosId] || {};
+                    if(!appState[convosId]) {
+                        convState=appState[convosId] = {}
+                    }
+                    convState.currentTab = currentTab;
+                    localStorage.setItem('agentAssistState', JSON.stringify(appState));
+                }
+
                 function btnInit() {
                     document.addEventListener("click", (evt) => {
                         var target = evt.target;
@@ -1568,16 +1614,20 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                         if (target.id === `searchAutoIcon` || target.id === `searchIcon` || target.id === `LibraryLabel`) {
                             data = _agentAssistDataObj
+                            updateCurrentTabInState(_conversationId,'librarySearch')
                             libraryTabActive();
                         }
                         else if (target.id === `agentAutoIcon` || target.id === `agentBotIcon` || target.id === `MybotLabel`) {
+                            updateCurrentTabInState(_conversationId,'myBotTab')
                             agentTabActive();
                         }
                         else if (target.id === `transcriptIcon` || target.id === `scriptIcon` || target.id === `transcriptLabel`) {
+                            updateCurrentTabInState(_conversationId,'transcriptTab')
                             transcriptionTabActive();
 
                         }
-                        if (target.id === `userAutoIcon` || target.id === `userBotIcon` || target.id === `AssistLabel`) {
+                        else if (target.id === `userAutoIcon` || target.id === `userBotIcon` || target.id === `AssistLabel`) {
+                            updateCurrentTabInState(_conversationId,'assistTab')
                             userTabActive();
 
                         }
