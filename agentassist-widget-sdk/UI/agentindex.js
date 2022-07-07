@@ -696,8 +696,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     let a = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display #faqDivLib-${index}`) : $(`#overLaySearch #faqDivLib-${index}`);
                                     let faqActionHtml = `<div class="action-links">
                             <button class="send-run-btn" id="sendMsg" data-msg-id="${index}"  data-msg-data="${ele.answer}">Send</button>
-                            <div class="copy-btn" data-msg-id="${index}">
-                                <i class="ast-copy" data-msg-id="${index}"></i>
+                            <div class="copy-btn" data-msg-id="${index}" data-msg-data='${ele.answer}'>
+                                <i class="ast-copy" data-msg-id="${index}" data-msg-data='${ele.answer}'></i>
                             </div>
                         </div>`;
                                     a.append(faqActionHtml);
@@ -719,10 +719,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             data.suggestions.faqs.forEach((ele) => {
                                 if(currentTabActive == 'searchAutoIcon'){
                                     let faqAnswerSendMsg =  $(`#search-text-display #faqDivLib-${answerPlaceableID.split('-')[1]}`).find("[id='sendMsg']");
-                                    $(faqAnswerSendMsg).attr('data-msg-data',ele.answer)
+                                    $(faqAnswerSendMsg).attr('data-msg-data',ele.answer);
+                                    let faqAnswerCopyMsg =  $(`#search-text-display #faqDivLib-${answerPlaceableID.split('-')[1]}`).find("[class='copy-btn']");
+                                    $(faqAnswerCopyMsg).attr('data-msg-data',ele.answer)
                                 }else{
                                     let faqAnswerSendMsg =  $(`#overLaySearch #faqDivLib-${answerPlaceableID.split('-')[1]}`).find("[id='sendMsg']");
                                     $(faqAnswerSendMsg).attr('data-msg-data',ele.answer)
+                                    let faqAnswerCopyMsg =  $(`#search-text-display #faqDivLib-${answerPlaceableID.split('-')[1]}`).find("[class='copy-btn']");
+                                    $(faqAnswerCopyMsg).attr('data-msg-data',ele.answer)
                                 }
                                 
                                 $(`${currentTabActive == 'searchAutoIcon' ? `#search-text-display #${answerPlaceableID}` : `#overLaySearch #${answerPlaceableID}`}`).html(ele.answer);
@@ -1135,8 +1139,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     let a = $(`#faqDiv-${index}`);
                                     let faqActionHtml = `<div class="action-links">
                         <button class="send-run-btn" id="sendMsg" data-msg-id="${index}" data-msg-data="${ele.answer}">Send</button>
-                        <div class="copy-btn" data-msg-id="${index}">
-                            <i class="ast-copy" data-msg-id="${index}"></i>
+                        <div class="copy-btn" data-msg-id="${index}" data-msg-data="${ele.answer}">
+                            <i class="ast-copy" data-msg-id="${index}" data-msg-data="${ele.answer}"></i>
                         </div>
                     </div>`;
                                     a.append(faqActionHtml);
@@ -1157,6 +1161,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             data.suggestions.faqs.forEach((ele) => {
                                let faqAnswerSendMsg =  $(`#faqDiv-${answerPlaceableID.split('-')[1]}`).find("[id='sendMsg']");
                                $(faqAnswerSendMsg).attr('data-msg-data',ele.answer)
+                               let faqAnswerCopyMsg =  $(`#faqDiv-${answerPlaceableID.split('-')[1]}`).find("[class='copy-btn']");
+                               $(faqAnswerCopyMsg).attr('data-msg-data',ele.answer)
                                 $(`#${answerPlaceableID}`).html(ele.answer);
                                 $(`#${answerPlaceableID}`).attr('data-answer-render', 'true');
                                 if ((ele.question?.length + ele.answer?.length) > 70) {
@@ -1299,8 +1305,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 <div class="title-data" id="displayData-${uuids}">${ele.value}</div>
                                 <div class="action-links">
                                     <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}"  data-msg-data='${ele.value}'>Send</button>
-                                    <div class="copy-btn" data-msg-id="${uuids}">
-                                        <i class="ast-copy" data-msg-id="${uuids}"></i>
+                                    <div class="copy-btn" data-msg-id="${uuids}" data-msg-data="${ele.value}">
+                                        <i class="ast-copy" data-msg-id="${uuids}" data-msg-data="${ele.value}"></i>
                                     </div>
                                 </div>
                             </div>`;
@@ -1312,8 +1318,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 <div class="title-data" id="displayData-${uuids}">${ele.value}</div>
                                 <div class="action-links">
                                     <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}"  data-msg-data='${ele.value}'>Send</button>
-                                    <div class="copy-btn" data-msg-id="${uuids}">
-                                        <i class="ast-copy" data-msg-id="${uuids}"></i>
+                                    <div class="copy-btn" data-msg-id="${uuids}" data-msg-data='${ele.value}'>
+                                        <i class="ast-copy" data-msg-id="${uuids}" data-msg-data='${ele.value}'></i>
                                     </div>
                                 </div>
                             </div>`;
@@ -1331,8 +1337,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                  <div class="title-data" id="displayData-${uuids}">${ele.value}</div>
                                  <div class="action-links">
                                      <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}"  data-msg-data='${ele.value}'>Send</button>
-                                     <div class="copy-btn" data-msg-id="${uuids}">
-                                         <i class="ast-copy" data-msg-id="${uuids}"></i>
+                                     <div class="copy-btn" data-msg-id="${uuids}" data-msg-data='${ele.value}'>
+                                         <i class="ast-copy" data-msg-id="${uuids}" data-msg-data='${ele.value}'></i>
                                      </div>
                                  </div>
                              </div>
@@ -1467,16 +1473,19 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             let ele = document.getElementById(`displayData-${target.dataset.msgId}`) ? document.getElementById(`displayData-${target.dataset.msgId}`) : document.getElementById(target.dataset.msgId);
                             window.parent.postMessage({
                                 method: "copy",
-                                text: ele.innerText
+                                text: target.dataset.msgData && target.dataset.msgData!==''?target.dataset.msgData:ele.innerText
                             }, "*")
                         }
                         if (target.className == 'ast-close close-search') {
                             $('#agentSearch').val('');
                             $('.overlay-suggestions').addClass('hide').removeAttr('style');
                             $('#overLaySearch').html('');
+                            $('#librarySearch').val('');
+                            searchedVal = '';
                         }
 
                         if (target.className == 'show-all') {
+                            $('#frequently-exhaustive').addClass('hide');
                             let showAllClicked = true;
                             previousTabActive = currentTabActive;
                             $(`#${currentTabActive}`).removeClass('active-tab');
@@ -1531,10 +1540,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
 
                         if (target.id == 'backToPreviousTab') {
-
+                            $('#frequently-exhaustive').removeClass('hide');
                             $(`#${currentTabActive}`).removeClass('active-tab');
                             $(`#${previousTabActive}`).addClass('active-tab');
-
+                            $('#searchResults').addClass('hide');
+                            $('#librarySearch').val('');
+                            $('#allAutomations-Exhaustivelist').removeClass('hide');
                             if (previousTabActive == 'agentAutoIcon') {
                                 document.getElementById('agentAutoContainer').classList.remove('hide');
                             } else if (previousTabActive == 'userAutoIcon') {
@@ -1659,6 +1670,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     if (JSON.stringify(response) === JSON.stringify(previousResp)) {
                                         $(`#historyData .collapse-acc-data.hide`)[$(`#historyData .collapse-acc-data.hide`).length - 1]?.classList.remove('hide');
                                         $(`#historyData .show-history-feedback.hide`)[$(`#historyData .show-history-feedback.hide`).length - 1]?.classList.remove('hide');
+                                        $(`#historyData .dilog-task-end.hide`)[$(`#historyData .dilog-task-end.hide`).length - 1]?.classList.remove('hide');
+                                        
 
                                     } else {
                                         let resp = response.length > 0 ? response?.slice(previousResp?.length - 1, response.length) : undefined;
@@ -1771,8 +1784,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                                 let a = $(`#faqDiv-${uniqueID}`);
                                                                 let faqActionHtml = `<div class="action-links">
                                                 <button class="send-run-btn" id="sendMsg" data-msg-id="${uniqueID}"  data-msg-data="${ele.answer}">Send</button>
-                                                <div class="copy-btn" data-msg-id="${uniqueID}">
-                                                    <i class="ast-copy" data-msg-id="${uniqueID}"></i>
+                                                <div class="copy-btn" data-msg-id="${uniqueID}" data-msg-data='${ele.answer}'>
+                                                    <i class="ast-copy" data-msg-id="${uniqueID}" data-msg-data='${ele.answer}'></i>
                                                 </div>
                                             </div>`;
                                                                 a.append(faqActionHtml);
@@ -1833,19 +1846,19 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                                     </div>
                                                                     <div class="feedback-data show-history-feedback hide">
                                                                         <div class="feedbackup-data">
-                                                                            <div class="feedback-icon" id="feedbackup-${res._id}" data-feedbacklike="false" data-conv-id="${_agentAssistDataObj.conversationId}"data-bot-id="${_agentAssistDataObj.botId}" data-feedback="like" data-dialog-name="${res.tN}" data-user-input="${userIntentInput}">
-                                                                                <i class="ast-thumbup"></i>
+                                                                            <div class="feedback-icon" id="feedbackup">
+                                                                                <i class="ast-thumbup" id="feedbackup-${res._id}" data-feedbacklike="false" data-conv-id="${_agentAssistDataObj.conversationId}"data-bot-id="${_agentAssistDataObj.botId}" data-feedback="like" data-dialog-name="${res.tN}" data-user-input="${res?.agentAssistDetails?.userInput}"></i>
                                                                             </div>
                                                                             <span class="tootltip-tabs">Like</span>
                                                                         </div>
                                                                         <div class="feedbackdown-data">
-                                                                            <div class="feedback-icon" id="feedbackdown-${res._id}" data-feedbackdislike="false" data-conv-id="${_agentAssistDataObj.conversationId}" data-bot-id="${_agentAssistDataObj.botId}" data-feedback="dislike" data-dialog-name="${res.tN}" data-user-input="${userIntentInput}">
-                                                                                <i class="ast-thumbdown"></i>
+                                                                            <div class="feedback-icon" id="feedbackdown">
+                                                                                <i class="ast-thumbdown" id="feedbackdown-${res._id}" data-feedbackdislike="false" data-conv-id="${_agentAssistDataObj.conversationId}" data-bot-id="${_agentAssistDataObj.botId}" data-feedback="dislike" data-dialog-name="${res.tN}" data-user-input="${res?.agentAssistDetails?.userInput}"></i>
                                                                             </div>
                                                                             <span class="tootltip-tabs">Dislike</span>
                                                                         </div>
                                                                     </div>
-                                                            <div class="dilog-task-end" id="endTaks-${res._id}">
+                                                            <div class="dilog-task-end hide" id="endTaks-${res._id}">
                                                             <div class="text-dialog-task-end">Dialog Task ended</div>     
                                                                         </div>
                                                                     </div>
@@ -1991,7 +2004,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                 //             data-conv-id="${_agentAssistDataObj.conversationId}"
                                                 //                     data-bot-id="${_agentAssistDataObj.botId}" data-feedback="like"
                                                 //                     data-dialog-name="${previousTaskName}"
-                                                //                     data-user-input="${userIntentInput}"></i>
+                                                //                     data-user-input="${res.agentAssistDetails.userInput}"></i>
                                                 //         </div>
                                                 //         <div class="feedback-icon" id="feedbackdown">
                                                 //             <i class="ast-thumbdown" id="feedbackdown-${previousId}"
@@ -1999,7 +2012,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                 //             data-conv-id="${_agentAssistDataObj.conversationId}"
                                                 //                     data-bot-id="${_agentAssistDataObj.botId}" data-feedback="dislike"
                                                 //                     data-dialog-name="${previousTaskName}"
-                                                //                     data-user-input="${userIntentInput}"></i>
+                                                //                     data-user-input="${res.agentAssistDetails.userInput}"></i>
                                                 //         </div>
                                                 //    </div>`;
                                                 //                 dropDownData.append(feedbackHtml);
@@ -2017,7 +2030,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             }
                                             if (index == resp.length - 1) {
                                                 $(`#historyData .collapse-acc-data.hide`)[$(`#historyData .collapse-acc-data.hide`).length - 1]?.classList.remove('hide');
-                                                $(`#historyData .show-history-feedback.hide`)[$(`#historyData .show-history-feedback.hide`).length - 1]?.classList.remove('hide');
+                                               // $(`#historyData .show-history-feedback.hide`)[$(`#historyData .show-history-feedback.hide`).length - 1]?.classList.remove('hide');
                                             }
                                         });
                                     }
@@ -2034,7 +2047,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $('.show-history-block').removeClass('hide');
                             $('.show-back-recommendation-block').addClass('hide');
                             $('#historyData').addClass('hide');
-
+                            $('#welcomeMsg').removeClass('hide');
                             let automationSuggestions = $('#dynamicBlock .dialog-task-accordiaon-info');
                             let dialogSpace = document.getElementsByClassName('dialog-task-run-sec hide');
                             let suggestionsLength = $(`#dynamicBlock .dialog-task-run-sec`);
@@ -2154,13 +2167,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                                         </div>
                                                                         <div class="feedback-data show-history-feedback hide">
                                                                             <div class="feedbackup-data">
-                                                                                <div class="feedback-icon" id="feedbackup-${res._id}" data-feedbacklike="false" data-conv-id="${_agentAssistDataObj.conversationId}"data-bot-id="${_agentAssistDataObj.botId}" data-feedback="like" data-dialog-name="${res.tN}" data-user-input="${userIntentInput}">
+                                                                                <div class="feedback-icon" id="feedbackup-${res._id}" data-feedbacklike="false" data-conv-id="${_agentAssistDataObj.conversationId}"data-bot-id="${_agentAssistDataObj.botId}" data-feedback="like" data-dialog-name="${res.tN}" data-user-input="${res?.agentAssistDetails?.userInput}">
                                                                                     <i class="ast-thumbup"></i>
                                                                                 </div>
                                                                                 <span class="tootltip-tabs">Like</span>
                                                                             </div>
                                                                             <div class="feedbackdown-data">
-                                                                                <div class="feedback-icon" id="feedbackdown-${res._id}" data-feedbackdislike="false" data-conv-id="${_agentAssistDataObj.conversationId}" data-bot-id="${_agentAssistDataObj.botId}" data-feedback="dislike" data-dialog-name="${res.tN}" data-user-input="${userIntentInput}">
+                                                                                <div class="feedback-icon" id="feedbackdown-${res._id}" data-feedbackdislike="false" data-conv-id="${_agentAssistDataObj.conversationId}" data-bot-id="${_agentAssistDataObj.botId}" data-feedback="dislike" data-dialog-name="${res.tN}" data-user-input="${res?.agentAssistDetails?.userInput}">
                                                                                     <i class="ast-thumbdown"></i>
                                                                                 </div>
                                                                                 <span class="tootltip-tabs">Dislike</span>
@@ -2312,7 +2325,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                 //             data-conv-id="${_agentAssistDataObj.conversationId}"
                                                 //                     data-bot-id="${_agentAssistDataObj.botId}" data-feedback="like"
                                                 //                     data-dialog-name="${previousTaskName}"
-                                                //                     data-user-input="${userIntentInput}"></i>
+                                                //                     data-user-input="${res.agentAssistDetails.userInput}"></i>
                                                 //         </div>
                                                 //         <div class="feedback-icon" id="feedbackdown">
                                                 //             <i class="ast-thumbdown" id="feedbackdown-${previousId}"
@@ -2320,7 +2333,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                 //             data-conv-id="${_agentAssistDataObj.conversationId}"
                                                 //                     data-bot-id="${_agentAssistDataObj.botId}" data-feedback="dislike"
                                                 //                     data-dialog-name="${previousTaskName}"
-                                                //                     data-user-input="${userIntentInput}"></i>
+                                                //                     data-user-input="${res.agentAssistDetails.userInput}"></i>
                                                 //         </div>
                                                 //    </div>`;
                                                 //                 dropDownData.append(feedbackHtml);
@@ -3198,9 +3211,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
         let old_users = {};
         console.log('conversation Details: ');
         old_users = JSON.parse(localStorage.getItem('agentAssistState'));
-        debugger
         old_users[userIds]=$(`#userIDs-${userIds}`).html();
-        debugger
         localStorage.setItem('agentAssistState', JSON.stringify(old_users));    
         console.log('conversation Details: ', localStorage);         
     }
