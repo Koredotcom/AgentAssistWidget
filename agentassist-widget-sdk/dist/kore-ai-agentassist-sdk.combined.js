@@ -81737,7 +81737,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             data: JSON.stringify(payload),
             dataType: "json",
             success: function (result) {
-                if(localStorage.getItem('agentAssistState') == null) {
+                if (localStorage.getItem('agentAssistState') == null) {
                     localStorage.setItem('agentAssistState', '{}');
                 }
                 chatConfig = window.KoreSDK.chatConfig;
@@ -81753,6 +81753,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
                 var _agentAssistDataObj = this;
                 var publicAPIs = {};
+                $(`#${containerId}`).attr('data-convos-id', `userIDs-${_conversationId}`);
 
                 publicAPIs.botId = _agentAssistDataObj.botId = _botId;
                 publicAPIs.containerId = _agentAssistDataObj.containerId = containerId;
@@ -82305,18 +82306,18 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     } else {
                         if (data.type === 'text' && data.suggestions) {
                             data.suggestions.faqs.forEach((ele) => {
-                                if(currentTabActive == 'searchAutoIcon'){
-                                    let faqAnswerSendMsg =  $(`#search-text-display #faqDivLib-${answerPlaceableID.split('-')[1]}`).find("[id='sendMsg']");
-                                    $(faqAnswerSendMsg).attr('data-msg-data',ele.answer);
-                                    let faqAnswerCopyMsg =  $(`#search-text-display #faqDivLib-${answerPlaceableID.split('-')[1]}`).find("[class='copy-btn']");
-                                    $(faqAnswerCopyMsg).attr('data-msg-data',ele.answer)
-                                }else{
-                                    let faqAnswerSendMsg =  $(`#overLaySearch #faqDivLib-${answerPlaceableID.split('-')[1]}`).find("[id='sendMsg']");
-                                    $(faqAnswerSendMsg).attr('data-msg-data',ele.answer)
-                                    let faqAnswerCopyMsg =  $(`#search-text-display #faqDivLib-${answerPlaceableID.split('-')[1]}`).find("[class='copy-btn']");
-                                    $(faqAnswerCopyMsg).attr('data-msg-data',ele.answer)
+                                if (currentTabActive == 'searchAutoIcon') {
+                                    let faqAnswerSendMsg = $(`#search-text-display #faqDivLib-${answerPlaceableID.split('-')[1]}`).find("[id='sendMsg']");
+                                    $(faqAnswerSendMsg).attr('data-msg-data', ele.answer);
+                                    let faqAnswerCopyMsg = $(`#search-text-display #faqDivLib-${answerPlaceableID.split('-')[1]}`).find("[class='copy-btn']");
+                                    $(faqAnswerCopyMsg).attr('data-msg-data', ele.answer)
+                                } else {
+                                    let faqAnswerSendMsg = $(`#overLaySearch #faqDivLib-${answerPlaceableID.split('-')[1]}`).find("[id='sendMsg']");
+                                    $(faqAnswerSendMsg).attr('data-msg-data', ele.answer)
+                                    let faqAnswerCopyMsg = $(`#search-text-display #faqDivLib-${answerPlaceableID.split('-')[1]}`).find("[class='copy-btn']");
+                                    $(faqAnswerCopyMsg).attr('data-msg-data', ele.answer)
                                 }
-                                
+
                                 $(`${currentTabActive == 'searchAutoIcon' ? `#search-text-display #${answerPlaceableID}` : `#overLaySearch #${answerPlaceableID}`}`).html(ele.answer);
                                 $(`${currentTabActive == 'searchAutoIcon' ? `#search-text-display #${answerPlaceableID}` : `#overLaySearch #${answerPlaceableID}`}`).attr('data-answer-render', 'true');
                                 if ((ele.question?.length + ele.answer?.length) > 70) {
@@ -82747,10 +82748,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     } else {
                         if (data.type === 'text' && data.suggestions) {
                             data.suggestions.faqs.forEach((ele) => {
-                               let faqAnswerSendMsg =  $(`#faqDiv-${answerPlaceableID.split('-')[1]}`).find("[id='sendMsg']");
-                               $(faqAnswerSendMsg).attr('data-msg-data',ele.answer)
-                               let faqAnswerCopyMsg =  $(`#faqDiv-${answerPlaceableID.split('-')[1]}`).find("[class='copy-btn']");
-                               $(faqAnswerCopyMsg).attr('data-msg-data',ele.answer)
+                                let faqAnswerSendMsg = $(`#faqDiv-${answerPlaceableID.split('-')[1]}`).find("[id='sendMsg']");
+                                $(faqAnswerSendMsg).attr('data-msg-data', ele.answer)
+                                let faqAnswerCopyMsg = $(`#faqDiv-${answerPlaceableID.split('-')[1]}`).find("[class='copy-btn']");
+                                $(faqAnswerCopyMsg).attr('data-msg-data', ele.answer)
                                 $(`#${answerPlaceableID}`).html(ele.answer);
                                 $(`#${answerPlaceableID}`).attr('data-answer-render', 'true');
                                 if ((ele.question?.length + ele.answer?.length) > 70) {
@@ -82835,8 +82836,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                            </div>
                            </div>
                        </div>
-            `;           
-                        
+            `;
+
                         let tellToUserHtml = `
             <div class="steps-run-data">
                            <div class="icon_block">
@@ -83061,7 +83062,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             let ele = document.getElementById(`displayData-${target.dataset.msgId}`) ? document.getElementById(`displayData-${target.dataset.msgId}`) : document.getElementById(target.dataset.msgId);
                             window.parent.postMessage({
                                 method: "copy",
-                                text: target.dataset.msgData && target.dataset.msgData!==''?target.dataset.msgData:ele.innerText
+                                text: target.dataset.msgData && target.dataset.msgData !== '' ? target.dataset.msgData : ele.innerText
                             }, "*")
                         }
                         if (target.className == 'ast-close close-search') {
@@ -83259,7 +83260,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         $(`#historyData .collapse-acc-data.hide`)[$(`#historyData .collapse-acc-data.hide`).length - 1]?.classList.remove('hide');
                                         $(`#historyData .show-history-feedback.hide`)[$(`#historyData .show-history-feedback.hide`).length - 1]?.classList.remove('hide');
                                         $(`#historyData .dilog-task-end.hide`)[$(`#historyData .dilog-task-end.hide`).length - 1]?.classList.remove('hide');
-                                        
+
 
                                     } else {
                                         let resp = response.length > 0 ? response?.slice(previousResp?.length - 1, response.length) : undefined;
@@ -83618,7 +83619,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             }
                                             if (index == resp.length - 1) {
                                                 $(`#historyData .collapse-acc-data.hide`)[$(`#historyData .collapse-acc-data.hide`).length - 1]?.classList.remove('hide');
-                                               // $(`#historyData .show-history-feedback.hide`)[$(`#historyData .show-history-feedback.hide`).length - 1]?.classList.remove('hide');
+                                                // $(`#historyData .show-history-feedback.hide`)[$(`#historyData .show-history-feedback.hide`).length - 1]?.classList.remove('hide');
                                             }
                                         });
                                     }
@@ -84792,38 +84793,38 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
         });
     }
 
-    
+
     let userIds;
     userIds = _conversationId;
-    window.onbeforeunload= function(){
+    window.onbeforeunload = function () {
         let old_users = {};
         console.log('conversation Details: ');
         old_users = JSON.parse(localStorage.getItem('agentAssistState'));
-        old_users[userIds]=$(`#userIDs-${userIds}`).html();
-        localStorage.setItem('agentAssistState', JSON.stringify(old_users));    
-        console.log('conversation Details: ', localStorage);         
+        old_users[userIds] = $(`#${containerId}`).find(`[data-convos-id='userIDs-${userIds}']`).html();
+        localStorage.setItem('agentAssistState', JSON.stringify(old_users));
+        console.log('conversation Details: ', localStorage);
     }
 
-    $(document).ready(function(){
+    $(document).ready(function () {
         let result = JSON.parse(localStorage.getItem('agentAssistState'));
-        for(let res in result){
+        for (let res in result) {
             // let splitRess = res.split('_');
             let bodyContainer = $(`#userIDs-${res}`);
 
-            if(splitRess[0]==(userIds)){
+            if (splitRess[0] == (userIds)) {
                 bodyContainer.html(result[res]);
                 var hasVerticalScrollbar = $('.agent-assist-chat-container').scrollHeight - 3 > $('.agent-assist-chat-container').clientHeight;
-                if(!hasVerticalScrollbar){
-                var KRPerfectScrollbar;
-                if(window.PerfectScrollbar && typeof PerfectScrollbar ==='function'){
-                KRPerfectScrollbar=window.PerfectScrollbar;
-                }
-                new KRPerfectScrollbar($('.agent-assist-chat-container').find('.body-data-container').get(0), {
-                    suppressScrollX: true
-                });
+                if (!hasVerticalScrollbar) {
+                    var KRPerfectScrollbar;
+                    if (window.PerfectScrollbar && typeof PerfectScrollbar === 'function') {
+                        KRPerfectScrollbar = window.PerfectScrollbar;
+                    }
+                    new KRPerfectScrollbar($('.agent-assist-chat-container').find('.body-data-container').get(0), {
+                        suppressScrollX: true
+                    });
                 }
 
-            } 
+            }
         }
     });
 
