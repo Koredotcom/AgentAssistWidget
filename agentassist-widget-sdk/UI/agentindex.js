@@ -149,9 +149,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             data: JSON.stringify(payload),
             dataType: "json",
             success: function (result) {
-                if(localStorage.getItem('agentAssistState') == null) {
-                    localStorage.setItem('agentAssistState', '{}');
-                }
                 chatConfig = window.KoreSDK.chatConfig;
                 var koreBot = koreBotChat();
                 AgentChatInitialize = new koreBot.chatWindow(chatConfig);
@@ -165,6 +162,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
                 var _agentAssistDataObj = this;
                 var publicAPIs = {};
+                $(`#${containerId}`).attr('data-convos-id', `userIDs-${_conversationId}`);
 
                 publicAPIs.botId = _agentAssistDataObj.botId = _botId;
                 publicAPIs.containerId = _agentAssistDataObj.containerId = containerId;
@@ -182,7 +180,24 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     });
 
                     _agentAsisstSocket.on('agent_assist_response', (data) => {
-
+                        let shouldProcessResponse = false;
+                        var appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                        var appState = JSON.parse(appStateStr);
+                        if (appState[_conversationId]) {
+                            // if incoming data belongs to welcome message do nothing
+                            if (!data.suggestions && data.buttons.length > 1) {
+                                if (appState[_conversationId].isWelcomeProcessed) {
+                                    return;
+                                }
+                            }
+							shouldProcessResponse = true;
+                        } else {
+                            shouldProcessResponse = true;
+                        }
+                        if (!shouldProcessResponse) {
+                            return;
+                        }
+                        
                         var overRideObj = {
                             "agentId": "",
                             "botId": _botId,
@@ -194,6 +209,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         isOverRideMode = false;
                         displayCustomerFeels(data, data.conversationId, _botId);
 
+                        updateAgentAssistState(_conversationId, 'assistTab', data);
+                        
                         processAgentAssistResponse(data, data.conversationId, _botId);
                         document.getElementById("loader").style.display = "none";
                         // document.getElementById("addRemoveDropDown").style.display = "block";
@@ -208,6 +225,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                     });
                     _agentAsisstSocket.on('agent_assist_user_message', (data) => {
+                        updateAgentAssistState(_conversationId, 'assistTab', data);
                         processUserMessages(data, data.conversationId, data.botId);
 
                     });
@@ -228,6 +246,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             document.getElementById("loader").style.display = "none";
                             document.getElementById("overLaySearch").style.display = "block";
                         } else {
+                            updateAgentAssistState(_conversationId, 'myBotTab', data);
                             processMybotDataResponse(data, data.conversationId, data.botId);
                         }
                         // processAgentIntentResults(data, data.conversationId, data.botId);
@@ -270,12 +289,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     'userName': 'test',
                     'id': _agentAssistDataObj.conversationId
                 }
+               
                 console.log("AgentAssist >>> sending welcome_message_request")
                 _agentAsisstSocket.emit('welcome_message_request', welcome_message_request);
+
                 if (isCallConversation === 'true') {
                     $('#transcriptIcon').removeClass('hide');
                     transcriptionTabActive();
                 }
+                updateUIState(_conversationId, isCallConversation);
 
                 // var agent_menu_request = {
                 //     "botId": _agentAssistDataObj.botId,
@@ -348,6 +370,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
                     }
                     AgentChatInitialize.renderMessage(_msgsResponse);
+                    // HtmlRenderMethod(_convId, _msgsResponse) {}
+                    // setTimeout(() => {
+                    //     // store HTML
+                    // }, 500)
+                    // 
                 }
 
                 $('body').bind('mousedown keydown', function (event) {
@@ -728,7 +755,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     let faqAnswerCopyMsg =  $(`#overLaySearch #faqDivLib-${answerPlaceableID.split('-')[1]}`).find(".copy-btn");
                                     $(faqAnswerCopyMsg).attr('data-msg-data',ele.answer)
                                 }
-                                
+
                                 $(`${currentTabActive == 'searchAutoIcon' ? `#search-text-display #${answerPlaceableID}` : `#overLaySearch #${answerPlaceableID}`}`).html(ele.answer);
                                 $(`${currentTabActive == 'searchAutoIcon' ? `#search-text-display #${answerPlaceableID}` : `#overLaySearch #${answerPlaceableID}`}`).attr('data-answer-render', 'true');
                                 if ((ele.question?.length + ele.answer?.length) > 70) {
@@ -1247,8 +1274,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                            </div>
                            </div>
                        </div>
-            `;           
-                        
+            `;
+
                         let tellToUserHtml = `
             <div class="steps-run-data">
                            <div class="icon_block">
@@ -1436,6 +1463,236 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }
                 }
 
+                function _createRunTemplateContainerForMyTab(agentBotuuids, intentName) {
+                    let dynamicBlock = document.getElementById('myBotAutomationBlock');
+                    let dropdownHtml = `
+                <div class="dialog-task-accordiaon-info hide" id="MyBotaddRemoveDropDown-${agentBotuuids}">
+                    <div class="accordion-header" id="dropDownHeader-${agentBotuuids}" data-drop-down-opened="false">
+                        <div class="icon-info">
+                            <i class="ast-rule"></i>
+                        </div>
+                        <div class="header-text" id="dropDownTitle-${agentBotuuids}">${intentName}</div>
+                        <i class="ast-carrotup"></i>
+                        <button class="btn-danger" id="myBotTerminateAgentDialog-${agentBotuuids}">Terminate</button>
+                    </div>
+                    <div class="collapse-acc-data" id="dropDownData-${agentBotuuids}">
+
+
+                    </div>
+                </div>`;
+                    dynamicBlock.innerHTML += dropdownHtml;
+                }
+
+                function _createRunTemplateContiner(uuids, intentName){
+                    let dynamicBlock = document.getElementById('dynamicBlock');
+                    let dropdownHtml = `
+       <div class="dialog-task-accordiaon-info hide" id="addRemoveDropDown-${uuids}" >
+           <div class="accordion-header" id="dropDownHeader-${uuids}"
+           data-drop-down-opened="false">
+               <div class="icon-info">
+                   <i class="ast-rule"></i>
+               </div>
+               <div class="header-text" id="dropDownTitle-${uuids}">${intentName}</div>
+               <i class="ast-carrotup"></i>
+               <button class="btn-danger">Terminate</button>
+           </div>
+           <div class="collapse-acc-data" id="dropDownData-${uuids}">
+            <div class="override-input-div hide">
+            <button class="override-input-btn" id="overRideBtn-${uuids}">Override Input</button>
+            <button class="cancel-override-input-btn hide" id="cancelOverRideBtn-${uuids}">Cancel Override</button>
+            </div>
+              
+           </div>
+           
+           </div>
+           `;
+                    dynamicBlock.innerHTML = dynamicBlock.innerHTML + dropdownHtml;
+                }
+
+                function updateAgentAssistState(_convId, _tabName, _data) {
+                    var appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                    var appState = JSON.parse(appStateStr);
+                    var convState = appState[_convId] || {};
+                    if (!appState[_convId]) {
+                        convState = appState[_convId] = {};
+                    }
+                    if (!convState[_tabName] ) {
+                        convState[_tabName] = {};
+                    }
+                    if (!convState[_tabName]['stateItems']) {
+                        convState[_tabName]['stateItems'] = [];
+                    } 
+                    if (!_data.suggestions && _data.buttons?.length > 1) {
+                        convState['isWelcomeProcessed'] = true;
+                    }
+                    let stateItems = convState[_tabName]['stateItems'];
+                    if (stateItems.length >= 2) {
+                        let lIntentName = null;
+                        for (let i = stateItems.length-1; (i >= 0 && lIntentName == null); i--) {
+                           let item = JSON.parse(stateItems[i]);
+                           if (item.intentName) {
+                              lIntentName = item.intentName;
+                           }
+                        }
+                        if (!_data.intentName) {
+                           _data.intentName = lIntentName;
+                        }
+                       if (JSON.parse(stateItems[0]).intentName === _data.intentName ) {
+                            stateItems[0] = stateItems[1];
+                            stateItems[1] = JSON.stringify(_data);
+                       } else {
+                           stateItems[0] = JSON.stringify(_data);
+                           stateItems.splice(1,1);
+                       }
+                      
+                    } else {
+                        // let lIntentName = null;
+                        // for (let i = stateItems.length-1; (i >= 0 && lIntentName == null); i--) {
+                        //    let item = JSON.parse(stateItems[i]);
+                        //    if (item.intentName) {
+                        //       lIntentName = item.intentName;
+                        //    }
+                        // }
+                        // if (!_data.intentName) {
+                        //    _data.intentName = lIntentName;
+                        // }
+                        stateItems.push(JSON.stringify(_data));
+                    }
+                    localStorage.setItem('agentAssistState', JSON.stringify(appState));
+                }
+
+                function updateUIState(_convId, _isCallConv) {
+                    $('.empty-data-no-agents').addClass('hide')
+                    var appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                    var appState = JSON.parse(appStateStr);
+                    var convState = appState[_convId] || {};
+                    if(!appState[_convId]) {
+                        convState=appState[_convId] = {}
+                        if(_isCallConv == 'true') {
+                            convState.currentTab = 'transcriptTab';
+                        } else {
+                            convState.currentTab = 'assistTab';
+                        }
+                    }
+                    if (convState.currentTab == 'librarySearch') {
+                         libraryTabActive();
+                         currentTabActive = 'searchAutoIcon';
+                        if(convState?.libraryTab.length > 0) {
+                            $('#librarySearch').val(convState.libraryTab);
+                            var convId = _convId;
+                            var botId = _botId;
+                            var intentName = convState.libraryTab;
+                            AgentAssistPubSub.publish('searched_Automation_details', { conversationId: convId, botId: botId, value: intentName, isSearch: true });
+                            
+                        }
+                        
+                    }
+                    else if (convState.currentTab == 'myBotTab') {  
+                        agentTabActive();
+                    }
+                    else if (convState.currentTab == 'transcriptTab') {
+                        transcriptionTabActive();
+            
+                    }
+                    else if (convState.currentTab == 'assistTab') {
+                        userTabActive();
+                    }
+                    updateCurrentTabInState(_convId,  convState.currentTab);
+                    convState.currentTab !== 'librarySearch' ? updateUIWithTabState(_convId, convState.currentTab):'';
+                    document.getElementById("loader").style.display = "none";
+                }
+
+                function updateUIWithTabState(convId, currentTab) {
+                    var appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                    var appState = JSON.parse(appStateStr);
+                    if (!appState[convId]) {
+                         return 
+                    }
+                    var convState = appState[convId];
+                    if (!convState[currentTab]) {return;}
+                    if (!convState[currentTab].stateItems || convState[currentTab].stateItems.length == 0) {
+                       return;
+                    }
+                    let stateItems = convState[currentTab].stateItems;
+                    if (currentTab == 'assistTab') {
+                        $('#welcomeMsg').html('');
+                        let dialogs = $(`#dynamicBlock .dialog-task-run-sec`);
+                        dialogs?.each(function (i, ele) {
+                            $('#dynamicBlock .agent-utt-info').each((i, elem) => {
+                                $(elem).remove();
+                            });
+                            $(ele).remove();
+                        });
+                        let dialogsDropDowns = $(`#dynamicBlock .dialog-task-accordiaon-info`);
+                        dialogsDropDowns?.each(function (i, ele) {
+                            $(ele).remove();
+                        });
+                    } else {
+                        $('#noAutoRunning').addClass('hide');
+                    }
+                    let intentContainerObj = {};
+                    for (let i = 0; i < stateItems.length; i++) {
+                        let itemStr = stateItems[i];
+                        let item = JSON.parse(itemStr);
+                        if (!intentContainerObj[item.intentName]) {
+                            intentContainerObj[item.intentName] = {};
+                        }
+                        if (item.intentName && !intentContainerObj[item.intentName]['containerCreated']) {
+                            intentContainerObj[item.intentName]['containerCreated'] = true;
+                            dropdownHeaderUuids = koreGenerateUUID();
+                            intentContainerObj[item.intentName]['containerId'] = dropdownHeaderUuids;
+                            if (currentTab == 'assistTab') {
+                                _createRunTemplateContiner(dropdownHeaderUuids, item.intentName);
+                                $(`#addRemoveDropDown-${dropdownHeaderUuids}`).removeClass('hide');
+                            } else {
+                                currentTab == 'myBotTab'?_createRunTemplateContainerForMyTab(dropdownHeaderUuids, item.intentName):'';
+                                $(`#MyBotaddRemoveDropDown-${dropdownHeaderUuids}`).removeClass('hide');
+                            }  
+                        }
+                    }
+
+                    for(let i =0 ;i<stateItems.length; i++){
+                        let itemStr = stateItems[i];
+                        let item = JSON.parse(itemStr);
+                        if (item.intentName) {
+                            if (currentTab == 'assistTab') {
+                                dropdownHeaderUuids = intentContainerObj[item.intentName]['containerId'];
+                            } 
+                            if (currentTab == 'myBotTab') {
+                                myBotDropdownHeaderUuids = intentContainerObj[item.intentName]['containerId']
+                            }
+                           
+                        }
+                        if (currentTab == 'assistTab') {
+                            if (item.event == 'agent_assist_user_message') {
+                                processUserMessages(item, convId, _botId);
+                            }
+                            processAgentAssistResponse(item, convId, _botId);
+                        } else {
+                            currentTab == 'myBotTab'?processMybotDataResponse(item, convId, _botId):'';
+                        }
+                      
+                    }
+                }
+
+                function updateCurrentTabInState(_convId, currentTab) {
+                    var appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                    var appState = JSON.parse(appStateStr);
+                    var convState = appState[_convId] || {};
+                    if(!appState[_convId]) {
+                        convState=appState[_convId] = {}
+                    }
+                    convState.currentTab = currentTab;
+                    if(appState[_convId] && (convState.currentTab == 'librarySearch')) {
+                        if(searchedVal !== undefined && document.getElementById('librarySearch').value.length > 0){
+                        convState.libraryTab = document.getElementById('librarySearch').value;
+                        } else {
+                            convState.libraryTab = '';
+                        }
+                    }
+                    localStorage.setItem('agentAssistState', JSON.stringify(appState));
+                }
+
                 function btnInit() {
                     document.addEventListener("click", (evt) => {
                         var target = evt.target;
@@ -1567,17 +1824,23 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                         if (target.id === `searchAutoIcon` || target.id === `searchIcon` || target.id === `LibraryLabel`) {
                             data = _agentAssistDataObj
+                            updateCurrentTabInState(_conversationId,'librarySearch')
                             libraryTabActive();
                         }
                         else if (target.id === `agentAutoIcon` || target.id === `agentBotIcon` || target.id === `MybotLabel`) {
+                            updateCurrentTabInState(_conversationId,'myBotTab')
                             agentTabActive();
+                            updateUIState(_conversationId, isCallConversation);
                         }
                         else if (target.id === `transcriptIcon` || target.id === `scriptIcon` || target.id === `transcriptLabel`) {
+                            updateCurrentTabInState(_conversationId,'transcriptTab')
                             transcriptionTabActive();
 
                         }
-                        if (target.id === `userAutoIcon` || target.id === `userBotIcon` || target.id === `AssistLabel`) {
+                        else if (target.id === `userAutoIcon` || target.id === `userBotIcon` || target.id === `AssistLabel`) {
+                            updateCurrentTabInState(_conversationId,'assistTab')
                             userTabActive();
+                            updateUIState(_conversationId, isCallConversation);
 
                         }
                         var seeMoreButton = target.dataset.seeMore;
@@ -1671,7 +1934,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         $(`#historyData .collapse-acc-data.hide`)[$(`#historyData .collapse-acc-data.hide`).length - 1]?.classList.remove('hide');
                                         $(`#historyData .show-history-feedback.hide`)[$(`#historyData .show-history-feedback.hide`).length - 1]?.classList.remove('hide');
                                         $(`#historyData .dilog-task-end.hide`)[$(`#historyData .dilog-task-end.hide`).length - 1]?.classList.remove('hide');
-                                        
+
 
                                     } else {
                                         let resp = response.length > 0 ? response?.slice(previousResp?.length - 1, response.length) : undefined;
@@ -2030,7 +2293,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             }
                                             if (index == resp.length - 1) {
                                                 $(`#historyData .collapse-acc-data.hide`)[$(`#historyData .collapse-acc-data.hide`).length - 1]?.classList.remove('hide');
-                                               // $(`#historyData .show-history-feedback.hide`)[$(`#historyData .show-history-feedback.hide`).length - 1]?.classList.remove('hide');
+                                                // $(`#historyData .show-history-feedback.hide`)[$(`#historyData .show-history-feedback.hide`).length - 1]?.classList.remove('hide');
                                             }
                                         });
                                     }
@@ -2450,6 +2713,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                         }
                         if (runAutoForAgent) {
+                            updateCurrentTabInState(_conversationId, 'myBotTab')
                             $('#agentSearch').val('');
                             $('.overlay-suggestions').addClass('hide').removeAttr('style');
                             $('#overLaySearch').html('')
@@ -2461,23 +2725,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 let agentBotuuids = Math.floor(Math.random() * 100);
                                 myBotDropdownHeaderUuids = agentBotuuids;
                                 $('#noAutoRunning').addClass('hide');
-                                let dynamicBlock = document.getElementById('myBotAutomationBlock');
-                                let dropdownHtml = `
-                            <div class="dialog-task-accordiaon-info hide" id="MyBotaddRemoveDropDown-${agentBotuuids}">
-                                <div class="accordion-header" id="dropDownHeader-${agentBotuuids}" data-drop-down-opened="false">
-                                    <div class="icon-info">
-                                        <i class="ast-rule"></i>
-                                    </div>
-                                    <div class="header-text" id="dropDownTitle-${agentBotuuids}">${target.dataset.intentName}</div>
-                                    <i class="ast-carrotup"></i>
-                                    <button class="btn-danger" id="myBotTerminateAgentDialog-${agentBotuuids}">Terminate</button>
-                                </div>
-                                <div class="collapse-acc-data" id="dropDownData-${agentBotuuids}">
-
-
-                                </div>
-                            </div>`;
-                                dynamicBlock.innerHTML += dropdownHtml;
+                                _createRunTemplateContainerForMyTab(agentBotuuids, target.dataset.intentName)
                                 let ids = target.id.split('-');
                                 $(`${!target?.dataset?.runMybot}` ? '.dialog-task-run-sec' : '.content-dialog-task-type .type-info-run-send').each((i, ele) => {
                                     let id = ele.id?.split('-');
@@ -2497,6 +2745,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             }
 
                         }
+                       
                         if (runButton || libraryRunBtn || historyRunBtn) {
                             if (!isAutomationOnGoing) {
                                 $('#welcomeMsg').addClass('hide');
@@ -2524,11 +2773,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     })
                                 }
                                 if (libraryRunBtn) {
-
+                                    updateCurrentTabInState(_conversationId, 'assistTab')
                                     $('.empty-data-no-agents').addClass('hide');
                                     $('#agentSearch').val('');
                                     $('.overlay-suggestions').addClass('hide').removeAttr('style');
-                                    $('#overLaySearch').html('')
+                                    $('#overLaySearch').html('');
                                     userTabActive();
 
                                     $('#dynamicBlock .dialog-task-run-sec').each((i, ele) => {
@@ -2562,29 +2811,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 suggestionsLength.each((i, ele) => {
                                     $(ele).addClass('hide');
                                 })
-                                let dynamicBlock = document.getElementById('dynamicBlock');
-                                let dropdownHtml = `
-                   <div class="dialog-task-accordiaon-info hide" id="addRemoveDropDown-${uuids}" >
-                       <div class="accordion-header" id="dropDownHeader-${uuids}"
-                       data-drop-down-opened="false">
-                           <div class="icon-info">
-                               <i class="ast-rule"></i>
-                           </div>
-                           <div class="header-text" id="dropDownTitle-${uuids}">${target.dataset.intentName}</div>
-                           <i class="ast-carrotup"></i>
-                           <button class="btn-danger">Terminate</button>
-                       </div>
-                       <div class="collapse-acc-data" id="dropDownData-${uuids}">
-                        <div class="override-input-div hide">
-                        <button class="override-input-btn" id="overRideBtn-${uuids}">Override Input</button>
-                        <button class="cancel-override-input-btn hide" id="cancelOverRideBtn-${uuids}">Cancel Override</button>
-                        </div>
-                          
-                       </div>
-                       
-                       </div>
-                       `;
-                                dynamicBlock.innerHTML = dynamicBlock.innerHTML + dropdownHtml;
+                                _createRunTemplateContiner(uuids, target.dataset.intentName);
                                 let ids = target.id.split('-');
                                 ids.shift();
                                 let joinedIds = ids.join('-');
@@ -3100,7 +3327,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
         `;
                     endOfDialoge.append(endofDialogeHtml);
                     $(`.customer-feeling-text`).addClass('bottom-95');
-                    dropdownHeaderUuids = undefined;
+                    setTimeout(()=>{
+                        dropdownHeaderUuids = undefined;
+                    },100)
+                   // dropdownHeaderUuids = undefined;
                 }
 
                 function feedbackLoop(evt) {
@@ -3134,6 +3364,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
                         if (e.keyCode == 13 && (input_taker.trim().length > 0 || e.target.dataset.val.trim().length > 0)) {
                             searchedVal = $('#librarySearch').val();
+                            updateCurrentTabInState(_conversationId, 'librarySearch');
                             agentSearchVal = $('#agentSearch').val()
                             var convId = e.target.dataset.convId;
                             var botId = e.target.dataset.botId;
@@ -3203,43 +3434,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             }
         });
     }
-
-    
-    let userIds;
-    userIds = _conversationId;
-    window.onbeforeunload= function(){
-        let old_users = {};
-        console.log('conversation Details: ');
-        old_users = JSON.parse(localStorage.getItem('agentAssistState'));
-        old_users[userIds]=$(`#userIDs-${userIds}`).html();
-        localStorage.setItem('agentAssistState', JSON.stringify(old_users));    
-        console.log('conversation Details: ', localStorage);         
-    }
-
-    $(document).ready(function(){
-        let result = JSON.parse(localStorage.getItem('agentAssistState'));
-        for(let res in result){
-            // let splitRess = res.split('_');
-            let bodyContainer = $(`#userIDs-${res}`);
-
-            if(splitRess[0]==(userIds)){
-                bodyContainer.html(result[res]);
-                var hasVerticalScrollbar = $('.agent-assist-chat-container').scrollHeight - 3 > $('.agent-assist-chat-container').clientHeight;
-                if(!hasVerticalScrollbar){
-                var KRPerfectScrollbar;
-                if(window.PerfectScrollbar && typeof PerfectScrollbar ==='function'){
-                KRPerfectScrollbar=window.PerfectScrollbar;
-                }
-                new KRPerfectScrollbar($('.agent-assist-chat-container').find('.body-data-container').get(0), {
-                    suppressScrollX: true
-                });
-                }
-
-            } 
-        }
-    });
-
-
 
     function createAgentAssistContainer(containerId, conversationId, botId, connectionDetails) {
         console.log("AgentAssist >>> finding container ", containerId);
