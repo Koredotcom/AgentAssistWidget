@@ -1510,7 +1510,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
                       </ul> \
               <div style="clear:both"></div>\
               {{if dataItems && dataItems.length > 3 && viewmore}} \
-                  <div class="listViewMore" onclick="viewMorePanel(\'${JSON.stringify(panelDetail)}\')"><span class="seeMoreText">See more <span class="see-more"></span></span></div>\
+                  <div class="listViewMore" onclick="viewMorePanel(\'${JSON.stringify(panelDetail)}\')"><span class="seeMoreText">Show more <span class="see-more"></span></span></div>\
               {{/if}}\
               {{if dataItems && dataItems.length === 0}}\
                   <div class="noContent">\
