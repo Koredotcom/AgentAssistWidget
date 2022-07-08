@@ -67119,7 +67119,7 @@ print(JSON.stringify(message)); */
 			    "heading":"Speed Analysis",
 			    "buttons":[
 			        {
-			            "title":"See more",
+			            "title":"Show more",
 			            "type":"postback",
 			            "payload":"payload"
 			        }
@@ -68181,7 +68181,7 @@ print(JSON.stringify(message)); */
 			   </ul> \
 	   <div style="clear:both"></div>\
 	   {{if dataItems && dataItems.length > 3 && viewmore}} \
-		   <div class="listViewMore" onclick="viewMorePanel(\'${JSON.stringify(panelDetail)}\')"><span class="seeMoreText">See more <span class="see-more"></span></span></div>\
+		   <div class="listViewMore" onclick="viewMorePanel(\'${JSON.stringify(panelDetail)}\')"><span class="seeMoreText">Show more <span class="see-more"></span></span></div>\
 	   {{/if}}\
 	   {{if dataItems && dataItems.length === 0}}\
 		   <div class="noContent">\
@@ -68530,9 +68530,9 @@ var advancedListTemplate = '<script id="chat_message_tmpl" type="text/x-jqury-tm
 			{{if (msgData && msgData.message[0] && msgData.message[0].component && msgData.message[0].component.payload && msgData.message[0].component.payload.seeMore && msgData.message[0].component.payload.listItems.length > msgData.message[0].component.payload.listItemDisplayCount) || (msgData && msgData.message[0] && msgData.message[0].component && msgData.message[0].component.payload && msgData.message[0].component.payload.listItems.length > msgData.message[0].component.payload.listItemDisplayCount)}}\
 				<div class="see-more-data">\
 				    {{if msgData && msgData.message[0] && msgData.message[0].component && msgData.message[0].component.payload && (!msgData.message[0].component.payload.seeMoreVisibity || (msgData.message[0].component.payload.seeMoreVisibity && msgData.message[0].component.payload.seeMoreVisibity === "link"))}}\
-						<span>{{if (msgData && msgData.message[0] && msgData.message[0].component && msgData.message[0].component.payload && msgData.message[0].component.payload.seeMoreTitle)}} ${msgData.message[0].component.payload.seeMoreTitle} {{else}}See more{{/if}} <img {{if msgData.message[0].component.payload.seeMoreIcon}} src="${msgData.message[0].component.payload.seeMoreIcon}" {{else}} src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAALCAYAAACzkJeoAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAACDSURBVHgBdY7BDYMwDEW/E+612gWs0gE6Qtmkm7ACGzADI7ABG5AJIAMgQozEIUDewQf/Z/lDdso/brAcAZmWny/289QnoY8wPzqAmrNgdeQEe1h3Ap1LaD1QMSKgMpeKxtZxDsAyJJfyLlsE+iIslXPOUy7QHeUCpRD5/LBC4o8kUDaUO0VusgMydwAAAABJRU5ErkJggg=="{{/if}}></span>\
+						<span>{{if (msgData && msgData.message[0] && msgData.message[0].component && msgData.message[0].component.payload && msgData.message[0].component.payload.seeMoreTitle)}} ${msgData.message[0].component.payload.seeMoreTitle} {{else}}Show more{{/if}} <img {{if msgData.message[0].component.payload.seeMoreIcon}} src="${msgData.message[0].component.payload.seeMoreIcon}" {{else}} src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAALCAYAAACzkJeoAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAACDSURBVHgBdY7BDYMwDEW/E+612gWs0gE6Qtmkm7ACGzADI7ABG5AJIAMgQozEIUDewQf/Z/lDdso/brAcAZmWny/289QnoY8wPzqAmrNgdeQEe1h3Ap1LaD1QMSKgMpeKxtZxDsAyJJfyLlsE+iIslXPOUy7QHeUCpRD5/LBC4o8kUDaUO0VusgMydwAAAABJRU5ErkJggg=="{{/if}}></span>\
 					{{else msgData && msgData.message[0] && msgData.message[0].component && msgData.message[0].component.payload && (msgData.message[0].component.payload.seeMoreVisibity  && msgData.message[0].component.payload.seeMoreVisibity === "button")}}\
-							<button class="button_seemore" >{{if (msgData && msgData.message[0] && msgData.message[0].component && msgData.message[0].component.payload && msgData.message[0].component.payload.seeMoreIcon)}}<img src="${msgData.message[0].component.payload.seeMoreIcon}">{{/if}}{{if (msgData && msgData.message[0] && msgData.message[0].component && msgData.message[0].component.payload && msgData.message[0].component.payload.seeMoreTitle)}} ${msgData.message[0].component.payload.seeMoreTitle} {{else}}See more{{/if}}</button>\
+							<button class="button_seemore" >{{if (msgData && msgData.message[0] && msgData.message[0].component && msgData.message[0].component.payload && msgData.message[0].component.payload.seeMoreIcon)}}<img src="${msgData.message[0].component.payload.seeMoreIcon}">{{/if}}{{if (msgData && msgData.message[0] && msgData.message[0].component && msgData.message[0].component.payload && msgData.message[0].component.payload.seeMoreTitle)}} ${msgData.message[0].component.payload.seeMoreTitle} {{else}}Show more{{/if}}</button>\
 					{{/if}}\
 				</div>\
 			{{/if}}\
@@ -69072,9 +69072,9 @@ var advancedListTemplate = '<script id="chat_message_tmpl" type="text/x-jqury-tm
 				{{if (msgData && msgData.message[0] && msgData.message[0].component && msgData.message[0].component.payload && msgData.message[0].component.payload.seeMore && msgData.message[0].component.payload.listItems.length > msgData.message[0].component.payload.listItemDisplayCount) || (msgData && msgData.message[0] && msgData.message[0].component && msgData.message[0].component.payload && msgData.message[0].component.payload.listItems.length > msgData.message[0].component.payload.listItemDisplayCount)}}\
 					<div class="see-more-data">\
 						{{if msgData && msgData.message[0] && msgData.message[0].component && msgData.message[0].component.payload && (!msgData.message[0].component.payload.seeMoreVisibity || (msgData.message[0].component.payload.seeMoreVisibity && msgData.message[0].component.payload.seeMoreVisibity === "link"))}}\
-							<span>{{if (msgData && msgData.message[0] && msgData.message[0].component && msgData.message[0].component.payload && msgData.message[0].component.payload.seeMoreTitle)}} ${msgData.message[0].component.payload.seeMoreTitle} {{else}}See more{{/if}} <img {{if msgData.message[0].component.payload.seeMoreIcon}} src="${msgData.message[0].component.payload.seeMoreIcon}" {{else}} src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAALCAYAAACzkJeoAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAACDSURBVHgBdY7BDYMwDEW/E+612gWs0gE6Qtmkm7ACGzADI7ABG5AJIAMgQozEIUDewQf/Z/lDdso/brAcAZmWny/289QnoY8wPzqAmrNgdeQEe1h3Ap1LaD1QMSKgMpeKxtZxDsAyJJfyLlsE+iIslXPOUy7QHeUCpRD5/LBC4o8kUDaUO0VusgMydwAAAABJRU5ErkJggg=="{{/if}}></span>\
+							<span>{{if (msgData && msgData.message[0] && msgData.message[0].component && msgData.message[0].component.payload && msgData.message[0].component.payload.seeMoreTitle)}} ${msgData.message[0].component.payload.seeMoreTitle} {{else}}Show more{{/if}} <img {{if msgData.message[0].component.payload.seeMoreIcon}} src="${msgData.message[0].component.payload.seeMoreIcon}" {{else}} src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAALCAYAAACzkJeoAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAACDSURBVHgBdY7BDYMwDEW/E+612gWs0gE6Qtmkm7ACGzADI7ABG5AJIAMgQozEIUDewQf/Z/lDdso/brAcAZmWny/289QnoY8wPzqAmrNgdeQEe1h3Ap1LaD1QMSKgMpeKxtZxDsAyJJfyLlsE+iIslXPOUy7QHeUCpRD5/LBC4o8kUDaUO0VusgMydwAAAABJRU5ErkJggg=="{{/if}}></span>\
 						{{else msgData && msgData.message[0] && msgData.message[0].component && msgData.message[0].component.payload && (msgData.message[0].component.payload.seeMoreVisibity  && msgData.message[0].component.payload.seeMoreVisibity === "button")}}\
-								<button class="button_seemore" >{{if (msgData && msgData.message[0] && msgData.message[0].component && msgData.message[0].component.payload && msgData.message[0].component.payload.seeMoreIcon)}}<img src="${msgData.message[0].component.payload.seeMoreIcon.seeMoreIcon}">{{/if}}{{if (msgData && msgData.message[0] && msgData.message[0].component && msgData.message[0].component.payload && msgData.message[0].component.payload.seeMoreTitle)}} ${msgData.message[0].component.payload.seeMoreTitle} {{else}}See more{{/if}}</button>\
+								<button class="button_seemore" >{{if (msgData && msgData.message[0] && msgData.message[0].component && msgData.message[0].component.payload && msgData.message[0].component.payload.seeMoreIcon)}}<img src="${msgData.message[0].component.payload.seeMoreIcon.seeMoreIcon}">{{/if}}{{if (msgData && msgData.message[0] && msgData.message[0].component && msgData.message[0].component.payload && msgData.message[0].component.payload.seeMoreTitle)}} ${msgData.message[0].component.payload.seeMoreTitle} {{else}}Show more{{/if}}</button>\
 						{{/if}}\
 					</div>\
 				{{/if}}\
@@ -82087,7 +82087,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             if (data.suggestions.dialogs.length > 0) {
 
                                 let allAutomationSuggestions = document.getElementById(`allAutomations-Exhaustivelist`);
-                                let listAreaHtml = `<div class="heading-title">Automations Exhaustive list</div>
+                                let listAreaHtml = `<div class="heading-title">All Automations</div>
                                             <div class="dialog-task-run-sec p-0" >
                                                 <div class="task-type" id="usecases-list">
                                                 <div class="content-dialog-task-type p1-0" id="usecases-suggestions"></div>
@@ -82294,7 +82294,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 if ((ele.question?.length + ele.answer?.length) > 70) {
                                     let faqs = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${index}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${index}`);
                                     let seeMoreButtonHtml = `
-                              <button class="ghost-btn" style="font-style: italic;" id="seeMore-${index}" data-see-more="true">See more</button>
+                              <button class="ghost-btn" style="font-style: italic;" id="seeMore-${index}" data-see-more="true">Show more</button>
                               `;
                                     faqs.append(seeMoreButtonHtml);
                                 }
@@ -82322,7 +82322,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 if ((ele.question?.length + ele.answer?.length) > 70) {
                                     let faqs = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${answerPlaceableID.split('-')[1]}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${answerPlaceableID.split('-')[1]}`);
                                     let seeMoreButtonHtml = `
-                          <button class="ghost-btn" style="font-style: italic;" id="seeMore-${answerPlaceableID.split('-')[1]}" data-see-more="true">See more</button>
+                          <button class="ghost-btn" style="font-style: italic;" id="seeMore-${answerPlaceableID.split('-')[1]}" data-see-more="true">Show more</button>
                           `;
                                     faqs.append(seeMoreButtonHtml);
                                 }
@@ -82737,7 +82737,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 if ((ele.question?.length + ele.answer?.length) > 70) {
                                     let faqs = $(`.type-info-run-send #faqSection-${index}`);
                                     let seeMoreButtonHtml = `
-                          <button class="ghost-btn" style="font-style: italic;" id="seeMore-${index}" data-see-more="true">See more</button>
+                          <button class="ghost-btn" style="font-style: italic;" id="seeMore-${index}" data-see-more="true">Show more</button>
                           `;
                                     faqs.append(seeMoreButtonHtml);
                                 }
@@ -82756,7 +82756,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 if ((ele.question?.length + ele.answer?.length) > 70) {
                                     let faqs = $(`.type-info-run-send #faqSection-${answerPlaceableID.split('-')[1]}`);
                                     let seeMoreButtonHtml = `
-                          <button class="ghost-btn" style="font-style: italic;" id="seeMore-${answerPlaceableID.split('-')[1]}" data-see-more="true">See more</button>
+                          <button class="ghost-btn" style="font-style: italic;" id="seeMore-${answerPlaceableID.split('-')[1]}" data-see-more="true">Show more</button>
                           `;
                                     faqs.append(seeMoreButtonHtml);
                                 }
@@ -83181,7 +83181,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             let faqs = (currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ?
                                 $(`.type-info-run-send #faqSection-${targets[targets.length - 1]}`) :
                                 (currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${targets[targets.length - 1]}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${targets[targets.length - 1]}`));
-                            let seelessHtml = `<button class="ghost-btn" style="font-style: italic;" id="seeLess-${targets[targets.length - 1]}" data-see-less="true">See less</button>`;
+                            let seelessHtml = `<button class="ghost-btn" style="font-style: italic;" id="seeLess-${targets[targets.length - 1]}" data-see-less="true">Show less</button>`;
                             evt.target.classList.add('hide')
                             faqs.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#title-${targets[targets.length - 1]}` :
                                 `#titleLib-${targets[targets.length - 1]}`}`).attr('style', `overflow: inherit; white-space: normal; text-overflow: unset;`);
@@ -83382,7 +83382,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                             if ((ele.question?.length + ele.answer?.length) > 70) {
                                                                 let faqs = $(`.type-info-run-send #faqSection-${uniqueID}`);
                                                                 let seeMoreButtonHtml = `
-                                                  <button class="ghost-btn" style="font-style: italic;" id="seeMore-${uniqueID}" data-see-more="true">See more</button>
+                                                  <button class="ghost-btn" style="font-style: italic;" id="seeMore-${uniqueID}" data-see-more="true">Show more</button>
                                                   `;
                                                                 faqs.append(seeMoreButtonHtml);
                                                             }
@@ -84904,11 +84904,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     </div>
 
                     <div class="empty-data-no-agents">
-                        <div class="title">No intent identified yet</div>
-                        <div class="desc-text">The bot will automatically suggest tasks here.</div>
-                        <div class="desc-text">To start a manual task, go to "Library" and run a task as "Run with
-                            Agent
-                            Input"</div>
+                    <div class="title">No Agent automations are in running state</div>
+                    <div class="desc-text">Use “Run with Agent Inputs” to execute.</div>
+                       
                     </div>
                     <div class="collapse-acc-data hide" id="welcomeMsg">
                     </div>
@@ -84930,10 +84928,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         <div id="agentTab-custSentimentAnalysis" class="customer-feeling-text">
                         </div>
                         <div class="empty-data-no-agents hide" id="noAutoRunning">
-                            <div class="title">No intent identified yet</div>
-                            <div class="desc-text">The bot will automatically suggest tasks here.</div>
-                            <div class="desc-text">To start a manual task, go to "Library" and run a task as "Run
-                                with Agent Input"</div>
+                            <div class="title">No Agent automations are in running state</div>
+                            <div class="desc-text">Use “Run with Agent Inputs” to execute.</div>
                         </div>
                     </div>
                 </div>

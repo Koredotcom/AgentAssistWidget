@@ -499,7 +499,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             if (data.suggestions.dialogs.length > 0) {
 
                                 let allAutomationSuggestions = document.getElementById(`allAutomations-Exhaustivelist`);
-                                let listAreaHtml = `<div class="heading-title">Automations Exhaustive list</div>
+                                let listAreaHtml = `<div class="heading-title">All Automations</div>
                                             <div class="dialog-task-run-sec p-0" >
                                                 <div class="task-type" id="usecases-list">
                                                 <div class="content-dialog-task-type p1-0" id="usecases-suggestions"></div>
@@ -706,7 +706,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 if ((ele.question?.length + ele.answer?.length) > 70) {
                                     let faqs = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${index}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${index}`);
                                     let seeMoreButtonHtml = `
-                              <button class="ghost-btn" style="font-style: italic;" id="seeMore-${index}" data-see-more="true">See more</button>
+                              <button class="ghost-btn" style="font-style: italic;" id="seeMore-${index}" data-see-more="true">Show more</button>
                               `;
                                     faqs.append(seeMoreButtonHtml);
                                 }
@@ -734,7 +734,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 if ((ele.question?.length + ele.answer?.length) > 70) {
                                     let faqs = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${answerPlaceableID.split('-')[1]}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${answerPlaceableID.split('-')[1]}`);
                                     let seeMoreButtonHtml = `
-                          <button class="ghost-btn" style="font-style: italic;" id="seeMore-${answerPlaceableID.split('-')[1]}" data-see-more="true">See more</button>
+                          <button class="ghost-btn" style="font-style: italic;" id="seeMore-${answerPlaceableID.split('-')[1]}" data-see-more="true">Show more</button>
                           `;
                                     faqs.append(seeMoreButtonHtml);
                                 }
@@ -1149,7 +1149,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 if ((ele.question?.length + ele.answer?.length) > 70) {
                                     let faqs = $(`.type-info-run-send #faqSection-${index}`);
                                     let seeMoreButtonHtml = `
-                          <button class="ghost-btn" style="font-style: italic;" id="seeMore-${index}" data-see-more="true">See more</button>
+                          <button class="ghost-btn" style="font-style: italic;" id="seeMore-${index}" data-see-more="true">Show more</button>
                           `;
                                     faqs.append(seeMoreButtonHtml);
                                 }
@@ -1168,7 +1168,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 if ((ele.question?.length + ele.answer?.length) > 70) {
                                     let faqs = $(`.type-info-run-send #faqSection-${answerPlaceableID.split('-')[1]}`);
                                     let seeMoreButtonHtml = `
-                          <button class="ghost-btn" style="font-style: italic;" id="seeMore-${answerPlaceableID.split('-')[1]}" data-see-more="true">See more</button>
+                          <button class="ghost-btn" style="font-style: italic;" id="seeMore-${answerPlaceableID.split('-')[1]}" data-see-more="true">Show more</button>
                           `;
                                     faqs.append(seeMoreButtonHtml);
                                 }
@@ -1593,7 +1593,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             let faqs = (currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ?
                                 $(`.type-info-run-send #faqSection-${targets[targets.length - 1]}`) :
                                 (currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${targets[targets.length - 1]}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${targets[targets.length - 1]}`));
-                            let seelessHtml = `<button class="ghost-btn" style="font-style: italic;" id="seeLess-${targets[targets.length - 1]}" data-see-less="true">See less</button>`;
+                            let seelessHtml = `<button class="ghost-btn" style="font-style: italic;" id="seeLess-${targets[targets.length - 1]}" data-see-less="true">Show less</button>`;
                             evt.target.classList.add('hide')
                             faqs.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#title-${targets[targets.length - 1]}` :
                                 `#titleLib-${targets[targets.length - 1]}`}`).attr('style', `overflow: inherit; white-space: normal; text-overflow: unset;`);
@@ -1794,7 +1794,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                             if ((ele.question?.length + ele.answer?.length) > 70) {
                                                                 let faqs = $(`.type-info-run-send #faqSection-${uniqueID}`);
                                                                 let seeMoreButtonHtml = `
-                                                  <button class="ghost-btn" style="font-style: italic;" id="seeMore-${uniqueID}" data-see-more="true">See more</button>
+                                                  <button class="ghost-btn" style="font-style: italic;" id="seeMore-${uniqueID}" data-see-more="true">Show more</button>
                                                   `;
                                                                 faqs.append(seeMoreButtonHtml);
                                                             }
@@ -3316,11 +3316,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     </div>
 
                     <div class="empty-data-no-agents">
-                        <div class="title">No intent identified yet</div>
-                        <div class="desc-text">The bot will automatically suggest tasks here.</div>
-                        <div class="desc-text">To start a manual task, go to "Library" and run a task as "Run with
-                            Agent
-                            Input"</div>
+                    <div class="title">No Agent automations are in running state</div>
+                    <div class="desc-text">Use “Run with Agent Inputs” to execute.</div>
+                       
                     </div>
                     <div class="collapse-acc-data hide" id="welcomeMsg">
                     </div>
@@ -3342,10 +3340,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         <div id="agentTab-custSentimentAnalysis" class="customer-feeling-text">
                         </div>
                         <div class="empty-data-no-agents hide" id="noAutoRunning">
-                            <div class="title">No intent identified yet</div>
-                            <div class="desc-text">The bot will automatically suggest tasks here.</div>
-                            <div class="desc-text">To start a manual task, go to "Library" and run a task as "Run
-                                with Agent Input"</div>
+                            <div class="title">No Agent automations are in running state</div>
+                            <div class="desc-text">Use “Run with Agent Inputs” to execute.</div>
                         </div>
                     </div>
                 </div>
