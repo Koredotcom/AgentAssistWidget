@@ -81834,6 +81834,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             document.getElementById("loader").style.display = "none";
                             document.getElementById("overLaySearch").style.display = "block";
                         } else {
+                            updateAgentAssistState(_conversationId, 'myBotTab', data);
                             processMybotDataResponse(data, data.conversationId, data.botId);
                         }
                         // processAgentIntentResults(data, data.conversationId, data.botId);
@@ -83050,6 +83051,26 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }
                 }
 
+                function _createRunTemplateContainerForMyTab(agentBotuuids, intentName) {
+                    let dynamicBlock = document.getElementById('myBotAutomationBlock');
+                    let dropdownHtml = `
+                <div class="dialog-task-accordiaon-info hide" id="MyBotaddRemoveDropDown-${agentBotuuids}">
+                    <div class="accordion-header" id="dropDownHeader-${agentBotuuids}" data-drop-down-opened="false">
+                        <div class="icon-info">
+                            <i class="ast-rule"></i>
+                        </div>
+                        <div class="header-text" id="dropDownTitle-${agentBotuuids}">${intentName}</div>
+                        <i class="ast-carrotup"></i>
+                        <button class="btn-danger" id="myBotTerminateAgentDialog-${agentBotuuids}">Terminate</button>
+                    </div>
+                    <div class="collapse-acc-data" id="dropDownData-${agentBotuuids}">
+
+
+                    </div>
+                </div>`;
+                    dynamicBlock.innerHTML += dropdownHtml;
+                }
+
                 function _createRunTemplateContiner(uuids, intentName){
                     let dynamicBlock = document.getElementById('dynamicBlock');
                     let dropdownHtml = `
@@ -83104,19 +83125,25 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         if (!_data.intentName) {
                            _data.intentName = lIntentName;
                         }
-                       stateItems[0] = stateItems[1];
-                       stateItems[1] = JSON.stringify(_data);
+                       if (JSON.parse(stateItems[0]).intentName === _data.intentName ) {
+                            stateItems[0] = stateItems[1];
+                            stateItems[1] = JSON.stringify(_data);
+                       } else {
+                           stateItems[0] = JSON.stringify(_data);
+                           stateItems.splice(1,1);
+                       }
+                      
                     } else {
-                        let lIntentName = null;
-                        for (let i = stateItems.length-1; (i >= 0 && lIntentName == null); i--) {
-                           let item = JSON.parse(stateItems[i]);
-                           if (item.intentName) {
-                              lIntentName = item.intentName;
-                           }
-                        }
-                        if (!_data.intentName) {
-                           _data.intentName = lIntentName;
-                        }
+                        // let lIntentName = null;
+                        // for (let i = stateItems.length-1; (i >= 0 && lIntentName == null); i--) {
+                        //    let item = JSON.parse(stateItems[i]);
+                        //    if (item.intentName) {
+                        //       lIntentName = item.intentName;
+                        //    }
+                        // }
+                        // if (!_data.intentName) {
+                        //    _data.intentName = lIntentName;
+                        // }
                         stateItems.push(JSON.stringify(_data));
                     }
                     localStorage.setItem('agentAssistState', JSON.stringify(appState));
@@ -83159,7 +83186,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         userTabActive();
                     }
                     updateCurrentTabInState(_convId,  convState.currentTab);
-                    convState.currentTab == 'assistTab' ? updateUIWithTabState(_convId, convState.currentTab):'';
+                    convState.currentTab !== 'librarySearch' ? updateUIWithTabState(_convId, convState.currentTab):'';
                     document.getElementById("loader").style.display = "none";
                 }
 
@@ -83175,18 +83202,22 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                        return;
                     }
                     let stateItems = convState[currentTab].stateItems;
-                    $('#welcomeMsg').html('');
-                    let dialogs = $(`#dynamicBlock .dialog-task-run-sec`);
-                    dialogs?.each(function (i, ele) {
-                        $('#dynamicBlock .agent-utt-info').each((i, elem) => {
-                            $(elem).remove();
+                    if (currentTab == 'assistTab') {
+                        $('#welcomeMsg').html('');
+                        let dialogs = $(`#dynamicBlock .dialog-task-run-sec`);
+                        dialogs?.each(function (i, ele) {
+                            $('#dynamicBlock .agent-utt-info').each((i, elem) => {
+                                $(elem).remove();
+                            });
+                            $(ele).remove();
                         });
-                        $(ele).remove();
-                    });
-                    let dialogsDropDowns = $(`#dynamicBlock .dialog-task-accordiaon-info`);
-                    dialogsDropDowns?.each(function (i, ele) {
-                        $(ele).remove();
-                    });
+                        let dialogsDropDowns = $(`#dynamicBlock .dialog-task-accordiaon-info`);
+                        dialogsDropDowns?.each(function (i, ele) {
+                            $(ele).remove();
+                        });
+                    } else {
+                        $('#noAutoRunning').addClass('hide');
+                    }
                     let intentContainerObj = {};
                     for (let i = 0; i < stateItems.length; i++) {
                         let itemStr = stateItems[i];
@@ -83198,9 +83229,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             intentContainerObj[item.intentName]['containerCreated'] = true;
                             dropdownHeaderUuids = koreGenerateUUID();
                             intentContainerObj[item.intentName]['containerId'] = dropdownHeaderUuids;
-
-                            _createRunTemplateContiner(dropdownHeaderUuids, item.intentName);
-                            $(`#addRemoveDropDown-${dropdownHeaderUuids}`).removeClass('hide');
+                            if (currentTab == 'assistTab') {
+                                _createRunTemplateContiner(dropdownHeaderUuids, item.intentName);
+                                $(`#addRemoveDropDown-${dropdownHeaderUuids}`).removeClass('hide');
+                            } else {
+                                currentTab == 'myBotTab'?_createRunTemplateContainerForMyTab(dropdownHeaderUuids, item.intentName):'';
+                                $(`#MyBotaddRemoveDropDown-${dropdownHeaderUuids}`).removeClass('hide');
+                            }  
                         }
                     }
 
@@ -83208,12 +83243,23 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         let itemStr = stateItems[i];
                         let item = JSON.parse(itemStr);
                         if (item.intentName) {
-                            dropdownHeaderUuids = intentContainerObj[item.intentName]['containerId'];
-                        } 
-                        if (item.event == 'agent_assist_user_message') {
-                            processUserMessages(item, convId, _botId);
+                            if (currentTab == 'assistTab') {
+                                dropdownHeaderUuids = intentContainerObj[item.intentName]['containerId'];
+                            } 
+                            if (currentTab == 'myBotTab') {
+                                myBotDropdownHeaderUuids = intentContainerObj[item.intentName]['containerId']
+                            }
+                           
                         }
-                        processAgentAssistResponse(item, convId, _botId);
+                        if (currentTab == 'assistTab') {
+                            if (item.event == 'agent_assist_user_message') {
+                                processUserMessages(item, convId, _botId);
+                            }
+                            processAgentAssistResponse(item, convId, _botId);
+                        } else {
+                            currentTab == 'myBotTab'?processMybotDataResponse(item, convId, _botId):'';
+                        }
+                      
                     }
                 }
 
@@ -83372,6 +83418,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         else if (target.id === `agentAutoIcon` || target.id === `agentBotIcon` || target.id === `MybotLabel`) {
                             updateCurrentTabInState(_conversationId,'myBotTab')
                             agentTabActive();
+                            updateUIState(_conversationId, isCallConversation);
                         }
                         else if (target.id === `transcriptIcon` || target.id === `scriptIcon` || target.id === `transcriptLabel`) {
                             updateCurrentTabInState(_conversationId,'transcriptTab')
@@ -84254,6 +84301,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                         }
                         if (runAutoForAgent) {
+                            updateCurrentTabInState(_conversationId, 'myBotTab')
                             $('#agentSearch').val('');
                             $('.overlay-suggestions').addClass('hide').removeAttr('style');
                             $('#overLaySearch').html('')
@@ -84265,23 +84313,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 let agentBotuuids = Math.floor(Math.random() * 100);
                                 myBotDropdownHeaderUuids = agentBotuuids;
                                 $('#noAutoRunning').addClass('hide');
-                                let dynamicBlock = document.getElementById('myBotAutomationBlock');
-                                let dropdownHtml = `
-                            <div class="dialog-task-accordiaon-info hide" id="MyBotaddRemoveDropDown-${agentBotuuids}">
-                                <div class="accordion-header" id="dropDownHeader-${agentBotuuids}" data-drop-down-opened="false">
-                                    <div class="icon-info">
-                                        <i class="ast-rule"></i>
-                                    </div>
-                                    <div class="header-text" id="dropDownTitle-${agentBotuuids}">${target.dataset.intentName}</div>
-                                    <i class="ast-carrotup"></i>
-                                    <button class="btn-danger" id="myBotTerminateAgentDialog-${agentBotuuids}">Terminate</button>
-                                </div>
-                                <div class="collapse-acc-data" id="dropDownData-${agentBotuuids}">
-
-
-                                </div>
-                            </div>`;
-                                dynamicBlock.innerHTML += dropdownHtml;
+                                _createRunTemplateContainerForMyTab(agentBotuuids, target.dataset.intentName)
                                 let ids = target.id.split('-');
                                 $(`${!target?.dataset?.runMybot}` ? '.dialog-task-run-sec' : '.content-dialog-task-type .type-info-run-send').each((i, ele) => {
                                     let id = ele.id?.split('-');
@@ -84329,11 +84361,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     })
                                 }
                                 if (libraryRunBtn) {
-                                    updateUIState(_conversationId, isCallConversation);
+                                    updateCurrentTabInState(_conversationId, 'assistTab')
                                     $('.empty-data-no-agents').addClass('hide');
                                     $('#agentSearch').val('');
                                     $('.overlay-suggestions').addClass('hide').removeAttr('style');
-                                    $('#overLaySearch').html('')
+                                    $('#overLaySearch').html('');
                                     userTabActive();
 
                                     $('#dynamicBlock .dialog-task-run-sec').each((i, ele) => {
