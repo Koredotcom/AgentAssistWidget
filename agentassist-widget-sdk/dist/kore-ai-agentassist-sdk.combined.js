@@ -81737,9 +81737,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             data: JSON.stringify(payload),
             dataType: "json",
             success: function (result) {
-                if (localStorage.getItem('agentAssistState') == null) {
-                    localStorage.setItem('agentAssistState', '{}');
-                }
                 chatConfig = window.KoreSDK.chatConfig;
                 var koreBot = koreBotChat();
                 AgentChatInitialize = new koreBot.chatWindow(chatConfig);
@@ -83037,14 +83034,24 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     var convState = appState[_convId] || {};
                     if(!appState[_convId]) {
                         convState=appState[_convId] = {}
-                        if(_isCallConv) {
+                        if(_isCallConv == 'true') {
                             convState.currentTab = 'transcriptTab';
                         } else {
                             convState.currentTab = 'assistTab';
                         }
                     }
                     if (convState.currentTab == 'librarySearch') {
-                        libraryTabActive();
+                         libraryTabActive();
+                         currentTabActive = 'searchAutoIcon';
+                        if(convState?.libraryTab.length > 0) {
+                            $('#librarySearch').val(convState.libraryTab);
+                            var convId = _convId;
+                            var botId = _botId;
+                            var intentName = convState.libraryTab;
+                            AgentAssistPubSub.publish('searched_Automation_details', { conversationId: convId, botId: botId, value: intentName, isSearch: true });
+                            
+                        }
+                        
                     }
                     else if (convState.currentTab == 'myBotTab') {  
                         agentTabActive();
@@ -83060,14 +83067,21 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             
                 }
 
-                function updateCurrentTabInState(convosId, currentTab) {
+                function updateCurrentTabInState(_convId, currentTab) {
                     var appStateStr = localStorage.getItem('agentAssistState') || '{}';
                     var appState = JSON.parse(appStateStr);
-                    var convState = appState[convosId] || {};
-                    if(!appState[convosId]) {
-                        convState=appState[convosId] = {}
+                    var convState = appState[_convId] || {};
+                    if(!appState[_convId]) {
+                        convState=appState[_convId] = {}
                     }
                     convState.currentTab = currentTab;
+                    if(appState[_convId] && (convState.currentTab == 'librarySearch')) {
+                        if(searchedVal !== undefined && document.getElementById('librarySearch').value.length > 0){
+                        convState.libraryTab = document.getElementById('librarySearch').value;
+                        } else {
+                            convState.libraryTab = '';
+                        }
+                    }
                     localStorage.setItem('agentAssistState', JSON.stringify(appState));
                 }
 
@@ -84773,6 +84787,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
                         if (e.keyCode == 13 && (input_taker.trim().length > 0 || e.target.dataset.val.trim().length > 0)) {
                             searchedVal = $('#librarySearch').val();
+                            updateCurrentTabInState(_conversationId, 'librarySearch');
                             agentSearchVal = $('#agentSearch').val()
                             var convId = e.target.dataset.convId;
                             var botId = e.target.dataset.botId;
@@ -84842,43 +84857,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             }
         });
     }
-
-
-    let userIds;
-    userIds = _conversationId;
-    window.onbeforeunload = function () {
-        let old_users = {};
-        console.log('conversation Details: ');
-        old_users = JSON.parse(localStorage.getItem('agentAssistState'));
-        old_users[userIds] = $(`#${containerId}`).find(`[data-convos-id='userIDs-${userIds}']`).html();
-        localStorage.setItem('agentAssistState', JSON.stringify(old_users));
-        console.log('conversation Details: ', localStorage);
-    }
-
-    $(document).ready(function () {
-        let result = JSON.parse(localStorage.getItem('agentAssistState'));
-        for (let res in result) {
-            // let splitRess = res.split('_');
-            let bodyContainer = $(`#userIDs-${res}`);
-
-            if (splitRess[0] == (userIds)) {
-                bodyContainer.html(result[res]);
-                var hasVerticalScrollbar = $('.agent-assist-chat-container').scrollHeight - 3 > $('.agent-assist-chat-container').clientHeight;
-                if (!hasVerticalScrollbar) {
-                    var KRPerfectScrollbar;
-                    if (window.PerfectScrollbar && typeof PerfectScrollbar === 'function') {
-                        KRPerfectScrollbar = window.PerfectScrollbar;
-                    }
-                    new KRPerfectScrollbar($('.agent-assist-chat-container').find('.body-data-container').get(0), {
-                        suppressScrollX: true
-                    });
-                }
-
-            }
-        }
-    });
-
-
 
     function createAgentAssistContainer(containerId, conversationId, botId, connectionDetails) {
         console.log("AgentAssist >>> finding container ", containerId);
