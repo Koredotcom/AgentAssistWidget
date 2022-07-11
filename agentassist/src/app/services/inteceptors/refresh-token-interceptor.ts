@@ -40,8 +40,10 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
                             // tslint:disable-next-line:max-line-length
                             } else if(errorRes && errorRes.errors && ((errorRes.errors[0].code === 41) || (errorRes.errors[0].code === '41'))){
                                 // this.authService.refreshTokenExpired();
+                                this.appUrls.redirectToLogin();
                                 return observableThrowError(error);
                             } else {
+                                this.appUrls.redirectToLogin();
                                 return observableThrowError(error);
                             }
                         default:
@@ -67,7 +69,7 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
                 switchMap((refreshData: any) => {
 
                     if (refreshData) {
-                        // authService.updateAuthInfoWithRefreshTokenResponse(refreshData);
+                        authService.updateAuthInfoWithRefreshTokenResponse(refreshData);
                         const newToken = refreshData.authorization.accessToken;
                         this.tokenSubject.next(newToken);
                         return next.handle(this.addToken(req, newToken));
