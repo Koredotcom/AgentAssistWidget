@@ -66,7 +66,7 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   private redirectToLogin() {
-    this.appUrls.redirectToLogin();
+    // this.appUrls.redirectToLogin();
   }
   private resolveUrl(toResolveUrl, values, deleteProp) {
     let _regExToParamName = /\:([a-zA-Z]+)/g;
@@ -84,4 +84,3 @@ export class AuthInterceptor implements HttpInterceptor {
     });
   }
 }
-

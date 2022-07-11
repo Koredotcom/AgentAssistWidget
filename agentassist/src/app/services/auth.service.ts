@@ -10,6 +10,7 @@ import * as _ from 'underscore';
 import { MixPanelWrapper } from '../helpers/mixpanel';
 import { TranslateService } from '@ngx-translate/core';
 import { map } from 'rxjs/operators';
+import { MixPanelService } from '../helpers/mixPanel.service';
 
 declare const $: any;
 
@@ -39,7 +40,8 @@ export class AuthService {
     private appUrls: AppUrlsService,
     public workflowService: workflowService,
     private translate: TranslateService,
-    private injector: Injector
+    private injector: Injector,
+    private mixPanel: MixPanelService
   ) {
     if (window.location.hash && window.location.hash.indexOf('#id_token') == 0 && window.location.search && window.location.search.indexOf('?qp') == 0) {
       this.hasToken = true;
@@ -62,8 +64,9 @@ export class AuthService {
   public logout() {
     this.service.invoke('sales.signout', {}, {}).subscribe(
       res => {
-        const mixPanel = this.injector.get(MixPanelWrapper);
-        mixPanel.postEvent('Sign Out');
+        // const mixPanel = this.injector.get(MixPanelWrapper);
+        // mixPanel.postEvent('Sign Out');
+        this.mixPanel.postEvent('Sign Out', {});
         this.authInfo = false;
         this.localstore.removeAuthInfo();
         this.appUrls.redirectToLoginBotStore(true)
@@ -83,7 +86,7 @@ export class AuthService {
     let _accessToken = "";
 
     if (this.isAuthenticated && !this.hasToken) {
-      try { _accessToken = this.authInfo.currentAccount.authorization.accessToken; }
+      try { _accessToken = this.localstore.getAuthInfo()?.currentAccount.authorization.accessToken; }
       catch (error) { return false; }
       return _accessToken;
     }
@@ -281,7 +284,7 @@ export class AuthService {
       grant_type: "password"
     };
 
-    const currentAccount = this.getSelectedAccount();
+    const currentAccount = this.localstore.getAuthInfo()?.currentAccount; //this.getSelectedAccount();
 
     if (currentAccount) {
       let params: any = {};
