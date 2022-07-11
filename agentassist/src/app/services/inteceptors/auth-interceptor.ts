@@ -23,6 +23,7 @@ export class AuthInterceptor implements HttpInterceptor {
     else { authToken = this.auth.getAccessToken(); }
     if (!authToken && !req.url.includes('assets/i18n/en.json')) {
       debugger;
+      console.log(authToken, "redirect login token");
       this.redirectToLogin();
     }
 
