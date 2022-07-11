@@ -159,6 +159,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 console.log("AgentAssist >>> no of agent assist instances", _agentAssistComponents);
                 if (!window._agentAssisteventListenerAdded) {
                     btnInit(containerId);
+                    // eventListener for removing the ended currentconversation from the localStorage
+                    var newUrl='';
+                    window.addEventListener("message", function(e) {
+                    console.log('Testing', e.data);//your data is captured in e.data 
+                    }, false);
                 }
                 var _agentAssistDataObj = this;
                 var publicAPIs = {};
