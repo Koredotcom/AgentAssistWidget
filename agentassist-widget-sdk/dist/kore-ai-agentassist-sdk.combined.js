@@ -83339,6 +83339,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             searchedVal = '';
                         }
 
+                        if(target.id === 'cancelLibrarySearch') {
+                            $('#librarySearch').val('');
+                            $('#cancelAgentSearch').addClass('hide');
+                            loadLibraryOnCancel(autoExhaustiveList, _conversationId, _botId);
+                        } else if(target.id === 'cancelAgentSearch') {
+                            $('#agentSearch').val('');
+                        }
+
                         if (target.className == 'show-all') {
                             $('#frequently-exhaustive').addClass('hide');
                             let showAllClicked = true;
@@ -83354,12 +83362,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $(`#dynamicBlock`).addClass('hide');
                             document.getElementById('agentAutoContainer').classList.add('hide');
                             document.getElementById('scriptContainer').classList.add('hide');
-
                             let libSearch = $('#librarySearch').val(agentSearchVal);
                             if (libSearch.length > 0) {
                                 $('#cancelLibrarySearch').removeClass('hide');
                             } else {
                                 $('#cancelLibrarySearch').addClass('hide');
+                                processAgentIntentResults(autoExhaustiveList, _conversationId, _botId);
                             }
                             $('.sugestions-info-data').addClass('hide');
                             $('#bodyContainer').removeClass('if-suggestion-search');
@@ -84940,6 +84948,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                 }
 
+                function loadLibraryOnCancel(list, _convsId, _botId) {
+                    processAgentIntentResults(list, _convsId, _botId)
+                }
+
                 function AgentAssist_input_keydown(e) {
                     if (e.target.id == 'librarySearch' || e.target.id == 'agentSearch') {
                         var input_taker = document.getElementById('librarySearch').value;
@@ -84948,6 +84960,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $('#cancelLibrarySearch').removeClass('hide');
                         } else {
                             $('#cancelLibrarySearch').addClass('hide');
+                            processAgentIntentResults(autoExhaustiveList, _conversationId, _botId);
                         }
                         if (agent_search.length > 0) {
                             $('#cancelAgentSearch').removeClass('hide');
@@ -84960,10 +84973,18 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         if (e.target.id == 'librarySearch' && input_taker.trim().length == 0 && e.target.dataset?.val?.trim().length == 0) {
                             processAgentIntentResults(autoExhaustiveList, autoExhaustiveList.conversationId, autoExhaustiveList.botId);
                         }
-                        if (e.keyCode == 13 && (input_taker.trim().length > 0 || e.target.dataset.val.trim().length > 0)) {
+                        if (e.keyCode == 13 && (input_taker.trim().length > 0)) {
                             searchedVal = $('#librarySearch').val();
                             updateCurrentTabInState(_conversationId, 'librarySearch');
-                            agentSearchVal = $('#agentSearch').val()
+                            // agentSearchVal = agent_search;
+                            var convId = e.target.dataset.convId;
+                            var botId = e.target.dataset.botId;
+                            var intentName = input_taker ? input_taker : e.target.dataset.val;
+                            AgentAssistPubSub.publish('searched_Automation_details', { conversationId: convId, botId: botId, value: intentName, isSearch: true });
+                            document.getElementById("loader").style.display = "block";
+                            document.getElementById("overLaySearch").style.display = "none";
+                        } else if(e.keyCode == 13 && agent_search.trim().length > 0) {
+                            agentSearchVal = agent_search;
                             var convId = e.target.dataset.convId;
                             var botId = e.target.dataset.botId;
                             var intentName = input_taker ? input_taker : e.target.dataset.val;
@@ -85109,7 +85130,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                     <div class="empty-data-no-agents">
                     <div class="title">No Agent automations are in running state</div>
-                    <div class="desc-text">Use “Run with Agent Inputs” to execute.</div>
+                    <div class="desc-text">Use "Run with Agent Inputs" to execute.</div>
                        
                     </div>
                     <div class="collapse-acc-data hide" id="welcomeMsg">
@@ -85133,7 +85154,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         </div>
                         <div class="empty-data-no-agents hide" id="noAutoRunning">
                             <div class="title">No Agent automations are in running state</div>
-                            <div class="desc-text">Use “Run with Agent Inputs” to execute.</div>
+                            <div class="desc-text">Use "Run with Agent Inputs" to execute.</div>
                         </div>
                     </div>
                 </div>
