@@ -82280,7 +82280,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                     <img src="./images/kg.svg">
                                                 </div>
                                                 <div class="content-dialog-task-type arr-cont-dialogtask" id="faqsSuggestions-results">
-                                                    <div class="type-with-img-title">Knowledge graph (${data.suggestions.faqs.length})</div>
+                                                    <div class="type-with-img-title">FAQ/Articles (${data.suggestions.faqs.length})</div>
                                                 </div>
                                             </div>
                                         </div>`;
@@ -82640,7 +82640,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     <img src="./images/kg.svg">
                 </div>
                 <div class="content-dialog-task-type" id="faqsSuggestions-${responseId}">
-                    <div class="type-with-img-title">Knowledge graph (${data.suggestions.faqs.length})</div>
+                    <div class="type-with-img-title">FAQ/Articles (${data.suggestions.faqs.length})</div>
                     
                 </div>
             </div>`;
@@ -83592,7 +83592,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             <img src="./images/kg.svg">
                                         </div>
                                         <div class="content-dialog-task-type" id="faqsSuggestions-${uniqueID}">
-                                            <div class="type-with-img-title">Knowledge graph (${res.agentAssistDetails?.suggestions ? res.agentAssistDetails?.suggestions.faqs.length : res.agentAssistDetails.ambiguityList.faqs.length})</div>
+                                            <div class="type-with-img-title">FAQ/Articles (${res.agentAssistDetails?.suggestions ? res.agentAssistDetails?.suggestions.faqs.length : res.agentAssistDetails.ambiguityList.faqs.length})</div>
                                             
                                         </div>
                                     </div>`;
