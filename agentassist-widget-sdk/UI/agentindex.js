@@ -3650,14 +3650,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
         <div class="overlay-delete-popup hide" id="terminatePopUp">
             <div class="delete-box-content">
-                <div class="header-text">Are you sure you want to terminate the current on going task?</div>
+                <div class="header-text">You are terminate the current Task?</div>
                 <div class="close-popup">
                     <i class="ast-close"></i>
                 </div>
                 <div class="desc-text-info">Are you sure you want to terminate the dialog task ? If you terminate this task, you cannot continue with this task. To restart, 
                 you will have to run this task manually in Library.</div>
                 <div class="btn-footer-info">
-                    <button class="btn-danger">Yes</button>
+                    <button class="btn-danger">Yes Terminate</button>
                     <button class="btn-cancel">Cancel</button>
                 </div>
             </div>
