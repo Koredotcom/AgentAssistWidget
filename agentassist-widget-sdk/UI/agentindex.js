@@ -3383,6 +3383,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             input_taker = ''
                         }
                         if (e.target.id == 'librarySearch' && input_taker.trim().length == 0 && e.target.dataset?.val?.trim().length == 0) {
+                            searchedVal = '';
                             processAgentIntentResults(autoExhaustiveList, autoExhaustiveList.conversationId, autoExhaustiveList.botId);
                         }
                         if (e.keyCode == 13 && (input_taker.trim().length > 0)) {
