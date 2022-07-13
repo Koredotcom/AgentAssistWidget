@@ -83344,6 +83344,27 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 method: "send",
                                 text: target.dataset.msgData
                             }, "*")
+                        } else if(target.id === 'sendMsg' && sourceType == 'salesforce') {
+                            payload = {
+                                'Message__c': document.getElementById(`displayData-${target.dataset.msgId}`),
+                                'recordId__c': _conversationId
+                            }
+                            $.ajax({
+                                url: 'https://koreaicontactcenter-dev-ed.my.salesforce.com',
+                                type: 'POST',
+                                crossDomain: true,
+                                contentType: 'application/json',
+                                headers: {
+                                    'User-Agent': this.userAgent,
+                                    "content-type": 'application/json',
+                                    "Authorization": 'Bearer 00D8b000002B0oREAS!AQEAQKdEoyMy_Dqeebp0CMYKF3Q9GH2hX5jTS7ZqsGfpUMiPJwBjl00HvsODRcOkWFPFJAEXzcfj.fpQsQG74EOORgrVCdPD'
+                                },
+                                data: JSON.stringify(payload),
+                                dataType: "json",
+                                success: function (result) {
+                                    console.log('Successfully Sent the text', result);
+                                }
+                            });
                         }
                         if ((target.className == 'copy-btn' || target.className == 'ast-copy') && sourceType == 'smartassist-color-scheme') {
                             let ele = document.getElementById(`displayData-${target.dataset.msgId}`) ? document.getElementById(`displayData-${target.dataset.msgId}`) : document.getElementById(target.dataset.msgId);
@@ -83351,6 +83372,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 method: "copy",
                                 text: target.dataset.msgData && target.dataset.msgData!==''?target.dataset.msgData:(target.parentNode.dataset.msgData && target.parentNode.dataset.msgData!==''?target.parentNode.dataset.msgData:ele.innerText)
                             }, "*")
+                        } else if((target.className == 'copy-btn' || target.className == 'ast-copy') && sourceType == 'salesforce') {
+                            console.log('message is copied to clipboard');
+                            // function copyToClipboard(element) {
+                            //     var $temp = $("<input>");
+                            //     $("body").append($temp);
+                            //     $temp.val($(element).text()).select();
+                            //     document.execCommand("copy");
+                            //     $temp.remove();
+                            //   }
                         }
                         if (target.className == 'ast-close close-search') {
                             $('#agentSearch').val('');
@@ -84290,7 +84320,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
                         if (target.className == 'btn-danger') {
                             target.innerHTML == 'Terminate' ? $('#terminatePopUp').removeClass('hide') : '';
-                            if (target.innerHTML == 'Yes') {
+                            if (target.innerHTML == 'Yes, Terminate') {
                                 isTerminateClicked = true;
                                 $('#terminatePopUp').addClass('hide');
                                 if (currentTabActive == 'userAutoIcon') {
@@ -85270,14 +85300,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
         <div class="overlay-delete-popup hide" id="terminatePopUp">
             <div class="delete-box-content">
-                <div class="header-text">You are terminate the current Task?</div>
+                <div class="header-text">You are terminating the current Task?</div>
                 <div class="close-popup">
                     <i class="ast-close"></i>
                 </div>
                 <div class="desc-text-info">Are you sure you want to terminate the dialog task ? If you terminate this task, you cannot continue with this task. To restart, 
                 you will have to run this task manually in Library.</div>
                 <div class="btn-footer-info">
-                    <button class="btn-danger">Yes Terminate</button>
+                    <button class="btn-danger">Yes, Terminate</button>
                     <button class="btn-cancel">Cancel</button>
                 </div>
             </div>
