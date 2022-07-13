@@ -1453,45 +1453,50 @@
                 //         setCaretEnd(_this);
                 //     }, 100);
                 // });
+                
                 // _chatContainer.off('click', '.sendChat').on('click', '.sendChat', function (event) {
                 //     var _footerContainer = $(me.config.container).find('.kore-chat-footer');
                 //     me.sendMessage(_footerContainer.find('.chatInputBox'));
                 // });
-
-                // _chatContainer.off('click', 'li a').on('click', 'li a', function (e) {
-                //     e.preventDefault();
-                //     var a_link = $(this).attr('href');
-                //     var _trgt = $(this).attr('target');
-                //     var msgDataText = $(event.currentTarget).closest('span.simpleMsg').attr('msgData') || '';
-                //     var msgData;
-                //     if(msgDataText){
-                //         try {
-                //          msgData = JSON.parse(msgDataText);
-                //         } catch (err) {
+                // _chatContainer = $('#agent-assist-chat-container')
+                // _chatContainer.off('click', 'li a').on('click', 'li a', function (e) {///////
+                if(isEventEnable){
+                    e.preventDefault();
+                    e.stopPropagation();
+                    var a_link = $(this).attr('href');
+                    var _trgt = $(this).attr('target');
+                    var msgDataText = $(event.currentTarget).closest('span.simpleMsg').attr('msgData') || '';
+                    var msgData;
+                    if(msgDataText){
+                        try {
+                         msgData = JSON.parse(msgDataText);
+                        } catch (err) {
         
-                //         }
-                //     }
-                //     if(msgData && msgData.message && msgData.message[0].component && msgData.message[0].component.payload && msgData.message[0].component.payload.formData){
-                //         me.renderWebForm(msgData);
-                //     } else if (_trgt === "_self") {
-                //         callListener("provideVal", { link: a_link });
-                //         return;
-                //     }
-                //     if (me.config.allowIframe === true) {
-                //          var popupHtml = $(me.getChatTemplate("iframe")).tmpl({
-                //             'msgData': msgData,
-                //             'helpers': me.helpers,
-                //             "link_url": url
-                //         });
-                //          popupHtml[0].onload = function(iFrameEvent){
-                //             console.log(iFrameEvent);
-                //          }
-                //          openModal(popupHtml[0],true);
-                //     }
-                //     else {
-                //         me.openExternalLink(a_link)
-                //     }
-                // });
+                        }
+                    }
+                    if(msgData && msgData.message && msgData.message[0].component && msgData.message[0].component.payload && msgData.message[0].component.payload.formData){
+                        me.renderWebForm(msgData);
+                    } else if (_trgt === "_self") {
+                        callListener("provideVal", { link: a_link });
+                        return;
+                    }
+                    if (me.config.allowIframe === true) {
+                         var popupHtml = $(me.getChatTemplate("iframe")).tmpl({
+                            'msgData': msgData,
+                            'helpers': me.helpers,
+                            "link_url": url
+                        });
+                         popupHtml[0].onload = function(iFrameEvent){
+                            console.log(iFrameEvent);
+                         }
+                         openModal(popupHtml[0],true);
+                    }
+                    else {
+                        me.openExternalLink(a_link)
+                    }
+                }
+                   
+              //  });
                 //_chatContainer.off('click', '.buttonTmplContentBox li,.listTmplContentChild .buyBtn,.viewMoreList .viewMore,.listItemPath,.quickReply,.carouselImageContent,.listRightContent,.checkboxBtn,.likeDislikeDiv').on('click', '.buttonTmplContentBox li,.listTmplContentChild .buyBtn, .viewMoreList .viewMore,.listItemPath,.quickReply,.carouselImageContent,.listRightContent,.checkboxBtn,.likeDislikeDiv', function (e) {
                 if(isEventEnable){
                     e.preventDefault();
