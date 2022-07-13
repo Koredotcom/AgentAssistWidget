@@ -35,7 +35,6 @@ var jwtToken, isCallConversation;
 var entitiestValueArray;
 var previousEntitiesValue;
 var isRetore = false;
-var convosId;
 function koreGenerateUUID() {
     console.info("generating UUID");
     var d = new Date().getTime();
@@ -508,7 +507,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                     AgentChatInitialize.renderMessage(_msgsResponse);
                 }
-
+                let isSuggestionProcessed = true;
                 processAgentIntentResults = function (data, convId, botId) {
                     let uuids = Math.floor(Math.random() * 100);
                     libraryResponseId = uuids;
@@ -590,6 +589,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             });
                         }
                     }
+                    
 
                     if (data.isSearch && !answerPlaceableID) {
                         ShowSearchContent();
@@ -598,6 +598,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $('#dialogs-faqs').addClass('hide');
                         }
                         if (data.suggestions) {
+                            isSuggestionProcessed = false;
                             if (currentTabActive == 'searchAutoIcon') {
                                 let searchTextDisplay = document.getElementById('search-text-display');
                                 html = `<div class="searched-intent" id="librarySearchText">Search results for '${data.userInput}' </div>`
@@ -619,13 +620,16 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             }
 
                         } else {
-                            if (currentTabActive == 'searchAutoIcon') {
-                                let searchTextDisplay = document.getElementById('search-text-display');
-                                html = `<div class="searched-intent" id="librarySearchText">0 Search results for '${data.userInput}' </div>`
-                                searchTextDisplay.innerHTML = html;
-                            } else {
-                                  $('#overLaySearch').html(`<div class="search-results-text">0 Search results for '${data.userInput}'</div>`)
+                            if(isSuggestionProcessed) {
+                                if (currentTabActive == 'searchAutoIcon') {
+                                    let searchTextDisplay = document.getElementById('search-text-display');
+                                    html = `<div class="searched-intent" id="librarySearchText">0 Search results for '${data.userInput}' </div>`
+                                    searchTextDisplay.innerHTML = html;
+                                } else {
+                                      $('#overLaySearch').html(`<div class="search-results-text">0 Search results for '${data.userInput}'</div>`)
+                                }
                             }
+                           
 
                         }
 
@@ -758,6 +762,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
                     } else {
                         if (data.type === 'text' && data.suggestions) {
+                            isSuggestionProcessed = false
                             data.suggestions.faqs.forEach((ele) => {
                                 if(currentTabActive == 'searchAutoIcon'){
                                     let faqAnswerSendMsg =  $(`#search-text-display #faqDivLib-${answerPlaceableID.split('-')[1]}`).find("[id='sendMsg']");
@@ -2940,7 +2945,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 $(`#${target.id}`).attr('data-answer-render', 'false');
                                 faqDiv.append(faqaction);
                                 answerPlaceableID = `desc-${latestId}`;
-                                $(`#${target.id}`).addClass('rotate-carrot');
+                                $(`#faqssArea #${target.id}`).addClass('rotate-carrot');
                                 AgentAssist_run_click(evt);
                                 return
                             }
@@ -2976,7 +2981,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 $(`#overLaySearch #${target.id}`).attr('data-answer-render', 'false');
                                 faqDiv.append(faqaction);
                                 answerPlaceableID = `descLib-${id}`;
-                                $(`#${target.id}`).addClass('rotate-carrot');
+                                $(`#overLaySearch #${target.id}`).addClass('rotate-carrot');
                                 AgentAssistPubSub.publish('searched_Automation_details', { conversationId: evt.target.dataset.convId, botId: evt.target.dataset.botId, value: evt.target.dataset.intentName, isSearch: true });
                                 return
                             }
@@ -2995,7 +3000,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 $(`#search-text-display #${target.id}`).attr('data-answer-render', 'false');
                                 faqDiv.append(faqaction);
                                 answerPlaceableID = `descLib-${id}`;
-                                $(`#${target.id}`).addClass('rotate-carrot');
+                                $(`#search-text-display #${target.id}`).addClass('rotate-carrot');
                                 AgentAssistPubSub.publish('searched_Automation_details', { conversationId: evt.target.dataset.convId, botId: evt.target.dataset.botId, value: evt.target.dataset.intentName, isSearch: true });
                                 return
                             }
@@ -3385,6 +3390,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
 
                 function AgentAssist_input_keydown(e) {
+                    isSuggestionProcessed = true;
                     if (e.target.id == 'librarySearch' || e.target.id == 'agentSearch') {
                         var input_taker = document.getElementById('librarySearch').value;
                         var agent_search = document.getElementById('agentSearch').value;
