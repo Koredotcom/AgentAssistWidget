@@ -195,7 +195,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         var appState = JSON.parse(appStateStr);
                         if (appState[_conversationId]) {
                             // if incoming data belongs to welcome message do nothing
-                            if (!data.suggestions && data.buttons.length > 1) {
+                            if (!data.suggestions && data.buttons?.length > 1) {
                                 if (appState[_conversationId].isWelcomeProcessed) {
                                     return;
                                 }
@@ -603,14 +603,18 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 html = `<div class="searched-intent" id="librarySearchText">Search results for '${data.userInput}' </div>`
                                 searchTextDisplay.innerHTML = html;
                             } else {
-                                let dialogsLength = data.suggestions.dialogs?.length;
-                                let faqsLength = data.suggestions.faqs?.length
+                                let dialogsLength = data.suggestions.dialogs?.length || 0;
+                                let faqsLength = data.suggestions.faqs?.length || 0;
                                 if ((dialogsLength > 0) && (faqsLength > 0)) {
-                                    $('#overLaySearch').html(`<div class="search-results-text">${dialogsLength + faqsLength} Search results for '${data.userInput}' <span class="show-all">Show all</span></div>`)
+                                    $('#overLaySearch').html(`<div class="search-results-text">${dialogsLength + faqsLength} Search results for '${data.userInput}' <span class="show-all hide">Show all</span></div>`)
                                 } else if ((dialogsLength > 0) && (faqsLength === 0 || faqsLength === undefined)) {
-                                    $('#overLaySearch').html(`<div class="search-results-text">${dialogsLength} Search results for '${data.userInput}' <span class="show-all">Show all</span></div>`)
+                                    $('#overLaySearch').html(`<div class="search-results-text">${dialogsLength} Search results for '${data.userInput}' <span class="show-all hide">Show all</span></div>`)
                                 } else if ((dialogsLength === 0 || dialogsLength === undefined) && (faqsLength > 0)) {
-                                    $('#overLaySearch').html(`<div class="search-results-text">${faqsLength} Search results for '${data.userInput}' <span class="show-all">Show all</span></div>`)
+                                    $('#overLaySearch').html(`<div class="search-results-text">${faqsLength} Search results for '${data.userInput}' <span class="show-all hide">Show all</span></div>`)
+                                }
+                                if((dialogsLength + faqsLength)>1){
+                                    $('#overLaySearch').find('.show-all').removeClass('hide');
+
                                 }
                             }
 
@@ -620,7 +624,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 html = `<div class="searched-intent" id="librarySearchText">0 Search results for '${data.userInput}' </div>`
                                 searchTextDisplay.innerHTML = html;
                             } else {
-                                $('#overLaySearch').html(`<div class="search-results-text">0 Search results for '${data.userInput}'</div>`)
+                                  $('#overLaySearch').html(`<div class="search-results-text">0 Search results for '${data.userInput}'</div>`)
                             }
 
                         }
@@ -692,7 +696,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                     <img src="./images/kg.svg">
                                                 </div>
                                                 <div class="content-dialog-task-type arr-cont-dialogtask" id="faqsSuggestions-results">
-                                                    <div class="type-with-img-title">Knowledge graph (${data.suggestions.faqs.length})</div>
+                                                    <div class="type-with-img-title">FAQ/Articles (${data.suggestions.faqs.length})</div>
                                                 </div>
                                             </div>
                                         </div>`;
@@ -744,6 +748,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     let faqs = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${index}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${index}`);
                                     let seeMoreButtonHtml = `
                               <button class="ghost-btn" style="font-style: italic;" id="seeMore-${index}" data-see-more="true">Show more</button>
+                              <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${index}" data-see-less="true">Show less</button>                  
                               `;
                                     faqs.append(seeMoreButtonHtml);
                                 }
@@ -771,9 +776,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 if ((ele.question?.length + ele.answer?.length) > 70) {
                                     let faqs = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${answerPlaceableID.split('-')[1]}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${answerPlaceableID.split('-')[1]}`);
                                     let seeMoreButtonHtml = `
-                          <button class="ghost-btn" style="font-style: italic;" id="seeMore-${answerPlaceableID.split('-')[1]}" data-see-more="true">Show more</button>
+                          <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${answerPlaceableID.split('-')[1]}" data-see-more="true">Show more</button>
+                          <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${answerPlaceableID.split('-')[1]}" data-see-less="true">Show less</button>
                           `;
                                     faqs.append(seeMoreButtonHtml);
+                                    $(`#search-text-display .type-info-run-send #faqSectionLib-${answerPlaceableID.split('-')[1]} .ast-carrotup.rotate-carrot`).length>0?$(`#search-text-display #seeMore-${answerPlaceableID.split('-')[1]}`).removeClass('hide'):$(`#search-text-display #seeMore-${answerPlaceableID.split('-')[1]}`).addClass('hide');
+                                    $(`#overLaySearch .type-info-run-send #faqSectionLib-${answerPlaceableID.split('-')[1]} .ast-carrotup.rotate-carrot`).length>0?$(`#overLaySearch #seeMore-${answerPlaceableID.split('-')[1]}`).removeClass('hide'):$(`#overLaySearch #seeMore-${answerPlaceableID.split('-')[1]}`).addClass('hide');
                                 }
                             })
                             answerPlaceableID = undefined;
@@ -1052,7 +1060,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     <img src="./images/kg.svg">
                 </div>
                 <div class="content-dialog-task-type" id="faqsSuggestions-${responseId}">
-                    <div class="type-with-img-title">Knowledge graph (${data.suggestions.faqs.length})</div>
+                    <div class="type-with-img-title">FAQ/Articles (${data.suggestions.faqs.length})</div>
                     
                 </div>
             </div>`;
@@ -1187,6 +1195,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     let faqs = $(`.type-info-run-send #faqSection-${index}`);
                                     let seeMoreButtonHtml = `
                           <button class="ghost-btn" style="font-style: italic;" id="seeMore-${index}" data-see-more="true">Show more</button>
+                          <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${index}" data-see-less="true">Show less</button>
                           `;
                                     faqs.append(seeMoreButtonHtml);
                                 }
@@ -1205,9 +1214,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 if ((ele.question?.length + ele.answer?.length) > 70) {
                                     let faqs = $(`.type-info-run-send #faqSection-${answerPlaceableID.split('-')[1]}`);
                                     let seeMoreButtonHtml = `
-                          <button class="ghost-btn" style="font-style: italic;" id="seeMore-${answerPlaceableID.split('-')[1]}" data-see-more="true">Show more</button>
+                          <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${answerPlaceableID.split('-')[1]}" data-see-more="true">Show more</button>
+                          <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${answerPlaceableID.split('-')[1]}" data-see-less="true">Show less</button>
                           `;
                                     faqs.append(seeMoreButtonHtml);
+                                    $(`.type-info-run-send #faqSection-${answerPlaceableID.split('-')[1]} .ast-carrotup.rotate-carrot`).length>0?$(`.type-info-run-send #faqSection-${answerPlaceableID.split('-')[1]} #seeMore-${answerPlaceableID.split('-')[1]}`).removeClass('hide'):$(`.type-info-run-send #faqSection-${answerPlaceableID.split('-')[1]} #seeMore-${answerPlaceableID.split('-')[1]}`).addClass('hide');
                                 }
                             })
                             answerPlaceableID = undefined;
@@ -1332,7 +1343,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             
                             </div>
                         </div>`;
-                            if (data.buttons.length > 1) {
+                            if (data.buttons?.length > 1) {
                                 if (i == 0) {
                                     welcomeMsgdiv.append(welcomeMsgHtml);
                                     let runInfoDivOfwelcome = $(`#welcomeMsg .run-info-content`);
@@ -1751,6 +1762,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             searchedVal = '';
                         }
 
+                        if(target.id === 'cancelLibrarySearch') {
+                            $('#librarySearch').val('');
+                            $('#cancelAgentSearch').addClass('hide');
+                            loadLibraryOnCancel(autoExhaustiveList, _conversationId, _botId);
+                        } else if(target.id === 'cancelAgentSearch') {
+                            $('#agentSearch').val('');
+                        }
+
                         if (target.className == 'show-all') {
                             $('#frequently-exhaustive').addClass('hide');
                             let showAllClicked = true;
@@ -1766,12 +1785,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $(`#dynamicBlock`).addClass('hide');
                             document.getElementById('agentAutoContainer').classList.add('hide');
                             document.getElementById('scriptContainer').classList.add('hide');
-
                             let libSearch = $('#librarySearch').val(agentSearchVal);
                             if (libSearch.length > 0) {
                                 $('#cancelLibrarySearch').removeClass('hide');
                             } else {
                                 $('#cancelLibrarySearch').addClass('hide');
+                                processAgentIntentResults(autoExhaustiveList, _conversationId, _botId);
                             }
                             $('.sugestions-info-data').addClass('hide');
                             $('#bodyContainer').removeClass('if-suggestion-search');
@@ -1840,7 +1859,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         else if (target.id === `agentAutoIcon` || target.id === `agentBotIcon` || target.id === `MybotLabel`) {
                             updateCurrentTabInState(_conversationId,'myBotTab')
                             agentTabActive();
-                            updateUIState(_conversationId, isCallConversation);
                         }
                         else if (target.id === `transcriptIcon` || target.id === `scriptIcon` || target.id === `transcriptLabel`) {
                             updateCurrentTabInState(_conversationId,'transcriptTab')
@@ -1850,7 +1868,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         else if (target.id === `userAutoIcon` || target.id === `userBotIcon` || target.id === `AssistLabel`) {
                             updateCurrentTabInState(_conversationId,'assistTab')
                             userTabActive();
-                            updateUIState(_conversationId, isCallConversation);
+                          //  updateUIState(_conversationId, isCallConversation);
 
                         }
                         var seeMoreButton = target.dataset.seeMore;
@@ -1866,13 +1884,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             let faqs = (currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ?
                                 $(`.type-info-run-send #faqSection-${targets[targets.length - 1]}`) :
                                 (currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${targets[targets.length - 1]}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${targets[targets.length - 1]}`));
-                            let seelessHtml = `<button class="ghost-btn" style="font-style: italic;" id="seeLess-${targets[targets.length - 1]}" data-see-less="true">Show less</button>`;
+                            faqs.find(`#seeLess-${targets[targets.length - 1]}`).each((i, ele) => {
+                                if ($(ele).attr('id').includes(`seeLess-${targets[targets.length - 1]}`)) {
+                                    ele.classList.remove('hide')
+                                }
+                            })
                             evt.target.classList.add('hide')
                             faqs.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#title-${targets[targets.length - 1]}` :
                                 `#titleLib-${targets[targets.length - 1]}`}`).attr('style', `overflow: inherit; white-space: normal; text-overflow: unset;`);
                             faqs.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#desc-${targets[targets.length - 1]}` : `#descLib-${targets[targets.length - 1]}`}`).attr('style', `overflow: inherit; white-space: normal; text-overflow: unset;`);
-
-                            faqs.append(seelessHtml);
                         }
                         if (seeLessButton) {
                             let targets = target.id.split('-');
@@ -1996,7 +2016,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             <img src="./images/kg.svg">
                                         </div>
                                         <div class="content-dialog-task-type" id="faqsSuggestions-${uniqueID}">
-                                            <div class="type-with-img-title">Knowledge graph (${res.agentAssistDetails?.suggestions ? res.agentAssistDetails?.suggestions.faqs.length : res.agentAssistDetails.ambiguityList.faqs.length})</div>
+                                            <div class="type-with-img-title">FAQ/Articles (${res.agentAssistDetails?.suggestions ? res.agentAssistDetails?.suggestions.faqs.length : res.agentAssistDetails.ambiguityList.faqs.length})</div>
                                             
                                         </div>
                                     </div>`;
@@ -2068,6 +2088,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                                 let faqs = $(`.type-info-run-send #faqSection-${uniqueID}`);
                                                                 let seeMoreButtonHtml = `
                                                   <button class="ghost-btn" style="font-style: italic;" id="seeMore-${uniqueID}" data-see-more="true">Show more</button>
+                                                  <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${uniqueID}" data-see-less="true">Show less</button>
                                                   `;
                                                                 faqs.append(seeMoreButtonHtml);
                                                             }
@@ -2872,7 +2893,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         <i class="ast-agent"></i>
                     </div>
                     <div class="run-info-content">
-                    <div class="title">Input ovrridden. Please provide the input</div>
+                    <div class="title">Input overridden. Please provide the input</div>
                     <div class="agent-utt enter-details-block">
                     <div class="title-data" ><span class="enter-details-title">EnterDetails: </span>
                     <input type="text" placeholder="Enter Value" class="input-text chat-container" id="agentInput-${Math.floor(Math.random() * 100)}" data-conv-id="${_agentAssistDataObj.conversationId}" data-bot-id="${_botId}"  data-mybot-input="true">
@@ -2928,11 +2949,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 $(`#faqssArea #faqDiv-${latestId} .action-links`).removeClass('hide');
                                 $(`#faqssArea #desc-${latestId}`).removeClass('hide');
                                 $(`#faqssArea #seeMore-${latestId}`).removeClass('hide');
+                                $(`#faqssArea #seeLess-${latestId}`).addClass('hide');
                             } else {
                                 $(`#${target.id}`).removeClass('rotate-carrot');
                                 $(`#faqssArea #faqDiv-${latestId} .action-links`).addClass('hide');
                                 $(`#faqssArea #desc-${latestId}`).addClass('hide');
                                 $(`#faqssArea #seeMore-${latestId}`).addClass('hide');
+                                $(`#faqssArea #seeLess-${latestId}`).addClass('hide');
                             }
 
                         }
@@ -2976,30 +2999,35 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 AgentAssistPubSub.publish('searched_Automation_details', { conversationId: evt.target.dataset.convId, botId: evt.target.dataset.botId, value: evt.target.dataset.intentName, isSearch: true });
                                 return
                             }
-                            if ($(`#search-text-display .ast-carrotup.rotate-carrot`).length <= 0) {
-                                $(`#search-text-display #${target.id}`).addClass('rotate-carrot');
-                                $(`#search-text-display #faqDivLib-${id} .action-links`).removeClass('hide');
-                                $(`#search-text-display #descLib-${id}`).removeClass('hide');
-                                $(`#search-text-display #seeMore-${id}`).removeClass('hide');
+                            if(currentTabActive == 'searchAutoIcon'){
+                                if ($(`#search-text-display .ast-carrotup.rotate-carrot`).length <= 0) {
+                                    $(`#search-text-display #${target.id}`).addClass('rotate-carrot');
+                                    $(`#search-text-display #faqDivLib-${id} .action-links`).removeClass('hide');
+                                    $(`#search-text-display #descLib-${id}`).removeClass('hide');
+                                    $(`#search-text-display #seeMore-${id}`).removeClass('hide');
+                                    $(`#search-text-display #seeLess-${id}`).addClass('hide');
+                                } else {
+                                    $(`#search-text-display #${target.id}`).removeClass('rotate-carrot');
+                                    $(`#search-text-display #faqDivLib-${id} .action-links`).addClass('hide');
+                                    $(`#search-text-display #descLib-${id}`).addClass('hide');
+                                    $(`#search-text-display #seeMore-${id}`).addClass('hide');
+                                    $(`#search-text-display #seeLess-${id}`).addClass('hide');
+                                }
                             } else {
-                                $(`#search-text-display #${target.id}`).removeClass('rotate-carrot');
-                                $(`#search-text-display #faqDivLib-${id} .action-links`).addClass('hide');
-                                $(`#search-text-display #descLib-${id}`).addClass('hide');
-                                $(`#search-text-display #seeMore-${id}`).addClass('hide');
+                                if ($(`#overLaySearch .ast-carrotup.rotate-carrot`).length <= 0) {
+                                    $(`#overLaySearch #${target.id}`).addClass('rotate-carrot');
+                                    $(`#overLaySearch #faqDivLib-${id} .action-links`).removeClass('hide');
+                                    $(`#overLaySearch #descLib-${id}`).removeClass('hide');
+                                    $(`#overLaySearch #seeMore-${id}`).removeClass('hide');
+                                    $(`#overLaySearch #seeLess-${id}`).addClass('hide');
+                                } else {
+                                    $(`#overLaySearch #${target.id}`).removeClass('rotate-carrot');
+                                    $(`#overLaySearch #faqDivLib-${id} .action-links`).addClass('hide');
+                                    $(`#overLaySearch #descLib-${id}`).addClass('hide');
+                                    $(`#overLaySearch #seeMore-${id}`).addClass('hide');
+                                    $(`#overLaySearch #seeLess-${id}`).addClass('hide');
+                                }
                             }
-
-                            if ($(`#overLaySearch .ast-carrotup.rotate-carrot`).length <= 0) {
-                                $(`#overLaySearch #${target.id}`).addClass('rotate-carrot');
-                                $(`#overLaySearch #faqDivLib-${id} .action-links`).removeClass('hide');
-                                $(`#overLaySearch #descLib-${id}`).removeClass('hide');
-                                $(`#overLaySearch #seeMore-${id}`).removeClass('hide');
-                            } else {
-                                $(`#overLaySearch #${target.id}`).removeClass('rotate-carrot');
-                                $(`#overLaySearch #faqDivLib-${id} .action-links`).addClass('hide');
-                                $(`#overLaySearch #descLib-${id}`).addClass('hide');
-                                $(`#overLaySearch #seeMore-${id}`).addClass('hide');
-                            }
-
                         }
 
                         if (target.id.split('-')[0] === 'dropDownHeader' || target.id.split('-')[0] === 'dropDownTitle') {
@@ -3352,6 +3380,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                 }
 
+                function loadLibraryOnCancel(list, _convsId, _botId) {
+                    processAgentIntentResults(list, _convsId, _botId)
+                }
+
                 function AgentAssist_input_keydown(e) {
                     if (e.target.id == 'librarySearch' || e.target.id == 'agentSearch') {
                         var input_taker = document.getElementById('librarySearch').value;
@@ -3360,6 +3392,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $('#cancelLibrarySearch').removeClass('hide');
                         } else {
                             $('#cancelLibrarySearch').addClass('hide');
+                            processAgentIntentResults(autoExhaustiveList, _conversationId, _botId);
                         }
                         if (agent_search.length > 0) {
                             $('#cancelAgentSearch').removeClass('hide');
@@ -3370,12 +3403,21 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             input_taker = ''
                         }
                         if (e.target.id == 'librarySearch' && input_taker.trim().length == 0 && e.target.dataset?.val?.trim().length == 0) {
+                            searchedVal = '';
                             processAgentIntentResults(autoExhaustiveList, autoExhaustiveList.conversationId, autoExhaustiveList.botId);
                         }
-                        if (e.keyCode == 13 && (input_taker.trim().length > 0 || e.target.dataset.val.trim().length > 0)) {
+                        if (e.keyCode == 13 && (input_taker.trim().length > 0)) {
                             searchedVal = $('#librarySearch').val();
                             updateCurrentTabInState(_conversationId, 'librarySearch');
-                            agentSearchVal = $('#agentSearch').val()
+                            // agentSearchVal = agent_search;
+                            var convId = e.target.dataset.convId;
+                            var botId = e.target.dataset.botId;
+                            var intentName = input_taker ? input_taker : e.target.dataset.val;
+                            AgentAssistPubSub.publish('searched_Automation_details', { conversationId: convId, botId: botId, value: intentName, isSearch: true });
+                            document.getElementById("loader").style.display = "block";
+                            document.getElementById("overLaySearch").style.display = "none";
+                        } else if(e.keyCode == 13 && agent_search.trim().length > 0) {
+                            agentSearchVal = agent_search;
                             var convId = e.target.dataset.convId;
                             var botId = e.target.dataset.botId;
                             var intentName = input_taker ? input_taker : e.target.dataset.val;
@@ -3521,7 +3563,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                     <div class="empty-data-no-agents">
                     <div class="title">No Agent automations are in running state</div>
-                    <div class="desc-text">Use “Run with Agent Inputs” to execute.</div>
+                    <div class="desc-text">Use "Run with Agent Inputs" to execute.</div>
                        
                     </div>
                     <div class="collapse-acc-data hide" id="welcomeMsg">
@@ -3545,7 +3587,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         </div>
                         <div class="empty-data-no-agents hide" id="noAutoRunning">
                             <div class="title">No Agent automations are in running state</div>
-                            <div class="desc-text">Use “Run with Agent Inputs” to execute.</div>
+                            <div class="desc-text">Use "Run with Agent Inputs" to execute.</div>
                         </div>
                     </div>
                 </div>
@@ -3629,14 +3671,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
         <div class="overlay-delete-popup hide" id="terminatePopUp">
             <div class="delete-box-content">
-                <div class="header-text">Are you sure you want to terminate the current on going task?</div>
+                <div class="header-text">You are terminate the current Task?</div>
                 <div class="close-popup">
                     <i class="ast-close"></i>
                 </div>
                 <div class="desc-text-info">Are you sure you want to terminate the dialog task ? If you terminate this task, you cannot continue with this task. To restart, 
                 you will have to run this task manually in Library.</div>
                 <div class="btn-footer-info">
-                    <button class="btn-danger">Yes</button>
+                    <button class="btn-danger">Yes Terminate</button>
                     <button class="btn-cancel">Cancel</button>
                 </div>
             </div>
