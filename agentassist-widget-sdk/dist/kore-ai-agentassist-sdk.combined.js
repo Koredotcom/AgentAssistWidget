@@ -81896,6 +81896,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 _agentAsisstSocket.emit('welcome_message_request', welcome_message_request);
 
                 if (isCallConversation === 'true') {
+                    currentTabActive = 'transcriptIcon';
                     $('#transcriptIcon').removeClass('hide');
                     transcriptionTabActive();
                 }
@@ -82574,14 +82575,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                     let uuids = koreGenerateUUID();
                     responseId = uuids;
-                    if (isCallConversation === 'true' && data.suggestions) {
+                    if (isCallConversation === 'true' && data.suggestions && currentTabActive == 'transcriptIcon') {
                         let buldHtml = `
                         <div class="buld-count-utt" id="buldCount-${uuids}">
                                     <i class="ast-bulb" id="buldCountAst-${uuids}"></i>
                                     <span class="count-number" id="buldCountNumber-${uuids}">${(data.suggestions.dialogs ? data.suggestions.dialogs?.length : 0) + (data.suggestions.faqs ? data.suggestions.faqs?.length : 0)}</span>
                                 </div>`;
 
-                        let attrs = $('.other-user-bubble .bubble-data');
+                        let attrs = $('#scriptContainer .other-user-bubble .bubble-data');
                         $(attrs).last().attr('id', uuids)
                         attrs.each((i, data) => {
                             if (data.id === uuids) {
@@ -83344,27 +83345,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 method: "send",
                                 text: target.dataset.msgData
                             }, "*")
-                        } else if(target.id === 'sendMsg' && sourceType == 'salesforce') {
-                            payload = {
-                                'Message__c': document.getElementById(`displayData-${target.dataset.msgId}`),
-                                'recordId__c': _conversationId
-                            }
-                            $.ajax({
-                                url: 'https://koreaicontactcenter-dev-ed.my.salesforce.com',
-                                type: 'POST',
-                                crossDomain: true,
-                                contentType: 'application/json',
-                                headers: {
-                                    'User-Agent': this.userAgent,
-                                    "content-type": 'application/json',
-                                    "Authorization": 'Bearer 00D8b000002B0oREAS!AQEAQKdEoyMy_Dqeebp0CMYKF3Q9GH2hX5jTS7ZqsGfpUMiPJwBjl00HvsODRcOkWFPFJAEXzcfj.fpQsQG74EOORgrVCdPD'
-                                },
-                                data: JSON.stringify(payload),
-                                dataType: "json",
-                                success: function (result) {
-                                    console.log('Successfully Sent the text', result);
-                                }
-                            });
                         }
                         if ((target.className == 'copy-btn' || target.className == 'ast-copy') && sourceType == 'smartassist-color-scheme') {
                             let ele = document.getElementById(`displayData-${target.dataset.msgId}`) ? document.getElementById(`displayData-${target.dataset.msgId}`) : document.getElementById(target.dataset.msgId);
@@ -83372,15 +83352,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 method: "copy",
                                 text: target.dataset.msgData && target.dataset.msgData!==''?target.dataset.msgData:(target.parentNode.dataset.msgData && target.parentNode.dataset.msgData!==''?target.parentNode.dataset.msgData:ele.innerText)
                             }, "*")
-                        } else if((target.className == 'copy-btn' || target.className == 'ast-copy') && sourceType == 'salesforce') {
-                            console.log('message is copied to clipboard');
-                            // function copyToClipboard(element) {
-                            //     var $temp = $("<input>");
-                            //     $("body").append($temp);
-                            //     $temp.val($(element).text()).select();
-                            //     document.execCommand("copy");
-                            //     $temp.remove();
-                            //   }
                         }
                         if (target.className == 'ast-close close-search') {
                             $('#agentSearch').val('');
@@ -84751,7 +84722,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
 
                         if (target.id.split('-')[0] == 'buldCount' || target.className == 'ast-bulb' || target.className == 'count-number') {
-                            let bulbDiv = $('.other-user-bubble .bubble-data .buld-count-utt').length <= 0 ? $('.other-user-bubble .bubble-data .buld-count-utt-after-click') : $('.other-user-bubble .bubble-data .buld-count-utt');
+                            let bulbDiv = $('#scriptContainer .other-user-bubble .bubble-data .buld-count-utt').length <= 0 ? $('#scriptContainer .other-user-bubble .bubble-data .buld-count-utt-after-click') : $('#scriptContainer .other-user-bubble .bubble-data .buld-count-utt');
                             let bulbid = target.id.split('-');
                             bulbid.shift();
                             let idOfBuld = $(bulbDiv).last().attr('id').split('-');
@@ -84762,8 +84733,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 userTabActive();
                                 document.getElementById('showHistory').click();
                             }
-                            $(`#buldCount-${bulbid.join('-')}`).removeClass('buld-count-utt').addClass('buld-count-utt-after-click');
-                            $(`#buldCountNumber-${bulbid.join('-')}`).html(`<span>&#10003;</span>`);
+                            $(`#scriptContainer #buldCount-${bulbid.join('-')}`).removeClass('buld-count-utt').addClass('buld-count-utt-after-click');
+                            $(`#scriptContainer #buldCountNumber-${bulbid.join('-')}`).html(`<span>&#10003;</span>`);
                         }
                     })
 

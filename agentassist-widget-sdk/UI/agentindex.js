@@ -303,6 +303,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 _agentAsisstSocket.emit('welcome_message_request', welcome_message_request);
 
                 if (isCallConversation === 'true') {
+                    currentTabActive = 'transcriptIcon';
                     $('#transcriptIcon').removeClass('hide');
                     transcriptionTabActive();
                 }
@@ -981,14 +982,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                     let uuids = koreGenerateUUID();
                     responseId = uuids;
-                    if (isCallConversation === 'true' && data.suggestions) {
+                    if (isCallConversation === 'true' && data.suggestions && currentTabActive == 'transcriptIcon') {
                         let buldHtml = `
                         <div class="buld-count-utt" id="buldCount-${uuids}">
                                     <i class="ast-bulb" id="buldCountAst-${uuids}"></i>
                                     <span class="count-number" id="buldCountNumber-${uuids}">${(data.suggestions.dialogs ? data.suggestions.dialogs?.length : 0) + (data.suggestions.faqs ? data.suggestions.faqs?.length : 0)}</span>
                                 </div>`;
 
-                        let attrs = $('.other-user-bubble .bubble-data');
+                        let attrs = $('#scriptContainer .other-user-bubble .bubble-data');
                         $(attrs).last().attr('id', uuids)
                         attrs.each((i, data) => {
                             if (data.id === uuids) {
@@ -3128,7 +3129,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
 
                         if (target.id.split('-')[0] == 'buldCount' || target.className == 'ast-bulb' || target.className == 'count-number') {
-                            let bulbDiv = $('.other-user-bubble .bubble-data .buld-count-utt').length <= 0 ? $('.other-user-bubble .bubble-data .buld-count-utt-after-click') : $('.other-user-bubble .bubble-data .buld-count-utt');
+                            let bulbDiv = $('#scriptContainer .other-user-bubble .bubble-data .buld-count-utt').length <= 0 ? $('#scriptContainer .other-user-bubble .bubble-data .buld-count-utt-after-click') : $('#scriptContainer .other-user-bubble .bubble-data .buld-count-utt');
                             let bulbid = target.id.split('-');
                             bulbid.shift();
                             let idOfBuld = $(bulbDiv).last().attr('id').split('-');
@@ -3139,8 +3140,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 userTabActive();
                                 document.getElementById('showHistory').click();
                             }
-                            $(`#buldCount-${bulbid.join('-')}`).removeClass('buld-count-utt').addClass('buld-count-utt-after-click');
-                            $(`#buldCountNumber-${bulbid.join('-')}`).html(`<span>&#10003;</span>`);
+                            $(`#scriptContainer #buldCount-${bulbid.join('-')}`).removeClass('buld-count-utt').addClass('buld-count-utt-after-click');
+                            $(`#scriptContainer #buldCountNumber-${bulbid.join('-')}`).html(`<span>&#10003;</span>`);
                         }
                     })
 
