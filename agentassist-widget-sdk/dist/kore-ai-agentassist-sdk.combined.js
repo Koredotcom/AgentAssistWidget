@@ -81628,6 +81628,9 @@ var jwtToken, isCallConversation;
 var entitiestValueArray;
 var previousEntitiesValue;
 var isRetore = false;
+// SalesForce
+var salesForceAPIData;
+// 
 function koreGenerateUUID() {
     console.info("generating UUID");
     var d = new Date().getTime();
@@ -81642,7 +81645,6 @@ function koreGenerateUUID() {
     return uuid;
 }
 window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, connectionDetails) {
-    console.log('agent assist inside contructor', new Date());
 
     try {
         const params = new Proxy(new URLSearchParams(window.location.search), {
@@ -81650,12 +81652,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
         });
         sourceType = params.source;
         isCallConversation = params.isCall;
-        console.log('================source============: ', sourceType)
         if (sourceType === 'smartassist-color-scheme') {
-            console.log('sourceType: ', params.source);
             $('body').addClass(sourceType);
         } else {
-            console.log(params.source);
             $('body').addClass('default-color-scheme')
         }
     } catch (err) {
@@ -81718,8 +81717,27 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
         }
     }
 
+    // function salesForceLoginAPI(jsonData) {
+    //     $.ajax({
+    //         url: "https://login.salesforce.com/services/oauth2/token",
+    //         type: 'post',
+    //         data: jsonData,
+    //         dataType: 'json',
+    //         crossDomain: true,
+    //         headers: {
+    //             'User-Agent': this.userAgent,
+    //             "Content-Type":"application/x-www-form-urlencoded"
+    //         },
+    //         success: function (data) {
+    //             salesForceAPIData = data;
+    //         },
+    //         error: function (err) {
+    //             console.error("sales Force login API failed: ", err);
+    //         }
+    //     });
+    // }
+
     function grantCall(jwtID, botid, url) {
-        console.log('agent assist inside grantCall', new Date());
         document.getElementById("loader").style.display = "block";
         var payload = {
             "assertion": jwtID,
@@ -81741,6 +81759,17 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             data: JSON.stringify(payload),
             dataType: "json",
             success: function (result) {
+                // if(sourceType === 'salesforce') {
+                //     payload = {
+                //         "grant_type":"password",
+                //         "client_id": '3MVG99gP.VbJma8XJg4Yvj22oLyPzMyUEduPfrjwiO2qJGjCJ1kW0yeLpM83z34Ckunlvqp3iaIYPfic.dZn0',
+                //         "client_secret": 'DDCA2AB019814F4DFF39FB9C142832BD2259FB3091BC1005E58A3B4D5741A8B4',
+                //         "username": 'ajay.gummalla@kore.com.cc',
+                //         "password": 'Kore@1234'
+                //     }
+                //     salesForceLoginAPI(payload)
+                // }
+
                 chatConfig = window.KoreSDK.chatConfig;
                 var koreBot = koreBotChat();
                 AgentChatInitialize = new koreBot.chatWindow(chatConfig);
@@ -81896,6 +81925,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 _agentAsisstSocket.emit('welcome_message_request', welcome_message_request);
 
                 if (isCallConversation === 'true') {
+                    currentTabActive = 'transcriptIcon';
                     $('#transcriptIcon').removeClass('hide');
                     transcriptionTabActive();
                 }
@@ -82574,14 +82604,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                     let uuids = koreGenerateUUID();
                     responseId = uuids;
-                    if (isCallConversation === 'true' && data.suggestions) {
+                    if (isCallConversation === 'true' && data.suggestions && currentTabActive == 'transcriptIcon') {
                         let buldHtml = `
                         <div class="buld-count-utt" id="buldCount-${uuids}">
                                     <i class="ast-bulb" id="buldCountAst-${uuids}"></i>
                                     <span class="count-number" id="buldCountNumber-${uuids}">${(data.suggestions.dialogs ? data.suggestions.dialogs?.length : 0) + (data.suggestions.faqs ? data.suggestions.faqs?.length : 0)}</span>
                                 </div>`;
 
-                        let attrs = $('.other-user-bubble .bubble-data');
+                        let attrs = $('#scriptContainer .other-user-bubble .bubble-data');
                         $(attrs).last().attr('id', uuids)
                         attrs.each((i, data) => {
                             if (data.id === uuids) {
@@ -82609,7 +82639,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         if (suggestionsblock.length >= 1) {
                             suggestionsblock.each((i, ele) => {
                                 $('#dynamicBlock .agent-utt-info').each((i, elem) => {
-                                    console.log("xxxxxxxxxxxxxxxxxxxxxxxxx automation list", elem.innerText)
                                     if (ele.id.split('-').includes(elem.id.split('-')[1])) {
                                         automationNotRanArray.push(elem.innerText.trim());
                                         elem.remove();
@@ -83339,32 +83368,40 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         });
 
                         if (target.id === 'sendMsg' && sourceType == 'smartassist-color-scheme') {
-                            let ele = document.getElementById(`displayData-${target.dataset.msgId}`)
+                            // let ele = document.getElementById(`displayData-${target.dataset.msgId}`)
                             window.parent.postMessage({
                                 method: "send",
                                 text: target.dataset.msgData
                             }, "*")
                         } else if(target.id === 'sendMsg' && sourceType == 'salesforce') {
-                            payload = {
-                                'Message__c': document.getElementById(`displayData-${target.dataset.msgId}`),
-                                'recordId__c': _conversationId
-                            }
-                            $.ajax({
-                                url: 'https://koreaicontactcenter-dev-ed.my.salesforce.com',
-                                type: 'POST',
-                                crossDomain: true,
-                                contentType: 'application/json',
-                                headers: {
-                                    'User-Agent': this.userAgent,
-                                    "content-type": 'application/json',
-                                    "Authorization": 'Bearer 00D8b000002B0oREAS!AQEAQKdEoyMy_Dqeebp0CMYKF3Q9GH2hX5jTS7ZqsGfpUMiPJwBjl00HvsODRcOkWFPFJAEXzcfj.fpQsQG74EOORgrVCdPD'
-                                },
-                                data: JSON.stringify(payload),
-                                dataType: "json",
-                                success: function (result) {
-                                    console.log('Successfully Sent the text', result);
-                                }
-                            });
+                            var lexOrigin = "https://koreaicontactcenter-dev-ed.lightning.force.com";
+                            let payload = target.dataset.msgData;
+                            let data = JSON.stringify(payload);
+                            var message = {
+                                name: "com.mycompany.chatmessage",
+                                payload: data
+                            };
+                            parent.postMessage(message, lexOrigin);
+                            // let payload = {
+                            //     'Message__c': target.dataset.msgData,
+                            //     'recordId__c': _conversationId
+                            // }
+                            // $.ajax({
+                            //     url: salesForceAPIData.instance_url + '/services/data/v55.0/sobjects/AgentNotification__e/',
+                            //     type: 'POST',
+                            //     crossDomain: true,
+                            //     contentType: 'application/json',
+                            //     headers: {
+                            //         'User-Agent': this.userAgent,
+                            //         "content-type": 'application/json',
+                            //         "Authorization": 'Bearer ' + salesForceAPIData.access_token 
+                            //     },
+                            //     data: JSON.stringify(payload),
+                            //     dataType: "json",
+                            //     success: function (result) {
+                            //         console.log('Successfully Sent the text', result);
+                            //     }
+                            // });
                         }
                         if ((target.className == 'copy-btn' || target.className == 'ast-copy') && sourceType == 'smartassist-color-scheme') {
                             let ele = document.getElementById(`displayData-${target.dataset.msgId}`) ? document.getElementById(`displayData-${target.dataset.msgId}`) : document.getElementById(target.dataset.msgId);
@@ -84751,7 +84788,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
 
                         if (target.id.split('-')[0] == 'buldCount' || target.className == 'ast-bulb' || target.className == 'count-number') {
-                            let bulbDiv = $('.other-user-bubble .bubble-data .buld-count-utt').length <= 0 ? $('.other-user-bubble .bubble-data .buld-count-utt-after-click') : $('.other-user-bubble .bubble-data .buld-count-utt');
+                            let bulbDiv = $('#scriptContainer .other-user-bubble .bubble-data .buld-count-utt').length <= 0 ? $('#scriptContainer .other-user-bubble .bubble-data .buld-count-utt-after-click') : $('#scriptContainer .other-user-bubble .bubble-data .buld-count-utt');
                             let bulbid = target.id.split('-');
                             bulbid.shift();
                             let idOfBuld = $(bulbDiv).last().attr('id').split('-');
@@ -84762,8 +84799,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 userTabActive();
                                 document.getElementById('showHistory').click();
                             }
-                            $(`#buldCount-${bulbid.join('-')}`).removeClass('buld-count-utt').addClass('buld-count-utt-after-click');
-                            $(`#buldCountNumber-${bulbid.join('-')}`).html(`<span>&#10003;</span>`);
+                            $(`#scriptContainer #buldCount-${bulbid.join('-')}`).removeClass('buld-count-utt').addClass('buld-count-utt-after-click');
+                            $(`#scriptContainer #buldCountNumber-${bulbid.join('-')}`).html(`<span>&#10003;</span>`);
                         }
                     })
 
