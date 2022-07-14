@@ -81628,9 +81628,7 @@ var jwtToken, isCallConversation;
 var entitiestValueArray;
 var previousEntitiesValue;
 var isRetore = false;
-// SalesForce
-var salesForceAPIData;
-// 
+
 function koreGenerateUUID() {
     console.info("generating UUID");
     var d = new Date().getTime();
@@ -81717,26 +81715,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
         }
     }
 
-    // function salesForceLoginAPI(jsonData) {
-    //     $.ajax({
-    //         url: "https://login.salesforce.com/services/oauth2/token",
-    //         type: 'post',
-    //         data: jsonData,
-    //         dataType: 'json',
-    //         crossDomain: true,
-    //         headers: {
-    //             'User-Agent': this.userAgent,
-    //             "Content-Type":"application/x-www-form-urlencoded"
-    //         },
-    //         success: function (data) {
-    //             salesForceAPIData = data;
-    //         },
-    //         error: function (err) {
-    //             console.error("sales Force login API failed: ", err);
-    //         }
-    //     });
-    // }
-
     function grantCall(jwtID, botid, url) {
         document.getElementById("loader").style.display = "block";
         var payload = {
@@ -81759,17 +81737,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             data: JSON.stringify(payload),
             dataType: "json",
             success: function (result) {
-                // if(sourceType === 'salesforce') {
-                //     payload = {
-                //         "grant_type":"password",
-                //         "client_id": '3MVG99gP.VbJma8XJg4Yvj22oLyPzMyUEduPfrjwiO2qJGjCJ1kW0yeLpM83z34Ckunlvqp3iaIYPfic.dZn0',
-                //         "client_secret": 'DDCA2AB019814F4DFF39FB9C142832BD2259FB3091BC1005E58A3B4D5741A8B4',
-                //         "username": 'ajay.gummalla@kore.com.cc',
-                //         "password": 'Kore@1234'
-                //     }
-                //     salesForceLoginAPI(payload)
-                // }
-
                 chatConfig = window.KoreSDK.chatConfig;
                 var koreBot = koreBotChat();
                 AgentChatInitialize = new koreBot.chatWindow(chatConfig);
@@ -83374,7 +83341,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 text: target.dataset.msgData
                             }, "*")
                         } else if(target.id === 'sendMsg' && sourceType == 'salesforce') {
-                            // var lexOrigin = "https://koreaicontactcenter-dev-ed.lightning.force.com";
                             let payload = target.dataset.msgData;
                             let data = payload;
                             var message = {
@@ -83383,26 +83349,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 payload: data
                             };
                             parent.postMessage(message, '*');
-                            // let payload = {
-                            //     'Message__c': target.dataset.msgData,
-                            //     'recordId__c': _conversationId
-                            // }
-                            // $.ajax({
-                            //     url: salesForceAPIData.instance_url + '/services/data/v55.0/sobjects/AgentNotification__e/',
-                            //     type: 'POST',
-                            //     crossDomain: true,
-                            //     contentType: 'application/json',
-                            //     headers: {
-                            //         'User-Agent': this.userAgent,
-                            //         "content-type": 'application/json',
-                            //         "Authorization": 'Bearer ' + salesForceAPIData.access_token 
-                            //     },
-                            //     data: JSON.stringify(payload),
-                            //     dataType: "json",
-                            //     success: function (result) {
-                            //         console.log('Successfully Sent the text', result);
-                            //     }
-                            // });
                         }
                         if ((target.className == 'copy-btn' || target.className == 'ast-copy') && sourceType == 'smartassist-color-scheme') {
                             let ele = document.getElementById(`displayData-${target.dataset.msgId}`) ? document.getElementById(`displayData-${target.dataset.msgId}`) : document.getElementById(target.dataset.msgId);
