@@ -18,7 +18,6 @@ export class LocalStoreService {
       else returns accountDetails
   */
   public getAuthInfo(): any {
-    console.log(window[this.storageType].getItem("jStorage"),"jstorage value");
     try {
       let _accountDetails = window[this.storageType].getItem("jStorage");
       if (_accountDetails) {
