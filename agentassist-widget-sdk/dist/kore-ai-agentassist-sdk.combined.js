@@ -83374,14 +83374,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 text: target.dataset.msgData
                             }, "*")
                         } else if(target.id === 'sendMsg' && sourceType == 'salesforce') {
-                            var lexOrigin = "https://koreaicontactcenter-dev-ed.lightning.force.com";
+                            // var lexOrigin = "https://koreaicontactcenter-dev-ed.lightning.force.com";
                             let payload = target.dataset.msgData;
-                            let data = JSON.stringify(payload);
+                            let data = payload;
                             var message = {
-                                name: "com.mycompany.chatmessage",
+                                name: "agentAssist.SendMessage",
+                                conversationId: _conversationId,
                                 payload: data
                             };
-                            parent.postMessage(message, lexOrigin);
+                            parent.postMessage(message, '*');
                             // let payload = {
                             //     'Message__c': target.dataset.msgData,
                             //     'recordId__c': _conversationId
@@ -83410,14 +83411,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 text: target.dataset.msgData && target.dataset.msgData!==''?target.dataset.msgData:(target.parentNode.dataset.msgData && target.parentNode.dataset.msgData!==''?target.parentNode.dataset.msgData:ele.innerText)
                             }, "*")
                         } else if((target.className == 'copy-btn' || target.className == 'ast-copy') && sourceType == 'salesforce') {
-                            console.log('message is copied to clipboard');
-                            // function copyToClipboard(element) {
-                            //     var $temp = $("<input>");
-                            //     $("body").append($temp);
-                            //     $temp.val($(element).text()).select();
-                            //     document.execCommand("copy");
-                            //     $temp.remove();
-                            //   }
+                            console.log('message is copied');
+                            let data = target.dataset.msgData && target.dataset.msgData!==''?target.dataset.msgData:(target.parentNode.dataset.msgData && target.parentNode.dataset.msgData!==''?target.parentNode.dataset.msgData:ele.innerText)
+                            var message = {
+                                name: "agentAssist.CopyMessage",
+                                conversationId: _conversationId,
+                                payload: data
+                            };
+                            parent.postMessage(message, '*');
                         }
                         if (target.className == 'ast-close close-search') {
                             $('#agentSearch').val('');
