@@ -336,7 +336,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     localStorage.setItem("queryParams", JSON.stringify({
       'return_to': this.appUrlsService.completeAppPath(),
       'showLogin': 'true',
-      'comingFromKey': 'isDeflectApp',
+      'comingFromKey': 'isAgentAssistApp',
       'hideSSOButtons': 'true',
       'hideResourcesPageLink': 'true'
     }))
