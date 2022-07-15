@@ -986,7 +986,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         let buldHtml = `
                         <div class="buld-count-utt" id="buldCount-${uuids}">
                                     <i class="ast-bulb" id="buldCountAst-${uuids}"></i>
-                                    <span class="count-number" id="buldCountNumber-${uuids}">${(data.suggestions.dialogs ? data.suggestions.dialogs?.length : 0) + (data.suggestions.faqs ? data.suggestions.faqs?.length : 0)}</span>
+                                    <span class="count-number" id="buldCountNumber-${uuids}">${(data.suggestions.dialogs.length || 0) + (data.suggestions.faqs?.length || 0)}</span>
                                 </div>`;
 
                         let attrs = $('#scriptContainer .other-user-bubble .bubble-data');
@@ -3129,7 +3129,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
 
                         if (target.id.split('-')[0] == 'buldCount' || target.className == 'ast-bulb' || target.className == 'count-number') {
-                            let bulbDiv = $('#scriptContainer .other-user-bubble .bubble-data .buld-count-utt').length <= 0 ? $('#scriptContainer .other-user-bubble .bubble-data .buld-count-utt-after-click') : $('#scriptContainer .other-user-bubble .bubble-data .buld-count-utt');
+                            let bulbDiv;
+                            if( $('#scriptContainer .other-user-bubble .bubble-data .buld-count-utt').length > 0){
+                                bulbDiv=  $('#scriptContainer .other-user-bubble .bubble-data').find('.buld-count-utt, .buld-count-utt-after-click');
+                            }else {
+                                bulbDiv = $('#scriptContainer .other-user-bubble .bubble-data .buld-count-utt-after-click');
+                            }
                             let bulbid = target.id.split('-');
                             bulbid.shift();
                             let idOfBuld = $(bulbDiv).last().attr('id').split('-');
