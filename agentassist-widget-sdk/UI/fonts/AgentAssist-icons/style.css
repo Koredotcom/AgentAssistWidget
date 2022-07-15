@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'AgentAssist-icons';
-  src:  url('./fonts/AgentAssist-icons/fonts/AgentAssist-icons.eot?dda8yd');
-  src:  url('./fonts/AgentAssist-icons/fonts/AgentAssist-icons.eot?dda8yd#iefix') format('embedded-opentype'),
-    url('./fonts/AgentAssist-icons/fonts/AgentAssist-icons.ttf?dda8yd') format('truetype'),
-    url('./fonts/AgentAssist-icons/fonts/AgentAssist-icons.woff?dda8yd') format('woff'),
-    url('./fonts/AgentAssist-icons/fonts/AgentAssist-icons.svg?dda8yd#AgentAssist-icons') format('svg');
+  src:  url('./fonts/AgentAssist-icons/fonts/AgentAssist-icons.eot?bq2n0p');
+  src:  url('./fonts/AgentAssist-icons/fonts/AgentAssist-icons.eot?bq2n0p#iefix') format('embedded-opentype'),
+    url('./fonts/AgentAssist-icons/fonts/AgentAssist-icons.ttf?bq2n0p') format('truetype'),
+    url('./fonts/AgentAssist-icons/fonts/AgentAssist-icons.woff?bq2n0p') format('woff'),
+    url('./fonts/AgentAssist-icons/fonts/AgentAssist-icons.svg?bq2n0p#AgentAssist-icons') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.ast-thumb-new:before {
+  content: "\e915";
+  color: #135423;
+}
 .ast-edited:before {
   content: "\e914";
 }

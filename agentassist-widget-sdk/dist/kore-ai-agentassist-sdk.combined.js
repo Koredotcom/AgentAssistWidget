@@ -85318,7 +85318,96 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             <div class="event-bucket">
                 <img src="./images/bucket.svg">
             </div>
-        </div>`;
+        </div>
+        
+        <div class="fedback-success-notification">
+            <div class="icon-block">
+                <i class="ast-thumb-new"></i>
+            </div>
+            <div class="success-title">Thank you! Your feedback helps us improve your experience.</div>
+            <div class="close-feedback">
+                <i class="ast-close"></i>
+            </div>
+        </div>
+
+        <div class="show-bottom-slider-modal">
+            <div class="content-bottom-slider-top">
+                <div class="header-content">
+                    <div class="close-slider">
+                        <i class="ast-close"></i>
+                    </div>
+                    <div class="title-heading">Give Feedback</div>
+                    <div class="desc-text-header">You ran a few automations for in this session. How was your experience?</div>
+                </div>
+                <div class="body-sec-data-slider">
+                    <div class="feedback-row-data">
+                        <div class="label-text">Order Cancellation</div>
+                        <div class="feedback-icons">
+                            <div class="thumbs-icons">
+                                <i class="ast-thumbup"></i>
+                            </div>
+                            <div class="thumbs-icons">
+                                <i class="ast-thumbdown"></i>
+                            </div>
+                        </div>
+                        <input type="text" class="input-text" placeholder="Add a comment">
+                    </div>
+                    <div class="feedback-row-data">
+                        <div class="label-text">Refund Initiation</div>
+                        <div class="feedback-icons">
+                            <div class="thumbs-icons">
+                                <i class="ast-thumbup"></i>
+                            </div>
+                            <div class="thumbs-icons">
+                                <i class="ast-thumbdown"></i>
+                            </div>
+                        </div>
+                        <input type="text" class="input-text" placeholder="Add a comment">
+                    </div>
+                    <div class="feedback-row-data">
+                        <div class="label-text">Order Replacement</div>
+                        <div class="feedback-icons">
+                            <div class="thumbs-icons">
+                                <i class="ast-thumbup"></i>
+                            </div>
+                            <div class="thumbs-icons">
+                                <i class="ast-thumbdown"></i>
+                            </div>
+                        </div>
+                        <textarea placeholder="Add a comment" class="input-text-area"></textarea>
+                    </div>
+                    <div class="feedback-row-data">
+                        <div class="label-text">Order Replacement</div>
+                        <div class="feedback-icons">
+                            <div class="thumbs-icons">
+                                <i class="ast-thumbup"></i>
+                            </div>
+                            <div class="thumbs-icons">
+                                <i class="ast-thumbdown"></i>
+                            </div>
+                        </div>
+                        <input type="text" class="input-text" placeholder="Add a comment">
+                    </div>
+                    <div class="feedback-row-data">
+                        <div class="label-text">New Order </div>
+                        <div class="feedback-icons">
+                            <div class="thumbs-icons">
+                                <i class="ast-thumbup"></i>
+                            </div>
+                            <div class="thumbs-icons">
+                                <i class="ast-thumbdown"></i>
+                            </div>
+                        </div>
+                        <input type="text" class="input-text" placeholder="Add a comment">
+                    </div>
+                </div>
+                <div class="footer-slider-btns">
+                    <button class="submit-btn">Submit</button>
+                    <button class="skip-btn">Skip</button>
+                </div>
+            </div>
+        </div>
+        `;
             console.log("AgentAssist >>> adding html")
             // var hrml = `<div>Hello</div>`
             container.append(cHtml);
