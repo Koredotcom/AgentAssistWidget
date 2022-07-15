@@ -1764,6 +1764,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             }, "*")
                         } else if((target.className == 'copy-btn' || target.className == 'ast-copy') && sourceType == 'salesforce') {
                             console.log('message is copied');
+                            let ele = document.getElementById(`displayData-${target.dataset.msgId}`) ? document.getElementById(`displayData-${target.dataset.msgId}`) : document.getElementById(target.dataset.msgId);
                             let data = target.dataset.msgData && target.dataset.msgData!==''?target.dataset.msgData:(target.parentNode.dataset.msgData && target.parentNode.dataset.msgData!==''?target.parentNode.dataset.msgData:ele.innerText)
                             console.log('copy data for sales force',data);
                             var message = {
