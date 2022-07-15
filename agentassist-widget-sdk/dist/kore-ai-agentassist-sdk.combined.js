@@ -83342,11 +83342,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             }, "*")
                         } else if(target.id === 'sendMsg' && sourceType == 'salesforce') {
                             let payload = target.dataset.msgData;
-                            let data = payload;
                             var message = {
                                 name: "agentAssist.SendMessage",
                                 conversationId: _conversationId,
-                                payload: data
+                                payload: payload
                             };
                             parent.postMessage(message, '*');
                         }
@@ -83359,11 +83358,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         } else if((target.className == 'copy-btn' || target.className == 'ast-copy') && sourceType == 'salesforce') {
                             console.log('message is copied');
                             let data = target.dataset.msgData && target.dataset.msgData!==''?target.dataset.msgData:(target.parentNode.dataset.msgData && target.parentNode.dataset.msgData!==''?target.parentNode.dataset.msgData:ele.innerText)
+                            console.log('copy data for sales force',data);
                             var message = {
                                 name: "agentAssist.CopyMessage",
                                 conversationId: _conversationId,
                                 payload: data
                             };
+                            console.log('copy message to sales force',message)
                             parent.postMessage(message, '*');
                         }
                         if (target.className == 'ast-close close-search') {
