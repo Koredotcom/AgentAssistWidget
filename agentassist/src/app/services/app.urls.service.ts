@@ -29,7 +29,7 @@ export class AppUrlsService {
       // redirectedUrl = this.completeAppPath();
     }
      
-    return this.marketURL()+'/?return_to='+redirectedUrl+'&showLogin=true&hideSSOButtons=true&hideResourcesPageLink=true&comingFromKey=isDeflectApp' + window.location.search.replace('?', '&');
+    return this.marketURL()+'/?return_to='+redirectedUrl+'&showLogin=true&hideSSOButtons=true&hideResourcesPageLink=true&comingFromKey=isAgentAssistApp' + window.location.search.replace('?', '&');
   }
   public redirectToLogin(redirectToHome?){
     let _redirectUrl=this.getLoginRedirectURL(redirectToHome);
