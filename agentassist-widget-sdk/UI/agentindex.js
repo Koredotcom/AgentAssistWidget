@@ -35,6 +35,7 @@ var jwtToken, isCallConversation;
 var entitiestValueArray;
 var previousEntitiesValue;
 var isRetore = false;
+var userMessage = {};
 
 function koreGenerateUUID() {
     console.info("generating UUID");
@@ -227,7 +228,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         { conversationId: _agentAssistDataObj.conversationId, botId: _agentAssistDataObj.botId, 'experience': 'chat' });
                     _agentAsisstSocket.on('user_message', (data) => {
                         processUserMessage(data, data.conversationId, _botId);
-
+                        userMessage = data;
                     });
                     _agentAsisstSocket.on('agent_assist_user_message', (data) => {
                         updateAgentAssistState(_conversationId, 'assistTab', data);
@@ -1412,11 +1413,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         $(noOfSteps[noOfSteps.length - 2]).removeClass('hide').attr('style', 'color:gray');
                         $(noOfSteps[noOfSteps.length - 1]).removeClass('hide');
                     }
-                    if (((data.endOfFaq || data.endOfTask) && data.type !== 'text') || (data.userInput == 'discard all' && data.type !== 'text')) {
+                    if (((data.endOfFaq || data.endOfTask) && data.type !== 'text') || (data.userInput == 'discard all' && data.type !== 'text') || (userMessage && userMessage.value && userMessage.value.includes('discard'))) {
                         isAutomationOnGoing = false;
                         //  isOverRideMode = false;
                         $('.override-input-div').addClass('hide');
                         addFeedbackHtmlToDom(data, botId, userIntentInput);
+                        userMessage = {};
                     }
 
                 }
@@ -1783,10 +1785,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                         if(target.id === 'cancelLibrarySearch') {
                             $('#librarySearch').val('');
-                            $('#cancelAgentSearch').addClass('hide');
+                            $('#cancelLibrarySearch').addClass('hide');
                             loadLibraryOnCancel(autoExhaustiveList, _conversationId, _botId);
                         } else if(target.id === 'cancelAgentSearch') {
                             $('#agentSearch').val('');
+                            $('#cancelAgentSearch').addClass('hide');
                         }
 
                         if (target.className == 'show-all') {
@@ -3556,7 +3559,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         <div class="custom-tootltip-tabs">My Bot</div>
                     </div>    
                 </div>
-                <div class="taoggle-with-text">
+                <div class="taoggle-with-text hide">
                     <div class="t-title">Proactive</div>
                     <label class="kr-sg-toggle">
                         <div class="hover-tooltip">Proactive</div>
