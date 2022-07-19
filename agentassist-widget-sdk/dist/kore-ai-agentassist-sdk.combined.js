@@ -82551,7 +82551,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         $(noOfSteps[noOfSteps.length - 2]).removeClass('hide');
                         $(noOfSteps[noOfSteps.length - 1]).removeClass('hide');
                     }
-                    if ((data.endOfFaq || data.endOfTask) && data.type !== 'text') {
+                    if (((data.endOfFaq || data.endOfTask) && data.type !== 'text') || (data.userInput == 'discard all' && data.type !== 'text')) {
                         isMyBotAutomationOnGoing = false;
                         addFeedbackHtmlToDom(data, botId, userIntentInput, 'runForAgentBot');
                     }
@@ -83005,7 +83005,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         $(noOfSteps[noOfSteps.length - 2]).removeClass('hide').attr('style', 'color:gray');
                         $(noOfSteps[noOfSteps.length - 1]).removeClass('hide');
                     }
-                    if ((data.endOfFaq || data.endOfTask) && data.type !== 'text') {
+                    if (((data.endOfFaq || data.endOfTask) && data.type !== 'text') || (data.userInput == 'discard all' && data.type !== 'text')) {
                         isAutomationOnGoing = false;
                         //  isOverRideMode = false;
                         $('.override-input-div').addClass('hide');
@@ -83109,7 +83109,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                </div>
                <div class="header-text" id="dropDownTitle-${uuids}">${intentName}</div>
                <i class="ast-carrotup"></i>
-               <button class="btn-danger">Terminate</button>
+               <button class="btn-danger" id="terminateAgentDialog">Terminate</button>
            </div>
            <div class="collapse-acc-data" id="dropDownData-${uuids}">
             <div class="override-input-div hide">
@@ -84307,6 +84307,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 isTerminateClicked = true;
                                 $('#terminatePopUp').addClass('hide');
                                 if (currentTabActive == 'userAutoIcon') {
+                                    $('#terminateAgentDialog').addClass('hide');
                                     AgentAssistPubSub.publish('agent_assist_send_text',
                                         {
                                             conversationId: _agentAssistDataObj.conversationId,
@@ -84314,6 +84315,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         });
                                     document.getElementById("loader").style.display = "block";
                                 } else {
+                                    var mybotTabTerminateBtnId = '#myBotTerminateAgentDialog-' + myBotDropdownHeaderUuids;
+                                    $(mybotTabTerminateBtnId).addClass('hide');
                                     AgentAssistPubSub.publish('searched_Automation_details',
                                         { conversationId: _agentAssistDataObj.conversationId, botId: _botId, value: 'discard all', isSearch: false });
                                     document.getElementById("loader").style.display = "block";
