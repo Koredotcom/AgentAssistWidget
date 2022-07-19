@@ -82489,7 +82489,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                            <div class="run-info-content" >
                            <div class="title">Ask customer...</div>
                            <div class="agent-utt">
-                               <div class="title-data text-truncate"><ul class="chat-container" id="displayData-${myBotuuids}"></ul></div>
+                               <div class="title-data"><ul class="chat-container" id="displayData-${myBotuuids}"></ul></div>
                                <div class="action-links">
                                    <button class="send-run-btn" id="sendMsg" data-msg-id="${myBotuuids}" data-msg-data="${sendMsgData}">Send</button>
                                    <div class="copy-btn hide" data-msg-id="${myBotuuids}">
