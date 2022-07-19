@@ -81760,7 +81760,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     });
 
                     window.addEventListener("message", function(e) {
-                        console.log('event listener message: ',e)
+                        console.log('event listener message: ',e.data)
                     })
                 }
                 var _agentAssistDataObj = this;
