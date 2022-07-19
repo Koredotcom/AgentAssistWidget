@@ -165,6 +165,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         delete appState[currentEndedConversationId];
                     }
                     });
+
+                    window.addEventListener("message", function(e) {
+                        console.log('event listener message: ',e)
+                    })
                 }
                 var _agentAssistDataObj = this;
                 var publicAPIs = {};
