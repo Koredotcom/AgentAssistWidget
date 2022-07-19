@@ -897,7 +897,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                            <div class="run-info-content" >
                            <div class="title">Ask customer...</div>
                            <div class="agent-utt">
-                               <div class="title-data text-truncate"><ul class="chat-container" id="displayData-${myBotuuids}"></ul></div>
+                               <div class="title-data"><ul class="chat-container" id="displayData-${myBotuuids}"></ul></div>
                                <div class="action-links">
                                    <button class="send-run-btn" id="sendMsg" data-msg-id="${myBotuuids}" data-msg-data="${sendMsgData}">Send</button>
                                    <div class="copy-btn hide" data-msg-id="${myBotuuids}">
@@ -983,7 +983,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         let buldHtml = `
                         <div class="buld-count-utt" id="buldCount-${uuids}">
                                     <i class="ast-bulb" id="buldCountAst-${uuids}"></i>
-                                    <span class="count-number" id="buldCountNumber-${uuids}">${(data.suggestions.dialogs ? data.suggestions.dialogs?.length : 0) + (data.suggestions.faqs ? data.suggestions.faqs?.length : 0)}</span>
+                                    <span class="count-number" id="buldCountNumber-${uuids}">${(data.suggestions.dialogs.length || 0) + (data.suggestions.faqs?.length || 0)}</span>
                                 </div>`;
 
                         let attrs = $('#scriptContainer .other-user-bubble .bubble-data');
@@ -1751,11 +1751,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             }, "*")
                         } else if(target.id === 'sendMsg' && sourceType == 'salesforce') {
                             let payload = target.dataset.msgData;
-                            let data = payload;
                             var message = {
                                 name: "agentAssist.SendMessage",
                                 conversationId: _conversationId,
-                                payload: data
+                                payload: payload
                             };
                             parent.postMessage(message, '*');
                         }
@@ -1766,7 +1765,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 text: target.dataset.msgData && target.dataset.msgData!==''?target.dataset.msgData:(target.parentNode.dataset.msgData && target.parentNode.dataset.msgData!==''?target.parentNode.dataset.msgData:ele.innerText)
                             }, "*")
                         } else if((target.className == 'copy-btn' || target.className == 'ast-copy') && sourceType == 'salesforce') {
-                            console.log('message is copied');
+                            let ele = document.getElementById(`displayData-${target.dataset.msgId}`) ? document.getElementById(`displayData-${target.dataset.msgId}`) : document.getElementById(target.dataset.msgId);
                             let data = target.dataset.msgData && target.dataset.msgData!==''?target.dataset.msgData:(target.parentNode.dataset.msgData && target.parentNode.dataset.msgData!==''?target.parentNode.dataset.msgData:ele.innerText)
                             var message = {
                                 name: "agentAssist.CopyMessage",
@@ -3148,7 +3147,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
 
                         if (target.id.split('-')[0] == 'buldCount' || target.className == 'ast-bulb' || target.className == 'count-number') {
-                            let bulbDiv = $('#scriptContainer .other-user-bubble .bubble-data .buld-count-utt').length <= 0 ? $('#scriptContainer .other-user-bubble .bubble-data .buld-count-utt-after-click') : $('#scriptContainer .other-user-bubble .bubble-data .buld-count-utt');
+                            let bulbDiv;
+                            if( $('#scriptContainer .other-user-bubble .bubble-data .buld-count-utt').length > 0){
+                                bulbDiv=  $('#scriptContainer .other-user-bubble .bubble-data').find('.buld-count-utt, .buld-count-utt-after-click');
+                            }else {
+                                bulbDiv = $('#scriptContainer .other-user-bubble .bubble-data .buld-count-utt-after-click');
+                            }
                             let bulbid = target.id.split('-');
                             bulbid.shift();
                             let idOfBuld = $(bulbDiv).last().attr('id').split('-');
@@ -3727,7 +3731,96 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             <div class="event-bucket">
                 <img src="./images/bucket.svg">
             </div>
-        </div>`;
+        </div>
+        
+        <div class="fedback-success-notification">
+            <div class="icon-block">
+                <i class="ast-thumb-new"></i>
+            </div>
+            <div class="success-title">Thank you! Your feedback helps us improve your experience.</div>
+            <div class="close-feedback">
+                <i class="ast-close"></i>
+            </div>
+        </div>
+
+        <div class="show-bottom-slider-modal">
+            <div class="content-bottom-slider-top">
+                <div class="header-content">
+                    <div class="close-slider">
+                        <i class="ast-close"></i>
+                    </div>
+                    <div class="title-heading">Give Feedback</div>
+                    <div class="desc-text-header">You ran a few automations for in this session. How was your experience?</div>
+                </div>
+                <div class="body-sec-data-slider">
+                    <div class="feedback-row-data">
+                        <div class="label-text">Order Cancellation</div>
+                        <div class="feedback-icons">
+                            <div class="thumbs-icons">
+                                <i class="ast-thumbup"></i>
+                            </div>
+                            <div class="thumbs-icons">
+                                <i class="ast-thumbdown"></i>
+                            </div>
+                        </div>
+                        <input type="text" class="input-text" placeholder="Add a comment">
+                    </div>
+                    <div class="feedback-row-data">
+                        <div class="label-text">Refund Initiation</div>
+                        <div class="feedback-icons">
+                            <div class="thumbs-icons">
+                                <i class="ast-thumbup"></i>
+                            </div>
+                            <div class="thumbs-icons">
+                                <i class="ast-thumbdown"></i>
+                            </div>
+                        </div>
+                        <input type="text" class="input-text" placeholder="Add a comment">
+                    </div>
+                    <div class="feedback-row-data">
+                        <div class="label-text">Order Replacement</div>
+                        <div class="feedback-icons">
+                            <div class="thumbs-icons">
+                                <i class="ast-thumbup"></i>
+                            </div>
+                            <div class="thumbs-icons">
+                                <i class="ast-thumbdown"></i>
+                            </div>
+                        </div>
+                        <textarea placeholder="Add a comment" class="input-text-area"></textarea>
+                    </div>
+                    <div class="feedback-row-data">
+                        <div class="label-text">Order Replacement</div>
+                        <div class="feedback-icons">
+                            <div class="thumbs-icons">
+                                <i class="ast-thumbup"></i>
+                            </div>
+                            <div class="thumbs-icons">
+                                <i class="ast-thumbdown"></i>
+                            </div>
+                        </div>
+                        <input type="text" class="input-text" placeholder="Add a comment">
+                    </div>
+                    <div class="feedback-row-data">
+                        <div class="label-text">New Order </div>
+                        <div class="feedback-icons">
+                            <div class="thumbs-icons">
+                                <i class="ast-thumbup"></i>
+                            </div>
+                            <div class="thumbs-icons">
+                                <i class="ast-thumbdown"></i>
+                            </div>
+                        </div>
+                        <input type="text" class="input-text" placeholder="Add a comment">
+                    </div>
+                </div>
+                <div class="footer-slider-btns">
+                    <button class="submit-btn">Submit</button>
+                    <button class="skip-btn">Skip</button>
+                </div>
+            </div>
+        </div>
+        `;
             console.log("AgentAssist >>> adding html")
             // var hrml = `<div>Hello</div>`
             container.append(cHtml);
