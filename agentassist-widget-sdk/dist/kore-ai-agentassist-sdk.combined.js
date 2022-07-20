@@ -81758,6 +81758,17 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         delete appState[currentEndedConversationId];
                     }
                     });
+
+                    window.addEventListener("message", function(e) {
+                        console.log('event listener message: ',e.data)
+                        let userInputData = e.data;
+                        let agent_assist_request = {
+                            'conversationId': userInputData.conversationid,
+                            'query': userInputData.content,
+                            'botId': _botId,
+                        }
+                        _agentAsisstSocket.emit('agent_assist_request', agent_assist_request);
+                    })
                 }
                 var _agentAssistDataObj = this;
                 var publicAPIs = {};
@@ -81779,6 +81790,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     });
 
                     _agentAsisstSocket.on('agent_assist_response', (data) => {
+                        // console.log('event listner message response', data)
                         let shouldProcessResponse = false;
                         var appStateStr = localStorage.getItem('agentAssistState') || '{}';
                         var appState = JSON.parse(appStateStr);
