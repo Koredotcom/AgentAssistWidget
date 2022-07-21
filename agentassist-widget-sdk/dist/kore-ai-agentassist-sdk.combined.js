@@ -81762,37 +81762,27 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     window.addEventListener("message", function(e) {
                         console.log('event listener message: ',e.data)
                         let userInputData = e.data;
-                        // 
-                        // let dummyData = {
-                        //     "_id": "ms-3965fc7a-2087-5e7f-8a09-778a537c6e29",
-                        //     "accountId": "629db4a25d75780d66b2ee2a",
-                        //     "author": {
-                        //         "id": "u-24da1645-4bbd-597b-8c34-4b1f1d3a2ed6",
-                        //         "type": "USER"
-                        //     },
-                        //     "botId": "st-641a3fbf-9975-542d-bb56-889bcab5a502",
-                        //     "conversationId": "c-8c99c26-a46d-44d0-973c-8815bebd8566",
-                        //     "event": "user_message",
-                        //     "orgId": "o-401174cc-9c90-53cb-8aae-6cd6193af618",
-                        //     "type": "text",
-                        //     "value": "template"
-                        // }
-                        //
                         let agent_assist_request = {
-                            "_id": "",
-                            "accountId": "",
                             'author': {
-                                "id": "",
-                                "type": "USER"
+                                "type": userInputData.author.type
                             },
                             'botId': _botId,
                             'conversationId': userInputData.conversationid,
-                            'event': "user_message",
-                            'orgId': "",
                             "type": "text",
-                            'value': userInputData.content,
+                            'query': userInputData.content,
                         }
-                        _agentAsisstSocket.emit('agent_assist_request', agent_assist_request);
+                        if(isCallConversation === 'true') {
+                            if(userInputData.author.type === 'USER') {
+                                processTranscriptData(userInputData, userInputData.conversationid, _botId);
+                                _agentAsisstSocket.emit('agent_assist_request', agent_assist_request);
+                            } else {
+                                processAgentMessages(userInputData)
+                            }
+                        } else {
+                            if(userInputData.author.type === 'USER') {
+                                _agentAsisstSocket.emit('agent_assist_request', agent_assist_request);
+                             } 
+                        }
                     })
                 }
                 var _agentAssistDataObj = this;
