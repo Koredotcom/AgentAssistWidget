@@ -1930,7 +1930,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         else if (target.id === `transcriptIcon` || target.id === `scriptIcon` || target.id === `transcriptLabel`) {
                             updateCurrentTabInState(_conversationId,'transcriptTab')
                             transcriptionTabActive();
-
+                            currentTabActive = 'transcriptIcon';
                         }
                         else if (target.id === `userAutoIcon` || target.id === `userBotIcon` || target.id === `AssistLabel`) {
                             updateCurrentTabInState(_conversationId,'assistTab')
