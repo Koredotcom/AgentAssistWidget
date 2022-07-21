@@ -785,7 +785,9 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
   getConvStatus(convId: string) {
     const params = {
       userId: this.authService.getUserId(),
-      importId: convId
+      importId: this.selectedBot,
+      'isAgentAssist':true
+      
     }
     this.service.invoke('get.importconvertbotstatus', params).subscribe(
       res => {
