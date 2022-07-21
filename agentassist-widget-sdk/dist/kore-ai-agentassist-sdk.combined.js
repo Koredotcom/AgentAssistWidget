@@ -81768,18 +81768,20 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             },
                             'botId': _botId,
                             'conversationId': userInputData.conversationid,
-                            "type": "text",
-                            'query': userInputData.content,
+                            'query': userInputData.value,
                         }
                         if(isCallConversation === 'true') {
                             if(userInputData.author.type === 'USER') {
+                                console.log('event listener USER Message:')
                                 processTranscriptData(userInputData, userInputData.conversationid, _botId);
                                 _agentAsisstSocket.emit('agent_assist_request', agent_assist_request);
                             } else {
+                                console.log('event listener AGENT Message:')
                                 processAgentMessages(userInputData)
                             }
                         } else {
                             if(userInputData.author.type === 'USER') {
+                                console.log('event listener AGENT Message:')
                                 _agentAsisstSocket.emit('agent_assist_request', agent_assist_request);
                              } 
                         }
