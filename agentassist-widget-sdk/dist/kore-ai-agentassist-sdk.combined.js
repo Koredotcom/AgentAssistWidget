@@ -85231,7 +85231,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     </div>
 
                     <div class="empty-data-no-agents">
-                    <div class="title">No Agent automations are in running state</div>
+                    <div class="title">No Agent automations are in running state.</div>
                     <div class="desc-text">Use "Run with Agent Inputs" to execute.</div>
                        
                     </div>
@@ -85255,7 +85255,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         <div id="agentTab-custSentimentAnalysis" class="customer-feeling-text">
                         </div>
                         <div class="empty-data-no-agents hide" id="noAutoRunning">
-                            <div class="title">No Agent automations are in running state</div>
+                            <div class="title">No Agent automations are in running state.</div>
                             <div class="desc-text">Use "Run with Agent Inputs" to execute.</div>
                         </div>
                     </div>
