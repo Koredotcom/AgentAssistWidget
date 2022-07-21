@@ -21,21 +21,21 @@
                             General Setup
                         </div>
                     </li>
-                    <li *ngIf="!(ucType === 'dialog' && (conv.isAgentAssistOnly || conv.hasAgentAssistAccess))">
+                    <li *ngIf="!(ucType === 'dialog' || (conv.isAgentAssistOnly))">
                         <div class="tab-name" data-toggle="tab" href="#call">
                             <!-- <img src="assets/icons/call-inactive.svg" class="call-inactive">
                             <img src="assets/icons/call-active.svg" class="call-active"> -->
                             {{ "USECASES.CALL_EXPERIENCE" | translate }}
                         </div>
                     </li>
-                    <li *ngIf="!(ucType === 'dialog' && (conv.isAgentAssistOnly || conv.hasAgentAssistAccess))">
+                    <li *ngIf="!(ucType === 'dialog' || (conv.isAgentAssistOnly))">
                         <div class="tab-name" data-toggle="tab" href="#chat">
                             <!-- <img src="assets/icons/comment-active.svg" class="chat-active">
                             <img src="assets/icons/comment-inactive.svg" class="chat-inactive"> -->
                             {{ "USECASES.CHAT_EXPERIENCE" | translate }}
                         </div>
                     </li>
-                    <li *ngIf="ucType === 'dialog' && (conv.isAgentAssistOnly || conv.hasAgentAssistAccess)">
+                    <li *ngIf="ucType === 'dialog' || (conv.isAgentAssistOnly)">
                         <div class="tab-name" data-toggle="tab" href="#triggersandpermissions">
                             <!-- <img src="assets/icons/agent-usecase/triggers.svg" class="call-inactive"> -->
                             <img src="assets/icons/agent-usecase/triggers-active.svg" class="call-active">{{"TRIGGER_PERMISSION" | translate}}
