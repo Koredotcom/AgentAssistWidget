@@ -170,11 +170,28 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         console.log('event listener message: ',e.data)
                         let userInputData = e.data;
                         let agent_assist_request = {
-                            'conversationId': userInputData.conversationid,
-                            'query': userInputData.content,
+                            'author': {
+                                "type": userInputData.author.type
+                            },
                             'botId': _botId,
+                            'conversationId': userInputData.conversationid,
+                            'query': userInputData.value,
                         }
-                        _agentAsisstSocket.emit('agent_assist_request', agent_assist_request);
+                        if(isCallConversation === 'true') {
+                            if(userInputData.author.type === 'USER') {
+                                console.log('event listener USER Message:')
+                                processTranscriptData(userInputData, userInputData.conversationid, _botId);
+                                _agentAsisstSocket.emit('agent_assist_request', agent_assist_request);
+                            } else {
+                                console.log('event listener AGENT Message:')
+                                processAgentMessages(userInputData)
+                            }
+                        } else {
+                            if(userInputData.author.type === 'USER') {
+                                console.log('event listener AGENT Message:')
+                                _agentAsisstSocket.emit('agent_assist_request', agent_assist_request);
+                             } 
+                        }
                     })
                 }
                 var _agentAssistDataObj = this;
