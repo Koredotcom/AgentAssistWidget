@@ -5,12 +5,11 @@ import { Actions } from '../../states/CustomTaskListState';
 import CustomTaskList from './CustomTaskList';
 
 const mapStateToProps = (state) => ({
-  isOpen: state['sample'].customTaskList.isOpen
+  iframeUrl: state['agentassist'].customTaskList.iframeUrl,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   dismissBar: bindActionCreators(Actions.dismissBar, dispatch),
 });
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(CustomTaskList);

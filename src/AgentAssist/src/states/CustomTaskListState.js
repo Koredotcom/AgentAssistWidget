@@ -1,20 +1,20 @@
-const ACTION_DISMISS_BAR = 'DISMISS_BAR';
+const ACTION_IFRAME_URL = 'IFRAME_URL';
 
 const initialState = {
-  isOpen: true
+  iframeUrl: "about:blank",
 };
 
 export class Actions {
-  static dismissBar = () => ({ type: ACTION_DISMISS_BAR });
+  static dismissBar = () => ({ type: ACTION_IFRAME_URL });
 }
 
 export function reduce(state = initialState, action) {
   // eslint-disable-next-line sonarjs/no-small-switch
   switch (action.type) {
-    case ACTION_DISMISS_BAR: {
+    case ACTION_IFRAME_URL: {
       return {
         ...state,
-        isOpen: false,
+        iframeUrl: action.iframeUrl,
       };
     }
 
