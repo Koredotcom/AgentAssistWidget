@@ -1039,7 +1039,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         "traceId": "873209019a5adc26"
                     }
                     if (!isAutomationOnGoing && data.suggestions && !answerPlaceableID) {
-                        $('#welcomeMsg').addClass('hide');
                         let dynamicBlock = document.getElementById('dynamicBlock');
                         let suggestionsblock = $('#dynamicBlock .dialog-task-run-sec');
                         if (suggestionsblock.length >= 1) {
@@ -1363,51 +1362,53 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                     }
                     if (!dropdownHeaderUuids && !parsedPayload && !data.suggestions) {
-                        $('#welcomeMsg').removeClass('hide');
                         $('#dynamicBlock .empty-data-no-agents').addClass('hide');
-                        let welcomeMsgdiv = $('#welcomeMsg');
+                        let dynamicBlockDiv = $('#dynamicBlock');
                         data.buttons?.forEach((ele, i) => {
                             let welcomeMsgHtml = `
-                            <div class="steps-run-data">
-                            <div class="icon_block">
-                                <i class="ast-agent"></i>
-                            </div>
-                            <div class="run-info-content">
-                            
-                            </div>
-                        </div>`;
+                            <div class = "collapse-acc-data">
+                                <div class="steps-run-data">
+                                    <div class="icon_block">
+                                        <i class="ast-agent"></i>
+                                    </div>
+                                    <div class="run-info-content">
+                                    
+                                    </div>
+                                </div>
+                            </div>`;
                             if (data.buttons?.length > 1) {
                                 if (i == 0) {
-                                    welcomeMsgdiv.append(welcomeMsgHtml);
-                                    let runInfoDivOfwelcome = $(`#welcomeMsg .run-info-content`);
+                                    dynamicBlockDiv.append(welcomeMsgHtml);
+                                    let runInfoDivOfwelcome = $(`#dynamicBlock .collapse-acc-data .run-info-content`);
                                     let contentHtml = `
                                 <div class="title">Customer has waited for an agent for few seconds.<br/>Here are some appropriate opening lines.</div>
-                            <div class="agent-utt">
-                                <div class="title-data" id="displayData-${uuids}">${ele.value}</div>
-                                <div class="action-links">
-                                    <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}"  data-msg-data='${ele.value}'>Send</button>
-                                    <div class="copy-btn" data-msg-id="${uuids}" data-msg-data="${ele.value}">
-                                        <i class="ast-copy" data-msg-id="${uuids}" data-msg-data="${ele.value}"></i>
+                                   <div class="agent-utt">
+                                    <div class="title-data" id="displayData-${uuids}">${ele.value}</div>
+                                    <div class="action-links">
+                                        <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}"  data-msg-data='${ele.value}'>Send</button>
+                                        <div class="copy-btn" data-msg-id="${uuids}" data-msg-data="${ele.value}">
+                                            <i class="ast-copy" data-msg-id="${uuids}" data-msg-data="${ele.value}"></i>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>`;
+                                </div>`;
                                     runInfoDivOfwelcome.append(contentHtml);
                                 } else {
-                                    let runInfoDivOfwelcome = $(`#welcomeMsg .run-info-content`);
+                                    let runInfoDivOfwelcome = $(`#dynamicBlock .collapse-acc-data .run-info-content`);
                                     let contentHtmlWithoutTellCus = `
-                            <div class="agent-utt">
-                                <div class="title-data" id="displayData-${uuids}">${ele.value}</div>
-                                <div class="action-links">
-                                    <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}"  data-msg-data='${ele.value}'>Send</button>
-                                    <div class="copy-btn" data-msg-id="${uuids}" data-msg-data='${ele.value}'>
-                                        <i class="ast-copy" data-msg-id="${uuids}" data-msg-data='${ele.value}'></i>
-                                    </div>
-                                </div>
-                            </div>`;
+                                    <div class="agent-utt">
+                                        <div class="title-data" id="displayData-${uuids}">${ele.value}</div>
+                                        <div class="action-links">
+                                            <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}"  data-msg-data='${ele.value}'>Send</button>
+                                            <div class="copy-btn" data-msg-id="${uuids}" data-msg-data='${ele.value}'>
+                                                <i class="ast-copy" data-msg-id="${uuids}" data-msg-data='${ele.value}'></i>
+                                            </div>
+                                        </div>
+                                    </div>`;
                                     runInfoDivOfwelcome.append(contentHtmlWithoutTellCus);
                                 }
                             } else {
                                 let botResHtml = `
+                                <div class="collapse-acc-data">
                              <div class="steps-run-data">
                              <div class="icon_block">
                                  <i class="ast-agent"></i>
@@ -1424,19 +1425,20 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                  </div>
                              </div>
                              </div>
+                         </div>
                          </div>`;
-                                welcomeMsgdiv.append(botResHtml)
+                         dynamicBlockDiv.append(botResHtml)
                             }
                         });
                     }
 
                     dropdownHeaderUuids ? AgentChatInitialize.renderMessage(_msgsResponse, uuids, `dropDownData-${dropdownHeaderUuids}`) : '';
-                    let noOfStepsOfSmallTalk = $(`.body-data-container #dynamicBlock #welcomeMsg`).find('.steps-run-data').not('.hide');
-                    if (noOfStepsOfSmallTalk.length >= 2) {
-                        $(noOfStepsOfSmallTalk).addClass('hide');
-                        $(noOfStepsOfSmallTalk[noOfStepsOfSmallTalk.length - 2]).removeClass('hide').attr('style', 'color:gray');
-                        $(noOfStepsOfSmallTalk[noOfStepsOfSmallTalk.length - 1]).removeClass('hide');
-                    }
+                    // let noOfStepsOfSmallTalk = $(`.body-data-container #dynamicBlock #welcomeMsg`).find('.steps-run-data').not('.hide');
+                    // if (noOfStepsOfSmallTalk.length >= 2) {
+                    //     $(noOfStepsOfSmallTalk).addClass('hide');
+                    //     $(noOfStepsOfSmallTalk[noOfStepsOfSmallTalk.length - 2]).removeClass('hide').attr('style', 'color:gray');
+                    //     $(noOfStepsOfSmallTalk[noOfStepsOfSmallTalk.length - 1]).removeClass('hide');
+                    // }
                     // removeElementFromDom();
                     let noOfSteps = $(`.body-data-container #dynamicBlock .dialog-task-accordiaon-info`).find('.steps-run-data').not('.hide');
                     if (noOfSteps.length >= 2) {
@@ -1685,7 +1687,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }
                     let stateItems = convState[currentTab].stateItems;
                     if (currentTab == 'assistTab') {
-                        $('#welcomeMsg').html('');
                         let dialogs = $(`#dynamicBlock .dialog-task-run-sec`);
                         dialogs?.each(function (i, ele) {
                             $('#dynamicBlock .agent-utt-info').each((i, elem) => {
@@ -2011,7 +2012,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
                         if (target.id === 'showHistory') {
                             isShowHistoryEnable = true;
-                            $('#welcomeMsg').addClass('hide');
                             $('.show-history-block').addClass('hide');
                             $('.show-back-recommendation-block').removeClass('hide');
                             $('#dynamicBlock .dialog-task-accordiaon-info').addClass('hide');
@@ -2408,7 +2408,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $('.show-history-block').removeClass('hide');
                             $('.show-back-recommendation-block').addClass('hide');
                             $('#historyData').addClass('hide');
-                            $('#welcomeMsg').removeClass('hide');
                             let automationSuggestions = $('#dynamicBlock .dialog-task-accordiaon-info');
                             let dialogSpace = document.getElementsByClassName('dialog-task-run-sec hide');
                             let suggestionsLength = $(`#dynamicBlock .dialog-task-run-sec`);
@@ -2849,7 +2848,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                        
                         if (runButton || libraryRunBtn || historyRunBtn) {
                             if (!isAutomationOnGoing) {
-                                $('#welcomeMsg').addClass('hide');
                                 if (historyRunBtn) {
                                     isShowHistoryEnable = false;
                                     let dom = document.getElementById('dynamicBlock');
@@ -3642,7 +3640,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     <div class="desc-text">Use "Run with Agent Inputs" to execute.</div>
                        
                     </div>
-                    <div class="collapse-acc-data hide" id="welcomeMsg">
                     </div>
                 </div>
                 <div class="dynamic-block-content history hide" id="historyData" style='top: -46px;'></div>
