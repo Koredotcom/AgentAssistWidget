@@ -237,6 +237,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         if (!shouldProcessResponse) {
                             return;
                         }
+                        updateNumberOfMessages();
                         
                         var overRideObj = {
                             "agentId": "",
@@ -265,6 +266,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         userMessage = data;
                     });
                     _agentAsisstSocket.on('agent_assist_user_message', (data) => {
+                        updateNumberOfMessages();
                         updateAgentAssistState(_conversationId, 'assistTab', data);
                         processUserMessages(data, data.conversationId, data.botId);
 
@@ -999,6 +1001,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }
                 }
 
+                function updateNumberOfMessages(){
+                    numberOfNewMessages += 1;
+                    $(".scroll-bottom-btn").text(numberOfNewMessages + ' new');
+                }
+
                 function processAgentAssistResponse(data, convId, botId) {
                     console.log("AgentAssist >>> agentassist_response:", data);
                     let automationSuggestions = $('#dynamicBlock .dialog-task-accordiaon-info');
@@ -1045,11 +1052,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     console.log(isAutomationOnGoing, "is automation on going", data.suggestions, answerPlaceableID)
                     if (!isAutomationOnGoing && data.suggestions && !answerPlaceableID) {
                         if(!scrollAtEnd){
-                            numberOfNewMessages += 1;
-                            $(".scroll-bottom-btn").text(numberOfNewMessages + ' new');
-                            if(newlyAddedMessagesUUIDlist.indexOf(responseId) == -1){
-                                newlyAddedMessagesUUIDlist.push(responseId);
-                                console.log(newlyAddedMessagesUUIDlist, "uuid list")
+                            if(numberOfNewMessages){
+                                if(newlyAddedMessagesUUIDlist.indexOf(responseId) == -1){
+                                    newlyAddedMessagesUUIDlist.push(responseId);
+                                    console.log(newlyAddedMessagesUUIDlist, "uuid list")
+                                }
                             }
                             // if(numberOfNewMessages == 1){
                             //     addUnreadMessageHtml();
@@ -1794,25 +1801,40 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 {
                     var parentRec = document.getElementById("bodyContainer").getBoundingClientRect();
                     var childRec = elem.getBoundingClientRect();
-                    console.log('11111111111', parentRec, childRec);
                     var paddingTop = 0;
-                    if(window.getComputedStyle(elem, null).getPropertyValue('padding-top')){
-                        var paddingTopStr = window.getComputedStyle(elem, null).getPropertyValue('padding-top');
-                        if(paddingTopStr.length && paddingTopStr.length-2){
-                            paddingTopStr = paddingTopStr.substring(0, paddingTopStr.length-2);
-                            paddingTop = parseInt(paddingTopStr) ? parseInt(paddingTopStr) : 0;
-                        }
-                    }
+                    // if(window.getComputedStyle(elem, null).getPropertyValue('padding-top')){
+                    //     var paddingTopStr = window.getComputedStyle(elem, null).getPropertyValue('padding-top');
+                    //     if(paddingTopStr.length && paddingTopStr.length-2){
+                    //         paddingTopStr = paddingTopStr.substring(0, paddingTopStr.length-2);
+                    //         paddingTop = parseInt(paddingTopStr) ? parseInt(paddingTopStr) : 0;
+                    //     }
+                    // }
                     return (childRec.top + paddingTop) > (parentRec.height + parentRec.top);
                 }
 
                 function getLastElement(){
                     let lastElement = ''
-                    var dynamicBlockElements = document.getElementById("dynamicBlock");
+                    var dynamicBlockElements = document.getElementById('dynamicBlock');
                     var numOfdynamicBlockElements = dynamicBlockElements.children;
                     for (var i = 0; i < numOfdynamicBlockElements.length; i++) {
-                        lastElement = numOfdynamicBlockElements[i];
+                        lastElement = numOfdynamicBlockElements[i];  
                     }
+                    console.log(lastElement.className, "className");
+
+                    if(lastElement.className == 'dialog-task-run-sec'){
+                        var numOfdynamicBlockElements = lastElement.children;
+                        for (var i = 0; i < numOfdynamicBlockElements.length; i++) {
+                            lastElement = numOfdynamicBlockElements[i];  
+                        }
+                    }else if(lastElement.className == 'dialog-task-accordiaon-info'){
+                        let listOfNodes = lastElement.querySelectorAll('.steps-run-data');
+                        console.log(listOfNodes, "list of nodes");
+                        lastElement =  Array.from(listOfNodes).pop();
+                    }
+                    // $("#dynamicBlock div").each(function(i, ele){
+                    //    lastElement = ele;
+                    //  });
+                    //  console.log(lastElement, "last element");
                     return lastElement;
                 }
 
@@ -1820,20 +1842,22 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                     document.querySelector('#bodyContainer').addEventListener('ps-scroll-up',(scrollEndevent)=>{
                         lastelement = getLastElement();
-                        console.log(lastelement, "lastelement");
                         scrollAtEnd = !isScrolledIntoView(lastelement) ? true : false;
-                        console.log(scrollAtEnd, "scrollAt End");
                         if(!scrollAtEnd){
                             $(".scroll-bottom-btn").removeClass('hide');
                         }
                     });
 
                     document.querySelector('#bodyContainer').addEventListener('ps-scroll-down',(scrollEndevent)=>{
-                        lastelement = getLastElement();
-                        console.log(lastelement, "lastelement");
-                        
+                        //newly added elements scroll view
+
+                        for(let i=0; i<newlyAddedMessagesUUIDlist.length; i++){
+
+                        }
+
+                        //last element scroll view
+                        lastelement = getLastElement();                        
                         scrollAtEnd = !isScrolledIntoView(lastelement) ? true : false;
-                        console.log(scrollAtEnd, "scrollAt End");
                         if(scrollAtEnd){
                             $(".scroll-bottom-btn").addClass('hide');
                         }
@@ -3352,7 +3376,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
 
                 function getNewlyAddedElementsHeights(){
-                    let normalIdsList = ['addRemoveDropDown', 'agentUttInfo', 'automationSuggestions'];
+                    let normalIdsList = ['addRemoveDropDown', 'agentUttInfo', 'dialogSuggestions'];
                     let attachedUUIDIdsList = [];
                     for(let uuid of newlyAddedMessagesUUIDlist){
                        for(let id of normalIdsList){
@@ -4029,6 +4053,13 @@ function AgentAssist_run_click(e) {
     var botId = e.target.dataset.botId;
     var intentName = e.target.dataset.intentName;
     dialogName = intentName;
+    let runbtnId = e.target.id;
+    let actualIdArray = runbtnId.split('-');
+    actualIdArray.shift();
+    let actualId = actualIdArray.join('-');
+    let showRunForAgentBtn = 'showRunForAgentBtn-' + actualId; 
+    $("#"+runbtnId).remove();
+    $("#"+showRunForAgentBtn).remove();
     if (e.target.dataset.check || e.target.dataset.checkLib) {
         AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: convId, botId: botId, value: intentName, check: true });
 

@@ -81629,6 +81629,9 @@ var entitiestValueArray;
 var previousEntitiesValue;
 var isRetore = false;
 var userMessage = {};
+var numberOfNewMessages = 0;
+var newlyAddedMessagesUUIDlist = [];
+var scrollAtEnd = true;
 
 function koreGenerateUUID() {
     console.info("generating UUID");
@@ -81827,6 +81830,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         if (!shouldProcessResponse) {
                             return;
                         }
+                        updateNumberOfMessages();
                         
                         var overRideObj = {
                             "agentId": "",
@@ -81855,6 +81859,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         userMessage = data;
                     });
                     _agentAsisstSocket.on('agent_assist_user_message', (data) => {
+                        updateNumberOfMessages();
                         updateAgentAssistState(_conversationId, 'assistTab', data);
                         processUserMessages(data, data.conversationId, data.botId);
 
@@ -82583,23 +82588,28 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         $(noOfSteps[noOfSteps.length - 2]).removeClass('hide');
                         $(noOfSteps[noOfSteps.length - 1]).removeClass('hide');
                     }
-                    if (((data.endOfFaq || data.endOfTask) && data.type !== 'text') || (data.userInput == 'discard all' && data.type !== 'text')) {
+                    if (((data.endOfFaq || data.endOfTask) && data.type !== 'text') || (data.userInput == 'discard all' && data.type !== 'text') || (userMessage && userMessage.value && userMessage.value.includes('discard'))) {
                         isMyBotAutomationOnGoing = false;
                         addFeedbackHtmlToDom(data, botId, userIntentInput, 'runForAgentBot');
                     }
                 }
 
+                function updateNumberOfMessages(){
+                    numberOfNewMessages += 1;
+                    $(".scroll-bottom-btn").text(numberOfNewMessages + ' new');
+                }
+
                 function processAgentAssistResponse(data, convId, botId) {
                     console.log("AgentAssist >>> agentassist_response:", data);
                     let automationSuggestions = $('#dynamicBlock .dialog-task-accordiaon-info');
-                    if (data.suggestions) {
-                        for (let ele of automationSuggestions) {
-                            ele.classList.add('hide');
-                        }
-                        $('.empty-data-no-agents').addClass('hide');
-                    } else {
-                        automationSuggestions.length > 1 ? (automationSuggestions[automationSuggestions.length - 1].classList.remove('hide'), $('.empty-data-no-agents').addClass('hide')) : '';
-                    }
+                    // if (data.suggestions) {
+                    //     for (let ele of automationSuggestions) {
+                    //         ele.classList.add('hide');
+                    //     }
+                    //     $('.empty-data-no-agents').addClass('hide');
+                    // } else {
+                    //     automationSuggestions.length > 1 ? (automationSuggestions[automationSuggestions.length - 1].classList.remove('hide'), $('.empty-data-no-agents').addClass('hide')) : '';
+                    // }
 
                     let uuids = koreGenerateUUID();
                     responseId = uuids;
@@ -82631,7 +82641,22 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         "icon": "https://uat.kore.ai:443/api/getMediaStream/market/f-cb381255-9aa1-5ce2-95e3-71233aef7084.png?n=17648985&s=IlRvUlUwalFVaFVMYm9sZStZQnlLc0l1UlZvdlNUUDcxR2o3U2lscHRrL3M9Ig$$",
                         "traceId": "873209019a5adc26"
                     }
+
+                    console.log(isAutomationOnGoing, "is automation on going", data.suggestions, answerPlaceableID)
                     if (!isAutomationOnGoing && data.suggestions && !answerPlaceableID) {
+                        if(!scrollAtEnd){
+                            if(numberOfNewMessages){
+                                if(newlyAddedMessagesUUIDlist.indexOf(responseId) == -1){
+                                    newlyAddedMessagesUUIDlist.push(responseId);
+                                    console.log(newlyAddedMessagesUUIDlist, "uuid list")
+                                }
+                            }
+                            // if(numberOfNewMessages == 1){
+                            //     addUnreadMessageHtml();
+                            // }
+                        }
+                        
+                        // $('#welcomeMsg').addClass('hide');
                         let dynamicBlock = document.getElementById('dynamicBlock');
                         let suggestionsblock = $('#dynamicBlock .dialog-task-run-sec');
                         if (suggestionsblock.length >= 1) {
@@ -82639,10 +82664,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 $('#dynamicBlock .agent-utt-info').each((i, elem) => {
                                     if (ele.id.split('-').includes(elem.id.split('-')[1])) {
                                         automationNotRanArray.push(elem.innerText.trim());
-                                        elem.remove();
+                                        // elem.remove();
                                     }
                                 })
-                                ele.remove();
+                                // ele.remove();
                             })
                         }
                         userIntentInput = data.userInput;
@@ -83033,12 +83058,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     //     $(noOfStepsOfSmallTalk[noOfStepsOfSmallTalk.length - 1]).removeClass('hide');
                     // }
                     // removeElementFromDom();
-                    let noOfSteps = $(`.body-data-container #dynamicBlock .dialog-task-accordiaon-info`).find('.steps-run-data').not('.hide');
-                    if (noOfSteps.length >= 2) {
-                        $(noOfSteps).addClass('hide');
-                        $(noOfSteps[noOfSteps.length - 2]).removeClass('hide').attr('style', 'color:gray');
-                        $(noOfSteps[noOfSteps.length - 1]).removeClass('hide');
-                    }
+                    // let noOfSteps = $(`.body-data-container #dynamicBlock .dialog-task-accordiaon-info`).find('.steps-run-data').not('.hide');
+                    // if (noOfSteps.length >= 2) {
+                    //     $(noOfSteps).addClass('hide');
+                    //     $(noOfSteps[noOfSteps.length - 2]).removeClass('hide').attr('style', 'color:gray');
+                    //     $(noOfSteps[noOfSteps.length - 1]).removeClass('hide');
+                    // }
                     if (((data.endOfFaq || data.endOfTask) && data.type !== 'text') || (data.userInput == 'discard all' && data.type !== 'text') || (userMessage && userMessage.value && userMessage.value.includes('discard'))) {
                         isAutomationOnGoing = false;
                         //  isOverRideMode = false;
@@ -83046,7 +83071,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         addFeedbackHtmlToDom(data, botId, userIntentInput);
                         userMessage = {};
                     }
+                    console.log(scrollAtEnd, "scroll at end in process agent assist response");
 
+                    if(scrollAtEnd){
+                        scrollToBottom();
+                    }
                 }
 
                 function processTranscriptData(data, conversationId, botid) {
@@ -83191,39 +83220,42 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         convState['isWelcomeProcessed'] = true;
                     }
                     let stateItems = convState[_tabName]['stateItems'];
-                    if (stateItems.length >= 2) {
-                        let lIntentName = null;
-                        for (let i = stateItems.length-1; (i >= 0 && lIntentName == null); i--) {
-                           let item = JSON.parse(stateItems[i]);
-                           if (item.intentName) {
-                              lIntentName = item.intentName;
-                           }
-                        }
-                        if (!_data.intentName) {
-                           _data.intentName = lIntentName;
-                        }
-                       if (JSON.parse(stateItems[0]).intentName === _data.intentName ) {
-                            stateItems[0] = stateItems[1];
-                            stateItems[1] = JSON.stringify(_data);
-                       } else {
-                           stateItems[0] = JSON.stringify(_data);
-                           stateItems.splice(1,1);
-                       }
+                    // if (stateItems.length >= 2) {
+                    //     let lIntentName = null;
+                    //     for (let i = stateItems.length-1; (i >= 0 && lIntentName == null); i--) {
+                    //        let item = JSON.parse(stateItems[i]);
+                    //        if (item.intentName) {
+                    //           lIntentName = item.intentName;
+                    //        }
+                    //     }
+                    //     if (!_data.intentName) {
+                    //        _data.intentName = lIntentName;
+                    //     }
+                    //    if (JSON.parse(stateItems[0]).intentName === _data.intentName ) {
+                    //         stateItems[0] = stateItems[1];
+                    //         stateItems[1] = JSON.stringify(_data);
+                    //    } else {
+                    //        stateItems[0] = JSON.stringify(_data);
+                    //        stateItems.splice(1,1);
+                    //    }
                       
-                    } else {
-                        // let lIntentName = null;
-                        // for (let i = stateItems.length-1; (i >= 0 && lIntentName == null); i--) {
-                        //    let item = JSON.parse(stateItems[i]);
-                        //    if (item.intentName) {
-                        //       lIntentName = item.intentName;
-                        //    }
-                        // }
-                        // if (!_data.intentName) {
-                        //    _data.intentName = lIntentName;
-                        // }
-                        stateItems.push(JSON.stringify(_data));
-                    }
+                    // } else {
+                    //     // let lIntentName = null;
+                    //     // for (let i = stateItems.length-1; (i >= 0 && lIntentName == null); i--) {
+                    //     //    let item = JSON.parse(stateItems[i]);
+                    //     //    if (item.intentName) {
+                    //     //       lIntentName = item.intentName;
+                    //     //    }
+                    //     // }
+                    //     // if (!_data.intentName) {
+                    //     //    _data.intentName = lIntentName;
+                    //     // }
+                    //     stateItems.push(JSON.stringify(_data));
+                    // }
+                    stateItems.push(JSON.stringify(_data));
                     localStorage.setItem('agentAssistState', JSON.stringify(appState));
+                    console.log("scroll at end", scrollAtEnd);
+                    
                 }
 
                 function updateUIState(_convId, _isCallConv) {
@@ -83280,17 +83312,18 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }
                     let stateItems = convState[currentTab].stateItems;
                     if (currentTab == 'assistTab') {
-                        let dialogs = $(`#dynamicBlock .dialog-task-run-sec`);
-                        dialogs?.each(function (i, ele) {
-                            $('#dynamicBlock .agent-utt-info').each((i, elem) => {
-                                $(elem).remove();
-                            });
-                            $(ele).remove();
-                        });
-                        let dialogsDropDowns = $(`#dynamicBlock .dialog-task-accordiaon-info`);
-                        dialogsDropDowns?.each(function (i, ele) {
-                            $(ele).remove();
-                        });
+                        // $('#welcomeMsg').html('');
+                        // let dialogs = $(`#dynamicBlock .dialog-task-run-sec`);
+                        // dialogs?.each(function (i, ele) {
+                        //     $('#dynamicBlock .agent-utt-info').each((i, elem) => {
+                        //         $(elem).remove();
+                        //     });
+                        //     $(ele).remove();
+                        // });
+                        // let dialogsDropDowns = $(`#dynamicBlock .dialog-task-accordiaon-info`);
+                        // dialogsDropDowns?.each(function (i, ele) {
+                        //     $(ele).remove();
+                        // });
                     } else {
                         $('#noAutoRunning').addClass('hide');
                     }
@@ -83357,7 +83390,80 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     localStorage.setItem('agentAssistState', JSON.stringify(appState));
                 }
 
+                function isScrolledIntoView(elem)
+                {
+                    var parentRec = document.getElementById("bodyContainer").getBoundingClientRect();
+                    var childRec = elem.getBoundingClientRect();
+                    var paddingTop = 0;
+                    // if(window.getComputedStyle(elem, null).getPropertyValue('padding-top')){
+                    //     var paddingTopStr = window.getComputedStyle(elem, null).getPropertyValue('padding-top');
+                    //     if(paddingTopStr.length && paddingTopStr.length-2){
+                    //         paddingTopStr = paddingTopStr.substring(0, paddingTopStr.length-2);
+                    //         paddingTop = parseInt(paddingTopStr) ? parseInt(paddingTopStr) : 0;
+                    //     }
+                    // }
+                    return (childRec.top + paddingTop) > (parentRec.height + parentRec.top);
+                }
+
+                function getLastElement(){
+                    let lastElement = ''
+                    var dynamicBlockElements = document.getElementById('dynamicBlock');
+                    var numOfdynamicBlockElements = dynamicBlockElements.children;
+                    for (var i = 0; i < numOfdynamicBlockElements.length; i++) {
+                        lastElement = numOfdynamicBlockElements[i];  
+                    }
+                    console.log(lastElement.className, "className");
+
+                    if(lastElement.className == 'dialog-task-run-sec'){
+                        var numOfdynamicBlockElements = lastElement.children;
+                        for (var i = 0; i < numOfdynamicBlockElements.length; i++) {
+                            lastElement = numOfdynamicBlockElements[i];  
+                        }
+                    }else if(lastElement.className == 'dialog-task-accordiaon-info'){
+                        let listOfNodes = lastElement.querySelectorAll('.steps-run-data');
+                        console.log(listOfNodes, "list of nodes");
+                        lastElement =  Array.from(listOfNodes).pop();
+                    }
+                    // $("#dynamicBlock div").each(function(i, ele){
+                    //    lastElement = ele;
+                    //  });
+                    //  console.log(lastElement, "last element");
+                    return lastElement;
+                }
+
                 function btnInit() {
+
+                    document.querySelector('#bodyContainer').addEventListener('ps-scroll-up',(scrollEndevent)=>{
+                        lastelement = getLastElement();
+                        scrollAtEnd = !isScrolledIntoView(lastelement) ? true : false;
+                        if(!scrollAtEnd){
+                            $(".scroll-bottom-btn").removeClass('hide');
+                        }
+                    });
+
+                    document.querySelector('#bodyContainer').addEventListener('ps-scroll-down',(scrollEndevent)=>{
+                        //newly added elements scroll view
+
+                        for(let i=0; i<newlyAddedMessagesUUIDlist.length; i++){
+
+                        }
+
+                        //last element scroll view
+                        lastelement = getLastElement();                        
+                        scrollAtEnd = !isScrolledIntoView(lastelement) ? true : false;
+                        if(scrollAtEnd){
+                            $(".scroll-bottom-btn").addClass('hide');
+                        }
+                    });
+
+                    document.querySelector('#bodyContainer').addEventListener('ps-y-reach-end',(scrollEndevent)=>{
+                        $(".scroll-bottom-btn").addClass('hide');
+                        numberOfNewMessages = 0;
+                        newlyAddedMessagesUUIDlist = [];
+                        $(".scroll-bottom-btn").text('Scroll Bottom');
+                        scrollAtEnd = true;
+                    });
+
                     document.addEventListener("click", (evt) => {
                         var target = evt.target;
                         var runButton = target.dataset.run;
@@ -83382,6 +83488,25 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 e.stopPropagation();
                             }
                         });
+
+                        if(target.className == 'scroll-bottom-btn'){
+                            let newElementsHeight = getNewlyAddedElementsHeights();
+                            console.log(newElementsHeight, "new elements height",$( "#bodyContainer" ).prop( "scrollHeight" ));
+                            if(newElementsHeight){
+                                console.log("if condition");
+                                $("#bodyContainer").scrollTop( newElementsHeight);
+                            }else{
+                                console.log("else condition");
+                                scrollToBottom();
+                            }
+                            // $("#bodyContainer").perfectScrollbar('update');
+                            if($(".scroll-bottom-btn").text().includes('new')){
+                                $(".scroll-bottom-btn").text('Scroll Bottom');
+                                newlyAddedMessagesUUIDlist = [];
+                            }
+
+                            console.log("scroll to bottom **************", numberOfNewMessages, newlyAddedMessagesUUIDlist)
+                        }
 
                         if (target.id === 'sendMsg' && sourceType == 'smartassist-color-scheme') {
                             // let ele = document.getElementById(`displayData-${target.dataset.msgId}`)
@@ -84369,7 +84494,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         { conversationId: _agentAssistDataObj.conversationId, botId: _botId, value: 'discard all', isSearch: false });
                                     document.getElementById("loader").style.display = "block";
                                 }
-
                             }
 
                         }
@@ -84436,11 +84560,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 // condition for if an automation is already running in the agent automation
                                 $('#interruptPopUp').removeClass('hide');
                             }
-
                         }
                        
                         if (runButton || libraryRunBtn || historyRunBtn) {
                             if (!isAutomationOnGoing) {
+                                // $('#welcomeMsg').addClass('hide');
                                 if (historyRunBtn) {
                                     isShowHistoryEnable = false;
                                     let dom = document.getElementById('dynamicBlock');
@@ -84496,13 +84620,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 let uuids = koreGenerateUUID();
                                 dropdownHeaderUuids = uuids;
                                 isAutomationOnGoing = true;
-                                for (let a of $('#dynamicBlock .agent-utt-info')) {
-                                    a.classList.add('hide');
-                                }
-                                let suggestionsLength = $(`#dynamicBlock .dialog-task-run-sec`);
-                                suggestionsLength.each((i, ele) => {
-                                    $(ele).addClass('hide');
-                                })
+                                // for (let a of $('#dynamicBlock .agent-utt-info')) {
+                                //     a.classList.add('hide');
+                                // }
+                                // let suggestionsLength = $(`#dynamicBlock .dialog-task-run-sec`);
+                                // suggestionsLength.each((i, ele) => {
+                                //     $(ele).addClass('hide');
+                                // })
                                 _createRunTemplateContiner(uuids, target.dataset.intentName);
                                 let ids = target.id.split('-');
                                 ids.shift();
@@ -84512,7 +84636,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     id.shift();
                                     if (joinedIds.includes(id.join('-'))) {
                                         idsOfDropDown = ele.id;
-                                        $(ele).remove()
+                                        // $(ele).remove()
                                     }
                                 });
 
@@ -84844,6 +84968,27 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     return response;
                 }
 
+                function getNewlyAddedElementsHeights(){
+                    let normalIdsList = ['addRemoveDropDown', 'agentUttInfo', 'dialogSuggestions'];
+                    let attachedUUIDIdsList = [];
+                    for(let uuid of newlyAddedMessagesUUIDlist){
+                       for(let id of normalIdsList){
+                        let newGenerateId = id + '-' + uuid;
+                        if(attachedUUIDIdsList.indexOf(newGenerateId) == -1){
+                            attachedUUIDIdsList.push(id + '-' + uuid);
+                        }
+                       }
+                    }
+                    let newElementsHeight = 0;
+                    for(let id of attachedUUIDIdsList){
+                        if(document.getElementById(id)){
+                            newElementsHeight += document.getElementById(id).clientHeight;  
+                        }
+                    }
+                    console.log(attachedUUIDIdsList, "attached uuid list", newElementsHeight)
+                    return newElementsHeight;
+                }
+
                 function userTabActive() {
                     $("#historyData").addClass('hide');
                     $("#historyDataForMyBot").addClass('hide');
@@ -84879,7 +85024,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 $(elem).removeClass('hide');
                                 $(ele).removeClass('hide');
                             } else {
-                                $(elem).addClass('hide')
+                                // $(elem).addClass('hide')
                             }
                         })
                     });
@@ -84982,6 +85127,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         const agentSearchVal = document.getElementById('librarySearch');
                         agentSearchVal.value = '';
                     }
+                }
+
+                function addUnreadMessageHtml(){
+                    var dropDownData;
+                    dropDownData = $(`#dropDownData-${dropdownHeaderUuids}`);
+                    var unreadHtml = `<div class="unread-msg">unread message</div>     
+                    </div>`
+                    dropDownData.append(unreadHtml);
                 }
 
                 function addFeedbackHtmlToDom(data, botId, userIntentInput, runForAgentBot) {
@@ -85140,6 +85293,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: _agentAssistDataObj.conversationId, botId: _botId, value: value, intentName: value })
                 }
 
+                $('.body-data-container').scrollTop($('.body-data-container').prop("scrollHeight"));
+
                 return publicAPIs;
             },
             error: function (error) {
@@ -85227,6 +85382,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     </div>
                     <div id="userTab-custSentimentAnalysis" class="customer-feeling-text">
                     </div>
+
+                    <button class="scroll-bottom-btn hide">Scroll Bottom</button>
 
                     <div class="empty-data-no-agents">
                     <div class="title">No Agent automations are in running state.</div>
@@ -85477,11 +85634,25 @@ function AgentAssist_feedback_click(e) {
     AgentAssistPubSub.publish('agent_usage_feedback', { userInput: userInput, dialogName: dialogName, conversationId: convId, botId: botId, feedback: feedback, eventName: 'agent_usage_feedback', dialogId: dialogId });
 }
 
+function scrollToBottom(){
+    console.log("scroll to end");
+    setTimeout(() => {
+        $("#bodyContainer").scrollTop( $( "#bodyContainer" ).prop( "scrollHeight" ) );
+    }, 0);
+}
+
 function AgentAssist_run_click(e) {
     var convId = e.target.dataset.convId;
     var botId = e.target.dataset.botId;
     var intentName = e.target.dataset.intentName;
     dialogName = intentName;
+    let runbtnId = e.target.id;
+    let actualIdArray = runbtnId.split('-');
+    actualIdArray.shift();
+    let actualId = actualIdArray.join('-');
+    let showRunForAgentBtn = 'showRunForAgentBtn-' + actualId; 
+    $("#"+runbtnId).remove();
+    $("#"+showRunForAgentBtn).remove();
     if (e.target.dataset.check || e.target.dataset.checkLib) {
         AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: convId, botId: botId, value: intentName, check: true });
 
@@ -85490,8 +85661,9 @@ function AgentAssist_run_click(e) {
         AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: convId, botId: botId, value: intentName, intentName: intentName, 'entities': isRetore ? JSON.parse(previousEntitiesValue) : entitiestValueArray });
         document.getElementById("loader").style.display = "block";
     }
-
 }
+
+
 
 (function (root, factory) {
     'use strict';
