@@ -85233,7 +85233,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     <div class="desc-text">Use "Run with Agent Inputs" to execute.</div>
                        
                     </div>
-                    </div>
                 </div>
                 <div class="dynamic-block-content history hide" id="historyData" style='top: -46px;'></div>
                 <div class="agent-body-data-container hide" id="agentAutoContainer">
