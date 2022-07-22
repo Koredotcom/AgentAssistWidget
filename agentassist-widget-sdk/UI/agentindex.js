@@ -1930,7 +1930,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         else if (target.id === `transcriptIcon` || target.id === `scriptIcon` || target.id === `transcriptLabel`) {
                             updateCurrentTabInState(_conversationId,'transcriptTab')
                             transcriptionTabActive();
-
+                            currentTabActive = 'transcriptIcon';
                         }
                         else if (target.id === `userAutoIcon` || target.id === `userBotIcon` || target.id === `AssistLabel`) {
                             updateCurrentTabInState(_conversationId,'assistTab')
@@ -3638,7 +3638,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     </div>
 
                     <div class="empty-data-no-agents">
-                    <div class="title">No Agent automations are in running state</div>
+                    <div class="title">No Agent automations are in running state.</div>
                     <div class="desc-text">Use "Run with Agent Inputs" to execute.</div>
                        
                     </div>
@@ -3662,7 +3662,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         <div id="agentTab-custSentimentAnalysis" class="customer-feeling-text">
                         </div>
                         <div class="empty-data-no-agents hide" id="noAutoRunning">
-                            <div class="title">No Agent automations are in running state</div>
+                            <div class="title">No Agent automations are in running state.</div>
                             <div class="desc-text">Use "Run with Agent Inputs" to execute.</div>
                         </div>
                     </div>
