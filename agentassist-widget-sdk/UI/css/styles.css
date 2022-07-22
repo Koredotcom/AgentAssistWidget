@@ -642,7 +642,7 @@ html, body{
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content {
     min-height: 100px;
-    background: var(--bg-color-containers);
+    /* background: var(--bg-color-containers); */
     margin-top: 0px;
     display: inline-block;
     width: 100%;
@@ -2924,3 +2924,33 @@ border: 1px solid transparent !important;
     font-size: 11px;
     cursor: pointer;
 }
+
+/* scroll bottom button */
+
+.agent-assist-chat-container .scroll-bottom-btn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 20px;
+    color: var(--color-grey-text);
+    padding: 5px 15px;
+    position: fixed;
+    bottom: 12%;
+    margin-left: 35%;
+    z-index : 999;
+}
+
+.agent-assist-chat-container .unread-msg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 20px;
+    color: var(--color-grey-text);
+    padding: 5px 15px;
+    margin-left: 35%;
+}
+
