@@ -3722,7 +3722,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
         </div>
         
         <div id="loader">
-        <img src="./images/loaderIcon.png">
+        <lottie-player autoplay loop mode="normal" src="./images/loader.json" style="width: 100px"></lottie-player>
         </div>
         <div class="overlay-suggestions hide">
             <div class="suggestion-content" id="overLaySearch">
