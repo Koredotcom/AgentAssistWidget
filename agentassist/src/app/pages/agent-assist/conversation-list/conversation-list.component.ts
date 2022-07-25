@@ -197,7 +197,8 @@ export class ConversationListComponent implements OnInit, OnDestroy {
         return;
       }
       let params = {
-        streamId: this.streamId
+        streamId: this.streamId,
+        'isAgentAssist':true
       };
       let payload = <Category>this.getCPayload();
       this.service.invoke('post.createCategory', params, payload).subscribe(
@@ -237,7 +238,8 @@ export class ConversationListComponent implements OnInit, OnDestroy {
       update();
     } else {
       let params = {
-        streamId: this.streamId
+        streamId: this.streamId,
+        'isAgentAssist':true
       };
       let payload = this.getCPayload();
       this.service.invoke('post.createCategory', params, payload)
