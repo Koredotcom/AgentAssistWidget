@@ -1009,6 +1009,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
 
                 function updateOldMessagesBackground(){
+                    
                     let classList = ['collapse-acc-data', 'agent-utt-info','dialog-task-run-sec', 'dialog-task-accordiaon-info']
                     let eachElement = ''
                     var dynamicBlockElements = document.getElementById('dynamicBlock');
