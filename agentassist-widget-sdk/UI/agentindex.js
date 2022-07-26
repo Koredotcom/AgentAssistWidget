@@ -1003,7 +1003,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }
                 }
 
-                function updateNumberOfMessages(){
+                function updateNumberOfMessages(){      
                     numberOfNewMessages += 1;
                     $(".scroll-bottom-btn").text(numberOfNewMessages + ' new');
                 }
@@ -1043,9 +1043,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                 function processAgentAssistResponse(data, convId, botId) {
                     console.log("AgentAssist >>> agentassist_response:", data);
-                    if(!scrollAtEnd && numberOfNewMessages>0 && newlyAddedMessagesUUIDlist.length == 0){
-                        addUnreadMessageHtml();   
-                    }
                     let automationSuggestions = $('#dynamicBlock .dialog-task-accordiaon-info');
                     // if (data.suggestions) {
                     //     for (let ele of automationSuggestions) {
@@ -1945,7 +1942,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         //newly added elements scroll view
 
                         updateNewMessageCount();
-
                         //last element scroll view
                         // lastelement = getLastElement('dynamicBlock');                        
                         // scrollAtEnd = !isScrolledIntoView(lastelement) ? true : false;
@@ -2001,6 +1997,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             }
                             // $("#bodyContainer").perfectScrollbar('update');
                             if($(".scroll-bottom-btn").text().includes('new')){
+                                if(!scrollAtEnd && numberOfNewMessages > 0){
+                                    let elements = document.getElementById(newlyAddedIdList[0]);
+                                    elements?.insertAdjacentHTML('beforeBegin', addUnreadMessageHtml());  
+                               }
                                 // $(".scroll-bottom-btn").text('Scroll Bottom');
                                 // newlyAddedMessagesUUIDlist = [];
                                 // newlyAddedIdList = getActualRenderedIdList();
@@ -3630,9 +3630,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
 
                 function addUnreadMessageHtml(){
-                    let dynamicBlock = $('#dynamicBlock');
                     let unreadHtml = `<div class="unread-msg">unread message</div>`;
-                    dynamicBlock.append(unreadHtml);
+                    return unreadHtml;
                 }
 
                 function addFeedbackHtmlToDom(data, botId, userIntentInput, runForAgentBot) {
