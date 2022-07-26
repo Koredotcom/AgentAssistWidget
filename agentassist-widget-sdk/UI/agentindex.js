@@ -1008,6 +1008,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                 function processAgentAssistResponse(data, convId, botId) {
                     console.log("AgentAssist >>> agentassist_response:", data);
+                    if(!scrollAtEnd && numberOfNewMessages>0 && newlyAddedMessagesUUIDlist.length == 0){
+                        addUnreadMessageHtml();   
+                    }
                     let automationSuggestions = $('#dynamicBlock .dialog-task-accordiaon-info');
                     // if (data.suggestions) {
                     //     for (let ele of automationSuggestions) {
@@ -1051,7 +1054,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                     console.log(isAutomationOnGoing, "is automation on going", data.suggestions, answerPlaceableID)
                     if (!isAutomationOnGoing && data.suggestions && !answerPlaceableID) {
-                        if(!scrollAtEnd){
+                        if(!scrollAtEnd){                                                                                                                                                                                                                              
                             if(numberOfNewMessages){
                                 if(newlyAddedMessagesUUIDlist.indexOf(responseId) == -1){
                                     newlyAddedMessagesUUIDlist.push(responseId);
@@ -1391,7 +1394,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         let dynamicBlockDiv = $('#dynamicBlock');
                         data.buttons?.forEach((ele, i) => {
                             let welcomeMsgHtml = `
-                            <div class = "collapse-acc-data">
+                            <div class = "collapse-acc-data" id='smallTalk-${uuids}'>
                                 <div class="steps-run-data">
                                     <div class="icon_block">
                                         <i class="ast-agent"></i>
@@ -1433,7 +1436,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 }
                             } else {
                                 let botResHtml = `
-                                <div class="collapse-acc-data">
+                                <div class="collapse-acc-data" id='smallTalk-${uuids}'>
                              <div class="steps-run-data">
                              <div class="icon_block">
                                  <i class="ast-agent"></i>
@@ -1860,11 +1863,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         scrollAtEnd = !isScrolledIntoView(lastelement) ? true : false;
                         if(scrollAtEnd){
                             $(".scroll-bottom-btn").addClass('hide');
+                            $('.unread-msg').addClass('hide');
                         }
                     });
 
                     document.querySelector('#bodyContainer').addEventListener('ps-y-reach-end',(scrollEndevent)=>{
                         $(".scroll-bottom-btn").addClass('hide');
+                        $('.unread-msg').addClass('hide');
                         numberOfNewMessages = 0;
                         newlyAddedMessagesUUIDlist = [];
                         $(".scroll-bottom-btn").text('Scroll Bottom');
@@ -3537,11 +3542,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
 
                 function addUnreadMessageHtml(){
-                    var dropDownData;
-                    dropDownData = $(`#dropDownData-${dropdownHeaderUuids}`);
-                    var unreadHtml = `<div class="unread-msg">unread message</div>     
-                    </div>`
-                    dropDownData.append(unreadHtml);
+                    let dynamicBlock = $('#dynamicBlock');
+                    let unreadHtml = `<div class="unread-msg">unread message</div>`;
+                    dynamicBlock.append(unreadHtml);
                 }
 
                 function addFeedbackHtmlToDom(data, botId, userIntentInput, runForAgentBot) {
