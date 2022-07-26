@@ -5,7 +5,7 @@ const initialState = {
 };
 
 export class Actions {
-  static dismissBar = () => ({ type: ACTION_IFRAME_URL });
+  static changeIframeUrl = () => ({ type: ACTION_IFRAME_URL });
 }
 
 export function reduce(state = initialState, action) {

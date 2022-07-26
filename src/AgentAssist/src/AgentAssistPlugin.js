@@ -1,12 +1,11 @@
 import React from 'react';
-import { useState } from "react";
 
 import { VERSION } from '@twilio/flex-ui';
 import { FlexPlugin } from '@twilio/flex-plugin';
 import axios from 'axios';
 
 
-import CustomTaskListContainer from './components/CustomTaskList/CustomTaskList.Container';
+import CustomTaskListContainer from './components/CustomTask/CustomTask';
 import reducers, { namespace } from './states';
 //import CustomCRM from './components/CustomCRM';
 
@@ -59,6 +58,9 @@ export default class AgentAssistPlugin extends FlexPlugin {
       const { agentassistURL, token, smartassistURL, botId, isCall = true } = funcResponse.data
 
       let conversationid = payload?.task?.attributes["caller"]
+      conversationid = conversationid.replace("+", "%2B");
+      // conversationid = "14152367315";
+      console.log("---------------->",conversationid);
       let iframeURL = `${agentassistURL}/koreagentassist-sdk/UI/agentassist-iframe.html?token=${token}&botid=${botId}&agentassisturl=${smartassistURL}&conversationid=${conversationid}&source=smartassist&isCall=${isCall}`;
       console.log("Iframe URL ====>  ", iframeURL);
       manager.store.dispatch({type:"IFRAME_URL", iframeUrl:`${iframeURL}`})

@@ -1,5 +1,4 @@
 #!/bin/sh
-
 if [ $# -eq 0 ]
   then
     echo "File name as command line agrument is required."
@@ -8,7 +7,7 @@ if [ $# -eq 0 ]
 fi
 #Installing the twilio CLI
 echo "Installing necessary plugins"
-npm install -g twilio-cli
+#npm install -g twilio-cli
 
 file_name=$1
 echo "copying the configuration........"
@@ -78,6 +77,8 @@ else
 fi
 echo
 
+
+exit 1
 ###################################################################
 #######         Twilio Flex Bulid                           #######
 ###################################################################
@@ -85,8 +86,8 @@ cd ../AgentAssist
 echo "change in directory, current directory is $(pwd)"
 export TWILIO_ACCOUNT_SID=$ACCOUNT_SID
 export TWILIO_AUTH_TOKEN=$AUTH_TOKEN
-export NODE_OPTIONS=--openssl-legacy-provider
-sudo npm install
+#export NODE_OPTIONS=--openssl-legacy-provider
+npm install
 sleep 5s 
 echo
 echo "Node version ---------> $(node -v)"

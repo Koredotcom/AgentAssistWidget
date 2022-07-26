@@ -9,7 +9,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  dismissBar: bindActionCreators(Actions.dismissBar, dispatch),
+  changeIframeUrl: bindActionCreators(Actions.changeIframeUrl, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CustomTaskList);
