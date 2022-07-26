@@ -617,7 +617,7 @@ html, body{
     /* margin-bottom: 16px; */
     padding: 15px 10px 16px 10px;
     position: relative;
-    z-index: 1;
+    /* z-index: 1; */
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .agent-utt-info .user-img {
     width: 30px;
