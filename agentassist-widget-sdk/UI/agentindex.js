@@ -3436,6 +3436,40 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
         <div class="dilog-task-end" id="endTaks-${dropdownHeaderUuids}">
         <div class="text-dialog-task-end">Dialog Task ended</div>     
                    </div>
+                   <div class="feedback-helpul-container">
+                    <div class="titles-content">
+                        <div class="title">Helpful?</div>
+                        <div class="btn-positive">
+                            <i class="ast-thumbup"></i>
+                            <span class="tootltip-tabs">Like</span>
+                        </div>
+                        <div class="btn-negtive">
+                            <i class="ast-thumbdown"></i>
+                            <span class="tootltip-tabs">Dislike</span>
+                        </div>
+                        <div class="thanks-update hide">Thanks for the feedback!</div>
+                        <div class="help-improve-arrow">
+                            <div class="title-improve">Help us improve (optional)</div>
+                            <div class="arrow-icon">
+                                <i class="ast-carrotup"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="explore-more-negtive-data">
+                        <div class="btns-group-negtive-chips">
+                            <div class="btn-chip-negtive active-chip">Not enough suggestions</div>
+                            <div class="btn-chip-negtive active-chip">Not prompt</div>
+                            <div class="btn-chip-negtive">Intent undetected</div>
+                            <div class="btn-chip-negtive">Not prompt</div>
+                            <div class="btn-chip-negtive">Other</div>
+                        </div>
+                        <div class="input-block-optional">
+                            <div class="label-text"></div>
+                            <input type="text" placeholder="Placeholder text" class="input-text">
+                        </div>
+                        <button class="submit-btn" disabled>Submit</button>
+                    </div>
+                </div>
             
         `;
                     endOfDialoge.append(endofDialogeHtml);
