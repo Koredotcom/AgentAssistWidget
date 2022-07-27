@@ -163,18 +163,18 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 if (!window._agentAssisteventListenerAdded) {
                     btnInit(containerId);
                     // eventListener for removing the ended currentconversation from the localStorage
-                    window.addEventListener("message", function(e) {
-                    console.log(e.data);//your data is captured in e.data
-                    let currentEndedConversationId = e.data.convsId; 
-                    var appStateStr = localStorage.getItem('agentAssistState') || '{}';
-                    var appState = JSON.parse(appStateStr);
-                    if(appState[currentEndedConversationId]) {
-                        delete appState[currentEndedConversationId];
-                    }
+                    window.addEventListener("message", function (e) {
+                        console.log(e.data);//your data is captured in e.data
+                        let currentEndedConversationId = e.data.convsId;
+                        var appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                        var appState = JSON.parse(appStateStr);
+                        if (appState[currentEndedConversationId]) {
+                            delete appState[currentEndedConversationId];
+                        }
                     });
 
-                    window.addEventListener("message", function(e) {
-                        console.log('event listener message: ',e.data)
+                    window.addEventListener("message", function (e) {
+                        console.log('event listener message: ', e.data)
                         let userInputData = e.data;
                         let agent_assist_request = {
                             'author': {
@@ -186,20 +186,20 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             'conversationId': userInputData.conversationid,
                             'query': userInputData.value,
                         }
-                        if(isCallConversation === 'true') {
-                            if(userInputData.author.type === 'USER') {
+                        if (isCallConversation === 'true') {
+                            if (userInputData.author.type === 'USER') {
                                 console.log('event listener USER Message:')
-                                processTranscriptData(userInputData, userInputData.conversationid, _botId, );
+                                processTranscriptData(userInputData, userInputData.conversationid, _botId,);
                                 _agentAsisstSocket.emit('agent_assist_request', agent_assist_request);
                             } else {
                                 console.log('event listener AGENT Message:')
                                 processAgentMessages(userInputData)
                             }
                         } else {
-                            if(userInputData.author.type === 'USER') {
+                            if (userInputData.author.type === 'USER') {
                                 console.log('event listener AGENT Message:')
                                 _agentAsisstSocket.emit('agent_assist_request', agent_assist_request);
-                             } 
+                            }
                         }
                     })
                 }
@@ -234,7 +234,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     return;
                                 }
                             }
-							shouldProcessResponse = true;
+                            shouldProcessResponse = true;
                         } else {
                             shouldProcessResponse = true;
                         }
@@ -242,7 +242,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             return;
                         }
                         updateNumberOfMessages();
-                        
+
                         var overRideObj = {
                             "agentId": "",
                             "botId": _botId,
@@ -255,7 +255,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         displayCustomerFeels(data, data.conversationId, _botId);
 
                         updateAgentAssistState(_conversationId, 'assistTab', data);
-                        
+
                         processAgentAssistResponse(data, data.conversationId, _botId);
                         document.getElementById("loader").style.display = "none";
                         // document.getElementById("addRemoveDropDown").style.display = "block";
@@ -336,7 +336,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     'userName': 'test',
                     'id': _agentAssistDataObj.conversationId
                 }
-               
+
                 console.log("AgentAssist >>> sending welcome_message_request")
                 _agentAsisstSocket.emit('welcome_message_request', welcome_message_request);
 
@@ -349,7 +349,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 renderingHistoryMessage();
                 
                 updateUIState(_conversationId, isCallConversation);
-
                 // var agent_menu_request = {
                 //     "botId": _agentAssistDataObj.botId,
                 //     "conversationId": _agentAssistDataObj.conversationId,
@@ -631,7 +630,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             });
                         }
                     }
-                    
+
 
                     if (data.isSearch && !answerPlaceableID) {
                         ShowSearchContent();
@@ -655,23 +654,23 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 } else if ((dialogsLength === 0 || dialogsLength === undefined) && (faqsLength > 0)) {
                                     $('#overLaySearch').html(`<div class="search-results-text">${faqsLength} Search results for '${data.userInput}' <span class="show-all hide">Show all</span></div>`)
                                 }
-                                if((dialogsLength + faqsLength)>1){
+                                if ((dialogsLength + faqsLength) > 1) {
                                     $('#overLaySearch').find('.show-all').removeClass('hide');
 
                                 }
                             }
 
                         } else {
-                            if(isSuggestionProcessed) {
+                            if (isSuggestionProcessed) {
                                 if (currentTabActive == 'searchAutoIcon') {
                                     let searchTextDisplay = document.getElementById('search-text-display');
                                     html = `<div class="searched-intent" id="librarySearchText">0 Search results for '${data.userInput}' </div>`
                                     searchTextDisplay.innerHTML = html;
                                 } else {
-                                      $('#overLaySearch').html(`<div class="search-results-text">0 Search results for '${data.userInput}'</div>`)
+                                    $('#overLaySearch').html(`<div class="search-results-text">0 Search results for '${data.userInput}'</div>`)
                                 }
                             }
-                           
+
 
                         }
 
@@ -1012,122 +1011,117 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }
                 }
 
-                function updateNumberOfMessages(){      
+                function updateNumberOfMessages() {
                     numberOfNewMessages += 1;
                     $(".scroll-bottom-btn").text(numberOfNewMessages + ' new');
-                    console.log(numberOfNewMessages, "number of new messages in update");
                 }
 
-                function changeNewMessageBackground(element){
+                function changeNewMessageBackground(element) {
                     changeNewMessageIcon(element);
-                    console.log(element.className, "last element class name");
-                    if(element.className == 'agent-utt-info'){
-                        changeBackgroundColor(element,'white');
-                    }else if(element.className == 'dialog-task-run-sec'){
-                        changeBackgroundColor(element,'white');
-                    }else if(element.className == 'dialog-task-accordiaon-info'){
-                        changeBackgroundColor(element,"white"); 
+                    if (element.className == 'agent-utt-info') {
+                        changeBackgroundColor(element, 'white');
+                    } else if (element.className == 'dialog-task-run-sec') {
+                        changeBackgroundColor(element, 'white');
+                    } else if (element.className == 'dialog-task-accordiaon-info') {
+                        changeBackgroundColor(element, "white");
                         let accordionInfoChildren = element.children;
-                        for(let i = 0; i<accordionInfoChildren.length; i++){
+                        for (let i = 0; i < accordionInfoChildren.length; i++) {
                             let accordionElement = accordionInfoChildren[i];
-                            if(accordionElement.className == 'collapse-acc-data'){
+                            if (accordionElement.className == 'collapse-acc-data') {
                                 //steps-run-data nodes finding last element
                                 let listOfStepsNodes = accordionElement.querySelectorAll('.steps-run-data');
-                                for(let node of listOfStepsNodes){
+                                for (let node of listOfStepsNodes) {
                                     changeBackgroundColor(node, '#f3f7ff');
                                 }
-                                let stepsLastElement =  Array.from(listOfStepsNodes).pop();
+                                let stepsLastElement = Array.from(listOfStepsNodes).pop();
                                 changeBackgroundColor(stepsLastElement, 'white');
 
                                 // feedback node finding last element
                                 let listOfFeedbackNodes = accordionElement.querySelectorAll('.feedback-data');
-                                for(let node of listOfFeedbackNodes){
+                                for (let node of listOfFeedbackNodes) {
                                     changeBackgroundColor(node, '#f3f7ff');
                                 }
-                                let feedbackLastElement =  Array.from(listOfFeedbackNodes).pop();
+                                let feedbackLastElement = Array.from(listOfFeedbackNodes).pop();
                                 changeBackgroundColor(feedbackLastElement, 'white');
 
 
-                            }else if(accordionElement.className == 'accordion-header'){
+                            } else if (accordionElement.className == 'accordion-header') {
                                 changeBackgroundColor(accordionElement, '#f3f7ff');
                             }
-                        } 
-                    }else if(element.className == 'collapse-acc-data'){
+                        }
+                    } else if (element.className == 'collapse-acc-data') {
                         changeBackgroundColor(element, 'white');
                     }
                 }
 
-                function updateOldMessageIcon(){
+                function updateOldMessageIcon() {
                     var dynamicBlockElement = document.getElementById('dynamicBlock');
                     var iconBlockElements = dynamicBlockElement.querySelectorAll('.icon_block');
-                    for(let i = 0; i < iconBlockElements.length; i++){
+                    for (let i = 0; i < iconBlockElements.length; i++) {
                         let iconElement = iconBlockElements[i];
                         changeBackgroundColor(iconElement, "#ffffff");
                         iconElement.style.color = "#009dab";
                     }
                 }
 
-                function updateOldFaqList(){
-                    var dynamicBlockElement = document.getElementById('dynamicBlock');
-                    var numOfdynamicBlockElements = dynamicBlockElement.children;
-                    let eachElement = '';
-                    for (var i = 0; i < numOfdynamicBlockElements.length; i++) {
-                        eachElement = numOfdynamicBlockElements[i]; 
-                        console.log(eachElement.className, "className");
-                        if(eachElement.className == 'dialog-task-run-sec'){
-                            console.log(eachElement.id, "id of dialogure task run section");
-                            let childrunsec = Array.from(eachElement.children);
-                            childrunsec.forEach(element =>{
-                                if(element.id == 'faqssArea'){
-                                    let faqsList = element.querySelectorAll('type-info-run-send');
-                                    console.log(faqsList, "faqslist");
-                                    // for(let faq of faqsList){
+                // function updateOldFaqList(){
+                //     var dynamicBlockElement = document.getElementById('dynamicBlock');
+                //     var numOfdynamicBlockElements = dynamicBlockElement.children;
+                //     let eachElement = '';
+                //     for (var i = 0; i < numOfdynamicBlockElements.length; i++) {
+                //         eachElement = numOfdynamicBlockElements[i]; 
+                //         if(eachElement.className == 'dialog-task-run-sec'){
+                //             let childrunsec = Array.from(eachElement.children);
+                //             childrunsec.forEach(element =>{
+                //                 if(element.id == 'faqssArea'){
+                //                     let faqsList = element.querySelectorAll('type-info-run-send');
+                //                     console.log(faqsList, "faqslist");
+                //                     // for(let faq of faqsList){
 
-                                    // }
-                                }
-                            })
-                        }
-                    }
-                }
+                //                     // }
+                //                 }
+                //             })
+                //         }
+                //     }
+                // }
 
-                function changeNewMessageIcon(element){
+                function changeNewMessageIcon(element) {
                     var iconBlockElements = element.querySelectorAll('.icon_block');
-                    for(let i = 0; i < iconBlockElements.length; i++){
+                    for (let i = 0; i < iconBlockElements.length; i++) {
                         let iconElement = iconBlockElements[i];
-                        if(i == (iconBlockElements.length -1)){
+                        if (i == (iconBlockElements.length - 1)) {
                             changeBackgroundColor(iconElement, "#009dab");
                             iconElement.style.color = "white";
                         }
                     }
                 }
 
-                function updateOldMessagesBackground(){
+                function updateOldMessagesBackground() {
 
-                    let classList = ['collapse-acc-data', 'agent-utt-info','dialog-task-run-sec', 'dialog-task-accordiaon-info']
+                    let classList = ['collapse-acc-data', 'agent-utt-info', 'dialog-task-run-sec', 'dialog-task-accordiaon-info']
                     let eachElement = ''
                     var dynamicBlockElements = document.getElementById('dynamicBlock');
                     var numOfdynamicBlockElements = dynamicBlockElements.children;
                     let lastElement = '';
                     for (var i = 0; i < numOfdynamicBlockElements.length; i++) {
-                        eachElement = numOfdynamicBlockElements[i]; 
-                        console.log(eachElement.className, "className");
-                        if(classList.indexOf(eachElement.className) != -1){
-                            changeBackgroundColor(eachElement,"#f3f7ff"); 
+                        eachElement = numOfdynamicBlockElements[i];
+                        if (classList.indexOf(eachElement.className) != -1) {
+                            changeBackgroundColor(eachElement, "#f3f7ff");
                         }
                         lastElement = numOfdynamicBlockElements[i];
                     }
 
                     updateOldMessageIcon();
                     changeNewMessageBackground(lastElement);
-                    updateOldFaqList();
+                    // updateOldFaqList();
                 }
 
-                function changeBackgroundColor(element,color, action){
-                    $(element).attr('style',function(){
-                        if(this.style.hasOwnProperty('background-color')){
+                function changeBackgroundColor(element, color, action) {
+                    $(element).attr('style', function () {
+                        if (this.style.hasOwnProperty('background-color')) {
                             this.style.removeProperty('background-color');
                         }
-                        return this.style.cssText + 'background-color:'+ color + ';';
+                        return this.style.cssText + 'background-color:' + color + ';';
                     })
                     // element.style.backgroundColor = color;
                 }
@@ -1400,7 +1394,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
 
                         updateNewMessageUUIDList(responseId);
-                    
+
                     } else {
                         if (data.type === 'text' && data.suggestions) {
                             data.suggestions.faqs.forEach((ele) => {
@@ -1596,13 +1590,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                              </div>
                          </div>
                          </div>`;
-                         dynamicBlockDiv.append(botResHtml)
+                                dynamicBlockDiv.append(botResHtml)
                             }
                         });
                         updateNewMessageUUIDList(uuids);
                     }
                     dropdownHeaderUuids ? AgentChatInitialize.renderMessage(_msgsResponse, uuids, `dropDownData-${dropdownHeaderUuids}`) : '';
-                   
+
                     // let noOfStepsOfSmallTalk = $(`.body-data-container #dynamicBlock #welcomeMsg`).find('.steps-run-data').not('.hide');
                     // if (noOfStepsOfSmallTalk.length >= 2) {
                     //     $(noOfStepsOfSmallTalk).addClass('hide');
@@ -1623,9 +1617,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         addFeedbackHtmlToDom(data, botId, userIntentInput);
                         userMessage = {};
                     }
-                    console.log(scrollAtEnd, "scroll at end in process agent assist response");
-
-                    if(scrollAtEnd){
+                    if (scrollAtEnd) {
                         scrollToBottom();
                     }
                     updateOldMessagesBackground();
@@ -1656,10 +1648,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     var ampm = hours >= 12 ? 'pm' : 'am';
                     hours = hours % 12;
                     hours = hours ? hours : 12; // the hour '0' should be '12'
-                    minutes = minutes < 10 ? '0'+minutes : minutes;
+                    minutes = minutes < 10 ? '0' + minutes : minutes;
                     var strTime = hours + ':' + minutes + ' ' + ampm;
                     return strTime;
-                  }
+                }
 
                 function processAgentMessages(data) {
                     let time = new Date();
@@ -1730,7 +1722,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     dynamicBlock.innerHTML += dropdownHtml;
                 }
 
-                function _createRunTemplateContiner(uuids, intentName){
+                function _createRunTemplateContiner(uuids, intentName) {
                     let dynamicBlock = document.getElementById('dynamicBlock');
                     let dropdownHtml = `
        <div class="dialog-task-accordiaon-info hide" id="addRemoveDropDown-${uuids}" >
@@ -1763,7 +1755,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     if (!appState[_convId]) {
                         convState = appState[_convId] = {};
                     }
-                    if (!convState[_tabName] ) {
+                    if (!convState[_tabName]) {
                         convState[_tabName] = {};
                     }
                     // if (!convState[_tabName]['stateItems']) {
@@ -1791,7 +1783,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     //        stateItems[0] = JSON.stringify(_data);
                     //        stateItems.splice(1,1);
                     //    }
-                      
+
                     // } else {
                     //     // let lIntentName = null;
                     //     // for (let i = stateItems.length-1; (i >= 0 && lIntentName == null); i--) {
@@ -1807,8 +1799,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     // }
                   //  stateItems.push(JSON.stringify(_data));
                     localStorage.setItem('agentAssistState', JSON.stringify(appState));
-                    console.log("scroll at end", scrollAtEnd);
-                    
                 }
 
                 function renderingHistoryMessage () {
@@ -2295,33 +2285,33 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     var appStateStr = localStorage.getItem('agentAssistState') || '{}';
                     var appState = JSON.parse(appStateStr);
                     var convState = appState[_convId] || {};
-                    if(!appState[_convId]) {
-                        convState=appState[_convId] = {}
-                        if(_isCallConv == 'true') {
+                    if (!appState[_convId]) {
+                        convState = appState[_convId] = {}
+                        if (_isCallConv == 'true') {
                             convState.currentTab = 'transcriptTab';
                         } else {
                             convState.currentTab = 'assistTab';
                         }
                     }
                     if (convState.currentTab == 'librarySearch') {
-                         libraryTabActive();
-                         currentTabActive = 'searchAutoIcon';
-                        if(convState?.libraryTab.length > 0) {
+                        libraryTabActive();
+                        currentTabActive = 'searchAutoIcon';
+                        if (convState?.libraryTab.length > 0) {
                             $('#librarySearch').val(convState.libraryTab);
                             var convId = _convId;
                             var botId = _botId;
                             var intentName = convState.libraryTab;
                             AgentAssistPubSub.publish('searched_Automation_details', { conversationId: convId, botId: botId, value: intentName, isSearch: true });
-                            
+
                         }
-                        
+
                     }
-                    else if (convState.currentTab == 'myBotTab') {  
+                    else if (convState.currentTab == 'myBotTab') {
                         agentTabActive();
                     }
                     else if (convState.currentTab == 'transcriptTab') {
                         transcriptionTabActive();
-            
+
                     }
                     else if (convState.currentTab == 'assistTab') {
                         userTabActive();
@@ -2329,18 +2319,70 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     updateCurrentTabInState(_convId,  convState.currentTab);
                   //  convState.currentTab !== 'librarySearch' ? updateUIWithTabState(_convId, convState.currentTab):'';
                     document.getElementById("loader").style.display = "none";
+                    hightLightFaqFromStoredList(_conversationId, 'assistTab');
+                }
+
+                function hightLightFaqFromStoredList(convId, currentTab) {
+                    var appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                    var appState = JSON.parse(appStateStr);
+                    if (!appState[convId]) {
+                        return
+                    }
+                    var convState = appState[convId];
+                    if (!convState[currentTab]) { return; }
+                    if (!convState[currentTab].faqsList) {
+                        convState[currentTab].faqsList = [];
+                    }
+                    let selectedFaqList = convState[currentTab].faqsList;
+                    for (let item of selectedFaqList) {
+                        let faqElementId = item.split('_')[1];
+                        let faqParentElementId = item.split('_')[0];
+                        let faqParentElement = document.getElementById(faqParentElementId);
+                        console.log(faqParentElement, "parent element");
+                        if (faqParentElement) {
+                            let faqElement = faqParentElement.querySelector('#' + faqElementId);
+                            faqElement.style.borderStyle = "solid";
+                        }
+                        // document.getElementById(faqElementId).style.borderStyle = "solid";
+                    }
+                }
+
+                function highLightAndStoreFaqId(evt) {
+                    let faqElementId = $(evt.target).parent().parent().attr('id');
+                    let faqParentElementId = $(evt.target).parent().parent().parent().attr('id');
+                    let storedfaqId = faqParentElementId + '_' + faqElementId;
+                    selectedFaqList.push(storedfaqId);
+                    document.getElementById(faqElementId).style.borderStyle = "solid";
+                    setSentFaqListInStorage(_conversationId, storedfaqId, 'assistTab');
+                }
+
+                function setSentFaqListInStorage(convId, faqId, currentTab) {
+                    var appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                    var appState = JSON.parse(appStateStr);
+                    if (!appState[convId]) {
+                        return
+                    }
+                    var convState = appState[convId];
+                    if (!convState[currentTab]) { return; }
+                    if (!convState[currentTab].faqsList) {
+                        convState[currentTab].faqsList = [];
+                    }
+                    if (convState[currentTab].faqsList.indexOf(faqId) == -1) {
+                        convState[currentTab].faqsList.push(faqId);
+                        localStorage.setItem('agentAssistState', JSON.stringify(appState));
+                    }
                 }
 
                 function updateUIWithTabState(convId, currentTab) {
                     var appStateStr = localStorage.getItem('agentAssistState') || '{}';
                     var appState = JSON.parse(appStateStr);
                     if (!appState[convId]) {
-                         return 
+                        return
                     }
                     var convState = appState[convId];
-                    if (!convState[currentTab]) {return;}
+                    if (!convState[currentTab]) { return; }
                     if (!convState[currentTab].stateItems || convState[currentTab].stateItems.length == 0) {
-                       return;
+                        return;
                     }
                     let stateItems = convState[currentTab].stateItems;
                     if (currentTab == 'assistTab') {
@@ -2374,23 +2416,23 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 _createRunTemplateContiner(dropdownHeaderUuids, item.intentName);
                                 $(`#addRemoveDropDown-${dropdownHeaderUuids}`).removeClass('hide');
                             } else {
-                                currentTab == 'myBotTab'?_createRunTemplateContainerForMyTab(dropdownHeaderUuids, item.intentName):'';
+                                currentTab == 'myBotTab' ? _createRunTemplateContainerForMyTab(dropdownHeaderUuids, item.intentName) : '';
                                 $(`#MyBotaddRemoveDropDown-${dropdownHeaderUuids}`).removeClass('hide');
-                            }  
+                            }
                         }
                     }
 
-                    for(let i =0 ;i<stateItems.length; i++){
+                    for (let i = 0; i < stateItems.length; i++) {
                         let itemStr = stateItems[i];
                         let item = JSON.parse(itemStr);
                         if (item.intentName) {
                             if (currentTab == 'assistTab') {
                                 dropdownHeaderUuids = intentContainerObj[item.intentName]['containerId'];
-                            } 
+                            }
                             if (currentTab == 'myBotTab') {
                                 myBotDropdownHeaderUuids = intentContainerObj[item.intentName]['containerId']
                             }
-                           
+
                         }
                         if (currentTab == 'assistTab') {
                             if (item.event == 'agent_assist_user_message') {
@@ -2398,9 +2440,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             }
                             processAgentAssistResponse(item, convId, _botId);
                         } else {
-                            currentTab == 'myBotTab'?processMybotDataResponse(item, convId, _botId):'';
+                            currentTab == 'myBotTab' ? processMybotDataResponse(item, convId, _botId) : '';
                         }
-                      
+
                     }
                 }
 
@@ -2408,13 +2450,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     var appStateStr = localStorage.getItem('agentAssistState') || '{}';
                     var appState = JSON.parse(appStateStr);
                     var convState = appState[_convId] || {};
-                    if(!appState[_convId]) {
-                        convState=appState[_convId] = {}
+                    if (!appState[_convId]) {
+                        convState = appState[_convId] = {}
                     }
                     convState.currentTab = currentTab;
-                    if(appState[_convId] && (convState.currentTab == 'librarySearch')) {
-                        if(searchedVal !== undefined && document.getElementById('librarySearch').value.length > 0){
-                        convState.libraryTab = document.getElementById('librarySearch').value;
+                    if (appState[_convId] && (convState.currentTab == 'librarySearch')) {
+                        if (searchedVal !== undefined && document.getElementById('librarySearch').value.length > 0) {
+                            convState.libraryTab = document.getElementById('librarySearch').value;
                         } else {
                             convState.libraryTab = '';
                         }
@@ -2422,16 +2464,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     localStorage.setItem('agentAssistState', JSON.stringify(appState));
                 }
 
-                function isScrolledIntoView(elem)
-                {
-                    if(elem){
+                function isScrolledIntoView(elem) {
+                    if (elem) {
                         var parentRec = document.getElementById("bodyContainer").getBoundingClientRect();
                         var childRec = elem.getBoundingClientRect();
                         var paddingTop = 0;
-                        if(window.getComputedStyle(elem, null).getPropertyValue('padding-top')){
+                        if (window.getComputedStyle(elem, null).getPropertyValue('padding-top')) {
                             var paddingTopStr = window.getComputedStyle(elem, null).getPropertyValue('padding-top');
-                            if(paddingTopStr.length && paddingTopStr.length-2){
-                                paddingTopStr = paddingTopStr.substring(0, paddingTopStr.length-2);
+                            if (paddingTopStr.length && paddingTopStr.length - 2) {
+                                paddingTopStr = paddingTopStr.substring(0, paddingTopStr.length - 2);
                                 paddingTop = parseInt(paddingTopStr) ? parseInt(paddingTopStr) : 0;
                             }
                         }
@@ -2439,57 +2480,57 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }
                 }
 
-                function getLastElement(id){
+                function getLastElement(id) {
                     let lastElement = ''
                     var dynamicBlockElements = document.getElementById(id);
-                    if(dynamicBlockElements){
+                    if (dynamicBlockElements) {
                         var numOfdynamicBlockElements = dynamicBlockElements.children;
-                        if(numOfdynamicBlockElements){
+                        if (numOfdynamicBlockElements) {
                             for (var i = 0; i < numOfdynamicBlockElements.length; i++) {
-                                lastElement = numOfdynamicBlockElements[i];  
+                                lastElement = numOfdynamicBlockElements[i];
                             }
-                            console.log(lastElement.className, "className");
-        
-                            if(lastElement.className == 'dialog-task-run-sec'){
+                            if (lastElement.className == 'dialog-task-run-sec') {
                                 var numOfdynamicBlockElements = lastElement.children;
                                 for (var i = 0; i < numOfdynamicBlockElements.length; i++) {
-                                    lastElement = numOfdynamicBlockElements[i];  
+                                    lastElement = numOfdynamicBlockElements[i];
+                                    console.log($(lastElement).attr("id"), "attribute id");
+                                    if ($(lastElement).attr("id") == 'dialoguesArea') {
+                                        let typeInfoRunNodes = lastElement.querySelectorAll('.content-dialog-task-type');
+                                        console.log(typeInfoRunNodes, "type info run nodes");
+                                        lastElement = typeInfoRunNodes[typeInfoRunNodes.length - 1];
+                                    }
                                 }
-                            }else if(lastElement.className == 'dialog-task-accordiaon-info'){
+                            } else if (lastElement.className == 'dialog-task-accordiaon-info') {
                                 let listOfNodes = lastElement.querySelectorAll('.steps-run-data');
-                                console.log(listOfNodes, "list of nodes");
-                                lastElement =  Array.from(listOfNodes).pop();
+                                lastElement = Array.from(listOfNodes).pop();
                             }
                         }
                     }
                     return lastElement;
                 }
 
-                function updateNewMessageUUIDList(responseId){
-                    if(!scrollAtEnd){
-                        if(numberOfNewMessages){
-                            if(newlyAddedMessagesUUIDlist.indexOf(responseId) == -1){
+                function updateNewMessageUUIDList(responseId) {
+                    if (!scrollAtEnd) {
+                        if (numberOfNewMessages) {
+                            if (newlyAddedMessagesUUIDlist.indexOf(responseId) == -1) {
                                 newlyAddedMessagesUUIDlist.push(responseId);
                                 newlyAddedIdList = getActualRenderedIdList();
-                                console.log(newlyAddedMessagesUUIDlist, "uuid list")
                             }
                         }
-                        // if(numberOfNewMessages == 1){
-                        //     addUnreadMessageHtml();
-                        // }
                     }
                 }
 
-                function updateNewMessageCount(){
-                    for(let id of newlyAddedIdList){
+                function updateNewMessageCount() {
+                    for (let id of newlyAddedIdList) {
                         let element = document.getElementById(id);
-                        if(element){
+                        if (element) {
                             let inView = !isScrolledIntoView(element) ? true : false;
-                            if(inView){
+                            if (inView) {
                                 removedIdListOnScroll.push(id);
                                 newlyAddedIdList = newlyAddedIdList.filter(item => item !== id)
                                 numberOfNewMessages = numberOfNewMessages > 0 ? numberOfNewMessages - 1 : 0;
-                                if(numberOfNewMessages){
+                                lastElementBeforeNewMessage = getLastElement(id);
+                                if (numberOfNewMessages) {
                                     $(".scroll-bottom-btn").text(numberOfNewMessages + ' new');
                                 }
                             }
@@ -2497,11 +2538,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }
                 }
 
-                function getActualRenderedIdList(){
+                function getActualRenderedIdList() {
                     let normalIdsList = ['addRemoveDropDown', 'agentUttInfo', 'automationSuggestions', 'smallTalk'];
                     let actualRenderedIdList = [];
-                    for(let uuid of newlyAddedMessagesUUIDlist){
-                        for(let name of normalIdsList){
+                    for (let uuid of newlyAddedMessagesUUIDlist) {
+                        for (let name of normalIdsList) {
                             let childIdList = [];
                             childIdList = getChildRenderedIdList(name + '-' + uuid, uuid, name);
                             actualRenderedIdList = actualRenderedIdList.concat(childIdList);
@@ -2511,31 +2552,25 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     actualRenderedIdList = actualRenderedIdList.filter((c, index) => {
                         return actualRenderedIdList.indexOf(c) === index;
                     });
-
-                    // filter from removedIdListOnScroll
-                    console.log(actualRenderedIdList, "actual rendered id list");
-                    
                     return actualRenderedIdList;
                 }
 
-                function getChildRenderedIdList(id, uuid, name){
-                    console.log(id, uuid , "id and uuid");
+                function getChildRenderedIdList(id, uuid, name) {
                     let childIdList = [];
                     var dynamicBlockElement = document.getElementById(id);
-                    if(dynamicBlockElement){
-                        console.log(dynamicBlockElement.className, "className");
-                        if(dynamicBlockElement.className == 'dialog-task-run-sec'){
+                    if (dynamicBlockElement) {
+                        if (dynamicBlockElement.className == 'dialog-task-run-sec') {
                             let dialogueSuggestionId = 'dialogSuggestions-' + uuid;
                             let faqSuggestionId = 'faqsSuggestions-' + uuid;
-                            if(removedIdListOnScroll.indexOf(dialogueSuggestionId) == -1){
+                            if (removedIdListOnScroll.indexOf(dialogueSuggestionId) == -1) {
                                 childIdList.push(dialogueSuggestionId);
                             }
-                            if(removedIdListOnScroll.indexOf(faqSuggestionId) == -1){
+                            if (removedIdListOnScroll.indexOf(faqSuggestionId) == -1) {
                                 childIdList.push(faqSuggestionId);
                             }
-                        }else{
+                        } else {
                             let actualParentId = name + '-' + uuid;
-                            if(removedIdListOnScroll.indexOf(actualParentId) == -1){
+                            if (removedIdListOnScroll.indexOf(actualParentId) == -1) {
                                 childIdList.push(actualParentId);
                             }
                         }
@@ -2543,29 +2578,42 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     return childIdList;
                 }
 
+                function scrollToEle(element) {
+                    var _PanelEle = $(element);
+                    if (_PanelEle) {
+                        var _container = _PanelEle.closest('.body-data-container');
+                        if (_container && _container.offset()) {
+                            var _scrollHeight = _PanelEle.offset().top - _container.offset().top + _container.scrollTop();
+                            _container.animate({
+                                scrollTop: _scrollHeight
+                            }, 'slow');
+                        }
+                    }
+                }
+
                 function btnInit() {
 
-                    document.querySelector('#bodyContainer').addEventListener('ps-scroll-up',(scrollUpevent)=>{
+                    document.querySelector('#bodyContainer').addEventListener('ps-scroll-up', (scrollUpevent) => {
                         lastelement = getLastElement('dynamicBlock');
                         scrollAtEnd = !isScrolledIntoView(lastelement) ? true : false;
-                        if(!scrollAtEnd){
+                        if (!scrollAtEnd) {
                             $(".scroll-bottom-btn").removeClass('hide');
                         }
                     });
 
-                    document.querySelector('#bodyContainer').addEventListener('ps-scroll-down',(scrollDownevent)=>{
+                    document.querySelector('#bodyContainer').addEventListener('ps-scroll-down', (scrollDownevent) => {
                         //newly added elements scroll view
 
                         updateNewMessageCount();
                         //last element scroll view
-                        // lastelement = getLastElement('dynamicBlock');                        
-                        // scrollAtEnd = !isScrolledIntoView(lastelement) ? true : false;
-                        // if(scrollAtEnd){
-                        //     $(".scroll-bottom-btn").addClass('hide');
-                        // }
+                        lastelement = getLastElement('dynamicBlock');
+                        scrollAtEnd = !isScrolledIntoView(lastelement) ? true : false;
+                        if (scrollAtEnd) {
+                            $(".scroll-bottom-btn").addClass('hide');
+                        }
                     });
 
-                    document.querySelector('#bodyContainer').addEventListener('ps-y-reach-end',(scrollEndevent)=>{
+                    document.querySelector('#bodyContainer').addEventListener('ps-y-reach-end', (scrollEndevent) => {
                         $(".scroll-bottom-btn").addClass('hide');
                         $('.unread-msg').addClass('hide');
                         numberOfNewMessages = 0;
@@ -2602,27 +2650,29 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             }
                         });
 
-                        if(target.className == 'scroll-bottom-btn'){
+                        if (target.className == 'scroll-bottom-btn') {
                             let newElementsHeight = getNewlyAddedElementsHeights();
-                            console.log(newElementsHeight, "new elements height",$( "#bodyContainer" ).prop( "scrollHeight" ));
-                            if(newElementsHeight){
-                                $("#bodyContainer").scrollTop( newElementsHeight);
-                            }else{
+                            console.log(newElementsHeight, "new elements height", $("#bodyContainer").prop("scrollHeight"));
+                            if (newElementsHeight) {
+                                // $("#bodyContainer").scrollTop(newElementsHeight);
+                                scrollToEle(lastElementBeforeNewMessage);
+
+                            } else {
                                 scrollToBottom();
                             }
                             // $("#bodyContainer").perfectScrollbar('update');
-                            if($(".scroll-bottom-btn").text().includes('new')){
+                            if ($(".scroll-bottom-btn").text().includes('new')) {
                                 console.log(newlyAddedIdList, "id list");
-                                if(!scrollAtEnd && numberOfNewMessages > 0){
-                                    for(let i = 0; i< newlyAddedIdList.length; i++){
-                                        if(document.getElementById(newlyAddedIdList[i])){
+                                if (!scrollAtEnd && numberOfNewMessages > 0) {
+                                    for (let i = 0; i < newlyAddedIdList.length; i++) {
+                                        if (document.getElementById(newlyAddedIdList[i])) {
                                             let elements = document.getElementById(newlyAddedIdList[i]);
-                                            elements?.insertAdjacentHTML('beforeBegin', addUnreadMessageHtml());  
+                                            elements?.insertAdjacentHTML('beforeBegin', addUnreadMessageHtml());
                                             break;
                                         }
                                     }
-                                    
-                               }
+
+                                }
                             }
                         }
 
@@ -2632,13 +2682,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 method: "send",
                                 text: target.dataset.msgData
                             }, "*");
-                            let faqElementId = $(evt.target).parent().parent().attr('id');
-                            let faqParentElementId = $(evt.target).parent().parent().parent().attr('id');
-                            selectedFaqList.push(faqParentElementId + '_' + faqElementId);
-                            document.getElementById(faqElementId).style.borderStyle = "solid";
-                            
-                            console.log($(evt.target).parent().parent().attr('id'), "parent id");
-                        } else if(target.id === 'sendMsg' && sourceType == 'salesforce') {
+                            highLightAndStoreFaqId(evt);
+                        } else if (target.id === 'sendMsg' && sourceType == 'salesforce') {
                             let payload = target.dataset.msgData;
                             var message = {
                                 name: "agentAssist.SendMessage",
@@ -2651,11 +2696,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             let ele = document.getElementById(`displayData-${target.dataset.msgId}`) ? document.getElementById(`displayData-${target.dataset.msgId}`) : document.getElementById(target.dataset.msgId);
                             window.parent.postMessage({
                                 method: "copy",
-                                text: target.dataset.msgData && target.dataset.msgData!==''?target.dataset.msgData:(target.parentNode.dataset.msgData && target.parentNode.dataset.msgData!==''?target.parentNode.dataset.msgData:ele.innerText)
+                                text: target.dataset.msgData && target.dataset.msgData !== '' ? target.dataset.msgData : (target.parentNode.dataset.msgData && target.parentNode.dataset.msgData !== '' ? target.parentNode.dataset.msgData : ele.innerText)
                             }, "*")
-                        } else if((target.className == 'copy-btn' || target.className == 'ast-copy') && sourceType == 'salesforce') {
+                        } else if ((target.className == 'copy-btn' || target.className == 'ast-copy') && sourceType == 'salesforce') {
                             let ele = document.getElementById(`displayData-${target.dataset.msgId}`) ? document.getElementById(`displayData-${target.dataset.msgId}`) : document.getElementById(target.dataset.msgId);
-                            let data = target.dataset.msgData && target.dataset.msgData!==''?target.dataset.msgData:(target.parentNode.dataset.msgData && target.parentNode.dataset.msgData!==''?target.parentNode.dataset.msgData:ele.innerText)
+                            let data = target.dataset.msgData && target.dataset.msgData !== '' ? target.dataset.msgData : (target.parentNode.dataset.msgData && target.parentNode.dataset.msgData !== '' ? target.parentNode.dataset.msgData : ele.innerText)
                             var message = {
                                 name: "agentAssist.CopyMessage",
                                 conversationId: _conversationId,
@@ -2671,11 +2716,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             searchedVal = '';
                         }
 
-                        if(target.id === 'cancelLibrarySearch') {
+                        if (target.id === 'cancelLibrarySearch') {
                             $('#librarySearch').val('');
                             $('#cancelLibrarySearch').addClass('hide');
                             loadLibraryOnCancel(autoExhaustiveList, _conversationId, _botId);
-                        } else if(target.id === 'cancelAgentSearch') {
+                        } else if (target.id === 'cancelAgentSearch') {
                             $('#agentSearch').val('');
                             $('#cancelAgentSearch').addClass('hide');
                         }
@@ -2763,22 +2808,22 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                         if (target.id === `searchAutoIcon` || target.id === `searchIcon` || target.id === `LibraryLabel`) {
                             data = _agentAssistDataObj
-                            updateCurrentTabInState(_conversationId,'librarySearch')
+                            updateCurrentTabInState(_conversationId, 'librarySearch')
                             libraryTabActive();
                         }
                         else if (target.id === `agentAutoIcon` || target.id === `agentBotIcon` || target.id === `MybotLabel`) {
-                            updateCurrentTabInState(_conversationId,'myBotTab')
+                            updateCurrentTabInState(_conversationId, 'myBotTab')
                             agentTabActive();
                         }
                         else if (target.id === `transcriptIcon` || target.id === `scriptIcon` || target.id === `transcriptLabel`) {
-                            updateCurrentTabInState(_conversationId,'transcriptTab')
+                            updateCurrentTabInState(_conversationId, 'transcriptTab')
                             transcriptionTabActive();
                             currentTabActive = 'transcriptIcon';
                         }
                         else if (target.id === `userAutoIcon` || target.id === `userBotIcon` || target.id === `AssistLabel`) {
-                            updateCurrentTabInState(_conversationId,'assistTab')
+                            updateCurrentTabInState(_conversationId, 'assistTab')
                             userTabActive();
-                          //  updateUIState(_conversationId, isCallConversation);
+                            //  updateUIState(_conversationId, isCallConversation);
 
                         }
                         var seeMoreButton = target.dataset.seeMore;
@@ -3687,7 +3732,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 $('#interruptPopUp').removeClass('hide');
                             }
                         }
-                       
+
                         if (runButton || libraryRunBtn || historyRunBtn) {
                             if (!isAutomationOnGoing) {
                                 // $('#welcomeMsg').addClass('hide');
@@ -3914,7 +3959,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 AgentAssistPubSub.publish('searched_Automation_details', { conversationId: evt.target.dataset.convId, botId: evt.target.dataset.botId, value: evt.target.dataset.intentName, isSearch: true });
                                 return
                             }
-                            if(currentTabActive == 'searchAutoIcon'){
+                            if (currentTabActive == 'searchAutoIcon') {
                                 if ($(`#search-text-display .ast-carrotup.rotate-carrot`).length <= 0) {
                                     $(`#search-text-display #${target.id}`).addClass('rotate-carrot');
                                     $(`#search-text-display #faqDivLib-${id.join('-')} .action-links`).removeClass('hide');
@@ -4039,9 +4084,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                         if (target.id.split('-')[0] == 'buldCount' || target.className == 'ast-bulb' || target.className == 'count-number') {
                             let bulbDiv;
-                            if( $('#scriptContainer .other-user-bubble .bubble-data .buld-count-utt').length > 0){
-                                bulbDiv=  $('#scriptContainer .other-user-bubble .bubble-data').find('.buld-count-utt, .buld-count-utt-after-click');
-                            }else {
+                            if ($('#scriptContainer .other-user-bubble .bubble-data .buld-count-utt').length > 0) {
+                                bulbDiv = $('#scriptContainer .other-user-bubble .bubble-data').find('.buld-count-utt, .buld-count-utt-after-click');
+                            } else {
                                 bulbDiv = $('#scriptContainer .other-user-bubble .bubble-data .buld-count-utt-after-click');
                             }
                             let bulbid = target.id.split('-');
@@ -4098,22 +4143,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     return response;
                 }
 
-                function getNewlyAddedElementsHeights(){
-                    // let normalIdsList = ['addRemoveDropDown', 'agentUttInfo', 'automationSuggestions'];
-                    // let attachedUUIDIdsList = [];
-                    // for(let uuid of newlyAddedMessagesUUIDlist){
-                    //    for(let id of normalIdsList){
-                    //     let newGenerateId = id + '-' + uuid;
-                    //     if(attachedUUIDIdsList.indexOf(newGenerateId) == -1){
-                    //         attachedUUIDIdsList.push(id + '-' + uuid);
-                    //     }
-                    //    }
-                    // }
+                function getNewlyAddedElementsHeights() {
                     console.log(lastElementBeforeNewMessage, "lastElement before new message");
                     let newElementsHeight = lastElementBeforeNewMessage.clientHeight;
-                    for(let id of newlyAddedIdList){
-                        if(document.getElementById(id)){
-                            newElementsHeight += document.getElementById(id).clientHeight;  
+                    for (let id of newlyAddedIdList) {
+                        if (document.getElementById(id)) {
+                            console.log(id, "newly added id list");
+                            newElementsHeight += document.getElementById(id).clientHeight;
                         }
                     }
                     return newElementsHeight;
@@ -4259,11 +4295,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }
                 }
 
-                function addUnreadMessageHtml(){
-                    if(document.getElementsByClassName('.unread-msg')){
+                function addUnreadMessageHtml() {
+                    if (document.getElementsByClassName('.unread-msg')) {
                         $('.unread-msg').remove();
                     }
-                    let unreadHtml = `<div class="unread-msg">unread message</div>`;
+                    let unreadHtml = ` <div class="unread-msg">
+                    <div class="text-dialog-task-end">Unread Messages</div>     
+                               </div>`;
                     return unreadHtml;
                 }
 
@@ -4314,10 +4352,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
         `;
                     endOfDialoge.append(endofDialogeHtml);
                     $(`.customer-feeling-text`).addClass('bottom-95');
-                    setTimeout(()=>{
+                    setTimeout(() => {
                         dropdownHeaderUuids = undefined;
-                    },100)
-                   // dropdownHeaderUuids = undefined;
+                    }, 100)
+                    // dropdownHeaderUuids = undefined;
                 }
 
                 function feedbackLoop(evt) {
@@ -4366,7 +4404,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             AgentAssistPubSub.publish('searched_Automation_details', { conversationId: convId, botId: botId, value: intentName, isSearch: true });
                             document.getElementById("loader").style.display = "block";
                             document.getElementById("overLaySearch").style.display = "none";
-                        } else if(e.keyCode == 13 && agent_search.trim().length > 0) {
+                        } else if (e.keyCode == 13 && agent_search.trim().length > 0) {
                             agentSearchVal = agent_search;
                             var convId = e.target.dataset.convId;
                             var botId = e.target.dataset.botId;
@@ -4764,10 +4802,9 @@ function AgentAssist_feedback_click(e) {
     AgentAssistPubSub.publish('agent_usage_feedback', { userInput: userInput, dialogName: dialogName, conversationId: convId, botId: botId, feedback: feedback, eventName: 'agent_usage_feedback', dialogId: dialogId });
 }
 
-function scrollToBottom(){
-    console.log("scroll to end");
+function scrollToBottom() {
     setTimeout(() => {
-        $("#bodyContainer").scrollTop( $( "#bodyContainer" ).prop( "scrollHeight" ) );
+        $("#bodyContainer").scrollTop($("#bodyContainer").prop("scrollHeight"));
     }, 0);
 }
 
@@ -4780,9 +4817,9 @@ function AgentAssist_run_click(e) {
     let actualIdArray = runbtnId.split('-');
     actualIdArray.shift();
     let actualId = actualIdArray.join('-');
-    let showRunForAgentBtn = 'showRunForAgentBtn-' + actualId; 
-    $("#"+runbtnId).remove();
-    $("#"+showRunForAgentBtn).remove();
+    let showRunForAgentBtn = 'showRunForAgentBtn-' + actualId;
+    $("#" + runbtnId).remove();
+    $("#" + showRunForAgentBtn).remove();
     if (e.target.dataset.check || e.target.dataset.checkLib) {
         AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: convId, botId: botId, value: intentName, check: true });
 
