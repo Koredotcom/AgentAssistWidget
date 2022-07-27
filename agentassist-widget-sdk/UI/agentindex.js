@@ -762,36 +762,36 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 let faqsSuggestions = currentTabActive == 'searchAutoIcon' ? $('#search-text-display #faqsSuggestions-results') : $('#overLaySearch #faqsSuggestions-results');
 
                                 let faqHtml = `
-                        <div class="type-info-run-send" id="faqDivLib-${index}">
-                            <div class="left-content" id="faqSectionLib-${index}">
-                                <div class="title-text" id="titleLib-${index}">${ele.question}</div>
+                        <div class="type-info-run-send" id="faqDivLib-${uuids+index}">
+                            <div class="left-content" id="faqSectionLib-${uuids+index}">
+                                <div class="title-text" id="titleLib-${uuids+index}">${ele.question}</div>
                             </div>
                         </div>`;
 
                                 faqsSuggestions.append(faqHtml);
-                                let faqs = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${index}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${index}`);
+                                let faqs = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${uuids+index}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${uuids+index}`);
                                 if (!ele.answer) {
                                     let checkHtml = `
                             <i class="ast-carrotup" data-conv-id="${data.conversationId}"
                             data-bot-id="${botId}" data-intent-name="${ele.question}"
-                            data-check-lib="true" id="checkLib-${index}"></i>`;
+                            data-check-lib="true" id="checkLib-${uuids+index}"></i>`;
                                     faqs.append(checkHtml);
                                 } else {
-                                    let a = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display #faqDivLib-${index}`) : $(`#overLaySearch #faqDivLib-${index}`);
+                                    let a = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display #faqDivLib-${uuids+index}`) : $(`#overLaySearch #faqDivLib-${uuids+index}`);
                                     let faqActionHtml = `<div class="action-links">
-                            <button class="send-run-btn" id="sendMsg" data-msg-id="${index}"  data-msg-data="${ele.answer}">Send</button>
-                            <div class="copy-btn" data-msg-id="${index}" data-msg-data='${ele.answer}'>
-                                <i class="ast-copy" data-msg-id="${index}" data-msg-data='${ele.answer}'></i>
+                            <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids+index}"  data-msg-data="${ele.answer}">Send</button>
+                            <div class="copy-btn" data-msg-id="${uuids+index}" data-msg-data='${ele.answer}'>
+                                <i class="ast-copy" data-msg-id="${uuids+index}" data-msg-data='${ele.answer}'></i>
                             </div>
                         </div>`;
                                     a.append(faqActionHtml);
-                                    faqs.append(`<div class="desc-text" id="descLib-${index}">${ele.answer}</div>`);
+                                    faqs.append(`<div class="desc-text" id="descLib-${uuids+index}">${ele.answer}</div>`);
                                 }
                                 if ((ele.question?.length + ele.answer?.length) > 70) {
-                                    let faqs = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${index}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${index}`);
+                                    let faqs = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${uuids+index}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${uuids+index}`);
                                     let seeMoreButtonHtml = `
-                              <button class="ghost-btn" style="font-style: italic;" id="seeMore-${index}" data-see-more="true">Show more</button>
-                              <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${index}" data-see-less="true">Show less</button>                  
+                              <button class="ghost-btn" style="font-style: italic;" id="seeMore-${uuids+index}" data-see-more="true">Show more</button>
+                              <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${uuids+index}" data-see-less="true">Show less</button>                  
                               `;
                                     faqs.append(seeMoreButtonHtml);
                                 }
@@ -803,29 +803,32 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         if (data.type === 'text' && data.suggestions) {
                             isSuggestionProcessed = false
                             data.suggestions.faqs.forEach((ele) => {
+                                let splitedanswerPlaceableID = answerPlaceableID.split('-');
+                                splitedanswerPlaceableID.shift();
+                                
                                 if(currentTabActive == 'searchAutoIcon'){
-                                    let faqAnswerSendMsg =  $(`#search-text-display #faqDivLib-${answerPlaceableID.split('-')[1]}`).find("[id='sendMsg']");
+                                    let faqAnswerSendMsg =  $(`#search-text-display #faqDivLib-${splitedanswerPlaceableID.join('-')}`).find("[id='sendMsg']");
                                     $(faqAnswerSendMsg).attr('data-msg-data',ele.answer);
-                                    let faqAnswerCopyMsg =  $(`#search-text-display #faqDivLib-${answerPlaceableID.split('-')[1]}`).find(".copy-btn");
+                                    let faqAnswerCopyMsg =  $(`#search-text-display #faqDivLib-${splitedanswerPlaceableID.join('-')}`).find(".copy-btn");
                                     $(faqAnswerCopyMsg).attr('data-msg-data',ele.answer)
                                 }else{
-                                    let faqAnswerSendMsg =  $(`#overLaySearch #faqDivLib-${answerPlaceableID.split('-')[1]}`).find("[id='sendMsg']");
+                                    let faqAnswerSendMsg =  $(`#overLaySearch #faqDivLib-${splitedanswerPlaceableID.join('-')}`).find("[id='sendMsg']");
                                     $(faqAnswerSendMsg).attr('data-msg-data',ele.answer)
-                                    let faqAnswerCopyMsg =  $(`#overLaySearch #faqDivLib-${answerPlaceableID.split('-')[1]}`).find(".copy-btn");
+                                    let faqAnswerCopyMsg =  $(`#overLaySearch #faqDivLib-${splitedanswerPlaceableID.join('-')}`).find(".copy-btn");
                                     $(faqAnswerCopyMsg).attr('data-msg-data',ele.answer)
                                 }
 
                                 $(`${currentTabActive == 'searchAutoIcon' ? `#search-text-display #${answerPlaceableID}` : `#overLaySearch #${answerPlaceableID}`}`).html(ele.answer);
                                 $(`${currentTabActive == 'searchAutoIcon' ? `#search-text-display #${answerPlaceableID}` : `#overLaySearch #${answerPlaceableID}`}`).attr('data-answer-render', 'true');
                                 if ((ele.question?.length + ele.answer?.length) > 70) {
-                                    let faqs = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${answerPlaceableID.split('-')[1]}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${answerPlaceableID.split('-')[1]}`);
+                                    let faqs = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${splitedanswerPlaceableID.join('-')}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${splitedanswerPlaceableID.join('-')}`);
                                     let seeMoreButtonHtml = `
-                          <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${answerPlaceableID.split('-')[1]}" data-see-more="true">Show more</button>
-                          <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${answerPlaceableID.split('-')[1]}" data-see-less="true">Show less</button>
+                          <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${splitedanswerPlaceableID.join('-')}" data-see-more="true">Show more</button>
+                          <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${splitedanswerPlaceableID.join('-')}" data-see-less="true">Show less</button>
                           `;
                                     faqs.append(seeMoreButtonHtml);
-                                    $(`#search-text-display .type-info-run-send #faqSectionLib-${answerPlaceableID.split('-')[1]} .ast-carrotup.rotate-carrot`).length>0?$(`#search-text-display #seeMore-${answerPlaceableID.split('-')[1]}`).removeClass('hide'):$(`#search-text-display #seeMore-${answerPlaceableID.split('-')[1]}`).addClass('hide');
-                                    $(`#overLaySearch .type-info-run-send #faqSectionLib-${answerPlaceableID.split('-')[1]} .ast-carrotup.rotate-carrot`).length>0?$(`#overLaySearch #seeMore-${answerPlaceableID.split('-')[1]}`).removeClass('hide'):$(`#overLaySearch #seeMore-${answerPlaceableID.split('-')[1]}`).addClass('hide');
+                                    $(`#search-text-display .type-info-run-send #faqSectionLib-${splitedanswerPlaceableID.join('-')} .ast-carrotup.rotate-carrot`).length>0?$(`#search-text-display #seeMore-${splitedanswerPlaceableID.join('-')}`).removeClass('hide'):$(`#search-text-display #seeMore-${splitedanswerPlaceableID.join('-')}`).addClass('hide');
+                                    $(`#overLaySearch .type-info-run-send #faqSectionLib-${splitedanswerPlaceableID.join('-')} .ast-carrotup.rotate-carrot`).length>0?$(`#overLaySearch #seeMore-${splitedanswerPlaceableID.join('-')}`).removeClass('hide'):$(`#overLaySearch #seeMore-${splitedanswerPlaceableID.join('-')}`).addClass('hide');
                                 }
                             })
                             answerPlaceableID = undefined;
@@ -1328,9 +1331,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 let faqsSuggestions = document.getElementById(`faqsSuggestions-${responseId}`);
 
                                 let faqHtml = `
-                    <div class="type-info-run-send" id="faqDiv-${index}">
-                        <div class="left-content" id="faqSection-${index}">
-                            <div class="title-text" id="title-${index}">${ele.question}</div>
+                    <div class="type-info-run-send" id="faqDiv-${uuids+index}">
+                        <div class="left-content" id="faqSection-${uuids+index}">
+                            <div class="title-text" id="title-${uuids+index}">${ele.question}</div>
                             
                             
                         </div>
@@ -1338,29 +1341,29 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     </div>`;
 
                                 faqsSuggestions.innerHTML += faqHtml;
-                                let faqs = $(`.type-info-run-send #faqSection-${index}`);
+                                let faqs = $(`.type-info-run-send #faqSection-${uuids+index}`);
                                 if (!ele.answer) {
                                     let checkHtml = `
                         <i class="ast-carrotup" data-conv-id="${data.conversationId}"
                         data-bot-id="${botId}" data-intent-name="${ele.question}"
-                        data-check="true" id="check-${index}"></i>`;
+                        data-check="true" id="check-${uuids+index}"></i>`;
                                     faqs.append(checkHtml);
                                 } else {
-                                    let a = $(`#faqDiv-${index}`);
+                                    let a = $(`#faqDiv-${uuids+index}`);
                                     let faqActionHtml = `<div class="action-links">
-                        <button class="send-run-btn" id="sendMsg" data-msg-id="${index}" data-msg-data="${ele.answer}">Send</button>
-                        <div class="copy-btn" data-msg-id="${index}" data-msg-data="${ele.answer}">
-                            <i class="ast-copy" data-msg-id="${index}" data-msg-data="${ele.answer}"></i>
+                        <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids+index}" data-msg-data="${ele.answer}">Send</button>
+                        <div class="copy-btn" data-msg-id="${uuids+index}" data-msg-data="${ele.answer}">
+                            <i class="ast-copy" data-msg-id="${uuids+index}" data-msg-data="${ele.answer}"></i>
                         </div>
                     </div>`;
                                     a.append(faqActionHtml);
-                                    faqs.append(`<div class="desc-text" id="desc-${index}">${ele.answer}</div>`);
+                                    faqs.append(`<div class="desc-text" id="desc-${uuids+index}">${ele.answer}</div>`);
                                 }
                                 if ((ele.question?.length + ele.answer?.length) > 70) {
-                                    let faqs = $(`.type-info-run-send #faqSection-${index}`);
+                                    let faqs = $(`.type-info-run-send #faqSection-${uuids+index}`);
                                     let seeMoreButtonHtml = `
-                          <button class="ghost-btn" style="font-style: italic;" id="seeMore-${index}" data-see-more="true">Show more</button>
-                          <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${index}" data-see-less="true">Show less</button>
+                          <button class="ghost-btn" style="font-style: italic;" id="seeMore-${uuids+index}" data-see-more="true">Show more</button>
+                          <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${uuids+index}" data-see-less="true">Show less</button>
                           `;
                                     faqs.append(seeMoreButtonHtml);
                                 }
@@ -1373,20 +1376,22 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     } else {
                         if (data.type === 'text' && data.suggestions) {
                             data.suggestions.faqs.forEach((ele) => {
-                               let faqAnswerSendMsg =  $(`#faqDiv-${answerPlaceableID.split('-')[1]}`).find("[id='sendMsg']");
+                               let splitedanswerPlaceableID = answerPlaceableID.split('-');
+                               splitedanswerPlaceableID.shift();
+                               let faqAnswerSendMsg =  $(`#dynamicBlock #faqDiv-${splitedanswerPlaceableID.join('-')}`).find("[id='sendMsg']");
                                $(faqAnswerSendMsg).attr('data-msg-data',ele.answer)
-                               let faqAnswerCopyMsg =  $(`#faqDiv-${answerPlaceableID.split('-')[1]}`).find(".copy-btn");
+                               let faqAnswerCopyMsg =  $(`#dynamicBlock #faqDiv-${splitedanswerPlaceableID.join('-')}`).find(".copy-btn");
                                $(faqAnswerCopyMsg).attr('data-msg-data',ele.answer)
                                 $(`#${answerPlaceableID}`).html(ele.answer);
                                 $(`#${answerPlaceableID}`).attr('data-answer-render', 'true');
                                 if ((ele.question?.length + ele.answer?.length) > 70) {
-                                    let faqs = $(`.type-info-run-send #faqSection-${answerPlaceableID.split('-')[1]}`);
+                                    let faqs = $(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')}`);
                                     let seeMoreButtonHtml = `
-                          <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${answerPlaceableID.split('-')[1]}" data-see-more="true">Show more</button>
-                          <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${answerPlaceableID.split('-')[1]}" data-see-less="true">Show less</button>
+                          <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${splitedanswerPlaceableID.join('-')}" data-see-more="true">Show more</button>
+                          <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${splitedanswerPlaceableID.join('-')}" data-see-less="true">Show less</button>
                           `;
                                     faqs.append(seeMoreButtonHtml);
-                                    $(`.type-info-run-send #faqSection-${answerPlaceableID.split('-')[1]} .ast-carrotup.rotate-carrot`).length>0?$(`.type-info-run-send #faqSection-${answerPlaceableID.split('-')[1]} #seeMore-${answerPlaceableID.split('-')[1]}`).removeClass('hide'):$(`.type-info-run-send #faqSection-${answerPlaceableID.split('-')[1]} #seeMore-${answerPlaceableID.split('-')[1]}`).addClass('hide');
+                                    $(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')} .ast-carrotup.rotate-carrot`).length>0?$(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')} #seeMore-${splitedanswerPlaceableID.join('-')}`).removeClass('hide'):$(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')} #seeMore-${splitedanswerPlaceableID.join('-')}`).addClass('hide');
                                 }
                             })
                             answerPlaceableID = undefined;
@@ -2279,33 +2284,35 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
                         if (seeMoreButton) {
                             let targets = target.id.split('-');
+                            targets.shift();
                             let faqs = (currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ?
-                                $(`.type-info-run-send #faqSection-${targets[targets.length - 1]}`) :
-                                (currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${targets[targets.length - 1]}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${targets[targets.length - 1]}`));
-                            faqs.find(`#seeLess-${targets[targets.length - 1]}`).each((i, ele) => {
-                                if ($(ele).attr('id').includes(`seeLess-${targets[targets.length - 1]}`)) {
+                                $(`.type-info-run-send #faqSection-${targets.join('-')}`) :
+                                (currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${targets.join('-')}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${targets.join('-')}`));
+                            faqs.find(`#seeLess-${targets.join('-')}`).each((i, ele) => {
+                                if ($(ele).attr('id').includes(`seeLess-${targets.join('-')}`)) {
                                     ele.classList.remove('hide')
                                 }
                             })
                             evt.target.classList.add('hide')
-                            faqs.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#title-${targets[targets.length - 1]}` :
-                                `#titleLib-${targets[targets.length - 1]}`}`).attr('style', `overflow: inherit; white-space: normal; text-overflow: unset;`);
-                            faqs.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#desc-${targets[targets.length - 1]}` : `#descLib-${targets[targets.length - 1]}`}`).attr('style', `overflow: inherit; white-space: normal; text-overflow: unset;`);
+                            faqs.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#title-${targets.join('-')}` :
+                                `#titleLib-${targets.join('-')}`}`).attr('style', `overflow: inherit; white-space: normal; text-overflow: unset;`);
+                            faqs.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#desc-${targets.join('-')}` : `#descLib-${targets.join('-')}`}`).attr('style', `overflow: inherit; white-space: normal; text-overflow: unset;`);
                         }
                         if (seeLessButton) {
                             let targets = target.id.split('-');
-                            let faqs = (currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? $(`.type-info-run-send #faqSection-${targets[targets.length - 1]}`) :
-                                (currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${targets[targets.length - 1]}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${targets[targets.length - 1]}`));
+                            targets.shift();
+                            let faqs = (currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? $(`.type-info-run-send #faqSection-${targets.join('-')}`) :
+                                (currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${targets.join('-')}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${targets.join('-')}`));
 
-                            faqs.find(`#seeMore-${targets[targets.length - 1]}`).each((i, ele) => {
-                                if ($(ele).attr('id').includes(`seeMore-${targets[targets.length - 1]}`)) {
+                            faqs.find(`#seeMore-${targets.join('-')}`).each((i, ele) => {
+                                if ($(ele).attr('id').includes(`seeMore-${targets.join('-')}`)) {
                                     ele.classList.remove('hide')
                                 }
                             })
-                            faqs.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#title-${targets[targets.length - 1]}` : `#titleLib-${targets[targets.length - 1]}`}`).attr('style', `overflow: hidden;
+                            faqs.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#title-${targets.join('-')}` : `#titleLib-${targets.join('-')}`}`).attr('style', `overflow: hidden;
                 white-space: nowrap;
                 text-overflow: ellipsis;`);
-                            faqs.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#desc-${targets[targets.length - 1]}` : `#descLib-${targets[targets.length - 1]}`}`).attr('style', `overflow: hidden;
+                            faqs.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#desc-${targets.join('-')}` : `#descLib-${targets.join('-')}`}`).attr('style', `overflow: hidden;
                 white-space: nowrap;
                 text-overflow: ellipsis;`);
                             evt.target.classList.add('hide')
@@ -3322,76 +3329,80 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         if (checkButton) {
                             let id = target.id.split('-');
                             id.shift();
-                            let latestId = id.join('-');
                             if (!target.dataset.answerRender) {
-                                let faq = $(`.type-info-run-send #faqSection-${latestId}`);
-                                let answerHtml = `<div class="desc-text" id="desc-${latestId}"></div>`
-                                let faqDiv = $(`#faqDiv-${latestId}`);
+                                let faq = $(`#dynamicBlock .type-info-run-send #faqSection-${id.join('-')}`);
+                                let answerHtml = `<div class="desc-text" id="desc-${id.join('-')}"></div>`
+                                let faqDiv = $(`#dynamicBlock #faqDiv-${id.join('-')}`);
                                 let faqaction = `<div class="action-links">
-                    <button class="send-run-btn" id="sendMsg" data-msg-id="${latestId}"  data-msg-data="">Send</button>
-                    <div class="copy-btn" data-msg-id="${latestId}">
-                        <i class="ast-copy" data-msg-id="${latestId}"></i>
-                    </div>
-                </div>`;
+                        <button class="send-run-btn" id="sendMsg" data-msg-id="${id.join('-')}"  data-msg-data="">Send</button>
+                        <div class="copy-btn" data-msg-id="${id.join('-')}">
+                        <i class="ast-copy" data-msg-id="${id.join('-')}"></i>
+                        </div>
+                        </div>`;
+                          let dropDownHtml =` <i class="ast-carrotup" data-conv-id="${_conversationId}"
+                          data-bot-id="" data-intent-name=""
+                          data-check="true" id="check-${id.join('-')}"></i>`;
+                          faq.append(dropDownHtml)
                                 faq.append(answerHtml);
-                                $(`#${target.id}`).attr('data-answer-render', 'false');
+                                $(`#dynamicBlock #${target.id}`).attr('data-answer-render', 'false');
                                 faqDiv.append(faqaction);
-                                answerPlaceableID = `desc-${latestId}`;
-                                $(`#faqssArea #${target.id}`).addClass('rotate-carrot');
+                                answerPlaceableID = `desc-${id.join('-')}`;
+                                $(`#dynamicBlock #${target.id}`).addClass('rotate-carrot');
                                 AgentAssist_run_click(evt);
                                 return
                             }
-                            if ($(`#faqssArea .ast-carrotup.rotate-carrot`).length <= 0) {
-                                $(`#${target.id}`).addClass('rotate-carrot');
-                                $(`#faqssArea #faqDiv-${latestId} .action-links`).removeClass('hide');
-                                $(`#faqssArea #desc-${latestId}`).removeClass('hide');
-                                $(`#faqssArea #seeMore-${latestId}`).removeClass('hide');
-                                $(`#faqssArea #seeLess-${latestId}`).addClass('hide');
+                            if ($(`#dynamicBlock .ast-carrotup.rotate-carrot`).length <= 0) {
+                                $(`#dynamicBlock #${target.id}`).addClass('rotate-carrot');
+                                $(`#dynamicBlock #faqDiv-${id.join('-')} .action-links`).removeClass('hide');
+                                $(`#dynamicBlock #desc-${id.join('-')}`).removeClass('hide');
+                                $(`#dynamicBlock #seeMore-${id.join('-')}`).removeClass('hide');
+                                $(`#dynamicBlock #seeLess-${id.join('-')}`).addClass('hide');
                             } else {
-                                $(`#${target.id}`).removeClass('rotate-carrot');
-                                $(`#faqssArea #faqDiv-${latestId} .action-links`).addClass('hide');
-                                $(`#faqssArea #desc-${latestId}`).addClass('hide');
-                                $(`#faqssArea #seeMore-${latestId}`).addClass('hide');
-                                $(`#faqssArea #seeLess-${latestId}`).addClass('hide');
+                                $(`#dynamicBlock #${target.id}`).removeClass('rotate-carrot');
+                                $(`#dynamicBlock #faqDiv-${id.join('-')} .action-links`).addClass('hide');
+                                $(`#dynamicBlock #desc-${id.join('-')}`).addClass('hide');
+                                $(`#dynamicBlock #seeMore-${id.join('-')}`).addClass('hide');
+                                $(`#dynamicBlock #seeLess-${id.join('-')}`).addClass('hide');
                             }
-
+                        
                         }
 
                         if (checkLibButton) {
-                            let id = target.id.split('-')[1];
+                            let id = target.id.split('-');
+                            id.shift();
                             if ((!target.dataset.answerRender && (currentTabActive == 'userAutoIcon' || currentTabActive == 'agentAutoIcon' || currentTabActive == 'transcriptIcon'))) {
-                                let faq = $(`#overLaySearch .type-info-run-send #faqSectionLib-${id}`);
-                                let answerHtml = `<div class="desc-text" id="descLib-${id}"></div>`
-                                let faqDiv = $(`#overLaySearch #faqDivLib-${id}`);
+                                let faq = $(`#overLaySearch .type-info-run-send #faqSectionLib-${id.join('-')}`);
+                                let answerHtml = `<div class="desc-text" id="descLib-${id.join('-')}"></div>`
+                                let faqDiv = $(`#overLaySearch #faqDivLib-${id.join('-')}`);
                                 let faqaction = `<div class="action-links">
-                    <button class="send-run-btn" id="sendMsg" data-msg-id="${id}"  data-msg-data="">Send</button>
-                    <div class="copy-btn" data-msg-id="${id}">
-                        <i class="ast-copy" data-msg-id="${id}"></i>
+                    <button class="send-run-btn" id="sendMsg" data-msg-id="${id.join('-')}"  data-msg-data="">Send</button>
+                    <div class="copy-btn" data-msg-id="${id.join('-')}">
+                        <i class="ast-copy" data-msg-id="${id.join('-')}"></i>
                     </div>
                 </div>`;
                                 faq.append(answerHtml);
                                 $(`#overLaySearch #${target.id}`).attr('data-answer-render', 'false');
                                 faqDiv.append(faqaction);
-                                answerPlaceableID = `descLib-${id}`;
+                                answerPlaceableID = `descLib-${id.join('-')}`;
                                 $(`#overLaySearch #${target.id}`).addClass('rotate-carrot');
                                 AgentAssistPubSub.publish('searched_Automation_details', { conversationId: evt.target.dataset.convId, botId: evt.target.dataset.botId, value: evt.target.dataset.intentName, isSearch: true });
                                 return
                             }
 
                             if ((!target.dataset.answerRender && currentTabActive == 'searchAutoIcon')) {
-                                let faq = $(`#search-text-display .type-info-run-send #faqSectionLib-${id}`);
-                                let answerHtml = `<div class="desc-text" id="descLib-${id}"></div>`
-                                let faqDiv = $(`#search-text-display #faqDivLib-${id}`);
+                                let faq = $(`#search-text-display .type-info-run-send #faqSectionLib-${id.join('-')}`);
+                                let answerHtml = `<div class="desc-text" id="descLib-${id.join('-')}"></div>`
+                                let faqDiv = $(`#search-text-display #faqDivLib-${id.join('-')}`);
                                 let faqaction = `<div class="action-links">
-                    <button class="send-run-btn" id="sendMsg" data-msg-id="${id}"  data-msg-data="">Send</button>
-                    <div class="copy-btn" data-msg-id="${id}">
-                        <i class="ast-copy" data-msg-id="${id}"></i>
+                    <button class="send-run-btn" id="sendMsg" data-msg-id="${id.join('-')}"  data-msg-data="">Send</button>
+                    <div class="copy-btn" data-msg-id="${id.join('-')}">
+                        <i class="ast-copy" data-msg-id="${id.join('-')}"></i>
                     </div>
                 </div>`;
                                 faq.append(answerHtml);
                                 $(`#search-text-display #${target.id}`).attr('data-answer-render', 'false');
                                 faqDiv.append(faqaction);
-                                answerPlaceableID = `descLib-${id}`;
+                                answerPlaceableID = `descLib-${id.join('-')}`;
                                 $(`#search-text-display #${target.id}`).addClass('rotate-carrot');
                                 AgentAssistPubSub.publish('searched_Automation_details', { conversationId: evt.target.dataset.convId, botId: evt.target.dataset.botId, value: evt.target.dataset.intentName, isSearch: true });
                                 return
@@ -3399,30 +3410,30 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             if(currentTabActive == 'searchAutoIcon'){
                                 if ($(`#search-text-display .ast-carrotup.rotate-carrot`).length <= 0) {
                                     $(`#search-text-display #${target.id}`).addClass('rotate-carrot');
-                                    $(`#search-text-display #faqDivLib-${id} .action-links`).removeClass('hide');
-                                    $(`#search-text-display #descLib-${id}`).removeClass('hide');
-                                    $(`#search-text-display #seeMore-${id}`).removeClass('hide');
-                                    $(`#search-text-display #seeLess-${id}`).addClass('hide');
+                                    $(`#search-text-display #faqDivLib-${id.join('-')} .action-links`).removeClass('hide');
+                                    $(`#search-text-display #descLib-${id.join('-')}`).removeClass('hide');
+                                    $(`#search-text-display #seeMore-${id.join('-')}`).removeClass('hide');
+                                    $(`#search-text-display #seeLess-${id.join('-')}`).addClass('hide');
                                 } else {
                                     $(`#search-text-display #${target.id}`).removeClass('rotate-carrot');
-                                    $(`#search-text-display #faqDivLib-${id} .action-links`).addClass('hide');
-                                    $(`#search-text-display #descLib-${id}`).addClass('hide');
-                                    $(`#search-text-display #seeMore-${id}`).addClass('hide');
-                                    $(`#search-text-display #seeLess-${id}`).addClass('hide');
+                                    $(`#search-text-display #faqDivLib-${id.join('-')} .action-links`).addClass('hide');
+                                    $(`#search-text-display #descLib-${id.join('-')}`).addClass('hide');
+                                    $(`#search-text-display #seeMore-${id.join('-')}`).addClass('hide');
+                                    $(`#search-text-display #seeLess-${id.join('-')}`).addClass('hide');
                                 }
                             } else {
                                 if ($(`#overLaySearch .ast-carrotup.rotate-carrot`).length <= 0) {
                                     $(`#overLaySearch #${target.id}`).addClass('rotate-carrot');
-                                    $(`#overLaySearch #faqDivLib-${id} .action-links`).removeClass('hide');
-                                    $(`#overLaySearch #descLib-${id}`).removeClass('hide');
-                                    $(`#overLaySearch #seeMore-${id}`).removeClass('hide');
-                                    $(`#overLaySearch #seeLess-${id}`).addClass('hide');
+                                    $(`#overLaySearch #faqDivLib-${id.join('-')} .action-links`).removeClass('hide');
+                                    $(`#overLaySearch #descLib-${id.join('-')}`).removeClass('hide');
+                                    $(`#overLaySearch #seeMore-${id.join('-')}`).removeClass('hide');
+                                    $(`#overLaySearch #seeLess-${id.join('-')}`).addClass('hide');
                                 } else {
                                     $(`#overLaySearch #${target.id}`).removeClass('rotate-carrot');
-                                    $(`#overLaySearch #faqDivLib-${id} .action-links`).addClass('hide');
-                                    $(`#overLaySearch #descLib-${id}`).addClass('hide');
-                                    $(`#overLaySearch #seeMore-${id}`).addClass('hide');
-                                    $(`#overLaySearch #seeLess-${id}`).addClass('hide');
+                                    $(`#overLaySearch #faqDivLib-${id.join('-')} .action-links`).addClass('hide');
+                                    $(`#overLaySearch #descLib-${id.join('-')}`).addClass('hide');
+                                    $(`#overLaySearch #seeMore-${id.join('-')}`).addClass('hide');
+                                    $(`#overLaySearch #seeLess-${id.join('-')}`).addClass('hide');
                                 }
                             }
                         }
