@@ -599,7 +599,7 @@ html, body{
     display: inline-block;
     /* height: calc(100% - 82px); */
     height: calc(100% - 38px);
-    /* background: var(--bg-hover-tabs-color); */
+    background: var(--bg-hover-tabs-color);
 }
 .agent-assist-chat-container .body-data-container.if-suggestion-search{
     /* height: calc(100% - 137px); */

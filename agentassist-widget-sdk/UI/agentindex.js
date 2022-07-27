@@ -1017,6 +1017,32 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     $(".scroll-bottom-btn span").text(numberOfNewMessages + ' new');
                 }
 
+                function addIconClassToNewMessage(){
+                    let beforeLastElement = document.getElementsByClassName('bg-color-icon-block');
+                    console.log(beforeLastElement, "before last icon element");
+                    if(beforeLastElement){
+                        $(beforeLastElement).removeClass("bg-color-icon-block");
+                    }
+                    var iconBlockElements = element.querySelectorAll('.icon_block');
+                    for (let i = 0; i < iconBlockElements.length; i++) {
+                        let iconElement = iconBlockElements[i];
+                        if (i == (iconBlockElements.length - 1)) {
+                            $(iconElement).addClass("bg-color-icon-block");
+                        }
+                    }
+                }
+
+                function addWhiteBackgroundClassToNewMessage(){
+                    let beforeLastElement = document.getElementsByClassName('last-msg-white-bg');
+                    console.log(beforeLastElement, "before last element");
+                    if(beforeLastElement){
+                        $(beforeLastElement).removeClass("last-msg-white-bg");
+                    }
+                    let lastElement = getLastElement('dynamicBlock');
+                    $(lastElement).addClass("last-msg-white-bg");
+                    console.log(lastElement, "lastElement");
+                }
+
                 function changeNewMessageBackground(element) {
                     changeNewMessageIcon(element);
                     if (element.className == 'agent-utt-info') {
@@ -1111,10 +1137,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
                         lastElement = numOfdynamicBlockElements[i];
                     }
-
-                    updateOldMessageIcon();
                     changeNewMessageBackground(lastElement);
-                    // updateOldFaqList();
+                    
                 }
 
                 function changeBackgroundColor(element, color, action) {
@@ -1621,7 +1645,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     if (scrollAtEnd) {
                         scrollToBottom();
                     }
-                    updateOldMessagesBackground();
+                    // updateOldMessagesBackground();
+                    addWhiteBackgroundClassToNewMessage();
+                    addIconClassToNewMessage();
+                    // updateOldMessageIcon();
                 }
 
                 function processTranscriptData(data, conversationId, botid) {
@@ -2653,7 +2680,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             }
                         });
 
-                        if (target.className == 'scroll-bottom-btn') {
+                        if (target.className.includes('scroll-bottom-btn')) {
                             let newElementsHeight = getNewlyAddedElementsHeights();
                             console.log(newElementsHeight, "new elements height", $("#bodyContainer").prop("scrollHeight"));
                             if (newElementsHeight) {
