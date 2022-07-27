@@ -1013,7 +1013,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                 function updateNumberOfMessages() {
                     numberOfNewMessages += 1;
-                    $(".scroll-bottom-btn").text(numberOfNewMessages + ' new');
+                    $(".scroll-bottom-btn").addClass("new-messages");
+                    $(".scroll-bottom-btn span").text(numberOfNewMessages + ' new');
                 }
 
                 function changeNewMessageBackground(element) {
@@ -2531,7 +2532,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 numberOfNewMessages = numberOfNewMessages > 0 ? numberOfNewMessages - 1 : 0;
                                 lastElementBeforeNewMessage = getLastElement(id);
                                 if (numberOfNewMessages) {
-                                    $(".scroll-bottom-btn").text(numberOfNewMessages + ' new');
+                                    $(".scroll-bottom-btn").addClass("new-messages");
+                                    $(".scroll-bottom-btn span").text(numberOfNewMessages + ' new');
                                 }
                             }
                         }
@@ -2597,7 +2599,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         lastelement = getLastElement('dynamicBlock');
                         scrollAtEnd = !isScrolledIntoView(lastelement) ? true : false;
                         if (!scrollAtEnd) {
-                            $(".scroll-bottom-btn").removeClass('hide');
+                            $(".scroll-bottom-show-btn").removeClass('hide');
                         }
                     });
 
@@ -2609,18 +2611,19 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         lastelement = getLastElement('dynamicBlock');
                         scrollAtEnd = !isScrolledIntoView(lastelement) ? true : false;
                         if (scrollAtEnd) {
-                            $(".scroll-bottom-btn").addClass('hide');
+                            $(".scroll-bottom-show-btn").addClass('hide');
                         }
                     });
 
                     document.querySelector('#bodyContainer').addEventListener('ps-y-reach-end', (scrollEndevent) => {
-                        $(".scroll-bottom-btn").addClass('hide');
+                        $(".scroll-bottom-show-btn").addClass('hide');
                         $('.unread-msg').addClass('hide');
                         numberOfNewMessages = 0;
                         newlyAddedMessagesUUIDlist = [];
                         newlyAddedIdList = [];
                         removedIdListOnScroll = [];
-                        $(".scroll-bottom-btn").text('Scroll Bottom');
+                        $(".scroll-bottom-btn").removeClass("new-messages");
+                        $(".scroll-bottom-btn span").text('Scroll Bottom');
                         scrollAtEnd = true;
                         lastElementBeforeNewMessage = getLastElement('dynamicBlock');
                     });
@@ -2661,7 +2664,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 scrollToBottom();
                             }
                             // $("#bodyContainer").perfectScrollbar('update');
-                            if ($(".scroll-bottom-btn").text().includes('new')) {
+                            if ($(".scroll-bottom-btn span").text().includes('new')) {
                                 console.log(newlyAddedIdList, "id list");
                                 if (!scrollAtEnd && numberOfNewMessages > 0) {
                                     for (let i = 0; i < newlyAddedIdList.length; i++) {
@@ -4551,7 +4554,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     <div id="userTab-custSentimentAnalysis" class="customer-feeling-text">
                     </div>
 
-                    <button class="scroll-bottom-btn hide">Scroll Bottom</button>
+                    <div class="scroll-bottom-show-btn hide">
+                        <button class="scroll-bottom-btn">
+                            <i class="ast-carrotup"></i>
+                            <span>Scroll Bottom</span>
+                        </button>
+                    </div>
 
                     <div class="empty-data-no-agents">
                     <div class="title">No Agent automations are in running state.</div>
