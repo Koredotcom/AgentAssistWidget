@@ -458,12 +458,12 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
         self.selectedBt = selectedBotDetails.name;
       }
 
-      selectedBotDetails.streamId = self.selectedBot;      
+      selectedBotDetails.streamId = self.selectedBot;     
       self.service.invoke('post.convertbot', {}, selectedBotDetails)
           .subscribe(res=>{
-            self.getConvStatus(res._id);
+            self.getConvStatus(res[0]._id);
             self.impInterval = setInterval(() => {
-              self.getConvStatus(res._id);
+              self.getConvStatus(res[0]._id);
             }, 3000);
           }, err =>{
             self.selectBotSwitch('fourth');
@@ -785,7 +785,7 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
   getConvStatus(convId: string) {
     const params = {
       userId: this.authService.getUserId(),
-      importId: this.selectedBot,
+      importId: convId,
       'isAgentAssist':true
       
     }
