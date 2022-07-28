@@ -2061,10 +2061,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 $(`#feedbackHelpfulContainer-${id.join('-')} .title-improve`).addClass('hide');
                                 $('.submit-btn').removeAttr('disabled');
                                 $('.submit-btn').attr('data-details', dataSets)
+                            } else {
+                                if(dataSets.comment.length == 0){
+                                    $(`#feedbackHelpfulContainer-${id.join('-')} .title-improve`).removeClass('hide');
+                                } 
                             }
-                            
-
-
                         }
                         if(target.className == 'submit-btn') {
                             let id = target.parentElement.firstElementChild.id.split('-');
@@ -3286,16 +3287,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $('.ast-check-right.disabled-color').removeClass('disabled-color');
                             $('.save-reset-disabled').removeClass('save-reset-disabled').addClass('save-reset');
                         } else if (target.dataset.feedbackComment) {
-                            let targteids = target.id.split('-');
-                            targteids.shift();
-                            let dataSets = $(`#feedbackdown-${targteids.join('-')} .ast-thumbdown`).data();
+                            let targetids = target.id.split('-');
+                            targetids.shift();
+                            let dataSets = $(`#feedbackdown-${targetids.join('-')} .ast-thumbdown`).data();
                             dataSets.comment = target.value;
                             if(target.value.length > 0) {
                                 $('.submit-btn').removeAttr('disabled');
-                                $(`#feedbackHelpfulContainer-${id.join('-')} .title-improve`).addClass('hide');
+                                $(`#feedbackHelpfulContainer-${targetids.join('-')} .title-improve`).addClass('hide');
                             }
-                        }
-                        else {
+                        } else {
                             var agentAssistInput = target.dataset.agentAssistInput;
                             var mybotInput = target.dataset.mybotInput;
                             let val = $('#agentSearch').val();
