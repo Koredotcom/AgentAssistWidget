@@ -1981,33 +1981,95 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
                         let targetIds = (target.id).split('-');
                         if (['feedbackup', 'feedbackdown'].includes(targetIds[0])) {
-                            console.log("=====event===============", evt.target);
+                            
+                            let cloneTargtIds = [...targetIds]
+                            let isDivElement =  evt.target instanceof HTMLDivElement;
+                            console.log("isDivElement", isDivElement, target.parentElement.id);
                             if (targetIds.includes('feedbackup')) {
-                                if (target.dataset.feedbacklike == 'false') {
-                                    //  target.dataset.feedbacklike = 'true';
-                                    ($(target.parentElement.parentElement.parentElement).find('#feedbackdown')?.attr('style')) ? (
-                                        $(target.parentElement.parentElement.parentElement).find('#feedbackdown')?.removeAttr('style'),
-                                        $(target.parentElement.parentElement).find('.ast-thumbdown').attr('data-feedbackdislike', 'false')) : '';
-                                    $(target.parentElement).attr('style', 'color:#0077D2;border-color:#0077D2;');
+                                cloneTargtIds.shift()
+                                if (isDivElement) {
+                                    $(`#${target.id}`).addClass('active-feedback');
+                                    target.firstElementChild.dataset.feedbacklike = 'true';
+                                    evt.target.dataset = target.firstElementChild.dataset;
+                                    
                                     feedbackLoop(evt);
                                 } else {
+                                    $(`#${target.parentElement.id}`).addClass('active-feedback');
                                     target.dataset.feedbacklike = 'false';
-                                    $(target.parentElement).removeAttr('style');
+                                    feedbackLoop(evt);
                                 }
+                                $(`#feedbackdown-${cloneTargtIds.join('-')}`).removeClass('active-feedback')
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .thanks-update`).removeClass('hide');
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .help-improve-arrow`).addClass('hide')
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .explore-more-negtive-data`).addClass('hide');
                             }
                             if (targetIds.includes('feedbackdown')) {
-                                if (target.dataset.feedbackdislike == 'false') {
-                                    // target.dataset.feedbackdislike = 'true';
-                                    ($(target.parentElement.parentElement.parentElement).find('#feedbackup')?.attr('style')) ? (
-                                        $(target.parentElement.parentElement.parentElement).find('#feedbackup')?.removeAttr('style'),
-                                        $(target.parentElement.parentElement).find('.ast-thumbup').attr('data-feedbacklike', 'false')) : '';
-                                    $(target.parentElement).attr('style', 'color:#0077D2;border-color:#0077D2;');
-                                    feedbackLoop(evt);
+                                cloneTargtIds.shift()
+                                if (isDivElement) {
+                                    $(`#${target.id}`).addClass('active-feedback');
+                                    target.firstElementChild.dataset.feedbacklike = 'true';
+                                    evt.target.dataset = evt.target.firstElementChild.dataset;
+                                   // feedbackLoop(evt);
                                 } else {
-                                    target.dataset.feedbackdislike = 'false';
-                                    $(target.parentElement).removeAttr('style');
+                                    $(`#${target.parentElement.id}`).addClass('active-feedback');
+                                    target.dataset.feedbacklike = 'false';
+                                   // feedbackLoop(evt);
                                 }
+                                $(`#feedbackup-${cloneTargtIds.join('-')}`).removeClass('active-feedback')
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .thanks-update`).addClass('hide');
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .help-improve-arrow`).removeClass('hide')
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .explore-more-negtive-data`).removeClass('hide');
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .title-improve`).removeClass('hide');
+                                
                             }
+                        }
+                        if(target.id.split('-')[0] == 'dropdownArrowFeedBack' || target.id.split('-')[0] == 'dropdownArrowFeedBackIcon') {
+                            let targteId = target.id.split('-');
+                            targteId.shift();
+                            if (target.dataset.feedbackDropDownOpened === 'false') {
+                                $(`#dropdownArrowFeedBackIcon-${targteId.join('-')}`).attr('data-feedback-drop-down-opened', 'true');
+                                $(`#dropdownArrowFeedBack-${targteId.join('-')}`).attr('data-feedback-drop-down-opened', 'true');
+                                $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).addClass('hide');
+                                $(`#feedbackHelpfulContainer-${targteId.join('-')} .explore-more-negtive-data`).addClass('hide');
+                            } else {
+                                $(`#dropdownArrowFeedBackIcon-${targteId.join('-')}`).attr('data-feedback-drop-down-opened', 'false');
+                                $(`#dropdownArrowFeedBack-${targteId.join('-')}`).attr('data-feedback-drop-down-opened', 'false');
+                                $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).removeClass('hide');
+                                $(`#feedbackHelpfulContainer-${targteId.join('-')} .explore-more-negtive-data`).removeClass('hide');
+                            }
+                        }
+                        if(target.className.includes('btn-chip-negtive')){
+                            let id = target.parentElement.id.split('-');
+                            id.shift();
+                            let dataSets = $(`#feedbackdown-${id.join('-')} .ast-thumbdown`).data();
+                            if(target.dataset.chipClick == 'false') {
+                                $(target).addClass('active-chip');
+                                target.dataset.chipClick = 'true';
+                                dataSets.feedbackdetails.push($(target).html());
+                            } else {
+                                $(target).removeClass('active-chip');
+                                dataSets.feedbackdetails?.forEach((ele, i)=>{
+                                    if(ele==$(target).html()){
+                                        delete dataSets.feedbackdetails[i]
+                                    }
+
+                                })
+                            }
+                            let activeChipCount = $(`#${target.parentElement.id} .btn-chip-negtive.active-chip`);
+                            if(activeChipCount.length>0){
+                                $(`#feedbackHelpfulContainer-${id.join('-')} .title-improve`).addClass('hide');
+                                $('.submit-btn').removeAttr('disabled');
+                                $('.submit-btn').attr('data-details', dataSets)
+                            }
+                            
+
+
+                        }
+                        if(target.className == 'submit-btn') {
+                            let id = target.parentElement.firstElementChild.id.split('-');
+                            id.shift();
+                            let dataSets = $(`#feedbackdown-${id.join('-')} .ast-thumbdown`).data();
+                            feedbackLoop(dataSets, true);
                         }
                         if (target.id === 'showHistory') {
                             isShowHistoryEnable = true;
@@ -3222,7 +3284,17 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             entitiestValueArray[targetid[1]]['editedValue'] = $(`#${target.id}`).val();
                             $('.ast-check-right.disabled-color').removeClass('disabled-color');
                             $('.save-reset-disabled').removeClass('save-reset-disabled').addClass('save-reset');
-                        } else {
+                        } else if (target.dataset.feedbackComment) {
+                            let targteids = target.id.split('-');
+                            targteids.shift();
+                            let dataSets = $(`#feedbackdown-${targteids.join('-')} .ast-thumbdown`).data();
+                            dataSets.comment = target.value;
+                            if(target.value.length > 0) {
+                                $('.submit-btn').removeAttr('disabled');
+                                $(`#feedbackHelpfulContainer-${id.join('-')} .title-improve`).addClass('hide');
+                            }
+                        }
+                        else {
                             var agentAssistInput = target.dataset.agentAssistInput;
                             var mybotInput = target.dataset.mybotInput;
                             let val = $('#agentSearch').val();
@@ -3431,41 +3503,58 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             <span class="tootltip-tabs">Dislike</span>
             </div>
        </div>`;
-                    dropDownData.append(feedbackHtml);
+                 //   dropDownData.append(feedbackHtml);
                     let endofDialogeHtml = `
         <div class="dilog-task-end" id="endTaks-${dropdownHeaderUuids}">
         <div class="text-dialog-task-end">Dialog Task ended</div>     
                    </div>
-                   <div class="feedback-helpul-container">
+                   <div class="feedback-helpul-container" id="feedbackHelpfulContainer-${dropdownHeaderUuids}">
                     <div class="titles-content">
                         <div class="title">Helpful?</div>
-                        <div class="btn-positive">
-                            <i class="ast-thumbup"></i>
+                        <div class="btn-positive" id="feedbackup-${dropdownHeaderUuids}">
+                            <i class="ast-thumbup"
+                            id="feedbackup-${dropdownHeaderUuids}"
+                            data-feedbacklike="false"
+                            data-conv-id="${data.conversationId}"
+                            data-bot-id="${botId}" data-feedback="like"
+                            data-dialog-name="${dialogName}"
+                            data-user-input="${userIntentInput}"
+                            data-comment=""
+                            data-feedbackdetails="[]"></i>
                             <span class="tootltip-tabs">Like</span>
                         </div>
-                        <div class="btn-negtive">
-                            <i class="ast-thumbdown"></i>
+                        <div class="btn-negtive" id="feedbackdown-${dropdownHeaderUuids}">
+                            <i class="ast-thumbdown" 
+                            id="feedbackdown-${dropdownHeaderUuids}"
+                            data-feedbackdislike="false"
+                            data-conv-id="${data.conversationId}"
+                            data-bot-id="${botId}" data-feedback="dislike"
+                            data-dialog-name="${dialogName}"
+                            data-user-input="${userIntentInput}"
+                            data-comment=""
+                            data-feedbackdetails="[]"></i>
                             <span class="tootltip-tabs">Dislike</span>
                         </div>
                         <div class="thanks-update hide">Thanks for the feedback!</div>
-                        <div class="help-improve-arrow">
-                            <div class="title-improve">Help us improve (optional)</div>
-                            <div class="arrow-icon">
-                                <i class="ast-carrotup"></i>
+                        <div class="help-improve-arrow hide">
+                            <div class="title-improve" hide>Help us improve (optional)</div>
+                            <div class="arrow-icon" data-feedback-drop-down-opened="false" id="dropdownArrowFeedBack-${dropdownHeaderUuids}">
+                                <i class="ast-carrotup" data-feedback-drop-down-opened="false" id="dropdownArrowFeedBackIcon-${dropdownHeaderUuids}"></i>
                             </div>
                         </div>
                     </div>
-                    <div class="explore-more-negtive-data">
-                        <div class="btns-group-negtive-chips">
-                            <div class="btn-chip-negtive active-chip">Not enough suggestions</div>
-                            <div class="btn-chip-negtive active-chip">Not prompt</div>
-                            <div class="btn-chip-negtive">Intent undetected</div>
-                            <div class="btn-chip-negtive">Not prompt</div>
-                            <div class="btn-chip-negtive">Other</div>
+                    <div class="explore-more-negtive-data hide">
+                        <div class="btns-group-negtive-chips" id="feedBackOptions-${dropdownHeaderUuids}">
+                            <div class="btn-chip-negtive" data-chip-click='false'>Not enough suggestions</div>
+                            <div class="btn-chip-negtive" data-chip-click='false'>Not prompt</div>
+                            <div class="btn-chip-negtive" data-chip-click='false'>Intent undetected</div>
+                            <div class="btn-chip-negtive" data-chip-click='false'>Not prompt</div>
+                            <div class="btn-chip-negtive" data-chip-click='false'>Other</div>
                         </div>
                         <div class="input-block-optional">
                             <div class="label-text"></div>
-                            <input type="text" placeholder="Placeholder text" class="input-text">
+                            <input type="text" placeholder="Placeholder text" class="input-text" id="feedBackComment-${dropdownHeaderUuids}"
+                            data-feedback-comment="true">
                         </div>
                         <button class="submit-btn" disabled>Submit</button>
                     </div>
@@ -3480,8 +3569,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                    // dropdownHeaderUuids = undefined;
                 }
 
-                function feedbackLoop(evt) {
-                    AgentAssist_feedback_click(evt);
+                function feedbackLoop(evt, isSubmit = false) {
+                    if(isSubmit){
+                        AgentAssist_feedback_click(evt, true);
+                    } else {
+                        AgentAssist_feedback_click(evt);
+                    }
+                   
                 }
 
                 function processUserMessage(data, _conversationId, botId) {
@@ -3822,16 +3916,33 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
     }
 }
 
-function AgentAssist_feedback_click(e) {
-    console.log(e.target);
-    var convId = e.target.dataset.convId;
-    var botId = e.target.dataset.botId;
-    var feedback = e.target.dataset.feedback;
-    var userInput = e.target.dataset.userInput;
-    var dialogName = e.target.dataset.dialogName;
-    var dialogId = 'dg-' + (Math.random() + 1).toString(36).substring(2);
+function AgentAssist_feedback_click(e, isSubmit = false) {
+    let convId,botId,feedback,userInput,dialogId,comment,feedbackdetails;
+    if(isSubmit) {
+        convId = e.convId;
+        botId = e.botId;
+        feedback = e.feedback;
+        userInput = e.userInput;
+        dialogName = e.dialogName;
+        dialogId = 'dg-' + (Math.random() + 1).toString(36).substring(2);
+        comment = e.comment;
+        feedbackdetails = e.feedbackdetails;
+    } else {
+        console.log(e.target);
+         convId = e.target.dataset.convId;
+         botId = e.target.dataset.botId;
+         feedback = e.target.dataset.feedback;
+         userInput = e.target.dataset.userInput;
+         dialogName = e.target.dataset.dialogName;
+         dialogId = 'dg-' + (Math.random() + 1).toString(36).substring(2);
+         comment = e.target.dataset.comment;
+         feedbackdetails = e.target.dataset.feedbackdetails;
+    }
+    
     // var userId = (Math.random() + 1).toString(36).substring(3);
-    AgentAssistPubSub.publish('agent_usage_feedback', { userInput: userInput, dialogName: dialogName, conversationId: convId, botId: botId, feedback: feedback, eventName: 'agent_usage_feedback', dialogId: dialogId });
+    AgentAssistPubSub.publish('agent_usage_feedback', { 
+        comment: comment, feedbackDetails: feedbackdetails,userInput: userInput, dialogName: dialogName, conversationId: convId, botId: botId, feedback: feedback, eventName: 'agent_usage_feedback', dialogId: dialogId
+    });
 }
 
 function AgentAssist_run_click(e) {
@@ -4212,9 +4323,11 @@ AgentAssistPubSub.subscribe('agent_usage_feedback', (msg, data) => {
         "accountId": "622efb179b25b1a23ef05da2",
         "conversationId": data.conversationId,
         userInput: data.userInput,
-        dialogName: data.dialogName,
+        taskName: data.dialogName,
         "event": data.eventName,
-        dialogId: data.dialogId,
+        taskId: data.dialogId,
+        comment: data.comment,
+        feedbackDetails: data.feedbackDetails
     }
     _agentAsisstSocket.emit('agent_usage_feedback', agent_assist_request);
 });

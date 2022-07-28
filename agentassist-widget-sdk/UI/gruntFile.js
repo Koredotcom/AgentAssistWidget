@@ -35,7 +35,6 @@ module.exports = function (grunt) {
             'kore-config.js',
             'libs/kore-no-conflict-end.js',
             'libs/jquery-3.1.1.js',
-            'libs/lottie-loader.js',
             'agentindex.js'
         ];
         cssFiles=[
@@ -167,6 +166,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-concat-css');
 
     // the default task can be run just by typing "grunt" on the command line
-    grunt.registerTask('default', ['clean','concat','copy', 'cssmin', 'uglify']);
+    grunt.registerTask('default', ['clean','concat','copy', 'cssmin']);
 
 };
