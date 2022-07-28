@@ -599,7 +599,7 @@ html, body{
     display: inline-block;
     /* height: calc(100% - 82px); */
     height: calc(100% - 38px);
-    /* background: var(--bg-hover-tabs-color); */
+    background: var(--bg-hover-tabs-color);
 }
 .agent-assist-chat-container .body-data-container.if-suggestion-search{
     /* height: calc(100% - 137px); */
@@ -614,8 +614,8 @@ html, body{
     display: flex;
     align-items: center;
     /* margin-top: 20px; */
-    /* margin-bottom: 16px; */
-    padding: 15px 10px 16px 10px;
+    margin-bottom: 16px;
+    padding: 15px 10px 0px 10px;
     position: relative;
     /* z-index: 1; */
 }
@@ -839,7 +839,7 @@ html, body{
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info {
     display: inline-block;
     width: 100%;
-    padding: 12px 15px 25px 15px;
+    padding: 12px 15px 0px 15px;
     position: relative;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info:last-child{
@@ -2927,30 +2927,78 @@ border: 1px solid transparent !important;
 
 /* scroll bottom button */
 
-.agent-assist-chat-container .scroll-bottom-btn{
+.scroll-bottom-show-btn{
+    position: fixed;
+    bottom: 70px;
+    z-index: 3;
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 100%;
+}
+.scroll-bottom-show-btn .scroll-bottom-btn{
+    background: #FFFFFF;
+    box-shadow: 0px 4px 8px rgba(32, 33, 36, 0.15);
+    border-radius: 30px;
+    outline: 0;
+    border: 0;
+    padding: 10px 26px;
     font-weight: 400;
-    font-size: 10px;
+    font-size: 12px;
     line-height: 20px;
-    color: var(--color-grey-text);
-    padding: 5px 15px;
-    position: fixed;
-    bottom: 12%;
-    margin-left: 35%;
-    z-index : 999;
+    color: #0077D2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+.scroll-bottom-show-btn .scroll-bottom-btn.new-messages{
+    background: #0077D2;
+    color: #FFFFFF;
 }
 
+.scroll-bottom-show-btn .scroll-bottom-btn i{
+    font-size: 7px;
+    line-height: normal;
+    margin-right: 12px;
+}
+
+.scroll-bottom-show-btn .scroll-bottom-btn span{
+    line-height: normal;
+}
+
+
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info:last-child .dilog-task-end{
+    position: absolute;
+}
 .agent-assist-chat-container .unread-msg {
     display: flex;
     align-items: center;
     justify-content: center;
+    margin: 10px 0;
+    position: relative;
+    width: 100%;
+}
+.agent-assist-chat-container .unread-msg::before{
+    content: "";
+    position: absolute;
+    width: calc(100% + 30px);
+    height: 1px;
+    background: #D7D8D9;
+    left: -14px;
+    top: auto;
+}
+.agent-assist-chat-container .unread-msg .text-dialog-task-end{
+    padding: 5px 10px;
+    background: #DCE3EA;
+    border-radius: 30px;
     font-weight: 400;
-    font-size: 10px;
+    font-size: 12px;
     line-height: 20px;
-    color: var(--color-grey-text);
-    padding: 5px 15px;
-    margin-left: 35%;
+    color: #000000;
+    z-index: 1;
+    position: relative;
+    min-width: 169px;
+    text-align: center;
 }
 
