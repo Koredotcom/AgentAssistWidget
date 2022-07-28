@@ -1185,9 +1185,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 $('#dynamicBlock .agent-utt-info').each((i, elem) => {
                                     let elemID = elem.id.split('-');
                                     elemID.shift();
-                                    if (ele.id.split('-').includes(elemID.join('-'))) {
+                                    if (ele.id.includes(elemID.join('-'))) {
                                         let foundIndex = automationNotRanArray.findIndex((ele)=>ele.id === elem.id);
-                                        if(foundIndex==-1){
+                                        if(foundIndex == -1){
                                             automationNotRanArray.push({name:elem.innerText.trim(),id:elem.id});
                                             var appStateStr = localStorage.getItem('agentAssistState') || '{}';
                                             var appState = JSON.parse(appStateStr);
@@ -1201,12 +1201,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                 }
                                                 if (!convState['assistTab']['automationsNotRanArray']) {
                                                     convState['assistTab']['automationsNotRanArray'] = [];
-                                                }else{
-                                                    let automationss = convState['assistTab']['automationsNotRanArray'];
-                                                    automationss.push({name:elem.innerText.trim(),id:elem.id});
                                                 }
-                                                
-                                                
+                                                    convState['assistTab']['automationsNotRanArray'] = automationNotRanArray;
                                                 localStorage.setItem('agentAssistState', JSON.stringify(appState))
                                             }
                                         }
