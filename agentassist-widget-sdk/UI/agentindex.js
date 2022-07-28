@@ -1018,12 +1018,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
 
                 function addIconClassToNewMessage(){
+                    let lastElement = getLastElement('dynamicBlock');
                     let beforeLastElement = document.getElementsByClassName('bg-color-icon-block');
                     console.log(beforeLastElement, "before last icon element");
                     if(beforeLastElement){
                         $(beforeLastElement).removeClass("bg-color-icon-block");
                     }
-                    var iconBlockElements = element.querySelectorAll('.icon_block');
+                    var iconBlockElements = lastElement.querySelectorAll('.icon_block');
                     for (let i = 0; i < iconBlockElements.length; i++) {
                         let iconElement = iconBlockElements[i];
                         if (i == (iconBlockElements.length - 1)) {
@@ -1031,6 +1032,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
                     }
                 }
+
 
                 function addWhiteBackgroundClassToNewMessage(){
                     let beforeLastElement = document.getElementsByClassName('last-msg-white-bg');
@@ -1090,28 +1092,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         iconElement.style.color = "#009dab";
                     }
                 }
-
-                // function updateOldFaqList(){
-                //     var dynamicBlockElement = document.getElementById('dynamicBlock');
-                //     var numOfdynamicBlockElements = dynamicBlockElement.children;
-                //     let eachElement = '';
-                //     for (var i = 0; i < numOfdynamicBlockElements.length; i++) {
-                //         eachElement = numOfdynamicBlockElements[i]; 
-                //         if(eachElement.className == 'dialog-task-run-sec'){
-                //             let childrunsec = Array.from(eachElement.children);
-                //             childrunsec.forEach(element =>{
-                //                 if(element.id == 'faqssArea'){
-                //                     let faqsList = element.querySelectorAll('type-info-run-send');
-                //                     console.log(faqsList, "faqslist");
-                //                     // for(let faq of faqsList){
-
-                //                     // }
-                //                 }
-                //             })
-                //         }
-                //     }
-                // }
-
+                
                 function changeNewMessageIcon(element) {
                     var iconBlockElements = element.querySelectorAll('.icon_block');
                     for (let i = 0; i < iconBlockElements.length; i++) {
@@ -2526,6 +2507,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 }
                             } else if (lastElement.className == 'dialog-task-accordiaon-info') {
                                 let listOfNodes = lastElement.querySelectorAll('.steps-run-data');
+                                let index = 0;
+                                for(let node of listOfNodes){
+                                    $(node).attr('id', 'steps-run-data-' + lastElement.id + index);
+                                    index++;
+                                }
                                 lastElement = Array.from(listOfNodes).pop();
                             }
                         }
@@ -2603,14 +2589,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     return childIdList;
                 }
 
-                function scrollToEle(element) {
-                    var _PanelEle = $(element);
+                function scrollToEle(id) {
+                    var _PanelEle = $('#'+id);
                     if (_PanelEle) {
                         var _container = _PanelEle.closest('.body-data-container');
                         if (_container && _container.offset()) {
                             var _scrollHeight = _PanelEle.offset().top - _container.offset().top + _container.scrollTop();
                             _container.animate({
-                                scrollTop: _scrollHeight
+                            scrollTop: _scrollHeight
                             }, 'slow');
                         }
                     }
@@ -2678,10 +2664,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                         if (target.className.includes('scroll-bottom-btn')) {
                             let newElementsHeight = getNewlyAddedElementsHeights();
-                            console.log(newElementsHeight, "new elements height", $("#bodyContainer").prop("scrollHeight"));
                             if (newElementsHeight) {
-                                // $("#bodyContainer").scrollTop(newElementsHeight);
-                                scrollToEle(lastElementBeforeNewMessage);
+                                scrollToEle(lastElementBeforeNewMessage.id);
 
                             } else {
                                 scrollToBottom();
