@@ -2048,6 +2048,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 dataSets.feedbackdetails.push($(target).html());
                             } else {
                                 $(target).removeClass('active-chip');
+                                target.dataset.chipClick = 'false';
                                 dataSets.feedbackdetails?.forEach((ele, i)=>{
                                     if(ele==$(target).html()){
                                         delete dataSets.feedbackdetails[i]
