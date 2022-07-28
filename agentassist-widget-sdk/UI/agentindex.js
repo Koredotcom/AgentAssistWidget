@@ -1052,6 +1052,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }
                     let lastElement = getLastElement('dynamicBlock');
                     $(lastElement).addClass("last-msg-white-bg");
+                    if(lastElement.nextElementSibling && lastElement.nextElementSibling.className == 'feedback-data'){
+                        lastElement.nextElementSibling.classList.add('last-msg-white-bg');
+                    }
                     console.log(lastElement, "lastElement");
                 }
 
@@ -4094,7 +4097,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     $("#historyDataForMyBot").addClass('hide');
                     isShowHistoryEnable = false;
                     console.log('-----> User Automation Tab Active State <-----');
-                    document.getElementById(`history-details-btn`).classList.remove('hide');
+                    // document.getElementById(`history-details-btn`).classList.remove('hide');
                     $('.show-back-recommendation-block').addClass('hide');
                     document.getElementById(`agentAutoIcon`).classList.remove(`active-tab`);
                     document.getElementById(`transcriptIcon`).classList.remove(`active-tab`);
@@ -4483,7 +4486,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             <div class="dialog-task-data" id="dynamicBlocksData">
 
                 <div class="dynamic-block-content" id="dynamicBlock">
-                    <div class="show-history-block" id="history-details-btn">
+                    <div class="show-history-block hide" id="history-details-btn">
                         <button id="showHistory" class="ghost-btn">Show history</button>
                     </div>
                     <div class="show-back-recommendation-block hide">
