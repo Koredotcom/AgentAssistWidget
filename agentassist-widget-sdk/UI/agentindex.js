@@ -337,7 +337,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     'id': _agentAssistDataObj.conversationId
                 }
 
-                console.log("AgentAssist >>> sending welcome_message_request")
                 _agentAsisstSocket.emit('welcome_message_request', welcome_message_request);
 
                 if (isCallConversation === 'true') {
@@ -1015,12 +1014,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     numberOfNewMessages += 1;
                     $(".scroll-bottom-btn").addClass("new-messages");
                     $(".scroll-bottom-btn span").text(numberOfNewMessages + ' new');
+                    if(numberOfNewMessages == 1){
+                        console.log("number of new messages");
+                        removeWhiteBackgroundToSeenMessages();
+                    }
                 }
 
                 function addIconClassToNewMessage(){
                     let lastElement = getLastElement('dynamicBlock');
                     let beforeLastElement = document.getElementsByClassName('bg-color-icon-block');
-                    console.log(beforeLastElement, "before last icon element");
                     if(beforeLastElement){
                         $(beforeLastElement).removeClass("bg-color-icon-block");
                     }
@@ -1033,103 +1035,24 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }
                 }
 
+                function removeWhiteBackgroundToSeenMessages(){
+                     let beforeLastElementArray = document.querySelectorAll('.last-msg-white-bg');
+                    for(let ele of beforeLastElementArray){
+                        $(ele).removeClass("last-msg-white-bg");
+                    }
+                }
+
 
                 function addWhiteBackgroundClassToNewMessage(){
-                    let beforeLastElement = document.getElementsByClassName('last-msg-white-bg');
-                    console.log(beforeLastElement, "before last element");
-                    if(beforeLastElement){
-                        $(beforeLastElement).removeClass("last-msg-white-bg");
+                    let beforeLastElementArray = document.querySelectorAll('.last-msg-white-bg');
+                    for(let ele of beforeLastElementArray){
+                        if(ele && scrollAtEnd){
+                            $(ele).removeClass("last-msg-white-bg");
+                        }
                     }
                     let lastElement = getLastElement('dynamicBlock');
                     $(lastElement).addClass("last-msg-white-bg");
                     console.log(lastElement, "lastElement");
-                }
-
-                function changeNewMessageBackground(element) {
-                    changeNewMessageIcon(element);
-                    if (element.className == 'agent-utt-info') {
-                        changeBackgroundColor(element, 'white');
-                    } else if (element.className == 'dialog-task-run-sec') {
-                        changeBackgroundColor(element, 'white');
-                    } else if (element.className == 'dialog-task-accordiaon-info') {
-                        changeBackgroundColor(element, "white");
-                        let accordionInfoChildren = element.children;
-                        for (let i = 0; i < accordionInfoChildren.length; i++) {
-                            let accordionElement = accordionInfoChildren[i];
-                            if (accordionElement.className == 'collapse-acc-data') {
-                                //steps-run-data nodes finding last element
-                                let listOfStepsNodes = accordionElement.querySelectorAll('.steps-run-data');
-                                for (let node of listOfStepsNodes) {
-                                    changeBackgroundColor(node, '#f3f7ff');
-                                }
-                                let stepsLastElement = Array.from(listOfStepsNodes).pop();
-                                changeBackgroundColor(stepsLastElement, 'white');
-
-                                // feedback node finding last element
-                                let listOfFeedbackNodes = accordionElement.querySelectorAll('.feedback-data');
-                                for (let node of listOfFeedbackNodes) {
-                                    changeBackgroundColor(node, '#f3f7ff');
-                                }
-                                let feedbackLastElement = Array.from(listOfFeedbackNodes).pop();
-                                changeBackgroundColor(feedbackLastElement, 'white');
-
-
-                            } else if (accordionElement.className == 'accordion-header') {
-                                changeBackgroundColor(accordionElement, '#f3f7ff');
-                            }
-                        }
-                    } else if (element.className == 'collapse-acc-data') {
-                        changeBackgroundColor(element, 'white');
-                    }
-                }
-
-                function updateOldMessageIcon() {
-                    var dynamicBlockElement = document.getElementById('dynamicBlock');
-                    var iconBlockElements = dynamicBlockElement.querySelectorAll('.icon_block');
-                    for (let i = 0; i < iconBlockElements.length; i++) {
-                        let iconElement = iconBlockElements[i];
-                        changeBackgroundColor(iconElement, "#ffffff");
-                        iconElement.style.color = "#009dab";
-                    }
-                }
-                
-                function changeNewMessageIcon(element) {
-                    var iconBlockElements = element.querySelectorAll('.icon_block');
-                    for (let i = 0; i < iconBlockElements.length; i++) {
-                        let iconElement = iconBlockElements[i];
-                        if (i == (iconBlockElements.length - 1)) {
-                            changeBackgroundColor(iconElement, "#009dab");
-                            iconElement.style.color = "white";
-                        }
-                    }
-                }
-
-                function updateOldMessagesBackground() {
-
-                    let classList = ['collapse-acc-data', 'agent-utt-info', 'dialog-task-run-sec', 'dialog-task-accordiaon-info']
-                    let eachElement = ''
-                    var dynamicBlockElements = document.getElementById('dynamicBlock');
-                    var numOfdynamicBlockElements = dynamicBlockElements.children;
-                    let lastElement = '';
-                    for (var i = 0; i < numOfdynamicBlockElements.length; i++) {
-                        eachElement = numOfdynamicBlockElements[i];
-                        if (classList.indexOf(eachElement.className) != -1) {
-                            changeBackgroundColor(eachElement, "#f3f7ff");
-                        }
-                        lastElement = numOfdynamicBlockElements[i];
-                    }
-                    changeNewMessageBackground(lastElement);
-                    
-                }
-
-                function changeBackgroundColor(element, color, action) {
-                    $(element).attr('style', function () {
-                        if (this.style.hasOwnProperty('background-color')) {
-                            this.style.removeProperty('background-color');
-                        }
-                        return this.style.cssText + 'background-color:' + color + ';';
-                    })
-                    // element.style.backgroundColor = color;
                 }
 
                 function processAgentAssistResponse(data, convId, botId) {
@@ -1622,10 +1545,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     if (scrollAtEnd) {
                         scrollToBottom();
                     }
-                    // updateOldMessagesBackground();
                     addWhiteBackgroundClassToNewMessage();
                     addIconClassToNewMessage();
-                    // updateOldMessageIcon();
                 }
 
                 function processTranscriptData(data, conversationId, botid) {
@@ -2498,10 +2419,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 var numOfdynamicBlockElements = lastElement.children;
                                 for (var i = 0; i < numOfdynamicBlockElements.length; i++) {
                                     lastElement = numOfdynamicBlockElements[i];
-                                    console.log($(lastElement).attr("id"), "attribute id");
                                     if ($(lastElement).attr("id") == 'dialoguesArea') {
                                         let typeInfoRunNodes = lastElement.querySelectorAll('.content-dialog-task-type');
-                                        console.log(typeInfoRunNodes, "type info run nodes");
                                         lastElement = typeInfoRunNodes[typeInfoRunNodes.length - 1];
                                     }
                                 }
@@ -2521,16 +2440,18 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                 function updateNewMessageUUIDList(responseId) {
                     if (!scrollAtEnd) {
+                        console.log(numberOfNewMessages, "update new message uuid list");
                         if (numberOfNewMessages) {
                             if (newlyAddedMessagesUUIDlist.indexOf(responseId) == -1) {
                                 newlyAddedMessagesUUIDlist.push(responseId);
                                 newlyAddedIdList = getActualRenderedIdList();
                             }
                         }
+                        addUnreadMessageHtml();  
                     }
                 }
 
-                function updateNewMessageCount() {
+                function updateNewMessageCount(lastElement) {
                     for (let id of newlyAddedIdList) {
                         let element = document.getElementById(id);
                         if (element) {
@@ -2543,6 +2464,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 if (numberOfNewMessages) {
                                     $(".scroll-bottom-btn").addClass("new-messages");
                                     $(".scroll-bottom-btn span").text(numberOfNewMessages + ' new');
+                                }
+                                console.log(id, lastElement.id, "id and lastlement id");
+                                if(element.classList.contains('last-msg-white-bg') && id != lastElement.id){
+                                    element.classList.remove("last-msg-white-bg");
                                 }
                             }
                         }
@@ -2614,19 +2539,18 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                     document.querySelector('#bodyContainer').addEventListener('ps-scroll-down', (scrollDownevent) => {
                         //newly added elements scroll view
-
-                        updateNewMessageCount();
-                        //last element scroll view
+                        //get last element call should be before update message count;
                         lastelement = getLastElement('dynamicBlock');
+                        updateNewMessageCount(lastelement);
                         scrollAtEnd = !isScrolledIntoView(lastelement) ? true : false;
                         if (scrollAtEnd) {
                             $(".scroll-bottom-show-btn").addClass('hide');
+                            $('.unread-msg').remove();
                         }
                     });
 
                     document.querySelector('#bodyContainer').addEventListener('ps-y-reach-end', (scrollEndevent) => {
                         $(".scroll-bottom-show-btn").addClass('hide');
-                        $('.unread-msg').addClass('hide');
                         numberOfNewMessages = 0;
                         newlyAddedMessagesUUIDlist = [];
                         newlyAddedIdList = [];
@@ -2673,16 +2597,16 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             // $("#bodyContainer").perfectScrollbar('update');
                             if ($(".scroll-bottom-btn span").text().includes('new')) {
                                 console.log(newlyAddedIdList, "id list");
-                                if (!scrollAtEnd && numberOfNewMessages > 0) {
-                                    for (let i = 0; i < newlyAddedIdList.length; i++) {
-                                        if (document.getElementById(newlyAddedIdList[i])) {
-                                            let elements = document.getElementById(newlyAddedIdList[i]);
-                                            elements?.insertAdjacentHTML('beforeBegin', addUnreadMessageHtml());
-                                            break;
-                                        }
-                                    }
+                                // if (!scrollAtEnd && numberOfNewMessages > 0) {
+                                //     for (let i = 0; i < newlyAddedIdList.length; i++) {
+                                //         if (document.getElementById(newlyAddedIdList[i])) {
+                                //             let elements = document.getElementById(newlyAddedIdList[i]);
+                                //             elements?.insertAdjacentHTML('beforeBegin', addUnreadMessageHtml());
+                                //             break;
+                                //         }
+                                //     }
 
-                                }
+                                // }
                             }
                         }
 
@@ -4306,13 +4230,25 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
 
                 function addUnreadMessageHtml() {
-                    if (document.getElementsByClassName('.unread-msg')) {
-                        $('.unread-msg').remove();
+                    console.log("outside number of new messages", numberOfNewMessages);
+                    console.log(document.getElementsByClassName('unread-msg'), "unread msg");
+                    if (!scrollAtEnd && numberOfNewMessages && document.getElementsByClassName('unread-msg').length == 0) {
+                        console.log("inside unread message", newlyAddedIdList);
+                        if (document.getElementsByClassName('unread-msg')) {
+                            $('.unread-msg').remove();
+                        }
+                        let unreadHtml = ` <div class="unread-msg">
+                        <div class="text-dialog-task-end">Unread Messages</div>     
+                                   </div>`;
+
+                        for (let i = 0; i < newlyAddedIdList.length; i++) {
+                            if (document.getElementById(newlyAddedIdList[i])) {
+                                let elements = document.getElementById(newlyAddedIdList[i]);
+                                elements?.insertAdjacentHTML('beforeBegin', unreadHtml);
+                                break;
+                            }
+                        }
                     }
-                    let unreadHtml = ` <div class="unread-msg">
-                    <div class="text-dialog-task-end">Unread Messages</div>     
-                               </div>`;
-                    return unreadHtml;
                 }
 
                 function addFeedbackHtmlToDom(data, botId, userIntentInput, runForAgentBot) {
