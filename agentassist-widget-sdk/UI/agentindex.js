@@ -931,7 +931,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         };
                         //  _msgsResponse.message.push(body);
                     }
-                    if (data.buttons && !data.value.includes('Customer has waited')) {
+                    if (isMyBotAutomationOnGoing && data.buttons && !data.value.includes('Customer has waited')) {
                         let sendMsgData = encodeURI(JSON.stringify(_msgsResponse));
                         let runInfoContent = $(`#dropDownData-${myBotDropdownHeaderUuids}`);
                         let askToUserHtml = `
@@ -1004,7 +1004,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         $(noOfSteps[noOfSteps.length - 2]).removeClass('hide');
                         $(noOfSteps[noOfSteps.length - 1]).removeClass('hide');
                     }
-                    if (((data.endOfFaq || data.endOfTask) && data.type !== 'text') || (data.userInput == 'discard all' && data.type !== 'text') || (userMessage && userMessage.value && userMessage.value.includes('discard'))) {
+                    if (isMyBotAutomationOnGoing && (((data.endOfFaq || data.endOfTask) && data.type !== 'text') || (data.userInput == 'discard all' && data.type !== 'text') || (userMessage && userMessage.value && userMessage.value.includes('discard')))) {
                         isMyBotAutomationOnGoing = false;
                         addFeedbackHtmlToDom(data, botId, userIntentInput, 'runForAgentBot');
                     }
@@ -1416,7 +1416,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                         _msgsResponse.message.push(body);
                     });
-                    if (dropdownHeaderUuids && data.buttons && !data.value.includes('Customer has waited')) {
+                    if (isAutomationOnGoing && dropdownHeaderUuids && data.buttons && !data.value.includes('Customer has waited')) {
                         let msgStringify = JSON.stringify(_msgsResponse);
                         let newTemp = encodeURI(msgStringify);
                         $(`#overRideBtn-${dropdownHeaderUuids}`).removeClass('hide');
@@ -1561,7 +1561,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     //     $(noOfSteps[noOfSteps.length - 2]).removeClass('hide').attr('style', 'color:gray');
                     //     $(noOfSteps[noOfSteps.length - 1]).removeClass('hide');
                     // }
-                    if (((data.endOfFaq || data.endOfTask) && data.type !== 'text') || (data.userInput == 'discard all' && data.type !== 'text') || (userMessage && userMessage.value && userMessage.value.includes('discard'))) {
+                    if (isAutomationOnGoing && (((data.endOfFaq || data.endOfTask) && data.type !== 'text') || (data.userInput == 'discard all' && data.type !== 'text') || (userMessage && userMessage.value && userMessage.value.includes('discard')))) {
                         isAutomationOnGoing = false;
                         //  isOverRideMode = false;
                         $('.override-input-div').addClass('hide');
