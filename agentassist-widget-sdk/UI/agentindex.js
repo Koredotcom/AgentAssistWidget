@@ -4839,8 +4839,11 @@ function AgentAssist_run_click(e) {
     actualIdArray.shift();
     let actualId = actualIdArray.join('-');
     let showRunForAgentBtn = 'showRunForAgentBtn-' + actualId;
-    $("#" + runbtnId).remove();
-    $("#" + showRunForAgentBtn).remove();
+    if(currentTabActive !== 'searchAutoIcon') {
+        $("#" + runbtnId).remove();
+        $("#" + showRunForAgentBtn).remove();
+    }
+   
     if (e.target.dataset.check || e.target.dataset.checkLib) {
         AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: convId, botId: botId, value: intentName, check: true });
 
