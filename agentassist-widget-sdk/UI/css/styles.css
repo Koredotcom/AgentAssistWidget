@@ -929,6 +929,7 @@ html, body{
     height: 100%;
     top: 0;
     left: 16px;
+    z-index: 1;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data {
     margin: 10px 0;
@@ -936,6 +937,19 @@ html, body{
     position: relative;
     display: inline-block;
     width: 100%;
+}
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data.last-msg-white-bg{
+    width: calc(100% + 68px);
+    left: -23px;
+    background: #fff;
+    margin-bottom: 0;
+    padding-top: 20px;
+    padding-left: 50px;
+}
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data.last-msg-white-bg .icon_block{
+    left: 23px !important;
+    background: transparent !important;
+    color: var(--theme-color) !important;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data .icon_block {
     position: absolute;
@@ -949,6 +963,7 @@ html, body{
     align-items: center;
     justify-content: center;
     color: var(--default-white-color);
+    z-index: 1;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data .icon_block_img {
     position: absolute;
@@ -1088,6 +1103,14 @@ border: 1px solid transparent !important;
     margin: -10px 0 15px 0;
     display: inline-flex;
     align-items: center;
+}
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .feedback-data.last-msg-white-bg{
+    width: calc(100% + 68px);
+    left: -23px;
+    background: #fff;
+    margin-bottom: 0;
+    padding-left: 52px;
+    position: relative;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .feedback-data .feedback-icon {
     width: 26px;
