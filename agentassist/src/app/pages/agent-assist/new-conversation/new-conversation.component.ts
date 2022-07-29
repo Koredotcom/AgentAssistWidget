@@ -165,7 +165,8 @@ export class NewConversationComponent implements OnInit, OnDestroy {
       this.createConversation(keepWindow);
     } else {
       let params = {
-        streamId: this.streamId
+        streamId: this.streamId,
+        'isAgentAssist':true
       };
       let payload = this.getCPayload();
       this.service.invoke('post.createCategory', params, payload)

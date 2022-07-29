@@ -352,7 +352,8 @@ export class NewConversationsComponent implements OnInit, OnChanges, AfterViewIn
       return;
     }
     let params = {
-      streamId: this.streamId
+      streamId: this.streamId,
+      'isAgentAssist':true
     };
     let payload = this.getCPayload();
 
@@ -437,7 +438,9 @@ export class NewConversationsComponent implements OnInit, OnChanges, AfterViewIn
     } else if (this.ucType === 'faq') {
       payload.utterances.primary.text = this.conv.usecaseName; //this.utterancesForm.value.primaryUtterance;
       payload.callExperience.responses = this.callExp?.responses;
+      payload.callExperience.isConfigured = this.callExp.isConfigured;
       payload.chatExperience.responses = this.chatExp?.responses;
+      payload.chatExperience.isConfigured = this.chatExp.isConfigured;
       delete payload.hasAgentAssistAccess;
       delete payload.isAgentAssistOnly;
     }
@@ -509,7 +512,8 @@ export class NewConversationsComponent implements OnInit, OnChanges, AfterViewIn
       }
     } else {
       let params = {
-        streamId: this.streamId
+        streamId: this.streamId,
+        'isAgentAssist':true
       };
       let payload = this.getCPayload();
       this.service.invoke('post.createCategory', params, payload)
@@ -779,6 +783,17 @@ export class NewConversationsComponent implements OnInit, OnChanges, AfterViewIn
     setTimeout(() => this.onClickDone(responseObj, i));
   }
 
+  onEditResp(responseObj, type: 'chat' | 'call') {
+    if (this.isEditable) {
+      responseObj.viewType = 'edit';
+    }
+
+    if (type === 'chat') {
+      this.chatExp.isConfigured = true;
+    } else if (type === 'call') {
+      this.callExp.isConfigured = true;
+    }
+  }
   /** FAQ END */
 
   onChangeUCType(type: string, value) {

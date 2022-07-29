@@ -21,21 +21,21 @@
                             General Setup
                         </div>
                     </li>
-                    <li *ngIf="!(ucType === 'dialog' && (conv.isAgentAssistOnly || conv.hasAgentAssistAccess))">
+                    <li *ngIf="!(ucType === 'dialog' || (conv.isAgentAssistOnly))">
                         <div class="tab-name" data-toggle="tab" href="#call">
                             <!-- <img src="assets/icons/call-inactive.svg" class="call-inactive">
                             <img src="assets/icons/call-active.svg" class="call-active"> -->
                             {{ "USECASES.CALL_EXPERIENCE" | translate }}
                         </div>
                     </li>
-                    <li *ngIf="!(ucType === 'dialog' && (conv.isAgentAssistOnly || conv.hasAgentAssistAccess))">
+                    <li *ngIf="!(ucType === 'dialog' || (conv.isAgentAssistOnly))">
                         <div class="tab-name" data-toggle="tab" href="#chat">
                             <!-- <img src="assets/icons/comment-active.svg" class="chat-active">
                             <img src="assets/icons/comment-inactive.svg" class="chat-inactive"> -->
                             {{ "USECASES.CHAT_EXPERIENCE" | translate }}
                         </div>
                     </li>
-                    <li *ngIf="ucType === 'dialog' && (conv.isAgentAssistOnly || conv.hasAgentAssistAccess)">
+                    <li *ngIf="ucType === 'dialog' || (conv.isAgentAssistOnly)">
                         <div class="tab-name" data-toggle="tab" href="#triggersandpermissions">
                             <!-- <img src="assets/icons/agent-usecase/triggers.svg" class="call-inactive"> -->
                             <img src="assets/icons/agent-usecase/triggers-active.svg" class="call-active">{{"TRIGGER_PERMISSION" | translate}}
@@ -394,7 +394,7 @@
                      <div id="call" class="tab-pane fade" *ngIf="ucType === 'faq'">
                         <div class="main-title">{{ "USECASES.CALL_EXPERIENCE" | translate }}</div>
                         <ng-container *ngFor="let responseObj of callExp.responses; let i = index">
-                            <div class="response-view" *ngIf="responseObj.viewType !== 'edit'" (click)="isEditable ? responseObj.viewType = 'edit': ''">
+                            <div class="response-view" *ngIf="responseObj.viewType !== 'edit'" (click)="onEditResp(responseObj, 'call')">
                                 <div class="res-tille">{{ "USECASES.RESPONSE" | translate }} {{i + 1}}</div>
                                 <div class="copy-rom-call d-none" (click)="copyFormChat(responseObj, i, $event)" *ngIf="showCopyBtn(responseObj, i , 'phone')">
                                     <img src="assets/icons/copy.svg">{{'USECASES.COPY_FROM_CHAT' | translate}}
@@ -429,7 +429,7 @@
                     <div id="chat" class="tab-pane fade" *ngIf="ucType === 'faq'">
                         <div class="main-title">{{ "USECASES.CHAT_EXPERIENCE" | translate }}</div>
                         <ng-container *ngFor="let responseObj of chatExp.responses; let i = index">
-                            <div class="response-view" *ngIf="responseObj.viewType !== 'edit'" (click)="isEditable ? responseObj.viewType = 'edit': ''">
+                            <div class="response-view" *ngIf="responseObj.viewType !== 'edit'" (click)="onEditResp(responseObj, 'chat')">
                                 <div class="res-tille">{{ "USECASES.RESPONSE" | translate }} {{i + 1}}</div>
                                 <div class="copy-rom-call d-none" (click)="copyFormCall(responseObj, i, $event)" *ngIf="showCopyBtn(responseObj, i , 'chat')">
                                     <img src="assets/icons/copy.svg">{{'USECASES.COPY_FROM_CALL' | translate}}
