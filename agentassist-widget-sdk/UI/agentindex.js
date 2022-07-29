@@ -149,6 +149,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 var koreBot = koreBotChat();
                 AgentChatInitialize = new koreBot.chatWindow(chatConfig);
                 AgentChatInitialize.customTemplateObj = new customTemplate(chatConfig, AgentChatInitialize);
+                let isUpdateFeedBackDetailsFlag = false;
                 let docs = document.getElementById('chat-window-footer');
                 docs.hidden = true;
                 _userTranscript = false;
@@ -256,7 +257,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     })
 
                     _agentAsisstSocket.on('agent_feedback_response', (data) => {
-                        UpdateFeedBackDetails(data);
+                        if(isUpdateFeedBackDetailsFlag) {
+                            UpdateFeedBackDetails(data);
+                        }
                     })
 
                     AgentAssistPubSub.publish('automation_exhaustive_list',
@@ -2051,9 +2054,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 $(`#dropdownArrowFeedBack-${targteId.join('-')}`).attr('data-feedback-drop-down-opened', 'false');
                                 $(`#feedbackHelpfulContainer-${targteId.join('-')} .explore-more-negtive-data`).removeClass('hide');
                             }
-                            let updateFlag = $(`#feedbackHelpfulContainer-${targteId.join('-')} .submit-btn`).attr('data-update-flag');
+                            let updateFlag = $(`#feedbackHelpfulContainer-${targteId.join('-')} .submit-btn`).attr('data-updateflag');
                             if (updateFlag == 'true' && target.dataset.feedbackDropDownOpened === 'false') {
                                 AgentAssist_feedBack_Update_Request(dataSets);
+                                isUpdateFeedBackDetailsFlag = true;
                             }
                         }
                         if (target.className.includes('btn-chip-negtive')) {
@@ -2095,14 +2099,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             // }
                             feedbackLoop(dataSets, true);
                             $(`#feedbackHelpfulContainer-${id.join('-')} .explore-more-negtive-data`).addClass('hide');
-                            target.dataset.updateFlag = 'true';
+                             target.dataset.updateflag = 'true';
                             target.innerHTML = "Update";
                             $('.submit-btn').attr('disabled', 'disabled');
                             
                             dataSets.comment = "";
                             dataSets.feedbackdetails = [];
                             $(`#feedbackHelpfulContainer-${id.join('-')} .btn-chip-negtive.active-chip`).removeClass('active-chip');
-                            $(`#feedBackComment-${id.join('-')}`).val('')
+                            $(`#feedBackComment-${id.join('-')}`).val('');
+                            isUpdateFeedBackDetailsFlag = false;
                         }
                         if (target.id === 'showHistory') {
                             isShowHistoryEnable = true;
