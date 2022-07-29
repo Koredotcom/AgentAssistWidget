@@ -1051,6 +1051,16 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }
                     let lastElement = getLastElement('dynamicBlock');
                     $(lastElement).addClass("last-msg-white-bg");
+                    if(!scrollAtEnd){
+                        if(lastElement.id.includes('automationSuggestions')){
+                            let agentUttInfoId = lastElement.id.split('-');
+                            agentUttInfoId.shift();
+                            agentUttInfoId = 'agentUttInfo-' + agentUttInfoId.join('-');
+                            if(document.getElementById(agentUttInfoId)){
+                                $('#'+agentUttInfoId).addClass("last-msg-white-bg");
+                            }
+                        }
+                    }
                     if(lastElement.nextElementSibling && lastElement.nextElementSibling.className == 'feedback-data'){
                         lastElement.nextElementSibling.classList.add('last-msg-white-bg');
                     }
@@ -2486,9 +2496,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 }else{
                                     $(".scroll-bottom-btn span").text('Scroll Bottom');
                                 }
-                                if(element.classList.contains('last-msg-white-bg') && id != lastElement.id){
-                                    element.classList.remove("last-msg-white-bg");
-                                }
+                                // if(element.classList.contains('last-msg-white-bg') && id != lastElement.id){
+                                //     element.classList.remove("last-msg-white-bg");
+                                // }
                             }
                         }
                     }
@@ -2590,6 +2600,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         $(".scroll-bottom-btn span").text('Scroll Bottom');
                         scrollAtEnd = true;
                         lastElementBeforeNewMessage = getLastElement('dynamicBlock');
+                        addWhiteBackgroundClassToNewMessage();
                     });
 
                     document.addEventListener("click", (evt) => {
@@ -3634,6 +3645,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         { conversationId: _agentAssistDataObj.conversationId, botId: _botId, value: 'discard all', isSearch: false });
                                     document.getElementById("loader").style.display = "block";
                                 }
+                                scrollToBottom();
                             }
 
                         }

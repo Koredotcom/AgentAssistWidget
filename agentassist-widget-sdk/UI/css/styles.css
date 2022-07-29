@@ -640,6 +640,11 @@ html, body{
     line-height: 20px;
     color: var(--default-text-color2);
 }
+.agent-assist-chat-container .body-data-container .dialog-task-data .agent-utt-info.last-msg-white-bg{
+    background-color: #FFFFFF;
+    padding-bottom: 15px;
+    margin-bottom: 0px;
+}
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content {
     min-height: 100px;
     /* background: var(--bg-color-containers); */
@@ -2996,10 +3001,12 @@ border: 1px solid transparent !important;
     font-size: 7px;
     line-height: normal;
     margin-right: 12px;
+    pointer-events: none;
 }
 
 .scroll-bottom-show-btn .scroll-bottom-btn span{
     line-height: normal;
+    pointer-events: none;
 }
 
 
