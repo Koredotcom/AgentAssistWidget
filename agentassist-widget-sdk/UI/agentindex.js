@@ -1210,7 +1210,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                                 let dialogSuggestions = document.getElementById(`dialogSuggestions-${responseId}`);
                                 let dialogsHtml = `
-                    <div class="type-info-run-send">
+                    <div class="type-info-run-send" id="suggestionId-${uuids}">
                         <div class="left-content">
                             <div class="title-text" id="automation-${uuids}">${ele.name}</div>
                         </div>
@@ -3750,10 +3750,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 // suggestionsLength.each((i, ele) => {
                                 //     $(ele).addClass('hide');
                                 // })
+                                
                                 _createRunTemplateContiner(uuids, target.dataset.intentName);
                                 let ids = target.id.split('-');
                                 ids.shift();
                                 let joinedIds = ids.join('-');
+                                document.getElementById(`suggestionId-${joinedIds}`).style.borderStyle="solid";
                                 $(`${!target?.dataset?.useCaseList}` ? '.dialog-task-run-sec' : '.content-dialog-task-type .type-info-run-send').each((i, ele) => {
                                     let id = ele.id?.split('-');
                                     id.shift();
