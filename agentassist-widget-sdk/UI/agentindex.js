@@ -1064,6 +1064,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         if(document.getElementById(endofTaskId)){
                             document.getElementById(endofTaskId).classList.add('last-msg-white-bg');
                         }
+                        let overridebtnId = 'overRideBtn-' + uuid;
+                        if(document.getElementById(overridebtnId)){
+                            $('#' + overridebtnId).parent().addClass('last-msg-white-bg');
+                        }
                     }
                 }
 
@@ -2441,7 +2445,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 let listOfNodes = lastElement.querySelectorAll('.steps-run-data');
                                 let index = 0;
                                 for(let node of listOfNodes){
-                                    $(node).attr('id', 'steps-run-data-' + lastElement.id + index);
+                                    if(!($(node).attr('id'))){
+                                        $(node).attr('id', 'steps-run-data-' + lastElement.id + index);
+                                    }
                                     index++;
                                 }
                                 lastElement = Array.from(listOfNodes).pop();
@@ -2529,7 +2535,18 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
 
                 function scrollToEle(id) {
+                    console.log(id, "scroll to ele");
                     var _PanelEle = $('#'+id);
+                    if(id.includes('automationSuggestions')){
+                        let agentUttInfoId = id.split('-');
+                        agentUttInfoId.shift();
+                        agentUttInfoId = 'agentUttInfo-' + agentUttInfoId.join('-');
+                        if(document.getElementById(agentUttInfoId)){
+                            _PanelEle = $('#' + agentUttInfoId);
+                        }
+                        console.log(agentUttInfoId, "aggent utt info id");
+                    }
+                    console.log(_PanelEle, "panelement");
                     if (_PanelEle) {
                         var _container = _PanelEle.closest('.body-data-container');
                         if (_container && _container.offset()) {
@@ -3814,6 +3831,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             runInfoContent.append(agentInputToBotHtml);
                             $(`#overRideBtn-${id}`).addClass('hide');
                             $(`#cancelOverRideBtn-${id}`).removeClass('hide');
+                            addWhiteBackgroundClassToNewMessage();
                         }
                         if (target.id.split('-').includes('cancelOverRideBtn')) {
                             let idsss = target.id.split('-');
@@ -3831,6 +3849,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $(`#overRideBtn-${id}`).removeClass('hide');
                             $(`#cancelOverRideBtn-${id}`).addClass('hide');
                             $('#inputFieldForAgent').remove();
+                            addWhiteBackgroundClassToNewMessage();
                         }
                         if (checkButton) {
                             let id = target.id.split('-');
@@ -4261,9 +4280,21 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         <div class="text-dialog-task-end">Unread Messages</div>     
                                    </div>`;
 
+                        console.log(lastElementBeforeNewMessage, "last element before new message");
+
+
                         for (let i = 0; i < newlyAddedIdList.length; i++) {
                             if (document.getElementById(newlyAddedIdList[i])) {
                                 let elements = document.getElementById(newlyAddedIdList[i]);
+                                if(elements.className == 'content-dialog-task-type' && (elements.id.includes('dialogSuggestions') || elements.id.includes('faqsSuggestions'))){
+                                    let agentUttInfoId = newlyAddedIdList[i].split('-');
+                                    agentUttInfoId.shift();
+                                    agentUttInfoId = 'agentUttInfo-' + agentUttInfoId.join('-');
+                                    if(document.getElementById(agentUttInfoId)){
+                                        elements = document.getElementById(agentUttInfoId);
+                                    }
+                                }
+                                console.log(elements, "elements");
                                 elements?.insertAdjacentHTML('beforeBegin', unreadHtml);
                                 break;
                             }

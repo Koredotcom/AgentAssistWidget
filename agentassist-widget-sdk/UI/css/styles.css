@@ -599,7 +599,7 @@ html, body{
     display: inline-block;
     /* height: calc(100% - 82px); */
     height: calc(100% - 38px);
-    background: var(--bg-hover-tabs-color);
+    /* background: var(--bg-hover-tabs-color); */
 }
 .agent-assist-chat-container .body-data-container.if-suggestion-search{
     /* height: calc(100% - 137px); */
@@ -648,6 +648,7 @@ html, body{
     width: 100%;
     padding: 0px 0px 0px 0px;
     position: relative;
+    background: var(--bg-hover-tabs-color);
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content.no-bg-block{
     background-color: transparent;
@@ -657,6 +658,9 @@ html, body{
     width: 100%;
     position: relative;
     padding: 12px 15px 12px 25px;
+}
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec.last-msg-white-bg{
+    background: #FFFFFF;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type {
     display: flex;
@@ -843,7 +847,7 @@ html, body{
     position: relative;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info:last-child{
-    padding-bottom: 30px;
+    padding-top: 30px;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info:last-child .dilog-task-end{
     position: absolute;
@@ -920,8 +924,9 @@ html, body{
 
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .override-input-div {
     position: absolute;
-    bottom: -30px;
+    bottom: -40px;
 }
+
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data::before {
     content: "";
     position: absolute;
@@ -945,6 +950,7 @@ html, body{
     margin-bottom: 0;
     padding-top: 20px;
     padding-left: 50px;
+    padding-right: 45px;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data.last-msg-white-bg .icon_block{
     left: 23px !important;
@@ -1055,6 +1061,9 @@ border: 1px solid transparent !important;
     border-radius: 0px 8px 8px 0px;
     width: 185px;
     background: linear-gradient(270deg,var(--default-white-color) 0%,rgba(255,255,255,0.8173) 78.65%,rgba(255,255,255,0) 100%);
+}
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data.last-msg-white-bg .run-info-content .agent-utt .action-links{
+    right: 30px !important;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data .run-info-content .agent-utt .action-links .send-run-btn {
     border: 0;
@@ -2556,6 +2565,9 @@ border: 1px solid transparent !important;
     position: relative;
     display: inline-block;
     width: 100%;
+}
+.collapse-acc-data.last-msg-white-bg{
+    background: #FFFFFF;
 }
 .collapse-acc-data .steps-run-data .icon_block {
     position: absolute;
