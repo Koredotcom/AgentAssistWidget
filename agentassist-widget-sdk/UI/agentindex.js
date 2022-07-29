@@ -222,7 +222,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         var appState = JSON.parse(appStateStr);
                         if (appState[_conversationId]) {
                             // if incoming data belongs to welcome message do nothing
-                            if (!data.suggestions && data.buttons?.length > 1) {
+                            let taskid = $(`#dropDownData-${dropdownHeaderUuids}`).attr('data-taskId');
+                            if (!data.suggestions && data.buttons?.length > 1 && taskid) {
                                 if (appState[_conversationId].isWelcomeProcessed) {
                                     return;
                                 }
