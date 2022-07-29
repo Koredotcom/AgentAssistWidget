@@ -3801,6 +3801,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 addRemoveDropDown?.classList.remove('hide');
                                 $(`#endTaks-${uuids}`).removeClass('hide')
                                 AgentAssist_run_click(evt);
+                               
 
                                 // if (libraryRunBtn) {
                                 //     let automationSuggestions = $('#dynamicBlock .dialog-task-accordiaon-info');
@@ -4828,6 +4829,7 @@ function scrollToBottom() {
 }
 
 function AgentAssist_run_click(e) {
+    scrollToBottom();
     var convId = e.target.dataset.convId;
     var botId = e.target.dataset.botId;
     var intentName = e.target.dataset.intentName;
