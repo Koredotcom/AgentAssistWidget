@@ -3762,10 +3762,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                 <div class="dialog-task-run-sec">
                                                 ${$(ele).html()}
                                                 </div>`)
-                                                elem.remove();
+                                              //  elem.remove();
                                             }
                                         })
-                                        ele.remove();
+                                      //  ele.remove();
                                     })
                                 }
 
@@ -3784,7 +3784,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 let ids = target.id.split('-');
                                 ids.shift();
                                 let joinedIds = ids.join('-');
-                                document.getElementById(`suggestionId-${joinedIds}`).style.borderStyle="solid";
+                                let dialogID = document.getElementById(`suggestionId-${joinedIds}`);
+                                if(dialogID){
+                                    dialogID.style.borderStyle="solid";
+                                }
                                 $(`${!target?.dataset?.useCaseList}` ? '.dialog-task-run-sec' : '.content-dialog-task-type .type-info-run-send').each((i, ele) => {
                                     let id = ele.id?.split('-');
                                     id.shift();
@@ -3799,13 +3802,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 $(`#endTaks-${uuids}`).removeClass('hide')
                                 AgentAssist_run_click(evt);
 
-                                if (libraryRunBtn) {
-                                    let automationSuggestions = $('#dynamicBlock .dialog-task-accordiaon-info');
-                                    automationSuggestions.each((i, ele) => {
-                                        $(ele).addClass('hide');
-                                    });
-                                    (automationSuggestions.length >= 1 && $('#dynamicBlock .dialog-task-run-sec').length <= 0) ? $(automationSuggestions[automationSuggestions.length - 1]).removeClass('hide') : '';
-                                }
+                                // if (libraryRunBtn) {
+                                //     let automationSuggestions = $('#dynamicBlock .dialog-task-accordiaon-info');
+                                //     automationSuggestions.each((i, ele) => {
+                                //         $(ele).addClass('hide');
+                                //     });
+                                //     (automationSuggestions.length >= 1 && $('#dynamicBlock .dialog-task-run-sec').length <= 0) ? $(automationSuggestions[automationSuggestions.length - 1]).removeClass('hide') : '';
+                                // }
                                 return;
                             }
                             else {
