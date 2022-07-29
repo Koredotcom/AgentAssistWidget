@@ -4361,7 +4361,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
         <div class="dilog-task-end" id="endTaks-${dropdownHeaderUuids}">
         <div class="text-dialog-task-end">Dialog Task ended</div>     
                    </div>
-                   <div class="feedback-helpul-container">
+                   <div class="feedback-helpul-container hide">
                     <div class="titles-content">
                         <div class="title">Helpful?</div>
                         <div class="btn-positive">
