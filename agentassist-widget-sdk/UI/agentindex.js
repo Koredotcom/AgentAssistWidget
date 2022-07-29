@@ -266,7 +266,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     AgentAssistPubSub.publish('automation_exhaustive_list',
                         { conversationId: _agentAssistDataObj.conversationId, botId: _agentAssistDataObj.botId, 'experience': 'chat' });
                     _agentAsisstSocket.on('user_message', (data) => {
-                        updateNumberOfMessages();
+                        // updateNumberOfMessages();
                         processUserMessage(data, data.conversationId, _botId);
                         userMessage = data;
                     });
@@ -1015,22 +1015,21 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     $(".scroll-bottom-btn").addClass("new-messages");
                     $(".scroll-bottom-btn span").text(numberOfNewMessages + ' new');
                     if(numberOfNewMessages == 1){
-                        console.log("number of new messages");
                         removeWhiteBackgroundToSeenMessages();
                     }
                 }
 
                 function addIconClassToNewMessage(){
                     let lastElement = getLastElement('dynamicBlock');
-                    let beforeLastElement = document.getElementsByClassName('bg-color-icon-block');
+                    let beforeLastElement = document.getElementsByClassName('icon-block');
                     if(beforeLastElement){
-                        $(beforeLastElement).removeClass("bg-color-icon-block");
+                        $(beforeLastElement).removeClass("icon-block");
                     }
                     var iconBlockElements = lastElement.querySelectorAll('.icon_block');
                     for (let i = 0; i < iconBlockElements.length; i++) {
                         let iconElement = iconBlockElements[i];
                         if (i == (iconBlockElements.length - 1)) {
-                            $(iconElement).addClass("bg-color-icon-block");
+                            $(iconElement).addClass("icon-block");
                         }
                     }
                 }
@@ -1055,7 +1054,17 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     if(lastElement.nextElementSibling && lastElement.nextElementSibling.className == 'feedback-data'){
                         lastElement.nextElementSibling.classList.add('last-msg-white-bg');
                     }
-                    console.log(lastElement, "lastElement");
+                    let lastElementId = $(lastElement).parent().attr('id');
+                    if(lastElementId){
+                        let uuid = lastElementId.split('-');
+                        uuid.shift();
+                        uuid = uuid.join('-');
+                        console.log(uuid, "uuid");
+                        let endofTaskId = 'endTaks-' + uuid;
+                        if(document.getElementById(endofTaskId)){
+                            document.getElementById(endofTaskId).classList.add('last-msg-white-bg');
+                        }
+                    }
                 }
 
                 function processAgentAssistResponse(data, convId, botId) {
@@ -2418,16 +2427,17 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             for (var i = 0; i < numOfdynamicBlockElements.length; i++) {
                                 lastElement = numOfdynamicBlockElements[i];
                             }
-                            if (lastElement.className == 'dialog-task-run-sec') {
-                                var numOfdynamicBlockElements = lastElement.children;
-                                for (var i = 0; i < numOfdynamicBlockElements.length; i++) {
-                                    lastElement = numOfdynamicBlockElements[i];
-                                    if ($(lastElement).attr("id") == 'dialoguesArea') {
-                                        let typeInfoRunNodes = lastElement.querySelectorAll('.content-dialog-task-type');
-                                        lastElement = typeInfoRunNodes[typeInfoRunNodes.length - 1];
-                                    }
-                                }
-                            } else if (lastElement.className == 'dialog-task-accordiaon-info') {
+                            // if (lastElement.className == 'dialog-task-run-sec') {
+                            //     var numOfdynamicBlockElements = lastElement.children;
+                            //     for (var i = 0; i < numOfdynamicBlockElements.length; i++) {
+                            //         lastElement = numOfdynamicBlockElements[i];
+                            //         if ($(lastElement).attr("id") == 'dialoguesArea') {
+                            //             let typeInfoRunNodes = lastElement.querySelectorAll('.content-dialog-task-type');
+                            //             lastElement = typeInfoRunNodes[typeInfoRunNodes.length - 1];
+                            //         }
+                            //     }
+                            // } else
+                             if (lastElement.className == 'dialog-task-accordiaon-info') {
                                 let listOfNodes = lastElement.querySelectorAll('.steps-run-data');
                                 let index = 0;
                                 for(let node of listOfNodes){
@@ -2467,8 +2477,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 if (numberOfNewMessages) {
                                     $(".scroll-bottom-btn").addClass("new-messages");
                                     $(".scroll-bottom-btn span").text(numberOfNewMessages + ' new');
+                                }else{
+                                    $(".scroll-bottom-btn span").text('Scroll Bottom');
                                 }
-                                console.log(id, lastElement.id, "id and lastlement id");
                                 if(element.classList.contains('last-msg-white-bg') && id != lastElement.id){
                                     element.classList.remove("last-msg-white-bg");
                                 }
@@ -2478,7 +2489,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
 
                 function getActualRenderedIdList() {
-                    let normalIdsList = ['addRemoveDropDown', 'agentUttInfo', 'automationSuggestions', 'smallTalk'];
+                    let normalIdsList = ['addRemoveDropDown', 'automationSuggestions', 'smallTalk'];
                     let actualRenderedIdList = [];
                     for (let uuid of newlyAddedMessagesUUIDlist) {
                         for (let name of normalIdsList) {
@@ -4237,9 +4248,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     console.log(document.getElementsByClassName('unread-msg'), "unread msg");
                     if (!scrollAtEnd && numberOfNewMessages && document.getElementsByClassName('unread-msg').length == 0) {
                         console.log("inside unread message", newlyAddedIdList);
-                        if (document.getElementsByClassName('unread-msg')) {
-                            $('.unread-msg').remove();
-                        }
+                        // if (document.getElementsByClassName('unread-msg')) {
+                        //     $('.unread-msg').remove();
+                        // }
                         let unreadHtml = ` <div class="unread-msg">
                         <div class="text-dialog-task-end">Unread Messages</div>     
                                    </div>`;
@@ -4299,7 +4310,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                    </div>
             
         `;
-                    endOfDialoge.append(endofDialogeHtml);
+                    if(!document.getElementById('endTaks-' + dropdownHeaderUuids)){
+                        endOfDialoge.append(endofDialogeHtml);
+                    }
                     $(`.customer-feeling-text`).addClass('bottom-95');
                     setTimeout(() => {
                         dropdownHeaderUuids = undefined;
@@ -4648,7 +4661,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
         </div>
         
         <div class="fedback-success-notification">
-            <div class="icon-block">
+            <div class="bg-color-icon-block">
                 <i class="ast-thumb-new"></i>
             </div>
             <div class="success-title">Thank you! Your feedback helps us improve your experience.</div>
