@@ -266,7 +266,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     AgentAssistPubSub.publish('automation_exhaustive_list',
                         { conversationId: _agentAssistDataObj.conversationId, botId: _agentAssistDataObj.botId, 'experience': 'chat' });
                     _agentAsisstSocket.on('user_message', (data) => {
-                        updateNumberOfMessages();
+                        // updateNumberOfMessages();
                         processUserMessage(data, data.conversationId, _botId);
                         userMessage = data;
                     });
@@ -337,7 +337,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     'id': _agentAssistDataObj.conversationId
                 }
 
-                console.log("AgentAssist >>> sending welcome_message_request")
                 _agentAsisstSocket.emit('welcome_message_request', welcome_message_request);
 
                 if (isCallConversation === 'true') {
@@ -1015,140 +1014,57 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     numberOfNewMessages += 1;
                     $(".scroll-bottom-btn").addClass("new-messages");
                     $(".scroll-bottom-btn span").text(numberOfNewMessages + ' new');
+                    if(numberOfNewMessages == 1){
+                        removeWhiteBackgroundToSeenMessages();
+                    }
                 }
 
                 function addIconClassToNewMessage(){
-                    let beforeLastElement = document.getElementsByClassName('bg-color-icon-block');
-                    console.log(beforeLastElement, "before last icon element");
+                    let lastElement = getLastElement('dynamicBlock');
+                    let beforeLastElement = document.getElementsByClassName('icon-block');
                     if(beforeLastElement){
-                        $(beforeLastElement).removeClass("bg-color-icon-block");
+                        $(beforeLastElement).removeClass("icon-block");
                     }
-                    var iconBlockElements = element.querySelectorAll('.icon_block');
+                    var iconBlockElements = lastElement.querySelectorAll('.icon_block');
                     for (let i = 0; i < iconBlockElements.length; i++) {
                         let iconElement = iconBlockElements[i];
                         if (i == (iconBlockElements.length - 1)) {
-                            $(iconElement).addClass("bg-color-icon-block");
+                            $(iconElement).addClass("icon-block");
                         }
                     }
                 }
 
+                function removeWhiteBackgroundToSeenMessages(){
+                     let beforeLastElementArray = document.querySelectorAll('.last-msg-white-bg');
+                    for(let ele of beforeLastElementArray){
+                        $(ele).removeClass("last-msg-white-bg");
+                    }
+                }
+
+
                 function addWhiteBackgroundClassToNewMessage(){
-                    let beforeLastElement = document.getElementsByClassName('last-msg-white-bg');
-                    console.log(beforeLastElement, "before last element");
-                    if(beforeLastElement){
-                        $(beforeLastElement).removeClass("last-msg-white-bg");
+                    let beforeLastElementArray = document.querySelectorAll('.last-msg-white-bg');
+                    for(let ele of beforeLastElementArray){
+                        if(ele && scrollAtEnd){
+                            $(ele).removeClass("last-msg-white-bg");
+                        }
                     }
                     let lastElement = getLastElement('dynamicBlock');
                     $(lastElement).addClass("last-msg-white-bg");
-                    console.log(lastElement, "lastElement");
-                }
-
-                function changeNewMessageBackground(element) {
-                    changeNewMessageIcon(element);
-                    if (element.className == 'agent-utt-info') {
-                        changeBackgroundColor(element, 'white');
-                    } else if (element.className == 'dialog-task-run-sec') {
-                        changeBackgroundColor(element, 'white');
-                    } else if (element.className == 'dialog-task-accordiaon-info') {
-                        changeBackgroundColor(element, "white");
-                        let accordionInfoChildren = element.children;
-                        for (let i = 0; i < accordionInfoChildren.length; i++) {
-                            let accordionElement = accordionInfoChildren[i];
-                            if (accordionElement.className == 'collapse-acc-data') {
-                                //steps-run-data nodes finding last element
-                                let listOfStepsNodes = accordionElement.querySelectorAll('.steps-run-data');
-                                for (let node of listOfStepsNodes) {
-                                    changeBackgroundColor(node, '#f3f7ff');
-                                }
-                                let stepsLastElement = Array.from(listOfStepsNodes).pop();
-                                changeBackgroundColor(stepsLastElement, 'white');
-
-                                // feedback node finding last element
-                                let listOfFeedbackNodes = accordionElement.querySelectorAll('.feedback-data');
-                                for (let node of listOfFeedbackNodes) {
-                                    changeBackgroundColor(node, '#f3f7ff');
-                                }
-                                let feedbackLastElement = Array.from(listOfFeedbackNodes).pop();
-                                changeBackgroundColor(feedbackLastElement, 'white');
-
-
-                            } else if (accordionElement.className == 'accordion-header') {
-                                changeBackgroundColor(accordionElement, '#f3f7ff');
-                            }
-                        }
-                    } else if (element.className == 'collapse-acc-data') {
-                        changeBackgroundColor(element, 'white');
+                    if(lastElement.nextElementSibling && lastElement.nextElementSibling.className == 'feedback-data'){
+                        lastElement.nextElementSibling.classList.add('last-msg-white-bg');
                     }
-                }
-
-                function updateOldMessageIcon() {
-                    var dynamicBlockElement = document.getElementById('dynamicBlock');
-                    var iconBlockElements = dynamicBlockElement.querySelectorAll('.icon_block');
-                    for (let i = 0; i < iconBlockElements.length; i++) {
-                        let iconElement = iconBlockElements[i];
-                        changeBackgroundColor(iconElement, "#ffffff");
-                        iconElement.style.color = "#009dab";
-                    }
-                }
-
-                // function updateOldFaqList(){
-                //     var dynamicBlockElement = document.getElementById('dynamicBlock');
-                //     var numOfdynamicBlockElements = dynamicBlockElement.children;
-                //     let eachElement = '';
-                //     for (var i = 0; i < numOfdynamicBlockElements.length; i++) {
-                //         eachElement = numOfdynamicBlockElements[i]; 
-                //         if(eachElement.className == 'dialog-task-run-sec'){
-                //             let childrunsec = Array.from(eachElement.children);
-                //             childrunsec.forEach(element =>{
-                //                 if(element.id == 'faqssArea'){
-                //                     let faqsList = element.querySelectorAll('type-info-run-send');
-                //                     console.log(faqsList, "faqslist");
-                //                     // for(let faq of faqsList){
-
-                //                     // }
-                //                 }
-                //             })
-                //         }
-                //     }
-                // }
-
-                function changeNewMessageIcon(element) {
-                    var iconBlockElements = element.querySelectorAll('.icon_block');
-                    for (let i = 0; i < iconBlockElements.length; i++) {
-                        let iconElement = iconBlockElements[i];
-                        if (i == (iconBlockElements.length - 1)) {
-                            changeBackgroundColor(iconElement, "#009dab");
-                            iconElement.style.color = "white";
+                    let lastElementId = $(lastElement).parent().attr('id');
+                    if(lastElementId){
+                        let uuid = lastElementId.split('-');
+                        uuid.shift();
+                        uuid = uuid.join('-');
+                        console.log(uuid, "uuid");
+                        let endofTaskId = 'endTaks-' + uuid;
+                        if(document.getElementById(endofTaskId)){
+                            document.getElementById(endofTaskId).classList.add('last-msg-white-bg');
                         }
                     }
-                }
-
-                function updateOldMessagesBackground() {
-
-                    let classList = ['collapse-acc-data', 'agent-utt-info', 'dialog-task-run-sec', 'dialog-task-accordiaon-info']
-                    let eachElement = ''
-                    var dynamicBlockElements = document.getElementById('dynamicBlock');
-                    var numOfdynamicBlockElements = dynamicBlockElements.children;
-                    let lastElement = '';
-                    for (var i = 0; i < numOfdynamicBlockElements.length; i++) {
-                        eachElement = numOfdynamicBlockElements[i];
-                        if (classList.indexOf(eachElement.className) != -1) {
-                            changeBackgroundColor(eachElement, "#f3f7ff");
-                        }
-                        lastElement = numOfdynamicBlockElements[i];
-                    }
-                    changeNewMessageBackground(lastElement);
-                    
-                }
-
-                function changeBackgroundColor(element, color, action) {
-                    $(element).attr('style', function () {
-                        if (this.style.hasOwnProperty('background-color')) {
-                            this.style.removeProperty('background-color');
-                        }
-                        return this.style.cssText + 'background-color:' + color + ';';
-                    })
-                    // element.style.backgroundColor = color;
                 }
 
                 function processAgentAssistResponse(data, convId, botId) {
@@ -1641,10 +1557,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     if (scrollAtEnd) {
                         scrollToBottom();
                     }
-                    // updateOldMessagesBackground();
                     addWhiteBackgroundClassToNewMessage();
                     addIconClassToNewMessage();
-                    // updateOldMessageIcon();
                 }
 
                 function processTranscriptData(data, conversationId, botid) {
@@ -2513,19 +2427,23 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             for (var i = 0; i < numOfdynamicBlockElements.length; i++) {
                                 lastElement = numOfdynamicBlockElements[i];
                             }
-                            if (lastElement.className == 'dialog-task-run-sec') {
-                                var numOfdynamicBlockElements = lastElement.children;
-                                for (var i = 0; i < numOfdynamicBlockElements.length; i++) {
-                                    lastElement = numOfdynamicBlockElements[i];
-                                    console.log($(lastElement).attr("id"), "attribute id");
-                                    if ($(lastElement).attr("id") == 'dialoguesArea') {
-                                        let typeInfoRunNodes = lastElement.querySelectorAll('.content-dialog-task-type');
-                                        console.log(typeInfoRunNodes, "type info run nodes");
-                                        lastElement = typeInfoRunNodes[typeInfoRunNodes.length - 1];
-                                    }
-                                }
-                            } else if (lastElement.className == 'dialog-task-accordiaon-info') {
+                            // if (lastElement.className == 'dialog-task-run-sec') {
+                            //     var numOfdynamicBlockElements = lastElement.children;
+                            //     for (var i = 0; i < numOfdynamicBlockElements.length; i++) {
+                            //         lastElement = numOfdynamicBlockElements[i];
+                            //         if ($(lastElement).attr("id") == 'dialoguesArea') {
+                            //             let typeInfoRunNodes = lastElement.querySelectorAll('.content-dialog-task-type');
+                            //             lastElement = typeInfoRunNodes[typeInfoRunNodes.length - 1];
+                            //         }
+                            //     }
+                            // } else
+                             if (lastElement.className == 'dialog-task-accordiaon-info') {
                                 let listOfNodes = lastElement.querySelectorAll('.steps-run-data');
+                                let index = 0;
+                                for(let node of listOfNodes){
+                                    $(node).attr('id', 'steps-run-data-' + lastElement.id + index);
+                                    index++;
+                                }
                                 lastElement = Array.from(listOfNodes).pop();
                             }
                         }
@@ -2535,16 +2453,18 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                 function updateNewMessageUUIDList(responseId) {
                     if (!scrollAtEnd) {
+                        console.log(numberOfNewMessages, "update new message uuid list");
                         if (numberOfNewMessages) {
                             if (newlyAddedMessagesUUIDlist.indexOf(responseId) == -1) {
                                 newlyAddedMessagesUUIDlist.push(responseId);
                                 newlyAddedIdList = getActualRenderedIdList();
                             }
                         }
+                        addUnreadMessageHtml();  
                     }
                 }
 
-                function updateNewMessageCount() {
+                function updateNewMessageCount(lastElement) {
                     for (let id of newlyAddedIdList) {
                         let element = document.getElementById(id);
                         if (element) {
@@ -2557,6 +2477,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 if (numberOfNewMessages) {
                                     $(".scroll-bottom-btn").addClass("new-messages");
                                     $(".scroll-bottom-btn span").text(numberOfNewMessages + ' new');
+                                }else{
+                                    $(".scroll-bottom-btn span").text('Scroll Bottom');
+                                }
+                                if(element.classList.contains('last-msg-white-bg') && id != lastElement.id){
+                                    element.classList.remove("last-msg-white-bg");
                                 }
                             }
                         }
@@ -2564,7 +2489,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
 
                 function getActualRenderedIdList() {
-                    let normalIdsList = ['addRemoveDropDown', 'agentUttInfo', 'automationSuggestions', 'smallTalk'];
+                    let normalIdsList = ['addRemoveDropDown', 'automationSuggestions', 'smallTalk'];
                     let actualRenderedIdList = [];
                     for (let uuid of newlyAddedMessagesUUIDlist) {
                         for (let name of normalIdsList) {
@@ -2603,14 +2528,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     return childIdList;
                 }
 
-                function scrollToEle(element) {
-                    var _PanelEle = $(element);
+                function scrollToEle(id) {
+                    var _PanelEle = $('#'+id);
                     if (_PanelEle) {
                         var _container = _PanelEle.closest('.body-data-container');
                         if (_container && _container.offset()) {
                             var _scrollHeight = _PanelEle.offset().top - _container.offset().top + _container.scrollTop();
                             _container.animate({
-                                scrollTop: _scrollHeight
+                            scrollTop: _scrollHeight
                             }, 'slow');
                         }
                     }
@@ -2628,19 +2553,18 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                     document.querySelector('#bodyContainer').addEventListener('ps-scroll-down', (scrollDownevent) => {
                         //newly added elements scroll view
-
-                        updateNewMessageCount();
-                        //last element scroll view
+                        //get last element call should be before update message count;
                         lastelement = getLastElement('dynamicBlock');
+                        updateNewMessageCount(lastelement);
                         scrollAtEnd = !isScrolledIntoView(lastelement) ? true : false;
                         if (scrollAtEnd) {
                             $(".scroll-bottom-show-btn").addClass('hide');
+                            $('.unread-msg').remove();
                         }
                     });
 
                     document.querySelector('#bodyContainer').addEventListener('ps-y-reach-end', (scrollEndevent) => {
                         $(".scroll-bottom-show-btn").addClass('hide');
-                        $('.unread-msg').addClass('hide');
                         numberOfNewMessages = 0;
                         newlyAddedMessagesUUIDlist = [];
                         newlyAddedIdList = [];
@@ -2678,10 +2602,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                         if (target.className.includes('scroll-bottom-btn')) {
                             let newElementsHeight = getNewlyAddedElementsHeights();
-                            console.log(newElementsHeight, "new elements height", $("#bodyContainer").prop("scrollHeight"));
                             if (newElementsHeight) {
-                                // $("#bodyContainer").scrollTop(newElementsHeight);
-                                scrollToEle(lastElementBeforeNewMessage);
+                                scrollToEle(lastElementBeforeNewMessage.id);
 
                             } else {
                                 scrollToBottom();
@@ -2689,16 +2611,16 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             // $("#bodyContainer").perfectScrollbar('update');
                             if ($(".scroll-bottom-btn span").text().includes('new')) {
                                 console.log(newlyAddedIdList, "id list");
-                                if (!scrollAtEnd && numberOfNewMessages > 0) {
-                                    for (let i = 0; i < newlyAddedIdList.length; i++) {
-                                        if (document.getElementById(newlyAddedIdList[i])) {
-                                            let elements = document.getElementById(newlyAddedIdList[i]);
-                                            elements?.insertAdjacentHTML('beforeBegin', addUnreadMessageHtml());
-                                            break;
-                                        }
-                                    }
+                                // if (!scrollAtEnd && numberOfNewMessages > 0) {
+                                //     for (let i = 0; i < newlyAddedIdList.length; i++) {
+                                //         if (document.getElementById(newlyAddedIdList[i])) {
+                                //             let elements = document.getElementById(newlyAddedIdList[i]);
+                                //             elements?.insertAdjacentHTML('beforeBegin', addUnreadMessageHtml());
+                                //             break;
+                                //         }
+                                //     }
 
-                                }
+                                // }
                             }
                         }
 
@@ -4190,7 +4112,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     $("#historyDataForMyBot").addClass('hide');
                     isShowHistoryEnable = false;
                     console.log('-----> User Automation Tab Active State <-----');
-                    document.getElementById(`history-details-btn`).classList.remove('hide');
+                    // document.getElementById(`history-details-btn`).classList.remove('hide');
                     $('.show-back-recommendation-block').addClass('hide');
                     document.getElementById(`agentAutoIcon`).classList.remove(`active-tab`);
                     document.getElementById(`transcriptIcon`).classList.remove(`active-tab`);
@@ -4326,13 +4248,25 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
 
                 function addUnreadMessageHtml() {
-                    if (document.getElementsByClassName('.unread-msg')) {
-                        $('.unread-msg').remove();
+                    console.log("outside number of new messages", numberOfNewMessages);
+                    console.log(document.getElementsByClassName('unread-msg'), "unread msg");
+                    if (!scrollAtEnd && numberOfNewMessages && document.getElementsByClassName('unread-msg').length == 0) {
+                        console.log("inside unread message", newlyAddedIdList);
+                        // if (document.getElementsByClassName('unread-msg')) {
+                        //     $('.unread-msg').remove();
+                        // }
+                        let unreadHtml = ` <div class="unread-msg">
+                        <div class="text-dialog-task-end">Unread Messages</div>     
+                                   </div>`;
+
+                        for (let i = 0; i < newlyAddedIdList.length; i++) {
+                            if (document.getElementById(newlyAddedIdList[i])) {
+                                let elements = document.getElementById(newlyAddedIdList[i]);
+                                elements?.insertAdjacentHTML('beforeBegin', unreadHtml);
+                                break;
+                            }
+                        }
                     }
-                    let unreadHtml = ` <div class="unread-msg">
-                    <div class="text-dialog-task-end">Unread Messages</div>     
-                               </div>`;
-                    return unreadHtml;
                 }
 
                 function addFeedbackHtmlToDom(data, botId, userIntentInput, runForAgentBot) {
@@ -4380,7 +4314,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                    </div>
             
         `;
-                    endOfDialoge.append(endofDialogeHtml);
+                    if(!document.getElementById('endTaks-' + dropdownHeaderUuids)){
+                        endOfDialoge.append(endofDialogeHtml);
+                    }
                     $(`.customer-feeling-text`).addClass('bottom-95');
                     setTimeout(() => {
                         dropdownHeaderUuids = undefined;
@@ -4567,7 +4503,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             <div class="dialog-task-data" id="dynamicBlocksData">
 
                 <div class="dynamic-block-content" id="dynamicBlock">
-                    <div class="show-history-block" id="history-details-btn">
+                    <div class="show-history-block hide" id="history-details-btn">
                         <button id="showHistory" class="ghost-btn">Show history</button>
                     </div>
                     <div class="show-back-recommendation-block hide">
@@ -4729,7 +4665,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
         </div>
         
         <div class="fedback-success-notification">
-            <div class="icon-block">
+            <div class="bg-color-icon-block">
                 <i class="ast-thumb-new"></i>
             </div>
             <div class="success-title">Thank you! Your feedback helps us improve your experience.</div>
