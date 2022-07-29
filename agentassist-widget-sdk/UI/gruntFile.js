@@ -166,6 +166,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-concat-css');
 
     // the default task can be run just by typing "grunt" on the command line
-    grunt.registerTask('default', ['clean','concat','copy', 'cssmin']);
+    grunt.registerTask('default', ['clean','concat','copy', 'cssmin', 'uglify']);
 
 };
