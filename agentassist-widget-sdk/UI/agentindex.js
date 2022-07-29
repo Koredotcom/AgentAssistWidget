@@ -2833,20 +2833,24 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
 
                         if (target.id === `searchAutoIcon` || target.id === `searchIcon` || target.id === `LibraryLabel`) {
+                            $("#bodyContainer").scrollTop(0);
                             data = _agentAssistDataObj
                             updateCurrentTabInState(_conversationId, 'librarySearch')
                             libraryTabActive();
                         }
                         else if (target.id === `agentAutoIcon` || target.id === `agentBotIcon` || target.id === `MybotLabel`) {
+                            $("#bodyContainer").scrollTop(0);
                             updateCurrentTabInState(_conversationId, 'myBotTab')
                             agentTabActive();
                         }
                         else if (target.id === `transcriptIcon` || target.id === `scriptIcon` || target.id === `transcriptLabel`) {
+                            $("#bodyContainer").scrollTop(0);
                             updateCurrentTabInState(_conversationId, 'transcriptTab')
                             transcriptionTabActive();
                             currentTabActive = 'transcriptIcon';
                         }
                         else if (target.id === `userAutoIcon` || target.id === `userBotIcon` || target.id === `AssistLabel`) {
+                            $("#bodyContainer").scrollTop(0)
                             updateCurrentTabInState(_conversationId, 'assistTab')
                             userTabActive();
                             //  updateUIState(_conversationId, isCallConversation);
