@@ -24,7 +24,6 @@ exports.handler = function(context, event, callback) {
         }
         const token = jwt.sign(data, process.env.clientSecret, { algorithm: 'HS256' }, {expiresIn: '1d'});
         response.appendHeader('Content-Type', 'application/json');
-        
         response.setBody({'token': token,
                           'agentassistURL' : agentassistURL,
                           'smartassistURL' : smartassistURL,

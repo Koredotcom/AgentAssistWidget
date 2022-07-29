@@ -17,6 +17,7 @@ cp $file_name AgentAssist-function/.env
 sleep 5s
 
 echo "Agent assist function deployment starts............"
+cp $file_name AgentAssist/.env
 cd AgentAssist-function
 sh setup.sh
 echo "Agent Assist function deployed."

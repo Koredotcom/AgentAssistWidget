@@ -34,15 +34,13 @@ export default class AgentAssistPlugin extends FlexPlugin {
 
     // )
     // flex.AgentDesktopView.Panel1.Content.add(<CustomTaskListContainer key="AgentAssistPlugin-component" />, options);
-    flex.AgentDesktopView.Panel2.Content.remove('container');
-    flex.AgentDesktopView.Panel2.Content.add(<CustomTaskListContainer key="AgentAssistPlugin-component" />)
-
+    // flex.AgentDesktopView.Panel2.Content.remove('container');
+    flex.AgentDesktopView.Panel2.Content.replace(<CustomTaskListContainer key="AgentAssistPlugin-component" />)
 
     manager.strings.NoTasks = "Welcome to Twilio flex, This page is for Kore.AI";
-
     const currentFlexConfig = Twilio.Flex.Manager.getInstance().serviceConfiguration.attributes;
     console.log(currentFlexConfig);
-
+    console.log(Twilio.Flex.Manager.events);
     let serverlessURL = currentFlexConfig?.kore_agent_assist?.runtime_service;
     console.log("********* serverless URL *********");
     console.log(serverlessURL);
@@ -55,31 +53,46 @@ export default class AgentAssistPlugin extends FlexPlugin {
         payload.task.attributes
       ) {
 
-      const { agentassistURL, token, smartassistURL, botId, isCall = true } = funcResponse.data
-
-      let conversationid = payload?.task?.attributes["caller"]
-      conversationid = conversationid.replace("+", "%2B");
+        let { agentassistURL, token, smartassistURL, botId, isCall} = funcResponse.data;
+        let conversationid;
+        debugger
+        if(payload.task.channelType === "voice"){
+          isCall = true;
+          conversationid = payload?.task?.attributes["caller"];
+          conversationid = conversationid.replace("+", "%2B");
+        }else{
+          isCall = false;
+          conversationid = payload.task.attributes.conversationSid;
+          const manager = Twilio.Flex.Manager.getInstance();
+          console.log(flex.ChatEventEmitter);
+        }
       // conversationid = "14152367315";
-      console.log("---------------->",conversationid);
+      console.log("---------------->",conversationid, "isCall----->", isCall);
       let iframeURL = `${agentassistURL}/koreagentassist-sdk/UI/agentassist-iframe.html?token=${token}&botid=${botId}&agentassisturl=${smartassistURL}&conversationid=${conversationid}&source=smartassist&isCall=${isCall}`;
       console.log("Iframe URL ====>  ", iframeURL);
+
       manager.store.dispatch({type:"IFRAME_URL", iframeUrl:`${iframeURL}`})
+
       }
       // no account number found
       else {
         console.log("Error in Payload")
       }
+      
     });
     flex.Actions.addListener('afterCompleteTask', (payload) => {
       console.log("completing the task", payload);
       manager.store.dispatch({type:"IFRAME_URL", iframeUrl:`about:blank`})
     });
+
+   
     const body = {
       Token: manager.store.getState().flex.session.ssoTokenPayload.token,
       identity: "number"
     };
 
     // getting generated token from twilio function
+    // serverlessURL = "https://8fb6-115-114-88-222.ngrok.io/sendMessage"
     var funcResponse = await axios.post(serverlessURL, body);
 
     console.log("----------------func----------------------------");

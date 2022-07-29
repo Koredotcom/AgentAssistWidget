@@ -1,6 +1,6 @@
 {
   "name": "AgentAssist",
-  "version": "16.0.0",
+  "version": "10.0.0",
   "private": true,
   "scripts": {
     "postinstall": "flex-plugin pre-script-check"
@@ -13,7 +13,7 @@
     "react-emotion": "9.2.12"
   },
   "devDependencies": {
-    "@twilio/flex-ui": "^1",
+    "@twilio/flex-ui": "^2.0.0-beta.1",
     "react-test-renderer": "17.0.2"
   }
 }
