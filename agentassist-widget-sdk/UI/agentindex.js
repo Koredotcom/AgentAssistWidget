@@ -1050,33 +1050,35 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
                     }
                     let lastElement = getLastElement('dynamicBlock');
-                    $(lastElement).addClass("last-msg-white-bg");
-                    if(!scrollAtEnd){
-                        if(lastElement.id.includes('automationSuggestions')){
-                            let agentUttInfoId = lastElement.id.split('-');
-                            agentUttInfoId.shift();
-                            agentUttInfoId = 'agentUttInfo-' + agentUttInfoId.join('-');
-                            if(document.getElementById(agentUttInfoId)){
-                                $('#'+agentUttInfoId).addClass("last-msg-white-bg");
+                    if(lastElement){
+                        $(lastElement).addClass("last-msg-white-bg");
+                        if(!scrollAtEnd){
+                            if(lastElement.id.includes('automationSuggestions')){
+                                let agentUttInfoId = lastElement.id.split('-');
+                                agentUttInfoId.shift();
+                                agentUttInfoId = 'agentUttInfo-' + agentUttInfoId.join('-');
+                                if(document.getElementById(agentUttInfoId)){
+                                    $('#'+agentUttInfoId).addClass("last-msg-white-bg");
+                                }
                             }
                         }
-                    }
-                    if(lastElement.nextElementSibling && lastElement.nextElementSibling.className == 'feedback-data'){
-                        lastElement.nextElementSibling.classList.add('last-msg-white-bg');
-                    }
-                    let lastElementId = $(lastElement).parent().attr('id');
-                    if(lastElementId){
-                        let uuid = lastElementId.split('-');
-                        uuid.shift();
-                        uuid = uuid.join('-');
-                        console.log(uuid, "uuid");
-                        let endofTaskId = 'endTaks-' + uuid;
-                        if(document.getElementById(endofTaskId)){
-                            document.getElementById(endofTaskId).classList.add('last-msg-white-bg');
+                        if(lastElement.nextElementSibling && lastElement.nextElementSibling.className == 'feedback-data'){
+                            lastElement.nextElementSibling.classList.add('last-msg-white-bg');
                         }
-                        let overridebtnId = 'overRideBtn-' + uuid;
-                        if(document.getElementById(overridebtnId)){
-                            $('#' + overridebtnId).parent().addClass('last-msg-white-bg');
+                        let lastElementId = $(lastElement).parent().attr('id');
+                        if(lastElementId){
+                            let uuid = lastElementId.split('-');
+                            uuid.shift();
+                            uuid = uuid.join('-');
+                            console.log(uuid, "uuid");
+                            let endofTaskId = 'endTaks-' + uuid;
+                            if(document.getElementById(endofTaskId)){
+                                document.getElementById(endofTaskId).classList.add('last-msg-white-bg');
+                            }
+                            let overridebtnId = 'overRideBtn-' + uuid;
+                            if(document.getElementById(overridebtnId)){
+                                $('#' + overridebtnId).parent().addClass('last-msg-white-bg');
+                            }
                         }
                     }
                 }
@@ -2299,13 +2301,23 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }
                 }
 
+                function highLightDialogueTask(evt){
+                    let dialogueTaskElementId = $(evt.target).parent().parent().attr('id');
+                    console.log(dialogueTaskElementId, "faqelement id");
+                    if(document.getElementById(dialogueTaskElementId)){
+                        document.getElementById(dialogueTaskElementId).style.borderStyle = "solid";
+                    }
+                }
+
                 function highLightAndStoreFaqId(evt) {
                     let faqElementId = $(evt.target).parent().parent().attr('id');
-                    let faqParentElementId = $(evt.target).parent().parent().parent().attr('id');
-                    let storedfaqId = faqParentElementId + '_' + faqElementId;
-                    selectedFaqList.push(storedfaqId);
-                    document.getElementById(faqElementId).style.borderStyle = "solid";
-                    setSentFaqListInStorage(_conversationId, storedfaqId, 'assistTab');
+                    if(document.getElementById(faqElementId)){
+                        let faqParentElementId = $(evt.target).parent().parent().parent().attr('id');
+                        let storedfaqId = faqParentElementId + '_' + faqElementId;
+                        selectedFaqList.push(storedfaqId);
+                        document.getElementById(faqElementId).style.borderStyle = "solid";
+                        setSentFaqListInStorage(_conversationId, storedfaqId, 'assistTab');
+                    }
                 }
 
                 function setSentFaqListInStorage(convId, faqId, currentTab) {
@@ -2489,7 +2501,17 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 removedIdListOnScroll.push(id);
                                 newlyAddedIdList = newlyAddedIdList.filter(item => item !== id)
                                 numberOfNewMessages = numberOfNewMessages > 0 ? numberOfNewMessages - 1 : 0;
-                                lastElementBeforeNewMessage = getLastElement(id);
+                                if(id.includes('automationSuggestions')){
+                                    let agentUttInfoId = id.split('-');
+                                    agentUttInfoId.shift();
+                                    agentUttInfoId = 'agentUttInfo-' + agentUttInfoId.join('-');
+                                    if(document.getElementById(agentUttInfoId)){
+                                        lastElementBeforeNewMessage = document.getElementById(agentUttInfoId);
+                                    }
+                                }else{
+                                    lastElementBeforeNewMessage = getLastElement(id);
+                                }
+                                
                                 if (numberOfNewMessages) {
                                     $(".scroll-bottom-btn").addClass("new-messages");
                                     $(".scroll-bottom-btn span").text(numberOfNewMessages + ' new');
@@ -2667,6 +2689,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 payload: payload
                             };
                             parent.postMessage(message, '*');
+                            highLightAndStoreFaqId(evt);
                         }
                         if ((target.className == 'copy-btn' || target.className == 'ast-copy') && sourceType == 'smartassist-color-scheme') {
                             let ele = document.getElementById(`displayData-${target.dataset.msgId}`) ? document.getElementById(`displayData-${target.dataset.msgId}`) : document.getElementById(target.dataset.msgId);
@@ -2674,6 +2697,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 method: "copy",
                                 text: target.dataset.msgData && target.dataset.msgData !== '' ? target.dataset.msgData : (target.parentNode.dataset.msgData && target.parentNode.dataset.msgData !== '' ? target.parentNode.dataset.msgData : ele.innerText)
                             }, "*")
+                            highLightAndStoreFaqId(evt);
                         } else if ((target.className == 'copy-btn' || target.className == 'ast-copy') && sourceType == 'salesforce') {
                             let ele = document.getElementById(`displayData-${target.dataset.msgId}`) ? document.getElementById(`displayData-${target.dataset.msgId}`) : document.getElementById(target.dataset.msgId);
                             let data = target.dataset.msgData && target.dataset.msgData !== '' ? target.dataset.msgData : (target.parentNode.dataset.msgData && target.parentNode.dataset.msgData !== '' ? target.parentNode.dataset.msgData : ele.innerText)
@@ -2683,6 +2707,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 payload: data
                             };
                             parent.postMessage(message, '*');
+                            highLightAndStoreFaqId(evt);
                         }
                         if (target.className == 'ast-close close-search') {
                             $('#agentSearch').val('');
@@ -3779,6 +3804,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 // suggestionsLength.each((i, ele) => {
                                 //     $(ele).addClass('hide');
                                 // })
+                                console.log(target, "target element",target.id, evt);
                                 
                                 _createRunTemplateContiner(uuids, target.dataset.intentName);
                                 let ids = target.id.split('-');
