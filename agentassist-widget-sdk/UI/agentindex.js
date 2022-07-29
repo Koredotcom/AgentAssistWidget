@@ -1452,7 +1452,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         $(noOfSteps[noOfSteps.length - 2]).removeClass('hide').attr('style', 'color:gray');
                         $(noOfSteps[noOfSteps.length - 1]).removeClass('hide');
                     }
-                    if (((data.endOfFaq || data.endOfTask) && data.type !== 'text') || (data.userInput == 'discard all' && data.type !== 'text') || (userMessage && userMessage.value && userMessage.value.includes('discard'))) {
+                    if (isAutomationOnGoing && (((data.endOfFaq || data.endOfTask) && data.type !== 'text') || (data.userInput == 'discard all' && data.type !== 'text') || (userMessage && userMessage.value && userMessage.value.includes('discard')))) {
                         isAutomationOnGoing = false;
                         //  isOverRideMode = false;
                         $('.override-input-div').addClass('hide');
