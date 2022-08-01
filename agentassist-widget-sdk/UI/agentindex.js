@@ -2228,6 +2228,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             });
                         
                         previousResp = response;
+                        scrollToBottom();
                     }).catch(err => {
                         document.getElementById("loader").style.display = "block";
                         console.log("error", err)
@@ -2447,7 +2448,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 function getLastElement(id) {
                     let lastElement = ''
                     var dynamicBlockElements = document.getElementById(id);
-                    if (dynamicBlockElements) {
+                    if(id.includes('smallTalk') && dynamicBlockElements){
+                        lastElement = dynamicBlockElements;
+                    }else if(dynamicBlockElements) {
                         var numOfdynamicBlockElements = dynamicBlockElements.children;
                         if (numOfdynamicBlockElements) {
                             for (var i = 0; i < numOfdynamicBlockElements.length; i++) {
@@ -2567,7 +2570,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
 
                 function scrollToEle(id) {
-                    console.log(id, "scroll to ele");
                     var _PanelEle = $('#'+id);
                     if(id.includes('automationSuggestions')){
                         let agentUttInfoId = id.split('-');
@@ -2576,9 +2578,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         if(document.getElementById(agentUttInfoId)){
                             _PanelEle = $('#' + agentUttInfoId);
                         }
-                        console.log(agentUttInfoId, "aggent utt info id");
                     }
-                    console.log(_PanelEle, "panelement");
                     if (_PanelEle) {
                         var _container = _PanelEle.closest('.body-data-container');
                         if (_container && _container.offset()) {
@@ -2654,7 +2654,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             let newElementsHeight = getNewlyAddedElementsHeights();
                             if (newElementsHeight) {
                                 scrollToEle(lastElementBeforeNewMessage.id);
-
                             } else {
                                 scrollToBottom();
                             }
@@ -2825,9 +2824,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             currentTabActive = 'transcriptIcon';
                         }
                         else if (target.id === `userAutoIcon` || target.id === `userBotIcon` || target.id === `AssistLabel`) {
-                            $("#bodyContainer").scrollTop(0)
                             updateCurrentTabInState(_conversationId, 'assistTab')
                             userTabActive();
+                            scrollToBottom();
                             //  updateUIState(_conversationId, isCallConversation);
 
                         }
