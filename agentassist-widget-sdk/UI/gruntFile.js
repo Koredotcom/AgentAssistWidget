@@ -35,6 +35,7 @@ module.exports = function (grunt) {
             'kore-config.js',
             'libs/kore-no-conflict-end.js',
             'libs/jquery-3.1.1.js',
+            'libs/lottie-loader.js',
             'agentindex.js'
         ];
         cssFiles=[

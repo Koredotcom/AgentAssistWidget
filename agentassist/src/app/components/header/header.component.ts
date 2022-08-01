@@ -121,7 +121,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.pagetitle = "";
       this.ref.detectChanges();
     });
-    if (this.workflowService.getCurrentBt()?._id) {
+
+    if (this.authService.smartAssistBots.map(x=>x._id)) {
       this.initCalls();
     }
     this.initSub = this.workflowService.headerInitCalls$.subscribe(() => {
@@ -150,7 +151,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     if (this.workflowService.getCurrentBt()._id) {
       params = {
         userId: this.authService.getUserId(),
-        streamId: this.workflowService.getCurrentBt()._id,
+        streamId: this.authService.smartAssistBots.map(x=>x._id)
       }
     } else {
       params = {

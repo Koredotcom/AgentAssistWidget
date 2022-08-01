@@ -333,7 +333,8 @@ export class InstallTemplatesComponent implements OnInit {
   getConvStatus(convId: string) {
     const params = {
       userId: this.authService.getUserId(),
-      importId: convId
+      importId: convId,
+      'isAgentAssist':true
     }
     this.service.invoke('get.importconvertbotstatus', params).subscribe(
       res => {

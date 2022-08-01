@@ -8,9 +8,10 @@
     <link href="./../dist/kore-ai-agentassist-sdk.min.css" rel="stylesheet">
     </link>
 
-    <script src="./../dist/kore-ai-agentassist-sdk.combined.js" type="text/javascript"></script>
+    <script src="./../dist/kore-ai-agentassist-sdk.min.js" type="text/javascript"></script>
     <script>
         $(document).ready(function () {
+            console.log('agent assist inside iframe', new Date());
             var chatConfig = window.KoreSDK.chatConfig;
             // $('#botid').val(chatConfig.botOptions.botInfo._id);
             // $('#clientid').val(chatConfig.botOptions.clientId)
@@ -28,6 +29,7 @@
                     isAuthentication: true
                 }
                 function getToken() {
+                    console.log('agent assist inside getToken', new Date());
                     const params = new Proxy(new URLSearchParams(window.location.search), {
                         get: (searchParams, prop) => searchParams.get(prop),
                     });

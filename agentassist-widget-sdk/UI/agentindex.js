@@ -58,7 +58,7 @@ function koreGenerateUUID() {
     return uuid;
 }
 window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, connectionDetails) {
-
+    console.log('inside agentassist constructor')
     try {
         const params = new Proxy(new URLSearchParams(window.location.search), {
             get: (searchParams, prop) => searchParams.get(prop),
@@ -4386,6 +4386,40 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
         <div class="dilog-task-end" id="endTaks-${dropdownHeaderUuids}">
         <div class="text-dialog-task-end">Dialog Task ended</div>     
                    </div>
+                   <div class="feedback-helpul-container hide">
+                    <div class="titles-content">
+                        <div class="title">Helpful?</div>
+                        <div class="btn-positive">
+                            <i class="ast-thumbup"></i>
+                            <span class="tootltip-tabs">Like</span>
+                        </div>
+                        <div class="btn-negtive">
+                            <i class="ast-thumbdown"></i>
+                            <span class="tootltip-tabs">Dislike</span>
+                        </div>
+                        <div class="thanks-update hide">Thanks for the feedback!</div>
+                        <div class="help-improve-arrow">
+                            <div class="title-improve">Help us improve (optional)</div>
+                            <div class="arrow-icon">
+                                <i class="ast-carrotup"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="explore-more-negtive-data">
+                        <div class="btns-group-negtive-chips">
+                            <div class="btn-chip-negtive active-chip">Not enough suggestions</div>
+                            <div class="btn-chip-negtive active-chip">Not prompt</div>
+                            <div class="btn-chip-negtive">Intent undetected</div>
+                            <div class="btn-chip-negtive">Not prompt</div>
+                            <div class="btn-chip-negtive">Other</div>
+                        </div>
+                        <div class="input-block-optional">
+                            <div class="label-text"></div>
+                            <input type="text" placeholder="Placeholder text" class="input-text">
+                        </div>
+                        <button class="submit-btn" disabled>Submit</button>
+                    </div>
+                </div>
             
         `;
                     if(!document.getElementById('endTaks-' + dropdownHeaderUuids)){
@@ -4681,7 +4715,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
         </div>
         
         <div id="loader">
-        <img src="./images/loaderIcon.png">
+        <lottie-player autoplay loop mode="normal" src="./images/loader.json" style="width: 100px"></lottie-player>
         </div>
         <div class="overlay-suggestions hide">
             <div class="suggestion-content" id="overLaySearch">
@@ -4737,94 +4771,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 <img src="./images/bucket.svg">
             </div>
         </div>
-        
-        <div class="fedback-success-notification">
-            <div class="bg-color-icon-block">
-                <i class="ast-thumb-new"></i>
-            </div>
-            <div class="success-title">Thank you! Your feedback helps us improve your experience.</div>
-            <div class="close-feedback">
-                <i class="ast-close"></i>
-            </div>
-        </div>
-
-        <div class="show-bottom-slider-modal">
-            <div class="content-bottom-slider-top">
-                <div class="header-content">
-                    <div class="close-slider">
-                        <i class="ast-close"></i>
-                    </div>
-                    <div class="title-heading">Give Feedback</div>
-                    <div class="desc-text-header">You ran a few automations for in this session. How was your experience?</div>
-                </div>
-                <div class="body-sec-data-slider">
-                    <div class="feedback-row-data">
-                        <div class="label-text">Order Cancellation</div>
-                        <div class="feedback-icons">
-                            <div class="thumbs-icons">
-                                <i class="ast-thumbup"></i>
-                            </div>
-                            <div class="thumbs-icons">
-                                <i class="ast-thumbdown"></i>
-                            </div>
-                        </div>
-                        <input type="text" class="input-text" placeholder="Add a comment">
-                    </div>
-                    <div class="feedback-row-data">
-                        <div class="label-text">Refund Initiation</div>
-                        <div class="feedback-icons">
-                            <div class="thumbs-icons">
-                                <i class="ast-thumbup"></i>
-                            </div>
-                            <div class="thumbs-icons">
-                                <i class="ast-thumbdown"></i>
-                            </div>
-                        </div>
-                        <input type="text" class="input-text" placeholder="Add a comment">
-                    </div>
-                    <div class="feedback-row-data">
-                        <div class="label-text">Order Replacement</div>
-                        <div class="feedback-icons">
-                            <div class="thumbs-icons">
-                                <i class="ast-thumbup"></i>
-                            </div>
-                            <div class="thumbs-icons">
-                                <i class="ast-thumbdown"></i>
-                            </div>
-                        </div>
-                        <textarea placeholder="Add a comment" class="input-text-area"></textarea>
-                    </div>
-                    <div class="feedback-row-data">
-                        <div class="label-text">Order Replacement</div>
-                        <div class="feedback-icons">
-                            <div class="thumbs-icons">
-                                <i class="ast-thumbup"></i>
-                            </div>
-                            <div class="thumbs-icons">
-                                <i class="ast-thumbdown"></i>
-                            </div>
-                        </div>
-                        <input type="text" class="input-text" placeholder="Add a comment">
-                    </div>
-                    <div class="feedback-row-data">
-                        <div class="label-text">New Order </div>
-                        <div class="feedback-icons">
-                            <div class="thumbs-icons">
-                                <i class="ast-thumbup"></i>
-                            </div>
-                            <div class="thumbs-icons">
-                                <i class="ast-thumbdown"></i>
-                            </div>
-                        </div>
-                        <input type="text" class="input-text" placeholder="Add a comment">
-                    </div>
-                </div>
-                <div class="footer-slider-btns">
-                    <button class="submit-btn">Submit</button>
-                    <button class="skip-btn">Skip</button>
-                </div>
-            </div>
-        </div>
         `;
             console.log("AgentAssist >>> adding html")
             // var hrml = `<div>Hello</div>`
@@ -4864,7 +4810,7 @@ function AgentAssist_run_click(e) {
     actualIdArray.shift();
     let actualId = actualIdArray.join('-');
     let showRunForAgentBtn = 'showRunForAgentBtn-' + actualId;
-    if(currentTabActive !== 'searchAutoIcon') {
+    if(currentTabActive == 'userAutoIcon') {
         $("#" + runbtnId).remove();
         $("#" + showRunForAgentBtn).remove();
     }
