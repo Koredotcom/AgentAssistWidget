@@ -31,7 +31,7 @@
     --secondary-color-2:#9AA0A6;
     --secondary-color-3:#979797;
     --default-white-color:#FFFFFF;
-    --theme-color:#009dab;
+    --theme-color:#0D6EFD;
     --border-color:#BDC1C6;
     --border-color-2:#E5E8EC;
     --bg-hover-tabs-color:#F5F8FA;
@@ -948,6 +948,22 @@ html, body{
     display: inline-block;
     width: 100%;
 }
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data.last-child-step-run {
+    z-index: 1;
+    position: relative;
+    margin: 0;
+    padding-top: 0px;
+    margin-top: 10px;
+    padding-bottom: 10px;
+    background: var(--bg-hover-tabs-color);
+}
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .feedback-data.last-child-step-run {
+    z-index: 1;
+    position: relative;
+    margin: 0px;
+    padding-bottom: 15px;
+    background: var(--bg-hover-tabs-color);
+}
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data.last-msg-white-bg{
     width: calc(100% + 68px);
     left: -23px;
@@ -957,24 +973,35 @@ html, body{
     padding-left: 50px;
     padding-right: 45px;
 }
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data.last-child-step-run.last-msg-white-bg::before{
+    content: "";
+    position: absolute;
+    width: 1px;
+    height: 20px;
+    left: 31px;
+    top: 0;
+    z-index: 9;
+    border-left: 1px solid var(--border-color);
+}
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data.last-msg-white-bg .icon_block{
     left: 23px !important;
-    background: transparent !important;
-    color: var(--theme-color) !important;
+    background: var(--theme-color) !important;
+    color : var(--default-white-color) !important;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data .icon_block {
     position: absolute;
     left: 0;
     width: 16px;
     height: 16px;
-    background: var(--theme-color);
     border-radius: 100%;
     font-size: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--default-white-color);
     z-index: 1;
+    /* background: transparent !important; */
+    color: var(--theme-color) !important;
+    background: var(--bg-hover-tabs-color);
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data .icon_block_img {
     position: absolute;
@@ -987,6 +1014,7 @@ html, body{
     justify-content: center;
     color: var(--default-white-color);
     flex-shrink: 0;
+    z-index: 1;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data .icon_block_img img {
     width: 16px;
@@ -1153,6 +1181,12 @@ border: 1px solid transparent !important;
     /* margin-top: 10px;
     padding-bottom: 15px;
     border-bottom: 1px solid #DCE3EA; */
+}
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dilog-task-end.last-msg-white-bg{
+    width: calc(100% + 30px);
+    background: #FFFFFF;
+    top: 0;
+    left: -15px;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dilog-task-end .text-dialog-task-end{
     display: inline-block;
@@ -2553,10 +2587,13 @@ border: 1px solid transparent !important;
 }
 
 .collapse-acc-data {
-    padding: 5px 30px 0px 8px;
+    padding: 5px 30px 0px 25px;
     position: relative;
     display: inline-block;
     width: 100%;
+}
+.collapse-acc-data.before-none::before{
+    display: none;
 }
 .collapse-acc-data::before {
     content: "";
@@ -2564,7 +2601,7 @@ border: 1px solid transparent !important;
     border-left: 1px solid var(--border-color);
     height: 100%;
     top: 0;
-    left: 16px;
+    left: 33px;
 }
 .collapse-acc-data .steps-run-data {
     margin: 10px 0;
@@ -2576,18 +2613,24 @@ border: 1px solid transparent !important;
 .collapse-acc-data.last-msg-white-bg{
     background: #FFFFFF;
 }
+
+.collapse-acc-data.last-msg-white-bg .icon_block{
+    background: var(--theme-color) !important;
+    color : var(--default-white-color) !important;
+}
+
 .collapse-acc-data .steps-run-data .icon_block {
     position: absolute;
     left: 0;
     width: 16px;
     height: 16px;
-    background: var(--theme-color);
+    background: transparent;
     border-radius: 100%;
     font-size: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--default-white-color);
+    color: var(--theme-color);
 }
 .collapse-acc-data .steps-run-data .icon_block_img {
     position: absolute;

@@ -1062,8 +1062,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 }
                             }
                         }
-                        if(lastElement.nextElementSibling && lastElement.nextElementSibling.className == 'feedback-data'){
-                            lastElement.nextElementSibling.classList.add('last-msg-white-bg');
+                        if(lastElement.nextElementSibling && lastElement.nextElementSibling.className.includes('feedback-data')){
+                            lastElement.nextElementSibling.classList.add("last-msg-white-bg");
                         }
                         let lastElementId = $(lastElement).parent().attr('id');
                         if(lastElementId){
@@ -1482,7 +1482,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         let dynamicBlockDiv = $('#dynamicBlock');
                         data.buttons?.forEach((ele, i) => {
                             let welcomeMsgHtml = `
-                            <div class = "collapse-acc-data" id='smallTalk-${uuids}'>
+                            <div class = "collapse-acc-data before-none" id='smallTalk-${uuids}'>
                                 <div class="steps-run-data">
                                     <div class="icon_block">
                                         <i class="ast-agent"></i>
@@ -1524,7 +1524,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 }
                             } else {
                                 let botResHtml = `
-                                <div class="collapse-acc-data" id='smallTalk-${uuids}'>
+                                <div class="collapse-acc-data before-none" id='smallTalk-${uuids}'>
                              <div class="steps-run-data">
                              <div class="icon_block">
                                  <i class="ast-agent"></i>
@@ -1569,12 +1569,16 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         $('.override-input-div').addClass('hide');
                         addFeedbackHtmlToDom(data, botId, userIntentInput);
                         userMessage = {};
+                        let dropDownDataElement = document.getElementById(`dropDownData-${dropdownHeaderUuids}`);
+                        let steprunelementArray = dropDownDataElement.querySelectorAll('.steps-run-data');
+                        let lastStepNode = steprunelementArray[steprunelementArray.length - 1];
+                        $(lastStepNode).addClass('last-child-step-run');
                     }
                     if (scrollAtEnd) {
                         scrollToBottom();
                     }
                     addWhiteBackgroundClassToNewMessage();
-                    addIconClassToNewMessage();
+                    // addIconClassToNewMessage();
                 }
 
                 function processTranscriptData(data, conversationId, botid) {
@@ -2196,7 +2200,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         let dynamicBlockDiv = $('#dynamicBlock');
                                         res.components?.forEach((ele, i) => {
                                             let welcomeMsgHtml = `
-                                            <div class = "collapse-acc-data" id='smallTalk-${res._id}'>
+                                            <div class = "collapse-acc-data before-none" id='smallTalk-${res._id}'>
                                                 <div class="steps-run-data">
                                                     <div class="icon_block">
                                                         <i class="ast-agent"></i>
@@ -2238,7 +2242,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                 }
                                             } else {
                                                 let botResHtml = `
-                                                <div class="collapse-acc-data" id='smallTalk-${res._id}'>
+                                                <div class="collapse-acc-data before-none" id='smallTalk-${res._id}'>
                                              <div class="steps-run-data">
                                              <div class="icon_block">
                                                  <i class="ast-agent"></i>
@@ -4425,7 +4429,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }
                     // $(`#addRemoveDropDown-${dropdownHeaderUuids} .btn-danger`).remove();
                     let feedbackHtml = ` 
-        <div class="feedback-data">
+        <div class="feedback-data last-child-step-run">
         <div class="feedbackup-data" id="feedBackLikeContainer-${dropdownHeaderUuids}">
             <div class="feedback-icon" id="feedbackup-${dropdownHeaderUuids}" data-feedbacklike="false"
             data-conv-id="${data.conversationId}"
