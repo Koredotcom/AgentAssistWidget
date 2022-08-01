@@ -222,10 +222,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         var appState = JSON.parse(appStateStr);
                         if (appState[_conversationId]) {
                             // if incoming data belongs to welcome message do nothing
-                            let taskid = $(`#dropDownData-${dropdownHeaderUuids}`).attr('data-taskId');
-                            let runInfoDivOfwelcome = $(`#dynamicBlock .collapse-acc-data .run-info-content`).attr('data-welcome-msg');
-                            if (!data.suggestions && data.buttons?.length > 1 && runInfoDivOfwelcome && runInfoDivOfwelcome !== 'true') {
-                                if (appState[_conversationId].isWelcomeProcessed) {
+                            if (!data.suggestions && data.buttons?.length > 1) {
+                                if (appState[_conversationId].isWelcomeProcessed && !appState[_conversationId].automationGoingOn) {
                                     return;
                                 }
                             }
@@ -865,9 +863,16 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     data.buttons?.forEach((elem) => {
                         let payloadType = (elem.value).replace(/(&quot\;)/g, "\"");
 
-                        if (payloadType.indexOf('text') !== -1 || payloadType.indexOf('payload') !== -1) {
-                            let withoutSpecials = payloadType.replace(/^\s+|\s+$/g, "");
-                            parsedPayload = JSON.parse(withoutSpecials);
+                        try {
+                            if (payloadType.indexOf('text') !== -1 || payloadType.indexOf('payload') !== -1) {
+                                let withoutSpecials = payloadType.replace(/^\s+|\s+$/g, "");
+                                parsedPayload = JSON.parse(withoutSpecials);
+                            }
+                        }catch(error){
+                            if(payloadType.text){
+                                let withoutSpecials = payloadType.replace(/^\s+|\s+$/g, "");
+                                parsedPayload = withoutSpecials;
+                            }
                         }
 
                         let body = {};
@@ -1266,10 +1271,18 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     let parsedPayload;
                     data.buttons?.forEach((elem) => {
                         let payloadType = (elem.value).replace(/(&quot\;)/g, "\"");
-                        if (payloadType.indexOf('text') !== -1 || payloadType.indexOf('payload') !== -1) {
-                            let withoutSpecials = payloadType.replace(/^\s+|\s+$/g, "");
-                            parsedPayload = JSON.parse(withoutSpecials);
+                        try {
+                            if (payloadType.indexOf('text') !== -1 || payloadType.indexOf('payload') !== -1) {
+                                let withoutSpecials = payloadType.replace(/^\s+|\s+$/g, "");
+                                parsedPayload = JSON.parse(withoutSpecials);
+                            }
+                        }catch(error){
+                            if(payloadType.text){
+                                let withoutSpecials = payloadType.replace(/^\s+|\s+$/g, "");
+                                parsedPayload = withoutSpecials;
+                            }
                         }
+                       
 
                         let body = {};
                         body['type'] = elem.type;
@@ -1449,6 +1462,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }
                     if (((data.endOfFaq || data.endOfTask) && data.type !== 'text') || (data.userInput == 'discard all' && data.type !== 'text') || (userMessage && userMessage.value && userMessage.value.includes('discard'))) {
                         isAutomationOnGoing = false;
+                        var appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                        var appState = JSON.parse(appStateStr);
+                        if (appState[_conversationId]) {
+                            appState[_conversationId].automationGoingOn = isAutomationOnGoing;
+                            localStorage.setItem('agentAssistState', JSON.stringify(appState))
+                        }
                         //  isOverRideMode = false;
                         $('.override-input-div').addClass('hide');
                         addFeedbackHtmlToDom(data, botId, userIntentInput);
@@ -1597,6 +1616,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     } 
                     if (!_data.suggestions && _data.buttons?.length > 1) {
                         convState['isWelcomeProcessed'] = true;
+                        convState['automationGoingOn'] = isAutomationOnGoing 
                     }
                     let stateItems = convState[_tabName]['stateItems'];
                     if (stateItems.length >= 2) {
@@ -2280,9 +2300,16 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                 res.components?.forEach((elem) => {
                                                     let payloadType = (elem.data?.text).replace(/(&quot\;)/g, "\"");
 
-                                                    if (payloadType.indexOf('text') !== -1 || payloadType.indexOf('payload') !== -1) {
-                                                        let withoutSpecials = payloadType.replace(/^\s+|\s+$/g, "");
-                                                        parsedPayload = JSON.parse(withoutSpecials);
+                                                    try {
+                                                        if (payloadType.indexOf('text') !== -1 || payloadType.indexOf('payload') !== -1) {
+                                                            let withoutSpecials = payloadType.replace(/^\s+|\s+$/g, "");
+                                                            parsedPayload = JSON.parse(withoutSpecials);
+                                                        }
+                                                    }catch(error){
+                                                        if(payloadType.text){
+                                                            let withoutSpecials = payloadType.replace(/^\s+|\s+$/g, "");
+                                                            parsedPayload = withoutSpecials;
+                                                        }
                                                     }
 
                                                     let body = {};
@@ -2602,9 +2629,16 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                 res.components?.forEach((elem) => {
                                                     let payloadType = (elem.data?.text).replace(/(&quot\;)/g, "\"");
 
-                                                    if (payloadType.indexOf('text') !== -1 || payloadType.indexOf('payload') !== -1) {
-                                                        let withoutSpecials = payloadType.replace(/^\s+|\s+$/g, "");
-                                                        parsedPayload = JSON.parse(withoutSpecials);
+                                                    try {
+                                                        if (payloadType.indexOf('text') !== -1 || payloadType.indexOf('payload') !== -1) {
+                                                            let withoutSpecials = payloadType.replace(/^\s+|\s+$/g, "");
+                                                            parsedPayload = JSON.parse(withoutSpecials);
+                                                        }
+                                                    }catch(error){
+                                                        if(payloadType.text){
+                                                            let withoutSpecials = payloadType.replace(/^\s+|\s+$/g, "");
+                                                            parsedPayload = withoutSpecials;
+                                                        }
                                                     }
 
                                                     let body = {};
@@ -2908,6 +2942,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 let uuids = koreGenerateUUID();
                                 dropdownHeaderUuids = uuids;
                                 isAutomationOnGoing = true;
+                                var appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                                var appState = JSON.parse(appStateStr);
+                                if (appState[_conversationId]) {
+                                    appState[_conversationId].automationGoingOn = isAutomationOnGoing;
+                                    localStorage.setItem('agentAssistState', JSON.stringify(appState))
+                                }
                                 for (let a of $('#dynamicBlock .agent-utt-info')) {
                                     a.classList.add('hide');
                                 }
