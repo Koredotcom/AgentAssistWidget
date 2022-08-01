@@ -4865,7 +4865,7 @@ function AgentAssist_run_click(e) {
     actualIdArray.shift();
     let actualId = actualIdArray.join('-');
     let showRunForAgentBtn = 'showRunForAgentBtn-' + actualId;
-    if(currentTabActive !== 'searchAutoIcon') {
+    if(currentTabActive == 'userAutoIcon') {
         $("#" + runbtnId).remove();
         $("#" + showRunForAgentBtn).remove();
     }
