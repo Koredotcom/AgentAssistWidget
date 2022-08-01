@@ -356,32 +356,32 @@ export class EndPointsService {
     //APIs for Usecases START
 
     this.serviceList['get.usecases'] = {
-      endpoint: this.API_SERVER_URL + '/smartassist/apps/:streamId/usecases?limit=:limit&offset=:offset&search=:search&filterby=:filterby&usecaseType=:usecaseType&status=:status',
+      endpoint: this.API_SERVER_URL + '/smartassist/apps/:streamId/usecases?limit=:limit&offset=:offset&search=:search&filterby=:filterby&usecaseType=:usecaseType&status=:status&isAgentAssist=true',
       method: 'get'
     };
 
     this.serviceList['post.createCategory'] = {
-      endpoint: this.API_SERVER_URL + '/smartassist/apps/:streamId/usecases/category',
+      endpoint: this.API_SERVER_URL + '/smartassist/apps/:streamId/usecases/category?isAgentAssist=true',
       method: 'post'
     };
 
     this.serviceList['get.categories'] = {
-      endpoint: this.API_SERVER_URL + '/smartassist/apps/:streamId/usecases/category',
+      endpoint: this.API_SERVER_URL + '/smartassist/apps/:streamId/usecases/category?isAgentAssist=true',
       method: 'get'
     };
 
     this.serviceList['post.createUsecase'] = {
-      endpoint: this.API_SERVER_URL + '/smartassist/apps/:streamId/usecases',
+      endpoint: this.API_SERVER_URL + '/smartassist/apps/:streamId/usecases?isAgentAssist=true',
       method: 'post'
     };
 
     this.serviceList['post.deleteUsecase'] = {
-      endpoint: this.API_SERVER_URL + '/smartassist/apps/:streamId/usecases/:usecaseId',
+      endpoint: this.API_SERVER_URL + '/smartassist/apps/:streamId/usecases/:usecaseId?isAgentAssist=true',
       method: 'delete'
     };
 
     this.serviceList['post.editUsecase'] = {
-      endpoint: this.API_SERVER_URL + '/smartassist/apps/:streamId/usecases/:usecaseId',
+      endpoint: this.API_SERVER_URL + '/smartassist/apps/:streamId/usecases/:usecaseId?isAgentAssist=true',
       method: 'put'
     };
 
@@ -530,7 +530,7 @@ export class EndPointsService {
     }
 
     this.serviceList['post.importbot'] = {
-      endpoint: this.API_SERVER_URL + '/users/:userId/builder/importBot?isAgentAssist=true',
+      endpoint: this.API_SERVER_URL + '/users/:userId/builder/importBot',
       method: 'post'
     };
 
@@ -556,7 +556,7 @@ export class EndPointsService {
     };
 
     this.serviceList['post.importbot.export'] = {
-      endpoint: this.API_SERVER_URL + '/builder/streams/:streamId/export?isAgentAssist=true',
+      endpoint: this.API_SERVER_URL + '/builder/streams/:streamId/export',
       method: 'post'
     };
 
