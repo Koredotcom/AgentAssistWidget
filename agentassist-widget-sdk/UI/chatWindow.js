@@ -403,7 +403,7 @@
                                 hyperLinksMap[_randomKey] = _link;
                                 _link = _randomKey;
                             }
-                            return "<span class='isLink'><a id='linkEvent' target='_blank'  " + _target + " href=\"" + _link + "\">" + match + "</a></span>";
+                            return "<span class='isLink'><a id='linkEvent' target='_blank' " + _target + " href=\"" + _link + "\">" + match + "</a></span>";
                         } else {
                             return match;
                         }
@@ -582,7 +582,7 @@
                                     hyperLinksMap[_randomKey] = _linkLink;
                                     _linkLink = _randomKey;
                                 }
-                                _linkLink = '<span class="isLink"><a id="linkEvent" target="_blank" href="' + _linkLink + '" target="underscoreblank">' + helpers.checkMarkdowns(_linkTxt) + '</a></span>';
+                                _linkLink = '<span class="isLink"><a id="linkEvent" target="_blank"  href="' + _linkLink + '" target="underscoreblank">' + helpers.checkMarkdowns(_linkTxt) + '</a></span>';
                                 txtArr[i] = txtArr[i].replace(_matchLink[j], _linkLink);
                             }
                         }
