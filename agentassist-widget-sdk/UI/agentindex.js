@@ -149,6 +149,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 var koreBot = koreBotChat();
                 AgentChatInitialize = new koreBot.chatWindow(chatConfig);
                 AgentChatInitialize.customTemplateObj = new customTemplate(chatConfig, AgentChatInitialize);
+                let isUpdateFeedBackDetailsFlag = false;
                 let docs = document.getElementById('chat-window-footer');
                 docs.hidden = true;
                 _userTranscript = false;
@@ -156,18 +157,18 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 if (!window._agentAssisteventListenerAdded) {
                     btnInit(containerId);
                     // eventListener for removing the ended currentconversation from the localStorage
-                    window.addEventListener("message", function(e) {
-                    console.log(e.data);//your data is captured in e.data
-                    let currentEndedConversationId = e.data.convsId; 
-                    var appStateStr = localStorage.getItem('agentAssistState') || '{}';
-                    var appState = JSON.parse(appStateStr);
-                    if(appState[currentEndedConversationId]) {
-                        delete appState[currentEndedConversationId];
-                    }
+                    window.addEventListener("message", function (e) {
+                        console.log(e.data);//your data is captured in e.data
+                        let currentEndedConversationId = e.data.convsId;
+                        var appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                        var appState = JSON.parse(appStateStr);
+                        if (appState[currentEndedConversationId]) {
+                            delete appState[currentEndedConversationId];
+                        }
                     });
 
-                    window.addEventListener("message", function(e) {
-                        console.log('event listener message: ',e.data)
+                    window.addEventListener("message", function (e) {
+                        console.log('event listener message: ', e.data)
                         let userInputData = e.data;
                         let agent_assist_request = {
                             'author': {
@@ -179,20 +180,20 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             'conversationId': userInputData.conversationid,
                             'query': userInputData.value,
                         }
-                        if(isCallConversation === 'true') {
-                            if(userInputData.author.type === 'USER') {
+                        if (isCallConversation === 'true') {
+                            if (userInputData.author.type === 'USER') {
                                 console.log('event listener USER Message:')
-                                processTranscriptData(userInputData, userInputData.conversationid, _botId, );
+                                processTranscriptData(userInputData, userInputData.conversationid, _botId,);
                                 _agentAsisstSocket.emit('agent_assist_request', agent_assist_request);
                             } else {
                                 console.log('event listener AGENT Message:')
                                 processAgentMessages(userInputData)
                             }
                         } else {
-                            if(userInputData.author.type === 'USER') {
+                            if (userInputData.author.type === 'USER') {
                                 console.log('event listener AGENT Message:')
                                 _agentAsisstSocket.emit('agent_assist_request', agent_assist_request);
-                             } 
+                            }
                         }
                     })
                 }
@@ -222,19 +223,20 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         var appState = JSON.parse(appStateStr);
                         if (appState[_conversationId]) {
                             // if incoming data belongs to welcome message do nothing
-                            if (!data.suggestions && data.buttons?.length > 1) {
+                            let taskid = $(`#dropDownData-${dropdownHeaderUuids}`).attr('data-taskId');
+                            if (!data.suggestions && data.buttons?.length > 1 && taskid) {
                                 if (appState[_conversationId].isWelcomeProcessed) {
                                     return;
                                 }
                             }
-							shouldProcessResponse = true;
+                            shouldProcessResponse = true;
                         } else {
                             shouldProcessResponse = true;
                         }
                         if (!shouldProcessResponse) {
                             return;
                         }
-                        
+
                         var overRideObj = {
                             "agentId": "",
                             "botId": _botId,
@@ -247,13 +249,18 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         displayCustomerFeels(data, data.conversationId, _botId);
 
                         updateAgentAssistState(_conversationId, 'assistTab', data);
-                        
+
                         processAgentAssistResponse(data, data.conversationId, _botId);
                         document.getElementById("loader").style.display = "none";
                         // document.getElementById("addRemoveDropDown").style.display = "block";
 
                     })
 
+                    _agentAsisstSocket.on('agent_feedback_response', (data) => {
+                        if(isUpdateFeedBackDetailsFlag) {
+                            UpdateFeedBackDetails(data);
+                        }
+                    })
 
                     AgentAssistPubSub.publish('automation_exhaustive_list',
                         { conversationId: _agentAssistDataObj.conversationId, botId: _agentAssistDataObj.botId, 'experience': 'chat' });
@@ -326,7 +333,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     'userName': 'test',
                     'id': _agentAssistDataObj.conversationId
                 }
-               
+
                 console.log("AgentAssist >>> sending welcome_message_request")
                 _agentAsisstSocket.emit('welcome_message_request', welcome_message_request);
 
@@ -618,7 +625,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             });
                         }
                     }
-                    
+
 
                     if (data.isSearch && !answerPlaceableID) {
                         ShowSearchContent();
@@ -642,23 +649,23 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 } else if ((dialogsLength === 0 || dialogsLength === undefined) && (faqsLength > 0)) {
                                     $('#overLaySearch').html(`<div class="search-results-text">${faqsLength} Search results for '${data.userInput}' <span class="show-all hide">Show all</span></div>`)
                                 }
-                                if((dialogsLength + faqsLength)>1){
+                                if ((dialogsLength + faqsLength) > 1) {
                                     $('#overLaySearch').find('.show-all').removeClass('hide');
 
                                 }
                             }
 
                         } else {
-                            if(isSuggestionProcessed) {
+                            if (isSuggestionProcessed) {
                                 if (currentTabActive == 'searchAutoIcon') {
                                     let searchTextDisplay = document.getElementById('search-text-display');
                                     html = `<div class="searched-intent" id="librarySearchText">0 Search results for '${data.userInput}' </div>`
                                     searchTextDisplay.innerHTML = html;
                                 } else {
-                                      $('#overLaySearch').html(`<div class="search-results-text">0 Search results for '${data.userInput}'</div>`)
+                                    $('#overLaySearch').html(`<div class="search-results-text">0 Search results for '${data.userInput}'</div>`)
                                 }
                             }
-                           
+
 
                         }
 
@@ -793,16 +800,16 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         if (data.type === 'text' && data.suggestions) {
                             isSuggestionProcessed = false
                             data.suggestions.faqs.forEach((ele) => {
-                                if(currentTabActive == 'searchAutoIcon'){
-                                    let faqAnswerSendMsg =  $(`#search-text-display #faqDivLib-${answerPlaceableID.split('-')[1]}`).find("[id='sendMsg']");
-                                    $(faqAnswerSendMsg).attr('data-msg-data',ele.answer);
-                                    let faqAnswerCopyMsg =  $(`#search-text-display #faqDivLib-${answerPlaceableID.split('-')[1]}`).find(".copy-btn");
-                                    $(faqAnswerCopyMsg).attr('data-msg-data',ele.answer)
-                                }else{
-                                    let faqAnswerSendMsg =  $(`#overLaySearch #faqDivLib-${answerPlaceableID.split('-')[1]}`).find("[id='sendMsg']");
-                                    $(faqAnswerSendMsg).attr('data-msg-data',ele.answer)
-                                    let faqAnswerCopyMsg =  $(`#overLaySearch #faqDivLib-${answerPlaceableID.split('-')[1]}`).find(".copy-btn");
-                                    $(faqAnswerCopyMsg).attr('data-msg-data',ele.answer)
+                                if (currentTabActive == 'searchAutoIcon') {
+                                    let faqAnswerSendMsg = $(`#search-text-display #faqDivLib-${answerPlaceableID.split('-')[1]}`).find("[id='sendMsg']");
+                                    $(faqAnswerSendMsg).attr('data-msg-data', ele.answer);
+                                    let faqAnswerCopyMsg = $(`#search-text-display #faqDivLib-${answerPlaceableID.split('-')[1]}`).find(".copy-btn");
+                                    $(faqAnswerCopyMsg).attr('data-msg-data', ele.answer)
+                                } else {
+                                    let faqAnswerSendMsg = $(`#overLaySearch #faqDivLib-${answerPlaceableID.split('-')[1]}`).find("[id='sendMsg']");
+                                    $(faqAnswerSendMsg).attr('data-msg-data', ele.answer)
+                                    let faqAnswerCopyMsg = $(`#overLaySearch #faqDivLib-${answerPlaceableID.split('-')[1]}`).find(".copy-btn");
+                                    $(faqAnswerCopyMsg).attr('data-msg-data', ele.answer)
                                 }
 
                                 $(`${currentTabActive == 'searchAutoIcon' ? `#search-text-display #${answerPlaceableID}` : `#overLaySearch #${answerPlaceableID}`}`).html(ele.answer);
@@ -814,8 +821,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                           <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${answerPlaceableID.split('-')[1]}" data-see-less="true">Show less</button>
                           `;
                                     faqs.append(seeMoreButtonHtml);
-                                    $(`#search-text-display .type-info-run-send #faqSectionLib-${answerPlaceableID.split('-')[1]} .ast-carrotup.rotate-carrot`).length>0?$(`#search-text-display #seeMore-${answerPlaceableID.split('-')[1]}`).removeClass('hide'):$(`#search-text-display #seeMore-${answerPlaceableID.split('-')[1]}`).addClass('hide');
-                                    $(`#overLaySearch .type-info-run-send #faqSectionLib-${answerPlaceableID.split('-')[1]} .ast-carrotup.rotate-carrot`).length>0?$(`#overLaySearch #seeMore-${answerPlaceableID.split('-')[1]}`).removeClass('hide'):$(`#overLaySearch #seeMore-${answerPlaceableID.split('-')[1]}`).addClass('hide');
+                                    $(`#search-text-display .type-info-run-send #faqSectionLib-${answerPlaceableID.split('-')[1]} .ast-carrotup.rotate-carrot`).length > 0 ? $(`#search-text-display #seeMore-${answerPlaceableID.split('-')[1]}`).removeClass('hide') : $(`#search-text-display #seeMore-${answerPlaceableID.split('-')[1]}`).addClass('hide');
+                                    $(`#overLaySearch .type-info-run-send #faqSectionLib-${answerPlaceableID.split('-')[1]} .ast-carrotup.rotate-carrot`).length > 0 ? $(`#overLaySearch #seeMore-${answerPlaceableID.split('-')[1]}`).removeClass('hide') : $(`#overLaySearch #seeMore-${answerPlaceableID.split('-')[1]}`).addClass('hide');
                                 }
                             })
                             answerPlaceableID = undefined;
@@ -863,7 +870,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     data.buttons?.forEach((elem) => {
                         let payloadType = (elem.value).replace(/(&quot\;)/g, "\"");
 
-                        if (payloadType.indexOf('text') !== -1 || payloadType.indexOf('payload') !== -1) {
+                        if (payloadType.indexOf('payload') !== -1) {
                             let withoutSpecials = payloadType.replace(/^\s+|\s+$/g, "");
                             parsedPayload = JSON.parse(withoutSpecials);
                         }
@@ -1238,10 +1245,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     } else {
                         if (data.type === 'text' && data.suggestions) {
                             data.suggestions.faqs.forEach((ele) => {
-                               let faqAnswerSendMsg =  $(`#faqDiv-${answerPlaceableID.split('-')[1]}`).find("[id='sendMsg']");
-                               $(faqAnswerSendMsg).attr('data-msg-data',ele.answer)
-                               let faqAnswerCopyMsg =  $(`#faqDiv-${answerPlaceableID.split('-')[1]}`).find(".copy-btn");
-                               $(faqAnswerCopyMsg).attr('data-msg-data',ele.answer)
+                                let faqAnswerSendMsg = $(`#faqDiv-${answerPlaceableID.split('-')[1]}`).find("[id='sendMsg']");
+                                $(faqAnswerSendMsg).attr('data-msg-data', ele.answer)
+                                let faqAnswerCopyMsg = $(`#faqDiv-${answerPlaceableID.split('-')[1]}`).find(".copy-btn");
+                                $(faqAnswerCopyMsg).attr('data-msg-data', ele.answer)
                                 $(`#${answerPlaceableID}`).html(ele.answer);
                                 $(`#${answerPlaceableID}`).attr('data-answer-render', 'true');
                                 if ((ele.question?.length + ele.answer?.length) > 70) {
@@ -1251,7 +1258,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                           <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${answerPlaceableID.split('-')[1]}" data-see-less="true">Show less</button>
                           `;
                                     faqs.append(seeMoreButtonHtml);
-                                    $(`.type-info-run-send #faqSection-${answerPlaceableID.split('-')[1]} .ast-carrotup.rotate-carrot`).length>0?$(`.type-info-run-send #faqSection-${answerPlaceableID.split('-')[1]} #seeMore-${answerPlaceableID.split('-')[1]}`).removeClass('hide'):$(`.type-info-run-send #faqSection-${answerPlaceableID.split('-')[1]} #seeMore-${answerPlaceableID.split('-')[1]}`).addClass('hide');
+                                    $(`.type-info-run-send #faqSection-${answerPlaceableID.split('-')[1]} .ast-carrotup.rotate-carrot`).length > 0 ? $(`.type-info-run-send #faqSection-${answerPlaceableID.split('-')[1]} #seeMore-${answerPlaceableID.split('-')[1]}`).removeClass('hide') : $(`.type-info-run-send #faqSection-${answerPlaceableID.split('-')[1]} #seeMore-${answerPlaceableID.split('-')[1]}`).addClass('hide');
                                 }
                             })
                             answerPlaceableID = undefined;
@@ -1264,7 +1271,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     let parsedPayload;
                     data.buttons?.forEach((elem) => {
                         let payloadType = (elem.value).replace(/(&quot\;)/g, "\"");
-                        if (payloadType.indexOf('text') !== -1 || payloadType.indexOf('payload') !== -1) {
+                        if (payloadType.indexOf('payload') !== -1) {
                             let withoutSpecials = payloadType.replace(/^\s+|\s+$/g, "");
                             parsedPayload = JSON.parse(withoutSpecials);
                         }
@@ -1310,6 +1317,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         $(`#cancelOverRideBtn-${dropdownHeaderUuids}`).addClass('hide');
                         $("#inputFieldForAgent").remove();
                         let runInfoContent = $(`#dropDownData-${dropdownHeaderUuids}`);
+                        $(runInfoContent).attr('data-taskId', data.uniqueTaskId);
                         let askToUserHtml = `
             <div class="steps-run-data">
                            <div class="icon_block">
@@ -1444,7 +1452,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         $(noOfSteps[noOfSteps.length - 2]).removeClass('hide').attr('style', 'color:gray');
                         $(noOfSteps[noOfSteps.length - 1]).removeClass('hide');
                     }
-                    if (((data.endOfFaq || data.endOfTask) && data.type !== 'text') || (data.userInput == 'discard all' && data.type !== 'text') || (userMessage && userMessage.value && userMessage.value.includes('discard'))) {
+                    if (isAutomationOnGoing && (((data.endOfFaq || data.endOfTask) && data.type !== 'text') || (data.userInput == 'discard all' && data.type !== 'text') || (userMessage && userMessage.value && userMessage.value.includes('discard')))) {
                         isAutomationOnGoing = false;
                         //  isOverRideMode = false;
                         $('.override-input-div').addClass('hide');
@@ -1479,10 +1487,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     var ampm = hours >= 12 ? 'pm' : 'am';
                     hours = hours % 12;
                     hours = hours ? hours : 12; // the hour '0' should be '12'
-                    minutes = minutes < 10 ? '0'+minutes : minutes;
+                    minutes = minutes < 10 ? '0' + minutes : minutes;
                     var strTime = hours + ':' + minutes + ' ' + ampm;
                     return strTime;
-                  }
+                }
 
                 function processAgentMessages(data) {
                     let time = new Date();
@@ -1553,7 +1561,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     dynamicBlock.innerHTML += dropdownHtml;
                 }
 
-                function _createRunTemplateContiner(uuids, intentName){
+                function _createRunTemplateContiner(uuids, intentName) {
                     let dynamicBlock = document.getElementById('dynamicBlock');
                     let dropdownHtml = `
        <div class="dialog-task-accordiaon-info hide" id="addRemoveDropDown-${uuids}" >
@@ -1586,35 +1594,35 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     if (!appState[_convId]) {
                         convState = appState[_convId] = {};
                     }
-                    if (!convState[_tabName] ) {
+                    if (!convState[_tabName]) {
                         convState[_tabName] = {};
                     }
                     if (!convState[_tabName]['stateItems']) {
                         convState[_tabName]['stateItems'] = [];
-                    } 
+                    }
                     if (!_data.suggestions && _data.buttons?.length > 1) {
                         convState['isWelcomeProcessed'] = true;
                     }
                     let stateItems = convState[_tabName]['stateItems'];
                     if (stateItems.length >= 2) {
                         let lIntentName = null;
-                        for (let i = stateItems.length-1; (i >= 0 && lIntentName == null); i--) {
-                           let item = JSON.parse(stateItems[i]);
-                           if (item.intentName) {
-                              lIntentName = item.intentName;
-                           }
+                        for (let i = stateItems.length - 1; (i >= 0 && lIntentName == null); i--) {
+                            let item = JSON.parse(stateItems[i]);
+                            if (item.intentName) {
+                                lIntentName = item.intentName;
+                            }
                         }
                         if (!_data.intentName) {
-                           _data.intentName = lIntentName;
+                            _data.intentName = lIntentName;
                         }
-                       if (JSON.parse(stateItems[0]).intentName === _data.intentName ) {
+                        if (JSON.parse(stateItems[0]).intentName === _data.intentName) {
                             stateItems[0] = stateItems[1];
                             stateItems[1] = JSON.stringify(_data);
-                       } else {
-                           stateItems[0] = JSON.stringify(_data);
-                           stateItems.splice(1,1);
-                       }
-                      
+                        } else {
+                            stateItems[0] = JSON.stringify(_data);
+                            stateItems.splice(1, 1);
+                        }
+
                     } else {
                         // let lIntentName = null;
                         // for (let i = stateItems.length-1; (i >= 0 && lIntentName == null); i--) {
@@ -1636,39 +1644,39 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     var appStateStr = localStorage.getItem('agentAssistState') || '{}';
                     var appState = JSON.parse(appStateStr);
                     var convState = appState[_convId] || {};
-                    if(!appState[_convId]) {
-                        convState=appState[_convId] = {}
-                        if(_isCallConv == 'true') {
+                    if (!appState[_convId]) {
+                        convState = appState[_convId] = {}
+                        if (_isCallConv == 'true') {
                             convState.currentTab = 'transcriptTab';
                         } else {
                             convState.currentTab = 'assistTab';
                         }
                     }
                     if (convState.currentTab == 'librarySearch') {
-                         libraryTabActive();
-                         currentTabActive = 'searchAutoIcon';
-                        if(convState?.libraryTab.length > 0) {
+                        libraryTabActive();
+                        currentTabActive = 'searchAutoIcon';
+                        if (convState?.libraryTab.length > 0) {
                             $('#librarySearch').val(convState.libraryTab);
                             var convId = _convId;
                             var botId = _botId;
                             var intentName = convState.libraryTab;
                             AgentAssistPubSub.publish('searched_Automation_details', { conversationId: convId, botId: botId, value: intentName, isSearch: true });
-                            
+
                         }
-                        
+
                     }
-                    else if (convState.currentTab == 'myBotTab') {  
+                    else if (convState.currentTab == 'myBotTab') {
                         agentTabActive();
                     }
                     else if (convState.currentTab == 'transcriptTab') {
                         transcriptionTabActive();
-            
+
                     }
                     else if (convState.currentTab == 'assistTab') {
                         userTabActive();
                     }
-                    updateCurrentTabInState(_convId,  convState.currentTab);
-                    convState.currentTab !== 'librarySearch' ? updateUIWithTabState(_convId, convState.currentTab):'';
+                    updateCurrentTabInState(_convId, convState.currentTab);
+                    convState.currentTab !== 'librarySearch' ? updateUIWithTabState(_convId, convState.currentTab) : '';
                     document.getElementById("loader").style.display = "none";
                 }
 
@@ -1676,12 +1684,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     var appStateStr = localStorage.getItem('agentAssistState') || '{}';
                     var appState = JSON.parse(appStateStr);
                     if (!appState[convId]) {
-                         return 
+                        return
                     }
                     var convState = appState[convId];
-                    if (!convState[currentTab]) {return;}
+                    if (!convState[currentTab]) { return; }
                     if (!convState[currentTab].stateItems || convState[currentTab].stateItems.length == 0) {
-                       return;
+                        return;
                     }
                     let stateItems = convState[currentTab].stateItems;
                     if (currentTab == 'assistTab') {
@@ -1715,23 +1723,23 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 _createRunTemplateContiner(dropdownHeaderUuids, item.intentName);
                                 $(`#addRemoveDropDown-${dropdownHeaderUuids}`).removeClass('hide');
                             } else {
-                                currentTab == 'myBotTab'?_createRunTemplateContainerForMyTab(dropdownHeaderUuids, item.intentName):'';
+                                currentTab == 'myBotTab' ? _createRunTemplateContainerForMyTab(dropdownHeaderUuids, item.intentName) : '';
                                 $(`#MyBotaddRemoveDropDown-${dropdownHeaderUuids}`).removeClass('hide');
-                            }  
+                            }
                         }
                     }
 
-                    for(let i =0 ;i<stateItems.length; i++){
+                    for (let i = 0; i < stateItems.length; i++) {
                         let itemStr = stateItems[i];
                         let item = JSON.parse(itemStr);
                         if (item.intentName) {
                             if (currentTab == 'assistTab') {
                                 dropdownHeaderUuids = intentContainerObj[item.intentName]['containerId'];
-                            } 
+                            }
                             if (currentTab == 'myBotTab') {
                                 myBotDropdownHeaderUuids = intentContainerObj[item.intentName]['containerId']
                             }
-                           
+
                         }
                         if (currentTab == 'assistTab') {
                             if (item.event == 'agent_assist_user_message') {
@@ -1739,9 +1747,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             }
                             processAgentAssistResponse(item, convId, _botId);
                         } else {
-                            currentTab == 'myBotTab'?processMybotDataResponse(item, convId, _botId):'';
+                            currentTab == 'myBotTab' ? processMybotDataResponse(item, convId, _botId) : '';
                         }
-                      
+
                     }
                 }
 
@@ -1749,13 +1757,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     var appStateStr = localStorage.getItem('agentAssistState') || '{}';
                     var appState = JSON.parse(appStateStr);
                     var convState = appState[_convId] || {};
-                    if(!appState[_convId]) {
-                        convState=appState[_convId] = {}
+                    if (!appState[_convId]) {
+                        convState = appState[_convId] = {}
                     }
                     convState.currentTab = currentTab;
-                    if(appState[_convId] && (convState.currentTab == 'librarySearch')) {
-                        if(searchedVal !== undefined && document.getElementById('librarySearch').value.length > 0){
-                        convState.libraryTab = document.getElementById('librarySearch').value;
+                    if (appState[_convId] && (convState.currentTab == 'librarySearch')) {
+                        if (searchedVal !== undefined && document.getElementById('librarySearch').value.length > 0) {
+                            convState.libraryTab = document.getElementById('librarySearch').value;
                         } else {
                             convState.libraryTab = '';
                         }
@@ -1795,7 +1803,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 method: "send",
                                 text: target.dataset.msgData
                             }, "*")
-                        } else if(target.id === 'sendMsg' && sourceType == 'salesforce') {
+                        } else if (target.id === 'sendMsg' && sourceType == 'salesforce') {
                             let payload = target.dataset.msgData;
                             var message = {
                                 name: "agentAssist.SendMessage",
@@ -1808,11 +1816,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             let ele = document.getElementById(`displayData-${target.dataset.msgId}`) ? document.getElementById(`displayData-${target.dataset.msgId}`) : document.getElementById(target.dataset.msgId);
                             window.parent.postMessage({
                                 method: "copy",
-                                text: target.dataset.msgData && target.dataset.msgData!==''?target.dataset.msgData:(target.parentNode.dataset.msgData && target.parentNode.dataset.msgData!==''?target.parentNode.dataset.msgData:ele.innerText)
+                                text: target.dataset.msgData && target.dataset.msgData !== '' ? target.dataset.msgData : (target.parentNode.dataset.msgData && target.parentNode.dataset.msgData !== '' ? target.parentNode.dataset.msgData : ele.innerText)
                             }, "*")
-                        } else if((target.className == 'copy-btn' || target.className == 'ast-copy') && sourceType == 'salesforce') {
+                        } else if ((target.className == 'copy-btn' || target.className == 'ast-copy') && sourceType == 'salesforce') {
                             let ele = document.getElementById(`displayData-${target.dataset.msgId}`) ? document.getElementById(`displayData-${target.dataset.msgId}`) : document.getElementById(target.dataset.msgId);
-                            let data = target.dataset.msgData && target.dataset.msgData!==''?target.dataset.msgData:(target.parentNode.dataset.msgData && target.parentNode.dataset.msgData!==''?target.parentNode.dataset.msgData:ele.innerText)
+                            let data = target.dataset.msgData && target.dataset.msgData !== '' ? target.dataset.msgData : (target.parentNode.dataset.msgData && target.parentNode.dataset.msgData !== '' ? target.parentNode.dataset.msgData : ele.innerText)
                             var message = {
                                 name: "agentAssist.CopyMessage",
                                 conversationId: _conversationId,
@@ -1828,11 +1836,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             searchedVal = '';
                         }
 
-                        if(target.id === 'cancelLibrarySearch') {
+                        if (target.id === 'cancelLibrarySearch') {
                             $('#librarySearch').val('');
                             $('#cancelLibrarySearch').addClass('hide');
                             loadLibraryOnCancel(autoExhaustiveList, _conversationId, _botId);
-                        } else if(target.id === 'cancelAgentSearch') {
+                        } else if (target.id === 'cancelAgentSearch') {
                             $('#agentSearch').val('');
                             $('#cancelAgentSearch').addClass('hide');
                         }
@@ -1920,22 +1928,22 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                         if (target.id === `searchAutoIcon` || target.id === `searchIcon` || target.id === `LibraryLabel`) {
                             data = _agentAssistDataObj
-                            updateCurrentTabInState(_conversationId,'librarySearch')
+                            updateCurrentTabInState(_conversationId, 'librarySearch')
                             libraryTabActive();
                         }
                         else if (target.id === `agentAutoIcon` || target.id === `agentBotIcon` || target.id === `MybotLabel`) {
-                            updateCurrentTabInState(_conversationId,'myBotTab')
+                            updateCurrentTabInState(_conversationId, 'myBotTab')
                             agentTabActive();
                         }
                         else if (target.id === `transcriptIcon` || target.id === `scriptIcon` || target.id === `transcriptLabel`) {
-                            updateCurrentTabInState(_conversationId,'transcriptTab')
+                            updateCurrentTabInState(_conversationId, 'transcriptTab')
                             transcriptionTabActive();
                             currentTabActive = 'transcriptIcon';
                         }
                         else if (target.id === `userAutoIcon` || target.id === `userBotIcon` || target.id === `AssistLabel`) {
-                            updateCurrentTabInState(_conversationId,'assistTab')
+                            updateCurrentTabInState(_conversationId, 'assistTab')
                             userTabActive();
-                          //  updateUIState(_conversationId, isCallConversation);
+                            //  updateUIState(_conversationId, isCallConversation);
 
                         }
                         var seeMoreButton = target.dataset.seeMore;
@@ -1981,33 +1989,125 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
                         let targetIds = (target.id).split('-');
                         if (['feedbackup', 'feedbackdown'].includes(targetIds[0])) {
-                            console.log("=====event===============", evt.target);
+
+                            let cloneTargtIds = [...targetIds]
+                            let isDivElement = evt.target instanceof HTMLDivElement;
+                            console.log("isDivElement", isDivElement, target.parentElement.id);
                             if (targetIds.includes('feedbackup')) {
-                                if (target.dataset.feedbacklike == 'false') {
-                                    //  target.dataset.feedbacklike = 'true';
-                                    ($(target.parentElement.parentElement.parentElement).find('#feedbackdown')?.attr('style')) ? (
-                                        $(target.parentElement.parentElement.parentElement).find('#feedbackdown')?.removeAttr('style'),
-                                        $(target.parentElement.parentElement).find('.ast-thumbdown').attr('data-feedbackdislike', 'false')) : '';
-                                    $(target.parentElement).attr('style', 'color:#0077D2;border-color:#0077D2;');
+                                cloneTargtIds.shift()
+                                if (isDivElement) {
+                                    $(`#${target.id}`).addClass('active-feedback');
+                                    target.firstElementChild.dataset.feedbacklike = 'true';
+                                    evt.target.dataset = target.firstElementChild.dataset;
+
                                     feedbackLoop(evt);
                                 } else {
+                                    $(`#${target.parentElement.id}`).addClass('active-feedback');
                                     target.dataset.feedbacklike = 'false';
-                                    $(target.parentElement).removeAttr('style');
+                                    feedbackLoop(evt);
                                 }
+                                $(`#feedbackdown-${cloneTargtIds.join('-')}`).removeClass('active-feedback')
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .thanks-update`).removeClass('hide');
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .help-improve-arrow`).addClass('hide')
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .explore-more-negtive-data`).addClass('hide');
                             }
                             if (targetIds.includes('feedbackdown')) {
-                                if (target.dataset.feedbackdislike == 'false') {
-                                    // target.dataset.feedbackdislike = 'true';
-                                    ($(target.parentElement.parentElement.parentElement).find('#feedbackup')?.attr('style')) ? (
-                                        $(target.parentElement.parentElement.parentElement).find('#feedbackup')?.removeAttr('style'),
-                                        $(target.parentElement.parentElement).find('.ast-thumbup').attr('data-feedbacklike', 'false')) : '';
-                                    $(target.parentElement).attr('style', 'color:#0077D2;border-color:#0077D2;');
-                                    feedbackLoop(evt);
+                                cloneTargtIds.shift()
+                                if (isDivElement) {
+                                    $(`#${target.id}`).addClass('active-feedback');
+                                    target.firstElementChild.dataset.feedbacklike = 'true';
+                                    evt.target.dataset = evt.target.firstElementChild.dataset;
+                                     feedbackLoop(evt);
                                 } else {
-                                    target.dataset.feedbackdislike = 'false';
-                                    $(target.parentElement).removeAttr('style');
+                                    $(`#${target.parentElement.id}`).addClass('active-feedback');
+                                    target.dataset.feedbacklike = 'false';
+                                     feedbackLoop(evt);
+                                }
+                                $(`#feedbackup-${cloneTargtIds.join('-')}`).removeClass('active-feedback')
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .thanks-update`).addClass('hide');
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .help-improve-arrow`).removeClass('hide')
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .explore-more-negtive-data`).removeClass('hide');
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .title-improve`).removeClass('hide');
+
+                            }
+                        }
+                        if (target.id.split('-')[0] == 'dropdownArrowFeedBack' || target.id.split('-')[0] == 'dropdownArrowFeedBackIcon') {
+                            let targteId = target.id.split('-');
+                            targteId.shift();
+                            let dataSets = $(`#feedbackdown-${targteId.join('-')} .ast-thumbdown`).data();
+                            let activeChipCount = $(`#feedbackHelpfulContainer-${targteId.join('-')} .btn-chip-negtive.active-chip`);
+                            if ((activeChipCount.length > 0 || dataSets.comment.length > 0) && target.dataset.feedbackDropDownOpened === 'true') {
+                                $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).addClass('hide');
+                            } else {
+                                if ((activeChipCount.length == 0 && dataSets.comment.length == 0) && target.dataset.feedbackDropDownOpened === 'true') {
+                                    $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).removeClass('hide');
+                                } else {
+                                    $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).addClass('hide');
                                 }
                             }
+                            if (target.dataset.feedbackDropDownOpened === 'false') {
+                                $(`#dropdownArrowFeedBackIcon-${targteId.join('-')}`).attr('data-feedback-drop-down-opened', 'true');
+                                $(`#dropdownArrowFeedBack-${targteId.join('-')}`).attr('data-feedback-drop-down-opened', 'true');
+                                $(`#feedbackHelpfulContainer-${targteId.join('-')} .explore-more-negtive-data`).addClass('hide');
+                            } else {
+                                $(`#dropdownArrowFeedBackIcon-${targteId.join('-')}`).attr('data-feedback-drop-down-opened', 'false');
+                                $(`#dropdownArrowFeedBack-${targteId.join('-')}`).attr('data-feedback-drop-down-opened', 'false');
+                                $(`#feedbackHelpfulContainer-${targteId.join('-')} .explore-more-negtive-data`).removeClass('hide');
+                            }
+                            let updateFlag = $(`#feedbackHelpfulContainer-${targteId.join('-')} .submit-btn`).attr('data-updateflag');
+                            if (updateFlag == 'true' && target.dataset.feedbackDropDownOpened === 'false') {
+                                AgentAssist_feedBack_Update_Request(dataSets);
+                                isUpdateFeedBackDetailsFlag = true;
+                            }
+                        }
+                        if (target.className.includes('btn-chip-negtive')) {
+                            let id = target.parentElement.id.split('-');
+                            id.shift();
+                            let dataSets = $(`#feedbackdown-${id.join('-')} .ast-thumbdown`).data();
+                            if (target.dataset.chipClick == 'false') {
+                                $(target).addClass('active-chip');
+                                target.dataset.chipClick = 'true';
+                                dataSets.feedbackdetails.push($(target).html());
+
+                            } else {
+                                $(target).removeClass('active-chip');
+                                target.dataset.chipClick = 'false';
+                                dataSets.feedbackdetails?.forEach((ele, i) => {
+                                    if (ele == $(target).html()) {
+                                        delete dataSets.feedbackdetails[i]
+                                    }
+                                })
+                            }
+                            let activeChipCount = $(`#${target.parentElement.id} .btn-chip-negtive.active-chip`);
+                            if (activeChipCount.length > 0) {
+                                $(`#feedbackHelpfulContainer-${id.join('-')} .title-improve`).addClass('hide');
+                                $('.submit-btn').removeAttr('disabled');
+                            } else {
+                                if (dataSets.comment.length == 0) {
+                                    $(`#feedbackHelpfulContainer-${id.join('-')} .title-improve`).removeClass('hide');
+                                }
+                            }
+                        }
+                        if (target.className == 'submit-btn') {
+                            let id = target.parentElement.firstElementChild.id.split('-');
+                            id.shift();
+                            let dataSets = $(`#feedbackdown-${id.join('-')} .ast-thumbdown`).data();
+                            // if(target.innerHTML == 'Update') {
+                            //     dataSets.comment = target.value;
+                            //     // dataSets.feedbackdetails = 
+
+                            // }
+                            feedbackLoop(dataSets, true);
+                            $(`#feedbackHelpfulContainer-${id.join('-')} .explore-more-negtive-data`).addClass('hide');
+                             target.dataset.updateflag = 'true';
+                            target.innerHTML = "Update";
+                            $('.submit-btn').attr('disabled', 'disabled');
+                            
+                            dataSets.comment = "";
+                            dataSets.feedbackdetails = [];
+                            $(`#feedbackHelpfulContainer-${id.join('-')} .btn-chip-negtive.active-chip`).removeClass('active-chip');
+                            $(`#feedBackComment-${id.join('-')}`).val('');
+                            isUpdateFeedBackDetailsFlag = false;
                         }
                         if (target.id === 'showHistory') {
                             isShowHistoryEnable = true;
@@ -2846,7 +2946,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             }
 
                         }
-                       
+
                         if (runButton || libraryRunBtn || historyRunBtn) {
                             if (!isAutomationOnGoing) {
                                 $('#welcomeMsg').addClass('hide');
@@ -3069,7 +3169,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 AgentAssistPubSub.publish('searched_Automation_details', { conversationId: evt.target.dataset.convId, botId: evt.target.dataset.botId, value: evt.target.dataset.intentName, isSearch: true });
                                 return
                             }
-                            if(currentTabActive == 'searchAutoIcon'){
+                            if (currentTabActive == 'searchAutoIcon') {
                                 if ($(`#search-text-display .ast-carrotup.rotate-carrot`).length <= 0) {
                                     $(`#search-text-display #${target.id}`).addClass('rotate-carrot');
                                     $(`#search-text-display #faqDivLib-${id} .action-links`).removeClass('hide');
@@ -3194,9 +3294,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                         if (target.id.split('-')[0] == 'buldCount' || target.className == 'ast-bulb' || target.className == 'count-number') {
                             let bulbDiv;
-                            if( $('#scriptContainer .other-user-bubble .bubble-data .buld-count-utt').length > 0){
-                                bulbDiv=  $('#scriptContainer .other-user-bubble .bubble-data').find('.buld-count-utt, .buld-count-utt-after-click');
-                            }else {
+                            if ($('#scriptContainer .other-user-bubble .bubble-data .buld-count-utt').length > 0) {
+                                bulbDiv = $('#scriptContainer .other-user-bubble .bubble-data').find('.buld-count-utt, .buld-count-utt-after-click');
+                            } else {
                                 bulbDiv = $('#scriptContainer .other-user-bubble .bubble-data .buld-count-utt-after-click');
                             }
                             let bulbid = target.id.split('-');
@@ -3222,6 +3322,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             entitiestValueArray[targetid[1]]['editedValue'] = $(`#${target.id}`).val();
                             $('.ast-check-right.disabled-color').removeClass('disabled-color');
                             $('.save-reset-disabled').removeClass('save-reset-disabled').addClass('save-reset');
+                        } else if (target.dataset.feedbackComment) {
+                            let targetids = target.id.split('-');
+                            targetids.shift();
+                            let dataSets = $(`#feedbackdown-${targetids.join('-')} .ast-thumbdown`).data();
+                            dataSets.comment = target.value;
+                            if (target.value.length > 0) {
+                                $('.submit-btn').removeAttr('disabled');
+                                $(`#feedbackHelpfulContainer-${targetids.join('-')} .title-improve`).addClass('hide');
+                            }
                         } else {
                             var agentAssistInput = target.dataset.agentAssistInput;
                             var mybotInput = target.dataset.mybotInput;
@@ -3396,6 +3505,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 function addFeedbackHtmlToDom(data, botId, userIntentInput, runForAgentBot) {
                     var dropDownData;
                     var endOfDialoge;
+                    let dialogIds = 'dg-' + (Math.random() + 1).toString(36).substring(2);
+                    let taskIdOfDialog = $(`#dropDownData-${dropdownHeaderUuids}`).attr('data-taskId');
                     if (runForAgentBot) {
                         $(`#myBotTerminateAgentDialog-${myBotDropdownHeaderUuids}.btn-danger`).remove();
                         dropDownData = $(`#dropDownData-${myBotDropdownHeaderUuids}`);
@@ -3431,57 +3542,116 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             <span class="tootltip-tabs">Dislike</span>
             </div>
        </div>`;
-                    dropDownData.append(feedbackHtml);
+                    //   dropDownData.append(feedbackHtml);
                     let endofDialogeHtml = `
         <div class="dilog-task-end" id="endTaks-${dropdownHeaderUuids}">
         <div class="text-dialog-task-end">Dialog Task ended</div>     
                    </div>
-                   <div class="feedback-helpul-container">
+                   <div class="feedback-helpul-container" id="feedbackHelpfulContainer-${dropdownHeaderUuids}">
                     <div class="titles-content">
                         <div class="title">Helpful?</div>
-                        <div class="btn-positive">
-                            <i class="ast-thumbup"></i>
+                        <div class="btn-positive" id="feedbackup-${dropdownHeaderUuids}">
+                            <i class="ast-thumbup"
+                            id="feedbackup-${dropdownHeaderUuids}"
+                            data-feedbacklike="false"
+                            data-conv-id="${data.conversationId}"
+                            data-bot-id="${botId}" data-feedback="like"
+                            data-dialog-name="${dialogName}"
+                            data-user-input="${userIntentInput}"
+                            data-comment=""
+                            data-feedbackdetails="[]"
+                            data-taskID ="${taskIdOfDialog}"
+                            data-dialogId="${dialogIds}"></i>
                             <span class="tootltip-tabs">Like</span>
                         </div>
-                        <div class="btn-negtive">
-                            <i class="ast-thumbdown"></i>
+                        <div class="btn-negtive" id="feedbackdown-${dropdownHeaderUuids}">
+                            <i class="ast-thumbdown" 
+                            id="feedbackdown-${dropdownHeaderUuids}"
+                            data-feedbackdislike="false"
+                            data-conv-id="${data.conversationId}"
+                            data-bot-id="${botId}" data-feedback="dislike"
+                            data-dialog-name="${dialogName}"
+                            data-user-input="${userIntentInput}"
+                            data-comment=""
+                            data-feedbackdetails="[]"
+                            data-taskID ="${taskIdOfDialog}"
+                            data-dialogId="${dialogIds}"></i>
                             <span class="tootltip-tabs">Dislike</span>
                         </div>
                         <div class="thanks-update hide">Thanks for the feedback!</div>
-                        <div class="help-improve-arrow">
-                            <div class="title-improve">Help us improve (optional)</div>
-                            <div class="arrow-icon">
-                                <i class="ast-carrotup"></i>
+                        <div class="help-improve-arrow hide">
+                            <div class="title-improve hide">Help us improve (optional)</div>
+                            <div class="arrow-icon" data-feedback-drop-down-opened="false" id="dropdownArrowFeedBack-${dropdownHeaderUuids}">
+                                <i class="ast-carrotup" data-feedback-drop-down-opened="false" id="dropdownArrowFeedBackIcon-${dropdownHeaderUuids}"></i>
                             </div>
                         </div>
                     </div>
-                    <div class="explore-more-negtive-data">
-                        <div class="btns-group-negtive-chips">
-                            <div class="btn-chip-negtive active-chip">Not enough suggestions</div>
-                            <div class="btn-chip-negtive active-chip">Not prompt</div>
-                            <div class="btn-chip-negtive">Intent undetected</div>
-                            <div class="btn-chip-negtive">Not prompt</div>
-                            <div class="btn-chip-negtive">Other</div>
+                    <div class="explore-more-negtive-data hide">
+                        <div class="btns-group-negtive-chips" id="feedBackOptions-${dropdownHeaderUuids}">
+                            <div class="btn-chip-negtive" data-chip-click='false'>Not enough suggestions</div>
+                            <div class="btn-chip-negtive" data-chip-click='false'>Not prompt</div>
+                            <div class="btn-chip-negtive" data-chip-click='false'>Intent undetected</div>
+                            <div class="btn-chip-negtive" data-chip-click='false'>Other</div>
                         </div>
                         <div class="input-block-optional">
                             <div class="label-text"></div>
-                            <input type="text" placeholder="Placeholder text" class="input-text">
+                            <input type="text" placeholder="Placeholder text" class="input-text" id="feedBackComment-${dropdownHeaderUuids}"
+                            data-feedback-comment="true">
                         </div>
-                        <button class="submit-btn" disabled>Submit</button>
+                        <button class="submit-btn" data-updateFlag="false" disabled>Submit</button>
                     </div>
                 </div>
             
         `;
                     endOfDialoge.append(endofDialogeHtml);
                     $(`.customer-feeling-text`).addClass('bottom-95');
-                    setTimeout(()=>{
+                    setTimeout(() => {
                         dropdownHeaderUuids = undefined;
-                    },100)
-                   // dropdownHeaderUuids = undefined;
+                    }, 100)
+                    // dropdownHeaderUuids = undefined;
                 }
 
-                function feedbackLoop(evt) {
-                    AgentAssist_feedback_click(evt);
+                function UpdateFeedBackDetails(data) {
+                    let allFeedBackDetails = $('.feedback-helpul-container');
+                    allFeedBackDetails.each((i, ele) => {
+                        let feedDataSet;
+                        if (data.feedback == 'dislike') {
+                            feedDataSet = $(ele).find('.btn-negtive .ast-thumbdown').data();
+                        } else {
+                            feedDataSet = $(ele).find('.btn-positive .ast-thumbup').data();
+                        }
+
+                        if (feedDataSet.dialogid == data.positionId && data.feedback == 'like') {
+                            $(ele).find('.btn-positive .ast-thumbup').addClass('active-feedback');
+                            $(ele).find('.thanks-update').removeClass('hide');
+                        } else if (feedDataSet.dialogid == data.positionId && data.feedback == 'dislike') {
+                            $(ele).find('.btn-negtive .ast-thumbdown').addClass('active-feedback');
+                            $(ele).find('.help-improve-arrow').removeClass('hide')
+                            if (data.feedbackDetails.length > 0 || data.comment.length > 0) {
+                                $(ele).find('.explore-more-negtive-data').removeClass('hide');
+                                let btnChipNegtive = $(ele).find('.btn-chip-negtive');
+                                btnChipNegtive.each((i, eles) => {
+                                    data.feedbackDetails.includes(eles.innerHTML) ?
+                                        $(eles).addClass('active-chip') : '';
+                                });
+                                $(ele).find('.input-block-optional .input-text').val(data.comment);
+                                feedDataSet.comment = data.comment;
+                                feedDataSet.feedbackdetails = data.feedbackDetails;
+                            } else {
+                                $(ele).find('.btn-chip-negtive').removeClass('active-chip');
+                                $(ele).find('.title-improve').removeClass('hide');
+                            }
+                        }
+                    })
+                }
+
+                function feedbackLoop(evt, isSubmit = false) {
+                    if (isSubmit) {
+                        AgentAssist_feedback_click(evt, true);
+                    } else {
+                        AgentAssist_feedback_click(evt);
+                    }
+
                 }
 
                 function processUserMessage(data, _conversationId, botId) {
@@ -3526,7 +3696,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             AgentAssistPubSub.publish('searched_Automation_details', { conversationId: convId, botId: botId, value: intentName, isSearch: true });
                             document.getElementById("loader").style.display = "block";
                             document.getElementById("overLaySearch").style.display = "none";
-                        } else if(e.keyCode == 13 && agent_search.trim().length > 0) {
+                        } else if (e.keyCode == 13 && agent_search.trim().length > 0) {
                             agentSearchVal = agent_search;
                             var convId = e.target.dataset.convId;
                             var botId = e.target.dataset.botId;
@@ -3822,16 +3992,50 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
     }
 }
 
-function AgentAssist_feedback_click(e) {
-    console.log(e.target);
-    var convId = e.target.dataset.convId;
-    var botId = e.target.dataset.botId;
-    var feedback = e.target.dataset.feedback;
-    var userInput = e.target.dataset.userInput;
-    var dialogName = e.target.dataset.dialogName;
-    var dialogId = 'dg-' + (Math.random() + 1).toString(36).substring(2);
-    // var userId = (Math.random() + 1).toString(36).substring(3);
-    AgentAssistPubSub.publish('agent_usage_feedback', { userInput: userInput, dialogName: dialogName, conversationId: convId, botId: botId, feedback: feedback, eventName: 'agent_usage_feedback', dialogId: dialogId });
+function AgentAssist_feedback_click(e, isSubmit = false) {
+    let convId, botId, feedback, userInput, dialogId, comment, feedbackdetails;
+    if (isSubmit) {
+        convId = e.convId;
+        botId = e.botId;
+        feedback = e.feedback;
+        userInput = e.userInput;
+        dialogName = e.dialogName;
+        dialogId = e.dialogid;
+        comment = e.comment;
+        feedbackdetails = e.feedbackdetails;
+        taskId = e.taskid
+    } else {
+        console.log(e.target);
+        convId = e.target.dataset.convId;
+        botId = e.target.dataset.botId;
+        feedback = e.target.dataset.feedback;
+        userInput = e.target.dataset.userInput;
+        dialogName = e.target.dataset.dialogName;
+        dialogId = e.target.dataset.dialogid;
+        comment = e.target.dataset.comment;
+        feedbackdetails = e.target.dataset.feedbackdetails;
+        taskId = e.target.dataset.taskid
+    }
+
+    feedDetailsArray = typeof feedbackdetails == 'string' ? [] : feedbackdetails?.filter(ele => ele !== null);
+    AgentAssistPubSub.publish('agent_usage_feedback', {
+        comment: comment, feedbackDetails: feedDetailsArray, userInput: userInput, dialogName: dialogName, conversationId: convId, botId: botId, feedback: feedback, eventName: 'agent_usage_feedback', dialogId: dialogId,
+        taskId: taskId
+    });
+}
+
+function AgentAssist_feedBack_Update_Request(e) {
+    let agent_assist_feedback_request = {
+        conversationId: e.convId,
+        agentId: '',
+        botId: e.botId,
+        orgId: '',
+        taskId: e.taskid,
+        positionId: e.dialogid
+    }
+
+    _agentAsisstSocket.emit('agent_feedback_request', agent_assist_feedback_request);
+
 }
 
 function AgentAssist_run_click(e) {
@@ -4212,9 +4416,12 @@ AgentAssistPubSub.subscribe('agent_usage_feedback', (msg, data) => {
         "accountId": "622efb179b25b1a23ef05da2",
         "conversationId": data.conversationId,
         userInput: data.userInput,
-        dialogName: data.dialogName,
+        taskName: data.dialogName,
         "event": data.eventName,
-        dialogId: data.dialogId,
+        positionId: data.dialogId,
+        taskId: data.taskId,
+        comment: data.comment,
+        feedbackDetails: data.feedbackDetails
     }
     _agentAsisstSocket.emit('agent_usage_feedback', agent_assist_request);
 });
