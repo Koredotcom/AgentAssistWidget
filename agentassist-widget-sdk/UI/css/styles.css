@@ -2891,9 +2891,7 @@ border: 1px solid transparent !important;
 }
 
 
-.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info:last-child .dilog-task-end{
-    position: absolute;
-}
+
 .agent-assist-chat-container .unread-msg {
     display: flex;
     align-items: center;
