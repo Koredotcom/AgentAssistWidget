@@ -1807,7 +1807,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     dropDownData.append(feedbackHtml);
                     let endofDialogeHtml = `
         <div class="dilog-task-end" id="endTaks-${id}" data-history="true">
-        <div class="text-dialog-task-end">Dialog Task ended</div>     
+        <div class="text-dialog-task-end">Task Ended</div>     
                    </div>
                    <div class="feedback-helpul-container hide">
                     <div class="titles-content">
@@ -2294,7 +2294,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     //                 dropDownData.append(feedbackHtml);
                                     //                 let endofDialogeHtml = `
                                     //     <div class="dilog-task-end" id="endTaks-${previousId}">
-                                    //     <div class="text-dialog-task-end">Dialog Task ended</div>     
+                                    //     <div class="text-dialog-task-end">Task Ended</div>     
                                     //                </div>
 
                                     //     `;
@@ -3201,7 +3201,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             //                                             </div>
                             //                                         </div>
                             //                                 <div class="dilog-task-end hide" id="endTaks-${res._id}">
-                            //                                 <div class="text-dialog-task-end">Dialog Task ended</div>     
+                            //                                 <div class="text-dialog-task-end">Task Ended</div>     
                             //                                             </div>
                             //                                         </div>
                             //                                     `;
@@ -3360,7 +3360,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             //                     //                 dropDownData.append(feedbackHtml);
                             //                     //                 let endofDialogeHtml = `
                             //                     //     <div class="dilog-task-end" id="endTaks-${previousId}">
-                            //                     //     <div class="text-dialog-task-end">Dialog Task ended</div>     
+                            //                     //     <div class="text-dialog-task-end">Task Ended</div>     
                             //                     //                </div>
 
                             //                     //     `;
@@ -3522,7 +3522,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                                             </div>
                                                                         </div>
                                                                 <div class="dilog-task-end hide" id="endTaks-${res._id}">
-                                                                <div class="text-dialog-task-end">Dialog Task ended</div>     
+                                                                <div class="text-dialog-task-end">Task Ended</div>     
                                                                             </div>
                                                                         </div>
                                                                     `;
@@ -3681,7 +3681,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                 //                 dropDownData.append(feedbackHtml);
                                                 //                 let endofDialogeHtml = `
                                                 //     <div class="dilog-task-end" id="endTaks-${previousId}">
-                                                //     <div class="text-dialog-task-end">Dialog Task ended</div>     
+                                                //     <div class="text-dialog-task-end">Task Ended</div>     
                                                 //                </div>
 
                                                 //     `;
@@ -4464,7 +4464,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     dropDownData.append(feedbackHtml);
                     let endofDialogeHtml = `
         <div class="dilog-task-end" id="endTaks-${dropdownHeaderUuids}">
-        <div class="text-dialog-task-end">Dialog Task ended</div>     
+        <div class="text-dialog-task-end">Task Ended</div>     
                    </div>
                    <div class="feedback-helpul-container hide">
                     <div class="titles-content">
