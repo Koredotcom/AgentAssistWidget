@@ -222,7 +222,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         var appState = JSON.parse(appStateStr);
                         if (appState[_conversationId]) {
                             // if incoming data belongs to welcome message do nothing
-                            if (!data.suggestions && data.buttons?.length > 1) {
+                            let taskid = $(`#dropDownData-${dropdownHeaderUuids}`).attr('data-taskId');
+                            let runInfoDivOfwelcome = $(`#dynamicBlock .collapse-acc-data .run-info-content`).attr('data-welcome-msg');
+                            if (!data.suggestions && data.buttons?.length > 1 && runInfoDivOfwelcome && runInfoDivOfwelcome !== 'true') {
                                 if (appState[_conversationId].isWelcomeProcessed) {
                                     return;
                                 }
@@ -1380,6 +1382,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 if (i == 0) {
                                     welcomeMsgdiv.append(welcomeMsgHtml);
                                     let runInfoDivOfwelcome = $(`#welcomeMsg .run-info-content`);
+                                    $(runInfoDivOfwelcome).attr('data-welcome-msg', 'true');
                                     let contentHtml = `
                                 <div class="title">Customer has waited for an agent for few seconds.<br/>Here are some appropriate opening lines.</div>
                             <div class="agent-utt">
@@ -3436,7 +3439,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
         <div class="dilog-task-end" id="endTaks-${dropdownHeaderUuids}">
         <div class="text-dialog-task-end">Dialog Task ended</div>     
                    </div>
-                   <div class="feedback-helpul-container">
+                   <div class="feedback-helpul-container hide">
                     <div class="titles-content">
                         <div class="title">Helpful?</div>
                         <div class="btn-positive">
