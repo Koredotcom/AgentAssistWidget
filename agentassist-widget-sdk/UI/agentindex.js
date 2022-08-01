@@ -224,7 +224,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         if (appState[_conversationId]) {
                             // if incoming data belongs to welcome message do nothing
                             let taskid = $(`#dropDownData-${dropdownHeaderUuids}`).attr('data-taskId');
-                            if (!data.suggestions && data.buttons?.length > 1 && taskid) {
+                            let runInfoDivOfwelcome = $(`#dynamicBlock .collapse-acc-data .run-info-content`).attr('data-welcome-msg');
+                            if (!data.suggestions && data.buttons?.length > 1 && runInfoDivOfwelcome && runInfoDivOfwelcome !== 'true') {
                                 if (appState[_conversationId].isWelcomeProcessed) {
                                     return;
                                 }
@@ -1388,6 +1389,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 if (i == 0) {
                                     welcomeMsgdiv.append(welcomeMsgHtml);
                                     let runInfoDivOfwelcome = $(`#welcomeMsg .run-info-content`);
+                                    $(runInfoDivOfwelcome).attr('data-welcome-msg', 'true');
                                     let contentHtml = `
                                 <div class="title">Customer has waited for an agent for few seconds.<br/>Here are some appropriate opening lines.</div>
                             <div class="agent-utt">
