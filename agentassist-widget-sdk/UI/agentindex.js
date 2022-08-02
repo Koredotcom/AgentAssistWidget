@@ -297,6 +297,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         } else {
                           //  updateAgentAssistState(_conversationId, 'myBotTab', data);
                             processMybotDataResponse(data, data.conversationId, data.botId);
+                            document.getElementById("loader").style.display = "none";
                         }
                         // processAgentIntentResults(data, data.conversationId, data.botId);
                     })
