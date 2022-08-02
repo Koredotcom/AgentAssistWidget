@@ -241,7 +241,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         if (!shouldProcessResponse) {
                             return;
                         }
-                        updateNumberOfMessages();
+                        if(!isAutomationOnGoing && data.suggestions){
+                            updateNumberOfMessages();
+                        }
 
                         var overRideObj = {
                             "agentId": "",
@@ -1062,6 +1064,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 }
                             }
                         }
+                        let newElementsHeight = lastElement.clientHeight;
+                        // addBlurToOldMessage(newElementsHeight);
                         if(lastElement.nextElementSibling && lastElement.nextElementSibling.className.includes('feedback-data')){
                             lastElement.nextElementSibling.classList.add("last-msg-white-bg");
                         }
@@ -1569,17 +1573,35 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         $('.override-input-div').addClass('hide');
                         addFeedbackHtmlToDom(data, botId, userIntentInput);
                         userMessage = {};
-                        let dropDownDataElement = document.getElementById(`dropDownData-${dropdownHeaderUuids}`);
-                        let steprunelementArray = dropDownDataElement.querySelectorAll('.steps-run-data');
-                        let lastStepNode = steprunelementArray[steprunelementArray.length - 1];
-                        $(lastStepNode).addClass('last-child-step-run');
+                        // let dropDownDataElement = document.getElementById(`dropDownData-${dropdownHeaderUuids}`);
+                        // let steprunelementArray = dropDownDataElement.querySelectorAll('.steps-run-data');
+                        // let lastStepNode = steprunelementArray[steprunelementArray.length - 1];
+                        // $(lastStepNode).addClass('last-child-step-run');
                     }
                     if (scrollAtEnd) {
                         scrollToBottom();
                     }
                     addWhiteBackgroundClassToNewMessage();
-                    // addIconClassToNewMessage();
+                    RemoveVerticalLineForLastResponse();
                 }
+
+                function addBlurToOldMessage(newElementsHeight){
+                    let dynamicBlockHeight = $(".dynamic-block-content").height();
+                    $(".dynamic-block-blur").height(dynamicBlockHeight - newElementsHeight);
+                }
+
+                function RemoveVerticalLineForLastResponse(){
+                    let accordionInfoList = document.querySelectorAll('.dialog-task-accordiaon-info');
+                    for(let info of accordionInfoList){
+                        let stepsrunList = info.querySelectorAll('.steps-run-data');
+                        for(let node of stepsrunList){
+                            $(node).removeClass('last-child-step-run');
+                        }
+                        let lastStepNode = stepsrunList[stepsrunList.length -1];
+                        $(lastStepNode).addClass('last-child-step-run');
+                    }
+                }
+
 
                 function processTranscriptData(data, conversationId, botid) {
                     console.log("---- data====", data)

@@ -31,10 +31,10 @@
     --secondary-color-2:#9AA0A6;
     --secondary-color-3:#979797;
     --default-white-color:#FFFFFF;
-    --theme-color:#0D6EFD;
+    --theme-color:#1B92D8;
     --border-color:#BDC1C6;
     --border-color-2:#E5E8EC;
-    --bg-hover-tabs-color:#F5F8FA;
+    --bg-hover-tabs-color:#E6F0F7;
     --warning-color:#DD3646;
     --bg-color-containers:#E9EFF4;
     --bg-color-2:#EFF0F1;
@@ -860,7 +860,7 @@ html, body{
     position: relative;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info:last-child{
-    padding-top: 30px;
+    padding-top: 5px;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info:last-child .dilog-task-end{
     /* position: absolute;
@@ -929,7 +929,7 @@ html, body{
     padding: 4px 10px;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data {
-    padding: 5px 30px 0px 8px;
+    padding: 5px 3px 0px 8px;
     position: relative;
     display: inline-block;
     width: 100%;
@@ -973,13 +973,13 @@ html, body{
     background: var(--bg-hover-tabs-color);
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data.last-msg-white-bg{
-    width: calc(100% + 68px);
+    width: calc(100% + 45px);
     left: -23px;
     background: #fff;
     margin-bottom: 0;
     padding-top: 20px;
     padding-left: 50px;
-    padding-right: 45px;
+    padding-right: 25px;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data.last-child-step-run.last-msg-white-bg::before{
     content: "";
@@ -1047,7 +1047,7 @@ html, body{
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data .run-info-content .agent-utt {
     background: linear-gradient(0deg,var(--default-white-color),var(--default-white-color)), var(--bg-hover-tabs-color);
     border-radius: 10px 5px 10px 10px;
-    padding: 8px 15px;
+    padding: 8px 5px;
     position: relative;
     transition: 0.2s all ease;
     margin: 0 0 8px 0;
@@ -1852,6 +1852,7 @@ border: 1px solid transparent !important;
     text-overflow: ellipsis;
     padding-right: 15px;
     transition: 0.2s all ease;
+    padding-top : 5px;
 }
 .overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content.show-text-on-hover:hover {
     overflow: inherit;
@@ -3103,4 +3104,13 @@ border: 1px solid transparent !important;
 
 .body-data-container .ps__rail-y{
     z-index: 9 !important;
+}
+.dynamic-block-blur {
+    position: absolute;
+    width: 100%;
+    top: 0px;
+    left: 0px;
+    z-index: 2;
+    background: var(--bg-hover-tabs-color);
+    opacity: 0.8
 }
