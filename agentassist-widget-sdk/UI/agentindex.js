@@ -1817,7 +1817,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }
                     // $(`#addRemoveDropDown-${dropdownHeaderUuids} .btn-danger`).remove();
                     let feedbackHtml = ` 
-        <div class="feedback-data">
+        <div class="feedback-data last-child-step-run">
         <div class="feedbackup-data" id="feedBackLikeContainer-${id}">
             <div class="feedback-icon" id="feedbackup-${id}" data-feedbacklike="false"
             data-conv-id="${data.conversationId}"
@@ -2384,6 +2384,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         
                         previousResp = response;
                         scrollToBottom();
+                        addWhiteBackgroundClassToNewMessage();
+                        RemoveVerticalLineForLastResponse();
                     }).catch(err => {
                         document.getElementById("loader").style.display = "block";
                         console.log("error", err)
