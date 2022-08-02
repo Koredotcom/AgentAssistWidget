@@ -2103,7 +2103,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                         </div>
                                                     `;
 
-                                    if (previousTaskName && currentTaskName !== previousTaskName) {
+                                    if (previousTaskName && currentTaskName !== previousTaskName ) {
                                         addFeedbackHtmlToDomForHistory(res, res.botId, res?.agentAssistDetails?.userInput, previousId, false)
                                         previousId = undefined;
                                     }
@@ -2202,6 +2202,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                                         _msgsResponse.message.push(body);
                                     });
+                                    if(res.agentAssistDetails?.isPrompt === true || res.agentAssistDetails?.isPrompt === false) {
                                     let runInfoContent = $(`#dropDownData-${previousId}`);
                                     let askToUserHtml = `
                                         <div class="steps-run-data">
@@ -2235,7 +2236,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         var appState = JSON.parse(appStateStr);  
                                         if(appState[_conversationId]['automationGoingOnAfterRefresh']) {
                                             isAutomationOnGoing = true;
-                                            dropdownHeaderUuids = res._id;
+                                            dropdownHeaderUuids = previousId;
                                             appState[_conversationId]['automationGoingOnAfterRefresh'] = isAutomationOnGoing;
                                             localStorage.setItem('agentAssistState', JSON.stringify(appState))
                                         }
@@ -2253,6 +2254,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     } else {
                                         runInfoContent.append(tellToUserHtml);
                                     }
+                                 }
                                     
                                     AgentChatInitialize.renderMessage(_msgsResponse, res._id, `dropDownData-${previousId}`);
                                     let shouldProcessResponse = false;
@@ -2270,7 +2272,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         // }
                                         
                                     }
-                                    if (!parsedPayload && !res.tN && !shouldProcessResponse) {
+                                    let isPromtFlag;
+                                    if((res.agentAssistDetails?.isPrompt == true )){
+                                        isPromtFlag = "true";
+                                    }else if(res.agentAssistDetails?.isPrompt == false){
+                                        isPromtFlag = "false";
+                                    }
+                                    if (!parsedPayload && !res.tN && !shouldProcessResponse && !isPromtFlag) {
                                         let dynamicBlockDiv = $('#dynamicBlock');
                                         res.components?.forEach((ele, i) => {
                                             let welcomeMsgHtml = `
