@@ -36,6 +36,13 @@ var entitiestValueArray;
 var previousEntitiesValue;
 var isRetore = false;
 var userMessage = {};
+var numberOfNewMessages = 0;
+var newlyAddedMessagesUUIDlist = [];
+var newlyAddedIdList = [];
+var removedIdListOnScroll = [];
+var scrollAtEnd = true;
+var selectedFaqList = [];
+var lastElementBeforeNewMessage = '';
 
 function koreGenerateUUID() {
     console.info("generating UUID");
@@ -156,18 +163,18 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 if (!window._agentAssisteventListenerAdded) {
                     btnInit(containerId);
                     // eventListener for removing the ended currentconversation from the localStorage
-                    window.addEventListener("message", function(e) {
-                    console.log(e.data);//your data is captured in e.data
-                    let currentEndedConversationId = e.data.convsId; 
-                    var appStateStr = localStorage.getItem('agentAssistState') || '{}';
-                    var appState = JSON.parse(appStateStr);
-                    if(appState[currentEndedConversationId]) {
-                        delete appState[currentEndedConversationId];
-                    }
+                    window.addEventListener("message", function (e) {
+                        console.log(e.data);//your data is captured in e.data
+                        let currentEndedConversationId = e.data.convsId;
+                        var appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                        var appState = JSON.parse(appStateStr);
+                        if (appState[currentEndedConversationId]) {
+                            delete appState[currentEndedConversationId];
+                        }
                     });
 
-                    window.addEventListener("message", function(e) {
-                        console.log('event listener message: ',e.data)
+                    window.addEventListener("message", function (e) {
+                        console.log('event listener message: ', e.data)
                         let userInputData = e.data;
                         let agent_assist_request = {
                             'author': {
@@ -179,20 +186,20 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             'conversationId': userInputData.conversationid,
                             'query': userInputData.value,
                         }
-                        if(isCallConversation === 'true') {
-                            if(userInputData.author.type === 'USER') {
+                        if (isCallConversation === 'true') {
+                            if (userInputData.author.type === 'USER') {
                                 console.log('event listener USER Message:')
-                                processTranscriptData(userInputData, userInputData.conversationid, _botId, );
+                                processTranscriptData(userInputData, userInputData.conversationid, _botId,);
                                 _agentAsisstSocket.emit('agent_assist_request', agent_assist_request);
                             } else {
                                 console.log('event listener AGENT Message:')
                                 processAgentMessages(userInputData)
                             }
                         } else {
-                            if(userInputData.author.type === 'USER') {
+                            if (userInputData.author.type === 'USER') {
                                 console.log('event listener AGENT Message:')
                                 _agentAsisstSocket.emit('agent_assist_request', agent_assist_request);
-                             } 
+                            }
                         }
                     })
                 }
@@ -227,14 +234,17 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     return;
                                 }
                             }
-							shouldProcessResponse = true;
+                            shouldProcessResponse = true;
                         } else {
                             shouldProcessResponse = true;
                         }
                         if (!shouldProcessResponse) {
                             return;
                         }
-                        
+                        if(!(isAutomationOnGoing && data.suggestions)){
+                            updateNumberOfMessages();
+                        }
+
                         var overRideObj = {
                             "agentId": "",
                             "botId": _botId,
@@ -247,7 +257,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         displayCustomerFeels(data, data.conversationId, _botId);
 
                         updateAgentAssistState(_conversationId, 'assistTab', data);
-                        
+
                         processAgentAssistResponse(data, data.conversationId, _botId);
                         document.getElementById("loader").style.display = "none";
                         // document.getElementById("addRemoveDropDown").style.display = "block";
@@ -258,11 +268,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     AgentAssistPubSub.publish('automation_exhaustive_list',
                         { conversationId: _agentAssistDataObj.conversationId, botId: _agentAssistDataObj.botId, 'experience': 'chat' });
                     _agentAsisstSocket.on('user_message', (data) => {
+                        // updateNumberOfMessages();
                         processUserMessage(data, data.conversationId, _botId);
                         userMessage = data;
                     });
                     _agentAsisstSocket.on('agent_assist_user_message', (data) => {
-                        updateAgentAssistState(_conversationId, 'assistTab', data);
+                        updateNumberOfMessages();
+                      //  updateAgentAssistState(_conversationId, 'assistTab', data);
                         processUserMessages(data, data.conversationId, data.botId);
 
                     });
@@ -283,7 +295,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             document.getElementById("loader").style.display = "none";
                             document.getElementById("overLaySearch").style.display = "block";
                         } else {
-                            updateAgentAssistState(_conversationId, 'myBotTab', data);
+                          //  updateAgentAssistState(_conversationId, 'myBotTab', data);
                             processMybotDataResponse(data, data.conversationId, data.botId);
                         }
                         // processAgentIntentResults(data, data.conversationId, data.botId);
@@ -326,8 +338,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     'userName': 'test',
                     'id': _agentAssistDataObj.conversationId
                 }
-               
-                console.log("AgentAssist >>> sending welcome_message_request")
+
                 _agentAsisstSocket.emit('welcome_message_request', welcome_message_request);
 
                 if (isCallConversation === 'true') {
@@ -335,8 +346,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     $('#transcriptIcon').removeClass('hide');
                     transcriptionTabActive();
                 }
-                updateUIState(_conversationId, isCallConversation);
 
+                renderingHistoryMessage();
+                
+                updateUIState(_conversationId, isCallConversation);
                 // var agent_menu_request = {
                 //     "botId": _agentAssistDataObj.botId,
                 //     "conversationId": _agentAssistDataObj.conversationId,
@@ -618,7 +631,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             });
                         }
                     }
-                    
+
 
                     if (data.isSearch && !answerPlaceableID) {
                         ShowSearchContent();
@@ -642,23 +655,23 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 } else if ((dialogsLength === 0 || dialogsLength === undefined) && (faqsLength > 0)) {
                                     $('#overLaySearch').html(`<div class="search-results-text">${faqsLength} Search results for '${data.userInput}' <span class="show-all hide">Show all</span></div>`)
                                 }
-                                if((dialogsLength + faqsLength)>1){
+                                if ((dialogsLength + faqsLength) > 1) {
                                     $('#overLaySearch').find('.show-all').removeClass('hide');
 
                                 }
                             }
 
                         } else {
-                            if(isSuggestionProcessed) {
+                            if (isSuggestionProcessed) {
                                 if (currentTabActive == 'searchAutoIcon') {
                                     let searchTextDisplay = document.getElementById('search-text-display');
                                     html = `<div class="searched-intent" id="librarySearchText">0 Search results for '${data.userInput}' </div>`
                                     searchTextDisplay.innerHTML = html;
                                 } else {
-                                      $('#overLaySearch').html(`<div class="search-results-text">0 Search results for '${data.userInput}'</div>`)
+                                    $('#overLaySearch').html(`<div class="search-results-text">0 Search results for '${data.userInput}'</div>`)
                                 }
                             }
-                           
+
 
                         }
 
@@ -752,36 +765,36 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 let faqsSuggestions = currentTabActive == 'searchAutoIcon' ? $('#search-text-display #faqsSuggestions-results') : $('#overLaySearch #faqsSuggestions-results');
 
                                 let faqHtml = `
-                        <div class="type-info-run-send" id="faqDivLib-${index}">
-                            <div class="left-content" id="faqSectionLib-${index}">
-                                <div class="title-text" id="titleLib-${index}">${ele.question}</div>
+                        <div class="type-info-run-send" id="faqDivLib-${uuids+index}">
+                            <div class="left-content" id="faqSectionLib-${uuids+index}">
+                                <div class="title-text" id="titleLib-${uuids+index}">${ele.question}</div>
                             </div>
                         </div>`;
 
                                 faqsSuggestions.append(faqHtml);
-                                let faqs = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${index}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${index}`);
+                                let faqs = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${uuids+index}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${uuids+index}`);
                                 if (!ele.answer) {
                                     let checkHtml = `
                             <i class="ast-carrotup" data-conv-id="${data.conversationId}"
                             data-bot-id="${botId}" data-intent-name="${ele.question}"
-                            data-check-lib="true" id="checkLib-${index}"></i>`;
+                            data-check-lib="true" id="checkLib-${uuids+index}"></i>`;
                                     faqs.append(checkHtml);
                                 } else {
-                                    let a = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display #faqDivLib-${index}`) : $(`#overLaySearch #faqDivLib-${index}`);
+                                    let a = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display #faqDivLib-${uuids+index}`) : $(`#overLaySearch #faqDivLib-${uuids+index}`);
                                     let faqActionHtml = `<div class="action-links">
-                            <button class="send-run-btn" id="sendMsg" data-msg-id="${index}"  data-msg-data="${ele.answer}">Send</button>
-                            <div class="copy-btn" data-msg-id="${index}" data-msg-data='${ele.answer}'>
-                                <i class="ast-copy" data-msg-id="${index}" data-msg-data='${ele.answer}'></i>
+                            <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids+index}"  data-msg-data="${ele.answer}">Send</button>
+                            <div class="copy-btn" data-msg-id="${uuids+index}" data-msg-data='${ele.answer}'>
+                                <i class="ast-copy" data-msg-id="${uuids+index}" data-msg-data='${ele.answer}'></i>
                             </div>
                         </div>`;
                                     a.append(faqActionHtml);
-                                    faqs.append(`<div class="desc-text" id="descLib-${index}">${ele.answer}</div>`);
+                                    faqs.append(`<div class="desc-text" id="descLib-${uuids+index}">${ele.answer}</div>`);
                                 }
                                 if ((ele.question?.length + ele.answer?.length) > 70) {
-                                    let faqs = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${index}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${index}`);
+                                    let faqs = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${uuids+index}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${uuids+index}`);
                                     let seeMoreButtonHtml = `
-                              <button class="ghost-btn" style="font-style: italic;" id="seeMore-${index}" data-see-more="true">Show more</button>
-                              <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${index}" data-see-less="true">Show less</button>                  
+                              <button class="ghost-btn" style="font-style: italic;" id="seeMore-${uuids+index}" data-see-more="true">Show more</button>
+                              <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${uuids+index}" data-see-less="true">Show less</button>                  
                               `;
                                     faqs.append(seeMoreButtonHtml);
                                 }
@@ -793,29 +806,32 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         if (data.type === 'text' && data.suggestions) {
                             isSuggestionProcessed = false
                             data.suggestions.faqs.forEach((ele) => {
+                                let splitedanswerPlaceableID = answerPlaceableID.split('-');
+                                splitedanswerPlaceableID.shift();
+                                
                                 if(currentTabActive == 'searchAutoIcon'){
-                                    let faqAnswerSendMsg =  $(`#search-text-display #faqDivLib-${answerPlaceableID.split('-')[1]}`).find("[id='sendMsg']");
+                                    let faqAnswerSendMsg =  $(`#search-text-display #faqDivLib-${splitedanswerPlaceableID.join('-')}`).find("[id='sendMsg']");
                                     $(faqAnswerSendMsg).attr('data-msg-data',ele.answer);
-                                    let faqAnswerCopyMsg =  $(`#search-text-display #faqDivLib-${answerPlaceableID.split('-')[1]}`).find(".copy-btn");
+                                    let faqAnswerCopyMsg =  $(`#search-text-display #faqDivLib-${splitedanswerPlaceableID.join('-')}`).find(".copy-btn");
                                     $(faqAnswerCopyMsg).attr('data-msg-data',ele.answer)
                                 }else{
-                                    let faqAnswerSendMsg =  $(`#overLaySearch #faqDivLib-${answerPlaceableID.split('-')[1]}`).find("[id='sendMsg']");
+                                    let faqAnswerSendMsg =  $(`#overLaySearch #faqDivLib-${splitedanswerPlaceableID.join('-')}`).find("[id='sendMsg']");
                                     $(faqAnswerSendMsg).attr('data-msg-data',ele.answer)
-                                    let faqAnswerCopyMsg =  $(`#overLaySearch #faqDivLib-${answerPlaceableID.split('-')[1]}`).find(".copy-btn");
+                                    let faqAnswerCopyMsg =  $(`#overLaySearch #faqDivLib-${splitedanswerPlaceableID.join('-')}`).find(".copy-btn");
                                     $(faqAnswerCopyMsg).attr('data-msg-data',ele.answer)
                                 }
 
                                 $(`${currentTabActive == 'searchAutoIcon' ? `#search-text-display #${answerPlaceableID}` : `#overLaySearch #${answerPlaceableID}`}`).html(ele.answer);
                                 $(`${currentTabActive == 'searchAutoIcon' ? `#search-text-display #${answerPlaceableID}` : `#overLaySearch #${answerPlaceableID}`}`).attr('data-answer-render', 'true');
                                 if ((ele.question?.length + ele.answer?.length) > 70) {
-                                    let faqs = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${answerPlaceableID.split('-')[1]}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${answerPlaceableID.split('-')[1]}`);
+                                    let faqs = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${splitedanswerPlaceableID.join('-')}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${splitedanswerPlaceableID.join('-')}`);
                                     let seeMoreButtonHtml = `
-                          <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${answerPlaceableID.split('-')[1]}" data-see-more="true">Show more</button>
-                          <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${answerPlaceableID.split('-')[1]}" data-see-less="true">Show less</button>
+                          <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${splitedanswerPlaceableID.join('-')}" data-see-more="true">Show more</button>
+                          <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${splitedanswerPlaceableID.join('-')}" data-see-less="true">Show less</button>
                           `;
                                     faqs.append(seeMoreButtonHtml);
-                                    $(`#search-text-display .type-info-run-send #faqSectionLib-${answerPlaceableID.split('-')[1]} .ast-carrotup.rotate-carrot`).length>0?$(`#search-text-display #seeMore-${answerPlaceableID.split('-')[1]}`).removeClass('hide'):$(`#search-text-display #seeMore-${answerPlaceableID.split('-')[1]}`).addClass('hide');
-                                    $(`#overLaySearch .type-info-run-send #faqSectionLib-${answerPlaceableID.split('-')[1]} .ast-carrotup.rotate-carrot`).length>0?$(`#overLaySearch #seeMore-${answerPlaceableID.split('-')[1]}`).removeClass('hide'):$(`#overLaySearch #seeMore-${answerPlaceableID.split('-')[1]}`).addClass('hide');
+                                    $(`#search-text-display .type-info-run-send #faqSectionLib-${splitedanswerPlaceableID.join('-')} .ast-carrotup.rotate-carrot`).length>0?$(`#search-text-display #seeMore-${splitedanswerPlaceableID.join('-')}`).removeClass('hide'):$(`#search-text-display #seeMore-${splitedanswerPlaceableID.join('-')}`).addClass('hide');
+                                    $(`#overLaySearch .type-info-run-send #faqSectionLib-${splitedanswerPlaceableID.join('-')} .ast-carrotup.rotate-carrot`).length>0?$(`#overLaySearch #seeMore-${splitedanswerPlaceableID.join('-')}`).removeClass('hide'):$(`#overLaySearch #seeMore-${splitedanswerPlaceableID.join('-')}`).addClass('hide');
                                 }
                             })
                             answerPlaceableID = undefined;
@@ -924,7 +940,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         };
                         //  _msgsResponse.message.push(body);
                     }
-                    if (data.buttons && !data.value.includes('Customer has waited')) {
+                    if (isMyBotAutomationOnGoing && data.buttons && !data.value.includes('Customer has waited')) {
                         let sendMsgData = encodeURI(JSON.stringify(_msgsResponse));
                         let runInfoContent = $(`#dropDownData-${myBotDropdownHeaderUuids}`);
                         let askToUserHtml = `
@@ -997,23 +1013,98 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         $(noOfSteps[noOfSteps.length - 2]).removeClass('hide');
                         $(noOfSteps[noOfSteps.length - 1]).removeClass('hide');
                     }
-                    if (((data.endOfFaq || data.endOfTask) && data.type !== 'text') || (data.userInput == 'discard all' && data.type !== 'text')) {
+                    if (isMyBotAutomationOnGoing && (((data.endOfFaq || data.endOfTask) && data.type !== 'text') || (data.userInput == 'discard all' && data.type !== 'text') || (userMessage && userMessage.value && userMessage.value.includes('discard')))) {
                         isMyBotAutomationOnGoing = false;
                         addFeedbackHtmlToDom(data, botId, userIntentInput, 'runForAgentBot');
+                    }
+                }
+
+                function updateNumberOfMessages() {
+                    numberOfNewMessages += 1;
+                    $(".scroll-bottom-btn").addClass("new-messages");
+                    $(".scroll-bottom-btn span").text(numberOfNewMessages + ' new');
+                    if(numberOfNewMessages == 1){
+                        removeWhiteBackgroundToSeenMessages();
+                    }
+                }
+
+                function addIconClassToNewMessage(){
+                    let lastElement = getLastElement('dynamicBlock');
+                    let beforeLastElement = document.getElementsByClassName('icon-block');
+                    if(beforeLastElement){
+                        $(beforeLastElement).removeClass("icon-block");
+                    }
+                    var iconBlockElements = lastElement.querySelectorAll('.icon_block');
+                    for (let i = 0; i < iconBlockElements.length; i++) {
+                        let iconElement = iconBlockElements[i];
+                        if (i == (iconBlockElements.length - 1)) {
+                            $(iconElement).addClass("icon-block");
+                        }
+                    }
+                }
+
+                function removeWhiteBackgroundToSeenMessages(){
+                     let beforeLastElementArray = document.querySelectorAll('.last-msg-white-bg');
+                    for(let ele of beforeLastElementArray){
+                        $(ele).removeClass("last-msg-white-bg");
+                    }
+                }
+
+
+                function addWhiteBackgroundClassToNewMessage(){
+                    let beforeLastElementArray = document.querySelectorAll('.last-msg-white-bg');
+                    for(let ele of beforeLastElementArray){
+                        if(ele && scrollAtEnd){
+                            $(ele).removeClass("last-msg-white-bg");
+                        }
+                    }
+                    let lastElement = getLastElement('dynamicBlock');
+                    if(lastElement){
+                        $(lastElement).addClass("last-msg-white-bg");
+                        if(!scrollAtEnd){
+                            if(lastElement.id.includes('automationSuggestions')){
+                                let agentUttInfoId = lastElement.id.split('-');
+                                agentUttInfoId.shift();
+                                agentUttInfoId = 'agentUttInfo-' + agentUttInfoId.join('-');
+                                if(document.getElementById(agentUttInfoId)){
+                                    $('#'+agentUttInfoId).addClass("last-msg-white-bg");
+                                }
+                            }
+                        }
+                        let newElementsHeight = lastElement.clientHeight;
+                        // addBlurToOldMessage(newElementsHeight);
+                        if(lastElement.nextElementSibling && lastElement.nextElementSibling.className.includes('feedback-data')){
+                            lastElement.nextElementSibling.classList.add("last-msg-white-bg");
+                        }
+                        let lastElementId = $(lastElement).parent().attr('id');
+                        if(lastElementId){
+                            let uuid = lastElementId.split('-');
+                            uuid.shift();
+                            uuid = uuid.join('-');
+                            console.log(uuid, "uuid");
+                            let endofTaskId = 'endTaks-' + uuid;
+                            if(document.getElementById(endofTaskId)){
+                                document.getElementById(endofTaskId).classList.add('last-msg-white-bg');
+                            }
+                            let overridebtnId = 'overRideBtn-' + uuid;
+                            if(document.getElementById(overridebtnId)){
+                                $('#' + overridebtnId).parent().addClass('last-msg-white-bg');
+                            }
+                        }
                     }
                 }
 
                 function processAgentAssistResponse(data, convId, botId) {
                     console.log("AgentAssist >>> agentassist_response:", data);
                     let automationSuggestions = $('#dynamicBlock .dialog-task-accordiaon-info');
-                    if (data.suggestions) {
-                        for (let ele of automationSuggestions) {
-                            ele.classList.add('hide');
-                        }
-                        $('.empty-data-no-agents').addClass('hide');
-                    } else {
-                        automationSuggestions.length > 1 ? (automationSuggestions[automationSuggestions.length - 1].classList.remove('hide'), $('.empty-data-no-agents').addClass('hide')) : '';
-                    }
+                    // if (data.suggestions) {
+                    //     for (let ele of automationSuggestions) {
+                    //         ele.classList.add('hide');
+                    //     }
+                    //     $('.empty-data-no-agents').addClass('hide');
+                    // } else {
+                    //     automationSuggestions.length > 1 ? (automationSuggestions[automationSuggestions.length - 1].classList.remove('hide'), $('.empty-data-no-agents').addClass('hide')) : '';
+                    // }
 
                     let uuids = koreGenerateUUID();
                     responseId = uuids;
@@ -1045,19 +1136,42 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         "icon": "https://uat.kore.ai:443/api/getMediaStream/market/f-cb381255-9aa1-5ce2-95e3-71233aef7084.png?n=17648985&s=IlRvUlUwalFVaFVMYm9sZStZQnlLc0l1UlZvdlNUUDcxR2o3U2lscHRrL3M9Ig$$",
                         "traceId": "873209019a5adc26"
                     }
+
+                    console.log(isAutomationOnGoing, "is automation on going", data.suggestions, answerPlaceableID)
                     if (!isAutomationOnGoing && data.suggestions && !answerPlaceableID) {
-                        $('#welcomeMsg').addClass('hide');
+                        // $('#welcomeMsg').addClass('hide');
                         let dynamicBlock = document.getElementById('dynamicBlock');
                         let suggestionsblock = $('#dynamicBlock .dialog-task-run-sec');
                         if (suggestionsblock.length >= 1) {
                             suggestionsblock.each((i, ele) => {
                                 $('#dynamicBlock .agent-utt-info').each((i, elem) => {
-                                    if (ele.id.split('-').includes(elem.id.split('-')[1])) {
-                                        automationNotRanArray.push(elem.innerText.trim());
-                                        elem.remove();
+                                    let elemID = elem.id.split('-');
+                                    elemID.shift();
+                                    if (ele.id.includes(elemID.join('-'))) {
+                                        let foundIndex = automationNotRanArray.findIndex((ele)=>ele.id === elem.id);
+                                        if(foundIndex == -1){
+                                            automationNotRanArray.push({name:elem.innerText.trim(),id:elem.id});
+                                            var appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                                            var appState = JSON.parse(appStateStr);
+                                            var convState = appState[_conversationId] || {};
+                                            if(!appState[_conversationId]) {
+                                                convState = appState[_conversationId] = {};
+                                            }else{
+                                                
+                                                if (!convState['assistTab'] ) {
+                                                    convState['assistTab'] = {};
+                                                }
+                                                if (!convState['assistTab']['automationsNotRanArray']) {
+                                                    convState['assistTab']['automationsNotRanArray'] = [];
+                                                }
+                                                    convState['assistTab']['automationsNotRanArray'] = automationNotRanArray;
+                                                localStorage.setItem('agentAssistState', JSON.stringify(appState))
+                                            }
+                                        }
+                                        // elem.remove();
                                     }
                                 })
-                                ele.remove();
+                                // ele.remove();
                             })
                         }
                         userIntentInput = data.userInput;
@@ -1123,7 +1237,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                                 let dialogSuggestions = document.getElementById(`dialogSuggestions-${responseId}`);
                                 let dialogsHtml = `
-                    <div class="type-info-run-send">
+                    <div class="type-info-run-send" id="suggestionId-${uuids}">
                         <div class="left-content">
                             <div class="title-text" id="automation-${uuids}">${ele.name}</div>
                         </div>
@@ -1203,9 +1317,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 let faqsSuggestions = document.getElementById(`faqsSuggestions-${responseId}`);
 
                                 let faqHtml = `
-                    <div class="type-info-run-send" id="faqDiv-${index}">
-                        <div class="left-content" id="faqSection-${index}">
-                            <div class="title-text" id="title-${index}">${ele.question}</div>
+                    <div class="type-info-run-send" id="faqDiv-${uuids+index}">
+                        <div class="left-content" id="faqSection-${uuids+index}">
+                            <div class="title-text" id="title-${uuids+index}">${ele.question}</div>
                             
                             
                         </div>
@@ -1213,52 +1327,57 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     </div>`;
 
                                 faqsSuggestions.innerHTML += faqHtml;
-                                let faqs = $(`.type-info-run-send #faqSection-${index}`);
+                                let faqs = $(`.type-info-run-send #faqSection-${uuids+index}`);
                                 if (!ele.answer) {
                                     let checkHtml = `
                         <i class="ast-carrotup" data-conv-id="${data.conversationId}"
                         data-bot-id="${botId}" data-intent-name="${ele.question}"
-                        data-check="true" id="check-${index}"></i>`;
+                        data-check="true" id="check-${uuids+index}"></i>`;
                                     faqs.append(checkHtml);
                                 } else {
-                                    let a = $(`#faqDiv-${index}`);
+                                    let a = $(`#faqDiv-${uuids+index}`);
                                     let faqActionHtml = `<div class="action-links">
-                        <button class="send-run-btn" id="sendMsg" data-msg-id="${index}" data-msg-data="${ele.answer}">Send</button>
-                        <div class="copy-btn" data-msg-id="${index}" data-msg-data="${ele.answer}">
-                            <i class="ast-copy" data-msg-id="${index}" data-msg-data="${ele.answer}"></i>
+                        <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids+index}" data-msg-data="${ele.answer}">Send</button>
+                        <div class="copy-btn" data-msg-id="${uuids+index}" data-msg-data="${ele.answer}">
+                            <i class="ast-copy" data-msg-id="${uuids+index}" data-msg-data="${ele.answer}"></i>
                         </div>
                     </div>`;
                                     a.append(faqActionHtml);
-                                    faqs.append(`<div class="desc-text" id="desc-${index}">${ele.answer}</div>`);
+                                    faqs.append(`<div class="desc-text" id="desc-${uuids+index}">${ele.answer}</div>`);
                                 }
                                 if ((ele.question?.length + ele.answer?.length) > 70) {
-                                    let faqs = $(`.type-info-run-send #faqSection-${index}`);
+                                    let faqs = $(`.type-info-run-send #faqSection-${uuids+index}`);
                                     let seeMoreButtonHtml = `
-                          <button class="ghost-btn" style="font-style: italic;" id="seeMore-${index}" data-see-more="true">Show more</button>
-                          <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${index}" data-see-less="true">Show less</button>
+                          <button class="ghost-btn" style="font-style: italic;" id="seeMore-${uuids+index}" data-see-more="true">Show more</button>
+                          <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${uuids+index}" data-see-less="true">Show less</button>
                           `;
                                     faqs.append(seeMoreButtonHtml);
                                 }
                                 //  _msgsResponse.message.push(body);
                             })
                         }
+
+                        updateNewMessageUUIDList(responseId);
+
                     } else {
                         if (data.type === 'text' && data.suggestions) {
                             data.suggestions.faqs.forEach((ele) => {
-                               let faqAnswerSendMsg =  $(`#faqDiv-${answerPlaceableID.split('-')[1]}`).find("[id='sendMsg']");
+                               let splitedanswerPlaceableID = answerPlaceableID.split('-');
+                               splitedanswerPlaceableID.shift();
+                               let faqAnswerSendMsg =  $(`#dynamicBlock #faqDiv-${splitedanswerPlaceableID.join('-')}`).find("[id='sendMsg']");
                                $(faqAnswerSendMsg).attr('data-msg-data',ele.answer)
-                               let faqAnswerCopyMsg =  $(`#faqDiv-${answerPlaceableID.split('-')[1]}`).find(".copy-btn");
+                               let faqAnswerCopyMsg =  $(`#dynamicBlock #faqDiv-${splitedanswerPlaceableID.join('-')}`).find(".copy-btn");
                                $(faqAnswerCopyMsg).attr('data-msg-data',ele.answer)
                                 $(`#${answerPlaceableID}`).html(ele.answer);
                                 $(`#${answerPlaceableID}`).attr('data-answer-render', 'true');
                                 if ((ele.question?.length + ele.answer?.length) > 70) {
-                                    let faqs = $(`.type-info-run-send #faqSection-${answerPlaceableID.split('-')[1]}`);
+                                    let faqs = $(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')}`);
                                     let seeMoreButtonHtml = `
-                          <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${answerPlaceableID.split('-')[1]}" data-see-more="true">Show more</button>
-                          <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${answerPlaceableID.split('-')[1]}" data-see-less="true">Show less</button>
+                          <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${splitedanswerPlaceableID.join('-')}" data-see-more="true">Show more</button>
+                          <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${splitedanswerPlaceableID.join('-')}" data-see-less="true">Show less</button>
                           `;
                                     faqs.append(seeMoreButtonHtml);
-                                    $(`.type-info-run-send #faqSection-${answerPlaceableID.split('-')[1]} .ast-carrotup.rotate-carrot`).length>0?$(`.type-info-run-send #faqSection-${answerPlaceableID.split('-')[1]} #seeMore-${answerPlaceableID.split('-')[1]}`).removeClass('hide'):$(`.type-info-run-send #faqSection-${answerPlaceableID.split('-')[1]} #seeMore-${answerPlaceableID.split('-')[1]}`).addClass('hide');
+                                    $(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')} .ast-carrotup.rotate-carrot`).length>0?$(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')} #seeMore-${splitedanswerPlaceableID.join('-')}`).removeClass('hide'):$(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')} #seeMore-${splitedanswerPlaceableID.join('-')}`).addClass('hide');
                                 }
                             })
                             answerPlaceableID = undefined;
@@ -1318,7 +1437,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                         _msgsResponse.message.push(body);
                     });
-                    if (dropdownHeaderUuids && data.buttons && !data.value.includes('Customer has waited')) {
+                    if (isAutomationOnGoing && dropdownHeaderUuids && data.buttons && !data.value.includes('Customer has waited')) {
                         let msgStringify = JSON.stringify(_msgsResponse);
                         let newTemp = encodeURI(msgStringify);
                         $(`#overRideBtn-${dropdownHeaderUuids}`).removeClass('hide');
@@ -1378,52 +1497,53 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                     }
                     if (!dropdownHeaderUuids && !parsedPayload && !data.suggestions) {
-                        $('#welcomeMsg').removeClass('hide');
                         $('#dynamicBlock .empty-data-no-agents').addClass('hide');
-                        let welcomeMsgdiv = $('#welcomeMsg');
+                        let dynamicBlockDiv = $('#dynamicBlock');
                         data.buttons?.forEach((ele, i) => {
                             let welcomeMsgHtml = `
-                            <div class="steps-run-data">
-                            <div class="icon_block">
-                                <i class="ast-agent"></i>
-                            </div>
-                            <div class="run-info-content">
-                            
-                            </div>
-                        </div>`;
+                            <div class = "collapse-acc-data before-none" id='smallTalk-${uuids}'>
+                                <div class="steps-run-data">
+                                    <div class="icon_block">
+                                        <i class="ast-agent"></i>
+                                    </div>
+                                    <div class="run-info-content">
+                                    
+                                    </div>
+                                </div>
+                            </div>`;
                             if (data.buttons?.length > 1) {
                                 if (i == 0) {
-                                    welcomeMsgdiv.append(welcomeMsgHtml);
-                                    let runInfoDivOfwelcome = $(`#welcomeMsg .run-info-content`);
-                                    $(runInfoDivOfwelcome).attr('data-welcome-msg', 'true');
+                                    dynamicBlockDiv.append(welcomeMsgHtml);
+                                    let runInfoDivOfwelcome = $(`#dynamicBlock .collapse-acc-data .run-info-content`);
                                     let contentHtml = `
                                 <div class="title">Customer has waited for an agent for few seconds.<br/>Here are some appropriate opening lines.</div>
-                            <div class="agent-utt">
-                                <div class="title-data" id="displayData-${uuids}">${ele.value}</div>
-                                <div class="action-links">
-                                    <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}"  data-msg-data='${ele.value}'>Send</button>
-                                    <div class="copy-btn" data-msg-id="${uuids}" data-msg-data="${ele.value}">
-                                        <i class="ast-copy" data-msg-id="${uuids}" data-msg-data="${ele.value}"></i>
+                                   <div class="agent-utt">
+                                    <div class="title-data" id="displayData-${uuids}">${ele.value}</div>
+                                    <div class="action-links">
+                                        <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}"  data-msg-data='${ele.value}'>Send</button>
+                                        <div class="copy-btn" data-msg-id="${uuids}" data-msg-data="${ele.value}">
+                                            <i class="ast-copy" data-msg-id="${uuids}" data-msg-data="${ele.value}"></i>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>`;
+                                </div>`;
                                     runInfoDivOfwelcome.append(contentHtml);
                                 } else {
-                                    let runInfoDivOfwelcome = $(`#welcomeMsg .run-info-content`);
+                                    let runInfoDivOfwelcome = $(`#dynamicBlock .collapse-acc-data .run-info-content`);
                                     let contentHtmlWithoutTellCus = `
-                            <div class="agent-utt">
-                                <div class="title-data" id="displayData-${uuids}">${ele.value}</div>
-                                <div class="action-links">
-                                    <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}"  data-msg-data='${ele.value}'>Send</button>
-                                    <div class="copy-btn" data-msg-id="${uuids}" data-msg-data='${ele.value}'>
-                                        <i class="ast-copy" data-msg-id="${uuids}" data-msg-data='${ele.value}'></i>
-                                    </div>
-                                </div>
-                            </div>`;
+                                    <div class="agent-utt">
+                                        <div class="title-data" id="displayData-${uuids}">${ele.value}</div>
+                                        <div class="action-links">
+                                            <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}"  data-msg-data='${ele.value}'>Send</button>
+                                            <div class="copy-btn" data-msg-id="${uuids}" data-msg-data='${ele.value}'>
+                                                <i class="ast-copy" data-msg-id="${uuids}" data-msg-data='${ele.value}'></i>
+                                            </div>
+                                        </div>
+                                    </div>`;
                                     runInfoDivOfwelcome.append(contentHtmlWithoutTellCus);
                                 }
                             } else {
                                 let botResHtml = `
+                                <div class="collapse-acc-data before-none" id='smallTalk-${uuids}'>
                              <div class="steps-run-data">
                              <div class="icon_block">
                                  <i class="ast-agent"></i>
@@ -1440,27 +1560,29 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                  </div>
                              </div>
                              </div>
+                         </div>
                          </div>`;
-                                welcomeMsgdiv.append(botResHtml)
+                                dynamicBlockDiv.append(botResHtml)
                             }
                         });
+                        updateNewMessageUUIDList(uuids);
                     }
-
                     dropdownHeaderUuids ? AgentChatInitialize.renderMessage(_msgsResponse, uuids, `dropDownData-${dropdownHeaderUuids}`) : '';
-                    let noOfStepsOfSmallTalk = $(`.body-data-container #dynamicBlock #welcomeMsg`).find('.steps-run-data').not('.hide');
-                    if (noOfStepsOfSmallTalk.length >= 2) {
-                        $(noOfStepsOfSmallTalk).addClass('hide');
-                        $(noOfStepsOfSmallTalk[noOfStepsOfSmallTalk.length - 2]).removeClass('hide').attr('style', 'color:gray');
-                        $(noOfStepsOfSmallTalk[noOfStepsOfSmallTalk.length - 1]).removeClass('hide');
-                    }
+
+                    // let noOfStepsOfSmallTalk = $(`.body-data-container #dynamicBlock #welcomeMsg`).find('.steps-run-data').not('.hide');
+                    // if (noOfStepsOfSmallTalk.length >= 2) {
+                    //     $(noOfStepsOfSmallTalk).addClass('hide');
+                    //     $(noOfStepsOfSmallTalk[noOfStepsOfSmallTalk.length - 2]).removeClass('hide').attr('style', 'color:gray');
+                    //     $(noOfStepsOfSmallTalk[noOfStepsOfSmallTalk.length - 1]).removeClass('hide');
+                    // }
                     // removeElementFromDom();
-                    let noOfSteps = $(`.body-data-container #dynamicBlock .dialog-task-accordiaon-info`).find('.steps-run-data').not('.hide');
-                    if (noOfSteps.length >= 2) {
-                        $(noOfSteps).addClass('hide');
-                        $(noOfSteps[noOfSteps.length - 2]).removeClass('hide').attr('style', 'color:gray');
-                        $(noOfSteps[noOfSteps.length - 1]).removeClass('hide');
-                    }
-                    if (((data.endOfFaq || data.endOfTask) && data.type !== 'text') || (data.userInput == 'discard all' && data.type !== 'text') || (userMessage && userMessage.value && userMessage.value.includes('discard'))) {
+                    // let noOfSteps = $(`.body-data-container #dynamicBlock .dialog-task-accordiaon-info`).find('.steps-run-data').not('.hide');
+                    // if (noOfSteps.length >= 2) {
+                    //     $(noOfSteps).addClass('hide');
+                    //     $(noOfSteps[noOfSteps.length - 2]).removeClass('hide').attr('style', 'color:gray');
+                    //     $(noOfSteps[noOfSteps.length - 1]).removeClass('hide');
+                    // }
+                    if (isAutomationOnGoing && (((data.endOfFaq || data.endOfTask) && data.type !== 'text') || (data.userInput == 'discard all' && data.type !== 'text') || (userMessage && userMessage.value && userMessage.value.includes('discard')))) {
                         isAutomationOnGoing = false;
                         var appStateStr = localStorage.getItem('agentAssistState') || '{}';
                         var appState = JSON.parse(appStateStr);
@@ -1472,9 +1594,35 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         $('.override-input-div').addClass('hide');
                         addFeedbackHtmlToDom(data, botId, userIntentInput);
                         userMessage = {};
+                        // let dropDownDataElement = document.getElementById(`dropDownData-${dropdownHeaderUuids}`);
+                        // let steprunelementArray = dropDownDataElement.querySelectorAll('.steps-run-data');
+                        // let lastStepNode = steprunelementArray[steprunelementArray.length - 1];
+                        // $(lastStepNode).addClass('last-child-step-run');
                     }
-
+                    if (scrollAtEnd) {
+                        scrollToBottom();
+                    }
+                    addWhiteBackgroundClassToNewMessage();
+                    RemoveVerticalLineForLastResponse();
                 }
+
+                function addBlurToOldMessage(newElementsHeight){
+                    let dynamicBlockHeight = $(".dynamic-block-content").height();
+                    $(".dynamic-block-blur").height(dynamicBlockHeight - newElementsHeight);
+                }
+
+                function RemoveVerticalLineForLastResponse(){
+                    let accordionInfoList = document.querySelectorAll('.dialog-task-accordiaon-info');
+                    for(let info of accordionInfoList){
+                        let stepsrunList = info.querySelectorAll('.steps-run-data');
+                        for(let node of stepsrunList){
+                            $(node).removeClass('last-child-step-run');
+                        }
+                        let lastStepNode = stepsrunList[stepsrunList.length -1];
+                        $(lastStepNode).addClass('last-child-step-run');
+                    }
+                }
+
 
                 function processTranscriptData(data, conversationId, botid) {
                     console.log("---- data====", data)
@@ -1501,10 +1649,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     var ampm = hours >= 12 ? 'pm' : 'am';
                     hours = hours % 12;
                     hours = hours ? hours : 12; // the hour '0' should be '12'
-                    minutes = minutes < 10 ? '0'+minutes : minutes;
+                    minutes = minutes < 10 ? '0' + minutes : minutes;
                     var strTime = hours + ':' + minutes + ' ' + ampm;
                     return strTime;
-                  }
+                }
 
                 function processAgentMessages(data) {
                     let time = new Date();
@@ -1575,7 +1723,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     dynamicBlock.innerHTML += dropdownHtml;
                 }
 
-                function _createRunTemplateContiner(uuids, intentName){
+                function _createRunTemplateContiner(uuids, intentName) {
                     let dynamicBlock = document.getElementById('dynamicBlock');
                     let dropdownHtml = `
        <div class="dialog-task-accordiaon-info hide" id="addRemoveDropDown-${uuids}" >
@@ -1608,50 +1756,618 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     if (!appState[_convId]) {
                         convState = appState[_convId] = {};
                     }
-                    if (!convState[_tabName] ) {
+                    if (!convState[_tabName]) {
                         convState[_tabName] = {};
                     }
-                    if (!convState[_tabName]['stateItems']) {
-                        convState[_tabName]['stateItems'] = [];
-                    } 
+                    // if (!convState[_tabName]['stateItems']) {
+                    //     convState[_tabName]['stateItems'] = [];
+                    // } 
                     if (!_data.suggestions && _data.buttons?.length > 1) {
                         convState['isWelcomeProcessed'] = true;
                         convState['automationGoingOn'] = isAutomationOnGoing 
                     }
-                    let stateItems = convState[_tabName]['stateItems'];
-                    if (stateItems.length >= 2) {
-                        let lIntentName = null;
-                        for (let i = stateItems.length-1; (i >= 0 && lIntentName == null); i--) {
-                           let item = JSON.parse(stateItems[i]);
-                           if (item.intentName) {
-                              lIntentName = item.intentName;
-                           }
-                        }
-                        if (!_data.intentName) {
-                           _data.intentName = lIntentName;
-                        }
-                       if (JSON.parse(stateItems[0]).intentName === _data.intentName ) {
-                            stateItems[0] = stateItems[1];
-                            stateItems[1] = JSON.stringify(_data);
-                       } else {
-                           stateItems[0] = JSON.stringify(_data);
-                           stateItems.splice(1,1);
-                       }
-                      
-                    } else {
-                        // let lIntentName = null;
-                        // for (let i = stateItems.length-1; (i >= 0 && lIntentName == null); i--) {
-                        //    let item = JSON.parse(stateItems[i]);
-                        //    if (item.intentName) {
-                        //       lIntentName = item.intentName;
-                        //    }
-                        // }
-                        // if (!_data.intentName) {
-                        //    _data.intentName = lIntentName;
-                        // }
-                        stateItems.push(JSON.stringify(_data));
-                    }
+                   // let stateItems = convState[_tabName]['stateItems'];
+                    // if (stateItems.length >= 2) {
+                    //     let lIntentName = null;
+                    //     for (let i = stateItems.length-1; (i >= 0 && lIntentName == null); i--) {
+                    //        let item = JSON.parse(stateItems[i]);
+                    //        if (item.intentName) {
+                    //           lIntentName = item.intentName;
+                    //        }
+                    //     }
+                    //     if (!_data.intentName) {
+                    //        _data.intentName = lIntentName;
+                    //     }
+                    //    if (JSON.parse(stateItems[0]).intentName === _data.intentName ) {
+                    //         stateItems[0] = stateItems[1];
+                    //         stateItems[1] = JSON.stringify(_data);
+                    //    } else {
+                    //        stateItems[0] = JSON.stringify(_data);
+                    //        stateItems.splice(1,1);
+                    //    }
+
+                    // } else {
+                    //     // let lIntentName = null;
+                    //     // for (let i = stateItems.length-1; (i >= 0 && lIntentName == null); i--) {
+                    //     //    let item = JSON.parse(stateItems[i]);
+                    //     //    if (item.intentName) {
+                    //     //       lIntentName = item.intentName;
+                    //     //    }
+                    //     // }
+                    //     // if (!_data.intentName) {
+                    //     //    _data.intentName = lIntentName;
+                    //     // }
+                    //     stateItems.push(JSON.stringify(_data));
+                    // }
+                  //  stateItems.push(JSON.stringify(_data));
                     localStorage.setItem('agentAssistState', JSON.stringify(appState));
+                }
+                function addFeedbackHtmlToDomForHistory(data, botId, userIntentInput, id, runForAgentBot) {
+                    var dropDownData;
+                    var endOfDialoge;
+                    if (runForAgentBot) {
+                        $(`#myBotTerminateAgentDialog-${id}.btn-danger`).remove();
+                        dropDownData = $(`#dropDownData-${id}`);
+                        endOfDialoge = $(`#MyBotaddRemoveDropDown-${id}`);
+                    } else {
+                        $(`#addRemoveDropDown-${id} .btn-danger`).remove();
+                        dropDownData = $(`#dropDownData-${id}`);
+                        endOfDialoge = $(`#addRemoveDropDown-${id}`);
+                    }
+                    // $(`#addRemoveDropDown-${dropdownHeaderUuids} .btn-danger`).remove();
+                    let feedbackHtml = ` 
+        <div class="feedback-data">
+        <div class="feedbackup-data" id="feedBackLikeContainer-${id}">
+            <div class="feedback-icon" id="feedbackup-${id}" data-feedbacklike="false"
+            data-conv-id="${data.conversationId}"
+                        data-bot-id="${botId}" data-feedback="like"
+                        data-dialog-name="${data.tN}"
+                        data-user-input="${userIntentInput}">
+                <i class="ast-thumbup" id="feedbackup-${id}"
+                data-feedbacklike="false"
+                data-conv-id="${data.conversationId}"
+                        data-bot-id="${botId}" data-feedback="like"
+                        data-dialog-name="${data.tN}"
+                        data-user-input="${userIntentInput}"></i>
+            </div>
+            <span class="tootltip-tabs">Like</span>
+            </div>
+            <div class="feedbackdown-data" id="feedBackDislikeContainer-${id}">
+            <div class="feedback-icon" id="feedbackdown-${id}" data-feedbackdislike="false"
+            data-conv-id="${data.conversationId}"
+                        data-bot-id="${botId}" data-feedback="dislike"
+                        data-dialog-name="${data.tN}"
+                        data-user-input="${userIntentInput}">
+                <i class="ast-thumbdown" id="feedbackdown-${id}"
+                data-feedbackdislike="false"
+                data-conv-id="${data.conversationId}"
+                        data-bot-id="${botId}" data-feedback="dislike"
+                        data-dialog-name="${data.tN}"
+                        data-user-input="${userIntentInput}"></i>
+            </div>
+            <span class="tootltip-tabs">Dislike</span>
+            </div>
+       </div>`;
+                    dropDownData.append(feedbackHtml);
+                    let endofDialogeHtml = `
+        <div class="dilog-task-end" id="endTaks-${id}" data-history="true">
+        <div class="text-dialog-task-end">Task Ended</div>     
+                   </div>
+                   <div class="feedback-helpul-container hide">
+                    <div class="titles-content">
+                        <div class="title">Helpful?</div>
+                        <div class="btn-positive">
+                            <i class="ast-thumbup"></i>
+                            <span class="tootltip-tabs">Like</span>
+                        </div>
+                        <div class="btn-negtive">
+                            <i class="ast-thumbdown"></i>
+                            <span class="tootltip-tabs">Dislike</span>
+                        </div>
+                        <div class="thanks-update hide">Thanks for the feedback!</div>
+                        <div class="help-improve-arrow">
+                            <div class="title-improve">Help us improve (optional)</div>
+                            <div class="arrow-icon">
+                                <i class="ast-carrotup"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="explore-more-negtive-data">
+                        <div class="btns-group-negtive-chips">
+                            <div class="btn-chip-negtive active-chip">Not enough suggestions</div>
+                            <div class="btn-chip-negtive active-chip">Not prompt</div>
+                            <div class="btn-chip-negtive">Intent undetected</div>
+                            <div class="btn-chip-negtive">Not prompt</div>
+                            <div class="btn-chip-negtive">Other</div>
+                        </div>
+                        <div class="input-block-optional">
+                            <div class="label-text"></div>
+                            <input type="text" placeholder="Placeholder text" class="input-text">
+                        </div>
+                        <button class="submit-btn" disabled>Submit</button>
+                    </div>
+                </div>
+            
+        `;
+                    if(!document.getElementById('endTaks-' + id)){
+                        endOfDialoge.append(endofDialogeHtml);
+                    }
+                    $(`.customer-feeling-text`).addClass('bottom-95');
+                    setTimeout(() => {
+                        id = undefined;
+                    }, 100)
+                    // dropdownHeaderUuids = undefined;
+                }
+
+                function renderingHistoryMessage () {
+                    isShowHistoryEnable = true;
+                    getData(`${connectionDetails.envinormentUrl}/api/1.1/botmessages/agentassist/${_agentAssistDataObj.botId}/history?convId=${_agentAssistDataObj.conversationId}&agentHistory=false`)
+                    .then(response => {
+
+                        document.getElementById("loader").style.display = "none";
+
+                        let previousId;
+                        let previousTaskName, currentTaskName;
+                        // if (JSON.stringify(response) === JSON.stringify(previousResp)) {
+                        //     $(`#historyData .collapse-acc-data.hide`)[$(`#historyData .collapse-acc-data.hide`).length - 1]?.classList.remove('hide');
+                        //     $(`#historyData .show-history-feedback.hide`)[$(`#historyData .show-history-feedback.hide`).length - 1]?.classList.remove('hide');
+                        //     $(`#historyData .dilog-task-end.hide`)[$(`#historyData .dilog-task-end.hide`).length - 1]?.classList.remove('hide');
+
+
+                        // } else {
+                            let resp = response.length > 0 ? response?.slice(previousResp?.length - 1, response.length) : undefined;
+                            resp?.forEach((res, index) => {
+                                if (res.type == 'incoming') {
+                                    res.components?.forEach((ele) => {
+                                        if (ele.data.text == previousTaskName) {
+                                            previousTaskName = undefined;
+                                            previousId = undefined;
+                                            console.log("xxxxxxxxxxxxxxxxxxxxx incoming task same")
+                                        }
+                                    })
+                                }
+
+                                if ((res.agentAssistDetails?.suggestions || res.agentAssistDetails?.ambiguityList) && res.type == 'outgoing') {
+                                    let uniqueID = res._id;
+                                    var appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                                    var appState = JSON.parse(appStateStr);
+                                    if (!appState[_conversationId]) {
+                                        return 
+                                    }
+                                    var convState = appState[_conversationId];
+                                    if (!convState['assistTab']) {return;}
+                                    if (!convState['assistTab'].automationsNotRanArray || convState['assistTab'].automationsNotRanArray.length == 0) {
+                                      return;
+                                    }
+                                    let automationsNotRanArray = convState['assistTab'].automationsNotRanArray;
+                                        let historyDataHtml = $('#dynamicBlock');
+                                        if (automationsNotRanArray.findIndex(ele=>ele.name===res.agentAssistDetails?.userInput)!==-1) {
+
+                                            let htmls = `
+                                        <div class="agent-utt-info" id="agentUttInfo-${uniqueID}">
+                                            <div class="user-img">
+                                                <img src="./images/userIcon.svg">
+                                            </div>
+                                            <div class="text-user" >${res.agentAssistDetails.userInput}</div>
+                                        </div>
+                                        <div class="dialog-task-run-sec" id="automationSuggestions-${uniqueID}">
+                                        </div>`;
+
+                                            historyDataHtml.append(htmls);
+                                            let automationSuggestions = document.getElementById(`automationSuggestions-${uniqueID}`);
+                                            if (res.agentAssistDetails?.ambiguityList?.dialogs?.length > 0 || res.agentAssistDetails?.suggestions?.dialogs?.length > 0) {
+
+
+                                                let dialogAreaHtml = `<div class="task-type" id="dialoguesArea">
+                              <div class="img-block-info">
+                                  <img src="./images/dialogtask.svg">
+                              </div>
+                              <div class="content-dialog-task-type" id="dialogSuggestions-${uniqueID}">
+                                <div class="type-with-img-title">Dialog task (${res.agentAssistDetails?.suggestions ? res.agentAssistDetails?.suggestions.dialogs?.length : res.agentAssistDetails?.ambiguityList.dialogs?.length})</div>
+                              </div>
+                            </div>`;
+                                                automationSuggestions.innerHTML += dialogAreaHtml;
+                                            }
+                                            if (res.agentAssistDetails?.ambiguityList?.faqs?.length > 0 || res.agentAssistDetails?.suggestions?.faqs?.length > 0) {
+                                                let dialogAreaHtml = `<div class="task-type" id="faqssArea">
+                            <div class="img-block-info">
+                                <img src="./images/kg.svg">
+                            </div>
+                            <div class="content-dialog-task-type" id="faqsSuggestions-${uniqueID}">
+                                <div class="type-with-img-title">FAQ/Articles (${res.agentAssistDetails?.suggestions ? res.agentAssistDetails?.suggestions.faqs.length : res.agentAssistDetails.ambiguityList.faqs.length})</div>
+                                
+                            </div>
+                        </div>`;
+                                                automationSuggestions.innerHTML += dialogAreaHtml;
+                                            }
+                                            let dialogsss = (res.agentAssistDetails?.suggestions) ? (res.agentAssistDetails?.suggestions?.dialogs) : (res.agentAssistDetails?.ambiguityList?.dialogs);
+                                            dialogsss?.forEach((ele, index) => {
+
+                                                let dialogSuggestions = document.getElementById(`dialogSuggestions-${uniqueID}`);
+                                                let dialogsHtml = `
+                                <div class="type-info-run-send">
+                                    <div class="left-content">
+                                        <div class="title-text" id="automation-${uniqueID}">${ele.name}</div>
+                                    </div>
+                                    <div class="action-links">
+                                        <button class="send-run-btn" data-conv-id="${_agentAssistDataObj.conversationId}"
+                                        data-bot-id="${res.botId}" data-intent-name="${ele.name}"
+                                        data-history-run="true" id="run-${uniqueID}"
+                                        >RUN</button>
+                                        <div class="elipse-dropdown-info" id="showRunForAgentBtn-${uniqueID}">
+                                            <div class="elipse-icon" id="elipseIcon-${uniqueID}">
+                                                <i class="ast-overflow" id="overflowIcon-${uniqueID}"></i>
+                                            </div>
+                                            <div class="dropdown-content-elipse" id="runAgtBtn-${uniqueID}">
+                                                <div class="list-option" data-conv-id="${_agentAssistDataObj.conversationId}"
+                                                data-bot-id="${res.botId}" data-intent-name="${ele.name}"
+                                                 id="agentSelect-${uniqueID}"
+                                                data-exhaustivelist-run="true">Run with Agent Inputs</div>
+                                            </div>
+                                    </div>
+                                </div>`;
+                                                dialogSuggestions.innerHTML += dialogsHtml;
+                                            });
+                                            let faqss = (res.agentAssistDetails?.suggestions) ? (res.agentAssistDetails?.suggestions?.faqs) : (res.agentAssistDetails?.ambiguityList?.faqs);
+                                            faqss?.forEach((ele, index) => {
+
+                                                let faqsSuggestions = document.getElementById(`faqsSuggestions-${uniqueID}`);
+
+                                                let faqHtml = `
+                                <div class="type-info-run-send" id="faqDiv-${uniqueID}">
+                                    <div class="left-content" id="faqSection-${uniqueID}">
+                                        <div class="title-text" id="title-${uniqueID}">${ele.question}</div>
+                                        
+                                        
+                                    </div>
+                                    
+                                </div>`;
+
+                                                faqsSuggestions.innerHTML += faqHtml;
+                                                let faqs = $(`.type-info-run-send #faqSection-${uniqueID}`);
+                                                if (!ele.answer) {
+                                                    let checkHtml = `
+                                    <i class="ast-carrotup" data-conv-id="${_agentAssistDataObj.conversationId}"
+                                    data-bot-id="${res.botId}" data-intent-name="${ele.question}"
+                                    data-check="true" id="check-${uniqueID}"></i>`;
+                                                    faqs.append(checkHtml);
+                                                } else {
+                                                    let a = $(`#faqDiv-${uniqueID}`);
+                                                    let faqActionHtml = `<div class="action-links">
+                                    <button class="send-run-btn" id="sendMsg" data-msg-id="${uniqueID}"  data-msg-data="${ele.answer}">Send</button>
+                                    <div class="copy-btn" data-msg-id="${uniqueID}" data-msg-data='${ele.answer}'>
+                                        <i class="ast-copy" data-msg-id="${uniqueID}" data-msg-data='${ele.answer}'></i>
+                                    </div>
+                                </div>`;
+                                                    a.append(faqActionHtml);
+                                                    faqs.append(`<div class="desc-text" id="desc-${uniqueID}">${ele.answer}</div>`);
+                                                }
+                                                if ((ele.question?.length + ele.answer?.length) > 70) {
+                                                    let faqs = $(`.type-info-run-send #faqSection-${uniqueID}`);
+                                                    let seeMoreButtonHtml = `
+                                      <button class="ghost-btn" style="font-style: italic;" id="seeMore-${uniqueID}" data-see-more="true">Show more</button>
+                                      <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${uniqueID}" data-see-less="true">Show less</button>
+                                      `;
+                                                    faqs.append(seeMoreButtonHtml);
+                                                }
+                                                uniqueID = undefined;
+                                            })
+                                        }
+                                   // });
+                                }
+                                if ((!res.agentAssistDetails?.suggestions && !res.agentAssistDetails?.ambiguityList && !res.agentAssistDetails?.ambiguity) && res.type == 'outgoing') {
+                                    let _msgsResponse = {
+                                        "type": "bot_response",
+                                        "from": "bot",
+                                        "message": [],
+                                        "messageId": res._id,
+                                        "botInfo": {
+                                            "chatBot": "sample Bot",
+                                            "taskBotId": res.botId
+                                        },
+                                        "createdOn": "2022-03-21T07:56:18.225Z",
+                                        "icon": "https://uat.kore.ai:443/api/getMediaStream/market/f-cb381255-9aa1-5ce2-95e3-71233aef7084.png?n=17648985&s=IlRvUlUwalFVaFVMYm9sZStZQnlLc0l1UlZvdlNUUDcxR2o3U2lscHRrL3M9Ig$$",
+                                        "traceId": "873209019a5adc26",
+                                        "createdOnTimemillis": res._id
+                                    }
+                                    currentTaskName = res.tN ? res.tN : currentTaskName;
+                                    let historyData = $('#dynamicBlock');
+                                    let userInputHtml;
+                                    if (res.agentAssistDetails.userInput) {
+                                        userInputHtml = `<div class="agent-utt-info" id="agentUttInfo-${res._id}">
+                                            <div class="user-img">
+                                                <img src="./images/userIcon.svg">
+                                            </div>
+                                            <div class="text-user" >${res.agentAssistDetails.userInput}</div>
+                                        </div>`;
+                                    }
+                                    let dropdownHtml = `
+                                        
+                                                    <div class="dialog-task-accordiaon-info" id="addRemoveDropDown-${res._id}" >
+                                                        <div class="accordion-header" id="dropDownHeader-${res._id}"
+                                                        data-drop-down-opened="false">
+                                                            <div class="icon-info">
+                                                                <i class="ast-rule"></i>
+                                                            </div>
+                                                            <div class="header-text" id="dropDownTitle-${res._id}">${res.tN}</div>
+                                                            <i class="ast-carrotup"></i>
+                                                        </div>
+                                                        <div class="collapse-acc-data hide" id="dropDownData-${res._id}">
+                                                            
+                                                            
+                                                        </div>
+                                                    `;
+
+                                    if (previousTaskName && currentTaskName !== previousTaskName) {
+                                        addFeedbackHtmlToDomForHistory(res, res.botId, res?.agentAssistDetails?.userInput, previousId, false)
+                                        previousId = undefined;
+                                    }
+
+                                    if (res.tN && !previousId && previousTaskName !== currentTaskName) {
+                                        let divExist = $(`#addRemoveDropDown-${res._id}`);
+                                        previousTaskName = currentTaskName;
+                                        if (divExist.length >= 1) {
+                                            console.log("---->>>>>>>>>>>>>>>>>>>>>already exsit===in the dom");
+                                        } else {
+                                            historyData.append(userInputHtml);
+                                            historyData.append(dropdownHtml);
+                                            previousId = res._id;
+                                            previousTaskName = res.tN;
+                                        }
+                                    }
+                                    if (res.agentAssistDetails.entityName && res.agentAssistDetails.entityResponse && res.agentAssistDetails.entityValue) {
+                                        let runInfoContent = $(`#dropDownData-${previousId}`);
+                                        let userQueryHtml = `
+                                            <div class="steps-run-data">
+                                                <div class="icon_block_img">
+                                                    <img src="./images/userIcon.svg">
+                                                </div>
+                                                <div class="run-info-content" id="userInput-${res._id}">
+                                                    <div class="title">Customer Said - </div>
+                                                    <div class="agent-utt">
+                                                        <div class="title-data">${res.agentAssistDetails.entityValue}</div>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>`;
+                                        runInfoContent.append(userQueryHtml);
+                                        let entityHtml = $(`#dropDownData-${previousId}`).find(`#userInput-${res._id}`);
+                                        if (res.agentAssistDetails.entityValue && !res.agentAssistDetails.isErrorPrompt) {
+                                            entityHtml.append(`<div class="order-number-info">${res.agentAssistDetails.entityName} : ${res.agentAssistDetails.entityValue}</div>`);
+                                        } else {
+                                            if (res.agentAssistDetails.isErrorPrompt) {
+                                                let entityHtmls = `<div class="order-number-info">${res.agentAssistDetails.entityName} : 
+                                                            <span style="color:red">Value unidentified</span>
+                                                        </div>
+                                                        <div>
+                                                            <img src="./images/warning.svg" style="padding-right: 8px;">
+                                                            <span style="font-size: 12px; line-height: 18px; color: #202124;">Incorrect input format<span>
+                                                        </div>`
+                                                entityHtml.append(entityHtmls);
+                                            }
+                                        }
+                                    }
+                                    let parsedPayload;
+                                    res.components?.forEach((elem) => {
+                                        let payloadType = (elem.data?.text).replace(/(&quot\;)/g, "\"");
+
+                                        try {
+                                            if (payloadType.indexOf('text') !== -1 || payloadType.indexOf('payload') !== -1) {
+                                                let withoutSpecials = payloadType.replace(/^\s+|\s+$/g, "");
+                                                parsedPayload = JSON.parse(withoutSpecials);
+                                            }
+                                        }catch(error){
+                                            if(payloadType.text){
+                                                let withoutSpecials = payloadType.replace(/^\s+|\s+$/g, "");
+                                                parsedPayload = withoutSpecials;
+                                            }
+                                        }
+                                        
+                                        let body = {};
+                                        body['type'] = elem.cT;
+                                        if (!parsedPayload) {
+                                            body['component'] = {
+                                                "type": elem.cT,
+                                                "payload": {
+                                                    "type": elem.cT,
+                                                    "text": elem.data.text
+                                                }
+                                            };
+                                            body['cInfo'] = {
+                                                "body": elem.data.text
+                                            };
+
+                                        } else {
+                                            body['component'] = parsedPayload.payload ? parsedPayload : parsedPayload.text;
+                                            if (parsedPayload?.type === 'message') {
+                                                body['cInfo'] = {
+                                                    "body": ''
+                                                };
+                                            } else if (parsedPayload?.text) {
+                                                body['cInfo'] = {
+                                                    "body": parsedPayload.text
+                                                };
+                                            } else {
+                                                body['cInfo'] = {
+                                                    "body": parsedPayload
+                                                };
+                                            }
+
+                                        }
+
+                                        _msgsResponse.message.push(body);
+                                    });
+                                    let runInfoContent = $(`#dropDownData-${previousId}`);
+                                    let askToUserHtml = `
+                                        <div class="steps-run-data">
+                                                    <div class="icon_block">
+                                                        <i class="ast-agent"></i>
+                                                    </div>
+                                                    <div class="run-info-content" >
+                                                    <div class="title">Ask customer...</div>
+                                                    <div class="agent-utt">
+                                                        <div class="title-data"><ul class="chat-container" id="displayData-${res._id}"></ul></div>
+                                                        
+                                                    </div>
+                                                    </div>
+                                                </div>
+                                        `;
+                                    let tellToUserHtml = `
+                                        <div class="steps-run-data">
+                                                    <div class="icon_block">
+                                                        <i class="ast-agent"></i>
+                                                    </div>
+                                                    <div class="run-info-content" >
+                                                    <div class="title">Tell Customer</div>
+                                                    <div class="agent-utt">
+                                                        <div class="title-data" ><ul class="chat-container" id="displayData-${res._id}"></ul></div>
+                                                        
+                                                    </div>
+                                                    </div>
+                                                </div>
+                                        `;
+                                    if (res.agentAssistDetails.isPrompt || res.agentAssistDetails.entityRequest) {
+                                        runInfoContent.append(askToUserHtml);
+                                    } else {
+                                        runInfoContent.append(tellToUserHtml);
+                                    }
+                                    AgentChatInitialize.renderMessage(_msgsResponse, res._id, `dropDownData-${previousId}`);
+                                    let shouldProcessResponse = false;
+                                    var appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                                    var appState = JSON.parse(appStateStr);
+                                    if (appState[_conversationId]) {
+                                        // if incoming data belongs to welcome message do nothing
+                                        // if (!data.suggestions && data.buttons?.length > 1) {
+                                            if (appState[_conversationId].isWelcomeProcessed) {
+                                                shouldProcessResponse = false;
+                                                
+                                            }else {
+                                                shouldProcessResponse = true;
+                                            }
+                                        // }
+                                        
+                                    }
+                                    if (!parsedPayload && !res.tN && !shouldProcessResponse) {
+                                        let dynamicBlockDiv = $('#dynamicBlock');
+                                        res.components?.forEach((ele, i) => {
+                                            let welcomeMsgHtml = `
+                                            <div class = "collapse-acc-data before-none" id='smallTalk-${res._id}'>
+                                                <div class="steps-run-data">
+                                                    <div class="icon_block">
+                                                        <i class="ast-agent"></i>
+                                                    </div>
+                                                    <div class="run-info-content">
+                                                    
+                                                    </div>
+                                                </div>
+                                            </div>`;
+                                            if (res.components?.length > 1) {
+                                                if (i == 0) {
+                                                    dynamicBlockDiv.append(welcomeMsgHtml);
+                                                    let runInfoDivOfwelcome = $(`#dynamicBlock .collapse-acc-data .run-info-content`);
+                                                    let contentHtml = `
+                                                <div class="title">Customer has waited for an agent for few seconds.<br/>Here are some appropriate opening lines.</div>
+                                                   <div class="agent-utt">
+                                                    <div class="title-data" id="displayData-${res._id}">${ele.data.text}</div>
+                                                    <div class="action-links">
+                                                        <button class="send-run-btn" id="sendMsg" data-msg-id="${res._id}"  data-msg-data='${ele.data.text}'>Send</button>
+                                                        <div class="copy-btn" data-msg-id="${res._id}" data-msg-data="${ele.data.text}">
+                                                            <i class="ast-copy" data-msg-id="${res._id}" data-msg-data="${ele.data.text}"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>`;
+                                                    runInfoDivOfwelcome.append(contentHtml);
+                                                } else {
+                                                    let runInfoDivOfwelcome = $(`#dynamicBlock .collapse-acc-data .run-info-content`);
+                                                    let contentHtmlWithoutTellCus = `
+                                                    <div class="agent-utt">
+                                                        <div class="title-data" id="displayData-${res._id}">${ele.data.text}</div>
+                                                        <div class="action-links">
+                                                            <button class="send-run-btn" id="sendMsg" data-msg-id="${res._id}"  data-msg-data='${ele.data.text}'>Send</button>
+                                                            <div class="copy-btn" data-msg-id="${res._id}" data-msg-data='${ele.data.text}'>
+                                                                <i class="ast-copy" data-msg-id="${res._id}" data-msg-data='${ele.data.text}'></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>`;
+                                                    runInfoDivOfwelcome.append(contentHtmlWithoutTellCus);
+                                                }
+                                            } else {
+                                                let botResHtml = `
+                                                <div class="collapse-acc-data before-none" id='smallTalk-${res._id}'>
+                                             <div class="steps-run-data">
+                                             <div class="icon_block">
+                                                 <i class="ast-agent"></i>
+                                             </div>
+                                             <div class="run-info-content" >
+                                             <div class="title">Tell Customer</div>
+                                             <div class="agent-utt">
+                                                 <div class="title-data" id="displayData-${res._id}">${ele.data.text}</div>
+                                                 <div class="action-links">
+                                                     <button class="send-run-btn" id="sendMsg" data-msg-id="${res._id}"  data-msg-data='${ele.data.text}'>Send</button>
+                                                     <div class="copy-btn" data-msg-id="${res._id}" data-msg-data='${ele.data.text}'>
+                                                         <i class="ast-copy" data-msg-id="${res._id}" data-msg-data='${ele.data.text}'></i>
+                                                     </div>
+                                                 </div>
+                                             </div>
+                                             </div>
+                                         </div>
+                                         </div>`;
+                                         dynamicBlockDiv.append(botResHtml)
+                                            }
+                                        });
+                                    }
+
+                                    //  removeElementFromDom();
+                                    //if (res.agentAssistDetails.endOfTask) { // need this block of code once the endofTask flag received from backend
+                                    //                                                    let dropDownData = $(`#dropDownData-${previousId}`);
+                                    //                    let endOfDialoge = $(`#addRemoveDropDown-${previousId}`);
+
+                                    //                 // $(`#addRemoveDropDown-${dropdownHeaderUuids} .btn-danger`).remove();
+                                    //                 let feedbackHtml = ` 
+                                    //     <div class="feedback-data">
+                                    //         <div class="feedback-icon" id="feedbackup">
+                                    //             <i class="ast-thumbup" id="feedbackup-${previousId}"
+                                    //             data-feedbacklike="false"
+                                    //             data-conv-id="${_agentAssistDataObj.conversationId}"
+                                    //                     data-bot-id="${_agentAssistDataObj.botId}" data-feedback="like"
+                                    //                     data-dialog-name="${previousTaskName}"
+                                    //                     data-user-input="${res.agentAssistDetails.userInput}"></i>
+                                    //         </div>
+                                    //         <div class="feedback-icon" id="feedbackdown">
+                                    //             <i class="ast-thumbdown" id="feedbackdown-${previousId}"
+                                    //             data-feedbackdislike="false"
+                                    //             data-conv-id="${_agentAssistDataObj.conversationId}"
+                                    //                     data-bot-id="${_agentAssistDataObj.botId}" data-feedback="dislike"
+                                    //                     data-dialog-name="${previousTaskName}"
+                                    //                     data-user-input="${res.agentAssistDetails.userInput}"></i>
+                                    //         </div>
+                                    //    </div>`;
+                                    //                 dropDownData.append(feedbackHtml);
+                                    //                 let endofDialogeHtml = `
+                                    //     <div class="dilog-task-end" id="endTaks-${previousId}">
+                                    //     <div class="text-dialog-task-end">Task Ended</div>     
+                                    //                </div>
+
+                                    //     `;
+                                    //                 endOfDialoge.append(endofDialogeHtml);
+                                    //     previousId = undefined;
+                                    //     previousTaskName = undefined;
+                                    // }
+
+                                }
+                                // if (index == resp.length - 1) {
+                                //     $(`#historyData .collapse-acc-data.hide`)[$(`#historyData .collapse-acc-data.hide`).length - 1]?.classList.remove('hide');
+                                //     // $(`#historyData .show-history-feedback.hide`)[$(`#historyData .show-history-feedback.hide`).length - 1]?.classList.remove('hide');
+                                // }
+                            });
+                        
+                        previousResp = response;
+                        scrollToBottom();
+                    }).catch(err => {
+                        document.getElementById("loader").style.display = "block";
+                        console.log("error", err)
+                    });
+                    isShowHistoryEnable = false;
                 }
 
                 function updateUIState(_convId, _isCallConv) {
@@ -1659,67 +2375,129 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     var appStateStr = localStorage.getItem('agentAssistState') || '{}';
                     var appState = JSON.parse(appStateStr);
                     var convState = appState[_convId] || {};
-                    if(!appState[_convId]) {
-                        convState=appState[_convId] = {}
-                        if(_isCallConv == 'true') {
+                    if (!appState[_convId]) {
+                        convState = appState[_convId] = {}
+                        if (_isCallConv == 'true') {
                             convState.currentTab = 'transcriptTab';
                         } else {
                             convState.currentTab = 'assistTab';
                         }
                     }
                     if (convState.currentTab == 'librarySearch') {
-                         libraryTabActive();
-                         currentTabActive = 'searchAutoIcon';
-                        if(convState?.libraryTab.length > 0) {
+                        libraryTabActive();
+                        currentTabActive = 'searchAutoIcon';
+                        if (convState?.libraryTab.length > 0) {
                             $('#librarySearch').val(convState.libraryTab);
                             var convId = _convId;
                             var botId = _botId;
                             var intentName = convState.libraryTab;
                             AgentAssistPubSub.publish('searched_Automation_details', { conversationId: convId, botId: botId, value: intentName, isSearch: true });
-                            
+
                         }
-                        
+
                     }
-                    else if (convState.currentTab == 'myBotTab') {  
+                    else if (convState.currentTab == 'myBotTab') {
                         agentTabActive();
                     }
                     else if (convState.currentTab == 'transcriptTab') {
                         transcriptionTabActive();
-            
+
                     }
                     else if (convState.currentTab == 'assistTab') {
                         userTabActive();
                     }
                     updateCurrentTabInState(_convId,  convState.currentTab);
-                    convState.currentTab !== 'librarySearch' ? updateUIWithTabState(_convId, convState.currentTab):'';
+                  //  convState.currentTab !== 'librarySearch' ? updateUIWithTabState(_convId, convState.currentTab):'';
                     document.getElementById("loader").style.display = "none";
+                    hightLightFaqFromStoredList(_conversationId, 'assistTab');
+                }
+
+                function hightLightFaqFromStoredList(convId, currentTab) {
+                    var appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                    var appState = JSON.parse(appStateStr);
+                    if (!appState[convId]) {
+                        return
+                    }
+                    var convState = appState[convId];
+                    if (!convState[currentTab]) { return; }
+                    if (!convState[currentTab].faqsList) {
+                        convState[currentTab].faqsList = [];
+                    }
+                    let selectedFaqList = convState[currentTab].faqsList;
+                    for (let item of selectedFaqList) {
+                        let faqElementId = item.split('_')[1];
+                        let faqParentElementId = item.split('_')[0];
+                        let faqParentElement = document.getElementById(faqParentElementId);
+                        console.log(faqParentElement, "parent element");
+                        if (faqParentElement) {
+                            let faqElement = faqParentElement.querySelector('#' + faqElementId);
+                            faqElement.style.borderStyle = "solid";
+                        }
+                        // document.getElementById(faqElementId).style.borderStyle = "solid";
+                    }
+                }
+
+                function highLightDialogueTask(evt){
+                    let dialogueTaskElementId = $(evt.target).parent().parent().attr('id');
+                    console.log(dialogueTaskElementId, "faqelement id");
+                    if(document.getElementById(dialogueTaskElementId)){
+                        document.getElementById(dialogueTaskElementId).style.borderStyle = "solid";
+                    }
+                }
+
+                function highLightAndStoreFaqId(evt) {
+                    let faqElementId = $(evt.target).parent().parent().attr('id');
+                    if(document.getElementById(faqElementId)){
+                        let faqParentElementId = $(evt.target).parent().parent().parent().attr('id');
+                        let storedfaqId = faqParentElementId + '_' + faqElementId;
+                        selectedFaqList.push(storedfaqId);
+                        document.getElementById(faqElementId).style.borderStyle = "solid";
+                        setSentFaqListInStorage(_conversationId, storedfaqId, 'assistTab');
+                    }
+                }
+
+                function setSentFaqListInStorage(convId, faqId, currentTab) {
+                    var appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                    var appState = JSON.parse(appStateStr);
+                    if (!appState[convId]) {
+                        return
+                    }
+                    var convState = appState[convId];
+                    if (!convState[currentTab]) { return; }
+                    if (!convState[currentTab].faqsList) {
+                        convState[currentTab].faqsList = [];
+                    }
+                    if (convState[currentTab].faqsList.indexOf(faqId) == -1) {
+                        convState[currentTab].faqsList.push(faqId);
+                        localStorage.setItem('agentAssistState', JSON.stringify(appState));
+                    }
                 }
 
                 function updateUIWithTabState(convId, currentTab) {
                     var appStateStr = localStorage.getItem('agentAssistState') || '{}';
                     var appState = JSON.parse(appStateStr);
                     if (!appState[convId]) {
-                         return 
+                        return
                     }
                     var convState = appState[convId];
-                    if (!convState[currentTab]) {return;}
+                    if (!convState[currentTab]) { return; }
                     if (!convState[currentTab].stateItems || convState[currentTab].stateItems.length == 0) {
-                       return;
+                        return;
                     }
                     let stateItems = convState[currentTab].stateItems;
                     if (currentTab == 'assistTab') {
-                        $('#welcomeMsg').html('');
-                        let dialogs = $(`#dynamicBlock .dialog-task-run-sec`);
-                        dialogs?.each(function (i, ele) {
-                            $('#dynamicBlock .agent-utt-info').each((i, elem) => {
-                                $(elem).remove();
-                            });
-                            $(ele).remove();
-                        });
-                        let dialogsDropDowns = $(`#dynamicBlock .dialog-task-accordiaon-info`);
-                        dialogsDropDowns?.each(function (i, ele) {
-                            $(ele).remove();
-                        });
+                        // $('#welcomeMsg').html('');
+                        // let dialogs = $(`#dynamicBlock .dialog-task-run-sec`);
+                        // dialogs?.each(function (i, ele) {
+                        //     $('#dynamicBlock .agent-utt-info').each((i, elem) => {
+                        //         $(elem).remove();
+                        //     });
+                        //     $(ele).remove();
+                        // });
+                        // let dialogsDropDowns = $(`#dynamicBlock .dialog-task-accordiaon-info`);
+                        // dialogsDropDowns?.each(function (i, ele) {
+                        //     $(ele).remove();
+                        // });
                     } else {
                         $('#noAutoRunning').addClass('hide');
                     }
@@ -1738,23 +2516,23 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 _createRunTemplateContiner(dropdownHeaderUuids, item.intentName);
                                 $(`#addRemoveDropDown-${dropdownHeaderUuids}`).removeClass('hide');
                             } else {
-                                currentTab == 'myBotTab'?_createRunTemplateContainerForMyTab(dropdownHeaderUuids, item.intentName):'';
+                                currentTab == 'myBotTab' ? _createRunTemplateContainerForMyTab(dropdownHeaderUuids, item.intentName) : '';
                                 $(`#MyBotaddRemoveDropDown-${dropdownHeaderUuids}`).removeClass('hide');
-                            }  
+                            }
                         }
                     }
 
-                    for(let i =0 ;i<stateItems.length; i++){
+                    for (let i = 0; i < stateItems.length; i++) {
                         let itemStr = stateItems[i];
                         let item = JSON.parse(itemStr);
                         if (item.intentName) {
                             if (currentTab == 'assistTab') {
                                 dropdownHeaderUuids = intentContainerObj[item.intentName]['containerId'];
-                            } 
+                            }
                             if (currentTab == 'myBotTab') {
                                 myBotDropdownHeaderUuids = intentContainerObj[item.intentName]['containerId']
                             }
-                           
+
                         }
                         if (currentTab == 'assistTab') {
                             if (item.event == 'agent_assist_user_message') {
@@ -1762,9 +2540,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             }
                             processAgentAssistResponse(item, convId, _botId);
                         } else {
-                            currentTab == 'myBotTab'?processMybotDataResponse(item, convId, _botId):'';
+                            currentTab == 'myBotTab' ? processMybotDataResponse(item, convId, _botId) : '';
                         }
-                      
+
                     }
                 }
 
@@ -1772,13 +2550,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     var appStateStr = localStorage.getItem('agentAssistState') || '{}';
                     var appState = JSON.parse(appStateStr);
                     var convState = appState[_convId] || {};
-                    if(!appState[_convId]) {
-                        convState=appState[_convId] = {}
+                    if (!appState[_convId]) {
+                        convState = appState[_convId] = {}
                     }
                     convState.currentTab = currentTab;
-                    if(appState[_convId] && (convState.currentTab == 'librarySearch')) {
-                        if(searchedVal !== undefined && document.getElementById('librarySearch').value.length > 0){
-                        convState.libraryTab = document.getElementById('librarySearch').value;
+                    if (appState[_convId] && (convState.currentTab == 'librarySearch')) {
+                        if (searchedVal !== undefined && document.getElementById('librarySearch').value.length > 0) {
+                            convState.libraryTab = document.getElementById('librarySearch').value;
                         } else {
                             convState.libraryTab = '';
                         }
@@ -1786,7 +2564,202 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     localStorage.setItem('agentAssistState', JSON.stringify(appState));
                 }
 
+                function isScrolledIntoView(elem) {
+                    if (elem) {
+                        var parentRec = document.getElementById("bodyContainer").getBoundingClientRect();
+                        var childRec = elem.getBoundingClientRect();
+                        var paddingTop = 0;
+                        if (window.getComputedStyle(elem, null).getPropertyValue('padding-top')) {
+                            var paddingTopStr = window.getComputedStyle(elem, null).getPropertyValue('padding-top');
+                            if (paddingTopStr.length && paddingTopStr.length - 2) {
+                                paddingTopStr = paddingTopStr.substring(0, paddingTopStr.length - 2);
+                                paddingTop = parseInt(paddingTopStr) ? parseInt(paddingTopStr) : 0;
+                            }
+                        }
+                        return (childRec.top + paddingTop) > (parentRec.height + parentRec.top);
+                    }
+                }
+
+                function getLastElement(id) {
+                    let lastElement = ''
+                    var dynamicBlockElements = document.getElementById(id);
+                    if(id.includes('smallTalk') && dynamicBlockElements){
+                        lastElement = dynamicBlockElements;
+                    }else if(dynamicBlockElements) {
+                        var numOfdynamicBlockElements = dynamicBlockElements.children;
+                        if (numOfdynamicBlockElements) {
+                            for (var i = 0; i < numOfdynamicBlockElements.length; i++) {
+                                lastElement = numOfdynamicBlockElements[i];
+                            }
+                            // if (lastElement.className == 'dialog-task-run-sec') {
+                            //     var numOfdynamicBlockElements = lastElement.children;
+                            //     for (var i = 0; i < numOfdynamicBlockElements.length; i++) {
+                            //         lastElement = numOfdynamicBlockElements[i];
+                            //         if ($(lastElement).attr("id") == 'dialoguesArea') {
+                            //             let typeInfoRunNodes = lastElement.querySelectorAll('.content-dialog-task-type');
+                            //             lastElement = typeInfoRunNodes[typeInfoRunNodes.length - 1];
+                            //         }
+                            //     }
+                            // } else
+                             if (lastElement.className == 'dialog-task-accordiaon-info') {
+                                let listOfNodes = lastElement.querySelectorAll('.steps-run-data');
+                                let index = 0;
+                                for(let node of listOfNodes){
+                                    if(!($(node).attr('id'))){
+                                        $(node).attr('id', 'steps-run-data-' + lastElement.id + index);
+                                    }
+                                    index++;
+                                }
+                                lastElement = Array.from(listOfNodes).pop();
+                            }
+                        }
+                    }
+                    return lastElement;
+                }
+
+                function updateNewMessageUUIDList(responseId) {
+                    if (!scrollAtEnd) {
+                        console.log(numberOfNewMessages, "update new message uuid list");
+                        if (numberOfNewMessages) {
+                            if (newlyAddedMessagesUUIDlist.indexOf(responseId) == -1) {
+                                newlyAddedMessagesUUIDlist.push(responseId);
+                                newlyAddedIdList = getActualRenderedIdList();
+                            }
+                        }
+                        addUnreadMessageHtml();  
+                    }
+                }
+
+                function updateNewMessageCount(lastElement) {
+                    for (let id of newlyAddedIdList) {
+                        let element = document.getElementById(id);
+                        if (element) {
+                            let inView = !isScrolledIntoView(element) ? true : false;
+                            if (inView) {
+                                removedIdListOnScroll.push(id);
+                                newlyAddedIdList = newlyAddedIdList.filter(item => item !== id)
+                                numberOfNewMessages = numberOfNewMessages > 0 ? numberOfNewMessages - 1 : 0;
+                                if(id.includes('automationSuggestions')){
+                                    let agentUttInfoId = id.split('-');
+                                    agentUttInfoId.shift();
+                                    agentUttInfoId = 'agentUttInfo-' + agentUttInfoId.join('-');
+                                    if(document.getElementById(agentUttInfoId)){
+                                        lastElementBeforeNewMessage = document.getElementById(agentUttInfoId);
+                                    }
+                                }else{
+                                    lastElementBeforeNewMessage = getLastElement(id);
+                                }
+                                
+                                if (numberOfNewMessages) {
+                                    $(".scroll-bottom-btn").addClass("new-messages");
+                                    $(".scroll-bottom-btn span").text(numberOfNewMessages + ' new');
+                                }else{
+                                    $(".scroll-bottom-btn span").text('Scroll Bottom');
+                                }
+                                // if(element.classList.contains('last-msg-white-bg') && id != lastElement.id){
+                                //     element.classList.remove("last-msg-white-bg");
+                                // }
+                            }
+                        }
+                    }
+                }
+
+                function getActualRenderedIdList() {
+                    let normalIdsList = ['addRemoveDropDown', 'automationSuggestions', 'smallTalk'];
+                    let actualRenderedIdList = [];
+                    for (let uuid of newlyAddedMessagesUUIDlist) {
+                        for (let name of normalIdsList) {
+                            let childIdList = [];
+                            childIdList = getChildRenderedIdList(name + '-' + uuid, uuid, name);
+                            actualRenderedIdList = actualRenderedIdList.concat(childIdList);
+                        }
+                    }
+                    //removing duplicates
+                    actualRenderedIdList = actualRenderedIdList.filter((c, index) => {
+                        return actualRenderedIdList.indexOf(c) === index;
+                    });
+                    return actualRenderedIdList;
+                }
+
+                function getChildRenderedIdList(id, uuid, name) {
+                    let childIdList = [];
+                    var dynamicBlockElement = document.getElementById(id);
+                    if (dynamicBlockElement) {
+                        if (dynamicBlockElement.className == 'dialog-task-run-sec') {
+                            let dialogueSuggestionId = 'dialogSuggestions-' + uuid;
+                            let faqSuggestionId = 'faqsSuggestions-' + uuid;
+                            if (removedIdListOnScroll.indexOf(dialogueSuggestionId) == -1) {
+                                childIdList.push(dialogueSuggestionId);
+                            }
+                            if (removedIdListOnScroll.indexOf(faqSuggestionId) == -1) {
+                                childIdList.push(faqSuggestionId);
+                            }
+                        } else {
+                            let actualParentId = name + '-' + uuid;
+                            if (removedIdListOnScroll.indexOf(actualParentId) == -1) {
+                                childIdList.push(actualParentId);
+                            }
+                        }
+                    }
+                    return childIdList;
+                }
+
+                function scrollToEle(id) {
+                    var _PanelEle = $('#'+id);
+                    if(id.includes('automationSuggestions')){
+                        let agentUttInfoId = id.split('-');
+                        agentUttInfoId.shift();
+                        agentUttInfoId = 'agentUttInfo-' + agentUttInfoId.join('-');
+                        if(document.getElementById(agentUttInfoId)){
+                            _PanelEle = $('#' + agentUttInfoId);
+                        }
+                    }
+                    if (_PanelEle) {
+                        var _container = _PanelEle.closest('.body-data-container');
+                        if (_container && _container.offset()) {
+                            var _scrollHeight = _PanelEle.offset().top - _container.offset().top + _container.scrollTop();
+                            _container.animate({
+                            scrollTop: _scrollHeight
+                            }, 'slow');
+                        }
+                    }
+                }
+
                 function btnInit() {
+
+                    document.querySelector('#bodyContainer').addEventListener('ps-scroll-up', (scrollUpevent) => {
+                        lastelement = getLastElement('dynamicBlock');
+                        scrollAtEnd = !isScrolledIntoView(lastelement) ? true : false;
+                        if (!scrollAtEnd) {
+                            $(".scroll-bottom-show-btn").removeClass('hide');
+                        }
+                    });
+
+                    document.querySelector('#bodyContainer').addEventListener('ps-scroll-down', (scrollDownevent) => {
+                        //newly added elements scroll view
+                        //get last element call should be before update message count;
+                        lastelement = getLastElement('dynamicBlock');
+                        updateNewMessageCount(lastelement);
+                        scrollAtEnd = !isScrolledIntoView(lastelement) ? true : false;
+                        if (scrollAtEnd) {
+                            $(".scroll-bottom-show-btn").addClass('hide');
+                            $('.unread-msg').remove();
+                        }
+                    });
+
+                    document.querySelector('#bodyContainer').addEventListener('ps-y-reach-end', (scrollEndevent) => {
+                        $(".scroll-bottom-show-btn").addClass('hide');
+                        numberOfNewMessages = 0;
+                        newlyAddedMessagesUUIDlist = [];
+                        newlyAddedIdList = [];
+                        removedIdListOnScroll = [];
+                        $(".scroll-bottom-btn").removeClass("new-messages");
+                        $(".scroll-bottom-btn span").text('Scroll Bottom');
+                        scrollAtEnd = true;
+                        lastElementBeforeNewMessage = getLastElement('dynamicBlock');
+                        addWhiteBackgroundClassToNewMessage();
+                    });
+
                     document.addEventListener("click", (evt) => {
                         var target = evt.target;
                         var runButton = target.dataset.run;
@@ -1812,13 +2785,37 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             }
                         });
 
+                        if (target.className.includes('scroll-bottom-btn')) {
+                            let newElementsHeight = getNewlyAddedElementsHeights();
+                            if (newElementsHeight) {
+                                scrollToEle(lastElementBeforeNewMessage.id);
+                            } else {
+                                scrollToBottom();
+                            }
+                            // $("#bodyContainer").perfectScrollbar('update');
+                            if ($(".scroll-bottom-btn span").text().includes('new')) {
+                                console.log(newlyAddedIdList, "id list");
+                                // if (!scrollAtEnd && numberOfNewMessages > 0) {
+                                //     for (let i = 0; i < newlyAddedIdList.length; i++) {
+                                //         if (document.getElementById(newlyAddedIdList[i])) {
+                                //             let elements = document.getElementById(newlyAddedIdList[i]);
+                                //             elements?.insertAdjacentHTML('beforeBegin', addUnreadMessageHtml());
+                                //             break;
+                                //         }
+                                //     }
+
+                                // }
+                            }
+                        }
+
                         if (target.id === 'sendMsg' && sourceType == 'smartassist-color-scheme') {
                             // let ele = document.getElementById(`displayData-${target.dataset.msgId}`)
                             window.parent.postMessage({
                                 method: "send",
                                 text: target.dataset.msgData
-                            }, "*")
-                        } else if(target.id === 'sendMsg' && sourceType == 'salesforce') {
+                            }, "*");
+                            highLightAndStoreFaqId(evt);
+                        } else if (target.id === 'sendMsg' && sourceType == 'salesforce') {
                             let payload = target.dataset.msgData;
                             var message = {
                                 name: "agentAssist.SendMessage",
@@ -1826,22 +2823,25 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 payload: payload
                             };
                             parent.postMessage(message, '*');
+                            highLightAndStoreFaqId(evt);
                         }
                         if ((target.className == 'copy-btn' || target.className == 'ast-copy') && sourceType == 'smartassist-color-scheme') {
                             let ele = document.getElementById(`displayData-${target.dataset.msgId}`) ? document.getElementById(`displayData-${target.dataset.msgId}`) : document.getElementById(target.dataset.msgId);
                             window.parent.postMessage({
                                 method: "copy",
-                                text: target.dataset.msgData && target.dataset.msgData!==''?target.dataset.msgData:(target.parentNode.dataset.msgData && target.parentNode.dataset.msgData!==''?target.parentNode.dataset.msgData:ele.innerText)
+                                text: target.dataset.msgData && target.dataset.msgData !== '' ? target.dataset.msgData : (target.parentNode.dataset.msgData && target.parentNode.dataset.msgData !== '' ? target.parentNode.dataset.msgData : ele.innerText)
                             }, "*")
-                        } else if((target.className == 'copy-btn' || target.className == 'ast-copy') && sourceType == 'salesforce') {
+                            highLightAndStoreFaqId(evt);
+                        } else if ((target.className == 'copy-btn' || target.className == 'ast-copy') && sourceType == 'salesforce') {
                             let ele = document.getElementById(`displayData-${target.dataset.msgId}`) ? document.getElementById(`displayData-${target.dataset.msgId}`) : document.getElementById(target.dataset.msgId);
-                            let data = target.dataset.msgData && target.dataset.msgData!==''?target.dataset.msgData:(target.parentNode.dataset.msgData && target.parentNode.dataset.msgData!==''?target.parentNode.dataset.msgData:ele.innerText)
+                            let data = target.dataset.msgData && target.dataset.msgData !== '' ? target.dataset.msgData : (target.parentNode.dataset.msgData && target.parentNode.dataset.msgData !== '' ? target.parentNode.dataset.msgData : ele.innerText)
                             var message = {
                                 name: "agentAssist.CopyMessage",
                                 conversationId: _conversationId,
                                 payload: data
                             };
                             parent.postMessage(message, '*');
+                            highLightAndStoreFaqId(evt);
                         }
                         if (target.className == 'ast-close close-search') {
                             $('#agentSearch').val('');
@@ -1851,11 +2851,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             searchedVal = '';
                         }
 
-                        if(target.id === 'cancelLibrarySearch') {
+                        if (target.id === 'cancelLibrarySearch') {
                             $('#librarySearch').val('');
                             $('#cancelLibrarySearch').addClass('hide');
                             loadLibraryOnCancel(autoExhaustiveList, _conversationId, _botId);
-                        } else if(target.id === 'cancelAgentSearch') {
+                        } else if (target.id === 'cancelAgentSearch') {
                             $('#agentSearch').val('');
                             $('#cancelAgentSearch').addClass('hide');
                         }
@@ -1942,23 +2942,27 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
 
                         if (target.id === `searchAutoIcon` || target.id === `searchIcon` || target.id === `LibraryLabel`) {
+                            $("#bodyContainer").scrollTop(0);
                             data = _agentAssistDataObj
-                            updateCurrentTabInState(_conversationId,'librarySearch')
+                            updateCurrentTabInState(_conversationId, 'librarySearch')
                             libraryTabActive();
                         }
                         else if (target.id === `agentAutoIcon` || target.id === `agentBotIcon` || target.id === `MybotLabel`) {
-                            updateCurrentTabInState(_conversationId,'myBotTab')
+                            $("#bodyContainer").scrollTop(0);
+                            updateCurrentTabInState(_conversationId, 'myBotTab')
                             agentTabActive();
                         }
                         else if (target.id === `transcriptIcon` || target.id === `scriptIcon` || target.id === `transcriptLabel`) {
-                            updateCurrentTabInState(_conversationId,'transcriptTab')
+                            $("#bodyContainer").scrollTop(0);
+                            updateCurrentTabInState(_conversationId, 'transcriptTab')
                             transcriptionTabActive();
                             currentTabActive = 'transcriptIcon';
                         }
                         else if (target.id === `userAutoIcon` || target.id === `userBotIcon` || target.id === `AssistLabel`) {
-                            updateCurrentTabInState(_conversationId,'assistTab')
+                            updateCurrentTabInState(_conversationId, 'assistTab')
                             userTabActive();
-                          //  updateUIState(_conversationId, isCallConversation);
+                            scrollToBottom();
+                            //  updateUIState(_conversationId, isCallConversation);
 
                         }
                         var seeMoreButton = target.dataset.seeMore;
@@ -1971,33 +2975,35 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
                         if (seeMoreButton) {
                             let targets = target.id.split('-');
+                            targets.shift();
                             let faqs = (currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ?
-                                $(`.type-info-run-send #faqSection-${targets[targets.length - 1]}`) :
-                                (currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${targets[targets.length - 1]}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${targets[targets.length - 1]}`));
-                            faqs.find(`#seeLess-${targets[targets.length - 1]}`).each((i, ele) => {
-                                if ($(ele).attr('id').includes(`seeLess-${targets[targets.length - 1]}`)) {
+                                $(`.type-info-run-send #faqSection-${targets.join('-')}`) :
+                                (currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${targets.join('-')}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${targets.join('-')}`));
+                            faqs.find(`#seeLess-${targets.join('-')}`).each((i, ele) => {
+                                if ($(ele).attr('id').includes(`seeLess-${targets.join('-')}`)) {
                                     ele.classList.remove('hide')
                                 }
                             })
                             evt.target.classList.add('hide')
-                            faqs.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#title-${targets[targets.length - 1]}` :
-                                `#titleLib-${targets[targets.length - 1]}`}`).attr('style', `overflow: inherit; white-space: normal; text-overflow: unset;`);
-                            faqs.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#desc-${targets[targets.length - 1]}` : `#descLib-${targets[targets.length - 1]}`}`).attr('style', `overflow: inherit; white-space: normal; text-overflow: unset;`);
+                            faqs.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#title-${targets.join('-')}` :
+                                `#titleLib-${targets.join('-')}`}`).attr('style', `overflow: inherit; white-space: normal; text-overflow: unset;`);
+                            faqs.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#desc-${targets.join('-')}` : `#descLib-${targets.join('-')}`}`).attr('style', `overflow: inherit; white-space: normal; text-overflow: unset;`);
                         }
                         if (seeLessButton) {
                             let targets = target.id.split('-');
-                            let faqs = (currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? $(`.type-info-run-send #faqSection-${targets[targets.length - 1]}`) :
-                                (currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${targets[targets.length - 1]}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${targets[targets.length - 1]}`));
+                            targets.shift();
+                            let faqs = (currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? $(`.type-info-run-send #faqSection-${targets.join('-')}`) :
+                                (currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${targets.join('-')}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${targets.join('-')}`));
 
-                            faqs.find(`#seeMore-${targets[targets.length - 1]}`).each((i, ele) => {
-                                if ($(ele).attr('id').includes(`seeMore-${targets[targets.length - 1]}`)) {
+                            faqs.find(`#seeMore-${targets.join('-')}`).each((i, ele) => {
+                                if ($(ele).attr('id').includes(`seeMore-${targets.join('-')}`)) {
                                     ele.classList.remove('hide')
                                 }
                             })
-                            faqs.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#title-${targets[targets.length - 1]}` : `#titleLib-${targets[targets.length - 1]}`}`).attr('style', `overflow: hidden;
+                            faqs.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#title-${targets.join('-')}` : `#titleLib-${targets.join('-')}`}`).attr('style', `overflow: hidden;
                 white-space: nowrap;
                 text-overflow: ellipsis;`);
-                            faqs.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#desc-${targets[targets.length - 1]}` : `#descLib-${targets[targets.length - 1]}`}`).attr('style', `overflow: hidden;
+                            faqs.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#desc-${targets.join('-')}` : `#descLib-${targets.join('-')}`}`).attr('style', `overflow: hidden;
                 white-space: nowrap;
                 text-overflow: ellipsis;`);
                             evt.target.classList.add('hide')
@@ -2006,430 +3012,426 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         if (['feedbackup', 'feedbackdown'].includes(targetIds[0])) {
                             console.log("=====event===============", evt.target);
                             if (targetIds.includes('feedbackup')) {
+                                targetIds.shift();
                                 if (target.dataset.feedbacklike == 'false') {
-                                    //  target.dataset.feedbacklike = 'true';
-                                    ($(target.parentElement.parentElement.parentElement).find('#feedbackdown')?.attr('style')) ? (
-                                        $(target.parentElement.parentElement.parentElement).find('#feedbackdown')?.removeAttr('style'),
-                                        $(target.parentElement.parentElement).find('.ast-thumbdown').attr('data-feedbackdislike', 'false')) : '';
-                                    $(target.parentElement).attr('style', 'color:#0077D2;border-color:#0077D2;');
+                                      target.dataset.feedbacklike = 'true';
+                                    $(`#feedBackLikeContainer-${targetIds.join('-')} .feedback-icon`).attr('style', 'color:#0077D2;border-color:#0077D2;');
+                                    $(`#feedBackDislikeContainer-${targetIds.join('-')} .feedback-icon`).removeAttr('style');
                                     feedbackLoop(evt);
                                 } else {
                                     target.dataset.feedbacklike = 'false';
-                                    $(target.parentElement).removeAttr('style');
+                                    $(`#feedBackLikeContainer-${targetIds.join('-')} .feedback-icon`).removeAttr('style');
+                                    $(`#feedBackLikeContainer-${targetIds.join('-')} .feedback-icon`).attr('data-feedback', '');
+                                    $(`#feedBackLikeContainer-${targetIds.join('-')} .ast-thumbup`).attr('data-feedback', '');
+                                    feedbackLoop(evt);
                                 }
                             }
                             if (targetIds.includes('feedbackdown')) {
+                                targetIds.shift();
                                 if (target.dataset.feedbackdislike == 'false') {
-                                    // target.dataset.feedbackdislike = 'true';
-                                    ($(target.parentElement.parentElement.parentElement).find('#feedbackup')?.attr('style')) ? (
-                                        $(target.parentElement.parentElement.parentElement).find('#feedbackup')?.removeAttr('style'),
-                                        $(target.parentElement.parentElement).find('.ast-thumbup').attr('data-feedbacklike', 'false')) : '';
-                                    $(target.parentElement).attr('style', 'color:#0077D2;border-color:#0077D2;');
+                                     target.dataset.feedbackdislike = 'true';
+                                        $(`#feedBackLikeContainer-${targetIds.join('-')} .feedback-icon`).removeAttr('style');
+                                        $(`#feedBackDislikeContainer-${targetIds.join('-')} .feedback-icon`).attr('style', 'color:#0077D2;border-color:#0077D2;');
                                     feedbackLoop(evt);
                                 } else {
                                     target.dataset.feedbackdislike = 'false';
-                                    $(target.parentElement).removeAttr('style');
+                                    $(`#feedBackDislikeContainer-${targetIds.join('-')} .feedback-icon`).removeAttr('style');
+                                    $(`#feedBackDislikeContainer-${targetIds.join('-')} .feedback-icon`).attr('data-feedback', '');
+                                    $(`#feedBackDislikeContainer-${targetIds.join('-')} .ast-thumbdown`).attr('data-feedback', '');
+                                    feedbackLoop(evt);
                                 }
                             }
                         }
                         if (target.id === 'showHistory') {
                             isShowHistoryEnable = true;
-                            $('#welcomeMsg').addClass('hide');
                             $('.show-history-block').addClass('hide');
                             $('.show-back-recommendation-block').removeClass('hide');
                             $('#dynamicBlock .dialog-task-accordiaon-info').addClass('hide');
                             $('#dynamicBlock .agent-utt-info').addClass('hide');
                             $('#dynamicBlock .dialog-task-run-sec').addClass('hide');
                             $('#historyData').removeClass('hide');
-                            getData(`${connectionDetails.envinormentUrl}/api/1.1/botmessages/agentassist/${_agentAssistDataObj.botId}/history?convId=${_agentAssistDataObj.conversationId}&agentHistory=false`)
-                                .then(response => {
+                            // getData(`${connectionDetails.envinormentUrl}/api/1.1/botmessages/agentassist/${_agentAssistDataObj.botId}/history?convId=${_agentAssistDataObj.conversationId}&agentHistory=false`)
+                            //     .then(response => {
 
-                                    document.getElementById("loader").style.display = "none";
-                                    $(`#historyData .collapse-acc-data`)?.addClass('hide');
-                                    $(`#historyData .show-history-feedback`)?.addClass('hide');
+                            //         document.getElementById("loader").style.display = "none";
+                            //         $(`#historyData .collapse-acc-data`)?.addClass('hide');
+                            //         $(`#historyData .show-history-feedback`)?.addClass('hide');
 
-                                    let previousId;
-                                    let previousTaskName, currentTaskName;
-                                    if (JSON.stringify(response) === JSON.stringify(previousResp)) {
-                                        $(`#historyData .collapse-acc-data.hide`)[$(`#historyData .collapse-acc-data.hide`).length - 1]?.classList.remove('hide');
-                                        $(`#historyData .show-history-feedback.hide`)[$(`#historyData .show-history-feedback.hide`).length - 1]?.classList.remove('hide');
-                                        $(`#historyData .dilog-task-end.hide`)[$(`#historyData .dilog-task-end.hide`).length - 1]?.classList.remove('hide');
-
-
-                                    } else {
-                                        let resp = response.length > 0 ? response?.slice(previousResp?.length - 1, response.length) : undefined;
-                                        resp?.forEach((res, index) => {
-                                            if (res.type == 'incoming') {
-                                                res.components?.forEach((ele) => {
-                                                    if (ele.data.text == previousTaskName) {
-                                                        previousTaskName = undefined;
-                                                        previousId = undefined;
-                                                        console.log("xxxxxxxxxxxxxxxxxxxxx incoming task same")
-                                                    }
-                                                })
-                                            }
-
-                                            if ((res.agentAssistDetails?.suggestions || res.agentAssistDetails?.ambiguityList) && res.type == 'outgoing') {
-
-                                                automationNotRanArray?.forEach((eleName, i) => {
-                                                    let historyDataHtml = $('#historyData');
-                                                    if (eleName === res.agentAssistDetails?.userInput) {
-                                                        let uniqueID = res._id;
-                                                        let htmls = `
-                                                    <div class="agent-utt-info" id="agentUttInfo-${uniqueID}">
-                                                        <div class="user-img">
-                                                            <img src="./images/userIcon.svg">
-                                                        </div>
-                                                        <div class="text-user" >${res.agentAssistDetails.userInput}</div>
-                                                    </div>
-                                                    <div class="dialog-task-run-sec" id="automationSuggestions-${uniqueID}">
-                                                    </div>`;
-
-                                                        historyDataHtml.append(htmls);
-                                                        let automationSuggestions = document.getElementById(`automationSuggestions-${uniqueID}`);
-                                                        if (res.agentAssistDetails?.ambiguityList?.dialogs?.length > 0 || res.agentAssistDetails?.suggestions?.dialogs?.length > 0) {
+                            //         let previousId;
+                            //         let previousTaskName, currentTaskName;
+                            //         if (JSON.stringify(response) === JSON.stringify(previousResp)) {
+                            //             $(`#historyData .collapse-acc-data.hide`)[$(`#historyData .collapse-acc-data.hide`).length - 1]?.classList.remove('hide');
+                            //             $(`#historyData .show-history-feedback.hide`)[$(`#historyData .show-history-feedback.hide`).length - 1]?.classList.remove('hide');
+                            //             $(`#historyData .dilog-task-end.hide`)[$(`#historyData .dilog-task-end.hide`).length - 1]?.classList.remove('hide');
 
 
-                                                            let dialogAreaHtml = `<div class="task-type" id="dialoguesArea">
-                                          <div class="img-block-info">
-                                              <img src="./images/dialogtask.svg">
-                                          </div>
-                                          <div class="content-dialog-task-type" id="dialogSuggestions-${uniqueID}">
-                                            <div class="type-with-img-title">Dialog task (${res.agentAssistDetails?.suggestions ? res.agentAssistDetails?.suggestions.dialogs?.length : res.agentAssistDetails?.ambiguityList.dialogs?.length})</div>
-                                          </div>
-                                        </div>`;
-                                                            automationSuggestions.innerHTML += dialogAreaHtml;
-                                                        }
-                                                        if (res.agentAssistDetails?.ambiguityList?.faqs?.length > 0 || res.agentAssistDetails?.suggestions?.faqs?.length > 0) {
-                                                            let dialogAreaHtml = `<div class="task-type" id="faqssArea">
-                                        <div class="img-block-info">
-                                            <img src="./images/kg.svg">
-                                        </div>
-                                        <div class="content-dialog-task-type" id="faqsSuggestions-${uniqueID}">
-                                            <div class="type-with-img-title">FAQ/Articles (${res.agentAssistDetails?.suggestions ? res.agentAssistDetails?.suggestions.faqs.length : res.agentAssistDetails.ambiguityList.faqs.length})</div>
+                            //         } else {
+                            //             let resp = response.length > 0 ? response?.slice(previousResp?.length - 1, response.length) : undefined;
+                            //             resp?.forEach((res, index) => {
+                            //                 if (res.type == 'incoming') {
+                            //                     res.components?.forEach((ele) => {
+                            //                         if (ele.data.text == previousTaskName) {
+                            //                             previousTaskName = undefined;
+                            //                             previousId = undefined;
+                            //                             console.log("xxxxxxxxxxxxxxxxxxxxx incoming task same")
+                            //                         }
+                            //                     })
+                            //                 }
+
+                            //                 if ((res.agentAssistDetails?.suggestions || res.agentAssistDetails?.ambiguityList) && res.type == 'outgoing') {
+
+                            //                     automationNotRanArray?.forEach((eleName, i) => {
+                            //                         let historyDataHtml = $('#historyData');
+                            //                         if (eleName === res.agentAssistDetails?.userInput) {
+                            //                             let uniqueID = res._id;
+                            //                             let htmls = `
+                            //                         <div class="agent-utt-info" id="agentUttInfo-${uniqueID}">
+                            //                             <div class="user-img">
+                            //                                 <img src="./images/userIcon.svg">
+                            //                             </div>
+                            //                             <div class="text-user" >${res.agentAssistDetails.userInput}</div>
+                            //                         </div>
+                            //                         <div class="dialog-task-run-sec" id="automationSuggestions-${uniqueID}">
+                            //                         </div>`;
+
+                            //                             historyDataHtml.append(htmls);
+                            //                             let automationSuggestions = document.getElementById(`automationSuggestions-${uniqueID}`);
+                            //                             if (res.agentAssistDetails?.ambiguityList?.dialogs?.length > 0 || res.agentAssistDetails?.suggestions?.dialogs?.length > 0) {
+
+
+                            //                                 let dialogAreaHtml = `<div class="task-type" id="dialoguesArea">
+                            //               <div class="img-block-info">
+                            //                   <img src="./images/dialogtask.svg">
+                            //               </div>
+                            //               <div class="content-dialog-task-type" id="dialogSuggestions-${uniqueID}">
+                            //                 <div class="type-with-img-title">Dialog task (${res.agentAssistDetails?.suggestions ? res.agentAssistDetails?.suggestions.dialogs?.length : res.agentAssistDetails?.ambiguityList.dialogs?.length})</div>
+                            //               </div>
+                            //             </div>`;
+                            //                                 automationSuggestions.innerHTML += dialogAreaHtml;
+                            //                             }
+                            //                             if (res.agentAssistDetails?.ambiguityList?.faqs?.length > 0 || res.agentAssistDetails?.suggestions?.faqs?.length > 0) {
+                            //                                 let dialogAreaHtml = `<div class="task-type" id="faqssArea">
+                            //             <div class="img-block-info">
+                            //                 <img src="./images/kg.svg">
+                            //             </div>
+                            //             <div class="content-dialog-task-type" id="faqsSuggestions-${uniqueID}">
+                            //                 <div class="type-with-img-title">FAQ/Articles (${res.agentAssistDetails?.suggestions ? res.agentAssistDetails?.suggestions.faqs.length : res.agentAssistDetails.ambiguityList.faqs.length})</div>
                                             
-                                        </div>
-                                    </div>`;
-                                                            automationSuggestions.innerHTML += dialogAreaHtml;
-                                                        }
-                                                        let dialogsss = (res.agentAssistDetails?.suggestions) ? (res.agentAssistDetails?.suggestions?.dialogs) : (res.agentAssistDetails?.ambiguityList?.dialogs);
-                                                        dialogsss?.forEach((ele, index) => {
+                            //             </div>
+                            //         </div>`;
+                            //                                 automationSuggestions.innerHTML += dialogAreaHtml;
+                            //                             }
+                            //                             let dialogsss = (res.agentAssistDetails?.suggestions) ? (res.agentAssistDetails?.suggestions?.dialogs) : (res.agentAssistDetails?.ambiguityList?.dialogs);
+                            //                             dialogsss?.forEach((ele, index) => {
 
-                                                            let dialogSuggestions = document.getElementById(`dialogSuggestions-${uniqueID}`);
-                                                            let dialogsHtml = `
-                                            <div class="type-info-run-send">
-                                                <div class="left-content">
-                                                    <div class="title-text" id="automation-${uniqueID}">${ele.name}</div>
-                                                </div>
-                                                <div class="action-links">
-                                                    <button class="send-run-btn" data-conv-id="${_agentAssistDataObj.conversationId}"
-                                                    data-bot-id="${res.botId}" data-intent-name="${ele.name}"
-                                                    data-history-run="true" id="run-${uniqueID}"
-                                                    >RUN</button>
-                                                    <div class="elipse-dropdown-info" id="showRunForAgentBtn-${uniqueID}">
-                                                        <div class="elipse-icon" id="elipseIcon-${uniqueID}">
-                                                            <i class="ast-overflow" id="overflowIcon-${uniqueID}"></i>
-                                                        </div>
-                                                        <div class="dropdown-content-elipse" id="runAgtBtn-${uniqueID}">
-                                                            <div class="list-option" data-conv-id="${_agentAssistDataObj.conversationId}"
-                                                            data-bot-id="${res.botId}" data-intent-name="${ele.name}"
-                                                             id="agentSelect-${uniqueID}"
-                                                            data-exhaustivelist-run="true">Run with Agent Inputs</div>
-                                                        </div>
-                                                </div>
-                                            </div>`;
-                                                            dialogSuggestions.innerHTML += dialogsHtml;
-                                                        });
-                                                        let faqss = (res.agentAssistDetails?.suggestions) ? (res.agentAssistDetails?.suggestions?.faqs) : (res.agentAssistDetails?.ambiguityList?.faqs);
-                                                        faqss?.forEach((ele, index) => {
+                            //                                 let dialogSuggestions = document.getElementById(`dialogSuggestions-${uniqueID}`);
+                            //                                 let dialogsHtml = `
+                            //                 <div class="type-info-run-send">
+                            //                     <div class="left-content">
+                            //                         <div class="title-text" id="automation-${uniqueID}">${ele.name}</div>
+                            //                     </div>
+                            //                     <div class="action-links">
+                            //                         <button class="send-run-btn" data-conv-id="${_agentAssistDataObj.conversationId}"
+                            //                         data-bot-id="${res.botId}" data-intent-name="${ele.name}"
+                            //                         data-history-run="true" id="run-${uniqueID}"
+                            //                         >RUN</button>
+                            //                         <div class="elipse-dropdown-info" id="showRunForAgentBtn-${uniqueID}">
+                            //                             <div class="elipse-icon" id="elipseIcon-${uniqueID}">
+                            //                                 <i class="ast-overflow" id="overflowIcon-${uniqueID}"></i>
+                            //                             </div>
+                            //                             <div class="dropdown-content-elipse" id="runAgtBtn-${uniqueID}">
+                            //                                 <div class="list-option" data-conv-id="${_agentAssistDataObj.conversationId}"
+                            //                                 data-bot-id="${res.botId}" data-intent-name="${ele.name}"
+                            //                                  id="agentSelect-${uniqueID}"
+                            //                                 data-exhaustivelist-run="true">Run with Agent Inputs</div>
+                            //                             </div>
+                            //                     </div>
+                            //                 </div>`;
+                            //                                 dialogSuggestions.innerHTML += dialogsHtml;
+                            //                             });
+                            //                             let faqss = (res.agentAssistDetails?.suggestions) ? (res.agentAssistDetails?.suggestions?.faqs) : (res.agentAssistDetails?.ambiguityList?.faqs);
+                            //                             faqss?.forEach((ele, index) => {
 
-                                                            let faqsSuggestions = document.getElementById(`faqsSuggestions-${uniqueID}`);
+                            //                                 let faqsSuggestions = document.getElementById(`faqsSuggestions-${uniqueID}`);
 
-                                                            let faqHtml = `
-                                            <div class="type-info-run-send" id="faqDiv-${uniqueID}">
-                                                <div class="left-content" id="faqSection-${uniqueID}">
-                                                    <div class="title-text" id="title-${uniqueID}">${ele.question}</div>
+                            //                                 let faqHtml = `
+                            //                 <div class="type-info-run-send" id="faqDiv-${uniqueID}">
+                            //                     <div class="left-content" id="faqSection-${uniqueID}">
+                            //                         <div class="title-text" id="title-${uniqueID}">${ele.question}</div>
                                                     
                                                     
-                                                </div>
+                            //                     </div>
                                                 
-                                            </div>`;
+                            //                 </div>`;
 
-                                                            faqsSuggestions.innerHTML += faqHtml;
-                                                            let faqs = $(`.type-info-run-send #faqSection-${uniqueID}`);
-                                                            if (!ele.answer) {
-                                                                let checkHtml = `
-                                                <i class="ast-carrotup" data-conv-id="${_agentAssistDataObj.conversationId}"
-                                                data-bot-id="${res.botId}" data-intent-name="${ele.question}"
-                                                data-check="true" id="check-${uniqueID}"></i>`;
-                                                                faqs.append(checkHtml);
-                                                            } else {
-                                                                let a = $(`#faqDiv-${uniqueID}`);
-                                                                let faqActionHtml = `<div class="action-links">
-                                                <button class="send-run-btn" id="sendMsg" data-msg-id="${uniqueID}"  data-msg-data="${ele.answer}">Send</button>
-                                                <div class="copy-btn" data-msg-id="${uniqueID}" data-msg-data='${ele.answer}'>
-                                                    <i class="ast-copy" data-msg-id="${uniqueID}" data-msg-data='${ele.answer}'></i>
-                                                </div>
-                                            </div>`;
-                                                                a.append(faqActionHtml);
-                                                                faqs.append(`<div class="desc-text" id="desc-${uniqueID}">${ele.answer}</div>`);
-                                                            }
-                                                            if ((ele.question?.length + ele.answer?.length) > 70) {
-                                                                let faqs = $(`.type-info-run-send #faqSection-${uniqueID}`);
-                                                                let seeMoreButtonHtml = `
-                                                  <button class="ghost-btn" style="font-style: italic;" id="seeMore-${uniqueID}" data-see-more="true">Show more</button>
-                                                  <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${uniqueID}" data-see-less="true">Show less</button>
-                                                  `;
-                                                                faqs.append(seeMoreButtonHtml);
-                                                            }
-                                                            uniqueID = undefined;
-                                                        })
-                                                    }
-                                                });
-                                            }
-                                            if ((!res.agentAssistDetails?.suggestions && !res.agentAssistDetails?.ambiguityList && !res.agentAssistDetails?.ambiguity) && res.type == 'outgoing') {
-                                                let _msgsResponse = {
-                                                    "type": "bot_response",
-                                                    "from": "bot",
-                                                    "message": [],
-                                                    "messageId": res._id,
-                                                    "botInfo": {
-                                                        "chatBot": "sample Bot",
-                                                        "taskBotId": res.botId
-                                                    },
-                                                    "createdOn": "2022-03-21T07:56:18.225Z",
-                                                    "icon": "https://uat.kore.ai:443/api/getMediaStream/market/f-cb381255-9aa1-5ce2-95e3-71233aef7084.png?n=17648985&s=IlRvUlUwalFVaFVMYm9sZStZQnlLc0l1UlZvdlNUUDcxR2o3U2lscHRrL3M9Ig$$",
-                                                    "traceId": "873209019a5adc26",
-                                                    "createdOnTimemillis": res._id
-                                                }
-                                                currentTaskName = res.tN ? res.tN : currentTaskName;
-                                                let historyData = $('#historyData');
-                                                let userInputHtml;
-                                                if (res.agentAssistDetails.userInput) {
-                                                    userInputHtml = `<div class="agent-utt-info" id="agentUttInfo-${res._id}">
-                                                        <div class="user-img">
-                                                            <img src="./images/userIcon.svg">
-                                                        </div>
-                                                        <div class="text-user" >${res.agentAssistDetails.userInput}</div>
-                                                    </div>`;
-                                                }
-                                                let dropdownHtml = `
+                            //                                 faqsSuggestions.innerHTML += faqHtml;
+                            //                                 let faqs = $(`.type-info-run-send #faqSection-${uniqueID}`);
+                            //                                 if (!ele.answer) {
+                            //                                     let checkHtml = `
+                            //                     <i class="ast-carrotup" data-conv-id="${_agentAssistDataObj.conversationId}"
+                            //                     data-bot-id="${res.botId}" data-intent-name="${ele.question}"
+                            //                     data-check="true" id="check-${uniqueID}"></i>`;
+                            //                                     faqs.append(checkHtml);
+                            //                                 } else {
+                            //                                     let a = $(`#faqDiv-${uniqueID}`);
+                            //                                     let faqActionHtml = `<div class="action-links">
+                            //                     <button class="send-run-btn" id="sendMsg" data-msg-id="${uniqueID}"  data-msg-data="${ele.answer}">Send</button>
+                            //                     <div class="copy-btn" data-msg-id="${uniqueID}" data-msg-data='${ele.answer}'>
+                            //                         <i class="ast-copy" data-msg-id="${uniqueID}" data-msg-data='${ele.answer}'></i>
+                            //                     </div>
+                            //                 </div>`;
+                            //                                     a.append(faqActionHtml);
+                            //                                     faqs.append(`<div class="desc-text" id="desc-${uniqueID}">${ele.answer}</div>`);
+                            //                                 }
+                            //                                 if ((ele.question?.length + ele.answer?.length) > 70) {
+                            //                                     let faqs = $(`.type-info-run-send #faqSection-${uniqueID}`);
+                            //                                     let seeMoreButtonHtml = `
+                            //                       <button class="ghost-btn" style="font-style: italic;" id="seeMore-${uniqueID}" data-see-more="true">Show more</button>
+                            //                       <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${uniqueID}" data-see-less="true">Show less</button>
+                            //                       `;
+                            //                                     faqs.append(seeMoreButtonHtml);
+                            //                                 }
+                            //                                 uniqueID = undefined;
+                            //                             })
+                            //                         }
+                            //                     });
+                            //                 }
+                            //                 if ((!res.agentAssistDetails?.suggestions && !res.agentAssistDetails?.ambiguityList && !res.agentAssistDetails?.ambiguity) && res.type == 'outgoing') {
+                            //                     let _msgsResponse = {
+                            //                         "type": "bot_response",
+                            //                         "from": "bot",
+                            //                         "message": [],
+                            //                         "messageId": res._id,
+                            //                         "botInfo": {
+                            //                             "chatBot": "sample Bot",
+                            //                             "taskBotId": res.botId
+                            //                         },
+                            //                         "createdOn": "2022-03-21T07:56:18.225Z",
+                            //                         "icon": "https://uat.kore.ai:443/api/getMediaStream/market/f-cb381255-9aa1-5ce2-95e3-71233aef7084.png?n=17648985&s=IlRvUlUwalFVaFVMYm9sZStZQnlLc0l1UlZvdlNUUDcxR2o3U2lscHRrL3M9Ig$$",
+                            //                         "traceId": "873209019a5adc26",
+                            //                         "createdOnTimemillis": res._id
+                            //                     }
+                            //                     currentTaskName = res.tN ? res.tN : currentTaskName;
+                            //                     let historyData = $('#historyData');
+                            //                     let userInputHtml;
+                            //                     if (res.agentAssistDetails.userInput) {
+                            //                         userInputHtml = `<div class="agent-utt-info" id="agentUttInfo-${res._id}">
+                            //                             <div class="user-img">
+                            //                                 <img src="./images/userIcon.svg">
+                            //                             </div>
+                            //                             <div class="text-user" >${res.agentAssistDetails.userInput}</div>
+                            //                         </div>`;
+                            //                     }
+                            //                     let dropdownHtml = `
                                                     
-                                                                <div class="dialog-task-accordiaon-info" id="addRemoveDropDown-${res._id}" >
-                                                                    <div class="accordion-header" id="dropDownHeader-${res._id}"
-                                                                    data-drop-down-opened="false">
-                                                                        <div class="icon-info">
-                                                                            <i class="ast-rule"></i>
-                                                                        </div>
-                                                                        <div class="header-text" id="dropDownTitle-${res._id}">${res.tN}</div>
-                                                                        <i class="ast-carrotup"></i>
-                                                                    </div>
-                                                                    <div class="collapse-acc-data hide" id="dropDownData-${res._id}">
+                            //                                     <div class="dialog-task-accordiaon-info" id="addRemoveDropDown-${res._id}" >
+                            //                                         <div class="accordion-header" id="dropDownHeader-${res._id}"
+                            //                                         data-drop-down-opened="false">
+                            //                                             <div class="icon-info">
+                            //                                                 <i class="ast-rule"></i>
+                            //                                             </div>
+                            //                                             <div class="header-text" id="dropDownTitle-${res._id}">${res.tN}</div>
+                            //                                             <i class="ast-carrotup"></i>
+                            //                                         </div>
+                            //                                         <div class="collapse-acc-data hide" id="dropDownData-${res._id}">
                                                                         
                                                                         
-                                                                    </div>
-                                                                    <div class="feedback-data show-history-feedback hide">
-                                                                        <div class="feedbackup-data">
-                                                                            <div class="feedback-icon" id="feedbackup">
-                                                                                <i class="ast-thumbup" id="feedbackup-${res._id}" data-feedbacklike="false" data-conv-id="${_agentAssistDataObj.conversationId}"data-bot-id="${_agentAssistDataObj.botId}" data-feedback="like" data-dialog-name="${res.tN}" data-user-input="${res?.agentAssistDetails?.userInput}"></i>
-                                                                            </div>
-                                                                            <span class="tootltip-tabs">Like</span>
-                                                                        </div>
-                                                                        <div class="feedbackdown-data">
-                                                                            <div class="feedback-icon" id="feedbackdown">
-                                                                                <i class="ast-thumbdown" id="feedbackdown-${res._id}" data-feedbackdislike="false" data-conv-id="${_agentAssistDataObj.conversationId}" data-bot-id="${_agentAssistDataObj.botId}" data-feedback="dislike" data-dialog-name="${res.tN}" data-user-input="${res?.agentAssistDetails?.userInput}"></i>
-                                                                            </div>
-                                                                            <span class="tootltip-tabs">Dislike</span>
-                                                                        </div>
-                                                                    </div>
-                                                            <div class="dilog-task-end hide" id="endTaks-${res._id}">
-                                                            <div class="text-dialog-task-end">Dialog Task ended</div>     
-                                                                        </div>
-                                                                    </div>
-                                                                `;
+                            //                                         </div>
+                            //                                         <div class="feedback-data show-history-feedback hide">
+                            //                                             <div class="feedbackup-data">
+                            //                                                 <div class="feedback-icon" id="feedbackup">
+                            //                                                     <i class="ast-thumbup" id="feedbackup-${res._id}" data-feedbacklike="false" data-conv-id="${_agentAssistDataObj.conversationId}"data-bot-id="${_agentAssistDataObj.botId}" data-feedback="like" data-dialog-name="${res.tN}" data-user-input="${res?.agentAssistDetails?.userInput}"></i>
+                            //                                                 </div>
+                            //                                                 <span class="tootltip-tabs">Like</span>
+                            //                                             </div>
+                            //                                             <div class="feedbackdown-data">
+                            //                                                 <div class="feedback-icon" id="feedbackdown">
+                            //                                                     <i class="ast-thumbdown" id="feedbackdown-${res._id}" data-feedbackdislike="false" data-conv-id="${_agentAssistDataObj.conversationId}" data-bot-id="${_agentAssistDataObj.botId}" data-feedback="dislike" data-dialog-name="${res.tN}" data-user-input="${res?.agentAssistDetails?.userInput}"></i>
+                            //                                                 </div>
+                            //                                                 <span class="tootltip-tabs">Dislike</span>
+                            //                                             </div>
+                            //                                         </div>
+                            //                                 <div class="dilog-task-end hide" id="endTaks-${res._id}">
+                            //                                 <div class="text-dialog-task-end">Task Ended</div>     
+                            //                                             </div>
+                            //                                         </div>
+                            //                                     `;
 
-                                                if (previousTaskName && currentTaskName !== previousTaskName) {
-                                                    previousId = undefined;
-                                                }
+                            //                     if (previousTaskName && currentTaskName !== previousTaskName) {
+                            //                         previousId = undefined;
+                            //                     }
 
-                                                if (res.tN && !previousId && previousTaskName !== currentTaskName) {
-                                                    let divExist = $(`#addRemoveDropDown-${res._id}`);
-                                                    previousTaskName = currentTaskName;
-                                                    if (divExist.length >= 1) {
-                                                        console.log("---->>>>>>>>>>>>>>>>>>>>>already exsit===in the dom");
-                                                    } else {
-                                                        historyData.append(userInputHtml);
-                                                        historyData.append(dropdownHtml);
-                                                        previousId = res._id;
-                                                        previousTaskName = res.tN;
-                                                    }
-                                                }
-                                                if (res.agentAssistDetails.entityName && res.agentAssistDetails.entityResponse && res.agentAssistDetails.entityValue) {
-                                                    let runInfoContent = $(`#dropDownData-${previousId}`);
-                                                    let userQueryHtml = `
-                                                        <div class="steps-run-data">
-                                                            <div class="icon_block_img">
-                                                                <img src="./images/userIcon.svg">
-                                                            </div>
-                                                            <div class="run-info-content" id="userInput-${res._id}">
-                                                                <div class="title">Customer Said - </div>
-                                                                <div class="agent-utt">
-                                                                    <div class="title-data">${res.agentAssistDetails.entityValue}</div>
-                                                                </div>
+                            //                     if (res.tN && !previousId && previousTaskName !== currentTaskName) {
+                            //                         let divExist = $(`#addRemoveDropDown-${res._id}`);
+                            //                         previousTaskName = currentTaskName;
+                            //                         if (divExist.length >= 1) {
+                            //                             console.log("---->>>>>>>>>>>>>>>>>>>>>already exsit===in the dom");
+                            //                         } else {
+                            //                             historyData.append(userInputHtml);
+                            //                             historyData.append(dropdownHtml);
+                            //                             previousId = res._id;
+                            //                             previousTaskName = res.tN;
+                            //                         }
+                            //                     }
+                            //                     if (res.agentAssistDetails.entityName && res.agentAssistDetails.entityResponse && res.agentAssistDetails.entityValue) {
+                            //                         let runInfoContent = $(`#dropDownData-${previousId}`);
+                            //                         let userQueryHtml = `
+                            //                             <div class="steps-run-data">
+                            //                                 <div class="icon_block_img">
+                            //                                     <img src="./images/userIcon.svg">
+                            //                                 </div>
+                            //                                 <div class="run-info-content" id="userInput-${res._id}">
+                            //                                     <div class="title">Customer Said - </div>
+                            //                                     <div class="agent-utt">
+                            //                                         <div class="title-data">${res.agentAssistDetails.entityValue}</div>
+                            //                                     </div>
                                                                 
-                                                            </div>
-                                                        </div>`;
-                                                    runInfoContent.append(userQueryHtml);
-                                                    let entityHtml = $(`#dropDownData-${previousId}`).find(`#userInput-${res._id}`);
-                                                    if (res.agentAssistDetails.entityValue && !res.agentAssistDetails.isErrorPrompt) {
-                                                        entityHtml.append(`<div class="order-number-info">${res.agentAssistDetails.entityName} : ${res.agentAssistDetails.entityValue}</div>`);
-                                                    } else {
-                                                        if (res.agentAssistDetails.isErrorPrompt) {
-                                                            let entityHtmls = `<div class="order-number-info">${res.agentAssistDetails.entityName} : 
-                                                                        <span style="color:red">Value unidentified</span>
-                                                                    </div>
-                                                                    <div>
-                                                                        <img src="./images/warning.svg" style="padding-right: 8px;">
-                                                                        <span style="font-size: 12px; line-height: 18px; color: #202124;">Incorrect input format<span>
-                                                                    </div>`
-                                                            entityHtml.append(entityHtmls);
-                                                        }
-                                                    }
-                                                }
-                                                let parsedPayload;
-                                                res.components?.forEach((elem) => {
-                                                    let payloadType = (elem.data?.text).replace(/(&quot\;)/g, "\"");
+                            //                                 </div>
+                            //                             </div>`;
+                            //                         runInfoContent.append(userQueryHtml);
+                            //                         let entityHtml = $(`#dropDownData-${previousId}`).find(`#userInput-${res._id}`);
+                            //                         if (res.agentAssistDetails.entityValue && !res.agentAssistDetails.isErrorPrompt) {
+                            //                             entityHtml.append(`<div class="order-number-info">${res.agentAssistDetails.entityName} : ${res.agentAssistDetails.entityValue}</div>`);
+                            //                         } else {
+                            //                             if (res.agentAssistDetails.isErrorPrompt) {
+                            //                                 let entityHtmls = `<div class="order-number-info">${res.agentAssistDetails.entityName} : 
+                            //                                             <span style="color:red">Value unidentified</span>
+                            //                                         </div>
+                            //                                         <div>
+                            //                                             <img src="./images/warning.svg" style="padding-right: 8px;">
+                            //                                             <span style="font-size: 12px; line-height: 18px; color: #202124;">Incorrect input format<span>
+                            //                                         </div>`
+                            //                                 entityHtml.append(entityHtmls);
+                            //                             }
+                            //                         }
+                            //                     }
+                            //                     let parsedPayload;
+                            //                     res.components?.forEach((elem) => {
+                            //                         let payloadType = (elem.data?.text).replace(/(&quot\;)/g, "\"");
 
-                                                    try {
-                                                        if (payloadType.indexOf('text') !== -1 || payloadType.indexOf('payload') !== -1) {
-                                                            let withoutSpecials = payloadType.replace(/^\s+|\s+$/g, "");
-                                                            parsedPayload = JSON.parse(withoutSpecials);
-                                                        }
-                                                    }catch(error){
-                                                        if(payloadType.text){
-                                                            let withoutSpecials = payloadType.replace(/^\s+|\s+$/g, "");
-                                                            parsedPayload = withoutSpecials;
-                                                        }
-                                                    }
+                            //                         if (payloadType.indexOf('text') !== -1 || payloadType.indexOf('payload') !== -1) {
+                            //                             let withoutSpecials = payloadType.replace(/^\s+|\s+$/g, "");
+                            //                             parsedPayload = JSON.parse(withoutSpecials);
+                            //                         }
 
-                                                    let body = {};
-                                                    body['type'] = elem.cT;
-                                                    if (!parsedPayload) {
-                                                        body['component'] = {
-                                                            "type": elem.cT,
-                                                            "payload": {
-                                                                "type": elem.cT,
-                                                                "text": elem.data.text
-                                                            }
-                                                        };
-                                                        body['cInfo'] = {
-                                                            "body": elem.data.text
-                                                        };
+                            //                         let body = {};
+                            //                         body['type'] = elem.cT;
+                            //                         if (!parsedPayload) {
+                            //                             body['component'] = {
+                            //                                 "type": elem.cT,
+                            //                                 "payload": {
+                            //                                     "type": elem.cT,
+                            //                                     "text": elem.data.text
+                            //                                 }
+                            //                             };
+                            //                             body['cInfo'] = {
+                            //                                 "body": elem.data.text
+                            //                             };
 
-                                                    } else {
-                                                        body['component'] = parsedPayload.payload ? parsedPayload : parsedPayload.text;
-                                                        if (parsedPayload?.type === 'message') {
-                                                            body['cInfo'] = {
-                                                                "body": ''
-                                                            };
-                                                        } else if (parsedPayload?.text) {
-                                                            body['cInfo'] = {
-                                                                "body": parsedPayload.text
-                                                            };
-                                                        } else {
-                                                            body['cInfo'] = {
-                                                                "body": parsedPayload
-                                                            };
-                                                        }
+                            //                         } else {
+                            //                             body['component'] = parsedPayload.payload ? parsedPayload : parsedPayload.text;
+                            //                             if (parsedPayload?.type === 'message') {
+                            //                                 body['cInfo'] = {
+                            //                                     "body": ''
+                            //                                 };
+                            //                             } else if (parsedPayload?.text) {
+                            //                                 body['cInfo'] = {
+                            //                                     "body": parsedPayload.text
+                            //                                 };
+                            //                             } else {
+                            //                                 body['cInfo'] = {
+                            //                                     "body": parsedPayload
+                            //                                 };
+                            //                             }
 
-                                                    }
+                            //                         }
 
-                                                    _msgsResponse.message.push(body);
-                                                });
-                                                let runInfoContent = $(`#dropDownData-${previousId}`);
-                                                let askToUserHtml = `
-                                                    <div class="steps-run-data">
-                                                                <div class="icon_block">
-                                                                    <i class="ast-agent"></i>
-                                                                </div>
-                                                                <div class="run-info-content" >
-                                                                <div class="title">Ask customer...</div>
-                                                                <div class="agent-utt">
-                                                                    <div class="title-data"><ul class="chat-container" id="displayData-${res._id}"></ul></div>
+                            //                         _msgsResponse.message.push(body);
+                            //                     });
+                            //                     let runInfoContent = $(`#dropDownData-${previousId}`);
+                            //                     let askToUserHtml = `
+                            //                         <div class="steps-run-data">
+                            //                                     <div class="icon_block">
+                            //                                         <i class="ast-agent"></i>
+                            //                                     </div>
+                            //                                     <div class="run-info-content" >
+                            //                                     <div class="title">Ask customer...</div>
+                            //                                     <div class="agent-utt">
+                            //                                         <div class="title-data"><ul class="chat-container" id="displayData-${res._id}"></ul></div>
                                                                     
-                                                                </div>
-                                                                </div>
-                                                            </div>
-                                                    `;
-                                                let tellToUserHtml = `
-                                                    <div class="steps-run-data">
-                                                                <div class="icon_block">
-                                                                    <i class="ast-agent"></i>
-                                                                </div>
-                                                                <div class="run-info-content" >
-                                                                <div class="title">Tell Customer</div>
-                                                                <div class="agent-utt">
-                                                                    <div class="title-data" ><ul class="chat-container" id="displayData-${res._id}"></ul></div>
+                            //                                     </div>
+                            //                                     </div>
+                            //                                 </div>
+                            //                         `;
+                            //                     let tellToUserHtml = `
+                            //                         <div class="steps-run-data">
+                            //                                     <div class="icon_block">
+                            //                                         <i class="ast-agent"></i>
+                            //                                     </div>
+                            //                                     <div class="run-info-content" >
+                            //                                     <div class="title">Tell Customer</div>
+                            //                                     <div class="agent-utt">
+                            //                                         <div class="title-data" ><ul class="chat-container" id="displayData-${res._id}"></ul></div>
                                                                     
-                                                                </div>
-                                                                </div>
-                                                            </div>
-                                                    `;
-                                                if (res.agentAssistDetails.isPrompt || res.agentAssistDetails.entityRequest) {
-                                                    runInfoContent.append(askToUserHtml);
-                                                } else {
-                                                    runInfoContent.append(tellToUserHtml);
-                                                }
-                                                AgentChatInitialize.renderMessage(_msgsResponse, res._id, `dropDownData-${previousId}`);
-                                                //  removeElementFromDom();
-                                                //if (res.agentAssistDetails.endOfTask) { // need this block of code once the endofTask flag received from backend
-                                                //                                                    let dropDownData = $(`#dropDownData-${previousId}`);
-                                                //                    let endOfDialoge = $(`#addRemoveDropDown-${previousId}`);
+                            //                                     </div>
+                            //                                     </div>
+                            //                                 </div>
+                            //                         `;
+                            //                     if (res.agentAssistDetails.isPrompt || res.agentAssistDetails.entityRequest) {
+                            //                         runInfoContent.append(askToUserHtml);
+                            //                     } else {
+                            //                         runInfoContent.append(tellToUserHtml);
+                            //                     }
+                            //                     AgentChatInitialize.renderMessage(_msgsResponse, res._id, `dropDownData-${previousId}`);
+                            //                     //  removeElementFromDom();
+                            //                     //if (res.agentAssistDetails.endOfTask) { // need this block of code once the endofTask flag received from backend
+                            //                     //                                                    let dropDownData = $(`#dropDownData-${previousId}`);
+                            //                     //                    let endOfDialoge = $(`#addRemoveDropDown-${previousId}`);
 
-                                                //                 // $(`#addRemoveDropDown-${dropdownHeaderUuids} .btn-danger`).remove();
-                                                //                 let feedbackHtml = ` 
-                                                //     <div class="feedback-data">
-                                                //         <div class="feedback-icon" id="feedbackup">
-                                                //             <i class="ast-thumbup" id="feedbackup-${previousId}"
-                                                //             data-feedbacklike="false"
-                                                //             data-conv-id="${_agentAssistDataObj.conversationId}"
-                                                //                     data-bot-id="${_agentAssistDataObj.botId}" data-feedback="like"
-                                                //                     data-dialog-name="${previousTaskName}"
-                                                //                     data-user-input="${res.agentAssistDetails.userInput}"></i>
-                                                //         </div>
-                                                //         <div class="feedback-icon" id="feedbackdown">
-                                                //             <i class="ast-thumbdown" id="feedbackdown-${previousId}"
-                                                //             data-feedbackdislike="false"
-                                                //             data-conv-id="${_agentAssistDataObj.conversationId}"
-                                                //                     data-bot-id="${_agentAssistDataObj.botId}" data-feedback="dislike"
-                                                //                     data-dialog-name="${previousTaskName}"
-                                                //                     data-user-input="${res.agentAssistDetails.userInput}"></i>
-                                                //         </div>
-                                                //    </div>`;
-                                                //                 dropDownData.append(feedbackHtml);
-                                                //                 let endofDialogeHtml = `
-                                                //     <div class="dilog-task-end" id="endTaks-${previousId}">
-                                                //     <div class="text-dialog-task-end">Dialog Task ended</div>     
-                                                //                </div>
+                            //                     //                 // $(`#addRemoveDropDown-${dropdownHeaderUuids} .btn-danger`).remove();
+                            //                     //                 let feedbackHtml = ` 
+                            //                     //     <div class="feedback-data">
+                            //                     //         <div class="feedback-icon" id="feedbackup">
+                            //                     //             <i class="ast-thumbup" id="feedbackup-${previousId}"
+                            //                     //             data-feedbacklike="false"
+                            //                     //             data-conv-id="${_agentAssistDataObj.conversationId}"
+                            //                     //                     data-bot-id="${_agentAssistDataObj.botId}" data-feedback="like"
+                            //                     //                     data-dialog-name="${previousTaskName}"
+                            //                     //                     data-user-input="${res.agentAssistDetails.userInput}"></i>
+                            //                     //         </div>
+                            //                     //         <div class="feedback-icon" id="feedbackdown">
+                            //                     //             <i class="ast-thumbdown" id="feedbackdown-${previousId}"
+                            //                     //             data-feedbackdislike="false"
+                            //                     //             data-conv-id="${_agentAssistDataObj.conversationId}"
+                            //                     //                     data-bot-id="${_agentAssistDataObj.botId}" data-feedback="dislike"
+                            //                     //                     data-dialog-name="${previousTaskName}"
+                            //                     //                     data-user-input="${res.agentAssistDetails.userInput}"></i>
+                            //                     //         </div>
+                            //                     //    </div>`;
+                            //                     //                 dropDownData.append(feedbackHtml);
+                            //                     //                 let endofDialogeHtml = `
+                            //                     //     <div class="dilog-task-end" id="endTaks-${previousId}">
+                            //                     //     <div class="text-dialog-task-end">Task Ended</div>     
+                            //                     //                </div>
 
-                                                //     `;
-                                                //                 endOfDialoge.append(endofDialogeHtml);
-                                                //     previousId = undefined;
-                                                //     previousTaskName = undefined;
-                                                // }
+                            //                     //     `;
+                            //                     //                 endOfDialoge.append(endofDialogeHtml);
+                            //                     //     previousId = undefined;
+                            //                     //     previousTaskName = undefined;
+                            //                     // }
 
-                                            }
-                                            if (index == resp.length - 1) {
-                                                $(`#historyData .collapse-acc-data.hide`)[$(`#historyData .collapse-acc-data.hide`).length - 1]?.classList.remove('hide');
-                                                // $(`#historyData .show-history-feedback.hide`)[$(`#historyData .show-history-feedback.hide`).length - 1]?.classList.remove('hide');
-                                            }
-                                        });
-                                    }
-                                    previousResp = response;
-                                }).catch(err => {
-                                    document.getElementById("loader").style.display = "block";
-                                    console.log("error", err)
-                                });
+                            //                 }
+                            //                 if (index == resp.length - 1) {
+                            //                     $(`#historyData .collapse-acc-data.hide`)[$(`#historyData .collapse-acc-data.hide`).length - 1]?.classList.remove('hide');
+                            //                     // $(`#historyData .show-history-feedback.hide`)[$(`#historyData .show-history-feedback.hide`).length - 1]?.classList.remove('hide');
+                            //                 }
+                            //             });
+                            //         }
+                            //         previousResp = response;
+                            //     }).catch(err => {
+                            //         document.getElementById("loader").style.display = "block";
+                            //         console.log("error", err)
+                            //     });
                         }
                         if (target.id === 'backToRecommendation') {
                             isShowHistoryEnable = false;
@@ -2438,7 +3440,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $('.show-history-block').removeClass('hide');
                             $('.show-back-recommendation-block').addClass('hide');
                             $('#historyData').addClass('hide');
-                            $('#welcomeMsg').removeClass('hide');
                             let automationSuggestions = $('#dynamicBlock .dialog-task-accordiaon-info');
                             let dialogSpace = document.getElementsByClassName('dialog-task-run-sec hide');
                             let suggestionsLength = $(`#dynamicBlock .dialog-task-run-sec`);
@@ -2572,7 +3573,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                                             </div>
                                                                         </div>
                                                                 <div class="dilog-task-end hide" id="endTaks-${res._id}">
-                                                                <div class="text-dialog-task-end">Dialog Task ended</div>     
+                                                                <div class="text-dialog-task-end">Task Ended</div>     
                                                                             </div>
                                                                         </div>
                                                                     `;
@@ -2738,7 +3739,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                 //                 dropDownData.append(feedbackHtml);
                                                 //                 let endofDialogeHtml = `
                                                 //     <div class="dilog-task-end" id="endTaks-${previousId}">
-                                                //     <div class="text-dialog-task-end">Dialog Task ended</div>     
+                                                //     <div class="text-dialog-task-end">Task Ended</div>     
                                                 //                </div>
 
                                                 //     `;
@@ -2814,7 +3815,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         { conversationId: _agentAssistDataObj.conversationId, botId: _botId, value: 'discard all', isSearch: false });
                                     document.getElementById("loader").style.display = "block";
                                 }
-
+                                scrollToBottom();
                             }
 
                         }
@@ -2881,12 +3882,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 // condition for if an automation is already running in the agent automation
                                 $('#interruptPopUp').removeClass('hide');
                             }
-
                         }
-                       
+
                         if (runButton || libraryRunBtn || historyRunBtn) {
                             if (!isAutomationOnGoing) {
-                                $('#welcomeMsg').addClass('hide');
+                                // $('#welcomeMsg').addClass('hide');
                                 if (historyRunBtn) {
                                     isShowHistoryEnable = false;
                                     let dom = document.getElementById('dynamicBlock');
@@ -2932,10 +3932,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                 <div class="dialog-task-run-sec">
                                                 ${$(ele).html()}
                                                 </div>`)
-                                                elem.remove();
+                                              //  elem.remove();
                                             }
                                         })
-                                        ele.remove();
+                                      //  ele.remove();
                                     })
                                 }
 
@@ -2948,23 +3948,27 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     appState[_conversationId].automationGoingOn = isAutomationOnGoing;
                                     localStorage.setItem('agentAssistState', JSON.stringify(appState))
                                 }
-                                for (let a of $('#dynamicBlock .agent-utt-info')) {
-                                    a.classList.add('hide');
-                                }
-                                let suggestionsLength = $(`#dynamicBlock .dialog-task-run-sec`);
-                                suggestionsLength.each((i, ele) => {
-                                    $(ele).addClass('hide');
-                                })
+                                // for (let a of $('#dynamicBlock .agent-utt-info')) {
+                                //     a.classList.add('hide');
+                                // }
+                                // let suggestionsLength = $(`#dynamicBlock .dialog-task-run-sec`);
+                                // suggestionsLength.each((i, ele) => {
+                                //     $(ele).addClass('hide');
+                                // })
                                 _createRunTemplateContiner(uuids, target.dataset.intentName);
                                 let ids = target.id.split('-');
                                 ids.shift();
                                 let joinedIds = ids.join('-');
+                                let dialogID = document.getElementById(`suggestionId-${joinedIds}`);
+                                if(dialogID){
+                                    dialogID.style.borderStyle="solid";
+                                }
                                 $(`${!target?.dataset?.useCaseList}` ? '.dialog-task-run-sec' : '.content-dialog-task-type .type-info-run-send').each((i, ele) => {
                                     let id = ele.id?.split('-');
                                     id.shift();
                                     if (joinedIds.includes(id.join('-'))) {
                                         idsOfDropDown = ele.id;
-                                        $(ele).remove()
+                                        // $(ele).remove()
                                     }
                                 });
 
@@ -2972,14 +3976,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 addRemoveDropDown?.classList.remove('hide');
                                 $(`#endTaks-${uuids}`).removeClass('hide')
                                 AgentAssist_run_click(evt);
+                               
 
-                                if (libraryRunBtn) {
-                                    let automationSuggestions = $('#dynamicBlock .dialog-task-accordiaon-info');
-                                    automationSuggestions.each((i, ele) => {
-                                        $(ele).addClass('hide');
-                                    });
-                                    (automationSuggestions.length >= 1 && $('#dynamicBlock .dialog-task-run-sec').length <= 0) ? $(automationSuggestions[automationSuggestions.length - 1]).removeClass('hide') : '';
-                                }
+                                // if (libraryRunBtn) {
+                                //     let automationSuggestions = $('#dynamicBlock .dialog-task-accordiaon-info');
+                                //     automationSuggestions.each((i, ele) => {
+                                //         $(ele).addClass('hide');
+                                //     });
+                                //     (automationSuggestions.length >= 1 && $('#dynamicBlock .dialog-task-run-sec').length <= 0) ? $(automationSuggestions[automationSuggestions.length - 1]).removeClass('hide') : '';
+                                // }
                                 return;
                             }
                             else {
@@ -3017,6 +4022,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             runInfoContent.append(agentInputToBotHtml);
                             $(`#overRideBtn-${id}`).addClass('hide');
                             $(`#cancelOverRideBtn-${id}`).removeClass('hide');
+                            addWhiteBackgroundClassToNewMessage();
                         }
                         if (target.id.split('-').includes('cancelOverRideBtn')) {
                             let idsss = target.id.split('-');
@@ -3034,111 +4040,116 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $(`#overRideBtn-${id}`).removeClass('hide');
                             $(`#cancelOverRideBtn-${id}`).addClass('hide');
                             $('#inputFieldForAgent').remove();
+                            addWhiteBackgroundClassToNewMessage();
                         }
                         if (checkButton) {
                             let id = target.id.split('-');
                             id.shift();
-                            let latestId = id.join('-');
                             if (!target.dataset.answerRender) {
-                                let faq = $(`.type-info-run-send #faqSection-${latestId}`);
-                                let answerHtml = `<div class="desc-text" id="desc-${latestId}"></div>`
-                                let faqDiv = $(`#faqDiv-${latestId}`);
+                                let faq = $(`#dynamicBlock .type-info-run-send #faqSection-${id.join('-')}`);
+                                let answerHtml = `<div class="desc-text" id="desc-${id.join('-')}"></div>`
+                                let faqDiv = $(`#dynamicBlock #faqDiv-${id.join('-')}`);
                                 let faqaction = `<div class="action-links">
-                    <button class="send-run-btn" id="sendMsg" data-msg-id="${latestId}"  data-msg-data="">Send</button>
-                    <div class="copy-btn" data-msg-id="${latestId}">
-                        <i class="ast-copy" data-msg-id="${latestId}"></i>
-                    </div>
-                </div>`;
+                        <button class="send-run-btn" id="sendMsg" data-msg-id="${id.join('-')}"  data-msg-data="">Send</button>
+                        <div class="copy-btn" data-msg-id="${id.join('-')}">
+                        <i class="ast-copy" data-msg-id="${id.join('-')}"></i>
+                        </div>
+                        </div>`;
+                          let dropDownHtml =` <i class="ast-carrotup" data-conv-id="${_conversationId}"
+                          data-bot-id="" data-intent-name=""
+                          data-check="true" id="check-${id.join('-')}"></i>`;
+                          faq.append(dropDownHtml)
                                 faq.append(answerHtml);
-                                $(`#${target.id}`).attr('data-answer-render', 'false');
+                                $(`#dynamicBlock #${target.id}`).attr('data-answer-render', 'false');
                                 faqDiv.append(faqaction);
-                                answerPlaceableID = `desc-${latestId}`;
-                                $(`#faqssArea #${target.id}`).addClass('rotate-carrot');
+                                answerPlaceableID = `desc-${id.join('-')}`;
+                                $(`#dynamicBlock #${target.id}`).addClass('rotate-carrot');
                                 AgentAssist_run_click(evt);
                                 return
                             }
-                            if ($(`#faqssArea .ast-carrotup.rotate-carrot`).length <= 0) {
-                                $(`#${target.id}`).addClass('rotate-carrot');
-                                $(`#faqssArea #faqDiv-${latestId} .action-links`).removeClass('hide');
-                                $(`#faqssArea #desc-${latestId}`).removeClass('hide');
-                                $(`#faqssArea #seeMore-${latestId}`).removeClass('hide');
-                                $(`#faqssArea #seeLess-${latestId}`).addClass('hide');
+                            if ($(`#dynamicBlock .ast-carrotup.rotate-carrot`).length <= 0) {
+                                $(`#dynamicBlock #${target.id}`).addClass('rotate-carrot');
+                                $(`#dynamicBlock #faqDiv-${id.join('-')} .action-links`).removeClass('hide');
+                                $(`#dynamicBlock #desc-${id.join('-')}`).removeClass('hide');
+                                $(`#dynamicBlock #seeMore-${id.join('-')}`).removeClass('hide');
+                                $(`#dynamicBlock #seeLess-${id.join('-')}`).addClass('hide');
                             } else {
-                                $(`#${target.id}`).removeClass('rotate-carrot');
-                                $(`#faqssArea #faqDiv-${latestId} .action-links`).addClass('hide');
-                                $(`#faqssArea #desc-${latestId}`).addClass('hide');
-                                $(`#faqssArea #seeMore-${latestId}`).addClass('hide');
-                                $(`#faqssArea #seeLess-${latestId}`).addClass('hide');
+                                $(`#dynamicBlock #${target.id}`).removeClass('rotate-carrot');
+                                $(`#dynamicBlock #faqDiv-${id.join('-')} .action-links`).addClass('hide');
+                                $(`#dynamicBlock #desc-${id.join('-')}`).addClass('hide');
+                                $(`#dynamicBlock #seeMore-${id.join('-')}`).addClass('hide');
+                                $(`#dynamicBlock #seeLess-${id.join('-')}`).addClass('hide');
                             }
-
+                        
                         }
 
                         if (checkLibButton) {
-                            let id = target.id.split('-')[1];
+                            let id = target.id.split('-');
+                            id.shift();
                             if ((!target.dataset.answerRender && (currentTabActive == 'userAutoIcon' || currentTabActive == 'agentAutoIcon' || currentTabActive == 'transcriptIcon'))) {
-                                let faq = $(`#overLaySearch .type-info-run-send #faqSectionLib-${id}`);
-                                let answerHtml = `<div class="desc-text" id="descLib-${id}"></div>`
-                                let faqDiv = $(`#overLaySearch #faqDivLib-${id}`);
+                                let faq = $(`#overLaySearch .type-info-run-send #faqSectionLib-${id.join('-')}`);
+                                let answerHtml = `<div class="desc-text" id="descLib-${id.join('-')}"></div>`
+                                let faqDiv = $(`#overLaySearch #faqDivLib-${id.join('-')}`);
                                 let faqaction = `<div class="action-links">
-                    <button class="send-run-btn" id="sendMsg" data-msg-id="${id}"  data-msg-data="">Send</button>
-                    <div class="copy-btn" data-msg-id="${id}">
-                        <i class="ast-copy" data-msg-id="${id}"></i>
+                    <button class="send-run-btn" id="sendMsg" data-msg-id="${id.join('-')}"  data-msg-data="">Send</button>
+                    <div class="copy-btn" data-msg-id="${id.join('-')}">
+                        <i class="ast-copy" data-msg-id="${id.join('-')}"></i>
                     </div>
                 </div>`;
                                 faq.append(answerHtml);
                                 $(`#overLaySearch #${target.id}`).attr('data-answer-render', 'false');
                                 faqDiv.append(faqaction);
-                                answerPlaceableID = `descLib-${id}`;
+                                answerPlaceableID = `descLib-${id.join('-')}`;
                                 $(`#overLaySearch #${target.id}`).addClass('rotate-carrot');
                                 AgentAssistPubSub.publish('searched_Automation_details', { conversationId: evt.target.dataset.convId, botId: evt.target.dataset.botId, value: evt.target.dataset.intentName, isSearch: true });
                                 return
                             }
 
                             if ((!target.dataset.answerRender && currentTabActive == 'searchAutoIcon')) {
-                                let faq = $(`#search-text-display .type-info-run-send #faqSectionLib-${id}`);
-                                let answerHtml = `<div class="desc-text" id="descLib-${id}"></div>`
-                                let faqDiv = $(`#search-text-display #faqDivLib-${id}`);
+                                let faq = $(`#search-text-display .type-info-run-send #faqSectionLib-${id.join('-')}`);
+                                let answerHtml = `<div class="desc-text" id="descLib-${id.join('-')}"></div>`
+                                let faqDiv = $(`#search-text-display #faqDivLib-${id.join('-')}`);
                                 let faqaction = `<div class="action-links">
-                    <button class="send-run-btn" id="sendMsg" data-msg-id="${id}"  data-msg-data="">Send</button>
-                    <div class="copy-btn" data-msg-id="${id}">
-                        <i class="ast-copy" data-msg-id="${id}"></i>
+                    <button class="send-run-btn" id="sendMsg" data-msg-id="${id.join('-')}"  data-msg-data="">Send</button>
+                    <div class="copy-btn" data-msg-id="${id.join('-')}">
+                        <i class="ast-copy" data-msg-id="${id.join('-')}"></i>
                     </div>
                 </div>`;
                                 faq.append(answerHtml);
                                 $(`#search-text-display #${target.id}`).attr('data-answer-render', 'false');
                                 faqDiv.append(faqaction);
-                                answerPlaceableID = `descLib-${id}`;
+                                answerPlaceableID = `descLib-${id.join('-')}`;
                                 $(`#search-text-display #${target.id}`).addClass('rotate-carrot');
                                 AgentAssistPubSub.publish('searched_Automation_details', { conversationId: evt.target.dataset.convId, botId: evt.target.dataset.botId, value: evt.target.dataset.intentName, isSearch: true });
                                 return
                             }
-                            if(currentTabActive == 'searchAutoIcon'){
+                            if (currentTabActive == 'searchAutoIcon') {
                                 if ($(`#search-text-display .ast-carrotup.rotate-carrot`).length <= 0) {
                                     $(`#search-text-display #${target.id}`).addClass('rotate-carrot');
-                                    $(`#search-text-display #faqDivLib-${id} .action-links`).removeClass('hide');
-                                    $(`#search-text-display #descLib-${id}`).removeClass('hide');
-                                    $(`#search-text-display #seeMore-${id}`).removeClass('hide');
-                                    $(`#search-text-display #seeLess-${id}`).addClass('hide');
+                                    $(`#search-text-display #faqDivLib-${id.join('-')} .action-links`).removeClass('hide');
+                                    $(`#search-text-display #descLib-${id.join('-')}`).removeClass('hide');
+                                    $(`#search-text-display #seeMore-${id.join('-')}`).removeClass('hide');
+                                    $(`#search-text-display #seeLess-${id.join('-')}`).addClass('hide');
                                 } else {
                                     $(`#search-text-display #${target.id}`).removeClass('rotate-carrot');
-                                    $(`#search-text-display #faqDivLib-${id} .action-links`).addClass('hide');
-                                    $(`#search-text-display #descLib-${id}`).addClass('hide');
-                                    $(`#search-text-display #seeMore-${id}`).addClass('hide');
-                                    $(`#search-text-display #seeLess-${id}`).addClass('hide');
+                                    $(`#search-text-display #faqDivLib-${id.join('-')} .action-links`).addClass('hide');
+                                    $(`#search-text-display #descLib-${id.join('-')}`).addClass('hide');
+                                    $(`#search-text-display #seeMore-${id.join('-')}`).addClass('hide');
+                                    $(`#search-text-display #seeLess-${id.join('-')}`).addClass('hide');
                                 }
                             } else {
                                 if ($(`#overLaySearch .ast-carrotup.rotate-carrot`).length <= 0) {
                                     $(`#overLaySearch #${target.id}`).addClass('rotate-carrot');
-                                    $(`#overLaySearch #faqDivLib-${id} .action-links`).removeClass('hide');
-                                    $(`#overLaySearch #descLib-${id}`).removeClass('hide');
-                                    $(`#overLaySearch #seeMore-${id}`).removeClass('hide');
-                                    $(`#overLaySearch #seeLess-${id}`).addClass('hide');
+                                    $(`#overLaySearch #faqDivLib-${id.join('-')} .action-links`).removeClass('hide');
+                                    $(`#overLaySearch #descLib-${id.join('-')}`).removeClass('hide');
+                                    $(`#overLaySearch #seeMore-${id.join('-')}`).removeClass('hide');
+                                    $(`#overLaySearch #seeLess-${id.join('-')}`).addClass('hide');
                                 } else {
                                     $(`#overLaySearch #${target.id}`).removeClass('rotate-carrot');
-                                    $(`#overLaySearch #faqDivLib-${id} .action-links`).addClass('hide');
-                                    $(`#overLaySearch #descLib-${id}`).addClass('hide');
-                                    $(`#overLaySearch #seeMore-${id}`).addClass('hide');
-                                    $(`#overLaySearch #seeLess-${id}`).addClass('hide');
+                                    $(`#overLaySearch #faqDivLib-${id.join('-')} .action-links`).addClass('hide');
+                                    $(`#overLaySearch #descLib-${id.join('-')}`).addClass('hide');
+                                    $(`#overLaySearch #seeMore-${id.join('-')}`).addClass('hide');
+                                    $(`#overLaySearch #seeLess-${id.join('-')}`).addClass('hide');
                                 }
                             }
                         }
@@ -3151,29 +4162,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 if (target.dataset.dropDownOpened === 'false') {
                                     $(`#${target.id}`).attr('data-drop-down-opened', 'true');
                                     $(`#dropDownData-${targetsss}`).addClass('hide');
-                                    $(`#${target.parentElement.parentElement.id}`).find(`.dilog-task-end`).addClass('hide');
+                                   let a =  $(`#${target.parentElement.parentElement.id}`).find(`.dilog-task-end`);
+                                   $(a).attr('data-history') == 'true' ? $(a).removeClass('hide'):$(a).addClass('hide');
                                 } else {
                                     $(`#${target.id}`).attr('data-drop-down-opened', 'false');
                                     $(`#dropDownData-${targetsss}`).removeClass('hide');
-                                    $(`#${target.parentElement.parentElement.id}`).find(`.dilog-task-end`).removeClass('hide');
+                                    $(`#${target.parentElement.parentElement.id}`).find(`.dilog-task-end.hide`).removeClass('hide');
                                 }
-                            }
-                            if (isShowHistoryEnable || isShowHistoryEnableForMyBot) {
-                                let a = $(`.history #dropDownData-${targetsss}`);
-                                let b = $(`.history #addRemoveDropDown-${targetsss}`).find('.show-history-feedback ');
-                                a.each(function (i, ele) {
-                                    let eleID = $(ele).attr('id').split('-');
-                                    eleID.shift();
-                                    let joinedID = eleID.join('-');
-                                    if (!$(ele).attr('class').includes('hide')) {
-                                        targetsss.includes(joinedID) ? ele.classList.add('hide') : '';
-                                        b.length > 0 ? targetsss.includes(joinedID) ? b[i].classList.add('hide') : '' : '';
-                                    } else {
-                                        targetsss.includes(joinedID) ? ele.classList.remove('hide') : '';
-                                        b.length > 0 ? targetsss.includes(joinedID) ? b[i].classList.remove('hide') : '' : '';
-                                    }
-
-                                });
                             }
                         }
 
@@ -3237,9 +4232,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                         if (target.id.split('-')[0] == 'buldCount' || target.className == 'ast-bulb' || target.className == 'count-number') {
                             let bulbDiv;
-                            if( $('#scriptContainer .other-user-bubble .bubble-data .buld-count-utt').length > 0){
-                                bulbDiv=  $('#scriptContainer .other-user-bubble .bubble-data').find('.buld-count-utt, .buld-count-utt-after-click');
-                            }else {
+                            if ($('#scriptContainer .other-user-bubble .bubble-data .buld-count-utt').length > 0) {
+                                bulbDiv = $('#scriptContainer .other-user-bubble .bubble-data').find('.buld-count-utt, .buld-count-utt-after-click');
+                            } else {
                                 bulbDiv = $('#scriptContainer .other-user-bubble .bubble-data .buld-count-utt-after-click');
                             }
                             let bulbid = target.id.split('-');
@@ -3296,12 +4291,24 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     return response;
                 }
 
+                function getNewlyAddedElementsHeights() {
+                    console.log(lastElementBeforeNewMessage, "lastElement before new message");
+                    let newElementsHeight = lastElementBeforeNewMessage.clientHeight;
+                    for (let id of newlyAddedIdList) {
+                        if (document.getElementById(id)) {
+                            console.log(id, "newly added id list");
+                            newElementsHeight += document.getElementById(id).clientHeight;
+                        }
+                    }
+                    return newElementsHeight;
+                }
+
                 function userTabActive() {
                     $("#historyData").addClass('hide');
                     $("#historyDataForMyBot").addClass('hide');
                     isShowHistoryEnable = false;
                     console.log('-----> User Automation Tab Active State <-----');
-                    document.getElementById(`history-details-btn`).classList.remove('hide');
+                    // document.getElementById(`history-details-btn`).classList.remove('hide');
                     $('.show-back-recommendation-block').addClass('hide');
                     document.getElementById(`agentAutoIcon`).classList.remove(`active-tab`);
                     document.getElementById(`transcriptIcon`).classList.remove(`active-tab`);
@@ -3331,7 +4338,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 $(elem).removeClass('hide');
                                 $(ele).removeClass('hide');
                             } else {
-                                $(elem).addClass('hide')
+                                // $(elem).addClass('hide')
                             }
                         })
                     });
@@ -3436,6 +4443,40 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }
                 }
 
+                function addUnreadMessageHtml() {
+                    console.log("outside number of new messages", numberOfNewMessages);
+                    console.log(document.getElementsByClassName('unread-msg'), "unread msg");
+                    if (!scrollAtEnd && numberOfNewMessages && document.getElementsByClassName('unread-msg').length == 0) {
+                        console.log("inside unread message", newlyAddedIdList);
+                        // if (document.getElementsByClassName('unread-msg')) {
+                        //     $('.unread-msg').remove();
+                        // }
+                        let unreadHtml = ` <div class="unread-msg">
+                        <div class="text-dialog-task-end">Unread Messages</div>     
+                                   </div>`;
+
+                        console.log(lastElementBeforeNewMessage, "last element before new message");
+
+
+                        for (let i = 0; i < newlyAddedIdList.length; i++) {
+                            if (document.getElementById(newlyAddedIdList[i])) {
+                                let elements = document.getElementById(newlyAddedIdList[i]);
+                                if(elements.className == 'content-dialog-task-type' && (elements.id.includes('dialogSuggestions') || elements.id.includes('faqsSuggestions'))){
+                                    let agentUttInfoId = newlyAddedIdList[i].split('-');
+                                    agentUttInfoId.shift();
+                                    agentUttInfoId = 'agentUttInfo-' + agentUttInfoId.join('-');
+                                    if(document.getElementById(agentUttInfoId)){
+                                        elements = document.getElementById(agentUttInfoId);
+                                    }
+                                }
+                                console.log(elements, "elements");
+                                elements?.insertAdjacentHTML('beforeBegin', unreadHtml);
+                                break;
+                            }
+                        }
+                    }
+                }
+
                 function addFeedbackHtmlToDom(data, botId, userIntentInput, runForAgentBot) {
                     var dropDownData;
                     var endOfDialoge;
@@ -3450,9 +4491,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }
                     // $(`#addRemoveDropDown-${dropdownHeaderUuids} .btn-danger`).remove();
                     let feedbackHtml = ` 
-        <div class="feedback-data">
-        <div class="feedbackup-data">
-            <div class="feedback-icon" id="feedbackup">
+        <div class="feedback-data last-child-step-run">
+        <div class="feedbackup-data" id="feedBackLikeContainer-${dropdownHeaderUuids}">
+            <div class="feedback-icon" id="feedbackup-${dropdownHeaderUuids}" data-feedbacklike="false"
+            data-conv-id="${data.conversationId}"
+                        data-bot-id="${botId}" data-feedback="like"
+                        data-dialog-name="${dialogName}"
+                        data-user-input="${userIntentInput}">
                 <i class="ast-thumbup" id="feedbackup-${dropdownHeaderUuids}"
                 data-feedbacklike="false"
                 data-conv-id="${data.conversationId}"
@@ -3462,8 +4507,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             </div>
             <span class="tootltip-tabs">Like</span>
             </div>
-            <div class="feedbackdown-data">
-            <div class="feedback-icon" id="feedbackdown">
+            <div class="feedbackdown-data" id="feedBackDislikeContainer-${dropdownHeaderUuids}">
+            <div class="feedback-icon" id="feedbackdown-${dropdownHeaderUuids}" data-feedbackdislike="false" 
+            data-conv-id="${data.conversationId}"
+                        data-bot-id="${botId}" data-feedback="dislike"
+                        data-dialog-name="${dialogName}"
+                        data-user-input="${userIntentInput}">
                 <i class="ast-thumbdown" id="feedbackdown-${dropdownHeaderUuids}"
                 data-feedbackdislike="false"
                 data-conv-id="${data.conversationId}"
@@ -3477,7 +4526,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     dropDownData.append(feedbackHtml);
                     let endofDialogeHtml = `
         <div class="dilog-task-end" id="endTaks-${dropdownHeaderUuids}">
-        <div class="text-dialog-task-end">Dialog Task ended</div>     
+        <div class="text-dialog-task-end">Task Ended</div>     
                    </div>
                    <div class="feedback-helpul-container hide">
                     <div class="titles-content">
@@ -3515,12 +4564,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 </div>
             
         `;
-                    endOfDialoge.append(endofDialogeHtml);
+                    if(!document.getElementById('endTaks-' + dropdownHeaderUuids)){
+                        endOfDialoge.append(endofDialogeHtml);
+                    }
                     $(`.customer-feeling-text`).addClass('bottom-95');
-                    setTimeout(()=>{
+                    setTimeout(() => {
                         dropdownHeaderUuids = undefined;
-                    },100)
-                   // dropdownHeaderUuids = undefined;
+                    }, 100)
+                    // dropdownHeaderUuids = undefined;
                 }
 
                 function feedbackLoop(evt) {
@@ -3569,7 +4620,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             AgentAssistPubSub.publish('searched_Automation_details', { conversationId: convId, botId: botId, value: intentName, isSearch: true });
                             document.getElementById("loader").style.display = "block";
                             document.getElementById("overLaySearch").style.display = "none";
-                        } else if(e.keyCode == 13 && agent_search.trim().length > 0) {
+                        } else if (e.keyCode == 13 && agent_search.trim().length > 0) {
                             agentSearchVal = agent_search;
                             var convId = e.target.dataset.convId;
                             var botId = e.target.dataset.botId;
@@ -3625,6 +4676,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 publicAPIs.runIntent = function (value) {
                     AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: _agentAssistDataObj.conversationId, botId: _botId, value: value, intentName: value })
                 }
+
+                $('.body-data-container').scrollTop($('.body-data-container').prop("scrollHeight"));
 
                 return publicAPIs;
             },
@@ -3700,7 +4753,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             <div class="dialog-task-data" id="dynamicBlocksData">
 
                 <div class="dynamic-block-content" id="dynamicBlock">
-                    <div class="show-history-block" id="history-details-btn">
+                    <div class="show-history-block hide" id="history-details-btn">
                         <button id="showHistory" class="ghost-btn">Show history</button>
                     </div>
                     <div class="show-back-recommendation-block hide">
@@ -3714,12 +4767,17 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     <div id="userTab-custSentimentAnalysis" class="customer-feeling-text">
                     </div>
 
+                    <div class="scroll-bottom-show-btn hide">
+                        <button class="scroll-bottom-btn">
+                            <i class="ast-carrotup"></i>
+                            <span>Scroll Bottom</span>
+                        </button>
+                    </div>
+
                     <div class="empty-data-no-agents">
                     <div class="title">No Agent automations are in running state.</div>
                     <div class="desc-text">Use "Run with Agent Inputs" to execute.</div>
                        
-                    </div>
-                    <div class="collapse-acc-data hide" id="welcomeMsg">
                     </div>
                 </div>
                 <div class="dynamic-block-content history hide" id="historyData" style='top: -46px;'></div>
@@ -3877,11 +4935,19 @@ function AgentAssist_feedback_click(e) {
     AgentAssistPubSub.publish('agent_usage_feedback', { userInput: userInput, dialogName: dialogName, conversationId: convId, botId: botId, feedback: feedback, eventName: 'agent_usage_feedback', dialogId: dialogId });
 }
 
+function scrollToBottom() {
+    setTimeout(() => {
+        $("#bodyContainer").scrollTop($("#bodyContainer").prop("scrollHeight"));
+    }, 0);
+}
+
 function AgentAssist_run_click(e) {
+    scrollToBottom();
     var convId = e.target.dataset.convId;
     var botId = e.target.dataset.botId;
     var intentName = e.target.dataset.intentName;
     dialogName = intentName;
+   
     if (e.target.dataset.check || e.target.dataset.checkLib) {
         AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: convId, botId: botId, value: intentName, check: true });
 
@@ -3890,8 +4956,9 @@ function AgentAssist_run_click(e) {
         AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: convId, botId: botId, value: intentName, intentName: intentName, 'entities': isRetore ? JSON.parse(previousEntitiesValue) : entitiestValueArray });
         document.getElementById("loader").style.display = "block";
     }
-
 }
+
+
 
 (function (root, factory) {
     'use strict';
