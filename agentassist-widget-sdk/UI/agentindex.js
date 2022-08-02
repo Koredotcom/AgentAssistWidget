@@ -1484,10 +1484,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                        </div>
             `;
                         if (data.isPrompt) {
-                            $(`#overRideDiv-${dropdownHeaderUuids}`).removeClass('hide');
+                            $(`.override-input-div`).removeClass('hide');
                             runInfoContent.append(askToUserHtml);
                         } else {
-                            $(`#overRideDiv-${dropdownHeaderUuids}`).addClass('hide');
+                            $(`.override-input-div`).addClass('hide');
                             runInfoContent.append(tellToUserHtml);
                         }
 
@@ -1592,7 +1592,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             localStorage.setItem('agentAssistState', JSON.stringify(appState))
                         }
                         //  isOverRideMode = false;
-                        $(`#overRideDiv-${dropdownHeaderUuids}`).addClass('hide');
+                        $(`.override-input-div`).addClass('hide');
                         addFeedbackHtmlToDom(data, botId, userIntentInput);
                         userMessage = {};
                         // let dropDownDataElement = document.getElementById(`dropDownData-${dropdownHeaderUuids}`);
@@ -2096,7 +2096,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                         </div>
                                                         <div class="collapse-acc-data hide" id="dropDownData-${res._id}">
                                                         <div class="override-input-div hide" id="overRideDiv-${res._id}">
-                                                        <button class="override-input-btn" id="overRideBtn-${res._id}">Override Input</button>
+                                                        <button class="override-input-btn hide" id="overRideBtn-${res._id}">Override Input</button>
                                                         <button class="cancel-override-input-btn hide" id="cancelOverRideBtn-${res._id}">Cancel Override</button>
                                                         </div>
                                                             
@@ -2235,8 +2235,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         var appState = JSON.parse(appStateStr);  
                                         if(appState[_conversationId]['automationGoingOnAfterRefresh']) {
                                             isAutomationOnGoing = true;
-                                            dropdownHeaderUuids = previousId;
-                                            $(`#terminateAgentDialog`).removeClass('hide');
+                                            dropdownHeaderUuids = res._id;
+                                            appState[_conversationId]['automationGoingOnAfterRefresh'] = isAutomationOnGoing;
+                                            localStorage.setItem('agentAssistState', JSON.stringify(appState))
                                         }
                                     if (res.agentAssistDetails.isPrompt || res.agentAssistDetails.entityRequest) {
                                         if(appState[_conversationId]['automationGoingOnAfterRefresh']) {
@@ -2244,6 +2245,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             $(`#cancelOverRideBtn-${previousId}`).addClass('hide');
                                             $("#inputFieldForAgent").remove();
                                             $(`#terminateAgentDialog`).removeClass('hide');
+                                            $('#dynamicBlock .override-input-div').addClass('hide');
                                             $(`#overRideDiv-${previousId}`).removeClass('hide');
                                         }
                                        
@@ -2285,7 +2287,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             if (res.components?.length > 1) {
                                                 if (i == 0) {
                                                     dynamicBlockDiv.append(welcomeMsgHtml);
-                                                    let runInfoDivOfwelcome = $(`#dynamicBlock .collapse-acc-data .run-info-content`);
+                                                    let runInfoDivOfwelcome = $(`#dynamicBlock #smallTalk-${res._id} .run-info-content`);
                                                     let contentHtml = `
                                                 <div class="title">Customer has waited for an agent for few seconds.<br/>Here are some appropriate opening lines.</div>
                                                    <div class="agent-utt">
@@ -2299,7 +2301,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                 </div>`;
                                                     runInfoDivOfwelcome.append(contentHtml);
                                                 } else {
-                                                    let runInfoDivOfwelcome = $(`#dynamicBlock .collapse-acc-data .run-info-content`);
+                                                    let runInfoDivOfwelcome = $(`#dynamicBlock #smallTalk-${res._id} .run-info-content`);
                                                     let contentHtmlWithoutTellCus = `
                                                     <div class="agent-utt">
                                                         <div class="title-data" id="displayData-${res._id}">${ele.data.text}</div>
