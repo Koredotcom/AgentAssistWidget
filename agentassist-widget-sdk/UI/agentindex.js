@@ -571,7 +571,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                                 let allAutomationSuggestions = document.getElementById(`allAutomations-Exhaustivelist`);
                                 let listAreaHtml = `<div class="heading-title">All Automations</div>
-                                            <div class="dialog-task-run-sec p-0" >
+                                            <div class="dialog-task-run-sec" id="dialogs-list" p-0" >
                                                 <div class="task-type" id="usecases-list">
                                                 <div class="content-dialog-task-type p1-0" id="usecases-suggestions"></div>
                                                 </div>
