@@ -1485,10 +1485,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                        </div>
             `;
                         if (data.isPrompt) {
-                            $('.override-input-div').removeClass('hide');
+                            $(`.override-input-div`).removeClass('hide');
                             runInfoContent.append(askToUserHtml);
                         } else {
-                            $('.override-input-div').addClass('hide');
+                            $(`.override-input-div`).addClass('hide');
                             runInfoContent.append(tellToUserHtml);
                         }
 
@@ -1589,10 +1589,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         var appState = JSON.parse(appStateStr);
                         if (appState[_conversationId]) {
                             appState[_conversationId].automationGoingOn = isAutomationOnGoing;
+                            appState[_conversationId]['automationGoingOnAfterRefresh'] = isAutomationOnGoing;
                             localStorage.setItem('agentAssistState', JSON.stringify(appState))
                         }
                         //  isOverRideMode = false;
-                        $('.override-input-div').addClass('hide');
+                        $(`.override-input-div`).addClass('hide');
                         addFeedbackHtmlToDom(data, botId, userIntentInput);
                         userMessage = {};
                         // let dropDownDataElement = document.getElementById(`dropDownData-${dropdownHeaderUuids}`);
@@ -1738,7 +1739,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                <button class="btn-danger" id="terminateAgentDialog">Terminate</button>
            </div>
            <div class="collapse-acc-data" id="dropDownData-${uuids}">
-            <div class="override-input-div hide">
+            <div class="override-input-div hide" id="overRideDiv-${uuids}">
             <button class="override-input-btn" id="overRideBtn-${uuids}">Override Input</button>
             <button class="cancel-override-input-btn hide" id="cancelOverRideBtn-${uuids}">Cancel Override</button>
             </div>
@@ -1765,7 +1766,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     // } 
                     if (!_data.suggestions && _data.buttons?.length > 1) {
                         convState['isWelcomeProcessed'] = true;
-                        convState['automationGoingOn'] = isAutomationOnGoing 
+                        convState['automationGoingOn'] = isAutomationOnGoing;
                     }
                    // let stateItems = convState[_tabName]['stateItems'];
                     // if (stateItems.length >= 2) {
@@ -1817,7 +1818,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }
                     // $(`#addRemoveDropDown-${dropdownHeaderUuids} .btn-danger`).remove();
                     let feedbackHtml = ` 
-        <div class="feedback-data">
+        <div class="feedback-data last-child-step-run">
         <div class="feedbackup-data" id="feedBackLikeContainer-${id}">
             <div class="feedback-icon" id="feedbackup-${id}" data-feedbacklike="false"
             data-conv-id="${data.conversationId}"
@@ -1904,7 +1905,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     isShowHistoryEnable = true;
                     getData(`${connectionDetails.envinormentUrl}/api/1.1/botmessages/agentassist/${_agentAssistDataObj.botId}/history?convId=${_agentAssistDataObj.conversationId}&agentHistory=false`)
                     .then(response => {
-
+                        
                         document.getElementById("loader").style.display = "none";
 
                         let previousId;
@@ -1928,10 +1929,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     })
                                 }
 
-                                if ((res.agentAssistDetails?.suggestions || res.agentAssistDetails?.ambiguityList) && res.type == 'outgoing') {
+                                if ((res.agentAssistDetails?.suggestions || res.agentAssistDetails?.ambiguityList) && res.type == 'outgoing') {     
                                     let uniqueID = res._id;
                                     var appStateStr = localStorage.getItem('agentAssistState') || '{}';
-                                    var appState = JSON.parse(appStateStr);
+                                    var appState = JSON.parse(appStateStr);               
                                     if (!appState[_conversationId]) {
                                         return 
                                     }
@@ -2092,14 +2093,18 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                             </div>
                                                             <div class="header-text" id="dropDownTitle-${res._id}">${res.tN}</div>
                                                             <i class="ast-carrotup"></i>
+                                                            <button class="btn-danger hide" id="terminateAgentDialog">Terminate</button>
                                                         </div>
                                                         <div class="collapse-acc-data hide" id="dropDownData-${res._id}">
-                                                            
+                                                        <div class="override-input-div hide" id="overRideDiv-${res._id}">
+                                                        <button class="override-input-btn hide" id="overRideBtn-${res._id}">Override Input</button>
+                                                        <button class="cancel-override-input-btn hide" id="cancelOverRideBtn-${res._id}">Cancel Override</button>
+                                                        </div>
                                                             
                                                         </div>
                                                     `;
 
-                                    if (previousTaskName && currentTaskName !== previousTaskName) {
+                                    if (previousTaskName && currentTaskName !== previousTaskName ) {
                                         addFeedbackHtmlToDomForHistory(res, res.botId, res?.agentAssistDetails?.userInput, previousId, false)
                                         previousId = undefined;
                                     }
@@ -2198,6 +2203,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                                         _msgsResponse.message.push(body);
                                     });
+                                    if(res.agentAssistDetails?.isPrompt === true || res.agentAssistDetails?.isPrompt === false) {
                                     let runInfoContent = $(`#dropDownData-${previousId}`);
                                     let askToUserHtml = `
                                         <div class="steps-run-data">
@@ -2227,11 +2233,30 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                     </div>
                                                 </div>
                                         `;
+                                        var appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                                        var appState = JSON.parse(appStateStr);  
+                                        if(appState[_conversationId]['automationGoingOnAfterRefresh']) {
+                                            isAutomationOnGoing = true;
+                                            dropdownHeaderUuids = previousId;
+                                            appState[_conversationId]['automationGoingOnAfterRefresh'] = isAutomationOnGoing;
+                                            localStorage.setItem('agentAssistState', JSON.stringify(appState))
+                                        }
                                     if (res.agentAssistDetails.isPrompt || res.agentAssistDetails.entityRequest) {
+                                        if(appState[_conversationId]['automationGoingOnAfterRefresh']) {
+                                            $(`#overRideBtn-${previousId}`).removeClass('hide');
+                                            $(`#cancelOverRideBtn-${previousId}`).addClass('hide');
+                                            $("#inputFieldForAgent").remove();
+                                            $(`#terminateAgentDialog`).removeClass('hide');
+                                            $('#dynamicBlock .override-input-div').addClass('hide');
+                                            $(`#overRideDiv-${previousId}`).removeClass('hide');
+                                        }
+                                       
                                         runInfoContent.append(askToUserHtml);
                                     } else {
                                         runInfoContent.append(tellToUserHtml);
                                     }
+                                 }
+                                    
                                     AgentChatInitialize.renderMessage(_msgsResponse, res._id, `dropDownData-${previousId}`);
                                     let shouldProcessResponse = false;
                                     var appStateStr = localStorage.getItem('agentAssistState') || '{}';
@@ -2248,7 +2273,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         // }
                                         
                                     }
-                                    if (!parsedPayload && !res.tN && !shouldProcessResponse) {
+                                    let isPromtFlag;
+                                    if((res.agentAssistDetails?.isPrompt == true )){
+                                        isPromtFlag = "true";
+                                    }else if(res.agentAssistDetails?.isPrompt == false){
+                                        isPromtFlag = "false";
+                                    }
+                                    if (!parsedPayload && !res.tN && !shouldProcessResponse && !isPromtFlag) {
                                         let dynamicBlockDiv = $('#dynamicBlock');
                                         res.components?.forEach((ele, i) => {
                                             let welcomeMsgHtml = `
@@ -2265,7 +2296,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             if (res.components?.length > 1) {
                                                 if (i == 0) {
                                                     dynamicBlockDiv.append(welcomeMsgHtml);
-                                                    let runInfoDivOfwelcome = $(`#dynamicBlock .collapse-acc-data .run-info-content`);
+                                                    let runInfoDivOfwelcome = $(`#dynamicBlock #smallTalk-${res._id} .run-info-content`);
                                                     let contentHtml = `
                                                 <div class="title">Customer has waited for an agent for few seconds.<br/>Here are some appropriate opening lines.</div>
                                                    <div class="agent-utt">
@@ -2279,7 +2310,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                 </div>`;
                                                     runInfoDivOfwelcome.append(contentHtml);
                                                 } else {
-                                                    let runInfoDivOfwelcome = $(`#dynamicBlock .collapse-acc-data .run-info-content`);
+                                                    let runInfoDivOfwelcome = $(`#dynamicBlock #smallTalk-${res._id} .run-info-content`);
                                                     let contentHtmlWithoutTellCus = `
                                                     <div class="agent-utt">
                                                         <div class="title-data" id="displayData-${res._id}">${ele.data.text}</div>
@@ -2364,6 +2395,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         
                         previousResp = response;
                         scrollToBottom();
+                        addWhiteBackgroundClassToNewMessage();
+                        RemoveVerticalLineForLastResponse();
                     }).catch(err => {
                         document.getElementById("loader").style.display = "block";
                         console.log("error", err)
@@ -3947,6 +3980,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 var appState = JSON.parse(appStateStr);
                                 if (appState[_conversationId]) {
                                     appState[_conversationId].automationGoingOn = isAutomationOnGoing;
+                                    appState[_conversationId]['automationGoingOnAfterRefresh'] = isAutomationOnGoing
                                     localStorage.setItem('agentAssistState', JSON.stringify(appState))
                                 }
                                 // for (let a of $('#dynamicBlock .agent-utt-info')) {
