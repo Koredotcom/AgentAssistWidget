@@ -1060,6 +1060,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
                     }
                     let lastElement = getLastElement('dynamicBlock');
+                    if(lastElement && lastElement.className.includes('welcome-msg')){
+                        return
+                    }
                     if(lastElement){
                         $(lastElement).addClass("last-msg-white-bg");
                         if(!scrollAtEnd){
@@ -1503,7 +1506,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         let dynamicBlockDiv = $('#dynamicBlock');
                         data.buttons?.forEach((ele, i) => {
                             let welcomeMsgHtml = `
-                            <div class = "collapse-acc-data before-none" id='smallTalk-${uuids}'>
+                            <div class = "welcome-msg collapse-acc-data before-none" id='smallTalk-${uuids}'>
                                 <div class="steps-run-data">
                                     <div class="icon_block">
                                         <i class="ast-agent"></i>
@@ -2283,7 +2286,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         let dynamicBlockDiv = $('#dynamicBlock');
                                         res.components?.forEach((ele, i) => {
                                             let welcomeMsgHtml = `
-                                            <div class = "collapse-acc-data before-none" id='smallTalk-${res._id}'>
+                                            <div class = "welcome-msg collapse-acc-data before-none" id='smallTalk-${res._id}'>
                                                 <div class="steps-run-data">
                                                     <div class="icon_block">
                                                         <i class="ast-agent"></i>
