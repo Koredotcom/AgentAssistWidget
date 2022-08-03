@@ -1497,7 +1497,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
 
                     }
-                    if (!dropdownHeaderUuids && !parsedPayload && !data.suggestions) {
+                    if (!isAutomationOnGoing && !dropdownHeaderUuids && !parsedPayload && !data.suggestions) {
                         $('#dynamicBlock .empty-data-no-agents').addClass('hide');
                         let dynamicBlockDiv = $('#dynamicBlock');
                         data.buttons?.forEach((ele, i) => {
@@ -4085,15 +4085,18 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 let answerHtml = `<div class="desc-text" id="desc-${id.join('-')}"></div>`
                                 let faqDiv = $(`#dynamicBlock #faqDiv-${id.join('-')}`);
                                 let faqaction = `<div class="action-links">
-                        <button class="send-run-btn" id="sendMsg" data-msg-id="${id.join('-')}"  data-msg-data="">Send</button>
-                        <div class="copy-btn" data-msg-id="${id.join('-')}">
-                        <i class="ast-copy" data-msg-id="${id.join('-')}"></i>
-                        </div>
-                        </div>`;
-                          let dropDownHtml =` <i class="ast-carrotup" data-conv-id="${_conversationId}"
-                          data-bot-id="" data-intent-name=""
-                          data-check="true" id="check-${id.join('-')}"></i>`;
-                          faq.append(dropDownHtml)
+                                    <button class="send-run-btn" id="sendMsg" data-msg-id="${id.join('-')}"  data-msg-data="">Send</button>
+                                    <div class="copy-btn" data-msg-id="${id.join('-')}">
+                                    <i class="ast-copy" data-msg-id="${id.join('-')}"></i>
+                                    </div>
+                                    </div>`;
+                                let dropDownHtml =` <i class="ast-carrotup" data-conv-id="${_conversationId}"
+                                data-bot-id="" data-intent-name=""
+                                data-check="true" id="check-${id.join('-')}"></i>`;
+                                let arrowIcons = $(`#dynamicBlock .type-info-run-send #faqSection-${id.join('-')} .ast-carrotup`);
+                                if(!arrowIcons || arrowIcons.length<=0) {
+                                    faq.append(dropDownHtml)
+                                }
                                 faq.append(answerHtml);
                                 $(`#dynamicBlock #${target.id}`).attr('data-answer-render', 'false');
                                 faqDiv.append(faqaction);
@@ -4278,9 +4281,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             idOfBuld.shift();
                             if (idOfBuld.join('-') === bulbid.join('-')) {
                                 userTabActive();
+                                scrollToEle(`automationSuggestions-${idOfBuld.join('-')}`)
                             } else {
                                 userTabActive();
-                                document.getElementById('showHistory').click();
+                                let theElement= `automationSuggestions-${bulbid.join('-')}`;
+                                scrollToEle(theElement);
+                                // document.getElementById('showHistory').click();
                             }
                             $(`#scriptContainer #buldCount-${bulbid.join('-')}`).removeClass('buld-count-utt').addClass('buld-count-utt-after-click');
                             $(`#scriptContainer #buldCountNumber-${bulbid.join('-')}`).html(`<span>&#10003;</span>`);
