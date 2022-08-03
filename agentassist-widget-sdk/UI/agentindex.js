@@ -1591,7 +1591,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             localStorage.setItem('agentAssistState', JSON.stringify(appState))
                         }
                         //  isOverRideMode = false;
-                        $(`.override-input-div`).addClass('hide');
+                        $(`.override-input-div`).remove();
                         addFeedbackHtmlToDom(data, botId, userIntentInput);
                         userMessage = {};
                         // let dropDownDataElement = document.getElementById(`dropDownData-${dropdownHeaderUuids}`);
@@ -4656,7 +4656,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
         `;
                     if(!document.getElementById('endTaks-' + dropdownHeaderUuids)){
                         endOfDialoge.append(endofDialogeHtml);
-                        $(`#overRideDiv-${dropdownHeaderUuids}`).addClass('hide');
+                        $(`#overRideDiv-${dropdownHeaderUuids}`).remove();
                     }
                     $(`.customer-feeling-text`).addClass('bottom-95');
                     setTimeout(() => {
