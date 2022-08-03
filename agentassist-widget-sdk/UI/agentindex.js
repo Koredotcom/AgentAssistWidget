@@ -58,7 +58,6 @@ function koreGenerateUUID() {
     return uuid;
 }
 window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, connectionDetails) {
-    console.log('inside agentassist constructor')
     try {
         const params = new Proxy(new URLSearchParams(window.location.search), {
             get: (searchParams, prop) => searchParams.get(prop),
@@ -174,7 +173,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     });
 
                     window.addEventListener("message", function (e) {
-                        console.log('event listener message: ', e.data)
                         let userInputData = e.data;
                         let agent_assist_request = {
                             'author': {
@@ -188,16 +186,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
                         if (isCallConversation === 'true') {
                             if (userInputData.author.type === 'USER') {
-                                console.log('event listener USER Message:')
                                 processTranscriptData(userInputData, userInputData.conversationid, _botId,);
                                 _agentAsisstSocket.emit('agent_assist_request', agent_assist_request);
                             } else {
-                                console.log('event listener AGENT Message:')
                                 processAgentMessages(userInputData)
                             }
                         } else {
                             if (userInputData.author.type === 'USER') {
-                                console.log('event listener AGENT Message:')
                                 _agentAsisstSocket.emit('agent_assist_request', agent_assist_request);
                             }
                         }
@@ -223,7 +218,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     });
 
                     _agentAsisstSocket.on('agent_assist_response', (data) => {
-                        // console.log('event listner message response', data)
                         let shouldProcessResponse = false;
                         var appStateStr = localStorage.getItem('agentAssistState') || '{}';
                         var appState = JSON.parse(appStateStr);
@@ -3863,12 +3857,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             }
 
                         }
+                        $('.dropdown-content-elipse').addClass('hide');
                         if (target.id.split("-")[0] == 'elipseIcon' || target.id.split("-")[0] == 'overflowIcon') {
                             if ($('.dropdown-content-elipse').length !== 0) {
                                 $('.dropdown-content-elipse').addClass('hide');
                             }
                             let elementClicked;
                             if (target.id.split("-")[0] == 'elipseIcon') {
+                                evt.stopPropagation();
                                 (target.nextElementSibling)?.classList.remove('hide');
                                 elementClicked = target.parentElement;
 
