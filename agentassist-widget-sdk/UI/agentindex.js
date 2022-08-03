@@ -950,7 +950,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                <i class="ast-agent"></i>
                            </div>
                            <div class="run-info-content" >
-                           <div class="title">Ask customer...</div>
+                           <div class="title">Ask customer</div>
                            <div class="agent-utt">
                                <div class="title-data"><ul class="chat-container" id="displayData-${myBotuuids}"></ul></div>
                                <div class="action-links">
@@ -1093,6 +1093,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             }
                         }
                     }
+                    RemoveVerticalLineForLastResponse();
                 }
 
                 function processAgentAssistResponse(data, convId, botId) {
@@ -1451,7 +1452,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                <i class="ast-agent"></i>
                            </div>
                            <div class="run-info-content" >
-                           <div class="title">Ask customer...</div>
+                           <div class="title">Ask customer</div>
                            <div class="agent-utt">
                                <div class="title-data"><ul class="chat-container" id="displayData-${uuids}"></ul></div>
                                <div class="action-links">
@@ -1605,7 +1606,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         scrollToBottom();
                     }
                     addWhiteBackgroundClassToNewMessage();
-                    RemoveVerticalLineForLastResponse();
                 }
 
                 function addBlurToOldMessage(newElementsHeight){
@@ -2211,7 +2211,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                         <i class="ast-agent"></i>
                                                     </div>
                                                     <div class="run-info-content" >
-                                                    <div class="title">Ask customer...</div>
+                                                    <div class="title">Ask customer</div>
                                                     <div class="agent-utt">
                                                         <div class="title-data"><ul class="chat-container" id="displayData-${res._id}"></ul></div>
                                                         
@@ -2396,7 +2396,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         previousResp = response;
                         scrollToBottom();
                         addWhiteBackgroundClassToNewMessage();
-                        RemoveVerticalLineForLastResponse();
                     }).catch(err => {
                         document.getElementById("loader").style.display = "block";
                         console.log("error", err)
@@ -2614,6 +2613,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }
                 }
 
+                function getUUIDFromId(id){
+                    if(id){
+                        let idArray = id.split('-');
+                        idArray.shift();
+                        return (idArray.join('-'));
+                    }
+                    return '-';
+                }
+
                 function getLastElement(id) {
                     let lastElement = ''
                     var dynamicBlockElements = document.getElementById(id);
@@ -2640,7 +2648,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 let index = 0;
                                 for(let node of listOfNodes){
                                     if(!($(node).attr('id'))){
-                                        $(node).attr('id', 'steps-run-data-' + lastElement.id + index);
+                                        $(node).attr('id', 'stepsrundata-' + getUUIDFromId(lastElement.id) + '*' + index);
                                     }
                                     index++;
                                 }
@@ -2688,7 +2696,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     $(".scroll-bottom-btn").addClass("new-messages");
                                     $(".scroll-bottom-btn span").text(numberOfNewMessages + ' new');
                                 }else{
-                                    $(".scroll-bottom-btn span").text('Scroll Bottom');
+                                    $(".scroll-bottom-btn span").text('Scroll to bottom');
                                 }
                                 // if(element.classList.contains('last-msg-white-bg') && id != lastElement.id){
                                 //     element.classList.remove("last-msg-white-bg");
@@ -2739,7 +2747,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
 
                 function scrollToEle(id) {
-                    var _PanelEle = $('#'+id);
+                    let element = document.getElementById(id);
+                    var _PanelEle = $(element);
                     if(id.includes('automationSuggestions')){
                         let agentUttInfoId = id.split('-');
                         agentUttInfoId.shift();
@@ -2759,14 +2768,40 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }
                 }
 
+                function UnCollapseDropdownForLastElement(lastElement){
+                    if(lastElement.className.includes('steps-run-data')){
+                        let lastElementId = getUUIDFromId(lastElement.id);
+                        lastElementId = lastElementId.split("*")[0];
+                        let collapseElement = document.getElementById('dropDownData-' + lastElementId);
+                        $(collapseElement).removeClass('hide');
+                    }
+                }
+
+                function checkDropdownCollapaseState(lastElement){
+                    if(lastElement && lastElement.className.includes('steps-run-data')){
+                        let lastElementId = getUUIDFromId(lastElement.id);
+                        lastElementId = lastElementId.split("*")[0];
+                        let collapseElement = document.getElementById('dropDownData-' + lastElementId);
+                        if(collapseElement && collapseElement.className.includes('hide') && numberOfNewMessages){
+                            scrollAtEnd = false;
+                        }
+                    }
+                }
+
+                function updateScrollButton(){
+                    lastelement = getLastElement('dynamicBlock');
+                    scrollAtEnd = !isScrolledIntoView(lastelement) ? true : false;
+                    if (!scrollAtEnd) {
+                        $(".scroll-bottom-show-btn").removeClass('hide');
+                    }else{
+                        $(".scroll-bottom-show-btn").addClass('hide');
+                    }
+                }
+
                 function btnInit() {
 
                     document.querySelector('#bodyContainer').addEventListener('ps-scroll-up', (scrollUpevent) => {
-                        lastelement = getLastElement('dynamicBlock');
-                        scrollAtEnd = !isScrolledIntoView(lastelement) ? true : false;
-                        if (!scrollAtEnd) {
-                            $(".scroll-bottom-show-btn").removeClass('hide');
-                        }
+                        updateScrollButton();
                     });
 
                     document.querySelector('#bodyContainer').addEventListener('ps-scroll-down', (scrollDownevent) => {
@@ -2782,14 +2817,19 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     });
 
                     document.querySelector('#bodyContainer').addEventListener('ps-y-reach-end', (scrollEndevent) => {
-                        $(".scroll-bottom-show-btn").addClass('hide');
-                        numberOfNewMessages = 0;
-                        newlyAddedMessagesUUIDlist = [];
-                        newlyAddedIdList = [];
-                        removedIdListOnScroll = [];
-                        $(".scroll-bottom-btn").removeClass("new-messages");
-                        $(".scroll-bottom-btn span").text('Scroll Bottom');
                         scrollAtEnd = true;
+                        checkDropdownCollapaseState(lastElementBeforeNewMessage);
+                        if(scrollAtEnd){
+                            $(".scroll-bottom-btn span").text('Scroll to bottom');
+                            $(".scroll-bottom-btn").removeClass("new-messages");
+                            $(".scroll-bottom-show-btn").addClass('hide');
+                            numberOfNewMessages = 0;
+                            newlyAddedMessagesUUIDlist = [];
+                            newlyAddedIdList = [];
+                            removedIdListOnScroll = [];
+                        }else{
+                            $(".scroll-bottom-show-btn").removeClass('hide');
+                        }
                         lastElementBeforeNewMessage = getLastElement('dynamicBlock');
                         addWhiteBackgroundClassToNewMessage();
                     });
@@ -2820,6 +2860,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         });
 
                         if (target.className.includes('scroll-bottom-btn')) {
+                            UnCollapseDropdownForLastElement(lastElementBeforeNewMessage);
                             let newElementsHeight = getNewlyAddedElementsHeights();
                             if (newElementsHeight) {
                                 scrollToEle(lastElementBeforeNewMessage.id);
@@ -3389,7 +3430,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             //                                         <i class="ast-agent"></i>
                             //                                     </div>
                             //                                     <div class="run-info-content" >
-                            //                                     <div class="title">Ask customer...</div>
+                            //                                     <div class="title">Ask customer</div>
                             //                                     <div class="agent-utt">
                             //                                         <div class="title-data"><ul class="chat-container" id="displayData-${res._id}"></ul></div>
                                                                     
@@ -3717,7 +3758,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                                         <i class="ast-agent"></i>
                                                                     </div>
                                                                     <div class="run-info-content" >
-                                                                    <div class="title">Ask customer...</div>
+                                                                    <div class="title">Ask customer</div>
                                                                     <div class="agent-utt">
                                                                         <div class="title-data"><ul class="chat-container" id="displayData-${res._id}"></ul></div>
                                                                         
@@ -4058,6 +4099,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $(`#overRideBtn-${id}`).addClass('hide');
                             $(`#cancelOverRideBtn-${id}`).removeClass('hide');
                             addWhiteBackgroundClassToNewMessage();
+                            scrollToBottom();
                         }
                         if (target.id.split('-').includes('cancelOverRideBtn')) {
                             let idsss = target.id.split('-');
@@ -4076,6 +4118,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $(`#cancelOverRideBtn-${id}`).addClass('hide');
                             $('#inputFieldForAgent').remove();
                             addWhiteBackgroundClassToNewMessage();
+                            scrollToBottom();
                         }
                         if (checkButton) {
                             let id = target.id.split('-');
@@ -4208,6 +4251,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     $(`#${target.parentElement.parentElement.id}`).find(`.dilog-task-end.hide`).removeClass('hide');
                                 }
                             }
+                            updateScrollButton();
                         }
 
                         if (target.id.split('-')[0] == 'entityEdit') {
@@ -4485,8 +4529,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
 
                 function addUnreadMessageHtml() {
-                    console.log("outside number of new messages", numberOfNewMessages);
-                    console.log(document.getElementsByClassName('unread-msg'), "unread msg");
+                    
                     if (!scrollAtEnd && numberOfNewMessages && document.getElementsByClassName('unread-msg').length == 0) {
                         console.log("inside unread message", newlyAddedIdList);
                         // if (document.getElementsByClassName('unread-msg')) {
@@ -4495,9 +4538,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         let unreadHtml = ` <div class="unread-msg">
                         <div class="text-dialog-task-end">Unread Messages</div>     
                                    </div>`;
-
-                        console.log(lastElementBeforeNewMessage, "last element before new message");
-
 
                         for (let i = 0; i < newlyAddedIdList.length; i++) {
                             if (document.getElementById(newlyAddedIdList[i])) {
@@ -4510,7 +4550,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         elements = document.getElementById(agentUttInfoId);
                                     }
                                 }
-                                console.log(elements, "elements");
+                                UnCollapseDropdownForLastElement(lastElementBeforeNewMessage);
                                 elements?.insertAdjacentHTML('beforeBegin', unreadHtml);
                                 break;
                             }
@@ -4607,12 +4647,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
         `;
                     if(!document.getElementById('endTaks-' + dropdownHeaderUuids)){
                         endOfDialoge.append(endofDialogeHtml);
+                        $(`#overRideDiv-${dropdownHeaderUuids}`).addClass('hide');
                     }
                     $(`.customer-feeling-text`).addClass('bottom-95');
                     setTimeout(() => {
                         dropdownHeaderUuids = undefined;
                     }, 100)
                     // dropdownHeaderUuids = undefined;
+		    UnCollapseDropdownForLastElement(lastElementBeforeNewMessage);
                 }
 
                 function feedbackLoop(evt) {
@@ -4811,7 +4853,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     <div class="scroll-bottom-show-btn hide">
                         <button class="scroll-bottom-btn">
                             <i class="ast-carrotup"></i>
-                            <span>Scroll Bottom</span>
+                            <span>Scroll to bottom</span>
                         </button>
                     </div>
 
