@@ -4085,18 +4085,18 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 let answerHtml = `<div class="desc-text" id="desc-${id.join('-')}"></div>`
                                 let faqDiv = $(`#dynamicBlock #faqDiv-${id.join('-')}`);
                                 let faqaction = `<div class="action-links">
-                        <button class="send-run-btn" id="sendMsg" data-msg-id="${id.join('-')}"  data-msg-data="">Send</button>
-                        <div class="copy-btn" data-msg-id="${id.join('-')}">
-                        <i class="ast-copy" data-msg-id="${id.join('-')}"></i>
-                        </div>
-                        </div>`;
-                          let dropDownHtml =` <i class="ast-carrotup" data-conv-id="${_conversationId}"
-                          data-bot-id="" data-intent-name=""
-                          data-check="true" id="check-${id.join('-')}"></i>`;
-                          let arrowIcons = $(`#dynamicBlock .type-info-run-send #faqSection-${id.join('-')} .ast-carrotup`);
-                          if(!arrowIcons || arrowIcons.length<=0) {
-                            faq.append(dropDownHtml)
-                          }
+                                    <button class="send-run-btn" id="sendMsg" data-msg-id="${id.join('-')}"  data-msg-data="">Send</button>
+                                    <div class="copy-btn" data-msg-id="${id.join('-')}">
+                                    <i class="ast-copy" data-msg-id="${id.join('-')}"></i>
+                                    </div>
+                                    </div>`;
+                                let dropDownHtml =` <i class="ast-carrotup" data-conv-id="${_conversationId}"
+                                data-bot-id="" data-intent-name=""
+                                data-check="true" id="check-${id.join('-')}"></i>`;
+                                let arrowIcons = $(`#dynamicBlock .type-info-run-send #faqSection-${id.join('-')} .ast-carrotup`);
+                                if(!arrowIcons || arrowIcons.length<=0) {
+                                    faq.append(dropDownHtml)
+                                }
                                 faq.append(answerHtml);
                                 $(`#dynamicBlock #${target.id}`).attr('data-answer-render', 'false');
                                 faqDiv.append(faqaction);
