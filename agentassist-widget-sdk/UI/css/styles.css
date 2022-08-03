@@ -599,6 +599,7 @@ html, body{
     display: inline-block;
     /* height: calc(100% - 82px); */
     height: calc(100% - 38px);
+    z-index: 0;
     /* background: var(--bg-hover-tabs-color); */
 }
 .agent-assist-chat-container .body-data-container.if-suggestion-search{
@@ -1111,7 +1112,7 @@ border: 1px solid transparent !important;
     background: linear-gradient(270deg,var(--default-white-color) 0%,rgba(255,255,255,0.8173) 78.65%,rgba(255,255,255,0) 100%);
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data.last-msg-white-bg .run-info-content .agent-utt .action-links{
-    right: 30px !important;
+    right: 0px !important;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data .run-info-content .agent-utt .action-links .send-run-btn {
     border: 0;
