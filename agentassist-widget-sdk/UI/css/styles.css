@@ -216,6 +216,7 @@ html, body{
     height: auto!important;
     min-width: 100px;
     max-height: 100% !important;
+    background-color: #ffffff !important;
 }
 
 
