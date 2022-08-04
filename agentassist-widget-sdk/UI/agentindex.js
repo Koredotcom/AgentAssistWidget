@@ -1015,6 +1015,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     // }
                     if (isMyBotAutomationOnGoing && (((data.endOfFaq || data.endOfTask) && data.type !== 'text') || (data.userInput == 'discard all' && data.type !== 'text') || (userMessage && userMessage.value && userMessage.value.includes('discard')))) {
                         isMyBotAutomationOnGoing = false;
+                        var appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                        var appState = JSON.parse(appStateStr);
+                        if (appState[_conversationId]) {
+                            appState[_conversationId]['automationGoingOnAfterRefreshMyBot'] = isMyBotAutomationOnGoing;
+                            localStorage.setItem('agentAssistState', JSON.stringify(appState))
+                        }
                         addFeedbackHtmlToDom(data, botId, userIntentInput, 'runForAgentBot');
                     }
 
@@ -2466,27 +2472,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                                 
                                                                 
                                                             </div>
-                                                            <div class="feedback-data show-history-feedback hide">
-                                                                <div class="feedbackup-data">
-                                                                    <div class="feedback-icon" id="feedbackup">
-                                                                        <i class="ast-thumbup" id="feedbackup-${res._id}" data-feedbacklike="false" data-conv-id="${_agentAssistDataObj.conversationId}"data-bot-id="${_agentAssistDataObj.botId}" data-feedback="like" data-dialog-name="${res.tN}" data-user-input="${res?.agentAssistDetails?.userInput}"></i>
-                                                                    </div>
-                                                                    <span class="tootltip-tabs">Like</span>
-                                                                </div>
-                                                                <div class="feedbackdown-data">
-                                                                    <div class="feedback-icon" id="feedbackdown">
-                                                                        <i class="ast-thumbdown" id="feedbackdown-${res._id}" data-feedbackdislike="false" data-conv-id="${_agentAssistDataObj.conversationId}" data-bot-id="${_agentAssistDataObj.botId}" data-feedback="dislike" data-dialog-name="${res.tN}" data-user-input="${res?.agentAssistDetails?.userInput}"></i>
-                                                                    </div>
-                                                                    <span class="tootltip-tabs">Dislike</span>
-                                                                </div>
-                                                            </div>
-                                                    <div class="dilog-task-end hide" id="endTaks-${res._id}">
-                                                    <div class="text-dialog-task-end">Task Ended</div>     
-                                                                </div>
-                                                            </div>
+                                                            
                                                         `;
 
                                     if (previousTaskName && currentTaskName !== previousTaskName) {
+                                        addFeedbackHtmlToDomForHistory(res, res.botId, res?.agentAssistDetails?.userInput, previousId, false)
                                         previousId = undefined;
                                     }
 
@@ -2584,6 +2574,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                                         _msgsResponse.message.push(body);
                                     });
+                                    if(res.agentAssistDetails?.isPrompt === true || res.agentAssistDetails?.isPrompt === false) {
                                     let runInfoContent = $(`#dropDownData-${previousId}`);
                                     let askToUserHtml = `
                                             <div class="steps-run-data">
@@ -2613,11 +2604,21 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                         </div>
                                                     </div>
                                             `;
+                                        var appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                                        var appState = JSON.parse(appStateStr);  
+                                        if(appState[_conversationId]['automationGoingOnAfterRefreshMyBot']) {
+                                            isMyBotAutomationOnGoing = true;
+                                            noAutomationrunninginMyBot = false;
+                                            myBotDropdownHeaderUuids = previousId;
+                                            appState[_conversationId]['automationGoingOnAfterRefreshMyBot'] = isMyBotAutomationOnGoing;
+                                            localStorage.setItem('agentAssistState', JSON.stringify(appState))
+                                        }
                                     if (res.agentAssistDetails.isPrompt || res.agentAssistDetails.entityRequest) {
                                         runInfoContent.append(askToUserHtml);
                                     } else {
                                         runInfoContent.append(tellToUserHtml);
                                     }
+                                  } 
                                     AgentChatInitialize.renderMessage(_msgsResponse, res._id, `dropDownData-${previousId}`);
                                     //  removeElementFromDom();
                                     //if (res.agentAssistDetails.endOfTask) { // need this block of code once the endofTask flag received from backend
@@ -4222,6 +4223,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 noAutomationrunninginMyBot = false;
                                 let agentBotuuids = Math.floor(Math.random() * 100);
                                 myBotDropdownHeaderUuids = agentBotuuids;
+                                var appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                                var appState = JSON.parse(appStateStr);
+                                if (appState[_conversationId]) {
+                                    appState[_conversationId]['automationGoingOnAfterRefreshMyBot'] = isMyBotAutomationOnGoing
+                                    localStorage.setItem('agentAssistState', JSON.stringify(appState))
+                                }
                                 $('#noAutoRunning').addClass('hide');
                                 _createRunTemplateContainerForMyTab(agentBotuuids, target.dataset.intentName)
                                 let ids = target.id.split('-');
