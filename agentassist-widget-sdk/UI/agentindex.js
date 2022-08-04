@@ -1111,7 +1111,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         let buldHtml = `
                         <div class="buld-count-utt" id="buldCount-${uuids}">
                                     <i class="ast-bulb" id="buldCountAst-${uuids}"></i>
-                                    <span class="count-number" id="buldCountNumber-${uuids}">${(data.suggestions.dialogs.length || 0) + (data.suggestions.faqs?.length || 0)}</span>
+                                    <span class="count-number" id="buldCountNumber-${uuids}">${(data.suggestions.dialogs?.length || 0) + (data.suggestions.faqs?.length || 0)}</span>
                                 </div>`;
 
                         let attrs = $('#scriptContainer .other-user-bubble .bubble-data');
@@ -1899,6 +1899,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
 
                 function renderingHistoryMessage () {
+                    document.getElementById("loader").style.display = "block";
                     isShowHistoryEnable = true;
                     getData(`${connectionDetails.envinormentUrl}/api/1.1/botmessages/agentassist/${_agentAssistDataObj.botId}/history?convId=${_agentAssistDataObj.conversationId}&agentHistory=false`)
                     .then(response => {
@@ -2394,7 +2395,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         scrollToBottom();
                         addWhiteBackgroundClassToNewMessage();
                     }).catch(err => {
-                        document.getElementById("loader").style.display = "block";
+                        document.getElementById("loader").style.display = "none";
                         console.log("error", err)
                     });
                     isShowHistoryEnable = false;
