@@ -24,7 +24,7 @@ var responseId;
 var userIntentInput;
 var answerPlaceableID;
 var dialogName;
-var currentTabActive;
+var currentTabActive = 'userAutoIcon';
 var previousTabActive;
 var AgentChatInitialize;
 var chatConfig;
@@ -2414,6 +2414,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         document.getElementById("loader").style.display = "none";
                         let previousId;
                         let previousTaskName, currentTaskName;
+                        let convId = _agentAssistDataObj.conversationId;
+                        let botId = _agentAssistDataObj.botId;
                         // if (JSON.stringify(response) === JSON.stringify(previousResp)) {
                         //     $(`#historyDataForMyBot .collapse-acc-data.hide`)[$(`#historyDataForMyBot .collapse-acc-data.hide`).length - 1]?.classList.remove('hide');
                         //     $(`#historyDataForMyBot .show-history-feedback.hide`)[$(`#historyDataForMyBot .show-history-feedback.hide`).length - 1]?.classList.remove('hide');
@@ -2613,8 +2615,24 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             appState[_conversationId]['automationGoingOnAfterRefreshMyBot'] = isMyBotAutomationOnGoing;
                                             localStorage.setItem('agentAssistState', JSON.stringify(appState))
                                         }
+                                        let agentInputToBotHtml = `
+                                        <div class="steps-run-data">
+                                            <div class="icon_block">
+                                                <i class="ast-agent"></i>
+                                            </div>
+                                            <div class="run-info-content">
+                                            <div class="title">Input</div>
+                                            <div class="agent-utt enter-details-block">
+                                            <div class="title-data" ><span class="enter-details-title">EnterDetails: </span>
+                                            <input type="text" placeholder="Enter Value" class="input-text chat-container" id="agentInput-${Math.floor(Math.random() * 100)}" data-conv-id="${convId}" data-bot-id="${botId}"  data-mybot-input="true">
+                                            </div>
+                                            </div>
+                                            </div>
+                                        </div>`
+                                     
                                     if (res.agentAssistDetails.isPrompt || res.agentAssistDetails.entityRequest) {
                                         runInfoContent.append(askToUserHtml);
+                                        // runInfoContent.append(agentInputToBotHtml);
                                     } else {
                                         runInfoContent.append(tellToUserHtml);
                                     }
@@ -3308,7 +3326,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         else if (target.id === `agentAutoIcon` || target.id === `agentBotIcon` || target.id === `MybotLabel`) {
                             updateCurrentTabInState(_conversationId, 'myBotTab')
                             agentTabActive();
-                            scrollToBottom();
                         }
                         else if (target.id === `transcriptIcon` || target.id === `scriptIcon` || target.id === `transcriptLabel`) {
                             $("#bodyContainer").scrollTop(0);
@@ -3319,7 +3336,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         else if (target.id === `userAutoIcon` || target.id === `userBotIcon` || target.id === `AssistLabel`) {
                             updateCurrentTabInState(_conversationId, 'assistTab')
                             userTabActive();
-                            scrollToBottom();
                             //  updateUIState(_conversationId, isCallConversation);
 
                         }
@@ -4680,6 +4696,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
 
                 function userTabActive() {
+                    currentTabActive = 'userAutoIcon';
                     $("#historyData").addClass('hide');
                     $("#historyDataForMyBot").addClass('hide');
                     isShowHistoryEnable = false;
@@ -4718,11 +4735,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             }
                         })
                     });
-
+                    scrollToBottom();
+                    updateScrollButton();
                 }
 
                 function libraryTabActive() {
                     console.log('-----> Library Tab Active State<-----');
+                    currentTabActive = 'searchAutoIcon';
                     if (isShowHistoryEnable) {
                         $("#historyData").addClass('hide');
                         isShowHistoryEnable = false;
@@ -4755,6 +4774,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
 
                 function agentTabActive() {
+                    currentTabActive = 'agentAutoIcon';
                     if (isShowHistoryEnable) {
                         $("#historyData").addClass('hide');
                         isShowHistoryEnable = false;
@@ -4783,10 +4803,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     if (automationSuggestions.length >= 1) {
                         automationSuggestions[automationSuggestions.length - 1].classList.remove('hide');
                     }
-
+                    scrollToBottom();
+                    updateScrollButton();
                 }
 
                 function transcriptionTabActive() {
+                    currentTabActive = "transcriptIcon";
                     if (isShowHistoryEnable) {
                         $("#historyData").addClass('hide');
                         isShowHistoryEnable = false;
@@ -4852,25 +4874,26 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 function addFeedbackHtmlToDom(data, botId, userIntentInput, runForAgentBot) {
                     var dropDownData;
                     var endOfDialoge;
+                    let headerUUids = runForAgentBot ? myBotDropdownHeaderUuids : dropdownHeaderUuids;
                     if (runForAgentBot) {
-                        $(`#myBotTerminateAgentDialog-${myBotDropdownHeaderUuids}.btn-danger`).remove();
-                        dropDownData = $(`#dropDownData-${myBotDropdownHeaderUuids}`);
-                        endOfDialoge = $(`#MyBotaddRemoveDropDown-${myBotDropdownHeaderUuids}`);
+                        $(`#myBotTerminateAgentDialog-${headerUUids}.btn-danger`).remove();
+                        dropDownData = $(`#dropDownData-${headerUUids}`);
+                        endOfDialoge = $(`#MyBotaddRemoveDropDown-${headerUUids}`);
                     } else {
-                        $(`#addRemoveDropDown-${dropdownHeaderUuids} .btn-danger`).remove();
-                        dropDownData = $(`#dropDownData-${dropdownHeaderUuids}`);
-                        endOfDialoge = $(`#addRemoveDropDown-${dropdownHeaderUuids}`);
+                        $(`#addRemoveDropDown-${headerUUids} .btn-danger`).remove();
+                        dropDownData = $(`#dropDownData-${headerUUids}`);
+                        endOfDialoge = $(`#addRemoveDropDown-${headerUUids}`);
                     }
-                    // $(`#addRemoveDropDown-${dropdownHeaderUuids} .btn-danger`).remove();
+                    // $(`#addRemoveDropDown-${headerUUids} .btn-danger`).remove();
                     let feedbackHtml = ` 
         <div class="feedback-data last-child-step-run">
-        <div class="feedbackup-data" id="feedBackLikeContainer-${dropdownHeaderUuids}">
-            <div class="feedback-icon" id="feedbackup-${dropdownHeaderUuids}" data-feedbacklike="false"
+        <div class="feedbackup-data" id="feedBackLikeContainer-${headerUUids}">
+            <div class="feedback-icon" id="feedbackup-${headerUUids}" data-feedbacklike="false"
             data-conv-id="${data.conversationId}"
                         data-bot-id="${botId}" data-feedback="like"
                         data-dialog-name="${dialogName}"
                         data-user-input="${userIntentInput}">
-                <i class="ast-thumbup" id="feedbackup-${dropdownHeaderUuids}"
+                <i class="ast-thumbup" id="feedbackup-${headerUUids}"
                 data-feedbacklike="false"
                 data-conv-id="${data.conversationId}"
                         data-bot-id="${botId}" data-feedback="like"
@@ -4879,13 +4902,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             </div>
             <span class="tootltip-tabs">Like</span>
             </div>
-            <div class="feedbackdown-data" id="feedBackDislikeContainer-${dropdownHeaderUuids}">
-            <div class="feedback-icon" id="feedbackdown-${dropdownHeaderUuids}" data-feedbackdislike="false" 
+            <div class="feedbackdown-data" id="feedBackDislikeContainer-${headerUUids}">
+            <div class="feedback-icon" id="feedbackdown-${headerUUids}" data-feedbackdislike="false" 
             data-conv-id="${data.conversationId}"
                         data-bot-id="${botId}" data-feedback="dislike"
                         data-dialog-name="${dialogName}"
                         data-user-input="${userIntentInput}">
-                <i class="ast-thumbdown" id="feedbackdown-${dropdownHeaderUuids}"
+                <i class="ast-thumbdown" id="feedbackdown-${headerUUids}"
                 data-feedbackdislike="false"
                 data-conv-id="${data.conversationId}"
                         data-bot-id="${botId}" data-feedback="dislike"
@@ -4897,7 +4920,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
        </div>`;
                     dropDownData.append(feedbackHtml);
                     let endofDialogeHtml = `
-        <div class="dilog-task-end" id="endTaks-${dropdownHeaderUuids}">
+        <div class="dilog-task-end" id="endTaks-${headerUUids}">
         <div class="text-dialog-task-end">Task Ended</div>     
                    </div>
                    <div class="feedback-helpul-container hide">
@@ -4936,15 +4959,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 </div>
             
         `;
-                    if(!document.getElementById('endTaks-' + dropdownHeaderUuids)){
+                    if(!document.getElementById('endTaks-' + headerUUids)){
                         endOfDialoge.append(endofDialogeHtml);
-                        $(`#overRideDiv-${dropdownHeaderUuids}`).remove();
+                        $(`#overRideDiv-${headerUUids}`).remove();
                     }
                     $(`.customer-feeling-text`).addClass('bottom-95');
                     setTimeout(() => {
-                        dropdownHeaderUuids = undefined;
+                        headerUUids = undefined;
                     }, 100)
-                    // dropdownHeaderUuids = undefined;
+                    // headerUUids = undefined;
 		    UnCollapseDropdownForLastElement(lastElementBeforeNewMessage);
                 }
 
