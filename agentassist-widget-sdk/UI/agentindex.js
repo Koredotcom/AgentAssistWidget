@@ -3955,7 +3955,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     let id = ele.id?.split('-');
                                     if (ids.includes(id[1])) {
                                         idsOfMyBotDropDown = ele.id;
-                                        $(ele).remove()
                                     }
                                 });
                                 let addRemoveDropDown = document.getElementById(`MyBotaddRemoveDropDown-${agentBotuuids}`);
