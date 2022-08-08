@@ -2469,6 +2469,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                                 </div>
                                                                 <div class="header-text" id="dropDownTitle-${res._id}">${res.tN}</div>
                                                                 <i class="ast-carrotup"></i>
+                                                                <button class="btn-danger hide" id="myBotTerminateAgentDialog-${res._id}">Terminate</button>
+
                                                             </div>
                                                             <div class="collapse-acc-data hide" id="dropDownData-${res._id}">
                                                                 
@@ -2613,7 +2615,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             noAutomationrunninginMyBot = false;
                                             myBotDropdownHeaderUuids = previousId;
                                             appState[_conversationId]['automationGoingOnAfterRefreshMyBot'] = isMyBotAutomationOnGoing;
-                                            localStorage.setItem('agentAssistState', JSON.stringify(appState))
+                                            localStorage.setItem('agentAssistState', JSON.stringify(appState));
+                                            let terminateButtonElement = document.getElementById('myBotTerminateAgentDialog-' + previousId);
+                                            terminateButtonElement.classList.remove('hide');
                                         }
                                         let agentInputToBotHtml = `
                                         <div class="steps-run-data">
@@ -2632,7 +2636,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                      
                                     if (res.agentAssistDetails.isPrompt || res.agentAssistDetails.entityRequest) {
                                         runInfoContent.append(askToUserHtml);
-                                        // runInfoContent.append(agentInputToBotHtml);
+                                        runInfoContent.append(agentInputToBotHtml);
                                     } else {
                                         runInfoContent.append(tellToUserHtml);
                                     }
