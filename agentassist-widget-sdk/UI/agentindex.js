@@ -31,7 +31,7 @@ var chatConfig;
 var agentContainer;
 var previousResp;
 var automationNotRanArray = [];
-var jwtToken, isCallConversation;
+var jwtToken, isCallConversation, parsedCustomData;
 var entitiestValueArray;
 var previousEntitiesValue;
 var isRetore = false;
@@ -65,6 +65,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
         });
         sourceType = params.source;
         isCallConversation = params.isCall;
+        let decodedCustomData = decodeURI(params.customData);
+        parsedCustomData = JSON.parse(decodedCustomData);
         if (sourceType === 'smartassist-color-scheme') {
             $('body').addClass(sourceType);
         } else {
@@ -328,24 +330,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     });
 
                 }
-                function getUserName(){
-                    let userName;
-                    let currentAccountInfo = window.parent.localStorage.getItem('jStorage');
-                    if (currentAccountInfo) {
-                        try{
-                            currentAccountInfo = JSON.parse(currentAccountInfo);
-                        }catch(err){
-                            console.log(err);
-                        }  
-                    }
-                    let userInfo = currentAccountInfo?.currentAccount && currentAccountInfo?.currentAccount?.userInfo;
-                    userName = userInfo?.fName;
-                    return userName? userName:'test';
-                }
                   
                 var welcome_message_request = {
                     'waitTime': 2000,
-                    'userName': getUserName(),
+                    'userName': parsedCustomData?.userName || 'user',
                     'id': _agentAssistDataObj.conversationId
                 }
 
