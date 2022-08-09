@@ -786,16 +786,21 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     a.append(faqActionHtml);
                                     faqs.append(`<div class="desc-text" id="descLib-${uuids+index}">${ele.answer}</div>`);
                                 }
-                                if ((ele.question?.length + ele.answer?.length) > 70) {
-                                    let faqs = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${uuids+index}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${uuids+index}`);
-                                    let seeMoreButtonHtml = `
-                              <button class="ghost-btn" style="font-style: italic;" id="seeMore-${uuids+index}" data-see-more="true">Show more</button>
-                              <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${uuids+index}" data-see-less="true">Show less</button>                  
+                                
+                                let faqstypeInfo = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${uuids + index}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${uuids + index}`);
+                                let seeMoreButtonHtml = `
+                              <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${uuids + index}" data-see-more="true">Show more</button>
+                              <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${uuids + index}" data-see-less="true">Show less</button>                  
                               `;
-                                    faqs.append(seeMoreButtonHtml);
-                                }
+                                faqstypeInfo.append(seeMoreButtonHtml);
+                                setTimeout(() => {
+                                    updateSeeMoreButtonForAgent(uuids + index);
+                                }, 10);
+                                
+                                
                                 // _msgsResponse.message.push(body);
                             });
+                            
 
                         }
                     } else {
@@ -1095,6 +1100,46 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     RemoveVerticalLineForLastResponse();
                 }
 
+                function updateSeeMoreButtonForAgent(id){
+                    let titleElement = $("#titleLib-" + id);
+                    let descElement = $("#descLib-" + id);
+                    let faqSectionElement = $('#faqSectionLib-' + id);
+                    let faqDivElement = $('#faqDivLib-' + id);
+                    if(titleElement && descElement && faqSectionElement && faqDivElement){
+                        $(titleElement).css({"overflow": "inherit", "white-space": "normal", "text-overflow" : "unset"});
+                        $(descElement).css({"overflow": "inherit", "white-space": "normal", "text-overflow" : "unset"});
+                        let faqSectionHeight = $(faqSectionElement).css("height");
+                        faqSectionHeight = parseInt(faqSectionHeight.slice(0,faqSectionHeight.length-2));
+                        let faqMinHeight = $(faqDivElement).css("min-height");
+                        faqMinHeight = parseInt(faqMinHeight.slice(0,faqMinHeight.length-2));
+                        if (faqSectionHeight > (faqMinHeight + 5)) {
+                            $('#seeMore-' + id).removeClass('hide');
+                        }
+                        $(titleElement).css({"overflow": "hidden", "white-space": "nowrap", "text-overflow" : "ellipsis"});
+                        $(descElement).css({"overflow": "hidden", "white-space": "nowrap", "text-overflow" : "ellipsis"});
+                    }
+                }
+
+                function updateSeeMoreButtonForAssist(id){
+                    let titleElement = $("#title-" + id);
+                    let descElement = $("#desc-" + id);
+                    let faqSectionElement = $('#faqSection-' + id);
+                    let faqDivElement = $('#faqDiv-' + id);
+                    if(titleElement && descElement && faqSectionElement && faqDivElement){
+                        $(titleElement).css({"overflow": "inherit", "white-space": "normal", "text-overflow" : "unset"});
+                        $(descElement).css({"overflow": "inherit", "white-space": "normal", "text-overflow" : "unset"});
+                        let faqSectionHeight = $(faqSectionElement).css("height");
+                        faqSectionHeight = parseInt(faqSectionHeight.slice(0,faqSectionHeight.length-2));
+                        let faqMinHeight = $(faqDivElement).css("min-height");
+                        faqMinHeight = parseInt(faqMinHeight.slice(0,faqMinHeight.length-2));
+                        if (faqSectionHeight > (faqMinHeight + 5)) {
+                            $('#seeMore-' + id).removeClass('hide');
+                        }
+                        $(titleElement).css({"overflow": "hidden", "white-space": "nowrap", "text-overflow" : "ellipsis"});
+                        $(descElement).css({"overflow": "hidden", "white-space": "nowrap", "text-overflow" : "ellipsis"});
+                    }
+                }
+
                 function processAgentAssistResponse(data, convId, botId) {
                     console.log("AgentAssist >>> agentassist_response:", data);
                     let automationSuggestions = $('#dynamicBlock .dialog-task-accordiaon-info');
@@ -1346,15 +1391,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     a.append(faqActionHtml);
                                     faqs.append(`<div class="desc-text" id="desc-${uuids+index}">${ele.answer}</div>`);
                                 }
-                                if ((ele.question?.length + ele.answer?.length) > 70) {
-                                    let faqs = $(`.type-info-run-send #faqSection-${uuids+index}`);
-                                    let seeMoreButtonHtml = `
-                          <button class="ghost-btn" style="font-style: italic;" id="seeMore-${uuids+index}" data-see-more="true">Show more</button>
-                          <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${uuids+index}" data-see-less="true">Show less</button>
+                                let faqstypeInfo = $(`.type-info-run-send #faqSection-${uuids + index}`);
+                                let seeMoreButtonHtml = `
+                          <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${uuids + index}" data-see-more="true">Show more</button>
+                          <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${uuids + index}" data-see-less="true">Show less</button>
                           `;
-                                    faqs.append(seeMoreButtonHtml);
-                                }
-                                //  _msgsResponse.message.push(body);
+                                faqstypeInfo.append(seeMoreButtonHtml);
+                                updateSeeMoreButtonForAssist(uuids + index);
                             })
                         }
 
@@ -2045,14 +2088,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                     a.append(faqActionHtml);
                                                     faqs.append(`<div class="desc-text" id="desc-${uniqueID}">${ele.answer}</div>`);
                                                 }
-                                                if ((ele.question?.length + ele.answer?.length) > 70) {
-                                                    let faqs = $(`.type-info-run-send #faqSection-${uniqueID}`);
-                                                    let seeMoreButtonHtml = `
-                                      <button class="ghost-btn" style="font-style: italic;" id="seeMore-${uniqueID}" data-see-more="true">Show more</button>
+
+                                                let faqstypeInfo = $(`.type-info-run-send #faqSection-${uniqueID}`);
+                                                let seeMoreButtonHtml = `
+                                      <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${uniqueID}" data-see-more="true">Show more</button>
                                       <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${uniqueID}" data-see-less="true">Show less</button>
                                       `;
-                                                    faqs.append(seeMoreButtonHtml);
-                                                }
+                                                faqstypeInfo.append(seeMoreButtonHtml);
+                                                updateSeeMoreButtonForAssist(uniqueID);
+
                                                 uniqueID = undefined;
                                             })
                                         }
