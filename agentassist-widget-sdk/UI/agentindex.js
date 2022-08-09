@@ -2461,7 +2461,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     }
                                     let dropdownHtml = `
                                             
-                                                        <div class="dialog-task-accordiaon-info" id="addRemoveDropDown-${res._id}" >
+                                                        <div class="dialog-task-accordiaon-info" id="MyBotaddRemoveDropDown-${res._id}" >
                                                             <div class="accordion-header" id="dropDownHeader-${res._id}"
                                                             data-drop-down-opened="false">
                                                                 <div class="icon-info">
@@ -2485,7 +2485,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     }
 
                                     if (res.tN && !previousId && previousTaskName !== currentTaskName) {
-                                        let divExist = $(`#addRemoveDropDown-${res._id}`);
+                                        let divExist = $(`#MyBotaddRemoveDropDown-${res._id}`);
                                         previousTaskName = currentTaskName;
                                         if (divExist.length >= 1) {
                                             console.log("---->>>>>>>>>>>>>>>>>>>>>already exsit===in the dom");
