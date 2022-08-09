@@ -103,7 +103,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.selectedApp = this.workflowService.getCurrentBt();
+    this.selectedApp = this.authService.smartAssistBots.map(x=>x._id);
+    this.initCalls();
     this.getWidget();
     this.subs.sink = this.authService.isAgentDesktopEnabled$.subscribe(isEnabled => {
       this.isAgentDesktopEnabled = isEnabled;
@@ -148,17 +149,23 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   initCalls() {
     let params;
-    if (this.workflowService.getCurrentBt()._id) {
-      params = {
+     params = {
         userId: this.authService.getUserId(),
         streamId: this.authService.smartAssistBots.map(x=>x._id)
       }
-    } else {
-      params = {
-        userId: this.authService.getUserId(),
-        streamId: this.workflowService.deflectApps()._id || this.workflowService.deflectApps()[0]._id,
-      }
-    }
+
+      this.service.invoke('get.shared.developers', params).subscribe(
+        res => {
+          this.isSharedDeveloper = true;
+          this.sharedToList = res;
+          this.isSharedDevError = false;
+        },
+        err => {
+          this.isSharedDeveloper = true;
+          this.workflowService.showError(err, this.translate.instant("HEADER.FAILED_FETCH"));
+          this.isSharedDevError = true;
+        }
+      )
 
     try {
       this.isInvite = _.findWhere(this.authService.getApplictionControls().associatedAccounts, { accountId: this.authService.getAuthInfo().currentAccount.accountId }).roles[0] == 'admin';
@@ -168,19 +175,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     let paramsEmail;
 
-    if (this.workflowService.getCurrentBt()._id) {
       paramsEmail = {
         userId: this.authService.getUserId(),
-        streamId: this.workflowService.getCurrentBt()._id,
+        streamId: this.authService.smartAssistBots.map(x=>x._id),
         orgId: this.authService.getOrgId()
       }
-    } else {
-      paramsEmail = {
-        userId: this.authService.getUserId(),
-        streamId: this.workflowService.deflectApps()._id || this.workflowService.deflectApps()[0]._id,
-        orgId: this.authService.getOrgId()
-      }
-    }
+   
 
     this.service.invoke('get.share.email', paramsEmail).subscribe(
       res => {
@@ -199,18 +199,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
       }
     );
 
-    this.service.invoke('get.shared.developers', params).subscribe(
-      res => {
-        this.isSharedDeveloper = true;
-        this.sharedToList = res;
-        this.isSharedDevError = false;
-      },
-      err => {
-        this.isSharedDeveloper = true;
-        this.workflowService.showError(err, this.translate.instant("HEADER.FAILED_FETCH"));
-        this.isSharedDevError = true;
-      }
-    )
   }
 
   goToPlatform() {
@@ -268,7 +256,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(InviteDialogComponent);
     const params = {
       userId: this.authService.getUserId(),
-      streamId: this.workflowService.getCurrentBt()._id,
+      streamId: this.authService.smartAssistBots.map(x=>x._id),
     }
     dialogRef.afterClosed().subscribe(res => {
       let usersList = [];
