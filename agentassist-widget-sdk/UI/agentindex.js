@@ -328,10 +328,24 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     });
 
                 }
-
+                function getUserName(){
+                    let userName;
+                    let currentAccountInfo = window.parent.localStorage.getItem('jStorage');
+                    if (currentAccountInfo) {
+                        try{
+                            currentAccountInfo = JSON.parse(currentAccountInfo);
+                        }catch(err){
+                            console.log(err);
+                        }  
+                    }
+                    let userInfo = currentAccountInfo?.currentAccount && currentAccountInfo?.currentAccount?.userInfo;
+                    userName = userInfo?.fName;
+                    return userName? userName:'test';
+                }
+                  
                 var welcome_message_request = {
                     'waitTime': 2000,
-                    'userName': 'test',
+                    'userName': getUserName(),
                     'id': _agentAssistDataObj.conversationId
                 }
 
