@@ -1109,7 +1109,7 @@ border: 1px solid transparent !important;
     right: 8px;
     top: 3px;
     border-radius: 0px 8px 8px 0px;
-    width: 185px;
+    width: 100px;
     background: linear-gradient(270deg,var(--default-white-color) 0%,rgba(255,255,255,0.8173) 78.65%,rgba(255,255,255,0) 100%);
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data.last-msg-white-bg .run-info-content .agent-utt .action-links{
@@ -1192,7 +1192,7 @@ border: 1px solid transparent !important;
     left: 0;
     text-align: center;
     position: relative;
-    top: 12px;
+    top: 0;
     z-index: 1;
     /* bottom: -55px; */
     /* margin-top: 10px;
@@ -2767,7 +2767,7 @@ border: 1px solid transparent !important;
     right: 8px;
     top: 3px;
     border-radius: 0px 8px 8px 0px;
-    width: 185px;
+    width: 100px;
     background: linear-gradient(270deg,var(--default-white-color) 0%,rgba(255,255,255,0.8173) 78.65%,rgba(255,255,255,0) 100%);
 }
 .collapse-acc-data .steps-run-data .run-info-content .agent-utt .action-links .send-run-btn {
