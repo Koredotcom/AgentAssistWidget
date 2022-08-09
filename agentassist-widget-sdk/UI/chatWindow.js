@@ -403,7 +403,7 @@
                                 hyperLinksMap[_randomKey] = _link;
                                 _link = _randomKey;
                             }
-                            return "<span class='isLink'><a id='linkEvent' target='_blank' " + _target + " href=\"" + _link + "\">" + match + "</a></span>";
+                            return "<span class='isLink'><a id='linkEvent' target='_blank'  " + _target + " href=\"" + _link + "\">" + match + "</a></span>";
                         } else {
                             return match;
                         }
