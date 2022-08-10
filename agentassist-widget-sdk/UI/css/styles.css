@@ -217,7 +217,7 @@ html, body{
     height: auto!important;
     min-width: 100px;
     max-height: 100% !important;
-    background-color: #ffffff !important;
+    /* background-color: #ffffff !important; */
 }
 
 
@@ -958,7 +958,7 @@ html, body{
     height: 100%;
     top: 0;
     left: 16px;
-    z-index: 1;
+    z-index: 0;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data {
     margin: 10px 0;
@@ -3141,11 +3141,11 @@ border: 1px solid transparent !important;
 }
 
 /* Blur changes */
-.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content *:not(.last-msg-white-bg){
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content * :not(.last-msg-white-bg){
     opacity: 0.94;
 }
-.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .agent-utt-info *{
-    opacity: 0.9;
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .agent-utt-info, .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .agent-utt-info * :not(.last-msg-white-bg), .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .accordion-header {
+    opacity: 0.75;
 }
 
 .last-msg-white-bg *{
