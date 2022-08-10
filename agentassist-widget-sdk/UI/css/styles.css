@@ -1086,6 +1086,11 @@ border: 1px solid transparent !important;
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data .run-info-content .agent-utt:hover .action-links {
     display: flex;
 }
+
+.overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send:hover .action-links {
+    display: flex;
+}
+
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data .run-info-content .agent-utt .title-data {
     font-weight: 400;
     font-size: 12px;
@@ -1522,9 +1527,12 @@ border: 1px solid transparent !important;
     transform: rotate(180deg);
 }
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links {
-    display: flex;
+    display: none;
     align-items: center;
     flex-shrink: 0;
+}
+.agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send:hover .action-links {
+    display: flex;
 }
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .send-run-btn {
     border: 0;
@@ -1901,7 +1909,7 @@ border: 1px solid transparent !important;
     text-overflow: ellipsis;
 }
 .overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links {
-    display: flex;
+    display: none;
     align-items: center;
     flex-shrink: 0;
 }
