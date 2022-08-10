@@ -256,6 +256,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         updateAgentAssistState(_conversationId, 'assistTab', data);
 
                         processAgentAssistResponse(data, data.conversationId, _botId);
+                        removingSendCopyBtnForCall();
                         document.getElementById("loader").style.display = "none";
                         // document.getElementById("addRemoveDropDown").style.display = "block";
 
@@ -273,11 +274,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         updateNumberOfMessages();
                       //  updateAgentAssistState(_conversationId, 'assistTab', data);
                         processUserMessages(data, data.conversationId, data.botId);
-
+                        removingSendCopyBtnForCall();
                     });
 
                     _agentAsisstSocket.on('user_message', (data) => {
-                        isCallConversation === 'true' ? processTranscriptData(data, data.conversationId, data.botId) : '';
+                        if (isCallConversation === 'true') {
+                            processTranscriptData(data, data.conversationId, data.botId);
+                        } 
                     })
 
                     _agentAsisstSocket.on('agent_message', (data) => {
@@ -296,6 +299,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             processMybotDataResponse(data, data.conversationId, data.botId);
                             document.getElementById("loader").style.display = "none";
                         }
+                        removingSendCopyBtnForCall();
                         // processAgentIntentResults(data, data.conversationId, data.botId);
                     })
                     // Get useCases List Data
@@ -317,6 +321,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         autoExhaustiveList = payloadData;
 
                         processAgentIntentResults(payloadData, payloadData.conversationId, payloadData.botId);
+                        removingSendCopyBtnForCall();
                     });
                     const channel = new BroadcastChannel('app-data');
                     channel.addEventListener('message', (event) => {
@@ -355,7 +360,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 // }
                 // _agentAsisstSocket.emit('agent_menu_request', agent_menu_request)
 
-
+                function removingSendCopyBtnForCall(){
+                    if (isCallConversation === 'true') {
+                        $(document.body).find('[id="sendMsg"], .copy-btn').remove();
+                    }
+                }
 
                 function processUserMessages(data, conversationId, botId) {
                     var _msgsResponse = {
@@ -796,6 +805,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                               `;
                                     faqs.append(seeMoreButtonHtml);
                                 }
+                                if(data.suggestions.faqs.length == 1 && !ele.answer){
+                                    document.getElementById(`checkLib-${uuids+index}`).click();
+                                    $(`#checkLib-${uuids+index}`).addClass('hide');
+                                }
                                 // _msgsResponse.message.push(body);
                             });
 
@@ -806,7 +819,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             data.suggestions.faqs.forEach((ele) => {
                                 let splitedanswerPlaceableID = answerPlaceableID.split('-');
                                 splitedanswerPlaceableID.shift();
-                                
                                 if(currentTabActive == 'searchAutoIcon'){
                                     let faqAnswerSendMsg =  $(`#search-text-display #faqDivLib-${splitedanswerPlaceableID.join('-')}`).find("[id='sendMsg']");
                                     $(faqAnswerSendMsg).attr('data-msg-data',ele.answer);
@@ -1357,6 +1369,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     faqs.append(seeMoreButtonHtml);
                                 }
                                 //  _msgsResponse.message.push(body);
+                                if(data.suggestions.faqs.length == 1 && !ele.answer){
+                                    document.getElementById(`check-${uuids+index}`).click();
+                                    $(`#check-${uuids+index}`).addClass('hide');
+                                }
                             })
                         }
 
@@ -1637,7 +1653,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     let transcriptHtml = `
                         <div class="other-user-bubble">
                             <div class="name-with-time">
-                                <div class="u-name">${data.author.firstName + data.author.lastName}</div>
+                                <div class="u-name">${parsedCustomData?.userName || 'User'}</div>
                                 <div class="u-time">${timeStr}</div>
                             </div>
                             <div class="bubble-data" id="userInputMsg">
@@ -2055,7 +2071,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                       `;
                                                     faqs.append(seeMoreButtonHtml);
                                                 }
+                                                if(faqss.length === 1 && !ele.answer) {
+                                                    document.getElementById(`check-${uniqueID}`).click();
+                                                    $(`#check-${uniqueID}`).remove();
+                                                }
                                                 uniqueID = undefined;
+                                                
                                             })
                                         }
                                    // });
