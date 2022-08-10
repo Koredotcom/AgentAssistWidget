@@ -1067,10 +1067,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }
                     let lastElement = getLastElement(dynamicBlockId);
                     if(lastElement && lastElement.className.includes('welcome-msg')){
+                        $(lastElement).addClass('welcome-msg-last');
                         return
+                    }else{
+                        $('.welcome-msg').removeClass('welcome-msg-last');
                     }
+
                     if(lastElement){
                         $(lastElement).addClass("last-msg-white-bg");
+                        $(lastElement).parent().css('opacity' , 1);
                         if(!scrollAtEnd){
                             if(lastElement.id.includes('automationSuggestions')){
                                 let agentUttInfoId = lastElement.id.split('-');
