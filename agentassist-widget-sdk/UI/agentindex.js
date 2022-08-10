@@ -256,6 +256,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         updateAgentAssistState(_conversationId, 'assistTab', data);
 
                         processAgentAssistResponse(data, data.conversationId, _botId);
+                        removingSendCopyBtnForCall();
                         document.getElementById("loader").style.display = "none";
                         // document.getElementById("addRemoveDropDown").style.display = "block";
 
@@ -273,7 +274,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         updateNumberOfMessages();
                       //  updateAgentAssistState(_conversationId, 'assistTab', data);
                         processUserMessages(data, data.conversationId, data.botId);
-
+                        removingSendCopyBtnForCall();
                     });
 
                     _agentAsisstSocket.on('user_message', (data) => {
@@ -299,6 +300,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             processMybotDataResponse(data, data.conversationId, data.botId);
                             document.getElementById("loader").style.display = "none";
                         }
+                        removingSendCopyBtnForCall();
                         // processAgentIntentResults(data, data.conversationId, data.botId);
                     })
                     // Get useCases List Data
@@ -320,6 +322,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         autoExhaustiveList = payloadData;
 
                         processAgentIntentResults(payloadData, payloadData.conversationId, payloadData.botId);
+                        removingSendCopyBtnForCall();
                     });
                     const channel = new BroadcastChannel('app-data');
                     channel.addEventListener('message', (event) => {
@@ -359,7 +362,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 // }
                 // _agentAsisstSocket.emit('agent_menu_request', agent_menu_request)
 
-
+                function removingSendCopyBtnForCall(){
+                    if (isCallConversation === 'true') {
+                        $(document.body).find('[id="sendMsg"], .copy-btn').remove();
+                    }
+                }
 
                 function processUserMessages(data, conversationId, botId) {
                     var _msgsResponse = {
@@ -806,13 +813,17 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 
                                 
                                 // _msgsResponse.message.push(body);
+                                if(data.suggestions.faqs.length === 1 && !ele.answer) {
+                                    document.getElementById(`checkLib-${uuids+index}`).click();
+                                    $(`#checkLib-${uuids+index}`).addClass('hide');
+                                }
                             });
                             
 
                         }
                         // updateNewMessageUUIDList(libraryResponseId);
                     } else {
-                        if (data.type === 'text' && data.suggestions) {
+                        if (data.type === 'text' && data.suggestions && isAnswerRenderbtnClicked) {
                             isSuggestionProcessed = false
                             data.suggestions.faqs.forEach((ele) => {
                                 let splitedanswerPlaceableID = answerPlaceableID.split('-');
@@ -1407,13 +1418,17 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         //   `;
                         //         faqstypeInfo.append(seeMoreButtonHtml);
                         //         updateSeeMoreButtonForAssist(uuids + index);
+                            if(data.suggestions.faqs.length === 1 && !ele.answer) {
+                                document.getElementById(`check-${uuids+index}`).click();
+                                $(`#check-${uuids+index}`).addClass('hide');
+                            }
                             })
                         }
 
                         updateNewMessageUUIDList(responseId);
 
                     } else {
-                        if (data.type === 'text' && data.suggestions) {
+                        if (data.type === 'text' && data.suggestions && isAnswerRenderbtnClicked) {
                             data.suggestions.faqs.forEach((ele) => {
                                let splitedanswerPlaceableID = answerPlaceableID.split('-');
                                splitedanswerPlaceableID.shift();
@@ -1430,7 +1445,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         `;
                                 faqs.append(seeMoreButtonHtml);
                                 updateSeeMoreButtonForAssist(splitedanswerPlaceableID.join('-'));
-                                $(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')} .ast-carrotup.rotate-carrot`).length>0?$(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')} #seeMore-${splitedanswerPlaceableID.join('-')}`).removeClass('hide'):$(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')} #seeMore-${splitedanswerPlaceableID.join('-')}`).addClass('hide');
+                                $(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')} .ast-carrotup.rotate-carrot`).length>0?$(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')} #seeMore-${splitedanswerPlaceableID.join('-')}`).removeClass('hide'):$(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')} #seeMore-${splitedanswerPlaceableID.join('-')}`).removeClass('hide');
                                 isAnswerRenderbtnClicked = false;
                             })
                             answerPlaceableID = undefined;
@@ -1686,7 +1701,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     let transcriptHtml = `
                         <div class="other-user-bubble">
                             <div class="name-with-time">
-                                <div class="u-name">${data.author.firstName + data.author.lastName}</div>
+                                <div class="u-name">${parsedCustomData?.userName || 'User'}</div>
                                 <div class="u-time">${timeStr}</div>
                             </div>
                             <div class="bubble-data" id="userInputMsg">
@@ -2106,7 +2121,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                       `;
                                                 faqstypeInfo.append(seeMoreButtonHtml);
                                                 updateSeeMoreButtonForAssist(uniqueID);
-
+                                                // if(faqss.length === 1 && !ele.answer) {
+                                                //     document.getElementById(`check-${uniqueID}`).click();
+                                                //     $(`#check-${uniqueID}`).addClass('hide');
+                                                // }
                                                 uniqueID = undefined;
                                             })
                                         }
@@ -4497,13 +4515,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     <i class="ast-copy" data-msg-id="${id.join('-')}"></i>
                                     </div>
                                     </div>`;
-                                let dropDownHtml =` <i class="ast-carrotup" data-conv-id="${_conversationId}"
-                                data-bot-id="" data-intent-name=""
-                                data-check="true" id="check-${id.join('-')}"></i>`;
-                                let arrowIcons = $(`#dynamicBlock .type-info-run-send #faqSection-${id.join('-')} .ast-carrotup`);
-                                if(!arrowIcons || arrowIcons.length<=0) {
-                                    faq.append(dropDownHtml)
-                                }
+                                // let dropDownHtml =` <i class="ast-carrotup" data-conv-id="${_conversationId}"
+                                // data-bot-id="" data-intent-name=""
+                                // data-check="true" id="check-${id.join('-')}"></i>`;
+                                // let arrowIcons = $(`#dynamicBlock .type-info-run-send #faqSection-${id.join('-')} .ast-carrotup`);
+                                // if(!arrowIcons || arrowIcons.length<=0) {
+                                //     faq.append(dropDownHtml)
+                                // }
                                 faq.append(answerHtml);
                                 $(`#dynamicBlock #${target.id}`).attr('data-answer-render', 'false');
                                 faqDiv.append(faqaction);
