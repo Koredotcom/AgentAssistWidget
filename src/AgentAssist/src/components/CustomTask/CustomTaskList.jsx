@@ -13,7 +13,7 @@ const CustomTaskList = (props) => {
      
     // </CustomTaskListComponentStyles>
                    
-    <iframe
+    <iframe id="agentassist-iframe"
     title="agenAssistIframe"
     src={props.iframeUrl}
     height="100%"
