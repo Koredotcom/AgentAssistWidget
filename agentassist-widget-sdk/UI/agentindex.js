@@ -392,6 +392,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     };
                     _msgsResponse.message.push(body);
 
+                    let titleText = isOverRideMode ? "You Entered -" : "Customer Said -"
                     let addUserQueryTodropdownData = document.getElementById(`dropDownData-${dropdownHeaderUuids}`);
                     let userQueryHtml = `
                                     <div class="steps-run-data">
@@ -399,7 +400,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             <img src="./images/userIcon.svg">
                                         </div>
                                         <div class="run-info-content" id="userInput-${_id}">
-                                            <div class="title">Customer Said - </div>
+                                            <div class="title">${titleText}</div>
                                             <div class="agent-utt">
                                                 <div class="title-data">${data.userInput}</div>
                                             </div>
@@ -5102,7 +5103,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 entityValue: agentInput,
                             }
                             console.log(e.target.dataset.val);
-                            agentManualentryMsg(agentInput, e.target.dataset, e.target.dataset.convId, e.target.dataset.botId);
+                            // agentManualentryMsg(agentInput, e.target.dataset, e.target.dataset.convId, e.target.dataset.botId);
                             var convId = e.target.dataset.convId;
                             var botId = e.target.dataset.botId;
                             var intentName = agentInput
