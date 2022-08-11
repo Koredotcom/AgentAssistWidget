@@ -788,17 +788,17 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         </div>`;
                                     a.append(faqActionHtml);
                                     faqs.append(`<div class="desc-text" id="descLib-${uuids+index}">${ele.answer}</div>`);
+                                    let faqstypeInfo = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${uuids + index}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${uuids + index}`);
+                                    let seeMoreButtonHtml = `
+                                  <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${uuids + index}" data-see-more="true">Show more</button>
+                                  <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${uuids + index}" data-see-less="true">Show less</button>                  
+                                  `;
+                                    faqstypeInfo.append(seeMoreButtonHtml);
+                                    setTimeout(() => {
+                                        updateSeeMoreButtonForAgent(uuids + index);
+                                    }, 10);
                                 }
                                 
-                                // let faqstypeInfo = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${uuids + index}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${uuids + index}`);
-                            //     let seeMoreButtonHtml = `
-                            //   <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${uuids + index}" data-see-more="true">Show more</button>
-                            //   <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${uuids + index}" data-see-less="true">Show less</button>                  
-                            //   `;
-                            //     faqstypeInfo.append(seeMoreButtonHtml);
-                            //     setTimeout(() => {
-                            //         updateSeeMoreButtonForAgent(uuids + index);
-                            //     }, 10);
                                 
                                 
                                 // _msgsResponse.message.push(body);
@@ -1392,21 +1392,27 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     </div>`;
                                     a.append(faqActionHtml);
                                     faqs.append(`<div class="desc-text" id="desc-${uuids+index}">${ele.answer}</div>`);
+                                     
+                                    let faqstypeInfo = $(`.type-info-run-send #faqSection-${uuids + index}`);
+                                    let seeMoreButtonHtml = `
+                                <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${uuids + index}" data-see-more="true">Show more</button>
+                                <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${uuids + index}" data-see-less="true">Show less</button>
+                                `;
+                                    faqstypeInfo.append(seeMoreButtonHtml);
+                                    updateSeeMoreButtonForAssist(uuids + index);
                                 }
-                        //         let faqstypeInfo = $(`.type-info-run-send #faqSection-${uuids + index}`);
-                        //         let seeMoreButtonHtml = `
-                        //   <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${uuids + index}" data-see-more="true">Show more</button>
-                        //   <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${uuids + index}" data-see-less="true">Show less</button>
-                        //   `;
-                        //         faqstypeInfo.append(seeMoreButtonHtml);
-                        //         updateSeeMoreButtonForAssist(uuids + index);
+                              
+                            if(data.suggestions.faqs.length === 1 && !ele.answer) {
+                                document.getElementById(`check-${uuids+index}`).click();
+                                $(`#check-${uuids+index}`).addClass('hide');
+                            }
                             })
                         }
 
                         updateNewMessageUUIDList(responseId);
 
                     } else {
-                        if (data.type === 'text' && data.suggestions) {
+                        if (data.type === 'text' && data.suggestions && isAnswerRenderbtnClicked) {
                             data.suggestions.faqs.forEach((ele) => {
                                let splitedanswerPlaceableID = answerPlaceableID.split('-');
                                splitedanswerPlaceableID.shift();
@@ -1422,6 +1428,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${splitedanswerPlaceableID.join('-')}" data-see-less="true">Show less</button>
                         `;
                                 faqs.append(seeMoreButtonHtml);
+                                console.log("updat see more button for assist");
                                 updateSeeMoreButtonForAssist(splitedanswerPlaceableID.join('-'));
                                 $(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')} .ast-carrotup.rotate-carrot`).length>0?$(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')} #seeMore-${splitedanswerPlaceableID.join('-')}`).removeClass('hide'):$(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')} #seeMore-${splitedanswerPlaceableID.join('-')}`).addClass('hide');
                                 isAnswerRenderbtnClicked = false;
@@ -2088,16 +2095,20 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 </div>`;
                                                     a.append(faqActionHtml);
                                                     faqs.append(`<div class="desc-text" id="desc-${uniqueID}">${ele.answer}</div>`);
+                                                    let faqstypeInfo = $(`.type-info-run-send #faqSection-${uniqueID}`);
+                                                    let seeMoreButtonHtml = `
+                                          <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${uniqueID}" data-see-more="true">Show more</button>
+                                          <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${uniqueID}" data-see-less="true">Show less</button>
+                                          `;
+                                                    faqstypeInfo.append(seeMoreButtonHtml);
+                                                    updateSeeMoreButtonForAssist(uniqueID);
                                                 }
 
-                                                let faqstypeInfo = $(`.type-info-run-send #faqSection-${uniqueID}`);
-                                                let seeMoreButtonHtml = `
-                                      <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${uniqueID}" data-see-more="true">Show more</button>
-                                      <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${uniqueID}" data-see-less="true">Show less</button>
-                                      `;
-                                                faqstypeInfo.append(seeMoreButtonHtml);
-                                                updateSeeMoreButtonForAssist(uniqueID);
-
+                                              
+                                                // if(faqss.length === 1 && !ele.answer) {
+                                                //     document.getElementById(`check-${uniqueID}`).click();
+                                                //     $(`#check-${uniqueID}`).addClass('hide');
+                                                // }
                                                 uniqueID = undefined;
                                             })
                                         }
