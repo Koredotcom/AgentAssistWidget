@@ -3466,7 +3466,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             if (targetIds.includes('feedbackup')) {
                                 targetIds.shift();
                                 if (target.dataset.feedbacklike == 'false') {
-                                      target.dataset.feedbacklike = 'true';
+                                     // target.dataset.feedbacklike = 'true';
                                     $(`#feedBackLikeContainer-${targetIds.join('-')} .feedback-icon`).attr('style', 'color:#0077D2;border-color:#0077D2;');
                                     $(`#feedBackDislikeContainer-${targetIds.join('-')} .feedback-icon`).removeAttr('style');
                                     feedbackLoop(evt);
@@ -3481,7 +3481,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             if (targetIds.includes('feedbackdown')) {
                                 targetIds.shift();
                                 if (target.dataset.feedbackdislike == 'false') {
-                                     target.dataset.feedbackdislike = 'true';
+                                    // target.dataset.feedbackdislike = 'true';
                                         $(`#feedBackLikeContainer-${targetIds.join('-')} .feedback-icon`).removeAttr('style');
                                         $(`#feedBackDislikeContainer-${targetIds.join('-')} .feedback-icon`).attr('style', 'color:#0077D2;border-color:#0077D2;');
                                     feedbackLoop(evt);
