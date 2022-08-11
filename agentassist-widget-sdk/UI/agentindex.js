@@ -4537,8 +4537,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 $(`#dynamicBlock #${target.id}`).addClass('rotate-carrot');
                                 $(`#dynamicBlock #faqDiv-${id.join('-')} .action-links`).removeClass('hide');
                                 $(`#dynamicBlock #desc-${id.join('-')}`).removeClass('hide');
-                                $(`#dynamicBlock #seeMore-${id.join('-')}`).removeClass('hide');
-                                $(`#dynamicBlock #seeLess-${id.join('-')}`).addClass('hide');
+                                updateSeeMoreButtonForAssist(id.join('-'));
+                                // $(`#dynamicBlock #seeMore-${id.join('-')}`).removeClass('hide');
+                                // $(`#dynamicBlock #seeLess-${id.join('-')}`).addClass('hide');
                             } else {
                                 $(`#dynamicBlock #${target.id}`).removeClass('rotate-carrot');
                                 $(`#dynamicBlock #faqDiv-${id.join('-')} .action-links`).addClass('hide');
@@ -4596,8 +4597,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     $(`#search-text-display #${target.id}`).addClass('rotate-carrot');
                                     $(`#search-text-display #faqDivLib-${id.join('-')} .action-links`).removeClass('hide');
                                     $(`#search-text-display #descLib-${id.join('-')}`).removeClass('hide');
-                                    $(`#search-text-display #seeMore-${id.join('-')}`).removeClass('hide');
-                                    $(`#search-text-display #seeLess-${id.join('-')}`).addClass('hide');
+                                    // $(`#search-text-display #seeMore-${id.join('-')}`).removeClass('hide');
+                                    // $(`#search-text-display #seeLess-${id.join('-')}`).addClass('hide');
+                                    updateSeeMoreButtonForAgent(id.join('-'));
                                 } else {
                                     $(`#search-text-display #${target.id}`).removeClass('rotate-carrot');
                                     $(`#search-text-display #faqDivLib-${id.join('-')} .action-links`).addClass('hide');
@@ -4610,8 +4612,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     $(`#overLaySearch #${target.id}`).addClass('rotate-carrot');
                                     $(`#overLaySearch #faqDivLib-${id.join('-')} .action-links`).removeClass('hide');
                                     $(`#overLaySearch #descLib-${id.join('-')}`).removeClass('hide');
-                                    $(`#overLaySearch #seeMore-${id.join('-')}`).removeClass('hide');
-                                    $(`#overLaySearch #seeLess-${id.join('-')}`).addClass('hide');
+                                    // $(`#overLaySearch #seeMore-${id.join('-')}`).removeClass('hide');
+                                    // $(`#overLaySearch #seeLess-${id.join('-')}`).addClass('hide');
+                                    updateSeeMoreButtonForAgent(id.join('-'));
                                 } else {
                                     $(`#overLaySearch #${target.id}`).removeClass('rotate-carrot');
                                     $(`#overLaySearch #faqDivLib-${id.join('-')} .action-links`).addClass('hide');
