@@ -76,7 +76,7 @@ export default class AgentAssistPlugin extends FlexPlugin {
         }
         console.log("11111111 this._conversations[activeConversationId]", this._conversations[activeConversationId])
         if (!this._conversations[activeConversationId].iframeLoaded) {
-          let iframeURL = `${agentassistURL}/koreagentassist-sdk/UI/agentassist-iframe.html?token=${token}&botid=${botId}&agentassisturl=${smartassistURL}&conversationid=${activeConversationId}&source=smartassist&isCall=false`;
+          let iframeURL = `${agentassistURL}/koreagentassist-sdk/UI/agentassist-iframe.html?token=${token}&botid=${botId}&agentassisturl=${smartassistURL}&conversationid=${activeConversationId}&source=twilio&isCall=false`;
           console.log("Iframe URL ====>  ", iframeURL);
           this.setIframeLoadedForAllConversations(false);
           this._conversations[activeConversationId].iframeLoaded = true;
@@ -243,7 +243,7 @@ export default class AgentAssistPlugin extends FlexPlugin {
         }
       }
       console.log("---------------->",conversationid, "isCall----->", isCall);
-      let iframeURL = `${agentassistURL}/koreagentassist-sdk/UI/agentassist-iframe.html?token=${token}&botid=${botId}&agentassisturl=${smartassistURL}&conversationid=${conversationid}&source=smartassist&isCall=${isCall}`;
+      let iframeURL = `${agentassistURL}/koreagentassist-sdk/UI/agentassist-iframe.html?token=${token}&botid=${botId}&agentassisturl=${smartassistURL}&conversationid=${conversationid}&source=twilio&isCall=${isCall}`;
       console.log("Iframe URL ====>  ", iframeURL);
       manager.store.dispatch({type:"IFRAME_URL", iframeUrl:`${iframeURL}`})
 
