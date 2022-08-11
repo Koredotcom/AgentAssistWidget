@@ -2206,7 +2206,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                 <div class="run-info-content" id="userInput-${res._id}">
                                                     <div class="title">Customer Said - </div>
                                                     <div class="agent-utt">
-                                                        <div class="title-data">${res.agentAssistDetails.entityValue}</div>
+                                                        <div class="title-data">"${res.agentAssistDetails.entityValue}"</div>
                                                     </div>
                                                     
                                                 </div>
@@ -2580,7 +2580,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                     <div class="run-info-content" id="userInput-${res._id}">
                                                         <div class="title">Customer Said - </div>
                                                         <div class="agent-utt">
-                                                            <div class="title-data">${res.agentAssistDetails.entityValue}</div>
+                                                            <div class="title-data">"${res.agentAssistDetails.entityValue}"</div>
                                                         </div>
                                                         
                                                     </div>
