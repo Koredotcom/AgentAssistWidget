@@ -775,14 +775,19 @@ html, body{
     text-overflow: ellipsis;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links {
-    display: flex;
+    display: none;
     align-items: center;
     flex-shrink: 0;
 }
 
-/* .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send:hover .action-links {
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send:hover .action-links {
     display: flex;
-} */
+}
+
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type#dialoguesArea .content-dialog-task-type .type-info-run-send .action-links {
+    display: flex !important;
+}
+
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .send-run-btn {
     border: 0;
     background: var(--theme-color);
@@ -1078,6 +1083,11 @@ background: var(--default-white-color);
 border: 1px solid transparent;
 height: 25px;
 border-radius: 4px;
+pointer-events: all;
+/* background: #BDC1C6; */
+}
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data:not(.last-msg-white-bg) .run-info-content .agent-utt.enter-details-block .title-data .input-text{
+    pointer-events: none;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data .run-info-content .agent-utt.enter-details-block .title-data .input-text:focus{
 box-shadow: none !important;
@@ -1550,6 +1560,9 @@ border: 1px solid transparent !important;
     align-items: center;
     flex-shrink: 0;
 }
+.agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .frequently-asked .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links{
+    display: flex !important;
+}
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send:hover .action-links {
     display: flex;
 }
@@ -1932,6 +1945,10 @@ border: 1px solid transparent !important;
     display: none;
     align-items: center;
     flex-shrink: 0;
+}
+
+.overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type#dialoguesArea .content-dialog-task-type .type-info-run-send .action-links{
+    display: flex !important;
 }
 .overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .send-run-btn {
     border: 0;
@@ -3169,4 +3186,9 @@ opacity: 1 !important;
 
 .welcome-msg-last {
     opacity: 1 !important;
+}
+
+/* removing autosuggestions from chrome */
+input.no-autofill-bkg:-webkit-autofill {
+-webkit-background-clip: text;
 }

@@ -960,6 +960,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         };
                         //  _msgsResponse.message.push(body);
                     }
+                    let agentInputId = Math.floor(Math.random() * 100);
                     if (isMyBotAutomationOnGoing && data.buttons && !data.value.includes('Customer has waited')) {
                         let sendMsgData = encodeURI(JSON.stringify(_msgsResponse));
                         let runInfoContent = $(`#dropDownData-${myBotDropdownHeaderUuids}`);
@@ -1010,7 +1011,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 <div class="title">Input</div>
                 <div class="agent-utt enter-details-block">
                 <div class="title-data" ><span class="enter-details-title">EnterDetails: </span>
-                <input type="text" placeholder="Enter Value" class="input-text chat-container" id="agentInput-${Math.floor(Math.random() * 100)}" data-conv-id="${convId}" data-bot-id="${botId}"  data-mybot-input="true">
+                <input type="text" placeholder="Enter Value" class="input-text chat-container" id="agentInput-${agentInputId}" data-conv-id="${convId}" data-bot-id="${botId}"  data-mybot-input="true">
                 </div>
                 </div>
                 </div>
@@ -1027,6 +1028,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }
                     AgentChatInitialize.renderMessage(_msgsResponse, myBotuuids, `dropDownData-${myBotDropdownHeaderUuids}`);
                     removeElementFromDom();
+
+                    if(document.getElementById('agentInput-'+ agentInputId)){
+                        document.getElementById('agentInput-'+ agentInputId).focus();
+                    }
                     // let noOfSteps = $(`.body-data-container #agentAutoContainer`).find('.steps-run-data').not('.hide');
                     // if (noOfSteps.length > 2) {
                     //     $(noOfSteps).addClass('hide');
@@ -4465,6 +4470,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             }
                             _agentAsisstSocket.emit('enable_override_userinput', overRideObj);
                             let runInfoContent = $(`#dropDownData-${dropdownHeaderUuids}`);
+                            let agentInputId = Math.floor(Math.random() * 100)
                             let agentInputToBotHtml = `
                 <div class="steps-run-data" id="inputFieldForAgent">
                     <div class="icon_block">
@@ -4474,12 +4480,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     <div class="title">Input overridden. Please provide the input</div>
                     <div class="agent-utt enter-details-block">
                     <div class="title-data" ><span class="enter-details-title">EnterDetails: </span>
-                    <input type="text" placeholder="Enter Value" class="input-text chat-container" id="agentInput-${Math.floor(Math.random() * 100)}" data-conv-id="${_agentAssistDataObj.conversationId}" data-bot-id="${_botId}"  data-mybot-input="true">
+                    <input type="text" placeholder="Enter Value" class="input-text chat-container" id="agentInput-${agentInputId}" data-conv-id="${_agentAssistDataObj.conversationId}" data-bot-id="${_botId}"  data-mybot-input="true">
                     </div>
                     </div>
                     </div>
                 </div>`
                             runInfoContent.append(agentInputToBotHtml);
+                            if(document.getElementById('agentInput-' + agentInputId)){
+                                document.getElementById('agentInput-' + agentInputId).focus();
+                            }
                             $(`#overRideBtn-${id}`).addClass('hide');
                             $(`#cancelOverRideBtn-${id}`).removeClass('hide');
                             addWhiteBackgroundClassToNewMessage();
@@ -5881,4 +5890,3 @@ AgentAssistPubSub.subscribe('searched_Automation_details', (msg, data) => {
     }
     _agentAsisstSocket.emit('agent_assist_agent_request', agent_assist_request);
 });
-
