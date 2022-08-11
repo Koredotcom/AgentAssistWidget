@@ -2020,8 +2020,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 if (isDivElement) {
                                     $(`#${target.id}`).addClass('active-feedback');
                                     target.firstElementChild.dataset.feedbacklike = 'true';
-                                    evt.target.dataset = target.firstElementChild.dataset;
-
+                                    Object.assign(target.dataset, target.firstElementChild.dataset);
                                     feedbackLoop(evt);
                                 } else {
                                     $(`#${target.parentElement.id}`).addClass('active-feedback');
@@ -2038,7 +2037,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 if (isDivElement) {
                                     $(`#${target.id}`).addClass('active-feedback');
                                     target.firstElementChild.dataset.feedbacklike = 'true';
-                                    evt.target.dataset = evt.target.firstElementChild.dataset;
+                                    Object.assign(target.dataset, target.firstElementChild.dataset);
                                      feedbackLoop(evt);
                                 } else {
                                     $(`#${target.parentElement.id}`).addClass('active-feedback');
