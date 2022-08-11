@@ -16,6 +16,7 @@ export default class AgentAssistPlugin extends FlexPlugin {
   eventListenerAdded = false;
   _handleMessageAddedListener = null;
   isCallConversation = false;
+  activeConversationId = '';
   _conversations = {};
   constructor() {
     super(PLUGIN_NAME);
@@ -30,8 +31,11 @@ export default class AgentAssistPlugin extends FlexPlugin {
    * @param manager { import('@twilio/flex-ui').Manager }
    */
 
-  async init(flex, manager){
+  async init(flex, manager) {
+
+    this.createWindowListener();
     this.registerReducers(manager);
+
     // flex.AgentDesktopView.Panel2.Content.remove('container');
     // // flex.AgentDesktopView.defaultProps.showPanel2=false;
     // flex.AgentDesktopView.Panel2.Content.replace(
@@ -57,88 +61,89 @@ export default class AgentAssistPlugin extends FlexPlugin {
     // getting generated token from twilio function
     // serverlessURL = "https://8fb6-115-114-88-222.ngrok.io/sendMessage"
     var funcResponse = await axios.post(serverlessURL, body);
-    let { agentassistURL, token, smartassistURL, botId, isCall} = funcResponse.data;
+    let { agentassistURL, token, smartassistURL, botId, isCall } = funcResponse.data;
     let conversationid;
     console.log("11111111111111111111 state", manager.store.getState())
-    
-    manager.store.subscribe(()=> {
+
+    manager.store.subscribe(() => {
       let flex = manager.store.getState().flex;
-      let activeConversationId = flex?.chat?.messageList?.activeConversation;
-      let convObj = flex?.chat?.conversations[activeConversationId];
-      console.log("11111111111111 activeConversationId", activeConversationId, convObj);
+      this.activeConversationId = flex?.chat?.messageList?.activeConversation;
+      let convObj = flex?.chat?.conversations[this.activeConversationId];
+      console.log("11111111111111 this.activeConversationId", this.activeConversationId, convObj);
       if (this.atleastOneKeyExist(convObj)) {
         console.log("11111111111 conversation exist")
         //manager.store.dispatch({type:"IFRAME_URL", iframeUrl:`about:blank`});
         this.isCallConversation = false;
-        if (!this._conversations[activeConversationId]) {
-          this._conversations[activeConversationId] = {};
-          this._conversations[activeConversationId].iframeLoaded = false;
+        if (!this._conversations[this.activeConversationId]) {
+          this._conversations[this.activeConversationId] = {};
+          this._conversations[this.activeConversationId].iframeLoaded = false;
         }
-        console.log("11111111 this._conversations[activeConversationId]", this._conversations[activeConversationId])
-        if (!this._conversations[activeConversationId].iframeLoaded) {
-          let iframeURL = `${agentassistURL}/koreagentassist-sdk/UI/agentassist-iframe.html?token=${token}&botid=${botId}&agentassisturl=${smartassistURL}&conversationid=${activeConversationId}&source=twilio&isCall=false`;
+        console.log("11111111 this._conversations[this.activeConversationId]", this._conversations[this.activeConversationId])
+        if (!this._conversations[this.activeConversationId].iframeLoaded) {
+          let iframeURL = `${agentassistURL}/koreagentassist-sdk/UI/agentassist-iframe.html?token=${token}&botid=${botId}&agentassisturl=${smartassistURL}&conversationid=${this.activeConversationId}&source=salesforce&isCall=false`;
           console.log("Iframe URL ====>  ", iframeURL);
           this.setIframeLoadedForAllConversations(false);
-          this._conversations[activeConversationId].iframeLoaded = true;
-          manager.store.dispatch({type:"IFRAME_URL", iframeUrl:`${iframeURL}`});
+          this._conversations[this.activeConversationId].iframeLoaded = true;
+          manager.store.dispatch({ type: "IFRAME_URL", iframeUrl: `${iframeURL}` });
           setTimeout(() => {
             let _self = this;
             let iframe = document.getElementById('agentassist-iframe');
-            if (iframe.attachEvent){
-              iframe.attachEvent("onload", function(){
+            if (iframe.attachEvent) {
+              iframe.attachEvent("onload", function () {
                 //alert("Local iframe is now loaded.(IE)");
-                _self.sendUnreadMessages(activeConversationId, convOb, agentassistURLj);
+                _self.sendUnreadMessages(convOb, agentassistURLj);
               });
             } else {
-              iframe.onload = function(){
+              iframe.onload = function () {
                 //alert("Local iframe is now loaded.(non-IE)");
-                _self.sendUnreadMessages(activeConversationId, convObj, agentassistURL);
+                _self.sendUnreadMessages(convObj, agentassistURL);
               };
             }
           }, 1000);
         }
-        this.sendUnreadMessages(activeConversationId, convObj, agentassistURL);
-        
+        this.sendUnreadMessages(convObj, agentassistURL);
 
-        } else {
-          this.isCallConversation = true;
-        }
+
+      } else {
+        this.isCallConversation = true;
+      }
+
     });
-    
+
     flex.Actions.addListener('afterAcceptTask', async (payload) => {
       console.log("beforeSelectTask ===> ", payload);
-      
+
       if (
         payload.task &&
         payload.task.attributes
       ) {
-        
-        if(payload.task.channelType === "voice"){
+
+        if (payload.task.channelType === "voice") {
           this.isCallConversation = true;
           isCall = true;
           conversationid = payload?.task?.attributes["caller"];
           conversationid = conversationid.replace("+", "%2B");
-        }else{
+        } else {
           this.isCallConversation = false;
           isCall = false;
           conversationid = payload.task.attributes.conversationSid;
           //this.handleConversation(conversationid);
         }
-      // conversationid = "14152367315";
+        // conversationid = "14152367315";
       }
       // no account number found
       else {
         console.log("Error in Payload")
       }
-      
+
     });
     flex.Actions.addListener('afterCompleteTask', (payload) => {
       console.log("completing the task", payload);
-      manager.store.dispatch({type:"IFRAME_URL", iframeUrl:`about:blank`})
+      manager.store.dispatch({ type: "IFRAME_URL", iframeUrl: `about:blank` })
     });
 
-   
-    
+
+
 
     console.log("----------------func----------------------------");
     console.log(funcResponse.data);
@@ -148,9 +153,9 @@ export default class AgentAssistPlugin extends FlexPlugin {
 
     // When new task is accepted
     // changeURL(iframeURL);
-    
 
-    
+
+
 
     const options = { sortOrder: -1 };
 
@@ -159,23 +164,72 @@ export default class AgentAssistPlugin extends FlexPlugin {
     // setInterval(() => {
     //   manager.store.dispatch({type:"IFRAME_URL", iframeUrl:`https://www.bing.com/search?q=${++count}`})
     // }, 5000);
-    
+
   }
-  sendUnreadMessages(activeConversationId, convObj, agentassistURL) {
+  createWindowListener() {
+    console.log("111111111111111 registering window listener for agentassist")
+    window.addEventListener("message", (event) => {
+      console.log("11111111111 inside window eventlistener", this.activeConversationId, event.data);
+      var recordId = this.activeConversationId;
+      if (event.data.name === "agentAssist.SendMessage" && event.data.conversationId == this.activeConversationId) {
+        //console.log(event.data.payload);
+        var msg = '';
+        try {
+          msg = JSON.parse(decodeURI(event.data.payload)).message[0].cInfo.body;
+        } catch (e) {
+          msg = decodeURI(encodeURI(event.data.payload));
+        }
+        console.log("1111111111111111 sending message", msg);
+        /* var conversationKit = cmp.find("conversationKit");
+         //console.log("RecordId", recordId);
+         conversationKit.sendMessage({
+             recordId: recordId,
+             message: {
+                 text:msg
+             }
+         })
+       .then(function(result){
+             if (result) {
+                     console.log("Successfully sent message");
+                 } else {
+                     console.log("Failed to send message");
+                 }
+       });*/
+      } else if (event.data.name === "agentAssist.CopyMessage" && event.data.conversationId == this.activeConversationId) {
+        var msg = decodeURI(encodeURI(event.data.payload));
+        console.log("1111111111111111 copying message", msg);
+        /*  var conversationKit = cmp.find("conversationKit");
+         conversationKit.setAgentInput({
+             recordId: recordId,
+             message: {
+                 text:msg
+             }
+         })
+       .then(function(result){
+             if (result) {
+                     console.log("Successfully sent message");
+                 } else {
+                     console.log("Failed to send message");
+                 }
+       });*/
+      }
+    }, false);
+  }
+  sendUnreadMessages(convObj, agentassistURL) {
     // check if there are any unreadmessages, if yes send the messages
     if (convObj && convObj.unreadMessages && convObj.unreadMessages.length > 0) {
       let unreadMessages = convObj.unreadMessages;
       for (let i = 0; i < unreadMessages.length; i++) {
-        let source = unreadMessages[i]?.source; 
+        let source = unreadMessages[i]?.source;
         let state = source?.state;
         if (state && state.participantSid && state?.type === 'text') {
           let sid = state['sid'];
           if (!this._conversations[sid]) {
             let unreadMessage = state.body;
             console.log("111111111111111111 unreadMessage", unreadMessage)
-            this._conversations[sid]= {};
+            this._conversations[sid] = {};
             this._conversations[sid]['message'] = unreadMessage;
-            this.sendMessageToAgentAssist(activeConversationId, unreadMessage, agentassistURL);
+            this.sendMessageToAgentAssist(this.activeConversationId, unreadMessage, agentassistURL);
 
 
           }
@@ -193,17 +247,17 @@ export default class AgentAssistPlugin extends FlexPlugin {
     var recordId = conversationId;
     var content = message;
     console.log("New Message recordId:" + recordId + " content:" + content);
-      var message = {};
-      message['author']={};
-      message['author'].Id='';
-      message['author'].type='USER';
-      message['conversationid'] = recordId;
-      message['name'] = 'agentAssist.CustomerMessage';
-      message['value'] =  content ;       
-      var vfWindow = iframe.contentWindow;
-      if (vfWindow) {
-        vfWindow.postMessage(message, agentAssistURL);//window.location.protocol+'//'+window.location.host);
-      }
+    var message = {};
+    message['author'] = {};
+    message['author'].Id = '';
+    message['author'].type = 'USER';
+    message['conversationid'] = recordId;
+    message['name'] = 'agentAssist.CustomerMessage';
+    message['value'] = content;
+    var vfWindow = iframe.contentWindow;
+    if (vfWindow) {
+      vfWindow.postMessage(message, agentAssistURL);//window.location.protocol+'//'+window.location.host);
+    }
   }
   setIframeLoadedForAllConversations(flag) {
     for (let key in this._conversations) {
@@ -211,41 +265,41 @@ export default class AgentAssistPlugin extends FlexPlugin {
     }
   }
   atleastOneKeyExist(obj) {
-      var count=0;
-      for(var prop in obj) {
-         if (obj.hasOwnProperty(prop)) {
-            ++count;
-         }
+    var count = 0;
+    for (var prop in obj) {
+      if (obj.hasOwnProperty(prop)) {
+        ++count;
       }
-      return count;
+    }
+    return count;
   }
   handleConversation(conversationid) {
     const manager = Twilio.Flex.Manager.getInstance();
     let convObj = manager.store.getState().flex.chat.conversations[conversationid];
-    
-    manager.store.subscribe(()=> {
-      console.log("1111111111111111111 convObj", manager.store.getState() );
+
+    manager.store.subscribe(() => {
+      console.log("1111111111111111111 convObj", manager.store.getState());
       if (convObj && convObj.unreadMessages && convObj.unreadMessages.length > 0) {
         let unreadMessages = convObj.unreadMessages;
         for (let i = 0; i < unreadMessages.length; i++) {
-          let source = unreadMessages[i]?.source; 
+          let source = unreadMessages[i]?.source;
           let state = source?.state;
           if (state && state.participantSid && state?.type === 'text') {
             let sid = state['sid'];
             if (!this._conversations[sid]) {
               let unreadMessage = state.body;
               console.log("111111111111111111 unreadMessage", unreadMessage)
-              this._conversations[sid]= {};
+              this._conversations[sid] = {};
               this._conversations[sid]['message'] = unreadMessage;
             }
 
           }
         }
       }
-      console.log("---------------->",conversationid, "isCall----->", isCall);
-      let iframeURL = `${agentassistURL}/koreagentassist-sdk/UI/agentassist-iframe.html?token=${token}&botid=${botId}&agentassisturl=${smartassistURL}&conversationid=${conversationid}&source=twilio&isCall=${isCall}`;
+      console.log("---------------->", conversationid, "isCall----->", isCall);
+      let iframeURL = `${agentassistURL}/koreagentassist-sdk/UI/agentassist-iframe.html?token=${token}&botid=${botId}&agentassisturl=${smartassistURL}&conversationid=${conversationid}&source=salesforce&isCall=${isCall}`;
       console.log("Iframe URL ====>  ", iframeURL);
-      manager.store.dispatch({type:"IFRAME_URL", iframeUrl:`${iframeURL}`})
+      manager.store.dispatch({ type: "IFRAME_URL", iframeUrl: `${iframeURL}` })
 
     })
 
