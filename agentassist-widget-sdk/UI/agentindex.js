@@ -178,7 +178,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     window.addEventListener("message", function (e) {
                         console.log(e.data);//your data is captured in e.data
                         if(e.data.convsId) {
-                            console.log('during Conversation ended:', e.data);
                             let currentEndedConversationId = e.data.convsId;
                             var appStateStr = localStorage.getItem('agentAssistState') || '{}';
                             var appState = JSON.parse(appStateStr);
@@ -187,7 +186,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             }
                             return;
                         }
-                        console.log('during Conversation:', e.data)
                         let userInputData = e.data;
                         let agent_assist_request = {
                             'author': {
