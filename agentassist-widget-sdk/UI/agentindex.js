@@ -850,8 +850,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         `;
                                 faqs.append(seeMoreButtonHtml);
                                 updateSeeMoreButtonForAgent(splitedanswerPlaceableID.join('-'));
-                                $(`#search-text-display .type-info-run-send #faqSectionLib-${splitedanswerPlaceableID.join('-')} .ast-carrotup.rotate-carrot`).length>0?$(`#search-text-display #seeMore-${splitedanswerPlaceableID.join('-')}`).removeClass('hide'):$(`#search-text-display #seeMore-${splitedanswerPlaceableID.join('-')}`).addClass('hide');
-                                $(`#overLaySearch .type-info-run-send #faqSectionLib-${splitedanswerPlaceableID.join('-')} .ast-carrotup.rotate-carrot`).length>0?$(`#overLaySearch #seeMore-${splitedanswerPlaceableID.join('-')}`).removeClass('hide'):$(`#overLaySearch #seeMore-${splitedanswerPlaceableID.join('-')}`).addClass('hide');            
+                                // $(`#search-text-display .type-info-run-send #faqSectionLib-${splitedanswerPlaceableID.join('-')} .ast-carrotup.rotate-carrot`).length>0?$(`#search-text-display #seeMore-${splitedanswerPlaceableID.join('-')}`).removeClass('hide'):$(`#search-text-display #seeMore-${splitedanswerPlaceableID.join('-')}`).addClass('hide');
+                                // $(`#overLaySearch .type-info-run-send #faqSectionLib-${splitedanswerPlaceableID.join('-')} .ast-carrotup.rotate-carrot`).length>0?$(`#overLaySearch #seeMore-${splitedanswerPlaceableID.join('-')}`).removeClass('hide'):$(`#overLaySearch #seeMore-${splitedanswerPlaceableID.join('-')}`).addClass('hide');            
                                 isAnswerRenderbtnClicked = false;
                             })
                             answerPlaceableID = undefined;
@@ -1139,6 +1139,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         faqMinHeight = parseInt(faqMinHeight.slice(0,faqMinHeight.length-2));
                         if (faqSectionHeight > (faqMinHeight + 5)) {
                             $('#seeMore-' + id).removeClass('hide');
+                        }else{
+                            $('#seeMore-' + id).addClass('hide');
                         }
                         $(titleElement).css({"overflow": "hidden", "white-space": "nowrap", "text-overflow" : "ellipsis"});
                         $(descElement).css({"overflow": "hidden", "white-space": "nowrap", "text-overflow" : "ellipsis"});
@@ -1159,6 +1161,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         faqMinHeight = parseInt(faqMinHeight.slice(0,faqMinHeight.length-2));
                         if (faqSectionHeight > (faqMinHeight + 5)) {
                             $('#seeMore-' + id).removeClass('hide');
+                        }else{
+                            $('#seeMore-' + id).addClass('hide');
                         }
                         $(titleElement).css({"overflow": "hidden", "white-space": "nowrap", "text-overflow" : "ellipsis"});
                         $(descElement).css({"overflow": "hidden", "white-space": "nowrap", "text-overflow" : "ellipsis"});
@@ -1453,7 +1457,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 faqs.append(seeMoreButtonHtml);
                                 console.log("updat see more button for assist");
                                 updateSeeMoreButtonForAssist(splitedanswerPlaceableID.join('-'));
-                                $(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')} .ast-carrotup.rotate-carrot`).length>0?$(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')} #seeMore-${splitedanswerPlaceableID.join('-')}`).removeClass('hide'):$(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')} #seeMore-${splitedanswerPlaceableID.join('-')}`).removeClass('hide');
+                                // $(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')} .ast-carrotup.rotate-carrot`).length>0?$(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')} #seeMore-${splitedanswerPlaceableID.join('-')}`).removeClass('hide'):$(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')} #seeMore-${splitedanswerPlaceableID.join('-')}`).removeClass('hide');
                                 isAnswerRenderbtnClicked = false;
                             })
                             answerPlaceableID = undefined;
