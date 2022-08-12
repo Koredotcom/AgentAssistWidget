@@ -165,17 +165,29 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 if (!window._agentAssisteventListenerAdded) {
                     btnInit(containerId);
                     // eventListener for removing the ended currentconversation from the localStorage
-                    window.addEventListener("message", function (e) {
-                        console.log(e.data);//your data is captured in e.data
-                        let currentEndedConversationId = e.data.convsId;
-                        var appStateStr = localStorage.getItem('agentAssistState') || '{}';
-                        var appState = JSON.parse(appStateStr);
-                        if (appState[currentEndedConversationId]) {
-                            delete appState[currentEndedConversationId];
-                        }
-                    });
+                    // window.addEventListener("message", function (e) {
+                    //     console.log(e.data);//your data is captured in e.data
+                    //     let currentEndedConversationId = e.data.convsId;
+                    //     var appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                    //     var appState = JSON.parse(appStateStr);
+                    //     if (appState[currentEndedConversationId]) {
+                    //         delete appState[currentEndedConversationId];
+                    //     }
+                    // });
 
                     window.addEventListener("message", function (e) {
+                        console.log(e.data);//your data is captured in e.data
+                        if(e.data.convsId) {
+                            console.log('during Conversation ended:', e.data);
+                            let currentEndedConversationId = e.data.convsId;
+                            var appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                            var appState = JSON.parse(appStateStr);
+                            if (appState[currentEndedConversationId]) {
+                                delete appState[currentEndedConversationId];
+                            }
+                            return;
+                        }
+                        console.log('during Conversation:', e.data)
                         let userInputData = e.data;
                         let agent_assist_request = {
                             'author': {
@@ -4268,6 +4280,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     document.getElementById("loader").style.display = "block";
                                 }
                                 scrollToBottom();
+                            }
+                            if(target.innerHTML === 'yes, Continue') {
+                                console.log('111222');
                             }
 
                         }
