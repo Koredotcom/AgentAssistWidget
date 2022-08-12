@@ -227,7 +227,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         if (appState[_conversationId]) {
                             // if incoming data belongs to welcome message do nothing
                             if (!data.suggestions && data.buttons?.length > 1) {
-                                if (appState[_conversationId].isWelcomeProcessed && !appState[_conversationId].automationGoingOn) {
+                                if (appState[_conversationId].isWelcomeProcessed && !appState[_conversationId].automationGoingOn && document.getElementsByClassName('.welcome-msg').length > 0) {
                                     return;
                                 }
                             }
