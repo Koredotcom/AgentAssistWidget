@@ -165,17 +165,27 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 if (!window._agentAssisteventListenerAdded) {
                     btnInit(containerId);
                     // eventListener for removing the ended currentconversation from the localStorage
-                    window.addEventListener("message", function (e) {
-                        console.log(e.data);//your data is captured in e.data
-                        let currentEndedConversationId = e.data.convsId;
-                        var appStateStr = localStorage.getItem('agentAssistState') || '{}';
-                        var appState = JSON.parse(appStateStr);
-                        if (appState[currentEndedConversationId]) {
-                            delete appState[currentEndedConversationId];
-                        }
-                    });
+                    // window.addEventListener("message", function (e) {
+                    //     console.log(e.data);//your data is captured in e.data
+                    //     let currentEndedConversationId = e.data.convsId;
+                    //     var appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                    //     var appState = JSON.parse(appStateStr);
+                    //     if (appState[currentEndedConversationId]) {
+                    //         delete appState[currentEndedConversationId];
+                    //     }
+                    // });
 
                     window.addEventListener("message", function (e) {
+                        console.log(e.data);//your data is captured in e.data
+                        if(e.data.convsId) {
+                            let currentEndedConversationId = e.data.convsId;
+                            var appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                            var appState = JSON.parse(appStateStr);
+                            if (appState[currentEndedConversationId]) {
+                                delete appState[currentEndedConversationId];
+                            }
+                            return;
+                        }
                         let userInputData = e.data;
                         let agent_assist_request = {
                             'author': {
@@ -3267,31 +3277,33 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             }
                         }
 
-                        if (target.id === 'sendMsg' && sourceType == 'smartassist-color-scheme') {
-                            // let ele = document.getElementById(`displayData-${target.dataset.msgId}`)
-                            window.parent.postMessage({
-                                method: "send",
-                                text: target.dataset.msgData
-                            }, "*");
-                            highLightAndStoreFaqId(evt);
-                        } else if (target.id === 'sendMsg' && sourceType == 'salesforce') {
+                        // if (target.id === 'sendMsg' && sourceType == 'smartassist-color-scheme') {
+                        //     // let ele = document.getElementById(`displayData-${target.dataset.msgId}`)
+                        //     window.parent.postMessage({
+                        //         method: "send",
+                        //         text: target.dataset.msgData
+                        //     }, "*");
+                        //     highLightAndStoreFaqId(evt);
+                        // } else 
+                        if (target.id === 'sendMsg') {
                             let payload = target.dataset.msgData;
                             var message = {
                                 name: "agentAssist.SendMessage",
                                 conversationId: _conversationId,
                                 payload: payload
                             };
-                            parent.postMessage(message, '*');
+                            window.parent.postMessage(message, '*');
                             highLightAndStoreFaqId(evt);
                         }
-                        if ((target.className == 'copy-btn' || target.className == 'ast-copy') && sourceType == 'smartassist-color-scheme') {
-                            let ele = document.getElementById(`displayData-${target.dataset.msgId}`) ? document.getElementById(`displayData-${target.dataset.msgId}`) : document.getElementById(target.dataset.msgId);
-                            window.parent.postMessage({
-                                method: "copy",
-                                text: target.dataset.msgData && target.dataset.msgData !== '' ? target.dataset.msgData : (target.parentNode.dataset.msgData && target.parentNode.dataset.msgData !== '' ? target.parentNode.dataset.msgData : ele.innerText)
-                            }, "*")
-                            highLightAndStoreFaqId(evt);
-                        } else if ((target.className == 'copy-btn' || target.className == 'ast-copy') && sourceType == 'salesforce') {
+                        // if ((target.className == 'copy-btn' || target.className == 'ast-copy') && sourceType == 'smartassist-color-scheme') {
+                        //     let ele = document.getElementById(`displayData-${target.dataset.msgId}`) ? document.getElementById(`displayData-${target.dataset.msgId}`) : document.getElementById(target.dataset.msgId);
+                        //     window.parent.postMessage({
+                        //         method: "copy",
+                        //         text: target.dataset.msgData && target.dataset.msgData !== '' ? target.dataset.msgData : (target.parentNode.dataset.msgData && target.parentNode.dataset.msgData !== '' ? target.parentNode.dataset.msgData : ele.innerText)
+                        //     }, "*")
+                        //     highLightAndStoreFaqId(evt);
+                        // } else 
+                        if ((target.className == 'copy-btn' || target.className == 'ast-copy')) {
                             let ele = document.getElementById(`displayData-${target.dataset.msgId}`) ? document.getElementById(`displayData-${target.dataset.msgId}`) : document.getElementById(target.dataset.msgId);
                             let data = target.dataset.msgData && target.dataset.msgData !== '' ? target.dataset.msgData : (target.parentNode.dataset.msgData && target.parentNode.dataset.msgData !== '' ? target.parentNode.dataset.msgData : ele.innerText)
                             var message = {
@@ -4273,6 +4285,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     document.getElementById("loader").style.display = "block";
                                 }
                                 scrollToBottom();
+                            }
+                            if(target.innerHTML === 'yes, Continue') {
+                                console.log('111222');
                             }
 
                         }
