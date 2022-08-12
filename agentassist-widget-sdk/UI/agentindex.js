@@ -1586,6 +1586,63 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
 
                     }
+
+                 
+                    if(isAutomationOnGoing && !parsedPayload && !data.suggestions){
+                        if(document.getElementsByClassName('.welcome-msg').length <= 0){
+                            $('#dynamicBlock .empty-data-no-agents').addClass('hide');
+                            let dynamicBlockDiv = $('#dynamicBlock');
+                            data.buttons?.forEach((ele, i) => {
+                                let welcomeMsgHtml = `
+                                <div class = "welcome-msg collapse-acc-data before-none" id='smallTalk-${uuids}'>
+                                    <div class="steps-run-data">
+                                        <div class="icon_block">
+                                            <i class="ast-agent"></i>
+                                        </div>
+                                        <div class="run-info-content">
+                                        
+                                        </div>
+                                    </div>
+                                </div>`;
+                                if (data.buttons?.length > 1) {
+                                    if (i == 0) {
+                                        dynamicBlockDiv.prepend(welcomeMsgHtml);
+                                        let runInfoDivOfwelcome = $(`#dynamicBlock .welcome-msg .run-info-content`);
+                                        let contentHtml = `
+                                    <div class="title">Customer has waited for an agent for few seconds.<br/>Here are some appropriate opening lines.</div>
+                                       <div class="agent-utt">
+                                        <div class="title-data" id="displayData-${uuids}">${ele.value}</div>
+                                        <div class="action-links">
+                                            <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}"  data-msg-data='${ele.value}'>Send</button>
+                                            <div class="copy-btn" data-msg-id="${uuids}" data-msg-data="${ele.value}">
+                                                <i class="ast-copy" data-msg-id="${uuids}" data-msg-data="${ele.value}"></i>
+                                            </div>
+                                        </div>
+                                    </div>`;
+                                    runInfoDivOfwelcome.append(contentHtml);
+                                    }else {
+                                        let runInfoDivOfwelcome = $(`#dynamicBlock .welcome-msg .run-info-content`);
+                                        let contentHtmlWithoutTellCus = `
+                                        <div class="agent-utt">
+                                            <div class="title-data" id="displayData-${uuids}">${ele.value}</div>
+                                            <div class="action-links">
+                                                <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}"  data-msg-data='${ele.value}'>Send</button>
+                                                <div class="copy-btn" data-msg-id="${uuids}" data-msg-data='${ele.value}'>
+                                                    <i class="ast-copy" data-msg-id="${uuids}" data-msg-data='${ele.value}'></i>
+                                                </div>
+                                            </div>
+                                        </div>`;
+                                        runInfoDivOfwelcome.append(contentHtmlWithoutTellCus);
+                                    }
+                                }
+                            });
+                            if(numberOfNewMessages == 1){
+                                numberOfNewMessages = 0;
+                                scrollToBottom();
+                            }    
+                        }
+                    }
+                    
                     if (!isAutomationOnGoing && !dropdownHeaderUuids && !parsedPayload && !data.suggestions) {
                         $('#dynamicBlock .empty-data-no-agents').addClass('hide');
                         let dynamicBlockDiv = $('#dynamicBlock');
@@ -1603,7 +1660,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             </div>`;
                             if (data.buttons?.length > 1) {
                                 if (i == 0) {
-                                    dynamicBlockDiv.append(welcomeMsgHtml);
+                                    dynamicBlockDiv.prepend(welcomeMsgHtml);
                                     let runInfoDivOfwelcome = $(`#dynamicBlock .collapse-acc-data .run-info-content`);
                                     let contentHtml = `
                                 <div class="title">Customer has waited for an agent for few seconds.<br/>Here are some appropriate opening lines.</div>
@@ -3194,6 +3251,16 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }
                 }
 
+                function updateScrollAtEndVariables(){
+                    $(".scroll-bottom-btn span").text('Scroll to bottom');
+                    $(".scroll-bottom-btn").removeClass("new-messages");
+                    $(".scroll-bottom-show-btn").addClass('hide');
+                    numberOfNewMessages = 0;
+                    newlyAddedMessagesUUIDlist = [];
+                    newlyAddedIdList = [];
+                    removedIdListOnScroll = [];
+                }
+
                 function btnInit() {
 
                     document.querySelector('#bodyContainer').addEventListener('ps-scroll-up', (scrollUpevent) => {
@@ -3217,13 +3284,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         scrollAtEnd = true;
                         checkDropdownCollapaseState(lastElementBeforeNewMessage);
                         if(scrollAtEnd){
-                            $(".scroll-bottom-btn span").text('Scroll to bottom');
-                            $(".scroll-bottom-btn").removeClass("new-messages");
-                            $(".scroll-bottom-show-btn").addClass('hide');
-                            numberOfNewMessages = 0;
-                            newlyAddedMessagesUUIDlist = [];
-                            newlyAddedIdList = [];
-                            removedIdListOnScroll = [];
+                            updateScrollAtEndVariables();
                         }else{
                             $(".scroll-bottom-show-btn").removeClass('hide');
                         }
