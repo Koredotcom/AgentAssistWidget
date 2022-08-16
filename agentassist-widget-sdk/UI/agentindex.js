@@ -288,10 +288,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     });
 
                     _agentAsisstSocket.on('user_message', (data) => {
+                        $(`#scriptContainer .empty-data-no-agents`).addClass('hide');
                         isCallConversation === 'true' ? processTranscriptData(data, data.conversationId, data.botId) : '';
                     })
 
                     _agentAsisstSocket.on('agent_message', (data) => {
+                        $(`#scriptContainer .empty-data-no-agents`).addClass('hide');
                         isCallConversation === 'true' ? processAgentMessages(data) : '';
                     })
                     // Library Automation list, Search and Agent-Automation tabs related webSockets
@@ -451,7 +453,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 $('body').bind('mousedown keydown', function (event) {
                     currentTabActive = detectCurrentTab();
                     document.getElementById("loader").style.display = "none";
-                    if (currentTabActive === 'userAutoIcon') {
+                    if (currentTabActive !== 'searchAutoIcon') {
                         let agentSearchBlock = $("#agentSearch");
                         agentSearchBlock.attr('data-conv-id', _agentAssistDataObj.conversationId);
                         agentSearchBlock.attr('data-bot-id', _agentAssistDataObj.botId);
@@ -1492,7 +1494,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             }
                         }
                        
-
+                        if(["&lt;","&gt;","&quot;","&#39;"].includes(elem.value)){
+                            elem.value = $("<p/>").html(elem.value).text();
+                        }
                         let body = {};
                         body['type'] = elem.type;
                         if (!parsedPayload) {
@@ -1753,6 +1757,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     addWhiteBackgroundClassToNewMessage();
                 }
 
+
                 function addBlurToOldMessage(newElementsHeight){
                     let dynamicBlockHeight = $(".dynamic-block-content").height();
                     $(".dynamic-block-blur").height(dynamicBlockHeight - newElementsHeight);
@@ -1780,7 +1785,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     let transcriptHtml = `
                         <div class="other-user-bubble">
                             <div class="name-with-time">
-                                <div class="u-name">${parsedCustomData?.userName || 'User'}</div>
+                                <div class="u-name">${parsedCustomData?.userName || 'Customer'}</div>
                                 <div class="u-time">${timeStr}</div>
                             </div>
                             <div class="bubble-data" id="userInputMsg">
@@ -2846,10 +2851,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
 
                 function updateUIState(_convId, _isCallConv) {
-                    $('.empty-data-no-agents').addClass('hide')
+                    $('.empty-data-no-agents').addClass('hide');
+                    $(`#scriptContainer .empty-data-no-agents`).removeClass('hide');
                     var appStateStr = localStorage.getItem('agentAssistState') || '{}';
                     var appState = JSON.parse(appStateStr);
                     var convState = appState[_convId] || {};
+                    if(appState[_convId] && convState?.currentTab == 'transcriptTab') {
+                        $(`#scriptContainer .empty-data-no-agents`).addClass('hide');
+                    }
                     if (!appState[_convId]) {
                         convState = appState[_convId] = {}
                         if (_isCallConv == 'true') {
@@ -5249,7 +5258,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 $('.body-data-container').scrollTop($('.body-data-container').prop("scrollHeight"));
 
                 return publicAPIs;
-            },
+           },
             error: function (error) {
                 console.error("token is wrong");
                 if (error.status === 500) {
@@ -5380,6 +5389,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 <div class="dynamic-block-content history hide" id="historyDataForMyBot" style='top: -46px;'></div>
                 <div class="transcipt-only-calls-data hide" id="scriptContainer">
                 <div class="data-contnet"></div>
+                <div class="empty-data-no-agents">
+                    <div class="title">Voice based utterances from customer and Agent will render on this screen.</div> 
+                    </div>
                 </div>
 
                 <div class="library-search-data-container hide" id="LibraryContainer">
@@ -5966,7 +5978,8 @@ AgentAssistPubSub.subscribe('searched_Automation_details', (msg, data) => {
         'conversationId': data.conversationId,
         'query': data.value,
         'botId': data.botId,
-        'intentName': data.intentName
+        'intentName': data.intentName,
+        'experience': isCallConversation === 'true' ? 'voice':'chat'
     }
     _agentAsisstSocket.emit('agent_assist_agent_request', agent_assist_request);
 });
