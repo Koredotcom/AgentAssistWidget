@@ -124,7 +124,7 @@ export default class AgentAssistPlugin extends FlexPlugin {
           conversationid = payload?.task?.attributes["caller"];
           conversationid = conversationid.replace("+", "%2B");
           this.activeConversationId = conversationid;
-          let iframeURL = `${agentassistURL}/koreagentassist-sdk/UI/agentassist-iframe.html?token=${token}&botid=${botId}&agentassisturl=${smartassistURL}&conversationid=${this.activeConversationId}&source=salesforce&isCall=false`;
+          let iframeURL = `${agentassistURL}/koreagentassist-sdk/UI/agentassist-iframe.html?token=${token}&botid=${botId}&agentassisturl=${smartassistURL}&conversationid=${this.activeConversationId}&source=salesforce&isCall=true`;
           manager.store.dispatch({ type: "IFRAME_URL", iframeUrl: iframeURL });
         }
         // conversationid = "14152367315";
