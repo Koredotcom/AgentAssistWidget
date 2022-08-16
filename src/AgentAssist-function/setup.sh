@@ -1,4 +1,18 @@
 # !/bin/sh
+if [ $# -eq 0 ]
+  then
+    echo "File name as command line agrument is required."
+    exit 1
+    
+fi
+file_name=$1
+if [ ! -f "../$file_name" ]; then
+    echo "$file_name does not exist."
+else
+    echo "file exists...."
+    cp "../$file_name" .env
+fi
+
 [ ! -f .env ] || export $(grep -v '^#' .env | xargs)
 
 # echo $ACCOUNT_SID

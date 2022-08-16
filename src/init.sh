@@ -10,17 +10,17 @@ echo "Installing necessary plugins"
 #npm install -g twilio-cli
 
 file_name=$1
-echo "copying the configuration........"
+# echo "copying the configuration........"
 
 #copy config to agentassit function, file should be in the .env file format
-cp $file_name AgentAssist-function/.env
-sleep 5s
+# cp $file_name AgentAssist-function/.env
+# sleep 5s
 
 echo "Agent assist function deployment starts............"
-cp $file_name AgentAssist/.env
+# cp $file_name AgentAssist/.env
 cd AgentAssist-function
-sh setup.sh
+sh setup.sh $file_name
 echo "Agent Assist function deployed."
 echo
 cd ../AgentAssist
-sh setup.sh
+sh setup.sh $file_name
