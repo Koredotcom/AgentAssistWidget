@@ -8,7 +8,7 @@ import axios from 'axios';
 import CustomTaskListContainer from './components/CustomTask/CustomTask';
 import reducers, { namespace } from './states';
 //import CustomCRM from './components/CustomCRM';
-
+import { Actions } from "@twilio/flex-ui";
 
 const PLUGIN_NAME = 'AgentAssistPlugin';
 
@@ -32,7 +32,7 @@ export default class AgentAssistPlugin extends FlexPlugin {
    */
 
   async init(flex, manager) {
-
+    // console.log("============================ flex MSG input >>",flex.DynamicComponent);
     this.createWindowListener(manager);
     this.registerReducers(manager);
 
@@ -169,7 +169,7 @@ export default class AgentAssistPlugin extends FlexPlugin {
   createWindowListener(manager) {
     var flex = manager.store.getState().flex;
     console.log("111111111111111 registering window listener for agentassist changed var")
-    window.addEventListener("message", (event) => {
+    window.addEventListener("message", async (event) => {
       console.log("11111111111 inside window eventlistener", this.activeConversationId, event.data);
       var recordId = this.activeConversationId;
       if (event.data.name === "agentAssist.SendMessage" && event.data.conversationId == this.activeConversationId) {
@@ -181,42 +181,21 @@ export default class AgentAssistPlugin extends FlexPlugin {
           msg = decodeURI(encodeURI(event.data.payload));
         }
         console.log("1111111111111111 sending message", msg);
-         // Send the message:
-        //  const { channelSid } = manager.store.getState().flex.session;
-         manager.chatClient.getChannelBySid(recordId)
-           .then(channel => {
-             channel.sendMessage(msg);
-           });
-        /* var conversationKit = cmp.find("conversationKit");
-         //console.log("RecordId", recordId);
-         conversationKit.sendMessage({
-             recordId: recordId,
-             message: {
-                 text:msg
-             }
-         })
-       .then(function(result){
-             if (result) {
-                     console.log("Successfully sent message");
-                 } else {
-                     console.log("Failed to send message");
-                 }
-       });*/
+
+        //  manager.chatClient.getChannelBySid(recordId)
+        //    .then(channel => {
+        //      channel.sendMessage(msg);
+        //    });
+        Actions.invokeAction("SendMessage", { body: msg, conversationSid: recordId });
+        
       } else if (event.data.name === "agentAssist.CopyMessage" && event.data.conversationId == this.activeConversationId) {
         var msg = decodeURI(encodeURI(event.data.payload));
         console.log("1111111111111111 copying message", msg);
 
-      //  var textarea=document.getElementsByTagName("textarea");
-      // //  var text = document.createTextNode(msg);
-      // //  textarea[0].appendChild(text);
+      Actions.invokeAction("SetInputText", { body: msg, conversationSid: recordId });
 
-      // textarea[0].text += msg;
-      flex.chat['conversationInput'][recordId]=flex.chat['conversationInput'][recordId] || {};
-      flex.chat['conversationInput'][recordId]['inputText'] = {
-        attachedFiles: [],
-        htmlValue: undefined,
-        inputText: msg,
-        isReplyModeActive: true};
+
+
       }
     }, false);
   }
