@@ -421,7 +421,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         <div class="run-info-content" id="userInput-${_id}">
                                             <div class="title">${titleText}</div>
                                             <div class="agent-utt">
-                                                <div class="title-data">${data.userInput}</div>
+                                                <div class="title-data">"${data.userInput}"</div>
                                             </div>
                                             
                                         </div>
