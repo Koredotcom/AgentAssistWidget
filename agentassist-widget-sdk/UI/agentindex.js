@@ -4732,12 +4732,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 if (target.dataset.dropDownOpened === 'false') {
                                     $(`#${target.id}`).attr('data-drop-down-opened', 'true');
                                     $(`#dropDownData-${targetsss}`).addClass('hide');
-                                   let a =  $(`#${target.parentElement.parentElement.id}`).find(`.dilog-task-end`);
+                                   let a =  $(`#${target.parentElement.parentElement.id}`).find(`#endTaks-${targetsss}`);
                                    $(a).attr('data-history') == 'true' ? $(a).removeClass('hide'):$(a).addClass('hide');
                                 } else {
                                     $(`#${target.id}`).attr('data-drop-down-opened', 'false');
                                     $(`#dropDownData-${targetsss}`).removeClass('hide');
-                                    $(`#${target.parentElement.parentElement.id}`).find(`.dilog-task-end.hide`).removeClass('hide');
+                                    $(`#endTaks-${targetsss}`).removeClass('hide');
+                                    // $(`#${target.parentElement.parentElement.id}`).find(`.dilog-task-end.hide`).removeClass('hide');
                                 }
                             // }
                             updateScrollButton();
