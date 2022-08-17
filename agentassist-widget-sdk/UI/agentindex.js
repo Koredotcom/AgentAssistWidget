@@ -65,7 +65,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
         });
         sourceType = params.source;
         isCallConversation = params.isCall;
-        let decodedCustomData = decodeURI(params.customData);
+        let decodedCustomData = decodeURI(params.customdata);
         parsedCustomData = JSON.parse(decodedCustomData);
         if (sourceType === 'smartassist-color-scheme') {
             $('body').addClass(sourceType);
@@ -351,7 +351,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                   
                 var welcome_message_request = {
                     'waitTime': 2000,
-                    'userName': parsedCustomData?.userName || 'user',
+                    'userName': parsedCustomData?.userName || parsedCustomData?.fName + parsedCustomData?.lName || 'user',
                     'id': _agentAssistDataObj.conversationId
                 }
 
@@ -1494,12 +1494,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             }
                         }
                        
-                        if(["&lt;","&gt;","&quot;","&#39;"].includes(elem.value)){
-                            elem.value = $("<p/>").html(elem.value).text();
-                        }
                         let body = {};
                         body['type'] = elem.type;
                         if (!parsedPayload) {
+                            elem.value = htmlEntities(elem.value);
                             body['component'] = {
                                 "type": elem.type,
                                 "payload": {
@@ -1757,6 +1755,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     addWhiteBackgroundClassToNewMessage();
                 }
 
+                function htmlEntities(str) {
+                    return String(str).replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&apos/g,"'");
+                }
 
                 function addBlurToOldMessage(newElementsHeight){
                     let dynamicBlockHeight = $(".dynamic-block-content").height();
@@ -1785,7 +1786,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     let transcriptHtml = `
                         <div class="other-user-bubble">
                             <div class="name-with-time">
-                                <div class="u-name">${parsedCustomData?.userName || 'Customer'}</div>
+                                <div class="u-name">${parsedCustomData?.userName || parsedCustomData?.fName + parsedCustomData?.lName || 'Customer'}</div>
                                 <div class="u-time">${timeStr}</div>
                             </div>
                             <div class="bubble-data" id="userInputMsg">
@@ -2852,7 +2853,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                 function updateUIState(_convId, _isCallConv) {
                     $('.empty-data-no-agents').addClass('hide');
-                    $(`#scriptContainer .empty-data-no-agents`).removeClass('hide');
                     var appStateStr = localStorage.getItem('agentAssistState') || '{}';
                     var appState = JSON.parse(appStateStr);
                     var convState = appState[_convId] || {};
@@ -2863,6 +2863,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         convState = appState[_convId] = {}
                         if (_isCallConv == 'true') {
                             convState.currentTab = 'transcriptTab';
+                            $(`#scriptContainer .empty-data-no-agents`).removeClass('hide');
                         } else {
                             convState.currentTab = 'assistTab';
                         }
