@@ -2856,14 +2856,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     var appStateStr = localStorage.getItem('agentAssistState') || '{}';
                     var appState = JSON.parse(appStateStr);
                     var convState = appState[_convId] || {};
-                    if(appState[_convId] && convState?.currentTab == 'transcriptTab') {
-                        $(`#scriptContainer .empty-data-no-agents`).addClass('hide');
-                    }
+                   
                     if (!appState[_convId]) {
                         convState = appState[_convId] = {}
                         if (_isCallConv == 'true') {
                             convState.currentTab = 'transcriptTab';
-                            $(`#scriptContainer .empty-data-no-agents`).removeClass('hide');
                         } else {
                             convState.currentTab = 'assistTab';
                         }
