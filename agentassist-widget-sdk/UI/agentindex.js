@@ -198,9 +198,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             'query': userInputData.value,
                         }
                         if (isCallConversation === 'true') {
+                            $('.empty-data-no-agents').addClass('hide');
                             if (userInputData.author.type === 'USER') {
                                 processTranscriptData(userInputData, userInputData.conversationid, _botId,);
                                 _agentAsisstSocket.emit('agent_assist_request', agent_assist_request);
+
                             } else {
                                 processAgentMessages(userInputData)
                             }
