@@ -198,7 +198,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             'query': userInputData.value,
                         }
                         if (isCallConversation === 'true') {
-                            $('.empty-data-no-agents').addClass('hide');
+                            prepareConversation();
                             if (userInputData.author.type === 'USER') {
                                 processTranscriptData(userInputData, userInputData.conversationid, _botId,);
                                 _agentAsisstSocket.emit('agent_assist_request', agent_assist_request);
@@ -290,12 +290,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     });
 
                     _agentAsisstSocket.on('user_message', (data) => {
-                        $(`#scriptContainer .empty-data-no-agents`).addClass('hide');
+                        // $(`#scriptContainer .empty-data-no-agents`).addClass('hide');
+                        prepareConversation();
                         isCallConversation === 'true' ? processTranscriptData(data, data.conversationId, data.botId) : '';
                     })
 
                     _agentAsisstSocket.on('agent_message', (data) => {
-                        $(`#scriptContainer .empty-data-no-agents`).addClass('hide');
+                        // $(`#scriptContainer .empty-data-no-agents`).addClass('hide')
+                        prepareConversation();
                         isCallConversation === 'true' ? processAgentMessages(data) : '';
                     })
                     // Library Automation list, Search and Agent-Automation tabs related webSockets
@@ -2855,7 +2857,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                 function updateUIState(_convId, _isCallConv) {
                     $('.empty-data-no-agents').addClass('hide');
-
                     var appStateStr = localStorage.getItem('agentAssistState') || '{}';
                     var appState = JSON.parse(appStateStr);
                     var convState = appState[_convId] || {};
@@ -5272,6 +5273,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 return false;
             }
         });
+    }
+
+    function prepareConversation() {
+        $(`#scriptContainer .empty-data-no-agents`).addClass('hide');
     }
 
     function createAgentAssistContainer(containerId, conversationId, botId, connectionDetails) {
