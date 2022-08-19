@@ -2857,7 +2857,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     var appStateStr = localStorage.getItem('agentAssistState') || '{}';
                     var appState = JSON.parse(appStateStr);
                     var convState = appState[_convId] || {};
-                   
+                    if(_isCallConv == 'true'){
+                        $(`#scriptContainer .empty-data-no-agents`).removeClass('hide');
+                    }
                     if (!appState[_convId]) {
                         convState = appState[_convId] = {}
                         if (_isCallConv == 'true') {
@@ -2884,8 +2886,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }
                     else if (convState.currentTab == 'transcriptTab') {
                         transcriptionTabActive();
-                        $(`#scriptContainer .empty-data-no-agents`).removeClass('hide');
-
                     }
                     else if (convState.currentTab == 'assistTab') {
                         userTabActive();
