@@ -3430,7 +3430,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                         }
                         function togglePoint(){
-                            if(document.getElementById("check1").checked == true){
+                            if(document.getElementById("checkProActive").checked == true){
                                 var toggleObj = {
                                     "agentId": "",
                                     "botId": _botId,
@@ -3440,7 +3440,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 }
                                 isOverRideMode ? _agentAsisstSocket.emit('enable_override_userinput', toggleObj) : '';
                                 isOverRideMode = false;
-                                console.log(toggleObj, "toggle button onnnnn");
                             }
                             else{   
                                 var toggleObj = {
@@ -3452,7 +3451,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 }
                                 isOverRideMode ? _agentAsisstSocket.emit('enable_override_userinput', toggleObj) : '';
                                 isOverRideMode = false;
-                                console.log(toggleObj,"toggle button offffff");
                             }
                         }
                         let isChecked =  togglePoint();
@@ -5265,7 +5263,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     <div class="t-title">Proactive</div>
                     <label class="kr-sg-toggle">
                         <div class="hover-tooltip">Proactive</div>
-                        <input type="checkbox" id="check1" onclick="isChecked()">
+                        <input type="checkbox" id="checkProActive" onclick="isChecked()">
                         <div class="slider"></div>
                     </label>
                 </div>
