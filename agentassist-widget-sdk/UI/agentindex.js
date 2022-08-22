@@ -1164,6 +1164,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
 
                 function updateSeeMoreButtonForAssist(id){
+                    let faqSourceTypePixel = ((sourceType === 'smartassist-color-scheme') ? 5 : 3) ;
                     let titleElement = $("#title-" + id);
                     let descElement = $("#desc-" + id);
                     let faqSectionElement = $('#faqSection-' + id);
@@ -1175,7 +1176,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         faqSectionHeight = parseInt(faqSectionHeight.slice(0,faqSectionHeight.length-2));
                         let faqMinHeight = $(faqDivElement).css("min-height");
                         faqMinHeight = parseInt(faqMinHeight.slice(0,faqMinHeight.length-2));
-                        if (faqSectionHeight > (faqMinHeight + 5)) {
+                        if (faqSectionHeight > (faqMinHeight + faqSourceTypePixel)) {
                             $('#seeMore-' + id).removeClass('hide');
                         }else{
                             $('#seeMore-' + id).addClass('hide');
