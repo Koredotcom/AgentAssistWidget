@@ -3365,6 +3365,34 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         //     }, "*");
                         //     highLightAndStoreFaqId(evt);
                         // } else 
+
+
+                        function togglePoint(){
+                            if(document.getElementById("checkProActive").checked == true){
+                                var toggleObj = {
+                                    "agentId": "",
+                                    "botId": _botId,
+                                    "conversationId": _agentAssistDataObj.conversationId,
+                                    "query": "",
+                                    "enable_override_userinput": false
+                                }
+                                isOverRideMode ? _agentAsisstSocket.emit('enable_override_userinput', toggleObj) : '';
+                                isOverRideMode = false;
+                            }
+                            else{   
+                                var toggleObj = {
+                                    "agentId": "",
+                                    "botId": _botId,
+                                    "conversationId": _agentAssistDataObj.conversationId,
+                                    "query": "",
+                                    "enable_override_userinput": true
+                                }
+                                isOverRideMode ? _agentAsisstSocket.emit('enable_override_userinput', toggleObj) : '';
+                                isOverRideMode = false;
+                            }
+                        }
+                        let isChecked =  togglePoint();
+
                         if (target.id === 'sendMsg') {
                             let payload = target.dataset.msgData;
                             var message = {
@@ -5332,8 +5360,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     <div class="t-title">Proactive</div>
                     <label class="kr-sg-toggle">
                         <div class="hover-tooltip">Proactive</div>
-                        <input id="check1" type="checkbox" checked>
-                        <div for="check1" class="slider"></div>
+                        <input type="checkbox" id="checkProActive" onclick="isChecked()">
+                        <div class="slider"></div>
                     </label>
                 </div>
             </div>
