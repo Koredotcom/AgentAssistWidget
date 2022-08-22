@@ -3569,18 +3569,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             let isDivElement = evt.target instanceof HTMLDivElement;
                             console.log("isDivElement", isDivElement, target.parentElement.id);
                             if (targetIds.includes('feedbackup')) {
-                                targetIds.shift();
-                                if (target.dataset.feedbacklike == 'false') {
-                                     // target.dataset.feedbacklike = 'true';
-                                    $(`#feedBackLikeContainer-${targetIds.join('-')} .feedback-icon`).attr('style', 'color:#0077D2;border-color:#0077D2;');
-                                    $(`#feedBackDislikeContainer-${targetIds.join('-')} .feedback-icon`).removeAttr('style');
+                                cloneTargtIds.shift()
+                                if (isDivElement) {
+                                    $(`#${target.id}`).addClass('active-feedback');
+                                    target.firstElementChild.dataset.feedbacklike = 'true';
+                                    Object.assign(target.dataset, target.firstElementChild.dataset);
                                     feedbackLoop(evt);
                                 } else {
                                     $(`#${target.parentElement.id}`).addClass('active-feedback');
                                     target.dataset.feedbacklike = 'false';
-                                    $(`#feedBackLikeContainer-${targetIds.join('-')} .feedback-icon`).removeAttr('style');
-                                    $(`#feedBackLikeContainer-${targetIds.join('-')} .feedback-icon`).attr('data-feedback', '');
-                                    $(`#feedBackLikeContainer-${targetIds.join('-')} .ast-thumbup`).attr('data-feedback', '');
                                     feedbackLoop(evt);
                                 }
                                 $(`#feedbackdown-${cloneTargtIds.join('-')}`).removeClass('active-feedback')
@@ -3589,18 +3586,37 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .explore-more-negtive-data`).addClass('hide');
                             }
                             if (targetIds.includes('feedbackdown')) {
-                                targetIds.shift();
-                                if (target.dataset.feedbackdislike == 'false') {
-                                    // target.dataset.feedbackdislike = 'true';
-                                        $(`#feedBackLikeContainer-${targetIds.join('-')} .feedback-icon`).removeAttr('style');
-                                        $(`#feedBackDislikeContainer-${targetIds.join('-')} .feedback-icon`).attr('style', 'color:#0077D2;border-color:#0077D2;');
-                                    feedbackLoop(evt);
+                                cloneTargtIds.shift()
+                                if (isDivElement) {
+                                    $(`#${target.id}`).addClass('active-feedback');
+                                    target.firstElementChild.dataset.feedbacklike = 'true';
+                                    Object.assign(target.dataset, target.firstElementChild.dataset);
+                                     feedbackLoop(evt);
                                 } else {
-                                    target.dataset.feedbackdislike = 'false';
-                                    $(`#feedBackDislikeContainer-${targetIds.join('-')} .feedback-icon`).removeAttr('style');
-                                    $(`#feedBackDislikeContainer-${targetIds.join('-')} .feedback-icon`).attr('data-feedback', '');
-                                    $(`#feedBackDislikeContainer-${targetIds.join('-')} .ast-thumbdown`).attr('data-feedback', '');
-                                    feedbackLoop(evt);
+                                    $(`#${target.parentElement.id}`).addClass('active-feedback');
+                                    target.dataset.feedbacklike = 'false';
+                                     feedbackLoop(evt);
+                                }
+                                $(`#feedbackup-${cloneTargtIds.join('-')}`).removeClass('active-feedback')
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .thanks-update`).addClass('hide');
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .help-improve-arrow`).removeClass('hide')
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .explore-more-negtive-data`).removeClass('hide');
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .title-improve`).removeClass('hide');
+
+                            }
+                        }
+                        if (target.id.split('-')[0] == 'dropdownArrowFeedBack' || target.id.split('-')[0] == 'dropdownArrowFeedBackIcon') {
+                            let targteId = target.id.split('-');
+                            targteId.shift();
+                            let dataSets = $(`#feedbackdown-${targteId.join('-')} .ast-thumbdown`).data();
+                            let activeChipCount = $(`#feedbackHelpfulContainer-${targteId.join('-')} .btn-chip-negtive.active-chip`);
+                            if ((activeChipCount.length > 0 || dataSets.comment.length > 0) && target.dataset.feedbackDropDownOpened === 'true') {
+                                $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).addClass('hide');
+                            } else {
+                                if ((activeChipCount.length == 0 && dataSets.comment.length == 0) && target.dataset.feedbackDropDownOpened === 'true') {
+                                    $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).removeClass('hide');
+                                } else {
+                                    $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).addClass('hide');
                                 }
                             }
                             if (target.dataset.feedbackDropDownOpened === 'false') {
@@ -5148,6 +5164,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     var dropDownData;
                     var endOfDialoge;
                     let headerUUids = runForAgentBot ? myBotDropdownHeaderUuids : dropdownHeaderUuids;
+                    let dialogIds = 'dg-' + (Math.random() + 1).toString(36).substring(2);
+                    let taskIdOfDialog = $(`#dropDownData-${dropdownHeaderUuids}`).attr('data-taskId');
                     if (runForAgentBot) {
                         $(`#myBotTerminateAgentDialog-${headerUUids}.btn-danger`).remove();
                         dropDownData = $(`#dropDownData-${headerUUids}`);
@@ -5193,65 +5211,65 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
        </div>`;
                     //   dropDownData.append(feedbackHtml);
                     let endofDialogeHtml = `
-        <div class="dilog-task-end" id="endTaks-${headerUUids}">
-        <div class="text-dialog-task-end">Task Ended</div>     
-                   </div>
-                   <div class="feedback-helpul-container hide">
-                    <div class="titles-content">
-                        <div class="title">Helpful?</div>
-                        <div class="btn-positive" id="feedbackup-${dropdownHeaderUuids}">
-                            <i class="ast-thumbup"
-                            id="feedbackup-${dropdownHeaderUuids}"
-                            data-feedbacklike="false"
-                            data-conv-id="${data.conversationId}"
-                            data-bot-id="${botId}" data-feedback="like"
-                            data-dialog-name="${dialogName}"
-                            data-user-input="${userIntentInput}"
-                            data-comment=""
-                            data-feedbackdetails="[]"
-                            data-taskID ="${taskIdOfDialog}"
-                            data-dialogId="${dialogIds}"></i>
-                            <span class="tootltip-tabs">Like</span>
-                        </div>
-                        <div class="btn-negtive" id="feedbackdown-${dropdownHeaderUuids}">
-                            <i class="ast-thumbdown" 
-                            id="feedbackdown-${dropdownHeaderUuids}"
-                            data-feedbackdislike="false"
-                            data-conv-id="${data.conversationId}"
-                            data-bot-id="${botId}" data-feedback="dislike"
-                            data-dialog-name="${dialogName}"
-                            data-user-input="${userIntentInput}"
-                            data-comment=""
-                            data-feedbackdetails="[]"
-                            data-taskID ="${taskIdOfDialog}"
-                            data-dialogId="${dialogIds}"></i>
-                            <span class="tootltip-tabs">Dislike</span>
-                        </div>
-                        <div class="thanks-update hide">Thanks for the feedback!</div>
-                        <div class="help-improve-arrow hide">
-                            <div class="title-improve hide">Help us improve (optional)</div>
-                            <div class="arrow-icon" data-feedback-drop-down-opened="false" id="dropdownArrowFeedBack-${dropdownHeaderUuids}">
-                                <i class="ast-carrotup" data-feedback-drop-down-opened="false" id="dropdownArrowFeedBackIcon-${dropdownHeaderUuids}"></i>
+                    <div class="dilog-task-end" id="endTaks-${dropdownHeaderUuids}">
+                    <div class="text-dialog-task-end">Dialog Task ended</div>     
+                               </div>
+                               <div class="feedback-helpul-container" id="feedbackHelpfulContainer-${dropdownHeaderUuids}">
+                                <div class="titles-content">
+                                    <div class="title">Helpful?</div>
+                                    <div class="btn-positive" id="feedbackup-${dropdownHeaderUuids}">
+                                        <i class="ast-thumbup"
+                                        id="feedbackup-${dropdownHeaderUuids}"
+                                        data-feedbacklike="false"
+                                        data-conv-id="${data.conversationId}"
+                                        data-bot-id="${botId}" data-feedback="like"
+                                        data-dialog-name="${dialogName}"
+                                        data-user-input="${userIntentInput}"
+                                        data-comment=""
+                                        data-feedbackdetails="[]"
+                                        data-taskID ="${taskIdOfDialog}"
+                                        data-dialogId="${dialogIds}"></i>
+                                        <span class="tootltip-tabs">Like</span>
+                                    </div>
+                                    <div class="btn-negtive" id="feedbackdown-${dropdownHeaderUuids}">
+                                        <i class="ast-thumbdown" 
+                                        id="feedbackdown-${dropdownHeaderUuids}"
+                                        data-feedbackdislike="false"
+                                        data-conv-id="${data.conversationId}"
+                                        data-bot-id="${botId}" data-feedback="dislike"
+                                        data-dialog-name="${dialogName}"
+                                        data-user-input="${userIntentInput}"
+                                        data-comment=""
+                                        data-feedbackdetails="[]"
+                                        data-taskID ="${taskIdOfDialog}"
+                                        data-dialogId="${dialogIds}"></i>
+                                        <span class="tootltip-tabs">Dislike</span>
+                                    </div>
+                                    <div class="thanks-update hide">Thanks for the feedback!</div>
+                                    <div class="help-improve-arrow hide">
+                                        <div class="title-improve hide">Help us improve (optional)</div>
+                                        <div class="arrow-icon" data-feedback-drop-down-opened="false" id="dropdownArrowFeedBack-${dropdownHeaderUuids}">
+                                            <i class="ast-carrotup" data-feedback-drop-down-opened="false" id="dropdownArrowFeedBackIcon-${dropdownHeaderUuids}"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="explore-more-negtive-data hide">
+                                    <div class="btns-group-negtive-chips" id="feedBackOptions-${dropdownHeaderUuids}">
+                                        <div class="btn-chip-negtive" data-chip-click='false'>Not enough suggestions</div>
+                                        <div class="btn-chip-negtive" data-chip-click='false'>Not prompt</div>
+                                        <div class="btn-chip-negtive" data-chip-click='false'>Intent undetected</div>
+                                        <div class="btn-chip-negtive" data-chip-click='false'>Other</div>
+                                    </div>
+                                    <div class="input-block-optional">
+                                        <div class="label-text"></div>
+                                        <input type="text" placeholder="Placeholder text" class="input-text" id="feedBackComment-${dropdownHeaderUuids}"
+                                        data-feedback-comment="true">
+                                    </div>
+                                    <button class="submit-btn" data-updateFlag="false" disabled>Submit</button>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="explore-more-negtive-data hide">
-                        <div class="btns-group-negtive-chips" id="feedBackOptions-${dropdownHeaderUuids}">
-                            <div class="btn-chip-negtive" data-chip-click='false'>Not enough suggestions</div>
-                            <div class="btn-chip-negtive" data-chip-click='false'>Not prompt</div>
-                            <div class="btn-chip-negtive" data-chip-click='false'>Intent undetected</div>
-                            <div class="btn-chip-negtive" data-chip-click='false'>Other</div>
-                        </div>
-                        <div class="input-block-optional">
-                            <div class="label-text"></div>
-                            <input type="text" placeholder="Placeholder text" class="input-text" id="feedBackComment-${dropdownHeaderUuids}"
-                            data-feedback-comment="true">
-                        </div>
-                        <button class="submit-btn" data-updateFlag="false" disabled>Submit</button>
-                    </div>
-                </div>
-            
-        `;
+                        
+                    `;
                     if(!document.getElementById('endTaks-' + headerUUids)){
                         endOfDialoge.append(endofDialogeHtml);
                         $(`#overRideDiv-${headerUUids}`).remove();
