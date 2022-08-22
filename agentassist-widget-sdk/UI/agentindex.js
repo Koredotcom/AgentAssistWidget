@@ -274,6 +274,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                     })
 
+                    _agentAsisstSocket.on("agent_assist_endoftask", (data)=>{
+                        dialogTerminatedOrIntruppted(data, data.botId, userIntentInput)
+                    })
+
 
                     AgentAssistPubSub.publish('automation_exhaustive_list',
                         { conversationId: _agentAssistDataObj.conversationId, botId: _agentAssistDataObj.botId, 'experience': 'chat' });
@@ -1055,14 +1059,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     //     $(noOfSteps[noOfSteps.length - 1]).removeClass('hide');
                     // }
                     if (isMyBotAutomationOnGoing && (((data.endOfFaq || data.endOfTask) && data.type !== 'text') || (data.userInput == 'discard all' && data.type !== 'text') || (userMessage && userMessage.value && userMessage.value.includes('discard')))) {
-                        isMyBotAutomationOnGoing = false;
-                        var appStateStr = localStorage.getItem('agentAssistState') || '{}';
-                        var appState = JSON.parse(appStateStr);
-                        if (appState[_conversationId]) {
-                            appState[_conversationId]['automationGoingOnAfterRefreshMyBot'] = isMyBotAutomationOnGoing;
-                            localStorage.setItem('agentAssistState', JSON.stringify(appState))
-                        }
-                        addFeedbackHtmlToDom(data, botId, userIntentInput, 'runForAgentBot');
+                        // isMyBotAutomationOnGoing = false;
+                        // var appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                        // var appState = JSON.parse(appStateStr);
+                        // if (appState[_conversationId]) {
+                        //     appState[_conversationId]['automationGoingOnAfterRefreshMyBot'] = isMyBotAutomationOnGoing;
+                        //     localStorage.setItem('agentAssistState', JSON.stringify(appState))
+                        // }
+                        // addFeedbackHtmlToDom(data, botId, userIntentInput, 'runForAgentBot');
                     }
 
                     if (scrollAtEnd) {
@@ -1070,6 +1074,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }
                     addWhiteBackgroundClassToNewMessage();
                 }
+
+            
 
                 function updateNumberOfMessages() {
                     numberOfNewMessages += 1;
@@ -1737,18 +1743,18 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     //     $(noOfSteps[noOfSteps.length - 1]).removeClass('hide');
                     // }
                     if (isAutomationOnGoing && (((data.endOfFaq || data.endOfTask) && data.type !== 'text') || (data.userInput == 'discard all' && data.type !== 'text') || (userMessage && userMessage.value && userMessage.value.includes('discard')))) {
-                        isAutomationOnGoing = false;
-                        var appStateStr = localStorage.getItem('agentAssistState') || '{}';
-                        var appState = JSON.parse(appStateStr);
-                        if (appState[_conversationId]) {
-                            appState[_conversationId].automationGoingOn = isAutomationOnGoing;
-                            appState[_conversationId]['automationGoingOnAfterRefresh'] = isAutomationOnGoing;
-                            localStorage.setItem('agentAssistState', JSON.stringify(appState))
-                        }
-                        //  isOverRideMode = false;
-                        $(`.override-input-div`).remove();
-                        addFeedbackHtmlToDom(data, botId, userIntentInput);
-                        userMessage = {};
+                        // isAutomationOnGoing = false;
+                        // var appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                        // var appState = JSON.parse(appStateStr);
+                        // if (appState[_conversationId]) {
+                        //     appState[_conversationId].automationGoingOn = isAutomationOnGoing;
+                        //     appState[_conversationId]['automationGoingOnAfterRefresh'] = isAutomationOnGoing;
+                        //     localStorage.setItem('agentAssistState', JSON.stringify(appState))
+                        // }
+                        // //  isOverRideMode = false;
+                        // $(`.override-input-div`).remove();
+                        // addFeedbackHtmlToDom(data, botId, userIntentInput);
+                        // userMessage = {};
                         // let dropDownDataElement = document.getElementById(`dropDownData-${dropdownHeaderUuids}`);
                         // let steprunelementArray = dropDownDataElement.querySelectorAll('.steps-run-data');
                         // let lastStepNode = steprunelementArray[steprunelementArray.length - 1];
@@ -1758,6 +1764,35 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         scrollToBottom();
                     }
                     addWhiteBackgroundClassToNewMessage();
+                }
+
+                function dialogTerminatedOrIntruppted(data, botId, userIntentInput) {
+                    var appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                    var appState = JSON.parse(appStateStr);
+                    if(data.endOfTask && data?.isSearch ) {
+                        dialogTerminatedOrIntrupptedInMyBot(data, botId, userIntentInput, appState);
+                    }else {
+                        isAutomationOnGoing = false;
+                        if (appState[_conversationId]) {
+                            appState[_conversationId].automationGoingOn = isAutomationOnGoing;
+                            appState[_conversationId]['automationGoingOnAfterRefresh'] = isAutomationOnGoing;
+                            localStorage.setItem('agentAssistState', JSON.stringify(appState))
+                        }
+                        //  isOverRideMode = false;
+                        $(`.override-input-div`).remove();
+                        addFeedbackHtmlToDom(data, botId, userIntentInput);
+                        userMessage = {};
+                    }
+                    
+                }
+
+                function dialogTerminatedOrIntrupptedInMyBot(data, botId, userIntentInput, appState) {
+                    isMyBotAutomationOnGoing = false;
+                    if (appState[_conversationId]) {
+                        appState[_conversationId]['automationGoingOnAfterRefreshMyBot'] = isMyBotAutomationOnGoing;
+                        localStorage.setItem('agentAssistState', JSON.stringify(appState))
+                    }
+                    addFeedbackHtmlToDom(data, botId, userIntentInput, 'runForAgentBot');
                 }
 
                 function htmlEntities(str) {
