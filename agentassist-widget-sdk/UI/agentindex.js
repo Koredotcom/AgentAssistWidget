@@ -1142,6 +1142,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
 
                 function updateSeeMoreButtonForAgent(id){
+                    let faqSourceTypePixel = 5;
                     let titleElement = $("#titleLib-" + id);
                     let descElement = $("#descLib-" + id);
                     let faqSectionElement = $('#faqSectionLib-' + id);
@@ -1153,7 +1154,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         faqSectionHeight = parseInt(faqSectionHeight.slice(0,faqSectionHeight.length-2));
                         let faqMinHeight = $(faqDivElement).css("min-height");
                         faqMinHeight = parseInt(faqMinHeight.slice(0,faqMinHeight.length-2));
-                        if (faqSectionHeight > (faqMinHeight + 5)) {
+                        if ((faqSectionHeight > (faqMinHeight + faqSourceTypePixel)) || (faqSectionElement > faqMinHeight && faqSectionHeight <= (faqMinHeight + faqSourceTypePixel))) {
                             $('#seeMore-' + id).removeClass('hide');
                         }else{
                             $('#seeMore-' + id).addClass('hide');
@@ -1164,8 +1165,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
 
                 function updateSeeMoreButtonForAssist(id){
-                    let faqSourceTypePixel = ((sourceType === 'smartassist-color-scheme') ? 5 : 2) ;
-                    console.log('FAQ pixel Size', sourceType,faqSourceTypePixel);
+                    // let faqSourceTypePixel = ((sourceType === 'smartassist-color-scheme') ? 5 : 2) ;
+                    let faqSourceTypePixel = 5;
                     let titleElement = $("#title-" + id);
                     let descElement = $("#desc-" + id);
                     let faqSectionElement = $('#faqSection-' + id);
@@ -1178,7 +1179,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         let faqMinHeight = $(faqDivElement).css("min-height");
                         faqMinHeight = parseInt(faqMinHeight.slice(0,faqMinHeight.length-2));
                         console.log('FAQ SM SL: ',faqMinHeight, faqSourceTypePixel);
-                        if (faqSectionHeight > (faqMinHeight + faqSourceTypePixel)) {
+                        if ((faqSectionHeight > (faqMinHeight + faqSourceTypePixel)) || (faqSectionElement > faqMinHeight && faqSectionHeight <= (faqMinHeight + faqSourceTypePixel))) {
                             $('#seeMore-' + id).removeClass('hide');
                         }else{
                             $('#seeMore-' + id).addClass('hide');
