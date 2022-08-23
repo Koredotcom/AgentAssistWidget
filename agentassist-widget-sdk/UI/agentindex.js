@@ -1452,7 +1452,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${uuids + index}" data-see-less="true">Show less</button>
                                 `;
                                     faqstypeInfo.append(seeMoreButtonHtml);
-                                    updateSeeMoreButtonForAssist(uuids + index);
+                                    setTimeout(() => {
+                                        updateSeeMoreButtonForAssist(uuids + index);
+                                    }, 100);
+                                    // updateSeeMoreButtonForAssist(uuids + index);
                                 }
 
                             if(data.suggestions.faqs.length === 1 && !ele.answer) {
@@ -1482,7 +1485,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         `;
                                 faqs.append(seeMoreButtonHtml);
                                 console.log("updat see more button for assist");
-                                updateSeeMoreButtonForAssist(splitedanswerPlaceableID.join('-'));
+                                // updateSeeMoreButtonForAssist(splitedanswerPlaceableID.join('-'));
+                                setTimeout(() => {
+                                    updateSeeMoreButtonForAssist(splitedanswerPlaceableID.join('-'));
+                                }, 100);
                                 // $(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')} .ast-carrotup.rotate-carrot`).length>0?$(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')} #seeMore-${splitedanswerPlaceableID.join('-')}`).removeClass('hide'):$(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')} #seeMore-${splitedanswerPlaceableID.join('-')}`).removeClass('hide');
                                 isAnswerRenderbtnClicked = false;
                             })
