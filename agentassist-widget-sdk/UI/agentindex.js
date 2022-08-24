@@ -280,6 +280,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             UpdateFeedBackDetails(data);
                         }
                     })
+                    _agentAsisstSocket.on("agent_assist_endoftask", (data)=>{
+                        dialogTerminatedOrIntruppted(data, data.botId, userIntentInput)
+                    })
+
 
                     AgentAssistPubSub.publish('automation_exhaustive_list',
                         { conversationId: _agentAssistDataObj.conversationId, botId: _agentAssistDataObj.botId, 'experience': 'chat' });
@@ -1061,14 +1065,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     //     $(noOfSteps[noOfSteps.length - 1]).removeClass('hide');
                     // }
                     if (isMyBotAutomationOnGoing && (((data.endOfFaq || data.endOfTask) && data.type !== 'text') || (data.userInput == 'discard all' && data.type !== 'text') || (userMessage && userMessage.value && userMessage.value.includes('discard')))) {
-                        isMyBotAutomationOnGoing = false;
-                        var appStateStr = localStorage.getItem('agentAssistState') || '{}';
-                        var appState = JSON.parse(appStateStr);
-                        if (appState[_conversationId]) {
-                            appState[_conversationId]['automationGoingOnAfterRefreshMyBot'] = isMyBotAutomationOnGoing;
-                            localStorage.setItem('agentAssistState', JSON.stringify(appState))
-                        }
-                        addFeedbackHtmlToDom(data, botId, userIntentInput, 'runForAgentBot');
+                        // isMyBotAutomationOnGoing = false;
+                        // var appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                        // var appState = JSON.parse(appStateStr);
+                        // if (appState[_conversationId]) {
+                        //     appState[_conversationId]['automationGoingOnAfterRefreshMyBot'] = isMyBotAutomationOnGoing;
+                        //     localStorage.setItem('agentAssistState', JSON.stringify(appState))
+                        // }
+                        // addFeedbackHtmlToDom(data, botId, userIntentInput, 'runForAgentBot');
                     }
 
                     if (scrollAtEnd) {
@@ -1076,6 +1080,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }
                     addWhiteBackgroundClassToNewMessage();
                 }
+
+            
 
                 function updateNumberOfMessages() {
                     numberOfNewMessages += 1;
@@ -1148,6 +1154,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
 
                 function updateSeeMoreButtonForAgent(id){
+                    let faqSourceTypePixel = 5;
                     let titleElement = $("#titleLib-" + id);
                     let descElement = $("#descLib-" + id);
                     let faqSectionElement = $('#faqSectionLib-' + id);
@@ -1159,7 +1166,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         faqSectionHeight = parseInt(faqSectionHeight.slice(0,faqSectionHeight.length-2));
                         let faqMinHeight = $(faqDivElement).css("min-height");
                         faqMinHeight = parseInt(faqMinHeight.slice(0,faqMinHeight.length-2));
-                        if (faqSectionHeight > (faqMinHeight + 5)) {
+                        if ((faqSectionHeight > (faqMinHeight + faqSourceTypePixel)) || (faqSectionElement > faqMinHeight && faqSectionHeight <= (faqMinHeight + faqSourceTypePixel))) {
                             $('#seeMore-' + id).removeClass('hide');
                         }else{
                             $('#seeMore-' + id).addClass('hide');
@@ -1170,7 +1177,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
 
                 function updateSeeMoreButtonForAssist(id){
-                    let faqSourceTypePixel = ((sourceType === 'smartassist-color-scheme') ? 5 : 3) ;
+                    // let faqSourceTypePixel = ((sourceType === 'smartassist-color-scheme') ? 5 : 2) ;
+                    let faqSourceTypePixel = 5;
                     let titleElement = $("#title-" + id);
                     let descElement = $("#desc-" + id);
                     let faqSectionElement = $('#faqSection-' + id);
@@ -1182,7 +1190,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         faqSectionHeight = parseInt(faqSectionHeight.slice(0,faqSectionHeight.length-2));
                         let faqMinHeight = $(faqDivElement).css("min-height");
                         faqMinHeight = parseInt(faqMinHeight.slice(0,faqMinHeight.length-2));
-                        if (faqSectionHeight > (faqMinHeight + faqSourceTypePixel)) {
+                        console.log('FAQ SM SL: ',faqMinHeight, faqSourceTypePixel);
+                        if ((faqSectionHeight > (faqMinHeight + faqSourceTypePixel)) || (faqSectionElement > faqMinHeight && faqSectionHeight <= (faqMinHeight + faqSourceTypePixel))) {
                             $('#seeMore-' + id).removeClass('hide');
                         }else{
                             $('#seeMore-' + id).addClass('hide');
@@ -1449,7 +1458,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${uuids + index}" data-see-less="true">Show less</button>
                                 `;
                                     faqstypeInfo.append(seeMoreButtonHtml);
-                                    updateSeeMoreButtonForAssist(uuids + index);
+                                    setTimeout(() => {
+                                        updateSeeMoreButtonForAssist(uuids + index);
+                                    }, 100);
+                                    // updateSeeMoreButtonForAssist(uuids + index);
                                 }
 
                             if(data.suggestions.faqs.length === 1 && !ele.answer) {
@@ -1479,7 +1491,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         `;
                                 faqs.append(seeMoreButtonHtml);
                                 console.log("updat see more button for assist");
-                                updateSeeMoreButtonForAssist(splitedanswerPlaceableID.join('-'));
+                                // updateSeeMoreButtonForAssist(splitedanswerPlaceableID.join('-'));
+                                setTimeout(() => {
+                                    updateSeeMoreButtonForAssist(splitedanswerPlaceableID.join('-'));
+                                }, 100);
                                 // $(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')} .ast-carrotup.rotate-carrot`).length>0?$(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')} #seeMore-${splitedanswerPlaceableID.join('-')}`).removeClass('hide'):$(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')} #seeMore-${splitedanswerPlaceableID.join('-')}`).removeClass('hide');
                                 isAnswerRenderbtnClicked = false;
                             })
@@ -1744,18 +1759,18 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     //     $(noOfSteps[noOfSteps.length - 1]).removeClass('hide');
                     // }
                     if (isAutomationOnGoing && (((data.endOfFaq || data.endOfTask) && data.type !== 'text') || (data.userInput == 'discard all' && data.type !== 'text') || (userMessage && userMessage.value && userMessage.value.includes('discard')))) {
-                        isAutomationOnGoing = false;
-                        var appStateStr = localStorage.getItem('agentAssistState') || '{}';
-                        var appState = JSON.parse(appStateStr);
-                        if (appState[_conversationId]) {
-                            appState[_conversationId].automationGoingOn = isAutomationOnGoing;
-                            appState[_conversationId]['automationGoingOnAfterRefresh'] = isAutomationOnGoing;
-                            localStorage.setItem('agentAssistState', JSON.stringify(appState))
-                        }
-                        //  isOverRideMode = false;
-                        $(`.override-input-div`).remove();
-                        addFeedbackHtmlToDom(data, botId, userIntentInput);
-                        userMessage = {};
+                        // isAutomationOnGoing = false;
+                        // var appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                        // var appState = JSON.parse(appStateStr);
+                        // if (appState[_conversationId]) {
+                        //     appState[_conversationId].automationGoingOn = isAutomationOnGoing;
+                        //     appState[_conversationId]['automationGoingOnAfterRefresh'] = isAutomationOnGoing;
+                        //     localStorage.setItem('agentAssistState', JSON.stringify(appState))
+                        // }
+                        // //  isOverRideMode = false;
+                        // $(`.override-input-div`).remove();
+                        // addFeedbackHtmlToDom(data, botId, userIntentInput);
+                        // userMessage = {};
                         // let dropDownDataElement = document.getElementById(`dropDownData-${dropdownHeaderUuids}`);
                         // let steprunelementArray = dropDownDataElement.querySelectorAll('.steps-run-data');
                         // let lastStepNode = steprunelementArray[steprunelementArray.length - 1];
@@ -1765,6 +1780,35 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         scrollToBottom();
                     }
                     addWhiteBackgroundClassToNewMessage();
+                }
+
+                function dialogTerminatedOrIntruppted(data, botId, userIntentInput) {
+                    var appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                    var appState = JSON.parse(appStateStr);
+                    if(data.endOfTask && data?.isSearch ) {
+                        dialogTerminatedOrIntrupptedInMyBot(data, botId, userIntentInput, appState);
+                    }else {
+                        isAutomationOnGoing = false;
+                        if (appState[_conversationId]) {
+                            appState[_conversationId].automationGoingOn = isAutomationOnGoing;
+                            appState[_conversationId]['automationGoingOnAfterRefresh'] = isAutomationOnGoing;
+                            localStorage.setItem('agentAssistState', JSON.stringify(appState))
+                        }
+                        //  isOverRideMode = false;
+                        $(`.override-input-div`).remove();
+                        addFeedbackHtmlToDom(data, botId, userIntentInput);
+                        userMessage = {};
+                    }
+                    
+                }
+
+                function dialogTerminatedOrIntrupptedInMyBot(data, botId, userIntentInput, appState) {
+                    isMyBotAutomationOnGoing = false;
+                    if (appState[_conversationId]) {
+                        appState[_conversationId]['automationGoingOnAfterRefreshMyBot'] = isMyBotAutomationOnGoing;
+                        localStorage.setItem('agentAssistState', JSON.stringify(appState))
+                    }
+                    addFeedbackHtmlToDom(data, botId, userIntentInput, 'runForAgentBot');
                 }
 
                 function htmlEntities(str) {
@@ -3370,6 +3414,34 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         //     }, "*");
                         //     highLightAndStoreFaqId(evt);
                         // } else 
+
+
+                        function togglePoint(){
+                            if(document.getElementById("checkProActive").checked == true){
+                                var toggleObj = {
+                                    "agentId": "",
+                                    "botId": _botId,
+                                    "conversationId": _agentAssistDataObj.conversationId,
+                                    "query": "",
+                                    "enable_override_userinput": false
+                                }
+                                isOverRideMode ? _agentAsisstSocket.emit('enable_override_userinput', toggleObj) : '';
+                                isOverRideMode = false;
+                            }
+                            else{   
+                                var toggleObj = {
+                                    "agentId": "",
+                                    "botId": _botId,
+                                    "conversationId": _agentAssistDataObj.conversationId,
+                                    "query": "",
+                                    "enable_override_userinput": true
+                                }
+                                isOverRideMode ? _agentAsisstSocket.emit('enable_override_userinput', toggleObj) : '';
+                                isOverRideMode = false;
+                            }
+                        }
+                        let isChecked =  togglePoint();
+
                         if (target.id === 'sendMsg') {
                             let payload = target.dataset.msgData;
                             var message = {
@@ -5494,8 +5566,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     <div class="t-title">Proactive</div>
                     <label class="kr-sg-toggle">
                         <div class="hover-tooltip">Proactive</div>
-                        <input id="check1" type="checkbox" checked>
-                        <div for="check1" class="slider"></div>
+                        <input type="checkbox" id="checkProActive" onclick="isChecked()">
+                        <div class="slider"></div>
                     </label>
                 </div>
             </div>
