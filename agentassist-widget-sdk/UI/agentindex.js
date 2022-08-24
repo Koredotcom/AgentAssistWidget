@@ -1785,7 +1785,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 function dialogTerminatedOrIntruppted(data, botId, userIntentInput) {
                     var appStateStr = localStorage.getItem('agentAssistState') || '{}';
                     var appState = JSON.parse(appStateStr);
-                    if(data.endOfTask && data?.isSearch ) {
+                    if(data.endOfTask && data?.isSearch !== undefined && !data?.isSearch ) {
                         dialogTerminatedOrIntrupptedInMyBot(data, botId, userIntentInput, appState);
                     }else {
                         isAutomationOnGoing = false;
@@ -2014,6 +2014,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 function addFeedbackHtmlToDomForHistory(data, botId, userIntentInput, id, runForAgentBot) {
                     var dropDownData;
                     var endOfDialoge;
+                    let dialogIds = 'dg-' + (Math.random() + 1).toString(36).substring(2);
+                    let taskIdOfDialog = $(`#dropDownData-${id}`).attr('data-taskId');
                     if (runForAgentBot) {
                         $(`#myBotTerminateAgentDialog-${id}.btn-danger`).remove();
                         dropDownData = $(`#dropDownData-${id}`);
@@ -2057,47 +2059,67 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             <span class="tootltip-tabs">Dislike</span>
             </div>
        </div>`;
-                    dropDownData.append(feedbackHtml);
-                    let endofDialogeHtml = `
-        <div class="dilog-task-end" id="endTaks-${id}" data-history="true">
-        <div class="text-dialog-task-end">Task Ended</div>     
-                   </div>
-                   <div class="feedback-helpul-container hide">
-                    <div class="titles-content">
-                        <div class="title">Helpful?</div>
-                        <div class="btn-positive">
-                            <i class="ast-thumbup"></i>
-                            <span class="tootltip-tabs">Like</span>
-                        </div>
-                        <div class="btn-negtive">
-                            <i class="ast-thumbdown"></i>
-                            <span class="tootltip-tabs">Dislike</span>
-                        </div>
-                        <div class="thanks-update hide">Thanks for the feedback!</div>
-                        <div class="help-improve-arrow">
-                            <div class="title-improve">Help us improve (optional)</div>
-                            <div class="arrow-icon">
-                                <i class="ast-carrotup"></i>
+                   // dropDownData.append(feedbackHtml);
+        let endofDialogeHtml = `
+                    <div class="dilog-task-end" id="endTaks-${id}">
+                    <div class="text-dialog-task-end">Dialog Task ended</div>     
+                               </div>
+                               <div class="feedback-helpul-container" id="feedbackHelpfulContainer-${id}">
+                                <div class="titles-content">
+                                    <div class="title">Helpful?</div>
+                                    <div class="btn-positive" id="feedbackup-${id}">
+                                        <i class="ast-thumbup"
+                                        id="feedbackup-${id}"
+                                        data-feedbacklike="false"
+                                        data-conv-id="${_conversationId}"
+                                        data-bot-id="${botId}" data-feedback="like"
+                                        data-dialog-name="${data.tN}"
+                                        data-user-input="${userIntentInput}"
+                                        data-comment=""
+                                        data-feedbackdetails="[]"
+                                        data-taskID ="${taskIdOfDialog}"
+                                        data-dialogId="${dialogIds}"></i>
+                                        <span class="tootltip-tabs">Like</span>
+                                    </div>
+                                    <div class="btn-negtive" id="feedbackdown-${id}">
+                                        <i class="ast-thumbdown" 
+                                        id="feedbackdown-${id}"
+                                        data-feedbackdislike="false"
+                                        data-conv-id="${_conversationId}"
+                                        data-bot-id="${botId}" data-feedback="dislike"
+                                        data-dialog-name="${data.tN}"
+                                        data-user-input="${userIntentInput}"
+                                        data-comment=""
+                                        data-feedbackdetails="[]"
+                                        data-taskID ="${taskIdOfDialog}"
+                                        data-dialogId="${dialogIds}"></i>
+                                        <span class="tootltip-tabs">Dislike</span>
+                                    </div>
+                                    <div class="thanks-update hide">Thanks for the feedback!</div>
+                                    <div class="help-improve-arrow hide">
+                                        <div class="title-improve hide">Help us improve (optional)</div>
+                                        <div class="arrow-icon" data-feedback-drop-down-opened="false" id="dropdownArrowFeedBack-${id}">
+                                            <i class="ast-carrotup" data-feedback-drop-down-opened="false" id="dropdownArrowFeedBackIcon-${id}"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="explore-more-negtive-data hide">
+                                    <div class="btns-group-negtive-chips" id="feedBackOptions-${id}">
+                                        <div class="btn-chip-negtive" data-chip-click='false'>Not enough suggestions</div>
+                                        <div class="btn-chip-negtive" data-chip-click='false'>Not prompt</div>
+                                        <div class="btn-chip-negtive" data-chip-click='false'>Intent undetected</div>
+                                        <div class="btn-chip-negtive" data-chip-click='false'>Other</div>
+                                    </div>
+                                    <div class="input-block-optional">
+                                        <div class="label-text"></div>
+                                        <input type="text" placeholder="Placeholder text" class="input-text" id="feedBackComment-${id}"
+                                        data-feedback-comment="true">
+                                    </div>
+                                    <button class="submit-btn" data-updateFlag="false" disabled>Submit</button>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="explore-more-negtive-data">
-                        <div class="btns-group-negtive-chips">
-                            <div class="btn-chip-negtive active-chip">Not enough suggestions</div>
-                            <div class="btn-chip-negtive active-chip">Not prompt</div>
-                            <div class="btn-chip-negtive">Intent undetected</div>
-                            <div class="btn-chip-negtive">Not prompt</div>
-                            <div class="btn-chip-negtive">Other</div>
-                        </div>
-                        <div class="input-block-optional">
-                            <div class="label-text"></div>
-                            <input type="text" placeholder="Placeholder text" class="input-text">
-                        </div>
-                        <button class="submit-btn" disabled>Submit</button>
-                    </div>
-                </div>
-            
-        `;
+                        
+                    `;
                     if(!document.getElementById('endTaks-' + id)){
                         endOfDialoge.append(endofDialogeHtml);
                     }
@@ -3703,6 +3725,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             let updateFlag = $(`#feedbackHelpfulContainer-${targteId.join('-')} .submit-btn`).attr('data-updateflag');
                             if (updateFlag == 'true' && target.dataset.feedbackDropDownOpened === 'false') {
                                 AgentAssist_feedBack_Update_Request(dataSets);
+                                $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).addClass('hide');
                                 isUpdateFeedBackDetailsFlag = true;
                             }
                         }
@@ -5283,15 +5306,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
        </div>`;
                     //   dropDownData.append(feedbackHtml);
                     let endofDialogeHtml = `
-                    <div class="dilog-task-end" id="endTaks-${dropdownHeaderUuids}">
+                    <div class="dilog-task-end" id="endTaks-${headerUUids}">
                     <div class="text-dialog-task-end">Dialog Task ended</div>     
                                </div>
-                               <div class="feedback-helpul-container" id="feedbackHelpfulContainer-${dropdownHeaderUuids}">
+                               <div class="feedback-helpul-container" id="feedbackHelpfulContainer-${headerUUids}">
                                 <div class="titles-content">
                                     <div class="title">Helpful?</div>
-                                    <div class="btn-positive" id="feedbackup-${dropdownHeaderUuids}">
+                                    <div class="btn-positive" id="feedbackup-${headerUUids}">
                                         <i class="ast-thumbup"
-                                        id="feedbackup-${dropdownHeaderUuids}"
+                                        id="feedbackup-${headerUUids}"
                                         data-feedbacklike="false"
                                         data-conv-id="${data.conversationId}"
                                         data-bot-id="${botId}" data-feedback="like"
@@ -5303,9 +5326,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         data-dialogId="${dialogIds}"></i>
                                         <span class="tootltip-tabs">Like</span>
                                     </div>
-                                    <div class="btn-negtive" id="feedbackdown-${dropdownHeaderUuids}">
+                                    <div class="btn-negtive" id="feedbackdown-${headerUUids}">
                                         <i class="ast-thumbdown" 
-                                        id="feedbackdown-${dropdownHeaderUuids}"
+                                        id="feedbackdown-${headerUUids}"
                                         data-feedbackdislike="false"
                                         data-conv-id="${data.conversationId}"
                                         data-bot-id="${botId}" data-feedback="dislike"
@@ -5320,13 +5343,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     <div class="thanks-update hide">Thanks for the feedback!</div>
                                     <div class="help-improve-arrow hide">
                                         <div class="title-improve hide">Help us improve (optional)</div>
-                                        <div class="arrow-icon" data-feedback-drop-down-opened="false" id="dropdownArrowFeedBack-${dropdownHeaderUuids}">
-                                            <i class="ast-carrotup" data-feedback-drop-down-opened="false" id="dropdownArrowFeedBackIcon-${dropdownHeaderUuids}"></i>
+                                        <div class="arrow-icon" data-feedback-drop-down-opened="false" id="dropdownArrowFeedBack-${headerUUids}">
+                                            <i class="ast-carrotup" data-feedback-drop-down-opened="false" id="dropdownArrowFeedBackIcon-${headerUUids}"></i>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="explore-more-negtive-data hide">
-                                    <div class="btns-group-negtive-chips" id="feedBackOptions-${dropdownHeaderUuids}">
+                                    <div class="btns-group-negtive-chips" id="feedBackOptions-${headerUUids}">
                                         <div class="btn-chip-negtive" data-chip-click='false'>Not enough suggestions</div>
                                         <div class="btn-chip-negtive" data-chip-click='false'>Not prompt</div>
                                         <div class="btn-chip-negtive" data-chip-click='false'>Intent undetected</div>
@@ -5334,7 +5357,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     </div>
                                     <div class="input-block-optional">
                                         <div class="label-text"></div>
-                                        <input type="text" placeholder="Placeholder text" class="input-text" id="feedBackComment-${dropdownHeaderUuids}"
+                                        <input type="text" placeholder="Placeholder text" class="input-text" id="feedBackComment-${headerUUids}"
                                         data-feedback-comment="true">
                                     </div>
                                     <button class="submit-btn" data-updateFlag="false" disabled>Submit</button>
