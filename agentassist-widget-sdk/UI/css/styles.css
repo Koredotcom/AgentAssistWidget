@@ -713,6 +713,7 @@ html, body{
     align-items: center;
     padding: 5px 12px;
     min-height: 33px;
+    position: relative;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content {
     width: 100%;
@@ -723,7 +724,7 @@ html, body{
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    padding-right: 15px;
+    padding-right: 0px;
     transition: 0.2s all ease;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec.last-msg-white-bg .task-type .content-dialog-task-type .type-info-run-send .left-content{
@@ -750,7 +751,7 @@ html, body{
     white-space: nowrap;
     text-overflow: ellipsis;
     display: inline-block;
-    max-width: 95%;
+    max-width: 100%;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content .ast-carrotup{
     display: inline-block;
@@ -769,7 +770,7 @@ html, body{
     line-height: 12px;
     color: var(--secondary-color-3);
     font-style: italic;
-    margin-top: 4px;
+    margin-top: 6px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -778,8 +779,13 @@ html, body{
     display: none;
     align-items: center;
     flex-shrink: 0;
+    position: absolute;
+    top: 3px;
+    right: 8px;
 }
-
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send:hover .title-text{
+    padding-right: 80px;
+}
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send:hover .action-links {
     display: flex;
 }
@@ -1109,7 +1115,9 @@ border: 1px solid transparent !important;
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data .run-info-content .agent-utt:hover .action-links {
     display: flex;
 }
-
+.overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send:hover .title-text{
+    padding-right: 80px;
+}
 .overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send:hover .action-links {
     display: flex;
 }
@@ -1496,6 +1504,7 @@ border: 1px solid transparent !important;
     align-items: center;
     padding: 5px 12px;
     min-height: 33px;
+    position: relative;
 }
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content {
     width: 100%;
@@ -1506,7 +1515,7 @@ border: 1px solid transparent !important;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    padding-right: 15px;
+    padding-right: 0px;
     transition: 0.2s all ease;
 }
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content.show-text-on-hover:hover {
@@ -1529,7 +1538,7 @@ border: 1px solid transparent !important;
     white-space: nowrap;
     text-overflow: ellipsis;
     display: inline-block;
-    max-width: 95%;
+    max-width: 100%;
 }
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content .desc-text {
     font-weight: 400;
@@ -1537,7 +1546,7 @@ border: 1px solid transparent !important;
     line-height: 12px;
     color: var(--secondary-color-3);
     font-style: italic;
-    margin-top: 4px;
+    margin-top: 5px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -1559,12 +1568,18 @@ border: 1px solid transparent !important;
     display: none;
     align-items: center;
     flex-shrink: 0;
+    position: absolute;
+    top: 3px;
+    right: 8px;
 }
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .frequently-asked .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links{
     display: flex !important;
 }
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send:hover .action-links {
     display: flex;
+}
+.agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send:hover .title-text{
+    padding-right: 80px;
 }
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .send-run-btn {
     border: 0;
@@ -1883,6 +1898,7 @@ border: 1px solid transparent !important;
     align-items: flex-start;
     padding: 5px 12px;
     min-height: 33px;
+    position: relative;
 }
 .overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content {
     width: 100%;
@@ -1893,7 +1909,7 @@ border: 1px solid transparent !important;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    padding-right: 15px;
+    padding-right: 0px;
     transition: 0.2s all ease;
     padding-top : 5px;
 }
@@ -1917,7 +1933,7 @@ border: 1px solid transparent !important;
     white-space: nowrap;
     text-overflow: ellipsis;
     display: inline-block;
-    max-width: 95%;
+    max-width: 100%;
 }
 .overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content .ast-carrotup{
     display: inline-block;
@@ -1936,7 +1952,7 @@ border: 1px solid transparent !important;
     line-height: 12px;
     color: var(--secondary-color-3);
     font-style: italic;
-    margin-top: 4px;
+    margin-top: 5px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -1945,6 +1961,9 @@ border: 1px solid transparent !important;
     display: none;
     align-items: center;
     flex-shrink: 0;
+    position: absolute;
+    top: 3px;
+    right: 8px;
 }
 
 .overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type#dialoguesArea .content-dialog-task-type .type-info-run-send .action-links{
