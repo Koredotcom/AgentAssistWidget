@@ -1597,6 +1597,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             `;
                         if (data.isPrompt) {
                             $(`.override-input-div`).removeClass('hide');
+                            $(`#overRideBtn-${dropdownHeaderUuids}`).attr('data-position-id', data.positionId);
+                            $(`#cancelOverRideBtn-${dropdownHeaderUuids}`).attr('data-position-id', data.positionId);
                             runInfoContent.append(askToUserHtml);
                         } else {
                             $(`.override-input-div`).addClass('hide');
@@ -2455,6 +2457,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             $(`#terminateAgentDialog`).removeClass('hide');
                                             $('#dynamicBlock .override-input-div').addClass('hide');
                                             $(`#overRideDiv-${previousId}`).removeClass('hide');
+                                            $(`#overRideBtn-${previousId}`).attr('data-position-id', res?.agentAssistDetails?.positionId)
                                         }
                                        
                                         runInfoContent.append(askToUserHtml);
@@ -4631,7 +4634,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 "botId": _botId,
                                 "conversationId": _agentAssistDataObj.conversationId,
                                 "query": "",
-                                "enable_override_userinput": true
+                                "enable_override_userinput": true,
+                                "positionId": target.dataset.positionId
                             }
                             _agentAsisstSocket.emit('enable_override_userinput', overRideObj);
                             let runInfoContent = $(`#dropDownData-${dropdownHeaderUuids}`);
@@ -4645,7 +4649,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     <div class="title">Input overridden. Please provide the input</div>
                     <div class="agent-utt enter-details-block">
                     <div class="title-data" ><span class="enter-details-title">EnterDetails: </span>
-                    <input type="text" placeholder="Enter Value" class="input-text chat-container" id="agentInput-${agentInputId}" data-conv-id="${_agentAssistDataObj.conversationId}" data-bot-id="${_botId}"  data-mybot-input="true">
+                    <input type="text" placeholder="Enter Value" class="input-text chat-container" id="agentInput-${agentInputId}" data-conv-id="${_agentAssistDataObj.conversationId}" data-bot-id="${_botId}"  data-mybot-input="true" data-position-id="${target.dataset.positionId}">
                     </div>
                     </div>
                     </div>
@@ -4669,7 +4673,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 "botId": _botId,
                                 "conversationId": _agentAssistDataObj.conversationId,
                                 "query": "",
-                                "enable_override_userinput": false
+                                "enable_override_userinput": false,
+                                "positionId": target.dataset.positionId
                             }
                             _agentAsisstSocket.emit('enable_override_userinput', overRideObj);
                             $(`#overRideBtn-${id}`).removeClass('hide');
@@ -5150,13 +5155,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             data-conv-id="${data.conversationId}"
                         data-bot-id="${botId}" data-feedback="like"
                         data-dialog-name="${dialogName}"
-                        data-user-input="${userIntentInput}">
+                        data-user-input="${userIntentInput}" data-position-id="${data.positionId}">
                 <i class="ast-thumbup" id="feedbackup-${headerUUids}"
                 data-feedbacklike="false"
                 data-conv-id="${data.conversationId}"
                         data-bot-id="${botId}" data-feedback="like"
                         data-dialog-name="${dialogName}"
-                        data-user-input="${userIntentInput}"></i>
+                        data-user-input="${userIntentInput}" data-position-id="${data.positionId}"></i>
             </div>
             <span class="tootltip-tabs">Like</span>
             </div>
@@ -5165,13 +5170,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             data-conv-id="${data.conversationId}"
                         data-bot-id="${botId}" data-feedback="dislike"
                         data-dialog-name="${dialogName}"
-                        data-user-input="${userIntentInput}">
+                        data-user-input="${userIntentInput}" data-position-id="${data.positionId}">
                 <i class="ast-thumbdown" id="feedbackdown-${headerUUids}"
                 data-feedbackdislike="false"
                 data-conv-id="${data.conversationId}"
                         data-bot-id="${botId}" data-feedback="dislike"
                         data-dialog-name="${dialogName}"
-                        data-user-input="${userIntentInput}"></i>
+                        data-user-input="${userIntentInput}" data-position-id="${data.positionId}"></i>
             </div>
             <span class="tootltip-tabs">Dislike</span>
             </div>
@@ -5309,7 +5314,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             var botId = e.target.dataset.botId;
                             var intentName = agentInput
                             if (currentTabActive === 'userAutoIcon') {
-                                AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: convId, botId: botId, value: intentName, check: true });
+                                AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: convId, botId: botId, value: intentName, check: true, "positionId": e.target.dataset.positionId });
                                 document.getElementById("loader").style.display = "block";
                             } else {
                                 AgentAssistPubSub.publish('searched_Automation_details', { conversationId: convId, botId: botId, value: intentName, isSearch: false });
@@ -5598,7 +5603,7 @@ function AgentAssist_feedback_click(e) {
     var feedback = e.target.dataset.feedback;
     var userInput = e.target.dataset.userInput;
     var dialogName = e.target.dataset.dialogName;
-    var dialogId = 'dg-' + (Math.random() + 1).toString(36).substring(2);
+    var dialogId = e.target.dataset.positionId;
     // var userId = (Math.random() + 1).toString(36).substring(3);
     AgentAssistPubSub.publish('agent_usage_feedback', { userInput: userInput, dialogName: dialogName, conversationId: convId, botId: botId, feedback: feedback, eventName: 'agent_usage_feedback', dialogId: dialogId });
 }
@@ -5615,13 +5620,14 @@ function AgentAssist_run_click(e) {
     var botId = e.target.dataset.botId;
     var intentName = e.target.dataset.intentName;
     dialogName = intentName;
+    var dialogId = 'dg-' + (Math.random() + 1).toString(36).substring(2);
    
     if (e.target.dataset.check || e.target.dataset.checkLib) {
-        AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: convId, botId: botId, value: intentName, check: true });
+        AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: convId, botId: botId, value: intentName, check: true, dialogId:dialogId });
 
     } else {
         //document.getElementById("addRemoveDropDown").style.display = "none";
-        AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: convId, botId: botId, value: intentName, intentName: intentName, 'entities': isRetore ? JSON.parse(previousEntitiesValue) : entitiestValueArray });
+        AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: convId, botId: botId, value: intentName, intentName: intentName, dialogId:dialogId, 'entities': isRetore ? JSON.parse(previousEntitiesValue) : entitiestValueArray });
         document.getElementById("loader").style.display = "block";
     }
 }
@@ -6004,7 +6010,8 @@ AgentAssistPubSub.subscribe('agent_assist_send_text', (msg, data) => {
         'conversationId': data.conversationId,
         'query': data.value,
         'botId': data.botId,
-        'agentId': ''
+        'agentId': '',
+        'positionId': data.dialogId
     }
     if (data.intentName) {
         agent_assist_request['intentName'] = data.value;
