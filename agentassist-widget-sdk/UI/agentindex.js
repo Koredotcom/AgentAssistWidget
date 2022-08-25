@@ -435,7 +435,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     </div>`;
                     addUserQueryTodropdownData.innerHTML = addUserQueryTodropdownData.innerHTML + userQueryHtml;
                     let entityHtml = $(`#dropDownData-${dropdownHeaderUuids}`).find(`#userInput-${_id}`);
-                    let entityDisplayName = data.entityDisplayName ? data.entityDisplayName : data.entityName;
+                    let entityDisplayName = agentAssistResponse.entityDisplayName ? agentAssistResponse.entityDisplayName : agentAssistResponse.entityName;
+                    if(agentAssistResponse.newEntityDisplayName || agentAssistResponse.newEntityName){
+                        entityDisplayName = agentAssistResponse.newEntityDisplayName ? agentAssistResponse.newEntityDisplayName : agentAssistResponse.newEntityName;
+                    }
                     if (data.entityValue && !data.isErrorPrompt && entityDisplayName) {
                         entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${data.entityValue}</div>`);
                     } else { 
@@ -1593,10 +1596,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         $(`#cancelOverRideBtn-${dropdownHeaderUuids}`).addClass('hide');
                         $("#inputFieldForAgent").remove();
                         let runInfoContent = $(`#dropDownData-${dropdownHeaderUuids}`);
-                        agentAssistResponse = {};
-                        if(data.entityName){
-                            agentAssistResponse = Object.assign({},data);
-                        }
+                        setTimeout(() => {
+                            if(data.entityName){
+                                agentAssistResponse = {};
+                                agentAssistResponse = Object.assign({},data);
+                            }
+                        }, 10);
                         let askToUserHtml = `
             <div class="steps-run-data">
                            <div class="icon_block">
@@ -2356,7 +2361,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             </div>`;
                                         runInfoContent.append(userQueryHtml);
                                         let entityHtml = $(`#dropDownData-${previousId}`).find(`#userInput-${res._id}`);
-                                        let entityDisplayName = agentAssistResponse.entityDisplayName ? agentAssistResponse.entityDisplayName : agentAssistResponse.entityName;
+                                        let entityDisplayName = agentAssistResponse.newEntityDisplayName ? agentAssistResponse.newEntityDisplayName : agentAssistResponse.newEntityName;
                                         if (res.agentAssistDetails.entityValue && !res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
                                             entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${res.agentAssistDetails.entityValue}</div>`);
                                         } else {
@@ -2735,7 +2740,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                 </div>`;
                                         runInfoContent.append(userQueryHtml);
                                         let entityHtml = $(`#dropDownData-${previousId}`).find(`#userInput-${res._id}`);
-                                        let entityDisplayName = myBotDataResponse.entityDisplayName ? myBotDataResponse.entityDisplayName : myBotDataResponse.entityName
+                                        let entityDisplayName = myBotDataResponse.newEntityDisplayName ? myBotDataResponse.newEntityDisplayName : myBotDataResponse.newEntityName
                                         if (res.agentAssistDetails.entityValue && !res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
                                             entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${res.agentAssistDetails.entityValue}</div>`);
                                         } else {
@@ -2753,6 +2758,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     }
                                     if(res.agentAssistDetails?.entityName){
                                         myBotDataResponse = res.agentAssistDetails;
+                                        myBotDataResponse.entityDisplayName = myBotDataResponse.newEntityDisplayName;
+                                        myBotDataResponse.entityName = myBotDataResponse.newEntityName;
                                     }
                                     let parsedPayload;
                                     res.components?.forEach((elem) => {
@@ -2848,8 +2855,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         }
 
                                         let agentInputEntityName = 'EnterDetails';
-                                        if(res.agentAssistDetails?.entityDisplayName || res.agentAssistDetails?.entityName){
-                                            agentInputEntityName = res.agentAssistDetails.entityDisplayName ? res.agentAssistDetails.entityDisplayName : res.agentAssistDetails.entityName
+                                        if(res.agentAssistDetails?.newEntityDisplayName || res.agentAssistDetails?.newEntityName){
+                                            agentInputEntityName = res.agentAssistDetails.newEntityDisplayName ? res.agentAssistDetails.newEntityDisplayName : res.agentAssistDetails.newEntityName
                                         }
                                         
                                         let agentInputToBotHtml = `
@@ -4641,8 +4648,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             let runInfoContent = $(`#dropDownData-${dropdownHeaderUuids}`);
                             let agentInputId = Math.floor(Math.random() * 100);
                             let agentInputEntityName = 'EnterDetails';
-                            if(agentAssistResponse.entityDisplayName || agentAssistResponse.entityName){
-                                agentInputEntityName = agentAssistResponse.entityDisplayName ? agentAssistResponse.entityDisplayName : agentAssistResponse.entityName
+                            if(agentAssistResponse.newEntityDisplayName || agentAssistResponse.newEntityName){
+                                agentInputEntityName = agentAssistResponse.newEntityDisplayName ? agentAssistResponse.newEntityDisplayName : agentAssistResponse.newEntityName;
+                            }else if(agentAssistResponse.entityDisplayName || agentAssistResponse.entityName){
+                                agentInputEntityName = agentAssistResponse.entityDisplayName ? agentAssistResponse.entityDisplayName : agentAssistResponse.entityName;
                             }
                             let agentInputToBotHtml = `
                 <div class="steps-run-data" id="inputFieldForAgent">
