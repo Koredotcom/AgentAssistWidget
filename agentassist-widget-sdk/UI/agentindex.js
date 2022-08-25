@@ -158,6 +158,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 var koreBot = koreBotChat();
                 AgentChatInitialize = new koreBot.chatWindow(chatConfig);
                 AgentChatInitialize.customTemplateObj = new customTemplate(chatConfig, AgentChatInitialize);
+                let isUpdateFeedBackDetailsFlag = false;
                 let docs = document.getElementById('chat-window-footer');
                 docs.hidden = true;
                 _userTranscript = false;
@@ -274,6 +275,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                     })
 
+                    _agentAsisstSocket.on('agent_feedback_response', (data) => {
+                        if(isUpdateFeedBackDetailsFlag) {
+                            UpdateFeedBackDetails(data);
+                        }
+                    })
                     _agentAsisstSocket.on("agent_assist_endoftask", (data)=>{
                         dialogTerminatedOrIntruppted(data, data.botId, userIntentInput)
                     })
@@ -1556,6 +1562,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         $(`#cancelOverRideBtn-${dropdownHeaderUuids}`).addClass('hide');
                         $("#inputFieldForAgent").remove();
                         let runInfoContent = $(`#dropDownData-${dropdownHeaderUuids}`);
+                        $(runInfoContent).attr('data-taskId', data.uniqueTaskId);
                         let askToUserHtml = `
             <div class="steps-run-data">
                            <div class="icon_block">
@@ -1780,7 +1787,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 function dialogTerminatedOrIntruppted(data, botId, userIntentInput) {
                     var appStateStr = localStorage.getItem('agentAssistState') || '{}';
                     var appState = JSON.parse(appStateStr);
-                    if(data.endOfTask && data?.isSearch ) {
+                    if(data.endOfTask && data?.isSearch !== undefined && !data?.isSearch ) {
                         dialogTerminatedOrIntrupptedInMyBot(data, botId, userIntentInput, appState);
                     }else {
                         isAutomationOnGoing = false;
@@ -2009,6 +2016,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 function addFeedbackHtmlToDomForHistory(data, botId, userIntentInput, id, runForAgentBot) {
                     var dropDownData;
                     var endOfDialoge;
+                    let dialogIds = 'dg-' + (Math.random() + 1).toString(36).substring(2);
+                    let taskIdOfDialog = $(`#dropDownData-${id}`).attr('data-taskId');
                     if (runForAgentBot) {
                         $(`#myBotTerminateAgentDialog-${id}.btn-danger`).remove();
                         dropDownData = $(`#dropDownData-${id}`);
@@ -2052,47 +2061,67 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             <span class="tootltip-tabs">Dislike</span>
             </div>
        </div>`;
-                    dropDownData.append(feedbackHtml);
-                    let endofDialogeHtml = `
-        <div class="dilog-task-end" id="endTaks-${id}" data-history="true">
-        <div class="text-dialog-task-end">Task Ended</div>     
-                   </div>
-                   <div class="feedback-helpul-container hide">
-                    <div class="titles-content">
-                        <div class="title">Helpful?</div>
-                        <div class="btn-positive">
-                            <i class="ast-thumbup"></i>
-                            <span class="tootltip-tabs">Like</span>
-                        </div>
-                        <div class="btn-negtive">
-                            <i class="ast-thumbdown"></i>
-                            <span class="tootltip-tabs">Dislike</span>
-                        </div>
-                        <div class="thanks-update hide">Thanks for the feedback!</div>
-                        <div class="help-improve-arrow">
-                            <div class="title-improve">Help us improve (optional)</div>
-                            <div class="arrow-icon">
-                                <i class="ast-carrotup"></i>
+                   // dropDownData.append(feedbackHtml);
+        let endofDialogeHtml = `
+                    <div class="dilog-task-end" id="endTaks-${id}">
+                    <div class="text-dialog-task-end">Dialog Task ended</div>     
+                               </div>
+                               <div class="feedback-helpul-container" id="feedbackHelpfulContainer-${id}">
+                                <div class="titles-content">
+                                    <div class="title">Helpful?</div>
+                                    <div class="btn-positive" id="feedbackup-${id}">
+                                        <i class="ast-thumbup"
+                                        id="feedbackup-${id}"
+                                        data-feedbacklike="false"
+                                        data-conv-id="${_conversationId}"
+                                        data-bot-id="${botId}" data-feedback="like"
+                                        data-dialog-name="${data.tN}"
+                                        data-user-input="${userIntentInput}"
+                                        data-comment=""
+                                        data-feedbackdetails="[]"
+                                        data-taskID ="${taskIdOfDialog}"
+                                        data-dialogId="${dialogIds}"></i>
+                                        <span class="tootltip-tabs">Like</span>
+                                    </div>
+                                    <div class="btn-negtive" id="feedbackdown-${id}">
+                                        <i class="ast-thumbdown" 
+                                        id="feedbackdown-${id}"
+                                        data-feedbackdislike="false"
+                                        data-conv-id="${_conversationId}"
+                                        data-bot-id="${botId}" data-feedback="dislike"
+                                        data-dialog-name="${data.tN}"
+                                        data-user-input="${userIntentInput}"
+                                        data-comment=""
+                                        data-feedbackdetails="[]"
+                                        data-taskID ="${taskIdOfDialog}"
+                                        data-dialogId="${dialogIds}"></i>
+                                        <span class="tootltip-tabs">Dislike</span>
+                                    </div>
+                                    <div class="thanks-update hide">Thanks for the feedback!</div>
+                                    <div class="help-improve-arrow hide">
+                                        <div class="title-improve hide">Help us improve (optional)</div>
+                                        <div class="arrow-icon" data-feedback-drop-down-opened="false" id="dropdownArrowFeedBack-${id}">
+                                            <i class="ast-carrotup" data-feedback-drop-down-opened="false" id="dropdownArrowFeedBackIcon-${id}"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="explore-more-negtive-data hide">
+                                    <div class="btns-group-negtive-chips" id="feedBackOptions-${id}">
+                                        <div class="btn-chip-negtive" data-chip-click='false'>Not enough suggestions</div>
+                                        <div class="btn-chip-negtive" data-chip-click='false'>Not prompt</div>
+                                        <div class="btn-chip-negtive" data-chip-click='false'>Intent undetected</div>
+                                        <div class="btn-chip-negtive" data-chip-click='false'>Other</div>
+                                    </div>
+                                    <div class="input-block-optional">
+                                        <div class="label-text"></div>
+                                        <input type="text" placeholder="Placeholder text" class="input-text" id="feedBackComment-${id}"
+                                        data-feedback-comment="true">
+                                    </div>
+                                    <button class="submit-btn" data-updateFlag="false" disabled>Submit</button>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="explore-more-negtive-data">
-                        <div class="btns-group-negtive-chips">
-                            <div class="btn-chip-negtive active-chip">Not enough suggestions</div>
-                            <div class="btn-chip-negtive active-chip">Not prompt</div>
-                            <div class="btn-chip-negtive">Intent undetected</div>
-                            <div class="btn-chip-negtive">Not prompt</div>
-                            <div class="btn-chip-negtive">Other</div>
-                        </div>
-                        <div class="input-block-optional">
-                            <div class="label-text"></div>
-                            <input type="text" placeholder="Placeholder text" class="input-text">
-                        </div>
-                        <button class="submit-btn" disabled>Submit</button>
-                    </div>
-                </div>
-            
-        `;
+                        
+                    `;
                     if(!document.getElementById('endTaks-' + id)){
                         endOfDialoge.append(endofDialogeHtml);
                     }
@@ -3632,37 +3661,125 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
                         let targetIds = (target.id).split('-');
                         if (['feedbackup', 'feedbackdown'].includes(targetIds[0])) {
-                            console.log("=====event===============", evt.target);
+
+                            let cloneTargtIds = [...targetIds]
+                            let isDivElement = evt.target instanceof HTMLDivElement;
+                            console.log("isDivElement", isDivElement, target.parentElement.id);
                             if (targetIds.includes('feedbackup')) {
-                                targetIds.shift();
-                                if (target.dataset.feedbacklike == 'false') {
-                                     // target.dataset.feedbacklike = 'true';
-                                    $(`#feedBackLikeContainer-${targetIds.join('-')} .feedback-icon`).attr('style', 'color:#0077D2;border-color:#0077D2;');
-                                    $(`#feedBackDislikeContainer-${targetIds.join('-')} .feedback-icon`).removeAttr('style');
+                                cloneTargtIds.shift()
+                                if (isDivElement) {
+                                    $(`#${target.id}`).addClass('active-feedback');
+                                    target.firstElementChild.dataset.feedbacklike = 'true';
+                                    Object.assign(target.dataset, target.firstElementChild.dataset);
                                     feedbackLoop(evt);
                                 } else {
+                                    $(`#${target.parentElement.id}`).addClass('active-feedback');
                                     target.dataset.feedbacklike = 'false';
-                                    $(`#feedBackLikeContainer-${targetIds.join('-')} .feedback-icon`).removeAttr('style');
-                                    $(`#feedBackLikeContainer-${targetIds.join('-')} .feedback-icon`).attr('data-feedback', '');
-                                    $(`#feedBackLikeContainer-${targetIds.join('-')} .ast-thumbup`).attr('data-feedback', '');
                                     feedbackLoop(evt);
                                 }
+                                $(`#feedbackdown-${cloneTargtIds.join('-')}`).removeClass('active-feedback')
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .thanks-update`).removeClass('hide');
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .help-improve-arrow`).addClass('hide')
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .explore-more-negtive-data`).addClass('hide');
                             }
                             if (targetIds.includes('feedbackdown')) {
-                                targetIds.shift();
-                                if (target.dataset.feedbackdislike == 'false') {
-                                    // target.dataset.feedbackdislike = 'true';
-                                        $(`#feedBackLikeContainer-${targetIds.join('-')} .feedback-icon`).removeAttr('style');
-                                        $(`#feedBackDislikeContainer-${targetIds.join('-')} .feedback-icon`).attr('style', 'color:#0077D2;border-color:#0077D2;');
-                                    feedbackLoop(evt);
+                                cloneTargtIds.shift()
+                                if (isDivElement) {
+                                    $(`#${target.id}`).addClass('active-feedback');
+                                    target.firstElementChild.dataset.feedbacklike = 'true';
+                                    Object.assign(target.dataset, target.firstElementChild.dataset);
+                                     feedbackLoop(evt);
                                 } else {
-                                    target.dataset.feedbackdislike = 'false';
-                                    $(`#feedBackDislikeContainer-${targetIds.join('-')} .feedback-icon`).removeAttr('style');
-                                    $(`#feedBackDislikeContainer-${targetIds.join('-')} .feedback-icon`).attr('data-feedback', '');
-                                    $(`#feedBackDislikeContainer-${targetIds.join('-')} .ast-thumbdown`).attr('data-feedback', '');
-                                    feedbackLoop(evt);
+                                    $(`#${target.parentElement.id}`).addClass('active-feedback');
+                                    target.dataset.feedbacklike = 'false';
+                                     feedbackLoop(evt);
+                                }
+                                $(`#feedbackup-${cloneTargtIds.join('-')}`).removeClass('active-feedback')
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .thanks-update`).addClass('hide');
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .help-improve-arrow`).removeClass('hide')
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .explore-more-negtive-data`).removeClass('hide');
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .title-improve`).removeClass('hide');
+
+                            }
+                        }
+                        if (target.id.split('-')[0] == 'dropdownArrowFeedBack' || target.id.split('-')[0] == 'dropdownArrowFeedBackIcon') {
+                            let targteId = target.id.split('-');
+                            targteId.shift();
+                            let dataSets = $(`#feedbackdown-${targteId.join('-')} .ast-thumbdown`).data();
+                            let activeChipCount = $(`#feedbackHelpfulContainer-${targteId.join('-')} .btn-chip-negtive.active-chip`);
+                            if ((activeChipCount.length > 0 || dataSets.comment.length > 0) && target.dataset.feedbackDropDownOpened === 'true') {
+                                $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).addClass('hide');
+                            } else {
+                                if ((activeChipCount.length == 0 && dataSets.comment.length == 0) && target.dataset.feedbackDropDownOpened === 'true') {
+                                    $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).removeClass('hide');
+                                } else {
+                                    $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).addClass('hide');
                                 }
                             }
+                            if (target.dataset.feedbackDropDownOpened === 'false') {
+                                $(`#dropdownArrowFeedBackIcon-${targteId.join('-')}`).attr('data-feedback-drop-down-opened', 'true');
+                                $(`#dropdownArrowFeedBack-${targteId.join('-')}`).attr('data-feedback-drop-down-opened', 'true');
+                                $(`#feedbackHelpfulContainer-${targteId.join('-')} .explore-more-negtive-data`).addClass('hide');
+                            } else {
+                                $(`#dropdownArrowFeedBackIcon-${targteId.join('-')}`).attr('data-feedback-drop-down-opened', 'false');
+                                $(`#dropdownArrowFeedBack-${targteId.join('-')}`).attr('data-feedback-drop-down-opened', 'false');
+                                $(`#feedbackHelpfulContainer-${targteId.join('-')} .explore-more-negtive-data`).removeClass('hide');
+                            }
+                            let updateFlag = $(`#feedbackHelpfulContainer-${targteId.join('-')} .submit-btn`).attr('data-updateflag');
+                            if (updateFlag == 'true' && target.dataset.feedbackDropDownOpened === 'false') {
+                                AgentAssist_feedBack_Update_Request(dataSets);
+                                $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).addClass('hide');
+                                isUpdateFeedBackDetailsFlag = true;
+                            }
+                        }
+                        if (target.className.includes('btn-chip-negtive')) {
+                            let id = target.parentElement.id.split('-');
+                            id.shift();
+                            let dataSets = $(`#feedbackdown-${id.join('-')} .ast-thumbdown`).data();
+                            if (target.dataset.chipClick == 'false') {
+                                $(target).addClass('active-chip');
+                                target.dataset.chipClick = 'true';
+                                dataSets.feedbackdetails.push($(target).html());
+
+                            } else {
+                                $(target).removeClass('active-chip');
+                                target.dataset.chipClick = 'false';
+                                dataSets.feedbackdetails?.forEach((ele, i) => {
+                                    if (ele == $(target).html()) {
+                                        delete dataSets.feedbackdetails[i]
+                                    }
+                                })
+                            }
+                            let activeChipCount = $(`#${target.parentElement.id} .btn-chip-negtive.active-chip`);
+                            if (activeChipCount.length > 0) {
+                                $(`#feedbackHelpfulContainer-${id.join('-')} .title-improve`).addClass('hide');
+                                $('.submit-btn').removeAttr('disabled');
+                            } else {
+                                if (dataSets.comment.length == 0) {
+                                    $(`#feedbackHelpfulContainer-${id.join('-')} .title-improve`).removeClass('hide');
+                                }
+                            }
+                        }
+                        if (target.className == 'submit-btn') {
+                            let id = target.parentElement.firstElementChild.id.split('-');
+                            id.shift();
+                            let dataSets = $(`#feedbackdown-${id.join('-')} .ast-thumbdown`).data();
+                            // if(target.innerHTML == 'Update') {
+                            //     dataSets.comment = target.value;
+                            //     // dataSets.feedbackdetails = 
+
+                            // }
+                            feedbackLoop(dataSets, true);
+                            $(`#feedbackHelpfulContainer-${id.join('-')} .explore-more-negtive-data`).addClass('hide');
+                             target.dataset.updateflag = 'true';
+                            target.innerHTML = "Update";
+                            $('.submit-btn').attr('disabled', 'disabled');
+                            
+                            dataSets.comment = "";
+                            dataSets.feedbackdetails = [];
+                            $(`#feedbackHelpfulContainer-${id.join('-')} .btn-chip-negtive.active-chip`).removeClass('active-chip');
+                            $(`#feedBackComment-${id.join('-')}`).val('');
+                            isUpdateFeedBackDetailsFlag = false;
                         }
                         if (target.id === 'showHistory') {
                             isShowHistoryEnable = true;
@@ -4915,6 +5032,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             entitiestValueArray[targetid[1]]['editedValue'] = $(`#${target.id}`).val();
                             $('.ast-check-right.disabled-color').removeClass('disabled-color');
                             $('.save-reset-disabled').removeClass('save-reset-disabled').addClass('save-reset');
+                        } else if (target.dataset.feedbackComment) {
+                            let targetids = target.id.split('-');
+                            targetids.shift();
+                            let dataSets = $(`#feedbackdown-${targetids.join('-')} .ast-thumbdown`).data();
+                            dataSets.comment = target.value;
+                            if (target.value.length > 0) {
+                                $('.submit-btn').removeAttr('disabled');
+                                $(`#feedbackHelpfulContainer-${targetids.join('-')} .title-improve`).addClass('hide');
+                            }
                         } else {
                             var agentAssistInput = target.dataset.agentAssistInput;
                             var mybotInput = target.dataset.mybotInput;
@@ -5138,6 +5264,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     var dropDownData;
                     var endOfDialoge;
                     let headerUUids = runForAgentBot ? myBotDropdownHeaderUuids : dropdownHeaderUuids;
+                    let dialogIds = 'dg-' + (Math.random() + 1).toString(36).substring(2);
+                    let taskIdOfDialog = $(`#dropDownData-${dropdownHeaderUuids}`).attr('data-taskId');
                     if (runForAgentBot) {
                         $(`#myBotTerminateAgentDialog-${headerUUids}.btn-danger`).remove();
                         dropDownData = $(`#dropDownData-${headerUUids}`);
@@ -5181,47 +5309,67 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             <span class="tootltip-tabs">Dislike</span>
             </div>
        </div>`;
-                    dropDownData.append(feedbackHtml);
+                    //   dropDownData.append(feedbackHtml);
                     let endofDialogeHtml = `
-        <div class="dilog-task-end" id="endTaks-${headerUUids}">
-        <div class="text-dialog-task-end">Task Ended</div>     
-                   </div>
-                   <div class="feedback-helpul-container hide">
-                    <div class="titles-content">
-                        <div class="title">Helpful?</div>
-                        <div class="btn-positive">
-                            <i class="ast-thumbup"></i>
-                            <span class="tootltip-tabs">Like</span>
-                        </div>
-                        <div class="btn-negtive">
-                            <i class="ast-thumbdown"></i>
-                            <span class="tootltip-tabs">Dislike</span>
-                        </div>
-                        <div class="thanks-update hide">Thanks for the feedback!</div>
-                        <div class="help-improve-arrow">
-                            <div class="title-improve">Help us improve (optional)</div>
-                            <div class="arrow-icon">
-                                <i class="ast-carrotup"></i>
+                    <div class="dilog-task-end" id="endTaks-${headerUUids}">
+                    <div class="text-dialog-task-end">Dialog Task ended</div>     
+                               </div>
+                               <div class="feedback-helpul-container" id="feedbackHelpfulContainer-${headerUUids}">
+                                <div class="titles-content">
+                                    <div class="title">Helpful?</div>
+                                    <div class="btn-positive" id="feedbackup-${headerUUids}">
+                                        <i class="ast-thumbup"
+                                        id="feedbackup-${headerUUids}"
+                                        data-feedbacklike="false"
+                                        data-conv-id="${data.conversationId}"
+                                        data-bot-id="${botId}" data-feedback="like"
+                                        data-dialog-name="${dialogName}"
+                                        data-user-input="${userIntentInput}"
+                                        data-comment=""
+                                        data-feedbackdetails="[]"
+                                        data-taskID ="${taskIdOfDialog}"
+                                        data-dialogId="${dialogIds}"></i>
+                                        <span class="tootltip-tabs">Like</span>
+                                    </div>
+                                    <div class="btn-negtive" id="feedbackdown-${headerUUids}">
+                                        <i class="ast-thumbdown" 
+                                        id="feedbackdown-${headerUUids}"
+                                        data-feedbackdislike="false"
+                                        data-conv-id="${data.conversationId}"
+                                        data-bot-id="${botId}" data-feedback="dislike"
+                                        data-dialog-name="${dialogName}"
+                                        data-user-input="${userIntentInput}"
+                                        data-comment=""
+                                        data-feedbackdetails="[]"
+                                        data-taskID ="${taskIdOfDialog}"
+                                        data-dialogId="${dialogIds}"></i>
+                                        <span class="tootltip-tabs">Dislike</span>
+                                    </div>
+                                    <div class="thanks-update hide">Thanks for the feedback!</div>
+                                    <div class="help-improve-arrow hide">
+                                        <div class="title-improve hide">Help us improve (optional)</div>
+                                        <div class="arrow-icon" data-feedback-drop-down-opened="false" id="dropdownArrowFeedBack-${headerUUids}">
+                                            <i class="ast-carrotup" data-feedback-drop-down-opened="false" id="dropdownArrowFeedBackIcon-${headerUUids}"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="explore-more-negtive-data hide">
+                                    <div class="btns-group-negtive-chips" id="feedBackOptions-${headerUUids}">
+                                        <div class="btn-chip-negtive" data-chip-click='false'>Not enough suggestions</div>
+                                        <div class="btn-chip-negtive" data-chip-click='false'>Not prompt</div>
+                                        <div class="btn-chip-negtive" data-chip-click='false'>Intent undetected</div>
+                                        <div class="btn-chip-negtive" data-chip-click='false'>Other</div>
+                                    </div>
+                                    <div class="input-block-optional">
+                                        <div class="label-text"></div>
+                                        <input type="text" placeholder="Placeholder text" class="input-text" id="feedBackComment-${headerUUids}"
+                                        data-feedback-comment="true">
+                                    </div>
+                                    <button class="submit-btn" data-updateFlag="false" disabled>Submit</button>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="explore-more-negtive-data">
-                        <div class="btns-group-negtive-chips">
-                            <div class="btn-chip-negtive active-chip">Not enough suggestions</div>
-                            <div class="btn-chip-negtive active-chip">Not prompt</div>
-                            <div class="btn-chip-negtive">Intent undetected</div>
-                            <div class="btn-chip-negtive">Not prompt</div>
-                            <div class="btn-chip-negtive">Other</div>
-                        </div>
-                        <div class="input-block-optional">
-                            <div class="label-text"></div>
-                            <input type="text" placeholder="Placeholder text" class="input-text">
-                        </div>
-                        <button class="submit-btn" disabled>Submit</button>
-                    </div>
-                </div>
-            
-        `;
+                        
+                    `;
                     if(!document.getElementById('endTaks-' + headerUUids)){
                         endOfDialoge.append(endofDialogeHtml);
                         $(`#overRideDiv-${headerUUids}`).remove();
@@ -5234,8 +5382,47 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 		    UnCollapseDropdownForLastElement(lastElementBeforeNewMessage);
                 }
 
-                function feedbackLoop(evt) {
-                    AgentAssist_feedback_click(evt);
+                function UpdateFeedBackDetails(data) {
+                    let allFeedBackDetails = $('.feedback-helpul-container');
+                    allFeedBackDetails.each((i, ele) => {
+                        let feedDataSet;
+                        if (data.feedback == 'dislike') {
+                            feedDataSet = $(ele).find('.btn-negtive .ast-thumbdown').data();
+                        } else {
+                            feedDataSet = $(ele).find('.btn-positive .ast-thumbup').data();
+                        }
+
+                        if (feedDataSet.dialogid == data.positionId && data.feedback == 'like') {
+                            $(ele).find('.btn-positive .ast-thumbup').addClass('active-feedback');
+                            $(ele).find('.thanks-update').removeClass('hide');
+                        } else if (feedDataSet.dialogid == data.positionId && data.feedback == 'dislike') {
+                            $(ele).find('.btn-negtive .ast-thumbdown').addClass('active-feedback');
+                            $(ele).find('.help-improve-arrow').removeClass('hide')
+                            if (data.feedbackDetails.length > 0 || data.comment.length > 0) {
+                                $(ele).find('.explore-more-negtive-data').removeClass('hide');
+                                let btnChipNegtive = $(ele).find('.btn-chip-negtive');
+                                btnChipNegtive.each((i, eles) => {
+                                    data.feedbackDetails.includes(eles.innerHTML) ?
+                                        $(eles).addClass('active-chip') : '';
+                                });
+                                $(ele).find('.input-block-optional .input-text').val(data.comment);
+                                feedDataSet.comment = data.comment;
+                                feedDataSet.feedbackdetails = data.feedbackDetails;
+                            } else {
+                                $(ele).find('.btn-chip-negtive').removeClass('active-chip');
+                                $(ele).find('.title-improve').removeClass('hide');
+                            }
+                        }
+                    })
+                }
+
+                function feedbackLoop(evt, isSubmit = false) {
+                    if (isSubmit) {
+                        AgentAssist_feedback_click(evt, true);
+                    } else {
+                        AgentAssist_feedback_click(evt);
+                    }
+
                 }
 
                 function processUserMessage(data, _conversationId, botId) {
@@ -5596,16 +5783,50 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
     }
 }
 
-function AgentAssist_feedback_click(e) {
-    console.log(e.target);
-    var convId = e.target.dataset.convId;
-    var botId = e.target.dataset.botId;
-    var feedback = e.target.dataset.feedback;
-    var userInput = e.target.dataset.userInput;
-    var dialogName = e.target.dataset.dialogName;
-    var dialogId = e.target.dataset.positionId;
-    // var userId = (Math.random() + 1).toString(36).substring(3);
-    AgentAssistPubSub.publish('agent_usage_feedback', { userInput: userInput, dialogName: dialogName, conversationId: convId, botId: botId, feedback: feedback, eventName: 'agent_usage_feedback', dialogId: dialogId });
+function AgentAssist_feedback_click(e, isSubmit = false) {
+    let convId, botId, feedback, userInput, dialogId, comment, feedbackdetails;
+    if (isSubmit) {
+        convId = e.convId;
+        botId = e.botId;
+        feedback = e.feedback;
+        userInput = e.userInput;
+        dialogName = e.dialogName;
+        dialogId = e.dialogid;
+        comment = e.comment;
+        feedbackdetails = e.feedbackdetails;
+        taskId = e.taskid
+    } else {
+        console.log(e.target);
+        convId = e.target.dataset.convId;
+        botId = e.target.dataset.botId;
+        feedback = e.target.dataset.feedback;
+        userInput = e.target.dataset.userInput;
+        dialogName = e.target.dataset.dialogName;
+        dialogId = e.target.dataset.dialogid;
+        comment = e.target.dataset.comment;
+        feedbackdetails = e.target.dataset.feedbackdetails;
+        taskId = e.target.dataset.taskid
+    }
+
+    feedDetailsArray = typeof feedbackdetails == 'string' ? [] : feedbackdetails?.filter(ele => ele !== null);
+    AgentAssistPubSub.publish('agent_usage_feedback', {
+        comment: comment, feedbackDetails: feedDetailsArray, userInput: userInput, dialogName: dialogName, conversationId: convId, botId: botId, feedback: feedback, eventName: 'agent_usage_feedback', dialogId: dialogId,
+        taskId: taskId
+    });
+}
+
+function AgentAssist_feedBack_Update_Request(e) {
+    let agent_assist_feedback_request = {
+        conversationId: e.convId,
+        agentId: '',
+        botId: e.botId,
+        orgId: '',
+        taskId: e.taskid,
+        positionId: e.dialogid
+    }
+
+    _agentAsisstSocket.emit('agent_feedback_request', agent_assist_feedback_request);
+
 }
 
 function scrollToBottom() {
@@ -5996,9 +6217,12 @@ AgentAssistPubSub.subscribe('agent_usage_feedback', (msg, data) => {
         "accountId": "622efb179b25b1a23ef05da2",
         "conversationId": data.conversationId,
         userInput: data.userInput,
-        dialogName: data.dialogName,
+        taskName: data.dialogName,
         "event": data.eventName,
-        dialogId: data.dialogId,
+        positionId: data.dialogId,
+        taskId: data.taskId,
+        comment: data.comment,
+        feedbackDetails: data.feedbackDetails
     }
     _agentAsisstSocket.emit('agent_usage_feedback', agent_assist_request);
 });
