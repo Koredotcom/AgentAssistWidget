@@ -136,6 +136,9 @@ export class OnboardingDialogComponent implements OnInit, AfterViewInit, OnDestr
     if (type === 'createNew') {
       modalRef.componentInstance.modSwitch('createNew');
     }
+    else if(type === 'import'){
+      modalRef.componentInstance.modSwitch('import');
+    }
     this.dialogRef.afterClosed().subscribe(res => {
       console.log(res);
       this.dialogRef.close();
