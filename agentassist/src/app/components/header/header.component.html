@@ -51,12 +51,9 @@
                                 <span class="menu-name">{{ "HEADER.SWITCH_ACC" | translate }}</span>
                             </button>
                             <button matIconButton mat-menu-item [disabled]="!isInvite" *hasPermission="['admin']">
-                                <div *ngIf="isSharedDeveloper" class="invite-button" [ngClass]="{'disabled': isSharedDevError}" (click)="inviteDialog()">
+                                <div class="invite-button" [ngClass]="{'disabled': isSharedDevError}" (click)="inviteDialog()">
                                     <img src="assets/icons/header/invite.svg" [ngStyle]="{'opacity': !isInvite?0.5:1}">
                                     <span class="menu-name">{{ "HEADER.INVITE" | translate }}</span>
-                                </div>
-                                <div *ngIf="!isSharedDeveloper" style="margin-left: 45%">
-                                    <mat-spinner diameter="18"></mat-spinner>
                                 </div>
                             </button>
                             <!-- <button matIconButton mat-menu-item (click)="langSwitchDialog()">
