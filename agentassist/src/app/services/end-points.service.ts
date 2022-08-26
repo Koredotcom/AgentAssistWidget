@@ -556,7 +556,7 @@ export class EndPointsService {
     };
 
     this.serviceList['post.importbot.export'] = {
-      endpoint: this.API_SERVER_URL + '/builder/streams/:streamId/export',
+      endpoint: this.API_SERVER_URL + '/builder/streams/:streamId/export?isAgentAssist=true',
       method: 'post'
     };
 
