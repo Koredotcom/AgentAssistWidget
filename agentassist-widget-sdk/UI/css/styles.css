@@ -713,6 +713,7 @@ html, body{
     align-items: center;
     padding: 5px 12px;
     min-height: 33px;
+    position: relative;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content {
     width: 100%;
@@ -723,7 +724,7 @@ html, body{
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    padding-right: 15px;
+    padding-right: 0px;
     transition: 0.2s all ease;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec.last-msg-white-bg .task-type .content-dialog-task-type .type-info-run-send .left-content{
@@ -750,7 +751,7 @@ html, body{
     white-space: nowrap;
     text-overflow: ellipsis;
     display: inline-block;
-    max-width: 95%;
+    max-width: 100%;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content .ast-carrotup{
     display: inline-block;
@@ -769,7 +770,7 @@ html, body{
     line-height: 12px;
     color: var(--secondary-color-3);
     font-style: italic;
-    margin-top: 4px;
+    margin-top: 6px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -778,8 +779,13 @@ html, body{
     display: none;
     align-items: center;
     flex-shrink: 0;
+    position: absolute;
+    top: 3px;
+    right: 8px;
 }
-
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send:hover .title-text{
+    padding-right: 80px;
+}
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send:hover .action-links {
     display: flex;
 }
@@ -1000,6 +1006,15 @@ html, body{
     padding-top: 20px;
     padding-left: 50px;
     padding-right: 25px;
+    margin-top: 0;
+}
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data.last-msg-white-bg::before{
+    content: "";
+    position: absolute;
+    height: 100%;
+    left: 31px;
+    top: 0;
+    border-left: 1px solid var(--border-color);
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data.last-child-step-run.last-msg-white-bg::before{
     content: "";
@@ -1015,6 +1030,9 @@ html, body{
     left: 23px !important;
     background: var(--theme-color) !important;
     color : var(--default-white-color) !important;
+}
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data.last-msg-white-bg .icon_block_img{
+    left: 23px !important;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data .icon_block {
     position: absolute;
@@ -1109,7 +1127,9 @@ border: 1px solid transparent !important;
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data .run-info-content .agent-utt:hover .action-links {
     display: flex;
 }
-
+.overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send:hover .title-text{
+    padding-right: 80px;
+}
 .overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send:hover .action-links {
     display: flex;
 }
@@ -1496,6 +1516,7 @@ border: 1px solid transparent !important;
     align-items: center;
     padding: 5px 12px;
     min-height: 33px;
+    position: relative;
 }
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content {
     width: 100%;
@@ -1506,7 +1527,7 @@ border: 1px solid transparent !important;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    padding-right: 15px;
+    padding-right: 0px;
     transition: 0.2s all ease;
 }
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content.show-text-on-hover:hover {
@@ -1529,7 +1550,7 @@ border: 1px solid transparent !important;
     white-space: nowrap;
     text-overflow: ellipsis;
     display: inline-block;
-    max-width: 95%;
+    max-width: 100%;
 }
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content .desc-text {
     font-weight: 400;
@@ -1537,7 +1558,7 @@ border: 1px solid transparent !important;
     line-height: 12px;
     color: var(--secondary-color-3);
     font-style: italic;
-    margin-top: 4px;
+    margin-top: 5px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -1559,12 +1580,18 @@ border: 1px solid transparent !important;
     display: none;
     align-items: center;
     flex-shrink: 0;
+    position: absolute;
+    top: 3px;
+    right: 8px;
 }
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .frequently-asked .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links{
     display: flex !important;
 }
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send:hover .action-links {
     display: flex;
+}
+.agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send:hover .title-text{
+    padding-right: 80px;
 }
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .send-run-btn {
     border: 0;
@@ -1883,6 +1910,7 @@ border: 1px solid transparent !important;
     align-items: flex-start;
     padding: 5px 12px;
     min-height: 33px;
+    position: relative;
 }
 .overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content {
     width: 100%;
@@ -1893,7 +1921,7 @@ border: 1px solid transparent !important;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    padding-right: 15px;
+    padding-right: 0px;
     transition: 0.2s all ease;
     padding-top : 5px;
 }
@@ -1917,7 +1945,7 @@ border: 1px solid transparent !important;
     white-space: nowrap;
     text-overflow: ellipsis;
     display: inline-block;
-    max-width: 95%;
+    max-width: 100%;
 }
 .overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content .ast-carrotup{
     display: inline-block;
@@ -1936,7 +1964,7 @@ border: 1px solid transparent !important;
     line-height: 12px;
     color: var(--secondary-color-3);
     font-style: italic;
-    margin-top: 4px;
+    margin-top: 5px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -1945,6 +1973,9 @@ border: 1px solid transparent !important;
     display: none;
     align-items: center;
     flex-shrink: 0;
+    position: absolute;
+    top: 3px;
+    right: 8px;
 }
 
 .overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type#dialoguesArea .content-dialog-task-type .type-info-run-send .action-links{
@@ -3045,20 +3076,20 @@ border: 1px solid transparent !important;
 .agent-assist-chat-container .unread-msg::before{
     content: "";
     position: absolute;
-    width: calc(100% + 30px);
+    width: calc(100% + 41px);
     height: 1px;
-    background: #D7D8D9;
-    left: -14px;
+    background: #d7d8d9;
+    left: -23px;
     top: auto;
 }
 .agent-assist-chat-container .unread-msg::after{
     content: "";
     position: absolute;
-    width: 100%;
+    width: calc(100% + 41px);
     height: 24px;
-    bottom: -12px;
-    left: 0;
-    background: #FFFFFF;
+    bottom: -10px;
+    left: -23px;
+    background: #f8fafb;
 }
 .agent-assist-chat-container .unread-msg .text-dialog-task-end{
     padding: 5px 10px;
