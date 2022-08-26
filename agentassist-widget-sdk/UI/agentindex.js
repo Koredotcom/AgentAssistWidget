@@ -3599,6 +3599,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         if (target.id === 'sendMsg') {
                             let payload = target.dataset.msgData;
                             var message = {
+                                method: 'send',
                                 name: "agentAssist.SendMessage",
                                 conversationId: _conversationId,
                                 payload: payload
@@ -3618,6 +3619,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             let ele = document.getElementById(`displayData-${target.dataset.msgId}`) ? document.getElementById(`displayData-${target.dataset.msgId}`) : document.getElementById(target.dataset.msgId);
                             let data = target.dataset.msgData && target.dataset.msgData !== '' ? target.dataset.msgData : (target.parentNode.dataset.msgData && target.parentNode.dataset.msgData !== '' ? target.parentNode.dataset.msgData : ele.innerText)
                             var message = {
+                                method: 'copy',
                                 name: "agentAssist.CopyMessage",
                                 conversationId: _conversationId,
                                 payload: data
