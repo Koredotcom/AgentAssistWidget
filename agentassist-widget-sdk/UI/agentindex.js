@@ -44,6 +44,9 @@ var scrollAtEnd = true;
 var selectedFaqList = [];
 var lastElementBeforeNewMessage = '';
 var isAnswerRenderbtnClicked = false;
+var isMybotInputResponseClick = false;
+var agentAssistResponse = {};
+var myBotDataResponse = {};
 
 function koreGenerateUUID() {
     console.info("generating UUID");
@@ -428,7 +431,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     let titleText = isOverRideMode ? "You Entered -" : "Customer Said -"
                     let addUserQueryTodropdownData = document.getElementById(`dropDownData-${dropdownHeaderUuids}`);
                     let userQueryHtml = `
-                                    <div class="steps-run-data">
+                                    <div class="steps-run-data last-msg-white-bg">
                                         <div class="icon_block_img">
                                             <img src="./images/userIcon.svg">
                                         </div>
@@ -442,11 +445,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     </div>`;
                     addUserQueryTodropdownData.innerHTML = addUserQueryTodropdownData.innerHTML + userQueryHtml;
                     let entityHtml = $(`#dropDownData-${dropdownHeaderUuids}`).find(`#userInput-${_id}`);
-                    if (data.entityValue && !data.isErrorPrompt) {
-                        entityHtml.append(`<div class="order-number-info">${data.entityName} : ${data.entityValue}</div>`);
-                    } else {
-                        if (data.isErrorPrompt) {
-                            let entityHtmls = `<div class="order-number-info">${data.entityName} : 
+                    let entityDisplayName = agentAssistResponse.entityDisplayName ? agentAssistResponse.entityDisplayName : agentAssistResponse.entityName;
+                    if(agentAssistResponse.newEntityDisplayName || agentAssistResponse.newEntityName){
+                        entityDisplayName = agentAssistResponse.newEntityDisplayName ? agentAssistResponse.newEntityDisplayName : agentAssistResponse.newEntityName;
+                    }
+                    if (data.entityValue && !data.isErrorPrompt && entityDisplayName) {
+                        entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${data.entityValue}</div>`);
+                    } else { 
+                        if (data.isErrorPrompt && entityDisplayName) {
+                            let entityHtmls = `<div class="order-number-info">${entityDisplayName} : 
                                                     <span style="color:red">Value unidentified</span>
                                                 </div>
                                                 <div>
@@ -990,6 +997,46 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     if (isMyBotAutomationOnGoing && data.buttons && !data.value.includes('Customer has waited')) {
                         let sendMsgData = encodeURI(JSON.stringify(_msgsResponse));
                         let runInfoContent = $(`#dropDownData-${myBotDropdownHeaderUuids}`);
+                        $('#inputFieldForMyBot').remove();
+                        
+                         if(isMybotInputResponseClick){
+                            let userQueryHtml = `
+                                    <div class="steps-run-data">
+                                        <div class="icon_block_img">
+                                            <img src="./images/userIcon.svg">
+                                        </div>
+                                        <div class="run-info-content" id="userInput-${myBotuuids}">
+                                            <div class="title">You Entered -</div>
+                                            <div class="agent-utt">
+                                                <div class="title-data">${data.userInput}</div>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>`;
+                            runInfoContent.append(userQueryHtml);
+                            let entityHtml = $(`#dropDownData-${myBotDropdownHeaderUuids}`).find(`#userInput-${myBotuuids}`);
+                            let entityDisplayName = myBotDataResponse.entityDisplayName ? myBotDataResponse.entityDisplayName : myBotDataResponse.entityName;
+                            if (data.userInput && !data.isErrorPrompt && entityDisplayName) {
+                                entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${data.userInput}</div>`);
+                            } else {
+                                if (data.isErrorPrompt && entityDisplayName) {
+                                    let entityHtmls = `<div class="order-number-info">${entityDisplayName} : 
+                                                            <span style="color:red">Value unidentified</span>
+                                                        </div>
+                                                        <div>processMybotData
+                                                            <img src="./images/warning.svg" style="padding-right: 8px;">
+                                                            <span style="font-size: 12px; line-height: 18px; color: #202124;">Incorrect input format<span>
+                                                        </div>`
+                                    entityHtml.append(entityHtmls);
+                                }
+                            }
+                            isMybotInputResponseClick = false;
+                        }
+                        myBotDataResponse = {};
+                        if(data.entityName){
+                            myBotDataResponse = Object.assign({},data);
+                        }
+
                         let askToUserHtml = `
             <div class="steps-run-data">
                            <div class="icon_block">
@@ -1028,15 +1075,21 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                            </div>
                        </div>
             `;
+
+            let agentInputEntityName = 'EnterDetails';
+            if(data.entityDisplayName || data.entityName){
+                agentInputEntityName = data.entityDisplayName ? data.entityDisplayName : data.entityName
+            }
+
                         let agentInputToBotHtml = `
-            <div class="steps-run-data">
+            <div class="steps-run-data" id="inputFieldForMyBot">
                 <div class="icon_block">
                     <i class="ast-agent"></i>
                 </div>
                 <div class="run-info-content">
                 <div class="title">Input</div>
                 <div class="agent-utt enter-details-block">
-                <div class="title-data" ><span class="enter-details-title">EnterDetails: </span>
+                <div class="title-data" ><span class="enter-details-title">${agentInputEntityName} : </span>
                 <input type="text" placeholder="Enter Value" class="input-text chat-container" id="agentInput-${agentInputId}" data-conv-id="${convId}" data-bot-id="${botId}"  data-mybot-input="true">
                 </div>
                 </div>
@@ -1562,7 +1615,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         $(`#cancelOverRideBtn-${dropdownHeaderUuids}`).addClass('hide');
                         $("#inputFieldForAgent").remove();
                         let runInfoContent = $(`#dropDownData-${dropdownHeaderUuids}`);
-                        $(runInfoContent).attr('data-taskId', data.uniqueTaskId);
+                        setTimeout(() => {
+                            if(data.entityName){
+                                agentAssistResponse = {};
+                                agentAssistResponse = Object.assign({},data);
+                            }
+                        }, 10);
                         let askToUserHtml = `
             <div class="steps-run-data">
                            <div class="icon_block">
@@ -1613,7 +1671,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         if (!parsedPayload) {
                             $(runInfoContent).find('.copy-btn').removeClass('hide');
                         }
-
+                        updateNewMessageUUIDList(dropdownHeaderUuids);
                     }
 
                  
@@ -2373,11 +2431,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             </div>`;
                                         runInfoContent.append(userQueryHtml);
                                         let entityHtml = $(`#dropDownData-${previousId}`).find(`#userInput-${res._id}`);
-                                        if (res.agentAssistDetails.entityValue && !res.agentAssistDetails.isErrorPrompt) {
-                                            entityHtml.append(`<div class="order-number-info">${res.agentAssistDetails.entityName} : ${res.agentAssistDetails.entityValue}</div>`);
+                                        let entityDisplayName = agentAssistResponse.newEntityDisplayName ? agentAssistResponse.newEntityDisplayName : agentAssistResponse.newEntityName;
+                                        if (res.agentAssistDetails.entityValue && !res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
+                                            entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${res.agentAssistDetails.entityValue}</div>`);
                                         } else {
-                                            if (res.agentAssistDetails.isErrorPrompt) {
-                                                let entityHtmls = `<div class="order-number-info">${res.agentAssistDetails.entityName} : 
+                                            if (res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
+                                                let entityHtmls = `<div class="order-number-info">${entityDisplayName} : 
                                                             <span style="color:red">Value unidentified</span>
                                                         </div>
                                                         <div>
@@ -2387,6 +2446,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                 entityHtml.append(entityHtmls);
                                             }
                                         }
+                                    }
+                                    if(res.agentAssistDetails?.entityName){
+                                        agentAssistResponse = res.agentAssistDetails;
                                     }
                                     let parsedPayload;
                                     res.components?.forEach((elem) => {
@@ -2656,8 +2718,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         //     $(`#historyDataForMyBot .dilog-task-end.hide`)[$(`#historyDataForMyBot .dilog-task-end.hide`).length - 1]?.classList.remove('hide');
 
                         // } else {
-                            let resp = response.length > 0 ? response?.slice(previousResp?.length - 1, response.length) : undefined;
-                            resp?.forEach((res, index) => {
+                            //let resp = response.length > 0 ? response?.slice(previousResp?.length - 1, response.length) : undefined;
+                            let resp = response.length > 0 ? response : undefined;
+				            resp?.forEach((res, index) => {
                                 if (res.type == 'incoming') {
                                     res.components?.forEach((ele) => {
                                         if (ele.data.text == previousTaskName) {
@@ -2747,11 +2810,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                 </div>`;
                                         runInfoContent.append(userQueryHtml);
                                         let entityHtml = $(`#dropDownData-${previousId}`).find(`#userInput-${res._id}`);
-                                        if (res.agentAssistDetails.entityValue && !res.agentAssistDetails.isErrorPrompt) {
-                                            entityHtml.append(`<div class="order-number-info">${res.agentAssistDetails.entityName} : ${res.agentAssistDetails.entityValue}</div>`);
+                                        let entityDisplayName = myBotDataResponse.newEntityDisplayName ? myBotDataResponse.newEntityDisplayName : myBotDataResponse.newEntityName
+                                        if (res.agentAssistDetails.entityValue && !res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
+                                            entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${res.agentAssistDetails.entityValue}</div>`);
                                         } else {
-                                            if (res.agentAssistDetails.isErrorPrompt) {
-                                                let entityHtmls = `<div class="order-number-info">${res.agentAssistDetails.entityName} : 
+                                            if (res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
+                                                let entityHtmls = `<div class="order-number-info">${entityDisplayName} : 
                                                                 <span style="color:red">Value unidentified</span>
                                                             </div>
                                                             <div>
@@ -2761,6 +2825,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                 entityHtml.append(entityHtmls);
                                             }
                                         }
+                                    }
+                                    if(res.agentAssistDetails?.entityName){
+                                        myBotDataResponse = res.agentAssistDetails;
+                                        myBotDataResponse.entityDisplayName = myBotDataResponse.newEntityDisplayName;
+                                        myBotDataResponse.entityName = myBotDataResponse.newEntityName;
                                     }
                                     let parsedPayload;
                                     res.components?.forEach((elem) => {
@@ -2848,11 +2917,18 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             isMyBotAutomationOnGoing = true;
                                             noAutomationrunninginMyBot = false;
                                             myBotDropdownHeaderUuids = previousId;
+                                            $('#inputFieldForMyBot').remove();
                                             appState[_conversationId]['automationGoingOnAfterRefreshMyBot'] = isMyBotAutomationOnGoing;
                                             localStorage.setItem('agentAssistState', JSON.stringify(appState));
                                             let terminateButtonElement = document.getElementById('myBotTerminateAgentDialog-' + previousId);
                                             terminateButtonElement.classList.remove('hide');
                                         }
+
+                                        let agentInputEntityName = 'EnterDetails';
+                                        if(res.agentAssistDetails?.newEntityDisplayName || res.agentAssistDetails?.newEntityName){
+                                            agentInputEntityName = res.agentAssistDetails.newEntityDisplayName ? res.agentAssistDetails.newEntityDisplayName : res.agentAssistDetails.newEntityName
+                                        }
+                                        
                                         let agentInputToBotHtml = `
                                         <div class="steps-run-data">
                                             <div class="icon_block">
@@ -2861,16 +2937,20 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             <div class="run-info-content">
                                             <div class="title">Input</div>
                                             <div class="agent-utt enter-details-block">
-                                            <div class="title-data" ><span class="enter-details-title">EnterDetails: </span>
+                                            <div class="title-data" ><span class="enter-details-title">${agentInputEntityName} : </span>
                                             <input type="text" placeholder="Enter Value" class="input-text chat-container" id="agentInput-${Math.floor(Math.random() * 100)}" data-conv-id="${convId}" data-bot-id="${botId}"  data-mybot-input="true">
                                             </div>
                                             </div>
                                             </div>
                                         </div>`
-                                     
+
+                                   
+                                    let nextResponse = resp[index+1];
                                     if (res.agentAssistDetails.isPrompt || res.agentAssistDetails.entityRequest) {
                                         runInfoContent.append(askToUserHtml);
-                                        runInfoContent.append(agentInputToBotHtml);
+                                        if(!nextResponse || (nextResponse.status != 'received' && nextResponse.status != 'incoming')){
+                                            runInfoContent.append(agentInputToBotHtml);
+                                        }
                                     } else {
                                         runInfoContent.append(tellToUserHtml);
                                     }
@@ -3204,6 +3284,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             if (newlyAddedMessagesUUIDlist.indexOf(responseId) == -1) {
                                 newlyAddedMessagesUUIDlist.push(responseId);
                                 newlyAddedIdList = getActualRenderedIdList();
+                            }else{
+                                newlyAddedIdList = getActualRenderedIdList()
                             }
                         }
                         addUnreadMessageHtml();  
@@ -3226,7 +3308,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     if(document.getElementById(agentUttInfoId)){
                                         lastElementBeforeNewMessage = document.getElementById(agentUttInfoId);
                                     }
-                                }else{
+                                }else if(id.includes('stepsrundata')){
+                                    lastElementBeforeNewMessage = document.getElementById(id);
+                                } else{
                                     lastElementBeforeNewMessage = getLastElement(id);
                                 }
                                 
@@ -3274,10 +3358,24 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             if (removedIdListOnScroll.indexOf(faqSuggestionId) == -1) {
                                 childIdList.push(faqSuggestionId);
                             }
-                        } else {
-                            let actualParentId = name + '-' + uuid;
-                            if (removedIdListOnScroll.indexOf(actualParentId) == -1) {
-                                childIdList.push(actualParentId);
+                        } else { 
+                            if(dynamicBlockElement.className == 'dialog-task-accordiaon-info'){
+                                let stepsrunList = dynamicBlockElement.querySelectorAll('.steps-run-data');
+                                for(let node of stepsrunList){
+                                    if(node.id){
+                                        if (removedIdListOnScroll.indexOf(node.id) == -1) {
+                                            childIdList.push(node.id);
+                                        }
+                                    }
+                                }
+                                if(childIdList.indexOf(lastElementBeforeNewMessage.id) != -1){
+                                    childIdList.splice(0,childIdList.indexOf(lastElementBeforeNewMessage.id));
+                                }
+                            }else{
+                                let actualParentId = name + '-' + uuid;
+                                if (removedIdListOnScroll.indexOf(actualParentId) == -1) {
+                                    childIdList.push(actualParentId);
+                                }
                             }
                         }
                     }
@@ -3341,6 +3439,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     $(".scroll-bottom-btn span").text('Scroll to bottom');
                     $(".scroll-bottom-btn").removeClass("new-messages");
                     $(".scroll-bottom-show-btn").addClass('hide');
+                    $('.unread-msg').remove();
                     numberOfNewMessages = 0;
                     newlyAddedMessagesUUIDlist = [];
                     newlyAddedIdList = [];
@@ -3362,7 +3461,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         scrollAtEnd = !isScrolledIntoView(lastelement) ? true : false;
                         if (scrollAtEnd) {
                             $(".scroll-bottom-show-btn").addClass('hide');
-                            $('.unread-msg').remove();
+                            updateScrollAtEndVariables();
                         }
                     });
 
@@ -4752,7 +4851,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             }
                             _agentAsisstSocket.emit('enable_override_userinput', overRideObj);
                             let runInfoContent = $(`#dropDownData-${dropdownHeaderUuids}`);
-                            let agentInputId = Math.floor(Math.random() * 100)
+                            let agentInputId = Math.floor(Math.random() * 100);
+                            let agentInputEntityName = 'EnterDetails';
+                            if(agentAssistResponse.newEntityDisplayName || agentAssistResponse.newEntityName){
+                                agentInputEntityName = agentAssistResponse.newEntityDisplayName ? agentAssistResponse.newEntityDisplayName : agentAssistResponse.newEntityName;
+                            }else if(agentAssistResponse.entityDisplayName || agentAssistResponse.entityName){
+                                agentInputEntityName = agentAssistResponse.entityDisplayName ? agentAssistResponse.entityDisplayName : agentAssistResponse.entityName;
+                            }
                             let agentInputToBotHtml = `
                 <div class="steps-run-data" id="inputFieldForAgent">
                     <div class="icon_block">
@@ -4761,7 +4866,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     <div class="run-info-content">
                     <div class="title">Input overridden. Please provide the input</div>
                     <div class="agent-utt enter-details-block">
-                    <div class="title-data" ><span class="enter-details-title">EnterDetails: </span>
+                    <div class="title-data" ><span class="enter-details-title">${agentInputEntityName} : </span>
                     <input type="text" placeholder="Enter Value" class="input-text chat-container" id="agentInput-${agentInputId}" data-conv-id="${_agentAssistDataObj.conversationId}" data-bot-id="${_botId}"  data-mybot-input="true">
                     </div>
                     </div>
@@ -5226,7 +5331,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
 
                 function addUnreadMessageHtml() {
-                    
                     if (!scrollAtEnd && numberOfNewMessages && document.getElementsByClassName('unread-msg').length == 0) {
                         console.log("inside unread message", newlyAddedIdList);
                         // if (document.getElementsByClassName('unread-msg')) {
@@ -5235,6 +5339,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         let unreadHtml = ` <div class="unread-msg">
                         <div class="text-dialog-task-end">Unread Messages</div>     
                                    </div>`;
+                        UnCollapseDropdownForLastElement(lastElementBeforeNewMessage);
 
                         for (let i = 0; i < newlyAddedIdList.length; i++) {
                             if (document.getElementById(newlyAddedIdList[i])) {
@@ -5246,9 +5351,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     if(document.getElementById(agentUttInfoId)){
                                         elements = document.getElementById(agentUttInfoId);
                                     }
+                                    console.log(elements, 'elements');
+                                    elements?.insertAdjacentHTML('beforeBegin', unreadHtml);
+                                }else if(elements.id.includes('stepsrundata') && lastElementBeforeNewMessage.id.includes('stepsrundata')){
+                                    elements = document.getElementById(lastElementBeforeNewMessage.id);
+                                    elements?.insertAdjacentHTML('afterend', unreadHtml);
                                 }
-                                UnCollapseDropdownForLastElement(lastElementBeforeNewMessage);
-                                elements?.insertAdjacentHTML('beforeBegin', unreadHtml);
                                 break;
                             }
                         }
@@ -5499,6 +5607,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: convId, botId: botId, value: intentName, check: true });
                                 document.getElementById("loader").style.display = "block";
                             } else {
+                             	 isMybotInputResponseClick = true;
                                 AgentAssistPubSub.publish('searched_Automation_details', { conversationId: convId, botId: botId, value: intentName, isSearch: false });
                             }
                         }
