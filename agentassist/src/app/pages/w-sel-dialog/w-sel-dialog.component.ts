@@ -572,9 +572,6 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
   }
 
   importSelect() {
-    this.close();
-    this.workflowService.loadBotStore$.next();
-    return;
     this.modSwitch('import'); 
     this.importBotSwitch('first');
     this.step = 2;
@@ -725,7 +722,8 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
     }
 
     const params = {
-      userId: this.authService.getUserId()
+      userId: this.authService.getUserId(),
+      "isAgentAssist":true
     };
     this.importedVariablesData = JSON.parse(this.importedVariablesData);
     this.importedBotData = JSON.parse(this.importedBotData);
@@ -750,8 +748,8 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
           "fileName":this.botFunctionFileName
         }
       ],
-      "isLinkedSmartAssist": true,
-      instanceBotId: this.appService.selectedInstanceApp$.value?._id
+      "isAgentAssist": true,
+      "instanceBotId": this.appService.selectedInstanceApp$.value?._id
     };
     this.importedBt = this.impBtName.trim();
     if(this.conversionNeeded) {
@@ -789,6 +787,7 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
       'isAgentAssist':true
       
     }
+    console.log(params,"params are correct");
     this.service.invoke('get.importconvertbotstatus', params).subscribe(
       res => {
         this.stLogsConversion = res.statusLogs;
@@ -828,7 +827,8 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
   getImpStatus(impId: string) {
     const params = {
       userId: this.authService.getUserId(),
-      importId: impId
+      importId: impId,
+      "isAgentAssist": true
     }
     this.service.invoke('get.importbotstatus', params).subscribe(
       res => {

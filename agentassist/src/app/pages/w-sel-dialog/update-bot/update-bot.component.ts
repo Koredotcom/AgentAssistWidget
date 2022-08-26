@@ -410,7 +410,8 @@ export class UpdateBotComponent implements OnInit {
   checkStatus(imId) {
     const params = {
       userId: this.authService.getUserId(),
-      importId: imId 
+      importId: imId,
+      'isAgentAssist':true 
     };
     this.service.invoke('get.importbotstatus', params).subscribe(
       res => {

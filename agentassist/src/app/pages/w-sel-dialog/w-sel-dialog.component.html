@@ -14,20 +14,21 @@
                 </div>
                 <div class="cards-data">
                     <div class="card_sec" [ngClass]="{'active': activeMod.createNew}" (click)="modSwitch('createNew'); step = 2;">
-                        <div class="img-block"><img src="assets/icons/welcome/new-bot.svg"></div>
+                        <div class="img-block"><img src="assets/images/onboarding/ast-onboarding-1.svg"></div>
                         <div class="title">{{ "ONBOARDING.CREATE_NEW" | translate }}</div>
                         <div class="desc-text">{{ "ONBOARDING.CREATE_NEW_DESC" | translate }}</div>
+                    </div>
+                     <div class="card_sec" [ngClass]="{'active': activeMod.import}" (click)="importSelect();">
+                        <div class="img-block"><img src="assets/images/onboarding/importBot.svg"></div>
+                        <div class="title">{{ "USECASES.NEW_PRE_BOT" | translate }}</div>
+                        <div class="desc-text">{{ "ONBOARDING.CREATE_TEMPLATES_DESC" | translate }}</div>
                     </div>
                     <div class="card_sec" [ngClass]="{'active': activeMod.selectBot}" (click)="convertBotSelection();">
                         <div class="img-block"><img src="assets/icons/welcome/existing.svg"></div>
                         <div class="title">{{ "ONBOARDING.SELECT_EXISTING" | translate }}</div>
                         <div class="desc-text">{{ "ONBOARDING.SELECT_EXISTING_DESC" | translate }}</div>
                     </div>
-                    <!-- <div class="card_sec disabled" [ngClass]="{'active': activeMod.import}" (click)="importSelect()">
-                        <div class="img-block"><img src="assets/icons/welcome/create-templates.svg"></div>
-                        <div class="title">{{ "USECASES.NEW_PRE_BOT" | translate }}</div>
-                        <div class="desc-text">{{ "ONBOARDING.CREATE_TEMPLATES_DESC" | translate }}</div>
-                    </div> -->
+                   
                 </div>
             </div>
         </div>
