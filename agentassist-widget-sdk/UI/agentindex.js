@@ -958,9 +958,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 } else {
                                     let a = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display #articleDivLib-${uuids+index}`) : $(`#overLaySearch #articleDivLib-${uuids+index}`);
                                     let articlesActionHtml = `<div class="action-links">
-                            <button class="send-run-btn" id="articlesendMsg" data-msg-id="article-${uuids+index}"  data-msg-data="${ele.content}">Send</button>
-                            <div class="copy-btn" data-msg-id="article-${uuids+index}" data-msg-data="${ele.content}">
-                                <i class="ast-copy" data-msg-id="article-${uuids+index}" data-msg-data="${ele.content}"></i>
+                            <button class="send-run-btn" id="articlesendMsg" data-msg-id="article-${uuids+index}"  data-msg-data='${ele.content}'>Send</button>
+                            <div class="copy-btn" data-msg-id="article-${uuids+index}" data-msg-data='${ele.content}'>
+                                <i class="ast-copy" data-msg-id="article-${uuids+index}" data-msg-data='${ele.content}'></i>
                             </div>
                         </div>`;
                                     a.append(articlesActionHtml);
@@ -1618,15 +1618,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     } else {
                                             let a = $(`#articleDiv-${uuids + index}`);
                                             let articleActionHtml = `<div class="action-links">
-                                            <button class="send-run-btn" id="articlesendMsg" data-msg-id="article-${uuids + index}" data-msg-data="${ele.content}">Send</button>
-                                            <div class="copy-btn" data-msg-id="article-${uuids + index}" data-msg-data="${ele.content}">
-                                                <i class="ast-copy" data-msg-id="article-${uuids + index}" data-msg-data="${ele.content}"></i>
+                                            <button class="send-run-btn" id="articlesendMsg" data-msg-id="article-${uuids + index}" data-msg-data='${ele.content}'>Send</button>
+                                            <div class="copy-btn" data-msg-id="article-${uuids + index}" data-msg-data='${ele.content}'>
+                                                <i class="ast-copy" data-msg-id="article-${uuids + index}" data-msg-data='${ele.content}'></i>
                                             </div>
                                         </div>`;
                                         a.append(articleActionHtml);
                                         articles.append(`<div class="desc-text" id="articledesc-${uuids + index}">${ele.content}</div>`);
                                         if(ele.link){
-                                            let fullArticleLinkHtml = `<div class="link-view-full-article hide" id="articleViewLink-${uuids+index}"><a href="#" target="_blank">View Full Article</a></div>`
+                                            let fullArticleLinkHtml = `<div class="link-view-full-article hide" id="articleViewLink-${uuids+index}"><a href="${ele.link}" target="_blank">View Full Article</a></div>`
                                              document.getElementById(`articledesc-${uuids+index}`).insertAdjacentHTML('beforeend',fullArticleLinkHtml);
                                          }
     

@@ -1561,9 +1561,11 @@ border: 1px solid transparent !important;
     color: var(--secondary-color-3);
     font-style: italic;
     margin-top: 5px;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    overflow: inherit;
+    white-space: normal;
+    text-overflow: unset;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
 }
 
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content .ast-carrotup{
