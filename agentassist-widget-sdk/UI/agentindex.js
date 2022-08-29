@@ -606,15 +606,16 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }
 
                     // dummy data prepration for articles
-                    if(data.suggestions && data.suggestions.faqs){
-                        data.suggestions.articles = [];
-                        for(let faq of data.suggestions.faqs){
-                            let object = {};
-                            object.title = faq.question;
-                            object.content = faq.answer;
-                            data.suggestions.articles.push(object);
-                        }
-                    }
+                    // if(data.suggestions && data.suggestions.faqs){
+                    //     data.suggestions.articles = [];
+                    //     for(let faq of data.suggestions.faqs){
+                    //         let object = {};
+                    //         object.title = faq.question;
+                    //         object.content = faq.answer + 'Start by entering your trip details onto an aggregator website like SkyScanner or GoogleFlights';
+                    //         object.link = "http://www.google.com"
+                    //         data.suggestions.articles.push(object);
+                    //     }
+                    // }
 
 
                     if (data.useCases) {
@@ -820,14 +821,20 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 };
                                 let faqsSuggestions = currentTabActive == 'searchAutoIcon' ? $('#search-text-display #faqsSuggestions-results') : $('#overLaySearch #faqsSuggestions-results');
 
+                                let faqDivClass = "type-info-run-send"
+                                if(index == 1){
+                                    faqDivClass = "type-info-run-send hide";
+                                }
+
                                 let faqHtml = `
-                        <div class="type-info-run-send" id="faqDivLib-${uuids+index}">
+                        <div class="${faqDivClass}" id="faqDivLib-${uuids+index}">
                             <div class="left-content" id="faqSectionLib-${uuids+index}">
                                 <div class="title-text" id="titleLib-${uuids+index}">${ele.question}</div>
                             </div>
                         </div>`;
 
                                 faqsSuggestions.append(faqHtml);
+                               
                                 let faqs = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${uuids+index}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${uuids+index}`);
                                 if (!ele.answer) {
                                     let checkHtml = `
@@ -864,7 +871,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     $(`#checkLib-${uuids+index}`).addClass('hide');
                                 }
                             });
-                            
+
+                            if(data?.suggestions?.faqs?.length > 1){
+                                let faqsSuggestions = currentTabActive == 'searchAutoIcon' ? $('#search-text-display #faqsSuggestions-results') : $('#overLaySearch #faqsSuggestions-results');
+                                let fullFaqView = `<div class="link-view-full-article ghost-btn" id="faqFullView-${uuids}" data-faq-full-view="true">View All FAQs</div>`
+                                let fewFaqView = `<div class="link-view-full-article ghost-btn hide" id="faqFewView-${uuids}" data-faq-few-view="true">View Few FAQs</div>`
+                                faqsSuggestions.append(fullFaqView); 
+                                faqsSuggestions.append(fewFaqView);
+                            }
+
 
                         }
 
@@ -900,14 +915,21 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 };
                                 let articleSuggestions = currentTabActive == 'searchAutoIcon' ? $('#search-text-display #articleSuggestions-results') : $('#overLaySearch #articleSuggestions-results');
 
+                                let articleDivClass = "type-info-run-send"
+                                if(index == 1){
+                                    articleDivClass = "type-info-run-send hide";
+                                }
+
                                 let articleHtml = `
-                        <div class="type-info-run-send" id="articleDivLib-${uuids+index}">
+                        <div class="${articleDivClass}" id="articleDivLib-${uuids+index}">
                             <div class="left-content" id="articleSectionLib-${uuids+index}">
                                 <div class="title-text" id="articletitleLib-${uuids+index}">${ele.title}</div>
                             </div>
                         </div>`;
 
                         articleSuggestions.append(articleHtml);
+
+                        
                                 let articles = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #articleSectionLib-${uuids+index}`) : $(`#overLaySearch .type-info-run-send #articleSectionLib-${uuids+index}`);
                                 if (!ele.content) {
                                     let articlecheckHtml = `
@@ -924,7 +946,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             </div>
                         </div>`;
                                     a.append(articlesActionHtml);
-                                    articles.append(`<div class="desc-text" id="articledescLib-${uuids+index}">${ele.content}</div>`);
+                                    articles.append(`<div class="desc-text" id="articledescLib-${uuids+index}">${ele.content}
+                                     </div>`);
+                                     if(ele.link){
+                                        let fullArticleLinkHtml = `<div class="link-view-full-article hide" id="articleViewLinkLib-${uuids+index}"><a href="${ele.link}" target="_blank">View Full Article</a></div>`
+                                         document.getElementById(`articledescLib-${uuids+index}`).insertAdjacentHTML('beforeend',fullArticleLinkHtml);
+                                     }
                                     let articlestypeInfo = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #articleSectionLib-${uuids + index}`) : $(`#overLaySearch .type-info-run-send #articleSectionLib-${uuids + index}`);
                                     let seeMoreButtonHtml = `
                                   <button class="ghost-btn hide" style="font-style: italic;" id="articleseeMore-${uuids + index}" data-article-see-more="true">Show more</button>
@@ -939,11 +966,20 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 
                                 
                                 // _msgsResponse.message.push(body);
-                                // if(data.suggestions.faqs.length === 1 && !ele.answer) {
+                                // if(data.suggestions.articles.length === 1 && !ele.answer) {
                                 //     document.getElementById(`articledescLib-${uuids+index}`).click();
                                 //     $(`#articledescLib-${uuids+index}`).addClass('hide');
                                 // }
                             });
+
+                            if(data?.suggestions?.articles?.length > 1){
+                                let articleSuggestions = currentTabActive == 'searchAutoIcon' ? $('#search-text-display #articleSuggestions-results') : $('#overLaySearch #articleSuggestions-results');
+                                let fullArticleView = `<div class="link-view-full-article ghost-btn" id="articleFullView-${uuids}" data-article-full-view="true">View All Articles</div>`
+                                let fewArticleView = `<div class="link-view-full-article ghost-btn hide" id="articleFewView-${uuids}" data-article-few-view="true">View Few Articles</div>`
+                                articleSuggestions.append(fullArticleView); 
+                                articleSuggestions.append(fewArticleView);
+                            }
+
                         }
 
 
@@ -1314,23 +1350,27 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         sectionElement = $('#articleSectionLib-' + id);
                         divElement = $('#articleDivLib-' + id);
                         seeMoreElement = $('#articleseeMore-' + id);
+                        viewLinkElement = $('#articleViewLinkLib-' + id);
                         console.log(seeMoreElement, "see more element");
                     }
                     if(titleElement && descElement && sectionElement && divElement){
                         $(titleElement).css({"overflow": "inherit", "white-space": "normal", "text-overflow" : "unset"});
-                        $(descElement).css({"overflow": "inherit", "white-space": "normal", "text-overflow" : "unset"});
+                        $(descElement).css({"overflow": "inherit", "text-overflow" : "unset"});
                         let faqSectionHeight = $(sectionElement).css("height");
                         faqSectionHeight = parseInt(faqSectionHeight.slice(0,faqSectionHeight.length-2));
                         let faqMinHeight = $(divElement).css("min-height");
-                        faqMinHeight = parseInt(faqMinHeight.slice(0,faqMinHeight.length-2));
+                        faqMinHeight = parseInt(faqMinHeight.slice(0,faqMinHeight.length-2)) + 12;
                         console.log(faqSectionHeight, "section height", faqMinHeight, "min height");
                         if ((faqSectionHeight > (faqMinHeight + faqSourceTypePixel)) || (sectionElement > faqMinHeight && faqSectionHeight <= (faqMinHeight + faqSourceTypePixel))) {
                             $(seeMoreElement).removeClass('hide');
                         }else{
                             $(seeMoreElement).addClass('hide');
+                            if(article){
+                                $(viewLinkElement).removeClass('hide');
+                            }
                         }
                         $(titleElement).css({"overflow": "hidden", "white-space": "nowrap", "text-overflow" : "ellipsis"});
-                        $(descElement).css({"overflow": "hidden", "white-space": "nowrap", "text-overflow" : "ellipsis"});
+                        $(descElement).css({"overflow": "hidden", "text-overflow" : "ellipsis", "display": "-webkit-box"});
                     }
                 }
 
@@ -1353,11 +1393,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }
                     if(titleElement && descElement && sectionElement && divElement){
                         $(titleElement).css({"overflow": "inherit", "white-space": "normal", "text-overflow" : "unset"});
-                        $(descElement).css({"overflow": "inherit", "white-space": "normal", "text-overflow" : "unset"});
+                        $(descElement).css({"overflow": "inherit", "text-overflow" : "unset"});
                         let faqSectionHeight = $(sectionElement).css("height");
                         faqSectionHeight = parseInt(faqSectionHeight.slice(0,faqSectionHeight.length-2));
                         let faqMinHeight = $(divElement).css("min-height");
-                        faqMinHeight = parseInt(faqMinHeight.slice(0,faqMinHeight.length-2));
+                        faqMinHeight = parseInt(faqMinHeight.slice(0,faqMinHeight.length-2)) + 12;
                         console.log('FAQ SM SL: ',faqMinHeight, faqSourceTypePixel);
                         if ((faqSectionHeight > (faqMinHeight + faqSourceTypePixel)) || (sectionElement > faqMinHeight && faqSectionHeight <= (faqMinHeight + faqSourceTypePixel))) {
                             $(seeMoreElement).removeClass('hide');
@@ -1365,7 +1405,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $(seeMoreElement).addClass('hide');
                         }
                         $(titleElement).css({"overflow": "hidden", "white-space": "nowrap", "text-overflow" : "ellipsis"});
-                        $(descElement).css({"overflow": "hidden", "white-space": "nowrap", "text-overflow" : "ellipsis"});
+                        $(descElement).css({"overflow": "hidden", "text-overflow" : "ellipsis", "display": "-webkit-box"});
                     }
                 }
 
@@ -1382,15 +1422,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     // }
 
                     // dummy data prepration for articles
-                    if(data.suggestions && data.suggestions.faqs){
-                        data.suggestions.articles = [];
-                        for(let faq of data.suggestions.faqs){
-                            let object = {};
-                            object.title = faq.question;
-                            object.content = faq.answer;
-                            data.suggestions.articles.push(object);
-                        }
-                    }
+                    // if(data.suggestions && data.suggestions.faqs){
+                    //     data.suggestions.articles = [];
+                    //     for(let faq of data.suggestions.faqs){
+                    //         let object = {};
+                    //         object.title = faq.question;
+                    //         object.content = faq.answer + 'Start by entering your trip details onto an aggregator website like SkyScanner or GoogleFlights';
+                    //         data.suggestions.articles.push(object);
+                    //     }
+                    // }
 
                     let uuids = koreGenerateUUID();
                     responseId = uuids;
@@ -1710,6 +1750,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     </div>`;
                                     a.append(articleActionHtml);
                                     articles.append(`<div class="desc-text" id="articledesc-${uuids + index}">${ele.content}</div>`);
+                                    if(ele.link){
+                                        let fullArticleLinkHtml = `<div class="link-view-full-article hide" id="articleViewLink-${uuids+index}"><a href="#" target="_blank">View Full Article</a></div>`
+                                         document.getElementById(`articledesc-${uuids+index}`).insertAdjacentHTML('beforeend',fullArticleLinkHtml);
+                                     }
 
                                     let articlestypeInfo = $(`.type-info-run-send #articleSection-${uuids + index}`);
                                     let seeMoreButtonHtml = `
@@ -3903,9 +3947,49 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         var checkLibButton = target.dataset.checkLib;
                         var articleSeeMoreButton = target.dataset.articleSeeMore;
                         var articleSeeLessButton = target.dataset.articleSeeLess;
+                        var articleFullView = target.dataset.articleFullView;
+                        var faqFullView = target.dataset.faqFullView;
+                        var articleFewView = target.dataset.articleFewView;
+                        var faqFewView = target.dataset.faqFewView;
 
                         if (target.className === 'copy-btn') {
                             // Hello();
+                        }
+
+                        if(articleFewView){
+                            let targets = target.id.split('-');
+                            targets.shift();
+                            let articleSuggestions = currentTabActive == 'searchAutoIcon' ? $('#search-text-display #articleSuggestions-results') : $('#overLaySearch #articleSuggestions-results');
+                            $(articleSuggestions).children(".type-info-run-send").slice(0,1).addClass('hide');
+                            $(`#articleFullView-${targets.join('-')}`).removeClass('hide');
+                            evt.target.classList.add('hide');
+                        }
+
+                        if(faqFewView){
+                            let targets = target.id.split('-');
+                            targets.shift();
+                            let faqsSuggestions = currentTabActive == 'searchAutoIcon' ? $('#search-text-display #faqsSuggestions-results') : $('#overLaySearch #faqsSuggestions-results');
+                            $(faqsSuggestions).children(".type-info-run-send").slice(0,1).addClass('hide');
+                            $(`#faqFullView-${targets.join('-')}`).removeClass('hide');
+                            evt.target.classList.add('hide');
+                        }
+
+                        if(articleFullView){
+                            let targets = target.id.split('-');
+                            targets.shift();
+                            let articleSuggestions = currentTabActive == 'searchAutoIcon' ? $('#search-text-display #articleSuggestions-results') : $('#overLaySearch #articleSuggestions-results');
+                            $(articleSuggestions).children(".type-info-run-send").removeClass('hide');
+                            $(`#articleFewView-${targets.join('-')}`).removeClass('hide');
+                            evt.target.classList.add('hide');
+                        }
+
+                        if(faqFullView){
+                            let targets = target.id.split('-');
+                            targets.shift();
+                            let faqsSuggestions = currentTabActive == 'searchAutoIcon' ? $('#search-text-display #faqsSuggestions-results') : $('#overLaySearch #faqsSuggestions-results');
+                            $(faqsSuggestions).children(".type-info-run-send").removeClass('hide');
+                            $(`#faqFewView-${targets.join('-')}`).removeClass('hide');
+                            evt.target.classList.add('hide');
                         }
 
                         if(articleSeeMoreButton){
@@ -3920,10 +4004,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     ele.classList.remove('hide')
                                 }
                             })
-                            evt.target.classList.add('hide')
+                            evt.target.classList.add('hide');
                             articles.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#articletitle-${targets.join('-')}` :
                                 `#articletitleLib-${targets.join('-')}`}`).attr('style', `overflow: inherit; white-space: normal; text-overflow: unset;`);
-                            articles.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#articledesc-${targets.join('-')}` : `#articledescLib-${targets.join('-')}`}`).attr('style', `overflow: inherit; white-space: normal; text-overflow: unset;`);
+                            articles.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#articledesc-${targets.join('-')}` : `#articledescLib-${targets.join('-')}`}`).attr('style', `overflow: inherit; text-overflow: unset;  display:block;`);
+                            articles.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#articleViewLink-${targets.join('-')}` : `#articleViewLinkLib-${targets.join('-')}`}`).removeClass('hide');
 
                         }
 
@@ -3942,8 +4027,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             white-space: nowrap;
                             text-overflow: ellipsis;`);
                                         articles.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#articledesc-${targets.join('-')}` : `#articledescLib-${targets.join('-')}`}`).attr('style', `overflow: hidden;
-                            white-space: nowrap;
-                            text-overflow: ellipsis;`);
+                           
+                            text-overflow: ellipsis;
+                            display : -webkit-box`);
+                            articles.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#articleViewLink-${targets.join('-')}` : `#articleViewLinkLib-${targets.join('-')}`}`).addClass('hide');
+
                             evt.target.classList.add('hide')
                         }
                         
@@ -3962,7 +4050,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             evt.target.classList.add('hide')
                             faqs.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#title-${targets.join('-')}` :
                                 `#titleLib-${targets.join('-')}`}`).attr('style', `overflow: inherit; white-space: normal; text-overflow: unset;`);
-                            faqs.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#desc-${targets.join('-')}` : `#descLib-${targets.join('-')}`}`).attr('style', `overflow: inherit; white-space: normal; text-overflow: unset;`);
+                            faqs.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#desc-${targets.join('-')}` : `#descLib-${targets.join('-')}`}`).attr('style', `overflow: inherit; text-overflow: unset; display:block;`);
                         }
                         if (seeLessButton) {
                             let targets = target.id.split('-');
@@ -3979,8 +4067,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 white-space: nowrap;
                 text-overflow: ellipsis;`);
                             faqs.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#desc-${targets.join('-')}` : `#descLib-${targets.join('-')}`}`).attr('style', `overflow: hidden;
-                white-space: nowrap;
-                text-overflow: ellipsis;`);
+                
+                text-overflow: ellipsis;
+                display : -webkit-box`);
                             evt.target.classList.add('hide')
                         }
                         let targetIds = (target.id).split('-');
