@@ -5830,6 +5830,17 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
         $(`#scriptContainer .empty-data-no-agents`).addClass('hide');
     }
 
+    function initializePerfectScrollBarForOverlaySuggestions(container){
+        var KRPerfectScrollbar;
+        if(window.PerfectScrollbar && typeof PerfectScrollbar ==='function'){
+          KRPerfectScrollbar=window.PerfectScrollbar;
+          let scrollbar = new KRPerfectScrollbar($(`#${agentContainer}`).find('.suggestion-content').get(0), {
+            suppressScrollX: true
+          });
+        }
+
+    }
+
     function createAgentAssistContainer(containerId, conversationId, botId, connectionDetails) {
         console.log("AgentAssist >>> finding container ", containerId);
         console.log("AgentAssist >>> userId in createAgentAssistContainer", containerId, conversationId, connectionDetails, botId)
@@ -6063,6 +6074,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             console.log("AgentAssist >>> adding html")
             // var hrml = `<div>Hello</div>`
             container.append(cHtml);
+            initializePerfectScrollBarForOverlaySuggestions(container);
         } else {
             console.log(`AgentAssist >>> container ${containerId} not found`)
         }

@@ -776,6 +776,8 @@ html, body{
     text-overflow: ellipsis;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
+    text-align: justify;
+    word-break: break-word;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links {
     display: none;
@@ -1566,6 +1568,8 @@ border: 1px solid transparent !important;
     text-overflow: unset;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
+    text-align: justify;
+    word-break: break-word;
 }
 
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content .ast-carrotup{
@@ -1974,6 +1978,8 @@ border: 1px solid transparent !important;
     text-overflow: ellipsis;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
+    text-align: justify;
+    word-break: break-word;
 }
 .overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links {
     display: none;
