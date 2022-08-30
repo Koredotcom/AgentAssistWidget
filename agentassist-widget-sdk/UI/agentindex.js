@@ -429,9 +429,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     };
                     _msgsResponse.message.push(body);
 
-                    let titleText = isOverRideMode ? "You Entered -" : "Customer Said -"
-                    let addUserQueryTodropdownData = document.getElementById(`dropDownData-${dropdownHeaderUuids}`);
-                    let userQueryHtml = `
+                    let titleText = '';
+                    let userQueryHtml = '';
+                    if(isOverRideMode) {
+                        titleText = "YouEntered -";
+                        userQueryHtml = `
                                     <div class="steps-run-data last-msg-white-bg">
                                         <div class="icon_block_img">
                                             <img src="./images/userIcon.svg">
@@ -444,6 +446,23 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             
                                         </div>
                                     </div>`;
+                    } else {
+                        titleText = "Customer Said -"
+                        userQueryHtml = `
+                                    <div class="steps-run-data last-msg-white-bg">
+                                        <div class="icon_block_img">
+                                            <img src="./images/userIcon.svg">
+                                        </div>
+                                        <div class="run-info-content" id="userInput-${_id}">
+                                            <div class="title">${titleText}</div>
+                                            <div class="agent-utt">
+                                                <div class="title-data">"${data.userInput}"</div>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>`;
+                    }
+                    let addUserQueryTodropdownData = document.getElementById(`dropDownData-${dropdownHeaderUuids}`);
                     addUserQueryTodropdownData.innerHTML = addUserQueryTodropdownData.innerHTML + userQueryHtml;
                     let entityHtml = $(`#dropDownData-${dropdownHeaderUuids}`).find(`#userInput-${_id}`);
                     let entityDisplayName = agentAssistResponse.entityDisplayName ? agentAssistResponse.entityDisplayName : agentAssistResponse.entityName;
@@ -2456,7 +2475,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                 <div class="run-info-content" id="userInput-${res._id}">
                                                     <div class="title">Customer Said - </div>
                                                     <div class="agent-utt">
-                                                        <div class="title-data">"${encodeURI(res.agentAssistDetails.entityValue)}"</div>
+                                                        <div class="title-data">"${res.agentAssistDetails.entityValue}"</div>
                                                     </div>
                                                     
                                                 </div>
