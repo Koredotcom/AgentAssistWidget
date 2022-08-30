@@ -438,7 +438,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         <div class="run-info-content" id="userInput-${_id}">
                                             <div class="title">${titleText}</div>
                                             <div class="agent-utt">
-                                                <div class="title-data">"${data.userInput}"</div>
+                                                <div class="title-data">"${encodeURI(data.userInput)}"</div>
                                             </div>
                                             
                                         </div>
@@ -450,7 +450,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         entityDisplayName = agentAssistResponse.newEntityDisplayName ? agentAssistResponse.newEntityDisplayName : agentAssistResponse.newEntityName;
                     }
                     if (data.entityValue && !data.isErrorPrompt && entityDisplayName) {
-                        entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${data.entityValue}</div>`);
+                        entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${encodeURI(data.entityValue)}</div>`);
                     } else { 
                         if (data.isErrorPrompt && entityDisplayName) {
                             let entityHtmls = `<div class="order-number-info">${entityDisplayName} : 
@@ -585,7 +585,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         </div>
                                         <div class="run-info-content">
                                             <div class="title">You Entered- </div>
-                                            <div class="order-number-info">value : ${agentEntityInput}</div>
+                                            <div class="order-number-info">value : ${encodeUIR(agentEntityInput)}</div>
                                         </div>
                                 </div>`;
                     addAgentQueryTodropdownData.innerHTML = addAgentQueryTodropdownData.innerHTML + agentQueryHtml;
@@ -686,17 +686,17 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             isSuggestionProcessed = false;
                             if (currentTabActive == 'searchAutoIcon') {
                                 let searchTextDisplay = document.getElementById('search-text-display');
-                                html = `<div class="searched-intent" id="librarySearchText">Search results for '${data.userInput}' </div>`
+                                html = `<div class="searched-intent" id="librarySearchText">Search results for '${encodeURI(data.userInput)}' </div>`
                                 searchTextDisplay.innerHTML = html;
                             } else {
                                 let dialogsLength = data.suggestions.dialogs?.length || 0;
                                 let faqsLength = data.suggestions.faqs?.length || 0;
                                 if ((dialogsLength > 0) && (faqsLength > 0)) {
-                                    $('#overLaySearch').html(`<div class="search-results-text">${dialogsLength + faqsLength} Search results for '${data.userInput}' <span class="show-all hide">Show all</span></div>`)
+                                    $('#overLaySearch').html(`<div class="search-results-text">${dialogsLength + faqsLength} Search results for '${encodeURI(data.userInput)}' <span class="show-all hide">Show all</span></div>`)
                                 } else if ((dialogsLength > 0) && (faqsLength === 0 || faqsLength === undefined)) {
-                                    $('#overLaySearch').html(`<div class="search-results-text">${dialogsLength} Search results for '${data.userInput}' <span class="show-all hide">Show all</span></div>`)
+                                    $('#overLaySearch').html(`<div class="search-results-text">${dialogsLength} Search results for '${encodeURI(data.userInput)}' <span class="show-all hide">Show all</span></div>`)
                                 } else if ((dialogsLength === 0 || dialogsLength === undefined) && (faqsLength > 0)) {
-                                    $('#overLaySearch').html(`<div class="search-results-text">${faqsLength} Search results for '${data.userInput}' <span class="show-all hide">Show all</span></div>`)
+                                    $('#overLaySearch').html(`<div class="search-results-text">${faqsLength} Search results for '${encodeURI(data.userInput)}' <span class="show-all hide">Show all</span></div>`)
                                 }
                                 if ((dialogsLength + faqsLength) > 1) {
                                     $('#overLaySearch').find('.show-all').removeClass('hide');
@@ -708,10 +708,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             if (isSuggestionProcessed) {
                                 if (currentTabActive == 'searchAutoIcon') {
                                     let searchTextDisplay = document.getElementById('search-text-display');
-                                    html = `<div class="searched-intent" id="librarySearchText">0 Search results for '${data.userInput}' </div>`
+                                    html = `<div class="searched-intent" id="librarySearchText">0 Search results for '${encodeURI(data.userInput)}' </div>`
                                     searchTextDisplay.innerHTML = html;
                                 } else {
-                                    $('#overLaySearch').html(`<div class="search-results-text">0 Search results for '${data.userInput}'</div>`)
+                                    $('#overLaySearch').html(`<div class="search-results-text">0 Search results for '${encodeURI(data.userInput)}'</div>`)
                                 }
                             }
 
@@ -1008,7 +1008,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         <div class="run-info-content" id="userInput-${myBotuuids}">
                                             <div class="title">You Entered -</div>
                                             <div class="agent-utt">
-                                                <div class="title-data">${data.userInput}</div>
+                                                <div class="title-data">${encodeURI(data.userInput)}</div>
                                             </div>
                                             
                                         </div>
@@ -1017,7 +1017,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             let entityHtml = $(`#dropDownData-${myBotDropdownHeaderUuids}`).find(`#userInput-${myBotuuids}`);
                             let entityDisplayName = myBotDataResponse.entityDisplayName ? myBotDataResponse.entityDisplayName : myBotDataResponse.entityName;
                             if (data.userInput && !data.isErrorPrompt && entityDisplayName) {
-                                entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${data.userInput}</div>`);
+                                entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${encodeURI(data.userInput)}</div>`);
                             } else {
                                 if (data.isErrorPrompt && entityDisplayName) {
                                     let entityHtmls = `<div class="order-number-info">${entityDisplayName} : 
@@ -2453,7 +2453,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                 <div class="run-info-content" id="userInput-${res._id}">
                                                     <div class="title">Customer Said - </div>
                                                     <div class="agent-utt">
-                                                        <div class="title-data">"${res.agentAssistDetails.entityValue}"</div>
+                                                        <div class="title-data">"${encodeURI(res.agentAssistDetails.entityValue)}"</div>
                                                     </div>
                                                     
                                                 </div>
@@ -2462,7 +2462,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         let entityHtml = $(`#dropDownData-${previousId}`).find(`#userInput-${res._id}`);
                                         let entityDisplayName = agentAssistResponse.newEntityDisplayName ? agentAssistResponse.newEntityDisplayName : agentAssistResponse.newEntityName;
                                         if (res.agentAssistDetails.entityValue && !res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
-                                            entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${res.agentAssistDetails.entityValue}</div>`);
+                                            entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${encodeURI(res.agentAssistDetails.entityValue)}</div>`);
                                         } else {
                                             if (res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
                                                 let entityHtmls = `<div class="order-number-info">${entityDisplayName} : 
@@ -2854,7 +2854,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                     <div class="run-info-content" id="userInput-${res._id}">
                                                         <div class="title">Customer Said - </div>
                                                         <div class="agent-utt">
-                                                            <div class="title-data">"${res.agentAssistDetails.entityValue}"</div>
+                                                            <div class="title-data">"${encodeURI(res.agentAssistDetails.entityValue)}"</div>
                                                         </div>
                                                         
                                                     </div>
@@ -2863,7 +2863,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         let entityHtml = $(`#dropDownData-${previousId}`).find(`#userInput-${res._id}`);
                                         let entityDisplayName = myBotDataResponse.newEntityDisplayName ? myBotDataResponse.newEntityDisplayName : myBotDataResponse.newEntityName
                                         if (res.agentAssistDetails.entityValue && !res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
-                                            entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${res.agentAssistDetails.entityValue}</div>`);
+                                            entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${encodeURI(res.agentAssistDetails.entityValue)}</div>`);
                                         } else {
                                             if (res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
                                                 let entityHtmls = `<div class="order-number-info">${entityDisplayName} : 
@@ -3083,7 +3083,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         libraryTabActive();
                         currentTabActive = 'searchAutoIcon';
                         if (convState?.libraryTab.length > 0) {
-                            $('#librarySearch').val(convState.libraryTab);
+                            // $('#librarySearch').val(convState.libraryTab);
+                            let decodeEncodedVal = decodeURI(convState.libraryTab)
+                            $('#librarySearch').val(decodeEncodedVal);
                             var convId = _convId;
                             var botId = _botId;
                             var intentName = convState.libraryTab;
@@ -3251,7 +3253,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     convState.currentTab = currentTab;
                     if (appState[_convId] && (convState.currentTab == 'librarySearch')) {
                         if (searchedVal !== undefined && document.getElementById('librarySearch').value.length > 0) {
-                            convState.libraryTab = document.getElementById('librarySearch').value;
+                            // convState.libraryTab = document.getElementById('librarySearch').value;
+                            let encodedSearchVal = encodeURI(document.getElementById('librarySearch').value);
+                            convState.libraryTab = encodedSearchVal;
                         } else {
                             convState.libraryTab = '';
                         }
