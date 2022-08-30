@@ -2069,12 +2069,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                   //  stateItems.push(JSON.stringify(_data));
                     localStorage.setItem('agentAssistState', JSON.stringify(appState));
                 }
-                function addFeedbackHtmlToDomForHistory(data, botId, userIntentInput, id, runForAgentBot, previousTaskPositionId = '') {
+                function addFeedbackHtmlToDomForHistory(data, botId, userIntentInput, id, runForAgentBot, previousTaskPositionId) {
                     var dropDownData;
                     var endOfDialoge;
                     let taskIdOfDialog = $(`#dropDownData-${id}`).attr('data-taskId');
-                    let myBotdialogId = 'dg-' + (Math.random() + 1).toString(36).substring(2);
-                    let positionID = runForAgentBot? myBotdialogId:previousTaskPositionId;
+                    let positionID = previousTaskPositionId;
                     if (runForAgentBot) {
                         $(`#myBotTerminateAgentDialog-${id}.btn-danger`).remove();
                         dropDownData = $(`#dropDownData-${id}`);
@@ -2205,7 +2204,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
 
                 async function renderingHistoryMessage () {
-                    let url = `${connectionDetails.envinormentUrl}/agentassist/api/v1/agent-feedback/${_agentAssistDataObj.conversationId}?interaction="assist"`;
+                    let url = `${connectionDetails.envinormentUrl}/agentassist/api/v1/agent-feedback/${_agentAssistDataObj.conversationId}?interaction=assist`;
                     let feedBackResult = await renderHistoryFeedBack(url);
                     document.getElementById("loader").style.display = "block";
                     isShowHistoryEnable = true;
@@ -2734,7 +2733,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
 
                 async function renderingAgentHistoryMessage(){
-                    let url = `${connectionDetails.envinormentUrl}/agentassist/api/v1/agent-feedback/${_agentAssistDataObj.conversationId}?interaction="mybot"`;
+                    let url = `${connectionDetails.envinormentUrl}/agentassist/api/v1/agent-feedback/${_agentAssistDataObj.conversationId}?interaction=mybot`;
                     let feedBackResult = await renderHistoryFeedBack(url);
                     isShowHistoryEnableForMyBot = true;
                     getData(`${connectionDetails.envinormentUrl}/api/1.1/botmessages/agentassist/${_agentAssistDataObj.botId}/history?convId=${_agentAssistDataObj.conversationId}&agentHistory=true`)
@@ -5560,7 +5559,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     if(!tabName){
                         tabName = currentTabActive == 'userAutoIcon'? 'dynamicBlock':'agentAutoContainer';
                     }
-                    let allFeedBackDetails = $(`#${tabName}.feedback-helpul-container`);
+                    let allFeedBackDetails = $(`#${tabName} .feedback-helpul-container`);
                     allFeedBackDetails?.each((i, ele) => {
                         let feedDataSet;
                         if (data.feedback == 'dislike') {
