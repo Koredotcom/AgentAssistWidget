@@ -1247,7 +1247,7 @@ border: 1px solid transparent !important;
     text-align: center;
     position: relative;
     top: 0;
-    z-index: 1;
+    /* z-index: 0; */
     /* bottom: -55px; */
     /* margin-top: 10px;
     padding-bottom: 15px;
@@ -2899,10 +2899,13 @@ border: 1px solid transparent !important;
     width: calc(100% + 30px);
     left: -15px;
     position: relative;
-    background: #EAF1FC;
+    /* background: #EAF1FC; */
     box-shadow: inset 0px 1px 3px rgba(209,218,231,0.25), inset 0px 0px 1px #D1DAE7;
     padding: 18px 24px;
     display: inline-block;
+    margin-top: -11px;
+    border: 1px dashed #EAF1FC;
+    background: #f8fafb;
 }
 .feedback-helpul-container .titles-content {
     display: flex;
