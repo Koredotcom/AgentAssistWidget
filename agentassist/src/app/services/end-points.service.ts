@@ -535,7 +535,7 @@ export class EndPointsService {
     };
 
     this.serviceList['get.importbotstatus'] = {
-      endpoint: this.API_SERVER_URL + '/users/:userId/builder/importBot/status/:importId',
+      endpoint: this.API_SERVER_URL + '/users/:userId/builder/importBot/status/:importId?isAgentAssist=true',
       method: 'get'
     };
 
