@@ -575,7 +575,6 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
     this.modSwitch('import'); 
     this.importBotSwitch('first');
     this.step = 2;
-    this.uploadIconSelected('assets/icons/welcome/bot_icon_0.png');
   }
 
   uploadIconSelected(iconPath: string) {
@@ -783,8 +782,7 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
   getConvStatus(convId: string) {
     const params = {
       userId: this.authService.getUserId(),
-      importId: convId,
-      'isAgentAssist':true
+      importId: convId
       
     }
     console.log(params,"params are correct");
