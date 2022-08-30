@@ -2189,8 +2189,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     // dropdownHeaderUuids = undefined;
                 }
 
-                async function renderHistoryFeedBack(){
-                    let url = `${connectionDetails.envinormentUrl}/agentassist/api/v1/agent-feedback/${_agentAssistDataObj.conversationId}`;
+                async function renderHistoryFeedBack(url){
                     const response = await $.ajax({
                         method: 'GET',
                         url: url
@@ -2206,7 +2205,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
 
                 async function renderingHistoryMessage () {
-                    let feedBackResult = await renderHistoryFeedBack();
+                    let url = `${connectionDetails.envinormentUrl}/agentassist/api/v1/agent-feedback/${_agentAssistDataObj.conversationId}?interaction="assist"`;
+                    let feedBackResult = await renderHistoryFeedBack(url);
                     document.getElementById("loader").style.display = "block";
                     isShowHistoryEnable = true;
                     getData(`${connectionDetails.envinormentUrl}/api/1.1/botmessages/agentassist/${_agentAssistDataObj.botId}/history?convId=${_agentAssistDataObj.conversationId}&agentHistory=false`)
@@ -2398,7 +2398,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         
                                                     <div class="dialog-task-accordiaon-info" id="addRemoveDropDown-${res._id}" >
                                                         <div class="accordion-header" id="dropDownHeader-${res._id}"
-                                                        data-drop-down-opened="false">
+                                                        data-drop-down-opened="true">
                                                             <div class="icon-info">
                                                                 <i class="ast-rule"></i>
                                                             </div>
@@ -2419,7 +2419,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         let previousIdFeedBackDetails = feedBackResult.find((ele)=> ele.positionId === previousTaskPositionId);
                                         addFeedbackHtmlToDomForHistory(res, res.botId, res?.agentAssistDetails?.userInput, previousId, false, previousTaskPositionId);
                                         if(previousIdFeedBackDetails) {
-                                            UpdateFeedBackDetails(previousIdFeedBackDetails);
+                                            UpdateFeedBackDetails(previousIdFeedBackDetails, 'dynamicBlock');
                                             if(previousIdFeedBackDetails.feedback == 'dislike' && (previousIdFeedBackDetails.feedbackDetails.length == 0 && previousIdFeedBackDetails.comment.length == 0)){
                                                 $(`#feedbackHelpfulContainer-${previousId} .explore-more-negtive-data`).removeClass('hide');
                                             }else {
@@ -2733,7 +2733,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     isShowHistoryEnable = false;
                 }
 
-                function renderingAgentHistoryMessage(){
+                async function renderingAgentHistoryMessage(){
+                    let url = `${connectionDetails.envinormentUrl}/agentassist/api/v1/agent-feedback/${_agentAssistDataObj.conversationId}?interaction="mybot"`;
+                    let feedBackResult = await renderHistoryFeedBack(url);
                     isShowHistoryEnableForMyBot = true;
                     getData(`${connectionDetails.envinormentUrl}/api/1.1/botmessages/agentassist/${_agentAssistDataObj.botId}/history?convId=${_agentAssistDataObj.conversationId}&agentHistory=true`)
                     .then(response => {
@@ -2742,7 +2744,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
                         document.getElementById("loader").style.display = "none";
                         let previousId;
-                        let previousTaskName, currentTaskName;
+                        let previousTaskName, currentTaskName, previousTaskPositionId, currentTaskPositionId;
                         let convId = _agentAssistDataObj.conversationId;
                         let botId = _agentAssistDataObj.botId;
                         // if (JSON.stringify(response) === JSON.stringify(previousResp)) {
@@ -2754,15 +2756,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             //let resp = response.length > 0 ? response?.slice(previousResp?.length - 1, response.length) : undefined;
                             let resp = response.length > 0 ? response : undefined;
 				            resp?.forEach((res, index) => {
-                                if (res.type == 'incoming') {
-                                    res.components?.forEach((ele) => {
-                                        if (ele.data.text == previousTaskName) {
-                                            previousTaskName = undefined;
-                                            previousId = undefined;
-                                            console.log("xxxxxxxxxxxxxxxxxxxxx incoming task same")
-                                        }
-                                    })
-                                }
+                                // if (res.type == 'incoming') {
+                                //     res.components?.forEach((ele) => {
+                                //         if (ele.data.text == previousTaskName) {
+                                //             previousTaskName = undefined;
+                                //             previousId = undefined;
+                                //             console.log("xxxxxxxxxxxxxxxxxxxxx incoming task same")
+                                //         }
+                                //     })
+                                // }
                                 if ((!res.agentAssistDetails?.suggestions && !res.agentAssistDetails?.ambiguityList && !res.agentAssistDetails?.ambiguity) && res.type == 'outgoing') {
                                     let _msgsResponse = {
                                         "type": "bot_response",
@@ -2779,6 +2781,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         "createdOnTimemillis": res._id
                                     }
                                     currentTaskName = res.tN ? res.tN : currentTaskName;
+                                    currentTaskPositionId = res?.agentAssistDetails?.positionId ? res?.agentAssistDetails?.positionId : currentTaskPositionId;
                                     let historyData = $('#myBotAutomationBlock');
                                     let userInputHtml;
                                     if (res.agentAssistDetails.userInput) {
@@ -2809,21 +2812,37 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                             
                                                         `;
 
-                                    if (previousTaskName && currentTaskName !== previousTaskName) {
-                                        addFeedbackHtmlToDomForHistory(res, res.botId, res?.agentAssistDetails?.userInput, previousId, true)
+                                    // if (previousTaskName && currentTaskName !== previousTaskName) {
+                                    //     addFeedbackHtmlToDomForHistory(res, res.botId, res?.agentAssistDetails?.userInput, previousId, true)
+                                    //     previousId = undefined;
+                                    // }
+                                    if (previousTaskPositionId && currentTaskPositionId !== previousTaskPositionId ) {
+                                        let previousIdFeedBackDetails = feedBackResult.find((ele)=> ele.positionId === previousTaskPositionId);
+                                        addFeedbackHtmlToDomForHistory(res, res.botId, res?.agentAssistDetails?.userInput, previousId, true, previousTaskPositionId);
+                                        if(previousIdFeedBackDetails) {
+                                            UpdateFeedBackDetails(previousIdFeedBackDetails, 'agentAutoContainer');
+                                            if(previousIdFeedBackDetails.feedback == 'dislike' && (previousIdFeedBackDetails.feedbackDetails.length == 0 && previousIdFeedBackDetails.comment.length == 0)){
+                                                $(`#feedbackHelpfulContainer-${previousId} .explore-more-negtive-data`).removeClass('hide');
+                                            }else {
+                                                $(`#feedbackHelpfulContainer-${previousId} .explore-more-negtive-data`).addClass('hide');
+                                            }
+                                        }    
                                         previousId = undefined;
+                                        previousTaskPositionId = undefined;
+                                        previousTaskName = undefined;
                                     }
 
-                                    if (res.tN && !previousId && previousTaskName !== currentTaskName) {
+                                    if (res.tN && !previousId && previousTaskPositionId !== currentTaskPositionId) {
                                         let divExist = $(`#MyBotaddRemoveDropDown-${res._id}`);
                                         previousTaskName = currentTaskName;
+                                        previousTaskPositionId = currentTaskPositionId;
                                         if (divExist.length >= 1) {
                                             console.log("---->>>>>>>>>>>>>>>>>>>>>already exsit===in the dom");
                                         } else {
                                             historyData.append(userInputHtml);
                                             historyData.append(dropdownHtml);
                                             previousId = res._id;
-                                            previousTaskName = res.tN;
+                                            previousTaskPositionId = currentTaskPositionId;
                                         }
                                     }
                                     if (res.agentAssistDetails.entityName && res.agentAssistDetails.entityResponse && res.agentAssistDetails.entityValue) {
@@ -2914,7 +2933,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                                         _msgsResponse.message.push(body);
                                     });
-                                    if(res.agentAssistDetails?.isPrompt === true || res.agentAssistDetails?.isPrompt === false) {
+                                    if((res.agentAssistDetails?.isPrompt === true || res.agentAssistDetails?.isPrompt === false)  && previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) {
                                     let runInfoContent = $(`#dropDownData-${previousId}`);
                                     let askToUserHtml = `
                                             <div class="steps-run-data">
@@ -2954,7 +2973,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             appState[_conversationId]['automationGoingOnAfterRefreshMyBot'] = isMyBotAutomationOnGoing;
                                             localStorage.setItem('agentAssistState', JSON.stringify(appState));
                                             let terminateButtonElement = document.getElementById('myBotTerminateAgentDialog-' + previousId);
+                                            $(`#myBotTerminateAgentDialog-${previousId}`).attr('data-position-id', previousTaskPositionId);
                                             terminateButtonElement.classList.remove('hide');
+                                            myBotDialogPositionId = previousTaskPositionId;
                                         }
 
                                         let agentInputEntityName = 'EnterDetails';
@@ -2984,6 +3005,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         if(!nextResponse || (nextResponse.status != 'received' && nextResponse.status != 'incoming')){
                                             runInfoContent.append(agentInputToBotHtml);
                                         }
+                                        
                                     } else {
                                         runInfoContent.append(tellToUserHtml);
                                     }
@@ -5534,8 +5556,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 		    UnCollapseDropdownForLastElement(lastElementBeforeNewMessage);
                 }
 
-                function UpdateFeedBackDetails(data) {
-                    let allFeedBackDetails = $('.feedback-helpul-container');
+                function UpdateFeedBackDetails(data, tabName) {
+                    if(!tabName){
+                        tabName = currentTabActive == 'userAutoIcon'? 'dynamicBlock':'agentAutoContainer';
+                    }
+                    let allFeedBackDetails = $(`#${tabName}.feedback-helpul-container`);
                     allFeedBackDetails?.each((i, ele) => {
                         let feedDataSet;
                         if (data.feedback == 'dislike') {
@@ -5977,7 +6002,8 @@ function AgentAssist_feedBack_Update_Request(e) {
         botId: e.botId,
         orgId: '',
         taskId: e.taskid,
-        positionId: e.dialogid
+        positionId: e.dialogid,
+        "interactionType": currentTabActive == 'userAutoIcon'? 'assist': 'mybot'
     }
 
     _agentAsisstSocket.emit('agent_feedback_request', agent_assist_feedback_request);
@@ -6376,7 +6402,8 @@ AgentAssistPubSub.subscribe('agent_usage_feedback', (msg, data) => {
         positionId: data.dialogId,
         taskId: data.taskId,
         comment: data.comment,
-        feedbackDetails: data.feedbackDetails
+        feedbackDetails: data.feedbackDetails,
+        "interactionType": currentTabActive == 'userAutoIcon'? 'assist': 'mybot'
     }
     _agentAsisstSocket.emit('agent_usage_feedback', agent_assist_request);
 });

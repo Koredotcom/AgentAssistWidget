@@ -3272,7 +3272,7 @@
                                         <div class="msgCmpt botResponseAttachments" fileid="${msgItem.component.payload.url}"> \
                                             <div class="uploadedFileIcon"> \
                                                 {{if msgItem.component.type == "image"}} \
-                                                    <span class="icon cf-icon icon-photos_active"></span> \
+                                                  <img class="image-size" src="${msgItem.component.payload.url}"> \
                                                 {{else msgItem.component.type == "audio"}}\
                                                     <span class="icon cf-icon icon-files_audio"></span> \
                                                 {{else msgItem.component.type == "video"}} \
