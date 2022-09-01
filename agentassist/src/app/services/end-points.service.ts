@@ -535,12 +535,12 @@ export class EndPointsService {
     };
 
     this.serviceList['get.importbotstatus'] = {
-      endpoint: this.API_SERVER_URL + '/users/:userId/builder/importBot/status/:importId?isAgentAssist=true',
+      endpoint: this.API_SERVER_URL + '/users/:userId/builder/importBot/status/:importId',
       method: 'get'
     };
 
     this.serviceList['get.importconvertbotstatus'] = {
-      endpoint: this.API_SERVER_URL + '/users/:userId/builder/importBot/status/:importId?isAgentAssist=true',
+      endpoint: this.API_SERVER_URL + '/users/:userId/builder/importBot/status/:importId',
       method: 'get'
     };
 
