@@ -2163,7 +2163,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     </div>
                                 </div>
                                 <div class="explore-more-negtive-data hide">
-                                    <div class="btns-group-negtive-chips" id="feedBackOptions-${id}">
+                                    <div class="btns-group-negtive-chips" "data-options-changes"="false" id="feedBackOptions-${id}">
                                         <div class="btn-chip-negtive" data-chip-click='false'>Not enough suggestions</div>
                                         <div class="btn-chip-negtive" data-chip-click='false'>Not prompt</div>
                                         <div class="btn-chip-negtive" data-chip-click='false'>Intent undetected</div>
@@ -2174,7 +2174,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         <input type="text" placeholder="Placeholder text" class="input-text" id="feedBackComment-${id}"
                                         data-feedback-comment="true">
                                     </div>
-                                    <button class="submit-btn" data-updateFlag="false" disabled>Submit</button>
+                                    <button class="submit-btn" data-updateFlag="false" "data-changed"="false" disabled>Submit</button>
                                 </div>
                             </div>
                         
@@ -3871,7 +3871,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 $(target).addClass('active-chip');
                                 target.dataset.chipClick = 'true';
                                 dataSets.feedbackdetails.push($(target).html());
-
                             } else {
                                 $(target).removeClass('active-chip');
                                 target.dataset.chipClick = 'false';
@@ -3881,15 +3880,28 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     }
                                 })
                             }
+                            $(`#feedbackdown-${id.join('-')} .ast-thumbdown`).attr('data-feedbackdetails', `[${dataSets.feedbackdetails}]`);
+                            $(`#${target.parentElement.id}`).attr('data-options-changes', 'true');
+                           
                             let activeChipCount = $(`#${target.parentElement.id} .btn-chip-negtive.active-chip`);
+                            let dataSetofSubmit = $(`#feedbackHelpfulContainer-${id.join('-')} .submit-btn`).data();
+                            if(dataSetofSubmit.isSubmitDisabled == 'true' && dataSetofSubmit.updateflag == 'true'){
+                                $(`#feedbackHelpfulContainer-${id.join('-')} .submit-btn`).removeAttr('disabled');
+                            }
                             if (activeChipCount.length > 0) {
                                 $(`#feedbackHelpfulContainer-${id.join('-')} .title-improve`).addClass('hide');
-                                $('.submit-btn').removeAttr('disabled');
+                                $(`#feedbackHelpfulContainer-${id.join('-')} .submit-btn`).removeAttr('disabled');
                             } else {
                                 if (dataSets.comment.length == 0) {
                                     $(`#feedbackHelpfulContainer-${id.join('-')} .title-improve`).removeClass('hide');
+                                    if(dataSetofSubmit.updateflag == 'false' ){
+                                        $(`#feedbackHelpfulContainer-${id.join('-')} .submit-btn`).attr('disabled', 'disabled');
+                                    }
                                 }
+                                
                             }
+                            
+                            
                         }
                         if (target.className == 'submit-btn') {
                             let id = target.parentElement.firstElementChild.id.split('-');
@@ -3906,8 +3918,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             target.innerHTML = "Update";
                             $('.submit-btn').attr('disabled', 'disabled');
                             
-                            dataSets.comment = "";
-                            dataSets.feedbackdetails = [];
+                            // dataSets.comment = "";
+                            // dataSets.feedbackdetails = [];
+                            
+                            $(`#feedbackdown-${id.join('-')} .ast-thumbdown`).attr('data-comment','');
+                            $(`#feedbackdown-${id.join('-')} .ast-thumbdown`).attr('data-feedbackdetails', '[]');
                             $(`#feedbackHelpfulContainer-${id.join('-')} .btn-chip-negtive.active-chip`).removeClass('active-chip');
                             $(`#feedBackComment-${id.join('-')}`).val('');
                             isUpdateFeedBackDetailsFlag = false;
@@ -5185,10 +5200,24 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             targetids.shift();
                             let dataSets = $(`#feedbackdown-${targetids.join('-')} .ast-thumbdown`).data();
                             dataSets.comment = target.value;
-                            if (target.value.length > 0) {
-                                $('.submit-btn').removeAttr('disabled');
-                                $(`#feedbackHelpfulContainer-${targetids.join('-')} .title-improve`).addClass('hide');
+                            $(`#feedbackHelpfulContainer-${targetids.join('-')} .submit-btn`).attr('data-changed', 'true');
+                            let dataSetofSubmit = $(`#feedbackHelpfulContainer-${id.join('-')} .submit-btn`).data();
+                            if(dataSetofSubmit.isSubmitDisabled == 'true' && dataSetofSubmit.updateflag == 'true'){
+                                $(`#feedbackHelpfulContainer-${id.join('-')} .submit-btn`).removeAttr('disabled');
                             }
+                            if (target.value.length > 0) {
+                                $(`#feedbackHelpfulContainer-${targetids.join('-')} .submit-btn`).removeAttr('disabled');
+                                $(`#feedbackHelpfulContainer-${targetids.join('-')} .title-improve`).addClass('hide');
+                            } else {
+                                if(dataSetofSubmit.isSubmitDisabled == 'true' && dataSetofSubmit.updateflag == 'false'){
+                                    $(`#feedbackHelpfulContainer-${id.join('-')} .submit-btn`).removeAttr('disabled');
+                                }
+                            }
+                            let isSubmitDisabled = $(`#feedbackHelpfulContainer-${targetids.join('-')} .btns-group-negtive-chips`).attr('data-options-changes');
+                            if(isSubmitDisabled){
+                                $(`#feedbackHelpfulContainer-${targetids.join('-')} .submit-btn`).removeAttr('disabled');
+                            }
+                            
                         } else {
                             var agentAssistInput = target.dataset.agentAssistInput;
                             var mybotInput = target.dataset.mybotInput;
@@ -5506,7 +5535,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     </div>
                                 </div>
                                 <div class="explore-more-negtive-data hide">
-                                    <div class="btns-group-negtive-chips" id="feedBackOptions-${headerUUids}">
+                                    <div class="btns-group-negtive-chips" "data-options-changes"="false" id="feedBackOptions-${headerUUids}">
                                         <div class="btn-chip-negtive" data-chip-click='false'>Not enough suggestions</div>
                                         <div class="btn-chip-negtive" data-chip-click='false'>Not prompt</div>
                                         <div class="btn-chip-negtive" data-chip-click='false'>Intent undetected</div>
@@ -5517,7 +5546,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         <input type="text" placeholder="Placeholder text" class="input-text" id="feedBackComment-${headerUUids}"
                                         data-feedback-comment="true">
                                     </div>
-                                    <button class="submit-btn" data-updateFlag="false" disabled>Submit</button>
+                                    <button class="submit-btn" data-updateFlag="false" "data-changed"="false" disabled>Submit</button>
                                 </div>
                             </div>
                         
@@ -5560,8 +5589,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         $(eles).addClass('active-chip') : '';
                                 });
                                 $(ele).find('.input-block-optional .input-text').val(data.comment);
-                                feedDataSet.comment = data.comment;
-                                feedDataSet.feedbackdetails = data.feedbackDetails;
+                                 feedDataSet.comment = data.comment;
+                                 feedDataSet.feedbackdetails = data.feedbackDetails;
+                                 $(ele).find(`.input-text`).val(data.comment);
+                                 $(ele).find('.btn-negtive .ast-thumbdown').attr('data-comment', data.comment);
+                                 $(ele).find('.btn-negtive .ast-thumbdown').attr('data-feedbackdetails', `[${data.feedbackDetails}]`)
                             } else {
                                 $(ele).find('.btn-chip-negtive').removeClass('active-chip');
                                 $(ele).find('.title-improve').removeClass('hide');
