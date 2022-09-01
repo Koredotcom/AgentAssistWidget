@@ -47,6 +47,7 @@ var isAnswerRenderbtnClicked = false;
 var isMybotInputResponseClick = false;
 var agentAssistResponse = {};
 var myBotDataResponse = {};
+var waitingTimeForSeeMoreButton = 150;
 
 function koreGenerateUUID() {
     console.info("generating UUID");
@@ -161,6 +162,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 var koreBot = koreBotChat();
                 AgentChatInitialize = new koreBot.chatWindow(chatConfig);
                 AgentChatInitialize.customTemplateObj = new customTemplate(chatConfig, AgentChatInitialize);
+                let isUpdateFeedBackDetailsFlag = false;
                 let docs = document.getElementById('chat-window-footer');
                 docs.hidden = true;
                 _userTranscript = false;
@@ -277,6 +279,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                     })
 
+                    _agentAsisstSocket.on('agent_feedback_response', (data) => {
+                        if(isUpdateFeedBackDetailsFlag) {
+                            UpdateFeedBackDetails(data);
+                        }
+                    })
                     _agentAsisstSocket.on("agent_assist_endoftask", (data)=>{
                         dialogTerminatedOrIntruppted(data, data.botId, userIntentInput)
                     })
@@ -373,7 +380,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     $('#transcriptIcon').removeClass('hide');
                     transcriptionTabActive();
                 }
-
+                
                 renderingHistoryMessage();
                 renderingAgentHistoryMessage();
                 
@@ -434,9 +441,26 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     };
                     _msgsResponse.message.push(body);
 
-                    let titleText = isOverRideMode ? "You Entered -" : "Customer Said -"
-                    let addUserQueryTodropdownData = document.getElementById(`dropDownData-${dropdownHeaderUuids}`);
-                    let userQueryHtml = `
+                    let titleText = '';
+                    let userQueryHtml = '';
+                    if(isOverRideMode) {
+                        titleText = "YouEntered -";
+                        userQueryHtml = `
+                                    <div class="steps-run-data last-msg-white-bg">
+                                        <div class="icon_block_img">
+                                            <img src="./images/userIcon.svg">
+                                        </div>
+                                        <div class="run-info-content" id="userInput-${_id}">
+                                            <div class="title">${titleText}</div>
+                                            <div class="agent-utt">
+                                                <div class="title-data">"${encodeURI(data.userInput)}"</div>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>`;
+                    } else {
+                        titleText = "Customer Said -"
+                        userQueryHtml = `
                                     <div class="steps-run-data last-msg-white-bg">
                                         <div class="icon_block_img">
                                             <img src="./images/userIcon.svg">
@@ -449,6 +473,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             
                                         </div>
                                     </div>`;
+                    }
+                    let addUserQueryTodropdownData = document.getElementById(`dropDownData-${dropdownHeaderUuids}`);
                     addUserQueryTodropdownData.innerHTML = addUserQueryTodropdownData.innerHTML + userQueryHtml;
                     let entityHtml = $(`#dropDownData-${dropdownHeaderUuids}`).find(`#userInput-${_id}`);
                     let entityDisplayName = agentAssistResponse.entityDisplayName ? agentAssistResponse.entityDisplayName : agentAssistResponse.entityName;
@@ -456,7 +482,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         entityDisplayName = agentAssistResponse.newEntityDisplayName ? agentAssistResponse.newEntityDisplayName : agentAssistResponse.newEntityName;
                     }
                     if (data.entityValue && !data.isErrorPrompt && entityDisplayName) {
-                        entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${data.entityValue}</div>`);
+                        entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${encodeURI(data.entityValue)}</div>`);
                     } else { 
                         if (data.isErrorPrompt && entityDisplayName) {
                             let entityHtmls = `<div class="order-number-info">${entityDisplayName} : 
@@ -591,7 +617,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         </div>
                                         <div class="run-info-content">
                                             <div class="title">You Entered- </div>
-                                            <div class="order-number-info">value : ${agentEntityInput}</div>
+                                            <div class="order-number-info">value : ${encodeUIR(agentEntityInput)}</div>
                                         </div>
                                 </div>`;
                     addAgentQueryTodropdownData.innerHTML = addAgentQueryTodropdownData.innerHTML + agentQueryHtml;
@@ -708,7 +734,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             isSuggestionProcessed = false;
                             if (currentTabActive == 'searchAutoIcon') {
                                 let searchTextDisplay = document.getElementById('search-text-display');
-                                html = `<div class="searched-intent" id="librarySearchText">Search results for '${data.userInput}' </div>`
+                                html = `<div class="searched-intent" id="librarySearchText">Search results for '${encodeURI(data.userInput)}' </div>`
                                 searchTextDisplay.innerHTML = html;
                             } else {
                                 let dialogsLength = data.suggestions.dialogs?.length || 0;
@@ -736,10 +762,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             if (isSuggestionProcessed) {
                                 if (currentTabActive == 'searchAutoIcon') {
                                     let searchTextDisplay = document.getElementById('search-text-display');
-                                    html = `<div class="searched-intent" id="librarySearchText">0 Search results for '${data.userInput}' </div>`
+                                    html = `<div class="searched-intent" id="librarySearchText">0 Search results for '${encodeURI(data.userInput)}' </div>`
                                     searchTextDisplay.innerHTML = html;
                                 } else {
-                                    $('#overLaySearch').html(`<div class="search-results-text">0 Search results for '${data.userInput}'</div>`)
+                                    $('#overLaySearch').html(`<div class="search-results-text">0 Search results for '${encodeURI(data.userInput)}'</div>`)
                                 }
                             }
 
@@ -856,6 +882,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             data-bot-id="${botId}" data-intent-name="${ele.question}"
                             data-check-lib="true" id="checkLib-${uuids+index}"></i>`;
                                     faqs.append(checkHtml);
+                                    $(`#titleLib-${uuids+index}`).addClass('noPadding');
                                 } else {
                                     let a = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display #faqDivLib-${uuids+index}`) : $(`#overLaySearch #faqDivLib-${uuids+index}`);
                                     let faqActionHtml = `<div class="action-links">
@@ -874,7 +901,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     faqstypeInfo.append(seeMoreButtonHtml);
                                     setTimeout(() => {
                                         updateSeeMoreButtonForAgent(uuids + index);
-                                    }, 10);
+                                    }, waitingTimeForSeeMoreButton);
                                 }
                                 
                                 
@@ -1030,7 +1057,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${splitedanswerPlaceableID.join('-')}" data-see-less="true">Show less</button>
                         `;
                                 faqs.append(seeMoreButtonHtml);
-                                updateSeeMoreButtonForAgent(splitedanswerPlaceableID.join('-'));
+                                setTimeout(() => {                                 
+                                    updateSeeMoreButtonForAgent(splitedanswerPlaceableID.join('-'));
+                                }, waitingTimeForSeeMoreButton);
                                 // $(`#search-text-display .type-info-run-send #faqSectionLib-${splitedanswerPlaceableID.join('-')} .ast-carrotup.rotate-carrot`).length>0?$(`#search-text-display #seeMore-${splitedanswerPlaceableID.join('-')}`).removeClass('hide'):$(`#search-text-display #seeMore-${splitedanswerPlaceableID.join('-')}`).addClass('hide');
                                 // $(`#overLaySearch .type-info-run-send #faqSectionLib-${splitedanswerPlaceableID.join('-')} .ast-carrotup.rotate-carrot`).length>0?$(`#overLaySearch #seeMore-${splitedanswerPlaceableID.join('-')}`).removeClass('hide'):$(`#overLaySearch #seeMore-${splitedanswerPlaceableID.join('-')}`).addClass('hide');            
                                 isAnswerRenderbtnClicked = false;
@@ -1156,7 +1185,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         <div class="run-info-content" id="userInput-${myBotuuids}">
                                             <div class="title">You Entered -</div>
                                             <div class="agent-utt">
-                                                <div class="title-data">${data.userInput}</div>
+                                                <div class="title-data">${encodeURI(data.userInput)}</div>
                                             </div>
                                             
                                         </div>
@@ -1165,7 +1194,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             let entityHtml = $(`#dropDownData-${myBotDropdownHeaderUuids}`).find(`#userInput-${myBotuuids}`);
                             let entityDisplayName = myBotDataResponse.entityDisplayName ? myBotDataResponse.entityDisplayName : myBotDataResponse.entityName;
                             if (data.userInput && !data.isErrorPrompt && entityDisplayName) {
-                                entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${data.userInput}</div>`);
+                                entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${encodeURI(data.userInput)}</div>`);
                             } else {
                                 if (data.isErrorPrompt && entityDisplayName) {
                                     let entityHtmls = `<div class="order-number-info">${entityDisplayName} : 
@@ -1764,6 +1793,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         data-bot-id="${botId}" data-intent-name="${ele.question}"
                         data-check="true" id="check-${uuids+index}"></i>`;
                                     faqs.append(checkHtml);
+                                    $(`#title-${uuids+index}`).addClass('noPadding');
                                 } else {
                                     let a = $(`#faqDiv-${uuids+index}`);
                                     let faqActionHtml = `<div class="action-links">
@@ -1783,8 +1813,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     faqstypeInfo.append(seeMoreButtonHtml);
                                     setTimeout(() => {
                                         updateSeeMoreButtonForAssist(uuids + index);
-                                    }, 100);
-                                    // updateSeeMoreButtonForAssist(uuids + index);
+                                    }, waitingTimeForSeeMoreButton);
                                 }
 
                             if(data.suggestions.faqs.length === 1 && !ele.answer) {
@@ -1814,10 +1843,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         `;
                                 faqs.append(seeMoreButtonHtml);
                                 console.log("updat see more button for assist");
-                                // updateSeeMoreButtonForAssist(splitedanswerPlaceableID.join('-'));
                                 setTimeout(() => {
                                     updateSeeMoreButtonForAssist(splitedanswerPlaceableID.join('-'));
-                                }, 100);
+                                }, waitingTimeForSeeMoreButton);
                                 // $(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')} .ast-carrotup.rotate-carrot`).length>0?$(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')} #seeMore-${splitedanswerPlaceableID.join('-')}`).removeClass('hide'):$(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')} #seeMore-${splitedanswerPlaceableID.join('-')}`).removeClass('hide');
                                 isAnswerRenderbtnClicked = false;
                             })
@@ -2113,7 +2141,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 function dialogTerminatedOrIntruppted(data, botId, userIntentInput) {
                     var appStateStr = localStorage.getItem('agentAssistState') || '{}';
                     var appState = JSON.parse(appStateStr);
-                    if(data.endOfTask && data?.isSearch ) {
+                    if(data.endOfTask && data?.isSearch !== undefined && !data?.isSearch ) {
                         dialogTerminatedOrIntrupptedInMyBot(data, botId, userIntentInput, appState);
                     }else {
                         isAutomationOnGoing = false;
@@ -2240,7 +2268,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }
                 }
 
-                function _createRunTemplateContainerForMyTab(agentBotuuids, intentName) {
+                function _createRunTemplateContainerForMyTab(agentBotuuids, intentName, dialogId) {
                     let dynamicBlock = document.getElementById('myBotAutomationBlock');
                     let dropdownHtml = `
                 <div class="dialog-task-accordiaon-info hide" id="MyBotaddRemoveDropDown-${agentBotuuids}">
@@ -2250,7 +2278,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         </div>
                         <div class="header-text" id="dropDownTitle-${agentBotuuids}">${intentName}</div>
                         <i class="ast-carrotup"></i>
-                        <button class="btn-danger" id="myBotTerminateAgentDialog-${agentBotuuids}">Terminate</button>
+                        <button class="btn-danger" id="myBotTerminateAgentDialog-${agentBotuuids}" data-position-id="${dialogId}">Terminate</button>
                     </div>
                     <div class="collapse-acc-data" id="dropDownData-${agentBotuuids}">
 
@@ -2260,7 +2288,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     dynamicBlock.innerHTML += dropdownHtml;
                 }
 
-                function _createRunTemplateContiner(uuids, intentName) {
+                function _createRunTemplateContiner(uuids, intentName, dialogId) {
                     let dynamicBlock = document.getElementById('dynamicBlock');
                     let dropdownHtml = `
        <div class="dialog-task-accordiaon-info hide" id="addRemoveDropDown-${uuids}" >
@@ -2271,12 +2299,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                </div>
                <div class="header-text" id="dropDownTitle-${uuids}">${intentName}</div>
                <i class="ast-carrotup"></i>
-               <button class="btn-danger" id="terminateAgentDialog">Terminate</button>
+               <button class="btn-danger" id="terminateAgentDialog" data-position-id="${dialogId}">Terminate</button>
            </div>
            <div class="collapse-acc-data" id="dropDownData-${uuids}">
-            <div class="override-input-div hide" id="overRideDiv-${uuids}">
-            <button class="override-input-btn" id="overRideBtn-${uuids}">Override Input</button>
-            <button class="cancel-override-input-btn hide" id="cancelOverRideBtn-${uuids}">Cancel Override</button>
+            <div class="override-input-div hide" id="overRideDiv-${uuids}" >
+            <button class="override-input-btn" id="overRideBtn-${uuids}" data-position-id="${dialogId}">Override Input</button>
+            <button class="cancel-override-input-btn hide" id="cancelOverRideBtn-${uuids}" data-position-id="${dialogId}">Cancel Override</button>
             </div>
               
            </div>
@@ -2339,9 +2367,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                   //  stateItems.push(JSON.stringify(_data));
                     localStorage.setItem('agentAssistState', JSON.stringify(appState));
                 }
-                function addFeedbackHtmlToDomForHistory(data, botId, userIntentInput, id, runForAgentBot) {
+                function addFeedbackHtmlToDomForHistory(data, botId, userIntentInput, id, runForAgentBot, previousTaskPositionId) {
                     var dropDownData;
                     var endOfDialoge;
+                    let taskIdOfDialog = $(`#dropDownData-${id}`).attr('data-taskId');
+                    let positionID = previousTaskPositionId;
                     if (runForAgentBot) {
                         $(`#myBotTerminateAgentDialog-${id}.btn-danger`).remove();
                         dropDownData = $(`#dropDownData-${id}`);
@@ -2385,47 +2415,67 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             <span class="tootltip-tabs">Dislike</span>
             </div>
        </div>`;
-                    dropDownData.append(feedbackHtml);
-                    let endofDialogeHtml = `
-        <div class="dilog-task-end" id="endTaks-${id}" data-history="true">
-        <div class="text-dialog-task-end">Task Ended</div>     
-                   </div>
-                   <div class="feedback-helpul-container hide">
-                    <div class="titles-content">
-                        <div class="title">Helpful?</div>
-                        <div class="btn-positive">
-                            <i class="ast-thumbup"></i>
-                            <span class="tootltip-tabs">Like</span>
-                        </div>
-                        <div class="btn-negtive">
-                            <i class="ast-thumbdown"></i>
-                            <span class="tootltip-tabs">Dislike</span>
-                        </div>
-                        <div class="thanks-update hide">Thanks for the feedback!</div>
-                        <div class="help-improve-arrow">
-                            <div class="title-improve">Help us improve (optional)</div>
-                            <div class="arrow-icon">
-                                <i class="ast-carrotup"></i>
+                   // dropDownData.append(feedbackHtml);
+        let endofDialogeHtml = `
+                    <div class="dilog-task-end" id="endTaks-${id}">
+                    <div class="text-dialog-task-end">Dialog Task ended</div>     
+                               </div>
+                               <div class="feedback-helpul-container" id="feedbackHelpfulContainer-${id}">
+                                <div class="titles-content">
+                                    <div class="title">Helpful?</div>
+                                    <div class="btn-positive" id="feedbackup-${id}">
+                                        <i class="ast-thumbup"
+                                        id="feedbackup-${id}"
+                                        data-feedbacklike="false"
+                                        data-conv-id="${_conversationId}"
+                                        data-bot-id="${botId}" data-feedback="like"
+                                        data-dialog-name="${data.tN}"
+                                        data-user-input="${userIntentInput}"
+                                        data-comment=""
+                                        data-feedbackdetails="[]"
+                                        data-taskID ="${taskIdOfDialog}"
+                                        data-dialogId="${positionID}"></i>
+                                        <span class="tootltip-tabs">Like</span>
+                                    </div>
+                                    <div class="btn-negtive" id="feedbackdown-${id}">
+                                        <i class="ast-thumbdown" 
+                                        id="feedbackdown-${id}"
+                                        data-feedbackdislike="false"
+                                        data-conv-id="${_conversationId}"
+                                        data-bot-id="${botId}" data-feedback="dislike"
+                                        data-dialog-name="${data.tN}"
+                                        data-user-input="${userIntentInput}"
+                                        data-comment=""
+                                        data-feedbackdetails="[]"
+                                        data-taskID ="${taskIdOfDialog}"
+                                        data-dialogId="${positionID}"></i>
+                                        <span class="tootltip-tabs">Dislike</span>
+                                    </div>
+                                    <div class="thanks-update hide">Thanks for the feedback!</div>
+                                    <div class="help-improve-arrow hide">
+                                        <div class="title-improve hide">Help us improve (optional)</div>
+                                        <div class="arrow-icon" data-feedback-drop-down-opened="false" id="dropdownArrowFeedBack-${id}">
+                                            <i class="ast-carrotup" data-feedback-drop-down-opened="false" id="dropdownArrowFeedBackIcon-${id}"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="explore-more-negtive-data hide">
+                                    <div class="btns-group-negtive-chips" id="feedBackOptions-${id}">
+                                        <div class="btn-chip-negtive" data-chip-click='false'>Not enough suggestions</div>
+                                        <div class="btn-chip-negtive" data-chip-click='false'>Not prompt</div>
+                                        <div class="btn-chip-negtive" data-chip-click='false'>Intent undetected</div>
+                                        <div class="btn-chip-negtive" data-chip-click='false'>Other</div>
+                                    </div>
+                                    <div class="input-block-optional">
+                                        <div class="label-text">Additional comments (Optional)</div>
+                                        <input type="text" placeholder="Placeholder text" class="input-text" id="feedBackComment-${id}"
+                                        data-feedback-comment="true">
+                                    </div>
+                                    <button class="submit-btn" data-updateFlag="false" disabled>Submit</button>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="explore-more-negtive-data">
-                        <div class="btns-group-negtive-chips">
-                            <div class="btn-chip-negtive active-chip">Not enough suggestions</div>
-                            <div class="btn-chip-negtive active-chip">Not prompt</div>
-                            <div class="btn-chip-negtive">Intent undetected</div>
-                            <div class="btn-chip-negtive">Not prompt</div>
-                            <div class="btn-chip-negtive">Other</div>
-                        </div>
-                        <div class="input-block-optional">
-                            <div class="label-text"></div>
-                            <input type="text" placeholder="Placeholder text" class="input-text">
-                        </div>
-                        <button class="submit-btn" disabled>Submit</button>
-                    </div>
-                </div>
-            
-        `;
+                        
+                    `;
                     if(!document.getElementById('endTaks-' + id)){
                         endOfDialoge.append(endofDialogeHtml);
                     }
@@ -2436,9 +2486,24 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     // dropdownHeaderUuids = undefined;
                 }
 
+                async function renderHistoryFeedBack(url){
+                    const response = await $.ajax({
+                        method: 'GET',
+                        url: url
+                    });
+                    if(response.results) {
+                        return response.results;
+                    }else {
+                        console.log("error")
+                    }
+                    
+                     
+                }
 
 
-                function renderingHistoryMessage () {
+                async function renderingHistoryMessage () {
+                    let url = `${connectionDetails.envinormentUrl}/agentassist/api/v1/agent-feedback/${_agentAssistDataObj.conversationId}?interaction=assist`;
+                    let feedBackResult = await renderHistoryFeedBack(url);
                     document.getElementById("loader").style.display = "block";
                     isShowHistoryEnable = true;
                     getData(`${connectionDetails.envinormentUrl}/api/1.1/botmessages/agentassist/${_agentAssistDataObj.botId}/history?convId=${_agentAssistDataObj.conversationId}&agentHistory=false`)
@@ -2447,7 +2512,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         document.getElementById("loader").style.display = "none";
 
                         let previousId;
-                        let previousTaskName, currentTaskName;
+                        let previousTaskPositionId, currentTaskPositionId, currentTaskName, previousTaskName;
                         // if (JSON.stringify(response) === JSON.stringify(previousResp)) {
                         //     $(`#historyData .collapse-acc-data.hide`)[$(`#historyData .collapse-acc-data.hide`).length - 1]?.classList.remove('hide');
                         //     $(`#historyData .show-history-feedback.hide`)[$(`#historyData .show-history-feedback.hide`).length - 1]?.classList.remove('hide');
@@ -2457,15 +2522,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         // } else {
                             let resp = response.length > 0 ? response?.slice(previousResp?.length - 1, response.length) : undefined;
                             resp?.forEach((res, index) => {
-                                if (res.type == 'incoming') {
-                                    res.components?.forEach((ele) => {
-                                        if (ele.data.text == previousTaskName) {
-                                            previousTaskName = undefined;
-                                            previousId = undefined;
-                                            console.log("xxxxxxxxxxxxxxxxxxxxx incoming task same")
-                                        }
-                                    })
-                                }
+                                // if (res.type == 'incoming') {
+                                //     res.components?.forEach((ele) => {
+                                //         if (ele.data.text == previousTaskName) {
+                                //             previousTaskName = undefined;
+                                //             previousId = undefined;
+                                //             console.log("xxxxxxxxxxxxxxxxxxxxx incoming task same")
+                                //         }
+                                //     })
+                                // }
 
                                 if ((res.agentAssistDetails?.suggestions || res.agentAssistDetails?.ambiguityList) && res.type == 'outgoing') {     
                                     let uniqueID = res._id;
@@ -2571,6 +2636,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     data-bot-id="${res.botId}" data-intent-name="${ele.question}"
                                     data-check="true" id="check-${uniqueID}"></i>`;
                                                     faqs.append(checkHtml);
+                                                    $(`#title-${uniqueID}`).addClass('noPadding');
                                                 } else {
                                                     let a = $(`#faqDiv-${uniqueID}`);
                                                     let faqActionHtml = `<div class="action-links">
@@ -2587,7 +2653,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                           <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${uniqueID}" data-see-less="true">Show less</button>
                                           `;
                                                     faqstypeInfo.append(seeMoreButtonHtml);
-                                                    updateSeeMoreButtonForAssist(uniqueID);
+                                                    setTimeout(() => {                                                    
+                                                        updateSeeMoreButtonForAssist(uniqueID);
+                                                    }, waitingTimeForSeeMoreButton);
                                                 }
                                                 // if(faqss.length === 1 && !ele.answer) {
                                                 //     document.getElementById(`check-${uniqueID}`).click();
@@ -2614,6 +2682,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         "createdOnTimemillis": res._id
                                     }
                                     currentTaskName = res.tN ? res.tN : currentTaskName;
+                                    currentTaskPositionId = res?.agentAssistDetails?.positionId ? res?.agentAssistDetails?.positionId : currentTaskPositionId;
+
                                     let historyData = $('#dynamicBlock');
                                     let userInputHtml;
                                     if (res.agentAssistDetails.userInput) {
@@ -2628,7 +2698,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         
                                                     <div class="dialog-task-accordiaon-info" id="addRemoveDropDown-${res._id}" >
                                                         <div class="accordion-header" id="dropDownHeader-${res._id}"
-                                                        data-drop-down-opened="false">
+                                                        data-drop-down-opened="true">
                                                             <div class="icon-info">
                                                                 <i class="ast-rule"></i>
                                                             </div>
@@ -2645,13 +2715,25 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                         </div>
                                                     `;
 
-                                    if (previousTaskName && currentTaskName !== previousTaskName ) {
-                                        addFeedbackHtmlToDomForHistory(res, res.botId, res?.agentAssistDetails?.userInput, previousId, false)
+                                    if (previousTaskPositionId && currentTaskPositionId !== previousTaskPositionId ) {
+                                        let previousIdFeedBackDetails = feedBackResult.find((ele)=> ele.positionId === previousTaskPositionId);
+                                        addFeedbackHtmlToDomForHistory(res, res.botId, res?.agentAssistDetails?.userInput, previousId, false, previousTaskPositionId);
+                                        if(previousIdFeedBackDetails) {
+                                            UpdateFeedBackDetails(previousIdFeedBackDetails, 'dynamicBlock');
+                                            if(previousIdFeedBackDetails.feedback == 'dislike' && (previousIdFeedBackDetails.feedbackDetails.length == 0 && previousIdFeedBackDetails.comment.length == 0)){
+                                                $(`#feedbackHelpfulContainer-${previousId} .explore-more-negtive-data`).removeClass('hide');
+                                            }else {
+                                                $(`#feedbackHelpfulContainer-${previousId} .explore-more-negtive-data`).addClass('hide');
+                                            }
+                                        }    
                                         previousId = undefined;
+                                        previousTaskPositionId = undefined;
+                                        previousTaskName = undefined;
                                     }
 
-                                    if (res.tN && !previousId && previousTaskName !== currentTaskName) {
+                                    if (res.tN && !previousId && previousTaskPositionId !== currentTaskPositionId) {
                                         let divExist = $(`#addRemoveDropDown-${res._id}`);
+                                        previousTaskPositionId = currentTaskPositionId;
                                         previousTaskName = currentTaskName;
                                         if (divExist.length >= 1) {
                                             console.log("---->>>>>>>>>>>>>>>>>>>>>already exsit===in the dom");
@@ -2659,7 +2741,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             historyData.append(userInputHtml);
                                             historyData.append(dropdownHtml);
                                             previousId = res._id;
-                                            previousTaskName = res.tN;
+                                            previousTaskPositionId = currentTaskPositionId;
                                         }
                                     }
                                     if (res.agentAssistDetails.entityName && res.agentAssistDetails.entityResponse && res.agentAssistDetails.entityValue) {
@@ -2681,7 +2763,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         let entityHtml = $(`#dropDownData-${previousId}`).find(`#userInput-${res._id}`);
                                         let entityDisplayName = agentAssistResponse.newEntityDisplayName ? agentAssistResponse.newEntityDisplayName : agentAssistResponse.newEntityName;
                                         if (res.agentAssistDetails.entityValue && !res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
-                                            entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${res.agentAssistDetails.entityValue}</div>`);
+                                            entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${encodeURI(res.agentAssistDetails.entityValue)}</div>`);
                                         } else {
                                             if (res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
                                                 let entityHtmls = `<div class="order-number-info">${entityDisplayName} : 
@@ -2748,7 +2830,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                                         _msgsResponse.message.push(body);
                                     });
-                                    if(res.agentAssistDetails?.isPrompt === true || res.agentAssistDetails?.isPrompt === false) {
+                                    if((res.agentAssistDetails?.isPrompt === true || res.agentAssistDetails?.isPrompt === false) && previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) {
                                     let runInfoContent = $(`#dropDownData-${previousId}`);
                                     let askToUserHtml = `
                                         <div class="steps-run-data">
@@ -2794,6 +2876,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             $(`#terminateAgentDialog`).removeClass('hide');
                                             $('#dynamicBlock .override-input-div').addClass('hide');
                                             $(`#overRideDiv-${previousId}`).removeClass('hide');
+                                            $(`#overRideBtn-${previousId}`).attr('data-position-id', previousTaskPositionId);
+                                            $(`#terminateAgentDialog`).attr('data-position-id', previousTaskPositionId);
+                                            dialogPositionId = previousTaskPositionId;
                                         }
                                        
                                         runInfoContent.append(askToUserHtml);
@@ -2948,7 +3033,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     isShowHistoryEnable = false;
                 }
 
-                function renderingAgentHistoryMessage(){
+                async function renderingAgentHistoryMessage(){
+                    let url = `${connectionDetails.envinormentUrl}/agentassist/api/v1/agent-feedback/${_agentAssistDataObj.conversationId}?interaction=mybot`;
+                    let feedBackResult = await renderHistoryFeedBack(url);
                     isShowHistoryEnableForMyBot = true;
                     getData(`${connectionDetails.envinormentUrl}/api/1.1/botmessages/agentassist/${_agentAssistDataObj.botId}/history?convId=${_agentAssistDataObj.conversationId}&agentHistory=true`)
                     .then(response => {
@@ -2957,7 +3044,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
                         document.getElementById("loader").style.display = "none";
                         let previousId;
-                        let previousTaskName, currentTaskName;
+                        let previousTaskName, currentTaskName, previousTaskPositionId, currentTaskPositionId;
                         let convId = _agentAssistDataObj.conversationId;
                         let botId = _agentAssistDataObj.botId;
                         // if (JSON.stringify(response) === JSON.stringify(previousResp)) {
@@ -2969,15 +3056,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             //let resp = response.length > 0 ? response?.slice(previousResp?.length - 1, response.length) : undefined;
                             let resp = response.length > 0 ? response : undefined;
 				            resp?.forEach((res, index) => {
-                                if (res.type == 'incoming') {
-                                    res.components?.forEach((ele) => {
-                                        if (ele.data.text == previousTaskName) {
-                                            previousTaskName = undefined;
-                                            previousId = undefined;
-                                            console.log("xxxxxxxxxxxxxxxxxxxxx incoming task same")
-                                        }
-                                    })
-                                }
+                                // if (res.type == 'incoming') {
+                                //     res.components?.forEach((ele) => {
+                                //         if (ele.data.text == previousTaskName) {
+                                //             previousTaskName = undefined;
+                                //             previousId = undefined;
+                                //             console.log("xxxxxxxxxxxxxxxxxxxxx incoming task same")
+                                //         }
+                                //     })
+                                // }
                                 if ((!res.agentAssistDetails?.suggestions && !res.agentAssistDetails?.ambiguityList && !res.agentAssistDetails?.ambiguity) && res.type == 'outgoing') {
                                     let _msgsResponse = {
                                         "type": "bot_response",
@@ -2994,6 +3081,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         "createdOnTimemillis": res._id
                                     }
                                     currentTaskName = res.tN ? res.tN : currentTaskName;
+                                    currentTaskPositionId = res?.agentAssistDetails?.positionId ? res?.agentAssistDetails?.positionId : currentTaskPositionId;
                                     let historyData = $('#myBotAutomationBlock');
                                     let userInputHtml;
                                     if (res.agentAssistDetails.userInput) {
@@ -3024,21 +3112,37 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                             
                                                         `;
 
-                                    if (previousTaskName && currentTaskName !== previousTaskName) {
-                                        addFeedbackHtmlToDomForHistory(res, res.botId, res?.agentAssistDetails?.userInput, previousId, false)
+                                    // if (previousTaskName && currentTaskName !== previousTaskName) {
+                                    //     addFeedbackHtmlToDomForHistory(res, res.botId, res?.agentAssistDetails?.userInput, previousId, true)
+                                    //     previousId = undefined;
+                                    // }
+                                    if (previousTaskPositionId && currentTaskPositionId !== previousTaskPositionId ) {
+                                        let previousIdFeedBackDetails = feedBackResult.find((ele)=> ele.positionId === previousTaskPositionId);
+                                        addFeedbackHtmlToDomForHistory(res, res.botId, res?.agentAssistDetails?.userInput, previousId, true, previousTaskPositionId);
+                                        if(previousIdFeedBackDetails) {
+                                            UpdateFeedBackDetails(previousIdFeedBackDetails, 'agentAutoContainer');
+                                            if(previousIdFeedBackDetails.feedback == 'dislike' && (previousIdFeedBackDetails.feedbackDetails.length == 0 && previousIdFeedBackDetails.comment.length == 0)){
+                                                $(`#feedbackHelpfulContainer-${previousId} .explore-more-negtive-data`).removeClass('hide');
+                                            }else {
+                                                $(`#feedbackHelpfulContainer-${previousId} .explore-more-negtive-data`).addClass('hide');
+                                            }
+                                        }    
                                         previousId = undefined;
+                                        previousTaskPositionId = undefined;
+                                        previousTaskName = undefined;
                                     }
 
-                                    if (res.tN && !previousId && previousTaskName !== currentTaskName) {
+                                    if (res.tN && !previousId && previousTaskPositionId !== currentTaskPositionId) {
                                         let divExist = $(`#MyBotaddRemoveDropDown-${res._id}`);
                                         previousTaskName = currentTaskName;
+                                        previousTaskPositionId = currentTaskPositionId;
                                         if (divExist.length >= 1) {
                                             console.log("---->>>>>>>>>>>>>>>>>>>>>already exsit===in the dom");
                                         } else {
                                             historyData.append(userInputHtml);
                                             historyData.append(dropdownHtml);
                                             previousId = res._id;
-                                            previousTaskName = res.tN;
+                                            previousTaskPositionId = currentTaskPositionId;
                                         }
                                     }
                                     if (res.agentAssistDetails.entityName && res.agentAssistDetails.entityResponse && res.agentAssistDetails.entityValue) {
@@ -3051,7 +3155,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                     <div class="run-info-content" id="userInput-${res._id}">
                                                         <div class="title">Customer Said - </div>
                                                         <div class="agent-utt">
-                                                            <div class="title-data">"${res.agentAssistDetails.entityValue}"</div>
+                                                            <div class="title-data">"${encodeURI(res.agentAssistDetails.entityValue)}"</div>
                                                         </div>
                                                         
                                                     </div>
@@ -3060,7 +3164,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         let entityHtml = $(`#dropDownData-${previousId}`).find(`#userInput-${res._id}`);
                                         let entityDisplayName = myBotDataResponse.newEntityDisplayName ? myBotDataResponse.newEntityDisplayName : myBotDataResponse.newEntityName
                                         if (res.agentAssistDetails.entityValue && !res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
-                                            entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${res.agentAssistDetails.entityValue}</div>`);
+                                            entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${encodeURI(res.agentAssistDetails.entityValue)}</div>`);
                                         } else {
                                             if (res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
                                                 let entityHtmls = `<div class="order-number-info">${entityDisplayName} : 
@@ -3129,7 +3233,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                                         _msgsResponse.message.push(body);
                                     });
-                                    if(res.agentAssistDetails?.isPrompt === true || res.agentAssistDetails?.isPrompt === false) {
+                                    if((res.agentAssistDetails?.isPrompt === true || res.agentAssistDetails?.isPrompt === false)  && previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) {
                                     let runInfoContent = $(`#dropDownData-${previousId}`);
                                     let askToUserHtml = `
                                             <div class="steps-run-data">
@@ -3169,7 +3273,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             appState[_conversationId]['automationGoingOnAfterRefreshMyBot'] = isMyBotAutomationOnGoing;
                                             localStorage.setItem('agentAssistState', JSON.stringify(appState));
                                             let terminateButtonElement = document.getElementById('myBotTerminateAgentDialog-' + previousId);
+                                            $(`#myBotTerminateAgentDialog-${previousId}`).attr('data-position-id', previousTaskPositionId);
                                             terminateButtonElement.classList.remove('hide');
+                                            myBotDialogPositionId = previousTaskPositionId;
                                         }
 
                                         let agentInputEntityName = 'EnterDetails';
@@ -3199,6 +3305,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         if(!nextResponse || (nextResponse.status != 'received' && nextResponse.status != 'incoming')){
                                             runInfoContent.append(agentInputToBotHtml);
                                         }
+                                        
                                     } else {
                                         runInfoContent.append(tellToUserHtml);
                                     }
@@ -3277,7 +3384,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         libraryTabActive();
                         currentTabActive = 'searchAutoIcon';
                         if (convState?.libraryTab.length > 0) {
-                            $('#librarySearch').val(convState.libraryTab);
+                            // $('#librarySearch').val(convState.libraryTab);
+                            let decodeEncodedVal = decodeURI(convState.libraryTab)
+                            $('#librarySearch').val(decodeEncodedVal);
                             var convId = _convId;
                             var botId = _botId;
                             var intentName = convState.libraryTab;
@@ -3445,7 +3554,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     convState.currentTab = currentTab;
                     if (appState[_convId] && (convState.currentTab == 'librarySearch')) {
                         if (searchedVal !== undefined && document.getElementById('librarySearch').value.length > 0) {
-                            convState.libraryTab = document.getElementById('librarySearch').value;
+                            // convState.libraryTab = document.getElementById('librarySearch').value;
+                            let encodedSearchVal = encodeURI(document.getElementById('librarySearch').value);
+                            convState.libraryTab = encodedSearchVal;
                         } else {
                             convState.libraryTab = '';
                         }
@@ -3818,6 +3929,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         if (target.id === 'sendMsg') {
                             let payload = target.dataset.msgData;
                             var message = {
+                                method: 'send',
                                 name: "agentAssist.SendMessage",
                                 conversationId: _conversationId,
                                 payload: payload
@@ -3837,6 +3949,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             let ele = document.getElementById(`displayData-${target.dataset.msgId}`) ? document.getElementById(`displayData-${target.dataset.msgId}`) : document.getElementById(target.dataset.msgId);
                             let data = target.dataset.msgData && target.dataset.msgData !== '' ? target.dataset.msgData : (target.parentNode.dataset.msgData && target.parentNode.dataset.msgData !== '' ? target.parentNode.dataset.msgData : ele.innerText)
                             var message = {
+                                method: 'copy',
                                 name: "agentAssist.CopyMessage",
                                 conversationId: _conversationId,
                                 payload: data
@@ -4097,37 +4210,125 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
                         let targetIds = (target.id).split('-');
                         if (['feedbackup', 'feedbackdown'].includes(targetIds[0])) {
-                            console.log("=====event===============", evt.target);
+
+                            let cloneTargtIds = [...targetIds]
+                            let isDivElement = evt.target instanceof HTMLDivElement;
+                            console.log("isDivElement", isDivElement, target.parentElement.id);
                             if (targetIds.includes('feedbackup')) {
-                                targetIds.shift();
-                                if (target.dataset.feedbacklike == 'false') {
-                                     // target.dataset.feedbacklike = 'true';
-                                    $(`#feedBackLikeContainer-${targetIds.join('-')} .feedback-icon`).attr('style', 'color:#0077D2;border-color:#0077D2;');
-                                    $(`#feedBackDislikeContainer-${targetIds.join('-')} .feedback-icon`).removeAttr('style');
+                                cloneTargtIds.shift()
+                                if (isDivElement) {
+                                    $(`#${target.id}`).addClass('active-feedback');
+                                    target.firstElementChild.dataset.feedbacklike = 'true';
+                                    Object.assign(target.dataset, target.firstElementChild.dataset);
                                     feedbackLoop(evt);
                                 } else {
+                                    $(`#${target.parentElement.id}`).addClass('active-feedback');
                                     target.dataset.feedbacklike = 'false';
-                                    $(`#feedBackLikeContainer-${targetIds.join('-')} .feedback-icon`).removeAttr('style');
-                                    $(`#feedBackLikeContainer-${targetIds.join('-')} .feedback-icon`).attr('data-feedback', '');
-                                    $(`#feedBackLikeContainer-${targetIds.join('-')} .ast-thumbup`).attr('data-feedback', '');
                                     feedbackLoop(evt);
                                 }
+                                $(`#feedbackdown-${cloneTargtIds.join('-')}`).removeClass('active-feedback')
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .thanks-update`).removeClass('hide');
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .help-improve-arrow`).addClass('hide')
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .explore-more-negtive-data`).addClass('hide');
                             }
                             if (targetIds.includes('feedbackdown')) {
-                                targetIds.shift();
-                                if (target.dataset.feedbackdislike == 'false') {
-                                    // target.dataset.feedbackdislike = 'true';
-                                        $(`#feedBackLikeContainer-${targetIds.join('-')} .feedback-icon`).removeAttr('style');
-                                        $(`#feedBackDislikeContainer-${targetIds.join('-')} .feedback-icon`).attr('style', 'color:#0077D2;border-color:#0077D2;');
-                                    feedbackLoop(evt);
+                                cloneTargtIds.shift()
+                                if (isDivElement) {
+                                    $(`#${target.id}`).addClass('active-feedback');
+                                    target.firstElementChild.dataset.feedbacklike = 'true';
+                                    Object.assign(target.dataset, target.firstElementChild.dataset);
+                                     feedbackLoop(evt);
                                 } else {
-                                    target.dataset.feedbackdislike = 'false';
-                                    $(`#feedBackDislikeContainer-${targetIds.join('-')} .feedback-icon`).removeAttr('style');
-                                    $(`#feedBackDislikeContainer-${targetIds.join('-')} .feedback-icon`).attr('data-feedback', '');
-                                    $(`#feedBackDislikeContainer-${targetIds.join('-')} .ast-thumbdown`).attr('data-feedback', '');
-                                    feedbackLoop(evt);
+                                    $(`#${target.parentElement.id}`).addClass('active-feedback');
+                                    target.dataset.feedbacklike = 'false';
+                                     feedbackLoop(evt);
+                                }
+                                $(`#feedbackup-${cloneTargtIds.join('-')}`).removeClass('active-feedback')
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .thanks-update`).addClass('hide');
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .help-improve-arrow`).removeClass('hide')
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .explore-more-negtive-data`).removeClass('hide');
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .title-improve`).removeClass('hide');
+
+                            }
+                        }
+                        if (target.id.split('-')[0] == 'dropdownArrowFeedBack' || target.id.split('-')[0] == 'dropdownArrowFeedBackIcon') {
+                            let targteId = target.id.split('-');
+                            targteId.shift();
+                            let dataSets = $(`#feedbackdown-${targteId.join('-')} .ast-thumbdown`).data();
+                            let activeChipCount = $(`#feedbackHelpfulContainer-${targteId.join('-')} .btn-chip-negtive.active-chip`);
+                            if ((activeChipCount.length > 0 || dataSets.comment.length > 0) && target.dataset.feedbackDropDownOpened === 'true') {
+                                $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).addClass('hide');
+                            } else {
+                                if ((activeChipCount.length == 0 && dataSets.comment.length == 0) && target.dataset.feedbackDropDownOpened === 'true') {
+                                    $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).removeClass('hide');
+                                } else {
+                                    $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).addClass('hide');
                                 }
                             }
+                            if (target.dataset.feedbackDropDownOpened === 'false') {
+                                $(`#dropdownArrowFeedBackIcon-${targteId.join('-')}`).attr('data-feedback-drop-down-opened', 'true');
+                                $(`#dropdownArrowFeedBack-${targteId.join('-')}`).attr('data-feedback-drop-down-opened', 'true');
+                                $(`#feedbackHelpfulContainer-${targteId.join('-')} .explore-more-negtive-data`).addClass('hide');
+                            } else {
+                                $(`#dropdownArrowFeedBackIcon-${targteId.join('-')}`).attr('data-feedback-drop-down-opened', 'false');
+                                $(`#dropdownArrowFeedBack-${targteId.join('-')}`).attr('data-feedback-drop-down-opened', 'false');
+                                $(`#feedbackHelpfulContainer-${targteId.join('-')} .explore-more-negtive-data`).removeClass('hide');
+                            }
+                            let updateFlag = $(`#feedbackHelpfulContainer-${targteId.join('-')} .submit-btn`).attr('data-updateflag');
+                            if (updateFlag == 'true' && target.dataset.feedbackDropDownOpened === 'false') {
+                                AgentAssist_feedBack_Update_Request(dataSets);
+                                $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).addClass('hide');
+                                isUpdateFeedBackDetailsFlag = true;
+                            }
+                        }
+                        if (target.className.includes('btn-chip-negtive')) {
+                            let id = target.parentElement.id.split('-');
+                            id.shift();
+                            let dataSets = $(`#feedbackdown-${id.join('-')} .ast-thumbdown`).data();
+                            if (target.dataset.chipClick == 'false') {
+                                $(target).addClass('active-chip');
+                                target.dataset.chipClick = 'true';
+                                dataSets.feedbackdetails.push($(target).html());
+
+                            } else {
+                                $(target).removeClass('active-chip');
+                                target.dataset.chipClick = 'false';
+                                dataSets.feedbackdetails?.forEach((ele, i) => {
+                                    if (ele == $(target).html()) {
+                                        delete dataSets.feedbackdetails[i]
+                                    }
+                                })
+                            }
+                            let activeChipCount = $(`#${target.parentElement.id} .btn-chip-negtive.active-chip`);
+                            if (activeChipCount.length > 0) {
+                                $(`#feedbackHelpfulContainer-${id.join('-')} .title-improve`).addClass('hide');
+                                $('.submit-btn').removeAttr('disabled');
+                            } else {
+                                if (dataSets.comment.length == 0) {
+                                    $(`#feedbackHelpfulContainer-${id.join('-')} .title-improve`).removeClass('hide');
+                                }
+                            }
+                        }
+                        if (target.className == 'submit-btn') {
+                            let id = target.parentElement.firstElementChild.id.split('-');
+                            id.shift();
+                            let dataSets = $(`#feedbackdown-${id.join('-')} .ast-thumbdown`).data();
+                            // if(target.innerHTML == 'Update') {
+                            //     dataSets.comment = target.value;
+                            //     // dataSets.feedbackdetails = 
+
+                            // }
+                            feedbackLoop(dataSets, true);
+                            $(`#feedbackHelpfulContainer-${id.join('-')} .explore-more-negtive-data`).addClass('hide');
+                             target.dataset.updateflag = 'true';
+                            target.innerHTML = "Update";
+                            $('.submit-btn').attr('disabled', 'disabled');
+                            
+                            dataSets.comment = "";
+                            dataSets.feedbackdetails = [];
+                            $(`#feedbackHelpfulContainer-${id.join('-')} .btn-chip-negtive.active-chip`).removeClass('active-chip');
+                            $(`#feedBackComment-${id.join('-')}`).val('');
+                            isUpdateFeedBackDetailsFlag = false;
                         }
                         if (target.id === 'showHistory') {
                             isShowHistoryEnable = true;
@@ -4883,7 +5084,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                         }
                         if (target.className == 'btn-danger') {
-                            target.innerHTML == 'Terminate' ? $('#terminatePopUp').removeClass('hide') : '';
+                            if(target.innerHTML == 'Terminate'){
+                                $('#terminatePopUp').removeClass('hide');
+                                $('#terminatePopUp .btn-danger').attr('data-position-id',target.dataset.positionId);
+                                $(`#myBotTerminateAgentDialog-${myBotDropdownHeaderUuids} .btn-danger`).attr('data-position-id',target.dataset.positionId)
+                            }
                             if (target.innerHTML == 'Yes, Terminate') {
                                 isTerminateClicked = true;
                                 $('#terminatePopUp').addClass('hide');
@@ -4892,14 +5097,16 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     AgentAssistPubSub.publish('agent_assist_send_text',
                                         {
                                             conversationId: _agentAssistDataObj.conversationId,
-                                            botId: _botId, value: 'discard all', check: true
+                                            botId: _botId, value: 'discard all', check: true,
+                                            "positionId": target.dataset.positionId
                                         });
                                     document.getElementById("loader").style.display = "block";
                                 } else {
                                     var mybotTabTerminateBtnId = '#myBotTerminateAgentDialog-' + myBotDropdownHeaderUuids;
                                     $(mybotTabTerminateBtnId).addClass('hide');
                                     AgentAssistPubSub.publish('searched_Automation_details',
-                                        { conversationId: _agentAssistDataObj.conversationId, botId: _botId, value: 'discard all', isSearch: false });
+                                        { conversationId: _agentAssistDataObj.conversationId, botId: _botId, value: 'discard all', isSearch: false,
+                                        "positionId": target.dataset.positionId });
                                     document.getElementById("loader").style.display = "block";
                                 }
                                 scrollToBottom();
@@ -4950,7 +5157,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $('#overLaySearch').html('')
                             if (!isMyBotAutomationOnGoing) {
                                 data = target.dataset;
-                                AgentAssistPubSub.publish('searched_Automation_details', { conversationId: data.convId, botId: data.botId, value: data.intentName, isSearch: false, intentName: data.intentName });
+                                var dialogId = 'dg-' + (Math.random() + 1).toString(36).substring(2);
+                                myBotDialogPositionId = dialogId;
+                                AgentAssistPubSub.publish('searched_Automation_details', { conversationId: data.convId, botId: data.botId, value: data.intentName, isSearch: false, intentName: data.intentName, "positionId": dialogId });
                                 isMyBotAutomationOnGoing = true;
                                 noAutomationrunninginMyBot = false;
                                 let agentBotuuids = Math.floor(Math.random() * 100);
@@ -4962,7 +5171,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     localStorage.setItem('agentAssistState', JSON.stringify(appState))
                                 }
                                 $('#noAutoRunning').addClass('hide');
-                                _createRunTemplateContainerForMyTab(agentBotuuids, target.dataset.intentName)
+                                
+                                _createRunTemplateContainerForMyTab(agentBotuuids, target.dataset.intentName, myBotDialogPositionId)
                                 let ids = target.id.split('-');
                                 $(`${!target?.dataset?.runMybot}` ? '.dialog-task-run-sec' : '.content-dialog-task-type .type-info-run-send').each((i, ele) => {
                                     let id = ele.id?.split('-');
@@ -5053,7 +5263,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 // suggestionsLength.each((i, ele) => {
                                 //     $(ele).addClass('hide');
                                 // })
-                                _createRunTemplateContiner(uuids, target.dataset.intentName);
+                                var dialogId = 'dg-' + (Math.random() + 1).toString(36).substring(2);
+                                dialogPositionId = dialogId;
+                                _createRunTemplateContiner(uuids, target.dataset.intentName, dialogPositionId);
                                 let ids = target.id.split('-');
                                 ids.shift();
                                 let joinedIds = ids.join('-');
@@ -5073,7 +5285,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 let addRemoveDropDown = document.getElementById(`addRemoveDropDown-${uuids}`);
                                 addRemoveDropDown?.classList.remove('hide');
                                 $(`#endTaks-${uuids}`).removeClass('hide')
-                                AgentAssist_run_click(evt);
+                                AgentAssist_run_click(evt, dialogPositionId);
                                
 
                                 // if (libraryRunBtn) {
@@ -5099,7 +5311,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 "botId": _botId,
                                 "conversationId": _agentAssistDataObj.conversationId,
                                 "query": "",
-                                "enable_override_userinput": true
+                                "enable_override_userinput": true,
+                                "positionId": target.dataset.positionId
                             }
                             _agentAsisstSocket.emit('enable_override_userinput', overRideObj);
                             let runInfoContent = $(`#dropDownData-${dropdownHeaderUuids}`);
@@ -5118,8 +5331,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     <div class="run-info-content">
                     <div class="title">Input overridden. Please provide the input</div>
                     <div class="agent-utt enter-details-block">
-                    <div class="title-data" ><span class="enter-details-title">${agentInputEntityName} : </span>
-                    <input type="text" placeholder="Enter Value" class="input-text chat-container" id="agentInput-${agentInputId}" data-conv-id="${_agentAssistDataObj.conversationId}" data-bot-id="${_botId}"  data-mybot-input="true">
+                    <div class="title-data" ><span class="enter-details-title">${agentInputEntityName}: </span>
+                    <input type="text" placeholder="Enter Value" class="input-text chat-container" id="agentInput-${agentInputId}" data-conv-id="${_agentAssistDataObj.conversationId}" data-bot-id="${_botId}"  data-mybot-input="true" data-position-id="${target.dataset.positionId}">
                     </div>
                     </div>
                     </div>
@@ -5143,7 +5356,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 "botId": _botId,
                                 "conversationId": _agentAssistDataObj.conversationId,
                                 "query": "",
-                                "enable_override_userinput": false
+                                "enable_override_userinput": false,
+                                "positionId": target.dataset.positionId
                             }
                             _agentAsisstSocket.emit('enable_override_userinput', overRideObj);
                             $(`#overRideBtn-${id}`).removeClass('hide');
@@ -5185,7 +5399,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 $(`#dynamicBlock #${target.id}`).addClass('rotate-carrot');
                                 $(`#dynamicBlock #faqDiv-${id.join('-')} .action-links`).removeClass('hide');
                                 $(`#dynamicBlock #desc-${id.join('-')}`).removeClass('hide');
-                                updateSeeMoreButtonForAssist(id.join('-'));
+                                setTimeout(() => {                                
+                                    updateSeeMoreButtonForAssist(id.join('-'));
+                                }, waitingTimeForSeeMoreButton);
                                 // $(`#dynamicBlock #seeMore-${id.join('-')}`).removeClass('hide');
                                 // $(`#dynamicBlock #seeLess-${id.join('-')}`).addClass('hide');
                             } else {
@@ -5247,7 +5463,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     $(`#search-text-display #descLib-${id.join('-')}`).removeClass('hide');
                                     // $(`#search-text-display #seeMore-${id.join('-')}`).removeClass('hide');
                                     // $(`#search-text-display #seeLess-${id.join('-')}`).addClass('hide');
-                                    updateSeeMoreButtonForAgent(id.join('-'));
+                                    setTimeout(() => {
+                                        updateSeeMoreButtonForAgent(id.join('-'));
+                                    }, waitingTimeForSeeMoreButton);
                                 } else {
                                     $(`#search-text-display #${target.id}`).removeClass('rotate-carrot');
                                     $(`#search-text-display #faqDivLib-${id.join('-')} .action-links`).addClass('hide');
@@ -5262,7 +5480,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     $(`#overLaySearch #descLib-${id.join('-')}`).removeClass('hide');
                                     // $(`#overLaySearch #seeMore-${id.join('-')}`).removeClass('hide');
                                     // $(`#overLaySearch #seeLess-${id.join('-')}`).addClass('hide');
-                                    updateSeeMoreButtonForAgent(id.join('-'));
+                                    setTimeout(() => {                                  
+                                        updateSeeMoreButtonForAgent(id.join('-'));
+                                    }, waitingTimeForSeeMoreButton);
                                 } else {
                                     $(`#overLaySearch #${target.id}`).removeClass('rotate-carrot');
                                     $(`#overLaySearch #faqDivLib-${id.join('-')} .action-links`).addClass('hide');
@@ -5282,7 +5502,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     $(`#${target.id}`).attr('data-drop-down-opened', 'true');
                                     $(`#dropDownData-${targetsss}`).addClass('hide');
                                    let a =  $(`#${target.parentElement.parentElement.id}`).find(`#endTaks-${targetsss}`);
-                                   $(a).attr('data-history') == 'true' ? $(a).removeClass('hide'):$(a).addClass('hide');
+                                   $(a).removeClass('hide');
                                 } else {
                                     $(`#${target.id}`).attr('data-drop-down-opened', 'false');
                                     $(`#dropDownData-${targetsss}`).removeClass('hide');
@@ -5384,6 +5604,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             entitiestValueArray[targetid[1]]['editedValue'] = $(`#${target.id}`).val();
                             $('.ast-check-right.disabled-color').removeClass('disabled-color');
                             $('.save-reset-disabled').removeClass('save-reset-disabled').addClass('save-reset');
+                        } else if (target.dataset.feedbackComment) {
+                            let targetids = target.id.split('-');
+                            targetids.shift();
+                            let dataSets = $(`#feedbackdown-${targetids.join('-')} .ast-thumbdown`).data();
+                            dataSets.comment = target.value;
+                            if (target.value.length > 0) {
+                                $('.submit-btn').removeAttr('disabled');
+                                $(`#feedbackHelpfulContainer-${targetids.join('-')} .title-improve`).addClass('hide');
+                            }
                         } else {
                             var agentAssistInput = target.dataset.agentAssistInput;
                             var mybotInput = target.dataset.mybotInput;
@@ -5610,6 +5839,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     var dropDownData;
                     var endOfDialoge;
                     let headerUUids = runForAgentBot ? myBotDropdownHeaderUuids : dropdownHeaderUuids;
+                    let positionID = runForAgentBot ? myBotDialogPositionId : dialogPositionId;
+                    // let dialogIds = 'dg-' + (Math.random() + 1).toString(36).substring(2);
+                    let taskIdOfDialog = $(`#dropDownData-${dropdownHeaderUuids}`).attr('data-taskId');
                     if (runForAgentBot) {
                         $(`#myBotTerminateAgentDialog-${headerUUids}.btn-danger`).remove();
                         dropDownData = $(`#dropDownData-${headerUUids}`);
@@ -5627,13 +5859,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             data-conv-id="${data.conversationId}"
                         data-bot-id="${botId}" data-feedback="like"
                         data-dialog-name="${dialogName}"
-                        data-user-input="${userIntentInput}">
+                        data-user-input="${userIntentInput}" data-position-id="${data.positionId}">
                 <i class="ast-thumbup" id="feedbackup-${headerUUids}"
                 data-feedbacklike="false"
                 data-conv-id="${data.conversationId}"
                         data-bot-id="${botId}" data-feedback="like"
                         data-dialog-name="${dialogName}"
-                        data-user-input="${userIntentInput}"></i>
+                        data-user-input="${userIntentInput}" data-position-id="${data.positionId}"></i>
             </div>
             <span class="tootltip-tabs">Like</span>
             </div>
@@ -5642,58 +5874,78 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             data-conv-id="${data.conversationId}"
                         data-bot-id="${botId}" data-feedback="dislike"
                         data-dialog-name="${dialogName}"
-                        data-user-input="${userIntentInput}">
+                        data-user-input="${userIntentInput}" data-position-id="${data.positionId}">
                 <i class="ast-thumbdown" id="feedbackdown-${headerUUids}"
                 data-feedbackdislike="false"
                 data-conv-id="${data.conversationId}"
                         data-bot-id="${botId}" data-feedback="dislike"
                         data-dialog-name="${dialogName}"
-                        data-user-input="${userIntentInput}"></i>
+                        data-user-input="${userIntentInput}" data-position-id="${data.positionId}"></i>
             </div>
             <span class="tootltip-tabs">Dislike</span>
             </div>
        </div>`;
-                    dropDownData.append(feedbackHtml);
+                    //   dropDownData.append(feedbackHtml);
                     let endofDialogeHtml = `
-        <div class="dilog-task-end" id="endTaks-${headerUUids}">
-        <div class="text-dialog-task-end">Task Ended</div>     
-                   </div>
-                   <div class="feedback-helpul-container hide">
-                    <div class="titles-content">
-                        <div class="title">Helpful?</div>
-                        <div class="btn-positive">
-                            <i class="ast-thumbup"></i>
-                            <span class="tootltip-tabs">Like</span>
-                        </div>
-                        <div class="btn-negtive">
-                            <i class="ast-thumbdown"></i>
-                            <span class="tootltip-tabs">Dislike</span>
-                        </div>
-                        <div class="thanks-update hide">Thanks for the feedback!</div>
-                        <div class="help-improve-arrow">
-                            <div class="title-improve">Help us improve (optional)</div>
-                            <div class="arrow-icon">
-                                <i class="ast-carrotup"></i>
+                    <div class="dilog-task-end" id="endTaks-${headerUUids}">
+                    <div class="text-dialog-task-end">Dialog Task ended</div>     
+                               </div>
+                               <div class="feedback-helpul-container" id="feedbackHelpfulContainer-${headerUUids}">
+                                <div class="titles-content">
+                                    <div class="title">Helpful?</div>
+                                    <div class="btn-positive" id="feedbackup-${headerUUids}">
+                                        <i class="ast-thumbup"
+                                        id="feedbackup-${headerUUids}"
+                                        data-feedbacklike="false"
+                                        data-conv-id="${data.conversationId}"
+                                        data-bot-id="${botId}" data-feedback="like"
+                                        data-dialog-name="${dialogName}"
+                                        data-user-input="${userIntentInput}"
+                                        data-comment=""
+                                        data-feedbackdetails="[]"
+                                        data-taskID ="${taskIdOfDialog}"
+                                        data-dialogId="${positionID}"></i>
+                                        <span class="tootltip-tabs">Like</span>
+                                    </div>
+                                    <div class="btn-negtive" id="feedbackdown-${headerUUids}">
+                                        <i class="ast-thumbdown" 
+                                        id="feedbackdown-${headerUUids}"
+                                        data-feedbackdislike="false"
+                                        data-conv-id="${data.conversationId}"
+                                        data-bot-id="${botId}" data-feedback="dislike"
+                                        data-dialog-name="${dialogName}"
+                                        data-user-input="${userIntentInput}"
+                                        data-comment=""
+                                        data-feedbackdetails="[]"
+                                        data-taskID ="${taskIdOfDialog}"
+                                        data-dialogId="${positionID}"></i>
+                                        <span class="tootltip-tabs">Dislike</span>
+                                    </div>
+                                    <div class="thanks-update hide">Thanks for the feedback!</div>
+                                    <div class="help-improve-arrow hide">
+                                        <div class="title-improve hide">Help us improve (optional)</div>
+                                        <div class="arrow-icon" data-feedback-drop-down-opened="false" id="dropdownArrowFeedBack-${headerUUids}">
+                                            <i class="ast-carrotup" data-feedback-drop-down-opened="false" id="dropdownArrowFeedBackIcon-${headerUUids}"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="explore-more-negtive-data hide">
+                                    <div class="btns-group-negtive-chips" id="feedBackOptions-${headerUUids}">
+                                        <div class="btn-chip-negtive" data-chip-click='false'>Not enough suggestions</div>
+                                        <div class="btn-chip-negtive" data-chip-click='false'>Not prompt</div>
+                                        <div class="btn-chip-negtive" data-chip-click='false'>Intent undetected</div>
+                                        <div class="btn-chip-negtive" data-chip-click='false'>Other</div>
+                                    </div>
+                                    <div class="input-block-optional">
+                                        <div class="label-text"></div>
+                                        <input type="text" placeholder="Placeholder text" class="input-text" id="feedBackComment-${headerUUids}"
+                                        data-feedback-comment="true">
+                                    </div>
+                                    <button class="submit-btn" data-updateFlag="false" disabled>Submit</button>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="explore-more-negtive-data">
-                        <div class="btns-group-negtive-chips">
-                            <div class="btn-chip-negtive active-chip">Not enough suggestions</div>
-                            <div class="btn-chip-negtive active-chip">Not prompt</div>
-                            <div class="btn-chip-negtive">Intent undetected</div>
-                            <div class="btn-chip-negtive">Not prompt</div>
-                            <div class="btn-chip-negtive">Other</div>
-                        </div>
-                        <div class="input-block-optional">
-                            <div class="label-text"></div>
-                            <input type="text" placeholder="Placeholder text" class="input-text">
-                        </div>
-                        <button class="submit-btn" disabled>Submit</button>
-                    </div>
-                </div>
-            
-        `;
+                        
+                    `;
                     if(!document.getElementById('endTaks-' + headerUUids)){
                         endOfDialoge.append(endofDialogeHtml);
                         $(`#overRideDiv-${headerUUids}`).remove();
@@ -5706,8 +5958,52 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 		    UnCollapseDropdownForLastElement(lastElementBeforeNewMessage);
                 }
 
-                function feedbackLoop(evt) {
-                    AgentAssist_feedback_click(evt);
+                function UpdateFeedBackDetails(data, tabName) {
+                    if(!tabName){
+                        tabName = currentTabActive == 'userAutoIcon'? 'dynamicBlock':'agentAutoContainer';
+                    }
+                    let allFeedBackDetails = $(`#${tabName} .feedback-helpul-container`);
+                    allFeedBackDetails?.each((i, ele) => {
+                        let feedDataSet;
+                        if (data.feedback == 'dislike') {
+                            feedDataSet = $(ele).find('.btn-negtive .ast-thumbdown').data();
+                        } else {
+                            feedDataSet = $(ele).find('.btn-positive .ast-thumbup').data();
+                        }
+
+                        if (feedDataSet.dialogid == data.positionId && data.feedback == 'like') {
+                            $(ele).find('.btn-positive').addClass('active-feedback');
+                            $(ele).find('.btn-positive .ast-thumbup').addClass('active-feedback');
+                            $(ele).find('.thanks-update').removeClass('hide');
+                        } else if (feedDataSet.dialogid == data.positionId && data.feedback == 'dislike') {
+                            $(ele).find('.btn-negtive').addClass('active-feedback');
+                            $(ele).find('.btn-negtive .ast-thumbdown').addClass('active-feedback');
+                            $(ele).find('.help-improve-arrow').removeClass('hide')
+                            if (data.feedbackDetails.length > 0 || data.comment.length > 0) {
+                                $(ele).find('.explore-more-negtive-data').removeClass('hide');
+                                let btnChipNegtive = $(ele).find('.btn-chip-negtive');
+                                btnChipNegtive.each((i, eles) => {
+                                    data.feedbackDetails.includes(eles.innerHTML) ?
+                                        $(eles).addClass('active-chip') : '';
+                                });
+                                $(ele).find('.input-block-optional .input-text').val(data.comment);
+                                feedDataSet.comment = data.comment;
+                                feedDataSet.feedbackdetails = data.feedbackDetails;
+                            } else {
+                                $(ele).find('.btn-chip-negtive').removeClass('active-chip');
+                                $(ele).find('.title-improve').removeClass('hide');
+                            }
+                        }
+                    })
+                }
+
+                function feedbackLoop(evt, isSubmit = false) {
+                    if (isSubmit) {
+                        AgentAssist_feedback_click(evt, true);
+                    } else {
+                        AgentAssist_feedback_click(evt);
+                    }
+
                 }
 
                 function processUserMessage(data, _conversationId, botId) {
@@ -5786,11 +6082,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             var botId = e.target.dataset.botId;
                             var intentName = agentInput
                             if (currentTabActive === 'userAutoIcon') {
-                                AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: convId, botId: botId, value: intentName, check: true });
+                                AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: convId, botId: botId, value: intentName, check: true, "positionId": e.target.dataset.positionId });
                                 document.getElementById("loader").style.display = "block";
                             } else {
                              	 isMybotInputResponseClick = true;
-                                AgentAssistPubSub.publish('searched_Automation_details', { conversationId: convId, botId: botId, value: intentName, isSearch: false });
+                                AgentAssistPubSub.publish('searched_Automation_details', { conversationId: convId, botId: botId, value: intentName, isSearch: false, "positionId": e.target.dataset.positionId });
                             }
                         }
                     }
@@ -6081,16 +6377,51 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
     }
 }
 
-function AgentAssist_feedback_click(e) {
-    console.log(e.target);
-    var convId = e.target.dataset.convId;
-    var botId = e.target.dataset.botId;
-    var feedback = e.target.dataset.feedback;
-    var userInput = e.target.dataset.userInput;
-    var dialogName = e.target.dataset.dialogName;
-    var dialogId = 'dg-' + (Math.random() + 1).toString(36).substring(2);
-    // var userId = (Math.random() + 1).toString(36).substring(3);
-    AgentAssistPubSub.publish('agent_usage_feedback', { userInput: userInput, dialogName: dialogName, conversationId: convId, botId: botId, feedback: feedback, eventName: 'agent_usage_feedback', dialogId: dialogId });
+function AgentAssist_feedback_click(e, isSubmit = false) {
+    let convId, botId, feedback, userInput, dialogId, comment, feedbackdetails;
+    if (isSubmit) {
+        convId = e.convId;
+        botId = e.botId;
+        feedback = e.feedback;
+        userInput = e.userInput;
+        dialogName = e.dialogName;
+        dialogId = e.dialogid;
+        comment = e.comment;
+        feedbackdetails = e.feedbackdetails;
+        taskId = e.taskid
+    } else {
+        console.log(e.target);
+        convId = e.target.dataset.convId;
+        botId = e.target.dataset.botId;
+        feedback = e.target.dataset.feedback;
+        userInput = e.target.dataset.userInput;
+        dialogName = e.target.dataset.dialogName;
+        dialogId = e.target.dataset.dialogid;
+        comment = e.target.dataset.comment;
+        feedbackdetails = e.target.dataset.feedbackdetails;
+        taskId = e.target.dataset.taskid
+    }
+
+    feedDetailsArray = typeof feedbackdetails == 'string' ? [] : feedbackdetails?.filter(ele => ele !== null);
+    AgentAssistPubSub.publish('agent_usage_feedback', {
+        comment: comment, feedbackDetails: feedDetailsArray, userInput: userInput, dialogName: dialogName, conversationId: convId, botId: botId, feedback: feedback, eventName: 'agent_usage_feedback', dialogId: dialogId,
+        taskId: taskId
+    });
+}
+
+function AgentAssist_feedBack_Update_Request(e) {
+    let agent_assist_feedback_request = {
+        conversationId: e.convId,
+        agentId: '',
+        botId: e.botId,
+        orgId: '',
+        taskId: e.taskid,
+        positionId: e.dialogid,
+        "interactionType": currentTabActive == 'userAutoIcon'? 'assist': 'mybot'
+    }
+
+    _agentAsisstSocket.emit('agent_feedback_request', agent_assist_feedback_request);
+
 }
 
 function scrollToBottom() {
@@ -6099,19 +6430,19 @@ function scrollToBottom() {
     }, 0);
 }
 
-function AgentAssist_run_click(e) {
+function AgentAssist_run_click(e, dialogId) {
     scrollToBottom();
     var convId = e.target.dataset.convId;
     var botId = e.target.dataset.botId;
     var intentName = e.target.dataset.intentName;
     dialogName = intentName;
-   
+
     if (e.target.dataset.check || e.target.dataset.checkLib) {
-        AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: convId, botId: botId, value: intentName, check: true });
+        AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: convId, botId: botId, value: intentName, check: true, "positionId":dialogId });
 
     } else {
         //document.getElementById("addRemoveDropDown").style.display = "none";
-        AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: convId, botId: botId, value: intentName, intentName: intentName, 'entities': isRetore ? JSON.parse(previousEntitiesValue) : entitiestValueArray });
+        AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: convId, botId: botId, value: intentName, intentName: intentName, "positionId":dialogId, 'entities': isRetore ? JSON.parse(previousEntitiesValue) : entitiestValueArray });
         document.getElementById("loader").style.display = "block";
     }
 }
@@ -6480,9 +6811,13 @@ AgentAssistPubSub.subscribe('agent_usage_feedback', (msg, data) => {
         "accountId": "622efb179b25b1a23ef05da2",
         "conversationId": data.conversationId,
         userInput: data.userInput,
-        dialogName: data.dialogName,
+        taskName: data.dialogName,
         "event": data.eventName,
-        dialogId: data.dialogId,
+        positionId: data.dialogId,
+        taskId: data.taskId,
+        comment: data.comment,
+        feedbackDetails: data.feedbackDetails,
+        "interactionType": currentTabActive == 'userAutoIcon'? 'assist': 'mybot'
     }
     _agentAsisstSocket.emit('agent_usage_feedback', agent_assist_request);
 });
@@ -6494,7 +6829,8 @@ AgentAssistPubSub.subscribe('agent_assist_send_text', (msg, data) => {
         'conversationId': data.conversationId,
         'query': data.value,
         'botId': data.botId,
-        'agentId': ''
+        'agentId': '',
+        'positionId': data.positionId
     }
     if (data.intentName) {
         agent_assist_request['intentName'] = data.value;
@@ -6550,7 +6886,8 @@ AgentAssistPubSub.subscribe('searched_Automation_details', (msg, data) => {
         'query': data.value,
         'botId': data.botId,
         'intentName': data.intentName,
-        'experience': isCallConversation === 'true' ? 'voice':'chat'
+        'experience': isCallConversation === 'true' ? 'voice':'chat',
+        'positionId': data?.positionId
     }
     _agentAsisstSocket.emit('agent_assist_agent_request', agent_assist_request);
 });
