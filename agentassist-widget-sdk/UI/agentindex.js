@@ -836,7 +836,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 let faqsSuggestions = currentTabActive == 'searchAutoIcon' ? $('#search-text-display #faqsSuggestions-results') : $('#overLaySearch #faqsSuggestions-results');
 
                                 let faqDivClass = "type-info-run-send"
-                                if(index == 1){
+                                if(index > 1){
                                     faqDivClass = "type-info-run-send hide";
                                 }
 
@@ -886,7 +886,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 }
                             });
 
-                            if(data?.suggestions?.faqs?.length > 1){
+                            if(data?.suggestions?.faqs?.length > 2){
                                 let faqsSuggestions = currentTabActive == 'searchAutoIcon' ? $('#search-text-display #faqsSuggestions-results') : $('#overLaySearch #faqsSuggestions-results');
                                 let fullFaqView = `<div class="link-view-full-article ghost-btn" id="faqFullView-${uuids}" data-faq-full-view="true">View All FAQs</div>`
                                 let fewFaqView = `<div class="link-view-full-article ghost-btn hide" id="faqFewView-${uuids}" data-faq-few-view="true">View Few FAQs</div>`
@@ -1373,7 +1373,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }
                     if(titleElement && descElement && sectionElement && divElement){
                         $(titleElement).css({"overflow": "inherit", "white-space": "normal", "text-overflow" : "unset"});
-                        $(descElement).css({"overflow": "inherit", "text-overflow" : "unset"});
+                        $(descElement).css({"overflow": "inherit", "text-overflow" : "unset", "display" : "block"});
                         let faqSectionHeight = $(sectionElement).css("height");
                         faqSectionHeight = parseInt(faqSectionHeight.slice(0,faqSectionHeight.length-2));
                         let faqMinHeight = $(divElement).css("min-height");
@@ -1411,7 +1411,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }
                     if(titleElement && descElement && sectionElement && divElement){
                         $(titleElement).css({"overflow": "inherit", "white-space": "normal", "text-overflow" : "unset"});
-                        $(descElement).css({"overflow": "inherit", "text-overflow" : "unset"});
+                        $(descElement).css({"overflow": "inherit", "text-overflow" : "unset", "display" : "block"});
                         let faqSectionHeight = $(sectionElement).css("height");
                         faqSectionHeight = parseInt(faqSectionHeight.slice(0,faqSectionHeight.length-2));
                         let faqMinHeight = $(divElement).css("min-height");
