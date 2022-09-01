@@ -825,7 +825,8 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
   getImpStatus(impId: string) {
     const params = {
       userId: this.authService.getUserId(),
-      importId: impId
+      importId: impId,
+      "isAgentAssist": true
     }
     this.service.invoke('get.importbotstatus', params).subscribe(
       res => {
