@@ -3934,12 +3934,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             let activeChipCount = $(`#${target.parentElement.id} .btn-chip-negtive.active-chip`);
                             if (activeChipCount.length > 0) {
                                 $(`#feedbackHelpfulContainer-${id.join('-')} .title-improve`).addClass('hide');
-                                $('.submit-btn').removeAttr('disabled');
+                                $(`#feedbackHelpfulContainer-${id.join('-')} .submit-btn`).removeAttr('disabled');
                             } else {
                                 if (dataSets.comment.length == 0) {
                                     $(`#feedbackHelpfulContainer-${id.join('-')} .title-improve`).removeClass('hide');
                                 }
                             }
+                            $(`#feedbackHelpfulContainer-${id.join('-')} .ast-thumbdown`).attr('data-feedbackdetails', dataSets.feedbackdetails)
                         }
                         if (target.className == 'submit-btn') {
                             let id = target.parentElement.firstElementChild.id.split('-');
@@ -3950,16 +3951,21 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             //     // dataSets.feedbackdetails = 
 
                             // }
+                            if(typeof dataSets.feedbackdetails == 'string'&& dataSets.feedbackdetails.indexOf(',') > -1 ) {
+                                dataSets.feedbackdetails = dataSets.feedbackdetails.split(',');
+                            }
                             feedbackLoop(dataSets, true);
                             $(`#feedbackHelpfulContainer-${id.join('-')} .explore-more-negtive-data`).addClass('hide');
-                             target.dataset.updateflag = 'true';
+                            target.dataset.updateflag = 'true';
                             target.innerHTML = "Update";
-                            $('.submit-btn').attr('disabled', 'disabled');
-                            
+                            $(`#feedbackHelpfulContainer-${id.join('-')}.submit-btn`).attr('disabled', 'disabled');
+
+                            $(`#feedbackHelpfulContainer-${id.join('-')} .ast-thumbdown`).attr('data-comment',``)
+                            $(`#feedbackHelpfulContainer-${id.join('-')} .ast-thumbdown`).attr('data-feedbackdetails','[]')
                             dataSets.comment = "";
                             dataSets.feedbackdetails = [];
                             $(`#feedbackHelpfulContainer-${id.join('-')} .btn-chip-negtive.active-chip`).removeClass('active-chip');
-                            $(`#feedBackComment-${id.join('-')}`).val('');
+                            $(`#feedbackHelpfulContainer-${id.join('-')} #feedBackComment-${id.join('-')}`).val('');
                             isUpdateFeedBackDetailsFlag = false;
                         }
                         if (target.id === 'showHistory') {
@@ -5241,10 +5247,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             targetids.shift();
                             let dataSets = $(`#feedbackdown-${targetids.join('-')} .ast-thumbdown`).data();
                             dataSets.comment = target.value;
+                            
                             if (target.value.length > 0) {
-                                $('.submit-btn').removeAttr('disabled');
+                                $(`#feedbackHelpfulContainer-${targetids.join('-')} .submit-btn`).removeAttr('disabled');
+                               
                                 $(`#feedbackHelpfulContainer-${targetids.join('-')} .title-improve`).addClass('hide');
                             }
+                            $(`#feedbackHelpfulContainer-${targetids.join('-')} .input-block-optional .input-text`).attr('value', target.value);
+                            $(`#feedbackdown-${targetids.join('-')} .ast-thumbdown`).attr('data-comment', target.value);
                         } else {
                             var agentAssistInput = target.dataset.agentAssistInput;
                             var mybotInput = target.dataset.mybotInput;
@@ -5618,7 +5628,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     data.feedbackDetails.includes(eles.innerHTML) ?
                                         $(eles).addClass('active-chip') : '';
                                 });
+                                $(ele).find('.input-block-optional .input-text').attr('value', data.comment);
                                 $(ele).find('.input-block-optional .input-text').val(data.comment);
+                                $(ele).find(`.ast-thumbdown`).attr('data-comment',`${data.comment}`)
+                                $(ele).find(`.ast-thumbdown`).attr('data-feedbackdetails', data.feedbackDetails)
                                 feedDataSet.comment = data.comment;
                                 feedDataSet.feedbackdetails = data.feedbackDetails;
                             } else {
