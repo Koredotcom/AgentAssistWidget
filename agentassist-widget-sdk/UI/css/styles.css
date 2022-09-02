@@ -772,12 +772,8 @@ html, body{
     font-style: italic;
     margin-top: 6px;
     overflow: hidden;
-    white-space: normal;
+    white-space: nowrap;
     text-overflow: ellipsis;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    text-align: justify;
-    word-break: break-word;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links {
     display: none;
@@ -1251,7 +1247,6 @@ border: 1px solid transparent !important;
     text-align: center;
     position: relative;
     top: 0;
-    z-index: 1;
     /* z-index: 0; */
     /* bottom: -55px; */
     /* margin-top: 10px;
@@ -1272,7 +1267,6 @@ border: 1px solid transparent !important;
     background: #f8fafb;
     top: 0;
     left: -15px;
-    z-index: inherit;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dilog-task-end.last-msg-white-bg .text-dialog-task-end{
     font-size: 14px;
@@ -1565,13 +1559,9 @@ border: 1px solid transparent !important;
     color: var(--secondary-color-3);
     font-style: italic;
     margin-top: 5px;
-    overflow: inherit;
-    white-space: normal;
-    text-overflow: unset;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    text-align: justify;
-    word-break: break-word;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content .ast-carrotup{
@@ -1976,12 +1966,8 @@ border: 1px solid transparent !important;
     font-style: italic;
     margin-top: 5px;
     overflow: hidden;
-    white-space: normal;
+    white-space: nowrap;
     text-overflow: ellipsis;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    text-align: justify;
-    word-break: break-word;
 }
 .overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links {
     display: none;
@@ -3099,7 +3085,7 @@ border: 1px solid transparent !important;
     left: -23px;
     top: auto;
 }
-.agent-assist-chat-container .unread-msg.last-msg-white-bg::after{
+.agent-assist-chat-container .unread-msg::after{
     content: "";
     position: absolute;
     width: calc(100% + 41px);
@@ -3239,25 +3225,6 @@ opacity: 1 !important;
 /* removing autosuggestions from chrome */
 input.no-autofill-bkg:-webkit-autofill {
 -webkit-background-clip: text;
-}
-
-.link-view-full-article{
-    display: inline-block;
-}
-.link-view-full-article a{
-    color: #1b92d8 !important;
-    font-size: 12px;
-    line-height: 15px;
-    margin: 5px 0;
-    display: inline-block;
-    cursor: pointer;
-}
-
-.d_block{
-    display: block;
-}
-.m-10{
-    margin: 10px 0;
 }
 
 .kore-chat-window .botResponseAttachments .uploadedFileIcon .image-size{
