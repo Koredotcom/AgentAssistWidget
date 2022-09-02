@@ -4311,55 +4311,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             let activeChipCount = $(`#${target.parentElement.id} .btn-chip-negtive.active-chip`);
                             if (activeChipCount.length > 0) {
                                 $(`#feedbackHelpfulContainer-${id.join('-')} .title-improve`).addClass('hide');
-                                $('.submit-btn').removeAttr('disabled');
+                                $(`#feedbackHelpfulContainer-${id.join('-')} .submit-btn`).removeAttr('disabled');
                             } else {
                                 if (dataSets.comment.length == 0) {
                                     $(`#feedbackHelpfulContainer-${id.join('-')} .title-improve`).removeClass('hide');
                                 }
                             }
-                            if (target.dataset.feedbackDropDownOpened === 'false') {
-                                $(`#dropdownArrowFeedBackIcon-${targteId.join('-')}`).attr('data-feedback-drop-down-opened', 'true');
-                                $(`#dropdownArrowFeedBack-${targteId.join('-')}`).attr('data-feedback-drop-down-opened', 'true');
-                                $(`#feedbackHelpfulContainer-${targteId.join('-')} .explore-more-negtive-data`).addClass('hide');
-                            } else {
-                                $(`#dropdownArrowFeedBackIcon-${targteId.join('-')}`).attr('data-feedback-drop-down-opened', 'false');
-                                $(`#dropdownArrowFeedBack-${targteId.join('-')}`).attr('data-feedback-drop-down-opened', 'false');
-                                $(`#feedbackHelpfulContainer-${targteId.join('-')} .explore-more-negtive-data`).removeClass('hide');
-                            }
-                            let updateFlag = $(`#feedbackHelpfulContainer-${targteId.join('-')} .submit-btn`).attr('data-updateflag');
-                            if (updateFlag == 'true' && target.dataset.feedbackDropDownOpened === 'false') {
-                                AgentAssist_feedBack_Update_Request(dataSets);
-                                $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).addClass('hide');
-                                isUpdateFeedBackDetailsFlag = true;
-                            }
-                        }
-                        if (target.className.includes('btn-chip-negtive')) {
-                            let id = target.parentElement.id.split('-');
-                            id.shift();
-                            let dataSets = $(`#feedbackdown-${id.join('-')} .ast-thumbdown`).data();
-                            if (target.dataset.chipClick == 'false') {
-                                $(target).addClass('active-chip');
-                                target.dataset.chipClick = 'true';
-                                dataSets.feedbackdetails.push($(target).html());
-
-                            } else {
-                                $(target).removeClass('active-chip');
-                                target.dataset.chipClick = 'false';
-                                dataSets.feedbackdetails?.forEach((ele, i) => {
-                                    if (ele == $(target).html()) {
-                                        delete dataSets.feedbackdetails[i]
-                                    }
-                                })
-                            }
-                            let activeChipCount = $(`#${target.parentElement.id} .btn-chip-negtive.active-chip`);
-                            if (activeChipCount.length > 0) {
-                                $(`#feedbackHelpfulContainer-${id.join('-')} .title-improve`).addClass('hide');
-                                $('.submit-btn').removeAttr('disabled');
-                            } else {
-                                if (dataSets.comment.length == 0) {
-                                    $(`#feedbackHelpfulContainer-${id.join('-')} .title-improve`).removeClass('hide');
-                                }
-                            }
+                            $(`#feedbackHelpfulContainer-${id.join('-')} .ast-thumbdown`).attr('data-feedbackdetails', dataSets.feedbackdetails)
                         }
                         if (target.className == 'submit-btn') {
                             let id = target.parentElement.firstElementChild.id.split('-');
@@ -4370,37 +4328,21 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             //     // dataSets.feedbackdetails = 
 
                             // }
+                            if(typeof dataSets.feedbackdetails == 'string'&& dataSets.feedbackdetails.indexOf(',') > -1 ) {
+                                dataSets.feedbackdetails = dataSets.feedbackdetails.split(',');
+                            }
                             feedbackLoop(dataSets, true);
                             $(`#feedbackHelpfulContainer-${id.join('-')} .explore-more-negtive-data`).addClass('hide');
-                             target.dataset.updateflag = 'true';
+                            target.dataset.updateflag = 'true';
                             target.innerHTML = "Update";
-                            $('.submit-btn').attr('disabled', 'disabled');
-                            
-                            dataSets.comment = "";
-                            dataSets.feedbackdetails = [];
-                            $(`#feedbackHelpfulContainer-${id.join('-')} .btn-chip-negtive.active-chip`).removeClass('active-chip');
-                            $(`#feedBackComment-${id.join('-')}`).val('');
-                            isUpdateFeedBackDetailsFlag = false;
-                        }
-                        if (target.className == 'submit-btn') {
-                            let id = target.parentElement.firstElementChild.id.split('-');
-                            id.shift();
-                            let dataSets = $(`#feedbackdown-${id.join('-')} .ast-thumbdown`).data();
-                            // if(target.innerHTML == 'Update') {
-                            //     dataSets.comment = target.value;
-                            //     // dataSets.feedbackdetails = 
+                            $(`#feedbackHelpfulContainer-${id.join('-')}.submit-btn`).attr('disabled', 'disabled');
 
-                            // }
-                            feedbackLoop(dataSets, true);
-                            $(`#feedbackHelpfulContainer-${id.join('-')} .explore-more-negtive-data`).addClass('hide');
-                             target.dataset.updateflag = 'true';
-                            target.innerHTML = "Update";
-                            $('.submit-btn').attr('disabled', 'disabled');
-                            
+                            $(`#feedbackHelpfulContainer-${id.join('-')} .ast-thumbdown`).attr('data-comment',``)
+                            $(`#feedbackHelpfulContainer-${id.join('-')} .ast-thumbdown`).attr('data-feedbackdetails','[]')
                             dataSets.comment = "";
                             dataSets.feedbackdetails = [];
                             $(`#feedbackHelpfulContainer-${id.join('-')} .btn-chip-negtive.active-chip`).removeClass('active-chip');
-                            $(`#feedBackComment-${id.join('-')}`).val('');
+                            $(`#feedbackHelpfulContainer-${id.join('-')} #feedBackComment-${id.join('-')}`).val('');
                             isUpdateFeedBackDetailsFlag = false;
                         }
                         if (target.id === 'showHistory') {
@@ -5679,10 +5621,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             targetids.shift();
                             let dataSets = $(`#feedbackdown-${targetids.join('-')} .ast-thumbdown`).data();
                             dataSets.comment = target.value;
+                            
                             if (target.value.length > 0) {
-                                $('.submit-btn').removeAttr('disabled');
+                                $(`#feedbackHelpfulContainer-${targetids.join('-')} .submit-btn`).removeAttr('disabled');
                                 $(`#feedbackHelpfulContainer-${targetids.join('-')} .title-improve`).addClass('hide');
                             }
+                            $(`#feedbackHelpfulContainer-${targetids.join('-')} .input-block-optional .input-text`).attr('value', target.value);
+                            $(`#feedbackdown-${targetids.join('-')} .ast-thumbdown`).attr('data-comment', target.value);
                         } else {
                             var agentAssistInput = target.dataset.agentAssistInput;
                             var mybotInput = target.dataset.mybotInput;
@@ -6056,7 +6001,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     data.feedbackDetails.includes(eles.innerHTML) ?
                                         $(eles).addClass('active-chip') : '';
                                 });
+                                $(ele).find('.input-block-optional .input-text').attr('value', data.comment);
                                 $(ele).find('.input-block-optional .input-text').val(data.comment);
+                                $(ele).find(`.ast-thumbdown`).attr('data-comment',`${data.comment}`)
+                                $(ele).find(`.ast-thumbdown`).attr('data-feedbackdetails', data.feedbackDetails)
                                 feedDataSet.comment = data.comment;
                                 feedDataSet.feedbackdetails = data.feedbackDetails;
                             } else {
