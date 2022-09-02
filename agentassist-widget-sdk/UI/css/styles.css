@@ -3085,7 +3085,7 @@ border: 1px solid transparent !important;
     left: -23px;
     top: auto;
 }
-.agent-assist-chat-container .unread-msg::after{
+.agent-assist-chat-container .unread-msg.last-msg-white-bg::after{
     content: "";
     position: absolute;
     width: calc(100% + 41px);
@@ -3094,6 +3094,7 @@ border: 1px solid transparent !important;
     left: -23px;
     background: #f8fafb;
 }
+
 .agent-assist-chat-container .unread-msg .text-dialog-task-end{
     padding: 5px 10px;
     background: #DCE3EA;
@@ -3230,4 +3231,13 @@ input.no-autofill-bkg:-webkit-autofill {
 .kore-chat-window .botResponseAttachments .uploadedFileIcon .image-size{
     width: 100%;
     height: 100%;
+}
+
+.unread-msg-after{
+    content: "";
+    position: absolute;
+    width: calc(100% + 41px);
+    height: 24px;
+    bottom: -10px;
+    left: -23px;
 }
