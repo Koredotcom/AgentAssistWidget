@@ -431,7 +431,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                     let titleText = '';
                     let userQueryHtml = '';
-                    let sanitizedVal = sanitizeHTML(String(data.userInput));
+                    let sanitizedVal = sanitizeHTML((data.userInput));
                     if(isOverRideMode) {
                         titleText = "YouEntered -";
                         userQueryHtml = `
@@ -704,7 +704,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $('#dialogs-faqs').addClass('hide');
                         }
                         if (data.suggestions) {
-                            let sanitizedVal = sanitizeHTML(String(data.userInput));
+                            let sanitizedVal = sanitizeHTML((data.userInput));
                             isSuggestionProcessed = false;
                             if (currentTabActive == 'searchAutoIcon') {
                                 let searchTextDisplay = document.getElementById('search-text-display');
@@ -728,13 +728,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                         } else {
                             if (isSuggestionProcessed) {
-                                let sanitizedVal = sanitizeHTML(String(data.userInput))
+                                let sanitizedVal = sanitizeHTML((data.userInput))
                                 if (currentTabActive == 'searchAutoIcon') {
                                     let searchTextDisplay = document.getElementById('search-text-display');
                                     html = `<div class="searched-intent" id="librarySearchText">0 Search results for '${sanitizedVal}' </div>`
                                     searchTextDisplay.innerHTML = html;
                                 } else {
-                                    $('#overLaySearch').html(`<div class="search-results-text">0 Search results for '${sanitized}'</div>`)
+                                    $('#overLaySearch').html(`<div class="search-results-text">0 Search results for '${sanitizedVal}'</div>`)
                                 }
                             }
 
@@ -1032,7 +1032,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         $('#inputFieldForMyBot').remove();
                         
                          if(isMybotInputResponseClick){
-                            let sanitizedVal = sanitizeHTML(String(data.userInput))
+                            let sanitizedVal = sanitizeHTML((data.userInput))
                             let userQueryHtml = `
                                     <div class="steps-run-data">
                                         <div class="icon_block_img">
@@ -2480,7 +2480,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     }
                                     if (res.agentAssistDetails.entityName && res.agentAssistDetails.entityResponse && res.agentAssistDetails.entityValue) {
                                         let runInfoContent = $(`#dropDownData-${previousId}`);
-                                        let sanitizedVal = sanitizeHTML(String(res.agentAssistDetails.entityValue))
+                                        let sanitizedVal = sanitizeHTML((res.agentAssistDetails.entityValue))
                                         let userQueryHtml = `
                                             <div class="steps-run-data">
                                                 <div class="icon_block_img">
@@ -2882,7 +2882,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     }
                                     if (res.agentAssistDetails.entityName && res.agentAssistDetails.entityResponse && res.agentAssistDetails.entityValue) {
                                         let runInfoContent = $(`#dropDownData-${previousId}`);
-                                        let sanitizedVal = sanitizeHTML(String(res.agentAssistDetails.entityValue))
+                                        let sanitizedVal = sanitizeHTML((res.agentAssistDetails.entityValue))
                                         let userQueryHtml = `
                                                 <div class="steps-run-data">
                                                     <div class="icon_block_img">
@@ -3291,7 +3291,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     if (appState[_convId] && (convState.currentTab == 'librarySearch')) {
                         if (searchedVal !== undefined && document.getElementById('librarySearch').value.length > 0) {
                             convState.libraryTab = document.getElementById('librarySearch').value;
-                            let sanitizedVal = sanitizeHTML(String(document.getElementById('librarySearch').value));
+                            let sanitizedVal = sanitizeHTML(convState.libraryTab);
+                            console.log('updateCurrentTabInState: ',convState.libraryTab);
                             convState.libraryTab = sanitizedVal;
                         } else {
                             convState.libraryTab = '';
