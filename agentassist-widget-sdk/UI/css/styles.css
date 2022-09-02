@@ -3099,7 +3099,7 @@ border: 1px solid transparent !important;
     left: -23px;
     top: auto;
 }
-.agent-assist-chat-container .unread-msg::after{
+.agent-assist-chat-container .unread-msg.last-msg-white-bg::after{
     content: "";
     position: absolute;
     width: calc(100% + 41px);
