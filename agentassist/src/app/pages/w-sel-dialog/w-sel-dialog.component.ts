@@ -572,9 +572,13 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
   }
 
   importSelect() {
+    this.close();
+    this.workflowService.loadBotStore$.next();
+    return;
     this.modSwitch('import'); 
     this.importBotSwitch('first');
     this.step = 2;
+    this.uploadIconSelected('assets/icons/welcome/bot_icon_0.png');
   }
 
   uploadIconSelected(iconPath: string) {
@@ -721,8 +725,7 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
     }
 
     const params = {
-      userId: this.authService.getUserId(),
-      "isAgentAssist":true
+      userId: this.authService.getUserId()
     };
     this.importedVariablesData = JSON.parse(this.importedVariablesData);
     this.importedBotData = JSON.parse(this.importedBotData);
@@ -747,8 +750,8 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
           "fileName":this.botFunctionFileName
         }
       ],
-      "isAgentAssist": true,
-      "instanceBotId": this.appService.selectedInstanceApp$.value?._id
+      "isLinkedSmartAssist": true,
+      instanceBotId: this.appService.selectedInstanceApp$.value?._id
     };
     this.importedBt = this.impBtName.trim();
     if(this.conversionNeeded) {
@@ -782,10 +785,10 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
   getConvStatus(convId: string) {
     const params = {
       userId: this.authService.getUserId(),
-      importId: convId
+      importId: convId,
+      'isAgentAssist':true
       
     }
-    console.log(params,"params are correct");
     this.service.invoke('get.importconvertbotstatus', params).subscribe(
       res => {
         this.stLogsConversion = res.statusLogs;
@@ -827,7 +830,6 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
       userId: this.authService.getUserId(),
       importId: impId
     }
-    console.log("import bot status");
     this.service.invoke('get.importbotstatus', params).subscribe(
       res => {
         this.stLogs = res.statusLogs;
