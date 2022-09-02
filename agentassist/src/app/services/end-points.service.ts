@@ -530,7 +530,7 @@ export class EndPointsService {
     }
 
     this.serviceList['post.importbot'] = {
-      endpoint: this.API_SERVER_URL + '/users/:userId/builder/importBot?isAgentAssist=true',
+      endpoint: this.API_SERVER_URL + '/users/:userId/builder/importBot',
       method: 'post'
     };
 
@@ -540,7 +540,7 @@ export class EndPointsService {
     };
 
     this.serviceList['get.importconvertbotstatus'] = {
-      endpoint: this.API_SERVER_URL + '/users/:userId/builder/importBot/status/:importId',
+      endpoint: this.API_SERVER_URL + '/users/:userId/builder/importBot/status/:importId?isAgentAssist=true',
       method: 'get'
     };
 
@@ -556,7 +556,7 @@ export class EndPointsService {
     };
 
     this.serviceList['post.importbot.export'] = {
-      endpoint: this.API_SERVER_URL + '/builder/streams/:streamId/export?isAgentAssist=true',
+      endpoint: this.API_SERVER_URL + '/builder/streams/:streamId/export',
       method: 'post'
     };
 
