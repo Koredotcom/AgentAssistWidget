@@ -5250,7 +5250,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             
                             if (target.value.length > 0) {
                                 $(`#feedbackHelpfulContainer-${targetids.join('-')} .submit-btn`).removeAttr('disabled');
-                               
                                 $(`#feedbackHelpfulContainer-${targetids.join('-')} .title-improve`).addClass('hide');
                             }
                             $(`#feedbackHelpfulContainer-${targetids.join('-')} .input-block-optional .input-text`).attr('value', target.value);
