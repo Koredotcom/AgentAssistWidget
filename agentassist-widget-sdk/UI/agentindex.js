@@ -4289,6 +4289,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             }
                             let updateFlag = $(`#feedbackHelpfulContainer-${targteId.join('-')} .submit-btn`).attr('data-updateflag');
                             if (updateFlag == 'true' && target.dataset.feedbackDropDownOpened === 'false') {
+                                $(`#feedbackHelpfulContainer-${targteId.join('-')} .submit-btn`).attr('disabled', 'disabled');
                                 AgentAssist_feedBack_Update_Request(dataSets);
                                 $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).addClass('hide');
                                 isUpdateFeedBackDetailsFlag = true;
@@ -4337,6 +4338,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             }
                             feedbackLoop(dataSets, true);
                             $(`#feedbackHelpfulContainer-${id.join('-')} .explore-more-negtive-data`).addClass('hide');
+                            $(`#feedbackHelpfulContainer-${id.join('-')} #dropdownArrowFeedBackIcon-${id.join('-')}`).attr('data-feedback-drop-down-opened', 'true');
+                            $(`#feedbackHelpfulContainer-${id.join('-')} #dropdownArrowFeedBack-${id.join('-')}`).attr('data-feedback-drop-down-opened', 'true');
                             target.dataset.updateflag = 'true';
                             target.innerHTML = "Update";
                             $(`#feedbackHelpfulContainer-${id.join('-')}.submit-btn`).attr('disabled', 'disabled');

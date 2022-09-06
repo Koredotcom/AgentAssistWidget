@@ -2905,7 +2905,7 @@ border: 1px solid transparent !important;
     display: inline-block;
     margin-top: -11px;
     border: 1px dashed #EAF1FC;
-    background: #f8fafb;
+    /* background: #f8fafb; */
 }
 .feedback-helpul-container .titles-content {
     display: flex;
