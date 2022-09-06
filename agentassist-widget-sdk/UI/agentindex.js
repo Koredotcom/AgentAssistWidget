@@ -1493,7 +1493,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                     let uuids = koreGenerateUUID();
                     responseId = uuids;
-                    if (isCallConversation === 'true' && data.suggestions && currentTabActive == 'transcriptIcon') {
+                    if (isCallConversation === 'true' && data.suggestions) {
                         let buldHtml = `
                         <div class="buld-count-utt" id="buldCount-${uuids}">
                                     <i class="ast-bulb" id="buldCountAst-${uuids}"></i>
