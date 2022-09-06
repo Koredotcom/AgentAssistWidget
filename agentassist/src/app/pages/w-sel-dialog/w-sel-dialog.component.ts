@@ -306,6 +306,10 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
     if(flag == 'createNew') {
       this.uploadIconSelected(this.botIconsList[0].icon);
     }
+    else if(flag == 'import'){
+      this.activeMod['import'] = true;
+      this.uploadIconSelected(this.botIconsList[0].icon);
+    }
   }
 
   modSwitchCreate(event) {
