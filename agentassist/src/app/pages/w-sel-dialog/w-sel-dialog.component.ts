@@ -315,6 +315,7 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
       this.uploadIconSelected(this.botIconsList[0].icon);
     } else {
       this.activeMod['import'] = true;
+      this.uploadIconSelected(this.botIconsList[0].icon);
     }
   }
 
@@ -461,9 +462,9 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
       selectedBotDetails.streamId = self.selectedBot;     
       self.service.invoke('post.convertbot', {}, selectedBotDetails)
           .subscribe(res=>{
-            self.getConvStatus(res[0]._id);
+            self.getConvStatus(res._id);
             self.impInterval = setInterval(() => {
-              self.getConvStatus(res[0]._id);
+              self.getConvStatus(res._id);
             }, 3000);
           }, err =>{
             self.selectBotSwitch('fourth');
@@ -727,11 +728,11 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
     this.importedVariablesData = JSON.parse(this.importedVariablesData);
     this.importedBotData = JSON.parse(this.importedBotData);
 
-    if((!this.importedBotData.hasOwnProperty('isLinkedSmartAssist')) || (this.importedBotData.hasOwnProperty('isLinkedSmartAssist') && !this.importedBotData.isLinkedSmartAssist)) {
-      this.conversionNeeded = true;
-    } else {
-      this.conversionNeeded = false;
-    }
+    // if((!this.importedBotData.hasOwnProperty('isLinkedSmartAssist')) || (this.importedBotData.hasOwnProperty('isLinkedSmartAssist') && !this.importedBotData.isLinkedSmartAssist)) {
+    //   this.conversionNeeded = true;
+    // } else {
+    //   this.conversionNeeded = false;
+    // }
 
     this.importedVariablesData.color = '#3366ff';
     this.importedVariablesData.name = this.impBtName.trim();
@@ -751,11 +752,11 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
       "instanceBotId": this.appService.selectedInstanceApp$.value?._id
     };
     this.importedBt = this.impBtName.trim();
-    if(this.conversionNeeded) {
-      this.importBotSwitch('fifth');
-    } else {
+    // if(this.conversionNeeded) {
+    //   this.importBotSwitch('fifth');
+    // } else {
       this.importBotSwitch('second');
-    }
+    // }
     this.service.invoke('post.importbot', params, payload).subscribe(
       res => {
         const self = this;
@@ -764,11 +765,11 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
           self.getImpStatus(res._id);
         }, 3000);
       }, err => {
-        if(this.conversionNeeded) {
-          this.importBotSwitch('seventh');
-        } else {
+        // if(this.conversionNeeded) {
+        //   this.importBotSwitch('seventh');
+        // } else {
           this.importBotSwitch('fourth');
-        }
+        // }
         try {
           this.importedBtError = err.error.errors[0].msg;
         } catch(e) {
@@ -782,10 +783,10 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
   getConvStatus(convId: string) {
     const params = {
       userId: this.authService.getUserId(),
-      importId: convId
+      importId: convId,
+      'isAgentAssist': true
       
     }
-    console.log(params,"params are correct");
     this.service.invoke('get.importconvertbotstatus', params).subscribe(
       res => {
         this.stLogsConversion = res.statusLogs;
@@ -827,7 +828,6 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
       userId: this.authService.getUserId(),
       importId: impId
     }
-    console.log("import bot status");
     this.service.invoke('get.importbotstatus', params).subscribe(
       res => {
         this.stLogs = res.statusLogs;
@@ -837,32 +837,32 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
             this.notificationService.notify(this.translate.instant("ONBOARDING.IMPORT_SUCCESSFUL"), "success");
             this.importedBtStreamId = res.streamId;
             this.authService.getDeflectApps();
-            if(this.conversionNeeded) {
-              this.selectedBot = res.streamId;
-              this.isImported = true;
-              const convPayload = {
-                _id: res.streamId,
-                status: 'configured'
-              }
-              this.convertBot(convPayload);
-            } else {
-              this.importBotSwitch('third');
-            }
+            // if(this.conversionNeeded) {
+            //   this.selectedBot = res.streamId;
+            //   this.isImported = true;
+            //   const convPayload = {
+            //     _id: res.streamId,
+            //     status: 'configured'
+            //   }
+            //   this.convertBot(convPayload);
+            // } else {
+               this.importBotSwitch('third');
+            // }
           } else if (res.status == 'failed') {
-            if(this.conversionNeeded) {
-              this.importBotSwitch('seventh');
-            } else {
-              this.importBotSwitch('fourth');
-            }
+            // if(this.conversionNeeded) {
+            //   this.importBotSwitch('seventh');
+            // } else {
+               this.importBotSwitch('fourth');
+            // }
             this.importedBtError = this.translate.instant("ONBOARDING.BT_IMPORT_FAILED")
           }
         }
       }, err => {
-        if(this.conversionNeeded) {
-          this.importBotSwitch('seventh');
-        } else {
-          this.importBotSwitch('fourth')
-        }
+        // if(this.conversionNeeded) {
+        //   this.importBotSwitch('seventh');
+        // } else {
+           this.importBotSwitch('fourth')
+        // }
         try {
           this.importedBtError = err.error.errors[0].msg;
         } catch(e) {
