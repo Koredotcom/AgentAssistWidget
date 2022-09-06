@@ -462,11 +462,9 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
       selectedBotDetails.streamId = self.selectedBot;     
       self.service.invoke('post.convertbot', {}, selectedBotDetails)
           .subscribe(res=>{
-            console.log("convert status1");
             self.getConvStatus(res._id);
             self.impInterval = setInterval(() => {
               self.getConvStatus(res._id);
-              console.log("convert status 2");
             }, 3000);
           }, err =>{
             self.selectBotSwitch('fourth');
@@ -485,7 +483,6 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
       this.workflowService.switchBt$.next(_.findWhere(this.workflowService.deflectApps(), {_id: this.importedBtStreamId}));
       this.wSel.emit();
     } else {
-      console.log("conversion on process");
       this.notificationService.notify(this.translate.instant('ONBOARDING.PLEASE_WAIT_LOADING'), 'warning');
       return;
     }
@@ -775,7 +772,6 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
         // }
         try {
           this.importedBtError = err.error.errors[0].msg;
-          console.log("import bot exists already AA");
         } catch(e) {
           this.importedBtError = this.translate.instant("ONBOARDING.IMPORT_FAILED");
         }
@@ -791,7 +787,6 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
       'isAgentAssist': true
       
     }
-    console.log(params,"params are correct");
     this.service.invoke('get.importconvertbotstatus', params).subscribe(
       res => {
         this.stLogsConversion = res.statusLogs;
@@ -833,7 +828,6 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
       userId: this.authService.getUserId(),
       importId: impId
     }
-    console.log("import bot status");
     this.service.invoke('get.importbotstatus', params).subscribe(
       res => {
         this.stLogs = res.statusLogs;
