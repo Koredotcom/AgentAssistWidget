@@ -21,17 +21,19 @@ fi
 echo "change in directory, current directory is $(pwd)"
 export TWILIO_ACCOUNT_SID=$ACCOUNT_SID
 export TWILIO_AUTH_TOKEN=$AUTH_TOKEN
-
+ 
 # echo $TWILIO_ACCOUNT_SID
 # echo $TWILIO_AUTH_TOKEN
 echo
 #export NODE_OPTIONS=--openssl-legacy-provider
-npm i --legacy-peer-deps
+#npm i --legacy-peer-deps
+twilio plugins:install @twilio-labs/plugin-flex
 npm install
 sleep 5s 
 echo
 echo "Node version ---------> $(node -v)"
 echo "Twilio Flex build in progress........"
+
 npx twilio flex:plugins:build
 echo
 
