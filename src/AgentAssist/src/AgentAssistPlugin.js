@@ -18,6 +18,7 @@ export default class AgentAssistPlugin extends FlexPlugin {
   isCallConversation = false;
   activeConversationId = '';
   _conversations = {};
+  customerName = '';
   constructor() {
     super(PLUGIN_NAME);
 
@@ -50,6 +51,10 @@ export default class AgentAssistPlugin extends FlexPlugin {
     console.log(currentFlexConfig);
     console.log(Twilio.Flex.Manager.events);
     let serverlessURL = currentFlexConfig?.kore_agent_assist?.runtime_service;
+
+    // let showPanel2 =  currentFlexConfig?.AgentDesktopView?.showPanel2 || false;
+    // flex.AgentDesktopView.defaultProps.showPanel2=showPanel2;
+
     console.log("********* serverless URL *********");
     console.log(serverlessURL);
     console.log("**********************************");
@@ -63,24 +68,25 @@ export default class AgentAssistPlugin extends FlexPlugin {
     var funcResponse = await axios.post(serverlessURL, body);
     let { agentassistURL, token, smartassistURL, botId, isCall } = funcResponse.data;
     let conversationid;
-    console.log("11111111111111111111 state", manager.store.getState())
+    console.log("Kore Agent Assist state", manager.store.getState())
 
     manager.store.subscribe(() => {
       let flex = manager.store.getState().flex;
       this.activeConversationId = flex?.chat?.messageList?.activeConversation;
       let convObj = flex?.chat?.conversations[this.activeConversationId];
-      console.log("11111111111111 this.activeConversationId", this.activeConversationId, convObj);
+      console.log("Kore Agent Assist this.activeConversationId", this.activeConversationId, convObj);
       if (this.atleastOneKeyExist(convObj)) {
-        console.log("11111111111 conversation exist")
+        console.log("Kore Agent Assist conversation exist")
         //manager.store.dispatch({type:"IFRAME_URL", iframeUrl:`about:blank`});
         this.isCallConversation = false;
         if (!this._conversations[this.activeConversationId]) {
           this._conversations[this.activeConversationId] = {};
           this._conversations[this.activeConversationId].iframeLoaded = false;
         }
-        console.log("11111111 this._conversations[this.activeConversationId]", this._conversations[this.activeConversationId])
+        console.log("Kore Agent Assist this._conversations[this.activeConversationId]", this._conversations[this.activeConversationId])
         if (!this._conversations[this.activeConversationId].iframeLoaded) {
-          let iframeURL = `${agentassistURL}/koreagentassist-sdk/UI/agentassist-iframe.html?token=${token}&botid=${botId}&agentassisturl=${smartassistURL}&conversationid=${this.activeConversationId}&source=salesforce&isCall=false`;
+          let customdata = encodeURI(JSON.stringify({fName:this.customerName || 'Customer',lName:''}))
+          let iframeURL = `${agentassistURL}/koreagentassist-sdk/UI/agentassist-iframe.html?token=${token}&botid=${botId}&agentassisturl=${smartassistURL}&conversationid=${this.activeConversationId}&isCall=false&customdata=${customdata}`;
           console.log("Iframe URL ====>  ", iframeURL);
           this.setIframeLoadedForAllConversations(false);
           this._conversations[this.activeConversationId].iframeLoaded = true;
@@ -99,7 +105,7 @@ export default class AgentAssistPlugin extends FlexPlugin {
                 _self.sendUnreadMessages(convObj, agentassistURL);
               };
             }
-          }, 1000);
+          }, 2000);
         }
         this.sendUnreadMessages(convObj, agentassistURL);
 
@@ -117,14 +123,16 @@ export default class AgentAssistPlugin extends FlexPlugin {
         payload.task &&
         payload.task.attributes
       ) {
-
+        this.customerName = payload.task.attributes.from;
+        console.log("Kore Agent Assist ",this.customerName)
         if (payload.task.channelType === "voice") {
           this.isCallConversation = true;
           isCall = true;
           conversationid = payload?.task?.attributes["caller"];
           conversationid = conversationid.replace("+", "%2B");
           this.activeConversationId = conversationid;
-          let iframeURL = `${agentassistURL}/koreagentassist-sdk/UI/agentassist-iframe.html?token=${token}&botid=${botId}&agentassisturl=${smartassistURL}&conversationid=${this.activeConversationId}&source=salesforce&isCall=true`;
+          let customdata = encodeURI(JSON.stringify({fName:'Customer', lName:''})) // voice call 
+          let iframeURL = `${agentassistURL}/koreagentassist-sdk/UI/agentassist-iframe.html?token=${token}&botid=${botId}&agentassisturl=${smartassistURL}&conversationid=${this.activeConversationId}&isCall=true&customdata=${customdata}`;
           manager.store.dispatch({ type: "IFRAME_URL", iframeUrl: iframeURL });
         }
         // conversationid = "14152367315";
@@ -166,9 +174,9 @@ export default class AgentAssistPlugin extends FlexPlugin {
   }
   createWindowListener(manager) {
     var flex = manager.store.getState().flex;
-    console.log("111111111111111 registering window listener for agentassist changed var")
+    console.log("Kore Agent Assist registering window listener for agentassist changed var")
     window.addEventListener("message", async (event) => {
-      console.log("11111111111 inside window eventlistener", this.activeConversationId, event.data);
+      console.log("Kore Agent Assist inside window eventlistener", this.activeConversationId, event.data);
       var recordId = this.activeConversationId;
       if (event.data.name === "agentAssist.SendMessage" && event.data.conversationId == this.activeConversationId) {
         //console.log(event.data.payload);
@@ -178,19 +186,19 @@ export default class AgentAssistPlugin extends FlexPlugin {
         } catch (e) {
           msg = decodeURI(encodeURI(event.data.payload));
         }
-        console.log("1111111111111111 sending message", msg);
+        console.log("Kore Agent Assist1 sending message", msg);
 
         //  manager.chatClient.getChannelBySid(recordId)
         //    .then(channel => {
         //      channel.sendMessage(msg);
         //    });
         Actions.invokeAction("SendMessage", { body: msg, conversationSid: recordId });
-        
+
       } else if (event.data.name === "agentAssist.CopyMessage" && event.data.conversationId == this.activeConversationId) {
         var msg = decodeURI(encodeURI(event.data.payload));
-        console.log("1111111111111111 copying message", msg);
+        console.log("Kore Agent Assist1 copying message", msg);
 
-      Actions.invokeAction("SetInputText", { body: msg, conversationSid: recordId });
+        Actions.invokeAction("SetInputText", { body: msg, conversationSid: recordId });
 
 
 
@@ -208,7 +216,7 @@ export default class AgentAssistPlugin extends FlexPlugin {
           let sid = state['sid'];
           if (!this._conversations[sid]) {
             let unreadMessage = state.body;
-            console.log("111111111111111111 unreadMessage", unreadMessage)
+            console.log("Kore Agent Assist111 unreadMessage", unreadMessage)
             this._conversations[sid] = {};
             this._conversations[sid]['message'] = unreadMessage;
             this.sendMessageToAgentAssist(this.activeConversationId, unreadMessage, agentassistURL);
@@ -225,7 +233,7 @@ export default class AgentAssistPlugin extends FlexPlugin {
     if (!iframe) {
       return;
     }
-    console.log("111111111 iframe", iframe);
+    console.log("Kore Agent Assist iframe", iframe);
     var recordId = conversationId;
     var content = message;
     console.log("New Message recordId:" + recordId + " content:" + content);
@@ -260,7 +268,7 @@ export default class AgentAssistPlugin extends FlexPlugin {
     let convObj = manager.store.getState().flex.chat.conversations[conversationid];
 
     manager.store.subscribe(() => {
-      console.log("1111111111111111111 convObj", manager.store.getState());
+      console.log("Kore Agent Assist convObj", manager.store.getState());
       if (convObj && convObj.unreadMessages && convObj.unreadMessages.length > 0) {
         let unreadMessages = convObj.unreadMessages;
         for (let i = 0; i < unreadMessages.length; i++) {
@@ -270,7 +278,7 @@ export default class AgentAssistPlugin extends FlexPlugin {
             let sid = state['sid'];
             if (!this._conversations[sid]) {
               let unreadMessage = state.body;
-              console.log("111111111111111111 unreadMessage", unreadMessage)
+              console.log("Kore Agent Assist111 unreadMessage", unreadMessage)
               this._conversations[sid] = {};
               this._conversations[sid]['message'] = unreadMessage;
             }
@@ -279,7 +287,8 @@ export default class AgentAssistPlugin extends FlexPlugin {
         }
       }
       console.log("---------------->", conversationid, "isCall----->", isCall);
-      let iframeURL = `${agentassistURL}/koreagentassist-sdk/UI/agentassist-iframe.html?token=${token}&botid=${botId}&agentassisturl=${smartassistURL}&conversationid=${conversationid}&source=salesforce&isCall=${isCall}`;
+      let customdata = encodeURI(JSON.stringify({fName:this.customerName || 'Customer',lName:''}))
+      let iframeURL = `${agentassistURL}/koreagentassist-sdk/UI/agentassist-iframe.html?token=${token}&botid=${botId}&agentassisturl=${smartassistURL}&conversationid=${conversationid}&sisCall=${isCall}&customdata=${customdata}`;
       console.log("Iframe URL ====>  ", iframeURL);
       manager.store.dispatch({ type: "IFRAME_URL", iframeUrl: `${iframeURL}` })
 
