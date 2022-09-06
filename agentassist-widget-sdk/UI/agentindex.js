@@ -22,7 +22,7 @@ var idsOfDropDown;
 var dropdownHeaderUuids;
 var responseId;
 var userIntentInput;
-var answerPlaceableID;
+var answerPlaceableIDs = [];
 var dialogName;
 var currentTabActive = 'userAutoIcon';
 var previousTabActive;
@@ -43,11 +43,11 @@ var removedIdListOnScroll = [];
 var scrollAtEnd = true;
 var selectedFaqList = [];
 var lastElementBeforeNewMessage = '';
-var isAnswerRenderbtnClicked = false;
 var isMybotInputResponseClick = false;
 var agentAssistResponse = {};
 var myBotDataResponse = {};
 var waitingTimeForSeeMoreButton = 150;
+var waitingTimeForUUID = 100;
 
 function koreGenerateUUID() {
     console.info("generating UUID");
@@ -146,18 +146,18 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             },
             "token": {}
         }
-        $.ajax({
-            url: url + '/api/1.1/oAuth/token/jwtgrant',
-            type: 'POST',
-            crossDomain: true,
-            contentType: 'application/json',
-            headers: {
-                'User-Agent': this.userAgent,
-                "content-type": 'application/json'
-            },
-            data: JSON.stringify(payload),
-            dataType: "json",
-            success: function (result) {
+        // $.ajax({
+        //     url: url + '/api/1.1/oAuth/token/jwtgrant',
+        //     type: 'POST',
+        //     crossDomain: true,
+        //     contentType: 'application/json',
+        //     headers: {
+        //         'User-Agent': this.userAgent,
+        //         "content-type": 'application/json'
+        //     },
+        //     data: JSON.stringify(payload),
+        //     dataType: "json",
+        //     success: function (result) {
                 chatConfig = window.KoreSDK.chatConfig;
                 var koreBot = koreBotChat();
                 AgentChatInitialize = new koreBot.chatWindow(chatConfig);
@@ -398,6 +398,18 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }
                 }
 
+                function formatSearchAssistData(suggestions){
+            
+                    let searchAssistData = suggestions.searchassist;
+                    let articlesData = [];
+                    for(let source in searchAssistData){
+                        articlesData.push.apply(articlesData,searchAssistData[source]);
+                    }
+                    suggestions.articles = articlesData;
+                    console.log(suggestions, "suggestions");
+                    return suggestions;
+                }
+
                 function processUserMessages(data, conversationId, botId) {
                     var _msgsResponse = {
                         "type": "bot_response",
@@ -431,6 +443,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                     let titleText = '';
                     let userQueryHtml = '';
+                    let sanitizedVal = sanitizeHTML((data.userInput));
                     if(isOverRideMode) {
                         titleText = "YouEntered -";
                         userQueryHtml = `
@@ -441,7 +454,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         <div class="run-info-content" id="userInput-${_id}">
                                             <div class="title">${titleText}</div>
                                             <div class="agent-utt">
-                                                <div class="title-data">"${encodeURI(data.userInput)}"</div>
+                                                <div class="title-data">"${sanitizedVal}"</div>
                                             </div>
                                             
                                         </div>
@@ -456,7 +469,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         <div class="run-info-content" id="userInput-${_id}">
                                             <div class="title">${titleText}</div>
                                             <div class="agent-utt">
-                                                <div class="title-data">"${data.userInput}"</div>
+                                                <div class="title-data">"${sanitizedVal}"</div>
                                             </div>
                                             
                                         </div>
@@ -470,7 +483,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         entityDisplayName = agentAssistResponse.newEntityDisplayName ? agentAssistResponse.newEntityDisplayName : agentAssistResponse.newEntityName;
                     }
                     if (data.entityValue && !data.isErrorPrompt && entityDisplayName) {
-                        entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${encodeURI(data.entityValue)}</div>`);
+                        entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${sanitizedVal}</div>`);
                     } else { 
                         if (data.isErrorPrompt && entityDisplayName) {
                             let entityHtmls = `<div class="order-number-info">${entityDisplayName} : 
@@ -631,8 +644,24 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         "traceId": "873209019a5adc26"
                     }
 
+                    // dummy data prepration for articles
+                    // if(data.suggestions && data.suggestions.faqs){
+                    //     data.suggestions.articles = [];
+                    //     for(let faq of data.suggestions.faqs){
+                    //         let object = {};
+                    //         object.title = faq.question;
+                    //         object.content = faq.answer + 'Start by entering your trip details onto an aggregator website like SkyScanner or GoogleFlights';
+                    //         object.link = "http://www.google.com"
+                    //         data.suggestions.articles.push(object);
+                    //     }
+                    // }
+
+
                     if (data.useCases) {
                         if (data.suggestions) {
+
+
+
                             document.getElementById('allAutomations-Exhaustivelist').classList.remove('hide');
                             $('#dialogs-faqs').removeClass('hide');
                             document.getElementById('searchResults').classList.add('hide');
@@ -696,29 +725,37 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }
 
 
-                    if (data.isSearch && !answerPlaceableID && !isAnswerRenderbtnClicked) {
+                    if (data.isSearch && answerPlaceableIDs.length == 0) {
                         ShowSearchContent();
                         if (data.value.length > 0 && currentTabActive == 'searchAutoIcon') {
                             document.getElementById('allAutomations-Exhaustivelist').classList.add('hide');
                             $('#dialogs-faqs').addClass('hide');
                         }
                         if (data.suggestions) {
+                            let sanitizedVal = sanitizeHTML((data.userInput));
                             isSuggestionProcessed = false;
                             if (currentTabActive == 'searchAutoIcon') {
                                 let searchTextDisplay = document.getElementById('search-text-display');
-                                html = `<div class="searched-intent" id="librarySearchText">Search results for '${encodeURI(data.userInput)}' </div>`
+                                html = `<div class="searched-intent" id="librarySearchText">Search results for '${sanitizedVal}' </div>`
                                 searchTextDisplay.innerHTML = html;
                             } else {
                                 let dialogsLength = data.suggestions.dialogs?.length || 0;
                                 let faqsLength = data.suggestions.faqs?.length || 0;
-                                if ((dialogsLength > 0) && (faqsLength > 0)) {
-                                    $('#overLaySearch').html(`<div class="search-results-text">${dialogsLength + faqsLength} Search results for '${encodeURI(data.userInput)}' <span class="show-all hide">Show all</span></div>`)
-                                } else if ((dialogsLength > 0) && (faqsLength === 0 || faqsLength === undefined)) {
-                                    $('#overLaySearch').html(`<div class="search-results-text">${dialogsLength} Search results for '${encodeURI(data.userInput)}' <span class="show-all hide">Show all</span></div>`)
-                                } else if ((dialogsLength === 0 || dialogsLength === undefined) && (faqsLength > 0)) {
-                                    $('#overLaySearch').html(`<div class="search-results-text">${faqsLength} Search results for '${encodeURI(data.userInput)}' <span class="show-all hide">Show all</span></div>`)
+
+                                let articlesLength = data.suggestions.articles?.length || 0;
+                                let totalSuggestionLength = dialogsLength + faqsLength + articlesLength || 0;
+                                if(totalSuggestionLength){
+                                    $('#overLaySearch').html(`<div class="search-results-text">${totalSuggestionLength} Search results for '${sanitizedVal}' <span class="show-all hide">Show all</span></div>`)
                                 }
-                                if ((dialogsLength + faqsLength) > 1) {
+
+                                // if ((dialogsLength > 0) && (faqsLength > 0)) {
+                                //     $('#overLaySearch').html(`<div class="search-results-text">${dialogsLength + faqsLength} Search results for '${data.userInput}' <span class="show-all hide">Show all</span></div>`)
+                                // } else if ((dialogsLength > 0) && (faqsLength === 0 || faqsLength === undefined)) {
+                                //     $('#overLaySearch').html(`<div class="search-results-text">${dialogsLength} Search results for '${data.userInput}' <span class="show-all hide">Show all</span></div>`)
+                                // } else if ((dialogsLength === 0 || dialogsLength === undefined) && (faqsLength > 0)) {
+                                //     $('#overLaySearch').html(`<div class="search-results-text">${faqsLength} Search results for '${data.userInput}' <span class="show-all hide">Show all</span></div>`)
+                                // }
+                                if (totalSuggestionLength > 1) {
                                     $('#overLaySearch').find('.show-all').removeClass('hide');
 
                                 }
@@ -726,12 +763,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                         } else {
                             if (isSuggestionProcessed) {
+                                let sanitizedVal = sanitizeHTML((data.userInput))
                                 if (currentTabActive == 'searchAutoIcon') {
                                     let searchTextDisplay = document.getElementById('search-text-display');
-                                    html = `<div class="searched-intent" id="librarySearchText">0 Search results for '${encodeURI(data.userInput)}' </div>`
+                                    html = `<div class="searched-intent" id="librarySearchText">0 Search results for '${sanitizedVal}' </div>`
                                     searchTextDisplay.innerHTML = html;
                                 } else {
-                                    $('#overLaySearch').html(`<div class="search-results-text">0 Search results for '${encodeURI(data.userInput)}'</div>`)
+                                    $('#overLaySearch').html(`<div class="search-results-text">0 Search results for '${sanitizedVal}'</div>`)
                                 }
                             }
 
@@ -805,7 +843,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                     <img src="./images/kg.svg">
                                                 </div>
                                                 <div class="content-dialog-task-type arr-cont-dialogtask" id="faqsSuggestions-results">
-                                                    <div class="type-with-img-title">FAQ/Articles (${data.suggestions.faqs.length})</div>
+                                                    <div class="type-with-img-title">FAQ (${data.suggestions.faqs.length})</div>
                                                 </div>
                                             </div>
                                         </div>`;
@@ -827,14 +865,20 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 };
                                 let faqsSuggestions = currentTabActive == 'searchAutoIcon' ? $('#search-text-display #faqsSuggestions-results') : $('#overLaySearch #faqsSuggestions-results');
 
+                                let faqDivClass = "type-info-run-send"
+                                if(index > 1){
+                                    faqDivClass = "type-info-run-send hide";
+                                }
+
                                 let faqHtml = `
-                        <div class="type-info-run-send" id="faqDivLib-${uuids+index}">
+                        <div class="${faqDivClass}" id="faqDivLib-${uuids+index}">
                             <div class="left-content" id="faqSectionLib-${uuids+index}">
                                 <div class="title-text" id="titleLib-${uuids+index}">${ele.question}</div>
                             </div>
                         </div>`;
 
                                 faqsSuggestions.append(faqHtml);
+                               
                                 let faqs = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${uuids+index}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${uuids+index}`);
                                 if (!ele.answer) {
                                     let checkHtml = `
@@ -872,15 +916,127 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     $(`#checkLib-${uuids+index}`).addClass('hide');
                                 }
                             });
-                            
+
+                            if(data?.suggestions?.faqs?.length > 2){
+                                let faqsSuggestions = currentTabActive == 'searchAutoIcon' ? $('#search-text-display #faqsSuggestions-results') : $('#overLaySearch #faqsSuggestions-results');
+                                let fullFaqView = `<div class="link-view-full-article ghost-btn" id="faqFullView-${uuids}" data-faq-full-view="true">View All FAQs</div>`
+                                let fewFaqView = `<div class="link-view-full-article ghost-btn hide" id="faqFewView-${uuids}" data-faq-few-view="true">View Few FAQs</div>`
+                                faqsSuggestions.append(fullFaqView); 
+                                faqsSuggestions.append(fewFaqView);
+                            }
+
 
                         }
-                        // updateNewMessageUUIDList(libraryResponseId);
+
+                        console.log(data.suggestions, "suggestion");
+
+                        if (data?.suggestions?.searchassist && Object.keys(data.suggestions.searchassist).length > 0) {
+
+                            data.suggestions = formatSearchAssistData(data.suggestions);
+
+                            console.log("article lenght");
+                            let automationSuggestions = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display`) : $('#overLaySearch');
+                            let articleAreaHtml = `<div class="dialog-task-run-sec p-0">
+                                            <div class="task-type" id="articlesArea">
+                                                <div class="img-block-info">
+                                                    <img src="./images/kg.svg">
+                                                </div>
+                                                <div class="content-dialog-task-type arr-cont-dialogtask" id="articleSuggestions-results">
+                                                    <div class="type-with-img-title">Articles (${data.suggestions.articles.length})</div>
+                                                </div>
+                                            </div>
+                                        </div>`;
+                            automationSuggestions.append(articleAreaHtml);
+
+                            // articles body
+                            data.suggestions.articles?.forEach((ele, index) => {
+                                let body = {};
+                                body['type'] = 'text';
+                                body['component'] = {
+                                    "type": 'text',
+                                    "payload": {
+                                        "type": 'text',
+                                        "text": ele
+                                    }
+                                };
+                                body['cInfo'] = {
+                                    "body": data.value
+                                };
+                                let articleSuggestions = currentTabActive == 'searchAutoIcon' ? $('#search-text-display #articleSuggestions-results') : $('#overLaySearch #articleSuggestions-results');
+
+                                let articleDivClass = "type-info-run-send"
+                                if(index == 1){
+                                    articleDivClass = "type-info-run-send hide";
+                                }
+
+                                let articleHtml = `
+                        <div class="${articleDivClass}" id="articleDivLib-${uuids+index}">
+                            <div class="left-content" id="articleSectionLib-${uuids+index}">
+                                <div class="title-text" id="articletitleLib-${uuids+index}">${ele.title}</div>
+                            </div>
+                        </div>`;
+
+                        articleSuggestions.append(articleHtml);
+
+                        
+                                let articles = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #articleSectionLib-${uuids+index}`) : $(`#overLaySearch .type-info-run-send #articleSectionLib-${uuids+index}`);
+                                if (!ele.content) {
+                                    let articlecheckHtml = `
+                            <i class="ast-carrotup" data-conv-id="${data.conversationId}"
+                            data-bot-id="${botId}" data-intent-name="${ele.title}"
+                            data-check-lib="true" id="articlecheckLib-${uuids+index}"></i>`;
+                            articles.append(articlecheckHtml);
+                                } else {
+                                    let a = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display #articleDivLib-${uuids+index}`) : $(`#overLaySearch #articleDivLib-${uuids+index}`);
+                                    let articlesActionHtml = `<div class="action-links">
+                            <button class="send-run-btn" id="articlesendMsg" data-msg-id="article-${uuids+index}"  data-msg-data='${ele.content}'>Send</button>
+                            <div class="copy-btn" data-msg-id="article-${uuids+index}" data-msg-data='${ele.content}'>
+                                <i class="ast-copy" data-msg-id="article-${uuids+index}" data-msg-data='${ele.content}'></i>
+                            </div>
+                        </div>`;
+                                    a.append(articlesActionHtml);
+                                    articles.append(`<div class="desc-text" id="articledescLib-${uuids+index}">${ele.content}
+                                     </div>`);
+                                     if(ele.link){
+                                        let fullArticleLinkHtml = `<div class="link-view-full-article hide" id="articleViewLinkLib-${uuids+index}"><a href="${ele.link}" target="_blank">View Full Article</a></div>`
+                                         document.getElementById(`articledescLib-${uuids+index}`).insertAdjacentHTML('beforeend',fullArticleLinkHtml);
+                                     }
+                                    let articlestypeInfo = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #articleSectionLib-${uuids + index}`) : $(`#overLaySearch .type-info-run-send #articleSectionLib-${uuids + index}`);
+                                    let seeMoreButtonHtml = `
+                                  <button class="ghost-btn hide" style="font-style: italic;" id="articleseeMore-${uuids + index}" data-article-see-more="true">Show more</button>
+                                  <button class="ghost-btn hide" style="font-style: italic;" id="articleseeLess-${uuids + index}" data-article-see-less="true">Show less</button>                  
+                                  `;
+                                  articlestypeInfo.append(seeMoreButtonHtml);
+                                    setTimeout(() => {
+                                        updateSeeMoreButtonForAgent(uuids + index, 'article');
+                                    }, 10);
+                                }
+                                
+                                
+                                
+                                // _msgsResponse.message.push(body);
+                                // if(data.suggestions.articles.length === 1 && !ele.answer) {
+                                //     document.getElementById(`articledescLib-${uuids+index}`).click();
+                                //     $(`#articledescLib-${uuids+index}`).addClass('hide');
+                                // }
+                            });
+
+                            if(data?.suggestions?.articles?.length > 1){
+                                let articleSuggestions = currentTabActive == 'searchAutoIcon' ? $('#search-text-display #articleSuggestions-results') : $('#overLaySearch #articleSuggestions-results');
+                                let fullArticleView = `<div class="link-view-full-article ghost-btn" id="articleFullView-${uuids}" data-article-full-view="true">View All Articles</div>`
+                                let fewArticleView = `<div class="link-view-full-article ghost-btn hide" id="articleFewView-${uuids}" data-article-few-view="true">View Few Articles</div>`
+                                articleSuggestions.append(fullArticleView); 
+                                articleSuggestions.append(fewArticleView);
+                            }
+
+                        }
                     } else {
-                        if (data.type === 'text' && data.suggestions && isAnswerRenderbtnClicked) {
+                        if (data.type === 'text' && data.suggestions) {
                             isSuggestionProcessed = false
+                            let faqAnswerIdsPlace;
                             data.suggestions.faqs.forEach((ele) => {
-                                let splitedanswerPlaceableID = answerPlaceableID.split('-');
+                                faqAnswerIdsPlace = answerPlaceableIDs.find(ele => ele.input == data.value);
+                                let splitedanswerPlaceableID = faqAnswerIdsPlace.id.split('-');
                                 splitedanswerPlaceableID.shift();
                                 
                                 if(currentTabActive == 'searchAutoIcon'){
@@ -895,8 +1051,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     $(faqAnswerCopyMsg).attr('data-msg-data',ele.answer)
                                 }
 
-                                $(`${currentTabActive == 'searchAutoIcon' ? `#search-text-display #${answerPlaceableID}` : `#overLaySearch #${answerPlaceableID}`}`).html(ele.answer);
-                                $(`${currentTabActive == 'searchAutoIcon' ? `#search-text-display #${answerPlaceableID}` : `#overLaySearch #${answerPlaceableID}`}`).attr('data-answer-render', 'true');
+                                $(`${currentTabActive == 'searchAutoIcon' ? `#search-text-display #${faqAnswerIdsPlace.id}` : `#overLaySearch #${faqAnswerIdsPlace.id}`}`).html(ele.answer);
+                                $(`${currentTabActive == 'searchAutoIcon' ? `#search-text-display #${faqAnswerIdsPlace.id}` : `#overLaySearch #${faqAnswerIdsPlace.id}`}`).attr('data-answer-render', 'true');
                                 let faqs = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${splitedanswerPlaceableID.join('-')}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${splitedanswerPlaceableID.join('-')}`);
                                 let seeMoreButtonHtml = `
                         <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${splitedanswerPlaceableID.join('-')}" data-see-more="true">Show more</button>
@@ -908,9 +1064,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 }, waitingTimeForSeeMoreButton);
                                 // $(`#search-text-display .type-info-run-send #faqSectionLib-${splitedanswerPlaceableID.join('-')} .ast-carrotup.rotate-carrot`).length>0?$(`#search-text-display #seeMore-${splitedanswerPlaceableID.join('-')}`).removeClass('hide'):$(`#search-text-display #seeMore-${splitedanswerPlaceableID.join('-')}`).addClass('hide');
                                 // $(`#overLaySearch .type-info-run-send #faqSectionLib-${splitedanswerPlaceableID.join('-')} .ast-carrotup.rotate-carrot`).length>0?$(`#overLaySearch #seeMore-${splitedanswerPlaceableID.join('-')}`).removeClass('hide'):$(`#overLaySearch #seeMore-${splitedanswerPlaceableID.join('-')}`).addClass('hide');            
-                                isAnswerRenderbtnClicked = false;
                             })
-                            answerPlaceableID = undefined;
+                            if(faqAnswerIdsPlace) {
+                                let index = answerPlaceableIDs.indexOf(faqAnswerIdsPlace);
+                                answerPlaceableIDs.splice(index, 1);
+                            }
+                            
 
                         }
                     }
@@ -925,6 +1084,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                         }
                     }
+                }
+
+                function sanitizeHTML(text) {
+                    var element = document.createElement('div');
+                    element.innerText = text;
+                    return element.innerHTML;
                 }
 
                 function processMybotDataResponse(data, convId, botId) {
@@ -1023,6 +1188,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         $('#inputFieldForMyBot').remove();
                         
                          if(isMybotInputResponseClick){
+                            let sanitizedVal = sanitizeHTML((data.userInput))
                             let userQueryHtml = `
                                     <div class="steps-run-data">
                                         <div class="icon_block_img">
@@ -1031,7 +1197,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         <div class="run-info-content" id="userInput-${myBotuuids}">
                                             <div class="title">You Entered -</div>
                                             <div class="agent-utt">
-                                                <div class="title-data">${encodeURI(data.userInput)}</div>
+                                                <div class="title-data">${sanitizedVal}</div>
                                             </div>
                                             
                                         </div>
@@ -1040,7 +1206,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             let entityHtml = $(`#dropDownData-${myBotDropdownHeaderUuids}`).find(`#userInput-${myBotuuids}`);
                             let entityDisplayName = myBotDataResponse.entityDisplayName ? myBotDataResponse.entityDisplayName : myBotDataResponse.entityName;
                             if (data.userInput && !data.isErrorPrompt && entityDisplayName) {
-                                entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${encodeURI(data.userInput)}</div>`);
+                                entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${sanitizedVal}</div>`);
                             } else {
                                 if (data.isErrorPrompt && entityDisplayName) {
                                     let entityHtmls = `<div class="order-number-info">${entityDisplayName} : 
@@ -1229,51 +1395,76 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     RemoveVerticalLineForLastResponse();
                 }
 
-                function updateSeeMoreButtonForAgent(id){
+                function updateSeeMoreButtonForAgent(id,article){
                     let faqSourceTypePixel = 5;
                     let titleElement = $("#titleLib-" + id);
                     let descElement = $("#descLib-" + id);
-                    let faqSectionElement = $('#faqSectionLib-' + id);
-                    let faqDivElement = $('#faqDivLib-' + id);
-                    if(titleElement && descElement && faqSectionElement && faqDivElement){
+                    let sectionElement = $('#faqSectionLib-' + id);
+                    let divElement = $('#faqDivLib-' + id);
+                    let seeMoreElement = $('#seeMore-' + id);
+                    console.log(article, 'article');
+                    if(article){
+                        titleElement = $("#articletitleLib-" + id);
+                        descElement = $("#articledescLib-" + id);
+                        sectionElement = $('#articleSectionLib-' + id);
+                        divElement = $('#articleDivLib-' + id);
+                        seeMoreElement = $('#articleseeMore-' + id);
+                        viewLinkElement = $('#articleViewLinkLib-' + id);
+                        console.log(seeMoreElement, "see more element");
+                    }
+                    if(titleElement && descElement && sectionElement && divElement){
                         $(titleElement).css({"overflow": "inherit", "white-space": "normal", "text-overflow" : "unset"});
-                        $(descElement).css({"overflow": "inherit", "white-space": "normal", "text-overflow" : "unset"});
-                        let faqSectionHeight = $(faqSectionElement).css("height");
+                        $(descElement).css({"overflow": "inherit", "text-overflow" : "unset", "display" : "block"});
+                        let faqSectionHeight = $(sectionElement).css("height");
                         faqSectionHeight = parseInt(faqSectionHeight.slice(0,faqSectionHeight.length-2));
-                        let faqMinHeight = $(faqDivElement).css("min-height");
-                        faqMinHeight = parseInt(faqMinHeight.slice(0,faqMinHeight.length-2));
-                        if ((faqSectionHeight > (faqMinHeight + faqSourceTypePixel)) || (faqSectionElement > faqMinHeight && faqSectionHeight <= (faqMinHeight + faqSourceTypePixel))) {
-                            $('#seeMore-' + id).removeClass('hide');
+                        let faqMinHeight = $(divElement).css("min-height");
+                        faqMinHeight = parseInt(faqMinHeight.slice(0,faqMinHeight.length-2)) + 12;
+                        console.log(faqSectionHeight, "section height", faqMinHeight, "min height");
+                        if ((faqSectionHeight > (faqMinHeight + faqSourceTypePixel)) || (sectionElement > faqMinHeight && faqSectionHeight <= (faqMinHeight + faqSourceTypePixel))) {
+                            $(seeMoreElement).removeClass('hide');
                         }else{
-                            $('#seeMore-' + id).addClass('hide');
+                            $(seeMoreElement).addClass('hide');
+                            if(article){
+                                $(viewLinkElement).removeClass('hide');
+                            }
                         }
                         $(titleElement).css({"overflow": "hidden", "white-space": "nowrap", "text-overflow" : "ellipsis"});
-                        $(descElement).css({"overflow": "hidden", "white-space": "nowrap", "text-overflow" : "ellipsis"});
+                        $(descElement).css({"overflow": "hidden", "text-overflow" : "ellipsis", "display": "-webkit-box"});
                     }
                 }
 
-                function updateSeeMoreButtonForAssist(id){
+                function updateSeeMoreButtonForAssist(id, article){
                     // let faqSourceTypePixel = ((sourceType === 'smartassist-color-scheme') ? 5 : 2) ;
                     let faqSourceTypePixel = 5;
                     let titleElement = $("#title-" + id);
                     let descElement = $("#desc-" + id);
-                    let faqSectionElement = $('#faqSection-' + id);
-                    let faqDivElement = $('#faqDiv-' + id);
-                    if(titleElement && descElement && faqSectionElement && faqDivElement){
+                    let sectionElement = $('#faqSection-' + id);
+                    let divElement = $('#faqDiv-' + id);
+                    let seeMoreElement = $('#seeMore-' + id);
+                    console.log(article, "article");
+                    if(article){
+                        titleElement = $("#articletitle-" + id);
+                        descElement = $("#articledesc-" + id);
+                        sectionElement = $('#articleSection-' + id);
+                        divElement = $('#articleDiv-' + id);
+                        seeMoreElement = $('#articleseeMore-' + id);
+                        console.log(seeMoreElement, 'see more element');
+                    }
+                    if(titleElement && descElement && sectionElement && divElement){
                         $(titleElement).css({"overflow": "inherit", "white-space": "normal", "text-overflow" : "unset"});
-                        $(descElement).css({"overflow": "inherit", "white-space": "normal", "text-overflow" : "unset"});
-                        let faqSectionHeight = $(faqSectionElement).css("height");
+                        $(descElement).css({"overflow": "inherit", "text-overflow" : "unset", "display" : "block"});
+                        let faqSectionHeight = $(sectionElement).css("height");
                         faqSectionHeight = parseInt(faqSectionHeight.slice(0,faqSectionHeight.length-2));
-                        let faqMinHeight = $(faqDivElement).css("min-height");
-                        faqMinHeight = parseInt(faqMinHeight.slice(0,faqMinHeight.length-2));
-                        console.log('FAQ SM SL: ',faqMinHeight, faqSourceTypePixel);
-                        if ((faqSectionHeight > (faqMinHeight + faqSourceTypePixel)) || (faqSectionElement > faqMinHeight && faqSectionHeight <= (faqMinHeight + faqSourceTypePixel))) {
-                            $('#seeMore-' + id).removeClass('hide');
+                        let faqMinHeight = $(divElement).css("min-height");
+                        faqMinHeight = parseInt(faqMinHeight.slice(0,faqMinHeight.length-2)) + 12;
+                        console.log('FAQ SM SL: ',faqMinHeight, faqSourceTypePixel, faqSectionHeight);
+                        if ((faqSectionHeight > (faqMinHeight + faqSourceTypePixel)) || (sectionElement > faqMinHeight && faqSectionHeight <= (faqMinHeight + faqSourceTypePixel))) {
+                            $(seeMoreElement).removeClass('hide');
                         }else{
-                            $('#seeMore-' + id).addClass('hide');
+                            $(seeMoreElement).addClass('hide');
                         }
                         $(titleElement).css({"overflow": "hidden", "white-space": "nowrap", "text-overflow" : "ellipsis"});
-                        $(descElement).css({"overflow": "hidden", "white-space": "nowrap", "text-overflow" : "ellipsis"});
+                        $(descElement).css({"overflow": "hidden", "text-overflow" : "ellipsis", "display": "-webkit-box"});
                     }
                 }
 
@@ -1289,9 +1480,20 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     //     automationSuggestions.length > 1 ? (automationSuggestions[automationSuggestions.length - 1].classList.remove('hide'), $('.empty-data-no-agents').addClass('hide')) : '';
                     // }
 
+                    // dummy data prepration for articles
+                    // if(data.suggestions && data.suggestions.faqs){
+                    //     data.suggestions.articles = [];
+                    //     for(let faq of data.suggestions.faqs){
+                    //         let object = {};
+                    //         object.title = faq.question;
+                    //         object.content = faq.answer + 'Start by entering your trip details onto an aggregator website like SkyScanner or GoogleFlights';
+                    //         data.suggestions.articles.push(object);
+                    //     }
+                    // }
+
                     let uuids = koreGenerateUUID();
                     responseId = uuids;
-                    if (isCallConversation === 'true' && data.suggestions && currentTabActive == 'transcriptIcon') {
+                    if (isCallConversation === 'true' && data.suggestions) {
                         let buldHtml = `
                         <div class="buld-count-utt" id="buldCount-${uuids}">
                                     <i class="ast-bulb" id="buldCountAst-${uuids}"></i>
@@ -1320,8 +1522,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         "traceId": "873209019a5adc26"
                     }
 
-                    console.log(isAutomationOnGoing, "is automation on going", data.suggestions, answerPlaceableID)
-                    if (!isAutomationOnGoing && data.suggestions && !answerPlaceableID && !isAnswerRenderbtnClicked) {
+                    console.log(isAutomationOnGoing, "is automation on going", data.suggestions, answerPlaceableIDs)
+                    if (!isAutomationOnGoing && data.suggestions && answerPlaceableIDs.length == 0) {
                         // $('#welcomeMsg').addClass('hide');
                         let dynamicBlock = document.getElementById('dynamicBlock');
                         let suggestionsblock = $('#dynamicBlock .dialog-task-run-sec');
@@ -1376,6 +1578,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
 
                         if (data.suggestions) {
+                            
                             idsOfDropDown = undefined;
                             if (data.suggestions.dialogs?.length > 0) {
 
@@ -1390,6 +1593,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 </div>`;
                                 automationSuggestions.innerHTML += dialogAreaHtml;
                             }
+
                             if (data.suggestions.faqs?.length > 0) {
                                 let automationSuggestions = document.getElementById(`automationSuggestions-${responseId}`);
                                 let dialogAreaHtml = `<div class="task-type" id="faqssArea">
@@ -1397,12 +1601,95 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     <img src="./images/kg.svg">
                 </div>
                 <div class="content-dialog-task-type" id="faqsSuggestions-${responseId}">
-                    <div class="type-with-img-title">FAQ/Articles (${data.suggestions.faqs.length})</div>
+                    <div class="type-with-img-title">FAQ (${data.suggestions.faqs.length})</div>
                     
                 </div>
             </div>`;
                                 automationSuggestions.innerHTML += dialogAreaHtml;
                             }
+                            
+                            if (data?.suggestions?.searchassist && Object.keys(data.suggestions.searchassist).length > 0) {
+                                data.suggestions = formatSearchAssistData(data.suggestions);
+                                if(data.suggestions.articles?.length > 0){
+                                    let automationSuggestions = document.getElementById(`automationSuggestions-${responseId}`);
+                                    let dialogAreaHtml = `<div class="task-type" id="articlesArea">
+                                            <div class="img-block-info">
+                                                <img src="./images/kg.svg">
+                                            </div>
+                                            <div class="content-dialog-task-type" id="articleSuggestions-${responseId}">
+                                                <div class="type-with-img-title">Articles (${data.suggestions.articles.length})</div>
+                                                
+                                            </div>
+                                        </div>`;
+                                    automationSuggestions.innerHTML += dialogAreaHtml;
+    
+                                }
+
+                                data.suggestions.articles?.forEach((ele, index) => {
+                                    let body = {};
+                                    body['type'] = 'text';
+                                    body['component'] = {
+                                        "type": 'text',
+                                        "payload": {
+                                            "type": 'text',
+                                            "text": ele
+                                        }
+                                    };
+                                    body['cInfo'] = {
+                                        "body": data.value
+                                    };
+                                    let articleSuggestions = document.getElementById(`articleSuggestions-${responseId}`);
+    
+                                    let articleHtml = `
+                                    <div class="type-info-run-send" id="articleDiv-${uuids+index}">
+                                        <div class="left-content" id="articleSection-${uuids+index}">
+                                            <div class="title-text" id="articletitle-${uuids+index}">${ele.title}</div>
+                                        </div>
+                                        
+                                    </div>`;
+    
+                                    articleSuggestions.innerHTML += articleHtml;
+                                    let articles = $(`.type-info-run-send #articleSection-${uuids+index}`);
+                                    if (!ele.content) {
+                                        let checkHtml = `
+                                        <i class="ast-carrotup" data-conv-id="${data.conversationId}"
+                                        data-bot-id="${botId}" data-intent-name="${ele.title}"
+                                        data-check="true" id="articlecheck-${uuids + index}"></i>`;
+                                                    articles.append(checkHtml);
+                                    } else {
+                                            let a = $(`#articleDiv-${uuids + index}`);
+                                            let articleActionHtml = `<div class="action-links">
+                                            <button class="send-run-btn" id="articlesendMsg" data-msg-id="article-${uuids + index}" data-msg-data='${ele.content}'>Send</button>
+                                            <div class="copy-btn" data-msg-id="article-${uuids + index}" data-msg-data='${ele.content}'>
+                                                <i class="ast-copy" data-msg-id="article-${uuids + index}" data-msg-data='${ele.content}'></i>
+                                            </div>
+                                        </div>`;
+                                        a.append(articleActionHtml);
+                                        articles.append(`<div class="desc-text" id="articledesc-${uuids + index}">${ele.content}</div>`);
+                                        if(ele.link){
+                                            let fullArticleLinkHtml = `<div class="link-view-full-article hide" id="articleViewLink-${uuids+index}"><a href="${ele.link}" target="_blank">View Full Article</a></div>`
+                                             document.getElementById(`articledesc-${uuids+index}`).insertAdjacentHTML('beforeend',fullArticleLinkHtml);
+                                         }
+    
+                                        let articlestypeInfo = $(`.type-info-run-send #articleSection-${uuids + index}`);
+                                        let seeMoreButtonHtml = `
+                                    <button class="ghost-btn hide" style="font-style: italic;" id="articleseeMore-${uuids + index}" data-article-see-more="true">Show more</button>
+                                    <button class="ghost-btn hide" style="font-style: italic;" id="articleseeLess-${uuids + index}" data-article-see-less="true">Show less</button>
+                                    `;
+                                        articlestypeInfo.append(seeMoreButtonHtml);
+                                        setTimeout(() => {
+                                            updateSeeMoreButtonForAssist(uuids + index,'article');
+                                        }, 100);
+                                    }
+    
+                                    // if (data.suggestions.faqs.length === 1 && !ele.answer) {
+                                    //     document.getElementById(`check-${uuids + index}`).click();
+                                    //     $(`#check-${uuids + index}`).addClass('hide');
+                                    // }
+                                })
+
+                            }
+
                             data.suggestions.dialogs?.forEach((ele, index) => {
                                 let body = {};
                                 body['type'] = 'text';
@@ -1484,6 +1771,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 }
                                 _msgsResponse.message.push(body);
                             });
+
                             data.suggestions.faqs?.forEach((ele, index) => {
                                 let body = {};
                                 body['type'] = 'text';
@@ -1546,20 +1834,23 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             }
                             })
                         }
-
-                        updateNewMessageUUIDList(responseId);
+                        setTimeout(() => {         
+                            updateNewMessageUUIDList(responseId);
+                        }, waitingTimeForUUID);                        
 
                     } else {
-                        if (data.type === 'text' && data.suggestions && isAnswerRenderbtnClicked) {
+                        if (data.type === 'text' && data.suggestions) {
+                            let faqAnswerIdsPlace ;
                             data.suggestions.faqs.forEach((ele) => {
-                               let splitedanswerPlaceableID = answerPlaceableID.split('-');
+                                faqAnswerIdsPlace = answerPlaceableIDs.find(ele => ele.input == data.value);
+                               let splitedanswerPlaceableID = faqAnswerIdsPlace.id.split('-');
                                splitedanswerPlaceableID.shift();
                                let faqAnswerSendMsg =  $(`#dynamicBlock #faqDiv-${splitedanswerPlaceableID.join('-')}`).find("[id='sendMsg']");
                                $(faqAnswerSendMsg).attr('data-msg-data',ele.answer)
                                let faqAnswerCopyMsg =  $(`#dynamicBlock #faqDiv-${splitedanswerPlaceableID.join('-')}`).find(".copy-btn");
                                $(faqAnswerCopyMsg).attr('data-msg-data',ele.answer)
-                                $(`#${answerPlaceableID}`).html(ele.answer);
-                                $(`#${answerPlaceableID}`).attr('data-answer-render', 'true');
+                                $(`#${faqAnswerIdsPlace.id}`).html(ele.answer);
+                                $(`#${faqAnswerIdsPlace.id}`).attr('data-answer-render', 'true');
                                 let faqs = $(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')}`);
                                 let seeMoreButtonHtml = `
                         <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${splitedanswerPlaceableID.join('-')}" data-see-more="true">Show more</button>
@@ -1571,9 +1862,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     updateSeeMoreButtonForAssist(splitedanswerPlaceableID.join('-'));
                                 }, waitingTimeForSeeMoreButton);
                                 // $(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')} .ast-carrotup.rotate-carrot`).length>0?$(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')} #seeMore-${splitedanswerPlaceableID.join('-')}`).removeClass('hide'):$(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')} #seeMore-${splitedanswerPlaceableID.join('-')}`).removeClass('hide');
-                                isAnswerRenderbtnClicked = false;
                             })
-                            answerPlaceableID = undefined;
+                            if(faqAnswerIdsPlace) {
+                                let index = answerPlaceableIDs.indexOf(faqAnswerIdsPlace);
+                                answerPlaceableIDs.splice(index, 1);
+                            }
+                            
                         }
                         if (data.suggestions) {
                             automationSuggestions.length >= 1 ? (automationSuggestions[automationSuggestions.length - 1].classList.remove('hide')) : ''
@@ -1693,7 +1987,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         if (!parsedPayload) {
                             $(runInfoContent).find('.copy-btn').removeClass('hide');
                         }
-                        updateNewMessageUUIDList(dropdownHeaderUuids);
+                        setTimeout(() => {             
+                            updateNewMessageUUIDList(dropdownHeaderUuids);
+                        }, waitingTimeForUUID);
                     }
 
                  
@@ -1821,7 +2117,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 dynamicBlockDiv.append(botResHtml)
                             }
                         });
-                        updateNewMessageUUIDList(uuids);
+                        setTimeout(() => {  
+                            updateNewMessageUUIDList(uuids);
+                        }, waitingTimeForUUID);
                     }
                     dropdownHeaderUuids ? AgentChatInitialize.renderMessage(_msgsResponse, uuids, `dropDownData-${dropdownHeaderUuids}`) : '';
 
@@ -2303,7 +2601,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 <img src="./images/kg.svg">
                             </div>
                             <div class="content-dialog-task-type" id="faqsSuggestions-${uniqueID}">
-                                <div class="type-with-img-title">FAQ/Articles (${res.agentAssistDetails?.suggestions ? res.agentAssistDetails?.suggestions.faqs.length : res.agentAssistDetails.ambiguityList.faqs.length})</div>
+                                <div class="type-with-img-title">FAQ (${res.agentAssistDetails?.suggestions ? res.agentAssistDetails?.suggestions.faqs.length : res.agentAssistDetails.ambiguityList.faqs.length})</div>
                                 
                             </div>
                         </div>`;
@@ -2470,6 +2768,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     }
                                     if (res.agentAssistDetails.entityName && res.agentAssistDetails.entityResponse && res.agentAssistDetails.entityValue) {
                                         let runInfoContent = $(`#dropDownData-${previousId}`);
+                                        let sanitizedVal = sanitizeHTML((res.agentAssistDetails.entityValue))
                                         let userQueryHtml = `
                                             <div class="steps-run-data">
                                                 <div class="icon_block_img">
@@ -2478,7 +2777,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                 <div class="run-info-content" id="userInput-${res._id}">
                                                     <div class="title">Customer Said - </div>
                                                     <div class="agent-utt">
-                                                        <div class="title-data">"${res.agentAssistDetails.entityValue}"</div>
+                                                        <div class="title-data">"${sanitizedVal}"</div>
                                                     </div>
                                                     
                                                 </div>
@@ -2487,7 +2786,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         let entityHtml = $(`#dropDownData-${previousId}`).find(`#userInput-${res._id}`);
                                         let entityDisplayName = agentAssistResponse.newEntityDisplayName ? agentAssistResponse.newEntityDisplayName : agentAssistResponse.newEntityName;
                                         if (res.agentAssistDetails.entityValue && !res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
-                                            entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${encodeURI(res.agentAssistDetails.entityValue)}</div>`);
+                                            entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${sanitizedVal}</div>`);
                                         } else {
                                             if (res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
                                                 let entityHtmls = `<div class="order-number-info">${entityDisplayName} : 
@@ -2871,6 +3170,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     }
                                     if (res.agentAssistDetails.entityName && res.agentAssistDetails.entityResponse && res.agentAssistDetails.entityValue) {
                                         let runInfoContent = $(`#dropDownData-${previousId}`);
+                                        let sanitizedVal = sanitizeHTML((res.agentAssistDetails.entityValue))
                                         let userQueryHtml = `
                                                 <div class="steps-run-data">
                                                     <div class="icon_block_img">
@@ -2879,16 +3179,16 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                     <div class="run-info-content" id="userInput-${res._id}">
                                                         <div class="title">Customer Said - </div>
                                                         <div class="agent-utt">
-                                                            <div class="title-data">"${encodeURI(res.agentAssistDetails.entityValue)}"</div>
+                                                            <div class="title-data">"${sanitizedVal}"</div>
                                                         </div>
                                                         
                                                     </div>
                                                 </div>`;
                                         runInfoContent.append(userQueryHtml);
                                         let entityHtml = $(`#dropDownData-${previousId}`).find(`#userInput-${res._id}`);
-                                        let entityDisplayName = myBotDataResponse.newEntityDisplayName ? myBotDataResponse.newEntityDisplayName : myBotDataResponse.newEntityName
+                                        let entityDisplayName = myBotDataResponse.newEntityDisplayName ? myBotDataResponse.newEntityDisplayName : myBotDataResponse.newEntityName;
                                         if (res.agentAssistDetails.entityValue && !res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
-                                            entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${encodeURI(res.agentAssistDetails.entityValue)}</div>`);
+                                            entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${sanitizedVal}</div>`);
                                         } else {
                                             if (res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
                                                 let entityHtmls = `<div class="order-number-info">${entityDisplayName} : 
@@ -3278,9 +3578,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     convState.currentTab = currentTab;
                     if (appState[_convId] && (convState.currentTab == 'librarySearch')) {
                         if (searchedVal !== undefined && document.getElementById('librarySearch').value.length > 0) {
-                            // convState.libraryTab = document.getElementById('librarySearch').value;
-                            let encodedSearchVal = encodeURI(document.getElementById('librarySearch').value);
-                            convState.libraryTab = encodedSearchVal;
+                            convState.libraryTab = document.getElementById('librarySearch').value;
+                            let sanitizedVal = sanitizeHTML(convState.libraryTab);
+                            console.log('updateCurrentTabInState: ',convState.libraryTab);
+                            convState.libraryTab = sanitizedVal;
                         } else {
                             convState.libraryTab = '';
                         }
@@ -3362,7 +3663,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                 function updateNewMessageUUIDList(responseId) {
                     if (!scrollAtEnd) {
-                        console.log(numberOfNewMessages, "update new message uuid list");
                         if (numberOfNewMessages) {
                             if (newlyAddedMessagesUUIDlist.indexOf(responseId) == -1) {
                                 newlyAddedMessagesUUIDlist.push(responseId);
@@ -3435,11 +3735,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         if (dynamicBlockElement.className == 'dialog-task-run-sec') {
                             let dialogueSuggestionId = 'dialogSuggestions-' + uuid;
                             let faqSuggestionId = 'faqsSuggestions-' + uuid;
+                            let articleSuggestionId = 'articleSuggestions-' + uuid;
                             if (removedIdListOnScroll.indexOf(dialogueSuggestionId) == -1) {
                                 childIdList.push(dialogueSuggestionId);
                             }
                             if (removedIdListOnScroll.indexOf(faqSuggestionId) == -1) {
                                 childIdList.push(faqSuggestionId);
+                            }
+                            if (removedIdListOnScroll.indexOf(articleSuggestionId) == -1) {
+                                childIdList.push(articleSuggestionId);
                             }
                         } else { 
                             if(dynamicBlockElement.className == 'dialog-task-accordiaon-info'){
@@ -3452,7 +3756,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     }
                                 }
                                 if(childIdList.indexOf(lastElementBeforeNewMessage.id) != -1){
-                                    childIdList.splice(0,childIdList.indexOf(lastElementBeforeNewMessage.id));
+                                    childIdList.splice(0,childIdList.indexOf(lastElementBeforeNewMessage.id)+1);
                                 }
                             }else{
                                 let actualParentId = name + '-' + uuid;
@@ -3522,7 +3826,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     $(".scroll-bottom-btn span").text('Scroll to bottom');
                     $(".scroll-bottom-btn").removeClass("new-messages");
                     $(".scroll-bottom-show-btn").addClass('hide');
-                    $('.unread-msg').remove();
                     numberOfNewMessages = 0;
                     newlyAddedMessagesUUIDlist = [];
                     newlyAddedIdList = [];
@@ -3545,6 +3848,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         if (scrollAtEnd) {
                             $(".scroll-bottom-show-btn").addClass('hide');
                             updateScrollAtEndVariables();
+                            lastElementBeforeNewMessage = getLastElement(dynamicBlockId);
+                            addWhiteBackgroundClassToNewMessage();
                         }
                     });
 
@@ -3588,25 +3893,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                         if (target.className.includes('scroll-bottom-btn')) {
                             UnCollapseDropdownForLastElement(lastElementBeforeNewMessage);
-                            let newElementsHeight = getNewlyAddedElementsHeights();
-                            if (newElementsHeight) {
-                                scrollToEle(lastElementBeforeNewMessage.id);
-                            } else {
-                                scrollToBottom();
-                            }
-                            // $("#bodyContainer").perfectScrollbar('update');
                             if ($(".scroll-bottom-btn span").text().includes('new')) {
-                                console.log(newlyAddedIdList, "id list");
-                                // if (!scrollAtEnd && numberOfNewMessages > 0) {
-                                //     for (let i = 0; i < newlyAddedIdList.length; i++) {
-                                //         if (document.getElementById(newlyAddedIdList[i])) {
-                                //             let elements = document.getElementById(newlyAddedIdList[i]);
-                                //             elements?.insertAdjacentHTML('beforeBegin', addUnreadMessageHtml());
-                                //             break;
-                                //         }
-                                //     }
-
-                                // }
+                                scrollToBottom();
+                            }else{
+                                let newElementsHeight = getNewlyAddedElementsHeights();
+                                if (newElementsHeight) {
+                                    scrollToEle(lastElementBeforeNewMessage.id);
+                                } 
                             }
                         }
 
@@ -3801,11 +4094,98 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         var seeLessButton = target.dataset.seeLess;
                         var checkButton = target.dataset.check;
                         var checkLibButton = target.dataset.checkLib;
+                        var articleSeeMoreButton = target.dataset.articleSeeMore;
+                        var articleSeeLessButton = target.dataset.articleSeeLess;
+                        var articleFullView = target.dataset.articleFullView;
+                        var faqFullView = target.dataset.faqFullView;
+                        var articleFewView = target.dataset.articleFewView;
+                        var faqFewView = target.dataset.faqFewView;
 
                         if (target.className === 'copy-btn') {
                             // Hello();
                         }
+
+                        if(articleFewView){
+                            let targets = target.id.split('-');
+                            targets.shift();
+                            let articleSuggestions = currentTabActive == 'searchAutoIcon' ? $('#search-text-display #articleSuggestions-results') : $('#overLaySearch #articleSuggestions-results');
+                            $(articleSuggestions).children(".type-info-run-send").slice(0,1).addClass('hide');
+                            $(`#articleFullView-${targets.join('-')}`).removeClass('hide');
+                            evt.target.classList.add('hide');
+                        }
+
+                        if(faqFewView){
+                            let targets = target.id.split('-');
+                            targets.shift();
+                            let faqsSuggestions = currentTabActive == 'searchAutoIcon' ? $('#search-text-display #faqsSuggestions-results') : $('#overLaySearch #faqsSuggestions-results');
+                            $(faqsSuggestions).children(".type-info-run-send").slice(0,1).addClass('hide');
+                            $(`#faqFullView-${targets.join('-')}`).removeClass('hide');
+                            evt.target.classList.add('hide');
+                        }
+
+                        if(articleFullView){
+                            let targets = target.id.split('-');
+                            targets.shift();
+                            let articleSuggestions = currentTabActive == 'searchAutoIcon' ? $('#search-text-display #articleSuggestions-results') : $('#overLaySearch #articleSuggestions-results');
+                            $(articleSuggestions).children(".type-info-run-send").removeClass('hide');
+                            $(`#articleFewView-${targets.join('-')}`).removeClass('hide');
+                            evt.target.classList.add('hide');
+                        }
+
+                        if(faqFullView){
+                            let targets = target.id.split('-');
+                            targets.shift();
+                            let faqsSuggestions = currentTabActive == 'searchAutoIcon' ? $('#search-text-display #faqsSuggestions-results') : $('#overLaySearch #faqsSuggestions-results');
+                            $(faqsSuggestions).children(".type-info-run-send").removeClass('hide');
+                            $(`#faqFewView-${targets.join('-')}`).removeClass('hide');
+                            evt.target.classList.add('hide');
+                        }
+
+                        if(articleSeeMoreButton){
+                            console.log("article see more button");
+                            let targets = target.id.split('-');
+                            targets.shift();
+                            let articles = (currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ?
+                                $(`.type-info-run-send #articleSection-${targets.join('-')}`) :
+                                (currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #articleSectionLib-${targets.join('-')}`) : $(`#overLaySearch .type-info-run-send #articleSectionLib-${targets.join('-')}`));
+                            articles.find(`#articleseeLess-${targets.join('-')}`).each((i, ele) => {
+                                if ($(ele).attr('id').includes(`articleseeLess-${targets.join('-')}`)) {
+                                    ele.classList.remove('hide')
+                                }
+                            })
+                            evt.target.classList.add('hide');
+                            articles.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#articletitle-${targets.join('-')}` :
+                                `#articletitleLib-${targets.join('-')}`}`).attr('style', `overflow: inherit; white-space: normal; text-overflow: unset;`);
+                            articles.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#articledesc-${targets.join('-')}` : `#articledescLib-${targets.join('-')}`}`).attr('style', `overflow: inherit; text-overflow: unset;  display:block;`);
+                            articles.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#articleViewLink-${targets.join('-')}` : `#articleViewLinkLib-${targets.join('-')}`}`).removeClass('hide');
+
+                        }
+
+                        if (articleSeeLessButton) {
+                            let targets = target.id.split('-');
+                            targets.shift();
+                            let articles = (currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? $(`.type-info-run-send #articleSection-${targets.join('-')}`) :
+                                (currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #articleSectionLib-${targets.join('-')}`) : $(`#overLaySearch .type-info-run-send #articleSectionLib-${targets.join('-')}`));
+
+                            articles.find(`#articleseeMore-${targets.join('-')}`).each((i, ele) => {
+                                if ($(ele).attr('id').includes(`articleseeMore-${targets.join('-')}`)) {
+                                    ele.classList.remove('hide')
+                                }
+                            })
+                            articles.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#articletitle-${targets.join('-')}` : `#articletitleLib-${targets.join('-')}`}`).attr('style', `overflow: hidden;
+                            white-space: nowrap;
+                            text-overflow: ellipsis;`);
+                                        articles.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#articledesc-${targets.join('-')}` : `#articledescLib-${targets.join('-')}`}`).attr('style', `overflow: hidden;
+                           
+                            text-overflow: ellipsis;
+                            display : -webkit-box`);
+                            articles.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#articleViewLink-${targets.join('-')}` : `#articleViewLinkLib-${targets.join('-')}`}`).addClass('hide');
+
+                            evt.target.classList.add('hide')
+                        }
+                        
                         if (seeMoreButton) {
+                            console.log("see more button", target);
                             let targets = target.id.split('-');
                             targets.shift();
                             let faqs = (currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ?
@@ -3819,7 +4199,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             evt.target.classList.add('hide')
                             faqs.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#title-${targets.join('-')}` :
                                 `#titleLib-${targets.join('-')}`}`).attr('style', `overflow: inherit; white-space: normal; text-overflow: unset;`);
-                            faqs.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#desc-${targets.join('-')}` : `#descLib-${targets.join('-')}`}`).attr('style', `overflow: inherit; white-space: normal; text-overflow: unset;`);
+                            faqs.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#desc-${targets.join('-')}` : `#descLib-${targets.join('-')}`}`).attr('style', `overflow: inherit; text-overflow: unset; display:block;`);
                         }
                         if (seeLessButton) {
                             let targets = target.id.split('-');
@@ -3836,8 +4216,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 white-space: nowrap;
                 text-overflow: ellipsis;`);
                             faqs.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#desc-${targets.join('-')}` : `#descLib-${targets.join('-')}`}`).attr('style', `overflow: hidden;
-                white-space: nowrap;
-                text-overflow: ellipsis;`);
+                
+                text-overflow: ellipsis;
+                display : -webkit-box`);
                             evt.target.classList.add('hide')
                         }
                         let targetIds = (target.id).split('-');
@@ -3934,12 +4315,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             let activeChipCount = $(`#${target.parentElement.id} .btn-chip-negtive.active-chip`);
                             if (activeChipCount.length > 0) {
                                 $(`#feedbackHelpfulContainer-${id.join('-')} .title-improve`).addClass('hide');
-                                $('.submit-btn').removeAttr('disabled');
+                                $(`#feedbackHelpfulContainer-${id.join('-')} .submit-btn`).removeAttr('disabled');
                             } else {
                                 if (dataSets.comment.length == 0) {
                                     $(`#feedbackHelpfulContainer-${id.join('-')} .title-improve`).removeClass('hide');
                                 }
                             }
+                            $(`#feedbackHelpfulContainer-${id.join('-')} .ast-thumbdown`).attr('data-feedbackdetails', dataSets.feedbackdetails)
                         }
                         if (target.className == 'submit-btn') {
                             let id = target.parentElement.firstElementChild.id.split('-');
@@ -3950,16 +4332,21 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             //     // dataSets.feedbackdetails = 
 
                             // }
+                            if(typeof dataSets.feedbackdetails == 'string'&& dataSets.feedbackdetails.indexOf(',') > -1 ) {
+                                dataSets.feedbackdetails = dataSets.feedbackdetails.split(',');
+                            }
                             feedbackLoop(dataSets, true);
                             $(`#feedbackHelpfulContainer-${id.join('-')} .explore-more-negtive-data`).addClass('hide');
-                             target.dataset.updateflag = 'true';
+                            target.dataset.updateflag = 'true';
                             target.innerHTML = "Update";
-                            $('.submit-btn').attr('disabled', 'disabled');
-                            
+                            $(`#feedbackHelpfulContainer-${id.join('-')}.submit-btn`).attr('disabled', 'disabled');
+
+                            $(`#feedbackHelpfulContainer-${id.join('-')} .ast-thumbdown`).attr('data-comment',``)
+                            $(`#feedbackHelpfulContainer-${id.join('-')} .ast-thumbdown`).attr('data-feedbackdetails','[]')
                             dataSets.comment = "";
                             dataSets.feedbackdetails = [];
                             $(`#feedbackHelpfulContainer-${id.join('-')} .btn-chip-negtive.active-chip`).removeClass('active-chip');
-                            $(`#feedBackComment-${id.join('-')}`).val('');
+                            $(`#feedbackHelpfulContainer-${id.join('-')} #feedBackComment-${id.join('-')}`).val('');
                             isUpdateFeedBackDetailsFlag = false;
                         }
                         if (target.id === 'showHistory') {
@@ -4998,7 +5385,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             addWhiteBackgroundClassToNewMessage();
                             scrollToBottom();
                         }
-                        if (checkButton && !isAnswerRenderbtnClicked) {
+                        if (checkButton) {
                             let id = target.id.split('-');
                             id.shift();
                             if (!target.dataset.answerRender) {
@@ -5021,8 +5408,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 faq.append(answerHtml);
                                 $(`#dynamicBlock #${target.id}`).attr('data-answer-render', 'false');
                                 faqDiv.append(faqaction);
-                                answerPlaceableID = `desc-${id.join('-')}`;
-                                isAnswerRenderbtnClicked = true;
+                                answerPlaceableIDs.push({id:`desc-${id.join('-')}`, input: target.dataset.intentName});
                                 $(`#dynamicBlock #${target.id}`).addClass('rotate-carrot');
                                 AgentAssist_run_click(evt);
                                 return
@@ -5046,7 +5432,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         
                         }
 
-                        if (checkLibButton && !isAnswerRenderbtnClicked) {
+                        if (checkLibButton) {
                             let id = target.id.split('-');
                             id.shift();
                             if ((!target.dataset.answerRender && (currentTabActive == 'userAutoIcon' || currentTabActive == 'agentAutoIcon' || currentTabActive == 'transcriptIcon'))) {
@@ -5062,8 +5448,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 faq.append(answerHtml);
                                 $(`#overLaySearch #${target.id}`).attr('data-answer-render', 'false');
                                 faqDiv.append(faqaction);
-                                answerPlaceableID = `descLib-${id.join('-')}`;
-                                isAnswerRenderbtnClicked = true;
+                                answerPlaceableIDs.push({id:`descLib-${id.join('-')}`, input: target.dataset.intentName});
                                 $(`#overLaySearch #${target.id}`).addClass('rotate-carrot');
                                 AgentAssistPubSub.publish('searched_Automation_details', { conversationId: evt.target.dataset.convId, botId: evt.target.dataset.botId, value: evt.target.dataset.intentName, isSearch: true });
                                 return
@@ -5082,8 +5467,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 faq.append(answerHtml);
                                 $(`#search-text-display #${target.id}`).attr('data-answer-render', 'false');
                                 faqDiv.append(faqaction);
-                                answerPlaceableID = `descLib-${id.join('-')}`;
-                                isAnswerRenderbtnClicked = true;
+                                answerPlaceableIDs.push({id:`descLib-${id.join('-')}`, input: target.dataset.intentName});
                                 $(`#search-text-display #${target.id}`).addClass('rotate-carrot');
                                 AgentAssistPubSub.publish('searched_Automation_details', { conversationId: evt.target.dataset.convId, botId: evt.target.dataset.botId, value: evt.target.dataset.intentName, isSearch: true });
                                 return
@@ -5241,10 +5625,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             targetids.shift();
                             let dataSets = $(`#feedbackdown-${targetids.join('-')} .ast-thumbdown`).data();
                             dataSets.comment = target.value;
+                            
                             if (target.value.length > 0) {
-                                $('.submit-btn').removeAttr('disabled');
+                                $(`#feedbackHelpfulContainer-${targetids.join('-')} .submit-btn`).removeAttr('disabled');
                                 $(`#feedbackHelpfulContainer-${targetids.join('-')} .title-improve`).addClass('hide');
                             }
+                            $(`#feedbackHelpfulContainer-${targetids.join('-')} .input-block-optional .input-text`).attr('value', target.value);
+                            $(`#feedbackdown-${targetids.join('-')} .ast-thumbdown`).attr('data-comment', target.value);
                         } else {
                             var agentAssistInput = target.dataset.agentAssistInput;
                             var mybotInput = target.dataset.mybotInput;
@@ -5277,11 +5664,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
 
                 function getNewlyAddedElementsHeights() {
-                    console.log(lastElementBeforeNewMessage, "lastElement before new message");
                     let newElementsHeight = lastElementBeforeNewMessage.clientHeight;
                     for (let id of newlyAddedIdList) {
                         if (document.getElementById(id)) {
-                            console.log(id, "newly added id list");
                             newElementsHeight += document.getElementById(id).clientHeight;
                         }
                     }
@@ -5435,12 +5820,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
 
                 function addUnreadMessageHtml() {
-                    if (!scrollAtEnd && numberOfNewMessages && document.getElementsByClassName('unread-msg').length == 0) {
+                    if (!scrollAtEnd && numberOfNewMessages) {
                         console.log("inside unread message", newlyAddedIdList);
-                        // if (document.getElementsByClassName('unread-msg')) {
-                        //     $('.unread-msg').remove();
-                        // }
-                        let unreadHtml = ` <div class="unread-msg">
+                        $('.unread-msg').remove();
+                        let unreadHtml = ` <div class="unread-msg last-msg-white-bg">
                         <div class="text-dialog-task-end">Unread Messages</div>     
                                    </div>`;
                         UnCollapseDropdownForLastElement(lastElementBeforeNewMessage);
@@ -5448,14 +5831,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         for (let i = 0; i < newlyAddedIdList.length; i++) {
                             if (document.getElementById(newlyAddedIdList[i])) {
                                 let elements = document.getElementById(newlyAddedIdList[i]);
-                                if(elements.className == 'content-dialog-task-type' && (elements.id.includes('dialogSuggestions') || elements.id.includes('faqsSuggestions'))){
+                                if(elements.className == 'content-dialog-task-type' && (elements.id.includes('dialogSuggestions') || elements.id.includes('faqsSuggestions') || elements.id.includes('articleSuggestions'))){
                                     let agentUttInfoId = newlyAddedIdList[i].split('-');
                                     agentUttInfoId.shift();
                                     agentUttInfoId = 'agentUttInfo-' + agentUttInfoId.join('-');
                                     if(document.getElementById(agentUttInfoId)){
                                         elements = document.getElementById(agentUttInfoId);
                                     }
-                                    console.log(elements, 'elements');
                                     elements?.insertAdjacentHTML('beforeBegin', unreadHtml);
                                 }else if(elements.id.includes('stepsrundata') && lastElementBeforeNewMessage.id.includes('stepsrundata')){
                                     elements = document.getElementById(lastElementBeforeNewMessage.id);
@@ -5618,7 +6000,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     data.feedbackDetails.includes(eles.innerHTML) ?
                                         $(eles).addClass('active-chip') : '';
                                 });
+                                $(ele).find('.input-block-optional .input-text').attr('value', data.comment);
                                 $(ele).find('.input-block-optional .input-text').val(data.comment);
+                                $(ele).find(`.ast-thumbdown`).attr('data-comment',`${data.comment}`)
+                                $(ele).find(`.ast-thumbdown`).attr('data-feedbackdetails', data.feedbackDetails)
                                 feedDataSet.comment = data.comment;
                                 feedDataSet.feedbackdetails = data.feedbackDetails;
                             } else {
@@ -5741,21 +6126,32 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 $('.body-data-container').scrollTop($('.body-data-container').prop("scrollHeight"));
 
                 return publicAPIs;
-           },
-            error: function (error) {
-                console.error("token is wrong");
-                if (error.status === 500) {
-                    $(`#${containerId}`).html("Issue identified with the backend services! Please reach out to AgentAssist Admin.")
-                } else {
-                    $(`#${containerId}`).html("Issue identified in configuration settings! Please reach out to AgentAssist Admin.")
-                }
-                return false;
-            }
-        });
+        //    },
+        //     error: function (error) {
+        //         console.error("token is wrong");
+        //         if (error.status === 500) {
+        //             $(`#${containerId}`).html("Issue identified with the backend services! Please reach out to AgentAssist Admin.")
+        //         } else {
+        //             $(`#${containerId}`).html("Issue identified in configuration settings! Please reach out to AgentAssist Admin.")
+        //         }
+        //         return false;
+        //     }
+        // });
     }
 
     function prepareConversation() {
         $(`#scriptContainer .empty-data-no-agents`).addClass('hide');
+    }
+
+    function initializePerfectScrollBarForOverlaySuggestions(container){
+        var KRPerfectScrollbar;
+        if(window.PerfectScrollbar && typeof PerfectScrollbar ==='function'){
+          KRPerfectScrollbar=window.PerfectScrollbar;
+          let scrollbar = new KRPerfectScrollbar($(`#${agentContainer}`).find('.suggestion-content').get(0), {
+            suppressScrollX: true
+          });
+        }
+
     }
 
     function createAgentAssistContainer(containerId, conversationId, botId, connectionDetails) {
@@ -5991,6 +6387,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             console.log("AgentAssist >>> adding html")
             // var hrml = `<div>Hello</div>`
             container.append(cHtml);
+            initializePerfectScrollBarForOverlaySuggestions(container);
         } else {
             console.log(`AgentAssist >>> container ${containerId} not found`)
         }
