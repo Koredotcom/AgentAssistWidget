@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="./agentassist.css" rel="stylesheet">
+    </link>
+    <!-- <script src="./agentassist.js" defer ></script> -->
+    <script type="text/javascript"
+        src="https://static.zdassets.com/zendesk_app_framework_sdk/2.0/zaf_sdk.min.js"></script>
+
+</head>
+
+<body>
+    <div style="width: 100%; display: flex; height: 460px!important;">
+        <div id="agentassist-maincontainer" style="width: 100%;padding-right: 10px;height: 460px!important;">
+            <iframe src="https://www.bing.com/"></iframe>
+        </div>
+
+        <!-- <div id="agentassist-maincontainer2" style="width: 30%;padding-right: 10px;">
+
+        </div>
+        <div id="agentassist-maincontainer3" style="width: 30%;">
+
+        </div> -->
+    </div>
+
+    <script type="text/javascript">
+        // var a1 = new AgentAssist('agentassist-maincontainer', '9849254208', 'user100', 'st-6e9d43c3-33f6-5b44-a8c3-5dfe5d08ffd1');
+        // var a2 = new AgentAssist('agentassist-maincontainer2', 'conv200', 'user100', 'st-6e9d43c3-33f6-5b44-a8c3-5dfe5d08ffd1');
+        // var a3 = new AgentAssist('agentassist-maincontainer3', 'conv3', 'user1', 'st-6e9d43c3-33f6-5b44-a8c3-5dfe5d08ffd1');
+        // a1.getPubSub().subscribe('agent_assist_text', (msg, data) => {
+        //     console.log(data);
+        // })
+        // setTimeout(() => {
+        //     a1.sendText("hello");
+        //     a2.sendText("what is my balance");
+        //     a3.runIntent("what is my balance");
+        // }, 2000);
+        /*
+            @TODO
+            creating custom Object Schema and saving all JWT token related data in custom object
+            need to assign UUID to `agentAssistUUID` varible 
+        */
+        var jwt = require('jsonwebtoken');
+
+        var client = ZAFClient.init();
+        
+        var zendeskBaseUrl = `https://self2959.zendesk.com`;
+        let agentAssistDataUUID = "d34a70a3-2e6c-11ed-b0aa-af398216b629";
+        let customDataUrl = `${zendeskBaseUrl}/api/sunshine/objects/records/${agentAssistDataUUID}`;
+        let username = 'himabindub07@gmail.com';
+        let password = 'bxvHwC@7';
+        let oAuthToken = '4c67db94563d4f79dbfa4b508a25abcc05e26c9c2fac6317f688af56b1361298';
+
+        let headers = new Headers();
+        var credentials = btoa(`${username}:${password}`);
+
+        headers.append("Authorization", "Bearer " + oAuthToken);
+        headers.append('Content-Type', 'application/json')
+
+        async function getData() {
+
+            let response = await fetch(customDataUrl, { method: 'GET', headers: headers })
+            if (response.ok) { // if HTTP-status is 200-299
+                let json = await response.json();
+                console.log(json.data);
+            } else {
+                console.log("HTTP-Error: " + response.status);
+            }
+        }
+        getData();
+
+    </script>
+</body>
+
+</html>
