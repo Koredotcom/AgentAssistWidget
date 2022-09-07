@@ -26,7 +26,7 @@ export TWILIO_AUTH_TOKEN=$AUTH_TOKEN
 # echo $TWILIO_AUTH_TOKEN
 echo
 #export NODE_OPTIONS=--openssl-legacy-provider
-#npm i --legacy-peer-deps
+npm i --legacy-peer-deps
 twilio plugins:install @twilio-labs/plugin-flex
 npm install
 sleep 5s 
