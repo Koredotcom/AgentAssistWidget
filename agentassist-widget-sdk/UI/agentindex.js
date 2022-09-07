@@ -1212,7 +1212,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     let entityHtmls = `<div class="order-number-info">${entityDisplayName} : 
                                                             <span style="color:red">Value unidentified</span>
                                                         </div>
-                                                        <div>processMybotData
+                                                        <div>
                                                             <img src="./images/warning.svg" style="padding-right: 8px;">
                                                             <span style="font-size: 12px; line-height: 18px; color: #202124;">Incorrect input format<span>
                                                         </div>`
