@@ -46,7 +46,7 @@ var lastElementBeforeNewMessage = '';
 var isMybotInputResponseClick = false;
 var agentAssistResponse = {};
 var myBotDataResponse = {};
-var waitingTimeForSeeMoreButton = 250;
+var waitingTimeForSeeMoreButton = 150;
 var waitingTimeForUUID = 100;
 
 function koreGenerateUUID() {
@@ -1426,11 +1426,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }
                     if(titleElement && descElement && sectionElement && divElement){
                         $(titleElement).css({"overflow": "inherit", "white-space": "normal", "text-overflow" : "unset"});
-                        $(descElement).css({"overflow": "inherit", "text-overflow" : "unset", "display" : "block"});
+                        $(descElement).css({"overflow": "inherit", "text-overflow" : "unset", "display" : "block", "white-space": "normal"});
                         let faqSectionHeight = $(sectionElement).css("height");
                         faqSectionHeight = parseInt(faqSectionHeight.slice(0,faqSectionHeight.length-2));
                         let faqMinHeight = $(divElement).css("min-height");
-                        faqMinHeight = parseInt(faqMinHeight.slice(0,faqMinHeight.length-2)) + 12;
+                        faqMinHeight = parseInt(faqMinHeight.slice(0,faqMinHeight.length-2)) + 15;
                         console.log(faqSectionHeight, "section height", faqMinHeight, "min height");
                         if ((faqSectionHeight > (faqMinHeight + faqSourceTypePixel)) || (sectionElement > faqMinHeight && faqSectionHeight <= (faqMinHeight + faqSourceTypePixel))) {
                             $(seeMoreElement).removeClass('hide');
