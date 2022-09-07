@@ -7,7 +7,7 @@ if [ $# -eq 0 ]
 fi
 #Installing the twilio CLI
 echo "Installing necessary plugins"
-#npm install -g twilio-cli
+npm install -g twilio-cli
 
 file_name=$1
 # echo "copying the configuration........"
