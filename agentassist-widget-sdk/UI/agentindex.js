@@ -187,6 +187,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             var appStateStr = localStorage.getItem('agentAssistState') || '{}';
                             var appState = JSON.parse(appStateStr);
                             if (appState[currentEndedConversationId]) {
+                                let request_resolution_comments = {
+                                    conversationId: e.data?.convsId,
+                                    userId: '',
+                                    botId: e.data?.botId,
+                                    sessionId: koreGenerateUUID(),
+                                    chatHistory: e.data?.chatHistory
+                                }
+                                _agentAsisstSocket.emit('request_resolution_comments', request_resolution_comments);
                                 delete appState[currentEndedConversationId];
                             }
                             return;
@@ -363,6 +371,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             'botId': _agentAssistDataObj.botId,
                         }
                         _agentAsisstSocket.emit('agent_assist_request', agent_assist_request);
+                    });
+
+                    _agentAsisstSocket.on('response_resolution_comments', (data) => {
+                        window.parent.postMessage(data, "*")
                     });
 
                 }
