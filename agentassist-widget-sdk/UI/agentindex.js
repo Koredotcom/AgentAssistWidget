@@ -46,7 +46,7 @@ var lastElementBeforeNewMessage = '';
 var isMybotInputResponseClick = false;
 var agentAssistResponse = {};
 var myBotDataResponse = {};
-var waitingTimeForSeeMoreButton = 150;
+var waitingTimeForSeeMoreButton = 250;
 var waitingTimeForUUID = 100;
 
 function koreGenerateUUID() {
