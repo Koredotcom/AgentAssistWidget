@@ -1466,7 +1466,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         console.log(article, id);
                         $(titleElement).css({"overflow": "inherit", "white-space": "normal", "text-overflow" : "unset"});
                         // $(descElement).css({"overflow": "inherit", "text-overflow" : "unset", "display" : "block"});
-                        $(descElement).css({"overflow": "inherit", "white-space": "normal", "text-overflow" : "unset"});
+                        $(descElement).css({"overflow": "inherit", "white-space": "normal !important", "text-overflow" : "unset"});
                         let faqSectionHeight = $(sectionElement).css("height");
                         faqSectionHeight = parseInt(faqSectionHeight.slice(0,faqSectionHeight.length-2));
                         let faqMinHeight = $(divElement).css("min-height");
