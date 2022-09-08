@@ -1463,8 +1463,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         console.log(seeMoreElement, 'see more element');
                     }
                     if(titleElement && descElement && sectionElement && divElement){
+                        console.log(article, id);
                         $(titleElement).css({"overflow": "inherit", "white-space": "normal", "text-overflow" : "unset"});
-                        $(descElement).css({"overflow": "inherit", "text-overflow" : "unset", "display" : "block"});
+                        // $(descElement).css({"overflow": "inherit", "text-overflow" : "unset", "display" : "block"});
+                        $(descElement).css({"overflow": "inherit", "white-space": "normal", "text-overflow" : "unset"});
                         let faqSectionHeight = $(sectionElement).css("height");
                         faqSectionHeight = parseInt(faqSectionHeight.slice(0,faqSectionHeight.length-2));
                         let faqMinHeight = $(divElement).css("min-height");
@@ -1476,7 +1478,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $(seeMoreElement).addClass('hide');
                         }
                         $(titleElement).css({"overflow": "hidden", "white-space": "nowrap", "text-overflow" : "ellipsis"});
-                        $(descElement).css({"overflow": "hidden", "text-overflow" : "ellipsis", "display": "-webkit-box"});
+                        // $(descElement).css({"overflow": "hidden", "text-overflow" : "ellipsis", "display": "-webkit-box"});
+                        $(descElement).css({"overflow": "hidden", "white-space": "nowrap", "text-overflow" : "ellipsis"});
                     }
                 }
 
