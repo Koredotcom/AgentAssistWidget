@@ -5566,7 +5566,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         <div class="btn-chip-negtive" data-chip-click='false'>Other</div>
                                     </div>
                                     <div class="input-block-optional">
-                                        <div class="label-text"></div>
+                                        <div class="label-text">Additional comments (Optional)</div>
                                         <input type="text" placeholder="Placeholder text" class="input-text" id="feedBackComment-${headerUUids}"
                                         data-feedback-comment="true">
                                     </div>
