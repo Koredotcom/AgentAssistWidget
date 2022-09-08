@@ -3959,7 +3959,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 }
                                 isOverRideMode ? _agentAsisstSocket.emit('enable_override_userinput', toggleObj) : '';
                                 isOverRideMode = false;
-                            } else if(document.getElementById("checkProActive").checked == false){   
+                            } else if (document.getElementById("checkProActive").checked == false) {   
                                 var toggleObj = {
                                     "agentId": "",
                                     "botId": _botId,
