@@ -274,7 +274,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             "query": "",
                             "enable_override_userinput": false
                         }
-                        isOverRideMode ? _agentAsisstSocket.emit('enable_override_userinput', overRideObj) : '';
+                        if(isOverRideMode) {
+                             _agentAsisstSocket.emit('enable_override_userinput', overRideObj)
+                        }
                         isOverRideMode = false;
                         displayCustomerFeels(data, data.conversationId, _botId);
 
@@ -2206,7 +2208,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             appState[_conversationId]['automationGoingOnAfterRefresh'] = isAutomationOnGoing;
                             localStorage.setItem('agentAssistState', JSON.stringify(appState))
                         }
-                        //  isOverRideMode = false;
+                          isOverRideMode = false;
                         $(`.override-input-div`).remove();
                         addFeedbackHtmlToDom(data, botId, userIntentInput);
                         userMessage = {};
@@ -3956,8 +3958,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 }
                                 isOverRideMode ? _agentAsisstSocket.emit('enable_override_userinput', toggleObj) : '';
                                 isOverRideMode = false;
-                            }
-                            else{   
+                            } else if(document.getElementById("checkProActive").checked == false){   
                                 var toggleObj = {
                                     "agentId": "",
                                     "botId": _botId,
@@ -5359,7 +5360,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             let idsss = target.id.split('-');
                             idsss.shift();
                             let id = idsss.join('-')
-                            isOverRideMode = true;
+                            
                             var overRideObj = {
                                 "agentId": "",
                                 "botId": _botId,
@@ -5397,6 +5398,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             }
                             $(`#overRideBtn-${id}`).addClass('hide');
                             $(`#cancelOverRideBtn-${id}`).removeClass('hide');
+                            isOverRideMode = true;
                             addWhiteBackgroundClassToNewMessage();
                             scrollToBottom();
                         }
@@ -5404,7 +5406,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             let idsss = target.id.split('-');
                             idsss.shift();
                             let id = idsss.join('-')
-                            isOverRideMode = false;
+                            
                             var overRideObj = {
                                 "agentId": "",
                                 "botId": _botId,
@@ -5417,6 +5419,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $(`#overRideBtn-${id}`).removeClass('hide');
                             $(`#cancelOverRideBtn-${id}`).addClass('hide');
                             $('#inputFieldForAgent').remove();
+                            isOverRideMode = false;
                             addWhiteBackgroundClassToNewMessage();
                             scrollToBottom();
                         }
