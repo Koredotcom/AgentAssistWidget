@@ -2822,7 +2822,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         let entityHtml = $(`#dropDownData-${previousId}`).find(`#userInput-${res._id}`);
                                         let entityDisplayName = agentAssistResponse.newEntityDisplayName ? agentAssistResponse.newEntityDisplayName : agentAssistResponse.newEntityName;
                                         if (res.agentAssistDetails.entityValue && !res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
-                                            entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${sanitizedVal}</div>`);
+                                            entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${sanitizeHTML(res.agentAssistDetails.entityValue)}</div>`);
                                         } else {
                                             if (res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
                                                 let entityHtmls = `<div class="order-number-info">${entityDisplayName} : 
