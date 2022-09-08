@@ -4252,9 +4252,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     target.dataset.feedbacklike = 'false';
                                     feedbackLoop(evt);
                                 }
-                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .submit-btn`).html('Submit');
+
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .ast-thumbdown`).attr('data-comment',``)
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .ast-thumbdown`).attr('data-feedbackdetails','[]');
                                 $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .btn-chip-negtive.active-chip`).removeClass('active-chip');
-                                $(`#feedBackComment-${cloneTargtIds.join('-')}`).val('');
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} #feedBackComment-${cloneTargtIds.join('-')}`).val('');
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .submit-btn`).attr('disabled', 'disabled')
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .submit-btn`).html('Submit');
                                 $(`#feedbackdown-${cloneTargtIds.join('-')}`).removeClass('active-feedback')
                                 $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .thanks-update`).removeClass('hide');
                                 $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .help-improve-arrow`).addClass('hide')
