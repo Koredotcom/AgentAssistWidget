@@ -231,7 +231,7 @@
                         <input type="text" maxlength="50" [placeholder]="'ONBOARDING.GIVE_UR_BOT_NAME' | translate" [(ngModel)]="impBtName" class="input-text">
                     </div>
                     <div class="kr-sg-checkbox mb-3">
-                        <input id="checkbox-import" (change)="modSwitchCreate($event)" class="checkbox-custom" type="checkbox">
+                        <input id="checkbox-import" checked (change)="modSwitchCreate($event)" class="checkbox-custom" type="checkbox">
                         <label for="checkbox-import" class="checkbox-custom-label">{{ "ONBOARDING.I_WANT_IMPORT" | translate}}</label>
                     </div> 
                     <div class="kr-sg-fileupload mb-20">
