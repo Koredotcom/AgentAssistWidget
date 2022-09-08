@@ -3928,28 +3928,27 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
 
                         function togglePoint(){
-                            // if(document.getElementById("checkProActive").checked == true){
-                            //     var toggleObj = {
-                            //         "agentId": "",
-                            //         "botId": _botId,
-                            //         "conversationId": _agentAssistDataObj.conversationId,
-                            //         "query": "",
-                            //         "enable_override_userinput": false
-                            //     }
-                            //     isOverRideMode ? _agentAsisstSocket.emit('enable_override_userinput', toggleObj) : '';
-                            //     isOverRideMode = false;
-                            // }
-                            // else{   
-                            //     var toggleObj = {
-                            //         "agentId": "",
-                            //         "botId": _botId,
-                            //         "conversationId": _agentAssistDataObj.conversationId,
-                            //         "query": "",
-                            //         "enable_override_userinput": true
-                            //     }
-                            //     isOverRideMode ? _agentAsisstSocket.emit('enable_override_userinput', toggleObj) : '';
-                            //     isOverRideMode = false;
-                            // }
+                            if(document.getElementById("checkProActive").checked == true){
+                                var toggleObj = {
+                                    "agentId": "",
+                                    "botId": _botId,
+                                    "conversationId": _agentAssistDataObj.conversationId,
+                                    "query": "",
+                                    "enable_override_userinput": false
+                                }
+                                isOverRideMode ? _agentAsisstSocket.emit('enable_override_userinput', toggleObj) : '';
+                                isOverRideMode = false;
+                            } else if(document.getElementById("checkProActive").checked == false){   
+                                var toggleObj = {
+                                    "agentId": "",
+                                    "botId": _botId,
+                                    "conversationId": _agentAssistDataObj.conversationId,
+                                    "query": "",
+                                    "enable_override_userinput": true
+                                }
+                                isOverRideMode ? _agentAsisstSocket.emit('enable_override_userinput', toggleObj) : '';
+                                isOverRideMode = false;
+                            }
                         }
                         let isChecked =  togglePoint();
 
