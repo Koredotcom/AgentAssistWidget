@@ -3856,6 +3856,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     target.dataset.feedbacklike = 'false';
                                     feedbackLoop(evt);
                                 }
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .submit-btn`).html('Submit');
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .btn-chip-negtive.active-chip`).removeClass('active-chip');
+                                $(`#feedBackComment-${cloneTargtIds.join('-')}`).val('');
                                 $(`#feedbackdown-${cloneTargtIds.join('-')}`).removeClass('active-feedback')
                                 $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .thanks-update`).removeClass('hide');
                                 $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .help-improve-arrow`).addClass('hide')
@@ -3906,6 +3909,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             }
                             let updateFlag = $(`#feedbackHelpfulContainer-${targteId.join('-')} .submit-btn`).attr('data-updateflag');
                             if (updateFlag == 'true' && target.dataset.feedbackDropDownOpened === 'false') {
+                                $(`#feedbackHelpfulContainer-${targteId.join('-')} .submit-btn`).html('Update');
                                 AgentAssist_feedBack_Update_Request(dataSets);
                                 $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).addClass('hide');
                                 isUpdateFeedBackDetailsFlag = true;
@@ -3951,7 +3955,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             feedbackLoop(dataSets, true);
                             $(`#feedbackHelpfulContainer-${id.join('-')} .explore-more-negtive-data`).addClass('hide');
                              target.dataset.updateflag = 'true';
-                            target.innerHTML = "Update";
                             $('.submit-btn').attr('disabled', 'disabled');
                             
                             dataSets.comment = "";
