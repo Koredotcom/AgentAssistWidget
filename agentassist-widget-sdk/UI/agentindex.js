@@ -455,7 +455,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                     let titleText = '';
                     let userQueryHtml = '';
-                    let sanitizedVal = sanitizeHTML((data.userInput));
                     if(isOverRideMode) {
                         titleText = "YouEntered -";
                         userQueryHtml = `
@@ -466,7 +465,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         <div class="run-info-content" id="userInput-${_id}">
                                             <div class="title">${titleText}</div>
                                             <div class="agent-utt">
-                                                <div class="title-data">"${sanitizedVal}"</div>
+                                                <div class="title-data">"${sanitizeHTML(data.userInput)}"</div>
                                             </div>
                                             
                                         </div>
@@ -744,11 +743,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $('#dialogs-faqs').addClass('hide');
                         }
                         if (data.suggestions) {
-                            let sanitizedVal = sanitizeHTML((data.userInput));
                             isSuggestionProcessed = false;
                             if (currentTabActive == 'searchAutoIcon') {
                                 let searchTextDisplay = document.getElementById('search-text-display');
-                                html = `<div class="searched-intent" id="librarySearchText">Search results for '${sanitizedVal}' </div>`
+                                html = `<div class="searched-intent" id="librarySearchText">Search results for '${sanitizeHTML(data.userInput)}' </div>`
                                 searchTextDisplay.innerHTML = html;
                             } else {
                                 let dialogsLength = data.suggestions.dialogs?.length || 0;
@@ -775,13 +773,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                         } else {
                             if (isSuggestionProcessed) {
-                                let sanitizedVal = sanitizeHTML((data.userInput))
                                 if (currentTabActive == 'searchAutoIcon') {
                                     let searchTextDisplay = document.getElementById('search-text-display');
-                                    html = `<div class="searched-intent" id="librarySearchText">0 Search results for '${sanitizedVal}' </div>`
+                                    html = `<div class="searched-intent" id="librarySearchText">0 Search results for '${sanitizeHTML(data.userInput)}' </div>`
                                     searchTextDisplay.innerHTML = html;
                                 } else {
-                                    $('#overLaySearch').html(`<div class="search-results-text">0 Search results for '${sanitizedVal}'</div>`)
+                                    $('#overLaySearch').html(`<div class="search-results-text">0 Search results for '${sanitizeHTML(data.userInput)}'</div>`)
                                 }
                             }
 
@@ -1099,9 +1096,17 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
 
                 function sanitizeHTML(text) {
-                    var element = document.createElement('div');
-                    element.innerText = text;
-                    return element.innerHTML;
+                    // var element = document.createElement('div');
+                    // element.innerText = text;
+                    // return element.innerHTML;
+                    console.log('sanitizeHTML: ',typeof text);
+                    var lt = /</g, 
+                    gt = />/g, 
+                    ap = /'/g, 
+                    ic = /"/g;
+                    value = text.toString().replace(lt, "&lt;").replace(gt, "&gt;").replace(ap, "&#39;").replace(ic, "&#34;");
+                    console.log(value);
+                    return value;
                 }
 
                 function processMybotDataResponse(data, convId, botId) {
@@ -1200,7 +1205,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         $('#inputFieldForMyBot').remove();
                         
                          if(isMybotInputResponseClick){
-                            let sanitizedVal = sanitizeHTML((data.userInput))
                             let userQueryHtml = `
                                     <div class="steps-run-data">
                                         <div class="icon_block_img">
@@ -1209,7 +1213,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         <div class="run-info-content" id="userInput-${myBotuuids}">
                                             <div class="title">You Entered -</div>
                                             <div class="agent-utt">
-                                                <div class="title-data">${sanitizedVal}</div>
+                                                <div class="title-data">${sanitizeHTML(data.userInput)}</div>
                                             </div>
                                             
                                         </div>
@@ -2798,7 +2802,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     }
                                     if (res.agentAssistDetails.entityName && res.agentAssistDetails.entityResponse && res.agentAssistDetails.entityValue) {
                                         let runInfoContent = $(`#dropDownData-${previousId}`);
-                                        let sanitizedVal = sanitizeHTML((res.agentAssistDetails.entityValue))
                                         let userQueryHtml = `
                                             <div class="steps-run-data">
                                                 <div class="icon_block_img">
@@ -2807,7 +2810,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                 <div class="run-info-content" id="userInput-${res._id}">
                                                     <div class="title">Customer Said - </div>
                                                     <div class="agent-utt">
-                                                        <div class="title-data">"${sanitizedVal}"</div>
+                                                        <div class="title-data">"${sanitizeHTML(res.agentAssistDetails.entityValue)}"</div>
                                                     </div>
                                                     
                                                 </div>
@@ -3200,7 +3203,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     }
                                     if (res.agentAssistDetails.entityName && res.agentAssistDetails.entityResponse && res.agentAssistDetails.entityValue) {
                                         let runInfoContent = $(`#dropDownData-${previousId}`);
-                                        let sanitizedVal = sanitizeHTML((res.agentAssistDetails.entityValue))
                                         let userQueryHtml = `
                                                 <div class="steps-run-data">
                                                     <div class="icon_block_img">
@@ -3209,7 +3211,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                     <div class="run-info-content" id="userInput-${res._id}">
                                                         <div class="title">Customer Said - </div>
                                                         <div class="agent-utt">
-                                                            <div class="title-data">"${sanitizedVal}"</div>
+                                                            <div class="title-data">"${sanitizeHTML(res.agentAssistDetails.entityValue)}"</div>
                                                         </div>
                                                         
                                                     </div>
@@ -3218,7 +3220,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         let entityHtml = $(`#dropDownData-${previousId}`).find(`#userInput-${res._id}`);
                                         let entityDisplayName = myBotDataResponse.newEntityDisplayName ? myBotDataResponse.newEntityDisplayName : myBotDataResponse.newEntityName;
                                         if (res.agentAssistDetails.entityValue && !res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
-                                            entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${sanitizedVal}</div>`);
+                                            entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${sanitizeHTML(res.agentAssistDetails.entityValue)}</div>`);
                                         } else {
                                             if (res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
                                                 let entityHtmls = `<div class="order-number-info">${entityDisplayName} : 
