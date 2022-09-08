@@ -482,7 +482,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         <div class="run-info-content" id="userInput-${_id}">
                                             <div class="title">${titleText}</div>
                                             <div class="agent-utt">
-                                                <div class="title-data">"${sanitizedVal}"</div>
+                                                <div class="title-data">"${sanitizeHTML(data.userInput)}"</div>
                                             </div>
                                             
                                         </div>
@@ -496,7 +496,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         entityDisplayName = agentAssistResponse.newEntityDisplayName ? agentAssistResponse.newEntityDisplayName : agentAssistResponse.newEntityName;
                     }
                     if (data.entityValue && !data.isErrorPrompt && entityDisplayName) {
-                        entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${sanitizedVal}</div>`);
+                        entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${sanitizeHTML(data.userInput)}</div>`);
                     } else { 
                         if (data.isErrorPrompt && entityDisplayName) {
                             let entityHtmls = `<div class="order-number-info">${entityDisplayName} : 
@@ -757,7 +757,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 let articlesLength = data.suggestions.articles?.length || 0;
                                 let totalSuggestionLength = dialogsLength + faqsLength + articlesLength || 0;
                                 if(totalSuggestionLength){
-                                    $('#overLaySearch').html(`<div class="search-results-text">${totalSuggestionLength} Search results for '${sanitizedVal}' <span class="show-all hide">Show all</span></div>`)
+                                    $('#overLaySearch').html(`<div class="search-results-text">${totalSuggestionLength} Search results for '${sanitizeHTML(data.userInput)}' <span class="show-all hide">Show all</span></div>`)
                                 }
 
                                 // if ((dialogsLength > 0) && (faqsLength > 0)) {
@@ -1224,7 +1224,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             let entityHtml = $(`#dropDownData-${myBotDropdownHeaderUuids}`).find(`#userInput-${myBotuuids}`);
                             let entityDisplayName = myBotDataResponse.entityDisplayName ? myBotDataResponse.entityDisplayName : myBotDataResponse.entityName;
                             if (data.userInput && !data.isErrorPrompt && entityDisplayName) {
-                                entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${sanitizedVal}</div>`);
+                                entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${sanitizeHTML(data.userInput)}</div>`);
                             } else {
                                 if (data.isErrorPrompt && entityDisplayName) {
                                     let entityHtmls = `<div class="order-number-info">${entityDisplayName} : 
