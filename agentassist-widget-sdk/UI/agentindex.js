@@ -2519,14 +2519,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 </div>
                                 <div class="explore-more-negtive-data hide">
                                     <div class="btns-group-negtive-chips" id="feedBackOptions-${id}">
-                                        <div class="btn-chip-negtive" data-chip-click='false'>Not enough suggestions</div>
-                                        <div class="btn-chip-negtive" data-chip-click='false'>Not prompt</div>
-                                        <div class="btn-chip-negtive" data-chip-click='false'>Intent undetected</div>
+                                        <div class="btn-chip-negtive" data-chip-click='false'>Wrong suggestions</div>
+                                        <div class="btn-chip-negtive" data-chip-click='false'>Incorrect intent</div>
+                                        <div class="btn-chip-negtive" data-chip-click='false'>Accidental click</div>
+                                        <div class="btn-chip-negtive" data-chip-click='false'>Time taking</div>
                                         <div class="btn-chip-negtive" data-chip-click='false'>Other</div>
                                     </div>
                                     <div class="input-block-optional">
                                         <div class="label-text">Additional comments (Optional)</div>
-                                        <input type="text" placeholder="Placeholder text" class="input-text" id="feedBackComment-${id}"
+                                        <input type="text" placeholder="Type to add comment" class="input-text" id="feedBackComment-${id}"
                                         data-feedback-comment="true">
                                     </div>
                                     <button class="submit-btn" data-updateFlag="false" disabled>Submit</button>
@@ -4272,6 +4273,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     target.dataset.feedbacklike = 'false';
                                     feedbackLoop(evt);
                                 }
+
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .ast-thumbdown`).attr('data-comment',``)
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .ast-thumbdown`).attr('data-feedbackdetails','[]');
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .btn-chip-negtive.active-chip`).removeClass('active-chip');
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} #feedBackComment-${cloneTargtIds.join('-')}`).val('');
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .submit-btn`).attr('disabled', 'disabled')
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .submit-btn`).html('Submit');
                                 $(`#feedbackdown-${cloneTargtIds.join('-')}`).removeClass('active-feedback')
                                 $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .thanks-update`).removeClass('hide');
                                 $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .help-improve-arrow`).addClass('hide')
@@ -4322,6 +4330,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             }
                             let updateFlag = $(`#feedbackHelpfulContainer-${targteId.join('-')} .submit-btn`).attr('data-updateflag');
                             if (updateFlag == 'true' && target.dataset.feedbackDropDownOpened === 'false') {
+                                $(`#feedbackHelpfulContainer-${targteId.join('-')} .submit-btn`).html('Update');
                                 $(`#feedbackHelpfulContainer-${targteId.join('-')} .submit-btn`).attr('disabled', 'disabled');
                                 AgentAssist_feedBack_Update_Request(dataSets);
                                 $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).addClass('hide');
@@ -4374,7 +4383,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $(`#feedbackHelpfulContainer-${id.join('-')} #dropdownArrowFeedBackIcon-${id.join('-')}`).attr('data-feedback-drop-down-opened', 'true');
                             $(`#feedbackHelpfulContainer-${id.join('-')} #dropdownArrowFeedBack-${id.join('-')}`).attr('data-feedback-drop-down-opened', 'true');
                             target.dataset.updateflag = 'true';
-                            target.innerHTML = "Update";
                             $(`#feedbackHelpfulContainer-${id.join('-')}.submit-btn`).attr('disabled', 'disabled');
 
                             $(`#feedbackHelpfulContainer-${id.join('-')} .ast-thumbdown`).attr('data-comment',``)
@@ -5983,14 +5991,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 </div>
                                 <div class="explore-more-negtive-data hide">
                                     <div class="btns-group-negtive-chips" id="feedBackOptions-${headerUUids}">
-                                        <div class="btn-chip-negtive" data-chip-click='false'>Not enough suggestions</div>
-                                        <div class="btn-chip-negtive" data-chip-click='false'>Not prompt</div>
-                                        <div class="btn-chip-negtive" data-chip-click='false'>Intent undetected</div>
+                                        <div class="btn-chip-negtive" data-chip-click='false'>Wrong suggestions</div>
+                                        <div class="btn-chip-negtive" data-chip-click='false'>Incorrect intent</div>
+                                        <div class="btn-chip-negtive" data-chip-click='false'>Accidental click</div>
+                                        <div class="btn-chip-negtive" data-chip-click='false'>Time taking</div>
                                         <div class="btn-chip-negtive" data-chip-click='false'>Other</div>
                                     </div>
                                     <div class="input-block-optional">
                                         <div class="label-text">Additional comments (Optional)</div>
-                                        <input type="text" placeholder="Placeholder text" class="input-text" id="feedBackComment-${headerUUids}"
+                                        <input type="text" placeholder="Type to add comment" class="input-text" id="feedBackComment-${headerUUids}"
                                         data-feedback-comment="true">
                                     </div>
                                     <button class="submit-btn" data-updateFlag="false" disabled>Submit</button>
