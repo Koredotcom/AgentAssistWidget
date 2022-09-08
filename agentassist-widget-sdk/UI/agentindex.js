@@ -1428,11 +1428,21 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         $(titleElement).css({"overflow": "inherit", "white-space": "normal", "text-overflow" : "unset"});
                         $(descElement).css({"overflow": "inherit", "text-overflow" : "unset", "display" : "block", "white-space": "normal"});
                         let faqSectionHeight = $(sectionElement).css("height");
+			  let divSectionHeight = $(descElement).css("height");
                         faqSectionHeight = parseInt(faqSectionHeight.slice(0,faqSectionHeight.length-2));
+                        divSectionHeight = parseInt(divSectionHeight.slice(0,divSectionHeight.length-2));
                         let faqMinHeight = $(divElement).css("min-height");
                         faqMinHeight = parseInt(faqMinHeight.slice(0,faqMinHeight.length-2)) + 15;
                         console.log(faqSectionHeight, "section height", faqMinHeight, "min height");
-                        if ((faqSectionHeight > (faqMinHeight + faqSourceTypePixel)) || (sectionElement > faqMinHeight && faqSectionHeight <= (faqMinHeight + faqSourceTypePixel))) {
+                        // if ((faqSectionHeight > (faqMinHeight + faqSourceTypePixel)) || (faqSectionHeight > faqMinHeight && faqSectionHeight <= (faqMinHeight + faqSourceTypePixel))) {
+                        //     $(seeMoreElement).removeClass('hide');
+                        // }else{
+                        //     $(seeMoreElement).addClass('hide');
+                        //     if(article){
+                        //         $(viewLinkElement).removeClass('hide');
+                        //     }
+                        // }
+                        if(divSectionHeight > (24 + faqSourceTypePixel)){
                             $(seeMoreElement).removeClass('hide');
                         }else{
                             $(seeMoreElement).addClass('hide');
@@ -1466,11 +1476,19 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         $(titleElement).css({"overflow": "inherit", "white-space": "normal", "text-overflow" : "unset"});
                         $(descElement).css({"overflow": "inherit", "text-overflow" : "unset", "display" : "block"});
                         let faqSectionHeight = $(sectionElement).css("height");
+                        let divSectionHeight = $(descElement).css("height");
                         faqSectionHeight = parseInt(faqSectionHeight.slice(0,faqSectionHeight.length-2));
+                        divSectionHeight = parseInt(divSectionHeight.slice(0,divSectionHeight.length-2));
                         let faqMinHeight = $(divElement).css("min-height");
                         faqMinHeight = parseInt(faqMinHeight.slice(0,faqMinHeight.length-2)) + 12;
                         console.log('FAQ SM SL: ',faqMinHeight, faqSourceTypePixel, faqSectionHeight);
-                        if ((faqSectionHeight > (faqMinHeight + faqSourceTypePixel)) || (sectionElement > faqMinHeight && faqSectionHeight <= (faqMinHeight + faqSourceTypePixel))) {
+                        // if ((faqSectionHeight > (faqMinHeight + faqSourceTypePixel)) || (faqSectionHeight > faqMinHeight && faqSectionHeight <= (faqMinHeight + faqSourceTypePixel))) {
+                        //     $(seeMoreElement).removeClass('hide');
+                        // }else{
+                        //     $(seeMoreElement).addClass('hide');
+                        // }
+
+                        if(divSectionHeight > (24 + faqSourceTypePixel)){
                             $(seeMoreElement).removeClass('hide');
                         }else{
                             $(seeMoreElement).addClass('hide');
