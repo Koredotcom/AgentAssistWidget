@@ -3235,3 +3235,22 @@ input.no-autofill-bkg:-webkit-autofill {
     width: 100%;
     height: 100%;
 }
+
+.link-view-full-article{
+    display: inline-block;
+}
+.link-view-full-article a{
+    color: #1b92d8 !important;
+    font-size: 12px;
+    line-height: 15px;
+    margin: 5px 0;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.d_block{
+    display: block;
+}
+.m-10{
+    margin: 10px 0;
+}
