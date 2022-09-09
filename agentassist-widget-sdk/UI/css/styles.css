@@ -788,7 +788,10 @@ html, body{
     right: 8px;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send:hover .title-text{
+    white-space: normal !important;
     padding-right: 80px;
+    text-align: justify;
+    word-break: break-word;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send:hover .action-links {
     display: flex;
@@ -1132,7 +1135,10 @@ border: 1px solid transparent !important;
     display: flex;
 }
 .overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send:hover .title-text{
+    white-space: normal !important; 
     padding-right: 80px;
+    text-align: justify;
+    word-break: break-word;
 }
 .overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send:hover .action-links {
     display: flex;
@@ -1601,7 +1607,10 @@ border: 1px solid transparent !important;
     display: flex;
 }
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send:hover .title-text{
+    white-space: normal !important;
     padding-right: 80px;
+    text-align: justify;
+    word-break: break-word;
 }
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .send-run-btn {
     border: 0;
