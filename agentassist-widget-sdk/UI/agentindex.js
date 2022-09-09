@@ -896,8 +896,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             <i class="ast-carrotup" data-conv-id="${data.conversationId}"
                             data-bot-id="${botId}" data-intent-name="${ele.question}"
                             data-check-lib="true" id="checkLib-${uuids+index}"></i>`;
-                                    faqs.append(checkHtml);
-                                    $(`#titleLib-${uuids+index}`).addClass('noPadding');
+                                    // faqs.append(checkHtml);
+                                    // $(`#titleLib-${uuids+index}`).addClass('noPadding');
+                                    document.getElementById(`titleLib-${uuids+index}`).insertAdjacentHTML('beforeend',checkHtml);
                                 } else {
                                     let a = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display #faqDivLib-${uuids+index}`) : $(`#overLaySearch #faqDivLib-${uuids+index}`);
                                     let faqActionHtml = `<div class="action-links">
@@ -1840,8 +1841,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         <i class="ast-carrotup" data-conv-id="${data.conversationId}"
                         data-bot-id="${botId}" data-intent-name="${ele.question}"
                         data-check="true" id="check-${uuids+index}"></i>`;
-                                    faqs.append(checkHtml);
-                                    $(`#title-${uuids+index}`).addClass('noPadding');
+                                    // faqs.append(checkHtml);
+                                    // $(`#title-${uuids+index}`).addClass('noPadding');
+                                    document.getElementById(`title-${uuids+index}`).insertAdjacentHTML('beforeend',checkHtml);
                                 } else {
                                     let a = $(`#faqDiv-${uuids+index}`);
                                     let faqActionHtml = `<div class="action-links">
@@ -2694,8 +2696,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     <i class="ast-carrotup" data-conv-id="${_agentAssistDataObj.conversationId}"
                                     data-bot-id="${res.botId}" data-intent-name="${ele.question}"
                                     data-check="true" id="check-${uniqueID}"></i>`;
-                                                    faqs.append(checkHtml);
-                                                    $(`#title-${uniqueID}`).addClass('noPadding');
+                                                    // faqs.append(checkHtml);
+                                                    // $(`#title-${uniqueID}`).addClass('noPadding');
+                                                    document.getElementById(`title-${uniqueID}`).insertAdjacentHTML('beforeend',checkHtml);
                                                 } else {
                                                     let a = $(`#faqDiv-${uniqueID}`);
                                                     let faqActionHtml = `<div class="action-links">
