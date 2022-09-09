@@ -5456,11 +5456,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 faqDiv.append(faqaction);
                                 answerPlaceableIDs.push({id:`desc-${id.join('-')}`, input: target.dataset.intentName});
                                 $(`#dynamicBlock #${target.id}`).addClass('rotate-carrot');
+                                $(`#dynamicBlock #faqDiv-${id.join('-')}`).addClass('is-dropdown-open');
                                 AgentAssist_run_click(evt);
                                 return
                             }
                             if ($(`#dynamicBlock .type-info-run-send #faqSection-${id.join('-')} .ast-carrotup.rotate-carrot`).length <= 0) {
                                 $(`#dynamicBlock #${target.id}`).addClass('rotate-carrot');
+                                $(`#dynamicBlock #faqDiv-${id.join('-')}`).addClass('is-dropdown-open');
                                 $(`#dynamicBlock #faqDiv-${id.join('-')} .action-links`).removeClass('hide');
                                 $(`#dynamicBlock #desc-${id.join('-')}`).removeClass('hide');
                                 setTimeout(() => {                                
@@ -5471,6 +5473,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             } else {
                                 $(`#dynamicBlock #${target.id}`).removeClass('rotate-carrot');
                                 $(`#dynamicBlock #faqDiv-${id.join('-')} .action-links`).addClass('hide');
+                                $(`#dynamicBlock #faqDiv-${id.join('-')}`).removeClass('is-dropdown-open');
                                 $(`#dynamicBlock #desc-${id.join('-')}`).addClass('hide');
                                 $(`#dynamicBlock #seeMore-${id.join('-')}`).addClass('hide');
                                 $(`#dynamicBlock #seeLess-${id.join('-')}`).addClass('hide');
@@ -5496,6 +5499,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 faqDiv.append(faqaction);
                                 answerPlaceableIDs.push({id:`descLib-${id.join('-')}`, input: target.dataset.intentName});
                                 $(`#overLaySearch #${target.id}`).addClass('rotate-carrot');
+                                $(`#overLaySearch #faqDivLib-${id.join('-')}`).addClass('is-dropdown-open');
                                 AgentAssistPubSub.publish('searched_Automation_details', { conversationId: evt.target.dataset.convId, botId: evt.target.dataset.botId, value: evt.target.dataset.intentName, isSearch: true });
                                 return
                             }
@@ -5515,6 +5519,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 faqDiv.append(faqaction);
                                 answerPlaceableIDs.push({id:`descLib-${id.join('-')}`, input: target.dataset.intentName});
                                 $(`#search-text-display #${target.id}`).addClass('rotate-carrot');
+                                $(`#search-text-display #faqDivLib-${id.join('-')}`).addClass('is-dropdown-open');
                                 AgentAssistPubSub.publish('searched_Automation_details', { conversationId: evt.target.dataset.convId, botId: evt.target.dataset.botId, value: evt.target.dataset.intentName, isSearch: true });
                                 return
                             }
@@ -5528,12 +5533,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     setTimeout(() => {
                                         updateSeeMoreButtonForAgent(id.join('-'));
                                     }, waitingTimeForSeeMoreButton);
+                                    $(`#search-text-display #faqDivLib-${id.join('-')}`).addClass('is-dropdown-open');
+ 
                                 } else {
                                     $(`#search-text-display #${target.id}`).removeClass('rotate-carrot');
                                     $(`#search-text-display #faqDivLib-${id.join('-')} .action-links`).addClass('hide');
                                     $(`#search-text-display #descLib-${id.join('-')}`).addClass('hide');
                                     $(`#search-text-display #seeMore-${id.join('-')}`).addClass('hide');
                                     $(`#search-text-display #seeLess-${id.join('-')}`).addClass('hide');
+                                    $(`#search-text-display #faqDivLib-${id.join('-')}`).removeClass('is-dropdown-open');
                                 }
                             } else {
                                 if ($(`#overLaySearch .type-info-run-send #faqSectionLib-${id.join('-')} .ast-carrotup.rotate-carrot`).length <= 0) {
@@ -5545,12 +5553,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     setTimeout(() => {                                  
                                         updateSeeMoreButtonForAgent(id.join('-'));
                                     }, waitingTimeForSeeMoreButton);
+                                    $(`#overLaySearch #faqDivLib-${id.join('-')}`).addClass('is-dropdown-open');
                                 } else {
                                     $(`#overLaySearch #${target.id}`).removeClass('rotate-carrot');
                                     $(`#overLaySearch #faqDivLib-${id.join('-')} .action-links`).addClass('hide');
                                     $(`#overLaySearch #descLib-${id.join('-')}`).addClass('hide');
                                     $(`#overLaySearch #seeMore-${id.join('-')}`).addClass('hide');
                                     $(`#overLaySearch #seeLess-${id.join('-')}`).addClass('hide');
+                                    $(`#overLaySearch #faqDivLib-${id.join('-')}`).removeClass('is-dropdown-open');
+
                                 }
                             }
                         }

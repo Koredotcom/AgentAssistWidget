@@ -2924,7 +2924,7 @@ border: 1px solid transparent !important;
     position: relative;
     /* background: #EAF1FC; */
     box-shadow: inset 0px 1px 3px rgba(209,218,231,0.25), inset 0px 0px 1px #D1DAE7;
-    padding: 18px 24px;
+    padding: 22px 24px;
     display: inline-block;
     margin-top: -11px;
     border: 1px dashed #EAF1FC;
@@ -2974,6 +2974,14 @@ border: 1px solid transparent !important;
 .feedback-helpul-container .titles-content .btn-positive .tootltip-tabs {
     position: absolute;
     left: -6px;
+    top: auto;
+    bottom: -28px;
+    z-index: 9;
+}
+
+.feedback-helpul-container .titles-content .btn-positive .tootltip-tabs::after{
+    top: -10px;
+    border-color: transparent transparent var(--default-text-color) transparent;
 }
 .feedback-helpul-container .titles-content .btn-negtive {
     background: #FFFFFF;
@@ -3008,6 +3016,13 @@ border: 1px solid transparent !important;
 .feedback-helpul-container .titles-content .btn-negtive .tootltip-tabs {
     position: absolute;
     left: -6px;
+    top:auto;
+    bottom:-28px;
+    z-index: 9;
+}
+.feedback-helpul-container .titles-content .btn-negtive .tootltip-tabs::after {
+    top: -10px;
+    border-color: transparent transparent var(--default-text-color) transparent;
 }
 .feedback-helpul-container .titles-content .thanks-update {
     font-weight: 400;
