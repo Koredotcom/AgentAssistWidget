@@ -4379,6 +4379,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 dataSets.feedbackdetails = dataSets.feedbackdetails.split(',');
                             }
                             feedbackLoop(dataSets, true);
+                            $(`#feedbackHelpfulContainer-${id.join('-')} .thanks-update`).css('right','34px').removeClass('hide');
+                            setTimeout(()=>{
+                                $(`#feedbackHelpfulContainer-${id.join('-')} .thanks-update`).css('right','25px').addClass('hide');
+                            },3000)
                             $(`#feedbackHelpfulContainer-${id.join('-')} .explore-more-negtive-data`).addClass('hide');
                             $(`#feedbackHelpfulContainer-${id.join('-')} #dropdownArrowFeedBackIcon-${id.join('-')}`).attr('data-feedback-drop-down-opened', 'true');
                             $(`#feedbackHelpfulContainer-${id.join('-')} #dropdownArrowFeedBack-${id.join('-')}`).attr('data-feedback-drop-down-opened', 'true');
