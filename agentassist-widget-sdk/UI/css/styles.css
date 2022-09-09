@@ -1251,6 +1251,7 @@ border: 1px solid transparent !important;
     text-align: center;
     position: relative;
     top: 0;
+    z-index: 1;
     /* z-index: 0; */
     /* bottom: -55px; */
     /* margin-top: 10px;
@@ -1271,6 +1272,7 @@ border: 1px solid transparent !important;
     background: #f8fafb;
     top: 0;
     left: -15px;
+    z-index: inherit;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dilog-task-end.last-msg-white-bg .text-dialog-task-end{
     font-size: 14px;
@@ -2909,7 +2911,7 @@ border: 1px solid transparent !important;
     display: inline-block;
     margin-top: -11px;
     border: 1px dashed #EAF1FC;
-    /* background: #f8fafb; */
+    background: #f8fafb;
 }
 .feedback-helpul-container .titles-content {
     display: flex;
@@ -3089,7 +3091,7 @@ border: 1px solid transparent !important;
     left: -23px;
     top: auto;
 }
-.agent-assist-chat-container .unread-msg::after{
+.agent-assist-chat-container .unread-msg.last-msg-white-bg::after{
     content: "";
     position: absolute;
     width: calc(100% + 41px);
