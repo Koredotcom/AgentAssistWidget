@@ -5178,9 +5178,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 }
                                 scrollToBottom();
                             }
-                            if(target.innerHTML === 'yes, Continue') {
-                                console.log('111222');
-                            }
 
                         }
                         if (target.className == 'btn-cancel' || target.className == 'ast-close') {
@@ -5255,6 +5252,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             } else if (isMyBotAutomationOnGoing && !noAutomationrunninginMyBot) {
                                 // condition for if an automation is already running in the agent automation
                                 $('#interruptPopUp').removeClass('hide');
+                                console.log("interruption for the  myBotTab");
+                                interruptCurrentDialog("myBotTab");
                             }
                         }
 
@@ -5364,10 +5363,82 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 // }
                                 return;
                             }
-                            else {
+                            else if(isAutomationOnGoing && libraryRunBtn) {
                                 $('#interruptPopUp').removeClass('hide');
-                            }
+                                console.log("interruption for the Assist Tab");
+                                interruptCurrentDialog("assistTab") 
+                            } 
                         }
+
+                        var navigatefromLibToTab;
+                        function interruptCurrentDialog(tab) {
+                            console.log('interruptCurrentAssistDialog');
+                            navigatefromLibToTab = tab;
+                        }
+
+                        if(target.innerHTML === 'Yes, continue') {
+                            $('#interruptPopUp').addClass('hide');
+                            if(navigatefromLibToTab === 'assistTab') {
+                                console.log('library run btn interruptions ---> yes, Continue');
+                                updateCurrentTabInState(_conversationId, 'assistTab')
+                                $('.empty-data-no-agents').addClass('hide');
+                                $('#agentSearch').val('');
+                                $('.overlay-suggestions').addClass('hide').removeAttr('style');
+                                $('#overLaySearch').html('');
+                                userTabActive();
+
+                                $('#dynamicBlock .dialog-task-run-sec').each((i, ele) => {
+                                    $('#dynamicBlock .agent-utt-info').each((i, elem) => {
+                                        let eleID = ele.id.split('-');
+                                        eleID.shift();
+                                        let elemids = elem.id.split('-');
+                                        elemids.shift();
+                                        if (eleID.join('-').includes(elemids.join('-'))) {
+                                            $(`#historyData`).append(`
+                                            <div class="agent-utt-info">
+                                                ${$(elem).html()}
+                                            </div>
+                                            <div class="dialog-task-run-sec">
+                                            ${$(ele).html()}
+                                            </div>`)
+                                            //  elem.remove();
+                                        }
+                                    })
+                                    //  ele.remove();
+                                })
+                            } else {
+                                data = target.dataset;
+                                var dialogId = 'dg-' + (Math.random() + 1).toString(36).substring(2);
+                                myBotDialogPositionId = dialogId;
+                                AgentAssistPubSub.publish('searched_Automation_details', { conversationId: data.convId, botId: data.botId, value: data.intentName, isSearch: false, intentName: data.intentName, "positionId": dialogId });
+                                isMyBotAutomationOnGoing = true;
+                                noAutomationrunninginMyBot = false;
+                                let agentBotuuids = Math.floor(Math.random() * 100);
+                                myBotDropdownHeaderUuids = agentBotuuids;
+                                var appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                                var appState = JSON.parse(appStateStr);
+                                if (appState[_conversationId]) {
+                                    appState[_conversationId]['automationGoingOnAfterRefreshMyBot'] = isMyBotAutomationOnGoing
+                                    localStorage.setItem('agentAssistState', JSON.stringify(appState))
+                                }
+                                $('#noAutoRunning').addClass('hide');
+                                
+                                _createRunTemplateContainerForMyTab(agentBotuuids, target.dataset.intentName, myBotDialogPositionId)
+                                let ids = target.id.split('-');
+                                $(`${!target?.dataset?.runMybot}` ? '.dialog-task-run-sec' : '.content-dialog-task-type .type-info-run-send').each((i, ele) => {
+                                    let id = ele.id?.split('-');
+                                    if (ids.includes(id[1])) {
+                                        idsOfMyBotDropDown = ele.id;
+                                    }
+                                });
+                                let addRemoveDropDown = document.getElementById(`MyBotaddRemoveDropDown-${agentBotuuids}`);
+                                addRemoveDropDown?.classList.remove('hide');
+                                $(`#myBotendTaks-${agentBotuuids}`).removeClass('hide')
+                                agentTabActive();
+                            }
+                            
+                        }
+
                         if (target.id.split('-').includes('overRideBtn')) {
                             let idsss = target.id.split('-');
                             idsss.shift();
