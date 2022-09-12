@@ -1,9 +1,9 @@
 {
   "name": "Requester",
   "author": {
-    "name": "Koreai",
-    "email": "test@kore.com",
-    "url": "https://kore.com/"
+    "name": "KoreAI",
+    "email": "koreai@kore.com",
+    "url": "https://kore.ai/"
   },
   "defaultLocale": "en",
   "private": true,
