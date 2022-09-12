@@ -146,18 +146,18 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             },
             "token": {}
         }
-        // $.ajax({
-        //     url: url + '/api/1.1/oAuth/token/jwtgrant',
-        //     type: 'POST',
-        //     crossDomain: true,
-        //     contentType: 'application/json',
-        //     headers: {
-        //         'User-Agent': this.userAgent,
-        //         "content-type": 'application/json'
-        //     },
-        //     data: JSON.stringify(payload),
-        //     dataType: "json",
-        //     success: function (result) {
+        $.ajax({
+            url: url + '/api/1.1/oAuth/token/jwtgrant',
+            type: 'POST',
+            crossDomain: true,
+            contentType: 'application/json',
+            headers: {
+                'User-Agent': this.userAgent,
+                "content-type": 'application/json'
+            },
+            data: JSON.stringify(payload),
+            dataType: "json",
+            success: function (result) {
                 chatConfig = window.KoreSDK.chatConfig;
                 var koreBot = koreBotChat();
                 AgentChatInitialize = new koreBot.chatWindow(chatConfig);
@@ -2214,6 +2214,25 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         userMessage = {};
                     }
                     
+                }
+
+                function terminateTheDialog(data, tabName){
+                    var appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                    var appState = JSON.parse(appStateStr);
+                    if( tabName == 'agentAutoIcon') {
+                        dialogTerminatedOrIntrupptedInMyBot(data, data.botId, userIntentInput, appState);
+                    }else if(tabName == 'userAutoIcon'){
+                        isAutomationOnGoing = false;
+                        if (appState[_conversationId]) {
+                            appState[_conversationId].automationGoingOn = isAutomationOnGoing;
+                            appState[_conversationId]['automationGoingOnAfterRefresh'] = isAutomationOnGoing;
+                            localStorage.setItem('agentAssistState', JSON.stringify(appState))
+                        }
+                          isOverRideMode = false;
+                        $(`.override-input-div`).remove();
+                        addFeedbackHtmlToDom(data, data.botId, userIntentInput);
+                        userMessage = {};
+                    }
                 }
 
                 function dialogTerminatedOrIntrupptedInMyBot(data, botId, userIntentInput, appState) {
@@ -5168,6 +5187,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             "positionId": target.dataset.positionId
                                         });
                                     document.getElementById("loader").style.display = "block";
+                                    terminateTheDialog({ conversationId: _agentAssistDataObj.conversationId,
+                                        botId: _botId,"positionId": target.dataset.positionId},'userAutoIcon')
                                 } else {
                                     var mybotTabTerminateBtnId = '#myBotTerminateAgentDialog-' + myBotDropdownHeaderUuids;
                                     $(mybotTabTerminateBtnId).addClass('hide');
@@ -5175,6 +5196,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         { conversationId: _agentAssistDataObj.conversationId, botId: _botId, value: 'discard all', isSearch: false,
                                         "positionId": target.dataset.positionId });
                                     document.getElementById("loader").style.display = "block";
+                                    terminateTheDialog({ conversationId: _agentAssistDataObj.conversationId,
+                                     botId: _botId,"positionId": target.dataset.positionId},'agentAutoIcon')
                                 }
                                 scrollToBottom();
                             }
@@ -6248,17 +6271,17 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 $('.body-data-container').scrollTop($('.body-data-container').prop("scrollHeight"));
 
                 return publicAPIs;
-        //    },
-        //     error: function (error) {
-        //         console.error("token is wrong");
-        //         if (error.status === 500) {
-        //             $(`#${containerId}`).html("Issue identified with the backend services! Please reach out to AgentAssist Admin.")
-        //         } else {
-        //             $(`#${containerId}`).html("Issue identified in configuration settings! Please reach out to AgentAssist Admin.")
-        //         }
-        //         return false;
-        //     }
-        // });
+           },
+            error: function (error) {
+                console.error("token is wrong");
+                if (error.status === 500) {
+                    $(`#${containerId}`).html("Issue identified with the backend services! Please reach out to AgentAssist Admin.")
+                } else {
+                    $(`#${containerId}`).html("Issue identified in configuration settings! Please reach out to AgentAssist Admin.")
+                }
+                return false;
+            }
+        });
     }
 
     function prepareConversation() {
