@@ -146,18 +146,18 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             },
             "token": {}
         }
-        // $.ajax({
-        //     url: url + '/api/1.1/oAuth/token/jwtgrant',
-        //     type: 'POST',
-        //     crossDomain: true,
-        //     contentType: 'application/json',
-        //     headers: {
-        //         'User-Agent': this.userAgent,
-        //         "content-type": 'application/json'
-        //     },
-        //     data: JSON.stringify(payload),
-        //     dataType: "json",
-        //     success: function (result) {
+        $.ajax({
+            url: url + '/api/1.1/oAuth/token/jwtgrant',
+            type: 'POST',
+            crossDomain: true,
+            contentType: 'application/json',
+            headers: {
+                'User-Agent': this.userAgent,
+                "content-type": 'application/json'
+            },
+            data: JSON.stringify(payload),
+            dataType: "json",
+            success: function (result) {
                 chatConfig = window.KoreSDK.chatConfig;
                 var koreBot = koreBotChat();
                 AgentChatInitialize = new koreBot.chatWindow(chatConfig);
@@ -187,14 +187,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             var appStateStr = localStorage.getItem('agentAssistState') || '{}';
                             var appState = JSON.parse(appStateStr);
                             if (appState[currentEndedConversationId]) {
-                                let request_resolution_comments = {
-                                    conversationId: e.data?.convsId,
-                                    userId: '',
-                                    botId: e.data?.botId,
-                                    sessionId: koreGenerateUUID(),
-                                    chatHistory: e.data?.chatHistory
-                                }
-                                _agentAsisstSocket.emit('request_resolution_comments', request_resolution_comments);
                                 delete appState[currentEndedConversationId];
                             }
                             return;
@@ -223,6 +215,27 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             if (userInputData.author.type === 'USER') {
                                 _agentAsisstSocket.emit('agent_assist_request', agent_assist_request);
                             }
+                        }
+                    })
+
+                    window.addEventListener('endOfConversation', function(e){
+                        if(e.data.convsId) {
+                            let currentEndedConversationId = e.data.convsId;
+                            var appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                            var appState = JSON.parse(appStateStr);
+                            if (appState[currentEndedConversationId]) {
+                                let request_resolution_comments = {
+                                    conversationId: e.data?.convsId,
+                                    userId: '',
+                                    botId: e.data?.botId,
+                                    sessionId: koreGenerateUUID(),
+                                    chatHistory: e.data?.chatHistory
+                                }
+                                _agentAsisstSocket.emit('request_resolution_comments', request_resolution_comments);
+                               // localStorage.clear(appState[currentEndedConversationId]);
+                               delete appState[currentEndedConversationId];
+                            }
+                            return;
                         }
                     })
                 }
@@ -376,7 +389,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     });
 
                     _agentAsisstSocket.on('response_resolution_comments', (data) => {
-                        window.parent.postMessage(data, "*")
+                        window.parent.postMessage(data, "conversation_summary")
                     });
 
                 }
@@ -6248,17 +6261,17 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 $('.body-data-container').scrollTop($('.body-data-container').prop("scrollHeight"));
 
                 return publicAPIs;
-        //    },
-        //     error: function (error) {
-        //         console.error("token is wrong");
-        //         if (error.status === 500) {
-        //             $(`#${containerId}`).html("Issue identified with the backend services! Please reach out to AgentAssist Admin.")
-        //         } else {
-        //             $(`#${containerId}`).html("Issue identified in configuration settings! Please reach out to AgentAssist Admin.")
-        //         }
-        //         return false;
-        //     }
-        // });
+           },
+            error: function (error) {
+                console.error("token is wrong");
+                if (error.status === 500) {
+                    $(`#${containerId}`).html("Issue identified with the backend services! Please reach out to AgentAssist Admin.")
+                } else {
+                    $(`#${containerId}`).html("Issue identified in configuration settings! Please reach out to AgentAssist Admin.")
+                }
+                return false;
+            }
+        });
     }
 
     function prepareConversation() {
