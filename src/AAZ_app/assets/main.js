@@ -4,9 +4,7 @@ import config from "./config.json" assert { type: 'json' };
 
 var zendeskBaseUrl = config.zendeskBaseUrl;
 let agentAssistDataUUID = config.agentAssistDataUUID;
-// let username = config.username;
-// let password = config.password;
-let oAuthToken = config.oAuthToken;
+
 
 let customDataUrl = `${zendeskBaseUrl}/api/sunshine/objects/records/${agentAssistDataUUID}`;
 
@@ -20,10 +18,10 @@ var client = ZAFClient.init();
 var iframeURL = null;
 
 
-async function getRequesterName(client){
+async function getRequesterName(client) {
 
   let result = await client.get("ticket.requester.name");
-  if(result)
+  if (result)
     return result['ticket.requester.name'];
   return null
 }
@@ -52,7 +50,7 @@ function sendMessageToAgentAssist(conversationId, message) {
 }
 
 async function getTicketId(client) {
-  
+
   let ticket = await client.context();
   if (ticket)
     return ticket.ticketId
@@ -77,16 +75,25 @@ function base64url(source) {
 async function generateURL() {
   return new Promise(async (resolve, reject) => {
 
-    let headers = new Headers();
+    // let headers = new Headers();
 
-    headers.append("Authorization", "Bearer " + oAuthToken);
-    headers.append('Content-Type', 'application/json')
+    // headers.append("Authorization", "Bearer " + oAuthToken);
+    // headers.append('Content-Type', 'application/json')
 
-    let response = await fetch(customDataUrl, { method: 'GET', headers: headers })
-    if (response.ok) { // if HTTP-status is 200-299
-      let json = await response.json();
+    // let response = await fetch(customDataUrl, { method: 'GET', headers: headers })
+    // if (response.ok) { // if HTTP-status is 200-299
+    //   let json = await response.json();
 
-      var tokenData = json.data.attributes;
+    let options = {
+      url: customDataUrl,
+      type: 'GET',
+      // headers: headers
+    }
+    let response = await client.request(options);
+    console.log(response);
+    if (response) {
+
+      var tokenData = response.data.attributes;
       var header = {
         "alg": "HS256",
         "typ": "JWT"
@@ -118,7 +125,7 @@ async function generateURL() {
       var signedToken = token + "." + signature;
 
       let requester = await getRequesterName(client);
-      
+
       let customdata = encodeURI(JSON.stringify({ fName: requester || 'Customer', lName: '' }));
       let smartassistURL = tokenData.agentassistURL.replace("agentassist", "smartassist");
       let activeConversationId = await getTicketId(client);
@@ -161,7 +168,7 @@ async function main() {
     console.log("app registered =========> ", event);
   });
 
-  
+
   window.addEventListener("message", async (event) => {
     // console.log("Kore Agent Assist inside window eventlistener", activeConversationId, event.data);
     var recordId = activeConversationId;

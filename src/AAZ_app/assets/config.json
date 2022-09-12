@@ -1,8 +1,4 @@
 {
     "zendeskBaseUrl" : "https://self2959.zendesk.com",
-    "agentAssistDataUUID" : "d34a70a3-2e6c-11ed-b0aa-af398216b629",
-    "username" : "himabindub07@gmail.com",
-    "password" : "bxvHwC@7",
-    "oAuthToken" : "4c67db94563d4f79dbfa4b508a25abcc05e26c9c2fac6317f688af56b1361298"
-
+    "agentAssistDataUUID" : "d34a70a3-2e6c-11ed-b0aa-af398216b629"
 }
