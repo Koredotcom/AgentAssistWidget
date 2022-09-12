@@ -714,6 +714,7 @@ html, body{
     padding: 5px 12px;
     min-height: 33px;
     position: relative;
+    text-align: justify;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content {
     width: 100%;
@@ -752,6 +753,8 @@ html, body{
     text-overflow: ellipsis;
     display: inline-block;
     max-width: 100%;
+    position: relative;
+    text-align: justify;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content .ast-carrotup{
     display: inline-block;
@@ -759,6 +762,16 @@ html, body{
     position: relative;
     top: -2px;
     cursor: pointer;
+}
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send.is-dropdown-show-default .left-content .ast-carrotup{
+    position: absolute;
+    top: 6px;
+    right: 0;
+}
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send.is-dropdown-show-default.is-dropdown-open .left-content .ast-carrotup{
+    position: relative;
+    top: 0;
+    margin-left: 5px;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content .ast-carrotup.rotate-carrot{
     top: -4px;
@@ -792,6 +805,29 @@ html, body{
     padding-right: 80px;
     text-align: justify;
     word-break: break-word;
+}
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send.is-dropdown-show-default .left-content .title-text{
+    padding-right: 18px;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
+}
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send.is-dropdown-show-default.is-dropdown-open:hover .left-content .title-text{
+    overflow: inherit !important;
+    white-space: normal !important;
+    padding: 0 !important;
+    margin-right: 80px;
+}
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send.is-dropdown-show-default.is-dropdown-open .left-content .title-text{
+    overflow: inherit !important;
+    white-space: normal !important;
+    padding: 0 !important;
+}
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send.is-dropdown-show-default.is-dropdown-open:hover .left-content .title-text{
+    overflow: inherit !important;
+    white-space: normal !important;
+    padding: 0 !important;
+    margin-right: 80px;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send:hover .action-links {
     display: flex;
@@ -1134,19 +1170,12 @@ border: 1px solid transparent !important;
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data .run-info-content .agent-utt:hover .action-links {
     display: flex;
 }
-
-.overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send:not(.is-dropdown-open) .title-text{
+.overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send:hover .title-text{
     white-space: normal !important; 
+    padding-right: 80px;
+    text-align: justify;
     word-break: break-word;
-    margin-right: 80px !important;
 }
-
-.overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send.is-dropdown-open:hover .title-text .ast-carrotup{
-    position: relative;
-    margin: 0 6px;
-    top: 0px;
-}
-
 .overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send:hover .action-links {
     display: flex;
 }
@@ -1536,6 +1565,7 @@ border: 1px solid transparent !important;
     padding: 5px 12px;
     min-height: 33px;
     position: relative;
+    text-align: justify;
 }
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content {
     width: 100%;
@@ -1570,6 +1600,21 @@ border: 1px solid transparent !important;
     text-overflow: ellipsis;
     display: inline-block;
     max-width: 100%;
+    position: relative;
+}
+.agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send.is-dropdown-show-default .left-content .title-text{
+    padding-right: 18px;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
+}
+.agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send.is-dropdown-show-default.is-dropdown-open .left-content .title-text{
+    overflow: inherit !important;
+    white-space: normal !important;
+    padding: 0 !important;
+}
+.agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send.is-dropdown-show-default.is-dropdown-open:hover .left-content .title-text{
+    margin-right: 80px;
 }
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content .desc-text {
     font-weight: 400;
@@ -1593,6 +1638,17 @@ border: 1px solid transparent !important;
     position: relative;
     top: -3px;
     cursor: pointer;
+}
+
+.agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send.is-dropdown-show-default .left-content .ast-carrotup{
+    position: absolute;
+    top: 4px !important;
+    right: 0;
+}
+.agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send.is-dropdown-show-default.is-dropdown-open .left-content .ast-carrotup{
+    position: relative;
+    top: 0 !important;
+    margin-left: 5px;
 }
 
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content .ast-carrotup.rotate-carrot{
@@ -1937,6 +1993,7 @@ border: 1px solid transparent !important;
     padding: 5px 12px;
     min-height: 33px;
     position: relative;
+    text-align: justify;
 }
 .overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content {
     width: 100%;
@@ -1950,7 +2007,6 @@ border: 1px solid transparent !important;
     padding-right: 0px;
     transition: 0.2s all ease;
     padding-top : 5px;
-    text-align: justify;
 }
 .overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content.show-text-on-hover:hover {
     overflow: inherit;
@@ -1973,15 +2029,26 @@ border: 1px solid transparent !important;
     text-overflow: ellipsis;
     display: inline-block;
     max-width: 100%;
+    text-align: justify;
+}
+.overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send.is-dropdown-show-default .left-content .title-text{
     position: relative;
+    padding-right: 18px;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
 }
-.overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send.is-dropdown-open .left-content .title-text{
-    padding-right: 18px !important;
+.overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send.is-dropdown-show-default.is-dropdown-open .left-content .title-text{
+    overflow: inherit !important;
+    white-space: normal !important;
+    padding: 0 !important;
 }
-.overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send.is-dropdown-open:hover .left-content .title-text{
-    padding-right: 80px !important;
+.overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send.is-dropdown-show-default.is-dropdown-open:hover .left-content .title-text{
+    overflow: inherit !important;
+    white-space: normal !important;
+    padding: 0 !important;
+    margin-right: 80px;
 }
-
 .overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content .ast-carrotup{
     display: inline-block;
     font-size: 6px;
@@ -1989,20 +2056,21 @@ border: 1px solid transparent !important;
     top: -2px;
     cursor: pointer;
 }
-.overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send.is-dropdown-open .left-content .ast-carrotup{
-    display: inline-block;
-    font-size: 6px;
+.overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send.is-dropdown-show-default .left-content .ast-carrotup{
     position: absolute;
-    top: 4px;
+    top: 4px !important;
     right: 0;
-    cursor: pointer;
 }
+.overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send.is-dropdown-show-default.is-dropdown-open .left-content .ast-carrotup{
+    position: relative;
+    top: 0 !important; 
+    margin-left: 5px;
+}
+
+
 .overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content .ast-carrotup.rotate-carrot{
-    top: -2px;
+    top: -4px;
     transform: rotate(180deg);
-}
-.overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send.is-dropdown-open .left-content .ast-carrotup.rotate-carrot{
-    top: 0px;
 }
 .overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content .desc-text {
     font-weight: 400;
@@ -3314,4 +3382,11 @@ input.no-autofill-bkg:-webkit-autofill {
 }
 .m-10{
     margin: 10px 0;
+}
+
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type#faqssArea .content-dialog-task-type{
+    padding-left: 0;
+}
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type#faqssArea .content-dialog-task-type .type-with-img-title{
+    padding-left: 24px;
 }

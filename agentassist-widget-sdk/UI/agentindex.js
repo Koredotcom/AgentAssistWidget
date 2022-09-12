@@ -898,6 +898,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             data-check-lib="true" id="checkLib-${uuids+index}"></i>`;
                                     // faqs.append(checkHtml);
                                     // $(`#titleLib-${uuids+index}`).addClass('noPadding');
+                                    $(`#faqDivLib-${uuids+index}`).addClass('is-dropdown-show-default');
                                     document.getElementById(`titleLib-${uuids+index}`).insertAdjacentHTML('beforeend',checkHtml);
                                 } else {
                                     let a = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display #faqDivLib-${uuids+index}`) : $(`#overLaySearch #faqDivLib-${uuids+index}`);
@@ -926,6 +927,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 if(data.suggestions.faqs.length === 1 && !ele.answer) {
                                     document.getElementById(`checkLib-${uuids+index}`).click();
                                     $(`#checkLib-${uuids+index}`).addClass('hide');
+                                    $(`#faqDivLib-${uuids+index}`).removeClass('is-dropdown-show-default');
                                 }
                             });
 
@@ -1843,6 +1845,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         data-check="true" id="check-${uuids+index}"></i>`;
                                     // faqs.append(checkHtml);
                                     // $(`#title-${uuids+index}`).addClass('noPadding');
+                                    $(`#faqDiv-${uuids+index}`).addClass('is-dropdown-show-default');
                                     document.getElementById(`title-${uuids+index}`).insertAdjacentHTML('beforeend',checkHtml);
                                 } else {
                                     let a = $(`#faqDiv-${uuids+index}`);
@@ -1869,6 +1872,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             if(data.suggestions.faqs.length === 1 && !ele.answer) {
                                 document.getElementById(`check-${uuids+index}`).click();
                                 $(`#check-${uuids+index}`).addClass('hide');
+                                $(`#faqDiv-${uuids+index}`).removeClass('is-dropdown-show-default');
                             }
                             })
                         }
@@ -2717,6 +2721,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     data-check="true" id="check-${uniqueID}"></i>`;
                                                     // faqs.append(checkHtml);
                                                     // $(`#title-${uniqueID}`).addClass('noPadding');
+                                                    $(`#faqDiv-${uuids+index}`).addClass('is-dropdown-show-default');
                                                     document.getElementById(`title-${uniqueID}`).insertAdjacentHTML('beforeend',checkHtml);
                                                 } else {
                                                     let a = $(`#faqDiv-${uniqueID}`);
