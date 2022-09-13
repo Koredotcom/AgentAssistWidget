@@ -3384,9 +3384,23 @@ input.no-autofill-bkg:-webkit-autofill {
     margin: 10px 0;
 }
 
-.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type#faqssArea .content-dialog-task-type{
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type{
     padding-left: 0;
 }
-.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type#faqssArea .content-dialog-task-type .type-with-img-title{
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-with-img-title{
+    padding-left: 24px;
+}
+.overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type{
+    padding-left: 0px;
+}
+.overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-with-img-title{
+    padding-left: 24px;
+}
+
+.agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type{
+    padding-left: 0px !important;
+}
+
+.agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-with-img-title{
     padding-left: 24px;
 }
