@@ -746,18 +746,23 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
                         if (data.suggestions) {
                             isSuggestionProcessed = false;
+                            if (data?.suggestions?.searchassist && Object.keys(data.suggestions.searchassist).length > 0) {
+                                data.suggestions = formatSearchAssistData(data.suggestions);
+                            }
+
+                            let dialogsLength = data.suggestions.dialogs?.length || 0;
+                            let faqsLength = data.suggestions.faqs?.length || 0;
+                            let articlesLength = data.suggestions.articles?.length || 0;
+                            let totalSuggestionLength = dialogsLength + faqsLength + articlesLength || 0;
+                            let searchResultText = (totalSuggestionLength == 1) ? " Search result for " : " Search results for "
+
                             if (currentTabActive == 'searchAutoIcon') {
                                 let searchTextDisplay = document.getElementById('search-text-display');
-                                html = `<div class="searched-intent" id="librarySearchText">Search results for '${sanitizeHTML(data.userInput)}' </div>`
+                                html = `<div class="searched-intent" id="librarySearchText">${totalSuggestionLength} ${searchResultText} '${sanitizeHTML(data.userInput)}' </div>`
                                 searchTextDisplay.innerHTML = html;
                             } else {
-                                let dialogsLength = data.suggestions.dialogs?.length || 0;
-                                let faqsLength = data.suggestions.faqs?.length || 0;
-
-                                let articlesLength = data.suggestions.articles?.length || 0;
-                                let totalSuggestionLength = dialogsLength + faqsLength + articlesLength || 0;
                                 if(totalSuggestionLength){
-                                    $('#overLaySearch').html(`<div class="search-results-text">${totalSuggestionLength} Search results for '${sanitizeHTML(data.userInput)}' <span class="show-all hide">Show all</span></div>`)
+                                    $('#overLaySearch').html(`<div class="search-results-text">${totalSuggestionLength} ${searchResultText} '${sanitizeHTML(data.userInput)}' <span class="show-all hide">Show all</span></div>`)
                                 }
 
                                 // if ((dialogsLength > 0) && (faqsLength > 0)) {
@@ -945,8 +950,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         console.log(data.suggestions, "suggestion");
 
                         if (data?.suggestions?.searchassist && Object.keys(data.suggestions.searchassist).length > 0) {
-
-                            data.suggestions = formatSearchAssistData(data.suggestions);
 
                             console.log("article lenght");
                             let automationSuggestions = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display`) : $('#overLaySearch');
