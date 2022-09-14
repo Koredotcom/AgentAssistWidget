@@ -158,6 +158,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             data: JSON.stringify(payload),
             dataType: "json",
             success: function (result) {
+                let isOnlyOneFaqOnSearch = false;
                 chatConfig = window.KoreSDK.chatConfig;
                 var koreBot = koreBotChat();
                 AgentChatInitialize = new koreBot.chatWindow(chatConfig);
@@ -750,7 +751,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
                     }
 
-
                     if (data.isSearch && answerPlaceableIDs.length == 0) {
                         ShowSearchContent();
                         if (data.value.length > 0 && currentTabActive == 'searchAutoIcon') {
@@ -910,10 +910,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                
                                 let faqs = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${uuids+index}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${uuids+index}`);
                                 if (!ele.answer) {
+                                    let positionID = "dg-"+koreGenerateUUID();
                                     let checkHtml = `
                             <i class="ast-carrotup" data-conv-id="${data.conversationId}"
                             data-bot-id="${botId}" data-intent-name="${ele.question}"
-                            data-check-lib="true" id="checkLib-${uuids+index}"></i>`;
+                            data-check-lib="true" id="checkLib-${uuids+index}" data-position-id="${positionID}"></i>`;
                                     // faqs.append(checkHtml);
                                     // $(`#titleLib-${uuids+index}`).addClass('noPadding');
                                     $(`#faqDivLib-${uuids+index}`).addClass('is-dropdown-show-default');
@@ -937,12 +938,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     setTimeout(() => {
                                         updateSeeMoreButtonForAgent(uuids + index);
                                     }, waitingTimeForSeeMoreButton);
-                                }
-                                
-                                
-                                
+                                }                   
                                 // _msgsResponse.message.push(body);
                                 if(data.suggestions.faqs.length === 1 && !ele.answer) {
+                                    isOnlyOneFaqOnSearch = true;
                                     document.getElementById(`checkLib-${uuids+index}`).click();
                                     $(`#checkLib-${uuids+index}`).addClass('hide');
                                     $(`#faqDivLib-${uuids+index}`).removeClass('is-dropdown-show-default');
@@ -1101,6 +1100,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             }
                             
 
+                        }
+                        if(isOnlyOneFaqOnSearch){
+                            let index = answerPlaceableIDs.indexOf(ele=>ele.positionId == data.positionId);
+                            answerPlaceableIDs.splice(index, 1);
+                            isOnlyOneFaqOnSearch = false;
                         }
                     }
 
@@ -1881,10 +1885,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 faqsSuggestions.innerHTML += faqHtml;
                                 let faqs = $(`.type-info-run-send #faqSection-${uuids+index}`);
                                 if (!ele.answer) {
+                                    let positionID = 'dg-'+koreGenerateUUID();
                                     let checkHtml = `
                         <i class="ast-carrotup" data-conv-id="${data.conversationId}"
                         data-bot-id="${botId}" data-intent-name="${ele.question}"
-                        data-check="true" id="check-${uuids+index}"></i>`;
+                        data-check="true" id="check-${uuids+index}" data-position-id="${positionID}"></i>`;
                                     // faqs.append(checkHtml);
                                     // $(`#title-${uuids+index}`).addClass('noPadding');
                                     $(`#faqDiv-${uuids+index}`).addClass('is-dropdown-show-default');
@@ -5606,10 +5611,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 faq.append(answerHtml);
                                 $(`#dynamicBlock #${target.id}`).attr('data-answer-render', 'false');
                                 faqDiv.append(faqaction);
-                                answerPlaceableIDs.push({id:`desc-${id.join('-')}`, input: target.dataset.intentName});
+                                answerPlaceableIDs.push({id:`desc-${id.join('-')}`, input: target.dataset.intentName, positionId: target.dataset.positionId});
                                 $(`#dynamicBlock #${target.id}`).addClass('rotate-carrot');
                                 $(`#dynamicBlock #faqDiv-${id.join('-')}`).addClass('is-dropdown-open');
-                                AgentAssist_run_click(evt);
+                                AgentAssist_run_click(evt, target.dataset.positionId);
                                 return
                             }
                             if ($(`#dynamicBlock .type-info-run-send #faqSection-${id.join('-')} .ast-carrotup.rotate-carrot`).length <= 0) {
@@ -5649,10 +5654,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 faq.append(answerHtml);
                                 $(`#overLaySearch #${target.id}`).attr('data-answer-render', 'false');
                                 faqDiv.append(faqaction);
-                                answerPlaceableIDs.push({id:`descLib-${id.join('-')}`, input: target.dataset.intentName});
+                                answerPlaceableIDs.push({id:`descLib-${id.join('-')}`, input: target.dataset.intentName, positionId: target.dataset.positionId});
                                 $(`#overLaySearch #${target.id}`).addClass('rotate-carrot');
                                 $(`#overLaySearch #faqDivLib-${id.join('-')}`).addClass('is-dropdown-open');
-                                AgentAssistPubSub.publish('searched_Automation_details', { conversationId: evt.target.dataset.convId, botId: evt.target.dataset.botId, value: evt.target.dataset.intentName, isSearch: true });
+                                AgentAssistPubSub.publish('searched_Automation_details', { conversationId: evt.target.dataset.convId, botId: evt.target.dataset.botId, value: evt.target.dataset.intentName, isSearch: true, positionId: target.dataset.positionId });
                                 return
                             }
 
@@ -5669,10 +5674,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 faq.append(answerHtml);
                                 $(`#search-text-display #${target.id}`).attr('data-answer-render', 'false');
                                 faqDiv.append(faqaction);
-                                answerPlaceableIDs.push({id:`descLib-${id.join('-')}`, input: target.dataset.intentName});
+                                answerPlaceableIDs.push({id:`descLib-${id.join('-')}`, input: target.dataset.intentName, positionId: target.dataset.positionId});
                                 $(`#search-text-display #${target.id}`).addClass('rotate-carrot');
                                 $(`#search-text-display #faqDivLib-${id.join('-')}`).addClass('is-dropdown-open');
-                                AgentAssistPubSub.publish('searched_Automation_details', { conversationId: evt.target.dataset.convId, botId: evt.target.dataset.botId, value: evt.target.dataset.intentName, isSearch: true });
+                                AgentAssistPubSub.publish('searched_Automation_details', { conversationId: evt.target.dataset.convId, botId: evt.target.dataset.botId, value: evt.target.dataset.intentName, isSearch: true, positionId: target.dataset.positionId });
                                 return
                             }
                             if (currentTabActive == 'searchAutoIcon') {
