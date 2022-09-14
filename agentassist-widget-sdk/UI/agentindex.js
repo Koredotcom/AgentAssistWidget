@@ -1523,6 +1523,32 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }
                 }
 
+                function collapseOldDialoguesInMyBot(){
+                        if($(`#myBotAutomationBlock .collapse-acc-data`).length > 0){
+                            let listItems = $("#myBotAutomationBlock .collapse-acc-data");
+                            listItems.each(function(idx, collapseElement) {
+                                console.log(collapseElement.classList, "classlist", collapseElement.id);
+                                if(!collapseElement.id.includes('smallTalk')  && collapseElement.id.includes('dropDownData')){
+                                    collapseElement.classList.add('hide');
+                                }
+                            });
+                        }
+                }
+
+                function collapseOldDialoguesInAssist(){
+                    if(scrollAtEnd){
+                        if($(`#dynamicBlocksData .collapse-acc-data`).length > 0){
+                            let listItems = $("#dynamicBlocksData .collapse-acc-data");
+                            listItems.each(function(idx, collapseElement) {
+                                console.log(collapseElement.classList, "classlist", collapseElement.id);
+                                if(!collapseElement.id.includes('smallTalk')  && collapseElement.id.includes('dropDownData')){
+                                    collapseElement.classList.add('hide');
+                                }
+                            });
+                        }
+                    }
+                }
+
                 function processAgentAssistResponse(data, convId, botId) {
                     console.log("AgentAssist >>> agentassist_response:", data);
                     let automationSuggestions = $('#dynamicBlock .dialog-task-accordiaon-info');
@@ -1894,8 +1920,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
                         setTimeout(() => {         
                             updateNewMessageUUIDList(responseId);
-                        }, waitingTimeForUUID);                        
-
+                        }, waitingTimeForUUID);   
+                        collapseOldDialoguesInAssist();
                     } else {
                         if (data.type === 'text' && data.suggestions) {
                             let faqAnswerIdsPlace ;
@@ -1929,6 +1955,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
                         if (data.suggestions) {
                             automationSuggestions.length >= 1 ? (automationSuggestions[automationSuggestions.length - 1].classList.remove('hide')) : ''
+                            collapseOldDialoguesInAssist();  
                         }
                     }
 
@@ -2124,7 +2151,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             if (data.buttons?.length > 1) {
                                 if (i == 0) {
                                     dynamicBlockDiv.prepend(welcomeMsgHtml);
-                                    let runInfoDivOfwelcome = $(`#dynamicBlock .collapse-acc-data .run-info-content`);
+                                    let runInfoDivOfwelcome = $(`#dynamicBlock .collapse-acc-data#smallTalk-${uuids} .run-info-content`);
                                     let contentHtml = `
                                 <div class="title">Customer has waited for an agent for few seconds.<br/>Here are some appropriate opening lines.</div>
                                    <div class="agent-utt">
@@ -2138,7 +2165,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 </div>`;
                                     runInfoDivOfwelcome.append(contentHtml);
                                 } else {
-                                    let runInfoDivOfwelcome = $(`#dynamicBlock .collapse-acc-data .run-info-content`);
+                                    let runInfoDivOfwelcome = $(`#dynamicBlock .collapse-acc-data#smallTalk-${uuids} .run-info-content`);
                                     let contentHtmlWithoutTellCus = `
                                     <div class="agent-utt">
                                         <div class="title-data" id="displayData-${uuids}">${ele.value}</div>
@@ -2172,7 +2199,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                              </div>
                          </div>
                          </div>`;
-                                dynamicBlockDiv.append(botResHtml)
+                                dynamicBlockDiv.append(botResHtml);
+                                collapseOldDialoguesInAssist();
                             }
                         });
                         setTimeout(() => {  
@@ -5262,6 +5290,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                         }
                         if (runAutoForAgent) {
+                            collapseOldDialoguesInMyBot();
                             updateCurrentTabInState(_conversationId, 'myBotTab')
                             $('#agentSearch').val('');
                             $('.overlay-suggestions').addClass('hide').removeAttr('style');
@@ -5331,6 +5360,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     })
                                 }
                                 if (libraryRunBtn) {
+                                    collapseOldDialoguesInAssist();
                                     updateCurrentTabInState(_conversationId, 'assistTab')
                                     $('.empty-data-no-agents').addClass('hide');
                                     $('#agentSearch').val('');
@@ -6622,9 +6652,10 @@ function AgentAssist_feedBack_Update_Request(e) {
 }
 
 function scrollToBottom() {
+    $(window).trigger('resize');
     setTimeout(() => {
         $("#bodyContainer").scrollTop($("#bodyContainer").prop("scrollHeight"));
-    }, 0);
+    }, 10);
 }
 
 function AgentAssist_run_click(e, dialogId) {
