@@ -183,15 +183,34 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                     window.addEventListener("message", function (e) {
                         console.log(e.data);//your data is captured in e.data
-                        if(e.data.convsId) {
-                            let currentEndedConversationId = e.data.convsId;
+                        if(e.data.name ==='agentAssist.endOfConversation' && e.data.conversationId) {
+                            let currentEndedConversationId = e.data.conversationId;
                             var appStateStr = localStorage.getItem('agentAssistState') || '{}';
                             var appState = JSON.parse(appStateStr);
                             if (appState[currentEndedConversationId]) {
-                                delete appState[currentEndedConversationId];
+                                let request_resolution_comments = {
+                                    conversationId: e.data?.conversationId,
+                                    userId: '',
+                                    botId: _botId,
+                                    sessionId: koreGenerateUUID(),
+                                    chatHistory: e.data?.payload?.chatHistory
+                                }
+                                _agentAsisstSocket.emit('request_resolution_comments', request_resolution_comments);
+                                console.log("request_resolution_comments event published", request_resolution_comments)
+                               // localStorage.clear(appState[currentEndedConversationId]);
+                               delete appState[currentEndedConversationId];
                             }
                             return;
                         }
+                        // if(e.data.convsId) {
+                        //     let currentEndedConversationId = e.data.convsId;
+                        //     var appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                        //     var appState = JSON.parse(appStateStr);
+                        //     if (appState[currentEndedConversationId]) {
+                        //         delete appState[currentEndedConversationId];
+                        //     }
+                        //     return;
+                        // }
                         let userInputData = e.data;
                         let agent_assist_request = {
                             'author': {
@@ -220,25 +239,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     })
 
                     window.addEventListener('agentAssist.endOfConversation', function(e){
-                        console.log("----endOfConversation event captured ", e)
-                        if(e.data.convsId) {
-                            let currentEndedConversationId = e.data.convsId;
-                            var appStateStr = localStorage.getItem('agentAssistState') || '{}';
-                            var appState = JSON.parse(appStateStr);
-                            if (appState[currentEndedConversationId]) {
-                                let request_resolution_comments = {
-                                    conversationId: e.data?.convsId,
-                                    userId: '',
-                                    botId: e.data?.botId,
-                                    sessionId: koreGenerateUUID(),
-                                    chatHistory: e.data?.chatHistory
-                                }
-                                _agentAsisstSocket.emit('request_resolution_comments', request_resolution_comments);
-                               // localStorage.clear(appState[currentEndedConversationId]);
-                               delete appState[currentEndedConversationId];
-                            }
-                            return;
-                        }
+                        console.log("----endOfConversation event captured ", e)   
                     })
                 }
                 var _agentAssistDataObj = this;
