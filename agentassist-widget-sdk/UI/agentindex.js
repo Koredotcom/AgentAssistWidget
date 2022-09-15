@@ -219,7 +219,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
                     })
 
-                    window.addEventListener('endOfConversation', function(e){
+                    window.addEventListener('agentAssist.endOfConversation', function(e){
                         console.log("----endOfConversation event captured ", e)
                         if(e.data.convsId) {
                             let currentEndedConversationId = e.data.convsId;
