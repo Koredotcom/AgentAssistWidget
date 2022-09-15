@@ -220,6 +220,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     })
 
                     window.addEventListener('endOfConversation', function(e){
+                        console.log("----endOfConversation event captured ", e)
                         if(e.data.convsId) {
                             let currentEndedConversationId = e.data.convsId;
                             var appStateStr = localStorage.getItem('agentAssistState') || '{}';
@@ -233,6 +234,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     chatHistory: e.data?.chatHistory
                                 }
                                 _agentAsisstSocket.emit('request_resolution_comments', request_resolution_comments);
+                                console.log("request_resolution_comments event published", request_resolution_comments)
                                // localStorage.clear(appState[currentEndedConversationId]);
                                delete appState[currentEndedConversationId];
                             }
