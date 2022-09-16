@@ -220,6 +220,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             },
                             'botId': _botId,
                             'conversationId': userInputData.conversationid,
+                            'experience': isCallConversation === 'true' ? 'voice':'chat',
                             'query': userInputData.value,
                         }
                         if (isCallConversation === 'true') {
@@ -289,6 +290,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             "botId": _botId,
                             "conversationId": _agentAssistDataObj.conversationId,
                             "query": "",
+                            'experience': isCallConversation === 'true' ? 'voice':'chat',
                             "enable_override_userinput": false
                         }
                         if(isOverRideMode) {
@@ -388,6 +390,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             'conversationId': _agentAssistDataObj.conversationId,
                             'query': event.data.value,
                             'botId': _agentAssistDataObj.botId,
+                            'experience': isCallConversation === 'true' ? 'voice':'chat'
                         }
                         _agentAsisstSocket.emit('agent_assist_request', agent_assist_request);
                     });
@@ -4034,6 +4037,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     "botId": _botId,
                                     "conversationId": _agentAssistDataObj.conversationId,
                                     "query": "",
+                                    'experience': isCallConversation === 'true' ? 'voice':'chat',
                                     "enable_override_userinput": false
                                 }
                                 isOverRideMode ? _agentAsisstSocket.emit('enable_override_userinput', toggleObj) : '';
@@ -4044,6 +4048,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     "botId": _botId,
                                     "conversationId": _agentAssistDataObj.conversationId,
                                     "query": "",
+                                    'experience': isCallConversation === 'true' ? 'voice':'chat',
                                     "enable_override_userinput": true
                                 }
                                 isOverRideMode ? _agentAsisstSocket.emit('enable_override_userinput', toggleObj) : '';
@@ -5535,6 +5540,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 "conversationId": _agentAssistDataObj.conversationId,
                                 "query": "",
                                 "enable_override_userinput": true,
+                                'experience': isCallConversation === 'true' ? 'voice':'chat',
                                 "positionId": target.dataset.positionId
                             }
                             _agentAsisstSocket.emit('enable_override_userinput', overRideObj);
@@ -5581,6 +5587,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 "conversationId": _agentAssistDataObj.conversationId,
                                 "query": "",
                                 "enable_override_userinput": false,
+                                'experience': isCallConversation === 'true' ? 'voice':'chat',
                                 "positionId": target.dataset.positionId
                             }
                             _agentAsisstSocket.emit('enable_override_userinput', overRideObj);
@@ -6652,6 +6659,7 @@ function AgentAssist_feedBack_Update_Request(e) {
         orgId: '',
         taskId: e.taskid,
         positionId: e.dialogid,
+        'experience': isCallConversation === 'true' ? 'voice':'chat',
         "interactionType": currentTabActive == 'userAutoIcon'? 'assist': 'mybot'
     }
 
@@ -7053,6 +7061,7 @@ AgentAssistPubSub.subscribe('agent_usage_feedback', (msg, data) => {
         taskId: data.taskId,
         comment: data.comment,
         feedbackDetails: data.feedbackDetails,
+        'experience': isCallConversation === 'true' ? 'voice':'chat',
         "interactionType": currentTabActive == 'userAutoIcon'? 'assist': 'mybot'
     }
     _agentAsisstSocket.emit('agent_usage_feedback', agent_assist_request);
@@ -7066,6 +7075,7 @@ AgentAssistPubSub.subscribe('agent_assist_send_text', (msg, data) => {
         'query': data.value,
         'botId': data.botId,
         'agentId': '',
+        'experience': isCallConversation === 'true' ? 'voice':'chat',
         'positionId': data.positionId
     }
     if (data.intentName) {
