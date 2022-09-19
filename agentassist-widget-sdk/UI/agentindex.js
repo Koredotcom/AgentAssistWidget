@@ -306,7 +306,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         removingSendCopyBtnForCall();
                         document.getElementById("loader").style.display = "none";
                         // document.getElementById("addRemoveDropDown").style.display = "block";
-
                     })
 
                     _agentAsisstSocket.on('agent_feedback_response', (data) => {
@@ -397,7 +396,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     });
 
                     _agentAsisstSocket.on('response_resolution_comments', (data) => {
-                        window.parent.postMessage(data, "conversation_summary")
+                        var message = {
+                            name: "agentAssist.conversation_summary",
+                            conversationId: _conversationId,
+                            payload: data
+                            };
+                        window.parent.postMessage(message, '*');
                     });
 
                 }
