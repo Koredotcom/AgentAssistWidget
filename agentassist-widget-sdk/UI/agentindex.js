@@ -1463,7 +1463,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         $(titleElement).css({"overflow": "inherit", "white-space": "normal", "text-overflow" : "unset"});
                         $(descElement).css({"overflow": "inherit", "text-overflow" : "unset", "display" : "block", "white-space": "normal"});
                         let faqSectionHeight = $(sectionElement).css("height");
-			  let divSectionHeight = $(descElement).css("height");
+			  let divSectionHeight = $(descElement).css("height")  || '0px';;
                         faqSectionHeight = parseInt(faqSectionHeight.slice(0,faqSectionHeight.length-2));
                         divSectionHeight = parseInt(divSectionHeight.slice(0,divSectionHeight.length-2));
                         let faqMinHeight = $(divElement).css("min-height");
@@ -1490,6 +1490,17 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }
                 }
 
+
+                function updateSeeMoreOnAssistTabActive(){
+                    let faqSuggestionList = $('[id*="faqDiv-"]');
+                    faqSuggestionList.each(function() {
+                        let elemID = this.id.split('-');
+                        elemID.shift();
+                        let actualId = elemID.join('-')
+                        updateSeeMoreButtonForAssist(actualId);
+                    });
+                }
+
                 function updateSeeMoreButtonForAssist(id, article){
                     // let faqSourceTypePixel = ((sourceType === 'smartassist-color-scheme') ? 5 : 2) ;
                     let faqSourceTypePixel = 5;
@@ -1511,7 +1522,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         $(titleElement).css({"overflow": "inherit", "white-space": "normal", "text-overflow" : "unset"});
                         $(descElement).css({"overflow": "inherit", "text-overflow" : "unset", "display" : "block"});
                         let faqSectionHeight = $(sectionElement).css("height");
-                        let divSectionHeight = $(descElement).css("height");
+                        let divSectionHeight = $(descElement).css("height") || '0px';
                         faqSectionHeight = parseInt(faqSectionHeight.slice(0,faqSectionHeight.length-2));
                         divSectionHeight = parseInt(divSectionHeight.slice(0,divSectionHeight.length-2));
                         let faqMinHeight = $(divElement).css("min-height");
@@ -5913,6 +5924,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     });
                     scrollToBottom();
                     updateScrollButton();
+                    updateSeeMoreOnAssistTabActive()
                 }
 
                 function libraryTabActive() {
