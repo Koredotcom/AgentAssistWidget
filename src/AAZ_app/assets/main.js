@@ -49,6 +49,14 @@ function sendMessageToAgentAssist(conversationId, message) {
 
 }
 
+async function getChannel(client) {
+
+  let data = await client.get('ticket');
+  if (data) {
+    return data.ticket.via.channel;
+  }
+}
+
 async function getTicketId(client) {
 
   let ticket = await client.context();
@@ -125,11 +133,16 @@ async function generateURL() {
       var signedToken = token + "." + signature;
 
       let requester = await getRequesterName(client);
-
+      debugger
       let customdata = encodeURI(JSON.stringify({ fName: requester || 'Customer', lName: '' }));
       let smartassistURL = tokenData.agentassistURL.replace("agentassist", "smartassist");
       let activeConversationId = await getTicketId(client);
-      iframeURL = `${tokenData.agentassistURL}/koreagentassist-sdk/UI/agentassist-iframe.html?token=${signedToken}&botid=${tokenData.botId}&agentassisturl=${smartassistURL}&conversationid=${activeConversationId}&isCall=false&customdata=${customdata}`;
+      let channel = await getChannel(client);
+      // let isCall = await getChannle;
+      console.log("===============> channel", channel);
+      let isCall = channel == "voice_inbound" ? true : false
+
+      iframeURL = `${tokenData.agentassistURL}/koreagentassist-sdk/UI/agentassist-iframe.html?token=${signedToken}&botid=${tokenData.botId}&agentassisturl=${smartassistURL}&conversationid=${activeConversationId}&isCall=${isCall}&customdata=${customdata}`;
       resolve(iframeURL);
     } else {
       console.log("HTTP-Error: " + response.status);
