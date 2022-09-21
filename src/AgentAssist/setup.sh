@@ -28,6 +28,8 @@ echo
 #export NODE_OPTIONS=--openssl-legacy-provider
 npm i --legacy-peer-deps
 twilio plugins:install @twilio-labs/plugin-flex
+sleep 5s
+
 npm install
 sleep 5s 
 echo

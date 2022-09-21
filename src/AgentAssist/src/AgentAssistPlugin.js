@@ -85,8 +85,9 @@ export default class AgentAssistPlugin extends FlexPlugin {
         }
         console.log("Kore Agent Assist this._conversations[this.activeConversationId]", this._conversations[this.activeConversationId])
         if (!this._conversations[this.activeConversationId].iframeLoaded) {
-          let customdata = encodeURI(JSON.stringify({fName:this.customerName || 'Customer',lName:''}))
-          let iframeURL = `${agentassistURL}/koreagentassist-sdk/UI/agentassist-iframe.html?token=${token}&botid=${botId}&agentassisturl=${smartassistURL}&conversationid=${this.activeConversationId}&isCall=false&customdata=${customdata}`;
+          let customdata = encodeURI(JSON.stringify({ fName: this.customerName || 'Customer', lName: '' }))
+          let _source = "twilio";
+          let iframeURL = `${agentassistURL}/koreagentassist-sdk/UI/agentassist-iframe.html?token=${token}&botid=${botId}&agentassisturl=${smartassistURL}&conversationid=${this.activeConversationId}&source=${_source}&isCall=false&customdata=${customdata}`;
           console.log("Iframe URL ====>  ", iframeURL);
           this.setIframeLoadedForAllConversations(false);
           this._conversations[this.activeConversationId].iframeLoaded = true;
@@ -124,15 +125,16 @@ export default class AgentAssistPlugin extends FlexPlugin {
         payload.task.attributes
       ) {
         this.customerName = payload.task.attributes.from;
-        console.log("Kore Agent Assist ",this.customerName)
+        console.log("Kore Agent Assist ", this.customerName)
         if (payload.task.channelType === "voice") {
           this.isCallConversation = true;
           isCall = true;
           conversationid = payload?.task?.attributes["caller"];
           conversationid = conversationid.replace("+", "%2B");
           this.activeConversationId = conversationid;
-          let customdata = encodeURI(JSON.stringify({fName:'Customer', lName:''})) // voice call 
-          let iframeURL = `${agentassistURL}/koreagentassist-sdk/UI/agentassist-iframe.html?token=${token}&botid=${botId}&agentassisturl=${smartassistURL}&conversationid=${this.activeConversationId}&isCall=true&customdata=${customdata}`;
+          let customdata = encodeURI(JSON.stringify({ fName: 'Customer', lName: '' })) // voice call 
+          let _source = "twilio";
+          let iframeURL = `${agentassistURL}/koreagentassist-sdk/UI/agentassist-iframe.html?token=${token}&botid=${botId}&agentassisturl=${smartassistURL}&conversationid=${this.activeConversationId}&source=${_source}&isCall=true&customdata=${customdata}`;
           manager.store.dispatch({ type: "IFRAME_URL", iframeUrl: iframeURL });
         }
         // conversationid = "14152367315";
@@ -188,10 +190,6 @@ export default class AgentAssistPlugin extends FlexPlugin {
         }
         console.log("Kore Agent Assist1 sending message", msg);
 
-        //  manager.chatClient.getChannelBySid(recordId)
-        //    .then(channel => {
-        //      channel.sendMessage(msg);
-        //    });
         Actions.invokeAction("SendMessage", { body: msg, conversationSid: recordId });
 
       } else if (event.data.name === "agentAssist.CopyMessage" && event.data.conversationId == this.activeConversationId) {
@@ -199,9 +197,6 @@ export default class AgentAssistPlugin extends FlexPlugin {
         console.log("Kore Agent Assist1 copying message", msg);
 
         Actions.invokeAction("SetInputText", { body: msg, conversationSid: recordId });
-
-
-
       }
     }, false);
   }
@@ -287,8 +282,9 @@ export default class AgentAssistPlugin extends FlexPlugin {
         }
       }
       console.log("---------------->", conversationid, "isCall----->", isCall);
-      let customdata = encodeURI(JSON.stringify({fName:this.customerName || 'Customer',lName:''}))
-      let iframeURL = `${agentassistURL}/koreagentassist-sdk/UI/agentassist-iframe.html?token=${token}&botid=${botId}&agentassisturl=${smartassistURL}&conversationid=${conversationid}&sisCall=${isCall}&customdata=${customdata}`;
+      let customdata = encodeURI(JSON.stringify({ fName: this.customerName || 'Customer', lName: '' }));
+      let _source = "twilio";
+      let iframeURL = `${agentassistURL}/koreagentassist-sdk/UI/agentassist-iframe.html?token=${token}&botid=${botId}&agentassisturl=${smartassistURL}&conversationid=${conversationid}&source=${_source}&sisCall=${isCall}&customdata=${customdata}`;
       console.log("Iframe URL ====>  ", iframeURL);
       manager.store.dispatch({ type: "IFRAME_URL", iframeUrl: `${iframeURL}` })
 
