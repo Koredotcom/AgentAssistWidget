@@ -146,18 +146,20 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             },
             "token": {}
         }
-        // $.ajax({
-        //     url: url + '/api/1.1/oAuth/token/jwtgrant',
-        //     type: 'POST',
-        //     crossDomain: true,
-        //     contentType: 'application/json',
-        //     headers: {
-        //         'User-Agent': this.userAgent,
-        //         "content-type": 'application/json'
-        //     },
-        //     data: JSON.stringify(payload),
-        //     dataType: "json",
-        //     success: function (result) {
+        $.ajax({
+            url: url + '/api/1.1/oAuth/token/jwtgrant',
+            type: 'POST',
+            crossDomain: true,
+            contentType: 'application/json',
+            headers: {
+                'User-Agent': this.userAgent,
+                "content-type": 'application/json'
+            },
+            data: JSON.stringify(payload),
+            dataType: "json",
+            success: function (result) {
+                var navigatefromLibToTab;
+                let isOnlyOneFaqOnSearch = false;
                 chatConfig = window.KoreSDK.chatConfig;
                 var koreBot = koreBotChat();
                 AgentChatInitialize = new koreBot.chatWindow(chatConfig);
@@ -182,23 +184,34 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                     window.addEventListener("message", function (e) {
                         console.log(e.data);//your data is captured in e.data
-                        if(e.data.convsId) {
-                            let currentEndedConversationId = e.data.convsId;
+                        if(e.data.name ==='agentAssist.endOfConversation' && e.data.conversationId) {
+                            let currentEndedConversationId = e.data.conversationId;
                             var appStateStr = localStorage.getItem('agentAssistState') || '{}';
                             var appState = JSON.parse(appStateStr);
                             if (appState[currentEndedConversationId]) {
                                 let request_resolution_comments = {
-                                    conversationId: e.data?.convsId,
+                                    conversationId: e.data?.conversationId,
                                     userId: '',
-                                    botId: e.data?.botId,
+                                    botId: _botId,
                                     sessionId: koreGenerateUUID(),
-                                    chatHistory: e.data?.chatHistory
+                                    chatHistory: e.data?.payload?.chatHistory
                                 }
                                 _agentAsisstSocket.emit('request_resolution_comments', request_resolution_comments);
-                                delete appState[currentEndedConversationId];
+                                console.log("request_resolution_comments event published", request_resolution_comments)
+                               // localStorage.clear(appState[currentEndedConversationId]);
+                               delete appState[currentEndedConversationId];
                             }
                             return;
                         }
+                        // if(e.data.convsId) {
+                        //     let currentEndedConversationId = e.data.convsId;
+                        //     var appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                        //     var appState = JSON.parse(appStateStr);
+                        //     if (appState[currentEndedConversationId]) {
+                        //         delete appState[currentEndedConversationId];
+                        //     }
+                        //     return;
+                        // }
                         let userInputData = e.data;
                         let agent_assist_request = {
                             'author': {
@@ -208,6 +221,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             },
                             'botId': _botId,
                             'conversationId': userInputData.conversationid,
+                            'experience': isCallConversation === 'true' ? 'voice':'chat',
                             'query': userInputData.value,
                         }
                         if (isCallConversation === 'true') {
@@ -224,6 +238,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 _agentAsisstSocket.emit('agent_assist_request', agent_assist_request);
                             }
                         }
+                    })
+
+                    window.addEventListener('agentAssist.endOfConversation', function(e){
+                        console.log("----endOfConversation event captured ", e)
+                       
                     })
                 }
                 var _agentAssistDataObj = this;
@@ -272,9 +291,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             "botId": _botId,
                             "conversationId": _agentAssistDataObj.conversationId,
                             "query": "",
+                            'experience': isCallConversation === 'true' ? 'voice':'chat',
                             "enable_override_userinput": false
                         }
-                        isOverRideMode ? _agentAsisstSocket.emit('enable_override_userinput', overRideObj) : '';
+                        if(isOverRideMode) {
+                             _agentAsisstSocket.emit('enable_override_userinput', overRideObj)
+                        }
                         isOverRideMode = false;
                         displayCustomerFeels(data, data.conversationId, _botId);
 
@@ -284,7 +306,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         removingSendCopyBtnForCall();
                         document.getElementById("loader").style.display = "none";
                         // document.getElementById("addRemoveDropDown").style.display = "block";
-
                     })
 
                     _agentAsisstSocket.on('agent_feedback_response', (data) => {
@@ -369,12 +390,18 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             'conversationId': _agentAssistDataObj.conversationId,
                             'query': event.data.value,
                             'botId': _agentAssistDataObj.botId,
+                            'experience': isCallConversation === 'true' ? 'voice':'chat'
                         }
                         _agentAsisstSocket.emit('agent_assist_request', agent_assist_request);
                     });
 
                     _agentAsisstSocket.on('response_resolution_comments', (data) => {
-                        window.parent.postMessage(data, "*")
+                        var message = {
+                            name: "agentAssist.conversation_summary",
+                            conversationId: _conversationId,
+                            payload: data
+                            };
+                        window.parent.postMessage(message, '*');
                     });
 
                 }
@@ -455,7 +482,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                     let titleText = '';
                     let userQueryHtml = '';
-                    let sanitizedVal = sanitizeHTML((data.userInput));
                     if(isOverRideMode) {
                         titleText = "YouEntered -";
                         userQueryHtml = `
@@ -466,7 +492,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         <div class="run-info-content" id="userInput-${_id}">
                                             <div class="title">${titleText}</div>
                                             <div class="agent-utt">
-                                                <div class="title-data">"${sanitizedVal}"</div>
+                                                <div class="title-data">"${sanitizeHTML(data.userInput)}"</div>
                                             </div>
                                             
                                         </div>
@@ -481,7 +507,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         <div class="run-info-content" id="userInput-${_id}">
                                             <div class="title">${titleText}</div>
                                             <div class="agent-utt">
-                                                <div class="title-data">"${sanitizedVal}"</div>
+                                                <div class="title-data">"${sanitizeHTML(data.userInput)}"</div>
                                             </div>
                                             
                                         </div>
@@ -495,7 +521,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         entityDisplayName = agentAssistResponse.newEntityDisplayName ? agentAssistResponse.newEntityDisplayName : agentAssistResponse.newEntityName;
                     }
                     if (data.entityValue && !data.isErrorPrompt && entityDisplayName) {
-                        entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${sanitizedVal}</div>`);
+                        entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${sanitizeHTML(data.userInput)}</div>`);
                     } else { 
                         if (data.isErrorPrompt && entityDisplayName) {
                             let entityHtmls = `<div class="order-number-info">${entityDisplayName} : 
@@ -736,7 +762,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
                     }
 
-
                     if (data.isSearch && answerPlaceableIDs.length == 0) {
                         ShowSearchContent();
                         if (data.value.length > 0 && currentTabActive == 'searchAutoIcon') {
@@ -744,20 +769,24 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $('#dialogs-faqs').addClass('hide');
                         }
                         if (data.suggestions) {
-                            let sanitizedVal = sanitizeHTML((data.userInput));
                             isSuggestionProcessed = false;
+                            if (data?.suggestions?.searchassist && Object.keys(data.suggestions.searchassist).length > 0) {
+                                data.suggestions = formatSearchAssistData(data.suggestions);
+                            }
+
+                            let dialogsLength = data.suggestions.dialogs?.length || 0;
+                            let faqsLength = data.suggestions.faqs?.length || 0;
+                            let articlesLength = data.suggestions.articles?.length || 0;
+                            let totalSuggestionLength = dialogsLength + faqsLength + articlesLength || 0;
+                            let searchResultText = (totalSuggestionLength == 1) ? " Search result for " : " Search results for "
+
                             if (currentTabActive == 'searchAutoIcon') {
                                 let searchTextDisplay = document.getElementById('search-text-display');
-                                html = `<div class="searched-intent" id="librarySearchText">Search results for '${sanitizedVal}' </div>`
+                                html = `<div class="searched-intent" id="librarySearchText">${totalSuggestionLength} ${searchResultText} '${sanitizeHTML(data.userInput)}' </div>`
                                 searchTextDisplay.innerHTML = html;
                             } else {
-                                let dialogsLength = data.suggestions.dialogs?.length || 0;
-                                let faqsLength = data.suggestions.faqs?.length || 0;
-
-                                let articlesLength = data.suggestions.articles?.length || 0;
-                                let totalSuggestionLength = dialogsLength + faqsLength + articlesLength || 0;
                                 if(totalSuggestionLength){
-                                    $('#overLaySearch').html(`<div class="search-results-text">${totalSuggestionLength} Search results for '${sanitizedVal}' <span class="show-all hide">Show all</span></div>`)
+                                    $('#overLaySearch').html(`<div class="search-results-text">${totalSuggestionLength} ${searchResultText} '${sanitizeHTML(data.userInput)}' <span class="show-all hide">Show all</span></div>`)
                                 }
 
                                 // if ((dialogsLength > 0) && (faqsLength > 0)) {
@@ -775,13 +804,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                         } else {
                             if (isSuggestionProcessed) {
-                                let sanitizedVal = sanitizeHTML((data.userInput))
                                 if (currentTabActive == 'searchAutoIcon') {
                                     let searchTextDisplay = document.getElementById('search-text-display');
-                                    html = `<div class="searched-intent" id="librarySearchText">0 Search results for '${sanitizedVal}' </div>`
+                                    html = `<div class="searched-intent" id="librarySearchText">0 Search results for '${sanitizeHTML(data.userInput)}' </div>`
                                     searchTextDisplay.innerHTML = html;
                                 } else {
-                                    $('#overLaySearch').html(`<div class="search-results-text">0 Search results for '${sanitizedVal}'</div>`)
+                                    $('#overLaySearch').html(`<div class="search-results-text">0 Search results for '${sanitizeHTML(data.userInput)}'</div>`)
                                 }
                             }
 
@@ -893,12 +921,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                
                                 let faqs = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${uuids+index}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${uuids+index}`);
                                 if (!ele.answer) {
+                                    let positionID = "dg-"+koreGenerateUUID();
                                     let checkHtml = `
                             <i class="ast-carrotup" data-conv-id="${data.conversationId}"
                             data-bot-id="${botId}" data-intent-name="${ele.question}"
-                            data-check-lib="true" id="checkLib-${uuids+index}"></i>`;
-                                    faqs.append(checkHtml);
-                                    $(`#titleLib-${uuids+index}`).addClass('noPadding');
+                            data-check-lib="true" id="checkLib-${uuids+index}" data-position-id="${positionID}"></i>`;
+                                    // faqs.append(checkHtml);
+                                    // $(`#titleLib-${uuids+index}`).addClass('noPadding');
+                                    $(`#faqDivLib-${uuids+index}`).addClass('is-dropdown-show-default');
+                                    document.getElementById(`titleLib-${uuids+index}`).insertAdjacentHTML('beforeend',checkHtml);
                                 } else {
                                     let a = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display #faqDivLib-${uuids+index}`) : $(`#overLaySearch #faqDivLib-${uuids+index}`);
                                     let faqActionHtml = `<div class="action-links">
@@ -918,14 +949,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     setTimeout(() => {
                                         updateSeeMoreButtonForAgent(uuids + index);
                                     }, waitingTimeForSeeMoreButton);
-                                }
-                                
-                                
-                                
+                                }                   
                                 // _msgsResponse.message.push(body);
                                 if(data.suggestions.faqs.length === 1 && !ele.answer) {
+                                    isOnlyOneFaqOnSearch = true;
                                     document.getElementById(`checkLib-${uuids+index}`).click();
                                     $(`#checkLib-${uuids+index}`).addClass('hide');
+                                    $(`#faqDivLib-${uuids+index}`).removeClass('is-dropdown-show-default');
                                 }
                             });
 
@@ -943,8 +973,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         console.log(data.suggestions, "suggestion");
 
                         if (data?.suggestions?.searchassist && Object.keys(data.suggestions.searchassist).length > 0) {
-
-                            data.suggestions = formatSearchAssistData(data.suggestions);
 
                             console.log("article lenght");
                             let automationSuggestions = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display`) : $('#overLaySearch');
@@ -1084,6 +1112,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             
 
                         }
+                        if(isOnlyOneFaqOnSearch){
+                            let index = answerPlaceableIDs.indexOf(ele=>ele.positionId == data.positionId);
+                            answerPlaceableIDs.splice(index, 1);
+                            isOnlyOneFaqOnSearch = false;
+                        }
                     }
 
                     function ShowSearchContent() {
@@ -1099,9 +1132,17 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
 
                 function sanitizeHTML(text) {
-                    var element = document.createElement('div');
-                    element.innerText = text;
-                    return element.innerHTML;
+                    // var element = document.createElement('div');
+                    // element.innerText = text;
+                    // return element.innerHTML;
+                    console.log('sanitizeHTML: ',typeof text);
+                    var lt = /</g, 
+                    gt = />/g, 
+                    ap = /'/g, 
+                    ic = /"/g;
+                    value = text.toString().replace(lt, "&lt;").replace(gt, "&gt;").replace(ap, "&#39;").replace(ic, "&#34;");
+                    console.log(value);
+                    return value;
                 }
 
                 function processMybotDataResponse(data, convId, botId) {
@@ -1194,13 +1235,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         //  _msgsResponse.message.push(body);
                     }
                     let agentInputId = Math.floor(Math.random() * 100);
-                    if (isMyBotAutomationOnGoing && data.buttons && !data.value.includes('Customer has waited')) {
+                    if (isMyBotAutomationOnGoing && data.buttons && !data.value.includes('Customer has waited') && data.positionId == myBotDialogPositionId) {
                         let sendMsgData = encodeURI(JSON.stringify(_msgsResponse));
                         let runInfoContent = $(`#dropDownData-${myBotDropdownHeaderUuids}`);
                         $('#inputFieldForMyBot').remove();
                         
                          if(isMybotInputResponseClick){
-                            let sanitizedVal = sanitizeHTML((data.userInput))
                             let userQueryHtml = `
                                     <div class="steps-run-data">
                                         <div class="icon_block_img">
@@ -1209,7 +1249,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         <div class="run-info-content" id="userInput-${myBotuuids}">
                                             <div class="title">You Entered -</div>
                                             <div class="agent-utt">
-                                                <div class="title-data">${sanitizedVal}</div>
+                                                <div class="title-data">${sanitizeHTML(data.userInput)}</div>
                                             </div>
                                             
                                         </div>
@@ -1218,7 +1258,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             let entityHtml = $(`#dropDownData-${myBotDropdownHeaderUuids}`).find(`#userInput-${myBotuuids}`);
                             let entityDisplayName = myBotDataResponse.entityDisplayName ? myBotDataResponse.entityDisplayName : myBotDataResponse.entityName;
                             if (data.userInput && !data.isErrorPrompt && entityDisplayName) {
-                                entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${sanitizedVal}</div>`);
+                                entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${sanitizeHTML(data.userInput)}</div>`);
                             } else {
                                 if (data.isErrorPrompt && entityDisplayName) {
                                     let entityHtmls = `<div class="order-number-info">${entityDisplayName} : 
@@ -1291,7 +1331,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 <div class="title">Input</div>
                 <div class="agent-utt enter-details-block">
                 <div class="title-data" ><span class="enter-details-title">${agentInputEntityName} : </span>
-                <input type="text" placeholder="Enter Value" class="input-text chat-container" id="agentInput-${agentInputId}" data-conv-id="${convId}" data-bot-id="${botId}"  data-mybot-input="true">
+                <input type="text" placeholder="Enter Value" class="input-text chat-container" id="agentInput-${agentInputId}" data-conv-id="${convId}" data-bot-id="${botId}"  data-mybot-input="true" data-position-id="${myBotDialogPositionId}">
                 </div>
                 </div>
                 </div>
@@ -1428,7 +1468,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         $(titleElement).css({"overflow": "inherit", "white-space": "normal", "text-overflow" : "unset"});
                         $(descElement).css({"overflow": "inherit", "text-overflow" : "unset", "display" : "block", "white-space": "normal"});
                         let faqSectionHeight = $(sectionElement).css("height");
-			  let divSectionHeight = $(descElement).css("height");
+			  let divSectionHeight = $(descElement).css("height")  || '0px';;
                         faqSectionHeight = parseInt(faqSectionHeight.slice(0,faqSectionHeight.length-2));
                         divSectionHeight = parseInt(divSectionHeight.slice(0,divSectionHeight.length-2));
                         let faqMinHeight = $(divElement).css("min-height");
@@ -1455,6 +1495,17 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }
                 }
 
+
+                function updateSeeMoreOnAssistTabActive(){
+                    let faqSuggestionList = $('[id*="faqDiv-"]');
+                    faqSuggestionList.each(function() {
+                        let elemID = this.id.split('-');
+                        elemID.shift();
+                        let actualId = elemID.join('-')
+                        updateSeeMoreButtonForAssist(actualId);
+                    });
+                }
+
                 function updateSeeMoreButtonForAssist(id, article){
                     // let faqSourceTypePixel = ((sourceType === 'smartassist-color-scheme') ? 5 : 2) ;
                     let faqSourceTypePixel = 5;
@@ -1476,7 +1527,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         $(titleElement).css({"overflow": "inherit", "white-space": "normal", "text-overflow" : "unset"});
                         $(descElement).css({"overflow": "inherit", "text-overflow" : "unset", "display" : "block"});
                         let faqSectionHeight = $(sectionElement).css("height");
-                        let divSectionHeight = $(descElement).css("height");
+                        let divSectionHeight = $(descElement).css("height") || '0px';
                         faqSectionHeight = parseInt(faqSectionHeight.slice(0,faqSectionHeight.length-2));
                         divSectionHeight = parseInt(divSectionHeight.slice(0,divSectionHeight.length-2));
                         let faqMinHeight = $(divElement).css("min-height");
@@ -1495,6 +1546,32 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
                         $(titleElement).css({"overflow": "hidden", "white-space": "nowrap", "text-overflow" : "ellipsis"});
                         $(descElement).css({"overflow": "hidden", "text-overflow" : "ellipsis", "display": "-webkit-box"});
+                    }
+                }
+
+                function collapseOldDialoguesInMyBot(){
+                        if($(`#myBotAutomationBlock .collapse-acc-data`).length > 0){
+                            let listItems = $("#myBotAutomationBlock .collapse-acc-data");
+                            listItems.each(function(idx, collapseElement) {
+                                console.log(collapseElement.classList, "classlist", collapseElement.id);
+                                if(!collapseElement.id.includes('smallTalk')  && collapseElement.id.includes('dropDownData')){
+                                    collapseElement.classList.add('hide');
+                                }
+                            });
+                        }
+                }
+
+                function collapseOldDialoguesInAssist(){
+                    if(scrollAtEnd){
+                        if($(`#dynamicBlocksData .collapse-acc-data`).length > 0){
+                            let listItems = $("#dynamicBlocksData .collapse-acc-data");
+                            listItems.each(function(idx, collapseElement) {
+                                console.log(collapseElement.classList, "classlist", collapseElement.id);
+                                if(!collapseElement.id.includes('smallTalk')  && collapseElement.id.includes('dropDownData')){
+                                    collapseElement.classList.add('hide');
+                                }
+                            });
+                        }
                     }
                 }
 
@@ -1552,7 +1629,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         "traceId": "873209019a5adc26"
                     }
 
-                    console.log(isAutomationOnGoing, "is automation on going", data.suggestions, answerPlaceableIDs)
+                    console.log(isAutomationOnGoing, "is automation on going", data.suggestions, answerPlaceableIDs);
                     if (!isAutomationOnGoing && data.suggestions && answerPlaceableIDs.length == 0) {
                         // $('#welcomeMsg').addClass('hide');
                         let dynamicBlock = document.getElementById('dynamicBlock');
@@ -1830,12 +1907,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 faqsSuggestions.innerHTML += faqHtml;
                                 let faqs = $(`.type-info-run-send #faqSection-${uuids+index}`);
                                 if (!ele.answer) {
+                                    let positionID = 'dg-'+koreGenerateUUID();
                                     let checkHtml = `
                         <i class="ast-carrotup" data-conv-id="${data.conversationId}"
                         data-bot-id="${botId}" data-intent-name="${ele.question}"
-                        data-check="true" id="check-${uuids+index}"></i>`;
-                                    faqs.append(checkHtml);
-                                    $(`#title-${uuids+index}`).addClass('noPadding');
+                        data-check="true" id="check-${uuids+index}" data-position-id="${positionID}"></i>`;
+                                    // faqs.append(checkHtml);
+                                    // $(`#title-${uuids+index}`).addClass('noPadding');
+                                    $(`#faqDiv-${uuids+index}`).addClass('is-dropdown-show-default');
+                                    document.getElementById(`title-${uuids+index}`).insertAdjacentHTML('beforeend',checkHtml);
                                 } else {
                                     let a = $(`#faqDiv-${uuids+index}`);
                                     let faqActionHtml = `<div class="action-links">
@@ -1857,17 +1937,18 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         updateSeeMoreButtonForAssist(uuids + index);
                                     }, waitingTimeForSeeMoreButton);
                                 }
-
+                           
                             if(data.suggestions.faqs.length === 1 && !ele.answer) {
                                 document.getElementById(`check-${uuids+index}`).click();
                                 $(`#check-${uuids+index}`).addClass('hide');
+                                $(`#faqDiv-${uuids+index}`).removeClass('is-dropdown-show-default');
                             }
                             })
                         }
                         setTimeout(() => {         
                             updateNewMessageUUIDList(responseId);
-                        }, waitingTimeForUUID);                        
-
+                        }, waitingTimeForUUID);   
+                        collapseOldDialoguesInAssist();
                     } else {
                         if (data.type === 'text' && data.suggestions) {
                             let faqAnswerIdsPlace ;
@@ -1901,6 +1982,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
                         if (data.suggestions) {
                             automationSuggestions.length >= 1 ? (automationSuggestions[automationSuggestions.length - 1].classList.remove('hide')) : ''
+                            collapseOldDialoguesInAssist();  
                         }
                     }
 
@@ -1954,7 +2036,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                         _msgsResponse.message.push(body);
                     });
-                    if (isAutomationOnGoing && dropdownHeaderUuids && data.buttons && !data.value.includes('Customer has waited')) {
+                    if (isAutomationOnGoing && dropdownHeaderUuids && data.buttons && !data.value.includes('Customer has waited') && (dialogPositionId && !data.positionId || data.positionId == dialogPositionId)) {
                         let msgStringify = JSON.stringify(_msgsResponse);
                         let newTemp = encodeURI(msgStringify);
                         $(`#overRideBtn-${dropdownHeaderUuids}`).removeClass('hide');
@@ -2096,7 +2178,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             if (data.buttons?.length > 1) {
                                 if (i == 0) {
                                     dynamicBlockDiv.prepend(welcomeMsgHtml);
-                                    let runInfoDivOfwelcome = $(`#dynamicBlock .collapse-acc-data .run-info-content`);
+                                    let runInfoDivOfwelcome = $(`#dynamicBlock .collapse-acc-data#smallTalk-${uuids} .run-info-content`);
                                     let contentHtml = `
                                 <div class="title">Customer has waited for an agent for few seconds.<br/>Here are some appropriate opening lines.</div>
                                    <div class="agent-utt">
@@ -2110,7 +2192,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 </div>`;
                                     runInfoDivOfwelcome.append(contentHtml);
                                 } else {
-                                    let runInfoDivOfwelcome = $(`#dynamicBlock .collapse-acc-data .run-info-content`);
+                                    let runInfoDivOfwelcome = $(`#dynamicBlock .collapse-acc-data#smallTalk-${uuids} .run-info-content`);
                                     let contentHtmlWithoutTellCus = `
                                     <div class="agent-utt">
                                         <div class="title-data" id="displayData-${uuids}">${ele.value}</div>
@@ -2144,7 +2226,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                              </div>
                          </div>
                          </div>`;
-                                dynamicBlockDiv.append(botResHtml)
+                                dynamicBlockDiv.append(botResHtml);
+                                collapseOldDialoguesInAssist();
                             }
                         });
                         setTimeout(() => {  
@@ -2202,12 +2285,31 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             appState[_conversationId]['automationGoingOnAfterRefresh'] = isAutomationOnGoing;
                             localStorage.setItem('agentAssistState', JSON.stringify(appState))
                         }
-                        //  isOverRideMode = false;
+                          isOverRideMode = false;
                         $(`.override-input-div`).remove();
                         addFeedbackHtmlToDom(data, botId, userIntentInput);
                         userMessage = {};
                     }
                     
+                }
+
+                function terminateTheDialog(data, tabName){
+                    var appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                    var appState = JSON.parse(appStateStr);
+                    if( tabName == 'agentAutoIcon') {
+                        dialogTerminatedOrIntrupptedInMyBot(data, data.botId, userIntentInput, appState);
+                    }else if(tabName == 'userAutoIcon'){
+                        isAutomationOnGoing = false;
+                        if (appState[_conversationId]) {
+                            appState[_conversationId].automationGoingOn = isAutomationOnGoing;
+                            appState[_conversationId]['automationGoingOnAfterRefresh'] = isAutomationOnGoing;
+                            localStorage.setItem('agentAssistState', JSON.stringify(appState))
+                        }
+                          isOverRideMode = false;
+                        $(`.override-input-div`).remove();
+                        addFeedbackHtmlToDom(data, data.botId, userIntentInput);
+                        userMessage = {};
+                    }
                 }
 
                 function dialogTerminatedOrIntrupptedInMyBot(data, botId, userIntentInput, appState) {
@@ -2513,14 +2615,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 </div>
                                 <div class="explore-more-negtive-data hide">
                                     <div class="btns-group-negtive-chips" id="feedBackOptions-${id}">
-                                        <div class="btn-chip-negtive" data-chip-click='false'>Not enough suggestions</div>
-                                        <div class="btn-chip-negtive" data-chip-click='false'>Not prompt</div>
-                                        <div class="btn-chip-negtive" data-chip-click='false'>Intent undetected</div>
+                                        <div class="btn-chip-negtive" data-chip-click='false'>Wrong suggestions</div>
+                                        <div class="btn-chip-negtive" data-chip-click='false'>Incorrect intent</div>
+                                        <div class="btn-chip-negtive" data-chip-click='false'>Accidental click</div>
+                                        <div class="btn-chip-negtive" data-chip-click='false'>Time taking</div>
                                         <div class="btn-chip-negtive" data-chip-click='false'>Other</div>
                                     </div>
                                     <div class="input-block-optional">
                                         <div class="label-text">Additional comments (Optional)</div>
-                                        <input type="text" placeholder="Placeholder text" class="input-text" id="feedBackComment-${id}"
+                                        <input type="text" placeholder="Type to add comment" class="input-text" id="feedBackComment-${id}"
                                         data-feedback-comment="true">
                                     </div>
                                     <button class="submit-btn" data-updateFlag="false" disabled>Submit</button>
@@ -2687,8 +2790,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     <i class="ast-carrotup" data-conv-id="${_agentAssistDataObj.conversationId}"
                                     data-bot-id="${res.botId}" data-intent-name="${ele.question}"
                                     data-check="true" id="check-${uniqueID}"></i>`;
-                                                    faqs.append(checkHtml);
-                                                    $(`#title-${uniqueID}`).addClass('noPadding');
+                                                    // faqs.append(checkHtml);
+                                                    // $(`#title-${uniqueID}`).addClass('noPadding');
+                                                    $(`#faqDiv-${uuids+index}`).addClass('is-dropdown-show-default');
+                                                    document.getElementById(`title-${uniqueID}`).insertAdjacentHTML('beforeend',checkHtml);
                                                 } else {
                                                     let a = $(`#faqDiv-${uniqueID}`);
                                                     let faqActionHtml = `<div class="action-links">
@@ -2798,7 +2903,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     }
                                     if (res.agentAssistDetails.entityName && res.agentAssistDetails.entityResponse && res.agentAssistDetails.entityValue) {
                                         let runInfoContent = $(`#dropDownData-${previousId}`);
-                                        let sanitizedVal = sanitizeHTML((res.agentAssistDetails.entityValue))
                                         let userQueryHtml = `
                                             <div class="steps-run-data">
                                                 <div class="icon_block_img">
@@ -2807,7 +2911,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                 <div class="run-info-content" id="userInput-${res._id}">
                                                     <div class="title">Customer Said - </div>
                                                     <div class="agent-utt">
-                                                        <div class="title-data">"${sanitizedVal}"</div>
+                                                        <div class="title-data">"${sanitizeHTML(res.agentAssistDetails.entityValue)}"</div>
                                                     </div>
                                                     
                                                 </div>
@@ -2816,7 +2920,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         let entityHtml = $(`#dropDownData-${previousId}`).find(`#userInput-${res._id}`);
                                         let entityDisplayName = agentAssistResponse.newEntityDisplayName ? agentAssistResponse.newEntityDisplayName : agentAssistResponse.newEntityName;
                                         if (res.agentAssistDetails.entityValue && !res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
-                                            entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${sanitizedVal}</div>`);
+                                            entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${sanitizeHTML(res.agentAssistDetails.entityValue)}</div>`);
                                         } else {
                                             if (res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
                                                 let entityHtmls = `<div class="order-number-info">${entityDisplayName} : 
@@ -3200,7 +3304,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     }
                                     if (res.agentAssistDetails.entityName && res.agentAssistDetails.entityResponse && res.agentAssistDetails.entityValue) {
                                         let runInfoContent = $(`#dropDownData-${previousId}`);
-                                        let sanitizedVal = sanitizeHTML((res.agentAssistDetails.entityValue))
                                         let userQueryHtml = `
                                                 <div class="steps-run-data">
                                                     <div class="icon_block_img">
@@ -3209,7 +3312,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                     <div class="run-info-content" id="userInput-${res._id}">
                                                         <div class="title">Customer Said - </div>
                                                         <div class="agent-utt">
-                                                            <div class="title-data">"${sanitizedVal}"</div>
+                                                            <div class="title-data">"${sanitizeHTML(res.agentAssistDetails.entityValue)}"</div>
                                                         </div>
                                                         
                                                     </div>
@@ -3218,7 +3321,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         let entityHtml = $(`#dropDownData-${previousId}`).find(`#userInput-${res._id}`);
                                         let entityDisplayName = myBotDataResponse.newEntityDisplayName ? myBotDataResponse.newEntityDisplayName : myBotDataResponse.newEntityName;
                                         if (res.agentAssistDetails.entityValue && !res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
-                                            entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${sanitizedVal}</div>`);
+                                            entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${sanitizeHTML(res.agentAssistDetails.entityValue)}</div>`);
                                         } else {
                                             if (res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
                                                 let entityHtmls = `<div class="order-number-info">${entityDisplayName} : 
@@ -3950,17 +4053,20 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     "botId": _botId,
                                     "conversationId": _agentAssistDataObj.conversationId,
                                     "query": "",
+                                    'experience': isCallConversation === 'true' ? 'voice':'chat',
                                     "enable_override_userinput": false
                                 }
                                 isOverRideMode ? _agentAsisstSocket.emit('enable_override_userinput', toggleObj) : '';
                                 isOverRideMode = false;
-                            }
-                            else if(document.getElementById("checkProActive").checked == false){   
+
+                            } else if (document.getElementById("checkProActive").checked == false) { 
+                            
                                 var toggleObj = {
                                     "agentId": "",
                                     "botId": _botId,
                                     "conversationId": _agentAssistDataObj.conversationId,
                                     "query": "",
+                                    'experience': isCallConversation === 'true' ? 'voice':'chat',
                                     "enable_override_userinput": true
                                 }
                                 isOverRideMode ? _agentAsisstSocket.emit('enable_override_userinput', toggleObj) : '';
@@ -4269,6 +4375,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     target.dataset.feedbacklike = 'false';
                                     feedbackLoop(evt);
                                 }
+
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .ast-thumbdown`).attr('data-comment',``)
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .ast-thumbdown`).attr('data-feedbackdetails','[]');
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .btn-chip-negtive.active-chip`).removeClass('active-chip');
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} #feedBackComment-${cloneTargtIds.join('-')}`).val('');
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .submit-btn`).attr('disabled', 'disabled')
+                                $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .submit-btn`).html('Submit');
                                 $(`#feedbackdown-${cloneTargtIds.join('-')}`).removeClass('active-feedback')
                                 $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .thanks-update`).removeClass('hide');
                                 $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .help-improve-arrow`).addClass('hide')
@@ -4319,6 +4432,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             }
                             let updateFlag = $(`#feedbackHelpfulContainer-${targteId.join('-')} .submit-btn`).attr('data-updateflag');
                             if (updateFlag == 'true' && target.dataset.feedbackDropDownOpened === 'false') {
+                                $(`#feedbackHelpfulContainer-${targteId.join('-')} .submit-btn`).html('Update');
                                 $(`#feedbackHelpfulContainer-${targteId.join('-')} .submit-btn`).attr('disabled', 'disabled');
                                 AgentAssist_feedBack_Update_Request(dataSets);
                                 $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).addClass('hide');
@@ -4367,11 +4481,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 dataSets.feedbackdetails = dataSets.feedbackdetails.split(',');
                             }
                             feedbackLoop(dataSets, true);
+                            $(`#feedbackHelpfulContainer-${id.join('-')} .thanks-update`).css('right','34px').removeClass('hide');
+                            setTimeout(()=>{
+                                $(`#feedbackHelpfulContainer-${id.join('-')} .thanks-update`).css('right','25px').addClass('hide');
+                            },3000)
                             $(`#feedbackHelpfulContainer-${id.join('-')} .explore-more-negtive-data`).addClass('hide');
                             $(`#feedbackHelpfulContainer-${id.join('-')} #dropdownArrowFeedBackIcon-${id.join('-')}`).attr('data-feedback-drop-down-opened', 'true');
                             $(`#feedbackHelpfulContainer-${id.join('-')} #dropdownArrowFeedBack-${id.join('-')}`).attr('data-feedback-drop-down-opened', 'true');
                             target.dataset.updateflag = 'true';
-                            target.innerHTML = "Update";
                             $(`#feedbackHelpfulContainer-${id.join('-')}.submit-btn`).attr('disabled', 'disabled');
 
                             $(`#feedbackHelpfulContainer-${id.join('-')} .ast-thumbdown`).attr('data-comment',``)
@@ -5153,6 +5270,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             "positionId": target.dataset.positionId
                                         });
                                     document.getElementById("loader").style.display = "block";
+                                    terminateTheDialog({ conversationId: _agentAssistDataObj.conversationId,
+                                        botId: _botId,"positionId": target.dataset.positionId},'userAutoIcon')
                                 } else {
                                     var mybotTabTerminateBtnId = '#myBotTerminateAgentDialog-' + myBotDropdownHeaderUuids;
                                     $(mybotTabTerminateBtnId).addClass('hide');
@@ -5160,11 +5279,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         { conversationId: _agentAssistDataObj.conversationId, botId: _botId, value: 'discard all', isSearch: false,
                                         "positionId": target.dataset.positionId });
                                     document.getElementById("loader").style.display = "block";
+                                    terminateTheDialog({ conversationId: _agentAssistDataObj.conversationId,
+                                     botId: _botId,"positionId": target.dataset.positionId},'agentAutoIcon')
                                 }
                                 scrollToBottom();
-                            }
-                            if(target.innerHTML === 'yes, Continue') {
-                                console.log('111222');
                             }
 
                         }
@@ -5203,43 +5321,21 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                         }
                         if (runAutoForAgent) {
+                            collapseOldDialoguesInMyBot();
                             updateCurrentTabInState(_conversationId, 'myBotTab')
                             $('#agentSearch').val('');
                             $('.overlay-suggestions').addClass('hide').removeAttr('style');
                             $('#overLaySearch').html('')
                             if (!isMyBotAutomationOnGoing) {
                                 data = target.dataset;
-                                var dialogId = 'dg-' + (Math.random() + 1).toString(36).substring(2);
-                                myBotDialogPositionId = dialogId;
-                                AgentAssistPubSub.publish('searched_Automation_details', { conversationId: data.convId, botId: data.botId, value: data.intentName, isSearch: false, intentName: data.intentName, "positionId": dialogId });
-                                isMyBotAutomationOnGoing = true;
-                                noAutomationrunninginMyBot = false;
-                                let agentBotuuids = Math.floor(Math.random() * 100);
-                                myBotDropdownHeaderUuids = agentBotuuids;
-                                var appStateStr = localStorage.getItem('agentAssistState') || '{}';
-                                var appState = JSON.parse(appStateStr);
-                                if (appState[_conversationId]) {
-                                    appState[_conversationId]['automationGoingOnAfterRefreshMyBot'] = isMyBotAutomationOnGoing
-                                    localStorage.setItem('agentAssistState', JSON.stringify(appState))
-                                }
-                                $('#noAutoRunning').addClass('hide');
-                                
-                                _createRunTemplateContainerForMyTab(agentBotuuids, target.dataset.intentName, myBotDialogPositionId)
-                                let ids = target.id.split('-');
-                                $(`${!target?.dataset?.runMybot}` ? '.dialog-task-run-sec' : '.content-dialog-task-type .type-info-run-send').each((i, ele) => {
-                                    let id = ele.id?.split('-');
-                                    if (ids.includes(id[1])) {
-                                        idsOfMyBotDropDown = ele.id;
-                                    }
-                                });
-                                let addRemoveDropDown = document.getElementById(`MyBotaddRemoveDropDown-${agentBotuuids}`);
-                                addRemoveDropDown?.classList.remove('hide');
-                                $(`#myBotendTaks-${agentBotuuids}`).removeClass('hide')
-                                agentTabActive();
+                                runDialogFormyBotTab(data, target.id);
                                 return;
                             } else if (isMyBotAutomationOnGoing && !noAutomationrunninginMyBot) {
                                 // condition for if an automation is already running in the agent automation
                                 $('#interruptPopUp').removeClass('hide');
+                                console.log("interruption for the  myBotTab");
+                                interruptCurrentDialog("myBotTab");
+                                $('#interruptPopUp').attr('data-payload', JSON.stringify({id:target.id,info:target.dataset}));
                             }
                         }
 
@@ -5270,6 +5366,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     })
                                 }
                                 if (libraryRunBtn) {
+                                    collapseOldDialoguesInAssist();
                                     updateCurrentTabInState(_conversationId, 'assistTab')
                                     $('.empty-data-no-agents').addClass('hide');
                                     $('#agentSearch').val('');
@@ -5298,72 +5395,75 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     })
                                 }
 
-                                let uuids = koreGenerateUUID();
-                                dropdownHeaderUuids = uuids;
-                                isAutomationOnGoing = true;
-                                var appStateStr = localStorage.getItem('agentAssistState') || '{}';
-                                var appState = JSON.parse(appStateStr);
-                                if (appState[_conversationId]) {
-                                    appState[_conversationId].automationGoingOn = isAutomationOnGoing;
-                                    appState[_conversationId]['automationGoingOnAfterRefresh'] = isAutomationOnGoing
-                                    localStorage.setItem('agentAssistState', JSON.stringify(appState))
-                                }
-                                // for (let a of $('#dynamicBlock .agent-utt-info')) {
-                                //     a.classList.add('hide');
-                                // }
-                                // let suggestionsLength = $(`#dynamicBlock .dialog-task-run-sec`);
-                                // suggestionsLength.each((i, ele) => {
-                                //     $(ele).addClass('hide');
-                                // })
-                                var dialogId = 'dg-' + (Math.random() + 1).toString(36).substring(2);
-                                dialogPositionId = dialogId;
-                                _createRunTemplateContiner(uuids, target.dataset.intentName, dialogPositionId);
-                                let ids = target.id.split('-');
-                                ids.shift();
-                                let joinedIds = ids.join('-');
-                                let dialogID = document.getElementById(`suggestionId-${joinedIds}`);
-                                if(dialogID){
-                                    dialogID.style.borderStyle="solid";
-                                }
-                                $(`${!target?.dataset?.useCaseList}` ? '.dialog-task-run-sec' : '.content-dialog-task-type .type-info-run-send').each((i, ele) => {
-                                    let id = ele.id?.split('-');
-                                    id.shift();
-                                    if (joinedIds.includes(id.join('-'))) {
-                                        idsOfDropDown = ele.id;
-                                        // $(ele).remove()
-                                    }
-                                });
-
-                                let addRemoveDropDown = document.getElementById(`addRemoveDropDown-${uuids}`);
-                                addRemoveDropDown?.classList.remove('hide');
-                                $(`#endTaks-${uuids}`).removeClass('hide')
-                                AgentAssist_run_click(evt, dialogPositionId);
-                               
-
-                                // if (libraryRunBtn) {
-                                //     let automationSuggestions = $('#dynamicBlock .dialog-task-accordiaon-info');
-                                //     automationSuggestions.each((i, ele) => {
-                                //         $(ele).addClass('hide');
-                                //     });
-                                //     (automationSuggestions.length >= 1 && $('#dynamicBlock .dialog-task-run-sec').length <= 0) ? $(automationSuggestions[automationSuggestions.length - 1]).removeClass('hide') : '';
-                                // }
+                                runDialogForAssistTab(target.dataset, target.id);
                                 return;
                             }
-                            else {
+                            else if(isAutomationOnGoing && libraryRunBtn) {
                                 $('#interruptPopUp').removeClass('hide');
-                            }
+                                console.log("interruption for the Assist Tab");
+                                interruptCurrentDialog("assistTab");
+                                $('#interruptPopUp').attr('data-payload', JSON.stringify({id:target.id,info:target.dataset}));
+                            } 
                         }
+
+                        
+                        function interruptCurrentDialog(tab) {
+                            console.log('interruptCurrentAssistDialog');
+                            navigatefromLibToTab = tab;
+                        }
+
+                        if(target.innerHTML === 'Yes, continue') {
+                            $('#interruptPopUp').addClass('hide');
+                            let data = $('#interruptPopUp').data();
+                            if(navigatefromLibToTab === 'assistTab') {
+                                AgentAssistPubSub.publish('agent_assist_send_text',
+                                {
+                                    conversationId: _agentAssistDataObj.conversationId,
+                                    botId: _botId, value: 'discard all', check: true,
+                                    "positionId": dialogPositionId
+                                });
+                                terminateTheDialog({ conversationId: _agentAssistDataObj.conversationId,
+                                botId: _botId,"positionId": dialogPositionId},'userAutoIcon')
+                                collapseOldDialoguesInAssist();
+                                updateCurrentTabInState(_conversationId, 'assistTab')
+                                $('.empty-data-no-agents').addClass('hide');
+                                $('#agentSearch').val('');
+                                $('.overlay-suggestions').addClass('hide').removeAttr('style');
+                                $('#overLaySearch').html('');
+                                userTabActive();
+                                runDialogForAssistTab(data.payload.info, data.payload.id);
+                                return;
+                            } else if(navigatefromLibToTab === 'myBotTab'){
+                                AgentAssistPubSub.publish('searched_Automation_details',
+                                { conversationId: _agentAssistDataObj.conversationId, botId: _botId, value: 'discard all', isSearch: false,
+                                "positionId": myBotDialogPositionId });
+                                document.getElementById("loader").style.display = "block";
+                                terminateTheDialog({ conversationId: _agentAssistDataObj.conversationId,
+                                botId: _botId,"positionId": myBotDialogPositionId },'agentAutoIcon')
+                                collapseOldDialoguesInMyBot();
+                                updateCurrentTabInState(_conversationId, 'myBotTab')
+                                $('#agentSearch').val('');
+                                $('.overlay-suggestions').addClass('hide').removeAttr('style');
+                                $('#overLaySearch').html('')
+                                if (!isMyBotAutomationOnGoing) {
+                                    runDialogFormyBotTab(data, data.payload.id);
+                                    return;
+                                }
+                            } 
+                        }
+
                         if (target.id.split('-').includes('overRideBtn')) {
                             let idsss = target.id.split('-');
                             idsss.shift();
                             let id = idsss.join('-')
-                            isOverRideMode = true;
+                            
                             var overRideObj = {
                                 "agentId": "",
                                 "botId": _botId,
                                 "conversationId": _agentAssistDataObj.conversationId,
                                 "query": "",
                                 "enable_override_userinput": true,
+                                'experience': isCallConversation === 'true' ? 'voice':'chat',
                                 "positionId": target.dataset.positionId
                             }
                             _agentAsisstSocket.emit('enable_override_userinput', overRideObj);
@@ -5395,6 +5495,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             }
                             $(`#overRideBtn-${id}`).addClass('hide');
                             $(`#cancelOverRideBtn-${id}`).removeClass('hide');
+                            isOverRideMode = true;
                             addWhiteBackgroundClassToNewMessage();
                             scrollToBottom();
                         }
@@ -5402,19 +5503,21 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             let idsss = target.id.split('-');
                             idsss.shift();
                             let id = idsss.join('-')
-                            isOverRideMode = false;
+                            
                             var overRideObj = {
                                 "agentId": "",
                                 "botId": _botId,
                                 "conversationId": _agentAssistDataObj.conversationId,
                                 "query": "",
                                 "enable_override_userinput": false,
+                                'experience': isCallConversation === 'true' ? 'voice':'chat',
                                 "positionId": target.dataset.positionId
                             }
                             _agentAsisstSocket.emit('enable_override_userinput', overRideObj);
                             $(`#overRideBtn-${id}`).removeClass('hide');
                             $(`#cancelOverRideBtn-${id}`).addClass('hide');
                             $('#inputFieldForAgent').remove();
+                            isOverRideMode = false;
                             addWhiteBackgroundClassToNewMessage();
                             scrollToBottom();
                         }
@@ -5441,13 +5544,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 faq.append(answerHtml);
                                 $(`#dynamicBlock #${target.id}`).attr('data-answer-render', 'false');
                                 faqDiv.append(faqaction);
-                                answerPlaceableIDs.push({id:`desc-${id.join('-')}`, input: target.dataset.intentName});
+                                answerPlaceableIDs.push({id:`desc-${id.join('-')}`, input: target.dataset.intentName, positionId: target.dataset.positionId});
                                 $(`#dynamicBlock #${target.id}`).addClass('rotate-carrot');
-                                AgentAssist_run_click(evt);
+                                $(`#dynamicBlock #faqDiv-${id.join('-')}`).addClass('is-dropdown-open');
+                                AgentAssist_run_click(evt.target.dataset, target.dataset.positionId);
                                 return
                             }
                             if ($(`#dynamicBlock .type-info-run-send #faqSection-${id.join('-')} .ast-carrotup.rotate-carrot`).length <= 0) {
                                 $(`#dynamicBlock #${target.id}`).addClass('rotate-carrot');
+                                $(`#dynamicBlock #faqDiv-${id.join('-')}`).addClass('is-dropdown-open');
                                 $(`#dynamicBlock #faqDiv-${id.join('-')} .action-links`).removeClass('hide');
                                 $(`#dynamicBlock #desc-${id.join('-')}`).removeClass('hide');
                                 setTimeout(() => {                                
@@ -5458,6 +5563,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             } else {
                                 $(`#dynamicBlock #${target.id}`).removeClass('rotate-carrot');
                                 $(`#dynamicBlock #faqDiv-${id.join('-')} .action-links`).addClass('hide');
+                                $(`#dynamicBlock #faqDiv-${id.join('-')}`).removeClass('is-dropdown-open');
                                 $(`#dynamicBlock #desc-${id.join('-')}`).addClass('hide');
                                 $(`#dynamicBlock #seeMore-${id.join('-')}`).addClass('hide');
                                 $(`#dynamicBlock #seeLess-${id.join('-')}`).addClass('hide');
@@ -5481,9 +5587,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 faq.append(answerHtml);
                                 $(`#overLaySearch #${target.id}`).attr('data-answer-render', 'false');
                                 faqDiv.append(faqaction);
-                                answerPlaceableIDs.push({id:`descLib-${id.join('-')}`, input: target.dataset.intentName});
+                                answerPlaceableIDs.push({id:`descLib-${id.join('-')}`, input: target.dataset.intentName, positionId: target.dataset.positionId});
                                 $(`#overLaySearch #${target.id}`).addClass('rotate-carrot');
-                                AgentAssistPubSub.publish('searched_Automation_details', { conversationId: evt.target.dataset.convId, botId: evt.target.dataset.botId, value: evt.target.dataset.intentName, isSearch: true });
+                                $(`#overLaySearch #faqDivLib-${id.join('-')}`).addClass('is-dropdown-open');
+                                AgentAssistPubSub.publish('searched_Automation_details', { conversationId: evt.target.dataset.convId, botId: evt.target.dataset.botId, value: evt.target.dataset.intentName, isSearch: true, positionId: target.dataset.positionId });
                                 return
                             }
 
@@ -5500,9 +5607,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 faq.append(answerHtml);
                                 $(`#search-text-display #${target.id}`).attr('data-answer-render', 'false');
                                 faqDiv.append(faqaction);
-                                answerPlaceableIDs.push({id:`descLib-${id.join('-')}`, input: target.dataset.intentName});
+                                answerPlaceableIDs.push({id:`descLib-${id.join('-')}`, input: target.dataset.intentName, positionId: target.dataset.positionId});
                                 $(`#search-text-display #${target.id}`).addClass('rotate-carrot');
-                                AgentAssistPubSub.publish('searched_Automation_details', { conversationId: evt.target.dataset.convId, botId: evt.target.dataset.botId, value: evt.target.dataset.intentName, isSearch: true });
+                                $(`#search-text-display #faqDivLib-${id.join('-')}`).addClass('is-dropdown-open');
+                                AgentAssistPubSub.publish('searched_Automation_details', { conversationId: evt.target.dataset.convId, botId: evt.target.dataset.botId, value: evt.target.dataset.intentName, isSearch: true, positionId: target.dataset.positionId });
                                 return
                             }
                             if (currentTabActive == 'searchAutoIcon') {
@@ -5515,12 +5623,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     setTimeout(() => {
                                         updateSeeMoreButtonForAgent(id.join('-'));
                                     }, waitingTimeForSeeMoreButton);
+                                    $(`#search-text-display #faqDivLib-${id.join('-')}`).addClass('is-dropdown-open');
+ 
                                 } else {
                                     $(`#search-text-display #${target.id}`).removeClass('rotate-carrot');
                                     $(`#search-text-display #faqDivLib-${id.join('-')} .action-links`).addClass('hide');
                                     $(`#search-text-display #descLib-${id.join('-')}`).addClass('hide');
                                     $(`#search-text-display #seeMore-${id.join('-')}`).addClass('hide');
                                     $(`#search-text-display #seeLess-${id.join('-')}`).addClass('hide');
+                                    $(`#search-text-display #faqDivLib-${id.join('-')}`).removeClass('is-dropdown-open');
                                 }
                             } else {
                                 if ($(`#overLaySearch .type-info-run-send #faqSectionLib-${id.join('-')} .ast-carrotup.rotate-carrot`).length <= 0) {
@@ -5532,12 +5643,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     setTimeout(() => {                                  
                                         updateSeeMoreButtonForAgent(id.join('-'));
                                     }, waitingTimeForSeeMoreButton);
+                                    $(`#overLaySearch #faqDivLib-${id.join('-')}`).addClass('is-dropdown-open');
                                 } else {
                                     $(`#overLaySearch #${target.id}`).removeClass('rotate-carrot');
                                     $(`#overLaySearch #faqDivLib-${id.join('-')} .action-links`).addClass('hide');
                                     $(`#overLaySearch #descLib-${id.join('-')}`).addClass('hide');
                                     $(`#overLaySearch #seeMore-${id.join('-')}`).addClass('hide');
                                     $(`#overLaySearch #seeLess-${id.join('-')}`).addClass('hide');
+                                    $(`#overLaySearch #faqDivLib-${id.join('-')}`).removeClass('is-dropdown-open');
+
                                 }
                             }
                         }
@@ -5683,6 +5797,75 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     window._agentAssisteventListenerAdded = true;
                 }
 
+                function runDialogFormyBotTab(data, idTarget){
+                    if(data?.payload){
+                     data = data.payload.info;
+                    }
+                    var dialogId = 'dg-' + (Math.random() + 1).toString(36).substring(2);
+                    myBotDialogPositionId = dialogId;
+                    AgentAssistPubSub.publish('searched_Automation_details', { conversationId: data.convId, botId: data.botId, value: data.intentName, isSearch: false, intentName: data.intentName, "positionId": myBotDialogPositionId });
+                    isMyBotAutomationOnGoing = true;
+                    noAutomationrunninginMyBot = false;
+                    let agentBotuuids = Math.floor(Math.random() * 100);
+                    myBotDropdownHeaderUuids = agentBotuuids;
+                    var appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                    var appState = JSON.parse(appStateStr);
+                    if (appState[_conversationId]) {
+                        appState[_conversationId]['automationGoingOnAfterRefreshMyBot'] = isMyBotAutomationOnGoing
+                        localStorage.setItem('agentAssistState', JSON.stringify(appState))
+                    }
+                    $('#noAutoRunning').addClass('hide');
+                    
+                    _createRunTemplateContainerForMyTab(agentBotuuids, data.intentName, myBotDialogPositionId)
+                    let ids = idTarget.split('-');
+                    $(`${!data?.runMybot}` ? '.dialog-task-run-sec' : '.content-dialog-task-type .type-info-run-send').each((i, ele) => {
+                        let id = ele.id?.split('-');
+                        if (ids.includes(id[1])) {
+                            idsOfMyBotDropDown = ele.id;
+                        }
+                    });
+                    let addRemoveDropDown = document.getElementById(`MyBotaddRemoveDropDown-${agentBotuuids}`);
+                    addRemoveDropDown?.classList.remove('hide');
+                    $(`#myBotendTaks-${agentBotuuids}`).removeClass('hide')
+                    agentTabActive();
+                }
+
+                function runDialogForAssistTab(data, idTarget){
+                    let uuids = koreGenerateUUID();
+                    dropdownHeaderUuids = uuids;
+                    isAutomationOnGoing = true;
+                    var appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                    var appState = JSON.parse(appStateStr);
+                    if (appState[_conversationId]) {
+                        appState[_conversationId].automationGoingOn = isAutomationOnGoing;
+                        appState[_conversationId]['automationGoingOnAfterRefresh'] = isAutomationOnGoing
+                        localStorage.setItem('agentAssistState', JSON.stringify(appState))
+                    }
+                    var dialogId = 'dg-' + (Math.random() + 1).toString(36).substring(2);
+                    dialogPositionId = dialogId;
+                    _createRunTemplateContiner(uuids, data.intentName, dialogPositionId);
+                    let ids = idTarget.split('-');
+                    ids.shift();
+                    let joinedIds = ids.join('-');
+                    let dialogID = document.getElementById(`suggestionId-${joinedIds}`);
+                    if(dialogID){
+                        dialogID.style.borderStyle="solid";
+                    }
+                    $(`${!data.useCaseList}` ? '.dialog-task-run-sec' : '.content-dialog-task-type .type-info-run-send').each((i, ele) => {
+                        let id = ele.id?.split('-');
+                        id.shift();
+                        if (joinedIds.includes(id.join('-'))) {
+                            idsOfDropDown = ele.id;
+                            // $(ele).remove()
+                        }
+                    });
+
+                    let addRemoveDropDown = document.getElementById(`addRemoveDropDown-${uuids}`);
+                    addRemoveDropDown?.classList.remove('hide');
+                    $(`#endTaks-${uuids}`).removeClass('hide')
+                    AgentAssist_run_click(data, dialogPositionId);
+                }
+
                 // Example POST method implementation:
                 async function getData(url = '', data = {}) {
                     document.getElementById("loader").style.display = "block";
@@ -5748,6 +5931,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     });
                     scrollToBottom();
                     updateScrollButton();
+                    updateSeeMoreOnAssistTabActive()
                 }
 
                 function libraryTabActive() {
@@ -5978,14 +6162,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 </div>
                                 <div class="explore-more-negtive-data hide">
                                     <div class="btns-group-negtive-chips" id="feedBackOptions-${headerUUids}">
-                                        <div class="btn-chip-negtive" data-chip-click='false'>Not enough suggestions</div>
-                                        <div class="btn-chip-negtive" data-chip-click='false'>Not prompt</div>
-                                        <div class="btn-chip-negtive" data-chip-click='false'>Intent undetected</div>
+                                        <div class="btn-chip-negtive" data-chip-click='false'>Wrong suggestions</div>
+                                        <div class="btn-chip-negtive" data-chip-click='false'>Incorrect intent</div>
+                                        <div class="btn-chip-negtive" data-chip-click='false'>Accidental click</div>
+                                        <div class="btn-chip-negtive" data-chip-click='false'>Time taking</div>
                                         <div class="btn-chip-negtive" data-chip-click='false'>Other</div>
                                     </div>
                                     <div class="input-block-optional">
                                         <div class="label-text">Additional comments (Optional)</div>
-                                        <input type="text" placeholder="Placeholder text" class="input-text" id="feedBackComment-${headerUUids}"
+                                        <input type="text" placeholder="Type to add comment" class="input-text" id="feedBackComment-${headerUUids}"
                                         data-feedback-comment="true">
                                     </div>
                                     <button class="submit-btn" data-updateFlag="false" disabled>Submit</button>
@@ -6159,17 +6344,17 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 $('.body-data-container').scrollTop($('.body-data-container').prop("scrollHeight"));
 
                 return publicAPIs;
-        //    },
-        //     error: function (error) {
-        //         console.error("token is wrong");
-        //         if (error.status === 500) {
-        //             $(`#${containerId}`).html("Issue identified with the backend services! Please reach out to AgentAssist Admin.")
-        //         } else {
-        //             $(`#${containerId}`).html("Issue identified in configuration settings! Please reach out to AgentAssist Admin.")
-        //         }
-        //         return false;
-        //     }
-        // });
+           },
+            error: function (error) {
+                console.error("token is wrong");
+                if (error.status === 500) {
+                    $(`#${containerId}`).html("Issue identified with the backend services! Please reach out to AgentAssist Admin.")
+                } else {
+                    $(`#${containerId}`).html("Issue identified in configuration settings! Please reach out to AgentAssist Admin.")
+                }
+                return false;
+            }
+        });
     }
 
     function prepareConversation() {
@@ -6467,6 +6652,7 @@ function AgentAssist_feedBack_Update_Request(e) {
         orgId: '',
         taskId: e.taskid,
         positionId: e.dialogid,
+        'experience': isCallConversation === 'true' ? 'voice':'chat',
         "interactionType": currentTabActive == 'userAutoIcon'? 'assist': 'mybot'
     }
 
@@ -6475,19 +6661,20 @@ function AgentAssist_feedBack_Update_Request(e) {
 }
 
 function scrollToBottom() {
+    $(window).trigger('resize');
     setTimeout(() => {
         $("#bodyContainer").scrollTop($("#bodyContainer").prop("scrollHeight"));
-    }, 0);
+    }, 10);
 }
 
 function AgentAssist_run_click(e, dialogId) {
     scrollToBottom();
-    var convId = e.target.dataset.convId;
-    var botId = e.target.dataset.botId;
-    var intentName = e.target.dataset.intentName;
+    var convId = e.convId;
+    var botId = e.botId;
+    var intentName = e.intentName;
     dialogName = intentName;
 
-    if (e.target.dataset.check || e.target.dataset.checkLib) {
+    if (e.check || e.checkLib) {
         AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: convId, botId: botId, value: intentName, check: true, "positionId":dialogId });
 
     } else {
@@ -6867,6 +7054,7 @@ AgentAssistPubSub.subscribe('agent_usage_feedback', (msg, data) => {
         taskId: data.taskId,
         comment: data.comment,
         feedbackDetails: data.feedbackDetails,
+        'experience': isCallConversation === 'true' ? 'voice':'chat',
         "interactionType": currentTabActive == 'userAutoIcon'? 'assist': 'mybot'
     }
     _agentAsisstSocket.emit('agent_usage_feedback', agent_assist_request);
@@ -6880,6 +7068,7 @@ AgentAssistPubSub.subscribe('agent_assist_send_text', (msg, data) => {
         'query': data.value,
         'botId': data.botId,
         'agentId': '',
+        'experience': isCallConversation === 'true' ? 'voice':'chat',
         'positionId': data.positionId
     }
     if (data.intentName) {
