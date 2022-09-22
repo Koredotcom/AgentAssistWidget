@@ -1,0 +1,23 @@
+<app-slider-component [id]="sliderId" #newConvSlider='app-slider'>
+    <app-exhaustive-representation (onClose)="closeSlider($event)" [componentType]="sliderId" *ngIf="sliderStatus">
+    </app-exhaustive-representation>
+</app-slider-component>
+<div class="dashboard-wrapper" id="pdfTable" #pdfTable>
+    <div class="filters-new">
+        <app-dashboard-filters (exportPdf)="exportPdf($event)"></app-dashboard-filters>
+    </div>
+    <div class="row ml-0 mr-0 mb-3">
+        <div class="col-6">
+            <div class="inner-data">
+                <app-automation-performance></app-automation-performance>
+            </div>
+        </div>
+        <div class="col-5">
+            <div class="inner-data">
+                <app-agent-aspect [viewType]='VIEWTYPE.PARTIAL_VIEW'></app-agent-aspect>
+                <button class="kr-sg-button-secondary-two" (click)="openSlider(DASHBORADCOMPONENTTYPE.AGENT_ASPECT)">View All</button>
+
+            </div>
+        </div>
+    </div>
+</div>

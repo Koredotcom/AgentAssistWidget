@@ -151,6 +151,7 @@
     "CONVERSATIONAL_LOGS.FAILED_LOAD_RESULTS": "Failed to load results",
     "CONVERSATIONAL_LOGS.FAILED_FETCH_RESULTS": "Failed to fetch results",
     "LIVE_CHAT_AGENT.CONFIGURATION": "Configuration",
+    "LIVE_CHAT_AGENT.DASHBOARD" : "Dashboard",
     "LIVE_CHAT_AGENT.INSTRUCTIONS": "Instructions",
     "LIVE_CHAT_AGENT.CHOOSE_OPTION": "Choose Option",
     "LIVE_CHAT_AGENT.COPY": "Copy",

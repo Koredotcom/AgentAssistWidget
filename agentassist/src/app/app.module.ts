@@ -95,6 +95,16 @@ import { ExternalWidgetComponent } from './pages/agent-settings/external-widget/
 import { AddWidgetComponent } from './pages/agent-settings/external-widget/add-widget/add-widget.component';
 import { OnboardingComponent } from './pages/onboarding/onboarding.component';
 import { OnboardingDialogComponent } from './pages/onboarding/onboarding-dialog/onboarding-dialog.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { AutomationPerformanceComponent } from './pages/dashboard/automation-performance/automation-performance.component';
+import { AgentFeedbackComponent } from './pages/dashboard/agent-feedback/agent-feedback.component';
+import { AutomationOverrideReportComponent } from './pages/dashboard/automation-override-report/automation-override-report.component';
+import { AgentAspectComponent } from './pages/dashboard/agent-aspect/agent-aspect.component';
+import { CustomerAspectComponent } from './pages/dashboard/customer-aspect/customer-aspect.component';
+import { ExhaustiveRepresentationComponent } from './pages/dashboard/exhaustive-representation/exhaustive-representation.component';
+import { DashboardFiltersComponent } from './pages/dashboard/dashboard-filters/dashboard-filters.component';
+import { DashboardKpiComponent } from './pages/dashboard/dashboard-kpi/dashboard-kpi.component';
+import { CommonModule } from '@angular/common';
 @NgModule({
   declarations: [
     AppComponent,
@@ -165,8 +175,18 @@ import { OnboardingDialogComponent } from './pages/onboarding/onboarding-dialog/
     AddWidgetComponent,
     OnboardingComponent,
     OnboardingDialogComponent,
+    DashboardComponent,
+    AutomationPerformanceComponent,
+    AgentFeedbackComponent,
+    AutomationOverrideReportComponent,
+    AgentAspectComponent,
+    CustomerAspectComponent,
+    ExhaustiveRepresentationComponent,
+    DashboardFiltersComponent,
+    DashboardKpiComponent,
   ],
   imports: [
+    CommonModule,
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,

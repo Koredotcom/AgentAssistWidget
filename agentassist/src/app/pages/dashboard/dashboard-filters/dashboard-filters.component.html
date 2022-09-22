@@ -1,0 +1,35 @@
+<div class="row ml-0 mr-0 mb-3">
+    <div class="col-6">
+        <div class="inner-data">
+            <button class="kr-sg-button-secondary-two" (click)="export()">Export</button>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="inner-data">
+            <div class="right-sec d-flex align-items-center col-8 p-0">
+                <!-- <div class="date-sec"><img src="assets/icons/analytics/calendar.svg">Today <img src="assets/icons/analytics/carrotup.svg" class="ml-3 mr-0"></div> -->
+                <div class="custom_date_picker_sec date-sec ngx-daterangepicker-action" (click)="openPicker()">
+                    <img src="assets/icons/analytics/calendar.svg" class="ngx-daterangepicker-action">
+                    <i class="icon-sa-calendar ngx-daterangepicker-action" (click)="openPicker()"></i>
+                    <input type="text"  
+                        ngxDaterangepickerMd                    
+                        [timePicker]="false"
+                        [alwaysShowCalendars]="true"
+                        [keepCalendarOpeningWithRange]="true"
+                        [ranges]="ranges"
+                        [showCustomRangeLabel]="true"
+                        [showRangeLabelOnInput]="true"
+                        [linkedCalendars]="true"
+                        showCancel="true"
+                        [locale]="{format: 'DD/MM/YYYY hh:mm', displayFormat: 'MM/DD/YYYY hh:mm A'}"
+                        [isInvalidDate]="isInvalidDate"
+                        [(ngModel)]="selected"
+                        class="input-date-custom"
+                        [locale] = "calendarLocale"
+                        (datesUpdated)="onDatesUpdated($event)"/>
+                    <img src="assets/icons/analytics/carrotup.svg" class="ml-2 mr-0 ngx-daterangepicker-action" (click)="openPicker()">  
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

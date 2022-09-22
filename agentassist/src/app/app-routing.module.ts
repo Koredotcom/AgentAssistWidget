@@ -13,6 +13,7 @@ import { AutomationComponent } from './pages/automation/automation.component';
 import { UserManagementComponent } from './pages/agent-settings/user-management/user-management.component';
 import { LanguagesSpeechComponent } from './pages/languages-speech/languages-speech.component';
 import { OnboardingComponent } from './pages/onboarding/onboarding.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
 
 const routes: Routes = [
   {
@@ -47,7 +48,9 @@ const routes: Routes = [
           { path: '**', redirectTo: 'sessiontrends' },
         ]
       },
-     
+      {
+        path : 'dashboard', component : DashboardComponent
+      }
     ]
   },
   
