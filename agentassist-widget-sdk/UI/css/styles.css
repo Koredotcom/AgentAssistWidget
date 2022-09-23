@@ -3405,7 +3405,7 @@ input.no-autofill-bkg:-webkit-autofill {
     padding-left: 24px;
 }
 .summary-box-content{
-    width:98%;
+    width:calc(100% - 30px);
 }
 .summary-box-content .summary-header{
     font-size: 16px;
