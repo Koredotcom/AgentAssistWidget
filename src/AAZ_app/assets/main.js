@@ -50,11 +50,19 @@ function sendMessageToAgentAssist(conversationId, message) {
 }
 
 async function getChannel(client) {
-
   let data = await client.get('ticket');
   if (data) {
     return data.ticket.via.channel;
   }
+  return null;
+}
+
+async function getPhoneNumber(client){
+  let data = await client.get('ticket');
+  if (data) {
+    return data.ticket.requester.identities[0]['value'].replace('+', '%2B')
+  }
+  return null;
 }
 
 async function getTicketId(client) {
@@ -131,16 +139,23 @@ async function generateURL() {
       signature = base64url(signature);
 
       var signedToken = token + "." + signature;
-
       let requester = await getRequesterName(client);
-      debugger
-      let customdata = encodeURI(JSON.stringify({ fName: requester || 'Customer', lName: '' }));
       let smartassistURL = tokenData.agentassistURL.replace("agentassist", "smartassist");
-      let activeConversationId = await getTicketId(client);
+      let activeConversationId = null;
+      let customdata = null;
       let channel = await getChannel(client);
-      // let isCall = await getChannle;
+      
       console.log("===============> channel", channel);
       let isCall = channel == "voice_inbound" ? true : false
+      if(isCall){
+        activeConversationId = await getPhoneNumber(client);
+        customdata = encodeURI(JSON.stringify({ fName:'Customer', lName: '' }));
+
+      }else{
+        activeConversationId = await getTicketId(client);
+        customdata = encodeURI(JSON.stringify({ fName: requester || 'Customer', lName: '' }));
+
+      }
 
       iframeURL = `${tokenData.agentassistURL}/koreagentassist-sdk/UI/agentassist-iframe.html?token=${signedToken}&botid=${tokenData.botId}&agentassisturl=${smartassistURL}&conversationid=${activeConversationId}&isCall=${isCall}&customdata=${customdata}`;
       resolve(iframeURL);
