@@ -187,7 +187,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         if(e.data.name === 'response_resolution_comments' && e.data.conversationId) {
                             $(`#summary`).removeClass('hide');
                             $(`#summaryText`).val(e.data?.summary ? e.data?.summary[0].summary_text:'');
-                            $(`#summarySubmit`).attr('data-summary', JSON.stringify(e.data))
+                            $(`#summarySubmit`).attr('data-summary', e.data?JSON.stringify(e.data):'')
                         }
                         if(e.data.name ==='agentAssist.endOfConversation' && e.data.conversationId) {
                             let currentEndedConversationId = e.data.conversationId;
@@ -411,7 +411,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     _agentAsisstSocket.on('response_resolution_comments', (data) => {
                         $(`#summary`).removeClass('hide');
                         $(`#summaryText`).val(data?.summary ? data?.summary[0].summary_text:'');
-                        $(`#summarySubmit`).attr('data-summary', JSON.stringify(data))
+                        $(`#summarySubmit`).attr('data-summary', data?JSON.stringify(data):'')
                     });
 
                 }
@@ -5767,7 +5767,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
 
                         if(target.id === 'summarySubmit'){
-                            let data = JSON.parse(target.dataset.summary);
+                            let data = JSON.parse(target.dataset?.summary);
                             let editedSummaryText =  $(`#summaryText`).val();
                             if(data?.summary){
                                 data['summary'][0]['summary_text'] = editedSummaryText;
