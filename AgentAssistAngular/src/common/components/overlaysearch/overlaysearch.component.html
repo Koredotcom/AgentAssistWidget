@@ -1,9 +1,61 @@
-<div class="sugestions-info-data">
-    <input type="text" class="suggestion-input" id="agentSearch" placeholder="Ask AgentAssist">
-    <i class="ast-search search-icon"></i>
-    <i class="ast-close close-search hide" id="cancelAgentSearch"></i>
-</div>
-<div class="overlay-suggestions hide">
-    <div class="suggestion-content" id="overLaySearch">
+<div class="searched-intent" id="librarySearchText">1 Search result for 'bar chart' </div>
+<div class="dialog-task-run-sec p-0" id="searchedDialogs-17">
+    <div class="task-type" id="dialoguesArea">
+        <div class="img-block-info">
+            <img [src]="imageFilePath + imageFileNames['DIALOG_TASK']">
+        </div>
+
+        <div class="content-dialog-task-type arr-cont-dialogtask" id="dialogSuggestions-results">
+            <div class="type-with-img-title">Dialog task (1)</div>
+
+            <div class="type-info-run-send">
+                <div class="left-content">
+                    <div class="title-text" id="automation-17">Bar Chart</div>
+                </div>
+                <div class="action-links">
+                    <button class="send-run-btn" id="run-17">RUN</button>
+                    <div class="elipse-dropdown-info" id="showRunForAgentBtn-17">
+                        <div class="elipse-icon" id="elipseIcon-17">
+                            <i class="ast-overflow" id="overflowIcon-17"></i>
+                        </div>
+                        <div class="dropdown-content-elipse hide" id="runsearchAgtBtn-17">
+                            <div class="list-option" id="agentSearchSelect-17">Run with Agent Inputs
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="task-type" id="faqssAreas">
+        <div class="img-block-info">
+            <img [src]="imageFilePath + imageFileNames['FAQ_SUGGESTION']">
+        </div>
+        <div class="content-dialog-task-type arr-cont-dialogtask" id="faqsSuggestions-results">
+            <div class="type-with-img-title">FAQ (2)</div>
+
+            <div class="type-info-run-send is-dropdown-show-default is-dropdown-open" id="faqDivLib-39">
+                <div class="left-content" id="faqSectionLib-39">
+                    <div class="title-text" id="titleLib-39"
+                        style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">How can
+                        I get new password?
+                        <i class="ast-carrotup rotate-carrot" id="checkLib-39"></i>
+                    </div>
+                    <div class="desc-text" id="descLib-39"
+                        style="overflow: hidden; text-overflow: ellipsis; display: -webkit-box; white-space: normal;">
+                        Login to application URL and click on forgot password button</div>
+                    <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-39">Show
+                        more</button>
+                    <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-39">Show
+                        less</button>
+                </div>
+                <div class="action-links">
+                    <button class="send-run-btn" id="sendMsg">Send</button>
+                    <div class="copy-btn">
+                        <i class="ast-copy"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

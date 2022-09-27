@@ -1,9 +1,10 @@
-<div class="library-search-data-container hide" id="LibraryContainer">
+<div class="library-search-data-container" id="LibraryContainer">
     <div class="search-block">
         <div class="input-text-search library-search-div" id="search-block">
-            <input type="text" placeholder="Ask AgentAssist" class="input-text" id="librarySearch">
+            <input type="text" placeholder="Ask AgentAssist" class="input-text" id="librarySearch" (keyup.enter)="getSearchResults()" [(ngModel)]="searchText"
+            (ngModelChange)="emptySearchTextCheck()">
             <i class="ast-search"></i>
-            <i class="ast-close close-search hide" id="cancelLibrarySearch"></i>
+            <i class="ast-close close-search" id="cancelLibrarySearch" (click)="showSearchSuggestions=false"></i>
         </div>
     </div>
 
@@ -24,13 +25,54 @@
             <div class="title-empty">No items found</div>
             <div class="desc-text">No usecases are configured for the bot.</div>
         </div>
-        <div id="frequently-exhaustive">
+        <div id="frequently-exhaustive" *ngIf="!showSearchSuggestions">
             <div class="frequently-asked" id="allAutomations-Exhaustivelist">
+                <div class="heading-title">All Automations</div>
+                <div class="dialog-task-run-sec" id="dialogs-list">
+                    <div class="task-type" id="usecases-list">
+                        <div class="content-dialog-task-type p1-0" id="usecases-suggestions">
+                            <div class="type-info-run-send" id="useCaseList-95">
+                                <div class="left-content">
+                                    <div class="title-text" id="automation-35">multipleMessages</div>
+                                </div>
+                                <div class="action-links">
+                                    <button class="send-run-btn" id="useCase-95">RUN</button>
+                                    <div class="elipse-dropdown-info" id="showRunForAgentBtn-95">
+                                        <div class="elipse-icon" id="elipseIcon-95">
+                                            <i class="ast-overflow" id="overflowIcon-95"></i>
+                                        </div>
+                                        <div class="dropdown-content-elipse hide" id="runAgtBtn-95">
+                                            <div class="list-option" id="agentSelect-95">Run with Agent
+                                                Inputs</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="type-info-run-send" id="useCaseList-37">
+                                <div class="left-content">
+                                    <div class="title-text" id="automation-35">Bar Chart</div>
+                                </div>
+                                <div class="action-links">
+                                    <button class="send-run-btn" id="useCase-37">RUN</button>
+                                    <div class="elipse-dropdown-info" id="showRunForAgentBtn-37">
+                                        <div class="elipse-icon" id="elipseIcon-37">
+                                            <i class="ast-overflow" id="overflowIcon-37"></i>
+                                        </div>
+                                        <div class="dropdown-content-elipse hide" id="runAgtBtn-37">
+                                            <div class="list-option" id="agentSelect-37">Run with Agent
+                                                Inputs</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="intent-based-search" id="searchResults">
-            <div id="search-text-display"></div>
+        <div class="intent-based-search" id="searchResults" *ngIf="showSearchSuggestions">
+            <app-overlaysearch></app-overlaysearch>
         </div>
     </div>
     <div id="dialogs-faqs">

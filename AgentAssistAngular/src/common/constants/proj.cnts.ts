@@ -3,7 +3,9 @@ export const ImageFileNames = {
     KORE_LOGO : "kore_new_logo.svg",
     AGENT_LOGO : "logo-agent.svg",
     EMPTY_LIBRARY : "emptylibrary.svg",
-    CUST_FEELING : "bucket.svg"
+    CUST_FEELING : "bucket.svg",
+    DIALOG_TASK : 'dialogtask.svg',
+    FAQ_SUGGESTION : 'kg.svg'
 }
 
 export const ImageFilePath = "assets/images/"

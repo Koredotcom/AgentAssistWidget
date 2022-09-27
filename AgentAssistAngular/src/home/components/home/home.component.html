@@ -15,22 +15,22 @@
                     <div class="logo-assist">
                         <img [src]="imageFilePath + imageFileNames['AGENT_LOGO']">
                     </div>
-                    <div class="tab-icon hide" id="transcriptIcon" (click)="changeActiveTab(projConstants.TRANSCRIPT)">
+                    <div class="tab-icon hide" id="transcriptIcon" (click)="changeActiveTab(projConstants.TRANSCRIPT)" [ngClass]="{'active-tab': activeTab == projConstants.TRANSCRIPT}">
                         <i class="ast-transcipt font-15" id="scriptIcon"></i>
                         <div class="title-tab" id="transcriptLabel">{{projConstants.TRANSCRIPT}}</div>
                         <div class="custom-tootltip-tabs">{{projConstants.TRANSCRIPT}}</div>
                     </div>
-                    <div class="tab-icon active-tab" id="userAutoIcon" (click)="changeActiveTab(projConstants.ASSIST)">
+                    <div class="tab-icon" id="userAutoIcon" (click)="changeActiveTab(projConstants.ASSIST)"  [ngClass]="{'active-tab': activeTab == projConstants.ASSIST}">
                         <i class="ast-bot font-13" id="userBotIcon"></i>
                         <div class="title-tab" id="AssistLabel">{{projConstants.ASSIST}}</div>
                         <div class="custom-tootltip-tabs">{{projConstants.ASSIST}}</div>
                     </div>
-                    <div class="tab-icon" id="searchAutoIcon" (click)="changeActiveTab(projConstants.LIBRARY)">
+                    <div class="tab-icon" id="searchAutoIcon" (click)="changeActiveTab(projConstants.LIBRARY)" [ngClass]="{'active-tab': activeTab == projConstants.LIBRARY}">
                         <i class="ast-library font-13" id="searchIcon"></i>
                         <div class="title-tab" id="LibraryLabel">{{projConstants.LIBRARY}}</div>
                         <div class="custom-tootltip-tabs">{{projConstants.LIBRARY}}</div>
                     </div>
-                    <div class="tab-icon" id="agentAutoIcon" (click)="changeActiveTab(projConstants.MYBOT)">
+                    <div class="tab-icon" id="agentAutoIcon" (click)="changeActiveTab(projConstants.MYBOT)" [ngClass]="{'active-tab': activeTab == projConstants.MYBOT}">
                         <i class="ast-automation font-13" id="agentBotIcon"></i>
                         <div class="title-tab" id="MybotLabel">{{projConstants.MYBOT}}</div>
                         <div class="custom-tootltip-tabs">{{projConstants.MYBOT}}</div>
@@ -62,7 +62,19 @@
                 </ng-container>
             </div>
         </div>
-        <app-overlaysearch></app-overlaysearch>
+        <!-- searchbar -->
+        <div class="sugestions-info-data" *ngIf="activeTab != projConstants.LIBRARY">
+            <input type="text" class="suggestion-input" id="agentSearch" placeholder="Ask AgentAssist" (keyup.enter)="getSearchResults()" [(ngModel)]="searchText"
+            (ngModelChange)="emptySearchTextCheck()">
+            <i class="ast-search search-icon"></i>
+            <i class="ast-close close-search" id="cancelAgentSearch" (click)="showSearchSuggestions=false"></i>
+        </div>
+        <div class="overlay-suggestions" style="bottom:0; display:block;" *ngIf="showSearchSuggestions">
+            <div class="suggestion-content" id="overLaySearch">
+                <app-overlaysearch></app-overlaysearch>
+            </div>
+        </div>
+        <!-- end -->
         <div class="footer-info" id="cust-feeling">
             <div class="event-bucket">
                 <img [src]="imageFilePath + imageFileNames['CUST_FEELING']">

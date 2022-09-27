@@ -13,7 +13,9 @@ export class HomeComponent implements OnInit {
   imageFilePath : string = ImageFilePath;
   imageFileNames : any = ImageFileNames;
   projConstants : any = ProjConstants;
-  subscriptionsList: Subscription[] = []
+  searchText : string = '';
+  showSearchSuggestions : boolean = false;
+  subscriptionsList: Subscription[] = [];
   activeTab : string; // call conversation make transcript as active tab.
 
   constructor(public handleSubjectService : HandleSubjectService) { }
@@ -44,6 +46,18 @@ export class HomeComponent implements OnInit {
 
   changeActiveTab(tab){
     this.handleSubjectService.setActiveTab(tab);
+  }
+
+  getSearchResults(){
+    console.log(this.searchText, "searched text");
+    this.showSearchSuggestions = true;
+    this.handleSubjectService.setSearchText({searchFrom:this.projConstants.ASSIST, value : this.searchText});
+  }
+
+  emptySearchTextCheck(){
+    if(this.searchText == ''){
+      this.showSearchSuggestions = false;
+    }
   }
 
 }

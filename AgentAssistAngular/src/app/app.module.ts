@@ -5,6 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SharedModule } from 'src/common/shared.module';
 import { HomeModule } from 'src/home/home.module';
+import { FormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     AppComponent
@@ -12,6 +13,7 @@ import { HomeModule } from 'src/home/home.module';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    FormsModule,
     SharedModule,
     HomeModule
   ],
