@@ -1,0 +1,38 @@
+<div class="library-search-data-container hide" id="LibraryContainer">
+    <div class="search-block">
+        <div class="input-text-search library-search-div" id="search-block">
+            <input type="text" placeholder="Ask AgentAssist" class="input-text" id="librarySearch">
+            <i class="ast-search"></i>
+            <i class="ast-close close-search hide" id="cancelLibrarySearch"></i>
+        </div>
+    </div>
+
+    <div class="show-back-recommendation-block  hide" id="backButton">
+        <button id="backToPreviousTab" class="ghost-btn">
+            <span class="back-icon">
+                <i class="ast-carrotup"></i>
+            </span>
+            Back
+        </button>
+    </div>
+
+    <div class="dynamic-searchlibrary-data">
+        <div class="empty-library-data hide" id="noLibraryList">
+            <div class="img-block">
+                <img [src]="imageFilePath + imageFileNames['EMPTY_LIBRARY']">
+            </div>
+            <div class="title-empty">No items found</div>
+            <div class="desc-text">No usecases are configured for the bot.</div>
+        </div>
+        <div id="frequently-exhaustive">
+            <div class="frequently-asked" id="allAutomations-Exhaustivelist">
+            </div>
+        </div>
+
+        <div class="intent-based-search" id="searchResults">
+            <div id="search-text-display"></div>
+        </div>
+    </div>
+    <div id="dialogs-faqs">
+    </div>
+</div>
