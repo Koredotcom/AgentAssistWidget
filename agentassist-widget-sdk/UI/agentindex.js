@@ -418,7 +418,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                     _agentAsisstSocket.on('response_resolution_comments', (data) => {
                         $(`#summary`).removeClass('hide');
-                        $(`#summaryText`).val(data?.summary ? data?.summary[0]?.summary_text:'');
+                        $(`#summaryText`).val(data?.summary ? data?.summary[0]?.summary_text:''); 
                         $(`#summarySubmit`).attr('data-summary', data?JSON.stringify(data):'')
                     });
 
