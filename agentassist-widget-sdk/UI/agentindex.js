@@ -80,7 +80,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
         console.log(err);
     }
     var webSocketConnection = {
-        "path": "/agentassist/api/v1/chat/", transports: ['websocket', 'polling', 'flashsocket']
+        "path": '/agentassist/api/v1/chat/', transports: ['websocket', 'polling', 'flashsocket'], query: {'jToken': connectionDetails.jwtToken}
     };
     connectionDetails['webSocketConnectionDomain'] = connectionDetails.envinormentUrl + "/koreagentassist",
         connectionDetails['webSocketConnectionDetails'] = webSocketConnection,
