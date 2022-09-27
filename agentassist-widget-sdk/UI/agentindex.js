@@ -5770,7 +5770,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         if(target.id === 'summarySubmit'){
                             let data = JSON.parse(target.dataset?.summary);
                             let editedSummaryText =  $(`#summaryText`).val();
-                            if(data?.summary){
+                            if(data?.summary != ''){
                                 data['summary'][0]['summary_text'] = editedSummaryText;
                             }else{
                                 data['summary'] = [];
