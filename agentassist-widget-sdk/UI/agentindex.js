@@ -186,7 +186,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         console.log(e.data, "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx message came to widget when any message came from others");//your data is captured in e.data
                         if(e.data.name === 'response_resolution_comments' && e.data.conversationId) {
                             $(`#summary`).removeClass('hide');
-                            $(`#summaryText`).val(e.data?.summary ? e.data?.summary[0].summary_text:'');
+                            $(`#summaryText`).val(e.data?.summary ? e.data?.summary[0]?.summary_text:'');
                             $(`#summarySubmit`).attr('data-summary', e.data?JSON.stringify(e.data):'')
                         }
                         if(e.data.name ==='agentAssist.endOfConversation' && e.data.conversationId) {
@@ -267,6 +267,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     _agentAsisstSocket = io(connectionDetails.webSocketConnectionDomain, connectionDetails.webSocketConnectionDetails);
                     _agentAsisstSocket.on("connect", () => {
                         console.log("AgentAssist >>> socket connected");
+                        if(sourceType === 'smartassist-color-scheme') {
+                            var message = {
+                                method: 'connected',
+                                name: "agentAssist.socketConnect",
+                                conversationId: _conversationId
+                            };
+                            window.parent.postMessage(message, '*');
+                        }
                     });
 
                     _agentAsisstSocket.on('agent_assist_response', (data) => {
@@ -410,7 +418,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                     _agentAsisstSocket.on('response_resolution_comments', (data) => {
                         $(`#summary`).removeClass('hide');
-                        $(`#summaryText`).val(data?.summary ? data?.summary[0].summary_text:'');
+                        $(`#summaryText`).val(data?.summary ? data?.summary[0]?.summary_text:'');
                         $(`#summarySubmit`).attr('data-summary', data?JSON.stringify(data):'')
                     });
 
