@@ -267,14 +267,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     _agentAsisstSocket = io(connectionDetails.webSocketConnectionDomain, connectionDetails.webSocketConnectionDetails);
                     _agentAsisstSocket.on("connect", () => {
                         console.log("AgentAssist >>> socket connected");
-                        if(sourceType === 'smartassist-color-scheme') {
-                            var message = {
-                                method: 'connected',
-                                name: "agentAssist.socketConnect",
-                                conversationId: _conversationId
-                            };
-                            window.parent.postMessage(message, '*');
-                        }
+                        
                     });
 
                     _agentAsisstSocket.on('agent_assist_response', (data) => {
