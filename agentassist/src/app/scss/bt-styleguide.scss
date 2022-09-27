@@ -1265,6 +1265,12 @@ and open the template in the editor.
             background-color: $whiteColor;
             padding: 0 30px 0 10px;       
             text-align: left;  
+            &.before-none{
+                padding-right: 10px;
+                &::before{
+                    display: none;
+                }
+            }
             .multi-selected-items{
                 background: $borderColor;
                 padding: 4px 8px;
@@ -1523,19 +1529,25 @@ and open the template in the editor.
                 &.selected{
                     position: relative;
                     background-color:$primaryHoverColor;
+                    padding-right: 35px;
                     &::before{
-                        content: "";
-                        background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAeFBMVEUAAAAAAIArK1UgQEAmM00mOUwoNkooM0onMkgmNkwoMksmNEwkNkwnNEknM0skM0koMksnM0slM0onNEknNEsmM0omNEolNEomNEslNEomNEomNEomM0omNEomM0omM0omNEomNUomNEkmNEomNUomNEomNEr////SMoFCAAAAJ3RSTlMAAgYIFBsmLS4vMzY5O0FGR1VaYmNka3WFl6jL1dbf5Ojp7O3u7/3xM/UwAAAAAWJLR0QnLQ+oIwAAAFVJREFUGNNjYCARcKPxxeSZUfhCypwofH5VXhQ+j4oACp9DSRBMM8uwg2k2BWGojKgiB5BklROHqxVV4mJgkZVA0i2ixCctiWKeqJoUI6oLuZhI8B4AqNQDaSUV+AIAAAAASUVORK5CYII=') no-repeat;                            
+                        content: "\e93a";
                         position: absolute;
-                        line-height: 40px;
-                        height: 100%;
-                        right: 16px;
-                        transition: all 0.3s ease-in;
-                        z-index: 99;                        
-                        height: 100%;
-                        width: 14px;
-                        background-position: center;
-                        background-size: 100%;
+                        right: 10px;
+                        top: 13px;
+                        color: #0D6EFD;
+                        font-size: 13px;
+                        font-family: 'icomoon' !important;
+                        speak: never;
+                        font-style: normal;
+                        font-weight: normal;
+                        font-variant: normal;
+                        text-transform: none;
+                        line-height: 1;
+
+                        /* Better Font Rendering =========== */
+                        -webkit-font-smoothing: antialiased;
+                        -moz-osx-font-smoothing: grayscale;
                     }
                 }
                 &:hover{               
@@ -3295,3 +3307,72 @@ pre{
         max-height: 250px;
     }
 }
+
+
+
+$numbers: 1000;
+
+@mixin padding-magin-width {
+  @for $i from 1 through $numbers {
+    .p_#{$i} {
+      padding: #{$i+'px'} !important;
+    }
+    .p_t_#{$i} {
+      padding-top: #{$i+'px'} !important;
+    }
+    .p_b_#{$i} {
+      padding-bottom:  #{$i+'px'} !important;
+    }
+    .p_l_#{$i} {
+      padding-left:  #{$i+'px'} !important;
+    }
+    .p_r_#{$i} {
+      padding-right:  #{$i+'px'} !important;
+    }
+    .p_r_#{$i} {
+        padding-right:  #{$i+'px'} !important;
+    }
+    .m_#{$i} {
+      margin: #{$i+'px'} !important;
+    }
+    .m_t_#{$i} {
+      margin-top: #{$i+'px'} !important;
+    }
+    .m_b_#{$i} {
+      margin-bottom: #{$i+'px'} !important;
+    }
+    .m_r_#{$i} {
+      margin-right: #{$i+'px'} !important;
+    }
+    .m_l_#{$i} {
+      margin-left: #{$i+'px'} !important;
+    }
+    .w_#{$i} {
+      width: #{$i+'%'} !important;
+    }
+    .width_#{$i} {
+        width: #{$i+'px'} !important;
+    }
+    .max_width_#{$i} {
+        max-width: #{$i+'%'} !important;
+    }
+    .h_#{$i} {
+        height: #{$i+'%'} !important;
+    }
+    .min_h_#{$i} {
+        min-height: #{$i+'px'};
+    }
+    .mx_h_#{$i} {
+        max-height: #{$i+'px'} !important;
+    }
+    .f_s_#{$i} {
+      font-size: #{$i+'px'} !important;
+    }
+    .f_w_#{$i} {
+        font-weight: #{$i} !important;
+    }
+  }
+}
+
+// Always Include in last
+@include padding-magin-width;

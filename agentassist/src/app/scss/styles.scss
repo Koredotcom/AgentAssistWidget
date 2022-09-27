@@ -1157,6 +1157,33 @@ body{
 }
 
 .custom_date_picker_sec{
+    position: relative;
+    &.date-sec-info{
+        background: #FFFFFF;
+        border: 1px solid #D1D5DB;
+        box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
+        border-radius: 6px;
+        height: 34px;
+        display: flex;
+        align-items: center;
+        padding: 0 20px;
+        cursor: pointer;
+        .icon-ast_calendar{
+            margin-right: 10px;
+        }
+        .input-date-custom{
+            width: 120px;
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 24px;
+            color: #121314;
+            cursor: pointer;
+        }
+        .md-drppicker.drops-down-auto{
+            right: 0 !important;
+            left: auto !important;
+        }
+    }
     &.date-sec{
         .input-date-custom{
             height: auto;

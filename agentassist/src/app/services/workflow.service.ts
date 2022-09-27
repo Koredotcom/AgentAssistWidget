@@ -233,6 +233,7 @@ export class workflowService {
     if (url === 'https://demo-app.smartassist.ai' || url === 'https://demo-app-smartassist.kore.ai') return 'https://uat-demo.kore.ai';
     if (url === 'https://app.deflect.ai' || url === 'https://app.smartassist.ai' || url === 'https://smartassist.kore.ai') return 'https://bots.kore.ai';
     if (url === 'https://smartassist-jp.kore.ai') return 'https://jp-bots.kore.ai';
+    if(url === 'http://localhost:4201') return 'https://dev-agentassist.kore.ai';
     return url;
   }
 

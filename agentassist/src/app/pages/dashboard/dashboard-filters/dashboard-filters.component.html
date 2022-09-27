@@ -1,4 +1,4 @@
-<div class="row ml-0 mr-0 mb-3">
+<div class="row ml-0 mr-0 mb-3 d-none">
     <div class="col-6">
         <div class="inner-data">
             <button class="kr-sg-button-secondary-two" (click)="export()">Export</button>
@@ -30,6 +30,60 @@
                     <img src="assets/icons/analytics/carrotup.svg" class="ml-2 mr-0 ngx-daterangepicker-action" (click)="openPicker()">  
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="date-channels-container">
+    <div class="left-title">Dashboard</div>
+    <div class="right-sec-actions">
+        <div class="custom_date_picker_sec date-sec-info ngx-daterangepicker-action" (click)="openPicker()">
+            <i class="icon-ast_calendar"></i>
+            <i class="icon-sa-calendar ngx-daterangepicker-action" (click)="openPicker()"></i>
+            <input type="text"  
+                ngxDaterangepickerMd                    
+                [timePicker]="false"
+                [alwaysShowCalendars]="true"
+                [keepCalendarOpeningWithRange]="true"
+                [ranges]="ranges"
+                [showCustomRangeLabel]="true"
+                [showRangeLabelOnInput]="true"
+                [linkedCalendars]="true"
+                showCancel="true"
+                [locale]="{format: 'DD/MM/YYYY hh:mm', displayFormat: 'MM/DD/YYYY hh:mm A'}"
+                [isInvalidDate]="isInvalidDate"
+                [(ngModel)]="selected"
+                class="input-date-custom"
+                [locale] = "calendarLocale" (datesUpdated)="onDatesUpdated($event)"/>
+        </div>
+        <div class="kr-sg-dropdowns channels-drpdowns" ngbDropdown placement="bottom-right">
+            <div class="dropdown-open">
+                <button type="button" class="dropdown-toggle before-none dropdown-input" id="repdropdown" ngbDropdownToggle>
+                    <i class="icon-ast_channels"></i>
+                    <span class="title-text">All Channels</span>
+                    <span class="count-channels">2</span>
+                </button>
+                <ul class="content-menu" aria-labelledby="repdropdown" ngbDropdownMenu>
+                    <perfect-scrollbar>
+                        <div class="scroll-data mx-h-280">
+                            <li ngbDropdownItem class="channel-name m_b_2">
+                                <a class="selected">All Channels</a>
+                            </li>
+                            <li ngbDropdownItem class="channel-name m_b_2">
+                                <a>Whatsapp</a>
+                            </li>
+                            <li ngbDropdownItem class="channel-name m_b_2">
+                                <a>Slack</a>
+                            </li>
+                        </div>
+                    </perfect-scrollbar>
+                </ul>
+            </div>
+        </div>
+        <div class="export-btn" (click)="export()">
+            <i class="icon-ast_export"></i>
+            <span>Export</span>
         </div>
     </div>
 </div>

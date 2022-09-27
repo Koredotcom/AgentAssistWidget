@@ -1,4 +1,4 @@
-<app-slider-component [id]="sliderId" #newConvSlider='app-slider'>
+<!-- <app-slider-component [id]="sliderId" #newConvSlider='app-slider'>
     <app-exhaustive-representation (onClose)="closeSlider($event)" [componentType]="sliderId" *ngIf="sliderStatus">
     </app-exhaustive-representation>
 </app-slider-component>
@@ -16,8 +16,426 @@
             <div class="inner-data">
                 <app-agent-aspect [viewType]='VIEWTYPE.PARTIAL_VIEW'></app-agent-aspect>
                 <button class="kr-sg-button-secondary-two" (click)="openSlider(DASHBORADCOMPONENTTYPE.AGENT_ASPECT)">View All</button>
-
             </div>
         </div>
     </div>
+</div> -->
+
+<div class="dashboard-wraaper-container">
+    <div class="header-titles">
+        <app-dashboard-filters (exportPdf)="exportPdf($event)"></app-dashboard-filters>
+    </div>
+    <perfect-scrollbar class="scroll-container">
+        <div class="inner-scroll-data">
+            <div class="cards-data-boards">
+                <div class="card-sec">
+                    <div class="inner-data-sec">
+                        <div class="title-text-info">
+                            <span class="heading-text">Total Suggestions</span>
+                            <div class="value-data negtive">
+                                <i class="icon-ast_sortdown"></i>
+                                <span>2.3%</span>
+                            </div>
+                        </div>
+                        <div class="count-heading">2321</div>
+                    </div>
+                </div>
+                <div class="card-sec">
+                    <div class="inner-data-sec">
+                        <div class="title-text-info">
+                            <span class="heading-text">Total Suggestions</span>
+                            <div class="value-data">
+                                <i class="icon-ast_sortup"></i>
+                                <span>2.3%</span>
+                            </div>
+                        </div>
+                        <div class="count-heading">7537</div>
+                    </div>
+                </div>
+                <div class="card-sec">
+                    <div class="inner-data-sec">
+                        <div class="title-text-info">
+                            <span class="heading-text">Avg. Suggestions Used/Session</span>
+                        </div>
+                        <div class="count-heading">7537</div>
+                    </div>
+                </div>
+                <div class="card-sec">
+                    <div class="inner-data-sec">
+                        <div class="title-text-info">
+                            <span class="heading-text">Accuracy</span>
+                            <div class="value-data">
+                                <i class="icon-ast_sortup"></i>
+                                <span>2.3%</span>
+                            </div>
+                        </div>
+                        <div class="count-heading">63%</div>
+                    </div>
+                </div>
+            </div>
+            <div class="charts-data-containers row">
+                <div class="chart-box-info col-6">
+                    <div class="chart-inner-data">
+                        <div class="kr-sg-dropdowns agent-intiated-dropdown" ngbDropdown placement="bottom">
+                            <div class="dropdown-open">
+                                <button type="button" class="dropdown-toggle before-none dropdown-input" id="repdropdown" ngbDropdownToggle>
+                                    <span class="title-text">Agent Inititated</span>
+                                    <i class="icon-sa-arrow-down"></i>
+                                </button>
+                                <ul class="content-menu" aria-labelledby="repdropdown" ngbDropdownMenu>
+                                    <perfect-scrollbar>
+                                        <div class="scroll-data mx-h-280">
+                                            <li ngbDropdownItem class="channel-name m_b_2">
+                                                <a class="selected">All Channels</a>
+                                            </li>
+                                            <li ngbDropdownItem class="channel-name m_b_2">
+                                                <a>Whatsapp</a>
+                                            </li>
+                                            <li ngbDropdownItem class="channel-name m_b_2">
+                                                <a>Slack</a>
+                                            </li>
+                                        </div>
+                                    </perfect-scrollbar>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="heading-data-wrapper">
+                            <div class="tag-title">AUTOMATION</div>
+                        </div>
+                        <div class="main-heading-title">What are your customers looking for?<i class="icon-sa-help"></i></div>
+                        <div class="automations-tabs">
+                            <div class="tab-name active-tab">
+                                <span>All</span>
+                            </div>
+                            <div class="tab-name">
+                                <img src="assets/icons/dashboard/articles.svg">
+                                <span>Articles</span>
+                            </div>
+                            <div class="tab-name">
+                                <img src="assets/icons/dashboard/faqs.svg">
+                                <span>FAQs</span>
+                            </div>
+                            <div class="tab-name">
+                                <img src="assets/icons/dashboard/automation.svg">
+                                <span>Automations</span>
+                            </div>
+                        </div>
+                        <div class="tab-details-info">
+                            <div class="row-data">
+                                <div class="title-with-count">
+                                    <img src="assets/icons/dashboard/articles.svg">
+                                    <span class="title">Reschedule Flight </span>    
+                                    <div class="count-percentage">
+                                        <span class="percentage">32%</span>
+                                        <span class="count-">(234)</span>
+                                    </div>                               
+                                </div>
+                                <div class="slider-percentage">
+                                    <div class="data-percentage"></div>
+                                </div>
+                            </div>
+                            <div class="row-data">
+                                <div class="title-with-count">
+                                    <img src="assets/icons/dashboard/faqs.svg">
+                                    <span class="title">Reschedule Flight </span>    
+                                    <div class="count-percentage">
+                                        <span class="percentage">32%</span>
+                                        <span class="count-">(234)</span>
+                                    </div>                               
+                                </div>
+                                <div class="slider-percentage">
+                                    <div class="data-percentage"></div>
+                                </div>
+                            </div>
+                            <div class="row-data">
+                                <div class="title-with-count">
+                                    <img src="assets/icons/dashboard/automation.svg">
+                                    <span class="title">Cancel Flight </span>    
+                                    <div class="count-percentage">
+                                        <span class="percentage">32%</span>
+                                        <span class="count-">(234)</span>
+                                    </div>                               
+                                </div>
+                                <div class="slider-percentage">
+                                    <div class="data-percentage"></div>
+                                </div>
+                            </div>
+                            <div class="row-data">
+                                <div class="title-with-count">
+                                    <img src="assets/icons/dashboard/automation.svg">
+                                    <span class="title">Reschedule Flight</span>    
+                                    <div class="count-percentage">
+                                        <span class="percentage">32%</span>
+                                        <span class="count-">(234)</span>
+                                    </div>                               
+                                </div>
+                                <div class="slider-percentage">
+                                    <div class="data-percentage"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="view-all-btn">View All</div>
+                    </div>
+                </div>
+                <div class="chart-box-info col-6">
+                    <div class="chart-inner-data">
+                        <div class="keyborad-view-tabs">
+                            <div class="tab-name-text">
+                                <i class="icon-ast_alpha"></i>
+                            </div>
+                            <div class="tab-name-text active-key">
+                                <i class="icon-ast_key"></i>
+                            </div>
+                        </div>
+                        <div class="heading-data-wrapper">
+                            <div class="tag-title">SEARCH</div>
+                        </div>
+                        <div class="main-heading-title">What are your agents looking for?<i class="icon-sa-help"></i></div>
+                        <div class="cards-data-boards agent-feedback-cards">
+                            <div class="card-sec max_width_50">
+                                <div class="inner-data-sec">
+                                    <div class="title-text-info">
+                                        <span class="heading-text">Total Search Requests</span>
+                                        <div class="value-data negtive">
+                                            <i class="icon-ast_sortdown"></i>
+                                            <span>2.3%</span>
+                                        </div>
+                                    </div>
+                                    <div class="count-heading">2,345K</div>
+                                </div>
+                            </div>
+                            <div class="card-sec max_width_50">
+                                <div class="inner-data-sec">
+                                    <div class="title-text-info">
+                                        <span class="heading-text">Search Results Used</span>
+                                        <div class="value-data">
+                                            <i class="icon-ast_sortup"></i>
+                                            <span>2.3%</span>
+                                        </div>
+                                    </div>
+                                    <div class="count-heading">23%</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table-agent-feedback">
+                            <div class="table-header row">
+                                <div class="title col-6">SEARCH KEYWORD</div>
+                                <div class="title col-6 text-right">TOTAL SEARCHES</div>
+                            </div>
+                            <ng-container>
+                                <div class="table-body-feedback row">
+                                    <div class="col-6 title">Book Flight</div>
+                                    <div class="col-6 title text-right f_w_600">50% (1320)</div>
+                                </div>
+                                <div class="table-body-feedback row">
+                                    <div class="col-6 title">Cancel Flight</div>
+                                    <div class="col-6 title text-right f_w_600">30% (1000)</div>
+                                </div>
+                                <div class="table-body-feedback row">
+                                    <div class="col-6 title">Reschedule Flight</div>
+                                    <div class="col-6 title text-right f_w_600">20% (700)</div>
+                                </div>
+                            </ng-container>
+                        </div>
+                        <div class="view-all-btn">View All</div>
+                    </div>
+                </div>
+                <div class="chart-box-info col-6">
+                    <div class="chart-inner-data">
+                        <div class="heading-data-wrapper">
+                            <div class="tag-title">ACCURACY</div>
+                        </div>
+                        <div class="main-heading-title">Automation Performance<i class="icon-sa-help"></i></div>
+                    </div>
+                </div>
+                <div class="chart-box-info col-6">
+                    <div class="chart-inner-data">
+                        <div class="override-info">
+                            <span>Override rate</span>
+                            <i class="icon-sa-help"></i>
+                        </div>
+                        <div class="heading-data-wrapper">
+                            <div class="tag-title">TRAINING</div>
+                        </div>
+                        <div class="main-heading-title">Agent Feedback<i class="icon-sa-help"></i></div>
+                        <div class="cards-data-boards agent-feedback-cards">
+                            <div class="card-sec max_width_100">
+                                <div class="inner-data-sec">
+                                    <div class="title-text-info">
+                                        <span class="heading-text">Total Responses</span>
+                                    </div>
+                                    <div class="count-heading">7537</div>
+                                </div>
+                            </div>
+                            <div class="card-sec max_width_100">
+                                <div class="inner-data-sec">
+                                    <div class="title-text-info">
+                                        <span class="heading-text">Helpful</span>
+                                        <i class="icon-ast_thumbsup"></i>
+                                    </div>
+                                    <div class="count-heading">73%</div>
+                                </div>
+                            </div>
+                            <div class="card-sec max_width_100">
+                                <div class="inner-data-sec">
+                                    <div class="title-text-info">
+                                        <span class="heading-text">Not Helpful</span>
+                                        <i class="icon-sat_thumsdown"></i>
+                                    </div>
+                                    <div class="count-heading">27%</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table-agent-feedback">
+                            <div class="table-header row">
+                                <div class="title col-4">Automation NAME</div>
+                                <div class="title col-3">RESPONSES</div>
+                                <div class="title col-5">LIKE/DISLIKE</div>
+                            </div>
+                            <ng-container>
+                                <div class="table-body-feedback row">
+                                    <div class="col-4 title">Book Flight</div>
+                                    <div class="col-3 title">700</div>
+                                    <div class="col-5 like-dislike">
+                                        <div class="like-count">
+                                            <i class="icon-ast_thumbsup"></i>
+                                            <span class="count">340</span>
+                                            <span class="percentage">(68%)</span>
+                                        </div>
+                                        <div class="like-count">
+                                            <i class="icon-sat_thumsdown"></i>
+                                            <span class="count">340</span>
+                                            <span class="percentage">(32%)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="table-body-feedback row">
+                                    <div class="col-4 title">Book Flight</div>
+                                    <div class="col-3 title">700</div>
+                                    <div class="col-5 like-dislike">
+                                        <div class="like-count">
+                                            <i class="icon-ast_thumbsup"></i>
+                                            <span class="count">340</span>
+                                            <span class="percentage">(68%)</span>
+                                        </div>
+                                        <div class="like-count">
+                                            <i class="icon-sat_thumsdown"></i>
+                                            <span class="count">340</span>
+                                            <span class="percentage">(32%)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="table-body-feedback row">
+                                    <div class="col-4 title">Book Flight</div>
+                                    <div class="col-3 title">700</div>
+                                    <div class="col-5 like-dislike">
+                                        <div class="like-count">
+                                            <i class="icon-ast_thumbsup"></i>
+                                            <span class="count">340</span>
+                                            <span class="percentage">(68%)</span>
+                                        </div>
+                                        <div class="like-count">
+                                            <i class="icon-sat_thumsdown"></i>
+                                            <span class="count">340</span>
+                                            <span class="percentage">(32%)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </div>
+                        <div class="view-all-btn">View All</div>
+                    </div>
+                </div>
+                <div class="chart-box-info col-6">
+                    <div class="chart-inner-data">
+                        <div class="heading-data-wrapper">
+                            <div class="tag-title">TRAINING</div>
+                        </div>
+                        <div class="main-heading-title">Automation Override Report<i class="icon-sa-help"></i></div>
+                        <div class="table-agent-feedback m_t_12">
+                            <div class="table-header row">
+                                <div class="title col-4">Automation NAME</div>
+                                <div class="title col-4">RESPONSES <i class="icon-ast_sortupdown ml-2"></i></div>
+                                <div class="title col-4 text-right">LIKE/DISLIKE <i class="icon-ast_sortupdown ml-2"></i></div>
+                            </div>
+                            <ng-container>
+                                <div class="table-body-feedback training-table-data row">
+                                    <div class="col-4 automation-name">
+                                        <!-- triggers="mouseenter:mouseleave" -->
+                                        <span triggers="mouseenter" [autoClose]="'inside'" popoverClass="automation-name-entitles" [ngbPopover]="devendar" placement="right">Book Flight</span>
+                                    </div>
+                                    <div class="title col-4">
+                                        <span>112</span>
+                                        <span class="plus-more-data">+3 others</span>
+                                    </div>
+                                    <div class="col-4 count-entity text-right">234</div>
+                                </div>
+                                <div class="table-body-feedback training-table-data row">
+                                    <div class="col-4 automation-name">
+                                        <span>Book Flight</span>
+                                    </div>
+                                    <div class="title col-4">
+                                        <span>112</span>
+                                    </div>
+                                    <div class="col-4 count-entity text-right">234</div>
+                                </div>
+                                <div class="table-body-feedback training-table-data row">
+                                    <div class="col-4 automation-name">
+                                        <span>Book Flight</span>
+                                    </div>
+                                    <div class="title col-4">
+                                        <span>112</span>
+                                    </div>
+                                    <div class="col-4 count-entity text-right">234</div>
+                                </div>
+                                <div class="table-body-feedback training-table-data row">
+                                    <div class="col-4 automation-name">
+                                        <span>Book Flight</span>
+                                    </div>
+                                    <div class="title col-4">
+                                        <span>112</span>
+                                    </div>
+                                    <div class="col-4 count-entity text-right">234</div>
+                                </div>
+                                <div class="table-body-feedback training-table-data row">
+                                    <div class="col-4 automation-name">
+                                        <span>Book Flight</span>
+                                    </div>
+                                    <div class="title col-4">
+                                        <span>112</span>
+                                    </div>
+                                    <div class="col-4 count-entity text-right">234</div>
+                                </div>
+                            </ng-container>
+                        </div>
+                        <div class="view-all-btn">View All</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </perfect-scrollbar>
 </div>
+
+<ng-template #devendar>
+    <perfect-scrollbar class="scroll-entities">
+        <div class="template-popover-automation-entities">
+            <div class="heading-title">Entities</div>
+            <div class="row-info">
+                <div class="title-left">PNR</div>
+                <div class="title-right">320</div>
+            </div>
+            <div class="row-info">
+                <div class="title-left">Transaction ID</div>
+                <div class="title-right">120</div>
+            </div>
+            <div class="row-info">
+                <div class="title-left">SeatNo</div>
+                <div class="title-right">13</div>
+            </div>
+            <div class="row-info">
+                <div class="title-left">Others</div>
+                <div class="title-right">13</div>
+            </div>
+        </div>
+    </perfect-scrollbar>
+</ng-template>
