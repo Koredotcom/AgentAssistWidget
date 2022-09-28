@@ -189,6 +189,27 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $(`#summaryText`).val(e.data?.summary ? e.data?.summary[0]?.summary_text:'');
                             $(`#summarySubmit`).attr('data-summary', e.data?JSON.stringify(e.data):'')
                         }
+                        if(e.data.name == 'initial_data'){
+                          e.data?.data?.forEach((ele)=>{
+                            var agent_assist_request = {
+                                'conversationId': ele.conversationId,
+                                'query': ele.value,
+                                'botId': ele.botId,
+                                'agentId': '',
+                                'experience': isCallConversation === 'true' ? 'voice':'chat',
+                                'positionId': ele?.positionId
+                            }
+                            if (ele?.intentName) {
+                                agent_assist_request['intentName'] = ele.value;
+                            }
+                            if (ele?.entities) {
+                                agent_assist_request['entities'] = ele.entities;
+                            } else {
+                                agent_assist_request['entities'] = [];
+                            }
+                            _agentAsisstSocket.emit('agent_assist_request', agent_assist_request);
+                          })
+                        }
                         if(e.data.name ==='agentAssist.endOfConversation' && e.data.conversationId) {
                             let currentEndedConversationId = e.data.conversationId;
                             var appStateStr = localStorage.getItem('agentAssistState') || '{}';
@@ -267,7 +288,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     _agentAsisstSocket = io(connectionDetails.webSocketConnectionDomain, connectionDetails.webSocketConnectionDetails);
                     _agentAsisstSocket.on("connect", () => {
                         console.log("AgentAssist >>> socket connected");
-                        
+                        if(sourceType === 'smartassist-color-scheme') {
+                            var message = {
+                                method: 'connected',
+                                name: "agentAssist.socketConnect",
+                                conversationId: _conversationId
+                            };
+                            window.parent.postMessage(message, '*');
+                        }
                     });
 
                     _agentAsisstSocket.on('agent_assist_response', (data) => {
