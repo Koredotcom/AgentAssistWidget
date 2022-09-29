@@ -80,7 +80,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
         console.log(err);
     }
     var webSocketConnection = {
-        "path": "/agentassist/api/v1/chat/", transports: ['websocket', 'polling', 'flashsocket']
+        "path": "/agentassist/api/v1/chat/", transports: ['websocket', 'polling', 'flashsocket'],  query: {'jToken': connectionDetails.jwtToken}
     };
     connectionDetails['webSocketConnectionDomain'] = connectionDetails.envinormentUrl + "/koreagentassist",
         connectionDetails['webSocketConnectionDetails'] = webSocketConnection,
@@ -160,6 +160,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             success: function (result) {
                 var navigatefromLibToTab;
                 let isOnlyOneFaqOnSearch = false;
+                let isInitialDialogOnGoing = false;
                 chatConfig = window.KoreSDK.chatConfig;
                 var koreBot = koreBotChat();
                 AgentChatInitialize = new koreBot.chatWindow(chatConfig);
@@ -183,7 +184,33 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     // });
 
                     window.addEventListener("message", function (e) {
-                        console.log(e.data);//your data is captured in e.data
+                        console.log(e.data, "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx message came to widget when any message came from others");//your data is captured in e.data
+                        if(e.data.name === 'response_resolution_comments' && e.data.conversationId) {
+                            $(`#summary`).removeClass('hide');
+                            $(`#summaryText`).val(e.data?.summary ? e.data?.summary[0]?.summary_text:'');
+                            $(`#summarySubmit`).attr('data-summary', e.data?JSON.stringify(e.data):'')
+                        }
+                        if(e.data.name == 'initial_data'){
+                          e.data?.data?.forEach((ele)=>{
+                            var agent_assist_request = {
+                                'conversationId': ele.conversationId,
+                                'query': ele.value,
+                                'botId': ele.botId,
+                                'agentId': '',
+                                'experience': isCallConversation === 'true' ? 'voice':'chat',
+                                'positionId': ele?.positionId
+                            }
+                            if (ele?.intentName) {
+                                agent_assist_request['intentName'] = ele.value;
+                            }
+                            if (ele?.entities) {
+                                agent_assist_request['entities'] = ele.entities;
+                            } else {
+                                agent_assist_request['entities'] = [];
+                            }
+                            _agentAsisstSocket.emit('agent_assist_request', agent_assist_request);
+                          })
+                        }
                         if(e.data.name ==='agentAssist.endOfConversation' && e.data.conversationId) {
                             let currentEndedConversationId = e.data.conversationId;
                             var appStateStr = localStorage.getItem('agentAssistState') || '{}';
@@ -262,6 +289,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     _agentAsisstSocket = io(connectionDetails.webSocketConnectionDomain, connectionDetails.webSocketConnectionDetails);
                     _agentAsisstSocket.on("connect", () => {
                         console.log("AgentAssist >>> socket connected");
+                        if(sourceType === 'smartassist-color-scheme') {
+                            var message = {
+                                method: 'connected',
+                                name: "agentAssist.socketConnect",
+                                conversationId: _conversationId
+                            };
+                            window.parent.postMessage(message, '*');
+                        }
                     });
 
                     _agentAsisstSocket.on('agent_assist_response', (data) => {
@@ -305,6 +340,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         processAgentAssistResponse(data, data.conversationId, _botId);
                         removingSendCopyBtnForCall();
                         document.getElementById("loader").style.display = "none";
+                        // let request_resolution_comments = {
+                        //     conversationId: data.conversationId,
+                        //     userId: '',
+                        //     botId: _botId,
+                        //     sessionId: koreGenerateUUID(),
+                        //     chatHistory: []
+                        // }
+                        // _agentAsisstSocket.emit('request_resolution_comments', request_resolution_comments);
                         // document.getElementById("addRemoveDropDown").style.display = "block";
                     })
 
@@ -396,12 +439,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     });
 
                     _agentAsisstSocket.on('response_resolution_comments', (data) => {
-                        var message = {
-                            name: "agentAssist.conversation_summary",
-                            conversationId: _conversationId,
-                            payload: data
-                            };
-                        window.parent.postMessage(message, '*');
+                        $(`#summary`).removeClass('hide');
+                        $(`#summaryText`).val(data?.summary ? data?.summary[0]?.summary_text:''); 
+                        $(`#summarySubmit`).attr('data-summary', data?JSON.stringify(data):'')
                     });
 
                 }
@@ -1600,6 +1640,18 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                     let uuids = koreGenerateUUID();
                     responseId = uuids;
+                    
+                    if(!isAutomationOnGoing && data.intentName && !data.suggestions && !isInitialDialogOnGoing) {
+                        let appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                        let appState = JSON.parse(appStateStr);
+                        let isInitialTaskRanORNot;
+                        if (appState[_conversationId]) {
+                            isInitialTaskRanORNot = appState[_conversationId]['initialTaskGoingOn'] 
+                        }
+                        if(!isInitialTaskRanORNot){
+                            runDialogForAssistTab(data, `onInitDialog-123456`, "onInitRun");
+                        }  
+                    }
                     if (isCallConversation === 'true' && data.suggestions) {
                         let buldHtml = `
                         <div class="buld-count-utt" id="buldCount-${uuids}">
@@ -2280,12 +2332,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         dialogTerminatedOrIntrupptedInMyBot(data, botId, userIntentInput, appState);
                     }else {
                         isAutomationOnGoing = false;
+                        isInitialDialogOnGoing = true;
                         if (appState[_conversationId]) {
                             appState[_conversationId].automationGoingOn = isAutomationOnGoing;
+                            appState[_conversationId].initialTaskGoingOn =  isInitialDialogOnGoing;
                             appState[_conversationId]['automationGoingOnAfterRefresh'] = isAutomationOnGoing;
                             localStorage.setItem('agentAssistState', JSON.stringify(appState))
                         }
-                          isOverRideMode = false;
+                        isOverRideMode = false;
                         $(`.override-input-div`).remove();
                         addFeedbackHtmlToDom(data, botId, userIntentInput);
                         userMessage = {};
@@ -2626,7 +2680,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         <input type="text" placeholder="Type to add comment" class="input-text" id="feedBackComment-${id}"
                                         data-feedback-comment="true">
                                     </div>
-                                    <button class="submit-btn" data-updateFlag="false" disabled>Submit</button>
+                                    <button class="submit-btn" data-updateFlag="false" id="feedbackSubmit" disabled>Submit</button>
                                 </div>
                             </div>
                         
@@ -4466,7 +4520,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             }
                             $(`#feedbackHelpfulContainer-${id.join('-')} .ast-thumbdown`).attr('data-feedbackdetails', dataSets.feedbackdetails)
                         }
-                        if (target.className == 'submit-btn') {
+                        if (target.id == 'feedbackSubmit') {
                             let id = target.parentElement.firstElementChild.id.split('-');
                             id.shift();
                             let dataSets = $(`#feedbackdown-${id.join('-')} .ast-thumbdown`).data();
@@ -5755,6 +5809,24 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $(`#scriptContainer #buldCount-${bulbid.join('-')}`).removeClass('buld-count-utt').addClass('buld-count-utt-after-click');
                             $(`#scriptContainer #buldCountNumber-${bulbid.join('-')}`).html(`<span>&#10003;</span>`);
                         }
+
+                        if(target.id === 'summarySubmit'){
+                            let data = JSON.parse(target.dataset?.summary);
+                            let editedSummaryText =  $(`#summaryText`).val();
+                            if(data?.summary != ''){
+                                data['summary'][0]['summary_text'] = editedSummaryText;
+                            }else{
+                                data['summary'] = [];
+                                data['summary'].push({'summary_text': editedSummaryText});
+                            }
+                            var message = {
+                                name: "agentAssist.conversation_summary",
+                                conversationId: _conversationId,
+                                payload: data
+                                };
+                            window.parent.postMessage(message, '*');
+                            $(`#summary`).addClass('hide');
+                        }
                     })
 
                     document.addEventListener("keyup", (evt) => {
@@ -5828,7 +5900,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     agentTabActive();
                 }
 
-                function runDialogForAssistTab(data, idTarget){
+                function runDialogForAssistTab(data, idTarget, runInitent){
                     let uuids = koreGenerateUUID();
                     dropdownHeaderUuids = uuids;
                     isAutomationOnGoing = true;
@@ -5860,8 +5932,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                     let addRemoveDropDown = document.getElementById(`addRemoveDropDown-${uuids}`);
                     addRemoveDropDown?.classList.remove('hide');
-                    $(`#endTaks-${uuids}`).removeClass('hide')
-                    AgentAssist_run_click(data, dialogPositionId);
+                    $(`#endTaks-${uuids}`).removeClass('hide');
+                    if(!runInitent) {
+                        AgentAssist_run_click(data, dialogPositionId);
+                    }
                 }
 
                 // Example POST method implementation:
@@ -6171,7 +6245,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         <input type="text" placeholder="Type to add comment" class="input-text" id="feedBackComment-${headerUUids}"
                                         data-feedback-comment="true">
                                     </div>
-                                    <button class="submit-btn" data-updateFlag="false" disabled>Submit</button>
+                                    <button class="submit-btn" data-updateFlag="false"id="feedbackSubmit" disabled>Submit</button>
                                 </div>
                             </div>
                         
@@ -6416,7 +6490,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         <div class="custom-tootltip-tabs">My Bot</div>
                     </div>    
                 </div>
-                <div class="taoggle-with-text hide">
+                <div class="taoggle-with-text">
                     <div class="t-title">Proactive</div>
                     <label class="kr-sg-toggle">
                         <div class="hover-tooltip">Proactive</div>
@@ -6591,6 +6665,17 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     <button class="btn-restore">Yes, restore</button>
                     <button class="btn-cancel">Cancel</button>
                 </div>
+            </div>
+        </div>
+
+        <div class="overlay-delete-popup hide" id="summary">
+            <div class="delete-box-content summary-box-content">
+                <div class="header-text summary-header">Desposition</div>
+                    <div class="input-block-optional">
+                    <div class="label-text">Remarks</div>
+                    <textarea class="input-text" id="summaryText" rows="4" cols="50"></textarea>
+                </div>
+                <button class="submit-btn" id="summarySubmit">Submit</button>
             </div>
         </div>
 
