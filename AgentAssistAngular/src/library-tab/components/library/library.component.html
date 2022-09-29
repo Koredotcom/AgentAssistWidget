@@ -30,37 +30,19 @@
                 <div class="heading-title">All Automations</div>
                 <div class="dialog-task-run-sec" id="dialogs-list">
                     <div class="task-type" id="usecases-list">
-                        <div class="content-dialog-task-type p1-0" id="usecases-suggestions">
-                            <div class="type-info-run-send" id="useCaseList-95">
+                        <div class="content-dialog-task-type p1-0" id="usecases-suggestions" >
+                            <div class="type-info-run-send" [id]="'useCaseList-' + i" *ngFor="let dialogue of menuResponse | keyvalue;let i = index">
                                 <div class="left-content">
-                                    <div class="title-text" id="automation-35">multipleMessages</div>
+                                    <div class="title-text" [id]="'automation-' + i">{{dialogue.value.intentName}}</div>
                                 </div>
                                 <div class="action-links">
-                                    <button class="send-run-btn" id="useCase-95">RUN</button>
-                                    <div class="elipse-dropdown-info" id="showRunForAgentBtn-95">
-                                        <div class="elipse-icon" id="elipseIcon-95">
-                                            <i class="ast-overflow" id="overflowIcon-95"></i>
+                                    <button class="send-run-btn" [id]="'useCase-' + i" (click)="dialogueRunClick(projConstants.ASSIST)">{{projConstants.RUN}}</button>
+                                    <div class="elipse-dropdown-info" [id]="'showRunForAgentBtn-' + i">
+                                        <div class="elipse-icon" [id]="'elipseIcon-' + i" (click)="handleRunAgent(dialogue.key, $event)">
+                                            <i class="ast-overflow" [id]="'overflowIcon-' + i"></i>
                                         </div>
-                                        <div class="dropdown-content-elipse hide" id="runAgtBtn-95">
-                                            <div class="list-option" id="agentSelect-95">Run with Agent
-                                                Inputs</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="type-info-run-send" id="useCaseList-37">
-                                <div class="left-content">
-                                    <div class="title-text" id="automation-35">Bar Chart</div>
-                                </div>
-                                <div class="action-links">
-                                    <button class="send-run-btn" id="useCase-37">RUN</button>
-                                    <div class="elipse-dropdown-info" id="showRunForAgentBtn-37">
-                                        <div class="elipse-icon" id="elipseIcon-37">
-                                            <i class="ast-overflow" id="overflowIcon-37"></i>
-                                        </div>
-                                        <div class="dropdown-content-elipse hide" id="runAgtBtn-37">
-                                            <div class="list-option" id="agentSelect-37">Run with Agent
-                                                Inputs</div>
+                                        <div class="dropdown-content-elipse" [id]="'runAgtBtn-' + i" *ngIf="dialogue.value.agentRunButton" (click)="$event.stopPropagation()">
+                                            <div class="list-option" [id]="'agentSelect-' + i" (click)="dialogueRunClick(projConstants.MYBOT)">{{projConstants.AGENTASSIST_RUN}}</div>
                                         </div>
                                     </div>
                                 </div>

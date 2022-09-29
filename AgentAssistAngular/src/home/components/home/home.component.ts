@@ -21,7 +21,6 @@ export class HomeComponent implements OnInit {
   constructor(public handleSubjectService : HandleSubjectService) { }
 
   ngOnInit(): void {
-    console.log("ng on it");
     this.subscribeEvents();
   }
 
@@ -33,14 +32,12 @@ export class HomeComponent implements OnInit {
 
   subscribeEvents(){
     let subscribtion = this.handleSubjectService.activeTabSubject.subscribe(tab => {
-      console.log(tab,"tab changed");
       this.activeTab = tab; 
     });
     this.subscriptionsList.push(subscribtion);
   }
 
   isChecked(){
-    console.log("is checked");
     
   }
 
@@ -49,7 +46,6 @@ export class HomeComponent implements OnInit {
   }
 
   getSearchResults(){
-    console.log(this.searchText, "searched text");
     this.showSearchSuggestions = true;
     this.handleSubjectService.setSearchText({searchFrom:this.projConstants.ASSIST, value : this.searchText});
   }

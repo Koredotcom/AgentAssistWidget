@@ -14,5 +14,11 @@ export const ProjConstants = {
     ASSIST : 'Assist',
     MYBOT : 'My Bot',
     TRANSCRIPT : "Transcript",
-    LIBRARY : 'Library'
+    LIBRARY : 'Library',
+    RUN : 'RUN',
+    AGENTASSIST_RUN : 'Run with Agent Inputs',
+    SEND : 'Send',
+    COPY : 'Copy',
+    SHOW_MORE : 'Show more',
+    SHOW_LESS : 'Show less'
 }

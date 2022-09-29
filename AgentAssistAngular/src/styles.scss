@@ -1616,7 +1616,7 @@ border: 1px solid transparent !important;
 }
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content .desc-text {
     font-weight: 400;
-    font-size: 10px;
+    font-size: 11px;
     line-height: 12px;
     color: var(--secondary-color-3);
     font-style: italic;
@@ -1627,7 +1627,8 @@ border: 1px solid transparent !important;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
     text-align: justify;
-    word-break: break-word;  
+    word-break: break-word; 
+    display: -webkit-box;
 }
 
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content .ast-carrotup{
@@ -3461,4 +3462,22 @@ input.no-autofill-bkg:-webkit-autofill {
 
 .summary-box-content .input-block-optional .input-text:focus {
     border: 1px solid #0D6EFD;
+}
+//perfect scrollbar
+perfect-scrollbar {
+    height: 90% !important;
+}
+
+//seemore less button css 
+.faq-title-overflow {
+    overflow: inherit !important;
+    white-space: normal !important;
+    text-overflow : unset !important;
+}
+
+.faq-desc-overflow {
+    overflow: inherit !important;
+    text-overflow : unset !important;
+    display : block !important;
+     white-space: normal !important;
 }
