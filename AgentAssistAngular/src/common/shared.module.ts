@@ -6,6 +6,7 @@ import { InterruptPopupComponent } from './components/interrupt-popup/interrupt-
 import { DeletePopupComponent } from './components/delete-popup/delete-popup.component';
 import { RestorePopupComponent } from './components/restore-popup/restore-popup.component';
 import { SummaryPopupComponent } from './components/summary-popup/summary-popup.component';
+import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 
 
 
@@ -13,7 +14,8 @@ import { SummaryPopupComponent } from './components/summary-popup/summary-popup.
   declarations: [OverlaysearchComponent, InterruptPopupComponent, DeletePopupComponent, RestorePopupComponent, SummaryPopupComponent],
   imports: [
     CommonModule,
-    HttpClientModule
+    HttpClientModule,
+    PerfectScrollbarModule
   ],
   exports : [OverlaysearchComponent, InterruptPopupComponent, DeletePopupComponent, RestorePopupComponent, SummaryPopupComponent]
 })

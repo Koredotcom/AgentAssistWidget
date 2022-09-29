@@ -1,4 +1,5 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { ImageFilePath, ImageFileNames, ProjConstants } from 'src/common/constants/proj.cnts';
 import { CommonService } from 'src/common/services/common.service';
 import { HandleSubjectService } from 'src/common/services/handle-subject.service';
@@ -9,38 +10,57 @@ import { HandleSubjectService } from 'src/common/services/handle-subject.service
   styleUrls: ['./overlaysearch.component.scss']
 })
 export class OverlaysearchComponent implements OnInit {
+  @Input() searchType: string;
+  @Output() handleSearchClickEvent = new EventEmitter();
+  subscriptionsList: Subscription[] = [];
 
-  projConstants : any = ProjConstants;
-  imageFilePath : string = ImageFilePath;
-  imageFileNames : any = ImageFileNames;
-  searchResponse : any = {};
-  
-  constructor(public handleSubjectService : HandleSubjectService, public commonService : CommonService) { }
+  projConstants: any = ProjConstants;
+  imageFilePath: string = ImageFilePath;
+  imageFileNames: any = ImageFileNames;
+  searchResponse: any = {};
+  faqViewCount: number;
+  articleViewCount: number;
+  faqAllView: boolean = false;
+  articleAllView: boolean = false;
+  searchResultText: string;
+  searchConentObject: any;
+
+  constructor(public handleSubjectService: HandleSubjectService, public commonService: CommonService) { }
 
   ngOnInit(): void {
     this.subscribeEvents();
   }
 
-  subscribeEvents(){
-    this.handleSubjectService.searchTextSubject.subscribe((searchObj) => {
-      this.handleSearchResponse(searchObj);
+  ngOnDestroy() {
+    this.subscriptionsList.forEach((subscription) => {
+      subscription.unsubscribe();
     })
+  }
+
+  subscribeEvents() {
+    let subscription = this.handleSubjectService.searchTextSubject.subscribe((searchObj) => {
+      if (searchObj) {
+        this.searchConentObject = searchObj;
+        this.handleSearchResponse(searchObj);
+      }
+    });
+    this.subscriptionsList.push(subscription);
   }
 
   @HostListener('document:click', ['$event']) onDocumentClick(event) {
     // hide Run with agent button on clicking outside of document.
-    if(this.searchResponse?.dialogs && this.searchResponse?.dialogs.length > 0){
-      this.searchResponse.dialogs.map(obj =>{
-          obj.agentRunButton = !obj.agentRunButton
+    if (this.searchResponse?.dialogs && this.searchResponse?.dialogs.length > 0) {
+      this.searchResponse.dialogs.map(obj => {
+        obj.agentRunButton = !obj.agentRunButton
       })
       event.stopPropagation();
     }
   }
 
-  handleRunAgent(dialoguename,event){
-    if(this.searchResponse?.dialogs && this.searchResponse?.dialogs.length > 0){
-      this.searchResponse.dialogs.map(obj =>{
-        if(obj.name === dialoguename){
+  handleRunAgent(dialoguename, event) {
+    if (this.searchResponse?.dialogs && this.searchResponse?.dialogs.length > 0) {
+      this.searchResponse.dialogs.map(obj => {
+        if (obj.name === dialoguename) {
           obj.agentRunButton = !obj.agentRunButton
           event.stopPropagation()
         }
@@ -48,108 +68,140 @@ export class OverlaysearchComponent implements OnInit {
     }
   }
 
-  dialogueRunClick(clickType){
-    if(clickType == this.projConstants.ASSIST){
-        this.handleSubjectService.setActiveTab(this.projConstants.ASSIST);
-    }else{
+  dialogueRunClick(clickType) {
+    if (clickType == this.projConstants.ASSIST) {
+      this.handleSubjectService.setActiveTab(this.projConstants.ASSIST);
+    } else {
       this.handleSubjectService.setActiveTab(this.projConstants.MYBOT);
     }
   }
 
-  handleSearchResponse(searchObj){
+  showAllResultsClick(clickType) {
+    if (clickType == this.projConstants.VIEW_ALL_ARTICLES) {
+      this.articleAllView = false;
+      this.articleViewCount = this.searchResponse.articles.length
+    } else if (clickType == this.projConstants.VIEW_FEW_ARTICLES) {
+      this.articleAllView = true;
+      this.articleViewCount = 2;
+    } else if (clickType == this.projConstants.VIEW_ALL_FAQ) {
+      this.faqAllView = false
+      this.faqViewCount = this.searchResponse.faqs.length;
+    } else if (clickType == this.projConstants.VIEW_FEW_FAQ) {
+      this.faqAllView = true;
+      this.faqViewCount = 2;
+    }
+  }
+
+  handleShowAllClick() {
+    this.handleSearchClickEvent.emit({ eventFrom: this.projConstants.AGENT_SEARCH, searchText: this.searchConentObject.value });
+  }
+
+  handleSearchResponse(searchObj) {
     this.searchResponse = {};
-    this.commonService.getSampleSearchResponse().subscribe((response : any) =>{
-      if(response && response[1] && response[1].suggestions){
+    this.commonService.getSampleSearchResponse().subscribe((response: any) => {
+      if (response && response[1] && response[1].suggestions) {
         this.searchResponse = this.commonService.formatSearchResponse(response[1].suggestions);
-        this.searchResponse.totalSearchResults = this.searchResponse.dialogs?.length + this.searchResponse.faqs?.length;
-        console.log(this.searchResponse, "searchResponse");
+        this.searchResponse.totalSearchResults = this.searchResponse.dialogs?.length + this.searchResponse.faqs?.length + this.searchResponse.articles?.length;
+        this.faqViewCount = (this.searchResponse.faqs && this.searchResponse.faqs.length <= 2) ? this.searchResponse.faqs.length : 2;
+        this.articleViewCount = (this.searchResponse.articles && this.searchResponse.articles.length <= 2) ? this.searchResponse.articles.length : 2;
+        this.faqAllView = this.searchResponse.faqs && this.searchResponse.faqs.length > 2 ? true : false;
+        this.articleAllView = this.searchResponse.articles && this.searchResponse.articles.length > 2 ? true : false;
+        this.searchResultText = this.searchResponse.totalSearchResults == 1 ? "Search result for" : "Search results for"
         setTimeout(() => {
-          this.handleSeeMoreButton(this.searchResponse.faqs);
+          this.handleSeeMoreButton(this.searchResponse.faqs, this.projConstants.FAQ);
+          this.handleSeeMoreButton(this.searchResponse.articles, this.projConstants.ARTICLE);
         }, 10);
       }
     })
   }
 
-  handleSendCopyButton(type,faq){
-    console.log(type,faq, 'faq');
+  handleSendCopyButton(actionType, faq_or_article_obj, selectType) {
     let message = {};
-    if(type == this.projConstants.SEND){
+    if (actionType == this.projConstants.SEND) {
       message = {
         method: 'send',
         name: "agentAssist.SendMessage",
         // conversationId: _conversationId,
-        payload: faq.answer
+        payload: selectType == this.projConstants.FAQ ? faq_or_article_obj.answer : faq_or_article_obj.content
       };
       window.parent.postMessage(message, '*');
-    }else {
+    } else {
       message = {
         method: 'copy',
         name: "agentAssist.CopyMessage",
         // conversationId: _conversationId,
-        payload: faq.answer
+        payload: selectType == this.projConstants.FAQ ? faq_or_article_obj.answer : faq_or_article_obj.content
       };
       parent.postMessage(message, '*');
     }
   }
 
-  handleSeeMoreButton(faqs){
-    let faqIndex = 0;
-    for(let faq of faqs){
-      this.updateSeeMoreButtonForAgent(faqIndex, faq);
-      faqIndex++;
+  handleSeeMoreButton(array, type) {
+    let index = 0;
+    for (let item of array) {
+      this.updateSeeMoreButtonForAgent(index, item, type);
+      index++;
     }
   }
 
-  toggleShowMoreLessButtons(faq, index){
+  toggleViewFullFewButtons(view, type) {
+    if (type == this.projConstants.FAQ) {
+      this.faqViewCount = (view == this.projConstants.VIEW_ALL_FAQ) ? this.searchResponse.faqs.length : 2;
+    } else {
+      this.articleViewCount = (view == this.projConstants.VIEW_ALL_ARTICLES) ? this.searchResponse.articles.length : 2;
+    }
+  }
+
+  toggleShowMoreLessButtons(faq_or_article_obj, index, type) {
     let titleElement = document.getElementById("titleLib-" + index);
     let descElement = document.getElementById("descLib-" + index);
-    faq.showLessButton = !faq.showLessButton;
-    faq.showMoreButton = !faq.showMoreButton;
-    if(faq.showLessButton){
-      titleElement.classList.add('faq-title-overflow');
-      descElement.classList.add('faq-desc-overflow');
-    }else if(faq.showMoreButton){
-      titleElement.classList.remove('faq-title-overflow');
-      descElement.classList.remove('faq-desc-overflow');
+
+    if (type == this.projConstants.ARTICLE) {
+      titleElement = document.getElementById("articletitleLib-" + index);
+      descElement = document.getElementById("articledescLib-" + index);
+    }
+    faq_or_article_obj.showLessButton = !faq_or_article_obj.showLessButton;
+    faq_or_article_obj.showMoreButton = !faq_or_article_obj.showMoreButton;
+    if (faq_or_article_obj.showLessButton) {
+      titleElement.classList.add('no-text-truncate');
+      descElement.classList.add('no-text-truncate');
+    } else if (faq_or_article_obj.showMoreButton) {
+      titleElement.classList.remove('no-text-truncate');
+      descElement.classList.remove('no-text-truncate');
     }
   }
 
 
-  updateSeeMoreButtonForAgent(id,faq,article?){
-    console.log("update see more button");
-    
+  updateSeeMoreButtonForAgent(id, faq_or_article_obj, type) {
     let faqSourceTypePixel = 5;
     let titleElement = document.getElementById("titleLib-" + id);
     let descElement = document.getElementById("descLib-" + id);
     let divElement = document.getElementById('faqDivLib-' + id);
     let seeMoreElement = document.getElementById('seeMore-' + id);
     let viewLinkElement;
-    if(article){
-        titleElement = document.getElementById("articletitleLib-" + id);
-        descElement = document.getElementById("articledescLib-" + id);
-        divElement = document.getElementById('articleDivLib-' + id);
-        seeMoreElement = document.getElementById('articleseeMore-' + id);
-        viewLinkElement = document.getElementById('articleViewLinkLib-' + id);
+    if (type == this.projConstants.ARTICLE) {
+      titleElement = document.getElementById("articletitleLib-" + id);
+      descElement = document.getElementById("articledescLib-" + id);
+      divElement = document.getElementById('articleDivLib-' + id);
+      seeMoreElement = document.getElementById('articleseeMore-' + id);
+      viewLinkElement = document.getElementById('articleViewLinkLib-' + id);
     }
-    console.log(divElement, titleElement, descElement);
-    
-    if(titleElement && descElement && divElement){
-        titleElement.classList.add('faq-title-overflow');
-        descElement.classList.add('faq-desc-overflow');
-        let divSectionHeight = descElement.clientHeight  || 0;
-        console.log(divSectionHeight, "div section height");
-        if(divSectionHeight > (24 + faqSourceTypePixel)){
-            faq.showMoreButton = true;
-        }else{
-          faq.showMoreButton = false;
-            if(article){
-                viewLinkElement.classList.remove('hide');
-            }
+    if (titleElement && descElement && divElement) {
+      titleElement.classList.add('no-text-truncate');
+      descElement.classList.add('no-text-truncate');
+      let divSectionHeight = descElement.clientHeight || 0;
+      if (divSectionHeight > (24 + faqSourceTypePixel)) {
+        faq_or_article_obj.showMoreButton = true;
+      } else {
+        faq_or_article_obj.showMoreButton = false;
+        if (type == this.projConstants.ARTICLE) {
+          viewLinkElement.classList.remove('hide');
         }
-        titleElement.classList.remove('faq-title-overflow');
-        descElement.classList.remove('faq-desc-overflow');
+      }
+      titleElement.classList.remove('no-text-truncate');
+      descElement.classList.remove('no-text-truncate');
     }
-}
-  
+  }
+
 
 }
