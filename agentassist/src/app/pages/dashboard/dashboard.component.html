@@ -1,8 +1,7 @@
-<!-- <app-slider-component [id]="sliderId" #newConvSlider='app-slider'>
-    <app-exhaustive-representation (onClose)="closeSlider($event)" [componentType]="sliderId" *ngIf="sliderStatus">
-    </app-exhaustive-representation>
+<app-slider-component [id]="sliderId" #newConvSlider='app-slider'>
+    <app-exhaustive-representation (onClose)="closeSlider($event)" [componentType]="sliderId" *ngIf="sliderStatus"></app-exhaustive-representation>
 </app-slider-component>
-<div class="dashboard-wrapper" id="pdfTable" #pdfTable>
+<!-- <div class="dashboard-wrapper" id="pdfTable" #pdfTable>
     <div class="filters-new">
         <app-dashboard-filters (exportPdf)="exportPdf($event)"></app-dashboard-filters>
     </div>
@@ -28,7 +27,7 @@
     <perfect-scrollbar class="scroll-container">
         <div class="inner-scroll-data">
             <div class="cards-data-boards">
-                <div class="card-sec">
+                <div class="card-sec" (click)="openSlider(DASHBORADCOMPONENTTYPE.AGENT_ASPECT)">
                     <div class="inner-data-sec">
                         <div class="title-text-info">
                             <span class="heading-text">Total Suggestions</span>
