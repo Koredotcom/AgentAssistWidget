@@ -20,5 +20,14 @@ export const ProjConstants = {
     SEND : 'Send',
     COPY : 'Copy',
     SHOW_MORE : 'Show more',
-    SHOW_LESS : 'Show less'
+    SHOW_LESS : 'Show less',
+    DIALOG : 'Dialog task',
+    FAQ : 'FAQ',
+    ARTICLE : 'Article',
+    VIEW_ALL_FAQ : 'View All FAQs',
+    VIEW_FEW_FAQ : 'View Few FAQs',
+    VIEW_ALL_ARTICLES : 'View All Articles',
+    VIEW_FEW_ARTICLES : 'View Few Articles',
+    AGENT_SEARCH : 'Agent Search',
+    LIBRARY_SEARCH : 'Library Search'
 }

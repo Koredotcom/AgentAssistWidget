@@ -2085,6 +2085,7 @@ border: 1px solid transparent !important;
     -webkit-line-clamp: 2;
     text-align: justify;
     word-break: break-word;
+    display: -webkit-box;
 }
 .overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links {
     display: none;
@@ -3463,21 +3464,27 @@ input.no-autofill-bkg:-webkit-autofill {
 .summary-box-content .input-block-optional .input-text:focus {
     border: 1px solid #0D6EFD;
 }
+
 //perfect scrollbar
-perfect-scrollbar {
-    height: 90% !important;
+.home-scroll-bar{
+    height: calc(100% - 90px);
+}
+
+.overlaysearch-scroll-bar{
+    height: 500px;
 }
 
 //seemore less button css 
-.faq-title-overflow {
+.no-text-truncate {
     overflow: inherit !important;
     white-space: normal !important;
     text-overflow : unset !important;
+    display: block !important;
 }
 
-.faq-desc-overflow {
-    overflow: inherit !important;
-    text-overflow : unset !important;
-    display : block !important;
-     white-space: normal !important;
-}
+// .desc-overflow {
+//     overflow: inherit !important;
+//     text-overflow : unset !important;
+//     display : block !important;
+//     white-space: normal !important;
+// }

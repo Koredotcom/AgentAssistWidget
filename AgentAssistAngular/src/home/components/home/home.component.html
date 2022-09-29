@@ -61,7 +61,7 @@
                         <app-assist></app-assist>
                     </ng-container>
                     <ng-container *ngIf="activeTab == projConstants.LIBRARY">
-                        <app-library></app-library>
+                        <app-library (handleSearchClickEvent)="handleSearchClickEvent($event)"></app-library>
                     </ng-container>
                     <ng-container *ngIf="activeTab == projConstants.MYBOT">
                         <app-mybot></app-mybot>
@@ -79,8 +79,10 @@
         </div>
         <div class="overlay-suggestions" style="bottom:0; display:block;" *ngIf="showSearchSuggestions">
             <div class="suggestion-content" id="overLaySearch">
-                <app-overlaysearch></app-overlaysearch>
-            </div>
+                <perfect-scrollbar class="overlaysearch-scroll-bar">
+                    <app-overlaysearch [searchType]="projConstants.AGENT_SEARCH" (handleSearchClickEvent)="handleSearchClickEvent($event)"></app-overlaysearch>
+                </perfect-scrollbar>
+                </div>
         </div>
         <!-- end -->
         <div class="footer-info" id="cust-feeling">
