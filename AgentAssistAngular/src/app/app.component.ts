@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { WebSocketService } from './web-socket.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,10 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'AgentAssistWidget';
+  constructor(private webSocketService: WebSocketService){
+
+  }
+  ngOnInit(){
+    this.webSocketService.init();
+  }
 }

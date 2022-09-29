@@ -138,5 +138,8 @@
       }
     }
   },
-  "defaultProject": "AgentAssistWidget"
+  "defaultProject": "AgentAssistWidget",
+  "cli": {
+    "analytics": false
+  }
 }

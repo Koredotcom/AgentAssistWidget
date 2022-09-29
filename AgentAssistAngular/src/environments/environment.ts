@@ -5,8 +5,8 @@
 export const environment = {
   production: false,
   tag:"dev",
-  API_SERVER_URL:'https://dev-smartassist.kore.ai',
-  SUPPORT_API_SERVER_URL:'https://uat-smartassist.kore.ai'
+  API_SERVER_URL:'https://uat-agentassist.kore.ai',
+  SUPPORT_API_SERVER_URL:'https://uat-agentassist.kore.ai'
 };
 
 /*
