@@ -6472,7 +6472,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         <div class="custom-tootltip-tabs">My Bot</div>
                     </div>    
                 </div>
-                <div class="taoggle-with-text hide">
+                <div class="taoggle-with-text">
                     <div class="t-title">Proactive</div>
                     <label class="kr-sg-toggle">
                         <div class="hover-tooltip">Proactive</div>
