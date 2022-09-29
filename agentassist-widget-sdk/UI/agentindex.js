@@ -160,6 +160,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             success: function (result) {
                 var navigatefromLibToTab;
                 let isOnlyOneFaqOnSearch = false;
+                let isInitialDialogOnGoing = false;
                 chatConfig = window.KoreSDK.chatConfig;
                 var koreBot = koreBotChat();
                 AgentChatInitialize = new koreBot.chatWindow(chatConfig);
@@ -1639,6 +1640,18 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                     let uuids = koreGenerateUUID();
                     responseId = uuids;
+                    
+                    if(!isAutomationOnGoing && data.intentName && !data.suggestions && !isInitialDialogOnGoing) {
+                        let appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                        let appState = JSON.parse(appStateStr);
+                        let isInitialTaskRanORNot;
+                        if (appState[_conversationId]) {
+                            isInitialTaskRanORNot = appState[_conversationId]['initialTaskGoingOn'] 
+                        }
+                        if(!isInitialTaskRanORNot){
+                            runDialogForAssistTab(data, `onInitDialog-123456`, "onInitRun");
+                        }  
+                    }
                     if (isCallConversation === 'true' && data.suggestions) {
                         let buldHtml = `
                         <div class="buld-count-utt" id="buldCount-${uuids}">
@@ -2319,12 +2332,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         dialogTerminatedOrIntrupptedInMyBot(data, botId, userIntentInput, appState);
                     }else {
                         isAutomationOnGoing = false;
+                        isInitialDialogOnGoing = true;
                         if (appState[_conversationId]) {
                             appState[_conversationId].automationGoingOn = isAutomationOnGoing;
+                            appState[_conversationId].initialTaskGoingOn =  isInitialDialogOnGoing;
                             appState[_conversationId]['automationGoingOnAfterRefresh'] = isAutomationOnGoing;
                             localStorage.setItem('agentAssistState', JSON.stringify(appState))
                         }
-                          isOverRideMode = false;
+                        isOverRideMode = false;
                         $(`.override-input-div`).remove();
                         addFeedbackHtmlToDom(data, botId, userIntentInput);
                         userMessage = {};
@@ -5885,7 +5900,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     agentTabActive();
                 }
 
-                function runDialogForAssistTab(data, idTarget){
+                function runDialogForAssistTab(data, idTarget, runInitent){
                     let uuids = koreGenerateUUID();
                     dropdownHeaderUuids = uuids;
                     isAutomationOnGoing = true;
@@ -5917,8 +5932,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                     let addRemoveDropDown = document.getElementById(`addRemoveDropDown-${uuids}`);
                     addRemoveDropDown?.classList.remove('hide');
-                    $(`#endTaks-${uuids}`).removeClass('hide')
-                    AgentAssist_run_click(data, dialogPositionId);
+                    $(`#endTaks-${uuids}`).removeClass('hide');
+                    if(!runInitent) {
+                        AgentAssist_run_click(data, dialogPositionId);
+                    }
                 }
 
                 // Example POST method implementation:
