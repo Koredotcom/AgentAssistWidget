@@ -196,6 +196,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             var agent_assist_request = {
                                 'conversationId': ele.conversationId,
                                 'query': ele.value,
+                                'query': sanitizeHTML(ele.value),
                                 'botId': ele.botId,
                                 'agentId': '',
                                 'experience': isCallConversation === 'true' ? 'voice':'chat',
@@ -250,7 +251,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             'botId': _botId,
                             'conversationId': userInputData.conversationid,
                             'experience': isCallConversation === 'true' ? 'voice':'chat',
-                            'query': userInputData.value,
+                            'query': sanitizeHTML(userInputData.value),
                         }
                         if (isCallConversation === 'true') {
                             prepareConversation();
@@ -432,7 +433,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         console.log("event recived", event.data);
                         let agent_assist_request = {
                             'conversationId': _agentAssistDataObj.conversationId,
-                            'query': event.data.value,
+                            'query': sanitizeHTML(event.data.value),
                             'botId': _agentAssistDataObj.botId,
                             'experience': isCallConversation === 'true' ? 'voice':'chat'
                         }
@@ -1177,20 +1178,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                         }
                     }
-                }
-
-                function sanitizeHTML(text) {
-                    // var element = document.createElement('div');
-                    // element.innerText = text;
-                    // return element.innerHTML;
-                    console.log('sanitizeHTML: ',typeof text);
-                    var lt = /</g, 
-                    gt = />/g, 
-                    ap = /'/g, 
-                    ic = /"/g;
-                    value = text.toString().replace(lt, "&lt;").replace(gt, "&gt;").replace(ap, "&#39;").replace(ic, "&#34;");
-                    console.log(value);
-                    return value;
                 }
 
                 function processMybotDataResponse(data, convId, botId) {
@@ -7130,6 +7117,20 @@ function AgentAssist_run_click(e, dialogId) {
     };
 }));
 
+function sanitizeHTML(text) {
+    // var element = document.createElement('div');
+    // element.innerText = text;
+    // return element.innerHTML;
+    console.log('sanitizeHTML: ',typeof text);
+    var lt = /</g, 
+    gt = />/g, 
+    ap = /'/g, 
+    ic = /"/g;
+    value = text.toString().replace(lt, "&lt;").replace(gt, "&gt;").replace(ap, "&#39;").replace(ic, "&#34;");
+    console.log(value);
+    return value;
+}
+
 AgentAssistPubSub.subscribe('agent_usage_feedback', (msg, data) => {
     console.log("===== data once the feedback clicked====", data);
     var agent_assist_request = {
@@ -7156,7 +7157,8 @@ AgentAssistPubSub.subscribe('agent_assist_send_text', (msg, data) => {
     console.log("AgentAssist >>> sending value", data);
     var agent_assist_request = {
         'conversationId': data.conversationId,
-        'query': data.value,
+        // 'query': data.value,
+        'query': sanitizeHTML(data.value),
         'botId': data.botId,
         'agentId': '',
         'experience': isCallConversation === 'true' ? 'voice':'chat',
@@ -7213,7 +7215,8 @@ AgentAssistPubSub.subscribe('searched_Automation_details', (msg, data) => {
     let agent_assist_request = {
         'isSearch': data.isSearch,
         'conversationId': data.conversationId,
-        'query': data.value,
+        // 'query': data.value,
+        'query': sanitizeHTML(data.value),
         'botId': data.botId,
         'intentName': data.intentName,
         'experience': isCallConversation === 'true' ? 'voice':'chat',
