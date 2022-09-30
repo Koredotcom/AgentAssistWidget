@@ -46,7 +46,6 @@ case $input in
       echo "---------- ID -----------------"
       # jq '.dataUUID='$id ' < ./AAZ_app/assets/config.json'
       jq -c '. + { "dataUUID": '$id' }' ./AAZ_app/assets/config.json > tmp.$$.json && mv tmp.$$.json ./AAZ_app/assets/config.json
-      [ -e "tmp.*.json" ] && rm "tmp.*.json"
 
     done
 
@@ -65,8 +64,9 @@ case $input in
     cd AAZ_app
     zat validate
     zat package
-    
+
     cd ../
+    [ -e "tmp.*.json" ] && rm "tmp.*.json"
   done
         echo
         ;;
