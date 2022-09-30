@@ -3,9 +3,7 @@
 import config from "./config.json" assert { type: 'json' };
 
 var zendeskBaseUrl = config.zendeskBaseUrl;
-let agentAssistDataUUID = config.agentAssistDataUUID;
-
-
+let agentAssistDataUUID = config.dataUUID;
 let customDataUrl = `${zendeskBaseUrl}/api/sunshine/objects/records/${agentAssistDataUUID}`;
 
 /*

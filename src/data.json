@@ -1,0 +1,13 @@
+{
+    "data":{
+        "type":"agentassist",
+        "attributes":{
+            "agentassistURL":"https://uat-agentassist.kore.ai",
+            "clientId":"cs-2da7a9e4-579b-53d9-a753-40a0957fd07e",
+            "aud":"https://idproxy.kore.com/authorize",
+            "isAnonymous":false,
+            "clientSecret":"OiIniVR5QW/0dYXXkIeXGH0eR1lL2APlHztM9drG8bo=",
+            "botId":"st-ef77c285-0031-539c-9e11-2087dc0a36e8"
+        }
+    }
+}

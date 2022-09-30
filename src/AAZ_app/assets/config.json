@@ -1,4 +1,6 @@
 {
-    "zendeskBaseUrl" : "https://mycompany7956.zendesk.com",
-    "agentAssistDataUUID" : "66d49c45-38e1-11ed-b986-e518d16e5a58"
+    "zendeskBaseUrl": "https://own8934.zendesk.com",
+    "email": "agentassist1234@gmail.com",
+    "token": "DfTJNogvxzUVvZAY0kxzTfB7aW7KLqwOOHYHTxYC",
+    "dataUUID": "87d8c19a-40ae-11ed-a9d3-1bb11805ce9a"
 }
