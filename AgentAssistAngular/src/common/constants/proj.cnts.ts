@@ -29,5 +29,20 @@ export const ProjConstants = {
     VIEW_ALL_ARTICLES : 'View All Articles',
     VIEW_FEW_ARTICLES : 'View Few Articles',
     AGENT_SEARCH : 'Agent Search',
-    LIBRARY_SEARCH : 'Library Search'
+    LIBRARY_SEARCH : 'Library Search',
+    ENTER_DETAILS : 'EnterDetails'
+}
+
+export const IdReferenceConst = {
+    DROPDOWNDATA : "dropDownData",
+    USERINPUT : "userInput",
+    MYBOTADDREMOVEDROPDOWN : "MyBotaddRemoveDropDown",
+    MYBOTAUTOMATIONBLOCK : "myBotAutomationBlock"
+
+}
+
+export const ConnectionDetails = {
+    "botId" : 'st-c0bff05e-224d-5544-a520-9dcd826afe35',
+    "conversationId" : 'c-d16b5c6-8553-4ee3-ab9e-c9c95735e898',
+    "experience" : "chat"
 }

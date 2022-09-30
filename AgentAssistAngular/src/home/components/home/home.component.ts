@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 import { EVENTS } from 'src/common/helper/events';
 import { WebSocketService } from 'src/common/services/web-socket.service';
 import { HandleSubjectService } from 'src/common/services/handle-subject.service';
-import { ImageFileNames, ImageFilePath, ProjConstants } from '../../../common/constants/proj.cnts'
+import { ConnectionDetails, ImageFileNames, ImageFilePath, ProjConstants } from '../../../common/constants/proj.cnts'
 
 @Component({
   selector: 'app-home',
@@ -35,8 +35,9 @@ export class HomeComponent implements OnInit {
   }
 
   emitEvents(){
-    this.websocketService.emit(EVENTS.welcome_message_request, {});
-    this.websocketService.emit(EVENTS.agent_menu_request,{});
+    let connectionDetails : any = ConnectionDetails;
+    this.websocketService.emit(EVENTS.welcome_message_request, connectionDetails);
+    this.websocketService.emit(EVENTS.agent_menu_request,connectionDetails);
   }
 
   subscribeEvents() {

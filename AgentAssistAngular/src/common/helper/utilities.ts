@@ -23,7 +23,7 @@ export class ADUtility {
     const url = window.location.href;
     const arr = url.split("/");
     // const finalUrl = arr[0] + '//' + arr[2];
-    const finalUrl = "https://uat-agentassist.kore.ai";
+    const finalUrl = "https://uat-smartassist.kore.ai";
     console.log('url arr', finalUrl)
     // const userInfo = this.getUserInfoFromLocalStorage();
     const config: SocketIoConfig = {
@@ -36,8 +36,9 @@ export class ADUtility {
         reconnectionAttempts: 5,
         // 'try multiple transports': false,
         query: {
-          "jToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NjQ0NjA1NzAzNzMsImV4cCI6MTY2NDQ2MDU3MTI3MywiYXVkIjoiIiwiaXNzIjoiY3MtYWI4Y2MzNzMtM2E1Yy01YzQ2LWFlZGQtNTBiNTY1ODVlZWRkIiwic3ViIjoiYy1lMTNhYTZjLTEyZDUtNDllNC04YWIwLTdiMTk5ODhiYWE4MyIsImlzQW5vbnltb3VzIjpmYWxzZX0.XpQafNBhQ6WvLpgtfyFGB1VPCyIQSlTFocg69mv-pII"
-          // "jToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NjQ0NTQ0Mzk1MjAsImV4cCI6MTY2NDQ1NDQ0MDQyMCwiYXVkIjoiIiwiaXNzIjoiY3MtYWI4Y2MzNzMtM2E1Yy01YzQ2LWFlZGQtNTBiNTY1ODVlZWRkIiwic3ViIjoiYy00YTVkNWI3LTBhYzYtNDAzZC04MGQ5LTA4ZWRjNGM2NzU0YSIsImlzQW5vbnltb3VzIjpmYWxzZX0.pRoQp2d26gOEduMO1DIZJ9W5mGK-OQFmkdHAFSIBfPE"
+          "jToken" : "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NjQ1MzM5MDg0NDIsImV4cCI6MTY2NDUzMzkwOTM0MiwiYXVkIjoiIiwiaXNzIjoiY3MtZTRhMmI0YjYtM2RiZC01NWQwLWIwMjUtNDY2ZTVkMDRjOTgxIiwic3ViIjoiYy1kMTZiNWM2LTg1NTMtNGVlMy1hYjllLWM5Yzk1NzM1ZTg5OCIsImlzQW5vbnltb3VzIjpmYWxzZX0.o6eJZTBI_fV1muPbrTdb1LUAOUA7Am7Luzbd2VRqmkA",
+          "EIO":'4',
+          "transport" : "websocket"
         }
       }
     };

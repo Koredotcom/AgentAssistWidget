@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Observable } from "rxjs";
 import { finalize } from 'rxjs/operators';
-import { ADUtility } from '../helper/utilities';
-import { SocketConnection } from '../helper/socket-connection';
-import { EVENTS } from '../helper/events';
+import { EVENTS } from 'src/common/helper/events';
+import { SocketConnection } from 'src/common/helper/socket-connection';
+import { ADUtility } from 'src/common/helper/utilities';
+
 
 @Injectable()
 export class WebSocketService {
@@ -50,8 +51,8 @@ export class WebSocketService {
       console.error("Error while connecting", err);
     });
 
-    this.socket.on(EVENTS.agent_menu_response, (data) => {
-      console.error("Menu Response", data);
+    this.socket.on(EVENTS.agent_menu_response, (err) => {
+      console.error("Error while connecting", err);
     });
 
     this.socket.on(EVENTS.user_message, (data) => {
@@ -64,7 +65,7 @@ export class WebSocketService {
       //this.store.publish('agent_message', data);
     });
 
-    this.socket.on(EVENTS.agent_assist_response, (data) => {
+    this.socket.on(EVENTS.agent_assist_request, (data) => {
       console.log("agentassist_response:", data);
       //this.store.publish('conversation.agentassist_response', data);
     })
@@ -86,7 +87,7 @@ export class WebSocketService {
 
         /* this.authService.isRefreshingToken = true;
         this.authService.tokenSubject.next(null);
-
+        
         // refreshToken method take cares of redirecting to login page, in case of invalid token
         this.authService.refreshToken()
           .pipe(finalize(() => this.authService.isRefreshingToken = false))

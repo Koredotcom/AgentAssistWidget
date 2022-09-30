@@ -14,4 +14,6 @@ export class AppComponent {
   ngOnInit(){
     this.webSocketService.init();
   }
+
+  
 }

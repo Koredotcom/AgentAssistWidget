@@ -11,10 +11,11 @@ import { TerminateComponent } from './components/terminate/terminate.component';
 import { RandomUUIDPipe } from './pipes/random-uuid.pipe';
 import { RemoveSpecialCharPipe } from './pipes/remove-special-char.pipe';
 import { ReplaceQuotStringWithDoubleQuotPipe } from './pipes/replace-quot-string-with-double-quot.pipe';
+import { SanitizeHtmlPipe } from './pipes/sanitize-html.pipe';
 
 
 @NgModule({
-  declarations: [OverlaysearchComponent, InterruptPopupComponent, RestorePopupComponent, SummaryPopupComponent, TerminateComponent, RandomUUIDPipe, RemoveSpecialCharPipe, ReplaceQuotStringWithDoubleQuotPipe],
+  declarations: [OverlaysearchComponent, InterruptPopupComponent, RestorePopupComponent, SummaryPopupComponent, TerminateComponent, RandomUUIDPipe, RemoveSpecialCharPipe, ReplaceQuotStringWithDoubleQuotPipe, SanitizeHtmlPipe],
   imports: [
     CommonModule,
     HttpClientModule,
@@ -22,6 +23,6 @@ import { ReplaceQuotStringWithDoubleQuotPipe } from './pipes/replace-quot-string
   ],
   providers:[TemplateRenderClassService],
   exports : [OverlaysearchComponent, InterruptPopupComponent, RestorePopupComponent, SummaryPopupComponent, TerminateComponent, RandomUUIDPipe,
-    RemoveSpecialCharPipe,ReplaceQuotStringWithDoubleQuotPipe]
+    RemoveSpecialCharPipe,ReplaceQuotStringWithDoubleQuotPipe, SanitizeHtmlPipe]
 })
 export class SharedModule { }
