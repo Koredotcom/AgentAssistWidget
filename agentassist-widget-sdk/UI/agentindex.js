@@ -161,6 +161,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 var navigatefromLibToTab;
                 let isOnlyOneFaqOnSearch = false;
                 let isInitialDialogOnGoing = false;
+                let isSendWelcomeMessage;
                 chatConfig = window.KoreSDK.chatConfig;
                 var koreBot = koreBotChat();
                 AgentChatInitialize = new koreBot.chatWindow(chatConfig);
@@ -445,11 +446,18 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     });
 
                 }
-                  
+                let appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                let appState = JSON.parse(appStateStr);
+                if (appState[_conversationId]) {
+                    isSendWelcomeMessage = false;
+                }else{
+                    isSendWelcomeMessage = true;
+                }
                 var welcome_message_request = {
                     'waitTime': 2000,
                     'userName': parsedCustomData?.userName || parsedCustomData?.fName + parsedCustomData?.lName || 'user',
-                    'id': _agentAssistDataObj.conversationId
+                    'id': _agentAssistDataObj.conversationId,
+                    'isSendWelcomeMessage': isSendWelcomeMessage
                 }
 
                 _agentAsisstSocket.emit('welcome_message_request', welcome_message_request);
