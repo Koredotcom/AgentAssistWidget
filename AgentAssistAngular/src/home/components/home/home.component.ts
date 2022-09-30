@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { EVENTS } from 'src/app/events';
+import { WebSocketService } from 'src/app/web-socket.service';
 import { HandleSubjectService } from 'src/common/services/handle-subject.service';
 import { ImageFileNames, ImageFilePath, ProjConstants } from '../../../common/constants/proj.cnts'
 
@@ -19,9 +21,10 @@ export class HomeComponent implements OnInit {
   searchConentObject: any;
   activeTab: string; // call conversation make transcript as active tab.
 
-  constructor(public handleSubjectService: HandleSubjectService) { }
+  constructor(public handleSubjectService: HandleSubjectService, public websocketService : WebSocketService) { }
 
   ngOnInit(): void {
+    this.emitEvents();
     this.subscribeEvents();
   }
 
@@ -29,6 +32,11 @@ export class HomeComponent implements OnInit {
     this.subscriptionsList.forEach((subscription) => {
       subscription.unsubscribe();
     })
+  }
+
+  emitEvents(){
+    this.websocketService.emit(EVENTS.welcome_message_request, {});
+    this.websocketService.emit(EVENTS.agent_menu_request,{});
   }
 
   subscribeEvents() {

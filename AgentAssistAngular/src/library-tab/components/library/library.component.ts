@@ -1,6 +1,7 @@
 import { Component, EventEmitter, HostListener, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ImageFilePath, ImageFileNames, ProjConstants } from 'src/common/constants/proj.cnts';
+import { HandleEventsService } from 'src/common/services/handle-events.service';
 import { HandleSubjectService } from 'src/common/services/handle-subject.service';
 import { LibraryService } from 'src/library-tab/services/library.service';
 
@@ -25,7 +26,8 @@ export class LibraryComponent implements OnInit {
   searchText: string = '';
   searchFromAgentSearchBar: boolean = false;
 
-  constructor(public handleSubjectService: HandleSubjectService, public libraryService: LibraryService) { }
+  constructor(public handleSubjectService: HandleSubjectService, public libraryService: LibraryService,
+    public handleEventsService : HandleEventsService) { }
 
   ngOnInit(): void {
     this.subscribeEvents();
@@ -56,7 +58,11 @@ export class LibraryComponent implements OnInit {
         this.getSearchResults(searchObj.eventFrom);
       }
     });
+    let subscription2 = this.handleEventsService.agent_menu_response_event.subscribe((response : any) => {
+      console.log("menu response", response);
+    });
     this.subscriptionsList.push(subscribtion);
+    this.subscriptionsList.push(subscription2);
   }
 
   handleRunAgent(dialogueId, event) {

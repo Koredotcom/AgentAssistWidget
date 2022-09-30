@@ -1,4 +1,15 @@
 export enum EVENTS {
+    'event' = 'event',
+    'request_port' = 'request_port',
+    'control_message' = 'control_message',
+    'connect' = 'connect',
+    'disconnect' = 'disconnect',
+    'error' = 'error',
+    'connect_error' = 'connect_error',
+    'conversation_closed' = 'conversation_closed',
+    'welcome_message_request' = 'welcome_message_request',
+    'user_message' = 'user_message',
+    'agent_message'  = 'agent_message',
     'agent_assist_request' = 'agent_assist_request',
     'agent_assist_response' = 'agent_assist_response',
 

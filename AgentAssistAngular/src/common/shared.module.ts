@@ -8,16 +8,20 @@ import { SummaryPopupComponent } from './components/summary-popup/summary-popup.
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { TemplateRenderClassService } from './services/template-render-class.service';
 import { TerminateComponent } from './components/terminate/terminate.component';
+import { RandomUUIDPipe } from './pipes/random-uuid.pipe';
+import { RemoveSpecialCharPipe } from './pipes/remove-special-char.pipe';
+import { ReplaceQuotStringWithDoubleQuotPipe } from './pipes/replace-quot-string-with-double-quot.pipe';
 
 
 @NgModule({
-  declarations: [OverlaysearchComponent, InterruptPopupComponent, RestorePopupComponent, SummaryPopupComponent, TerminateComponent],
+  declarations: [OverlaysearchComponent, InterruptPopupComponent, RestorePopupComponent, SummaryPopupComponent, TerminateComponent, RandomUUIDPipe, RemoveSpecialCharPipe, ReplaceQuotStringWithDoubleQuotPipe],
   imports: [
     CommonModule,
     HttpClientModule,
     PerfectScrollbarModule
   ],
   providers:[TemplateRenderClassService],
-  exports : [OverlaysearchComponent, InterruptPopupComponent, RestorePopupComponent, SummaryPopupComponent, TerminateComponent]
+  exports : [OverlaysearchComponent, InterruptPopupComponent, RestorePopupComponent, SummaryPopupComponent, TerminateComponent, RandomUUIDPipe,
+    RemoveSpecialCharPipe,ReplaceQuotStringWithDoubleQuotPipe]
 })
 export class SharedModule { }

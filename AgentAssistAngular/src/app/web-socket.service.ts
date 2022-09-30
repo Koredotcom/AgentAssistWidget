@@ -3,6 +3,7 @@ import { Observable } from "rxjs";
 import { finalize } from 'rxjs/operators';
 import { ADUtility } from './utilities';
 import { SocketConnection } from './socket-connection';
+import { EVENTS } from './events';
 
 @Injectable()
 export class WebSocketService {
@@ -13,11 +14,11 @@ export class WebSocketService {
   }
 
   sendMessage(data) {
-    this.emit('agent_message', data);
+    this.emit(EVENTS.agent_message, data);
   }
 
   sendControlMessage(data) {
-    this.emit('control_message', data);
+    this.emit(EVENTS.control_message, data);
   }
 
   closeConversation(data) {
@@ -25,81 +26,50 @@ export class WebSocketService {
       "id": data._id,
       "orgId": data.orgId
     };
-    console.log('conversation_closed', data);
-    this.emit('conversation_closed', data);
+    console.log(EVENTS.conversation_closed, data);
+    this.emit(EVENTS.conversation_closed, data);
   }
 
   sendWebRTCData(data) {
-    this.emit('event', data);
+    this.emit(EVENTS.event, data);
   }
 
   requestPort(data) {
-    this.emit('request_port', data);
+    this.emit(EVENTS.request_port, data);
   }
 
   init() {
     this.socket = new SocketConnection(this.adUtility);
     this.socket.connect();
 
-    this.socket.on("connect", () => {
+    this.socket.on(EVENTS.connect, () => {
       console.log("Connected");
     });
 
-    this.socket.on("connect_error", (err) => {
+    this.socket.on(EVENTS.connect_error, (err) => {
       console.error("Error while connecting", err);
     });
 
-    this.socket.on("open_conversations", (data) => {
-      console.log("open_conversations::", data);
-      // this.store.publish('open_conversations', data)
-      // if (data && data.length) {
-      //   this.store.publish('conversation.update_conv_count', {count : data.length})
-      // } else {
-      //   this.store.publish('conversation.update_conv_count', {count : 0})
-      // }
+    this.socket.on(EVENTS.agent_menu_response, (err) => {
+      console.error("Error while connecting", err);
     });
 
-    this.socket.on("active_conversations", (data) => {
-      console.log("active_conversations::", data);
-    });
-
-    this.socket.on("user_message", (data) => {
+    this.socket.on(EVENTS.user_message, (data) => {
       console.log("user message::", data);
       //this.store.publish('user_message', data);
     });
 
-    this.socket.on("agent_message", (data) => {
+    this.socket.on(EVENTS.agent_message, (data) => {
       console.log("agent_message::", data);
       //this.store.publish('agent_message', data);
     });
 
-    this.socket.on('new_conversation', (data) => {
-      console.log("new_conversation:", data);
-      //this.store.publish('conversation.newConversation', data);
-    })
-
-    this.socket.on('update_conversation', (data) => {
-      console.log("update_conversation:", data);
-      //this.store.publish('conversation.conversationUpdated', data);
-    })
-
-    this.socket.on('agentassist_response', (data) => {
+    this.socket.on(EVENTS.agent_assist_request, (data) => {
       console.log("agentassist_response:", data);
       //this.store.publish('conversation.agentassist_response', data);
     })
 
-    this.socket.on('conversation_closed', (data) => {
-      console.log("conversation_closed:", data);
-      //this.store.publish('conversation.conversationClosed', data);
-    })
-
-    // /
-    this.socket.on('delete_conversation', (data) => {
-      console.log("delete_conversation:", data);
-      //this.store.publish('conversation.deleteConversation', data);
-    })
-
-    this.socket.on("disconnect", (reason) => {
+    this.socket.on(EVENTS.disconnect, (reason) => {
       if (reason === "io server disconnect") {
         console.log("io server disconnect. Socket will reconnect:");
         // the disconnection was initiated by the server, you need to reconnect manually
@@ -109,7 +79,7 @@ export class WebSocketService {
     });
 
     // on web socket token expiry, call refresh token method
-    this.socket.on('error', (reason) => {
+    this.socket.on(EVENTS.error, (reason) => {
       if (reason === 'ERR_TOKEN_EXPIRED') {
         // Disconnect Web Socket to prevent auto reconnect
         this.socket.disconnect();
@@ -129,8 +99,6 @@ export class WebSocketService {
           }) */
       }
     })
-
-    this.socket.on("agent_force_logout", (data) => {});
 
   }
 
