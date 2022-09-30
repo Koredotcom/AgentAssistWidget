@@ -80,7 +80,7 @@
         <div class="overlay-suggestions" style="bottom:0; display:block;" *ngIf="showSearchSuggestions">
             <div class="suggestion-content" id="overLaySearch">
                 <perfect-scrollbar class="overlaysearch-scroll-bar">
-                    <app-overlaysearch [searchType]="projConstants.AGENT_SEARCH" (handleSearchClickEvent)="handleSearchClickEvent($event)"></app-overlaysearch>
+                    <app-overlaysearch [searchType]="projConstants.AGENT_SEARCH" (handleSearchClickEvent)="handleSearchClickEvent($event)" (closeSearchSuggestions)="closeSearchSuggestions($event)"></app-overlaysearch>
                 </perfect-scrollbar>
                 </div>
         </div>

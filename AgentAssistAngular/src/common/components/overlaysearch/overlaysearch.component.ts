@@ -12,6 +12,7 @@ import { HandleSubjectService } from 'src/common/services/handle-subject.service
 export class OverlaysearchComponent implements OnInit {
   @Input() searchType: string;
   @Output() handleSearchClickEvent = new EventEmitter();
+  @Output() closeSearchSuggestions = new EventEmitter();
   subscriptionsList: Subscription[] = [];
 
   projConstants: any = ProjConstants;
@@ -62,18 +63,24 @@ export class OverlaysearchComponent implements OnInit {
       this.searchResponse.dialogs.map(obj => {
         if (obj.name === dialoguename) {
           obj.agentRunButton = !obj.agentRunButton
+          console.log(obj, "inside handle run button");
+          
           event.stopPropagation()
         }
       })
     }
   }
 
-  dialogueRunClick(clickType) {
-    if (clickType == this.projConstants.ASSIST) {
+  dialogueRunClick(dialog,searchType) {
+    let runDialogueObject = Object.assign({},this.searchConentObject);
+    Object.assign(runDialogueObject, dialog);    
+    if (searchType == this.projConstants.ASSIST) {
       this.handleSubjectService.setActiveTab(this.projConstants.ASSIST);
     } else {
       this.handleSubjectService.setActiveTab(this.projConstants.MYBOT);
     }
+    this.closeSearchSuggestions.emit(true);
+    this.handleSubjectService.setRunButtonClickEvent(runDialogueObject);
   }
 
   showAllResultsClick(clickType) {

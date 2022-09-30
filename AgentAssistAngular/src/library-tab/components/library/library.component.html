@@ -45,7 +45,7 @@
                                     <div class="title-text" [id]="'automation-' + i">{{dialogue.value.intentName}}</div>
                                 </div>
                                 <div class="action-links">
-                                    <button class="send-run-btn" [id]="'useCase-' + i" (click)="dialogueRunClick(projConstants.ASSIST)">{{projConstants.RUN}}</button>
+                                    <button class="send-run-btn" [id]="'useCase-' + i" (click)="dialogueRunClick(dialogue,projConstants.ASSIST)">{{projConstants.RUN}}</button>
                                     <div class="elipse-dropdown-info" [id]="'showRunForAgentBtn-' + i">
                                         <div class="elipse-icon" [id]="'elipseIcon-' + i" (click)="handleRunAgent(dialogue.key, $event)">
                                             <i class="ast-overflow" [id]="'overflowIcon-' + i"></i>

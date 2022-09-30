@@ -69,5 +69,10 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  closeSearchSuggestions(flag){
+    if(flag){
+      this.showSearchSuggestions = false;
+    }
+  }
 
 }

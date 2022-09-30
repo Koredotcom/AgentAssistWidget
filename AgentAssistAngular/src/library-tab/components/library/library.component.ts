@@ -65,12 +65,15 @@ export class LibraryComponent implements OnInit {
   }
 
   //changing the tab
-  dialogueRunClick(clickType) {
+  dialogueRunClick(dialog,clickType) {
+    let runDialogueObject = Object.assign({},dialog);
+    runDialogueObject.searchFrom = this.projConstants.LIBRARY;
     if (clickType == this.projConstants.ASSIST) {
       this.handleSubjectService.setActiveTab(this.projConstants.ASSIST);
     } else {
       this.handleSubjectService.setActiveTab(this.projConstants.MYBOT);
     }
+    this.handleSubjectService.setRunButtonClickEvent(runDialogueObject);
   }
 
   getMenuResponse() {
@@ -85,7 +88,7 @@ export class LibraryComponent implements OnInit {
   getSearchResults(eventFrom?) {
     this.searchFromAgentSearchBar = eventFrom ? true : false;
     this.showSearchSuggestions = true;
-    this.handleSubjectService.setSearchText({ searchFrom: this.projConstants.ASSIST, value: this.searchText });
+    this.handleSubjectService.setSearchText({ searchFrom: this.projConstants.LIBRARY, value: this.searchText });
   }
 
   emptySearchTextCheck() {

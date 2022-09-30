@@ -14,7 +14,7 @@ export class AssistComponent implements OnInit {
     
   }
 
-   ngOnInit() {
+   ngOnInit() {   
     console.log("assist tab ng on it");
     let message = {
       "conversationId": "c-099914a-6ca1-4797-ab40-a5b18e0d214c",

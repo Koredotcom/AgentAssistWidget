@@ -34,7 +34,7 @@ export class ADUtility {
         reconnection: true,
         reconnectionDelay: 1000,
         reconnectionAttempts: 5,
-        'try multiple transports': false,
+        // 'try multiple transports': false,
         query: {
           "jToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NjQ0NjA1NzAzNzMsImV4cCI6MTY2NDQ2MDU3MTI3MywiYXVkIjoiIiwiaXNzIjoiY3MtYWI4Y2MzNzMtM2E1Yy01YzQ2LWFlZGQtNTBiNTY1ODVlZWRkIiwic3ViIjoiYy1lMTNhYTZjLTEyZDUtNDllNC04YWIwLTdiMTk5ODhiYWE4MyIsImlzQW5vbnltb3VzIjpmYWxzZX0.XpQafNBhQ6WvLpgtfyFGB1VPCyIQSlTFocg69mv-pII"
           // "jToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NjQ0NTQ0Mzk1MjAsImV4cCI6MTY2NDQ1NDQ0MDQyMCwiYXVkIjoiIiwiaXNzIjoiY3MtYWI4Y2MzNzMtM2E1Yy01YzQ2LWFlZGQtNTBiNTY1ODVlZWRkIiwic3ViIjoiYy00YTVkNWI3LTBhYzYtNDAzZC04MGQ5LTA4ZWRjNGM2NzU0YSIsImlzQW5vbnltb3VzIjpmYWxzZX0.pRoQp2d26gOEduMO1DIZJ9W5mGK-OQFmkdHAFSIBfPE"

@@ -10,6 +10,7 @@ export class HandleSubjectService {
   public activeTabSubject = new BehaviorSubject<string>(ProjConstants.ASSIST);
   public searchTextSubject = new BehaviorSubject<object>({});
   public searchTextFromAgentSearch = new BehaviorSubject<object>({});
+  public runButtonClickEventSubject = new BehaviorSubject<object>({});
 
   constructor() { }
 
@@ -23,6 +24,10 @@ export class HandleSubjectService {
 
   setLibrarySearchTextFromAgentSearch(searchObj){
     this.searchTextFromAgentSearch.next(searchObj);
+  }
+
+  setRunButtonClickEvent(obj){
+    this.runButtonClickEventSubject.next(obj);
   }
 
 }

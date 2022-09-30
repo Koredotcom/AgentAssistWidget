@@ -24,7 +24,6 @@ export class TemplateRenderClassService {
     this.chatConfig.botOptions = this.botOptions;
     var agentAssistv2 = agentAssistChat();
     this.AgentChatInitialize = new agentAssistv2.chatWindow(this.chatConfig);
-  
     this.AgentChatInitialize.customTemplateObj = new agentAssistCustomTemplate(this.chatConfig, this.AgentChatInitialize);
    }
 
