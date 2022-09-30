@@ -7,7 +7,7 @@ import { DeletePopupComponent } from './components/delete-popup/delete-popup.com
 import { RestorePopupComponent } from './components/restore-popup/restore-popup.component';
 import { SummaryPopupComponent } from './components/summary-popup/summary-popup.component';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
-
+import { TemplateRenderClassService } from './services/template-render-class.service';
 
 
 @NgModule({
@@ -17,6 +17,7 @@ import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
     HttpClientModule,
     PerfectScrollbarModule
   ],
+  providers:[TemplateRenderClassService],
   exports : [OverlaysearchComponent, InterruptPopupComponent, DeletePopupComponent, RestorePopupComponent, SummaryPopupComponent]
 })
 export class SharedModule { }

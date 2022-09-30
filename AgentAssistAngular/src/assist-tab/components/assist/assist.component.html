@@ -49,6 +49,43 @@
         </button>
     </div>
 
+    <div class="dialog-task-accordiaon-info "  >
+        <div class="accordion-header"
+        data-drop-down-opened="false">
+            <div class="icon-info">
+                <i class="ast-rule"></i>
+            </div>
+            <div class="header-text" >intentName</div>
+            <i class="ast-carrotup"></i>
+            <button class="btn-danger"  data-position-id="${dialogId}">Terminate</button>
+        </div>
+        <div class="collapse-acc-data" id="dropDownData-${uuids}">
+            <div class="steps-run-data"  >
+                <div class="icon_block">
+                    <i class="ast-agent"></i>
+                </div>
+                <div class="run-info-content" >
+                <div class="title">Tell Customer</div>
+                <div class="agent-utt">
+                    <div class="title-data" ><ul class="chat-container" id="displayData-${uuids}"></ul></div>
+                    <div class="action-links">
+                        <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data="${newTemp}">Send</button>
+                        <div class="copy-btn hide" data-msg-id="${uuids}">
+                            <i class="ast-copy" data-msg-id="${uuids}"></i>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+         <div class="override-input-div hide" id="overRideDiv-${uuids}" >
+         <button class="override-input-btn" id="overRideBtn-${uuids}" data-position-id="${dialogId}">Override Input</button>
+         <button class="cancel-override-input-btn hide" id="cancelOverRideBtn-${uuids}" data-position-id="${dialogId}">Cancel Override</button>
+         </div>
+           
+        </div>
+        
+        </div>
+
     <div id="userTab-custSentimentAnalysis" class="customer-feeling-text">
     </div>
 
