@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from "rxjs";
 import { finalize } from 'rxjs/operators';
-import { ADUtility } from './utilities';
-import { SocketConnection } from './socket-connection';
-import { EVENTS } from './events';
+import { ADUtility } from '../helper/utilities';
+import { SocketConnection } from '../helper/socket-connection';
+import { EVENTS } from '../helper/events';
 
 @Injectable()
 export class WebSocketService {
@@ -86,7 +86,7 @@ export class WebSocketService {
 
         /* this.authService.isRefreshingToken = true;
         this.authService.tokenSubject.next(null);
-        
+
         // refreshToken method take cares of redirecting to login page, in case of invalid token
         this.authService.refreshToken()
           .pipe(finalize(() => this.authService.isRefreshingToken = false))

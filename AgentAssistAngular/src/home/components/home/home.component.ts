@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { EVENTS } from 'src/app/events';
-import { WebSocketService } from 'src/app/web-socket.service';
+import { EVENTS } from 'src/common/helper/events';
+import { WebSocketService } from 'src/common/services/web-socket.service';
 import { HandleSubjectService } from 'src/common/services/handle-subject.service';
 import { ImageFileNames, ImageFilePath, ProjConstants } from '../../../common/constants/proj.cnts'
 
