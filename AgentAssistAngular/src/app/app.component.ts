@@ -28,6 +28,4 @@ export class AppComponent {
     }, 300)
   }
 
-  
-
 }
