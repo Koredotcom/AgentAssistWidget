@@ -2146,6 +2146,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         if (!parsedPayload) {
                             $(runInfoContent).find('.copy-btn').removeClass('hide');
                         }
+                        if((!sourceType || sourceType !== 'smartassist-color-scheme') && parsedPayload){
+                            $(runInfoContent).find('.send-run-btn').addClass('hide');
+                        }
                         setTimeout(() => {             
                             updateNewMessageUUIDList(dropdownHeaderUuids);
                         }, waitingTimeForUUID);
