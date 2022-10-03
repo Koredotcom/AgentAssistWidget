@@ -34,13 +34,13 @@ export class TemplateRenderClassService {
       "message": [
 
       ],
-      "messageId": res._id + "-" + (new Date()).getTime(),
+      "messageId": res?.id + "-" + (new Date()).getTime(),
       "botInfo": {
         "chatBot":  'st-fa82e7df-fa85-574c-92c7-a6ad6d6da07d',
         "taskBotId": 'st-fa82e7df-fa85-574c-92c7-a6ad6d6da07d'
       }
     }
-    res.buttons?.forEach((elem) => {
+    res?.buttons?.forEach((elem) => {
       let parsedPayload;
       let payloadType = (elem.value).replace(/(&quot\;)/g, "\"");
 

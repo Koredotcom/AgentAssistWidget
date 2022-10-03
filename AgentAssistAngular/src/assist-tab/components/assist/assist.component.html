@@ -48,7 +48,25 @@
             Back to recommendation
         </button>
     </div>
-
+    <div class = "welcome-msg collapse-acc-data before-none" id='smallTalk-${uuids}'>
+        <div class="steps-run-data">
+            <div class="icon_block">
+                <i class="ast-agent"></i>
+            </div>
+            <div class="run-info-content" *ngFor="let ele of agentResponse?.buttons; let i=index">
+                <div class="title" *ngIf="i === 0">Customer has waited for an agent for few seconds.<br/>Here are some appropriate opening lines.</div>
+                <div class="agent-utt">
+                 <div class="title-data" id="displayData-${uuids}">{{ele.value}}</div>
+                 <div class="action-links">
+                     <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}"  data-msg-data='${ele.value}'>Send</button>
+                     <div class="copy-btn" data-msg-id="${uuids}" data-msg-data="${ele.value}">
+                         <i class="ast-copy" data-msg-id="${uuids}" data-msg-data="${ele.value}"></i>
+                     </div>
+                 </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="dialog-task-accordiaon-info "  >
         <div class="accordion-header"
         data-drop-down-opened="false">

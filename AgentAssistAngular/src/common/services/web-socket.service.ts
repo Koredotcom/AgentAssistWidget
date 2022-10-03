@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from "rxjs";
+import { BehaviorSubject, Observable } from "rxjs";
 import { finalize } from 'rxjs/operators';
 import { ADUtility } from '../helper/utilities';
 import { SocketConnection } from '../helper/socket-connection';
@@ -9,6 +9,8 @@ import { EVENTS } from '../helper/events';
 export class WebSocketService {
   socketEventsSub: any;
   socket: SocketConnection;
+  agentAssistResponse$: BehaviorSubject<any[]> = new BehaviorSubject(null);
+  notifications$: Observable<any[]> = this.agentAssistResponse$.asObservable();
   constructor(public adUtility: ADUtility) {
     console.log('inside WebSocketService constructor');
   }
@@ -41,68 +43,55 @@ export class WebSocketService {
   init() {
     this.socket = new SocketConnection(this.adUtility);
     this.socket.connect();
+  }
 
-    this.socket.on(EVENTS.connect, () => {
+  registerEvents() {
+    this.listen(EVENTS.connect).subscribe((res: any) => {
       console.log("Connected");
+      this.agentAssistResponse$.next(res);
+  });
+    this.listen(EVENTS.agent_assist_response).subscribe((res: any) => {
+        console.log("--------------responseeeeeeeeeeeeeeeeeeeeeeee", res)
+        this.agentAssistResponse$.next(res);
     });
-
-    this.socket.on(EVENTS.connect_error, (err) => {
+    this.listen(EVENTS.connect_error).subscribe((err: any) => {
       console.error("Error while connecting", err);
+     // this.agentAssistResponse$.next(res);
     });
-
-    this.socket.on(EVENTS.agent_menu_response, (data) => {
-      console.error("Menu Response", data);
+    this.listen(EVENTS.agent_menu_response).subscribe((res: any) => {
+      console.error("menu response", res);
+     // this.agentAssistResponse$.next(res);
     });
-
-    this.socket.on(EVENTS.user_message, (data) => {
-      console.log("user message::", data);
-      //this.store.publish('user_message', data);
+    this.listen(EVENTS.user_message).subscribe((res: any) => {
+      console.error("user_message", res);
+     // this.agentAssistResponse$.next(res);
     });
-
-    this.socket.on(EVENTS.agent_message, (data) => {
-      console.log("agent_message::", data);
-      //this.store.publish('agent_message', data);
+    this.listen(EVENTS.agent_message).subscribe((res: any) => {
+      console.error("agent_message", res);
+     // this.agentAssistResponse$.next(res);
     });
-
-    this.socket.on(EVENTS.agent_assist_response, (data) => {
-      console.log("agentassist_response:", data);
-      //this.store.publish('conversation.agentassist_response', data);
-    })
-
-    this.socket.on(EVENTS.disconnect, (reason) => {
-      if (reason === "io server disconnect") {
+    this.listen(EVENTS.agent_assist_request).subscribe((res: any) => {
+      console.error("agent_assist_request", res);
+     // this.agentAssistResponse$.next(res);
+    });
+    this.listen(EVENTS.disconnect).subscribe((res: any) => {
+      if (res === "io server disconnect") {
         console.log("io server disconnect. Socket will reconnect:");
         // the disconnection was initiated by the server, you need to reconnect manually
         this.socket.connect();
       }
-      // else the socket will automatically try to reconnect
     });
-
     // on web socket token expiry, call refresh token method
-    this.socket.on(EVENTS.error, (reason) => {
-      if (reason === 'ERR_TOKEN_EXPIRED') {
+    this.listen(EVENTS.error).subscribe((res: any) => {
+      if (res === 'ERR_TOKEN_EXPIRED') {
         // Disconnect Web Socket to prevent auto reconnect
         this.socket.disconnect();
-
-        /* this.authService.isRefreshingToken = true;
-        this.authService.tokenSubject.next(null);
-
-        // refreshToken method take cares of redirecting to login page, in case of invalid token
-        this.authService.refreshToken()
-          .pipe(finalize(() => this.authService.isRefreshingToken = false))
-          .subscribe((tokenRes) => {
-            if (tokenRes) {
-              this.authService.updateAuthInfoWithRefreshTokenResponse(tokenRes);
-              this.authService.tokenSubject.next(tokenRes);
-              this.socket.connect();
-            }
-          }) */
       }
-    })
-
+    });
   }
 
   listen(eventName: string) {
+    console.log("came to listen")
     return new Observable(subscriber => {
       this.socket.on(eventName, (data) => {
         subscriber.next(data);
@@ -111,7 +100,7 @@ export class WebSocketService {
   }
 
   emit(eventName: string, data) {
-    this.socket.emit(eventName, data)
+    this.socket.emit(eventName, data);
   }
 
   disconnect() {

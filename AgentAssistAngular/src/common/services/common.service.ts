@@ -1,12 +1,21 @@
-import { Injectable } from '@angular/core';
-import { of } from 'rxjs';
+import { Injectable, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { EVENTS } from '../helper/events';
+import { WebSocketService } from './web-socket.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CommonService {
+export class CommonService{
+  configObj;
+  isAutomationOnGoing = false;
+  isParsedPayload;
 
-  constructor() { }
+  constructor(private route: ActivatedRoute, private webSocketService: WebSocketService) {
+    console.log("--------------------------cam to common serviceeeeeeeeeeeeeeeeeee");
+
+  }
 
   getSampleSearchResponse(){
     return of(["agent_assist_agent_response",{"isSearch":true,"conversationId":"c-e4eb98b-ddd0-4802-a679-a9d28d13e94b","botId":"st-c0bff05e-224d-5544-a520-9dcd826afe35","experience":"voice","type":"text","value":"How does COVID -19 spread?","event":"agent_assist_agent_response","volleyTone":[],"totalTone":[],
@@ -43,4 +52,13 @@ export class CommonService {
       return searchResponse;
   }
 
+  triggerWelcomeEvent(){
+    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx tigger", this.configObj)
+    var welcome_message_request = {
+      'waitTime': 2000,
+      'userName':  'user',
+      'id': this.configObj?.conversationId
+    }
+    this.webSocketService.emit('welcome_message_request', welcome_message_request)
+  }
 }

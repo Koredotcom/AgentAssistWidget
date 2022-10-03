@@ -51,8 +51,8 @@ export class WebSocketService {
       console.error("Error while connecting", err);
     });
 
-    this.socket.on(EVENTS.agent_menu_response, (err) => {
-      console.error("Error while connecting", err);
+    this.socket.on(EVENTS.agent_menu_response, (data) => {
+      console.error("Menu Response", data);
     });
 
     this.socket.on(EVENTS.user_message, (data) => {
