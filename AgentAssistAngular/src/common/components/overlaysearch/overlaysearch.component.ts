@@ -1,8 +1,11 @@
-import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { ImageFilePath, ImageFileNames, ProjConstants } from 'src/common/constants/proj.cnts';
+import { ImageFilePath, ImageFileNames, ProjConstants, ConnectionDetails, IdReferenceConst, classNamesConst } from 'src/common/constants/proj.cnts';
+import { EVENTS } from 'src/common/helper/events';
+import { RandomUUIDPipe } from 'src/common/pipes/random-uuid.pipe';
 import { CommonService } from 'src/common/services/common.service';
 import { HandleSubjectService } from 'src/common/services/handle-subject.service';
+import { WebSocketService } from 'src/common/services/web-socket.service';
 
 @Component({
   selector: 'app-overlaysearch',
@@ -25,8 +28,10 @@ export class OverlaysearchComponent implements OnInit {
   articleAllView: boolean = false;
   searchResultText: string;
   searchConentObject: any;
+  showOverLay : boolean = false;
 
-  constructor(public handleSubjectService: HandleSubjectService, public commonService: CommonService) { }
+  constructor(public handleSubjectService: HandleSubjectService, public commonService: CommonService,
+    public randomUUIDPipe: RandomUUIDPipe, public websocketService: WebSocketService, public cdRef : ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.subscribeEvents();
@@ -39,13 +44,41 @@ export class OverlaysearchComponent implements OnInit {
   }
 
   subscribeEvents() {
-    let subscription = this.handleSubjectService.searchTextSubject.subscribe((searchObj) => {
-      if (searchObj) {
+    let subscription1 = this.handleSubjectService.searchTextSubject.subscribe((searchObj : any) => {
+      this.showOverLay = false;
+      this.searchResponse = {};
+      if (searchObj && searchObj.value) {
         this.searchConentObject = searchObj;
-        this.handleSearchResponse(searchObj);
+        this.emitSearchRequest(searchObj, true);
+        console.log(this.showOverLay, "show overlya sub1"); 
       }
     });
-    this.subscriptionsList.push(subscription);
+    let subscription2 = this.websocketService.agentAssistAgentResponse$.subscribe((agentResponse: any) => {
+      if(agentResponse){
+        console.log(agentResponse, "agent Response");
+        this.handleSearchResponse(agentResponse);
+        this.showOverLay = true;
+        console.log(this.showOverLay, "show overlya sub2");
+
+        if(document.getElementById(IdReferenceConst.overLaySuggestions)){
+          document.getElementById(IdReferenceConst.overLaySuggestions).classList.add(classNamesConst.displayBlock)
+        }
+      }
+    });
+    this.subscriptionsList.push(subscription1);
+    this.subscriptionsList.push(subscription2);
+  }
+
+  emitSearchRequest(searchObj, isSearchFlag) {
+    console.log("inside emit search request", searchObj);
+    let connectionDetails: any = Object.assign({}, ConnectionDetails);
+    connectionDetails.value = searchObj.value;
+    connectionDetails.isSearch = isSearchFlag;
+    if(!isSearchFlag){
+      connectionDetails.intentName = searchObj.value;
+    }
+    let agent_assist_agent_request_params = this.commonService.prepareAgentAssistAgentRequestParams(connectionDetails);
+    this.websocketService.emitEvents(EVENTS.agent_assist_agent_request, agent_assist_agent_request_params);
   }
 
   @HostListener('document:click', ['$event']) onDocumentClick(event) {
@@ -64,23 +97,40 @@ export class OverlaysearchComponent implements OnInit {
         if (obj.name === dialoguename) {
           obj.agentRunButton = !obj.agentRunButton
           console.log(obj, "inside handle run button");
-          
+
           event.stopPropagation()
         }
       })
     }
   }
 
-  dialogueRunClick(dialog,searchType) {
-    let runDialogueObject = Object.assign({},this.searchConentObject);
-    Object.assign(runDialogueObject, dialog);    
+  dialogueRunClick(dialog, searchType) {
+    let runDialogueObject = Object.assign({}, this.searchConentObject);
+    Object.assign(runDialogueObject, dialog);
     if (searchType == this.projConstants.ASSIST) {
       this.handleSubjectService.setActiveTab(this.projConstants.ASSIST);
+      this.AgentAssist_run_click(dialog);
     } else {
       this.handleSubjectService.setActiveTab(this.projConstants.MYBOT);
+      this.AgentAssist_agent_run_click(dialog);
     }
     this.closeSearchSuggestions.emit(true);
     this.handleSubjectService.setRunButtonClickEvent(runDialogueObject);
+    
+  }
+
+  AgentAssist_agent_run_click(dialog){
+    dialog.value = dialog.name;
+    this.emitSearchRequest(dialog, false);
+  }
+
+  AgentAssist_run_click(dialog) {
+    let connectionDetails: any = Object.assign({}, ConnectionDetails);
+    connectionDetails.value = dialog.name;
+    connectionDetails.intentName = dialog.name;
+    connectionDetails.positionId = this.randomUUIDPipe.transform(IdReferenceConst.positionId)
+    let assistRequestParams = this.commonService.prepareAgentAssistRequestParams(connectionDetails);
+    this.websocketService.emitEvents(EVENTS.agent_assist_request, assistRequestParams);
   }
 
   showAllResultsClick(clickType) {
@@ -103,23 +153,23 @@ export class OverlaysearchComponent implements OnInit {
     this.handleSearchClickEvent.emit({ eventFrom: this.projConstants.AGENT_SEARCH, searchText: this.searchConentObject.value });
   }
 
-  handleSearchResponse(searchObj) {
+  handleSearchResponse(response) {
     this.searchResponse = {};
-    this.commonService.getSampleSearchResponse().subscribe((response: any) => {
-      if (response && response[1] && response[1].suggestions) {
-        this.searchResponse = this.commonService.formatSearchResponse(response[1].suggestions);
-        this.searchResponse.totalSearchResults = this.searchResponse.dialogs?.length + this.searchResponse.faqs?.length + this.searchResponse.articles?.length;
-        this.faqViewCount = (this.searchResponse.faqs && this.searchResponse.faqs.length <= 2) ? this.searchResponse.faqs.length : 2;
-        this.articleViewCount = (this.searchResponse.articles && this.searchResponse.articles.length <= 2) ? this.searchResponse.articles.length : 2;
-        this.faqAllView = this.searchResponse.faqs && this.searchResponse.faqs.length > 2 ? true : false;
-        this.articleAllView = this.searchResponse.articles && this.searchResponse.articles.length > 2 ? true : false;
-        this.searchResultText = this.searchResponse.totalSearchResults == 1 ? "Search result for" : "Search results for"
-        setTimeout(() => {
-          this.handleSeeMoreButton(this.searchResponse.faqs, this.projConstants.FAQ);
-          this.handleSeeMoreButton(this.searchResponse.articles, this.projConstants.ARTICLE);
-        }, 10);
-      }
-    })
+    if (response && response.suggestions) {
+      this.searchResponse = this.commonService.formatSearchResponse(response.suggestions);
+      this.searchResponse.totalSearchResults = this.searchResponse.dialogs?.length + this.searchResponse.faqs?.length + this.searchResponse.articles?.length;
+      this.faqViewCount = (this.searchResponse.faqs && this.searchResponse.faqs.length <= 2) ? this.searchResponse.faqs.length : 2;
+      this.articleViewCount = (this.searchResponse.articles && this.searchResponse.articles.length <= 2) ? this.searchResponse.articles.length : 2;
+      this.faqAllView = this.searchResponse.faqs && this.searchResponse.faqs.length > 2 ? true : false;
+      this.articleAllView = this.searchResponse.articles && this.searchResponse.articles.length > 2 ? true : false;
+      this.searchResultText = this.searchResponse.totalSearchResults == 1 ? "Search result for" : "Search results for";
+      console.log(this.searchResponse, "search response");
+      
+      setTimeout(() => {
+        this.handleSeeMoreButton(this.searchResponse.faqs, this.projConstants.FAQ);
+        this.handleSeeMoreButton(this.searchResponse.articles, this.projConstants.ARTICLE);
+      }, 10);
+    }
   }
 
   handleSendCopyButton(actionType, faq_or_article_obj, selectType) {

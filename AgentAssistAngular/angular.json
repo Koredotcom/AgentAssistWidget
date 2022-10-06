@@ -54,7 +54,8 @@
               "src/common/agent-assistv2/purejscarousel.js",
               "src/common/agent-assistv2/agentAssistChatWindow.js",
               "src/common/agent-assistv2/agentAssistCustomTemplate.js",
-              "src/common/agent-assistv2/KoreGraphAdapter.js"
+              "src/common/agent-assistv2/KoreGraphAdapter.js",
+              "src/common/agent-assistv2/socketConnection.js"
             ]
           },
           "configurations": {

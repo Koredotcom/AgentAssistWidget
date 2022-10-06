@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 import { EVENTS } from 'src/common/helper/events';
 import { WebSocketService } from 'src/common/services/web-socket.service';
 import { HandleSubjectService } from 'src/common/services/handle-subject.service';
-import { ConnectionDetails, ImageFileNames, ImageFilePath, ProjConstants } from '../../../common/constants/proj.cnts'
+import { classNamesConst, ConnectionDetails, IdReferenceConst, ImageFileNames, ImageFilePath, ProjConstants } from '../../../common/constants/proj.cnts'
 
 @Component({
   selector: 'app-home',
@@ -24,8 +24,10 @@ export class HomeComponent implements OnInit {
   constructor(public handleSubjectService: HandleSubjectService, public websocketService : WebSocketService) { }
 
   ngOnInit(): void {
-    this.emitEvents();
     this.subscribeEvents();
+    setTimeout(() => {
+      this.emitEvents();
+    }, 2000);
   }
 
   ngOnDestroy() {
@@ -36,8 +38,15 @@ export class HomeComponent implements OnInit {
 
   emitEvents(){
     let connectionDetails : any = ConnectionDetails;
-    this.websocketService.emit(EVENTS.welcome_message_request, connectionDetails);
-    this.websocketService.emit(EVENTS.agent_menu_request,connectionDetails);
+    let parsedCustomData : any = {};
+    let welcomeMessageParams : any = {
+      'waitTime': 2000,
+      'userName': parsedCustomData?.userName || parsedCustomData?.fName + parsedCustomData?.lName || 'user',
+      'id': ConnectionDetails.conversationId,
+      "isSendWelcomeMessage" : true
+    }
+    this.websocketService.emitEvents(EVENTS.welcome_message_request,welcomeMessageParams);
+    this.websocketService.emitEvents(EVENTS.agent_menu_request,connectionDetails);
   }
 
   subscribeEvents() {
@@ -62,13 +71,13 @@ export class HomeComponent implements OnInit {
 
   emptySearchTextCheck() {
     if (this.searchText == '') {
-      this.showSearchSuggestions = false;
+      this.closeSearchSuggestions(true);
     }
   }
 
   handleSearchClickEvent(eventObj) {
     if (eventObj.eventFrom == this.projConstants.AGENT_SEARCH) {
-      this.showSearchSuggestions = false;
+      this.closeSearchSuggestions(true);
       this.changeActiveTab(this.projConstants.LIBRARY);
       this.handleSubjectService.setLibrarySearchTextFromAgentSearch(eventObj);
     } else if (eventObj.eventFrom == this.projConstants.LIBRARY_SEARCH) {
@@ -81,7 +90,14 @@ export class HomeComponent implements OnInit {
   closeSearchSuggestions(flag){
     if(flag){
       this.showSearchSuggestions = false;
+      this.handleSubjectService.setSearchText({ searchFrom: this.projConstants.ASSIST, value: undefined });
+      this.websocketService.agentAssistAgentResponse$.next(null);
+      if(document.getElementById(IdReferenceConst.overLaySuggestions)){
+        document.getElementById(IdReferenceConst.overLaySuggestions).classList.remove(classNamesConst.displayBlock);
+      }
     }
   }
+
+  
 
 }

@@ -6,7 +6,6 @@ import { AppComponent } from './app.component';
 import { SharedModule } from 'src/common/shared.module';
 import { HomeModule } from 'src/home/home.module';
 import { FormsModule } from '@angular/forms';
-import { SocketIoModule } from 'ngx-socket-io';
 import { WebSocketService } from '../common/services/web-socket.service';
 @NgModule({
   declarations: [
@@ -17,8 +16,7 @@ import { WebSocketService } from '../common/services/web-socket.service';
     AppRoutingModule,
     FormsModule,
     SharedModule,
-    HomeModule,
-    SocketIoModule
+    HomeModule
   ],
   providers: [WebSocketService],
   bootstrap: [AppComponent]

@@ -21,7 +21,7 @@ import { SanitizeHtmlPipe } from './pipes/sanitize-html.pipe';
     HttpClientModule,
     PerfectScrollbarModule
   ],
-  providers:[TemplateRenderClassService],
+  providers:[TemplateRenderClassService, SanitizeHtmlPipe, RandomUUIDPipe, RemoveSpecialCharPipe,ReplaceQuotStringWithDoubleQuotPipe],
   exports : [OverlaysearchComponent, InterruptPopupComponent, RestorePopupComponent, SummaryPopupComponent, TerminateComponent, RandomUUIDPipe,
     RemoveSpecialCharPipe,ReplaceQuotStringWithDoubleQuotPipe, SanitizeHtmlPipe]
 })

@@ -39,6 +39,11 @@ export class EndPointsService {
       method: 'post'
     };
 
+    this.serviceList['post.grantToken'] = {
+      endpoint: 'https://uat-smartassist.kore.ai/api/1.1/oAuth/token/jwtgrant',
+      method: 'post'
+    };
+
     this.serviceList['app.controls'] = {
       endpoint: this.API_SERVER_URL + '/users/:userId/AppControlList?includeAgentDesktopPermissions=true',
       method: 'get'

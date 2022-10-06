@@ -21,10 +21,8 @@ export class AppComponent {
       this.service.configObj = params;
     }
   );
-    this.webSocketService.init();
-    this.webSocketService.registerEvents();
     setTimeout(()=>{
-      this.service.triggerWelcomeEvent();
+      // this.service.triggerWelcomeEvent();
     }, 300)
   }
 

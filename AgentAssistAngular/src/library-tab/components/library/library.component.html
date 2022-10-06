@@ -51,7 +51,7 @@
                                             <i class="ast-overflow" [id]="'overflowIcon-' + i"></i>
                                         </div>
                                         <div class="dropdown-content-elipse" [id]="'runAgtBtn-' + i" *ngIf="dialogue.value.agentRunButton" (click)="$event.stopPropagation()">
-                                            <div class="list-option" [id]="'agentSelect-' + i" (click)="dialogueRunClick(projConstants.MYBOT)">{{projConstants.AGENTASSIST_RUN}}</div>
+                                            <div class="list-option" [id]="'agentSelect-' + i" (click)="dialogueRunClick(dialogue,projConstants.MYBOT)">{{projConstants.AGENTASSIST_RUN}}</div>
                                         </div>
                                     </div>
                                 </div>

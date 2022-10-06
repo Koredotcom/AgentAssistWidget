@@ -175,12 +175,19 @@ export class MybotDataService {
                     <div class="title">Input</div>
                     <div class="agent-utt enter-details-block">
                     <div class="title-data" ><span class="enter-details-title">${agentInputEntityName} : </span>
-                    <input type="text" placeholder="Enter Value" class="input-text chat-container" id="agentInput-${agentInputId}">
+                    <input #agentInput type="text" placeholder="Enter Value" class="input-text chat-container" id="agentInput-${agentInputId}" 
+                    (keyup.enter)="getAgentInputValue(event.target.value)">
                     </div>
                     </div>
                     </div>
                 </div>`;
         return template;
     }
+
+
+  getAgentInputValue(value){
+    console.log("agent input value",value);
+    
+  }
 
 }

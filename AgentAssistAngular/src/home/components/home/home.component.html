@@ -77,7 +77,7 @@
             <i class="ast-search search-icon"></i>
             <i class="ast-close close-search" id="cancelAgentSearch" (click)="showSearchSuggestions=false"></i>
         </div>
-        <div class="overlay-suggestions" style="bottom:0; display:block;" *ngIf="showSearchSuggestions">
+        <div class="overlay-suggestions" style="bottom:0" *ngIf="showSearchSuggestions" id="overLaySuggestions">
             <div class="suggestion-content" id="overLaySearch">
                 <perfect-scrollbar class="overlaysearch-scroll-bar">
                     <app-overlaysearch [searchType]="projConstants.AGENT_SEARCH" (handleSearchClickEvent)="handleSearchClickEvent($event)" (closeSearchSuggestions)="closeSearchSuggestions($event)"></app-overlaysearch>

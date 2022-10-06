@@ -8,8 +8,7 @@ import { WebSocketService } from 'src/common/services/web-socket.service';
 @Component({
   selector: 'app-assist',
   templateUrl: './assist.component.html',
-  styleUrls: ['./assist.component.scss'],
-  providers:[RandomUUIDPipe]
+  styleUrls: ['./assist.component.scss']
 })
 export class AssistComponent implements OnInit {
   result;
