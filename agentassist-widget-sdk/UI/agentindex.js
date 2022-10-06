@@ -2881,69 +2881,18 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 if((res.agentAssistDetails?.suggestions || res.agentAssistDetails?.ambiguityList) && res.type == 'outgoing' && res.agentAssistDetails?.faqResponse && res.agentAssistDetails?.positionId) {
                                     historyFaqIDs?.forEach((ele,i)=>{
                                         let eleid = ele.slice(0,ele.length-1);
-                                        let dataSetsOfFaq = $(`#faqsSuggestions-${eleid} #check-${ele}`).data();
-                                        let isComapreIDs = false;
-                                        if(res.agentAssistDetails?.positionId.includes('ms')){
-                                          isComapreIDs = true;
-                                        }
                                         res.agentAssistDetails.suggestions?.faqs?.forEach((eles,j)=>{
-                                            if(isComapreIDs){
-                                               if(res.agentAssistDetails?.positionId === dataSetsOfFaq.positionId){
-                                                $(`#faqsSuggestions-${eleid} #check-${ele}`).addClass('hide');
-                                                let faqs = $(`#faqsSuggestions-${eleid} .type-info-run-send #faqSection-${ele}`);
-                                                let a = $(`#faqsSuggestions-${eleid} #faqDiv-${ele}`);
-                                                let faqActionHtml = `<div class="action-links">
-                                <button class="send-run-btn" id="sendMsg" data-msg-id="${ele}"  data-msg-data="${res.components[0].data.text}">Send</button>
-                                <div class="copy-btn" data-msg-id="${ele}" data-msg-data='${res.components[0].data.text}'>
-                                    <i class="ast-copy" data-msg-id="${ele}" data-msg-data='${res.components[0].data.text}'></i>
-                                </div>
-                            </div>`;
-                                                a.append(faqActionHtml);
-                                                faqs.append(`<div class="desc-text" id="desc-${ele}">${res.components[0].data.text}</div>`);
-                                                let faqstypeInfo = $(`#faqsSuggestions-${eleid} .type-info-run-send #faqSection-${ele}`);
-                                                let seeMoreButtonHtml = `
-                                      <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${ele}" data-see-more="true">Show more</button>
-                                      <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${ele}" data-see-less="true">Show less</button>
-                                      `;
-                                                faqstypeInfo.append(seeMoreButtonHtml);
-                                                setTimeout(() => {                                                    
-                                                    updateSeeMoreButtonForAssist(ele);
-                                                }, waitingTimeForSeeMoreButton);
-                                               }
-                                            }else{
                                                 if($(`#faqsSuggestions-${eleid} #title-${ele}`).text().trim() == eles.question) {
-                                                    $(`#faqsSuggestions-${eleid} #check-${ele}`).addClass('hide');
-                                                    let faqs = $(`#faqsSuggestions-${eleid} .type-info-run-send #faqSection-${ele}`);
-                                                    let a = $(`#faqsSuggestions-${eleid} #faqDiv-${ele}`);
-                                                    let faqActionHtml = `<div class="action-links">
-                                    <button class="send-run-btn" id="sendMsg" data-msg-id="${ele}"  data-msg-data="${res.components[0].data.text}">Send</button>
-                                    <div class="copy-btn" data-msg-id="${ele}" data-msg-data='${res.components[0].data.text}'>
-                                        <i class="ast-copy" data-msg-id="${ele}" data-msg-data='${res.components[0].data.text}'></i>
-                                    </div>
-                                </div>`;
-                                                    a.append(faqActionHtml);
-                                                    faqs.append(`<div class="desc-text" id="desc-${ele}">${res.components[0].data.text}</div>`);
-                                                    let faqstypeInfo = $(`#faqsSuggestions-${eleid} .type-info-run-send #faqSection-${ele}`);
-                                                    let seeMoreButtonHtml = `
-                                          <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${ele}" data-see-more="true">Show more</button>
-                                          <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${ele}" data-see-less="true">Show less</button>
-                                          `;
-                                                    faqstypeInfo.append(seeMoreButtonHtml);
-                                                    setTimeout(() => {                                                    
-                                                        updateSeeMoreButtonForAssist(ele);
-                                                    }, waitingTimeForSeeMoreButton);
-                                                 //   $(`#faqsSuggestions-${eleid} #desc-${ele}`).html(res.components[0].data.text);
+                                                let valOfDiv =  $(`#faqsSuggestions-${eleid} #desc-${ele}`).text().trim();
+                                                if(valOfDiv == '' && !valOfDiv)
+                                                   historyFaqSuggestionsContainer(eleid, ele, res);
                                                 }
-                                            }
-                                          
                                         })
                                     })
-                                  //  historyFaqIDs = [];
                                 }
 
                                 if ((res.agentAssistDetails?.suggestions || res.agentAssistDetails?.ambiguityList) && res.type == 'outgoing' && res.agentAssistDetails?.faqResponse && !res.agentAssistDetails?.positionId) {  
                                     let historyDataHtml = $('#dynamicBlock');
-                                    // if (automationsNotRanArray.findIndex(ele=>ele.name===res.agentAssistDetails?.userInput)!==-1) {
                                         let uniqueID = res._id;
                                          let htmls = `
                                      <div class="agent-utt-info" id="agentUttInfo-${uniqueID}">
@@ -2998,12 +2947,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                     setTimeout(() => {                                                    
                                                         updateSeeMoreButtonForAssist(uniqueID+index);
                                                     }, waitingTimeForSeeMoreButton);
-                                                
-                                                // if(faqss.length === 1 && !ele.answer) {
-                                                //     document.getElementById(`check-${uniqueID}`).click();
-                                                //     $(`#check-${uniqueID}`).addClass('hide');
-                                                // }
-                                                
                                             })
                                             setTimeout(()=>{
                                                 uniqueID = undefined;
@@ -3376,6 +3319,29 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         console.log("error", err)
                     });
                     isShowHistoryEnable = false;
+                }
+
+                function historyFaqSuggestionsContainer(eleid, ele, res){
+                    $(`#faqsSuggestions-${eleid} #check-${ele}`).addClass('hide');
+                    let faqs = $(`#faqsSuggestions-${eleid} .type-info-run-send #faqSection-${ele}`);
+                    let a = $(`#faqsSuggestions-${eleid} #faqDiv-${ele}`);
+                    let faqActionHtml = `<div class="action-links">
+    <button class="send-run-btn" id="sendMsg" data-msg-id="${ele}"  data-msg-data="${res.components[0].data.text}">Send</button>
+    <div class="copy-btn" data-msg-id="${ele}" data-msg-data='${res.components[0].data.text}'>
+        <i class="ast-copy" data-msg-id="${ele}" data-msg-data='${res.components[0].data.text}'></i>
+    </div>
+</div>`;
+                    a.append(faqActionHtml);
+                    faqs.append(`<div class="desc-text" id="desc-${ele}">${res.components[0].data.text}</div>`);
+                    let faqstypeInfo = $(`#faqsSuggestions-${eleid} .type-info-run-send #faqSection-${ele}`);
+                    let seeMoreButtonHtml = `
+          <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${ele}" data-see-more="true">Show more</button>
+          <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${ele}" data-see-less="true">Show less</button>
+          `;
+                    faqstypeInfo.append(seeMoreButtonHtml);
+                    setTimeout(() => {                                                    
+                        updateSeeMoreButtonForAssist(ele);
+                    }, waitingTimeForSeeMoreButton);
                 }
 
                 async function renderingAgentHistoryMessage(){
