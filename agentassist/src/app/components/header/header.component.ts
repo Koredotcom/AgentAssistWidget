@@ -180,7 +180,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         streamId: this.authService.smartAssistBots.map(x=>x._id),
         orgId: this.authService.getOrgId()
       }
-   
+
 
     this.service.invoke('get.share.email', paramsEmail).subscribe(
       res => {
@@ -286,7 +286,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
             users: usersList
           }
         }
-        this.service.invoke('put.sharebot', params, payload).subscribe(
+        this.service.invoke('put.sharebot', params, payload, {headers: {'agentassist': true}}).subscribe(
           res => {
             this.notificationService.notify(this.translate.instant("HEADER.BOT_SHARED_SUCCESSFUL"), 'success');
           }, err => {
