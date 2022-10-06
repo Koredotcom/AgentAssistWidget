@@ -58,14 +58,14 @@ export class DockStatusService {
                         observer.error(new Error());
                     })
                 }
-                
+
             })
         });
     }
 
     private commonLogic(polling, observer, job, res){
         let jobObj = _.findWhere(res, { jobType: job });
-                       
+
                         if (jobObj && jobObj.status == 'SUCCESS') {
                             polling.unsubscribe();
                             observer.next(jobObj);
@@ -107,7 +107,7 @@ export class DockStatusService {
             }else{
                 this.service.invoke('put.updatedockstatus', _params, payload).subscribe(res => { observer.next(res) }, err => { observer.error(err); });
             }
-            
+
         })
     }
 
@@ -198,38 +198,39 @@ export class DockStatusService {
             'isAgentAssist':true
         };
         return new Promise((resolve, reject) => {
-            this.service.invoke('post.deploy.publish', params, payload).subscribe(res => {
-                this.isAnyRecordInprogress$.next(true);
-                this.getDockStatus('PUBLISH_BOT')
-                    .subscribe(res => {
-                        if (res.status === 'SUCCESS') {
-                            this.change.emit(res);
-                            this.isAnyRecordInprogress$.next(false);
-                            this.notificationService.notify(this.translate.instant("PUBLISHING_COMPLETED"), 'success');
-                            this.appService.getInstaceApps();
-                            this.workflowService.updateAvailBal$.next();
-                            resolve("");
-                        } else if (res instanceof Error) {
-                            this.notificationService.notify(this.translate.instant("PUBLISHING_FAILED"), 'error');
-                            this.isAnyRecordInprogress$.next(false);
-                            reject();
-                        } else {
-                            // _.extend(res.store, { toastSeen: true });
-                            // this.updateProgress(_.pick(res, 'store'), res._id).subscribe(res => {
-                            //     this.change.emit(res);
-                            // })
-                        }
-                       
-                    }, err => {
-                        this.notificationService.showError(err, this.translate.instant("CONVERSATIONAL_LOGS.FAILED_GET_PR"));
-                        reject();
-                    })
-            },
-                err => {
-                    this.notificationService.showError(err, 'Failed to publish');
-                    reject();
-                }
-            )
+          // publish api is commented out
+            // this.service.invoke('post.deploy.publish', params, payload).subscribe(res => {
+            //     this.isAnyRecordInprogress$.next(true);
+            //     this.getDockStatus('PUBLISH_BOT')
+            //         .subscribe(res => {
+            //             if (res.status === 'SUCCESS') {
+            //                 this.change.emit(res);
+            //                 this.isAnyRecordInprogress$.next(false);
+            //                 this.notificationService.notify(this.translate.instant("PUBLISHING_COMPLETED"), 'success');
+            //                 this.appService.getInstaceApps();
+            //                 this.workflowService.updateAvailBal$.next();
+            //                 resolve("");
+            //             } else if (res instanceof Error) {
+            //                 this.notificationService.notify(this.translate.instant("PUBLISHING_FAILED"), 'error');
+            //                 this.isAnyRecordInprogress$.next(false);
+            //                 reject();
+            //             } else {
+            //                 // _.extend(res.store, { toastSeen: true });
+            //                 // this.updateProgress(_.pick(res, 'store'), res._id).subscribe(res => {
+            //                 //     this.change.emit(res);
+            //                 // })
+            //             }
+
+            //         }, err => {
+            //             this.notificationService.showError(err, this.translate.instant("CONVERSATIONAL_LOGS.FAILED_GET_PR"));
+            //             reject();
+            //         })
+            // },
+            //     err => {
+            //         this.notificationService.showError(err, 'Failed to publish');
+            //         reject();
+            //     }
+            // )
         })
     }
 

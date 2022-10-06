@@ -3019,11 +3019,11 @@ border: 1px solid transparent !important;
     position: relative;
     /* background: #EAF1FC; */
     box-shadow: inset 0px 1px 3px rgba(209,218,231,0.25), inset 0px 0px 1px #D1DAE7;
-    padding: 22px 24px;
+    padding: 6px 22px 12px 24px;
     display: inline-block;
     margin-top: -11px;
     border: 1px dashed #EAF1FC;
-    background: #f8fafb;
+    /* background: #f8fafb; */
 }
 .feedback-helpul-container .titles-content {
     display: flex;
