@@ -37,7 +37,7 @@ export const ProjConstants = {
     TERMINATE : 'Terminate',
     INTERRUPT : 'Interrupt',
     INTENT : 'IntentName',
-    "jToken" : "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NjUwNDE0ODIxNDksImV4cCI6MTY2NTA0MTQ4MzA0OSwiYXVkIjoiIiwiaXNzIjoiY3MtZTRhMmI0YjYtM2RiZC01NWQwLWIwMjUtNDY2ZTVkMDRjOTgxIiwic3ViIjoiYy1lNGViOThiLWRkZDAtNDgwMi1hNjc5LWE5ZDI4ZDEzZTk0YiIsImlzQW5vbnltb3VzIjpmYWxzZX0.NhReg-o2gzi4Hx1hFLQY27m_B7UfG1IBmoI5n4r8fZ0"
+    jToken : "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NjUzODYxNzgyMjMsImV4cCI6MTY2NTM4NjE3OTEyMywiYXVkIjoiIiwiaXNzIjoiY3MtZTRhMmI0YjYtM2RiZC01NWQwLWIwMjUtNDY2ZTVkMDRjOTgxIiwic3ViIjoiYy00NzJhNjYyLTQ5ZDYtNDM5Ny1hMjY1LTViNzE4ZDQ0MWNiNCIsImlzQW5vbnltb3VzIjpmYWxzZX0.1SN5BIEaQ4Rr6XpyKXR1AerNcIEmyDcnK6P0cpPkQzM"
 }
 
 export const IdReferenceConst = {
@@ -45,10 +45,12 @@ export const IdReferenceConst = {
     USERINPUT : "userInput",
     MYBOTADDREMOVEDROPDOWN : "MyBotaddRemoveDropDown",
     MYBOTAUTOMATIONBLOCK : "myBotAutomationBlock",
+    DYNAMICBLOCK : 'dynamicBlock',
     positionId : 'positionId',
     overLaySuggestions : 'overLaySuggestions',
     displayData : 'displayData',
     MYBOTTERMINATE : 'myBotTerminateAgentDialog',
+    ASSISTTERMINATE : 'terminateAgentDialog',
     DIALOG_SUGGESTIONS : 'dialogSuggestions',
     FAQ_SUGGESTIONS : 'faqsSuggestions',
     ARTICLE_SUGGESTIONS : 'articleSuggestions',
@@ -59,8 +61,7 @@ export const IdReferenceConst = {
     OVERRIDE_BTN : 'overRideBtn',
     CANCEL_OVERRIDE_BTN : 'cancelOverRideBtn',
     INPUT_FIELD_AGENT : 'inputFieldForAgent',
-    ARTICLE_SEND_MSG : 'articlesendMsg',
-    
+    ARTICLE_SEND_MSG : 'articlesendMsg'
 }
 
 export const ConnectionDetails = {

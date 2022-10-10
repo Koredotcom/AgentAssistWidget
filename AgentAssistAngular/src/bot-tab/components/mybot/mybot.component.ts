@@ -165,7 +165,7 @@ export class MybotComponent implements OnInit {
       let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(result)[0].innerHTML;
       let a = document.getElementById(IdReferenceConst.displayData + `-${myBotuuids}`);
       a.innerHTML = a.innerHTML + html;
-      this.designAlterService.addWhiteBackgroundClassToNewMessage(this.scrollAtEnd);
+      this.designAlterService.addWhiteBackgroundClassToNewMessage(this.scrollAtEnd, IdReferenceConst.MYBOTAUTOMATIONBLOCK);
     }
 
   }

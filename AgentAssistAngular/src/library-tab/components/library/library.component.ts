@@ -87,7 +87,7 @@ export class LibraryComponent implements OnInit {
     runDialogueObject.agentRunButton = dialog.value.agentRunButton;
     if (clickType == this.projConstants.ASSIST) {
       this.handleSubjectService.setActiveTab(this.projConstants.ASSIST);
-      this.AgentAssist_run_click(runDialogueObject);
+      // this.AgentAssist_run_click(runDialogueObject);
     } else {
       this.handleSubjectService.setActiveTab(this.projConstants.MYBOT);
       this.agent_run_click(runDialogueObject,false)
@@ -108,19 +108,6 @@ export class LibraryComponent implements OnInit {
       let agent_assist_agent_request_params = this.commonService.prepareAgentAssistAgentRequestParams(connectionDetails);
       this.websocketService.emitEvents(EVENTS.agent_assist_agent_request, agent_assist_agent_request_params);
     }
-  }
-
-  AgentAssist_run_click(dialog) {
-    console.log(dialog, "dialog inside library");
-    
-    let connectionDetails: any = Object.assign({}, ConnectionDetails);
-    connectionDetails.value = dialog.intentName;
-    connectionDetails.intentName = dialog.intentName;
-    connectionDetails.positionId = this.randomUUIDPipe.transform(IdReferenceConst.positionId)
-    console.log(connectionDetails, "inside agent assist run click");
-    
-    let assistRequestParams = this.commonService.prepareAgentAssistRequestParams(connectionDetails);
-    this.websocketService.emitEvents(EVENTS.agent_assist_request, assistRequestParams);
   }
 
   getSearchResults(eventFrom?) {

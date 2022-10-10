@@ -9,8 +9,8 @@ export class DesignAlterService {
 
   constructor() { }
 
-  addWhiteBackgroundClassToNewMessage(scrollAtEnd) {
-    let dynamicBlockId = IdReferenceConst.MYBOTAUTOMATIONBLOCK;
+  addWhiteBackgroundClassToNewMessage(scrollAtEnd,blockId) {
+    let dynamicBlockId = blockId;
     let beforeLastElementArray: any = document.querySelectorAll('.last-msg-white-bg');
     for (let ele of beforeLastElementArray) {
       if (ele && scrollAtEnd) {
