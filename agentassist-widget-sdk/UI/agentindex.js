@@ -271,9 +271,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             prepareConversation();
                             if (userInputData.author.type === 'USER') {
                                 processTranscriptData(userInputData, userInputData.conversationid, _botId,);
-                                console.log("xxxxxxxxxxisOverRideModexxxxxxxx line no 274", isOverRideMode)
                                 if(isOverRideMode) {
-                                    console.log("came inside it user_message")
                                     _agentAsisstSocket.emit('user_message', user_messsage)
                                 }else{
                                     _agentAsisstSocket.emit('agent_assist_request', agent_assist_request);
@@ -284,12 +282,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             }
                         } else {
                             if (userInputData?.author?.type === 'USER') {
-                                console.log("xxxxxxxxxxisOverRideModexxxxxxxx isOverRideMode isOverRideModeisOverRideModeisOverRideMode line no 287", isOverRideMode)
                                 if(isOverRideMode) {
-                                    console.log("came isOverRideMode inside it user_message")
                                    _agentAsisstSocket.emit('user_message', user_messsage)
                                 }else{
-                                    console.log("came isOverRideMode inside it user_message in else ")
                                     _agentAsisstSocket.emit('agent_assist_request', agent_assist_request);
                                 }
                                 
