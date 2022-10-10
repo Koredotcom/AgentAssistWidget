@@ -3,12 +3,13 @@ import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { EVENTS } from '../helper/events';
 import { WebSocketService } from './web-socket.service';
-
+declare var  $: any;
 @Injectable({
   providedIn: 'root'
 })
 export class CommonService {
   configObj;
+  grantResponseObj;
   isCallConversation: boolean = false;
   isAutomationOnGoing: boolean = false;
   isMyBotAutomationOnGoing : boolean = false;
@@ -89,6 +90,44 @@ export class CommonService {
       'positionId': data?.positionId
     }
     return agent_assist_agent_request;
+  }
+
+  grantCall(jwtID, botid, url): Promise<any>{
+    var payload = {
+      "assertion": jwtID,
+      "botInfo": {
+          "chatBot": "sample Bot",
+          "taskBotId": botid
+      },
+      "token": {}
+    }
+      return $.ajax({
+        url: url + '/api/1.1/oAuth/token/jwtgrant',
+        type: 'POST',
+        crossDomain: true,
+        contentType: 'application/json',
+        headers: {
+            'User-Agent': '',
+            "content-type": 'application/json'
+        },
+        data: JSON.stringify(payload),
+        dataType: "json",
+        success: function (response) {
+              this.grantResponseObj = response;
+              console.log('success Case: ', response);
+              return response;
+          },
+          error: function (error) {
+            console.error("token is wrong");
+           
+            return error;
+          }
+      }).promise();
+    
+  }
+
+  getAccessToken(){
+    return this.grantResponseObj.authorization.accessToken;
   }
 
 

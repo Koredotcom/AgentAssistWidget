@@ -12,6 +12,7 @@ export class WebSocketService {
   agentMenuResponse$ : BehaviorSubject<any[]> = new BehaviorSubject(null);
   agentAssistResponse$: BehaviorSubject<any[]> = new BehaviorSubject(null);
   agentAssistAgentResponse$ : BehaviorSubject<any[]> = new BehaviorSubject(null);
+  endOfTaskResponse$ : BehaviorSubject<any[]> = new BehaviorSubject(null);
   
   constructor() {
     this.socketConnection();
@@ -46,6 +47,10 @@ export class WebSocketService {
 
     this._agentAsisstSocket.on(EVENTS.agent_assist_agent_response, (data)=>{
       this.agentAssistAgentResponse$.next(data);
+    });
+
+    this._agentAsisstSocket.on(EVENTS.agent_assist_endoftask, (data) =>{
+      this.endOfTaskResponse$.next(data);
     })
   }
 }

@@ -10,7 +10,8 @@ import { WebSocketService } from '../common/services/web-socket.service';
 })
 export class AppComponent {
   title = 'AgentAssistWidget';
-
+  isGrantSuccess = false;
+  errorMsg;
   constructor(private webSocketService: WebSocketService, private service: CommonService,
     private route: ActivatedRoute){
 
@@ -19,11 +20,27 @@ export class AppComponent {
     this.route.queryParams
     .subscribe(params => {
       this.service.configObj = params;
+      if(params.token && params.botid && params.agentassisturl){
+        this.service.grantCall(params.token, params.botid, params.agentassisturl).then((res)=>{
+          console.log(res,"sucess")
+          this.isGrantSuccess = true;
+        }).catch((err)=>{
+          if (err.status === 500) {
+              this.errorMsg =  "Issue identified with the backend services! Please reach out to AgentAssist Admin.";
+          } else {
+            this.errorMsg = "Issue identified in configuration settings! Please reach out to AgentAssist Admin.";
+          }
+          this.isGrantSuccess = false;
+        });
+      }
+  
     }
   );
-    setTimeout(()=>{
-      // this.service.triggerWelcomeEvent();
-    }, 300)
+    // this.webSocketService.init();
+    // this.webSocketService.registerEvents();
+    // setTimeout(()=>{
+    //   this.service.triggerWelcomeEvent();
+    // }, 300)
   }
 
 }
