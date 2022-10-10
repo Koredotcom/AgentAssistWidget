@@ -253,18 +253,41 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             'experience': isCallConversation === 'true' ? 'voice':'chat',
                             'query': sanitizeHTML(userInputData.value),
                         }
+                        let user_messsage = {
+                            "botId": _botId,
+                            "type": "text",
+                            "conversationId": userInputData.conversationid,
+                            "value": sanitizeHTML(userInputData.value),
+                            "author": {
+                                "firstName": userInputData.author?.firstName,
+                                "lastName": userInputData.author?.lastName,
+                                "type": userInputData.author?.type
+                            },
+                            "event": "user_message"
+                        }
+
+                        
                         if (isCallConversation === 'true') {
                             prepareConversation();
                             if (userInputData.author.type === 'USER') {
                                 processTranscriptData(userInputData, userInputData.conversationid, _botId,);
-                                _agentAsisstSocket.emit('agent_assist_request', agent_assist_request);
+                                if(isOverRideMode) {
+                                    _agentAsisstSocket.emit('user_message', user_messsage)
+                                }else{
+                                    _agentAsisstSocket.emit('agent_assist_request', agent_assist_request);
+                                }
 
                             } else {
                                 processAgentMessages(userInputData)
                             }
                         } else {
                             if (userInputData?.author?.type === 'USER') {
-                                _agentAsisstSocket.emit('agent_assist_request', agent_assist_request);
+                                if(isOverRideMode) {
+                                   _agentAsisstSocket.emit('user_message', user_messsage)
+                                }else{
+                                    _agentAsisstSocket.emit('agent_assist_request', agent_assist_request);
+                                }
+                                
                             }
                         }
                     })
