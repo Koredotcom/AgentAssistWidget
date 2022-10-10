@@ -185,7 +185,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     // });
 
                     window.addEventListener("message", function (e) {
-                        console.log(e.data, "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx message came to widget when any message came from others");//your data is captured in e.data
+                        console.log(e.data, "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx message came to widget when any message came from others", isOverRideMode);//your data is captured in e.data
                         if(e.data.name === 'response_resolution_comments' && e.data.conversationId) {
                             $(`#summary`).removeClass('hide');
                             $(`#summaryText`).val(e.data?.summary ? e.data?.summary[0]?.summary_text:'');
@@ -284,11 +284,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             }
                         } else {
                             if (userInputData?.author?.type === 'USER') {
-                                console.log("xxxxxxxxxxisOverRideModexxxxxxxx line no 287", isOverRideMode)
+                                console.log("xxxxxxxxxxisOverRideModexxxxxxxx isOverRideMode isOverRideModeisOverRideModeisOverRideMode line no 287", isOverRideMode)
                                 if(isOverRideMode) {
-                                    console.log("came inside it user_message")
+                                    console.log("came isOverRideMode inside it user_message")
                                    _agentAsisstSocket.emit('user_message', user_messsage)
                                 }else{
+                                    console.log("came isOverRideMode inside it user_message in else ")
                                     _agentAsisstSocket.emit('agent_assist_request', agent_assist_request);
                                 }
                                 
