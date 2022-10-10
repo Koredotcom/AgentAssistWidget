@@ -4,6 +4,7 @@ import { EVENTS } from 'src/common/helper/events';
 import { WebSocketService } from 'src/common/services/web-socket.service';
 import { HandleSubjectService } from 'src/common/services/handle-subject.service';
 import { classNamesConst, ConnectionDetails, IdReferenceConst, ImageFileNames, ImageFilePath, ProjConstants } from '../../../common/constants/proj.cnts'
+import { CommonService } from 'src/common/services/common.service';
 
 @Component({
   selector: 'app-home',
@@ -23,7 +24,7 @@ export class HomeComponent implements OnInit {
   showTerminatePopup : boolean = false;
   showInterruptPopup : boolean = false;
 
-  constructor(public handleSubjectService: HandleSubjectService, public websocketService : WebSocketService) { }
+  constructor(public handleSubjectService: HandleSubjectService, public websocketService : WebSocketService, private service: CommonService) { }
 
   ngOnInit(): void {
     this.subscribeEvents();
@@ -40,11 +41,13 @@ export class HomeComponent implements OnInit {
 
   emitEvents(){
     let connectionDetails : any = ConnectionDetails;
+    connectionDetails['conversationId'] = this.service.configObj.conversationid;
+    connectionDetails['botId'] = this.service.configObj.botid;
     let parsedCustomData : any = {};
     let welcomeMessageParams : any = {
       'waitTime': 2000,
       'userName': parsedCustomData?.userName || parsedCustomData?.fName + parsedCustomData?.lName || 'user',
-      'id': ConnectionDetails.conversationId,
+      'id': this.service.configObj.conversationid,
       "isSendWelcomeMessage" : true
     }
     this.websocketService.emitEvents(EVENTS.welcome_message_request,welcomeMessageParams);
