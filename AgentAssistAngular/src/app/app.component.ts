@@ -24,6 +24,7 @@ export class AppComponent {
         this.service.grantCall(params.token, params.botid, params.agentassisturl).then((res)=>{
           console.log(res,"sucess")
           this.isGrantSuccess = true;
+          this.webSocketService.socketConnection(params);
         }).catch((err)=>{
           if (err.status === 500) {
               this.errorMsg =  "Issue identified with the backend services! Please reach out to AgentAssist Admin.";

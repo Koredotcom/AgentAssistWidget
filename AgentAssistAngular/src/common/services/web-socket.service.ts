@@ -20,15 +20,15 @@ export class WebSocketService {
 
   
   constructor() {
-    this.socketConnection();
+   // this.socketConnection();
     console.log('inside WebSocketService constructor');
   }
 
-  socketConnection() {
+  socketConnection(connectionDetails) {
     let webSocketConnection = {
-      "path": "/agentassist/api/v1/chat/", transports: ['websocket', 'polling', 'flashsocket'], query: { 'jToken': ProjConstants.jToken }
+      "path": "/agentassist/api/v1/chat/", transports: ['websocket', 'polling', 'flashsocket'], query: { 'jToken': connectionDetails.token }
     };
-    this._agentAsisstSocket = io("https://uat-smartassist.kore.ai/koreagentassist", webSocketConnection);
+    this._agentAsisstSocket = io(`${connectionDetails.agentassisturl}/koreagentassist`, webSocketConnection);
     this._agentAsisstSocket.on("connect", () => {
       console.log("connection done");
       this.listenEvents();
