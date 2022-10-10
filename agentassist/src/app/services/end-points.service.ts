@@ -630,7 +630,7 @@ export class EndPointsService {
     }
 
     this.serviceList['put.sharebot'] = {
-      endpoint: this.API_SERVER_URL + '/users/:userId/builder/streams/:streamId/sharebot',
+      endpoint: this.API_SERVER_URL + '/users/:userId/builder/streams/:streamId/sharebot?isAgentAssistApp=true',
       method: 'put'
     }
 
