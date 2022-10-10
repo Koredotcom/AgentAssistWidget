@@ -1,15 +1,15 @@
 <div class="overlay-delete-popup" id="interruptPopUp">
     <div class="delete-box-content">
         <div class="header-text">You are interrupting the current task</div>
-        <div class="close-popup">
+        <div class="close-popup" (click)="interruptButtonClick(false)">
             <i class="ast-close"></i>
         </div>
         <div class="desc-text-info">If you run the select task, the current task will be completely
             terminated.
             Are you sure you want to continue with the selected task?</div>
         <div class="btn-footer-info" id="interruptCancel">
-            <button class="btn-danger">Yes, continue</button>
-            <button class="btn-cancel">Cancel</button>
+            <button class="btn-danger" (click)="interruptButtonClick(true)">Yes, continue</button>
+            <button class="btn-cancel" (click)="interruptButtonClick(false)">Cancel</button>
         </div>
     </div>
 </div>

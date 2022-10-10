@@ -13,6 +13,11 @@ export class WebSocketService {
   agentAssistResponse$: BehaviorSubject<any[]> = new BehaviorSubject(null);
   agentAssistAgentResponse$ : BehaviorSubject<any[]> = new BehaviorSubject(null);
   endOfTaskResponse$ : BehaviorSubject<any[]> = new BehaviorSubject(null);
+  userMessageResponse$ : BehaviorSubject<any[]> = new BehaviorSubject(null);
+  agentMessageResponse$ : BehaviorSubject<any[]> = new BehaviorSubject(null);
+  agentAssistUserMessageResponse$ : BehaviorSubject<any[]> = new BehaviorSubject(null);
+  agentFeedbackResponse$ : BehaviorSubject<any[]> = new BehaviorSubject(null);
+
   
   constructor() {
     this.socketConnection();
@@ -37,6 +42,7 @@ export class WebSocketService {
   listenEvents() {
     this._agentAsisstSocket.on(EVENTS.agent_assist_response, (data) => {
       console.log("inside agenta ssist");
+      this.agentAssistResponse$.next(data);
 
     });
 
@@ -51,6 +57,27 @@ export class WebSocketService {
 
     this._agentAsisstSocket.on(EVENTS.agent_assist_endoftask, (data) =>{
       this.endOfTaskResponse$.next(data);
-    })
+    });
+
+    this._agentAsisstSocket.on(EVENTS.agent_assist_endoftask, (data) =>{
+      this.endOfTaskResponse$.next(data);
+    });
+
+    this._agentAsisstSocket.on(EVENTS.user_message, (data) =>{
+      this.userMessageResponse$.next(data);
+    });
+
+    this._agentAsisstSocket.on(EVENTS.agent_message, (data)=>{
+      this.agentMessageResponse$.next(data);
+    });
+
+    this._agentAsisstSocket.on(EVENTS.agent_assist_user_message, (data) => {
+      this.agentAssistUserMessageResponse$.next(data);
+    });
+
+    this._agentAsisstSocket.on(EVENTS.agent_feedback_response, (data) =>{
+      this.agentFeedbackResponse$.next(data);
+    });
+
   }
 }

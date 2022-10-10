@@ -52,19 +52,20 @@
         </div>
 
         <perfect-scrollbar class="home-scroll-bar">
-        <div class="body-data-container if-suggestion-search" id="bodyContainer">
-            <div class="dialog-task-data" id="dynamicBlocksData">
-                    <ng-container *ngIf="activeTab == projConstants.TRANSCRIPT">
-                        <app-transcript></app-transcript>
+            <div class="body-data-container if-suggestion-search" id="bodyContainer">
+                <div class="dialog-task-data" id="dynamicBlocksData">
+                    <ng-container>
+                        <app-transcript [class.hide]="activeTab != projConstants.TRANSCRIPT"></app-transcript>
                     </ng-container>
-                    <ng-container *ngIf="activeTab == projConstants.ASSIST">
-                        <app-assist></app-assist>
+                    <ng-container>
+                        <app-assist [class.hide]="activeTab != projConstants.ASSIST"></app-assist>
                     </ng-container>
-                    <ng-container *ngIf="activeTab == projConstants.LIBRARY">
-                        <app-library (handleSearchClickEvent)="handleSearchClickEvent($event)"></app-library>
+                    <ng-container>
+                        <app-library [class.hide]="activeTab != projConstants.LIBRARY"
+                            (handleSearchClickEvent)="handleSearchClickEvent($event)"></app-library>
                     </ng-container>
-                    <ng-container *ngIf="activeTab == projConstants.MYBOT">
-                        <app-mybot></app-mybot>
+                    <ng-container>
+                        <app-mybot [class.hide]="activeTab != projConstants.MYBOT" (handleTerminatePopup)="handleTerminatePopup($event)"></app-mybot>
                     </ng-container>
                 </div>
             </div>
@@ -80,10 +81,14 @@
         <div class="overlay-suggestions" style="bottom:0" *ngIf="showSearchSuggestions" id="overLaySuggestions">
             <div class="suggestion-content" id="overLaySearch">
                 <perfect-scrollbar class="overlaysearch-scroll-bar">
-                    <app-overlaysearch [searchType]="projConstants.AGENT_SEARCH" (handleSearchClickEvent)="handleSearchClickEvent($event)" (closeSearchSuggestions)="closeSearchSuggestions($event)"></app-overlaysearch>
+                    <app-overlaysearch [searchType]="projConstants.AGENT_SEARCH"
+                        (handleSearchClickEvent)="handleSearchClickEvent($event)"
+                        (closeSearchSuggestions)="closeSearchSuggestions($event)"></app-overlaysearch>
                 </perfect-scrollbar>
-                </div>
+            </div>
         </div>
+        <app-terminate [class.hide]="!showTerminatePopup" (handleTerminatePopup)="handleTerminatePopup($event)"></app-terminate>
+        <app-interrupt-popup [class.hide]="!showInterruptPopup" (handleTerminatePopup)="handleTerminatePopup($event)"></app-interrupt-popup>
         <!-- end -->
         <div class="footer-info" id="cust-feeling">
             <div class="event-bucket">

@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MybotComponent } from './components/mybot/mybot.component';
 import { SharedModule } from 'src/common/shared.module';
+import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 
 
 
@@ -9,7 +10,8 @@ import { SharedModule } from 'src/common/shared.module';
   declarations: [MybotComponent],
   imports: [
     CommonModule,
-    SharedModule
+    SharedModule,
+    PerfectScrollbarModule
   ],
   exports : [MybotComponent]
 })

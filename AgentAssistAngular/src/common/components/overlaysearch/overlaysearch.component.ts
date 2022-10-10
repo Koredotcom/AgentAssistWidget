@@ -61,7 +61,7 @@ export class OverlaysearchComponent implements OnInit {
         console.log(this.showOverLay, "show overlya sub2");
 
         if(document.getElementById(IdReferenceConst.overLaySuggestions)){
-          document.getElementById(IdReferenceConst.overLaySuggestions).classList.add(classNamesConst.displayBlock)
+          document.getElementById(IdReferenceConst.overLaySuggestions).classList.add(classNamesConst.DISPLAY_BLOCK)
         }
       }
     });
@@ -70,10 +70,11 @@ export class OverlaysearchComponent implements OnInit {
   }
 
   emitSearchRequest(searchObj, isSearchFlag) {
-    console.log("inside emit search request", searchObj);
+    console.log("inside emit overlay request", searchObj);
     let connectionDetails: any = Object.assign({}, ConnectionDetails);
     connectionDetails.value = searchObj.value;
     connectionDetails.isSearch = isSearchFlag;
+    connectionDetails.positionId = searchObj?.positionId;
     if(!isSearchFlag){
       connectionDetails.intentName = searchObj.value;
     }
@@ -105,6 +106,7 @@ export class OverlaysearchComponent implements OnInit {
   }
 
   dialogueRunClick(dialog, searchType) {
+    dialog.positionId = this.randomUUIDPipe.transform(IdReferenceConst.positionId);
     let runDialogueObject = Object.assign({}, this.searchConentObject);
     Object.assign(runDialogueObject, dialog);
     if (searchType == this.projConstants.ASSIST) {

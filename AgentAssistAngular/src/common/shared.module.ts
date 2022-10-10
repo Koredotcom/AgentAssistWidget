@@ -12,17 +12,20 @@ import { RandomUUIDPipe } from './pipes/random-uuid.pipe';
 import { RemoveSpecialCharPipe } from './pipes/remove-special-char.pipe';
 import { ReplaceQuotStringWithDoubleQuotPipe } from './pipes/replace-quot-string-with-double-quot.pipe';
 import { SanitizeHtmlPipe } from './pipes/sanitize-html.pipe';
+import { RawHtmlPipe } from './pipes/raw-html.pipe';
+import { KoreGenerateuuidPipe } from './pipes/kore-generateuuid.pipe';
+import { HtmlEntityPipe } from './pipes/html-entity.pipe';
 
 
 @NgModule({
-  declarations: [OverlaysearchComponent, InterruptPopupComponent, RestorePopupComponent, SummaryPopupComponent, TerminateComponent, RandomUUIDPipe, RemoveSpecialCharPipe, ReplaceQuotStringWithDoubleQuotPipe, SanitizeHtmlPipe],
+  declarations: [OverlaysearchComponent, InterruptPopupComponent, RestorePopupComponent, SummaryPopupComponent, TerminateComponent, RandomUUIDPipe, RemoveSpecialCharPipe, ReplaceQuotStringWithDoubleQuotPipe, SanitizeHtmlPipe, RawHtmlPipe, KoreGenerateuuidPipe, HtmlEntityPipe],
   imports: [
     CommonModule,
     HttpClientModule,
     PerfectScrollbarModule
   ],
-  providers:[TemplateRenderClassService, SanitizeHtmlPipe, RandomUUIDPipe, RemoveSpecialCharPipe,ReplaceQuotStringWithDoubleQuotPipe],
+  providers:[TemplateRenderClassService, SanitizeHtmlPipe, RandomUUIDPipe, RemoveSpecialCharPipe,ReplaceQuotStringWithDoubleQuotPipe, RawHtmlPipe, KoreGenerateuuidPipe, HtmlEntityPipe],
   exports : [OverlaysearchComponent, InterruptPopupComponent, RestorePopupComponent, SummaryPopupComponent, TerminateComponent, RandomUUIDPipe,
-    RemoveSpecialCharPipe,ReplaceQuotStringWithDoubleQuotPipe, SanitizeHtmlPipe]
+    RemoveSpecialCharPipe,ReplaceQuotStringWithDoubleQuotPipe, SanitizeHtmlPipe, RawHtmlPipe, KoreGenerateuuidPipe, HtmlEntityPipe]
 })
 export class SharedModule { }

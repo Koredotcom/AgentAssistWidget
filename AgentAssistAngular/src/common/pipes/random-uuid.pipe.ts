@@ -10,7 +10,9 @@ export class RandomUUIDPipe implements PipeTransform {
     if(positionId){
       return  ('dg-' + (Math.random() + 1).toString(36).substring(2));
     }
-    return Math.floor(Math.random() * 100);
+    let max = Math.floor(Math.random() * 9);
+    let min = Math.floor(Math.random() * 5);
+    return Math.floor(Math.random() * 95) + max - min;
   }
 
 }
