@@ -3,6 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { EVENTS } from '../helper/events';
 import { WebSocketService } from './web-socket.service';
+import * as $ from 'jquery';
+import { IdReferenceConst } from '../constants/proj.cnts';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +13,9 @@ export class CommonService {
   configObj;
   isCallConversation: boolean = false;
   isAutomationOnGoing: boolean = false;
-  isMyBotAutomationOnGoing : boolean = false;
+  isMyBotAutomationOnGoing: boolean = false;
+  automationNotRanArray : any = [];
+  userIntentInput : string;
   isParsedPayload;
 
   constructor(private route: ActivatedRoute, private webSocketService: WebSocketService) {
@@ -79,17 +83,87 @@ export class CommonService {
   }
 
   prepareAgentAssistAgentRequestParams(data) {
-    let agent_assist_agent_request = {
+    let agent_assist_agent_request_params: any = {
       'isSearch': data.isSearch,
       'conversationId': data.conversationId,
       'query': data.value,
       'botId': data.botId,
-      'intentName': data.intentName,
       'experience': this.isCallConversation === true ? 'voice' : 'chat',
       'positionId': data?.positionId
     }
-    return agent_assist_agent_request;
+    if (data.intentName) {
+      agent_assist_agent_request_params.intentName = data.intentName;
+    }
+    return agent_assist_agent_request_params;
   }
 
+
+  addFeedbackHtmlToDom(runForAgentBot, headerUUids) {
+    let dropDownData;
+    let endOfDialoge;
+    if (runForAgentBot) {
+      $(`#myBotTerminateAgentDialog-${headerUUids}.btn-danger`).remove();
+      dropDownData = $(`#dropDownData-${headerUUids}`);
+      endOfDialoge = $(`#MyBotaddRemoveDropDown-${headerUUids}`);
+    } else {
+      $(`#addRemoveDropDown-${headerUUids} .btn-danger`).remove();
+      dropDownData = $(`#dropDownData-${headerUUids}`);
+      endOfDialoge = $(`#addRemoveDropDown-${headerUUids}`);
+    }
+    let endofDialogeHtml = `
+    <div class="dilog-task-end" id="endTaks-${headerUUids}">
+    <div class="text-dialog-task-end">Dialog Task ended</div>     
+               </div>
+               <div class="feedback-helpul-container" id="feedbackHelpfulContainer-${headerUUids}">
+                <div class="titles-content">
+                    <div class="title">Helpful?</div>
+                    <div class="btn-positive" id="feedbackup-${headerUUids}">
+                        <i class="ast-thumbup"
+                        id="feedbackup-${headerUUids}"
+                        ></i>
+                        <span class="tootltip-tabs">Like</span>
+                    </div>
+                    <div class="btn-negtive" id="feedbackdown-${headerUUids}">
+                        <i class="ast-thumbdown" 
+                        id="feedbackdown-${headerUUids}"
+                        ></i>
+                        <span class="tootltip-tabs">Dislike</span>
+                    </div>
+                    <div class="thanks-update hide">Thanks for the feedback!</div>
+                    <div class="help-improve-arrow hide">
+                        <div class="title-improve hide">Help us improve (optional)</div>
+                        <div class="arrow-icon" data-feedback-drop-down-opened="false" id="dropdownArrowFeedBack-${headerUUids}">
+                            <i class="ast-carrotup" data-feedback-drop-down-opened="false" id="dropdownArrowFeedBackIcon-${headerUUids}"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="explore-more-negtive-data hide">
+                    <div class="btns-group-negtive-chips" id="feedBackOptions-${headerUUids}">
+                        <div class="btn-chip-negtive" data-chip-click='false'>Wrong suggestions</div>
+                        <div class="btn-chip-negtive" data-chip-click='false'>Incorrect intent</div>
+                        <div class="btn-chip-negtive" data-chip-click='false'>Accidental click</div>
+                        <div class="btn-chip-negtive" data-chip-click='false'>Time taking</div>
+                        <div class="btn-chip-negtive" data-chip-click='false'>Other</div>
+                    </div>
+                    <div class="input-block-optional">
+                        <div class="label-text">Additional comments (Optional)</div>
+                        <input type="text" placeholder="Type to add comment" class="input-text" id="feedBackComment-${headerUUids}"
+                        data-feedback-comment="true">
+                    </div>
+                    <button class="submit-btn" data-updateFlag="false"id="feedbackSubmit" disabled>Submit</button>
+                </div>
+            </div>
+        
+    `;
+    if (!document.getElementById('endTaks-' + headerUUids)) {
+      endOfDialoge.append(endofDialogeHtml);
+      $(`#overRideDiv-${headerUUids}`).remove();
+    }
+    $(`.customer-feeling-text`).addClass('bottom-95');
+    // setTimeout(() => {
+    //     headerUUids = undefined;
+    // }, 100)
+    // UnCollapseDropdownForLastElement(lastElementBeforeNewMessage);
+  }
 
 }

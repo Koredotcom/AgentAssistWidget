@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { RawHtmlPipe } from 'src/common/pipes/raw-html.pipe';
 import { SanitizeHtmlPipe } from 'src/common/pipes/sanitize-html.pipe';
 
 @Injectable({
@@ -6,7 +7,7 @@ import { SanitizeHtmlPipe } from 'src/common/pipes/sanitize-html.pipe';
 })
 export class MybotDataService {
 
-    constructor(private sanitizeHtmlPipe: SanitizeHtmlPipe) { }
+    constructor(private sanitizeHtmlPipe: SanitizeHtmlPipe, private rawHtmPipe : RawHtmlPipe) { }
 
     getMybotMsgResponse(myBotuuids, botId) {
         return {
@@ -71,7 +72,7 @@ export class MybotDataService {
         return body;
     }
 
-    createDialogTaskAccordionTemplate(agentBotuuids, intentName, dialogId) {
+    createDialogTaskAccordionTemplate(agentBotuuids, intentName) {
         let dialogTaskAccordion = `
                 <div class="dialog-task-accordiaon-info hide" id="MyBotaddRemoveDropDown-${agentBotuuids}">
                     <div class="accordion-header" id="dropDownHeader-${agentBotuuids}">
@@ -80,7 +81,7 @@ export class MybotDataService {
                         </div>
                         <div class="header-text" id="dropDownTitle-${agentBotuuids}">${intentName}</div>
                         <i class="ast-carrotup"></i>
-                        <button class="btn-danger" id="myBotTerminateAgentDialog-${agentBotuuids}" data-position-id="${dialogId}">Terminate</button>
+                        <button class="btn-danger" id="myBotTerminateAgentDialog-${agentBotuuids}">Terminate</button>
                     </div>
                     <div class="collapse-acc-data" id="dropDownData-${agentBotuuids}">
                 
@@ -136,11 +137,11 @@ export class MybotDataService {
         return template;
     }
 
-    userQueryTemplate(myBotuuids, data) {
+    userQueryTemplate(imageFilePath,imageFileNames,myBotuuids, data) {
         let template = `
                 <div class="steps-run-data">
                     <div class="icon_block_img">
-                        <img src="./images/userIcon.svg">
+                        <img src="${imageFilePath}${imageFileNames['USERICON']}">
                     </div>
                     <div class="run-info-content" id="userInput-${myBotuuids}">
                         <div class="title">You Entered -</div>
@@ -153,19 +154,20 @@ export class MybotDataService {
         return template
     }
 
-    mybotErrorTemplate(entityDisplayName) {
+    mybotErrorTemplate(imageFilePath,imageFileNames,entityDisplayName) {
         let template = `
                 <div class="order-number-info">${entityDisplayName} : 
                         <span style="color:red">Value unidentified</span>
                 </div>
                 <div>
-                    <img src="./images/warning.svg" style="padding-right: 8px;">
+                    <img src="${imageFilePath}${imageFileNames['WARNING']}" style="padding-right: 8px;">
                     <span style="font-size: 12px; line-height: 18px; color: #202124;">Incorrect input format<span>
                 </div>`;
         return template;
     }
 
     agentInputToBotTemplate(agentInputEntityName, agentInputId) {
+        
         let template = `
                 <div class="steps-run-data" id="inputFieldForMyBot">
                     <div class="icon_block">
@@ -176,18 +178,11 @@ export class MybotDataService {
                     <div class="agent-utt enter-details-block">
                     <div class="title-data" ><span class="enter-details-title">${agentInputEntityName} : </span>
                     <input #agentInput type="text" placeholder="Enter Value" class="input-text chat-container" id="agentInput-${agentInputId}" 
-                    (keyup.enter)="getAgentInputValue(event.target.value)">
+                    >
                     </div>
                     </div>
                     </div>
                 </div>`;
         return template;
     }
-
-
-  getAgentInputValue(value){
-    console.log("agent input value",value);
-    
-  }
-
 }

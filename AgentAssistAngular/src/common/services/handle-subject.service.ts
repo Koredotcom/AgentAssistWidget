@@ -11,6 +11,8 @@ export class HandleSubjectService {
   public searchTextSubject = new BehaviorSubject<object>({});
   public searchTextFromAgentSearch = new BehaviorSubject<object>({});
   public runButtonClickEventSubject = new BehaviorSubject<object>({});
+  public terminateClickEventSubject = new BehaviorSubject<object>({});
+  public interruptClickEventSubject = new BehaviorSubject<object>({});
 
   constructor() { }
 
@@ -30,4 +32,11 @@ export class HandleSubjectService {
     this.runButtonClickEventSubject.next(obj);
   }
 
+  setTerminateClickEvent(obj){
+    this.terminateClickEventSubject.next(obj);
+  }
+
+  setInterruptClickEvent(obj){
+    this.interruptClickEventSubject.next(obj);
+  }
 }

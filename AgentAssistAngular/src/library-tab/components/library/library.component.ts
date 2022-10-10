@@ -80,39 +80,42 @@ export class LibraryComponent implements OnInit {
 
   //changing the tab
   dialogueRunClick(dialog,clickType) {
-    let runDialogueObject = Object.assign({},dialog);
+    dialog.value.positionId = this.randomUUIDPipe.transform(IdReferenceConst.positionId);
+    let runDialogueObject = Object.assign({},dialog.value);
     runDialogueObject.searchFrom = this.projConstants.LIBRARY;
     runDialogueObject.name = dialog.value.intentName;
     runDialogueObject.agentRunButton = dialog.value.agentRunButton;
-    this.handleSubjectService.setRunButtonClickEvent(runDialogueObject);
     if (clickType == this.projConstants.ASSIST) {
       this.handleSubjectService.setActiveTab(this.projConstants.ASSIST);
-      this.AgentAssist_run_click(dialog);
+      this.AgentAssist_run_click(runDialogueObject);
     } else {
       this.handleSubjectService.setActiveTab(this.projConstants.MYBOT);
-      this.agent_run_click(dialog,false)
+      this.agent_run_click(runDialogueObject,false)
     }
-    
+    this.handleSubjectService.setRunButtonClickEvent(runDialogueObject);
   }
 
   agent_run_click(dialog, isSearchFlag) {
-    console.log("inside emit search request", dialog);
-    let connectionDetails: any = Object.assign({}, ConnectionDetails);
-    connectionDetails.value = dialog.value.intentName;
-    connectionDetails.isSearch = isSearchFlag;
-    if(!isSearchFlag){
-      connectionDetails.intentName = dialog.value.intentName;
+    if(!this.commonService.isMyBotAutomationOnGoing){
+      console.log("inside emit search request library search");
+      let connectionDetails: any = Object.assign({}, ConnectionDetails);
+      connectionDetails.value = dialog.intentName;
+      connectionDetails.isSearch = isSearchFlag;
+      if(!isSearchFlag){
+        connectionDetails.intentName = dialog.intentName;
+      }
+      connectionDetails.positionId = dialog.positionId;
+      let agent_assist_agent_request_params = this.commonService.prepareAgentAssistAgentRequestParams(connectionDetails);
+      this.websocketService.emitEvents(EVENTS.agent_assist_agent_request, agent_assist_agent_request_params);
     }
-    let agent_assist_agent_request_params = this.commonService.prepareAgentAssistAgentRequestParams(connectionDetails);
-    this.websocketService.emitEvents(EVENTS.agent_assist_agent_request, agent_assist_agent_request_params);
   }
 
   AgentAssist_run_click(dialog) {
     console.log(dialog, "dialog inside library");
     
     let connectionDetails: any = Object.assign({}, ConnectionDetails);
-    connectionDetails.value = dialog.value.intentName;
-    connectionDetails.intentName = dialog.value.intentName;
+    connectionDetails.value = dialog.intentName;
+    connectionDetails.intentName = dialog.intentName;
     connectionDetails.positionId = this.randomUUIDPipe.transform(IdReferenceConst.positionId)
     console.log(connectionDetails, "inside agent assist run click");
     

@@ -1,59 +1,10 @@
 <div class="dynamic-block-content" id="dynamicBlock">
-    <!-- <div class="welcome-msg collapse-acc-data before-none" id="smallTalk-ua-09cceae1-f446-4422-98a8-493ed12f7618">
+  <div class = "welcome-msg collapse-acc-data before-none" id='smallTalk-${uuids}' *ngIf="(welcomeMsgResponse | json) != '{}'">
         <div class="steps-run-data">
             <div class="icon_block">
                 <i class="ast-agent"></i>
             </div>
-            <div class="run-info-content">
-            
-            
-        <div class="title">Customer has waited for an agent for few seconds.<br>Here are some appropriate opening lines.</div>
-           <div class="agent-utt">
-            <div class="title-data" id="displayData-ua-09cceae1-f446-4422-98a8-493ed12f7618">Hello user. How can I help you today?</div>
-            <div class="action-links">
-                <button class="send-run-btn" id="sendMsg" >Send</button>
-                <div class="copy-btn">
-                    <i class="ast-copy"></i>
-                </div>
-            </div>
-        </div>
-            <div class="agent-utt">
-                <div class="title-data" id="displayData-ua-09cceae1-f446-4422-98a8-493ed12f7618">Hello user. Sorry for the long wait. How can I help you today?</div>
-                <div class="action-links">
-                    <button class="send-run-btn" id="sendMsg">Send</button>
-                    <div class="copy-btn">
-                        <i class="ast-copy"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="agent-utt">
-                <div class="title-data" id="displayData-ua-09cceae1-f446-4422-98a8-493ed12f7618">Hi there. I apologize for your wait. How can I help you today?</div>
-                <div class="action-links">
-                    <button class="send-run-btn" id="sendMsg" >Send</button>
-                    <div class="copy-btn">
-                        <i class="ast-copy"></i>
-                    </div>
-                </div>
-            </div></div>
-        </div>
-    </div> -->
-    <div class="show-history-block hide" id="history-details-btn">
-        <button id="showHistory" class="ghost-btn">Show history</button>
-    </div>
-    <div class="show-back-recommendation-block hide">
-        <button id="backToRecommendation" class="ghost-btn">
-            <span class="back-icon">
-                <i class="ast-carrotup"></i>
-            </span>
-            Back to recommendation
-        </button>
-    </div>
-    <div class = "welcome-msg collapse-acc-data before-none" id='smallTalk-${uuids}'>
-        <div class="steps-run-data">
-            <div class="icon_block">
-                <i class="ast-agent"></i>
-            </div>
-            <div class="run-info-content" *ngFor="let ele of agentResponse?.buttons; let i=index">
+            <div class="run-info-content" *ngFor="let ele of welcomeMsgResponse?.buttons; let i=index">
                 <div class="title" *ngIf="i === 0">Customer has waited for an agent for few seconds.<br/>Here are some appropriate opening lines.</div>
                 <div class="agent-utt">
                  <div class="title-data" id="displayData-${uuids}">{{ele.value}}</div>
@@ -67,42 +18,6 @@
             </div>
         </div>
     </div>
-    <div class="dialog-task-accordiaon-info "  >
-        <div class="accordion-header"
-        data-drop-down-opened="false">
-            <div class="icon-info">
-                <i class="ast-rule"></i>
-            </div>
-            <div class="header-text" >intentName</div>
-            <i class="ast-carrotup"></i>
-            <button class="btn-danger"  data-position-id="${dialogId}">Terminate</button>
-        </div>
-        <div class="collapse-acc-data" id="dropDownData-${uuids}">
-            <div class="steps-run-data"  >
-                <div class="icon_block">
-                    <i class="ast-agent"></i>
-                </div>
-                <div class="run-info-content" >
-                <div class="title">Tell Customer</div>
-                <div class="agent-utt">
-                    <div class="title-data" ><ul class="chat-container" id="displayData-${uuids}"></ul></div>
-                    <div class="action-links">
-                        <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data="${newTemp}">Send</button>
-                        <div class="copy-btn hide" data-msg-id="${uuids}">
-                            <i class="ast-copy" data-msg-id="${uuids}"></i>
-                        </div>
-                    </div>
-                </div>
-                </div>
-            </div>
-         <div class="override-input-div hide" id="overRideDiv-${uuids}" >
-         <button class="override-input-btn" id="overRideBtn-${uuids}" data-position-id="${dialogId}">Override Input</button>
-         <button class="cancel-override-input-btn hide" id="cancelOverRideBtn-${uuids}" data-position-id="${dialogId}">Cancel Override</button>
-         </div>
-           
-        </div>
-        
-        </div>
 
     <div id="userTab-custSentimentAnalysis" class="customer-feeling-text">
     </div>

@@ -20,6 +20,8 @@ export class HomeComponent implements OnInit {
   subscriptionsList: Subscription[] = [];
   searchConentObject: any;
   activeTab: string; // call conversation make transcript as active tab.
+  showTerminatePopup : boolean = false;
+  showInterruptPopup : boolean = false;
 
   constructor(public handleSubjectService: HandleSubjectService, public websocketService : WebSocketService) { }
 
@@ -93,11 +95,25 @@ export class HomeComponent implements OnInit {
       this.handleSubjectService.setSearchText({ searchFrom: this.projConstants.ASSIST, value: undefined });
       this.websocketService.agentAssistAgentResponse$.next(null);
       if(document.getElementById(IdReferenceConst.overLaySuggestions)){
-        document.getElementById(IdReferenceConst.overLaySuggestions).classList.remove(classNamesConst.displayBlock);
+        document.getElementById(IdReferenceConst.overLaySuggestions).classList.remove(classNamesConst.DISPLAY_BLOCK);
       }
     }
   }
 
-  
+  handleTerminatePopup(popupObject){
+    if(popupObject.type == this.projConstants.TERMINATE){
+      this.showTerminatePopup = popupObject.status;
+      if(popupObject.terminate){
+        console.log("terminate inside home component");
+        this.handleSubjectService.setTerminateClickEvent({activeTab : this.activeTab})
+      }
+    }else if(popupObject.type == this.projConstants.INTERRUPT){
+      this.showInterruptPopup = popupObject.status;
+      if(popupObject.interrupt){
+        console.log("interrupt inside home component");
+        this.handleSubjectService.setInterruptClickEvent({activeTab : this.activeTab}) 
+      }
+    }
 
+  }
 }
