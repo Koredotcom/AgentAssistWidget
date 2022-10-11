@@ -167,6 +167,8 @@ export class CommonService {
     // UnCollapseDropdownForLastElement(lastElementBeforeNewMessage);
   }
 
+  
+
   grantCall(jwtID, botid, url): Promise<any>{
     var payload = {
       "assertion": jwtID,
@@ -189,7 +191,7 @@ export class CommonService {
         dataType: "json",
         success: function (response) {
               this.grantResponseObj = response;
-              console.log('success Case: ', response);
+              console.log('success Case: ', response, "grantResponseObj", this.grantResponseObj);
               return response;
           },
           error: function (error) {
@@ -220,5 +222,169 @@ export class CommonService {
       }
   }).promise();
   }
+
+  async renderHistoryFeedBack(url){
+    const response = await $.ajax({
+        method: 'GET',
+        url: url
+    });
+    if(response.results) {
+        return response.results;
+    }else {
+        console.log("error")
+    }  
+  }
+
+  async renderingAgentHistoryMessage() {
+    let url = `${this.configObj.agentassisturl}/agentassist/api/v1/agent-feedback/${this.configObj.conversationid}?interaction=mybot`;
+    let feedBackResult = await this.renderHistoryFeedBack(url);
+    console.log("xxxxxxxxxxxxxxxxxxxxxxxxx feedBackResult", feedBackResult);
+    return this.getData(`${this.configObj.agentassisturl}/api/1.1/botmessages/agentassist/${this.configObj.botid}/history?convId=${this.configObj.conversationid}&agentHistory=true`)
+    .then(response => {
+      return {messages:response, feedbackDetails: feedBackResult}
+    }).catch(err => {
+      console.log("error", err)
+      return err;
+  });
+  }
+
+  async getData(url = '', data = {}) {
+    console.log("ccccccccccccccccccccc grantResponseObj", this.grantResponseObj)
+    const response = await $.ajax({
+        method: 'GET',
+        url: url,
+        headers: {
+            'Authorization': this.grantResponseObj.authorization.token_type + ' ' + this.getAccessToken()
+        }
+    }) // parses JSON response into native JavaScript objects
+    return response;
+  }
+
+ addFeedbackHtmlToDomForHistory(data, botId, userIntentInput, id, runForAgentBot, previousTaskPositionId) {
+    var dropDownData;
+    var endOfDialoge;
+    let taskIdOfDialog = $(`#dropDownData-${id}`).attr('data-taskId');
+    let positionID = previousTaskPositionId;
+    if (runForAgentBot) {
+        $(`#myBotTerminateAgentDialog-${id}.btn-danger`).remove();
+        dropDownData = $(`#dropDownData-${id}`);
+        endOfDialoge = $(`#MyBotaddRemoveDropDown-${id}`);
+    } else {
+        $(`#addRemoveDropDown-${id} .btn-danger`).remove();
+        dropDownData = $(`#dropDownData-${id}`);
+        endOfDialoge = $(`#addRemoveDropDown-${id}`);
+    }
+let endofDialogeHtml = `
+    <div class="dilog-task-end" id="endTaks-${id}">
+    <div class="text-dialog-task-end">Dialog Task ended</div>     
+               </div>
+               <div class="feedback-helpul-container" id="feedbackHelpfulContainer-${id}">
+                <div class="titles-content">
+                    <div class="title">Helpful?</div>
+                    <div class="btn-positive" id="feedbackup-${id}">
+                        <i class="ast-thumbup"
+                        id="feedbackup-${id}"
+                        data-feedbacklike="false"
+                        data-conv-id="${this.configObj.conversationId}"
+                        data-bot-id="${botId}" data-feedback="like"
+                        data-dialog-name="${data.tN}"
+                        data-user-input="${userIntentInput}"
+                        data-comment=""
+                        data-feedbackdetails="[]"
+                        data-taskID ="${taskIdOfDialog}"
+                        data-dialogId="${positionID}"></i>
+                        <span class="tootltip-tabs">Like</span>
+                    </div>
+                    <div class="btn-negtive" id="feedbackdown-${id}">
+                        <i class="ast-thumbdown" 
+                        id="feedbackdown-${id}"
+                        data-feedbackdislike="false"
+                        data-conv-id="${this.configObj.conversationId}"
+                        data-bot-id="${botId}" data-feedback="dislike"
+                        data-dialog-name="${data.tN}"
+                        data-user-input="${userIntentInput}"
+                        data-comment=""
+                        data-feedbackdetails="[]"
+                        data-taskID ="${taskIdOfDialog}"
+                        data-dialogId="${positionID}"></i>
+                        <span class="tootltip-tabs">Dislike</span>
+                    </div>
+                    <div class="thanks-update hide">Thanks for the feedback!</div>
+                    <div class="help-improve-arrow hide">
+                        <div class="title-improve hide">Help us improve (optional)</div>
+                        <div class="arrow-icon" data-feedback-drop-down-opened="false" id="dropdownArrowFeedBack-${id}">
+                            <i class="ast-carrotup" data-feedback-drop-down-opened="false" id="dropdownArrowFeedBackIcon-${id}"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="explore-more-negtive-data hide">
+                    <div class="btns-group-negtive-chips" id="feedBackOptions-${id}">
+                        <div class="btn-chip-negtive" data-chip-click='false'>Wrong suggestions</div>
+                        <div class="btn-chip-negtive" data-chip-click='false'>Incorrect intent</div>
+                        <div class="btn-chip-negtive" data-chip-click='false'>Accidental click</div>
+                        <div class="btn-chip-negtive" data-chip-click='false'>Time taking</div>
+                        <div class="btn-chip-negtive" data-chip-click='false'>Other</div>
+                    </div>
+                    <div class="input-block-optional">
+                        <div class="label-text">Additional comments (Optional)</div>
+                        <input type="text" placeholder="Type to add comment" class="input-text" id="feedBackComment-${id}"
+                        data-feedback-comment="true">
+                    </div>
+                    <button class="submit-btn" data-updateFlag="false" id="feedbackSubmit" disabled>Submit</button>
+                </div>
+            </div>
+        
+    `;
+    if(!document.getElementById('endTaks-' + id)){
+        endOfDialoge.append(endofDialogeHtml);
+    }
+    $(`.customer-feeling-text`).addClass('bottom-95');
+    setTimeout(() => {
+        id = undefined;
+    }, 100)
+    // dropdownHeaderUuids = undefined;
+}
+
+ UpdateFeedBackDetails(data, tabName) {
+  if(!tabName){
+      tabName == 'userAutoIcon'? 'dynamicBlock':'agentAutoContainer';
+  }
+  let allFeedBackDetails = $(`#${tabName} .feedback-helpul-container`);
+  allFeedBackDetails?.each((i, ele) => {
+      let feedDataSet;
+      if (data.feedback == 'dislike') {
+          feedDataSet = $(ele).find('.btn-negtive .ast-thumbdown').data();
+      } else {
+          feedDataSet = $(ele).find('.btn-positive .ast-thumbup').data();
+      }
+
+      if (feedDataSet.dialogid == data.positionId && data.feedback == 'like') {
+          $(ele).find('.btn-positive').addClass('active-feedback');
+          $(ele).find('.btn-positive .ast-thumbup').addClass('active-feedback');
+          $(ele).find('.thanks-update').removeClass('hide');
+      } else if (feedDataSet.dialogid == data.positionId && data.feedback == 'dislike') {
+          $(ele).find('.btn-negtive').addClass('active-feedback');
+          $(ele).find('.btn-negtive .ast-thumbdown').addClass('active-feedback');
+          $(ele).find('.help-improve-arrow').removeClass('hide')
+          if (data.feedbackDetails.length > 0 || data.comment.length > 0) {
+              $(ele).find('.explore-more-negtive-data').removeClass('hide');
+              let btnChipNegtive = $(ele).find('.btn-chip-negtive');
+              btnChipNegtive.each((i, eles) => {
+                  data.feedbackDetails.includes(eles.innerHTML) ?
+                      $(eles).addClass('active-chip') : '';
+              });
+              $(ele).find('.input-block-optional .input-text').attr('value', data.comment);
+              $(ele).find('.input-block-optional .input-text').val(data.comment);
+              $(ele).find(`.ast-thumbdown`).attr('data-comment',`${data.comment}`)
+              $(ele).find(`.ast-thumbdown`).attr('data-feedbackdetails', data.feedbackDetails)
+              feedDataSet.comment = data.comment;
+              feedDataSet.feedbackdetails = data.feedbackDetails;
+          } else {
+              $(ele).find('.btn-chip-negtive').removeClass('active-chip');
+              $(ele).find('.title-improve').removeClass('hide');
+          }
+      }
+  })
+}
 
 }

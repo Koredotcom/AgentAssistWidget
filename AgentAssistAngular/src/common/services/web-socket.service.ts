@@ -128,8 +128,5 @@ export class WebSocketService {
     this._agentAsisstSocket.on(EVENTS.agent_feedback_response, (data) =>{
       this.agentFeedbackResponse$.next(data);
     });
-
-
-
   }
 }

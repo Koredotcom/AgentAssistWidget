@@ -63,6 +63,7 @@ export class AppComponent {
     this.service.grantCall(params.token, params.botid, params.agentassisturl).then((res) => {
       console.log(res, "sucess")
       this.isGrantSuccess = true;
+      this.service.grantResponseObj = res;
       this.handleSubjectService.setConnectionDetails(params);
       setTimeout(() => {
         this.webSocketService.socketConnection();

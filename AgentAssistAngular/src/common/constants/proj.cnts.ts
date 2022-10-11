@@ -79,7 +79,7 @@ export const connectionObj = {
         "clientSecret":'HV4fd2UCmZJUbr3mVIla1+iMV07j6wHUWgXfgrnq0hs=',
         "botId":'st-fa82e7df-fa85-574c-92c7-a6ad6d6da07d'
     },
-    isAuthentication: true
+    isAuthentication: false
 }
 
 
