@@ -1,6 +1,6 @@
 import { Component, EventEmitter, HostListener, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { ImageFilePath, ImageFileNames, ProjConstants, ConnectionDetails, IdReferenceConst } from 'src/common/constants/proj.cnts';
+import { ImageFilePath, ImageFileNames, ProjConstants, IdReferenceConst } from 'src/common/constants/proj.cnts';
 import { EVENTS } from 'src/common/helper/events';
 import { RandomUUIDPipe } from 'src/common/pipes/random-uuid.pipe';
 import { CommonService } from 'src/common/services/common.service';
@@ -28,6 +28,7 @@ export class LibraryComponent implements OnInit {
   menuResponse: any = {};
   searchText: string = '';
   searchFromAgentSearchBar: boolean = false;
+  connectionDetails : any = {};
 
   constructor(public handleSubjectService: HandleSubjectService, public libraryService: LibraryService,
   public websocketService : WebSocketService, public randomUUIDPipe: RandomUUIDPipe,
@@ -67,9 +68,18 @@ export class LibraryComponent implements OnInit {
         this.menuResponse = this.libraryService.formatMenuResponse(menuResponse.usecases); 
       }
     });
+
+    let subscription3 = this.handleSubjectService.connectDetailsSubject.subscribe((response: any) => {
+      if (response) {
+        this.connectionDetails = response;
+        console.log("connection details, 'inside assist tab");
+
+      }
+    });
    
     this.subscriptionsList.push(subscribtion1);
     this.subscriptionsList.push(subscription2);
+    this.subscriptionsList.push(subscription3);
 
   }
 
@@ -100,7 +110,7 @@ export class LibraryComponent implements OnInit {
     
     if(!this.commonService.isMyBotAutomationOnGoing){
       console.log("inside emit search request library search");
-      let connectionDetails: any = Object.assign({}, ConnectionDetails);
+      let connectionDetails: any = Object.assign({}, this.connectionDetails);
       connectionDetails.value = dialog.intentName;
       connectionDetails.isSearch = isSearchFlag;
       if(!isSearchFlag){

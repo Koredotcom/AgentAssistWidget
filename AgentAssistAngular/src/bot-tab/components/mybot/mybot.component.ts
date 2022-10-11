@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { MybotDataService } from 'src/bot-tab/services/mybot-data.service';
-import { ProjConstants, ImageFilePath, ImageFileNames, IdReferenceConst, ConnectionDetails } from 'src/common/constants/proj.cnts';
+import { ProjConstants, ImageFilePath, ImageFileNames, IdReferenceConst } from 'src/common/constants/proj.cnts';
 import { RandomUUIDPipe } from 'src/common/pipes/random-uuid.pipe';
 import { RemoveSpecialCharPipe } from 'src/common/pipes/remove-special-char.pipe';
 import { ReplaceQuotStringWithDoubleQuotPipe } from 'src/common/pipes/replace-quot-string-with-double-quot.pipe';
@@ -208,7 +208,7 @@ export class MybotComponent implements OnInit {
   getAgentInputValue(value, intent?) {
     console.log("agent input value mybot request", value);
     if (value) {
-      let connectionDetails: any = Object.assign({}, ConnectionDetails);
+      let connectionDetails: any = Object.assign({}, this.connectionDetails);
       connectionDetails.value = value;
       connectionDetails.isSearch = false;
       connectionDetails.positionId = this.myBotDialogPositionId;

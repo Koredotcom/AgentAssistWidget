@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from "rxjs";
-import { ConnectionDetails, ProjConstants } from '../constants/proj.cnts';
 import { EVENTS } from '../helper/events';
 import { SanitizeHtmlPipe } from '../pipes/sanitize-html.pipe';
 import { CommonService } from './common.service';
@@ -44,7 +43,7 @@ export class WebSocketService {
     let webSocketConnection = {
       "path": "/agentassist/api/v1/chat/", transports: ['websocket', 'polling', 'flashsocket'], query: { 'jToken': this.connectionDetails.token }
     };
-    this._agentAsisstSocket = io("https://uat-smartassist.kore.ai/koreagentassist", webSocketConnection);
+    this._agentAsisstSocket = io(`${this.connectionDetails.agentassisturl}/koreagentassist`, webSocketConnection);
     this._agentAsisstSocket.on("connect", () => {
       console.log("connection done");
       this.listenEvents();

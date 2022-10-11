@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 import { EVENTS } from 'src/common/helper/events';
 import { WebSocketService } from 'src/common/services/web-socket.service';
 import { HandleSubjectService } from 'src/common/services/handle-subject.service';
-import { classNamesConst, ConnectionDetails, IdReferenceConst, ImageFileNames, ImageFilePath, ProjConstants } from '../../../common/constants/proj.cnts'
+import { classNamesConst, IdReferenceConst, ImageFileNames, ImageFilePath, ProjConstants } from '../../../common/constants/proj.cnts'
 import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
 import * as $ from 'jquery';
 import { SanitizeHtmlPipe } from 'src/common/pipes/sanitize-html.pipe';
@@ -38,9 +38,6 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.subscribeEvents();
-    setTimeout(() => {
-      this.emitEvents();
-    }, 2000);
   }
 
   ngOnDestroy() {
@@ -55,11 +52,15 @@ export class HomeComponent implements OnInit {
       this.activeTab = tab;
     });
 
-    let subscription2 = this.handleSubjectService.connectDetailsSubject.subscribe((urlPrams: any) => {
-      if (urlPrams && urlPrams?.token) {
+    let subscription2 = this.handleSubjectService.connectDetailsSubject.subscribe((urlParams: any) => {
+      console.log(urlParams, "inside home component");
+      if (urlParams && urlParams?.token) {
+        this.connectionDetails = urlParams;
+        this.emitEvents();
         this.eventListenerFromParent();
       }
     });
+
     this.subscriptionsList.push(subscription1);
     this.subscriptionsList.push(subscription2);
   }
@@ -147,16 +148,24 @@ export class HomeComponent implements OnInit {
 
 
   emitEvents() {
-    let connectionDetails: any = ConnectionDetails;
+    console.log(this.connectionDetails, "connection details");
+    
+    let menu_request_params : any = {
+      botId : this.connectionDetails.botId,
+      conversationId : this.connectionDetails.conversationId,
+      experience : this.connectionDetails.isCall == "false" ? 'chat' : 'voice'
+    }
     let parsedCustomData: any = {};
     let welcomeMessageParams: any = {
       'waitTime': 2000,
       'userName': parsedCustomData?.userName || parsedCustomData?.fName + parsedCustomData?.lName || 'user',
-      'id': ConnectionDetails.conversationId,
+      'id': this.connectionDetails.conversationId,
       "isSendWelcomeMessage": true
     }
+    console.log(menu_request_params, "menu_prams");
+    
     this.websocketService.emitEvents(EVENTS.welcome_message_request, welcomeMessageParams);
-    this.websocketService.emitEvents(EVENTS.agent_menu_request, connectionDetails);
+    this.websocketService.emitEvents(EVENTS.agent_menu_request, menu_request_params);
   }
 
   isChecked() {

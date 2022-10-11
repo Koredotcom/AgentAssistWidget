@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { ProjConstants, ImageFilePath, ImageFileNames, ConnectionDetails, IdReferenceConst } from 'src/common/constants/proj.cnts';
+import { ProjConstants, ImageFilePath, ImageFileNames, IdReferenceConst } from 'src/common/constants/proj.cnts';
 import { RandomUUIDPipe } from 'src/common/pipes/random-uuid.pipe';
 import { RawHtmlPipe } from 'src/common/pipes/raw-html.pipe';
 import { RemoveSpecialCharPipe } from 'src/common/pipes/remove-special-char.pipe';
@@ -287,7 +287,7 @@ export class AssistComponent implements OnInit {
   }
 
   AgentAssist_run_click(dialog, dialogPositionId, intent?) {
-    let connectionDetails: any = Object.assign({}, ConnectionDetails);
+    let connectionDetails: any = Object.assign({}, this.connectionDetails);
     connectionDetails.value = dialog.intentName;
     if (dialog.intentName && intent) {
       connectionDetails.intentName = dialog.intentName;

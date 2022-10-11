@@ -71,10 +71,15 @@ export const IdReferenceConst = {
     DROPDOWN_HEADER : 'dropDownHeader'
 }
 
-export const ConnectionDetails = {
-    "botId" : 'st-c0bff05e-224d-5544-a520-9dcd826afe35',
-    "conversationId" : 'c-9d6b4cb-40cb-4101-a10d-760e045ae116',
-    "experience" : "chat",
+
+export const connectionObj = {
+    envinormentUrl: 'https://dev-smartassist.kore.ai',
+    botDetails: {
+        "clientId":'cs-0a7ab777-72e6-5a0d-944c-66ccd2be4d5c',
+        "clientSecret":'HV4fd2UCmZJUbr3mVIla1+iMV07j6wHUWgXfgrnq0hs=',
+        "botId":'st-fa82e7df-fa85-574c-92c7-a6ad6d6da07d'
+    },
+    isAuthentication: true
 }
 
 

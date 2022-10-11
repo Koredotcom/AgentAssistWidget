@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { connectionObj } from 'src/common/constants/proj.cnts';
+import { KoreGenerateuuidPipe } from 'src/common/pipes/kore-generateuuid.pipe';
+import { RandomUUIDPipe } from 'src/common/pipes/random-uuid.pipe';
 import { CommonService } from 'src/common/services/common.service';
 import { HandleSubjectService } from 'src/common/services/handle-subject.service';
 import { WebSocketService } from '../common/services/web-socket.service';
@@ -14,8 +17,8 @@ export class AppComponent {
   isGrantSuccess = false;
   errorMsg;
   constructor(private webSocketService: WebSocketService, private service: CommonService,
-    private route: ActivatedRoute, private handleSubjectService : HandleSubjectService){
-
+    private route: ActivatedRoute, private handleSubjectService : HandleSubjectService, private randomID : KoreGenerateuuidPipe){
+    
   }
   ngOnInit(){
     this.route.queryParams
@@ -28,18 +31,19 @@ export class AppComponent {
           console.log(res,"sucess")
           this.isGrantSuccess = true;
           this.handleSubjectService.setConnectionDetails(params);
+          // this.webSocketService.socketConnection();
         }).catch((err)=>{
-          if (err.status === 500) {
-              this.errorMsg =  "Issue identified with the backend services! Please reach out to AgentAssist Admin.";
-          } else {
-            this.errorMsg = "Issue identified in configuration settings! Please reach out to AgentAssist Admin.";
-          }
-          this.isGrantSuccess = false;
-        });
-      }
+          this.errorMsg = "jwt token generation failed";
+        })
+        } else {
+          this.errorMsg = "Issue identified in configuration settings! Please reach out to AgentAssist Admin."
+        }
+       
+      });
   
     }
-  );
+
+
     // this.webSocketService.init();
     // this.webSocketService.registerEvents();
     // setTimeout(()=>{
@@ -47,4 +51,3 @@ export class AppComponent {
     // }, 300)
   }
 
-}

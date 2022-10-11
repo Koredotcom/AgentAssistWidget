@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { ImageFilePath, ImageFileNames, ProjConstants, ConnectionDetails, IdReferenceConst, classNamesConst } from 'src/common/constants/proj.cnts';
+import { ImageFilePath, ImageFileNames, ProjConstants, IdReferenceConst, classNamesConst } from 'src/common/constants/proj.cnts';
 import { EVENTS } from 'src/common/helper/events';
 import { RandomUUIDPipe } from 'src/common/pipes/random-uuid.pipe';
 import { CommonService } from 'src/common/services/common.service';
@@ -29,6 +29,7 @@ export class OverlaysearchComponent implements OnInit {
   searchResultText: string;
   searchConentObject: any;
   showOverLay : boolean = false;
+  connectionDetails : any = {};
 
   constructor(public handleSubjectService: HandleSubjectService, public commonService: CommonService,
     public randomUUIDPipe: RandomUUIDPipe, public websocketService: WebSocketService, public cdRef : ChangeDetectorRef) { }
@@ -65,13 +66,21 @@ export class OverlaysearchComponent implements OnInit {
         }
       }
     });
+    let subscription3 = this.handleSubjectService.connectDetailsSubject.subscribe((response: any) => {
+      if (response) {
+        this.connectionDetails = response;
+        console.log("connection details, 'inside assist tab");
+
+      }
+    });
     this.subscriptionsList.push(subscription1);
     this.subscriptionsList.push(subscription2);
+    this.subscriptionsList.push(subscription3);
   }
 
   emitSearchRequest(searchObj, isSearchFlag) {
     console.log("inside emit overlay request", searchObj);
-    let connectionDetails: any = Object.assign({}, ConnectionDetails);
+    let connectionDetails: any = Object.assign({}, this.connectionDetails);
     connectionDetails.value = searchObj.value;
     connectionDetails.isSearch = isSearchFlag;
     connectionDetails.positionId = searchObj?.positionId;
