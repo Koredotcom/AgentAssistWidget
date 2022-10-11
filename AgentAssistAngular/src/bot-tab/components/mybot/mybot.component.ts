@@ -23,8 +23,8 @@ import { PerfectScrollbarDirective } from 'ngx-perfect-scrollbar';
 })
 export class MybotComponent implements OnInit {
 
-  @ViewChild('psBottom') psBottom: PerfectScrollbarDirective;
-  @ViewChild('mybotautomation') mybotautomation:ElementRef;
+  @Output() scrollToBottomEvent = new EventEmitter();
+  @ViewChild('mybotautomation') mybotautomation: ElementRef;
   @Output() handleTerminatePopup = new EventEmitter();
 
   subscriptionsList: Subscription[] = [];
@@ -37,15 +37,15 @@ export class MybotComponent implements OnInit {
   myBotDropdownHeaderUuids: any;
   myBotDialogPositionId: string;
   scrollAtEnd: boolean = true;
-  connectionDetails: any = ConnectionDetails;
-  interruptDialog : any = {};
+  connectionDetails: any;
+  interruptDialog: any = {};
 
   constructor(public handleSubjectService: HandleSubjectService, public randomUUIDPipe: RandomUUIDPipe,
     public mybotDataService: MybotDataService, public removeSpecialCharPipe: RemoveSpecialCharPipe,
     public replaceQuotStringWithDoubleQuotPipe: ReplaceQuotStringWithDoubleQuotPipe,
     public sanitizeHtmlPipe: SanitizeHtmlPipe, private templateRenderClassService: TemplateRenderClassService,
     public commonService: CommonService, public websocketService: WebSocketService,
-    public designAlterService: DesignAlterService, public rawHtmlPipe : RawHtmlPipe) { }
+    public designAlterService: DesignAlterService, public rawHtmlPipe: RawHtmlPipe) { }
 
   ngOnInit(): void {
     this.subscribeEvents();
@@ -63,12 +63,12 @@ export class MybotComponent implements OnInit {
       if (runEventObj.agentRunButton && !this.commonService.isMyBotAutomationOnGoing) {
         console.log(runEventObj, "run event obj");
         this.runDialogFormyBotTab(runEventObj);
-        this.scrollToBottom();
-      }else if(runEventObj.agentRunButton && this.commonService.isMyBotAutomationOnGoing){
+        // this.scrollToBottom();
+      } else if (runEventObj.agentRunButton && this.commonService.isMyBotAutomationOnGoing) {
         this.interruptDialog = runEventObj;
         console.log(this.interruptDialog, "interrupt dialog");
-        
-        this.handleTerminatePopup.emit({status : true, type : this.projConstants.INTERRUPT});
+
+        this.handleTerminatePopup.emit({ status: true, type: this.projConstants.INTERRUPT });
       }
     });
 
@@ -82,33 +82,42 @@ export class MybotComponent implements OnInit {
 
     let subscription3 = this.websocketService.endOfTaskResponse$.subscribe((endoftaskresponse: any) => {
       console.log(endoftaskresponse, "endof task");
-      if(endoftaskresponse){
+      if (endoftaskresponse && this.myBotDialogPositionId == endoftaskresponse.positionId) {
         this.dialogTerminatedOrIntrupptedInMyBot();
       }
     })
 
-    let subscription4 = this.handleSubjectService.terminateClickEventSubject.subscribe((response : any) =>{
-      if(response && response?.activeTab == this.projConstants.MYBOT){
+    let subscription4 = this.handleSubjectService.terminateClickEventSubject.subscribe((response: any) => {
+      if (response && response?.activeTab == this.projConstants.MYBOT) {
         console.log(response, "inside subject mybot");
         this.getAgentInputValue(this.projConstants.DISCARD_ALL);
         this.dialogTerminatedOrIntrupptedInMyBot();
       }
     });
 
-    let subscription5 = this.handleSubjectService.interruptClickEventSubject.subscribe((response : any) =>{
-      if(response && response?.activeTab == this.projConstants.MYBOT){
+    let subscription5 = this.handleSubjectService.interruptClickEventSubject.subscribe((response: any) => {
+      if (response && response?.activeTab == this.projConstants.MYBOT) {
         console.log(response, "inside interrupt mybot component");
         this.getAgentInputValue(this.projConstants.DISCARD_ALL);
-        this.dialogTerminatedOrIntrupptedInMyBot(); 
+        this.dialogTerminatedOrIntrupptedInMyBot();
         this.runDialogFormyBotTab(this.interruptDialog);
         this.getAgentInputValue(this.interruptDialog.name, this.projConstants.INTENT);
       }
-    })
+    });
+
+    let subscription6 = this.handleSubjectService.connectDetailsSubject.subscribe((response : any)=>{
+      if(response){
+        this.connectionDetails = response;
+        console.log("connection details, 'inside assist tab");
+        
+      }
+    });
     this.subscriptionsList.push(subscription1);
     this.subscriptionsList.push(subscription2);
     this.subscriptionsList.push(subscription3);
     this.subscriptionsList.push(subscription4);
     this.subscriptionsList.push(subscription5);
+    this.subscriptionsList.push(subscription6);
   }
 
   processMybotDataResponse(data) {
@@ -193,6 +202,7 @@ export class MybotComponent implements OnInit {
     let dropdownHtml = this.mybotDataService.createDialogTaskAccordionTemplate(agentBotuuids, intentName);
     this.mybotautomation.nativeElement.innerHTML += dropdownHtml;
     this.clickEvents(IdReferenceConst.MYBOTTERMINATE, agentBotuuids);
+    this.clickEvents(IdReferenceConst.DROPDOWN_HEADER,agentBotuuids);
   }
 
   getAgentInputValue(value, intent?) {
@@ -202,7 +212,7 @@ export class MybotComponent implements OnInit {
       connectionDetails.value = value;
       connectionDetails.isSearch = false;
       connectionDetails.positionId = this.myBotDialogPositionId;
-      if(intent){
+      if (intent) {
         connectionDetails.intentName = value;
       }
       let agent_assist_agent_request_params = this.commonService.prepareAgentAssistAgentRequestParams(connectionDetails);
@@ -219,38 +229,39 @@ export class MybotComponent implements OnInit {
       appState[this.connectionDetails.conversationId]['automationGoingOnAfterRefreshMyBot'] = this.commonService.isMyBotAutomationOnGoing;
       localStorage.setItem('agentAssistState', JSON.stringify(appState))
     }
-    this.commonService.addFeedbackHtmlToDom('runForAgentBot', this.myBotDropdownHeaderUuids);
+    this.commonService.addFeedbackHtmlToDom(this.myBotDropdownHeaderUuids, 'runForAgentBot',);
   }
 
-  terminateButtonClick(uuid){
-    document.getElementById(IdReferenceConst.MYBOTTERMINATE + '-' + uuid).addEventListener('click', (event) =>{
+  terminateButtonClick(uuid) {
+    document.getElementById(IdReferenceConst.MYBOTTERMINATE + '-' + uuid).addEventListener('click', (event) => {
       console.log(event);
       console.log("terminate click");
-      this.handleTerminatePopup.emit({status : true, type : this.projConstants.TERMINATE});
-    }); 
+      this.handleTerminatePopup.emit({ status: true, type: this.projConstants.TERMINATE });
+    });
   }
 
-  clickEvents(eventName, uuid?){
-    if(eventName == IdReferenceConst.MYBOTTERMINATE){
+  clickEvents(eventName, uuid?) {
+    if (eventName == IdReferenceConst.MYBOTTERMINATE) {
       this.terminateButtonClick(uuid)
+    }else if(eventName == IdReferenceConst.DROPDOWN_HEADER){
+      this.designAlterService.handleDropdownToggle(uuid);
     }
   }
 
-  scrollToBottom(){
-    setTimeout(() => {
-      this.psBottom.scrollToBottom(0, 500);
-   }, 100);
+  scrollToBottom() {
+    this.scrollToBottomEvent.emit(true);
   }
 
-  collapseOldDialoguesInMyBot(){
-    if($(`#myBotAutomationBlock .collapse-acc-data`).length > 0){
-        let listItems = $("#myBotAutomationBlock .collapse-acc-data");
-        listItems.each(function(idx, collapseElement) {
-            console.log(collapseElement.classList, "classlist", collapseElement.id);
-            if(!collapseElement.id.includes('smallTalk')  && collapseElement.id.includes('dropDownData')){
-                collapseElement.classList.add('hide');
-            }
-        });
+  collapseOldDialoguesInMyBot() {
+    if ($(`#myBotAutomationBlock .collapse-acc-data`).length > 0) {
+      let listItems = $("#myBotAutomationBlock .collapse-acc-data");
+      listItems.each(function (idx, collapseElement) {
+        console.log(collapseElement.classList, "classlist", collapseElement.id);
+        if (!collapseElement.id.includes('smallTalk') && collapseElement.id.includes('dropDownData')) {
+          collapseElement.classList.add('hide');
+        }
+      });
     }
-}
+  }
+
 }

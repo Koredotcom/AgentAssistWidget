@@ -21,6 +21,7 @@ export enum EVENTS {
     'agent_assist_agent_request' = 'agent_assist_agent_request',
     'agent_assist_agent_response' = 'agent_assist_agent_response',
     'agent_assist_endoftask' = 'agent_assist_endoftask',
+    'request_resolution_comments' = 'request_resolution_comments',
     'response_resolution_comments' = 'response_resolution_comments',
     'enable_override_userinput' = 'enable_override_userinput'
 }

@@ -99,7 +99,7 @@ export class CommonService {
   }
 
 
-  addFeedbackHtmlToDom(runForAgentBot, headerUUids) {
+  addFeedbackHtmlToDom(headerUUids, runForAgentBot?) {
     let dropDownData;
     let endOfDialoge;
     if (runForAgentBot) {
@@ -154,7 +154,18 @@ export class CommonService {
                     <button class="submit-btn" data-updateFlag="false"id="feedbackSubmit" disabled>Submit</button>
                 </div>
             </div>
-        
+    `;
+    if (!document.getElementById('endTaks-' + headerUUids)) {
+      endOfDialoge.append(endofDialogeHtml);
+      $(`#overRideDiv-${headerUUids}`).remove();
+    }
+    $(`.customer-feeling-text`).addClass('bottom-95');
+    // setTimeout(() => {
+    //     headerUUids = undefined;
+    // }, 100)
+    // UnCollapseDropdownForLastElement(lastElementBeforeNewMessage);
+  }
+
   grantCall(jwtID, botid, url): Promise<any>{
     var payload = {
       "assertion": jwtID,
@@ -193,16 +204,5 @@ export class CommonService {
     return this.grantResponseObj.authorization.accessToken;
   }
 
-    `;
-    if (!document.getElementById('endTaks-' + headerUUids)) {
-      endOfDialoge.append(endofDialogeHtml);
-      $(`#overRideDiv-${headerUUids}`).remove();
-    }
-    $(`.customer-feeling-text`).addClass('bottom-95');
-    // setTimeout(() => {
-    //     headerUUids = undefined;
-    // }, 100)
-    // UnCollapseDropdownForLastElement(lastElementBeforeNewMessage);
-  }
 
 }

@@ -17,6 +17,8 @@ export const ProjConstants = {
     MYBOT : 'My Bot',
     TRANSCRIPT : "Transcript",
     LIBRARY : 'Library',
+    BOTID : 'botId',
+    CONVESATIONID : 'conversationId',
     RUN : 'RUN',
     AGENTASSIST_RUN : 'Run with Agent Inputs',
     SEND : 'Send',
@@ -37,10 +39,14 @@ export const ProjConstants = {
     TERMINATE : 'Terminate',
     INTERRUPT : 'Interrupt',
     INTENT : 'IntentName',
+    PS_Y_REACH_START : 'ps-y-reach-start',
+    PS_Y_REACH_END : 'ps-y-reach-end',
+    PS_SCROLL_UP : 'ps-scroll-up',
     jToken : "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NjUzODYxNzgyMjMsImV4cCI6MTY2NTM4NjE3OTEyMywiYXVkIjoiIiwiaXNzIjoiY3MtZTRhMmI0YjYtM2RiZC01NWQwLWIwMjUtNDY2ZTVkMDRjOTgxIiwic3ViIjoiYy00NzJhNjYyLTQ5ZDYtNDM5Ny1hMjY1LTViNzE4ZDQ0MWNiNCIsImlzQW5vbnltb3VzIjpmYWxzZX0.1SN5BIEaQ4Rr6XpyKXR1AerNcIEmyDcnK6P0cpPkQzM"
 }
 
 export const IdReferenceConst = {
+    BODYCONTAINER : 'bodyContainer',
     DROPDOWNDATA : "dropDownData",
     USERINPUT : "userInput",
     MYBOTADDREMOVEDROPDOWN : "MyBotaddRemoveDropDown",
@@ -61,7 +67,8 @@ export const IdReferenceConst = {
     OVERRIDE_BTN : 'overRideBtn',
     CANCEL_OVERRIDE_BTN : 'cancelOverRideBtn',
     INPUT_FIELD_AGENT : 'inputFieldForAgent',
-    ARTICLE_SEND_MSG : 'articlesendMsg'
+    ARTICLE_SEND_MSG : 'articlesendMsg',
+    DROPDOWN_HEADER : 'dropDownHeader'
 }
 
 export const ConnectionDetails = {

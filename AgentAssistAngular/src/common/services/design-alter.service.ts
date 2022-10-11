@@ -11,7 +11,7 @@ export class DesignAlterService {
 
   addWhiteBackgroundClassToNewMessage(scrollAtEnd,blockId) {
     let dynamicBlockId = blockId;
-    let beforeLastElementArray: any = document.querySelectorAll('.last-msg-white-bg');
+    let beforeLastElementArray: any = document.getElementById(blockId).querySelectorAll('.last-msg-white-bg');
     for (let ele of beforeLastElementArray) {
       if (ele && scrollAtEnd) {
         $(ele).removeClass("last-msg-white-bg");
@@ -76,6 +76,36 @@ export class DesignAlterService {
     }
   }
 
+  isScrolledIntoView(elem) {
+    if (elem) {
+        var parentRec = document.getElementById(IdReferenceConst.BODYCONTAINER).getBoundingClientRect();
+        var childRec = elem.getBoundingClientRect();
+        console.log(childRec, "before top");
+        
+        if(childRec.top == 0 && $(elem).parent().attr('class').includes('hide')){
+            if($(elem).parent().parent().length){
+                elem = $(elem).parent().parent()[0];
+            }
+        }
+        var paddingTop = 0;
+        childRec = elem.getBoundingClientRect();
+        try{
+            if (window.getComputedStyle(elem, null).getPropertyValue('padding-top')) {
+                var paddingTopStr = window.getComputedStyle(elem, null).getPropertyValue('padding-top');
+                if (paddingTopStr.length && paddingTopStr.length - 2) {
+                    paddingTopStr = paddingTopStr.substring(0, paddingTopStr.length - 2);
+                    paddingTop = parseInt(paddingTopStr) ? parseInt(paddingTopStr) : 0;
+                }
+            }
+        }catch(e){
+            console.log(e);
+        }
+        console.log(childRec, paddingTop, parentRec);
+        
+        return (childRec.top + paddingTop) > (parentRec.height + parentRec.top);
+    }
+}
+
   getLastElement(id) {
     let lastElement: any = ''
     var dynamicBlockElements = document.getElementById(id);
@@ -123,4 +153,17 @@ export class DesignAlterService {
     }
     return '-';
   }
+
+  handleDropdownToggle(uuid){
+    console.log("handle dropdown toggle", `#dropDownData-${uuid}`);
+     document.getElementById(IdReferenceConst.DROPDOWN_HEADER + '-' + uuid).addEventListener('click', (event) => {
+       let dropdownDataElement = $(`#dropDownData-${uuid}`);
+       if($(dropdownDataElement).hasClass('hide')){
+         $(dropdownDataElement).removeClass('hide')
+       }else{
+         $(dropdownDataElement).addClass('hide')
+       }
+     }); 
+  }
+
 }

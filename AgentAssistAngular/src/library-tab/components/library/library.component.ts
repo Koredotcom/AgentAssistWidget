@@ -79,7 +79,7 @@ export class LibraryComponent implements OnInit {
   }
 
   //changing the tab
-  dialogueRunClick(dialog,clickType) {
+  dialogueRunClick(dialog,clickType) {    
     dialog.value.positionId = this.randomUUIDPipe.transform(IdReferenceConst.positionId);
     let runDialogueObject = Object.assign({},dialog.value);
     runDialogueObject.searchFrom = this.projConstants.LIBRARY;
@@ -96,6 +96,8 @@ export class LibraryComponent implements OnInit {
   }
 
   agent_run_click(dialog, isSearchFlag) {
+    console.log("inside agent-run-click", dialog, this.commonService.isMyBotAutomationOnGoing);
+    
     if(!this.commonService.isMyBotAutomationOnGoing){
       console.log("inside emit search request library search");
       let connectionDetails: any = Object.assign({}, ConnectionDetails);

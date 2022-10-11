@@ -16,15 +16,17 @@ import { KoreGenerateuuidPipe } from 'src/common/pipes/kore-generateuuid.pipe';
 import { AssistService } from 'src/assist-tab/services/assist.service';
 import { HtmlEntityPipe } from 'src/common/pipes/html-entity.pipe';
 import { EVENTS } from 'src/common/helper/events';
+import { PerfectScrollbarDirective } from 'ngx-perfect-scrollbar';
 
 @Component({
   selector: 'app-assist',
   templateUrl: './assist.component.html',
   styleUrls: ['./assist.component.scss'],
-  providers:[RandomUUIDPipe]
+  providers: [RandomUUIDPipe]
 })
 export class AssistComponent implements OnInit {
 
+  @Output() scrollToBottomEvent = new EventEmitter();
   @ViewChild('dynamicBlockRef') dynamicBlockRef: ElementRef;
   @Output() handleTerminatePopup = new EventEmitter();
 
@@ -38,7 +40,7 @@ export class AssistComponent implements OnInit {
   dropdownHeaderUuids: any;
   dialogPositionId: string;
   scrollAtEnd: boolean = true;
-  connectionDetails: any = ConnectionDetails;
+  connectionDetails: any;
   isInitialDialogOnGoing: boolean = false
   interruptDialog: any = {};
   answerPlaceableIDs: any = [];
@@ -77,13 +79,22 @@ export class AssistComponent implements OnInit {
   subscribeEvents() {
 
     let subscription1 = this.handleSubjectService.runButtonClickEventSubject.subscribe((runEventObj: any) => {
-      if (runEventObj.intentName) {
-        this.runDialogForAssistTab(runEventObj)
+      console.log(runEventObj, 'run event obj');
+      if (Object.keys(runEventObj).length > 0) {
+        if (runEventObj && !runEventObj?.agentRunButton && !this.commonService.isAutomationOnGoing) {
+          console.log(runEventObj, "run event obj");
+          this.runDialogForAssistTab(runEventObj);
+          this.scrollToBottom();
+        } else if (runEventObj && !runEventObj?.agentRunButton && this.commonService.isAutomationOnGoing) {
+          this.interruptDialog = runEventObj;
+          console.log(this.interruptDialog, "interrupt dialog");
+          this.handleTerminatePopup.emit({ status: true, type: this.projConstants.INTERRUPT });
+        }
       }
     });
 
     let subscription2 = this.websocketService.agentAssistResponse$.subscribe((response: any) => {
-      if (response) {
+      if (response && Object.keys(response).length > 0) {
         this.processAgentAssistResponse(response, this.connectionDetails.botId);
       }
 
@@ -91,27 +102,50 @@ export class AssistComponent implements OnInit {
 
     let subscription3 = this.websocketService.endOfTaskResponse$.subscribe((endoftaskresponse: any) => {
       console.log(endoftaskresponse, "end of task response");
-
+      if (endoftaskresponse && this.dialogPositionId == endoftaskresponse.positionId) {
+        this.dialogTerminatedOrIntrupptedInMyBot();
+      }
     })
 
     let subscription4 = this.handleSubjectService.terminateClickEventSubject.subscribe((response: any) => {
-      console.log(response, "terminate click event");
-
+      if (response && response?.activeTab == this.projConstants.ASSIST) {
+        console.log(response, "terminate click event");
+        this.AgentAssist_run_click({ intentName: this.projConstants.DISCARD_ALL }, this.dialogPositionId)
+        this.dialogTerminatedOrIntrupptedInMyBot();
+      }
     });
 
     let subscription5 = this.handleSubjectService.interruptClickEventSubject.subscribe((response: any) => {
       console.log(response, "interrupt click event");
+      if (response && response?.activeTab == this.projConstants.ASSIST) {
+        console.log(response, "inside interrupt mybot component");
+        this.AgentAssist_run_click({ intentName: this.projConstants.DISCARD_ALL }, this.dialogPositionId)
+        this.dialogTerminatedOrIntrupptedInMyBot();
+        this.runDialogForAssistTab(this.interruptDialog);
+      }
 
     });
 
     let subscription6 = this.websocketService.agentAssistUserMessageResponse$.subscribe((response: any) => {
       console.log(response, "user message");
       if (response && response.botId) {
-        // this.updateNumberOfMessages();
+        this.updateNumberOfMessages();
         this.processUserMessages(response, response.conversationId, response.botId);
         // removingSendCopyBtnForCall();
       }
+    });
 
+    let subscription7 = this.handleSubjectService.connectDetailsSubject.subscribe((response: any) => {
+      if (response) {
+        this.connectionDetails = response;
+        console.log("connection details, 'inside assist tab");
+
+      }
+    });
+
+    let subscription8 = this.websocketService.userMessageResponse$.subscribe((userMsgResponse : any) =>{
+      console.log(userMsgResponse, "usermsg response in assist tab");
+      
     })
     this.subscriptionsList.push(subscription1);
     this.subscriptionsList.push(subscription2);
@@ -119,11 +153,12 @@ export class AssistComponent implements OnInit {
     this.subscriptionsList.push(subscription4);
     this.subscriptionsList.push(subscription5);
     this.subscriptionsList.push(subscription6);
+    this.subscriptionsList.push(subscription7);
+    this.subscriptionsList.push(subscription8);
   }
-  testInput() {
-    console.log("From TEst input");
-  }
+
   terminateButtonClick(uuid) {
+    console.log("terminate button click", IdReferenceConst.ASSISTTERMINATE + '-' + uuid);
     document.getElementById(IdReferenceConst.ASSISTTERMINATE + '-' + uuid).addEventListener('click', (event) => {
       console.log("terminate click");
       this.handleTerminatePopup.emit({ status: true, type: this.projConstants.TERMINATE });
@@ -169,7 +204,7 @@ export class AssistComponent implements OnInit {
       $(`#cancelOverRideBtn-${uuid}`).removeClass('hide');
       this.isOverRideMode = true;
       this.designAlterService.addWhiteBackgroundClassToNewMessage(this.scrollAtEnd, IdReferenceConst.DYNAMICBLOCK);
-      // scrollToBottom();
+      this.scrollToBottom();
     });
   }
 
@@ -190,17 +225,19 @@ export class AssistComponent implements OnInit {
       $('#inputFieldForAgent').remove();
       this.isOverRideMode = false;
       this.designAlterService.addWhiteBackgroundClassToNewMessage(this.scrollAtEnd, IdReferenceConst.DYNAMICBLOCK);
-      // scrollToBottom();
+      this.scrollToBottom();
     })
   }
 
   clickEvents(eventName, uuid?, dialogId?) {
-    if (eventName == IdReferenceConst.MYBOTTERMINATE) {
+    if (eventName == IdReferenceConst.ASSISTTERMINATE) {
       this.terminateButtonClick(uuid)
     } else if (eventName == IdReferenceConst.OVERRIDE_BTN) {
       this.handleOverridBtnClick(uuid, dialogId);
     } else if (eventName == IdReferenceConst.CANCEL_OVERRIDE_BTN) {
       this.handleCancelOverrideBtnClick(uuid, dialogId);
+    } else if (eventName == IdReferenceConst.DROPDOWN_HEADER) {
+      this.designAlterService.handleDropdownToggle(uuid);
     }
   }
 
@@ -243,7 +280,10 @@ export class AssistComponent implements OnInit {
     if (!runInitent) {
       this.AgentAssist_run_click(data, this.dialogPositionId, this.projConstants.INTENT);
     }
-    this.clickEvents(IdReferenceConst.ASSISTTERMINATE, uuids);
+    setTimeout(() => {
+      this.clickEvents(IdReferenceConst.ASSISTTERMINATE, uuids);
+      this.clickEvents(IdReferenceConst.DROPDOWN_HEADER, uuids);
+    }, 1000);
   }
 
   AgentAssist_run_click(dialog, dialogPositionId, intent?) {
@@ -255,6 +295,7 @@ export class AssistComponent implements OnInit {
     connectionDetails.positionId = dialogPositionId;
     let assistRequestParams = this.commonService.prepareAgentAssistRequestParams(connectionDetails);
     this.websocketService.emitEvents(EVENTS.agent_assist_request, assistRequestParams);
+    this.scrollToBottom();
   }
 
   processUserMessages(data, conversationId, botId) {
@@ -608,6 +649,10 @@ export class AssistComponent implements OnInit {
 
     if (this.commonService.isAutomationOnGoing && !data.suggestions) {
       this.welcomeMsgResponse = data;
+      if (this.numberOfNewMessages == 1) {
+        this.numberOfNewMessages = 0;
+        this.scrollToBottom();
+      }
     }
 
     if (!this.commonService.isAutomationOnGoing && !this.dropdownHeaderUuids && !data.suggestions) {
@@ -625,10 +670,16 @@ export class AssistComponent implements OnInit {
     }
 
     let result = this.templateRenderClassService.getResponseUsingTemplate(data);
+    console.log(data, "data inside assist response", result);
+
     let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(result)[0].innerHTML;
     let a = document.getElementById(IdReferenceConst.displayData + `-${uuids}`);
     if (a) {
       a.innerHTML = a.innerHTML + html;
+    }
+    this.designAlterService.addWhiteBackgroundClassToNewMessage(this.scrollAtEnd, IdReferenceConst.DYNAMICBLOCK);
+    if (this.scrollAtEnd) {
+      this.scrollToBottom();
     }
     this.designAlterService.addWhiteBackgroundClassToNewMessage(this.scrollAtEnd, IdReferenceConst.DYNAMICBLOCK);
   }
@@ -773,17 +824,40 @@ export class AssistComponent implements OnInit {
     }
   }
 
-  // dialogTerminatedOrIntrupptedInMyBot() {
-  //   let appStateStr: any = localStorage.getItem('agentAssistState') || '{}';
-  //   let appState: any = JSON.parse(appStateStr);
-  //   this.commonService.isMyBotAutomationOnGoing = false;
-  //   if (appState[this.connectionDetails.conversationId]) {
-  //     appState[this.connectionDetails.conversationId]['automationGoingOnAfterRefreshMyBot'] = this.commonService.isMyBotAutomationOnGoing;
-  //     localStorage.setItem('agentAssistState', JSON.stringify(appState))
-  //   }
-  //   this.commonService.addFeedbackHtmlToDom('runForAgentBot', this.dropdownHeaderUuids);
-  // }
+  dialogTerminatedOrIntrupptedInMyBot() {
+    let appStateStr: any = localStorage.getItem('agentAssistState') || '{}';
+    let appState: any = JSON.parse(appStateStr);
+    this.commonService.isAutomationOnGoing = false;
+    if (appState[this.connectionDetails.conversationId]) {
+      appState[this.connectionDetails.conversationId]['automationGoingOnAfterRefresh'] = this.commonService.isAutomationOnGoing;
+      localStorage.setItem('agentAssistState', JSON.stringify(appState))
+    }
+    this.commonService.addFeedbackHtmlToDom(this.dropdownHeaderUuids);
+    this.scrollToBottom();
+  }
 
+  updateNumberOfMessages() {
+    this.numberOfNewMessages += 1;
+    $(".scroll-bottom-btn").addClass("new-messages");
+    $(".scroll-bottom-btn span").text(this.numberOfNewMessages + ' new');
+    if (this.numberOfNewMessages == 1) {
+      this.removeWhiteBackgroundToSeenMessages();
+    }
+  }
 
+  removeWhiteBackgroundToSeenMessages() {
+    let beforeLastElementArray: any = document.getElementById(IdReferenceConst.DYNAMICBLOCK).querySelectorAll('.last-msg-white-bg');
+    for (let ele of beforeLastElementArray) {
+      $(ele).removeClass("last-msg-white-bg");
+    }
+  }
+
+  scrollToBottom() {
+    console.log("scroll to bottom");
+    setTimeout(() => {
+      this.scrollToBottomEvent.emit(true);
+    }, this.waitingTimeForUUID);
+
+  }
 
 }

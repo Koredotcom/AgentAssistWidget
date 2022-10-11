@@ -70,7 +70,7 @@ export class AssistService {
       </div>
       <div class="header-text" id="dropDownTitle-${uuids}">${intentName}</div>
       <i class="ast-carrotup"></i>
-      <button class="btn-danger" id="terminateAgentDialog">Terminate</button>
+      <button class="btn-danger" id="terminateAgentDialog-${uuids}">Terminate</button>
       </div>
       <div class="collapse-acc-data" id="dropDownData-${uuids}">
       <div class="override-input-div hide" id="overRideDiv-${uuids}" >

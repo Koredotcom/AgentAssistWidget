@@ -107,11 +107,13 @@ export class OverlaysearchComponent implements OnInit {
 
   dialogueRunClick(dialog, searchType) {
     dialog.positionId = this.randomUUIDPipe.transform(IdReferenceConst.positionId);
+    dialog.intentName = dialog.name;
     let runDialogueObject = Object.assign({}, this.searchConentObject);
     Object.assign(runDialogueObject, dialog);
+    console.log(runDialogueObject, "runDialogueObject inside overlaysearch");
+    
     if (searchType == this.projConstants.ASSIST) {
       this.handleSubjectService.setActiveTab(this.projConstants.ASSIST);
-      this.AgentAssist_run_click(dialog);
     } else {
       this.handleSubjectService.setActiveTab(this.projConstants.MYBOT);
       this.AgentAssist_agent_run_click(dialog);
@@ -124,15 +126,6 @@ export class OverlaysearchComponent implements OnInit {
   AgentAssist_agent_run_click(dialog){
     dialog.value = dialog.name;
     this.emitSearchRequest(dialog, false);
-  }
-
-  AgentAssist_run_click(dialog) {
-    let connectionDetails: any = Object.assign({}, ConnectionDetails);
-    connectionDetails.value = dialog.name;
-    connectionDetails.intentName = dialog.name;
-    connectionDetails.positionId = this.randomUUIDPipe.transform(IdReferenceConst.positionId)
-    let assistRequestParams = this.commonService.prepareAgentAssistRequestParams(connectionDetails);
-    this.websocketService.emitEvents(EVENTS.agent_assist_request, assistRequestParams);
   }
 
   showAllResultsClick(clickType) {
