@@ -25,8 +25,9 @@ export class AppComponent {
       .subscribe(params => {
         this.service.configObj = params;
         if (params.token && params.botid && params.agentassisturl && params.conversationid) {
-          return this.grantCall(params);
-        } else {
+          this.grantCall(params);
+        }
+         else {
           if (connectionObj.isAuthentication) {
             var jsonData = {
               "clientId": connectionObj.botDetails.clientId,
@@ -62,7 +63,10 @@ export class AppComponent {
     this.service.grantCall(params.token, params.botid, params.agentassisturl).then((res) => {
       console.log(res, "sucess")
       this.isGrantSuccess = true;
-      this.webSocketService.socketConnection();
+      this.handleSubjectService.setConnectionDetails(params);
+      setTimeout(() => {
+        this.webSocketService.socketConnection();
+      }, 100);
     }).catch((err) => {
       if (err.status === 500) {
         this.errorMsg = "Issue identified with the backend services! Please reach out to AgentAssist Admin.";

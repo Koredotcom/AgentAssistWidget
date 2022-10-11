@@ -56,7 +56,6 @@ export class HomeComponent implements OnInit {
       console.log(urlParams, "inside home component");
       if (urlParams && urlParams?.token) {
         this.connectionDetails = urlParams;
-        this.emitEvents();
         this.eventListenerFromParent();
       }
     });
@@ -144,28 +143,6 @@ export class HomeComponent implements OnInit {
       }
     });
 
-  }
-
-
-  emitEvents() {
-    console.log(this.connectionDetails, "connection details");
-    
-    let menu_request_params : any = {
-      botId : this.connectionDetails.botId,
-      conversationId : this.connectionDetails.conversationId,
-      experience : this.connectionDetails.isCall == "false" ? 'chat' : 'voice'
-    }
-    let parsedCustomData: any = {};
-    let welcomeMessageParams: any = {
-      'waitTime': 2000,
-      'userName': parsedCustomData?.userName || parsedCustomData?.fName + parsedCustomData?.lName || 'user',
-      'id': this.connectionDetails.conversationId,
-      "isSendWelcomeMessage": true
-    }
-    console.log(menu_request_params, "menu_prams");
-    
-    this.websocketService.emitEvents(EVENTS.welcome_message_request, welcomeMessageParams);
-    this.websocketService.emitEvents(EVENTS.agent_menu_request, menu_request_params);
   }
 
   isChecked() {

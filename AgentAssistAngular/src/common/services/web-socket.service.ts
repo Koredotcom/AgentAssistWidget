@@ -46,8 +46,28 @@ export class WebSocketService {
     this._agentAsisstSocket = io(`${this.connectionDetails.agentassisturl}/koreagentassist`, webSocketConnection);
     this._agentAsisstSocket.on("connect", () => {
       console.log("connection done");
+      this.commonEmitEvents();
       this.listenEvents();
     });
+  }
+
+  commonEmitEvents(){
+    let menu_request_params : any = {
+      botId : this.connectionDetails.botId,
+      conversationId : this.connectionDetails.conversationId,
+      experience : this.connectionDetails.isCall == "false" ? 'chat' : 'voice'
+    }
+    let parsedCustomData: any = {};
+    let welcomeMessageParams: any = {
+      'waitTime': 2000,
+      'userName': parsedCustomData?.userName || parsedCustomData?.fName + parsedCustomData?.lName || 'user',
+      'id': this.connectionDetails.conversationId,
+      "isSendWelcomeMessage": true
+    }
+    console.log(menu_request_params, "menu_prams");
+    
+    this.emitEvents(EVENTS.welcome_message_request, welcomeMessageParams);
+    this.emitEvents(EVENTS.agent_menu_request, menu_request_params);
   }
 
   emitEvents(eventName,requestParams) {
