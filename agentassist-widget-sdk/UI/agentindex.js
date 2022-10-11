@@ -4231,7 +4231,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     "conversationId": _agentAssistDataObj.conversationId,
                                     "query": "",
                                     'experience': isCallConversation === 'true' ? 'voice':'chat',
-                                    "enable_override_userinput": false
+                                    "enable_override_userinput": true
                                 }
                                 isOverRideMode ? _agentAsisstSocket.emit('enable_override_userinput', toggleObj) : '';
                                 isOverRideMode = false;
@@ -4242,13 +4242,27 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     "conversationId": _agentAssistDataObj.conversationId,
                                     "query": "",
                                     'experience': isCallConversation === 'true' ? 'voice':'chat',
-                                    "enable_override_userinput": true
+                                    "enable_override_userinput": false
                                 }
                                 isOverRideMode ? _agentAsisstSocket.emit('enable_override_userinput', toggleObj) : '';
                                 isOverRideMode = false;
                             }
                         }
                         let isChecked =  togglePoint();
+                        // $(document).ready(function() {
+                        //     $('#toggle').click(function() {
+                        //         $(':checkbox').each(function() {
+                        //             this.click();
+                        //         });
+                        //     });
+                        // });
+                        // document.getElementById('checkProActive').onclick = function() {
+                        //     var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                        //     for (var checkbox of checkboxes) {
+                        //         console.log('Testing: ',checkbox);
+                        //         checkbox.checked = !checkbox.checked;
+                        //     }
+                        // }
 
                         if (target.id === 'sendMsg') {
                             let payload = target.dataset.msgData;
@@ -6617,7 +6631,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     <div class="t-title">Proactive</div>
                     <label class="kr-sg-toggle">
                         <div class="hover-tooltip">Proactive</div>
-                        <input type="checkbox" id="checkProActive" onclick="isChecked()">
+                        <input type="checkbox" id="checkProActive" value="YES" checked onclick="isChecked()">
                         <div class="slider"></div>
                     </label>
                 </div>
