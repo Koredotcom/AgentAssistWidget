@@ -17,37 +17,63 @@ export class AppComponent {
   isGrantSuccess = false;
   errorMsg;
   constructor(private webSocketService: WebSocketService, private service: CommonService,
-    private route: ActivatedRoute, private handleSubjectService : HandleSubjectService, private randomID : KoreGenerateuuidPipe){
-    
+    private route: ActivatedRoute, private handleSubjectService: HandleSubjectService, private randomID: KoreGenerateuuidPipe) {
+
   }
-  ngOnInit(){
+  ngOnInit() {
     this.route.queryParams
-    .subscribe(params => {
-      this.service.configObj = params;
-      console.log(params, "params");
-      
-      if(params.token && params.botid && params.agentassisturl){
-        this.service.grantCall(params.token, params.botid, params.agentassisturl).then((res)=>{
-          console.log(res,"sucess")
-          this.isGrantSuccess = true;
-          this.handleSubjectService.setConnectionDetails(params);
-          // this.webSocketService.socketConnection();
-        }).catch((err)=>{
-          this.errorMsg = "jwt token generation failed";
-        })
+      .subscribe(params => {
+        this.service.configObj = params;
+        if (params.token && params.botid && params.agentassisturl && params.conversationid) {
+          return this.grantCall(params);
         } else {
-          this.errorMsg = "Issue identified in configuration settings! Please reach out to AgentAssist Admin."
+          if (connectionObj.isAuthentication) {
+            var jsonData = {
+              "clientId": connectionObj.botDetails.clientId,
+              "clientSecret": connectionObj.botDetails.clientSecret,
+              "identity": this.randomID.transform(),
+              "aud": "",
+              "isAnonymous": false
+            };
+
+            this.service.callSts(jsonData).then((res) => {
+              let params = {};
+              let conversationId = this.randomID.transform();
+              params['token'] = res.jwt;
+              params['botid'] = connectionObj.botDetails.botId;
+              params['agentassisturl'] = connectionObj.envinormentUrl;
+              params['conversationid'] = conversationId
+              this.service.configObj = params;
+              this.grantCall(params)
+            }).catch((err) => {
+              this.errorMsg = "jwt token generation failed";
+            })
+          } else {
+            this.errorMsg = "Issue identified in configuration settings! Please reach out to AgentAssist Admin."
+          }
+
         }
-       
-      });
-  
-    }
 
-
-    // this.webSocketService.init();
-    // this.webSocketService.registerEvents();
-    // setTimeout(()=>{
-    //   this.service.triggerWelcomeEvent();
-    // }, 300)
+      }
+      );
   }
+
+  grantCall(params) {
+    this.service.grantCall(params.token, params.botid, params.agentassisturl).then((res) => {
+      console.log(res, "sucess")
+      this.isGrantSuccess = true;
+      this.webSocketService.socketConnection();
+    }).catch((err) => {
+      if (err.status === 500) {
+        this.errorMsg = "Issue identified with the backend services! Please reach out to AgentAssist Admin.";
+      } else {
+        this.errorMsg = "Issue identified in configuration settings! Please reach out to AgentAssist Admin.";
+      }
+      this.isGrantSuccess = false;
+    });
+  }
+
+}
+
+
 

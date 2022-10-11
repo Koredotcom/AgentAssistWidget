@@ -155,10 +155,10 @@ export class AssistService {
     return template
   }
 
-  getDialogAreaTemplate(responseId, data) {
+  getDialogAreaTemplate(responseId, data, imageFilePath, imageFileNames) {
     let template = `<div class="task-type" id="dialoguesArea">
       <div class="img-block-info">
-          <img src="./images/dialogtask.svg">
+          <img src="${imageFilePath}${imageFileNames['DIALOG_TASK']}">
       </div>
       <div class="content-dialog-task-type" id="dialogSuggestions-${responseId}">
         <div class="type-with-img-title">Dialog task (${data.suggestions.dialogs.length})</div>
@@ -167,10 +167,10 @@ export class AssistService {
     return template;
   }
 
-  getFaqAreaTemplate(responseId, data) {
+  getFaqAreaTemplate(responseId, data, imageFilePath, imageFileNames) {
     let template = `<div class="task-type" id="faqssArea">
     <div class="img-block-info">
-        <img src="./images/kg.svg">
+        <img src="${imageFilePath}${imageFileNames['FAQ_SUGGESTION']}">
     </div>
     <div class="content-dialog-task-type" id="faqsSuggestions-${responseId}">
         <div class="type-with-img-title">FAQ (${data.suggestions.faqs.length})</div>
@@ -180,10 +180,10 @@ export class AssistService {
     return template;
   }
 
-  getArticleAreaTemplate(responseId, data) {
+  getArticleAreaTemplate(responseId, data, imageFilePath, imageFileNames) {
     let template = `<div class="task-type" id="articlesArea">
     <div class="img-block-info">
-        <img src="./images/kg.svg">
+        <img src="${imageFilePath}${imageFileNames['FAQ_SUGGESTION']}">
     </div>
     <div class="content-dialog-task-type" id="articleSuggestions-${responseId}">
         <div class="type-with-img-title">Articles (${data.suggestions.articles.length})</div>
@@ -280,6 +280,19 @@ export class AssistService {
       <img src="${imageFilePath}${imageFileNames['WARNING']}" style="padding-right: 8px;">
       <span style="font-size: 12px; line-height: 18px; color: #202124;">Incorrect input format<span>
   </div>`
+    return template;
+  }
+
+  agentUttInfoTemplate(data , responseId, imageFilePath, imageFileNames){
+    let template =  `
+    <div class="agent-utt-info" id="agentUttInfo-${responseId}">
+    <div class="user-img">
+        <img src="${imageFilePath}${imageFileNames['USERICON']}">
+    </div>
+    <div class="text-user" >${data.userInput}</div>
+    </div>
+    <div class="dialog-task-run-sec hide" id="automationSuggestions-${responseId}">
+    </div>`
     return template;
   }
 

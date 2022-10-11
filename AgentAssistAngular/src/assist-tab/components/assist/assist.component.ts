@@ -401,15 +401,7 @@ export class AssistComponent implements OnInit {
         })
       }
       this.commonService.userIntentInput = data.userInput;
-      let htmls = `
-<div class="agent-utt-info" id="agentUttInfo-${responseId}">
-<div class="user-img">
-    <img src="./images/userIcon.svg">
-</div>
-<div class="text-user" >${data.userInput}</div>
-</div>
-<div class="dialog-task-run-sec hide" id="automationSuggestions-${responseId}">
-</div>`;
+      let htmls = this.assisttabService.agentUttInfoTemplate(data , responseId, this.imageFilePath, this.imageFileNames)
 
       dynamicBlock.innerHTML = dynamicBlock.innerHTML + htmls;
 
@@ -423,13 +415,13 @@ export class AssistComponent implements OnInit {
         if (data.suggestions.dialogs?.length > 0) {
 
           let automationSuggestions = document.getElementById(`automationSuggestions-${responseId}`);
-          let dialogAreaHtml = this.assisttabService.getDialogAreaTemplate(responseId, data);
+          let dialogAreaHtml = this.assisttabService.getDialogAreaTemplate(responseId, data, this.imageFilePath, this.imageFileNames);
           automationSuggestions.innerHTML += dialogAreaHtml;
         }
 
         if (data.suggestions.faqs?.length > 0) {
           let automationSuggestions = document.getElementById(`automationSuggestions-${responseId}`);
-          let faqAreaHtml = this.assisttabService.getFaqAreaTemplate(responseId, data);
+          let faqAreaHtml = this.assisttabService.getFaqAreaTemplate(responseId, data, this.imageFilePath, this.imageFileNames);
           automationSuggestions.innerHTML += faqAreaHtml;
         }
 
@@ -437,7 +429,7 @@ export class AssistComponent implements OnInit {
           data.suggestions = this.commonService.formatSearchResponse(data.suggestions);
           if (data.suggestions.articles?.length > 0) {
             let automationSuggestions = document.getElementById(`automationSuggestions-${responseId}`);
-            let articleAreaHtml = this.assisttabService.getArticleAreaTemplate(responseId, data);
+            let articleAreaHtml = this.assisttabService.getArticleAreaTemplate(responseId, data, this.imageFilePath, this.imageFileNames);
             automationSuggestions.innerHTML += articleAreaHtml;
           }
 
@@ -677,7 +669,7 @@ export class AssistComponent implements OnInit {
     if (a) {
       a.innerHTML = a.innerHTML + html;
     }
-    this.designAlterService.addWhiteBackgroundClassToNewMessage(this.scrollAtEnd, IdReferenceConst.DYNAMICBLOCK);
+
     if (this.scrollAtEnd) {
       this.scrollToBottom();
     }

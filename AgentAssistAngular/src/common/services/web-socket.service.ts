@@ -32,7 +32,7 @@ export class WebSocketService {
       if(urlParams && urlParams?.token){
         this.connectionDetails = urlParams;
         console.log(this.connectionDetails, "connection details");
-        this.socketConnection();
+        // this.socketConnection();
       }
     })
   }
