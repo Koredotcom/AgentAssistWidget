@@ -51,7 +51,7 @@
             </div>
         </div>
 
-        <perfect-scrollbar class="home-scroll-bar" #psBottom (psYReachEnd)="onScrollEvent($event)" (psYReachStart)="onScrollEvent($event)" (psScrollUp)="onScrollEvent($event)">
+        <perfect-scrollbar id="homeScrollBar" class="home-scroll-bar" #psBottom (psYReachEnd)="onScrollEvent($event)" (psYReachStart)="onScrollEvent($event)" (psScrollUp)="onScrollEvent($event)">
             <div class="body-data-container if-suggestion-search" id="bodyContainer">
                 <div class="dialog-task-data" id="dynamicBlocksData">
                     <ng-container>

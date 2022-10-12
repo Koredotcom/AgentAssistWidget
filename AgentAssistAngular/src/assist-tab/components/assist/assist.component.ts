@@ -39,18 +39,12 @@ export class AssistComponent implements OnInit {
   agentAssistResponse: any = {};
   dropdownHeaderUuids: any;
   dialogPositionId: string;
-  scrollAtEnd: boolean = true;
   connectionDetails: any;
   isInitialDialogOnGoing: boolean = false
   interruptDialog: any = {};
   answerPlaceableIDs: any = [];
   entitiestValueArray: any = [];
   previousEntitiesValue: string;
-  numberOfNewMessages: number = 0;
-  newlyAddedMessagesUUIDlist = [];
-  newlyAddedIdList = [];
-  lastElementBeforeNewMessage: any;
-  removedIdListOnScroll: any = [];
   welcomeMsgResponse: any;
   waitingTimeForUUID: number = 100;
 
@@ -102,7 +96,7 @@ export class AssistComponent implements OnInit {
 
     let subscription3 = this.websocketService.endOfTaskResponse$.subscribe((endoftaskresponse: any) => {
       console.log(endoftaskresponse, "end of task response");
-      if (endoftaskresponse && this.dialogPositionId == endoftaskresponse.positionId) {
+      if (endoftaskresponse && (this.dialogPositionId == endoftaskresponse.positionId || (endoftaskresponse.author && endoftaskresponse.author.type == 'USER'))) {
         this.dialogTerminatedOrIntrupptedInMyBot();
       }
     })
@@ -203,7 +197,7 @@ export class AssistComponent implements OnInit {
       $(`#overRideBtn-${uuid}`).addClass('hide');
       $(`#cancelOverRideBtn-${uuid}`).removeClass('hide');
       this.isOverRideMode = true;
-      this.designAlterService.addWhiteBackgroundClassToNewMessage(this.scrollAtEnd, IdReferenceConst.DYNAMICBLOCK);
+      this.designAlterService.addWhiteBackgroundClassToNewMessage(this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd, IdReferenceConst.DYNAMICBLOCK);
       this.scrollToBottom();
     });
   }
@@ -224,12 +218,23 @@ export class AssistComponent implements OnInit {
       $(`#cancelOverRideBtn-${uuid}`).addClass('hide');
       $('#inputFieldForAgent').remove();
       this.isOverRideMode = false;
-      this.designAlterService.addWhiteBackgroundClassToNewMessage(this.scrollAtEnd, IdReferenceConst.DYNAMICBLOCK);
+      this.designAlterService.addWhiteBackgroundClassToNewMessage(this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd, IdReferenceConst.DYNAMICBLOCK);
       this.scrollToBottom();
     })
   }
 
-  clickEvents(eventName, uuid?, dialogId?) {
+  handleRunButtonClick(uuid, data){
+    document.getElementById(IdReferenceConst.ASSIST_RUN_BUTTON + '-' + uuid).addEventListener('click', (event) => {
+      console.log("click event");
+      let runEventObj : any = {
+        agentRunButton : false,
+        intentName : data.name
+      }
+      this.handleSubjectService.setRunButtonClickEvent(runEventObj);
+    });
+  }
+
+  clickEvents(eventName, uuid?, dialogId?, data?) {
     if (eventName == IdReferenceConst.ASSISTTERMINATE) {
       this.terminateButtonClick(uuid)
     } else if (eventName == IdReferenceConst.OVERRIDE_BTN) {
@@ -238,6 +243,10 @@ export class AssistComponent implements OnInit {
       this.handleCancelOverrideBtnClick(uuid, dialogId);
     } else if (eventName == IdReferenceConst.DROPDOWN_HEADER) {
       this.designAlterService.handleDropdownToggle(uuid);
+    } else if (eventName == IdReferenceConst.ASSIST_RUN_BUTTON){
+      console.log("assist run button clicked");
+      this.handleRunButtonClick(uuid, data);
+      
     }
   }
 
@@ -521,6 +530,7 @@ export class AssistComponent implements OnInit {
              </div>`;
             enentiesDomDiv.append(entiteSaveAndCancelDiv);
           }
+          this.clickEvents(IdReferenceConst.ASSIST_RUN_BUTTON,uuids,this.dialogPositionId, ele);
         });
 
         data.suggestions.faqs?.forEach((ele, index) => {
@@ -641,8 +651,8 @@ export class AssistComponent implements OnInit {
 
     if (this.commonService.isAutomationOnGoing && !data.suggestions) {
       this.welcomeMsgResponse = data;
-      if (this.numberOfNewMessages == 1) {
-        this.numberOfNewMessages = 0;
+      if (this.commonService.scrollContent[ProjConstants.ASSIST].numberOfNewMessages == 1) {
+        this.commonService.scrollContent[ProjConstants.ASSIST].numberOfNewMessages = 0;
         this.scrollToBottom();
       }
     }
@@ -664,16 +674,19 @@ export class AssistComponent implements OnInit {
     let result = this.templateRenderClassService.getResponseUsingTemplate(data);
     console.log(data, "data inside assist response", result);
 
-    let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(result)[0].innerHTML;
-    let a = document.getElementById(IdReferenceConst.displayData + `-${uuids}`);
-    if (a) {
-      a.innerHTML = a.innerHTML + html;
+    let renderedMessage = this.templateRenderClassService.AgentChatInitialize.renderMessage(result);
+    if(renderedMessage && renderedMessage[0]){
+      let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(result)[0].innerHTML;
+      let a = document.getElementById(IdReferenceConst.displayData + `-${uuids}`);
+      if (a) {
+        a.innerHTML = a.innerHTML + html;
+      }
     }
 
-    if (this.scrollAtEnd) {
+    if (this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd) {
       this.scrollToBottom();
     }
-    this.designAlterService.addWhiteBackgroundClassToNewMessage(this.scrollAtEnd, IdReferenceConst.DYNAMICBLOCK);
+    this.designAlterService.addWhiteBackgroundClassToNewMessage(this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd, IdReferenceConst.DYNAMICBLOCK);
   }
 
   handleSeeMoreButton(array, type) {
@@ -685,13 +698,13 @@ export class AssistComponent implements OnInit {
   }
 
   updateNewMessageUUIDList(responseId) {
-    if (!this.scrollAtEnd) {
-      if (this.numberOfNewMessages) {
-        if (this.newlyAddedMessagesUUIDlist.indexOf(responseId) == -1) {
-          this.newlyAddedMessagesUUIDlist.push(responseId);
-          this.newlyAddedIdList = this.getActualRenderedIdList();
+    if (!this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd) {
+      if (this.commonService.scrollContent[ProjConstants.ASSIST].numberOfNewMessages) {
+        if (this.commonService.scrollContent[ProjConstants.ASSIST].newlyAddedMessagesUUIDlist.indexOf(responseId) == -1) {
+          this.commonService.scrollContent[ProjConstants.ASSIST].newlyAddedMessagesUUIDlist.push(responseId);
+          this.commonService.scrollContent[ProjConstants.ASSIST].newlyAddedIdList = this.getActualRenderedIdList();
         } else {
-          this.newlyAddedIdList = this.getActualRenderedIdList()
+          this.commonService.scrollContent[ProjConstants.ASSIST].newlyAddedIdList = this.getActualRenderedIdList()
         }
       }
       this.addUnreadMessageHtml();
@@ -701,7 +714,7 @@ export class AssistComponent implements OnInit {
   getActualRenderedIdList() {
     let normalIdsList = ['addRemoveDropDown', 'automationSuggestions', 'smallTalk'];
     let actualRenderedIdList = [];
-    for (let uuid of this.newlyAddedMessagesUUIDlist) {
+    for (let uuid of this.commonService.scrollContent[ProjConstants.ASSIST].newlyAddedMessagesUUIDlist) {
       for (let name of normalIdsList) {
         let childIdList = [];
         childIdList = this.getChildRenderedIdList(name + '-' + uuid, uuid, name);
@@ -716,26 +729,26 @@ export class AssistComponent implements OnInit {
   }
 
   addUnreadMessageHtml() {
-    if (!this.scrollAtEnd && this.numberOfNewMessages) {
+    if (!this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd && this.commonService.scrollContent[ProjConstants.ASSIST].numberOfNewMessages) {
       $('.unread-msg').remove();
       let unreadHtml = ` <div class="unread-msg last-msg-white-bg">
         <div class="text-dialog-task-end">Unread Messages</div>     
                    </div>`;
-      this.UnCollapseDropdownForLastElement(this.lastElementBeforeNewMessage);
+      this.designAlterService.UnCollapseDropdownForLastElement(this.commonService.scrollContent[ProjConstants.ASSIST].lastElementBeforeNewMessage);
 
-      for (let i = 0; i < this.newlyAddedIdList.length; i++) {
-        if (document.getElementById(this.newlyAddedIdList[i])) {
-          let elements: any = document.getElementById(this.newlyAddedIdList[i]);
+      for (let i = 0; i < this.commonService.scrollContent[ProjConstants.ASSIST].newlyAddedIdList.length; i++) {
+        if (document.getElementById(this.commonService.scrollContent[ProjConstants.ASSIST].newlyAddedIdList[i])) {
+          let elements: any = document.getElementById(this.commonService.scrollContent[ProjConstants.ASSIST].newlyAddedIdList[i]);
           if (elements.className == 'content-dialog-task-type' && (elements.id.includes('dialogSuggestions') || elements.id.includes('faqsSuggestions') || elements.id.includes('articleSuggestions'))) {
-            let agentUttInfoId = this.newlyAddedIdList[i].split('-');
+            let agentUttInfoId = this.commonService.scrollContent[ProjConstants.ASSIST].newlyAddedIdList[i].split('-');
             agentUttInfoId.shift();
             agentUttInfoId = 'agentUttInfo-' + agentUttInfoId.join('-');
             if (document.getElementById(agentUttInfoId)) {
               elements = document.getElementById(agentUttInfoId);
             }
             elements?.insertAdjacentHTML('beforeBegin', unreadHtml);
-          } else if (elements.id.includes('stepsrundata') && this.lastElementBeforeNewMessage.id.includes('stepsrundata')) {
-            elements = document.getElementById(this.lastElementBeforeNewMessage.id);
+          } else if (elements.id.includes('stepsrundata') && this.commonService.scrollContent[ProjConstants.ASSIST].lastElementBeforeNewMessage.id.includes('stepsrundata')) {
+            elements = document.getElementById(this.commonService.scrollContent[ProjConstants.ASSIST].lastElementBeforeNewMessage.id);
             elements?.insertAdjacentHTML('afterend', unreadHtml);
           }
           break;
@@ -752,13 +765,13 @@ export class AssistComponent implements OnInit {
         let dialogueSuggestionId = 'dialogSuggestions-' + uuid;
         let faqSuggestionId = 'faqsSuggestions-' + uuid;
         let articleSuggestionId = 'articleSuggestions-' + uuid;
-        if (this.removedIdListOnScroll.indexOf(dialogueSuggestionId) == -1) {
+        if (this.commonService.scrollContent[ProjConstants.ASSIST].removedIdListOnScroll.indexOf(dialogueSuggestionId) == -1) {
           childIdList.push(dialogueSuggestionId);
         }
-        if (this.removedIdListOnScroll.indexOf(faqSuggestionId) == -1) {
+        if (this.commonService.scrollContent[ProjConstants.ASSIST].removedIdListOnScroll.indexOf(faqSuggestionId) == -1) {
           childIdList.push(faqSuggestionId);
         }
-        if (this.removedIdListOnScroll.indexOf(articleSuggestionId) == -1) {
+        if (this.commonService.scrollContent[ProjConstants.ASSIST].removedIdListOnScroll.indexOf(articleSuggestionId) == -1) {
           childIdList.push(articleSuggestionId);
         }
       } else {
@@ -766,17 +779,17 @@ export class AssistComponent implements OnInit {
           let stepsrunList: any = dynamicBlockElement.querySelectorAll('.steps-run-data');
           for (let node of stepsrunList) {
             if (node.id) {
-              if (this.removedIdListOnScroll.indexOf(node.id) == -1) {
+              if (this.commonService.scrollContent[ProjConstants.ASSIST].removedIdListOnScroll.indexOf(node.id) == -1) {
                 childIdList.push(node.id);
               }
             }
           }
-          if (childIdList.indexOf(this.lastElementBeforeNewMessage.id) != -1) {
-            childIdList.splice(0, childIdList.indexOf(this.lastElementBeforeNewMessage.id) + 1);
+          if (childIdList.indexOf(this.commonService.scrollContent[ProjConstants.ASSIST].lastElementBeforeNewMessage.id) != -1) {
+            childIdList.splice(0, childIdList.indexOf(this.commonService.scrollContent[ProjConstants.ASSIST].lastElementBeforeNewMessage.id) + 1);
           }
         } else {
           let actualParentId = name + '-' + uuid;
-          if (this.removedIdListOnScroll.indexOf(actualParentId) == -1) {
+          if (this.commonService.scrollContent[ProjConstants.ASSIST].removedIdListOnScroll.indexOf(actualParentId) == -1) {
             childIdList.push(actualParentId);
           }
         }
@@ -785,26 +798,10 @@ export class AssistComponent implements OnInit {
     return childIdList;
   }
 
-  UnCollapseDropdownForLastElement(lastElement) {
-    if (lastElement.className.includes('steps-run-data')) {
-      let lastElementId = this.getUUIDFromId(lastElement.id);
-      lastElementId = lastElementId.split("*")[0];
-      let collapseElement = document.getElementById('dropDownData-' + lastElementId);
-      $(collapseElement).removeClass('hide');
-    }
-  }
-
-  getUUIDFromId(id) {
-    if (id) {
-      let idArray = id.split('-');
-      idArray.shift();
-      return (idArray.join('-'));
-    }
-    return '-';
-  }
+  
 
   collapseOldDialoguesInAssist() {
-    if (this.scrollAtEnd) {
+    if (this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd) {
       if ($(`#dynamicBlocksData .collapse-acc-data`).length > 0) {
         let listItems = $("#dynamicBlocksData .collapse-acc-data");
         listItems.each(function (idx, collapseElement) {
@@ -824,15 +821,15 @@ export class AssistComponent implements OnInit {
       appState[this.connectionDetails.conversationId]['automationGoingOnAfterRefresh'] = this.commonService.isAutomationOnGoing;
       localStorage.setItem('agentAssistState', JSON.stringify(appState))
     }
-    this.commonService.addFeedbackHtmlToDom(this.dropdownHeaderUuids);
+    this.commonService.addFeedbackHtmlToDom(this.dropdownHeaderUuids,this.commonService.scrollContent[ProjConstants.ASSIST].lastElementBeforeNewMessage);
     this.scrollToBottom();
   }
 
   updateNumberOfMessages() {
-    this.numberOfNewMessages += 1;
+    this.commonService.scrollContent[ProjConstants.ASSIST].numberOfNewMessages += 1;
     $(".scroll-bottom-btn").addClass("new-messages");
-    $(".scroll-bottom-btn span").text(this.numberOfNewMessages + ' new');
-    if (this.numberOfNewMessages == 1) {
+    $(".scroll-bottom-btn span").text(this.commonService.scrollContent[ProjConstants.ASSIST].numberOfNewMessages + ' new');
+    if (this.commonService.scrollContent[ProjConstants.ASSIST].numberOfNewMessages == 1) {
       this.removeWhiteBackgroundToSeenMessages();
     }
   }

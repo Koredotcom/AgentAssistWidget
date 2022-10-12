@@ -39,6 +39,7 @@ export class MybotComponent implements OnInit {
   scrollAtEnd: boolean = true;
   connectionDetails: any;
   interruptDialog: any = {};
+  lastElementBeforeNewMessage : any;
 
   constructor(public handleSubjectService: HandleSubjectService, public randomUUIDPipe: RandomUUIDPipe,
     public mybotDataService: MybotDataService, public removeSpecialCharPipe: RemoveSpecialCharPipe,
@@ -234,7 +235,7 @@ export class MybotComponent implements OnInit {
       appState[this.connectionDetails.conversationId]['automationGoingOnAfterRefreshMyBot'] = this.commonService.isMyBotAutomationOnGoing;
       localStorage.setItem('agentAssistState', JSON.stringify(appState))
     }
-    this.commonService.addFeedbackHtmlToDom(this.myBotDropdownHeaderUuids, 'runForAgentBot',);
+    this.commonService.addFeedbackHtmlToDom(this.myBotDropdownHeaderUuids, this.lastElementBeforeNewMessage, 'runForAgentBot',);
   }
 
   terminateButtonClick(uuid) {

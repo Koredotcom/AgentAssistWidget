@@ -78,8 +78,8 @@ export class DesignAlterService {
 
   isScrolledIntoView(elem) {
     if (elem) {
-        var parentRec = document.getElementById(IdReferenceConst.BODYCONTAINER).getBoundingClientRect();
-        var childRec = elem.getBoundingClientRect();
+        let parentRec = document.getElementById(IdReferenceConst.HOMESCROLLBAR).getBoundingClientRect();
+        let childRec = elem.getBoundingClientRect();
         console.log(childRec, "before top");
         
         if(childRec.top == 0 && $(elem).parent().attr('class').includes('hide')){
@@ -87,11 +87,11 @@ export class DesignAlterService {
                 elem = $(elem).parent().parent()[0];
             }
         }
-        var paddingTop = 0;
+        let paddingTop = 0;
         childRec = elem.getBoundingClientRect();
         try{
             if (window.getComputedStyle(elem, null).getPropertyValue('padding-top')) {
-                var paddingTopStr = window.getComputedStyle(elem, null).getPropertyValue('padding-top');
+                let paddingTopStr = window.getComputedStyle(elem, null).getPropertyValue('padding-top');
                 if (paddingTopStr.length && paddingTopStr.length - 2) {
                     paddingTopStr = paddingTopStr.substring(0, paddingTopStr.length - 2);
                     paddingTop = parseInt(paddingTopStr) ? parseInt(paddingTopStr) : 0;
@@ -108,18 +108,18 @@ export class DesignAlterService {
 
   getLastElement(id) {
     let lastElement: any = ''
-    var dynamicBlockElements = document.getElementById(id);
+    let dynamicBlockElements = document.getElementById(id);
     if (id.includes('smallTalk') && dynamicBlockElements) {
       lastElement = dynamicBlockElements;
     } else if (dynamicBlockElements) {
-      var numOfdynamicBlockElements = dynamicBlockElements.children;
+      let numOfdynamicBlockElements = dynamicBlockElements.children;
       if (numOfdynamicBlockElements) {
-        for (var i = 0; i < numOfdynamicBlockElements.length; i++) {
+        for (let i = 0; i < numOfdynamicBlockElements.length; i++) {
           lastElement = numOfdynamicBlockElements[i];
         }
         // if (lastElement.className == 'dialog-task-run-sec') {
-        //     var numOfdynamicBlockElements = lastElement.children;
-        //     for (var i = 0; i < numOfdynamicBlockElements.length; i++) {
+        //     let numOfdynamicBlockElements = lastElement.children;
+        //     for (let i = 0; i < numOfdynamicBlockElements.length; i++) {
         //         lastElement = numOfdynamicBlockElements[i];
         //         if ($(lastElement).attr("id") == 'dialoguesArea') {
         //             let typeInfoRunNodes = lastElement.querySelectorAll('.content-dialog-task-type');
@@ -165,5 +165,15 @@ export class DesignAlterService {
        }
      }); 
   }
+
+  UnCollapseDropdownForLastElement(lastElement) {
+    if (lastElement.className.includes('steps-run-data')) {
+      let lastElementId = this.getUUIDFromId(lastElement.id);
+      lastElementId = lastElementId.split("*")[0];
+      let collapseElement = document.getElementById('dropDownData-' + lastElementId);
+      $(collapseElement).removeClass('hide');
+    }
+  }
+
 
 }

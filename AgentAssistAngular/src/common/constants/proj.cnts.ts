@@ -46,6 +46,7 @@ export const ProjConstants = {
 }
 
 export const IdReferenceConst = {
+    HOMESCROLLBAR : 'homeScrollBar',
     BODYCONTAINER : 'bodyContainer',
     DROPDOWNDATA : "dropDownData",
     USERINPUT : "userInput",
@@ -68,7 +69,8 @@ export const IdReferenceConst = {
     CANCEL_OVERRIDE_BTN : 'cancelOverRideBtn',
     INPUT_FIELD_AGENT : 'inputFieldForAgent',
     ARTICLE_SEND_MSG : 'articlesendMsg',
-    DROPDOWN_HEADER : 'dropDownHeader'
+    DROPDOWN_HEADER : 'dropDownHeader',
+    ASSIST_RUN_BUTTON : 'run'
 }
 
 

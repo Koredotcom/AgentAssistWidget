@@ -34,7 +34,7 @@ export class HomeComponent implements OnInit {
 
   constructor(public handleSubjectService: HandleSubjectService, public websocketService: WebSocketService,
     public sanitizeHTMLPipe: SanitizeHtmlPipe, private commonService: CommonService, private koregenerateUUIDPipe: KoreGenerateuuidPipe,
-    private designAlterService : DesignAlterService) { }
+    private designAlterService: DesignAlterService) { }
 
   ngOnInit(): void {
     this.subscribeEvents();
@@ -209,40 +209,65 @@ export class HomeComponent implements OnInit {
   scrollToBottom($event) {
     console.log("inside scroll to bottom home component");
     setTimeout(() => {
-      this.psBottom.directiveRef.update(); 
+      this.psBottom.directiveRef.update();
     }, 100);
   }
 
-  onScrollEvent(event){
-    if(event && event?.type){
-      if(event.type == this.projConstants.PS_Y_REACH_START){
-        console.log("ps reach start");
-        
-      }else if(event.type == this.projConstants.PS_Y_REACH_END){
-        console.log("ps reach end");
-        
-      }else if(event.type == this.projConstants.PS_SCROLL_UP){
-        console.log("ps scroll top");
-        setTimeout(() => {
-          this.updateScrollButton()
-        }, 10);
-        
+  onScrollEvent(event) {
+    if(this.activeTab == this.projConstants.ASSIST){
+
+      console.log(this.commonService.scrollContent, "scroll content");
+      
+      if (event && event?.type) {
+        if (event.type == this.projConstants.PS_Y_REACH_START) {
+          console.log("ps reach start");
+  
+        }else if(event.type == this.projConstants.PS_Y_REACH_END){
+          this.commonService.scrollContent[this.activeTab].scrollAtEnd = true;
+          this.commonService.checkDropdownCollapaseState(this.commonService.scrollContent[this.activeTab].lastElementBeforeNewMessage, this.activeTab);
+          if(this.commonService.scrollContent[this.activeTab].scrollAtEnd){
+              this.commonService.updateScrollAtEndVariables(this.activeTab);
+          }else{
+              $(".scroll-bottom-show-btn").removeClass('hide');
+          }
+          let dynamicBlockId = (this.activeTab == this.projConstants.ASSIST) ? IdReferenceConst.DYNAMICBLOCK : IdReferenceConst.MYBOTAUTOMATIONBLOCK;
+          this.commonService.scrollContent[this.activeTab].lastElementBeforeNewMessage = this.designAlterService.getLastElement(dynamicBlockId);
+          this.designAlterService.addWhiteBackgroundClassToNewMessage(this.commonService.scrollContent[this.activeTab].scrollAtEnd, dynamicBlockId);
+        } else if (event.type == this.projConstants.PS_SCROLL_DOWN) {
+          console.log("ps reach end");
+          let dynamicBlockId = (this.activeTab == this.projConstants.ASSIST) ? IdReferenceConst.DYNAMICBLOCK : IdReferenceConst.MYBOTAUTOMATIONBLOCK;
+          let lastelement = this.designAlterService.getLastElement(dynamicBlockId);
+          this.commonService.updateNewMessageCount(this.commonService.scrollContent[this.activeTab].lastElementBeforeNewMessage, this.activeTab);
+          let scrollAtEnd = !this.designAlterService.isScrolledIntoView(lastelement) ? true : false;
+          if (scrollAtEnd) {
+            $(".scroll-bottom-show-btn").addClass('hide');
+            this.commonService.updateScrollAtEndVariables(this.activeTab);
+            this.commonService.scrollContent[this.activeTab].lastElementBeforeNewMessage = this.designAlterService.getLastElement(dynamicBlockId);
+            this.designAlterService.addWhiteBackgroundClassToNewMessage(scrollAtEnd, dynamicBlockId);
+          }
+        } else if (event.type == this.projConstants.PS_SCROLL_UP) {
+          console.log("ps scroll top");
+          setTimeout(() => {
+            this.updateScrollButton()
+          }, 10);
+  
+        }
       }
     }
-    
+
   }
 
-  updateScrollButton(){
-    let dynamicBlockId = (this.activeTab == this.projConstants.ASSIST) ?  IdReferenceConst.DYNAMICBLOCK : IdReferenceConst.MYBOTAUTOMATIONBLOCK;
+  updateScrollButton() {
+    let dynamicBlockId = (this.activeTab == this.projConstants.ASSIST) ? IdReferenceConst.DYNAMICBLOCK : IdReferenceConst.MYBOTAUTOMATIONBLOCK;
     let lastelement = this.designAlterService.getLastElement(dynamicBlockId);
     console.log(lastelement, "lastelement inside update scroll");
     let scrollAtEnd = !this.designAlterService.isScrolledIntoView(lastelement) ? true : false;
     console.log(scrollAtEnd, "scrollatend");
-    
+
     if (!scrollAtEnd) {
-        $(".scroll-bottom-show-btn").removeClass('hide');
-    }else{
-        $(".scroll-bottom-show-btn").addClass('hide');
+      $(".scroll-bottom-show-btn").removeClass('hide');
+    } else {
+      $(".scroll-bottom-show-btn").addClass('hide');
     }
   }
 

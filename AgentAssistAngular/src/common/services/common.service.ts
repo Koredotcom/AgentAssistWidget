@@ -4,8 +4,9 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 import { EVENTS } from '../helper/events';
 import { WebSocketService } from './web-socket.service';
 import * as $ from 'jquery';
-import { IdReferenceConst } from '../constants/proj.cnts';
-declare var  $: any;
+import { IdReferenceConst, ProjConstants } from '../constants/proj.cnts';
+import { DesignAlterService } from './design-alter.service';
+declare var $: any;
 @Injectable({
   providedIn: 'root'
 })
@@ -15,13 +16,27 @@ export class CommonService {
   isCallConversation: boolean = false;
   isAutomationOnGoing: boolean = false;
   isMyBotAutomationOnGoing: boolean = false;
-  automationNotRanArray : any = [];
-  userIntentInput : string;
+  automationNotRanArray: any = [];
+  userIntentInput: string;
   isParsedPayload;
-
-  constructor(private route: ActivatedRoute, private webSocketService: WebSocketService) {
+  scrollContent: any = {};
+  constructor(private route: ActivatedRoute, private webSocketService: WebSocketService, private designAlterService: DesignAlterService) {
     console.log("--------------------------cam to common serviceeeeeeeeeeeeeeeeeee");
+    this.setScrollContent();
+  }
 
+  setScrollContent() {
+    this.scrollContent = {
+      [ProjConstants.ASSIST]: {
+        numberOfNewMessages: 0,
+        newlyAddedIdList: [],
+        newlyAddedMessagesUUIDlist: [],
+        removedIdListOnScroll: [],
+        lastElement : '',
+        lastElementBeforeNewMessage : '',
+        scrollAtEnd : true
+      }
+    }
   }
 
   getSampleSearchResponse() {
@@ -99,7 +114,7 @@ export class CommonService {
   }
 
 
-  addFeedbackHtmlToDom(headerUUids, runForAgentBot?) {
+  addFeedbackHtmlToDom(headerUUids, lastElementBeforeNewMessage, runForAgentBot?) {
     let dropDownData;
     let endOfDialoge;
     if (runForAgentBot) {
@@ -164,17 +179,17 @@ export class CommonService {
     // setTimeout(() => {
     //     headerUUids = undefined;
     // }, 100)
-    // UnCollapseDropdownForLastElement(lastElementBeforeNewMessage);
+    this.designAlterService.UnCollapseDropdownForLastElement(lastElementBeforeNewMessage);
+    ;
   }
-
   
 
   grantCall(jwtID, botid, url): Promise<any>{
     var payload = {
       "assertion": jwtID,
       "botInfo": {
-          "chatBot": "sample Bot",
-          "taskBotId": botid
+        "chatBot": "sample Bot",
+        "taskBotId": botid
       },
       "token": {}
     }
@@ -203,24 +218,79 @@ export class CommonService {
     
   }
 
-  getAccessToken(){
+  getAccessToken() {
     return this.grantResponseObj.authorization.accessToken;
   }
 
-  callSts(jsonData){
+  callSts(jsonData) {
     return $.ajax({
       url: "https://mk2r2rmj21.execute-api.us-east-1.amazonaws.com/dev/users/sts",
       type: 'post',
       data: jsonData,
       dataType: 'json',
       success: function (data) {
-         return data;
+        return data;
       },
       error: function (err) {
-          console.error("jwt token generation failed");
-          return err;
+        console.error("jwt token generation failed");
+        return err;
       }
-  }).promise();
+    }).promise();
+  }
+
+  checkDropdownCollapaseState(lastElement, tabType){
+    if(lastElement && lastElement.className.includes('steps-run-data')){
+        let lastElementId = this.designAlterService.getUUIDFromId(lastElement.id);
+        lastElementId = lastElementId.split("*")[0];
+        let collapseElement = document.getElementById('dropDownData-' + lastElementId);
+        if(collapseElement && collapseElement.className.includes('hide') && this.scrollContent[tabType].numberOfNewMessages){
+          this.scrollContent[tabType].scrollAtEnd = false;
+        }
+    }
+}
+
+
+  updateScrollAtEndVariables(tabType) {
+    $(".scroll-bottom-btn span").text('Scroll to bottom');
+    $(".scroll-bottom-btn").removeClass("new-messages");
+    $(".scroll-bottom-show-btn").addClass('hide');
+    this.scrollContent[tabType].numberOfNewMessages = 0;
+    this.scrollContent[tabType].newlyAddedMessagesUUIDlist = [];
+    this.scrollContent[tabType].newlyAddedIdList = [];
+    this.scrollContent[tabType].removedIdListOnScroll = [];
+  }
+
+  updateNewMessageCount(lastElementBeforeNewMessage, tabType) {
+    for (let id of this.scrollContent[tabType].newlyAddedIdList) {
+      let element = document.getElementById(id);
+      if (element) {
+        let inView = !this.designAlterService.isScrolledIntoView(element) ? true : false;
+        if (inView) {
+          this.scrollContent[tabType].removedIdListOnScroll.push(id);
+          this.scrollContent[tabType].newlyAddedIdList = this.scrollContent[tabType].newlyAddedIdList.filter(item => item !== id)
+          this.scrollContent[tabType].numberOfNewMessages = this.scrollContent[tabType].numberOfNewMessages > 0 ? this.scrollContent[tabType].numberOfNewMessages - 1 : 0;
+          if (id.includes('automationSuggestions')) {
+            let agentUttInfoId = id.split('-');
+            agentUttInfoId.shift();
+            agentUttInfoId = 'agentUttInfo-' + agentUttInfoId.join('-');
+            if (document.getElementById(agentUttInfoId)) {
+              lastElementBeforeNewMessage = document.getElementById(agentUttInfoId);
+            }
+          } else if (id.includes('stepsrundata')) {
+            lastElementBeforeNewMessage = document.getElementById(id);
+          } else {
+            lastElementBeforeNewMessage = this.designAlterService.getLastElement(id);
+          }
+
+          if (this.scrollContent[tabType].numberOfNewMessages) {
+            $(".scroll-bottom-btn").addClass("new-messages");
+            $(".scroll-bottom-btn span").text(this.scrollContent[tabType].numberOfNewMessages + ' new');
+          } else {
+            $(".scroll-bottom-btn span").text('Scroll to bottom');
+          }
+        }
+      }
+    }
   }
 
   async renderHistoryFeedBack(url){
