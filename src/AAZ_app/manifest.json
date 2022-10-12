@@ -29,7 +29,7 @@
     },
     {
       "name": "clientSecret",
-      "type": "text",
+      "type": "password",
       "required": true
      
     },

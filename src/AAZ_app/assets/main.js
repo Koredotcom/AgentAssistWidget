@@ -2,20 +2,11 @@
 
 // import config from "./config.json" assert { type: 'json' };
 // import Schema from "./schema.json" assert { type: 'json' };
-import schemaData from "./data.json" assert { type: 'json' };
+// import schemaData from "./data.json" assert { type: 'json' };
 
 
 var client = ZAFClient.init();
 var iframeURL = null;
-var zendeskBaseUrl;
-
-getBaseUrl();
-async function getBaseUrl(){
-  let _client = await client.context();
-  console.log(_client);
-  zendeskBaseUrl= `https://${_client.account.subdomain}.zendesk.com`
-}
-
 
 async function getRequesterName(client) {
 
@@ -86,46 +77,10 @@ function base64url(source) {
   return encodedSource;
 }
 
-async function postDataToSchema(){
-  try {
-    let options = {
-      url: `${zendeskBaseUrl}/api/sunshine/objects/records`,
-      type: 'POST',
-      data: JSON.stringify(schemaData)
-    }
-    let response = await client.request(options);
-    if(response.data)
-      return response.data
-    return null;
-  } catch (error) {
-    return null;
-  }
-}
+
 async function generateURL(settings) {
   return new Promise(async (resolve, reject) => {
 
-    let customDataUrl = `${zendeskBaseUrl}/api/sunshine/objects/records/`;
-
-    var schema = await getSchema();
-    // console.log(schema);
-    if(schema && Object.keys(schema).length){
-      let data = await postDataToSchema()
-      if(data){
-        customDataUrl = customDataUrl+data.id;
-      }
-    }else{
-      console.log('Required schema not found');
-    }
-    let options = {
-      url: customDataUrl,
-      type: 'GET',
-      // headers: headers
-    }
-    let response = await client.request(options);
-    console.log(response);
-    if (response) {
-
-      var tokenData = response.data.attributes;
       var header = {
         "alg": "HS256",
         "typ": "JWT"
@@ -171,10 +126,7 @@ async function generateURL(settings) {
       }
       iframeURL = `${settings.agentassistURL}/koreagentassist-sdk/UI/agentassist-iframe.html?token=${signedToken}&botid=${settings.botId}&agentassisturl=${smartassistURL}&conversationid=${activeConversationId}&isCall=${isCall}&customdata=${customdata}`;
       resolve(iframeURL);
-    } else {
-      console.log("HTTP-Error: " + response.status);
-      reject(response.statusText);
-    }
+
   });
 }
 
@@ -187,19 +139,6 @@ async function iframeRender(url) {
 
 }
 
-async function getSchema(){
-  try {
-    let options = {
-      url: `${zendeskBaseUrl}/api/sunshine/objects/types/agentassist`,
-      type: 'GET',
-      // headers: headers
-    }
-    let response = await client.request(options);
-    return response.data;
-  } catch (error) {
-    return null;
-  }
-};
 
 async function main() {
 
