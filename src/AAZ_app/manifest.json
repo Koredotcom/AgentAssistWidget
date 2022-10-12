@@ -28,18 +28,6 @@
      
     },
     {
-      "name": "aud",
-      "type": "url",
-      "required": true
-     ,
-      "default":"https://idproxy.kore.com/authorize"
-    },
-    {
-      "name":"isAnonymous",
-      "type":"checkbox",
-      "default":false
-    },
-    {
       "name": "clientSecret",
       "type": "text",
       "required": true

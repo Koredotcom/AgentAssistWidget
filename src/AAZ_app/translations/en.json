@@ -3,17 +3,15 @@
     "name": "Zen Tunes",
     "short_description": "Play the famous zen tunes in your help desk.",
     "long_description": "Play the famous zen tunes in your help desk and \n listen to the beats it has to offer.",
-    "installation_instructions": "Simply click install.",  
-    "app": {
+    "installation_instructions": "Simply click install.",
+
       "parameters": {
-          "agentassistURL": {"label":"Agent Assist URL"},
-          "clientId": {"label": "Client ID"},
-          "aud": {"label": "AUD"},
-          "isAnonymous":{"label":"Is Anonymous"},
-          "clientSecret": {"label":"clientSecret"},
-          "botId": {"label":"botId"}
+          "agentassistURL": {"label":"Agent Assist URL "},
+          "clientId": {"label": "Client ID "},
+          "clientSecret": {"label":"Client Secret "},
+          "botId": {"label":"Bot ID"}
     
-      }
+      
     }
   
 

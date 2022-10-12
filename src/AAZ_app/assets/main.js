@@ -1,7 +1,7 @@
 
 
-import config from "./config.json" assert { type: 'json' };
-import Schema from "./schema.json" assert { type: 'json' };
+// import config from "./config.json" assert { type: 'json' };
+// import Schema from "./schema.json" assert { type: 'json' };
 import schemaData from "./data.json" assert { type: 'json' };
 
 
@@ -137,10 +137,7 @@ async function generateURL(settings) {
       const data = {
         'iss': settings.clientId,
         'sub': 'number',
-        'aud': settings.aud,
         'botId': settings.botId,
-        'isAnonymous': settings.isAnonymous
-
       }
 
 
