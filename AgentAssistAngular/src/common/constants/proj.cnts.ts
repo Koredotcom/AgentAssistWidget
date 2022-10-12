@@ -70,7 +70,9 @@ export const IdReferenceConst = {
     INPUT_FIELD_AGENT : 'inputFieldForAgent',
     ARTICLE_SEND_MSG : 'articlesendMsg',
     DROPDOWN_HEADER : 'dropDownHeader',
-    ASSIST_RUN_BUTTON : 'run'
+    ASSIST_RUN_BUTTON : 'run',
+    SCROLLBUTTON_ASSIST : 'scrollButtonAssist',
+    SCROLLBUTTON_MYBOT : 'scrollButtonMybot'
 }
 
 

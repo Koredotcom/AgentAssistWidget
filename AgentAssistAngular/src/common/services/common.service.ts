@@ -35,6 +35,24 @@ export class CommonService {
         lastElement : '',
         lastElementBeforeNewMessage : '',
         scrollAtEnd : true
+      },
+      [ProjConstants.MYBOT]: {
+        numberOfNewMessages: 0,
+        newlyAddedIdList: [],
+        newlyAddedMessagesUUIDlist: [],
+        removedIdListOnScroll: [],
+        lastElement : '',
+        lastElementBeforeNewMessage : '',
+        scrollAtEnd : true
+      },
+      [ProjConstants.TRANSCRIPT]: {
+        numberOfNewMessages: 0,
+        newlyAddedIdList: [],
+        newlyAddedMessagesUUIDlist: [],
+        removedIdListOnScroll: [],
+        lastElement : '',
+        lastElementBeforeNewMessage : '',
+        scrollAtEnd : true
       }
     }
   }
@@ -251,9 +269,11 @@ export class CommonService {
 
 
   updateScrollAtEndVariables(tabType) {
+    console.log("update scroll at end variables");
+    
     $(".scroll-bottom-btn span").text('Scroll to bottom');
     $(".scroll-bottom-btn").removeClass("new-messages");
-    $(".scroll-bottom-show-btn").addClass('hide');
+    $(".scroll-bottom-show-btn").addClass('hiddenEle');
     this.scrollContent[tabType].numberOfNewMessages = 0;
     this.scrollContent[tabType].newlyAddedMessagesUUIDlist = [];
     this.scrollContent[tabType].newlyAddedIdList = [];

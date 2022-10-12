@@ -52,7 +52,7 @@
         </div>
 
         <perfect-scrollbar id="homeScrollBar" class="home-scroll-bar" #psBottom (psYReachEnd)="onScrollEvent($event)" (psYReachStart)="onScrollEvent($event)" (psScrollUp)="onScrollEvent($event)">
-            <div class="body-data-container if-suggestion-search" id="bodyContainer">
+            <div class="body-data-container if-suggestion-search" id="bodyContainer" #tabBody>
                 <div class="dialog-task-data" id="dynamicBlocksData">
                     <ng-container>
                         <app-transcript [class.hide]="activeTab != projConstants.TRANSCRIPT"></app-transcript>

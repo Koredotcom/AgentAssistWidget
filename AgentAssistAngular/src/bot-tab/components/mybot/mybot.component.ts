@@ -39,7 +39,6 @@ export class MybotComponent implements OnInit {
   scrollAtEnd: boolean = true;
   connectionDetails: any;
   interruptDialog: any = {};
-  lastElementBeforeNewMessage : any;
 
   constructor(public handleSubjectService: HandleSubjectService, public randomUUIDPipe: RandomUUIDPipe,
     public mybotDataService: MybotDataService, public removeSpecialCharPipe: RemoveSpecialCharPipe,
@@ -51,7 +50,6 @@ export class MybotComponent implements OnInit {
   ngOnInit(): void {
     let response = this.commonService.renderingAgentHistoryMessage();
     response.then((res)=>{
-      console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx history response", res);
       this.renderHistoryMessages(res.messages, res.feedbackDetails)
     })
     this.subscribeEvents();
@@ -67,27 +65,20 @@ export class MybotComponent implements OnInit {
 
     let subscription1 = this.handleSubjectService.runButtonClickEventSubject.subscribe((runEventObj: any) => {
       if (runEventObj.agentRunButton && !this.commonService.isMyBotAutomationOnGoing) {
-        console.log(runEventObj, "run event obj");
         this.runDialogFormyBotTab(runEventObj);
-        // this.scrollToBottom();
       } else if (runEventObj.agentRunButton && this.commonService.isMyBotAutomationOnGoing) {
         this.interruptDialog = runEventObj;
-        console.log(this.interruptDialog, "interrupt dialog");
-
         this.handleTerminatePopup.emit({ status: true, type: this.projConstants.INTERRUPT });
       }
     });
 
     let subscription2 = this.websocketService.agentAssistAgentResponse$.subscribe((response: any) => {
-      console.log(this.commonService.isMyBotAutomationOnGoing, "inside response");
       if (response && !response.isSearch) {
-        console.log(response);
         this.processMybotDataResponse(response);
       }
     });
 
     let subscription3 = this.websocketService.endOfTaskResponse$.subscribe((endoftaskresponse: any) => {
-      console.log(endoftaskresponse, "endof task");
       if (endoftaskresponse && this.myBotDialogPositionId == endoftaskresponse.positionId) {
         this.dialogTerminatedOrIntrupptedInMyBot();
       }
@@ -95,7 +86,6 @@ export class MybotComponent implements OnInit {
 
     let subscription4 = this.handleSubjectService.terminateClickEventSubject.subscribe((response: any) => {
       if (response && response?.activeTab == this.projConstants.MYBOT) {
-        console.log(response, "inside subject mybot");
         this.getAgentInputValue(this.projConstants.DISCARD_ALL);
         this.dialogTerminatedOrIntrupptedInMyBot();
       }
@@ -103,7 +93,6 @@ export class MybotComponent implements OnInit {
 
     let subscription5 = this.handleSubjectService.interruptClickEventSubject.subscribe((response: any) => {
       if (response && response?.activeTab == this.projConstants.MYBOT) {
-        console.log(response, "inside interrupt mybot component");
         this.getAgentInputValue(this.projConstants.DISCARD_ALL);
         this.dialogTerminatedOrIntrupptedInMyBot();
         this.runDialogFormyBotTab(this.interruptDialog);
@@ -113,9 +102,7 @@ export class MybotComponent implements OnInit {
 
     let subscription6 = this.handleSubjectService.connectDetailsSubject.subscribe((response : any)=>{
       if(response){
-        this.connectionDetails = response;
-        console.log("connection details, 'inside assist tab");
-        
+        this.connectionDetails = response;        
       }
     });
     this.subscriptionsList.push(subscription1);
@@ -169,9 +156,7 @@ export class MybotComponent implements OnInit {
           let key = e.which || e.keyCode || 0;
           if (key === 13) {
             this.getAgentInputValue(e.target.value);
-            this.isMybotInputResponseClick = true;
-            console.log("enter clicked");
-          }
+            this.isMybotInputResponseClick = true;          }
         });
       } else {
         $(runInfoContent).append(tellToUserHtml);
@@ -181,12 +166,13 @@ export class MybotComponent implements OnInit {
       let a = document.getElementById(IdReferenceConst.displayData + `-${myBotuuids}`);
       a.innerHTML = a.innerHTML + html;
       this.designAlterService.addWhiteBackgroundClassToNewMessage(this.scrollAtEnd, IdReferenceConst.MYBOTAUTOMATIONBLOCK);
+      this.scrollToBottom();
     }
 
   }
 
   runDialogFormyBotTab(data) {
-    console.log(data, "data in ise mybot");
+    this.collapseOldDialoguesInMyBot();
     this.myBotDialogPositionId = data.positionId;
     this.commonService.isMyBotAutomationOnGoing = true;
     let agentBotuuids = this.randomUUIDPipe.transform();
@@ -201,6 +187,7 @@ export class MybotComponent implements OnInit {
     this._createRunTemplateContainerForMyTab(agentBotuuids, data.name, this.myBotDialogPositionId)
     let addRemoveDropDown = document.getElementById(IdReferenceConst.MYBOTADDREMOVEDROPDOWN + `-${agentBotuuids}`);
     addRemoveDropDown?.classList.remove('hide');
+    this.scrollToBottom();
   }
 
   _createRunTemplateContainerForMyTab(agentBotuuids, intentName, dialogId) {
@@ -212,7 +199,6 @@ export class MybotComponent implements OnInit {
   }
 
   getAgentInputValue(value, intent?) {
-    console.log("agent input value mybot request", value);
     if (value) {
       let connectionDetails: any = Object.assign({}, this.connectionDetails);
       connectionDetails.value = value;
@@ -235,13 +221,11 @@ export class MybotComponent implements OnInit {
       appState[this.connectionDetails.conversationId]['automationGoingOnAfterRefreshMyBot'] = this.commonService.isMyBotAutomationOnGoing;
       localStorage.setItem('agentAssistState', JSON.stringify(appState))
     }
-    this.commonService.addFeedbackHtmlToDom(this.myBotDropdownHeaderUuids, this.lastElementBeforeNewMessage, 'runForAgentBot',);
+    this.commonService.addFeedbackHtmlToDom(this.myBotDropdownHeaderUuids, this.commonService.scrollContent[ProjConstants.MYBOT].lastElementBeforeNewMessage, 'runForAgentBot',);
   }
 
   terminateButtonClick(uuid) {
     document.getElementById(IdReferenceConst.MYBOTTERMINATE + '-' + uuid).addEventListener('click', (event) => {
-      console.log(event);
-      console.log("terminate click");
       this.handleTerminatePopup.emit({ status: true, type: this.projConstants.TERMINATE });
     });
   }
@@ -262,7 +246,6 @@ export class MybotComponent implements OnInit {
     if ($(`#myBotAutomationBlock .collapse-acc-data`).length > 0) {
       let listItems = $("#myBotAutomationBlock .collapse-acc-data");
       listItems.each(function (idx, collapseElement) {
-        console.log(collapseElement.classList, "classlist", collapseElement.id);
         if (!collapseElement.id.includes('smallTalk') && collapseElement.id.includes('dropDownData')) {
           collapseElement.classList.add('hide');
         }
@@ -482,6 +465,5 @@ export class MybotComponent implements OnInit {
           });
       this.scrollToBottom();
       this.designAlterService.addWhiteBackgroundClassToNewMessage(this.scrollAtEnd, IdReferenceConst.MYBOTAUTOMATIONBLOCK);
-
   }
 }

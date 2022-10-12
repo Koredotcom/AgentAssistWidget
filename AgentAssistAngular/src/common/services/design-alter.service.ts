@@ -17,9 +17,7 @@ export class DesignAlterService {
         $(ele).removeClass("last-msg-white-bg");
       }
     }
-    let lastElement = this.getLastElement(dynamicBlockId);
-    console.log(lastElement, "lastelement");
-    
+    let lastElement = this.getLastElement(dynamicBlockId);    
     if (lastElement && lastElement.className.includes('welcome-msg')) {
       $(lastElement).addClass('welcome-msg-last');
       return
@@ -50,7 +48,6 @@ export class DesignAlterService {
         let uuid = lastElementId.split('-');
         uuid.shift();
         uuid = uuid.join('-');
-        console.log(uuid, "uuid");
         let endofTaskId = 'endTaks-' + uuid;
         if (document.getElementById(endofTaskId)) {
           document.getElementById(endofTaskId).classList.add('last-msg-white-bg');
@@ -79,9 +76,7 @@ export class DesignAlterService {
   isScrolledIntoView(elem) {
     if (elem) {
         let parentRec = document.getElementById(IdReferenceConst.HOMESCROLLBAR).getBoundingClientRect();
-        let childRec = elem.getBoundingClientRect();
-        console.log(childRec, "before top");
-        
+        let childRec = elem.getBoundingClientRect();        
         if(childRec.top == 0 && $(elem).parent().attr('class').includes('hide')){
             if($(elem).parent().parent().length){
                 elem = $(elem).parent().parent()[0];
@@ -99,9 +94,7 @@ export class DesignAlterService {
             }
         }catch(e){
             console.log(e);
-        }
-        console.log(childRec, paddingTop, parentRec);
-        
+        }        
         return (childRec.top + paddingTop) > (parentRec.height + parentRec.top);
     }
 }
@@ -126,9 +119,7 @@ export class DesignAlterService {
         //             lastElement = typeInfoRunNodes[typeInfoRunNodes.length - 1];
         //         }
         //     }
-        // } else
-        console.log(lastElement, "inside getlast element");
-        
+        // } else        
         if (lastElement.className == 'dialog-task-accordiaon-info') {
           let listOfNodes = lastElement.querySelectorAll('.steps-run-data');
           let index = 0;
@@ -155,7 +146,6 @@ export class DesignAlterService {
   }
 
   handleDropdownToggle(uuid){
-    console.log("handle dropdown toggle", `#dropDownData-${uuid}`);
      document.getElementById(IdReferenceConst.DROPDOWN_HEADER + '-' + uuid).addEventListener('click', (event) => {
        let dropdownDataElement = $(`#dropDownData-${uuid}`);
        if($(dropdownDataElement).hasClass('hide')){
@@ -167,7 +157,9 @@ export class DesignAlterService {
   }
 
   UnCollapseDropdownForLastElement(lastElement) {
-    if (lastElement.className.includes('steps-run-data')) {
+    console.log(lastElement, "last element");
+    
+    if (lastElement && lastElement.className.includes('steps-run-data')) {
       let lastElementId = this.getUUIDFromId(lastElement.id);
       lastElementId = lastElementId.split("*")[0];
       let collapseElement = document.getElementById('dropDownData-' + lastElementId);

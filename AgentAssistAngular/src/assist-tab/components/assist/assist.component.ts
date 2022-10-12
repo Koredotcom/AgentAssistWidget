@@ -46,7 +46,7 @@ export class AssistComponent implements OnInit {
   entitiestValueArray: any = [];
   previousEntitiesValue: string;
   welcomeMsgResponse: any;
-  waitingTimeForUUID: number = 100;
+  waitingTimeForUUID: number = 1000;
 
   constructor(private templateRenderClassService: TemplateRenderClassService, public handleSubjectService: HandleSubjectService, public randomUUIDPipe: RandomUUIDPipe,
     public removeSpecialCharPipe: RemoveSpecialCharPipe,
@@ -61,7 +61,7 @@ export class AssistComponent implements OnInit {
 
   ngOnInit(): void {
     this.subscribeEvents();
-
+    this.scrollToBottom();
   }
 
   ngOnDestroy() {
@@ -73,15 +73,11 @@ export class AssistComponent implements OnInit {
   subscribeEvents() {
 
     let subscription1 = this.handleSubjectService.runButtonClickEventSubject.subscribe((runEventObj: any) => {
-      console.log(runEventObj, 'run event obj');
       if (Object.keys(runEventObj).length > 0) {
         if (runEventObj && !runEventObj?.agentRunButton && !this.commonService.isAutomationOnGoing) {
-          console.log(runEventObj, "run event obj");
           this.runDialogForAssistTab(runEventObj);
-          this.scrollToBottom();
         } else if (runEventObj && !runEventObj?.agentRunButton && this.commonService.isAutomationOnGoing) {
           this.interruptDialog = runEventObj;
-          console.log(this.interruptDialog, "interrupt dialog");
           this.handleTerminatePopup.emit({ status: true, type: this.projConstants.INTERRUPT });
         }
       }
@@ -95,7 +91,6 @@ export class AssistComponent implements OnInit {
     });
 
     let subscription3 = this.websocketService.endOfTaskResponse$.subscribe((endoftaskresponse: any) => {
-      console.log(endoftaskresponse, "end of task response");
       if (endoftaskresponse && (this.dialogPositionId == endoftaskresponse.positionId || (endoftaskresponse.author && endoftaskresponse.author.type == 'USER'))) {
         this.dialogTerminatedOrIntrupptedInMyBot();
       }
@@ -103,16 +98,13 @@ export class AssistComponent implements OnInit {
 
     let subscription4 = this.handleSubjectService.terminateClickEventSubject.subscribe((response: any) => {
       if (response && response?.activeTab == this.projConstants.ASSIST) {
-        console.log(response, "terminate click event");
         this.AgentAssist_run_click({ intentName: this.projConstants.DISCARD_ALL }, this.dialogPositionId)
         this.dialogTerminatedOrIntrupptedInMyBot();
       }
     });
 
     let subscription5 = this.handleSubjectService.interruptClickEventSubject.subscribe((response: any) => {
-      console.log(response, "interrupt click event");
       if (response && response?.activeTab == this.projConstants.ASSIST) {
-        console.log(response, "inside interrupt mybot component");
         this.AgentAssist_run_click({ intentName: this.projConstants.DISCARD_ALL }, this.dialogPositionId)
         this.dialogTerminatedOrIntrupptedInMyBot();
         this.runDialogForAssistTab(this.interruptDialog);
@@ -121,7 +113,6 @@ export class AssistComponent implements OnInit {
     });
 
     let subscription6 = this.websocketService.agentAssistUserMessageResponse$.subscribe((response: any) => {
-      console.log(response, "user message");
       if (response && response.botId) {
         this.updateNumberOfMessages();
         this.processUserMessages(response, response.conversationId, response.botId);
@@ -132,13 +123,11 @@ export class AssistComponent implements OnInit {
     let subscription7 = this.handleSubjectService.connectDetailsSubject.subscribe((response: any) => {
       if (response) {
         this.connectionDetails = response;
-        console.log("connection details, 'inside assist tab");
-
       }
     });
 
-    let subscription8 = this.websocketService.userMessageResponse$.subscribe((userMsgResponse : any) =>{
-      console.log(userMsgResponse, "usermsg response in assist tab");
+    let subscription8 = this.websocketService.userMessageResponse$.subscribe((userMsgResponse: any) => {
+      console.log("user message response");
       
     })
     this.subscriptionsList.push(subscription1);
@@ -152,18 +141,13 @@ export class AssistComponent implements OnInit {
   }
 
   terminateButtonClick(uuid) {
-    console.log("terminate button click", IdReferenceConst.ASSISTTERMINATE + '-' + uuid);
     document.getElementById(IdReferenceConst.ASSISTTERMINATE + '-' + uuid).addEventListener('click', (event) => {
-      console.log("terminate click");
       this.handleTerminatePopup.emit({ status: true, type: this.projConstants.TERMINATE });
     });
   }
 
   handleOverridBtnClick(uuid, dialogId) {
-    console.log("inside handle overridebtn click", IdReferenceConst.OVERRIDE_BTN + '-' + uuid);
     document.getElementById(IdReferenceConst.OVERRIDE_BTN + '-' + uuid).addEventListener('click', (event) => {
-      console.log("override btn click event");
-
       let overRideObj: any = {
         "agentId": "",
         "botId": this.connectionDetails.botId,
@@ -190,7 +174,6 @@ export class AssistComponent implements OnInit {
           let key = e.which || e.keyCode || 0;
           if (key === 13) {
             this.AgentAssist_run_click({ intentName: e.target.value }, this.dialogPositionId);
-            console.log("enter clicked");
           }
         });
       }
@@ -223,12 +206,11 @@ export class AssistComponent implements OnInit {
     })
   }
 
-  handleRunButtonClick(uuid, data){
+  handleRunButtonClick(uuid, data) {
     document.getElementById(IdReferenceConst.ASSIST_RUN_BUTTON + '-' + uuid).addEventListener('click', (event) => {
-      console.log("click event");
-      let runEventObj : any = {
-        agentRunButton : false,
-        intentName : data.name
+      let runEventObj: any = {
+        agentRunButton: false,
+        intentName: data.name
       }
       this.handleSubjectService.setRunButtonClickEvent(runEventObj);
     });
@@ -243,16 +225,13 @@ export class AssistComponent implements OnInit {
       this.handleCancelOverrideBtnClick(uuid, dialogId);
     } else if (eventName == IdReferenceConst.DROPDOWN_HEADER) {
       this.designAlterService.handleDropdownToggle(uuid);
-    } else if (eventName == IdReferenceConst.ASSIST_RUN_BUTTON){
-      console.log("assist run button clicked");
+    } else if (eventName == IdReferenceConst.ASSIST_RUN_BUTTON) {
       this.handleRunButtonClick(uuid, data);
-      
+
     }
   }
 
   runDialogForAssistTab(data, idTarget?, runInitent?) {
-    console.log("run dialog for assist tab");
-
     let uuids = this.koreGenerateuuidPipe.transform();
     this.dropdownHeaderUuids = uuids;
     this.commonService.isAutomationOnGoing = true;
@@ -292,6 +271,7 @@ export class AssistComponent implements OnInit {
     setTimeout(() => {
       this.clickEvents(IdReferenceConst.ASSISTTERMINATE, uuids);
       this.clickEvents(IdReferenceConst.DROPDOWN_HEADER, uuids);
+      this.scrollToBottom();
     }, 1000);
   }
 
@@ -304,7 +284,6 @@ export class AssistComponent implements OnInit {
     connectionDetails.positionId = dialogPositionId;
     let assistRequestParams = this.commonService.prepareAgentAssistRequestParams(connectionDetails);
     this.websocketService.emitEvents(EVENTS.agent_assist_request, assistRequestParams);
-    this.scrollToBottom();
   }
 
   processUserMessages(data, conversationId, botId) {
@@ -334,6 +313,7 @@ export class AssistComponent implements OnInit {
         entityHtml.append(entityHtmls);
       }
     }
+    this.scrollToBottom();
     let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(resultMsgResponse)[0].innerHTML;
     // let a = document.getElementById(IdReferenceConst.DROPDOWNDATA + `-${this.dropdownHeaderUuids}`);
     // if (a) {
@@ -410,7 +390,7 @@ export class AssistComponent implements OnInit {
         })
       }
       this.commonService.userIntentInput = data.userInput;
-      let htmls = this.assisttabService.agentUttInfoTemplate(data , responseId, this.imageFilePath, this.imageFileNames)
+      let htmls = this.assisttabService.agentUttInfoTemplate(data, responseId, this.imageFilePath, this.imageFileNames)
 
       dynamicBlock.innerHTML = dynamicBlock.innerHTML + htmls;
 
@@ -530,7 +510,7 @@ export class AssistComponent implements OnInit {
              </div>`;
             enentiesDomDiv.append(entiteSaveAndCancelDiv);
           }
-          this.clickEvents(IdReferenceConst.ASSIST_RUN_BUTTON,uuids,this.dialogPositionId, ele);
+          this.clickEvents(IdReferenceConst.ASSIST_RUN_BUTTON, uuids, this.dialogPositionId, ele);
         });
 
         data.suggestions.faqs?.forEach((ele, index) => {
@@ -653,7 +633,6 @@ export class AssistComponent implements OnInit {
       this.welcomeMsgResponse = data;
       if (this.commonService.scrollContent[ProjConstants.ASSIST].numberOfNewMessages == 1) {
         this.commonService.scrollContent[ProjConstants.ASSIST].numberOfNewMessages = 0;
-        this.scrollToBottom();
       }
     }
 
@@ -670,12 +649,9 @@ export class AssistComponent implements OnInit {
         this.updateNewMessageUUIDList(uuids);
       }, this.waitingTimeForUUID);
     }
-
     let result = this.templateRenderClassService.getResponseUsingTemplate(data);
-    console.log(data, "data inside assist response", result);
-
     let renderedMessage = this.templateRenderClassService.AgentChatInitialize.renderMessage(result);
-    if(renderedMessage && renderedMessage[0]){
+    if (renderedMessage && renderedMessage[0]) {
       let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(result)[0].innerHTML;
       let a = document.getElementById(IdReferenceConst.displayData + `-${uuids}`);
       if (a) {
@@ -798,7 +774,7 @@ export class AssistComponent implements OnInit {
     return childIdList;
   }
 
-  
+
 
   collapseOldDialoguesInAssist() {
     if (this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd) {
@@ -821,7 +797,7 @@ export class AssistComponent implements OnInit {
       appState[this.connectionDetails.conversationId]['automationGoingOnAfterRefresh'] = this.commonService.isAutomationOnGoing;
       localStorage.setItem('agentAssistState', JSON.stringify(appState))
     }
-    this.commonService.addFeedbackHtmlToDom(this.dropdownHeaderUuids,this.commonService.scrollContent[ProjConstants.ASSIST].lastElementBeforeNewMessage);
+    this.commonService.addFeedbackHtmlToDom(this.dropdownHeaderUuids, this.commonService.scrollContent[ProjConstants.ASSIST].lastElementBeforeNewMessage);
     this.scrollToBottom();
   }
 
@@ -840,13 +816,9 @@ export class AssistComponent implements OnInit {
       $(ele).removeClass("last-msg-white-bg");
     }
   }
-
+  
   scrollToBottom() {
-    console.log("scroll to bottom");
-    setTimeout(() => {
-      this.scrollToBottomEvent.emit(true);
-    }, this.waitingTimeForUUID);
-
+    this.scrollToBottomEvent.emit(true);
   }
 
 }
