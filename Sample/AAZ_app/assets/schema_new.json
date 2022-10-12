@@ -1,0 +1,34 @@
+{
+    "data": {
+      "key": "AgentAssist",
+      "schema": {
+        "properties": {
+          "agentassistURL": {
+            "type": "string",
+            "description": "URL"
+          },
+          "clientId": {
+            "type": "string",
+            "description": "Client Id from of a specific bot"
+          },
+          "clientSecret": {
+            "type": "string",
+               "description": ""
+          },
+          "aud":{
+              "type": "string",
+              "description": ""
+          },
+          "isAnonymous":{
+               "type": "boolean",
+              "description": ""
+          },
+          "botId":{
+               "type": "string",
+              "description": "Bot ID"
+          }
+        },
+        "required": ["agentassistURL", "clientId", "clientSecret", "aud", "isAnonymous", "botId"]
+      }
+    }
+  }

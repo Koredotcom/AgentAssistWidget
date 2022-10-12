@@ -1,6 +1,0 @@
-{
-    "zendeskBaseUrl": "https://own8934.zendesk.com",
-    "email": "agentassist1234@gmail.com",
-    "token": "<paste your zendesk api token here>",
-    "dataUUID": "af158e54-40bf-11ed-8e16-9116dbd2e55d"
-}
