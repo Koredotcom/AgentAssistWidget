@@ -284,20 +284,7 @@ export class MybotComponent implements OnInit {
   resp?.forEach((res, index) => {
               
               if ((!res.agentAssistDetails?.suggestions && !res.agentAssistDetails?.ambiguityList && !res.agentAssistDetails?.ambiguity) && res.type == 'outgoing') {
-                  let _msgsResponse = {
-                      "type": "bot_response",
-                      "from": "bot",
-                      "message": [],
-                      "messageId": res._id,
-                      "botInfo": {
-                          "chatBot": "sample Bot",
-                          "taskBotId": res.botId
-                      },
-                      "createdOn": "2022-03-21T07:56:18.225Z",
-                      "icon": "https://uat.kore.ai:443/api/getMediaStream/market/f-cb381255-9aa1-5ce2-95e3-71233aef7084.png?n=17648985&s=IlRvUlUwalFVaFVMYm9sZStZQnlLc0l1UlZvdlNUUDcxR2o3U2lscHRrL3M9Ig$$",
-                      "traceId": "873209019a5adc26",
-                      "createdOnTimemillis": res._id
-                  }
+                  let _msgsResponse = this.mybotDataService.getMybotMsgResponse(res._id, res.botId)
                   currentTaskName = res.tN ? res.tN : currentTaskName;
                   currentTaskPositionId = res?.agentAssistDetails?.positionId ? res?.agentAssistDetails?.positionId : currentTaskPositionId;
                   let historyData = $('#myBotAutomationBlock');
@@ -312,23 +299,23 @@ export class MybotComponent implements OnInit {
                   }
                   let dropdownHtml = `
                           
-                                      <div class="dialog-task-accordiaon-info" id="MyBotaddRemoveDropDown-${res._id}" >
-                                          <div class="accordion-header" id="dropDownHeader-${res._id}"
-                                          data-drop-down-opened="false">
-                                              <div class="icon-info">
-                                                  <i class="ast-rule"></i>
-                                              </div>
-                                              <div class="header-text" id="dropDownTitle-${res._id}">${res.tN}</div>
-                                              <i class="ast-carrotup"></i>
-                                              <button class="btn-danger hide" id="myBotTerminateAgentDialog-${res._id}">Terminate</button>
+                  <div class="dialog-task-accordiaon-info" id="MyBotaddRemoveDropDown-${res._id}" >
+                      <div class="accordion-header" id="dropDownHeader-${res._id}"
+                      data-drop-down-opened="false">
+                          <div class="icon-info">
+                              <i class="ast-rule"></i>
+                          </div>
+                          <div class="header-text" id="dropDownTitle-${res._id}">${res.tN}</div>
+                          <i class="ast-carrotup"></i>
+                          <button class="btn-danger hide" id="myBotTerminateAgentDialog-${res._id}">Terminate</button>
 
-                                          </div>
-                                          <div class="collapse-acc-data hide" id="dropDownData-${res._id}">
-                                              
-                                              
-                                          </div>
-                                          
-                                      `;
+                      </div>
+                      <div class="collapse-acc-data hide" id="dropDownData-${res._id}">
+                          
+                          
+                      </div>
+                      
+                  `
 
                   if (previousTaskPositionId && currentTaskPositionId !== previousTaskPositionId ) {
                        let previousIdFeedBackDetails = feedBackResult.find((ele)=> ele.positionId === previousTaskPositionId);
@@ -357,23 +344,15 @@ export class MybotComponent implements OnInit {
                           historyData.append(dropdownHtml);
                           previousId = res._id;
                           previousTaskPositionId = currentTaskPositionId;
+                          this.clickEvents(IdReferenceConst.MYBOTTERMINATE, previousId);
+                          this.clickEvents(IdReferenceConst.DROPDOWN_HEADER,previousId);
                       }
                   }
                   if (res.agentAssistDetails.entityName && res.agentAssistDetails.entityResponse && res.agentAssistDetails.entityValue) {
                       let runInfoContent = $(`#dropDownData-${previousId}`);
-                      let userQueryHtml = `
-                              <div class="steps-run-data">
-                                  <div class="icon_block_img">
-                                      <img src="./images/userIcon.svg">
-                                  </div>
-                                  <div class="run-info-content" id="userInput-${res._id}">
-                                      <div class="title">Customer Said - </div>
-                                      <div class="agent-utt">
-                                          <div class="title-data">"${this.sanitizeHtmlPipe.transform(res.agentAssistDetails.entityValue)}"</div>
-                                      </div>
-                                      
-                                  </div>
-                              </div>`;
+                      let data = {};
+                      data['userInput'] = res.agentAssistDetails.entityValue;
+                      let userQueryHtml = this.mybotDataService.userQueryTemplate(this.imageFilePath, this.imageFileNames, res._id, data);
                       runInfoContent.append(userQueryHtml);
                       let entityHtml = $(`#dropDownData-${previousId}`).find(`#userInput-${res._id}`);
                      let entityDisplayName = '';
@@ -381,13 +360,7 @@ export class MybotComponent implements OnInit {
                           entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${this.sanitizeHtmlPipe.transform(res.agentAssistDetails.entityValue)}</div>`);
                       } else {
                           if (res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
-                              let entityHtmls = `<div class="order-number-info">${entityDisplayName} : 
-                                              <span style="color:red">Value unidentified</span>
-                                          </div>
-                                          <div>
-                                              <img src="./images/warning.svg" style="padding-right: 8px;">
-                                              <span style="font-size: 12px; line-height: 18px; color: #202124;">Incorrect input format<span>
-                                          </div>`
+                              let entityHtmls = this.mybotDataService.mybotErrorTemplate(this.imageFilePath, this.imageFileNames, entityDisplayName);
                               entityHtml.append(entityHtmls);
                           }
                       }
@@ -449,34 +422,9 @@ export class MybotComponent implements OnInit {
                   });
                   if((res.agentAssistDetails?.isPrompt === true || res.agentAssistDetails?.isPrompt === false)  && previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) {
                   let runInfoContent = $(`#dropDownData-${previousId}`);
-                  let askToUserHtml = `
-                          <div class="steps-run-data">
-                                      <div class="icon_block">
-                                          <i class="ast-agent"></i>
-                                      </div>
-                                      <div class="run-info-content" >
-                                      <div class="title">Ask customer</div>
-                                      <div class="agent-utt">
-                                          <div class="title-data"><ul class="chat-container" id="displayData-${res._id}"></ul></div>
-                                          
-                                      </div>
-                                      </div>
-                                  </div>
-                          `;
-                  let tellToUserHtml = `
-                          <div class="steps-run-data">
-                                      <div class="icon_block">
-                                          <i class="ast-agent"></i>
-                                      </div>
-                                      <div class="run-info-content" >
-                                      <div class="title">Tell Customer</div>
-                                      <div class="agent-utt">
-                                          <div class="title-data" ><ul class="chat-container" id="displayData-${res._id}"></ul></div>
-                                          
-                                      </div>
-                                      </div>
-                                  </div>
-                          `;
+                  let askToUserHtml = this.mybotDataService.askUserTemplate(res._id);
+                  let tellToUserHtml = this.mybotDataService.tellToUserTemplate(res._id);
+                  
                       var appStateStr = localStorage.getItem('agentAssistState') || '{}';
                       var appState = JSON.parse(appStateStr);  
                       // if(appState[_conversationId]['automationGoingOnAfterRefreshMyBot']) {
@@ -510,23 +458,27 @@ export class MybotComponent implements OnInit {
                           </div>
                           </div>
                           </div>
-                      </div>`
+                      </div>`;
 
-                 
+       
                   let nextResponse = resp[index+1];
                   if (res.agentAssistDetails.isPrompt || res.agentAssistDetails.entityRequest) {
                       runInfoContent.append(askToUserHtml);
+                      let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(_msgsResponse)[0].innerHTML;
+                      let a = document.getElementById(IdReferenceConst.displayData + `-${res._id}`);
+                      a.innerHTML = a?.innerHTML + html;
                       if(!nextResponse || (nextResponse.status != 'received' && nextResponse.status != 'incoming')){
                           runInfoContent.append(agentInputToBotHtml);
                       }
                       
                   } else {
                       runInfoContent.append(tellToUserHtml);
+                      let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(_msgsResponse)[0].innerHTML;
+                      let a = document.getElementById(IdReferenceConst.displayData + `-${res._id}`);
+                      a.innerHTML = a.innerHTML + html;
                   }
-                } 
-                this.templateRenderClassService.AgentChatInitialize.renderMessage(_msgsResponse, res._id, `dropDownData-${previousId}`);
+                }
               }
-              
           });
       this.scrollToBottom();
       this.designAlterService.addWhiteBackgroundClassToNewMessage(this.scrollAtEnd, IdReferenceConst.MYBOTAUTOMATIONBLOCK);
