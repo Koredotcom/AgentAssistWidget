@@ -1205,7 +1205,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                 function processMybotDataResponse(data, convId, botId) {
                     console.log("when an dialog is ran for the agent", data);
-                    let myBotuuids = Math.floor(Math.random() * 100);
+                    let myBotuuids = koreGenerateUUID();
                     // let automationSuggestions = $('#agentAutoContainer .dialog-task-accordiaon-info');
                     // for (let ele of automationSuggestions) {
                     //     ele.classList.add('hide');
