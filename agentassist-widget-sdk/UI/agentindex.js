@@ -2975,7 +2975,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                 uniqueID = undefined;
                                             }, waitingTimeForSeeMoreButton)
                                             
-                                  }
+                                }
 
                                 if ((!res.agentAssistDetails?.suggestions && !res.agentAssistDetails?.ambiguityList && !res.agentAssistDetails?.ambiguity) && res.type == 'outgoing') {
                                     let _msgsResponse = {
@@ -3041,7 +3041,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         previousTaskPositionId = undefined;
                                         previousTaskName = undefined;
                                     }
-
                                     if (res.tN && !previousId && previousTaskPositionId !== currentTaskPositionId) {
                                         let divExist = $(`#addRemoveDropDown-${res._id}`);
                                         previousTaskPositionId = currentTaskPositionId;
@@ -3053,6 +3052,18 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             historyData.append(dropdownHtml);
                                             previousId = res._id;
                                             previousTaskPositionId = currentTaskPositionId;
+                                        }
+                                    }
+                                    if(resp.length-1 == index && currentTaskPositionId == previousTaskPositionId) {
+                                        let previousIdFeedBackDetails = feedBackResult.find((ele)=> ele.positionId === currentTaskPositionId);
+                                        addFeedbackHtmlToDomForHistory(res, res.botId, res?.agentAssistDetails?.userInput, previousId, false, previousTaskPositionId);
+                                        if(previousIdFeedBackDetails) {
+                                            UpdateFeedBackDetails(previousIdFeedBackDetails, 'dynamicBlock');
+                                            if(previousIdFeedBackDetails.feedback == 'dislike' && (previousIdFeedBackDetails.feedbackDetails.length == 0 && previousIdFeedBackDetails.comment.length == 0)){
+                                                $(`#feedbackHelpfulContainer-${previousId} .explore-more-negtive-data`).removeClass('hide');
+                                            }else {
+                                                $(`#feedbackHelpfulContainer-${previousId} .explore-more-negtive-data`).addClass('hide');
+                                            }
                                         }
                                     }
                                     if (res.agentAssistDetails.entityName && res.agentAssistDetails.entityResponse && res.agentAssistDetails.entityValue) {
