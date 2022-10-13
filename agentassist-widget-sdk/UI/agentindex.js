@@ -473,7 +473,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 let appStateStr = localStorage.getItem('agentAssistState') || '{}';
                 let appState = JSON.parse(appStateStr);
                 if (appState[_conversationId]) {
-                    isSendWelcomeMessage = false;
+                    isSendWelcomeMessage = true;
                 }else{
                     isSendWelcomeMessage = true;
                 }
@@ -601,7 +601,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                 </div>
                                                 <div>
                                                     <img src="./images/warning.svg" style="padding-right: 8px;">
-                                                    <span style="font-size: 12px; line-height: 18px; color: #202124;">Incorrect input format<span>
+                                                    <span style="font-size: 12px; line-height: 18px; color: #202124;">Incorrect input<span>
                                                 </div>`
                             entityHtml.append(entityHtmls);
                         }
@@ -1324,7 +1324,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                         </div>
                                                         <div>
                                                             <img src="./images/warning.svg" style="padding-right: 8px;">
-                                                            <span style="font-size: 12px; line-height: 18px; color: #202124;">Incorrect input format<span>
+                                                            <span style="font-size: 12px; line-height: 18px; color: #202124;">Incorrect input<span>
                                                         </div>`
                                     entityHtml.append(entityHtmls);
                                 }
@@ -3093,7 +3093,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                         </div>
                                                         <div>
                                                             <img src="./images/warning.svg" style="padding-right: 8px;">
-                                                            <span style="font-size: 12px; line-height: 18px; color: #202124;">Incorrect input format<span>
+                                                            <span style="font-size: 12px; line-height: 18px; color: #202124;">Incorrect input<span>
                                                         </div>`
                                                 entityHtml.append(entityHtmls);
                                             }
@@ -3529,7 +3529,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                             </div>
                                                             <div>
                                                                 <img src="./images/warning.svg" style="padding-right: 8px;">
-                                                                <span style="font-size: 12px; line-height: 18px; color: #202124;">Incorrect input format<span>
+                                                                <span style="font-size: 12px; line-height: 18px; color: #202124;">Incorrect input<span>
                                                             </div>`
                                                 entityHtml.append(entityHtmls);
                                             }
@@ -4968,7 +4968,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             //                                         </div>
                             //                                         <div>
                             //                                             <img src="./images/warning.svg" style="padding-right: 8px;">
-                            //                                             <span style="font-size: 12px; line-height: 18px; color: #202124;">Incorrect input format<span>
+                            //                                             <span style="font-size: 12px; line-height: 18px; color: #202124;">Incorrect input<span>
                             //                                         </div>`
                             //                                 entityHtml.append(entityHtmls);
                             //                             }
@@ -5289,7 +5289,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             //                                             </div>
                             //                                             <div>
                             //                                                 <img src="./images/warning.svg" style="padding-right: 8px;">
-                            //                                                 <span style="font-size: 12px; line-height: 18px; color: #202124;">Incorrect input format<span>
+                            //                                                 <span style="font-size: 12px; line-height: 18px; color: #202124;">Incorrect input<span>
                             //                                             </div>`
                             //                                 entityHtml.append(entityHtmls);
                             //                             }
