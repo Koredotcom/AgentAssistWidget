@@ -74,6 +74,7 @@ export class MybotComponent implements OnInit {
 
     let subscription2 = this.websocketService.agentAssistAgentResponse$.subscribe((response: any) => {
       if (response && !response.isSearch) {
+        this.designAlterService.displayCustomerFeels(response, response.conversationId, response.botId);
         this.processMybotDataResponse(response);
       }
     });

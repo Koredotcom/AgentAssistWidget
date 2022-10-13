@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ProjConstants } from 'src/common/constants/proj.cnts';
 import { SanitizeHtmlPipe } from 'src/common/pipes/sanitize-html.pipe';
+import * as $ from 'jquery';
 
 @Injectable({
   providedIn: 'root'
@@ -29,18 +30,33 @@ export class AssistService {
   }
 
 
-  updateSeeMoreButtonForAssist(id, faq_or_article_obj, type) {
+  updateSeeMoreOnAssistTabActive(){
+    let faqSuggestionList : any = $('[id*="faqDiv-"]');
+    faqSuggestionList.each((ele) => {
+      console.log(ele.id, "ele");
+        let elemID = ele.id.split('-');
+        elemID.shift();
+        let actualId = elemID.join('-');
+        // this.updateSeeMoreButtonForAssist(actualId);
+    });
+}
+
+  updateSeeMoreButtonForAssist(id, type) {
+    console.log(id, "inside update see more button for assist");
+    
     let faqSourceTypePixel = 5;
     let titleElement = document.getElementById("title-" + id);
     let descElement = document.getElementById("desc-" + id);
     let divElement = document.getElementById('faqDiv-' + id);
     let seeMoreElement = document.getElementById('seeMore-' + id);
+    let seeLessElement = document.getElementById('seeLess-' + id);
     let viewLinkElement;
     if (type == ProjConstants.ARTICLE) {
       titleElement = document.getElementById("articletitle-" + id);
       descElement = document.getElementById("articledesc-" + id);
       divElement = document.getElementById('articleDiv-' + id);
       seeMoreElement = document.getElementById('articleseeMore-' + id);
+      seeLessElement = document.getElementById('articleseeLess-' + id);
       viewLinkElement = document.getElementById('articleViewLink-' + id);
     }
     if (titleElement && descElement && divElement) {
@@ -48,9 +64,9 @@ export class AssistService {
       descElement.classList.add('no-text-truncate');
       let divSectionHeight = descElement.clientHeight || 0;
       if (divSectionHeight > (24 + faqSourceTypePixel)) {
-        faq_or_article_obj.showMoreButton = true;
+        $(seeMoreElement).removeClass('hide');
       } else {
-        faq_or_article_obj.showMoreButton = false;
+        $(seeMoreElement).addClass('hide');
         if (type == ProjConstants.ARTICLE) {
           viewLinkElement.classList.remove('hide');
         }

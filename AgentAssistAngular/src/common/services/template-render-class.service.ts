@@ -46,7 +46,11 @@ export class TemplateRenderClassService {
 
       if (payloadType.indexOf('text') !== -1 || payloadType.indexOf('payload') !== -1) {
         let withoutSpecials = payloadType.replace(/^\s+|\s+$/g, "");
-        parsedPayload = JSON.parse(withoutSpecials);
+        try{
+          parsedPayload = JSON.parse(withoutSpecials);
+        }catch(e){
+          parsedPayload = withoutSpecials;
+        }
       }
 
       let body = {};

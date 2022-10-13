@@ -241,6 +241,7 @@ export class HomeComponent implements OnInit {
           let lastelement = this.designAlterService.getLastElement(dynamicBlockId);
           this.commonService.updateNewMessageCount(this.commonService.scrollContent[this.activeTab].lastElementBeforeNewMessage, this.activeTab);
           let scrollAtEnd = !this.designAlterService.isScrolledIntoView(lastelement) ? true : false;
+          this.commonService.scrollContent[this.activeTab].scrollAtEnd = scrollAtEnd;
           if (scrollAtEnd) {
             $(".scroll-bottom-show-btn").addClass('hiddenEle');
             this.commonService.updateScrollAtEndVariables(this.activeTab);
@@ -272,6 +273,7 @@ export class HomeComponent implements OnInit {
     let dynamicBlockId = (this.activeTab == this.projConstants.ASSIST) ? IdReferenceConst.DYNAMICBLOCK : IdReferenceConst.MYBOTAUTOMATIONBLOCK;
     let lastelement = this.designAlterService.getLastElement(dynamicBlockId);
     let scrollAtEnd = !this.designAlterService.isScrolledIntoView(lastelement) ? true : false;
+    this.commonService.scrollContent[this.activeTab].scrollAtEnd = scrollAtEnd;
     if (!scrollAtEnd) {
       $(".scroll-bottom-show-btn").removeClass('hiddenEle');
       this.scrollClickEvents();

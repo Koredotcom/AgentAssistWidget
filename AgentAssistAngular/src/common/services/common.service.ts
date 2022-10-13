@@ -132,6 +132,23 @@ export class CommonService {
   }
 
 
+  updateAgentAssistState(_convId, _tabName, _data) {
+    var appStateStr = localStorage.getItem('agentAssistState') || '{}';
+    var appState = JSON.parse(appStateStr);
+    var convState = appState[_convId] || {};
+    if (!appState[_convId]) {
+        convState = appState[_convId] = {};
+    }
+    if (!convState[_tabName]) {
+        convState[_tabName] = {};
+    }
+    if (!_data.suggestions && _data.buttons?.length > 1) {
+        convState['isWelcomeProcessed'] = true;
+        convState['automationGoingOn'] = this.isAutomationOnGoing;
+    }
+    localStorage.setItem('agentAssistState', JSON.stringify(appState));
+}
+
   addFeedbackHtmlToDom(headerUUids, lastElementBeforeNewMessage, runForAgentBot?) {
     let dropDownData;
     let endOfDialoge;

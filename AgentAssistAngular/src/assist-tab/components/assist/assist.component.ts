@@ -85,7 +85,7 @@ export class AssistComponent implements OnInit {
 
     let subscription2 = this.websocketService.agentAssistResponse$.subscribe((response: any) => {
       if (response && Object.keys(response).length > 0) {
-        this.processAgentAssistResponse(response, this.connectionDetails.botId);
+        this.updateAgentAssistResponse(response, this.connectionDetails.botId, this.connectionDetails.conversationId);
       }
 
     });
@@ -128,7 +128,14 @@ export class AssistComponent implements OnInit {
 
     let subscription8 = this.websocketService.userMessageResponse$.subscribe((userMsgResponse: any) => {
       console.log("user message response");
-      
+
+    });
+
+    let subscription9 = this.handleSubjectService.activeTabSubject.subscribe((response) => {
+      console.log(response, 'response');
+      if(response && response == this.projConstants.ASSIST){
+        this.assisttabService.updateSeeMoreOnAssistTabActive()
+      } 
     })
     this.subscriptionsList.push(subscription1);
     this.subscriptionsList.push(subscription2);
@@ -138,6 +145,7 @@ export class AssistComponent implements OnInit {
     this.subscriptionsList.push(subscription6);
     this.subscriptionsList.push(subscription7);
     this.subscriptionsList.push(subscription8);
+    this.subscriptionsList.push(subscription9);
   }
 
   terminateButtonClick(uuid) {
@@ -313,7 +321,11 @@ export class AssistComponent implements OnInit {
         entityHtml.append(entityHtmls);
       }
     }
-    this.scrollToBottom();
+    console.log(this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd, "process user messages");
+
+    if (this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd) {
+      this.scrollToBottom();
+    }
     let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(resultMsgResponse)[0].innerHTML;
     // let a = document.getElementById(IdReferenceConst.DROPDOWNDATA + `-${this.dropdownHeaderUuids}`);
     // if (a) {
@@ -322,11 +334,52 @@ export class AssistComponent implements OnInit {
   }
 
 
+  updateAgentAssistResponse(data, botId, conversationId) {
+    let shouldProcessResponse = false;
+    let appStateStr = localStorage.getItem('agentAssistState') || '{}';
+    let appState = JSON.parse(appStateStr);
+    if (appState[this.connectionDetails.conversationId]) {
+      // if incoming data belongs to welcome message do nothing
+      if (!data.suggestions && data.buttons?.length > 1) {
+        if (appState[this.connectionDetails.conversationId].isWelcomeProcessed && !appState[this.connectionDetails.conversationId].automationGoingOn && document.getElementsByClassName('.welcome-msg').length > 0) {
+          return;
+        }
+      }
+      shouldProcessResponse = true;
+    } else {
+      shouldProcessResponse = true;
+    }
+    if (!shouldProcessResponse) {
+      return;
+    }
+    if (!(this.commonService.isAutomationOnGoing && data.suggestions)) {
+      this.updateNumberOfMessages();
+    }
+
+    let overRideObj = {
+      "agentId": "",
+      "botId": botId,
+      "conversationId": conversationId,
+      "query": "",
+      'experience': this.commonService.isCallConversation === true ? 'voice' : 'chat',
+      "enable_override_userinput": false
+    }
+    if (this.isOverRideMode) {
+      this.websocketService.emitEvents(EVENTS.enable_override_userinput, overRideObj)
+    }
+    this.isOverRideMode = false;
+    this.designAlterService.displayCustomerFeels(data, conversationId, botId);
+
+    this.commonService.updateAgentAssistState(conversationId, this.projConstants.ASSIST, data);
+    this.processAgentAssistResponse(data, botId);
+  }
+
   processAgentAssistResponse(data, botId) {
     let automationSuggestions = $('#dynamicBlock .dialog-task-accordiaon-info');
     let uuids = this.koreGenerateuuidPipe.transform();
     let responseId = uuids;
-
+    console.log(this.commonService.isAutomationOnGoing,this.dropdownHeaderUuids,data.suggestions);
+    
     if (!this.commonService.isAutomationOnGoing && data.intentName && !data.suggestions && !this.isInitialDialogOnGoing) {
       let appStateStr = localStorage.getItem('agentAssistState') || '{}';
       let appState = JSON.parse(appStateStr);
@@ -553,7 +606,9 @@ export class AssistComponent implements OnInit {
             $(`#check-${uuids + index}`).addClass('hide');
             $(`#faqDiv-${uuids + index}`).removeClass('is-dropdown-show-default');
           }
-        })
+        });
+        this.handleSeeMoreButton(responseId,data.suggestions.faqs, this.projConstants.FAQ);
+        this.handleSeeMoreButton(responseId,data.suggestions.articles, this.projConstants.ARTICLE);
       }
       setTimeout(() => {
         this.updateNewMessageUUIDList(responseId);
@@ -578,10 +633,11 @@ export class AssistComponent implements OnInit {
         <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${splitedanswerPlaceableID.join('-')}" data-see-less="true">Show less</button>
         `;
           faqs.append(seeMoreButtonHtml);
-          // setTimeout(() => {
-          //     updateSeeMoreButtonForAssist(splitedanswerPlaceableID.join('-'));
-          // }, waitingTimeForSeeMoreButton);
-        })
+          setTimeout(() => {
+              this.assisttabService.updateSeeMoreButtonForAssist(splitedanswerPlaceableID.join('-'), this.projConstants.FAQ);
+          }, 1000);
+        });
+
         if (faqAnswerIdsPlace) {
           let index = this.answerPlaceableIDs.indexOf(faqAnswerIdsPlace);
           this.answerPlaceableIDs.splice(index, 1);
@@ -637,18 +693,23 @@ export class AssistComponent implements OnInit {
     }
 
     if (!this.commonService.isAutomationOnGoing && !this.dropdownHeaderUuids && !data.suggestions) {
+      console.log("inside small talk", data.buttons.length);
+      
       $('#dynamicBlock .empty-data-no-agents').addClass('hide');
       let dynamicBlockDiv = $('#dynamicBlock');
       if (data.buttons?.length > 1) {
         this.welcomeMsgResponse = data;
       } else {
         let botResHtml = this.assisttabService.smallTalkTemplate(data.buttons[0], uuids);
-        dynamicBlockDiv.innerHTML += botResHtml;
+        console.log(botResHtml, "bot res html");
+        
+        dynamicBlockDiv.append(botResHtml);
       }
       setTimeout(() => {
         this.updateNewMessageUUIDList(uuids);
       }, this.waitingTimeForUUID);
     }
+    
     let result = this.templateRenderClassService.getResponseUsingTemplate(data);
     let renderedMessage = this.templateRenderClassService.AgentChatInitialize.renderMessage(result);
     if (renderedMessage && renderedMessage[0]) {
@@ -659,21 +720,55 @@ export class AssistComponent implements OnInit {
       }
     }
 
+    console.log(this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd, "process agentassist response");
+
     if (this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd) {
       this.scrollToBottom();
     }
     this.designAlterService.addWhiteBackgroundClassToNewMessage(this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd, IdReferenceConst.DYNAMICBLOCK);
   }
 
-  handleSeeMoreButton(array, type) {
-    let index = 0;
-    for (let item of array) {
-      this.assisttabService.updateSeeMoreButtonForAssist(index, item, type);
-      index++;
+  handleSeeMoreButton(responseId,array, type) {
+    console.log(array, type, responseId, "array");
+    if(array && responseId && type){
+      let index = 0;
+      for (let item of array) {
+        let id = responseId+index;
+        this.assisttabService.updateSeeMoreButtonForAssist(id, type);
+        index++;
+        this.handleSeeMoreLessClickEvents(id, type);
+      }
     }
   }
 
+  handleSeeMoreLessClickEvents(id, type){
+    let seeMoreElement = document.getElementById('seeMore-' + id);
+    let seeLessElement = document.getElementById('seeLess-' + id);
+    let titleElement = document.getElementById("title-" + id);
+    let descElement = document.getElementById("desc-" + id);
+    if(type == this.projConstants.ARTICLE){
+      seeMoreElement = document.getElementById('articleseeMore-' + id);
+      seeLessElement = document.getElementById('articleseeLess-' + id);
+      titleElement = document.getElementById("articletitle-" + id);
+      descElement = document.getElementById("articledesc-" + id);
+    }
+    seeMoreElement.addEventListener('click', (event : any) => {
+      event.target.classList.add('hide');
+      seeLessElement.classList.remove('hide');
+      titleElement.classList.add('no-text-truncate');
+      descElement.classList.add('no-text-truncate');                       
+    });
+    seeLessElement.addEventListener('click',(event : any) => {
+      event.target.classList.add('hide');
+      seeMoreElement.classList.remove('hide');
+      titleElement.classList.remove('no-text-truncate');
+      descElement.classList.remove('no-text-truncate'); 
+    });
+  }
+
   updateNewMessageUUIDList(responseId) {
+    console.log(this.commonService.scrollContent[ProjConstants.ASSIST], "inside update new message uuid list");
+
     if (!this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd) {
       if (this.commonService.scrollContent[ProjConstants.ASSIST].numberOfNewMessages) {
         if (this.commonService.scrollContent[ProjConstants.ASSIST].newlyAddedMessagesUUIDlist.indexOf(responseId) == -1) {
@@ -705,12 +800,16 @@ export class AssistComponent implements OnInit {
   }
 
   addUnreadMessageHtml() {
+    console.log("unread msg html");
+
     if (!this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd && this.commonService.scrollContent[ProjConstants.ASSIST].numberOfNewMessages) {
       $('.unread-msg').remove();
       let unreadHtml = ` <div class="unread-msg last-msg-white-bg">
         <div class="text-dialog-task-end">Unread Messages</div>     
                    </div>`;
       this.designAlterService.UnCollapseDropdownForLastElement(this.commonService.scrollContent[ProjConstants.ASSIST].lastElementBeforeNewMessage);
+
+      console.log(this.commonService.scrollContent[ProjConstants.ASSIST], this.commonService.scrollContent[ProjConstants.ASSIST].newlyAddedIdList, "newly added id list");
 
       for (let i = 0; i < this.commonService.scrollContent[ProjConstants.ASSIST].newlyAddedIdList.length; i++) {
         if (document.getElementById(this.commonService.scrollContent[ProjConstants.ASSIST].newlyAddedIdList[i])) {
@@ -724,6 +823,8 @@ export class AssistComponent implements OnInit {
             }
             elements?.insertAdjacentHTML('beforeBegin', unreadHtml);
           } else if (elements.id.includes('stepsrundata') && this.commonService.scrollContent[ProjConstants.ASSIST].lastElementBeforeNewMessage.id.includes('stepsrundata')) {
+            console.log("steprund data");
+
             elements = document.getElementById(this.commonService.scrollContent[ProjConstants.ASSIST].lastElementBeforeNewMessage.id);
             elements?.insertAdjacentHTML('afterend', unreadHtml);
           }
@@ -798,7 +899,11 @@ export class AssistComponent implements OnInit {
       localStorage.setItem('agentAssistState', JSON.stringify(appState))
     }
     this.commonService.addFeedbackHtmlToDom(this.dropdownHeaderUuids, this.commonService.scrollContent[ProjConstants.ASSIST].lastElementBeforeNewMessage);
-    this.scrollToBottom();
+    console.log(this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd, "dialog termiante");
+
+    if (this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd) {
+      this.scrollToBottom();
+    }
   }
 
   updateNumberOfMessages() {
@@ -816,7 +921,7 @@ export class AssistComponent implements OnInit {
       $(ele).removeClass("last-msg-white-bg");
     }
   }
-  
+
   scrollToBottom() {
     this.scrollToBottomEvent.emit(true);
   }
