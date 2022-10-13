@@ -14,7 +14,7 @@ After running the server we have to add  ***?zat=true*** after ticket id in the 
 ```
 https://{WorkSpaceName}.zendesk.com/agent/tickets/{ticketid}?zat=true
 ```
-# Necessary ZAT Commands
+# Useful ZAT Commands
 ## Validate
 Runs a suite of validation tests against your app. Because the same tests are run when you upload the app, you probably won't be able to upload the app until your app passes the validate tests.
 ``` 
