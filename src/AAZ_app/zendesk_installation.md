@@ -24,3 +24,10 @@ Click on the app that you wanted to change the settings.
 <img
   src="./translations/update.gif"
   style="display: inline-block; margin: 0 auto; max-width: 300px">
+
+
+Sample Screen of the application is below.
+
+<img
+  src="./translations/sample.png"
+  style="display: inline-block; margin: 0 auto; max-width: 300px">
