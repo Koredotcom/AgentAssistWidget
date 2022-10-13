@@ -473,7 +473,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 let appStateStr = localStorage.getItem('agentAssistState') || '{}';
                 let appState = JSON.parse(appStateStr);
                 if (appState[_conversationId]) {
-                    isSendWelcomeMessage = true;
+                    isSendWelcomeMessage = false;
                 }else{
                     isSendWelcomeMessage = true;
                 }
