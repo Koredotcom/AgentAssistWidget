@@ -1,6 +1,8 @@
 # Installation Instructions
 
 By simple click on install button you will be redirected to page like below.
+
+
 <img
   src="./translations/Instruction-1.png"
   style="display: inline-block; margin: 0 auto; max-width: 300px">
