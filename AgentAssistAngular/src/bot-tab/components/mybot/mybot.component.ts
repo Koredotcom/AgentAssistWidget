@@ -25,7 +25,7 @@ import { LocalStorageService } from 'src/common/services/local-storage.service';
 export class MybotComponent implements OnInit {
 
   @Output() scrollToBottomEvent = new EventEmitter();
-  @Output() handleTerminatePopup = new EventEmitter();
+  @Output() handlePopupEvent = new EventEmitter();
   @ViewChild('mybotautomation') mybotautomation: ElementRef;
 
   subscriptionsList: Subscription[] = [];
@@ -76,7 +76,7 @@ export class MybotComponent implements OnInit {
         this.runDialogFormyBotTab(runEventObj);
       } else if (runEventObj.agentRunButton && this.commonService.isMyBotAutomationOnGoing) {
         this.interruptDialog = runEventObj;
-        this.handleTerminatePopup.emit({ status: true, type: this.projConstants.INTERRUPT });
+        this.handlePopupEvent.emit({ status: true, type: this.projConstants.INTERRUPT });
       }
     });
 
@@ -250,7 +250,7 @@ export class MybotComponent implements OnInit {
   //click events in mybot
   terminateButtonClick(uuid) {
     document.getElementById(IdReferenceConst.MYBOTTERMINATE + '-' + uuid).addEventListener('click', (event) => {
-      this.handleTerminatePopup.emit({ status: true, type: this.projConstants.TERMINATE });
+      this.handlePopupEvent.emit({ status: true, type: this.projConstants.TERMINATE });
     });
   }
 

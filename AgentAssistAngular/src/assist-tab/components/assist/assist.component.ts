@@ -27,7 +27,7 @@ export class AssistComponent implements OnInit {
 
   @Output() scrollToBottomEvent = new EventEmitter();
   @ViewChild('dynamicBlockRef') dynamicBlockRef: ElementRef;
-  @Output() handleTerminatePopup = new EventEmitter();
+  @Output() handlePopupEvent = new EventEmitter();
 
   subscriptionsList: Subscription[] = [];
 
@@ -77,7 +77,7 @@ export class AssistComponent implements OnInit {
           this.runDialogForAssistTab(runEventObj);
         } else if (runEventObj && !runEventObj?.agentRunButton && this.commonService.isAutomationOnGoing) {
           this.interruptDialog = runEventObj;
-          this.handleTerminatePopup.emit({ status: true, type: this.projConstants.INTERRUPT });
+          this.handlePopupEvent.emit({ status: true, type: this.projConstants.INTERRUPT });
         }
       }
     });
@@ -86,7 +86,6 @@ export class AssistComponent implements OnInit {
       if (response && Object.keys(response).length > 0) {
         this.updateAgentAssistResponse(response, this.connectionDetails.botId, this.connectionDetails.conversationId);
       }
-
     });
 
     let subscription3 = this.websocketService.endOfTaskResponse$.subscribe((endoftaskresponse: any) => {
@@ -277,7 +276,7 @@ export class AssistComponent implements OnInit {
     this.processAgentAssistResponse(data, botId);
   }
 
-  processAgentAssistResponse(data, botId) {
+  processAgentAssistResponse(data, botId) {  
     let automationSuggestions = $('#dynamicBlock .dialog-task-accordiaon-info');
     let uuids = this.koreGenerateuuidPipe.transform();
     let responseId = uuids;
@@ -541,8 +540,6 @@ export class AssistComponent implements OnInit {
       }
     }
 
-    let result = this.templateRenderClassService.getResponseUsingTemplate(data);
-
     if (this.commonService.isAutomationOnGoing && this.dropdownHeaderUuids && data.buttons && !data.value.includes('Customer has waited') && (this.dialogPositionId && !data.positionId || (data.positionId == this.dialogPositionId))) {
       $(`#overRideBtn-${this.dropdownHeaderUuids}`).removeClass('hide');
       $(`#cancelOverRideBtn-${this.dropdownHeaderUuids}`).addClass('hide');
@@ -599,6 +596,7 @@ export class AssistComponent implements OnInit {
       }, this.waitingTimeForUUID);
     }
 
+    let result = this.templateRenderClassService.getResponseUsingTemplate(data);
     let renderedMessage = this.dropdownHeaderUuids ? this.templateRenderClassService.AgentChatInitialize.renderMessage(result) : '';
     if (renderedMessage && renderedMessage[0]) {
       let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(result)[0].innerHTML;
@@ -625,7 +623,6 @@ export class AssistComponent implements OnInit {
       [storageConst.INITIALTASK_GOING_ON]: this.commonService.isInitialDialogOnGoing,
       [storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH]: this.commonService.isAutomationOnGoing
     }
-    this.dropdownHeaderUuids = null;
     this.localStorageService.setLocalStorageItem(storageObject);
     this.commonService.addFeedbackHtmlToDom(this.dropdownHeaderUuids, this.commonService.scrollContent[ProjConstants.ASSIST].lastElementBeforeNewMessage);
     if (this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd) {
@@ -800,7 +797,7 @@ export class AssistComponent implements OnInit {
 
   terminateButtonClick(uuid) {
     document.getElementById(IdReferenceConst.ASSISTTERMINATE + '-' + uuid).addEventListener('click', (event) => {
-      this.handleTerminatePopup.emit({ status: true, type: this.projConstants.TERMINATE });
+      this.handlePopupEvent.emit({ status: true, type: this.projConstants.TERMINATE });
     });
   }
 

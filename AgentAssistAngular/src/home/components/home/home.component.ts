@@ -31,6 +31,8 @@ export class HomeComponent implements OnInit {
   scrollContainer: any;
   searchConentObject: any;
   connectionDetails: any = {};
+  showRestorePopup : boolean = false;
+  showSummaryPopup : boolean = false;
   showTerminatePopup: boolean = false;
   showInterruptPopup: boolean = false;
   scrollbottomwaitingTime: number = 500;
@@ -195,7 +197,7 @@ export class HomeComponent implements OnInit {
   }
 
   //terminate popup
-  handleTerminatePopup(popupObject) {
+  handlePopupEvent(popupObject) {
     if (popupObject.type == this.projConstants.TERMINATE) {
       this.showTerminatePopup = popupObject.status;
       if (popupObject.terminate) {

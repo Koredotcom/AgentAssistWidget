@@ -8,7 +8,7 @@ import { ProjConstants } from 'src/common/constants/proj.cnts';
 })
 export class TerminateComponent implements OnInit {
 
-  @Output() handleTerminatePopup = new EventEmitter();
+  @Output() handlePopupEvent = new EventEmitter();
 
   constructor() { }
 
@@ -17,9 +17,9 @@ export class TerminateComponent implements OnInit {
 
   terminateButtonClick(flag){
     if(flag){
-      this.handleTerminatePopup.emit({status : false, terminate : true, type : ProjConstants.TERMINATE})
+      this.handlePopupEvent.emit({status : false, terminate : true, type : ProjConstants.TERMINATE})
     }else{
-      this.handleTerminatePopup.emit({status : flag, type : ProjConstants.TERMINATE})
+      this.handlePopupEvent.emit({status : flag, type : ProjConstants.TERMINATE})
     }
   }
 

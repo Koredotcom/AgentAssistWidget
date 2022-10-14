@@ -8,7 +8,7 @@ import { ProjConstants } from 'src/common/constants/proj.cnts';
 })
 export class InterruptPopupComponent implements OnInit {
 
-  @Output() handleTerminatePopup = new EventEmitter();
+  @Output() handlePopupEvent = new EventEmitter();
 
   constructor() { }
 
@@ -17,9 +17,9 @@ export class InterruptPopupComponent implements OnInit {
 
   interruptButtonClick(flag){
     if(flag){
-      this.handleTerminatePopup.emit({status : false, interrupt : true, type : ProjConstants.INTERRUPT})
+      this.handlePopupEvent.emit({status : false, interrupt : true, type : ProjConstants.INTERRUPT})
     }else{
-      this.handleTerminatePopup.emit({status : flag, type : ProjConstants.INTERRUPT})
+      this.handlePopupEvent.emit({status : flag, type : ProjConstants.INTERRUPT})
     }
   }
 

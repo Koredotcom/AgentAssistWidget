@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { ProjConstants } from 'src/common/constants/proj.cnts';
 
 @Component({
   selector: 'app-restore-popup',
@@ -7,9 +8,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RestorePopupComponent implements OnInit {
 
+  @Output() handlePopupEvent = new EventEmitter();
+  
   constructor() { }
 
   ngOnInit(): void {
   }
 
+  restoreButtonClick(flag){
+    if(flag){
+      this.handlePopupEvent.emit({status : false, restore : true, type : ProjConstants.RESTORE})
+    }else{
+      this.handlePopupEvent.emit({status : flag, type : ProjConstants.RESTORE})
+    }
+  }
 }

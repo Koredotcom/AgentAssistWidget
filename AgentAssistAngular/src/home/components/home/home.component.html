@@ -58,14 +58,14 @@
                         <app-transcript [class.hide]="activeTab != projConstants.TRANSCRIPT"></app-transcript>
                     </ng-container>
                     <ng-container>
-                        <app-assist [class.hide]="activeTab != projConstants.ASSIST" (handleTerminatePopup)="handleTerminatePopup($event)" (scrollToBottomEvent)="scrollToBottom($event)"></app-assist>
+                        <app-assist [class.hide]="activeTab != projConstants.ASSIST" (handlePopupEvent)="handlePopupEvent($event)" (scrollToBottomEvent)="scrollToBottom($event)"></app-assist>
                     </ng-container>
                     <ng-container>
                         <app-library [class.hide]="activeTab != projConstants.LIBRARY"
                             (handleSearchClickEvent)="handleSearchClickEvent($event)"></app-library>
                     </ng-container>
                     <ng-container>
-                        <app-mybot [class.hide]="activeTab != projConstants.MYBOT" (handleTerminatePopup)="handleTerminatePopup($event)" (scrollToBottomEvent)="scrollToBottom($event)"></app-mybot>
+                        <app-mybot [class.hide]="activeTab != projConstants.MYBOT" (handlePopupEvent)="handlePopupEvent($event)" (scrollToBottomEvent)="scrollToBottom($event)"></app-mybot>
                     </ng-container>
                 </div>
             </div>
@@ -87,8 +87,10 @@
                 </perfect-scrollbar>
             </div>
         </div>
-        <app-terminate [class.hide]="!showTerminatePopup" (handleTerminatePopup)="handleTerminatePopup($event)"></app-terminate>
-        <app-interrupt-popup [class.hide]="!showInterruptPopup" (handleTerminatePopup)="handleTerminatePopup($event)"></app-interrupt-popup>
+        <app-terminate [class.hide]="!showTerminatePopup" (handlePopupEvent)="handlePopupEvent($event)"></app-terminate>
+        <app-interrupt-popup [class.hide]="!showInterruptPopup" (handlePopupEvent)="handlePopupEvent($event)"></app-interrupt-popup>
+        <app-summary-popup [class.hide]="!showSummaryPopup" (handlePopupEvent)="handlePopupEvent($event)"></app-summary-popup>
+        <app-restore-popup [class.hide]="!showRestorePopup" (handlePopupEvent)="handlePopupEvent($event)"></app-restore-popup>
         <!-- end -->
         <div class="footer-info" id="cust-feeling">
             <div class="event-bucket">

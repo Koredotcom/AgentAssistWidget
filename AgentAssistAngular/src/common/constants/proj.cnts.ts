@@ -40,6 +40,8 @@ export const ProjConstants = {
     DISCARD_ALL : 'discard all',
     TERMINATE : 'Terminate',
     INTERRUPT : 'Interrupt',
+    RESTORE : 'Restore',
+    SUMMARY : 'Summary',
     INTENT : 'IntentName',
     PS_Y_REACH_START : 'ps-y-reach-start',
     PS_Y_REACH_END : 'ps-y-reach-end',
