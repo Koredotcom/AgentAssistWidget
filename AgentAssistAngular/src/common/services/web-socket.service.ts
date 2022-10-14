@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from "rxjs";
+import { ProjConstants, storageConst } from '../constants/proj.cnts';
 import { EVENTS } from '../helper/events';
 import { SanitizeHtmlPipe } from '../pipes/sanitize-html.pipe';
 import { CommonService } from './common.service';
 import { HandleSubjectService } from './handle-subject.service';
+import { LocalStorageService } from './local-storage.service';
 declare var io: any;
 
 
@@ -12,6 +14,7 @@ export class WebSocketService {
   _agentAsisstSocket: any;
   socketEventsSub: any;
   connectionDetails : any;
+  socketConnectFlag$ : BehaviorSubject<boolean> = new BehaviorSubject(null);
   agentMenuResponse$ : BehaviorSubject<any[]> = new BehaviorSubject(null);
   agentAssistResponse$: BehaviorSubject<any[]> = new BehaviorSubject(null);
   agentAssistAgentResponse$ : BehaviorSubject<any[]> = new BehaviorSubject(null);
@@ -23,7 +26,8 @@ export class WebSocketService {
 
   
   constructor(private handleSubjectService : HandleSubjectService,
-    private sanitizeHTMLPipe : SanitizeHtmlPipe) {
+    private sanitizeHTMLPipe : SanitizeHtmlPipe, private localStorageService : LocalStorageService,
+  ) {
     this.subscribeEvents();
   }
 
@@ -45,9 +49,10 @@ export class WebSocketService {
     };
     this._agentAsisstSocket = io(`${this.connectionDetails.agentassisturl}/koreagentassist`, webSocketConnection);
     this._agentAsisstSocket.on("connect", () => {
-      console.log("connection done");
+      console.log("connection done",);
       this.commonEmitEvents();
       this.listenEvents();
+      this.socketConnectFlag$.next(true);
     });
   }
 
@@ -55,19 +60,25 @@ export class WebSocketService {
     let menu_request_params : any = {
       botId : this.connectionDetails.botId,
       conversationId : this.connectionDetails.conversationId,
-      experience : this.connectionDetails.isCall == "false" ? 'chat' : 'voice'
+      experience : this.connectionDetails.isCall == "false" ? ProjConstants.CHAT : ProjConstants.VOICE
+    }
+    this.emitEvents(EVENTS.agent_menu_request, menu_request_params);
+
+    let appState = this.localStorageService.getLocalStorageState();
+    let shouldProcessResponse = true;
+    if(appState[this.connectionDetails.conversationId] && appState[this.connectionDetails.conversationId][storageConst.IS_WELCOMEMSG_PROCESSED]){
+      shouldProcessResponse = false;
     }
     let parsedCustomData: any = {};
     let welcomeMessageParams: any = {
       'waitTime': 2000,
       'userName': parsedCustomData?.userName || parsedCustomData?.fName + parsedCustomData?.lName || 'user',
       'id': this.connectionDetails.conversationId,
-      "isSendWelcomeMessage": true
+      "isSendWelcomeMessage": shouldProcessResponse
     }
     console.log(menu_request_params, "menu_prams");
     
     this.emitEvents(EVENTS.welcome_message_request, welcomeMessageParams);
-    this.emitEvents(EVENTS.agent_menu_request, menu_request_params);
   }
 
   emitEvents(eventName,requestParams) {

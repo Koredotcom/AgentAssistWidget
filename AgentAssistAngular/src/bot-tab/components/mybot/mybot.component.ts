@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { MybotDataService } from 'src/bot-tab/services/mybot-data.service';
-import { ProjConstants, ImageFilePath, ImageFileNames, IdReferenceConst } from 'src/common/constants/proj.cnts';
+import { ProjConstants, ImageFilePath, ImageFileNames, IdReferenceConst, storageConst } from 'src/common/constants/proj.cnts';
 import { RandomUUIDPipe } from 'src/common/pipes/random-uuid.pipe';
 import { RemoveSpecialCharPipe } from 'src/common/pipes/remove-special-char.pipe';
 import { ReplaceQuotStringWithDoubleQuotPipe } from 'src/common/pipes/replace-quot-string-with-double-quot.pipe';
@@ -15,6 +15,7 @@ import { EVENTS } from 'src/common/helper/events';
 import * as $ from 'jquery';
 import { RawHtmlPipe } from 'src/common/pipes/raw-html.pipe';
 import { PerfectScrollbarDirective } from 'ngx-perfect-scrollbar';
+import { LocalStorageService } from 'src/common/services/local-storage.service';
 
 @Component({
   selector: 'app-mybot',
@@ -45,7 +46,8 @@ export class MybotComponent implements OnInit {
     public replaceQuotStringWithDoubleQuotPipe: ReplaceQuotStringWithDoubleQuotPipe,
     public sanitizeHtmlPipe: SanitizeHtmlPipe, private templateRenderClassService: TemplateRenderClassService,
     public commonService: CommonService, public websocketService: WebSocketService,
-    public designAlterService: DesignAlterService, public rawHtmlPipe: RawHtmlPipe) { }
+    public designAlterService: DesignAlterService, public rawHtmlPipe: RawHtmlPipe,
+    private localStorageService : LocalStorageService) { }
 
   ngOnInit(): void {
     let response = this.commonService.renderingAgentHistoryMessage();
@@ -178,13 +180,10 @@ export class MybotComponent implements OnInit {
     this.commonService.isMyBotAutomationOnGoing = true;
     let agentBotuuids = this.randomUUIDPipe.transform();
     this.myBotDropdownHeaderUuids = agentBotuuids;
-    var appStateStr = localStorage.getItem('agentAssistState') || '{}';
-    var appState = JSON.parse(appStateStr);
-    if (appState[this.connectionDetails.conversationId]) {
-      appState[this.connectionDetails.conversationId]['automationGoingOnAfterRefreshMyBot'] = this.commonService.isMyBotAutomationOnGoing
-      localStorage.setItem('agentAssistState', JSON.stringify(appState))
+    let storageObject : any = {
+      [storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH_MYBOT] : this.commonService.isMyBotAutomationOnGoing
     }
-
+    this.localStorageService.setLocalStorageItem(storageObject);
     this._createRunTemplateContainerForMyTab(agentBotuuids, data.name, this.myBotDialogPositionId)
     let addRemoveDropDown = document.getElementById(IdReferenceConst.MYBOTADDREMOVEDROPDOWN + `-${agentBotuuids}`);
     addRemoveDropDown?.classList.remove('hide');
@@ -215,13 +214,11 @@ export class MybotComponent implements OnInit {
 
 
   dialogTerminatedOrIntrupptedInMyBot() {
-    let appStateStr: any = localStorage.getItem('agentAssistState') || '{}';
-    let appState: any = JSON.parse(appStateStr);
     this.commonService.isMyBotAutomationOnGoing = false;
-    if (appState[this.connectionDetails.conversationId]) {
-      appState[this.connectionDetails.conversationId]['automationGoingOnAfterRefreshMyBot'] = this.commonService.isMyBotAutomationOnGoing;
-      localStorage.setItem('agentAssistState', JSON.stringify(appState))
+    let storageObject : any = {
+      [storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH_MYBOT] : this.commonService.isMyBotAutomationOnGoing
     }
+    this.localStorageService.setLocalStorageItem(storageObject);
     this.commonService.addFeedbackHtmlToDom(this.myBotDropdownHeaderUuids, this.commonService.scrollContent[ProjConstants.MYBOT].lastElementBeforeNewMessage, 'runForAgentBot',);
   }
 
@@ -409,20 +406,21 @@ export class MybotComponent implements OnInit {
                   let askToUserHtml = this.mybotDataService.askUserTemplate(res._id);
                   let tellToUserHtml = this.mybotDataService.tellToUserTemplate(res._id);
                   
-                      var appStateStr = localStorage.getItem('agentAssistState') || '{}';
-                      var appState = JSON.parse(appStateStr);  
-                      // if(appState[_conversationId]['automationGoingOnAfterRefreshMyBot']) {
-                      //     isMyBotAutomationOnGoing = true;
-                      //     noAutomationrunninginMyBot = false;
-                      //     myBotDropdownHeaderUuids = previousId;
-                      //     $('#inputFieldForMyBot').remove();
-                      //     appState[_conversationId]['automationGoingOnAfterRefreshMyBot'] = isMyBotAutomationOnGoing;
-                      //     localStorage.setItem('agentAssistState', JSON.stringify(appState));
-                      //     let terminateButtonElement = document.getElementById('myBotTerminateAgentDialog-' + previousId);
-                      //     $(`#myBotTerminateAgentDialog-${previousId}`).attr('data-position-id', previousTaskPositionId);
-                      //     terminateButtonElement.classList.remove('hide');
-                      //     myBotDialogPositionId = previousTaskPositionId;
-                      // }
+                       
+                  if(this.localStorageService.checkStorageItemWithInConvId(this.connectionDetails.conversationId,storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH_MYBOT)) {
+                          this.commonService.isMyBotAutomationOnGoing = true;
+                          this.commonService.noAutomationrunninginMyBot = false;
+                          this.myBotDropdownHeaderUuids = previousId;
+                          $('#inputFieldForMyBot').remove();
+                          let storageObject : any = {
+                            [storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH_MYBOT] : this.commonService.isMyBotAutomationOnGoing
+                          }
+                          this.localStorageService.setLocalStorageItem(storageObject);
+                          let terminateButtonElement = document.getElementById('myBotTerminateAgentDialog-' + previousId);
+                          $(`#myBotTerminateAgentDialog-${previousId}`).attr('data-position-id', previousTaskPositionId);
+                          terminateButtonElement.classList.remove('hide');
+                          this.myBotDialogPositionId = previousTaskPositionId;
+                      }
 
                       let agentInputEntityName = 'EnterDetails';
                       if(res.agentAssistDetails?.newEntityDisplayName || res.agentAssistDetails?.newEntityName){

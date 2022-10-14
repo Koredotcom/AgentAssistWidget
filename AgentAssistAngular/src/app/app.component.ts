@@ -5,6 +5,7 @@ import { KoreGenerateuuidPipe } from 'src/common/pipes/kore-generateuuid.pipe';
 import { RandomUUIDPipe } from 'src/common/pipes/random-uuid.pipe';
 import { CommonService } from 'src/common/services/common.service';
 import { HandleSubjectService } from 'src/common/services/handle-subject.service';
+import { LocalStorageService } from 'src/common/services/local-storage.service';
 import { WebSocketService } from '../common/services/web-socket.service';
 
 @Component({
@@ -17,7 +18,8 @@ export class AppComponent {
   isGrantSuccess = false;
   errorMsg;
   constructor(private webSocketService: WebSocketService, private service: CommonService,
-    private route: ActivatedRoute, private handleSubjectService: HandleSubjectService, private randomID: KoreGenerateuuidPipe) {
+    private route: ActivatedRoute, private handleSubjectService: HandleSubjectService, private randomID: KoreGenerateuuidPipe,
+    private localStorageService : LocalStorageService) {
 
   }
   ngOnInit() {

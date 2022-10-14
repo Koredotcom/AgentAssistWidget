@@ -1,10 +1,11 @@
 import { Component, EventEmitter, HostListener, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { ImageFilePath, ImageFileNames, ProjConstants, IdReferenceConst } from 'src/common/constants/proj.cnts';
+import { ImageFilePath, ImageFileNames, ProjConstants, IdReferenceConst, storageConst } from 'src/common/constants/proj.cnts';
 import { EVENTS } from 'src/common/helper/events';
 import { RandomUUIDPipe } from 'src/common/pipes/random-uuid.pipe';
 import { CommonService } from 'src/common/services/common.service';
 import { HandleSubjectService } from 'src/common/services/handle-subject.service';
+import { LocalStorageService } from 'src/common/services/local-storage.service';
 import { WebSocketService } from 'src/common/services/web-socket.service';
 import { LibraryService } from 'src/library-tab/services/library.service';
 
@@ -32,7 +33,7 @@ export class LibraryComponent implements OnInit {
 
   constructor(public handleSubjectService: HandleSubjectService, public libraryService: LibraryService,
   public websocketService : WebSocketService, public randomUUIDPipe: RandomUUIDPipe,
-  public commonService: CommonService) { }
+  public commonService: CommonService, private localStorageService : LocalStorageService) { }
 
   ngOnInit(): void {
     this.subscribeEvents();
@@ -73,14 +74,28 @@ export class LibraryComponent implements OnInit {
       if (response) {
         this.connectionDetails = response;
         console.log("connection details, 'inside assist tab");
+      }
+    });
 
+    let subscription4 = this.websocketService.socketConnectFlag$.subscribe((response) => {
+      if(response){
+        this.updateSearchTextFromStorage();
       }
     });
    
     this.subscriptionsList.push(subscribtion1);
     this.subscriptionsList.push(subscription2);
     this.subscriptionsList.push(subscription3);
+    this.subscriptionsList.push(subscription4);
 
+  }
+
+  updateSearchTextFromStorage(){
+    let appState = this.localStorageService.getLocalStorageState();
+    if(appState && appState[this.connectionDetails.conversationId] && appState[this.connectionDetails.conversationId][this.projConstants.LIBRARY][storageConst.SEARCH_VALUE]){
+      this.searchText = appState[this.connectionDetails.conversationId][this.projConstants.LIBRARY][storageConst.SEARCH_VALUE];
+      this.getSearchResults();
+    }
   }
 
   handleRunAgent(dialogueId, event) {
@@ -126,6 +141,7 @@ export class LibraryComponent implements OnInit {
     this.searchFromAgentSearchBar = eventFrom ? true : false;
     this.showSearchSuggestions = true;
     this.handleSubjectService.setSearchText({ searchFrom: this.projConstants.LIBRARY, value: this.searchText });
+    this.setSearchTextInLocalStorage();
   }
 
   emptySearchTextCheck() {
@@ -139,6 +155,19 @@ export class LibraryComponent implements OnInit {
 
   handleBackButtonClick() {
     this.handleSearchClickEvent.emit({ eventFrom: this.projConstants.LIBRARY_SEARCH, searchText: this.searchText });
+  }
+
+  librarySearchClose(){
+    this.showSearchSuggestions=false;
+    this.searchText = '';
+    this.setSearchTextInLocalStorage();
+  }
+
+  setSearchTextInLocalStorage(){
+    let storageObject : any = {
+      [storageConst.SEARCH_VALUE] : this.searchText,
+    }
+    this.localStorageService.setLocalStorageItem(storageObject, this.projConstants.LIBRARY);
   }
 
 }

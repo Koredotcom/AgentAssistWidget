@@ -4,8 +4,9 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 import { EVENTS } from '../helper/events';
 import { WebSocketService } from './web-socket.service';
 import * as $ from 'jquery';
-import { IdReferenceConst, ProjConstants } from '../constants/proj.cnts';
+import { IdReferenceConst, ProjConstants, storageConst } from '../constants/proj.cnts';
 import { DesignAlterService } from './design-alter.service';
+import { LocalStorageService } from './local-storage.service';
 declare var $: any;
 @Injectable({
   providedIn: 'root'
@@ -15,12 +16,15 @@ export class CommonService {
   grantResponseObj;
   isCallConversation: boolean = false;
   isAutomationOnGoing: boolean = false;
+  isInitialDialogOnGoing : boolean = false;
   isMyBotAutomationOnGoing: boolean = false;
+  noAutomationrunninginMyBot : boolean = true;
   automationNotRanArray: any = [];
   userIntentInput: string;
   isParsedPayload;
   scrollContent: any = {};
-  constructor(private route: ActivatedRoute, private webSocketService: WebSocketService, private designAlterService: DesignAlterService) {
+  constructor(private route: ActivatedRoute, private webSocketService: WebSocketService, private designAlterService: DesignAlterService,
+    private localStorageService : LocalStorageService) {
     console.log("--------------------------cam to common serviceeeeeeeeeeeeeeeeeee");
     this.setScrollContent();
   }
@@ -133,20 +137,13 @@ export class CommonService {
 
 
   updateAgentAssistState(_convId, _tabName, _data) {
-    var appStateStr = localStorage.getItem('agentAssistState') || '{}';
-    var appState = JSON.parse(appStateStr);
-    var convState = appState[_convId] || {};
-    if (!appState[_convId]) {
-        convState = appState[_convId] = {};
-    }
-    if (!convState[_tabName]) {
-        convState[_tabName] = {};
-    }
     if (!_data.suggestions && _data.buttons?.length > 1) {
-        convState['isWelcomeProcessed'] = true;
-        convState['automationGoingOn'] = this.isAutomationOnGoing;
+      let storageObject : any = {
+        [storageConst.IS_WELCOMEMSG_PROCESSED] : true,
+        [storageConst.AUTOMATION_GOING_ON] : this.isAutomationOnGoing
+      }
+      this.localStorageService.setLocalStorageItem(storageObject);
     }
-    localStorage.setItem('agentAssistState', JSON.stringify(appState));
 }
 
   addFeedbackHtmlToDom(headerUUids, lastElementBeforeNewMessage, runForAgentBot?) {

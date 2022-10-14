@@ -49,8 +49,10 @@ export class OverlaysearchComponent implements OnInit {
       this.showOverLay = false;
       this.searchResponse = {};
       if (searchObj && searchObj.value) {
-        this.searchConentObject = searchObj;
-        this.emitSearchRequest(searchObj, true);
+        this.searchConentObject = Object.assign({}, searchObj);
+        setTimeout(() => {
+          this.emitSearchRequest(searchObj, true);
+        }, 100);
         console.log(this.showOverLay, "show overlya sub1"); 
       }
     });
@@ -79,7 +81,7 @@ export class OverlaysearchComponent implements OnInit {
   }
 
   emitSearchRequest(searchObj, isSearchFlag) {
-    console.log("inside emit overlay request", searchObj);
+    console.log("inside emit overlay request", searchObj, this.connectionDetails);
     let connectionDetails: any = Object.assign({}, this.connectionDetails);
     connectionDetails.value = searchObj.value;
     connectionDetails.isSearch = isSearchFlag;

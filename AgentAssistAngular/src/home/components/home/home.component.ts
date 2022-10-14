@@ -3,13 +3,14 @@ import { Subscription } from 'rxjs';
 import { EVENTS } from 'src/common/helper/events';
 import { WebSocketService } from 'src/common/services/web-socket.service';
 import { HandleSubjectService } from 'src/common/services/handle-subject.service';
-import { classNamesConst, IdReferenceConst, ImageFileNames, ImageFilePath, ProjConstants } from '../../../common/constants/proj.cnts'
+import { classNamesConst, IdReferenceConst, ImageFileNames, ImageFilePath, ProjConstants, storageConst } from '../../../common/constants/proj.cnts'
 import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
 import * as $ from 'jquery';
 import { SanitizeHtmlPipe } from 'src/common/pipes/sanitize-html.pipe';
 import { CommonService } from 'src/common/services/common.service';
 import { KoreGenerateuuidPipe } from 'src/common/pipes/kore-generateuuid.pipe';
 import { DesignAlterService } from 'src/common/services/design-alter.service';
+import { LocalStorageService } from 'src/common/services/local-storage.service';
 
 @Component({
   selector: 'app-home',
@@ -32,12 +33,12 @@ export class HomeComponent implements OnInit {
   showTerminatePopup: boolean = false;
   showInterruptPopup: boolean = false;
   connectionDetails: any = {};
-  scrollContainer : any;
-  scrollbottomwaitingTime : number = 500;
+  scrollContainer: any;
+  scrollbottomwaitingTime: number = 500;
 
   constructor(public handleSubjectService: HandleSubjectService, public websocketService: WebSocketService,
     public sanitizeHTMLPipe: SanitizeHtmlPipe, private commonService: CommonService, private koregenerateUUIDPipe: KoreGenerateuuidPipe,
-    private designAlterService: DesignAlterService) { }
+    private designAlterService: DesignAlterService, private localStorageService: LocalStorageService) { }
 
   ngOnInit(): void {
     this.subscribeEvents();
@@ -49,30 +50,83 @@ export class HomeComponent implements OnInit {
     })
   }
 
-  ngAfterViewInit(){
+  ngAfterViewInit() {
     this.scrollContainer = document.getElementById(IdReferenceConst.HOMESCROLLBAR);
   }
 
   subscribeEvents() {
-
     let subscription1 = this.handleSubjectService.activeTabSubject.subscribe(tab => {
       this.activeTab = tab;
-      setTimeout(() => { 
-        if(this.activeTab != this.projConstants.LIBRARY){
+      setTimeout(() => {
+        if (this.activeTab != this.projConstants.LIBRARY) {
           this.scrollToBottom(true);
-        } 
+        }
       }, this.scrollbottomwaitingTime);
     });
 
     let subscription2 = this.handleSubjectService.connectDetailsSubject.subscribe((urlParams: any) => {
       if (urlParams && urlParams?.token) {
+        // let activeTab = (urlParams.isCall == "false") ? this.projConstants.ASSIST : this.projConstants.TRANSCRIPT;
+        // this.handleSubjectService.setActiveTab(activeTab);
+        this.localStorageService.initializeLocalStorageState();
         this.connectionDetails = urlParams;
         this.eventListenerFromParent();
+        this.updateUIState(this.connectionDetails.conversationId, urlParams.isCall);
       }
     });
 
     this.subscriptionsList.push(subscription1);
     this.subscriptionsList.push(subscription2);
+  }
+
+  updateUIState(_convId, _isCallConv) {
+    
+    $('.empty-data-no-agents').addClass('hide');
+    let appState = this.localStorageService.getLocalStorageState();
+    let activeTab: any;
+    console.log("update ui state", appState[_convId][storageConst.CURRENT_TAB]);
+    if (_isCallConv == 'true') {
+      $(`#scriptContainer .empty-data-no-agents`).removeClass('hide');
+    }
+    if (appState[_convId] && !appState[_convId][storageConst.CURRENT_TAB]) {
+      let storageObject: any = {};
+      if (_isCallConv == 'true') {
+        storageObject[storageConst.CURRENT_TAB] = this.projConstants.TRANSCRIPT;
+        activeTab = this.projConstants.TRANSCRIPT;
+      } else {
+        storageObject[storageConst.CURRENT_TAB] = this.projConstants.ASSIST;
+        activeTab = this.projConstants.ASSIST;
+      }
+        console.log("inside home component ui state");
+        
+        this.localStorageService.setLocalStorageItem(storageObject, activeTab);
+    } else if (appState[_convId] && appState[_convId][storageConst.CURRENT_TAB]) {
+      activeTab = appState[_convId][storageConst.CURRENT_TAB];
+    }
+    this.handleSubjectService.setActiveTab(activeTab);
+    // document.getElementById("loader").style.display = "none";
+    this.hightLightFaqFromStoredList(_convId, this.projConstants.ASSIST);
+  }
+
+
+  hightLightFaqFromStoredList(convId, currentTab) {
+    let appState = this.localStorageService.getLocalStorageState();
+    if (appState[convId] && !appState[convId][currentTab] && !appState[convId][currentTab][storageConst.FAQ_LIST]) {
+      let storageObject: any = {};
+      storageObject[currentTab][storageConst.FAQ_LIST] = [];
+      this.localStorageService.setLocalStorageItem(storageObject);
+    }else if(appState[convId] && appState[convId][currentTab] && appState[convId][currentTab][storageConst.FAQ_LIST]){
+      let selectedFaqList = appState[convId][currentTab][storageConst.FAQ_LIST];
+      for (let item of selectedFaqList) {
+        let faqElementId = item.split('_')[1];
+        let faqParentElementId = item.split('_')[0];
+        let faqParentElement = document.getElementById(faqParentElementId);
+        if (faqParentElement) {
+          let faqElement: any = faqParentElement.querySelector('#' + faqElementId);
+          faqElement.style.borderStyle = "solid";
+        }
+      }
+    }
   }
 
   eventListenerFromParent() {
@@ -106,9 +160,7 @@ export class HomeComponent implements OnInit {
       }
       if (e.data.name === 'agentAssist.endOfConversation' && e.data.conversationId) {
         let currentEndedConversationId = e.data.conversationId;
-        let appStateStr = localStorage.getItem('agentAssistState') || '{}';
-        let appState = JSON.parse(appStateStr);
-        if (appState[currentEndedConversationId]) {
+        if (this.localStorageService.checkConversationIdStateInStorage([currentEndedConversationId])) {
           let request_resolution_comments = {
             conversationId: e.data?.conversationId,
             userId: '',
@@ -117,8 +169,7 @@ export class HomeComponent implements OnInit {
             chatHistory: e.data?.payload?.chatHistory
           }
           this.websocketService.emitEvents(EVENTS.request_resolution_comments, request_resolution_comments);
-          // localStorage.clear(appState[currentEndedConversationId]);
-          delete appState[currentEndedConversationId];
+          this.localStorageService.deleteLocalStorageState(currentEndedConversationId);
         }
         return;
       }
@@ -154,13 +205,13 @@ export class HomeComponent implements OnInit {
 
   }
 
-  isChecked() {
-
-  }
-
   changeActiveTab(tab) {
     $(".scroll-bottom-show-btn").addClass('hiddenEle');
     this.handleSubjectService.setActiveTab(tab);
+    let storageObject : any = {
+      [storageConst.CURRENT_TAB] : tab
+    }
+    this.localStorageService.setLocalStorageItem(storageObject);
   }
 
   getSearchResults() {
@@ -213,25 +264,25 @@ export class HomeComponent implements OnInit {
   }
 
   scrollToBottom($event) {
-    if(this.psBottom){
+    if (this.psBottom) {
       $(window).trigger('resize');
       this.psBottom.directiveRef.scrollToTop(this.homescroll.nativeElement.scrollHeight);
-      setTimeout(() => {        
-        this.psBottom.directiveRef.update();    
+      setTimeout(() => {
+        this.psBottom.directiveRef.update();
       }, this.scrollbottomwaitingTime);
     }
   }
 
   onScrollEvent(event) {
-    if(this.activeTab == this.projConstants.ASSIST || this.activeTab == this.projConstants.MYBOT){      
+    if (this.activeTab == this.projConstants.ASSIST || this.activeTab == this.projConstants.MYBOT) {
       if (event && event?.type) {
-        if(event.type == this.projConstants.PS_Y_REACH_END){          
+        if (event.type == this.projConstants.PS_Y_REACH_END) {
           this.commonService.scrollContent[this.activeTab].scrollAtEnd = true;
           this.commonService.checkDropdownCollapaseState(this.commonService.scrollContent[this.activeTab].lastElementBeforeNewMessage, this.activeTab);
-          if(this.commonService.scrollContent[this.activeTab].scrollAtEnd){
-              this.commonService.updateScrollAtEndVariables(this.activeTab);
-          }else{
-              $(".scroll-bottom-show-btn").removeClass('hiddenEle');
+          if (this.commonService.scrollContent[this.activeTab].scrollAtEnd) {
+            this.commonService.updateScrollAtEndVariables(this.activeTab);
+          } else {
+            $(".scroll-bottom-show-btn").removeClass('hiddenEle');
           }
           let dynamicBlockId = (this.activeTab == this.projConstants.ASSIST) ? IdReferenceConst.DYNAMICBLOCK : IdReferenceConst.MYBOTAUTOMATIONBLOCK;
           this.commonService.scrollContent[this.activeTab].lastElementBeforeNewMessage = this.designAlterService.getLastElement(dynamicBlockId);
@@ -252,18 +303,18 @@ export class HomeComponent implements OnInit {
           setTimeout(() => {
             this.updateScrollButton()
           }, 10);
-  
+
         }
       }
     }
 
   }
 
-  scrollClickEvents(){
+  scrollClickEvents() {
     let scrollbuttonId = this.activeTab == this.projConstants.ASSIST ? IdReferenceConst.SCROLLBUTTON_ASSIST : IdReferenceConst.SCROLLBUTTON_MYBOT;
-    document.getElementById(scrollbuttonId).removeEventListener('click', ()=>{
+    document.getElementById(scrollbuttonId).removeEventListener('click', () => {
       console.log("click event removed");
-    });    
+    });
     document.getElementById(scrollbuttonId).addEventListener('click', (event) => {
       this.scrollToBottom(true);
     }, { once: true });
@@ -282,6 +333,10 @@ export class HomeComponent implements OnInit {
     }
   }
 
+
+  isChecked() {
+
+  }
 
 
 }

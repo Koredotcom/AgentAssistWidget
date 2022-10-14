@@ -8,7 +8,7 @@ import { ProjConstants } from '../constants/proj.cnts';
 export class HandleSubjectService {
 
   public connectDetailsSubject = new BehaviorSubject<object>({});
-  public activeTabSubject = new BehaviorSubject<string>(ProjConstants.ASSIST);
+  public activeTabSubject = new BehaviorSubject<string>(null);
   public searchTextSubject = new BehaviorSubject<object>({});
   public searchTextFromAgentSearch = new BehaviorSubject<object>({});
   public runButtonClickEventSubject = new BehaviorSubject<object>({});
@@ -54,7 +54,6 @@ export class HandleSubjectService {
       }
     }
     console.log(parmasObj, "after obj");
-    
 
     this.connectDetailsSubject.next(parmasObj);
   }

@@ -17,6 +17,8 @@ export const ProjConstants = {
     MYBOT : 'My Bot',
     TRANSCRIPT : "Transcript",
     LIBRARY : 'Library',
+    VOICE : 'voice',
+    CHAT : 'chat',
     BOTID : 'botId',
     CONVESATIONID : 'conversationId',
     RUN : 'RUN',
@@ -72,7 +74,13 @@ export const IdReferenceConst = {
     DROPDOWN_HEADER : 'dropDownHeader',
     ASSIST_RUN_BUTTON : 'run',
     SCROLLBUTTON_ASSIST : 'scrollButtonAssist',
-    SCROLLBUTTON_MYBOT : 'scrollButtonMybot'
+    SCROLLBUTTON_MYBOT : 'scrollButtonMybot',
+    SENDMSG : 'sendMsg',
+    COPYMSG : 'copyMsg',
+    SENDMSG_REQUEST : 'agentAssist.SendMessage',
+    COPYMSG_REQUEST : 'agentAssist.CopyMessage',
+    SEND_METHOD : 'send',
+    COPY_METHOD : 'copy'
 }
 
 
@@ -97,5 +105,17 @@ export const classNamesConst = {
     UNREAD_MSG : 'unread-msg',
     EMPTY_DATA_NO_AGENTS : 'empty-data-no-agents',
     OVERRIDE_INPUT_DIV : 'override-input-div'
+}
 
+export const storageConst = {
+    CURRENT_TAB : 'currentTab',
+    AGENT_ASSIST_STATE : 'agentAssistState',
+    IS_WELCOMEMSG_PROCESSED : 'isWelcomeProcessed',
+    AUTOMATION_GOING_ON : 'automationGoingOn',
+    INITIALTASK_GOING_ON : 'initialTaskGoingOn',
+    AUTOMATION_GOING_ON_AFTER_REFRESH : 'automationGoingOnAfterRefresh',
+    AUTOMATION_GOING_ON_AFTER_REFRESH_MYBOT : 'automationGoingOnAfterRefreshMyBot',
+    AUTOMATION_NOTRAN_ARRAY : 'automationsNotRanArray',
+    FAQ_LIST : 'faqList',
+    SEARCH_VALUE : 'search'
 }

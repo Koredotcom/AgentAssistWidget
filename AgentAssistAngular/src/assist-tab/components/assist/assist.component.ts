@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { ProjConstants, ImageFilePath, ImageFileNames, IdReferenceConst } from 'src/common/constants/proj.cnts';
+import { ProjConstants, ImageFilePath, ImageFileNames, IdReferenceConst, storageConst } from 'src/common/constants/proj.cnts';
 import { RandomUUIDPipe } from 'src/common/pipes/random-uuid.pipe';
 import { RawHtmlPipe } from 'src/common/pipes/raw-html.pipe';
 import { RemoveSpecialCharPipe } from 'src/common/pipes/remove-special-char.pipe';
@@ -16,8 +16,7 @@ import { KoreGenerateuuidPipe } from 'src/common/pipes/kore-generateuuid.pipe';
 import { AssistService } from 'src/assist-tab/services/assist.service';
 import { HtmlEntityPipe } from 'src/common/pipes/html-entity.pipe';
 import { EVENTS } from 'src/common/helper/events';
-import { PerfectScrollbarDirective } from 'ngx-perfect-scrollbar';
-
+import { LocalStorageService } from 'src/common/services/local-storage.service';
 @Component({
   selector: 'app-assist',
   templateUrl: './assist.component.html',
@@ -40,7 +39,6 @@ export class AssistComponent implements OnInit {
   dropdownHeaderUuids: any;
   dialogPositionId: string;
   connectionDetails: any;
-  isInitialDialogOnGoing: boolean = false
   interruptDialog: any = {};
   answerPlaceableIDs: any = [];
   entitiestValueArray: any = [];
@@ -55,7 +53,7 @@ export class AssistComponent implements OnInit {
     public commonService: CommonService, public websocketService: WebSocketService,
     public designAlterService: DesignAlterService, public rawHtmlPipe: RawHtmlPipe,
     public koreGenerateuuidPipe: KoreGenerateuuidPipe, public assisttabService: AssistService,
-    public htmlEntityPipe: HtmlEntityPipe) {
+    public htmlEntityPipe: HtmlEntityPipe, private localStorageService : LocalStorageService) {
 
   }
 
@@ -92,21 +90,21 @@ export class AssistComponent implements OnInit {
 
     let subscription3 = this.websocketService.endOfTaskResponse$.subscribe((endoftaskresponse: any) => {
       if (endoftaskresponse && (this.dialogPositionId == endoftaskresponse.positionId || (endoftaskresponse.author && endoftaskresponse.author.type == 'USER'))) {
-        this.dialogTerminatedOrIntrupptedInMyBot();
+        this.dialogTerminatedOrIntruppted();
       }
     })
 
     let subscription4 = this.handleSubjectService.terminateClickEventSubject.subscribe((response: any) => {
       if (response && response?.activeTab == this.projConstants.ASSIST) {
         this.AgentAssist_run_click({ intentName: this.projConstants.DISCARD_ALL }, this.dialogPositionId)
-        this.dialogTerminatedOrIntrupptedInMyBot();
+        this.dialogTerminatedOrIntruppted();
       }
     });
 
     let subscription5 = this.handleSubjectService.interruptClickEventSubject.subscribe((response: any) => {
       if (response && response?.activeTab == this.projConstants.ASSIST) {
         this.AgentAssist_run_click({ intentName: this.projConstants.DISCARD_ALL }, this.dialogPositionId)
-        this.dialogTerminatedOrIntrupptedInMyBot();
+        this.dialogTerminatedOrIntruppted();
         this.runDialogForAssistTab(this.interruptDialog);
       }
 
@@ -224,6 +222,48 @@ export class AssistComponent implements OnInit {
     });
   }
 
+  handleSendCopyButtonClickEvent(uuid, data, eventName){
+    document.getElementById(IdReferenceConst.SENDMSG + '-' + uuid).addEventListener('click', (evt) => {
+      let payload = data.answer;
+      var message = {
+          method: (eventName == IdReferenceConst.SENDMSG) ? this.projConstants.SEND_METHOD : this.projConstants.COPY_METHOD,
+          name: (eventName == IdReferenceConst.SENDMSG) ? this.projConstants.SENDMSG_REQUEST : this.projConstants.COPYMSG_REQUEST,
+          conversationId: this.connectionDetails.conversationId,
+          payload: payload
+      };
+      if(eventName == IdReferenceConst.SENDMSG) {
+        window.parent.postMessage(message, '*');
+      }else if(eventName == IdReferenceConst.COPYMSG){
+        parent.postMessage(message, '*');
+      }
+      this.highLightAndStoreFaqId(evt,uuid, data);
+    });
+  }
+
+  highLightAndStoreFaqId(evt,uuid, data){
+    console.log("clickevent", data);
+    let faqElementId = $(evt.target).parent().parent().attr('id');
+    if(document.getElementById(faqElementId)){
+        let faqParentElementId = $(evt.target).parent().parent().parent().attr('id');
+        let storedfaqId = faqParentElementId + '_' + faqElementId;
+        document.getElementById(faqElementId).style.borderStyle = "solid";
+        console.log(faqElementId, "faq element id");
+        
+        this.setSentFaqListInStorage(this.connectionDetails.conversationId, storedfaqId, this.projConstants.ASSIST);
+    }
+  }
+
+  setSentFaqListInStorage(convId, faqId, currentTab) {
+    let appState = this.localStorageService.getLocalStorageState();
+    if (appState && appState[convId] && appState[convId][storageConst.FAQ_LIST].indexOf(faqId) == -1) {
+      appState[convId][storageConst.FAQ_LIST].push(faqId);
+      let storageObject : any = {
+        [storageConst.FAQ_LIST] : appState[convId][storageConst.FAQ_LIST]
+      }
+      this.localStorageService.setLocalStorageItem(storageObject);
+    }
+  }
+
   clickEvents(eventName, uuid?, dialogId?, data?) {
     if (eventName == IdReferenceConst.ASSISTTERMINATE) {
       this.terminateButtonClick(uuid)
@@ -235,7 +275,8 @@ export class AssistComponent implements OnInit {
       this.designAlterService.handleDropdownToggle(uuid);
     } else if (eventName == IdReferenceConst.ASSIST_RUN_BUTTON) {
       this.handleRunButtonClick(uuid, data);
-
+    } else if(eventName == IdReferenceConst.SENDMSG || eventName == IdReferenceConst.COPYMSG){
+      this.handleSendCopyButtonClickEvent(uuid, data, eventName);
     }
   }
 
@@ -243,13 +284,11 @@ export class AssistComponent implements OnInit {
     let uuids = this.koreGenerateuuidPipe.transform();
     this.dropdownHeaderUuids = uuids;
     this.commonService.isAutomationOnGoing = true;
-    // let appStateStr = localStorage.getItem('agentAssistState') || '{}';
-    // let appState = JSON.parse(appStateStr);
-    // if (appState[this.connectionDetails.conversationId]) {
-    //   appState[this.connectionDetails.conversationId].automationGoingOn = this.commonService.isAutomationOnGoing;
-    //   appState[this.connectionDetails.conversationId]['automationGoingOnAfterRefresh'] = this.commonService.isAutomationOnGoing
-    //   localStorage.setItem('agentAssistState', JSON.stringify(appState))
-    // }
+    let storageObject : any = {
+      [storageConst.AUTOMATION_GOING_ON] : this.commonService.isAutomationOnGoing,
+      [storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH] : this.commonService.isAutomationOnGoing
+    }
+    this.localStorageService.setLocalStorageItem(storageObject);
     let dialogId = this.randomUUIDPipe.transform(IdReferenceConst.positionId);
     this.dialogPositionId = dialogId;
     this.assisttabService._createRunTemplateContiner(uuids, data.intentName);
@@ -336,12 +375,11 @@ export class AssistComponent implements OnInit {
 
   updateAgentAssistResponse(data, botId, conversationId) {
     let shouldProcessResponse = false;
-    let appStateStr = localStorage.getItem('agentAssistState') || '{}';
-    let appState = JSON.parse(appStateStr);
+    let appState = this.localStorageService.getLocalStorageState();
     if (appState[this.connectionDetails.conversationId]) {
       // if incoming data belongs to welcome message do nothing
       if (!data.suggestions && data.buttons?.length > 1) {
-        if (appState[this.connectionDetails.conversationId].isWelcomeProcessed && !appState[this.connectionDetails.conversationId].automationGoingOn && document.getElementsByClassName('.welcome-msg').length > 0) {
+        if (appState[this.connectionDetails.conversationId][storageConst.IS_WELCOMEMSG_PROCESSED] && !appState[this.connectionDetails.conversationId][storageConst.AUTOMATION_GOING_ON] && document.getElementsByClassName('.welcome-msg').length > 0) {
           return;
         }
       }
@@ -380,12 +418,11 @@ export class AssistComponent implements OnInit {
     let responseId = uuids;
     console.log(this.commonService.isAutomationOnGoing,this.dropdownHeaderUuids,data.suggestions);
     
-    if (!this.commonService.isAutomationOnGoing && data.intentName && !data.suggestions && !this.isInitialDialogOnGoing) {
-      let appStateStr = localStorage.getItem('agentAssistState') || '{}';
-      let appState = JSON.parse(appStateStr);
+    if (!this.commonService.isAutomationOnGoing && data.intentName && !data.suggestions && !this.commonService.isInitialDialogOnGoing) {
       let isInitialTaskRanORNot;
+      let appState = this.localStorageService.getLocalStorageState();
       if (appState[this.connectionDetails.conversationId]) {
-        isInitialTaskRanORNot = appState[this.connectionDetails.conversationId]['initialTaskGoingOn']
+        isInitialTaskRanORNot = appState[this.connectionDetails.conversationId][storageConst.INITIALTASK_GOING_ON]
       }
       if (!isInitialTaskRanORNot) {
         this.runDialogForAssistTab(data, `onInitDialog-123456`, "onInitRun");
@@ -419,27 +456,14 @@ export class AssistComponent implements OnInit {
               let foundIndex = this.commonService.automationNotRanArray.findIndex((ele) => ele.id === elem.id);
               if (foundIndex == -1) {
                 this.commonService.automationNotRanArray.push({ name: elem.innerText.trim(), id: elem.id });
-                let appStateStr = localStorage.getItem('agentAssistState') || '{}';
-                let appState = JSON.parse(appStateStr);
-                let convState = appState[this.connectionDetails.conversationId] || {};
-                if (!appState[this.connectionDetails.conversationId]) {
-                  convState = appState[this.connectionDetails.conversationId] = {};
-                } else {
-
-                  if (!convState['assistTab']) {
-                    convState['assistTab'] = {};
-                  }
-                  if (!convState['assistTab']['automationsNotRanArray']) {
-                    convState['assistTab']['automationsNotRanArray'] = [];
-                  }
-                  convState['assistTab']['automationsNotRanArray'] = this.commonService.automationNotRanArray;
-                  localStorage.setItem('agentAssistState', JSON.stringify(appState))
+                let storageObject : any = {
+                  [storageConst.AUTOMATION_NOTRAN_ARRAY] : this.commonService.automationNotRanArray 
                 }
-              }
-              // elem.remove();
+                this.localStorageService.setLocalStorageItem(storageObject,this.projConstants.ASSIST);
+               }
+            
             }
           })
-          // ele.remove();
         })
       }
       this.commonService.userIntentInput = data.userInput;
@@ -582,8 +606,8 @@ export class AssistComponent implements OnInit {
           } else {
             let a = $(`#faqDiv-${uuids + index}`);
             let faqActionHtml = `<div class="action-links">
-            <button class="send-run-btn" id="sendMsg">Send</button>
-            <div class="copy-btn">
+            <button class="send-run-btn" id="sendMsg-${uuids + index}">Send</button>
+            <div class="copy-btn" id="copyMsg-${uuids + index}">
                 <i class="ast-copy"></i>
             </div>
             </div>`;
@@ -606,9 +630,12 @@ export class AssistComponent implements OnInit {
             $(`#check-${uuids + index}`).addClass('hide');
             $(`#faqDiv-${uuids + index}`).removeClass('is-dropdown-show-default');
           }
+          this.clickEvents(IdReferenceConst.SENDMSG, uuids+index, this.dialogPositionId, ele);
+          this.clickEvents(IdReferenceConst.COPYMSG, uuids+index, this.dialogPositionId, ele);
         });
         this.handleSeeMoreButton(responseId,data.suggestions.faqs, this.projConstants.FAQ);
         this.handleSeeMoreButton(responseId,data.suggestions.articles, this.projConstants.ARTICLE);
+        
       }
       setTimeout(() => {
         this.updateNewMessageUUIDList(responseId);
@@ -621,7 +648,7 @@ export class AssistComponent implements OnInit {
           faqAnswerIdsPlace = this.answerPlaceableIDs.find(ele => ele.input == data.value);
           let splitedanswerPlaceableID = faqAnswerIdsPlace.id.split('-');
           splitedanswerPlaceableID.shift();
-          let faqAnswerSendMsg = $(`#dynamicBlock #faqDiv-${splitedanswerPlaceableID.join('-')}`).find("[id='sendMsg']");
+          let faqAnswerSendMsg = $(`#dynamicBlock #faqDiv-${splitedanswerPlaceableID.join('-')}`).find("[id*='sendMsg']");
           $(faqAnswerSendMsg).attr('data-msg-data', ele.answer)
           let faqAnswerCopyMsg = $(`#dynamicBlock #faqDiv-${splitedanswerPlaceableID.join('-')}`).find(".copy-btn");
           $(faqAnswerCopyMsg).attr('data-msg-data', ele.answer)
@@ -890,17 +917,17 @@ export class AssistComponent implements OnInit {
     }
   }
 
-  dialogTerminatedOrIntrupptedInMyBot() {
-    let appStateStr: any = localStorage.getItem('agentAssistState') || '{}';
-    let appState: any = JSON.parse(appStateStr);
+  dialogTerminatedOrIntruppted() {
     this.commonService.isAutomationOnGoing = false;
-    if (appState[this.connectionDetails.conversationId]) {
-      appState[this.connectionDetails.conversationId]['automationGoingOnAfterRefresh'] = this.commonService.isAutomationOnGoing;
-      localStorage.setItem('agentAssistState', JSON.stringify(appState))
+    this.commonService.isInitialDialogOnGoing = true;
+    this.isOverRideMode = false;
+    let storageObject : any = {
+      [storageConst.AUTOMATION_GOING_ON] : this.commonService.isAutomationOnGoing,
+      [storageConst.INITIALTASK_GOING_ON] : this.commonService.isInitialDialogOnGoing,
+      [storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH] : this.commonService.isAutomationOnGoing
     }
+    this.localStorageService.setLocalStorageItem(storageObject);
     this.commonService.addFeedbackHtmlToDom(this.dropdownHeaderUuids, this.commonService.scrollContent[ProjConstants.ASSIST].lastElementBeforeNewMessage);
-    console.log(this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd, "dialog termiante");
-
     if (this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd) {
       this.scrollToBottom();
     }
