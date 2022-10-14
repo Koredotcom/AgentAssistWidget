@@ -25,33 +25,39 @@ import { LocalStorageService } from 'src/common/services/local-storage.service';
 export class MybotComponent implements OnInit {
 
   @Output() scrollToBottomEvent = new EventEmitter();
-  @ViewChild('mybotautomation') mybotautomation: ElementRef;
   @Output() handleTerminatePopup = new EventEmitter();
+  @ViewChild('mybotautomation') mybotautomation: ElementRef;
 
   subscriptionsList: Subscription[] = [];
 
   projConstants: any = ProjConstants;
-  imageFilePath: string = ImageFilePath;
   imageFileNames: any = ImageFileNames;
-  isMybotInputResponseClick: boolean = false;
+  imageFilePath: string = ImageFilePath;
+
+  connectionDetails: any;
+  interruptDialog: any = {};
+  scrollAtEnd: boolean = true;
   myBotDataResponse: any = {};
   myBotDropdownHeaderUuids: any;
   myBotDialogPositionId: string;
-  scrollAtEnd: boolean = true;
-  connectionDetails: any;
-  interruptDialog: any = {};
+  isMybotInputResponseClick: boolean = false;
 
-  constructor(public handleSubjectService: HandleSubjectService, public randomUUIDPipe: RandomUUIDPipe,
-    public mybotDataService: MybotDataService, public removeSpecialCharPipe: RemoveSpecialCharPipe,
+  constructor(public handleSubjectService: HandleSubjectService,
+    public randomUUIDPipe: RandomUUIDPipe,
+    public mybotDataService: MybotDataService,
+    public removeSpecialCharPipe: RemoveSpecialCharPipe,
     public replaceQuotStringWithDoubleQuotPipe: ReplaceQuotStringWithDoubleQuotPipe,
-    public sanitizeHtmlPipe: SanitizeHtmlPipe, private templateRenderClassService: TemplateRenderClassService,
-    public commonService: CommonService, public websocketService: WebSocketService,
-    public designAlterService: DesignAlterService, public rawHtmlPipe: RawHtmlPipe,
-    private localStorageService : LocalStorageService) { }
+    public sanitizeHtmlPipe: SanitizeHtmlPipe,
+    private templateRenderClassService: TemplateRenderClassService,
+    public commonService: CommonService,
+    public websocketService: WebSocketService,
+    public designAlterService: DesignAlterService,
+    public rawHtmlPipe: RawHtmlPipe,
+    private localStorageService: LocalStorageService) { }
 
   ngOnInit(): void {
     let response = this.commonService.renderingAgentHistoryMessage();
-    response.then((res)=>{
+    response.then((res) => {
       this.renderHistoryMessages(res.messages, res.feedbackDetails)
     })
     this.subscribeEvents();
@@ -103,9 +109,9 @@ export class MybotComponent implements OnInit {
       }
     });
 
-    let subscription6 = this.handleSubjectService.connectDetailsSubject.subscribe((response : any)=>{
-      if(response){
-        this.connectionDetails = response;        
+    let subscription6 = this.handleSubjectService.connectDetailsSubject.subscribe((response: any) => {
+      if (response) {
+        this.connectionDetails = response;
       }
     });
     this.subscriptionsList.push(subscription1);
@@ -116,6 +122,7 @@ export class MybotComponent implements OnInit {
     this.subscriptionsList.push(subscription6);
   }
 
+  //running dialogue and mybot data response code.
   processMybotDataResponse(data) {
     let myBotuuids = this.randomUUIDPipe.transform();
     let agentInputId = this.randomUUIDPipe.transform();
@@ -159,7 +166,8 @@ export class MybotComponent implements OnInit {
           let key = e.which || e.keyCode || 0;
           if (key === 13) {
             this.getAgentInputValue(e.target.value);
-            this.isMybotInputResponseClick = true;          }
+            this.isMybotInputResponseClick = true;
+          }
         });
       } else {
         $(runInfoContent).append(tellToUserHtml);
@@ -180,8 +188,8 @@ export class MybotComponent implements OnInit {
     this.commonService.isMyBotAutomationOnGoing = true;
     let agentBotuuids = this.randomUUIDPipe.transform();
     this.myBotDropdownHeaderUuids = agentBotuuids;
-    let storageObject : any = {
-      [storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH_MYBOT] : this.commonService.isMyBotAutomationOnGoing
+    let storageObject: any = {
+      [storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH_MYBOT]: this.commonService.isMyBotAutomationOnGoing
     }
     this.localStorageService.setLocalStorageItem(storageObject);
     this._createRunTemplateContainerForMyTab(agentBotuuids, data.name, this.myBotDialogPositionId)
@@ -195,9 +203,10 @@ export class MybotComponent implements OnInit {
     let dropdownHtml = this.mybotDataService.createDialogTaskAccordionTemplate(agentBotuuids, intentName);
     this.mybotautomation.nativeElement.innerHTML += dropdownHtml;
     this.clickEvents(IdReferenceConst.MYBOTTERMINATE, agentBotuuids);
-    this.clickEvents(IdReferenceConst.DROPDOWN_HEADER,agentBotuuids);
+    this.clickEvents(IdReferenceConst.DROPDOWN_HEADER, agentBotuuids);
   }
 
+  //input value from mybot
   getAgentInputValue(value, intent?) {
     if (value) {
       let connectionDetails: any = Object.assign({}, this.connectionDetails);
@@ -212,34 +221,17 @@ export class MybotComponent implements OnInit {
     }
   }
 
-
+  //terminate code
   dialogTerminatedOrIntrupptedInMyBot() {
     this.commonService.isMyBotAutomationOnGoing = false;
-    let storageObject : any = {
-      [storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH_MYBOT] : this.commonService.isMyBotAutomationOnGoing
+    let storageObject: any = {
+      [storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH_MYBOT]: this.commonService.isMyBotAutomationOnGoing
     }
     this.localStorageService.setLocalStorageItem(storageObject);
     this.commonService.addFeedbackHtmlToDom(this.myBotDropdownHeaderUuids, this.commonService.scrollContent[ProjConstants.MYBOT].lastElementBeforeNewMessage, 'runForAgentBot',);
   }
 
-  terminateButtonClick(uuid) {
-    document.getElementById(IdReferenceConst.MYBOTTERMINATE + '-' + uuid).addEventListener('click', (event) => {
-      this.handleTerminatePopup.emit({ status: true, type: this.projConstants.TERMINATE });
-    });
-  }
-
-  clickEvents(eventName, uuid?) {
-    if (eventName == IdReferenceConst.MYBOTTERMINATE) {
-      this.terminateButtonClick(uuid)
-    }else if(eventName == IdReferenceConst.DROPDOWN_HEADER){
-      this.designAlterService.handleDropdownToggle(uuid);
-    }
-  }
-
-  scrollToBottom() {
-    this.scrollToBottomEvent.emit(true);
-  }
-
+  //old dialogues styling
   collapseOldDialoguesInMyBot() {
     if ($(`#myBotAutomationBlock .collapse-acc-data`).length > 0) {
       let listItems = $("#myBotAutomationBlock .collapse-acc-data");
@@ -249,36 +241,57 @@ export class MybotComponent implements OnInit {
         }
       });
     }
-}
+  }
 
-  renderHistoryMessages(response, feedBackResult){
-      if(response.length > 0){
-          $('#noAutoRunning').addClass('hide');
-      }
-      // document.getElementById("loader").style.display = "none";
-      let previousId;
-      let previousTaskName, currentTaskName, previousTaskPositionId, currentTaskPositionId;
-      let convId = this.commonService.configObj.conversationid;
-      let botId = this.commonService.configObj.botid;
+  scrollToBottom() {
+    this.scrollToBottomEvent.emit(true);
+  }
 
-          let resp = response.length > 0 ? response : undefined;
-  resp?.forEach((res, index) => {
-              
-              if ((!res.agentAssistDetails?.suggestions && !res.agentAssistDetails?.ambiguityList && !res.agentAssistDetails?.ambiguity) && res.type == 'outgoing') {
-                  let _msgsResponse = this.mybotDataService.getMybotMsgResponse(res._id, res.botId)
-                  currentTaskName = res.tN ? res.tN : currentTaskName;
-                  currentTaskPositionId = res?.agentAssistDetails?.positionId ? res?.agentAssistDetails?.positionId : currentTaskPositionId;
-                  let historyData = $('#myBotAutomationBlock');
-                  let userInputHtml;
-                  if (res.agentAssistDetails.userInput) {
-                      userInputHtml = `<div class="agent-utt-info" id="agentUttInfo-${res._id}">
+  //click events in mybot
+  terminateButtonClick(uuid) {
+    document.getElementById(IdReferenceConst.MYBOTTERMINATE + '-' + uuid).addEventListener('click', (event) => {
+      this.handleTerminatePopup.emit({ status: true, type: this.projConstants.TERMINATE });
+    });
+  }
+
+  clickEvents(eventName, uuid?) {
+    if (eventName == IdReferenceConst.MYBOTTERMINATE) {
+      this.terminateButtonClick(uuid)
+    } else if (eventName == IdReferenceConst.DROPDOWN_HEADER) {
+      this.designAlterService.handleDropdownToggle(uuid);
+    }
+  }
+
+
+  //rendering history code
+  renderHistoryMessages(response, feedBackResult) {
+    if (response.length > 0) {
+      $('#noAutoRunning').addClass('hide');
+    }
+    // document.getElementById("loader").style.display = "none";
+    let previousId;
+    let previousTaskName, currentTaskName, previousTaskPositionId, currentTaskPositionId;
+    let convId = this.commonService.configObj.conversationid;
+    let botId = this.commonService.configObj.botid;
+
+    let resp = response.length > 0 ? response : undefined;
+    resp?.forEach((res, index) => {
+
+      if ((!res.agentAssistDetails?.suggestions && !res.agentAssistDetails?.ambiguityList && !res.agentAssistDetails?.ambiguity) && res.type == 'outgoing') {
+        let _msgsResponse = this.mybotDataService.getMybotMsgResponse(res._id, res.botId)
+        currentTaskName = res.tN ? res.tN : currentTaskName;
+        currentTaskPositionId = res?.agentAssistDetails?.positionId ? res?.agentAssistDetails?.positionId : currentTaskPositionId;
+        let historyData = $('#myBotAutomationBlock');
+        let userInputHtml;
+        if (res.agentAssistDetails.userInput) {
+          userInputHtml = `<div class="agent-utt-info" id="agentUttInfo-${res._id}">
                               <div class="user-img">
                                   <img src="./images/userIcon.svg">
                               </div>
                               <div class="text-user" >${res.agentAssistDetails.userInput}</div>
                           </div>`;
-                  }
-                  let dropdownHtml = `
+        }
+        let dropdownHtml = `
                           
                   <div class="dialog-task-accordiaon-info" id="MyBotaddRemoveDropDown-${res._id}" >
                       <div class="accordion-header" id="dropDownHeader-${res._id}"
@@ -298,136 +311,136 @@ export class MybotComponent implements OnInit {
                       
                   `
 
-                  if (previousTaskPositionId && currentTaskPositionId !== previousTaskPositionId ) {
-                       let previousIdFeedBackDetails = feedBackResult.find((ele)=> ele.positionId === previousTaskPositionId);
-                       this.commonService.addFeedbackHtmlToDomForHistory(res, res.botId, res?.agentAssistDetails?.userInput, previousId, true, previousTaskPositionId);
-                      if(previousIdFeedBackDetails) {
-                          this.commonService.UpdateFeedBackDetails(previousIdFeedBackDetails, 'agentAutoContainer');
-                          if(previousIdFeedBackDetails.feedback == 'dislike' && (previousIdFeedBackDetails.feedbackDetails.length == 0 && previousIdFeedBackDetails.comment.length == 0)){
-                              $(`#feedbackHelpfulContainer-${previousId} .explore-more-negtive-data`).removeClass('hide');
-                          }else {
-                              $(`#feedbackHelpfulContainer-${previousId} .explore-more-negtive-data`).addClass('hide');
-                          }
-                      }    
-                      previousId = undefined;
-                      previousTaskPositionId = undefined;
-                      previousTaskName = undefined;
-                  }
+        if (previousTaskPositionId && currentTaskPositionId !== previousTaskPositionId) {
+          let previousIdFeedBackDetails = feedBackResult.find((ele) => ele.positionId === previousTaskPositionId);
+          this.commonService.addFeedbackHtmlToDomForHistory(res, res.botId, res?.agentAssistDetails?.userInput, previousId, true, previousTaskPositionId);
+          if (previousIdFeedBackDetails) {
+            this.commonService.UpdateFeedBackDetails(previousIdFeedBackDetails, 'agentAutoContainer');
+            if (previousIdFeedBackDetails.feedback == 'dislike' && (previousIdFeedBackDetails.feedbackDetails.length == 0 && previousIdFeedBackDetails.comment.length == 0)) {
+              $(`#feedbackHelpfulContainer-${previousId} .explore-more-negtive-data`).removeClass('hide');
+            } else {
+              $(`#feedbackHelpfulContainer-${previousId} .explore-more-negtive-data`).addClass('hide');
+            }
+          }
+          previousId = undefined;
+          previousTaskPositionId = undefined;
+          previousTaskName = undefined;
+        }
 
-                  if (res.tN && !previousId && previousTaskPositionId !== currentTaskPositionId) {
-                      let divExist = $(`#MyBotaddRemoveDropDown-${res._id}`);
-                      previousTaskName = currentTaskName;
-                      previousTaskPositionId = currentTaskPositionId;
-                      if (divExist.length >= 1) {
-                          console.log("---->>>>>>>>>>>>>>>>>>>>>already exsit===in the dom");
-                      } else {
-                          historyData.append(userInputHtml);
-                          historyData.append(dropdownHtml);
-                          previousId = res._id;
-                          previousTaskPositionId = currentTaskPositionId;
-                          this.clickEvents(IdReferenceConst.MYBOTTERMINATE, previousId);
-                          this.clickEvents(IdReferenceConst.DROPDOWN_HEADER,previousId);
-                      }
-                  }
-                  if (res.agentAssistDetails.entityName && res.agentAssistDetails.entityResponse && res.agentAssistDetails.entityValue) {
-                      let runInfoContent = $(`#dropDownData-${previousId}`);
-                      let data = {};
-                      data['userInput'] = res.agentAssistDetails.entityValue;
-                      let userQueryHtml = this.mybotDataService.userQueryTemplate(this.imageFilePath, this.imageFileNames, res._id, data);
-                      runInfoContent.append(userQueryHtml);
-                      let entityHtml = $(`#dropDownData-${previousId}`).find(`#userInput-${res._id}`);
-                     let entityDisplayName = '';
-                      if (res.agentAssistDetails.entityValue && !res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
-                          entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${this.sanitizeHtmlPipe.transform(res.agentAssistDetails.entityValue)}</div>`);
-                      } else {
-                          if (res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
-                              let entityHtmls = this.mybotDataService.mybotErrorTemplate(this.imageFilePath, this.imageFileNames, entityDisplayName);
-                              entityHtml.append(entityHtmls);
-                          }
-                      }
-                  }
-                  if(res.agentAssistDetails?.entityName){
-                       this.myBotDataResponse = res.agentAssistDetails;
-                       this.myBotDataResponse.entityDisplayName = this.myBotDataResponse.newEntityDisplayName;
-                       this.myBotDataResponse.entityName = this.myBotDataResponse.newEntityName;
-                  }
-                  let parsedPayload;
-                  res.components?.forEach((elem) => {
-                      let payloadType = (elem.data?.text).replace(/(&quot\;)/g, "\"");
+        if (res.tN && !previousId && previousTaskPositionId !== currentTaskPositionId) {
+          let divExist = $(`#MyBotaddRemoveDropDown-${res._id}`);
+          previousTaskName = currentTaskName;
+          previousTaskPositionId = currentTaskPositionId;
+          if (divExist.length >= 1) {
+            console.log("---->>>>>>>>>>>>>>>>>>>>>already exsit===in the dom");
+          } else {
+            historyData.append(userInputHtml);
+            historyData.append(dropdownHtml);
+            previousId = res._id;
+            previousTaskPositionId = currentTaskPositionId;
+            this.clickEvents(IdReferenceConst.MYBOTTERMINATE, previousId);
+            this.clickEvents(IdReferenceConst.DROPDOWN_HEADER, previousId);
+          }
+        }
+        if (res.agentAssistDetails.entityName && res.agentAssistDetails.entityResponse && res.agentAssistDetails.entityValue) {
+          let runInfoContent = $(`#dropDownData-${previousId}`);
+          let data = {};
+          data['userInput'] = res.agentAssistDetails.entityValue;
+          let userQueryHtml = this.mybotDataService.userQueryTemplate(this.imageFilePath, this.imageFileNames, res._id, data);
+          runInfoContent.append(userQueryHtml);
+          let entityHtml = $(`#dropDownData-${previousId}`).find(`#userInput-${res._id}`);
+          let entityDisplayName = '';
+          if (res.agentAssistDetails.entityValue && !res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
+            entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${this.sanitizeHtmlPipe.transform(res.agentAssistDetails.entityValue)}</div>`);
+          } else {
+            if (res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
+              let entityHtmls = this.mybotDataService.mybotErrorTemplate(this.imageFilePath, this.imageFileNames, entityDisplayName);
+              entityHtml.append(entityHtmls);
+            }
+          }
+        }
+        if (res.agentAssistDetails?.entityName) {
+          this.myBotDataResponse = res.agentAssistDetails;
+          this.myBotDataResponse.entityDisplayName = this.myBotDataResponse.newEntityDisplayName;
+          this.myBotDataResponse.entityName = this.myBotDataResponse.newEntityName;
+        }
+        let parsedPayload;
+        res.components?.forEach((elem) => {
+          let payloadType = (elem.data?.text).replace(/(&quot\;)/g, "\"");
 
-                      try {
-                          if (payloadType.indexOf('text') !== -1 || payloadType.indexOf('payload') !== -1) {
-                              let withoutSpecials = payloadType.replace(/^\s+|\s+$/g, "");
-                              parsedPayload = JSON.parse(withoutSpecials);
-                          }
-                      }catch(error){
-                          if(payloadType.text){
-                              let withoutSpecials = payloadType.replace(/^\s+|\s+$/g, "");
-                              parsedPayload = withoutSpecials;
-                          }
-                      }
+          try {
+            if (payloadType.indexOf('text') !== -1 || payloadType.indexOf('payload') !== -1) {
+              let withoutSpecials = payloadType.replace(/^\s+|\s+$/g, "");
+              parsedPayload = JSON.parse(withoutSpecials);
+            }
+          } catch (error) {
+            if (payloadType.text) {
+              let withoutSpecials = payloadType.replace(/^\s+|\s+$/g, "");
+              parsedPayload = withoutSpecials;
+            }
+          }
 
-                      let body = {};
-                      body['type'] = elem.cT;
-                      if (!parsedPayload) {
-                          body['component'] = {
-                              "type": elem.cT,
-                              "payload": {
-                                  "type": elem.cT,
-                                  "text": elem.data.text
-                              }
-                          };
-                          body['cInfo'] = {
-                              "body": elem.data.text
-                          };
+          let body = {};
+          body['type'] = elem.cT;
+          if (!parsedPayload) {
+            body['component'] = {
+              "type": elem.cT,
+              "payload": {
+                "type": elem.cT,
+                "text": elem.data.text
+              }
+            };
+            body['cInfo'] = {
+              "body": elem.data.text
+            };
 
-                      } else {
-                          body['component'] = parsedPayload.payload ? parsedPayload : parsedPayload.text;
-                          if (parsedPayload?.type === 'message') {
-                              body['cInfo'] = {
-                                  "body": ''
-                              };
-                          } else if (parsedPayload?.text) {
-                              body['cInfo'] = {
-                                  "body": parsedPayload.text
-                              };
-                          } else {
-                              body['cInfo'] = {
-                                  "body": parsedPayload
-                              };
-                          }
+          } else {
+            body['component'] = parsedPayload.payload ? parsedPayload : parsedPayload.text;
+            if (parsedPayload?.type === 'message') {
+              body['cInfo'] = {
+                "body": ''
+              };
+            } else if (parsedPayload?.text) {
+              body['cInfo'] = {
+                "body": parsedPayload.text
+              };
+            } else {
+              body['cInfo'] = {
+                "body": parsedPayload
+              };
+            }
 
-                      }
+          }
 
-                      _msgsResponse.message.push(body);
-                  });
-                  if((res.agentAssistDetails?.isPrompt === true || res.agentAssistDetails?.isPrompt === false)  && previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) {
-                  let runInfoContent = $(`#dropDownData-${previousId}`);
-                  let askToUserHtml = this.mybotDataService.askUserTemplate(res._id);
-                  let tellToUserHtml = this.mybotDataService.tellToUserTemplate(res._id);
-                  
-                       
-                  if(this.localStorageService.checkStorageItemWithInConvId(this.connectionDetails.conversationId,storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH_MYBOT)) {
-                          this.commonService.isMyBotAutomationOnGoing = true;
-                          this.commonService.noAutomationrunninginMyBot = false;
-                          this.myBotDropdownHeaderUuids = previousId;
-                          $('#inputFieldForMyBot').remove();
-                          let storageObject : any = {
-                            [storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH_MYBOT] : this.commonService.isMyBotAutomationOnGoing
-                          }
-                          this.localStorageService.setLocalStorageItem(storageObject);
-                          let terminateButtonElement = document.getElementById('myBotTerminateAgentDialog-' + previousId);
-                          $(`#myBotTerminateAgentDialog-${previousId}`).attr('data-position-id', previousTaskPositionId);
-                          terminateButtonElement.classList.remove('hide');
-                          this.myBotDialogPositionId = previousTaskPositionId;
-                      }
+          _msgsResponse.message.push(body);
+        });
+        if ((res.agentAssistDetails?.isPrompt === true || res.agentAssistDetails?.isPrompt === false) && previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) {
+          let runInfoContent = $(`#dropDownData-${previousId}`);
+          let askToUserHtml = this.mybotDataService.askUserTemplate(res._id);
+          let tellToUserHtml = this.mybotDataService.tellToUserTemplate(res._id);
 
-                      let agentInputEntityName = 'EnterDetails';
-                      if(res.agentAssistDetails?.newEntityDisplayName || res.agentAssistDetails?.newEntityName){
-                          agentInputEntityName = res.agentAssistDetails.newEntityDisplayName ? res.agentAssistDetails.newEntityDisplayName : res.agentAssistDetails.newEntityName
-                      }
-                      
-                      let agentInputToBotHtml = `
+
+          if (this.localStorageService.checkStorageItemWithInConvId(this.connectionDetails.conversationId, storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH_MYBOT)) {
+            this.commonService.isMyBotAutomationOnGoing = true;
+            this.commonService.noAutomationrunninginMyBot = false;
+            this.myBotDropdownHeaderUuids = previousId;
+            $('#inputFieldForMyBot').remove();
+            let storageObject: any = {
+              [storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH_MYBOT]: this.commonService.isMyBotAutomationOnGoing
+            }
+            this.localStorageService.setLocalStorageItem(storageObject);
+            let terminateButtonElement = document.getElementById('myBotTerminateAgentDialog-' + previousId);
+            $(`#myBotTerminateAgentDialog-${previousId}`).attr('data-position-id', previousTaskPositionId);
+            terminateButtonElement.classList.remove('hide');
+            this.myBotDialogPositionId = previousTaskPositionId;
+          }
+
+          let agentInputEntityName = 'EnterDetails';
+          if (res.agentAssistDetails?.newEntityDisplayName || res.agentAssistDetails?.newEntityName) {
+            agentInputEntityName = res.agentAssistDetails.newEntityDisplayName ? res.agentAssistDetails.newEntityDisplayName : res.agentAssistDetails.newEntityName
+          }
+
+          let agentInputToBotHtml = `
                       <div class="steps-run-data">
                           <div class="icon_block">
                               <i class="ast-agent"></i>
@@ -442,27 +455,29 @@ export class MybotComponent implements OnInit {
                           </div>
                       </div>`;
 
-       
-                  let nextResponse = resp[index+1];
-                  if (res.agentAssistDetails.isPrompt || res.agentAssistDetails.entityRequest) {
-                      runInfoContent.append(askToUserHtml);
-                      let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(_msgsResponse)[0].innerHTML;
-                      let a = document.getElementById(IdReferenceConst.displayData + `-${res._id}`);
-                      a.innerHTML = a?.innerHTML + html;
-                      if(!nextResponse || (nextResponse.status != 'received' && nextResponse.status != 'incoming')){
-                          runInfoContent.append(agentInputToBotHtml);
-                      }
-                      
-                  } else {
-                      runInfoContent.append(tellToUserHtml);
-                      let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(_msgsResponse)[0].innerHTML;
-                      let a = document.getElementById(IdReferenceConst.displayData + `-${res._id}`);
-                      a.innerHTML = a.innerHTML + html;
-                  }
-                }
-              }
-          });
-      this.scrollToBottom();
-      this.designAlterService.addWhiteBackgroundClassToNewMessage(this.scrollAtEnd, IdReferenceConst.MYBOTAUTOMATIONBLOCK);
+
+          let nextResponse = resp[index + 1];
+          if (res.agentAssistDetails.isPrompt || res.agentAssistDetails.entityRequest) {
+            runInfoContent.append(askToUserHtml);
+            let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(_msgsResponse)[0].innerHTML;
+            let a = document.getElementById(IdReferenceConst.displayData + `-${res._id}`);
+            a.innerHTML = a?.innerHTML + html;
+            if (!nextResponse || (nextResponse.status != 'received' && nextResponse.status != 'incoming')) {
+              runInfoContent.append(agentInputToBotHtml);
+            }
+
+          } else {
+            runInfoContent.append(tellToUserHtml);
+            let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(_msgsResponse)[0].innerHTML;
+            let a = document.getElementById(IdReferenceConst.displayData + `-${res._id}`);
+            a.innerHTML = a.innerHTML + html;
+          }
+        }
+      }
+    });
+    this.scrollToBottom();
+    this.designAlterService.addWhiteBackgroundClassToNewMessage(this.scrollAtEnd, IdReferenceConst.MYBOTAUTOMATIONBLOCK);
   }
+
+
 }

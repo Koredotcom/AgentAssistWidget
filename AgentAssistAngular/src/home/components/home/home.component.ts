@@ -25,17 +25,18 @@ export class HomeComponent implements OnInit {
   imageFilePath: string = ImageFilePath;
   imageFileNames: any = ImageFileNames;
   projConstants: any = ProjConstants;
-  searchText: string = '';
-  showSearchSuggestions: boolean = false;
-  subscriptionsList: Subscription[] = [];
-  searchConentObject: any;
+
   activeTab: string; // call conversation make transcript as active tab.
+  searchText: string = '';
+  scrollContainer: any;
+  searchConentObject: any;
+  connectionDetails: any = {};
   showTerminatePopup: boolean = false;
   showInterruptPopup: boolean = false;
-  connectionDetails: any = {};
-  scrollContainer: any;
   scrollbottomwaitingTime: number = 500;
-  proactiveModeEnabled : boolean = false;
+  showSearchSuggestions: boolean = false;
+  subscriptionsList: Subscription[] = [];
+  proactiveModeEnabled: boolean = false;
 
   constructor(public handleSubjectService: HandleSubjectService, public websocketService: WebSocketService,
     public sanitizeHTMLPipe: SanitizeHtmlPipe, private commonService: CommonService, private koregenerateUUIDPipe: KoreGenerateuuidPipe,
@@ -76,17 +77,15 @@ export class HomeComponent implements OnInit {
         this.btnInit();
       }
     });
-
     this.subscriptionsList.push(subscription1);
     this.subscriptionsList.push(subscription2);
   }
 
+  // update state based on local storage.
   updateUIState(_convId, _isCallConv) {
-    
     $('.empty-data-no-agents').addClass('hide');
     let appState = this.localStorageService.getLocalStorageState();
     let activeTab: any;
-    console.log("update ui state", appState[_convId][storageConst.CURRENT_TAB]);
     if (_isCallConv == 'true') {
       $(`#scriptContainer .empty-data-no-agents`).removeClass('hide');
     }
@@ -99,9 +98,7 @@ export class HomeComponent implements OnInit {
         storageObject[storageConst.CURRENT_TAB] = this.projConstants.ASSIST;
         activeTab = this.projConstants.ASSIST;
       }
-        console.log("inside home component ui state");
-        
-        this.localStorageService.setLocalStorageItem(storageObject, activeTab);
+      this.localStorageService.setLocalStorageItem(storageObject, activeTab);
     } else if (appState[_convId] && appState[_convId][storageConst.CURRENT_TAB]) {
       activeTab = appState[_convId][storageConst.CURRENT_TAB];
     }
@@ -110,27 +107,7 @@ export class HomeComponent implements OnInit {
     this.hightLightFaqFromStoredList(_convId, this.projConstants.ASSIST);
   }
 
-
-  hightLightFaqFromStoredList(convId, currentTab) {
-    let appState = this.localStorageService.getLocalStorageState();
-    if (appState[convId] && !appState[convId][currentTab] && !appState[convId][currentTab][storageConst.FAQ_LIST]) {
-      let storageObject: any = {};
-      storageObject[currentTab][storageConst.FAQ_LIST] = [];
-      this.localStorageService.setLocalStorageItem(storageObject);
-    }else if(appState[convId] && appState[convId][currentTab] && appState[convId][currentTab][storageConst.FAQ_LIST]){
-      let selectedFaqList = appState[convId][currentTab][storageConst.FAQ_LIST];
-      for (let item of selectedFaqList) {
-        let faqElementId = item.split('_')[1];
-        let faqParentElementId = item.split('_')[0];
-        let faqParentElement = document.getElementById(faqParentElementId);
-        if (faqParentElement) {
-          let faqElement: any = faqParentElement.querySelector('#' + faqElementId);
-          faqElement.style.borderStyle = "solid";
-        }
-      }
-    }
-  }
-
+  //event listeners from parent
   eventListenerFromParent() {
 
     window.addEventListener("message", (e) => {
@@ -207,15 +184,69 @@ export class HomeComponent implements OnInit {
 
   }
 
+  //tab change code
   changeActiveTab(tab) {
     $(".scroll-bottom-show-btn").addClass('hiddenEle');
     this.handleSubjectService.setActiveTab(tab);
-    let storageObject : any = {
-      [storageConst.CURRENT_TAB] : tab
+    let storageObject: any = {
+      [storageConst.CURRENT_TAB]: tab
     }
     this.localStorageService.setLocalStorageItem(storageObject);
   }
 
+  //terminate popup
+  handleTerminatePopup(popupObject) {
+    if (popupObject.type == this.projConstants.TERMINATE) {
+      this.showTerminatePopup = popupObject.status;
+      if (popupObject.terminate) {
+        this.handleSubjectService.setTerminateClickEvent({ activeTab: this.activeTab })
+      }
+    } else if (popupObject.type == this.projConstants.INTERRUPT) {
+      this.showInterruptPopup = popupObject.status;
+      if (popupObject.interrupt) {
+        this.handleSubjectService.setInterruptClickEvent({ activeTab: this.activeTab })
+      }
+    }
+
+  }
+
+  //proactive tab toggle click
+  proactiveToggle(proactiveModeEnabled) {
+    this.proactiveModeEnabled = proactiveModeEnabled;
+    let toggleObj: any = {
+      "agentId": "",
+      "botId": this.connectionDetails.botId,
+      "conversationId": this.connectionDetails.conversationId,
+      "query": "",
+      'experience': this.commonService.isCallConversation === true ? ProjConstants.VOICE : ProjConstants.CHAT,
+      "enable_override_userinput": this.proactiveModeEnabled
+    }
+    this.commonService.OverRideMode ? this.websocketService.emitEvents(EVENTS.enable_override_userinput, toggleObj) : '';
+    this.commonService.OverRideMode = this.proactiveModeEnabled;
+  }
+
+  //highlight faq after refresh
+  hightLightFaqFromStoredList(convId, currentTab) {
+    let appState = this.localStorageService.getLocalStorageState();
+    if (appState[convId] && !appState[convId][currentTab] && !appState[convId][currentTab][storageConst.FAQ_LIST]) {
+      let storageObject: any = {};
+      storageObject[currentTab][storageConst.FAQ_LIST] = [];
+      this.localStorageService.setLocalStorageItem(storageObject);
+    } else if (appState[convId] && appState[convId][currentTab] && appState[convId][currentTab][storageConst.FAQ_LIST]) {
+      let selectedFaqList = appState[convId][currentTab][storageConst.FAQ_LIST];
+      for (let item of selectedFaqList) {
+        let faqElementId = item.split('_')[1];
+        let faqParentElementId = item.split('_')[0];
+        let faqParentElement = document.getElementById(faqParentElementId);
+        if (faqParentElement) {
+          let faqElement: any = faqParentElement.querySelector('#' + faqElementId);
+          faqElement.style.borderStyle = "solid";
+        }
+      }
+    }
+  }
+
+  //search bar related code.
   getSearchResults() {
     this.showSearchSuggestions = true;
     this.handleSubjectService.setSearchText({ searchFrom: this.projConstants.ASSIST, value: this.searchText });
@@ -250,21 +281,8 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  handleTerminatePopup(popupObject) {
-    if (popupObject.type == this.projConstants.TERMINATE) {
-      this.showTerminatePopup = popupObject.status;
-      if (popupObject.terminate) {
-        this.handleSubjectService.setTerminateClickEvent({ activeTab: this.activeTab })
-      }
-    } else if (popupObject.type == this.projConstants.INTERRUPT) {
-      this.showInterruptPopup = popupObject.status;
-      if (popupObject.interrupt) {
-        this.handleSubjectService.setInterruptClickEvent({ activeTab: this.activeTab })
-      }
-    }
 
-  }
-
+  // scroll realted code.
   scrollToBottom($event) {
     if (this.psBottom) {
       $(window).trigger('resize');
@@ -315,7 +333,6 @@ export class HomeComponent implements OnInit {
   scrollClickEvents() {
     let scrollbuttonId = this.activeTab == this.projConstants.ASSIST ? IdReferenceConst.SCROLLBUTTON_ASSIST : IdReferenceConst.SCROLLBUTTON_MYBOT;
     document.getElementById(scrollbuttonId).removeEventListener('click', () => {
-      console.log("click event removed");
     });
     document.getElementById(scrollbuttonId).addEventListener('click', (event) => {
       this.scrollToBottom(true);
@@ -335,44 +352,22 @@ export class HomeComponent implements OnInit {
     }
   }
 
-
-  isChecked(proactiveModeEnabled) {
-    this.proactiveModeEnabled = proactiveModeEnabled;
-    console.log(proactiveModeEnabled, "proactive mode enabled");
-    let toggleObj : any = {
-      "agentId": "",
-      "botId": this.connectionDetails.botId,
-      "conversationId": this.connectionDetails.conversationId,
-      "query": "",
-      'experience': this.commonService.isCallConversation === true ? ProjConstants.VOICE : ProjConstants.CHAT,
-      "enable_override_userinput": this.proactiveModeEnabled
-    }
-    this.commonService.OverRideMode ? this.websocketService.emitEvents(EVENTS.enable_override_userinput, toggleObj) : '';
-    this.commonService.OverRideMode = this.proactiveModeEnabled; 
-  }
-
-
-  btnInit(){
-    document.addEventListener("click", (evt : any) => {
-      let target : any = evt.target;
+  // send and copy click operations.
+  btnInit() {
+    document.addEventListener("click", (evt: any) => {
+      let target: any = evt.target;
       if (target.id === 'sendMsg') {
-        console.log(`displayData-${target.dataset.msgId}`, "displaydata");
-        
-        
         let ele = document.getElementById(`displayData-${target.dataset.msgId}`) ? document.getElementById(`displayData-${target.dataset.msgId}`) : document.getElementById(target.dataset.msgId);
-        console.log(ele, "element");
-        
         let data = target.dataset.msgData && target.dataset.msgData !== '' ? target.dataset.msgData : (target.parentNode.dataset.msgData && target.parentNode.dataset.msgData !== '' ? target.parentNode.dataset.msgData : ele.innerText);
         this.commonService.preparePostMessageForSendAndCopy(evt, data, IdReferenceConst.SENDMSG, this.connectionDetails);
       }
       if ((target.className == 'copy-btn' || target.className == 'ast-copy')) {
-        console.log("inside target classname");
-        
         let ele = document.getElementById(`displayData-${target.dataset.msgId}`) ? document.getElementById(`displayData-${target.dataset.msgId}`) : document.getElementById(target.dataset.msgId);
         let data = target.dataset.msgData && target.dataset.msgData !== '' ? target.dataset.msgData : (target.parentNode.dataset.msgData && target.parentNode.dataset.msgData !== '' ? target.parentNode.dataset.msgData : ele.innerText);
         this.commonService.preparePostMessageForSendAndCopy(evt, data, IdReferenceConst.COPYMSG, this.connectionDetails);
       }
     });
   }
+
 
 }

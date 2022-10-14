@@ -42,7 +42,6 @@ export class HandleSubjectService {
   }
 
   setConnectionDetails(obj) {
-    console.log(obj, "obj");
     let parmasObj : any = Object.assign({}, obj);
     for (let key in parmasObj) {
       if (key === "botid") {
@@ -53,8 +52,6 @@ export class HandleSubjectService {
         delete parmasObj[key];
       }
     }
-    console.log(parmasObj, "after obj");
-
     this.connectDetailsSubject.next(parmasObj);
   }
 }

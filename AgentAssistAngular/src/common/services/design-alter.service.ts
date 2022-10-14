@@ -8,24 +8,23 @@ import { IdReferenceConst } from '../constants/proj.cnts';
 export class DesignAlterService {
 
   constructor() { }
-
+  // display customer feels
   displayCustomerFeels(data, convId, botId) {
-    let custTone : any;
+    let custTone: any;
     if (data.sentimentTone) {
-        custTone = data;
+      custTone = data;
     }
     let userTabtoneId = document.getElementById('userTab-custSentimentAnalysis');
     let agentTabtoneId = document.getElementById('agentTab-custSentimentAnalysis');
     if (custTone?.sentimentTone) {
-        console.log(custTone);
-        // if (cusTone?.sentiment.strength > 0 && cusTone?.sentiment.strength <= 33) {
+      // if (cusTone?.sentiment.strength > 0 && cusTone?.sentiment.strength <= 33) {
 
-        // } else if (cusTone?.sentiment.strength > 33 && cusTone?.sentiment.strength <= 66) {
+      // } else if (cusTone?.sentiment.strength > 33 && cusTone?.sentiment.strength <= 66) {
 
-        // } else if (cusTone?.sentiment.strength > 66 && cusTone?.sentiment.strength <= 100) {
+      // } else if (cusTone?.sentiment.strength > 66 && cusTone?.sentiment.strength <= 100) {
 
-        // }
-        let toneinnerHTML = `
+      // }
+      let toneinnerHTML = `
         <div id="custEmoji" class="emojis">${custTone?.sentimentTone?.emoji}</div>
         <div id="strengthDisplay"></div>
             <div [ngStyle]="{'background-color' : (custTone?.strength > 0 && custTone?.strength <=33) ? '#28A745' : '#E5E8EC'}" class="strength-bar strength-bar-sm"></div>
@@ -34,17 +33,17 @@ export class DesignAlterService {
         </div>
         <span id="customerTone">Customer is feeling <b>${custTone?.sentimentTone?.sentiment}</b></span>
         `
-        userTabtoneId.innerHTML = toneinnerHTML;
-        agentTabtoneId.innerHTML = toneinnerHTML;
+      userTabtoneId.innerHTML = toneinnerHTML;
+      agentTabtoneId.innerHTML = toneinnerHTML;
     }
     $(document).ready(() => {
-        if (!custTone?.sentimentTone) {
-            let staticToneData = {
-                emoji: "&#128512;",
-                sentiment: "Happy",
-                strength: 3
-            }
-            let staticToneInnerHtml = `
+      if (!custTone?.sentimentTone) {
+        let staticToneData = {
+          emoji: "&#128512;",
+          sentiment: "Happy",
+          strength: 3
+        }
+        let staticToneInnerHtml = `
             <div id="custEmoji" class="emojis">${staticToneData.emoji}</div>
                 <div [ngStyle]="{'background-color' : (staticToneData?.strength > 0 && staticToneData?.strength <=33) ? '#28A745' : '#E5E8EC'}" class="strength-bar strength-bar-sm"></div>
                 <div [ngStyle]="{'background-color' : (staticToneData?.strength > 33 && staticToneData?.strength <=66) ? '#28A745' : '#E5E8EC'}" class="strength-bar strength-bar-md"></div>
@@ -52,13 +51,14 @@ export class DesignAlterService {
             </div>
             <span id="customerTone">Customer is feeling <b>${staticToneData.sentiment}</b></span>
             `
-            userTabtoneId.innerHTML = staticToneInnerHtml;
-            agentTabtoneId.innerHTML = staticToneInnerHtml;
-        }
+        userTabtoneId.innerHTML = staticToneInnerHtml;
+        agentTabtoneId.innerHTML = staticToneInnerHtml;
+      }
     });
-}
+  }
 
-  addWhiteBackgroundClassToNewMessage(scrollAtEnd,blockId) {
+  // new message arrival code
+  addWhiteBackgroundClassToNewMessage(scrollAtEnd, blockId) {
     let dynamicBlockId = blockId;
     let beforeLastElementArray: any = document.getElementById(blockId).querySelectorAll('.last-msg-white-bg');
     for (let ele of beforeLastElementArray) {
@@ -66,7 +66,7 @@ export class DesignAlterService {
         $(ele).removeClass("last-msg-white-bg");
       }
     }
-    let lastElement = this.getLastElement(dynamicBlockId);    
+    let lastElement = this.getLastElement(dynamicBlockId);
     if (lastElement && lastElement.className.includes('welcome-msg')) {
       $(lastElement).addClass('welcome-msg-last');
       return
@@ -122,32 +122,6 @@ export class DesignAlterService {
     }
   }
 
-  isScrolledIntoView(elem) {
-    if (elem) {
-        let parentRec = document.getElementById(IdReferenceConst.HOMESCROLLBAR).getBoundingClientRect();
-        let childRec = elem.getBoundingClientRect();        
-        if(childRec.top == 0 && $(elem).parent().attr('class').includes('hide')){
-            if($(elem).parent().parent().length){
-                elem = $(elem).parent().parent()[0];
-            }
-        }
-        let paddingTop = 0;
-        childRec = elem.getBoundingClientRect();
-        try{
-            if (window.getComputedStyle(elem, null).getPropertyValue('padding-top')) {
-                let paddingTopStr = window.getComputedStyle(elem, null).getPropertyValue('padding-top');
-                if (paddingTopStr.length && paddingTopStr.length - 2) {
-                    paddingTopStr = paddingTopStr.substring(0, paddingTopStr.length - 2);
-                    paddingTop = parseInt(paddingTopStr) ? parseInt(paddingTopStr) : 0;
-                }
-            }
-        }catch(e){
-            console.log(e);
-        }        
-        return (childRec.top + paddingTop) > (parentRec.height + parentRec.top);
-    }
-}
-
   getLastElement(id) {
     let lastElement: any = ''
     let dynamicBlockElements = document.getElementById(id);
@@ -194,20 +168,7 @@ export class DesignAlterService {
     return '-';
   }
 
-  handleDropdownToggle(uuid){
-     document.getElementById(IdReferenceConst.DROPDOWN_HEADER + '-' + uuid).addEventListener('click', (event) => {
-       let dropdownDataElement = $(`#dropDownData-${uuid}`);
-       if($(dropdownDataElement).hasClass('hide')){
-         $(dropdownDataElement).removeClass('hide')
-       }else{
-         $(dropdownDataElement).addClass('hide')
-       }
-     }); 
-  }
-
   UnCollapseDropdownForLastElement(lastElement) {
-    console.log(lastElement, "last element");
-    
     if (lastElement && lastElement.className.includes('steps-run-data')) {
       let lastElementId = this.getUUIDFromId(lastElement.id);
       lastElementId = lastElementId.split("*")[0];
@@ -216,5 +177,43 @@ export class DesignAlterService {
     }
   }
 
+  //scroll related code
+  isScrolledIntoView(elem) {
+    if (elem) {
+      let parentRec = document.getElementById(IdReferenceConst.HOMESCROLLBAR).getBoundingClientRect();
+      let childRec = elem.getBoundingClientRect();
+      if (childRec.top == 0 && $(elem).parent().attr('class').includes('hide')) {
+        if ($(elem).parent().parent().length) {
+          elem = $(elem).parent().parent()[0];
+        }
+      }
+      let paddingTop = 0;
+      childRec = elem.getBoundingClientRect();
+      try {
+        if (window.getComputedStyle(elem, null).getPropertyValue('padding-top')) {
+          let paddingTopStr = window.getComputedStyle(elem, null).getPropertyValue('padding-top');
+          if (paddingTopStr.length && paddingTopStr.length - 2) {
+            paddingTopStr = paddingTopStr.substring(0, paddingTopStr.length - 2);
+            paddingTop = parseInt(paddingTopStr) ? parseInt(paddingTopStr) : 0;
+          }
+        }
+      } catch (e) {
+        console.log(e);
+      }
+      return (childRec.top + paddingTop) > (parentRec.height + parentRec.top);
+    }
+  }
+
+  // toggle dropdown click events
+  handleDropdownToggle(uuid) {
+    document.getElementById(IdReferenceConst.DROPDOWN_HEADER + '-' + uuid).addEventListener('click', (event) => {
+      let dropdownDataElement = $(`#dropDownData-${uuid}`);
+      if ($(dropdownDataElement).hasClass('hide')) {
+        $(dropdownDataElement).removeClass('hide')
+      } else {
+        $(dropdownDataElement).addClass('hide')
+      }
+    });
+  }
 
 }

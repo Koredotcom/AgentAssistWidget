@@ -18,22 +18,25 @@ export class LibraryComponent implements OnInit {
 
   @Output() handleSearchClickEvent = new EventEmitter();
 
-  imageFilePath: string = ImageFilePath;
-  imageFileNames: any = ImageFileNames;
-  projConstants: any = ProjConstants;
   subscriptionsList: Subscription[] = [];
 
+  projConstants: any = ProjConstants;
+  imageFileNames: any = ImageFileNames;
+  imageFilePath: string = ImageFilePath;
 
-  showSearchSuggestions: boolean = false;
   botDetails: any = {};
   menuResponse: any = {};
   searchText: string = '';
+  connectionDetails: any = {};
+  showSearchSuggestions: boolean = false;
   searchFromAgentSearchBar: boolean = false;
-  connectionDetails : any = {};
 
-  constructor(public handleSubjectService: HandleSubjectService, public libraryService: LibraryService,
-  public websocketService : WebSocketService, public randomUUIDPipe: RandomUUIDPipe,
-  public commonService: CommonService, private localStorageService : LocalStorageService) { }
+  constructor(public handleSubjectService: HandleSubjectService,
+    public libraryService: LibraryService,
+    public websocketService: WebSocketService,
+    public randomUUIDPipe: RandomUUIDPipe,
+    public commonService: CommonService,
+    private localStorageService: LocalStorageService) { }
 
   ngOnInit(): void {
     this.subscribeEvents();
@@ -63,26 +66,24 @@ export class LibraryComponent implements OnInit {
         this.getSearchResults(searchObj.eventFrom);
       }
     });
-    let subscription2 = this.websocketService.agentMenuResponse$.subscribe((menuResponse : any) =>{
-      console.log(menuResponse, "inside library");
-      if(menuResponse && menuResponse.usecases){
-        this.menuResponse = this.libraryService.formatMenuResponse(menuResponse.usecases); 
+    let subscription2 = this.websocketService.agentMenuResponse$.subscribe((menuResponse: any) => {
+      if (menuResponse && menuResponse.usecases) {
+        this.menuResponse = this.libraryService.formatMenuResponse(menuResponse.usecases);
       }
     });
 
     let subscription3 = this.handleSubjectService.connectDetailsSubject.subscribe((response: any) => {
       if (response) {
         this.connectionDetails = response;
-        console.log("connection details, 'inside assist tab");
       }
     });
 
     let subscription4 = this.websocketService.socketConnectFlag$.subscribe((response) => {
-      if(response){
+      if (response) {
         this.updateSearchTextFromStorage();
       }
     });
-   
+
     this.subscriptionsList.push(subscribtion1);
     this.subscriptionsList.push(subscription2);
     this.subscriptionsList.push(subscription3);
@@ -90,53 +91,12 @@ export class LibraryComponent implements OnInit {
 
   }
 
-  updateSearchTextFromStorage(){
-    let appState = this.localStorageService.getLocalStorageState();
-    if(appState && appState[this.connectionDetails.conversationId] && appState[this.connectionDetails.conversationId][this.projConstants.LIBRARY][storageConst.SEARCH_VALUE]){
-      this.searchText = appState[this.connectionDetails.conversationId][this.projConstants.LIBRARY][storageConst.SEARCH_VALUE];
-      this.getSearchResults();
-    }
-  }
-
   handleRunAgent(dialogueId, event) {
     this.menuResponse[dialogueId].agentRunButton = !this.menuResponse[dialogueId].agentRunButton;
     event.stopPropagation()
   }
 
-  //changing the tab
-  dialogueRunClick(dialog,clickType) {    
-    dialog.value.positionId = this.randomUUIDPipe.transform(IdReferenceConst.positionId);
-    let runDialogueObject = Object.assign({},dialog.value);
-    runDialogueObject.searchFrom = this.projConstants.LIBRARY;
-    runDialogueObject.name = dialog.value.intentName;
-    runDialogueObject.agentRunButton = dialog.value.agentRunButton;
-    if (clickType == this.projConstants.ASSIST) {
-      this.handleSubjectService.setActiveTab(this.projConstants.ASSIST);
-      // this.AgentAssist_run_click(runDialogueObject);
-    } else {
-      this.handleSubjectService.setActiveTab(this.projConstants.MYBOT);
-      this.agent_run_click(runDialogueObject,false)
-    }
-    this.handleSubjectService.setRunButtonClickEvent(runDialogueObject);
-  }
-
-  agent_run_click(dialog, isSearchFlag) {
-    console.log("inside agent-run-click", dialog, this.commonService.isMyBotAutomationOnGoing);
-    
-    if(!this.commonService.isMyBotAutomationOnGoing){
-      console.log("inside emit search request library search");
-      let connectionDetails: any = Object.assign({}, this.connectionDetails);
-      connectionDetails.value = dialog.intentName;
-      connectionDetails.isSearch = isSearchFlag;
-      if(!isSearchFlag){
-        connectionDetails.intentName = dialog.intentName;
-      }
-      connectionDetails.positionId = dialog.positionId;
-      let agent_assist_agent_request_params = this.commonService.prepareAgentAssistAgentRequestParams(connectionDetails);
-      this.websocketService.emitEvents(EVENTS.agent_assist_agent_request, agent_assist_agent_request_params);
-    }
-  }
-
+  //search bar related code
   getSearchResults(eventFrom?) {
     this.searchFromAgentSearchBar = eventFrom ? true : false;
     this.showSearchSuggestions = true;
@@ -153,21 +113,62 @@ export class LibraryComponent implements OnInit {
     }
   }
 
-  handleBackButtonClick() {
-    this.handleSearchClickEvent.emit({ eventFrom: this.projConstants.LIBRARY_SEARCH, searchText: this.searchText });
-  }
-
-  librarySearchClose(){
-    this.showSearchSuggestions=false;
+  librarySearchClose() {
+    this.showSearchSuggestions = false;
     this.searchText = '';
     this.setSearchTextInLocalStorage();
   }
 
-  setSearchTextInLocalStorage(){
-    let storageObject : any = {
-      [storageConst.SEARCH_VALUE] : this.searchText,
+  //local storage set text
+  setSearchTextInLocalStorage() {
+    let storageObject: any = {
+      [storageConst.SEARCH_VALUE]: this.searchText,
     }
     this.localStorageService.setLocalStorageItem(storageObject, this.projConstants.LIBRARY);
   }
+
+  updateSearchTextFromStorage() {
+    let appState = this.localStorageService.getLocalStorageState();
+    if (appState && appState[this.connectionDetails.conversationId] && appState[this.connectionDetails.conversationId][this.projConstants.LIBRARY][storageConst.SEARCH_VALUE]) {
+      this.searchText = appState[this.connectionDetails.conversationId][this.projConstants.LIBRARY][storageConst.SEARCH_VALUE];
+      this.getSearchResults();
+    }
+  }
+
+  //handling click events
+  handleBackButtonClick() {
+    this.handleSearchClickEvent.emit({ eventFrom: this.projConstants.LIBRARY_SEARCH, searchText: this.searchText });
+  }
+
+  dialogueRunClick(dialog, clickType) {
+    dialog.value.positionId = this.randomUUIDPipe.transform(IdReferenceConst.positionId);
+    let runDialogueObject = Object.assign({}, dialog.value);
+    runDialogueObject.searchFrom = this.projConstants.LIBRARY;
+    runDialogueObject.name = dialog.value.intentName;
+    runDialogueObject.agentRunButton = dialog.value.agentRunButton;
+    if (clickType == this.projConstants.ASSIST) {
+      this.handleSubjectService.setActiveTab(this.projConstants.ASSIST);
+      // this.AgentAssist_run_click(runDialogueObject);
+    } else {
+      this.handleSubjectService.setActiveTab(this.projConstants.MYBOT);
+      this.agent_run_click(runDialogueObject, false)
+    }
+    this.handleSubjectService.setRunButtonClickEvent(runDialogueObject);
+  }
+
+  agent_run_click(dialog, isSearchFlag) {
+    if (!this.commonService.isMyBotAutomationOnGoing) {
+      let connectionDetails: any = Object.assign({}, this.connectionDetails);
+      connectionDetails.value = dialog.intentName;
+      connectionDetails.isSearch = isSearchFlag;
+      if (!isSearchFlag) {
+        connectionDetails.intentName = dialog.intentName;
+      }
+      connectionDetails.positionId = dialog.positionId;
+      let agent_assist_agent_request_params = this.commonService.prepareAgentAssistAgentRequestParams(connectionDetails);
+      this.websocketService.emitEvents(EVENTS.agent_assist_agent_request, agent_assist_agent_request_params);
+    }
+  }
+
 
 }

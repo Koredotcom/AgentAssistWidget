@@ -44,7 +44,7 @@
                     <div class="t-title">Proactive</div>
                     <label class="kr-sg-toggle">
                         <div class="hover-tooltip">Proactive</div>
-                        <input #proactiveMode type="checkbox" id="checkProActive" [checked]="proactiveModeEnabled"  (change)="isChecked(proactiveMode.checked)">
+                        <input #proactiveMode type="checkbox" id="checkProActive" [checked]="proactiveModeEnabled"  (change)="proactiveToggle(proactiveMode.checked)">
                         <div class="slider"></div>
                     </label>
                 </div>
