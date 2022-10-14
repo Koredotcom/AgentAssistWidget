@@ -38,20 +38,28 @@ export class TemplateRenderClassService {
       "botInfo": {
         "chatBot": 'st-fa82e7df-fa85-574c-92c7-a6ad6d6da07d',
         "taskBotId": 'st-fa82e7df-fa85-574c-92c7-a6ad6d6da07d'
-      }
+      },
+      parsePayLoad: null
     }
     res?.buttons?.forEach((elem) => {
       let parsedPayload;
       let payloadType = (elem.value).replace(/(&quot\;)/g, "\"");
+      console.log(payloadType, "payload type", elem.value);
+      
 
-      if (payloadType.indexOf('text') !== -1 || payloadType.indexOf('payload') !== -1) {
-        let withoutSpecials = payloadType.replace(/^\s+|\s+$/g, "");
-        try{
+      try {
+        if (payloadType.indexOf('text') !== -1 || payloadType.indexOf('payload') !== -1) {
+          let withoutSpecials = payloadType.replace(/^\s+|\s+$/g, "");
           parsedPayload = JSON.parse(withoutSpecials);
-        }catch(e){
+        }
+      } catch (error) {
+        if (payloadType.text) {
+          let withoutSpecials = payloadType.replace(/^\s+|\s+$/g, "");
           parsedPayload = withoutSpecials;
         }
       }
+
+
 
       let body = {};
       body['type'] = elem.type;
@@ -89,6 +97,9 @@ export class TemplateRenderClassService {
 
       }
       _msgsResponse.message[0] = body;
+      _msgsResponse.parsePayLoad = parsedPayload;
+      console.log(parsedPayload, "parsed payload inside template render");
+
     })
     return _msgsResponse;
 

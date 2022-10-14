@@ -73,9 +73,11 @@ export class LocalStorageService {
 
   initializeLocalStorageState(){
     let appState = this.getLocalStorageState();
+    console.log(appState, "app state inside local storage &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&", this.connectionDetails.conversationId);
+    
     if(!appState || !appState[this.connectionDetails.conversationId]){
       if(this.connectionDetails && this.connectionDetails.conversationId){
-        let appState : any =  {};
+        let appState : any =  this.getLocalStorageState();
         let conversationId = this.connectionDetails.conversationId;
         console.log(conversationId, "conversationid");
         appState[conversationId]= {};

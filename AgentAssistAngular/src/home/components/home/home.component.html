@@ -40,11 +40,11 @@
                         <div class="custom-tootltip-tabs">{{projConstants.MYBOT}}</div>
                     </div>
                 </div>
-                <div class="taoggle-with-text hide">
+                <div class="taoggle-with-text">
                     <div class="t-title">Proactive</div>
                     <label class="kr-sg-toggle">
                         <div class="hover-tooltip">Proactive</div>
-                        <input type="checkbox" id="checkProActive" (click)="isChecked()">
+                        <input #proactiveMode type="checkbox" id="checkProActive" [checked]="proactiveModeEnabled"  (change)="isChecked(proactiveMode.checked)">
                         <div class="slider"></div>
                     </label>
                 </div>

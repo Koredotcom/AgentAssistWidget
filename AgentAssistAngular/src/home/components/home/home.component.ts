@@ -35,6 +35,7 @@ export class HomeComponent implements OnInit {
   connectionDetails: any = {};
   scrollContainer: any;
   scrollbottomwaitingTime: number = 500;
+  proactiveModeEnabled : boolean = false;
 
   constructor(public handleSubjectService: HandleSubjectService, public websocketService: WebSocketService,
     public sanitizeHTMLPipe: SanitizeHtmlPipe, private commonService: CommonService, private koregenerateUUIDPipe: KoreGenerateuuidPipe,
@@ -72,6 +73,7 @@ export class HomeComponent implements OnInit {
         this.connectionDetails = urlParams;
         this.eventListenerFromParent();
         this.updateUIState(this.connectionDetails.conversationId, urlParams.isCall);
+        this.btnInit();
       }
     });
 
@@ -334,9 +336,43 @@ export class HomeComponent implements OnInit {
   }
 
 
-  isChecked() {
-
+  isChecked(proactiveModeEnabled) {
+    this.proactiveModeEnabled = proactiveModeEnabled;
+    console.log(proactiveModeEnabled, "proactive mode enabled");
+    let toggleObj : any = {
+      "agentId": "",
+      "botId": this.connectionDetails.botId,
+      "conversationId": this.connectionDetails.conversationId,
+      "query": "",
+      'experience': this.commonService.isCallConversation === true ? ProjConstants.VOICE : ProjConstants.CHAT,
+      "enable_override_userinput": this.proactiveModeEnabled
+    }
+    this.commonService.OverRideMode ? this.websocketService.emitEvents(EVENTS.enable_override_userinput, toggleObj) : '';
+    this.commonService.OverRideMode = this.proactiveModeEnabled; 
   }
 
+
+  btnInit(){
+    document.addEventListener("click", (evt : any) => {
+      let target : any = evt.target;
+      if (target.id === 'sendMsg') {
+        console.log(`displayData-${target.dataset.msgId}`, "displaydata");
+        
+        
+        let ele = document.getElementById(`displayData-${target.dataset.msgId}`) ? document.getElementById(`displayData-${target.dataset.msgId}`) : document.getElementById(target.dataset.msgId);
+        console.log(ele, "element");
+        
+        let data = target.dataset.msgData && target.dataset.msgData !== '' ? target.dataset.msgData : (target.parentNode.dataset.msgData && target.parentNode.dataset.msgData !== '' ? target.parentNode.dataset.msgData : ele.innerText);
+        this.commonService.preparePostMessageForSendAndCopy(evt, data, IdReferenceConst.SENDMSG, this.connectionDetails);
+      }
+      if ((target.className == 'copy-btn' || target.className == 'ast-copy')) {
+        console.log("inside target classname");
+        
+        let ele = document.getElementById(`displayData-${target.dataset.msgId}`) ? document.getElementById(`displayData-${target.dataset.msgId}`) : document.getElementById(target.dataset.msgId);
+        let data = target.dataset.msgData && target.dataset.msgData !== '' ? target.dataset.msgData : (target.parentNode.dataset.msgData && target.parentNode.dataset.msgData !== '' ? target.parentNode.dataset.msgData : ele.innerText);
+        this.commonService.preparePostMessageForSendAndCopy(evt, data, IdReferenceConst.COPYMSG, this.connectionDetails);
+      }
+    });
+  }
 
 }

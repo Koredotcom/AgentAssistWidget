@@ -9,9 +9,9 @@
                 <div class="agent-utt">
                  <div class="title-data" id="displayData-${uuids}">{{ele.value}}</div>
                  <div class="action-links">
-                     <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}"  data-msg-data='${ele.value}'>Send</button>
-                     <div class="copy-btn" data-msg-id="${uuids}" data-msg-data="${ele.value}">
-                         <i class="ast-copy" data-msg-id="${uuids}" data-msg-data="${ele.value}"></i>
+                     <button class="send-run-btn" id="sendMsgWelcome" (click)="commonService.preparePostMessageForSendAndCopy($event, ele.value, idReferenceConst.SENDMSG)">Send</button>
+                     <div class="copy-btn welcome-msg-copy" (click)="commonService.preparePostMessageForSendAndCopy($event, ele.value, idReferenceConst.COPYMSG)">
+                         <i class="ast-copy welcome-msg-copy"></i>
                      </div>
                  </div>
                 </div>

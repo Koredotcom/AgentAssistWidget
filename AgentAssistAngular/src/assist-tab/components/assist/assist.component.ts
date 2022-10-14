@@ -34,7 +34,7 @@ export class AssistComponent implements OnInit {
   projConstants: any = ProjConstants;
   imageFilePath: string = ImageFilePath;
   imageFileNames: any = ImageFileNames;
-  isOverRideMode: boolean = false;
+  idReferenceConst : any = IdReferenceConst;
   agentAssistResponse: any = {};
   dropdownHeaderUuids: any;
   dialogPositionId: string;
@@ -185,7 +185,7 @@ export class AssistComponent implements OnInit {
       }
       $(`#overRideBtn-${uuid}`).addClass('hide');
       $(`#cancelOverRideBtn-${uuid}`).removeClass('hide');
-      this.isOverRideMode = true;
+      this.commonService.OverRideMode = true;
       this.designAlterService.addWhiteBackgroundClassToNewMessage(this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd, IdReferenceConst.DYNAMICBLOCK);
       this.scrollToBottom();
     });
@@ -206,7 +206,7 @@ export class AssistComponent implements OnInit {
       $(`#overRideBtn-${uuid}`).removeClass('hide');
       $(`#cancelOverRideBtn-${uuid}`).addClass('hide');
       $('#inputFieldForAgent').remove();
-      this.isOverRideMode = false;
+      this.commonService.OverRideMode = false;
       this.designAlterService.addWhiteBackgroundClassToNewMessage(this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd, IdReferenceConst.DYNAMICBLOCK);
       this.scrollToBottom();
     })
@@ -222,47 +222,23 @@ export class AssistComponent implements OnInit {
     });
   }
 
-  handleSendCopyButtonClickEvent(uuid, data, eventName){
-    document.getElementById(IdReferenceConst.SENDMSG + '-' + uuid).addEventListener('click', (evt) => {
-      let payload = data.answer;
-      var message = {
-          method: (eventName == IdReferenceConst.SENDMSG) ? this.projConstants.SEND_METHOD : this.projConstants.COPY_METHOD,
-          name: (eventName == IdReferenceConst.SENDMSG) ? this.projConstants.SENDMSG_REQUEST : this.projConstants.COPYMSG_REQUEST,
-          conversationId: this.connectionDetails.conversationId,
-          payload: payload
-      };
-      if(eventName == IdReferenceConst.SENDMSG) {
-        window.parent.postMessage(message, '*');
-      }else if(eventName == IdReferenceConst.COPYMSG){
-        parent.postMessage(message, '*');
-      }
-      this.highLightAndStoreFaqId(evt,uuid, data);
-    });
-  }
-
-  highLightAndStoreFaqId(evt,uuid, data){
-    console.log("clickevent", data);
-    let faqElementId = $(evt.target).parent().parent().attr('id');
-    if(document.getElementById(faqElementId)){
-        let faqParentElementId = $(evt.target).parent().parent().parent().attr('id');
-        let storedfaqId = faqParentElementId + '_' + faqElementId;
-        document.getElementById(faqElementId).style.borderStyle = "solid";
-        console.log(faqElementId, "faq element id");
+  // handleSendCopyButtonClickEvent(uuid, data, eventName){
+  //   if(eventName == IdReferenceConst.SENDMSG){
+  //     document.getElementById(IdReferenceConst.SENDMSG + '-' + uuid).addEventListener('click', (evt : any) => {
+  //       console.log(evt.target.dataset.msgData, "msg data ************8");
         
-        this.setSentFaqListInStorage(this.connectionDetails.conversationId, storedfaqId, this.projConstants.ASSIST);
-    }
-  }
+  //      this.preparePostMessageForSendAndCopy(evt, uuid, data, eventName);
+  //     });
+  //   }else if(eventName == IdReferenceConst.COPYMSG){
+  //     document.getElementById(IdReferenceConst.COPYMSG + '-' + uuid).addEventListener('click', (evt) => {
+  //       console.log("click event inside copy button");
+        
+  //       this.preparePostMessageForSendAndCopy(evt, uuid, data, eventName);
+  //      });
+  //   }
+  // }
 
-  setSentFaqListInStorage(convId, faqId, currentTab) {
-    let appState = this.localStorageService.getLocalStorageState();
-    if (appState && appState[convId] && appState[convId][storageConst.FAQ_LIST].indexOf(faqId) == -1) {
-      appState[convId][storageConst.FAQ_LIST].push(faqId);
-      let storageObject : any = {
-        [storageConst.FAQ_LIST] : appState[convId][storageConst.FAQ_LIST]
-      }
-      this.localStorageService.setLocalStorageItem(storageObject);
-    }
-  }
+  
 
   clickEvents(eventName, uuid?, dialogId?, data?) {
     if (eventName == IdReferenceConst.ASSISTTERMINATE) {
@@ -276,7 +252,7 @@ export class AssistComponent implements OnInit {
     } else if (eventName == IdReferenceConst.ASSIST_RUN_BUTTON) {
       this.handleRunButtonClick(uuid, data);
     } else if(eventName == IdReferenceConst.SENDMSG || eventName == IdReferenceConst.COPYMSG){
-      this.handleSendCopyButtonClickEvent(uuid, data, eventName);
+      // this.handleSendCopyButtonClickEvent(uuid, data, eventName);
     }
   }
 
@@ -338,7 +314,7 @@ export class AssistComponent implements OnInit {
     let resultMsgResponse = this.templateRenderClassService.getMessageResponseForUserMessages(data, botId)
     let titleText = '';
     let userQueryHtml = '';
-    if (this.isOverRideMode) {
+    if (this.commonService.OverRideMode) {
       titleText = "YouEntered -";
       userQueryHtml = this.assisttabService.userQueryTemplate(titleText, this.imageFilePath, this.imageFileNames, _id, data);
     } else {
@@ -402,10 +378,10 @@ export class AssistComponent implements OnInit {
       'experience': this.commonService.isCallConversation === true ? 'voice' : 'chat',
       "enable_override_userinput": false
     }
-    if (this.isOverRideMode) {
+    if (this.commonService.OverRideMode) {
       this.websocketService.emitEvents(EVENTS.enable_override_userinput, overRideObj)
     }
-    this.isOverRideMode = false;
+    this.commonService.OverRideMode = false;
     this.designAlterService.displayCustomerFeels(data, conversationId, botId);
 
     this.commonService.updateAgentAssistState(conversationId, this.projConstants.ASSIST, data);
@@ -417,7 +393,10 @@ export class AssistComponent implements OnInit {
     let uuids = this.koreGenerateuuidPipe.transform();
     let responseId = uuids;
     console.log(this.commonService.isAutomationOnGoing,this.dropdownHeaderUuids,data.suggestions);
+
+   
     
+
     if (!this.commonService.isAutomationOnGoing && data.intentName && !data.suggestions && !this.commonService.isInitialDialogOnGoing) {
       let isInitialTaskRanORNot;
       let appState = this.localStorageService.getLocalStorageState();
@@ -606,8 +585,8 @@ export class AssistComponent implements OnInit {
           } else {
             let a = $(`#faqDiv-${uuids + index}`);
             let faqActionHtml = `<div class="action-links">
-            <button class="send-run-btn" id="sendMsg-${uuids + index}">Send</button>
-            <div class="copy-btn" id="copyMsg-${uuids + index}">
+            <button class="send-run-btn" id="sendMsg" data-msg-data="${ele.answer}">Send</button>
+            <div class="copy-btn" data-msg-data="${ele.answer}">
                 <i class="ast-copy"></i>
             </div>
             </div>`;
@@ -677,7 +656,13 @@ export class AssistComponent implements OnInit {
       }
     }
 
-    if (this.commonService.isAutomationOnGoing && this.dropdownHeaderUuids && data.buttons && !data.value.includes('Customer has waited') && (this.dialogPositionId && !data.positionId || data.positionId == this.dialogPositionId)) {
+    let result = this.templateRenderClassService.getResponseUsingTemplate(data);
+    console.log(result, "result");  
+
+    console.log(this.commonService.isAutomationOnGoing, "is Automation on going");
+    
+
+    if (this.commonService.isAutomationOnGoing && this.dropdownHeaderUuids && data.buttons && !data.value.includes('Customer has waited') && (this.dialogPositionId && !data.positionId || (data.positionId == this.dialogPositionId))) {
       $(`#overRideBtn-${this.dropdownHeaderUuids}`).removeClass('hide');
       $(`#cancelOverRideBtn-${this.dropdownHeaderUuids}`).addClass('hide');
       $("#inputFieldForAgent").remove();
@@ -697,6 +682,8 @@ export class AssistComponent implements OnInit {
         this.clickEvents(IdReferenceConst.OVERRIDE_BTN, this.dropdownHeaderUuids, this.dialogPositionId);
         this.clickEvents(IdReferenceConst.CANCEL_OVERRIDE_BTN, this.dropdownHeaderUuids, this.dialogPositionId);
       } else {
+        console.log("inside tell customer");
+        
         $(`.override-input-div`).addClass('hide');
         $(runInfoContent).append(tellToUserHtml);
       }
@@ -728,7 +715,7 @@ export class AssistComponent implements OnInit {
         this.welcomeMsgResponse = data;
       } else {
         let botResHtml = this.assisttabService.smallTalkTemplate(data.buttons[0], uuids);
-        console.log(botResHtml, "bot res html");
+        console.log(botResHtml, "small template");
         
         dynamicBlockDiv.append(botResHtml);
       }
@@ -737,8 +724,7 @@ export class AssistComponent implements OnInit {
       }, this.waitingTimeForUUID);
     }
     
-    let result = this.templateRenderClassService.getResponseUsingTemplate(data);
-    let renderedMessage = this.templateRenderClassService.AgentChatInitialize.renderMessage(result);
+    let renderedMessage = this.dropdownHeaderUuids ? this.templateRenderClassService.AgentChatInitialize.renderMessage(result) : '';
     if (renderedMessage && renderedMessage[0]) {
       let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(result)[0].innerHTML;
       let a = document.getElementById(IdReferenceConst.displayData + `-${uuids}`);
@@ -920,12 +906,13 @@ export class AssistComponent implements OnInit {
   dialogTerminatedOrIntruppted() {
     this.commonService.isAutomationOnGoing = false;
     this.commonService.isInitialDialogOnGoing = true;
-    this.isOverRideMode = false;
+    this.commonService.OverRideMode = false;
     let storageObject : any = {
       [storageConst.AUTOMATION_GOING_ON] : this.commonService.isAutomationOnGoing,
       [storageConst.INITIALTASK_GOING_ON] : this.commonService.isInitialDialogOnGoing,
       [storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH] : this.commonService.isAutomationOnGoing
     }
+    this.dropdownHeaderUuids = null;
     this.localStorageService.setLocalStorageItem(storageObject);
     this.commonService.addFeedbackHtmlToDom(this.dropdownHeaderUuids, this.commonService.scrollContent[ProjConstants.ASSIST].lastElementBeforeNewMessage);
     if (this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd) {

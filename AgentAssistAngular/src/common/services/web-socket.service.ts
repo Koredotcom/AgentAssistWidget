@@ -66,6 +66,8 @@ export class WebSocketService {
 
     let appState = this.localStorageService.getLocalStorageState();
     let shouldProcessResponse = true;
+    console.log(appState, appState[this.connectionDetails.conversationId],this.connectionDetails.conversationId, "inside common emit eventa");
+    
     if(appState[this.connectionDetails.conversationId] && appState[this.connectionDetails.conversationId][storageConst.IS_WELCOMEMSG_PROCESSED]){
       shouldProcessResponse = false;
     }

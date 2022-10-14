@@ -14,6 +14,7 @@ declare var $: any;
 export class CommonService {
   configObj;
   grantResponseObj;
+  OverRideMode : boolean = false;
   isCallConversation: boolean = false;
   isAutomationOnGoing: boolean = false;
   isInitialDialogOnGoing : boolean = false;
@@ -490,5 +491,48 @@ let endofDialogeHtml = `
       }
   })
 }
+
+preparePostMessageForSendAndCopy(evt, data, eventName, connectionDetails){
+  console.log(evt, data, eventName, "inside prepare post message");
+  
+  let payload = data;
+  var message = {
+      method: (eventName == IdReferenceConst.SENDMSG) ? IdReferenceConst.SEND_METHOD : IdReferenceConst.COPY_METHOD,
+      name: (eventName == IdReferenceConst.SENDMSG) ? IdReferenceConst.SENDMSG_REQUEST : IdReferenceConst.COPYMSG_REQUEST,
+      conversationId: connectionDetails.conversationId,
+      payload: payload
+  };
+  if(eventName == IdReferenceConst.SENDMSG) {
+    window.parent.postMessage(message, '*');
+  }else if(eventName == IdReferenceConst.COPYMSG){
+    parent.postMessage(message, '*');
+  }
+  this.highLightAndStoreFaqId(evt, data, connectionDetails);
+}
+
+highLightAndStoreFaqId(evt, data, connectionDetails){
+  console.log("clickevent", data);
+  let faqElementId = $(evt.target).parent().parent().attr('id');
+  if(document.getElementById(faqElementId)){
+      let faqParentElementId = $(evt.target).parent().parent().parent().attr('id');
+      let storedfaqId = faqParentElementId + '_' + faqElementId;
+      document.getElementById(faqElementId).style.borderStyle = "solid";
+      console.log(faqElementId, "faq element id");
+      
+      this.setSentFaqListInStorage(connectionDetails.conversationId, storedfaqId);
+  }
+}
+
+setSentFaqListInStorage(convId, faqId) {
+  let appState = this.localStorageService.getLocalStorageState();
+  if (appState && appState[convId] && appState[convId][storageConst.FAQ_LIST].indexOf(faqId) == -1) {
+    appState[convId][storageConst.FAQ_LIST].push(faqId);
+    let storageObject : any = {
+      [storageConst.FAQ_LIST] : appState[convId][storageConst.FAQ_LIST]
+    }
+    this.localStorageService.setLocalStorageItem(storageObject);
+  }
+}
+
 
 }
