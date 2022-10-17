@@ -22,7 +22,7 @@ function sendMessageToAgentAssist(conversationId, message) {
   if (!iframe) {
     return;
   }
-  console.log("Kore Agent Assist iframe", iframe);
+  // console.log("Kore Agent Assist iframe", iframe);
   var content = message;
   console.log("New Message recordId:" + conversationId + " content:" + content);
   var message = {};
@@ -47,7 +47,7 @@ async function getChannel(client) {
   return null;
 }
 
-async function getPhoneNumber(client){
+async function getPhoneNumber(client) {
   let data = await client.get('ticket');
   if (data) {
     return data.ticket.requester.identities[0]['value'].replace('+', '%2B')
@@ -81,51 +81,51 @@ function base64url(source) {
 async function generateURL(settings) {
   return new Promise(async (resolve, reject) => {
 
-      var header = {
-        "alg": "HS256",
-        "typ": "JWT"
-      };
+    var header = {
+      "alg": "HS256",
+      "typ": "JWT"
+    };
 
-      var stringifiedHeader = CryptoJS.enc.Utf8.parse(JSON.stringify(header));
-      var encodedHeader = base64url(stringifiedHeader);
+    var stringifiedHeader = CryptoJS.enc.Utf8.parse(JSON.stringify(header));
+    var encodedHeader = base64url(stringifiedHeader);
 
-      const data = {
-        'iss': settings.clientId,
-        'sub': 'number',
-        'botId': settings.botId,
-      }
+    const data = {
+      'iss': settings.clientId,
+      'sub': 'number',
+      'botId': settings.botId,
+    }
 
 
-      var stringifiedData = CryptoJS.enc.Utf8.parse(JSON.stringify(data));
-      var encodedData = base64url(stringifiedData);
+    var stringifiedData = CryptoJS.enc.Utf8.parse(JSON.stringify(data));
+    var encodedData = base64url(stringifiedData);
 
-      var token = encodedHeader + "." + encodedData;
-      // console.log("token ==========================>", token);
+    var token = encodedHeader + "." + encodedData;
+    // console.log("token ==========================>", token);
 
-      var secret = settings.clientSecret;
-      var signature = CryptoJS.HmacSHA256(token, secret);
-      signature = base64url(signature);
+    var secret = settings.clientSecret;
+    var signature = CryptoJS.HmacSHA256(token, secret);
+    signature = base64url(signature);
 
-      var signedToken = token + "." + signature;
-      let requester = await getRequesterName(client);
-      let smartassistURL = settings.agentassistURL.replace("agentassist", "smartassist");
-      let activeConversationId = null;
-      let customdata = null;
-      let channel = await getChannel(client);
-      
-      console.log("===============> channel", channel);
-      let isCall = channel == "voice_inbound" ? true : false
-      if(isCall){
-        activeConversationId = await getPhoneNumber(client);
-        customdata = encodeURI(JSON.stringify({ fName:'Customer', lName: '' }));
+    var signedToken = token + "." + signature;
+    let requester = await getRequesterName(client);
+    let smartassistURL = settings.agentassistURL.replace("agentassist", "smartassist");
+    let activeConversationId = null;
+    let customdata = null;
+    let channel = await getChannel(client);
 
-      }else{
-        activeConversationId = await getTicketId(client);
-        customdata = encodeURI(JSON.stringify({ fName: requester || 'Customer', lName: '' }));
+    console.log("===============> channel", channel);
+    let isCall = channel == "voice_inbound" ? true : false
+    if (isCall) {
+      activeConversationId = await getPhoneNumber(client);
+      customdata = encodeURI(JSON.stringify({ fName: 'Customer', lName: '' }));
 
-      }
-      iframeURL = `${settings.agentassistURL}/koreagentassist-sdk/UI/agentassist-iframe.html?token=${signedToken}&botid=${settings.botId}&agentassisturl=${smartassistURL}&conversationid=${activeConversationId}&isCall=${isCall}&customdata=${customdata}`;
-      resolve(iframeURL);
+    } else {
+      activeConversationId = await getTicketId(client);
+      customdata = encodeURI(JSON.stringify({ fName: requester || 'Customer', lName: '' }));
+
+    }
+    iframeURL = `${settings.agentassistURL}/koreagentassist-sdk/UI/agentassist-iframe.html?token=${signedToken}&botid=${settings.botId}&agentassisturl=${smartassistURL}&conversationid=${activeConversationId}&isCall=${isCall}&customdata=${customdata}`;
+    resolve(iframeURL);
 
   });
 }
@@ -134,8 +134,6 @@ async function iframeRender(url) {
 
   console.log("Iframe URL ========> ", url);
   document.getElementById("agentassist-iframe").src = url;
-  // let ticketData = await client.get('ticket');
-  // console.log("ticket data =====> ", ticketData);
 
 }
 
@@ -149,6 +147,35 @@ async function main() {
 
   var metadata = await client.metadata();
 
+  client.on('ticket.save', async function () {
+    let response = await client.get('ticket.status');
+    if (response['ticket.status'] === "solved") {
+      //Emit the conversation event.
+      let conversation = await client.get("ticket.conversation");
+
+      let chatHistory = conversation['ticket.conversation'].reduce((acc, current) => {
+        let obj = {};
+        obj['type'] = current.author.role === "admin" ? "agent" : current.author.role === "end-user" ? "user" : "Invalid";
+        obj['message'] = current.message.content;
+        obj['name'] = current.author.name;
+        obj['timestamp'] = Date.parse(current.timestamp);
+        acc.push(obj);
+        return acc
+      }, []);
+
+      var message = {};
+      message['payload']={};
+      message['payload'].chatHistory= chatHistory;//JSON.parse(JSON.stringify(result)).messages;
+      message['conversationId'] = activeConversationId;
+      message['name'] = 'agentAssist.endOfConversation'; 
+      let iframe = document.getElementById('agentassist-iframe');      
+      var vfWindow = iframe.contentWindow;
+      if (vfWindow) {
+        vfWindow.postMessage(message, iframeURL);//window.location.protocol+'//'+window.location.host);
+      }
+    }
+    return true
+  });
   client.on('ticket.conversation.changed', function (conversations) {
     // console.log("change event =====> ", e);
     let lastElement = conversations.pop();
@@ -175,7 +202,7 @@ async function main() {
       } catch (e) {
         msg = decodeURI(encodeURI(event.data.payload));
       }
-      console.log("Kore Agent Assist sending message ===============> ", msg);
+      // console.log("Kore Agent Assist sending message ===============> ", msg);
       client.invoke("ticket.sendMessage", { channel: 'messaging', message: msg });
 
 
@@ -183,6 +210,15 @@ async function main() {
       var msg = decodeURI(encodeURI(event.data.payload));
       console.log("Kore Agent Assist copying message ==============> ", msg);
       client.invoke('comment.appendText', msg);
+
+    }
+    else if (event.data.name === "agentAssist.conversation_summary" && event.data.conversationId == activeConversationId) {
+      console.log("conversation_summary");
+      debugger;
+      let summary = JSON.parse(JSON.stringify(event.data)).payload.summary[0].summary_text;
+      // let chatTranscript = JSON.parse(JSON.stringify(event.data)).conversationId;
+
+      client.set('ticket.customField:conversation_summary', summary) 
 
     }
   }, false);

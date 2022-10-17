@@ -1,8 +1,26 @@
 {
   "app": {
     "name": "Agent Assist",
-    "short_description": "Play the famous zen tunes in your help desk.",
-    "long_description": "Play the famous zen tunes in your help desk and \n listen to the beats it has to offer.",
+    "short_description": "No-Code, AI-first Automation for better customer and employee experiences using XO Platform",
+    "long_description": " More than 80% of routine business interactions between customers, employees and processes drive their overall experiences - and most of them can be automated. XO Platform, an AI-first technology, enables businesses to harness conversational interactions with greater efficiency at reduced costs while ensuring the highest customer, employee, agent, and partner experiences. Companies can have complete control over their customer experience with: Multichannel Human-like Interactions
+    Personalized Self-Service Options
+    Lower Wait Times with Real-Time Responses in Seconds
+    Seamless Integrations (Now with Salesforce!)
+    Highly Scalable with Minimal Upfront Investment
+    
+    
+    Highlights:
+    
+    AMPLIFY EMPLOYEE AND CUSTOMER SATISFACTION
+    Provide convenient, timely, and personalized customer experiences with Conversational AI-powered intelligent assistants for multichannel and voice powered by Salesforce data.
+    
+    NO CODE NEEDED
+    XO Platform’s no-code, drag-n-drop interface with pre-built templates is ideal for you to kick-start your conversational AI journey instantly. Learn everything you need to know with our UI-based training modules.
+    
+    DESIGNED FOR SALESFORCE
+    
+    Seamless integration with Conversational AI enables data updates on Salesforce.
+    Kore Landing Page Kore.ai XO Platform for Salesforce Deliver World-Class Service with the Power of Salesforce and Conversational AI" ,
     "installation_instructions": "Simply click install.",
 
       "parameters": {
