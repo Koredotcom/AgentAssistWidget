@@ -113,11 +113,9 @@ export const storageConst = {
     CURRENT_TAB : 'currentTab',
     AGENT_ASSIST_STATE : 'agentAssistState',
     IS_WELCOMEMSG_PROCESSED : 'isWelcomeProcessed',
-    AUTOMATION_GOING_ON : 'automationGoingOn',
     INITIALTASK_GOING_ON : 'initialTaskGoingOn',
     AUTOMATION_GOING_ON_AFTER_REFRESH : 'automationGoingOnAfterRefresh',
     AUTOMATION_GOING_ON_AFTER_REFRESH_MYBOT : 'automationGoingOnAfterRefreshMyBot',
-    AUTOMATION_NOTRAN_ARRAY : 'automationsNotRanArray',
     FAQ_LIST : 'faqList',
     SEARCH_VALUE : 'search'
 }

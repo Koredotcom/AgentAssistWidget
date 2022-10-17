@@ -31,18 +31,18 @@ export class LocalStorageService {
     let appState = this.getLocalStorageState();
     let conversationId = this.connectionDetails.conversationId;
     if(appState && Object.keys(appState).length > 0 && appState[conversationId]){
-      if(this.emptyObjectCheckPipe.transform(storageObject[storageConst.AUTOMATION_GOING_ON])){
-        appState[conversationId][storageConst.AUTOMATION_GOING_ON] = storageObject[storageConst.AUTOMATION_GOING_ON];
-      }
+      // if(this.emptyObjectCheckPipe.transform(storageObject[storageConst.AUTOMATION_GOING_ON])){
+      //   appState[conversationId][storageConst.AUTOMATION_GOING_ON] = storageObject[storageConst.AUTOMATION_GOING_ON];
+      // }
       if(this.emptyObjectCheckPipe.transform(storageObject[storageConst.IS_WELCOMEMSG_PROCESSED])){
         appState[conversationId][storageConst.IS_WELCOMEMSG_PROCESSED] = storageObject[storageConst.IS_WELCOMEMSG_PROCESSED];
       }
       if(this.emptyObjectCheckPipe.transform(storageObject[storageConst.INITIALTASK_GOING_ON])){
         appState[conversationId][storageConst.INITIALTASK_GOING_ON] = storageObject[storageConst.INITIALTASK_GOING_ON];
       }
-      if(this.emptyObjectCheckPipe.transform(storageObject[storageConst.AUTOMATION_NOTRAN_ARRAY]) && currentTab){
-        appState[conversationId][currentTab][storageConst.AUTOMATION_NOTRAN_ARRAY] = storageObject[storageConst.AUTOMATION_NOTRAN_ARRAY];
-      }
+      // if(this.emptyObjectCheckPipe.transform(storageObject[storageConst.AUTOMATION_NOTRAN_ARRAY]) && currentTab){
+      //   appState[conversationId][currentTab][storageConst.AUTOMATION_NOTRAN_ARRAY] = storageObject[storageConst.AUTOMATION_NOTRAN_ARRAY];
+      // }
       if(this.emptyObjectCheckPipe.transform(storageObject[storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH])){
         appState[conversationId][storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH] = storageObject[storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH];
  
@@ -86,9 +86,9 @@ export class LocalStorageService {
         appState[conversationId][ProjConstants.LIBRARY] = {};
         appState[conversationId][ProjConstants.TRANSCRIPT] = {};
         appState[conversationId][storageConst.FAQ_LIST] = [];
-        appState[conversationId][ProjConstants.ASSIST][storageConst.AUTOMATION_NOTRAN_ARRAY] = [];
+        // appState[conversationId][ProjConstants.ASSIST][storageConst.AUTOMATION_NOTRAN_ARRAY] = [];
         appState[conversationId][storageConst.IS_WELCOMEMSG_PROCESSED] = false;
-        appState[conversationId][storageConst.AUTOMATION_GOING_ON] = false;
+        // appState[conversationId][storageConst.AUTOMATION_GOING_ON] = false;
         appState[conversationId][storageConst.INITIALTASK_GOING_ON] = false;
         appState[conversationId][storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH] = false;
         appState[conversationId][storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH_MYBOT] = false;

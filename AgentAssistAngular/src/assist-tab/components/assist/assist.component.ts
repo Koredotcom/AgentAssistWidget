@@ -72,7 +72,7 @@ export class AssistComponent implements OnInit {
 
   subscribeEvents() {
     let subscription1 = this.handleSubjectService.runButtonClickEventSubject.subscribe((runEventObj: any) => {
-      if (Object.keys(runEventObj).length > 0) {
+      if (runEventObj) {
         if (runEventObj && !runEventObj?.agentRunButton && !this.commonService.isAutomationOnGoing) {
           this.runDialogForAssistTab(runEventObj);
         } else if (runEventObj && !runEventObj?.agentRunButton && this.commonService.isAutomationOnGoing) {
@@ -161,7 +161,7 @@ export class AssistComponent implements OnInit {
     this.dropdownHeaderUuids = uuids;
     this.commonService.isAutomationOnGoing = true;
     let storageObject: any = {
-      [storageConst.AUTOMATION_GOING_ON]: this.commonService.isAutomationOnGoing,
+      // [storageConst.AUTOMATION_GOING_ON]: this.commonService.isAutomationOnGoing,
       [storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH]: this.commonService.isAutomationOnGoing
     }
     this.localStorageService.setLocalStorageItem(storageObject);
@@ -238,22 +238,22 @@ export class AssistComponent implements OnInit {
   }
 
   updateAgentAssistResponse(data, botId, conversationId) {
-    let shouldProcessResponse = false;
-    let appState = this.localStorageService.getLocalStorageState();
-    if (appState[this.connectionDetails.conversationId]) {
-      // if incoming data belongs to welcome message do nothing
-      if (!data.suggestions && data.buttons?.length > 1) {
-        if (appState[this.connectionDetails.conversationId][storageConst.IS_WELCOMEMSG_PROCESSED] && !appState[this.connectionDetails.conversationId][storageConst.AUTOMATION_GOING_ON] && document.getElementsByClassName('.welcome-msg').length > 0) {
-          return;
-        }
-      }
-      shouldProcessResponse = true;
-    } else {
-      shouldProcessResponse = true;
-    }
-    if (!shouldProcessResponse) {
-      return;
-    }
+    // let shouldProcessResponse = false;
+    // let appState = this.localStorageService.getLocalStorageState();
+    // if (appState[this.connectionDetails.conversationId]) {
+    //   // if incoming data belongs to welcome message do nothing
+    //   if (!data.suggestions && data.buttons?.length > 1) {
+    //     if (appState[this.connectionDetails.conversationId][storageConst.IS_WELCOMEMSG_PROCESSED]  && document.getElementsByClassName('.welcome-msg').length > 0) {
+    //       return;
+    //     }
+    //   }
+    //   shouldProcessResponse = true;
+    // } else {
+    //   shouldProcessResponse = true;
+    // }
+    // if (!shouldProcessResponse) {
+    //   return;
+    // }
     if (!(this.commonService.isAutomationOnGoing && data.suggestions)) {
       this.updateNumberOfMessages();
     }
@@ -319,10 +319,10 @@ export class AssistComponent implements OnInit {
               let foundIndex = this.commonService.automationNotRanArray.findIndex((ele) => ele.id === elem.id);
               if (foundIndex == -1) {
                 this.commonService.automationNotRanArray.push({ name: elem.innerText.trim(), id: elem.id });
-                let storageObject: any = {
-                  [storageConst.AUTOMATION_NOTRAN_ARRAY]: this.commonService.automationNotRanArray
-                }
-                this.localStorageService.setLocalStorageItem(storageObject, this.projConstants.ASSIST);
+                // let storageObject: any = {
+                //   [storageConst.AUTOMATION_NOTRAN_ARRAY]: this.commonService.automationNotRanArray
+                // }
+                // this.localStorageService.setLocalStorageItem(storageObject, this.projConstants.ASSIST);
               }
 
             }
@@ -540,6 +540,8 @@ export class AssistComponent implements OnInit {
       }
     }
 
+    let result = this.templateRenderClassService.getResponseUsingTemplate(data);
+
     if (this.commonService.isAutomationOnGoing && this.dropdownHeaderUuids && data.buttons && !data.value.includes('Customer has waited') && (this.dialogPositionId && !data.positionId || (data.positionId == this.dialogPositionId))) {
       $(`#overRideBtn-${this.dropdownHeaderUuids}`).removeClass('hide');
       $(`#cancelOverRideBtn-${this.dropdownHeaderUuids}`).addClass('hide');
@@ -575,14 +577,14 @@ export class AssistComponent implements OnInit {
       }, this.waitingTimeForUUID);
     }
 
-    if (this.commonService.isAutomationOnGoing && !data.suggestions) {
+    if (this.commonService.isAutomationOnGoing && !data.suggestions && !result.parsePayLoad) {
       this.welcomeMsgResponse = data;
       if (this.commonService.scrollContent[ProjConstants.ASSIST].numberOfNewMessages == 1) {
         this.commonService.scrollContent[ProjConstants.ASSIST].numberOfNewMessages = 0;
       }
     }
 
-    if (!this.commonService.isAutomationOnGoing && !this.dropdownHeaderUuids && !data.suggestions) {
+    if (!this.commonService.isAutomationOnGoing && !this.dropdownHeaderUuids && !data.suggestions && !result.parsePayLoad) {
       $('#dynamicBlock .empty-data-no-agents').addClass('hide');
       let dynamicBlockDiv = $('#dynamicBlock');
       if (data.buttons?.length > 1) {
@@ -596,7 +598,6 @@ export class AssistComponent implements OnInit {
       }, this.waitingTimeForUUID);
     }
 
-    let result = this.templateRenderClassService.getResponseUsingTemplate(data);
     let renderedMessage = this.dropdownHeaderUuids ? this.templateRenderClassService.AgentChatInitialize.renderMessage(result) : '';
     if (renderedMessage && renderedMessage[0]) {
       let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(result)[0].innerHTML;
@@ -619,7 +620,7 @@ export class AssistComponent implements OnInit {
     this.commonService.isInitialDialogOnGoing = true;
     this.commonService.OverRideMode = false;
     let storageObject: any = {
-      [storageConst.AUTOMATION_GOING_ON]: this.commonService.isAutomationOnGoing,
+      // [storageConst.AUTOMATION_GOING_ON]: this.commonService.isAutomationOnGoing,
       [storageConst.INITIALTASK_GOING_ON]: this.commonService.isInitialDialogOnGoing,
       [storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH]: this.commonService.isAutomationOnGoing
     }

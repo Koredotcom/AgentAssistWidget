@@ -72,11 +72,13 @@ export class MybotComponent implements OnInit {
   subscribeEvents() {
 
     let subscription1 = this.handleSubjectService.runButtonClickEventSubject.subscribe((runEventObj: any) => {
-      if (runEventObj.agentRunButton && !this.commonService.isMyBotAutomationOnGoing) {
-        this.runDialogFormyBotTab(runEventObj);
-      } else if (runEventObj.agentRunButton && this.commonService.isMyBotAutomationOnGoing) {
-        this.interruptDialog = runEventObj;
-        this.handlePopupEvent.emit({ status: true, type: this.projConstants.INTERRUPT });
+      if(runEventObj){
+        if (runEventObj.agentRunButton && !this.commonService.isMyBotAutomationOnGoing) {
+          this.runDialogFormyBotTab(runEventObj);
+        } else if (runEventObj.agentRunButton && this.commonService.isMyBotAutomationOnGoing) {
+          this.interruptDialog = runEventObj;
+          this.handlePopupEvent.emit({ status: true, type: this.projConstants.INTERRUPT });
+        }
       }
     });
 

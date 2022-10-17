@@ -204,6 +204,28 @@ export class DesignAlterService {
     }
   }
 
+  scrollToEle(id) {
+    let element = document.getElementById(id);
+    var _PanelEle = $(element);
+    if(id.includes('automationSuggestions')){
+        let agentUttInfoId = id.split('-');
+        agentUttInfoId.shift();
+        agentUttInfoId = 'agentUttInfo-' + agentUttInfoId.join('-');
+        if(document.getElementById(agentUttInfoId)){
+            _PanelEle = $('#' + agentUttInfoId);
+        }
+    }
+    if (_PanelEle) {
+        var _container = _PanelEle.closest('.body-data-container');
+        if (_container && _container.offset()) {
+            var _scrollHeight = _PanelEle.offset().top - _container.offset().top + _container.scrollTop();
+            _container.animate({
+            scrollTop: _scrollHeight
+            }, 'slow');
+        }
+    }
+}
+
   // toggle dropdown click events
   handleDropdownToggle(uuid) {
     document.getElementById(IdReferenceConst.DROPDOWN_HEADER + '-' + uuid).addEventListener('click', (event) => {

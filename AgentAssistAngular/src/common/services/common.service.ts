@@ -113,7 +113,7 @@ export class CommonService {
     if (!_data.suggestions && _data.buttons?.length > 1) {
       let storageObject: any = {
         [storageConst.IS_WELCOMEMSG_PROCESSED]: true,
-        [storageConst.AUTOMATION_GOING_ON]: this.isAutomationOnGoing
+        // [storageConst.AUTOMATION_GOING_ON]: this.isAutomationOnGoing
       }
       this.localStorageService.setLocalStorageItem(storageObject);
     }

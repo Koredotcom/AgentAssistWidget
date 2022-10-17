@@ -7,6 +7,7 @@ import { CommonService } from 'src/common/services/common.service';
 import { HandleSubjectService } from 'src/common/services/handle-subject.service';
 import { LocalStorageService } from 'src/common/services/local-storage.service';
 import { WebSocketService } from '../common/services/web-socket.service';
+import * as $ from 'jquery';
 
 @Component({
   selector: 'app-root',
@@ -19,7 +20,7 @@ export class AppComponent {
   errorMsg;
   constructor(private webSocketService: WebSocketService, private service: CommonService,
     private route: ActivatedRoute, private handleSubjectService: HandleSubjectService, private randomID: KoreGenerateuuidPipe,
-    private localStorageService : LocalStorageService) {
+    private localStorageService: LocalStorageService) {
 
   }
   ngOnInit() {
@@ -29,7 +30,7 @@ export class AppComponent {
         if (params.token && params.botid && params.agentassisturl && params.conversationid) {
           this.grantCall(params);
         }
-         else {
+        else {
           if (connectionObj.isAuthentication) {
             var jsonData = {
               "clientId": connectionObj.botDetails.clientId,
@@ -67,6 +68,7 @@ export class AppComponent {
       this.isGrantSuccess = true;
       this.service.grantResponseObj = res;
       this.handleSubjectService.setConnectionDetails(params);
+      this.handleSourceType(params);
       setTimeout(() => {
         this.webSocketService.socketConnection();
       }, 100);
@@ -78,6 +80,15 @@ export class AppComponent {
       }
       this.isGrantSuccess = false;
     });
+  }
+
+  handleSourceType(params) {
+    let sourceType = params.source;
+    if (sourceType === 'smartassist-color-scheme') {
+      $('body').addClass(sourceType);
+    } else {
+      $('body').addClass('default-color-scheme')
+    }
   }
 
 }

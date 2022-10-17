@@ -31,8 +31,8 @@ export class HomeComponent implements OnInit {
   scrollContainer: any;
   searchConentObject: any;
   connectionDetails: any = {};
-  showRestorePopup : boolean = false;
-  showSummaryPopup : boolean = false;
+  showRestorePopup: boolean = false;
+  showSummaryPopup: boolean = false;
   showTerminatePopup: boolean = false;
   showInterruptPopup: boolean = false;
   scrollbottomwaitingTime: number = 500;
@@ -40,8 +40,9 @@ export class HomeComponent implements OnInit {
   subscriptionsList: Subscription[] = [];
   proactiveModeEnabled: boolean = false;
 
+
   constructor(public handleSubjectService: HandleSubjectService, public websocketService: WebSocketService,
-    public sanitizeHTMLPipe: SanitizeHtmlPipe, private commonService: CommonService, private koregenerateUUIDPipe: KoreGenerateuuidPipe,
+    public sanitizeHTMLPipe: SanitizeHtmlPipe, public commonService: CommonService, private koregenerateUUIDPipe: KoreGenerateuuidPipe,
     private designAlterService: DesignAlterService, private localStorageService: LocalStorageService) { }
 
   ngOnInit(): void {
@@ -61,6 +62,8 @@ export class HomeComponent implements OnInit {
   subscribeEvents() {
     let subscription1 = this.handleSubjectService.activeTabSubject.subscribe(tab => {
       this.activeTab = tab;
+      this.tabActiveActivities();
+      console.log(this.activeTab, "active tab**********", this.commonService.isCallConversation);
       setTimeout(() => {
         if (this.activeTab != this.projConstants.LIBRARY) {
           this.scrollToBottom(true);
@@ -70,8 +73,7 @@ export class HomeComponent implements OnInit {
 
     let subscription2 = this.handleSubjectService.connectDetailsSubject.subscribe((urlParams: any) => {
       if (urlParams && urlParams?.token) {
-        // let activeTab = (urlParams.isCall == "false") ? this.projConstants.ASSIST : this.projConstants.TRANSCRIPT;
-        // this.handleSubjectService.setActiveTab(activeTab);
+        this.commonService.isCallConversation = (urlParams.isCall == "false") ? false : true;
         this.localStorageService.initializeLocalStorageState();
         this.connectionDetails = urlParams;
         this.eventListenerFromParent();
@@ -85,6 +87,8 @@ export class HomeComponent implements OnInit {
 
   // update state based on local storage.
   updateUIState(_convId, _isCallConv) {
+    console.log(_isCallConv, "is call conversation");
+
     $('.empty-data-no-agents').addClass('hide');
     let appState = this.localStorageService.getLocalStorageState();
     let activeTab: any;
@@ -93,7 +97,7 @@ export class HomeComponent implements OnInit {
     }
     if (appState[_convId] && !appState[_convId][storageConst.CURRENT_TAB]) {
       let storageObject: any = {};
-      if (_isCallConv == 'true') {
+      if (_isCallConv == 'true' || _isCallConv) {
         storageObject[storageConst.CURRENT_TAB] = this.projConstants.TRANSCRIPT;
         activeTab = this.projConstants.TRANSCRIPT;
       } else {
@@ -104,6 +108,8 @@ export class HomeComponent implements OnInit {
     } else if (appState[_convId] && appState[_convId][storageConst.CURRENT_TAB]) {
       activeTab = appState[_convId][storageConst.CURRENT_TAB];
     }
+    console.log(activeTab, "active tab inside update ui state");
+
     this.handleSubjectService.setActiveTab(activeTab);
     // document.getElementById("loader").style.display = "none";
     this.hightLightFaqFromStoredList(_convId, this.projConstants.ASSIST);
@@ -112,77 +118,78 @@ export class HomeComponent implements OnInit {
   //event listeners from parent
   eventListenerFromParent() {
 
-    window.addEventListener("message", (e) => {
-      if (e.data.name === 'response_resolution_comments' && e.data.conversationId) {
-        $(`#summary`).removeClass('hide');
-        $(`#summaryText`).val(e.data?.summary ? e.data?.summary[0]?.summary_text : '');
-        $(`#summarySubmit`).attr('data-summary', e.data ? JSON.stringify(e.data) : '')
-      }
-      if (e.data.name == 'initial_data') {
-        e.data?.data?.forEach((ele) => {
-          let agent_assist_request = {
-            'conversationId': ele.conversationId,
-            'query': this.sanitizeHTMLPipe.transform(ele.value),
-            'botId': ele.botId,
-            'agentId': '',
-            'experience': this.commonService.isCallConversation === true ? 'voice' : 'chat',
-            'positionId': ele?.positionId
-          }
-          if (ele?.intentName) {
-            agent_assist_request['intentName'] = ele.value;
-          }
-          if (ele?.entities) {
-            agent_assist_request['entities'] = ele.entities;
-          } else {
-            agent_assist_request['entities'] = [];
-          }
-          this.websocketService.emitEvents(EVENTS.agent_assist_request, agent_assist_request);
-        })
-      }
-      if (e.data.name === 'agentAssist.endOfConversation' && e.data.conversationId) {
-        let currentEndedConversationId = e.data.conversationId;
-        if (this.localStorageService.checkConversationIdStateInStorage([currentEndedConversationId])) {
-          let request_resolution_comments = {
-            conversationId: e.data?.conversationId,
-            userId: '',
-            botId: this.connectionDetails.botId,
-            sessionId: this.koregenerateUUIDPipe.transform(),
-            chatHistory: e.data?.payload?.chatHistory
-          }
-          this.websocketService.emitEvents(EVENTS.request_resolution_comments, request_resolution_comments);
-          this.localStorageService.deleteLocalStorageState(currentEndedConversationId);
+    if (!(window)._agentAssisteventListenerAdded) {
+      window.addEventListener("message", (e: any) => {
+        if (e.data.name === EVENTS.response_resolution_comments && e.data.conversationId) {
+          $(`#summary`).removeClass('hide');
+          $(`#summaryText`).val(e.data?.summary ? e.data?.summary[0]?.summary_text : '');
+          $(`#summarySubmit`).attr('data-summary', e.data ? JSON.stringify(e.data) : '')
         }
-        return;
-      }
+        if (e.data.name == 'initial_data') {
+          e.data?.data?.forEach((ele) => {
+            let agent_assist_request = {
+              'conversationId': ele.conversationId,
+              'query': this.sanitizeHTMLPipe.transform(ele.value),
+              'botId': ele.botId,
+              'agentId': '',
+              'experience': this.commonService.isCallConversation === true ? 'voice' : 'chat',
+              'positionId': ele?.positionId
+            }
+            if (ele?.intentName) {
+              agent_assist_request['intentName'] = ele.value;
+            }
+            if (ele?.entities) {
+              agent_assist_request['entities'] = ele.entities;
+            } else {
+              agent_assist_request['entities'] = [];
+            }
+            this.websocketService.emitEvents(EVENTS.agent_assist_request, agent_assist_request);
+          })
+        }
+        if (e.data.name === 'agentAssist.endOfConversation' && e.data.conversationId) {
+          let currentEndedConversationId = e.data.conversationId;
+          if (this.localStorageService.checkConversationIdStateInStorage([currentEndedConversationId])) {
+            let request_resolution_comments = {
+              conversationId: e.data?.conversationId,
+              userId: '',
+              botId: this.connectionDetails.botId,
+              sessionId: this.koregenerateUUIDPipe.transform(),
+              chatHistory: e.data?.payload?.chatHistory
+            }
+            this.websocketService.emitEvents(EVENTS.request_resolution_comments, request_resolution_comments);
+            this.localStorageService.deleteLocalStorageState(currentEndedConversationId);
+          }
+          return;
+        }
 
-      if (e.data.value) {
-        let userInputData = e.data;
-        let agent_assist_request = {
-          'author': {
-            "firstName": userInputData.author?.firstName,
-            "lastName": userInputData.author?.lastName,
-            "type": userInputData.author?.type
-          },
-          'botId': this.connectionDetails.botId,
-          'conversationId': userInputData.conversationid,
-          'experience': this.commonService.isCallConversation === true ? 'voice' : 'chat',
-          'query': this.sanitizeHTMLPipe.transform(userInputData.value),
-        }
-        if (this.commonService.isCallConversation === true) {
-          // prepareConversation();
-          if (userInputData.author.type === 'USER') {
-            // processTranscriptData(userInputData, userInputData.conversationid, this.connectionDetails.botId,);
-            this.websocketService.emitEvents(EVENTS.agent_assist_request, agent_assist_request);
+        if (e.data.value) {
+          let userInputData = e.data;
+          let agent_assist_request = {
+            'author': {
+              "firstName": userInputData.author?.firstName,
+              "lastName": userInputData.author?.lastName,
+              "type": userInputData.author?.type
+            },
+            'botId': this.connectionDetails.botId,
+            'conversationId': userInputData.conversationid,
+            'experience': this.commonService.isCallConversation === true ? 'voice' : 'chat',
+            'query': this.sanitizeHTMLPipe.transform(userInputData.value),
+          }
+          if (this.commonService.isCallConversation === true) {
+            this.handleSubjectService.setAgentOrTranscriptResponse(userInputData);
           } else {
-            // processAgentMessages(userInputData)
-          }
-        } else {
-          if (userInputData?.author?.type === 'USER') {
-            this.websocketService.emitEvents(EVENTS.agent_assist_request, agent_assist_request);
+            if (userInputData?.author?.type === 'USER') {
+              this.websocketService.emitEvents(EVENTS.agent_assist_request, agent_assist_request);
+            }
           }
         }
-      }
-    });
+      });
+
+      window.addEventListener('agentAssist.endOfConversation', function (e) {
+        console.log("----endOfConversation event captured ", e)
+      });
+      window._agentAssisteventListenerAdded = true;
+    }
 
   }
 
@@ -194,6 +201,11 @@ export class HomeComponent implements OnInit {
       [storageConst.CURRENT_TAB]: tab
     }
     this.localStorageService.setLocalStorageItem(storageObject);
+  }
+
+  tabActiveActivities(){
+    // $('#bodyContainer').addClass('if-suggestion-search');
+
   }
 
   //terminate popup
@@ -367,6 +379,28 @@ export class HomeComponent implements OnInit {
         let ele = document.getElementById(`displayData-${target.dataset.msgId}`) ? document.getElementById(`displayData-${target.dataset.msgId}`) : document.getElementById(target.dataset.msgId);
         let data = target.dataset.msgData && target.dataset.msgData !== '' ? target.dataset.msgData : (target.parentNode.dataset.msgData && target.parentNode.dataset.msgData !== '' ? target.parentNode.dataset.msgData : ele.innerText);
         this.commonService.preparePostMessageForSendAndCopy(evt, data, IdReferenceConst.COPYMSG, this.connectionDetails);
+      }
+      if (target.id.split('-')[0] == 'buldCount' || target.className == 'ast-bulb' || target.className == 'count-number') {
+        let bulbDiv;
+        if ($('#scriptContainer .other-user-bubble .bubble-data .buld-count-utt').length > 0) {
+          bulbDiv = $('#scriptContainer .other-user-bubble .bubble-data').find('.buld-count-utt, .buld-count-utt-after-click');
+        } else {
+          bulbDiv = $('#scriptContainer .other-user-bubble .bubble-data .buld-count-utt-after-click');
+        }
+        let bulbid = target.id.split('-');
+        bulbid.shift();
+        let idOfBuld = $(bulbDiv).last().attr('id').split('-');
+        idOfBuld.shift();
+        if (idOfBuld.join('-') === bulbid.join('-')) {
+          this.handleSubjectService.setActiveTab(this.projConstants.ASSIST)
+          this.designAlterService.scrollToEle(`automationSuggestions-${idOfBuld.join('-')}`)
+        } else {
+          this.handleSubjectService.setActiveTab(this.projConstants.ASSIST)
+          let theElement = `automationSuggestions-${bulbid.join('-')}`;
+          this.designAlterService.scrollToEle(theElement);
+        }
+        $(`#scriptContainer #buldCount-${bulbid.join('-')}`).removeClass('buld-count-utt').addClass('buld-count-utt-after-click');
+        $(`#scriptContainer #buldCountNumber-${bulbid.join('-')}`).html(`<span>&#10003;</span>`);
       }
     });
   }

@@ -15,8 +15,8 @@
                     <div class="logo-assist">
                         <img [src]="imageFilePath + imageFileNames['AGENT_LOGO']">
                     </div>
-                    <div class="tab-icon hide" id="transcriptIcon" (click)="changeActiveTab(projConstants.TRANSCRIPT)"
-                        [ngClass]="{'active-tab': activeTab == projConstants.TRANSCRIPT}">
+                    <div class="tab-icon" id="transcriptIcon" (click)="changeActiveTab(projConstants.TRANSCRIPT)"
+                        [ngClass]="{'active-tab': activeTab == projConstants.TRANSCRIPT}" [class.hide]="!commonService.isCallConversation">
                         <i class="ast-transcipt font-15" id="scriptIcon"></i>
                         <div class="title-tab" id="transcriptLabel">{{projConstants.TRANSCRIPT}}</div>
                         <div class="custom-tootltip-tabs">{{projConstants.TRANSCRIPT}}</div>
