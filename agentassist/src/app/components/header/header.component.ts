@@ -288,8 +288,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
             users: usersList
           }
         };
-        const headers = new HttpHeaders().set('agentassist' , 'true').set('x-http-method-override','put');
-        this.service.invoke('put.sharebot', params, payload, headers).subscribe(
+        // const headers = new HttpHeaders().set('agentassist' , 'true').set('x-http-method-override','put');
+        this.service.invoke('put.sharebot', params, payload).subscribe(
           res => {
             this.notificationService.notify(this.translate.instant("HEADER.BOT_SHARED_SUCCESSFUL"), 'success');
           }, err => {
