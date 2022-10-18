@@ -142,7 +142,7 @@ export class AssistComponent implements OnInit {
 
     let subscription11 = this.websocketService.agentFeedbackResponse$.subscribe((data) => {
       if (this.commonService.isUpdateFeedBackDetailsFlag) {
-        this.commonService.UpdateFeedBackDetails(data, 'agentAutoContainer')
+        this.commonService.UpdateFeedBackDetails(data, 'dynamicBlock')
       }
     })
 
