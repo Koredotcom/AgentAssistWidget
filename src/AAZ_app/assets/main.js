@@ -1,10 +1,4 @@
 
-
-// import config from "./config.json" assert { type: 'json' };
-// import Schema from "./schema.json" assert { type: 'json' };
-// import schemaData from "./data.json" assert { type: 'json' };
-
-
 var client = ZAFClient.init();
 var iframeURL = null;
 
@@ -164,11 +158,11 @@ async function main() {
       }, []);
 
       var message = {};
-      message['payload']={};
-      message['payload'].chatHistory= chatHistory;//JSON.parse(JSON.stringify(result)).messages;
+      message['payload'] = {};
+      message['payload'].chatHistory = chatHistory;//JSON.parse(JSON.stringify(result)).messages;
       message['conversationId'] = activeConversationId;
-      message['name'] = 'agentAssist.endOfConversation'; 
-      let iframe = document.getElementById('agentassist-iframe');      
+      message['name'] = 'agentAssist.endOfConversation';
+      let iframe = document.getElementById('agentassist-iframe');
       var vfWindow = iframe.contentWindow;
       if (vfWindow) {
         vfWindow.postMessage(message, iframeURL);//window.location.protocol+'//'+window.location.host);
@@ -214,11 +208,10 @@ async function main() {
     }
     else if (event.data.name === "agentAssist.conversation_summary" && event.data.conversationId == activeConversationId) {
       console.log("conversation_summary");
-      debugger;
       let summary = JSON.parse(JSON.stringify(event.data)).payload.summary[0].summary_text;
       // let chatTranscript = JSON.parse(JSON.stringify(event.data)).conversationId;
 
-      client.set('ticket.customField:conversation_summary', summary) 
+      client.set('ticket.customField:conversation_summary', summary)
 
     }
   }, false);
