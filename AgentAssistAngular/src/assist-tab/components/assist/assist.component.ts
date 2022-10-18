@@ -140,7 +140,7 @@ export class AssistComponent implements OnInit {
       }
     })
 
-    let subscription10 = this.websocketService.agentFeedbackResponse$.subscribe((data) => {
+    let subscription11 = this.websocketService.agentFeedbackResponse$.subscribe((data) => {
       if (this.commonService.isUpdateFeedBackDetailsFlag) {
         this.commonService.UpdateFeedBackDetails(data, 'agentAutoContainer')
       }
@@ -156,6 +156,7 @@ export class AssistComponent implements OnInit {
     this.subscriptionsList.push(subscription8);
     this.subscriptionsList.push(subscription9);
     this.subscriptionsList.push(subscription10);
+    this.subscriptionsList.push(subscription11);
   }
 
   //dialogue click and agent response handling code.
