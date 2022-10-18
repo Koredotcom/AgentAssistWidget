@@ -7,13 +7,15 @@ import { ProjConstants } from '../constants/proj.cnts';
 })
 export class HandleSubjectService {
 
-  public connectDetailsSubject = new BehaviorSubject<object>({});
-  public activeTabSubject = new BehaviorSubject<string>(ProjConstants.ASSIST);
-  public searchTextSubject = new BehaviorSubject<object>({});
-  public searchTextFromAgentSearch = new BehaviorSubject<object>({});
-  public runButtonClickEventSubject = new BehaviorSubject<object>({});
-  public terminateClickEventSubject = new BehaviorSubject<object>({});
-  public interruptClickEventSubject = new BehaviorSubject<object>({});
+  public connectDetailsSubject = new BehaviorSubject<object>(null);
+  public activeTabSubject = new BehaviorSubject<string>(null);
+  public searchTextSubject = new BehaviorSubject<object>(null);
+  public searchTextFromAgentSearch = new BehaviorSubject<object>(null);
+  public runButtonClickEventSubject = new BehaviorSubject<object>(null);
+  public terminateClickEventSubject = new BehaviorSubject<object>(null);
+  public interruptClickEventSubject = new BehaviorSubject<object>(null);
+  public restoreClickEventSubject = new BehaviorSubject<object>(null);
+  public summarySubmitClickEventSubject= new BehaviorSubject<object>(null);
   public processAgentOrTranscriptResponseSubject = new BehaviorSubject<object>(null);
 
   constructor() { }
@@ -40,6 +42,14 @@ export class HandleSubjectService {
 
   setInterruptClickEvent(obj) {
     this.interruptClickEventSubject.next(obj);
+  }
+
+  setRestoreClickEvent(obj){
+    this.restoreClickEventSubject.next(obj);
+  }
+
+  setSummarySubmitClickEvent(obj){
+    this.summarySubmitClickEventSubject.next(obj);
   }
 
   setConnectionDetails(obj) {

@@ -23,6 +23,7 @@ export class WebSocketService {
   agentMessageResponse$ : BehaviorSubject<any[]> = new BehaviorSubject(null);
   agentAssistUserMessageResponse$ : BehaviorSubject<any[]> = new BehaviorSubject(null);
   agentFeedbackResponse$ : BehaviorSubject<any[]> = new BehaviorSubject(null);
+  responseResolutionCommentsResponse$ : BehaviorSubject<any[]> = new BehaviorSubject(null);
 
   
   constructor(private handleSubjectService : HandleSubjectService,
@@ -68,9 +69,9 @@ export class WebSocketService {
     let shouldProcessResponse = true;
     console.log(appState, appState[this.connectionDetails.conversationId],this.connectionDetails.conversationId, "inside common emit eventa");
     
-    if(appState[this.connectionDetails.conversationId] && appState[this.connectionDetails.conversationId][storageConst.IS_WELCOMEMSG_PROCESSED]){
-      shouldProcessResponse = false;
-    }
+    // if(appState[this.connectionDetails.conversationId] && appState[this.connectionDetails.conversationId][storageConst.IS_WELCOMEMSG_PROCESSED]){
+    //   shouldProcessResponse = false;
+    // }
     let parsedCustomData: any = {};
     let welcomeMessageParams: any = {
       'waitTime': 2000,
@@ -141,5 +142,9 @@ export class WebSocketService {
     this._agentAsisstSocket.on(EVENTS.agent_feedback_response, (data) =>{
       this.agentFeedbackResponse$.next(data);
     });
+
+    this._agentAsisstSocket.on(EVENTS.response_resolution_comments, (data) =>{
+      this.responseResolutionCommentsResponse$.next(data);
+    })
   }
 }
