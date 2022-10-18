@@ -3054,7 +3054,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             previousTaskPositionId = currentTaskPositionId;
                                         }
                                     }
-                                    if(resp.length-1 == index && currentTaskPositionId == previousTaskPositionId) {
+                                    if(resp.length-1 == index && (!res.agentAssistDetails?.entityRequest && !res.agentAssistDetails?.entityResponse) && currentTaskPositionId == previousTaskPositionId) {
                                         let previousIdFeedBackDetails = feedBackResult.find((ele)=> ele.positionId === currentTaskPositionId);
                                         addFeedbackHtmlToDomForHistory(res, res.botId, res?.agentAssistDetails?.userInput, previousId, false, previousTaskPositionId);
                                         if(previousIdFeedBackDetails) {
@@ -3152,6 +3152,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                                         _msgsResponse.message.push(body);
                                     });
+                                    let msgStringify = JSON.stringify(_msgsResponse);
+                                    let newTemp = encodeURI(msgStringify);
                                     if((res.agentAssistDetails?.isPrompt === true || res.agentAssistDetails?.isPrompt === false) && previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) {
                                     let runInfoContent = $(`#dropDownData-${previousId}`);
                                     let askToUserHtml = `
@@ -3163,7 +3165,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                     <div class="title">Ask customer</div>
                                                     <div class="agent-utt">
                                                         <div class="title-data"><ul class="chat-container" id="displayData-${res._id}"></ul></div>
-                                                        
+                                                        <div class="action-links">
+                                                        <button class="send-run-btn" id="sendMsg" data-msg-id="${res._id}" data-msg-data="${newTemp}">Send</button>
+                                                        <div class="copy-btn hide" data-msg-id="${res._id}">
+                                                            <i class="ast-copy" data-msg-id="${res._id}"></i>
+                                                        </div>
+                                                    </div>
                                                     </div>
                                                     </div>
                                                 </div>
@@ -3177,7 +3184,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                     <div class="title">Tell Customer</div>
                                                     <div class="agent-utt">
                                                         <div class="title-data" ><ul class="chat-container" id="displayData-${res._id}"></ul></div>
-                                                        
+                                                        <div class="action-links">
+                                                            <button class="send-run-btn" id="sendMsg" data-msg-id="${res._id}" data-msg-data="${newTemp}">Send</button>
+                                                            <div class="copy-btn hide" data-msg-id="${res._id}">
+                                                                <i class="ast-copy" data-msg-id="${res._id}"></i>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                     </div>
                                                 </div>
