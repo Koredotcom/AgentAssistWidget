@@ -16,9 +16,7 @@ function sendMessageToAgentAssist(conversationId, message) {
   if (!iframe) {
     return;
   }
-  // console.log("Kore Agent Assist iframe", iframe);
   var content = message;
-  console.log("New Message recordId:" + conversationId + " content:" + content);
   var message = {};
   message['author'] = {};
   message['author'].Id = '';
@@ -94,7 +92,6 @@ async function generateURL(settings) {
     var encodedData = base64url(stringifiedData);
 
     var token = encodedHeader + "." + encodedData;
-    // console.log("token ==========================>", token);
 
     var secret = settings.clientSecret;
     var signature = CryptoJS.HmacSHA256(token, secret);
@@ -107,7 +104,6 @@ async function generateURL(settings) {
     let customdata = null;
     let channel = await getChannel(client);
 
-    console.log("===============> channel", channel);
     let isCall = channel == "voice_inbound" ? true : false
     if (isCall) {
       activeConversationId = await getPhoneNumber(client);
@@ -126,7 +122,6 @@ async function generateURL(settings) {
 
 async function iframeRender(url) {
 
-  console.log("Iframe URL ========> ", url);
   document.getElementById("agentassist-iframe").src = url;
 
 }
@@ -171,7 +166,7 @@ async function main() {
     return true
   });
   client.on('ticket.conversation.changed', function (conversations) {
-    // console.log("change event =====> ", e);
+
     let lastElement = conversations.pop();
     if (lastElement.author.role == "customer") {
       sendMessageToAgentAssist(activeConversationId, lastElement.message.content);
@@ -181,14 +176,13 @@ async function main() {
 
   iframeRender(_iframeURL);
 
-  client.on('app.registered', (event) => {
-    console.log("app registered =========> ", event);
-  });
+  // client.on('app.registered', (event) => {
+  //   console.log("app registered =========> ", event);
+  // });
 
 
   window.addEventListener("message", async (event) => {
-    // console.log("Kore Agent Assist inside window eventlistener", activeConversationId, event.data);
-    var recordId = activeConversationId;
+    // var recordId = activeConversationId;
     if (event.data.name === "agentAssist.SendMessage" && event.data.conversationId == activeConversationId) {
       var msg = '';
       try {
@@ -196,18 +190,15 @@ async function main() {
       } catch (e) {
         msg = decodeURI(encodeURI(event.data.payload));
       }
-      // console.log("Kore Agent Assist sending message ===============> ", msg);
       client.invoke("ticket.sendMessage", { channel: 'messaging', message: msg });
 
 
     } else if (event.data.name === "agentAssist.CopyMessage" && event.data.conversationId == activeConversationId) {
       var msg = decodeURI(encodeURI(event.data.payload));
-      console.log("Kore Agent Assist copying message ==============> ", msg);
       client.invoke('comment.appendText', msg);
 
     }
     else if (event.data.name === "agentAssist.conversation_summary" && event.data.conversationId == activeConversationId) {
-      console.log("conversation_summary");
       let summary = JSON.parse(JSON.stringify(event.data)).payload.summary[0].summary_text;
       // let chatTranscript = JSON.parse(JSON.stringify(event.data)).conversationId;
 
