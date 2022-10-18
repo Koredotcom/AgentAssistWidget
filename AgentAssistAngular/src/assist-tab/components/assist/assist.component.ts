@@ -46,6 +46,7 @@ export class AssistComponent implements OnInit {
   agentAssistResponse: any = {};
   previousEntitiesValue: string;
   waitingTimeForUUID: number = 1000;
+  dialogName;
 
   constructor(private templateRenderClassService: TemplateRenderClassService, 
     public handleSubjectService: HandleSubjectService,
@@ -133,6 +134,13 @@ export class AssistComponent implements OnInit {
         this.assisttabService.updateSeeMoreOnAssistTabActive()
       }
     })
+
+    let subscription10 = this.websocketService.agentFeedbackResponse$.subscribe((data) => {
+      if (this.commonService.isUpdateFeedBackDetailsFlag) {
+        this.commonService.UpdateFeedBackDetails(data, 'agentAutoContainer')
+      }
+    })
+
     this.subscriptionsList.push(subscription1);
     this.subscriptionsList.push(subscription2);
     this.subscriptionsList.push(subscription3);
@@ -142,6 +150,7 @@ export class AssistComponent implements OnInit {
     this.subscriptionsList.push(subscription7);
     this.subscriptionsList.push(subscription8);
     this.subscriptionsList.push(subscription9);
+    this.subscriptionsList.push(subscription10);
   }
 
   //dialogue click and agent response handling code.
@@ -168,6 +177,7 @@ export class AssistComponent implements OnInit {
     let dialogId = this.randomUUIDPipe.transform(IdReferenceConst.positionId);
     this.dialogPositionId = dialogId;
     this.assisttabService._createRunTemplateContiner(uuids, data.intentName);
+    this.dialogName = data.intentName;
     if (idTarget) {
       let ids = idTarget.split('-');
       ids.shift();
@@ -625,7 +635,7 @@ export class AssistComponent implements OnInit {
       [storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH]: this.commonService.isAutomationOnGoing
     }
     this.localStorageService.setLocalStorageItem(storageObject);
-    this.commonService.addFeedbackHtmlToDom(this.dropdownHeaderUuids, this.commonService.scrollContent[ProjConstants.ASSIST].lastElementBeforeNewMessage);
+    this.commonService.addFeedbackHtmlToDom(this.dropdownHeaderUuids, this.commonService.scrollContent[ProjConstants.ASSIST].lastElementBeforeNewMessage, this.dialogName, this.dialogPositionId, this.commonService.userIntentInput);
     if (this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd) {
       this.scrollToBottom();
     }

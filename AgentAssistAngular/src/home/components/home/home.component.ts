@@ -402,8 +402,222 @@ export class HomeComponent implements OnInit {
         $(`#scriptContainer #buldCount-${bulbid.join('-')}`).removeClass('buld-count-utt').addClass('buld-count-utt-after-click');
         $(`#scriptContainer #buldCountNumber-${bulbid.join('-')}`).html(`<span>&#10003;</span>`);
       }
+      let targetIds = (target.id).split('-');
+      if (['feedbackup', 'feedbackdown'].includes(targetIds[0])) {
+
+          let cloneTargtIds = [...targetIds]
+          let isDivElement = evt.target instanceof HTMLDivElement;
+          console.log("isDivElement", isDivElement, target.parentElement.id);
+          if (targetIds.includes('feedbackup')) {
+              cloneTargtIds.shift()
+              if (isDivElement) {
+                  $(`#${target.id}`).addClass('active-feedback');
+                  target.firstElementChild.dataset.feedbacklike = 'true';
+                  Object.assign(target.dataset, target.firstElementChild.dataset);
+                  this.feedbackLoop(evt);
+              } else {
+                  $(`#${target.parentElement.id}`).addClass('active-feedback');
+                  target.dataset.feedbacklike = 'false';
+                  this.feedbackLoop(evt);
+              }
+
+              $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .ast-thumbdown`).attr('data-comment',``)
+              $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .ast-thumbdown`).attr('data-feedbackdetails','[]');
+              $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .btn-chip-negtive.active-chip`).removeClass('active-chip');
+              $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} #feedBackComment-${cloneTargtIds.join('-')}`).val('');
+              $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .submit-btn`).attr('disabled', 'disabled')
+              $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .submit-btn`).html('Submit');
+              $(`#feedbackdown-${cloneTargtIds.join('-')}`).removeClass('active-feedback')
+              $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .thanks-update`).removeClass('hide');
+              $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .help-improve-arrow`).addClass('hide')
+              $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .explore-more-negtive-data`).addClass('hide');
+          }
+          if (targetIds.includes('feedbackdown')) {
+              cloneTargtIds.shift()
+              if (isDivElement) {
+                  $(`#${target.id}`).addClass('active-feedback');
+                  target.firstElementChild.dataset.feedbacklike = 'true';
+                  Object.assign(target.dataset, target.firstElementChild.dataset);
+                   this.feedbackLoop(evt);
+              } else {
+                  $(`#${target.parentElement.id}`).addClass('active-feedback');
+                  target.dataset.feedbacklike = 'false';
+                   this.feedbackLoop(evt);
+              }
+              $(`#feedbackup-${cloneTargtIds.join('-')}`).removeClass('active-feedback')
+              $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .thanks-update`).addClass('hide');
+              $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .help-improve-arrow`).removeClass('hide')
+              $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .explore-more-negtive-data`).removeClass('hide');
+              $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .title-improve`).removeClass('hide');
+
+          }
+      }
+      if (target.id.split('-')[0] == 'dropdownArrowFeedBack' || target.id.split('-')[0] == 'dropdownArrowFeedBackIcon') {
+          let targteId = target.id.split('-');
+          targteId.shift();
+          let dataSets = $(`#feedbackdown-${targteId.join('-')} .ast-thumbdown`).data();
+          let activeChipCount = $(`#feedbackHelpfulContainer-${targteId.join('-')} .btn-chip-negtive.active-chip`);
+          if ((activeChipCount.length > 0 || dataSets.comment.length > 0) && target.dataset.feedbackDropDownOpened === 'true') {
+              $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).addClass('hide');
+          } else {
+              if ((activeChipCount.length == 0 && dataSets.comment.length == 0) && target.dataset.feedbackDropDownOpened === 'true') {
+                  $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).removeClass('hide');
+              } else {
+                  $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).addClass('hide');
+              }
+          }
+          if (target.dataset.feedbackDropDownOpened === 'false') {
+              $(`#dropdownArrowFeedBackIcon-${targteId.join('-')}`).attr('data-feedback-drop-down-opened', 'true');
+              $(`#dropdownArrowFeedBack-${targteId.join('-')}`).attr('data-feedback-drop-down-opened', 'true');
+              $(`#feedbackHelpfulContainer-${targteId.join('-')} .explore-more-negtive-data`).addClass('hide');
+          } else {
+              $(`#dropdownArrowFeedBackIcon-${targteId.join('-')}`).attr('data-feedback-drop-down-opened', 'false');
+              $(`#dropdownArrowFeedBack-${targteId.join('-')}`).attr('data-feedback-drop-down-opened', 'false');
+              $(`#feedbackHelpfulContainer-${targteId.join('-')} .explore-more-negtive-data`).removeClass('hide');
+          }
+          let updateFlag = $(`#feedbackHelpfulContainer-${targteId.join('-')} .submit-btn`).attr('data-updateflag');
+          if (updateFlag == 'true' && target.dataset.feedbackDropDownOpened === 'false') {
+              $(`#feedbackHelpfulContainer-${targteId.join('-')} .submit-btn`).html('Update');
+              $(`#feedbackHelpfulContainer-${targteId.join('-')} .submit-btn`).attr('disabled', 'disabled');
+              this.AgentAssist_feedBack_Update_Request(dataSets);
+              $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).addClass('hide');
+              this.commonService.isUpdateFeedBackDetailsFlag = true;
+          }
+      }
+      if (target.className.includes('btn-chip-negtive')) {
+          let id = target.parentElement.id.split('-');
+          id.shift();
+          let dataSets = $(`#feedbackdown-${id.join('-')} .ast-thumbdown`).data();
+          if (target.dataset.chipClick == 'false') {
+              $(target).addClass('active-chip');
+              target.dataset.chipClick = 'true';
+              dataSets.feedbackdetails.push($(target).html());
+
+          } else {
+              $(target).removeClass('active-chip');
+              target.dataset.chipClick = 'false';
+              dataSets.feedbackdetails?.forEach((ele, i) => {
+                  if (ele == $(target).html()) {
+                      delete dataSets.feedbackdetails[i]
+                  }
+              })
+          }
+          let activeChipCount = $(`#${target.parentElement.id} .btn-chip-negtive.active-chip`);
+          if (activeChipCount.length > 0) {
+              $(`#feedbackHelpfulContainer-${id.join('-')} .title-improve`).addClass('hide');
+              $(`#feedbackHelpfulContainer-${id.join('-')} .submit-btn`).removeAttr('disabled');
+          } else {
+              if (dataSets.comment.length == 0) {
+                  $(`#feedbackHelpfulContainer-${id.join('-')} .title-improve`).removeClass('hide');
+              }
+          }
+          $(`#feedbackHelpfulContainer-${id.join('-')} .ast-thumbdown`).attr('data-feedbackdetails', dataSets.feedbackdetails)
+      }
+      if (target.id == 'feedbackSubmit') {
+          let id = target.parentElement.firstElementChild.id.split('-');
+          id.shift();
+          let dataSets = $(`#feedbackdown-${id.join('-')} .ast-thumbdown`).data();
+          // if(target.innerHTML == 'Update') {
+          //     dataSets.comment = target.value;
+          //     // dataSets.feedbackdetails = 
+
+          // }
+          if(typeof dataSets.feedbackdetails == 'string'&& dataSets.feedbackdetails.indexOf(',') > -1 ) {
+              dataSets.feedbackdetails = dataSets.feedbackdetails.split(',');
+          }
+          this.feedbackLoop(dataSets, true);
+          $(`#feedbackHelpfulContainer-${id.join('-')} .thanks-update`).css('right','34px').removeClass('hide');
+          setTimeout(()=>{
+              $(`#feedbackHelpfulContainer-${id.join('-')} .thanks-update`).css('right','25px').addClass('hide');
+          },3000)
+          $(`#feedbackHelpfulContainer-${id.join('-')} .explore-more-negtive-data`).addClass('hide');
+          $(`#feedbackHelpfulContainer-${id.join('-')} #dropdownArrowFeedBackIcon-${id.join('-')}`).attr('data-feedback-drop-down-opened', 'true');
+          $(`#feedbackHelpfulContainer-${id.join('-')} #dropdownArrowFeedBack-${id.join('-')}`).attr('data-feedback-drop-down-opened', 'true');
+          target.dataset.updateflag = 'true';
+          $(`#feedbackHelpfulContainer-${id.join('-')}.submit-btn`).attr('disabled', 'disabled');
+
+          $(`#feedbackHelpfulContainer-${id.join('-')} .ast-thumbdown`).attr('data-comment',``)
+          $(`#feedbackHelpfulContainer-${id.join('-')} .ast-thumbdown`).attr('data-feedbackdetails','[]')
+          dataSets.comment = "";
+          dataSets.feedbackdetails = [];
+          $(`#feedbackHelpfulContainer-${id.join('-')} .btn-chip-negtive.active-chip`).removeClass('active-chip');
+          $(`#feedbackHelpfulContainer-${id.join('-')} #feedBackComment-${id.join('-')}`).val('');
+          this.commonService.isUpdateFeedBackDetailsFlag = false;
+      }
     });
+    document.addEventListener("keyup", (evt: any) => {
+      var target = evt.target;
+       if (target.dataset.feedbackComment) {
+          let targetids = target.id.split('-');
+          targetids.shift();
+          let dataSets = $(`#feedbackdown-${targetids.join('-')} .ast-thumbdown`).data();
+          dataSets.comment = target.value;
+          
+          if (target.value.length > 0) {
+              $(`#feedbackHelpfulContainer-${targetids.join('-')} .submit-btn`).removeAttr('disabled');
+              $(`#feedbackHelpfulContainer-${targetids.join('-')} .title-improve`).addClass('hide');
+          }
+          $(`#feedbackHelpfulContainer-${targetids.join('-')} .input-block-optional .input-text`).attr('value', target.value);
+          $(`#feedbackdown-${targetids.join('-')} .ast-thumbdown`).attr('data-comment', target.value);
+      }
+    })
   }
 
+  feedbackLoop(evt, isSubmit = false) {
+    if (isSubmit) {
+        this.AgentAssist_feedback_click(evt, true);
+    } else {
+        this.AgentAssist_feedback_click(evt);
+    }
+
+}
+
+AgentAssist_feedback_click(e, isSubmit = false) {
+  let convId, botId, feedback, userInput, dialogId, comment,dialogName,taskId, feedbackdetails, feedDetailsArray;
+  if (isSubmit) {
+      convId = e.convId;
+      botId = e.botId;
+      feedback = e.feedback;
+      userInput = e.userInput;
+      dialogName = e.dialogName;
+      dialogId = e.dialogid;
+      comment = e.comment;
+      feedbackdetails = e.feedbackdetails;
+      taskId = e.taskid
+  } else {
+      console.log(e.target);
+      convId = e.target.dataset.convId;
+      botId = e.target.dataset.botId;
+      feedback = e.target.dataset.feedback;
+      userInput = e.target.dataset.userInput;
+      dialogName = e.target.dataset.dialogName;
+      dialogId = e.target.dataset.dialogid;
+      comment = e.target.dataset.comment;
+      feedbackdetails = e.target.dataset.feedbackdetails;
+      taskId = e.target.dataset.taskid
+  }
+
+  feedDetailsArray = typeof feedbackdetails == 'string' ? [] : feedbackdetails?.filter(ele => ele !== null);
+  this.websocketService.emitEvents(EVENTS.agent_usage_feedback, {
+    comment: comment, feedbackDetails: feedDetailsArray, userInput: userInput, dialogName: dialogName, conversationId: convId, botId: botId, feedback: feedback, eventName: 'agent_usage_feedback', positionId: dialogId,
+    taskId: taskId
+  })
+}
+
+AgentAssist_feedBack_Update_Request(e) {
+  let agent_assist_feedback_request = {
+      conversationId: e.convId,
+      agentId: '',
+      botId: e.botId,
+      orgId: '',
+      taskId: e.taskid,
+      positionId: e.dialogid,
+      'experience': 'chat',
+      "interactionType": 'mybot'
+  }
+
+  this.websocketService.emitEvents(EVENTS.agent_feedback_request, agent_assist_feedback_request);
+
+}
 
 }

@@ -23,6 +23,7 @@ export class CommonService {
   isInitialDialogOnGoing: boolean = false;
   isMyBotAutomationOnGoing: boolean = false;
   noAutomationrunninginMyBot: boolean = true;
+  isUpdateFeedBackDetailsFlag = false;
 
   constructor(private route: ActivatedRoute, private webSocketService: WebSocketService, private designAlterService: DesignAlterService,
     private localStorageService: LocalStorageService) {
@@ -244,7 +245,7 @@ export class CommonService {
                         <i class="ast-thumbup"
                         id="feedbackup-${id}"
                         data-feedbacklike="false"
-                        data-conv-id="${this.configObj.conversationId}"
+                        data-conv-id="${this.configObj.conversationid}"
                         data-bot-id="${botId}" data-feedback="like"
                         data-dialog-name="${data.tN}"
                         data-user-input="${userIntentInput}"
@@ -258,7 +259,7 @@ export class CommonService {
                         <i class="ast-thumbdown" 
                         id="feedbackdown-${id}"
                         data-feedbackdislike="false"
-                        data-conv-id="${this.configObj.conversationId}"
+                        data-conv-id="${this.configObj.conversationid}"
                         data-bot-id="${botId}" data-feedback="dislike"
                         data-dialog-name="${data.tN}"
                         data-user-input="${userIntentInput}"
@@ -346,9 +347,10 @@ export class CommonService {
     })
   }
 
-  addFeedbackHtmlToDom(headerUUids, lastElementBeforeNewMessage, runForAgentBot?) {
+  addFeedbackHtmlToDom(headerUUids, lastElementBeforeNewMessage, dialogName, positionID, userIntentInput?, runForAgentBot?) {
     let dropDownData;
     let endOfDialoge;
+    let taskIdOfDialog = $(`#dropDownData-${headerUUids}`).attr('data-taskId');
     if (runForAgentBot) {
       $(`#myBotTerminateAgentDialog-${headerUUids}.btn-danger`).remove();
       dropDownData = $(`#dropDownData-${headerUUids}`);
@@ -368,13 +370,29 @@ export class CommonService {
                     <div class="btn-positive" id="feedbackup-${headerUUids}">
                         <i class="ast-thumbup"
                         id="feedbackup-${headerUUids}"
-                        ></i>
+                        data-feedbacklike="false"
+                        data-conv-id="${this.configObj.conversationid}"
+                        data-bot-id="${this.configObj.botid}" data-feedback="like"
+                        data-dialog-name="${dialogName}"
+                        data-user-input="${userIntentInput}"
+                        data-comment=""
+                        data-feedbackdetails="[]"
+                        data-taskID ="${taskIdOfDialog}"
+                        data-dialogId="${positionID}"></i>
                         <span class="tootltip-tabs">Like</span>
                     </div>
                     <div class="btn-negtive" id="feedbackdown-${headerUUids}">
                         <i class="ast-thumbdown" 
                         id="feedbackdown-${headerUUids}"
-                        ></i>
+                        data-feedbackdislike="false"
+                        data-conv-id="${this.configObj.conversationid}"
+                        data-bot-id="${this.configObj.botid}" data-feedback="dislike"
+                        data-dialog-name="${dialogName}"
+                        data-user-input="${userIntentInput}"
+                        data-comment=""
+                        data-feedbackdetails="[]"
+                        data-taskID ="${taskIdOfDialog}"
+                        data-dialogId="${positionID}"></i>
                         <span class="tootltip-tabs">Dislike</span>
                     </div>
                     <div class="thanks-update hide">Thanks for the feedback!</div>

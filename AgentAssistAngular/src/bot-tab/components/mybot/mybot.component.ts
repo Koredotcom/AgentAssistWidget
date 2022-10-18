@@ -41,6 +41,7 @@ export class MybotComponent implements OnInit {
   myBotDropdownHeaderUuids: any;
   myBotDialogPositionId: string;
   isMybotInputResponseClick: boolean = false;
+  dialogName;
 
   constructor(public handleSubjectService: HandleSubjectService,
     public randomUUIDPipe: RandomUUIDPipe,
@@ -116,12 +117,20 @@ export class MybotComponent implements OnInit {
         this.connectionDetails = response;
       }
     });
+
+    let subscription7 = this.websocketService.agentFeedbackResponse$.subscribe((data) => {
+      if (this.commonService.isUpdateFeedBackDetailsFlag) {
+        this.commonService.UpdateFeedBackDetails(data, 'agentAutoContainer')
+      }
+    })
+
     this.subscriptionsList.push(subscription1);
     this.subscriptionsList.push(subscription2);
     this.subscriptionsList.push(subscription3);
     this.subscriptionsList.push(subscription4);
     this.subscriptionsList.push(subscription5);
     this.subscriptionsList.push(subscription6);
+    this.subscriptionsList.push(subscription7);
   }
 
   //running dialogue and mybot data response code.
@@ -201,6 +210,7 @@ export class MybotComponent implements OnInit {
   }
 
   _createRunTemplateContainerForMyTab(agentBotuuids, intentName, dialogId) {
+    this.dialogName = intentName;
     let dynamicBlock = document.getElementById(IdReferenceConst.MYBOTAUTOMATIONBLOCK);
     let dropdownHtml = this.mybotDataService.createDialogTaskAccordionTemplate(agentBotuuids, intentName);
     this.mybotautomation.nativeElement.innerHTML += dropdownHtml;
@@ -230,7 +240,7 @@ export class MybotComponent implements OnInit {
       [storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH_MYBOT]: this.commonService.isMyBotAutomationOnGoing
     }
     this.localStorageService.setLocalStorageItem(storageObject);
-    this.commonService.addFeedbackHtmlToDom(this.myBotDropdownHeaderUuids, this.commonService.scrollContent[ProjConstants.MYBOT].lastElementBeforeNewMessage, 'runForAgentBot',);
+    this.commonService.addFeedbackHtmlToDom(this.myBotDropdownHeaderUuids, this.commonService.scrollContent[ProjConstants.MYBOT].lastElementBeforeNewMessage, this.dialogName,this.myBotDialogPositionId,'runForAgentBot');
   }
 
   //old dialogues styling
