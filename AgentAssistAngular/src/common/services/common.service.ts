@@ -16,6 +16,9 @@ export class CommonService {
   grantResponseObj;
   userIntentInput: string;
   scrollContent: any = {};
+  entitiestValueArray : any;
+  previousEntitiesValue : any;
+  isRestore : boolean = false;
   OverRideMode: boolean = false;
   automationNotRanArray: any = [];
   isCallConversation: boolean = false;

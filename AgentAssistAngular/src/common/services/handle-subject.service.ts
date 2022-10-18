@@ -14,6 +14,8 @@ export class HandleSubjectService {
   public runButtonClickEventSubject = new BehaviorSubject<object>(null);
   public terminateClickEventSubject = new BehaviorSubject<object>(null);
   public interruptClickEventSubject = new BehaviorSubject<object>(null);
+  public restoreClickEventSubject = new BehaviorSubject<object>(null);
+  public summarySubmitClickEventSubject= new BehaviorSubject<object>(null);
   public processAgentOrTranscriptResponseSubject = new BehaviorSubject<object>(null);
 
   constructor() { }
@@ -40,6 +42,14 @@ export class HandleSubjectService {
 
   setInterruptClickEvent(obj) {
     this.interruptClickEventSubject.next(obj);
+  }
+
+  setRestoreClickEvent(obj){
+    this.restoreClickEventSubject.next(obj);
+  }
+
+  setSummarySubmitClickEvent(obj){
+    this.summarySubmitClickEventSubject.next(obj);
   }
 
   setConnectionDetails(obj) {

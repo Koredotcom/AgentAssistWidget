@@ -82,7 +82,12 @@ export const IdReferenceConst = {
     SENDMSG_REQUEST : 'agentAssist.SendMessage',
     COPYMSG_REQUEST : 'agentAssist.CopyMessage',
     SEND_METHOD : 'send',
-    COPY_METHOD : 'copy'
+    COPY_METHOD : 'copy',
+    ENTITY_EDIT : 'entityEdit',
+    EDIT_CANCEL_BTN : 'cancelBtn',
+    RESTORE_BTN : 'restorebtn',
+    SAVE_BTN : 'savebtn',
+    ENTITY_VALUE : 'entityValue'
 }
 
 

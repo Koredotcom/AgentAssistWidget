@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ProjConstants } from 'src/common/constants/proj.cnts';
 
 @Component({
@@ -8,18 +8,20 @@ import { ProjConstants } from 'src/common/constants/proj.cnts';
 })
 export class SummaryPopupComponent implements OnInit {
 
+  @Input() summaryText: any;
   @Output() handlePopupEvent = new EventEmitter();
+
+  editedSummaryText : any;
   
   constructor() { }
 
   ngOnInit(): void {
+    this.editedSummaryText = this.summaryText?.summary ? this.summaryText?.summary[0]?.summary_text:'';
   }
 
   summaryButtonClick(flag){
     if(flag){
-      this.handlePopupEvent.emit({status : false, summary : true, type : ProjConstants.SUMMARY})
-    }else{
-      this.handlePopupEvent.emit({status : flag, type : ProjConstants.SUMMARY})
+      this.handlePopupEvent.emit({status : false, summary : true, type : ProjConstants.SUMMARY, summaryText : this.summaryText, editedSummary : this.editedSummaryText})
     }
   }
 

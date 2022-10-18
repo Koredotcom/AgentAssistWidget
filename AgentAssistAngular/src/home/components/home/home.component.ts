@@ -27,9 +27,10 @@ export class HomeComponent implements OnInit {
   projConstants: any = ProjConstants;
 
   activeTab: string; // call conversation make transcript as active tab.
-  searchText: string = '';
   scrollContainer: any;
   searchConentObject: any;
+  searchText: string = '';
+  summaryText: string = '';
   connectionDetails: any = {};
   showRestorePopup: boolean = false;
   showSummaryPopup: boolean = false;
@@ -81,8 +82,47 @@ export class HomeComponent implements OnInit {
         this.btnInit();
       }
     });
+
+    let subscription3 = this.websocketService.responseResolutionCommentsResponse$.subscribe((data: any) => {
+      console.log((data));
+      if (data) {
+        this.handleResponseResoultionComments(data);
+      }
+
+    });
+
+    let subscription4 = this.handleSubjectService.summarySubmitClickEventSubject.subscribe((data: any) => {
+      if (data) {
+        this.handleSummarySubmitClickEvent(data);
+      }
+    });
+
     this.subscriptionsList.push(subscription1);
     this.subscriptionsList.push(subscription2);
+    this.subscriptionsList.push(subscription3);
+    this.subscriptionsList.push(subscription4);
+  }
+
+  //summary popup related code
+  handleResponseResoultionComments(data) {
+    this.handlePopupEvent({ status: true, type: this.projConstants.SUMMARY, summaryText: data });
+  }
+
+  handleSummarySubmitClickEvent(response) {
+    let data = response.summaryText;
+    let editedSummaryText = response.editedSummary;
+    if (data?.summary != '') {
+      data['summary'][0]['summary_text'] = editedSummaryText;
+    } else {
+      data['summary'] = [];
+      data['summary'].push({ 'summary_text': editedSummaryText });
+    }
+    var message = {
+      name: "agentAssist.conversation_summary",
+      conversationId: this.connectionDetails.conversationId,
+      payload: data
+    };
+    window.parent.postMessage(message, '*');
   }
 
   // update state based on local storage.
@@ -97,7 +137,7 @@ export class HomeComponent implements OnInit {
     }
     if (appState[_convId] && !appState[_convId][storageConst.CURRENT_TAB]) {
       let storageObject: any = {};
-      if (_isCallConv == 'true' || _isCallConv) {
+      if (_isCallConv == 'true') {
         storageObject[storageConst.CURRENT_TAB] = this.projConstants.TRANSCRIPT;
         activeTab = this.projConstants.TRANSCRIPT;
       } else {
@@ -121,9 +161,7 @@ export class HomeComponent implements OnInit {
     if (!(window)._agentAssisteventListenerAdded) {
       window.addEventListener("message", (e: any) => {
         if (e.data.name === EVENTS.response_resolution_comments && e.data.conversationId) {
-          $(`#summary`).removeClass('hide');
-          $(`#summaryText`).val(e.data?.summary ? e.data?.summary[0]?.summary_text : '');
-          $(`#summarySubmit`).attr('data-summary', e.data ? JSON.stringify(e.data) : '')
+          this.handleResponseResoultionComments(e.data);
         }
         if (e.data.name == 'initial_data') {
           e.data?.data?.forEach((ele) => {
@@ -203,7 +241,7 @@ export class HomeComponent implements OnInit {
     this.localStorageService.setLocalStorageItem(storageObject);
   }
 
-  tabActiveActivities(){
+  tabActiveActivities() {
     // $('#bodyContainer').addClass('if-suggestion-search');
 
   }
@@ -219,6 +257,17 @@ export class HomeComponent implements OnInit {
       this.showInterruptPopup = popupObject.status;
       if (popupObject.interrupt) {
         this.handleSubjectService.setInterruptClickEvent({ activeTab: this.activeTab })
+      }
+    } else if (popupObject.type == this.projConstants.RESTORE) {
+      this.showRestorePopup = popupObject.status;
+      if (popupObject.restore) {
+        this.handleSubjectService.setRestoreClickEvent({ activeTab: this.activeTab, status: popupObject.status });
+      }
+    } else if (popupObject.type == this.projConstants.SUMMARY) {
+      this.summaryText = popupObject.summaryText ? popupObject.summaryText : '';
+      this.showSummaryPopup = popupObject.status;
+      if (popupObject.summary) {
+        this.handleSubjectService.setSummarySubmitClickEvent({ activeTab: this.activeTab, summaryText: popupObject.summaryText, editedSummary: popupObject.editedSummaryText });
       }
     }
 
@@ -301,6 +350,8 @@ export class HomeComponent implements OnInit {
     if (this.psBottom) {
       $(window).trigger('resize');
       this.psBottom.directiveRef.scrollToTop(this.homescroll.nativeElement.scrollHeight);
+      $(".scroll-bottom-btn span").text('Scroll to bottom');
+      $(".scroll-bottom-btn").removeClass("new-messages");
       setTimeout(() => {
         this.psBottom.directiveRef.update();
       }, this.scrollbottomwaitingTime);

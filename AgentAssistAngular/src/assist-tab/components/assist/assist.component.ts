@@ -42,12 +42,10 @@ export class AssistComponent implements OnInit {
   dialogPositionId: string;
   interruptDialog: any = {};
   answerPlaceableIDs: any = [];
-  entitiestValueArray: any = [];
   agentAssistResponse: any = {};
-  previousEntitiesValue: string;
   waitingTimeForUUID: number = 1000;
 
-  constructor(private templateRenderClassService: TemplateRenderClassService, 
+  constructor(private templateRenderClassService: TemplateRenderClassService,
     public handleSubjectService: HandleSubjectService,
     public randomUUIDPipe: RandomUUIDPipe,
     public removeSpecialCharPipe: RemoveSpecialCharPipe,
@@ -132,6 +130,13 @@ export class AssistComponent implements OnInit {
       if (response && response == this.projConstants.ASSIST) {
         this.assisttabService.updateSeeMoreOnAssistTabActive()
       }
+    });
+
+    let subscription10 = this.handleSubjectService.restoreClickEventSubject.subscribe((response : any) =>{
+      if (response && response?.activeTab == this.projConstants.ASSIST) {
+        console.log(response, "response from restore");
+        this.handleRestoreConfirmClickEvent();
+      }
     })
     this.subscriptionsList.push(subscription1);
     this.subscriptionsList.push(subscription2);
@@ -142,6 +147,7 @@ export class AssistComponent implements OnInit {
     this.subscriptionsList.push(subscription7);
     this.subscriptionsList.push(subscription8);
     this.subscriptionsList.push(subscription9);
+    this.subscriptionsList.push(subscription10);
   }
 
   //dialogue click and agent response handling code.
@@ -152,6 +158,7 @@ export class AssistComponent implements OnInit {
       connectionDetails.intentName = dialog.intentName;
     }
     connectionDetails.positionId = dialogPositionId;
+    connectionDetails.entities = this.commonService.isRestore ? JSON.parse(this.commonService.previousEntitiesValue) : this.commonService.entitiestValueArray
     let assistRequestParams = this.commonService.prepareAgentAssistRequestParams(connectionDetails);
     this.websocketService.emitEvents(EVENTS.agent_assist_request, assistRequestParams);
   }
@@ -276,7 +283,7 @@ export class AssistComponent implements OnInit {
     this.processAgentAssistResponse(data, botId);
   }
 
-  processAgentAssistResponse(data, botId) {  
+  processAgentAssistResponse(data, botId) {
     let automationSuggestions = $('#dynamicBlock .dialog-task-accordiaon-info');
     let uuids = this.koreGenerateuuidPipe.transform();
     let responseId = uuids;
@@ -405,13 +412,13 @@ export class AssistComponent implements OnInit {
         }
 
         data.suggestions.dialogs?.forEach((ele, index) => {
-          ele.entities?.length > 0 ? (this.entitiestValueArray = ele.entities) : '';
+          ele.entities?.length > 0 ? (this.commonService.entitiestValueArray = ele.entities) : '';
 
           let dialogSuggestions = document.getElementById(`dialogSuggestions-${responseId}`);
           let dialogsHtml = this.assisttabService.dialogTypeInfoTemplate(uuids, ele);
           dialogSuggestions.innerHTML += dialogsHtml;
           if (ele.entities?.length > 0) {
-            this.previousEntitiesValue = JSON.stringify(ele.entities);
+            this.commonService.previousEntitiesValue = JSON.stringify(ele.entities);
             let entitesDiv = `<div class="entity-values-container" id="entitesDiv-${uuids}">
                     <fieldset class="fieldsets">
                         <legend>ENTITY VALUES</legend>
@@ -439,6 +446,7 @@ export class AssistComponent implements OnInit {
                         </div>
                     </div>`;
               enentiesDomDiv.append(eachEntitiesDiv);
+              this.keyUpEvents(IdReferenceConst.ENTITY_VALUE, i);
 
             });
             let entiteSaveAndCancelDiv = `<div class="save-reset-cancel hide" id='saveAndCancel-${uuids}'>
@@ -451,6 +459,10 @@ export class AssistComponent implements OnInit {
             enentiesDomDiv.append(entiteSaveAndCancelDiv);
           }
           this.clickEvents(IdReferenceConst.ASSIST_RUN_BUTTON, uuids, this.dialogPositionId, ele);
+          this.clickEvents(IdReferenceConst.ENTITY_EDIT, uuids);
+          this.clickEvents(IdReferenceConst.EDIT_CANCEL_BTN, uuids);
+          this.clickEvents(IdReferenceConst.RESTORE_BTN, uuids);
+          this.clickEvents(IdReferenceConst.SAVE_BTN, uuids);
         });
 
         data.suggestions.faqs?.forEach((ele, index) => {
@@ -779,6 +791,25 @@ export class AssistComponent implements OnInit {
     this.scrollToBottomEvent.emit(true);
   }
 
+  keyUpEvents(eventName, id){
+    if(eventName == IdReferenceConst.ENTITY_VALUE){
+      this.handleEntityValueKeyUpEvent(id);
+    }
+  }
+
+  handleEntityValueKeyUpEvent(id){
+    document.getElementById(IdReferenceConst.ENTITY_VALUE + '-' + id).addEventListener('keyup', (event : any) =>{
+      
+      let targetid = event.target.id.split('-');
+      console.log("key up inside handle", targetid);
+      event.target.dataset.eachvalue = $(`#${event.target.id}`).val();
+      this.commonService.entitiestValueArray[targetid[1]]['editedValue'] = $(`#${event.target.id}`).val();
+      $('.ast-check-right.disabled-color').removeClass('disabled-color');
+      $('.save-reset-disabled').removeClass('save-reset-disabled').addClass('save-reset');
+      
+    })
+  }
+
   //click events related code.
   clickEvents(eventName, uuid?, dialogId?, data?) {
     if (eventName == IdReferenceConst.ASSISTTERMINATE) {
@@ -791,8 +822,14 @@ export class AssistComponent implements OnInit {
       this.designAlterService.handleDropdownToggle(uuid);
     } else if (eventName == IdReferenceConst.ASSIST_RUN_BUTTON) {
       this.handleRunButtonClick(uuid, data);
-    } else if (eventName == IdReferenceConst.SENDMSG || eventName == IdReferenceConst.COPYMSG) {
-      // this.handleSendCopyButtonClickEvent(uuid, data, eventName);
+    } else if (eventName == IdReferenceConst.ENTITY_EDIT) {
+      this.handleEntityEditClick(uuid);
+    } else if (eventName == IdReferenceConst.EDIT_CANCEL_BTN) {
+      this.handleEditCancelBtnClick(uuid);
+    } else if (eventName == IdReferenceConst.RESTORE_BTN) {
+      this.handleRestoreBtnClick(uuid);
+    } else if (eventName == IdReferenceConst.SAVE_BTN) {
+      this.handleSaveBtnClick(uuid);
     }
   }
 
@@ -897,4 +934,64 @@ export class AssistComponent implements OnInit {
     });
   }
 
+  //restore popup related click events
+  handleEntityEditClick(id) {
+    document.getElementById(IdReferenceConst.ENTITY_EDIT + '-' + id).addEventListener('click', (event) => {
+      $(`#entitesDiv-${id}`).addClass('edit-entity-rules');
+      $(`#saveAndCancel-${id}`).removeClass('hide');
+    });
+  }
+
+  handleEditCancelBtnClick(id) {
+    document.getElementById(IdReferenceConst.EDIT_CANCEL_BTN + '-' + id).addEventListener('click', (event) => {
+      $(`#entitesDiv-${id}`).removeClass('edit-entity-rules');
+      $(`#saveAndCancel-${id}`).addClass('hide');
+      this.commonService.entitiestValueArray.forEach((e, i) => {
+        $(`#entityValue-${i}`).val(e.value);
+      });
+      $('.ast-check-right').addClass('disabled-color')
+      $('.save-reset').removeClass('save-reset').addClass('save-reset-disabled');
+    });
+  }
+
+  handleRestoreBtnClick(id) {
+    document.getElementById(IdReferenceConst.RESTORE_BTN + '-' + id).addEventListener('click', (event) => {
+      this.handlePopupEvent.emit({ status: true, type: this.projConstants.RESTORE });
+    });
+  }
+
+  handleSaveBtnClick(id) {
+    document.getElementById(IdReferenceConst.SAVE_BTN + '-' + id).addEventListener('click', (event) => {
+      this.commonService.entitiestValueArray.forEach((e, i) => {
+        if (e.editedValue) {
+          e.value = e.editedValue;
+          delete e.editedValue;
+          $(`#enityNameAndValue-${i}`).find('.edited-status').removeClass('hide');
+          $(`#initialentityValue-${i}`).html(e.value);
+        }
+      });
+      $(`#entitesDiv-${id}`).removeClass('edit-entity-rules');
+      $(`#saveAndCancel-${id}`).addClass('hide');
+      $(`.edit-values-btn.restore`).removeClass('hide');
+      this.commonService.isRestore = false;
+      $('.ast-check-right').addClass('disabled-color')
+      $('.save-reset').removeClass('save-reset').addClass('save-reset-disabled');
+    });
+  }
+
+  handleRestoreConfirmClickEvent(){
+    console.log(this.commonService.previousEntitiesValue, "previous entity values");
+    console.log(this.commonService.entitiestValueArray, "entity values array");
+    
+    
+    this.commonService.isRestore = true;
+    this.commonService.entitiestValueArray = JSON.parse(this.commonService.previousEntitiesValue);
+    JSON.parse(this.commonService.previousEntitiesValue).forEach((e, i) => {
+        $(`#enityNameAndValue-${i}`).find('.edited-status').addClass('hide');
+        $(`#initialentityValue-${i}`).html(e.value);
+        $(`#entityValue-${i}`).val(e.value);
+        $(`.edit-values-btn.restore`).addClass('hide');
+    });
+  }
+  
 }

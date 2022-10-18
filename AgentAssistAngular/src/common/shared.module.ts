@@ -17,12 +17,14 @@ import { KoreGenerateuuidPipe } from './pipes/kore-generateuuid.pipe';
 import { HtmlEntityPipe } from './pipes/html-entity.pipe';
 import { EmptyObjectCheckPipe } from './pipes/empty-object-check.pipe';
 import { FormatAMPMPipe } from './pipes/format-ampm.pipe';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
   declarations: [OverlaysearchComponent, InterruptPopupComponent, RestorePopupComponent, SummaryPopupComponent, TerminateComponent, RandomUUIDPipe, RemoveSpecialCharPipe, ReplaceQuotStringWithDoubleQuotPipe, SanitizeHtmlPipe, RawHtmlPipe, KoreGenerateuuidPipe, HtmlEntityPipe, EmptyObjectCheckPipe, FormatAMPMPipe],
   imports: [
     CommonModule,
+    FormsModule,
     HttpClientModule,
     PerfectScrollbarModule
   ],

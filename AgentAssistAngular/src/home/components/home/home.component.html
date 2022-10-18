@@ -89,7 +89,7 @@
         </div>
         <app-terminate [class.hide]="!showTerminatePopup" (handlePopupEvent)="handlePopupEvent($event)"></app-terminate>
         <app-interrupt-popup [class.hide]="!showInterruptPopup" (handlePopupEvent)="handlePopupEvent($event)"></app-interrupt-popup>
-        <app-summary-popup [class.hide]="!showSummaryPopup" (handlePopupEvent)="handlePopupEvent($event)"></app-summary-popup>
+        <app-summary-popup [class.hide]="!showSummaryPopup" (handlePopupEvent)="handlePopupEvent($event)" [summaryText]="summaryText"></app-summary-popup>
         <app-restore-popup [class.hide]="!showRestorePopup" (handlePopupEvent)="handlePopupEvent($event)"></app-restore-popup>
         <!-- end -->
         <div class="footer-info" id="cust-feeling">
