@@ -119,7 +119,7 @@ export class MybotComponent implements OnInit {
     });
 
     let subscription7 = this.websocketService.agentFeedbackResponse$.subscribe((data) => {
-      if (this.commonService.isUpdateFeedBackDetailsFlag) {
+      if (this.commonService.isUpdateFeedBackDetailsFlag && data) {
         this.commonService.UpdateFeedBackDetails(data, 'agentAutoContainer')
       }
     })
@@ -240,7 +240,7 @@ export class MybotComponent implements OnInit {
       [storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH_MYBOT]: this.commonService.isMyBotAutomationOnGoing
     }
     this.localStorageService.setLocalStorageItem(storageObject);
-    this.commonService.addFeedbackHtmlToDom(this.myBotDropdownHeaderUuids, this.commonService.scrollContent[ProjConstants.MYBOT].lastElementBeforeNewMessage, this.dialogName,this.myBotDialogPositionId,'runForAgentBot');
+    this.commonService.addFeedbackHtmlToDom(this.myBotDropdownHeaderUuids, this.commonService.scrollContent[ProjConstants.MYBOT].lastElementBeforeNewMessage, this.dialogName,this.myBotDialogPositionId, this.commonService.userIntentInput,'runForAgentBot');
   }
 
   //old dialogues styling

@@ -489,11 +489,11 @@ export class HomeComponent implements OnInit {
                   $(`#${target.id}`).addClass('active-feedback');
                   target.firstElementChild.dataset.feedbacklike = 'true';
                   Object.assign(target.dataset, target.firstElementChild.dataset);
-                   this.feedbackLoop(evt);
+                  this.feedbackLoop(evt);
               } else {
                   $(`#${target.parentElement.id}`).addClass('active-feedback');
                   target.dataset.feedbacklike = 'false';
-                   this.feedbackLoop(evt);
+                  this.feedbackLoop(evt);
               }
               $(`#feedbackup-${cloneTargtIds.join('-')}`).removeClass('active-feedback')
               $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .thanks-update`).addClass('hide');
@@ -538,12 +538,26 @@ export class HomeComponent implements OnInit {
       if (target.className.includes('btn-chip-negtive')) {
           let id = target.parentElement.id.split('-');
           id.shift();
+          let aaa = $(`#${target.parentElement.id} .btn-chip-negtive.active-chip`);
+          let arrayOfChips = [];
+          aaa.each((i,ele)=>{
+             arrayOfChips.push($(ele).html())
+          });
           let dataSets = $(`#feedbackdown-${id.join('-')} .ast-thumbdown`).data();
+          dataSets.feedbackdetails = arrayOfChips;
+          
           if (target.dataset.chipClick == 'false') {
               $(target).addClass('active-chip');
               target.dataset.chipClick = 'true';
-              dataSets.feedbackdetails.push($(target).html());
-
+              let index;
+              if(typeof dataSets.feedbackdetails == 'string'){
+                dataSets.feedbackdetails = dataSets.feedbackdetails?.split(',');
+                index = dataSets.feedbackdetails.findIndex((ele)=>ele == $(target).html());
+              }
+              index = dataSets.feedbackdetails.findIndex((ele)=>ele == $(target).html());
+              if(index == -1){
+                dataSets.feedbackdetails.push($(target).html());
+              }
           } else {
               $(target).removeClass('active-chip');
               target.dataset.chipClick = 'false';
@@ -567,12 +581,16 @@ export class HomeComponent implements OnInit {
       if (target.id == 'feedbackSubmit') {
           let id = target.parentElement.firstElementChild.id.split('-');
           id.shift();
+          let feedbackComment = $(`#feedbackHelpfulContainer-${id.join('-')} #feedBackComment-${id.join('-')}`).val();
+          let aaa = $(`#feedbackHelpfulContainer-${id.join('-')} .btn-chip-negtive.active-chip`);
+          let arrayOfChips = [];
+          aaa.each((i,ele)=>{
+             arrayOfChips.push($(ele).html())
+          });
+          
           let dataSets = $(`#feedbackdown-${id.join('-')} .ast-thumbdown`).data();
-          // if(target.innerHTML == 'Update') {
-          //     dataSets.comment = target.value;
-          //     // dataSets.feedbackdetails = 
-
-          // }
+          dataSets.comment = feedbackComment;
+          dataSets.feedbackdetails = arrayOfChips;
           if(typeof dataSets.feedbackdetails == 'string'&& dataSets.feedbackdetails.indexOf(',') > -1 ) {
               dataSets.feedbackdetails = dataSets.feedbackdetails.split(',');
           }
@@ -597,20 +615,24 @@ export class HomeComponent implements OnInit {
       }
     });
     document.addEventListener("keyup", (evt: any) => {
-      var target = evt.target;
-       if (target.dataset.feedbackComment) {
-          let targetids = target.id.split('-');
-          targetids.shift();
-          let dataSets = $(`#feedbackdown-${targetids.join('-')} .ast-thumbdown`).data();
-          dataSets.comment = target.value;
-          
-          if (target.value.length > 0) {
-              $(`#feedbackHelpfulContainer-${targetids.join('-')} .submit-btn`).removeAttr('disabled');
-              $(`#feedbackHelpfulContainer-${targetids.join('-')} .title-improve`).addClass('hide');
-          }
-          $(`#feedbackHelpfulContainer-${targetids.join('-')} .input-block-optional .input-text`).attr('value', target.value);
-          $(`#feedbackdown-${targetids.join('-')} .ast-thumbdown`).attr('data-comment', target.value);
+      let target = evt.target;
+      let targetids = target.id.split('-');
+      targetids.shift();
+      let aaa = $(`#feedbackHelpfulContainer-${targetids.join('-')} .btn-chip-negtive.active-chip`);
+      let arrayOfChips = [];
+      aaa.each((i,ele)=>{
+          arrayOfChips.push($(ele).html())
+      });
+      let dataSets = $(`#feedbackdown-${targetids.join('-')} .ast-thumbdown`).data();
+      dataSets.feedbackdetails = arrayOfChips;
+      dataSets.comment = target.value;
+      
+      if (target.value.length > 0) {
+          $(`#feedbackHelpfulContainer-${targetids.join('-')} .submit-btn`).removeAttr('disabled');
+          $(`#feedbackHelpfulContainer-${targetids.join('-')} .title-improve`).addClass('hide');
       }
+      $(`#feedbackHelpfulContainer-${targetids.join('-')} .input-block-optional .input-text`).attr('value', target.value);
+      $(`#feedbackdown-${targetids.join('-')} .ast-thumbdown`).attr('data-comment', target.value);
     })
   }
 
@@ -624,35 +646,53 @@ export class HomeComponent implements OnInit {
 }
 
 AgentAssist_feedback_click(e, isSubmit = false) {
-  let convId, botId, feedback, userInput, dialogId, comment,dialogName,taskId, feedbackdetails, feedDetailsArray;
-  if (isSubmit) {
-      convId = e.convId;
-      botId = e.botId;
-      feedback = e.feedback;
-      userInput = e.userInput;
-      dialogName = e.dialogName;
-      dialogId = e.dialogid;
-      comment = e.comment;
-      feedbackdetails = e.feedbackdetails;
-      taskId = e.taskid
-  } else {
-      console.log(e.target);
-      convId = e.target.dataset.convId;
-      botId = e.target.dataset.botId;
-      feedback = e.target.dataset.feedback;
-      userInput = e.target.dataset.userInput;
-      dialogName = e.target.dataset.dialogName;
-      dialogId = e.target.dataset.dialogid;
-      comment = e.target.dataset.comment;
-      feedbackdetails = e.target.dataset.feedbackdetails;
-      taskId = e.target.dataset.taskid
-  }
+  let convId, botId, feedback, userInput, dialogId, comment, feedbackdetails, dialogName, taskId, feedDetailsArray;
+    if (isSubmit) {
+        convId = e.convId;
+        botId = e.botId;
+        feedback = e.feedback;
+        userInput = e.userInput;
+        dialogName = e.dialogName;
+        dialogId = e.dialogid;
+        comment = e.comment;
+        feedbackdetails = e.feedbackdetails;
+        taskId = e.taskid
+    } else {
+        console.log(e.target);
+        convId = e.target.dataset.convId;
+        botId = e.target.dataset.botId;
+        feedback = e.target.dataset.feedback;
+        userInput = e.target.dataset.userInput;
+        dialogName = e.target.dataset.dialogName;
+        dialogId = e.target.dataset.dialogid;
+        comment = e.target.dataset.comment;
+        feedbackdetails = e.target.dataset.feedbackdetails;
+        taskId = e.target.dataset.taskid
+    }
 
-  feedDetailsArray = typeof feedbackdetails == 'string' ? [] : feedbackdetails?.filter(ele => ele !== null);
-  this.websocketService.emitEvents(EVENTS.agent_usage_feedback, {
-    comment: comment, feedbackDetails: feedDetailsArray, userInput: userInput, dialogName: dialogName, conversationId: convId, botId: botId, feedback: feedback, eventName: 'agent_usage_feedback', positionId: dialogId,
-    taskId: taskId
-  })
+    feedDetailsArray = typeof feedbackdetails == 'string' ? [] : feedbackdetails?.filter(ele => ele !== null);
+    this.agent_feedback_usage({
+        comment: comment, feedbackDetails: feedDetailsArray, userInput: userInput, dialogName: dialogName, conversationId: convId, botId: botId, feedback: feedback, eventName: 'agent_usage_feedback', dialogId: dialogId,
+        taskId: taskId
+    });
+}
+
+agent_feedback_usage(data){
+  var agent_assist_request = {
+    "feedback": data.feedback,
+    "botId": data.botId,
+    "conversationId": data.conversationId,
+    userInput: data.userInput,
+    taskName: data.dialogName,
+    "event": data.eventName,
+    positionId: data.dialogId,
+    taskId: data.taskId,
+    comment: data.comment,
+    feedbackDetails: data.feedbackDetails,
+    'experience': this.commonService.configObj.isCall== 'false' ?'chat':'voice',
+    "interactionType":  this.activeTab == 'Assist'?'assist':'mybot'
+  }
+  this.websocketService.emitEvents(EVENTS.agent_usage_feedback, agent_assist_request);
 }
 
 AgentAssist_feedBack_Update_Request(e) {
@@ -663,8 +703,8 @@ AgentAssist_feedBack_Update_Request(e) {
       orgId: '',
       taskId: e.taskid,
       positionId: e.dialogid,
-      'experience': 'chat',
-      "interactionType": 'mybot'
+      'experience': this.commonService.configObj.isCall== 'false' ?'chat':'voice',
+      "interactionType": this.activeTab == 'Assist'?'assist':'mybot'
   }
 
   this.websocketService.emitEvents(EVENTS.agent_feedback_request, agent_assist_feedback_request);
