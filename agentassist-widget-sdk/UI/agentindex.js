@@ -630,51 +630,54 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
 
                 function displayCustomerFeels(data, convId, botId) {
-                    if (data.sentimentTone) {
-                        custTone = data;
-                    }
-                    let userTabtoneId = document.getElementById('userTab-custSentimentAnalysis');
-                    let agentTabtoneId = document.getElementById('agentTab-custSentimentAnalysis');
-                    if (custTone?.sentimentTone) {
-                        console.log(custTone);
-                        // if (cusTone?.sentiment.strength > 0 && cusTone?.sentiment.strength <= 33) {
-
-                        // } else if (cusTone?.sentiment.strength > 33 && cusTone?.sentiment.strength <= 66) {
-
-                        // } else if (cusTone?.sentiment.strength > 66 && cusTone?.sentiment.strength <= 100) {
-
-                        // }
-                        let toneinnerHTML = `
-                        <div id="custEmoji" class="emojis">${custTone?.sentimentTone?.emoji}</div>
-                        <div id="strengthDisplay"></div>
-                            <div [ngStyle]="{'background-color' : (custTone?.strength > 0 && custTone?.strength <=33) ? '#28A745' : '#E5E8EC'}" class="strength-bar strength-bar-sm"></div>
-                            <div [ngStyle]="{'background-color' : (custTone?.strength > 33 && custTone?.strength <=66) ? '#28A745' : '#E5E8EC'}" class="strength-bar strength-bar-md"></div>
-                            <div [ngStyle]="{'background-color' : (custTone?.strength > 66 && custTone?.strength <=100) ? '#28A745' : '#E5E8EC'}" class="strength-bar strength-bar-lg"></div>
-                        </div>
-                        <span id="customerTone">Customer is feeling <b>${custTone?.sentimentTone?.sentiment}</b></span>
-                        `
-                        userTabtoneId.innerHTML = toneinnerHTML;
-                        agentTabtoneId.innerHTML = toneinnerHTML;
-                    }
-                    $(document).ready(() => {
-                        if (!custTone?.sentimentTone) {
-                            let staticToneData = {
-                                emoji: "&#128512;",
-                                sentiment: "Happy",
-                                strength: 3
-                            }
-                            staticToneInnerHtml = `
-                            <div id="custEmoji" class="emojis">${staticToneData.emoji}</div>
-                                <div [ngStyle]="{'background-color' : (staticToneData?.strength > 0 && staticToneData?.strength <=33) ? '#28A745' : '#E5E8EC'}" class="strength-bar strength-bar-sm"></div>
-                                <div [ngStyle]="{'background-color' : (staticToneData?.strength > 33 && staticToneData?.strength <=66) ? '#28A745' : '#E5E8EC'}" class="strength-bar strength-bar-md"></div>
-                                <div [ngStyle]="{'background-color' : (staticToneData?.strength > 66 && staticToneData?.strength <=100) ? '#28A745' : '#E5E8EC'}" class="strength-bar strength-bar-lg"></div>
-                            </div>
-                            <span id="customerTone">Customer is feeling <b>${staticToneData.sentiment}</b></span>
-                            `
-                            userTabtoneId.innerHTML = staticToneInnerHtml;
-                            agentTabtoneId.innerHTML = staticToneInnerHtml;
+                    if(sourceType !== 'smartassist-color-scheme') {
+                        if (data.sentimentTone) {
+                            custTone = data;
                         }
-                    });
+                        let userTabtoneId = document.getElementById('userTab-custSentimentAnalysis');
+                        let agentTabtoneId = document.getElementById('agentTab-custSentimentAnalysis');
+                        if (custTone?.sentimentTone) {
+                            console.log(custTone);
+                            // if (cusTone?.sentiment.strength > 0 && cusTone?.sentiment.strength <= 33) {
+    
+                            // } else if (cusTone?.sentiment.strength > 33 && cusTone?.sentiment.strength <= 66) {
+    
+                            // } else if (cusTone?.sentiment.strength > 66 && cusTone?.sentiment.strength <= 100) {
+    
+                            // }
+                            let toneinnerHTML = `
+                            <div id="custEmoji" class="emojis">${custTone?.sentimentTone?.emoji}</div>
+                            <div id="strengthDisplay"></div>
+                                <div [ngStyle]="{'background-color' : (custTone?.strength > 0 && custTone?.strength <=33) ? '#28A745' : '#E5E8EC'}" class="strength-bar strength-bar-sm"></div>
+                                <div [ngStyle]="{'background-color' : (custTone?.strength > 33 && custTone?.strength <=66) ? '#28A745' : '#E5E8EC'}" class="strength-bar strength-bar-md"></div>
+                                <div [ngStyle]="{'background-color' : (custTone?.strength > 66 && custTone?.strength <=100) ? '#28A745' : '#E5E8EC'}" class="strength-bar strength-bar-lg"></div>
+                            </div>
+                            <span id="customerTone">Customer is feeling <b>${custTone?.sentimentTone?.sentiment}</b></span>
+                            `
+                            userTabtoneId.innerHTML = toneinnerHTML;
+                            agentTabtoneId.innerHTML = toneinnerHTML;
+                        }
+                        $(document).ready(() => {
+                            if (!custTone?.sentimentTone) {
+                                let staticToneData = {
+                                    emoji: "&#128512;",
+                                    sentiment: "Happy",
+                                    strength: 3
+                                }
+                                staticToneInnerHtml = `
+                                <div id="custEmoji" class="emojis">${staticToneData.emoji}</div>
+                                    <div [ngStyle]="{'background-color' : (staticToneData?.strength > 0 && staticToneData?.strength <=33) ? '#28A745' : '#E5E8EC'}" class="strength-bar strength-bar-sm"></div>
+                                    <div [ngStyle]="{'background-color' : (staticToneData?.strength > 33 && staticToneData?.strength <=66) ? '#28A745' : '#E5E8EC'}" class="strength-bar strength-bar-md"></div>
+                                    <div [ngStyle]="{'background-color' : (staticToneData?.strength > 66 && staticToneData?.strength <=100) ? '#28A745' : '#E5E8EC'}" class="strength-bar strength-bar-lg"></div>
+                                </div>
+                                <span id="customerTone">Customer is feeling <b>${staticToneData.sentiment}</b></span>
+                                `
+                                userTabtoneId.innerHTML = staticToneInnerHtml;
+                                agentTabtoneId.innerHTML = staticToneInnerHtml;
+                            }
+                        });
+                    }
+                    
                 }
 
                 // Add input field to the userResponse manually by the agent
