@@ -7,7 +7,7 @@ import * as $ from 'jquery';
   providedIn: 'root'
 })
 export class AssistService {
-
+  projConstants: any = ProjConstants;
   constructor(public sanitizeHtmlPipe: SanitizeHtmlPipe) { }
 
   toggleShowMoreLessButtons(faq_or_article_obj, index, type) {
@@ -331,5 +331,28 @@ export class AssistService {
   //             </div>`;
   //     return template;
   // }
+
+  historyFaqSuggestionsContainer(eleid, ele, res){
+    $(`#faqsSuggestions-${eleid} #check-${ele}`).addClass('hide');
+    let faqs = $(`#faqsSuggestions-${eleid} .type-info-run-send #faqSection-${ele}`);
+    let a = $(`#faqsSuggestions-${eleid} #faqDiv-${ele}`);
+    let faqActionHtml = `<div class="action-links">
+        <button class="send-run-btn" id="sendMsg" data-msg-id="${ele}"  data-msg-data="${res.components[0].data.text}">Send</button>
+        <div class="copy-btn" data-msg-id="${ele}" data-msg-data='${res.components[0].data.text}'>
+        <i class="ast-copy" data-msg-id="${ele}" data-msg-data='${res.components[0].data.text}'></i>
+        </div>
+        </div>`;
+    a.append(faqActionHtml);
+    faqs.append(`<div class="desc-text" id="desc-${ele}">${res.components[0].data.text}</div>`);
+    let faqstypeInfo = $(`#faqsSuggestions-${eleid} .type-info-run-send #faqSection-${ele}`);
+    let seeMoreButtonHtml = `
+      <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${ele}" data-see-more="true">Show more</button>
+      <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${ele}" data-see-less="true">Show less</button>
+      `;
+    faqstypeInfo.append(seeMoreButtonHtml);
+    setTimeout(() => {                                                    
+        this.updateSeeMoreButtonForAssist(ele, this.projConstants.FAQ);
+    }, 1000);
+  }
 
 }

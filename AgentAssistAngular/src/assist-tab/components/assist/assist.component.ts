@@ -59,6 +59,10 @@ export class AssistComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    let response = this.commonService.renderingHistoryMessage();
+    response.then((res) => {
+      this.renderHistoryMessages(res.messages, res.feedbackDetails)
+    })
     this.subscribeEvents();
     this.scrollToBottom();
   }
@@ -1002,6 +1006,564 @@ export class AssistComponent implements OnInit {
         $(`#entityValue-${i}`).val(e.value);
         $(`.edit-values-btn.restore`).addClass('hide');
     });
+  }
+
+  renderHistoryMessages(response, feedBackResult){
+    let historyFaqIDs = [];
+
+        let previousId;
+        let previousTaskPositionId, currentTaskPositionId, currentTaskName, previousTaskName;
+            let resp = response.length > 0 ? response : undefined;
+            resp?.forEach((res, index) => {
+
+                if ((res.agentAssistDetails?.suggestions || res.agentAssistDetails?.ambiguityList) && res.type == 'outgoing' && !res.agentAssistDetails?.faqResponse) {     
+                    let uniqueID = res._id;
+                        let historyDataHtml = $('#dynamicBlock');
+
+                            let htmls = `
+                        <div class="agent-utt-info" id="agentUttInfo-${uniqueID}">
+                            <div class="user-img">
+                                <img src="./images/userIcon.svg">
+                            </div>
+                            <div class="text-user" >${res.agentAssistDetails.userInput}</div>
+                        </div>
+                        <div class="dialog-task-run-sec" id="automationSuggestions-${uniqueID}">
+                        </div>`;
+
+                            historyDataHtml.append(htmls);
+                            let automationSuggestions = document.getElementById(`automationSuggestions-${uniqueID}`);
+                            if (res.agentAssistDetails?.ambiguityList?.dialogs?.length > 0 || res.agentAssistDetails?.suggestions?.dialogs?.length > 0) {
+
+
+                                let dialogAreaHtml = `<div class="task-type" id="dialoguesArea">
+              <div class="img-block-info">
+                  <img src="./images/dialogtask.svg">
+              </div>
+              <div class="content-dialog-task-type" id="dialogSuggestions-${uniqueID}">
+                <div class="type-with-img-title">Dialog task (${res.agentAssistDetails?.suggestions ? res.agentAssistDetails?.suggestions.dialogs?.length : res.agentAssistDetails?.ambiguityList.dialogs?.length})</div>
+              </div>
+            </div>`;
+                                automationSuggestions.innerHTML += dialogAreaHtml;
+                            }
+                            if (res.agentAssistDetails?.ambiguityList?.faqs?.length > 0 || res.agentAssistDetails?.suggestions?.faqs?.length > 0) {
+                                let dialogAreaHtml = `<div class="task-type" id="faqssArea">
+            <div class="img-block-info">
+                <img src="./images/kg.svg">
+            </div>
+            <div class="content-dialog-task-type" id="faqsSuggestions-${uniqueID}">
+                <div class="type-with-img-title">FAQ (${res.agentAssistDetails?.suggestions ? res.agentAssistDetails?.suggestions.faqs.length : res.agentAssistDetails.ambiguityList.faqs.length})</div>
+                
+            </div>
+        </div>`;
+                                automationSuggestions.innerHTML += dialogAreaHtml;
+                            }
+                            let dialogsss = (res.agentAssistDetails?.suggestions) ? (res.agentAssistDetails?.suggestions?.dialogs) : (res.agentAssistDetails?.ambiguityList?.dialogs);
+                            dialogsss?.forEach((ele, index) => {
+
+                                let dialogSuggestions = document.getElementById(`dialogSuggestions-${uniqueID}`);
+                                let dialogsHtml = `
+                <div class="type-info-run-send">
+                    <div class="left-content">
+                        <div class="title-text" id="automation-${uniqueID}">${ele.name}</div>
+                    </div>
+                    <div class="action-links">
+                        <button class="send-run-btn" data-conv-id="${this.commonService.configObj.conversationid}"
+                        data-bot-id="${res.botId}" data-intent-name="${ele.name}"
+                        data-history-run="true" id="run-${uniqueID}"
+                        >RUN</button>
+                        <div class="elipse-dropdown-info" id="showRunForAgentBtn-${uniqueID}">
+                            <div class="elipse-icon" id="elipseIcon-${uniqueID}">
+                                <i class="ast-overflow" id="overflowIcon-${uniqueID}"></i>
+                            </div>
+                            <div class="dropdown-content-elipse" id="runAgtBtn-${uniqueID}">
+                                <div class="list-option" data-conv-id="${this.commonService.configObj.conversationid}"
+                                data-bot-id="${res.botId}" data-intent-name="${ele.name}"
+                                 id="agentSelect-${uniqueID}"
+                                data-exhaustivelist-run="true">Run with Agent Inputs</div>
+                            </div>
+                    </div>
+                </div>`;
+                                dialogSuggestions.innerHTML += dialogsHtml;
+                            });
+                            let faqss = (res.agentAssistDetails?.suggestions) ? (res.agentAssistDetails?.suggestions?.faqs) : (res.agentAssistDetails?.ambiguityList?.faqs);
+                            faqss?.forEach((ele, index) => {
+
+                                let faqsSuggestions = document.getElementById(`faqsSuggestions-${uniqueID}`);
+                                historyFaqIDs.push(uniqueID+index);
+                                let faqHtml = `
+                <div class="type-info-run-send" id="faqDiv-${uniqueID+index}">
+                    <div class="left-content" id="faqSection-${uniqueID+index}">
+                        <div class="title-text" id="title-${uniqueID+index}">${ele.question}</div>
+                        
+                        
+                    </div>
+                    
+                </div>`;
+
+                                faqsSuggestions.innerHTML += faqHtml;
+                                let faqs = $(`.type-info-run-send #faqSection-${uniqueID+index}`);
+                                if (!ele.answer) {
+                                    let checkHtml = `
+                    <i class="ast-carrotup" data-conv-id="${this.commonService.configObj.conversationid}"
+                    data-bot-id="${res.botId}" data-intent-name="${ele.question}"
+                    data-check="true" id="check-${uniqueID+index}" data-position-id="${uniqueID+index}"></i>`;
+                                    // faqs.append(checkHtml);
+                                    // $(`#title-${uniqueID}`).addClass('noPadding');
+                                    $(`#faqDiv-${uniqueID+index}`).addClass('is-dropdown-show-default');
+                                    document.getElementById(`title-${uniqueID+index}`).insertAdjacentHTML('beforeend',checkHtml);
+                                } else {
+                                    let a = $(`#faqDiv-${uniqueID+index}`);
+                                    let faqActionHtml = `<div class="action-links">
+                    <button class="send-run-btn" id="sendMsg" data-msg-id="${uniqueID+index}"  data-msg-data="${ele.answer}">Send</button>
+                    <div class="copy-btn" data-msg-id="${uniqueID+index}" data-msg-data='${ele.answer}'>
+                        <i class="ast-copy" data-msg-id="${uniqueID+index}" data-msg-data='${ele.answer}'></i>
+                    </div>
+                </div>`;
+                                    a.append(faqActionHtml);
+                                    faqs.append(`<div class="desc-text" id="desc-${uniqueID+index}">${ele.answer}</div>`);
+                                    let faqstypeInfo = $(`.type-info-run-send #faqSection-${uniqueID+index}`);
+                                    let seeMoreButtonHtml = `
+                          <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${uniqueID+index}" data-see-more="true">Show more</button>
+                          <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${uniqueID+index}" data-see-less="true">Show less</button>
+                          `;
+                                    faqstypeInfo.append(seeMoreButtonHtml);
+                                    setTimeout(() => {                                                    
+                                        this.assisttabService.updateSeeMoreButtonForAssist(uniqueID, this.projConstants.FAQ);
+                                    }, 1000);
+                                }
+                                
+                            })
+                            uniqueID = undefined;
+                }
+                if((res.agentAssistDetails?.suggestions || res.agentAssistDetails?.ambiguityList) && res.type == 'outgoing' && res.agentAssistDetails?.faqResponse && res.agentAssistDetails?.positionId) {
+                    historyFaqIDs?.forEach((ele,i)=>{
+                        let eleid = ele.slice(0,ele.length-1);
+                        res.agentAssistDetails.suggestions?.faqs?.forEach((eles,j)=>{
+                                if($(`#faqsSuggestions-${eleid} #title-${ele}`).text().trim() == eles.question) {
+                                let valOfDiv =  $(`#faqsSuggestions-${eleid} #desc-${ele}`).text().trim();
+                                if(valOfDiv == '' && !valOfDiv)
+                                  this.assisttabService.historyFaqSuggestionsContainer(eleid, ele, res);
+                                }
+                        })
+                    })
+                }
+
+                if ((res.agentAssistDetails?.suggestions || res.agentAssistDetails?.ambiguityList) && res.type == 'outgoing' && res.agentAssistDetails?.faqResponse && !res.agentAssistDetails?.positionId) {  
+                    let historyDataHtml = $('#dynamicBlock');
+                        let uniqueID = res._id;
+                         let htmls = `
+                     <div class="agent-utt-info" id="agentUttInfo-${uniqueID}">
+                         <div class="user-img">
+                             <img src="./images/userIcon.svg">
+                         </div>
+                         <div class="text-user" >${res.agentAssistDetails.userInput}</div>
+                     </div>
+                     <div class="dialog-task-run-sec" id="automationSuggestions-${uniqueID}">
+                     </div>`;
+
+                         historyDataHtml.append(htmls);
+                         let automationSuggestions = document.getElementById(`automationSuggestions-${uniqueID}`); 
+                    if (res.agentAssistDetails?.ambiguityList?.faqs?.length > 0 || res.agentAssistDetails?.suggestions?.faqs?.length > 0) {
+                        let dialogAreaHtml = `<div class="task-type" id="faqssArea">
+    <div class="img-block-info">
+        <img src="./images/kg.svg">
+    </div>
+    <div class="content-dialog-task-type" id="faqsSuggestions-${uniqueID}">
+        <div class="type-with-img-title">FAQ (${res.agentAssistDetails?.suggestions ? res.agentAssistDetails?.suggestions.faqs.length : res.agentAssistDetails.ambiguityList.faqs.length})</div>
+        
+    </div>
+</div>`;
+                        automationSuggestions.innerHTML += dialogAreaHtml;
+                    }
+                    let faqss = (res.agentAssistDetails?.suggestions) ? (res.agentAssistDetails?.suggestions?.faqs) : (res.agentAssistDetails?.ambiguityList?.faqs);
+                            faqss?.forEach((ele, index) => {
+                                let faqsSuggestions = document.getElementById(`faqsSuggestions-${uniqueID}`);
+                                let faqHtml = `
+                <div class="type-info-run-send" id="faqDiv-${uniqueID+index}">
+                    <div class="left-content" id="faqSection-${uniqueID+index}">
+                        <div class="title-text" id="title-${uniqueID+index}">${ele.question}</div>
+                    </div>
+                </div>`;
+                                faqsSuggestions.innerHTML += faqHtml;
+                                let faqs = $(`.type-info-run-send #faqSection-${uniqueID+index}`);
+                                    let a = $(`#faqDiv-${uniqueID+index}`);
+                                    let faqActionHtml = `<div class="action-links">
+                    <button class="send-run-btn" id="sendMsg" data-msg-id="${uniqueID+index}"  data-msg-data="${res.components[0].data.text}">Send</button>
+                    <div class="copy-btn" data-msg-id="${uniqueID+index}" data-msg-data='${res.components[0].data.text}'>
+                        <i class="ast-copy" data-msg-id="${uniqueID+index}" data-msg-data='${res.components[0].data.text}'></i>
+                    </div>
+                </div>`;
+                                    a.append(faqActionHtml);
+                                    faqs.append(`<div class="desc-text" id="desc-${uniqueID+index}">${res.components[0].data.text}</div>`);
+                                    let faqstypeInfo = $(`.type-info-run-send #faqSection-${uniqueID+index}`);
+                                    let seeMoreButtonHtml = `
+                          <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${uniqueID+index}" data-see-more="true">Show more</button>
+                          <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${uniqueID+index}" data-see-less="true">Show less</button>
+                          `;
+                                    faqstypeInfo.append(seeMoreButtonHtml);
+                                    setTimeout(() => {                                                    
+                                        this.assisttabService.updateSeeMoreButtonForAssist(uniqueID+index, this.projConstants.FAQ);
+                                    }, 1000);
+                            })
+                            setTimeout(()=>{
+                                uniqueID = undefined;
+                            }, 1000)
+                            
+                }
+
+                if ((!res.agentAssistDetails?.suggestions && !res.agentAssistDetails?.ambiguityList && !res.agentAssistDetails?.ambiguity) && res.type == 'outgoing') {
+                    let _msgsResponse = {
+                        "type": "bot_response",
+                        "from": "bot",
+                        "message": [],
+                        "messageId": res._id,
+                        "botInfo": {
+                            "chatBot": "sample Bot",
+                            "taskBotId": res.botId
+                        },
+                        "createdOn": "2022-03-21T07:56:18.225Z",
+                        "icon": "https://uat.kore.ai:443/api/getMediaStream/market/f-cb381255-9aa1-5ce2-95e3-71233aef7084.png?n=17648985&s=IlRvUlUwalFVaFVMYm9sZStZQnlLc0l1UlZvdlNUUDcxR2o3U2lscHRrL3M9Ig$$",
+                        "traceId": "873209019a5adc26",
+                        "createdOnTimemillis": res._id
+                    }
+                    currentTaskName = res.tN ? res.tN : currentTaskName;
+                    currentTaskPositionId = res?.agentAssistDetails?.positionId ? res?.agentAssistDetails?.positionId : currentTaskPositionId;
+
+                    let historyData = $('#dynamicBlock');
+                    let userInputHtml;
+                    if (res.agentAssistDetails.userInput) {
+                        userInputHtml = `<div class="agent-utt-info" id="agentUttInfo-${res._id}">
+                            <div class="user-img">
+                                <img src="./images/userIcon.svg">
+                            </div>
+                            <div class="text-user" >${res.agentAssistDetails.userInput}</div>
+                        </div>`;
+                    }
+                    let dropdownHtml = `
+                        
+                                    <div class="dialog-task-accordiaon-info" id="addRemoveDropDown-${res._id}" >
+                                        <div class="accordion-header" id="dropDownHeader-${res._id}"
+                                        data-drop-down-opened="true">
+                                            <div class="icon-info">
+                                                <i class="ast-rule"></i>
+                                            </div>
+                                            <div class="header-text" id="dropDownTitle-${res._id}">${res.tN}</div>
+                                            <i class="ast-carrotup"></i>
+                                            <button class="btn-danger hide" id="terminateAgentDialog">Terminate</button>
+                                        </div>
+                                        <div class="collapse-acc-data hide" id="dropDownData-${res._id}">
+                                        <div class="override-input-div hide" id="overRideDiv-${res._id}">
+                                        <button class="override-input-btn hide" id="overRideBtn-${res._id}">Override Input</button>
+                                        <button class="cancel-override-input-btn hide" id="cancelOverRideBtn-${res._id}">Cancel Override</button>
+                                        </div>
+                                            
+                                        </div>
+                                    `;
+
+                    if (previousTaskPositionId && currentTaskPositionId !== previousTaskPositionId ) {
+                        let previousIdFeedBackDetails = feedBackResult.find((ele)=> ele.positionId === previousTaskPositionId);
+                        this.commonService.addFeedbackHtmlToDomForHistory(res, res.botId, res?.agentAssistDetails?.userInput, previousId, false, previousTaskPositionId);
+                        if(previousIdFeedBackDetails) {
+                            this.commonService.UpdateFeedBackDetails(previousIdFeedBackDetails, 'dynamicBlock');
+                            if(previousIdFeedBackDetails.feedback == 'dislike' && (previousIdFeedBackDetails.feedbackDetails.length == 0 && previousIdFeedBackDetails.comment.length == 0)){
+                                $(`#feedbackHelpfulContainer-${previousId} .explore-more-negtive-data`).removeClass('hide');
+                            }else {
+                                $(`#feedbackHelpfulContainer-${previousId} .explore-more-negtive-data`).addClass('hide');
+                            }
+                        }    
+                        previousId = undefined;
+                        previousTaskPositionId = undefined;
+                        previousTaskName = undefined;
+                    }
+                    if (res.tN && !previousId && previousTaskPositionId !== currentTaskPositionId) {
+                        let divExist = $(`#addRemoveDropDown-${res._id}`);
+                        previousTaskPositionId = currentTaskPositionId;
+                        previousTaskName = currentTaskName;
+                        if (divExist.length >= 1) {
+                            console.log("---->>>>>>>>>>>>>>>>>>>>>already exsit===in the dom");
+                        } else {
+                            historyData.append(userInputHtml);
+                            historyData.append(dropdownHtml);
+                            previousId = res._id;
+                            previousTaskPositionId = currentTaskPositionId;
+                            setTimeout(()=>{
+                              this.clickEvents(IdReferenceConst.DROPDOWN_HEADER, previousId);
+                             // this.clickEvents(IdReferenceConst.ASSISTTERMINATE, previousId);
+                            }, 10000)
+                           
+                        }
+                    }
+                    if(resp.length-1 == index && currentTaskPositionId == previousTaskPositionId) {
+                        let previousIdFeedBackDetails = feedBackResult.find((ele)=> ele.positionId === currentTaskPositionId);
+                        this.commonService.addFeedbackHtmlToDomForHistory(res, res.botId, res?.agentAssistDetails?.userInput, previousId, false, previousTaskPositionId);
+                        if(previousIdFeedBackDetails) {
+                            this.commonService.UpdateFeedBackDetails(previousIdFeedBackDetails, 'dynamicBlock');
+                            if(previousIdFeedBackDetails.feedback == 'dislike' && (previousIdFeedBackDetails.feedbackDetails.length == 0 && previousIdFeedBackDetails.comment.length == 0)){
+                                $(`#feedbackHelpfulContainer-${previousId} .explore-more-negtive-data`).removeClass('hide');
+                            }else {
+                                $(`#feedbackHelpfulContainer-${previousId} .explore-more-negtive-data`).addClass('hide');
+                            }
+                        }
+                    }
+                    if (res.agentAssistDetails.entityName && res.agentAssistDetails.entityResponse && res.agentAssistDetails.entityValue) {
+                        let runInfoContent = $(`#dropDownData-${previousId}`);
+                        let userQueryHtml = `
+                            <div class="steps-run-data">
+                                <div class="icon_block_img">
+                                    <img src="./images/userIcon.svg">
+                                </div>
+                                <div class="run-info-content" id="userInput-${res._id}">
+                                    <div class="title">Customer Said - </div>
+                                    <div class="agent-utt">
+                                        <div class="title-data">"${(res.agentAssistDetails.entityValue)}"</div>
+                                    </div>
+                                    
+                                </div>
+                            </div>`;
+                        runInfoContent.append(userQueryHtml);
+                        let entityHtml = $(`#dropDownData-${previousId}`).find(`#userInput-${res._id}`);
+                        let entityDisplayName = this.agentAssistResponse.newEntityDisplayName ? this.agentAssistResponse.newEntityDisplayName : this.agentAssistResponse.newEntityName;
+                        if (res.agentAssistDetails.entityValue && !res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
+                            entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${(res.agentAssistDetails.entityValue)}</div>`);
+                        } else {
+                            if (res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
+                                let entityHtmls = `<div class="order-number-info">${entityDisplayName} : 
+                                            <span style="color:red">Value unidentified</span>
+                                        </div>
+                                        <div>
+                                            <img src="./images/warning.svg" style="padding-right: 8px;">
+                                            <span style="font-size: 12px; line-height: 18px; color: #202124;">Incorrect input format<span>
+                                        </div>`
+                                entityHtml.append(entityHtmls);
+                            }
+                        }
+                    }
+                    if(res.agentAssistDetails?.entityName){
+                        this.agentAssistResponse = res.agentAssistDetails;
+                    }
+                    let parsedPayload;
+                    res.components?.forEach((elem) => {
+                        let payloadType = (elem.data?.text).replace(/(&quot\;)/g, "\"");
+
+                        try {
+                            if (payloadType.indexOf('text') !== -1 || payloadType.indexOf('payload') !== -1) {
+                                let withoutSpecials = payloadType.replace(/^\s+|\s+$/g, "");
+                                parsedPayload = JSON.parse(withoutSpecials);
+                            }
+                        }catch(error){
+                            if(payloadType.text){
+                                let withoutSpecials = payloadType.replace(/^\s+|\s+$/g, "");
+                                parsedPayload = withoutSpecials;
+                            }
+                        }
+                        
+                        let body = {};
+                        body['type'] = elem.cT;
+                        if (!parsedPayload) {
+                            body['component'] = {
+                                "type": elem.cT,
+                                "payload": {
+                                    "type": elem.cT,
+                                    "text": elem.data.text
+                                }
+                            };
+                            body['cInfo'] = {
+                                "body": elem.data.text
+                            };
+
+                        } else {
+                            body['component'] = parsedPayload.payload ? parsedPayload : parsedPayload.text;
+                            if (parsedPayload?.type === 'message') {
+                                body['cInfo'] = {
+                                    "body": ''
+                                };
+                            } else if (parsedPayload?.text) {
+                                body['cInfo'] = {
+                                    "body": parsedPayload.text
+                                };
+                            } else {
+                                body['cInfo'] = {
+                                    "body": parsedPayload
+                                };
+                            }
+
+                        }
+
+                        _msgsResponse.message.push(body);
+                    });
+                    if((res.agentAssistDetails?.isPrompt === true || res.agentAssistDetails?.isPrompt === false) && previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) {
+                    let runInfoContent = $(`#dropDownData-${previousId}`);
+                    let askToUserHtml = this.assisttabService.askUserTemplate(res._id);
+                    let tellToUserHtml = this.assisttabService.tellToUserTemplate(res._id);
+                        var appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                        var appState = JSON.parse(appStateStr);  
+                        // if(appState[_conversationId]['automationGoingOnAfterRefresh']) {
+                        //     isAutomationOnGoing = true;
+                        //     dropdownHeaderUuids = previousId;
+                        //     appState[_conversationId]['automationGoingOnAfterRefresh'] = isAutomationOnGoing;
+                        //     localStorage.setItem('agentAssistState', JSON.stringify(appState))
+                        // }
+                    if (res.agentAssistDetails.isPrompt || res.agentAssistDetails.entityRequest) {
+                        // if(appState[_conversationId]['automationGoingOnAfterRefresh']) {
+                        //     $(`#overRideBtn-${previousId}`).removeClass('hide');
+                        //     $(`#cancelOverRideBtn-${previousId}`).addClass('hide');
+                        //     $("#inputFieldForAgent").remove();
+                        //     $(`#terminateAgentDialog`).removeClass('hide');
+                        //     $('#dynamicBlock .override-input-div').addClass('hide');
+                        //     $(`#overRideDiv-${previousId}`).removeClass('hide');
+                        //     $(`#overRideBtn-${previousId}`).attr('data-position-id', previousTaskPositionId);
+                        //     $(`#terminateAgentDialog`).attr('data-position-id', previousTaskPositionId);
+                        //     dialogPositionId = previousTaskPositionId;
+                        // }
+                       
+                        runInfoContent.append(askToUserHtml);
+                        let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(_msgsResponse)[0].innerHTML;
+                        let a = document.getElementById(IdReferenceConst.displayData + `-${res._id}`);
+                        a.innerHTML = a?.innerHTML + html;
+                    } else {
+                        runInfoContent.append(tellToUserHtml);
+                        let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(_msgsResponse)[0].innerHTML;
+                        let a = document.getElementById(IdReferenceConst.displayData + `-${res._id}`);
+                        a.innerHTML = a.innerHTML + html;
+                    }
+                 }
+                    let shouldProcessResponse = false;
+                    var appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                    var appState = JSON.parse(appStateStr);
+                    // if (appState[_conversationId]) {
+                    //     // if incoming data belongs to welcome message do nothing
+                    //     // if (!data.suggestions && data.buttons?.length > 1) {
+                    //         if (appState[_conversationId].isWelcomeProcessed) {
+                    //             shouldProcessResponse = false;
+                                
+                    //         }else {
+                    //             shouldProcessResponse = true;
+                    //         }
+                    //     // }
+                        
+                    // }
+                    let isPromtFlag;
+                    if((res.agentAssistDetails?.isPrompt == true )){
+                        isPromtFlag = "true";
+                    }else if(res.agentAssistDetails?.isPrompt == false){
+                        isPromtFlag = "false";
+                    }
+                    if (!parsedPayload && !res.tN && !shouldProcessResponse && !isPromtFlag) {
+                        let dynamicBlockDiv = $('#dynamicBlock');
+                        res.components?.forEach((ele, i) => {
+                            let welcomeMsgHtml = `
+                            <div class = "welcome-msg collapse-acc-data before-none" id='smallTalk-${res._id}'>
+                                <div class="steps-run-data">
+                                    <div class="icon_block">
+                                        <i class="ast-agent"></i>
+                                    </div>
+                                    <div class="run-info-content">
+                                    
+                                    </div>
+                                </div>
+                            </div>`;
+                            if (res.components?.length > 1) {
+                                if (i == 0) {
+                                    dynamicBlockDiv.append(welcomeMsgHtml);
+                                    let runInfoDivOfwelcome = $(`#dynamicBlock #smallTalk-${res._id} .run-info-content`);
+                                    let contentHtml = `
+                                <div class="title">Customer has waited for an agent for few seconds.<br/>Here are some appropriate opening lines.</div>
+                                   <div class="agent-utt">
+                                    <div class="title-data" id="displayData-${res._id}">${ele.data.text}</div>
+                                    <div class="action-links">
+                                        <button class="send-run-btn" id="sendMsg" data-msg-id="${res._id}"  data-msg-data='${ele.data.text}'>Send</button>
+                                        <div class="copy-btn" data-msg-id="${res._id}" data-msg-data="${ele.data.text}">
+                                            <i class="ast-copy" data-msg-id="${res._id}" data-msg-data="${ele.data.text}"></i>
+                                        </div>
+                                    </div>
+                                </div>`;
+                                    runInfoDivOfwelcome.append(contentHtml);
+                                } else {
+                                    let runInfoDivOfwelcome = $(`#dynamicBlock #smallTalk-${res._id} .run-info-content`);
+                                    let contentHtmlWithoutTellCus = `
+                                    <div class="agent-utt">
+                                        <div class="title-data" id="displayData-${res._id}">${ele.data.text}</div>
+                                        <div class="action-links">
+                                            <button class="send-run-btn" id="sendMsg" data-msg-id="${res._id}"  data-msg-data='${ele.data.text}'>Send</button>
+                                            <div class="copy-btn" data-msg-id="${res._id}" data-msg-data='${ele.data.text}'>
+                                                <i class="ast-copy" data-msg-id="${res._id}" data-msg-data='${ele.data.text}'></i>
+                                            </div>
+                                        </div>
+                                    </div>`;
+                                    runInfoDivOfwelcome.append(contentHtmlWithoutTellCus);
+                                }
+                            } else {
+                                let botResHtml = `
+                                <div class="collapse-acc-data before-none" id='smallTalk-${res._id}'>
+                             <div class="steps-run-data">
+                             <div class="icon_block">
+                                 <i class="ast-agent"></i>
+                             </div>
+                             <div class="run-info-content" >
+                             <div class="title">Tell Customer</div>
+                             <div class="agent-utt">
+                                 <div class="title-data" id="displayData-${res._id}">${ele.data.text}</div>
+                                 <div class="action-links">
+                                     <button class="send-run-btn" id="sendMsg" data-msg-id="${res._id}"  data-msg-data='${ele.data.text}'>Send</button>
+                                     <div class="copy-btn" data-msg-id="${res._id}" data-msg-data='${ele.data.text}'>
+                                         <i class="ast-copy" data-msg-id="${res._id}" data-msg-data='${ele.data.text}'></i>
+                                     </div>
+                                 </div>
+                             </div>
+                             </div>
+                         </div>
+                         </div>`;
+                         dynamicBlockDiv.append(botResHtml)
+                            }
+                        });
+                    }
+
+                    //  removeElementFromDom();
+                    //if (res.agentAssistDetails.endOfTask) { // need this block of code once the endofTask flag received from backend
+                    //                                                    let dropDownData = $(`#dropDownData-${previousId}`);
+                    //                    let endOfDialoge = $(`#addRemoveDropDown-${previousId}`);
+
+                    //                 // $(`#addRemoveDropDown-${dropdownHeaderUuids} .btn-danger`).remove();
+                    //                 let feedbackHtml = ` 
+                    //     <div class="feedback-data">
+                    //         <div class="feedback-icon" id="feedbackup">
+                    //             <i class="ast-thumbup" id="feedbackup-${previousId}"
+                    //             data-feedbacklike="false"
+                    //             data-conv-id="${_agentAssistDataObj.conversationId}"
+                    //                     data-bot-id="${_agentAssistDataObj.botId}" data-feedback="like"
+                    //                     data-dialog-name="${previousTaskName}"
+                    //                     data-user-input="${res.agentAssistDetails.userInput}"></i>
+                    //         </div>
+                    //         <div class="feedback-icon" id="feedbackdown">
+                    //             <i class="ast-thumbdown" id="feedbackdown-${previousId}"
+                    //             data-feedbackdislike="false"
+                    //             data-conv-id="${_agentAssistDataObj.conversationId}"
+                    //                     data-bot-id="${_agentAssistDataObj.botId}" data-feedback="dislike"
+                    //                     data-dialog-name="${previousTaskName}"
+                    //                     data-user-input="${res.agentAssistDetails.userInput}"></i>
+                    //         </div>
+                    //    </div>`;
+                    //                 dropDownData.append(feedbackHtml);
+                    //                 let endofDialogeHtml = `
+                    //     <div class="dilog-task-end" id="endTaks-${previousId}">
+                    //     <div class="text-dialog-task-end">Task Ended</div>     
+                    //                </div>
+
+                    //     `;
+                    //                 endOfDialoge.append(endofDialogeHtml);
+                    //     previousId = undefined;
+                    //     previousTaskName = undefined;
+                    // }
+
+                }
+                // if (index == resp.length - 1) {
+                //     $(`#historyData .collapse-acc-data.hide`)[$(`#historyData .collapse-acc-data.hide`).length - 1]?.classList.remove('hide');
+                //     // $(`#historyData .show-history-feedback.hide`)[$(`#historyData .show-history-feedback.hide`).length - 1]?.classList.remove('hide');
+                // }
+            });
+        this.scrollToBottom();
+        this.designAlterService.addWhiteBackgroundClassToNewMessage(this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd, IdReferenceConst.DYNAMICBLOCK);
+    
   }
   
 }
