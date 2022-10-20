@@ -6,7 +6,7 @@ import { NotificationService } from '@kore.services/notification.service';
 import { finalize, take, takeUntil } from 'rxjs/operators';
 import { VoicePreferencesModel } from '../settings.model';
 import { SettingsService } from '../setttings.service';
-import { combineLatest, concat, of, Subject } from 'rxjs';
+import { combineLatest, concat, of, Subject, Subscription } from 'rxjs';
 import { AgentSettingsService } from '../../agent-settings/agent-settings.service';
 import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'underscore';
@@ -33,9 +33,9 @@ export class AdvSettingsComponent implements OnInit, OnDestroy {
 
   showPhHoldAudio = false;
   showVoicePreferences:boolean = false;
-  channelList: any;
 
   subs = new SubSink();
+  voiceListSub: Subscription;
 
   @ViewChild('vpSlider', { static: true }) vpSlider: SliderComponentComponent;
   @ViewChild('langSlider', { static: true }) langSlider: SliderComponentComponent;
@@ -82,22 +82,33 @@ export class AdvSettingsComponent implements OnInit, OnDestroy {
   }
 
   getAdvSettings() {
-    this.channelList = this.authService.smartAssistBots.map(x=>x.channels.length);
-    if(this.channelList > 1){
-      this.showVoicePreferences = true;
-   // const _params = { streamId: this.streamId }
-    const _params = { streamId:this.authService.smartAssistBots.map(x=>x._id),
-                      'isAgentAssist':true }
-    this.loading = true;
-    this.subs.sink = this.service.invoke('get.settings.voicePreferences', _params)
-      .pipe(finalize(() => this.loading = false))
-      .subscribe(res => {
-        this.voicePreferences = res;
-      }, err => {
-        this.notificationService.showError(err, 'Failed to fetch voice preferences')
+    const params = {
+      // instanceId: this.instanceAppDetails._id,
+      instanceId:this.authService.smartAssistBots.map(x=>x._id),
+       'isAgentAssist':true
+     }
+     let channelList;
+     if (this.voiceListSub) this.voiceListSub.unsubscribe();
+     this.voiceListSub = this.service.invoke('get.voiceList', params, 's').subscribe(voiceList => {
+       channelList = voiceList;
+       if(channelList.sipTransfers.length > 0){
+         this.showVoicePreferences = true;
+         const _params = { streamId:this.authService.smartAssistBots.map(x=>x._id),
+                         'isAgentAssist':true }
+         this.loading = true;
+         this.subs.sink = this.service.invoke('get.settings.voicePreferences', _params)
+         .pipe(finalize(() => this.loading = false))
+         .subscribe(res => {
+           this.voicePreferences = res;
+         }, err => {
+           this.notificationService.showError(err, 'Failed to fetch voice preferences')
+         })
+       }
+       else{
+        this.showVoicePreferences = false;
+       }
       })
-    }
-  }
+    } 
 
   getLanguages() {
     const params = {};
