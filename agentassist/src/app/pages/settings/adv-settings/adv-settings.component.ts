@@ -6,7 +6,7 @@ import { NotificationService } from '@kore.services/notification.service';
 import { finalize, take, takeUntil } from 'rxjs/operators';
 import { VoicePreferencesModel } from '../settings.model';
 import { SettingsService } from '../setttings.service';
-import { combineLatest, concat, of, Subject, Subscription } from 'rxjs';
+import { combineLatest, concat, of, Subject } from 'rxjs';
 import { AgentSettingsService } from '../../agent-settings/agent-settings.service';
 import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'underscore';
@@ -35,7 +35,6 @@ export class AdvSettingsComponent implements OnInit, OnDestroy {
   showVoicePreferences:boolean = false;
 
   subs = new SubSink();
-  voiceListSub: Subscription;
 
   @ViewChild('vpSlider', { static: true }) vpSlider: SliderComponentComponent;
   @ViewChild('langSlider', { static: true }) langSlider: SliderComponentComponent;
@@ -168,6 +167,5 @@ export class AdvSettingsComponent implements OnInit, OnDestroy {
     this.destroyed$.next();
     this.destroyed$.complete();
     this.subs.unsubscribe();
-    if (this.voiceListSub) this.voiceListSub.unsubscribe();
   }
 }
