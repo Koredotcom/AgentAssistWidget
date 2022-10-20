@@ -1378,7 +1378,7 @@ export class AssistComponent implements OnInit {
                                 <div class="run-info-content" id="userInput-${res._id}">
                                     <div class="title">Customer Said - </div>
                                     <div class="agent-utt">
-                                        <div class="title-data">"${(res.agentAssistDetails.entityValue)}"</div>
+                                        <div class="title-data">"${this.sanitizeHtmlPipe.transform(res.agentAssistDetails.entityValue)}"</div>
                                     </div>
                                     
                                 </div>
@@ -1387,7 +1387,7 @@ export class AssistComponent implements OnInit {
                         let entityHtml = $(`#dropDownData-${previousId}`).find(`#userInput-${res._id}`);
                         let entityDisplayName = this.agentAssistResponse.newEntityDisplayName ? this.agentAssistResponse.newEntityDisplayName : this.agentAssistResponse.newEntityName;
                         if (res.agentAssistDetails.entityValue && !res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
-                            entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${(res.agentAssistDetails.entityValue)}</div>`);
+                            entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${this.sanitizeHtmlPipe.transform(res.agentAssistDetails.entityValue)}</div>`);
                         } else {
                             if (res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
                                 let entityHtmls = `<div class="order-number-info">${entityDisplayName} : 
