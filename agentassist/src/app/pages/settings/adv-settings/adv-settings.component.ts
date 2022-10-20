@@ -83,13 +83,11 @@ export class AdvSettingsComponent implements OnInit, OnDestroy {
 
   getAdvSettings() {
     const params = {
-      // instanceId: this.instanceAppDetails._id,
       instanceId:this.authService.smartAssistBots.map(x=>x._id),
        'isAgentAssist':true
      }
      let channelList;
-     if (this.voiceListSub) this.voiceListSub.unsubscribe();
-     this.voiceListSub = this.service.invoke('get.voiceList', params, 's').subscribe(voiceList => {
+     this.subs.sink = this.service.invoke('get.voiceList', params, 's').subscribe(voiceList => {
        channelList = voiceList;
        if(channelList.sipTransfers.length > 0){
          this.showVoicePreferences = true;
@@ -170,5 +168,6 @@ export class AdvSettingsComponent implements OnInit, OnDestroy {
     this.destroyed$.next();
     this.destroyed$.complete();
     this.subs.unsubscribe();
+    if (this.voiceListSub) this.voiceListSub.unsubscribe();
   }
 }
