@@ -150,6 +150,19 @@ export class AssistComponent implements OnInit {
       if (this.commonService.isUpdateFeedBackDetailsFlag) {
         this.commonService.UpdateFeedBackDetails(data, 'dynamicBlock')
       }
+    });
+
+    let subscription12 = this.handleSubjectService.overridebtnClickEventSubject.subscribe((response : any) => {
+      if(response && response.data){
+        let actualId = response.data.id.split('-');
+        actualId.shift();
+        let id = actualId.join('-');
+        if(response.override){
+          this.clickEvents(IdReferenceConst.OVERRIDE_BTN, id, this.dialogPositionId);
+        }else if(response.cancelOverride){
+          this.clickEvents(IdReferenceConst.CANCEL_OVERRIDE_BTN, id, this.dialogPositionId);
+        }
+      }
     })
 
     this.subscriptionsList.push(subscription1);
@@ -163,6 +176,7 @@ export class AssistComponent implements OnInit {
     this.subscriptionsList.push(subscription9);
     this.subscriptionsList.push(subscription10);
     this.subscriptionsList.push(subscription11);
+    this.subscriptionsList.push(subscription12);
   }
 
   //dialogue click and agent response handling code.
@@ -217,8 +231,6 @@ export class AssistComponent implements OnInit {
     setTimeout(() => {
       this.clickEvents(IdReferenceConst.ASSISTTERMINATE, uuids);
       this.clickEvents(IdReferenceConst.DROPDOWN_HEADER, uuids);
-      this.clickEvents(IdReferenceConst.OVERRIDE_BTN, uuids, this.dialogPositionId);
-      this.clickEvents(IdReferenceConst.CANCEL_OVERRIDE_BTN, uuids, this.dialogPositionId);
       this.scrollToBottom();
     }, 1000);
   }
@@ -913,7 +925,8 @@ export class AssistComponent implements OnInit {
   }
 
   handleOverridBtnClick(uuid, dialogId) {
-    document.getElementById(IdReferenceConst.OVERRIDE_BTN + '-' + uuid).addEventListener('click', (event) => {
+      console.log("over ride click event");
+      
       let overRideObj: any = {
         "agentId": "",
         "botId": this.connectionDetails.botId,
@@ -948,11 +961,9 @@ export class AssistComponent implements OnInit {
       this.commonService.OverRideMode = true;
       this.designAlterService.addWhiteBackgroundClassToNewMessage(this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd, IdReferenceConst.DYNAMICBLOCK);
       this.scrollToBottom();
-    });
   }
 
   handleCancelOverrideBtnClick(uuid, dialogId) {
-    document.getElementById(IdReferenceConst.CANCEL_OVERRIDE_BTN + '-' + uuid).addEventListener('click', (event) => {
       let overRideObj: any = {
         "agentId": "",
         "botId": this.connectionDetails.botId,
@@ -969,7 +980,6 @@ export class AssistComponent implements OnInit {
       this.commonService.OverRideMode = false;
       this.designAlterService.addWhiteBackgroundClassToNewMessage(this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd, IdReferenceConst.DYNAMICBLOCK);
       this.scrollToBottom();
-    })
   }
 
   handleRunButtonClick(uuid, data) {    

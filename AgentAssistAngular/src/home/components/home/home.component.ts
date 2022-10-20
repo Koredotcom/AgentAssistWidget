@@ -647,6 +647,22 @@ export class HomeComponent implements OnInit {
           }
         }
       }
+      if(target.id.split('-').includes('overRideBtn')){
+        let overrideObject : any = {
+          override : true,
+          cancelOverride : false,
+          data : target
+        }
+        this.handleSubjectService.setOverridebtnClickEvent(overrideObject);
+      }
+      if(target.id.split('-').includes('cancelOverRideBtn')){
+        let overrideObject : any = {
+          override : false,
+          cancelOverride : true,
+          data : target
+        }
+        this.handleSubjectService.setOverridebtnClickEvent(overrideObject);
+      }
     });
     document.addEventListener("keyup", (evt: any) => {
       let target = evt.target;
