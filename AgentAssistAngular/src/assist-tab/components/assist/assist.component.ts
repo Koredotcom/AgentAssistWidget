@@ -669,7 +669,7 @@ export class AssistComponent implements OnInit {
         this.assisttabService.updateSeeMoreButtonForAssist(id, type);
         index++;
         if(item.answer){
-          this.handleSeeMoreLessClickEvents(id, type);
+          this.clickEvents(IdReferenceConst.SEEMORE_BTN, id, '', type)
         }
       }
     }
@@ -863,6 +863,8 @@ export class AssistComponent implements OnInit {
         this.handleSaveBtnClick(uuid);
       } else if (eventName == IdReferenceConst.AGENT_RUN_BTN){
         this.handleMybotRunClick(uuid, data);
+      } else if (eventName == IdReferenceConst.SEEMORE_BTN){
+        this.handleSeeMoreLessClickEvents(uuid, data);
       }
     }
   }
@@ -1084,7 +1086,7 @@ export class AssistComponent implements OnInit {
                             let htmls = `
                         <div class="agent-utt-info" id="agentUttInfo-${uniqueID}">
                             <div class="user-img">
-                                <img src="./images/userIcon.svg">
+                                <img src="${this.imageFilePath}${this.imageFileNames['USERICON']}">
                             </div>
                             <div class="text-user" >${res.agentAssistDetails.userInput}</div>
                         </div>
@@ -1098,7 +1100,7 @@ export class AssistComponent implements OnInit {
 
                                 let dialogAreaHtml = `<div class="task-type" id="dialoguesArea">
               <div class="img-block-info">
-                  <img src="./images/dialogtask.svg">
+                  <img src="${this.imageFilePath}${this.imageFileNames['DIALOG_TASK']}">
               </div>
               <div class="content-dialog-task-type" id="dialogSuggestions-${uniqueID}">
                 <div class="type-with-img-title">Dialog task (${res.agentAssistDetails?.suggestions ? res.agentAssistDetails?.suggestions.dialogs?.length : res.agentAssistDetails?.ambiguityList.dialogs?.length})</div>
@@ -1109,7 +1111,7 @@ export class AssistComponent implements OnInit {
                             if (res.agentAssistDetails?.ambiguityList?.faqs?.length > 0 || res.agentAssistDetails?.suggestions?.faqs?.length > 0) {
                                 let dialogAreaHtml = `<div class="task-type" id="faqssArea">
             <div class="img-block-info">
-                <img src="./images/kg.svg">
+                <img src="${this.imageFilePath}${this.imageFileNames['FAQ_SUGGESTION']}">
             </div>
             <div class="content-dialog-task-type" id="faqsSuggestions-${uniqueID}">
                 <div class="type-with-img-title">FAQ (${res.agentAssistDetails?.suggestions ? res.agentAssistDetails?.suggestions.faqs.length : res.agentAssistDetails.ambiguityList.faqs.length})</div>
@@ -1215,7 +1217,7 @@ export class AssistComponent implements OnInit {
                          let htmls = `
                      <div class="agent-utt-info" id="agentUttInfo-${uniqueID}">
                          <div class="user-img">
-                             <img src="./images/userIcon.svg">
+                             <img src="${this.imageFilePath}${this.imageFileNames['USERICON']}">
                          </div>
                          <div class="text-user" >${res.agentAssistDetails.userInput}</div>
                      </div>
@@ -1227,7 +1229,7 @@ export class AssistComponent implements OnInit {
                     if (res.agentAssistDetails?.ambiguityList?.faqs?.length > 0 || res.agentAssistDetails?.suggestions?.faqs?.length > 0) {
                         let dialogAreaHtml = `<div class="task-type" id="faqssArea">
     <div class="img-block-info">
-        <img src="./images/kg.svg">
+        <img src="${this.imageFilePath}${this.imageFileNames['FAQ_SUGGESTION']}">
     </div>
     <div class="content-dialog-task-type" id="faqsSuggestions-${uniqueID}">
         <div class="type-with-img-title">FAQ (${res.agentAssistDetails?.suggestions ? res.agentAssistDetails?.suggestions.faqs.length : res.agentAssistDetails.ambiguityList.faqs.length})</div>
@@ -1295,7 +1297,7 @@ export class AssistComponent implements OnInit {
                     if (res.agentAssistDetails.userInput) {
                         userInputHtml = `<div class="agent-utt-info" id="agentUttInfo-${res._id}">
                             <div class="user-img">
-                                <img src="./images/userIcon.svg">
+                                <img src="${this.imageFilePath}${this.imageFileNames['USERICON']}">
                             </div>
                             <div class="text-user" >${res.agentAssistDetails.userInput}</div>
                         </div>`;
@@ -1371,7 +1373,7 @@ export class AssistComponent implements OnInit {
                         let userQueryHtml = `
                             <div class="steps-run-data">
                                 <div class="icon_block_img">
-                                    <img src="./images/userIcon.svg">
+                                    <img src="${this.imageFilePath}${this.imageFileNames['USERICON']}">
                                 </div>
                                 <div class="run-info-content" id="userInput-${res._id}">
                                     <div class="title">Customer Said - </div>
@@ -1392,7 +1394,7 @@ export class AssistComponent implements OnInit {
                                             <span style="color:red">Value unidentified</span>
                                         </div>
                                         <div>
-                                            <img src="./images/warning.svg" style="padding-right: 8px;">
+                                            <img src="${this.imageFilePath}${this.imageFileNames['WARNING']}" style="padding-right: 8px;">
                                             <span style="font-size: 12px; line-height: 18px; color: #202124;">Incorrect input format<span>
                                         </div>`
                                 entityHtml.append(entityHtmls);

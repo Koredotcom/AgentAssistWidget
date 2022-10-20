@@ -93,7 +93,8 @@ export const IdReferenceConst = {
     ENTITY_VALUE : 'entityValue',
     OTHER_BUBBLE : 'otherBubble',
     CURRENTUSER_BUBBLE : 'currentUser',
-    AGENT_RUN_BTN : 'runAgtBtn'
+    AGENT_RUN_BTN : 'runAgtBtn',
+    SEEMORE_BTN : 'seeMore'
 }
 
 

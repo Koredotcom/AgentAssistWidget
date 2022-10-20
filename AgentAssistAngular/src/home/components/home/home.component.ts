@@ -341,15 +341,17 @@ export class HomeComponent implements OnInit {
 
 
   // scroll realted code.
-  scrollToBottom($event) {
-    if (this.psBottom) {
-      $(window).trigger('resize');
-      this.psBottom.directiveRef.scrollToTop(this.homescroll.nativeElement.scrollHeight);
-      $(".scroll-bottom-btn span").text('Scroll to bottom');
-      $(".scroll-bottom-btn").removeClass("new-messages");
-      setTimeout(() => {
-        this.psBottom.directiveRef.update();
-      }, this.scrollbottomwaitingTime);
+  scrollToBottom(flag) {
+    if(flag){
+      if (this.psBottom) {
+        $(window).trigger('resize');
+        this.psBottom.directiveRef.scrollToTop(this.homescroll.nativeElement.scrollHeight);
+        $(".scroll-bottom-btn span").text('Scroll to bottom');
+        $(".scroll-bottom-btn").removeClass("new-messages");
+        setTimeout(() => {
+          this.psBottom.directiveRef.update();
+        }, this.scrollbottomwaitingTime);
+      }
     }
   }
 
