@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as $ from 'jquery';
-import { IdReferenceConst } from '../constants/proj.cnts';
+import { IdReferenceConst, ProjConstants } from '../constants/proj.cnts';
 
 @Injectable({
   providedIn: 'root'
@@ -127,8 +127,17 @@ export class DesignAlterService {
     let dynamicBlockElements = document.getElementById(id);
     if (id.includes('smallTalk') && dynamicBlockElements) {
       lastElement = dynamicBlockElements;
-    } else if (dynamicBlockElements) {
-      let numOfdynamicBlockElements = dynamicBlockElements.children;
+    } else if (id.includes(IdReferenceConst.SCRIPTCONTAINER) && dynamicBlockElements){
+      let numOfdynamicBlockElements = dynamicBlockElements.getElementsByClassName('data-contnet');
+      let childElements = numOfdynamicBlockElements[0].children;
+      if (childElements) {
+        for (let i = 0; i < childElements.length; i++) {
+          lastElement = childElements[i];
+        }
+      }
+
+    }else if (dynamicBlockElements) {
+      let numOfdynamicBlockElements = dynamicBlockElements.children;      
       if (numOfdynamicBlockElements) {
         for (let i = 0; i < numOfdynamicBlockElements.length; i++) {
           lastElement = numOfdynamicBlockElements[i];

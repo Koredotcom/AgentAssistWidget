@@ -57,7 +57,12 @@ html, body{
 }
 
 .hide{
+    // width: 0px;
     display: none !important;
+}
+
+.hidewidth {
+    width: 0px;
 }
 
 .text-truncate{

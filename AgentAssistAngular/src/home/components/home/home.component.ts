@@ -62,9 +62,9 @@ export class HomeComponent implements OnInit {
 
   subscribeEvents() {
     let subscription1 = this.handleSubjectService.activeTabSubject.subscribe(tab => {
+      this.commonService.activeTab = tab;
       this.activeTab = tab;
       this.tabActiveActivities();
-      console.log(this.activeTab, "active tab**********", this.commonService.isCallConversation);
       setTimeout(() => {
         if (this.activeTab != this.projConstants.LIBRARY) {
           this.scrollToBottom(true);
@@ -84,7 +84,6 @@ export class HomeComponent implements OnInit {
     });
 
     let subscription3 = this.websocketService.responseResolutionCommentsResponse$.subscribe((data: any) => {
-      console.log((data));
       if (data) {
         this.handleResponseResoultionComments(data);
       }
@@ -127,8 +126,6 @@ export class HomeComponent implements OnInit {
 
   // update state based on local storage.
   updateUIState(_convId, _isCallConv) {
-    console.log(_isCallConv, "is call conversation");
-
     $('.empty-data-no-agents').addClass('hide');
     let appState = this.localStorageService.getLocalStorageState();
     let activeTab: any;
@@ -148,8 +145,6 @@ export class HomeComponent implements OnInit {
     } else if (appState[_convId] && appState[_convId][storageConst.CURRENT_TAB]) {
       activeTab = appState[_convId][storageConst.CURRENT_TAB];
     }
-    console.log(activeTab, "active tab inside update ui state");
-
     this.handleSubjectService.setActiveTab(activeTab);
     // document.getElementById("loader").style.display = "none";
     this.hightLightFaqFromStoredList(_convId, this.projConstants.ASSIST);
@@ -359,7 +354,7 @@ export class HomeComponent implements OnInit {
   }
 
   onScrollEvent(event) {
-    if (this.activeTab == this.projConstants.ASSIST || this.activeTab == this.projConstants.MYBOT) {
+    if (this.activeTab == this.projConstants.ASSIST || this.activeTab == this.projConstants.MYBOT || this.activeTab == this.projConstants.TRANSCRIPT) {
       if (event && event?.type) {
         if (event.type == this.projConstants.PS_Y_REACH_END) {
           this.commonService.scrollContent[this.activeTab].scrollAtEnd = true;
@@ -369,11 +364,11 @@ export class HomeComponent implements OnInit {
           } else {
             $(".scroll-bottom-show-btn").removeClass('hiddenEle');
           }
-          let dynamicBlockId = (this.activeTab == this.projConstants.ASSIST) ? IdReferenceConst.DYNAMICBLOCK : IdReferenceConst.MYBOTAUTOMATIONBLOCK;
+          let dynamicBlockId = this.commonService.tabNamevsId[this.activeTab];
           this.commonService.scrollContent[this.activeTab].lastElementBeforeNewMessage = this.designAlterService.getLastElement(dynamicBlockId);
           this.designAlterService.addWhiteBackgroundClassToNewMessage(this.commonService.scrollContent[this.activeTab].scrollAtEnd, dynamicBlockId);
         } else if (event.type == this.projConstants.PS_SCROLL_DOWN) {
-          let dynamicBlockId = (this.activeTab == this.projConstants.ASSIST) ? IdReferenceConst.DYNAMICBLOCK : IdReferenceConst.MYBOTAUTOMATIONBLOCK;
+          let dynamicBlockId = this.commonService.tabNamevsId[this.activeTab];
           let lastelement = this.designAlterService.getLastElement(dynamicBlockId);
           this.commonService.updateNewMessageCount(this.commonService.scrollContent[this.activeTab].lastElementBeforeNewMessage, this.activeTab);
           let scrollAtEnd = !this.designAlterService.isScrolledIntoView(lastelement) ? true : false;
@@ -396,7 +391,7 @@ export class HomeComponent implements OnInit {
   }
 
   scrollClickEvents() {
-    let scrollbuttonId = this.activeTab == this.projConstants.ASSIST ? IdReferenceConst.SCROLLBUTTON_ASSIST : IdReferenceConst.SCROLLBUTTON_MYBOT;
+    let scrollbuttonId = this.commonService.tabNamevsScrollId[this.activeTab];
     document.getElementById(scrollbuttonId).removeEventListener('click', () => {
     });
     document.getElementById(scrollbuttonId).addEventListener('click', (event) => {
@@ -405,7 +400,7 @@ export class HomeComponent implements OnInit {
   }
 
   updateScrollButton() {
-    let dynamicBlockId = (this.activeTab == this.projConstants.ASSIST) ? IdReferenceConst.DYNAMICBLOCK : IdReferenceConst.MYBOTAUTOMATIONBLOCK;
+    let dynamicBlockId = this.commonService.tabNamevsId[this.activeTab];
     let lastelement = this.designAlterService.getLastElement(dynamicBlockId);
     let scrollAtEnd = !this.designAlterService.isScrolledIntoView(lastelement) ? true : false;
     this.commonService.scrollContent[this.activeTab].scrollAtEnd = scrollAtEnd;
@@ -456,162 +451,199 @@ export class HomeComponent implements OnInit {
       let targetIds = (target.id).split('-');
       if (['feedbackup', 'feedbackdown'].includes(targetIds[0])) {
 
-          let cloneTargtIds = [...targetIds]
-          let isDivElement = evt.target instanceof HTMLDivElement;
-          console.log("isDivElement", isDivElement, target.parentElement.id);
-          if (targetIds.includes('feedbackup')) {
-              cloneTargtIds.shift()
-              if (isDivElement) {
-                  $(`#${target.id}`).addClass('active-feedback');
-                  target.firstElementChild.dataset.feedbacklike = 'true';
-                  Object.assign(target.dataset, target.firstElementChild.dataset);
-                  this.feedbackLoop(evt);
-              } else {
-                  $(`#${target.parentElement.id}`).addClass('active-feedback');
-                  target.dataset.feedbacklike = 'false';
-                  this.feedbackLoop(evt);
-              }
-
-              $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .ast-thumbdown`).attr('data-comment',``)
-              $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .ast-thumbdown`).attr('data-feedbackdetails','[]');
-              $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .btn-chip-negtive.active-chip`).removeClass('active-chip');
-              $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} #feedBackComment-${cloneTargtIds.join('-')}`).val('');
-              $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .submit-btn`).attr('disabled', 'disabled')
-              $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .submit-btn`).html('Submit');
-              $(`#feedbackdown-${cloneTargtIds.join('-')}`).removeClass('active-feedback')
-              $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .thanks-update`).removeClass('hide');
-              $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .help-improve-arrow`).addClass('hide')
-              $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .explore-more-negtive-data`).addClass('hide');
+        let cloneTargtIds = [...targetIds]
+        let isDivElement = evt.target instanceof HTMLDivElement;
+        if (targetIds.includes('feedbackup')) {
+          cloneTargtIds.shift()
+          if (isDivElement) {
+            $(`#${target.id}`).addClass('active-feedback');
+            target.firstElementChild.dataset.feedbacklike = 'true';
+            Object.assign(target.dataset, target.firstElementChild.dataset);
+            this.feedbackLoop(evt);
+          } else {
+            $(`#${target.parentElement.id}`).addClass('active-feedback');
+            target.dataset.feedbacklike = 'false';
+            this.feedbackLoop(evt);
           }
-          if (targetIds.includes('feedbackdown')) {
-              cloneTargtIds.shift()
-              if (isDivElement) {
-                  $(`#${target.id}`).addClass('active-feedback');
-                  target.firstElementChild.dataset.feedbacklike = 'true';
-                  Object.assign(target.dataset, target.firstElementChild.dataset);
-                  this.feedbackLoop(evt);
-              } else {
-                  $(`#${target.parentElement.id}`).addClass('active-feedback');
-                  target.dataset.feedbacklike = 'false';
-                  this.feedbackLoop(evt);
-              }
-              $(`#feedbackup-${cloneTargtIds.join('-')}`).removeClass('active-feedback')
-              $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .thanks-update`).addClass('hide');
-              $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .help-improve-arrow`).removeClass('hide')
-              $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .explore-more-negtive-data`).removeClass('hide');
-              $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .title-improve`).removeClass('hide');
 
+          $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .ast-thumbdown`).attr('data-comment', ``)
+          $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .ast-thumbdown`).attr('data-feedbackdetails', '[]');
+          $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .btn-chip-negtive.active-chip`).removeClass('active-chip');
+          $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} #feedBackComment-${cloneTargtIds.join('-')}`).val('');
+          $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .submit-btn`).attr('disabled', 'disabled')
+          $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .submit-btn`).html('Submit');
+          $(`#feedbackdown-${cloneTargtIds.join('-')}`).removeClass('active-feedback')
+          $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .thanks-update`).removeClass('hide');
+          $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .help-improve-arrow`).addClass('hide')
+          $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .explore-more-negtive-data`).addClass('hide');
+        }
+        if (targetIds.includes('feedbackdown')) {
+          cloneTargtIds.shift()
+          if (isDivElement) {
+            $(`#${target.id}`).addClass('active-feedback');
+            target.firstElementChild.dataset.feedbacklike = 'true';
+            Object.assign(target.dataset, target.firstElementChild.dataset);
+            this.feedbackLoop(evt);
+          } else {
+            $(`#${target.parentElement.id}`).addClass('active-feedback');
+            target.dataset.feedbacklike = 'false';
+            this.feedbackLoop(evt);
           }
+          $(`#feedbackup-${cloneTargtIds.join('-')}`).removeClass('active-feedback')
+          $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .thanks-update`).addClass('hide');
+          $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .help-improve-arrow`).removeClass('hide')
+          $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .explore-more-negtive-data`).removeClass('hide');
+          $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .title-improve`).removeClass('hide');
+
+        }
       }
       if (target.id.split('-')[0] == 'dropdownArrowFeedBack' || target.id.split('-')[0] == 'dropdownArrowFeedBackIcon') {
-          let targteId = target.id.split('-');
-          targteId.shift();
-          let dataSets = $(`#feedbackdown-${targteId.join('-')} .ast-thumbdown`).data();
-          let activeChipCount = $(`#feedbackHelpfulContainer-${targteId.join('-')} .btn-chip-negtive.active-chip`);
-          if ((activeChipCount.length > 0 || dataSets.comment.length > 0) && target.dataset.feedbackDropDownOpened === 'true') {
-              $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).addClass('hide');
+        let targteId = target.id.split('-');
+        targteId.shift();
+        let dataSets = $(`#feedbackdown-${targteId.join('-')} .ast-thumbdown`).data();
+        let activeChipCount = $(`#feedbackHelpfulContainer-${targteId.join('-')} .btn-chip-negtive.active-chip`);
+        if ((activeChipCount.length > 0 || dataSets.comment.length > 0) && target.dataset.feedbackDropDownOpened === 'true') {
+          $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).addClass('hide');
+        } else {
+          if ((activeChipCount.length == 0 && dataSets.comment.length == 0) && target.dataset.feedbackDropDownOpened === 'true') {
+            $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).removeClass('hide');
           } else {
-              if ((activeChipCount.length == 0 && dataSets.comment.length == 0) && target.dataset.feedbackDropDownOpened === 'true') {
-                  $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).removeClass('hide');
-              } else {
-                  $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).addClass('hide');
-              }
+            $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).addClass('hide');
           }
-          if (target.dataset.feedbackDropDownOpened === 'false') {
-              $(`#dropdownArrowFeedBackIcon-${targteId.join('-')}`).attr('data-feedback-drop-down-opened', 'true');
-              $(`#dropdownArrowFeedBack-${targteId.join('-')}`).attr('data-feedback-drop-down-opened', 'true');
-              $(`#feedbackHelpfulContainer-${targteId.join('-')} .explore-more-negtive-data`).addClass('hide');
-          } else {
-              $(`#dropdownArrowFeedBackIcon-${targteId.join('-')}`).attr('data-feedback-drop-down-opened', 'false');
-              $(`#dropdownArrowFeedBack-${targteId.join('-')}`).attr('data-feedback-drop-down-opened', 'false');
-              $(`#feedbackHelpfulContainer-${targteId.join('-')} .explore-more-negtive-data`).removeClass('hide');
-          }
-          let updateFlag = $(`#feedbackHelpfulContainer-${targteId.join('-')} .submit-btn`).attr('data-updateflag');
-          if (updateFlag == 'true' && target.dataset.feedbackDropDownOpened === 'false') {
-              $(`#feedbackHelpfulContainer-${targteId.join('-')} .submit-btn`).html('Update');
-              $(`#feedbackHelpfulContainer-${targteId.join('-')} .submit-btn`).attr('disabled', 'disabled');
-              this.AgentAssist_feedBack_Update_Request(dataSets);
-              $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).addClass('hide');
-              this.commonService.isUpdateFeedBackDetailsFlag = true;
-          }
+        }
+        if (target.dataset.feedbackDropDownOpened === 'false') {
+          $(`#dropdownArrowFeedBackIcon-${targteId.join('-')}`).attr('data-feedback-drop-down-opened', 'true');
+          $(`#dropdownArrowFeedBack-${targteId.join('-')}`).attr('data-feedback-drop-down-opened', 'true');
+          $(`#feedbackHelpfulContainer-${targteId.join('-')} .explore-more-negtive-data`).addClass('hide');
+        } else {
+          $(`#dropdownArrowFeedBackIcon-${targteId.join('-')}`).attr('data-feedback-drop-down-opened', 'false');
+          $(`#dropdownArrowFeedBack-${targteId.join('-')}`).attr('data-feedback-drop-down-opened', 'false');
+          $(`#feedbackHelpfulContainer-${targteId.join('-')} .explore-more-negtive-data`).removeClass('hide');
+        }
+        let updateFlag = $(`#feedbackHelpfulContainer-${targteId.join('-')} .submit-btn`).attr('data-updateflag');
+        if (updateFlag == 'true' && target.dataset.feedbackDropDownOpened === 'false') {
+          $(`#feedbackHelpfulContainer-${targteId.join('-')} .submit-btn`).html('Update');
+          $(`#feedbackHelpfulContainer-${targteId.join('-')} .submit-btn`).attr('disabled', 'disabled');
+          this.AgentAssist_feedBack_Update_Request(dataSets);
+          $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).addClass('hide');
+          this.commonService.isUpdateFeedBackDetailsFlag = true;
+        }
       }
       if (target.className.includes('btn-chip-negtive')) {
-          let id = target.parentElement.id.split('-');
-          id.shift();
-          let aaa = $(`#${target.parentElement.id} .btn-chip-negtive.active-chip`);
-          let arrayOfChips = [];
-          aaa.each((i,ele)=>{
-             arrayOfChips.push($(ele).html())
-          });
-          let dataSets = $(`#feedbackdown-${id.join('-')} .ast-thumbdown`).data();
-          dataSets.feedbackdetails = arrayOfChips;
-          
-          if (target.dataset.chipClick == 'false') {
-              $(target).addClass('active-chip');
-              target.dataset.chipClick = 'true';
-              let index;
-              if(typeof dataSets.feedbackdetails == 'string'){
-                dataSets.feedbackdetails = dataSets.feedbackdetails?.split(',');
-                index = dataSets.feedbackdetails.findIndex((ele)=>ele == $(target).html());
-              }
-              index = dataSets.feedbackdetails.findIndex((ele)=>ele == $(target).html());
-              if(index == -1){
-                dataSets.feedbackdetails.push($(target).html());
-              }
-          } else {
-              $(target).removeClass('active-chip');
-              target.dataset.chipClick = 'false';
-              dataSets.feedbackdetails?.forEach((ele, i) => {
-                  if (ele == $(target).html()) {
-                      delete dataSets.feedbackdetails[i]
-                  }
-              })
+        let id = target.parentElement.id.split('-');
+        id.shift();
+        let aaa = $(`#${target.parentElement.id} .btn-chip-negtive.active-chip`);
+        let arrayOfChips = [];
+        aaa.each((i, ele) => {
+          arrayOfChips.push($(ele).html())
+        });
+        let dataSets = $(`#feedbackdown-${id.join('-')} .ast-thumbdown`).data();
+        dataSets.feedbackdetails = arrayOfChips;
+
+        if (target.dataset.chipClick == 'false') {
+          $(target).addClass('active-chip');
+          target.dataset.chipClick = 'true';
+          let index;
+          if (typeof dataSets.feedbackdetails == 'string') {
+            dataSets.feedbackdetails = dataSets.feedbackdetails?.split(',');
+            index = dataSets.feedbackdetails.findIndex((ele) => ele == $(target).html());
           }
-          let activeChipCount = $(`#${target.parentElement.id} .btn-chip-negtive.active-chip`);
-          if (activeChipCount.length > 0) {
-              $(`#feedbackHelpfulContainer-${id.join('-')} .title-improve`).addClass('hide');
-              $(`#feedbackHelpfulContainer-${id.join('-')} .submit-btn`).removeAttr('disabled');
-          } else {
-              if (dataSets.comment.length == 0) {
-                  $(`#feedbackHelpfulContainer-${id.join('-')} .title-improve`).removeClass('hide');
-              }
+          index = dataSets.feedbackdetails.findIndex((ele) => ele == $(target).html());
+          if (index == -1) {
+            dataSets.feedbackdetails.push($(target).html());
           }
-          $(`#feedbackHelpfulContainer-${id.join('-')} .ast-thumbdown`).attr('data-feedbackdetails', dataSets.feedbackdetails)
+        } else {
+          $(target).removeClass('active-chip');
+          target.dataset.chipClick = 'false';
+          dataSets.feedbackdetails?.forEach((ele, i) => {
+            if (ele == $(target).html()) {
+              delete dataSets.feedbackdetails[i]
+            }
+          })
+        }
+        let activeChipCount = $(`#${target.parentElement.id} .btn-chip-negtive.active-chip`);
+        if (activeChipCount.length > 0) {
+          $(`#feedbackHelpfulContainer-${id.join('-')} .title-improve`).addClass('hide');
+          $(`#feedbackHelpfulContainer-${id.join('-')} .submit-btn`).removeAttr('disabled');
+        } else {
+          if (dataSets.comment.length == 0) {
+            $(`#feedbackHelpfulContainer-${id.join('-')} .title-improve`).removeClass('hide');
+          }
+        }
+        $(`#feedbackHelpfulContainer-${id.join('-')} .ast-thumbdown`).attr('data-feedbackdetails', dataSets.feedbackdetails)
       }
       if (target.id == 'feedbackSubmit') {
-          let id = target.parentElement.firstElementChild.id.split('-');
-          id.shift();
-          let feedbackComment = $(`#feedbackHelpfulContainer-${id.join('-')} #feedBackComment-${id.join('-')}`).val();
-          let aaa = $(`#feedbackHelpfulContainer-${id.join('-')} .btn-chip-negtive.active-chip`);
-          let arrayOfChips = [];
-          aaa.each((i,ele)=>{
-             arrayOfChips.push($(ele).html())
-          });
-          
-          let dataSets = $(`#feedbackdown-${id.join('-')} .ast-thumbdown`).data();
-          dataSets.comment = feedbackComment;
-          dataSets.feedbackdetails = arrayOfChips;
-          if(typeof dataSets.feedbackdetails == 'string'&& dataSets.feedbackdetails.indexOf(',') > -1 ) {
-              dataSets.feedbackdetails = dataSets.feedbackdetails.split(',');
-          }
-          this.feedbackLoop(dataSets, true);
-          $(`#feedbackHelpfulContainer-${id.join('-')} .thanks-update`).css('right','34px').removeClass('hide');
-          setTimeout(()=>{
-              $(`#feedbackHelpfulContainer-${id.join('-')} .thanks-update`).css('right','25px').addClass('hide');
-          },3000)
-          $(`#feedbackHelpfulContainer-${id.join('-')} .explore-more-negtive-data`).addClass('hide');
-          $(`#feedbackHelpfulContainer-${id.join('-')} #dropdownArrowFeedBackIcon-${id.join('-')}`).attr('data-feedback-drop-down-opened', 'true');
-          $(`#feedbackHelpfulContainer-${id.join('-')} #dropdownArrowFeedBack-${id.join('-')}`).attr('data-feedback-drop-down-opened', 'true');
-          target.dataset.updateflag = 'true';
-          $(`#feedbackHelpfulContainer-${id.join('-')}.submit-btn`).attr('disabled', 'disabled');
+        let id = target.parentElement.firstElementChild.id.split('-');
+        id.shift();
+        let feedbackComment = $(`#feedbackHelpfulContainer-${id.join('-')} #feedBackComment-${id.join('-')}`).val();
+        let aaa = $(`#feedbackHelpfulContainer-${id.join('-')} .btn-chip-negtive.active-chip`);
+        let arrayOfChips = [];
+        aaa.each((i, ele) => {
+          arrayOfChips.push($(ele).html())
+        });
 
-          $(`#feedbackHelpfulContainer-${id.join('-')} .ast-thumbdown`).attr('data-comment',``)
-          $(`#feedbackHelpfulContainer-${id.join('-')} .ast-thumbdown`).attr('data-feedbackdetails','[]')
-          dataSets.comment = "";
-          dataSets.feedbackdetails = [];
-          $(`#feedbackHelpfulContainer-${id.join('-')} .btn-chip-negtive.active-chip`).removeClass('active-chip');
-          $(`#feedbackHelpfulContainer-${id.join('-')} #feedBackComment-${id.join('-')}`).val('');
-          this.commonService.isUpdateFeedBackDetailsFlag = false;
+        let dataSets = $(`#feedbackdown-${id.join('-')} .ast-thumbdown`).data();
+        dataSets.comment = feedbackComment;
+        dataSets.feedbackdetails = arrayOfChips;
+        if (typeof dataSets.feedbackdetails == 'string' && dataSets.feedbackdetails.indexOf(',') > -1) {
+          dataSets.feedbackdetails = dataSets.feedbackdetails.split(',');
+        }
+        this.feedbackLoop(dataSets, true);
+        $(`#feedbackHelpfulContainer-${id.join('-')} .thanks-update`).css('right', '34px').removeClass('hide');
+        setTimeout(() => {
+          $(`#feedbackHelpfulContainer-${id.join('-')} .thanks-update`).css('right', '25px').addClass('hide');
+        }, 3000)
+        $(`#feedbackHelpfulContainer-${id.join('-')} .explore-more-negtive-data`).addClass('hide');
+        $(`#feedbackHelpfulContainer-${id.join('-')} #dropdownArrowFeedBackIcon-${id.join('-')}`).attr('data-feedback-drop-down-opened', 'true');
+        $(`#feedbackHelpfulContainer-${id.join('-')} #dropdownArrowFeedBack-${id.join('-')}`).attr('data-feedback-drop-down-opened', 'true');
+        target.dataset.updateflag = 'true';
+        $(`#feedbackHelpfulContainer-${id.join('-')}.submit-btn`).attr('disabled', 'disabled');
+
+        $(`#feedbackHelpfulContainer-${id.join('-')} .ast-thumbdown`).attr('data-comment', ``)
+        $(`#feedbackHelpfulContainer-${id.join('-')} .ast-thumbdown`).attr('data-feedbackdetails', '[]')
+        dataSets.comment = "";
+        dataSets.feedbackdetails = [];
+        $(`#feedbackHelpfulContainer-${id.join('-')} .btn-chip-negtive.active-chip`).removeClass('active-chip');
+        $(`#feedbackHelpfulContainer-${id.join('-')} #feedBackComment-${id.join('-')}`).val('');
+        this.commonService.isUpdateFeedBackDetailsFlag = false;
+      }
+      if (target.id.split("-")[0] == 'elipseIcon' || target.id.split("-")[0] == 'overflowIcon') {
+        if (this.activeTab == this.projConstants.ASSIST) {
+
+          $('.elipse-dropdown-info').each((i, ele) => {
+            $(ele).attr('class').includes('active-elipse') ? $(ele).removeClass('active-elipse') : '';
+          });
+
+          if ($('.dropdown-content-elipse').length !== 0) {
+            $('.dropdown-content-elipse').addClass('hide');
+          }
+          let elementClicked;
+          if (target.id.split("-")[0] == 'elipseIcon') {
+            evt.stopPropagation();
+            if (target.nextElementSibling) {
+              elementClicked = target.parentElement;
+              if ((target.nextElementSibling)?.classList.contains('hide')) {
+                (target.nextElementSibling)?.classList.remove('hide');
+                elementClicked.classList.add('active-elipse');
+              } else {
+                (target.nextElementSibling)?.classList.add('hide');
+                elementClicked.classList.remove('active-elipse');
+              }
+            }
+          }
+          else if (target.id.split("-")[0] == 'overflowIcon') {
+            if ((target.parentElement.nextElementSibling)?.classList) {
+              elementClicked = target.parentElement.parentElement;
+              if ((target.parentElement.nextElementSibling)?.classList.contains('hide')) {
+                (target.parentElement.nextElementSibling)?.classList.remove('hide');
+                elementClicked.classList.add('active-elipse');
+              } else {
+                (target.parentElement.nextElementSibling)?.classList.add('hide');
+                elementClicked.classList.remove('active-elipse');
+              }
+            }
+          }
+        }
       }
     });
     document.addEventListener("keyup", (evt: any) => {
@@ -620,16 +652,16 @@ export class HomeComponent implements OnInit {
       targetids.shift();
       let aaa = $(`#feedbackHelpfulContainer-${targetids.join('-')} .btn-chip-negtive.active-chip`);
       let arrayOfChips = [];
-      aaa.each((i,ele)=>{
-          arrayOfChips.push($(ele).html())
+      aaa.each((i, ele) => {
+        arrayOfChips.push($(ele).html())
       });
       let dataSets = $(`#feedbackdown-${targetids.join('-')} .ast-thumbdown`).data();
       dataSets.feedbackdetails = arrayOfChips;
       dataSets.comment = target.value;
-      
+
       if (target.value.length > 0) {
-          $(`#feedbackHelpfulContainer-${targetids.join('-')} .submit-btn`).removeAttr('disabled');
-          $(`#feedbackHelpfulContainer-${targetids.join('-')} .title-improve`).addClass('hide');
+        $(`#feedbackHelpfulContainer-${targetids.join('-')} .submit-btn`).removeAttr('disabled');
+        $(`#feedbackHelpfulContainer-${targetids.join('-')} .title-improve`).addClass('hide');
       }
       $(`#feedbackHelpfulContainer-${targetids.join('-')} .input-block-optional .input-text`).attr('value', target.value);
       $(`#feedbackdown-${targetids.join('-')} .ast-thumbdown`).attr('data-comment', target.value);
@@ -638,77 +670,77 @@ export class HomeComponent implements OnInit {
 
   feedbackLoop(evt, isSubmit = false) {
     if (isSubmit) {
-        this.AgentAssist_feedback_click(evt, true);
+      this.AgentAssist_feedback_click(evt, true);
     } else {
-        this.AgentAssist_feedback_click(evt);
+      this.AgentAssist_feedback_click(evt);
     }
 
-}
+  }
 
-AgentAssist_feedback_click(e, isSubmit = false) {
-  let convId, botId, feedback, userInput, dialogId, comment, feedbackdetails, dialogName, taskId, feedDetailsArray;
+  AgentAssist_feedback_click(e, isSubmit = false) {
+    let convId, botId, feedback, userInput, dialogId, comment, feedbackdetails, dialogName, taskId, feedDetailsArray;
     if (isSubmit) {
-        convId = e.convId;
-        botId = e.botId;
-        feedback = e.feedback;
-        userInput = e.userInput;
-        dialogName = e.dialogName;
-        dialogId = e.dialogid;
-        comment = e.comment;
-        feedbackdetails = e.feedbackdetails;
-        taskId = e.taskid
+      convId = e.convId;
+      botId = e.botId;
+      feedback = e.feedback;
+      userInput = e.userInput;
+      dialogName = e.dialogName;
+      dialogId = e.dialogid;
+      comment = e.comment;
+      feedbackdetails = e.feedbackdetails;
+      taskId = e.taskid
     } else {
-        console.log(e.target);
-        convId = e.target.dataset.convId;
-        botId = e.target.dataset.botId;
-        feedback = e.target.dataset.feedback;
-        userInput = e.target.dataset.userInput;
-        dialogName = e.target.dataset.dialogName;
-        dialogId = e.target.dataset.dialogid;
-        comment = e.target.dataset.comment;
-        feedbackdetails = e.target.dataset.feedbackdetails;
-        taskId = e.target.dataset.taskid
+      convId = e.target.dataset.convId;
+      botId = e.target.dataset.botId;
+      feedback = e.target.dataset.feedback;
+      userInput = e.target.dataset.userInput;
+      dialogName = e.target.dataset.dialogName;
+      dialogId = e.target.dataset.dialogid;
+      comment = e.target.dataset.comment;
+      feedbackdetails = e.target.dataset.feedbackdetails;
+      taskId = e.target.dataset.taskid
     }
 
     feedDetailsArray = typeof feedbackdetails == 'string' ? [] : feedbackdetails?.filter(ele => ele !== null);
     this.agent_feedback_usage({
-        comment: comment, feedbackDetails: feedDetailsArray, userInput: userInput, dialogName: dialogName, conversationId: convId, botId: botId, feedback: feedback, eventName: 'agent_usage_feedback', dialogId: dialogId,
-        taskId: taskId
+      comment: comment, feedbackDetails: feedDetailsArray, userInput: userInput, dialogName: dialogName, conversationId: convId, botId: botId, feedback: feedback, eventName: 'agent_usage_feedback', dialogId: dialogId,
+      taskId: taskId
     });
-}
 
-agent_feedback_usage(data){
-  var agent_assist_request = {
-    "feedback": data.feedback,
-    "botId": data.botId,
-    "conversationId": data.conversationId,
-    userInput: data.userInput,
-    taskName: data.dialogName,
-    "event": data.eventName,
-    positionId: data.dialogId,
-    taskId: data.taskId,
-    comment: data.comment,
-    feedbackDetails: data.feedbackDetails,
-    'experience': this.commonService.configObj.isCall== 'false' ?'chat':'voice',
-    "interactionType":  this.activeTab == 'Assist'?'assist':'mybot'
   }
-  this.websocketService.emitEvents(EVENTS.agent_usage_feedback, agent_assist_request);
-}
 
-AgentAssist_feedBack_Update_Request(e) {
-  let agent_assist_feedback_request = {
+  agent_feedback_usage(data) {
+    var agent_assist_request = {
+      "feedback": data.feedback,
+      "botId": data.botId,
+      "conversationId": data.conversationId,
+      userInput: data.userInput,
+      taskName: data.dialogName,
+      "event": data.eventName,
+      positionId: data.dialogId,
+      taskId: data.taskId,
+      comment: data.comment,
+      feedbackDetails: data.feedbackDetails,
+      'experience': this.commonService.configObj.isCall == 'false' ? 'chat' : 'voice',
+      "interactionType": this.activeTab == 'Assist' ? 'assist' : 'mybot'
+    }
+    this.websocketService.emitEvents(EVENTS.agent_usage_feedback, agent_assist_request);
+  }
+
+  AgentAssist_feedBack_Update_Request(e) {
+    let agent_assist_feedback_request = {
       conversationId: e.convId,
       agentId: '',
       botId: e.botId,
       orgId: '',
       taskId: e.taskid,
       positionId: e.dialogid,
-      'experience': this.commonService.configObj.isCall== 'false' ?'chat':'voice',
-      "interactionType": this.activeTab == 'Assist'?'assist':'mybot'
+      'experience': this.commonService.configObj.isCall == 'false' ? 'chat' : 'voice',
+      "interactionType": this.activeTab == 'Assist' ? 'assist' : 'mybot'
+    }
+
+    this.websocketService.emitEvents(EVENTS.agent_feedback_request, agent_assist_feedback_request);
+
   }
-
-  this.websocketService.emitEvents(EVENTS.agent_feedback_request, agent_assist_feedback_request);
-
-}
 
 }

@@ -14,6 +14,7 @@ declare var $: any;
 export class CommonService {
   configObj;
   grantResponseObj;
+  activeTab : string;
   userIntentInput: string;
   scrollContent: any = {};
   entitiestValueArray : any;
@@ -27,11 +28,25 @@ export class CommonService {
   isMyBotAutomationOnGoing: boolean = false;
   noAutomationrunninginMyBot: boolean = true;
   isUpdateFeedBackDetailsFlag = false;
+  clickEventObjectsBeforeTabShift : any = [];
+  tabNamevsId : any = {
+    [ProjConstants.ASSIST] : IdReferenceConst.DYNAMICBLOCK,
+    [ProjConstants.MYBOT] : IdReferenceConst.MYBOTAUTOMATIONBLOCK,
+    [ProjConstants.TRANSCRIPT] : IdReferenceConst.SCRIPTCONTAINER,
+    [ProjConstants.LIBRARY] : IdReferenceConst.LIBRARY_CONATINER,
+  }
+
+  tabNamevsScrollId : any = {
+    [ProjConstants.ASSIST] : IdReferenceConst.SCROLLBUTTON_ASSIST,
+    [ProjConstants.MYBOT] : IdReferenceConst.SCROLLBUTTON_MYBOT,
+    [ProjConstants.TRANSCRIPT] : IdReferenceConst.SCROLLBUTTON_TRANSCRIPT
+  }
 
   constructor(private route: ActivatedRoute, private webSocketService: WebSocketService, private designAlterService: DesignAlterService,
     private localStorageService: LocalStorageService) {
     this.setScrollContent();
   }
+
 
   //initialize and update scroll related variables
   setScrollContent() {

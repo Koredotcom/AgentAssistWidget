@@ -133,13 +133,15 @@ export class AssistComponent implements OnInit {
 
     let subscription9 = this.handleSubjectService.activeTabSubject.subscribe((response) => {
       if (response && response == this.projConstants.ASSIST) {
-        this.assisttabService.updateSeeMoreOnAssistTabActive()
+        setTimeout(() => {
+          this.assisttabService.updateSeeMoreOnAssistTabActive();
+          this.handleClickEventsAfterTabShift();
+        }, 1000);
       }
     });
 
     let subscription10 = this.handleSubjectService.restoreClickEventSubject.subscribe((response : any) =>{
       if (response && response?.activeTab == this.projConstants.ASSIST) {
-        console.log(response, "response from restore");
         this.handleRestoreConfirmClickEvent();
       }
     })
@@ -215,6 +217,8 @@ export class AssistComponent implements OnInit {
     setTimeout(() => {
       this.clickEvents(IdReferenceConst.ASSISTTERMINATE, uuids);
       this.clickEvents(IdReferenceConst.DROPDOWN_HEADER, uuids);
+      this.clickEvents(IdReferenceConst.OVERRIDE_BTN, uuids, this.dialogPositionId);
+      this.clickEvents(IdReferenceConst.CANCEL_OVERRIDE_BTN, uuids, this.dialogPositionId);
       this.scrollToBottom();
     }, 1000);
   }
@@ -429,7 +433,7 @@ export class AssistComponent implements OnInit {
           ele.entities?.length > 0 ? (this.commonService.entitiestValueArray = ele.entities) : '';
 
           let dialogSuggestions = document.getElementById(`dialogSuggestions-${responseId}`);
-          let dialogsHtml = this.assisttabService.dialogTypeInfoTemplate(uuids, ele);
+          let dialogsHtml = this.assisttabService.dialogTypeInfoTemplate(uuids, index, ele);
           dialogSuggestions.innerHTML += dialogsHtml;
           if (ele.entities?.length > 0) {
             this.commonService.previousEntitiesValue = JSON.stringify(ele.entities);
@@ -471,12 +475,13 @@ export class AssistComponent implements OnInit {
                  <div class="cancel-btn" id="cancelBtn-${uuids}">Cancel</div>
              </div>`;
             enentiesDomDiv.append(entiteSaveAndCancelDiv);
-          }
-          this.clickEvents(IdReferenceConst.ASSIST_RUN_BUTTON, uuids, this.dialogPositionId, ele);
-          this.clickEvents(IdReferenceConst.ENTITY_EDIT, uuids);
-          this.clickEvents(IdReferenceConst.EDIT_CANCEL_BTN, uuids);
-          this.clickEvents(IdReferenceConst.RESTORE_BTN, uuids);
-          this.clickEvents(IdReferenceConst.SAVE_BTN, uuids);
+          }  
+          this.clickEvents(IdReferenceConst.ASSIST_RUN_BUTTON, uuids+index, this.dialogPositionId, ele);      
+          this.clickEvents(IdReferenceConst.AGENT_RUN_BTN, uuids+index, this.dialogPositionId, ele);
+          this.clickEvents(IdReferenceConst.ENTITY_EDIT, uuids+index);
+          this.clickEvents(IdReferenceConst.EDIT_CANCEL_BTN, uuids+index);
+          this.clickEvents(IdReferenceConst.RESTORE_BTN, uuids+index);
+          this.clickEvents(IdReferenceConst.SAVE_BTN, uuids+index);
         });
 
         data.suggestions.faqs?.forEach((ele, index) => {
@@ -585,8 +590,6 @@ export class AssistComponent implements OnInit {
       if (data.isPrompt) {
         $(`.override-input-div`).removeClass('hide');
         $(`#dropDownData-${this.dropdownHeaderUuids}`).append(askToUserHtml);
-        this.clickEvents(IdReferenceConst.OVERRIDE_BTN, this.dropdownHeaderUuids, this.dialogPositionId);
-        this.clickEvents(IdReferenceConst.CANCEL_OVERRIDE_BTN, this.dropdownHeaderUuids, this.dialogPositionId);
       } else {
         $(`.override-input-div`).addClass('hide');
         $(runInfoContent).append(tellToUserHtml);
@@ -665,7 +668,9 @@ export class AssistComponent implements OnInit {
         let id = responseId + index;
         this.assisttabService.updateSeeMoreButtonForAssist(id, type);
         index++;
-        this.handleSeeMoreLessClickEvents(id, type);
+        if(item.answer){
+          this.handleSeeMoreLessClickEvents(id, type);
+        }
       }
     }
   }
@@ -772,11 +777,13 @@ export class AssistComponent implements OnInit {
   }
 
   updateNumberOfMessages() {
-    this.commonService.scrollContent[ProjConstants.ASSIST].numberOfNewMessages += 1;
-    $(".scroll-bottom-btn").addClass("new-messages");
-    $(".scroll-bottom-btn span").text(this.commonService.scrollContent[ProjConstants.ASSIST].numberOfNewMessages + ' new');
-    if (this.commonService.scrollContent[ProjConstants.ASSIST].numberOfNewMessages == 1) {
-      this.removeWhiteBackgroundToSeenMessages();
+    if(this.commonService.activeTab == this.projConstants.ASSIST){
+      this.commonService.scrollContent[ProjConstants.ASSIST].numberOfNewMessages += 1;
+      $(".scroll-bottom-btn").addClass("new-messages");
+      $(".scroll-bottom-btn span").text(this.commonService.scrollContent[ProjConstants.ASSIST].numberOfNewMessages + ' new');
+      if (this.commonService.scrollContent[ProjConstants.ASSIST].numberOfNewMessages == 1) {
+        this.removeWhiteBackgroundToSeenMessages();
+      }
     }
   }
 
@@ -802,7 +809,9 @@ export class AssistComponent implements OnInit {
   }
 
   scrollToBottom() {
-    this.scrollToBottomEvent.emit(true);
+    if(this.commonService.activeTab == this.projConstants.ASSIST){
+      this.scrollToBottomEvent.emit(true);
+    }
   }
 
   keyUpEvents(eventName, id){
@@ -815,7 +824,6 @@ export class AssistComponent implements OnInit {
     document.getElementById(IdReferenceConst.ENTITY_VALUE + '-' + id).addEventListener('keyup', (event : any) =>{
       
       let targetid = event.target.id.split('-');
-      console.log("key up inside handle", targetid);
       event.target.dataset.eachvalue = $(`#${event.target.id}`).val();
       this.commonService.entitiestValueArray[targetid[1]]['editedValue'] = $(`#${event.target.id}`).val();
       $('.ast-check-right.disabled-color').removeClass('disabled-color');
@@ -826,24 +834,73 @@ export class AssistComponent implements OnInit {
 
   //click events related code.
   clickEvents(eventName, uuid?, dialogId?, data?) {
-    if (eventName == IdReferenceConst.ASSISTTERMINATE) {
-      this.terminateButtonClick(uuid)
-    } else if (eventName == IdReferenceConst.OVERRIDE_BTN) {
-      this.handleOverridBtnClick(uuid, dialogId);
-    } else if (eventName == IdReferenceConst.CANCEL_OVERRIDE_BTN) {
-      this.handleCancelOverrideBtnClick(uuid, dialogId);
-    } else if (eventName == IdReferenceConst.DROPDOWN_HEADER) {
-      this.designAlterService.handleDropdownToggle(uuid);
-    } else if (eventName == IdReferenceConst.ASSIST_RUN_BUTTON) {
-      this.handleRunButtonClick(uuid, data);
-    } else if (eventName == IdReferenceConst.ENTITY_EDIT) {
-      this.handleEntityEditClick(uuid);
-    } else if (eventName == IdReferenceConst.EDIT_CANCEL_BTN) {
-      this.handleEditCancelBtnClick(uuid);
-    } else if (eventName == IdReferenceConst.RESTORE_BTN) {
-      this.handleRestoreBtnClick(uuid);
-    } else if (eventName == IdReferenceConst.SAVE_BTN) {
-      this.handleSaveBtnClick(uuid);
+    if(this.commonService.activeTab != this.projConstants.ASSIST){
+      let clickObject : any = {
+        eventName : eventName,
+        uuid : uuid || null,
+        dialogId : dialogId || null,
+        data : data
+      }
+      this.commonService.clickEventObjectsBeforeTabShift.push(clickObject);
+    }else{
+      if (eventName == IdReferenceConst.ASSISTTERMINATE) {
+        this.terminateButtonClick(uuid)
+      } else if (eventName == IdReferenceConst.OVERRIDE_BTN) {
+        this.handleOverridBtnClick(uuid, dialogId);
+      } else if (eventName == IdReferenceConst.CANCEL_OVERRIDE_BTN) {
+        this.handleCancelOverrideBtnClick(uuid, dialogId);
+      } else if (eventName == IdReferenceConst.DROPDOWN_HEADER) {
+        this.designAlterService.handleDropdownToggle(uuid);
+      } else if (eventName == IdReferenceConst.ASSIST_RUN_BUTTON) {
+        this.handleRunButtonClick(uuid, data);
+      } else if (eventName == IdReferenceConst.ENTITY_EDIT) {
+        this.handleEntityEditClick(uuid);
+      } else if (eventName == IdReferenceConst.EDIT_CANCEL_BTN) {
+        this.handleEditCancelBtnClick(uuid);
+      } else if (eventName == IdReferenceConst.RESTORE_BTN) {
+        this.handleRestoreBtnClick(uuid);
+      } else if (eventName == IdReferenceConst.SAVE_BTN) {
+        this.handleSaveBtnClick(uuid);
+      } else if (eventName == IdReferenceConst.AGENT_RUN_BTN){
+        this.handleMybotRunClick(uuid, data);
+      }
+    }
+  }
+
+  handleClickEventsAfterTabShift(){
+    let clickObjectArray = Object.assign([], this.commonService.clickEventObjectsBeforeTabShift);
+    for(let obj of clickObjectArray){
+      this.clickEvents(obj.eventName, obj.uuid, obj.dialogId, obj.data)
+    }
+    this.commonService.clickEventObjectsBeforeTabShift = [];
+  }
+
+  handleMybotRunClick(uuid, data){
+    let runDialogueObject : any = {
+      agentRunButton : true,
+      name : data.name,
+      intentName : data.name,
+      searchFrom : this.projConstants.ASSIST,
+      positionId : this.randomUUIDPipe.transform(IdReferenceConst.positionId)
+    }
+    document.getElementById(IdReferenceConst.AGENT_RUN_BTN + '-' + uuid).addEventListener('click', (event) => {
+      this.handleSubjectService.setActiveTab(this.projConstants.MYBOT);
+      this.agent_run_click(runDialogueObject, false);
+      this.handleSubjectService.setRunButtonClickEvent(runDialogueObject);
+    })
+  }
+
+  agent_run_click(dialog, isSearchFlag) {
+    if (!this.commonService.isMyBotAutomationOnGoing) {
+      let connectionDetails: any = Object.assign({}, this.connectionDetails);
+      connectionDetails.value = dialog.intentName;
+      connectionDetails.isSearch = isSearchFlag;
+      if (!isSearchFlag) {
+        connectionDetails.intentName = dialog.intentName;
+      }
+      connectionDetails.positionId = dialog.positionId;
+      let agent_assist_agent_request_params = this.commonService.prepareAgentAssistAgentRequestParams(connectionDetails);
+      this.websocketService.emitEvents(EVENTS.agent_assist_agent_request, agent_assist_agent_request_params);
     }
   }
 
@@ -913,8 +970,8 @@ export class AssistComponent implements OnInit {
     })
   }
 
-  handleRunButtonClick(uuid, data) {
-    document.getElementById(IdReferenceConst.ASSIST_RUN_BUTTON + '-' + uuid).addEventListener('click', (event) => {
+  handleRunButtonClick(uuid, data) {    
+    document.getElementById(IdReferenceConst.ASSIST_RUN_BUTTON + '-' + uuid).addEventListener('click', (event) => {      
       let runEventObj: any = {
         agentRunButton: false,
         intentName: data.name
@@ -923,7 +980,7 @@ export class AssistComponent implements OnInit {
     });
   }
 
-  handleSeeMoreLessClickEvents(id, type) {
+  handleSeeMoreLessClickEvents(id, type) {    
     let seeMoreElement = document.getElementById('seeMore-' + id);
     let seeLessElement = document.getElementById('seeLess-' + id);
     let titleElement = document.getElementById("title-" + id);
@@ -934,7 +991,7 @@ export class AssistComponent implements OnInit {
       titleElement = document.getElementById("articletitle-" + id);
       descElement = document.getElementById("articledesc-" + id);
     }
-    seeMoreElement.addEventListener('click', (event: any) => {
+    seeMoreElement.addEventListener('click', (event: any) => {      
       event.target.classList.add('hide');
       seeLessElement.classList.remove('hide');
       titleElement.classList.add('no-text-truncate');
@@ -950,54 +1007,58 @@ export class AssistComponent implements OnInit {
 
   //restore popup related click events
   handleEntityEditClick(id) {
-    document.getElementById(IdReferenceConst.ENTITY_EDIT + '-' + id).addEventListener('click', (event) => {
-      $(`#entitesDiv-${id}`).addClass('edit-entity-rules');
-      $(`#saveAndCancel-${id}`).removeClass('hide');
-    });
+    if(document.getElementById(IdReferenceConst.ENTITY_EDIT + '-' + id)){
+      document.getElementById(IdReferenceConst.ENTITY_EDIT + '-' + id).addEventListener('click', (event) => {
+        $(`#entitesDiv-${id}`).addClass('edit-entity-rules');
+        $(`#saveAndCancel-${id}`).removeClass('hide');
+      });
+    }
   }
 
   handleEditCancelBtnClick(id) {
-    document.getElementById(IdReferenceConst.EDIT_CANCEL_BTN + '-' + id).addEventListener('click', (event) => {
-      $(`#entitesDiv-${id}`).removeClass('edit-entity-rules');
-      $(`#saveAndCancel-${id}`).addClass('hide');
-      this.commonService.entitiestValueArray.forEach((e, i) => {
-        $(`#entityValue-${i}`).val(e.value);
+    if(document.getElementById(IdReferenceConst.EDIT_CANCEL_BTN + '-' + id)){
+      document.getElementById(IdReferenceConst.EDIT_CANCEL_BTN + '-' + id).addEventListener('click', (event) => {
+        $(`#entitesDiv-${id}`).removeClass('edit-entity-rules');
+        $(`#saveAndCancel-${id}`).addClass('hide');
+        this.commonService.entitiestValueArray.forEach((e, i) => {
+          $(`#entityValue-${i}`).val(e.value);
+        });
+        $('.ast-check-right').addClass('disabled-color')
+        $('.save-reset').removeClass('save-reset').addClass('save-reset-disabled');
       });
-      $('.ast-check-right').addClass('disabled-color')
-      $('.save-reset').removeClass('save-reset').addClass('save-reset-disabled');
-    });
+    }
   }
 
   handleRestoreBtnClick(id) {
-    document.getElementById(IdReferenceConst.RESTORE_BTN + '-' + id).addEventListener('click', (event) => {
-      this.handlePopupEvent.emit({ status: true, type: this.projConstants.RESTORE });
-    });
+    if(document.getElementById(IdReferenceConst.RESTORE_BTN + '-' + id)){
+      document.getElementById(IdReferenceConst.RESTORE_BTN + '-' + id).addEventListener('click', (event) => {
+        this.handlePopupEvent.emit({ status: true, type: this.projConstants.RESTORE });
+      });
+    }
   }
 
   handleSaveBtnClick(id) {
-    document.getElementById(IdReferenceConst.SAVE_BTN + '-' + id).addEventListener('click', (event) => {
-      this.commonService.entitiestValueArray.forEach((e, i) => {
-        if (e.editedValue) {
-          e.value = e.editedValue;
-          delete e.editedValue;
-          $(`#enityNameAndValue-${i}`).find('.edited-status').removeClass('hide');
-          $(`#initialentityValue-${i}`).html(e.value);
-        }
+    if(document.getElementById(IdReferenceConst.SAVE_BTN + '-' + id)){
+      document.getElementById(IdReferenceConst.SAVE_BTN + '-' + id).addEventListener('click', (event) => {
+        this.commonService.entitiestValueArray.forEach((e, i) => {
+          if (e.editedValue) {
+            e.value = e.editedValue;
+            delete e.editedValue;
+            $(`#enityNameAndValue-${i}`).find('.edited-status').removeClass('hide');
+            $(`#initialentityValue-${i}`).html(e.value);
+          }
+        });
+        $(`#entitesDiv-${id}`).removeClass('edit-entity-rules');
+        $(`#saveAndCancel-${id}`).addClass('hide');
+        $(`.edit-values-btn.restore`).removeClass('hide');
+        this.commonService.isRestore = false;
+        $('.ast-check-right').addClass('disabled-color')
+        $('.save-reset').removeClass('save-reset').addClass('save-reset-disabled');
       });
-      $(`#entitesDiv-${id}`).removeClass('edit-entity-rules');
-      $(`#saveAndCancel-${id}`).addClass('hide');
-      $(`.edit-values-btn.restore`).removeClass('hide');
-      this.commonService.isRestore = false;
-      $('.ast-check-right').addClass('disabled-color')
-      $('.save-reset').removeClass('save-reset').addClass('save-reset-disabled');
-    });
+    }
   }
 
   handleRestoreConfirmClickEvent(){
-    console.log(this.commonService.previousEntitiesValue, "previous entity values");
-    console.log(this.commonService.entitiestValueArray, "entity values array");
-    
-    
     this.commonService.isRestore = true;
     this.commonService.entitiestValueArray = JSON.parse(this.commonService.previousEntitiesValue);
     JSON.parse(this.commonService.previousEntitiesValue).forEach((e, i) => {

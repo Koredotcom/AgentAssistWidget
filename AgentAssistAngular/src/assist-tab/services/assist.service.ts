@@ -30,20 +30,23 @@ export class AssistService {
   }
 
 
-  updateSeeMoreOnAssistTabActive(){
-    let faqSuggestionList : any = $('[id*="faqDiv-"]');
-    faqSuggestionList.each((ele) => {
-      console.log(ele.id, "ele");
-        let elemID = ele.id.split('-');
-        elemID.shift();
-        let actualId = elemID.join('-');
-        // this.updateSeeMoreButtonForAssist(actualId);
-    });
-}
+  updateSeeMoreOnAssistTabActive() {
+    let faqSuggestionList = $('[id*="faqDiv-"]');
+    let actualIdList: any = [];
 
-  updateSeeMoreButtonForAssist(id, type) {
-    console.log(id, "inside update see more button for assist");
-    
+    faqSuggestionList.each(function () {
+      let elemID = this.id.split('-');
+      elemID.shift();
+      let actualId = elemID.join('-');
+      actualIdList.push(actualId);
+    });
+
+    actualIdList.forEach(id => {
+      this.updateSeeMoreButtonForAssist(id, ProjConstants.FAQ)
+    });
+  }
+
+  updateSeeMoreButtonForAssist(id, type) {    
     let faqSourceTypePixel = 5;
     let titleElement = document.getElementById("title-" + id);
     let descElement = document.getElementById("desc-" + id);
@@ -209,21 +212,21 @@ export class AssistService {
     return template;
   }
 
-  dialogTypeInfoTemplate(uuids, ele) {
+  dialogTypeInfoTemplate(uuids, index, ele) {
     let template = `
     <div class="type-info-run-send" id="suggestionId-${uuids}">
         <div class="left-content">
             <div class="title-text" id="automation-${uuids}">${ele.name}</div>
         </div>
         <div class="action-links">
-            <button class="send-run-btn" id="run-${uuids}"
+            <button class="send-run-btn" id="run-${uuids + index}"
             >RUN</button>
-            <div class="elipse-dropdown-info" id="showRunForAgentBtn-${uuids}">
-                <div class="elipse-icon" id="elipseIcon-${uuids}">
-                    <i class="ast-overflow" id="overflowIcon-${uuids}"></i>
+            <div class="elipse-dropdown-info" id="showRunForAgentBtn-${uuids + index}">
+                <div class="elipse-icon" id="elipseIcon-${uuids + index}">
+                    <i class="ast-overflow" id="overflowIcon-${uuids + index}"></i>
                 </div>
-                <div class="dropdown-content-elipse" id="runAgtBtn-${uuids}">
-                    <div class="list-option" id="agentSelect-${uuids}"
+                <div class="dropdown-content-elipse" id="runAgtBtn-${uuids + index}">
+                    <div class="list-option" id="agentSelect-${uuids + index}"
                     >Run with Agent Inputs</div>
                 </div>
         </div>

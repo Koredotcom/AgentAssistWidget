@@ -57,6 +57,8 @@ export const IdReferenceConst = {
     MYBOTADDREMOVEDROPDOWN : "MyBotaddRemoveDropDown",
     MYBOTAUTOMATIONBLOCK : "myBotAutomationBlock",
     DYNAMICBLOCK : 'dynamicBlock',
+    SCRIPTCONTAINER : 'scriptContainer',
+    LIBRARY_CONATINER : 'LibraryContainer',
     positionId : 'positionId',
     overLaySuggestions : 'overLaySuggestions',
     displayData : 'displayData',
@@ -77,6 +79,7 @@ export const IdReferenceConst = {
     ASSIST_RUN_BUTTON : 'run',
     SCROLLBUTTON_ASSIST : 'scrollButtonAssist',
     SCROLLBUTTON_MYBOT : 'scrollButtonMybot',
+    SCROLLBUTTON_TRANSCRIPT : 'scrollButtonTranscript',
     SENDMSG : 'sendMsg',
     COPYMSG : 'copyMsg',
     SENDMSG_REQUEST : 'agentAssist.SendMessage',
@@ -87,7 +90,10 @@ export const IdReferenceConst = {
     EDIT_CANCEL_BTN : 'cancelBtn',
     RESTORE_BTN : 'restorebtn',
     SAVE_BTN : 'savebtn',
-    ENTITY_VALUE : 'entityValue'
+    ENTITY_VALUE : 'entityValue',
+    OTHER_BUBBLE : 'otherBubble',
+    CURRENTUSER_BUBBLE : 'currentUser',
+    AGENT_RUN_BTN : 'runAgtBtn'
 }
 
 

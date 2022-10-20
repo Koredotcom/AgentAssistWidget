@@ -36,24 +36,23 @@ export class WebSocketService {
     this.handleSubjectService.connectDetailsSubject.subscribe((urlParams : any) =>{
       if(urlParams && urlParams?.token){
         this.connectionDetails = urlParams;
-        console.log(this.connectionDetails, "connection details");
         // this.socketConnection();
       }
     })
   }
 
-  socketConnection() {
-    console.log("socket connection");
-    
+  socketConnection() {    
     let webSocketConnection = {
       "path": "/agentassist/api/v1/chat/", transports: ['websocket', 'polling', 'flashsocket'], query: { 'jToken': this.connectionDetails.token }
     };
     this._agentAsisstSocket = io(`${this.connectionDetails.agentassisturl}/koreagentassist`, webSocketConnection);
     this._agentAsisstSocket.on("connect", () => {
-      console.log("connection done",);
-      this.commonEmitEvents();
-      this.listenEvents();
-      this.socketConnectFlag$.next(true);
+      if(!window._agentAssistSocketEventListener){
+        this.commonEmitEvents();
+        this.listenEvents();
+        this.socketConnectFlag$.next(true);
+        window._agentAssistSocketEventListener = true;
+      }
     });
   }
 
@@ -66,9 +65,7 @@ export class WebSocketService {
     this.emitEvents(EVENTS.agent_menu_request, menu_request_params);
 
     let appState = this.localStorageService.getLocalStorageState();
-    let shouldProcessResponse = true;
-    console.log(appState, appState[this.connectionDetails.conversationId],this.connectionDetails.conversationId, "inside common emit eventa");
-    
+    let shouldProcessResponse = true;    
     // if(appState[this.connectionDetails.conversationId] && appState[this.connectionDetails.conversationId][storageConst.IS_WELCOMEMSG_PROCESSED]){
     //   shouldProcessResponse = false;
     // }
@@ -78,9 +75,7 @@ export class WebSocketService {
       'userName': parsedCustomData?.userName || parsedCustomData?.fName + parsedCustomData?.lName || 'user',
       'id': this.connectionDetails.conversationId,
       "isSendWelcomeMessage": shouldProcessResponse
-    }
-    console.log(menu_request_params, "menu_prams");
-    
+    }    
     this.emitEvents(EVENTS.welcome_message_request, welcomeMessageParams);
   }
 
@@ -109,7 +104,6 @@ export class WebSocketService {
     });
 
     this._agentAsisstSocket.on(EVENTS.agent_menu_response, (data) => {
-      console.log("inside menu response", data);
       this.agentMenuResponse$.next(data);
     });
 
@@ -125,9 +119,7 @@ export class WebSocketService {
       this.endOfTaskResponse$.next(data);
     });
 
-    this._agentAsisstSocket.on(EVENTS.user_message, (data) =>{
-      console.log("user message inside assist angular",data);
-      
+    this._agentAsisstSocket.on(EVENTS.user_message, (data) =>{      
       this.userMessageResponse$.next(data);
     });
 
