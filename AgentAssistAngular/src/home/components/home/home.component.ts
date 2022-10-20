@@ -651,22 +651,23 @@ export class HomeComponent implements OnInit {
     document.addEventListener("keyup", (evt: any) => {
       let target = evt.target;
       let targetids = target.id.split('-');
-      targetids.shift();
-      let aaa = $(`#feedbackHelpfulContainer-${targetids.join('-')} .btn-chip-negtive.active-chip`);
-      let arrayOfChips = [];
-      aaa.each((i, ele) => {
-        arrayOfChips.push($(ele).html())
-      });
-      let dataSets = $(`#feedbackdown-${targetids.join('-')} .ast-thumbdown`).data();
-      dataSets.feedbackdetails = arrayOfChips;
-      dataSets.comment = target.value;
-
-      if (target.value.length > 0) {
-        $(`#feedbackHelpfulContainer-${targetids.join('-')} .submit-btn`).removeAttr('disabled');
-        $(`#feedbackHelpfulContainer-${targetids.join('-')} .title-improve`).addClass('hide');
+      if(target.dataset.feedbackComment) {
+        targetids.shift();
+        let aaa = $(`#feedbackHelpfulContainer-${targetids.join('-')} .btn-chip-negtive.active-chip`);
+        let arrayOfChips = [];
+        aaa.each((i, ele) => {
+          arrayOfChips.push($(ele).html())
+        });
+        let dataSets = $(`#feedbackdown-${targetids.join('-')} .ast-thumbdown`).data();
+        dataSets.feedbackdetails = arrayOfChips;
+        dataSets.comment = target.value;
+        if (target.value.length > 0) {
+          $(`#feedbackHelpfulContainer-${targetids.join('-')} .submit-btn`).removeAttr('disabled');
+          $(`#feedbackHelpfulContainer-${targetids.join('-')} .title-improve`).addClass('hide');
+        }
+        $(`#feedbackHelpfulContainer-${targetids.join('-')} .input-block-optional .input-text`).attr('value', target.value);
+        $(`#feedbackdown-${targetids.join('-')} .ast-thumbdown`).attr('data-comment', target.value);
       }
-      $(`#feedbackHelpfulContainer-${targetids.join('-')} .input-block-optional .input-text`).attr('value', target.value);
-      $(`#feedbackdown-${targetids.join('-')} .ast-thumbdown`).attr('data-comment', target.value);
     })
   }
 
