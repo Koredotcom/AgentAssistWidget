@@ -171,6 +171,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 docs.hidden = true;
                 _userTranscript = false;
                 console.log("AgentAssist >>> no of agent assist instances", _agentAssistComponents);
+                renderingHistoryMessage();
                 if (!window._agentAssisteventListenerAdded) {
                     btnInit(containerId);
                     // eventListener for removing the ended currentconversation from the localStorage
@@ -309,7 +310,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 } else {
                     _agentAssistDataObj = _agentAssistComponents[_agentAssistDataObj.conversationId];
                 }
-
                 if (_agentAsisstSocket === null) {
                     _agentAsisstSocket = io(connectionDetails.webSocketConnectionDomain, connectionDetails.webSocketConnectionDetails);
                     _agentAsisstSocket.on("connect", () => {
@@ -386,8 +386,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     })
 
 
-                    AgentAssistPubSub.publish('automation_exhaustive_list',
-                        { conversationId: _agentAssistDataObj.conversationId, botId: _agentAssistDataObj.botId, 'experience': 'chat' });
                     _agentAsisstSocket.on('user_message', (data) => {
                         // updateNumberOfMessages();
                         processUserMessage(data, data.conversationId, _botId);
@@ -470,21 +468,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     });
 
                 }
-                let appStateStr = localStorage.getItem('agentAssistState') || '{}';
-                let appState = JSON.parse(appStateStr);
-                if (appState[_conversationId]) {
-                    isSendWelcomeMessage = false;
-                }else{
-                    isSendWelcomeMessage = true;
-                }
-                var welcome_message_request = {
-                    'waitTime': 2000,
-                    'userName': parsedCustomData?.userName || parsedCustomData?.fName + parsedCustomData?.lName || 'user',
-                    'id': _agentAssistDataObj.conversationId,
-                    'isSendWelcomeMessage': isSendWelcomeMessage
-                }
 
-                _agentAsisstSocket.emit('welcome_message_request', welcome_message_request);
 
                 if (isCallConversation === 'true') {
                     currentTabActive = 'transcriptIcon';
@@ -492,7 +476,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     transcriptionTabActive();
                 }
                 
-                renderingHistoryMessage();
                 renderingAgentHistoryMessage();
                 
                 updateUIState(_conversationId, isCallConversation);
@@ -630,51 +613,54 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
 
                 function displayCustomerFeels(data, convId, botId) {
-                    if (data.sentimentTone) {
-                        custTone = data;
-                    }
-                    let userTabtoneId = document.getElementById('userTab-custSentimentAnalysis');
-                    let agentTabtoneId = document.getElementById('agentTab-custSentimentAnalysis');
-                    if (custTone?.sentimentTone) {
-                        console.log(custTone);
-                        // if (cusTone?.sentiment.strength > 0 && cusTone?.sentiment.strength <= 33) {
-
-                        // } else if (cusTone?.sentiment.strength > 33 && cusTone?.sentiment.strength <= 66) {
-
-                        // } else if (cusTone?.sentiment.strength > 66 && cusTone?.sentiment.strength <= 100) {
-
-                        // }
-                        let toneinnerHTML = `
-                        <div id="custEmoji" class="emojis">${custTone?.sentimentTone?.emoji}</div>
-                        <div id="strengthDisplay"></div>
-                            <div [ngStyle]="{'background-color' : (custTone?.strength > 0 && custTone?.strength <=33) ? '#28A745' : '#E5E8EC'}" class="strength-bar strength-bar-sm"></div>
-                            <div [ngStyle]="{'background-color' : (custTone?.strength > 33 && custTone?.strength <=66) ? '#28A745' : '#E5E8EC'}" class="strength-bar strength-bar-md"></div>
-                            <div [ngStyle]="{'background-color' : (custTone?.strength > 66 && custTone?.strength <=100) ? '#28A745' : '#E5E8EC'}" class="strength-bar strength-bar-lg"></div>
-                        </div>
-                        <span id="customerTone">Customer is feeling <b>${custTone?.sentimentTone?.sentiment}</b></span>
-                        `
-                        userTabtoneId.innerHTML = toneinnerHTML;
-                        agentTabtoneId.innerHTML = toneinnerHTML;
-                    }
-                    $(document).ready(() => {
-                        if (!custTone?.sentimentTone) {
-                            let staticToneData = {
-                                emoji: "&#128512;",
-                                sentiment: "Happy",
-                                strength: 3
-                            }
-                            staticToneInnerHtml = `
-                            <div id="custEmoji" class="emojis">${staticToneData.emoji}</div>
-                                <div [ngStyle]="{'background-color' : (staticToneData?.strength > 0 && staticToneData?.strength <=33) ? '#28A745' : '#E5E8EC'}" class="strength-bar strength-bar-sm"></div>
-                                <div [ngStyle]="{'background-color' : (staticToneData?.strength > 33 && staticToneData?.strength <=66) ? '#28A745' : '#E5E8EC'}" class="strength-bar strength-bar-md"></div>
-                                <div [ngStyle]="{'background-color' : (staticToneData?.strength > 66 && staticToneData?.strength <=100) ? '#28A745' : '#E5E8EC'}" class="strength-bar strength-bar-lg"></div>
-                            </div>
-                            <span id="customerTone">Customer is feeling <b>${staticToneData.sentiment}</b></span>
-                            `
-                            userTabtoneId.innerHTML = staticToneInnerHtml;
-                            agentTabtoneId.innerHTML = staticToneInnerHtml;
+                    if(sourceType !== 'smartassist-color-scheme') {
+                        if (data.sentimentTone) {
+                            custTone = data;
                         }
-                    });
+                        let userTabtoneId = document.getElementById('userTab-custSentimentAnalysis');
+                        let agentTabtoneId = document.getElementById('agentTab-custSentimentAnalysis');
+                        if (custTone?.sentimentTone) {
+                            console.log(custTone);
+                            // if (cusTone?.sentiment.strength > 0 && cusTone?.sentiment.strength <= 33) {
+    
+                            // } else if (cusTone?.sentiment.strength > 33 && cusTone?.sentiment.strength <= 66) {
+    
+                            // } else if (cusTone?.sentiment.strength > 66 && cusTone?.sentiment.strength <= 100) {
+    
+                            // }
+                            let toneinnerHTML = `
+                            <div id="custEmoji" class="emojis">${custTone?.sentimentTone?.emoji}</div>
+                            <div id="strengthDisplay"></div>
+                                <div [ngStyle]="{'background-color' : (custTone?.strength > 0 && custTone?.strength <=33) ? '#28A745' : '#E5E8EC'}" class="strength-bar strength-bar-sm"></div>
+                                <div [ngStyle]="{'background-color' : (custTone?.strength > 33 && custTone?.strength <=66) ? '#28A745' : '#E5E8EC'}" class="strength-bar strength-bar-md"></div>
+                                <div [ngStyle]="{'background-color' : (custTone?.strength > 66 && custTone?.strength <=100) ? '#28A745' : '#E5E8EC'}" class="strength-bar strength-bar-lg"></div>
+                            </div>
+                            <span id="customerTone">Customer is feeling <b>${custTone?.sentimentTone?.sentiment}</b></span>
+                            `
+                            userTabtoneId.innerHTML = toneinnerHTML;
+                            agentTabtoneId.innerHTML = toneinnerHTML;
+                        }
+                        $(document).ready(() => {
+                            if (!custTone?.sentimentTone) {
+                                let staticToneData = {
+                                    emoji: "&#128512;",
+                                    sentiment: "Happy",
+                                    strength: 3
+                                }
+                                staticToneInnerHtml = `
+                                <div id="custEmoji" class="emojis">${staticToneData.emoji}</div>
+                                    <div [ngStyle]="{'background-color' : (staticToneData?.strength > 0 && staticToneData?.strength <=33) ? '#28A745' : '#E5E8EC'}" class="strength-bar strength-bar-sm"></div>
+                                    <div [ngStyle]="{'background-color' : (staticToneData?.strength > 33 && staticToneData?.strength <=66) ? '#28A745' : '#E5E8EC'}" class="strength-bar strength-bar-md"></div>
+                                    <div [ngStyle]="{'background-color' : (staticToneData?.strength > 66 && staticToneData?.strength <=100) ? '#28A745' : '#E5E8EC'}" class="strength-bar strength-bar-lg"></div>
+                                </div>
+                                <span id="customerTone">Customer is feeling <b>${staticToneData.sentiment}</b></span>
+                                `
+                                userTabtoneId.innerHTML = staticToneInnerHtml;
+                                agentTabtoneId.innerHTML = staticToneInnerHtml;
+                            }
+                        });
+                    }
+                    
                 }
 
                 // Add input field to the userResponse manually by the agent
@@ -2732,14 +2718,30 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
 
                 async function renderingHistoryMessage () {
-                    let url = `${connectionDetails.envinormentUrl}/agentassist/api/v1/agent-feedback/${_agentAssistDataObj.conversationId}?interaction=assist`;
+                    let url = `${connectionDetails.envinormentUrl}/agentassist/api/v1/agent-feedback/${_conversationId}?interaction=assist`;
                     let feedBackResult = await renderHistoryFeedBack(url);
                     document.getElementById("loader").style.display = "block";
                     isShowHistoryEnable = true;
                     let historyFaqIDs = [];
-                    getData(`${connectionDetails.envinormentUrl}/api/1.1/botmessages/agentassist/${_agentAssistDataObj.botId}/history?convId=${_agentAssistDataObj.conversationId}&agentHistory=false`)
+                    getData(`${connectionDetails.envinormentUrl}/api/1.1/botmessages/agentassist/${_botId}/history?convId=${_conversationId}&agentHistory=false`)
                     .then(response => {
-                        
+                        let appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                        let appState = JSON.parse(appStateStr);
+                        if (response?.length > 0 && appState[_conversationId]) {
+                            isSendWelcomeMessage = false;
+                        }else{
+                            isSendWelcomeMessage = true;
+                        }
+                        var welcome_message_request = {
+                            'waitTime': 2000,
+                            'userName': parsedCustomData?.userName || parsedCustomData?.fName + parsedCustomData?.lName || 'user',
+                            'id': _agentAssistDataObj.conversationId,
+                            'isSendWelcomeMessage': isSendWelcomeMessage
+                        }
+        
+                        _agentAsisstSocket.emit('welcome_message_request', welcome_message_request);
+                        AgentAssistPubSub.publish('automation_exhaustive_list',
+                        { conversationId: _agentAssistDataObj.conversationId, botId: _agentAssistDataObj.botId, 'experience': 'chat' });
                         document.getElementById("loader").style.display = "none";
 
                         let previousId;
