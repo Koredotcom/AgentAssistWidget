@@ -33,7 +33,6 @@ export class AdvSettingsComponent implements OnInit, OnDestroy {
 
   showPhHoldAudio = false;
   showVoicePreferences:boolean = false;
-  channelList: any;
 
   subs = new SubSink();
 
@@ -82,22 +81,31 @@ export class AdvSettingsComponent implements OnInit, OnDestroy {
   }
 
   getAdvSettings() {
-    this.channelList = this.authService.smartAssistBots.map(x=>x.channels.length);
-    if(this.channelList > 1){
-      this.showVoicePreferences = true;
-   // const _params = { streamId: this.streamId }
-    const _params = { streamId:this.authService.smartAssistBots.map(x=>x._id),
-                      'isAgentAssist':true }
-    this.loading = true;
-    this.subs.sink = this.service.invoke('get.settings.voicePreferences', _params)
-      .pipe(finalize(() => this.loading = false))
-      .subscribe(res => {
-        this.voicePreferences = res;
-      }, err => {
-        this.notificationService.showError(err, 'Failed to fetch voice preferences')
+    const params = {
+      instanceId:this.authService.smartAssistBots.map(x=>x._id),
+       'isAgentAssist':true
+     }
+     let channelList;
+     this.subs.sink = this.service.invoke('get.voiceList', params, 's').subscribe(voiceList => {
+       channelList = voiceList;
+       if(channelList.sipTransfers.length > 0){
+         this.showVoicePreferences = true;
+         const _params = { streamId:this.authService.smartAssistBots.map(x=>x._id),
+                         'isAgentAssist':true }
+         this.loading = true;
+         this.subs.sink = this.service.invoke('get.settings.voicePreferences', _params)
+         .pipe(finalize(() => this.loading = false))
+         .subscribe(res => {
+           this.voicePreferences = res;
+         }, err => {
+           this.notificationService.showError(err, 'Failed to fetch voice preferences')
+         })
+       }
+       else{
+        this.showVoicePreferences = false;
+       }
       })
-    }
-  }
+    } 
 
   getLanguages() {
     const params = {};
