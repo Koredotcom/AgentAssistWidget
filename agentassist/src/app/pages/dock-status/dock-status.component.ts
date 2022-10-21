@@ -138,7 +138,7 @@ export class DockStatusComponent implements OnInit {
   removeRecord(task, index) {
     if (task._id) {
       // this.statusDockerLoading = true;
-      let streamId = this.workflowService.getCurrentBt()._id
+      let streamId = this.authService.smartAssistBots.map(x=>x._id);
       const queryParms = {
         streamId: streamId,
         dsId: task._id,
@@ -163,7 +163,7 @@ export class DockStatusComponent implements OnInit {
 
   clearAllRecords() {
     const queryParms = {
-      streamId: this.workflowService.getCurrentBt()._id,
+      streamId: this.authService.smartAssistBots.map(x=>x._id),
     }
     this.service.invoke('deleteAll.dockstatus', queryParms).subscribe(
       res => {
