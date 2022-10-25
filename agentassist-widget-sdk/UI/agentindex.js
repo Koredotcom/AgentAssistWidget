@@ -171,6 +171,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 docs.hidden = true;
                 _userTranscript = false;
                 console.log("AgentAssist >>> no of agent assist instances", _agentAssistComponents);
+                renderingHistoryMessage();
                 if (!window._agentAssisteventListenerAdded) {
                     btnInit(containerId);
                     // eventListener for removing the ended currentconversation from the localStorage
@@ -185,7 +186,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     // });
 
                     window.addEventListener("message", function (e) {
-                        console.log(e.data, "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx message came to widget when any message came from others");//your data is captured in e.data
+                        console.log(e.data, "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx message came to widget when any message came from others", isOverRideMode);//your data is captured in e.data
                         if(e.data.name === 'response_resolution_comments' && e.data.conversationId) {
                             $(`#summary`).removeClass('hide');
                             $(`#summaryText`).val(e.data?.summary ? e.data?.summary[0]?.summary_text:'');
@@ -253,18 +254,41 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             'experience': isCallConversation === 'true' ? 'voice':'chat',
                             'query': sanitizeHTML(userInputData.value),
                         }
+                        let user_messsage = {
+                            "botId": _botId,
+                            "type": "text",
+                            "conversationId": userInputData.conversationid,
+                            "value": sanitizeHTML(userInputData.value),
+                            "author": {
+                                "firstName": userInputData.author?.firstName,
+                                "lastName": userInputData.author?.lastName,
+                                "type": userInputData.author?.type
+                            },
+                            "event": "user_message"
+                        }
+
+                        
                         if (isCallConversation === 'true') {
                             prepareConversation();
                             if (userInputData.author.type === 'USER') {
                                 processTranscriptData(userInputData, userInputData.conversationid, _botId,);
-                                _agentAsisstSocket.emit('agent_assist_request', agent_assist_request);
+                                if(isOverRideMode) {
+                                    _agentAsisstSocket.emit('user_message', user_messsage)
+                                }else{
+                                    _agentAsisstSocket.emit('agent_assist_request', agent_assist_request);
+                                }
 
                             } else {
                                 processAgentMessages(userInputData)
                             }
                         } else {
                             if (userInputData?.author?.type === 'USER') {
-                                _agentAsisstSocket.emit('agent_assist_request', agent_assist_request);
+                                if(isOverRideMode) {
+                                   _agentAsisstSocket.emit('user_message', user_messsage)
+                                }else{
+                                    _agentAsisstSocket.emit('agent_assist_request', agent_assist_request);
+                                }
+                                
                             }
                         }
                     })
@@ -286,7 +310,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 } else {
                     _agentAssistDataObj = _agentAssistComponents[_agentAssistDataObj.conversationId];
                 }
-
                 if (_agentAsisstSocket === null) {
                     _agentAsisstSocket = io(connectionDetails.webSocketConnectionDomain, connectionDetails.webSocketConnectionDetails);
                     _agentAsisstSocket.on("connect", () => {
@@ -363,8 +386,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     })
 
 
-                    AgentAssistPubSub.publish('automation_exhaustive_list',
-                        { conversationId: _agentAssistDataObj.conversationId, botId: _agentAssistDataObj.botId, 'experience': 'chat' });
                     _agentAsisstSocket.on('user_message', (data) => {
                         // updateNumberOfMessages();
                         processUserMessage(data, data.conversationId, _botId);
@@ -447,21 +468,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     });
 
                 }
-                let appStateStr = localStorage.getItem('agentAssistState') || '{}';
-                let appState = JSON.parse(appStateStr);
-                if (appState[_conversationId]) {
-                    isSendWelcomeMessage = false;
-                }else{
-                    isSendWelcomeMessage = true;
-                }
-                var welcome_message_request = {
-                    'waitTime': 2000,
-                    'userName': parsedCustomData?.userName || parsedCustomData?.fName + parsedCustomData?.lName || 'user',
-                    'id': _agentAssistDataObj.conversationId,
-                    'isSendWelcomeMessage': isSendWelcomeMessage
-                }
 
-                _agentAsisstSocket.emit('welcome_message_request', welcome_message_request);
 
                 if (isCallConversation === 'true') {
                     currentTabActive = 'transcriptIcon';
@@ -469,7 +476,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     transcriptionTabActive();
                 }
                 
-                renderingHistoryMessage();
                 renderingAgentHistoryMessage();
                 
                 updateUIState(_conversationId, isCallConversation);
@@ -607,51 +613,54 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
 
                 function displayCustomerFeels(data, convId, botId) {
-                    if (data.sentimentTone) {
-                        custTone = data;
-                    }
-                    let userTabtoneId = document.getElementById('userTab-custSentimentAnalysis');
-                    let agentTabtoneId = document.getElementById('agentTab-custSentimentAnalysis');
-                    if (custTone?.sentimentTone) {
-                        console.log(custTone);
-                        // if (cusTone?.sentiment.strength > 0 && cusTone?.sentiment.strength <= 33) {
-
-                        // } else if (cusTone?.sentiment.strength > 33 && cusTone?.sentiment.strength <= 66) {
-
-                        // } else if (cusTone?.sentiment.strength > 66 && cusTone?.sentiment.strength <= 100) {
-
-                        // }
-                        let toneinnerHTML = `
-                        <div id="custEmoji" class="emojis">${custTone?.sentimentTone?.emoji}</div>
-                        <div id="strengthDisplay"></div>
-                            <div [ngStyle]="{'background-color' : (custTone?.strength > 0 && custTone?.strength <=33) ? '#28A745' : '#E5E8EC'}" class="strength-bar strength-bar-sm"></div>
-                            <div [ngStyle]="{'background-color' : (custTone?.strength > 33 && custTone?.strength <=66) ? '#28A745' : '#E5E8EC'}" class="strength-bar strength-bar-md"></div>
-                            <div [ngStyle]="{'background-color' : (custTone?.strength > 66 && custTone?.strength <=100) ? '#28A745' : '#E5E8EC'}" class="strength-bar strength-bar-lg"></div>
-                        </div>
-                        <span id="customerTone">Customer is feeling <b>${custTone?.sentimentTone?.sentiment}</b></span>
-                        `
-                        userTabtoneId.innerHTML = toneinnerHTML;
-                        agentTabtoneId.innerHTML = toneinnerHTML;
-                    }
-                    $(document).ready(() => {
-                        if (!custTone?.sentimentTone) {
-                            let staticToneData = {
-                                emoji: "&#128512;",
-                                sentiment: "Happy",
-                                strength: 3
-                            }
-                            staticToneInnerHtml = `
-                            <div id="custEmoji" class="emojis">${staticToneData.emoji}</div>
-                                <div [ngStyle]="{'background-color' : (staticToneData?.strength > 0 && staticToneData?.strength <=33) ? '#28A745' : '#E5E8EC'}" class="strength-bar strength-bar-sm"></div>
-                                <div [ngStyle]="{'background-color' : (staticToneData?.strength > 33 && staticToneData?.strength <=66) ? '#28A745' : '#E5E8EC'}" class="strength-bar strength-bar-md"></div>
-                                <div [ngStyle]="{'background-color' : (staticToneData?.strength > 66 && staticToneData?.strength <=100) ? '#28A745' : '#E5E8EC'}" class="strength-bar strength-bar-lg"></div>
-                            </div>
-                            <span id="customerTone">Customer is feeling <b>${staticToneData.sentiment}</b></span>
-                            `
-                            userTabtoneId.innerHTML = staticToneInnerHtml;
-                            agentTabtoneId.innerHTML = staticToneInnerHtml;
+                    if(sourceType !== 'smartassist-color-scheme') {
+                        if (data.sentimentTone) {
+                            custTone = data;
                         }
-                    });
+                        let userTabtoneId = document.getElementById('userTab-custSentimentAnalysis');
+                        let agentTabtoneId = document.getElementById('agentTab-custSentimentAnalysis');
+                        if (custTone?.sentimentTone) {
+                            console.log(custTone);
+                            // if (cusTone?.sentiment.strength > 0 && cusTone?.sentiment.strength <= 33) {
+    
+                            // } else if (cusTone?.sentiment.strength > 33 && cusTone?.sentiment.strength <= 66) {
+    
+                            // } else if (cusTone?.sentiment.strength > 66 && cusTone?.sentiment.strength <= 100) {
+    
+                            // }
+                            let toneinnerHTML = `
+                            <div id="custEmoji" class="emojis">${custTone?.sentimentTone?.emoji}</div>
+                            <div id="strengthDisplay"></div>
+                                <div [ngStyle]="{'background-color' : (custTone?.strength > 0 && custTone?.strength <=33) ? '#28A745' : '#E5E8EC'}" class="strength-bar strength-bar-sm"></div>
+                                <div [ngStyle]="{'background-color' : (custTone?.strength > 33 && custTone?.strength <=66) ? '#28A745' : '#E5E8EC'}" class="strength-bar strength-bar-md"></div>
+                                <div [ngStyle]="{'background-color' : (custTone?.strength > 66 && custTone?.strength <=100) ? '#28A745' : '#E5E8EC'}" class="strength-bar strength-bar-lg"></div>
+                            </div>
+                            <span id="customerTone">Customer is feeling <b>${custTone?.sentimentTone?.sentiment}</b></span>
+                            `
+                            userTabtoneId.innerHTML = toneinnerHTML;
+                            agentTabtoneId.innerHTML = toneinnerHTML;
+                        }
+                        $(document).ready(() => {
+                            if (!custTone?.sentimentTone) {
+                                let staticToneData = {
+                                    emoji: "&#128512;",
+                                    sentiment: "Happy",
+                                    strength: 3
+                                }
+                                staticToneInnerHtml = `
+                                <div id="custEmoji" class="emojis">${staticToneData.emoji}</div>
+                                    <div [ngStyle]="{'background-color' : (staticToneData?.strength > 0 && staticToneData?.strength <=33) ? '#28A745' : '#E5E8EC'}" class="strength-bar strength-bar-sm"></div>
+                                    <div [ngStyle]="{'background-color' : (staticToneData?.strength > 33 && staticToneData?.strength <=66) ? '#28A745' : '#E5E8EC'}" class="strength-bar strength-bar-md"></div>
+                                    <div [ngStyle]="{'background-color' : (staticToneData?.strength > 66 && staticToneData?.strength <=100) ? '#28A745' : '#E5E8EC'}" class="strength-bar strength-bar-lg"></div>
+                                </div>
+                                <span id="customerTone">Customer is feeling <b>${staticToneData.sentiment}</b></span>
+                                `
+                                userTabtoneId.innerHTML = staticToneInnerHtml;
+                                agentTabtoneId.innerHTML = staticToneInnerHtml;
+                            }
+                        });
+                    }
+                    
                 }
 
                 // Add input field to the userResponse manually by the agent
@@ -1182,7 +1191,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                 function processMybotDataResponse(data, convId, botId) {
                     console.log("when an dialog is ran for the agent", data);
-                    let myBotuuids = Math.floor(Math.random() * 100);
+                    let myBotuuids = koreGenerateUUID();
                     // let automationSuggestions = $('#agentAutoContainer .dialog-task-accordiaon-info');
                     // for (let ele of automationSuggestions) {
                     //     ele.classList.add('hide');
@@ -2709,14 +2718,30 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
 
                 async function renderingHistoryMessage () {
-                    let url = `${connectionDetails.envinormentUrl}/agentassist/api/v1/agent-feedback/${_agentAssistDataObj.conversationId}?interaction=assist`;
+                    let url = `${connectionDetails.envinormentUrl}/agentassist/api/v1/agent-feedback/${_conversationId}?interaction=assist`;
                     let feedBackResult = await renderHistoryFeedBack(url);
                     document.getElementById("loader").style.display = "block";
                     isShowHistoryEnable = true;
                     let historyFaqIDs = [];
-                    getData(`${connectionDetails.envinormentUrl}/api/1.1/botmessages/agentassist/${_agentAssistDataObj.botId}/history?convId=${_agentAssistDataObj.conversationId}&agentHistory=false`)
+                    getData(`${connectionDetails.envinormentUrl}/api/1.1/botmessages/agentassist/${_botId}/history?convId=${_conversationId}&agentHistory=false`)
                     .then(response => {
-                        
+                        let appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                        let appState = JSON.parse(appStateStr);
+                        if (response?.length > 0 && appState[_conversationId]) {
+                            isSendWelcomeMessage = false;
+                        }else{
+                            isSendWelcomeMessage = true;
+                        }
+                        var welcome_message_request = {
+                            'waitTime': 2000,
+                            'userName': parsedCustomData?.userName || parsedCustomData?.fName + parsedCustomData?.lName || 'user',
+                            'id': _agentAssistDataObj.conversationId,
+                            'isSendWelcomeMessage': isSendWelcomeMessage
+                        }
+        
+                        _agentAsisstSocket.emit('welcome_message_request', welcome_message_request);
+                        AgentAssistPubSub.publish('automation_exhaustive_list',
+                        { conversationId: _agentAssistDataObj.conversationId, botId: _agentAssistDataObj.botId, 'experience': 'chat' });
                         document.getElementById("loader").style.display = "none";
 
                         let previousId;
@@ -2952,7 +2977,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                 uniqueID = undefined;
                                             }, waitingTimeForSeeMoreButton)
                                             
-                                  }
+                                }
 
                                 if ((!res.agentAssistDetails?.suggestions && !res.agentAssistDetails?.ambiguityList && !res.agentAssistDetails?.ambiguity) && res.type == 'outgoing') {
                                     let _msgsResponse = {
@@ -3018,7 +3043,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         previousTaskPositionId = undefined;
                                         previousTaskName = undefined;
                                     }
-
                                     if (res.tN && !previousId && previousTaskPositionId !== currentTaskPositionId) {
                                         let divExist = $(`#addRemoveDropDown-${res._id}`);
                                         previousTaskPositionId = currentTaskPositionId;
@@ -3030,6 +3054,18 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             historyData.append(dropdownHtml);
                                             previousId = res._id;
                                             previousTaskPositionId = currentTaskPositionId;
+                                        }
+                                    }
+                                    if(resp.length-1 == index && (!res.agentAssistDetails?.entityRequest && !res.agentAssistDetails?.entityResponse) && currentTaskPositionId == previousTaskPositionId) {
+                                        let previousIdFeedBackDetails = feedBackResult.find((ele)=> ele.positionId === currentTaskPositionId);
+                                        addFeedbackHtmlToDomForHistory(res, res.botId, res?.agentAssistDetails?.userInput, previousId, false, previousTaskPositionId);
+                                        if(previousIdFeedBackDetails) {
+                                            UpdateFeedBackDetails(previousIdFeedBackDetails, 'dynamicBlock');
+                                            if(previousIdFeedBackDetails.feedback == 'dislike' && (previousIdFeedBackDetails.feedbackDetails.length == 0 && previousIdFeedBackDetails.comment.length == 0)){
+                                                $(`#feedbackHelpfulContainer-${previousId} .explore-more-negtive-data`).removeClass('hide');
+                                            }else {
+                                                $(`#feedbackHelpfulContainer-${previousId} .explore-more-negtive-data`).addClass('hide');
+                                            }
                                         }
                                     }
                                     if (res.agentAssistDetails.entityName && res.agentAssistDetails.entityResponse && res.agentAssistDetails.entityValue) {
@@ -3118,6 +3154,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                                         _msgsResponse.message.push(body);
                                     });
+                                    let msgStringify = JSON.stringify(_msgsResponse);
+                                    let newTemp = encodeURI(msgStringify);
                                     if((res.agentAssistDetails?.isPrompt === true || res.agentAssistDetails?.isPrompt === false) && previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) {
                                     let runInfoContent = $(`#dropDownData-${previousId}`);
                                     let askToUserHtml = `
@@ -3129,7 +3167,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                     <div class="title">Ask customer</div>
                                                     <div class="agent-utt">
                                                         <div class="title-data"><ul class="chat-container" id="displayData-${res._id}"></ul></div>
-                                                        
+                                                        <div class="action-links">
+                                                        <button class="send-run-btn" id="sendMsg" data-msg-id="${res._id}" data-msg-data="${newTemp}">Send</button>
+                                                        <div class="copy-btn hide" data-msg-id="${res._id}">
+                                                            <i class="ast-copy" data-msg-id="${res._id}"></i>
+                                                        </div>
+                                                    </div>
                                                     </div>
                                                     </div>
                                                 </div>
@@ -3143,7 +3186,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                     <div class="title">Tell Customer</div>
                                                     <div class="agent-utt">
                                                         <div class="title-data" ><ul class="chat-container" id="displayData-${res._id}"></ul></div>
-                                                        
+                                                        <div class="action-links">
+                                                            <button class="send-run-btn" id="sendMsg" data-msg-id="${res._id}" data-msg-data="${newTemp}">Send</button>
+                                                            <div class="copy-btn hide" data-msg-id="${res._id}">
+                                                                <i class="ast-copy" data-msg-id="${res._id}"></i>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                     </div>
                                                 </div>
@@ -3455,6 +3503,18 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             previousId = res._id;
                                             previousTaskPositionId = currentTaskPositionId;
                                         }
+                                    }
+                                    if(resp.length-1 == index && currentTaskPositionId == previousTaskPositionId) {
+                                        let previousIdFeedBackDetails = feedBackResult.find((ele)=> ele.positionId === previousTaskPositionId);
+                                        addFeedbackHtmlToDomForHistory(res, res.botId, res?.agentAssistDetails?.userInput, previousId, true, previousTaskPositionId);
+                                        if(previousIdFeedBackDetails) {
+                                            UpdateFeedBackDetails(previousIdFeedBackDetails, 'agentAutoContainer');
+                                            if(previousIdFeedBackDetails.feedback == 'dislike' && (previousIdFeedBackDetails.feedbackDetails.length == 0 && previousIdFeedBackDetails.comment.length == 0)){
+                                                $(`#feedbackHelpfulContainer-${previousId} .explore-more-negtive-data`).removeClass('hide');
+                                            }else {
+                                                $(`#feedbackHelpfulContainer-${previousId} .explore-more-negtive-data`).addClass('hide');
+                                            }
+                                        }   
                                     }
                                     if (res.agentAssistDetails.entityName && res.agentAssistDetails.entityResponse && res.agentAssistDetails.entityValue) {
                                         let runInfoContent = $(`#dropDownData-${previousId}`);
@@ -4208,7 +4268,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     "conversationId": _agentAssistDataObj.conversationId,
                                     "query": "",
                                     'experience': isCallConversation === 'true' ? 'voice':'chat',
-                                    "enable_override_userinput": false
+                                    "enable_override_userinput": true
                                 }
                                 isOverRideMode ? _agentAsisstSocket.emit('enable_override_userinput', toggleObj) : '';
                                 isOverRideMode = false;
@@ -4219,13 +4279,27 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     "conversationId": _agentAssistDataObj.conversationId,
                                     "query": "",
                                     'experience': isCallConversation === 'true' ? 'voice':'chat',
-                                    "enable_override_userinput": true
+                                    "enable_override_userinput": false
                                 }
                                 isOverRideMode ? _agentAsisstSocket.emit('enable_override_userinput', toggleObj) : '';
                                 isOverRideMode = false;
                             }
                         }
                         let isChecked =  togglePoint();
+                        // $(document).ready(function() {
+                        //     $('#toggle').click(function() {
+                        //         $(':checkbox').each(function() {
+                        //             this.click();
+                        //         });
+                        //     });
+                        // });
+                        // document.getElementById('checkProActive').onclick = function() {
+                        //     var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                        //     for (var checkbox of checkboxes) {
+                        //         console.log('Testing: ',checkbox);
+                        //         checkbox.checked = !checkbox.checked;
+                        //     }
+                        // }
 
                         if (target.id === 'sendMsg') {
                             let payload = target.dataset.msgData;
@@ -6594,7 +6668,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     <div class="t-title">Proactive</div>
                     <label class="kr-sg-toggle">
                         <div class="hover-tooltip">Proactive</div>
-                        <input type="checkbox" id="checkProActive" onclick="isChecked()">
+                        <input type="checkbox" id="checkProActive" value="YES" checked onclick="isChecked()">
                         <div class="slider"></div>
                     </label>
                 </div>

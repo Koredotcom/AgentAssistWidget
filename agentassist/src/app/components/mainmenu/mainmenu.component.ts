@@ -223,20 +223,27 @@ export class MainmenuComponent implements OnInit, OnDestroy {
   }
 
   getAdvSettings() {
-    this.channelList = this.authService.smartAssistBots.map(x=>x.channels.length);
-    if(this.channelList > 1){
-    const _params = { streamId:this.authService.smartAssistBots.map(x=>x._id),
-                      'isAgentAssist':true }
-    this.loading = true;
-    this.subs.sink = this.service.invoke('get.settings.voicePreferences', _params)
-      .pipe(finalize(() => this.loading = false))
-      .subscribe(res => {
-        this.voicePreferences = res;
-      }, err => {
-        this.notificationService.showError(err, 'Failed to fetch voice preferences')
-      })
-    }
-  }
+    const params = {
+      instanceId:this.authService.smartAssistBots.map(x=>x._id),
+       'isAgentAssist':true
+     }
+     let channelList;
+     this.subs.sink = this.service.invoke('get.voiceList', params, 's').subscribe(voiceList => {
+       channelList = voiceList;
+       if(channelList.sipTransfers.length > 0){
+        const _params = { streamId:this.authService.smartAssistBots.map(x=>x._id),
+                        'isAgentAssist':true }
+        this.loading = true;
+        this.subs.sink = this.service.invoke('get.settings.voicePreferences', _params)
+        .pipe(finalize(() => this.loading = false))
+        .subscribe(res => {
+          this.voicePreferences = res;
+        }, err => {
+          this.notificationService.showError(err, 'Failed to fetch voice preferences')
+        })
+      }
+    })
+  } 
 
 
   config: any = {

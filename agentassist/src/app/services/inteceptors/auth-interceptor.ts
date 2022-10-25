@@ -40,6 +40,7 @@ export class AuthInterceptor implements HttpInterceptor {
     }
     _reqAdditions.setHeaders.state = this.workflowService.appState;
     _reqAdditions.setHeaders.smartassist = 'true';
+    // _reqAdditions.setHeaders.agentassist = 'true';
     _reqAdditions.setHeaders['X-Timezone-Offset'] = new Date().getTimezoneOffset().toString();
     _reqAdditions.setHeaders['X-Request-Id'] = uuidv4();
     _reqAdditions.setHeaders['app-language'] = this.localStoreService.appLanguage || 'en';

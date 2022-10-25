@@ -14,7 +14,7 @@ import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { InviteDialogComponent } from '../../helpers/components/invite-dialog/invite-dialog.component';
 import { TranslateService } from '@ngx-translate/core';
 import { SubSink } from 'subsink';
-
+import { HttpHeaders } from '@angular/common/http';
 
 import * as _ from 'underscore';
 import { Subscription } from 'rxjs';
@@ -257,6 +257,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     const params = {
       userId: this.authService.getUserId(),
       streamId: this.authService.smartAssistBots.map(x=>x._id),
+      'isAgentAssistApp':true
+
     }
     dialogRef.afterClosed().subscribe(res => {
       let usersList = [];
@@ -285,8 +287,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
             groups: [],
             users: usersList
           }
-        }
-        this.service.invoke('put.sharebot', params, payload, {headers: {'agentassist': true}}).subscribe(
+        };
+        const headers = new HttpHeaders().set('agentassist' , 'true').set('x-http-method-override','put');
+        this.service.invoke('put.sharebot', params, payload, headers).subscribe(
           res => {
             this.notificationService.notify(this.translate.instant("HEADER.BOT_SHARED_SUCCESSFUL"), 'success');
           }, err => {
