@@ -97,9 +97,9 @@ export class OverlaysearchComponent implements OnInit {
   @HostListener('document:click', ['$event']) onDocumentClick(event) {
     // hide Run with agent button on clicking outside of document.
     if (this.searchResponse?.dialogs && this.searchResponse?.dialogs.length > 0) {
-      this.searchResponse.dialogs.map(obj => {
-        obj.agentRunButton = !obj.agentRunButton
-      })
+      // this.searchResponse.dialogs.map(obj => {
+      //   obj.agentRunButton = !obj.agentRunButton
+      // })
       event.stopPropagation();
     }
   }
@@ -109,9 +109,9 @@ export class OverlaysearchComponent implements OnInit {
       this.searchResponse.dialogs.map(obj => {
         if (obj.name === dialoguename) {
           obj.agentRunButton = !obj.agentRunButton
-          console.log(obj, "inside handle run button");
-
           event.stopPropagation()
+        }else{
+          obj.agentRunButton = false;
         }
       })
     }

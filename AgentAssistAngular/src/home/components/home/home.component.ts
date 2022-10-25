@@ -618,42 +618,30 @@ export class HomeComponent implements OnInit {
         this.commonService.isUpdateFeedBackDetailsFlag = false;
       }
       if (target.id.split("-")[0] == 'elipseIcon' || target.id.split("-")[0] == 'overflowIcon') {
-        if (this.activeTab == this.projConstants.ASSIST) {
 
-          $('.elipse-dropdown-info').each((i, ele) => {
-            $(ele).attr('class').includes('active-elipse') ? $(ele).removeClass('active-elipse') : '';
-          });
+         if(!this.showSearchSuggestions){
 
-          if ($('.dropdown-content-elipse').length !== 0) {
-            $('.dropdown-content-elipse').addClass('hide');
-          }
-          let elementClicked;
-          if (target.id.split("-")[0] == 'elipseIcon') {
-            evt.stopPropagation();
-            if (target.nextElementSibling) {
-              elementClicked = target.parentElement;
-              if ((target.nextElementSibling)?.classList.contains('hide')) {
-                (target.nextElementSibling)?.classList.remove('hide');
-                elementClicked.classList.add('active-elipse');
-              } else {
-                (target.nextElementSibling)?.classList.add('hide');
-                elementClicked.classList.remove('active-elipse');
-              }
-            }
-          }
-          else if (target.id.split("-")[0] == 'overflowIcon') {
-            if ((target.parentElement.nextElementSibling)?.classList) {
-              elementClicked = target.parentElement.parentElement;
-              if ((target.parentElement.nextElementSibling)?.classList.contains('hide')) {
-                (target.parentElement.nextElementSibling)?.classList.remove('hide');
-                elementClicked.classList.add('active-elipse');
-              } else {
-                (target.parentElement.nextElementSibling)?.classList.add('hide');
-                elementClicked.classList.remove('active-elipse');
-              }
-            }
-          }
-        }
+           if ($('.dropdown-content-elipse').length !== 0) {
+             $('.dropdown-content-elipse').addClass('hide');
+           }
+           let elementClicked;
+           if (target.id.split("-")[0] == 'elipseIcon') {
+             evt.stopPropagation();
+             (target.nextElementSibling)?.classList.remove('hide');
+             elementClicked = target.parentElement;
+ 
+           } else if (target.id.split("-")[0] == 'overflowIcon') {
+             elementClicked = target.parentElement.parentElement;
+             (target.parentElement.nextElementSibling)?.classList.remove('hide');
+           }
+           if (this.activeTab != this.projConstants.LIBRARY) {
+             $('.elipse-dropdown-info').each((i, ele) => {
+               $(ele).attr('class').includes('active-elipse') ? $(ele).removeClass('active-elipse') : elementClicked.classList.add('active-elipse');
+             });
+             $(`#overLaySearch .type-info-run-send`).find(elementClicked).length > 0 ? elementClicked.classList.add('active-elipse') : '';
+           }
+         }
+        
       }
       if(target.id.split('-').includes('overRideBtn')){
         let overrideObject : any = {

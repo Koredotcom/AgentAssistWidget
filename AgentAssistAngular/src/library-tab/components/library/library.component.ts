@@ -96,7 +96,13 @@ export class LibraryComponent implements OnInit {
   }
 
   handleRunAgent(dialogueId, event) {
-    this.menuResponse[dialogueId].agentRunButton = !this.menuResponse[dialogueId].agentRunButton;
+    for(let key in this.menuResponse){
+      if(key == dialogueId){
+        this.menuResponse[dialogueId].agentRunButton = !this.menuResponse[dialogueId].agentRunButton;
+      }else{
+        this.menuResponse[key].agentRunButton = false;
+      }
+    }
     event.stopPropagation()
   }
 
@@ -114,6 +120,7 @@ export class LibraryComponent implements OnInit {
       this.searchFromAgentSearchBar = false;
       this.handleSubjectService.setSearchText({ searchFrom: this.projConstants.LIBRARY, value: undefined });
       this.websocketService.agentAssistAgentResponse$.next(null);
+      this.setSearchTextInLocalStorage();
     }
   }
 
