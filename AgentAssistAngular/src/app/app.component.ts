@@ -28,6 +28,7 @@ export class AppComponent {
       .subscribe(params => {
         this.service.configObj = params;
         if (params.token && params.botid && params.agentassisturl && params.conversationid) {
+          this.handleSubjectService.setLoader(true);
           this.grantCall(params);
         }
         else {
@@ -53,6 +54,7 @@ export class AppComponent {
               this.errorMsg = "jwt token generation failed";
             })
           } else {
+            this.handleSubjectService.setLoader(false);
             this.errorMsg = "Issue identified in configuration settings! Please reach out to AgentAssist Admin."
           }
 
@@ -63,6 +65,7 @@ export class AppComponent {
   }
 
   grantCall(params) {
+    this.handleSubjectService.setLoader(true);
     this.service.grantCall(params.token, params.botid, params.agentassisturl).then((res) => {
       console.log(res, "sucess")
       this.isGrantSuccess = true;
@@ -70,9 +73,12 @@ export class AppComponent {
       this.handleSubjectService.setConnectionDetails(params);
       this.handleSourceType(params);
       setTimeout(() => {
+        this.handleSubjectService.setLoader(true);
         this.webSocketService.socketConnection();
+        this.handleSubjectService.setLoader(false);
       }, 100);
     }).catch((err) => {
+      this.handleSubjectService.setLoader(false);
       if (err.status === 500) {
         this.errorMsg = "Issue identified with the backend services! Please reach out to AgentAssist Admin.";
       } else {

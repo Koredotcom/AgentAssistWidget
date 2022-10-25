@@ -73,6 +73,7 @@ export class MybotComponent implements OnInit {
   subscribeEvents() {
 
     let subscription1 = this.handleSubjectService.runButtonClickEventSubject.subscribe((runEventObj: any) => {
+      this.handleSubjectService.setLoader(true);
       if(runEventObj){
         if (runEventObj.agentRunButton && !this.commonService.isMyBotAutomationOnGoing) {
           this.runDialogFormyBotTab(runEventObj);
@@ -81,13 +82,16 @@ export class MybotComponent implements OnInit {
           this.handlePopupEvent.emit({ status: true, type: this.projConstants.INTERRUPT });
         }
       }
+      this.handleSubjectService.setLoader(false);
     });
 
     let subscription2 = this.websocketService.agentAssistAgentResponse$.subscribe((response: any) => {
+      this.handleSubjectService.setLoader(true);
       if (response && !response.isSearch) {
         this.designAlterService.displayCustomerFeels(response, response.conversationId, response.botId);
         this.processMybotDataResponse(response);
       }
+      this.handleSubjectService.setLoader(false);
     });
 
     let subscription3 = this.websocketService.endOfTaskResponse$.subscribe((endoftaskresponse: any) => {
@@ -235,12 +239,14 @@ export class MybotComponent implements OnInit {
 
   //terminate code
   dialogTerminatedOrIntrupptedInMyBot() {
+    this.handleSubjectService.setLoader(true)
     this.commonService.isMyBotAutomationOnGoing = false;
     let storageObject: any = {
       [storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH_MYBOT]: this.commonService.isMyBotAutomationOnGoing
     }
     this.localStorageService.setLocalStorageItem(storageObject);
     this.commonService.addFeedbackHtmlToDom(this.myBotDropdownHeaderUuids, this.commonService.scrollContent[ProjConstants.MYBOT].lastElementBeforeNewMessage, this.dialogName,this.myBotDialogPositionId, this.commonService.userIntentInput,'runForAgentBot');
+    this.handleSubjectService.setLoader(false);
   }
 
   //old dialogues styling
@@ -262,6 +268,7 @@ export class MybotComponent implements OnInit {
   //click events in mybot
   terminateButtonClick(uuid) {
     document.getElementById(IdReferenceConst.MYBOTTERMINATE + '-' + uuid).addEventListener('click', (event) => {
+      this.handleSubjectService.setLoader(true);
       this.handlePopupEvent.emit({ status: true, type: this.projConstants.TERMINATE });
     });
   }
@@ -298,7 +305,7 @@ export class MybotComponent implements OnInit {
         if (res.agentAssistDetails.userInput) {
           userInputHtml = `<div class="agent-utt-info" id="agentUttInfo-${res._id}">
                               <div class="user-img">
-                                  <img src="./images/userIcon.svg">
+                                  <img src="${this.imageFilePath}${this.imageFileNames['USERICON']}">
                               </div>
                               <div class="text-user" >${res.agentAssistDetails.userInput}</div>
                           </div>`;

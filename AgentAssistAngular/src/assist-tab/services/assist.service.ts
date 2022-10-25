@@ -266,7 +266,7 @@ export class AssistService {
     <div class="run-info-content">
     <div class="title">Input overridden. Please provide the input</div>
     <div class="agent-utt enter-details-block">
-    <div class="title-data" ><span class="enter-details-title">${agentInputEntityName}: </span>
+    <div class="title-data" ><span class="enter-details-title">${this.sanitizeHtmlPipe.transform(agentInputEntityName)}: </span>
     <input type="text" placeholder="Enter Value" class="input-text chat-container" id="agentInput-${agentInputId}">
     </div>
     </div>
@@ -308,7 +308,7 @@ export class AssistService {
     <div class="user-img">
         <img src="${imageFilePath}${imageFileNames['USERICON']}">
     </div>
-    <div class="text-user" >${data.userInput}</div>
+    <div class="text-user" >${this.sanitizeHtmlPipe.transform(data.userInput)}</div>
     </div>
     <div class="dialog-task-run-sec hide" id="automationSuggestions-${responseId}">
     </div>`
