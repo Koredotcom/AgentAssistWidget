@@ -606,6 +606,7 @@ html, body{
     /* height: calc(100% - 82px); */
     height: calc(100% - 38px);
     z-index: 0;
+    overflow : hidden;
     /* background: var(--bg-hover-tabs-color); */
 }
 .agent-assist-chat-container .body-data-container.if-suggestion-search{
@@ -1662,7 +1663,7 @@ border: 1px solid transparent !important;
     transform: rotate(180deg);
 }
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links {
-    display: none;
+    display: flex;
     align-items: center;
     flex-shrink: 0;
     position: absolute;
