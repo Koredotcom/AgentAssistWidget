@@ -59,7 +59,7 @@ export class AssistComponent implements OnInit {
   }
 
   ngOnInit(): void {
-   // this.handleSubjectService.setLoader(true);
+    this.handleSubjectService.setLoader(true);
     let response = this.commonService.renderingHistoryMessage();
     response.then((res) => {
       this.handleSubjectService.setLoader(false);
