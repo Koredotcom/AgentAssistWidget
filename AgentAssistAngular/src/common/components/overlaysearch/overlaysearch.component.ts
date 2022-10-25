@@ -48,6 +48,7 @@ export class OverlaysearchComponent implements OnInit {
     let subscription1 = this.handleSubjectService.searchTextSubject.subscribe((searchObj : any) => {
       this.showOverLay = false;
       this.searchResponse = {};
+      this.handleSubjectService.setLoader(true);
       if (searchObj && searchObj.value) {
         this.searchConentObject = Object.assign({}, searchObj);
         setTimeout(() => {

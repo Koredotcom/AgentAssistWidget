@@ -59,9 +59,13 @@ export class AssistComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.handleSubjectService.setLoader(true);
     let response = this.commonService.renderingHistoryMessage();
     response.then((res) => {
+      this.handleSubjectService.setLoader(false);
       this.renderHistoryMessages(res.messages, res.feedbackDetails)
+    }).catch((err)=>{
+      this.handleSubjectService.setLoader(false);
     })
     this.subscribeEvents();
     this.scrollToBottom();
@@ -75,6 +79,7 @@ export class AssistComponent implements OnInit {
 
   subscribeEvents() {
     let subscription1 = this.handleSubjectService.runButtonClickEventSubject.subscribe((runEventObj: any) => {
+     // this.handleSubjectService.setLoader(true);
       if (runEventObj) {
         if (runEventObj && !runEventObj?.agentRunButton && !this.commonService.isAutomationOnGoing) {
           this.runDialogForAssistTab(runEventObj);
@@ -86,9 +91,12 @@ export class AssistComponent implements OnInit {
     });
 
     let subscription2 = this.websocketService.agentAssistResponse$.subscribe((response: any) => {
+      console.log("------------resposne of agent request")
+      this.handleSubjectService.setLoader(true);
       if (response && Object.keys(response).length > 0) {
         this.updateAgentAssistResponse(response, this.connectionDetails.botId, this.connectionDetails.conversationId);
       }
+      this.handleSubjectService.setLoader(false);
     });
 
     let subscription3 = this.websocketService.endOfTaskResponse$.subscribe((endoftaskresponse: any) => {
@@ -98,7 +106,9 @@ export class AssistComponent implements OnInit {
     })
 
     let subscription4 = this.handleSubjectService.terminateClickEventSubject.subscribe((response: any) => {
+      this.handleSubjectService.setLoader(true);
       if (response && response?.activeTab == this.projConstants.ASSIST) {
+        
         this.AgentAssist_run_click({ intentName: this.projConstants.DISCARD_ALL }, this.dialogPositionId)
         this.dialogTerminatedOrIntruppted();
       }
@@ -106,6 +116,7 @@ export class AssistComponent implements OnInit {
 
     let subscription5 = this.handleSubjectService.interruptClickEventSubject.subscribe((response: any) => {
       if (response && response?.activeTab == this.projConstants.ASSIST) {
+        this.handleSubjectService.setLoader(true);
         this.AgentAssist_run_click({ intentName: this.projConstants.DISCARD_ALL }, this.dialogPositionId)
         this.dialogTerminatedOrIntruppted();
         this.runDialogForAssistTab(this.interruptDialog);
@@ -225,6 +236,7 @@ export class AssistComponent implements OnInit {
     let addRemoveDropDown = document.getElementById(`addRemoveDropDown-${uuids}`);
     addRemoveDropDown?.classList.remove('hide');
     $(`#endTaks-${uuids}`).removeClass('hide');
+   // this.handleSubjectService.setLoader(true);
     if (!runInitent) {
       this.AgentAssist_run_click(data, this.dialogPositionId, this.projConstants.INTENT);
     }
@@ -920,13 +932,13 @@ export class AssistComponent implements OnInit {
 
   terminateButtonClick(uuid) {
     document.getElementById(IdReferenceConst.ASSISTTERMINATE + '-' + uuid).addEventListener('click', (event) => {
+    //  this.handleSubjectService.setLoader(true);
       this.handlePopupEvent.emit({ status: true, type: this.projConstants.TERMINATE });
     });
   }
 
   handleOverridBtnClick(uuid, dialogId) {
       console.log("over ride click event");
-      
       let overRideObj: any = {
         "agentId": "",
         "botId": this.connectionDetails.botId,
@@ -952,7 +964,8 @@ export class AssistComponent implements OnInit {
         runInfoContent.querySelector(`#agentInput-${agentInputId}`).addEventListener('keypress', (e: any) => {
           let key = e.which || e.keyCode || 0;
           if (key === 13) {
-            this.AgentAssist_run_click({ intentName: e.target.value }, this.dialogPositionId);
+            this.handleSubjectService.setLoader(true);
+            this.AgentAssist_run_click({ intentName: this.sanitizeHtmlPipe.transform(e.target.value )}, this.dialogPositionId);
           }
         });
       }
@@ -1359,10 +1372,11 @@ export class AssistComponent implements OnInit {
                             historyData.append(dropdownHtml);
                             previousId = res._id;
                             previousTaskPositionId = currentTaskPositionId;
-                            setTimeout(()=>{
+                            // setTimeout(()=>{
+
                               this.clickEvents(IdReferenceConst.DROPDOWN_HEADER, previousId);
                              // this.clickEvents(IdReferenceConst.ASSISTTERMINATE, previousId);
-                            }, 10000)
+                           // }, 10000)
                            
                         }
                     }

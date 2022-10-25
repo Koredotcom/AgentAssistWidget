@@ -7,7 +7,8 @@ export const ImageFileNames = {
     DIALOG_TASK : 'dialogtask.svg',
     FAQ_SUGGESTION : 'kg.svg',
     WARNING : 'warning.svg',
-    USERICON : 'userIcon.svg'
+    USERICON : 'userIcon.svg',
+    LOADER: 'loaderNewIcon.png'
 }
 
 export const ImageFilePath = "assets/images/"

@@ -40,13 +40,14 @@ export class HomeComponent implements OnInit {
   showSearchSuggestions: boolean = false;
   subscriptionsList: Subscription[] = [];
   proactiveModeEnabled: boolean = false;
-
+  isLoader;
 
   constructor(public handleSubjectService: HandleSubjectService, public websocketService: WebSocketService,
     public sanitizeHTMLPipe: SanitizeHtmlPipe, public commonService: CommonService, private koregenerateUUIDPipe: KoreGenerateuuidPipe,
     private designAlterService: DesignAlterService, private localStorageService: LocalStorageService) { }
 
   ngOnInit(): void {
+    this.handleSubjectService.setLoader(true);
     this.subscribeEvents();
   }
 
@@ -96,10 +97,15 @@ export class HomeComponent implements OnInit {
       }
     });
 
+    let subscription5 = this.handleSubjectService.isLoaderSetSubject.subscribe((val)=>{
+      this.isLoader = val;
+    })
+
     this.subscriptionsList.push(subscription1);
     this.subscriptionsList.push(subscription2);
     this.subscriptionsList.push(subscription3);
     this.subscriptionsList.push(subscription4);
+    this.subscriptionsList.push(subscription5);
   }
 
   //summary popup related code
@@ -321,10 +327,12 @@ export class HomeComponent implements OnInit {
       this.closeSearchSuggestions(true);
       this.changeActiveTab(this.projConstants.LIBRARY);
       this.handleSubjectService.setLibrarySearchTextFromAgentSearch(eventObj);
+      this.handleSubjectService.setLoader(true)
     } else if (eventObj.eventFrom == this.projConstants.LIBRARY_SEARCH) {
       this.changeActiveTab(this.projConstants.ASSIST);
       this.searchText = eventObj.searchText;
       this.getSearchResults()
+      this.handleSubjectService.setLoader(true)
     }
   }
 

@@ -18,6 +18,7 @@ export class HandleSubjectService {
   public summarySubmitClickEventSubject= new BehaviorSubject<object>(null);
   public processAgentOrTranscriptResponseSubject = new BehaviorSubject<object>(null);
   public overridebtnClickEventSubject = new BehaviorSubject<object>(null);
+  public isLoaderSetSubject = new BehaviorSubject<boolean>(false);
 
   constructor() { }
 
@@ -74,5 +75,9 @@ export class HandleSubjectService {
   setOverridebtnClickEvent(data){
     this.overridebtnClickEventSubject.next(data);
   }
+  setLoader(falg) {
+   this.isLoaderSetSubject.next(falg)
+  }
+
 
 }
