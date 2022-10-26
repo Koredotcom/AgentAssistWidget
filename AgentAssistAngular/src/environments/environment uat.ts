@@ -7,16 +7,6 @@ export const environment = {
   tag:"dev",
   API_SERVER_URL:'https://uat-agentassist.kore.ai',
   SUPPORT_API_SERVER_URL:'https://uat-agentassist.kore.ai',
-  // USE_SESSION_STORE:false,
-  // ON_PREMISE: false,
-  // BOT_NAME: "Kore Support",
-  // BOT_ID: "st-dfac6407-04dc-50a1-8b4f-51f22f615b5a",
-  // CLIENT_ID: "cs-158e5c08-98d9-5a6f-a799-84a0bf260a58",
-  // CLIENT_SECRET_ID: "vvAxkeF1Hu1SPDtF8iplkv6eqScRejbeI89ppNf7ujM=",
-  // INLINE_MANUAL_SITE_KEY: "8c0da373990588f43a6e20d8d22228ee",
-  // MIX_PANEL_TOKEN: "b824395b2b215b62057a4667a618ce90",
-  // ENABLE_MIX_PANEL: true,
-  // MIX_PANEL_DEV: true
 };
 
 /*
