@@ -3169,7 +3169,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                         <div class="title-data"><ul class="chat-container" id="displayData-${res._id}"></ul></div>
                                                         <div class="action-links">
                                                         <button class="send-run-btn" id="sendMsg" data-msg-id="${res._id}" data-msg-data="${newTemp}">Send</button>
-                                                        <div class="copy-btn hide" data-msg-id="${res._id}">
+                                                        <div class="copy-btn" data-msg-id="${res._id}">
                                                             <i class="ast-copy" data-msg-id="${res._id}"></i>
                                                         </div>
                                                     </div>
@@ -6237,7 +6237,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     $('.sugestions-info-data').removeClass('hide');
                     $('#bodyContainer').addClass('if-suggestion-search');
                     emptySearchBarDuringTabShift();
-                    if (!isAutomationOnGoing && noAutomationrunninginMyBot) {
+                    if (!isMyBotAutomationOnGoing && noAutomationrunninginMyBot) {
                         $('#noAutoRunning').removeClass('hide');
                     }
                     let automationSuggestions = $('#agentAutoContainer .dialog-task-accordiaon-info');
