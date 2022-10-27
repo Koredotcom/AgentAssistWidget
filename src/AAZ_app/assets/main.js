@@ -176,11 +176,6 @@ async function main() {
 
   iframeRender(_iframeURL);
 
-  // client.on('app.registered', (event) => {
-  //   console.log("app registered =========> ", event);
-  // });
-
-
   window.addEventListener("message", async (event) => {
     // var recordId = activeConversationId;
     if (event.data.name === "agentAssist.SendMessage" && event.data.conversationId == activeConversationId) {
