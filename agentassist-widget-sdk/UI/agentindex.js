@@ -6237,7 +6237,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     $('.sugestions-info-data').removeClass('hide');
                     $('#bodyContainer').addClass('if-suggestion-search');
                     emptySearchBarDuringTabShift();
-                    if (!isAutomationOnGoing && noAutomationrunninginMyBot) {
+                    if (!isMyBotAutomationOnGoing && noAutomationrunninginMyBot) {
                         $('#noAutoRunning').removeClass('hide');
                     }
                     let automationSuggestions = $('#agentAutoContainer .dialog-task-accordiaon-info');
