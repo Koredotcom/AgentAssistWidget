@@ -31,8 +31,6 @@
               "src/assets"
             ],
             "styles": [
-              "src/assets/css/reset.css",
-              "src/styles.scss",
               "src/assets/fonts/inter.css",
               "src/assets/fonts/AgentAssist-icons/style.css",
               "src/assets/css/jquery-ui.min.css",
@@ -42,7 +40,9 @@
               "src/assets/css/chatWindow.css",
               "src/assets/css/emojione.sprites.css",
               "src/assets/css/purejscarousel.css",
-              "src/assets/css/customTemplate.css" 
+              "src/assets/css/customTemplate.css",
+              "src/assets/scss/_styles.scss",
+              "src/styles.scss"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",

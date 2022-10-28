@@ -1,4 +1,4 @@
-<div class="smartassist-color-scheme">
+<div class="smartassist-color-scheme" *ngIf="false">
     <div id="agent-assist-chat-container" class="agent-assist-chat-container kore-chat-window">
         <div class="header-top-bar">
             <div class="header-data hide">
@@ -105,5 +105,146 @@
             </div>
         </div>
         <app-loader *ngIf="isLoader"></app-loader>
+    </div>
+</div>
+
+
+<div class="agentassist-wrapper-main-container">
+    <div class="header-wrapper d_flex align_center space_between">
+        <div class="logo">
+            <img src="assets/images/logo.svg">
+        </div>
+        <div class="action-sec d_flex align_center flex_end">
+            <div class="btn-action d_flex align_center justify_center">
+                <i class="ast-list"></i>
+                <span>Library</span>
+            </div>
+            <div class="btn-action d_flex align_center justify_center">
+                <i class="ast-settings"></i>
+            </div>
+            <div class="btn-action d_flex align_center justify_center">
+                <i class="ast-search"></i>
+            </div>
+        </div>
+    </div>
+    <div class="body-wrapper-info">
+        <perfect-scrollbar>
+            <div class="inner-content-data">
+                <div class="transcipt-info">
+                    <div class="drag-with-title">
+                        <div class="drag-icon">
+                            <i class="ast-drag-drop"></i>
+                        </div>
+                        <div class="title">Transcript</div>
+                    </div>
+                    <div class="desc-text">Hi Jane! John this side. It’s my birthday, and I got a message for a 50% off on pizza delivery.</div>
+                    <div class="you-info-text">You • 6:30PM</div>
+                    <div class="desc-text">I can see that you are eligible for a 50% off. What would you like to order?</div>
+                    <div class="you-info-text others-text">John Wick • 6:30PM <span></span></div>
+                    <div class="desc-text">I’d like to place an order for a Pepperoni Pizza</div>
+
+                </div>
+                <div class="divider-resize">
+                    <div class="resize-icon"></div>
+                </div>
+
+                <div class="card-assist">
+                    <div class="card_header">
+                        <div class="left-info">
+                            <div class="drag-with-title">
+                                <div class="drag-icon">
+                                    <i class="ast-drag-drop"></i>
+                                </div>
+                                <div class="title">Assist</div>
+                            </div>
+                            <div class="order-info">Place Order <span>Step:</span> Pizza Base</div>
+                        </div>
+                        <div class="right-sec">
+                            <button class="action-btn">
+                                <i class="ast-return"></i>
+                            </button>
+                            <button class="action-btn">
+                                <i class="ast-list"></i>
+                            </button>
+                            <button class="action-btn record-btn">
+                                <span></span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card_body">
+                       <perfect-scrollbar>
+                            <div class="scroll-inner-data">
+                                <div class="no-dialog-run-sec">
+                                    <div class="cust-info">
+                                        <div class="img-block">
+                                            <img src="assets/images/profile.svg">
+                                        </div>
+                                        <div class="content-sec">
+                                            <div class="title">Customer said</div>
+                                            <div class="desc-text-italic">“I’d like to place an order for a Pepperoni Pizza”</div>
+                                        </div>
+                                    </div>
+                                    <div class="intent-identified-data">
+                                        <div class="cust-info">
+                                            <div class="img-block">
+                                                <img src="assets/images/new-images/intent-bg.svg">
+                                            </div>
+                                            <div class="content-sec">
+                                                <div class="title">AgentAssist • Intent Identified</div>
+                                            </div>
+                                        </div>
+                                        <div class="intent-box-info">
+                                            <div class="conv-data">
+                                                <div class="img-with-title">
+                                                    <div class="img-block">
+                                                        <img src="assets/images/new-images/workflows.svg">
+                                                    </div>
+                                                    <div class="title">Conversation</div>
+                                                </div>
+                                                <!-- Repeated Data -->
+                                                <ng-container>
+                                                    <div class="convs-list">
+                                                        <div class="left-title">Place order</div>
+                                                        <div class="right-actions">
+                                                            <button class="run-btn">RUN</button>
+                                                            <div class="dropdown-elipse">
+                                                                <div class="drop-icon">
+                                                                    <i class="ast-overflow"></i>
+                                                                </div>
+                                                                <div class="list-dropdown-content">
+                                                                    <li>Option</li>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="convs-list">
+                                                        <div class="left-title">Remove items from order</div>
+                                                        <div class="right-actions">
+                                                            <button class="run-btn">RUN</button>
+                                                            <div class="dropdown-elipse">
+                                                                <div class="drop-icon">
+                                                                    <i class="ast-overflow"></i>
+                                                                </div>
+                                                                <div class="list-dropdown-content">
+                                                                    <li>Option</li>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="convs-list">
+                                                        <a class="link-text">Not what you’re looking for?</a>
+                                                    </div>
+                                                </ng-container>
+                                                <!-- End -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                       </perfect-scrollbar>
+                    </div>
+                </div>
+            </div>
+        </perfect-scrollbar>
     </div>
 </div>
