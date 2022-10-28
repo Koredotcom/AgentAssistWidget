@@ -1,0 +1,89 @@
+
+
+.search-assist-wrapper{
+    height: calc(100vh - 59px);
+    .scroll-data{
+        padding: 40px;
+    }
+    .header-title{
+        font-size: 26px;
+        font-weight: bold;
+        color: #202124;
+        line-height: 30px;
+        margin-bottom: 20px;
+    }
+    .info-intelegent{
+        margin: 20px 0;
+        background: #F3F8FF;
+        border-radius: 4px;
+        padding: 22px 104px;
+        display: flex;
+        align-items: center;
+        .img-block{
+            flex-shrink: 0;
+            margin-right: 40px;
+        }
+        .content-sec{
+            width: 100%;
+            .title{
+                font-weight: 400;
+                font-size: 16px;
+                line-height: 24px;
+                color: #262626;
+            }
+            .know-more{
+                font-weight: 500;
+                font-size: 12px;
+                line-height: 18px;
+                color: #2B75E4;
+                margin-top: 10px;
+                display: inline-block;
+                cursor: pointer;
+            }
+        }
+    }
+    .label_heading{
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 24px;
+        color: #171717;
+        margin-bottom: 5px;
+    }
+    .action-box-data{
+        margin: 15px 0;
+        background: #FAFAFA;
+        border-radius: 4px;
+        padding: 0px 20px;
+        .row-data{
+            margin: 0;
+            border-bottom: 1px solid #E5E5E5;
+            .column-data{
+                padding: 20px 10px;
+                .label-text{
+                    margin-bottom: 4px;
+                    font-weight: 500;
+                    font-size: 14px;
+                    line-height: 20px;
+                    color: #171717;
+                    i{
+                        font-size: 14px;
+                        color: #A3A3A3;
+                        margin-left: 2px;
+                        cursor: pointer;
+                        position: relative;
+                        top: 1px;
+                    }
+                }
+            }
+        }
+    }
+    .edit-save{
+        display: flex;
+        align-items: center;
+        justify-content: end;
+        margin-top: 20px;
+        button{
+            margin-left: 15px;
+        }
+    }
+}
