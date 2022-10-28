@@ -24,13 +24,15 @@
     {
       "name": "clientId",
       "type": "text",
-      "required":true
+      "required":true,
+      "secure": true
      
     },
     {
       "name": "clientSecret",
       "type": "password",
-      "required":true   
+      "required":true,
+      "secure": true
     },
     {
       "name": "botId",
