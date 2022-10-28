@@ -78,6 +78,9 @@
 			<div class="link-router" [routerLink]="['languages']" routerLinkActive="active" *hasPermission="['LANGUAGE_SETTINGS_VIEW', 'WAITING_EXPERIENCE_FULL']" (click)="getAdvSettings()">
 				<img src="assets/icons/leftmenu/languages-speech.svg"><span class="link-name">Speech Recognition</span>
 			</div>
+      <div class="link-router" [routerLink]="['searchAssist']" routerLinkActive="active" *hasPermission="['LANGUAGE_SETTINGS_VIEW', 'WAITING_EXPERIENCE_FULL']" (click)="getAdvSettings()">
+				<img src="assets/icons/leftmenu/languages-speech.svg"><span class="link-name">SearchAssist</span>
+			</div>
 			<!-- <div class="link-router" [routerLink]="['agent-assist']" routerLinkActive="active" *hasPermission="['STANDARD_RESPONSE_VIEW']">
 				<img src="assets/icons/leftmenu/agent-assist.svg"><span class="link-name">{{'ONBOARDING.STD_RESPONSE' | translate}}</span>
 			</div>
@@ -94,7 +97,7 @@
 	<!-- <div class="list-group list-group-flush" *ngIf="type === 'history'">
 		<div class="group-links">
 			<div class="group-heading">{{"BTMENU_SUMMARY" | translate}}	</div>
-			
+
 		</div>
 		<div class="group-links">
 			<div class="group-heading">{{"ANALYZE_AUTO" | translate}}	</div>
