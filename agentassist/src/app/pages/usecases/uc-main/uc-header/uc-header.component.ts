@@ -19,7 +19,7 @@ export class UsecasesHeaderComponent implements OnInit {
   newUseCases: NewUsecase[] = [
     {title: this.translate.instant("USECASES.NEW_QA"), desc: this.translate.instant("USECASES.NEW_QA_DESC"), imgSrc: 'assets/images/usecases/new_faq.png', id: 'faq'},
     {title: this.translate.instant("USECASES.NEW_CONV"), desc: this.translate.instant("USECASES.NEW_CONV_DESC"), imgSrc: 'assets/images/usecases/new_conv.png', id: 'dialog'},
-    {title: this.translate.instant("USECASES.NEW_PRE_BOT"), desc: this.translate.instant("ONBOARDING.CREATE_TEMPLATES_DESC"), imgSrc: 'assets/images/usecases/new_template.png', id: 'new_template'}
+    {title: this.translate.instant("ONBOARDING.IMPORT_BOT"), desc: this.translate.instant("ONBOARDING.IMPORT_BOT_DESC"), imgSrc: 'assets/images/usecases/new_template.png', id: 'new_template'}
   ];
 
   constructor(public usecaseService: UsecasesMainService,
