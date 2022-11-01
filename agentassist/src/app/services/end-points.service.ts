@@ -14,13 +14,13 @@ export class EndPointsService {
   private serviceList: Object = {};
 
   constructor() {
-    // if (environment.production) {
-    //   this.SERVER_URL = window.location.protocol + '//' + window.location.host;
-    //   this.API_SERVER_URL = this.SERVER_URL + this.API_URL_PREFIX + this.API_VERSION_PREFIX;
-    // } 
-    
-    this.SERVER_URL = environment['API_SERVER_URL'];
-    this.API_SERVER_URL = environment['API_SERVER_URL'] + this.API_URL_PREFIX + this.API_VERSION_PREFIX;
+    if (environment.production) {
+      this.SERVER_URL = window.location.protocol + '//' + window.location.host;
+      this.API_SERVER_URL = this.SERVER_URL + this.API_URL_PREFIX + this.API_VERSION_PREFIX;
+    } else {
+      this.SERVER_URL = environment['API_SERVER_URL'];
+      this.API_SERVER_URL = environment['API_SERVER_URL'] + this.API_URL_PREFIX + this.API_VERSION_PREFIX;
+    }
     this.SUPPORT_API_SERVER_URL = environment['SUPPORT_API_SERVER_URL'] + this.API_URL_PREFIX + this.API_VERSION_PREFIX;
     this.init();
   }
@@ -313,7 +313,7 @@ export class EndPointsService {
       endpoint: this.API_SERVER_URL + '/builder/streams/:streamId/dockStatus/:dsId',
       method: 'put'
     };
-    
+
     this.serviceList['get.dockstatus.callflow.versions'] = {
       endpoint: this.API_SERVER_URL + '/users/:userId/streams/:streamId/callflows/:callflowId/dockStatus',
       method: 'get'
