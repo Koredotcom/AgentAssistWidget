@@ -478,7 +478,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 
                 renderingAgentHistoryMessage();
                 
-                updateUIState(_conversationId, isCallConversation);
                 // var agent_menu_request = {
                 //     "botId": _agentAssistDataObj.botId,
                 //     "conversationId": _agentAssistDataObj.conversationId,
@@ -2743,7 +2742,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         AgentAssistPubSub.publish('automation_exhaustive_list',
                         { conversationId: _agentAssistDataObj.conversationId, botId: _agentAssistDataObj.botId, 'experience': 'chat' });
                         document.getElementById("loader").style.display = "none";
-
+                        updateUIState(_conversationId, isCallConversation);
                         let previousId;
                         let previousTaskPositionId, currentTaskPositionId, currentTaskName, previousTaskName;
                         // if (JSON.stringify(response) === JSON.stringify(previousResp)) {
@@ -2999,7 +2998,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                                     let historyData = $('#dynamicBlock');
                                     let userInputHtml;
-                                    if (res.agentAssistDetails.userInput) {
+                                    if (res.agentAssistDetails?.userInput) {
                                         userInputHtml = `<div class="agent-utt-info" id="agentUttInfo-${res._id}">
                                             <div class="user-img">
                                                 <img src="./images/userIcon.svg">
@@ -3068,7 +3067,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             }
                                         }
                                     }
-                                    if (res.agentAssistDetails.entityName && res.agentAssistDetails.entityResponse && res.agentAssistDetails.entityValue) {
+                                    if (res.agentAssistDetails?.entityName && res.agentAssistDetails?.entityResponse && res.agentAssistDetails?.entityValue) {
                                         let runInfoContent = $(`#dropDownData-${previousId}`);
                                         let userQueryHtml = `
                                             <div class="steps-run-data">
@@ -3443,7 +3442,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     currentTaskPositionId = res?.agentAssistDetails?.positionId ? res?.agentAssistDetails?.positionId : currentTaskPositionId;
                                     let historyData = $('#myBotAutomationBlock');
                                     let userInputHtml;
-                                    if (res.agentAssistDetails.userInput) {
+                                    if (res.agentAssistDetails?.userInput) {
                                         userInputHtml = `<div class="agent-utt-info" id="agentUttInfo-${res._id}">
                                                 <div class="user-img">
                                                     <img src="./images/userIcon.svg">
@@ -3516,7 +3515,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             }
                                         }   
                                     }
-                                    if (res.agentAssistDetails.entityName && res.agentAssistDetails.entityResponse && res.agentAssistDetails.entityValue) {
+                                    if (res.agentAssistDetails?.entityName && res.agentAssistDetails?.entityResponse && res.agentAssistDetails?.entityValue) {
                                         let runInfoContent = $(`#dropDownData-${previousId}`);
                                         let userQueryHtml = `
                                                 <div class="steps-run-data">
