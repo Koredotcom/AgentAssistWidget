@@ -2218,8 +2218,35 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             }    
                         }
                     }
-                    
+                    if(!isAutomationOnGoing && dropdownHeaderUuids && data.buttons && !data.value.includes('Customer has waited') && (dialogPositionId && !data.positionId || data.positionId == dialogPositionId)){
+                        $('#dynamicBlock .empty-data-no-agents').addClass('hide');
+                        let dynamicBlockDiv = $('#dynamicBlock');
+                        data.buttons?.forEach((ele, i) => {
+                            let botResHtml = `
+                                <div class="collapse-acc-data before-none" id='smallTalk-${uuids}'>
+                            <div class="steps-run-data">
+                            <div class="icon_block">
+                                <i class="ast-agent"></i>
+                            </div>
+                            <div class="run-info-content" >
+                            <div class="title">Tell Customer</div>
+                            <div class="agent-utt">
+                                <div class="title-data" id="displayData-${uuids}">${ele.value}</div>
+                                <div class="action-links">
+                                    <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}"  data-msg-data='${ele.value}'>Send</button>
+                                    <div class="copy-btn" data-msg-id="${uuids}" data-msg-data='${ele.value}'>
+                                        <i class="ast-copy" data-msg-id="${uuids}" data-msg-data='${ele.value}'></i>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>`;
+                            dynamicBlockDiv.append(botResHtml);
+                        });
+                    }
                     if (!isAutomationOnGoing && !dropdownHeaderUuids && !parsedPayload && !data.suggestions) {
+                        
                         $('#dynamicBlock .empty-data-no-agents').addClass('hide');
                         let dynamicBlockDiv = $('#dynamicBlock');
                         data.buttons?.forEach((ele, i) => {
