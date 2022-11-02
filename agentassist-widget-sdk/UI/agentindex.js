@@ -6651,13 +6651,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             searchedVal = $('#librarySearch').val();
                             updateCurrentTabInState(_conversationId, 'librarySearch');
                             $('#searchResults').addClass('hide');
-                            typeAHead(e, true)
+                            typeAHead(e, true);
                             // agentSearchVal = agent_search;
                             var convId = e.target.dataset.convId;
                             var botId = e.target.dataset.botId;
                             var intentName = input_taker ? input_taker : e.target.dataset.val;
-                          //  AgentAssistPubSub.publish('searched_Automation_details', { conversationId: convId, botId: botId, value: intentName, isSearch: true });
-                        //    document.getElementById("loader").style.display = "block";
+                            //  AgentAssistPubSub.publish('searched_Automation_details', { conversationId: convId, botId: botId, value: intentName, isSearch: true });
+                            //    document.getElementById("loader").style.display = "block";
                             document.getElementById("overLaySearch").style.display = "none";
                         } else if (e.keyCode == 13 && agent_search.trim().length > 0) {
                             agentSearchVal = agent_search;
