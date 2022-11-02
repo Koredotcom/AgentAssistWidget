@@ -162,6 +162,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 let isOnlyOneFaqOnSearch = false;
                 let isInitialDialogOnGoing = false;
                 let isSendWelcomeMessage;
+                let isShowAllClicked = false;
                 chatConfig = window.KoreSDK.chatConfig;
                 var koreBot = koreBotChat();
                 AgentChatInitialize = new koreBot.chatWindow(chatConfig);
@@ -4383,6 +4384,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
 
                         if (target.className == 'show-all') {
+                            isShowAllClicked = true;
                             $('#frequently-exhaustive').addClass('hide');
                             let showAllClicked = true;
                             previousTabActive = currentTabActive;
@@ -4439,6 +4441,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
 
                         if (target.id == 'backToPreviousTab') {
+                            isShowAllClicked = false;
                             $('#frequently-exhaustive').removeClass('hide');
                             $(`#${currentTabActive}`).removeClass('active-tab');
                             $(`#${previousTabActive}`).addClass('active-tab');
@@ -6650,14 +6653,19 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         if (e.keyCode == 13 && (input_taker.trim().length > 0)) {
                             searchedVal = $('#librarySearch').val();
                             updateCurrentTabInState(_conversationId, 'librarySearch');
-                            $('#searchResults').addClass('hide');
-                            typeAHead(e, true);
+                            if(!isShowAllClicked){
+                                $('#searchResults').addClass('hide');
+                                typeAHead(e, true);
+                            }
                             // agentSearchVal = agent_search;
                             var convId = e.target.dataset.convId;
                             var botId = e.target.dataset.botId;
                             var intentName = input_taker ? input_taker : e.target.dataset.val;
-                            //  AgentAssistPubSub.publish('searched_Automation_details', { conversationId: convId, botId: botId, value: intentName, isSearch: true });
-                            //    document.getElementById("loader").style.display = "block";
+                            if(isShowAllClicked){
+                                AgentAssistPubSub.publish('searched_Automation_details', { conversationId: convId, botId: botId, value: intentName, isSearch: true });
+                                document.getElementById("loader").style.display = "block";
+                            }
+                            
                             document.getElementById("overLaySearch").style.display = "none";
                         } else if (e.keyCode == 13 && agent_search.trim().length > 0) {
                             agentSearchVal = agent_search;
