@@ -417,6 +417,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             processAgentIntentResults(data, data.conversationId, data.botId);
                             document.getElementById("loader").style.display = "none";
                             document.getElementById("overLaySearch").style.display = "block";
+                            document.getElementById("overLayAutoSearch").style.display = "block";
+                            $('#overLayAutoSearch').html('');
+                            $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
+                            $('.search-block').find('.search-results-text').remove();
                         } else {
                           //  updateAgentAssistState(_conversationId, 'myBotTab', data);
                             // if(!(isMyBotAutomationOnGoing && data.suggestions)){
@@ -4204,7 +4208,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     newlyAddedIdList = [];
                     removedIdListOnScroll = [];
                 }
-
+                const typeAHead = typeAHeadDeBounce((e, falg)=>getAutoSearchApiResult(e, falg));
                 function btnInit() {
 
                     document.querySelector('#bodyContainer').addEventListener('ps-scroll-up', (scrollUpevent) => {
@@ -4364,6 +4368,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $('#overLaySearch').html('');
                             $('#librarySearch').val('');
                             searchedVal = '';
+                            $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
+                            $('#overLayAutoSearch').html('');
+                            $('.search-block').find('.search-results-text')?.remove();
                         }
 
                         if (target.id === 'cancelLibrarySearch') {
@@ -4428,6 +4435,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $('#backButton').addClass('hide');
                             $('#searchResults').addClass('hide');
                             $('#allAutomations-Exhaustivelist').removeClass('hide');
+                            $('.search-block').find('.search-results-text').remove();
                         }
 
                         if (target.id == 'backToPreviousTab') {
@@ -4451,6 +4459,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $('#LibraryContainer').addClass('hide');
                             $('.overlay-suggestions').removeClass('hide').attr('style', 'bottom:0; display:block');
                             $('#backButton').addClass('hide');
+                            $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
                             $('.sugestions-info-data').removeClass('hide');
                             $('#bodyContainer').addClass('if-suggestion-search');
 
@@ -5623,6 +5632,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     $('.empty-data-no-agents').addClass('hide');
                                     $('#agentSearch').val('');
                                     $('.overlay-suggestions').addClass('hide').removeAttr('style');
+                                    // $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
+                                    // $('#overLayAutoSearch').html('');
                                     $('#overLaySearch').html('');
                                     userTabActive();
 
@@ -6027,9 +6038,28 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             window.parent.postMessage(message, '*');
                             $(`#summary`).addClass('hide');
                         }
-                    })
 
-                    document.addEventListener("keyup", (evt) => {
+                        if(target.id.split('-').includes('autoResult')){
+                            $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
+                            $('#overLayAutoSearch').html('');
+                            $('.search-block').find('.search-results-text')?.remove();
+                            $('#agentSearch').val(target.innerHTML);
+                            document.getElementById("loader").style.display = "block";
+                            AgentAssistPubSub.publish('searched_Automation_details', { conversationId: _conversationId, botId: _botId, value: target.innerHTML, isSearch: true, "positionId": evt.target.dataset.positionId });
+                        }
+
+                        if(target.id.split('-').includes('autoResultLib')){
+                            $('#librarySearch').val(target.innerHTML);
+                            $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
+                            $('#overLayAutoSearch').html('');
+                            $('.search-block').find('.search-results-text')?.remove();
+                            document.getElementById("loader").style.display = "block";
+                            AgentAssistPubSub.publish('searched_Automation_details', { conversationId: _conversationId, botId: _botId, value: target.innerHTML, isSearch: true, "positionId": evt.target.dataset.positionId });
+                        }
+                    })
+                    
+                    document.addEventListener("keyup", 
+                    (evt) => {
                         var target = evt.target;
                         if (target.dataset.isentityValues) {
                             let targetid = target.id.split('-');
@@ -6057,16 +6087,85 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             if (val == '') {
                                 $('#overLaySearch').html('');
                                 $('.overlay-suggestions').addClass('hide').removeAttr('style');
+                                $('#overLayAutoSearch').html('');
+                                $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
                             }
+                            $('#searchResults').addClass('hide');
+                                typeAHead(evt, val== ''? true: false);
+                            
+                            
                             if (agentAssistInput || mybotInput) {
                                 AgentAssist_input_keydown(evt);
                             }
                         }
 
-                    })
+                    }
+                    )
                     window._agentAssisteventListenerAdded = true;
                 }
 
+                function typeAHeadDeBounce(func, timeout = 300){
+                  let delay;
+                  return function(...args){
+                    clearTimeout(delay);
+                    delay = setTimeout(()=>{
+                       func.apply(this, args);
+                    }, timeout)
+                  }
+                }
+
+                function getAutoSearchApiResult(e){
+                    console.log(this,"this","get in auto search api", e)
+                    let payload = {
+                        "query": e.target.value,
+                        "maxNumOfResults": 3,
+                        "lang": "en"
+                      }
+                    if(!arguments[1]){
+                        addAutoSuggestionApi(e); 
+                    }else{
+                        console.log("came hee to else condition of autpo librqaruy")
+                        addAutoSuggestionTolibrary(e);
+                    }
+                    
+                    $.ajax({
+                        url: `${connectionDetails.envinormentUrl}/agentassist/api/v1/searchaccounts/autosearch?botId=${_botId}`,
+                        type: 'post',
+                        data: payload,
+                        dataType: 'json',
+                        success: function (data) {
+                           console.log("data", data);
+                           $('#overLaySearch').html(`<div class="search-results-text">${data}</div>`)
+                        },
+                        error: function (err) {
+                            console.error("jwt token generation failed");
+                        }
+                    });
+                }
+
+                function addAutoSuggestionTolibrary(e){
+                    let aa = ["hello", "there", "book", "password"];
+                    $('.search-block').find('.search-results-text').remove();
+                    if (e.target.value.length > 0) {
+                        let autoDiv = $('.search-block');
+                        aa.forEach((ele) => {
+                            autoDiv.append(`<div class="search-results-text" style="cursor: pointer;background: white;" id="autoResultLib-${ele}">${ele}</div>`)
+                        })
+                    }
+                }
+
+                function addAutoSuggestionApi(e){
+                    let aa = ["hello", "there", "book", "password"]
+                    $('#overLayAutoSearch').html('');
+                    if (e.target.value.length > 0) {
+                        $('#overLayAutoSearchDiv').removeClass('hide').attr('style', 'bottom:0; display:block');
+                        let autoDiv = $('#overLayAutoSearch');
+                        aa.forEach((ele) => {
+                            autoDiv.append(`<div class="search-results-text" style="cursor: pointer;" id="autoResult-${ele}">${ele}</div>`)
+                        })
+                    }
+                }
+                
                 function runDialogFormyBotTab(data, idTarget){
                     if(data?.payload){
                      data = data.payload.info;
@@ -6545,15 +6644,20 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             searchedVal = '';
                             processAgentIntentResults(autoExhaustiveList, autoExhaustiveList.conversationId, autoExhaustiveList.botId);
                         }
+                        if(e.keyCode == 13 && (input_taker.trim().length <= 0)) {
+                            $('.search-block').find('.search-results-text').remove();
+                        }
                         if (e.keyCode == 13 && (input_taker.trim().length > 0)) {
                             searchedVal = $('#librarySearch').val();
                             updateCurrentTabInState(_conversationId, 'librarySearch');
+                            $('#searchResults').addClass('hide');
+                            typeAHead(e, true)
                             // agentSearchVal = agent_search;
                             var convId = e.target.dataset.convId;
                             var botId = e.target.dataset.botId;
                             var intentName = input_taker ? input_taker : e.target.dataset.val;
-                            AgentAssistPubSub.publish('searched_Automation_details', { conversationId: convId, botId: botId, value: intentName, isSearch: true });
-                            document.getElementById("loader").style.display = "block";
+                          //  AgentAssistPubSub.publish('searched_Automation_details', { conversationId: convId, botId: botId, value: intentName, isSearch: true });
+                        //    document.getElementById("loader").style.display = "block";
                             document.getElementById("overLaySearch").style.display = "none";
                         } else if (e.keyCode == 13 && agent_search.trim().length > 0) {
                             agentSearchVal = agent_search;
@@ -6821,6 +6925,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
         </div>
         <div class="overlay-suggestions hide">
             <div class="suggestion-content" id="overLaySearch">
+            </div>
+        </div>
+        <div class="overlay-suggestions hide" id="overLayAutoSearchDiv">
+            <div class="suggestion-content" id="overLayAutoSearch">
             </div>
         </div>
 
