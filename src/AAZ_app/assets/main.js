@@ -136,7 +136,6 @@ async function main() {
 
   var metadata = await client.metadata();
 
- console.log(_metadata);
   client.on('ticket.save', async function () {
     let response = await client.get('ticket.status');
     if (response['ticket.status'] === "solved") {
