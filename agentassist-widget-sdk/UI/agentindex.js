@@ -6133,7 +6133,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         success: function (data) {
                            console.log("data", data);
                             if(!arguments[1]){
-                                addAutoSuggestionApi(e, data); 
+                                addAutoSuggestionApi(e, data);
                             }else{
                                 console.log("came hee to else condition of autpo librqaruy")
                                 addAutoSuggestionTolibrary(e,data);
