@@ -6095,7 +6095,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
                             }
                             $('#searchResults').addClass('hide');
-                                typeAHead(evt, val== ''? true: false);
+                            console.log("-------val----", val)
+                            typeAHead(evt, val== ''? true: false);
                             
                             
                             if (agentAssistInput || mybotInput) {
@@ -6119,7 +6120,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
 
                 function getAutoSearchApiResult(e){
-                    console.log(this,"this","get in auto search api", e)
+                    console.log(arguments[1],"this","get in auto search api", e)
                     let payload = {
                         "query": e.target.value,
                         "maxNumOfResults": 3,
@@ -6339,7 +6340,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     document.getElementById('LibraryContainer').classList.remove('hide');
                     $('.sugestions-info-data').addClass('hide');
                     $('#bodyContainer').removeClass('if-suggestion-search');
-
+                    emptySearchBarDuringTabShift();
                 }
 
                 function agentTabActive() {
@@ -6407,6 +6408,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     if (document.getElementById('librarySearch').value.length !== 0) {
                         const agentSearchVal = document.getElementById('librarySearch');
                         agentSearchVal.value = '';
+                    }
+                    if (document.getElementById('agentSearch').value.length !== 0) {
+                        $('#agentSearch').val('');
                     }
                 }
 
@@ -6655,6 +6659,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             updateCurrentTabInState(_conversationId, 'librarySearch');
                             if(!isShowAllClicked){
                                 $('#searchResults').addClass('hide');
+                                console.log("-------val---is in -librarySearch")
                                 typeAHead(e, true);
                             }
                             // agentSearchVal = agent_search;
