@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { SubSink } from 'subsink';
-import { DASHBORADCOMPONENTTYPE, VIEWTYPE } from '../dashboard.cnst';
+import { COMPONENTVSSUBTITLE, COMPONENTVSTITLE, DASHBORADCOMPONENTTYPE, VIEWTYPE } from '../dashboard.cnst';
 import { DashboardService } from '../dashboard.service';
 
 @Component({
@@ -20,6 +20,8 @@ export class ExhaustiveRepresentationComponent implements OnInit {
 
 
   sliderStatus: boolean;
+  componentTitle : string;
+  componentSubTitle : string;
 
   constructor(public dashboardService: DashboardService) { }
 
@@ -28,10 +30,12 @@ export class ExhaustiveRepresentationComponent implements OnInit {
     this.subs.sink = this.dashboardService.getExhaustiveRep().subscribe((response: any) => {
       console.log("inside subsribe", response);
       
-      if (response && response.status && response.type === DASHBORADCOMPONENTTYPE.AGENT_ASPECT) {
+      if (response && response.status) {
         this.sliderStatus = response.status;
         this.componentType = response.type;
-        console.log(this.sliderStatus, "slider status", this.componentType);
+        this.componentTitle = COMPONENTVSTITLE[response.type];
+        this.componentSubTitle = COMPONENTVSSUBTITLE[response.type];
+        console.log(this.sliderStatus, "slider status", this.componentType, this.componentTitle);
       }
     })
   }

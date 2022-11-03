@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-customer-aspect',
@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CustomerAspectComponent implements OnInit {
 
+  @Input() viewType : string;
+  
   constructor() { }
 
   ngOnInit(): void {

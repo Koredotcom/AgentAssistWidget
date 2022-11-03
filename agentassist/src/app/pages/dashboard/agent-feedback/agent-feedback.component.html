@@ -1,1 +1,173 @@
-<p>agent-feedback works!</p>
+
+<div class="agent-feedback-wrapper">
+    <ng-container *ngIf="(viewType == VIEWTYPELIST.PARTIAL_VIEW)">
+        <div class="cards-data-boards agent-feedback-cards">
+            <div class="card-sec max_width_100">
+                <div class="inner-data-sec">
+                    <div class="title-text-info">
+                        <span class="heading-text">Total Responses</span>
+                    </div>
+                    <div class="count-heading">7537</div>
+                </div>
+            </div>
+            <div class="card-sec max_width_100">
+                <div class="inner-data-sec">
+                    <div class="title-text-info">
+                        <span class="heading-text">Helpful</span>
+                        <i class="icon-ast_thumbsup"></i>
+                    </div>
+                    <div class="count-heading">73%</div>
+                </div>
+            </div>
+            <div class="card-sec max_width_100">
+                <div class="inner-data-sec">
+                    <div class="title-text-info">
+                        <span class="heading-text">Not Helpful</span>
+                        <i class="icon-sat_thumsdown"></i>
+                    </div>
+                    <div class="count-heading">27%</div>
+                </div>
+            </div>
+        </div>
+        <div class="table-agent-feedback">
+            <div class="table-header row">
+                <div class="title col-4">Automation NAME</div>
+                <div class="title col-3">RESPONSES</div>
+                <div class="title col-5">LIKE/DISLIKE</div>
+            </div>
+            <ng-container>
+                <div class="table-body-feedback row">
+                    <div class="col-4 title">Book Flight</div>
+                    <div class="col-3 title">700</div>
+                    <div class="col-5 like-dislike">
+                        <div class="like-count">
+                            <i class="icon-ast_thumbsup"></i>
+                            <span class="count">340</span>
+                            <span class="percentage">(68%)</span>
+                        </div>
+                        <div class="like-count">
+                            <i class="icon-sat_thumsdown"></i>
+                            <span class="count">340</span>
+                            <span class="percentage">(32%)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-body-feedback row">
+                    <div class="col-4 title">Book Flight</div>
+                    <div class="col-3 title">700</div>
+                    <div class="col-5 like-dislike">
+                        <div class="like-count">
+                            <i class="icon-ast_thumbsup"></i>
+                            <span class="count">340</span>
+                            <span class="percentage">(68%)</span>
+                        </div>
+                        <div class="like-count">
+                            <i class="icon-sat_thumsdown"></i>
+                            <span class="count">340</span>
+                            <span class="percentage">(32%)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-body-feedback row">
+                    <div class="col-4 title">Book Flight</div>
+                    <div class="col-3 title">700</div>
+                    <div class="col-5 like-dislike">
+                        <div class="like-count">
+                            <i class="icon-ast_thumbsup"></i>
+                            <span class="count">340</span>
+                            <span class="percentage">(68%)</span>
+                        </div>
+                        <div class="like-count">
+                            <i class="icon-sat_thumsdown"></i>
+                            <span class="count">340</span>
+                            <span class="percentage">(32%)</span>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </ng-container>
+    <ng-conatiner *ngIf="(viewType == VIEWTYPELIST.EXHAUSTIVE_VIEW)">
+        <div class="agent-feedback-data-info">
+            <div class="cards-data-boards agent-feedback-cards">
+                <div class="card-sec max_width_100">
+                    <div class="inner-data-sec">
+                        <div class="title-text-info">
+                            <span class="heading-text">Total Responses</span>
+                        </div>
+                        <div class="count-heading">7537</div>
+                    </div>
+                </div>
+                <div class="card-sec max_width_100">
+                    <div class="inner-data-sec">
+                        <div class="title-text-info">
+                            <span class="heading-text">Helpful</span>
+                            <i class="icon-ast_thumbsup"></i>
+                        </div>
+                        <div class="count-heading">73%</div>
+                    </div>
+                </div>
+                <div class="card-sec max_width_100">
+                    <div class="inner-data-sec">
+                        <div class="title-text-info">
+                            <span class="heading-text">Not Helpful</span>
+                            <i class="icon-sat_thumsdown"></i>
+                        </div>
+                        <div class="count-heading">27%</div>
+                    </div>
+                </div>
+            </div>
+            <div class="table-agent-feedback">
+                <div class="table-header row">
+                    <div class="title col-4">INTENT NAME</div>
+                    <div class="title col-4">Not Helpful</div>
+                    <div class="title col-4 text-right">Helpful</div>
+                </div>
+                <ng-container>
+                    <div class="table-body-feedback row">
+                        <div class="col-4 title">Book Flight</div>
+                        <div class="col-4 title">50%</div>
+                        <div class="col-4 title text-right">50%</div>
+                    </div>
+                    <div class="table-body-feedback row">
+                        <div class="col-4 title">Book Flight</div>
+                        <div class="col-4 title">50%</div>
+                        <div class="col-4 title text-right">50%</div>
+                    </div>
+                    <div class="table-body-feedback row">
+                        <div class="col-4 title">Book Flight</div>
+                        <div class="col-4 title">50%</div>
+                        <div class="col-4 title text-right">50%</div>
+                    </div>
+                    <div class="table-body-feedback row">
+                        <div class="col-4 title">Book Flight</div>
+                        <div class="col-4 title">50%</div>
+                        <div class="col-4 title text-right">50%</div>
+                    </div>
+                    <div class="table-body-feedback row">
+                        <div class="col-4 title">Book Flight</div>
+                        <div class="col-4 title">50%</div>
+                        <div class="col-4 title text-right">50%</div>
+                    </div>
+                    <div class="table-body-feedback row">
+                        <div class="col-4 title">Book Flight</div>
+                        <div class="col-4 title">50%</div>
+                        <div class="col-4 title text-right">50%</div>
+                    </div>
+                    <div class="table-body-feedback row">
+                        <div class="col-4 title">Book Flight</div>
+                        <div class="col-4 title">50%</div>
+                        <div class="col-4 title text-right">50%</div>
+                    </div>
+                    <div class="table-body-feedback row">
+                        <div class="col-4 title">Book Flight</div>
+                        <div class="col-4 title">50%</div>
+                        <div class="col-4 title text-right">50%</div>
+                    </div>
+                    
+                </ng-container>
+            </div>
+        </div>
+    </ng-conatiner>
+    
+</div>

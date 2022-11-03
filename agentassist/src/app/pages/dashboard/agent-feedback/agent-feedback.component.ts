@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { SubSink } from 'subsink';
+import { DASHBORADCOMPONENTTYPE, VIEWTYPE } from '../dashboard.cnst';
+import { DashboardService } from '../dashboard.service';
 
 @Component({
   selector: 'app-agent-feedback',
@@ -7,9 +10,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AgentFeedbackComponent implements OnInit {
 
-  constructor() { }
+  @Input() viewType : string;
+  public DASHBORADCOMPONENTTYPELIST = DASHBORADCOMPONENTTYPE;
+  public VIEWTYPELIST = VIEWTYPE;
+
+  constructor(private dashboardService : DashboardService) { }
 
   ngOnInit(): void {
+   
+  }
+
+  ngOnDestroy() {
   }
 
 }

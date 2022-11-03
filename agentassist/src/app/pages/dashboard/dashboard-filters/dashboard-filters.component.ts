@@ -4,7 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Moment } from 'moment';
 import * as moment from 'moment';
 import { DaterangepickerDirective } from 'ngx-daterangepicker-material';
-import { IAnalyticsFilters } from './dateFilter.model';
+import { CHANNELS, IAnalyticsFilters } from './dateFilter.model';
 import { Subject } from 'rxjs';
 
 @Component({
@@ -21,8 +21,17 @@ export class DashboardFiltersComponent implements OnInit {
 
   //Calender
   selected: { startDate: Moment, endDate: Moment };
-  ranges: any;
+  ranges: any = {
+    [this.translate.instant('CALENDAR.TODAY')]: [moment().startOf('day'), moment()],
+    [this.translate.instant('CALENDAR.YESTERDAY')]: [moment().subtract(1, 'days').startOf('day'), moment().subtract(1, 'days').endOf('day')],
+    [this.translate.instant('CALENDAR.LAST_X_DAYS', { x: 7 })]: [moment().subtract(6, 'days').startOf('day'), moment()],
+    [this.translate.instant('CALENDAR.LAST_X_DAYS', { x: 15 })]: [moment().subtract(16, 'days').startOf('day'), moment()],
+    [this.translate.instant('CALENDAR.LAST_X_DAYS', { x: 30 })]: [moment().subtract(29, 'days').startOf('day'), moment()]
+  }
+    ;
   calendarLocale: any;
+  channelObject : any = CHANNELS;
+  selectedChannel : string = 'ALL';
 
 
   @ViewChild(DaterangepickerDirective) pickerDirective: DaterangepickerDirective;
@@ -32,14 +41,6 @@ export class DashboardFiltersComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.ranges = {
-      [this.translate.instant('CALENDAR.TODAY')]: [moment().startOf('day'), moment()],
-      [this.translate.instant('CALENDAR.YESTERDAY')]: [moment().subtract(1, 'days').startOf('day'), moment().subtract(1, 'days').endOf('day')],
-      [this.translate.instant('CALENDAR.LAST_X_DAYS', { x: 7 })]: [moment().subtract(6, 'days').startOf('day'), moment()],
-      [this.translate.instant('CALENDAR.LAST_X_DAYS', { x: 15 })]: [moment().subtract(16, 'days').startOf('day'), moment()],
-      [this.translate.instant('CALENDAR.LAST_X_DAYS', { x: 30 })]: [moment().subtract(29, 'days').startOf('day'), moment()]
-    }
-
     this.calendarLocale = {
       applyLabel: this.translate.instant('BUTTONS.APPLY'),
       cancelLabel: this.translate.instant('BUTTONS.CANCEL'),
@@ -74,8 +75,12 @@ export class DashboardFiltersComponent implements OnInit {
     return this.filters;
   }
 
-  export(){
+  export() {
     this.exportPdf.emit("export pdf")
+  }
+
+  changeChannel(channel){
+    this.selectedChannel = channel;
   }
 
 }

@@ -16,8 +16,7 @@ export class AutomationPerformanceComponent implements OnInit {
   ngOnInit(): void {
     this.setDonutChartOptions();
   }
-
-
+  
   setDonutChartOptions() {
     this.chartOption = {
       tooltip: {

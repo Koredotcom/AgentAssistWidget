@@ -14,15 +14,11 @@ export class AgentAspectComponent implements OnInit, AfterViewInit {
 
   @ViewChild('wordCloud') wordCloudDiv: ElementRef;
   @ViewChild('wordCloudExhaustive') wordCloudExhaustiveDiv : ElementRef;
-  @Input() viewType : string;
 
+  @Input() viewType : string;
   public DASHBORADCOMPONENTTYPELIST = DASHBORADCOMPONENTTYPE;
   public VIEWTYPELIST = VIEWTYPE;
-  
-  subs = new SubSink();
 
-  exhaustiveView : boolean = true;
-  partialView : boolean = true;
   wordCloudOptions: any;
   wordCloudChart: any;
 
@@ -30,7 +26,8 @@ export class AgentAspectComponent implements OnInit, AfterViewInit {
     private renderer : Renderer2) { }
 
   ngOnInit(): void {
-    console.log("ng onit inside aspect ", this.viewType);
+    console.log(this.viewType, this.dashboardService.agentAspectView, "view type and agent aspect vie3w");
+    
   }
 
   ngAfterViewInit() {
@@ -39,9 +36,6 @@ export class AgentAspectComponent implements OnInit, AfterViewInit {
     this.setWordCloudOptions();
   }
 
-  ngOnDestroy() {
-    this.subs.unsubscribe();
-  }
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -50,15 +44,11 @@ export class AgentAspectComponent implements OnInit, AfterViewInit {
 
   initializeDefaultValues(){
     if(this.viewType == this.VIEWTYPELIST.PARTIAL_VIEW){
-      this.partialView = true;
-      this.exhaustiveView = false;
       this.wordCloudChart = echarts.init(this.wordCloudDiv.nativeElement);
     }else{
-      this.exhaustiveView = true;
-      this.partialView = false;
       this.wordCloudChart = echarts.init(this.wordCloudExhaustiveDiv.nativeElement);
     }
-    this.cdr.detectChanges();
+    this.cdr.detectChanges(); 
   }
 
   setWordCloudOptions() { 

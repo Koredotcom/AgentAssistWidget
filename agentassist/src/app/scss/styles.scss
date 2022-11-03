@@ -1183,6 +1183,11 @@ body{
             right: 0 !important;
             left: auto !important;
         }
+        .md-drppicker{
+            .ranges{
+                display: block !important;
+            }
+        }
     }
     &.date-sec{
         .input-date-custom{
@@ -2217,6 +2222,11 @@ body{
 
 //echart word cloud container
 .echart-wordCloudContainer{
-    height: 500px;
+    height: 300px;
     width: 100%;
+}
+
+.echart-wordCloudContainer-hide{
+    height: 0px !important;
+    width: 0px !important;
 }

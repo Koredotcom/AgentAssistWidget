@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { VIEWTYPE } from './dashboard.cnst';
 
 @Injectable({
   providedIn: 'root'
@@ -7,6 +8,7 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 export class DashboardService {
 
   private exhaustiveRepresentation: BehaviorSubject<{}> = new BehaviorSubject(null);
+  public agentAspectView : string =  VIEWTYPE.WORDCLOUD;
 
   constructor() { }
 

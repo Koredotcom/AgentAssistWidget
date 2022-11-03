@@ -1,6 +1,6 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
+import html2canvas, { Options } from 'html2canvas';
 import { DASHBORADCOMPONENTTYPE, VIEWTYPE } from './dashboard.cnst';
 import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
 import { DashboardService } from './dashboard.service';
@@ -13,7 +13,7 @@ import { DashboardService } from './dashboard.service';
 export class DashboardComponent implements OnInit {
   
   @ViewChild('newConvSlider', { static: true }) newConvSlider: SliderComponentComponent;
-  @ViewChild('pdfTable') pdfTable!: ElementRef;
+  @ViewChild('pdfTable') pdfTable: ElementRef;
   sliderId : string = "dashboardSlider";
   sliderStatus: boolean;
   openComponentId : string;
@@ -21,11 +21,10 @@ export class DashboardComponent implements OnInit {
   public DASHBORADCOMPONENTTYPE = DASHBORADCOMPONENTTYPE;
   public VIEWTYPE = VIEWTYPE;
 
-  constructor(private dashboardService : DashboardService) { }
+  constructor(public dashboardService : DashboardService, public cdRef : ChangeDetectorRef) { }
 
   ngOnInit(): void {
    
-    
   }
 
   openSlider(id) {
@@ -44,26 +43,36 @@ export class DashboardComponent implements OnInit {
 
 
   exportPdf(value) {
-    let fileName = "AgentAssist Dashboard"
-    html2canvas(this.pdfTable.nativeElement).then((canvas) => {
+    document.getElementById("pdfTable").style.height="auto";
+     document.getElementById('scrollContainer').style.height = "auto";
+     document.getElementById('innerScroll').style.height = "auto";
+     this.cdRef.detectChanges();
+  
+    var currentPosition = document.getElementById("pdfTable").scrollTop;
+      var w = document.getElementById("pdfTable").offsetWidth;
+      var h = document.getElementById("pdfTable").offsetHeight;
+     
 
-      const FILEURI = canvas.toDataURL('image/png');
-      // let PDF = new jsPDF('p', 'mm', 'a4');
-      let PDF = new jsPDF({
-        orientation: 'landscape'
-      })
-      // add page top padding 
-      let position = 10;
-      const imgProps = PDF.getImageProperties(FILEURI);
-      const pdfWidth = PDF.internal.pageSize.getWidth();
-      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-      PDF.addImage(FILEURI, 'PNG', 0, position, pdfWidth, pdfHeight);
-      PDF.save(fileName);
-      PDF.setProperties({
-        title: fileName
-      })
-      window.open(URL.createObjectURL(PDF.output("blob")))
-    })
+     const opts: Partial<Options> = {
+      scale: 3, // Adjusts your resolution
+    }
+      setTimeout(() => {
+        html2canvas(document.getElementById("pdfTable"), opts).then((canvas) => {
+          var img = canvas.toDataURL("image/jpeg", 1);
+          var doc = new jsPDF('l', 'px', [w, h]);
+          doc.addImage(img, 'JPEG', 0, 0, w, h);
+          // doc.addPage();
+          window.open(URL.createObjectURL(doc.output("blob")))
+          doc.save('AgentAssist Dashboard.pdf');
+          document.getElementById('scrollContainer').style.height = "calc(100vh - 137px)";
+          document.getElementById("pdfTable").style.height = "calc(100vh - 59px)";
+        });
+      }, 100);
+  }
+
+  changeAgentAspectView(viewType){
+    this.dashboardService.agentAspectView = viewType
+    console.log("click", this.dashboardService.agentAspectView);
   }
 
 }

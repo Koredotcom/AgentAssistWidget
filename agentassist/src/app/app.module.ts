@@ -105,6 +105,7 @@ import { ExhaustiveRepresentationComponent } from './pages/dashboard/exhaustive-
 import { DashboardFiltersComponent } from './pages/dashboard/dashboard-filters/dashboard-filters.component';
 import { DashboardKpiComponent } from './pages/dashboard/dashboard-kpi/dashboard-kpi.component';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     AppComponent,
@@ -198,6 +199,7 @@ import { CommonModule } from '@angular/common';
     MatPaginatorModule,
     FlexLayoutModule,
     BrowserAnimationsModule,
+    FormsModule,
     ToastrModule.forRoot({
       timeOut: 5000,
       autoDismiss: false,

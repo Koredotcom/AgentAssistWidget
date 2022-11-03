@@ -1,0 +1,92 @@
+
+.cust-aspects-wrapper{
+    display: inline-block;
+    width: 100%;
+    .automations-tabs{
+        display: flex;
+        align-items: center;
+        margin: 8px 0;
+        .tab-name{
+            display: flex;
+            align-items: center;
+            margin-right: 25px;
+            border-bottom: 2px solid transparent;
+            padding: 10px 0;
+            cursor: pointer;
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 20px;
+            color: #202124;
+            &.active-tab{
+                border-bottom: 2px solid #2B75E4;
+            }
+            img{
+                width: 16px;
+                height: 16px;
+                flex-shrink: 0;
+                margin-right: 5px;
+            }
+        }
+    }
+    .tab-details-info{
+        display: inline-block;
+        width: 100%;
+        .row-data{
+            display: inline-block;
+            width: 100%;
+            margin-bottom: 15px;
+            &:last-child{
+
+            }
+            .title-with-count{
+                display: flex;
+                align-items: center;
+                position: relative;
+                margin-bottom: 6px;
+                img{
+                    width: 20px;
+                    height: 20px;
+                    flex-shrink: 0;
+                    margin-right: 4px;
+                }
+                .title{
+                    font-weight: 500;
+                    font-size: 12px;
+                    line-height: 15px;
+                    color: #2D2F33;
+                }
+                .count-percentage{
+                    display: flex;
+                    align-items: center;
+                    position: absolute;
+                    right: 0;
+                    .percentage{
+                        font-weight: 600;
+                        font-size: 14px;
+                        line-height: 17px;
+                        color: #2D2F33;
+                        padding-right: 2px;
+                    }
+                    .count-{
+                        font-weight: 400;
+                    }
+                }
+            }
+            .slider-percentage{
+                background: #F0F1F2;
+                border-radius: 7px;
+                display: flex;
+                align-items: center;
+                width: 100%;
+                height: 8px;
+                .data-percentage{
+                    width: 62%;
+                    height: 100%;
+                    background: #1A4689;
+                    border-radius: 7px;
+                    flex-shrink: 0;
+                }
+            }
+        }
+    }
+}
