@@ -6125,13 +6125,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         "maxNumOfResults": 3,
                         "lang": "en"
                       }
-                    if(!arguments[1]){
-                        addAutoSuggestionApi(e); 
-                    }else{
-                        console.log("came hee to else condition of autpo librqaruy")
-                        addAutoSuggestionTolibrary(e);
-                    }
-                    
                     $.ajax({
                         url: `${connectionDetails.envinormentUrl}/agentassist/api/v1/searchaccounts/autosearch?botId=${_botId}`,
                         type: 'post',
@@ -6139,7 +6132,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         dataType: 'json',
                         success: function (data) {
                            console.log("data", data);
-                           $('#overLaySearch').html(`<div class="search-results-text">${data}</div>`)
+                            if(!arguments[1]){
+                                addAutoSuggestionApi(e, data); 
+                            }else{
+                                console.log("came hee to else condition of autpo librqaruy")
+                                addAutoSuggestionTolibrary(e,data);
+                            }
                         },
                         error: function (err) {
                             console.error("jwt token generation failed");
@@ -6147,24 +6145,24 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     });
                 }
 
-                function addAutoSuggestionTolibrary(e){
+                function addAutoSuggestionTolibrary(e, data){
                     let aa = ["hello", "there", "book", "password"];
                     $('.search-block').find('.search-results-text').remove();
                     if (e.target.value.length > 0) {
                         let autoDiv = $('.search-block');
-                        aa.forEach((ele) => {
+                        data.typeAheads?.forEach((ele) => {
                             autoDiv.append(`<div class="search-results-text" style="cursor: pointer;background: white;" id="autoResultLib-${ele}">${ele}</div>`)
                         })
                     }
                 }
 
-                function addAutoSuggestionApi(e){
+                function addAutoSuggestionApi(e, data){
                     let aa = ["hello", "there", "book", "password"]
                     $('#overLayAutoSearch').html('');
                     if (e.target.value.length > 0) {
                         $('#overLayAutoSearchDiv').removeClass('hide').attr('style', 'bottom:0; display:block');
                         let autoDiv = $('#overLayAutoSearch');
-                        aa.forEach((ele) => {
+                        data.typeAheads?.forEach((ele) => {
                             autoDiv.append(`<div class="search-results-text" style="cursor: pointer;" id="autoResult-${ele}">${ele}</div>`)
                         })
                     }
