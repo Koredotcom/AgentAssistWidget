@@ -1,5 +1,5 @@
 {
-  "name": "Agent Assist",
+  "name": "Kore.ai AgentAssist for Zendesk",
   "author": {
     "name": "KoreAI",
     "email": "koreai@kore.com",
@@ -23,16 +23,17 @@
     },
     {
       "name": "clientId",
-      "type": "text",
+      "type": "password",
       "required":true,
-      "secure": true
+      "secure": false
      
     },
     {
       "name": "clientSecret",
       "type": "password",
       "required":true,
-      "secure": true
+      "secure": false
+
     },
     {
       "name": "botId",
