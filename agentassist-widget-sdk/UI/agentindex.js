@@ -6047,6 +6047,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $('#overLayAutoSearch').html('');
                             $('.search-block').find('.search-results-text')?.remove();
                             $('#agentSearch').val(target.innerHTML);
+                            agentSearchVal = target.innerHTML;
                             document.getElementById("loader").style.display = "block";
                             AgentAssistPubSub.publish('searched_Automation_details', { conversationId: _conversationId, botId: _botId, value: target.innerHTML, isSearch: true, "positionId": evt.target.dataset.positionId });
                         }
