@@ -187,7 +187,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                     window.addEventListener("message", function (e) {
                         console.log(e.data, "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx message came to widget when any message came from others", isOverRideMode);//your data is captured in e.data
-                        if(e.data.name === 'response_resolution_comments' && e.data.conversationId) {
+                        if(e.data.name === 'response_resolution_comments' && e.data.conversationId == _conversationId) {
                             $(`#summary`).removeClass('hide');
                             $(`#summaryText`).val(e.data?.summary ? e.data?.summary[0]?.summary_text:'');
                             $(`#summarySubmit`).attr('data-summary', e.data?JSON.stringify(e.data):'')
