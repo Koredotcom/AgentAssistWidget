@@ -211,7 +211,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             } else {
                                 agent_assist_request['entities'] = [];
                             }
-                            _agentAsisstSocket.emit('agent_assist_request', agent_assist_request);
+                            if(ele.conversationId == _conversationId){
+                                _agentAsisstSocket.emit('agent_assist_request', agent_assist_request);
+                            }      
                           })
                         }
                         if(e.data.name ==='agentAssist.endOfConversation' && e.data.conversationId) {
