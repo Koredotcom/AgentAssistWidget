@@ -2760,18 +2760,30 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }else{
                             isSendWelcomeMessage = true;
                         }
+                        let index = response.findIndex((ele, i)=>
+                           ele.type == 'outgoing' && !ele?.agentAssistDetails?.positionId    
+                        );
+                        console.log("XXXXXXXXXXXXXXXXXXXXXXXXX indexxxx", index);
                         var welcome_message_request = {
                             'waitTime': 2000,
                             'userName': parsedCustomData?.userName || parsedCustomData?.fName + parsedCustomData?.lName || 'user',
                             'id': _agentAssistDataObj.conversationId,
                             'isSendWelcomeMessage': isSendWelcomeMessage
                         }
-        
+                        if(!isSendWelcomeMessage && (!index || index>-1)){
+                            welcome_message_request.isSendWelcomeMessage = true;
+                            isSendWelcomeMessage = true;
+                        }
+                        
                         _agentAsisstSocket.emit('welcome_message_request', welcome_message_request);
                         AgentAssistPubSub.publish('automation_exhaustive_list',
                         { conversationId: _agentAssistDataObj.conversationId, botId: _agentAssistDataObj.botId, 'experience': 'chat' });
                         document.getElementById("loader").style.display = "none";
                         updateUIState(_conversationId, isCallConversation);
+                        if(isSendWelcomeMessage){
+                           return;
+                        }
+                        
                         let previousId;
                         let previousTaskPositionId, currentTaskPositionId, currentTaskName, previousTaskName;
                         // if (JSON.stringify(response) === JSON.stringify(previousResp)) {
@@ -3056,6 +3068,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                         </div>
                                                     `;
 
+                        
                                     if (previousTaskPositionId && currentTaskPositionId !== previousTaskPositionId ) {
                                         let previousIdFeedBackDetails = feedBackResult.find((ele)=> ele.positionId === previousTaskPositionId);
                                         addFeedbackHtmlToDomForHistory(res, res.botId, res?.agentAssistDetails?.userInput, previousId, false, previousTaskPositionId);
