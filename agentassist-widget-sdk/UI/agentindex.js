@@ -1219,6 +1219,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }
                     let parsedPayload;
                     data.buttons?.forEach((elem) => {
+                        if(elem.value){
+                           elem.value = elem.value.replace(/(^(&quot\;)|(&quot\;)$)/g, '');
+                        }
                         let payloadType = (elem.value).replace(/(&quot\;)/g, "\"");
 
                         try {
@@ -2048,6 +2051,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                     let parsedPayload;
                     data.buttons?.forEach((elem) => {
+                        if(elem.value){
+                            elem.value = elem.value.replace(/(^(&quot\;)|(&quot\;)$)/g, '');
+                        }
                         let payloadType = (elem.value).replace(/(&quot\;)/g, "\"");
                         try {
                             if (payloadType.indexOf('text') !== -1 || payloadType.indexOf('payload') !== -1) {
@@ -3137,6 +3143,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     }
                                     let parsedPayload;
                                     res.components?.forEach((elem) => {
+                                        if(elem.data?.text){
+                                           elem.data.text = elem.data.text.replace(/(^(&quot\;)|(&quot\;)$)/g, '');
+                                        }
                                         let payloadType = (elem.data?.text).replace(/(&quot\;)/g, "\"");
 
                                         try {
@@ -3587,6 +3596,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     }
                                     let parsedPayload;
                                     res.components?.forEach((elem) => {
+                                        if(elem.data?.text){
+                                           elem.data.text = elem.data.text.replace(/(^(&quot\;)|(&quot\;)$)/g, '');
+                                        }
                                         let payloadType = (elem.data?.text).replace(/(&quot\;)/g, "\"");
 
                                         try {
