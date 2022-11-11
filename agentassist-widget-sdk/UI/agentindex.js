@@ -993,8 +993,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     let a = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display #faqDivLib-${uuids+index}`) : $(`#overLaySearch #faqDivLib-${uuids+index}`);
                                     let faqActionHtml = `<div class="action-links">
                             <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids+index}"  data-msg-data="${ele.answer}">Send</button>
-                            <div class="copy-btn" data-msg-id="${uuids+index}" data-msg-data='${ele.answer}'>
-                                <i class="ast-copy" data-msg-id="${uuids+index}" data-msg-data='${ele.answer}'></i>
+                            <div class="copy-btn" data-msg-id="${uuids+index}" data-msg-data="${ele.answer}">
+                                <i class="ast-copy" data-msg-id="${uuids+index}" data-msg-data="${ele.answer}"></i>
                             </div>
                         </div>`;
                                     a.append(faqActionHtml);
@@ -1088,9 +1088,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 } else {
                                     let a = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display #articleDivLib-${uuids+index}`) : $(`#overLaySearch #articleDivLib-${uuids+index}`);
                                     let articlesActionHtml = `<div class="action-links">
-                            <button class="send-run-btn" id="articlesendMsg" data-msg-id="article-${uuids+index}"  data-msg-data='${ele.content}'>Send</button>
-                            <div class="copy-btn" data-msg-id="article-${uuids+index}" data-msg-data='${ele.content}'>
-                                <i class="ast-copy" data-msg-id="article-${uuids+index}" data-msg-data='${ele.content}'></i>
+                            <button class="send-run-btn" id="articlesendMsg" data-msg-id="article-${uuids+index}"  data-msg-data="${ele.content}">Send</button>
+                            <div class="copy-btn" data-msg-id="article-${uuids+index}" data-msg-data="${ele.content}">
+                                <i class="ast-copy" data-msg-id="article-${uuids+index}" data-msg-data="${ele.content}"></i>
                             </div>
                         </div>`;
                                     a.append(articlesActionHtml);
@@ -1826,9 +1826,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     } else {
                                             let a = $(`#articleDiv-${uuids + index}`);
                                             let articleActionHtml = `<div class="action-links">
-                                            <button class="send-run-btn" id="articlesendMsg" data-msg-id="article-${uuids + index}" data-msg-data='${ele.content}'>Send</button>
-                                            <div class="copy-btn" data-msg-id="article-${uuids + index}" data-msg-data='${ele.content}'>
-                                                <i class="ast-copy" data-msg-id="article-${uuids + index}" data-msg-data='${ele.content}'></i>
+                                            <button class="send-run-btn" id="articlesendMsg" data-msg-id="article-${uuids + index}" data-msg-data="${ele.content}">Send</button>
+                                            <div class="copy-btn" data-msg-id="article-${uuids + index}" data-msg-data="${ele.content}">
+                                                <i class="ast-copy" data-msg-id="article-${uuids + index}" data-msg-data="${ele.content}"></i>
                                             </div>
                                         </div>`;
                                         a.append(articleActionHtml);
@@ -2196,7 +2196,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                        <div class="agent-utt">
                                         <div class="title-data" id="displayData-${uuids}">${ele.value}</div>
                                         <div class="action-links">
-                                            <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}"  data-msg-data='${ele.value}'>Send</button>
+                                            <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}"  data-msg-data="${ele.value}">Send</button>
                                             <div class="copy-btn" data-msg-id="${uuids}" data-msg-data="${ele.value}">
                                                 <i class="ast-copy" data-msg-id="${uuids}" data-msg-data="${ele.value}"></i>
                                             </div>
@@ -2209,9 +2209,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         <div class="agent-utt">
                                             <div class="title-data" id="displayData-${uuids}">${ele.value}</div>
                                             <div class="action-links">
-                                                <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}"  data-msg-data='${ele.value}'>Send</button>
-                                                <div class="copy-btn" data-msg-id="${uuids}" data-msg-data='${ele.value}'>
-                                                    <i class="ast-copy" data-msg-id="${uuids}" data-msg-data='${ele.value}'></i>
+                                                <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}"  data-msg-data="${ele.value}">Send</button>
+                                                <div class="copy-btn" data-msg-id="${uuids}" data-msg-data="${ele.value}">
+                                                    <i class="ast-copy" data-msg-id="${uuids}" data-msg-data="${ele.value}"></i>
                                                 </div>
                                             </div>
                                         </div>`;
@@ -2240,9 +2240,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             <div class="agent-utt">
                                 <div class="title-data" id="displayData-${uuids}">${ele.value}</div>
                                 <div class="action-links">
-                                    <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}"  data-msg-data='${ele.value}'>Send</button>
-                                    <div class="copy-btn" data-msg-id="${uuids}" data-msg-data='${ele.value}'>
-                                        <i class="ast-copy" data-msg-id="${uuids}" data-msg-data='${ele.value}'></i>
+                                    <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}"  data-msg-data="${ele.value}">Send</button>
+                                    <div class="copy-btn" data-msg-id="${uuids}" data-msg-data="${ele.value}">
+                                        <i class="ast-copy" data-msg-id="${uuids}" data-msg-data="${ele.value}"></i>
                                     </div>
                                 </div>
                             </div>
@@ -2277,7 +2277,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                    <div class="agent-utt">
                                     <div class="title-data" id="displayData-${uuids}">${ele.value}</div>
                                     <div class="action-links">
-                                        <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}"  data-msg-data='${ele.value}'>Send</button>
+                                        <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}"  data-msg-data="${ele.value}">Send</button>
                                         <div class="copy-btn" data-msg-id="${uuids}" data-msg-data="${ele.value}">
                                             <i class="ast-copy" data-msg-id="${uuids}" data-msg-data="${ele.value}"></i>
                                         </div>
@@ -2290,9 +2290,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     <div class="agent-utt">
                                         <div class="title-data" id="displayData-${uuids}">${ele.value}</div>
                                         <div class="action-links">
-                                            <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}"  data-msg-data='${ele.value}'>Send</button>
-                                            <div class="copy-btn" data-msg-id="${uuids}" data-msg-data='${ele.value}'>
-                                                <i class="ast-copy" data-msg-id="${uuids}" data-msg-data='${ele.value}'></i>
+                                            <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}"  data-msg-data="${ele.value}">Send</button>
+                                            <div class="copy-btn" data-msg-id="${uuids}" data-msg-data="${ele.value}">
+                                                <i class="ast-copy" data-msg-id="${uuids}" data-msg-data="${ele.value}"></i>
                                             </div>
                                         </div>
                                     </div>`;
@@ -2310,9 +2310,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                              <div class="agent-utt">
                                  <div class="title-data" id="displayData-${uuids}">${ele.value}</div>
                                  <div class="action-links">
-                                     <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}"  data-msg-data='${ele.value}'>Send</button>
-                                     <div class="copy-btn" data-msg-id="${uuids}" data-msg-data='${ele.value}'>
-                                         <i class="ast-copy" data-msg-id="${uuids}" data-msg-data='${ele.value}'></i>
+                                     <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}"  data-msg-data="${ele.value}">Send</button>
+                                     <div class="copy-btn" data-msg-id="${uuids}" data-msg-data="${ele.value}">
+                                         <i class="ast-copy" data-msg-id="${uuids}" data-msg-data="${ele.value}"></i>
                                      </div>
                                  </div>
                              </div>
@@ -2911,8 +2911,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                     let a = $(`#faqDiv-${uniqueID+index}`);
                                                     let faqActionHtml = `<div class="action-links">
                                     <button class="send-run-btn" id="sendMsg" data-msg-id="${uniqueID+index}"  data-msg-data="${ele.answer}">Send</button>
-                                    <div class="copy-btn" data-msg-id="${uniqueID+index}" data-msg-data='${ele.answer}'>
-                                        <i class="ast-copy" data-msg-id="${uniqueID+index}" data-msg-data='${ele.answer}'></i>
+                                    <div class="copy-btn" data-msg-id="${uniqueID+index}" data-msg-data="${ele.answer}">
+                                        <i class="ast-copy" data-msg-id="${uniqueID+index}" data-msg-data="${ele.answer}"></i>
                                     </div>
                                 </div>`;
                                                     a.append(faqActionHtml);
@@ -2991,8 +2991,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                     let a = $(`#faqDiv-${uniqueID+index}`);
                                                     let faqActionHtml = `<div class="action-links">
                                     <button class="send-run-btn" id="sendMsg" data-msg-id="${uniqueID+index}"  data-msg-data="${res.components[0].data.text}">Send</button>
-                                    <div class="copy-btn" data-msg-id="${uniqueID+index}" data-msg-data='${res.components[0].data.text}'>
-                                        <i class="ast-copy" data-msg-id="${uniqueID+index}" data-msg-data='${res.components[0].data.text}'></i>
+                                    <div class="copy-btn" data-msg-id="${uniqueID+index}" data-msg-data="${res.components[0].data.text}">
+                                        <i class="ast-copy" data-msg-id="${uniqueID+index}" data-msg-data="${res.components[0].data.text}"></i>
                                     </div>
                                 </div>`;
                                                     a.append(faqActionHtml);
@@ -3305,7 +3305,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                    <div class="agent-utt">
                                                     <div class="title-data" id="displayData-${res._id}">${ele.data.text}</div>
                                                     <div class="action-links">
-                                                        <button class="send-run-btn" id="sendMsg" data-msg-id="${res._id}"  data-msg-data='${ele.data.text}'>Send</button>
+                                                        <button class="send-run-btn" id="sendMsg" data-msg-id="${res._id}"  data-msg-data="${ele.data.text}">Send</button>
                                                         <div class="copy-btn" data-msg-id="${res._id}" data-msg-data="${ele.data.text}">
                                                             <i class="ast-copy" data-msg-id="${res._id}" data-msg-data="${ele.data.text}"></i>
                                                         </div>
@@ -3318,9 +3318,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                     <div class="agent-utt">
                                                         <div class="title-data" id="displayData-${res._id}">${ele.data.text}</div>
                                                         <div class="action-links">
-                                                            <button class="send-run-btn" id="sendMsg" data-msg-id="${res._id}"  data-msg-data='${ele.data.text}'>Send</button>
-                                                            <div class="copy-btn" data-msg-id="${res._id}" data-msg-data='${ele.data.text}'>
-                                                                <i class="ast-copy" data-msg-id="${res._id}" data-msg-data='${ele.data.text}'></i>
+                                                            <button class="send-run-btn" id="sendMsg" data-msg-id="${res._id}"  data-msg-data="${ele.data.text}">Send</button>
+                                                            <div class="copy-btn" data-msg-id="${res._id}" data-msg-data="${ele.data.text}">
+                                                                <i class="ast-copy" data-msg-id="${res._id}" data-msg-data="${ele.data.text}"></i>
                                                             </div>
                                                         </div>
                                                     </div>`;
@@ -3338,9 +3338,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                              <div class="agent-utt">
                                                  <div class="title-data" id="displayData-${res._id}">${ele.data.text}</div>
                                                  <div class="action-links">
-                                                     <button class="send-run-btn" id="sendMsg" data-msg-id="${res._id}"  data-msg-data='${ele.data.text}'>Send</button>
-                                                     <div class="copy-btn" data-msg-id="${res._id}" data-msg-data='${ele.data.text}'>
-                                                         <i class="ast-copy" data-msg-id="${res._id}" data-msg-data='${ele.data.text}'></i>
+                                                     <button class="send-run-btn" id="sendMsg" data-msg-id="${res._id}"  data-msg-data="${ele.data.text}">Send</button>
+                                                     <div class="copy-btn" data-msg-id="${res._id}" data-msg-data="${ele.data.text}">
+                                                         <i class="ast-copy" data-msg-id="${res._id}" data-msg-data="${ele.data.text}"></i>
                                                      </div>
                                                  </div>
                                              </div>
@@ -3412,8 +3412,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     let a = $(`#faqsSuggestions-${eleid} #faqDiv-${ele}`);
                     let faqActionHtml = `<div class="action-links">
     <button class="send-run-btn" id="sendMsg" data-msg-id="${ele}"  data-msg-data="${res.components[0].data.text}">Send</button>
-    <div class="copy-btn" data-msg-id="${ele}" data-msg-data='${res.components[0].data.text}'>
-        <i class="ast-copy" data-msg-id="${ele}" data-msg-data='${res.components[0].data.text}'></i>
+    <div class="copy-btn" data-msg-id="${ele}" data-msg-data="${res.components[0].data.text}">
+        <i class="ast-copy" data-msg-id="${ele}" data-msg-data="${res.components[0].data.text}"></i>
     </div>
 </div>`;
                     a.append(faqActionHtml);
