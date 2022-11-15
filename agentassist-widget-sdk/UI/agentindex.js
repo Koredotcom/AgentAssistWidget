@@ -6156,7 +6156,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     var dialogId = 'dg-' + (Math.random() + 1).toString(36).substring(2);
                     dialogPositionId = dialogId;
                     if(runInitent){
-                        dialogPositionId = data.positionId;
+                        dialogPositionId = data?.positionId;
                     }
                     _createRunTemplateContiner(uuids, data.intentName, dialogPositionId);
                     let ids = idTarget.split('-');
