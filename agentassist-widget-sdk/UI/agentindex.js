@@ -3551,7 +3551,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             previousTaskPositionId = currentTaskPositionId;
                                         }
                                     }
-                                    if(resp.length-1 == index && currentTaskPositionId == previousTaskPositionId) {
+                                    if(resp.length-1 == index && (!res.agentAssistDetails?.entityRequest && !res.agentAssistDetails?.entityResponse) && currentTaskPositionId == previousTaskPositionId) {
                                         let previousIdFeedBackDetails = feedBackResult.find((ele)=> ele.positionId === previousTaskPositionId);
                                         addFeedbackHtmlToDomForHistory(res, res.botId, res?.agentAssistDetails?.userInput, previousId, true, previousTaskPositionId);
                                         if(previousIdFeedBackDetails) {
