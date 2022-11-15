@@ -73,16 +73,18 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
         parsedCustomData = JSON.parse(decodedCustomData);
         if (sourceType === 'smartassist-color-scheme') {
             $('body').addClass(sourceType);
+            var webSocketConnection = {
+                "path": "/agentassist/api/v1/chat/", transports: ['websocket', 'polling', 'flashsocket'],  query: {'authToken': connectionDetails.jwtToken}
+            };
         } else {
             $('body').addClass('default-color-scheme')
+            var webSocketConnection = {
+                "path": "/agentassist/api/v1/chat/", transports: ['websocket', 'polling', 'flashsocket'],  query: {'token': connectionDetails.jwtToken}
+            };
         }
     } catch (err) {
         console.log(err);
     }
-    var webSocketConnection = {
-
-        "path": "/agentassist/api/v1/chat/", transports: ['websocket', 'polling', 'flashsocket'],  query: {'authToken': connectionDetails.jwtToken}
-    };
     connectionDetails['webSocketConnectionDomain'] = connectionDetails.envinormentUrl + "/koreagentassist",
         connectionDetails['webSocketConnectionDetails'] = webSocketConnection,
         agentContainer = containerId;
