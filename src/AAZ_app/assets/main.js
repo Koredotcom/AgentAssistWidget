@@ -1,7 +1,10 @@
 
 var client = ZAFClient.init();
 var iframeURL = null;
-
+client.on('app.registered', function () {
+  client.invoke('resize', { width: '100%', height: '80px' });
+  main();
+});
 async function getRequesterName(client) {
 
   let result = await client.get("ticket.requester.name");
@@ -55,49 +58,24 @@ async function getTicketId(client) {
   return null;
 };
 
-function base64url(source) {
-  // Encode in classical base64
-  let encodedSource = CryptoJS.enc.Base64.stringify(source);
-
-  // Remove padding equal characters
-  encodedSource = encodedSource.replace(/=+$/, '');
-
-  // Replace characters according to base64url specifications
-  encodedSource = encodedSource.replace(/\+/g, '-');
-  encodedSource = encodedSource.replace(/\//g, '_');
-
-  return encodedSource;
-}
-
-
 async function generateURL(settings) {
   return new Promise(async (resolve, reject) => {
 
-    var header = {
-      "alg": "HS256",
-      "typ": "JWT"
-    };
+    // Token Generation
+    const options = {
+      url: settings.stsURL,
+      type: "POST",
+      dataType: "json",
+      contentType: "application/json",
+      secure: true,
+      cors:false,
+      data:JSON.stringify({clientId: "{{setting.botClientId}}",clientSecret: "{{setting.botClientSecret}}",identity: "number",aud: "https://idproxy.kore.com/authorize",isAnonymous: false})
 
-    var stringifiedHeader = CryptoJS.enc.Utf8.parse(JSON.stringify(header));
-    var encodedHeader = base64url(stringifiedHeader);
-
-    const data = {
-      'iss': settings.clientId,
-      'sub': 'number',
-      'botId': settings.botId,
     }
 
+    let response = await client.request(options);
+    let token = response.jwt;
 
-    var stringifiedData = CryptoJS.enc.Utf8.parse(JSON.stringify(data));
-    var encodedData = base64url(stringifiedData);
-
-    var token = encodedHeader + "." + encodedData;
-
-    var secret = settings.clientSecret;
-    var signature = CryptoJS.HmacSHA256(token, secret);
-    signature = base64url(signature);
-
-    var signedToken = token + "." + signature;
     let requester = await getRequesterName(client);
     let smartassistURL = settings.agentassistURL.replace("agentassist", "smartassist");
     let activeConversationId = null;
@@ -114,8 +92,10 @@ async function generateURL(settings) {
       customdata = encodeURI(JSON.stringify({ fName: requester || 'Customer', lName: '' }));
 
     }
-    iframeURL = `${settings.agentassistURL}/koreagentassist-sdk/UI/agentassist-iframe.html?token=${signedToken}&botid=${settings.botId}&agentassisturl=${smartassistURL}&conversationid=${activeConversationId}&isCall=${isCall}&customdata=${customdata}`;
+
+    iframeURL = `${settings.agentassistURL}/koreagentassist-sdk/UI/agentassist-iframe.html?token=${token}&botid=${settings.botId}&agentassisturl=${smartassistURL}&conversationid=${activeConversationId}&isCall=${isCall}&customdata=${customdata}`;
     resolve(iframeURL);
+
 
   });
 }
@@ -165,6 +145,7 @@ async function main() {
     }
     return true
   });
+
   client.on('ticket.conversation.changed', function (conversations) {
 
     let lastElement = conversations.pop();
@@ -172,6 +153,7 @@ async function main() {
       sendMessageToAgentAssist(activeConversationId, lastElement.message.content);
     }
   });
+
   let _iframeURL = await generateURL(metadata.settings);
 
   iframeRender(_iframeURL);
@@ -203,4 +185,4 @@ async function main() {
   }, false);
 }
 
-main();
+// main();

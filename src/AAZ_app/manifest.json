@@ -22,17 +22,27 @@
      
     },
     {
-      "name": "clientId",
-      "type": "password",
-      "required":true,
-      "secure": false
-     
+      "name": "stsURL",
+      "type": "url",
+      "required":true    
     },
     {
-      "name": "clientSecret",
+      "name":"domain",
+      "type":"text",
+      "required":true,
+      "secure":true
+    },
+    {
+      "name": "botClientId",
       "type": "password",
       "required":true,
-      "secure": false
+      "secure":false    
+    },
+    {
+      "name": "botClientSecret",
+      "type": "password",
+      "required":true,
+      "secure": true
 
     },
     {
@@ -41,5 +51,6 @@
       "required":true  
     }
 
-  ]
+  ],
+  "domainWhiteList":["*.{{setting.domain}}"]
 }
