@@ -8,7 +8,7 @@
     <link href="./../dist/kore-ai-agentassist-sdk.min.css" rel="stylesheet">
     </link>
 
-    <script src="./../dist/kore-ai-agentassist-sdk.min.js" type="text/javascript"></script>
+    <script src="./../dist/kore-ai-agentassist-sdk.combined.js" type="text/javascript"></script>
     <script>
         $(document).ready(function () {
             console.log('agent assist inside iframe', new Date());
@@ -28,6 +28,35 @@
                     botDetails: {},
                     isAuthentication: false
                 }
+
+
+                let parentUrl = window.top.location.href;
+                let params = {};
+                console.log('====================', parentUrl);
+                alert(parentUrl.includes('smartassist.kore.ai'));
+                if (parentUrl.includes('smartassist.kore.ai')) {
+                    var message = {
+                        method: 'loaded',
+                        name: "agent_assist"
+                    };
+                    window.parent.postMessage(message, '*');
+                } else {
+                    params = new Proxy(new URLSearchParams(window.location.search), {
+                        get: (searchParams, prop) => searchParams.get(prop),
+                    });
+                    getToken();
+                    checkToken();
+                }
+
+                window.addEventListener("message", function (e) {
+                    if (e.data.name === 'queryParams') {
+                        params = e.data.urlParams;
+                        getToken();
+                        checkToken();
+                    }
+                });
+
+
                 function getToken() {
                     console.log('agent assist inside getToken', new Date());
                     const params = new Proxy(new URLSearchParams(window.location.search), {
@@ -39,7 +68,7 @@
                     conversationId = params.conversationid;
                     console.log("---conversation id -----", conversationId);
                 }
-                getToken();
+
                 function koreGenerateUUID() {
                     console.info("generating UUID");
                     var d = new Date().getTime();
@@ -53,22 +82,24 @@
                     });
                     return uuid;
                 }
-                if (!token || !botID || !agentAssistUrl || !conversationId) {
-                    if (connectionObj.isAuthentication) {
-                        connectionObj.botDetails['clientId'] = chatConfig.botOptions.clientId;
-                        connectionObj.botDetails['clientSecret'] = chatConfig.botOptions.clientSecret;
-                        connectionObj.botDetails['botId'] = chatConfig.botOptions.botInfo._id;
-                        conversationId = koreGenerateUUID();
-                        new AgentAssist('agent-assist-chat-container', conversationId, connectionObj.botDetails.botId, connectionObj);
-                    } else {
-                        console.error("failed");// invalid configuration
-                        $(`#agent-assist-chat-container`).html('Issue identified in configuration settings! Please reach out to AgentAssist Admin.')
-                    }
+                function checkToken() {
+                    if (!token || !botID || !agentAssistUrl || !conversationId) {
+                        if (connectionObj.isAuthentication) {
+                            connectionObj.botDetails['clientId'] = chatConfig.botOptions.clientId;
+                            connectionObj.botDetails['clientSecret'] = chatConfig.botOptions.clientSecret;
+                            connectionObj.botDetails['botId'] = chatConfig.botOptions.botInfo._id;
+                            conversationId = koreGenerateUUID();
+                            new AgentAssist('agent-assist-chat-container', conversationId, connectionObj.botDetails.botId, connectionObj);
+                        } else {
+                            console.error("failed");// invalid configuration
+                            $(`#agent-assist-chat-container`).html('Issue identified in configuration settings! Please reach out to AgentAssist Admin.')
+                        }
 
-                } else {
-                    connectionObj['envinormentUrl'] = agentAssistUrl;
-                    connectionObj['jwtToken'] = token;
-                    new AgentAssist('agent-assist-chat-container', conversationId, botID, connectionObj);
+                    } else {
+                        connectionObj['envinormentUrl'] = agentAssistUrl;
+                        connectionObj['jwtToken'] = token;
+                        new AgentAssist('agent-assist-chat-container', conversationId, botID, connectionObj);
+                    }
                 }
 
 
@@ -80,9 +111,9 @@
                 // connectionObj.botDetails.clientSecret = $(`#clientsecret`).val() ? $(`#clientsecret`).val() : connectionObj.botDetails.clientSecret;
 
             }
-        } 
-
-    </script>
+        }
+    
+         </script>
 
 </head>
 
