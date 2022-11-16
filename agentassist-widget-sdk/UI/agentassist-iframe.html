@@ -33,10 +33,10 @@
                 let parentUrl = window.top.location.href;
                 let params = {};
                 console.log('====================', parentUrl);
-                alert(parentUrl.includes('desktop'));
-                if (parentUrl.includes('desktop')) {
+                if (parentUrl.includes('smartassist.kore.ai')) {
+                    // alert(parentUrl.includes('desktop'), "sending message from iframe");
                     var message = {
-                        method: 'loaded',
+                        method: 'html_loaded',
                         name: "agent_assist"
                     };
                     window.parent.postMessage(message, '*');
@@ -51,7 +51,8 @@
                 window.addEventListener("message", function (e) {
                     if (e.data.name === 'queryParams') {
                         params = e.data.urlParams;
-                        alert("inside iframe agentassist", params);
+                        console.log(params, "params")
+                        // alert("inside iframe agentassist inside message", params);
                         getToken(params);
                         checkToken();
                     }

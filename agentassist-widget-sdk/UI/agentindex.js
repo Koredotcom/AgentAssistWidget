@@ -66,11 +66,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
     try {
         let parentUrl = window.top.location.href;
         let params = {};
-        if (parentUrl.includes('desktop')) {
+        if (parentUrl.includes('smartassist.kore.ai')) {
             var message = {
-                method: 'loaded',
+                method: 'js_loaded',
                 name: "agent_assist"
             };
+            // alert("inside agentindex.js", params);
             window.parent.postMessage(message, '*');
         } else {
             params = new Proxy(new URLSearchParams(window.location.search), {
@@ -80,9 +81,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
         }
 
         window.addEventListener("message", function (e) {
-            if (e.data.name === 'queryParams') {
+            if (e.data.name === 'url_queryParams') {
                 params = e.data.urlParams;
-                alert("inside agentindex.js", params);
+                // alert("inside agentindex.js inside message", params);
+                console.log(params, "params", connectionDetails);
 
                 onInitMethod(params, containerId, _conversationId, _botId, connectionDetails);
             }
