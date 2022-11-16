@@ -33,8 +33,8 @@
                 let parentUrl = window.top.location.href;
                 let params = {};
                 console.log('====================', parentUrl);
-                alert(parentUrl.includes('smartassist.kore.ai'));
-                if (parentUrl.includes('smartassist.kore.ai')) {
+                alert(parentUrl.includes('desktop'));
+                if (parentUrl.includes('desktop')) {
                     var message = {
                         method: 'loaded',
                         name: "agent_assist"
@@ -44,24 +44,22 @@
                     params = new Proxy(new URLSearchParams(window.location.search), {
                         get: (searchParams, prop) => searchParams.get(prop),
                     });
-                    getToken();
+                    getToken(params);
                     checkToken();
                 }
 
                 window.addEventListener("message", function (e) {
                     if (e.data.name === 'queryParams') {
                         params = e.data.urlParams;
-                        getToken();
+                        alert("inside iframe agentassist", params);
+                        getToken(params);
                         checkToken();
                     }
                 });
 
 
-                function getToken() {
+                function getToken(params) {
                     console.log('agent assist inside getToken', new Date());
-                    const params = new Proxy(new URLSearchParams(window.location.search), {
-                        get: (searchParams, prop) => searchParams.get(prop),
-                    });
                     token = params.token;
                     botID = params.botid;
                     agentAssistUrl = params.agentassisturl;

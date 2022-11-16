@@ -66,7 +66,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
     try {
         let parentUrl = window.top.location.href;
         let params = {};
-        if (parentUrl.includes('smartassist.kore.ai')) {
+        if (parentUrl.includes('desktop')) {
             var message = {
                 method: 'loaded',
                 name: "agent_assist"
@@ -76,13 +76,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             params = new Proxy(new URLSearchParams(window.location.search), {
                 get: (searchParams, prop) => searchParams.get(prop),
             });
-            onInitMethod(params);
+            onInitMethod(params, containerId, _conversationId, _botId, connectionDetails);
         }
 
         window.addEventListener("message", function (e) {
             if (e.data.name === 'queryParams') {
                 params = e.data.urlParams;
-                onInitMethod(params);
+                alert("inside agentindex.js", params);
+
+                onInitMethod(params, containerId, _conversationId, _botId, connectionDetails);
             }
         });
 
@@ -92,7 +94,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
 }
     
-function onInitMethod(params) {
+function onInitMethod(params, containerId, _conversationId, _botId, connectionDetails) {
 
     sourceType = params.source;
     isCallConversation = params.isCall;
@@ -123,18 +125,18 @@ function onInitMethod(params) {
             "isAnonymous": false
         };
 
-        callSts(jsonData)
+        callSts(jsonData, containerId, _conversationId, _botId, connectionDetails)
 
     } else if (connectionDetails.jwtToken) {
         jwtToken = connectionDetails.jwtToken;
-        grantCall(connectionDetails.jwtToken, _botId, connectionDetails.envinormentUrl);
+        grantCall(connectionDetails.jwtToken, _botId, connectionDetails.envinormentUrl, containerId, _conversationId, connectionDetails);
     } else {
         console.error("authentication failed")
     }
 
 }
 
-function callSts() {
+function callSts(jsonData, containerId, _conversationId, _botId, connectionDetails) {
     $.ajax({
         url: "https://mk2r2rmj21.execute-api.us-east-1.amazonaws.com/dev/users/sts",
         type: 'post',
@@ -142,7 +144,7 @@ function callSts() {
         dataType: 'json',
         success: function (data) {
             jwtToken = data.jwt;
-            grantCall(data.jwt, _botId, connectionDetails.envinormentUrl);
+            grantCall(data.jwt, _botId, connectionDetails.envinormentUrl, containerId, _conversationId, connectionDetails);
         },
         error: function (err) {
             console.error("jwt token generation failed");
@@ -164,7 +166,7 @@ function getToken() {
     }
 }
 
-function grantCall(jwtID, botid, url) {
+function grantCall(jwtID, botid, url, containerId, _conversationId, connectionDetails) {
     document.getElementById("loader").style.display = "block";
     var payload = {
         "assertion": jwtID,
@@ -252,7 +254,7 @@ function grantCall(jwtID, botid, url) {
                             let request_resolution_comments = {
                                 conversationId: e.data?.conversationId,
                                 userId: '',
-                                botId: _botId,
+                                botId: botid,
                                 sessionId: koreGenerateUUID(),
                                 chatHistory: e.data?.payload?.chatHistory
                             }
@@ -279,13 +281,13 @@ function grantCall(jwtID, botid, url) {
                             "lastName": userInputData.author?.lastName,
                             "type": userInputData.author?.type
                         },
-                        'botId': _botId,
+                        'botId': botid,
                         'conversationId': userInputData.conversationid,
                         'experience': isCallConversation === 'true' ? 'voice':'chat',
                         'query': sanitizeHTML(userInputData.value),
                     }
                     let user_messsage = {
-                        "botId": _botId,
+                        "botId": botid,
                         "type": "text",
                         "conversationId": userInputData.conversationid,
                         "value": sanitizeHTML(userInputData.value),
@@ -301,7 +303,7 @@ function grantCall(jwtID, botid, url) {
                     if (isCallConversation === 'true') {
                         prepareConversation();
                         if (userInputData.author.type === 'USER') {
-                            processTranscriptData(userInputData, userInputData.conversationid, _botId,);
+                            processTranscriptData(userInputData, userInputData.conversationid, botid,);
                             if(isOverRideMode) {
                                 _agentAsisstSocket.emit('user_message', user_messsage)
                             }else{
@@ -332,7 +334,7 @@ function grantCall(jwtID, botid, url) {
             var publicAPIs = {};
             $(`#${containerId}`).attr('data-convos-id', `userIDs-${_conversationId}`);
 
-            publicAPIs.botId = _agentAssistDataObj.botId = _botId;
+            publicAPIs.botId = _agentAssistDataObj.botId = botid;
             publicAPIs.containerId = _agentAssistDataObj.containerId = containerId;
             publicAPIs._conversationId = _agentAssistDataObj.conversationId = _conversationId;
             if (!_agentAssistComponents[_agentAssistDataObj.conversationId]) {
@@ -378,7 +380,7 @@ function grantCall(jwtID, botid, url) {
 
                     var overRideObj = {
                         "agentId": "",
-                        "botId": _botId,
+                        "botId": botid,
                         "conversationId": _agentAssistDataObj.conversationId,
                         "query": "",
                         'experience': isCallConversation === 'true' ? 'voice':'chat',
@@ -388,17 +390,17 @@ function grantCall(jwtID, botid, url) {
                          _agentAsisstSocket.emit('enable_override_userinput', overRideObj)
                     }
                     isOverRideMode = false;
-                    displayCustomerFeels(data, data.conversationId, _botId);
+                    displayCustomerFeels(data, data.conversationId, botid);
 
                     updateAgentAssistState(_conversationId, 'assistTab', data);
 
-                    processAgentAssistResponse(data, data.conversationId, _botId);
+                    processAgentAssistResponse(data, data.conversationId, botid);
                     removingSendCopyBtnForCall();
                     document.getElementById("loader").style.display = "none";
                     // let request_resolution_comments = {
                     //     conversationId: data.conversationId,
                     //     userId: '',
-                    //     botId: _botId,
+                    //     botId: botid,
                     //     sessionId: koreGenerateUUID(),
                     //     chatHistory: []
                     // }
@@ -418,7 +420,7 @@ function grantCall(jwtID, botid, url) {
 
                 _agentAsisstSocket.on('user_message', (data) => {
                     // updateNumberOfMessages();
-                    processUserMessage(data, data.conversationId, _botId);
+                    processUserMessage(data, data.conversationId, botid);
                     userMessage = data;
                 });
                 _agentAsisstSocket.on('agent_assist_user_message', (data) => {
@@ -2785,7 +2787,7 @@ function grantCall(jwtID, botid, url) {
                 document.getElementById("loader").style.display = "block";
                 isShowHistoryEnable = true;
                 let historyFaqIDs = [];
-                getData(`${connectionDetails.envinormentUrl}/api/1.1/botmessages/agentassist/${_botId}/history?convId=${_conversationId}&agentHistory=false`)
+                getData(`${connectionDetails.envinormentUrl}/api/1.1/botmessages/agentassist/${botid}/history?convId=${_conversationId}&agentHistory=false`)
                 .then(response => {
                     let appStateStr = localStorage.getItem('agentAssistState') || '{}';
                     let appState = JSON.parse(appStateStr);
@@ -3852,7 +3854,7 @@ function grantCall(jwtID, botid, url) {
                         let decodeEncodedVal = decodeURI(convState.libraryTab)
                         $('#librarySearch').val(decodeEncodedVal);
                         var convId = _convId;
-                        var botId = _botId;
+                        var botId = botid;
                         var intentName = convState.libraryTab;
                         AgentAssistPubSub.publish('searched_Automation_details', { conversationId: convId, botId: botId, value: intentName, isSearch: true });
 
@@ -3998,11 +4000,11 @@ function grantCall(jwtID, botid, url) {
                     }
                     if (currentTab == 'assistTab') {
                         if (item.event == 'agent_assist_user_message') {
-                            processUserMessages(item, convId, _botId);
+                            processUserMessages(item, convId, botid);
                         }
-                        processAgentAssistResponse(item, convId, _botId);
+                        processAgentAssistResponse(item, convId, botid);
                     } else {
-                        currentTab == 'myBotTab' ? processMybotDataResponse(item, convId, _botId) : '';
+                        currentTab == 'myBotTab' ? processMybotDataResponse(item, convId, botid) : '';
                     }
 
                 }
@@ -4357,7 +4359,7 @@ function grantCall(jwtID, botid, url) {
                         if(document.getElementById("checkProActive").checked == true){
                             var toggleObj = {
                                 "agentId": "",
-                                "botId": _botId,
+                                "botId": botid,
                                 "conversationId": _agentAssistDataObj.conversationId,
                                 "query": "",
                                 'experience': isCallConversation === 'true' ? 'voice':'chat',
@@ -4368,7 +4370,7 @@ function grantCall(jwtID, botid, url) {
                         } else if (document.getElementById("checkProActive").checked == false) {   
                             var toggleObj = {
                                 "agentId": "",
-                                "botId": _botId,
+                                "botId": botid,
                                 "conversationId": _agentAssistDataObj.conversationId,
                                 "query": "",
                                 'experience': isCallConversation === 'true' ? 'voice':'chat',
@@ -4436,7 +4438,7 @@ function grantCall(jwtID, botid, url) {
                     if (target.id === 'cancelLibrarySearch') {
                         $('#librarySearch').val('');
                         $('#cancelLibrarySearch').addClass('hide');
-                        loadLibraryOnCancel(autoExhaustiveList, _conversationId, _botId);
+                        loadLibraryOnCancel(autoExhaustiveList, _conversationId, botid);
                     } else if (target.id === 'cancelAgentSearch') {
                         $('#agentSearch').val('');
                         $('#cancelAgentSearch').addClass('hide');
@@ -4462,7 +4464,7 @@ function grantCall(jwtID, botid, url) {
                             $('#cancelLibrarySearch').removeClass('hide');
                         } else {
                             $('#cancelLibrarySearch').addClass('hide');
-                            processAgentIntentResults(autoExhaustiveList, _conversationId, _botId);
+                            processAgentIntentResults(autoExhaustiveList, _conversationId, botid);
                         }
                         $('.sugestions-info-data').addClass('hide');
                         $('#bodyContainer').removeClass('if-suggestion-search');
@@ -5585,21 +5587,21 @@ function grantCall(jwtID, botid, url) {
                                 AgentAssistPubSub.publish('agent_assist_send_text',
                                     {
                                         conversationId: _agentAssistDataObj.conversationId,
-                                        botId: _botId, value: 'discard all', check: true,
+                                        botId: botid, value: 'discard all', check: true,
                                         "positionId": target.dataset.positionId
                                     });
                                 document.getElementById("loader").style.display = "block";
                                 terminateTheDialog({ conversationId: _agentAssistDataObj.conversationId,
-                                    botId: _botId,"positionId": target.dataset.positionId},'userAutoIcon')
+                                    botId: botid,"positionId": target.dataset.positionId},'userAutoIcon')
                             } else {
                                 var mybotTabTerminateBtnId = '#myBotTerminateAgentDialog-' + myBotDropdownHeaderUuids;
                                 $(mybotTabTerminateBtnId).addClass('hide');
                                 AgentAssistPubSub.publish('searched_Automation_details',
-                                    { conversationId: _agentAssistDataObj.conversationId, botId: _botId, value: 'discard all', isSearch: false,
+                                    { conversationId: _agentAssistDataObj.conversationId, botId: botid, value: 'discard all', isSearch: false,
                                     "positionId": target.dataset.positionId });
                                 document.getElementById("loader").style.display = "block";
                                 terminateTheDialog({ conversationId: _agentAssistDataObj.conversationId,
-                                 botId: _botId,"positionId": target.dataset.positionId},'agentAutoIcon')
+                                 botId: botid,"positionId": target.dataset.positionId},'agentAutoIcon')
                             }
                             scrollToBottom();
                         }
@@ -5738,11 +5740,11 @@ function grantCall(jwtID, botid, url) {
                             AgentAssistPubSub.publish('agent_assist_send_text',
                             {
                                 conversationId: _agentAssistDataObj.conversationId,
-                                botId: _botId, value: 'discard all', check: true,
+                                botId: botid, value: 'discard all', check: true,
                                 "positionId": dialogPositionId
                             });
                             terminateTheDialog({ conversationId: _agentAssistDataObj.conversationId,
-                            botId: _botId,"positionId": dialogPositionId},'userAutoIcon')
+                            botId: botid,"positionId": dialogPositionId},'userAutoIcon')
                             collapseOldDialoguesInAssist();
                             updateCurrentTabInState(_conversationId, 'assistTab')
                             $('.empty-data-no-agents').addClass('hide');
@@ -5754,11 +5756,11 @@ function grantCall(jwtID, botid, url) {
                             return;
                         } else if(navigatefromLibToTab === 'myBotTab'){
                             AgentAssistPubSub.publish('searched_Automation_details',
-                            { conversationId: _agentAssistDataObj.conversationId, botId: _botId, value: 'discard all', isSearch: false,
+                            { conversationId: _agentAssistDataObj.conversationId, botId: botid, value: 'discard all', isSearch: false,
                             "positionId": myBotDialogPositionId });
                             document.getElementById("loader").style.display = "block";
                             terminateTheDialog({ conversationId: _agentAssistDataObj.conversationId,
-                            botId: _botId,"positionId": myBotDialogPositionId },'agentAutoIcon')
+                            botId: botid,"positionId": myBotDialogPositionId },'agentAutoIcon')
                             collapseOldDialoguesInMyBot();
                             updateCurrentTabInState(_conversationId, 'myBotTab')
                             $('#agentSearch').val('');
@@ -5778,7 +5780,7 @@ function grantCall(jwtID, botid, url) {
                         
                         var overRideObj = {
                             "agentId": "",
-                            "botId": _botId,
+                            "botId": botid,
                             "conversationId": _agentAssistDataObj.conversationId,
                             "query": "",
                             "enable_override_userinput": true,
@@ -5803,7 +5805,7 @@ function grantCall(jwtID, botid, url) {
                 <div class="title">Input overridden. Please provide the input</div>
                 <div class="agent-utt enter-details-block">
                 <div class="title-data" ><span class="enter-details-title">${agentInputEntityName}: </span>
-                <input type="text" placeholder="Enter Value" class="input-text chat-container" id="agentInput-${agentInputId}" data-conv-id="${_agentAssistDataObj.conversationId}" data-bot-id="${_botId}"  data-mybot-input="true" data-position-id="${target.dataset.positionId}">
+                <input type="text" placeholder="Enter Value" class="input-text chat-container" id="agentInput-${agentInputId}" data-conv-id="${_agentAssistDataObj.conversationId}" data-bot-id="${botid}"  data-mybot-input="true" data-position-id="${target.dataset.positionId}">
                 </div>
                 </div>
                 </div>
@@ -5825,7 +5827,7 @@ function grantCall(jwtID, botid, url) {
                         
                         var overRideObj = {
                             "agentId": "",
-                            "botId": _botId,
+                            "botId": botid,
                             "conversationId": _agentAssistDataObj.conversationId,
                             "query": "",
                             "enable_override_userinput": false,
@@ -6588,8 +6590,8 @@ function grantCall(jwtID, botid, url) {
 
             }
 
-            function loadLibraryOnCancel(list, _convsId, _botId) {
-                processAgentIntentResults(list, _convsId, _botId)
+            function loadLibraryOnCancel(list, _convsId, botid) {
+                processAgentIntentResults(list, _convsId, botid)
             }
 
             function AgentAssist_input_keydown(e) {
@@ -6601,7 +6603,7 @@ function grantCall(jwtID, botid, url) {
                         $('#cancelLibrarySearch').removeClass('hide');
                     } else {
                         $('#cancelLibrarySearch').addClass('hide');
-                        processAgentIntentResults(autoExhaustiveList, _conversationId, _botId);
+                        processAgentIntentResults(autoExhaustiveList, _conversationId, botid);
                     }
                     if (agent_search.length > 0) {
                         $('#cancelAgentSearch').removeClass('hide');
@@ -6676,11 +6678,11 @@ function grantCall(jwtID, botid, url) {
             }
 
             publicAPIs.sendText = function (value) {
-                AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: _agentAssistDataObj.conversationId, botId: _botId, value: value })
+                AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: _agentAssistDataObj.conversationId, botId: botid, value: value })
             }
 
             publicAPIs.runIntent = function (value) {
-                AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: _agentAssistDataObj.conversationId, botId: _botId, value: value, intentName: value })
+                AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: _agentAssistDataObj.conversationId, botId: botid, value: value, intentName: value })
             }
 
             $('.body-data-container').scrollTop($('.body-data-container').prop("scrollHeight"));
