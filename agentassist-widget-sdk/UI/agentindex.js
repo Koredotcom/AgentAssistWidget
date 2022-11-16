@@ -62,11 +62,14 @@ function koreGenerateUUID() {
     });
     return uuid;
 }
-window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, connectionDetails) {
+window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, connectionDetails, urlParams) {
     try {
-        const params = new Proxy(new URLSearchParams(window.location.search), {
+        let params = new Proxy(new URLSearchParams(window.location.search), {
             get: (searchParams, prop) => searchParams.get(prop),
         });
+        if (urlParams) {
+            params = urlParams;
+        }
         sourceType = params.source;
         isCallConversation = params.isCall;
         let decodedCustomData = decodeURI(params.customdata);
