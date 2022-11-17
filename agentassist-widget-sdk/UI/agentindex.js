@@ -2529,7 +2529,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             <i class="ast-rule"></i>
                         </div>
                         <div class="header-text" id="dropDownTitle-${agentBotuuids}">${intentName}</div>
-                        <i class="ast-carrotup"></i>
+                        <i class="ast-carrotup rotate-carrot"></i>
                         <button class="btn-danger" id="myBotTerminateAgentDialog-${agentBotuuids}" data-position-id="${dialogId}">Terminate</button>
                     </div>
                     <div class="collapse-acc-data" id="dropDownData-${agentBotuuids}">
@@ -2550,7 +2550,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                    <i class="ast-rule"></i>
                </div>
                <div class="header-text" id="dropDownTitle-${uuids}">${intentName}</div>
-               <i class="ast-carrotup"></i>
+               <i class="ast-carrotup rotate-carrot"></i>
                <button class="btn-danger" id="terminateAgentDialog" data-position-id="${dialogId}">Terminate</button>
            </div>
            <div class="collapse-acc-data" id="dropDownData-${uuids}">
@@ -4211,6 +4211,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         let lastElementId = getUUIDFromId(lastElement.id);
                         lastElementId = lastElementId.split("*")[0];
                         let collapseElement = document.getElementById('dropDownData-' + lastElementId);
+                        $(`#dropDownHeader-${lastElementId}`).find('.ast-carrotup').addClass('rotate-carrot');
                         $(collapseElement).removeClass('hide');
                     }
                 }
@@ -5958,11 +5959,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 if (target.dataset.dropDownOpened === 'false') {
                                     $(`#${target.id}`).attr('data-drop-down-opened', 'true');
                                     $(`#dropDownData-${targetsss}`).addClass('hide');
+                                    $(`#dropDownHeader-${targetsss}`).find('.ast-carrotup').removeClass('rotate-carrot');
                                    let a =  $(`#${target.parentElement.parentElement.id}`).find(`#endTaks-${targetsss}`);
                                    $(a).removeClass('hide');
                                 } else {
                                     $(`#${target.id}`).attr('data-drop-down-opened', 'false');
                                     $(`#dropDownData-${targetsss}`).removeClass('hide');
+                                    $(`#dropDownHeader-${targetsss}`).find('.ast-carrotup').addClass('rotate-carrot');
                                     $(`#endTaks-${targetsss}`).removeClass('hide');
                                     // $(`#${target.parentElement.parentElement.id}`).find(`.dilog-task-end.hide`).removeClass('hide');
                                 }
