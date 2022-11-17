@@ -1142,15 +1142,34 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 splitedanswerPlaceableID.shift();
                                 
                                 if(currentTabActive == 'searchAutoIcon'){
-                                    let faqAnswerSendMsg =  $(`#search-text-display #faqDivLib-${splitedanswerPlaceableID.join('-')}`).find("[id='sendMsg']");
-                                    $(faqAnswerSendMsg).attr('data-msg-data',ele.answer);
-                                    let faqAnswerCopyMsg =  $(`#search-text-display #faqDivLib-${splitedanswerPlaceableID.join('-')}`).find(".copy-btn");
-                                    $(faqAnswerCopyMsg).attr('data-msg-data',ele.answer)
+
+                                    let faqDiv = $(`#search-text-display #faqDivLib-${splitedanswerPlaceableID.join('-')}`);
+                                    let faqaction = `<div class="action-links">
+                                        <button class="send-run-btn" id="sendMsg" data-msg-id="${splitedanswerPlaceableID.join('-')}"  data-msg-data="${ele.answer}">Send</button>
+                                        <div class="copy-btn" data-msg-id="${splitedanswerPlaceableID.join('-')}" data-msg-data="${ele.answer}">
+                                            <i class="ast-copy" data-msg-id="${splitedanswerPlaceableID.join('-')}" data-msg-data="${ele.answer}"></i>
+                                        </div>
+                                    </div>`;
+                                    faqDiv.append(faqaction);
+
+                                    // let faqAnswerSendMsg =  $(`#search-text-display #faqDivLib-${splitedanswerPlaceableID.join('-')}`).find("[id='sendMsg']");
+                                    // $(faqAnswerSendMsg).attr('data-msg-data',ele.answer);
+                                    // let faqAnswerCopyMsg =  $(`#search-text-display #faqDivLib-${splitedanswerPlaceableID.join('-')}`).find(".copy-btn");
+                                    // $(faqAnswerCopyMsg).attr('data-msg-data',ele.answer)
                                 }else{
-                                    let faqAnswerSendMsg =  $(`#overLaySearch #faqDivLib-${splitedanswerPlaceableID.join('-')}`).find("[id='sendMsg']");
-                                    $(faqAnswerSendMsg).attr('data-msg-data',ele.answer)
-                                    let faqAnswerCopyMsg =  $(`#overLaySearch #faqDivLib-${splitedanswerPlaceableID.join('-')}`).find(".copy-btn");
-                                    $(faqAnswerCopyMsg).attr('data-msg-data',ele.answer)
+                                        let faqDiv = $(`#overLaySearch #faqDivLib-${splitedanswerPlaceableID.join('-')}`);
+                                        let faqaction = `<div class="action-links">
+                                            <button class="send-run-btn" id="sendMsg" data-msg-id="${splitedanswerPlaceableID.join('-')}"  data-msg-data="${ele.answer}">Send</button>
+                                            <div class="copy-btn" data-msg-id="${splitedanswerPlaceableID.join('-')}" data-msg-data="${ele.answer}">
+                                                <i class="ast-copy" data-msg-id="${splitedanswerPlaceableID.join('-')}" data-msg-data="${ele.answer}"></i>
+                                            </div>
+                                        </div>`;
+                                        faqDiv.append(faqaction);
+                    
+                                    // let faqAnswerSendMsg =  $(`#overLaySearch #faqDivLib-${splitedanswerPlaceableID.join('-')}`).find("[id='sendMsg']");
+                                    // $(faqAnswerSendMsg).attr('data-msg-data',ele.answer)
+                                    // let faqAnswerCopyMsg =  $(`#overLaySearch #faqDivLib-${splitedanswerPlaceableID.join('-')}`).find(".copy-btn");
+                                    // $(faqAnswerCopyMsg).attr('data-msg-data',ele.answer)
                                 }
 
                                 $(`${currentTabActive == 'searchAutoIcon' ? `#search-text-display #${faqAnswerIdsPlace.id}` : `#overLaySearch #${faqAnswerIdsPlace.id}`}`).html(ele.answer);
@@ -2017,24 +2036,38 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             let faqAnswerIdsPlace ;
                             data.suggestions.faqs.forEach((ele) => {
                                 faqAnswerIdsPlace = answerPlaceableIDs.find(ele => ele.input == data.value);
-                               let splitedanswerPlaceableID = faqAnswerIdsPlace.id.split('-');
-                               splitedanswerPlaceableID.shift();
-                               let faqAnswerSendMsg =  $(`#dynamicBlock #faqDiv-${splitedanswerPlaceableID.join('-')}`).find("[id='sendMsg']");
-                               $(faqAnswerSendMsg).attr('data-msg-data',ele.answer)
-                               let faqAnswerCopyMsg =  $(`#dynamicBlock #faqDiv-${splitedanswerPlaceableID.join('-')}`).find(".copy-btn");
-                               $(faqAnswerCopyMsg).attr('data-msg-data',ele.answer)
-                                $(`#${faqAnswerIdsPlace.id}`).html(ele.answer);
-                                $(`#${faqAnswerIdsPlace.id}`).attr('data-answer-render', 'true');
-                                let faqs = $(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')}`);
-                                let seeMoreButtonHtml = `
-                        <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${splitedanswerPlaceableID.join('-')}" data-see-more="true">Show more</button>
-                        <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${splitedanswerPlaceableID.join('-')}" data-see-less="true">Show less</button>
-                        `;
-                                faqs.append(seeMoreButtonHtml);
-                                console.log("updat see more button for assist");
-                                setTimeout(() => {
-                                    updateSeeMoreButtonForAssist(splitedanswerPlaceableID.join('-'));
-                                }, waitingTimeForSeeMoreButton);
+                                if(faqAnswerIdsPlace){
+                                    let splitedanswerPlaceableID = faqAnswerIdsPlace.id.split('-');
+                                    splitedanswerPlaceableID.shift();
+     
+                                    let faqDiv = $(`#dynamicBlock #faqDiv-${splitedanswerPlaceableID.join('-')}`);
+                                    let faqaction = `<div class="action-links">
+                                        <button class="send-run-btn" id="sendMsg" data-msg-id="${splitedanswerPlaceableID.join('-')}"  data-msg-data="${ele.answer}">Send</button>
+                                        <div class="copy-btn" data-msg-id="${splitedanswerPlaceableID.join('-')}" data-msg-data="${ele.answer}">
+                                        <i class="ast-copy" data-msg-id="${splitedanswerPlaceableID.join('-')}" data-msg-data="${ele.answer}"></i>
+                                        </div>
+                                        </div>`;
+                                     
+                                     faqDiv.append(faqaction);
+     
+                                 //    let faqAnswerSendMsg =  $(`#dynamicBlock #faqDiv-${splitedanswerPlaceableID.join('-')}`).find("[id='sendMsg']");
+                                 //    $(faqAnswerSendMsg).attr('data-msg-data',ele.answer)
+                                 //    let faqAnswerCopyMsg =  $(`#dynamicBlock #faqDiv-${splitedanswerPlaceableID.join('-')}`).find(".copy-btn");
+                                 //    $(faqAnswerCopyMsg).attr('data-msg-data',ele.answer)
+     
+                                     $(`#${faqAnswerIdsPlace.id}`).html(ele.answer);
+                                     $(`#${faqAnswerIdsPlace.id}`).attr('data-answer-render', 'true');
+                                     let faqs = $(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')}`);
+                                     let seeMoreButtonHtml = `
+                             <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${splitedanswerPlaceableID.join('-')}" data-see-more="true">Show more</button>
+                             <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${splitedanswerPlaceableID.join('-')}" data-see-less="true">Show less</button>
+                             `;
+                                     faqs.append(seeMoreButtonHtml);
+                                     console.log("updat see more button for assist");
+                                     setTimeout(() => {
+                                         updateSeeMoreButtonForAssist(splitedanswerPlaceableID.join('-'));
+                                     }, waitingTimeForSeeMoreButton);
+                                }
                                 // $(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')} .ast-carrotup.rotate-carrot`).length>0?$(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')} #seeMore-${splitedanswerPlaceableID.join('-')}`).removeClass('hide'):$(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')} #seeMore-${splitedanswerPlaceableID.join('-')}`).removeClass('hide');
                             })
                             if(faqAnswerIdsPlace) {
@@ -5821,13 +5854,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             if (!target.dataset.answerRender) {
                                 let faq = $(`#dynamicBlock .type-info-run-send #faqSection-${id.join('-')}`);
                                 let answerHtml = `<div class="desc-text" id="desc-${id.join('-')}"></div>`
-                                let faqDiv = $(`#dynamicBlock #faqDiv-${id.join('-')}`);
-                                let faqaction = `<div class="action-links">
-                                    <button class="send-run-btn" id="sendMsg" data-msg-id="${id.join('-')}"  data-msg-data="">Send</button>
-                                    <div class="copy-btn" data-msg-id="${id.join('-')}">
-                                    <i class="ast-copy" data-msg-id="${id.join('-')}"></i>
-                                    </div>
-                                    </div>`;
+                                // let faqDiv = $(`#dynamicBlock #faqDiv-${id.join('-')}`);
+                                // let faqaction = `<div class="action-links">
+                                //     <button class="send-run-btn" id="sendMsg" data-msg-id="${id.join('-')}"  data-msg-data="">Send</button>
+                                //     <div class="copy-btn" data-msg-id="${id.join('-')}">
+                                //     <i class="ast-copy" data-msg-id="${id.join('-')}"></i>
+                                //     </div>
+                                //     </div>`;
                                 // let dropDownHtml =` <i class="ast-carrotup" data-conv-id="${_conversationId}"
                                 // data-bot-id="" data-intent-name=""
                                 // data-check="true" id="check-${id.join('-')}"></i>`;
@@ -5837,7 +5870,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 // }
                                 faq.append(answerHtml);
                                 $(`#dynamicBlock #${target.id}`).attr('data-answer-render', 'false');
-                                faqDiv.append(faqaction);
+                                // faqDiv.append(faqaction);
                                 answerPlaceableIDs.push({id:`desc-${id.join('-')}`, input: target.dataset.intentName, positionId: target.dataset.positionId});
                                 $(`#dynamicBlock #${target.id}`).addClass('rotate-carrot');
                                 $(`#dynamicBlock #faqDiv-${id.join('-')}`).addClass('is-dropdown-open');
@@ -5871,16 +5904,16 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             if ((!target.dataset.answerRender && (currentTabActive == 'userAutoIcon' || currentTabActive == 'agentAutoIcon' || currentTabActive == 'transcriptIcon'))) {
                                 let faq = $(`#overLaySearch .type-info-run-send #faqSectionLib-${id.join('-')}`);
                                 let answerHtml = `<div class="desc-text" id="descLib-${id.join('-')}"></div>`
-                                let faqDiv = $(`#overLaySearch #faqDivLib-${id.join('-')}`);
-                                let faqaction = `<div class="action-links">
-                    <button class="send-run-btn" id="sendMsg" data-msg-id="${id.join('-')}"  data-msg-data="">Send</button>
-                    <div class="copy-btn" data-msg-id="${id.join('-')}">
-                        <i class="ast-copy" data-msg-id="${id.join('-')}"></i>
-                    </div>
-                </div>`;
+                                // let faqDiv = $(`#overLaySearch #faqDivLib-${id.join('-')}`);
+                //                 let faqaction = `<div class="action-links">
+                //     <button class="send-run-btn" id="sendMsg" data-msg-id="${id.join('-')}"  data-msg-data="">Send</button>
+                //     <div class="copy-btn" data-msg-id="${id.join('-')}">
+                //         <i class="ast-copy" data-msg-id="${id.join('-')}"></i>
+                //     </div>
+                // </div>`;
                                 faq.append(answerHtml);
                                 $(`#overLaySearch #${target.id}`).attr('data-answer-render', 'false');
-                                faqDiv.append(faqaction);
+                                // faqDiv.append(faqaction);
                                 answerPlaceableIDs.push({id:`descLib-${id.join('-')}`, input: target.dataset.intentName, positionId: target.dataset.positionId});
                                 $(`#overLaySearch #${target.id}`).addClass('rotate-carrot');
                                 $(`#overLaySearch #faqDivLib-${id.join('-')}`).addClass('is-dropdown-open');
@@ -5891,16 +5924,16 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             if ((!target.dataset.answerRender && currentTabActive == 'searchAutoIcon')) {
                                 let faq = $(`#search-text-display .type-info-run-send #faqSectionLib-${id.join('-')}`);
                                 let answerHtml = `<div class="desc-text" id="descLib-${id.join('-')}"></div>`
-                                let faqDiv = $(`#search-text-display #faqDivLib-${id.join('-')}`);
-                                let faqaction = `<div class="action-links">
-                    <button class="send-run-btn" id="sendMsg" data-msg-id="${id.join('-')}"  data-msg-data="">Send</button>
-                    <div class="copy-btn" data-msg-id="${id.join('-')}">
-                        <i class="ast-copy" data-msg-id="${id.join('-')}"></i>
-                    </div>
-                </div>`;
+                //                 let faqDiv = $(`#search-text-display #faqDivLib-${id.join('-')}`);
+                //                 let faqaction = `<div class="action-links">
+                //     <button class="send-run-btn" id="sendMsg" data-msg-id="${id.join('-')}"  data-msg-data="">Send</button>
+                //     <div class="copy-btn" data-msg-id="${id.join('-')}">
+                //         <i class="ast-copy" data-msg-id="${id.join('-')}"></i>
+                //     </div>
+                // </div>`;
                                 faq.append(answerHtml);
                                 $(`#search-text-display #${target.id}`).attr('data-answer-render', 'false');
-                                faqDiv.append(faqaction);
+                                // faqDiv.append(faqaction);
                                 answerPlaceableIDs.push({id:`descLib-${id.join('-')}`, input: target.dataset.intentName, positionId: target.dataset.positionId});
                                 $(`#search-text-display #${target.id}`).addClass('rotate-carrot');
                                 $(`#search-text-display #faqDivLib-${id.join('-')}`).addClass('is-dropdown-open');
