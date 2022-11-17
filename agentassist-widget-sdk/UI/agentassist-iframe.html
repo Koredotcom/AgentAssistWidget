@@ -26,7 +26,7 @@
             window.addEventListener("message", receiveMessage, false);
             let parentUrl = window.parent.location.href;
             let params = {};
-            if (!parentUrl.includes('smartassist.kore.ai')) {
+            if (!parentUrl.includes('desktop/console')) {
                 initAgentAssist(chatConfig);
             } else {
                 var message = {
@@ -55,7 +55,7 @@
                     token = params.token;
                     botID = params.botid;
                     agentAssistUrl = params.agentassisturl;
-                    conversationId = params.conversationid;
+                    conversationId = params.conversationId;
                     console.log("---conversation id -----", conversationId);
                 }
                 getToken(urlParams);
@@ -85,8 +85,12 @@
                     }
 
                 } else {
+                    console.log('==================================', urlParams)
                     connectionObj['envinormentUrl'] = agentAssistUrl;
                     connectionObj['jwtToken'] = token;
+                    connectionObj['accountId'] = urlParams.accountId || '';
+                    connectionObj['userId'] = urlParams.userId || '';
+                    connectionObj['orgId']= urlParams.orgId || '';
                     new AgentAssist('agent-assist-chat-container', conversationId, botID, connectionObj, urlParams);
                 }
 

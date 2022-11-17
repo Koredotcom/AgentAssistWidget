@@ -82,9 +82,16 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
     } catch (err) {
         console.log(err);
     }
-    var webSocketConnection = {
-        "path": "/agentassist/api/v1/chat/", transports: ['websocket', 'polling', 'flashsocket'],  query: {'jToken': connectionDetails.jwtToken}
-    };
+    if(sourceType === 'smartassist-color-scheme') {
+        var webSocketConnection = {
+            "path": "/agentassist/api/v1/chat/", transports: ['websocket', 'polling', 'flashsocket'],  query: {'userId': connectionDetails.userId, 'orgId': connectionDetails.orgId,'authToken': connectionDetails.jwtToken, 'accountId': connectionDetails.accountId, 'fromSAT': true}
+        };
+    } else {
+        var webSocketConnection = {
+            "path": "/agentassist/api/v1/chat/", transports: ['websocket', 'polling', 'flashsocket'],  query: {'jwtToken': connectionDetails.jwtToken}
+        };
+    }
+    
     connectionDetails['webSocketConnectionDomain'] = connectionDetails.envinormentUrl + "/koreagentassist",
         connectionDetails['webSocketConnectionDetails'] = webSocketConnection,
         agentContainer = containerId;
@@ -102,7 +109,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
         callSts(jsonData)
 
-    } else if (connectionDetails.jwtToken) {
+    } else if(sourceType === 'smartassist-color-scheme') {
+        return loadAgentAssist();
+    }
+     else if (connectionDetails.jwtToken) {
         jwtToken = connectionDetails.jwtToken;
         grantCall(connectionDetails.jwtToken, _botId, connectionDetails.envinormentUrl);
     } else {
@@ -161,7 +171,22 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             data: JSON.stringify(payload),
             dataType: "json",
             success: function (result) {
-                var navigatefromLibToTab;
+                loadAgentAssist()
+           },
+            error: function (error) {
+                console.error("token is wrong");
+                if (error.status === 500) {
+                    $(`#${containerId}`).html("Issue identified with the backend services! Please reach out to AgentAssist Admin.")
+                } else {
+                    $(`#${containerId}`).html("Issue identified in configuration settings! Please reach out to AgentAssist Admin.")
+                }
+                return false;
+            }
+        });
+    }
+
+    function loadAgentAssist() {
+        var navigatefromLibToTab;
                 let isOnlyOneFaqOnSearch = false;
                 let isInitialDialogOnGoing = false;
                 let isSendWelcomeMessage;
@@ -6664,17 +6689,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 $('.body-data-container').scrollTop($('.body-data-container').prop("scrollHeight"));
 
                 return publicAPIs;
-           },
-            error: function (error) {
-                console.error("token is wrong");
-                if (error.status === 500) {
-                    $(`#${containerId}`).html("Issue identified with the backend services! Please reach out to AgentAssist Admin.")
-                } else {
-                    $(`#${containerId}`).html("Issue identified in configuration settings! Please reach out to AgentAssist Admin.")
-                }
-                return false;
-            }
-        });
     }
 
     function prepareConversation() {
