@@ -48,6 +48,7 @@ var agentAssistResponse = {};
 var myBotDataResponse = {};
 var waitingTimeForSeeMoreButton = 150;
 var waitingTimeForUUID = 100;
+var proactiveMode = true;
 
 function koreGenerateUUID() {
     console.info("generating UUID");
@@ -1628,6 +1629,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                 function processAgentAssistResponse(data, convId, botId) {
                     console.log("AgentAssist >>> agentassist_response:", data);
+                    if(!isAutomationOnGoing && !isInitialDialogOnGoing && !proactiveMode){
+                        return;
+                    }
                     let automationSuggestions = $('#dynamicBlock .dialog-task-accordiaon-info');
                     // if (data.suggestions) {
                     //     for (let ele of automationSuggestions) {
@@ -2155,8 +2159,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                        </div>
             `;
                         if (data.isPrompt) {
-                            $(`.override-input-div`).removeClass('hide');
                             runInfoContent.append(askToUserHtml);
+                            if(!proactiveMode){
+                                getOverRideMode('overRideBtn-' + dropdownHeaderUuids, dialogPositionId);
+                            }else{
+                                $(`.override-input-div`).removeClass('hide');
+                            }
                         } else {
                             $(`.override-input-div`).addClass('hide');
                             runInfoContent.append(tellToUserHtml);
@@ -4247,6 +4255,80 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     removedIdListOnScroll = [];
                 }
 
+                function getCancelOverRideMode(targetId, positionId){
+                    let idsss = targetId.split('-');
+                    idsss.shift();
+                    let id = idsss.join('-')
+                    
+                    var overRideObj = {
+                        "agentId": "",
+                        "botId": _botId,
+                        "conversationId": _agentAssistDataObj.conversationId,
+                        "query": "",
+                        "enable_override_userinput": false,
+                        'experience': isCallConversation === 'true' ? 'voice':'chat',
+                        "positionId": positionId
+                    }
+                    _agentAsisstSocket.emit('enable_override_userinput', overRideObj);
+                    $(`#overRideBtn-${id}`).removeClass('hide');
+                    console.log(`#overRideBtn-${id}`, "overrride btn inside getcancel override mode");
+                    $(`#cancelOverRideBtn-${id}`).addClass('hide');
+                    $('#inputFieldForAgent').remove();
+                    isOverRideMode = false;
+                    addWhiteBackgroundClassToNewMessage();
+                    scrollToBottom();
+                }
+
+                function getOverRideMode(targetId, positionId) {
+                    let idsss = targetId.split('-');
+                    idsss.shift();
+                    let id = idsss.join('-')
+
+                    var overRideObj = {
+                        "agentId": "",
+                        "botId": _botId,
+                        "conversationId": _agentAssistDataObj.conversationId,
+                        "query": "",
+                        "enable_override_userinput": true,
+                        'experience': isCallConversation === 'true' ? 'voice' : 'chat',
+                        "positionId": positionId
+                    }
+                    _agentAsisstSocket.emit('enable_override_userinput', overRideObj);
+                    let runInfoContent = $(`#dropDownData-${dropdownHeaderUuids}`);
+                    let agentInputId = Math.floor(Math.random() * 100);
+                    let agentInputEntityName = 'EnterDetails';
+                    if (agentAssistResponse.newEntityDisplayName || agentAssistResponse.newEntityName) {
+                        agentInputEntityName = agentAssistResponse.newEntityDisplayName ? agentAssistResponse.newEntityDisplayName : agentAssistResponse.newEntityName;
+                    } else if (agentAssistResponse.entityDisplayName || agentAssistResponse.entityName) {
+                        agentInputEntityName = agentAssistResponse.entityDisplayName ? agentAssistResponse.entityDisplayName : agentAssistResponse.entityName;
+                    }
+                    let agentInputToBotHtml = `
+        <div class="steps-run-data" id="inputFieldForAgent">
+            <div class="icon_block">
+                <i class="ast-agent"></i>
+            </div>
+            <div class="run-info-content">
+            <div class="title">Input overridden. Please provide the input</div>
+            <div class="agent-utt enter-details-block">
+            <div class="title-data" ><span class="enter-details-title">${agentInputEntityName}: </span>
+            <input type="text" placeholder="Enter Value" class="input-text chat-container" id="agentInput-${agentInputId}" data-conv-id="${_agentAssistDataObj.conversationId}" data-bot-id="${_botId}"  data-mybot-input="true" data-position-id="${positionId}">
+            </div>
+            </div>
+            </div>
+        </div>`
+                    runInfoContent.append(agentInputToBotHtml);
+                    if (document.getElementById('agentInput-' + agentInputId)) {
+                        document.getElementById('agentInput-' + agentInputId).focus();
+                    }
+                    if(proactiveMode){
+                        $(`#overRideBtn-${id}`).addClass('hide');
+                        $(`#cancelOverRideBtn-${id}`).removeClass('hide');
+                    }
+                    isOverRideMode = true;
+                    addWhiteBackgroundClassToNewMessage();
+                    scrollToBottom();
+                }
+
                 function btnInit() {
 
                     document.querySelector('#bodyContainer').addEventListener('ps-scroll-up', (scrollUpevent) => {
@@ -4327,33 +4409,22 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         //     highLightAndStoreFaqId(evt);
                         // } else 
 
-
-                        function togglePoint(){
+                        if(target.id === 'checkProActive'){
                             if(document.getElementById("checkProActive").checked == true){
-                                var toggleObj = {
-                                    "agentId": "",
-                                    "botId": _botId,
-                                    "conversationId": _agentAssistDataObj.conversationId,
-                                    "query": "",
-                                    'experience': isCallConversation === 'true' ? 'voice':'chat',
-                                    "enable_override_userinput": true
-                                }
-                                isOverRideMode ? _agentAsisstSocket.emit('enable_override_userinput', toggleObj) : '';
-                                isOverRideMode = false;
+                                proactiveMode = true;
+                                $(`.override-input-div`).removeClass('hide');
+                                getCancelOverRideMode('overRideBtn-' + dropdownHeaderUuids, dialogPositionId);
+
                             } else if (document.getElementById("checkProActive").checked == false) {   
-                                var toggleObj = {
-                                    "agentId": "",
-                                    "botId": _botId,
-                                    "conversationId": _agentAssistDataObj.conversationId,
-                                    "query": "",
-                                    'experience': isCallConversation === 'true' ? 'voice':'chat',
-                                    "enable_override_userinput": false
+                                proactiveMode = false;
+                                if(document.getElementById(`overRideBtn-${dropdownHeaderUuids}`)){
+                                    $(`#overRideBtn-${dropdownHeaderUuids}`).addClass('hide');
+                                    getOverRideMode('overRideBtn-' + dropdownHeaderUuids, dialogPositionId);
                                 }
-                                isOverRideMode ? _agentAsisstSocket.emit('enable_override_userinput', toggleObj) : '';
-                                isOverRideMode = false;
                             }
                         }
-                        let isChecked =  togglePoint();
+
+                        // let isChecked =  togglePoint();
                         // $(document).ready(function() {
                         //     $('#toggle').click(function() {
                         //         $(':checkbox').each(function() {
@@ -5747,73 +5818,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
 
                         if (target.id.split('-').includes('overRideBtn')) {
-                            let idsss = target.id.split('-');
-                            idsss.shift();
-                            let id = idsss.join('-')
-                            
-                            var overRideObj = {
-                                "agentId": "",
-                                "botId": _botId,
-                                "conversationId": _agentAssistDataObj.conversationId,
-                                "query": "",
-                                "enable_override_userinput": true,
-                                'experience': isCallConversation === 'true' ? 'voice':'chat',
-                                "positionId": target.dataset.positionId
-                            }
-                            _agentAsisstSocket.emit('enable_override_userinput', overRideObj);
-                            let runInfoContent = $(`#dropDownData-${dropdownHeaderUuids}`);
-                            let agentInputId = Math.floor(Math.random() * 100);
-                            let agentInputEntityName = 'EnterDetails';
-                            if(agentAssistResponse.newEntityDisplayName || agentAssistResponse.newEntityName){
-                                agentInputEntityName = agentAssistResponse.newEntityDisplayName ? agentAssistResponse.newEntityDisplayName : agentAssistResponse.newEntityName;
-                            }else if(agentAssistResponse.entityDisplayName || agentAssistResponse.entityName){
-                                agentInputEntityName = agentAssistResponse.entityDisplayName ? agentAssistResponse.entityDisplayName : agentAssistResponse.entityName;
-                            }
-                            let agentInputToBotHtml = `
-                <div class="steps-run-data" id="inputFieldForAgent">
-                    <div class="icon_block">
-                        <i class="ast-agent"></i>
-                    </div>
-                    <div class="run-info-content">
-                    <div class="title">Input overridden. Please provide the input</div>
-                    <div class="agent-utt enter-details-block">
-                    <div class="title-data" ><span class="enter-details-title">${agentInputEntityName}: </span>
-                    <input type="text" placeholder="Enter Value" class="input-text chat-container" id="agentInput-${agentInputId}" data-conv-id="${_agentAssistDataObj.conversationId}" data-bot-id="${_botId}"  data-mybot-input="true" data-position-id="${target.dataset.positionId}">
-                    </div>
-                    </div>
-                    </div>
-                </div>`
-                            runInfoContent.append(agentInputToBotHtml);
-                            if(document.getElementById('agentInput-' + agentInputId)){
-                                document.getElementById('agentInput-' + agentInputId).focus();
-                            }
-                            $(`#overRideBtn-${id}`).addClass('hide');
-                            $(`#cancelOverRideBtn-${id}`).removeClass('hide');
-                            isOverRideMode = true;
-                            addWhiteBackgroundClassToNewMessage();
-                            scrollToBottom();
+                            getOverRideMode(target.id, target.dataset.positionId);
                         }
                         if (target.id.split('-').includes('cancelOverRideBtn')) {
-                            let idsss = target.id.split('-');
-                            idsss.shift();
-                            let id = idsss.join('-')
-                            
-                            var overRideObj = {
-                                "agentId": "",
-                                "botId": _botId,
-                                "conversationId": _agentAssistDataObj.conversationId,
-                                "query": "",
-                                "enable_override_userinput": false,
-                                'experience': isCallConversation === 'true' ? 'voice':'chat',
-                                "positionId": target.dataset.positionId
-                            }
-                            _agentAsisstSocket.emit('enable_override_userinput', overRideObj);
-                            $(`#overRideBtn-${id}`).removeClass('hide');
-                            $(`#cancelOverRideBtn-${id}`).addClass('hide');
-                            $('#inputFieldForAgent').remove();
-                            isOverRideMode = false;
-                            addWhiteBackgroundClassToNewMessage();
-                            scrollToBottom();
+                            getCancelOverRideMode(target.id, target.dataset.positionId);
+                           
                         }
                         if (checkButton) {
                             let id = target.id.split('-');
@@ -6739,7 +6748,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     <div class="t-title">Proactive</div>
                     <label class="kr-sg-toggle">
                         <div class="hover-tooltip">Proactive</div>
-                        <input type="checkbox" id="checkProActive" value="YES" checked onclick="isChecked()">
+                        <input type="checkbox" id="checkProActive" value="YES" checked>
                         <div class="slider"></div>
                     </label>
                 </div>
