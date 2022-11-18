@@ -24,7 +24,7 @@
             console.log('agent assist inside iframe', new Date());
             var chatConfig = window.KoreSDK.chatConfig;
             window.addEventListener("message", receiveMessage, false);
-            let parentUrl = window.parent.location.href;
+            let parentUrl = document.referrer;
             let params = {};
             if (!parentUrl.includes('smartassist.kore.ai')) {
                 initAgentAssist(chatConfig);
