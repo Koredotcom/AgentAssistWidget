@@ -2798,7 +2798,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 async function renderingHistoryMessage () {
                     let url = `${connectionDetails.envinormentUrl}/agentassist/api/v1/agent-feedback/${_conversationId}?interaction=assist`;
                     let feedBackResult = await renderHistoryFeedBack(url);
-                    document.getElementById("loader").style.display = "block";
+                    // document.getElementById("loader").style.display = "block";
                     isShowHistoryEnable = true;
                     let historyFaqIDs = [];
                     getData(`${connectionDetails.envinormentUrl}/api/1.1/botmessages/agentassist/${_botId}/history?convId=${_conversationId}&agentHistory=false`)
@@ -3838,7 +3838,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         scrollToBottom();
                         addWhiteBackgroundClassToNewMessage();
                     }).catch(err => {
-                        document.getElementById("loader").style.display = "block";
+                        // document.getElementById("loader").style.display = "block";
                         console.log("error", err)
                     });
                     isShowHistoryEnableForMyBot = false;
@@ -6230,7 +6230,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                 // Example POST method implementation:
                 async function getData(url = '', data = {}) {
-                    document.getElementById("loader").style.display = "block";
+                    // document.getElementById("loader").style.display = "block";
+                    console.log(result.authorization.token_type);
                     const response = await $.ajax({
                         method: 'GET',
                         url: url,
