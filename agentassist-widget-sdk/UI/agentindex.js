@@ -171,6 +171,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             data: JSON.stringify(payload),
             dataType: "json",
             success: function (result) {
+                console.log(result);
                 loadAgentAssist()
            },
             error: function (error) {
@@ -6213,7 +6214,19 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                 // Example POST method implementation:
                 async function getData(url = '', data = {}) {
-                    document.getElementById("loader").style.display = "block";
+                    if(sourceType === 'smartassist-color-scheme') {
+                        let accessToken = urlParams
+                        document.getElementById("loader").style.display = "block";
+                    const response = await $.ajax({
+                        method: 'GET',
+                        url: url,
+                        headers: {
+                            'Authorization': 'bearer' + ' ' + accessToken
+                        }
+                    }) // parses JSON response into native JavaScript objects
+                    return response;
+                    } else {
+                        document.getElementById("loader").style.display = "block";
                     const response = await $.ajax({
                         method: 'GET',
                         url: url,
@@ -6222,6 +6235,17 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
                     }) // parses JSON response into native JavaScript objects
                     return response;
+
+                    }
+                    // document.getElementById("loader").style.display = "block";
+                    // const response = await $.ajax({
+                    //     method: 'GET',
+                    //     url: url,
+                    //     headers: {
+                    //         'Authorization': result.authorization.token_type + ' ' + result.authorization.accessToken
+                    //     }
+                    // }) // parses JSON response into native JavaScript objects
+                    // return response;
                 }
 
                 function getNewlyAddedElementsHeights() {
