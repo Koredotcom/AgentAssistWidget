@@ -95,6 +95,7 @@ import { ExternalWidgetComponent } from './pages/agent-settings/external-widget/
 import { AddWidgetComponent } from './pages/agent-settings/external-widget/add-widget/add-widget.component';
 import { OnboardingComponent } from './pages/onboarding/onboarding.component';
 import { OnboardingDialogComponent } from './pages/onboarding/onboarding-dialog/onboarding-dialog.component';
+import { SearchAssistComponent } from './pages/search-assist/search-assist.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -165,6 +166,7 @@ import { OnboardingDialogComponent } from './pages/onboarding/onboarding-dialog/
     AddWidgetComponent,
     OnboardingComponent,
     OnboardingDialogComponent,
+    SearchAssistComponent,
   ],
   imports: [
     BrowserModule,

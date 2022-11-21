@@ -15,8 +15,8 @@ export class ServiceInvokerService {
     'Content-Type': undefined // 'multipart/form-data' //
   };
 
-  public invoke(serviceId?:String, qParams?:any, payload?:any, headers?:any): Observable<any> {
-    let conf = this.prepareHttpCall(serviceId, qParams, payload, headers);
+  public invoke(serviceId?:String, qParams?:any, payload?:any, headers?:any, response? : any): Observable<any> {
+    let conf = this.prepareHttpCall(serviceId, qParams, payload, headers, response);
     var _args=[conf.url];
     if(conf.method==='get'||conf.method==='delete'){
       _args.push({
@@ -25,13 +25,14 @@ export class ServiceInvokerService {
       });
     }else{
       _args.push(conf.payload,{
-          headers: conf.headers
+          headers: conf.headers,
+          responseType : conf.responseType
         });
       }
      
     return this.http[conf.method].apply(this.http,_args);
   }
-  private prepareHttpCall(serviceId, qParams, payload, headers) {
+  private prepareHttpCall(serviceId, qParams, payload, headers, response) {
     let HTTP_VERB_GET = 'get',
       HTTP_VERB_POST = 'post',
       HTTP_VERB_PUT = 'put',
@@ -65,7 +66,8 @@ export class ServiceInvokerService {
       method: _verb,
       url: _url,
       headers: Object.assign(headers||{},_headers), // Optional headers
-      payload: payload || {}
+      payload: payload || {},
+      responseType :  response && response.responseType ? response.responseType : ''
       // cache: true
     };
   }
