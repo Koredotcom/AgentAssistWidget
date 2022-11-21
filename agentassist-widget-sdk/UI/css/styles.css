@@ -3476,3 +3476,9 @@ input.no-autofill-bkg:-webkit-autofill {
 .summary-box-content .input-block-optional .input-text:focus {
     border: 1px solid #0D6EFD;
 }
+.search-results-text-in-lib{
+    font-weight: 500;
+    font-size: 12px;
+    color: var(--color-grey-text);
+    cursor: pointer;background: white; padding: 10px 0px 0px 10px;
+}
