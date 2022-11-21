@@ -425,7 +425,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             document.getElementById("loader").style.display = "none";
                             document.getElementById("overLaySearch").style.display = "block";
                             document.getElementById("overLayAutoSearch").style.display = "block";
-                            $('#overLayAutoSearch').html('');
+                            $('#overLayAutoSearch').find('.search-results-text')?.remove();
                             $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
                             $('.search-block').find('.search-results-text-in-lib').remove();
                         } else {
@@ -4518,7 +4518,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $('#librarySearch').val('');
                             searchedVal = '';
                             $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
-                            $('#overLayAutoSearch').html('');
+                            $('#overLayAutoSearch').find('.search-results-text')?.remove();
                             $('.search-block').find('.search-results-text-in-lib')?.remove();
                         }
 
@@ -6132,7 +6132,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                         if(target.id.split('-').includes('autoResult')){
                             $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
-                            $('#overLayAutoSearch').html('');
+                            $('#overLayAutoSearch').find('.search-results-text')?.remove();
                             $('.search-block').find('.search-results-text-in-lib')?.remove();
                             $('#agentSearch').val(target.innerHTML);
                             agentSearchVal = target.innerHTML;
@@ -6143,7 +6143,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         if(target.id.split('-').includes('autoResultLib')){
                             $('#librarySearch').val(target.innerHTML);
                             $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
-                            $('#overLayAutoSearch').html('');
+                            $('#overLayAutoSearch').find('.search-results-text')?.remove();
                             $('.search-block').find('.search-results-text-in-lib')?.remove();
                             document.getElementById("loader").style.display = "block";
                             AgentAssistPubSub.publish('searched_Automation_details', { conversationId: _conversationId, botId: _botId, value: target.innerHTML, isSearch: true, "positionId": evt.target.dataset.positionId });
@@ -6225,6 +6225,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             dataType: 'json',
                             success: function (data) {
                                 if (!isLibraryTab && data.typeAheads.length>0) {
+                                    $('#overLaySearch').html('');
+                                    $('.overlay-suggestions').addClass('hide').removeAttr('style');
                                     addAutoSuggestionApi(data);
                                 } else {
                                     if(data.typeAheads.length>0){
