@@ -1503,5 +1503,21 @@ export class EndPointsService {
       endpoint: this.API_SERVER_URL + '/smartassist/version',
       method: 'get'
     }
+
+    this.serviceList['get.searchaccounts'] = {
+      endpoint: this.SERVER_URL + '/agentassist/api/v1/searchaccounts/?accountId=:accountId',
+      method: 'get'
+    }
+
+    this.serviceList['post.searchaccounts'] = {
+      endpoint: this.SERVER_URL + '/agentassist/api/v1/searchaccounts/?accountId=:accountId',
+      method: 'post'
+    }
+
+    this.serviceList['put.searchaccounts'] = {
+      endpoint: this.SERVER_URL + '/agentassist/api/v1/searchaccounts/?accountId=:accountId',
+      method: 'put'
+    }
+
   }
 }

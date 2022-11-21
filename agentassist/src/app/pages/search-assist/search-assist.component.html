@@ -1,8 +1,15 @@
 <div class="search-assist-wrapper">
     <perfect-scrollbar>
         <div class="scroll-data">
-            <div class="header-title">SearchAssist</div>
-            <div class="info-intelegent">
+            <div class="header-title d-flex justify-content-between"><span>SearchAssist</span>
+                <div class="mr-55">
+                    <label class="kr-sg-toggle large" *ngIf="!createForm">
+                        <input type="checkbox" [(ngModel)]="searchConv.isEnabled" #searchconfToggle name="searchconfToggle">
+                        <div class="slider"><span class="enabled" *ngIf="searchConv.isEnabled !== false">{{ "USECASES.ENABLED" | translate}}</span><span *ngIf="searchConv.isEnabled === false" class="disabled">{{"USECASES.DISABLED" | translate}}</span></div>
+                    </label>
+                </div>
+            </div>
+            <div class="info-intelegent" *ngIf="createForm">
                 <div class="img-block">
                     <img src="assets/images/info-searchassist.svg">
                 </div>
@@ -13,38 +20,40 @@
             </div>
             <div class="label_heading">Client Information</div>
             <div class="action-box-data">
-                <div class="row row-data">
-                    <div class="col-6 column-data">
-                        <div class="kr-sg-input-text">
-                            <div class="label-text">Domain URL <i class="icon-sa-help"></i></div>
-                            <input type="text" placeholder="Enter Domain URL" class="input-text">
+                <form #searchForm="ngForm">
+                    <div class="row row-data">
+                        <div class="col-6 column-data">
+                            <div class="kr-sg-input-text">
+                                <div class="label-text">Domain URL <i class="icon-sa-help"></i></div>
+                                <input type="text" name="domain" placeholder="Enter Domain URL" class="input-text" [(ngModel)]="searchAssistConfigDetailsObj.domain">
+                            </div>
+                        </div>
+                        <div class="col-6 column-data">
+                            <div class="kr-sg-input-text">
+                                <div class="label-text">Stream ID <i class="icon-sa-help"></i></div>
+                                <input type="text" name="searchAssistbotId" placeholder="Enter Stream ID" class="input-text" [(ngModel)]="searchAssistConfigDetailsObj.searchAssistbotId">
+                            </div>
                         </div>
                     </div>
-                    <div class="col-6 column-data">
-                        <div class="kr-sg-input-text">
-                            <div class="label-text">Stream ID <i class="icon-sa-help"></i></div>
-                            <input type="text" placeholder="Enter Stream ID" class="input-text">
+                    <div class="row row-data border-0">
+                        <div class="col-6 column-data">
+                            <div class="kr-sg-input-text">
+                                <div class="label-text">Client ID <i class="icon-sa-help"></i></div>
+                                <input type="text" name="clientId" placeholder="Enter Client URL" class="input-text" [(ngModel)]="searchAssistConfigDetailsObj.clientId">
+                            </div>
+                        </div>
+                        <div class="col-6 column-data">
+                            <div class="kr-sg-input-text">
+                                <div class="label-text">Client Secret <i class="icon-sa-help"></i></div>
+                                <input type="text" name="clientSecret"  placeholder="Enter Client Secret" class="input-text" [(ngModel)]="searchAssistConfigDetailsObj.clientSecret">
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="row row-data border-0">
-                    <div class="col-6 column-data">
-                        <div class="kr-sg-input-text">
-                            <div class="label-text">Client ID <i class="icon-sa-help"></i></div>
-                            <input type="text" placeholder="Enter Client URL" class="input-text">
-                        </div>
-                    </div>
-                    <div class="col-6 column-data">
-                        <div class="kr-sg-input-text">
-                            <div class="label-text">Client Secret <i class="icon-sa-help"></i></div>
-                            <input type="text" placeholder="Enter Client Secret" class="input-text">
-                        </div>
-                    </div>
-                </div>
+                </form>
             </div>
             <div class="edit-save">
-                <button class="kr-sg-button-secondary btn_lg">Edit</button>
-                <button class="kr-sg-button-primary btn_lg">Save</button>
+                <button class="kr-sg-button-secondary btn_lg" (click)="updateSearchConfDetails('edit')" [disabled]="!disableSearchForm">Edit</button>
+                <button class="kr-sg-button-primary btn_lg" (click)="updateSearchConfDetails('save')" [disabled]="createForm ?  disableButtonCondition() : (disableButtonCondition() ? true : !formDirty)" >Save</button>
             </div>
         </div>
     </perfect-scrollbar>
