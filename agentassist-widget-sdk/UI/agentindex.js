@@ -166,6 +166,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 let isOnlyOneFaqOnSearch = false;
                 let isInitialDialogOnGoing = false;
                 let isSendWelcomeMessage;
+                let isShowAllClicked = false;
                 chatConfig = window.KoreSDK.chatConfig;
                 var koreBot = koreBotChat();
                 AgentChatInitialize = new koreBot.chatWindow(chatConfig);
@@ -423,6 +424,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             processAgentIntentResults(data, data.conversationId, data.botId);
                             document.getElementById("loader").style.display = "none";
                             document.getElementById("overLaySearch").style.display = "block";
+                            document.getElementById("overLayAutoSearch").style.display = "block";
+                            $('#overLayAutoSearch').html('');
+                            $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
+                            $('.search-block').find('.search-results-text-in-lib').remove();
                         } else {
                           //  updateAgentAssistState(_conversationId, 'myBotTab', data);
                             // if(!(isMyBotAutomationOnGoing && data.suggestions)){
@@ -4363,6 +4368,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     scrollToBottom();
                 }
 
+                const typeAHead = typeAHeadDeBounce((e, falg)=>getAutoSearchApiResult(e, falg));
                 function btnInit() {
 
                     document.querySelector('#bodyContainer').addEventListener('ps-scroll-up', (scrollUpevent) => {
@@ -4511,6 +4517,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $('#overLaySearch').html('');
                             $('#librarySearch').val('');
                             searchedVal = '';
+                            $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
+                            $('#overLayAutoSearch').html('');
+                            $('.search-block').find('.search-results-text-in-lib')?.remove();
                         }
 
                         if (target.id === 'cancelLibrarySearch') {
@@ -4523,6 +4532,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
 
                         if (target.className == 'show-all') {
+                            isShowAllClicked = true;
                             $('#frequently-exhaustive').addClass('hide');
                             let showAllClicked = true;
                             previousTabActive = currentTabActive;
@@ -4575,9 +4585,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $('#backButton').addClass('hide');
                             $('#searchResults').addClass('hide');
                             $('#allAutomations-Exhaustivelist').removeClass('hide');
+                            $('.search-block').find('.search-results-text-in-lib').remove();
                         }
 
                         if (target.id == 'backToPreviousTab') {
+                            isShowAllClicked = false;
                             $('#frequently-exhaustive').removeClass('hide');
                             $(`#${currentTabActive}`).removeClass('active-tab');
                             $(`#${previousTabActive}`).addClass('active-tab');
@@ -4598,6 +4610,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $('#LibraryContainer').addClass('hide');
                             $('.overlay-suggestions').removeClass('hide').attr('style', 'bottom:0; display:block');
                             $('#backButton').addClass('hide');
+                            $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
                             $('.sugestions-info-data').removeClass('hide');
                             $('#bodyContainer').addClass('if-suggestion-search');
 
@@ -5770,6 +5783,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     $('.empty-data-no-agents').addClass('hide');
                                     $('#agentSearch').val('');
                                     $('.overlay-suggestions').addClass('hide').removeAttr('style');
+                                    // $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
+                                    // $('#overLayAutoSearch').html('');
                                     $('#overLaySearch').html('');
                                     userTabActive();
 
@@ -6114,9 +6129,29 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             window.parent.postMessage(message, '*');
                             $(`#summary`).addClass('hide');
                         }
-                    })
 
-                    document.addEventListener("keyup", (evt) => {
+                        if(target.id.split('-').includes('autoResult')){
+                            $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
+                            $('#overLayAutoSearch').html('');
+                            $('.search-block').find('.search-results-text-in-lib')?.remove();
+                            $('#agentSearch').val(target.innerHTML);
+                            agentSearchVal = target.innerHTML;
+                            document.getElementById("loader").style.display = "block";
+                            AgentAssistPubSub.publish('searched_Automation_details', { conversationId: _conversationId, botId: _botId, value: target.innerHTML, isSearch: true, "positionId": evt.target.dataset.positionId });
+                        }
+
+                        if(target.id.split('-').includes('autoResultLib')){
+                            $('#librarySearch').val(target.innerHTML);
+                            $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
+                            $('#overLayAutoSearch').html('');
+                            $('.search-block').find('.search-results-text-in-lib')?.remove();
+                            document.getElementById("loader").style.display = "block";
+                            AgentAssistPubSub.publish('searched_Automation_details', { conversationId: _conversationId, botId: _botId, value: target.innerHTML, isSearch: true, "positionId": evt.target.dataset.positionId });
+                        }
+                    })
+                    
+                    document.addEventListener("keyup", 
+                    (evt) => {
                         var target = evt.target;
                         if (target.dataset.isentityValues) {
                             let targetid = target.id.split('-');
@@ -6144,16 +6179,84 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             if (val == '') {
                                 $('#overLaySearch').html('');
                                 $('.overlay-suggestions').addClass('hide').removeAttr('style');
+                                $('#overLayAutoSearch').find('.search-results-text')?.remove();
+                                $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
                             }
+                            $('#searchResults').addClass('hide');
+                            typeAHead(evt, val== ''? true: false);
+                            
+                            
                             if (agentAssistInput || mybotInput) {
                                 AgentAssist_input_keydown(evt);
                             }
                         }
 
-                    })
+                    }
+                    )
                     window._agentAssisteventListenerAdded = true;
                 }
 
+                function typeAHeadDeBounce(func, timeout = 300){
+                  let delay;
+                  return function(...args){
+                    clearTimeout(delay);
+                    delay = setTimeout(()=>{
+                       func.apply(this, args);
+                    }, timeout)
+                  }
+                }
+
+                function getAutoSearchApiResult(e){
+                    console.log(arguments[1],"this","get in auto search api", e)
+                    let payload = {
+                        "query": e.target.value,
+                        "maxNumOfResults": 3,
+                        "lang": "en"
+                    }
+                    let isLibraryTab = arguments[1];
+                    $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
+                    $('#overLayAutoSearch').find('.search-results-text')?.remove();
+                    $('.search-block').find('.search-results-text-in-lib')?.remove();
+                    if (e.target.value.length > 0) {                       
+                        $.ajax({
+                            url: `${connectionDetails.envinormentUrl}/agentassist/api/v1/searchaccounts/autosearch?botId=${_botId}`,
+                            type: 'post',
+                            data: payload,
+                            dataType: 'json',
+                            success: function (data) {
+                                if (!isLibraryTab && data.typeAheads.length>0) {
+                                    addAutoSuggestionApi(data);
+                                } else {
+                                    if(data.typeAheads.length>0){
+                                        console.log("came hee to else condition of autpo librqaruy")
+                                        addAutoSuggestionTolibrary(data);
+                                    }
+                                }
+                            },
+                            error: function (err) {
+                                console.error("auto search api failed");
+                            }
+                        });
+                    }
+                }
+
+                function addAutoSuggestionTolibrary(data){
+                    let autoDiv = $('.search-block');
+                    data.typeAheads?.forEach((ele) => {
+                        autoDiv.append(`<div class="search-results-text-in-lib" id="autoResultLib-${ele}">${ele}</div>`)
+                    })
+                    
+                }
+
+                function addAutoSuggestionApi(data){
+                    $('#overLayAutoSearchDiv').removeClass('hide').attr('style', 'bottom:0; display:block');
+                    let autoDiv = $('#overLayAutoSearch');
+                    data.typeAheads?.forEach((ele) => {
+                        autoDiv.append(`<div class="search-results-text" style="cursor: pointer;" id="autoResult-${ele}">${ele}</div>`)
+                    })
+                    
+                }
+                
                 function runDialogFormyBotTab(data, idTarget){
                     if(data?.payload){
                      data = data.payload.info;
@@ -6328,7 +6431,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     document.getElementById('LibraryContainer').classList.remove('hide');
                     $('.sugestions-info-data').addClass('hide');
                     $('#bodyContainer').removeClass('if-suggestion-search');
-
+                    emptySearchBarDuringTabShift();
                 }
 
                 function agentTabActive() {
@@ -6396,6 +6499,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     if (document.getElementById('librarySearch').value.length !== 0) {
                         const agentSearchVal = document.getElementById('librarySearch');
                         agentSearchVal.value = '';
+                    }
+                    if (document.getElementById('agentSearch').value.length !== 0) {
+                        $('#agentSearch').val('');
                     }
                 }
 
@@ -6636,15 +6742,26 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             searchedVal = '';
                             processAgentIntentResults(autoExhaustiveList, autoExhaustiveList.conversationId, autoExhaustiveList.botId);
                         }
+                        if(e.keyCode == 13 && (input_taker.trim().length <= 0)) {
+                            $('.search-block').find('.search-results-text-in-lib').remove();
+                        }
                         if (e.keyCode == 13 && (input_taker.trim().length > 0)) {
                             searchedVal = $('#librarySearch').val();
                             updateCurrentTabInState(_conversationId, 'librarySearch');
+                            if(!isShowAllClicked){
+                                $('#searchResults').addClass('hide');
+                                console.log("-------val---is in -librarySearch")
+                                typeAHead(e, true);
+                            }
                             // agentSearchVal = agent_search;
                             var convId = e.target.dataset.convId;
                             var botId = e.target.dataset.botId;
                             var intentName = input_taker ? input_taker : e.target.dataset.val;
-                            AgentAssistPubSub.publish('searched_Automation_details', { conversationId: convId, botId: botId, value: intentName, isSearch: true });
-                            document.getElementById("loader").style.display = "block";
+                            if(isShowAllClicked){
+                                AgentAssistPubSub.publish('searched_Automation_details', { conversationId: convId, botId: botId, value: intentName, isSearch: true });
+                                document.getElementById("loader").style.display = "block";
+                            }
+                            
                             document.getElementById("overLaySearch").style.display = "none";
                         } else if (e.keyCode == 13 && agent_search.trim().length > 0) {
                             agentSearchVal = agent_search;
@@ -6912,6 +7029,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
         </div>
         <div class="overlay-suggestions hide">
             <div class="suggestion-content" id="overLaySearch">
+            </div>
+        </div>
+        <div class="overlay-suggestions hide" id="overLayAutoSearchDiv">
+            <div class="suggestion-content" id="overLayAutoSearch">
             </div>
         </div>
 
