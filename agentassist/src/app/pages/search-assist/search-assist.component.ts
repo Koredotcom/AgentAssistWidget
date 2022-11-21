@@ -21,7 +21,7 @@ export class SearchAssistComponent implements OnInit {
   actualConfigDetailsObj: any = {};
   searchAssistConfigDetailsObj: any = {};
   searchAssistKeys: any = ['searchAssistbotId', 'domain', 'clientId', 'clientSecret'];
-  createForm: boolean = false;
+  createForm: boolean = true;
   searchConv: any = {};
 
   constructor(private localstorage: LocalStoreService, private service: ServiceInvokerService,
@@ -117,15 +117,15 @@ export class SearchAssistComponent implements OnInit {
     });
   }
 
-  disableButtonCondition() {
-    let keyArray: any = this.searchAssistKeys;
-    for (let key of keyArray) {
-      if (!this.searchAssistConfigDetailsObj[key]) {
-        return true;
-      }
-    }
-    return false;
-  }
+  // disableButtonCondition() {
+  //   let keyArray: any = this.searchAssistKeys;
+  //   for (let key of keyArray) {
+  //     if (!this.searchAssistConfigDetailsObj[key]) {
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // }
 
   searchFormChangeMode() {
     if (this.disableSearchForm) {
@@ -134,6 +134,10 @@ export class SearchAssistComponent implements OnInit {
       this.searchForm.form.enable();
     }
     this.cdr.detectChanges();
+  }
+
+  deleteConfig(){
+    console.log("delete config")
   }
 
 }

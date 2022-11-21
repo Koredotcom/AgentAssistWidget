@@ -1978,5 +1978,17 @@
     "SETTINGS.OUT_REQUIRED_NEWS": "Agent setup is required if one or more of your use cases transfer to a voice or chat agent. Select the outgoing integrations needed for the experience flows to work successfully.",
     "SETTINGS.SELECT_WHERE_TRANSFER_VOICES": "Select where SmartAssist should transfer the call to if a voice agent is required in the experience flow.",
     "SETTINGS.SELECT_WHERE_TRANSFER_CHATS": "Select where SmartAssist should transfer the chat to if a chat agent is required in the experience flow.",
-    "SELECT_VOICE_NAME": "Please select a voice name"
+    "SELECT_VOICE_NAME": "Please select a voice name",
+    "SEARCHASSIST_TITLE" : "SearchAssist",
+    "SEARCHASSIST.CONTENT_INFO" : "Provide intelligent, contextual, and personalized search experience in every interaction across your web and mobile channels.",
+    "SEARCHASSIST.CLIENT_INFO" : "Client Information",
+    "SEARCHASSIST.DOMAIN_URL" : "Domain URL",
+    "SEARCHASSIST.STREAM_ID" : "Stream ID",
+    "SEARCHASSIST.CLIENT_ID" : "Client ID",
+    "SEARCHASSIST.CLIENT_SECRET" : "Client Secret",
+    "SEARCHASSIST.ENABLED" : "Enabled",
+    "SEARCHASSIST.DISABLED" : "Disabled",
+    "SEARCHASSIST.EDIT" : "Edit",
+    "SEARCHASSIST.DELETE" : "Delete",
+    "SEARCHASSIST.SAVE" : "Save"
 }
