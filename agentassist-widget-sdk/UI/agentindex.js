@@ -2826,7 +2826,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     isShowHistoryEnable = true;
                     let historyFaqIDs = [];
                     if(connectionDetails.isSAT) {
-                        assistTabHistoryApiURL = `${connectionDetails.envinormentUrl}/agentassist/api/v1/conversations/${_conversationId}/aa/messages?botId=${_conversationId}&agentHistory=false`
+                        assistTabHistoryApiURL = `${connectionDetails.envinormentUrl}/agentassist/api/v1/conversations/${_conversationId}/aa/messages?botId=${_botId}&agentHistory=false`
                     } else {
                         assistTabHistoryApiURL = `${connectionDetails.envinormentUrl}/api/1.1/botmessages/agentassist/${_botId}/history?convId=${_conversationId}&agentHistory=false`
                     }
@@ -3514,7 +3514,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     let feedBackResult = await renderHistoryFeedBack(url);
                     isShowHistoryEnableForMyBot = true;
                     if(connectionDetails.isSAT) {
-                        myBotHistoryApiURL = `${connectionDetails.envinormentUrl}/agentassist/api/v1/conversations/${_conversationId}/aa/messages?botId=${_conversationId}&agentHistory=true`
+                        myBotHistoryApiURL = `${connectionDetails.envinormentUrl}/agentassist/api/v1/conversations/${_conversationId}/aa/messages?botId=${_botId}&agentHistory=true`
                     } else {
                         myBotHistoryApiURL = `${connectionDetails.envinormentUrl}/api/1.1/botmessages/agentassist/${_botId}/history?convId=${_conversationId}&agentHistory=true`
                     }
@@ -6265,16 +6265,16 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 // Example POST method implementation:
                 async function getData(url = '', data = {}) {
                     // document.getElementById("loader").style.display = "block";
-                    console.log(result.authorization.token_type);
                     let headersVal = {};
                     if(connectionDetails.isSAT) {
                         headersVal = {
                             'Authorization': 'bearer' + ' ' + connectionDetails.tokenVal,
-                            'eAD': false
+                            'eAD': false,
+                            'accountId': connectionDetails.accountId
                         }
                     } else {
                         headersVal = {
-                            'Authorization': result.authorization.token_type + ' ' + connectionDetails.tokenVal,
+                            'Authorization': connectionDetails.tokenVal,
                             'eAD': true
                         }
                     }
