@@ -75,7 +75,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
         isCallConversation = params.isCall;
         let decodedCustomData = decodeURI(params.customdata);
         parsedCustomData = JSON.parse(decodedCustomData);
-        if (sourceType === 'smartassist-color-scheme') {
+        if (connectionDetails.isSAT) {
             $('body').addClass(sourceType);
         } else {
             $('body').addClass('default-color-scheme')
@@ -83,9 +83,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
     } catch (err) {
         console.log(err);
     }
-    var webSocketConnection = {
-        "path": "/agentassist/api/v1/chat/", transports: ['websocket', 'polling', 'flashsocket'],  query: {'jToken': connectionDetails.jwtToken}
-    };
+    if(connectionDetails.isSAT) {
+        var webSocketConnection = {
+            "path": "/agentassist/api/v1/chat/", transports: ['websocket', 'polling', 'flashsocket'],  query: {'userId': connectionDetails.userId, 'orgId': connectionDetails.orgId,'authToken': connectionDetails.jwtToken, 'accountId': connectionDetails.accountId, 'fromSAT': connectionDetails.isSAT}
+        };
+    } else {
+        var webSocketConnection = {
+            "path": "/agentassist/api/v1/chat/", transports: ['websocket', 'polling', 'flashsocket'],  query: {'jToken': connectionDetails.jwtToken, 'fromSAT':connectionDetails.isSAT }
+        };
+    }
     connectionDetails['webSocketConnectionDomain'] = connectionDetails.envinormentUrl + "/koreagentassist",
         connectionDetails['webSocketConnectionDetails'] = webSocketConnection,
         agentContainer = containerId;
@@ -103,9 +109,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
         callSts(jsonData)
 
-    } else if (connectionDetails.jwtToken) {
-        jwtToken = connectionDetails.jwtToken;
-        grantCall(connectionDetails.jwtToken, _botId, connectionDetails.envinormentUrl);
+    } else if (connectionDetails.isSAT) {
+            return loadAgentAssist();
+
+    } else if(connectionDetails.jwtToken) {
+            jwtToken = connectionDetails.jwtToken;
+            grantCall(connectionDetails.jwtToken, _botId, connectionDetails.envinormentUrl);
     } else {
         console.error("authentication failed")
     }
@@ -162,7 +171,22 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             data: JSON.stringify(payload),
             dataType: "json",
             success: function (result) {
-                var navigatefromLibToTab;
+                loadAgentAssist();
+           },
+            error: function (error) {
+                console.error("token is wrong");
+                if (error.status === 500) {
+                    $(`#${containerId}`).html("Issue identified with the backend services! Please reach out to AgentAssist Admin.")
+                } else {
+                    $(`#${containerId}`).html("Issue identified in configuration settings! Please reach out to AgentAssist Admin.")
+                }
+                return false;
+            }
+        });
+    }
+
+    function loadAgentAssist() {
+        var navigatefromLibToTab;
                 let isOnlyOneFaqOnSearch = false;
                 let isInitialDialogOnGoing = false;
                 let isSendWelcomeMessage;
@@ -2801,7 +2825,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     // document.getElementById("loader").style.display = "block";
                     isShowHistoryEnable = true;
                     let historyFaqIDs = [];
-                    getData(`${connectionDetails.envinormentUrl}/api/1.1/botmessages/agentassist/${_botId}/history?convId=${_conversationId}&agentHistory=false`)
+                    if(connectionDetails.isSAT) {
+                        assistTabHistoryApiURL = `${connectionDetails.envinormentUrl}/agentassist/api/v1/conversations/${_conversationId}/aa/messages?botId=${_conversationId}&agentHistory=false`
+                    } else {
+                        assistTabHistoryApiURL = `${connectionDetails.envinormentUrl}/api/1.1/botmessages/agentassist/${_botId}/history?convId=${_conversationId}&agentHistory=false`
+                    }
+                    getData(assistTabHistoryApiURL)
                     .then(response => {
                         let appStateStr = localStorage.getItem('agentAssistState') || '{}';
                         let appState = JSON.parse(appStateStr);
@@ -3484,7 +3513,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     let url = `${connectionDetails.envinormentUrl}/agentassist/api/v1/agent-feedback/${_agentAssistDataObj.conversationId}?interaction=mybot`;
                     let feedBackResult = await renderHistoryFeedBack(url);
                     isShowHistoryEnableForMyBot = true;
-                    getData(`${connectionDetails.envinormentUrl}/api/1.1/botmessages/agentassist/${_agentAssistDataObj.botId}/history?convId=${_agentAssistDataObj.conversationId}&agentHistory=true`)
+                    if(connectionDetails.isSAT) {
+                        myBotHistoryApiURL = `${connectionDetails.envinormentUrl}/agentassist/api/v1/conversations/${_conversationId}/aa/messages?botId=${_conversationId}&agentHistory=true`
+                    } else {
+                        myBotHistoryApiURL = `${connectionDetails.envinormentUrl}/api/1.1/botmessages/agentassist/${_botId}/history?convId=${_conversationId}&agentHistory=true`
+                    }
+                    getData(myBotHistoryApiURL)
                     .then(response => {
                         if(response.length > 0){
                             $('#noAutoRunning').addClass('hide');
@@ -6232,12 +6266,21 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 async function getData(url = '', data = {}) {
                     // document.getElementById("loader").style.display = "block";
                     console.log(result.authorization.token_type);
+                    let headersVal = {};
+                    if(connectionDetails.isSAT) {
+                        headersVal = {
+                            'Authorization': 'bearer' + ' ' + connectionDetails.jwtToken,
+                            'eAD': false
+                        }
+                    } else {
+                        headersVal = {
+                            'Authorization': result.authorization.token_type + ' ' + connectionDetails.jwtToken
+                        }
+                    }
                     const response = await $.ajax({
                         method: 'GET',
                         url: url,
-                        headers: {
-                            'Authorization': result.authorization.token_type + ' ' + result.authorization.accessToken
-                        }
+                        headers: headersVal
                     }) // parses JSON response into native JavaScript objects
                     return response;
                 }
@@ -6707,17 +6750,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 $('.body-data-container').scrollTop($('.body-data-container').prop("scrollHeight"));
 
                 return publicAPIs;
-           },
-            error: function (error) {
-                console.error("token is wrong");
-                if (error.status === 500) {
-                    $(`#${containerId}`).html("Issue identified with the backend services! Please reach out to AgentAssist Admin.")
-                } else {
-                    $(`#${containerId}`).html("Issue identified in configuration settings! Please reach out to AgentAssist Admin.")
-                }
-                return false;
-            }
-        });
     }
 
     function prepareConversation() {
