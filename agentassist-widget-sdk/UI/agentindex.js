@@ -85,11 +85,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
     }
     if(connectionDetails.isSAT) {
         var webSocketConnection = {
-            "path": "/agentassist/api/v1/chat/", transports: ['websocket', 'polling', 'flashsocket'],  query: {'userId': connectionDetails.userId, 'orgId': connectionDetails.orgId,'authToken': connectionDetails.jwtToken, 'accountId': connectionDetails.accountId, 'fromSAT': connectionDetails.isSAT}
+            "path": "/agentassist/api/v1/chat/", transports: ['websocket', 'polling', 'flashsocket'],  query: {'userId': connectionDetails.userId, 'orgId': connectionDetails.orgId,'authToken': connectionDetails.tokenVal, 'accountId': connectionDetails.accountId, 'fromSAT': connectionDetails.isSAT}
         };
     } else {
         var webSocketConnection = {
-            "path": "/agentassist/api/v1/chat/", transports: ['websocket', 'polling', 'flashsocket'],  query: {'jToken': connectionDetails.jwtToken, 'fromSAT':connectionDetails.isSAT }
+            "path": "/agentassist/api/v1/chat/", transports: ['websocket', 'polling', 'flashsocket'],  query: {'jToken': connectionDetails.tokenVal, 'fromSAT':connectionDetails.isSAT }
         };
     }
     connectionDetails['webSocketConnectionDomain'] = connectionDetails.envinormentUrl + "/koreagentassist",
@@ -112,9 +112,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
     } else if (connectionDetails.isSAT) {
             return loadAgentAssist();
 
-    } else if(connectionDetails.jwtToken) {
-            jwtToken = connectionDetails.jwtToken;
-            grantCall(connectionDetails.jwtToken, _botId, connectionDetails.envinormentUrl);
+    } else if(connectionDetails.tokenVal) {
+            jwtToken = connectionDetails.tokenVal;
+            grantCall(connectionDetails.tokenVal, _botId, connectionDetails.envinormentUrl);
     } else {
         console.error("authentication failed")
     }
@@ -6269,12 +6269,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     let headersVal = {};
                     if(connectionDetails.isSAT) {
                         headersVal = {
-                            'Authorization': 'bearer' + ' ' + connectionDetails.jwtToken,
+                            'Authorization': 'bearer' + ' ' + connectionDetails.tokenVal,
                             'eAD': false
                         }
                     } else {
                         headersVal = {
-                            'Authorization': result.authorization.token_type + ' ' + connectionDetails.jwtToken
+                            'Authorization': result.authorization.token_type + ' ' + connectionDetails.tokenVal,
+                            'eAD': true
                         }
                     }
                     const response = await $.ajax({
