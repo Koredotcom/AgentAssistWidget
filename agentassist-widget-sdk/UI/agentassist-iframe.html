@@ -85,8 +85,13 @@
                     }
 
                 } else {
+                    console.log('==================================', urlParams)
                     connectionObj['envinormentUrl'] = agentAssistUrl;
                     connectionObj['jwtToken'] = token;
+                    connectionObj['accountId'] = urlParams.accountId || '';
+                    connectionObj['userId'] = urlParams.userId || '';
+                    connectionObj['orgId']= urlParams.orgId || '';
+                    connectionObj['isSAT'] = urlParams.fromSAT || false;
                     new AgentAssist('agent-assist-chat-container', conversationId, botID, connectionObj, urlParams);
                 }
 
