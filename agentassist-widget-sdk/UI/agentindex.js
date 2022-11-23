@@ -171,7 +171,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             data: JSON.stringify(payload),
             dataType: "json",
             success: function (result) {
-                loadAgentAssist();
+                loadAgentAssist(result);
            },
             error: function (error) {
                 console.error("token is wrong");
@@ -185,7 +185,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
         });
     }
 
-    function loadAgentAssist() {
+    function loadAgentAssist(result) {
         var navigatefromLibToTab;
                 let isOnlyOneFaqOnSearch = false;
                 let isInitialDialogOnGoing = false;
@@ -200,7 +200,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 docs.hidden = true;
                 _userTranscript = false;
                 console.log("AgentAssist >>> no of agent assist instances", _agentAssistComponents);
-                renderingHistoryMessage();
+                renderingHistoryMessage(result);
                 if (!window._agentAssisteventListenerAdded) {
                     btnInit(containerId);
                     // eventListener for removing the ended currentconversation from the localStorage
@@ -511,7 +511,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     transcriptionTabActive();
                 }
                 
-                renderingAgentHistoryMessage();
+                renderingAgentHistoryMessage(result);
                 
                 // var agent_menu_request = {
                 //     "botId": _agentAssistDataObj.botId,
@@ -2824,7 +2824,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
 
 
-                async function renderingHistoryMessage () {
+                async function renderingHistoryMessage (result) {
                     let url = `${connectionDetails.envinormentUrl}/agentassist/api/v1/agent-feedback/${_conversationId}?interaction=assist`;
                     let feedBackResult = await renderHistoryFeedBack(url);
                     // document.getElementById("loader").style.display = "block";
@@ -2835,7 +2835,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     } else {
                         assistTabHistoryApiURL = `${connectionDetails.envinormentUrl}/api/1.1/botmessages/agentassist/${_botId}/history?convId=${_conversationId}&agentHistory=false`
                     }
-                    getData(assistTabHistoryApiURL)
+                    getData(assistTabHistoryApiURL, {}, result)
                     .then(response => {
                         let appStateStr = localStorage.getItem('agentAssistState') || '{}';
                         let appState = JSON.parse(appStateStr);
@@ -3514,7 +3514,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }, waitingTimeForSeeMoreButton);
                 }
 
-                async function renderingAgentHistoryMessage(){
+                async function renderingAgentHistoryMessage(result){
                     let url = `${connectionDetails.envinormentUrl}/agentassist/api/v1/agent-feedback/${_agentAssistDataObj.conversationId}?interaction=mybot`;
                     let feedBackResult = await renderHistoryFeedBack(url);
                     isShowHistoryEnableForMyBot = true;
@@ -3523,7 +3523,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     } else {
                         myBotHistoryApiURL = `${connectionDetails.envinormentUrl}/api/1.1/botmessages/agentassist/${_botId}/history?convId=${_conversationId}&agentHistory=true`
                     }
-                    getData(myBotHistoryApiURL)
+                    getData(myBotHistoryApiURL, {}, result)
                     .then(response => {
                         if(response.length > 0){
                             $('#noAutoRunning').addClass('hide');
@@ -6368,7 +6368,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
 
                 // Example POST method implementation:
-                async function getData(url = '', data = {}) {
+                async function getData(url = '', data = {}, result) {
                     // document.getElementById("loader").style.display = "block";
                     let headersVal = {};
                     if(connectionDetails.isSAT) {
@@ -6379,7 +6379,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
                     } else {
                         headersVal = {
-                            'Authorization': connectionDetails.tokenVal,
+                            'Authorization': result.authorization.token_type + ' ' + result.authorization.accessToken,
                             'eAD': true
                         }
                     }
