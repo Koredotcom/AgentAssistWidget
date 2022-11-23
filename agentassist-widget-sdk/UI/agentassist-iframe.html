@@ -55,7 +55,7 @@
                     token = params.token;
                     botID = params.botid;
                     agentAssistUrl = params.agentassisturl;
-                    conversationId = params.conversationid;
+                    conversationId = params.conversationId;
                     console.log("---conversation id -----", conversationId);
                 }
                 getToken(urlParams);
@@ -85,8 +85,13 @@
                     }
 
                 } else {
+                    console.log('==================================', urlParams)
                     connectionObj['envinormentUrl'] = agentAssistUrl;
-                    connectionObj['jwtToken'] = token;
+                    connectionObj['tokenVal'] = token;
+                    connectionObj['accountId'] = urlParams.accountId || '';
+                    connectionObj['userId'] = urlParams.userId || '';
+                    connectionObj['orgId']= urlParams.orgId || '';
+                    connectionObj['isSAT'] = urlParams.fromSAT || false;
                     new AgentAssist('agent-assist-chat-container', conversationId, botID, connectionObj, urlParams);
                 }
 
