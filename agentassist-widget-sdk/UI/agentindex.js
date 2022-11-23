@@ -6583,7 +6583,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     } else {
                         headersVal = {
                             'Authorization': result.authorization.token_type + ' ' + result.authorization.accessToken,
-                            'eAD': true
                         }
                     }
                     const response = await $.ajax({
