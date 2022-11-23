@@ -4,7 +4,7 @@
             <div class="header-title d-flex justify-content-between"><span>{{ "SEARCHASSIST_TITLE" | translate}}</span>
                 <div class="mr-55">
                     <label class="kr-sg-toggle large" *ngIf="!createForm">
-                        <input type="checkbox" [(ngModel)]="searchConv.isEnabled" #searchconfToggle name="searchconfToggle">
+                        <input type="checkbox" [(ngModel)]="searchConv.isEnabled" #searchconfToggle name="searchconfToggle" (change)="searchConfToggleChange()">
                         <div class="slider"><span class="enabled" *ngIf="searchConv.isEnabled !== false">{{ "SEARCHASSIST.ENABLED" | translate}}</span><span *ngIf="searchConv.isEnabled === false" class="disabled">{{"SEARCHASSIST.DISABLED" | translate}}</span></div>
                     </label>
                 </div>
