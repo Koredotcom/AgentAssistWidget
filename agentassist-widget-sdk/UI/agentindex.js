@@ -6221,6 +6221,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         $.ajax({
                             url: `${connectionDetails.envinormentUrl}/agentassist/api/v1/searchaccounts/autosearch?botId=${_botId}`,
                             type: 'post',
+                            headers: {
+                                'Authorization': result.authorization.token_type + ' ' + result.authorization.accessToken
+                            },
                             data: payload,
                             dataType: 'json',
                             success: function (data) {
