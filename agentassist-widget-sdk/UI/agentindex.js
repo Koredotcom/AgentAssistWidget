@@ -4611,6 +4611,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $('.overlay-suggestions').removeClass('hide').attr('style', 'bottom:0; display:block');
                             $('#backButton').addClass('hide');
                             $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
+                            $('#overLayAutoSearch').find('.search-results-text')?.remove();
                             $('.sugestions-info-data').removeClass('hide');
                             $('#bodyContainer').addClass('if-suggestion-search');
 
@@ -6254,6 +6255,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
 
                 function addAutoSuggestionApi(data){
+                    $('#overLayAutoSearch').find('.search-results-text')?.remove();
                     $('#overLayAutoSearchDiv').removeClass('hide').attr('style', 'bottom:0; display:block');
                     let autoDiv = $('#overLayAutoSearch');
                     data.typeAheads?.forEach((ele) => {
