@@ -965,8 +965,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                             if(data?.suggestions?.searchassist?.snippets?.length > 1){
                                 let articleSuggestions = currentTabActive == 'searchAutoIcon' ? $('#search-text-display #snippetsSuggestions-results') : $('#overLaySearch #snippetsSuggestions-results');
-                                let fullArticleView = `<div class="link-view-full-article ghost-btn" id="articleFullView-${uuids}" data-snippet-full-view="true">View All Snippets</div>`
-                                let fewArticleView = `<div class="link-view-full-article ghost-btn hide" id="articleFewView-${uuids}" data-snippet-few-view="true">View Few Snippets</div>`
+                                let fullArticleView = `<div class="link-view-full-article ghost-btn" id="snippetFullView-${uuids}" data-snippet-full-view="true">View All Snippets</div>`
+                                let fewArticleView = `<div class="link-view-full-article ghost-btn hide" id="snippetFewView-${uuids}" data-snippet-few-view="true">View Few Snippets</div>`
                                 articleSuggestions.append(fullArticleView); 
                                 articleSuggestions.append(fewArticleView);
                             }
@@ -1219,8 +1219,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
     
                                 if(data?.suggestions?.articles?.length > 1){
                                     let articleSuggestions = currentTabActive == 'searchAutoIcon' ? $('#search-text-display #articleSuggestions-results') : $('#overLaySearch #articleSuggestions-results');
-                                    let fullArticleView = `<div class="link-view-full-article ghost-btn" id="snippetFullView-${uuids}" data-article-full-view="true">View All Articles</div>`
-                                    let fewArticleView = `<div class="link-view-full-article ghost-btn hide" id="snippetFewView-${uuids}" data-article-few-view="true">View Few Articles</div>`
+                                    let fullArticleView = `<div class="link-view-full-article ghost-btn" id="articleFullView-${uuids}" data-article-full-view="true">View All Articles</div>`
+                                    let fewArticleView = `<div class="link-view-full-article ghost-btn hide" id="articleFewView-${uuids}" data-article-few-view="true">View Few Articles</div>`
                                     articleSuggestions.append(fullArticleView); 
                                     articleSuggestions.append(fewArticleView);
                                 }
