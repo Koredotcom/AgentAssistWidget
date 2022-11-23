@@ -1676,6 +1676,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         return;
                     }
                     let automationSuggestions = $('#dynamicBlock .dialog-task-accordiaon-info');
+                    
+                    if(data.suggestions && Array.isArray(data.suggestions) && data.suggestions.length == 0){
+                        data.suggestions = false;
+                    }else if(data.suggestions && typeof data.suggestions === 'object' && !Array.isArray(data.suggestions) && Object.keys(data.suggestions).length == 0){
+                        data.suggestions = false;
+                    }
                     // if (data.suggestions) {
                     //     for (let ele of automationSuggestions) {
                     //         ele.classList.add('hide');
