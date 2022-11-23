@@ -96,6 +96,7 @@ import { AddWidgetComponent } from './pages/agent-settings/external-widget/add-w
 import { OnboardingComponent } from './pages/onboarding/onboarding.component';
 import { OnboardingDialogComponent } from './pages/onboarding/onboarding-dialog/onboarding-dialog.component';
 import { SearchAssistComponent } from './pages/search-assist/search-assist.component';
+import { SaDeleteConfirmComponent } from './helpers/components/sa-delete-confirm/sa-delete-confirm.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -167,6 +168,7 @@ import { SearchAssistComponent } from './pages/search-assist/search-assist.compo
     OnboardingComponent,
     OnboardingDialogComponent,
     SearchAssistComponent,
+    SaDeleteConfirmComponent,
   ],
   imports: [
     BrowserModule,

@@ -1990,5 +1990,11 @@
     "SEARCHASSIST.DISABLED" : "Disabled",
     "SEARCHASSIST.EDIT" : "Edit",
     "SEARCHASSIST.DELETE" : "Delete",
-    "SEARCHASSIST.SAVE" : "Save"
+    "SEARCHASSIST.SAVE" : "Save",
+    "SEARCHASSIST.DEL_CONF": "Delete Configuration",
+    "SEARCHASSIST.R_U_SURE_DEL": "Are you sure you want to delete",
+    "SEARCHASSIST.YES": "Yes",
+    "SEARCHASSIST.NO": "No",
+    "SEARCHASSIST.HAS_DELETED": "Configuration has been deleted",
+    "SEARCHASSIST.FAILED_SA": "Failed to delete the Configuration"
 }

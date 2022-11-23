@@ -1,7 +1,11 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { LocalStoreService } from '@kore.services/localstore.service';
+import { NotificationService } from '@kore.services/notification.service';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
+import { TranslateService } from '@ngx-translate/core';
+import { SaDeleteConfirmComponent } from 'src/app/helpers/components/sa-delete-confirm/sa-delete-confirm.component';
 
 @Component({
   selector: 'app-search-assist',
@@ -25,7 +29,10 @@ export class SearchAssistComponent implements OnInit {
   searchConv: any = {};
 
   constructor(private localstorage: LocalStoreService, private service: ServiceInvokerService,
-    private cdr: ChangeDetectorRef) { }
+    private cdr: ChangeDetectorRef, private dialog: MatDialog,
+    private translate: TranslateService, private notificationService: NotificationService,
+
+    ) { }
 
   ngOnInit(): void {
     this.getAccountId();
@@ -130,20 +137,41 @@ export class SearchAssistComponent implements OnInit {
   }
 
   deleteConfig(){
-    const params = {
-      'accountId': this.accountId
-    };
-    this.service.invoke('delete.searchaccounts', params).subscribe((data) => {
-      console.log("deleted", data);
-      if(data && data.ok){
-        this.getSearchAssistConfigInfo();
-        this.searchForm.reset();
-      }else{
-        console.log("Not deleted")
+
+    const dialogRef = this.dialog.open(SaDeleteConfirmComponent, {
+      width: '446px',
+      panelClass: "delete-uc",
+      data: {
+        title: this.translate.instant("SEARCHASSIST.DEL_CONF"),
+        text: this.translate.instant("SEARCHASSIST.R_U_SURE_DEL") + "?",
+        buttons: [{ key: 'yes', label: this.translate.instant("SEARCHASSIST.YES"), type: 'danger' }, { key: 'no', label: this.translate.instant("SEARCHASSIST.NO") }]
       }
-    }, (error) => {
-      console.log(error, "error");
     });
+    dialogRef.componentInstance.onSelect
+      .subscribe(result => {
+        if (result === 'yes') {
+          const params = {
+            'accountId': this.accountId
+          };
+          this.service.invoke('delete.searchaccounts', params).subscribe((data) => {
+            if(data && data.isOperational){
+              this.getSearchAssistConfigInfo();
+              this.searchForm.reset();
+              this.notificationService.notify(this.translate.instant("SEARCHASSIST.HAS_DELETED"), 'success');
+            }else{
+              this.notificationService.showError(this.translate.instant("SEARCHASSIST.FAILED_SA"));
+            }
+            dialogRef.close();
+          }, (error) => {
+            this.notificationService.showError(this.translate.instant("SEARCHASSIST.FAILED_SA"));
+            console.log(error, "error");
+          });
+        }
+    });
+  }
+
+  searchConfToggleChange(){
+    this.updateSearchConfDetails('save') 
   }
 
 }
