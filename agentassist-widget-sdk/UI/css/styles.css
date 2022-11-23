@@ -2435,6 +2435,21 @@ border: 1px solid transparent !important;
 .agent-assist-chat-container .customer-feeling-text .sentiments .strength-bar-lg {
     height: 15px;
 }
+.send-run-btn {
+    border: 0;
+    background: var(--theme-color);
+    box-shadow: 0px 2px 8px rgba(0,0,0,0.05);
+    border-radius: 5px;
+    outline: 0;
+    font-weight: 700;
+    font-size: 9px;
+    line-height: 12px;
+    color: var(--default-white-color);
+    height: 24px;
+    cursor: pointer;
+    padding: 3px 10px;
+    text-transform: uppercase;
+}
 
 .send-run-btn:hover {
     background-color: var(--theme-color);
@@ -3482,18 +3497,4 @@ input.no-autofill-bkg:-webkit-autofill {
     color: var(--color-grey-text);
     cursor: pointer;background: white; padding: 10px 0px 0px 10px;
 }
-.send-run-btn {
-    border: 0;
-    background: var(--theme-color);
-    box-shadow: 0px 2px 8px rgba(0,0,0,0.05);
-    border-radius: 5px;
-    outline: 0;
-    font-weight: 700;
-    font-size: 9px;
-    line-height: 12px;
-    color: var(--default-white-color);
-    height: 24px;
-    cursor: pointer;
-    padding: 3px 10px;
-    text-transform: uppercase;
-}
+

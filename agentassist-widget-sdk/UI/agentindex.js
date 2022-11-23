@@ -1894,8 +1894,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         <div class="img-block-info">
                                             <img src="./images/kg.svg">
                                         </div>
-                                        <div class="content-dialog-task-type" id="snippets-${responseId}">
-                                            <div class="type-with-img-title">Articles (${data.suggestions.searchassist.snippets.length})</div>
+                                        <div class="content-dialog-task-type" id="snippetsSuggestions-${responseId}">
+                                            <div class="type-with-img-title">Snippets (${data.suggestions.searchassist.snippets.length})</div>
                                             
                                         </div>
                                     </div>`;
@@ -1913,7 +1913,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     body['cInfo'] = {
                                         "body": data.value
                                     };
-                                    let articleSuggestions = document.getElementById(`snippetSuggestions-${responseId}`);
+                                    let articleSuggestions = document.getElementById(`snippetsSuggestions-${responseId}`);
     
                                     let articleHtml = `
                                     <div class="type-info-run-send" id="snippetDiv-${uuids+index}">
