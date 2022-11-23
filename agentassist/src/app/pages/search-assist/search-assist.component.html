@@ -54,7 +54,7 @@
             <div class="edit-save">
                 <button class="kr-sg-button-secondary btn_lg" (click)="updateSearchConfDetails('edit')" [disabled]="!disableSearchForm">{{ "SEARCHASSIST.EDIT" | translate}}</button>
                 <button class="kr-sg-button-primary btn_lg" (click)="updateSearchConfDetails('save')" [disabled]="createForm ? !(searchForm.valid) : (!(searchForm.valid) ? true : !formDirty)" >{{ "SEARCHASSIST.SAVE" | translate}}</button>
-                <!-- <button class="kr-sg-button-danger btn_lg" (click)="deleteConfig()" *ngIf="!createForm">{{ "SEARCHASSIST.DELETE" | translate}}</button> -->
+                <button class="kr-sg-button-danger btn_lg" (click)="deleteConfig()" *ngIf="!createForm">{{ "SEARCHASSIST.DELETE" | translate}}</button>
             </div>
         </div>
     </perfect-scrollbar>
