@@ -27,7 +27,10 @@
             let parentUrl = document.referrer;
             let params = {};
             if (!parentUrl.includes('smartassist.kore.ai')) {
-                initAgentAssist(chatConfig);
+                let params = new Proxy(new URLSearchParams(window.location.search), {
+                    get: (searchParams, prop) => searchParams.get(prop),
+                });
+                initAgentAssist(chatConfig, params);
             } else {
                 var message = {
                     method: 'agentassist_loaded',
