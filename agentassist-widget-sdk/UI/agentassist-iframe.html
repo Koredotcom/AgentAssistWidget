@@ -55,7 +55,7 @@
                     token = params.token;
                     botID = params.botid;
                     agentAssistUrl = params.agentassisturl;
-                    conversationId = params.conversationid;
+                    conversationId = params.conversationId || params.conversationid;
                     console.log("---conversation id -----", conversationId);
                 }
                 getToken(urlParams);
