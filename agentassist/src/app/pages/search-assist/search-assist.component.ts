@@ -70,18 +70,11 @@ export class SearchAssistComponent implements OnInit {
 
   updateSearchConfDetailsFromDb(data) {
     if (data && data.searchAssistbotId) {
+      this.createForm = false;
       this.actualConfigDetailsObj = Object.assign({}, data);
       for (let key of this.searchAssistKeys) {
         this.searchAssistConfigDetailsObj[key] = this.actualConfigDetailsObj[key];
       }
-      this.disableSearchForm = true;
-      this.searchFormChangeMode();
-    } else if (data === "OK") {
-      let acutalConfigDetails = Object.assign({}, this.actualConfigDetailsObj);
-      for (let key in this.searchAssistConfigDetailsObj) {
-        acutalConfigDetails[key] = this.searchAssistConfigDetailsObj[key];
-      }
-      this.actualConfigDetailsObj = Object.assign({}, acutalConfigDetails);
       this.disableSearchForm = true;
       this.searchFormChangeMode();
     }
@@ -94,7 +87,7 @@ export class SearchAssistComponent implements OnInit {
       this.disableSearchForm = true;
       this.searchFormChangeMode();
       let methodType = this.createForm ? 'post.searchaccounts' : 'put.searchaccounts';
-      this.service.invoke(methodType, { accountId: this.accountId }, payLoad, {}, { responseType: 'text' }).subscribe((data) => {
+      this.service.invoke(methodType, { accountId: this.accountId }, payLoad).subscribe((data) => {
         this.updateSearchConfDetailsFromDb(data);
       }, (error) => {
         console.log(error, "error");
@@ -137,7 +130,20 @@ export class SearchAssistComponent implements OnInit {
   }
 
   deleteConfig(){
-    console.log("delete config")
+    const params = {
+      'accountId': this.accountId
+    };
+    this.service.invoke('delete.searchaccounts', params).subscribe((data) => {
+      console.log("deleted", data);
+      if(data && data.ok){
+        this.getSearchAssistConfigInfo();
+        this.searchForm.reset();
+      }else{
+        console.log("Not deleted")
+      }
+    }, (error) => {
+      console.log(error, "error");
+    });
   }
 
 }

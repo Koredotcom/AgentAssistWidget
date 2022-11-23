@@ -1519,5 +1519,10 @@ export class EndPointsService {
       method: 'put'
     }
 
+    this.serviceList['delete.searchaccounts'] = {
+      endpoint: this.SERVER_URL + '/agentassist/api/v1/searchaccounts/?accountId=:accountId',
+      method: 'delete'
+    }
+
   }
 }
