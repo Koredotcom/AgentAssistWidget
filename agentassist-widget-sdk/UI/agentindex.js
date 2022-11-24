@@ -6218,13 +6218,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
                     $('#overLayAutoSearch').find('.search-results-text')?.remove();
                     $('.search-block').find('.search-results-text-in-lib')?.remove();
-                    if (e.target.value.length > 0) {                       
+                    if (e.target?.value?.length > 0) {                       
                         $.ajax({
                             url: `${connectionDetails.envinormentUrl}/agentassist/api/v1/searchaccounts/autosearch?botId=${_botId}`,
                             type: 'post',
-                            // headers: {
-                            //     'Authorization': result.authorization.token_type + ' ' + result.authorization.accessToken
-                            // },
+                            headers: {
+                                'Authorization': result.authorization.token_type + ' ' + result.authorization.accessToken,
+                                "AccountId": result.userInfo.accountId
+                            },
                             data: payload,
                             dataType: 'json',
                             success: function (data) {
@@ -6246,58 +6247,20 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }
                 }
                
-                function substringMatcher(strs) {
-                    return function findMatches(q, cb) {
-                      var matches, substringRegex;
-                      matches = [];
-                      substrRegex = new RegExp(q, 'i');
-                      jQuery.each(strs, function(i, str) {
-                        if (substrRegex.test(str.name)) {
-                          matches.push(str);
-                        }
-                      });
-                      cb(matches);
-                    };
-                  };
-
-                  function typeaHeadStyle(id,data) {
-                    jQuery(`#${id} .typeahead`).typeahead({
-                        hint: true,
-                        highlight: true,
-                        minLength: 1
-                      },
-                      {
-                        limit: 3,
-                        name: 'abc',
-                        source: substringMatcher(data),
-                        display: 'name',
-                        value:'id'
-                      })
-                  }
                 function addAutoSuggestionTolibrary(data){
                     let autoDiv = $('.search-block');
-                    data.querySuggestions?.forEach((ele) => {
+                    data?.querySuggestions?.forEach((ele) => {
                         autoDiv.append(`<div class="search-results-text-in-lib" id="autoResultLib-${ele}">${ele}</div>`)
                     });
-                    let typeAHeadData = [];
-                    data.typeAheads.forEach((ele,i)=>{
-                        typeAHeadData.push({'name':ele,id:i})
-                    })
-                    typeaHeadStyle('searchBlocks', typeAHeadData);
                 }
 
                 function addAutoSuggestionApi(data){
                     $('#overLayAutoSearch').find('.search-results-text')?.remove();
                     $('#overLayAutoSearchDiv').removeClass('hide').attr('style', 'bottom:0; display:block');
                     let autoDiv = $('#overLayAutoSearch');
-                    data.querySuggestions?.forEach((ele) => {
+                    data?.querySuggestions?.forEach((ele) => {
                         autoDiv.append(`<div class="search-results-text" style="cursor: pointer;" id="autoResult-${ele}">${ele}</div>`)
                     });
-                    let typeAHeadData = [];
-                    data.typeAheads.forEach((ele,i)=>{
-                        typeAHeadData.push({'name':ele,id:i})
-                    })
-                    typeaHeadStyle('overLayAutoSearchDiv', typeAHeadData);
                 }
 
                 function runDialogFormyBotTab(data, idTarget){
@@ -7021,7 +6984,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 <div class="library-search-data-container hide" id="LibraryContainer">
                     <div class="search-block" id="searchBlocks">
                         <div class="input-text-search library-search-div" id="search-block">
-                            <input type="text typeahead" placeholder="Ask AgentAssist" class="input-text" id="librarySearch">
+                            <input type="text" placeholder="Ask AgentAssist" class="input-text" id="librarySearch">
                             <i class="ast-search"></i>
                             <i class="ast-close close-search hide" id="cancelLibrarySearch"></i>
                         </div>
@@ -7075,7 +7038,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             </div>
         </div>
         <div class="overlay-suggestions  hide" id="overLayAutoSearchDiv">
-            <div class="suggestion-content typeahead" id="overLayAutoSearch">
+            <div class="suggestion-content" id="overLayAutoSearch">
             </div>
         </div>
 
