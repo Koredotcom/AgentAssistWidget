@@ -1479,8 +1479,52 @@ border: 1px solid transparent !important;
     background: var(--bg-color-containers);
     display: inline-block;
     width: 100%;
+    position: relative;
+}
+.agent-assist-chat-container .body-data-container .library-search-data-container .search-block.typeahead_search .tt-input{
+    background-color: var(--default-white-color);
+    border: solid 1px var(--border-color);
+    border-radius: 4px;
+    height: 34px;
+    padding: 6px 30px 6px 30px !important;
+    font-size: 14px;
+    color: var(--default-text-color2);
+    width: 100%;
+    line-height: normal;
+    margin: 0 !important;
+    outline: 0 !important;
 }
 
+.agent-assist-chat-container .body-data-container .library-search-data-container .search-block.typeahead_search .twitter-typeahead{
+    width: 100%;
+}
+.agent-assist-chat-container .body-data-container .library-search-data-container .search-block.typeahead_search .twitter-typeahead .tt-hint{
+    border: solid 1px var(--border-color);
+    border-radius: 4px;
+    height: 34px;
+    padding: 6px 30px 6px 30px !important;
+    font-size: 14px;
+    width: 100%;
+    line-height: normal;
+    margin: 0 !important;
+    outline: 0 !important;
+}
+
+.agent-assist-chat-container .body-data-container .library-search-data-container .search-block.typeahead_search .ast-search{
+    position: absolute;
+    left: 25px;
+    top: 26px;
+    color: var(--theme-color);
+    font-size: 14px;
+}
+.agent-assist-chat-container .body-data-container .library-search-data-container .search-block.typeahead_search .close-search{
+    position: absolute;
+    right: 25px;
+    top: 25px;
+    font-size: 12px;
+    cursor: pointer;
+    color: var(--default-text-color);
+}
 
 .agent-assist-chat-container .body-data-container .library-search-data-container .search-block input{
     padding-right: 30px;

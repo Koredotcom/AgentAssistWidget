@@ -6590,7 +6590,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     data?.querySuggestions?.forEach((ele) => {
                         autoDiv.append(`<div class="search-results-text" style="cursor: pointer;" id="autoResult-${ele}">${ele}</div>`)
                     });
-                    typeAHead('agentSearch', data.typeAheads)
+                    typeAHead('overlayAgentSearch', data.typeAheads)
                     // let filteredTypeahead = data.typeAheads.filter((ele)=>ele.includes(e.target.value));
 
                     // if(e.keyCode == 39){
@@ -7319,10 +7319,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 </div>
 
                 <div class="library-search-data-container hide" id="LibraryContainer">
-                <div id="the-basics">
-                <input class="typeahead" type="text" placeholder="States of USA">
-              </div>
-                    <div class="search-block" id="searchBlocks">
+                    <div id="the-basics" class="search-block typeahead_search">
+                        <input class="typeahead" type="text" placeholder="States of USA">
+                        <i class="ast-search"></i>
+                        <i class="ast-close close-search hide" id="cancelLibrarySearch"></i>
+                    </div>
+                    <div class="search-block hide" id="searchBlocks">
                         <div class="input-text-search library-search-div" id="search-block">
                             <input type="text" placeholder="Ask AgentAssist" class="input-text typeahead" id="librarySearch">
                             <i class="ast-search"></i>
@@ -7365,7 +7367,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
             </div>
         </div>
-        <div class="sugestions-info-data">
+        <div class="sugestions-info-data" id="overlayAgentSearch">
             <input type="text" class="suggestion-input typeahead" id="agentSearch" placeholder="Ask AgentAssist">
             <i class="ast-search search-icon"></i>
             <i class="ast-close close-search hide" id="cancelAgentSearch"></i>
