@@ -49,7 +49,8 @@ var myBotDataResponse = {};
 var waitingTimeForSeeMoreButton = 150;
 var waitingTimeForUUID = 100;
 var proactiveMode = true;
-
+var typeaheadArray = [];
+var states = [];
 function koreGenerateUUID() {
     console.info("generating UUID");
     var d = new Date().getTime();
@@ -65,7 +66,6 @@ function koreGenerateUUID() {
 }
 window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, connectionDetails, urlParams) {
     $(function() {
-        
         var substringMatcher = function(strs) {
             return function findMatches(q, cb) {
             var matches, substringRegex;
@@ -78,6 +78,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
   
             // iterate through the pool of strings and for any string that
             // contains the substring `q`, add it to the `matches` array
+            strs  = [...typeaheadArray];
             $.each(strs, function(i, str) {
               if (substrRegex.test(str)) {
                 matches.push(str);
@@ -88,18 +89,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
           };
         };
   
-        var states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California',
-          'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii',
-          'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana',
-          'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota',
-          'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire',
-          'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota',
-          'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island',
-          'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont',
-          'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
-        ];
-  
-        $('#the-basics .typeahead').typeahead({
+        $(`#overlayAgentSearch .typeahead`).typeahead({
           hint: true,
           highlight: true,
           minLength: 1
@@ -108,6 +98,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
           name: 'states',
           source: substringMatcher(states)
         });
+        $(`#search-block .typeahead`).typeahead({
+            hint: true,
+            highlight: true,
+            minLength: 1
+          },
+          {
+            name: 'states',
+            source: substringMatcher(states)
+          });
       });
     try {
         let params = new Proxy(new URLSearchParams(window.location.search), {
@@ -6493,7 +6492,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 function getAutoSearchApiResult(e){
                     console.log(arguments[1],"this","get in auto search api", e)
                     let payload = {
-                        "query": e.target.value,
+                        "query": e.target?.value,
                         "maxNumOfResults": 3,
                         "lang": "en"
                     }
@@ -6522,12 +6521,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             dataType: 'json',
                             success: function (data) {
                                 if (!isLibraryTab && data.typeAheads.length>0) {
+                                    typeaheadArray = data.typeAheads;
                                     $('#overLaySearch').html('');
                                     $('.overlay-suggestions').addClass('hide').removeAttr('style');
                                     addAutoSuggestionApi(data, e);
                                 } else {
                                     if(data.typeAheads.length>0){
-                                        console.log("came hee to else condition of autpo librqaruy")
+                                        typeaheadArray = data.typeAheads;
                                         addAutoSuggestionTolibrary(data, e.target?.value);
                                     }
                                 }
@@ -6539,48 +6539,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }
                 }
                 
-                function typeHead(id, data){
-                    $(document).ready(function(){
-                    var substringMatcher = function(strs) {
-                        return function findMatches(q, cb) {
-                        var matches, substringRegex;
-              
-                        // an array that will be populated with substring matches
-                        matches = [];
-              
-                        // regex used to determine if a string contains the substring `q`
-                        substrRegex = new RegExp(q, 'i');
-              
-                        // iterate through the pool of strings and for any string that
-                        // contains the substring `q`, add it to the `matches` array
-                        $.each(strs, function(i, str) {
-                          if (substrRegex.test(str)) {
-                            matches.push(str);
-                          }
-                        });
-              
-                        cb(matches);
-                      };
-                    };
-              
-                    
-              
-                    $(`#${id} .typeahead`).typeahead({
-                      hint: true,
-                      highlight: true,
-                      minLength: 1
-                    },
-                    {
-                      name: 'data',
-                      source: substringMatcher(data)
-                    });});
-                }
                 function addAutoSuggestionTolibrary(data, val){
                     let autoDiv = $('.search-block');
                     data?.querySuggestions?.forEach((ele) => {
                         autoDiv.append(`<div class="search-results-text-in-lib" id="autoResultLib-${ele}">${ele}</div>`)
                     });
-                    typeHead('search-block', data.typeAheads);
                 }
                 
                 function addAutoSuggestionApi(data, e){
@@ -6590,13 +6553,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     data?.querySuggestions?.forEach((ele) => {
                         autoDiv.append(`<div class="search-results-text" style="cursor: pointer;" id="autoResult-${ele}">${ele}</div>`)
                     });
-                    typeAHead('overlayAgentSearch', data.typeAheads)
-                    // let filteredTypeahead = data.typeAheads.filter((ele)=>ele.includes(e.target.value));
-
-                    // if(e.keyCode == 39){
-                    //     $('#agentSearch').val(filteredTypeahead[0])
-                    // } 
-                    // $('#autoFill').html(filteredTypeahead[0])
                 }
 
                 function runDialogFormyBotTab(data, idTarget){
@@ -7319,14 +7275,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 </div>
 
                 <div class="library-search-data-container hide" id="LibraryContainer">
-                    <div id="the-basics" class="search-block typeahead_search">
-                        <input class="typeahead" type="text" placeholder="States of USA">
+                    <div id="search-block" class="search-block typeahead_search">
+                        <input class="typeahead" type="text" placeholder="States of USA" id="librarySearch">
                         <i class="ast-search"></i>
                         <i class="ast-close close-search hide" id="cancelLibrarySearch"></i>
                     </div>
                     <div class="search-block hide" id="searchBlocks">
-                        <div class="input-text-search library-search-div" id="search-block">
-                            <input type="text" placeholder="Ask AgentAssist" class="input-text typeahead" id="librarySearch">
+                        <div class="input-text-search library-search-div" >
+                            <input type="text" placeholder="Ask AgentAssist" class="input-text typeahead" >
                             <i class="ast-search"></i>
                             <i class="ast-close close-search hide" id="cancelLibrarySearch"></i>
                         </div>

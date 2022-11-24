@@ -3542,3 +3542,12 @@ input.no-autofill-bkg:-webkit-autofill {
     cursor: pointer;background: white; padding: 10px 0px 0px 10px;
 }
 
+.twitter-typeahead{
+    width: 100%;
+}
+.tt-menu{
+    display: none !important;
+}
+.tt-open{
+    display: none !important;
+}
