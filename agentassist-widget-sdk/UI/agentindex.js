@@ -6534,7 +6534,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     data?.querySuggestions?.forEach((ele) => {
                         autoDiv.append(`<div class="search-results-text-in-lib" id="autoResultLib-${ele}">${ele}</div>`)
                     });
-                    typeHead('search-block'), data.typeAheads;
+                    typeHead('search-block', data.typeAheads);
                 }
                 
                 function addAutoSuggestionApi(data, e){
