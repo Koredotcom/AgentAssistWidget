@@ -4830,6 +4830,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $('.overlay-suggestions').removeClass('hide').attr('style', 'bottom:0; display:block');
                             $('#backButton').addClass('hide');
                             $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
+                            $('#overLayAutoSearch').find('.search-results-text')?.remove();
                             $('.sugestions-info-data').removeClass('hide');
                             $('#bodyContainer').addClass('if-suggestion-search');
 
@@ -6454,10 +6455,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
                     $('#overLayAutoSearch').find('.search-results-text')?.remove();
                     $('.search-block').find('.search-results-text-in-lib')?.remove();
-                    if (e.target.value.length > 0) {                       
+                    if (e.target?.value?.length > 0) {                       
                         $.ajax({
                             url: `${connectionDetails.envinormentUrl}/agentassist/api/v1/searchaccounts/autosearch?botId=${_botId}`,
                             type: 'post',
+                            headers: {
+                                'Authorization': result.authorization.token_type + ' ' + result.authorization.accessToken,
+                                "AccountId": result.userInfo.accountId
+                            },
                             data: payload,
                             dataType: 'json',
                             success: function (data) {
@@ -6478,24 +6483,23 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         });
                     }
                 }
-
+               
                 function addAutoSuggestionTolibrary(data){
                     let autoDiv = $('.search-block');
-                    data.typeAheads?.forEach((ele) => {
+                    data?.querySuggestions?.forEach((ele) => {
                         autoDiv.append(`<div class="search-results-text-in-lib" id="autoResultLib-${ele}">${ele}</div>`)
-                    })
-                    
+                    });
                 }
 
                 function addAutoSuggestionApi(data){
+                    $('#overLayAutoSearch').find('.search-results-text')?.remove();
                     $('#overLayAutoSearchDiv').removeClass('hide').attr('style', 'bottom:0; display:block');
                     let autoDiv = $('#overLayAutoSearch');
-                    data.typeAheads?.forEach((ele) => {
+                    data?.querySuggestions?.forEach((ele) => {
                         autoDiv.append(`<div class="search-results-text" style="cursor: pointer;" id="autoResult-${ele}">${ele}</div>`)
-                    })
-                    
+                    });
                 }
-                
+
                 function runDialogFormyBotTab(data, idTarget){
                     if(data?.payload){
                      data = data.payload.info;
@@ -7213,7 +7217,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 </div>
 
                 <div class="library-search-data-container hide" id="LibraryContainer">
-                    <div class="search-block">
+                    <div class="search-block" id="searchBlocks">
                         <div class="input-text-search library-search-div" id="search-block">
                             <input type="text" placeholder="Ask AgentAssist" class="input-text" id="librarySearch">
                             <i class="ast-search"></i>
@@ -7268,7 +7272,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             <div class="suggestion-content" id="overLaySearch">
             </div>
         </div>
-        <div class="overlay-suggestions hide" id="overLayAutoSearchDiv">
+        <div class="overlay-suggestions  hide" id="overLayAutoSearchDiv">
             <div class="suggestion-content" id="overLayAutoSearch">
             </div>
         </div>
