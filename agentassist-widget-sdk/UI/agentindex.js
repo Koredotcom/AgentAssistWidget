@@ -6455,14 +6455,23 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
                     $('#overLayAutoSearch').find('.search-results-text')?.remove();
                     $('.search-block').find('.search-results-text-in-lib')?.remove();
+                    let headersVal = {};
+                    if(connectionDetails.isSAT) {
+                        headersVal = {
+                            'Authorization': 'bearer' + ' ' + connectionDetails.tokenVal,
+                            'accountId': connectionDetails.accountId
+                        }
+                    } else {
+                        headersVal = {
+                            'Authorization': result.authorization.token_type + ' ' + result.authorization.accessToken,
+                            "AccountId": result.userInfo.accountId
+                        }
+                    }
                     if (e.target?.value?.length > 0) {                       
                         $.ajax({
                             url: `${connectionDetails.envinormentUrl}/agentassist/api/v1/searchaccounts/autosearch?botId=${_botId}`,
                             type: 'post',
-                            headers: {
-                                'Authorization': result.authorization.token_type + ' ' + result.authorization.accessToken,
-                                "AccountId": result.userInfo.accountId
-                            },
+                            headers: headersVal,
                             data: payload,
                             dataType: 'json',
                             success: function (data) {
