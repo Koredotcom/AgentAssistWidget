@@ -4739,6 +4739,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
                             $('#overLayAutoSearch').find('.search-results-text')?.remove();
                             $('.search-block').find('.search-results-text-in-lib')?.remove();
+                            $('#autoFill').html('')
                         }
 
                         if (target.id === 'cancelLibrarySearch') {
@@ -6421,8 +6422,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
                             }
                             $('#searchResults').addClass('hide');
+                            $('#autoFill').html('')
                             typeAHead(evt, val== ''? true: false);
-                            
                             
                             if (agentAssistInput || mybotInput) {
                                 AgentAssist_input_keydown(evt);
@@ -6467,7 +6468,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             "AccountId": result.userInfo.accountId
                         }
                     }
-                    if (e.target?.value?.length > 0) {                       
+                    if (e.target?.value?.length > 0) {                      
                         $.ajax({
                             url: `${connectionDetails.envinormentUrl}/agentassist/api/v1/searchaccounts/autosearch?botId=${_botId}`,
                             type: 'post',
@@ -6478,11 +6479,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 if (!isLibraryTab && data.typeAheads.length>0) {
                                     $('#overLaySearch').html('');
                                     $('.overlay-suggestions').addClass('hide').removeAttr('style');
-                                    addAutoSuggestionApi(data);
+                                    addAutoSuggestionApi(data, e);
                                 } else {
                                     if(data.typeAheads.length>0){
                                         console.log("came hee to else condition of autpo librqaruy")
-                                        addAutoSuggestionTolibrary(data);
+                                        addAutoSuggestionTolibrary(data, e.target?.value);
                                     }
                                 }
                             },
@@ -6492,21 +6493,64 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         });
                     }
                 }
-               
-                function addAutoSuggestionTolibrary(data){
+                
+                function typeHead(id, data){
+                    var substringMatcher = function(strs) {
+                        return function findMatches(q, cb) {
+                        var matches, substringRegex;
+              
+                        // an array that will be populated with substring matches
+                        matches = [];
+              
+                        // regex used to determine if a string contains the substring `q`
+                        substrRegex = new RegExp(q, 'i');
+              
+                        // iterate through the pool of strings and for any string that
+                        // contains the substring `q`, add it to the `matches` array
+                        $.each(strs, function(i, str) {
+                          if (substrRegex.test(str)) {
+                            matches.push(str);
+                          }
+                        });
+              
+                        cb(matches);
+                      };
+                    };
+              
+                    
+              
+                    $(`#${id} .typeahead`).typeahead({
+                      hint: true,
+                      highlight: true,
+                      minLength: 1
+                    },
+                    {
+                      name: 'data',
+                      source: substringMatcher(data)
+                    });
+                }
+                function addAutoSuggestionTolibrary(data, val){
                     let autoDiv = $('.search-block');
                     data?.querySuggestions?.forEach((ele) => {
                         autoDiv.append(`<div class="search-results-text-in-lib" id="autoResultLib-${ele}">${ele}</div>`)
                     });
+                    typeHead('search-block'), data.typeAheads;
                 }
-
-                function addAutoSuggestionApi(data){
+                
+                function addAutoSuggestionApi(data, e){
                     $('#overLayAutoSearch').find('.search-results-text')?.remove();
                     $('#overLayAutoSearchDiv').removeClass('hide').attr('style', 'bottom:0; display:block');
                     let autoDiv = $('#overLayAutoSearch');
                     data?.querySuggestions?.forEach((ele) => {
                         autoDiv.append(`<div class="search-results-text" style="cursor: pointer;" id="autoResult-${ele}">${ele}</div>`)
                     });
+                    typeAHead('agentSearch', data.typeAheads)
+                    // let filteredTypeahead = data.typeAheads.filter((ele)=>ele.includes(e.target.value));
+
+                    // if(e.keyCode == 39){
+                    //     $('#agentSearch').val(filteredTypeahead[0])
+                    // } 
+                    // $('#autoFill').html(filteredTypeahead[0])
                 }
 
                 function runDialogFormyBotTab(data, idTarget){
@@ -7188,6 +7232,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     <div class="desc-text">Use "Run with Agent Inputs" to execute.</div>
                        
                     </div>
+                  
                 </div>
                 <div class="dynamic-block-content history hide" id="historyData" style='top: -46px;'></div>
                 <div class="agent-body-data-container hide" id="agentAutoContainer">
@@ -7226,9 +7271,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 </div>
 
                 <div class="library-search-data-container hide" id="LibraryContainer">
+                
                     <div class="search-block" id="searchBlocks">
                         <div class="input-text-search library-search-div" id="search-block">
-                            <input type="text" placeholder="Ask AgentAssist" class="input-text" id="librarySearch">
+                            <input type="text" placeholder="Ask AgentAssist" class="input-text typeahead" id="librarySearch">
                             <i class="ast-search"></i>
                             <i class="ast-close close-search hide" id="cancelLibrarySearch"></i>
                         </div>
@@ -7269,7 +7315,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             </div>
         </div>
         <div class="sugestions-info-data">
-            <input type="text" class="suggestion-input" id="agentSearch" placeholder="Ask AgentAssist">
+            <input type="text" class="suggestion-input typeahead" id="agentSearch" placeholder="Ask AgentAssist">
             <i class="ast-search search-icon"></i>
             <i class="ast-close close-search hide" id="cancelAgentSearch"></i>
         </div>
