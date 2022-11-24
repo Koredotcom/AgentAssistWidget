@@ -64,6 +64,51 @@ function koreGenerateUUID() {
     return uuid;
 }
 window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, connectionDetails, urlParams) {
+    $(function() {
+        
+        var substringMatcher = function(strs) {
+            return function findMatches(q, cb) {
+            var matches, substringRegex;
+  
+            // an array that will be populated with substring matches
+            matches = [];
+  
+            // regex used to determine if a string contains the substring `q`
+            substrRegex = new RegExp(q, 'i');
+  
+            // iterate through the pool of strings and for any string that
+            // contains the substring `q`, add it to the `matches` array
+            $.each(strs, function(i, str) {
+              if (substrRegex.test(str)) {
+                matches.push(str);
+              }
+            });
+  
+            cb(matches);
+          };
+        };
+  
+        var states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California',
+          'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii',
+          'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana',
+          'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota',
+          'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire',
+          'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota',
+          'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island',
+          'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont',
+          'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
+        ];
+  
+        $('#the-basics .typeahead').typeahead({
+          hint: true,
+          highlight: true,
+          minLength: 1
+        },
+        {
+          name: 'states',
+          source: substringMatcher(states)
+        });
+      });
     try {
         let params = new Proxy(new URLSearchParams(window.location.search), {
             get: (searchParams, prop) => searchParams.get(prop),
@@ -6495,6 +6540,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
                 
                 function typeHead(id, data){
+                    $(document).ready(function(){
                     var substringMatcher = function(strs) {
                         return function findMatches(q, cb) {
                         var matches, substringRegex;
@@ -6527,7 +6573,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     {
                       name: 'data',
                       source: substringMatcher(data)
-                    });
+                    });});
                 }
                 function addAutoSuggestionTolibrary(data, val){
                     let autoDiv = $('.search-block');
@@ -7154,7 +7200,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
         container.addClass('kore-chat-window')
         if (container) {
             console.log("AgentAssist >>> found container", container);
-            var cHtml = `<div class="header-top-bar">
+            var cHtml = `
+            <div class="header-top-bar">
             <!-- Header -->
             <div class="header-data hide">
                 <div class="main-title">
@@ -7203,8 +7250,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             </div>
         </div>
         <div class="body-data-container if-suggestion-search" id="bodyContainer">
+   
             <div class="dialog-task-data" id="dynamicBlocksData">
-
+           
                 <div class="dynamic-block-content" id="dynamicBlock">
                     <div class="show-history-block hide" id="history-details-btn">
                         <button id="showHistory" class="ghost-btn">Show history</button>
@@ -7271,7 +7319,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 </div>
 
                 <div class="library-search-data-container hide" id="LibraryContainer">
-                
+                <div id="the-basics">
+                <input class="typeahead" type="text" placeholder="States of USA">
+              </div>
                     <div class="search-block" id="searchBlocks">
                         <div class="input-text-search library-search-div" id="search-block">
                             <input type="text" placeholder="Ask AgentAssist" class="input-text typeahead" id="librarySearch">
@@ -7279,6 +7329,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             <i class="ast-close close-search hide" id="cancelLibrarySearch"></i>
                         </div>
                     </div>
+                    
 
                     <div class="show-back-recommendation-block  hide" id="backButton">
                         <button id="backToPreviousTab" class="ghost-btn">
