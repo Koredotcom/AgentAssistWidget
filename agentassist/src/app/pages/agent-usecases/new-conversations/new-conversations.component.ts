@@ -300,7 +300,7 @@ export class NewConversationsComponent implements OnInit, OnChanges, AfterViewIn
       setTimeout(() => $('.added-utt input')[0].focus());
     } else {
 
-      const formGroup = this.fb.group({
+      const formGroup : any = this.fb.group({
         id: utterance.id,
         text: [utterance.text, Validators.required]
       });
