@@ -8,10 +8,9 @@
     "declaration": false,
     "module": "es2020",
     "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
-    "target": "es2015",
+    "target": "es2020",
     "paths": {
       "@kore.services/*": [ "./src/app/services/*" ],
       "@kore.environment": [ "./src/environments/environment" ],
