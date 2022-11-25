@@ -95,13 +95,15 @@ export class SearchAssistComponent implements OnInit {
       this.searchFormChangeMode();
       let methodType = this.createForm ? 'post.searchaccounts' : 'put.searchaccounts';
       this.service.invoke(methodType, { accountId: this.accountId }, payLoad).subscribe((data) => {
-        this.updateSearchConfDetailsFromDb(data);
+      this.updateSearchConfDetailsFromDb(data);
       }, (error) => {
         console.log(error, "error");
       });
-    } else {
+    } else if(type == 'edit') {
       this.disableSearchForm = false;
       this.searchFormChangeMode();
+    } else{
+      this.updateSearchConfDetailsFromDb(this.actualConfigDetailsObj);
     }
   }
 

@@ -2,6 +2,14 @@
 
 .search-assist-wrapper{
     height: calc(100vh - 59px);
+    .kr-sg-toggle {
+        .slider {
+            span{
+                padding-left: 48px !important;
+                top: -5px !important;
+            }
+        }
+    }
     .scroll-data{
         padding: 40px;
     }
