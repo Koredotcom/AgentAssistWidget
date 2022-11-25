@@ -49,7 +49,8 @@ var myBotDataResponse = {};
 var waitingTimeForSeeMoreButton = 150;
 var waitingTimeForUUID = 100;
 var proactiveMode = true;
-
+var typeaheadArray = [];
+var states = [];
 function koreGenerateUUID() {
     console.info("generating UUID");
     var d = new Date().getTime();
@@ -64,6 +65,49 @@ function koreGenerateUUID() {
     return uuid;
 }
 window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, connectionDetails, urlParams) {
+    $(function() {
+        var substringMatcher = function(strs) {
+            return function findMatches(q, cb) {
+            var matches, substringRegex;
+  
+            // an array that will be populated with substring matches
+            matches = [];
+  
+            // regex used to determine if a string contains the substring `q`
+            substrRegex = new RegExp(q, 'i');
+  
+            // iterate through the pool of strings and for any string that
+            // contains the substring `q`, add it to the `matches` array
+            strs  = [...typeaheadArray];
+            $.each(strs, function(i, str) {
+              if (substrRegex.test(str)) {
+                matches.push(str);
+              }
+            });
+  
+            cb(matches);
+          };
+        };
+  
+        $(`#overlayAgentSearch .typeahead`).typeahead({
+          hint: true,
+          highlight: true,
+          minLength: 1
+        },
+        {
+          name: 'states',
+          source: substringMatcher(states)
+        });
+        $(`#search-block .typeahead`).typeahead({
+            hint: true,
+            highlight: true,
+            minLength: 1
+          },
+          {
+            name: 'states',
+            source: substringMatcher(states)
+          });
+      });
     try {
         let params = new Proxy(new URLSearchParams(window.location.search), {
             get: (searchParams, prop) => searchParams.get(prop),
@@ -4739,6 +4783,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
                             $('#overLayAutoSearch').find('.search-results-text')?.remove();
                             $('.search-block').find('.search-results-text-in-lib')?.remove();
+                            $('#autoFill').html('')
                         }
 
                         if (target.id === 'cancelLibrarySearch') {
@@ -4830,6 +4875,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $('.overlay-suggestions').removeClass('hide').attr('style', 'bottom:0; display:block');
                             $('#backButton').addClass('hide');
                             $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
+                            $('#overLayAutoSearch').find('.search-results-text')?.remove();
                             $('.sugestions-info-data').removeClass('hide');
                             $('#bodyContainer').addClass('if-suggestion-search');
 
@@ -6420,8 +6466,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
                             }
                             $('#searchResults').addClass('hide');
+                            $('#autoFill').html('')
                             typeAHead(evt, val== ''? true: false);
-                            
                             
                             if (agentAssistInput || mybotInput) {
                                 AgentAssist_input_keydown(evt);
@@ -6446,7 +6492,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 function getAutoSearchApiResult(e){
                     console.log(arguments[1],"this","get in auto search api", e)
                     let payload = {
-                        "query": e.target.value,
+                        "query": e.target?.value,
                         "maxNumOfResults": 3,
                         "lang": "en"
                     }
@@ -6454,21 +6500,35 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
                     $('#overLayAutoSearch').find('.search-results-text')?.remove();
                     $('.search-block').find('.search-results-text-in-lib')?.remove();
-                    if (e.target.value.length > 0) {                       
+                    let headersVal = {};
+                    if(connectionDetails.isSAT) {
+                        headersVal = {
+                            'Authorization': 'bearer' + ' ' + connectionDetails.tokenVal,
+                            'accountId': connectionDetails.accountId
+                        }
+                    } else {
+                        headersVal = {
+                            'Authorization': result.authorization.token_type + ' ' + result.authorization.accessToken,
+                            "AccountId": result.userInfo.accountId
+                        }
+                    }
+                    if (e.target?.value?.length > 0) {                      
                         $.ajax({
                             url: `${connectionDetails.envinormentUrl}/agentassist/api/v1/searchaccounts/autosearch?botId=${_botId}`,
                             type: 'post',
+                            headers: headersVal,
                             data: payload,
                             dataType: 'json',
                             success: function (data) {
                                 if (!isLibraryTab && data.typeAheads.length>0) {
+                                    typeaheadArray = data.typeAheads;
                                     $('#overLaySearch').html('');
                                     $('.overlay-suggestions').addClass('hide').removeAttr('style');
-                                    addAutoSuggestionApi(data);
+                                    addAutoSuggestionApi(data, e);
                                 } else {
                                     if(data.typeAheads.length>0){
-                                        console.log("came hee to else condition of autpo librqaruy")
-                                        addAutoSuggestionTolibrary(data);
+                                        typeaheadArray = data.typeAheads;
+                                        addAutoSuggestionTolibrary(data, e.target?.value);
                                     }
                                 }
                             },
@@ -6478,24 +6538,23 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         });
                     }
                 }
-
-                function addAutoSuggestionTolibrary(data){
+                
+                function addAutoSuggestionTolibrary(data, val){
                     let autoDiv = $('.search-block');
-                    data.typeAheads?.forEach((ele) => {
+                    data?.querySuggestions?.forEach((ele) => {
                         autoDiv.append(`<div class="search-results-text-in-lib" id="autoResultLib-${ele}">${ele}</div>`)
-                    })
-                    
-                }
-
-                function addAutoSuggestionApi(data){
-                    $('#overLayAutoSearchDiv').removeClass('hide').attr('style', 'bottom:0; display:block');
-                    let autoDiv = $('#overLayAutoSearch');
-                    data.typeAheads?.forEach((ele) => {
-                        autoDiv.append(`<div class="search-results-text" style="cursor: pointer;" id="autoResult-${ele}">${ele}</div>`)
-                    })
-                    
+                    });
                 }
                 
+                function addAutoSuggestionApi(data, e){
+                    $('#overLayAutoSearch').find('.search-results-text')?.remove();
+                    $('#overLayAutoSearchDiv').removeClass('hide').attr('style', 'bottom:0; display:block');
+                    let autoDiv = $('#overLayAutoSearch');
+                    data?.querySuggestions?.forEach((ele) => {
+                        autoDiv.append(`<div class="search-results-text" style="cursor: pointer;" id="autoResult-${ele}">${ele}</div>`)
+                    });
+                }
+
                 function runDialogFormyBotTab(data, idTarget){
                     if(data?.payload){
                      data = data.payload.info;
@@ -7097,7 +7156,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
         container.addClass('kore-chat-window')
         if (container) {
             console.log("AgentAssist >>> found container", container);
-            var cHtml = `<div class="header-top-bar">
+            var cHtml = `
+            <div class="header-top-bar">
             <!-- Header -->
             <div class="header-data hide">
                 <div class="main-title">
@@ -7146,8 +7206,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             </div>
         </div>
         <div class="body-data-container if-suggestion-search" id="bodyContainer">
+   
             <div class="dialog-task-data" id="dynamicBlocksData">
-
+           
                 <div class="dynamic-block-content" id="dynamicBlock">
                     <div class="show-history-block hide" id="history-details-btn">
                         <button id="showHistory" class="ghost-btn">Show history</button>
@@ -7175,6 +7236,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     <div class="desc-text">Use "Run with Agent Inputs" to execute.</div>
                        
                     </div>
+                  
                 </div>
                 <div class="dynamic-block-content history hide" id="historyData" style='top: -46px;'></div>
                 <div class="agent-body-data-container hide" id="agentAutoContainer">
@@ -7213,13 +7275,19 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 </div>
 
                 <div class="library-search-data-container hide" id="LibraryContainer">
-                    <div class="search-block">
-                        <div class="input-text-search library-search-div" id="search-block">
-                            <input type="text" placeholder="Ask AgentAssist" class="input-text" id="librarySearch">
+                    <div id="search-block" class="search-block typeahead_search">
+                        <input class="typeahead" type="text" placeholder="States of USA" id="librarySearch">
+                        <i class="ast-search"></i>
+                        <i class="ast-close close-search hide" id="cancelLibrarySearch"></i>
+                    </div>
+                    <div class="search-block hide" id="searchBlocks">
+                        <div class="input-text-search library-search-div" >
+                            <input type="text" placeholder="Ask AgentAssist" class="input-text typeahead" >
                             <i class="ast-search"></i>
                             <i class="ast-close close-search hide" id="cancelLibrarySearch"></i>
                         </div>
                     </div>
+                    
 
                     <div class="show-back-recommendation-block  hide" id="backButton">
                         <button id="backToPreviousTab" class="ghost-btn">
@@ -7255,8 +7323,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
             </div>
         </div>
-        <div class="sugestions-info-data">
-            <input type="text" class="suggestion-input" id="agentSearch" placeholder="Ask AgentAssist">
+        <div class="sugestions-info-data" id="overlayAgentSearch">
+            <input type="text" class="suggestion-input typeahead" id="agentSearch" placeholder="Ask AgentAssist">
             <i class="ast-search search-icon"></i>
             <i class="ast-close close-search hide" id="cancelAgentSearch"></i>
         </div>
@@ -7268,7 +7336,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             <div class="suggestion-content" id="overLaySearch">
             </div>
         </div>
-        <div class="overlay-suggestions hide" id="overLayAutoSearchDiv">
+        <div class="overlay-suggestions  hide" id="overLayAutoSearchDiv">
             <div class="suggestion-content" id="overLayAutoSearch">
             </div>
         </div>
