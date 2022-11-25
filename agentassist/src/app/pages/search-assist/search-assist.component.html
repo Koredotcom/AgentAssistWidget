@@ -3,7 +3,7 @@
         <div class="scroll-data">
             <div class="header-title d-flex justify-content-between"><span>{{ "SEARCHASSIST_TITLE" | translate}}</span>
                 <div class="mr-55">
-                    <label class="kr-sg-toggle large" *ngIf="!createForm">
+                    <label class="kr-sg-toggle" *ngIf="!createForm">
                         <input type="checkbox" [(ngModel)]="searchConv.isEnabled" #searchconfToggle name="searchconfToggle" (change)="searchConfToggleChange()">
                         <div class="slider"><span class="enabled" *ngIf="searchConv.isEnabled !== false">{{ "SEARCHASSIST.ENABLED" | translate}}</span><span *ngIf="searchConv.isEnabled === false" class="disabled">{{"SEARCHASSIST.DISABLED" | translate}}</span></div>
                     </label>
@@ -18,19 +18,23 @@
                     <a class="know-more" href="#" target="_blank">Know More</a>
                 </div>
             </div>
-            <div class="label_heading">{{ "SEARCHASSIST.CLIENT_INFO" | translate}}</div>
+            <div class="label_heading">{{ "SEARCHASSIST.APP_INFO" | translate}}</div>
             <div class="action-box-data">
                 <form #searchForm="ngForm">
                     <div class="row row-data">
                         <div class="col-6 column-data">
                             <div class="kr-sg-input-text">
-                                <div class="label-text">{{ "SEARCHASSIST.DOMAIN_URL" | translate}} <i class="icon-sa-help"></i></div>
+                                <div class="label-text">{{ "SEARCHASSIST.DOMAIN_URL" | translate}}
+                                     <!-- <i class="icon-sa-help"></i> -->
+                                </div>
                                 <input type="text" name="domain" placeholder="Enter Domain URL" class="input-text" [(ngModel)]="searchAssistConfigDetailsObj.domain" required>
                             </div>
                         </div>
                         <div class="col-6 column-data">
                             <div class="kr-sg-input-text">
-                                <div class="label-text">{{ "SEARCHASSIST.STREAM_ID" | translate}} <i class="icon-sa-help"></i></div>
+                                <div class="label-text">{{ "SEARCHASSIST.STREAM_ID" | translate}} 
+                                    <!-- <i class="icon-sa-help"></i> -->
+                                </div>
                                 <input type="text" name="searchAssistbotId" placeholder="Enter Stream ID" class="input-text" [(ngModel)]="searchAssistConfigDetailsObj.searchAssistbotId" required>
                             </div>
                         </div>
@@ -38,13 +42,17 @@
                     <div class="row row-data border-0">
                         <div class="col-6 column-data">
                             <div class="kr-sg-input-text">
-                                <div class="label-text">{{ "SEARCHASSIST.CLIENT_ID" | translate}} <i class="icon-sa-help"></i></div>
+                                <div class="label-text">{{ "SEARCHASSIST.CLIENT_ID" | translate}} 
+                                    <!-- <i class="icon-sa-help"></i> -->
+                                </div>
                                 <input type="text" name="clientId" placeholder="Enter Client URL" class="input-text" [(ngModel)]="searchAssistConfigDetailsObj.clientId" required>
                             </div>
                         </div>
                         <div class="col-6 column-data">
                             <div class="kr-sg-input-text">
-                                <div class="label-text">{{ "SEARCHASSIST.CLIENT_SECRET" | translate}} <i class="icon-sa-help"></i></div>
+                                <div class="label-text">{{ "SEARCHASSIST.CLIENT_SECRET" | translate}}
+                                     <!-- <i class="icon-sa-help"></i> -->
+                                </div>
                                 <input type="text" name="clientSecret"  placeholder="Enter Client Secret" class="input-text" [(ngModel)]="searchAssistConfigDetailsObj.clientSecret" required>
                             </div>
                         </div>
@@ -52,7 +60,8 @@
                 </form>
             </div>
             <div class="edit-save">
-                <button class="kr-sg-button-secondary btn_lg" (click)="updateSearchConfDetails('edit')" [disabled]="!disableSearchForm">{{ "SEARCHASSIST.EDIT" | translate}}</button>
+                <button class="kr-sg-button-secondary btn_lg" (click)="updateSearchConfDetails('edit')" *ngIf="disableSearchForm && !createForm" >{{ "SEARCHASSIST.EDIT" | translate}}</button>
+                <button class="kr-sg-button-secondary btn_lg" (click)="updateSearchConfDetails('cancel')" *ngIf="!disableSearchForm && !createForm" >{{ "SEARCHASSIST.CANCEL" | translate}}</button>
                 <button class="kr-sg-button-primary btn_lg" (click)="updateSearchConfDetails('save')" [disabled]="createForm ? !(searchForm.valid) : (!(searchForm.valid) ? true : !formDirty)" >{{ "SEARCHASSIST.SAVE" | translate}}</button>
                 <button class="kr-sg-button-danger btn_lg" (click)="deleteConfig()" *ngIf="!createForm">{{ "SEARCHASSIST.DELETE" | translate}}</button>
             </div>
