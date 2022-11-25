@@ -6504,12 +6504,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     if(connectionDetails.isSAT) {
                         headersVal = {
                             'Authorization': 'bearer' + ' ' + connectionDetails.tokenVal,
-                            'accountId': connectionDetails.accountId
+                            'AccountId': connectionDetails.accountId,
+                            'eAD': false,
                         }
                     } else {
                         headersVal = {
                             'Authorization': result.authorization.token_type + ' ' + result.authorization.accessToken,
-                            "AccountId": result.userInfo.accountId
+                            "AccountId": result.userInfo.accountId,
+                            'eAD': true,
                         }
                     }
                     if (e.target?.value?.length > 0) {                      
