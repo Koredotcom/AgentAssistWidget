@@ -74,10 +74,10 @@
                     </div>
                 </li>
                 <li [class.disabled]="!currentBt">
-                    <div class="tab-name active" data-toggle="tab" href="#qa" (click)="ucType = 'faq'; selectGroup('')">{{"AGENTASSIST.QUEST_ANSWER" | translate}}</div>
+                    <div class="tab-name active" data-bs-toggle="tab" href="#qa" (click)="ucType = 'faq'; selectGroup('')">{{"AGENTASSIST.QUEST_ANSWER" | translate}}</div>
                 </li>               
                 <li [class.disabled]="!currentBt">
-                    <div class="tab-name" data-toggle="tab" href="#convers" (click)="ucType = 'dialog'; selectGroup('')">{{"ANALYTICS.CONVERSATIONS" | translate}}</div>
+                    <div class="tab-name" data-bs-toggle="tab" href="#convers" (click)="ucType = 'dialog'; selectGroup('')">{{"ANALYTICS.CONVERSATIONS" | translate}}</div>
                 </li>
             </ul>
             <button (click)="openConversation()" type="button" class="kr-sg-button-primary btn_lg new-hours-btn" [disabled]="!currentBt"><img src="assets/icons/add.svg">{{"USECASES.NEW_UC" | translate}}</button>

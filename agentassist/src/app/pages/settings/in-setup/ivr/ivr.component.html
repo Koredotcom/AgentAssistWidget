@@ -47,7 +47,7 @@
                             <div class="kr-sg-dropdowns">
                                 <div class="label-text">{{'SETTINGS.DNS_RESOLVE_METHOD' | translate}}<span class="optional">( {{'SETTINGS.OPTIONAL' | translate}} )</span></div>
                                 <div class="dropdown dropdown-open">
-                                    <button class="dropdown-toggle dropdown-input" data-toggle="dropdown">{{model.dnsResolveMethod || ('COMMON.SELECT' | translate)}}</button>                                            
+                                    <button class="dropdown-toggle dropdown-input" data-bs-toggle="dropdown">{{model.dnsResolveMethod || ('COMMON.SELECT' | translate)}}</button>                                            
                                     <ul class="dropdown-menu content-menu">                                                                          
                                       <li *ngFor="let method of dnsResolveMethods" (click)="model.dnsResolveMethod = method"><a>{{method}}</a></li>
                                     </ul>
@@ -59,7 +59,7 @@
                 <div class="kr-sg-dropdowns mb-23 d-none">
                     <div class="label-text">{{"IVR.LANG_PREF" | translate}}</div>
                     <div class="dropdown dropdown-open">
-                        <button class="dropdown-toggle dropdown-input" data-toggle="dropdown">{{"IVR.ENG" | translate}}</button>                                            
+                        <button class="dropdown-toggle dropdown-input" data-bs-toggle="dropdown">{{"IVR.ENG" | translate}}</button>                                            
                         <ul class="dropdown-menu content-menu">                                                                          
                           <li><a>{{"IVR.ENG" | translate}}</a></li>
                         </ul>
@@ -93,7 +93,7 @@
                 <div class="kr-sg-dropdowns mb-23">
                     <div class="label-text">{{'SETTINGS.SIP_TRANSPORT_TYPE' | translate}}<span class="optional"></span></div>
                     <div class="dropdown dropdown-open">
-                        <button class="dropdown-toggle dropdown-input" data-toggle="dropdown">{{model.sipTransportType || ('COMMON.SELECT' | translate)}}</button>                                            
+                        <button class="dropdown-toggle dropdown-input" data-bs-toggle="dropdown">{{model.sipTransportType || ('COMMON.SELECT' | translate)}}</button>                                            
                         <ul class="dropdown-menu content-menu">                                                                          
                             <li (click)="onChangeSIPTransportType(transport)" *ngFor="let transport of sipTransportTypes"><a>{{transport}}</a></li>
                         </ul>

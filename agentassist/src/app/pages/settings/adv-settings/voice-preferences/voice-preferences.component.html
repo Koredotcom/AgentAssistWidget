@@ -15,7 +15,7 @@
                     <div class="kr-sg-dropdowns">
                         <div class="label-text font-weight-bold show-info-icon">{{'SETTINGS.SPEECH_RECOGNITION_PREFERENCE' | translate}}</div>
                         <div class="dropdown dropdown-open">
-                              <button class="dropdown-toggle dropdown-input" data-toggle="dropdown">{{ voicePreferences.asrPreference || "select"}}</button>
+                              <button class="dropdown-toggle dropdown-input" data-bs-toggle="dropdown">{{ voicePreferences.asrPreference || "select"}}</button>
                               <ul class="dropdown-menu content-menu">
                                 <li class="search-box">
                                     <input type="text" placeholder="{{'PLACEHOLDERS.SEARCH' | translate}}" class="seach-input" name="preferenceCodeSearchTerm" #preferenceCodeSearchTerm (input)="preferenceCodeSearchTerm.value = $event.target.value">
@@ -30,7 +30,7 @@
                     <div class="kr-sg-dropdowns">
                         <div class="label-text show-info-icon">Dialect</div>
                         <div class="dropdown dropdown-open dialectDropDown">
-                              <button class="dropdown-toggle dropdown-input" data-toggle="dropdown" [disabled]="!dialects.length">{{ selectedDialect || "select"}}</button>
+                              <button class="dropdown-toggle dropdown-input" data-bs-toggle="dropdown" [disabled]="!dialects.length">{{ selectedDialect || "select"}}</button>
                               <ul class="dropdown-menu content-menu">
                                 <li class="search-box">
                                     <input type="text" placeholder="{{'PLACEHOLDERS.SEARCH' | translate}}" class="seach-input" name="dialectSearchTerm" #dialectSearchTerm (input)="dialectSearchTerm.value = $event.target.value">

@@ -74,25 +74,27 @@ export class BTContainerComponent implements OnInit, AfterViewInit, OnDestroy {
     return new Promise((resolve, reject) => {
       interval = setInterval(() => {
         doc = this.iframe.nativeElement.contentDocument;
-        var btns = doc.querySelectorAll(".btnSolidBlue");
-        if (btns && btns.length > 0) {
-          for (var i = 0; i < btns.length; i++) {
-            if (btns[i] && btns[i].getAttribute("ng-click") === `showForm($event, 'dialogTasks')`) {
-              clearInterval(interval);
-              return resolve("dialog")
+        if(doc){
+          var btns = doc.querySelectorAll(".btnSolidBlue");
+          if (btns && btns.length > 0) {
+            for (var i = 0; i < btns.length; i++) {
+              if (btns[i] && btns[i].getAttribute("ng-click") === `showForm($event, 'dialogTasks')`) {
+                clearInterval(interval);
+                return resolve("dialog")
+              }
             }
           }
-        }
-        btns = doc.querySelectorAll(".welcomeMessage");
-        if (btns && btns.length > 0) {
+          btns = doc.querySelectorAll(".welcomeMessage");
+          if (btns && btns.length > 0) {
+              clearInterval(interval);
+              return resolve("welcome")
+          }
+  
+          noOfTries--;
+          if (noOfTries === 0) {
             clearInterval(interval);
-            return resolve("welcome")
-        }
-
-        noOfTries--;
-        if (noOfTries === 0) {
-          clearInterval(interval);
-          resolve(false);
+            resolve(false);
+          }
         }
       }, this.RETRY_INTERVAL)
       

@@ -55,7 +55,7 @@
                             <div class="kr-sg-dropdowns mb-4 pb-1">     
                                 <div class="label-text">{{'SETTINGS.THEME' | translate}}</div>                                   
                                 <div class="dropdown dropdown-open">
-                                    <button class="dropdown-toggle dropdown-input" data-toggle="dropdown">{{activeWidget?.theme || 'choose'}}</button>                                            
+                                    <button class="dropdown-toggle dropdown-input" data-bs-toggle="dropdown">{{activeWidget?.theme || 'choose'}}</button>                                            
                                     <ul class="dropdown-menu content-menu">
                                         <perfect-scrollbar class="dropdown-scroll">
                                             <li *ngFor="let widget of widgets" (click)="onChangeTheme(widget)"><a [class.selected]="widget._id === activeWidget?._id">{{widget.theme}}</a></li>
@@ -66,7 +66,7 @@
                             <div class="kr-sg-dropdowns mb-4 pb-1">     
                                 <div class="label-text">{{'SETTINGS.FONT' | translate}}</div>                                   
                                 <div class="dropdown dropdown-open">
-                                    <button class="dropdown-toggle dropdown-input" data-toggle="dropdown">{{widgetForm.value.font || 'choose'}}</button>                                            
+                                    <button class="dropdown-toggle dropdown-input" data-bs-toggle="dropdown">{{widgetForm.value.font || 'choose'}}</button>                                            
                                     <ul class="dropdown-menu content-menu">
                                       <li *ngFor="let font of fontTypes" (click)="onChangeFont(font)"><a [class.selected]="widgetForm.value.font === font.id">{{font.label}}</a></li>
                                     </ul>

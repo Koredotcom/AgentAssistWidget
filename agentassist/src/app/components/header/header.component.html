@@ -23,7 +23,7 @@
             <div class="d-flex align-items-center">
                 <button class="kr-sg-button-primary mr-2 train_btn d-flex align-items-center" *ngIf="pagetitle == 'Manage Intents'" (click)="trainKG()" [disabled]="isKGTrainingInprogress || !faqCount"><div class="loader-in-button mr-2" *ngIf="isKGTrainingInprogress"><img src="assets/images/icons/fa-spinner.svg"></div>{{isKGTrainingInprogress? ("HEADER.TRAINING" | translate) : ("HEADER.TRAIN" | translate) }}</button>
                 <span class="manage-intent-import dropdown" *ngIf="pagetitle == 'Manage Intents'">
-                    <div class="dropdown-toggle" data-toggle="dropdown">
+                    <div class="dropdown-toggle" data-bs-toggle="dropdown">
                         <img src="assets/icons/three-dots.svg" alt="">
                     </div>
                     <ul class="dropdown-menu">
