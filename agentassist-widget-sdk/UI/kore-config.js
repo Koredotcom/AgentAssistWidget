@@ -45,7 +45,7 @@
     var chatConfig={
         botOptions: botOptions,
         agentAssistUrl : "https://dev-smartassist.kore.ai",
-        urls: ['smartassist.kore.ai', 'smartassist-js.kore.ai', 'localhost'],
+        urls: ['smartassist.kore.ai', 'smartassist-js.kore.ai'],
         agentAssist: true,
         allowIframe: false, 			// set true, opens authentication links in popup window, default value is "false"
         isSendButton: false, 			// set true, to show send button below the compose bar
