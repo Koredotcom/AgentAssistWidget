@@ -8,7 +8,7 @@
     <link href="./../dist/kore-ai-agentassist-sdk.min.css" rel="stylesheet">
     </link>
 
-    <script src="./../dist/kore-ai-agentassist-sdk.min.js" type="text/javascript"></script>
+    <script src="./../dist/kore-ai-agentassist-sdk.combined.js" type="text/javascript"></script>
     <script>
        window.addEventListener("unload", (event) => {
         window.removeEventListener("message", receiveMessage)
@@ -26,7 +26,8 @@
             window.addEventListener("message", receiveMessage, false);
             let parentUrl = document.referrer;
             let params = {};
-            if (!parentUrl.includes('smartassist.kore.ai')) {
+            let index = chatConfig.urls.findIndex(e=>parentUrl.includes(e));
+            if (!(index>-1)) {
                 let params = new Proxy(new URLSearchParams(window.location.search), {
                     get: (searchParams, prop) => searchParams.get(prop),
                 });
