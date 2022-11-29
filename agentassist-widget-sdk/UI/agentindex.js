@@ -6527,8 +6527,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             }
                             $('#searchResults').addClass('hide');
                             $('#autoFill').html('')
-                            typeAHead(evt, val== ''? true: false);
-                            
+                            if(evt.target.id == 'agentSearch' || evt.target.id == 'librarySearch'){
+                                typeAHead(evt, val== ''? true: false);
+                            }
                             if (agentAssistInput || mybotInput) {
                                 AgentAssist_input_keydown(evt);
                             }
