@@ -3124,6 +3124,7 @@ border: 1px solid transparent !important;
     cursor: pointer;
     position: relative;
     transition: 0.2s all ease;
+    z-index: 6;
 }
 .feedback-helpul-container .titles-content .btn-positive:hover {
     border: 1px solid #0077D2;
@@ -3139,15 +3140,17 @@ border: 1px solid transparent !important;
 }
 .feedback-helpul-container .titles-content .btn-positive .tootltip-tabs {
     position: absolute;
-    left: -6px;
-    top: auto;
-    bottom: -28px;
+    left: 30px;
+    top: -1px;
+    bottom: auto;
     z-index: 9;
 }
 
 .feedback-helpul-container .titles-content .btn-positive .tootltip-tabs::after{
-    top: -10px;
+    top: 6px;
     border-color: transparent transparent var(--default-text-color) transparent;
+    left: -5px;
+    transform: rotate(-90deg);
 }
 .feedback-helpul-container .titles-content .btn-negtive {
     background: #FFFFFF;
@@ -3166,6 +3169,7 @@ border: 1px solid transparent !important;
     cursor: pointer;
     position: relative;
     transition: 0.2s all ease;
+    z-index: 1;
 }
 .feedback-helpul-container .titles-content .btn-negtive:hover {
     border: 1px solid #D9435F;
@@ -3181,14 +3185,16 @@ border: 1px solid transparent !important;
 }
 .feedback-helpul-container .titles-content .btn-negtive .tootltip-tabs {
     position: absolute;
-    left: -6px;
-    top:auto;
-    bottom:-28px;
+    left: 30px;
+    top: -1px;
+    bottom: auto;
     z-index: 9;
 }
 .feedback-helpul-container .titles-content .btn-negtive .tootltip-tabs::after {
-    top: -10px;
+    top: 6px;
     border-color: transparent transparent var(--default-text-color) transparent;
+    left: -5px;
+    transform: rotate(-90deg);
 }
 .feedback-helpul-container .titles-content .thanks-update {
     font-weight: 400;
