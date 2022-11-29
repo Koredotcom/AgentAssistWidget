@@ -1579,6 +1579,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         if (!parsedPayload) {
                             $(runInfoContent).find('.copy-btn').removeClass('hide');
                         }
+                        if((!sourceType || sourceType !== 'smartassist-color-scheme') && parsedPayload){
+                            $(runInfoContent).find('.send-run-btn').addClass('hide');
+                        }
                     }
                     AgentChatInitialize.renderMessage(_msgsResponse, myBotuuids, `dropDownData-${myBotDropdownHeaderUuids}`);
                     removeElementFromDom();
@@ -3515,7 +3518,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                         <div class="title-data"><ul class="chat-container" id="displayData-${res._id}"></ul></div>
                                                         <div class="action-links">
                                                         <button class="send-run-btn" id="sendMsg" data-msg-id="${res._id}" data-msg-data="${newTemp}">Send</button>
-                                                        <div class="copy-btn" data-msg-id="${res._id}">
+                                                        <div class="copy-btn hide" data-msg-id="${res._id}">
                                                             <i class="ast-copy" data-msg-id="${res._id}"></i>
                                                         </div>
                                                     </div>
