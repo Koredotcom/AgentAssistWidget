@@ -3711,7 +3711,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 //     // $(`#historyData .show-history-feedback.hide`)[$(`#historyData .show-history-feedback.hide`).length - 1]?.classList.remove('hide');
                                 // }
                             });
+                        if(isAutomationOnGoing){
                             $(`#dynamicBlock .collapse-acc-data.hide`)[$(`#dynamicBlock .collapse-acc-data.hide`).length - 1]?.classList.remove('hide');
+                        }
                         previousResp = response;
                         scrollToBottom();
                         addWhiteBackgroundClassToNewMessage();
@@ -4104,7 +4106,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 // }
                             });
                         // }
-                        $(`#myBotAutomationBlock .collapse-acc-data.hide`)[$(`#myBotAutomationBlock .collapse-acc-data.hide`).length - 1]?.classList.remove('hide');
+                        if(isMyBotAutomationOnGoing){
+                            $(`#myBotAutomationBlock .collapse-acc-data.hide`)[$(`#myBotAutomationBlock .collapse-acc-data.hide`).length - 1]?.classList.remove('hide');
+                        }
                         previousResp = response;
                         scrollToBottom();
                         addWhiteBackgroundClassToNewMessage();
