@@ -1712,8 +1712,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         $(descElement).css({"overflow": "inherit", "text-overflow" : "unset", "display" : "block", "white-space": "normal"});
                         let faqSectionHeight = $(sectionElement).css("height");
 			  let divSectionHeight = $(descElement).css("height")  || '0px';;
-                        faqSectionHeight = parseInt(faqSectionHeight.slice(0,faqSectionHeight.length-2));
-                        divSectionHeight = parseInt(divSectionHeight.slice(0,divSectionHeight.length-2));
+                        faqSectionHeight = parseInt(faqSectionHeight?.slice(0,faqSectionHeight.length-2));
+                        divSectionHeight = parseInt(divSectionHeight?.slice(0,divSectionHeight.length-2));
                         let faqMinHeight = $(divElement).css("min-height");
                         faqMinHeight = parseInt(faqMinHeight.slice(0,faqMinHeight.length-2)) + 15;
                         console.log(faqSectionHeight, "section height", faqMinHeight, "min height");
@@ -2704,7 +2704,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
                           isOverRideMode = false;
                         $(`.override-input-div`).remove();
-                        addFeedbackHtmlToDom(data, data.botId, userIntentInput);
+                        if(dialogPositionId){
+                            addFeedbackHtmlToDom(data, data.botId, userIntentInput);
+                        }
                         userMessage = {};
                     }
                 }
@@ -3094,8 +3096,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
 
                         // } else {
-                            let len = previousResp?.length - 1 <= 0? undefined:previousResp?.length-1;
-                            let resp = response.length > 0 ? response?.slice(len, response.length) : undefined;
+                            //let len = previousResp?.length - 1 <= 0? undefined:previousResp?.length-1;
+                            let resp = response.length > 0 ? response : undefined;
                             resp?.forEach((res, index) => {
                                 // if (res.type == 'incoming') {
                                 //     res.components?.forEach((ele) => {
@@ -3709,7 +3711,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 //     // $(`#historyData .show-history-feedback.hide`)[$(`#historyData .show-history-feedback.hide`).length - 1]?.classList.remove('hide');
                                 // }
                             });
-                        
+                            $(`#dynamicBlock .collapse-acc-data.hide`)[$(`#dynamicBlock .collapse-acc-data.hide`).length - 1]?.classList.remove('hide');
                         previousResp = response;
                         scrollToBottom();
                         addWhiteBackgroundClassToNewMessage();
@@ -4102,6 +4104,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 // }
                             });
                         // }
+                        $(`#myBotAutomationBlock .collapse-acc-data.hide`)[$(`#myBotAutomationBlock .collapse-acc-data.hide`).length - 1]?.classList.remove('hide');
                         previousResp = response;
                         scrollToBottom();
                         addWhiteBackgroundClassToNewMessage();
