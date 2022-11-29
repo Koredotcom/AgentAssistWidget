@@ -1000,7 +1000,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                              
                                     let a = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display #snippetDivLib-${uuids+index}`) : $(`#overLaySearch #snippetDivLib-${uuids+index}`);
                                     let articlesActionHtml = `
-                            <button class="send-run-btn" id="snippetsendMsg" data-msg-id="snippet-${uuids+index}"  data-msg-data="${ele.page_url}"><a style="color: #FFFFFF;" href="${ele.page_url}" target="_blank">Know more</a></button>
+                            <button class="know-more-btn hide" id="snippetViewMsgLib-${uuids+index}" data-msg-id="snippet-${uuids+index}"  data-msg-data="${ele.page_url}"><a style="color: #FFFFFF;" href="${ele.page_url}" target="_blank">Know more</a></button>
                             
                         `;
    
@@ -1011,12 +1011,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     //     let fullArticleLinkHtml = `<div class="link-view-full-article hide" id="articleViewLinkLib-${uuids+index}"><a href="${ele.link}" target="_blank">View Full Article</a></div>`
                                     //      document.getElementById(`articledescLib-${uuids+index}`).insertAdjacentHTML('beforeend',fullArticleLinkHtml);
                                     //  }
-                                //     let articlestypeInfo = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #articleSectionLib-${uuids + index}`) : $(`#overLaySearch .type-info-run-send #articleSectionLib-${uuids + index}`);
-                                //     let seeMoreButtonHtml = `
-                                //   <button class="ghost-btn hide" style="font-style: italic;" id="articleseeMore-${uuids + index}" data-article-see-more="true">Show more</button>
-                                //   <button class="ghost-btn hide" style="font-style: italic;" id="articleseeLess-${uuids + index}" data-article-see-less="true">Show less</button>                  
-                                //   `;
-                                //   articlestypeInfo.append(seeMoreButtonHtml);
+                                    let articlestypeInfo = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #snippetSectionLib-${uuids + index}`) : $(`#overLaySearch .type-info-run-send #snippetSectionLib-${uuids + index}`);
+                                    let seeMoreButtonHtml = `
+                                  <button class="ghost-btn hide" style="font-style: italic;" id="snippetseeMore-${uuids + index}" data-snippet-see-more="true">Show more</button>
+                                  <button class="ghost-btn hide" style="font-style: italic;" id="snippetseeLess-${uuids + index}" data-snippet-see-less="true">Show less</button>                  
+                                  `;
+                                  articlestypeInfo.append(seeMoreButtonHtml);
                                     setTimeout(() => {
                                         updateSeeMoreButtonForAgent(uuids + index, 'snippet', true);
                                     }, 10);
@@ -1694,8 +1694,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         descElement = $("#snippetdescLib-" + id);
                         sectionElement = $('#snippetSectionLib-' + id);
                         divElement = $('#snippetDivLib-' + id);
-                        // seeMoreElement = $('#articleseeMore-' + id);
-                      //  viewLinkElement = $('#snippetViewLinkLib-' + id);
+                        seeMoreElement = $('#snippetseeMore-' + id);
+                        snippetsendMsg = $('#snippetViewMsgLib-' + id);
                        // console.log(seeMoreElement, "see more element");
                     }
                     if(article == 'article'){
@@ -1725,7 +1725,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         //         $(viewLinkElement).removeClass('hide');
                         //     }
                         // }
-                        if(!snippet){
                             if(divSectionHeight > (24 + faqSourceTypePixel)){
                                 $(seeMoreElement).removeClass('hide');
                             }else{
@@ -1733,8 +1732,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 if(article){
                                     $(viewLinkElement).removeClass('hide');
                                 }
+                                if(snippet){
+                                    $(snippetsendMsg).removeClass('hide');
+                                }
                             }
-                        }
                         
                         $(titleElement).css({"overflow": "hidden", "white-space": "nowrap", "text-overflow" : "ellipsis"});
                         $(descElement).css({"overflow": "hidden", "text-overflow" : "ellipsis", "display": "-webkit-box"});
@@ -1766,6 +1767,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         descElement = $("#snippetdesc-" + id);
                         sectionElement = $('#snippetSection-' + id);
                         divElement = $('#snippetDiv-' + id);
+                        seeMoreElement = $('#snippetseeMore-' + id);
+                        snippetviewMsg = $('#snippetviewMsg-' + id);
                     }
                     if(article){
                         titleElement = $("#articletitle-" + id);
@@ -1790,13 +1793,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         // }else{
                         //     $(seeMoreElement).addClass('hide');
                         // }
-                        if(!snippet){
                             if(divSectionHeight > (24 + faqSourceTypePixel)){
                                 $(seeMoreElement).removeClass('hide');
                             }else{
                                 $(seeMoreElement).addClass('hide');
                             }
-                        }
                         
                         $(titleElement).css({"overflow": "hidden", "white-space": "nowrap", "text-overflow" : "ellipsis"});
                         $(descElement).css({"overflow": "hidden", "text-overflow" : "ellipsis", "display": "-webkit-box"});
@@ -2002,7 +2003,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     
                                             let a = $(`#snippetDiv-${uuids + index}`);
                                             let articleActionHtml = `
-                                            <button class="send-run-btn" id="snippetviewMsg" data-msg-id="snippet-${uuids + index}" data-msg-data="${ele.page_url}"><a style="color: #FFFFFF;" href="${ele.page_url}" target="_blank">Know more</a></button>
+                                            <button class="know-more-btn hide" id="snippetviewMsg-${uuids+index}" data-msg-id="snippet-${uuids + index}" data-msg-data="${ele.page_url}"><a style="color: #FFFFFF;" href="${ele.page_url}" target="_blank">Know more</a></button>
                                             
                                         `;
                                         articles.append(articleActionHtml);
@@ -2013,11 +2014,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         //  }
     
                                         let articlestypeInfo = $(`.type-info-run-send #snippetSection-${uuids + index}`);
-                                    //     let seeMoreButtonHtml = `
-                                    // <button class="ghost-btn hide" style="font-style: italic;" id="articleseeMore-${uuids + index}" data-article-see-more="true">Show more</button>
-                                    // <button class="ghost-btn hide" style="font-style: italic;" id="articleseeLess-${uuids + index}" data-article-see-less="true">Show less</button>
-                                    // `;
-                                    //     articlestypeInfo.append(seeMoreButtonHtml);
+                                        let seeMoreButtonHtml = `
+                                    <button class="ghost-btn hide" style="font-style: italic;" id="snippetseeMore-${uuids + index}" data-snippet-see-more="true">Show more</button>
+                                    <button class="ghost-btn hide" style="font-style: italic;" id="snippetseeLess-${uuids + index}" data-snippet-see-less="true">Show less</button>
+                                    `;
+                                        articlestypeInfo.append(seeMoreButtonHtml);
                                         setTimeout(() => {
                                             updateSeeMoreButtonForAssist(uuids + index,'snippet', true);
                                         }, 100);
@@ -2684,7 +2685,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
                         isOverRideMode = false;
                         $(`.override-input-div`).remove();
-                        addFeedbackHtmlToDom(data, botId, userIntentInput);
+                        if(dialogPositionId){
+                            addFeedbackHtmlToDom(data, botId, userIntentInput);
+                        }
                         userMessage = {};
                     }
                     
@@ -2717,7 +2720,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         appState[_conversationId]['automationGoingOnAfterRefreshMyBot'] = isMyBotAutomationOnGoing;
                         localStorage.setItem('agentAssistState', JSON.stringify(appState))
                     }
-                    addFeedbackHtmlToDom(data, botId, userIntentInput, 'runForAgentBot');
+                    if(myBotDialogPositionId){
+                        addFeedbackHtmlToDom(data, botId, userIntentInput, 'runForAgentBot');
+                    }
                 }
 
                 function htmlEntities(str) {
@@ -4922,6 +4927,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         var faqFewView = target.dataset.faqFewView;
                         var snippetFewView = target.dataset.snippetFewView;
                         var snippetFullView = target.dataset.snippetFullView;
+                        var snippetSeeMoreButton = target.dataset.snippetSeeMore;
+                        var snippetSeeLessButton = target.dataset.snippetSeeLess;
 
                         if (target.className === 'copy-btn') {
                             // Hello();
@@ -5018,6 +5025,49 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             text-overflow: ellipsis;
                             display : -webkit-box`);
                             articles.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#articleViewLink-${targets.join('-')}` : `#articleViewLinkLib-${targets.join('-')}`}`).addClass('hide');
+
+                            evt.target.classList.add('hide')
+                        }
+
+                        if(snippetSeeMoreButton){
+                            console.log("snippet see more button");
+                            let targets = target.id.split('-');
+                            targets.shift();
+                            let articles = (currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ?
+                                $(`.type-info-run-send #snippetSection-${targets.join('-')}`) :
+                                (currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #snippetSectionLib-${targets.join('-')}`) : $(`#overLaySearch .type-info-run-send #snippetSectionLib-${targets.join('-')}`));
+                            articles.find(`#snippetseeLess-${targets.join('-')}`).each((i, ele) => {
+                                if ($(ele).attr('id').includes(`snippetseeLess-${targets.join('-')}`)) {
+                                    ele.classList.remove('hide')
+                                }
+                            })
+                            evt.target.classList.add('hide');
+                            articles.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#snippettitle-${targets.join('-')}` :
+                                `#snippettitleLib-${targets.join('-')}`}`).attr('style', `overflow: inherit; white-space: normal; text-overflow: unset;`);
+                            articles.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#snippetdesc-${targets.join('-')}` : `#snippetdescLib-${targets.join('-')}`}`).attr('style', `overflow: inherit; text-overflow: unset;  display:block;`);
+                            articles.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#snippetviewMsg-${targets.join('-')}` : `#snippetViewMsgLib-${targets.join('-')}`}`).removeClass('hide');
+
+                        }
+
+                        if (snippetSeeLessButton) {
+                            let targets = target.id.split('-');
+                            targets.shift();
+                            let articles = (currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? $(`.type-info-run-send #snippetSection-${targets.join('-')}`) :
+                                (currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #snippetSectionLib-${targets.join('-')}`) : $(`#overLaySearch .type-info-run-send #snippetSectionLib-${targets.join('-')}`));
+
+                            articles.find(`#snippetseeMore-${targets.join('-')}`).each((i, ele) => {
+                                if ($(ele).attr('id').includes(`snippetseeMore-${targets.join('-')}`)) {
+                                    ele.classList.remove('hide')
+                                }
+                            })
+                            articles.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#snippettitle-${targets.join('-')}` : `#snippettitleLib-${targets.join('-')}`}`).attr('style', `overflow: hidden;
+                            white-space: nowrap;
+                            text-overflow: ellipsis;`);
+                                        articles.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#snippetdesc-${targets.join('-')}` : `#snippetdescLib-${targets.join('-')}`}`).attr('style', `overflow: hidden;
+                           
+                            text-overflow: ellipsis;
+                            display : -webkit-box`);
+                            articles.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#snippetviewMsg-${targets.join('-')}` : `#snippetViewMsgLib-${targets.join('-')}`}`).addClass('hide');
 
                             evt.target.classList.add('hide')
                         }
