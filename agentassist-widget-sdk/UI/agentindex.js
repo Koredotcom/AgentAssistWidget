@@ -799,6 +799,23 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                     AgentChatInitialize.renderMessage(_msgsResponse);
                 }
+                function emptyDeep(mixedVar, emptyValues = [undefined, null, '']) {
+                    var key, i, len
+                    for (i = 0, len = emptyValues.length; i < len; i++) {
+                        if (mixedVar === emptyValues[i]) {
+                            return true
+                        }
+                    }
+                    if (typeof mixedVar === 'object') {
+                        for (const item of Object.values(mixedVar)) {
+                            if (!emptyDeep(item, emptyValues)) {
+                                return false
+                            }
+                        }
+                        return true
+                    }
+                    return false
+                }
                 let isSuggestionProcessed = true;
                 processAgentIntentResults = function (data, convId, botId) {
                     let uuids = Math.floor(Math.random() * 100);
@@ -903,6 +920,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         if (data.value.length > 0 && currentTabActive == 'searchAutoIcon') {
                             document.getElementById('allAutomations-Exhaustivelist').classList.add('hide');
                             $('#dialogs-faqs').addClass('hide');
+                        }
+                        if(data.suggestions && Array.isArray(data.suggestions) && data.suggestions.length == 0){
+                            data.suggestions = false;
+                        }else if(emptyDeep(data.suggestions)){
+                            data.suggestions = false;
                         }
                         if (data.suggestions) {
                             isSuggestionProcessed = false;
@@ -1842,7 +1864,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     
                     if(data.suggestions && Array.isArray(data.suggestions) && data.suggestions.length == 0){
                         data.suggestions = false;
-                    }else if(data.suggestions && typeof data.suggestions === 'object' && !Array.isArray(data.suggestions) && Object.keys(data.suggestions).length == 0){
+                    }else if(emptyDeep(data.suggestions)){
                         data.suggestions = false;
                     }
                     // if (data.suggestions) {
@@ -2476,7 +2498,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }, waitingTimeForUUID);
                     }
 
-                 
                     if(isAutomationOnGoing && !parsedPayload && !data.suggestions){
                         if(document.getElementsByClassName('.welcome-msg').length <= 0){
                             $('#dynamicBlock .empty-data-no-agents').addClass('hide');
@@ -4836,7 +4857,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $('.sugestions-info-data').addClass('hide');
                             $('#bodyContainer').removeClass('if-suggestion-search');
                             $('#librarySearch').keyup(function (evt) {
-
                                 if (!showAllClicked) {
                                     evt.stopImmediatePropagation();
                                 } else {
@@ -4845,8 +4865,17 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     target.dataset.botId = _agentAssistDataObj.botId;
                                     target.dataset.agentAssistInput = true;
                                     var agentAssistInput = target.dataset.agentAssistInput;
-                                    evt.keyCode = 13;
-                                    if (agentAssistInput) {
+                                    if(isShowAllClicked){
+                                        evt.keyCode = 13;
+                                    }else if(!isShowAllClicked){
+                                        try{
+                                            $('#searchResults').addClass('hide');
+                                            typeAHead(evt, true);
+                                        }catch{
+                                           //
+                                        }
+                                    }
+                                    if (agentAssistInput)  {
                                         AgentAssist_input_keydown(evt);
                                     }
                                     evt.stopImmediatePropagation();
@@ -6528,7 +6557,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $('#searchResults').addClass('hide');
                             $('#autoFill').html('')
                             if(evt.target.id == 'agentSearch' || evt.target.id == 'librarySearch'){
-                                typeAHead(evt, val== ''? true: false);
+                                try{
+                                    typeAHead(evt, val== ''? true: false);
+                                }catch{
+                                    //
+                                }
+                                
                             }
                             if (agentAssistInput || mybotInput) {
                                 AgentAssist_input_keydown(evt);
@@ -7118,19 +7152,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         if (e.keyCode == 13 && (input_taker.trim().length > 0)) {
                             searchedVal = $('#librarySearch').val();
                             updateCurrentTabInState(_conversationId, 'librarySearch');
-                            if(!isShowAllClicked){
-                                $('#searchResults').addClass('hide');
-                                console.log("-------val---is in -librarySearch")
-                                typeAHead(e, true);
-                            }
                             // agentSearchVal = agent_search;
                             var convId = e.target.dataset.convId;
                             var botId = e.target.dataset.botId;
                             var intentName = input_taker ? input_taker : e.target.dataset.val;
-                            if(isShowAllClicked){
                                 AgentAssistPubSub.publish('searched_Automation_details', { conversationId: convId, botId: botId, value: intentName, isSearch: true });
                                 document.getElementById("loader").style.display = "block";
-                            }
                             
                             document.getElementById("overLaySearch").style.display = "none";
                         } else if (e.keyCode == 13 && agent_search.trim().length > 0) {
