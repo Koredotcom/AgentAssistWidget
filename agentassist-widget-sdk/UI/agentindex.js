@@ -51,6 +51,7 @@ var waitingTimeForUUID = 100;
 var proactiveMode = true;
 var typeaheadArray = [];
 var states = [];
+var dialogPositionId, myBotDialogPositionId;
 function koreGenerateUUID() {
     console.info("generating UUID");
     var d = new Date().getTime();
