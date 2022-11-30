@@ -1795,7 +1795,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         seeMoreElement = $('#snippetseeMore-' + id);
                         snippetviewMsg = $('#snippetviewMsg-' + id);
                     }
-                    if(article){
+                    if(article == 'article'){
                         titleElement = $("#articletitle-" + id);
                         descElement = $("#articledesc-" + id);
                         sectionElement = $('#articleSection-' + id);
@@ -1822,6 +1822,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 $(seeMoreElement).removeClass('hide');
                             }else{
                                 $(seeMoreElement).addClass('hide');
+                                if(snippet){
+                                    $(snippetviewMsg).removeClass('hide');
+                                }
                             }
                         
                         $(titleElement).css({"overflow": "hidden", "white-space": "nowrap", "text-overflow" : "ellipsis"});
@@ -1990,6 +1993,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             idsOfDropDown = undefined;
                             if(data?.suggestions?.searchassist?.snippets?.length>0){
                                 let automationSuggestions = document.getElementById(`automationSuggestions-${responseId}`);
+                                automationSuggestions.classList.remove('hide');
                                 let dialogAreaHtml = `<div class="task-type" id="snippetsArea">
                                         <div class="img-block-info">
                                             <img src="./images/kg.svg">
@@ -2031,8 +2035,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             <button class="know-more-btn hide" id="snippetviewMsg-${uuids+index}" data-msg-id="snippet-${uuids + index}" data-msg-data="${ele.page_url}"><a style="color: #FFFFFF;" href="${ele.page_url}" target="_blank">Know more</a></button>
                                             
                                         `;
-                                        articles.append(articleActionHtml);
                                         articles.append(`<div class="desc-text" id="snippetdesc-${uuids + index}">${ele.content}</div>`);
+                                        articles.append(articleActionHtml);
                                         // if(ele.link){
                                         //     let fullArticleLinkHtml = `<div class="link-view-full-article hide" id="snippetsViewLink-${uuids+index}"><a href="${ele.link}" target="_blank">View Full Article</a></div>`
                                         //      document.getElementById(`snippetdesc-${uuids+index}`).insertAdjacentHTML('beforeend',fullArticleLinkHtml);
