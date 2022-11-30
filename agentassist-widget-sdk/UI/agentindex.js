@@ -913,7 +913,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             let dialogsLength = data.suggestions.dialogs?.length || 0;
                             let faqsLength = data.suggestions.faqs?.length || 0;
                             let articlesLength = data.suggestions.articles?.length || 0;
-                            let totalSuggestionLength = data?.suggestions?.searchassist?.snippets.length>0?data?.suggestions?.searchassist?.snippets.length:(dialogsLength + faqsLength + articlesLength || 0);
+                            let totalSuggestionLength = data?.suggestions?.searchassist?.snippets?.length>0?data?.suggestions?.searchassist?.snippets?.length:(dialogsLength + faqsLength + articlesLength || 0);
                             let searchResultText = (totalSuggestionLength == 1) ? " Search result for " : " Search results for "
 
                             if (currentTabActive == 'searchAutoIcon') {
@@ -951,7 +951,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
 
                         }
-                        if(data?.suggestions?.searchassist?.snippets.length>0){
+                        if(data?.suggestions?.searchassist?.snippets?.length>0){
                             let automationSuggestions = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display`) : $('#overLaySearch');
                             let articleAreaHtml = `<div class="dialog-task-run-sec p-0">
                                             <div class="task-type" id="snippetsArea">
@@ -1966,7 +1966,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         if (data.suggestions) {
                             
                             idsOfDropDown = undefined;
-                            if(data?.suggestions?.searchassist?.snippets.length>0){
+                            if(data?.suggestions?.searchassist?.snippets?.length>0){
                                 let automationSuggestions = document.getElementById(`automationSuggestions-${responseId}`);
                                 let dialogAreaHtml = `<div class="task-type" id="snippetsArea">
                                         <div class="img-block-info">
