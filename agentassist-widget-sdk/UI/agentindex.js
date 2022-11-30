@@ -2091,6 +2091,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         data.suggestions = formatSearchAssistData(data.suggestions);
                                         if(data.suggestions.articles?.length > 0){
                                             let automationSuggestions = document.getElementById(`automationSuggestions-${responseId}`);
+                                            automationSuggestions.classList.remove('hide');
                                             let dialogAreaHtml = `<div class="task-type" id="articlesArea">
                                                     <div class="img-block-info">
                                                         <img src="./images/kg.svg">
@@ -2713,7 +2714,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
                         isOverRideMode = false;
                         $(`.override-input-div`).remove();
-                        if(dialogPositionId){
+                        if(dialogPositionId != undefined){
                             addFeedbackHtmlToDom(data, botId, userIntentInput);
                         }
                         userMessage = {};
@@ -2735,7 +2736,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
                           isOverRideMode = false;
                         $(`.override-input-div`).remove();
-                        if(dialogPositionId){
+                        if(dialogPositionId != undefined){
                             addFeedbackHtmlToDom(data, data.botId, userIntentInput);
                         }
                         userMessage = {};
@@ -2748,7 +2749,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         appState[_conversationId]['automationGoingOnAfterRefreshMyBot'] = isMyBotAutomationOnGoing;
                         localStorage.setItem('agentAssistState', JSON.stringify(appState))
                     }
-                    if(myBotDialogPositionId){
+                    if(myBotDialogPositionId != undefined){
                         addFeedbackHtmlToDom(data, botId, userIntentInput, 'runForAgentBot');
                     }
                 }
