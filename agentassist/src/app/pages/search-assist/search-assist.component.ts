@@ -94,10 +94,14 @@ export class SearchAssistComponent implements OnInit {
       this.disableSearchForm = true;
       this.searchFormChangeMode();
       let methodType = this.createForm ? 'post.searchaccounts' : 'put.searchaccounts';
+      let notificationSuccessCase = this.createForm ? "SEARCHASSIST.HAS_SAVED" : "SEARCHASSIST.HAS_UPDATED";
+      let notificationFailureCase = this.createForm ? "SEARCHASSIST.FAILED_SAVE" : "SEARCHASSIST.FAILED_UPDATE";
       this.service.invoke(methodType, { accountId: this.accountId }, payLoad).subscribe((data) => {
-      this.updateSearchConfDetailsFromDb(data);
+        this.updateSearchConfDetailsFromDb(data);
+        this.notificationService.notify(this.translate.instant(notificationSuccessCase), 'success');
       }, (error) => {
         console.log(error, "error");
+        this.notificationService.showError(this.translate.instant(notificationFailureCase));
       });
     } else if(type == 'edit') {
       this.disableSearchForm = false;
