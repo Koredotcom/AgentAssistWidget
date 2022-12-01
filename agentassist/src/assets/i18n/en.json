@@ -1997,5 +1997,9 @@
     "SEARCHASSIST.YES": "Yes",
     "SEARCHASSIST.NO": "No",
     "SEARCHASSIST.HAS_DELETED": "Configuration has been deleted",
+    "SEARCHASSIST.HAS_SAVED" : "Configuration has been Saved",
+    "SEARCHASSIST.HAS_UPDATED" : "Configuarion has been Updated",
+    "SEARCHASSIST.FAILED_SAVE" : "Failed to save the Configuration",
+    "SEARCHASSIST.FAILED_UPDATE" : "Failed to upate the Configuration",
     "SEARCHASSIST.FAILED_SA": "Failed to delete the Configuration"
 }
