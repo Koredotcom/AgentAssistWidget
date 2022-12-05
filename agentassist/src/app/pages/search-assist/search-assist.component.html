@@ -3,7 +3,8 @@
         <div class="scroll-data">
             <div class="header-title d-flex justify-content-between"><span>{{ "SEARCHASSIST_TITLE" | translate}}</span>
                 <div class="mr-55">
-                    <label class="kr-sg-toggle" *ngIf="!createForm">
+                    <button class="kr-sg-button-primary sa-redirect-btn btn_lg" (click)="goToSearchAssistUrl()" >SearchAssist <span class="sa-redirect-btn-icon"><i class="icon-sa-arrow-right"></i></span></button>
+                    <label class="kr-sg-toggle bt-ps" *ngIf="!createForm">
                         <input type="checkbox" [(ngModel)]="searchConv.isEnabled" #searchconfToggle name="searchconfToggle" (change)="searchConfToggleChange()">
                         <div class="slider"><span class="enabled" *ngIf="searchConv.isEnabled !== false">{{ "SEARCHASSIST.ENABLED" | translate}}</span><span *ngIf="searchConv.isEnabled === false" class="disabled">{{"SEARCHASSIST.DISABLED" | translate}}</span></div>
                     </label>
