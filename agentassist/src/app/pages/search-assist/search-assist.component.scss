@@ -4,21 +4,29 @@
     height: calc(100vh - 59px);
     .kr-sg-toggle {
         .slider {
+            background-color: #1b92d8;
             span{
                 padding-left: 48px !important;
                 top: -5px !important;
             }
         }
     }
+    .save-btn:disabled {
+        background: #2151e3 !important;
+    }    
     .bt-ps{
         top: 6px;
         margin-left: 10px;
     }
     .sa-redirect-btn {
+        background : #1b92d8;
         .sa-redirect-btn-icon{
             position: relative;
             top: 2px;
         }
+    }
+    .btn_lg {
+        padding : 0px 10px !important;
     }
     .scroll-data{
         padding: 40px;
