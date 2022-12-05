@@ -27,6 +27,7 @@ export class SearchAssistComponent implements OnInit {
   searchAssistKeys: any = ['searchAssistbotId', 'domain', 'clientId', 'clientSecret'];
   createForm: boolean = true;
   searchConv: any = {};
+  searchAssistUrl : string = "https://searchassist-pilot.kore.ai/";
 
   constructor(private localstorage: LocalStoreService, private service: ServiceInvokerService,
     private cdr: ChangeDetectorRef, private dialog: MatDialog,
@@ -178,6 +179,10 @@ export class SearchAssistComponent implements OnInit {
 
   searchConfToggleChange(){
     this.updateSearchConfDetails('save') 
+  }
+
+  goToSearchAssistUrl(): void {
+    window.open(this.searchAssistUrl, "_blank");
   }
 
 }
