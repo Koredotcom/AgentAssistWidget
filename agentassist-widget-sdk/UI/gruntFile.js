@@ -35,6 +35,10 @@ module.exports = function (grunt) {
             'kore-config.js',
             'libs/kore-no-conflict-end.js',
             'libs/jquery-3.1.1.js',
+            "./typeahead.js/jquery_.min.js",
+            "./typeahead.js/bloodhound.min.js",
+            "./typeahead.js/typeahead.bundle.min.js",
+            "./typeahead.js/typeahead.jquery.min.js",
             'agentindex.js'
         ];
         cssFiles=[

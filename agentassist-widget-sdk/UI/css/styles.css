@@ -978,6 +978,9 @@ html, body{
     font-size: 6px;
     top: auto;
 }
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .accordion-header .ast-carrotup.rotate-carrot{
+    transform: rotate(180deg);
+}
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .accordion-header .btn-danger{
     position: absolute;
     right: 8px;
@@ -1476,8 +1479,52 @@ border: 1px solid transparent !important;
     background: var(--bg-color-containers);
     display: inline-block;
     width: 100%;
+    position: relative;
+}
+.agent-assist-chat-container .body-data-container .library-search-data-container .search-block.typeahead_search .tt-input{
+    background-color: var(--default-white-color);
+    border: solid 1px var(--border-color);
+    border-radius: 4px;
+    height: 34px;
+    padding: 6px 30px 6px 30px !important;
+    font-size: 14px;
+    color: var(--default-text-color2);
+    width: 100%;
+    line-height: normal;
+    margin: 0 !important;
+    outline: 0 !important;
 }
 
+.agent-assist-chat-container .body-data-container .library-search-data-container .search-block.typeahead_search .twitter-typeahead{
+    width: 100%;
+}
+.agent-assist-chat-container .body-data-container .library-search-data-container .search-block.typeahead_search .twitter-typeahead .tt-hint{
+    border: solid 1px var(--border-color);
+    border-radius: 4px;
+    height: 34px;
+    padding: 6px 30px 6px 30px !important;
+    font-size: 14px;
+    width: 100%;
+    line-height: normal;
+    margin: 0 !important;
+    outline: 0 !important;
+}
+
+.agent-assist-chat-container .body-data-container .library-search-data-container .search-block.typeahead_search .ast-search{
+    position: absolute;
+    left: 25px;
+    top: 26px;
+    color: var(--theme-color);
+    font-size: 14px;
+}
+.agent-assist-chat-container .body-data-container .library-search-data-container .search-block.typeahead_search .close-search{
+    position: absolute;
+    right: 25px;
+    top: 25px;
+    font-size: 12px;
+    cursor: pointer;
+    color: var(--default-text-color);
+}
 
 .agent-assist-chat-container .body-data-container .library-search-data-container .search-block input{
     padding-right: 30px;
@@ -2432,6 +2479,21 @@ border: 1px solid transparent !important;
 .agent-assist-chat-container .customer-feeling-text .sentiments .strength-bar-lg {
     height: 15px;
 }
+.know-more-btn {
+    border: 0;
+    background: var(--theme-color);
+    box-shadow: 0px 2px 8px rgba(0,0,0,0.05);
+    border-radius: 5px;
+    outline: 0;
+    font-weight: 700;
+    font-size: 9px;
+    line-height: 12px;
+    color: var(--default-white-color);
+    height: 18px;
+    cursor: pointer;
+    padding: 3px 10px;
+    text-transform: uppercase;
+}
 
 .send-run-btn:hover {
     background-color: var(--theme-color);
@@ -3018,12 +3080,21 @@ border: 1px solid transparent !important;
     left: -15px;
     position: relative;
     /* background: #EAF1FC; */
-    box-shadow: inset 0px 1px 3px rgba(209,218,231,0.25), inset 0px 0px 1px #D1DAE7;
-    padding: 6px 22px 12px 24px;
+    /* box-shadow: inset 0px 1px 3px rgba(209,218,231,0.25), inset 0px 0px 1px #D1DAE7; */
+    padding: 12px 22px 12px 24px;
     display: inline-block;
     margin-top: -11px;
-    border: 1px dashed #EAF1FC;
+    /* border: 1px dashed #EAF1FC; */
     /* background: #f8fafb; */
+}
+.feedback-helpul-container::before{
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 11px;
+    background: #e6f0f7;
+    left: 0;
+    top: 0;
 }
 .feedback-helpul-container .titles-content {
     display: flex;
@@ -3463,4 +3534,20 @@ input.no-autofill-bkg:-webkit-autofill {
 
 .summary-box-content .input-block-optional .input-text:focus {
     border: 1px solid #0D6EFD;
+}
+.search-results-text-in-lib{
+    font-weight: 500;
+    font-size: 12px;
+    color: var(--color-grey-text);
+    cursor: pointer;background: white; padding: 10px 0px 0px 10px;
+}
+
+.twitter-typeahead{
+    width: 100%;
+}
+.tt-menu{
+    display: none !important;
+}
+.tt-open{
+    display: none !important;
 }

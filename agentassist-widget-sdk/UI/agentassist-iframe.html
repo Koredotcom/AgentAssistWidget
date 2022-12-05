@@ -10,17 +10,37 @@
 
     <script src="./../dist/kore-ai-agentassist-sdk.min.js" type="text/javascript"></script>
     <script>
+       window.addEventListener("unload", (event) => {
+        window.removeEventListener("message", receiveMessage)
+        });
+        function receiveMessage(e) {
+            if(e.data.name === 'init_agentassist') {
+                var chatConfig = window.KoreSDK.chatConfig;
+                    let urlParams = e.data.urlParams;
+                    initAgentAssist(chatConfig, urlParams);
+                }
+        }
         $(document).ready(function () {
             console.log('agent assist inside iframe', new Date());
             var chatConfig = window.KoreSDK.chatConfig;
-            // $('#botid').val(chatConfig.botOptions.botInfo._id);
-            // $('#clientid').val(chatConfig.botOptions.clientId)
-            // $('#clientsecret').val(chatConfig.botOptions.clientSecret)
-            // $('#connect').click(() => {
-            initAgentAssist(chatConfig);
-            // });
+            window.addEventListener("message", receiveMessage, false);
+            let parentUrl = document.referrer;
+            let params = {};
+            let index = chatConfig.urls.findIndex(e=>parentUrl.includes(e));
+            if (!(index>-1)) {
+                let params = new Proxy(new URLSearchParams(window.location.search), {
+                    get: (searchParams, prop) => searchParams.get(prop),
+                });
+                initAgentAssist(chatConfig, params);
+            } else {
+                var message = {
+                    method: 'agentassist_loaded',
+                    name: "agent_assist"
+                };
+                window.parent.postMessage(message, "*");
+            }
         });
-        function initAgentAssist(chatConfig) {
+        function initAgentAssist(chatConfig, urlParams) {
             if (chatConfig.agentAssist) {
                 var token, botID, agentAssistUrl, conversationId;
                 var connectionObj = {
@@ -28,18 +48,21 @@
                     botDetails: {},
                     isAuthentication: false
                 }
-                function getToken() {
+                function getToken(urlParams) {
                     console.log('agent assist inside getToken', new Date());
-                    const params = new Proxy(new URLSearchParams(window.location.search), {
+                    let params = new Proxy(new URLSearchParams(window.location.search), {
                         get: (searchParams, prop) => searchParams.get(prop),
                     });
+                    if (urlParams) {
+                        params = urlParams;
+                    }
                     token = params.token;
                     botID = params.botid;
                     agentAssistUrl = params.agentassisturl;
-                    conversationId = params.conversationid;
+                    conversationId = params.conversationId || params.conversationid;
                     console.log("---conversation id -----", conversationId);
                 }
-                getToken();
+                getToken(urlParams);
                 function koreGenerateUUID() {
                     console.info("generating UUID");
                     var d = new Date().getTime();
@@ -66,9 +89,14 @@
                     }
 
                 } else {
+                    console.log('==================================', urlParams)
                     connectionObj['envinormentUrl'] = agentAssistUrl;
-                    connectionObj['jwtToken'] = token;
-                    new AgentAssist('agent-assist-chat-container', conversationId, botID, connectionObj);
+                    connectionObj['tokenVal'] = token;
+                    connectionObj['accountId'] = urlParams.accountId || '';
+                    connectionObj['userId'] = urlParams.userId || '';
+                    connectionObj['orgId']= urlParams.orgId || '';
+                    connectionObj['isSAT'] = urlParams.fromSAT || false;
+                    new AgentAssist('agent-assist-chat-container', conversationId, botID, connectionObj, urlParams);
                 }
 
 
