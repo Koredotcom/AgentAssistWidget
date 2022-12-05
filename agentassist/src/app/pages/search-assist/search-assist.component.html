@@ -63,7 +63,7 @@
             <div class="edit-save">
                 <button class="kr-sg-button-secondary btn_lg" (click)="updateSearchConfDetails('edit')" *ngIf="disableSearchForm && !createForm" >{{ "SEARCHASSIST.EDIT" | translate}}</button>
                 <button class="kr-sg-button-secondary btn_lg" (click)="updateSearchConfDetails('cancel')" *ngIf="!disableSearchForm && !createForm" >{{ "SEARCHASSIST.CANCEL" | translate}}</button>
-                <button class="kr-sg-button-primary btn_lg" (click)="updateSearchConfDetails('save')" [disabled]="createForm ? !(searchForm.valid) : (!(searchForm.valid) ? true : !formDirty)" >{{ "SEARCHASSIST.SAVE" | translate}}</button>
+                <button class="kr-sg-button-primary btn_lg save-btn" (click)="updateSearchConfDetails('save')" [disabled]="createForm ? !(searchForm.valid) : (!(searchForm.valid) ? true : !formDirty)" >{{ "SEARCHASSIST.SAVE" | translate}}</button>
                 <button class="kr-sg-button-danger btn_lg" (click)="deleteConfig()" *ngIf="!createForm">{{ "SEARCHASSIST.DELETE" | translate}}</button>
             </div>
         </div>
