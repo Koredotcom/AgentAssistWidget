@@ -1276,7 +1276,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     } else {
                                         let a = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display #articleDivLib-${uuids+index}`) : $(`#overLaySearch #articleDivLib-${uuids+index}`);
                                         let articlesActionHtml = `<div class="action-links">
-                                <button class="send-run-btn" id="articlesendMsg" data-msg-id="article-${uuids+index}"  data-msg-data="${ele.content}">Send</button>
+                                <button class="send-run-btn" id="sendMsg" data-msg-id="article-${uuids+index}"  data-msg-data="${ele.content}">Send</button>
                                 <div class="copy-btn" data-msg-id="article-${uuids+index}" data-msg-data="${ele.content}">
                                     <i class="ast-copy" data-msg-id="article-${uuids+index}" data-msg-data="${ele.content}"></i>
                                 </div>
@@ -2140,7 +2140,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             } else {
                                                     let a = $(`#articleDiv-${uuids + index}`);
                                                     let articleActionHtml = `<div class="action-links">
-                                                    <button class="send-run-btn" id="articlesendMsg" data-msg-id="article-${uuids + index}" data-msg-data="${ele.content}">Send</button>
+                                                    <button class="send-run-btn" id="sendMsg" data-msg-id="article-${uuids + index}" data-msg-data="${ele.content}">Send</button>
                                                     <div class="copy-btn" data-msg-id="article-${uuids + index}" data-msg-data="${ele.content}">
                                                         <i class="ast-copy" data-msg-id="article-${uuids + index}" data-msg-data="${ele.content}"></i>
                                                     </div>
