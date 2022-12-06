@@ -1252,7 +1252,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     let articleSuggestions = currentTabActive == 'searchAutoIcon' ? $('#search-text-display #articleSuggestions-results') : $('#overLaySearch #articleSuggestions-results');
     
                                     let articleDivClass = "type-info-run-send"
-                                    if(index == 1){
+                                    if(index >= 2){
                                         articleDivClass = "type-info-run-send hide";
                                     }
     
@@ -1308,7 +1308,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     // }
                                 });
     
-                                if(data?.suggestions?.articles?.length > 1){
+                                if(data?.suggestions?.articles?.length > 2){
                                     let articleSuggestions = currentTabActive == 'searchAutoIcon' ? $('#search-text-display #articleSuggestions-results') : $('#overLaySearch #articleSuggestions-results');
                                     let fullArticleView = `<div class="link-view-full-article ghost-btn" id="articleFullView-${uuids}" data-article-full-view="true">View All Articles</div>`
                                     let fewArticleView = `<div class="link-view-full-article ghost-btn hide" id="articleFewView-${uuids}" data-article-few-view="true">View Few Articles</div>`
@@ -1776,6 +1776,16 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         elemID.shift();
                         let actualId = elemID.join('-')
                         updateSeeMoreButtonForAssist(actualId);
+                    });
+                }
+
+                function updateSeeMoreForArticles(){
+                    let articleSuggestionList = $('[id*="articleDivLib-"]');
+                    articleSuggestionList.each(function() {
+                        let elemID = this.id.split('-');
+                        elemID.shift();
+                        let actualId = elemID.join('-')
+                        updateSeeMoreButtonForAgent(actualId, "article");
                     });
                 }
 
@@ -4976,9 +4986,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             let targets = target.id.split('-');
                             targets.shift();
                             let articleSuggestions = currentTabActive == 'searchAutoIcon' ? $('#search-text-display #articleSuggestions-results') : $('#overLaySearch #articleSuggestions-results');
-                            $(articleSuggestions).children(".type-info-run-send").slice(0,1).addClass('hide');
+                            let articleLength = $(articleSuggestions).children(".type-info-run-send").length;
+                            if(articleLength > 2){
+                                $(articleSuggestions).children(".type-info-run-send").slice(2,articleLength).addClass('hide');
+                            }
                             $(`#articleFullView-${targets.join('-')}`).removeClass('hide');
                             evt.target.classList.add('hide');
+                            let articleContainerId = currentTabActive == 'searchAutoIcon' ? "#bodyContainer" : "#overLaySearch";
+                            OverlayScrollTop(articleContainerId);
                         }
                         if(snippetFewView){
                             let targets = target.id.split('-');
@@ -5005,6 +5020,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $(articleSuggestions).children(".type-info-run-send").removeClass('hide');
                             $(`#articleFewView-${targets.join('-')}`).removeClass('hide');
                             evt.target.classList.add('hide');
+                            setTimeout(() => {
+                                updateSeeMoreForArticles();
+                            }, 10);
                         }
                         if(snippetFullView){
                             let targets = target.id.split('-');
@@ -7560,6 +7578,12 @@ function scrollToBottom() {
     $(window).trigger('resize');
     setTimeout(() => {
         $("#bodyContainer").scrollTop($("#bodyContainer").prop("scrollHeight"));
+    }, 10);
+}
+
+function OverlayScrollTop(containerId){
+    setTimeout(() => {
+        $(containerId).scrollTop(0);
     }, 10);
 }
 
