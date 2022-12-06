@@ -4953,7 +4953,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $('#overLayAutoSearch').find('.search-results-text')?.remove();
                             $('.sugestions-info-data').removeClass('hide');
                             $('#bodyContainer').addClass('if-suggestion-search');
-
+                            updateSeeMoreForArticles();
                         }
 
                         if (target.id === `searchAutoIcon` || target.id === `searchIcon` || target.id === `LibraryLabel`) {
