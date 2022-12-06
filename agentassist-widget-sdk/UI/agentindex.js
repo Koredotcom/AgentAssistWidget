@@ -7387,7 +7387,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                 <div class="library-search-data-container hide" id="LibraryContainer">
                     <div id="search-block" class="search-block typeahead_search">
-                        <input class="typeahead" type="text" placeholder="States of USA" id="librarySearch">
+                        <input class="typeahead" type="text" placeholder="Ask AgentAssist" id="librarySearch">
                         <i class="ast-search"></i>
                         <i class="ast-close close-search hide" id="cancelLibrarySearch"></i>
                     </div>
