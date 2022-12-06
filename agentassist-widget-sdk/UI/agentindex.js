@@ -4832,6 +4832,21 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $('#librarySearch').val('');
                             $('#cancelLibrarySearch').addClass('hide');
                             loadLibraryOnCancel(autoExhaustiveList, _conversationId, _botId);
+                            if(isShowAllClicked){
+                                isShowAllClicked = false;
+                                $('#frequently-exhaustive').removeClass('hide');
+                                $('#searchResults').addClass('hide');
+                                $('#librarySearch').val('');
+                                $('#allAutomations-Exhaustivelist').removeClass('hide');
+                                $('#LibraryContainer').removeClass('hide');
+                                $('.overlay-suggestions').addClass('hide').removeAttr('style');
+                                $('#backButton').addClass('hide');
+                                $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
+                                $('#overLayAutoSearch').find('.search-results-text')?.remove();
+                                $('.sugestions-info-data').addClass('hide');
+                                $('#bodyContainer').removeClass('if-suggestion-search');
+                            }
+                            
                         } else if (target.id === 'cancelAgentSearch') {
                             $('#agentSearch').val('');
                             $('#cancelAgentSearch').addClass('hide');
