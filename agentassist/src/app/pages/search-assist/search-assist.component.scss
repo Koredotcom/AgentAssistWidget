@@ -2,9 +2,11 @@
 
 .search-assist-wrapper{
     height: calc(100vh - 59px);
+    .kr-sg-toggle input:checked + .slider{
+        background-color: #1b92d8;
+    }
     .kr-sg-toggle {
         .slider {
-            background-color: #1b92d8;
             span{
                 padding-left: 48px !important;
                 top: -5px !important;
@@ -15,7 +17,7 @@
         background: #2151e3 !important;
     }    
     .bt-ps{
-        top: 6px;
+        top: 7px;
         margin-left: 10px;
     }
     .sa-redirect-btn {
