@@ -1610,13 +1610,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         } else {
                             runInfoContent.append(tellToUserHtml);
                             hideSendOrCopyButtons(parsedPayload, runInfoContent)
-                        }
-<<<<<<< HEAD
-                        
-=======
-                        hideSendOrCopyButtons(parsedPayload, runInfoContent)
->>>>>>> bd0b4a125388dd8b04a7d4d2342fe0d7303c38c6
-                        
+                        } 
                     }
                     AgentChatInitialize.renderMessage(_msgsResponse, myBotuuids, `dropDownData-${myBotDropdownHeaderUuids}`);
                     removeElementFromDom();
