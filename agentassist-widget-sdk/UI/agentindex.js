@@ -1605,11 +1605,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             </div>`
                         if (data.isPrompt) {
                             runInfoContent.append(askToUserHtml);
+                            hideSendOrCopyButtons(parsedPayload, runInfoContent)
                             runInfoContent.append(agentInputToBotHtml);
                         } else {
                             runInfoContent.append(tellToUserHtml);
+                            hideSendOrCopyButtons(parsedPayload, runInfoContent)
                         }
-                        hideSendOrCopyButtons(parsedPayload, runInfoContent)
+                        
                         
                     }
                     AgentChatInitialize.renderMessage(_msgsResponse, myBotuuids, `dropDownData-${myBotDropdownHeaderUuids}`);
@@ -4089,14 +4091,16 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     let nextResponse = resp[index+1];
                                     if (res.agentAssistDetails.isPrompt || res.agentAssistDetails.entityRequest) {
                                         runInfoContent.append(askToUserHtml);
+                                        hideSendOrCopyButtons(parsedPayload, runInfoContent)
                                         if(!nextResponse || (nextResponse.status != 'received' && nextResponse.status != 'incoming')){
                                             runInfoContent.append(agentInputToBotHtml);
                                         }
                                         
                                     } else {
                                         runInfoContent.append(tellToUserHtml);
+                                        hideSendOrCopyButtons(parsedPayload, runInfoContent)
                                     }
-                                    hideSendOrCopyButtons(parsedPayload, runInfoContent)
+                                   
                                     
                                   } 
                                     AgentChatInitialize.renderMessage(_msgsResponse, res._id, `dropDownData-${previousId}`);
