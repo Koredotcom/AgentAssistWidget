@@ -19,15 +19,18 @@ export class SearchAssistComponent implements OnInit {
 
   userInfo: any;
   accountId: string;
+  searchConv: any = {};
   formDirty: boolean = false;
   editClick: boolean = false;
-  disableSearchForm: boolean = false;
-  actualConfigDetailsObj: any = {};
-  searchAssistConfigDetailsObj: any = {};
-  searchAssistKeys: any = ['searchAssistbotId', 'domain', 'clientId', 'clientSecret'];
   createForm: boolean = true;
-  searchConv: any = {};
+  saveStatus : boolean = true;
+  actualConfigDetailsObj: any = {};
+  showOpenEyeIcon : boolean = true;
+  disableSearchForm: boolean = false;
+  searchAssistConfigDetailsObj: any = {};
+  createFormStatus : boolean = undefined;
   searchAssistUrl : string = "https://searchassist-pilot.kore.ai/";
+  searchAssistKeys: any = ['searchAssistbotId', 'domain', 'clientId', 'clientSecret'];
 
   constructor(private localstorage: LocalStoreService, private service: ServiceInvokerService,
     private cdr: ChangeDetectorRef, private dialog: MatDialog,
@@ -60,6 +63,7 @@ export class SearchAssistComponent implements OnInit {
         this.getFormValueStatus();
         this.createForm = false;
         this.searchConv.isEnabled = data.isEnabled;
+        this.createFormStatus = true;
       } else {
         this.createSearchFormActivity();
       }
@@ -84,6 +88,7 @@ export class SearchAssistComponent implements OnInit {
         this.searchAssistConfigDetailsObj[key] = this.actualConfigDetailsObj[key];
       }
       this.disableSearchForm = true;
+      this.showOpenEyeIcon = true;
       this.searchFormChangeMode();
     }
   }
@@ -92,18 +97,28 @@ export class SearchAssistComponent implements OnInit {
     let payLoad: any = Object.assign({}, this.searchAssistConfigDetailsObj);
     payLoad.isEnabled = this.searchConv.isEnabled;
     if (type == 'save') {
+      this.saveStatus = false;
       this.disableSearchForm = true;
       this.searchFormChangeMode();
       let methodType = this.createForm ? 'post.searchaccounts' : 'put.searchaccounts';
       let notificationSuccessCase = this.createForm ? "SEARCHASSIST.HAS_SAVED" : "SEARCHASSIST.HAS_UPDATED";
       let notificationFailureCase = this.createForm ? "SEARCHASSIST.FAILED_SAVE" : "SEARCHASSIST.FAILED_UPDATE";
       this.service.invoke(methodType, { accountId: this.accountId }, payLoad).subscribe((data) => {
+        if(this.createForm){
+          this.createFormStatus = true;
+        }
         this.updateSearchConfDetailsFromDb(data);
         this.notificationService.notify(this.translate.instant(notificationSuccessCase), 'success');
+        this.saveStatus = true;
       }, (error) => {
         console.log(error, "error");
+        this.saveStatus = false;
+        if(this.createForm){
+          this.createFormStatus = false;
+        }
         this.notificationService.showError(this.translate.instant(notificationFailureCase));
       });
+      
     } else if(type == 'edit') {
       this.disableSearchForm = false;
       this.searchFormChangeMode();
@@ -124,15 +139,15 @@ export class SearchAssistComponent implements OnInit {
     });
   }
 
-  // disableButtonCondition() {
-  //   let keyArray: any = this.searchAssistKeys;
-  //   for (let key of keyArray) {
-  //     if (!this.searchAssistConfigDetailsObj[key]) {
-  //       return true;
-  //     }
-  //   }
-  //   return false;
-  // }
+  disableButtonCondition() {
+    let keyArray: any = this.searchAssistKeys;
+    for (let key of keyArray) {
+      if (!this.searchAssistConfigDetailsObj[key]) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   searchFormChangeMode() {
     if (this.disableSearchForm) {
@@ -162,6 +177,9 @@ export class SearchAssistComponent implements OnInit {
           };
           this.service.invoke('delete.searchaccounts', params).subscribe((data) => {
             if(data && data.isOperational){
+              this.createForm = true;
+              this.showOpenEyeIcon = true;
+              this.createFormStatus = undefined;
               this.getSearchAssistConfigInfo();
               this.searchForm.reset();
               this.notificationService.notify(this.translate.instant("SEARCHASSIST.HAS_DELETED"), 'success');
@@ -178,11 +196,23 @@ export class SearchAssistComponent implements OnInit {
   }
 
   searchConfToggleChange(){
-    this.updateSearchConfDetails('save') 
+    if(!this.disableButtonCondition()){
+      this.updateSearchConfDetails('save') 
+    }
   }
 
   goToSearchAssistUrl(): void {
     window.open(this.searchAssistUrl, "_blank");
+  }
+
+  copyInputMessage(inputElement){
+    var dummy = document.createElement("textarea");
+    document.body.appendChild(dummy);
+    dummy.value = inputElement;
+    dummy.select();
+    document.execCommand("copy");
+    document.body.removeChild(dummy);
+    this.notificationService.notify("copied successfully", "success");
   }
 
 }

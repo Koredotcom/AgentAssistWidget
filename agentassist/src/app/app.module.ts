@@ -97,6 +97,7 @@ import { OnboardingComponent } from './pages/onboarding/onboarding.component';
 import { OnboardingDialogComponent } from './pages/onboarding/onboarding-dialog/onboarding-dialog.component';
 import { SearchAssistComponent } from './pages/search-assist/search-assist.component';
 import { SaDeleteConfirmComponent } from './helpers/components/sa-delete-confirm/sa-delete-confirm.component';
+import { CommonModule } from '@angular/common';
 @NgModule({
   declarations: [
     AppComponent,
@@ -175,6 +176,7 @@ import { SaDeleteConfirmComponent } from './helpers/components/sa-delete-confirm
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    CommonModule,
     DragDropModule,
     SharedModule,
     FileUploadModule,

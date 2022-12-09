@@ -196,7 +196,7 @@
                 position: absolute;
                 width: 4px;
                 height: 4px;
-                background: #0D6EFD;
+                background: #2B75E4;
                 border-radius: 100%;
                 right: 4px;
                 top: 4px;
@@ -204,7 +204,7 @@
                     background: #DD3646;
                 }
                 &.completed-notification{
-                    background: #0D6EFD;
+                    background: #2B75E4;
                 }
               }
             }                        
@@ -237,7 +237,7 @@
                                   position: absolute;
                                   width: 4px;
                                   height: 4px;
-                                  background: #0D6EFD;
+                                  background: #2B75E4;
                                   border-radius: 100%;
                                   right: -8px;
                                   top: 6px;
@@ -245,7 +245,7 @@
                                       background: #DD3646;
                                   }
                                   &.completed-notification{
-                                      background: #0D6EFD;
+                                      background: #2B75E4;
                                   }
                               }
                               &.active{
@@ -254,7 +254,7 @@
                                       content: "";
                                       position: absolute;
                                       width: 100%;
-                                      background: #0D6EFD;
+                                      background: #2B75E4;
                                       height: 2px;
                                       left: 0;
                                       bottom: 0;
