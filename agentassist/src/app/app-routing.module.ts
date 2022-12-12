@@ -30,6 +30,7 @@ const routes: Routes = [
           { path: 'roleManagement', component: UserManagementComponent },
           { path: 'usecases', loadChildren: () => import('./pages/agent-usecases/agent-usecases.module').then(m => m.AgentUsecasesModule) },
           { path: 'channels', component: AutomationChannelsComponent },
+          { path: 'conversationalLogs', component: ConversationalLogsComponent },
           { path: 'languages', component: LanguagesSpeechComponent },
           { path: '**', redirectTo: 'usecases' },
         ]
@@ -39,20 +40,19 @@ const routes: Routes = [
         },
       { path: 'bt', component: AutomationComponent },
       { path: 'bt/:type', component: BTContainerComponent },
-      
+
       {
         path: 'history', component: HistoryComponent, children: [
           { path: '', redirectTo: 'conversationalLogs', pathMatch: 'full' },
-          { path: 'conversationalLogs', component: ConversationalLogsComponent },
           { path: '**', redirectTo: 'sessiontrends' },
         ]
       },
-     
+
     ]
   },
-  
+
   { path: 'chathistory', loadChildren: () => import('./lazy/lazy.module').then(m => m.LazyModule) },
-  
+
 ];
 
 @NgModule({
