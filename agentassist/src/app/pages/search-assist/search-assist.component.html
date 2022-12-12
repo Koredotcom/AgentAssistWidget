@@ -32,7 +32,8 @@
             <div class="box-data-title">
                 <div class="title-text">{{"SEARCHASSIST.LINK_SEARCHASSIST_TITLE" | translate }}</div>
                 <div class="desc-text">{{"SEARCHASSIST.LINK_SEARCHASSIST_DESC" | translate }}
-                     <a class="know-more" href="#" target="_blank">{{"SEARCHASSIST.KNOW_MORE" | translate }}</a></div>
+                     <!-- <a class="know-more" href="#" target="_blank">{{"SEARCHASSIST.KNOW_MORE" | translate }}</a> -->
+                    </div>
                 <label class="kr-sg-toggle">
                     <input type="checkbox" [(ngModel)]="searchConv.isEnabled" #searchconfToggle name="searchconfToggle" (change)="searchConfToggleChange()">
                     <div class="slider">
@@ -59,6 +60,7 @@
                             <div class="col-12 column-data">
                                 <div class="kr-sg-input-text">
                                     <div class="label-text">{{ "SEARCHASSIST.DOMAIN_URL" | translate}}
+                                        <sup>*</sup>
                                          <!-- <i class="icon-sa-help"></i> -->
                                     </div>
                                     <input type="text" name="domain" placeholder="Enter Domain URL" class="input-text" [(ngModel)]="searchAssistConfigDetailsObj.domain" required>
@@ -67,6 +69,7 @@
                             <div class="col-12 column-data">
                                 <div class="kr-sg-input-text">
                                     <div class="label-text">{{ "SEARCHASSIST.STREAM_ID" | translate}} 
+                                        <sup>*</sup>
                                         <!-- <i class="icon-sa-help"></i> -->
                                     </div>
                                     <input type="text" name="searchAssistbotId" placeholder="Enter Stream ID" class="input-text" [(ngModel)]="searchAssistConfigDetailsObj.searchAssistbotId" required>
@@ -77,6 +80,7 @@
                             <div class="col-12 column-data">
                                 <div class="kr-sg-input-text">
                                     <div class="label-text">{{ "SEARCHASSIST.CLIENT_ID" | translate}} 
+                                        <sup>*</sup>
                                         <!-- <i class="icon-sa-help"></i> -->
                                     </div>
                                     <input type="text" name="clientId" placeholder="Enter Client URL" class="input-text" [(ngModel)]="searchAssistConfigDetailsObj.clientId" required>
@@ -85,6 +89,7 @@
                             <div class="col-12 column-data">
                                 <div class="kr-sg-input-text">
                                     <div class="label-text">{{ "SEARCHASSIST.CLIENT_SECRET" | translate}}
+                                        <sup>*</sup>
                                          <!-- <i class="icon-sa-help"></i> -->
                                     </div>
                                     <div class="eye-copy">

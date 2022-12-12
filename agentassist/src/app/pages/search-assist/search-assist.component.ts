@@ -104,18 +104,14 @@ export class SearchAssistComponent implements OnInit {
       let notificationSuccessCase = this.createForm ? "SEARCHASSIST.HAS_SAVED" : "SEARCHASSIST.HAS_UPDATED";
       let notificationFailureCase = this.createForm ? "SEARCHASSIST.FAILED_SAVE" : "SEARCHASSIST.FAILED_UPDATE";
       this.service.invoke(methodType, { accountId: this.accountId }, payLoad).subscribe((data) => {
-        if(this.createForm){
-          this.createFormStatus = true;
-        }
+        this.createFormStatus = true;
         this.updateSearchConfDetailsFromDb(data);
         this.notificationService.notify(this.translate.instant(notificationSuccessCase), 'success');
         this.saveStatus = true;
       }, (error) => {
         console.log(error, "error");
         this.saveStatus = false;
-        if(this.createForm){
-          this.createFormStatus = false;
-        }
+         this.createFormStatus = false;
         this.notificationService.showError(this.translate.instant(notificationFailureCase));
       });
       
