@@ -93,6 +93,14 @@ export class SearchAssistComponent implements OnInit {
     }
   }
 
+  handleSaveFailureCase(){
+    this.saveStatus = true;
+    this.createFormStatus = false;
+    this.createForm = this.createForm ? true : false;
+    this.disableSearchForm = this.createForm ? false : true;
+    this.actualConfigDetailsObj = Object.assign({},this.searchAssistConfigDetailsObj);
+  }
+
   updateSearchConfDetails(type) {
     let payLoad: any = Object.assign({}, this.searchAssistConfigDetailsObj);
     payLoad.isEnabled = this.searchConv.isEnabled;
@@ -102,17 +110,19 @@ export class SearchAssistComponent implements OnInit {
       this.searchFormChangeMode();
       let methodType = this.createForm ? 'post.searchaccounts' : 'put.searchaccounts';
       let notificationSuccessCase = this.createForm ? "SEARCHASSIST.HAS_SAVED" : "SEARCHASSIST.HAS_UPDATED";
-      let notificationFailureCase = this.createForm ? "SEARCHASSIST.FAILED_SAVE" : "SEARCHASSIST.FAILED_UPDATE";
+      // let notificationFailureCase = this.createForm ? "SEARCHASSIST.FAILED_SAVE" : "SEARCHASSIST.FAILED_UPDATE";
       this.service.invoke(methodType, { accountId: this.accountId }, payLoad).subscribe((data) => {
-        this.createFormStatus = true;
-        this.updateSearchConfDetailsFromDb(data);
-        this.notificationService.notify(this.translate.instant(notificationSuccessCase), 'success');
-        this.saveStatus = true;
+        if(data && data.statusCode == 401){
+          this.handleSaveFailureCase();
+        }else if(data){
+          this.createFormStatus = true;
+          this.updateSearchConfDetailsFromDb(data);
+          this.notificationService.notify(this.translate.instant(notificationSuccessCase), 'success');
+          this.saveStatus = true;
+        }
       }, (error) => {
         console.log(error, "error");
-        this.saveStatus = false;
-         this.createFormStatus = false;
-        this.notificationService.showError(this.translate.instant(notificationFailureCase));
+        this.handleSaveFailureCase();
       });
       
     } else if(type == 'edit') {
