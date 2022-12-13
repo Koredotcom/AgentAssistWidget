@@ -1991,6 +1991,7 @@
     "SEARCHASSIST.EDIT" : "Edit",
     "SEARCHASSIST.DELETE" : "Delete",
     "SEARCHASSIST.SAVE" : "Save",
+    "SEARCHASSIST.SAVING" : "Saving",
     "SEARCHASSIST.CANCEL" : "Cancel",
     "SEARCHASSIST.DEL_CONF": "Delete Configuration",
     "SEARCHASSIST.R_U_SURE_DEL": "Are you sure you want to delete",
@@ -2001,5 +2002,13 @@
     "SEARCHASSIST.HAS_UPDATED" : "Configuarion has been Updated",
     "SEARCHASSIST.FAILED_SAVE" : "Failed to save the Configuration",
     "SEARCHASSIST.FAILED_UPDATE" : "Failed to upate the Configuration",
-    "SEARCHASSIST.FAILED_SA": "Failed to delete the Configuration"
+    "SEARCHASSIST.FAILED_SA": "Failed to delete the Configuration",
+    "SEARCHASSIST.GO_TO_SEARCHASSIST" : "Go to SearchAssist",
+    "SEARCHASSIST.SUCCESS_BANNER" : "Connection established successfully",
+    "SEARCHASSIST.FAILURE_BANNER" : "Could not establish connection with SearchAssist. Check all parameters and try again",
+    "SEARCHASSIST.LINK_SEARCHASSIST_TITLE" : "Link SearchAssist with your AgentAssist Account",
+    "SEARCHASSIST.LINK_SEARCHASSIST_DESC" : "Provide intelligent, contextual, and personalized search experience in every interaction across your web and mobile channels.",
+    "SEARCHASSIST.KNOW_MORE" : "Know More",
+    "SEARCHASSIST.CONNECTED_TITLE" : "Connected",
+    "SEARCHASSIST.DISCONNECT_TITLE" : "Error establishing connection"
 }
