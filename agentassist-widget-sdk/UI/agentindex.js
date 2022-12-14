@@ -7510,7 +7510,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
         <div class="overlay-delete-popup hide" id="summary">
             <div class="delete-box-content summary-box-content">
-                <div class="header-text summary-header">Desposition</div>
+                <div class="header-text summary-header">Summary</div>
                     <div class="input-block-optional">
                     <div class="label-text">Remarks</div>
                     <textarea class="input-text" id="summaryText" rows="4" cols="50"></textarea>
