@@ -1,0 +1,154 @@
+
+.conversational-logs-wrappper-content{
+    display: inline-block;
+    width: 100%;
+    .header-info-title{
+        padding: 40px 40px 20px 40px;
+        .title{
+            font-size: 26px;
+            font-weight: 700;
+            color: #202124;
+            line-height: 30px;
+            margin-bottom: 5px;
+        }
+        .desc-text{
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 17px;
+            color: #202124;
+        }
+    }
+    perfect-scrollbar{
+        height: calc(100vh - 171px);
+    }
+    .scroll-data-info{
+        padding: 10px 40px 20px 40px;
+        .data-content-wrapper{
+            border: 1px solid #E4E5E7;
+            border-radius: 4px;
+            .search-header{
+                background: #F8F9FA;
+                border-radius: 4px;
+                padding: 5px;
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+                .kr-sg-input-search{
+                    width: 250px;
+                }
+            }
+            .table-data-info{
+                .table-hader-wrapper{
+                    display: flex;
+                    align-items: center;
+                    flex-wrap: wrap;
+                    min-height: 40px;
+                    border-bottom: 1px solid rgba(168, 200, 221, 1);
+                    .title{
+                        font-weight: 500;
+                        font-size: 10px;
+                        line-height: 14px;
+                        letter-spacing: 0.714286px;
+                        text-transform: uppercase;
+                        color: #202124;
+                        padding: 12px 15px;
+                        .icon-sa-arrow-left{
+                            display: inline-block;
+                            transform: rotate(-90deg);
+                            cursor: pointer;
+                        }
+                    }
+                }
+                .table-body-wrapper{
+                    display: flex;
+                    align-items: center;
+                    flex-wrap: wrap;
+                    min-height: 56px;
+                    padding: 11px 0;
+                    cursor: pointer;
+                    &:nth-child(odd){
+                        background: linear-gradient(0deg, #F5F8FA, #F5F8FA), #FFFFFF;
+                    }
+                    .text-title{
+                        padding: 0px 15px;
+                        font-weight: 500;
+                        font-size: 14px;
+                        line-height: 16px;
+                        color: #202124;
+                    }
+                    .title-text{
+                        font-weight: 400;
+                        font-size: 12px;
+                        line-height: 15px;
+                        padding: 0 15px;
+                        color: #26344A;
+                        overflow: hidden;
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                    }
+                    .title-text-info{
+                        display: flex;
+                        align-items: center;
+                        flex-wrap: wrap;
+                        font-weight: 400;
+                        font-size: 12px;
+                        line-height: 15px;
+                        color: #26344A;
+                        padding: 0 15px;
+                        .link-others{
+                            color: rgba(13, 110, 253, 1);
+                            cursor: pointer;
+                            font-weight: 600;
+                        }
+                    }
+                    .status-text{
+                        padding: 0 15px;
+                        &.open-status{
+                            span{
+                                height: 26px;
+                                background: #E7F1FF;
+                                border-radius: 2.5px;
+                                padding: 3px 10px;
+                                font-weight: 400;
+                                font-size: 14px;
+                                line-height: 20px;
+                                color: #07377F;
+                                display: inline-flex;
+                                align-items: center;
+                            }
+                        }
+                        &.closed{
+                            height: 26px;
+                            background: #EAF6EC;
+                            border-radius: 2.5px;
+                            padding: 3px 10px;
+                            font-weight: 400;
+                            font-size: 14px;
+                            line-height: 20px;
+                            color: #135423;
+                            display: inline-flex;
+                            align-items: center;
+                        }
+                    }
+                    .download-action{
+                        padding: 0 15px;
+                        .download-icon{
+                            width: 34px;
+                            height: 34px;
+                            padding: 7px 10px;
+                            background: #FFFFFF;
+                            border: 1px solid #BDC1C6;
+                            border-radius: 4px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            color: #202124;
+                            cursor: pointer;
+                            font-size: 12px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

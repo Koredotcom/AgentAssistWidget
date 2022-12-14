@@ -3295,3 +3295,115 @@ pre{
         max-height: 250px;
     }
 }
+
+
+
+$spacer:     0.25rem;
+$spacer-x:   $spacer;
+$spacer-y:   $spacer;
+$spacers: (
+  0: (
+    x:   0,
+    y:   0
+  ),
+  1: (
+    x:   $spacer-x,
+    y:   $spacer-y
+  ),
+  2: (
+    x:   ($spacer-x * 2),
+    y:   ($spacer-y * 2)
+  ),
+  3: (
+    x:   ($spacer-x * 4),
+    y:   ($spacer-y * 4)
+  ),
+  4: (
+    x:   ($spacer-x * 6),
+    y:   ($spacer-y * 6)
+  ),
+  5: (
+    x:   ($spacer-x * 12),
+    y:   ($spacer-y * 12)
+  )
+);
+
+@mixin spacing-b-margin-padding() {
+    @each $prop, $abbrev in (margin: m, padding: p) {
+      @each $size, $lengths in $spacers {
+        $length-x:   map-get($lengths, x);
+        $length-y:   map-get($lengths, y);
+        .#{$abbrev}-#{$size} { #{$prop}:         $length-y !important; }
+        .#{$abbrev}t-#{$size} { #{$prop}-top:    $length-y !important; }
+        .#{$abbrev}r-#{$size} { #{$prop}-right:  $length-x !important; }
+        .#{$abbrev}b-#{$size} { #{$prop}-bottom: $length-y !important; }
+        .#{$abbrev}l-#{$size} { #{$prop}-left:   $length-x !important; }
+      }
+    }
+}
+
+$numbers: 1000;
+
+@mixin padding-magin-width {
+  @for $i from 1 through $numbers {
+    .p-#{$i} {
+      padding: #{$i+'px'} !important;
+    }
+    .p-t-#{$i} {
+      padding-top: #{$i+'px'} !important;
+    }
+    .p-b-#{$i} {
+      padding-bottom:  #{$i+'px'} !important;
+    }
+    .p-l-#{$i} {
+      padding-left:  #{$i+'px'} !important;
+    }
+    .p-r-#{$i} {
+      padding-right:  #{$i+'px'} !important;
+    }
+    .p_r_#{$i} {
+        padding-right:  #{$i+'px'} !important;
+    }
+    .m-#{$i} {
+      margin: #{$i+'px'} !important;
+    }
+    .m-t-#{$i} {
+      margin-top: #{$i+'px'} !important;
+    }
+    .m-b-#{$i} {
+      margin-bottom: #{$i+'px'} !important;
+    }
+    .m-r-#{$i} {
+      margin-right: #{$i+'px'} !important;
+    }
+    .m-l-#{$i} {
+      margin-left: #{$i+'px'} !important;
+    }
+    .w-#{$i} {
+      width: #{$i+'%'} !important;
+    }
+    .width-#{$i} {
+        width: #{$i+'px'} !important;
+    }
+    .h-#{$i} {
+        height: #{$i+'%'} !important;
+    }
+    .min-h-#{$i} {
+        min-height: #{$i+'px'};
+    }
+    .mx-h-#{$i} {
+        max-height: #{$i+'px'} !important;
+    }
+    .f-s-#{$i} {
+      font-size: #{$i+'px'} !important;
+    }
+    .f-w-#{$i} {
+        font-weight: #{$i} !important;
+    }
+  }
+}
+
+
+// Always Include in last
+@include padding-magin-width;
+@include spacing-b-margin-padding;
