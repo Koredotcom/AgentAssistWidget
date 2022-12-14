@@ -7,7 +7,7 @@
     "installation_instructions": "![Install Button.](/translations/install_button.png \" Install Button \")\n\nBy simple clicking on the install button\n\nYou will be redirected to below screen.\n\n ![Installation Image.](/translations/bot_details.png \"Installation Settings\")\n\nYou have to fill all the below details.\n\n * __Agent Assit URL__ \n * __Clinet ID__ \n * __Client Secret__ \n * __Bot ID__\n\n\nTo get the above details you require an account in [Kore.ai ](https://bots.kore.ai/botbuilder/login)",
       "parameters": {
           "agentassistURL": {"label":"Agent Assist URL "},
-          "stsURL":{"label": "Token Genearation URL", "help":"This URL is used for creating the token"},
+          "stsURL":{"label": "Token Generation URL (Refer to \"How to install\")", "help":"This URL is used for creating the token"},
           "domain":{"label": "Domain", "help": "Please specify the domain of the Token Generation URL, e.g: kore.ai"},
           "botClientId": {"label": "Client ID "},
           "botClientSecret": {"label":"Client Secret "},

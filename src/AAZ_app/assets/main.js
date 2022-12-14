@@ -62,17 +62,26 @@ async function generateURL(settings) {
   return new Promise(async (resolve, reject) => {
 
     // Token Generation
+    // const options = {
+    //   url: settings.stsURL,
+    //   type: "POST",
+    //   dataType: "json",
+    //   contentType: "application/json",
+    //   secure: true,
+    //   cors:false,
+    //   data:JSON.stringify({clientId: "{{setting.botClientId}}",clientSecret: "{{setting.botClientSecret}}",identity: "number",aud: "https://idproxy.kore.com/authorize",isAnonymous: false})
+
+    // }
+
     const options = {
-      url: settings.stsURL,
+      url: "https://mk2r2rmj21.execute-api.us-east-1.amazonaws.com/dev/users/sts",
       type: "POST",
       dataType: "json",
       contentType: "application/json",
-      secure: true,
-      cors:false,
-      data:JSON.stringify({clientId: "{{setting.botClientId}}",clientSecret: "{{setting.botClientSecret}}",identity: "number",aud: "https://idproxy.kore.com/authorize",isAnonymous: false})
+      data: JSON.stringify({ clientId: "cs-1fe3de3f-3b95-5cff-b706-2e997726b5da", clientSecret: "gnrMxT8L0Q4jaRmIREJBX9JqGTtmNkbPYrGW/8ctfSo=", identity: "number", aud: "https://idproxy.kore.com/authorize", isAnonymous: false })
+
 
     }
-
     let response = await client.request(options);
     let token = response.jwt;
 
@@ -111,20 +120,21 @@ async function main() {
 
 
   // var iframeURL = "";
-  client.invoke('resize', { width: '100%', height: '500px' });
+  client.invoke('resize', { width: '100%', height: '476px' });
   var activeConversationId = await getTicketId(client);
 
   var metadata = await client.metadata();
 
-  client.on('ticket.save', async function () {
+  client.on('ticket.submit.start', async function(data) {
     let response = await client.get('ticket.status');
     if (response['ticket.status'] === "solved") {
+
       //Emit the conversation event.
       let conversation = await client.get("ticket.conversation");
 
       let chatHistory = conversation['ticket.conversation'].reduce((acc, current) => {
         let obj = {};
-        obj['type'] = current.author.role === "admin" ? "agent" : current.author.role === "end-user" ? "user" : "Invalid";
+        obj['type'] = ["admin", "agent"].includes(current.author.role) ? "agent" : ["end-user", "customer"].includes(current.author.role) ? "user" : "Invalid";
         obj['message'] = current.message.content;
         obj['name'] = current.author.name;
         obj['timestamp'] = Date.parse(current.timestamp);
@@ -143,8 +153,8 @@ async function main() {
         vfWindow.postMessage(message, iframeURL);//window.location.protocol+'//'+window.location.host);
       }
     }
-    return true
   });
+
 
   client.on('ticket.conversation.changed', function (conversations) {
 
@@ -176,10 +186,34 @@ async function main() {
 
     }
     else if (event.data.name === "agentAssist.conversation_summary" && event.data.conversationId == activeConversationId) {
+      client.invoke('comment.appendText', msg);
       let summary = JSON.parse(JSON.stringify(event.data)).payload.summary[0].summary_text;
       // let chatTranscript = JSON.parse(JSON.stringify(event.data)).conversationId;
 
-      client.set('ticket.customField:conversation_summary', summary)
+      client.get('ticketFields').then(function (data) {
+
+        // Get all fields to query against
+        var fields = data["ticketFields"];
+        var CustomFieldName;
+
+        // Iterate through each field
+        for (var field in fields) {
+
+          // Find the one that match
+          if (fields[field].label == "Conversation Summary") {
+            CustomFieldName = fields[field].name;
+            client.set('ticket.customField:' + CustomFieldName, summary).then(function (data) {
+              // https://SomeDomain.zendesk.com/api/v2/ticket_fields
+              console.log(data); // { 'ticket.subject': 'Printer Overheating Incident' }
+            });
+            break;
+          }
+        }
+
+
+
+      });
+
 
     }
   }, false);
