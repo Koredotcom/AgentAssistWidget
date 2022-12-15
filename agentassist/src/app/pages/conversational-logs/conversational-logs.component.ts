@@ -19,10 +19,12 @@ export class ConversationalLogsComponent implements OnInit {
   @ViewChild('slider', { static: true }) slider: SliderComponentComponent;
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.slider.openSlider("#slider", "width940");
+  }
 
   closeSlider(event) {
     this.showSlider = false;
-    this.slider.closeSlider("#slider2");
+    this.slider.closeSlider("#slider");
   }
 }
