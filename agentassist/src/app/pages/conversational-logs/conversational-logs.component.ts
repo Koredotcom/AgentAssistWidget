@@ -15,10 +15,14 @@ import * as _ from 'underscore';
   styleUrls: ['./conversational-logs.component.scss']
 })
 export class ConversationalLogsComponent implements OnInit {
-
-
+  showSlider = true;
+  @ViewChild('slider', { static: true }) slider: SliderComponentComponent;
   constructor() {}
 
   ngOnInit() {}
 
+  closeSlider(event) {
+    this.showSlider = false;
+    this.slider.closeSlider("#slider2");
+  }
 }

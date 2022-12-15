@@ -90,3 +90,7 @@
         </section>
     </div>
     <!-- DATA TABLE ENDS HERE -->
+
+    <app-slider-component id="slider" #slider='app-slider'>
+        <app-conversation-history *ngIf="showSlider"  (closed)="closeSlider($event)"></app-conversation-history>
+    </app-slider-component>
