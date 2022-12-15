@@ -19,6 +19,12 @@ export class ConversationalLogsComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.slider.openSlider("#slider", "width940");
+  }
 
+  closeSlider(event) {
+    this.showSlider = false;
+    this.slider.closeSlider("#slider");
+  }
 }
