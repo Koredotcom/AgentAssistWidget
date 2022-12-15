@@ -118,16 +118,18 @@
                             }
                         }
                         &.closed{
-                            height: 26px;
-                            background: #EAF6EC;
-                            border-radius: 2.5px;
-                            padding: 3px 10px;
-                            font-weight: 400;
-                            font-size: 14px;
-                            line-height: 20px;
-                            color: #135423;
-                            display: inline-flex;
-                            align-items: center;
+                            span{
+                                height: 26px;
+                                background: #EAF6EC;
+                                border-radius: 2.5px;
+                                padding: 3px 10px;
+                                font-weight: 400;
+                                font-size: 14px;
+                                line-height: 20px;
+                                color: #135423;
+                                display: inline-flex;
+                                align-items: center;
+                            }
                         }
                     }
                     .download-action{
