@@ -24,7 +24,17 @@ export const COMPONENTVSTITLE = {
 export const COMPONENTVSSUBTITLE = {
     AGENT_FEEDBACK : 'TRAINING',
     AGENT_ASPECT : 'SEARCH',
-    CUSTOMER_ASPECT : 'ACCURACY',
+    CUSTOMER_ASPECT : 'AUTOMATION',
     AUTOMATION_OVERRIDE : 'SEARCH',
     AUTOMATION_PERFORMANCE : 'ACCURACY'
+}
+
+export const actualvsDisplayTitle = {
+    CUSTOMER_ASPECT_DROPDOWN_LIST : ['All','Agent_Initiated', 'Agent_Suggested'],
+    CUSTOMER_ASPECT_TABS_LIST : ['All', 'Articles', 'Faqs', 'Automations'],
+    CUSTOMER_ASPECT_TYPE_VS_IMAGE : {
+        'Articles' : 'assets/icons/dashboard/articles.svg',
+        'Faqs' : 'assets/icons/dashboard/faqs.svg',
+        'Automations' : 'assets/icons/dashboard/automation.svg' 
+    }
 }

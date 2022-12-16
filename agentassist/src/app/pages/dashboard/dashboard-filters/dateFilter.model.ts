@@ -4,8 +4,4 @@ export interface IAnalyticsFilters {
     type?: string
 }
 
-export const CHANNELS = {
-    'ALL' : 'All Channels',
-    'WHATSAPP' : 'Whatsapp',
-    'SLACK' : 'Slack'
-}
+export const CHANNELS = ['ALL','WHATSAPP','SLACK']

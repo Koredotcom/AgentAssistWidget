@@ -7,7 +7,7 @@
                     <div class="title-text-info">
                         <span class="heading-text">Total Responses</span>
                     </div>
-                    <div class="count-heading">7537</div>
+                    <div class="count-heading">{{agentFeedbackData.totalResp}}</div>
                 </div>
             </div>
             <div class="card-sec max_width_100">
@@ -16,7 +16,7 @@
                         <span class="heading-text">Helpful</span>
                         <i class="icon-ast_thumbsup"></i>
                     </div>
-                    <div class="count-heading">73%</div>
+                    <div class="count-heading">{{agentFeedbackData.helpful}}%</div>
                 </div>
             </div>
             <div class="card-sec max_width_100">
@@ -25,7 +25,7 @@
                         <span class="heading-text">Not Helpful</span>
                         <i class="icon-sat_thumsdown"></i>
                     </div>
-                    <div class="count-heading">27%</div>
+                    <div class="count-heading">{{agentFeedbackData.nothelpful}}%</div>
                 </div>
             </div>
         </div>
@@ -36,51 +36,19 @@
                 <div class="title col-5">LIKE/DISLIKE</div>
             </div>
             <ng-container>
-                <div class="table-body-feedback row">
-                    <div class="col-4 title">Book Flight</div>
-                    <div class="col-3 title">700</div>
+                <div class="table-body-feedback row" *ngFor="let obj of agentFeedbackTableData">
+                    <div class="col-4 title">{{obj.intentName}}</div>
+                    <div class="col-3 title">{{obj.responses}}</div>
                     <div class="col-5 like-dislike">
                         <div class="like-count">
                             <i class="icon-ast_thumbsup"></i>
-                            <span class="count">340</span>
-                            <span class="percentage">(68%)</span>
+                            <span class="count">{{obj.like.count}}</span>
+                            <span class="percentage">({{obj.like.percent}}%)</span>
                         </div>
                         <div class="like-count">
                             <i class="icon-sat_thumsdown"></i>
-                            <span class="count">340</span>
-                            <span class="percentage">(32%)</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="table-body-feedback row">
-                    <div class="col-4 title">Book Flight</div>
-                    <div class="col-3 title">700</div>
-                    <div class="col-5 like-dislike">
-                        <div class="like-count">
-                            <i class="icon-ast_thumbsup"></i>
-                            <span class="count">340</span>
-                            <span class="percentage">(68%)</span>
-                        </div>
-                        <div class="like-count">
-                            <i class="icon-sat_thumsdown"></i>
-                            <span class="count">340</span>
-                            <span class="percentage">(32%)</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="table-body-feedback row">
-                    <div class="col-4 title">Book Flight</div>
-                    <div class="col-3 title">700</div>
-                    <div class="col-5 like-dislike">
-                        <div class="like-count">
-                            <i class="icon-ast_thumbsup"></i>
-                            <span class="count">340</span>
-                            <span class="percentage">(68%)</span>
-                        </div>
-                        <div class="like-count">
-                            <i class="icon-sat_thumsdown"></i>
-                            <span class="count">340</span>
-                            <span class="percentage">(32%)</span>
+                            <span class="count">{{obj.dislike.count}}</span>
+                            <span class="percentage">({{obj.dislike.percent}}%)</span>
                         </div>
                     </div>
                 </div>
@@ -95,7 +63,7 @@
                         <div class="title-text-info">
                             <span class="heading-text">Total Responses</span>
                         </div>
-                        <div class="count-heading">7537</div>
+                        <div class="count-heading">{{agentFeedbackData.totalResp}}</div>
                     </div>
                 </div>
                 <div class="card-sec max_width_100">
@@ -104,7 +72,7 @@
                             <span class="heading-text">Helpful</span>
                             <i class="icon-ast_thumbsup"></i>
                         </div>
-                        <div class="count-heading">73%</div>
+                        <div class="count-heading">{{agentFeedbackData.helpful}}%</div>
                     </div>
                 </div>
                 <div class="card-sec max_width_100">
@@ -113,7 +81,7 @@
                             <span class="heading-text">Not Helpful</span>
                             <i class="icon-sat_thumsdown"></i>
                         </div>
-                        <div class="count-heading">27%</div>
+                        <div class="count-heading">{{agentFeedbackData.nothelpful}}%</div>
                     </div>
                 </div>
             </div>
@@ -124,46 +92,12 @@
                     <div class="title col-4 text-right">Helpful</div>
                 </div>
                 <ng-container>
-                    <div class="table-body-feedback row">
-                        <div class="col-4 title">Book Flight</div>
-                        <div class="col-4 title">50%</div>
-                        <div class="col-4 title text-right">50%</div>
+                    <div class="table-body-feedback row" *ngFor="let obj of agentFeedbackTableData">
+                        <div class="col-4 title">{{obj.intentName}}</div>
+                        <div class="col-4 title">{{obj.like.percent}}%</div>
+                        <div class="col-4 title text-right">{{obj.dislike.percent}}%</div>
                     </div>
-                    <div class="table-body-feedback row">
-                        <div class="col-4 title">Book Flight</div>
-                        <div class="col-4 title">50%</div>
-                        <div class="col-4 title text-right">50%</div>
-                    </div>
-                    <div class="table-body-feedback row">
-                        <div class="col-4 title">Book Flight</div>
-                        <div class="col-4 title">50%</div>
-                        <div class="col-4 title text-right">50%</div>
-                    </div>
-                    <div class="table-body-feedback row">
-                        <div class="col-4 title">Book Flight</div>
-                        <div class="col-4 title">50%</div>
-                        <div class="col-4 title text-right">50%</div>
-                    </div>
-                    <div class="table-body-feedback row">
-                        <div class="col-4 title">Book Flight</div>
-                        <div class="col-4 title">50%</div>
-                        <div class="col-4 title text-right">50%</div>
-                    </div>
-                    <div class="table-body-feedback row">
-                        <div class="col-4 title">Book Flight</div>
-                        <div class="col-4 title">50%</div>
-                        <div class="col-4 title text-right">50%</div>
-                    </div>
-                    <div class="table-body-feedback row">
-                        <div class="col-4 title">Book Flight</div>
-                        <div class="col-4 title">50%</div>
-                        <div class="col-4 title text-right">50%</div>
-                    </div>
-                    <div class="table-body-feedback row">
-                        <div class="col-4 title">Book Flight</div>
-                        <div class="col-4 title">50%</div>
-                        <div class="col-4 title text-right">50%</div>
-                    </div>
+                   
                     
                 </ng-container>
             </div>

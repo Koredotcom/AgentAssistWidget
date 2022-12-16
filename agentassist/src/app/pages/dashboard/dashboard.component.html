@@ -1,5 +1,7 @@
 <app-slider-component [id]="sliderId" #newConvSlider='app-slider'>
-    <app-exhaustive-representation (onClose)="closeSlider($event)" [componentType]="sliderId" *ngIf="sliderStatus"></app-exhaustive-representation>
+    <app-exhaustive-representation (onClose)="closeSlider($event)" [componentType]="sliderId" [customerDropdownSelection]="customerAspectDropdownSelection" *ngIf="sliderStatus">
+
+    </app-exhaustive-representation>
 </app-slider-component>
 
 <div class="dashboard-wraaper-container" id="pdfTable" #pdfTable>
@@ -12,25 +14,25 @@
                 <div class="card-sec" (click)="openSlider(DASHBORADCOMPONENTTYPE.AGENT_ASPECT)">
                     <div class="inner-data-sec">
                         <div class="title-text-info">
-                            <span class="heading-text">Total Suggestions</span>
-                            <div class="value-data negtive">
-                                <i class="icon-ast_sortdown"></i>
-                                <span>2.3%</span>
+                            <span class="heading-text">Total Sessions</span>
+                            <div class="value-data" [ngClass]="{'negtive': !kpiData?.totalSessions?.increment}">
+                                <i [ngClass]="kpiData?.totalSessions?.increment ? 'icon-ast_sortup' : 'icon-ast_sortdown' "></i>
+                                <span>{{kpiData?.totalSessions?.percent}}%</span>
                             </div>
                         </div>
-                        <div class="count-heading">2321</div>
+                        <div class="count-heading">{{kpiData?.totalSessions?.count}}</div>
                     </div>
                 </div>
                 <div class="card-sec">
                     <div class="inner-data-sec">
                         <div class="title-text-info">
                             <span class="heading-text">Total Suggestions</span>
-                            <div class="value-data">
-                                <i class="icon-ast_sortup"></i>
-                                <span>2.3%</span>
+                            <div class="value-data" [ngClass]="{'negtive': !kpiData?.totalSuggestions?.increment}">
+                                <i [ngClass]="kpiData?.totalSuggestions?.increment ? 'icon-ast_sortup' : 'icon-ast_sortdown' "></i>
+                                <span>{{kpiData?.totalSuggestions?.percent}}%</span>
                             </div>
                         </div>
-                        <div class="count-heading">7537</div>
+                        <div class="count-heading">{{kpiData?.totalSuggestions?.count}}</div>
                     </div>
                 </div>
                 <div class="card-sec">
@@ -38,19 +40,19 @@
                         <div class="title-text-info">
                             <span class="heading-text">Avg. Suggestions Used/Session</span>
                         </div>
-                        <div class="count-heading">7537</div>
+                        <div class="count-heading">{{kpiData?.avgSuggestions?.count}}</div>
                     </div>
                 </div>
                 <div class="card-sec">
                     <div class="inner-data-sec">
                         <div class="title-text-info">
                             <span class="heading-text">Accuracy</span>
-                            <div class="value-data">
-                                <i class="icon-ast_sortup"></i>
-                                <span>2.3%</span>
+                            <div class="value-data" [ngClass]="{'negtive': !kpiData?.accuracy?.increment}">
+                                <i [ngClass]="kpiData?.accuracy?.increment ? 'icon-ast_sortup' : 'icon-ast_sortdown' "></i>
+                                <span>{{kpiData?.accuracy?.percent}}%</span>
                             </div>
                         </div>
-                        <div class="count-heading">63%</div>
+                        <div class="count-heading">{{kpiData?.accuracy?.count}}%</div>
                     </div>
                 </div>
             </div>
@@ -60,20 +62,14 @@
                         <div class="kr-sg-dropdowns agent-intiated-dropdown" ngbDropdown placement="bottom">
                             <div class="dropdown-open">
                                 <button type="button" class="dropdown-toggle before-none dropdown-input" id="repdropdown" ngbDropdownToggle>
-                                    <span class="title-text">Agent Inititated</span>
+                                    <span class="title-text">{{customerAspectDropdownSelection}}</span>
                                     <i class="icon-sa-arrow-down"></i>
                                 </button>
                                 <ul class="content-menu" aria-labelledby="repdropdown" ngbDropdownMenu>
                                     <perfect-scrollbar>
                                         <div class="scroll-data mx-h-280">
-                                            <li ngbDropdownItem class="channel-name m_b_2">
-                                                <a class="selected">All Channels</a>
-                                            </li>
-                                            <li ngbDropdownItem class="channel-name m_b_2">
-                                                <a>Whatsapp</a>
-                                            </li>
-                                            <li ngbDropdownItem class="channel-name m_b_2">
-                                                <a>Slack</a>
+                                            <li ngbDropdownItem class="channel-name m_b_2" *ngFor="let type of customerAspectDropdownList" (click)="changeCustomerAspectDropdown(type)">
+                                                <a  [ngClass]="{'selected': type === customerAspectDropdownSelection}">{{type}}</a>
                                             </li>
                                         </div>
                                     </perfect-scrollbar>
@@ -84,7 +80,7 @@
                             <div class="tag-title">AUTOMATION</div>
                         </div>
                         <div class="main-heading-title">What are your customers looking for?<i class="icon-sa-help"></i></div>
-                        <app-customer-aspect [viewType]="VIEWTYPE.PARTIAL_VIEW"></app-customer-aspect>
+                        <app-customer-aspect [viewType]="VIEWTYPE.PARTIAL_VIEW" [customerDropdownSelection]="customerAspectDropdownSelection"></app-customer-aspect>
                         <div class="view-all-btn" (click)="openSlider(DASHBORADCOMPONENTTYPE.CUSTOMER_ASPECT)">View All</div>
                     </div>
                 </div>

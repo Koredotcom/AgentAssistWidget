@@ -1,4 +1,3 @@
-
 <div class="automation-override-wrapper">
     <ng-container *ngIf="viewType == VIEWTYPELIST.PARTIAL_VIEW">
         <div class="table-agent-feedback m_t_12">
@@ -8,78 +7,32 @@
                 <div class="title col-4 text-right">LIKE/DISLIKE <i class="icon-ast_sortupdown ml-2"></i></div>
             </div>
             <ng-container>
-                <div class="table-body-feedback training-table-data row">
+                <div class="table-body-feedback training-table-data row" *ngFor="let automation of automationOverrideTableData">
                     <div class="col-4 automation-name">
                         <!-- triggers="mouseenter:mouseleave" -->
-                        <span triggers="mouseenter" [autoClose]="'inside'" popoverClass="automation-name-entitles" [ngbPopover]="devendar" placement="right">Book Flight</span>
+                        <span triggers="mouseenter:mouseleave" [autoClose]="'inside'" popoverClass="automation-name-entitles" [ngbPopover]="devendar" placement="right">{{automation.intentName}}</span>
                     </div>
                     <div class="title col-4">
-                        <span>112</span>
-                        <span class="plus-more-data">+3 others</span>
+                        <span>{{automationIntentNamevsEntityList[automation.intentName] | automationIntentvsEntityString}}</span>
+                        <span class="plus-more-data" triggers="mouseenter:mouseleave" [autoClose]="'inside'" popoverClass="automation-name-entitles" [ngbPopover]="devendar" placement="right">+{{automation.entityOtherCount}} others</span>
                     </div>
-                    <div class="col-4 count-entity text-right">234</div>
+                    <div class="col-4 count-entity text-right">{{automation.totalOverides}}</div>
+                    <ng-template #devendar>
+                        <perfect-scrollbar class="scroll-entities">
+                            <div class="template-popover-automation-entities">
+                                <div class="heading-title">Entities</div>
+                                <div class="row-info" *ngFor="let obj of automationIntentNamevsEntityList[automation.intentName]">
+                                    <div class="title-left">{{obj.entityName}}</div>
+                                    <div class="title-right">{{obj.override}}</div>
+                                </div>
+                            </div>
+                        </perfect-scrollbar>
+                    </ng-template>
                 </div>
-                <div class="table-body-feedback training-table-data row">
-                    <div class="col-4 automation-name">
-                        <span>Book Flight</span>
-                    </div>
-                    <div class="title col-4">
-                        <span>112</span>
-                    </div>
-                    <div class="col-4 count-entity text-right">234</div>
-                </div>
-                <div class="table-body-feedback training-table-data row">
-                    <div class="col-4 automation-name">
-                        <span>Book Flight</span>
-                    </div>
-                    <div class="title col-4">
-                        <span>112</span>
-                    </div>
-                    <div class="col-4 count-entity text-right">234</div>
-                </div>
-                <div class="table-body-feedback training-table-data row">
-                    <div class="col-4 automation-name">
-                        <span>Book Flight</span>
-                    </div>
-                    <div class="title col-4">
-                        <span>112</span>
-                    </div>
-                    <div class="col-4 count-entity text-right">234</div>
-                </div>
-                <div class="table-body-feedback training-table-data row">
-                    <div class="col-4 automation-name">
-                        <span>Book Flight</span>
-                    </div>
-                    <div class="title col-4">
-                        <span>112</span>
-                    </div>
-                    <div class="col-4 count-entity text-right">234</div>
-                </div>
+
             </ng-container>
         </div>
-        <ng-template #devendar>
-            <perfect-scrollbar class="scroll-entities">
-                <div class="template-popover-automation-entities">
-                    <div class="heading-title">Entities</div>
-                    <div class="row-info">
-                        <div class="title-left">PNR</div>
-                        <div class="title-right">320</div>
-                    </div>
-                    <div class="row-info">
-                        <div class="title-left">Transaction ID</div>
-                        <div class="title-right">120</div>
-                    </div>
-                    <div class="row-info">
-                        <div class="title-left">SeatNo</div>
-                        <div class="title-right">13</div>
-                    </div>
-                    <div class="row-info">
-                        <div class="title-left">Others</div>
-                        <div class="title-right">13</div>
-                    </div>
-                </div>
-            </perfect-scrollbar>
-        </ng-template>
+       
     </ng-container>
     <ng-container *ngIf="viewType == VIEWTYPELIST.EXHAUSTIVE_VIEW">
         <div class="automation-override-report-data">
@@ -87,73 +40,26 @@
                 <span>Override rate</span>
                 <i class="icon-sa-help"></i>
             </div>
-            <div class="count-number">12%</div>
+            <div class="count-number">{{automationOverrideReportData.overrideRate}}%</div>
             <div id="accordion">
-                <div class="card_accordion">
+                <div class="card_accordion" *ngFor = "let automation of automationOverrideTableData; let i = index">
                   <div class="card_header">
-                    <div class="card-data-header row collapsed" data-toggle="collapse" href="#bookflight">
+                    <div class="card-data-header row collapsed" data-toggle="collapse" [attr.href]="'#automationoverride' + i">
                         <i class="icon-sa-arrow-down"></i>
-                        <div class="title col-4">book Flight</div>
-                        <div class="title entity-title col-4">3 entities</div>
-                        <div class="title override-count col-4 text-right">4463 overrides</div>
+                        <div class="title col-4">{{automation.intentName}}</div>
+                        <div class="title entity-title col-4">{{automationIntentNamevsEntityList[automation.intentName].length}} entities</div>
+                        <div class="title override-count col-4 text-right">{{automation.totalOverides}} overrides</div>
                     </div>
                   </div>
-                  <div id="bookflight" class="collapse" data-parent="#accordion">
+                  <div [attr.id]="'automationoverride' + i"  class="collapse" data-parent="#accordion">
                     <div class="card-body">
-                        <div class="row-data-info row">
-                            <div class="title col-6">PNR</div>
-                            <div class="title col-6 text-right">2000</div>
+                        <div class="row-data-info row" *ngFor="let obj of automationIntentNamevsEntityList[automation.intentName]">
+                            <div class="title col-6">{{obj.entityName}}</div>
+                            <div class="title col-6 text-right">{{obj.override}}</div>
                         </div>
-                        <div class="row-data-info row">
-                            <div class="title col-6">TransactionID</div>
-                            <div class="title col-6 text-right">2463 </div>
-                        </div>
+                        
                     </div>
                   </div>
-                </div>
-                <div class="card_accordion">
-                    <div class="card_header">
-                      <div class="card-data-header row collapsed" data-toggle="collapse" href="#cancelflight">
-                          <i class="icon-sa-arrow-down"></i>
-                          <div class="title col-4">Cancel Flight</div>
-                          <div class="title entity-title col-4">2 entities</div>
-                          <div class="title override-count col-4 text-right">463 overrides</div>
-                      </div>
-                    </div>
-                    <div id="cancelflight" class="collapse" data-parent="#accordion">
-                      <div class="card-body">
-                          <div class="row-data-info row">
-                              <div class="title col-6">PNR</div>
-                              <div class="title col-6 text-right">2000</div>
-                          </div>
-                          <div class="row-data-info row">
-                              <div class="title col-6">TransactionID</div>
-                              <div class="title col-6 text-right">2463 </div>
-                          </div>
-                      </div>
-                    </div>
-                </div>
-                <div class="card_accordion">
-                    <div class="card_header">
-                      <div class="card-data-header row collapsed" data-toggle="collapse" href="#reschudle">
-                          <i class="icon-sa-arrow-down"></i>
-                          <div class="title col-4">Reschedule</div>
-                          <div class="title entity-title col-4">2 entities</div>
-                          <div class="title override-count col-4 text-right">103 overrides</div>
-                      </div>
-                    </div>
-                    <div id="reschudle" class="collapse" data-parent="#accordion">
-                      <div class="card-body">
-                          <div class="row-data-info row">
-                              <div class="title col-6">PNR</div>
-                              <div class="title col-6 text-right">2000</div>
-                          </div>
-                          <div class="row-data-info row">
-                              <div class="title col-6">TransactionID</div>
-                              <div class="title col-6 text-right">2463 </div>
-                          </div>
-                      </div>
-                    </div>
                 </div>
             </div>
         </div>

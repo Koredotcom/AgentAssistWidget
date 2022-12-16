@@ -12,11 +12,11 @@
                     <div class="title-text-info">
                         <span class="heading-text">Total Search Requests</span>
                         <div class="value-data negtive">
-                            <i class="icon-ast_sortdown"></i>
-                            <span>2.3%</span>
+                            <i [ngClass]="agentAspectData.totalSearchReq.increment ? 'icon-ast_sortup' : 'icon-ast_sortdown' "></i>
+                            <span>{{agentAspectData.totalSearchReq.percent}}%</span>
                         </div>
                     </div>
-                    <div class="count-heading">2,345K</div>
+                    <div class="count-heading">{{agentAspectData.totalSearchReq.count}}</div>
                 </div>
             </div>
             <div class="card-sec max_width_50">
@@ -24,11 +24,11 @@
                     <div class="title-text-info">
                         <span class="heading-text">Search Results Used</span>
                         <div class="value-data">
-                            <i class="icon-ast_sortup"></i>
-                            <span>2.3%</span>
+                            <i [ngClass]="agentAspectData.searchResultsUsed.increment ? 'icon-ast_sortup' : 'icon-ast_sortdown' "></i>
+                            <span>{{agentAspectData.searchResultsUsed.percent}}%</span>
                         </div>
                     </div>
-                    <div class="count-heading">23%</div>
+                    <div class="count-heading">{{agentAspectData.searchResultsUsed.count}}%</div>
                 </div>
             </div>
         </div>
@@ -38,17 +38,9 @@
                 <div class="title col-6 text-right">TOTAL SEARCHES</div>
             </div>
             <ng-container>
-                <div class="table-body-feedback row">
-                    <div class="col-6 title">Book Flight</div>
-                    <div class="col-6 title text-right f_w_600">50% (1320)</div>
-                </div>
-                <div class="table-body-feedback row">
-                    <div class="col-6 title">Cancel Flight</div>
-                    <div class="col-6 title text-right f_w_600">30% (1000)</div>
-                </div>
-                <div class="table-body-feedback row">
-                    <div class="col-6 title">Reschedule Flight</div>
-                    <div class="col-6 title text-right f_w_600">20% (700)</div>
+                <div class="table-body-feedback row" *ngFor="let obj of agentAspectTableData">
+                    <div class="col-6 title">{{obj.intentName}}</div>
+                    <div class="col-6 title text-right f_w_600">{{obj.percent}}% ({{obj.count}})</div>
                 </div>
             </ng-container>
         </div>
@@ -63,11 +55,11 @@
                     <div class="title-text-info">
                         <span class="heading-text">Total Search Requests</span>
                         <div class="value-data negtive">
-                            <i class="icon-ast_sortdown"></i>
-                            <span>2.3%</span>
+                            <i [ngClass]="agentAspectData.totalSearchReq.increment ? 'icon-ast_sortup' : 'icon-ast_sortdown' "></i>
+                            <span>{{agentAspectData.totalSearchReq.percent}}%</span>
                         </div>
                     </div>
-                    <div class="count-heading">2,345K</div>
+                    <div class="count-heading">{{agentAspectData.totalSearchReq.count}}</div>
                 </div>
             </div>
             <div class="card-sec max_width_50">
@@ -75,11 +67,11 @@
                     <div class="title-text-info">
                         <span class="heading-text">Search Results Used</span>
                         <div class="value-data">
-                            <i class="icon-ast_sortup"></i>
-                            <span>2.3%</span>
+                            <i [ngClass]="agentAspectData.searchResultsUsed.increment ? 'icon-ast_sortup' : 'icon-ast_sortdown' "></i>
+                            <span>{{agentAspectData.searchResultsUsed.percent}}%</span>
                         </div>
                     </div>
-                    <div class="count-heading">23%</div>
+                    <div class="count-heading">{{agentAspectData.searchResultsUsed.count}}%</div>
                 </div>
             </div>
         </div>
@@ -89,29 +81,9 @@
                 <div class="title col-6 text-right">COUNT | % OF TOTAL</div>
             </div>
             <ng-container>
-                <div class="table-body-feedback row">
-                    <div class="col-6 title">Book Flight</div>
-                    <div class="col-6 title text-right f_w_500">2646 | 32%</div>
-                </div>
-                <div class="table-body-feedback row">
-                    <div class="col-6 title">Book Flight</div>
-                    <div class="col-6 title text-right f_w_500">2646 | 32%</div>
-                </div>
-                <div class="table-body-feedback row">
-                    <div class="col-6 title">Book Flight</div>
-                    <div class="col-6 title text-right f_w_500">2646 | 32%</div>
-                </div>
-                <div class="table-body-feedback row">
-                    <div class="col-6 title">Book Flight</div>
-                    <div class="col-6 title text-right f_w_500">2646 | 32%</div>
-                </div>
-                <div class="table-body-feedback row">
-                    <div class="col-6 title">Book Flight</div>
-                    <div class="col-6 title text-right f_w_500">2646 | 32%</div>
-                </div>
-                <div class="table-body-feedback row">
-                    <div class="col-6 title">Book Flight</div>
-                    <div class="col-6 title text-right f_w_500">2646 | 32%</div>
+                <div class="table-body-feedback row" *ngFor="let obj of agentAspectTableData">
+                    <div class="col-6 title">{{obj.intentName}}</div>
+                    <div class="col-6 title text-right f_w_500">{{obj.count}} | {{obj.percent}}%</div>
                 </div>
             </ng-container>
         </div>

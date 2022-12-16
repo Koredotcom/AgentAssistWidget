@@ -30,7 +30,7 @@ export class DashboardFiltersComponent implements OnInit {
   }
     ;
   calendarLocale: any;
-  channelObject : any = CHANNELS;
+  channelList : any = CHANNELS;
   selectedChannel : string = 'ALL';
 
 

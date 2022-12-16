@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { VIEWTYPE } from './dashboard.cnst';
 
 @Injectable({
@@ -8,96 +8,95 @@ import { VIEWTYPE } from './dashboard.cnst';
 export class DashboardService {
 
   private exhaustiveRepresentation: BehaviorSubject<{}> = new BehaviorSubject(null);
-  public agentAspectView : string =  VIEWTYPE.WORDCLOUD;
+  public agentAspectView: string = VIEWTYPE.WORDCLOUD;
 
   constructor() { }
 
-  formatterData : any = {
-    "Successfully Completed" : [
+  formatterData: any = {
+    "Successfully Completed": [
       {
-        key : "Book Ticket",
-        value : "33"
+        key: "Book Ticket",
+        value: "33"
       },
       {
-        key : "Reschedule",
-        value : "23"
+        key: "Reschedule",
+        value: "23"
       },
       {
-        key : "Cancel",
-        value : "31"
+        key: "Cancel",
+        value: "31"
       },
       {
-        key : "Others",
-        value : "4"
+        key: "Others",
+        value: "4"
       }
-    ], 
-    "Terminated" : [
+    ],
+    "Terminated": [
       {
-        key : "Book Ticket",
-        value : "33"
+        key: "Book Ticket",
+        value: "33"
       },
       {
-        key : "Reschedule",
-        value : "23"
+        key: "Reschedule",
+        value: "23"
       },
       {
-        key : "Cancel",
-        value : "31"
+        key: "Cancel",
+        value: "31"
       },
       {
-        key : "Others",
-        value : "4"
+        key: "Others",
+        value: "4"
       }
-    ], 
-    "Error" : [
+    ],
+    "Error": [
       {
-        key : "Book Ticket",
-        value : "33"
+        key: "Book Ticket",
+        value: "33"
       },
       {
-        key : "Reschedule",
-        value : "23"
+        key: "Reschedule",
+        value: "23"
       },
       {
-        key : "Cancel",
-        value : "31"
+        key: "Cancel",
+        value: "31"
       },
       {
-        key : "Others",
-        value : "4"
+        key: "Others",
+        value: "4"
       }
-    ], 
-    "Other" : [
+    ],
+    "Other": [
       {
-        key : "Book Ticket",
-        value : "33"
+        key: "Book Ticket",
+        value: "33"
       },
       {
-        key : "Reschedule",
-        value : "23"
+        key: "Reschedule",
+        value: "23"
       },
       {
-        key : "Cancel",
-        value : "31"
+        key: "Cancel",
+        value: "31"
       },
       {
-        key : "Others",
-        value : "4"
+        key: "Others",
+        value: "4"
       }
     ]
   }
 
-  setExhaustiveRep(flag, component?){
+  setExhaustiveRep(flag, component?) {
     let type = component ? component : null;
-    this.exhaustiveRepresentation.next({status : flag, type : type});
+    this.exhaustiveRepresentation.next({ status: flag, type: type });
   }
 
-  getExhaustiveRep() : Observable<{}>{
+  getExhaustiveRep(): Observable<{}> {
     return this.exhaustiveRepresentation.asObservable();
   }
 
-
-  getWordCloudOptions() {
+  getWordCloudOptions(actualData) {
     return {
       tooltip: {
         trigger: 'item',
@@ -129,122 +128,687 @@ export class DashboardService {
             shadowColor: '#333'
           }
         },
-        data: [
-          {
-            name: 'Already Over',
-            value: 10000,
-            textStyle: {
-              normal: {
-                color: 'black'
-              },
-              emphasis: {
-                color: 'blue'
-              }
-            }
-          },
-          {
-            name: 'now',
-            value: 4055
-          },
-          {
-            name: 'know',
-            value: 2467
-          },
-          {
-            name: 'reaching',
-            value: 2244
-          },
-          {
-            name: 'nothing',
-            value: 1898
-          },
-          {
-            name: 'letting',
-            value: 1484
-          },
-          {
-            name: 'fall',
-            value: 1112
-          },
-          {
-            name: 'give',
-            value: 965
-          },
-          {
-            name: 'loving',
-            value: 847
-          },
-          {
-            name: 'go',
-            value: 582
-          },
-          {
-            name: 'left',
-            value: 555
-          },
-          {
-            name: 'lose',
-            value: 550
-          },
-          {
-            name: 'everything',
-            value: 462
-          },
-          {
-            name: 'never',
-            value: 366
-          },
-          {
-            name: 'breaking',
-            value: 360
-          },
-          {
-            name: 'slowly',
-            value: 282
-          },
-          {
-            name: 'all',
-            value: 273
-          },
-          {
-            name: 'here',
-            value: 273
-          },
-          {
-            name: 'skin',
-            value: 273
-          },
-          {
-            name: 'you',
-            value: 273
-          },
-          {
-            name: 'resist',
-            value: 273
-          },
-          {
-            name: 'again',
-            value: 273
-          },
-          {
-            name: 'suffocating',
-            value: 273
-          },
-          {
-            name: 'defense',
-            value: 273
-          },
-          {
-            name: 'cost',
-            value: 273
-          },
-          {
-            name: 'fading',
-            value: 265
-          }
-        ]
+        data: actualData
       }]
     }
+  }
+
+  getKPIData() {
+    return of({
+      "dashboardkpi": {
+        totalSessions: {
+          count: 7535,
+          percent: 2.3,
+          increment: false
+        },
+        totalSuggestions: {
+          count: 7537,
+          percent: 2.3,
+          increment: true
+        },
+        avgSuggestions: {
+          count: 3.2
+        },
+        accuracy: {
+          count: 63,
+          percent: 2.3,
+          increment: true
+        }
+      }
+    })
+  }
+
+  getCustomerAspectData(selection, type) {
+    let customerData: any = {
+      Agent_Initiated: {
+        All: [
+          {
+            intentName: "Reschedule Flight",
+            count: 234,
+            percent: 32,
+            type : 'Automations'
+          },
+          {
+            intentName: "Cancel Flight",
+            count: 180,
+            percent: 18,
+            type : 'Articles'
+          },
+          {
+            intentName: "Reschedule Flight",
+            count: 234,
+            percent: 32,
+            type : 'Faqs',
+          },
+          {
+            intentName: "Cancel Flight",
+            count: 180,
+            percent: 18,
+            type : 'Automations'
+          },
+          {
+            intentName: "Reschedule Flight",
+            count: 234,
+            percent: 32,
+            type : 'Articles'
+          },
+          {
+            intentName: "Cancel Flight",
+            count: 180,
+            percent: 18,
+            type : 'Faqs'
+          }
+        ],
+        Articles: [
+          {
+            intentName: "Reschedule Flight",
+            count: 234,
+            percent: 32,
+            type : 'Articles'
+          },
+          {
+            intentName: "Cancel Flight",
+            count: 180,
+            percent: 18,
+            type : 'Articles'
+          },
+          {
+            intentName: "Reschedule Flight",
+            count: 234,
+            percent: 32,
+            type : 'Articles'
+          },
+          {
+            intentName: "Cancel Flight",
+            count: 180,
+            percent: 18,
+            type : 'Articles'
+          },
+          {
+            intentName: "Reschedule Flight",
+            count: 234,
+            percent: 32,
+            type : 'Articles'
+          },
+          {
+            intentName: "Cancel Flight",
+            count: 180,
+            percent: 18,
+            type : 'Articles'
+          }
+        ],
+        Faqs: [
+          {
+            intentName: "Reschedule Flight",
+            count: 234,
+            percent: 32,
+            type : 'Faqs'
+          },
+          {
+            intentName: "Cancel Flight",
+            count: 180,
+            percent: 18,
+            type : 'Faqs'
+          },
+          {
+            intentName: "Reschedule Flight",
+            count: 234,
+            percent: 32,
+            type : 'Faqs'
+          },
+          {
+            intentName: "Cancel Flight",
+            count: 180,
+            percent: 18,
+            type : 'Faqs'
+          },
+          {
+            intentName: "Reschedule Flight",
+            count: 234,
+            percent: 32,
+            type : 'Faqs'
+          },
+          {
+            intentName: "Cancel Flight",
+            count: 180,
+            percent: 18,
+            type : 'Faqs'
+          }
+        ],
+        Automations: [
+          {
+            intentName: "Reschedule Flight",
+            count: 234,
+            percent: 32,
+            type : 'Automations'
+          },
+          {
+            intentName: "Cancel Flight",
+            count: 180,
+            percent: 18,
+            type : 'Automations'
+          },
+          {
+            intentName: "Reschedule Flight",
+            count: 234,
+            percent: 32,
+            type : 'Automations'
+          },
+          {
+            intentName: "Cancel Flight",
+            count: 180,
+            percent: 18,
+            type : 'Automations'
+          },
+          {
+            intentName: "Reschedule Flight",
+            count: 234,
+            percent: 32,
+            type : 'Automations'
+          },
+          {
+            intentName: "Cancel Flight",
+            count: 180,
+            percent: 18,
+            type : 'Automations'
+          }
+        ]
+
+      },
+      Agent_Suggested: {
+
+        All: [
+          {
+            intentName: "Reschedule Flight",
+            count: 234,
+            percent: 32,
+            type : 'Articles'
+          },
+          {
+            intentName: "Cancel Flight",
+            count: 180,
+            percent: 18,
+            type : 'Faqs'
+          }
+        ],
+        Articles: [
+          {
+            intentName: "Reschedule Flight",
+            count: 234,
+            percent: 32,
+            type : 'Articles'
+          },
+          {
+            intentName: "Cancel Flight",
+            count: 180,
+            percent: 18,
+            type : 'Articles'
+          }
+        ],
+        Faqs: [
+          {
+            intentName: "Reschedule Flight",
+            count: 234,
+            percent: 32,
+            type : 'Faqs'
+          },
+          {
+            intentName: "Cancel Flight",
+            count: 180,
+            percent: 18,
+            type : 'Faqs'
+          }
+        ],
+        Automations: [
+          {
+            intentName: "Reschedule Flight",
+            count: 234,
+            percent: 32,
+            type : 'Automations'
+          },
+          {
+            intentName: "Cancel Flight",
+            count: 180,
+            percent: 18,
+            type : 'Automations'
+          }
+        ]
+
+      },
+      All: {
+
+        All: [
+          {
+            intentName: "Reschedule Flight",
+            count: 234,
+            percent: 32,
+            type : 'Articles'
+          },
+          {
+            intentName: "Cancel Flight",
+            count: 180,
+            percent: 18,
+            type : 'Automations'
+          }
+        ],
+        Articles: [
+          {
+            intentName: "Reschedule Flight",
+            count: 234,
+            percent: 32,
+            type : 'Articles'
+          },
+          {
+            intentName: "Cancel Flight",
+            count: 180,
+            percent: 18,
+            type : 'Articles'
+          }
+        ],
+        Faqs: [
+          {
+            intentName: "Reschedule Flight",
+            count: 234,
+            percent: 32,
+            type : 'Faqs'
+          },
+          {
+            intentName: "Cancel Flight",
+            count: 180,
+            percent: 18,
+            type : 'Faqs'
+          }
+        ],
+        Automations: [
+          {
+            intentName: "Reschedule Flight",
+            count: 234,
+            percent: 32,
+            type : 'Automations'
+          },
+          {
+            intentName: "Cancel Flight",
+            count: 180,
+            percent: 18,
+            type : 'Automations'
+          }
+        ]
+
+      }
+    }
+    return of(customerData[selection][type]);
+  }
+
+  getAgentAspectData() {
+    return of({
+      totalSearchReq: {
+        count: 2345,
+        percent: 2.3,
+        increment: false
+      },
+      searchResultsUsed: {
+        count: 23,
+        percent: 2.3,
+        increment: true
+      },
+      actualData: [
+        {
+          intentName: "Book Flight",
+          count: 1320,
+          percent: 50
+        },
+        {
+          intentName: "Cancel Flight",
+          count: 1000,
+          percent: 30
+        },
+        {
+          intentName: "Reschedule Flight",
+          count: 700,
+          percent: 20
+        },
+        {
+          intentName: "Rearrange Flight",
+          count: 1320,
+          percent: 50
+        },
+        {
+          intentName: "Rebook Flight",
+          count: 1000,
+          percent: 30
+        },
+        {
+          intentName: "schedule Flight",
+          count: 700,
+          percent: 20
+        }
+      ]
+    })
+  }
+
+  getAutomationPerformanceData() {
+    return of({
+      total: 21474,
+      actualData: [
+        {
+          name: "Successfully Completed",
+          count: 7000,
+          percent: 70,
+          seriesData: [
+            {
+              key: "Book Ticket",
+              value: "33"
+            },
+            {
+              key: "Reschedule",
+              value: "23"
+            },
+            {
+              key: "Cancel",
+              value: "31"
+            },
+            {
+              key: "Others",
+              value: "4"
+            }
+          ]
+        },
+        {
+          name: "Terminated",
+          count: 2500,
+          percent: 25,
+          seriesData: [
+            {
+              key: "Book Ticket",
+              value: "33"
+            },
+            {
+              key: "Reschedule",
+              value: "23"
+            },
+            {
+              key: "Cancel",
+              value: "31"
+            },
+            {
+              key: "Others",
+              value: "4"
+            }
+          ]
+        },
+        {
+          name: "Error",
+          count: 500,
+          percent: 5,
+          seriesData: [
+            {
+              key: "Book Ticket",
+              value: "33"
+            },
+            {
+              key: "Reschedule",
+              value: "23"
+            },
+            {
+              key: "Cancel",
+              value: "31"
+            },
+            {
+              key: "Others",
+              value: "4"
+            }
+          ]
+        },
+        {
+          name: "Other",
+          count: 500,
+          percent: 5,
+          seriesData: [
+            {
+              key: "Book Ticket",
+              value: "33"
+            },
+            {
+              key: "Reschedule",
+              value: "23"
+            },
+            {
+              key: "Cancel",
+              value: "31"
+            },
+            {
+              key: "Others",
+              value: "4"
+            }
+          ]
+        },
+
+      ]
+    })
+  }
+
+  getAutomationOverrideReportData() {
+    return of({
+      overrideRate: 12,
+      actualData: [
+        {
+          intentName: "Book Flight",
+          totalOverides: 4463,
+          entity_override: [
+            {
+              entityName: "PNR",
+              override: 2000
+            },
+            {
+              entityName: "Transaction Id",
+              override: 2463
+            },
+            {
+              entityName: "PNR",
+              override: 2000
+            },
+            {
+              entityName: "Transaction Id",
+              override: 2463
+            }
+          ]
+        },
+        {
+          intentName: "Cancel Flight",
+          totalOverides: 4463,
+          entity_override: [
+            {
+              entityName: "PNR",
+              override: 2000
+            },
+            {
+              entityName: "Transaction Id",
+              override: 2463
+            },
+            {
+              entityName: "PNR",
+              override: 2000
+            },
+            {
+              entityName: "Transaction Id",
+              override: 2463
+            },
+            {
+              entityName: "PNR",
+              override: 2000
+            },
+            {
+              entityName: "Transaction Id",
+              override: 2463
+            }
+          ]
+        },
+        {
+          intentName: "Book Flight",
+          totalOverides: 4463,
+          entity_override: [
+            {
+              entityName: "PNR",
+              override: 2000
+            },
+            {
+              entityName: "Transaction Id",
+              override: 2463
+            },
+            {
+              entityName: "PNR",
+              override: 2000
+            },
+            {
+              entityName: "Transaction Id",
+              override: 2463
+            }
+          ]
+        },
+        {
+          intentName: "Cancel Flight",
+          totalOverides: 4463,
+          entity_override: [
+            {
+              entityName: "PNR",
+              override: 2000
+            },
+            {
+              entityName: "Transaction Id",
+              override: 2463
+            },
+            {
+              entityName: "PNR",
+              override: 2000
+            },
+            {
+              entityName: "Transaction Id",
+              override: 2463
+            },
+            {
+              entityName: "PNR",
+              override: 2000
+            },
+            {
+              entityName: "Transaction Id",
+              override: 2463
+            }
+          ]
+        },
+        {
+          intentName: "Book Flight",
+          totalOverides: 4463,
+          entity_override: [
+            {
+              entityName: "PNR",
+              override: 2000
+            },
+            {
+              entityName: "Transaction Id",
+              override: 2463
+            },
+            {
+              entityName: "PNR",
+              override: 2000
+            },
+            {
+              entityName: "Transaction Id",
+              override: 2463
+            }
+          ]
+        },
+        {
+          intentName: "Cancel Flight",
+          totalOverides: 4463,
+          entity_override: [
+            {
+              entityName: "PNR",
+              override: 2000
+            },
+            {
+              entityName: "Transaction Id",
+              override: 2463
+            },
+            {
+              entityName: "PNR",
+              override: 2000
+            },
+            {
+              entityName: "Transaction Id",
+              override: 2463
+            },
+            {
+              entityName: "PNR",
+              override: 2000
+            },
+            {
+              entityName: "Transaction Id",
+              override: 2463
+            }
+          ]
+        }
+      ]
+    })
+  }
+
+  getAgentFeedbackData() {
+    return of({
+      totalResp: 7535,
+      helpful: 73,
+      nothelpful: 27,
+      actualData: [
+        {
+          intentName: "Book Flight",
+          responses: 700,
+          like: {
+            count: 340,
+            percent: 68
+          },
+          dislike: {
+            count: 340,
+            percent: 32
+          }
+        },
+        {
+          intentName: "Cancel Flight",
+          responses: 700,
+          like: {
+            count: 340,
+            percent: 68
+          },
+          dislike: {
+            count: 340,
+            percent: 32
+          }
+        },
+        {
+          intentName: "Book Flight",
+          responses: 700,
+          like: {
+            count: 340,
+            percent: 68
+          },
+          dislike: {
+            count: 340,
+            percent: 32
+          }
+        },
+        {
+          intentName: "Cancel Flight",
+          responses: 700,
+          like: {
+            count: 340,
+            percent: 68
+          },
+          dislike: {
+            count: 340,
+            percent: 32
+          }
+        }
+      ]
+
+    }
+    )
   }
 
 }

@@ -13,14 +13,32 @@ export class AgentFeedbackComponent implements OnInit {
   @Input() viewType : string;
   public DASHBORADCOMPONENTTYPELIST = DASHBORADCOMPONENTTYPE;
   public VIEWTYPELIST = VIEWTYPE;
+  agentFeedbackData : any = {};
+  agentFeedbackTableData : any = [];
 
   constructor(private dashboardService : DashboardService) { }
 
   ngOnInit(): void {
-   
+   this.updateAgentFeedbackData();
   }
 
   ngOnDestroy() {
+  }
+
+  updateAgentFeedbackData(){
+    this.dashboardService.getAgentFeedbackData().subscribe((data : any) => {
+      console.log(data, 'data inside agent feedback');
+      if(data){
+        this.agentFeedbackData = Object.assign({}, data);
+        if(data.actualData){
+          if(this.viewType == VIEWTYPE.PARTIAL_VIEW){
+            this.agentFeedbackTableData = data.actualData.length <= 3 ? data.actualData : data.actualData.slice(0,3);
+          }else {
+            this.agentFeedbackTableData = data.actualData;
+          }
+        }
+      }
+    });
   }
 
 }

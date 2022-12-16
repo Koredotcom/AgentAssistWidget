@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import jsPDF from 'jspdf';
 import html2canvas, { Options } from 'html2canvas';
-import { DASHBORADCOMPONENTTYPE, VIEWTYPE } from './dashboard.cnst';
+import { actualvsDisplayTitle, DASHBORADCOMPONENTTYPE, VIEWTYPE } from './dashboard.cnst';
 import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
 import { DashboardService } from './dashboard.service';
 
@@ -17,6 +17,10 @@ export class DashboardComponent implements OnInit {
   sliderId : string = "dashboardSlider";
   sliderStatus: boolean;
   openComponentId : string;
+  kpiData : any = {};
+  customerAspectDropdownList : any = actualvsDisplayTitle.CUSTOMER_ASPECT_DROPDOWN_LIST;
+  customerAspectDropdownSelection : string = "Agent_Initiated";
+
 
   public DASHBORADCOMPONENTTYPE = DASHBORADCOMPONENTTYPE;
   public VIEWTYPE = VIEWTYPE;
@@ -24,7 +28,17 @@ export class DashboardComponent implements OnInit {
   constructor(public dashboardService : DashboardService, public cdRef : ChangeDetectorRef) { }
 
   ngOnInit(): void {
-   
+   this.updateKPIData();
+  }
+
+  updateKPIData(){
+    this.dashboardService.getKPIData().subscribe(data => {
+      console.log(data,"kpi data");
+      this.kpiData = {};
+      if(data && data.dashboardkpi){
+        this.kpiData = data.dashboardkpi;
+      }
+    });
   }
 
   openSlider(id) {
@@ -73,6 +87,12 @@ export class DashboardComponent implements OnInit {
   changeAgentAspectView(viewType){
     this.dashboardService.agentAspectView = viewType
     console.log("click", this.dashboardService.agentAspectView);
+  }
+
+  changeCustomerAspectDropdown(selection){
+    console.log("changing selection", selection);
+    
+    this.customerAspectDropdownSelection = selection;
   }
 
 }

@@ -11,7 +11,7 @@
     <perfect-scrollbar class="scroll-content">
         <div class="body-scroll-data">
             <ng-container *ngIf="componentType === DASHBORADCOMPONENTTYPE.CUSTOMER_ASPECT">
-                <app-customer-aspect [viewType]="VIEWTYPE.EXHAUSTIVE_VIEW"></app-customer-aspect>
+                <app-customer-aspect [viewType]="VIEWTYPE.EXHAUSTIVE_VIEW" [customerDropdownSelection]="customerDropdownSelection"></app-customer-aspect>
             </ng-container>
 
             <ng-container *ngIf="componentType === DASHBORADCOMPONENTTYPE.AGENT_FEEDBACK">

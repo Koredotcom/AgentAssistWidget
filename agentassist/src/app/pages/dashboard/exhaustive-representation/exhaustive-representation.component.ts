@@ -14,6 +14,7 @@ export class ExhaustiveRepresentationComponent implements OnInit {
 
   @Output() onClose = new EventEmitter();
   @Input() componentType: string = '';
+  @Input() customerDropdownSelection : string;
 
   public DASHBORADCOMPONENTTYPE = DASHBORADCOMPONENTTYPE;
   public VIEWTYPE = VIEWTYPE;
@@ -26,7 +27,7 @@ export class ExhaustiveRepresentationComponent implements OnInit {
   constructor(public dashboardService: DashboardService) { }
 
   ngOnInit(): void {
-    console.log("ngonint inside exhaustive");
+    console.log("ngonint inside exhaustive", this.customerDropdownSelection);
     this.subs.sink = this.dashboardService.getExhaustiveRep().subscribe((response: any) => {
       console.log("inside subsribe", response);
       

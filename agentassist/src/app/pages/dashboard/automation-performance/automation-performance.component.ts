@@ -10,22 +10,76 @@ import { DashboardService } from '../dashboard.service';
 export class AutomationPerformanceComponent implements OnInit {
 
   chartOption: EChartOption;
+  automationPerformanceChartData : any = [];
 
   constructor(public dashboardService : DashboardService) { }
 
   ngOnInit(): void {
-    this.setDonutChartOptions();
+    this.updateAutomationPerformanceData();
+  }
+
+  updateAutomationPerformanceData(){
+    this.dashboardService.getAutomationPerformanceData().subscribe((data : any) => {
+      console.log(data, "inside automation performace data");
+      this.automationPerformanceChartData = [];
+      let colorObj : any = {
+        "Successfully Completed" : '#47B39C',
+        "Terminated" : "#FFC154",
+        "Error" : '#EC6B56',
+        "Other" : '#003F5C'
+      }
+      if(data && data.actualData){
+        for(let automation of data.actualData){
+          let obj : any = {
+            name : automation.name,
+            value : automation.count,
+            percent : automation.percent,
+            series : automation.seriesData,
+            total : data.total,
+            itemStyle : {
+              color : colorObj[automation.name]
+            }
+          }
+          this.automationPerformanceChartData.push(obj);
+        }
+      }
+      this.setDonutChartOptions(this.automationPerformanceChartData);
+
+    })
   }
   
-  setDonutChartOptions() {
+  setDonutChartOptions(chartData) {
     this.chartOption = {
       tooltip: {
         trigger: 'item',
+        backgroundColor: '#fff',
+        textStyle : {
+          color : '#000',
+          fontStyle: 'normal',
+          fontWeight: 'normal',
+          fontSize: 15,
+        },
         formatter : (params : any) => {
-          let tooltipString  = params.data.name + ":" + params.percent + "%" + '</br>';
-          let tooltipSeriesList = this.dashboardService.formatterData[params.data.name];
-          for(let item of tooltipSeriesList){
-            tooltipString += item.key + ":" + item.value + "%" + "</br>";
+          let tooltipString  = params.marker  + ' ' + params.data.name  + " : " + params.data.percent + "%" + '</br>';
+          // let tooltipSeriesList = this.dashboardService.formatterData[params.data.name];
+          for(let item of params.data.series){
+            tooltipString = tooltipString + `<div style="display:flex;
+             align-items:center;
+             justify-content:space-between;">`
+            tooltipString += `<span style = "
+            font-weight: 400;
+            font-size: 12px;
+            line-height: 5px;
+            color: #121314;
+            width: 65%;
+            padding-left: 17px;">` + item.key + `</span>`;
+            tooltipString += `<span style="
+            font-weight: 400;
+            font-size: 12px;
+            line-height: 5px;
+            color: #121314;
+            width: 35%;
+            text-align: right;">` + item.value + "%" + `</span></div>` + "</br>"
           } 
           return tooltipString
         }
@@ -33,8 +87,23 @@ export class AutomationPerformanceComponent implements OnInit {
       legend: {
         orient: 'vertical',
         top: 'center',
-        left: 580,
-        icon: 'circle'
+        left: 400,
+        icon: 'circle',
+        textStyle: {
+          fontSize: 15,
+        },
+        formatter:function (name) {
+          let itemValue = chartData.filter(item => item.name === name);
+          let returnString = `${name}`;
+          let emptySpaceCount = 'successfully completed '.length - name.length;
+          console.log(emptySpaceCount, "empty space count");
+          
+          for(let i=0; i<=emptySpaceCount; i++){
+            returnString = returnString + '  ';
+          }
+          returnString += `${itemValue[0].value}` + ' | ' + `${itemValue[0].percent}%`;
+          return returnString;
+        }
       },
       series: [
         {
@@ -43,22 +112,19 @@ export class AutomationPerformanceComponent implements OnInit {
           avoidLabelOverlap: true,
           label: {
             color: '#000',
-            fontSize: 40,
+            fontSize: 25,
             position: 'center',
             formatter: () => {
-              return 'Total'; // Use sum variable here
+              // let returnString = `<div>Total</div>` + `<span>${chartData[0].total}</span>`
+              return `Total\n` + chartData[0].total; // Use sum variable here
+              // return returnString;
             },
           },
           labelLine: {
             show: false,
           },
-
-          data: [
-            { value: 7000, name: 'Successfully Completed', itemStyle: { color: '#47B39C' } },
-            { value: 2500, name: 'Terminated', itemStyle: { color: '#FFC154' } },
-            { value: 500, name: 'Error', itemStyle: { color: '#EC6B56' } },
-            { value: 500, name: 'Other', itemStyle: { color: '#003F5C' } }
-          ]
+          data: chartData,
+          center: ['30%', '50%']
         }
       ]
     };

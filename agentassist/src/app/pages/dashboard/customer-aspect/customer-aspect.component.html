@@ -3,37 +3,26 @@
 
 <div class="cust-aspects-wrapper">
     <div class="automations-tabs">
-        <div class="tab-name active-tab">
-            <span>All</span>
-        </div>
-        <div class="tab-name">
-            <img src="assets/icons/dashboard/articles.svg">
-            <span>Articles</span>
-        </div>
-        <div class="tab-name">
-            <img src="assets/icons/dashboard/faqs.svg">
-            <span>FAQs</span>
-        </div>
-        <div class="tab-name">
-            <img src="assets/icons/dashboard/automation.svg">
-            <span>Automations</span>
+        <div class="tab-name" [ngClass]="{'active-tab': tab === customerTabSelection}" (click)="changeTabSelection(tab)" *ngFor="let tab of customerAspectTabsList">
+            <img *ngIf="customerAspectTabvsImage[tab]" [src]="customerAspectTabvsImage[tab]" >
+            <span>{{tab}}</span>
         </div>
     </div>
     <div class="tab-details-info">
-        <div class="row-data">
+        <div class="row-data" *ngFor="let data of customerAspectData">
             <div class="title-with-count">
-                <img src="assets/icons/dashboard/articles.svg">
-                <span class="title">Reschedule Flight </span>    
+                <img [src]="customerAspectTabvsImage[data.type]">
+                <span class="title">{{data.intentName}} </span>    
                 <div class="count-percentage">
-                    <span class="percentage">32%</span>
-                    <span class="count-">(234)</span>
+                    <span class="percentage">{{data.percent}}%</span>
+                    <span class="count-">({{data.count}})</span>
                 </div>                               
             </div>
             <div class="slider-percentage">
-                <div class="data-percentage"></div>
+                <div class="data-percentage" [style.width.%]="data.percent"></div>
             </div>
         </div>
-        <div class="row-data">
+        <!-- <div class="row-data">
             <div class="title-with-count">
                 <img src="assets/icons/dashboard/faqs.svg">
                 <span class="title">Reschedule Flight </span>    
@@ -71,6 +60,6 @@
             <div class="slider-percentage">
                 <div class="data-percentage"></div>
             </div>
-        </div>
+        </div> -->
     </div>
 </div>

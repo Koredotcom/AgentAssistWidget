@@ -108,6 +108,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SearchAssistComponent } from './pages/search-assist/search-assist.component';
 import { SaDeleteConfirmComponent } from './helpers/components/sa-delete-confirm/sa-delete-confirm.component';
+import { AutomationIntentvsEntityStringPipe } from './helpers/filters/automation-intentvs-entity-string.pipe';
 @NgModule({
   declarations: [
     AppComponent,
@@ -189,6 +190,7 @@ import { SaDeleteConfirmComponent } from './helpers/components/sa-delete-confirm
     DashboardKpiComponent,
     SearchAssistComponent,
     SaDeleteConfirmComponent,
+    AutomationIntentvsEntityStringPipe
   ],
   imports: [
     CommonModule,
