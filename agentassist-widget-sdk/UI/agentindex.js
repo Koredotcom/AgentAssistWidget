@@ -7338,8 +7338,8 @@ AgentAssistPubSub.subscribe('agent_assist_send_text', (msg, data) => {
         'positionId': data.positionId
     }
     if(data.childBotId) {
-        agent_assist_request['childBotId'] = childBotId;
-        agent_assist_request['childBotName'] = childBotName;
+        agent_assist_request['childBotId'] = data.childBotId;
+        agent_assist_request['childBotName'] = data.childBotName;
     }
     if (data.intentName) {
         agent_assist_request['intentName'] = data.value;
