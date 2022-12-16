@@ -10,7 +10,7 @@ import * as moment from 'moment';
 import { DockStatusService } from '@kore.services/dockstatusService/dock-status.service';
 import { SubSink } from 'subsink';
 import { TranslateService } from '@ngx-translate/core';
-
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-dock-status',
@@ -34,10 +34,12 @@ export class DockStatusComponent implements OnInit {
     private dockStatusService: DockStatusService,
     private notificationService: NotificationService,
     private translate: TranslateService,
+    private authService: AuthService,
     private router: Router) { }
 
   ngOnInit(): void {
-    this.streamId = this.workflowService.getCurrentBt()._id
+    //this.streamId = this.workflowService.getCurrentBt()._id;
+    this.streamId = this.authService.smartAssistBots.map(x=>x._id);
     this.dockServiceSubscriber = this.dockStatusService.change.subscribe(data => {
       // this.polling();
       const index = this.dockersList.findIndex(f => f._id === data._id);
@@ -136,7 +138,7 @@ export class DockStatusComponent implements OnInit {
   removeRecord(task, index) {
     if (task._id) {
       // this.statusDockerLoading = true;
-      let streamId = this.workflowService.getCurrentBt()._id
+      let streamId = this.authService.smartAssistBots.map(x=>x._id);
       const queryParms = {
         streamId: streamId,
         dsId: task._id,
@@ -161,7 +163,7 @@ export class DockStatusComponent implements OnInit {
 
   clearAllRecords() {
     const queryParms = {
-      streamId: this.workflowService.getCurrentBt()._id,
+      streamId: this.authService.smartAssistBots.map(x=>x._id),
     }
     this.service.invoke('deleteAll.dockstatus', queryParms).subscribe(
       res => {

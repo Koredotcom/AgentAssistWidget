@@ -14,13 +14,13 @@ export class EndPointsService {
   private serviceList: Object = {};
 
   constructor() {
-    // if (environment.production) {
-    //   this.SERVER_URL = window.location.protocol + '//' + window.location.host;
-    //   this.API_SERVER_URL = this.SERVER_URL + this.API_URL_PREFIX + this.API_VERSION_PREFIX;
-    // } 
-    
-    this.SERVER_URL = environment['API_SERVER_URL'];
-    this.API_SERVER_URL = environment['API_SERVER_URL'] + this.API_URL_PREFIX + this.API_VERSION_PREFIX;
+    if (environment.production) {
+      this.SERVER_URL = window.location.protocol + '//' + window.location.host;
+      this.API_SERVER_URL = this.SERVER_URL + this.API_URL_PREFIX + this.API_VERSION_PREFIX;
+    } else {
+      this.SERVER_URL = environment['API_SERVER_URL'];
+      this.API_SERVER_URL = environment['API_SERVER_URL'] + this.API_URL_PREFIX + this.API_VERSION_PREFIX;
+    }
     this.SUPPORT_API_SERVER_URL = environment['SUPPORT_API_SERVER_URL'] + this.API_URL_PREFIX + this.API_VERSION_PREFIX;
     this.init();
   }
@@ -313,7 +313,7 @@ export class EndPointsService {
       endpoint: this.API_SERVER_URL + '/builder/streams/:streamId/dockStatus/:dsId',
       method: 'put'
     };
-    
+
     this.serviceList['get.dockstatus.callflow.versions'] = {
       endpoint: this.API_SERVER_URL + '/users/:userId/streams/:streamId/callflows/:callflowId/dockStatus',
       method: 'get'
@@ -630,7 +630,7 @@ export class EndPointsService {
     }
 
     this.serviceList['put.sharebot'] = {
-      endpoint: this.API_SERVER_URL + '/users/:userId/builder/streams/:streamId/sharebot',
+      endpoint: this.API_SERVER_URL + '/users/:userId/builder/streams/:streamId/sharebot?isAgentAssistApp=true',
       method: 'put'
     }
 
@@ -1503,5 +1503,26 @@ export class EndPointsService {
       endpoint: this.API_SERVER_URL + '/smartassist/version',
       method: 'get'
     }
+
+    this.serviceList['get.searchaccounts'] = {
+      endpoint: this.SERVER_URL + '/agentassist/api/v1/searchaccounts/?accountId=:accountId',
+      method: 'get'
+    }
+
+    this.serviceList['post.searchaccounts'] = {
+      endpoint: this.SERVER_URL + '/agentassist/api/v1/searchaccounts/?accountId=:accountId',
+      method: 'post'
+    }
+
+    this.serviceList['put.searchaccounts'] = {
+      endpoint: this.SERVER_URL + '/agentassist/api/v1/searchaccounts/?accountId=:accountId',
+      method: 'put'
+    }
+
+    this.serviceList['delete.searchaccounts'] = {
+      endpoint: this.SERVER_URL + '/agentassist/api/v1/searchaccounts/?accountId=:accountId',
+      method: 'delete'
+    }
+
   }
 }

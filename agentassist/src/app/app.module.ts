@@ -106,6 +106,8 @@ import { DashboardFiltersComponent } from './pages/dashboard/dashboard-filters/d
 import { DashboardKpiComponent } from './pages/dashboard/dashboard-kpi/dashboard-kpi.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { SearchAssistComponent } from './pages/search-assist/search-assist.component';
+import { SaDeleteConfirmComponent } from './helpers/components/sa-delete-confirm/sa-delete-confirm.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -185,6 +187,8 @@ import { FormsModule } from '@angular/forms';
     ExhaustiveRepresentationComponent,
     DashboardFiltersComponent,
     DashboardKpiComponent,
+    SearchAssistComponent,
+    SaDeleteConfirmComponent,
   ],
   imports: [
     CommonModule,
@@ -192,6 +196,7 @@ import { FormsModule } from '@angular/forms';
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    CommonModule,
     DragDropModule,
     SharedModule,
     FileUploadModule,

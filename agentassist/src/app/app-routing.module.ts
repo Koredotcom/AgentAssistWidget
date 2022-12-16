@@ -14,6 +14,7 @@ import { UserManagementComponent } from './pages/agent-settings/user-management/
 import { LanguagesSpeechComponent } from './pages/languages-speech/languages-speech.component';
 import { OnboardingComponent } from './pages/onboarding/onboarding.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { SearchAssistComponent } from './pages/search-assist/search-assist.component';
 
 const routes: Routes = [
   {
@@ -32,6 +33,7 @@ const routes: Routes = [
           { path: 'usecases', loadChildren: () => import('./pages/agent-usecases/agent-usecases.module').then(m => m.AgentUsecasesModule) },
           { path: 'channels', component: AutomationChannelsComponent },
           { path: 'languages', component: LanguagesSpeechComponent },
+          { path: 'searchAssist', component: SearchAssistComponent},
           { path: '**', redirectTo: 'usecases' },
         ]
       },
@@ -40,7 +42,7 @@ const routes: Routes = [
         },
       { path: 'bt', component: AutomationComponent },
       { path: 'bt/:type', component: BTContainerComponent },
-      
+
       {
         path: 'history', component: HistoryComponent, children: [
           { path: '', redirectTo: 'conversationalLogs', pathMatch: 'full' },
@@ -53,9 +55,9 @@ const routes: Routes = [
       }
     ]
   },
-  
+
   { path: 'chathistory', loadChildren: () => import('./lazy/lazy.module').then(m => m.LazyModule) },
-  
+
 ];
 
 @NgModule({
