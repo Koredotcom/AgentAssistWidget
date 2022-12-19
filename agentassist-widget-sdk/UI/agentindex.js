@@ -522,25 +522,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                         // dataTransformation
                         usecasesArr = (data.usecases);
-                        // console.log(usecasesArr.map(dialog => dialog.usecaseName)).map(dlg => ({ 'name': dlg }))
-                        // console.log(usecasesArr.map(dialog => dialog.childBotName))
-                        // console.log(usecasesArr.map(dialog => dialog.childBotId))
-                        // payloadData.suggestions.dialogs = (usecasesArr.map(dialog => dialog.usecaseName)).map(dlg => ({ 'name': dlg }))
-                        // payloadData.suggestions.dialogs = []
                         payloadData.suggestions.dialogs  = usecasesArr.reduce((acc, current)=>{
 
                             let obj = {};
                             let keys = ["usecaseName", "childBotName", "childBotId" ];
-                            // for(let key of keys){
-                            //   if(current[key]){
-                            //     if(key == "usecaseName")
-                            //       obj["name"] = current[key];
-                            //     else 
-                            //       obj[key] = current[key]  
-                            //   } else {
-                            //     obj[key] = ""
-                            //   }
-                            // }
                             obj["name"] = current["usecaseName"] || "";
                             obj["childBotId"] = current["childBotId"] || "";
                             obj["childBotName"] = current["childBotName"] || "";
@@ -927,7 +912,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 </div>
                                 <div class="dropdown-content-elipse hide" id="runAgtBtn-${libUuid}">
                                     <div class="list-option" data-conv-id="${data.conversationId}"
-                                    data-bot-id="${botId}" data-intent-name="${ele.name}"
+                                    data-bot-id="${botId}" data-intent-name="${ele.name}" data-child-bot-id="${ele.childBotId}" data-child-bot-name="${ele.childBotName}"
                                     id="agentSelect-${libUuid}"
                                     data-exhaustivelist-run="true" data-run-myBot="true">Run with Agent Inputs</div>
                                 </div>
@@ -6009,7 +5994,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     console.log("------------------------------------",data)
                     var dialogId = 'dg-' + (Math.random() + 1).toString(36).substring(2);
                     myBotDialogPositionId = dialogId;
-                    AgentAssistPubSub.publish('searched_Automation_details', { conversationId: data.convId, botId: data.botId, value: data.intentName, isSearch: false, intentName: data.intentName, "positionId": myBotDialogPositionId });
+                    AgentAssistPubSub.publish('searched_Automation_details', { conversationId: data.convId, botId: data.botId, value: data.intentName, isSearch: false, intentName: data.intentName, "positionId": myBotDialogPositionId, "childBotId":data.childBotId, "childBotName":data.childBotName });
                     isMyBotAutomationOnGoing = true;
                     noAutomationrunninginMyBot = false;
                     let agentBotuuids = Math.floor(Math.random() * 100);
@@ -7398,6 +7383,10 @@ AgentAssistPubSub.subscribe('searched_Automation_details', (msg, data) => {
         'intentName': data.intentName,
         'experience': isCallConversation === 'true' ? 'voice':'chat',
         'positionId': data?.positionId
+    }
+    if(data.childBotId) {
+        agent_assist_request['childBotId'] = data.childBotId;
+        agent_assist_request['childBotName'] = data.childBotName;
     }
     _agentAsisstSocket.emit('agent_assist_agent_request', agent_assist_request);
 });
