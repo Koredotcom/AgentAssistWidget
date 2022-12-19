@@ -1,1 +1,113 @@
-<h4>Conversational Logs!</h4>
+
+        <!-- <div>
+            <label for="searchConv">Search</label>
+            <input input class="form-control" 
+            type="text" name="userSearch" id="searchConv" #searchTerm
+   />
+        </div>
+        <ng-container *ngIf="true">
+                <div class="kr-sg-data-table">
+                    <div class="table-title-info">
+                        <div class="title">Conversation Logs</div>
+                        <div class="desc">Library of conversations  you have had with your customers</div>
+                    </div>
+                    <div class="table-action-header">
+                        <div class="search"><img src="assets/icons/search.svg"></div>
+                    </div>
+                <perfect-scrollbar class="scroll-tabs" #psTableView (psYReachEnd)="onReachEnd()">
+                    <section class="table-content" *ngIf="!erroMsg ">
+                        <header class="table-header">
+                            <div class="col">ConversaTion ID</div>
+                            <div class="col">TIME</div>
+                            <div class="col">AGENT</div>
+                            <div class="col">AUTOMATIONS</div>
+                            <div class="col">CHANNEL</div>
+                            <div class="col">DURATION</div>
+                            <div class="col">DOWNLOAD LOG</div>
+                        </header>
+                        <div class="content-body" *ngFor="let a of realconvs" (click)="openSlider($event)">
+                            <div class="col">{{a.id}}</div>
+                            <div class="col">{{a.name}}</div>
+                            <div class="col">{{a.value}}</div>
+                            <div class="col">{{a.friute}}</div>
+                            <div class="col">{{a.petname}}</div>
+                            <div class="col">{{a.parent}}</div>
+                            <div class="col text-right pr-0">
+                                <span class="actions-links"><img class="action_icon arrow-icon" src="assets/icons/sort-up.svg"></span>
+                                <span class="actions-links"><img class="action_icon" src="assets/icons/check.svg"></span>
+                                <span class="actions-links">
+                                </span>
+                            </div>
+                        </div>
+                       
+                        
+                    </section>
+                    <div *ngIf="erroMsg">
+                        {{erroMsg}}
+                    </div>
+                </perfect-scrollbar>
+                </div>
+            <!-- <ng-container *ngFor="let usecase of usecases; let i = index">
+                <ng-container *ngTemplateOutlet="usecaseRowTemplate; context: {usecase:usecase, i:i}"></ng-container>
+            </ng-container> 
+
+
+
+        </ng-container> -->
+
+
+<app-slider-component id="convsLogSilder" #newConvSlider='app-slider'>
+  <app-convs-history-logs *ngIf="showConversation" (onClose)="closeConvsHistorySlider($event)" [conversationId] = conversationId></app-convs-history-logs>
+</app-slider-component>
+
+<div class="conversational-logs-wrappper-content">
+    <div class="header-info-title">
+        <div class="title">Conversation Logs</div>
+        <div class="desc-text">Library of conversations  you have had with your customers</div>
+    </div>
+    <perfect-scrollbar class="scroll-tabs" #psTableView (psYReachEnd)="onReachEnd()">
+        <div class="scroll-data-info">
+            <div class="data-content-wrapper">
+                <div class="search-header">
+                    <div class="kr-sg-input-search">
+                        <input type="text" placeholder="Search" class="input-search" name="userSearch" id="searchConv" #searchTerm>
+                        <i class="icon-sa-search search-icon"></i>
+                    </div>
+                </div>
+                <div class="table-data-info">
+                    <div class="table-hader-wrapper">
+                        <div class="title w-17">ConversaTion ID <i class="icon-sa-arrow-left"></i></div>
+                        <div class="title w-12">tIME</div>
+                        <div class="title w-11">AGENT</div>
+                        <div class="title w-16">AUTOMATIONS</div>
+                        <div class="title w-10">CHANNEL</div>
+                        <div class="title w-10">DURATION</div>
+                        <div class="title w-10">Status</div>
+                        <div class="title w-14">DOWNLOAD LOG</div>
+                    </div>
+                    <ng-container>
+                        <div class="table-body-wrapper" id="{{a.id}}" *ngFor="let a of realconvs" (click)="openConvsHistorySlider($event)">
+                            <div class="text-title w-17" id="{{a.id}}">{{a.id}}</div>
+                            <div class="title-text w-12" id="{{a.id}}">{{a.value}}</div>
+                            <div class="title-text w-11" id="{{a.id}}">{{a.name}}</div>
+                            <div class="title-text-info w-16" id="{{a.id}}">
+                                <span class="m-r-5" id="{{a.id}}">New text, order</span>
+                                <span class="link-others" id="{{a.id}}">+2 others</span>
+                            </div>
+                            <div class="title-text w-10" id="{{a.id}}">{{a.friute}}</div>
+                            <div class="title-text w-10"id="{{a.id}}">{{a.parent}}</div>
+                            <div class="status-text open-status w-10" id="{{a.id}}">
+                                <span id="{{a.id}}">Open</span>
+                            </div>
+                            <div class="download-action w-14" id="{{a.id}}">
+                                <div class="download-icon" id="{{a.id}}">
+                                    <i class="icon-sa-comment" id="{{a.id}}"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+    </perfect-scrollbar>
+</div>

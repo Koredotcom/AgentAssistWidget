@@ -266,6 +266,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $(`#summaryText`).val(e.data?.summary ? e.data?.summary[0]?.summary_text:'');
                             $(`#summarySubmit`).attr('data-summary', e.data?JSON.stringify(e.data):'')
                         }
+                        if(e.data.name == 'conversation.endAgentAssis' && e.data.convsId == _conversationId){
+                            _agentAsisstSocket.emit('end_of_conversation', {conversationId: e.data?.convsId, botId:_botId})
+                        }
                         if(e.data.name == 'initial_data'){
                           e.data?.data?.forEach((ele)=>{
                             var agent_assist_request = {
@@ -292,6 +295,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
                         if(e.data.name ==='agentAssist.endOfConversation' && e.data.conversationId) {
                             let currentEndedConversationId = e.data.conversationId;
+                            _agentAsisstSocket.emit('end_of_conversation', {conversationId: e.data?.conversationId, botId:_botId})
                             var appStateStr = localStorage.getItem('agentAssistState') || '{}';
                             var appState = JSON.parse(appStateStr);
                             if (appState[currentEndedConversationId]) {
@@ -7510,7 +7514,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
         <div class="overlay-delete-popup hide" id="summary">
             <div class="delete-box-content summary-box-content">
-                <div class="header-text summary-header">Desposition</div>
+                <div class="header-text summary-header">Summary</div> 
                     <div class="input-block-optional">
                     <div class="label-text">Remarks</div>
                     <textarea class="input-text" id="summaryText" rows="4" cols="50"></textarea>

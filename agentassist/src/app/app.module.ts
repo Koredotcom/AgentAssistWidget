@@ -95,8 +95,7 @@ import { ExternalWidgetComponent } from './pages/agent-settings/external-widget/
 import { AddWidgetComponent } from './pages/agent-settings/external-widget/add-widget/add-widget.component';
 import { OnboardingComponent } from './pages/onboarding/onboarding.component';
 import { OnboardingDialogComponent } from './pages/onboarding/onboarding-dialog/onboarding-dialog.component';
-import { SearchAssistComponent } from './pages/search-assist/search-assist.component';
-import { SaDeleteConfirmComponent } from './helpers/components/sa-delete-confirm/sa-delete-confirm.component';
+import { ConvsHistoryLogsComponent } from './pages/conversational-logs/convs-history-logs/convs-history-logs.component';
 import { CommonModule } from '@angular/common';
 @NgModule({
   declarations: [
@@ -168,8 +167,7 @@ import { CommonModule } from '@angular/common';
     AddWidgetComponent,
     OnboardingComponent,
     OnboardingDialogComponent,
-    SearchAssistComponent,
-    SaDeleteConfirmComponent,
+    ConvsHistoryLogsComponent,
   ],
   imports: [
     BrowserModule,
