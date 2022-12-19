@@ -1,7 +1,7 @@
 
         <div>
             <label for="searchConv">Search</label>
-            <input input class="form-control"  [(ngModel)]="this.userSearch"
+            <input input class="form-control" 
             type="text" name="userSearch" id="searchConv" #searchTerm
    />
         </div>
@@ -69,7 +69,7 @@
                             <div class="col">DURATION</div>
                             <div class="col">DOWNLOAD LOG</div>
                         </header>
-                        <div class="content-body" *ngFor="let a of realconvs">
+                        <div class="content-body" *ngFor="let a of realconvs" (click)="openSlider($event)">
                             <div class="col">{{a.id}}</div>
                             <div class="col">{{a.name}}</div>
                             <div class="col">{{a.value}}</div>
@@ -142,5 +142,5 @@
 
 
     <app-slider-component id="slider" #slider='app-slider'>
-        <app-conversation-history *ngIf="showSlider"  (closed)="closeSlider($event)"></app-conversation-history>
+        <app-conversation-history *ngIf="showSlider"  (closed)="closeSlider($event)" [conversationId] = conversationId></app-conversation-history>
     </app-slider-component>

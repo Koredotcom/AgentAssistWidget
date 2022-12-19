@@ -1,4 +1,5 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 
 @Component({
   selector: 'app-conversation-history',
@@ -7,12 +8,24 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 })
 export class ConversationHistoryComponent implements OnInit {
   @Output() closed = new EventEmitter();
-  constructor() { }
+  @Input() conversationId;
+  constructor(private service: ServiceInvokerService) { }
 
   ngOnInit(): void {
+    this.getclickedConversationHistory()
   }
 
   close() {
     this.closed.emit();
+  }
+
+  getclickedConversationHistory(){
+    let params = {
+      botId:'dsfdf',
+      convId: this.conversationId
+    }
+    this.service.invoke('conversation.history',params).subscribe(res=>{
+      console.log('xxxxxxxxxxxxxx', res)
+    })
   }
 }

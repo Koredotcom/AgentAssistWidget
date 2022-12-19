@@ -29,8 +29,13 @@ export class EndPointsService {
     return this.serviceList[serviceId] || {};
   }
   public init() {
+    this.serviceList['conversation.history'] = {
+     // ${connectionDetails.envinormentUrl}/api/1.1/botmessages/agentassist/${_botId}/history?convId=${_conversationId}&agentHistory=false
+      endpoint: this.API_SERVER_URL + '/botmessages/agentassist/:botId/history?convId=:convId&agentHistory=false',
+      method: 'get'
+    }
     this.serviceList['conversation.logs'] = {
-      endpoint: this.API_SERVER_URL + '/agentassist/api/v1/conversationslogs',
+      endpoint: this.SERVER_URL + '/agentassist/api/v1/conversationslogs',
       method: 'post'
     }
     this.serviceList['sales.signout'] = {
