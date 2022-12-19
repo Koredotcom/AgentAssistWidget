@@ -1,18 +1,19 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
-import * as moment from 'moment';
-import { debounceTime, distinctUntilChanged, finalize, map } from 'rxjs/operators';
 import * as _ from 'underscore';
+import * as moment from 'moment';
 import { fromEvent } from 'rxjs';
-import { AuthService } from '@kore.services/auth.service';
+import { debounceTime, distinctUntilChanged, finalize, map } from 'rxjs/operators';
 @Component({
   selector: 'app-conversational-logs',
   templateUrl: './conversational-logs.component.html',
   styleUrls: ['./conversational-logs.component.scss']
 })
 export class ConversationalLogsComponent implements OnInit {
-  @ViewChild('slider', { static: true }) slider: SliderComponentComponent;
+  @ViewChild('newConvSlider', { static: true }) newConvSlider: SliderComponentComponent;
+  @ViewChild('pdfTable') pdfTable: ElementRef;
+  showConversation: boolean;
   @ViewChild('searchTerm') searchTerm: ElementRef<HTMLElement>;
   isLoadingData =  false;
   showSlider = false;
@@ -64,8 +65,7 @@ export class ConversationalLogsComponent implements OnInit {
   isInitialLoadDone = false;
   conversationId;
   constructor(
-    private service: ServiceInvokerService,
-    public authService: AuthService
+    private service: ServiceInvokerService
   ) { }
 
   ngOnInit() {
@@ -91,17 +91,21 @@ export class ConversationalLogsComponent implements OnInit {
       this.getUsecases(null,true);
     }
   }
-  openSlider(event){
-    this.showSlider = true;
-    console.log('xxxxxxxxxxxxx conersation id ', event.target.innerHTML);
-    this.conversationId = event.target.innerHTML;
-    this.slider.openSlider("#slider", "width500");
+  openSlider(event) {
+    this.showConversation = true;
+    this.newConvSlider.openSlider("#convsLogSilder", "width940");
+    this.conversationId = event.target.firstChild.innerText? event.target.firstChild.innerText: event.target.innerText;
   }
 
-  closeSlider(){
-    this.showSlider = false;
-    this.slider.closeSlider("#slider");
+  closeConvsHistorySlider() {
+    this.showConversation = false;
+    this.newConvSlider.closeSlider('#convsLogSilder');
   }
+
+  openConvsHistorySlider(event) {
+    this.openSlider(event)
+  }
+
  
   getUsecases(val?,pagination?: boolean) {
     this.ucOffset = pagination ? this.USECASES_LIMIT + this.USECASES_LIMIT : this.USECASES_LIMIT;

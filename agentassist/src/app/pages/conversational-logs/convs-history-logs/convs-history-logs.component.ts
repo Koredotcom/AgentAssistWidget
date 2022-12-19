@@ -2,12 +2,13 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 
 @Component({
-  selector: 'app-conversation-history',
-  templateUrl: './conversation-history.component.html',
-  styleUrls: ['./conversation-history.component.scss']
+  selector: 'app-convs-history-logs',
+  templateUrl: './convs-history-logs.component.html',
+  styleUrls: ['./convs-history-logs.component.scss']
 })
-export class ConversationHistoryComponent implements OnInit {
-  @Output() closed = new EventEmitter();
+export class ConvsHistoryLogsComponent implements OnInit {
+
+  @Output() onClose = new EventEmitter();
   @Input() conversationId;
   constructor(private service: ServiceInvokerService) { }
 
@@ -16,7 +17,7 @@ export class ConversationHistoryComponent implements OnInit {
   }
 
   close() {
-    this.closed.emit();
+    this.onClose.emit();
   }
 
   getclickedConversationHistory(){
