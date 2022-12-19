@@ -1110,7 +1110,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 <div class="action-links">
                                     <button class="send-run-btn" data-conv-id="${data.conversationId}"
                                     data-bot-id="${botId}" data-intent-name="${ele.name}"
-                                     data-library-run="true" 
+                                     data-library-run="true" data-child-bot-id="${ele.childBotId}" data-child-bot-name="${ele.childBotName}"
                                     id="run-${libraryResponseId}"
                                     >RUN</button>
                                     <div class="elipse-dropdown-info" id="showRunForAgentBtn-${uuids}">
@@ -1119,7 +1119,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         </div>
                                         <div class="dropdown-content-elipse hide" id="runsearchAgtBtn-${uuids}">
                                             <div class="list-option" data-conv-id="${data.conversationId}"
-                                            data-bot-id="${botId}" data-intent-name="${ele.name}"
+                                            data-bot-id="${botId}" data-intent-name="${ele.name}" data-child-bot-id="${ele.childBotId}" data-child-bot-name="${ele.childBotName}"
                                              id="agentSearchSelect-${uuids}"
                                             data-exhaustivelist-run="true" data-run-myBot="true">Run with Agent Inputs</div>
                                         </div>
@@ -2197,7 +2197,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             <div class="action-links">
                                 <button class="send-run-btn" data-conv-id="${data.conversationId}"
                                 data-bot-id="${botId}" data-intent-name="${ele.name}"
-                                data-run="true" id="run-${uuids}"
+                                data-run="true" id="run-${uuids}" data-child-bot-id="${ele.childBotId}" data-child-bot-name="${ele.childBotName}"
                                 >RUN</button>
                                 <div class="elipse-dropdown-info" id="showRunForAgentBtn-${uuids}">
                                     <div class="elipse-icon" id="elipseIcon-${uuids}">
@@ -2205,7 +2205,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     </div>
                                     <div class="dropdown-content-elipse" id="runAgtBtn-${uuids}">
                                         <div class="list-option" data-conv-id="${data.conversationId}"
-                                        data-bot-id="${botId}" data-intent-name="${ele.name}"
+                                        data-bot-id="${botId}" data-intent-name="${ele.name}" data-child-bot-id="${ele.childBotId}" data-child-bot-name="${ele.childBotName}"
                                          id="agentSelect-${uuids}"
                                         data-exhaustivelist-run="true">Run with Agent Inputs</div>
                                     </div>
@@ -3171,7 +3171,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     <div class="action-links">
                                         <button class="send-run-btn" data-conv-id="${_agentAssistDataObj.conversationId}"
                                         data-bot-id="${res.botId}" data-intent-name="${ele.name}"
-                                        data-history-run="true" id="run-${uniqueID}"
+                                        data-history-run="true" id="run-${uniqueID}" data-child-bot-id="${ele.childBotId}" data-child-bot-name="${ele.childBotName}"
                                         >RUN</button>
                                         <div class="elipse-dropdown-info" id="showRunForAgentBtn-${uniqueID}">
                                             <div class="elipse-icon" id="elipseIcon-${uniqueID}">
@@ -3179,7 +3179,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             </div>
                                             <div class="dropdown-content-elipse" id="runAgtBtn-${uniqueID}">
                                                 <div class="list-option" data-conv-id="${_agentAssistDataObj.conversationId}"
-                                                data-bot-id="${res.botId}" data-intent-name="${ele.name}"
+                                                data-bot-id="${res.botId}" data-intent-name="${ele.name}" data-child-bot-id="${ele.childBotId}" data-child-bot-name="${ele.childBotName}"
                                                  id="agentSelect-${uniqueID}"
                                                 data-exhaustivelist-run="true">Run with Agent Inputs</div>
                                             </div>
