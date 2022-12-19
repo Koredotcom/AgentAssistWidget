@@ -29,6 +29,10 @@ export class EndPointsService {
     return this.serviceList[serviceId] || {};
   }
   public init() {
+    this.serviceList['conversation.logs'] = {
+      endpoint: this.API_SERVER_URL + '/agentassist/api/v1/conversationslogs',
+      method: 'post'
+    }
     this.serviceList['sales.signout'] = {
       endpoint: this.API_SERVER_URL + '/oAuth/signout',
       method: 'delete'
