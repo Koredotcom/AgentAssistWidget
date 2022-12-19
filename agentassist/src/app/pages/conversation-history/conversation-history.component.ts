@@ -11,8 +11,8 @@ export class ConversationHistoryComponent implements OnInit {
 
   ngOnInit(): void {
   }
+
   close() {
     this.closed.emit();
   }
-
 }

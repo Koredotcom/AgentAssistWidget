@@ -2,8 +2,8 @@
         <div>
             <label for="searchConv">Search</label>
             <input input class="form-control"  [(ngModel)]="this.userSearch"
-            type="text" name="userSearch" id="searchConv"
-            (ngModelChange)="this.userSearchUpdate.next($event)"/>
+            type="text" name="userSearch" id="searchConv" #searchTerm
+   />
         </div>
  
       <!-- DATA TABLE START HERE -->
@@ -59,7 +59,7 @@
                         <div class="search"><img src="assets/icons/search.svg"></div>
                     </div>
                 <perfect-scrollbar class="scroll-tabs" #psTableView (psYReachEnd)="onReachEnd()">
-                    <section class="table-content">
+                    <section class="table-content" *ngIf="!erroMsg ">
                         <header class="table-header">
                             <div class="col">ConversaTion ID</div>
                             <div class="col">TIME</div>
@@ -86,6 +86,9 @@
                        
                         
                     </section>
+                    <div *ngIf="erroMsg">
+                        {{erroMsg}}
+                    </div>
                 </perfect-scrollbar>
                 </div>
             <!-- <ng-container *ngFor="let usecase of usecases; let i = index">
@@ -138,3 +141,6 @@
 
 
 
+    <app-slider-component id="slider" #slider='app-slider'>
+        <app-conversation-history *ngIf="showSlider"  (closed)="closeSlider($event)"></app-conversation-history>
+    </app-slider-component>

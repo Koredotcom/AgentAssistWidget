@@ -98,6 +98,7 @@ import { OnboardingDialogComponent } from './pages/onboarding/onboarding-dialog/
 import { SearchAssistComponent } from './pages/search-assist/search-assist.component';
 import { SaDeleteConfirmComponent } from './helpers/components/sa-delete-confirm/sa-delete-confirm.component';
 import { CommonModule } from '@angular/common';
+import { ConversationHistoryComponent } from './pages/conversation-history/conversation-history.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -170,6 +171,7 @@ import { CommonModule } from '@angular/common';
     OnboardingDialogComponent,
     SearchAssistComponent,
     SaDeleteConfirmComponent,
+    ConversationHistoryComponent,
   ],
   imports: [
     BrowserModule,
