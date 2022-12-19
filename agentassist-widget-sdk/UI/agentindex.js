@@ -266,7 +266,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $(`#summaryText`).val(e.data?.summary ? e.data?.summary[0]?.summary_text:'');
                             $(`#summarySubmit`).attr('data-summary', e.data?JSON.stringify(e.data):'')
                         }
-                        if(e.data.name=='conversation.endAgentAssist'){
+                        if(e.data.name == 'conversation.endAgentAssis' && e.data.convsId == _conversationId){
                             _agentAsisstSocket.emit('end_of_conversation', {conversationId: e.data?.convsId, botId:_botId})
                         }
                         if(e.data.name == 'initial_data'){
