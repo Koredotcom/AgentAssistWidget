@@ -1,3 +1,7 @@
+<app-slider-component id="convsLogSilder" #newConvSlider='app-slider'>
+  <app-convs-history-logs *ngIf="showConversation" (onClose)="closeConversation($event)"></app-convs-history-logs>
+</app-slider-component>
+
 <div class="conversational-logs-wrappper-content">
     <div class="header-info-title">
         <div class="title">Conversation Logs</div>
@@ -7,7 +11,7 @@
         <div class="scroll-data-info">
             <div class="data-content-wrapper">
                 <div class="search-header">
-                    <div class="kr-sg-input-search">                               
+                    <div class="kr-sg-input-search">
                         <input type="text" placeholder="Search" class="input-search">
                         <i class="icon-sa-search search-icon"></i>
                     </div>
@@ -24,7 +28,7 @@
                         <div class="title w-14">DOWNLOAD LOG</div>
                     </div>
                     <ng-container>
-                        <div class="table-body-wrapper">
+                        <div class="table-body-wrapper" (click)="openConvsHistorySlider()">
                             <div class="text-title w-17">3753756387</div>
                             <div class="title-text w-12">Apr 15, 2022 2:30 PM</div>
                             <div class="title-text w-11">Floyd Miles</div>
@@ -43,7 +47,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="table-body-wrapper">
+                        <div class="table-body-wrapper" (click)="openConvsHistorySlider()">
                             <div class="text-title w-17">3753756387</div>
                             <div class="title-text w-12">Apr 15, 2022 2:30 PM</div>
                             <div class="title-text w-11">Floyd Miles</div>
@@ -62,7 +66,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="table-body-wrapper">
+                        <div class="table-body-wrapper" (click)="openConvsHistorySlider()">
                             <div class="text-title w-17">3753756387</div>
                             <div class="title-text w-12">Apr 15, 2022 2:30 PM</div>
                             <div class="title-text w-11">Floyd Miles</div>
@@ -81,7 +85,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="table-body-wrapper">
+                        <div class="table-body-wrapper" (click)="openConvsHistorySlider()">
                             <div class="text-title w-17">3753756387</div>
                             <div class="title-text w-12">Apr 15, 2022 2:30 PM</div>
                             <div class="title-text w-11">Floyd Miles</div>

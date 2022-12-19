@@ -7,6 +7,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '@kore.services/notification.service';
 
 
+
 declare const $: any;
 import * as _ from 'underscore';
 @Component({
@@ -16,15 +17,27 @@ import * as _ from 'underscore';
 })
 export class ConversationalLogsComponent implements OnInit {
 
+  @ViewChild('newConvSlider', { static: true }) newConvSlider: SliderComponentComponent;
+  @ViewChild('pdfTable') pdfTable: ElementRef;
+  showConversation: boolean;
 
   constructor() {}
 
   ngOnInit() {
-    this.slider.openSlider("#slider", "width940");
+
   }
 
-  closeSlider(event) {
-    this.showSlider = false;
-    this.slider.closeSlider("#slider");
+  openSlider() {
+    this.showConversation = true;
+    this.newConvSlider.openSlider("#convsLogSilder", "width940");
+  }
+
+  closeConvsHistorySlider() {
+    this.showConversation = false;
+    this.newConvSlider.closeSlider('#convsLogSilder');
+  }
+
+  openConvsHistorySlider() {
+    this.openSlider()
   }
 }
