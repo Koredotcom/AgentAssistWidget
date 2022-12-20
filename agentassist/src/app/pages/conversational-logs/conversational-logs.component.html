@@ -1,61 +1,3 @@
-
-        <!-- <div>
-            <label for="searchConv">Search</label>
-            <input input class="form-control" 
-            type="text" name="userSearch" id="searchConv" #searchTerm
-   />
-        </div>
-        <ng-container *ngIf="true">
-                <div class="kr-sg-data-table">
-                    <div class="table-title-info">
-                        <div class="title">Conversation Logs</div>
-                        <div class="desc">Library of conversations  you have had with your customers</div>
-                    </div>
-                    <div class="table-action-header">
-                        <div class="search"><img src="assets/icons/search.svg"></div>
-                    </div>
-                <perfect-scrollbar class="scroll-tabs" #psTableView (psYReachEnd)="onReachEnd()">
-                    <section class="table-content" *ngIf="!erroMsg ">
-                        <header class="table-header">
-                            <div class="col">ConversaTion ID</div>
-                            <div class="col">TIME</div>
-                            <div class="col">AGENT</div>
-                            <div class="col">AUTOMATIONS</div>
-                            <div class="col">CHANNEL</div>
-                            <div class="col">DURATION</div>
-                            <div class="col">DOWNLOAD LOG</div>
-                        </header>
-                        <div class="content-body" *ngFor="let a of realconvs" (click)="openSlider($event)">
-                            <div class="col">{{data.id}}</div>
-                            <div class="col">{{a.name}}</div>
-                            <div class="col">{{a.value}}</div>
-                            <div class="col">{{a.friute}}</div>
-                            <div class="col">{{a.petname}}</div>
-                            <div class="col">{{a.parent}}</div>
-                            <div class="col text-right pr-0">
-                                <span class="actions-links"><img class="action_icon arrow-icon" src="assets/icons/sort-up.svg"></span>
-                                <span class="actions-links"><img class="action_icon" src="assets/icons/check.svg"></span>
-                                <span class="actions-links">
-                                </span>
-                            </div>
-                        </div>
-                       
-                        
-                    </section>
-                    <div *ngIf="erroMsg">
-                        {{erroMsg}}
-                    </div>
-                </perfect-scrollbar>
-                </div>
-            <!-- <ng-container *ngFor="let usecase of usecases; let i = index">
-                <ng-container *ngTemplateOutlet="usecaseRowTemplate; context: {usecase:usecase, i:i}"></ng-container>
-            </ng-container> 
-
-
-
-        </ng-container> -->
-
-
 <app-slider-component id="convsLogSilder" #newConvSlider='app-slider'>
   <app-convs-history-logs *ngIf="showConversation" (onClose)="closeConvsHistorySlider($event)" [conversationId] = conversationId></app-convs-history-logs>
 </app-slider-component>
@@ -69,8 +11,29 @@
         <div class="scroll-data-info">
             <div class="data-content-wrapper">
                 <div class="search-header">
+                    <div class="custom_date_picker_sec date-sec ngx-daterangepicker-action" (click)="openPicker()">
+                        <i class="icon-sa-calendar ngx-daterangepicker-action" (click)="openPicker()"></i>
+                        <input type="text" 
+                            readonly 
+                            ngxDaterangepickerMd                    
+                            [timePicker]="true"
+                            [alwaysShowCalendars]="true"
+                            [keepCalendarOpeningWithRange]="true"
+                            [ranges]="ranges"
+                            [showCustomRangeLabel]="true"
+                            [showRangeLabelOnInput]="true"
+                            [linkedCalendars]="true"
+                            showCancel="true"
+                            [locale]="{format: 'DD/MM/YYYY hh:mm', displayFormat: 'MM/DD/YYYY hh:mm A'}"
+                            [isInvalidDate]="isInvalidDate"
+                            [(ngModel)]="selected"
+                            class="input-date-custom"
+                            [locale] = "calendarLocale"
+                            (datesUpdated)="onDatesUpdated($event)"/>
+                        <img src="assets/icons/analytics/carrotup.svg" alt="not found" class="ml-2 mr-0 ngx-daterangepicker-action" (click)="openPicker()">  
+                    </div>
                     <div class="kr-sg-input-search">
-                        <input type="text" placeholder="Search" class="input-search" name="userSearch" id="searchConv" #searchTerm>
+                        <input type="text" placeholder="Search" class="input-search" name="userSearch" id="searchConv" #searchTerm (keydown.enter)="save($event)">
                         <i class="icon-sa-search search-icon"></i>
                     </div>
                 </div>
@@ -87,15 +50,15 @@
                     </div>
                     <ng-container>
                         <div class="table-body-wrapper"  *ngFor="let data of realconvs" (click)="openConvsHistorySlider($event, data)">
-                            <div class="text-title w-17" >{{data.id}}</div>
-                            <div class="title-text w-12" >{{data.value}}</div>
-                            <div class="title-text w-11" >{{data.name}}</div>
+                            <div class="text-title w-17" >{{data.conversationId}}</div>
+                            <div class="title-text w-12" >{{data.startedOn}}</div>
+                            <div class="title-text w-11" >{{data?.agent}}</div>
                             <div class="title-text-info w-16" >
-                                <span class="m-r-5" >New text, order</span>
+                                <span class="m-r-5" *ngFor="let ele of data.automations" >{{ele}}</span>
                                 <span class="link-others" >+2 others</span>
                             </div>
-                            <div class="title-text w-10" >{{data.friute}}</div>
-                            <div class="title-text w-10">{{data.parent}}</div>
+                            <div class="title-text w-10" >{{data.channel}}</div>
+                            <div class="title-text w-10">{{data.duration}}</div>
                             <div class="status-text open-status w-10" >
                                 <span >Open</span>
                             </div>
