@@ -320,7 +320,37 @@ https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/getting-starte
 	//     enable:true,
 	//     webhookURL:'PLEASE_PROVIDE_WEBHOOK_URL',
 	//     apiVersion:2	
-	// }		
+	// }	
+
+# How To Run the SDK application in the local environment
+- Pre-requirements:
+    - node version - 14.0.0^ and above is fine
+    - install http-server (https://www.npmjs.com/package/http-server)
+    - install grunt (https://www.npmjs.com/package/grunt)
+
+- Backend:
+    1. Open AgentDesktop latest code base navigate to ----> workflow.services.ts
+    2. In that file find the method ----> resolveAgentAssistHostUrl()
+    3. Add ----> if(url === 'http://localhost') return 'http://localhost/koreagentassist-sdk' <---- before return url
+    4. Open AgentAssist SDK project and navigate to kore-config.js
+    5. Add this 'localhost' to the array as shown ----> urls: ['localhost']
+    6. npm install in this path "agentassist-widget-sdk" folder path
+    7. run ----> http-server <---- in this path "agentassist-widget-sdk" folder
+    8. run ----> grunt <---- in this path "agentassist-widget-sdk/UI" folder path
+    
+- UI:
+    1. Open AgentDesktop latest code base navigate to workflow.services.ts
+    2. In that file find the method resolveAgentAssistHostUrl
+    3. Add if(url === 'http://localhost:{{agentdesktop port number}}') return 'http://localhost/{{http-server port number}}' before return url
+    4. Open AgentAssist SDK project and navigate to kore-config.js
+    5. Add this 'localhost' to the array as shown----> urls: ['localhost']
+    6. npm install in this path "agentassist-widget-sdk" folder path
+    7. run ----> http-server <---- in this path "agentassist-widget-sdk" folder
+    8. run ----> grunt <---- in this path "agentassist-widget-sdk/UI" folder path
+
+# Note:
+    - Run "grunt" command in the cli for every change made.(MANDATORY)
+    - To reflect grunt files with the latest changes in the UI, We have to Hard reload the page.	
 
 ```
 
