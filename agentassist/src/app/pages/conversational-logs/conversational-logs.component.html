@@ -1,4 +1,4 @@
-<app-slider-component id="convsLogSilder" #newConvSlider='app-slider'>
+<app-slider-component id="convsLogSilder" #newConvSlider='app-slider' class="conv-history-log-slider">
   <app-convs-history-logs *ngIf="showConversation" (onClose)="closeConversation($event)"></app-convs-history-logs>
 </app-slider-component>
 
@@ -18,91 +18,57 @@
                 </div>
                 <div class="table-data-info">
                     <div class="table-hader-wrapper">
-                        <div class="title w-17">ConversaTion ID <i class="icon-sa-arrow-left"></i></div>
-                        <div class="title w-12">tIME</div>
-                        <div class="title w-11">AGENT</div>
-                        <div class="title w-16">AUTOMATIONS</div>
-                        <div class="title w-10">CHANNEL</div>
-                        <div class="title w-10">DURATION</div>
-                        <div class="title w-10">Status</div>
-                        <div class="title w-14">DOWNLOAD LOG</div>
+                        <div class="title w-20">ConversaTion ID <i class="icon-sa-arrow-left"></i></div>
+                        <div class="title w-15">tIME</div>
+                        <div class="title w-15">AGENT</div>
+                        <div class="title w-20">AUTOMATIONS</div>
+                        <div class="title w-15">CHANNEL</div>
+                        <div class="title w-15">DURATION</div>
                     </div>
                     <ng-container>
                         <div class="table-body-wrapper" (click)="openConvsHistorySlider()">
-                            <div class="text-title w-17">3753756387</div>
-                            <div class="title-text w-12">Apr 15, 2022 2:30 PM</div>
-                            <div class="title-text w-11">Floyd Miles</div>
-                            <div class="title-text-info w-16">
+                            <div class="text-title w-20">3753756387</div>
+                            <div class="title-text w-15">Apr 15, 2022 2:30 PM</div>
+                            <div class="title-text w-15">Floyd Miles</div>
+                            <div class="title-text-info w-20">
                                 <span class="m-r-5">New text, order</span>
-                                <span class="link-others">+2 others</span>
+                                <span class="link-others" tooltipClass="tooltip-global-styles" placement="bottom-left" ngbTooltip="Replace order, Reorder">+2 others</span>
                             </div>
-                            <div class="title-text w-10">Voice</div>
-                            <div class="title-text w-10">3m 2s</div>
-                            <div class="status-text open-status w-10">
-                                <span>Open</span>
-                            </div>
-                            <div class="download-action w-14">
-                                <div class="download-icon">
-                                    <i class="icon-sa-comment"></i>
-                                </div>
-                            </div>
+                            <div class="title-text w-15">Voice</div>
+                            <div class="title-text w-15">3m 2s</div>
                         </div>
                         <div class="table-body-wrapper" (click)="openConvsHistorySlider()">
-                            <div class="text-title w-17">3753756387</div>
-                            <div class="title-text w-12">Apr 15, 2022 2:30 PM</div>
-                            <div class="title-text w-11">Floyd Miles</div>
-                            <div class="title-text-info w-16">
+                            <div class="text-title w-20">3753756387</div>
+                            <div class="title-text w-15">Apr 15, 2022 2:30 PM</div>
+                            <div class="title-text w-15">Floyd Miles</div>
+                            <div class="title-text-info w-20">
                                 <span class="m-r-5">New text, order</span>
                                 <span class="link-others">+2 others</span>
                             </div>
-                            <div class="title-text w-10">Voice</div>
-                            <div class="title-text w-10">3m 2s</div>
-                            <div class="status-text open-status w-10">
-                                <span>Open</span>
-                            </div>
-                            <div class="download-action w-14">
-                                <div class="download-icon">
-                                    <i class="icon-sa-comment"></i>
-                                </div>
-                            </div>
+                            <div class="title-text w-15">Voice</div>
+                            <div class="title-text w-15">3m 2s</div>
                         </div>
                         <div class="table-body-wrapper" (click)="openConvsHistorySlider()">
-                            <div class="text-title w-17">3753756387</div>
-                            <div class="title-text w-12">Apr 15, 2022 2:30 PM</div>
-                            <div class="title-text w-11">Floyd Miles</div>
-                            <div class="title-text-info w-16">
+                            <div class="text-title w-20">3753756387</div>
+                            <div class="title-text w-15">Apr 15, 2022 2:30 PM</div>
+                            <div class="title-text w-15">Floyd Miles</div>
+                            <div class="title-text-info w-20">
                                 <span class="m-r-5">New text, order</span>
                                 <span class="link-others">+2 others</span>
                             </div>
-                            <div class="title-text w-10">Voice</div>
-                            <div class="title-text w-10">3m 2s</div>
-                            <div class="status-text open-status w-10">
-                                <span>Open</span>
-                            </div>
-                            <div class="download-action w-14">
-                                <div class="download-icon">
-                                    <i class="icon-sa-comment"></i>
-                                </div>
-                            </div>
+                            <div class="title-text w-15">Voice</div>
+                            <div class="title-text w-15">3m 2s</div>
                         </div>
                         <div class="table-body-wrapper" (click)="openConvsHistorySlider()">
-                            <div class="text-title w-17">3753756387</div>
-                            <div class="title-text w-12">Apr 15, 2022 2:30 PM</div>
-                            <div class="title-text w-11">Floyd Miles</div>
-                            <div class="title-text-info w-16">
+                            <div class="text-title w-20">3753756387</div>
+                            <div class="title-text w-15">Apr 15, 2022 2:30 PM</div>
+                            <div class="title-text w-15">Floyd Miles</div>
+                            <div class="title-text-info w-20">
                                 <span class="m-r-5">New text, order</span>
                                 <span class="link-others">+2 others</span>
                             </div>
-                            <div class="title-text w-10">Voice</div>
-                            <div class="title-text w-10">3m 2s</div>
-                            <div class="status-text closed w-10">
-                                <span>Open</span>
-                            </div>
-                            <div class="download-action w-14">
-                                <div class="download-icon">
-                                    <i class="icon-sa-comment"></i>
-                                </div>
-                            </div>
+                            <div class="title-text w-15">Voice</div>
+                            <div class="title-text w-15">3m 2s</div>
                         </div>
                     </ng-container>
                 </div>

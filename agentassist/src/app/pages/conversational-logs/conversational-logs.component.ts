@@ -29,7 +29,7 @@ export class ConversationalLogsComponent implements OnInit {
 
   openSlider() {
     this.showConversation = true;
-    this.newConvSlider.openSlider("#convsLogSilder", "width940");
+    this.newConvSlider.openSlider("#convsLogSilder", "width500");
   }
 
   closeConvsHistorySlider() {
