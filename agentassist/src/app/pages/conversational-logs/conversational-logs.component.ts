@@ -45,7 +45,7 @@ export class ConversationalLogsComponent implements OnInit {
       "endedOn": 1670419674594,
       "conversationId": "c-639094425f9bd6639428b7c5",
       "duration": 152020,
-      "automations": ["book ticket", "book flight"]
+      "automations": ["book ticket", "book flight","book ticket", "book flight","book ticket", "book flight"]
     },
     {
       "channel": "voice",
@@ -215,7 +215,7 @@ export class ConversationalLogsComponent implements OnInit {
   }
   updateFilters(filters: IAnalyticsFilters) {
     this.filters = filters;
-    this.getUsecases(null, true)
+    this.getUsecases(null, false)
     this.filterUpdated$.next(this.filters);
   }
 
