@@ -145,10 +145,10 @@ export class ConversationalLogsComponent implements OnInit {
       this.getUsecases(null,true);
     }
   }
-  openSlider(event) {
+  openSlider(event, data) {
     this.showConversation = true;
     this.newConvSlider.openSlider("#convsLogSilder", "width940");
-    this.conversationId = event.target.id;
+    this.conversationId = data.id;
   }
 
   closeConvsHistorySlider() {
@@ -156,8 +156,8 @@ export class ConversationalLogsComponent implements OnInit {
     this.newConvSlider.closeSlider('#convsLogSilder');
   }
 
-  openConvsHistorySlider(event) {
-    this.openSlider(event)
+  openConvsHistorySlider(event, data) {
+    this.openSlider(event, data)
   }
 
  

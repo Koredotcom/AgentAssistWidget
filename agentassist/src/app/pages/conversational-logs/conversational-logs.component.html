@@ -26,7 +26,7 @@
                             <div class="col">DOWNLOAD LOG</div>
                         </header>
                         <div class="content-body" *ngFor="let a of realconvs" (click)="openSlider($event)">
-                            <div class="col">{{a.id}}</div>
+                            <div class="col">{{data.id}}</div>
                             <div class="col">{{a.name}}</div>
                             <div class="col">{{a.value}}</div>
                             <div class="col">{{a.friute}}</div>
@@ -86,22 +86,22 @@
                         <div class="title w-14">DOWNLOAD LOG</div>
                     </div>
                     <ng-container>
-                        <div class="table-body-wrapper" id="{{a.id}}" *ngFor="let a of realconvs" (click)="openConvsHistorySlider($event)">
-                            <div class="text-title w-17" id="{{a.id}}">{{a.id}}</div>
-                            <div class="title-text w-12" id="{{a.id}}">{{a.value}}</div>
-                            <div class="title-text w-11" id="{{a.id}}">{{a.name}}</div>
-                            <div class="title-text-info w-16" id="{{a.id}}">
-                                <span class="m-r-5" id="{{a.id}}">New text, order</span>
-                                <span class="link-others" id="{{a.id}}">+2 others</span>
+                        <div class="table-body-wrapper"  *ngFor="let data of realconvs" (click)="openConvsHistorySlider($event, data)">
+                            <div class="text-title w-17" >{{data.id}}</div>
+                            <div class="title-text w-12" >{{data.value}}</div>
+                            <div class="title-text w-11" >{{data.name}}</div>
+                            <div class="title-text-info w-16" >
+                                <span class="m-r-5" >New text, order</span>
+                                <span class="link-others" >+2 others</span>
                             </div>
-                            <div class="title-text w-10" id="{{a.id}}">{{a.friute}}</div>
-                            <div class="title-text w-10"id="{{a.id}}">{{a.parent}}</div>
-                            <div class="status-text open-status w-10" id="{{a.id}}">
-                                <span id="{{a.id}}">Open</span>
+                            <div class="title-text w-10" >{{data.friute}}</div>
+                            <div class="title-text w-10">{{data.parent}}</div>
+                            <div class="status-text open-status w-10" >
+                                <span >Open</span>
                             </div>
-                            <div class="download-action w-14" id="{{a.id}}">
-                                <div class="download-icon" id="{{a.id}}">
-                                    <i class="icon-sa-comment" id="{{a.id}}"></i>
+                            <div class="download-action w-14" >
+                                <div class="download-icon" >
+                                    <i class="icon-sa-comment" ></i>
                                 </div>
                             </div>
                         </div>
