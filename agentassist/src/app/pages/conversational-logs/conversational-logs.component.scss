@@ -65,6 +65,10 @@
                     min-height: 56px;
                     padding: 11px 0;
                     cursor: pointer;
+                    transition: 0.2s all ease;
+                    &:hover{
+                        background: #EEF2F6;
+                    }
                     &:nth-child(odd){
                         background: linear-gradient(0deg, #F5F8FA, #F5F8FA), #FFFFFF;
                     }

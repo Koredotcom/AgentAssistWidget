@@ -2187,3 +2187,34 @@ body{
         display: none;
     }
 }
+
+
+.tooltip-global-styles{
+    opacity: 1 !important;
+    &.bs-tooltip-top{
+        .arrow{
+            &::before{
+                top: -1px;
+                border-top-color: #202124;
+            }
+        }
+    }
+    &.no-wrap{
+        .tooltip-inner{
+            white-space: nowrap;
+        }
+    }
+    .tooltip-inner{
+        text-align: left;
+        max-width: 200px !important;
+        border: 0;
+        background: #202124;
+        box-shadow: 0px 4px 4px rgba(32, 33, 36, 0.2);
+        border-radius: 4px;
+        padding: 10px 15px;
+        font-weight: 600;
+        font-size: 10px;
+        line-height: 14px;
+        color: #FFFFFF;
+    }
+}

@@ -119,7 +119,6 @@ export class ConversationalLogsComponent implements OnInit {
       fromEvent(this.searchTerm.nativeElement, 'input')
         .pipe(
           map((event: any) => {
-            console.log(event.target.value)
             if (event.target.value == '') {
               return event.target.value;
             }
@@ -127,7 +126,6 @@ export class ConversationalLogsComponent implements OnInit {
           debounceTime(1000),
           distinctUntilChanged())
         .subscribe((val) => {
-          console.log(val)
           if (val == '' && this.isSearched) {
             this.getUsecases('');
             this.isSearched = false;
@@ -149,7 +147,7 @@ export class ConversationalLogsComponent implements OnInit {
   }
   openSlider(event, data) {
     this.showConversation = true;
-    this.newConvSlider.openSlider("#convsLogSilder", "width940");
+    this.newConvSlider.openSlider("#convsLogSilder", "width500");
     this.conversationId = data.conversationId;
   }
 

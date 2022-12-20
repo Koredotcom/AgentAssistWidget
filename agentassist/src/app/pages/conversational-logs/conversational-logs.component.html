@@ -1,5 +1,5 @@
-<app-slider-component id="convsLogSilder" #newConvSlider='app-slider'>
-  <app-convs-history-logs *ngIf="showConversation" (onClose)="closeConvsHistorySlider($event)" [conversationId] = conversationId></app-convs-history-logs>
+<app-slider-component id="convsLogSilder" #newConvSlider='app-slider' class="conv-history-log-slider">
+  <app-convs-history-logs *ngIf="showConversation" (onClose)="closeConvsHistorySlider($event)" [conversationId]="conversationId"></app-convs-history-logs>
 </app-slider-component>
 
 <div class="conversational-logs-wrappper-content">
@@ -39,17 +39,15 @@
                 </div>
                 <div class="table-data-info">
                     <div class="table-hader-wrapper">
-                        <div class="title w-17">ConversaTion ID <i class="icon-sa-arrow-left"></i></div>
-                        <div class="title w-12">tIME</div>
-                        <div class="title w-11">AGENT</div>
-                        <div class="title w-16">AUTOMATIONS</div>
-                        <div class="title w-10">CHANNEL</div>
-                        <div class="title w-10">DURATION</div>
-                        <div class="title w-10">Status</div>
-                        <div class="title w-14">DOWNLOAD LOG</div>
+                        <div class="title w-20">ConversaTion ID <i class="icon-sa-arrow-left"></i></div>
+                        <div class="title w-15">tIME</div>
+                        <div class="title w-15">AGENT</div>
+                        <div class="title w-20">AUTOMATIONS</div>
+                        <div class="title w-15">CHANNEL</div>
+                        <div class="title w-15">DURATION</div>
                     </div>
                     <ng-container>
-                        <div class="table-body-wrapper"  *ngFor="let data of realconvs" (click)="openConvsHistorySlider($event, data)">
+                        <!-- <div class="table-body-wrapper"  *ngFor="let data of realconvs" (click)="openConvsHistorySlider($event, data)">
                             <div class="text-title w-17" >{{data.conversationId}}</div>
                             <div class="title-text w-12" >{{data.startedOn}}</div>
                             <div class="title-text w-11" >{{data?.agent}}</div>
@@ -67,6 +65,18 @@
                                     <i class="icon-sa-comment" ></i>
                                 </div>
                             </div>
+                        </div> -->
+
+                        <div class="table-body-wrapper"  *ngFor="let data of realconvs" (click)="openConvsHistorySlider($event, data)">
+                            <div class="text-title w-20">{{data.conversationId}}</div>
+                            <div class="title-text w-15">{{data.startedOn}}</div>
+                            <div class="title-text w-15">{{data?.agent}}</div>
+                            <div class="title-text-info w-20">
+                                <span class="m-r-5" *ngFor="let ele of data.automations" >{{ele}}</span>
+                                <span class="link-others">+2 others</span>
+                            </div>
+                            <div class="title-text w-15">{{data.channel}}</div>
+                            <div class="title-text w-15">{{data.duration}}</div>
                         </div>
                     </ng-container>
                 </div>

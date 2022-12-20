@@ -1,2 +1,200 @@
-<p>conversation-history works!</p>
-<div class="close-link col-4 p-0"><img src="assets/images/close.svg"  (click)="close()"></div>
+
+<div class="conv-hstory-wrapper-info">
+    <div class="header-data-sec">
+        <div class="title-sec">
+            <div class="title">Customer ID</div>
+            <div class="collpase-btn">
+                <i class="icon-sa-info"></i>
+            </div>
+        </div>
+        <div class="close_modal" (click)="close()">
+            <i class="icon-sa-close"></i>
+        </div>
+    </div>
+    <div class="viewing-info">
+        <div class="view-title">
+            <i class="icon-sa-round-check"></i>
+            <span>Viewing:</span>
+        </div>
+        <div class="kr-sg-dropdowns" ngbDropdown [placement]="'bottom-right'">
+            <div class="dropdown dropdown-open">
+              <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>
+                <span>Hide Suggestions</span>
+              </button>
+              <ul class="dropdown-menu content-menu" ngbDropdownMenu>
+                <div class="list-name">
+                    <div class="title-list">All suggestions</div>
+                    <div class="desc-text-title">All suggestions made by AgentAssist will be shown</div>
+                    <div class="selected-check">
+                        <i class="icon-sa-check-gray"></i>
+                    </div>
+                </div>
+                <div class="list-name">
+                    <div class="title-list">Selected suggestions</div>
+                    <div class="desc-text-title">AgentAssist suggestions used by the agent will be shown</div>
+                    <div class="selected-check">
+                        <i class="icon-sa-check-gray"></i>
+                    </div>
+                </div>
+                <div class="list-name selected-list-item">
+                    <div class="title-list">Hide suggestions</div>
+                    <div class="desc-text-title">AgentAssist suggestions used by the agent will be shown</div>
+                    <div class="selected-check">
+                        <i class="icon-sa-check-gray"></i>
+                    </div>
+                </div>
+              </ul>
+            </div>
+        </div>
+    </div>
+
+    <perfect-scrollbar>
+        <div class="scroll-data">
+            <div class="joined-info-social">
+                <div class="title-social-text">Mark Jones via WhatsApp</div>
+                <div class="time-text">Today, 2:28pm</div>
+            </div>
+
+            <div class="agent-info-wrapper-template">
+                <div class="img-icon-title">
+                    <div class="time-name"><span>2:32 PM</span> • Charlie (Agent)</div>
+                    <div class="img-block">
+                        <img src="assets/images/conv-logs/agent-dummy.svg">
+                    </div>                   
+                </div>
+                <div class="agent-msg-template">
+                    <div class="title-agent-msg">Thank you for your patiences Mark. I’m Charlie. I see that your having some issues with making a trade. How can I help you today?</div>
+                    <div class="copied-via-agent-assist" data-toggle="collapse" data-target="#agent-selected">
+                        <img src="assets/images/conv-logs/agent-assist.svg">
+                        <span class="text-title">Copied via AgentAssist</span>
+                        <i class="icon-sa-arrow-down"></i>
+                    </div>
+                    <div class="thankyou-agent-selected collapse" id="agent-selected">
+                        <div class="title">Thank you for your patience. How can I help you today?</div>
+                        <div class="agent-selected-tag">
+                            <i class="icon-sa-grid"></i>
+                            <span>Agent Selected</span>
+                        </div>
+                    </div>
+                    <div class="info-text-border">Thank you for your patience. How can I help you today?</div>
+                </div>
+            </div>
+
+            <div class="customer-info-wrapper-template">
+                <div class="img-icon-title">
+                    <div class="img-block">
+                        <img src="assets/images/conv-logs/agent-dummy.svg">
+                    </div>
+                    <div class="time-name">Customer <span>2:32 PM</span></div>
+                </div>
+                <div class="cust-msg-template">
+                    <div class="title-cust-msg">Hi Charlie, yes, everytime I try to make a trade it simply errors after a minute or so</div>
+                </div>
+            </div>
+
+            <div class="agent-assist-info-wrapper-template">
+                <div class="img-icon-title">
+                    <div class="img-block">
+                        <img src="assets/images/conv-logs/agent-dummy.svg">
+                    </div>
+                    <div class="time-name">AgentAssist • <span>2:32 PM</span></div>
+                </div>
+                <div class="agentassist-msg-template">
+                    <div class="message-node-info">
+                        <div class="left-sec">
+                            <div class="icon_block">
+                                <i class="icon-sa-grid"></i>
+                            </div>
+                            <div class="content-sec">
+                                <div class="title">Check account Balance</div>
+                                <div class="automation-text">Automation running</div>
+                            </div>
+                        </div>
+                        <div class="copied-via-agent-assist" data-toggle="collapse" data-target="#auto-node">
+                            <img src="assets/images/conv-logs/agent-assist.svg">
+                            <span class="text-title">via AgentAssist</span>
+                            <i class="icon-sa-arrow-down"></i>
+                        </div>
+                    </div>
+                    <div class="conv-wrapper-info collapse" id="auto-node">
+                        <div class="list-automation-details">
+                            <div class="heading-title">
+                                <div class="icon_block">
+                                   <img src="assets/images/conv-logs/workflow.svg">
+                                </div>
+                                <div class="tetx-title">Conversation</div>
+                            </div>
+                            <div class="info-text-data">
+                                <div class="title">Troubleshoot</div>
+                            </div>
+                            <div class="info-text-data">
+                                <div class="title">Troubleshoot</div>
+                                <div class="agent-selected-tag">
+                                    <i class="icon-sa-grid"></i>
+                                    <span>Agent Selected</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="list-automation-details">
+                            <div class="heading-title">
+                                <div class="icon_block">
+                                    <img src="assets/images/conv-logs/news.svg">
+                                </div>
+                                <div class="tetx-title">Articles(01)</div>
+                            </div>
+                            <div class="info-text-data-no-flex">
+                                <div class="title">Common errors while executing a trade</div>
+                                <div class="show-more-text-desc">Here is how to check your eligibility for refund : 1. Verify the status of order. <span>Show more</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="customer-info-wrapper-template">
+                <div class="img-icon-title">
+                    <div class="img-block">
+                        <img src="assets/images/conv-logs/agent-dummy.svg">
+                    </div>
+                    <div class="time-name">Customer <span>2:32 PM</span></div>
+                </div>
+                <div class="cust-msg-template">
+                    <div class="title-cust-msg">Umm, let me check</div>
+                    <div class="title-cust-msg m-t-8">
+                        <i class="icon-sa-warning m-r-4 f-s-12"></i>Entity ‘digits’ not found
+                    </div>
+                </div>
+            </div>
+            <div class="customer-info-wrapper-template">
+                <div class="img-icon-title">
+                    <div class="img-block">
+                        <img src="assets/images/conv-logs/agent-dummy.svg">
+                    </div>
+                    <div class="time-name">Customer <span>2:32 PM</span></div>
+                </div>
+                <div class="cust-msg-template">
+                    <div class="title-cust-msg">Can’t quite find it</div>
+                    <div class="title-cust-msg m-t-8">
+                        <i class="icon-sa-warning m-r-4 f-s-12"></i>Entity ‘digits’ not found
+                    </div>
+                </div>
+            </div>
+            <div class="customer-info-wrapper-template">
+                <div class="img-icon-title">
+                    <div class="img-block">
+                        <img src="assets/images/conv-logs/agent-dummy.svg">
+                    </div>
+                    <div class="time-name">Customer <span>2:32 PM</span></div>
+                </div>
+                <div class="cust-msg-template">
+                    <div class="title-cust-msg">Got it. It’s 365.</div>
+                    <div class="info-text-input">
+                        <div class="left-title">Digits: <span>365</span></div>
+                        <div class="right-title">Autofilled</div>
+                    </div>
+                    <div class="title-cust-msg">Entity captured successfully</div>
+                </div>
+            </div>
+        </div>
+    </perfect-scrollbar>
+</div>
