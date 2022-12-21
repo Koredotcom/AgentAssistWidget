@@ -93,6 +93,9 @@ export class ConversationalLogsComponent implements OnInit {
   selected: { startDate: Moment, endDate: Moment };
   public filterUpdated$ = new Subject();
   @ViewChild(DaterangepickerDirective) pickerDirective: DaterangepickerDirective;
+  transformedConvsLogs: any = [];
+  sortConvsIds= 'desc';
+  sortConvsLogsByTime= 'desc';
   constructor(
     private service: ServiceInvokerService
   ) { }
@@ -179,7 +182,8 @@ export class ConversationalLogsComponent implements OnInit {
       }
     } else {
       this.erroMsg = undefined;
-      this.realconvs = [...this.convs]
+      // this.realconvs = [...this.convs]
+      // this.TransformConvsLogsData(this.realconvs)
     }
     this.service.invoke('conversation.logs', {}, payload)
       .pipe(
@@ -189,16 +193,62 @@ export class ConversationalLogsComponent implements OnInit {
         }))
       .subscribe((res) => {
         console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', res)
+        this.TransformConvsLogsData(res.data);
         if (pagination) {
-          this.realconvs = [...this.realconvs, ...res.usecases];
+          this.realconvs = [...this.transformedConvsLogs, ...this.TransformConvsLogsData(res.data)];
         } else {
           this.realconvs = res.usecases;
+          console.log(this.realconvs)
         }
 
         this.isInitialLoadDone = true;
       }, err => {
         this.isInitialLoadDone = false;
       });
+  }
+
+  TransformConvsLogsData(resData) {
+    for( let convsLogData of resData) {
+      convsLogData.start = moment(convsLogData.startedOn).format('MMMM Do YYYY, h:mm:ss a');
+      convsLogData.end = moment(convsLogData.endedOn).format('MMMM Do YYYY, h:mm:ss a');
+      convsLogData.duration = moment(parseInt(convsLogData.duration)).format("HH:mm:ss");
+      this.transformedConvsLogs.push(convsLogData)
+    }
+    return this.transformedConvsLogs;
+  }
+
+  convsIdSorting(sortType) {
+    this.transformedConvsLogs=[]
+    this.sortConvsIds = sortType
+    let payload = {
+      start: this.filter.startDate,
+      end: this.filter.endDate,
+      limit: this.ucOffset,
+      skip: 0,
+      sort: {conversationId: sortType},
+      conversationId: ''
+    }
+    this.service.invoke('conversation.logs', {}, payload).subscribe((res) => {
+      console.log(res);
+      this.TransformConvsLogsData(res.data);
+    })
+  }
+
+  sortingConvLogsByTime(sortType) {
+    this.transformedConvsLogs=[];
+    this.sortConvsLogsByTime = sortType
+    let payload = {
+      start: this.filter.startDate,
+      end: this.filter.endDate,
+      limit: this.ucOffset,
+      skip: 0,
+      sort: {"date":sortType},
+      conversationId: ''
+    }
+    this.service.invoke('conversation.logs', {}, payload).subscribe((res) => {
+      console.log(res);
+      this.TransformConvsLogsData(res.data);
+    })
   }
 
   openPicker() {
