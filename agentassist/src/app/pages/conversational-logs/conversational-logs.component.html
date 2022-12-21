@@ -25,7 +25,7 @@
                         <div class="title w-15">CHANNEL</div>
                         <div class="title w-15">DURATION</div>
                     </div>
-                    <ng-container>
+                    <ng-container *ngIf="true">
                         <div class="table-body-wrapper" (click)="openConvsHistorySlider()">
                             <div class="text-title w-20">3753756387</div>
                             <div class="title-text w-15">Apr 15, 2022 2:30 PM</div>
@@ -71,6 +71,31 @@
                             <div class="title-text w-15">3m 2s</div>
                         </div>
                     </ng-container>
+
+                    <ng-container *ngIf="true">
+                        <div class="empty-results-data">
+                            <div class="img-block">
+                                <img src="assets/images/conv-logs/search-no-results.svg">
+                            </div>
+                            <div class="title">No results found</div>
+                            <div class="text-desc">No results found for your query “37826487236”</div>
+                        </div>
+                        <div class="empty-results-data">
+                            <div class="img-block">
+                                <img src="assets/images/conv-logs/no-results-calendar.svg">
+                            </div>
+                            <div class="title">No results found</div>
+                            <div class="text-desc">Could not find any result for the selected date range <span>“Apr 5, 2022 - Jun 5, 2022”</span></div>
+                        </div>
+                        <div class="empty-results-data">
+                            <div class="img-block">
+                                <img src="assets/images/conv-logs/no-comments.svg">
+                            </div>
+                            <div class="title no-conv-title">There are no conversations to show</div>
+                            <div class="text-desc no-conv-desc">You have had no conversation with your customers yet. Conversations log records the transcript, decisions and interactions made while chatting with your customers.</div>
+                        </div>
+                    </ng-container>
+
                 </div>
             </div>
         </div>

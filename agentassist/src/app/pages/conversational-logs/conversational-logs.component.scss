@@ -154,6 +154,43 @@
                         }
                     }
                 }
+                .empty-results-data{
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-direction: column;
+                    width: 280px;
+                    text-align: center;
+                    margin: 0 auto;
+                    height: calc(100vh - 288px);
+                    .img-block{
+                        margin-bottom: 20px;
+                    }
+                    .title{
+                        font-weight: 600;
+                        font-size: 14px;
+                        line-height: 20px;
+                        color: #737373;
+                        margin-bottom: 8px;
+                        &.no-conv-title{
+                            color: #121926;
+                        }
+                    }
+                    .text-desc{
+                        font-weight: 400;
+                        font-size: 11px;
+                        line-height: 16px;
+                        color: #A3A3A3;
+                        &.no-conv-desc{
+                            font-size: 12px;
+                            line-height: 21px;
+                            color: #697586;
+                        }
+                        span{
+                            font-weight: 600;
+                        }
+                    }
+                }
             }
         }
     }
