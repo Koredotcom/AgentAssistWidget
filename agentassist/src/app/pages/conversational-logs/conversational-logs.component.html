@@ -42,7 +42,7 @@
                           <div *ngIf="sortConvsIds === 'desc'" class="title w-20">ConversaTion ID <i class="icon-sa-arrow-left" (click)="convsIdSorting('asc')"></i></div>
                           <div *ngIf="sortConvsIds === 'asc'" class="title w-20">ConversaTion ID <i class="icon-sa-arrow-right" (click)="convsIdSorting('desc')"></i></div>
                           <div *ngIf="sortConvsLogsByTime === 'desc'" class="title w-15">tIME <i class="icon-sa-arrow-left" (click)="sortingConvLogsByTime('asc')"></i></div>
-                          <div *ngIf="sortConvsLogsByTime === 'asc'" class="title w-15">tIME <i class="icon-sa-arrow-right" (click)="sortingConvLogsByTime('asc')"></i></div>
+                          <div *ngIf="sortConvsLogsByTime === 'asc'" class="title w-15">tIME <i class="icon-sa-arrow-right" (click)="sortingConvLogsByTime('desc')"></i></div>
                           <!-- <div class="title w-15">AGENT</div> -->
                           <div class="title w-20">AUTOMATIONS</div>
                           <div class="title w-15">CHANNEL</div>
@@ -81,7 +81,7 @@
                                 <span class="m-r-5" *ngFor="let ele of data?.automations?.slice(0,2)" >{{ele}}</span>
                                 <span class="link-others" *ngIf="data?.automations?.length>2" ngbTooltip="{{ data.automations.slice(2).join(',')}}">+{{data?.automations?.length-2}} others</span>
                             </div>
-                            <div class="title-text w-15">{{data.CHANNEL}}</div>
+                            <div class="title-text w-15">{{data.channel}}</div>
                             <div class="title-text w-15">{{durationCalc(data.DURATION)}}</div>
                         </div>
                         </div>
