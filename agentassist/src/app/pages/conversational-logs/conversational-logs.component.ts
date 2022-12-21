@@ -31,6 +31,9 @@ export class ConversationalLogsComponent implements OnInit {
     sort: { "date": "desc" }
   };
   isLoading: boolean = false;
+  config: any = {
+    suppressScrollX: true
+  };
   rangeList = [
     { id: 'today', display: ("CONVERSATIONAL_LOGS.TODAY") },
     { id: 'yesterday', display: ("CONVERSATIONAL_LOGS.YESTERDAY") },
@@ -41,15 +44,15 @@ export class ConversationalLogsComponent implements OnInit {
   convs = [
     {
       "channel": "chat",
-      "startedOn": 1670419522574,
+      "startedOn": 1671087220609,
       "endedOn": 1670419674594,
       "conversationId": "c-639094425f9bd6639428b7c5",
       "duration": 152020,
-      "automations": ["book ticket", "book flight","book ticket", "book flight","book ticket", "book flight"]
+      "automations": ["book ticket", "book flight", "book ticket", "book flight", "book ticket", "book flight"]
     },
     {
       "channel": "voice",
-      "startedOn": 1670419522574,
+      "startedOn": 1671087220609,
       "endedOn": 1670419674594,
       "conversationId": "c-639094425f9bd6639428b7c6",
       "duration": 152020,
@@ -90,8 +93,9 @@ export class ConversationalLogsComponent implements OnInit {
   ranges: any;
   calendarLocale: any;
   filters: IAnalyticsFilters;
+  isDatePicked = false;
   selected: { startDate: Moment, endDate: Moment };
-  public filterUpdated$ = new Subject();
+  isMoreAvailable = false;
   @ViewChild(DaterangepickerDirective) pickerDirective: DaterangepickerDirective;
   constructor(
     private service: ServiceInvokerService
@@ -111,6 +115,7 @@ export class ConversationalLogsComponent implements OnInit {
       customRangeLabel: ('Custom Range')
     }
     this.selected = { startDate: moment().subtract(6, 'days').startOf('day'), endDate: moment() }
+    this.filters = { startDate: this.selected.startDate.toISOString(), endDate: this.selected.endDate.toISOString() }
     this.getUsecases();
 
   }
@@ -136,13 +141,14 @@ export class ConversationalLogsComponent implements OnInit {
   }
 
   save(e) {
-    console.log("cam here with after enter pressed ", e.target.value);
     this.isSearched = true;
     this.getUsecases(e.target.value);
   }
   onReachEnd() {
-    if (this.isInitialLoadDone) {
+    if (this.isInitialLoadDone || this.isMoreAvailable) {
       this.getUsecases(null, true);
+    } else {
+      return;
     }
   }
   openSlider(event, data) {
@@ -150,6 +156,7 @@ export class ConversationalLogsComponent implements OnInit {
     this.newConvSlider.openSlider("#convsLogSilder", "width500");
     this.conversationId = data.conversationId;
   }
+
 
   closeConvsHistorySlider() {
     this.showConversation = false;
@@ -162,10 +169,11 @@ export class ConversationalLogsComponent implements OnInit {
 
 
   getUsecases(val?, pagination?: boolean) {
-    this.ucOffset = pagination ? this.USECASES_LIMIT + this.USECASES_LIMIT : this.USECASES_LIMIT;
+    this.ucOffset = pagination ? this.ucOffset + this.USECASES_LIMIT : this.USECASES_LIMIT;
+    console.log(this.filter)
     let payload = {
-      start: this.filter.startDate,
-      end: this.filter.endDate,
+      start: this.filters.startDate,
+      end: this.filters.endDate,
       limit: this.ucOffset,
       skip: 0,
       sort: this.filter.sort,
@@ -189,19 +197,21 @@ export class ConversationalLogsComponent implements OnInit {
         }))
       .subscribe((res) => {
         console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', res)
-        if (pagination) {
-          this.realconvs = [...this.realconvs, ...res.usecases];
+        if (pagination && res.length > 0) {
+          this.realconvs = [...this.realconvs, ...res?.data];
         } else {
-          this.realconvs = res.usecases;
+          this.realconvs = res?.data;
         }
-
+        this.isMoreAvailable = res.hasMore;
         this.isInitialLoadDone = true;
       }, err => {
         this.isInitialLoadDone = false;
       });
+      this.isDatePicked = false;
   }
 
   openPicker() {
+    this.isDatePicked = true;
     this.pickerDirective.open();
   }
 
@@ -211,12 +221,32 @@ export class ConversationalLogsComponent implements OnInit {
 
   onDatesUpdated($event) {
     this.filters = { ... this.filters, startDate: this.selected.startDate.toISOString(), endDate: this.selected.endDate.toISOString() }
-    this.updateFilters(this.filters);
+    if (this.isDatePicked) {
+      this.getUsecases(null, false)
+    }
+   
   }
-  updateFilters(filters: IAnalyticsFilters) {
-    this.filters = filters;
-    this.getUsecases(null, false)
-    this.filterUpdated$.next(this.filters);
+
+  durationCalc(dur: number) {
+    var duration = moment.duration(dur);
+    var hours = Math.trunc(duration.asHours());
+    var minutes = Math.trunc(duration.asMinutes()) % 60;
+    var seconds = Math.trunc(duration.asSeconds()) % 60;
+    let diff;
+    if (!hours) {
+      if (!minutes) {
+        if (!seconds) {
+          diff = "0s"
+        } else {
+          diff = seconds + 's';
+        }
+      } else {
+        diff = minutes + "m " + seconds + "s";
+      }
+    } else {
+      diff = hours + "h " + minutes + "m " + seconds + "s";
+    }
+    return diff;
   }
 
 }
