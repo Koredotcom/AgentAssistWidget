@@ -31,6 +31,9 @@ export class ConversationalLogsComponent implements OnInit {
     sort: { "date": "desc" }
   };
   isLoading: boolean = false;
+  config: any = {
+    suppressScrollX: true
+  };
   rangeList = [
     { id: 'today', display: ("CONVERSATIONAL_LOGS.TODAY") },
     { id: 'yesterday', display: ("CONVERSATIONAL_LOGS.YESTERDAY") },
@@ -38,47 +41,48 @@ export class ConversationalLogsComponent implements OnInit {
     { id: 'twoEight', display: ("CONVERSATIONAL_LOGS.LAST_28_DAYS") },
     { id: 'ninety', display: ("CONVERSATIONAL_LOGS.LAST_90_DAYS") }
   ];
-  convs = [
-    {
-      "channel": "chat",
-      "startedOn": 1670419522574,
-      "endedOn": 1670419674594,
-      "conversationId": "c-639094425f9bd6639428b7c5",
-      "duration": 152020,
-      "automations": ["book ticket", "book flight","book ticket", "book flight","book ticket", "book flight"]
-    },
-    {
-      "channel": "voice",
-      "startedOn": 1670419522574,
-      "endedOn": 1670419674594,
-      "conversationId": "c-639094425f9bd6639428b7c6",
-      "duration": 152020,
-      "automations": ["book ticket", "book flight"]
-    }, {
-      "channel": "chat",
-      "startedOn": 1670419522574,
-      "endedOn": 1670419674594,
-      "conversationId": "c-639094425f9bd6639428b7c7",
-      "duration": 152020,
-      "automations": ["book ticket", "book flight",]
-    },
-    {
-      "channel": "chat",
-      "startedOn": 1670419522574,
-      "endedOn": 1670419674594,
-      "conversationId": "c-639094425f9bd6639428b7c8",
-      "duration": 152020,
-      "automations": ["book ticket", "book flight"]
-    }, {
-      "channel": "chat",
-      "startedOn": 1670419522574,
-      "endedOn": 1670419674594,
-      "conversationId": "c-639094425f9bd6639428b7c5",
-      "duration": 152020,
-      "automations": ["book ticket", "book flight"]
-    }
+  // convs = [
+  //   {
+  //     "CHANNEL": "chat",
+  //     "startedOn": 1671087220609,
+  //     "endedOn": 1670419674594,
+  //     "CONVERSATION_ID": "c-639094425f9bd6639428b7c5",
+  //     "DURATION": 152020,
+  //     "automations": ["book ticket", "book flight", "book ticket", "book flight", "book ticket", "book flight"]
+  //   },
+  //   {
+  //     "CHANNEL": "voice",
+  //     "startedOn": 1671087220609,
+  //     "endedOn": 1670419674594,
+  //     "CONVERSATION_ID": "c-639094425f9bd6639428b7c6",
+  //     "DURATION": 152020,
+  //     "automations": ["book ticket", "book flight"]
+  //   }, {
+  //     "CHANNEL": "chat",
+  //     "startedOn": 1670419522574,
+  //     "endedOn": 1670419674594,
+  //     "CONVERSATION_ID": "c-639094425f9bd6639428b7c7",
+  //     "DURATION": 152020,
+  //     "automations": ["book ticket", "book flight",]
+  //   },
+  //   {
+  //     "CHANNEL": "chat",
+  //     "startedOn": 1670419522574,
+  //     "endedOn": 1670419674594,
+  //     "CONVERSATION_ID": "c-639094425f9bd6639428b7c8",
+  //     "DURATION": 152020,
+  //     "automations": ["book ticket", "book flight"],
+  //     TIME:''
+  //   }, {
+  //     "CHANNEL": "chat",
+  //     "startedOn": 1670419522574,
+  //     "endedOn": 1670419674594,
+  //     "CONVERSATION_ID": "c-639094425f9bd6639428b7c5",
+  //     "DURATION": 152020,
+  //     "automations": ["book ticket", "book flight"]
+  //   }
 
-  ];
+  // ];
   realconvs = [];
   isSearching = false;
   erroMsg;
@@ -90,8 +94,9 @@ export class ConversationalLogsComponent implements OnInit {
   ranges: any;
   calendarLocale: any;
   filters: IAnalyticsFilters;
+  isDatePicked = false;
   selected: { startDate: Moment, endDate: Moment };
-  public filterUpdated$ = new Subject();
+  isMoreAvailable = false;
   @ViewChild(DaterangepickerDirective) pickerDirective: DaterangepickerDirective;
   transformedConvsLogs: any = [];
   sortConvsIds= 'desc';
@@ -114,6 +119,7 @@ export class ConversationalLogsComponent implements OnInit {
       customRangeLabel: ('Custom Range')
     }
     this.selected = { startDate: moment().subtract(6, 'days').startOf('day'), endDate: moment() }
+    this.filters = { startDate: this.selected.startDate.toISOString(), endDate: this.selected.endDate.toISOString() }
     this.getUsecases();
 
   }
@@ -139,13 +145,14 @@ export class ConversationalLogsComponent implements OnInit {
   }
 
   save(e) {
-    console.log("cam here with after enter pressed ", e.target.value);
     this.isSearched = true;
     this.getUsecases(e.target.value);
   }
   onReachEnd() {
-    if (this.isInitialLoadDone) {
+    if ((this.isInitialLoadDone || this.isMoreAvailable) && !this.showConversation) {
       this.getUsecases(null, true);
+    } else {
+      return;
     }
   }
   openSlider(event, data) {
@@ -154,37 +161,38 @@ export class ConversationalLogsComponent implements OnInit {
     this.conversationId = data.conversationId;
   }
 
+
   closeConvsHistorySlider() {
     this.showConversation = false;
     this.newConvSlider.closeSlider('#convsLogSilder');
   }
 
   openConvsHistorySlider(event, data) {
-    this.openSlider(event, data)
+    this.openSlider(event, data);
   }
 
 
   getUsecases(val?, pagination?: boolean) {
-    this.ucOffset = pagination ? this.USECASES_LIMIT + this.USECASES_LIMIT : this.USECASES_LIMIT;
+    this.ucOffset = pagination ? this.ucOffset + this.USECASES_LIMIT : this.USECASES_LIMIT;
+    console.log(this.filter)
     let payload = {
-      start: this.filter.startDate,
-      end: this.filter.endDate,
+      start: this.filters.startDate,
+      end: this.filters.endDate,
       limit: this.ucOffset,
       skip: 0,
       sort: this.filter.sort,
       conversationId: val || ''
     }
-    if (val?.length > 0) {
-      this.realconvs = this.convs.filter((ele) => ele.conversationId == val);
-      if (this.realconvs.length == 0) {
-        this.erroMsg = `No conversation logs found.
-        Modify filter parameters and try again.`;
-      }
-    } else {
-      this.erroMsg = undefined;
-      // this.realconvs = [...this.convs]
-      // this.TransformConvsLogsData(this.realconvs)
-    }
+    // if (val?.length > 0) {
+    //   this.realconvs = this.convs.filter((ele) => ele.CONVERSATION_ID == val);
+    //   if (this.realconvs.length == 0) {
+    //     this.erroMsg = `No conversation logs found.
+    //     Modify filter parameters and try again.`;
+    //   }
+    // } else {
+    //   this.erroMsg = undefined;
+    //   this.realconvs = [...this.convs]
+    // }
     this.service.invoke('conversation.logs', {}, payload)
       .pipe(
         finalize(() => {
@@ -194,17 +202,18 @@ export class ConversationalLogsComponent implements OnInit {
       .subscribe((res) => {
         console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', res)
         this.TransformConvsLogsData(res.data);
-        if (pagination) {
+        if (pagination && res.length > 0) {
           this.realconvs = [...this.transformedConvsLogs, ...this.TransformConvsLogsData(res.data)];
         } else {
-          this.realconvs = res.usecases;
-          console.log(this.realconvs)
-        }
+          this.TransformConvsLogsData(res.data);
 
+        }
+        this.isMoreAvailable = res.hasMore;
         this.isInitialLoadDone = true;
       }, err => {
         this.isInitialLoadDone = false;
       });
+      this.isDatePicked = false;
   }
 
   TransformConvsLogsData(resData) {
@@ -252,6 +261,7 @@ export class ConversationalLogsComponent implements OnInit {
   }
 
   openPicker() {
+    this.isDatePicked = true;
     this.pickerDirective.open();
   }
 
@@ -261,12 +271,32 @@ export class ConversationalLogsComponent implements OnInit {
 
   onDatesUpdated($event) {
     this.filters = { ... this.filters, startDate: this.selected.startDate.toISOString(), endDate: this.selected.endDate.toISOString() }
-    this.updateFilters(this.filters);
+    if (this.isDatePicked) {
+      this.getUsecases(null, false)
+    }
+
   }
-  updateFilters(filters: IAnalyticsFilters) {
-    this.filters = filters;
-    this.getUsecases(null, false)
-    this.filterUpdated$.next(this.filters);
+
+  durationCalc(dur: number) {
+    var duration = moment.duration(dur);
+    var hours = Math.trunc(duration.asHours());
+    var minutes = Math.trunc(duration.asMinutes()) % 60;
+    var seconds = Math.trunc(duration.asSeconds()) % 60;
+    let diff;
+    if (!hours) {
+      if (!minutes) {
+        if (!seconds) {
+          diff = "0s"
+        } else {
+          diff = seconds + 's';
+        }
+      } else {
+        diff = minutes + "m " + seconds + "s";
+      }
+    } else {
+      diff = hours + "h " + minutes + "m " + seconds + "s";
+    }
+    return diff;
   }
 
 }

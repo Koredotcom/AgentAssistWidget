@@ -10,6 +10,7 @@ export class ConvsHistoryLogsComponent implements OnInit {
 
   @Output() onClose = new EventEmitter();
   @Input() conversationId;
+  chatHistData = [];
   constructor(private service: ServiceInvokerService) { }
 
   ngOnInit(): void {
@@ -26,7 +27,8 @@ export class ConvsHistoryLogsComponent implements OnInit {
       convId: this.conversationId
     }
     this.service.invoke('conversation.history',params).subscribe(res=>{
-      console.log('xxxxxxxxxxxxxx', res)
+      console.log('xxxxxxxxxxxxxx', res);
+      this.chatHistData = res;
     })
   }
 }
