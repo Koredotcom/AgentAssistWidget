@@ -36,7 +36,6 @@ export class DashboardComponent implements OnInit {
 
   updateKPIData(){
     this.dashboardService.getKPIData().subscribe(data => {
-      console.log(data,"kpi data");
       this.kpiData = {};
       if(data && data.dashboardkpi){
         this.kpiData = data.dashboardkpi;
@@ -61,7 +60,6 @@ export class DashboardComponent implements OnInit {
     this.openComponentId = id;
     this.dashboardService.setExhaustiveRep(true, this.openComponentId);
     this.newConvSlider.openSlider("#" + this.sliderId, "width940");
-    console.log(this.dashboardService.getExhaustiveRep())
   }
 
   closeSlider(value) {
@@ -101,12 +99,9 @@ export class DashboardComponent implements OnInit {
 
   changeAgentAspectView(viewType){
     this.dashboardService.agentAspectView = viewType
-    console.log("click", this.dashboardService.agentAspectView);
   }
 
-  changeCustomerAspectDropdown(selection){
-    console.log("changing selection", selection);
-    
+  changeCustomerAspectDropdown(selection){    
     this.customerAspectDropdownSelection = selection;
   }
 

@@ -27,7 +27,6 @@ export class AgentFeedbackComponent implements OnInit {
 
   updateAgentFeedbackData(){
     this.dashboardService.getAgentFeedbackData().subscribe((data : any) => {
-      console.log(data, 'data inside agent feedback');
       if(data){
         this.agentFeedbackData = Object.assign({}, data);
         if(data.actualData){

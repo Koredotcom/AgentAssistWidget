@@ -20,7 +20,6 @@ export class AutomationPerformanceComponent implements OnInit {
 
   updateAutomationPerformanceData(){
     this.dashboardService.getAutomationPerformanceData().subscribe((data : any) => {
-      console.log(data, "inside automation performace data");
       this.automationPerformanceChartData = [];
       let colorObj : any = {
         "Successfully Completed" : '#47B39C',
@@ -95,9 +94,7 @@ export class AutomationPerformanceComponent implements OnInit {
         formatter:function (name) {
           let itemValue = chartData.filter(item => item.name === name);
           let returnString = `${name}`;
-          let emptySpaceCount = 'successfully completed '.length - name.length;
-          console.log(emptySpaceCount, "empty space count");
-          
+          let emptySpaceCount = 'successfully completed '.length - name.length;          
           for(let i=0; i<=emptySpaceCount; i++){
             returnString = returnString + '  ';
           }

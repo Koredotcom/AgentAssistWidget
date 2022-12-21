@@ -23,11 +23,8 @@ export class CustomerAspectComponent implements OnInit {
     this.updateCustomerAspectData();
   }
 
-  updateCustomerAspectData(){
-    console.log(this.viewType, this.customerDropdownSelection, "inside customer aspect");
-    
+  updateCustomerAspectData(){    
     this.dashboardService.getCustomerAspectData(this.customerDropdownSelection,this.customerTabSelection).subscribe(data => {
-      console.log(data, 'data');
       this.customerAspectData = [];
       if(data && data.length > 0){
         if(this.viewType == VIEWTYPE.PARTIAL_VIEW){
@@ -35,14 +32,11 @@ export class CustomerAspectComponent implements OnInit {
         }else {
           this.customerAspectData = data;
         }
-      }
-      console.log(this.customerAspectData, "customer aspect data");
-      
+      }      
     });
   }
 
   ngOnChanges(changes : SimpleChanges){
-    console.log(changes, "changes");
     if(changes && changes.customerDropdownSelection && changes.customerDropdownSelection.currentValue != changes.customerDropdownSelection.previousValue){
       this.updateCustomerAspectData();
     }

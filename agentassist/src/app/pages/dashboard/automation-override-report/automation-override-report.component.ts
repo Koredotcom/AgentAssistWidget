@@ -46,9 +46,7 @@ export class AutomationOverrideReportComponent implements OnInit {
           this.automationOverrideTableData = data.actualData;
         }
         this.automationOverrideReportData = data;
-      }
-      console.log(data, 'data inside override data', this.automationIntentNamevsEntityList);
-      
+      }      
     })
   }
 

@@ -5,7 +5,7 @@
     <div class="automations-tabs">
         <div class="tab-name" [ngClass]="{'active-tab': tab === customerTabSelection}" (click)="changeTabSelection(tab)" *ngFor="let tab of customerAspectTabsList">
             <img *ngIf="customerAspectTabvsImage[tab]" [src]="customerAspectTabvsImage[tab]" >
-            <span>{{tab}}</span>
+            <span>{{("DASHBOARD.CUSTOMER_ASPECT_TABS_" + tab) | translate}}</span>
         </div>
     </div>
     <div class="tab-details-info">
@@ -22,44 +22,5 @@
                 <div class="data-percentage" [style.width.%]="data.percent"></div>
             </div>
         </div>
-        <!-- <div class="row-data">
-            <div class="title-with-count">
-                <img src="assets/icons/dashboard/faqs.svg">
-                <span class="title">Reschedule Flight </span>    
-                <div class="count-percentage">
-                    <span class="percentage">32%</span>
-                    <span class="count-">(234)</span>
-                </div>                               
-            </div>
-            <div class="slider-percentage">
-                <div class="data-percentage"></div>
-            </div>
-        </div>
-        <div class="row-data">
-            <div class="title-with-count">
-                <img src="assets/icons/dashboard/automation.svg">
-                <span class="title">Cancel Flight </span>    
-                <div class="count-percentage">
-                    <span class="percentage">32%</span>
-                    <span class="count-">(234)</span>
-                </div>                               
-            </div>
-            <div class="slider-percentage">
-                <div class="data-percentage"></div>
-            </div>
-        </div>
-        <div class="row-data">
-            <div class="title-with-count">
-                <img src="assets/icons/dashboard/automation.svg">
-                <span class="title">Reschedule Flight</span>    
-                <div class="count-percentage">
-                    <span class="percentage">32%</span>
-                    <span class="count-">(234)</span>
-                </div>                               
-            </div>
-            <div class="slider-percentage">
-                <div class="data-percentage"></div>
-            </div>
-        </div> -->
     </div>
 </div>

@@ -27,16 +27,12 @@ export class ExhaustiveRepresentationComponent implements OnInit {
   constructor(public dashboardService: DashboardService) { }
 
   ngOnInit(): void {
-    console.log("ngonint inside exhaustive", this.customerDropdownSelection);
-    this.subs.sink = this.dashboardService.getExhaustiveRep().subscribe((response: any) => {
-      console.log("inside subsribe", response);
-      
+    this.subs.sink = this.dashboardService.getExhaustiveRep().subscribe((response: any) => {      
       if (response && response.status) {
         this.sliderStatus = response.status;
         this.componentType = response.type;
         this.componentTitle = COMPONENTVSTITLE[response.type];
         this.componentSubTitle = COMPONENTVSSUBTITLE[response.type];
-        console.log(this.sliderStatus, "slider status", this.componentType, this.componentTitle);
       }
     })
   }

@@ -14,7 +14,7 @@
                 <div class="card-sec" (click)="openSlider(DASHBORADCOMPONENTTYPE.AGENT_ASPECT)">
                     <div class="inner-data-sec">
                         <div class="title-text-info">
-                            <span class="heading-text">Total Sessions</span>
+                            <span class="heading-text">{{"DASHBOARD.TOTAL_SESSIONS" | translate}}</span>
                             <div class="value-data" [ngClass]="{'negtive': !kpiData?.totalSessions?.increment}">
                                 <i [ngClass]="kpiData?.totalSessions?.increment ? 'icon-ast_sortup' : 'icon-ast_sortdown' "></i>
                                 <span>{{kpiData?.totalSessions?.percent}}%</span>
@@ -26,7 +26,7 @@
                 <div class="card-sec">
                     <div class="inner-data-sec">
                         <div class="title-text-info">
-                            <span class="heading-text">Total Suggestions</span>
+                            <span class="heading-text">{{"DASHBOARD.TOTAL_SUGGESTIONS" | translate}}</span>
                             <div class="value-data" [ngClass]="{'negtive': !kpiData?.totalSuggestions?.increment}">
                                 <i [ngClass]="kpiData?.totalSuggestions?.increment ? 'icon-ast_sortup' : 'icon-ast_sortdown' "></i>
                                 <span>{{kpiData?.totalSuggestions?.percent}}%</span>
@@ -38,7 +38,7 @@
                 <div class="card-sec">
                     <div class="inner-data-sec">
                         <div class="title-text-info">
-                            <span class="heading-text">Avg. Suggestions Used/Session</span>
+                            <span class="heading-text">{{"DASHBOARD.AVG_SUGGESTIONS" | translate}}</span>
                         </div>
                         <div class="count-heading">{{kpiData?.avgSuggestions?.count}}</div>
                     </div>
@@ -46,7 +46,7 @@
                 <div class="card-sec">
                     <div class="inner-data-sec">
                         <div class="title-text-info">
-                            <span class="heading-text">Accuracy</span>
+                            <span class="heading-text">{{"DASHBOARD.ACCUARY" | translate}}</span>
                             <div class="value-data" [ngClass]="{'negtive': !kpiData?.accuracy?.increment}">
                                 <i [ngClass]="kpiData?.accuracy?.increment ? 'icon-ast_sortup' : 'icon-ast_sortdown' "></i>
                                 <span>{{kpiData?.accuracy?.percent}}%</span>
@@ -62,14 +62,14 @@
                         <div class="kr-sg-dropdowns agent-intiated-dropdown" ngbDropdown placement="bottom">
                             <div class="dropdown-open">
                                 <button type="button" class="dropdown-toggle before-none dropdown-input" id="repdropdown" ngbDropdownToggle>
-                                    <span class="title-text">{{customerAspectDropdownSelection}}</span>
+                                    <span class="title-text">{{("DASHBOARD.CUSTOMER_ASPECT_DROPDOWN_" + customerAspectDropdownSelection) | translate}}</span>
                                     <i class="icon-sa-arrow-down"></i>
                                 </button>
                                 <ul class="content-menu" aria-labelledby="repdropdown" ngbDropdownMenu>
                                     <perfect-scrollbar>
                                         <div class="scroll-data mx-h-280">
                                             <li ngbDropdownItem class="channel-name m_b_2" *ngFor="let type of customerAspectDropdownList" (click)="changeCustomerAspectDropdown(type)">
-                                                <a  [ngClass]="{'selected': type === customerAspectDropdownSelection}">{{type}}</a>
+                                                <a  [ngClass]="{'selected': type === customerAspectDropdownSelection}">{{("DASHBOARD.CUSTOMER_ASPECT_DROPDOWN_" + type) | translate}}</a>
                                             </li>
                                         </div>
                                     </perfect-scrollbar>
@@ -77,11 +77,11 @@
                             </div>
                         </div>
                         <div class="heading-data-wrapper">
-                            <div class="tag-title">AUTOMATION</div>
+                            <div class="tag-title">{{"DASHBOARD.CUSTOMER_ASPECT_SUBTITLE" | translate}}</div>
                         </div>
-                        <div class="main-heading-title">What are your customers looking for?<i class="icon-sa-help"></i></div>
+                        <div class="main-heading-title">{{"DASHBOARD.CUSTOMER_ASPECT_TITLE" | translate}}<i class="icon-sa-help"></i></div>
                         <app-customer-aspect [viewType]="VIEWTYPE.PARTIAL_VIEW" [customerDropdownSelection]="customerAspectDropdownSelection"></app-customer-aspect>
-                        <div class="view-all-btn" (click)="openSlider(DASHBORADCOMPONENTTYPE.CUSTOMER_ASPECT)">View All</div>
+                        <div class="view-all-btn" (click)="openSlider(DASHBORADCOMPONENTTYPE.CUSTOMER_ASPECT)">{{"DASHBOARD.WIDGET_VIEWALL" | translate}}</div>
                     </div>
                 </div>
                 <div class="chart-box-info col-6">
@@ -95,44 +95,44 @@
                             </div>
                         </div>
                         <div class="heading-data-wrapper">
-                            <div class="tag-title">SEARCH</div>
+                            <div class="tag-title">{{"DASHBOARD.AGENT_ASPECT_SUBTITLE" | translate}}</div>
                         </div>
-                        <div class="main-heading-title">What are your agents looking for?<i class="icon-sa-help"></i></div>
+                        <div class="main-heading-title">{{"DASHBOARD.AGENT_ASPECT_TITLE" | translate}}<i class="icon-sa-help"></i></div>
                         <app-agent-aspect [viewType]="VIEWTYPE.PARTIAL_VIEW"></app-agent-aspect>
-                        <div class="view-all-btn" (click)="openSlider(DASHBORADCOMPONENTTYPE.AGENT_ASPECT)">View All</div>
+                        <div class="view-all-btn" (click)="openSlider(DASHBORADCOMPONENTTYPE.AGENT_ASPECT)">{{"DASHBOARD.WIDGET_VIEWALL" | translate}}</div>
                     </div>
                 </div>
                 <div class="chart-box-info col-6">
                     <div class="chart-inner-data">
                         <div class="heading-data-wrapper">
-                            <div class="tag-title">ACCURACY</div>
+                            <div class="tag-title">{{"DASHBOARD.AUTOMATION_PERFORMANCE_SUBTITLE" | translate}}</div>
                         </div>
-                        <div class="main-heading-title">Automation Performance<i class="icon-sa-help"></i></div>
+                        <div class="main-heading-title">{{"DASHBOARD.AUTOMATION_PERFORMANCE_TITLE" | translate}}<i class="icon-sa-help"></i></div>
                         <app-automation-performance></app-automation-performance>
                     </div>
                 </div>
                 <div class="chart-box-info col-6">
                     <div class="chart-inner-data">
                         <div class="heading-data-wrapper">
-                            <div class="tag-title">TRAINING</div>
+                            <div class="tag-title">{{"DASHBOARD.AGENT_FEEDBACK_SUBTITLE" | translate}}</div>
                         </div>
-                        <div class="main-heading-title">Agent Feedback<i class="icon-sa-help"></i></div>
+                        <div class="main-heading-title">{{"DASHBOARD.AGENT_FEEDBACK_TITLE" | translate}}<i class="icon-sa-help"></i></div>
                         <app-agent-feedback [viewType]="VIEWTYPE.PARTIAL_VIEW"></app-agent-feedback>
-                        <div class="view-all-btn" (click)="openSlider(DASHBORADCOMPONENTTYPE.AGENT_FEEDBACK)">View All</div>
+                        <div class="view-all-btn" (click)="openSlider(DASHBORADCOMPONENTTYPE.AGENT_FEEDBACK)">{{"DASHBOARD.WIDGET_VIEWALL" | translate}}</div>
                     </div>
                 </div>
                 <div class="chart-box-info col-6" id="lastele">
                     <div class="chart-inner-data">
                         <div class="override-info">
-                            <span>Override rate</span>
+                            <span>{{"DASHBOARD.OVERRIDE_RATE" | translate}}</span>
                             <i class="icon-sa-help"></i>
                         </div>
                         <div class="heading-data-wrapper">
-                            <div class="tag-title">TRAINING</div>
+                            <div class="tag-title">{{"DASHBOARD.AUTOMATION_OVERRIDE_SUBTITLE" | translate}}</div>
                         </div>
-                        <div class="main-heading-title">Automation Override Report<i class="icon-sa-help"></i></div>
+                        <div class="main-heading-title">{{"DASHBOARD.AUTOMATION_OVERRIDE_TITLE" | translate}}<i class="icon-sa-help"></i></div>
                         <app-automation-override-report [viewType]="VIEWTYPE.PARTIAL_VIEW"></app-automation-override-report>
-                        <div class="view-all-btn" (click)="openSlider(DASHBORADCOMPONENTTYPE.AUTOMATION_OVERRIDE)">View All</div>
+                        <div class="view-all-btn" (click)="openSlider(DASHBORADCOMPONENTTYPE.AUTOMATION_OVERRIDE)">{{"DASHBOARD.WIDGET_VIEWALL" | translate}}</div>
                     </div>
                 </div>
             </div>

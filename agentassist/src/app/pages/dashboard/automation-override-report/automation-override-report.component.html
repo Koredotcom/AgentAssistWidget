@@ -2,9 +2,9 @@
     <ng-container *ngIf="viewType == VIEWTYPELIST.PARTIAL_VIEW">
         <div class="table-agent-feedback m_t_12">
             <div class="table-header row">
-                <div class="title col-4">Automation NAME</div>
-                <div class="title col-4">ENTITIES OVERRIDDEN <i class="icon-ast_sortupdown ml-2"></i></div>
-                <div class="title col-4 text-right">TOTAL OVERRIDES <i class="icon-ast_sortupdown ml-2"></i></div>
+                <div class="title col-4">{{"DASHBOARD.AUTOMATION_OVERRIDE_AUTOMATION_COLUMN" | translate}}</div>
+                <div class="title col-4">{{"DASHBOARD.AUTOMATION_OVERRIDE_ENTITY_OVERRIDE_COLUMN" | translate}} <i class="icon-ast_sortupdown ml-2"></i></div>
+                <div class="title col-4 text-right">{{"DASHBOARD.AUTOMATION_OVERRIDE_TOTAL_OVERRIDE_COLUMN" | translate}} <i class="icon-ast_sortupdown ml-2"></i></div>
             </div>
             <ng-container>
                 <div class="table-body-feedback training-table-data row" *ngFor="let automation of automationOverrideTableData">
@@ -20,7 +20,7 @@
                     <ng-template #devendar>
                         <perfect-scrollbar class="scroll-entities">
                             <div class="template-popover-automation-entities">
-                                <div class="heading-title">Entities</div>
+                                <div class="heading-title">{{"DASHBOARD.AUTOMATION_OVERRIDE_ENTITIES" | translate}}</div>
                                 <div class="row-info" *ngFor="let obj of automationIntentNamevsEntityList[automation.intentName]">
                                     <div class="title-left">{{obj.entityName}}</div>
                                     <div class="title-right">{{obj.override}}</div>
@@ -37,7 +37,7 @@
     <ng-container *ngIf="viewType == VIEWTYPELIST.EXHAUSTIVE_VIEW">
         <div class="automation-override-report-data">
             <div class="text_info">
-                <span>Override rate</span>
+                <span>{{"DASHBOARD.OVERRIDE_RATE" | translate}}</span>
                 <i class="icon-sa-help"></i>
             </div>
             <div class="count-number">{{automationOverrideReportData.overrideRate}}%</div>

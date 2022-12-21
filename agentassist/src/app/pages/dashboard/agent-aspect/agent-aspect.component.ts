@@ -29,7 +29,6 @@ export class AgentAspectComponent implements OnInit, AfterViewInit {
     private renderer : Renderer2) { }
 
   ngOnInit(): void {
-    console.log(this.viewType, this.dashboardService.agentAspectView, "view type and agent aspect vie3w");
     this.updateAgentAspectData();
   }
 
@@ -64,7 +63,6 @@ export class AgentAspectComponent implements OnInit, AfterViewInit {
 
   updateAgentAspectData(){
     this.dashboardService.getAgentAspectData().subscribe(data => {
-      console.log(data, "inside agent aspect data");
       if(data){
         this.agentAspectData = data;
         if(data.actualData && data.actualData.length > 0){
