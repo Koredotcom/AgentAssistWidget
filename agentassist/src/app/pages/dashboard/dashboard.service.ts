@@ -9,6 +9,8 @@ export class DashboardService {
 
   private exhaustiveRepresentation: BehaviorSubject<{}> = new BehaviorSubject(null);
   public agentAspectView: string = VIEWTYPE.WORDCLOUD;
+  public dashboardfilterUpdated$ = new Subject();
+
 
   constructor() { }
 
@@ -95,6 +97,15 @@ export class DashboardService {
   getExhaustiveRep(): Observable<{}> {
     return this.exhaustiveRepresentation.asObservable();
   }
+
+  setDashboardFilterUpdated(filters){
+    this.dashboardfilterUpdated$.next(filters);
+  }
+
+  getDashboardFilterUpdated(){
+    return this.dashboardfilterUpdated$.asObservable();
+  }
+
 
   getWordCloudOptions(actualData) {
     return {

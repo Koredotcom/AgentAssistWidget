@@ -4,6 +4,7 @@ import html2canvas, { Options } from 'html2canvas';
 import { actualvsDisplayTitle, DASHBORADCOMPONENTTYPE, VIEWTYPE } from './dashboard.cnst';
 import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
 import { DashboardService } from './dashboard.service';
+import { SubSink } from 'subsink';
 
 @Component({
   selector: 'app-dashboard',
@@ -21,6 +22,7 @@ export class DashboardComponent implements OnInit {
   customerAspectDropdownList : any = actualvsDisplayTitle.CUSTOMER_ASPECT_DROPDOWN_LIST;
   customerAspectDropdownSelection : string = "Agent_Initiated";
 
+  subs = new SubSink();
 
   public DASHBORADCOMPONENTTYPE = DASHBORADCOMPONENTTYPE;
   public VIEWTYPE = VIEWTYPE;
@@ -28,6 +30,7 @@ export class DashboardComponent implements OnInit {
   constructor(public dashboardService : DashboardService, public cdRef : ChangeDetectorRef) { }
 
   ngOnInit(): void {
+    this.subscribeEvents();
    this.updateKPIData();
   }
 
@@ -40,6 +43,18 @@ export class DashboardComponent implements OnInit {
       }
     });
   }
+
+  subscribeEvents(){
+    this.subs.sink = this.dashboardService.getDashboardFilterUpdated().subscribe((filters : any) => {
+      console.log(filters, "filters");
+      
+    });
+  }
+
+  ngOnDestroy() {
+    this.subs.unsubscribe();
+  }
+
 
   openSlider(id) {
     this.sliderStatus = true;

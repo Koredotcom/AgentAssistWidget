@@ -3,5 +3,3 @@ export interface IAnalyticsFilters {
     endDate: string,
     type?: string
 }
-
-export const CHANNELS = ['ALL','WHATSAPP','SLACK']

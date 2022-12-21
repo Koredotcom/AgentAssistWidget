@@ -11,7 +11,6 @@ export class CustomerAspectComponent implements OnInit {
 
   @Input() viewType : string;
   @Input() customerDropdownSelection : string;
-  customerAspectDropdownList : any = actualvsDisplayTitle.CUSTOMER_ASPECT_DROPDOWN_LIST;
   customerAspectTabsList : any = actualvsDisplayTitle.CUSTOMER_ASPECT_TABS_LIST;
   customerTabSelection : string = "All";
   public customerAspectTabvsImage  = actualvsDisplayTitle.CUSTOMER_ASPECT_TYPE_VS_IMAGE;

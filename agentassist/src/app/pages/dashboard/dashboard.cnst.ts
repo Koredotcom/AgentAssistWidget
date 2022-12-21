@@ -38,3 +38,5 @@ export const actualvsDisplayTitle = {
         'Automations' : 'assets/icons/dashboard/automation.svg' 
     }
 }
+
+export const CHANNELS = ['ALL','WHATSAPP','SLACK', 'MIS_TEAMS', 'TWILIO']

@@ -4,8 +4,10 @@ import { TranslateService } from '@ngx-translate/core';
 import { Moment } from 'moment';
 import * as moment from 'moment';
 import { DaterangepickerDirective } from 'ngx-daterangepicker-material';
-import { CHANNELS, IAnalyticsFilters } from './dateFilter.model';
+import { IAnalyticsFilters } from './dateFilter.model';
 import { Subject } from 'rxjs';
+import { DashboardService } from '../dashboard.service';
+import { CHANNELS } from '../dashboard.cnst';
 
 @Component({
   selector: 'app-dashboard-filters',
@@ -17,7 +19,6 @@ export class DashboardFiltersComponent implements OnInit {
   @Output() exportPdf = new EventEmitter();
 
   private filters: IAnalyticsFilters;
-  public filterUpdated$ = new Subject();
 
   //Calender
   selected: { startDate: Moment, endDate: Moment };
@@ -37,7 +38,8 @@ export class DashboardFiltersComponent implements OnInit {
   @ViewChild(DaterangepickerDirective) pickerDirective: DaterangepickerDirective;
   constructor(
     private translate: TranslateService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private dashboardService : DashboardService
   ) { }
 
   ngOnInit(): void {
@@ -68,7 +70,7 @@ export class DashboardFiltersComponent implements OnInit {
 
   updateFilters(filters: IAnalyticsFilters) {
     this.filters = filters;
-    this.filterUpdated$.next(this.filters);
+    this.dashboardService.setDashboardFilterUpdated(this.filters);
   }
 
   getFilters(): IAnalyticsFilters {
