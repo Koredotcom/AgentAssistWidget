@@ -35,7 +35,7 @@ export class EndPointsService {
       method: 'get'
     }
     this.serviceList['conversation.logs'] = {
-      endpoint: this.SERVER_URL + '/agentassist/api/v1/agentassistconversationslogs',
+      endpoint: this.SERVER_URL + '/agentassist/api/v1/agentassistconversationslogs/accounts/:accountId',
       method: 'post'
     }
     this.serviceList['sales.signout'] = {
