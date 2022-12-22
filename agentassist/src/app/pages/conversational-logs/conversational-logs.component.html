@@ -70,8 +70,8 @@
                         </div> -->
                         <div *ngIf="transformedConvsLogs.length > 0">
                           <div class="table-body-wrapper"  *ngFor="let data of transformedConvsLogs" (click)="openConvsHistorySlider($event, data)">
-                            <div class="text-title w-20">{{data.conversationId}}</div>
-                            <div class="title-text w-15">{{data.start}}</div>
+                            <div class="text-title w-20 text-truncate">{{data.conversationId}}</div>
+                            <div class="title-text w-15 text-truncate">{{data.start}}</div>
                             <!-- <div class="title-text w-15">{{data?.agent}}</div> -->
                             <div class="title-text-info w-20">
                                 <span class="m-r-5" *ngFor="let ele of data?.automations?.slice(0,2)" >{{ele}}</span>
