@@ -83,25 +83,25 @@ export class AutomationPerformanceComponent implements OnInit {
           return tooltipString
         }
       },
-      legend: {
-        orient: 'vertical',
-        top: 'center',
-        left: 400,
-        icon: 'circle',
-        textStyle: {
-          fontSize: 15,
-        },
-        formatter:function (name) {
-          let itemValue = chartData.filter(item => item.name === name);
-          let returnString = `${name}`;
-          let emptySpaceCount = 'successfully completed '.length - name.length;          
-          for(let i=0; i<=emptySpaceCount; i++){
-            returnString = returnString + '  ';
-          }
-          returnString += `${itemValue[0].value}` + ' | ' + `${itemValue[0].percent}%`;
-          return returnString;
-        }
-      },
+      // legend: {
+      //   orient: 'vertical',
+      //   top: 'center',
+      //   left: 400,
+      //   icon: 'circle',
+      //   textStyle: {
+      //     fontSize: 15,
+      //   },
+      //   formatter:function (name) {
+      //     let itemValue = chartData.filter(item => item.name === name);
+      //     let returnString = `${name}`;
+      //     let emptySpaceCount = 'successfully completed '.length - name.length;          
+      //     for(let i=0; i<=emptySpaceCount; i++){
+      //       returnString = returnString + '  ';
+      //     }
+      //     returnString += `${itemValue[0].value}` + ' | ' + `${itemValue[0].percent}%`;
+      //     return returnString;
+      //   }
+      // },
       series: [
         {
           type: 'pie',

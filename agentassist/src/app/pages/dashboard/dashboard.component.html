@@ -79,7 +79,7 @@
                         <div class="heading-data-wrapper">
                             <div class="tag-title">{{"DASHBOARD.CUSTOMER_ASPECT_SUBTITLE" | translate}}</div>
                         </div>
-                        <div class="main-heading-title">{{"DASHBOARD.CUSTOMER_ASPECT_TITLE" | translate}}<i class="icon-sa-help"></i></div>
+                        <div class="main-heading-title">{{"DASHBOARD.CUSTOMER_ASPECT_TITLE" | translate}}<i class="icon-sa-help" ngbTooltip="Tooltips are text labels that appear when the user hovers over or focuses on an element." placement="bottom-center" tooltipClass="tooltip_dashboard"></i></div>
                         <app-customer-aspect [viewType]="VIEWTYPE.PARTIAL_VIEW" [customerDropdownSelection]="customerAspectDropdownSelection"></app-customer-aspect>
                         <div class="view-all-btn" (click)="openSlider(DASHBORADCOMPONENTTYPE.CUSTOMER_ASPECT)">{{"DASHBOARD.WIDGET_VIEWALL" | translate}}</div>
                     </div>

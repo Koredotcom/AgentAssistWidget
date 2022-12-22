@@ -1152,6 +1152,28 @@ body{
     }
 }
 
+
+.tooltip_dashboard{
+    opacity: 1 !important;
+    .arrow{
+        display: block !important;
+        &::before{
+            border-bottom-color:#ffffff !important;
+        }
+    }
+    .tooltip-inner{
+        max-width: 227px !important;
+        padding: 15px !important;
+        background: #FFFFFF;
+        border-radius: 8px;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 18px;
+        color: #404040;
+        text-align: left;
+        box-shadow: 0px -2px 25px -5px rgba(16, 24, 40, 0.1), 0px 8px 10px -6px rgba(16, 24, 40, 0.1);
+    }
+}
 .z-index-2{
     z-index: 2;
 }
