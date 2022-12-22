@@ -57,6 +57,9 @@ export class ConversationalLogsComponent implements OnInit {
   isMoreAvailable = false;
   seachedConvsId;
   @ViewChild(DaterangepickerDirective) pickerDirective: DaterangepickerDirective;
+  transformedConvsLogs: any = [];
+  sortConvsIds= 'desc';
+  sortConvsLogsByTime= 'desc';
   constructor(
     private service: ServiceInvokerService
   ) { }
@@ -77,7 +80,7 @@ export class ConversationalLogsComponent implements OnInit {
     this.selected = { startDate: moment().subtract(6, 'days').startOf('day'), endDate: moment() }
     this.filters = { startDate: this.selected.startDate.toISOString(), endDate: this.selected.endDate.toISOString() }
     console.log("called from ngoninit 111111111111111111111111111111111");
-    
+
     this.getUsecases();
 
   }
@@ -153,10 +156,12 @@ export class ConversationalLogsComponent implements OnInit {
         }))
       .subscribe((res) => {
         console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', res)
+        this.TransformConvsLogsData(res.data);
         if (pagination && res.length > 0) {
-          this.realconvs = [...this.realconvs, ...res?.data];
+          this.realconvs = [...this.transformedConvsLogs, ...this.TransformConvsLogsData(res.data)];
         } else {
-          this.realconvs = res?.data;
+          this.TransformConvsLogsData(res.data);
+
         }
         this.isMoreAvailable = res.hasMore;
         this.isInitialLoadDone = true;
@@ -166,6 +171,50 @@ export class ConversationalLogsComponent implements OnInit {
         this.realconvs = [];
         this.isDatePicked = false;
       });
+  }
+
+  TransformConvsLogsData(resData) {
+    for( let convsLogData of resData) {
+      convsLogData.start = moment(convsLogData.startedOn).format('MMMM Do YYYY, h:mm:ss a');
+      convsLogData.end = moment(convsLogData.endedOn).format('MMMM Do YYYY, h:mm:ss a');
+      convsLogData.duration = moment(parseInt(convsLogData.duration)).format("HH:mm:ss");
+      this.transformedConvsLogs.push(convsLogData)
+    }
+    return this.transformedConvsLogs;
+  }
+
+  convsIdSorting(sortType) {
+    this.transformedConvsLogs=[]
+    this.sortConvsIds = sortType
+    let payload = {
+      start: this.filter.startDate,
+      end: this.filter.endDate,
+      limit: this.ucOffset,
+      skip: 0,
+      sort: {conversationId: sortType},
+      conversationId: ''
+    }
+    this.service.invoke('conversation.logs', {}, payload).subscribe((res) => {
+      console.log(res);
+      this.TransformConvsLogsData(res.data);
+    })
+  }
+
+  sortingConvLogsByTime(sortType) {
+    this.transformedConvsLogs=[];
+    this.sortConvsLogsByTime = sortType
+    let payload = {
+      start: this.filter.startDate,
+      end: this.filter.endDate,
+      limit: this.ucOffset,
+      skip: 0,
+      sort: {"date":sortType},
+      conversationId: ''
+    }
+    this.service.invoke('conversation.logs', {}, payload).subscribe((res) => {
+      console.log(res);
+      this.TransformConvsLogsData(res.data);
+    })
   }
 
   openPicker() {
@@ -183,7 +232,7 @@ export class ConversationalLogsComponent implements OnInit {
       this.getUsecases(null, false)
       console.log("called once date selectedd 5555555555555555555555555555555555555555555");
     }
-   
+
   }
 
   durationCalc(dur: number) {
