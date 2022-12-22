@@ -19,26 +19,12 @@
         <div class="kr-sg-dropdowns" ngbDropdown [placement]="'bottom-right'">
             <div class="dropdown dropdown-open">
               <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>
-                <span>Hide Suggestions</span>
+                <span>{{selectedElement}}</span>
               </button>
               <ul class="dropdown-menu content-menu" ngbDropdownMenu>
-                <div class="list-name">
-                    <div class="title-list">All suggestions</div>
-                    <div class="desc-text-title">All suggestions made by AgentAssist will be shown</div>
-                    <div class="selected-check">
-                        <i class="icon-sa-check-gray"></i>
-                    </div>
-                </div>
-                <div class="list-name">
-                    <div class="title-list">Selected suggestions</div>
-                    <div class="desc-text-title">AgentAssist suggestions used by the agent will be shown</div>
-                    <div class="selected-check">
-                        <i class="icon-sa-check-gray"></i>
-                    </div>
-                </div>
-                <div class="list-name selected-list-item">
-                    <div class="title-list">Hide suggestions</div>
-                    <div class="desc-text-title">AgentAssist suggestions used by the agent will be shown</div>
+                <div class="list-name" ngbDropdownItem [ngClass]='selectedElement == ele.name ? "selected-list-item":"" ' *ngFor='let ele of dropDownOptions' (click)="selectedDropDown(ele)">
+                    <div class="title-list">{{ele.name}}</div>
+                    <div class="desc-text-title">{{ele.description}}</div>
                     <div class="selected-check">
                         <i class="icon-sa-check-gray"></i>
                     </div>

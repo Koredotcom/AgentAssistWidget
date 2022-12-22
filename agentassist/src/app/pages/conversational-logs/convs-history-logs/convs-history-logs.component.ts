@@ -10,6 +10,12 @@ export class ConvsHistoryLogsComponent implements OnInit {
 
   @Output() onClose = new EventEmitter();
   @Input() conversationId;
+  dropDownOptions = [
+    {name: 'All suggestions', description:'All suggestions made by AgentAssist will be shown'},
+    {name: 'Selected suggestions', description:'AgentAssist suggestions used by the agent will be shown'},
+    {name: 'Hide suggestions', description:'AgentAssist suggestions used by the agent will be shown'}
+  ]
+  selectedElement = this.dropDownOptions[2].name;
   chatHistData = [];
   constructor(private service: ServiceInvokerService) { }
 
@@ -30,5 +36,9 @@ export class ConvsHistoryLogsComponent implements OnInit {
       console.log('xxxxxxxxxxxxxx', res);
       this.chatHistData = res;
     })
+  }
+
+  selectedDropDown(data){
+    this.selectedElement = data.name;
   }
 }

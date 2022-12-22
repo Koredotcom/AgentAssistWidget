@@ -103,6 +103,7 @@ export class ConversationalLogsComponent implements OnInit {
           if (val == '' && this.isSearched) {
             console.log("called once search is cleared 222222222222222222222222222222222");
             this.getUsecases('');
+            this.isDatePicked = false;
             this.isSearched = false;
           }
         });
@@ -111,6 +112,7 @@ export class ConversationalLogsComponent implements OnInit {
   }
 
   save(e) {
+    this.isDatePicked = false
     this.isSearched = true;
     this.seachedConvsId = e.target.value;
     this.getUsecases(e.target.value);
@@ -141,7 +143,7 @@ export class ConversationalLogsComponent implements OnInit {
   }
 
 
-  getUsecases(val?, pagination?: boolean) {
+  getUsecases(val?, pagination?: boolean, datepicked?: boolean) {
     this.ucOffset = pagination ? this.ucOffset + this.USECASES_LIMIT : this.USECASES_LIMIT;
     console.log(this.filter)
 
@@ -183,15 +185,15 @@ export class ConversationalLogsComponent implements OnInit {
         }
         this.isMoreAvailable = res.hasMore;
         this.isInitialLoadDone = true;
-        this.transformedConvsLogs.length>0?this.isDatePicked = false:this.isDatePicked = true;
+        if(datepicked && this.TransformConvsLogsData.length == 0){
+          this.isDatePicked = false;
+        }
       }, err => {
         this.isInitialLoadDone = false;
         this.transformedConvsLogs = [];
         this.isDatePicked = false;
       });
   }
-
-
 
   TransformConvsLogsData(resData) {
     for( let convsLogData of resData) {
@@ -255,7 +257,7 @@ export class ConversationalLogsComponent implements OnInit {
   onDatesUpdated($event) {
     this.filters = { ... this.filters, startDate: this.selected.startDate.toISOString(), endDate: this.selected.endDate.toISOString() }
     if (this.isDatePicked) {
-      this.getUsecases(null, false)
+      this.getUsecases(null, false, true)
       console.log("called once date selectedd 5555555555555555555555555555555555555555555");
     }
 
