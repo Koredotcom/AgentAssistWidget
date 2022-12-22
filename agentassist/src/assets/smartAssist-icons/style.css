@@ -1,16 +1,16 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?v9basw');
-  src:  url('fonts/icomoon.eot?v9basw#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?v9basw') format('truetype'),
-    url('fonts/icomoon.woff?v9basw') format('woff'),
-    url('fonts/icomoon.svg?v9basw#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?br6spu');
+  src:  url('fonts/icomoon.eot?br6spu#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?br6spu') format('truetype'),
+    url('fonts/icomoon.woff?br6spu') format('woff'),
+    url('fonts/icomoon.svg?br6spu#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
 }
 
-[class^="icon-sa"], [class*=" icon-sa"] {
+[class^="icon-"], [class*=" icon-"] {
   /* use !important to prevent issues with browser extensions that change fonts */
   font-family: 'icomoon' !important;
   speak: never;
@@ -25,6 +25,69 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-sa-conv-info:before {
+  content: "\e93c";
+}
+.icon-sa-conv-keypad:before {
+  content: "\e93d";
+}
+.icon-sa-conv-mybot:before {
+  content: "\e93e";
+}
+.icon-sa-conv-refreshten:before {
+  content: "\e93f";
+}
+.icon-sa-conv-search:before {
+  content: "\e940";
+}
+.icon-sa-conv-speed:before {
+  content: "\e941";
+}
+.icon-sa-conv-thumb-down:before {
+  content: "\e942";
+}
+.icon-sa-conv-thumbup:before {
+  content: "\e943";
+}
+.icon-sa-conv-thumbupdown:before {
+  content: "\e944";
+}
+.icon-sa-conv-time:before {
+  content: "\e945";
+}
+.icon-sa-conv-user:before {
+  content: "\e946";
+}
+.icon-sa-conv-via-search:before {
+  content: "\e947";
+}
+.icon-sa-conv-volume:before {
+  content: "\e948";
+}
+.icon-sa-conv-agentassist:before {
+  content: "\e949";
+}
+.icon-sa-conv-agentselected:before {
+  content: "\e94a";
+}
+.icon-sa-conv-calendar:before {
+  content: "\e94b";
+}
+.icon-sa-conv-check:before {
+  content: "\e94c";
+}
+.icon-sa-conv-close:before {
+  content: "\e94d";
+}
+.icon-sa-conv-conversation-white:before {
+  content: "\e94e";
+}
+.icon-sa-conv-download:before {
+  content: "\e94f";
+}
+.icon-sa-conv-eye:before {
+  content: "\e950";
+}
 .icon-sa-ext-link:before {
   content: "\e938";
 }

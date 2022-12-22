@@ -42,48 +42,6 @@ export class ConversationalLogsComponent implements OnInit {
     { id: 'twoEight', display: ("CONVERSATIONAL_LOGS.LAST_28_DAYS") },
     { id: 'ninety', display: ("CONVERSATIONAL_LOGS.LAST_90_DAYS") }
   ];
-  // convs = [
-  //   {
-  //     "CHANNEL": "chat",
-  //     "startedOn": 1671087220609,
-  //     "endedOn": 1670419674594,
-  //     "CONVERSATION_ID": "c-639094425f9bd6639428b7c5",
-  //     "DURATION": 152020,
-  //     "automations": ["book ticket", "book flight", "book ticket", "book flight", "book ticket", "book flight"]
-  //   },
-  //   {
-  //     "CHANNEL": "voice",
-  //     "startedOn": 1671087220609,
-  //     "endedOn": 1670419674594,
-  //     "CONVERSATION_ID": "c-639094425f9bd6639428b7c6",
-  //     "DURATION": 152020,
-  //     "automations": ["book ticket", "book flight"]
-  //   }, {
-  //     "CHANNEL": "chat",
-  //     "startedOn": 1670419522574,
-  //     "endedOn": 1670419674594,
-  //     "CONVERSATION_ID": "c-639094425f9bd6639428b7c7",
-  //     "DURATION": 152020,
-  //     "automations": ["book ticket", "book flight",]
-  //   },
-  //   {
-  //     "CHANNEL": "chat",
-  //     "startedOn": 1670419522574,
-  //     "endedOn": 1670419674594,
-  //     "CONVERSATION_ID": "c-639094425f9bd6639428b7c8",
-  //     "DURATION": 152020,
-  //     "automations": ["book ticket", "book flight"],
-  //     TIME:''
-  //   }, {
-  //     "CHANNEL": "chat",
-  //     "startedOn": 1670419522574,
-  //     "endedOn": 1670419674594,
-  //     "CONVERSATION_ID": "c-639094425f9bd6639428b7c5",
-  //     "DURATION": 152020,
-  //     "automations": ["book ticket", "book flight"]
-  //   }
-
-  // ];
   realconvs = [];
   isSearching = false;
   erroMsg;
@@ -98,6 +56,7 @@ export class ConversationalLogsComponent implements OnInit {
   isDatePicked = false;
   selected: { startDate: Moment, endDate: Moment };
   isMoreAvailable = false;
+  seachedConvsId;
   @ViewChild(DaterangepickerDirective) pickerDirective: DaterangepickerDirective;
   transformedConvsLogs: any = [];
   sortConvsIds: string = 'desc';
@@ -154,11 +113,12 @@ export class ConversationalLogsComponent implements OnInit {
 
   save(e) {
     this.isSearched = true;
+    this.seachedConvsId = e.target.value;
     this.getUsecases(e.target.value);
     console.log("called clciked enter on search box 333333333333333333333333333333333333333");
   }
   onReachEnd() {
-    if ((this.isInitialLoadDone || this.isMoreAvailable) && !this.showConversation && !this.isSearched) {
+    if ((this.isInitialLoadDone || this.isMoreAvailable) && !this.showConversation && !this.isSearched && !this.isDatePicked) {
       console.log("called once scroll reached end 444444444444444444444444444444");
       this.getUsecases(null, true);
     } else {
@@ -225,10 +185,12 @@ export class ConversationalLogsComponent implements OnInit {
         }
         this.isMoreAvailable = res.hasMore;
         this.isInitialLoadDone = true;
+        this.realconvs.length>0?this.isDatePicked = false:this.isDatePicked = true;
       }, err => {
         this.isInitialLoadDone = false;
+        this.realconvs = [];
+        this.isDatePicked = false;
       });
-      this.isDatePicked = false;
   }
 
 
