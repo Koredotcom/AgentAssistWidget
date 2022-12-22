@@ -68,10 +68,6 @@
                                 </div>
                             </div>
                         </div> -->
-                        <div *ngIf="transformedConvsLogs.length === 0" >
-                          <h4>There are no conversations to show</h4>
-                          <p>You have had no conversation with your customers yet. Conversations log records the transcript, decisions and interactions made while chatting with your customers.</p>
-                        </div>
                         <div *ngIf="transformedConvsLogs.length > 0">
                           <div class="table-body-wrapper"  *ngFor="let data of transformedConvsLogs" (click)="openConvsHistorySlider($event, data)">
                             <div class="text-title w-20">{{data.conversationId}}</div>
