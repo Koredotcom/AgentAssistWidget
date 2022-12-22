@@ -7,6 +7,7 @@ import { fromEvent, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, finalize, map } from 'rxjs/operators';
 import { DaterangepickerDirective } from 'ngx-daterangepicker-material';
 import { Moment } from 'moment';
+import { LocalStoreService } from '@kore.services/localstore.service';
 export interface IAnalyticsFilters {
   startDate: string,
   endDate: string,
@@ -58,13 +59,17 @@ export class ConversationalLogsComponent implements OnInit {
   seachedConvsId;
   @ViewChild(DaterangepickerDirective) pickerDirective: DaterangepickerDirective;
   transformedConvsLogs: any = [];
-  sortConvsIds= 'desc';
-  sortConvsLogsByTime= 'desc';
+  sortConvsIds: string = 'desc';
+  sortConvsLogsByTime: string = 'desc';
+  accountId: string;
+
   constructor(
-    private service: ServiceInvokerService
+    private service: ServiceInvokerService,
+    private localstorage: LocalStoreService
   ) { }
 
   ngOnInit() {
+    this.accountId = this.localstorage.getSelectedAccount()?.accountId
     this.ranges = {
       [('Today')]: [moment().startOf('day'), moment()],
       [('Yesterday')]: [moment().subtract(1, 'days').startOf('day'), moment().subtract(1, 'days').endOf('day')],
@@ -140,6 +145,11 @@ export class ConversationalLogsComponent implements OnInit {
   getUsecases(val?, pagination?: boolean) {
     this.ucOffset = pagination ? this.ucOffset + this.USECASES_LIMIT : this.USECASES_LIMIT;
     console.log(this.filter)
+
+    const params = {
+      'accountId': this.accountId
+    };
+
     let payload = {
       start: this.filters.startDate,
       end: this.filters.endDate,
@@ -148,7 +158,17 @@ export class ConversationalLogsComponent implements OnInit {
       sort: this.filter.sort,
       conversationId: val || ''
     }
-    this.service.invoke('conversation.logs', {}, payload)
+    // if (val?.length > 0) {
+    //   this.realconvs = this.convs.filter((ele) => ele.CONVERSATION_ID == val);
+    //   if (this.realconvs.length == 0) {
+    //     this.erroMsg = `No conversation logs found.
+    //     Modify filter parameters and try again.`;
+    //   }
+    // } else {
+    //   this.erroMsg = undefined;
+    //   this.realconvs = [...this.convs]
+    // }
+    this.service.invoke('conversation.logs', params, payload)
       .pipe(
         finalize(() => {
           this.isLoading = false;
@@ -173,17 +193,22 @@ export class ConversationalLogsComponent implements OnInit {
       });
   }
 
+
+
   TransformConvsLogsData(resData) {
     for( let convsLogData of resData) {
       convsLogData.start = moment(convsLogData.startedOn).format('MMMM Do YYYY, h:mm:ss a');
       convsLogData.end = moment(convsLogData.endedOn).format('MMMM Do YYYY, h:mm:ss a');
-      convsLogData.duration = moment(parseInt(convsLogData.duration)).format("HH:mm:ss");
+      // convsLogData.duration = moment(convsLogData.duration).format("HH:mm:ss");
       this.transformedConvsLogs.push(convsLogData)
     }
     return this.transformedConvsLogs;
   }
 
   convsIdSorting(sortType) {
+    const params = {
+      'accountId': this.accountId
+    };
     this.transformedConvsLogs=[]
     this.sortConvsIds = sortType
     let payload = {
@@ -194,13 +219,16 @@ export class ConversationalLogsComponent implements OnInit {
       sort: {conversationId: sortType},
       conversationId: ''
     }
-    this.service.invoke('conversation.logs', {}, payload).subscribe((res) => {
+    this.service.invoke('conversation.logs', params, payload).subscribe((res) => {
       console.log(res);
       this.TransformConvsLogsData(res.data);
     })
   }
 
   sortingConvLogsByTime(sortType) {
+    const params = {
+      'accountId': this.accountId
+    };
     this.transformedConvsLogs=[];
     this.sortConvsLogsByTime = sortType
     let payload = {
@@ -211,7 +239,7 @@ export class ConversationalLogsComponent implements OnInit {
       sort: {"date":sortType},
       conversationId: ''
     }
-    this.service.invoke('conversation.logs', {}, payload).subscribe((res) => {
+    this.service.invoke('conversation.logs', params, payload).subscribe((res) => {
       console.log(res);
       this.TransformConvsLogsData(res.data);
     })
