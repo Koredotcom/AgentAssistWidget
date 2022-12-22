@@ -430,10 +430,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             'experience': isCallConversation === 'true' ? 'voice':'chat',
                             "enable_override_userinput": false
                         }
-                        if(isOverRideMode) {
+                        if(!isOverRideMode) {
                              _agentAsisstSocket.emit('enable_override_userinput', overRideObj)
                         }
-                        isOverRideMode = false;
                         displayCustomerFeels(data, data.conversationId, _botId);
 
                         updateAgentAssistState(_conversationId, 'assistTab', data);
@@ -3566,6 +3565,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             dialogPositionId = previousTaskPositionId;
                                         }
                                         runInfoContent.append(askToUserHtml);
+                                        if(!proactiveMode){
+                                            getOverRideMode('overRideBtn-' + dropdownHeaderUuids, dialogPositionId);
+					                        $(`.override-input-div`).addClass('hide');
+                                        }
                                     } else {
                                         runInfoContent.append(tellToUserHtml);
                                     }
@@ -4155,6 +4158,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     else if (convState.currentTab == 'assistTab') {
                         userTabActive();
                     }
+                    proactiveMode = (convState.proactiveMode != undefined && convState.proactiveMode != null) ? convState.proactiveMode : true;
+                    isOverRideMode = !proactiveMode;
+                    document.getElementById("checkProActive").checked = proactiveMode;
                     updateCurrentTabInState(_convId,  convState.currentTab);
                   //  convState.currentTab !== 'librarySearch' ? updateUIWithTabState(_convId, convState.currentTab):'';
                     document.getElementById("loader").style.display = "none";
@@ -4293,6 +4299,17 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
 
                     }
+                }
+
+                function updateProactiveModeState(_convId, modeStatus){
+                    var appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                    var appState = JSON.parse(appStateStr);
+                    var convState = appState[_convId] || {};
+                    if (!appState[_convId]) {
+                        convState = appState[_convId] = {}
+                    }
+                    convState.proactiveMode = modeStatus;
+                    localStorage.setItem('agentAssistState', JSON.stringify(appState));
                 }
 
                 function updateCurrentTabInState(_convId, currentTab) {
@@ -4728,6 +4745,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     getOverRideMode('overRideBtn-' + dropdownHeaderUuids, dialogPositionId);
                                 }
                             }
+                            updateProactiveModeState(_conversationId, proactiveMode);
                         }
 
                         // let isChecked =  togglePoint();
