@@ -42,7 +42,6 @@ export class ConversationalLogsComponent implements OnInit {
     { id: 'twoEight', display: ("CONVERSATIONAL_LOGS.LAST_28_DAYS") },
     { id: 'ninety', display: ("CONVERSATIONAL_LOGS.LAST_90_DAYS") }
   ];
-  realconvs = [];
   isSearching = false;
   erroMsg;
   isSearched = false;
@@ -172,23 +171,22 @@ export class ConversationalLogsComponent implements OnInit {
       .pipe(
         finalize(() => {
           this.isLoading = false;
-
         }))
       .subscribe((res) => {
         console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', res)
         this.TransformConvsLogsData(res.data);
         if (pagination && res.length > 0) {
-          this.realconvs = [...this.transformedConvsLogs, ...this.TransformConvsLogsData(res.data)];
+          this.transformedConvsLogs = [...this.transformedConvsLogs, ...this.TransformConvsLogsData(res.data)];
         } else {
           this.TransformConvsLogsData(res.data);
 
         }
         this.isMoreAvailable = res.hasMore;
         this.isInitialLoadDone = true;
-        this.realconvs.length>0?this.isDatePicked = false:this.isDatePicked = true;
+        this.transformedConvsLogs.length>0?this.isDatePicked = false:this.isDatePicked = true;
       }, err => {
         this.isInitialLoadDone = false;
-        this.realconvs = [];
+        this.transformedConvsLogs = [];
         this.isDatePicked = false;
       });
   }
