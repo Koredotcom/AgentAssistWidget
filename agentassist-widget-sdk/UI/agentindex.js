@@ -1399,6 +1399,16 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }
                 }
 
+                function hideSendOrCopyButtons(parsedPayload, conatiner){
+                    let lastchild = $(conatiner).children().last();
+                    if (!parsedPayload) {
+                        $(lastchild).find('.copy-btn').removeClass('hide')
+                    }
+                    if((!sourceType || sourceType !== 'smartassist-color-scheme') && parsedPayload){
+                        $(lastchild).find('.send-run-btn').addClass('hide')
+                    }
+                }
+
                 function processMybotDataResponse(data, convId, botId) {
                     console.log("when an dialog is ran for the agent", data);
                     let myBotuuids = koreGenerateUUID();
@@ -1595,16 +1605,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             </div>`
                         if (data.isPrompt) {
                             runInfoContent.append(askToUserHtml);
+                            hideSendOrCopyButtons(parsedPayload, runInfoContent)
                             runInfoContent.append(agentInputToBotHtml);
                         } else {
                             runInfoContent.append(tellToUserHtml);
-                        }
-                        if (!parsedPayload) {
-                            $(runInfoContent).find('.copy-btn').removeClass('hide');
-                        }
-                        if((!sourceType || sourceType !== 'smartassist-color-scheme') && parsedPayload){
-                            $(runInfoContent).find('.send-run-btn').addClass('hide');
-                        }
+                            hideSendOrCopyButtons(parsedPayload, runInfoContent)
+                        } 
                     }
                     AgentChatInitialize.renderMessage(_msgsResponse, myBotuuids, `dropDownData-${myBotDropdownHeaderUuids}`);
                     removeElementFromDom();
@@ -2502,13 +2508,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $(`.override-input-div`).addClass('hide');
                             runInfoContent.append(tellToUserHtml);
                         }
-
-                        if (!parsedPayload) {
-                            $(runInfoContent).find('.copy-btn').removeClass('hide');
-                        }
-                        if((!sourceType || sourceType !== 'smartassist-color-scheme') && parsedPayload){
-                            $(runInfoContent).find('.send-run-btn').addClass('hide');
-                        }
+                        
+                        hideSendOrCopyButtons(parsedPayload, runInfoContent)
                         setTimeout(() => {             
                             updateNewMessageUUIDList(dropdownHeaderUuids);
                         }, waitingTimeForUUID);
@@ -3607,17 +3608,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             $(`#terminateAgentDialog`).attr('data-position-id', previousTaskPositionId);
                                             dialogPositionId = previousTaskPositionId;
                                         }
-                                       
                                         runInfoContent.append(askToUserHtml);
                                     } else {
                                         runInfoContent.append(tellToUserHtml);
                                     }
-                                    if (!parsedPayload) {
-                                        $(runInfoContent).find('.copy-btn').removeClass('hide');
-                                    }
-                                    if ((!sourceType || sourceType !== 'smartassist-color-scheme') && parsedPayload) {
-                                        $(runInfoContent).find('.send-run-btn').addClass('hide');
-                                    }
+                                    hideSendOrCopyButtons(parsedPayload, runInfoContent)
+                                   
                                  }
                               
                                 
@@ -4093,19 +4089,17 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     let nextResponse = resp[index+1];
                                     if (res.agentAssistDetails.isPrompt || res.agentAssistDetails.entityRequest) {
                                         runInfoContent.append(askToUserHtml);
+                                        hideSendOrCopyButtons(parsedPayload, runInfoContent)
                                         if(!nextResponse || (nextResponse.status != 'received' && nextResponse.status != 'incoming')){
                                             runInfoContent.append(agentInputToBotHtml);
                                         }
                                         
                                     } else {
                                         runInfoContent.append(tellToUserHtml);
+                                        hideSendOrCopyButtons(parsedPayload, runInfoContent)
                                     }
-                                    if (!parsedPayload) {
-                                        $(runInfoContent).find('.copy-btn').removeClass('hide');
-                                    }
-                                    if((!sourceType || sourceType !== 'smartassist-color-scheme') && parsedPayload){
-                                        $(runInfoContent).find('.send-run-btn').addClass('hide');
-                                    }
+                                   
+                                    
                                   } 
                                     AgentChatInitialize.renderMessage(_msgsResponse, res._id, `dropDownData-${previousId}`);
                                     //  removeElementFromDom();
