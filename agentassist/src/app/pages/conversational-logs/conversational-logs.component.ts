@@ -7,6 +7,7 @@ import { fromEvent, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, finalize, map } from 'rxjs/operators';
 import { DaterangepickerDirective } from 'ngx-daterangepicker-material';
 import { Moment } from 'moment';
+import { LocalStoreService } from '@kore.services/localstore.service';
 export interface IAnalyticsFilters {
   startDate: string,
   endDate: string,
@@ -57,11 +58,18 @@ export class ConversationalLogsComponent implements OnInit {
   isMoreAvailable = false;
   seachedConvsId;
   @ViewChild(DaterangepickerDirective) pickerDirective: DaterangepickerDirective;
+  transformedConvsLogs: any = [];
+  sortConvsIds: string = 'desc';
+  sortConvsLogsByTime: string = 'desc';
+  accountId: string;
+
   constructor(
-    private service: ServiceInvokerService
+    private service: ServiceInvokerService,
+    private localstorage: LocalStoreService
   ) { }
 
   ngOnInit() {
+    this.accountId = this.localstorage.getSelectedAccount()?.accountId
     this.ranges = {
       [('Today')]: [moment().startOf('day'), moment()],
       [('Yesterday')]: [moment().subtract(1, 'days').startOf('day'), moment().subtract(1, 'days').endOf('day')],
@@ -77,7 +85,7 @@ export class ConversationalLogsComponent implements OnInit {
     this.selected = { startDate: moment().subtract(6, 'days').startOf('day'), endDate: moment() }
     this.filters = { startDate: this.selected.startDate.toISOString(), endDate: this.selected.endDate.toISOString() }
     console.log("called from ngoninit 111111111111111111111111111111111");
-    
+
     this.getUsecases();
 
   }
@@ -137,6 +145,11 @@ export class ConversationalLogsComponent implements OnInit {
   getUsecases(val?, pagination?: boolean) {
     this.ucOffset = pagination ? this.ucOffset + this.USECASES_LIMIT : this.USECASES_LIMIT;
     console.log(this.filter)
+
+    const params = {
+      'accountId': this.accountId
+    };
+
     let payload = {
       start: this.filters.startDate,
       end: this.filters.endDate,
@@ -145,7 +158,17 @@ export class ConversationalLogsComponent implements OnInit {
       sort: this.filter.sort,
       conversationId: val || ''
     }
-    this.service.invoke('conversation.logs', {}, payload)
+    // if (val?.length > 0) {
+    //   this.realconvs = this.convs.filter((ele) => ele.CONVERSATION_ID == val);
+    //   if (this.realconvs.length == 0) {
+    //     this.erroMsg = `No conversation logs found.
+    //     Modify filter parameters and try again.`;
+    //   }
+    // } else {
+    //   this.erroMsg = undefined;
+    //   this.realconvs = [...this.convs]
+    // }
+    this.service.invoke('conversation.logs', params, payload)
       .pipe(
         finalize(() => {
           this.isLoading = false;
@@ -153,10 +176,12 @@ export class ConversationalLogsComponent implements OnInit {
         }))
       .subscribe((res) => {
         console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', res)
+        this.TransformConvsLogsData(res.data);
         if (pagination && res.length > 0) {
-          this.realconvs = [...this.realconvs, ...res?.data];
+          this.realconvs = [...this.transformedConvsLogs, ...this.TransformConvsLogsData(res.data)];
         } else {
-          this.realconvs = res?.data;
+          this.TransformConvsLogsData(res.data);
+
         }
         this.isMoreAvailable = res.hasMore;
         this.isInitialLoadDone = true;
@@ -166,6 +191,58 @@ export class ConversationalLogsComponent implements OnInit {
         this.realconvs = [];
         this.isDatePicked = false;
       });
+  }
+
+
+
+  TransformConvsLogsData(resData) {
+    for( let convsLogData of resData) {
+      convsLogData.start = moment(convsLogData.startedOn).format('MMMM Do YYYY, h:mm:ss a');
+      convsLogData.end = moment(convsLogData.endedOn).format('MMMM Do YYYY, h:mm:ss a');
+      // convsLogData.duration = moment(convsLogData.duration).format("HH:mm:ss");
+      this.transformedConvsLogs.push(convsLogData)
+    }
+    return this.transformedConvsLogs;
+  }
+
+  convsIdSorting(sortType) {
+    const params = {
+      'accountId': this.accountId
+    };
+    this.transformedConvsLogs=[]
+    this.sortConvsIds = sortType
+    let payload = {
+      start: this.filter.startDate,
+      end: this.filter.endDate,
+      limit: this.ucOffset,
+      skip: 0,
+      sort: {conversationId: sortType},
+      conversationId: ''
+    }
+    this.service.invoke('conversation.logs', params, payload).subscribe((res) => {
+      console.log(res);
+      this.TransformConvsLogsData(res.data);
+    })
+  }
+
+  sortingConvLogsByTime(sortType) {
+    const params = {
+      'accountId': this.accountId
+    };
+    this.transformedConvsLogs=[];
+    this.sortConvsLogsByTime = sortType
+    let payload = {
+      start: this.filter.startDate,
+      end: this.filter.endDate,
+      limit: this.ucOffset,
+      skip: 0,
+      sort: {"date":sortType},
+      conversationId: ''
+    }
+    this.service.invoke('conversation.logs', params, payload).subscribe((res) => {
+      console.log(res);
+      this.TransformConvsLogsData(res.data);
+    })
   }
 
   openPicker() {
@@ -183,7 +260,7 @@ export class ConversationalLogsComponent implements OnInit {
       this.getUsecases(null, false)
       console.log("called once date selectedd 5555555555555555555555555555555555555555555");
     }
-   
+
   }
 
   durationCalc(dur: number) {

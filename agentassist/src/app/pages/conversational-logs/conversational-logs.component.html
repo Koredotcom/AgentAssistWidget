@@ -13,9 +13,9 @@
                 <div class="search-header">
                     <div class="custom_date_picker_sec date-sec ngx-daterangepicker-action" (click)="openPicker()">
                         <i class="icon-sa-calendar ngx-daterangepicker-action" (click)="openPicker()"></i>
-                        <input type="text" 
-                            readonly 
-                            ngxDaterangepickerMd                    
+                        <input type="text"
+                            readonly
+                            ngxDaterangepickerMd
                             [timePicker]="true"
                             [alwaysShowCalendars]="true"
                             [keepCalendarOpeningWithRange]="true"
@@ -30,7 +30,7 @@
                             class="input-date-custom"
                             [locale] = "calendarLocale"
                             (datesUpdated)="onDatesUpdated($event)"/>
-                        <img src="assets/icons/analytics/carrotup.svg" alt="not found" class="ml-2 mr-0 ngx-daterangepicker-action" (click)="openPicker()">  
+                        <img src="assets/icons/analytics/carrotup.svg" alt="not found" class="ml-2 mr-0 ngx-daterangepicker-action" (click)="openPicker()">
                     </div>
                     <div class="kr-sg-input-search">
                         <input type="text" placeholder="Search" class="input-search" name="userSearch" id="searchConv" #searchTerm (keydown.enter)="save($event)">
@@ -39,12 +39,14 @@
                 </div>
                 <div class="table-data-info">
                     <div class="table-hader-wrapper">
-                        <div class="title w-20">ConversaTion ID <i class="icon-sa-arrow-left"></i></div>
-                        <div class="title w-15">tIME</div>
-                        <div class="title w-15">AGENT</div>
-                        <div class="title w-20">AUTOMATIONS</div>
-                        <div class="title w-15">CHANNEL</div>
-                        <div class="title w-15">DURATION</div>
+                          <div *ngIf="sortConvsIds === 'desc'" class="title w-20">ConversaTion ID <i class="icon-sa-arrow-left" (click)="convsIdSorting('asc')"></i></div>
+                          <div *ngIf="sortConvsIds === 'asc'" class="title w-20">ConversaTion ID <i class="icon-sa-arrow-right" (click)="convsIdSorting('desc')"></i></div>
+                          <div *ngIf="sortConvsLogsByTime === 'desc'" class="title w-15">tIME <i class="icon-sa-arrow-left" (click)="sortingConvLogsByTime('asc')"></i></div>
+                          <div *ngIf="sortConvsLogsByTime === 'asc'" class="title w-15">tIME <i class="icon-sa-arrow-right" (click)="sortingConvLogsByTime('desc')"></i></div>
+                          <!-- <div class="title w-15">AGENT</div> -->
+                          <div class="title w-20">AUTOMATIONS</div>
+                          <div class="title w-15">CHANNEL</div>
+                          <div class="title w-15">DURATION</div>
                     </div>
                     <ng-container>
                         <!-- <div class="table-body-wrapper"  *ngFor="let data of realconvs" (click)="openConvsHistorySlider($event, data)">
@@ -66,28 +68,22 @@
                                 </div>
                             </div>
                         </div> -->
-                        <!-- channel
-                        : 
-                        "chat"
-                        conversationId
-                        : 
-                        "CH92ae98c4eb0a4473abe395a240491fa2"
-                        duration
-                        : 
-                        0
-                        startedOn
-                        : 
-                        "2022-12-19T11:08:54.690Z" -->
-                        <div class="table-body-wrapper"  *ngFor="let data of realconvs" (click)="openConvsHistorySlider($event, data)">
+                        <div *ngIf="transformedConvsLogs.length === 0" >
+                          <h4>There are no conversations to show</h4>
+                          <p>You have had no conversation with your customers yet. Conversations log records the transcript, decisions and interactions made while chatting with your customers.</p>
+                        </div>
+                        <div *ngIf="transformedConvsLogs.length > 0">
+                          <div class="table-body-wrapper"  *ngFor="let data of transformedConvsLogs" (click)="openConvsHistorySlider($event, data)">
                             <div class="text-title w-20">{{data.conversationId}}</div>
-                            <div class="title-text w-15">{{data.startedOn | date}} {{data.startedOn | date:'shortTime'}}</div>
-                            <div class="title-text w-15">{{data?.agent}}</div>
+                            <div class="title-text w-15">{{data.start}}</div>
+                            <!-- <div class="title-text w-15">{{data?.agent}}</div> -->
                             <div class="title-text-info w-20">
                                 <span class="m-r-5" *ngFor="let ele of data?.automations?.slice(0,2)" >{{ele}}</span>
                                 <span class="link-others" *ngIf="data?.automations?.length>2" ngbTooltip="{{ data.automations.slice(2).join(',')}}">+{{data?.automations?.length-2}} others</span>
                             </div>
                             <div class="title-text w-15">{{data.channel}}</div>
                             <div class="title-text w-15">{{durationCalc(data.duration)}}</div>
+                        </div>
                         </div>
                     </ng-container>
                     <ng-container *ngIf="this.realconvs.length == 0">
