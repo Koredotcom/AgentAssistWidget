@@ -90,6 +90,29 @@
                             <div class="title-text w-15">{{durationCalc(data.duration)}}</div>
                         </div>
                     </ng-container>
+                    <ng-container *ngIf="this.realconvs.length == 0">
+                        <div class="empty-results-data" *ngIf="this.isSearched && this.realconvs.length == 0">
+                            <div class="img-block">
+                                <img src="assets/images/conv-logs/search-no-results.svg">
+                            </div>
+                            <div class="title">No results found</div>
+                            <div class="text-desc">No results found for your query “{{seachedConvsId}}”</div>
+                        </div>
+                        <div class="empty-results-data" *ngIf="this.isDatePicked && this.realconvs.length == 0">
+                            <div class="img-block">
+                                <img src="assets/images/conv-logs/no-results-calendar.svg">
+                            </div>
+                            <div class="title">No results found</div>
+                            <div class="text-desc">Could not find any result for the selected date range <span>“{{selected.startDate.toISOString() | date}} - {{this.selected.endDate.toISOString() | date}}”</span></div>
+                        </div>
+                        <div class="empty-results-data" *ngIf="this.realconvs.length == 0 && !this.isSearched && !this.isDatePicked">
+                            <div class="img-block">
+                                <img src="assets/images/conv-logs/no-comments.svg">
+                            </div>
+                            <div class="title no-conv-title">There are no conversations to show</div>
+                            <div class="text-desc no-conv-desc">You have had no conversation with your customers yet. Conversations log records the transcript, decisions and interactions made while chatting with your customers.</div>
+                        </div>
+                    </ng-container>
                 </div>
             </div>
         </div>
