@@ -120,6 +120,8 @@ export class ConversationalLogsComponent implements OnInit {
     }
     this.selected = { startDate: moment().subtract(6, 'days').startOf('day'), endDate: moment() }
     this.filters = { startDate: this.selected.startDate.toISOString(), endDate: this.selected.endDate.toISOString() }
+    console.log("called from ngoninit 111111111111111111111111111111111");
+
     this.getUsecases();
 
   }
@@ -136,6 +138,7 @@ export class ConversationalLogsComponent implements OnInit {
           distinctUntilChanged())
         .subscribe((val) => {
           if (val == '' && this.isSearched) {
+            console.log("called once search is cleared 222222222222222222222222222222222");
             this.getUsecases('');
             this.isSearched = false;
           }
@@ -147,9 +150,11 @@ export class ConversationalLogsComponent implements OnInit {
   save(e) {
     this.isSearched = true;
     this.getUsecases(e.target.value);
+    console.log("called clciked enter on search box 333333333333333333333333333333333333333");
   }
   onReachEnd() {
-    if ((this.isInitialLoadDone || this.isMoreAvailable) && !this.showConversation) {
+    if ((this.isInitialLoadDone || this.isMoreAvailable) && !this.showConversation && !this.isSearched) {
+      console.log("called once scroll reached end 444444444444444444444444444444");
       this.getUsecases(null, true);
     } else {
       return;
@@ -273,6 +278,7 @@ export class ConversationalLogsComponent implements OnInit {
     this.filters = { ... this.filters, startDate: this.selected.startDate.toISOString(), endDate: this.selected.endDate.toISOString() }
     if (this.isDatePicked) {
       this.getUsecases(null, false)
+      console.log("called once date selectedd 5555555555555555555555555555555555555555555");
     }
 
   }
