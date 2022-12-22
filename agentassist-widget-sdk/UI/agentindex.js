@@ -4750,6 +4750,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             };
                             window.parent.postMessage(message, '*');
                             highLightAndStoreFaqId(evt);
+                            _agentAsisstSocket.emit('agent_send_or_copy', message)
                         }
                         // if ((target.className == 'copy-btn' || target.className == 'ast-copy') && sourceType == 'smartassist-color-scheme') {
                         //     let ele = document.getElementById(`displayData-${target.dataset.msgId}`) ? document.getElementById(`displayData-${target.dataset.msgId}`) : document.getElementById(target.dataset.msgId);
@@ -4770,6 +4771,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             };
                             parent.postMessage(message, '*');
                             highLightAndStoreFaqId(evt);
+                            _agentAsisstSocket.emit('agent_send_or_copy', message)
                         }
                         if (target.className == 'ast-close close-search') {
                             $('#agentSearch').val('');
