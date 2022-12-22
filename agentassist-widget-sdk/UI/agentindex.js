@@ -468,10 +468,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         userMessage = data;
                     });
                     _agentAsisstSocket.on('agent_assist_user_message', (data) => {
-                        updateNumberOfMessages();
-                      //  updateAgentAssistState(_conversationId, 'assistTab', data);
-                        processUserMessages(data, data.conversationId, data.botId);
-                        removingSendCopyBtnForCall();
+                        if(!isAutomationOnGoing && !proactiveMode){
+                            return;
+                        }else{
+                            updateNumberOfMessages();
+                            //  updateAgentAssistState(_conversationId, 'assistTab', data);
+                            processUserMessages(data, data.conversationId, data.botId);
+                            removingSendCopyBtnForCall();
+                        }
                     });
 
                     _agentAsisstSocket.on('user_message', (data) => {
@@ -1653,11 +1657,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             
 
                 function updateNumberOfMessages() {
-                    numberOfNewMessages += 1;
-                    $(".scroll-bottom-btn").addClass("new-messages");
-                    $(".scroll-bottom-btn span").text(numberOfNewMessages + ' new');
-                    if(numberOfNewMessages == 1){
-                        removeWhiteBackgroundToSeenMessages();
+                    if(proactiveMode){
+                        numberOfNewMessages += 1;
+                        $(".scroll-bottom-btn").addClass("new-messages");
+                        $(".scroll-bottom-btn span").text(numberOfNewMessages + ' new');
+                        if(numberOfNewMessages == 1){
+                            removeWhiteBackgroundToSeenMessages();
+                        }
                     }
                 }
 
@@ -1882,7 +1888,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                 function processAgentAssistResponse(data, convId, botId) {
                     console.log("AgentAssist >>> agentassist_response:", data);
-                    if(!isAutomationOnGoing && !isInitialDialogOnGoing && !proactiveMode){
+                    if(!isAutomationOnGoing && !proactiveMode){
                         return;
                     }
                     let automationSuggestions = $('#dynamicBlock .dialog-task-accordiaon-info');
