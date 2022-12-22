@@ -199,9 +199,9 @@ export class ConversationalLogsComponent implements OnInit {
       .subscribe((res) => {
         console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', res)
         if (pagination && res.length > 0) {
-          this.realconvs = [...this.realconvs, ...res];
+          this.realconvs = [...this.realconvs, ...res?.data];
         } else {
-          this.realconvs = res;
+          this.realconvs = res?.data;
         }
         this.isMoreAvailable = res.hasMore;
         this.isInitialLoadDone = true;
