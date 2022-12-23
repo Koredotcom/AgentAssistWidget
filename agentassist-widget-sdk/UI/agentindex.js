@@ -1192,9 +1192,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     } else {
                                         let a = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display #faqDivLib-${uuids+index}`) : $(`#overLaySearch #faqDivLib-${uuids+index}`);
                                         let faqActionHtml = `<div class="action-links">
-                                <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids+index}"  data-msg-data="${ele.answer}">Send</button>
-                                <div class="copy-btn" data-msg-id="${uuids+index}" data-msg-data="${ele.answer}">
-                                    <i class="ast-copy" data-msg-id="${uuids+index}" data-msg-data="${ele.answer}"></i>
+                                <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids+index}"  data-msg-data="${ele.answer}" data-position-id="${positionID}">Send</button>
+                                <div class="copy-btn" data-msg-id="${uuids+index}" data-msg-data="${ele.answer}" data-position-id="${positionID}">
+                                    <i class="ast-copy" data-msg-id="${uuids+index}" data-msg-data="${ele.answer}" data-position-id="${positionID}"></i>
                                 </div>
                             </div>`;
                                         a.append(faqActionHtml);
@@ -2300,9 +2300,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     } else {
                                         let a = $(`#faqDiv-${uuids+index}`);
                                         let faqActionHtml = `<div class="action-links">
-                            <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids+index}" data-msg-data="${ele.answer}">Send</button>
-                            <div class="copy-btn" data-msg-id="${uuids+index}" data-msg-data="${ele.answer}">
-                                <i class="ast-copy" data-msg-id="${uuids+index}" data-msg-data="${ele.answer}"></i>
+                            <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids+index}" data-msg-data="${ele.answer}" data-position-id="${positionID}">Send</button>
+                            <div class="copy-btn" data-msg-id="${uuids+index}" data-msg-data="${ele.answer}" data-position-id="${positionID}">
+                                <i class="ast-copy" data-msg-id="${uuids+index}" data-msg-data="${ele.answer}" data-position-id="${positionID}"></i>
                             </div>
                         </div>`;
                                         a.append(faqActionHtml);
@@ -3221,9 +3221,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                 } else {
                                                     let a = $(`#faqDiv-${uniqueID+index}`);
                                                     let faqActionHtml = `<div class="action-links">
-                                    <button class="send-run-btn" id="sendMsg" data-msg-id="${uniqueID+index}"  data-msg-data="${ele.answer}">Send</button>
-                                    <div class="copy-btn" data-msg-id="${uniqueID+index}" data-msg-data="${ele.answer}">
-                                        <i class="ast-copy" data-msg-id="${uniqueID+index}" data-msg-data="${ele.answer}"></i>
+                                    <button class="send-run-btn" id="sendMsg" data-msg-id="${uniqueID+index}"  data-msg-data="${ele.answer}" data-position-id="${uniqueID+index}">Send</button>
+                                    <div class="copy-btn" data-msg-id="${uniqueID+index}" data-msg-data="${ele.answer}" data-position-id="${uniqueID+index}">
+                                        <i class="ast-copy" data-msg-id="${uniqueID+index}" data-msg-data="${ele.answer}" data-position-id="${uniqueID+index}"></i>
                                     </div>
                                 </div>`;
                                                     a.append(faqActionHtml);
@@ -4774,7 +4774,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             };
                             window.parent.postMessage(message, '*');
                             highLightAndStoreFaqId(evt);
-                            _agentAsisstSocket.emit('agent_send_or_copy', message)
+                            let payloadForBE = {
+                                type: 'send',
+                                name: "agentAssist.SendMessage",
+                                conversationId: _conversationId,
+                                payload: payload,
+                                botId: _botId,
+                                positionId: target.dataset?.positionId | ''
+                            };
+                            _agentAsisstSocket.emit('agent_send_or_copy', payloadForBE)
                         }
                         // if ((target.className == 'copy-btn' || target.className == 'ast-copy') && sourceType == 'smartassist-color-scheme') {
                         //     let ele = document.getElementById(`displayData-${target.dataset.msgId}`) ? document.getElementById(`displayData-${target.dataset.msgId}`) : document.getElementById(target.dataset.msgId);
@@ -4795,7 +4803,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             };
                             parent.postMessage(message, '*');
                             highLightAndStoreFaqId(evt);
-                            _agentAsisstSocket.emit('agent_send_or_copy', message)
+                            let payloadForBE = {
+                                type: 'copy',
+                                name: "agentAssist.CopyMessage",
+                                conversationId: _conversationId,
+                                payload: data,
+                                botId: _botId,
+                                positionId: target.dataset?.positionId | ''
+                            };
+                            _agentAsisstSocket.emit('agent_send_or_copy', payloadForBE)
                         }
                         if (target.className == 'ast-close close-search') {
                             $('#agentSearch').val('');
