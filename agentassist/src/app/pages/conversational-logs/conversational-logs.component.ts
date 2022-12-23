@@ -216,7 +216,7 @@ export class ConversationalLogsComponent implements OnInit {
       end: this.filter.endDate,
       limit: this.ucOffset,
       skip: 0,
-      sort: {conversationId: sortType},
+      sort: {"convId": sortType},
       conversationId: ''
     }
     this.service.invoke('conversation.logs', params, payload).subscribe((res) => {
