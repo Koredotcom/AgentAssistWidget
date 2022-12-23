@@ -236,6 +236,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 let isInitialDialogOnGoing = false;
                 let isSendWelcomeMessage;
                 let isShowAllClicked = false;
+                let isFirstMessagOfDialogInMyBot = false;
+                let isFirstMessagOfDialog = false;
                 chatConfig = window.KoreSDK.chatConfig;
                 var koreBot = koreBotChat();
                 AgentChatInitialize = new koreBot.chatWindow(chatConfig);
@@ -1515,6 +1517,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }
                     let agentInputId = Math.floor(Math.random() * 100);
                     if (isMyBotAutomationOnGoing && data.buttons && !data.value.includes('Customer has waited') && data.positionId == myBotDialogPositionId) {
+                        if(isFirstMessagOfDialogInMyBot){
+                            $(`#dropDownData-${myBotDropdownHeaderUuids}`).attr('data-task-id', data.uniqueTaskId)
+                        }
+                        isFirstMessagOfDialogInMyBot = false;
                         let sendMsgData = encodeURI(JSON.stringify(_msgsResponse));
                         let runInfoContent = $(`#dropDownData-${myBotDropdownHeaderUuids}`);
                         $('#inputFieldForMyBot').remove();
@@ -2443,6 +2449,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         $(`#cancelOverRideBtn-${dropdownHeaderUuids}`).addClass('hide');
                         $("#inputFieldForAgent").remove();
                         let runInfoContent = $(`#dropDownData-${dropdownHeaderUuids}`);
+                        if(isFirstMessagOfDialog){
+                            $(`#dropDownData-${dropdownHeaderUuids}`).attr('data-task-id', data.uniqueTaskId)
+                        }
+                        isFirstMessagOfDialog = false;
                         setTimeout(() => {
                             if(data.entityName){
                                 agentAssistResponse = {};
@@ -2925,7 +2935,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 function addFeedbackHtmlToDomForHistory(data, botId, userIntentInput, id, runForAgentBot, previousTaskPositionId) {
                     var dropDownData;
                     var endOfDialoge;
-                    let taskIdOfDialog = $(`#dropDownData-${id}`).attr('data-taskId');
+                    let taskIdOfDialog = $(`#dropDownData-${id}`).attr('data-task-id');
                     let positionID = previousTaskPositionId;
                     if (runForAgentBot) {
                         $(`#myBotTerminateAgentDialog-${id}.btn-danger`).remove();
@@ -2988,7 +2998,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         data-user-input="${userIntentInput}"
                                         data-comment=""
                                         data-feedbackdetails="[]"
-                                        data-taskID ="${taskIdOfDialog}"
+                                        data-task-id ="${taskIdOfDialog}"
                                         data-dialogId="${positionID}"></i>
                                         <span class="tootltip-tabs">Like</span>
                                     </div>
@@ -3002,7 +3012,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         data-user-input="${userIntentInput}"
                                         data-comment=""
                                         data-feedbackdetails="[]"
-                                        data-taskID ="${taskIdOfDialog}"
+                                        data-task-id ="${taskIdOfDialog}"
                                         data-dialogId="${positionID}"></i>
                                         <span class="tootltip-tabs">Dislike</span>
                                     </div>
@@ -6030,6 +6040,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
 
                 function runDialogFormyBotTab(data, idTarget){
+                    isFirstMessagOfDialogInMyBot = true;
                     if(data?.payload){
                      data = data.payload.info;
                     }
@@ -6064,6 +6075,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
 
                 function runDialogForAssistTab(data, idTarget, runInitent){
+                    isFirstMessagOfDialog = true;
                     let uuids = koreGenerateUUID();
                     dropdownHeaderUuids = uuids;
                     isAutomationOnGoing = true;
@@ -6323,7 +6335,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     let headerUUids = runForAgentBot ? myBotDropdownHeaderUuids : dropdownHeaderUuids;
                     let positionID = runForAgentBot ? myBotDialogPositionId : dialogPositionId;
                     // let dialogIds = 'dg-' + (Math.random() + 1).toString(36).substring(2);
-                    let taskIdOfDialog = $(`#dropDownData-${dropdownHeaderUuids}`).attr('data-taskId');
+                    let taskIdOfDialog = $(`#dropDownData-${headerUUids}`).attr('data-task-id');
                     if (runForAgentBot) {
                         $(`#myBotTerminateAgentDialog-${headerUUids}.btn-danger`).remove();
                         dropDownData = $(`#dropDownData-${headerUUids}`);
@@ -6385,7 +6397,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         data-user-input="${userIntentInput}"
                                         data-comment=""
                                         data-feedbackdetails="[]"
-                                        data-taskID ="${taskIdOfDialog}"
+                                        data-task-id ="${taskIdOfDialog}"
                                         data-dialogId="${positionID}"></i>
                                         <span class="tootltip-tabs">Like</span>
                                     </div>
@@ -6399,7 +6411,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         data-user-input="${userIntentInput}"
                                         data-comment=""
                                         data-feedbackdetails="[]"
-                                        data-taskID ="${taskIdOfDialog}"
+                                        data-task-id ="${taskIdOfDialog}"
                                         data-dialogId="${positionID}"></i>
                                         <span class="tootltip-tabs">Dislike</span>
                                     </div>
@@ -6891,7 +6903,7 @@ function AgentAssist_feedback_click(e, isSubmit = false) {
         dialogId = e.dialogid;
         comment = e.comment;
         feedbackdetails = e.feedbackdetails;
-        taskId = e.taskid
+        taskId = e.taskId
     } else {
         console.log(e.target);
         convId = e.target.dataset.convId;
@@ -6902,7 +6914,7 @@ function AgentAssist_feedback_click(e, isSubmit = false) {
         dialogId = e.target.dataset.dialogid;
         comment = e.target.dataset.comment;
         feedbackdetails = e.target.dataset.feedbackdetails;
-        taskId = e.target.dataset.taskid
+        taskId = e.target.dataset.taskId
     }
 
     feedDetailsArray = typeof feedbackdetails == 'string' ? [] : feedbackdetails?.filter(ele => ele !== null);
@@ -6918,7 +6930,7 @@ function AgentAssist_feedBack_Update_Request(e) {
         agentId: '',
         botId: e.botId,
         orgId: '',
-        taskId: e.taskid,
+        taskId: e.taskId,
         positionId: e.dialogid,
         'experience': isCallConversation === 'true' ? 'voice':'chat',
         "interactionType": currentTabActive == 'userAutoIcon'? 'assist': 'mybot'
