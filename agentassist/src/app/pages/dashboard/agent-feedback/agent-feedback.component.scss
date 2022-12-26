@@ -209,6 +209,35 @@
                     }
                 }
             }
+            &.empty-data{
+                background: #F7F9FA;
+                &:nth-child(even){
+                    background: #fff;
+                }
+                .title{
+                    span{
+                        background: #DCDFEA;
+                        border-radius: 7px;
+                        width: 100%;
+                        display: inline-block;
+                        height: 10px;
+                    }
+                }
+                .like-dislike{
+                    flex-wrap: nowrap;
+                    .like-count{
+                        width: 50%;
+                        span{
+                            background: #DCDFEA;
+                            border-radius: 7px;
+                            width: 100%;
+                            display: inline-block;
+                            height: 10px;
+                            flex-shrink: 0;
+                        }
+                    }
+                }
+            }
         }
     }
 }

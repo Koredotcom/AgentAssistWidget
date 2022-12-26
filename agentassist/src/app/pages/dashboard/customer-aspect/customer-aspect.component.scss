@@ -89,4 +89,40 @@
             }
         }
     }
+    .empty-cust-aspects-data{
+        .details-empty{
+            margin-top: 20px;
+            .bg-top{
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 5px;
+                .bg{
+                    background: #F0F1F2;
+                    border-radius: 7px;
+                    width: 55px;
+                    height: 8px;
+                }
+                .count{
+                    font-weight: 600;
+                    font-size: 14px;
+                    line-height: 17px;
+                    color: #697586;
+                }
+            }
+            .bg-bottom-percentage{
+                display: flex;
+                align-items: center;
+                background: #F0F1F2;
+                border-radius: 7px;
+                height: 8px;
+                .bg-bottom{
+                    background: #DCDFEA;
+                    border-radius: 7px;
+                    width: 70%;
+                    height: 100%;
+                }
+            }
+        }
+    }
 }

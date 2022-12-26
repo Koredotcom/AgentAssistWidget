@@ -61,25 +61,51 @@ export class AutomationPerformanceComponent implements OnInit {
         formatter : (params : any) => {
           let tooltipString  = params.marker  + ' ' + params.data.name  + " : " + params.data.percent + "%" + '</br>';
           // let tooltipSeriesList = this.dashboardService.formatterData[params.data.name];
-          for(let item of params.data.series){
-            tooltipString = tooltipString + `<div style="display:flex;
-             align-items:center;
-             justify-content:space-between;">`
-            tooltipString += `<span style = "
-            font-weight: 400;
-            font-size: 12px;
-            line-height: 5px;
-            color: #121314;
-            width: 65%;
-            padding-left: 17px;">` + item.key + `</span>`;
-            tooltipString += `<span style="
-            font-weight: 400;
-            font-size: 12px;
-            line-height: 5px;
-            color: #121314;
-            width: 35%;
-            text-align: right;">` + item.value + "%" + `</span></div>` + "</br>"
-          } 
+          tooltipString = tooltipString + `<div class="automation-per-tooltip">
+            <div class="title-indication">
+              <div class="left-title">
+                <span class="bg"></span>
+                <span class="h-text">Terminated</span>
+              </div>
+              <div class="right-title">25%</div>
+            </div>
+            <div class="lable-heading">TOP 3</div>
+            <div class="row-labels">
+              <div class="left-title">Book Flight</div>
+              <div class="right-title">33%</div>
+            </div>
+            <div class="row-labels">
+              <div class="left-title">Reschedule</div>
+              <div class="right-title">32%</div>
+            </div>
+            <div class="row-labels">
+              <div class="left-title">Cancel</div>
+              <div class="right-title">31%</div>
+            </div>
+            <div class="row-labels">
+              <div class="left-title">Others</div>
+              <div class="right-title">04%</div>
+            </div>
+          </div>`
+          // for(let item of params.data.series){
+          //   tooltipString = tooltipString + `<div style="display:flex;
+          //    align-items:center;
+          //    justify-content:space-between;">`
+          //   tooltipString += `<span style = "
+          //   font-weight: 400;
+          //   font-size: 12px;
+          //   line-height: 5px;
+          //   color: #121314;
+          //   width: 65%;
+          //   padding-left: 17px;">` + item.key + `</span>`;
+          //   tooltipString += `<span style="
+          //   font-weight: 400;
+          //   font-size: 12px;
+          //   line-height: 5px;
+          //   color: #121314;
+          //   width: 35%;
+          //   text-align: right;">` + item.value + "%" + `</span></div>` + "</br>"
+          // } 
           return tooltipString
         }
       },

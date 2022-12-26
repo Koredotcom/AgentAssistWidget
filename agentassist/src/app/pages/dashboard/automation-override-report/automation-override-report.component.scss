@@ -2,6 +2,21 @@
     display: inline-block;
     width: 100%;
     padding-bottom: 30px;
+    position: relative;
+    .override-info{
+        position: absolute;
+        right: 0;
+        top: -47px;
+        display: flex;
+        align-items: center;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 17px;
+        color: #777A80;
+        i{
+            margin-left: 4px;
+        }
+    }
     .table-agent-feedback{
         display: inline-block;
         width: 100%;
@@ -113,6 +128,22 @@
                         line-height: 17px;
                         color: #2D2F33;
                         padding-left: 5px;
+                    }
+                }
+            }
+            &.empty-data{
+                background: #FFFFFF;
+                &:nth-child(odd){
+                    background: #F7F9FA;
+                }
+                .title{
+                    span{
+                        background: #DCDFEA;
+                        border-radius: 7px;
+                        width: 100%;
+                        display: inline-block;
+                        height: 10px;
+                        flex-shrink: 0;
                     }
                 }
             }

@@ -1,5 +1,9 @@
 <div class="automation-override-wrapper">
     <ng-container *ngIf="viewType == VIEWTYPELIST.PARTIAL_VIEW">
+        <div class="override-info">
+            <span>{{"DASHBOARD.OVERRIDE_RATE" | translate}}</span>
+            <i class="icon-sa-help"></i>
+        </div>
         <div class="table-agent-feedback m_t_12">
             <div class="table-header row">
                 <div class="title col-4">{{"DASHBOARD.AUTOMATION_OVERRIDE_AUTOMATION_COLUMN" | translate}}</div>
@@ -7,7 +11,7 @@
                 <div class="title col-4 text-right">{{"DASHBOARD.AUTOMATION_OVERRIDE_TOTAL_OVERRIDE_COLUMN" | translate}} <i class="icon-ast_sortupdown ml-2"></i></div>
             </div>
             <ng-container>
-                <div class="table-body-feedback training-table-data row" *ngFor="let automation of automationOverrideTableData">
+                <div class="table-body-feedback training-table-data row d-none" *ngFor="let automation of automationOverrideTableData">
                     <div class="col-4 automation-name">
                         <!-- triggers="mouseenter:mouseleave" -->
                         <span triggers="mouseenter:mouseleave" [autoClose]="'inside'" popoverClass="automation-name-entitles" [ngbPopover]="intentoverride" placement="right">{{automation.intentName}}</span>
@@ -42,6 +46,18 @@
                 </div>
 
             </ng-container>
+
+            <div class="table-body-feedback training-table-data row empty-data" *ngFor="let automation of automationOverrideTableData">
+                <div class="col-4 title automation-name">
+                   <span></span>
+                </div>
+                <div class="title col-4">
+                    <span></span>
+                </div>
+                <div class="col-4 title count-entity text-right">
+                    <span class="w_45"></span>
+                </div>
+            </div>
         </div>
        
     </ng-container>

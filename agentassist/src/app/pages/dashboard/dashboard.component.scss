@@ -64,6 +64,9 @@
                             overflow: hidden;
                             text-overflow: ellipsis;
                             white-space: nowrap;
+                            &.empty-title{
+                                color: #777A80;
+                            }
                         }
                         .icon-sat_thumsdown{
                             color: #FFC46A;
@@ -109,6 +112,9 @@
                         line-height: 28px;
                         color: #2D2F33;
                         margin-top: 12px;
+                        &.empty-count{
+                            color: #697586;
+                        }
                     }
                 }
             }
