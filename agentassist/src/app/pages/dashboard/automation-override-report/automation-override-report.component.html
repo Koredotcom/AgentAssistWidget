@@ -10,14 +10,25 @@
                 <div class="table-body-feedback training-table-data row" *ngFor="let automation of automationOverrideTableData">
                     <div class="col-4 automation-name">
                         <!-- triggers="mouseenter:mouseleave" -->
-                        <span triggers="mouseenter:mouseleave" [autoClose]="'inside'" popoverClass="automation-name-entitles" [ngbPopover]="devendar" placement="right">{{automation.intentName}}</span>
+                        <span triggers="mouseenter:mouseleave" [autoClose]="'inside'" popoverClass="automation-name-entitles" [ngbPopover]="intentoverride" placement="right">{{automation.intentName}}</span>
                     </div>
                     <div class="title col-4">
                         <span>{{automationIntentNamevsEntityList[automation.intentName] | automationIntentvsEntityString}}</span>
-                        <span class="plus-more-data" triggers="mouseenter:mouseleave" [autoClose]="'inside'" popoverClass="automation-name-entitles" [ngbPopover]="devendar" placement="right">+{{automation.entityOtherCount}} others</span>
+                        <span class="plus-more-data" triggers="mouseenter:mouseleave" [autoClose]="'inside'" popoverClass="automation-name-entitles" [ngbPopover]="entityoverride" placement="right">+{{automation.entityOtherCount}} others</span>
                     </div>
                     <div class="col-4 count-entity text-right">{{automation.totalOverides}}</div>
-                    <ng-template #devendar>
+                    <ng-template #entityoverride>
+                        <perfect-scrollbar class="scroll-entities">
+                            <div class="template-popover-automation-entities">
+                                <div class="heading-title">{{"DASHBOARD.AUTOMATION_OVERRIDE_ENTITIES" | translate}}</div>
+                                <div class="row-info" *ngFor="let obj of automationIntentNamevsEntityList[automation.intentName] | slice : 2 : (automationIntentNamevsEntityList[automation.intentName].length)">
+                                    <div class="title-left">{{obj.entityName}}</div>
+                                    <div class="title-right">{{obj.override}}</div>
+                                </div>
+                            </div>
+                        </perfect-scrollbar>
+                    </ng-template>
+                    <ng-template #intentoverride>
                         <perfect-scrollbar class="scroll-entities">
                             <div class="template-popover-automation-entities">
                                 <div class="heading-title">{{"DASHBOARD.AUTOMATION_OVERRIDE_ENTITIES" | translate}}</div>

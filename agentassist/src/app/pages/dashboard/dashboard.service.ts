@@ -112,7 +112,7 @@ export class DashboardService {
       tooltip: {
         trigger: 'item',
         formatter: (params: any) => {
-          let tooltipString = params.data.name + ":" + params.data.value + '</br>';
+          let tooltipString = params.marker  + ' ' + params.data.name + ":" + params.data.value + '</br>';
           return tooltipString
         }
       },
@@ -603,7 +603,59 @@ export class DashboardService {
       overrideRate: 12,
       actualData: [
         {
-          intentName: "Book Flight",
+          intentName: "Book Flight1",
+          totalOverides: 4463,
+          entity_override: [
+            {
+              entityName: "PNR1",
+              override: 2000
+            },
+            {
+              entityName: "Transaction Id1",
+              override: 2463
+            },
+            {
+              entityName: "PNR2",
+              override: 2000
+            },
+            {
+              entityName: "Transaction Id2",
+              override: 2463
+            }
+          ]
+        },
+        {
+          intentName: "Cancel Flight1",
+          totalOverides: 4463,
+          entity_override: [
+            {
+              entityName: "PNR1",
+              override: 2000
+            },
+            {
+              entityName: "Transaction Id1",
+              override: 2463
+            },
+            {
+              entityName: "PNR2",
+              override: 2000
+            },
+            {
+              entityName: "Transaction Id2",
+              override: 2463
+            },
+            {
+              entityName: "PNR3",
+              override: 2000
+            },
+            {
+              entityName: "Transaction Id4",
+              override: 2463
+            }
+          ]
+        },
+        {
+          intentName: "Book Flight2",
           totalOverides: 4463,
           entity_override: [
             {
@@ -625,7 +677,7 @@ export class DashboardService {
           ]
         },
         {
-          intentName: "Cancel Flight",
+          intentName: "Cancel Flight2",
           totalOverides: 4463,
           entity_override: [
             {
@@ -655,7 +707,7 @@ export class DashboardService {
           ]
         },
         {
-          intentName: "Book Flight",
+          intentName: "Book Flight3",
           totalOverides: 4463,
           entity_override: [
             {
@@ -677,59 +729,7 @@ export class DashboardService {
           ]
         },
         {
-          intentName: "Cancel Flight",
-          totalOverides: 4463,
-          entity_override: [
-            {
-              entityName: "PNR",
-              override: 2000
-            },
-            {
-              entityName: "Transaction Id",
-              override: 2463
-            },
-            {
-              entityName: "PNR",
-              override: 2000
-            },
-            {
-              entityName: "Transaction Id",
-              override: 2463
-            },
-            {
-              entityName: "PNR",
-              override: 2000
-            },
-            {
-              entityName: "Transaction Id",
-              override: 2463
-            }
-          ]
-        },
-        {
-          intentName: "Book Flight",
-          totalOverides: 4463,
-          entity_override: [
-            {
-              entityName: "PNR",
-              override: 2000
-            },
-            {
-              entityName: "Transaction Id",
-              override: 2463
-            },
-            {
-              entityName: "PNR",
-              override: 2000
-            },
-            {
-              entityName: "Transaction Id",
-              override: 2463
-            }
-          ]
-        },
-        {
-          intentName: "Cancel Flight",
+          intentName: "Cancel Flight3",
           totalOverides: 4463,
           entity_override: [
             {

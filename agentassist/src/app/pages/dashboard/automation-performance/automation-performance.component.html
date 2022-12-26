@@ -1,33 +1,12 @@
 <div class="automation-perforamce-wrapper">
     <div echarts [options]="chartOption" class="chart-container"></div>
     <div class="legend-wrapper">
-        <div class="legends-info">
+        <div class="legends-info" *ngFor="let obj of automationPerformanceChartData">
             <div class="legend-name">
-                <span class="bg"></span>
-                <span class="lname">Successfully Completed</span>
+                <span class="bg" [ngClass]="obj.name | lowercase"></span>
+                <span class="lname">{{obj.name}}</span>
             </div>
-            <div class="value-text">7,000 | 70%</div>
-        </div>
-        <div class="legends-info">
-            <div class="legend-name">
-                <span class="bg terminated"></span>
-                <span class="lname">Terminated</span>
-            </div>
-            <div class="value-text">2,500 | 25%</div>
-        </div>
-        <div class="legends-info">
-            <div class="legend-name">
-                <span class="bg error"></span>
-                <span class="lname">Error</span>
-            </div>
-            <div class="value-text">500 | 5%</div>
-        </div>
-        <div class="legends-info">
-            <div class="legend-name">
-                <span class="bg other"></span>
-                <span class="lname">Other</span>
-            </div>
-            <div class="value-text">500 | 5%</div>
+            <div class="value-text">{{obj.value}} | {{obj.percent}}%</div>
         </div>
     </div>
 </div>

@@ -79,7 +79,7 @@
                         <div class="heading-data-wrapper">
                             <div class="tag-title">{{"DASHBOARD.CUSTOMER_ASPECT_SUBTITLE" | translate}}</div>
                         </div>
-                        <div class="main-heading-title">{{"DASHBOARD.CUSTOMER_ASPECT_TITLE" | translate}}<i class="icon-sa-help" ngbTooltip="Tooltips are text labels that appear when the user hovers over or focuses on an element." placement="bottom-center" tooltipClass="tooltip_dashboard"></i></div>
+                        <div class="main-heading-title">{{"DASHBOARD.CUSTOMER_ASPECT_TITLE" | translate}}<i class="icon-sa-help" ngbTooltip='{{"DASHBOARD.CUSTOMER_ASPECT_TOOLTIP" | translate}}' placement="bottom-left" tooltipClass="tooltip_dashboard"></i></div>
                         <app-customer-aspect [viewType]="VIEWTYPE.PARTIAL_VIEW" [customerDropdownSelection]="customerAspectDropdownSelection"></app-customer-aspect>
                         <div class="view-all-btn" (click)="openSlider(DASHBORADCOMPONENTTYPE.CUSTOMER_ASPECT)">{{"DASHBOARD.WIDGET_VIEWALL" | translate}}</div>
                     </div>
@@ -97,7 +97,7 @@
                         <div class="heading-data-wrapper">
                             <div class="tag-title">{{"DASHBOARD.AGENT_ASPECT_SUBTITLE" | translate}}</div>
                         </div>
-                        <div class="main-heading-title">{{"DASHBOARD.AGENT_ASPECT_TITLE" | translate}}<i class="icon-sa-help"></i></div>
+                        <div class="main-heading-title">{{"DASHBOARD.AGENT_ASPECT_TITLE" | translate}}<i class="icon-sa-help" ngbTooltip='{{"DASHBOARD.AGENT_ASPECT_TOOLTIP" | translate}}' placement="bottom-left" tooltipClass="tooltip_dashboard"></i></div>
                         <app-agent-aspect [viewType]="VIEWTYPE.PARTIAL_VIEW"></app-agent-aspect>
                         <div class="view-all-btn" (click)="openSlider(DASHBORADCOMPONENTTYPE.AGENT_ASPECT)">{{"DASHBOARD.WIDGET_VIEWALL" | translate}}</div>
                     </div>
@@ -107,7 +107,7 @@
                         <div class="heading-data-wrapper">
                             <div class="tag-title">{{"DASHBOARD.AUTOMATION_PERFORMANCE_SUBTITLE" | translate}}</div>
                         </div>
-                        <div class="main-heading-title">{{"DASHBOARD.AUTOMATION_PERFORMANCE_TITLE" | translate}}<i class="icon-sa-help"></i></div>
+                        <div class="main-heading-title">{{"DASHBOARD.AUTOMATION_PERFORMANCE_TITLE" | translate}}<i class="icon-sa-help" ngbTooltip='{{"DASHBOARD.AUTOMATION_PERFORMANCE_TOOLTIP" | translate}}' placement="bottom-left" tooltipClass="tooltip_dashboard"></i></div>
                         <app-automation-performance></app-automation-performance>
                     </div>
                 </div>
@@ -116,7 +116,7 @@
                         <div class="heading-data-wrapper">
                             <div class="tag-title">{{"DASHBOARD.AGENT_FEEDBACK_SUBTITLE" | translate}}</div>
                         </div>
-                        <div class="main-heading-title">{{"DASHBOARD.AGENT_FEEDBACK_TITLE" | translate}}<i class="icon-sa-help"></i></div>
+                        <div class="main-heading-title">{{"DASHBOARD.AGENT_FEEDBACK_TITLE" | translate}}<i class="icon-sa-help" ngbTooltip='{{"DASHBOARD.AGENT_FEEDBACK_TOOLTIP" | translate}}' placement="bottom-left" tooltipClass="tooltip_dashboard"></i></div>
                         <app-agent-feedback [viewType]="VIEWTYPE.PARTIAL_VIEW"></app-agent-feedback>
                         <div class="view-all-btn" (click)="openSlider(DASHBORADCOMPONENTTYPE.AGENT_FEEDBACK)">{{"DASHBOARD.WIDGET_VIEWALL" | translate}}</div>
                     </div>
@@ -130,7 +130,7 @@
                         <div class="heading-data-wrapper">
                             <div class="tag-title">{{"DASHBOARD.AUTOMATION_OVERRIDE_SUBTITLE" | translate}}</div>
                         </div>
-                        <div class="main-heading-title">{{"DASHBOARD.AUTOMATION_OVERRIDE_TITLE" | translate}}<i class="icon-sa-help"></i></div>
+                        <div class="main-heading-title">{{"DASHBOARD.AUTOMATION_OVERRIDE_TITLE" | translate}}<i class="icon-sa-help" ngbTooltip='{{"DASHBOARD.AUTOMATION_OVERRIDE_TOOLTIP" | translate}}' placement="bottom-left" tooltipClass="tooltip_dashboard"></i></div>
                         <app-automation-override-report [viewType]="VIEWTYPE.PARTIAL_VIEW"></app-automation-override-report>
                         <div class="view-all-btn" (click)="openSlider(DASHBORADCOMPONENTTYPE.AUTOMATION_OVERRIDE)">{{"DASHBOARD.WIDGET_VIEWALL" | translate}}</div>
                     </div>

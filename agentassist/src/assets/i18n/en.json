@@ -2065,5 +2065,10 @@
     "DASHBOARD.AUTOMATION_PERFORMANCE_TERMINATED" : "Terminated",
     "DASHBOARD.AUTOMATION_PERFORMANCE_ERROR" : "Error",
     "DASHBOARD.AUTOMATION_PERFORMANCE_OTHER" : "Other",
-    "DASHBOARD.AUTOMATION_PERFORMANCE_TOTAL" : "Total"
+    "DASHBOARD.AUTOMATION_PERFORMANCE_TOTAL" : "Total",
+    "DASHBOARD.CUSTOMER_ASPECT_TOOLTIP" : "List of all intents used to fulfil customer needs.",
+    "DASHBOARD.AGENT_ASPECT_TOOLTIP" : "List of all search keywords used by agents.",
+    "DASHBOARD.AUTOMATION_PERFORMANCE_TOOLTIP" : "Depicts the performance of your automations by execution status.",
+    "DASHBOARD.AGENT_FEEDBACK_TOOLTIP" : "Feedback report for the automations used by the agents.",
+    "DASHBOARD.AUTOMATION_OVERRIDE_TOOLTIP" : "Report on inputs within automations which were overridden by agents."
 }
