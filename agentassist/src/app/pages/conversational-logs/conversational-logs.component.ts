@@ -119,7 +119,9 @@ export class ConversationalLogsComponent implements OnInit {
     console.log("called clciked enter on search box 333333333333333333333333333333333333333");
   }
   onReachEnd() {
-    if ((this.isInitialLoadDone || this.isMoreAvailable) && !this.showConversation && !this.isSearched && !this.isDatePicked) {
+    console.log(this.showConversation, this.isSearched, this.isDatePicked, "flags", this.isInitialLoadDone, this.isMoreAvailable);
+
+    if ((this.isInitialLoadDone && this.isMoreAvailable) && !this.showConversation && !this.isSearched && !this.isDatePicked) {
       console.log("called once scroll reached end 444444444444444444444444444444");
       this.getUsecases(null, true);
     } else {
@@ -176,7 +178,6 @@ export class ConversationalLogsComponent implements OnInit {
         }))
       .subscribe((res) => {
         console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', res)
-        this.TransformConvsLogsData(res.data);
         if (pagination && res.length > 0) {
           this.transformedConvsLogs = [...this.transformedConvsLogs, ...this.TransformConvsLogsData(res.data)];
         } else {
