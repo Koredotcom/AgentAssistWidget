@@ -9,21 +9,24 @@
         </div>
     </div>
     <div class="tab-details-info">
-        <div class="row-data" *ngFor="let data of customerAspectData">
-            <div class="title-with-count">
-                <img [src]="customerAspectTabvsImage[data.type]">
-                <span class="title">{{data.intentName}} </span>    
-                <div class="count-percentage">
-                    <span class="percentage">{{data.percent}}%</span>
-                    <span class="count-">({{data.count}})</span>
-                </div>                               
+        <ng-container *ngIf="customerAspectData && customerAspectData.length > 0">
+            <div class="row-data" *ngFor="let data of customerAspectData">
+                <div class="title-with-count">
+                    <img [src]="customerAspectTabvsImage[data.type]">
+                    <span class="title">{{data.intentName}} </span>    
+                    <div class="count-percentage">
+                        <span class="percentage">{{data.percent}}%</span>
+                        <span class="count-">({{data.count}})</span>
+                    </div>                               
+                </div>
+                <div class="slider-percentage">
+                    <div class="data-percentage" [style.width.%]="data.percent"></div>
+                </div>
             </div>
-            <div class="slider-percentage">
-                <div class="data-percentage" [style.width.%]="data.percent"></div>
-            </div>
-        </div>
-        <div class="empty-cust-aspects-data d-none" *ngFor="let data of customerAspectData">
-            <div class="details-empty">
+            <div class="view-all-btn" (click)="openSlider(DASHBORADCOMPONENTTYPELIST.CUSTOMER_ASPECT)">{{"DASHBOARD.WIDGET_VIEWALL" | translate}}</div>
+        </ng-container>
+        <div class="empty-cust-aspects-data" *ngIf="!customerAspectData || customerAspectData.length == 0">
+            <div class="details-empty" *ngFor="let item of [1,2,3,4,5]">
                 <div class="bg-top">
                     <div class="bg"></div>
                     <div class="count">0%</div>

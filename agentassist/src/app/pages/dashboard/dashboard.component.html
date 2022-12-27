@@ -15,24 +15,24 @@
                     <div class="inner-data-sec">
                         <div class="title-text-info">
                             <span class="heading-text">{{"DASHBOARD.TOTAL_SESSIONS" | translate}}</span>
-                            <div class="value-data" [ngClass]="{'negtive': !kpiData?.totalSessions?.increment}">
+                            <div class="value-data" *ngIf="kpiData?.totalSessions?.percent" [ngClass]="{'negtive': !kpiData?.totalSessions?.increment}">
                                 <i [ngClass]="kpiData?.totalSessions?.increment ? 'icon-ast_sortup' : 'icon-ast_sortdown' "></i>
                                 <span>{{kpiData?.totalSessions?.percent}}%</span>
                             </div>
                         </div>
-                        <div class="count-heading">{{kpiData?.totalSessions?.count}}</div>
+                        <div class="count-heading" [ngClass]="{'empty-count': !kpiData?.totalSessions?.count}">{{kpiData?.totalSessions?.count}}</div>
                     </div>
                 </div>
                 <div class="card-sec">
                     <div class="inner-data-sec">
                         <div class="title-text-info">
                             <span class="heading-text">{{"DASHBOARD.TOTAL_SUGGESTIONS" | translate}}</span>
-                            <div class="value-data" [ngClass]="{'negtive': !kpiData?.totalSuggestions?.increment}">
+                            <div class="value-data" *ngIf="kpiData?.totalSuggestions?.percent" [ngClass]="{'negtive': !kpiData?.totalSuggestions?.increment}">
                                 <i [ngClass]="kpiData?.totalSuggestions?.increment ? 'icon-ast_sortup' : 'icon-ast_sortdown' "></i>
                                 <span>{{kpiData?.totalSuggestions?.percent}}%</span>
                             </div>
                         </div>
-                        <div class="count-heading">{{kpiData?.totalSuggestions?.count}}</div>
+                        <div class="count-heading" [ngClass]="{'empty-count': !kpiData?.totalSuggestions?.count}">{{kpiData?.totalSuggestions?.count}}</div>
                     </div>
                 </div>
                 <div class="card-sec">
@@ -40,19 +40,19 @@
                         <div class="title-text-info">
                             <span class="heading-text">{{"DASHBOARD.AVG_SUGGESTIONS" | translate}}</span>
                         </div>
-                        <div class="count-heading">{{kpiData?.avgSuggestions?.count}}</div>
+                        <div class="count-heading" [ngClass]="{'empty-count': !kpiData?.avgSuggestions?.count}">{{kpiData?.avgSuggestions?.count}}</div>
                     </div>
                 </div>
                 <div class="card-sec">
                     <div class="inner-data-sec">
                         <div class="title-text-info">
                             <span class="heading-text">{{"DASHBOARD.ACCUARY" | translate}}</span>
-                            <div class="value-data" [ngClass]="{'negtive': !kpiData?.accuracy?.increment}">
+                            <div class="value-data" *ngIf="kpiData?.accuracy?.percent" [ngClass]="{'negtive': !kpiData?.accuracy?.increment}">
                                 <i [ngClass]="kpiData?.accuracy?.increment ? 'icon-ast_sortup' : 'icon-ast_sortdown' "></i>
                                 <span>{{kpiData?.accuracy?.percent}}%</span>
                             </div>
                         </div>
-                        <div class="count-heading">{{kpiData?.accuracy?.count}}%</div>
+                        <div class="count-heading" [ngClass]="{'empty-count': !kpiData?.accuracy?.count}">{{kpiData?.accuracy?.count}}%</div>
                     </div>
                 </div>
             </div>
@@ -80,8 +80,7 @@
                             <div class="tag-title">{{"DASHBOARD.CUSTOMER_ASPECT_SUBTITLE" | translate}}</div>
                         </div>
                         <div class="main-heading-title">{{"DASHBOARD.CUSTOMER_ASPECT_TITLE" | translate}}<i class="icon-sa-help" ngbTooltip='{{"DASHBOARD.CUSTOMER_ASPECT_TOOLTIP" | translate}}' placement="bottom-left" tooltipClass="tooltip_dashboard"></i></div>
-                        <app-customer-aspect [viewType]="VIEWTYPE.PARTIAL_VIEW" [customerDropdownSelection]="customerAspectDropdownSelection"></app-customer-aspect>
-                        <div class="view-all-btn" (click)="openSlider(DASHBORADCOMPONENTTYPE.CUSTOMER_ASPECT)">{{"DASHBOARD.WIDGET_VIEWALL" | translate}}</div>
+                        <app-customer-aspect [viewType]="VIEWTYPE.PARTIAL_VIEW" [customerDropdownSelection]="customerAspectDropdownSelection" (openSliderChild)="openSlider($event)"></app-customer-aspect>
                     </div>
                 </div>
                 <div class="chart-box-info col-6">
@@ -98,8 +97,7 @@
                             <div class="tag-title">{{"DASHBOARD.AGENT_ASPECT_SUBTITLE" | translate}}</div>
                         </div>
                         <div class="main-heading-title">{{"DASHBOARD.AGENT_ASPECT_TITLE" | translate}}<i class="icon-sa-help" ngbTooltip='{{"DASHBOARD.AGENT_ASPECT_TOOLTIP" | translate}}' placement="bottom-left" tooltipClass="tooltip_dashboard"></i></div>
-                        <app-agent-aspect [viewType]="VIEWTYPE.PARTIAL_VIEW"></app-agent-aspect>
-                        <div class="view-all-btn" (click)="openSlider(DASHBORADCOMPONENTTYPE.AGENT_ASPECT)">{{"DASHBOARD.WIDGET_VIEWALL" | translate}}</div>
+                        <app-agent-aspect [viewType]="VIEWTYPE.PARTIAL_VIEW" (openSliderChild)="openSlider($event)"></app-agent-aspect>
                     </div>
                 </div>
                 <div class="chart-box-info col-6">
@@ -117,8 +115,7 @@
                             <div class="tag-title">{{"DASHBOARD.AGENT_FEEDBACK_SUBTITLE" | translate}}</div>
                         </div>
                         <div class="main-heading-title">{{"DASHBOARD.AGENT_FEEDBACK_TITLE" | translate}}<i class="icon-sa-help" ngbTooltip='{{"DASHBOARD.AGENT_FEEDBACK_TOOLTIP" | translate}}' placement="bottom-left" tooltipClass="tooltip_dashboard"></i></div>
-                        <app-agent-feedback [viewType]="VIEWTYPE.PARTIAL_VIEW"></app-agent-feedback>
-                        <div class="view-all-btn" (click)="openSlider(DASHBORADCOMPONENTTYPE.AGENT_FEEDBACK)">{{"DASHBOARD.WIDGET_VIEWALL" | translate}}</div>
+                        <app-agent-feedback [viewType]="VIEWTYPE.PARTIAL_VIEW"  (openSliderChild)="openSlider($event)"></app-agent-feedback>
                     </div>
                 </div>
                 <div class="chart-box-info col-6" id="lastele">
@@ -127,8 +124,7 @@
                             <div class="tag-title">{{"DASHBOARD.AUTOMATION_OVERRIDE_SUBTITLE" | translate}}</div>
                         </div>
                         <div class="main-heading-title">{{"DASHBOARD.AUTOMATION_OVERRIDE_TITLE" | translate}}<i class="icon-sa-help" ngbTooltip='{{"DASHBOARD.AUTOMATION_OVERRIDE_TOOLTIP" | translate}}' placement="bottom-left" tooltipClass="tooltip_dashboard"></i></div>
-                        <app-automation-override-report [viewType]="VIEWTYPE.PARTIAL_VIEW"></app-automation-override-report>
-                        <div class="view-all-btn" (click)="openSlider(DASHBORADCOMPONENTTYPE.AUTOMATION_OVERRIDE)">{{"DASHBOARD.WIDGET_VIEWALL" | translate}}</div>
+                        <app-automation-override-report [viewType]="VIEWTYPE.PARTIAL_VIEW" (openSliderChild)="openSlider($event)"></app-automation-override-report>
                     </div>
                 </div>
             </div>

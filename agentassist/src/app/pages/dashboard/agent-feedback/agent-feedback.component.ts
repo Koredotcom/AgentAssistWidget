@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { SubSink } from 'subsink';
 import { DASHBORADCOMPONENTTYPE, VIEWTYPE } from '../dashboard.cnst';
 import { DashboardService } from '../dashboard.service';
@@ -11,6 +11,8 @@ import { DashboardService } from '../dashboard.service';
 export class AgentFeedbackComponent implements OnInit {
 
   @Input() viewType : string;
+  @Output() openSliderChild = new EventEmitter();
+  
   public DASHBORADCOMPONENTTYPELIST = DASHBORADCOMPONENTTYPE;
   public VIEWTYPELIST = VIEWTYPE;
   agentFeedbackData : any = {};
@@ -38,6 +40,10 @@ export class AgentFeedbackComponent implements OnInit {
         }
       }
     });
+  }
+
+  openSlider(componentName){
+    this.openSliderChild.emit(componentName);
   }
 
 }

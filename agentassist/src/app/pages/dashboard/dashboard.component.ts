@@ -15,6 +15,7 @@ export class DashboardComponent implements OnInit {
   
   @ViewChild('newConvSlider', { static: true }) newConvSlider: SliderComponentComponent;
   @ViewChild('pdfTable') pdfTable: ElementRef;
+
   sliderId : string = "dashboardSlider";
   sliderStatus: boolean;
   openComponentId : string;

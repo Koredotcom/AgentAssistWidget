@@ -91,6 +91,9 @@
                     line-height: 28px;
                     color: #2D2F33;
                     margin-top: 12px;
+                    &.empty-count{
+                        color: #697586;
+                    }
                 }
             }
         }
@@ -238,6 +241,18 @@
                     }
                 }
             }
+        }
+        .view-all-btn{
+            position: absolute;
+            bottom: 10px;
+            left: 15px;
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 17px;
+            color: #0D6EFD;
+            cursor: pointer;
+            padding: 5px;
+            z-index: 1;
         }
     }
 }

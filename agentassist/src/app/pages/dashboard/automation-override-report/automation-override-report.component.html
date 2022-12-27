@@ -3,6 +3,7 @@
         <div class="override-info">
             <span>{{"DASHBOARD.OVERRIDE_RATE" | translate}}</span>
             <i class="icon-sa-help"></i>
+            <div class="count-number">12%</div>
         </div>
         <div class="table-agent-feedback m_t_12">
             <div class="table-header row">
@@ -10,8 +11,8 @@
                 <div class="title col-4">{{"DASHBOARD.AUTOMATION_OVERRIDE_ENTITY_OVERRIDE_COLUMN" | translate}} <i class="icon-ast_sortupdown ml-2"></i></div>
                 <div class="title col-4 text-right">{{"DASHBOARD.AUTOMATION_OVERRIDE_TOTAL_OVERRIDE_COLUMN" | translate}} <i class="icon-ast_sortupdown ml-2"></i></div>
             </div>
-            <ng-container>
-                <div class="table-body-feedback training-table-data row d-none" *ngFor="let automation of automationOverrideTableData">
+            <ng-container *ngIf="automationOverrideTableData.length > 0">
+                <div class="table-body-feedback training-table-data row" *ngFor="let automation of automationOverrideTableData">
                     <div class="col-4 automation-name">
                         <!-- triggers="mouseenter:mouseleave" -->
                         <span triggers="mouseenter:mouseleave" [autoClose]="'inside'" popoverClass="automation-name-entitles" [ngbPopover]="intentoverride" placement="right">{{automation.intentName}}</span>
@@ -43,21 +44,22 @@
                             </div>
                         </perfect-scrollbar>
                     </ng-template>
+                    <div class="view-all-btn" (click)="openSlider(DASHBORADCOMPONENTTYPELIST.AUTOMATION_OVERRIDE)">{{"DASHBOARD.WIDGET_VIEWDETAILS" | translate}}</div>
                 </div>
-
             </ng-container>
-
-            <div class="table-body-feedback training-table-data row empty-data" *ngFor="let automation of automationOverrideTableData">
-                <div class="col-4 title automation-name">
-                   <span></span>
+            <ng-container *ngIf="automationOverrideTableData.length == 0 || !automationOverrideTableData">
+                <div class="table-body-feedback training-table-data row empty-data" *ngFor="let automation of [1,2,3,4,5]">
+                    <div class="col-4 title automation-name">
+                       <span></span>
+                    </div>
+                    <div class="title col-4">
+                        <span></span>
+                    </div>
+                    <div class="col-4 title count-entity text-right">
+                        <span class="w_45"></span>
+                    </div>
                 </div>
-                <div class="title col-4">
-                    <span></span>
-                </div>
-                <div class="col-4 title count-entity text-right">
-                    <span class="w_45"></span>
-                </div>
-            </div>
+            </ng-container>
         </div>
        
     </ng-container>

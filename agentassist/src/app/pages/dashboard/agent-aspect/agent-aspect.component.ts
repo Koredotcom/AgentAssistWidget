@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
 import { SubSink } from 'subsink';
 import { DashboardService } from '../dashboard.service';
 import * as echarts from 'echarts';
@@ -14,6 +14,8 @@ export class AgentAspectComponent implements OnInit, AfterViewInit {
 
   @ViewChild('wordCloud') wordCloudDiv: ElementRef;
   @ViewChild('wordCloudExhaustive') wordCloudExhaustiveDiv : ElementRef;
+  @Output() openSliderChild = new EventEmitter();
+
 
   @Input() viewType : string;
   public DASHBORADCOMPONENTTYPELIST = DASHBORADCOMPONENTTYPE;
@@ -62,7 +64,7 @@ export class AgentAspectComponent implements OnInit, AfterViewInit {
   }
 
   updateAgentAspectData(){
-    this.dashboardService.getAgentAspectData().subscribe(data => {
+    this.dashboardService.getAgentAspectData().subscribe((data : any) => {
       if(data){
         this.agentAspectData = data;
         if(data.actualData && data.actualData.length > 0){
@@ -98,4 +100,8 @@ export class AgentAspectComponent implements OnInit, AfterViewInit {
     this.setWordCloudOptions(worldCloudData);
   }
   
+  openSlider(componentName){
+    this.openSliderChild.emit(componentName);
+  }
+
 }

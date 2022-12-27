@@ -1,6 +1,6 @@
 
 <div class="agent-aspects-wrapper">
-    <div [hidden]="(viewType == VIEWTYPELIST.EXHAUSTIVE_VIEW) || (dashboardService.agentAspectView == VIEWTYPELIST.TABLE)">
+    <div [hidden]="((viewType == VIEWTYPELIST.EXHAUSTIVE_VIEW) || (dashboardService.agentAspectView == VIEWTYPELIST.TABLE)) || agentAspectTableData.length == 0">
         <div #wordCloud class="echart-wordCloudContainer" [ngClass]="{'echart-wordCloudContainer-hide' : (viewType == VIEWTYPELIST.EXHAUSTIVE_VIEW) && (dashboardService.agentAspectView == VIEWTYPELIST.TABLE)}"></div>
     </div>
     
@@ -16,7 +16,7 @@
                             <span>{{agentAspectData.totalSearchReq.percent}}%</span>
                         </div>
                     </div>
-                    <div class="count-heading">{{agentAspectData.totalSearchReq.count}}</div>
+                    <div class="count-heading" [ngClass]="{'empty-count': !agentAspectData.totalSearchReq.count}">{{agentAspectData.totalSearchReq.count}}</div>
                 </div>
             </div>
             <div class="card-sec max_width_50">
@@ -28,11 +28,11 @@
                             <span>{{agentAspectData.searchResultsUsed.percent}}%</span>
                         </div>
                     </div>
-                    <div class="count-heading">{{agentAspectData.searchResultsUsed.count}}%</div>
+                    <div class="count-heading" [ngClass]="{'empty-count': !agentAspectData.searchResultsUsed.count}">{{agentAspectData.searchResultsUsed.count}}%</div>
                 </div>
             </div>
         </div>
-        <div class="table-agent-feedback d-none">
+        <div class="table-agent-feedback" *ngIf="agentAspectTableData && agentAspectTableData.length > 0">
             <div class="table-header row">
                 <div class="title col-6">{{"DASHBOARD.AGENT_ASPECT_SEARCH_KEYWORD_COLUMN" | translate}}</div>
                 <div class="title col-6 text-right">{{"DASHBOARD.AGENT_ASPECT_TOTAL_SEARCHES_COLUMN" | translate}}</div>
@@ -44,7 +44,6 @@
                 </div>
             </ng-container>
         </div>
-        <div class="empty-title">Not enough data available</div>
     </ng-container>
     
     
@@ -90,9 +89,14 @@
         </div>
     </ng-container>
     
-    <div [hidden]="(viewType == VIEWTYPELIST.PARTIAL_VIEW) || (dashboardService.agentAspectView == VIEWTYPELIST.TABLE)">
+    <div [hidden]="((viewType == VIEWTYPELIST.PARTIAL_VIEW) || (dashboardService.agentAspectView == VIEWTYPELIST.TABLE)) || agentAspectTableData.length == 0 ">
         <div #wordCloudExhaustive [ngClass]="(viewType == VIEWTYPELIST.PARTIAL_VIEW) && (dashboardService.agentAspectView == VIEWTYPELIST.TABLE) ? 'echart-wordCloudContainer-hide' : 'echart-wordCloudContainer'"></div>
     </div>
+
+    <div class="empty-title" *ngIf="!agentAspectTableData || agentAspectTableData.length == 0">Not enough data available</div>
+
+    <div class="view-all-btn" (click)="openSlider(DASHBORADCOMPONENTTYPELIST.AGENT_ASPECT)" *ngIf="(viewType == VIEWTYPELIST.PARTIAL_VIEW)">{{"DASHBOARD.WIDGET_VIEWALL" | translate}}</div>
+
 </div>
 
 

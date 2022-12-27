@@ -2,6 +2,26 @@
     display: inline-block;
     width: 100%;
     padding-bottom: 30px;
+    .empty-title{
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 20px;
+        color: #697586;
+        padding: 50px 0;
+        text-align: center;
+    }
+    .view-all-btn{
+        position: absolute;
+        bottom: 15px;
+        left: 10px;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 17px;
+        color: #0D6EFD;
+        cursor: pointer;
+        padding: 5px;
+        z-index: 1;
+    }
     .cards-data-boards{
         display: flex;
         align-items: center;
@@ -91,6 +111,9 @@
                     line-height: 28px;
                     color: #2D2F33;
                     margin-top: 12px;
+                    &.empty-count{
+                        color: #697586;
+                    }
                 }
             }
         }
@@ -210,13 +233,5 @@
                 }
             }
         }
-    }
-    .empty-title{
-        font-weight: 600;
-        font-size: 14px;
-        line-height: 20px;
-        color: #697586;
-        padding: 50px 0;
-        text-align: center;
     }
 }

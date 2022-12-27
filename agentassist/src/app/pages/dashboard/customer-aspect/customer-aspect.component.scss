@@ -31,6 +31,18 @@
     .tab-details-info{
         display: inline-block;
         width: 100%;
+        .view-all-btn{
+            position: absolute;
+            bottom: 15px;
+            left: 10px;
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 17px;
+            color: #0D6EFD;
+            cursor: pointer;
+            padding: 5px;
+            z-index: 1;
+        }
         .row-data{
             display: inline-block;
             width: 100%;
