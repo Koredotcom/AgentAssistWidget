@@ -29,7 +29,7 @@ export class ConversationalLogsComponent implements OnInit {
     startDate: moment().subtract({ days: 7 }),
     endDate: moment(),
     limit: 20,
-    sort: { "date": "desc" }
+    sort: { "startTime": "desc" }
   };
   isLoading: boolean = false;
   config: any = {
@@ -121,7 +121,7 @@ export class ConversationalLogsComponent implements OnInit {
   onReachEnd() {
     console.log(this.showConversation, this.isSearched, this.isDatePicked, "flags", this.isInitialLoadDone, this.isMoreAvailable);
 
-    if ((this.isInitialLoadDone && this.isMoreAvailable) && !this.showConversation && !this.isSearched && !this.isDatePicked) {
+    if ((this.isInitialLoadDone || this.isMoreAvailable) && !this.showConversation && !this.isSearched && !this.isDatePicked) {
       console.log("called once scroll reached end 444444444444444444444444444444");
       this.getUsecases(null, true);
     } else {
@@ -178,8 +178,8 @@ export class ConversationalLogsComponent implements OnInit {
         }))
       .subscribe((res) => {
         console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', res)
-        if (pagination && res.length > 0) {
-          this.transformedConvsLogs = [...this.transformedConvsLogs, ...this.TransformConvsLogsData(res.data)];
+        if (pagination && res.data.length > 0) {
+           this.TransformConvsLogsData(res.data)
         } else {
           this.TransformConvsLogsData(res.data);
 
@@ -197,6 +197,7 @@ export class ConversationalLogsComponent implements OnInit {
   }
 
   TransformConvsLogsData(resData) {
+    this.transformedConvsLogs = [];
     for( let convsLogData of resData) {
       convsLogData.start = moment(convsLogData.startedOn).format('MMMM Do YYYY, h:mm:ss a');
       convsLogData.end = moment(convsLogData.endedOn).format('MMMM Do YYYY, h:mm:ss a');
