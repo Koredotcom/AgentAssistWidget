@@ -16,7 +16,7 @@
                         <span class="heading-text">{{"DASHBOARD.AGENT_FEEDBACK_KPI_HELPFUL" | translate}}</span>
                         <i class="icon-ast_thumbsup"></i>
                     </div>
-                    <div class="count-heading" [ngClass]="{'empty-count': !agentFeedbackData.helpfulResp}">{{agentFeedbackData.helpfulResp}}%</div>
+                    <div class="count-heading" [ngClass]="{'empty-count': !agentFeedbackData.helpfulResp}">{{agentFeedbackData.helpfulResp | number: '1.0-0'}}%</div>
                 </div>
             </div>
             <div class="card-sec max_width_100">
@@ -25,7 +25,7 @@
                         <span class="heading-text">{{"DASHBOARD.AGENT_FEEDBACK_KPI_NOT_HELPFUL" | translate}}</span>
                         <i class="icon-sat_thumsdown"></i>
                     </div>
-                    <div class="count-heading" [ngClass]="{'empty-count': !agentFeedbackData.nothelpfulResp}">{{agentFeedbackData.nothelpfulResp}}%</div>
+                    <div class="count-heading" [ngClass]="{'empty-count': !agentFeedbackData.nothelpfulResp}">{{agentFeedbackData.nothelpfulResp | number: '1.0-0'}}%</div>
                 </div>
             </div>
         </div>
@@ -94,7 +94,7 @@
                             <span class="heading-text">{{"DASHBOARD.AGENT_FEEDBACK_KPI_HELPFUL" | translate}}</span>
                             <i class="icon-ast_thumbsup"></i>
                         </div>
-                        <div class="count-heading">{{agentFeedbackData.helpfulResp}}%</div>
+                        <div class="count-heading">{{agentFeedbackData.helpfulResp | number: '1.0-0'}}%</div>
                     </div>
                 </div>
                 <div class="card-sec max_width_100">
@@ -103,7 +103,7 @@
                             <span class="heading-text">{{"DASHBOARD.AGENT_FEEDBACK_KPI_NOT_HELPFUL" | translate}}</span>
                             <i class="icon-sat_thumsdown"></i>
                         </div>
-                        <div class="count-heading">{{agentFeedbackData.nothelpfulResp}}%</div>
+                        <div class="count-heading">{{agentFeedbackData.nothelpfulResp | number: '1.0-0'}}%</div>
                     </div>
                 </div>
             </div>
