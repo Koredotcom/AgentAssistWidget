@@ -1524,5 +1524,10 @@ export class EndPointsService {
       method: 'delete'
     }
 
+    this.serviceList['post.agentfeedback'] = {
+      endpoint: this.SERVER_URL + '/agentassist/api/v1/dashboard/agentFeedback',
+      method: 'post'
+    }
+
   }
 }

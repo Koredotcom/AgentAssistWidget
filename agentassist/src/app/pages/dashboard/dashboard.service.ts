@@ -763,62 +763,62 @@ export class DashboardService {
   }
 
   getAgentFeedbackData() {
-    return of({
-      totalResp: 7535,
-      helpful: 73,
-      nothelpful: 27,
-      actualData: [
+    return of(
+      {
+        "totalResp": 10,
+        "helpfulResp": 50,
+        "nothelpfulResp": 50,
+        "usecases": [
         {
-          intentName: "Book Flight",
-          responses: 700,
-          like: {
-            count: 340,
-            percent: 68
-          },
-          dislike: {
-            count: 340,
-            percent: 32
-          }
+        "intentName": "Book Ticket",
+        "responses": 6,
+        "like": {
+        "count": 3,
+        "percent": 50
         },
-        {
-          intentName: "Cancel Flight",
-          responses: 700,
-          like: {
-            count: 340,
-            percent: 68
-          },
-          dislike: {
-            count: 340,
-            percent: 32
-          }
-        },
-        {
-          intentName: "Book Flight",
-          responses: 700,
-          like: {
-            count: 340,
-            percent: 68
-          },
-          dislike: {
-            count: 340,
-            percent: 32
-          }
-        },
-        {
-          intentName: "Cancel Flight",
-          responses: 700,
-          like: {
-            count: 340,
-            percent: 68
-          },
-          dislike: {
-            count: 340,
-            percent: 32
-          }
+        "dislike": {
+        "count": 1,
+        "percent": 16.666666666666664
         }
-      ]
-
-    }
+        },
+        {
+        "intentName": "customersaidtest1",
+        "responses": 1,
+        "like": {
+        "count": 1,
+        "percent": 100
+        },
+        "dislike": {
+        "count": 0,
+        "percent": 0
+        }
+        },
+        {
+        "intentName": "Show Balance",
+        "responses": 2,
+        "like": {
+        "count": 0,
+        "percent": 0
+        },
+        "dislike": {
+        "count": 2,
+        "percent": 100
+        }
+        },
+        {
+        "intentName": "Book Flight",
+        "responses": 1,
+        "like": {
+        "count": 1,
+        "percent": 100
+        },
+        "dislike": {
+        "count": 0,
+        "percent": 0
+        }
+        }
+        ]
+        }
     )
   }
 

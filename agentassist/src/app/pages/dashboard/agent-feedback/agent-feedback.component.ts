@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { SubSink } from 'subsink';
+import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { DASHBORADCOMPONENTTYPE, VIEWTYPE } from '../dashboard.cnst';
 import { DashboardService } from '../dashboard.service';
 
@@ -18,7 +18,8 @@ export class AgentFeedbackComponent implements OnInit {
   agentFeedbackData : any = {};
   agentFeedbackTableData : any = [];
 
-  constructor(private dashboardService : DashboardService) { }
+  constructor(private dashboardService : DashboardService,
+    private service : ServiceInvokerService) { }
 
   ngOnInit(): void {
    this.updateAgentFeedbackData();
@@ -28,18 +29,21 @@ export class AgentFeedbackComponent implements OnInit {
   }
 
   updateAgentFeedbackData(){
-    this.dashboardService.getAgentFeedbackData().subscribe((data : any) => {
+    this.service.invoke('post.agentfeedback', {}).subscribe((data : any) => {
       if(data){
         this.agentFeedbackData = Object.assign({}, data);
-        if(data.actualData){
+        if(data.usecases){
           if(this.viewType == VIEWTYPE.PARTIAL_VIEW){
-            this.agentFeedbackTableData = data.actualData.length <= 3 ? data.actualData : data.actualData.slice(0,3);
+            this.agentFeedbackTableData = data.usecases.length <= 3 ? data.usecases : data.usecases.slice(0,3);
           }else {
-            this.agentFeedbackTableData = data.actualData;
+            this.agentFeedbackTableData = data.usecases;
           }
         }
       }
     });
+    // this.dashboardService.getAgentFeedbackData().subscribe((data : any) => {
+     
+    // });
   }
 
   openSlider(componentName){

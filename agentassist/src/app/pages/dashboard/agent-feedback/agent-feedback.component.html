@@ -16,7 +16,7 @@
                         <span class="heading-text">{{"DASHBOARD.AGENT_FEEDBACK_KPI_HELPFUL" | translate}}</span>
                         <i class="icon-ast_thumbsup"></i>
                     </div>
-                    <div class="count-heading" [ngClass]="{'empty-count': !agentFeedbackData.helpful}">{{agentFeedbackData.helpful}}%</div>
+                    <div class="count-heading" [ngClass]="{'empty-count': !agentFeedbackData.helpfulResp}">{{agentFeedbackData.helpfulResp}}%</div>
                 </div>
             </div>
             <div class="card-sec max_width_100">
@@ -25,7 +25,7 @@
                         <span class="heading-text">{{"DASHBOARD.AGENT_FEEDBACK_KPI_NOT_HELPFUL" | translate}}</span>
                         <i class="icon-sat_thumsdown"></i>
                     </div>
-                    <div class="count-heading" [ngClass]="{'empty-count': !agentFeedbackData.nothelpful}">{{agentFeedbackData.nothelpful}}%</div>
+                    <div class="count-heading" [ngClass]="{'empty-count': !agentFeedbackData.nothelpfulResp}">{{agentFeedbackData.nothelpfulResp}}%</div>
                 </div>
             </div>
         </div>
@@ -42,13 +42,13 @@
                     <div class="col-5 like-dislike">
                         <div class="like-count">
                             <i class="icon-ast_thumbsup"></i>
-                            <span class="count">{{obj.like.count}}</span>
-                            <span class="percentage">({{obj.like.percent}}%)</span>
+                            <span class="count">{{obj.like.count | number: '1.0-0'}}</span>
+                            <span class="percentage">({{obj.like.percent | number: '1.0-0'}}%)</span>
                         </div>
                         <div class="like-count">
                             <i class="icon-sat_thumsdown"></i>
-                            <span class="count">{{obj.dislike.count}}</span>
-                            <span class="percentage">({{obj.dislike.percent}}%)</span>
+                            <span class="count">{{obj.dislike.count | number: '1.0-0'}}</span>
+                            <span class="percentage">({{obj.dislike.percent | number: '1.0-0'}}%)</span>
                         </div>
                     </div>
                 </div>
@@ -94,7 +94,7 @@
                             <span class="heading-text">{{"DASHBOARD.AGENT_FEEDBACK_KPI_HELPFUL" | translate}}</span>
                             <i class="icon-ast_thumbsup"></i>
                         </div>
-                        <div class="count-heading">{{agentFeedbackData.helpful}}%</div>
+                        <div class="count-heading">{{agentFeedbackData.helpfulResp}}%</div>
                     </div>
                 </div>
                 <div class="card-sec max_width_100">
@@ -103,7 +103,7 @@
                             <span class="heading-text">{{"DASHBOARD.AGENT_FEEDBACK_KPI_NOT_HELPFUL" | translate}}</span>
                             <i class="icon-sat_thumsdown"></i>
                         </div>
-                        <div class="count-heading">{{agentFeedbackData.nothelpful}}%</div>
+                        <div class="count-heading">{{agentFeedbackData.nothelpfulResp}}%</div>
                     </div>
                 </div>
             </div>
@@ -116,8 +116,8 @@
                 <ng-container>
                     <div class="table-body-feedback row" *ngFor="let obj of agentFeedbackTableData">
                         <div class="col-4 title">{{obj.intentName}}</div>
-                        <div class="col-4 title">{{obj.like.percent}}%</div>
-                        <div class="col-4 title text-right">{{obj.dislike.percent}}%</div>
+                        <div class="col-4 title">{{obj.like.percent | number: '1.0-0'}}%</div>
+                        <div class="col-4 title text-right">{{obj.dislike.percent | number: '1.0-0'}}%</div>
                     </div>
                    
                     
