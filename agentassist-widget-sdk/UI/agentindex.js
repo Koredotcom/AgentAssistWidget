@@ -292,19 +292,20 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             }      
                           })
                         }
-                        if(e.data.name ==='agentAssist.endOfConversation' && e.data.conversationId) {
-                            let currentEndedConversationId = e.data.conversationId;
+                        if(e.data.name ==='agentAssist.endOfConversation' && (e.data.conversationId || e.data.conversationid)) {
+                            let currentEndedConversationId = e.data.conversationId || e.data.conversationid;
                             var appStateStr = localStorage.getItem('agentAssistState') || '{}';
                             var appState = JSON.parse(appStateStr);
                             if (appState[currentEndedConversationId]) {
                                 let request_resolution_comments = {
-                                    conversationId: e.data?.conversationId,
+                                    conversationId: e.data?.conversationId || e.data?.conversationid,
                                     userId: '',
                                     botId: _botId,
                                     sessionId: koreGenerateUUID(),
                                     chatHistory: e.data?.payload?.chatHistory
                                 }
                                 _agentAsisstSocket.emit('request_resolution_comments', request_resolution_comments);
+                                _agentAsisstSocket.emit('end_of_conversation', request_resolution_comments);
                                 console.log("request_resolution_comments event published", request_resolution_comments)
                                // localStorage.clear(appState[currentEndedConversationId]);
                                delete appState[currentEndedConversationId];
@@ -3091,7 +3092,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             'waitTime': 2000,
                             'userName': parsedCustomData?.userName || parsedCustomData?.fName + parsedCustomData?.lName || 'user',
                             'id': _agentAssistDataObj.conversationId,
-                            'isSendWelcomeMessage': isSendWelcomeMessage
+                            'isSendWelcomeMessage': isSendWelcomeMessage,
+                            'botId': _botId
                         }
         
                         _agentAsisstSocket.emit('welcome_message_request', welcome_message_request);
