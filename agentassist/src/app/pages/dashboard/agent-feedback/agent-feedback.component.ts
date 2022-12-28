@@ -21,7 +21,8 @@ export class AgentFeedbackComponent implements OnInit {
   agentFeedbackTableData : any = [];
 
   constructor(private dashboardService : DashboardService,
-    private service : ServiceInvokerService) { }
+    private service : ServiceInvokerService, 
+    private workflowService : workflowService) { }
 
   ngOnInit(): void {
    this.updateAgentFeedbackData();
@@ -31,11 +32,7 @@ export class AgentFeedbackComponent implements OnInit {
   }
 
   updateAgentFeedbackData(){
-    const jStorage = JSON.parse(window.localStorage.getItem('jStorage'));
-    if(jStorage && jStorage.currentAccount && jStorage.currentAccount.accountId){
-      this.streamId = jStorage.currentAccount.accountId;
-    }
-    
+    this.streamId  = this.workflowService.deflectApps()._id || this.workflowService.deflectApps()[0]._id;
     this.service.invoke('post.agentfeedback', {botId : this.streamId}).subscribe((data : any) => {
       if(data){
         this.agentFeedbackData = Object.assign({}, data);
