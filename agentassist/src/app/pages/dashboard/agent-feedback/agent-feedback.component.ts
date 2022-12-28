@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
+import { workflowService } from '@kore.services/workflow.service';
 import { DASHBORADCOMPONENTTYPE, VIEWTYPE } from '../dashboard.cnst';
 import { DashboardService } from '../dashboard.service';
 
@@ -15,6 +16,7 @@ export class AgentFeedbackComponent implements OnInit {
   
   public DASHBORADCOMPONENTTYPELIST = DASHBORADCOMPONENTTYPE;
   public VIEWTYPELIST = VIEWTYPE;
+  streamId : string;
   agentFeedbackData : any = {};
   agentFeedbackTableData : any = [];
 
@@ -29,7 +31,12 @@ export class AgentFeedbackComponent implements OnInit {
   }
 
   updateAgentFeedbackData(){
-    this.service.invoke('post.agentfeedback', {}).subscribe((data : any) => {
+    const jStorage = JSON.parse(window.localStorage.getItem('jStorage'));
+    if(jStorage && jStorage.currentAccount && jStorage.currentAccount.accountId){
+      this.streamId = jStorage.currentAccount.accountId;
+    }
+    
+    this.service.invoke('post.agentfeedback', {botId : this.streamId}).subscribe((data : any) => {
       if(data){
         this.agentFeedbackData = Object.assign({}, data);
         if(data.usecases){

@@ -1525,7 +1525,7 @@ export class EndPointsService {
     }
 
     this.serviceList['post.agentfeedback'] = {
-      endpoint: this.SERVER_URL + '/agentassist/api/v1/dashboard/agentFeedback',
+      endpoint: this.SERVER_URL + '/agentassist/api/v1/dashboard/agentFeedback/account/:botId',
       method: 'post'
     }
 
