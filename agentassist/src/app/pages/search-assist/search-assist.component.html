@@ -40,6 +40,10 @@
                     </div>
                 </label>
             </div>
+            <div class="goto-link" (click)="goToSearchAssistUrl()" *ngIf="!searchConv.isEnabled">
+                <span>{{"SEARCHASSIST.GO_TO_SEARCHASSIST" | translate}} </span>
+                <i class="icon-sa-ext-link"></i>
+            </div>
             <div [hidden]="!searchConv.isEnabled">
                 <div class="info-text-succes-fail">
                     <div class="label_heading">{{ "SEARCHASSIST.APP_INFO" | translate}}</div>
@@ -112,11 +116,11 @@
                         <span>{{"SEARCHASSIST.GO_TO_SEARCHASSIST" | translate}}</span>
                         <i class="icon-sa-ext-link"></i>
                     </div>
-                    <button class="kr-sg-button-secondary btn_lg" (click)="updateSearchConfDetails('edit')" *ngIf="disableSearchForm && !createForm" >{{ "SEARCHASSIST.EDIT" | translate}}</button>
+                    <button class="kr-sg-button-secondary btn_lg" (click)="updateSearchConfDetails('edit')" *ngIf="(disableSearchForm && !createForm)" [disabled]= "!saveStatus" >{{ "SEARCHASSIST.EDIT" | translate}}</button>
                     <button class="kr-sg-button-secondary btn_lg" (click)="updateSearchConfDetails('cancel')" *ngIf="!disableSearchForm && !createForm" >{{ "SEARCHASSIST.CANCEL" | translate}}</button>
                     <button class="kr-sg-button-primary btn_lg save-btn" *ngIf = "saveStatus" (click)="updateSearchConfDetails('save')" [disabled]="createForm ? !(searchForm.valid) : (!(searchForm.valid) ? true : !formDirty)" >{{ "SEARCHASSIST.TESTCONNECTION" | translate}}</button>
                     <button class="kr-sg-button-primary btn_lg save-btn" *ngIf = "!saveStatus" [disabled]="createForm ? !(searchForm.valid) : (!(searchForm.valid) ? true : !formDirty)" >{{ "SEARCHASSIST.TESTING" | translate}}</button>
-                    <button class="kr-sg-button-danger btn_lg" (click)="deleteConfig()" *ngIf="!createForm">{{ "SEARCHASSIST.DELETE" | translate}}</button>
+                    <button class="kr-sg-button-danger btn_lg" (click)="deleteConfig()" *ngIf="!createForm" [disabled]= "!saveStatus">{{ "SEARCHASSIST.DELETE" | translate}}</button>
                 </div>
             </div>
         </div>
