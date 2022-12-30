@@ -38,6 +38,21 @@
     .scroll-data{
         padding: 40px;
         width: 880px;
+        .goto-link{
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 20px;
+            color: #2B75E4;
+            cursor: pointer;
+            height: 34px;
+            padding: 0 10px;
+            float: right;
+            span{
+                padding-right: 10px;
+            }
+        }
     }
     .header-title{
         font-size: 26px;
