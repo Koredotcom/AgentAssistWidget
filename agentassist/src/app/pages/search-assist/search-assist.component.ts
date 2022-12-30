@@ -63,7 +63,7 @@ export class SearchAssistComponent implements OnInit {
         this.getFormValueStatus();
         this.createForm = false;
         this.searchConv.isEnabled = data.isEnabled;
-        this.createFormStatus = true;
+        this.createFormStatus = this.searchConv.isEnabled ? true : undefined;
       } else {
         this.createSearchFormActivity();
       }
@@ -95,15 +95,17 @@ export class SearchAssistComponent implements OnInit {
 
   handleSaveFailureCase(){
     this.saveStatus = true;
-    this.createFormStatus = false;
-    this.createForm = this.createForm ? true : false;
-    this.disableSearchForm = this.createForm ? false : true;
+    this.createFormStatus = this.searchConv.isEnabled ? false : undefined;
+    this.createForm = true;
+    this.disableSearchForm = false;
     this.actualConfigDetailsObj = Object.assign({},this.searchAssistConfigDetailsObj);
+    this.searchFormChangeMode();
   }
 
   updateSearchConfDetails(type) {
     let payLoad: any = Object.assign({}, this.searchAssistConfigDetailsObj);
     payLoad.isEnabled = this.searchConv.isEnabled;
+    this.createFormStatus = undefined;
     if (type == 'save') {
       this.saveStatus = false;
       this.disableSearchForm = true;
@@ -115,9 +117,9 @@ export class SearchAssistComponent implements OnInit {
         if(data && data.statusCode == 401){
           this.handleSaveFailureCase();
         }else if(data){
-          this.createFormStatus = true;
+          this.createFormStatus = this.searchConv.isEnabled ? true : undefined;
           this.updateSearchConfDetailsFromDb(data);
-          this.notificationService.notify(this.translate.instant(notificationSuccessCase), 'success');
+          // this.notificationService.notify(this.translate.instant(notificationSuccessCase), 'success');
           this.saveStatus = true;
         }
       }, (error) => {
