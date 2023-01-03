@@ -3091,12 +3091,15 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }else{
                             isSendWelcomeMessage = true;
                         }
+                        console.log(window.agentDetails, window.userDetails, 'agent and user details')
+                        let agent_user_details = {...window.agentDetails, ...window.userDetails};
                         var welcome_message_request = {
                             'waitTime': 2000,
                             'userName': parsedCustomData?.userName || parsedCustomData?.fName + parsedCustomData?.lName || 'user',
                             'id': _agentAssistDataObj.conversationId,
                             'isSendWelcomeMessage': isSendWelcomeMessage,
-                            'botId': _botId
+                            'botId': _botId,
+                            'agentassistInfo' : agent_user_details
                         }
         
                         _agentAsisstSocket.emit('welcome_message_request', welcome_message_request);
