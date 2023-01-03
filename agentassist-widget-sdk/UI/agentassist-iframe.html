@@ -11,14 +11,20 @@
     <script src="./../dist/kore-ai-agentassist-sdk.min.js" type="text/javascript"></script>
     <script>
        window.addEventListener("unload", (event) => {
-        window.removeEventListener("message", receiveMessage)
+            window.removeEventListener("message", receiveMessage);
+            window.agentDetails = null;
+            window.userDetails = null;
         });
         function receiveMessage(e) {
             if(e.data.name === 'init_agentassist') {
                 var chatConfig = window.KoreSDK.chatConfig;
-                    let urlParams = e.data.urlParams;
-                    initAgentAssist(chatConfig, urlParams);
-                }
+                let urlParams = e.data.urlParams;
+                initAgentAssist(chatConfig, urlParams);
+            }else if(e.data.name === 'setAgentInfo'){
+                window.agentDetails = e.data.agentDetails ? e.data.agentDetails : null;
+            }else if(e.data.name === 'setUserInfo'){
+                window.userDetails = e.data.userDetails ? e.data.userDetails : null;
+            }
         }
         $(document).ready(function () {
             console.log('agent assist inside iframe', new Date());
@@ -32,13 +38,12 @@
                     get: (searchParams, prop) => searchParams.get(prop),
                 });
                 initAgentAssist(chatConfig, params);
-            } else {
-                var message = {
-                    method: 'agentassist_loaded',
-                    name: "agent_assist"
-                };
-                window.parent.postMessage(message, "*");
-            }
+            } 
+            var message = {
+                method: 'agentassist_loaded',
+                name: "agent_assist"
+            };
+            window.parent.postMessage(message, "*");
         });
         function initAgentAssist(chatConfig, urlParams) {
             if (chatConfig.agentAssist) {
