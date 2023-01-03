@@ -3088,6 +3088,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }else{
                             isSendWelcomeMessage = true;
                         }
+                        console.log(window.agentDetails, window.userDetails, 'agent and user details')
                         let agent_user_details = {...window.agentDetails, ...window.userDetails};
                         var welcome_message_request = {
                             'waitTime': 2000,

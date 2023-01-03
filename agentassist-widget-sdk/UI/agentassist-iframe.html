@@ -21,8 +21,10 @@
                 let urlParams = e.data.urlParams;
                 initAgentAssist(chatConfig, urlParams);
             }else if(e.data.name === 'setAgentInfo'){
+                console.log((e, "event", e.data.agentDetails, "agent details"));
                 window.agentDetails = e.data.agentDetails ? e.data.agentDetails : null;
             }else if(e.data.name === 'setUserInfo'){
+                console.log((e, "event", e.data.userDetails, "user details"));
                 window.userDetails = e.data.userDetails ? e.data.userDetails : null;
             }
         }
