@@ -1077,7 +1077,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 articleSuggestions.append(fewArticleView);
                             }
 
-                        }else{
+                        }
+                        
                             if (data?.suggestions?.dialogs?.length > 0) {
                                 let automationSuggestions = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display`) : $('#overLaySearch');
                                 let dialogAreaHtml = `<div class="dialog-task-run-sec p-0" id="searchedDialogs-${libraryResponseId}">
@@ -1332,7 +1333,6 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 }
     
                             }
-                        }
                         
                     } else {
                         if (data.type === 'text' && data.suggestions) {
