@@ -252,4 +252,24 @@ export class DesignAlterService {
     });
   }
 
+  //empty deep
+
+  emptyDeep(mixedVar, emptyValues = [undefined, null, '']) {
+    var key, i, len
+    for (i = 0, len = emptyValues.length; i < len; i++) {
+        if (mixedVar === emptyValues[i]) {
+            return true
+        }
+    }
+    if (typeof mixedVar === 'object') {
+        for (const item of Object.values(mixedVar)) {
+            if (!this.emptyDeep(item, emptyValues)) {
+                return false
+            }
+        }
+        return true
+    }
+    return false
+}
+
 }

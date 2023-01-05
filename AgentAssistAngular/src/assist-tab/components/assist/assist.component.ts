@@ -46,6 +46,7 @@ export class AssistComponent implements OnInit {
   agentAssistResponse: any = {};
   answerPlaceableIDs: any = [];
   waitingTimeForUUID: number = 1000;
+  proactiveModeStatus : boolean;
 
   constructor(private templateRenderClassService: TemplateRenderClassService,
     public handleSubjectService: HandleSubjectService,
@@ -127,8 +128,13 @@ export class AssistComponent implements OnInit {
 
     let subscription6 = this.websocketService.agentAssistUserMessageResponse$.subscribe((response: any) => {
       if (response && response.botId) {
-        this.updateNumberOfMessages();
-        this.processUserMessages(response, response.conversationId, response.botId);
+        if(!this.commonService.isAutomationOnGoing && !this.proactiveModeStatus){
+          return;
+        }else{
+          this.updateNumberOfMessages();
+          this.processUserMessages(response, response.conversationId, response.botId);
+        }
+       
       }
     });
 
@@ -179,6 +185,7 @@ export class AssistComponent implements OnInit {
 
     let subscription13 = this.handleSubjectService.proactiveModeSubject.subscribe((response) => {
       if(response != null){
+        this.proactiveModeStatus = response;
         if(response){
           $(`.override-input-div`).removeClass('hide');
           this.handleCancelOverrideBtnClick('overRideBtn-' + this.dropdownHeaderUuids, this.dialogPositionId);
@@ -342,7 +349,17 @@ export class AssistComponent implements OnInit {
   }
 
   processAgentAssistResponse(data, botId) {
+    if(!this.commonService.isAutomationOnGoing && !this.proactiveModeStatus){
+      return;
+    }
     let automationSuggestions = $('#dynamicBlock .dialog-task-accordiaon-info');
+
+    if(data.suggestions && Array.isArray(data.suggestions) && data.suggestions.length == 0){
+      data.suggestions = false;
+    }else if(this.designAlterService.emptyDeep(data.suggestions)){
+        data.suggestions = false;
+    }
+
     let uuids = this.koreGenerateuuidPipe.transform();
     let responseId = uuids;
 
@@ -818,11 +835,13 @@ export class AssistComponent implements OnInit {
 
   updateNumberOfMessages() {
     if(this.commonService.activeTab == this.projConstants.ASSIST){
-      this.commonService.scrollContent[ProjConstants.ASSIST].numberOfNewMessages += 1;
-      $(".scroll-bottom-btn").addClass("new-messages");
-      $(".scroll-bottom-btn span").text(this.commonService.scrollContent[ProjConstants.ASSIST].numberOfNewMessages + ' new');
-      if (this.commonService.scrollContent[ProjConstants.ASSIST].numberOfNewMessages == 1) {
-        this.removeWhiteBackgroundToSeenMessages();
+      if(this.proactiveModeStatus){
+        this.commonService.scrollContent[ProjConstants.ASSIST].numberOfNewMessages += 1;
+        $(".scroll-bottom-btn").addClass("new-messages");
+        $(".scroll-bottom-btn span").text(this.commonService.scrollContent[ProjConstants.ASSIST].numberOfNewMessages + ' new');
+        if (this.commonService.scrollContent[ProjConstants.ASSIST].numberOfNewMessages == 1) {
+          this.removeWhiteBackgroundToSeenMessages();
+        }
       }
     }
   }
