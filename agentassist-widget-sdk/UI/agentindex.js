@@ -231,6 +231,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
     }
 
     function loadAgentAssist(result) {
+        var isAgentSentRequestOnClick = false;
+        var isMyBotAgentSentRequestOnClick = false;
         var navigatefromLibToTab;
                 let isOnlyOneFaqOnSearch = false;
                 let isInitialDialogOnGoing = false;
@@ -1630,6 +1632,78 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             runInfoContent.append(tellToUserHtml);
                             hideSendOrCopyButtons(parsedPayload, runInfoContent)
                         } 
+                    }
+                    if(isMyBotAgentSentRequestOnClick){
+                        let mybotContainer = $('#myBotAutomationBlock');
+                        let botResHtml = `
+                                <div class="collapse-acc-data before-none" id='smallTalk-${myBotuuids}'>
+                             <div class="steps-run-data">
+                             <div class="icon_block">
+                                 <i class="ast-agent"></i>
+                             </div>
+                             <div class="run-info-content" >
+                             <div class="title">Tell Customer</div>
+                             <div class="agent-utt">
+                                 <div class="title-data" id="displayData-${myBotuuids}">${data.buttons[0].value}</div>
+                                 <div class="action-links">
+                                     <button class="send-run-btn" id="sendMsg" data-msg-id="${myBotuuids}"  data-msg-data="${data.buttons[0].value}">Send</button>
+                                     <div class="copy-btn" data-msg-id="${myBotuuids}" data-msg-data="${data.buttons[0].value}">
+                                         <i class="ast-copy" data-msg-id="${myBotuuids}" data-msg-data="${data.buttons[0].value}"></i>
+                                     </div>
+                                 </div>
+                             </div>
+                             </div>
+                         </div>
+                         </div>`;
+                         mybotContainer.append(botResHtml);
+                        // let runInfoContent = $(`#dropDownData-${myBotDropdownHeaderUuids}`);
+                        // let askToUserHtml = `
+                        // <div class="steps-run-data">
+                        //                <div class="icon_block">
+                        //                    <i class="ast-agent"></i>
+                        //                </div>
+                        //                <div class="run-info-content" >
+                        //                <div class="title">Ask customer</div>
+                        //                <div class="agent-utt">
+                        //                    <div class="title-data"><ul class="chat-container" id="displayData-${myBotuuids}"></ul></div>
+                        //                    <div class="action-links">
+                        //                        <button class="send-run-btn" id="sendMsg" data-msg-id="${myBotuuids}" data-msg-data="${sendMsgData}">Send</button>
+                        //                        <div class="copy-btn hide" data-msg-id="${myBotuuids}">
+                        //                            <i class="ast-copy" data-msg-id="${myBotuuids}"></i>
+                        //                        </div>
+                        //                    </div>
+                        //                </div>
+                        //                </div>
+                        //            </div>
+                        // `;
+                        //             let tellToUserHtml = `
+                        // <div class="steps-run-data">
+                        //                <div class="icon_block">
+                        //                    <i class="ast-agent"></i>
+                        //                </div>
+                        //                <div class="run-info-content" >
+                        //                <div class="title">Tell Customer</div>
+                        //                <div class="agent-utt">
+                        //                    <div class="title-data" ><ul class="chat-container" id="displayData-${myBotuuids}"></ul></div>
+                        //                    <div class="action-links">
+                        //                        <button class="send-run-btn" id="sendMsg" data-msg-id="${myBotuuids}" data-msg-data="${sendMsgData}">Send</button>
+                        //                        <div class="copy-btn hide" data-msg-id="${myBotuuids}">
+                        //                            <i class="ast-copy" data-msg-id="${myBotuuids}"></i>
+                        //                        </div>
+                        //                    </div>
+                        //                </div>
+                        //                </div>
+                        //            </div>
+                        // `;
+                        // if (data.isPrompt) {
+                        //     runInfoContent.append(askToUserHtml);
+                        //     hideSendOrCopyButtons(parsedPayload, runInfoContent)
+                        //    // runInfoContent.append(agentInputToBotHtml);
+                        // } else {
+                        //     runInfoContent.append(tellToUserHtml);
+                        //     hideSendOrCopyButtons(parsedPayload, runInfoContent)
+                        // } 
+                        isMyBotAgentSentRequestOnClick = false;
                     }
                     AgentChatInitialize.renderMessage(_msgsResponse, myBotuuids, `dropDownData-${myBotDropdownHeaderUuids}`);
                     removeElementFromDom();
@@ -4716,9 +4790,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             if (JSON.parse(localStorage.getItem('innerTextValue'))) {
                                if(currentTabActive == 'userAutoIcon'){
                                     AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: _agentAssistDataObj.conversationId, botId: _agentAssistDataObj.botId, value: JSON.parse(localStorage.getItem('innerTextValue')), check: true });
+                                    isAgentSentRequestOnClick = ture;
                                     localStorage.setItem('innerTextValue', null);
                                 } else if(currentTabActive == 'agentAutoIcon'){
                                     AgentAssistPubSub.publish('searched_Automation_details', { conversationId: _agentAssistDataObj.conversationId, botId: _agentAssistDataObj.botId, value: JSON.parse(localStorage.getItem('innerTextValue')), isSearch: false});
+                                    isMyBotAgentSentRequestOnClick = true;
+                                   // AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: _agentAssistDataObj.conversationId, botId: _agentAssistDataObj.botId, value: JSON.parse(localStorage.getItem('innerTextValue')), check: true });
                                     localStorage.setItem('innerTextValue', null);
                                 }
                                 e.stopImmediatePropagation();
