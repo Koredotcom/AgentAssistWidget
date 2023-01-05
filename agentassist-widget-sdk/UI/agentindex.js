@@ -231,6 +231,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
     }
 
     function loadAgentAssist(result) {
+        var isAgentSentRequestOnClick = false;
+        var isMyBotAgentSentRequestOnClick = false;
         var navigatefromLibToTab;
                 let isOnlyOneFaqOnSearch = false;
                 let isInitialDialogOnGoing = false;
@@ -1630,6 +1632,31 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             runInfoContent.append(tellToUserHtml);
                             hideSendOrCopyButtons(parsedPayload, runInfoContent)
                         } 
+                    }
+                    if(isMyBotAgentSentRequestOnClick && !myBotDropdownHeaderUuids){
+                        let mybotContainer = $('#myBotAutomationBlock');
+                        let botResHtml = `
+                                <div class="collapse-acc-data before-none" id='smallTalk-${myBotuuids}'>
+                             <div class="steps-run-data">
+                             <div class="icon_block">
+                                 <i class="ast-agent"></i>
+                             </div>
+                             <div class="run-info-content" >
+                             <div class="title">Tell Customer</div>
+                             <div class="agent-utt">
+                                 <div class="title-data" id="displayData-${myBotuuids}">${data.buttons[0].value}</div>
+                                 <div class="action-links">
+                                     <button class="send-run-btn" id="sendMsg" data-msg-id="${myBotuuids}"  data-msg-data="${data.buttons[0].value}">Send</button>
+                                     <div class="copy-btn" data-msg-id="${myBotuuids}" data-msg-data="${data.buttons[0].value}">
+                                         <i class="ast-copy" data-msg-id="${myBotuuids}" data-msg-data="${data.buttons[0].value}"></i>
+                                     </div>
+                                 </div>
+                             </div>
+                             </div>
+                         </div>
+                         </div>`;
+                        mybotContainer.append(botResHtml);
+                        isMyBotAgentSentRequestOnClick = false;
                     }
                     AgentChatInitialize.renderMessage(_msgsResponse, myBotuuids, `dropDownData-${myBotDropdownHeaderUuids}`);
                     removeElementFromDom();
@@ -4716,9 +4743,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             if (JSON.parse(localStorage.getItem('innerTextValue'))) {
                                if(currentTabActive == 'userAutoIcon'){
                                     AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: _agentAssistDataObj.conversationId, botId: _agentAssistDataObj.botId, value: JSON.parse(localStorage.getItem('innerTextValue')), check: true });
+                                    isAgentSentRequestOnClick = true;
                                     localStorage.setItem('innerTextValue', null);
                                 } else if(currentTabActive == 'agentAutoIcon'){
                                     AgentAssistPubSub.publish('searched_Automation_details', { conversationId: _agentAssistDataObj.conversationId, botId: _agentAssistDataObj.botId, value: JSON.parse(localStorage.getItem('innerTextValue')), isSearch: false});
+                                    isMyBotAgentSentRequestOnClick = true;
                                     localStorage.setItem('innerTextValue', null);
                                 }
                                 e.stopImmediatePropagation();
@@ -6458,6 +6487,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     $(`.customer-feeling-text`).addClass('bottom-95');
                     setTimeout(() => {
                         headerUUids = undefined;
+                        myBotDropdownHeaderUuids = undefined;
                     }, 100)
                     // headerUUids = undefined;
 		    UnCollapseDropdownForLastElement(lastElementBeforeNewMessage);
