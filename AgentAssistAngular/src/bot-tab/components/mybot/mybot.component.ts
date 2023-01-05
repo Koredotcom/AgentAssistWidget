@@ -385,6 +385,9 @@ export class MybotComponent implements OnInit {
         }
         let parsedPayload;
         res.components?.forEach((elem) => {
+          if(elem.data?.text){
+            elem.data.text = elem.data?.text.replace(/(^(&quot\;)|(&quot\;)$)/g, '');
+          }
           let payloadType = (elem.data?.text).replace(/(&quot\;)/g, "\"");
 
           try {

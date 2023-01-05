@@ -277,17 +277,16 @@ export class HomeComponent implements OnInit {
   //proactive tab toggle click
   proactiveToggle(proactiveModeEnabled) {
     this.proactiveModeEnabled = proactiveModeEnabled;
-    let toggleObj: any = {
-      "agentId": "",
-      "botId": this.connectionDetails.botId,
-      "conversationId": this.connectionDetails.conversationId,
-      "query": "",
-      'experience': this.commonService.isCallConversation === true ? ProjConstants.VOICE : ProjConstants.CHAT,
-      "enable_override_userinput": this.proactiveModeEnabled
-    }
-    this.commonService.OverRideMode ? this.websocketService.emitEvents(EVENTS.enable_override_userinput, toggleObj) : '';
-    this.commonService.OverRideMode = this.proactiveModeEnabled;
+    this.handleSubjectService.setProactiveModeStatus(this.proactiveModeEnabled);
+    this.updateProactiveModeState(this.proactiveModeEnabled);
   }
+
+  updateProactiveModeState(modeStatus){
+    let storageObject: any = {
+      [storageConst.PROACTIVE_MODE]: modeStatus
+    }
+    this.localStorageService.setLocalStorageItem(storageObject);
+}
 
   //highlight faq after refresh
   hightLightFaqFromStoredList(convId, currentTab) {

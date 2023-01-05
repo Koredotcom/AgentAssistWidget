@@ -43,6 +43,9 @@ export class TemplateRenderClassService {
     }
     res?.buttons?.forEach((elem) => {
       let parsedPayload;
+      if(elem.value){
+        elem.value = elem.value.replace(/(^(&quot\;)|(&quot\;)$)/g, '');
+      }
       let payloadType = (elem.value).replace(/(&quot\;)/g, "\"");
       console.log(payloadType, "payload type", elem.value);
       

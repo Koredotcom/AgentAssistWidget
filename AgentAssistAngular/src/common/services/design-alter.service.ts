@@ -182,6 +182,7 @@ export class DesignAlterService {
       let lastElementId = this.getUUIDFromId(lastElement.id);
       lastElementId = lastElementId.split("*")[0];
       let collapseElement = document.getElementById('dropDownData-' + lastElementId);
+      $(`#dropDownHeader-${lastElementId}`).find('.ast-carrotup').addClass('rotate-carrot');
       $(collapseElement).removeClass('hide');
     }
   }
@@ -240,9 +241,13 @@ export class DesignAlterService {
     document.getElementById(IdReferenceConst.DROPDOWN_HEADER + '-' + uuid).addEventListener('click', (event) => {
       let dropdownDataElement = $(`#dropDownData-${uuid}`);
       if ($(dropdownDataElement).hasClass('hide')) {
-        $(dropdownDataElement).removeClass('hide')
+        $(dropdownDataElement).removeClass('hide');
+        $(`#dropDownHeader-${uuid}`).find('.ast-carrotup').addClass('rotate-carrot');
+        $(`#endTaks-${uuid}`).removeClass('hide');
       } else {
         $(dropdownDataElement).addClass('hide')
+        $(`#dropDownHeader-${uuid}`).find('.ast-carrotup').removeClass('rotate-carrot');
+        $(`#endTaks-${uuid}`).removeClass('hide');
       }
     });
   }

@@ -19,6 +19,7 @@ export class HandleSubjectService {
   public processAgentOrTranscriptResponseSubject = new BehaviorSubject<object>(null);
   public overridebtnClickEventSubject = new BehaviorSubject<object>(null);
   public isLoaderSetSubject = new BehaviorSubject<boolean>(false);
+  public proactiveModeSubject = new BehaviorSubject<boolean>(null);
 
   constructor() { }
 
@@ -79,5 +80,7 @@ export class HandleSubjectService {
    this.isLoaderSetSubject.next(falg)
   }
 
-
+  setProactiveModeStatus(flag){
+    this.proactiveModeSubject.next(flag);
+  }
 }

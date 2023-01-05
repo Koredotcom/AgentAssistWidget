@@ -36,15 +36,16 @@ export class AssistComponent implements OnInit {
   imageFilePath: string = ImageFilePath;
   idReferenceConst: any = IdReferenceConst;
 
+  dialogName : string;
+  dialogPositionId: string;
+
   connectionDetails: any;
   welcomeMsgResponse: any;
   dropdownHeaderUuids: any;
-  dialogPositionId: string;
   interruptDialog: any = {};
-  answerPlaceableIDs: any = [];
   agentAssistResponse: any = {};
+  answerPlaceableIDs: any = [];
   waitingTimeForUUID: number = 1000;
-  dialogName;
 
   constructor(private templateRenderClassService: TemplateRenderClassService,
     public handleSubjectService: HandleSubjectService,
@@ -176,6 +177,20 @@ export class AssistComponent implements OnInit {
       }
     })
 
+    let subscription13 = this.handleSubjectService.proactiveModeSubject.subscribe((response) => {
+      if(response != null){
+        if(response){
+          $(`.override-input-div`).removeClass('hide');
+          this.handleCancelOverrideBtnClick('overRideBtn-' + this.dropdownHeaderUuids, this.dialogPositionId);
+        }else{
+          if(document.getElementById(`overRideBtn-${this.dropdownHeaderUuids}`)){
+            $(`#overRideBtn-${this.dropdownHeaderUuids}`).addClass('hide');
+            this.handleOverridBtnClick('overRideBtn-' + this.dropdownHeaderUuids, this.dialogPositionId);
+          }
+        }
+      }
+    });
+
     this.subscriptionsList.push(subscription1);
     this.subscriptionsList.push(subscription2);
     this.subscriptionsList.push(subscription3);
@@ -188,6 +203,7 @@ export class AssistComponent implements OnInit {
     this.subscriptionsList.push(subscription10);
     this.subscriptionsList.push(subscription11);
     this.subscriptionsList.push(subscription12);
+    this.subscriptionsList.push(subscription13);
   }
 
   //dialogue click and agent response handling code.
@@ -427,9 +443,9 @@ export class AssistComponent implements OnInit {
             } else {
               let a = $(`#articleDiv-${uuids + index}`);
               let articleActionHtml = `<div class="action-links">
-                            <button class="send-run-btn" id="articlesendMsg" data-msg-id="article-${uuids + index}" data-msg-data='${ele.content}'>Send</button>
-                            <div class="copy-btn" data-msg-id="article-${uuids + index}" data-msg-data='${ele.content}'>
-                                <i class="ast-copy" data-msg-id="article-${uuids + index}" data-msg-data='${ele.content}'></i>
+                            <button class="send-run-btn" id="articlesendMsg" data-msg-id="article-${uuids + index}" data-msg-data="${ele.content}">Send</button>
+                            <div class="copy-btn" data-msg-id="article-${uuids + index}" data-msg-data="${ele.content}">
+                                <i class="ast-copy" data-msg-id="article-${uuids + index}" data-msg-data="${ele.content}"></i>
                             </div>
                         </div>`;
               a.append(articleActionHtml);
@@ -1201,8 +1217,8 @@ export class AssistComponent implements OnInit {
                                     let a = $(`#faqDiv-${uniqueID+index}`);
                                     let faqActionHtml = `<div class="action-links">
                     <button class="send-run-btn" id="sendMsg" data-msg-id="${uniqueID+index}"  data-msg-data="${ele.answer}">Send</button>
-                    <div class="copy-btn" data-msg-id="${uniqueID+index}" data-msg-data='${ele.answer}'>
-                        <i class="ast-copy" data-msg-id="${uniqueID+index}" data-msg-data='${ele.answer}'></i>
+                    <div class="copy-btn" data-msg-id="${uniqueID+index}" data-msg-data="${ele.answer}">
+                        <i class="ast-copy" data-msg-id="${uniqueID+index}" data-msg-data="${ele.answer}"></i>
                     </div>
                 </div>`;
                                     a.append(faqActionHtml);
@@ -1275,8 +1291,8 @@ export class AssistComponent implements OnInit {
                                     let a = $(`#faqDiv-${uniqueID+index}`);
                                     let faqActionHtml = `<div class="action-links">
                     <button class="send-run-btn" id="sendMsg" data-msg-id="${uniqueID+index}"  data-msg-data="${res.components[0].data.text}">Send</button>
-                    <div class="copy-btn" data-msg-id="${uniqueID+index}" data-msg-data='${res.components[0].data.text}'>
-                        <i class="ast-copy" data-msg-id="${uniqueID+index}" data-msg-data='${res.components[0].data.text}'></i>
+                    <div class="copy-btn" data-msg-id="${uniqueID+index}" data-msg-data="${res.components[0].data.text}">
+                        <i class="ast-copy" data-msg-id="${uniqueID+index}" data-msg-data="${res.components[0].data.text}"></i>
                     </div>
                 </div>`;
                                     a.append(faqActionHtml);
@@ -1430,6 +1446,9 @@ export class AssistComponent implements OnInit {
                     }
                     let parsedPayload;
                     res.components?.forEach((elem) => {
+                        if(elem.data?.text){
+                          elem.data.text = elem.data?.text.replace(/(^(&quot\;)|(&quot\;)$)/g, '');
+                        }
                         let payloadType = (elem.data?.text).replace(/(&quot\;)/g, "\"");
 
                         try {
@@ -1558,7 +1577,7 @@ export class AssistComponent implements OnInit {
                                    <div class="agent-utt">
                                     <div class="title-data" id="displayData-${res._id}">${ele.data.text}</div>
                                     <div class="action-links">
-                                        <button class="send-run-btn" id="sendMsg" data-msg-id="${res._id}"  data-msg-data='${ele.data.text}'>Send</button>
+                                        <button class="send-run-btn" id="sendMsg" data-msg-id="${res._id}"  data-msg-data="${ele.data.text}">Send</button>
                                         <div class="copy-btn" data-msg-id="${res._id}" data-msg-data="${ele.data.text}">
                                             <i class="ast-copy" data-msg-id="${res._id}" data-msg-data="${ele.data.text}"></i>
                                         </div>
@@ -1571,9 +1590,9 @@ export class AssistComponent implements OnInit {
                                     <div class="agent-utt">
                                         <div class="title-data" id="displayData-${res._id}">${ele.data.text}</div>
                                         <div class="action-links">
-                                            <button class="send-run-btn" id="sendMsg" data-msg-id="${res._id}"  data-msg-data='${ele.data.text}'>Send</button>
-                                            <div class="copy-btn" data-msg-id="${res._id}" data-msg-data='${ele.data.text}'>
-                                                <i class="ast-copy" data-msg-id="${res._id}" data-msg-data='${ele.data.text}'></i>
+                                            <button class="send-run-btn" id="sendMsg" data-msg-id="${res._id}"  data-msg-data="${ele.data.text}">Send</button>
+                                            <div class="copy-btn" data-msg-id="${res._id}" data-msg-data="${ele.data.text}">
+                                                <i class="ast-copy" data-msg-id="${res._id}" data-msg-data="${ele.data.text}"></i>
                                             </div>
                                         </div>
                                     </div>`;
@@ -1591,9 +1610,9 @@ export class AssistComponent implements OnInit {
                              <div class="agent-utt">
                                  <div class="title-data" id="displayData-${res._id}">${ele.data.text}</div>
                                  <div class="action-links">
-                                     <button class="send-run-btn" id="sendMsg" data-msg-id="${res._id}"  data-msg-data='${ele.data.text}'>Send</button>
-                                     <div class="copy-btn" data-msg-id="${res._id}" data-msg-data='${ele.data.text}'>
-                                         <i class="ast-copy" data-msg-id="${res._id}" data-msg-data='${ele.data.text}'></i>
+                                     <button class="send-run-btn" id="sendMsg" data-msg-id="${res._id}"  data-msg-data="${ele.data.text}">Send</button>
+                                     <div class="copy-btn" data-msg-id="${res._id}" data-msg-data="${ele.data.text}">
+                                         <i class="ast-copy" data-msg-id="${res._id}" data-msg-data="${ele.data.text}"></i>
                                      </div>
                                  </div>
                              </div>

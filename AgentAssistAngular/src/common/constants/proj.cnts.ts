@@ -130,5 +130,6 @@ export const storageConst = {
     AUTOMATION_GOING_ON_AFTER_REFRESH : 'automationGoingOnAfterRefresh',
     AUTOMATION_GOING_ON_AFTER_REFRESH_MYBOT : 'automationGoingOnAfterRefreshMyBot',
     FAQ_LIST : 'faqList',
-    SEARCH_VALUE : 'search'
+    SEARCH_VALUE : 'search',
+    PROACTIVE_MODE : 'proactiveMode'
 }

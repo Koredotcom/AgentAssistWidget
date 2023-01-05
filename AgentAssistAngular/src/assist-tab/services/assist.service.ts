@@ -88,7 +88,7 @@ export class AssistService {
         <i class="ast-rule"></i>
       </div>
       <div class="header-text" id="dropDownTitle-${uuids}">${intentName}</div>
-      <i class="ast-carrotup"></i>
+      <i class="ast-carrotup rotate-carrot"></i>
       <button class="btn-danger" id="terminateAgentDialog-${uuids}">Terminate</button>
       </div>
       <div class="collapse-acc-data" id="dropDownData-${uuids}">
@@ -341,8 +341,8 @@ export class AssistService {
     let a = $(`#faqsSuggestions-${eleid} #faqDiv-${ele}`);
     let faqActionHtml = `<div class="action-links">
         <button class="send-run-btn" id="sendMsg" data-msg-id="${ele}"  data-msg-data="${res.components[0].data.text}">Send</button>
-        <div class="copy-btn" data-msg-id="${ele}" data-msg-data='${res.components[0].data.text}'>
-        <i class="ast-copy" data-msg-id="${ele}" data-msg-data='${res.components[0].data.text}'></i>
+        <div class="copy-btn" data-msg-id="${ele}" data-msg-data="${res.components[0].data.text}">
+        <i class="ast-copy" data-msg-id="${ele}" data-msg-data="${res.components[0].data.text}"></i>
         </div>
         </div>`;
     a.append(faqActionHtml);

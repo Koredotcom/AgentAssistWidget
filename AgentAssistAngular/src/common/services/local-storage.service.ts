@@ -61,6 +61,10 @@ export class LocalStorageService {
       if(this.emptyObjectCheckPipe.transform(storageObject[storageConst.SEARCH_VALUE]) && currentTab){
         appState[conversationId][currentTab][storageConst.SEARCH_VALUE] = storageObject[storageConst.SEARCH_VALUE];
       }
+
+      if(this.emptyObjectCheckPipe.transform(storageObject[storageConst.PROACTIVE_MODE])){
+        appState[conversationId][storageConst.PROACTIVE_MODE] = storageObject[storageConst.PROACTIVE_MODE];
+      }
       
     }
     localStorage.setItem(storageConst.AGENT_ASSIST_STATE, JSON.stringify(appState));
