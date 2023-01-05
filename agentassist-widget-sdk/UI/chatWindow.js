@@ -1492,7 +1492,9 @@
                          openModal(popupHtml[0],true);
                     }
                     else {
-                        me.openExternalLink(a_link)
+                        if(a_link){
+                            me.openExternalLink(a_link)
+                        }
                     }
                 }
                    

@@ -4714,8 +4714,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                             AgentChatInitialize.bindEvents(true, e);
                             if (JSON.parse(localStorage.getItem('innerTextValue'))) {
-                                AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: _agentAssistDataObj.conversationId, botId: _agentAssistDataObj.botId, value: JSON.parse(localStorage.getItem('innerTextValue')), check: true });
-                                localStorage.setItem('innerTextValue', null);
+                               if(currentTabActive == 'userAutoIcon'){
+                                    AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: _agentAssistDataObj.conversationId, botId: _agentAssistDataObj.botId, value: JSON.parse(localStorage.getItem('innerTextValue')), check: true });
+                                    localStorage.setItem('innerTextValue', null);
+                                } else if(currentTabActive == 'agentAutoIcon'){
+                                    AgentAssistPubSub.publish('searched_Automation_details', { conversationId: _agentAssistDataObj.conversationId, botId: _agentAssistDataObj.botId, value: JSON.parse(localStorage.getItem('innerTextValue')), isSearch: false});
+                                    localStorage.setItem('innerTextValue', null);
+                                }
                                 e.stopImmediatePropagation();
                                 e.preventDefault();
                                 e.stopPropagation();
