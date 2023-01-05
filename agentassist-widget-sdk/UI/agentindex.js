@@ -1633,7 +1633,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             hideSendOrCopyButtons(parsedPayload, runInfoContent)
                         } 
                     }
-                    if(isMyBotAgentSentRequestOnClick){
+                    if(isMyBotAgentSentRequestOnClick && !myBotDropdownHeaderUuids){
                         let mybotContainer = $('#myBotAutomationBlock');
                         let botResHtml = `
                                 <div class="collapse-acc-data before-none" id='smallTalk-${myBotuuids}'>
@@ -1655,54 +1655,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                              </div>
                          </div>
                          </div>`;
-                         mybotContainer.append(botResHtml);
-                        // let runInfoContent = $(`#dropDownData-${myBotDropdownHeaderUuids}`);
-                        // let askToUserHtml = `
-                        // <div class="steps-run-data">
-                        //                <div class="icon_block">
-                        //                    <i class="ast-agent"></i>
-                        //                </div>
-                        //                <div class="run-info-content" >
-                        //                <div class="title">Ask customer</div>
-                        //                <div class="agent-utt">
-                        //                    <div class="title-data"><ul class="chat-container" id="displayData-${myBotuuids}"></ul></div>
-                        //                    <div class="action-links">
-                        //                        <button class="send-run-btn" id="sendMsg" data-msg-id="${myBotuuids}" data-msg-data="${sendMsgData}">Send</button>
-                        //                        <div class="copy-btn hide" data-msg-id="${myBotuuids}">
-                        //                            <i class="ast-copy" data-msg-id="${myBotuuids}"></i>
-                        //                        </div>
-                        //                    </div>
-                        //                </div>
-                        //                </div>
-                        //            </div>
-                        // `;
-                        //             let tellToUserHtml = `
-                        // <div class="steps-run-data">
-                        //                <div class="icon_block">
-                        //                    <i class="ast-agent"></i>
-                        //                </div>
-                        //                <div class="run-info-content" >
-                        //                <div class="title">Tell Customer</div>
-                        //                <div class="agent-utt">
-                        //                    <div class="title-data" ><ul class="chat-container" id="displayData-${myBotuuids}"></ul></div>
-                        //                    <div class="action-links">
-                        //                        <button class="send-run-btn" id="sendMsg" data-msg-id="${myBotuuids}" data-msg-data="${sendMsgData}">Send</button>
-                        //                        <div class="copy-btn hide" data-msg-id="${myBotuuids}">
-                        //                            <i class="ast-copy" data-msg-id="${myBotuuids}"></i>
-                        //                        </div>
-                        //                    </div>
-                        //                </div>
-                        //                </div>
-                        //            </div>
-                        // `;
-                        // if (data.isPrompt) {
-                        //     runInfoContent.append(askToUserHtml);
-                        //     hideSendOrCopyButtons(parsedPayload, runInfoContent)
-                        //    // runInfoContent.append(agentInputToBotHtml);
-                        // } else {
-                        //     runInfoContent.append(tellToUserHtml);
-                        //     hideSendOrCopyButtons(parsedPayload, runInfoContent)
-                        // } 
+                        mybotContainer.append(botResHtml);
                         isMyBotAgentSentRequestOnClick = false;
                     }
                     AgentChatInitialize.renderMessage(_msgsResponse, myBotuuids, `dropDownData-${myBotDropdownHeaderUuids}`);
