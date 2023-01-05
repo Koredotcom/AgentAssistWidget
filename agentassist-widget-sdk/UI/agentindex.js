@@ -4743,12 +4743,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             if (JSON.parse(localStorage.getItem('innerTextValue'))) {
                                if(currentTabActive == 'userAutoIcon'){
                                     AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: _agentAssistDataObj.conversationId, botId: _agentAssistDataObj.botId, value: JSON.parse(localStorage.getItem('innerTextValue')), check: true });
-                                    isAgentSentRequestOnClick = ture;
+                                    isAgentSentRequestOnClick = true;
                                     localStorage.setItem('innerTextValue', null);
                                 } else if(currentTabActive == 'agentAutoIcon'){
                                     AgentAssistPubSub.publish('searched_Automation_details', { conversationId: _agentAssistDataObj.conversationId, botId: _agentAssistDataObj.botId, value: JSON.parse(localStorage.getItem('innerTextValue')), isSearch: false});
                                     isMyBotAgentSentRequestOnClick = true;
-                                   // AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: _agentAssistDataObj.conversationId, botId: _agentAssistDataObj.botId, value: JSON.parse(localStorage.getItem('innerTextValue')), check: true });
                                     localStorage.setItem('innerTextValue', null);
                                 }
                                 e.stopImmediatePropagation();
