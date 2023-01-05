@@ -6487,6 +6487,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     $(`.customer-feeling-text`).addClass('bottom-95');
                     setTimeout(() => {
                         headerUUids = undefined;
+                        myBotDropdownHeaderUuids = undefined;
                     }, 100)
                     // headerUUids = undefined;
 		    UnCollapseDropdownForLastElement(lastElementBeforeNewMessage);
