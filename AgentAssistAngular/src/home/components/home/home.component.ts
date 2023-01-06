@@ -5,13 +5,13 @@ import { WebSocketService } from 'src/common/services/web-socket.service';
 import { HandleSubjectService } from 'src/common/services/handle-subject.service';
 import { classNamesConst, IdReferenceConst, ImageFileNames, ImageFilePath, ProjConstants, storageConst } from '../../../common/constants/proj.cnts'
 import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
-import * as $ from 'jquery';
 import { SanitizeHtmlPipe } from 'src/common/pipes/sanitize-html.pipe';
 import { CommonService } from 'src/common/services/common.service';
 import { KoreGenerateuuidPipe } from 'src/common/pipes/kore-generateuuid.pipe';
 import { DesignAlterService } from 'src/common/services/design-alter.service';
 import { LocalStorageService } from 'src/common/services/local-storage.service';
-
+import { TypeAHeadService } from 'src/common/services/typeahead.service';
+declare const $: any;
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -41,11 +41,9 @@ export class HomeComponent implements OnInit {
   subscriptionsList: Subscription[] = [];
   proactiveModeEnabled: boolean = false;
   isLoader;
-
   constructor(public handleSubjectService: HandleSubjectService, public websocketService: WebSocketService,
     public sanitizeHTMLPipe: SanitizeHtmlPipe, public commonService: CommonService, private koregenerateUUIDPipe: KoreGenerateuuidPipe,
-    private designAlterService: DesignAlterService, private localStorageService: LocalStorageService) { }
-
+    private designAlterService: DesignAlterService, private localStorageService: LocalStorageService, private typeAheadService: TypeAHeadService) { }
   ngOnInit(): void {
     this.handleSubjectService.setLoader(true);
     this.subscribeEvents();
@@ -311,11 +309,16 @@ export class HomeComponent implements OnInit {
 
   //search bar related code.
   getSearchResults() {
+    $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
+    $('#overLayAutoSearch').find('.search-results-text')?.remove();
+    $('.search-block').find('.search-results-text-in-lib')?.remove();
+    
     this.showSearchSuggestions = true;
     this.handleSubjectService.setSearchText({ searchFrom: this.projConstants.ASSIST, value: this.searchText });
   }
 
   emptySearchTextCheck() {
+    this.typeAheadService.typeAHead(this.searchText, this.searchText== ''? true: false, this.connectionDetails);
     if (this.searchText == '') {
       this.closeSearchSuggestions(true);
     }
@@ -347,6 +350,9 @@ export class HomeComponent implements OnInit {
   }
 
   clearSearchText(){
+    $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
+    $('#overLayAutoSearch').find('.search-results-text')?.remove();
+    $('.search-block').find('.search-results-text-in-lib')?.remove();
     this.showSearchSuggestions=false;
     this.searchText = '';
   }
@@ -663,6 +669,11 @@ export class HomeComponent implements OnInit {
         }
         this.handleSubjectService.setOverridebtnClickEvent(overrideObject);
       }
+      if(target.id.split('-').includes('autoResult')){
+        $('#agentSearch').val(target.innerHTML);
+        this.getSearchResults()
+        this.handleSubjectService.setLoader(true)
+    }
     });
     document.addEventListener("keyup", (evt: any) => {
       let target = evt.target;

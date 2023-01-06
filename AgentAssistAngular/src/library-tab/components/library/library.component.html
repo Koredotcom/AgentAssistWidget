@@ -1,7 +1,7 @@
 <div class="library-search-data-container" id="LibraryContainer">
     <div class="search-block">
         <div class="input-text-search library-search-div" id="search-block">
-            <input type="text" placeholder="Ask AgentAssist" class="input-text" id="librarySearch" (keyup.enter)="getSearchResults()" [(ngModel)]="searchText"
+            <input type="text" placeholder="Ask AgentAssist" class="input-text typeahead" id="librarySearch" (keyup.enter)="getSearchResults()" [(ngModel)]="searchText"
             (ngModelChange)="emptySearchTextCheck()">
             <i class="ast-search"></i>
             <i class="ast-close close-search" id="cancelLibrarySearch" (click)="librarySearchClose()"></i>
@@ -61,7 +61,6 @@
                 </div>
             </div>
         </div>
-
         <div class="intent-based-search" id="searchResults" *ngIf="showSearchSuggestions">
             <app-overlaysearch [searchType]="projConstants.LIBRARY_SEARCH"></app-overlaysearch>
         </div>

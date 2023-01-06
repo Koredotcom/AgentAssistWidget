@@ -6,9 +6,10 @@ import { RandomUUIDPipe } from 'src/common/pipes/random-uuid.pipe';
 import { CommonService } from 'src/common/services/common.service';
 import { HandleSubjectService } from 'src/common/services/handle-subject.service';
 import { LocalStorageService } from 'src/common/services/local-storage.service';
+import { TypeAHeadService } from 'src/common/services/typeahead.service';
 import { WebSocketService } from 'src/common/services/web-socket.service';
 import { LibraryService } from 'src/library-tab/services/library.service';
-
+declare const $:any;
 @Component({
   selector: 'app-library',
   templateUrl: './library.component.html',
@@ -36,7 +37,8 @@ export class LibraryComponent implements OnInit {
     public websocketService: WebSocketService,
     public randomUUIDPipe: RandomUUIDPipe,
     public commonService: CommonService,
-    private localStorageService: LocalStorageService) { }
+    private localStorageService: LocalStorageService,
+    private typeAheadService: TypeAHeadService) { }
 
   ngOnInit(): void {
     this.subscribeEvents();
@@ -92,6 +94,7 @@ export class LibraryComponent implements OnInit {
     this.subscriptionsList.push(subscription2);
     this.subscriptionsList.push(subscription3);
     this.subscriptionsList.push(subscription4);
+    this.btnInit();
 
   }
 
@@ -115,6 +118,7 @@ export class LibraryComponent implements OnInit {
   }
 
   emptySearchTextCheck() {
+    this.typeAheadService.typeAHead(this.searchText, this.searchText== ''? true: false, this.connectionDetails);
     if (this.searchText == '') {
       this.showSearchSuggestions = false;
       this.searchFromAgentSearchBar = false;
@@ -127,6 +131,7 @@ export class LibraryComponent implements OnInit {
   librarySearchClose() {
     this.showSearchSuggestions = false;
     this.searchText = '';
+    $('.search-block').find('.search-results-text-in-lib')?.remove();
     this.setSearchTextInLocalStorage();
   }
 
@@ -181,5 +186,18 @@ export class LibraryComponent implements OnInit {
     }
   }
 
+  btnInit(){
+    document.addEventListener("click", (evt: any) => {
+      let target: any = evt.target;
+      if(target.id.split('-').includes('autoResultLib')){
+        $('#librarySearch').val(target.innerHTML);
+        $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
+        $('#overLayAutoSearch').find('.search-results-text')?.remove();
+        $('.search-block').find('.search-results-text-in-lib')?.remove();
+        this.searchText = target.innerHTML;
+        this.getSearchResults();
+      }
+    })
+  }
 
 }
