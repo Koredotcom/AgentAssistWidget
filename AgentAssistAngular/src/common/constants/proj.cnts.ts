@@ -75,7 +75,7 @@ export const IdReferenceConst = {
     OVERRIDE_BTN : 'overRideBtn',
     CANCEL_OVERRIDE_BTN : 'cancelOverRideBtn',
     INPUT_FIELD_AGENT : 'inputFieldForAgent',
-    ARTICLE_SEND_MSG : 'articlesendMsg',
+    ARTICLE_SEND_MSG : 'sendMsg',
     DROPDOWN_HEADER : 'dropDownHeader',
     ASSIST_RUN_BUTTON : 'run',
     SCROLLBUTTON_ASSIST : 'scrollButtonAssist',
