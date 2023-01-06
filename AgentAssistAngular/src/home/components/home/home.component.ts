@@ -346,6 +346,11 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  clearSearchText(){
+    this.showSearchSuggestions=false;
+    this.searchText = '';
+  }
+
 
   // scroll realted code.
   scrollToBottom(flag) {

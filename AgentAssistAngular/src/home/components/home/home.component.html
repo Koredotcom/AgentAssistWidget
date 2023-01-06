@@ -83,7 +83,7 @@
             <input type="text" class="suggestion-input" id="agentSearch" placeholder="Ask AgentAssist"
                 (keyup.enter)="getSearchResults()" [(ngModel)]="searchText" (ngModelChange)="emptySearchTextCheck()">
             <i class="ast-search search-icon"></i>
-            <i class="ast-close close-search" id="cancelAgentSearch" (click)="showSearchSuggestions=false"></i>
+            <i class="ast-close close-search" id="cancelAgentSearch" (click)="clearSearchText()"></i>
         </div>
         <div class="overlay-suggestions" style="bottom:0" *ngIf="showSearchSuggestions" id="overLaySuggestions">
             <div class="suggestion-content" id="overLaySearch">
