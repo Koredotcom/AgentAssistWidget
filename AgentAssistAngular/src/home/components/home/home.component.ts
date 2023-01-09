@@ -10,7 +10,6 @@ import { CommonService } from 'src/common/services/common.service';
 import { KoreGenerateuuidPipe } from 'src/common/pipes/kore-generateuuid.pipe';
 import { DesignAlterService } from 'src/common/services/design-alter.service';
 import { LocalStorageService } from 'src/common/services/local-storage.service';
-import { TypeAHeadService } from 'src/common/services/typeahead.service';
 declare const $: any;
 @Component({
   selector: 'app-home',
@@ -43,7 +42,7 @@ export class HomeComponent implements OnInit {
   isLoader;
   constructor(public handleSubjectService: HandleSubjectService, public websocketService: WebSocketService,
     public sanitizeHTMLPipe: SanitizeHtmlPipe, public commonService: CommonService, private koregenerateUUIDPipe: KoreGenerateuuidPipe,
-    private designAlterService: DesignAlterService, private localStorageService: LocalStorageService, private typeAheadService: TypeAHeadService) { }
+    private designAlterService: DesignAlterService, private localStorageService: LocalStorageService) { }
   ngOnInit(): void {
     this.handleSubjectService.setLoader(true);
     this.subscribeEvents();
@@ -308,19 +307,16 @@ export class HomeComponent implements OnInit {
   }
 
   //search bar related code.
-  getSearchResults() {
-    $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
-    $('#overLayAutoSearch').find('.search-results-text')?.remove();
-    $('.search-block').find('.search-results-text-in-lib')?.remove();
-    
+  getSearchResults(value) {
     this.showSearchSuggestions = true;
-    this.handleSubjectService.setSearchText({ searchFrom: this.projConstants.ASSIST, value: this.searchText });
+    this.handleSubjectService.setSearchText({ searchFrom: this.projConstants.ASSIST, value: value });
   }
 
-  emptySearchTextCheck() {
-    this.typeAheadService.typeAHead(this.searchText, this.searchText== ''? true: false, this.connectionDetails);
-    if (this.searchText == '') {
+  emptySearchTextCheck(value) {
+    if (value == '') {
       this.closeSearchSuggestions(true);
+    }else{
+      this.getSearchResults(value)
     }
   }
 
@@ -333,7 +329,7 @@ export class HomeComponent implements OnInit {
     } else if (eventObj.eventFrom == this.projConstants.LIBRARY_SEARCH) {
       this.changeActiveTab(this.projConstants.ASSIST);
       this.searchText = eventObj.searchText;
-      this.getSearchResults()
+      this.getSearchResults(this.searchText)
       this.handleSubjectService.setLoader(true)
     }
   }
@@ -350,11 +346,9 @@ export class HomeComponent implements OnInit {
   }
 
   clearSearchText(){
-    $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
-    $('#overLayAutoSearch').find('.search-results-text')?.remove();
-    $('.search-block').find('.search-results-text-in-lib')?.remove();
     this.showSearchSuggestions=false;
     this.searchText = '';
+    this.handleSubjectService.setSearchText({ searchFrom: this.projConstants.ASSIST, value: undefined });
   }
 
 
@@ -669,11 +663,6 @@ export class HomeComponent implements OnInit {
         }
         this.handleSubjectService.setOverridebtnClickEvent(overrideObject);
       }
-      if(target.id.split('-').includes('autoResult')){
-        $('#agentSearch').val(target.innerHTML);
-        this.getSearchResults()
-        this.handleSubjectService.setLoader(true)
-    }
     });
     document.addEventListener("keyup", (evt: any) => {
       let target = evt.target;

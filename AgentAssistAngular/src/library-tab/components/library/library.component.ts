@@ -6,7 +6,6 @@ import { RandomUUIDPipe } from 'src/common/pipes/random-uuid.pipe';
 import { CommonService } from 'src/common/services/common.service';
 import { HandleSubjectService } from 'src/common/services/handle-subject.service';
 import { LocalStorageService } from 'src/common/services/local-storage.service';
-import { TypeAHeadService } from 'src/common/services/typeahead.service';
 import { WebSocketService } from 'src/common/services/web-socket.service';
 import { LibraryService } from 'src/library-tab/services/library.service';
 declare const $:any;
@@ -37,8 +36,7 @@ export class LibraryComponent implements OnInit {
     public websocketService: WebSocketService,
     public randomUUIDPipe: RandomUUIDPipe,
     public commonService: CommonService,
-    private localStorageService: LocalStorageService,
-    private typeAheadService: TypeAHeadService) { }
+    private localStorageService: LocalStorageService) { }
 
   ngOnInit(): void {
     this.subscribeEvents();
@@ -66,7 +64,7 @@ export class LibraryComponent implements OnInit {
       if (searchObj && searchObj.eventFrom == this.projConstants.AGENT_SEARCH) {
         this.searchText = searchObj.searchText;
         this.searchFromAgentSearchBar = true;
-        this.getSearchResults(searchObj.eventFrom);
+        this.getSearchResults(this.searchText,searchObj.eventFrom);
       }
       this.handleSubjectService.setLoader(false);
     });
@@ -94,7 +92,6 @@ export class LibraryComponent implements OnInit {
     this.subscriptionsList.push(subscription2);
     this.subscriptionsList.push(subscription3);
     this.subscriptionsList.push(subscription4);
-    this.btnInit();
 
   }
 
@@ -110,35 +107,36 @@ export class LibraryComponent implements OnInit {
   }
 
   //search bar related code
-  getSearchResults(eventFrom?) {
+  getSearchResults(value,eventFrom?) {
     this.searchFromAgentSearchBar = eventFrom ? true : false;
     this.showSearchSuggestions = true;
-    this.handleSubjectService.setSearchText({ searchFrom: this.projConstants.LIBRARY, value: this.searchText });
-    this.setSearchTextInLocalStorage();
+    this.handleSubjectService.setSearchText({ searchFrom: this.projConstants.LIBRARY, value: value });
+    this.setSearchTextInLocalStorage(value);
   }
 
-  emptySearchTextCheck() {
-    this.typeAheadService.typeAHead(this.searchText, this.searchText== ''? true: false, this.connectionDetails);
-    if (this.searchText == '') {
+  emptySearchTextCheck(value) {
+    if (value == '') {
       this.showSearchSuggestions = false;
       this.searchFromAgentSearchBar = false;
       this.handleSubjectService.setSearchText({ searchFrom: this.projConstants.LIBRARY, value: undefined });
       this.websocketService.agentAssistAgentResponse$.next(null);
-      this.setSearchTextInLocalStorage();
+      this.setSearchTextInLocalStorage(value);
+    }else{
+      this.getSearchResults(value);
     }
   }
 
   librarySearchClose() {
     this.showSearchSuggestions = false;
     this.searchText = '';
-    $('.search-block').find('.search-results-text-in-lib')?.remove();
-    this.setSearchTextInLocalStorage();
+    this.handleSubjectService.setSearchText({ searchFrom: this.projConstants.LIBRARY, value: undefined });
+    this.setSearchTextInLocalStorage('');
   }
 
   //local storage set text
-  setSearchTextInLocalStorage() {
+  setSearchTextInLocalStorage(value) {
     let storageObject: any = {
-      [storageConst.SEARCH_VALUE]: this.searchText,
+      [storageConst.SEARCH_VALUE]: value,
     }
     this.localStorageService.setLocalStorageItem(storageObject, this.projConstants.LIBRARY);
   }
@@ -147,7 +145,7 @@ export class LibraryComponent implements OnInit {
     let appState = this.localStorageService.getLocalStorageState();
     if (appState && appState[this.connectionDetails.conversationId] && appState[this.connectionDetails.conversationId][this.projConstants.LIBRARY][storageConst.SEARCH_VALUE]) {
       this.searchText = appState[this.connectionDetails.conversationId][this.projConstants.LIBRARY][storageConst.SEARCH_VALUE];
-      this.getSearchResults();
+      this.getSearchResults(this.searchText);
     }
   }
 
@@ -184,20 +182,6 @@ export class LibraryComponent implements OnInit {
       let agent_assist_agent_request_params = this.commonService.prepareAgentAssistAgentRequestParams(connectionDetails);
       this.websocketService.emitEvents(EVENTS.agent_assist_agent_request, agent_assist_agent_request_params);
     }
-  }
-
-  btnInit(){
-    document.addEventListener("click", (evt: any) => {
-      let target: any = evt.target;
-      if(target.id.split('-').includes('autoResultLib')){
-        $('#librarySearch').val(target.innerHTML);
-        $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
-        $('#overLayAutoSearch').find('.search-results-text')?.remove();
-        $('.search-block').find('.search-results-text-in-lib')?.remove();
-        this.searchText = target.innerHTML;
-        this.getSearchResults();
-      }
-    })
   }
 
 }

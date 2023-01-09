@@ -1,8 +1,10 @@
 <div class="library-search-data-container" id="LibraryContainer">
     <div class="search-block">
         <div class="input-text-search library-search-div" id="search-block">
-            <input type="text" placeholder="Ask AgentAssist" class="input-text typeahead" id="librarySearch" (keyup.enter)="getSearchResults()" [(ngModel)]="searchText"
-            (ngModelChange)="emptySearchTextCheck()">
+            <!-- <input type="text" placeholder="Ask AgentAssist" class="input-text" id="librarySearch" (keyup.enter)="getSearchResults()" [(ngModel)]="searchText"
+            (ngModelChange)="emptySearchTextCheck()"> -->
+            <app-typeahead
+            (typeahead)="emptySearchTextCheck($event)"  (typeaheadEntered)="getSearchResults($event)" [connectionData]="connectionDetails"></app-typeahead>
             <i class="ast-search"></i>
             <i class="ast-close close-search" id="cancelLibrarySearch" (click)="librarySearchClose()"></i>
         </div>
