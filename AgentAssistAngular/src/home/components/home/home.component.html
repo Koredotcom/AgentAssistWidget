@@ -79,9 +79,13 @@
         </perfect-scrollbar>
 
         <!-- searchbar -->
+        
+        
         <div class="sugestions-info-data" *ngIf="activeTab != projConstants.LIBRARY">
-            <input type="text" class="suggestion-input" id="agentSearch" placeholder="Ask AgentAssist"
-                (keyup.enter)="getSearchResults()" [(ngModel)]="searchText" (ngModelChange)="emptySearchTextCheck()">
+            <!-- <input type="text" class="suggestion-input typeahead" id="agentSearch" placeholder="Ask AgentAssist"
+                (keyup.enter)="getSearchResults()" [(ngModel)]="searchText" (ngModelChange)="emptySearchTextCheck()"> -->
+                <app-typeahead [isNotLibraryTab]="true"
+        (typeahead)="emptySearchTextCheck($event)"  (typeaheadEntered)="getSearchResults($event)" [connectionData]="connectionDetails"></app-typeahead>
             <i class="ast-search search-icon"></i>
             <i class="ast-close close-search" id="cancelAgentSearch" (click)="clearSearchText()"></i>
         </div>
@@ -94,6 +98,7 @@
                 </perfect-scrollbar>
             </div>
         </div>
+      
         <app-terminate [class.hide]="!showTerminatePopup" (handlePopupEvent)="handlePopupEvent($event)"></app-terminate>
         <app-interrupt-popup [class.hide]="!showInterruptPopup" (handlePopupEvent)="handlePopupEvent($event)"></app-interrupt-popup>
         <app-summary-popup [class.hide]="!showSummaryPopup" (handlePopupEvent)="handlePopupEvent($event)" [summaryText]="summaryText"></app-summary-popup>

@@ -49,6 +49,7 @@ export class OverlaysearchComponent implements OnInit {
       this.showOverLay = false;
       this.searchResponse = {};
       this.handleSubjectService.setLoader(true);
+      console.log('inisde overlay component,,,,,,,,,,,,,,,,,,,')
       if (searchObj && searchObj.value) {
         this.searchConentObject = Object.assign({}, searchObj);
         setTimeout(() => {
@@ -56,6 +57,7 @@ export class OverlaysearchComponent implements OnInit {
         }, 100);
         console.log(this.showOverLay, "show overlya sub1"); 
       }
+      this.handleSubjectService.setLoader(false);
     });
     let subscription2 = this.websocketService.agentAssistAgentResponse$.subscribe((agentResponse: any) => {
       if(agentResponse){

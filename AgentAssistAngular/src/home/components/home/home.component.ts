@@ -5,13 +5,12 @@ import { WebSocketService } from 'src/common/services/web-socket.service';
 import { HandleSubjectService } from 'src/common/services/handle-subject.service';
 import { classNamesConst, IdReferenceConst, ImageFileNames, ImageFilePath, ProjConstants, storageConst } from '../../../common/constants/proj.cnts'
 import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
-import * as $ from 'jquery';
 import { SanitizeHtmlPipe } from 'src/common/pipes/sanitize-html.pipe';
 import { CommonService } from 'src/common/services/common.service';
 import { KoreGenerateuuidPipe } from 'src/common/pipes/kore-generateuuid.pipe';
 import { DesignAlterService } from 'src/common/services/design-alter.service';
 import { LocalStorageService } from 'src/common/services/local-storage.service';
-
+declare const $: any;
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -41,11 +40,9 @@ export class HomeComponent implements OnInit {
   subscriptionsList: Subscription[] = [];
   proactiveModeEnabled: boolean = false;
   isLoader;
-
   constructor(public handleSubjectService: HandleSubjectService, public websocketService: WebSocketService,
     public sanitizeHTMLPipe: SanitizeHtmlPipe, public commonService: CommonService, private koregenerateUUIDPipe: KoreGenerateuuidPipe,
     private designAlterService: DesignAlterService, private localStorageService: LocalStorageService) { }
-
   ngOnInit(): void {
     this.handleSubjectService.setLoader(true);
     this.subscribeEvents();
@@ -310,14 +307,16 @@ export class HomeComponent implements OnInit {
   }
 
   //search bar related code.
-  getSearchResults() {
+  getSearchResults(value) {
     this.showSearchSuggestions = true;
-    this.handleSubjectService.setSearchText({ searchFrom: this.projConstants.ASSIST, value: this.searchText });
+    this.handleSubjectService.setSearchText({ searchFrom: this.projConstants.ASSIST, value: value });
   }
 
-  emptySearchTextCheck() {
-    if (this.searchText == '') {
+  emptySearchTextCheck(value) {
+    if (value == '') {
       this.closeSearchSuggestions(true);
+    }else{
+      this.getSearchResults(value)
     }
   }
 
@@ -330,7 +329,7 @@ export class HomeComponent implements OnInit {
     } else if (eventObj.eventFrom == this.projConstants.LIBRARY_SEARCH) {
       this.changeActiveTab(this.projConstants.ASSIST);
       this.searchText = eventObj.searchText;
-      this.getSearchResults()
+      this.getSearchResults(this.searchText)
       this.handleSubjectService.setLoader(true)
     }
   }
@@ -349,6 +348,7 @@ export class HomeComponent implements OnInit {
   clearSearchText(){
     this.showSearchSuggestions=false;
     this.searchText = '';
+    this.handleSubjectService.setSearchText({ searchFrom: this.projConstants.ASSIST, value: undefined });
   }
 
 
