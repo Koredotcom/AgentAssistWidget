@@ -46,7 +46,17 @@ export class AssistService {
     });
   }
 
-  updateSeeMoreButtonForAssist(id, type) {    
+  updateSeeMoreForArticles(){
+    let articleSuggestionList = $('[id*="articleDivLib-"]');
+    articleSuggestionList.each(function() {
+        let elemID = this.id.split('-');
+        elemID.shift();
+        let actualId = elemID.join('-')
+        this.updateSeeMoreButtonForAgent(actualId, this.projConstants.ARTICLE);
+    });
+  }
+
+  updateSeeMoreButtonForAssist(id, type?) {    
     let faqSourceTypePixel = 5;
     let titleElement = document.getElementById("title-" + id);
     let descElement = document.getElementById("desc-" + id);
@@ -76,6 +86,57 @@ export class AssistService {
       }
       titleElement.classList.remove('no-text-truncate');
       descElement.classList.remove('no-text-truncate');
+    }
+  }
+
+  updateSeeMoreButtonForAgent(id, article, snippet = false) {
+    let faqSourceTypePixel = 5;
+    let titleElement = $("#titleLib-" + id);
+    let descElement = $("#descLib-" + id);
+    let sectionElement = $('#faqSectionLib-' + id);
+    let divElement = $('#faqDivLib-' + id);
+    let seeMoreElement = $('#seeMore-' + id);
+    let snippetsendMsg;
+    let viewLinkElement;
+    if (snippet) {
+      titleElement = $("#snippettitleLib-" + id);
+      descElement = $("#snippetdescLib-" + id);
+      sectionElement = $('#snippetSectionLib-' + id);
+      divElement = $('#snippetDivLib-' + id);
+      seeMoreElement = $('#snippetseeMore-' + id);
+      snippetsendMsg = $('#snippetViewMsgLib-' + id);
+    }
+    if (article == this.projConstants.article) {
+      titleElement = $("#articletitleLib-" + id);
+      descElement = $("#articledescLib-" + id);
+      sectionElement = $('#articleSectionLib-' + id);
+      divElement = $('#articleDivLib-' + id);
+      seeMoreElement = $('#articleseeMore-' + id);
+      viewLinkElement = $('#articleViewLinkLib-' + id);
+    }
+    if (titleElement && descElement && sectionElement && divElement) {
+      $(titleElement).css({ "overflow": "inherit", "white-space": "normal", "text-overflow": "unset" });
+      $(descElement).css({ "overflow": "inherit", "text-overflow": "unset", "display": "block", "white-space": "normal" });
+      let faqSectionHeight = $(sectionElement).css("height");
+      let divSectionHeight = $(descElement).css("height") || '0px';;
+      faqSectionHeight = parseInt(faqSectionHeight?.slice(0, faqSectionHeight.length - 2));
+      divSectionHeight = parseInt(divSectionHeight?.slice(0, divSectionHeight.length - 2));
+      let faqMinHeight = $(divElement).css("min-height");
+      faqMinHeight = parseInt(faqMinHeight.slice(0, faqMinHeight.length - 2)) + 15;
+      if (divSectionHeight > (24 + faqSourceTypePixel)) {
+        $(seeMoreElement).removeClass('hide');
+      } else {
+        $(seeMoreElement).addClass('hide');
+        if (article) {
+          $(viewLinkElement).removeClass('hide');
+        }
+        if (snippet) {
+          $(snippetsendMsg).removeClass('hide');
+        }
+      }
+
+      $(titleElement).css({ "overflow": "hidden", "white-space": "nowrap", "text-overflow": "ellipsis" });
+      $(descElement).css({ "overflow": "hidden", "text-overflow": "ellipsis", "display": "-webkit-box" });
     }
   }
 

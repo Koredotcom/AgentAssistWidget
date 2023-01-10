@@ -585,5 +585,15 @@ export class CommonService {
     return response;
   }
 
+  hideSendOrCopyButtons(parsedPayload, conatiner){
+    let lastchild = $(conatiner).children().last();
+    if (!parsedPayload) {
+        $(lastchild).find('.copy-btn').removeClass('hide')
+    }
+    if((!this.configObj.source || this.configObj.source !== 'smartassist-color-scheme') && parsedPayload){
+        $(lastchild).find('.send-run-btn').addClass('hide')
+    }
+  }
+
 
 }

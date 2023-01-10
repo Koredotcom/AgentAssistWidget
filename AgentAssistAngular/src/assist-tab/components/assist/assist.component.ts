@@ -47,6 +47,7 @@ export class AssistComponent implements OnInit {
   answerPlaceableIDs: any = [];
   waitingTimeForUUID: number = 1000;
   proactiveModeStatus : boolean;
+  isFirstMessagOfDialog : boolean = false;
 
   constructor(private templateRenderClassService: TemplateRenderClassService,
     public handleSubjectService: HandleSubjectService,
@@ -227,6 +228,7 @@ export class AssistComponent implements OnInit {
   }
 
   runDialogForAssistTab(data, idTarget?, runInitent?) {
+    this.isFirstMessagOfDialog = true;
     let uuids = this.koreGenerateuuidPipe.transform();
     this.dropdownHeaderUuids = uuids;
     this.commonService.isAutomationOnGoing = true;
@@ -478,9 +480,9 @@ export class AssistComponent implements OnInit {
                     <button class="ghost-btn hide" style="font-style: italic;" id="articleseeLess-${uuids + index}" data-article-see-less="true">Show less</button>
                     `;
               articlestypeInfo.append(seeMoreButtonHtml);
-              // setTimeout(() => {
-              //      this.assisttabService.updateSeeMoreButtonForAssist(uuids + index,'article');
-              // }, 100);
+              setTimeout(() => {
+                   this.assisttabService.updateSeeMoreButtonForAssist(uuids + index,this.projConstants.ARTICLE);
+              }, 100);
             }
           })
 
@@ -571,9 +573,9 @@ export class AssistComponent implements OnInit {
                 <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${uuids + index}" data-see-less="true">Show less</button>
                 `;
             faqstypeInfo.append(seeMoreButtonHtml);
-            // setTimeout(() => {
-            //     updateSeeMoreButtonForAssist(uuids + index);
-            // }, waitingTimeForSeeMoreButton);
+            setTimeout(() => {
+                this.assisttabService.updateSeeMoreButtonForAssist(uuids + index);
+            }, 1000);
           }
 
           if (data.suggestions.faqs.length === 1 && !ele.answer) {
@@ -597,25 +599,33 @@ export class AssistComponent implements OnInit {
         let faqAnswerIdsPlace;
         data.suggestions.faqs.forEach((ele) => {
           faqAnswerIdsPlace = this.answerPlaceableIDs.find(ele => ele.input == data.value);
-          let splitedanswerPlaceableID = faqAnswerIdsPlace.id.split('-');
-          splitedanswerPlaceableID.shift();
-          let faqAnswerSendMsg = $(`#dynamicBlock #faqDiv-${splitedanswerPlaceableID.join('-')}`).find("[id*='sendMsg']");
-          $(faqAnswerSendMsg).attr('data-msg-data', ele.answer)
-          let faqAnswerCopyMsg = $(`#dynamicBlock #faqDiv-${splitedanswerPlaceableID.join('-')}`).find(".copy-btn");
-          $(faqAnswerCopyMsg).attr('data-msg-data', ele.answer)
-          $(`#${faqAnswerIdsPlace.id}`).html(ele.answer);
-          $(`#${faqAnswerIdsPlace.id}`).attr('data-answer-render', 'true');
-          let faqs = $(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')}`);
-          let seeMoreButtonHtml = `
-        <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${splitedanswerPlaceableID.join('-')}" data-see-more="true">Show more</button>
-        <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${splitedanswerPlaceableID.join('-')}" data-see-less="true">Show less</button>
-        `;
-          faqs.append(seeMoreButtonHtml);
-          setTimeout(() => {
-            this.assisttabService.updateSeeMoreButtonForAssist(splitedanswerPlaceableID.join('-'), this.projConstants.FAQ);
-          }, 1000);
-        });
+          if(faqAnswerIdsPlace){
+            let splitedanswerPlaceableID = faqAnswerIdsPlace.id.split('-');
+            splitedanswerPlaceableID.shift();
 
+            let faqDiv = $(`#dynamicBlock #faqDiv-${splitedanswerPlaceableID.join('-')}`);
+            let faqaction = `<div class="action-links">
+                <button class="send-run-btn" id="sendMsg" data-msg-id="${splitedanswerPlaceableID.join('-')}"  data-msg-data="${ele.answer}">Send</button>
+                <div class="copy-btn" data-msg-id="${splitedanswerPlaceableID.join('-')}" data-msg-data="${ele.answer}">
+                <i class="ast-copy" data-msg-id="${splitedanswerPlaceableID.join('-')}" data-msg-data="${ele.answer}"></i>
+                </div>
+                </div>`;
+              
+            faqDiv.append(faqaction);
+           
+            $(`#${faqAnswerIdsPlace.id}`).html(ele.answer);
+            $(`#${faqAnswerIdsPlace.id}`).attr('data-answer-render', 'true');
+            let faqs = $(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')}`);
+            let seeMoreButtonHtml = `
+          <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${splitedanswerPlaceableID.join('-')}" data-see-more="true">Show more</button>
+          <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${splitedanswerPlaceableID.join('-')}" data-see-less="true">Show less</button>
+          `;
+            faqs.append(seeMoreButtonHtml);
+            setTimeout(() => {
+              this.assisttabService.updateSeeMoreButtonForAssist(splitedanswerPlaceableID.join('-'), this.projConstants.FAQ);
+            }, 1000);
+          }
+        });
         if (faqAnswerIdsPlace) {
           let index = this.answerPlaceableIDs.indexOf(faqAnswerIdsPlace);
           this.answerPlaceableIDs.splice(index, 1);
@@ -628,13 +638,17 @@ export class AssistComponent implements OnInit {
       }
     }
 
-    let result = this.templateRenderClassService.getResponseUsingTemplate(data);
+    let result : any = this.templateRenderClassService.getResponseUsingTemplate(data);
 
     if (this.commonService.isAutomationOnGoing && this.dropdownHeaderUuids && data.buttons && !data.value.includes('Customer has waited') && (this.dialogPositionId && !data.positionId || (data.positionId == this.dialogPositionId))) {
       $(`#overRideBtn-${this.dropdownHeaderUuids}`).removeClass('hide');
       $(`#cancelOverRideBtn-${this.dropdownHeaderUuids}`).addClass('hide');
       $("#inputFieldForAgent").remove();
       let runInfoContent = $(`#dropDownData-${this.dropdownHeaderUuids}`);
+      if(this.isFirstMessagOfDialog){
+        $(`#dropDownData-${this.dropdownHeaderUuids}`).attr('data-task-id', data.uniqueTaskId)
+      }
+      this.isFirstMessagOfDialog = false;
       setTimeout(() => {
         if (data.entityName) {
           this.agentAssistResponse = {};
@@ -645,19 +659,18 @@ export class AssistComponent implements OnInit {
 
       let tellToUserHtml = this.assisttabService.tellToUserTemplate(uuids)
       if (data.isPrompt) {
-        $(`.override-input-div`).removeClass('hide');
-        $(`#dropDownData-${this.dropdownHeaderUuids}`).append(askToUserHtml);
+        runInfoContent.append(askToUserHtml);
+        if(!this.proactiveModeStatus){
+            this.handleOverridBtnClick('overRideBtn-' + this.dropdownHeaderUuids, this.dialogPositionId);
+        }else{
+            $(`.override-input-div`).removeClass('hide');
+        }
       } else {
         $(`.override-input-div`).addClass('hide');
         $(runInfoContent).append(tellToUserHtml);
       }
 
-      // if (!parsedPayload) {
-      //   $(runInfoContent).find('.copy-btn').removeClass('hide');
-      // }
-      // if((!sourceType || sourceType !== 'smartassist-color-scheme') && parsedPayload){
-      //     $(runInfoContent).find('.send-run-btn').addClass('hide');
-      // }
+      this.commonService.hideSendOrCopyButtons(result.parsedPayload, runInfoContent)
       setTimeout(() => {
         this.updateNewMessageUUIDList(this.dropdownHeaderUuids);
       }, this.waitingTimeForUUID);
@@ -668,6 +681,16 @@ export class AssistComponent implements OnInit {
       if (this.commonService.scrollContent[ProjConstants.ASSIST].numberOfNewMessages == 1) {
         this.commonService.scrollContent[ProjConstants.ASSIST].numberOfNewMessages = 0;
       }
+      this.scrollToBottom();
+    }
+
+    if (!this.commonService.isAutomationOnGoing && this.dropdownHeaderUuids && data.buttons && !data.value.includes('Customer has waited') && (this.dialogPositionId && !data.positionId || data.positionId == this.dialogPositionId)){
+      $('#dynamicBlock .empty-data-no-agents').addClass('hide');
+      let dynamicBlockDiv = $('#dynamicBlock');
+      data.buttons?.forEach((ele, i) => {
+          let botResHtml = this.assisttabService.smallTalkTemplate(ele, uuids);
+          dynamicBlockDiv.append(botResHtml);
+      });
     }
 
     if (!this.commonService.isAutomationOnGoing && !this.dropdownHeaderUuids && !data.suggestions && !result.parsePayLoad) {
