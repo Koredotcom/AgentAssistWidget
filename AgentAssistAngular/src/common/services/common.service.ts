@@ -454,18 +454,36 @@ export class CommonService {
 
   // send and copy button related code
   preparePostMessageForSendAndCopy(evt, data, eventName, connectionDetails) {
+
+    if(eventName == IdReferenceConst.COPYMSG){
+      let ele = document.getElementById(`displayData-${evt.target.dataset.msgId}`) ? document.getElementById(`displayData-${evt.target.dataset.msgId}`) : document.getElementById(evt.target.dataset.msgId);
+      data = (data && data !== '') ? data : (evt.target.parentNode.dataset.msgData && evt.target.parentNode.dataset.msgData !== '' ? evt.target.parentNode.dataset.msgData : ele.innerText)
+    }
+
     let payload = data;
-    var message = {
+
+    let message : any = {
       method: (eventName == IdReferenceConst.SENDMSG) ? IdReferenceConst.SEND_METHOD : IdReferenceConst.COPY_METHOD,
       name: (eventName == IdReferenceConst.SENDMSG) ? IdReferenceConst.SENDMSG_REQUEST : IdReferenceConst.COPYMSG_REQUEST,
       conversationId: connectionDetails.conversationId,
       payload: payload
     };
+
     if (eventName == IdReferenceConst.SENDMSG) {
       window.parent.postMessage(message, '*');
     } else if (eventName == IdReferenceConst.COPYMSG) {
       parent.postMessage(message, '*');
     }
+
+    let payloadForBE : any = {
+      type: (eventName == IdReferenceConst.SENDMSG) ? IdReferenceConst.SEND_METHOD : IdReferenceConst.COPY_METHOD,
+      name: (eventName == IdReferenceConst.SENDMSG) ? IdReferenceConst.SENDMSG_REQUEST : IdReferenceConst.COPYMSG_REQUEST,
+      conversationId: connectionDetails.conversationId,
+      payload: payload,
+      botId: connectionDetails.botId,
+      positionId: evt.target.dataset?.positionId
+    };
+    this.webSocketService.emitEvents(EVENTS.agent_send_or_copy, payloadForBE);
     this.highLightAndStoreFaqId(evt, data, connectionDetails);
   }
 
@@ -592,6 +610,102 @@ export class CommonService {
     }
     if((!this.configObj.source || this.configObj.source !== 'smartassist-color-scheme') && parsedPayload){
         $(lastchild).find('.send-run-btn').addClass('hide')
+    }
+  }
+
+  //See more buttons update
+
+  updateSeeMoreForArticles(){
+    let articleSuggestionList = $('[id*="articleDivLib-"]');
+    articleSuggestionList.each(function() {
+        let elemID = this.id.split('-');
+        elemID.shift();
+        let actualId = elemID.join('-')
+        this.updateSeeMoreButtonForAgent(actualId, this.projConstants.ARTICLE);
+    });
+  }
+
+  updateSeeMoreButtonForAssist(id, type?) {    
+    let faqSourceTypePixel = 5;
+    let titleElement = document.getElementById("title-" + id);
+    let descElement = document.getElementById("desc-" + id);
+    let divElement = document.getElementById('faqDiv-' + id);
+    let seeMoreElement = document.getElementById('seeMore-' + id);
+    let seeLessElement = document.getElementById('seeLess-' + id);
+    let viewLinkElement;
+    if (type == ProjConstants.ARTICLE) {
+      titleElement = document.getElementById("articletitle-" + id);
+      descElement = document.getElementById("articledesc-" + id);
+      divElement = document.getElementById('articleDiv-' + id);
+      seeMoreElement = document.getElementById('articleseeMore-' + id);
+      seeLessElement = document.getElementById('articleseeLess-' + id);
+      viewLinkElement = document.getElementById('articleViewLink-' + id);
+    }
+    if (titleElement && descElement && divElement) {
+      titleElement.classList.add('no-text-truncate');
+      descElement.classList.add('no-text-truncate');
+      let divSectionHeight = descElement.clientHeight || 0;
+      if (divSectionHeight > (24 + faqSourceTypePixel)) {
+        $(seeMoreElement).removeClass('hide');
+      } else {
+        $(seeMoreElement).addClass('hide');
+        if (type == ProjConstants.ARTICLE) {
+          viewLinkElement.classList.remove('hide');
+        }
+      }
+      titleElement.classList.remove('no-text-truncate');
+      descElement.classList.remove('no-text-truncate');
+    }
+  }
+
+  updateSeeMoreButtonForAgent(id, article, snippet = false) {
+    let faqSourceTypePixel = 5;
+    let titleElement = $("#titleLib-" + id);
+    let descElement = $("#descLib-" + id);
+    let sectionElement = $('#faqSectionLib-' + id);
+    let divElement = $('#faqDivLib-' + id);
+    let seeMoreElement = $('#seeMore-' + id);
+    let snippetsendMsg;
+    let viewLinkElement;
+    if (snippet) {
+      titleElement = $("#snippettitleLib-" + id);
+      descElement = $("#snippetdescLib-" + id);
+      sectionElement = $('#snippetSectionLib-' + id);
+      divElement = $('#snippetDivLib-' + id);
+      seeMoreElement = $('#snippetseeMore-' + id);
+      snippetsendMsg = $('#snippetViewMsgLib-' + id);
+    }
+    if (article == ProjConstants.ARTICLE) {
+      titleElement = $("#articletitleLib-" + id);
+      descElement = $("#articledescLib-" + id);
+      sectionElement = $('#articleSectionLib-' + id);
+      divElement = $('#articleDivLib-' + id);
+      seeMoreElement = $('#articleseeMore-' + id);
+      viewLinkElement = $('#articleViewLinkLib-' + id);
+    }
+    if (titleElement && descElement && sectionElement && divElement) {
+      $(titleElement).css({ "overflow": "inherit", "white-space": "normal", "text-overflow": "unset" });
+      $(descElement).css({ "overflow": "inherit", "text-overflow": "unset", "display": "block", "white-space": "normal" });
+      let faqSectionHeight = $(sectionElement).css("height");
+      let divSectionHeight = $(descElement).css("height") || '0px';;
+      faqSectionHeight = parseInt(faqSectionHeight?.slice(0, faqSectionHeight.length - 2));
+      divSectionHeight = parseInt(divSectionHeight?.slice(0, divSectionHeight.length - 2));
+      let faqMinHeight = $(divElement).css("min-height");
+      faqMinHeight = parseInt(faqMinHeight.slice(0, faqMinHeight.length - 2)) + 15;
+      if (divSectionHeight > (24 + faqSourceTypePixel)) {
+        $(seeMoreElement).removeClass('hide');
+      } else {
+        $(seeMoreElement).addClass('hide');
+        if (article) {
+          $(viewLinkElement).removeClass('hide');
+        }
+        if (snippet) {
+          $(snippetsendMsg).removeClass('hide');
+        }
+      }
+
+      $(titleElement).css({ "overflow": "hidden", "white-space": "nowrap", "text-overflow": "ellipsis" });
+      $(descElement).css({ "overflow": "hidden", "text-overflow": "ellipsis", "display": "-webkit-box" });
     }
   }
 

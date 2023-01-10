@@ -91,10 +91,10 @@
         </div>
         <div class="overlay-suggestions" style="bottom:0" *ngIf="showSearchSuggestions" id="overLaySuggestions">
             <div class="suggestion-content" id="overLaySearch">
-                <perfect-scrollbar class="overlaysearch-scroll-bar">
+                <perfect-scrollbar class="overlaysearch-scroll-bar" #overlayps id="overlaySearchScroll">
                     <app-overlaysearch [searchType]="projConstants.AGENT_SEARCH"
                         (handleSearchClickEvent)="handleSearchClickEvent($event)"
-                        (closeSearchSuggestions)="closeSearchSuggestions($event)"></app-overlaysearch>
+                        (closeSearchSuggestions)="closeSearchSuggestions($event)" (overlayScrollTop)="overlayScrollTop($event)"></app-overlaysearch>
                 </perfect-scrollbar>
             </div>
         </div>

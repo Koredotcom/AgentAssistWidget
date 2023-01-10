@@ -20,6 +20,7 @@ export class HomeComponent implements OnInit {
 
   @ViewChild('tabBody', { read: ElementRef }) public homescroll: ElementRef<any>;
   @ViewChild('psBottom') psBottom: PerfectScrollbarComponent;
+  @ViewChild('overlayps') overlayps : PerfectScrollbarComponent;
 
   imageFilePath: string = ImageFilePath;
   imageFileNames: any = ImageFileNames;
@@ -353,6 +354,15 @@ export class HomeComponent implements OnInit {
 
 
   // scroll realted code.
+
+  overlayScrollTop(flag){
+    if(flag && this.overlayps){
+      this.overlayps.directiveRef.scrollToTop(0);
+      setTimeout(() => {
+        this.overlayps.directiveRef.update();
+      }, this.scrollbottomwaitingTime);
+    }
+  }
   scrollToBottom(flag) {
     if(flag){
       if (this.psBottom) {

@@ -2,13 +2,15 @@ import { Injectable } from '@angular/core';
 import { ProjConstants } from 'src/common/constants/proj.cnts';
 import { SanitizeHtmlPipe } from 'src/common/pipes/sanitize-html.pipe';
 import * as $ from 'jquery';
+import { CommonService } from 'src/common/services/common.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AssistService {
   projConstants: any = ProjConstants;
-  constructor(public sanitizeHtmlPipe: SanitizeHtmlPipe) { }
+  constructor(public sanitizeHtmlPipe: SanitizeHtmlPipe,
+    public commonService : CommonService) { }
 
   toggleShowMoreLessButtons(faq_or_article_obj, index, type) {
     let titleElement = document.getElementById("title-" + index);
@@ -42,103 +44,10 @@ export class AssistService {
     });
 
     actualIdList.forEach(id => {
-      this.updateSeeMoreButtonForAssist(id, ProjConstants.FAQ)
+      this.commonService.updateSeeMoreButtonForAssist(id, ProjConstants.FAQ)
     });
   }
 
-  updateSeeMoreForArticles(){
-    let articleSuggestionList = $('[id*="articleDivLib-"]');
-    articleSuggestionList.each(function() {
-        let elemID = this.id.split('-');
-        elemID.shift();
-        let actualId = elemID.join('-')
-        this.updateSeeMoreButtonForAgent(actualId, this.projConstants.ARTICLE);
-    });
-  }
-
-  updateSeeMoreButtonForAssist(id, type?) {    
-    let faqSourceTypePixel = 5;
-    let titleElement = document.getElementById("title-" + id);
-    let descElement = document.getElementById("desc-" + id);
-    let divElement = document.getElementById('faqDiv-' + id);
-    let seeMoreElement = document.getElementById('seeMore-' + id);
-    let seeLessElement = document.getElementById('seeLess-' + id);
-    let viewLinkElement;
-    if (type == ProjConstants.ARTICLE) {
-      titleElement = document.getElementById("articletitle-" + id);
-      descElement = document.getElementById("articledesc-" + id);
-      divElement = document.getElementById('articleDiv-' + id);
-      seeMoreElement = document.getElementById('articleseeMore-' + id);
-      seeLessElement = document.getElementById('articleseeLess-' + id);
-      viewLinkElement = document.getElementById('articleViewLink-' + id);
-    }
-    if (titleElement && descElement && divElement) {
-      titleElement.classList.add('no-text-truncate');
-      descElement.classList.add('no-text-truncate');
-      let divSectionHeight = descElement.clientHeight || 0;
-      if (divSectionHeight > (24 + faqSourceTypePixel)) {
-        $(seeMoreElement).removeClass('hide');
-      } else {
-        $(seeMoreElement).addClass('hide');
-        if (type == ProjConstants.ARTICLE) {
-          viewLinkElement.classList.remove('hide');
-        }
-      }
-      titleElement.classList.remove('no-text-truncate');
-      descElement.classList.remove('no-text-truncate');
-    }
-  }
-
-  updateSeeMoreButtonForAgent(id, article, snippet = false) {
-    let faqSourceTypePixel = 5;
-    let titleElement = $("#titleLib-" + id);
-    let descElement = $("#descLib-" + id);
-    let sectionElement = $('#faqSectionLib-' + id);
-    let divElement = $('#faqDivLib-' + id);
-    let seeMoreElement = $('#seeMore-' + id);
-    let snippetsendMsg;
-    let viewLinkElement;
-    if (snippet) {
-      titleElement = $("#snippettitleLib-" + id);
-      descElement = $("#snippetdescLib-" + id);
-      sectionElement = $('#snippetSectionLib-' + id);
-      divElement = $('#snippetDivLib-' + id);
-      seeMoreElement = $('#snippetseeMore-' + id);
-      snippetsendMsg = $('#snippetViewMsgLib-' + id);
-    }
-    if (article == this.projConstants.article) {
-      titleElement = $("#articletitleLib-" + id);
-      descElement = $("#articledescLib-" + id);
-      sectionElement = $('#articleSectionLib-' + id);
-      divElement = $('#articleDivLib-' + id);
-      seeMoreElement = $('#articleseeMore-' + id);
-      viewLinkElement = $('#articleViewLinkLib-' + id);
-    }
-    if (titleElement && descElement && sectionElement && divElement) {
-      $(titleElement).css({ "overflow": "inherit", "white-space": "normal", "text-overflow": "unset" });
-      $(descElement).css({ "overflow": "inherit", "text-overflow": "unset", "display": "block", "white-space": "normal" });
-      let faqSectionHeight = $(sectionElement).css("height");
-      let divSectionHeight = $(descElement).css("height") || '0px';;
-      faqSectionHeight = parseInt(faqSectionHeight?.slice(0, faqSectionHeight.length - 2));
-      divSectionHeight = parseInt(divSectionHeight?.slice(0, divSectionHeight.length - 2));
-      let faqMinHeight = $(divElement).css("min-height");
-      faqMinHeight = parseInt(faqMinHeight.slice(0, faqMinHeight.length - 2)) + 15;
-      if (divSectionHeight > (24 + faqSourceTypePixel)) {
-        $(seeMoreElement).removeClass('hide');
-      } else {
-        $(seeMoreElement).addClass('hide');
-        if (article) {
-          $(viewLinkElement).removeClass('hide');
-        }
-        if (snippet) {
-          $(snippetsendMsg).removeClass('hide');
-        }
-      }
-
-      $(titleElement).css({ "overflow": "hidden", "white-space": "nowrap", "text-overflow": "ellipsis" });
-      $(descElement).css({ "overflow": "hidden", "text-overflow": "ellipsis", "display": "-webkit-box" });
-    }
-  }
 
   _createRunTemplateContiner(uuids, intentName) {
     let dynamicBlock = document.getElementById('dynamicBlock');
@@ -415,7 +324,7 @@ export class AssistService {
       `;
     faqstypeInfo.append(seeMoreButtonHtml);
     setTimeout(() => {                                                    
-        this.updateSeeMoreButtonForAssist(ele, this.projConstants.FAQ);
+        this.commonService.updateSeeMoreButtonForAssist(ele, this.projConstants.FAQ);
     }, 1000);
   }
 

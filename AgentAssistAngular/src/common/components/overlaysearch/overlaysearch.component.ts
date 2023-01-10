@@ -16,6 +16,7 @@ export class OverlaysearchComponent implements OnInit {
   @Input() searchType: string;
   @Output() handleSearchClickEvent = new EventEmitter();
   @Output() closeSearchSuggestions = new EventEmitter();
+  @Output() overlayScrollTop = new EventEmitter();
   subscriptionsList: Subscription[] = [];
 
   projConstants: any = ProjConstants;
@@ -156,6 +157,12 @@ export class OverlaysearchComponent implements OnInit {
       this.faqAllView = true;
       this.faqViewCount = 2;
     }
+    if(this.searchType = this.projConstants.AGENT_SEARCH){
+      this.overlayScrollTop.emit(true);
+    }
+    setTimeout(() => {
+      this.commonService.updateSeeMoreForArticles();
+  }, 10);
   }
 
   handleShowAllClick() {

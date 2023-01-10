@@ -481,7 +481,7 @@ export class AssistComponent implements OnInit {
                     `;
               articlestypeInfo.append(seeMoreButtonHtml);
               setTimeout(() => {
-                   this.assisttabService.updateSeeMoreButtonForAssist(uuids + index,this.projConstants.ARTICLE);
+                   this.commonService.updateSeeMoreButtonForAssist(uuids + index,this.projConstants.ARTICLE);
               }, 100);
             }
           })
@@ -574,7 +574,7 @@ export class AssistComponent implements OnInit {
                 `;
             faqstypeInfo.append(seeMoreButtonHtml);
             setTimeout(() => {
-                this.assisttabService.updateSeeMoreButtonForAssist(uuids + index);
+                this.commonService.updateSeeMoreButtonForAssist(uuids + index);
             }, 1000);
           }
 
@@ -622,7 +622,7 @@ export class AssistComponent implements OnInit {
           `;
             faqs.append(seeMoreButtonHtml);
             setTimeout(() => {
-              this.assisttabService.updateSeeMoreButtonForAssist(splitedanswerPlaceableID.join('-'), this.projConstants.FAQ);
+              this.commonService.updateSeeMoreButtonForAssist(splitedanswerPlaceableID.join('-'), this.projConstants.FAQ);
             }, 1000);
           }
         });
@@ -746,7 +746,7 @@ export class AssistComponent implements OnInit {
       let index = 0;
       for (let item of array) {
         let id = responseId + index;
-        this.assisttabService.updateSeeMoreButtonForAssist(id, type);
+        this.commonService.updateSeeMoreButtonForAssist(id, type);
         index++;
         if(item.answer){
           this.clickEvents(IdReferenceConst.SEEMORE_BTN, id, '', type)
@@ -1272,7 +1272,7 @@ export class AssistComponent implements OnInit {
                           `;
                                     faqstypeInfo.append(seeMoreButtonHtml);
                                     setTimeout(() => {                                                    
-                                        this.assisttabService.updateSeeMoreButtonForAssist(uniqueID, this.projConstants.FAQ);
+                                        this.commonService.updateSeeMoreButtonForAssist(uniqueID, this.projConstants.FAQ);
                                     }, 1000);
                                 }
                                 
@@ -1346,7 +1346,7 @@ export class AssistComponent implements OnInit {
                           `;
                                     faqstypeInfo.append(seeMoreButtonHtml);
                                     setTimeout(() => {                                                    
-                                        this.assisttabService.updateSeeMoreButtonForAssist(uniqueID+index, this.projConstants.FAQ);
+                                        this.commonService.updateSeeMoreButtonForAssist(uniqueID+index, this.projConstants.FAQ);
                                     }, 1000);
                             })
                             setTimeout(()=>{
