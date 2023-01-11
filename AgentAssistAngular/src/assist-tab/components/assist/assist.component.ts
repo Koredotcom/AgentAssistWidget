@@ -283,6 +283,7 @@ export class AssistComponent implements OnInit {
     let resultMsgResponse = this.templateRenderClassService.getMessageResponseForUserMessages(data, botId)
     let titleText = '';
     let userQueryHtml = '';
+    $("#inputFieldForAgent").remove();
     if (this.commonService.OverRideMode) {
       titleText = "YouEntered -";
       userQueryHtml = this.assisttabService.userQueryTemplate(titleText, this.imageFilePath, this.imageFileNames, _id, data);
@@ -742,7 +743,9 @@ export class AssistComponent implements OnInit {
       [storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH]: this.commonService.isAutomationOnGoing
     }
     this.localStorageService.setLocalStorageItem(storageObject);
-    this.commonService.addFeedbackHtmlToDom(this.dropdownHeaderUuids, this.commonService.scrollContent[ProjConstants.ASSIST].lastElementBeforeNewMessage, this.dialogName, this.dialogPositionId, this.commonService.userIntentInput);
+    if(this.dialogPositionId){
+      this.commonService.addFeedbackHtmlToDom(this.dropdownHeaderUuids, this.commonService.scrollContent[ProjConstants.ASSIST].lastElementBeforeNewMessage, this.dialogName, this.dialogPositionId, this.commonService.userIntentInput);
+    }
     if (this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd) {
       this.scrollToBottom();
     }
@@ -1735,9 +1738,15 @@ export class AssistComponent implements OnInit {
                 //     // $(`#historyData .show-history-feedback.hide`)[$(`#historyData .show-history-feedback.hide`).length - 1]?.classList.remove('hide');
                 // }
             });
+<<<<<<< HEAD
           if(this.commonService.isAutomationOnGoing){
               $(`#dynamicBlock .collapse-acc-data.hide`)[$(`#dynamicBlock .collapse-acc-data.hide`).length - 1]?.classList.remove('hide');
           }
+=======
+        if(this.commonService.isAutomationOnGoing){
+          $(`#dynamicBlock .collapse-acc-data.hide`)[$(`#dynamicBlock .collapse-acc-data.hide`).length - 1]?.classList.remove('hide');
+        }
+>>>>>>> 98e57e300ac460b2d5d5b6e2630b6d244fa06c45
         this.scrollToBottom();
         this.designAlterService.addWhiteBackgroundClassToNewMessage(this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd, IdReferenceConst.DYNAMICBLOCK);
     

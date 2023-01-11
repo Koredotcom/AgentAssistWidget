@@ -63,9 +63,11 @@ export class OverlaysearchComponent implements OnInit {
     let subscription2 = this.websocketService.agentAssistAgentResponse$.subscribe((agentResponse: any) => {
       if(agentResponse){
         console.log(agentResponse, "agent Response");
-        this.handleSearchResponse(agentResponse);
-        this.showOverLay = true;
-        console.log(this.showOverLay, "show overlya sub2");
+        this.searchResponse = {};
+        setTimeout(() => {
+          this.handleSearchResponse(agentResponse);
+          this.showOverLay = true;
+        }, 10);
 
         if(document.getElementById(IdReferenceConst.overLaySuggestions)){
           document.getElementById(IdReferenceConst.overLaySuggestions).classList.add(classNamesConst.DISPLAY_BLOCK)
@@ -160,9 +162,10 @@ export class OverlaysearchComponent implements OnInit {
     if(this.searchType = this.projConstants.AGENT_SEARCH){
       this.overlayScrollTop.emit(true);
     }
-    setTimeout(() => {
-      this.commonService.updateSeeMoreForArticles();
-  }, 10);
+     setTimeout(() => {
+        this.handleSeeMoreButton(this.searchResponse.faqs, this.projConstants.FAQ);
+        this.handleSeeMoreButton(this.searchResponse.articles, this.projConstants.ARTICLE);
+      }, 10);
   }
 
   handleShowAllClick() {
@@ -170,7 +173,6 @@ export class OverlaysearchComponent implements OnInit {
   }
 
   handleSearchResponse(response) {
-    this.searchResponse = {};
     if (response && response.suggestions) {
       this.searchResponse = this.commonService.formatSearchResponse(response.suggestions);
       this.searchResponse.totalSearchResults = this.searchResponse.dialogs?.length + this.searchResponse.faqs?.length + this.searchResponse.articles?.length;
@@ -179,12 +181,11 @@ export class OverlaysearchComponent implements OnInit {
       this.faqAllView = this.searchResponse.faqs && this.searchResponse.faqs.length > 2 ? true : false;
       this.articleAllView = this.searchResponse.articles && this.searchResponse.articles.length > 2 ? true : false;
       this.searchResultText = this.searchResponse.totalSearchResults == 1 ? "Search result for" : "Search results for";
-      console.log(this.searchResponse, "search response");
-      
       setTimeout(() => {
         this.handleSeeMoreButton(this.searchResponse.faqs, this.projConstants.FAQ);
         this.handleSeeMoreButton(this.searchResponse.articles, this.projConstants.ARTICLE);
-      }, 10);
+        console.log(this.searchResponse.articles, 'articles');
+      }, 100);
     }
   }
 
@@ -212,7 +213,7 @@ export class OverlaysearchComponent implements OnInit {
   handleSeeMoreButton(array, type) {
     let index = 0;
     for (let item of array) {
-      this.updateSeeMoreButtonForAgent(index, item, type);
+      this.commonService.updateSeeMoreButtonForAgent(index, item, type);
       index++;
     }
   }
@@ -243,38 +244,5 @@ export class OverlaysearchComponent implements OnInit {
       descElement.classList.remove('no-text-truncate');
     }
   }
-
-
-  updateSeeMoreButtonForAgent(id, faq_or_article_obj, type) {
-    let faqSourceTypePixel = 5;
-    let titleElement = document.getElementById("titleLib-" + id);
-    let descElement = document.getElementById("descLib-" + id);
-    let divElement = document.getElementById('faqDivLib-' + id);
-    let seeMoreElement = document.getElementById('seeMore-' + id);
-    let viewLinkElement;
-    if (type == this.projConstants.ARTICLE) {
-      titleElement = document.getElementById("articletitleLib-" + id);
-      descElement = document.getElementById("articledescLib-" + id);
-      divElement = document.getElementById('articleDivLib-' + id);
-      seeMoreElement = document.getElementById('articleseeMore-' + id);
-      viewLinkElement = document.getElementById('articleViewLinkLib-' + id);
-    }
-    if (titleElement && descElement && divElement) {
-      titleElement.classList.add('no-text-truncate');
-      descElement.classList.add('no-text-truncate');
-      let divSectionHeight = descElement.clientHeight || 0;
-      if (divSectionHeight > (24 + faqSourceTypePixel)) {
-        faq_or_article_obj.showMoreButton = true;
-      } else {
-        faq_or_article_obj.showMoreButton = false;
-        if (type == this.projConstants.ARTICLE) {
-          viewLinkElement.classList.remove('hide');
-        }
-      }
-      titleElement.classList.remove('no-text-truncate');
-      descElement.classList.remove('no-text-truncate');
-    }
-  }
-
 
 }

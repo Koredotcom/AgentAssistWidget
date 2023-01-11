@@ -533,8 +533,10 @@ export class CommonService {
     searchResponse.articles = [];
     let dialoguesArray = suggestions.dialogs || [];
     let faqArray = suggestions.faqs || [];
-    if (suggestions.searchassist && suggestions.searchassist.data) {
-      searchResponse.articles = suggestions.searchassist.data;
+    if (suggestions.searchassist && Object.keys(suggestions.searchassist).length > 0) {
+      for(let source in suggestions.searchassist){
+        searchResponse.articles.push.apply(searchResponse.articles,suggestions.searchassist[source]);
+      }
       for (let article of searchResponse.articles) {
         article.showMoreButton = false;
         article.showLessButton = false;
@@ -552,6 +554,8 @@ export class CommonService {
     for (let dialog of dialoguesArray) {
       searchResponse.dialogs.push({ name: dialog.name, agentRunButton: false });
     }
+    console.log(searchResponse, "searchresponse");
+    
     return searchResponse;
   }
 
@@ -615,7 +619,7 @@ export class CommonService {
 
   //See more buttons update
 
-  updateSeeMoreForArticles(){
+  updateSeeMoreForArticles(articles){
     let articleSuggestionList = $('[id*="articleDivLib-"]');
     articleSuggestionList.each(function() {
         let elemID = this.id.split('-');
@@ -658,7 +662,7 @@ export class CommonService {
     }
   }
 
-  updateSeeMoreButtonForAgent(id, article, snippet = false) {
+  updateSeeMoreButtonForAgent(id, faq_or_article_obj, type) {
     let faqSourceTypePixel = 5;
     let titleElement = $("#titleLib-" + id);
     let descElement = $("#descLib-" + id);
@@ -667,7 +671,7 @@ export class CommonService {
     let seeMoreElement = $('#seeMore-' + id);
     let snippetsendMsg;
     let viewLinkElement;
-    if (snippet) {
+    if (type == ProjConstants.SNIPPET) {
       titleElement = $("#snippettitleLib-" + id);
       descElement = $("#snippetdescLib-" + id);
       sectionElement = $('#snippetSectionLib-' + id);
@@ -675,7 +679,7 @@ export class CommonService {
       seeMoreElement = $('#snippetseeMore-' + id);
       snippetsendMsg = $('#snippetViewMsgLib-' + id);
     }
-    if (article == ProjConstants.ARTICLE) {
+    if (type == ProjConstants.ARTICLE) {
       titleElement = $("#articletitleLib-" + id);
       descElement = $("#articledescLib-" + id);
       sectionElement = $('#articleSectionLib-' + id);
@@ -687,23 +691,22 @@ export class CommonService {
       $(titleElement).css({ "overflow": "inherit", "white-space": "normal", "text-overflow": "unset" });
       $(descElement).css({ "overflow": "inherit", "text-overflow": "unset", "display": "block", "white-space": "normal" });
       let faqSectionHeight = $(sectionElement).css("height");
-      let divSectionHeight = $(descElement).css("height") || '0px';;
+      let divSectionHeight = $(descElement).css("height") || '0px';
       faqSectionHeight = parseInt(faqSectionHeight?.slice(0, faqSectionHeight.length - 2));
       divSectionHeight = parseInt(divSectionHeight?.slice(0, divSectionHeight.length - 2));
-      let faqMinHeight = $(divElement).css("min-height");
-      faqMinHeight = parseInt(faqMinHeight.slice(0, faqMinHeight.length - 2)) + 15;
       if (divSectionHeight > (24 + faqSourceTypePixel)) {
-        $(seeMoreElement).removeClass('hide');
+        faq_or_article_obj.showLessButton = faq_or_article_obj.showLessButton ? faq_or_article_obj.showLessButton : false;
+        faq_or_article_obj.showMoreButton = faq_or_article_obj.showLessButton ? false : true;
       } else {
-        $(seeMoreElement).addClass('hide');
-        if (article) {
-          $(viewLinkElement).removeClass('hide');
+        faq_or_article_obj.showLessButton = false;
+        faq_or_article_obj.showMoreButton = false;
+        if (type == ProjConstants.ARTICLE && viewLinkElement && viewLinkElement.classList) {
+          viewLinkElement.classList.remove('hide');
         }
-        if (snippet) {
-          $(snippetsendMsg).removeClass('hide');
+        if (type == ProjConstants.SNIPPET && snippetsendMsg && snippetsendMsg.classList) {
+          snippetsendMsg.classList.remove('hide');
         }
       }
-
       $(titleElement).css({ "overflow": "hidden", "white-space": "nowrap", "text-overflow": "ellipsis" });
       $(descElement).css({ "overflow": "hidden", "text-overflow": "ellipsis", "display": "-webkit-box" });
     }

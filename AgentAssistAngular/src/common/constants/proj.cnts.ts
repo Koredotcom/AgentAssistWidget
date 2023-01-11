@@ -31,6 +31,7 @@ export const ProjConstants = {
     DIALOG : 'Dialog task',
     FAQ : 'FAQ',
     ARTICLE : 'Article',
+    SNIPPET : 'Snippet',
     VIEW_ALL_FAQ : 'View All FAQs',
     VIEW_FEW_FAQ : 'View Few FAQs',
     VIEW_ALL_ARTICLES : 'View All Articles',
