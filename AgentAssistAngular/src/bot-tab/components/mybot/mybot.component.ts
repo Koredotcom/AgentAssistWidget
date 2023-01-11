@@ -364,6 +364,18 @@ export class MybotComponent implements OnInit {
             this.clickEvents(IdReferenceConst.DROPDOWN_HEADER, previousId);
           }
         }
+        if(resp.length-1 == index && (!res.agentAssistDetails?.entityRequest && !res.agentAssistDetails?.entityResponse) && currentTaskPositionId == previousTaskPositionId) {
+          let previousIdFeedBackDetails = feedBackResult.find((ele)=> ele.positionId === previousTaskPositionId);
+          this.commonService.addFeedbackHtmlToDomForHistory(res, res.botId, res?.agentAssistDetails?.userInput, previousId, true, previousTaskPositionId);
+          if(previousIdFeedBackDetails) {
+              this.commonService.UpdateFeedBackDetails(previousIdFeedBackDetails, 'agentAutoContainer');
+              if(previousIdFeedBackDetails.feedback == 'dislike' && (previousIdFeedBackDetails.feedbackDetails.length == 0 && previousIdFeedBackDetails.comment.length == 0)){
+                  $(`#feedbackHelpfulContainer-${previousId} .explore-more-negtive-data`).removeClass('hide');
+              }else {
+                  $(`#feedbackHelpfulContainer-${previousId} .explore-more-negtive-data`).addClass('hide');
+              }
+          }   
+      }
         if (res.agentAssistDetails.entityName && res.agentAssistDetails.entityResponse && res.agentAssistDetails.entityValue) {
           let runInfoContent = $(`#dropDownData-${previousId}`);
           let data = {};

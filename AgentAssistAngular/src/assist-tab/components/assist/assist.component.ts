@@ -1446,7 +1446,7 @@ export class AssistComponent implements OnInit {
                            
                         }
                     }
-                    if(resp.length-1 == index && currentTaskPositionId == previousTaskPositionId) {
+                    if(resp.length-1 == index && (!res.agentAssistDetails?.entityRequest && !res.agentAssistDetails?.entityResponse) && currentTaskPositionId == previousTaskPositionId) {
                         let previousIdFeedBackDetails = feedBackResult.find((ele)=> ele.positionId === currentTaskPositionId);
                         this.commonService.addFeedbackHtmlToDomForHistory(res, res.botId, res?.agentAssistDetails?.userInput, previousId, false, previousTaskPositionId);
                         if(previousIdFeedBackDetails) {
