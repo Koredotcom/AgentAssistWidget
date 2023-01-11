@@ -16,6 +16,7 @@ import * as $ from 'jquery';
 import { RawHtmlPipe } from 'src/common/pipes/raw-html.pipe';
 import { PerfectScrollbarDirective } from 'ngx-perfect-scrollbar';
 import { LocalStorageService } from 'src/common/services/local-storage.service';
+import { KoreGenerateuuidPipe } from 'src/common/pipes/kore-generateuuid.pipe';
 
 @Component({
   selector: 'app-mybot',
@@ -54,7 +55,8 @@ export class MybotComponent implements OnInit {
     public websocketService: WebSocketService,
     public designAlterService: DesignAlterService,
     public rawHtmlPipe: RawHtmlPipe,
-    private localStorageService: LocalStorageService) { }
+    private localStorageService: LocalStorageService,
+    private koreGenerateuuidPipe: KoreGenerateuuidPipe) { }
 
   ngOnInit(): void {
     let response = this.commonService.renderingAgentHistoryMessage();
@@ -139,7 +141,7 @@ export class MybotComponent implements OnInit {
 
   //running dialogue and mybot data response code.
   processMybotDataResponse(data) {
-    let myBotuuids = this.randomUUIDPipe.transform();
+    let myBotuuids = this.koreGenerateuuidPipe.transform();
     let agentInputId = this.randomUUIDPipe.transform();
     if (this.commonService.isMyBotAutomationOnGoing && data.buttons && !data.value.includes('Customer has waited') && data.positionId == this.myBotDialogPositionId) {
       let runInfoContent = document.getElementById(IdReferenceConst.DROPDOWNDATA + `-${this.myBotDropdownHeaderUuids}`);
