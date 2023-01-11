@@ -1001,19 +1001,10 @@ export class AssistComponent implements OnInit {
   }
 
   terminateButtonClick(uuid) {
-    let appState = this.localStorageService.getLocalStorageState();
-    appState[this.connectionDetails.conversationId][storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH]
-    if(uuid && !appState[this.connectionDetails.conversationId][storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH]){
       document.getElementById(IdReferenceConst.ASSISTTERMINATE + '-' + uuid).addEventListener('click', (event) => {
         //  this.handleSubjectService.setLoader(true);
           this.handlePopupEvent.emit({ status: true, type: this.projConstants.TERMINATE });
         });
-    }else{
-      document.getElementById(IdReferenceConst.ASSISTTERMINATE).addEventListener('click', (event) => {
-        //  this.handleSubjectService.setLoader(true);
-          this.handlePopupEvent.emit({ status: true, type: this.projConstants.TERMINATE });
-        });
-    }
     
     
   }
@@ -1417,7 +1408,7 @@ export class AssistComponent implements OnInit {
                                             </div>
                                             <div class="header-text" id="dropDownTitle-${res._id}">${res.tN}</div>
                                             <i class="ast-carrotup"></i>
-                                            <button class="btn-danger hide" id="terminateAgentDialog">Terminate</button>
+                                            <button class="btn-danger hide" id="terminateAgentDialog-${res._id}">Terminate</button>
                                         </div>
                                         <div class="collapse-acc-data hide" id="dropDownData-${res._id}">
                                         <div class="override-input-div hide" id="overRideDiv-${res._id}">
@@ -1569,26 +1560,24 @@ export class AssistComponent implements OnInit {
                     let runInfoContent = $(`#dropDownData-${previousId}`);
                     let askToUserHtml = this.assisttabService.askUserTemplate(res._id, newTemp);
                     let tellToUserHtml = this.assisttabService.tellToUserTemplate(res._id, newTemp);
-                         
-                        let appState = this.localStorageService.getLocalStorageState();
-                        let conversationId = this.connectionDetails.conversationId;
-                        if(appState[conversationId][storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH]) {
+                        if(this.localStorageService.checkStorageItemWithInConvId(this.connectionDetails.conversationId, storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH)) {
                             this.commonService.isAutomationOnGoing = true;
                             this.dropdownHeaderUuids = previousId;
-                            appState[conversationId][storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH] = this.commonService.isAutomationOnGoing;
-                            // localStorage.setItem('agentAssistState', JSON.stringify(appState))
-                            this.localStorageService.setLocalStorageItem(appState, this.projConstants.ASSIST)
+                            let storageObject: any = {
+                              [storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH]: this.commonService.isAutomationOnGoing
+                            }
+                            this.localStorageService.setLocalStorageItem(storageObject);
                         }
                     if (res.agentAssistDetails.isPrompt || res.agentAssistDetails.entityRequest) {
-                        if(appState[conversationId][storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH]) {
+                        if(this.localStorageService.checkStorageItemWithInConvId(this.connectionDetails.conversationId, storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH)) {
                             $(`#overRideBtn-${previousId}`).removeClass('hide');
                             $(`#cancelOverRideBtn-${previousId}`).addClass('hide');
                             $("#inputFieldForAgent").remove();
-                            $(`#terminateAgentDialog`).removeClass('hide');
+                            $(`#terminateAgentDialog-${previousId}`).removeClass('hide');
                             $('#dynamicBlock .override-input-div').addClass('hide');
                             $(`#overRideDiv-${previousId}`).removeClass('hide');
                             $(`#overRideBtn-${previousId}`).attr('data-position-id', previousTaskPositionId);
-                            $(`#terminateAgentDialog`).attr('data-position-id', previousTaskPositionId);
+                            $(`#terminateAgentDialog-${previousId}`).attr('data-position-id', previousTaskPositionId);
                             this.dialogPositionId = previousTaskPositionId;
                         }
                        
