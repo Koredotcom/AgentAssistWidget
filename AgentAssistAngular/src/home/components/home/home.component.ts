@@ -78,6 +78,7 @@ export class HomeComponent implements OnInit {
         this.connectionDetails = urlParams;
         this.eventListenerFromParent();
         this.updateUIState(this.connectionDetails.conversationId, urlParams.isCall);
+        this.setProactiveMode();
         this.btnInit();
       }
     });
@@ -284,6 +285,13 @@ export class HomeComponent implements OnInit {
       [storageConst.PROACTIVE_MODE]: modeStatus
     }
     this.localStorageService.setLocalStorageItem(storageObject);
+}
+
+setProactiveMode(){
+  let appState : any = this.localStorageService.getLocalStorageState();
+  let convState = appState[this.connectionDetails.conversationId];
+  let proactiveModeStatus = (convState[storageConst.PROACTIVE_MODE] != undefined && convState[storageConst.PROACTIVE_MODE] != null) ? convState[storageConst.PROACTIVE_MODE] : true;
+  this.proactiveToggle(proactiveModeStatus);
 }
 
   //highlight faq after refresh

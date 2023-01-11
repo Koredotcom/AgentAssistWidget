@@ -19,7 +19,7 @@ export class HandleSubjectService {
   public processAgentOrTranscriptResponseSubject = new BehaviorSubject<object>(null);
   public overridebtnClickEventSubject = new BehaviorSubject<object>(null);
   public isLoaderSetSubject = new BehaviorSubject<boolean>(false);
-  public proactiveModeSubject = new BehaviorSubject<boolean>(null);
+  public proactiveModeSubject = new Subject<boolean>();
 
   constructor() { }
 

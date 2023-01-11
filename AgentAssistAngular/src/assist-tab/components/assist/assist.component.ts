@@ -142,6 +142,8 @@ export class AssistComponent implements OnInit {
     let subscription7 = this.handleSubjectService.connectDetailsSubject.subscribe((response: any) => {
       if (response) {
         this.connectionDetails = response;
+        let appState = this.localStorageService.getLocalStorageState();
+        this.proactiveModeStatus = appState[this.connectionDetails.conversationId][storageConst.PROACTIVE_MODE]
       }
     });
 
@@ -184,12 +186,13 @@ export class AssistComponent implements OnInit {
       }
     })
 
-    let subscription13 = this.handleSubjectService.proactiveModeSubject.subscribe((response) => {
-      if(response != null){
+    let subscription13 = this.handleSubjectService.proactiveModeSubject.subscribe((response : any) => {
+      if(response != null && response != undefined){
         this.proactiveModeStatus = response;
         if(response){
           $(`.override-input-div`).removeClass('hide');
           this.handleCancelOverrideBtnClick('overRideBtn-' + this.dropdownHeaderUuids, this.dialogPositionId);
+          $(`#overRideBtn-${this.dropdownHeaderUuids}`).removeClass('hide');
         }else{
           if(document.getElementById(`overRideBtn-${this.dropdownHeaderUuids}`)){
             $(`#overRideBtn-${this.dropdownHeaderUuids}`).addClass('hide');
@@ -239,6 +242,9 @@ export class AssistComponent implements OnInit {
     this.localStorageService.setLocalStorageItem(storageObject);
     let dialogId = this.randomUUIDPipe.transform(IdReferenceConst.positionId);
     this.dialogPositionId = dialogId;
+    if(runInitent){
+      this.dialogPositionId = data?.positionId;
+    }
     this.assisttabService._createRunTemplateContiner(uuids, data.intentName);
     this.dialogName = data.intentName;
     if (idTarget) {
@@ -996,7 +1002,6 @@ export class AssistComponent implements OnInit {
   }
 
   handleOverridBtnClick(uuid, dialogId) {
-      console.log("over ride click event");
       let overRideObj: any = {
         "agentId": "",
         "botId": this.connectionDetails.botId,
@@ -1027,8 +1032,10 @@ export class AssistComponent implements OnInit {
           }
         });
       }
-      $(`#overRideBtn-${uuid}`).addClass('hide');
-      $(`#cancelOverRideBtn-${uuid}`).removeClass('hide');
+      if(this.proactiveModeStatus){
+        $(`#overRideBtn-${uuid}`).addClass('hide');
+        $(`#cancelOverRideBtn-${uuid}`).removeClass('hide');
+      }
       this.commonService.OverRideMode = true;
       this.designAlterService.addWhiteBackgroundClassToNewMessage(this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd, IdReferenceConst.DYNAMICBLOCK);
       this.scrollToBottom();
