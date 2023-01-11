@@ -188,6 +188,7 @@ export class MybotComponent implements OnInit {
         $(runInfoContent).append(tellToUserHtml);
       }
       let result = this.templateRenderClassService.getResponseUsingTemplate(data);
+      this.commonService.hideSendOrCopyButtons(result.parsePayLoad, runInfoContent)
       let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(result)[0].innerHTML;
       let a = document.getElementById(IdReferenceConst.displayData + `-${myBotuuids}`);
       a.innerHTML = a.innerHTML + html;

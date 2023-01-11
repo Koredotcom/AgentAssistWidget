@@ -676,7 +676,7 @@ export class AssistComponent implements OnInit {
         $(runInfoContent).append(tellToUserHtml);
       }
 
-      this.commonService.hideSendOrCopyButtons(result.parsedPayload, runInfoContent)
+      this.commonService.hideSendOrCopyButtons(result.parsePayLoad, runInfoContent)
       setTimeout(() => {
         this.updateNewMessageUUIDList(this.dropdownHeaderUuids);
       }, this.waitingTimeForUUID);
@@ -744,6 +744,7 @@ export class AssistComponent implements OnInit {
     if (this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd) {
       this.scrollToBottom();
     }
+    this.dropdownHeaderUuids = undefined;
   }
 
   // handling seemoe button

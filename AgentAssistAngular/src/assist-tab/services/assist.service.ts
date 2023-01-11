@@ -86,7 +86,7 @@ export class AssistService {
         <div class="title-data"><ul class="chat-container" id="displayData-${uuids}" data-msg-id="${uuids}"></ul></div>
         <div class="action-links">
             <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}">Send</button>
-            <div class="copy-btn" data-msg-id="${uuids}">
+            <div class="copy-btn hide" data-msg-id="${uuids}">
                 <i class="ast-copy" data-msg-id="${uuids}"></i>
             </div>
         </div>
@@ -109,7 +109,7 @@ export class AssistService {
         <div class="title-data" ><ul class="chat-container" id="displayData-${uuids}" data-msg-id="${uuids}"></ul></div>
         <div class="action-links">
             <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}">Send</button>
-            <div class="copy-btn" data-msg-id="${uuids}">
+            <div class="copy-btn hide" data-msg-id="${uuids}">
                 <i class="ast-copy" data-msg-id="${uuids}"></i>
             </div>
         </div>

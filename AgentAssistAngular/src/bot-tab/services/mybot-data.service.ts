@@ -103,7 +103,7 @@ export class MybotDataService {
                        <div class="title-data"><ul class="chat-container" id="displayData-${myBotuuids}"></ul></div>
                        <div class="action-links">
                            <button class="send-run-btn" id="sendMsg" data-msg-id="${myBotuuids}">Send</button>
-                           <div class="copy-btn" data-msg-id="${myBotuuids}">
+                           <div class="copy-btn hide" data-msg-id="${myBotuuids}">
                                <i class="ast-copy" data-msg-id="${myBotuuids}"></i>
                            </div>
                        </div>
@@ -126,7 +126,7 @@ export class MybotDataService {
                        <div class="title-data" ><ul class="chat-container" id="displayData-${myBotuuids}"></ul></div>
                        <div class="action-links">
                            <button class="send-run-btn" id="sendMsg" data-msg-id="${myBotuuids}">Send</button>
-                           <div class="copy-btn" data-msg-id="${myBotuuids}">
+                           <div class="copy-btn hide" data-msg-id="${myBotuuids}">
                                <i class="ast-copy" data-msg-id="${myBotuuids}"></i>
                            </div>
                        </div>
