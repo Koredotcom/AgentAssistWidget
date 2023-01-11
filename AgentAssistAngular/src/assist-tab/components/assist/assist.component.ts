@@ -66,20 +66,6 @@ export class AssistComponent implements OnInit {
     let response = this.commonService.renderingHistoryMessage();
     response.then((res) => {
       this.handleSubjectService.setLoader(false);
-      // let appState = this.localStorageService.getLocalStorageState();
-      //                   if (res?.length > 0 && appState[this.connectionDetails.conversationId]) {
-      //                       this.commonService.isSendWelcomeMessage = false;
-      //                   }else{
-      //                       this.commonService.isSendWelcomeMessage = true;
-      //                   }
-      //                   var welcome_message_request = {
-      //                     'waitTime': 2000,
-      //                     'userName': parsedCustomData?.userName || parsedCustomData?.fName + parsedCustomData?.lName || 'user',
-      //                     'id': this.connectionDetails.conversationId,
-      //                     'isSendWelcomeMessage': this.commonService.isSendWelcomeMessage,
-      //                     'botId': _botId,
-      //                     'agentassistInfo' : agent_user_details
-      //                 }
       this.renderHistoryMessages(res.messages, res.feedbackDetails)
     }).catch((err)=>{
       this.handleSubjectService.setLoader(false);
