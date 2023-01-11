@@ -66,6 +66,20 @@ export class AssistComponent implements OnInit {
     let response = this.commonService.renderingHistoryMessage();
     response.then((res) => {
       this.handleSubjectService.setLoader(false);
+      // let appState = this.localStorageService.getLocalStorageState();
+      //                   if (res?.length > 0 && appState[this.connectionDetails.conversationId]) {
+      //                       this.commonService.isSendWelcomeMessage = false;
+      //                   }else{
+      //                       this.commonService.isSendWelcomeMessage = true;
+      //                   }
+      //                   var welcome_message_request = {
+      //                     'waitTime': 2000,
+      //                     'userName': parsedCustomData?.userName || parsedCustomData?.fName + parsedCustomData?.lName || 'user',
+      //                     'id': this.connectionDetails.conversationId,
+      //                     'isSendWelcomeMessage': this.commonService.isSendWelcomeMessage,
+      //                     'botId': _botId,
+      //                     'agentassistInfo' : agent_user_details
+      //                 }
       this.renderHistoryMessages(res.messages, res.feedbackDetails)
     }).catch((err)=>{
       this.handleSubjectService.setLoader(false);
@@ -647,6 +661,8 @@ export class AssistComponent implements OnInit {
     let result : any = this.templateRenderClassService.getResponseUsingTemplate(data);
 
     if (this.commonService.isAutomationOnGoing && this.dropdownHeaderUuids && data.buttons && !data.value.includes('Customer has waited') && (this.dialogPositionId && !data.positionId || (data.positionId == this.dialogPositionId))) {
+      let msgStringify = JSON.stringify(result);
+      let newTemp = encodeURI(msgStringify);
       $(`#overRideBtn-${this.dropdownHeaderUuids}`).removeClass('hide');
       $(`#cancelOverRideBtn-${this.dropdownHeaderUuids}`).addClass('hide');
       $("#inputFieldForAgent").remove();
@@ -661,9 +677,9 @@ export class AssistComponent implements OnInit {
           this.agentAssistResponse = Object.assign({}, data);
         }
       }, 10);
-      let askToUserHtml = this.assisttabService.askUserTemplate(uuids)
+      let askToUserHtml = this.assisttabService.askUserTemplate(uuids, newTemp)
 
-      let tellToUserHtml = this.assisttabService.tellToUserTemplate(uuids)
+      let tellToUserHtml = this.assisttabService.tellToUserTemplate(uuids, newTemp)
       if (data.isPrompt) {
         runInfoContent.append(askToUserHtml);
         if(!this.proactiveModeStatus){
@@ -996,10 +1012,21 @@ export class AssistComponent implements OnInit {
   }
 
   terminateButtonClick(uuid) {
-    document.getElementById(IdReferenceConst.ASSISTTERMINATE + '-' + uuid).addEventListener('click', (event) => {
-    //  this.handleSubjectService.setLoader(true);
-      this.handlePopupEvent.emit({ status: true, type: this.projConstants.TERMINATE });
-    });
+    let appState = this.localStorageService.getLocalStorageState();
+    appState[this.connectionDetails.conversationId][storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH]
+    if(uuid && !appState[this.connectionDetails.conversationId][storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH]){
+      document.getElementById(IdReferenceConst.ASSISTTERMINATE + '-' + uuid).addEventListener('click', (event) => {
+        //  this.handleSubjectService.setLoader(true);
+          this.handlePopupEvent.emit({ status: true, type: this.projConstants.TERMINATE });
+        });
+    }else{
+      document.getElementById(IdReferenceConst.ASSISTTERMINATE).addEventListener('click', (event) => {
+        //  this.handleSubjectService.setLoader(true);
+          this.handlePopupEvent.emit({ status: true, type: this.projConstants.TERMINATE });
+        });
+    }
+    
+    
   }
 
   handleOverridBtnClick(uuid, dialogId) {
@@ -1441,7 +1468,7 @@ export class AssistComponent implements OnInit {
                             // setTimeout(()=>{
 
                               this.clickEvents(IdReferenceConst.DROPDOWN_HEADER, previousId);
-                             // this.clickEvents(IdReferenceConst.ASSISTTERMINATE, previousId);
+                              this.clickEvents(IdReferenceConst.ASSISTTERMINATE, previousId);
                            // }, 10000)
                            
                         }
@@ -1547,30 +1574,34 @@ export class AssistComponent implements OnInit {
 
                         _msgsResponse.message.push(body);
                     });
+                    let msgStringify = JSON.stringify(_msgsResponse);
+                    let newTemp = encodeURI(msgStringify);
                     if((res.agentAssistDetails?.isPrompt === true || res.agentAssistDetails?.isPrompt === false) && previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) {
                     let runInfoContent = $(`#dropDownData-${previousId}`);
-                    let askToUserHtml = this.assisttabService.askUserTemplate(res._id);
-                    let tellToUserHtml = this.assisttabService.tellToUserTemplate(res._id);
-                        var appStateStr = localStorage.getItem('agentAssistState') || '{}';
-                        var appState = JSON.parse(appStateStr);  
-                        // if(appState[_conversationId]['automationGoingOnAfterRefresh']) {
-                        //     isAutomationOnGoing = true;
-                        //     dropdownHeaderUuids = previousId;
-                        //     appState[_conversationId]['automationGoingOnAfterRefresh'] = isAutomationOnGoing;
-                        //     localStorage.setItem('agentAssistState', JSON.stringify(appState))
-                        // }
+                    let askToUserHtml = this.assisttabService.askUserTemplate(res._id, newTemp);
+                    let tellToUserHtml = this.assisttabService.tellToUserTemplate(res._id, newTemp);
+                         
+                        let appState = this.localStorageService.getLocalStorageState();
+                        let conversationId = this.connectionDetails.conversationId;
+                        if(appState[conversationId][storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH]) {
+                            this.commonService.isAutomationOnGoing = true;
+                            this.dropdownHeaderUuids = previousId;
+                            appState[conversationId][storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH] = this.commonService.isAutomationOnGoing;
+                            // localStorage.setItem('agentAssistState', JSON.stringify(appState))
+                            this.localStorageService.setLocalStorageItem(appState, this.projConstants.ASSIST)
+                        }
                     if (res.agentAssistDetails.isPrompt || res.agentAssistDetails.entityRequest) {
-                        // if(appState[_conversationId]['automationGoingOnAfterRefresh']) {
-                        //     $(`#overRideBtn-${previousId}`).removeClass('hide');
-                        //     $(`#cancelOverRideBtn-${previousId}`).addClass('hide');
-                        //     $("#inputFieldForAgent").remove();
-                        //     $(`#terminateAgentDialog`).removeClass('hide');
-                        //     $('#dynamicBlock .override-input-div').addClass('hide');
-                        //     $(`#overRideDiv-${previousId}`).removeClass('hide');
-                        //     $(`#overRideBtn-${previousId}`).attr('data-position-id', previousTaskPositionId);
-                        //     $(`#terminateAgentDialog`).attr('data-position-id', previousTaskPositionId);
-                        //     dialogPositionId = previousTaskPositionId;
-                        // }
+                        if(appState[conversationId][storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH]) {
+                            $(`#overRideBtn-${previousId}`).removeClass('hide');
+                            $(`#cancelOverRideBtn-${previousId}`).addClass('hide');
+                            $("#inputFieldForAgent").remove();
+                            $(`#terminateAgentDialog`).removeClass('hide');
+                            $('#dynamicBlock .override-input-div').addClass('hide');
+                            $(`#overRideDiv-${previousId}`).removeClass('hide');
+                            $(`#overRideBtn-${previousId}`).attr('data-position-id', previousTaskPositionId);
+                            $(`#terminateAgentDialog`).attr('data-position-id', previousTaskPositionId);
+                            this.dialogPositionId = previousTaskPositionId;
+                        }
                        
                         runInfoContent.append(askToUserHtml);
                         let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(_msgsResponse)[0].innerHTML;
@@ -1582,6 +1613,7 @@ export class AssistComponent implements OnInit {
                         let a = document.getElementById(IdReferenceConst.displayData + `-${res._id}`);
                         a.innerHTML = a.innerHTML + html;
                     }
+                    this.commonService.hideSendOrCopyButtons(parsedPayload, runInfoContent)
                  }
                     let shouldProcessResponse = false;
                     var appStateStr = localStorage.getItem('agentAssistState') || '{}';
@@ -1717,6 +1749,9 @@ export class AssistComponent implements OnInit {
                 //     // $(`#historyData .show-history-feedback.hide`)[$(`#historyData .show-history-feedback.hide`).length - 1]?.classList.remove('hide');
                 // }
             });
+          if(this.commonService.isAutomationOnGoing){
+              $(`#dynamicBlock .collapse-acc-data.hide`)[$(`#dynamicBlock .collapse-acc-data.hide`).length - 1]?.classList.remove('hide');
+          }
         this.scrollToBottom();
         this.designAlterService.addWhiteBackgroundClassToNewMessage(this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd, IdReferenceConst.DYNAMICBLOCK);
     

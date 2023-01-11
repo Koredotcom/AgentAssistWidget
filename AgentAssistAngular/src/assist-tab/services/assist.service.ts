@@ -74,7 +74,7 @@ export class AssistService {
     dynamicBlock.innerHTML = dynamicBlock.innerHTML + dropdownHtml;
   }
 
-  askUserTemplate(uuids) {
+  askUserTemplate(uuids, newTemp?) {
     let template = `
     <div class="steps-run-data">
     <div class="icon_block">
@@ -85,7 +85,7 @@ export class AssistService {
     <div class="agent-utt">
         <div class="title-data"><ul class="chat-container" id="displayData-${uuids}" data-msg-id="${uuids}"></ul></div>
         <div class="action-links">
-            <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}">Send</button>
+            <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data="${newTemp}">Send</button>
             <div class="copy-btn hide" data-msg-id="${uuids}">
                 <i class="ast-copy" data-msg-id="${uuids}"></i>
             </div>
@@ -97,7 +97,7 @@ export class AssistService {
     return template
   }
 
-  tellToUserTemplate(uuids) {
+  tellToUserTemplate(uuids, newTemp?) {
     let template = `
     <div class="steps-run-data">
     <div class="icon_block">
@@ -108,7 +108,7 @@ export class AssistService {
     <div class="agent-utt">
         <div class="title-data" ><ul class="chat-container" id="displayData-${uuids}" data-msg-id="${uuids}"></ul></div>
         <div class="action-links">
-            <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}">Send</button>
+            <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data="${newTemp}">Send</button>
             <div class="copy-btn hide" data-msg-id="${uuids}">
                 <i class="ast-copy" data-msg-id="${uuids}"></i>
             </div>
