@@ -1985,7 +1985,7 @@ border: 1px solid transparent !important;
     max-height: 90%;
     position: absolute;
     bottom: 0px;
-    padding: 15px 15px 55px 15px;
+    padding: 15px 0px 55px 15px;
 }
 
 .overlay-suggestions .suggestion-content .search-results-text{
@@ -3534,7 +3534,8 @@ input.no-autofill-bkg:-webkit-autofill {
 }
 
 .overlaysearch-scroll-bar{
-    height: 500px;
+    max-height: 300px;
+    padding-right: 15px;
 }
 
 //seemore less button css 

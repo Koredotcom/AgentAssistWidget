@@ -248,7 +248,9 @@ export class MybotComponent implements OnInit {
       [storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH_MYBOT]: this.commonService.isMyBotAutomationOnGoing
     }
     this.localStorageService.setLocalStorageItem(storageObject);
-    this.commonService.addFeedbackHtmlToDom(this.myBotDropdownHeaderUuids, this.commonService.scrollContent[ProjConstants.MYBOT].lastElementBeforeNewMessage, this.dialogName,this.myBotDialogPositionId, this.commonService.userIntentInput,'runForAgentBot');
+    if(this.myBotDialogPositionId){
+      this.commonService.addFeedbackHtmlToDom(this.myBotDropdownHeaderUuids, this.commonService.scrollContent[ProjConstants.MYBOT].lastElementBeforeNewMessage, this.dialogName,this.myBotDialogPositionId, this.commonService.userIntentInput,'runForAgentBot');
+    }
     this.handleSubjectService.setLoader(false);
   }
 
@@ -512,6 +514,9 @@ export class MybotComponent implements OnInit {
         }
       }
     });
+    if(this.commonService.isMyBotAutomationOnGoing){
+      $(`#myBotAutomationBlock .collapse-acc-data.hide`)[$(`#myBotAutomationBlock .collapse-acc-data.hide`).length - 1]?.classList.remove('hide');
+    }
     this.scrollToBottom();
     this.designAlterService.addWhiteBackgroundClassToNewMessage(this.scrollAtEnd, IdReferenceConst.MYBOTAUTOMATIONBLOCK);
   }
