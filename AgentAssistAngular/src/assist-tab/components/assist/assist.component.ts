@@ -1738,15 +1738,9 @@ export class AssistComponent implements OnInit {
                 //     // $(`#historyData .show-history-feedback.hide`)[$(`#historyData .show-history-feedback.hide`).length - 1]?.classList.remove('hide');
                 // }
             });
-<<<<<<< HEAD
-          if(this.commonService.isAutomationOnGoing){
-              $(`#dynamicBlock .collapse-acc-data.hide`)[$(`#dynamicBlock .collapse-acc-data.hide`).length - 1]?.classList.remove('hide');
-          }
-=======
         if(this.commonService.isAutomationOnGoing){
           $(`#dynamicBlock .collapse-acc-data.hide`)[$(`#dynamicBlock .collapse-acc-data.hide`).length - 1]?.classList.remove('hide');
         }
->>>>>>> 98e57e300ac460b2d5d5b6e2630b6d244fa06c45
         this.scrollToBottom();
         this.designAlterService.addWhiteBackgroundClassToNewMessage(this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd, IdReferenceConst.DYNAMICBLOCK);
     
