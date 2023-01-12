@@ -319,8 +319,10 @@ setProactiveMode(){
 
   //search bar related code.
   getSearchResults(value) {
-    this.showSearchSuggestions = true;
-    this.handleSubjectService.setSearchText({ searchFrom: this.projConstants.ASSIST, value: value });
+    if(value){
+      this.showSearchSuggestions = true;
+      this.handleSubjectService.setSearchText({ searchFrom: this.projConstants.ASSIST, value: value });
+    }
   }
 
   emptySearchTextCheck(value) {
@@ -335,12 +337,16 @@ setProactiveMode(){
     if (eventObj.eventFrom == this.projConstants.AGENT_SEARCH) {
       this.closeSearchSuggestions(true);
       this.changeActiveTab(this.projConstants.LIBRARY);
-      this.handleSubjectService.setLibrarySearchTextFromAgentSearch(eventObj);
+      setTimeout(() => {
+        this.handleSubjectService.setLibrarySearchTextFromAgentSearch(eventObj);
+      }, 10);
       this.handleSubjectService.setLoader(true)
     } else if (eventObj.eventFrom == this.projConstants.LIBRARY_SEARCH) {
       this.changeActiveTab(this.projConstants.ASSIST);
       this.searchText = eventObj.searchText;
-      this.getSearchResults(this.searchText)
+      setTimeout(() => {
+        this.getSearchResults(this.searchText)
+      }, 10);
       this.handleSubjectService.setLoader(true)
     }
   }

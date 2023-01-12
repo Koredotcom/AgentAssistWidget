@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
+import { takeUntil } from 'rxjs/operators'
 import { ImageFilePath, ImageFileNames, ProjConstants, IdReferenceConst, classNamesConst } from 'src/common/constants/proj.cnts';
 import { EVENTS } from 'src/common/helper/events';
 import { RandomUUIDPipe } from 'src/common/pipes/random-uuid.pipe';
@@ -17,6 +18,7 @@ export class OverlaysearchComponent implements OnInit {
   @Output() handleSearchClickEvent = new EventEmitter();
   @Output() closeSearchSuggestions = new EventEmitter();
   @Output() overlayScrollTop = new EventEmitter();
+  private destroySubject: Subject<boolean> = new Subject();
   subscriptionsList: Subscription[] = [];
 
   projConstants: any = ProjConstants;
@@ -40,18 +42,22 @@ export class OverlaysearchComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.subscriptionsList.forEach((subscription) => {
-      subscription.unsubscribe();
-    })
+    // this.subscriptionsList.forEach((subscription) => {
+    //   console.log(subscription, "subscription list");
+      
+    //   subscription.unsubscribe();
+    // });
+    this.destroySubject.next(true);
+    this.destroySubject.unsubscribe();
   }
 
   subscribeEvents() {
-    let subscription1 = this.handleSubjectService.searchTextSubject.subscribe((searchObj : any) => {
+    let subscription1 = this.handleSubjectService.searchTextSubject.pipe(takeUntil(this.destroySubject)).subscribe((searchObj : any) => {
       this.showOverLay = false;
       this.searchResponse = {};
       this.handleSubjectService.setLoader(true);
-      console.log('inisde overlay component,,,,,,,,,,,,,,,,,,,')
-      if (searchObj && searchObj.value) {
+      if (searchObj && searchObj.value && searchObj.searchFrom == this.commonService.activeTab) {
+        console.log('inisde overlay component,,,,,,,,,,,,,,,,,,,', searchObj)
         this.searchConentObject = Object.assign({}, searchObj);
         setTimeout(() => {
           this.emitSearchRequest(searchObj, true);
@@ -60,21 +66,17 @@ export class OverlaysearchComponent implements OnInit {
       }
       this.handleSubjectService.setLoader(false);
     });
-    let subscription2 = this.websocketService.agentAssistAgentResponse$.subscribe((agentResponse: any) => {
+    let subscription2 = this.websocketService.agentAssistAgentResponse$.pipe(takeUntil(this.destroySubject)).subscribe((agentResponse: any) => {
       if(agentResponse){
-        console.log(agentResponse, "agent Response");
         this.searchResponse = {};
-        setTimeout(() => {
-          this.handleSearchResponse(agentResponse);
-          this.showOverLay = true;
-        }, 10);
-
+        this.handleSearchResponse(agentResponse);
+        this.showOverLay = true;
         if(document.getElementById(IdReferenceConst.overLaySuggestions)){
           document.getElementById(IdReferenceConst.overLaySuggestions).classList.add(classNamesConst.DISPLAY_BLOCK)
         }
       }
     });
-    let subscription3 = this.handleSubjectService.connectDetailsSubject.subscribe((response: any) => {
+    let subscription3 = this.handleSubjectService.connectDetailsSubject.pipe(takeUntil(this.destroySubject)).subscribe((response: any) => {
       if (response) {
         this.connectionDetails = response;
         console.log("connection details, 'inside assist tab");
@@ -185,7 +187,7 @@ export class OverlaysearchComponent implements OnInit {
         this.handleSeeMoreButton(this.searchResponse.faqs, this.projConstants.FAQ);
         this.handleSeeMoreButton(this.searchResponse.articles, this.projConstants.ARTICLE);
         console.log(this.searchResponse.articles, 'articles');
-      }, 100);
+      }, 1000);
     }
   }
 
@@ -246,3 +248,4 @@ export class OverlaysearchComponent implements OnInit {
   }
 
 }
+

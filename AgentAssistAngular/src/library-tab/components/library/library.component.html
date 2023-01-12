@@ -54,7 +54,7 @@
                 </div>
             </div>
         </div>
-        <div class="intent-based-search" id="searchResults" *ngIf="showSearchSuggestions">
+        <div class="intent-based-search" id="searchResults" *ngIf="showSearchSuggestions && commonService.activeTab == projConstants.LIBRARY">
             <app-overlaysearch [searchType]="projConstants.LIBRARY_SEARCH"></app-overlaysearch>
         </div>
     </div>
