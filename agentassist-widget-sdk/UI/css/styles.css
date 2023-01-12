@@ -1174,8 +1174,8 @@ border: 1px solid transparent !important;
     display: flex;
 }
 .overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send:hover .title-text{
-    white-space: normal !important; 
-    padding-right: 80px;
+    white-space: nowrap !important; 
+    padding-right: 0px;
     text-align: justify;
     word-break: break-word;
 }
@@ -3124,6 +3124,7 @@ border: 1px solid transparent !important;
     cursor: pointer;
     position: relative;
     transition: 0.2s all ease;
+    z-index: 2;
 }
 .feedback-helpul-container .titles-content .btn-positive:hover {
     border: 1px solid #0077D2;
@@ -3139,15 +3140,15 @@ border: 1px solid transparent !important;
 }
 .feedback-helpul-container .titles-content .btn-positive .tootltip-tabs {
     position: absolute;
-    left: -6px;
     top: auto;
-    bottom: -28px;
-    z-index: 9;
+    left: 30px;
+    bottom: -1px;
 }
 
 .feedback-helpul-container .titles-content .btn-positive .tootltip-tabs::after{
-    top: -10px;
-    border-color: transparent transparent var(--default-text-color) transparent;
+    left: -4px;
+    top: 6px;
+    border-color: transparent var(--default-text-color) transparent transparent;
 }
 .feedback-helpul-container .titles-content .btn-negtive {
     background: #FFFFFF;
@@ -3181,14 +3182,15 @@ border: 1px solid transparent !important;
 }
 .feedback-helpul-container .titles-content .btn-negtive .tootltip-tabs {
     position: absolute;
-    left: -6px;
     top:auto;
-    bottom:-28px;
+    left: 30px;
+    bottom: -1px;
     z-index: 9;
 }
 .feedback-helpul-container .titles-content .btn-negtive .tootltip-tabs::after {
-    top: -10px;
-    border-color: transparent transparent var(--default-text-color) transparent;
+    left: -4px;
+    top: 6px;
+    border-color: transparent var(--default-text-color) transparent transparent;
 }
 .feedback-helpul-container .titles-content .thanks-update {
     font-weight: 400;
