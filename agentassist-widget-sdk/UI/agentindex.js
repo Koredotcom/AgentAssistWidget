@@ -1030,7 +1030,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 let articleHtml = `
                         <div class="${articleDivClass}" id="snippetDivLib-${uuids+index}">
                             <div class="left-content" id="snippetSectionLib-${uuids+index}">
-                                <div class="title-text" id="snippettitleLib-${uuids+index}">${ele.title}</div>
+                                <div class="title-text" title="${ele.title}" id="snippettitleLib-${uuids+index}">${ele.title}</div>
                             </div>
                         </div>`;
 
@@ -1179,7 +1179,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     let faqHtml = `
                             <div class="${faqDivClass}" id="faqDivLib-${uuids+index}">
                                 <div class="left-content" id="faqSectionLib-${uuids+index}">
-                                    <div class="title-text" id="titleLib-${uuids+index}">${ele.question}</div>
+                                    <div class="title-text" title="${ele.title}" id="titleLib-${uuids+index}">${ele.question}</div>
                                 </div>
                             </div>`;
     
@@ -1278,7 +1278,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     let articleHtml = `
                             <div class="${articleDivClass}" id="articleDivLib-${uuids+index}">
                                 <div class="left-content" id="articleSectionLib-${uuids+index}">
-                                    <div class="title-text" id="articletitleLib-${uuids+index}">${ele.title}</div>
+                                    <div class="title-text" title="${ele.title}" id="articletitleLib-${uuids+index}">${ele.title}</div>
                                 </div>
                             </div>`;
     
@@ -2065,7 +2065,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     let articleHtml = `
                                     <div class="type-info-run-send" id="snippetDiv-${uuids+index}">
                                         <div class="left-content" id="snippetSection-${uuids+index}">
-                                            <div class="title-text" id="snippettitle-${uuids+index}">${ele.title}</div>
+                                            <div class="title-text" title="${ele.title}" id="snippettitle-${uuids+index}">${ele.title}</div>
                                         </div>
                                         
                                     </div>`;
@@ -2166,7 +2166,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             let articleHtml = `
                                             <div class="type-info-run-send" id="articleDiv-${uuids+index}">
                                                 <div class="left-content" id="articleSection-${uuids+index}">
-                                                    <div class="title-text" id="articletitle-${uuids+index}">${ele.title}</div>
+                                                    <div class="title-text" title="${ele.title}" id="articletitle-${uuids+index}">${ele.title}</div>
                                                 </div>
                                                 
                                             </div>`;
@@ -2313,7 +2313,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     let faqHtml = `
                         <div class="type-info-run-send" id="faqDiv-${uuids+index}">
                             <div class="left-content" id="faqSection-${uuids+index}">
-                                <div class="title-text" id="title-${uuids+index}">${ele.question}</div>
+                                <div class="title-text" title="${ele.title}" id="title-${uuids+index}">${ele.question}</div>
                                 
                                 
                             </div>
@@ -3243,7 +3243,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                 let faqHtml = `
                                 <div class="type-info-run-send" id="faqDiv-${uniqueID+index}">
                                     <div class="left-content" id="faqSection-${uniqueID+index}">
-                                        <div class="title-text" id="title-${uniqueID+index}">${ele.question}</div>
+                                        <div class="title-text" title="${ele.title}" id="title-${uniqueID+index}">${ele.question}</div>
                                         
                                         
                                     </div>
@@ -3337,7 +3337,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                 let faqHtml = `
                                 <div class="type-info-run-send" id="faqDiv-${uniqueID+index}">
                                     <div class="left-content" id="faqSection-${uniqueID+index}">
-                                        <div class="title-text" id="title-${uniqueID+index}">${ele.question}</div>
+                                        <div class="title-text" title="${ele.title}" id="title-${uniqueID+index}">${ele.question}</div>
                                     </div>
                                 </div>`;
                                                 faqsSuggestions.innerHTML += faqHtml;
