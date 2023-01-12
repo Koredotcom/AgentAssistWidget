@@ -30,7 +30,7 @@ export class MybotComponent implements OnInit {
   @ViewChild('mybotautomation') mybotautomation: ElementRef;
 
   subscriptionsList: Subscription[] = [];
-
+  isFirstMessagOfDialogInMyBot = false;
   projConstants: any = ProjConstants;
   imageFileNames: any = ImageFileNames;
   imageFilePath: string = ImageFilePath;
@@ -76,7 +76,7 @@ export class MybotComponent implements OnInit {
 
     let subscription1 = this.handleSubjectService.runButtonClickEventSubject.subscribe((runEventObj: any) => {
       this.handleSubjectService.setLoader(true);
-      if(runEventObj){
+      if (runEventObj) {
         if (runEventObj.agentRunButton && !this.commonService.isMyBotAutomationOnGoing) {
           this.runDialogFormyBotTab(runEventObj);
         } else if (runEventObj.agentRunButton && this.commonService.isMyBotAutomationOnGoing) {
@@ -141,11 +141,15 @@ export class MybotComponent implements OnInit {
 
   //running dialogue and mybot data response code.
   processMybotDataResponse(data) {
-    let results : any = this.templateRenderClassService.getResponseUsingTemplate(data);
+    let results: any = this.templateRenderClassService.getResponseUsingTemplate(data);
     let sendMsgData = encodeURI(JSON.stringify(results));
     let myBotuuids = this.koreGenerateuuidPipe.transform();
     let agentInputId = this.randomUUIDPipe.transform();
     if (this.commonService.isMyBotAutomationOnGoing && data.buttons && !data.value.includes('Customer has waited') && data.positionId == this.myBotDialogPositionId) {
+      if (this.isFirstMessagOfDialogInMyBot) {
+        $(`#dropDownData-${this.myBotDropdownHeaderUuids}`).attr('data-task-id', data.uniqueTaskId)
+      }
+      this.isFirstMessagOfDialogInMyBot = false;
       let runInfoContent = document.getElementById(IdReferenceConst.DROPDOWNDATA + `-${this.myBotDropdownHeaderUuids}`);
       if (this.isMybotInputResponseClick) {
         let userQueryHtml = this.mybotDataService.userQueryTemplate(this.imageFilePath, this.imageFileNames, myBotuuids, data);
@@ -203,6 +207,7 @@ export class MybotComponent implements OnInit {
   }
 
   runDialogFormyBotTab(data) {
+    this.isFirstMessagOfDialogInMyBot = true;
     this.collapseOldDialoguesInMyBot();
     this.myBotDialogPositionId = data.positionId;
     this.commonService.isMyBotAutomationOnGoing = true;
@@ -250,8 +255,8 @@ export class MybotComponent implements OnInit {
       [storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH_MYBOT]: this.commonService.isMyBotAutomationOnGoing
     }
     this.localStorageService.setLocalStorageItem(storageObject);
-    if(this.myBotDialogPositionId){
-      this.commonService.addFeedbackHtmlToDom(this.myBotDropdownHeaderUuids, this.commonService.scrollContent[ProjConstants.MYBOT].lastElementBeforeNewMessage, this.dialogName,this.myBotDialogPositionId, this.commonService.userIntentInput,'runForAgentBot');
+    if (this.myBotDialogPositionId) {
+      this.commonService.addFeedbackHtmlToDom(this.myBotDropdownHeaderUuids, this.commonService.scrollContent[ProjConstants.MYBOT].lastElementBeforeNewMessage, this.dialogName, this.myBotDialogPositionId, this.commonService.userIntentInput, 'runForAgentBot');
     }
     this.handleSubjectService.setLoader(false);
   }
@@ -368,18 +373,18 @@ export class MybotComponent implements OnInit {
             this.clickEvents(IdReferenceConst.DROPDOWN_HEADER, previousId);
           }
         }
-        if(resp.length-1 == index && (!res.agentAssistDetails?.entityRequest && !res.agentAssistDetails?.entityResponse) && currentTaskPositionId == previousTaskPositionId) {
-          let previousIdFeedBackDetails = feedBackResult.find((ele)=> ele.positionId === previousTaskPositionId);
+        if (resp.length - 1 == index && (!res.agentAssistDetails?.entityRequest && !res.agentAssistDetails?.entityResponse) && currentTaskPositionId == previousTaskPositionId) {
+          let previousIdFeedBackDetails = feedBackResult.find((ele) => ele.positionId === previousTaskPositionId);
           this.commonService.addFeedbackHtmlToDomForHistory(res, res.botId, res?.agentAssistDetails?.userInput, previousId, true, previousTaskPositionId);
-          if(previousIdFeedBackDetails) {
-              this.commonService.UpdateFeedBackDetails(previousIdFeedBackDetails, 'agentAutoContainer');
-              if(previousIdFeedBackDetails.feedback == 'dislike' && (previousIdFeedBackDetails.feedbackDetails.length == 0 && previousIdFeedBackDetails.comment.length == 0)){
-                  $(`#feedbackHelpfulContainer-${previousId} .explore-more-negtive-data`).removeClass('hide');
-              }else {
-                  $(`#feedbackHelpfulContainer-${previousId} .explore-more-negtive-data`).addClass('hide');
-              }
-          }   
-      }
+          if (previousIdFeedBackDetails) {
+            this.commonService.UpdateFeedBackDetails(previousIdFeedBackDetails, 'agentAutoContainer');
+            if (previousIdFeedBackDetails.feedback == 'dislike' && (previousIdFeedBackDetails.feedbackDetails.length == 0 && previousIdFeedBackDetails.comment.length == 0)) {
+              $(`#feedbackHelpfulContainer-${previousId} .explore-more-negtive-data`).removeClass('hide');
+            } else {
+              $(`#feedbackHelpfulContainer-${previousId} .explore-more-negtive-data`).addClass('hide');
+            }
+          }
+        }
         if (res.agentAssistDetails.entityName && res.agentAssistDetails.entityResponse && res.agentAssistDetails.entityValue) {
           let runInfoContent = $(`#dropDownData-${previousId}`);
           let data = {};
@@ -404,7 +409,7 @@ export class MybotComponent implements OnInit {
         }
         let parsedPayload;
         res.components?.forEach((elem) => {
-          if(elem.data?.text){
+          if (elem.data?.text) {
             elem.data.text = elem.data?.text.replace(/(^(&quot\;)|(&quot\;)$)/g, '');
           }
           let payloadType = (elem.data?.text).replace(/(&quot\;)/g, "\"");
@@ -459,7 +464,7 @@ export class MybotComponent implements OnInit {
         let newTemp = encodeURI(msgStringify);
         if ((res.agentAssistDetails?.isPrompt === true || res.agentAssistDetails?.isPrompt === false) && previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) {
           let runInfoContent = $(`#dropDownData-${previousId}`);
-          let askToUserHtml = this.mybotDataService.askUserTemplate(res._id,newTemp);
+          let askToUserHtml = this.mybotDataService.askUserTemplate(res._id, newTemp);
           let tellToUserHtml = this.mybotDataService.tellToUserTemplate(res._id, newTemp);
 
 
@@ -528,7 +533,7 @@ export class MybotComponent implements OnInit {
         }
       }
     });
-    if(this.commonService.isMyBotAutomationOnGoing){
+    if (this.commonService.isMyBotAutomationOnGoing) {
       $(`#myBotAutomationBlock .collapse-acc-data.hide`)[$(`#myBotAutomationBlock .collapse-acc-data.hide`).length - 1]?.classList.remove('hide');
     }
     this.scrollToBottom();

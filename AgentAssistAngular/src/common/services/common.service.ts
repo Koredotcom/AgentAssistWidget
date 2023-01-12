@@ -241,7 +241,7 @@ export class CommonService {
   addFeedbackHtmlToDomForHistory(data, botId, userIntentInput, id, runForAgentBot, previousTaskPositionId) {
     var dropDownData;
     var endOfDialoge;
-    let taskIdOfDialog = $(`#dropDownData-${id}`).attr('data-taskId');
+    let taskIdOfDialog = $(`#dropDownData-${id}`).attr('data-task-id');
     let positionID = previousTaskPositionId;
     if (runForAgentBot) {
       $(`#myBotTerminateAgentDialog-${id}.btn-danger`).remove();
@@ -269,7 +269,7 @@ export class CommonService {
                                         data-user-input="${userIntentInput}"
                                         data-comment=""
                                         data-feedbackdetails="[]"
-                                        data-taskID ="${taskIdOfDialog}"
+                                        data-task-id ="${taskIdOfDialog}"
                                         data-dialogId="${positionID}"></i>
                                         <span class="tootltip-tabs">Like</span>
                                     </div>
@@ -283,7 +283,7 @@ export class CommonService {
                                         data-user-input="${userIntentInput}"
                                         data-comment=""
                                         data-feedbackdetails="[]"
-                                        data-taskID ="${taskIdOfDialog}"
+                                        data-task-id ="${taskIdOfDialog}"
                                         data-dialogId="${positionID}"></i>
                                         <span class="tootltip-tabs">Dislike</span>
                                     </div>
@@ -369,7 +369,7 @@ export class CommonService {
   addFeedbackHtmlToDom(headerUUids, lastElementBeforeNewMessage, dialogName, positionID, userIntentInput?, runForAgentBot?) {
     let dropDownData;
     let endOfDialoge;
-    let taskIdOfDialog = $(`#dropDownData-${headerUUids}`).attr('data-taskId');
+    let taskIdOfDialog = $(`#dropDownData-${headerUUids}`).attr('data-task-id');
     if (runForAgentBot) {
       $(`#myBotTerminateAgentDialog-${headerUUids}.btn-danger`).remove();
       dropDownData = $(`#dropDownData-${headerUUids}`);
@@ -396,7 +396,7 @@ export class CommonService {
                                         data-user-input="${userIntentInput}"
                                         data-comment=""
                                         data-feedbackdetails="[]"
-                                        data-taskID ="${taskIdOfDialog}"
+                                        data-task-id ="${taskIdOfDialog}"
                                         data-dialogId="${positionID}"></i>
                                         <span class="tootltip-tabs">Like</span>
                                     </div>
@@ -410,7 +410,7 @@ export class CommonService {
                                         data-user-input="${userIntentInput}"
                                         data-comment=""
                                         data-feedbackdetails="[]"
-                                        data-taskID ="${taskIdOfDialog}"
+                                        data-task-id ="${taskIdOfDialog}"
                                         data-dialogId="${positionID}"></i>
                                         <span class="tootltip-tabs">Dislike</span>
                                     </div>

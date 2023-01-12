@@ -725,7 +725,7 @@ setProactiveMode(){
       dialogId = e.dialogid;
       comment = e.comment;
       feedbackdetails = e.feedbackdetails;
-      taskId = e.taskid
+      taskId = e.taskId
     } else {
       convId = e.target.dataset.convId;
       botId = e.target.dataset.botId;
@@ -735,7 +735,7 @@ setProactiveMode(){
       dialogId = e.target.dataset.dialogid;
       comment = e.target.dataset.comment;
       feedbackdetails = e.target.dataset.feedbackdetails;
-      taskId = e.target.dataset.taskid
+      taskId = e.target.dataset.taskId
     }
 
     feedDetailsArray = typeof feedbackdetails == 'string' ? [] : feedbackdetails?.filter(ele => ele !== null);
@@ -770,7 +770,7 @@ setProactiveMode(){
       agentId: '',
       botId: e.botId,
       orgId: '',
-      taskId: e.taskid,
+      taskId: e.taskId,
       positionId: e.dialogid,
       'experience': this.commonService.configObj.isCall == 'false' ? 'chat' : 'voice',
       "interactionType": this.activeTab == 'Assist' ? 'assist' : 'mybot'
