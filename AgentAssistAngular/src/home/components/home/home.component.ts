@@ -78,7 +78,6 @@ export class HomeComponent implements OnInit {
         this.connectionDetails = urlParams;
         this.eventListenerFromParent();
         this.updateUIState(this.connectionDetails.conversationId, urlParams.isCall);
-        this.setProactiveMode();
         this.btnInit();
       }
     });
@@ -153,6 +152,9 @@ export class HomeComponent implements OnInit {
     this.handleSubjectService.setActiveTab(activeTab);
     // document.getElementById("loader").style.display = "none";
     this.hightLightFaqFromStoredList(_convId, this.projConstants.ASSIST);
+    setTimeout(() => {
+      this.setProactiveMode();
+    }, 100);
   }
 
   //event listeners from parent
