@@ -74,7 +74,7 @@ export class AssistService {
     dynamicBlock.innerHTML = dynamicBlock.innerHTML + dropdownHtml;
   }
 
-  askUserTemplate(uuids, newTemp?) {
+  askUserTemplate(uuids, newTemp?, positionID?) {
     let template = `
     <div class="steps-run-data">
     <div class="icon_block">
@@ -85,9 +85,9 @@ export class AssistService {
     <div class="agent-utt">
         <div class="title-data"><ul class="chat-container" id="displayData-${uuids}" data-msg-id="${uuids}"></ul></div>
         <div class="action-links">
-            <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data="${newTemp}">Send</button>
-            <div class="copy-btn hide" data-msg-id="${uuids}">
-                <i class="ast-copy" data-msg-id="${uuids}"></i>
+            <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data="${newTemp}" data-position-id="${positionID}">Send</button>
+            <div class="copy-btn hide" data-msg-id="${uuids}" data-position-id="${positionID}">
+                <i class="ast-copy" data-msg-id="${uuids}" data-position-id="${positionID}"></i>
             </div>
         </div>
     </div>
@@ -97,7 +97,7 @@ export class AssistService {
     return template
   }
 
-  tellToUserTemplate(uuids, newTemp?) {
+  tellToUserTemplate(uuids, newTemp?, positionID?) {
     let template = `
     <div class="steps-run-data">
     <div class="icon_block">
@@ -108,9 +108,9 @@ export class AssistService {
     <div class="agent-utt">
         <div class="title-data" ><ul class="chat-container" id="displayData-${uuids}" data-msg-id="${uuids}"></ul></div>
         <div class="action-links">
-            <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data="${newTemp}">Send</button>
-            <div class="copy-btn hide" data-msg-id="${uuids}">
-                <i class="ast-copy" data-msg-id="${uuids}"></i>
+            <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data="${newTemp}" data-position-id="${positionID}">Send</button>
+            <div class="copy-btn hide" data-msg-id="${uuids}" data-position-id="${positionID}">
+                <i class="ast-copy" data-msg-id="${uuids}" data-position-id="${positionID}"></i>
             </div>
         </div>
     </div>

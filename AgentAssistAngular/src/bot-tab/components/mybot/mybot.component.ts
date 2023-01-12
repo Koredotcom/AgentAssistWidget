@@ -171,8 +171,8 @@ export class MybotComponent implements OnInit {
         this.myBotDataResponse = Object.assign({}, data);
       }
 
-      let askToUserHtml = this.mybotDataService.askUserTemplate(myBotuuids, sendMsgData);
-      let tellToUserHtml = this.mybotDataService.tellToUserTemplate(myBotuuids, sendMsgData);
+      let askToUserHtml = this.mybotDataService.askUserTemplate(myBotuuids, sendMsgData, this.myBotDialogPositionId);
+      let tellToUserHtml = this.mybotDataService.tellToUserTemplate(myBotuuids, sendMsgData, this.myBotDialogPositionId);
 
       let agentInputEntityName = ProjConstants.ENTER_DETAILS;
       if (data.entityDisplayName || data.entityName) {
@@ -464,8 +464,8 @@ export class MybotComponent implements OnInit {
         let newTemp = encodeURI(msgStringify);
         if ((res.agentAssistDetails?.isPrompt === true || res.agentAssistDetails?.isPrompt === false) && previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) {
           let runInfoContent = $(`#dropDownData-${previousId}`);
-          let askToUserHtml = this.mybotDataService.askUserTemplate(res._id, newTemp);
-          let tellToUserHtml = this.mybotDataService.tellToUserTemplate(res._id, newTemp);
+          let askToUserHtml = this.mybotDataService.askUserTemplate(res._id, newTemp, currentTaskPositionId);
+          let tellToUserHtml = this.mybotDataService.tellToUserTemplate(res._id, newTemp, currentTaskPositionId);
 
 
           if (this.localStorageService.checkStorageItemWithInConvId(this.connectionDetails.conversationId, storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH_MYBOT)) {

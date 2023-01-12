@@ -91,7 +91,7 @@ export class MybotDataService {
         return dialogTaskAccordion;
     }
 
-    askUserTemplate(myBotuuids, newTemp) {
+    askUserTemplate(myBotuuids, newTemp, positionID) {
         let template = `
                 <div class="steps-run-data">
                    <div class="icon_block">
@@ -102,9 +102,9 @@ export class MybotDataService {
                    <div class="agent-utt">
                        <div class="title-data"><ul class="chat-container" id="displayData-${myBotuuids}"></ul></div>
                        <div class="action-links">
-                           <button class="send-run-btn" id="sendMsg" data-msg-id="${myBotuuids}" data-msg-data="${newTemp}">Send</button>
-                           <div class="copy-btn hide" data-msg-id="${myBotuuids}">
-                               <i class="ast-copy" data-msg-id="${myBotuuids}"></i>
+                           <button class="send-run-btn" id="sendMsg" data-msg-id="${myBotuuids}" data-msg-data="${newTemp}" data-position-id="${positionID}">Send</button>
+                           <div class="copy-btn hide" data-msg-id="${myBotuuids}" data-position-id="${positionID}">
+                               <i class="ast-copy" data-msg-id="${myBotuuids}" data-position-id="${positionID}"></i>
                            </div>
                        </div>
                    </div>
@@ -114,7 +114,7 @@ export class MybotDataService {
         return template
     }
 
-    tellToUserTemplate(myBotuuids, newTemp) {
+    tellToUserTemplate(myBotuuids, newTemp, positionID) {
         let template = `
                 <div class="steps-run-data">
                    <div class="icon_block">
@@ -125,9 +125,9 @@ export class MybotDataService {
                    <div class="agent-utt">
                        <div class="title-data" ><ul class="chat-container" id="displayData-${myBotuuids}"></ul></div>
                        <div class="action-links">
-                           <button class="send-run-btn" id="sendMsg" data-msg-id="${myBotuuids}" data-msg-data="${newTemp}">Send</button>
-                           <div class="copy-btn hide" data-msg-id="${myBotuuids}">
-                               <i class="ast-copy" data-msg-id="${myBotuuids}"></i>
+                           <button class="send-run-btn" id="sendMsg" data-msg-id="${myBotuuids}" data-msg-data="${newTemp}" data-position-id="${positionID}">Send</button>
+                           <div class="copy-btn hide" data-msg-id="${myBotuuids}" data-position-id="${positionID}">
+                               <i class="ast-copy" data-msg-id="${myBotuuids}" data-position-id="${positionID}"></i>
                            </div>
                        </div>
                    </div>

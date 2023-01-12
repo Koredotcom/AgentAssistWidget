@@ -664,9 +664,9 @@ export class AssistComponent implements OnInit {
           this.agentAssistResponse = Object.assign({}, data);
         }
       }, 10);
-      let askToUserHtml = this.assisttabService.askUserTemplate(uuids, newTemp)
+      let askToUserHtml = this.assisttabService.askUserTemplate(uuids, newTemp, this.dialogPositionId)
 
-      let tellToUserHtml = this.assisttabService.tellToUserTemplate(uuids, newTemp)
+      let tellToUserHtml = this.assisttabService.tellToUserTemplate(uuids, newTemp, this.dialogPositionId)
       if (data.isPrompt) {
         runInfoContent.append(askToUserHtml);
         if(!this.proactiveModeStatus){
@@ -1558,8 +1558,8 @@ export class AssistComponent implements OnInit {
                     let newTemp = encodeURI(msgStringify);
                     if((res.agentAssistDetails?.isPrompt === true || res.agentAssistDetails?.isPrompt === false) && previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) {
                     let runInfoContent = $(`#dropDownData-${previousId}`);
-                    let askToUserHtml = this.assisttabService.askUserTemplate(res._id, newTemp);
-                    let tellToUserHtml = this.assisttabService.tellToUserTemplate(res._id, newTemp);
+                    let askToUserHtml = this.assisttabService.askUserTemplate(res._id, newTemp, previousTaskPositionId);
+                    let tellToUserHtml = this.assisttabService.tellToUserTemplate(res._id, newTemp, previousTaskPositionId);
                         if(this.localStorageService.checkStorageItemWithInConvId(this.connectionDetails.conversationId, storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH)) {
                             this.commonService.isAutomationOnGoing = true;
                             this.dropdownHeaderUuids = previousId;
