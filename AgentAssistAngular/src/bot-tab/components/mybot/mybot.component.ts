@@ -175,7 +175,7 @@ export class MybotComponent implements OnInit {
         agentInputEntityName = data.entityDisplayName ? data.entityDisplayName : data.entityName
       }
 
-      let agentInputToBotHtml = this.mybotDataService.agentInputToBotTemplate(agentInputEntityName, agentInputId);
+      let agentInputToBotHtml = this.mybotDataService.agentInputToBotTemplate(agentInputEntityName, agentInputId, this.connectionDetails, this.myBotDialogPositionId);
 
       if (data.isPrompt) {
         $(runInfoContent).append(askToUserHtml);
@@ -482,7 +482,7 @@ export class MybotComponent implements OnInit {
           if (res.agentAssistDetails?.newEntityDisplayName || res.agentAssistDetails?.newEntityName) {
             agentInputEntityName = res.agentAssistDetails.newEntityDisplayName ? res.agentAssistDetails.newEntityDisplayName : res.agentAssistDetails.newEntityName
           }
-
+          let agentInputId = this.randomUUIDPipe.transform();
           let agentInputToBotHtml = `
                       <div class="steps-run-data">
                           <div class="icon_block">
@@ -492,7 +492,7 @@ export class MybotComponent implements OnInit {
                           <div class="title">Input</div>
                           <div class="agent-utt enter-details-block">
                           <div class="title-data" ><span class="enter-details-title">${agentInputEntityName} : </span>
-                          <input type="text" placeholder="Enter Value" class="input-text chat-container" id="agentInput-${Math.floor(Math.random() * 100)}" data-conv-id="${convId}" data-bot-id="${botId}"  data-mybot-input="true">
+                          <input type="text" placeholder="Enter Value" class="input-text chat-container" id="agentInput-${agentInputId}" data-conv-id="${convId}" data-bot-id="${botId}"  data-mybot-input="true">
                           </div>
                           </div>
                           </div>
@@ -508,6 +508,14 @@ export class MybotComponent implements OnInit {
             a.innerHTML = a?.innerHTML + html;
             if (!nextResponse || (nextResponse.status != 'received' && nextResponse.status != 'incoming')) {
               runInfoContent.append(agentInputToBotHtml);
+              document.getElementById(`agentInput-${agentInputId}`).focus();
+              runInfoContent.find(`#agentInput-${agentInputId}`).on('keypress', (e: any) => {
+                let key = e.which || e.keyCode || 0;
+                if (key === 13) {
+                  this.getAgentInputValue(e.target.value);
+                  this.isMybotInputResponseClick = true;
+                }
+              });
             }
 
           } else {

@@ -166,7 +166,7 @@ export class MybotDataService {
         return template;
     }
 
-    agentInputToBotTemplate(agentInputEntityName, agentInputId) {
+    agentInputToBotTemplate(agentInputEntityName, agentInputId, connectionDetails, myBotDialogPositionId) {
         
         let template = `
                 <div class="steps-run-data" id="inputFieldForMyBot">
@@ -177,7 +177,7 @@ export class MybotDataService {
                     <div class="title">Input</div>
                     <div class="agent-utt enter-details-block">
                     <div class="title-data" ><span class="enter-details-title">${agentInputEntityName} : </span>
-                    <input #agentInput type="text" placeholder="Enter Value" class="input-text chat-container" id="agentInput-${agentInputId}" 
+                    <input #agentInput type="text" placeholder="Enter Value" class="input-text chat-container" id="agentInput-${agentInputId}"  data-conv-id="${connectionDetails.conversationId}" data-bot-id="${connectionDetails.botId}"  data-mybot-input="true" data-position-id="${myBotDialogPositionId}"
                     >
                     </div>
                     </div>
