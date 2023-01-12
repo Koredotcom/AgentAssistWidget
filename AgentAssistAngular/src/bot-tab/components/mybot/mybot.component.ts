@@ -141,6 +141,8 @@ export class MybotComponent implements OnInit {
 
   //running dialogue and mybot data response code.
   processMybotDataResponse(data) {
+    let results : any = this.templateRenderClassService.getResponseUsingTemplate(data);
+    let sendMsgData = encodeURI(JSON.stringify(results));
     let myBotuuids = this.koreGenerateuuidPipe.transform();
     let agentInputId = this.randomUUIDPipe.transform();
     if (this.commonService.isMyBotAutomationOnGoing && data.buttons && !data.value.includes('Customer has waited') && data.positionId == this.myBotDialogPositionId) {
@@ -165,8 +167,8 @@ export class MybotComponent implements OnInit {
         this.myBotDataResponse = Object.assign({}, data);
       }
 
-      let askToUserHtml = this.mybotDataService.askUserTemplate(myBotuuids);
-      let tellToUserHtml = this.mybotDataService.tellToUserTemplate(myBotuuids);
+      let askToUserHtml = this.mybotDataService.askUserTemplate(myBotuuids, sendMsgData);
+      let tellToUserHtml = this.mybotDataService.tellToUserTemplate(myBotuuids, sendMsgData);
 
       let agentInputEntityName = ProjConstants.ENTER_DETAILS;
       if (data.entityDisplayName || data.entityName) {
@@ -453,10 +455,12 @@ export class MybotComponent implements OnInit {
 
           _msgsResponse.message.push(body);
         });
+        let msgStringify = JSON.stringify(_msgsResponse);
+        let newTemp = encodeURI(msgStringify);
         if ((res.agentAssistDetails?.isPrompt === true || res.agentAssistDetails?.isPrompt === false) && previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) {
           let runInfoContent = $(`#dropDownData-${previousId}`);
-          let askToUserHtml = this.mybotDataService.askUserTemplate(res._id);
-          let tellToUserHtml = this.mybotDataService.tellToUserTemplate(res._id);
+          let askToUserHtml = this.mybotDataService.askUserTemplate(res._id,newTemp);
+          let tellToUserHtml = this.mybotDataService.tellToUserTemplate(res._id, newTemp);
 
 
           if (this.localStorageService.checkStorageItemWithInConvId(this.connectionDetails.conversationId, storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH_MYBOT)) {
@@ -498,6 +502,7 @@ export class MybotComponent implements OnInit {
           let nextResponse = resp[index + 1];
           if (res.agentAssistDetails.isPrompt || res.agentAssistDetails.entityRequest) {
             runInfoContent.append(askToUserHtml);
+            this.commonService.hideSendOrCopyButtons(parsedPayload, runInfoContent)
             let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(_msgsResponse)[0].innerHTML;
             let a = document.getElementById(IdReferenceConst.displayData + `-${res._id}`);
             a.innerHTML = a?.innerHTML + html;
@@ -507,6 +512,7 @@ export class MybotComponent implements OnInit {
 
           } else {
             runInfoContent.append(tellToUserHtml);
+            this.commonService.hideSendOrCopyButtons(parsedPayload, runInfoContent)
             let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(_msgsResponse)[0].innerHTML;
             let a = document.getElementById(IdReferenceConst.displayData + `-${res._id}`);
             a.innerHTML = a.innerHTML + html;
