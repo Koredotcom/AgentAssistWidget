@@ -435,8 +435,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             'experience': isCallConversation === 'true' ? 'voice':'chat',
                             "enable_override_userinput": false
                         }
-                        if(!isOverRideMode) {
+                        if(isOverRideMode && proactiveMode) {
                              _agentAsisstSocket.emit('enable_override_userinput', overRideObj)
+                             isOverRideMode = false;
                         }
                         displayCustomerFeels(data, data.conversationId, _botId);
 
@@ -2529,7 +2530,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         if (data.isPrompt) {
                             runInfoContent.append(askToUserHtml);
                             if(!proactiveMode){
-                                getOverRideMode('overRideBtn-' + dropdownHeaderUuids, dialogPositionId);
+                                getOverRideMode('overRideBtn-' + dropdownHeaderUuids, dialogPositionId, true);
                             }else{
                                 $(`.override-input-div`).removeClass('hide');
                             }
@@ -3608,7 +3609,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         }
                                         runInfoContent.append(askToUserHtml);
                                         if(!proactiveMode){
-                                            getOverRideMode('overRideBtn-' + dropdownHeaderUuids, dialogPositionId);
+                                            getOverRideMode('overRideBtn-' + dropdownHeaderUuids, dialogPositionId, true);
 					                        $(`.override-input-div`).addClass('hide');
                                         }
                                     } else {
@@ -4201,12 +4202,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         userTabActive();
                     }
                     proactiveMode = (convState.proactiveMode != undefined && convState.proactiveMode != null) ? convState.proactiveMode : true;
-                    isOverRideMode = !proactiveMode;
+                    // isOverRideMode = !proactiveMode;
                     document.getElementById("checkProActive").checked = proactiveMode;
                     updateCurrentTabInState(_convId,  convState.currentTab);
                   //  convState.currentTab !== 'librarySearch' ? updateUIWithTabState(_convId, convState.currentTab):'';
                     document.getElementById("loader").style.display = "none";
                     hightLightFaqFromStoredList(_conversationId, 'assistTab');
+                    proactiveModeStatusChange();
                 }
 
                 function hightLightFaqFromStoredList(convId, currentTab) {
@@ -4643,7 +4645,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     scrollToBottom();
                 }
 
-                function getOverRideMode(targetId, positionId) {
+                function getOverRideMode(targetId, positionId, notEmit) {
                     let idsss = targetId.split('-');
                     idsss.shift();
                     let id = idsss.join('-')
@@ -4657,7 +4659,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         'experience': isCallConversation === 'true' ? 'voice' : 'chat',
                         "positionId": positionId
                     }
-                    _agentAsisstSocket.emit('enable_override_userinput', overRideObj);
+                    if(!notEmit){
+                        _agentAsisstSocket.emit('enable_override_userinput', overRideObj);
+                    }
+                
                     let runInfoContent = $(`#dropDownData-${dropdownHeaderUuids}`);
                     let agentInputId = Math.floor(Math.random() * 100);
                     let agentInputEntityName = 'EnterDetails';
@@ -4694,6 +4699,26 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
 
                 const typeAHead = typeAHeadDeBounce((e, falg)=>getAutoSearchApiResult(e, falg));
+
+                function proactiveModeStatusChange(){
+                    if(document.getElementById("checkProActive").checked == true){
+                        proactiveMode = true;
+                        $(`.override-input-div`).removeClass('hide');
+                        getCancelOverRideMode('overRideBtn-' + dropdownHeaderUuids, dialogPositionId);
+
+                    } else if (document.getElementById("checkProActive").checked == false) {   
+                        proactiveMode = false;
+                        if(document.getElementById(`inputFieldForAgent`)){
+                            $(`#inputFieldForAgent`).remove();
+                        }
+                        if(document.getElementById(`overRideBtn-${dropdownHeaderUuids}`)){
+                            $(`#overRideBtn-${dropdownHeaderUuids}`).addClass('hide');
+                            $(`#cancelOverRideBtn-${dropdownHeaderUuids}`).addClass('hide');
+                        }
+                        getOverRideMode('overRideBtn-' + dropdownHeaderUuids, dialogPositionId);
+                    }
+                }
+
                 function btnInit() {
 
                     document.querySelector('#bodyContainer').addEventListener('ps-scroll-up', (scrollUpevent) => {
@@ -4782,18 +4807,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         // } else 
 
                         if(target.id === 'checkProActive'){
-                            if(document.getElementById("checkProActive").checked == true){
-                                proactiveMode = true;
-                                $(`.override-input-div`).removeClass('hide');
-                                getCancelOverRideMode('overRideBtn-' + dropdownHeaderUuids, dialogPositionId);
-
-                            } else if (document.getElementById("checkProActive").checked == false) {   
-                                proactiveMode = false;
-                                if(document.getElementById(`overRideBtn-${dropdownHeaderUuids}`)){
-                                    $(`#overRideBtn-${dropdownHeaderUuids}`).addClass('hide');
-                                    getOverRideMode('overRideBtn-' + dropdownHeaderUuids, dialogPositionId);
-                                }
-                            }
+                            proactiveModeStatusChange();
                             updateProactiveModeState(_conversationId, proactiveMode);
                         }
 
