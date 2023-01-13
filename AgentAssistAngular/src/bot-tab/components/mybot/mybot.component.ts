@@ -146,7 +146,12 @@ export class MybotComponent implements OnInit {
     let myBotuuids = this.koreGenerateuuidPipe.transform();
     let agentInputId = this.randomUUIDPipe.transform();
     if (this.commonService.isMyBotAutomationOnGoing && data.buttons && !data.value.includes('Customer has waited') && data.positionId == this.myBotDialogPositionId) {
+      if(this.commonService.isFirstMessagOfDialogInMyBot){
+        $(`#dropDownData-${this.myBotDropdownHeaderUuids}`).attr('data-task-id', data.uniqueTaskId)
+      }
+      this.commonService.isFirstMessagOfDialogInMyBot = false;
       let runInfoContent = document.getElementById(IdReferenceConst.DROPDOWNDATA + `-${this.myBotDropdownHeaderUuids}`);
+      $('#inputFieldForMyBot').remove();
       if (this.isMybotInputResponseClick) {
         let userQueryHtml = this.mybotDataService.userQueryTemplate(this.imageFilePath, this.imageFileNames, myBotuuids, data);
         $(runInfoContent).append(userQueryHtml);
@@ -191,9 +196,9 @@ export class MybotComponent implements OnInit {
       } else {
         $(runInfoContent).append(tellToUserHtml);
       }
-      let result = this.templateRenderClassService.getResponseUsingTemplate(data);
-      this.commonService.hideSendOrCopyButtons(result.parsePayLoad, runInfoContent)
-      let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(result)[0].innerHTML;
+      // let result = this.templateRenderClassService.getResponseUsingTemplate(data);
+      this.commonService.hideSendOrCopyButtons(results.parsePayLoad, runInfoContent)
+      let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(results)[0].innerHTML;
       let a = document.getElementById(IdReferenceConst.displayData + `-${myBotuuids}`);
       a.innerHTML = a.innerHTML + html;
       this.designAlterService.addWhiteBackgroundClassToNewMessage(this.scrollAtEnd, IdReferenceConst.MYBOTAUTOMATIONBLOCK);
@@ -203,6 +208,7 @@ export class MybotComponent implements OnInit {
   }
 
   runDialogFormyBotTab(data) {
+    this.commonService.isFirstMessagOfDialogInMyBot = true;
     this.collapseOldDialoguesInMyBot();
     this.myBotDialogPositionId = data.positionId;
     this.commonService.isMyBotAutomationOnGoing = true;

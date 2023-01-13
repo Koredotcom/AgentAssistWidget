@@ -27,6 +27,8 @@ export class CommonService {
   isInitialDialogOnGoing: boolean = false;
   isMyBotAutomationOnGoing: boolean = false;
   noAutomationrunninginMyBot: boolean = true;
+  isFirstMessagOfDialogInMyBot : boolean = false;
+
   isUpdateFeedBackDetailsFlag = false;
   clickEventObjectsBeforeTabShift : any = [];
   tabNamevsId : any = {
