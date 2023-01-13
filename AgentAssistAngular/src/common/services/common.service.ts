@@ -555,7 +555,7 @@ export class CommonService {
       }
       searchResponse.faqs.push(faqObject);
     }
-    if(suggestions?.searchassist?.snippets.length > 0){
+    if(suggestions?.searchassist?.snippets?.length > 0){
       for(let snippet of snippersArray){
         searchResponse.snippets.push(snippet);
       }
