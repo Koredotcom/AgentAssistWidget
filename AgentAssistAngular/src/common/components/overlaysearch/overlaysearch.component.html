@@ -1,96 +1,130 @@
 
 <ng-container *ngIf="searchConentObject && searchConentObject.value && showOverLay">
     <div id="librarySearchText" [ngClass]=" searchType == projConstants.AGENT_SEARCH ? 'search-results-text' : 'searched-intent' ">{{searchResponse.totalSearchResults}} {{searchResultText}} {{searchConentObject.value}} 
-        <span class="show-all" *ngIf="searchType == projConstants.AGENT_SEARCH && searchResponse.totalSearchResults" (click)="handleShowAllClick()">Show all</span>
+        <span class="show-all" *ngIf="searchType == projConstants.AGENT_SEARCH && searchResponse.totalSearchResults > 2" (click)="handleShowAllClick()">Show all</span>
     </div>
     <div class="dialog-task-run-sec p-0" id="searchedDialogs">
-        <div class="task-type" id="dialoguesArea" *ngIf="searchResponse.dialogs?.length > 0">
+        <div class="task-type" id="snippetsArea" *ngIf="searchResponse.snippets?.length > 0; else elseTemplate">
             <div class="img-block-info">
-                <img [src]="imageFilePath + imageFileNames['DIALOG_TASK']">
+                <img [src]="imageFilePath + imageFileNames['FAQ_SUGGESTION']">
             </div>
+            <div class="content-dialog-task-type arr-cont-dialogtask" id="snippetsSuggestions-results">
+                <div class="type-with-img-title">Snippets ({{searchResponse.snippets?.length}})</div>
     
-            <div class="content-dialog-task-type arr-cont-dialogtask" id="dialogSuggestions-results">
-                <div class="type-with-img-title">Dialog task ({{searchResponse.dialogs?.length}})</div>
-    
-                <div class="type-info-run-send" *ngFor="let dialog of searchResponse.dialogs; let i = index">
-                    <div class="left-content">
-                        <div class="title-text" [id]="'automation-' + i">{{dialog.name}}</div>
+                <div class="type-info-run-send is-dropdown-show-default is-dropdown-open" [id]="'snippetDivLib-' + i" *ngFor="let snippet of searchResponse.snippets | slice : 0 : snippetViewCount; let i = index">
+                    <div class="left-content" [id]="'snippetSectionLib-' + i">
+                        <div class="title-text" [id]="'snippettitleLib-' + i"
+                            >{{snippet.title}}
+                            <!-- <i class="ast-carrotup rotate-carrot" [id]="'articlecheckLib-' + i" *ngIf="!article.content"></i> -->
+                        </div>
+                        <div class="desc-text" [id]="'snippetdescLib-' + i"
+                            *ngIf="snippet.content">{{snippet.content}}
+                            <!-- <div class="link-view-full-article" [id]="'articleViewLinkLib-' + i" *ngIf="article.link"><a [href]="article.link" target="_blank">View Full Article</a></div> -->
+                            <button class="know-more-btn" [id]="'snippetViewMsgLib-' + i" ><a style="color: #FFFFFF;" [href]="snippet.page_url" target="_blank">Know more</a></button>
+                        </div>
+                        <button class="ghost-btn" style="font-style: italic;" [id]="'snippetseeMore-' + i" *ngIf="snippet.showMoreButton" (click)="toggleShowMoreLessButtons(snippet, i, projConstants.SNIPPET)">{{projConstants.SHOW_MORE}}</button>
+                        <button class="ghost-btn" style="font-style: italic;" [id]="'snippetseeLess-' + i" *ngIf="snippet.showLessButton" (click)="toggleShowMoreLessButtons(snippet, i, projConstants.SNIPPET)">{{projConstants.SHOW_LESS}}</button>
                     </div>
-                    <div class="action-links">
-                        <button class="send-run-btn" [id]="'run-' + i" (click)="dialogueRunClick(dialog,projConstants.ASSIST)">{{projConstants.RUN}}</button>
-                        <div class="elipse-dropdown-info" [id]="'showRunForAgentBtn-' + i">
-                            <div class="elipse-icon" [id]="'elipseIcon-' + i" (click)="handleRunAgent(dialog.name, $event)">
-                                <i class="ast-overflow" [id]="'overflowIcon-' + i"></i>
-                            </div>
-                            <div class="dropdown-content-elipse" [id]="'runsearchAgtBtn-' + i" *ngIf="dialog.agentRunButton"(click)="$event.stopPropagation()">
-                                <div class="list-option" [id]="'agentSearchSelect-' + i" (click)="dialogueRunClick(dialog,projConstants.MYBOT)">{{projConstants.AGENTASSIST_RUN}}
+                    <!-- <div class="action-links">
+                        <button class="send-run-btn" [id]="sendMsg" (click)="handleSendCopyButton(projConstants.SEND, article, projConstants.ARTICLE)">{{projConstants.SEND}}</button>
+                        <div class="copy-btn" (click)="handleSendCopyButton(projConstants.COPY, article, projConstants.ARTICLE)">
+                            <i class="ast-copy"></i>
+                        </div>
+                    </div> -->
+                </div>
+                <div class="link-view-full-article ghost-btn" [id]="'snippetFullView-' + i" *ngIf="snippetAllView" (click)="showAllResultsClick(projConstants.VIEW_ALL_SNIPPETS)">{{projConstants.VIEW_ALL_SNIPPETS}}</div>
+                <div class="link-view-full-article ghost-btn" [id]="'snippetFewView-' + i" *ngIf="!snippetAllView && searchResponse.snippets?.length > 2" (click)="showAllResultsClick(projConstants.VIEW_FEW_SNIPPETS)">{{projConstants.VIEW_FEW_SNIPPETS}}</div>
+            </div>
+        </div>
+        <ng-template #elseTemplate>
+            <div class="task-type" id="dialoguesArea" *ngIf="searchResponse.dialogs?.length > 0">
+                <div class="img-block-info">
+                    <img [src]="imageFilePath + imageFileNames['DIALOG_TASK']">
+                </div>
+        
+                <div class="content-dialog-task-type arr-cont-dialogtask" id="dialogSuggestions-results">
+                    <div class="type-with-img-title">Dialog task ({{searchResponse.dialogs?.length}})</div>
+        
+                    <div class="type-info-run-send" *ngFor="let dialog of searchResponse.dialogs; let i = index">
+                        <div class="left-content">
+                            <div class="title-text" [id]="'automation-' + i">{{dialog.name}}</div>
+                        </div>
+                        <div class="action-links">
+                            <button class="send-run-btn" [id]="'run-' + i" (click)="dialogueRunClick(dialog,projConstants.ASSIST)">{{projConstants.RUN}}</button>
+                            <div class="elipse-dropdown-info" [id]="'showRunForAgentBtn-' + i">
+                                <div class="elipse-icon" [id]="'elipseIcon-' + i" (click)="handleRunAgent(dialog.name, $event)">
+                                    <i class="ast-overflow" [id]="'overflowIcon-' + i"></i>
+                                </div>
+                                <div class="dropdown-content-elipse" [id]="'runsearchAgtBtn-' + i" *ngIf="dialog.agentRunButton"(click)="$event.stopPropagation()">
+                                    <div class="list-option" [id]="'agentSearchSelect-' + i" (click)="dialogueRunClick(dialog,projConstants.MYBOT)">{{projConstants.AGENTASSIST_RUN}}
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="task-type" id="faqssAreas" *ngIf="searchResponse.faqs?.length > 0">
-            <div class="img-block-info">
-                <img [src]="imageFilePath + imageFileNames['FAQ_SUGGESTION']">
-            </div>
-            <div class="content-dialog-task-type arr-cont-dialogtask" id="faqsSuggestions-results">
-                <div class="type-with-img-title">FAQ ({{searchResponse.faqs?.length}})</div>
-                <div class="type-info-run-send is-dropdown-show-default is-dropdown-open" [id]="'faqDivLib-' + i" *ngFor="let faq of searchResponse.faqs | slice : 0 : faqViewCount; let i = index">
-                    <div class="left-content" [id]="'faqSectionLib-' + i">
-                        <div class="title-text" [id]="'titleLib-' + i"
-                            >{{faq.question}}
-                            <i class="ast-carrotup rotate-carrot" [id]="'checkLib-' + i" *ngIf="!faq.answer"></i>
-                        </div>
-                        <div class="desc-text" [id]="'descLib-' + i"
-                            *ngIf="faq.answer">{{faq.answer}}</div>
-                        <button class="ghost-btn" style="font-style: italic;" [id]="'seeMore-' + i" *ngIf="faq.showMoreButton" (click)="toggleShowMoreLessButtons(faq, i, projConstants.FAQ)">{{projConstants.SHOW_MORE}}</button>
-                        <button class="ghost-btn" style="font-style: italic;" [id]="'seeLess-' + i" *ngIf="faq.showLessButton" (click)="toggleShowMoreLessButtons(faq, i, projConstants.FAQ)">{{projConstants.SHOW_LESS}}</button>
-                    </div>
-                    <div class="action-links">
-                        <button class="send-run-btn" [id]="sendMsg" (click)="handleSendCopyButton(projConstants.SEND,faq, projConstants.FAQ)">{{projConstants.SEND}}</button>
-                        <div class="copy-btn" (click)="handleSendCopyButton(projConstants.COPY,faq, projConstants.FAQ)">
-                            <i class="ast-copy"></i>
-                        </div>
-                    </div>
+            <div class="task-type" id="faqssAreas" *ngIf="searchResponse.faqs?.length > 0">
+                <div class="img-block-info">
+                    <img [src]="imageFilePath + imageFileNames['FAQ_SUGGESTION']">
                 </div>
-                <div class="link-view-full-article ghost-btn" [id]="'faqFullView-' + i" *ngIf="faqAllView" (click)="showAllResultsClick(projConstants.VIEW_ALL_FAQ)">{{projConstants.VIEW_ALL_FAQ}}</div>
-                <div class="link-view-full-article ghost-btn" [id]="'faqFewView-' + i" *ngIf="!faqAllView && searchResponse.faqs?.length > 2" (click)="showAllResultsClick(projConstants.VIEW_FEW_FAQ)">{{projConstants.VIEW_FEW_FAQ}}</div>
-            </div>
-        </div>
-    
-        <div class="task-type" id="articlesArea" *ngIf="searchResponse.articles?.length > 0">
-            <div class="img-block-info">
-                <img [src]="imageFilePath + imageFileNames['FAQ_SUGGESTION']">
-            </div>
-            <div class="content-dialog-task-type arr-cont-dialogtask" id="articleSuggestions-results">
-                <div class="type-with-img-title">Article ({{searchResponse.articles?.length}})</div>
-    
-                <div class="type-info-run-send is-dropdown-show-default is-dropdown-open" [id]="'articleDivLib-' + i" *ngFor="let article of searchResponse.articles | slice : 0 : articleViewCount; let i = index">
-                    <div class="left-content" [id]="'articleSectionLib-' + i">
-                        <div class="title-text" [id]="'articletitleLib-' + i"
-                            >{{article.title}}
-                            <i class="ast-carrotup rotate-carrot" [id]="'articlecheckLib-' + i" *ngIf="!article.content"></i>
+                <div class="content-dialog-task-type arr-cont-dialogtask" id="faqsSuggestions-results">
+                    <div class="type-with-img-title">FAQ ({{searchResponse.faqs?.length}})</div>
+                    <div class="type-info-run-send is-dropdown-show-default is-dropdown-open" [id]="'faqDivLib-' + i" *ngFor="let faq of searchResponse.faqs | slice : 0 : faqViewCount; let i = index">
+                        <div class="left-content" [id]="'faqSectionLib-' + i">
+                            <div class="title-text" [id]="'titleLib-' + i"
+                                >{{faq.question}}
+                                <i class="ast-carrotup rotate-carrot" [id]="'checkLib-' + i" *ngIf="!faq.answer"></i>
+                            </div>
+                            <div class="desc-text" [id]="'descLib-' + i"
+                                *ngIf="faq.answer">{{faq.answer}}</div>
+                            <button class="ghost-btn" style="font-style: italic;" [id]="'seeMore-' + i" *ngIf="faq.showMoreButton" (click)="toggleShowMoreLessButtons(faq, i, projConstants.FAQ)">{{projConstants.SHOW_MORE}}</button>
+                            <button class="ghost-btn" style="font-style: italic;" [id]="'seeLess-' + i" *ngIf="faq.showLessButton" (click)="toggleShowMoreLessButtons(faq, i, projConstants.FAQ)">{{projConstants.SHOW_LESS}}</button>
                         </div>
-                        <div class="desc-text" [id]="'articledescLib-' + i"
-                            *ngIf="article.content">{{article.content}}
-                            <div class="link-view-full-article" [id]="'articleViewLinkLib-' + i" *ngIf="article.link"><a [href]="article.link" target="_blank">View Full Article</a></div>
-                        </div>
-                        <button class="ghost-btn" style="font-style: italic;" [id]="'articleseeMore-' + i" *ngIf="article.showMoreButton" (click)="toggleShowMoreLessButtons(article, i, projConstants.ARTICLE)">{{projConstants.SHOW_MORE}}</button>
-                        <button class="ghost-btn" style="font-style: italic;" [id]="'articleseeLess-' + i" *ngIf="article.showLessButton" (click)="toggleShowMoreLessButtons(article, i, projConstants.ARTICLE)">{{projConstants.SHOW_LESS}}</button>
-                    </div>
-                    <div class="action-links">
-                        <button class="send-run-btn" [id]="sendMsg" (click)="handleSendCopyButton(projConstants.SEND, article, projConstants.ARTICLE)">{{projConstants.SEND}}</button>
-                        <div class="copy-btn" (click)="handleSendCopyButton(projConstants.COPY, article, projConstants.ARTICLE)">
-                            <i class="ast-copy"></i>
+                        <div class="action-links">
+                            <button class="send-run-btn" [id]="sendMsg" (click)="handleSendCopyButton(projConstants.SEND,faq, projConstants.FAQ)">{{projConstants.SEND}}</button>
+                            <div class="copy-btn" (click)="handleSendCopyButton(projConstants.COPY,faq, projConstants.FAQ)">
+                                <i class="ast-copy"></i>
+                            </div>
                         </div>
                     </div>
+                    <div class="link-view-full-article ghost-btn" [id]="'faqFullView-' + i" *ngIf="faqAllView" (click)="showAllResultsClick(projConstants.VIEW_ALL_FAQ)">{{projConstants.VIEW_ALL_FAQ}}</div>
+                    <div class="link-view-full-article ghost-btn" [id]="'faqFewView-' + i" *ngIf="!faqAllView && searchResponse.faqs?.length > 2" (click)="showAllResultsClick(projConstants.VIEW_FEW_FAQ)">{{projConstants.VIEW_FEW_FAQ}}</div>
                 </div>
-                <div class="link-view-full-article ghost-btn" [id]="'articleFullView-' + i" *ngIf="articleAllView" (click)="showAllResultsClick(projConstants.VIEW_ALL_ARTICLES)">{{projConstants.VIEW_ALL_ARTICLES}}</div>
-                <div class="link-view-full-article ghost-btn" [id]="'articleFewView-' + i" *ngIf="!articleAllView && searchResponse.articles?.length > 2" (click)="showAllResultsClick(projConstants.VIEW_FEW_ARTICLES)">{{projConstants.VIEW_FEW_ARTICLES}}</div>
             </div>
-        </div>
+        
+            <div class="task-type" id="articlesArea" *ngIf="searchResponse.articles?.length > 0">
+                <div class="img-block-info">
+                    <img [src]="imageFilePath + imageFileNames['FAQ_SUGGESTION']">
+                </div>
+                <div class="content-dialog-task-type arr-cont-dialogtask" id="articleSuggestions-results">
+                    <div class="type-with-img-title">Article ({{searchResponse.articles?.length}})</div>
+        
+                    <div class="type-info-run-send is-dropdown-show-default is-dropdown-open" [id]="'articleDivLib-' + i" *ngFor="let article of searchResponse.articles | slice : 0 : articleViewCount; let i = index">
+                        <div class="left-content" [id]="'articleSectionLib-' + i">
+                            <div class="title-text" [id]="'articletitleLib-' + i"
+                                >{{article.title}}
+                                <i class="ast-carrotup rotate-carrot" [id]="'articlecheckLib-' + i" *ngIf="!article.content"></i>
+                            </div>
+                            <div class="desc-text" [id]="'articledescLib-' + i"
+                                *ngIf="article.content">{{article.content}}
+                                <div class="link-view-full-article" [id]="'articleViewLinkLib-' + i" *ngIf="article.link"><a [href]="article.link" target="_blank">View Full Article</a></div>
+                            </div>
+                            <button class="ghost-btn" style="font-style: italic;" [id]="'articleseeMore-' + i" *ngIf="article.showMoreButton" (click)="toggleShowMoreLessButtons(article, i, projConstants.ARTICLE)">{{projConstants.SHOW_MORE}}</button>
+                            <button class="ghost-btn" style="font-style: italic;" [id]="'articleseeLess-' + i" *ngIf="article.showLessButton" (click)="toggleShowMoreLessButtons(article, i, projConstants.ARTICLE)">{{projConstants.SHOW_LESS}}</button>
+                        </div>
+                        <div class="action-links">
+                            <button class="send-run-btn" [id]="sendMsg" (click)="handleSendCopyButton(projConstants.SEND, article, projConstants.ARTICLE)">{{projConstants.SEND}}</button>
+                            <div class="copy-btn" (click)="handleSendCopyButton(projConstants.COPY, article, projConstants.ARTICLE)">
+                                <i class="ast-copy"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="link-view-full-article ghost-btn" [id]="'articleFullView-' + i" *ngIf="articleAllView" (click)="showAllResultsClick(projConstants.VIEW_ALL_ARTICLES)">{{projConstants.VIEW_ALL_ARTICLES}}</div>
+                    <div class="link-view-full-article ghost-btn" [id]="'articleFewView-' + i" *ngIf="!articleAllView && searchResponse.articles?.length > 2" (click)="showAllResultsClick(projConstants.VIEW_FEW_ARTICLES)">{{projConstants.VIEW_FEW_ARTICLES}}</div>
+                </div>
+            </div>
+        </ng-template>
     
     </div>
 </ng-container>

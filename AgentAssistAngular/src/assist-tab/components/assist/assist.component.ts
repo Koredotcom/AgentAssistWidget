@@ -441,7 +441,52 @@ export class AssistComponent implements OnInit {
       }
 
       if (data.suggestions) {
+        if(data?.suggestions?.searchassist?.snippets?.length>0){
+          let automationSuggestions = document.getElementById(`automationSuggestions-${responseId}`);
+          automationSuggestions.classList.remove('hide');
+          let dialogAreaHtml = `<div class="task-type" id="snippetsArea">
+                  <div class="img-block-info">
+                      <img src="./images/kg.svg">
+                  </div>
+                  <div class="content-dialog-task-type" id="snippetsSuggestions-${responseId}">
+                      <div class="type-with-img-title">Snippets (${data.suggestions.searchassist.snippets.length})</div>
+                      
+                  </div>
+              </div>`;
+          automationSuggestions.innerHTML += dialogAreaHtml;
+          data.suggestions.searchassist?.snippets?.forEach((ele, index) => {
+              let articleSuggestions = document.getElementById(`snippetsSuggestions-${responseId}`);
 
+              let articleHtml = `
+              <div class="type-info-run-send" id="snippetDiv-${uuids+index}">
+                  <div class="left-content" id="snippetSection-${uuids+index}">
+                      <div class="title-text" title="${ele.title}" id="snippettitle-${uuids+index}">${ele.title}</div>
+                  </div>
+                  
+              </div>`;
+
+              articleSuggestions.innerHTML += articleHtml;
+              let articles = $(`.type-info-run-send #snippetSection-${uuids+index}`);
+              
+                      let a = $(`#snippetDiv-${uuids + index}`);
+                      let articleActionHtml = `
+                      <button class="know-more-btn hide" id="snippetviewMsg-${uuids+index}" data-msg-id="snippet-${uuids + index}" data-msg-data="${ele.page_url}"><a style="color: #FFFFFF;" href="${ele.page_url}" target="_blank">Know more</a></button>
+                      
+                  `;
+                  articles.append(`<div class="desc-text" id="snippetdesc-${uuids + index}">${ele.content}</div>`);
+                  articles.append(articleActionHtml);
+                  let articlestypeInfo = $(`.type-info-run-send #snippetSection-${uuids + index}`);
+                  let seeMoreButtonHtml = `
+              <button class="ghost-btn hide" style="font-style: italic;" id="snippetseeMore-${uuids + index}" data-snippet-see-more="true">Show more</button>
+              <button class="ghost-btn hide" style="font-style: italic;" id="snippetseeLess-${uuids + index}" data-snippet-see-less="true">Show less</button>
+              `;
+                  articlestypeInfo.append(seeMoreButtonHtml);
+                  setTimeout(() => {
+                      this.commonService.updateSeeMoreButtonForAssist(uuids + index,'snippet');
+                  }, 100);
+          })
+
+      }else{
         if (data.suggestions.dialogs?.length > 0) {
 
           let automationSuggestions = document.getElementById(`automationSuggestions-${responseId}`);
@@ -605,6 +650,7 @@ export class AssistComponent implements OnInit {
         });
         this.handleSeeMoreButton(responseId, data.suggestions.faqs, this.projConstants.FAQ);
         this.handleSeeMoreButton(responseId, data.suggestions.articles, this.projConstants.ARTICLE);
+      }
 
       }
       setTimeout(() => {

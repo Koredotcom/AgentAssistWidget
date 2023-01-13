@@ -27,8 +27,10 @@ export class OverlaysearchComponent implements OnInit {
   searchResponse: any = {};
   faqViewCount: number;
   articleViewCount: number;
+  snippetViewCount: number;
   faqAllView: boolean = false;
   articleAllView: boolean = false;
+  snippetAllView: boolean = false;
   searchResultText: string;
   searchConentObject: any;
   showOverLay : boolean = false;
@@ -154,7 +156,13 @@ export class OverlaysearchComponent implements OnInit {
     } else if (clickType == this.projConstants.VIEW_FEW_ARTICLES) {
       this.articleAllView = true;
       this.articleViewCount = 2;
-    } else if (clickType == this.projConstants.VIEW_ALL_FAQ) {
+    }else if (clickType == this.projConstants.VIEW_ALL_SNIPPETS) {
+      this.snippetAllView = false;
+      this.snippetViewCount = this.searchResponse.snippets.length
+    } else if (clickType == this.projConstants.VIEW_FEW_SNIPPETS) {
+      this.snippetAllView = true;
+      this.snippetViewCount = 2;
+    }else if (clickType == this.projConstants.VIEW_ALL_FAQ) {
       this.faqAllView = false
       this.faqViewCount = this.searchResponse.faqs.length;
     } else if (clickType == this.projConstants.VIEW_FEW_FAQ) {
@@ -167,6 +175,7 @@ export class OverlaysearchComponent implements OnInit {
      setTimeout(() => {
         this.handleSeeMoreButton(this.searchResponse.faqs, this.projConstants.FAQ);
         this.handleSeeMoreButton(this.searchResponse.articles, this.projConstants.ARTICLE);
+        this.handleSeeMoreButton(this.searchResponse.snippets, this.projConstants.SNIPPET);
       }, 10);
   }
 
@@ -177,16 +186,19 @@ export class OverlaysearchComponent implements OnInit {
   handleSearchResponse(response) {
     if (response && response.suggestions) {
       this.searchResponse = this.commonService.formatSearchResponse(response.suggestions);
-      this.searchResponse.totalSearchResults = this.searchResponse.dialogs?.length + this.searchResponse.faqs?.length + this.searchResponse.articles?.length;
+      this.searchResponse.totalSearchResults = this.searchResponse.snippets?.length > 0 ? this.searchResponse.snippets?.length:( this.searchResponse.dialogs?.length + this.searchResponse.faqs?.length + this.searchResponse.articles?.length || 0);
       this.faqViewCount = (this.searchResponse.faqs && this.searchResponse.faqs.length <= 2) ? this.searchResponse.faqs.length : 2;
       this.articleViewCount = (this.searchResponse.articles && this.searchResponse.articles.length <= 2) ? this.searchResponse.articles.length : 2;
+      this.snippetViewCount = (this.searchResponse.snippets && this.searchResponse.snippets.length <= 2) ? this.searchResponse.snippets.length : 2;
       this.faqAllView = this.searchResponse.faqs && this.searchResponse.faqs.length > 2 ? true : false;
       this.articleAllView = this.searchResponse.articles && this.searchResponse.articles.length > 2 ? true : false;
+      this.snippetAllView = this.searchResponse.snippets && this.searchResponse.snippets.length > 2 ? true : false;
       this.searchResultText = this.searchResponse.totalSearchResults == 1 ? "Search result for" : "Search results for";
       setTimeout(() => {
         this.handleSeeMoreButton(this.searchResponse.faqs, this.projConstants.FAQ);
         this.handleSeeMoreButton(this.searchResponse.articles, this.projConstants.ARTICLE);
-        console.log(this.searchResponse.articles, 'articles');
+        this.handleSeeMoreButton(this.searchResponse.snippets, this.projConstants.SNIPPET);
+        console.log(this.searchResponse.snippets, 'snippets');
       }, 1000);
     }
   }
@@ -235,6 +247,10 @@ export class OverlaysearchComponent implements OnInit {
     if (type == this.projConstants.ARTICLE) {
       titleElement = document.getElementById("articletitleLib-" + index);
       descElement = document.getElementById("articledescLib-" + index);
+    }
+    if (type == this.projConstants.SNIPPET) {
+      titleElement = document.getElementById("snippettitleLib-" + index);
+      descElement = document.getElementById("snippetdescLib-" + index);
     }
     faq_or_article_obj.showLessButton = !faq_or_article_obj.showLessButton;
     faq_or_article_obj.showMoreButton = !faq_or_article_obj.showMoreButton;

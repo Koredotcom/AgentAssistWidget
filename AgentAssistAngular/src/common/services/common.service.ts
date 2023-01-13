@@ -533,8 +533,10 @@ export class CommonService {
     searchResponse.dialogs = [];
     searchResponse.faqs = [];
     searchResponse.articles = [];
+    searchResponse.snippets = [];
     let dialoguesArray = suggestions.dialogs || [];
     let faqArray = suggestions.faqs || [];
+    let snippersArray = suggestions?.searchassist?.snippets || []
     if (suggestions.searchassist && Object.keys(suggestions.searchassist).length > 0) {
       for(let source in suggestions.searchassist){
         searchResponse.articles.push.apply(searchResponse.articles,suggestions.searchassist[source]);
@@ -553,6 +555,16 @@ export class CommonService {
       }
       searchResponse.faqs.push(faqObject);
     }
+    if(suggestions?.searchassist?.snippets.length > 0){
+      for(let snippet of snippersArray){
+        searchResponse.snippets.push(snippet);
+      }
+      for (let snippet of searchResponse.snippets) {
+        snippet.showMoreButton = false;
+        snippet.showLessButton = false;
+      }
+    }
+
     for (let dialog of dialoguesArray) {
       searchResponse.dialogs.push({ name: dialog.name, agentRunButton: false });
     }
@@ -639,6 +651,15 @@ export class CommonService {
     let seeMoreElement = document.getElementById('seeMore-' + id);
     let seeLessElement = document.getElementById('seeLess-' + id);
     let viewLinkElement;
+    let snippetviewMsg;
+    if(type == ProjConstants.SNIPPET){
+      titleElement = document.getElementById("snippettitle-" + id);
+      descElement = document.getElementById("snippetdesc-" + id);
+      divElement = document.getElementById('snippetDiv-' + id);
+      seeMoreElement = document.getElementById('snippetseeMore-' + id);
+      snippetviewMsg = document.getElementById('snippetviewMsg-' + id);
+     // viewLinkElement = document.getElementById('articleViewLink-' + id);
+    }
     if (type == ProjConstants.ARTICLE) {
       titleElement = document.getElementById("articletitle-" + id);
       descElement = document.getElementById("articledesc-" + id);
@@ -657,6 +678,9 @@ export class CommonService {
         $(seeMoreElement).addClass('hide');
         if (type == ProjConstants.ARTICLE) {
           viewLinkElement.classList.remove('hide');
+        }
+        if(type == ProjConstants.SNIPPET){
+          snippetviewMsg.classList.remove('hide');
         }
       }
       titleElement.classList.remove('no-text-truncate');

@@ -36,6 +36,8 @@ export const ProjConstants = {
     VIEW_FEW_FAQ : 'View Few FAQs',
     VIEW_ALL_ARTICLES : 'View All Articles',
     VIEW_FEW_ARTICLES : 'View Few Articles',
+    VIEW_ALL_SNIPPETS : 'View All Snippets',
+    VIEW_FEW_SNIPPETS : 'View Few Snippets',
     AGENT_SEARCH : 'Agent Search',
     LIBRARY_SEARCH : 'Library Search',
     ENTER_DETAILS : 'EnterDetails',

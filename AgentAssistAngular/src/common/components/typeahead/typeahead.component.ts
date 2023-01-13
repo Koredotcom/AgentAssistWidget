@@ -55,10 +55,10 @@ export class TypeaheadComponent implements OnInit {
     })
     this.subscriptionsList.push(subscription1);
   }
-  typeAHead = this.typeAHeadDeBounce((val, falg, connectionDetails)=>this.getAutoSearchApiResult(val, falg, connectionDetails));
+  typeAHead = this.typeAHeadDeBounce((val, connectionDetails)=>this.getAutoSearchApiResult(val, connectionDetails));
   onSearch(event: any) {   
     if(this.searchText.length > 0) {
-      this.typeAHead(this.searchText, this.searchText== ''? true: false, this.connectionData);
+      this.typeAHead(this.searchText, this.connectionData);
     } else {
       this.filterSet = [];
     }
@@ -75,14 +75,13 @@ export class TypeaheadComponent implements OnInit {
       }
     }
   
-     getAutoSearchApiResult(value, flag, connectionDetails){
+     getAutoSearchApiResult(value, connectionDetails){
         console.log(arguments[1],"this","get in auto search api", value)
         let payload = {
             "query": value,
             "maxNumOfResults": 3,
             "lang": "en"
         }
-        let isLibraryTab = arguments[1];
         console.log("connectionDetailsconnectionDetailsconnectionDetails", connectionDetails)
         let headersVal = {};
         // if(connectionDetails.isSAT) {
@@ -98,27 +97,18 @@ export class TypeaheadComponent implements OnInit {
                 'eAD': true,
             }
        // }
-        if (value?.length > 0) {
-          this.isNotLibraryTab?this.showOverlay = false:this.showOverlay = true;
-          this.dataSet = ['book','book ticket']    
-          this.showList();         
+        if (value?.length > 0) {        
             $.ajax({
                 url: `${connectionDetails.agentassisturl}/agentassist/api/v1/searchaccounts/autosearch?botId=${connectionDetails.botId}`,
                 type: 'post',
                 headers: headersVal,
                 data: payload,
                 dataType: 'json',
-                success: function (data) {
-                    if (!isLibraryTab && data.typeAheads.length>0 && this.isNotLibraryTab) {
-                        this.dataSet = data.typeAheads;
-                        this.showOverLay = true;
-                        this.showList();
-                    } else {
-                        if(data.typeAheads.length>0 && !this.isNotLibraryTab){
-                            this.dataSet = data.typeAheads;
-                            this.showOverLay = true;
-                            this.showList();
-                        }
+                success:  (data) => {
+                    if (data.querySuggestions.length>0) {
+                      this.showOverlay = true;
+                      this.dataSet = data.querySuggestions;
+                      this.showList();
                     }
                 },
                 error: function (err) {
