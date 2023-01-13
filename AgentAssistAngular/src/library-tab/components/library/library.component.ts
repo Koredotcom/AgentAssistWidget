@@ -108,10 +108,12 @@ export class LibraryComponent implements OnInit {
 
   //search bar related code
   getSearchResults(value,eventFrom?) {
-    this.searchFromAgentSearchBar = eventFrom ? true : false;
-    this.showSearchSuggestions = true;
-    this.handleSubjectService.setSearchText({ searchFrom: this.projConstants.LIBRARY, value: value });
-    this.setSearchTextInLocalStorage(value);
+    if(this.commonService.activeTab == ProjConstants.LIBRARY){
+      this.searchFromAgentSearchBar = eventFrom ? true : false;
+      this.showSearchSuggestions = true;
+      this.handleSubjectService.setSearchText({ searchFrom: this.projConstants.LIBRARY, value: value });
+      this.setSearchTextInLocalStorage(value);
+    }
   }
 
   emptySearchTextCheck(value) {

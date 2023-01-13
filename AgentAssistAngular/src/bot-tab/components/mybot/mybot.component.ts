@@ -151,6 +151,7 @@ export class MybotComponent implements OnInit {
       }
       this.isFirstMessagOfDialogInMyBot = false;
       let runInfoContent = document.getElementById(IdReferenceConst.DROPDOWNDATA + `-${this.myBotDropdownHeaderUuids}`);
+      $('#inputFieldForMyBot').remove();
       if (this.isMybotInputResponseClick) {
         let userQueryHtml = this.mybotDataService.userQueryTemplate(this.imageFilePath, this.imageFileNames, myBotuuids, data);
         $(runInfoContent).append(userQueryHtml);
@@ -195,9 +196,9 @@ export class MybotComponent implements OnInit {
       } else {
         $(runInfoContent).append(tellToUserHtml);
       }
-      let result = this.templateRenderClassService.getResponseUsingTemplate(data);
-      this.commonService.hideSendOrCopyButtons(result.parsePayLoad, runInfoContent)
-      let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(result)[0].innerHTML;
+      // let result = this.templateRenderClassService.getResponseUsingTemplate(data);
+      this.commonService.hideSendOrCopyButtons(results.parsePayLoad, runInfoContent)
+      let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(results)[0].innerHTML;
       let a = document.getElementById(IdReferenceConst.displayData + `-${myBotuuids}`);
       a.innerHTML = a.innerHTML + html;
       this.designAlterService.addWhiteBackgroundClassToNewMessage(this.scrollAtEnd, IdReferenceConst.MYBOTAUTOMATIONBLOCK);

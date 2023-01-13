@@ -89,7 +89,7 @@
             <i class="ast-search search-icon"></i>
             <i class="ast-close close-search" id="cancelAgentSearch" (click)="clearSearchText()"></i>
         </div>
-        <div class="overlay-suggestions" style="bottom:0" *ngIf="showSearchSuggestions" id="overLaySuggestions">
+        <div class="overlay-suggestions" style="bottom:0" *ngIf="showSearchSuggestions && activeTab == projConstants.ASSIST" id="overLaySuggestions">
             <div class="suggestion-content" id="overLaySearch">
                 <perfect-scrollbar class="overlaysearch-scroll-bar" #overlayps id="overlaySearchScroll">
                     <app-overlaysearch [searchType]="projConstants.AGENT_SEARCH"
