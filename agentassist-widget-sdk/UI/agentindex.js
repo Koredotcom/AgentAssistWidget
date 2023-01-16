@@ -1417,8 +1417,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }
                 }
 
-                function hideSendOrCopyButtons(parsedPayload, conatiner){
+                function hideSendOrCopyButtons(parsedPayload, conatiner, smallTalk){
                     let lastchild = $(conatiner).children().last();
+                    if(smallTalk){
+                        lastchild = $(conatiner);
+                    }
                     if (!parsedPayload) {
                         $(lastchild).find('.copy-btn').removeClass('hide')
                     }
@@ -2612,10 +2615,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             <div class="run-info-content" >
                             <div class="title">Tell Customer</div>
                             <div class="agent-utt">
-                                <div class="title-data" id="displayData-${uuids}">${ele.value}</div>
                                 <div class="action-links">
                                     <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}"  data-msg-data="${ele.value}">Send</button>
-                                    <div class="copy-btn" data-msg-id="${uuids}" data-msg-data="${ele.value}">
+                                    <div class="copy-btn hide" data-msg-id="${uuids}" data-msg-data="${ele.value}">
                                         <i class="ast-copy" data-msg-id="${uuids}" data-msg-data="${ele.value}"></i>
                                     </div>
                                 </div>
@@ -2623,7 +2625,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             </div>
                         </div>
                         </div>`;
+                            let titleData = `<div class="title-data" id="displayData-${uuids}">${ele.value}</div>`
+                            if(parsedPayload){
+                                titleData = `<div class="title-data" ><ul class="chat-container" id="displayData-${uuids}"></ul></div>`;
+                            }
                             dynamicBlockDiv.append(botResHtml);
+                            $(`#smallTalk-${uuids} .agent-utt`).append(titleData);
+
+                            hideSendOrCopyButtons(parsedPayload, `#smallTalk-${uuids} .agent-utt`, 'smallTalk')
                         });
                     }
                     if (!isAutomationOnGoing && !dropdownHeaderUuids && !parsedPayload && !data.suggestions) {
@@ -2701,7 +2710,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             updateNewMessageUUIDList(uuids);
                         }, waitingTimeForUUID);
                     }
-                    dropdownHeaderUuids ? AgentChatInitialize.renderMessage(_msgsResponse, uuids, `dropDownData-${dropdownHeaderUuids}`) : '';
+                    let dropdownUUID = `dropDownData-${dropdownHeaderUuids}`;
+                    if(!isAutomationOnGoing && parsedPayload){
+                        dropdownUUID = `smallTalk-${uuids}`;
+                    }
+                    dropdownHeaderUuids ? AgentChatInitialize.renderMessage(_msgsResponse, uuids, dropdownUUID) : '';
 
                     // let noOfStepsOfSmallTalk = $(`.body-data-container #dynamicBlock #welcomeMsg`).find('.steps-run-data').not('.hide');
                     // if (noOfStepsOfSmallTalk.length >= 2) {
