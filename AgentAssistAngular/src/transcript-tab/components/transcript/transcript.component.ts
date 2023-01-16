@@ -77,10 +77,26 @@ export class TranscriptComponent implements OnInit {
           'experience': this.commonService.isCallConversation === true ? 'voice' : 'chat',
           'query': this.sanitizeHTMLPipe.transform(userInputData.value),
         }
+        let user_messsage = {
+          "botId": this.connectionDetails.botId,
+          "type": "text",
+          "conversationId": userInputData.conversationid,
+          "value": this.sanitizeHTMLPipe.transform(userInputData.value),
+          "author": {
+              "firstName": userInputData.author?.firstName,
+              "lastName": userInputData.author?.lastName,
+              "type": userInputData.author?.type
+          },
+          "event": "user_message"
+      }
         this.prepareConversation();
         if (userInputData.author.type === 'USER') {
           this.processTranscriptData(userInputData);
-          this.websocketService.emitEvents(EVENTS.agent_assist_request, agent_assist_request);
+          if(this.commonService.OverRideMode) {
+            this.websocketService.emitEvents(EVENTS.user_message, user_messsage);
+          }else{
+            this.websocketService.emitEvents(EVENTS.agent_assist_request, agent_assist_request);
+          }
         } else {
           this.processAgentMessages(userInputData)
         }

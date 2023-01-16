@@ -186,8 +186,8 @@ export class HomeComponent implements OnInit {
             this.websocketService.emitEvents(EVENTS.agent_assist_request, agent_assist_request);
           })
         }
-        if (e.data.name === 'agentAssist.endOfConversation' && e.data.conversationId) {
-          let currentEndedConversationId = e.data.conversationId;
+        if (e.data.name === 'agentAssist.endOfConversation' && (e.data.conversationId || e.data.conversationid)) {
+          let currentEndedConversationId = e.data.conversationId || e.data.conversationid;
           if (this.localStorageService.checkConversationIdStateInStorage([currentEndedConversationId])) {
             let request_resolution_comments = {
               conversationId: e.data?.conversationId,
@@ -197,6 +197,7 @@ export class HomeComponent implements OnInit {
               chatHistory: e.data?.payload?.chatHistory
             }
             this.websocketService.emitEvents(EVENTS.request_resolution_comments, request_resolution_comments);
+            this.websocketService.emitEvents(EVENTS.end_of_conversation, request_resolution_comments);
             this.localStorageService.deleteLocalStorageState(currentEndedConversationId);
           }
           return;
@@ -215,11 +216,27 @@ export class HomeComponent implements OnInit {
             'experience': this.commonService.isCallConversation === true ? 'voice' : 'chat',
             'query': this.sanitizeHTMLPipe.transform(userInputData.value),
           }
+          let user_messsage = {
+            "botId": this.connectionDetails.botId,
+            "type": "text",
+            "conversationId": userInputData.conversationid,
+            "value": this.sanitizeHTMLPipe.transform(userInputData.value),
+            "author": {
+                "firstName": userInputData.author?.firstName,
+                "lastName": userInputData.author?.lastName,
+                "type": userInputData.author?.type
+            },
+            "event": "user_message"
+         }
           if (this.commonService.isCallConversation === true) {
             this.handleSubjectService.setAgentOrTranscriptResponse(userInputData);
           } else {
             if (userInputData?.author?.type === 'USER') {
-              this.websocketService.emitEvents(EVENTS.agent_assist_request, agent_assist_request);
+              if(this.commonService.OverRideMode) {
+                this.websocketService.emitEvents(EVENTS.user_message, user_messsage);
+              }else{
+                this.websocketService.emitEvents(EVENTS.agent_assist_request, agent_assist_request);
+              }
             }
           }
         }
