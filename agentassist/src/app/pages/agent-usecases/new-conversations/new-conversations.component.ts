@@ -435,6 +435,7 @@ export class NewConversationsComponent implements OnInit, OnChanges, AfterViewIn
       payload.chatExperience.preTransferMsgs = this.chatExp.preTransferMsgs;
       payload.chatExperience.isConfigured = this.chatExp.isConfigured;
       payload.chatExperience.skills = this.chatSkills?.addedSkillsId;
+      payload.hasAgentAssistAccess = true;
     } else if (this.ucType === 'faq') {
       payload.utterances.primary.text = this.conv.usecaseName; //this.utterancesForm.value.primaryUtterance;
       payload.callExperience.responses = this.callExp?.responses;
