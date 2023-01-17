@@ -43,14 +43,14 @@ export class NewConversationsComponent implements OnInit, OnChanges, AfterViewIn
   };
 
   triggerPoints: any = {
-    "isChatEnabled": true,
-    "isVoiceEnabled": true,
-    "isEmailEnabled": true,
+    "isChatEnabled": false,
+    "isVoiceEnabled": false,
+    "isEmailEnabled": false,
     "isSkillMatchEnabled": false,
     "isAgentGroupMatchEnabled": false,
     "agentGroups": [],
-    "isAutoDetectIntentEnabled": true,
-    "isLaunchByMenuEnabled": true,
+    "isAutoDetectIntentEnabled": false,
+    "isLaunchByMenuEnabled": false, 
     "skillMatchRules": []
   };
 
