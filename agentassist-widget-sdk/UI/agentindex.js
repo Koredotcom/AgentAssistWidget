@@ -2325,8 +2325,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
     
                                     faqsSuggestions.innerHTML += faqHtml;
                                     let faqs = $(`.type-info-run-send #faqSection-${uuids+index}`);
+                                    let positionID = 'dg-'+koreGenerateUUID();
                                     if (!ele.answer) {
-                                        let positionID = 'dg-'+koreGenerateUUID();
                                         let checkHtml = `
                             <i class="ast-carrotup" data-conv-id="${data.conversationId}"
                             data-bot-id="${botId}" data-intent-name="${ele.question}"
