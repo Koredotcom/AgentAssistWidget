@@ -31,6 +31,8 @@ export class LibraryService {
       dialogueDetails.intentName = dialogue.usecaseName;
       dialogueDetails.type = dialogue.usecaseType;
       dialogueDetails.agentRunButton = false;
+      dialogueDetails["childBotId"] = dialogue["childBotId"] || "";
+      dialogueDetails["childBotName"] = dialogue["childBotName"] || "";
       formattedMenuResponse[dialogue.dialogId] = dialogueDetails;
     }
     return formattedMenuResponse;

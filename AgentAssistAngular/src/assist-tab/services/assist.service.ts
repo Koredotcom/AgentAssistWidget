@@ -189,14 +189,14 @@ export class AssistService {
             <div class="title-text" id="automation-${uuids}">${ele.name}</div>
         </div>
         <div class="action-links">
-            <button class="send-run-btn" id="run-${uuids + index}"
+            <button class="send-run-btn" id="run-${uuids + index}" data-child-bot-id="${ele.childBotId}" data-child-bot-name="${ele.childBotName}"
             >RUN</button>
             <div class="elipse-dropdown-info" id="showRunForAgentBtn-${uuids + index}">
                 <div class="elipse-icon" id="elipseIcon-${uuids + index}">
                     <i class="ast-overflow" id="overflowIcon-${uuids + index}"></i>
                 </div>
                 <div class="dropdown-content-elipse" id="runAgtBtn-${uuids + index}">
-                    <div class="list-option" id="agentSelect-${uuids + index}"
+                    <div class="list-option" id="agentSelect-${uuids + index}" data-child-bot-id="${ele.childBotId}" data-child-bot-name="${ele.childBotName}"
                     >Run with Agent Inputs</div>
                 </div>
         </div>

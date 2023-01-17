@@ -99,6 +99,8 @@ export class OverlaysearchComponent implements OnInit {
     if(!isSearchFlag){
       connectionDetails.intentName = searchObj.value;
     }
+    connectionDetails.childBotId = searchObj.childBotId;
+    connectionDetails.childBotName = searchObj.childBotName;
     let agent_assist_agent_request_params = this.commonService.prepareAgentAssistAgentRequestParams(connectionDetails);
     this.websocketService.emitEvents(EVENTS.agent_assist_agent_request, agent_assist_agent_request_params);
   }

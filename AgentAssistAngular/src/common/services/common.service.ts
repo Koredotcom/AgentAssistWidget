@@ -111,6 +111,10 @@ export class CommonService {
     } else {
       agent_assist_request['entities'] = [];
     }
+    if(data.childBotId) {
+      agent_assist_request['childBotId'] = data.childBotId;
+      agent_assist_request['childBotName'] = data.childBotName;
+    }
     return agent_assist_request;
   }
 
@@ -125,6 +129,10 @@ export class CommonService {
     }
     if (data.intentName) {
       agent_assist_agent_request_params.intentName = data.intentName;
+    }
+    if(data.childBotId) {
+      agent_assist_agent_request_params['childBotId'] = data.childBotId;
+      agent_assist_agent_request_params['childBotName'] = data.childBotName;
     }
     return agent_assist_agent_request_params;
   }
@@ -566,7 +574,8 @@ export class CommonService {
     }
 
     for (let dialog of dialoguesArray) {
-      searchResponse.dialogs.push({ name: dialog.name, agentRunButton: false });
+      searchResponse.dialogs.push({ name: dialog.name, agentRunButton: false, childBotId : dialog.childBotId,
+        childBotName : dialog.childBotName });
     }
     console.log(searchResponse, "searchresponse");
     

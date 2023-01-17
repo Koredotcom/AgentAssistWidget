@@ -236,6 +236,8 @@ export class AssistComponent implements OnInit {
     }
     connectionDetails.positionId = dialogPositionId;
     connectionDetails.entities = this.commonService.isRestore ? JSON.parse(this.commonService.previousEntitiesValue) : this.commonService.entitiestValueArray
+    connectionDetails.childBotId = dialog.childBotId;
+    connectionDetails.childBotName = dialog.childBotName;
     let assistRequestParams = this.commonService.prepareAgentAssistRequestParams(connectionDetails);
     this.websocketService.emitEvents(EVENTS.agent_assist_request, assistRequestParams);
   }
@@ -1037,7 +1039,9 @@ export class AssistComponent implements OnInit {
       name: data.name,
       intentName: data.name,
       searchFrom: this.projConstants.ASSIST,
-      positionId: this.randomUUIDPipe.transform(IdReferenceConst.positionId)
+      positionId: this.randomUUIDPipe.transform(IdReferenceConst.positionId),
+      childBotId : data.childBotId,
+      childBotName : data.childBotName
     }
     document.getElementById(IdReferenceConst.AGENT_RUN_BTN + '-' + uuid).addEventListener('click', (event) => {
       this.handleSubjectService.setActiveTab(this.projConstants.MYBOT);
@@ -1055,6 +1059,8 @@ export class AssistComponent implements OnInit {
         connectionDetails.intentName = dialog.intentName;
       }
       connectionDetails.positionId = dialog.positionId;
+      connectionDetails.childBotId = dialog.childBotId;
+      connectionDetails.childBotName = dialog.childBotName;
       let agent_assist_agent_request_params = this.commonService.prepareAgentAssistAgentRequestParams(connectionDetails);
       this.websocketService.emitEvents(EVENTS.agent_assist_agent_request, agent_assist_agent_request_params);
     }
@@ -1134,7 +1140,9 @@ export class AssistComponent implements OnInit {
     document.getElementById(IdReferenceConst.ASSIST_RUN_BUTTON + '-' + uuid).addEventListener('click', (event) => {
       let runEventObj: any = {
         agentRunButton: false,
-        intentName: data.name
+        intentName: data.name,
+        childBotId : data.childBotId,
+        childBotName : data.childBotName
       }
       this.handleSubjectService.setRunButtonClickEvent(runEventObj);
     });
@@ -1290,7 +1298,7 @@ export class AssistComponent implements OnInit {
                     <div class="action-links">
                         <button class="send-run-btn" data-conv-id="${this.commonService.configObj.conversationid}"
                         data-bot-id="${res.botId}" data-intent-name="${ele.name}"
-                        data-history-run="true" id="run-${uniqueID}"
+                        data-history-run="true" id="run-${uniqueID}" data-child-bot-id="${ele.childBotId}" data-child-bot-name="${ele.childBotName}"
                         >RUN</button>
                         <div class="elipse-dropdown-info" id="showRunForAgentBtn-${uniqueID}">
                             <div class="elipse-icon" id="elipseIcon-${uniqueID}">
@@ -1298,7 +1306,7 @@ export class AssistComponent implements OnInit {
                             </div>
                             <div class="dropdown-content-elipse" id="runAgtBtn-${uniqueID}">
                                 <div class="list-option" data-conv-id="${this.commonService.configObj.conversationid}"
-                                data-bot-id="${res.botId}" data-intent-name="${ele.name}"
+                                data-bot-id="${res.botId}" data-intent-name="${ele.name}" data-child-bot-id="${ele.childBotId}" data-child-bot-name="${ele.childBotName}"
                                  id="agentSelect-${uniqueID}"
                                 data-exhaustivelist-run="true">Run with Agent Inputs</div>
                             </div>
