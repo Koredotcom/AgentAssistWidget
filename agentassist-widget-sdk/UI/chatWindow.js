@@ -944,7 +944,7 @@
                     var btnsParentDiv = quickReplyDivs[i].querySelectorAll('.quick_replies_btn_parent');
                     var leftScrollBtn = quickReplyDivs[i].querySelectorAll('.quickreplyLeftIcon');
                     var rightScrollBtn = quickReplyDivs[i].querySelectorAll('.quickreplyRightIcon');
-                    if (btnsParentDiv[0].hasChildNodes()) {
+                    if (btnsParentDiv[0] && btnsParentDiv[0].hasChildNodes()) {
                         if (btnsParentDiv[0].scrollLeft > 0) {
                             leftScrollBtn[0].classList.remove('hide');
                         }
