@@ -1179,7 +1179,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     let faqHtml = `
                             <div class="${faqDivClass}" id="faqDivLib-${uuids+index}">
                                 <div class="left-content" id="faqSectionLib-${uuids+index}">
-                                    <div class="title-text" title="${ele.title}" id="titleLib-${uuids+index}">${ele.question}</div>
+                                    <div class="title-text" title="${ele.question}" id="titleLib-${uuids+index}">${ele.question}</div>
                                 </div>
                             </div>`;
     
@@ -2316,7 +2316,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     let faqHtml = `
                         <div class="type-info-run-send" id="faqDiv-${uuids+index}">
                             <div class="left-content" id="faqSection-${uuids+index}">
-                                <div class="title-text" title="${ele.title}" id="title-${uuids+index}">${ele.question}</div>
+                                <div class="title-text" title="${ele.question}" id="title-${uuids+index}">${ele.question}</div>
                                 
                                 
                             </div>
@@ -3256,7 +3256,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                 let faqHtml = `
                                 <div class="type-info-run-send" id="faqDiv-${uniqueID+index}">
                                     <div class="left-content" id="faqSection-${uniqueID+index}">
-                                        <div class="title-text" title="${ele.title}" id="title-${uniqueID+index}">${ele.question}</div>
+                                        <div class="title-text" title="${ele.question}" id="title-${uniqueID+index}">${ele.question}</div>
                                         
                                         
                                     </div>
@@ -3350,7 +3350,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                 let faqHtml = `
                                 <div class="type-info-run-send" id="faqDiv-${uniqueID+index}">
                                     <div class="left-content" id="faqSection-${uniqueID+index}">
-                                        <div class="title-text" title="${ele.title}" id="title-${uniqueID+index}">${ele.question}</div>
+                                        <div class="title-text" title="${ele.question}" id="title-${uniqueID+index}">${ele.question}</div>
                                     </div>
                                 </div>`;
                                                 faqsSuggestions.innerHTML += faqHtml;
