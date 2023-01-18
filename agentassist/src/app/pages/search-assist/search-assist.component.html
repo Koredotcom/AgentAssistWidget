@@ -67,7 +67,7 @@
                                         <sup>*</sup>
                                          <!-- <i class="icon-sa-help"></i> -->
                                     </div>
-                                    <input type="text" name="domain" placeholder="Enter Domain URL" class="input-text" [(ngModel)]="searchAssistConfigDetailsObj.domain" required>
+                                    <input type="text" name="domain" placeholder="Enter Domain URL" class="input-text" [(ngModel)]="searchAssistConfigDetailsObj.domain" required autocomplete="no-pe">
                                 </div>
                             </div>
                             <div class="col-12 column-data">
@@ -76,7 +76,7 @@
                                         <sup>*</sup>
                                         <!-- <i class="icon-sa-help"></i> -->
                                     </div>
-                                    <input type="text" name="searchAssistbotId" placeholder="Enter Stream ID" class="input-text" [(ngModel)]="searchAssistConfigDetailsObj.searchAssistbotId" required>
+                                    <input type="text" name="searchAssistbotId" placeholder="Enter Stream ID" class="input-text" [(ngModel)]="searchAssistConfigDetailsObj.searchAssistbotId" required autocomplete="no-pe">
                                 </div>
                             </div>
                         </div>
@@ -87,7 +87,7 @@
                                         <sup>*</sup>
                                         <!-- <i class="icon-sa-help"></i> -->
                                     </div>
-                                    <input type="text" name="clientId" placeholder="Enter Client URL" class="input-text" [(ngModel)]="searchAssistConfigDetailsObj.clientId" required>
+                                    <input type="text" name="clientId" placeholder="Enter Client URL" class="input-text" [(ngModel)]="searchAssistConfigDetailsObj.clientId" required autocomplete="no-pe">
                                 </div>
                             </div>
                             <div class="col-12 column-data">
@@ -105,7 +105,7 @@
                                             <i class="icon-sa-copy"></i>
                                         </div>
                                     </div>
-                                    <input [attr.type]="showOpenEyeIcon ? 'password' : 'text'" name="clientSecret"  placeholder="Enter Client Secret" class="input-text p-r-72" [(ngModel)]="searchAssistConfigDetailsObj.clientSecret" required>
+                                    <input [attr.type]="showOpenEyeIcon ? 'password' : 'text'" name="clientSecret"  placeholder="Enter Client Secret" class="input-text p-r-72" [(ngModel)]="searchAssistConfigDetailsObj.clientSecret" required autocomplete="no-pe">
                                 </div>
                             </div>
                         </div>
