@@ -748,9 +748,9 @@ html, body{
     text-overflow: unset;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content .title-text {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
     display: inline-block;
     max-width: 100%;
     position: relative;
@@ -801,7 +801,7 @@ html, body{
     right: 8px;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send:hover .title-text{
-    white-space: normal !important;
+    white-space: nowrap !important;
     padding-right: 80px;
     text-align: justify;
     word-break: break-word;
@@ -1642,9 +1642,9 @@ border: 1px solid transparent !important;
     text-overflow: unset;
 }
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content .title-text {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
     display: inline-block;
     max-width: 100%;
     position: relative;
@@ -1717,7 +1717,7 @@ border: 1px solid transparent !important;
     display: flex;
 }
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send:hover .title-text{
-    white-space: normal !important;
+    white-space: nowrap !important;
     padding-right: 80px;
     text-align: justify;
     word-break: break-word;
@@ -2071,9 +2071,9 @@ border: 1px solid transparent !important;
     text-overflow: unset;
 }
 .overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content .title-text {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
     display: inline-block;
     max-width: 100%;
     text-align: justify;
