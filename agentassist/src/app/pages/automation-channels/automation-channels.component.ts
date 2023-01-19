@@ -90,9 +90,8 @@ export class AutomationChannelsComponent implements OnInit {
 
 
  getChatChannelData() {
-
     const params = {
-            instanceId:this.authService.smartAssistBots.map(x=>x._id),
+            instanceId: this.authService.getAgentAssistStreamId(),
             'isAgentAssist':true
           };
     this.chatChannelData = this.service.invoke('get.chatList', params).subscribe(data => {
