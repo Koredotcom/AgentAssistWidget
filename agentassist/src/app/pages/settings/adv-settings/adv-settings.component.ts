@@ -82,7 +82,7 @@ export class AdvSettingsComponent implements OnInit, OnDestroy {
 
   getAdvSettings() {
     const params = {
-      instanceId:this.authService.smartAssistBots.map(x=>x._id),
+      instanceId:this.authService.getAgentAssistStreamId(),
        'isAgentAssist':true
      }
      let channelList;
@@ -90,7 +90,7 @@ export class AdvSettingsComponent implements OnInit, OnDestroy {
        channelList = voiceList;
        if(channelList.sipTransfers.length > 0){
          this.showVoicePreferences = true;
-         const _params = { streamId:this.authService.smartAssistBots.map(x=>x._id),
+         const _params = { streamId:this.authService.getAgentAssistStreamId(),
                          'isAgentAssist':true }
          this.loading = true;
          this.subs.sink = this.service.invoke('get.settings.voicePreferences', _params)
