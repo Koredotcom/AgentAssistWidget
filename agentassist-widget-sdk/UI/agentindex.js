@@ -1337,7 +1337,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
     
                             }
                         
-                    }
+                    } else {
                         if (data.type === 'text' && data.suggestions) {
                             isSuggestionProcessed = false
                             let faqAnswerIdsPlace;
@@ -1403,7 +1403,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             answerPlaceableIDs.splice(index, 1);
                             isOnlyOneFaqOnSearch = false;
                         }
-                    
+                    }
 
                     function ShowSearchContent() {
                         if (currentTabActive == 'searchAutoIcon') {
@@ -2105,7 +2105,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     // }
                                 })
 
-                            }else{
+                            }
                                 if (data.suggestions.dialogs?.length > 0) {
                                     let automationSuggestions = document.getElementById(`automationSuggestions-${responseId}`);
                                     let dialogAreaHtml = `<div class="task-type" id="dialoguesArea">
@@ -2363,7 +2363,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     $(`#faqDiv-${uuids+index}`).removeClass('is-dropdown-show-default');
                                 }
                                 })
-                            }
+                            
                       
                         }
                         setTimeout(() => {         
