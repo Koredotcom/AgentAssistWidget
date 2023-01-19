@@ -59,12 +59,20 @@
                     </div>
                     <div class="row-data">
                         <div class="label-text">Client Secret</div>
+                        
                         <div class="kr-sg-input-text">
-                            <input type="text" placeholder="Placeholder text" class="input-text" [(ngModel)]="chatList.cS" readonly>
-                                <button class="copy-btn" (click)="copyInputMessage(chatList.cS)" value="click to copy">
+                            <input [attr.type]="showOpenEyeIcon ? 'password' : 'text'" placeholder="Placeholder text" class="input-text" [(ngModel)]="chatList.cS" readonly autocomplete="new-password">
+                            <div class="eye-copy">
+                                <div class="eye" placement="bottom-left" (click)="showOpenEyeIcon = !showOpenEyeIcon">
+                                    <i class="icon-sa-eye" *ngIf="showOpenEyeIcon"></i>
+                                    <i class="icon-sa-eye-open" *ngIf="!showOpenEyeIcon"></i>
+                                </div>
+                            </div>
+                            <button class="copy-btn" (click)="copyInputMessage(chatList.cS)" value="click to copy">
                                 <img src="assets/icons/copyblue.svg">
                                 Copy
-                                </button> 
+                            </button> 
+                              
                         </div>
                     </div>
                 </div>
