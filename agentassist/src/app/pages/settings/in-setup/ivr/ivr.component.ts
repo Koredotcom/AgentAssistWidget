@@ -105,7 +105,7 @@ export class IvrComponent implements OnInit {
          }
         else {
           const params = {
-            instanceId:this.authService.smartAssistBots.map(x=>x._id),
+            instanceId:this.authService.getAgentAssistStreamId(),
             'isAgentAssist':true
            }
           this.voiceListSub = this.service.invoke('get.voiceList', params).subscribe(voiceList => {
@@ -335,7 +335,7 @@ export class IvrComponent implements OnInit {
    
     this.saveInProgress = true;
     const params = {
-      instanceId: this.authService.smartAssistBots.map(x=>x._id),
+      instanceId: this.authService.getAgentAssistStreamId(),
       'isAgentAssist':true
     }
     
