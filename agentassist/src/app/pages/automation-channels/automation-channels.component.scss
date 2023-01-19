@@ -185,6 +185,14 @@
                         }
                     }
                 }
+                .eye-copy{
+                    position: absolute;
+                    right: 110px;
+                    top: auto;
+                    z-index: 1;
+                    cursor: pointer;
+                    font-size: 14px;
+                }
             }
         }
     }
