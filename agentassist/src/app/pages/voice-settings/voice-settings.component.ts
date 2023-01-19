@@ -139,7 +139,7 @@ export class VoiceSettingsComponent implements OnInit, AfterViewInit, OnDestroy 
     this.updatePhNumberSlider = false;
     this.updateIVRSlider = false;
     this.updateCallFlowList = false;
-    this.streamId = this.authService.smartAssistBots.map(x=>x._id);
+    this.streamId = this.authService.getAgentAssistStreamId();
     this.instanceAppDetails = this.voiceService.instantAppData();
     this.getFlows();
     this.route.queryParams.subscribe(params => {
@@ -183,7 +183,7 @@ export class VoiceSettingsComponent implements OnInit, AfterViewInit, OnDestroy 
   getListOfPhoneNumbers(searchTerm = '') {
     const params = {
      // instanceId: this.instanceAppDetails._id,
-     instanceId:this.authService.smartAssistBots.map(x=>x._id),
+     instanceId:this.authService.getAgentAssistStreamId(),
       'isAgentAssist':true
     }
     
@@ -285,7 +285,7 @@ export class VoiceSettingsComponent implements OnInit, AfterViewInit, OnDestroy 
           //TODO
           console.log(numDetail);
           const params = {
-            instanceId: this.authService.smartAssistBots.map(x=>x._id),
+            instanceId: this.authService.getAgentAssistStreamId(),
             'isAgentAssist':true
           }
           const payload = {
@@ -339,7 +339,7 @@ export class VoiceSettingsComponent implements OnInit, AfterViewInit, OnDestroy 
           //TODO
           console.log(sipDetails);
           const params = {
-            instanceId: this.authService.smartAssistBots.map(x=>x._id),
+            instanceId: this.authService.getAgentAssistStreamId(),
             'isAgentAssist':true
           }
           const payload = {
