@@ -151,7 +151,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     let params;
      params = {
         userId: this.authService.getUserId(),
-        streamId: this.authService.smartAssistBots.map(x=>x._id)
+        streamId: this.authService.getAgentAssistStreamId()
       }
 
       this.service.invoke('get.shared.developers', params).subscribe(

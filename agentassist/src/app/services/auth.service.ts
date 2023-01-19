@@ -25,6 +25,7 @@ export class AuthService {
   private selectedAccount = null;
   public deflectApps = new BehaviorSubject<any>(null);
   public smartAssistBots: any[];
+  public universalBot : any = {};
   public hasToken = false;
   public userProfile: any;
   public btStoreQp = null
@@ -262,12 +263,30 @@ export class AuthService {
     })
   }
 
+  public getUniversalBotDetails(res){
+    for(let obj of res){
+      if(obj.type == 'universalbot'){
+        return obj;
+        break;
+      }
+    }
+    return {};
+  }
+
+  public getAgentAssistStreamId(){
+    if(this.universalBot && this.universalBot._id){
+      return (this.universalBot._id);
+    }else{
+      return this.smartAssistBots.map(x=>x._id);
+    }
+  }
+
   public getDeflectApps() {
     this.service.invoke('get.automationbots').subscribe(res => {
-      // res = [];
       if (res && res.length) {
         this.workflowService.showAppCreationHeader(false);
         this.smartAssistBots = res;
+        this.universalBot = this.getUniversalBotDetails(res);
       }
       this.deflectApps.next(res);
       this.workflowService.deflectApps(res);
