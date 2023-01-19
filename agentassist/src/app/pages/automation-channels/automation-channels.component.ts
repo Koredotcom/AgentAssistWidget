@@ -24,6 +24,7 @@ export class AutomationChannelsComponent implements OnInit {
   chatChannelData: Subscription;
   chatData: any;
   webhookUrl: any;
+  showOpenEyeIcon : boolean = true;
   
   constructor( public workflowService: workflowService,
     private notificationService: NotificationService,
