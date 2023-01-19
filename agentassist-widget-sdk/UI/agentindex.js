@@ -2105,7 +2105,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     // }
                                 })
 
-                            }else{
+                            }
                                 if (data.suggestions.dialogs?.length > 0) {
                                     let automationSuggestions = document.getElementById(`automationSuggestions-${responseId}`);
                                     let dialogAreaHtml = `<div class="task-type" id="dialoguesArea">
@@ -2363,7 +2363,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     $(`#faqDiv-${uuids+index}`).removeClass('is-dropdown-show-default');
                                 }
                                 })
-                            }
+                            
                       
                         }
                         setTimeout(() => {         
