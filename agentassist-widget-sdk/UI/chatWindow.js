@@ -1511,7 +1511,7 @@
                         //if(!me.config.agentAssist){
                          //   $('.chatInputBox').text($(e.target).attr('actual-value') || $(e.target).attr('value'));
                         //var _innerText = $(e.target)[0].innerText.trim() || $(e.target).attr('data-value').trim();
-                        var _innerText = ($(e.target)[0] && $(e.target)[0].innerText) ? $(e.target)[0].innerText.trim() : "" || ($(e.target) && $(e.target).attr('data-value')) ? $(e.target).attr('data-value').trim() : "";
+                        var _innerText = $(e.target).attr('value')?$(e.target).attr('value').trim():'' ||($(e.target)[0] && $(e.target)[0].innerText) ? $(e.target)[0].innerText.trim() : "" || ($(e.target) && $(e.target).attr('data-value')) ? $(e.target).attr('data-value').trim() : "";
                        // me.sendMessage($('.chatInputBox'), _innerText);
                        
                        localStorage.setItem('innerTextValue', JSON.stringify(_innerText));
@@ -1558,7 +1558,7 @@
                             toShowText.push($(checkboxSelection[i]).attr('text'));
                         }
                         $('.chatInputBox').text($(e.target).attr('title') +': '+ selectedValue.toString());
-                        me.sendMessage($('.chatInputBox'),toShowText.toString());
+                        // me.sendMessage($('.chatInputBox'),toShowText.toString());
                     }
                     if (e.currentTarget.classList && e.currentTarget.classList.length > 0 && e.currentTarget.classList[0] === 'quickReply') {
                         var _parentQuikReplyEle = e.currentTarget.parentElement.parentElement;
@@ -2041,7 +2041,7 @@
             chatWindow.prototype.sendMessage = function (chatInput, renderMsg,msgObject) {
                 var me = this;
                 me.stopSpeaking();
-                if (chatInput.text().trim() === "" && $('.attachment').html().trim().length == 0) {
+                if (chatInput.text().trim() === "" && $('.attachment')?.html()?.trim()?.length == 0) {
                     return;
                 }
                 if(msgObject && msgObject.message && msgObject.message.length && msgObject.message[0]&& msgObject.message[0].component&& msgObject.message[0].component.payload && msgObject.message[0].component.payload.ignoreCheckMark){
@@ -2060,7 +2060,7 @@
                 var msgData = {};
                 fileUploaderCounter = 0;
                 //to send \n to server for new lines
-                chatInput.html(chatInput.html().replaceAll("<br>", "\n"));
+                chatInput.html(chatInput.html()?.replaceAll("<br>", "\n"));
                 if (me.attachmentInfo && Object.keys(me.attachmentInfo).length) {
                     msgData = {
                         'type': "currentUser",
@@ -3579,7 +3579,7 @@
                                     <div class="quick_replies_btn_parent"><div class="autoWidth">\
                                         {{each(key, msgItem) msgData.message[0].component.payload.quick_replies}} \
                                             <div class="buttonTmplContentChild quickReplyDiv"> <span {{if msgItem.payload}}value="${msgItem.payload}"{{/if}} class="quickReply {{if msgItem.image_url}}with-img{{/if}}" type="${msgItem.content_type}">\
-                                                {{if msgItem.image_url}}<img src="${msgItem.image_url}">{{/if}} <span class="quickreplyText {{if msgItem.image_url}}with-img{{/if}}">${msgItem.title}</span></span>\
+                                                {{if msgItem.image_url}}<img src="${msgItem.image_url}">{{/if}} <span class="quickreplyText {{if msgItem.image_url}}with-img{{/if}}" value="${msgItem.payload}">${msgItem.title}</span></span>\
                                             </div> \
                                         {{/each}} \
                                     </div>\
