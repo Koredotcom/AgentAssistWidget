@@ -614,8 +614,8 @@ export class AssistComponent implements OnInit {
 
           faqsSuggestions.innerHTML += faqHtml;
           let faqs = $(`.type-info-run-send #faqSection-${uuids + index}`);
+          let positionID = 'dg-' + this.koreGenerateuuidPipe.transform();
           if (!ele.answer) {
-            let positionID = 'dg-' + this.koreGenerateuuidPipe.transform();
             let checkHtml = `
         <i class="ast-carrotup" id="check-${uuids + index}"></i>`;
             $(`#faqDiv-${uuids + index}`).addClass('is-dropdown-show-default');
@@ -759,8 +759,14 @@ export class AssistComponent implements OnInit {
       $('#dynamicBlock .empty-data-no-agents').addClass('hide');
       let dynamicBlockDiv = $('#dynamicBlock');
       data.buttons?.forEach((ele, i) => {
-        let botResHtml = this.assisttabService.smallTalkTemplate(ele, uuids);
+        let botResHtml = this.assisttabService.smallTalkTemplateForTemplatePayload(ele, uuids);
+        let titleData = `<div class="title-data" id="displayData-${uuids}">${ele.value}</div>`
+        if(result.parsedPayload){
+            titleData = `<div class="title-data" ><ul class="chat-container" id="displayData-${uuids}"></ul></div>`;
+        }
         dynamicBlockDiv.append(botResHtml);
+        $(`#smallTalk-${uuids} .agent-utt`).append(titleData);
+        this.commonService.hideSendOrCopyButtons(result.parsedPayload, `#smallTalk-${uuids} .agent-utt`, 'smallTalk')
       });
     }
 

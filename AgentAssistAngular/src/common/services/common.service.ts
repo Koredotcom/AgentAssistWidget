@@ -630,8 +630,11 @@ export class CommonService {
     return response;
   }
 
-  hideSendOrCopyButtons(parsedPayload, conatiner){
+  hideSendOrCopyButtons(parsedPayload, conatiner, smallTalk?){
     let lastchild = $(conatiner).children().last();
+    if(smallTalk){
+      lastchild = $(conatiner);
+    }
     if (!parsedPayload) {
         $(lastchild).find('.copy-btn').removeClass('hide')
     }

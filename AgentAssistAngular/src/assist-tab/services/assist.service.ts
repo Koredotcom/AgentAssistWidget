@@ -120,6 +120,29 @@ export class AssistService {
     return template;
   }
 
+  smallTalkTemplateForTemplatePayload(ele, uuids){
+    let template = `
+    <div class="collapse-acc-data before-none" id='smallTalk-${uuids}'>
+        <div class="steps-run-data">
+        <div class="icon_block">
+            <i class="ast-agent"></i>
+        </div>
+        <div class="run-info-content" >
+        <div class="title">Tell Customer</div>
+        <div class="agent-utt">
+            <div class="action-links">
+                <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}">Send</button>
+                <div class="copy-btn hide" data-msg-id="${uuids}">
+                    <i class="ast-copy" data-msg-id="${uuids}"></i>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    </div>`
+  return template
+  }
+
   smallTalkTemplate(ele, uuids) {
     let template = `
       <div class="collapse-acc-data before-none" id='smallTalk-${uuids}'>
