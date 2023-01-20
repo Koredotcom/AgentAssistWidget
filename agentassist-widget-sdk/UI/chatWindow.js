@@ -3579,11 +3579,7 @@
                                     <div class="quick_replies_btn_parent"><div class="autoWidth">\
                                         {{each(key, msgItem) msgData.message[0].component.payload.quick_replies}} \
                                             <div class="buttonTmplContentChild quickReplyDiv"> <span {{if msgItem.payload}}value="${msgItem.payload}"{{/if}} class="quickReply {{if msgItem.image_url}}with-img{{/if}}" type="${msgItem.content_type}">\
-<<<<<<< HEAD
                                                 {{if msgItem.image_url}}<img src="${msgItem.image_url}">{{/if}} <span class="quickreplyText {{if msgItem.image_url}}with-img{{/if}}" value="${msgItem.payload}" type="${msgItem.content_type}">${msgItem.title}</span></span>\
-=======
-                                                {{if msgItem.image_url}}<img src="${msgItem.image_url}">{{/if}} <span class="quickreplyText {{if msgItem.image_url}}with-img{{/if}}" value="${msgItem.payload}">${msgItem.title}</span></span>\
->>>>>>> 17394cc86d09b0148813107cb697ba8372837455
                                             </div> \
                                         {{/each}} \
                                     </div>\
