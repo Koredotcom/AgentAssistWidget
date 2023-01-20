@@ -3410,7 +3410,8 @@ var message= {
 				var selectedValue=inputForm_id.find("#email").val();
 				$(messageHtml).find(".formMainComponent form").addClass("hide");
 		}
-		chatInitialize.sendMessage($('.chatInputBox'),selectedValue,msgData);
+		// chatInitialize.sendMessage($('.chatInputBox'),selectedValue,msgData);
+		localStorage.setItem('innerTextValue', JSON.stringify(_innerText || selectedValue));
 		});
 		/* Inline form submit click function ends here*/
 		
@@ -3532,7 +3533,8 @@ var message= {
 				}
 				$('.chatInputBox').text('Here are the selected items ' + ': '+ selectedValue.toString());
 				
-				chatInitialize.sendMessage($('.chatInputBox'),'Here are the selected items '+': '+ toShowText.toString());
+				// chatInitialize.sendMessage($('.chatInputBox'),'Here are the selected items '+': '+ toShowText.toString());
+				localStorage.setItem('innerTextValue', JSON.stringify(_innerText || 'Here are the selected items '+': '+ toShowText.toString()));
 				$(messageHtml).find(".multiCheckboxBtn").hide();
 				$(messageHtml).find(".advancedMultiSelectScroll").css({"pointer-events":"none"});
 				$(messageHtml).find(".advancedMultiSelectScroll").css({"overflow":"hidden"});
@@ -3560,7 +3562,8 @@ var message= {
 		 }else{
 			var _innerText = $(this).attr('data-value') || $(this).attr('data-title');
 			var postBack = $(this).attr('data-title');
-			chatInitialize.sendMessage($('.chatInputBox').text(_innerText), postBack);
+			// chatInitialize.sendMessage($('.chatInputBox').text(_innerText), postBack);
+			localStorage.setItem('innerTextValue', JSON.stringify(postBack));
 			$(".listViewTmplContentBox").css({"pointer-events":"none"});
 		 }
 		 });
@@ -3600,7 +3603,8 @@ var message= {
 				}
 			}
 			if(silderValue===false){
-				chatInitialize.sendMessage($('.chatInputBox').text(_innerText), _innerText);
+				//chatInitialize.sendMessage($('.chatInputBox').text(_innerText), _innerText);
+				localStorage.setItem('innerTextValue', JSON.stringify(_innerText));
 				$(".ratingMainComponent").css({"pointer-events":"none"});
 			  }
 			$(".buttonTmplContent .ratingMainComponent .submitBtn").click(function(){
@@ -3608,14 +3612,17 @@ var message= {
 				if(_innerText == msgData.message[0].component.payload.starArrays.length){
 					var messageTodisplay=msgData.message[0].component.payload.messageTodisplay;
 					chatInitialize.renderMessage(msgData);
-					chatInitialize.sendMessage($('.chatInputBox').text(_innerText +" :"+ messageTodisplay), _innerText +" :"+ messageTodisplay);
+					//chatInitialize.sendMessage($('.chatInputBox').text(_innerText +" :"+ messageTodisplay), _innerText +" :"+ messageTodisplay);
+					localStorage.setItem('innerTextValue', JSON.stringify(_innerText +" :"+ messageTodisplay));
 				}else if($(".suggestionInput").val()==""){
 					chatInitialize.renderMessage(msgData);
-					chatInitialize.sendMessage($('.chatInputBox').text(_innerText),_innerText)
+					//chatInitialize.sendMessage($('.chatInputBox').text(_innerText),_innerText)
+					localStorage.setItem('innerTextValue', JSON.stringify(_innerText));
 				}else{
 					var messageDisplay=$(".suggestionInput").val();
 					chatInitialize.renderMessage(msgData);
-					chatInitialize.sendMessage($('.chatInputBox').text(_innerText +" :"+ messageDisplay),_innerText +" :"+ messageDisplay);
+					//chatInitialize.sendMessage($('.chatInputBox').text(_innerText +" :"+ messageDisplay),_innerText +" :"+ messageDisplay);
+					localStorage.setItem('innerTextValue', JSON.stringify(_innerText +" :"+ messageDisplay));
 				}
 				bottomSliderAction("hide");
 				msgData.message[0].component.payload.sliderView=true;
@@ -3686,7 +3693,8 @@ var message= {
 				}
 			}
 			if(sliderValue===false){
-				chatInitialize.sendMessage($('.chatInputBox').text(emojiValue),emojiValue);
+				// chatInitialize.sendMessage($('.chatInputBox').text(emojiValue),emojiValue);
+				localStorage.setItem('innerTextValue', JSON.stringify(emojiValue));
 				$(".rating-main-component").css({"pointer-events":"none"});
 			}
 			$(".emojiComponent,.thumpsUpDownComponent,.numbersComponent").off('click','.submitBtn').on('click','.submitBtn',function(e){
@@ -3694,14 +3702,17 @@ var message= {
 				if(emojiValue=="5"){
 					var messageTodisplay=msgData.message[0].component.payload.messageTodisplay
 					chatInitialize.renderMessage(msgData);
-				  chatInitialize.sendMessage($('.chatInputBox').text(emojiValue +" :"+ messageTodisplay),"Rating"+': '+ emojiValue +" and "+ messageTodisplay);
+				 // chatInitialize.sendMessage($('.chatInputBox').text(emojiValue +" :"+ messageTodisplay),"Rating"+': '+ emojiValue +" and "+ messageTodisplay);
+				 localStorage.setItem('innerTextValue', JSON.stringify("Rating"+': '+ emojiValue +" and "+ messageTodisplay));
 				}else if($(".suggestionInput").val()==""){
 					chatInitialize.renderMessage(msgData);
-					chatInitialize.sendMessage($('.chatInputBox').text(emojiValue),emojiValue);
+					//chatInitialize.sendMessage($('.chatInputBox').text(emojiValue),emojiValue);
+					localStorage.setItem('innerTextValue', JSON.stringify(emojiValue));
 				}else{
 					var messageDisplay=$(".suggestionInput").val();
 					chatInitialize.renderMessage(msgData);
-                    chatInitialize.sendMessage($('.chatInputBox').text(emojiValue +" :"+ messageDisplay),emojiValue +" :"+ messageDisplay);
+                  //  chatInitialize.sendMessage($('.chatInputBox').text(emojiValue +" :"+ messageDisplay),emojiValue +" :"+ messageDisplay);
+				  localStorage.setItem('innerTextValue', JSON.stringify(emojiValue +" :"+ messageDisplay));
 				}
 				bottomSliderAction("hide");
 				msgData.message[0].component.payload.sliderView=true;
@@ -3719,7 +3730,8 @@ var message= {
 			if (typeCheck == "postback") {
 				let payload = $(this).attr("payload");
 				$('.chatInputBox').text(payload);
-				chatInitialize.sendMessage($('.chatInputBox'), $(this).text());
+				//chatInitialize.sendMessage($('.chatInputBox'), $(this).text());
+				localStorage.setItem('innerTextValue', JSON.stringify($(this).text()));
 			} else {
 				let a_link = $(this).attr("url");
 				chatInitialize.openExternalLink(a_link);
@@ -3804,7 +3816,8 @@ var message= {
 				  var _innerText = actionObj.payload;
 				  var eData={};
 				eData.payload = _self.innerText || actionObj.title;
-				chatInitialize.sendMessage($('.chatInputBox').text(_innerText), eData.payload);
+				//chatInitialize.sendMessage($('.chatInputBox').text(_innerText), eData.payload);
+				localStorage.setItem('innerTextValue', JSON.stringify(eData.payload));
 			  }
 			  if(_self && _self.hasClass("dropdown-contentWidgt")){
 				$(_self).hide();
@@ -3819,7 +3832,8 @@ var message= {
 			 }else{
 				var _innerText= $(_self).attr('data-value') || $(_self).attr('data-title');
 				var postBack=$(_self).attr('data-title');
-				chatInitialize.sendMessage($('.chatInputBox').text(_innerText), postBack);
+				//chatInitialize.sendMessage($('.chatInputBox').text(_innerText), postBack);
+				localStorage.setItem('innerTextValue', JSON.stringify(postBack));
 			 $(".kore-action-sheet .list-template-sheet").animate({ height: 'toggle' });
              bottomSliderAction("hide");
 			 $(".listViewTmplContentBox").css({"pointer-events":"none"});
@@ -3921,7 +3935,8 @@ var message= {
 			if (type && type == "postback" || type == "text") {
 				$('.chatInputBox').text(parsedActionObj.payload ||parsedActionObj.title);
 				var _innerText = parsedActionObj.renderMessage || parsedActionObj.title;
-				chatInitialize.sendMessage($('.chatInputBox'), _innerText);
+				// chatInitialize.sendMessage($('.chatInputBox'), _innerText);
+				localStorage.setItem('innerTextValue', JSON.stringify(_innerText));
 				$ele.find(".advanced-list-wrapper").css({"pointer-events":"none"});
 			} else if (type && type == "url" || type == "web_url") {
 				if ($(this).attr('msgData') !== undefined) {
@@ -4193,7 +4208,8 @@ var message= {
 							$(".largePreviewContent").removeClass("addheight");
 						}
 						bottomSliderAction('hide');
-						chatInitialize.sendMessage($('.chatInputBox'), _innerText);
+						// chatInitialize.sendMessage($('.chatInputBox'), _innerText);
+						localStorage.setItem('innerTextValue', JSON.stringify(_innerText));
 						$ele.find(".advanced-list-wrapper").css({"pointer-events":"none"});
 					} else if (type == "url" || type == "web_url") {
 						if ($(this).attr('msgData') !== undefined) {
@@ -4320,7 +4336,8 @@ var message= {
 					$(".largePreviewContent").removeClass("addheight");
 				}
 				bottomSliderAction('hide');
-				chatInitialize.sendMessage($('.chatInputBox'), _innerText);
+				// chatInitialize.sendMessage($('.chatInputBox'), _innerText);
+				localStorage.setItem('innerTextValue', JSON.stringify(_innerText));
 				$ele.find(".advanced-list-wrapper").css({"pointer-events":"none"});
 			} else if (type == "url" || type == "web_url") {
 				if ($(this).attr('msgData') !== undefined) {
@@ -4357,7 +4374,8 @@ var message= {
 				}else{
 					$('.chatInputBox').text($(this).attr('title'));
 				}
-				chatInitialize.sendMessage($('.chatInputBox'), toShowText.toString());
+				// chatInitialize.sendMessage($('.chatInputBox'), toShowText.toString());
+				localStorage.setItem('innerTextValue', JSON.stringify(_innerText));
 				$ele.find(".advanced-list-wrapper").css({"pointer-events":"none"});
 				bottomSliderAction('hide');
 			}
@@ -4426,11 +4444,13 @@ var message= {
 						}
 					}
 
-					chatInitialize.sendMessage($('.chatInputBox'), renderMessage);
+				  //	chatInitialize.sendMessage($('.chatInputBox'), renderMessage);
+				  localStorage.setItem('innerTextValue', JSON.stringify(_innerText || renderMessage));
 				} else {
 					$('.chatInputBox').text($(this).attr('actual-value') || $(this).attr('value'));
 					var _innerText = $(this)[0].innerText.trim() || $(this).attr('data-value').trim();
-					chatInitialize.sendMessage($('.chatInputBox'), _innerText);
+					// chatInitialize.sendMessage($('.chatInputBox'), _innerText);
+					localStorage.setItem('innerTextValue', JSON.stringify(_innerText));
 				}
 				$(ele).find(".card-template").css({ "pointer-events": "none" });
 			} else if (type == 'action') {
@@ -4641,7 +4661,8 @@ var message= {
 							}else{
 								$('.chatInputBox').text($(this).attr('title'));
 							}
-							chatInitialize.sendMessage($('.chatInputBox'), toShowText.toString());
+							// chatInitialize.sendMessage($('.chatInputBox'), toShowText.toString());
+							localStorage.setItem('innerTextValue', JSON.stringify(_innerText|| toShowText.toString()));
 							bottomSliderAction('hide');
 						});
 					}
@@ -4649,7 +4670,8 @@ var message= {
 			}else if(type == 'postback'){
 				$('.chatInputBox').text($(this).attr('actual-value') || $(this).attr('value'));
 				var _innerText = $(this)[0].innerText.trim() || $(this).attr('data-value').trim();
-				chatInitialize.sendMessage($('.chatInputBox'), _innerText);
+				// chatInitialize.sendMessage($('.chatInputBox'), _innerText);
+				localStorage.setItem('innerTextValue', JSON.stringify(_innerText));
 				$ele.find('.propose-template').css({"pointer-events":"none"});
 			}
 
@@ -4723,7 +4745,8 @@ var message= {
 					$(".largePreviewContent").removeClass("addheight");
 				}
 				bottomSliderAction('hide');
-				chatInitialize.sendMessage($('.chatInputBox'), _innerText);
+				// chatInitialize.sendMessage($('.chatInputBox'), _innerText);
+				localStorage.setItem('innerTextValue', JSON.stringify(_innerText));
 				$ele.find(".default-card-elements").css({ "pointer-events": "none" });
 			} else if (type == "url" || type == "web_url") {
 				if ($(this).attr('msgData') !== undefined) {
@@ -4760,7 +4783,8 @@ var message= {
 				} else {
 					$('.chatInputBox').text($(this).attr('title'));
 				}
-				chatInitialize.sendMessage($('.chatInputBox'), toShowText.toString());
+				// chatInitialize.sendMessage($('.chatInputBox'), toShowText.toString());
+				localStorage.setItem('innerTextValue', JSON.stringify(_innerText || toShowText.toString()));
 				$ele.find(".default-card-elements").css({ "pointer-events": "none" });
 				bottomSliderAction('hide');
 			}
@@ -4885,7 +4909,8 @@ var message= {
 					if (type && type == "postback" || type == "text") {
 						$('.chatInputBox').text(parsedActionObj.payload ||parsedActionObj.title);
 						var _innerText = parsedActionObj.renderMessage || parsedActionObj.title;
-						chatInitialize.sendMessage($('.chatInputBox'), _innerText);
+						// chatInitialize.sendMessage($('.chatInputBox'), _innerText);
+						localStorage.setItem('innerTextValue', JSON.stringify(_innerText));
 						$ele.find(".advanced-multi-list-wrapper").css({"pointer-events":"none"});
 					}
 					else if (type && type == "url" || type == "web_url") {
@@ -5160,7 +5185,8 @@ var message= {
 									$(".largePreviewContent").removeClass("addheight");
 								}
 								bottomSliderAction('hide');
-								chatInitialize.sendMessage($('.chatInputBox'), _innerText);
+								// chatInitialize.sendMessage($('.chatInputBox'), _innerText);
+								localStorage.setItem('innerTextValue', JSON.stringify(_innerText));
 								$ele.find(".advanced-multi-list-wrapper").css({"pointer-events":"none"});
 							} else if (type == "url" || type == "web_url") {
 								if ($(this).attr('msgData') !== undefined) {
@@ -5286,7 +5312,8 @@ var message= {
 							$(".largePreviewContent").removeClass("addheight");
 						}
 						bottomSliderAction('hide');
-						chatInitialize.sendMessage($('.chatInputBox'), _innerText);
+						// chatInitialize.sendMessage($('.chatInputBox'), _innerText);
+						localStorage.setItem('innerTextValue', JSON.stringify(_innerText));
 						$ele.find(".advanced-multi-list-wrapper").css({"pointer-events":"none"});
 					} else if (type == "url" || type == "web_url") {
 						if ($(this).attr('msgData') !== undefined) {
@@ -5323,7 +5350,8 @@ var message= {
 						}else{
 							$('.chatInputBox').text($(this).attr('title'));
 						}
-						chatInitialize.sendMessage($('.chatInputBox'), toShowText.toString());
+						// chatInitialize.sendMessage($('.chatInputBox'), toShowText.toString());
+						localStorage.setItem('innerTextValue', JSON.stringify(_innerText || toShowText.toString()));
 						$ele.find(".advanced-multi-list-wrapper").css({"pointer-events":"none"});
 						bottomSliderAction('hide');
 					}
@@ -5378,7 +5406,8 @@ var message= {
 					messageToBot = parsedActionObj.title;
 				}
 				bottomSliderAction('hide');
-				chatInitialize.sendMessage($('.chatInputBox').text(messageToBot), parsedActionObj.title);
+				// chatInitialize.sendMessage($('.chatInputBox').text(messageToBot), parsedActionObj.title);
+				localStorage.setItem('innerTextValue', JSON.stringify(_innerText || parsedActionObj.title));
 				$(_chatContainer).find('.article-template-content').css({ "pointer-events": "none" });
 			} else if (type == "url" || type == "web_url") {
 				var a_link = $(this).attr('url');
@@ -5433,7 +5462,8 @@ var message= {
 					var payload = parsedActionObj.default_action.payload;
 					var messageToDisplay = parsedActionObj.default_action.messageToDisplay || parsedActionObj.title;
 					bottomSliderAction('hide');
-					chatInitialize.sendMessage($('.chatInputBox').text(payload), messageToDisplay);
+					// chatInitialize.sendMessage($('.chatInputBox').text(payload), messageToDisplay);
+					localStorage.setItem('innerTextValue', JSON.stringify(_innerText || messageToDisplay));
 					$(_chatContainer).find('.article-template-content').css({ "pointer-events": "none" });
 				}
 
@@ -5523,7 +5553,8 @@ var message= {
 					enteredPin = specialChar+enteredPin+specialChar;
 				}
 				$('.chatInputBox').text(enteredPin);
-				chatInitialize.sendMessage($('.chatInputBox'), messageTodisplay, msgData, true);
+				// chatInitialize.sendMessage($('.chatInputBox'), messageTodisplay, msgData, true);
+				localStorage.setItem('innerTextValue', JSON.stringify(_innerText || messageToDisplay));
 				bottomSliderAction('hide');
 				if ($('.kore-chat-window').hasClass('background-blur')) {
 					$('.kore-chat-window').removeClass('background-blur');
@@ -5536,7 +5567,8 @@ var message= {
 		$(messageHtml).off('click', '.reset-pin-template .hading-text .close-button').on('click', '.reset-pin-template .hading-text .close-button', function (e) {
 			$('.chatInputBox').text('cancel');
 			var messageTodisplay = '******';
-			chatInitialize.sendMessage($('.chatInputBox'), messageTodisplay, msgData, true);
+			// chatInitialize.sendMessage($('.chatInputBox'), messageTodisplay, msgData, true);
+			localStorage.setItem('innerTextValue', JSON.stringify(_innerText || messageToDisplay));
 			bottomSliderAction('hide');
 			if ($('.kore-chat-window').hasClass('background-blur')) {
 				$('.kore-chat-window').removeClass('background-blur');
@@ -5621,7 +5653,8 @@ var message= {
 					$(messageHtml).find('.error-message').addClass('hide');
 				}
 				$('.chatInputBox').text(enteredPin);
-				chatInitialize.sendMessage($('.chatInputBox'), messageTodisplay, msgData, true);
+				// chatInitialize.sendMessage($('.chatInputBox'), messageTodisplay, msgData, true);
+				localStorage.setItem('innerTextValue', JSON.stringify(_innerText || messageToDisplay));
 				bottomSliderAction('hide');
 				if ($('.kore-chat-window').hasClass('background-blur')) {
 					$('.kore-chat-window').removeClass('background-blur');
@@ -5647,7 +5680,8 @@ var message= {
 			}
 			$('.chatInputBox').text(inputValue);
 			var messageTodisplay = '******';
-			chatInitialize.sendMessage($('.chatInputBox'), messageTodisplay, msgData, true);
+			// chatInitialize.sendMessage($('.chatInputBox'), messageTodisplay, msgData, true);
+			localStorage.setItem('innerTextValue', JSON.stringify(_innerText || messageToDisplay));
 			bottomSliderAction('hide');
 			if ($('.kore-chat-window').hasClass('background-blur')) {
 				$('.kore-chat-window').removeClass('background-blur');
@@ -5668,7 +5702,8 @@ var message= {
 		$(messageHtml).off('click', '.otp-validations .hading-text .close-button').on('click', '.otp-validations .hading-text .close-button', function (e) {
 			$('.chatInputBox').text('cancel');
 			var messageTodisplay = '******';
-			chatInitialize.sendMessage($('.chatInputBox'), messageTodisplay, msgData, true);
+			// chatInitialize.sendMessage($('.chatInputBox'), messageTodisplay, msgData, true);
+			localStorage.setItem('innerTextValue', JSON.stringify(_innerText || messageToDisplay));
 			bottomSliderAction('hide');
 			if ($('.kore-chat-window').hasClass('background-blur')) {
 				$('.kore-chat-window').removeClass('background-blur');
@@ -5678,7 +5713,8 @@ var message= {
 		$(messageHtml).off('click', '.otp-validations .otp-btn-group .otp-resend').on('click', '.otp-validations .otp-btn-group .otp-resend', function (e) {
 			var payload = $(e.currentTarget).attr('value');
 			$('.chatInputBox').text(payload);
-			chatInitialize.sendMessage($('.chatInputBox'), payload, msgData, true);
+			// chatInitialize.sendMessage($('.chatInputBox'), payload, msgData, true);
+			localStorage.setItem('innerTextValue', JSON.stringify(_innerText || payload));
 			bottomSliderAction('hide');
 		});
 
@@ -5743,7 +5779,8 @@ var message= {
 				var displayMessage = msgData.message[0].component.payload.messageToDisplay;
 				$('.chatInputBox').text(JSON.stringify(payload));
 				$(messageHtml).find('.bankingFeedBackTemplate').addClass('disabled');
-				me.chatInitialize.sendMessage($('.chatInputBox'), displayMessage, msgData, true);
+				// me.chatInitialize.sendMessage($('.chatInputBox'), displayMessage, msgData, true);
+				localStorage.setItem('innerTextValue', JSON.stringify(_innerText || displayMessage));
 			}
 		});
 		$(messageHtml).off('click', '.bankingFeedBackTemplate-feedback-content .buttons-div .feedback-cancel').on('click', '.bankingFeedBackTemplate-feedback-content .buttons-div .feedback-cancel', function (e) {
@@ -5778,7 +5815,8 @@ var message= {
 				var displayMessage = msgData.message[0].component.payload.messageToDisplay;
 				$('.chatInputBox').text('Cancel');
 				$(messageHtml).find('.bankingFeedBackTemplate').addClass('disabled');
-				me.chatInitialize.sendMessage($('.chatInputBox'), 'Cancel', msgData);
+				// me.chatInitialize.sendMessage($('.chatInputBox'), 'Cancel', msgData);
+				localStorage.setItem('innerTextValue', JSON.stringify(_innerText || 'Cancel'));
 			}
 		});
 	};
