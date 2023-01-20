@@ -4765,6 +4765,27 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         lastElementBeforeNewMessage = getLastElement(dynamicBlockId);
                         addWhiteBackgroundClassToNewMessage();
                     });
+                    
+                    function HandleClickAndSendRequest(e){
+                        if (JSON.parse(localStorage.getItem('innerTextValue'))) {
+                            if(currentTabActive == 'userAutoIcon'){
+                                 AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: _agentAssistDataObj.conversationId, botId: _agentAssistDataObj.botId, value: JSON.parse(localStorage.getItem('innerTextValue')), check: true });
+                                 isAgentSentRequestOnClick = true;
+                                 localStorage.setItem('innerTextValue', null);
+                             } else if(currentTabActive == 'agentAutoIcon'){
+                                 AgentAssistPubSub.publish('searched_Automation_details', { conversationId: _agentAssistDataObj.conversationId, botId: _agentAssistDataObj.botId, value: JSON.parse(localStorage.getItem('innerTextValue')), isSearch: false});
+                                 isMyBotAgentSentRequestOnClick = true;
+                                 localStorage.setItem('innerTextValue', null);
+                             }
+                             e.stopImmediatePropagation();
+                             e.preventDefault();
+                             e.stopPropagation();
+                         } else {
+                             e.stopImmediatePropagation();
+                             e.preventDefault();
+                             e.stopPropagation();
+                         }
+                    }
 
                     document.addEventListener("click", (evt) => {
                         var target = evt.target;
@@ -4778,24 +4799,57 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         $('.agent-assist-chat-container.kore-chat-window').off('click', '.buttonTmplContentBox li,.listTmplContentChild .buyBtn,.viewMoreList .viewMore,.listItemPath,.quickReply,.carouselImageContent,.listRightContent,.checkboxBtn,.likeDislikeDiv').on('click', '.buttonTmplContentBox li,.listTmplContentChild .buyBtn, .viewMoreList .viewMore,.listItemPath,.quickReply,.carouselImageContent,.listRightContent,.checkboxBtn,.likeDislikeDiv', function (e) {
 
                             AgentChatInitialize.bindEvents(true, e);
-                            if (JSON.parse(localStorage.getItem('innerTextValue'))) {
-                               if(currentTabActive == 'userAutoIcon'){
-                                    AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: _agentAssistDataObj.conversationId, botId: _agentAssistDataObj.botId, value: JSON.parse(localStorage.getItem('innerTextValue')), check: true });
-                                    isAgentSentRequestOnClick = true;
-                                    localStorage.setItem('innerTextValue', null);
-                                } else if(currentTabActive == 'agentAutoIcon'){
-                                    AgentAssistPubSub.publish('searched_Automation_details', { conversationId: _agentAssistDataObj.conversationId, botId: _agentAssistDataObj.botId, value: JSON.parse(localStorage.getItem('innerTextValue')), isSearch: false});
-                                    isMyBotAgentSentRequestOnClick = true;
-                                    localStorage.setItem('innerTextValue', null);
-                                }
-                                e.stopImmediatePropagation();
-                                e.preventDefault();
-                                e.stopPropagation();
-                            } else {
-                                e.stopImmediatePropagation();
-                                e.preventDefault();
-                                e.stopPropagation();
-                            }
+                            HandleClickAndSendRequest(e);
+                        });
+                        $('.agent-assist-chat-container.kore-chat-window').off('click', '.advanced-list-wrapper .callendar-tabs .month-tab').on('click', '.advanced-list-wrapper .callendar-tabs .month-tab', function (e) {
+                              HandleClickAndSendRequest(e);
+                        });
+                        $('.agent-assist-chat-container.kore-chat-window').off('click', '.advanced-list-wrapper .multiple-accor-rows .accor-inner-content .option').on('click', '.advanced-list-wrapper .multiple-accor-rows .accor-inner-content .option', function (e) {
+                            HandleClickAndSendRequest(e)
+                        });
+                        $('.agent-assist-chat-container.kore-chat-window').off('click', '.advanced-list-wrapper .multiple-accor-rows .accor-inner-content .option .option-input').on('click', '.advanced-list-wrapper .multiple-accor-rows .accor-inner-content .option .option-input', function (e) {
+                             HandleClickAndSendRequest(e)
+                        });
+                        $('.agent-assist-chat-container.kore-chat-window').off('click', '.advanced-list-wrapper .multiple-accor-rows .accor-header-top').on('click', '.advanced-list-wrapper .multiple-accor-rows .accor-header-top', function (e) {
+                             HandleClickAndSendRequest(e)
+                        });
+
+                        $('.agent-assist-chat-container.kore-chat-window').off('click', '.advanced-list-wrapper .main-title-text-block .search-block .search_icon').on('click', '.advanced-list-wrapper .main-title-text-block .search-block .search_icon', function (e) {
+                             HandleClickAndSendRequest(e)
+                        });
+                        $('.agent-assist-chat-container.kore-chat-window').off('click', '.advanced-list-wrapper .main-title-text-block .search-block .close_icon').on('click', '.advanced-list-wrapper .main-title-text-block .search-block .close_icon', function (e) {
+                             HandleClickAndSendRequest(e);
+                        });
+                        $('.agent-assist-chat-container.kore-chat-window').off('click', '.advanced-list-wrapper .main-title-text-block .search-block .input_text').on("keyup", '.advanced-list-wrapper .main-title-text-block .search-block .input_text', function (e) {
+                             HandleClickAndSendRequest(e);
+                        });
+                        $('.agent-assist-chat-container.kore-chat-window').off('click', '.advanced-list-wrapper .main-title-text-block .filter-sort-block .sort-icon').on("click", '.advanced-list-wrapper .main-title-text-block .filter-sort-block .sort-icon', function (e) {
+                             HandleClickAndSendRequest(e); 
+                        });
+                        $('.agent-assist-chat-container.kore-chat-window').off('click', '.advanced-list-wrapper .see-more-data').on("click", '.advanced-list-wrapper .see-more-data', function (e) {
+                             HandleClickAndSendRequest(e);
+                        });
+                        $('.agent-assist-chat-container.kore-chat-window').off('click', '.advanced-list-wrapper .close-btn').on("click", '.advanced-list-wrapper .close-btn', function (e) {
+                            HandleClickAndSendRequest(e);
+                        });
+                        $('.agent-assist-chat-container.kore-chat-window').off('click', '.advanced-list-wrapper .multiple-accor-rows .accor-inner-content .inner-btns-acc .more-btn').on("click", '.advanced-list-wrapper .multiple-accor-rows .accor-inner-content .inner-btns-acc .more-btn', function (e) {
+                             HandleClickAndSendRequest(e);
+                        });
+                        $('.agent-assist-chat-container.kore-chat-window').off('click', '.advanced-list-wrapper .multiple-accor-rows .accor-inner-content .inner-btns-acc .more-button-info .close_btn,.filter-icon .close_btn').on("click", '.advanced-list-wrapper .multiple-accor-rows .accor-inner-content .inner-btns-acc .more-button-info .close_btn,.filter-icon .close_btn', function (e) {
+                             HandleClickAndSendRequest(e);
+                        });
+                        $('.agent-assist-chat-container.kore-chat-window').off('click', '.advanced-list-wrapper .multiple-accor-rows .accor-header-top .btn_block.dropdown,.filter-icon').on("click", '.advanced-list-wrapper .multiple-accor-rows .accor-header-top .btn_block.dropdown,.filter-icon', function (e) {
+                             HandleClickAndSendRequest(e);
+                        });
+                        $('.agent-assist-chat-container.kore-chat-window').off('click', ".advancelisttemplate .TaskPickerContainer .close-button").on('click', ".advancelisttemplate .TaskPickerContainer .close-button", function (event) {
+                             HandleClickAndSendRequest(e);
+                        });
+                        $('.agent-assist-chat-container.kore-chat-window').off('click', '.advanced-list-wrapper .multiple-accor-rows .inner-acc-table-sec .table-sec .column-table-more').on("click", '.advanced-list-wrapper .multiple-accor-rows .inner-acc-table-sec .table-sec .column-table-more', function (e) {
+                            HandleClickAndSendRequest(e);
+                        });
+                
+                        $('.agent-assist-chat-container.kore-chat-window').off('click', '.advanced-list-wrapper .button_,.advanced-list-wrapper .inner-btns-acc .button_,.advanced-list-wrapper .tags-data .tag-name,.advanced-list-wrapper .btn_group .submitBtn,.advanced-list-wrapper .btn_group .cancelBtn,.advanced-list-wrapper .details-content .text-info,.advancelisttemplate .inner-btns-acc .button_,.advancelisttemplate .filter-icon .button_').on("click", '.advanced-list-wrapper .button_,.advanced-list-wrapper .inner-btns-acc .button_,.advanced-list-wrapper .tags-data .tag-name,.advanced-list-wrapper .btn_group .submitBtn,.advanced-list-wrapper .btn_group .cancelBtn,.advanced-list-wrapper .details-content .text-info,.advancelisttemplate .inner-btns-acc .button_,.advancelisttemplate .filter-icon .button_', function (e) {
+                            HandleClickAndSendRequest(e);
                         });
 
                         if (target.className.includes('scroll-bottom-btn')) {
