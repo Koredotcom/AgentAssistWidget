@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 declare const $: any;
 declare const agentAssistChat: any;
 declare const agentAssistCustomTemplate: any;
-
 @Injectable({
   providedIn: 'root'
 })
@@ -25,6 +24,7 @@ export class TemplateRenderClassService {
     var agentAssistv2 = agentAssistChat();
     this.AgentChatInitialize = new agentAssistv2.chatWindow(this.chatConfig);
     this.AgentChatInitialize.customTemplateObj = new agentAssistCustomTemplate(this.chatConfig, this.AgentChatInitialize);
+    window['AgentChatInitializes'] = this.AgentChatInitialize;
   }
 
   getResponseUsingTemplate(res) {

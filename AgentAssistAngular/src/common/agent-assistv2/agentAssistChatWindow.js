@@ -743,11 +743,11 @@
                 // this.reWriteWebHookURL(this.config)
                 // window._chatHistoryLoaded = false;
                 this.init();
-               // updateOnlineStatus();
-               // addBottomSlider();
-               // window.addEventListener('online', updateOnlineStatus);
-               // window.addEventListener('offline', updateOnlineStatus);
-               // attachEventListener();
+                // updateOnlineStatus();
+                // addBottomSlider();
+                // window.addEventListener('online', updateOnlineStatus);
+                // window.addEventListener('offline', updateOnlineStatus);
+                // attachEventListener();
             }
             //converts v1 webhooks url to v2 automatically
             chatWindow.prototype.reWriteWebHookURL = function (chatConfig) {
@@ -916,78 +916,78 @@
                     me.resetPingMessage();
                 }, me._pingTime);
             }
-            // window.onresize = function (event) {
-            //     var me=AgentChatInitialize;
-            //     if (event.target === window) {
-            //         AgentChatInitialize.setCollapsedModeStyles();
-            //         var _width = $('#chatContainer').width() - 400;
-            //         //$('.kore-chat-window').attr('style','left: '+_width+'+px');
-            //     }
-            //     if (($(`#${agentContainer}`).width() > 400) || (document.getElementsByClassName(`#${agentContainer}`).length && document.getElementsByClassName(`#${agentContainer}`)[0].classList.contains('expanded'))) {
-            //         var _koreChatWindowHeight = $(`#${agentContainer}`).width();
-            //       //  $('.carousel').attr('style', 'width: ' + (_koreChatWindowHeight - 85) + 'px !important');
-            //     } else {
-            //         $('.carousel').attr('style', 'width: 300px !important');
-            //     }
-            //     for (var i = 0; i < carouselEles.length; i++) {
-            //         carouselEles[i].computeResize();
-            //     }
+            window.onresize = function (event) {
+                var me=AgentChatInitializes;
+                if (event.target === window) {
+                    AgentChatInitializes.setCollapsedModeStyles();
+                    var _width = $('#chatContainer').width() - 400;
+                    //$('.kore-chat-window').attr('style','left: '+_width+'+px');
+                }
+                if (($(`#agentAssistContainer`).width() > 400) || (document.getElementsByClassName(`#agentAssistContainer`).length && document.getElementsByClassName(`#agentAssistContainer`)[0].classList.contains('expanded'))) {
+                    var _koreChatWindowHeight = $(`#agentAssistContainer`).width();
+                  //  $('.carousel').attr('style', 'width: ' + (_koreChatWindowHeight - 85) + 'px !important');
+                } else {
+                    $('.carousel').attr('style', 'width: 300px !important');
+                }
+                for (var i = 0; i < carouselEles.length; i++) {
+                    carouselEles[i].computeResize();
+                }
 
-            //     // handling quick replies
-            //     var quickReplyDivs = document.querySelectorAll('.quickReplies');
-            //     for (var i = 0; i < quickReplyDivs.length; i++) {
-            //         var btnsParentDiv = quickReplyDivs[i].querySelectorAll('.quick_replies_btn_parent');
-            //         var leftScrollBtn = quickReplyDivs[i].querySelectorAll('.quickreplyLeftIcon');
-            //         var rightScrollBtn = quickReplyDivs[i].querySelectorAll('.quickreplyRightIcon');
-            //         if (btnsParentDiv[0] && btnsParentDiv[0].hasChildNodes()) {
-            //             if (btnsParentDiv[0].scrollLeft > 0) {
-            //                 leftScrollBtn[0].classList.remove('hide');
-            //             }
-            //             else {
-            //                 leftScrollBtn[0].classList.add('hide');
-            //             }
-            //             if (btnsParentDiv[0].offsetWidth < btnsParentDiv[0].scrollWidth) {
-            //                 rightScrollBtn[0].classList.remove('hide');
-            //             }
-            //             else {
-            //                 rightScrollBtn[0].classList.add('hide');
-            //             }
-            //         }
-            //     }
+                // handling quick replies
+                var quickReplyDivs = document.querySelectorAll('.quickReplies');
+                for (var i = 0; i < quickReplyDivs.length; i++) {
+                    var btnsParentDiv = quickReplyDivs[i].querySelectorAll('.quick_replies_btn_parent');
+                    var leftScrollBtn = quickReplyDivs[i].querySelectorAll('.quickreplyLeftIcon');
+                    var rightScrollBtn = quickReplyDivs[i].querySelectorAll('.quickreplyRightIcon');
+                    if (btnsParentDiv[0] && btnsParentDiv[0].hasChildNodes()) {
+                        if (btnsParentDiv[0].scrollLeft > 0) {
+                            leftScrollBtn[0].classList.remove('hide');
+                        }
+                        else {
+                            leftScrollBtn[0].classList.add('hide');
+                        }
+                        if (btnsParentDiv[0].offsetWidth < btnsParentDiv[0].scrollWidth) {
+                            rightScrollBtn[0].classList.remove('hide');
+                        }
+                        else {
+                            rightScrollBtn[0].classList.add('hide');
+                        }
+                    }
+                }
 
-            //     /* Handling for full size table */
-            //     if ($(`#${agentContainer}`).width() > 460) {
-            //         $(".accordionTable").each(function () {
-            //             if ($(this).hasClass("responsive")) {
-            //                 $(this).addClass("hide")
-            //             }
-            //         });
-            //         $(".tablechartDiv").each(function () {
-            //             if (!$(this).hasClass("regular")) {
-            //                 $(this).removeClass("hide")
-            //             }
-            //         });
-            //     }
-            //     else {
-            //         $(".accordionTable").each(function () {
-            //             if ($(this).hasClass("responsive")) {
-            //                 $(this).removeClass("hide")
-            //             }
-            //         });
-            //         $(".tablechartDiv").each(function () {
-            //             if (!$(this).hasClass("regular")) {
-            //                 $(this).addClass("hide")
-            //             }
-            //         });
-            //     }
-            //     /* Handling for table ends*/
-            //      /* Handling expand and collapse chat-container height */
-            //     $(".chat-container").scrollTop($(".chat-container")[0].scrollHeight);
-            //     if(me.chatPSObj && me.chatPSObj.update){
-            //         me.chatPSObj.update()
-            //     }
-            //     /* Handling expand and collapse chat-container height */
-            // };
+                /* Handling for full size table */
+                if ($(`#agentAssistContainer`).width() > 460) {
+                    $(".accordionTable").each(function () {
+                        if ($(this).hasClass("responsive")) {
+                            $(this).addClass("hide")
+                        }
+                    });
+                    $(".tablechartDiv").each(function () {
+                        if (!$(this).hasClass("regular")) {
+                            $(this).removeClass("hide")
+                        }
+                    });
+                }
+                else {
+                    $(".accordionTable").each(function () {
+                        if ($(this).hasClass("responsive")) {
+                            $(this).removeClass("hide")
+                        }
+                    });
+                    $(".tablechartDiv").each(function () {
+                        if (!$(this).hasClass("regular")) {
+                            $(this).addClass("hide")
+                        }
+                    });
+                }
+                /* Handling for table ends*/
+                 /* Handling expand and collapse chat-container height */
+                // $(".chat-container").scrollTop($(".chat-container")[0].scrollHeight);
+                if(me.chatPSObj && me.chatPSObj.update){
+                    me.chatPSObj.update()
+                }
+                /* Handling expand and collapse chat-container height */
+            };
             chatWindow.prototype.handleImagePreview= function() {
                 var modal = document.getElementById('myModal');
 
@@ -1215,7 +1215,7 @@
                 _this.bot=bot;
                 //_this._chatContainer =  _this.config.chatContainer;
                 _this.EVENTS=EVENTS;
-                // _this.chatInitialize=AgentChatInitialize;
+                // _this.chatInitialize=AgentChatInitializes;
                 _this.botMessages=botMessages;
                 _this.attachmentInfo=attachmentInfo;
                 _this._botInfo=_botInfo;
@@ -1567,7 +1567,7 @@
                         }, 50);
                     }
                     // setTimeout(function () {
-                    //     // var _chatInput = _chatContainer.find('.kore-chat-footer .chatInputBox');
+                    //     var _chatInput = _chatContainer.find('.kore-chat-footer .chatInputBox');
                     //     _chatInput.focus();
                     // }, 600);
                 }
@@ -1675,13 +1675,13 @@
                 //     sendFailedMessage.messageId=target.closest('.fromCurrentUser').attr('id');
                 //     _chatContainer.find(".reload-btn").trigger('click',{isReconnect:true});
                 // });
-                // /*$('body').on('click', '.kore-chat-overlay, .kore-chat-window .minimize-btn', function () {
-                //     if (me.expanded === true) {
-                //         $('.kore-chat-window .expand-btn').trigger('click');
-                //     }
-                // });*/
+                /*$('body').on('click', '.kore-chat-overlay, .kore-chat-window .minimize-btn', function () {
+                    if (me.expanded === true) {
+                        $('.kore-chat-window .expand-btn').trigger('click');
+                    }
+                });*/
 
-                //  // dateClockPickers();
+                 // dateClockPickers();
                 //  if (window.KorePickers) {
                 //      var pickerConfig={
                 //       chatWindowInstance: me,
@@ -2173,7 +2173,7 @@
                 if (msgsData && msgsData.length) {
                     msgsData.forEach(function (msgData, index) {
                         setTimeout(function () {
-                            AgentChatInitialize.renderMessage(msgData);
+                            AgentChatInitializes.renderMessage(msgData);
                         }, (index >= 1) ? SUBSEQUENT_RENDER_DELAY : 0);
                     });
                 }
@@ -2917,7 +2917,7 @@
                             'msgData': msgData,
                             'helpers': helpers,
                             'extension': extension,
-                            'extractedFileName': _extractedFileName
+                            'extractedFileName':_extractedFileName
                         });
                     }
 
@@ -2938,10 +2938,10 @@
                     bottomSliderAction('show',messageHtml);
                 }else{
                     //ignore message(msgId) if it is already in viewport           
-                    // if ($(`${me.config.agentAssist?`#${agentContainer} #${runInfoContent} #displayData-${elementID}  li#`:`.kore-chat-window .chat-container li#`}` + msgData.messageId).length < 1 || (msgData.renderType==='inline')) {
+                    // if ($(`${me.config.agentAssist?`#agentAssistContainer #${runInfoContent} #displayData-${elementID}  li#`:`.kore-chat-window .chat-container li#`}` + msgData.messageId).length < 1 || (msgData.renderType==='inline')) {
                     //     if (msgData.type === "bot_response" && msgData.fromHistorySync) {
                     //         var msgTimeStamps = [];
-                    //         var msgEles = $(`${me.config.agentAssist?`#${agentContainer} #${runInfoContent} #displayData-${elementID}  >li`:'.kore-chat-window .chat-container>li'}`);
+                    //         var msgEles = $(`${me.config.agentAssist?`#agentAssistContainer #${runInfoContent} #displayData-${elementID}  >li`:'.kore-chat-window .chat-container>li'}`);
                     //         if (msgEles.length) {
                     //             msgEles.each(function (i, ele) {
                     //                 msgTimeStamps.push(parseInt($(ele).attr('data-time')));
@@ -2965,7 +2965,7 @@
                     //        _chatContainer.append(messageHtml);
                     //     }
                     // }else{
-                    //     console.log($(`#${agentContainer} #${runInfoContent} #displayData-${elementID}  li#`).length,"----<============================else=======================>came here out of else main if condition===",$(`${me.config.agentAssist?`#${agentContainer} #displayData-${elementID}  li#`:`.kore-chat-window .chat-container li#`}` + msgData.messageId).length,msgData.messageId, msgData.renderType);
+                    //     console.log($(`#agentAssistContainer #${runInfoContent} #displayData-${elementID}  li#`).length,"----<============================else=======================>came here out of else main if condition===",$(`${me.config.agentAssist?`#agentAssistContainer #displayData-${elementID}  li#`:`.kore-chat-window .chat-container li#`}` + msgData.messageId).length,msgData.messageId, msgData.renderType);
                     // }
                 }
                 me.handleImagePreview();
@@ -3963,7 +3963,7 @@
                 }
             };
             this.applySDKBranding = function (res) {
-                AgentChatInitialize.applySDKBranding.call(AgentChatInitialize,res);
+                AgentChatInitializes.applySDKBranding.call(AgentChatInitializes,res);
             }
             function IsJsonString() {
                 try {
@@ -4065,8 +4065,8 @@
                 }
             }*/
             window.onbeforeunload = function () {
-                if (AgentChatInitialize && $(AgentChatInitialize.config.chatContainer).length > 0) {
-                    AgentChatInitialize.destroy();
+                if (AgentChatInitializes && $(AgentChatInitializes.config.chatContainer).length > 0) {
+                    AgentChatInitializes.destroy();
                     //return null;
                 }
             }
@@ -4121,21 +4121,21 @@
                     var wizSDK = cfg.widgetSDKInstace;
                     wizSDK.events.onPostback = function (data) {
                             $('.chatInputBox').text(data.payload);
-                            AgentChatInitialize.sendMessage($('.chatInputBox'), data.utterance, data);
+                            AgentChatInitializes.sendMessage($('.chatInputBox'), data.utterance, data);
                     };
                 }
             };
             
             this.setWidgetInstance=function(widgetSDKInstace){
                 if(widgetSDKInstace){
-                    AgentChatInitialize.config.widgetSDKInstace=widgetSDKInstace;
-                    this.addWidgetEvents(AgentChatInitialize.config);
+                    AgentChatInitializes.config.widgetSDKInstace=widgetSDKInstace;
+                    this.addWidgetEvents(AgentChatInitializes.config);
                 }
             }           
             this.destroy = function () {
-                if (AgentChatInitialize && AgentChatInitialize.destroy) {
+                if (AgentChatInitializes && AgentChatInitializes.destroy) {
                     _eventQueue = {};
-                    AgentChatInitialize.destroy();
+                    AgentChatInitializes.destroy();
                 }
                 if (_ttsContext) {
                     _ttsContext.close();
@@ -4177,7 +4177,7 @@
                 }, 50);*/
             }
             this.chatHistory = function (res) {
-                AgentChatInitialize.chatHistory.call(AgentChatInitialize,res);
+                AgentChatInitializes.chatHistory.call(AgentChatInitializes,res);
             }
             // chatWindow.prototype.chatHistory = function (res) {
             //     var me = this;
@@ -4304,8 +4304,8 @@
             //     }
             // }
             this.closeConversationSession = function () {
-               if(AgentChatInitialize){
-                    AgentChatInitialize.closeConversationSession();
+               if(AgentChatInitializes){
+                    AgentChatInitializes.closeConversationSession();
                } 
             }
             /*************************************       Microphone code      **********************************************/
@@ -4313,16 +4313,16 @@
             var recognizing = false;
             var recognition = null;
             var prevStr = "";
-            // setTimeout(function(){
-            //     if(AgentChatInitialize && AgentChatInitialize.config && AgentChatInitialize.config.allowGoogleSpeech) {
-            //         if(window.initGapi){
-            //             initGapi();
-            //         }else{
-            //             console.warn("Please uncomment Google Speech files('speech/app.js','speech/key.js' and 'client_api.js' in index.html")
-            //         }
+            setTimeout(function(){
+                if(AgentChatInitializes && AgentChatInitializes.config && AgentChatInitializes.config.allowGoogleSpeech) {
+                    if(window.initGapi){
+                        initGapi();
+                    }else{
+                        console.warn("Please uncomment Google Speech files('speech/app.js','speech/key.js' and 'client_api.js' in index.html")
+                    }
         
-            //     }
-            // },2000);
+                }
+            },2000);
             function isChrome() {
                 var isChromium = window.chrome,
                     winNav = window.navigator,
@@ -4439,7 +4439,7 @@
                     intervalKey = setInterval(function () {
                         rec.export16kMono(function (blob) {
                             console.log(new Date());
-                            if (AgentChatInitialize.config.allowGoogleSpeech) {
+                            if (AgentChatInitializes.config.allowGoogleSpeech) {
                                 sendBlobToSpeech(blob, 'LINEAR16', 16000);
                             }
                             else {
@@ -4452,7 +4452,7 @@
             }
 
             function getSIDToken() {
-                if(AgentChatInitialize.config.allowGoogleSpeech) {
+                if(AgentChatInitializes.config.allowGoogleSpeech) {
                     if(recognition) { // using webkit speech recognition
                         startGoogleWebKitRecognization();
                     }
@@ -4548,7 +4548,7 @@
                 });
                 console.log('Recorder Initialized');
                 _permission = true;
-                if (!AgentChatInitialize.config.allowGoogleSpeech) {
+                if (!AgentChatInitializes.config.allowGoogleSpeech) {
                     afterMicEnable();
                 }
                 else {
@@ -4679,7 +4679,7 @@
                 };
                 // If server is closed
                 _connection.onclose = function (e) {
-                    if ($('.chatInputBox').text() !== '' && AgentChatInitialize.config.autoEnableSpeechAndTTS) {
+                    if ($('.chatInputBox').text() !== '' && AgentChatInitializes.config.autoEnableSpeechAndTTS) {
                         var me = window.chatContainerConfig;
                         me.sendMessage($('.chatInputBox'));
                     }
@@ -4696,7 +4696,7 @@
             }
 
             function stop() {
-                if ($('.chatInputBox').text() !== '' && AgentChatInitialize.config.autoEnableSpeechAndTTS) {
+                if ($('.chatInputBox').text() !== '' && AgentChatInitializes.config.autoEnableSpeechAndTTS) {
                     var me = window.chatContainerConfig;
                     me.sendMessage($('.chatInputBox'));
                 }
@@ -4793,7 +4793,7 @@
                         // do nothing
                     } else {
                         var _data = msg.data
-                        if (AgentChatInitialize.isTTSOn) {
+                        if (AgentChatInitializes.isTTSOn) {
                             playsound(_data);
                         }
                     }
@@ -4863,7 +4863,7 @@
                         ttsAudioSource.start(0);
                         ttsAudioSource.addEventListener('ended', function () {
                             setTimeout(function () {
-                                if (AgentChatInitialize.isTTSOn && AgentChatInitialize.config.autoEnableSpeechAndTTS) {
+                                if (AgentChatInitializes.isTTSOn && AgentChatInitializes.config.autoEnableSpeechAndTTS) {
                                     $('.notRecordingMicrophone').trigger('click');
                                 }
                             }, 350);
@@ -5052,7 +5052,7 @@
                 }
             };
             function getFileToken(_obj, _file, recState) {
-                var me=AgentChatInitialize;
+                var me=AgentChatInitializes;
                 var auth = (bearerToken) ? bearerToken : assertionToken;
                 var url=koreAPIUrl + "1.1/attachment/file/token";
                 if(me.config && me.config && me.config.botOptions && me.config.botOptions.webhookConfig && me.config.botOptions.webhookConfig.enable){
@@ -5071,7 +5071,7 @@
                         acceptAndUploadFile(_obj, _file, recState);
                     },
                     error: function (msg) {
-                        AgentChatInitialize.config.botOptions._reconnecting=true;
+                        AgentChatInitializes.config.botOptions._reconnecting=true;
                         _self.showError("Failed to upload file.Please try again");
                         if(msg.responseJSON && msg.responseJSON.errors && msg.responseJSON.errors.length && msg.responseJSON.errors[0].httpStatus==="401"){
                             setTimeout(function(){
@@ -5084,13 +5084,13 @@
                 });
             }
             function getfileuploadConf(_recState) {
-                var me=AgentChatInitialize;
+                var me=AgentChatInitializes;
                 appConsts.UPLOAD = {
                     "FILE_ENDPOINT": koreAPIUrl + "1.1/attachment/file",
                     "FILE_TOKEN_ENDPOINT": koreAPIUrl + "1.1/attachment/file/token",
                     "FILE_CHUNK_ENDPOINT": koreAPIUrl + "1.1/attachment/file/:fileID/chunk"
                 };
-                _accessToke = "bearer " + AgentChatInitialize.accessToken;
+                _accessToke = "bearer " + AgentChatInitializes.accessToken;
                 if(me.config && me.config && me.config.botOptions && me.config.botOptions.webhookConfig && me.config.botOptions.webhookConfig.enable){
                     //appConsts.UPLOAD.FILE_ENDPOINT=koreAPIUrl + "attachments/file/"+me.config.botOptions.webhookConfig.streamId+"/"+me.config.botOptions.webhookConfig.channelType;
                     _accessToke='bearer '+me.config.botOptions.webhookConfig.token;
@@ -5228,8 +5228,8 @@
                 _cmpt.append('<div class="removeAttachment"><span>&times;</span></div>');
                 $('.footerContainer').find('.attachment').html(_cmpt);
                 $('.chatInputBox').focus();
-                AgentChatInitialize.attachmentInfo.fileName = data.values.componentData.filename;
-                AgentChatInitialize.attachmentInfo.fileType = data.values.componentType;
+                AgentChatInitializes.attachmentInfo.fileName = data.values.componentData.filename;
+                AgentChatInitializes.attachmentInfo.fileType = data.values.componentType;
                 $('.sendButton').removeClass('disabled');
             };
             function acceptFileRecording(_this, _recState, ele) {
@@ -5714,7 +5714,7 @@
                 getSDKInstance:function(){
                     return bot;
                 },
-               // instance:AgentChatInitialize,
+               // instance:AgentChatInitializes,
                 sdkInstance:bot,
                 chatWindow:chatWindow,
                 addWidgetEvents:addWidgetEvents,
