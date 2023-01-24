@@ -397,13 +397,13 @@
                         if (dummyString.indexOf(match) !== -1) {
                             var _link = p1.indexOf('http') < 0 ? 'http://' + match : match, _target;
                             //_link = encodeURIComponent(_link);
-                            _target = "target='underscoreblank'";
+                            target = "target='underscoreblank'";
                             if (hyperLinksMap) {
                                 var _randomKey = "korerandom://" + Object.keys(hyperLinksMap).length;
                                 hyperLinksMap[_randomKey] = _link;
                                 _link = _randomKey;
                             }
-                            return "<span class='isLink'><a id='linkEvent'" + _target + " href=\"" + _link + "\">" + match + "</a></span>";
+                            return "<span class='isLink'><a id='linkEvent' target='_blank' " + _target + " href=\"" + _link + "\">" + match + "</a></span>";
                         } else {
                             return match;
                         }
@@ -582,7 +582,7 @@
                                     hyperLinksMap[_randomKey] = _linkLink;
                                     _linkLink = _randomKey;
                                 }
-                                _linkLink = '<span class="isLink"><a id="linkEvent" href="' + _linkLink + '" target="underscoreblank">' + helpers.checkMarkdowns(_linkTxt) + '</a></span>';
+                                _linkLink = '<span class="isLink"><a id="linkEvent" target="_blank" href="' + _linkLink + '" target="underscoreblank">' + helpers.checkMarkdowns(_linkTxt) + '</a></span>';
                                 txtArr[i] = txtArr[i].replace(_matchLink[j], _linkLink);
                             }
                         }
@@ -724,15 +724,15 @@
 
             function chatWindow(cfg) {
                 this.setPrivateVarToContext(this);
-               // isRecordingStarted = false;
-               // cfg.botOptions.test = false;
-                this.config =cfg;
-                // // koreAPIUrl = cfg.botOptions.koreAPIUrl;
-                // // bearerToken = cfg.botOptions.bearer;
+                // isRecordingStarted = false;
+                // cfg.botOptions.test = false;
+                this.config =cfg
+                // koreAPIUrl = cfg.botOptions.koreAPIUrl;
+                // bearerToken = cfg.botOptions.bearer;
                 // //speechServerUrl = cfg.botOptions.speechSocketUrl;
-                // // speechPrefixURL = cfg.botOptions.koreSpeechAPIUrl;
-                // // ttsServerUrl = cfg.botOptions.ttsSocketUrl;
-                // // userIdentity = cfg.botOptions.userIdentity;
+                // speechPrefixURL = cfg.botOptions.koreSpeechAPIUrl;
+                // ttsServerUrl = cfg.botOptions.ttsSocketUrl;
+                // userIdentity = cfg.botOptions.userIdentity;
                 // if (cfg.botOptions.recorderWorkerPath && cfg.botOptions.recorderWorkerPath.trim().length > 0) {
                 //     recorderWorkerPath = cfg.botOptions.recorderWorkerPath.trim();
                 // }
@@ -740,10 +740,13 @@
                 //     delete cfg.chatContainer;
                 // }
                 // this.config = extend(this.config, cfg);
-               
+                // this.reWriteWebHookURL(this.config)
+                // window._chatHistoryLoaded = false;
                 this.init();
                // updateOnlineStatus();
                // addBottomSlider();
+               // window.addEventListener('online', updateOnlineStatus);
+               // window.addEventListener('offline', updateOnlineStatus);
                // attachEventListener();
             }
             //converts v1 webhooks url to v2 automatically
@@ -920,8 +923,8 @@
             //         var _width = $('#chatContainer').width() - 400;
             //         //$('.kore-chat-window').attr('style','left: '+_width+'+px');
             //     }
-            //     if (($(`#agentAssistContainer`).width() > 400) || (document.getElementsByClassName(`#agentAssistContainer`).length && document.getElementsByClassName(`#agentAssistContainer`)[0].classList.contains('expanded'))) {
-            //         var _koreChatWindowHeight = $(`#agentAssistContainer`).width();
+            //     if (($(`#${agentContainer}`).width() > 400) || (document.getElementsByClassName(`#${agentContainer}`).length && document.getElementsByClassName(`#${agentContainer}`)[0].classList.contains('expanded'))) {
+            //         var _koreChatWindowHeight = $(`#${agentContainer}`).width();
             //       //  $('.carousel').attr('style', 'width: ' + (_koreChatWindowHeight - 85) + 'px !important');
             //     } else {
             //         $('.carousel').attr('style', 'width: 300px !important');
@@ -936,7 +939,7 @@
             //         var btnsParentDiv = quickReplyDivs[i].querySelectorAll('.quick_replies_btn_parent');
             //         var leftScrollBtn = quickReplyDivs[i].querySelectorAll('.quickreplyLeftIcon');
             //         var rightScrollBtn = quickReplyDivs[i].querySelectorAll('.quickreplyRightIcon');
-            //         if (btnsParentDiv[0].hasChildNodes()) {
+            //         if (btnsParentDiv[0] && btnsParentDiv[0].hasChildNodes()) {
             //             if (btnsParentDiv[0].scrollLeft > 0) {
             //                 leftScrollBtn[0].classList.remove('hide');
             //             }
@@ -953,7 +956,7 @@
             //     }
 
             //     /* Handling for full size table */
-            //     if ($(`#agentAssistContainer`).width() > 460) {
+            //     if ($(`#${agentContainer}`).width() > 460) {
             //         $(".accordionTable").each(function () {
             //             if ($(this).hasClass("responsive")) {
             //                 $(this).addClass("hide")
@@ -1138,8 +1141,7 @@
                 if (me.config.allowLocation) {
                     me.bot.fetchUserLocation();
                 }
-                console.log("======me=====",me)
-              //  me.render(chatWindowHtml);
+               // me.render(chatWindowHtml);
                 me.unfreezeUIOnHistoryLoadingFail.call(me);
             };
             chatWindow.prototype.initi18n = function () {
@@ -1446,49 +1448,55 @@
                 //         setCaretEnd(_this);
                 //     }, 100);
                 // });
+                
                 // _chatContainer.off('click', '.sendChat').on('click', '.sendChat', function (event) {
                 //     var _footerContainer = $(me.config.container).find('.kore-chat-footer');
                 //     me.sendMessage(_footerContainer.find('.chatInputBox'));
                 // });
-
-                // _chatContainer.off('click', 'li a').on('click', 'li a', function (e) {
-                //     e.preventDefault();
-                //     var a_link = $(this).attr('href');
-                //     var _trgt = $(this).attr('target');
-                //     var msgDataText = $(event.currentTarget).closest('span.simpleMsg').attr('msgData') || '';
-                //     var msgData;
-                //     if(msgDataText){
-                //         try {
-                //          msgData = JSON.parse(msgDataText);
-                //         } catch (err) {
+                // _chatContainer = $('#agent-assist-chat-container')
+                // _chatContainer.off('click', 'li a').on('click', 'li a', function (e) {///////
+                if(isEventEnable){
+                    e.preventDefault();
+                    e.stopPropagation();
+                    var a_link = $(this).attr('href');
+                    var _trgt = $(this).attr('target');
+                    var msgDataText = $(event.currentTarget).closest('span.simpleMsg').attr('msgData') || '';
+                    var msgData;
+                    if(msgDataText){
+                        try {
+                         msgData = JSON.parse(msgDataText);
+                        } catch (err) {
         
-                //         }
-                //     }
-                //     if(msgData && msgData.message && msgData.message[0].component && msgData.message[0].component.payload && msgData.message[0].component.payload.formData){
-                //         me.renderWebForm(msgData);
-                //     } else if (_trgt === "_self") {
-                //         callListener("provideVal", { link: a_link });
-                //         return;
-                //     }
-                //     if (me.config.allowIframe === true) {
-                //          var popupHtml = $(me.getChatTemplate("iframe")).tmpl({
-                //             'msgData': msgData,
-                //             'helpers': me.helpers,
-                //             "link_url": url
-                //         });
-                //          popupHtml[0].onload = function(iFrameEvent){
-                //             console.log(iFrameEvent);
-                //          }
-                //          openModal(popupHtml[0],true);
-                //     }
-                //     else {
-                //         me.openExternalLink(a_link)
-                //     }
-                // });
+                        }
+                    }
+                    if(msgData && msgData.message && msgData.message[0].component && msgData.message[0].component.payload && msgData.message[0].component.payload.formData){
+                        me.renderWebForm(msgData);
+                    } else if (_trgt === "_self") {
+                        callListener("provideVal", { link: a_link });
+                        return;
+                    }
+                    if (me.config.allowIframe === true) {
+                         var popupHtml = $(me.getChatTemplate("iframe")).tmpl({
+                            'msgData': msgData,
+                            'helpers': me.helpers,
+                            "link_url": url
+                        });
+                         popupHtml[0].onload = function(iFrameEvent){
+                            console.log(iFrameEvent);
+                         }
+                         openModal(popupHtml[0],true);
+                    }
+                    else {
+                        if(a_link){
+                            me.openExternalLink(a_link)
+                        }
+                    }
+                }
+                   
+              //  });
                 //_chatContainer.off('click', '.buttonTmplContentBox li,.listTmplContentChild .buyBtn,.viewMoreList .viewMore,.listItemPath,.quickReply,.carouselImageContent,.listRightContent,.checkboxBtn,.likeDislikeDiv').on('click', '.buttonTmplContentBox li,.listTmplContentChild .buyBtn, .viewMoreList .viewMore,.listItemPath,.quickReply,.carouselImageContent,.listRightContent,.checkboxBtn,.likeDislikeDiv', function (e) {
                 if(isEventEnable){
                     e.preventDefault();
-                    console.log('=======================here inside click========')
                     e.stopPropagation();
                     var type = $(e.target).attr('type');
                     if (type) {
@@ -1498,7 +1506,7 @@
                         //if(!me.config.agentAssist){
                          //   $('.chatInputBox').text($(e.target).attr('actual-value') || $(e.target).attr('value'));
                         //var _innerText = $(e.target)[0].innerText.trim() || $(e.target).attr('data-value').trim();
-                        var _innerText = ($(e.target)[0] && $(e.target)[0].innerText) ? $(e.target)[0].innerText.trim() : "" || ($(e.target) && $(e.target).attr('data-value')) ? $(e.target).attr('data-value').trim() : "";
+                        var _innerText = $(e.target).attr('value')?$(e.target).attr('value').trim():'' ||($(e.target)[0] && $(e.target)[0].innerText) ? $(e.target)[0].innerText.trim() : "" || ($(e.target) && $(e.target).attr('data-value')) ? $(e.target).attr('data-value').trim() : "";
                        // me.sendMessage($('.chatInputBox'), _innerText);
                        
                        localStorage.setItem('innerTextValue', JSON.stringify(_innerText));
@@ -1545,7 +1553,7 @@
                             toShowText.push($(checkboxSelection[i]).attr('text'));
                         }
                         $('.chatInputBox').text($(e.target).attr('title') +': '+ selectedValue.toString());
-                        me.sendMessage($('.chatInputBox'),toShowText.toString());
+                        // me.sendMessage($('.chatInputBox'),toShowText.toString());
                     }
                     if (e.currentTarget.classList && e.currentTarget.classList.length > 0 && e.currentTarget.classList[0] === 'quickReply') {
                         var _parentQuikReplyEle = e.currentTarget.parentElement.parentElement;
@@ -1558,10 +1566,10 @@
                             _parentQuikReplyEle.parentElement.removeChild(_parentQuikReplyEle);
                         }, 50);
                     }
-                    setTimeout(function () {
-                        var _chatInput = _chatContainer.find('.kore-chat-footer .chatInputBox');
-                        _chatInput.focus();
-                    }, 600);
+                    // setTimeout(function () {
+                    //     // var _chatInput = _chatContainer.find('.kore-chat-footer .chatInputBox');
+                    //     _chatInput.focus();
+                    // }, 600);
                 }
                 //});
 
@@ -1667,27 +1675,27 @@
                 //     sendFailedMessage.messageId=target.closest('.fromCurrentUser').attr('id');
                 //     _chatContainer.find(".reload-btn").trigger('click',{isReconnect:true});
                 // });
-                /*$('body').on('click', '.kore-chat-overlay, .kore-chat-window .minimize-btn', function () {
-                    if (me.expanded === true) {
-                        $('.kore-chat-window .expand-btn').trigger('click');
-                    }
-                });*/
+                // /*$('body').on('click', '.kore-chat-overlay, .kore-chat-window .minimize-btn', function () {
+                //     if (me.expanded === true) {
+                //         $('.kore-chat-window .expand-btn').trigger('click');
+                //     }
+                // });*/
 
-                 // dateClockPickers();
-                 if (window.KorePickers) {
-                     var pickerConfig={
-                      chatWindowInstance: me,
-                       chatConfig: me.config,
-                    }
-                    var korePicker = new KorePickers(pickerConfig);
-                    korePicker.init();
-                 }
-                $(document).on('keyup', function (evt) {
-                    if (evt.keyCode == 27) {
-                        $('.closeImagePreview').trigger('click');
-                        $('.closeElePreview').trigger('click');
-                    }
-                });
+                //  // dateClockPickers();
+                //  if (window.KorePickers) {
+                //      var pickerConfig={
+                //       chatWindowInstance: me,
+                //        chatConfig: me.config,
+                //     }
+                //     var korePicker = new KorePickers(pickerConfig);
+                //     korePicker.init();
+                //  }
+                // $(document).on('keyup', function (evt) {
+                //     if (evt.keyCode == 27) {
+                //         $('.closeImagePreview').trigger('click');
+                //         $('.closeElePreview').trigger('click');
+                //     }
+                // });
                 // _chatContainer.off('click', '.quickreplyLeftIcon').on('click', '.quickreplyLeftIcon', function (event) {
                 //     var _quickReplesDivs = event.currentTarget.parentElement.getElementsByClassName('buttonTmplContentChild');
                 //     if (_quickReplesDivs.length) {
@@ -2028,7 +2036,7 @@
             chatWindow.prototype.sendMessage = function (chatInput, renderMsg,msgObject) {
                 var me = this;
                 me.stopSpeaking();
-                if (chatInput.text().trim() === "" && $('.attachment').html().trim().length == 0) {
+                if (chatInput.text().trim() === "" && $('.attachment')?.html()?.trim()?.length == 0) {
                     return;
                 }
                 if(msgObject && msgObject.message && msgObject.message.length && msgObject.message[0]&& msgObject.message[0].component&& msgObject.message[0].component.payload && msgObject.message[0].component.payload.ignoreCheckMark){
@@ -2047,7 +2055,7 @@
                 var msgData = {};
                 fileUploaderCounter = 0;
                 //to send \n to server for new lines
-                chatInput.html(chatInput.html().replaceAll("<br>", "\n"));
+                chatInput.html(chatInput.html()?.replaceAll("<br>", "\n"));
                 if (me.attachmentInfo && Object.keys(me.attachmentInfo).length) {
                     msgData = {
                         'type': "currentUser",
@@ -2238,7 +2246,7 @@
             };
 
             chatWindow.prototype.renderMessage = function (msgData,elementID, runInfoContent) {
-                console.log("came inside render message function with id", elementID);
+                console.log("came inside render message function with id", msgData);
                 $(".kore-chat-window").addClass('customBranding-theme');
                 var me = this, messageHtml = '', extension = '', _extractedFileName = '';
                 var helpers=me.helpers;
@@ -2332,6 +2340,7 @@
                                 $(`#carousel-one-by-one-${msgData.messageId}`).parent().show();
                                 $(`#carousel-one-by-one-${msgData.messageId}`).attr('style', 'height: 100% !important');
                                 carouselEles.push(carouselOneByOne);
+                                console.log("xxxxxxxxxxxxxxxxx carousels", carouselEles)
                                 for (var i = 0; i < carouselEles.length; i++) {
                                     $(carouselEles[i].carousel).parent().show();
                                 }
@@ -2928,12 +2937,11 @@
                 if(msgData && msgData.message[0] && msgData.message[0].component && msgData.message[0].component.payload && msgData.message[0].component.payload.sliderView && !msgData.message[0].component.payload.fromHistory){
                     bottomSliderAction('show',messageHtml);
                 }else{
-                    //ignore message(msgId) if it is already in viewport        
-                    console.log("-------------came to first else conditions--- line no 2929", _chatContainer)             
-                    // if ($(`${me.config.agentAssist?`#agentAssistContainer #${runInfoContent} #displayData-${elementID}  li#`:`.kore-chat-window .chat-container li#`}` + msgData.messageId).length < 1 || (msgData.renderType==='inline')) {
+                    //ignore message(msgId) if it is already in viewport           
+                    // if ($(`${me.config.agentAssist?`#${agentContainer} #${runInfoContent} #displayData-${elementID}  li#`:`.kore-chat-window .chat-container li#`}` + msgData.messageId).length < 1 || (msgData.renderType==='inline')) {
                     //     if (msgData.type === "bot_response" && msgData.fromHistorySync) {
                     //         var msgTimeStamps = [];
-                    //         var msgEles = $(`${me.config.agentAssist?`#agentAssistContainer #${runInfoContent} #displayData-${elementID}  >li`:'.kore-chat-window .chat-container>li'}`);
+                    //         var msgEles = $(`${me.config.agentAssist?`#${agentContainer} #${runInfoContent} #displayData-${elementID}  >li`:'.kore-chat-window .chat-container>li'}`);
                     //         if (msgEles.length) {
                     //             msgEles.each(function (i, ele) {
                     //                 msgTimeStamps.push(parseInt($(ele).attr('data-time')));
@@ -2945,23 +2953,19 @@
                     //                 if (insertAfterEle) {
                     //                     $(messageHtml).insertBefore(insertAfterEle);
                     //                 } else {
-                    //                     console.log(_chatContainer,"===========line no 2945=====", messageHtml)
                     //                     _chatContainer.append(messageHtml);
                     //                 }
                     //             } else {
-                    //                 console.log(_chatContainer,"===========line no 2949=====", messageHtml)
                     //                 _chatContainer.prepend(messageHtml);
                     //             }
                     //         } else {
-                    //             console.log(_chatContainer,"===========line no 2953=====", messageHtml)
                     //             _chatContainer.append(messageHtml);
                     //         }
                     //     } else {
-                    //         console.log(_chatContainer,"===========line no 2957=====", messageHtml)
                     //        _chatContainer.append(messageHtml);
                     //     }
                     // }else{
-                    //     console.log($(`#agentAssistContainer #${runInfoContent} #displayData-${elementID}  li#`).length,"----<============================else=======================>came here out of else main if condition===",$(`${me.config.agentAssist?`#agentAssistContainer #displayData-${elementID}  li#`:`.kore-chat-window .chat-container li#`}` + msgData.messageId).length,msgData.messageId, msgData.renderType);
+                    //     console.log($(`#${agentContainer} #${runInfoContent} #displayData-${elementID}  li#`).length,"----<============================else=======================>came here out of else main if condition===",$(`${me.config.agentAssist?`#${agentContainer} #displayData-${elementID}  li#`:`.kore-chat-window .chat-container li#`}` + msgData.messageId).length,msgData.messageId, msgData.renderType);
                     // }
                 }
                 me.handleImagePreview();
@@ -3198,80 +3202,80 @@
         </script>';
 
             var msgTemplate = '<script id="chat_message_tmpl" type="text/x-jqury-tmpl"> \
-                    {{if msgData.message}} \
-                        {{each(key, msgItem) msgData.message}} \
-                            {{if msgItem.cInfo && msgItem.type === "text"}} \
-                                <li data-time="${msgData.createdOnTimemillis}" id="${msgData.messageId || msgItem.clientMessageId}"\
-                                     class="{{if msgData.type === "bot_response"}}fromOtherUsers{{else}}fromCurrentUser{{/if}}\ {{if msgData.icon}}with-icon{{/if}} {{if msgData.fromAgent}}from-agent{{/if}}"> \
-                                    {{if msgData.createdOn}}<div aria-hidden="true" aria-live="off" class="extra-info">${helpers.formatDate(msgData.createdOn)}</div>{{/if}} \
-                                    {{if msgData.icon}}<div aria-hidden="true"  aria-live="off" class="profile-photo"> <div class="user-account avtar" style="background-image:url(${msgData.icon})" title="User Avatar"></div> </div> {{/if}} \
-                                    <div class="messageBubble" aria-live="assertive">\
-                                        <div> \
-                                            {{if msgData.type === "bot_response"}} \
-                                                {{if msgItem.component  && msgItem.component.type =="error"}} \
-                                                    <span style="color:${msgItem.component.payload.color}">{{html helpers.convertMDtoHTML(msgItem.component.payload.text, "bot",msgItem)}} </span>\
-                                                {{else}} \
-                                                    {{if msgItem.component.type == "message" && msgItem.component.payload.fileUrl}} \
-                                                        <div class="msgCmpt botResponseAttachments" fileid="${msgItem.component.payload.fileUrl}"> \
-                                                            <div class="uploadedFileIcon"> \
-                                                                {{if extension[extension.length-1]=="xlsx" || extension[extension.length-1]=="xls" || extension[extension.length-1]=="docx" || extension[extension.length-1]=="doc" || extension[extension.length-1]=="pdf" || extension[extension.length-1]=="ppsx" || extension[extension.length-1]=="pptx" || extension[extension.length-1]=="ppt" || extension[extension.length-1]=="zip" || extension[extension.length-1]=="rar"}}\
-                                                                    <span class="icon cf-icon icon-files_${extension[extension.length-1]}"></span> \
-                                                                {{else extension[extension.length-1]}}\
-                                                                    <span class="icon cf-icon icon-files_other_doc"></span> \
-                                                                {{/if}}\
-                                                            </div> \
-                                                            <div class="botuploadedFileName">${extractedFileName}</div> \
-                                                        </div> \
-                                                    {{else}} \
-                                                        <span class="simpleMsg" {{if msgData}}msgData="${JSON.stringify(msgData)}" {{/if}}>{{html helpers.convertMDtoHTML(msgItem.cInfo.body, "bot",msgItem)}}</span> \
-                                                    {{/if}} \
-                                                    {{if msgItem.component && msgItem.component.payload && msgItem.component.payload.videoUrl}}\
-                                                        <div class="videoEle"><video width="300" controls><source src="${msgItem.component.payload.videoUrl}" type="video/mp4"></video></div>\
-                                                    {{/if}}\
-                                                    {{if msgItem.component && msgItem.component.payload && msgItem.component.payload.audioUrl}}\
-                                                        <div class="audioEle"><audio width="180" controls><source src="${msgItem.component.payload.audioUrl}"></audio></div>\
-                                                    {{/if}}\
-                                                {{/if}} \
-                                            {{else}} \
-                                                {{if msgItem.cInfo.renderMsg && msgItem.cInfo.renderMsg !== ""}}\
-                                                    {{html helpers.convertMDtoHTML(msgItem.cInfo.renderMsg, "user",msgItem)}} \
-                                                {{else}}\
-                                                    {{html helpers.convertMDtoHTML(msgItem.cInfo.body, "user",msgItem)}} \
-                                                {{/if}}\
-                                            {{/if}} \
-                                        </div>\
-                                        {{if msgItem.cInfo && msgItem.cInfo.emoji}} \
-                                            <span class="emojione emojione-${msgItem.cInfo.emoji[0].code}">${msgItem.cInfo.emoji[0].title}</span> \
-                                        {{/if}} \
-                                        {{if msgItem.cInfo.attachments}} \
-                                            <div class="msgCmpt attachments" fileid="${msgItem.cInfo.attachments[0].fileId}"> \
-                                                <div class="uploadedFileIcon"> \
-                                                    {{if msgItem.cInfo.attachments[0].fileType == "image"}} \
-                                                        <span class="icon cf-icon icon-photos_active"></span> \
-                                                    {{else msgItem.cInfo.attachments[0].fileType == "audio"}}\
-                                                        <span class="icon cf-icon icon-files_audio"></span> \
-                                                    {{else msgItem.cInfo.attachments[0].fileType == "video"}} \
-                                                        <span class="icon cf-icon icon-video_active"></span> \
-                                                    {{else}} \
-                                                        {{if extension[1]=="xlsx" || extension[1]=="xls" || extension[1]=="docx" || extension[1]=="doc" || extension[1]=="pdf" || extension[1]=="ppsx" || extension[1]=="pptx" || extension[1]=="ppt" || extension[1]=="zip" || extension[1]=="rar"}}\
-                                                            <span class="icon cf-icon icon-files_${extension[1]}"></span> \
-                                                        {{else extension[1]}}\
+            {{if msgData.message}} \
+                {{each(key, msgItem) msgData.message}} \
+                    {{if msgItem.cInfo && msgItem.type === "text"}} \
+                        <li data-time="${msgData.createdOnTimemillis}" id="${msgData.messageId || msgItem.clientMessageId}"\
+                             class="{{if msgData.type === "bot_response"}}fromOtherUsers{{else}}fromCurrentUser{{/if}}\ {{if msgData.icon}}with-icon{{/if}} {{if msgData.fromAgent}}from-agent{{/if}}"> \
+                            {{if msgData.createdOn}}<div aria-hidden="true" aria-live="off" class="extra-info">${helpers.formatDate(msgData.createdOn)}</div>{{/if}} \
+                            {{if msgData.icon}}<div aria-hidden="true"  aria-live="off" class="profile-photo"> <div class="user-account avtar" style="background-image:url(${msgData.icon})" title="User Avatar"></div> </div> {{/if}} \
+                            <div class="messageBubble" aria-live="assertive">\
+                                <div> \
+                                    {{if msgData.type === "bot_response"}} \
+                                        {{if msgItem.component  && msgItem.component.type =="error"}} \
+                                            <span style="color:${msgItem.component.payload.color}">{{html helpers.convertMDtoHTML(msgItem.component.payload.text, "bot",msgItem)}} </span>\
+                                        {{else}} \
+                                            {{if msgItem.component.type == "message" && msgItem.component.payload.fileUrl}} \
+                                                <div class="msgCmpt botResponseAttachments" fileid="${msgItem.component.payload.fileUrl}"> \
+                                                    <div class="uploadedFileIcon"> \
+                                                        {{if extension[extension.length-1]=="xlsx" || extension[extension.length-1]=="xls" || extension[extension.length-1]=="docx" || extension[extension.length-1]=="doc" || extension[extension.length-1]=="pdf" || extension[extension.length-1]=="ppsx" || extension[extension.length-1]=="pptx" || extension[extension.length-1]=="ppt" || extension[extension.length-1]=="zip" || extension[extension.length-1]=="rar"}}\
+                                                            <span class="icon cf-icon icon-files_${extension[extension.length-1]}"></span> \
+                                                        {{else extension[extension.length-1]}}\
                                                             <span class="icon cf-icon icon-files_other_doc"></span> \
                                                         {{/if}}\
-                                                    {{/if}}\
+                                                    </div> \
+                                                    <div class="botuploadedFileName">${extractedFileName}</div> \
                                                 </div> \
-                                                <div class="curUseruploadedFileName">${msgItem.cInfo.attachments[0].fileName}</div> \
-                                            </div> \
+                                            {{else}} \
+                                                <span class="simpleMsg" {{if msgData}}msgData="${JSON.stringify(msgData)}" {{/if}}>{{html helpers.convertMDtoHTML(msgItem.cInfo.body, "bot",msgItem)}}</span> \
+                                            {{/if}} \
+                                            {{if msgItem.component && msgItem.component.payload && msgItem.component.payload.videoUrl}}\
+                                                <div class="videoEle"><video width="300" controls><source src="${msgItem.component.payload.videoUrl}" type="video/mp4"></video></div>\
+                                            {{/if}}\
+                                            {{if msgItem.component && msgItem.component.payload && msgItem.component.payload.audioUrl}}\
+                                                <div class="audioEle"><audio width="180" controls><source src="${msgItem.component.payload.audioUrl}"></audio></div>\
+                                            {{/if}}\
                                         {{/if}} \
-                                        {{if msgData.isError}} \
-                                            <div class="errorMsg">Send Failed. Please resend.</div> \
-                                        {{/if}} \
+                                    {{else}} \
+                                        {{if msgItem.cInfo.renderMsg && msgItem.cInfo.renderMsg !== ""}}\
+                                            {{html helpers.convertMDtoHTML(msgItem.cInfo.renderMsg, "user",msgItem)}} \
+                                        {{else}}\
+                                            {{html helpers.convertMDtoHTML(msgItem.cInfo.body, "user",msgItem)}} \
+                                        {{/if}}\
+                                    {{/if}} \
+                                </div>\
+                                {{if msgItem.cInfo && msgItem.cInfo.emoji}} \
+                                    <span class="emojione emojione-${msgItem.cInfo.emoji[0].code}">${msgItem.cInfo.emoji[0].title}</span> \
+                                {{/if}} \
+                                {{if msgItem.cInfo.attachments}} \
+                                    <div class="msgCmpt attachments" fileid="${msgItem.cInfo.attachments[0].fileId}"> \
+                                        <div class="uploadedFileIcon"> \
+                                            {{if msgItem.cInfo.attachments[0].fileType == "image"}} \
+                                                <span class="icon cf-icon icon-photos_active"></span> \
+                                            {{else msgItem.cInfo.attachments[0].fileType == "audio"}}\
+                                                <span class="icon cf-icon icon-files_audio"></span> \
+                                            {{else msgItem.cInfo.attachments[0].fileType == "video"}} \
+                                                <span class="icon cf-icon icon-video_active"></span> \
+                                            {{else}} \
+                                                {{if extension[1]=="xlsx" || extension[1]=="xls" || extension[1]=="docx" || extension[1]=="doc" || extension[1]=="pdf" || extension[1]=="ppsx" || extension[1]=="pptx" || extension[1]=="ppt" || extension[1]=="zip" || extension[1]=="rar"}}\
+                                                    <span class="icon cf-icon icon-files_${extension[1]}"></span> \
+                                                {{else extension[1]}}\
+                                                    <span class="icon cf-icon icon-files_other_doc"></span> \
+                                                {{/if}}\
+                                            {{/if}}\
+                                        </div> \
+                                        <div class="curUseruploadedFileName">${msgItem.cInfo.attachments[0].fileName}</div> \
                                     </div> \
-                                </li> \
-                            {{/if}} \
-                        {{/each}} \
+                                {{/if}} \
+                                {{if msgData.isError}} \
+                                    <div class="errorMsg">Send Failed. Please resend.</div> \
+                                {{/if}} \
+                            </div> \
+                        </li> \
                     {{/if}} \
-                </scipt>';
+                {{/each}} \
+            {{/if}} \
+        </scipt>';
                     var templateAttachment = '<script id="chat_message_tmpl" type="text/x-jqury-tmpl"> \
                     {{if msgData.message}} \
                         {{each(key, msgItem) msgData.message}} \
@@ -3572,7 +3576,7 @@
                                     <div class="quick_replies_btn_parent"><div class="autoWidth">\
                                         {{each(key, msgItem) msgData.message[0].component.payload.quick_replies}} \
                                             <div class="buttonTmplContentChild quickReplyDiv"> <span {{if msgItem.payload}}value="${msgItem.payload}"{{/if}} class="quickReply {{if msgItem.image_url}}with-img{{/if}}" type="${msgItem.content_type}">\
-                                                {{if msgItem.image_url}}<img src="${msgItem.image_url}">{{/if}} <span class="quickreplyText {{if msgItem.image_url}}with-img{{/if}}">${msgItem.title}</span></span>\
+                                                {{if msgItem.image_url}}<img src="${msgItem.image_url}">{{/if}} <span class="quickreplyText {{if msgItem.image_url}}with-img{{/if}}" value="${msgItem.payload}" type="${msgItem.content_type}">${msgItem.title}</span></span>\
                                             </div> \
                                         {{/each}} \
                                     </div>\
@@ -4310,14 +4314,14 @@
             var recognition = null;
             var prevStr = "";
             // setTimeout(function(){
-            //     // if(AgentChatInitialize && AgentChatInitialize.config && AgentChatInitialize.config.allowGoogleSpeech) {
-            //     //     if(window.initGapi){
-            //     //         initGapi();
-            //     //     }else{
-            //     //         console.warn("Please uncomment Google Speech files('speech/app.js','speech/key.js' and 'client_api.js' in index.html")
-            //     //     }
+            //     if(AgentChatInitialize && AgentChatInitialize.config && AgentChatInitialize.config.allowGoogleSpeech) {
+            //         if(window.initGapi){
+            //             initGapi();
+            //         }else{
+            //             console.warn("Please uncomment Google Speech files('speech/app.js','speech/key.js' and 'client_api.js' in index.html")
+            //         }
         
-            //     // }
+            //     }
             // },2000);
             function isChrome() {
                 var isChromium = window.chrome,
@@ -5710,6 +5714,7 @@
                 getSDKInstance:function(){
                     return bot;
                 },
+               // instance:AgentChatInitialize,
                 sdkInstance:bot,
                 chatWindow:chatWindow,
                 addWidgetEvents:addWidgetEvents,

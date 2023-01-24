@@ -98,6 +98,7 @@ export class AssistComponent implements OnInit {
       this.handleSubjectService.setLoader(true);
       if (response && Object.keys(response).length > 0) {
         this.updateAgentAssistResponse(response, this.connectionDetails.botId, this.connectionDetails.conversationId);
+        this.viewCustomTempAttachment()
       }
       this.handleSubjectService.setLoader(false);
     });
@@ -105,6 +106,7 @@ export class AssistComponent implements OnInit {
     let subscription3 = this.websocketService.endOfTaskResponse$.subscribe((endoftaskresponse: any) => {
       if (endoftaskresponse && (this.dialogPositionId == endoftaskresponse.positionId || (endoftaskresponse.author && endoftaskresponse.author.type == 'USER'))) {
         this.dialogTerminatedOrIntruppted();
+        this.viewCustomTempAttachment();
       }
     })
 
@@ -134,6 +136,7 @@ export class AssistComponent implements OnInit {
         } else {
           this.updateNumberOfMessages();
           this.processUserMessages(response, response.conversationId, response.botId);
+          this.viewCustomTempAttachment()
         }
 
       }
@@ -1807,6 +1810,10 @@ export class AssistComponent implements OnInit {
     this.scrollToBottom();
     this.designAlterService.addWhiteBackgroundClassToNewMessage(this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd, IdReferenceConst.DYNAMICBLOCK);
 
+  }
+
+  viewCustomTempAttachment(){
+    this.commonService.CustomTempClickEvents(this.projConstants.ASSIST, this.connectionDetails)
   }
 
 }

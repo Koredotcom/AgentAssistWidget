@@ -7,6 +7,7 @@ import * as $ from 'jquery';
 import { IdReferenceConst, ProjConstants, storageConst } from '../constants/proj.cnts';
 import { DesignAlterService } from './design-alter.service';
 import { LocalStorageService } from './local-storage.service';
+import { TemplateRenderClassService } from './template-render-class.service';
 declare var $: any;
 @Injectable({
   providedIn: 'root'
@@ -28,6 +29,8 @@ export class CommonService {
   isMyBotAutomationOnGoing: boolean = false;
   noAutomationrunninginMyBot: boolean = true;
   isFirstMessagOfDialogInMyBot : boolean = false;
+  isAgentSentRequestOnClick: boolean = false;
+  isMyBotAgentSentRequestOnClick: boolean = false;
 
   isUpdateFeedBackDetailsFlag = false;
   clickEventObjectsBeforeTabShift : any = [];
@@ -45,7 +48,7 @@ export class CommonService {
   }
 
   constructor(private route: ActivatedRoute, private webSocketService: WebSocketService, private designAlterService: DesignAlterService,
-    private localStorageService: LocalStorageService) {
+    private localStorageService: LocalStorageService,private templateRenderClassService: TemplateRenderClassService) {
     this.setScrollContent();
   }
 
@@ -749,6 +752,90 @@ export class CommonService {
       $(descElement).css({ "overflow": "hidden", "text-overflow": "ellipsis", "display": "-webkit-box" });
     }
   }
+  HandleClickAndSendRequest(tab, connectionObj, e) {
+    if (JSON.parse(localStorage.getItem('innerTextValue'))) {
+      if (tab == ProjConstants.ASSIST) {
 
+        let assistRequestParams = { conversationId: connectionObj.conversationId, botId: connectionObj.botId, value: JSON.parse(localStorage.getItem('innerTextValue')), check: true };
+        this.webSocketService.emitEvents(EVENTS.agent_assist_request, assistRequestParams);
+        this.isAgentSentRequestOnClick = true;
+        localStorage.setItem('innerTextValue', null);
+      } else if (tab == ProjConstants.MYBOT) {
 
+        let agent_assist_agent_request_params = { conversationId: connectionObj.conversationId, botId: connectionObj.botId, value: JSON.parse(localStorage.getItem('innerTextValue')), isSearch: false };
+        this.webSocketService.emitEvents(EVENTS.agent_assist_agent_request, agent_assist_agent_request_params);
+        this.isMyBotAgentSentRequestOnClick = true;
+        localStorage.setItem('innerTextValue', null);
+      }
+      e.stopImmediatePropagation();
+      e.preventDefault();
+      e.stopPropagation();
+    } else {
+      e.stopImmediatePropagation();
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  }
+   
+  CustomTempClickEvents(tab, connectionObj) {
+    let mythis = this;
+    $('.agent-assist-chat-container.kore-chat-window').on('click', '.botResponseAttachments', function (event) {
+      window.open($(this).attr('fileid'), '_blank');
+    });
+    $('.agent-assist-chat-container.kore-chat-window').off('click', '.buttonTmplContentBox li,.listTmplContentChild .buyBtn,.viewMoreList .viewMore,.listItemPath,.quickReply,.carouselImageContent,.listRightContent,.checkboxBtn,.likeDislikeDiv').on('click', '.buttonTmplContentBox li,.listTmplContentChild .buyBtn, .viewMoreList .viewMore,.listItemPath,.quickReply,.carouselImageContent,.listRightContent,.checkboxBtn,.likeDislikeDiv', function (e) {
+
+      mythis.templateRenderClassService.AgentChatInitialize.bindEvents(true, e);
+      mythis.HandleClickAndSendRequest(tab, connectionObj, e);
+    });
+    $('.agent-assist-chat-container.kore-chat-window').off('click', '.advanced-list-wrapper .callendar-tabs .month-tab').on('click', '.advanced-list-wrapper .callendar-tabs .month-tab', function (e) {
+      mythis.HandleClickAndSendRequest(tab, connectionObj, e)
+    });
+    $('.agent-assist-chat-container.kore-chat-window').off('click', '.advanced-list-wrapper .multiple-accor-rows .accor-inner-content .option').on('click', '.advanced-list-wrapper .multiple-accor-rows .accor-inner-content .option', function (e) {
+      mythis.HandleClickAndSendRequest(tab, connectionObj, e)
+    });
+    $('.agent-assist-chat-container.kore-chat-window').off('click', '.advanced-list-wrapper .multiple-accor-rows .accor-inner-content .option .option-input').on('click', '.advanced-list-wrapper .multiple-accor-rows .accor-inner-content .option .option-input', function (e) {
+      mythis.HandleClickAndSendRequest(tab, connectionObj, e)
+    });
+    $('.agent-assist-chat-container.kore-chat-window').off('click', '.advanced-list-wrapper .multiple-accor-rows .accor-header-top').on('click', '.advanced-list-wrapper .multiple-accor-rows .accor-header-top', function (e) {
+      mythis.HandleClickAndSendRequest(tab, connectionObj, e)
+    });
+
+    $('.agent-assist-chat-container.kore-chat-window').off('click', '.advanced-list-wrapper .main-title-text-block .search-block .search_icon').on('click', '.advanced-list-wrapper .main-title-text-block .search-block .search_icon', function (e) {
+      mythis.HandleClickAndSendRequest(tab, connectionObj, e)
+    });
+    $('.agent-assist-chat-container.kore-chat-window').off('click', '.advanced-list-wrapper .main-title-text-block .search-block .close_icon').on('click', '.advanced-list-wrapper .main-title-text-block .search-block .close_icon', function (e) {
+      mythis.HandleClickAndSendRequest(tab, connectionObj, e)
+    });
+    $('.agent-assist-chat-container.kore-chat-window').off('click', '.advanced-list-wrapper .main-title-text-block .search-block .input_text').on("keyup", '.advanced-list-wrapper .main-title-text-block .search-block .input_text', function (e) {
+      mythis.HandleClickAndSendRequest(tab, connectionObj, e)
+    });
+    $('.agent-assist-chat-container.kore-chat-window').off('click', '.advanced-list-wrapper .main-title-text-block .filter-sort-block .sort-icon').on("click", '.advanced-list-wrapper .main-title-text-block .filter-sort-block .sort-icon', function (e) {
+      mythis.HandleClickAndSendRequest(tab, connectionObj, e)
+    });
+    $('.agent-assist-chat-container.kore-chat-window').off('click', '.advanced-list-wrapper .see-more-data').on("click", '.advanced-list-wrapper .see-more-data', function (e) {
+      mythis.HandleClickAndSendRequest(tab, connectionObj, e)
+    });
+    $('.agent-assist-chat-container.kore-chat-window').off('click', '.advanced-list-wrapper .close-btn').on("click", '.advanced-list-wrapper .close-btn', function (e) {
+      mythis.HandleClickAndSendRequest(tab, connectionObj, e)
+    });
+    $('.agent-assist-chat-container.kore-chat-window').off('click', '.advanced-list-wrapper .multiple-accor-rows .accor-inner-content .inner-btns-acc .more-btn').on("click", '.advanced-list-wrapper .multiple-accor-rows .accor-inner-content .inner-btns-acc .more-btn', function (e) {
+      mythis.HandleClickAndSendRequest(tab, connectionObj, e)
+    });
+    $('.agent-assist-chat-container.kore-chat-window').off('click', '.advanced-list-wrapper .multiple-accor-rows .accor-inner-content .inner-btns-acc .more-button-info .close_btn,.filter-icon .close_btn').on("click", '.advanced-list-wrapper .multiple-accor-rows .accor-inner-content .inner-btns-acc .more-button-info .close_btn,.filter-icon .close_btn', function (e) {
+      mythis.HandleClickAndSendRequest(tab, connectionObj, e)
+    });
+    $('.agent-assist-chat-container.kore-chat-window').off('click', '.advanced-list-wrapper .multiple-accor-rows .accor-header-top .btn_block.dropdown,.filter-icon').on("click", '.advanced-list-wrapper .multiple-accor-rows .accor-header-top .btn_block.dropdown,.filter-icon', function (e) {
+      mythis.HandleClickAndSendRequest(tab, connectionObj, e)
+    });
+    $('.agent-assist-chat-container.kore-chat-window').off('click', ".advancelisttemplate .TaskPickerContainer .close-button").on('click', ".advancelisttemplate .TaskPickerContainer .close-button", function (e) {
+      mythis.HandleClickAndSendRequest(tab, connectionObj, e)
+    });
+    $('.agent-assist-chat-container.kore-chat-window').off('click', '.advanced-list-wrapper .multiple-accor-rows .inner-acc-table-sec .table-sec .column-table-more').on("click", '.advanced-list-wrapper .multiple-accor-rows .inner-acc-table-sec .table-sec .column-table-more', function (e) {
+      mythis.HandleClickAndSendRequest(tab, connectionObj, e)
+    });
+
+    $('.agent-assist-chat-container.kore-chat-window').off('click', '.advanced-list-wrapper .button_,.advanced-list-wrapper .inner-btns-acc .button_,.advanced-list-wrapper .tags-data .tag-name,.advanced-list-wrapper .btn_group .submitBtn,.advanced-list-wrapper .btn_group .cancelBtn,.advanced-list-wrapper .details-content .text-info,.advancelisttemplate .inner-btns-acc .button_,.advancelisttemplate .filter-icon .button_').on("click", '.advanced-list-wrapper .button_,.advanced-list-wrapper .inner-btns-acc .button_,.advanced-list-wrapper .tags-data .tag-name,.advanced-list-wrapper .btn_group .submitBtn,.advanced-list-wrapper .btn_group .cancelBtn,.advanced-list-wrapper .details-content .text-info,.advancelisttemplate .inner-btns-acc .button_,.advancelisttemplate .filter-icon .button_', function (e) {
+      mythis.HandleClickAndSendRequest(tab, connectionObj, e)
+    });
+  }
 }

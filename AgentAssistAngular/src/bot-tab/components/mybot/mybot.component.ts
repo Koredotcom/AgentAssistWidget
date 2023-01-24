@@ -92,6 +92,7 @@ export class MybotComponent implements OnInit {
       if (response && !response.isSearch) {
         this.designAlterService.displayCustomerFeels(response, response.conversationId, response.botId, this.connectionDetails.source);
         this.processMybotDataResponse(response);
+        this.viewCustomTempAttachment();
       }
       this.handleSubjectService.setLoader(false);
     });
@@ -99,6 +100,7 @@ export class MybotComponent implements OnInit {
     let subscription3 = this.websocketService.endOfTaskResponse$.subscribe((endoftaskresponse: any) => {
       if (endoftaskresponse && this.myBotDialogPositionId == endoftaskresponse.positionId) {
         this.dialogTerminatedOrIntrupptedInMyBot();
+        this.viewCustomTempAttachment();
       }
     })
 
@@ -539,6 +541,10 @@ export class MybotComponent implements OnInit {
     }
     this.scrollToBottom();
     this.designAlterService.addWhiteBackgroundClassToNewMessage(this.scrollAtEnd, IdReferenceConst.MYBOTAUTOMATIONBLOCK);
+  }
+
+  viewCustomTempAttachment(){
+    this.commonService.CustomTempClickEvents(this.projConstants.MYBOT, this.connectionDetails)
   }
 
 
