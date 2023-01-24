@@ -231,7 +231,7 @@ export class AssistService {
     let template = `
     <div class="type-info-run-send" id="faqDiv-${uuids + index}">
         <div class="left-content" id="faqSection-${uuids + index}">
-            <div class="title-text" id="title-${uuids + index}">${ele.question}</div>
+            <div class="title-text" id="title-${uuids + index}" title="${ele.question}">${ele.question}</div>
             
             
         </div>
@@ -243,7 +243,7 @@ export class AssistService {
     let template = `
     <div class="type-info-run-send" id="articleDiv-${uuids + index}">
         <div class="left-content" id="articleSection-${uuids + index}">
-            <div class="title-text" id="articletitle-${uuids + index}">${ele.title}</div>
+            <div class="title-text" id="articletitle-${uuids + index}" title="${ele.title}">${ele.title}</div>
         </div>
         
     </div>`;
