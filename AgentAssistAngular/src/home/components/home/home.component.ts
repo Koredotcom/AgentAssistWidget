@@ -131,7 +131,7 @@ export class HomeComponent implements OnInit {
 
   // update state based on local storage.
   updateUIState(_convId, _isCallConv) {
-    $('.empty-data-no-agents').addClass('hide');
+    $('#dynamicBlock .empty-data-no-agents').addClass('hide');
     let appState = this.localStorageService.getLocalStorageState();
     let activeTab: any;
     if (_isCallConv == 'true') {

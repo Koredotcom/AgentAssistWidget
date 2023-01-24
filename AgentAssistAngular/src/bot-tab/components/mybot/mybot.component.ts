@@ -221,6 +221,7 @@ export class MybotComponent implements OnInit {
     this._createRunTemplateContainerForMyTab(agentBotuuids, data.name, this.myBotDialogPositionId)
     let addRemoveDropDown = document.getElementById(IdReferenceConst.MYBOTADDREMOVEDROPDOWN + `-${agentBotuuids}`);
     addRemoveDropDown?.classList.remove('hide');
+    document.getElementById(IdReferenceConst.NO_AUTO_RUNNING).classList.add('hide');
     this.scrollToBottom();
   }
 
@@ -308,8 +309,8 @@ export class MybotComponent implements OnInit {
 
     let resp = response.length > 0 ? response : undefined;
     resp?.forEach((res, index) => {
-
       if ((!res.agentAssistDetails?.suggestions && !res.agentAssistDetails?.ambiguityList && !res.agentAssistDetails?.ambiguity) && res.type == 'outgoing') {
+        document.getElementById(IdReferenceConst.NO_AUTO_RUNNING).classList.add('hide');
         let _msgsResponse = this.mybotDataService.getMybotMsgResponse(res._id, res.botId)
         currentTaskName = res.tN ? res.tN : currentTaskName;
         currentTaskPositionId = res?.agentAssistDetails?.positionId ? res?.agentAssistDetails?.positionId : currentTaskPositionId;

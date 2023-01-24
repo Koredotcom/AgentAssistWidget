@@ -99,7 +99,8 @@ export const IdReferenceConst = {
     CURRENTUSER_BUBBLE : 'currentUser',
     AGENT_RUN_BTN : 'runAgtBtn',
     SEEMORE_BTN : 'seeMore',
-    CHECK : 'check'
+    CHECK : 'check',
+    NO_AUTO_RUNNING : 'noAutoRunning'
 }
 
 
