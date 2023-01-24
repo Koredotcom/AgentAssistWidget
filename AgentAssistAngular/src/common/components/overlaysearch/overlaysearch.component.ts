@@ -247,6 +247,9 @@ export class OverlaysearchComponent implements OnInit {
       searchObj.value = faq.question;
       this.emitSearchRequest(searchObj, true);
     }
+    setTimeout(() => {
+      this.handleSeeMoreButton(this.searchResponse.faqs, this.projConstants.FAQ);
+    }, 10);
   }
 
   handleSendCopyButton(actionType, faq_or_article_obj, selectType) {
