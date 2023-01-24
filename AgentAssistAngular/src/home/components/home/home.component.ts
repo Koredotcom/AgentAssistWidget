@@ -41,6 +41,7 @@ export class HomeComponent implements OnInit {
   subscriptionsList: Subscription[] = [];
   proactiveModeEnabled: boolean = false;
   isLoader;
+  isBackBtnClicked: boolean = false;
   constructor(public handleSubjectService: HandleSubjectService, public websocketService: WebSocketService,
     public sanitizeHTMLPipe: SanitizeHtmlPipe, public commonService: CommonService, private koregenerateUUIDPipe: KoreGenerateuuidPipe,
     private designAlterService: DesignAlterService, private localStorageService: LocalStorageService) { }
@@ -352,6 +353,7 @@ setProactiveMode(){
 
   handleSearchClickEvent(eventObj) {
     if (eventObj.eventFrom == this.projConstants.AGENT_SEARCH) {
+      this.isBackBtnClicked = true;
       this.closeSearchSuggestions(true);
       this.changeActiveTab(this.projConstants.LIBRARY);
       setTimeout(() => {
@@ -359,6 +361,7 @@ setProactiveMode(){
       }, 10);
       this.handleSubjectService.setLoader(true)
     } else if (eventObj.eventFrom == this.projConstants.LIBRARY_SEARCH) {
+      this.isBackBtnClicked = true;
       this.changeActiveTab(this.projConstants.ASSIST);
       this.searchText = eventObj.searchText;
       setTimeout(() => {
@@ -383,6 +386,12 @@ setProactiveMode(){
     this.showSearchSuggestions=false;
     this.searchText = '';
     this.handleSubjectService.setSearchText({ searchFrom: this.projConstants.ASSIST, value: undefined });
+    if(this.isBackBtnClicked){
+      setTimeout(() => {
+        this.handleSubjectService.setLibrarySearchTextFromAgentSearch({ eventFrom: this.projConstants.ASSIST, searchText: undefined });
+      }, 10);
+      this.isBackBtnClicked = false;
+    }
   }
 
 

@@ -66,6 +66,9 @@ export class LibraryComponent implements OnInit {
         this.searchFromAgentSearchBar = true;
         this.getSearchResults(this.searchText,searchObj.eventFrom);
       }
+      if (searchObj && !searchObj.searchText && searchObj.eventFrom == this.projConstants.ASSIST) {
+        this.librarySearchClose();
+      }
       this.handleSubjectService.setLoader(false);
     });
     let subscription2 = this.websocketService.agentMenuResponse$.subscribe((menuResponse: any) => {
@@ -130,6 +133,7 @@ export class LibraryComponent implements OnInit {
 
   librarySearchClose() {
     this.showSearchSuggestions = false;
+    this.searchFromAgentSearchBar = false;
     this.searchText = '';
     this.handleSubjectService.setSearchText({ searchFrom: this.projConstants.LIBRARY, value: undefined });
     this.setSearchTextInLocalStorage('');
