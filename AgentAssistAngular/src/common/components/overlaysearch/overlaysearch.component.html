@@ -79,8 +79,8 @@
                             </div>
                             <div class="desc-text" [id]="'descLib-' + i"
                                 *ngIf="(faq.answer && faq.toggle && !faq.answerRender) || (faq.answer && faq.answerRender)">{{faq.answer}}</div>
-                            <button class="ghost-btn" style="font-style: italic;" [id]="'seeMore-' + i" *ngIf="faq.showMoreButton" (click)="toggleShowMoreLessButtons(faq, i, projConstants.FAQ)">{{projConstants.SHOW_MORE}}</button>
-                            <button class="ghost-btn" style="font-style: italic;" [id]="'seeLess-' + i" *ngIf="faq.showLessButton" (click)="toggleShowMoreLessButtons(faq, i, projConstants.FAQ)">{{projConstants.SHOW_LESS}}</button>
+                            <button class="ghost-btn" style="font-style: italic;" [id]="'seeMore-' + i" *ngIf="faq.showMoreButton && ((faq.answer && faq.toggle && !faq.answerRender) || (faq.answer && faq.answerRender))" (click)="toggleShowMoreLessButtons(faq, i, projConstants.FAQ)">{{projConstants.SHOW_MORE}}</button>
+                            <button class="ghost-btn" style="font-style: italic;" [id]="'seeLess-' + i" *ngIf="faq.showLessButton && ((faq.answer && faq.toggle && !faq.answerRender) || (faq.answer && faq.answerRender))" (click)="toggleShowMoreLessButtons(faq, i, projConstants.FAQ)">{{projConstants.SHOW_LESS}}</button>
                         </div>
                         <div class="action-links">
                             <button class="send-run-btn" [id]="sendMsg" (click)="handleSendCopyButton(projConstants.SEND,faq, projConstants.FAQ)">{{projConstants.SEND}}</button>
