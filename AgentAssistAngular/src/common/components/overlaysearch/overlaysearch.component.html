@@ -4,7 +4,7 @@
         <span class="show-all" *ngIf="searchType == projConstants.AGENT_SEARCH && searchResponse.totalSearchResults > 2" (click)="handleShowAllClick()">Show all</span>
     </div>
     <div class="dialog-task-run-sec p-0" id="searchedDialogs">
-        <div class="task-type" id="snippetsArea" *ngIf="searchResponse.snippets?.length > 0; else elseTemplate">
+        <div class="task-type" id="snippetsArea" *ngIf="searchResponse.snippets?.length > 0">
             <div class="img-block-info">
                 <img [src]="imageFilePath + imageFileNames['FAQ_SUGGESTION']">
             </div>
@@ -36,7 +36,7 @@
                 <div class="link-view-full-article ghost-btn" [id]="'snippetFewView-' + i" *ngIf="!snippetAllView && searchResponse.snippets?.length > 2" (click)="showAllResultsClick(projConstants.VIEW_FEW_SNIPPETS)">{{projConstants.VIEW_FEW_SNIPPETS}}</div>
             </div>
         </div>
-        <ng-template #elseTemplate>
+        
             <div class="task-type" id="dialoguesArea" *ngIf="searchResponse.dialogs?.length > 0">
                 <div class="img-block-info">
                     <img [src]="imageFilePath + imageFileNames['DIALOG_TASK']">
@@ -125,7 +125,7 @@
                     <div class="link-view-full-article ghost-btn" [id]="'articleFewView-' + i" *ngIf="!articleAllView && searchResponse.articles?.length > 2" (click)="showAllResultsClick(projConstants.VIEW_FEW_ARTICLES)">{{projConstants.VIEW_FEW_ARTICLES}}</div>
                 </div>
             </div>
-        </ng-template>
+        
     
     </div>
 </ng-container>

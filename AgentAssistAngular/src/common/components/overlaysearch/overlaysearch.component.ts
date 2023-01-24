@@ -190,7 +190,7 @@ export class OverlaysearchComponent implements OnInit {
     if (response && response.suggestions && this.answerPlaceableIDs.length == 0) {
       this.searchResponse = {};
       this.searchResponse = this.commonService.formatSearchResponse(response.suggestions);
-      this.searchResponse.totalSearchResults = this.searchResponse.snippets?.length > 0 ? this.searchResponse.snippets?.length : (this.searchResponse.dialogs?.length + this.searchResponse.faqs?.length + this.searchResponse.articles?.length || 0);
+      this.searchResponse.totalSearchResults =  (this.searchResponse.dialogs?.length + this.searchResponse.faqs?.length + this.searchResponse?.articles?.length +this.searchResponse?.snippets?.length || 0);
       this.faqViewCount = (this.searchResponse.faqs && this.searchResponse.faqs.length <= 2) ? this.searchResponse.faqs.length : 2;
       this.articleViewCount = (this.searchResponse.articles && this.searchResponse.articles.length <= 2) ? this.searchResponse.articles.length : 2;
       this.snippetViewCount = (this.searchResponse.snippets && this.searchResponse.snippets.length <= 2) ? this.searchResponse.snippets.length : 2;

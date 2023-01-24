@@ -442,7 +442,7 @@ export class AssistComponent implements OnInit {
       }
 
       if (data.suggestions) {
-        if(data?.suggestions?.searchassist?.snippets?.length>0){
+        
           let automationSuggestions = document.getElementById(`automationSuggestions-${responseId}`);
           automationSuggestions.classList.remove('hide');
           let dialogAreaHtml = `<div class="task-type" id="snippetsArea">
@@ -450,12 +450,12 @@ export class AssistComponent implements OnInit {
                       <img src="./images/kg.svg">
                   </div>
                   <div class="content-dialog-task-type" id="snippetsSuggestions-${responseId}">
-                      <div class="type-with-img-title">Snippets (${data.suggestions.searchassist.snippets.length})</div>
+                      <div class="type-with-img-title">Snippets (${data.suggestions?.searchassist?.snippets?.length})</div>
                       
                   </div>
               </div>`;
           automationSuggestions.innerHTML += dialogAreaHtml;
-          data.suggestions.searchassist?.snippets?.forEach((ele, index) => {
+          data.suggestions?.searchassist?.snippets?.forEach((ele, index) => {
               let articleSuggestions = document.getElementById(`snippetsSuggestions-${responseId}`);
 
               let articleHtml = `
@@ -487,7 +487,7 @@ export class AssistComponent implements OnInit {
                   }, 100);
           })
 
-      }else{
+      
         if (data.suggestions.dialogs?.length > 0) {
 
           let automationSuggestions = document.getElementById(`automationSuggestions-${responseId}`);
@@ -654,7 +654,7 @@ export class AssistComponent implements OnInit {
         });
         this.handleSeeMoreButton(responseId, data.suggestions.faqs, this.projConstants.FAQ);
         this.handleSeeMoreButton(responseId, data.suggestions.articles, this.projConstants.ARTICLE);
-      }
+      
 
       }
       setTimeout(() => {
