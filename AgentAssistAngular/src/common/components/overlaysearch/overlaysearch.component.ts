@@ -271,10 +271,12 @@ export class OverlaysearchComponent implements OnInit {
   }
 
   handleSeeMoreButton(array, type) {
-    let index = 0;
-    for (let item of array) {
-      this.commonService.updateSeeMoreButtonForAgent(index, item, type);
-      index++;
+    if(array && array.length > 0){
+      let index = 0;
+      for (let item of array) {
+        this.commonService.updateSeeMoreButtonForAgent(index, item, type);
+        index++;
+      }
     }
   }
 

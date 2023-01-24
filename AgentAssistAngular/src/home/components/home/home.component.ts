@@ -339,7 +339,7 @@ setProactiveMode(){
   getSearchResults(value) {
     if(value){
       this.showSearchSuggestions = true;
-      this.handleSubjectService.setSearchText({ searchFrom: this.projConstants.ASSIST, value: value });
+      this.handleSubjectService.setSearchText({ searchFrom: this.commonService.activeTab, value: value });
     }
   }
 
