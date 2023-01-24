@@ -39,6 +39,9 @@ export class TemplateRenderClassService {
         "chatBot": 'st-fa82e7df-fa85-574c-92c7-a6ad6d6da07d',
         "taskBotId": 'st-fa82e7df-fa85-574c-92c7-a6ad6d6da07d'
       },
+      "createdOn": "2022-03-21T07:56:18.225Z",
+      "icon": "https://uat.kore.ai:443/api/getMediaStream/market/f-cb381255-9aa1-5ce2-95e3-71233aef7084.png?n=17648985&s=IlRvUlUwalFVaFVMYm9sZStZQnlLc0l1UlZvdlNUUDcxR2o3U2lscHRrL3M9Ig$$",
+      "traceId": "873209019a5adc26",
       parsePayLoad: null
     }
     res?.buttons?.forEach((elem) => {

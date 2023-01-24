@@ -44,10 +44,10 @@ export class AssistComponent implements OnInit {
   dropdownHeaderUuids: any;
   interruptDialog: any = {};
   agentAssistResponse: any = {};
-  answerPlaceableIDs: any = [];
   waitingTimeForUUID: number = 1000;
   proactiveModeStatus: boolean;
   isFirstMessagOfDialog: boolean = false;
+  answerPlaceableIDs : any = [];
 
   constructor(private templateRenderClassService: TemplateRenderClassService,
     public handleSubjectService: HandleSubjectService,
@@ -188,12 +188,8 @@ export class AssistComponent implements OnInit {
         }
       }
     });
-    console.log("subscriptions inside asssit");
-
 
     let subscription13 = this.handleSubjectService.proactiveModeSubject.subscribe((response: any) => {
-      console.log("proactive mode status inside assist tab", response);
-
       if (response != null && response != undefined) {
         this.proactiveModeStatus = response;
         if (response) {
@@ -618,11 +614,14 @@ export class AssistComponent implements OnInit {
           faqsSuggestions.innerHTML += faqHtml;
           let faqs = $(`.type-info-run-send #faqSection-${uuids + index}`);
           let positionID = 'dg-' + this.koreGenerateuuidPipe.transform();
+          
           if (!ele.answer) {
             let checkHtml = `
-        <i class="ast-carrotup" id="check-${uuids + index}"></i>`;
+        <i class="ast-carrotup" id="check-${uuids + index}" data-intent-name="${ele.question}"
+        data-check="true" data-position-id="${positionID}"></i>`;
             $(`#faqDiv-${uuids + index}`).addClass('is-dropdown-show-default');
             document.getElementById(`title-${uuids + index}`).insertAdjacentHTML('beforeend', checkHtml);
+            this.clickEvents(IdReferenceConst.CHECK, uuids + index, positionID, {intentName : ele.question, positionID : positionID});
           } else {
             let a = $(`#faqDiv-${uuids + index}`);
             let faqActionHtml = `<div class="action-links">
@@ -650,8 +649,8 @@ export class AssistComponent implements OnInit {
             $(`#check-${uuids + index}`).addClass('hide');
             $(`#faqDiv-${uuids + index}`).removeClass('is-dropdown-show-default');
           }
-          this.clickEvents(IdReferenceConst.SENDMSG, uuids + index, this.dialogPositionId, ele);
-          this.clickEvents(IdReferenceConst.COPYMSG, uuids + index, this.dialogPositionId, ele);
+          // this.clickEvents(IdReferenceConst.SENDMSG, uuids + index, this.dialogPositionId, ele);
+          // this.clickEvents(IdReferenceConst.COPYMSG, uuids + index, this.dialogPositionId, ele);
         });
         this.handleSeeMoreButton(responseId, data.suggestions.faqs, this.projConstants.FAQ);
         this.handleSeeMoreButton(responseId, data.suggestions.articles, this.projConstants.ARTICLE);
@@ -998,7 +997,7 @@ export class AssistComponent implements OnInit {
   }
 
   //click events related code.
-  clickEvents(eventName, uuid?, dialogId?, data?) {
+  clickEvents(eventName, uuid?, dialogId?, data?) {    
     if (this.commonService.activeTab != this.projConstants.ASSIST) {
       let clickObject: any = {
         eventName: eventName,
@@ -1030,7 +1029,50 @@ export class AssistComponent implements OnInit {
         this.handleMybotRunClick(uuid, data);
       } else if (eventName == IdReferenceConst.SEEMORE_BTN) {
         this.handleSeeMoreLessClickEvents(uuid, data);
+      } else if (eventName == IdReferenceConst.CHECK){
+        setTimeout(() => {
+          this.handleFaqArrowClick(uuid, dialogId, data);
+        }, 1000);
       }
+    }
+  }
+
+  handleFaqArrowClick(uuid, positionId, data){
+    let target : any = {
+      id : 'check-' + uuid
+    }
+    let checkElement = document.getElementById(IdReferenceConst.CHECK + '-' + uuid);
+    if(checkElement){
+      checkElement.addEventListener('click', (event) => {        
+        if (!$(`#${target.id}`).attr("data-answer-render")) {
+            let faq = $(`#dynamicBlock .type-info-run-send #faqSection-${uuid}`);
+            let answerHtml = `<div class="desc-text" id="desc-${uuid}"></div>`
+            faq.append(answerHtml);
+            $(`#dynamicBlock #${target.id}`).attr('data-answer-render', 'false');
+            // faqDiv.append(faqaction);
+            this.answerPlaceableIDs.push({id:`desc-${uuid}`, input: data.intentName, positionId: data.positionId});
+            $(`#dynamicBlock #${target.id}`).addClass('rotate-carrot');
+            $(`#dynamicBlock #faqDiv-${uuid}`).addClass('is-dropdown-open');
+            this.AgentAssist_run_click(data, data.positionId);
+            return
+        }
+        if ($(`#dynamicBlock .type-info-run-send #faqSection-${uuid} .ast-carrotup.rotate-carrot`).length <= 0) {
+            $(`#dynamicBlock #${target.id}`).addClass('rotate-carrot');
+            $(`#dynamicBlock #faqDiv-${uuid}`).addClass('is-dropdown-open');
+            $(`#dynamicBlock #faqDiv-${uuid} .action-links`).removeClass('hide');
+            $(`#dynamicBlock #desc-${uuid}`).removeClass('hide');
+            setTimeout(() => {                                
+              this.commonService.updateSeeMoreButtonForAssist(uuid);
+            }, 1000);
+        } else {
+            $(`#dynamicBlock #${target.id}`).removeClass('rotate-carrot');
+            $(`#dynamicBlock #faqDiv-${uuid} .action-links`).addClass('hide');
+            $(`#dynamicBlock #faqDiv-${uuid}`).removeClass('is-dropdown-open');
+            $(`#dynamicBlock #desc-${uuid}`).addClass('hide');
+            $(`#dynamicBlock #seeMore-${uuid}`).addClass('hide');
+            $(`#dynamicBlock #seeLess-${uuid}`).addClass('hide');
+        }
+      });
     }
   }
 

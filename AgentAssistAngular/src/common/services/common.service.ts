@@ -31,8 +31,8 @@ export class CommonService {
   isFirstMessagOfDialogInMyBot : boolean = false;
   isAgentSentRequestOnClick: boolean = false;
   isMyBotAgentSentRequestOnClick: boolean = false;
+  isUpdateFeedBackDetailsFlag : boolean = false;
 
-  isUpdateFeedBackDetailsFlag = false;
   clickEventObjectsBeforeTabShift : any = [];
   tabNamevsId : any = {
     [ProjConstants.ASSIST] : IdReferenceConst.DYNAMICBLOCK,
@@ -562,7 +562,8 @@ export class CommonService {
         question: faq.question,
         answer: faq.answer || false,
         showMoreButton: false,
-        showLessButton: false
+        showLessButton: false,
+        answerRender : faq.answer || false
       }
       searchResponse.faqs.push(faqObject);
     }
@@ -754,13 +755,13 @@ export class CommonService {
   }
   HandleClickAndSendRequest(tab, connectionObj, e) {
     if (JSON.parse(localStorage.getItem('innerTextValue'))) {
-      if (tab == ProjConstants.ASSIST) {
+      if (this.activeTab == ProjConstants.ASSIST) {
 
         let assistRequestParams = { conversationId: connectionObj.conversationId, botId: connectionObj.botId, value: JSON.parse(localStorage.getItem('innerTextValue')), check: true };
         this.webSocketService.emitEvents(EVENTS.agent_assist_request, assistRequestParams);
         this.isAgentSentRequestOnClick = true;
         localStorage.setItem('innerTextValue', null);
-      } else if (tab == ProjConstants.MYBOT) {
+      } else if (this.activeTab == ProjConstants.MYBOT) {
 
         let agent_assist_agent_request_params = { conversationId: connectionObj.conversationId, botId: connectionObj.botId, value: JSON.parse(localStorage.getItem('innerTextValue')), isSearch: false };
         this.webSocketService.emitEvents(EVENTS.agent_assist_agent_request, agent_assist_agent_request_params);

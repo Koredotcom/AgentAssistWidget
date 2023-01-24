@@ -198,8 +198,34 @@ export class MybotComponent implements OnInit {
       } else {
         $(runInfoContent).append(tellToUserHtml);
       }
+     
       // let result = this.templateRenderClassService.getResponseUsingTemplate(data);
       this.commonService.hideSendOrCopyButtons(results.parsePayLoad, runInfoContent)
+      if (this.commonService.isMyBotAgentSentRequestOnClick && !this.myBotDropdownHeaderUuids) {
+        let mybotContainer = $('#myBotAutomationBlock');
+        let botResHtml = `
+                <div class="collapse-acc-data before-none" id='smallTalk-${myBotuuids}'>
+             <div class="steps-run-data">
+             <div class="icon_block">
+                 <i class="ast-agent"></i>
+             </div>
+             <div class="run-info-content" >
+             <div class="title">Tell Customer</div>
+             <div class="agent-utt">
+                 <div class="title-data" id="displayData-${myBotuuids}">${data.buttons[0].value}</div>
+                 <div class="action-links">
+                     <button class="send-run-btn" id="sendMsg" data-msg-id="${myBotuuids}"  data-msg-data="${data.buttons[0].value}">Send</button>
+                     <div class="copy-btn" data-msg-id="${myBotuuids}" data-msg-data="${data.buttons[0].value}">
+                         <i class="ast-copy" data-msg-id="${myBotuuids}" data-msg-data="${data.buttons[0].value}"></i>
+                     </div>
+                 </div>
+             </div>
+             </div>
+         </div>
+         </div>`;
+        mybotContainer.append(botResHtml);
+        this.commonService.isMyBotAgentSentRequestOnClick = false;
+      }
       let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(results)[0].innerHTML;
       let a = document.getElementById(IdReferenceConst.displayData + `-${myBotuuids}`);
       a.innerHTML = a.innerHTML + html;
@@ -223,6 +249,7 @@ export class MybotComponent implements OnInit {
     this._createRunTemplateContainerForMyTab(agentBotuuids, data.name, this.myBotDialogPositionId)
     let addRemoveDropDown = document.getElementById(IdReferenceConst.MYBOTADDREMOVEDROPDOWN + `-${agentBotuuids}`);
     addRemoveDropDown?.classList.remove('hide');
+    document.getElementById(IdReferenceConst.NO_AUTO_RUNNING).classList.add('hide');
     this.scrollToBottom();
   }
 
@@ -310,8 +337,8 @@ export class MybotComponent implements OnInit {
 
     let resp = response.length > 0 ? response : undefined;
     resp?.forEach((res, index) => {
-
       if ((!res.agentAssistDetails?.suggestions && !res.agentAssistDetails?.ambiguityList && !res.agentAssistDetails?.ambiguity) && res.type == 'outgoing') {
+        document.getElementById(IdReferenceConst.NO_AUTO_RUNNING).classList.add('hide');
         let _msgsResponse = this.mybotDataService.getMybotMsgResponse(res._id, res.botId)
         currentTaskName = res.tN ? res.tN : currentTaskName;
         currentTaskPositionId = res?.agentAssistDetails?.positionId ? res?.agentAssistDetails?.positionId : currentTaskPositionId;
