@@ -98,7 +98,8 @@ export const IdReferenceConst = {
     OTHER_BUBBLE : 'otherBubble',
     CURRENTUSER_BUBBLE : 'currentUser',
     AGENT_RUN_BTN : 'runAgtBtn',
-    SEEMORE_BTN : 'seeMore'
+    SEEMORE_BTN : 'seeMore',
+    CHECK : 'check'
 }
 
 

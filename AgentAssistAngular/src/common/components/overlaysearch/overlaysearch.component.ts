@@ -35,6 +35,7 @@ export class OverlaysearchComponent implements OnInit {
   searchConentObject: any;
   showOverLay : boolean = false;
   connectionDetails : any = {};
+  answerPlaceableIDs : any = [];
 
   constructor(public handleSubjectService: HandleSubjectService, public commonService: CommonService,
     public randomUUIDPipe: RandomUUIDPipe, public websocketService: WebSocketService, public cdRef : ChangeDetectorRef) { }
@@ -70,7 +71,7 @@ export class OverlaysearchComponent implements OnInit {
     });
     let subscription2 = this.websocketService.agentAssistAgentResponse$.pipe(takeUntil(this.destroySubject)).subscribe((agentResponse: any) => {
       if(agentResponse){
-        this.searchResponse = {};
+        
         this.handleSearchResponse(agentResponse);
         this.showOverLay = true;
         if(document.getElementById(IdReferenceConst.overLaySuggestions)){
@@ -186,9 +187,10 @@ export class OverlaysearchComponent implements OnInit {
   }
 
   handleSearchResponse(response) {
-    if (response && response.suggestions) {
+    if (response && response.suggestions && this.answerPlaceableIDs.length == 0) {
+      this.searchResponse = {};
       this.searchResponse = this.commonService.formatSearchResponse(response.suggestions);
-      this.searchResponse.totalSearchResults = this.searchResponse.snippets?.length > 0 ? this.searchResponse.snippets?.length:( this.searchResponse.dialogs?.length + this.searchResponse.faqs?.length + this.searchResponse.articles?.length || 0);
+      this.searchResponse.totalSearchResults = this.searchResponse.snippets?.length > 0 ? this.searchResponse.snippets?.length : (this.searchResponse.dialogs?.length + this.searchResponse.faqs?.length + this.searchResponse.articles?.length || 0);
       this.faqViewCount = (this.searchResponse.faqs && this.searchResponse.faqs.length <= 2) ? this.searchResponse.faqs.length : 2;
       this.articleViewCount = (this.searchResponse.articles && this.searchResponse.articles.length <= 2) ? this.searchResponse.articles.length : 2;
       this.snippetViewCount = (this.searchResponse.snippets && this.searchResponse.snippets.length <= 2) ? this.searchResponse.snippets.length : 2;
@@ -202,6 +204,48 @@ export class OverlaysearchComponent implements OnInit {
         this.handleSeeMoreButton(this.searchResponse.snippets, this.projConstants.SNIPPET);
         console.log(this.searchResponse.snippets, 'snippets');
       }, 1000);
+      this.checkFaqAnswerNotRenderCountAndRequest()
+    } else if (response && response.suggestions && this.answerPlaceableIDs.length > 0) {
+      let faqAnswerIdsPlace = this.answerPlaceableIDs.find(ele => ele.input == response.value);
+      if (faqAnswerIdsPlace) {
+        let accumulator = response.suggestions.faqs.reduce((acc, faq) => {
+          if (faq.question == faqAnswerIdsPlace.input) {
+            acc[faq.question] = faq;
+            return acc;
+          }
+        }, {});
+        this.searchResponse.faqs.forEach(faq => {
+          if (accumulator[faq.question] && accumulator[faq.question].answer) {
+            faq.answer = accumulator[faq.question].answer;
+          }
+        });
+        let index = this.answerPlaceableIDs.indexOf(faqAnswerIdsPlace);
+        this.answerPlaceableIDs.splice(index, 1);
+        setTimeout(() => {
+          this.handleSeeMoreButton(this.searchResponse.faqs, this.projConstants.FAQ);
+        }, 1000);
+      }
+    }
+  }
+
+  checkFaqAnswerNotRenderCountAndRequest(){
+    let answerNotRenderendElements = (this.searchResponse.faqs || []).filter(faq => {
+      return !faq.answer;
+    });
+    console.log(answerNotRenderendElements, "answer not rendered elements");
+    
+    if(answerNotRenderendElements.length == 1){
+      this.getFaqAnswerAndtoggle(answerNotRenderendElements[0]);
+    }
+  }
+
+  getFaqAnswerAndtoggle(faq){
+    faq.toggle = !faq.toggle;
+    if(!faq.answer && faq.toggle){
+      this.answerPlaceableIDs.push({input : faq.question});
+      let searchObj : any = {};
+      searchObj.value = faq.question;
+      this.emitSearchRequest(searchObj, true);
     }
   }
 

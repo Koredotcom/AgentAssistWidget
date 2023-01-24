@@ -28,8 +28,8 @@ export class CommonService {
   isMyBotAutomationOnGoing: boolean = false;
   noAutomationrunninginMyBot: boolean = true;
   isFirstMessagOfDialogInMyBot : boolean = false;
+  isUpdateFeedBackDetailsFlag : boolean = false;
 
-  isUpdateFeedBackDetailsFlag = false;
   clickEventObjectsBeforeTabShift : any = [];
   tabNamevsId : any = {
     [ProjConstants.ASSIST] : IdReferenceConst.DYNAMICBLOCK,
@@ -559,7 +559,8 @@ export class CommonService {
         question: faq.question,
         answer: faq.answer || false,
         showMoreButton: false,
-        showLessButton: false
+        showLessButton: false,
+        answerRender : faq.answer || false
       }
       searchResponse.faqs.push(faqObject);
     }
