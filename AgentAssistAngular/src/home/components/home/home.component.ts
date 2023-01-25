@@ -163,7 +163,7 @@ export class HomeComponent implements OnInit {
 
     if (!(window)._agentAssisteventListenerAdded) {
       window.addEventListener("message", (e: any) => {
-        if (e.data.name === EVENTS.response_resolution_comments && e.data.conversationId) {
+        if (e.data.name === EVENTS.response_resolution_comments &&  e.data.conversationId == this.connectionDetails.conversationId) {
           this.handleResponseResoultionComments(e.data);
         }
         if (e.data.name == 'initial_data') {
@@ -184,7 +184,9 @@ export class HomeComponent implements OnInit {
             } else {
               agent_assist_request['entities'] = [];
             }
-            this.websocketService.emitEvents(EVENTS.agent_assist_request, agent_assist_request);
+            if(ele.conversationId === this.connectionDetails.conversationId){
+              this.websocketService.emitEvents(EVENTS.agent_assist_request, agent_assist_request);
+            }
           })
         }
         if (e.data.name === 'agentAssist.endOfConversation' && (e.data.conversationId || e.data.conversationid)) {
