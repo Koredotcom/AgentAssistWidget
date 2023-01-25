@@ -14,6 +14,7 @@ export class TemplateRenderClassService {
     "container": "body",
     botOptions: this.botOptions,
     agentAssistUrl: "https://dev-smartassist.kore.ai",
+    urls: ['smartassist.kore.ai', 'smartassist-jp.kore.ai', 'smartassist.korebots.com'],
     agentAssist: true,
 
   };
@@ -48,7 +49,7 @@ export class TemplateRenderClassService {
       }
       let payloadType = (elem.value).replace(/(&quot\;)/g, "\"");
       console.log(payloadType, "payload type", elem.value);
-      
+
 
       try {
         if (payloadType.indexOf('text') !== -1 || payloadType.indexOf('payload') !== -1) {
