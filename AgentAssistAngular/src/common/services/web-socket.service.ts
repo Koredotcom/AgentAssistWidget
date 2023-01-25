@@ -70,11 +70,13 @@ export class WebSocketService {
     //   shouldProcessResponse = false;
     // }
     let parsedCustomData: any = {};
+    let agent_user_details = {...this.localStorageService.agentDetails, ...this.localStorageService.userDetails};
     let welcomeMessageParams: any = {
       'waitTime': 2000,
       'userName': parsedCustomData?.userName || parsedCustomData?.fName + parsedCustomData?.lName || 'user',
       'id': this.connectionDetails.conversationId,
-      "isSendWelcomeMessage": shouldProcessResponse
+      "isSendWelcomeMessage": shouldProcessResponse,
+      'agentassistInfo' : agent_user_details
     }    
     this.emitEvents(EVENTS.welcome_message_request, welcomeMessageParams);
   }

@@ -29,6 +29,8 @@ export class AppComponent {
   ngOnInit() {
     window.addEventListener("unload", (event) => {
       window.removeEventListener("message", this.receiveMessage);
+      this.localStorageService.agentDetails = {};
+      this.localStorageService.userDetails = {};
     });
 
     this.route.queryParams
@@ -94,6 +96,12 @@ export class AppComponent {
         let urlParams = e.data.urlParams;
         this.service.configObj = urlParams;
         this.initAgentAssist(chatConfig, urlParams);
+    }else if(e.data.name === 'setAgentInfo'){
+      console.log(e, "event", e.data.agentDetails, "agent details");
+      this.localStorageService.agentDetails = e.data.agentDetails ? e.data.agentDetails : null;
+    }else if(e.data.name === 'setUserInfo'){
+      console.log(e, "event", e.data.userDetails, "user details");
+      this.localStorageService.userDetails = e.data.userDetails ? e.data.userDetails : null;
     }
   }
 

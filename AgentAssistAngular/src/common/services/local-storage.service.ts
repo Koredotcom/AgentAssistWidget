@@ -11,6 +11,8 @@ export class LocalStorageService {
 
   subscriptionsList: Subscription[] = [];
   connectionDetails : any;
+  userDetails : any = {};
+  agentDetails : any = {};
 
   constructor(private handleSubjectService : HandleSubjectService, private emptyObjectCheckPipe : EmptyObjectCheckPipe) {
     this.subscribeEvents();
