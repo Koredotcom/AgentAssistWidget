@@ -505,7 +505,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             document.getElementById("overLayAutoSearch").style.display = "block";
                             $('#overLayAutoSearch').find('.search-results-text')?.remove();
                             $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
-                            $('.search-block').find('.search-results-text-in-lib').remove();
+                            $('#overLayAutoSearchLibDiv').addClass('hide').removeAttr('style');
+                            $('#overLayAutoSearchLib').find('.search-results-text')?.remove();
+                            // $('.search-block').find('.search-results-text-in-lib').remove();
                         } else {
                           //  updateAgentAssistState(_conversationId, 'myBotTab', data);
                             // if(!(isMyBotAutomationOnGoing && data.suggestions)){
@@ -4951,7 +4953,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             searchedVal = '';
                             $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
                             $('#overLayAutoSearch').find('.search-results-text')?.remove();
-                            $('.search-block').find('.search-results-text-in-lib')?.remove();
+                            $('#overLayAutoSearchLibDiv').addClass('hide').removeAttr('style');
+                            $('#overLayAutoSearchLib').find('.search-results-text')?.remove();
+                            // $('.search-block').find('.search-results-text-in-lib')?.remove();
                             $('#autoFill').html('')
                         }
 
@@ -6012,7 +6016,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         if(target.id.split('-').includes('autoResult')){
                             $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
                             $('#overLayAutoSearch').find('.search-results-text')?.remove();
-                            $('.search-block').find('.search-results-text-in-lib')?.remove();
+                            $('#overLayAutoSearchLibDiv').addClass('hide').removeAttr('style');
+                            $('#overLayAutoSearchLib').find('.search-results-text')?.remove();
+                            // $('.search-block').find('.search-results-text-in-lib')?.remove();
                             $('#agentSearch').val(target.innerHTML);
                             agentSearchVal = target.innerHTML;
                             document.getElementById("loader").style.display = "block";
@@ -6023,7 +6029,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $('#librarySearch').val(target.innerHTML);
                             $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
                             $('#overLayAutoSearch').find('.search-results-text')?.remove();
-                            $('.search-block').find('.search-results-text-in-lib')?.remove();
+                            $('#overLayAutoSearchLibDiv').addClass('hide').removeAttr('style');
+                            $('#overLayAutoSearchLib').find('.search-results-text')?.remove();
+                           // $('.search-block').find('.search-results-text-in-lib')?.remove();
                             document.getElementById("loader").style.display = "block";
                             AgentAssistPubSub.publish('searched_Automation_details', { conversationId: _conversationId, botId: _botId, value: target.innerHTML, isSearch: true, "positionId": evt.target.dataset.positionId });
                         }
@@ -6101,7 +6109,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     let isLibraryTab = arguments[1];
                     $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
                     $('#overLayAutoSearch').find('.search-results-text')?.remove();
-                    $('.search-block').find('.search-results-text-in-lib')?.remove();
+                    $('#overLayAutoSearchLibDiv').addClass('hide').removeAttr('style');
+                    $('#overLayAutoSearchLib').find('.search-results-text')?.remove();
+                    // $('.search-block').find('.search-results-text-in-lib')?.remove();
                     let headersVal = {};
                     if(connectionDetails.isSAT) {
                         headersVal = {
@@ -6144,9 +6154,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
                 
                 function addAutoSuggestionTolibrary(data, val){
-                    let autoDiv = $('.search-block');
+                    $('#overLayAutoSearchLib').find('.search-results-text')?.remove();
+                    $('#overLayAutoSearchLibDiv').removeClass('hide').attr('style', 'display:block;');
+                    // let autoDiv = $('.search-block');
+                    let autoDiv = $('#overLayAutoSearchLib');
                     data?.querySuggestions?.forEach((ele) => {
-                        autoDiv.append(`<div class="search-results-text-in-lib" id="autoResultLib-${ele}">${ele}</div>`)
+                        autoDiv.append(`<div class="search-results-text" style="cursor: pointer;" id="autoResultLib-${ele}">${ele}</div>`)
                     });
                 }
                 
@@ -6880,6 +6893,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         <input class="typeahead" type="text" placeholder="Ask AgentAssist" id="librarySearch">
                         <i class="ast-search"></i>
                         <i class="ast-close close-search hide" id="cancelLibrarySearch"></i>
+                        <div class= "overlay-suggestions  overlay-library  hide" id="overLayAutoSearchLibDiv">
+                            <div class="suggestion-content suggestion-content-library" id="overLayAutoSearchLib">
+                            </div>
+                        </div>
                     </div>
                     <div class="search-block hide" id="searchBlocks">
                         <div class="input-text-search library-search-div" >

@@ -1173,6 +1173,20 @@ border: 1px solid transparent !important;
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data .run-info-content .agent-utt:hover .action-links {
     display: flex;
 }
+.overlay-library {
+    width: 97.5% !important;
+    height: 100% !important;
+    left: 13px !important;
+    bottom: -66% !important;
+    background: transparent !important;
+}
+.suggestion-content-library{
+    width: 100%;
+    border-radius: 0px 0px 10px 10px !important;
+    padding: 15px 15px 15px 15px !important;
+    bottom: -66% !important;
+    max-height: 156% !important;
+}
 .overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send:hover .title-text{
     white-space: nowrap !important; 
     padding-right: 0px;
