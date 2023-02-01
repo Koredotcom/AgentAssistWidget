@@ -41,7 +41,7 @@
               "src/assets/css/chatWindow.css",
               "src/assets/css/emojione.sprites.css",
               "src/assets/css/purejscarousel.css",
-              "src/assets/css/customTemplate.css" 
+              "src/assets/css/customTemplate.css"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
@@ -80,7 +80,7 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
+                  "maximumWarning": "5mb",
                   "maximumError": "20mb"
                 },
                 {
@@ -132,7 +132,7 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
+                  "maximumWarning": "5mb",
                   "maximumError": "20mb"
                 },
                 {
@@ -157,7 +157,7 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
+                  "maximumWarning": "5mb",
                   "maximumError": "20mb"
                 },
                 {
@@ -182,7 +182,7 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
+                  "maximumWarning": "5mb",
                   "maximumError": "20mb"
                 },
                 {
@@ -209,7 +209,7 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
+                  "maximumWarning": "5mb",
                   "maximumError": "15mb"
                 },
                 {
@@ -236,7 +236,7 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
+                  "maximumWarning": "5mb",
                   "maximumError": "15mb"
                 },
                 {
@@ -261,7 +261,7 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
+                  "maximumWarning": "5mb",
                   "maximumError": "20mb"
                 },
                 {
@@ -286,7 +286,7 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
+                  "maximumWarning": "5mb",
                   "maximumError": "20mb"
                 },
                 {
@@ -311,7 +311,7 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
+                  "maximumWarning": "5mb",
                   "maximumError": "20mb"
                 },
                 {
@@ -336,7 +336,7 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
+                  "maximumWarning": "5mb",
                   "maximumError": "20mb"
                 },
                 {
