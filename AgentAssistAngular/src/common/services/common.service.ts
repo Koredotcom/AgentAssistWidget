@@ -267,7 +267,7 @@ export class CommonService {
     }
     let endofDialogeHtml = `
                     <div class="dilog-task-end" id="endTaks-${id}">
-                    <div class="text-dialog-task-end">Dialog Task ended</div>     
+                    <div class="text-dialog-task-end">Dialog Task ended</div>
                                </div>
                                <div class="feedback-helpul-container" id="feedbackHelpfulContainer-${id}">
                                 <div class="titles-content">
@@ -287,7 +287,7 @@ export class CommonService {
                                         <span class="tootltip-tabs">Like</span>
                                     </div>
                                     <div class="btn-negtive" id="feedbackdown-${id}">
-                                        <i class="ast-thumbdown" 
+                                        <i class="ast-thumbdown"
                                         id="feedbackdown-${id}"
                                         data-feedbackdislike="false"
                                         data-conv-id="${this.configObj.conversationid}"
@@ -324,7 +324,7 @@ export class CommonService {
                                     <button class="submit-btn" data-updateFlag="false" id="feedbackSubmit" disabled>Submit</button>
                                 </div>
                             </div>
-                        
+
                     `;
     if (!document.getElementById('endTaks-' + id)) {
       endOfDialoge.append(endofDialogeHtml);
@@ -377,7 +377,7 @@ export class CommonService {
           }
       })
   }
-  
+
 
   addFeedbackHtmlToDom(headerUUids, lastElementBeforeNewMessage, dialogName, positionID, userIntentInput?, runForAgentBot?) {
     let dropDownData;
@@ -394,7 +394,7 @@ export class CommonService {
     }
     let endofDialogeHtml = `
                     <div class="dilog-task-end" id="endTaks-${headerUUids}">
-                    <div class="text-dialog-task-end">Dialog Task ended</div>     
+                    <div class="text-dialog-task-end">Dialog Task ended</div>
                                </div>
                                <div class="feedback-helpul-container" id="feedbackHelpfulContainer-${headerUUids}">
                                 <div class="titles-content">
@@ -414,7 +414,7 @@ export class CommonService {
                                         <span class="tootltip-tabs">Like</span>
                                     </div>
                                     <div class="btn-negtive" id="feedbackdown-${headerUUids}">
-                                        <i class="ast-thumbdown" 
+                                        <i class="ast-thumbdown"
                                         id="feedbackdown-${headerUUids}"
                                         data-feedbackdislike="false"
                                         data-conv-id="${this.configObj.conversationid}"
@@ -451,7 +451,7 @@ export class CommonService {
                                     <button class="submit-btn" data-updateFlag="false"id="feedbackSubmit" disabled>Submit</button>
                                 </div>
                             </div>
-                        
+
                     `;
     if (!document.getElementById('endTaks-' + headerUUids)) {
       endOfDialoge.append(endofDialogeHtml);
@@ -528,7 +528,7 @@ export class CommonService {
     }
   }
 
-  //article related code 
+  //article related code
   getSampleSearchResponse() {
     return of(["agent_assist_agent_response", {
       "isSearch": true, "conversationId": this.configObj.conversationid, "botId": this.configObj.botid, "experience": "voice", "type": "text", "value": "How does COVID -19 spread?", "event": "agent_assist_agent_response", "volleyTone": [], "totalTone": [],
@@ -582,7 +582,7 @@ export class CommonService {
         childBotName : dialog.childBotName });
     }
     console.log(searchResponse, "searchresponse");
-    
+
     return searchResponse;
   }
 
@@ -602,34 +602,86 @@ export class CommonService {
   async renderingAgentHistoryMessage() {
     let url = `${this.configObj.agentassisturl}/agentassist/api/v1/agent-feedback/${this.configObj.conversationid}?interaction=mybot`;
     let feedBackResult = await this.renderHistoryFeedBack(url);
-    return this.getAgentHistoryData(`${this.configObj.agentassisturl}/api/1.1/botmessages/agentassist/${this.configObj.botid}/history?convId=${this.configObj.conversationid}&agentHistory=true`)
+    if(this.configObj.isSAT) {
+      return this.getAgentHistoryData(`${this.configObj.envinormentUrl}/agentassist/api/v1/conversations/${this.configObj.conversationid}/aa/messages?botId=${this.configObj.botid}&agentHistory=true`)
       .then(response => {
         return { messages: response, feedbackDetails: feedBackResult }
       }).catch(err => {
         console.log("error", err)
         return err;
       });
+    } else {
+      return this.getAgentHistoryData(`${this.configObj.agentassisturl}/api/1.1/botmessages/agentassist/${this.configObj.botid}/history?convId=${this.configObj.conversationid}&agentHistory=true`)
+      .then(response => {
+        return { messages: response, feedbackDetails: feedBackResult }
+      }).catch(err => {
+        console.log("error", err)
+        return err;
+      });
+    }
+    // return this.getAgentHistoryData(`${this.configObj.agentassisturl}/api/1.1/botmessages/agentassist/${this.configObj.botid}/history?convId=${this.configObj.conversationid}&agentHistory=true`)
+    //   .then(response => {
+    //     return { messages: response, feedbackDetails: feedBackResult }
+    //   }).catch(err => {
+    //     console.log("error", err)
+    //     return err;
+    //   });
   }
 
   async renderingHistoryMessage() {
     let url = `${this.configObj.agentassisturl}/agentassist/api/v1/agent-feedback/${this.configObj.conversationid}?interaction=assist`;
     let feedBackResult = await this.renderHistoryFeedBack(url);
-    return this.getAgentHistoryData(`${this.configObj.agentassisturl}/api/1.1/botmessages/agentassist/${this.configObj.botid}/history?convId=${this.configObj.conversationid}&agentHistory=false`)
+    if(this.configObj.isSAT) {
+      return this.getAgentHistoryData(`${this.configObj.envinormentUrl}/agentassist/api/v1/conversations/${this.configObj.conversationid}/aa/messages?botId=${this.configObj.botid}&agentHistory=false`)
       .then(response => {
         return { messages: response, feedbackDetails: feedBackResult }
       }).catch(err => {
         console.log("error", err)
         return err;
       });
+    } else {
+      return this.getAgentHistoryData(`${this.configObj.agentassisturl}/api/1.1/botmessages/agentassist/${this.configObj.botid}/history?convId=${this.configObj.conversationid}&agentHistory=false`)
+      .then(response => {
+        return { messages: response, feedbackDetails: feedBackResult }
+      }).catch(err => {
+        console.log("error", err)
+        return err;
+      });
+    }
+    // return this.getAgentHistoryData(`${this.configObj.agentassisturl}/api/1.1/botmessages/agentassist/${this.configObj.botid}/history?convId=${this.configObj.conversationid}&agentHistory=false`)
+    //   .then(response => {
+    //     return { messages: response, feedbackDetails: feedBackResult }
+    //   }).catch(err => {
+    //     console.log("error", err)
+    //     return err;
+    //   });
   }
 
   async getAgentHistoryData(url = '', data = {}) {
+    // const response = await $.ajax({
+    //   method: 'GET',
+    //   url: url,
+    //   headers: {
+    //     'Authorization': this.grantResponseObj.authorization.token_type + ' ' + this.getAccessToken()
+    //   }
+    // }) // parses JSON response into native JavaScript objects
+    // return response;
+    let headersVal = {};
+    if(this.configObj.isSAT) {
+        headersVal = {
+            'Authorization': 'bearer' + ' ' + this.configObj.tokenVal,
+            'eAD': false,
+            'accountId': this.configObj.accountId
+        }
+    } else {
+        headersVal = {
+            'Authorization': this.grantResponseObj.authorization.token_type + ' ' + this.getAccessToken()
+        }
+    }
     const response = await $.ajax({
-      method: 'GET',
-      url: url,
-      headers: {
-        'Authorization': this.grantResponseObj.authorization.token_type + ' ' + this.getAccessToken()
-      }
+        method: 'GET',
+        url: url,
+        headers: headersVal
     }) // parses JSON response into native JavaScript objects
     return response;
   }
@@ -659,7 +711,7 @@ export class CommonService {
     });
   }
 
-  updateSeeMoreButtonForAssist(id, type?) {    
+  updateSeeMoreButtonForAssist(id, type?) {
     let faqSourceTypePixel = 5;
     let titleElement = document.getElementById("title-" + id);
     let descElement = document.getElementById("desc-" + id);
@@ -777,7 +829,7 @@ export class CommonService {
       e.stopPropagation();
     }
   }
-   
+
   CustomTempClickEvents(tab, connectionObj) {
     let mythis = this;
     $('.agent-assist-chat-container.kore-chat-window').on('click', '.botResponseAttachments', function (event) {
