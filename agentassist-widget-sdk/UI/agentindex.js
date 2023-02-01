@@ -6061,7 +6061,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 $('#overLayAutoSearch').find('.search-results-text')?.remove();
                                 $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
                             }
-                            $('#searchResults').addClass('hide');
+                           // $('#searchResults').addClass('hide');
                             $('#autoFill').html('')
                             if(evt.target.id == 'agentSearch' || evt.target.id == 'librarySearch'){
                                 try{
@@ -6126,8 +6126,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             success: function (data) {
                                 if (!isLibraryTab && data.typeAheads.length>0) {
                                     typeaheadArray = data.typeAheads;
-                                    $('#overLaySearch').html('');
-                                    $('.overlay-suggestions').addClass('hide').removeAttr('style');
+                                    // $('#overLaySearch').html('');
+                                    // $('.overlay-suggestions').addClass('hide').removeAttr('style');
                                     addAutoSuggestionApi(data, e);
                                 } else {
                                     if(data.typeAheads.length>0){
