@@ -4,7 +4,7 @@ import { AppComponent } from './app.component';
 
 const routes: Routes = [
   {
-    path : 'koreagentassist-sdk/UI/agentassist-iframe.html', component : AppComponent
+    path : 'UI/agentassist-iframe.html', component : AppComponent
   }
 ];
 
