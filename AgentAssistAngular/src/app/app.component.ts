@@ -37,8 +37,9 @@ export class AppComponent {
       .subscribe(params => {    
         this.service.configObj = params;
         window.addEventListener("message", this.receiveMessage.bind(this), false);
-        let parentUrl = window.location.hostname;
-        
+        // let parentUrl = window.parent.location.hostname;
+        let parentUrl = document.referrer;
+        console.log(parentUrl, "parent url")
         let index = this.templateChatConfig.chatConfig.urls.findIndex(e=>parentUrl.includes(e));
         console.log(index, "index");
           if (!(index>-1)) {
@@ -112,7 +113,7 @@ export class AppComponent {
   initAgentAssist(chatConfig, params) {
     console.log(this.service.configObj, "configobj");
      this.service.configObj.conversationId = this.service.configObj.conversationid || this.service.configObj.conversationId
-     if (this.service.configObj.token && this.service.configObj.botid && this.service.configObj.agentassisturl && this.service.configObj.conversationId) {
+     if (this.service.configObj.token && this.service.configObj.botid && this.service.configObj.agentassisturl && this.service.configObj.conversationId && !this.service.configObj.fromSAT) {
       this.handleSubjectService.setLoader(true);
       this.grantCall(params);
     }
