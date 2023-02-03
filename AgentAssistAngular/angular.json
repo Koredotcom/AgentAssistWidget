@@ -34,7 +34,6 @@
             "styles": [
               "src/assets/css/reset.css",
               "src/styles.scss",
-              "src/assets/fonts/inter.css",
               "src/assets/fonts/AgentAssist-icons/style.css",
               "src/assets/css/jquery-ui.min.css",
               "src/assets/css/daterangepicker.css",
