@@ -34,12 +34,16 @@ export class AppComponent {
     });
 
     this.route.queryParams
-      .subscribe(params => {
+      .subscribe(params => {    
         this.service.configObj = params;
         window.addEventListener("message", this.receiveMessage.bind(this), false);
         let parentUrl = window.location.hostname;
-          let index = this.templateChatConfig.chatConfig.urls.findIndex(e=>parentUrl.includes(e));
+        
+        let index = this.templateChatConfig.chatConfig.urls.findIndex(e=>parentUrl.includes(e));
+        console.log(index, "index");
           if (!(index>-1)) {
+            console.log("inside if condition");
+            
             this.initAgentAssist(this.templateChatConfig.chatConfig, params);
           } else {
             var message = {
@@ -106,12 +110,13 @@ export class AppComponent {
   }
 
   initAgentAssist(chatConfig, params) {
-
-     if (this.service.configObj.token && this.service.configObj.botid && this.service.configObj.agentassisturl && this.service.configObj.conversationid) {
+    console.log(this.service.configObj, "configobj");
+     this.service.configObj.conversationId = this.service.configObj.conversationid || this.service.configObj.conversationId
+     if (this.service.configObj.token && this.service.configObj.botid && this.service.configObj.agentassisturl && this.service.configObj.conversationId) {
       this.handleSubjectService.setLoader(true);
       this.grantCall(params);
     }
-    else if (!this.service.configObj.token && !this.service.configObj.botid && !this.service.configObj.agentassisturl && !this.service.configObj.conversationid) {
+    else if (!this.service.configObj.token && !this.service.configObj.botid && !this.service.configObj.agentassisturl && !this.service.configObj.conversationId) {
       if (connectionObj.isAuthentication) {
         var jsonData = {
           "clientId": connectionObj.botDetails.clientId,
