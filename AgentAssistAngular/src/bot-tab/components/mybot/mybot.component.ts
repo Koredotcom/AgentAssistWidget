@@ -326,7 +326,7 @@ export class MybotComponent implements OnInit {
 
   //rendering history code
   renderHistoryMessages(response, feedBackResult) {
-    if (response.length > 0) {
+    if (response && response.length > 0) {
       $('#noAutoRunning').addClass('hide');
     }
     // document.getElementById("loader").style.display = "none";
