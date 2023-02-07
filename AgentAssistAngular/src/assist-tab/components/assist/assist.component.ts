@@ -63,13 +63,15 @@ export class AssistComponent implements OnInit {
 
   ngOnInit(): void {
     this.handleSubjectService.setLoader(true);
-    let response = this.commonService.renderingHistoryMessage();
-    response.then((res) => {
-      this.handleSubjectService.setLoader(false);
-      this.renderHistoryMessages(res.messages, res.feedbackDetails)
-    }).catch((err) => {
-      this.handleSubjectService.setLoader(false);
-    })
+    let response : any = this.commonService.renderingHistoryMessage();
+    if(response && response.messages){
+      response.then((res) => {
+        this.handleSubjectService.setLoader(false);
+        this.renderHistoryMessages(res.messages, res.feedbackDetails)
+      }).catch((err) => {
+        this.handleSubjectService.setLoader(false);
+      })
+    }
     this.subscribeEvents();
     this.scrollToBottom();
   }

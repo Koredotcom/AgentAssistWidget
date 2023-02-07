@@ -59,10 +59,12 @@ export class MybotComponent implements OnInit {
     private koreGenerateuuidPipe: KoreGenerateuuidPipe) { }
 
   ngOnInit(): void {
-    let response = this.commonService.renderingAgentHistoryMessage();
-    response.then((res) => {
-      this.renderHistoryMessages(res.messages, res.feedbackDetails)
-    })
+    let response : any = this.commonService.renderingAgentHistoryMessage();
+    if(response && response.messages){
+      response.then((res) => {
+        this.renderHistoryMessages(res.messages, res.feedbackDetails)
+      })
+    }
     this.subscribeEvents();
   }
 
