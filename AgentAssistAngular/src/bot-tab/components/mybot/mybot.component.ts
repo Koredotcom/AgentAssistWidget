@@ -42,7 +42,8 @@ export class MybotComponent implements OnInit {
   myBotDropdownHeaderUuids: any;
   myBotDialogPositionId: string;
   isMybotInputResponseClick: boolean = false;
-  dialogName;
+  mybotEmptyState : boolean = true;
+  dialogName : string;
 
   constructor(public handleSubjectService: HandleSubjectService,
     public randomUUIDPipe: RandomUUIDPipe,
@@ -238,6 +239,7 @@ export class MybotComponent implements OnInit {
   }
 
   runDialogFormyBotTab(data) {
+    this.mybotEmptyState = false;
     this.isFirstMessagOfDialogInMyBot = true;
     this.collapseOldDialoguesInMyBot();
     this.myBotDialogPositionId = data.positionId;
@@ -329,7 +331,7 @@ export class MybotComponent implements OnInit {
   //rendering history code
   renderHistoryMessages(response, feedBackResult) {
     if (response && response.length > 0) {
-      $('#noAutoRunning').addClass('hide');
+        this.mybotEmptyState = false;
     }
     // document.getElementById("loader").style.display = "none";
     let previousId;
@@ -340,7 +342,6 @@ export class MybotComponent implements OnInit {
     let resp = response.length > 0 ? response : undefined;
     resp?.forEach((res, index) => {
       if ((!res.agentAssistDetails?.suggestions && !res.agentAssistDetails?.ambiguityList && !res.agentAssistDetails?.ambiguity) && res.type == 'outgoing') {
-        document.getElementById(IdReferenceConst.NO_AUTO_RUNNING).classList.add('hide');
         let _msgsResponse = this.mybotDataService.getMybotMsgResponse(res._id, res.botId)
         currentTaskName = res.tN ? res.tN : currentTaskName;
         currentTaskPositionId = res?.agentAssistDetails?.positionId ? res?.agentAssistDetails?.positionId : currentTaskPositionId;
