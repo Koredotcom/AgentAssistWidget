@@ -61,6 +61,7 @@ export class TypeaheadComponent implements OnInit {
       this.typeAHead(this.searchText, this.connectionData);
     } else {
       this.filterSet = [];
+      this.typeahead.emit('');
     }
     
   }
@@ -92,8 +93,8 @@ export class TypeaheadComponent implements OnInit {
         //     }
         // } else {
             headersVal = {
-                'Authorization': this.commonService.grantResponseObj.authorization.token_type + ' ' + this.commonService.grantResponseObj.authorization.accessToken,
-                "AccountId": this.commonService.grantResponseObj.userInfo.accountId,
+                'Authorization': this.commonService.grantResponseObj?.authorization?.token_type + ' ' + this.commonService.grantResponseObj?.authorization?.accessToken,
+                "AccountId": this.commonService.grantResponseObj?.userInfo?.accountId,
                 'eAD': true,
             }
        // }

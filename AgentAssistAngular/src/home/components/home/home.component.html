@@ -55,12 +55,12 @@
             <div class="body-data-container if-suggestion-search" id="bodyContainer" #tabBody>
                 <div class="dialog-task-data" id="dynamicBlocksData">
                     <ng-container>
-                        <app-transcript [class.hide]="activeTab != projConstants.TRANSCRIPT"  (scrollToBottomEvent)="scrollToBottom($event)"></app-transcript>
+                        <app-transcript [class.hide]="activeTab != projConstants.TRANSCRIPT"  (scrollToBottomEvent)="scrollToBottom($event)"  (newButtonScrollClickEvents)="scrollClickEvents($event)"></app-transcript>
                     </ng-container>
                     <ng-container>
                         <div [class.hide]="activeTab != projConstants.ASSIST">
                             
-                            <app-assist  (handlePopupEvent)="handlePopupEvent($event)" (scrollToBottomEvent)="scrollToBottom($event)"
+                            <app-assist  (handlePopupEvent)="handlePopupEvent($event)" (scrollToBottomEvent)="scrollToBottom($event)" (newButtonScrollClickEvents)="scrollClickEvents($event)"
                             ></app-assist>
                         </div>
                     </ng-container>

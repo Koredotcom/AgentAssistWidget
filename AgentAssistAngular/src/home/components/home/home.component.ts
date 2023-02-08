@@ -64,10 +64,12 @@ export class HomeComponent implements OnInit {
     let subscription1 = this.handleSubjectService.activeTabSubject.subscribe(tab => {
       this.commonService.activeTab = tab;
       this.activeTab = tab;
-      this.tabActiveActivities();
+      this.tabActiveActivities(tab);
       setTimeout(() => {
         if (this.activeTab != this.projConstants.LIBRARY) {
           this.scrollToBottom(true);
+        }else{
+          this.tabScrollbarScrollTop();
         }
       }, this.scrollbottomwaitingTime);
     });
@@ -263,7 +265,11 @@ export class HomeComponent implements OnInit {
     this.localStorageService.setLocalStorageItem(storageObject);
   }
 
-  tabActiveActivities() {
+  tabActiveActivities(tab) {
+    let storageObject: any = {
+      [storageConst.CURRENT_TAB]: tab
+    }
+    this.localStorageService.setLocalStorageItem(storageObject);
     // $('#bodyContainer').addClass('if-suggestion-search');
 
   }
@@ -399,6 +405,15 @@ setProactiveMode(){
 
   // scroll realted code.
 
+  tabScrollbarScrollTop(){
+    if(this.psBottom){
+      this.psBottom.directiveRef.scrollToTop(0);
+      setTimeout(() => {
+        this.psBottom.directiveRef.update();
+      }, this.scrollbottomwaitingTime);
+    }
+  }
+
   overlayScrollTop(flag){
     if(flag && this.overlayps){
       this.overlayps.directiveRef.scrollToTop(0);
@@ -458,13 +473,17 @@ setProactiveMode(){
 
   }
 
-  scrollClickEvents() {
+  scrollClickEvents(emit) {
     let scrollbuttonId = this.commonService.tabNamevsScrollId[this.activeTab];
     document.getElementById(scrollbuttonId).removeEventListener('click', () => {
     });
-    document.getElementById(scrollbuttonId).addEventListener('click', (event) => {
-      this.scrollToBottom(true);
-    }, { once: true });
+    setTimeout(() => {
+      document.getElementById(scrollbuttonId).addEventListener('click', (event) => {
+        console.log("click event *************" );
+        
+        this.scrollToBottom(true);
+      }, { once: true });
+    }, 10);
   }
 
   updateScrollButton() {
@@ -474,7 +493,7 @@ setProactiveMode(){
     this.commonService.scrollContent[this.activeTab].scrollAtEnd = scrollAtEnd;
     if (!scrollAtEnd) {
       $(".scroll-bottom-show-btn").removeClass('hiddenEle');
-      this.scrollClickEvents();
+      this.scrollClickEvents(true);
     } else {
       $(".scroll-bottom-show-btn").addClass('hiddenEle');
     }

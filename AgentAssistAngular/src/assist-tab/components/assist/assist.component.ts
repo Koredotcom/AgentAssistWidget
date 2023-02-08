@@ -28,6 +28,7 @@ export class AssistComponent implements OnInit {
   @Output() scrollToBottomEvent = new EventEmitter();
   @ViewChild('dynamicBlockRef') dynamicBlockRef: ElementRef;
   @Output() handlePopupEvent = new EventEmitter();
+  @Output() newButtonScrollClickEvents = new EventEmitter();
 
   subscriptionsList: Subscription[] = [];
 
@@ -444,50 +445,44 @@ export class AssistComponent implements OnInit {
       }
 
       if (data.suggestions) {
-        
-          let automationSuggestions = document.getElementById(`automationSuggestions-${responseId}`);
-          automationSuggestions.classList.remove('hide');
-          let dialogAreaHtml = `<div class="task-type" id="snippetsArea">
-                  <div class="img-block-info">
-                      <img src="./images/kg.svg">
-                  </div>
-                  <div class="content-dialog-task-type" id="snippetsSuggestions-${responseId}">
-                      <div class="type-with-img-title">Snippets (${data.suggestions?.searchassist?.snippets?.length})</div>
-                      
-                  </div>
-              </div>`;
-          automationSuggestions.innerHTML += dialogAreaHtml;
-          data.suggestions?.searchassist?.snippets?.forEach((ele, index) => {
-              let articleSuggestions = document.getElementById(`snippetsSuggestions-${responseId}`);
-
-              let articleHtml = `
-              <div class="type-info-run-send" id="snippetDiv-${uuids+index}">
-                  <div class="left-content" id="snippetSection-${uuids+index}">
-                      <div class="title-text" title="${ele.title}" id="snippettitle-${uuids+index}">${ele.title}</div>
-                  </div>
-                  
-              </div>`;
-
-              articleSuggestions.innerHTML += articleHtml;
-              let articles = $(`.type-info-run-send #snippetSection-${uuids+index}`);
-              
-                      let a = $(`#snippetDiv-${uuids + index}`);
-                      let articleActionHtml = `
-                      <button class="know-more-btn hide" id="snippetviewMsg-${uuids+index}" data-msg-id="snippet-${uuids + index}" data-msg-data="${ele.page_url}"><a style="color: #FFFFFF;" href="${ele.page_url}" target="_blank">Know more</a></button>
-                      
-                  `;
-                  articles.append(`<div class="desc-text" id="snippetdesc-${uuids + index}">${ele.content}</div>`);
-                  articles.append(articleActionHtml);
-                  let articlestypeInfo = $(`.type-info-run-send #snippetSection-${uuids + index}`);
-                  let seeMoreButtonHtml = `
-              <button class="ghost-btn hide" style="font-style: italic;" id="snippetseeMore-${uuids + index}" data-snippet-see-more="true">Show more</button>
-              <button class="ghost-btn hide" style="font-style: italic;" id="snippetseeLess-${uuids + index}" data-snippet-see-less="true">Show less</button>
-              `;
-                  articlestypeInfo.append(seeMoreButtonHtml);
-                  setTimeout(() => {
-                      this.commonService.updateSeeMoreButtonForAssist(uuids + index,'snippet');
-                  }, 100);
-          })
+    
+          if(data.suggestions?.searchassist?.snippets?.length > 0){
+            let automationSuggestions = document.getElementById(`automationSuggestions-${responseId}`);
+            automationSuggestions.classList.remove('hide');
+            let dialogAreaHtml = this.assisttabService.getSnippetAreaTemplate(responseId, data, this.imageFilePath, this.imageFileNames)
+            automationSuggestions.innerHTML += dialogAreaHtml;
+            data.suggestions?.searchassist?.snippets?.forEach((ele, index) => {
+                let articleSuggestions = document.getElementById(`snippetsSuggestions-${responseId}`);
+  
+                let articleHtml = `
+                <div class="type-info-run-send" id="snippetDiv-${uuids+index}">
+                    <div class="left-content" id="snippetSection-${uuids+index}">
+                        <div class="title-text" title="${ele.title}" id="snippettitle-${uuids+index}">${ele.title}</div>
+                    </div>
+                    
+                </div>`;
+  
+                articleSuggestions.innerHTML += articleHtml;
+                let articles = $(`.type-info-run-send #snippetSection-${uuids+index}`);
+                
+                        let a = $(`#snippetDiv-${uuids + index}`);
+                        let articleActionHtml = `
+                        <button class="know-more-btn hide" id="snippetviewMsg-${uuids+index}" data-msg-id="snippet-${uuids + index}" data-msg-data="${ele.page_url}"><a style="color: #FFFFFF;" href="${ele.page_url}" target="_blank">Know more</a></button>
+                        
+                    `;
+                    articles.append(`<div class="desc-text" id="snippetdesc-${uuids + index}">${ele.content}</div>`);
+                    articles.append(articleActionHtml);
+                    let articlestypeInfo = $(`.type-info-run-send #snippetSection-${uuids + index}`);
+                    let seeMoreButtonHtml = `
+                <button class="ghost-btn hide" style="font-style: italic;" id="snippetseeMore-${uuids + index}" data-snippet-see-more="true">Show more</button>
+                <button class="ghost-btn hide" style="font-style: italic;" id="snippetseeLess-${uuids + index}" data-snippet-see-less="true">Show less</button>
+                `;
+                    articlestypeInfo.append(seeMoreButtonHtml);
+                    setTimeout(() => {
+                        this.commonService.updateSeeMoreButtonForAssist(uuids + index,'snippet');
+                    }, 100);
+            })
+          }
 
       
         if (data.suggestions.dialogs?.length > 0) {
@@ -949,6 +944,7 @@ export class AssistComponent implements OnInit {
         if (this.commonService.scrollContent[ProjConstants.ASSIST].numberOfNewMessages == 1) {
           this.removeWhiteBackgroundToSeenMessages();
         }
+        this.newButtonScrollClickEvents.emit(true);
       }
     }
   }
@@ -1738,115 +1734,15 @@ export class AssistComponent implements OnInit {
         if (!parsedPayload && !res.tN && !shouldProcessResponse && !isPromtFlag) {
           let dynamicBlockDiv = $('#dynamicBlock');
           res.components?.forEach((ele, i) => {
-            let welcomeMsgHtml = `
-                            <div class = "welcome-msg collapse-acc-data before-none" id='smallTalk-${res._id}'>
-                                <div class="steps-run-data">
-                                    <div class="icon_block">
-                                        <i class="ast-agent"></i>
-                                    </div>
-                                    <div class="run-info-content">
-                                    
-                                    </div>
-                                </div>
-                            </div>`;
             if (res.components?.length > 1) {
-              if (i == 0) {
-                dynamicBlockDiv.append(welcomeMsgHtml);
-                let runInfoDivOfwelcome = $(`#dynamicBlock #smallTalk-${res._id} .run-info-content`);
-                let contentHtml = `
-                                <div class="title">Customer has waited for an agent for few seconds.<br/>Here are some appropriate opening lines.</div>
-                                   <div class="agent-utt">
-                                    <div class="title-data" id="displayData-${res._id}">${ele.data.text}</div>
-                                    <div class="action-links">
-                                        <button class="send-run-btn" id="sendMsg" data-msg-id="${res._id}"  data-msg-data="${ele.data.text}">Send</button>
-                                        <div class="copy-btn" data-msg-id="${res._id}" data-msg-data="${ele.data.text}">
-                                            <i class="ast-copy" data-msg-id="${res._id}" data-msg-data="${ele.data.text}"></i>
-                                        </div>
-                                    </div>
-                                </div>`;
-                runInfoDivOfwelcome.append(contentHtml);
-              } else {
-                let runInfoDivOfwelcome = $(`#dynamicBlock #smallTalk-${res._id} .run-info-content`);
-                let contentHtmlWithoutTellCus = `
-                                    <div class="agent-utt">
-                                        <div class="title-data" id="displayData-${res._id}">${ele.data.text}</div>
-                                        <div class="action-links">
-                                            <button class="send-run-btn" id="sendMsg" data-msg-id="${res._id}"  data-msg-data="${ele.data.text}">Send</button>
-                                            <div class="copy-btn" data-msg-id="${res._id}" data-msg-data="${ele.data.text}">
-                                                <i class="ast-copy" data-msg-id="${res._id}" data-msg-data="${ele.data.text}"></i>
-                                            </div>
-                                        </div>
-                                    </div>`;
-                runInfoDivOfwelcome.append(contentHtmlWithoutTellCus);
-              }
+              this.welcomeMsgResponse = res.components;
             } else {
-              let botResHtml = `
-                                <div class="collapse-acc-data before-none" id='smallTalk-${res._id}'>
-                             <div class="steps-run-data">
-                             <div class="icon_block">
-                                 <i class="ast-agent"></i>
-                             </div>
-                             <div class="run-info-content" >
-                             <div class="title">Tell Customer</div>
-                             <div class="agent-utt">
-                                 <div class="title-data" id="displayData-${res._id}">${ele.data.text}</div>
-                                 <div class="action-links">
-                                     <button class="send-run-btn" id="sendMsg" data-msg-id="${res._id}"  data-msg-data="${ele.data.text}">Send</button>
-                                     <div class="copy-btn" data-msg-id="${res._id}" data-msg-data="${ele.data.text}">
-                                         <i class="ast-copy" data-msg-id="${res._id}" data-msg-data="${ele.data.text}"></i>
-                                     </div>
-                                 </div>
-                             </div>
-                             </div>
-                         </div>
-                         </div>`;
-              dynamicBlockDiv.append(botResHtml)
+              let botResHtml = this.assisttabService.historySmallTalkTemplate(res.components[0], res._id);
+              dynamicBlockDiv.append(botResHtml);
             }
           });
         }
-
-        //  removeElementFromDom();
-        //if (res.agentAssistDetails.endOfTask) { // need this block of code once the endofTask flag received from backend
-        //                                                    let dropDownData = $(`#dropDownData-${previousId}`);
-        //                    let endOfDialoge = $(`#addRemoveDropDown-${previousId}`);
-
-        //                 // $(`#addRemoveDropDown-${dropdownHeaderUuids} .btn-danger`).remove();
-        //                 let feedbackHtml = ` 
-        //     <div class="feedback-data">
-        //         <div class="feedback-icon" id="feedbackup">
-        //             <i class="ast-thumbup" id="feedbackup-${previousId}"
-        //             data-feedbacklike="false"
-        //             data-conv-id="${_agentAssistDataObj.conversationId}"
-        //                     data-bot-id="${_agentAssistDataObj.botId}" data-feedback="like"
-        //                     data-dialog-name="${previousTaskName}"
-        //                     data-user-input="${res.agentAssistDetails.userInput}"></i>
-        //         </div>
-        //         <div class="feedback-icon" id="feedbackdown">
-        //             <i class="ast-thumbdown" id="feedbackdown-${previousId}"
-        //             data-feedbackdislike="false"
-        //             data-conv-id="${_agentAssistDataObj.conversationId}"
-        //                     data-bot-id="${_agentAssistDataObj.botId}" data-feedback="dislike"
-        //                     data-dialog-name="${previousTaskName}"
-        //                     data-user-input="${res.agentAssistDetails.userInput}"></i>
-        //         </div>
-        //    </div>`;
-        //                 dropDownData.append(feedbackHtml);
-        //                 let endofDialogeHtml = `
-        //     <div class="dilog-task-end" id="endTaks-${previousId}">
-        //     <div class="text-dialog-task-end">Task Ended</div>     
-        //                </div>
-
-        //     `;
-        //                 endOfDialoge.append(endofDialogeHtml);
-        //     previousId = undefined;
-        //     previousTaskName = undefined;
-        // }
-
       }
-      // if (index == resp.length - 1) {
-      //     $(`#historyData .collapse-acc-data.hide`)[$(`#historyData .collapse-acc-data.hide`).length - 1]?.classList.remove('hide');
-      //     // $(`#historyData .show-history-feedback.hide`)[$(`#historyData .show-history-feedback.hide`).length - 1]?.classList.remove('hide');
-      // }
     });
     if (this.commonService.isAutomationOnGoing) {
       $(`#dynamicBlock .collapse-acc-data.hide`)[$(`#dynamicBlock .collapse-acc-data.hide`).length - 1]?.classList.remove('hide');

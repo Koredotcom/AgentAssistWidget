@@ -143,6 +143,30 @@ export class AssistService {
   return template
   }
 
+  historySmallTalkTemplate(ele, _id){
+    let template = `
+      <div class="collapse-acc-data before-none" id='smallTalk-${_id}'>
+    <div class="steps-run-data">
+    <div class="icon_block">
+        <i class="ast-agent"></i>
+    </div>
+    <div class="run-info-content" >
+    <div class="title">Tell Customer</div>
+    <div class="agent-utt">
+        <div class="title-data" id="displayData-${_id}">${ele.data.text}</div>
+        <div class="action-links">
+            <button class="send-run-btn" id="sendMsg" data-msg-id="${_id}"  data-msg-data="${ele.data.text}">Send</button>
+            <div class="copy-btn" data-msg-id="${_id}" data-msg-data="${ele.data.text}">
+                <i class="ast-copy" data-msg-id="${_id}" data-msg-data="${ele.data.text}"></i>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+    </div>`;
+    return template;
+  }
+
   smallTalkTemplate(ele, uuids) {
     let template = `
       <div class="collapse-acc-data before-none" id='smallTalk-${uuids}'>
@@ -202,6 +226,19 @@ export class AssistService {
         
     </div>
     </div>`;
+    return template;
+  }
+
+  getSnippetAreaTemplate(responseId, data, imageFilePath, imageFileNames){
+    let template = `<div class="task-type" id="snippetsArea">
+    <div class="img-block-info">
+        <img src="${imageFilePath}${imageFileNames['FAQ_SUGGESTION']}">
+    </div>
+    <div class="content-dialog-task-type" id="snippetsSuggestions-${responseId}">
+        <div class="type-with-img-title">Snippets (${data.suggestions?.searchassist?.snippets?.length})</div>
+        
+    </div>
+</div>`;
     return template;
   }
 

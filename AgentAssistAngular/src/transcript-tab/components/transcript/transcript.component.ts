@@ -19,6 +19,7 @@ import { RandomUUIDPipe } from 'src/common/pipes/random-uuid.pipe';
 export class TranscriptComponent implements OnInit {
 
   @Output() scrollToBottomEvent = new EventEmitter();
+  @Output() newButtonScrollClickEvents = new EventEmitter();
 
   constructor(private websocketService: WebSocketService,
     private handleSubjectService: HandleSubjectService,
@@ -176,6 +177,7 @@ export class TranscriptComponent implements OnInit {
       this.commonService.scrollContent[ProjConstants.TRANSCRIPT].numberOfNewMessages += 1;
       $(".scroll-bottom-btn").addClass("new-messages");
       $(".scroll-bottom-btn span").text(this.commonService.scrollContent[ProjConstants.TRANSCRIPT].numberOfNewMessages + ' new');
+      this.newButtonScrollClickEvents.emit(true);
     }
   }
 
