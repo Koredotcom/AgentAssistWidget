@@ -467,7 +467,6 @@ export class CommonService {
 
   // send and copy button related code
   preparePostMessageForSendAndCopy(evt, data, eventName, connectionDetails) {
-
     if(eventName == IdReferenceConst.COPYMSG){
       let ele = document.getElementById(`displayData-${evt.target.dataset.msgId}`) ? document.getElementById(`displayData-${evt.target.dataset.msgId}`) : document.getElementById(evt.target.dataset.msgId);
       data = (data && data !== '') ? data : (evt.target.parentNode.dataset.msgData && evt.target.parentNode.dataset.msgData !== '' ? evt.target.parentNode.dataset.msgData : ele.innerText)
@@ -604,8 +603,8 @@ export class CommonService {
     
     let url = `${this.configObj.agentassisturl}/agentassist/api/v1/agent-feedback/${this.configObj.conversationId}?interaction=mybot`;
     let feedBackResult = await this.renderHistoryFeedBack(url);
-    if(this.configObj.isSAT) {
-      return this.getAgentHistoryData(`${this.configObj.envinormentUrl}/agentassist/api/v1/conversations/${this.configObj.conversationId}/aa/messages?botId=${this.configObj.botid}&agentHistory=true`)
+    if(this.configObj.fromSAT) {
+      return this.getAgentHistoryData(`${this.configObj.agentassisturl}/agentassist/api/v1/conversations/${this.configObj.conversationId}/aa/messages?botId=${this.configObj.botid}&agentHistory=true`)
       .then(response => {
         return { messages: response, feedbackDetails: feedBackResult }
       }).catch(err => {
@@ -633,8 +632,8 @@ export class CommonService {
   async renderingHistoryMessage() {
     let url = `${this.configObj.agentassisturl}/agentassist/api/v1/agent-feedback/${this.configObj.conversationId}?interaction=assist`;
     let feedBackResult = await this.renderHistoryFeedBack(url);
-    if(this.configObj.isSAT) {
-      return this.getAgentHistoryData(`${this.configObj.envinormentUrl}/agentassist/api/v1/conversations/${this.configObj.conversationId}/aa/messages?botId=${this.configObj.botid}&agentHistory=false`)
+    if(this.configObj.fromSAT) {
+      return this.getAgentHistoryData(`${this.configObj.agentassisturl}/agentassist/api/v1/conversations/${this.configObj.conversationId}/aa/messages?botId=${this.configObj.botid}&agentHistory=false`)
       .then(response => {
         return { messages: response, feedbackDetails: feedBackResult }
       }).catch(err => {
@@ -650,28 +649,13 @@ export class CommonService {
         return err;
       });
     }
-    // return this.getAgentHistoryData(`${this.configObj.agentassisturl}/api/1.1/botmessages/agentassist/${this.configObj.botid}/history?convId=${this.configObj.conversationId}&agentHistory=false`)
-    //   .then(response => {
-    //     return { messages: response, feedbackDetails: feedBackResult }
-    //   }).catch(err => {
-    //     console.log("error", err)
-    //     return err;
-    //   });
   }
 
   async getAgentHistoryData(url = '', data = {}) {
-    // const response = await $.ajax({
-    //   method: 'GET',
-    //   url: url,
-    //   headers: {
-    //     'Authorization': this.grantResponseObj.authorization.token_type + ' ' + this.getAccessToken()
-    //   }
-    // }) // parses JSON response into native JavaScript objects
-    // return response;
     let headersVal = {};
-    if(this.configObj.isSAT) {
+    if(this.configObj.fromSAT) {
         headersVal = {
-            'Authorization': 'bearer' + ' ' + this.configObj.tokenVal,
+            'Authorization': 'bearer' + ' ' + this.configObj.token,
             'eAD': false,
             'accountId': this.configObj.accountId
         }

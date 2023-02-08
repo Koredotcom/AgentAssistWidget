@@ -145,12 +145,12 @@ export class AppComponent {
       }
 
     } else {
-      connectionObj['envinormentUrl'] = connectionObj.envinormentUrl;
+      connectionObj['agentassisturl'] = connectionObj.envinormentUrl;
       connectionObj['jwtToken'] = params.token;
       connectionObj['accountId'] = params.accountId || '';
       connectionObj['userId'] = params.userId || '';
       connectionObj['orgId']= params.orgId || '';
-      connectionObj['isSAT'] = params.fromSAT || false;
+      connectionObj['fromSAT'] = params.fromSAT || false;
       this.initiateSocketConnection(params);
     }
 

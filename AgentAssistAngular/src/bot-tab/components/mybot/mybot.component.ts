@@ -60,11 +60,11 @@ export class MybotComponent implements OnInit {
 
   ngOnInit(): void {
     let response : any = this.commonService.renderingAgentHistoryMessage();
-    if(response && response.messages){
-      response.then((res) => {
+    response.then((res) => {
+      if(res && res.messages){
         this.renderHistoryMessages(res.messages, res.feedbackDetails)
-      })
-    }
+      }
+    })
     this.subscribeEvents();
   }
 

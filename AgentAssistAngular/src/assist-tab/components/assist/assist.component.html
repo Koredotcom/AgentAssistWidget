@@ -9,8 +9,8 @@
                 <div class="agent-utt">
                  <div class="title-data" id="displayData-${uuids}">{{ele.value}}</div>
                  <div class="action-links">
-                     <button class="send-run-btn" id="sendMsgWelcome" (click)="commonService.preparePostMessageForSendAndCopy($event, ele.value, idReferenceConst.SENDMSG)">Send</button>
-                     <div class="copy-btn welcome-msg-copy" (click)="commonService.preparePostMessageForSendAndCopy($event, ele.value, idReferenceConst.COPYMSG)">
+                     <button class="send-run-btn" id="sendMsgWelcome" (click)="commonService.preparePostMessageForSendAndCopy($event, ele.value, idReferenceConst.SENDMSG, connectionDetails)">Send</button>
+                     <div class="copy-btn welcome-msg-copy" (click)="commonService.preparePostMessageForSendAndCopy($event, ele.value, idReferenceConst.COPYMSG, connectionDetails)">
                          <i class="ast-copy welcome-msg-copy"></i>
                      </div>
                  </div>

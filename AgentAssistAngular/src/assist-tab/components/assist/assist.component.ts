@@ -65,14 +65,14 @@ export class AssistComponent implements OnInit {
   ngOnInit(): void {
     this.handleSubjectService.setLoader(true);
     let response : any = this.commonService.renderingHistoryMessage();
-    if(response && response.messages){
-      response.then((res) => {
+    response.then((res) => {
+      if(res && res.messages){
         this.handleSubjectService.setLoader(false);
         this.renderHistoryMessages(res.messages, res.feedbackDetails)
-      }).catch((err) => {
-        this.handleSubjectService.setLoader(false);
-      })
-    }
+      }
+    }).catch((err) => {
+      this.handleSubjectService.setLoader(false);
+    });
     this.subscribeEvents();
     this.scrollToBottom();
   }
@@ -1292,6 +1292,8 @@ export class AssistComponent implements OnInit {
     let previousId;
     let previousTaskPositionId, currentTaskPositionId, currentTaskName, previousTaskName;
     let resp = response.length > 0 ? response : undefined;
+    console.log(resp, "response inside history messages");
+    
     resp?.forEach((res, index) => {
 
       if ((res.agentAssistDetails?.suggestions || res.agentAssistDetails?.ambiguityList) && res.type == 'outgoing' && !res.agentAssistDetails?.faqResponse) {
