@@ -62,7 +62,7 @@ export class WebSocketService {
       conversationId : this.connectionDetails.conversationId,
       experience : this.connectionDetails.isCall == "false" ? ProjConstants.CHAT : ProjConstants.VOICE
     }
-    this.emitEvents(EVENTS.agent_menu_request, menu_request_params);
+   
 
     let appState = this.localStorageService.getLocalStorageState();
     let shouldProcessResponse = true;    
@@ -79,6 +79,7 @@ export class WebSocketService {
       'agentassistInfo' : agent_user_details
     }    
     this.emitEvents(EVENTS.welcome_message_request, welcomeMessageParams);
+    this.emitEvents(EVENTS.agent_menu_request, menu_request_params);
   }
 
   emitEvents(eventName,requestParams) {

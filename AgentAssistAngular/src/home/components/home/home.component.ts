@@ -157,7 +157,7 @@ export class HomeComponent implements OnInit {
     this.hightLightFaqFromStoredList(_convId, this.projConstants.ASSIST);
     setTimeout(() => {
       this.setProactiveMode();
-    }, 100);
+    }, 1000);
   }
 
   //event listeners from parent
