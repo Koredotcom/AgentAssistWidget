@@ -76,8 +76,13 @@ export class WebSocketService {
       'userName': parsedCustomData?.userName || parsedCustomData?.fName + parsedCustomData?.lName || 'user',
       'id': this.connectionDetails.conversationId,
       "isSendWelcomeMessage": shouldProcessResponse,
-      'agentassistInfo' : agent_user_details
-    }    
+      'agentassistInfo' : agent_user_details,
+    }
+    if(this.connectionDetails?.autoBotId) {
+      welcomeMessageParams['autoBotId'] = this.connectionDetails.autoBotId;
+    } else {
+      welcomeMessageParams['autoBotId'] = '';
+    }
     this.emitEvents(EVENTS.welcome_message_request, welcomeMessageParams);
     this.emitEvents(EVENTS.agent_menu_request, menu_request_params);
   }
