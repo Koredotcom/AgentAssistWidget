@@ -118,6 +118,12 @@ export class CommonService {
       agent_assist_request['childBotId'] = data.childBotId;
       agent_assist_request['childBotName'] = data.childBotName;
     }
+    if(this.configObj?.autoBotId) {
+      console.log(this.configObj);
+      agent_assist_request['autoBotId'] = this.configObj.autoBotId;
+    } else {
+      agent_assist_request['autoBotId'] = '';
+    }
     return agent_assist_request;
   }
 
@@ -136,6 +142,12 @@ export class CommonService {
     if(data.childBotId) {
       agent_assist_agent_request_params['childBotId'] = data.childBotId;
       agent_assist_agent_request_params['childBotName'] = data.childBotName;
+    }
+    if(this.configObj?.autoBotId) {
+      console.log(this.configObj);
+      agent_assist_agent_request_params['autoBotId'] = this.configObj.autoBotId;
+    } else {
+      agent_assist_agent_request_params['autoBotId'] = '';
     }
     return agent_assist_agent_request_params;
   }

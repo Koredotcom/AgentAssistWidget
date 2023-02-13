@@ -80,8 +80,10 @@ export class WebSocketService {
     }
     if(this.connectionDetails?.autoBotId) {
       welcomeMessageParams['autoBotId'] = this.connectionDetails.autoBotId;
+      menu_request_params['autoBotId'] = this.connectionDetails.autoBotId;
     } else {
       welcomeMessageParams['autoBotId'] = '';
+      menu_request_params['autoBotId'] = '';
     }
     this.emitEvents(EVENTS.welcome_message_request, welcomeMessageParams);
     this.emitEvents(EVENTS.agent_menu_request, menu_request_params);
