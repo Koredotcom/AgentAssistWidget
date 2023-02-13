@@ -592,15 +592,23 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
 
                 function formatSearchAssistData(suggestions){
-            
                     let searchAssistData = suggestions.searchassist;
                     let articlesData = [];
                     for(let source in searchAssistData){
-                        articlesData.push.apply(articlesData,searchAssistData[source]);
+                        searchAssistData[source] = checkEmptyObjectsInArray(searchAssistData[source]);
+                        if(Object.keys(searchAssistData[source]).length > 0){
+                            articlesData.push.apply(articlesData,searchAssistData[source]);
+                        }
                     }
                     suggestions.articles = articlesData;
-                    console.log(suggestions, "suggestions");
                     return suggestions;
+                }
+
+                function checkEmptyObjectsInArray(arr){
+                    arr = arr.filter(
+                        obj => !(obj && Object.keys(obj).length === 0)
+                    );
+                    return arr;
                 }
 
                 function processUserMessages(data, conversationId, botId) {
@@ -938,7 +946,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                     if (data.isSearch && answerPlaceableIDs.length == 0) {
                         ShowSearchContent();
-                        if (data.value.length > 0 && currentTabActive == 'searchAutoIcon') {
+                        if (data.value && data.value.length > 0 && currentTabActive == 'searchAutoIcon') {
                             document.getElementById('allAutomations-Exhaustivelist').classList.add('hide');
                             $('#dialogs-faqs').addClass('hide');
                         }
@@ -1288,13 +1296,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
     
                             
                                     let articles = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #articleSectionLib-${uuids+index}`) : $(`#overLaySearch .type-info-run-send #articleSectionLib-${uuids+index}`);
-                                    if (!ele.content) {
-                                        let articlecheckHtml = `
-                                <i class="ast-carrotup" data-conv-id="${data.conversationId}"
-                                data-bot-id="${botId}" data-intent-name="${ele.title}"
-                                data-check-lib="true" id="articlecheckLib-${uuids+index}"></i>`;
-                                articles.append(articlecheckHtml);
-                                    } else {
+                                //     if (!ele.content) {
+                                //         let articlecheckHtml = `
+                                // <i class="ast-carrotup" data-conv-id="${data.conversationId}"
+                                // data-bot-id="${botId}" data-intent-name="${ele.title}"
+                                // data-check-lib="true" id="articlecheckLib-${uuids+index}"></i>`;
+                                // articles.append(articlecheckHtml);
+                                //     } else {
+                                        ele.content = ele.content ? ele.content : '';
                                         let a = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display #articleDivLib-${uuids+index}`) : $(`#overLaySearch #articleDivLib-${uuids+index}`);
                                         let articlesActionHtml = `<div class="action-links">
                                 <button class="send-run-btn" id="sendMsg" data-msg-id="article-${uuids+index}"  data-msg-data="${ele.content}">Send</button>
@@ -1302,7 +1311,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     <i class="ast-copy" data-msg-id="article-${uuids+index}" data-msg-data="${ele.content}"></i>
                                 </div>
                             </div>`;
-                                        a.append(articlesActionHtml);
+                                        if(ele.content){
+                                            a.append(articlesActionHtml);
+                                        }
                                         articles.append(`<div class="desc-text" id="articledescLib-${uuids+index}">${ele.content}
                                          </div>`);
                                          if(ele.link){
@@ -1318,7 +1329,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         setTimeout(() => {
                                             updateSeeMoreButtonForAgent(uuids + index, 'article');
                                         }, 10);
-                                    }
+                                    // }
                                     
                                     
                                     
@@ -2178,13 +2189,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
             
                                             articleSuggestions.innerHTML += articleHtml;
                                             let articles = $(`.type-info-run-send #articleSection-${uuids+index}`);
-                                            if (!ele.content) {
-                                                let checkHtml = `
-                                                <i class="ast-carrotup" data-conv-id="${data.conversationId}"
-                                                data-bot-id="${botId}" data-intent-name="${ele.title}"
-                                                data-check="true" id="articlecheck-${uuids + index}"></i>`;
-                                                            articles.append(checkHtml);
-                                            } else {
+                                            // if (!ele.content) {
+                                            //     let checkHtml = `
+                                            //     <i class="ast-carrotup" data-conv-id="${data.conversationId}"
+                                            //     data-bot-id="${botId}" data-intent-name="${ele.title}"
+                                            //     data-check="true" id="articlecheck-${uuids + index}"></i>`;
+                                            //                 articles.append(checkHtml);
+                                            // } else {
+                                                    ele.content = ele.content ? ele.content : '';
                                                     let a = $(`#articleDiv-${uuids + index}`);
                                                     let articleActionHtml = `<div class="action-links">
                                                     <button class="send-run-btn" id="sendMsg" data-msg-id="article-${uuids + index}" data-msg-data="${ele.content}">Send</button>
@@ -2192,7 +2204,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                         <i class="ast-copy" data-msg-id="article-${uuids + index}" data-msg-data="${ele.content}"></i>
                                                     </div>
                                                 </div>`;
-                                                a.append(articleActionHtml);
+                                                if(ele.content){
+                                                    a.append(articleActionHtml);
+                                                }
                                                 articles.append(`<div class="desc-text" id="articledesc-${uuids + index}">${ele.content}</div>`);
                                                 if(ele.link){
                                                     let fullArticleLinkHtml = `<div class="link-view-full-article hide" id="articleViewLink-${uuids+index}"><a href="${ele.link}" target="_blank">View Full Article</a></div>`
@@ -2208,7 +2222,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                 setTimeout(() => {
                                                     updateSeeMoreButtonForAssist(uuids + index,'article');
                                                 }, 100);
-                                            }
+                                            // }
             
                                             // if (data.suggestions.faqs.length === 1 && !ele.answer) {
                                             //     document.getElementById(`check-${uuids + index}`).click();
