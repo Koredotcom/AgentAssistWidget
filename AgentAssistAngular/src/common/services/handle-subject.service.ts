@@ -64,6 +64,9 @@ export class HandleSubjectService {
       } else if (key == 'conversationid') {
         parmasObj[ProjConstants.CONVESATIONID] = parmasObj[key];
         delete parmasObj[key];
+      }else if(key == "autoBotId"){
+        parmasObj[ProjConstants.AUTOMATIONBOTID] = parmasObj[key];
+        delete parmasObj[key];
       }
     }
     this.connectDetailsSubject.next(parmasObj);
