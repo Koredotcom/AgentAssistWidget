@@ -513,13 +513,13 @@ export class AssistComponent implements OnInit {
 
             articleSuggestions.innerHTML += articleHtml;
             let articles = $(`.type-info-run-send #articleSection-${uuids + index}`);
-            if (!ele.content) {
-              let checkHtml = `
-                        <i class="ast-carrotup" data-conv-id="${data.conversationId}"
-                        data-bot-id="${botId}" data-intent-name="${ele.title}"
-                        data-check="true" id="articlecheck-${uuids + index}"></i>`;
-              articles.append(checkHtml);
-            } else {
+            // if (!ele.content) {
+            //   let checkHtml = `
+            //             <i class="ast-carrotup" data-conv-id="${data.conversationId}"
+            //             data-bot-id="${botId}" data-intent-name="${ele.title}"
+            //             data-check="true" id="articlecheck-${uuids + index}"></i>`;
+            //   articles.append(checkHtml);
+            // } else {
               let a = $(`#articleDiv-${uuids + index}`);
               let articleActionHtml = `<div class="action-links">
                             <button class="send-run-btn" id="sendMsg" data-msg-id="article-${uuids + index}" data-msg-data="${ele.content}">Send</button>
@@ -543,7 +543,7 @@ export class AssistComponent implements OnInit {
               setTimeout(() => {
                 this.commonService.updateSeeMoreButtonForAssist(uuids + index, this.projConstants.ARTICLE);
               }, 100);
-            }
+            // }
           })
 
         }
