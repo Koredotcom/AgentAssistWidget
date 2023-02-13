@@ -595,9 +595,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     let searchAssistData = suggestions.searchassist;
                     let articlesData = [];
                     for(let source in searchAssistData){
-                        searchAssistData[source] = checkEmptyObjectsInArray(searchAssistData[source]);
-                        if(Object.keys(searchAssistData[source]).length > 0){
-                            articlesData.push.apply(articlesData,searchAssistData[source]);
+                        if(source != "snippets"){
+                            searchAssistData[source] = checkEmptyObjectsInArray(searchAssistData[source]);
+                            if(Object.keys(searchAssistData[source]).length > 0){
+                                articlesData.push.apply(articlesData,searchAssistData[source]);
+                            }
                         }
                     }
                     suggestions.articles = articlesData;
