@@ -102,6 +102,10 @@ export class AssistComponent implements OnInit {
       if (response && Object.keys(response).length > 0) {
         this.updateAgentAssistResponse(response, this.connectionDetails.botId, this.connectionDetails.conversationId);
         this.viewCustomTempAttachment()
+        if(!this.connectionDetails?.autoBotId || !this.commonService.configObj?.autoBotId){
+          this.connectionDetails['autoBotId'] = response?.autoBotId;
+          this.commonService.configObj['autoBotId'] = response?.autoBotId;
+        }
       }
       this.handleSubjectService.setLoader(false);
     });
