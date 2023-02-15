@@ -6771,7 +6771,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
         var KRPerfectScrollbar;
         if(window.PerfectScrollbar && typeof PerfectScrollbar ==='function'){
           KRPerfectScrollbar=window.PerfectScrollbar;
-          let scrollbar = new KRPerfectScrollbar($(`#${agentContainer}`).find('.suggestion-content').get(0), {
+          let scrollbar = new KRPerfectScrollbar($(`#${agentContainer}`).find('#overLaySearch').get(0), {
             suppressScrollX: true
           });
         }
