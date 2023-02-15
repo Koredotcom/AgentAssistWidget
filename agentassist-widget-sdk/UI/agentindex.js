@@ -1305,7 +1305,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 // data-check-lib="true" id="articlecheckLib-${uuids+index}"></i>`;
                                 // articles.append(articlecheckHtml);
                                 //     } else {
-                                        ele.content = ele.content ? ele.content.replace( /(<([^>]+)>)/ig, '') : '';
+                                        ele.content = ele.content ? ele.content.replace( /(<([^>]+)>)/ig, '').replace(/"/g, "'") : '';
                                         let a = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display #articleDivLib-${uuids+index}`) : $(`#overLaySearch #articleDivLib-${uuids+index}`);
                                         let articlesActionHtml = `<div class="action-links">
                                 <button class="send-run-btn" id="sendMsg" data-msg-id="article-${uuids+index}"  data-msg-data="${ele.content}">Send</button>
