@@ -561,11 +561,17 @@ export class CommonService {
     let snippersArray = suggestions?.searchassist?.snippets || []
     if (suggestions.searchassist && Object.keys(suggestions.searchassist).length > 0) {
       for(let source in suggestions.searchassist){
-        searchResponse.articles.push.apply(searchResponse.articles,suggestions.searchassist[source]);
+        if(source != "snippets"){
+          suggestions.searchassist[source] = this.checkEmptyObjectsInArray(suggestions.searchassist[source]);
+          if(Object.keys(suggestions.searchassist[source]).length > 0){
+            searchResponse.articles.push.apply(searchResponse.articles,suggestions.searchassist[source]);
+          }
+        }
       }
       for (let article of searchResponse.articles) {
         article.showMoreButton = false;
         article.showLessButton = false;
+        article.content = article.content ? article.content : '';
       }
     }
     for (let faq of faqArray) {
@@ -595,6 +601,13 @@ export class CommonService {
     console.log(searchResponse, "searchresponse");
 
     return searchResponse;
+  }
+
+  checkEmptyObjectsInArray(arr){
+    arr = arr.filter(
+        obj => !(obj && Object.keys(obj).length === 0)
+    );
+    return arr;
   }
 
   //history related code
