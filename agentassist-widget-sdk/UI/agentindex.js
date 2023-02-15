@@ -1305,7 +1305,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 // data-check-lib="true" id="articlecheckLib-${uuids+index}"></i>`;
                                 // articles.append(articlecheckHtml);
                                 //     } else {
-                                        ele.content = ele.content ? ele.content : '';
+                                        ele.content = ele.content ? ele.content.replace( /(<([^>]+)>)/ig, '') : '';
                                         let a = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display #articleDivLib-${uuids+index}`) : $(`#overLaySearch #articleDivLib-${uuids+index}`);
                                         let articlesActionHtml = `<div class="action-links">
                                 <button class="send-run-btn" id="sendMsg" data-msg-id="article-${uuids+index}"  data-msg-data="${ele.content}">Send</button>
@@ -1787,6 +1787,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     let sectionElement = $('#faqSectionLib-' + id);
                     let divElement = $('#faqDivLib-' + id);
                     let seeMoreElement = $('#seeMore-' + id);
+                    let seeLessElement = $('#seeLess-' + id);
                     console.log(article, 'article');
                     if(snippet){
                         titleElement = $("#snippettitleLib-" + id);
@@ -1794,6 +1795,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         sectionElement = $('#snippetSectionLib-' + id);
                         divElement = $('#snippetDivLib-' + id);
                         seeMoreElement = $('#snippetseeMore-' + id);
+                        seeLessElement = $('#snippetseeLess-' + id);
                         snippetsendMsg = $('#snippetViewMsgLib-' + id);
                        // console.log(seeMoreElement, "see more element");
                     }
@@ -1803,6 +1805,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         sectionElement = $('#articleSectionLib-' + id);
                         divElement = $('#articleDivLib-' + id);
                         seeMoreElement = $('#articleseeMore-' + id);
+                        seeLessElement = $('#articleseeLess-' + id);
                         viewLinkElement = $('#articleViewLinkLib-' + id);
                         console.log(seeMoreElement, "see more element");
                     }
@@ -1826,6 +1829,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         // }
                             if(divSectionHeight > (24 + faqSourceTypePixel)){
                                 $(seeMoreElement).removeClass('hide');
+                                $(seeLessElement).addClass('hide');
                             }else{
                                 $(seeMoreElement).addClass('hide');
                                 if(article){
@@ -1870,6 +1874,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     let sectionElement = $('#faqSection-' + id);
                     let divElement = $('#faqDiv-' + id);
                     let seeMoreElement = $('#seeMore-' + id);
+                    let seeLessElement = $('#seeLess-' + id);
                     console.log(article, "article", snippet);
                     if(snippet){
                         titleElement = $("#snippettitle-" + id);
@@ -1877,6 +1882,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         sectionElement = $('#snippetSection-' + id);
                         divElement = $('#snippetDiv-' + id);
                         seeMoreElement = $('#snippetseeMore-' + id);
+                        seeLessElement = $('#snippetseeLess-' + id);
                         snippetviewMsg = $('#snippetviewMsg-' + id);
                     }
                     if(article == 'article'){
@@ -1885,6 +1891,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         sectionElement = $('#articleSection-' + id);
                         divElement = $('#articleDiv-' + id);
                         seeMoreElement = $('#articleseeMore-' + id);
+                        seeLessElement = $('#articleseeLess-' + id);
                         console.log(seeMoreElement, 'see more element');
                     }
                     if(titleElement && descElement && sectionElement && divElement){
@@ -1900,6 +1907,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         
                             if(divSectionHeight > (24 + faqSourceTypePixel)){
                                 $(seeMoreElement).removeClass('hide');
+                                $(seeLessElement).addClass('hide');
                             }else{
                                 $(seeMoreElement).addClass('hide');
                                 if(snippet){
@@ -2198,7 +2206,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             //     data-check="true" id="articlecheck-${uuids + index}"></i>`;
                                             //                 articles.append(checkHtml);
                                             // } else {
-                                                    ele.content = ele.content ? ele.content : '';
+                                                    ele.content = ele.content ? ele.content.replace( /(<([^>]+)>)/ig, '') : '';
                                                     let a = $(`#articleDiv-${uuids + index}`);
                                                     let articleActionHtml = `<div class="action-links">
                                                     <button class="send-run-btn" id="sendMsg" data-msg-id="article-${uuids + index}" data-msg-data="${ele.content}">Send</button>
