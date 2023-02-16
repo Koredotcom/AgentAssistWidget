@@ -550,7 +550,8 @@ export class CommonService {
     }])
   }
 
-  formatSearchResponse(suggestions) {
+  formatSearchResponse(response) {
+    let suggestions = response.suggestions
     let searchResponse: any = {};
     searchResponse.dialogs = [];
     searchResponse.faqs = [];
@@ -572,6 +573,7 @@ export class CommonService {
         article.showMoreButton = false;
         article.showLessButton = false;
         article.content = article.content ? article.content : '';
+        article.userInput = response.userInput;
       }
     }
     for (let faq of faqArray) {

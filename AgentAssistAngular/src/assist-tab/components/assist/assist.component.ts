@@ -17,6 +17,8 @@ import { AssistService } from 'src/assist-tab/services/assist.service';
 import { HtmlEntityPipe } from 'src/common/pipes/html-entity.pipe';
 import { EVENTS } from 'src/common/helper/events';
 import { LocalStorageService } from 'src/common/services/local-storage.service';
+import { ReplaceTextWithTagPipe } from 'src/common/pipes/replace-text-with-tag.pipe';
+import { RemoveTagFromStringPipe } from 'src/common/pipes/remove-tag-from-string.pipe';
 @Component({
   selector: 'app-assist',
   templateUrl: './assist.component.html',
@@ -59,7 +61,8 @@ export class AssistComponent implements OnInit {
     public commonService: CommonService, public websocketService: WebSocketService,
     public designAlterService: DesignAlterService, public rawHtmlPipe: RawHtmlPipe,
     public koreGenerateuuidPipe: KoreGenerateuuidPipe, public assisttabService: AssistService,
-    public htmlEntityPipe: HtmlEntityPipe, private localStorageService: LocalStorageService) {
+    public htmlEntityPipe: HtmlEntityPipe, private localStorageService: LocalStorageService,
+    private removeTagFromString : RemoveTagFromStringPipe, private replaceTextwithTag : ReplaceTextWithTagPipe) {
   }
 
   ngOnInit(): void {
@@ -195,8 +198,10 @@ export class AssistComponent implements OnInit {
     let subscription13 = this.handleSubjectService.proactiveModeSubject.subscribe((response: any) => {
       if (response != null && response != undefined) {
         this.proactiveModeStatus = response;
-        if (response) {
-          $(`.override-input-div`).removeClass('hide');
+        if (response) {          
+          if(response != ProjConstants.PROACTIVE_INITIAL_MODE){
+            $(`.override-input-div`).removeClass('hide');
+          }
           this.handleCancelOverrideBtnClick('overRideBtn-' + this.dropdownHeaderUuids, this.dialogPositionId);
           $(`#overRideBtn-${this.dropdownHeaderUuids}`).removeClass('hide');
         } else {
@@ -520,6 +525,7 @@ export class AssistComponent implements OnInit {
             //             data-check="true" id="articlecheck-${uuids + index}"></i>`;
             //   articles.append(checkHtml);
             // } else {
+              ele.content = this.removeTagFromString.transform(ele.content);
               let a = $(`#articleDiv-${uuids + index}`);
               let articleActionHtml = `<div class="action-links">
                             <button class="send-run-btn" id="sendMsg" data-msg-id="article-${uuids + index}" data-msg-data="${ele.content}">Send</button>
@@ -527,7 +533,12 @@ export class AssistComponent implements OnInit {
                                 <i class="ast-copy" data-msg-id="article-${uuids + index}" data-msg-data="${ele.content}"></i>
                             </div>
                         </div>`;
-              a.append(articleActionHtml);
+              if(ele.content){
+                a.append(articleActionHtml);
+              }
+              if(data.userInput){
+                ele.content = this.replaceTextwithTag.transform(ele.content, data.userInput);
+              }
               articles.append(`<div class="desc-text" id="articledesc-${uuids + index}">${ele.content}</div>`);
               if (ele.link) {
                 let fullArticleLinkHtml = `<div class="link-view-full-article hide" id="articleViewLink-${uuids + index}"><a href="${ele.link}" target="_blank">View Full Article</a></div>`

@@ -4,6 +4,8 @@ import { takeUntil } from 'rxjs/operators'
 import { ImageFilePath, ImageFileNames, ProjConstants, IdReferenceConst, classNamesConst } from 'src/common/constants/proj.cnts';
 import { EVENTS } from 'src/common/helper/events';
 import { RandomUUIDPipe } from 'src/common/pipes/random-uuid.pipe';
+import { RemoveTagFromStringPipe } from 'src/common/pipes/remove-tag-from-string.pipe';
+import { ReplaceTextWithTagPipe } from 'src/common/pipes/replace-text-with-tag.pipe';
 import { CommonService } from 'src/common/services/common.service';
 import { HandleSubjectService } from 'src/common/services/handle-subject.service';
 import { WebSocketService } from 'src/common/services/web-socket.service';
@@ -38,7 +40,8 @@ export class OverlaysearchComponent implements OnInit {
   answerPlaceableIDs : any = [];
 
   constructor(public handleSubjectService: HandleSubjectService, public commonService: CommonService,
-    public randomUUIDPipe: RandomUUIDPipe, public websocketService: WebSocketService, public cdRef : ChangeDetectorRef) { }
+    public randomUUIDPipe: RandomUUIDPipe, public websocketService: WebSocketService, public cdRef : ChangeDetectorRef,
+    public removeTagFromString : RemoveTagFromStringPipe, public replaceTextWithTag : ReplaceTextWithTagPipe ) { }
 
   ngOnInit(): void {
     this.subscribeEvents();
@@ -189,7 +192,7 @@ export class OverlaysearchComponent implements OnInit {
   handleSearchResponse(response) {
     if (response && response.suggestions && this.answerPlaceableIDs.length == 0) {
       this.searchResponse = {};
-      this.searchResponse = this.commonService.formatSearchResponse(response.suggestions);
+      this.searchResponse = this.commonService.formatSearchResponse(response);
       this.searchResponse.totalSearchResults =  (this.searchResponse.dialogs?.length + this.searchResponse.faqs?.length + this.searchResponse?.articles?.length +this.searchResponse?.snippets?.length || 0);
       this.faqViewCount = (this.searchResponse.faqs && this.searchResponse.faqs.length <= 2) ? this.searchResponse.faqs.length : 2;
       this.articleViewCount = (this.searchResponse.articles && this.searchResponse.articles.length <= 2) ? this.searchResponse.articles.length : 2;

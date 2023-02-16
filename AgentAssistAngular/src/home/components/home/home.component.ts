@@ -303,8 +303,8 @@ export class HomeComponent implements OnInit {
 
   //proactive tab toggle click
   proactiveToggle(proactiveModeEnabled) {
-    this.proactiveModeEnabled = proactiveModeEnabled;
-    this.handleSubjectService.setProactiveModeStatus(this.proactiveModeEnabled);
+    this.proactiveModeEnabled = (proactiveModeEnabled == ProjConstants.PROACTIVE_INITIAL_MODE) ? true : proactiveModeEnabled;
+    this.handleSubjectService.setProactiveModeStatus(proactiveModeEnabled);
     this.updateProactiveModeState(this.proactiveModeEnabled);
   }
 
@@ -318,7 +318,7 @@ export class HomeComponent implements OnInit {
 setProactiveMode(){
   let appState : any = this.localStorageService.getLocalStorageState();
   let convState = appState[this.connectionDetails.conversationId];
-  let proactiveModeStatus = (convState[storageConst.PROACTIVE_MODE] != undefined && convState[storageConst.PROACTIVE_MODE] != null) ? convState[storageConst.PROACTIVE_MODE] : true;
+  let proactiveModeStatus = (convState[storageConst.PROACTIVE_MODE] != undefined && convState[storageConst.PROACTIVE_MODE] != null) ? ProjConstants.PROACTIVE_INITIAL_MODE : ProjConstants.PROACTIVE_INITIAL_MODE;
   this.proactiveToggle(proactiveModeStatus);
 }
 
