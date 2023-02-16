@@ -69,8 +69,8 @@ export class AppComponent {
 
   grantCall(params) {
     this.handleSubjectService.setLoader(true);
-    let botid = params?.autoBotId ? params?.autoBotId : params.botid;
-    this.service.grantCall(params.token, botid, params.agentassisturl).then((res) => {
+    // let botid = params?.autoBotId ? params?.autoBotId : params.botid;
+    this.service.grantCall(params.token, params.botid, params.agentassisturl).then((res) => {
       console.log(res, "sucess")
       // this.isGrantSuccess = true;
       this.service.grantResponseObj = res;
