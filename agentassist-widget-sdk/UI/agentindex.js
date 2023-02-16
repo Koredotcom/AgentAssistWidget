@@ -1316,6 +1316,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         if(ele.content){
                                             a.append(articlesActionHtml);
                                         }
+                                        if(data.userInput){
+                                            ele.content = ele.content.replace(new RegExp('('+data.userInput+')', 'gi'), '<b>$1</b>');
+                                        }
                                         articles.append(`<div class="desc-text" id="articledescLib-${uuids+index}">${ele.content}
                                          </div>`);
                                          if(ele.link){
@@ -1832,7 +1835,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 $(seeLessElement).addClass('hide');
                             }else{
                                 $(seeMoreElement).addClass('hide');
-                                if(article){
+                                if(article && viewLinkElement){
                                     $(viewLinkElement).removeClass('hide');
                                 }
                                 if(snippet){
@@ -2206,7 +2209,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             //     data-check="true" id="articlecheck-${uuids + index}"></i>`;
                                             //                 articles.append(checkHtml);
                                             // } else {
-                                                    ele.content = ele.content ? ele.content.replace( /(<([^>]+)>)/ig, '') : '';
+                                                    ele.content = ele.content ? ele.content.replace( /(<([^>]+)>)/ig, '').replace(/"/g, "'") : '';
                                                     let a = $(`#articleDiv-${uuids + index}`);
                                                     let articleActionHtml = `<div class="action-links">
                                                     <button class="send-run-btn" id="sendMsg" data-msg-id="article-${uuids + index}" data-msg-data="${ele.content}">Send</button>
@@ -2216,6 +2219,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                 </div>`;
                                                 if(ele.content){
                                                     a.append(articleActionHtml);
+                                                }
+                                                if(data.userInput){
+                                                    ele.content = ele.content.replace(new RegExp('('+data.userInput+')', 'gi'), '<b>$1</b>');
                                                 }
                                                 articles.append(`<div class="desc-text" id="articledesc-${uuids + index}">${ele.content}</div>`);
                                                 if(ele.link){
