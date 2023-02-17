@@ -64,12 +64,13 @@ export class HandleSubjectService {
       } else if (key == 'conversationid') {
         parmasObj[ProjConstants.CONVESATIONID] = parmasObj[key];
         delete parmasObj[key];
-      }else if(key == "autoBotId"){
-        console.log("------- autobotid----xxxxxxxxxxxxxx", key)
-        parmasObj[ProjConstants.AUTOMATIONBOTID] = parmasObj[key];
-        console.log("------- autobotid----xxxxxxxxxxxxxx", parmasObj[ProjConstants.AUTOMATIONBOTID])
-        delete parmasObj[key];
       }
+      // else if(key == "autoBotId"){
+      //   console.log("------- autobotid----xxxxxxxxxxxxxx", key)
+      //   parmasObj[ProjConstants.AUTOMATIONBOTID] = parmasObj[key];
+      //   console.log("------- autobotid----xxxxxxxxxxxxxx", parmasObj[ProjConstants.AUTOMATIONBOTID])
+      //   delete parmasObj[key];
+      // }
     }
     console.log("-----------parmasObj-----------", parmasObj)
     this.connectDetailsSubject.next(parmasObj);
