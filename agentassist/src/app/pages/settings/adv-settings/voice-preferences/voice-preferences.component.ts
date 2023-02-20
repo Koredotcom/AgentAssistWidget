@@ -223,10 +223,10 @@ export class VoicePreferencesComponent implements OnInit {
 
   configureVoicePreferenaces() {
     let _params: any = { streamId:this.authService.smartAssistBots.map(x=>x._id),'isAgentAssist':true };
-    if (!this.voicePreferences?.voicePreference) {
-      this.notificationService.notify(this.translate.instant('SELECT_VOICE_NAME'), 'warning');
-      return;
-    }
+    // if (!this.voicePreferences?.voicePreference) {
+    //   this.notificationService.notify(this.translate.instant('SELECT_VOICE_NAME'), 'warning');
+    //   return;
+    // }
 
     this.saveInProgress = true;
     this.voicePreferences.languagePreference = this.selectedTTSLanguage.languagePreference;
