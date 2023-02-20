@@ -340,6 +340,7 @@ export class CommonService {
                     `;
     if (!document.getElementById('endTaks-' + id)) {
       endOfDialoge.append(endofDialogeHtml);
+      $(`#overRideDiv-${id}`).remove();
     }
     $(`.customer-feeling-text`).addClass('bottom-95');
     setTimeout(() => {

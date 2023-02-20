@@ -318,7 +318,7 @@ export class HomeComponent implements OnInit {
 setProactiveMode(){
   let appState : any = this.localStorageService.getLocalStorageState();
   let convState = appState[this.connectionDetails.conversationId];
-  let proactiveModeStatus = (convState[storageConst.PROACTIVE_MODE] != undefined && convState[storageConst.PROACTIVE_MODE] != null) ? ProjConstants.PROACTIVE_INITIAL_MODE : ProjConstants.PROACTIVE_INITIAL_MODE;
+  let proactiveModeStatus = (convState[storageConst.PROACTIVE_MODE] != undefined && convState[storageConst.PROACTIVE_MODE] != null) ? convState[storageConst.PROACTIVE_MODE] : true;
   this.proactiveToggle(proactiveModeStatus);
 }
 

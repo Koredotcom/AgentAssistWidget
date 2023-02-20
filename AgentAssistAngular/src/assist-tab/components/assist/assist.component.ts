@@ -199,9 +199,7 @@ export class AssistComponent implements OnInit {
       if (response != null && response != undefined) {
         this.proactiveModeStatus = response;
         if (response) {          
-          if(response != ProjConstants.PROACTIVE_INITIAL_MODE){
-            $(`.override-input-div`).removeClass('hide');
-          }
+          $(`.override-input-div`).removeClass('hide');
           this.handleCancelOverrideBtnClick('overRideBtn-' + this.dropdownHeaderUuids, this.dialogPositionId);
           $(`#overRideBtn-${this.dropdownHeaderUuids}`).removeClass('hide');
         } else {
