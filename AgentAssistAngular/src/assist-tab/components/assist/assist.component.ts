@@ -296,43 +296,48 @@ export class AssistComponent implements OnInit {
   }
 
   processUserMessages(data, conversationId, botId) {
-    let _id = this.randomUUIDPipe.transform();
-    let resultMsgResponse = this.templateRenderClassService.getMessageResponseForUserMessages(data, botId)
-    let titleText = '';
-    let userQueryHtml = '';
-    $("#inputFieldForAgent").remove();
-    if (this.commonService.OverRideMode) {
-      titleText = "YouEntered -";
-      userQueryHtml = this.assisttabService.userQueryTemplate(titleText, this.imageFilePath, this.imageFileNames, _id, data);
-    } else {
-      titleText = "Customer Said -"
-      userQueryHtml = this.assisttabService.userQueryTemplate(titleText, this.imageFilePath, this.imageFileNames, _id, data);
-    }
-    let addUserQueryTodropdownData = document.getElementById(`dropDownData-${this.dropdownHeaderUuids}`);
-    addUserQueryTodropdownData.innerHTML = addUserQueryTodropdownData.innerHTML + userQueryHtml;
-    let entityHtml = $(`#dropDownData-${this.dropdownHeaderUuids}`).find(`#userInput-${_id}`);
-    let entityDisplayName = this.agentAssistResponse.entityDisplayName ? this.agentAssistResponse.entityDisplayName : this.agentAssistResponse.entityName;
-    if (this.agentAssistResponse.newEntityDisplayName || this.agentAssistResponse.newEntityName) {
-      entityDisplayName = this.agentAssistResponse.newEntityDisplayName ? this.agentAssistResponse.newEntityDisplayName : this.agentAssistResponse.newEntityName;
-    }
-    if (data.entityValue && !data.isErrorPrompt && entityDisplayName) {
-      entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${this.sanitizeHtmlPipe.transform(data.userInput)}</div>`);
-    } else {
-      if (data.isErrorPrompt && entityDisplayName) {
-        let entityHtmls = this.assisttabService.errorTemplate(this.imageFilePath, this.imageFileNames, entityDisplayName);
-        entityHtml.append(entityHtmls);
+    if(this.commonService.isAutomationOnGoing){
+      let _id = this.randomUUIDPipe.transform();
+      let resultMsgResponse = this.templateRenderClassService.getMessageResponseForUserMessages(data, botId)
+      let titleText = '';
+      let userQueryHtml = '';
+      $("#inputFieldForAgent").remove();
+      if (this.commonService.OverRideMode) {
+        titleText = "YouEntered -";
+        userQueryHtml = this.assisttabService.userQueryTemplate(titleText, this.imageFilePath, this.imageFileNames, _id, data);
+      } else {
+        titleText = "Customer Said -"
+        userQueryHtml = this.assisttabService.userQueryTemplate(titleText, this.imageFilePath, this.imageFileNames, _id, data);
       }
+      let addUserQueryTodropdownData = document.getElementById(`dropDownData-${this.dropdownHeaderUuids}`);
+      addUserQueryTodropdownData.innerHTML = addUserQueryTodropdownData.innerHTML + userQueryHtml;
+      let entityHtml = $(`#dropDownData-${this.dropdownHeaderUuids}`).find(`#userInput-${_id}`);
+      let entityDisplayName = this.agentAssistResponse.entityDisplayName ? this.agentAssistResponse.entityDisplayName : this.agentAssistResponse.entityName;
+      if (this.agentAssistResponse.newEntityDisplayName || this.agentAssistResponse.newEntityName) {
+        entityDisplayName = this.agentAssistResponse.newEntityDisplayName ? this.agentAssistResponse.newEntityDisplayName : this.agentAssistResponse.newEntityName;
+      }
+      if (data.entityValue && !data.isErrorPrompt && entityDisplayName) {
+        entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${this.sanitizeHtmlPipe.transform(data.userInput)}</div>`);
+      } else {
+        if (data.isErrorPrompt && entityDisplayName) {
+          let entityHtmls = this.assisttabService.errorTemplate(this.imageFilePath, this.imageFileNames, entityDisplayName);
+          entityHtml.append(entityHtmls);
+        }
+      }
+  
+      if (this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd) {
+        this.scrollToBottom();
+      }
+      let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(resultMsgResponse)[0].innerHTML;
+      this.commonService.removingSendCopyBtnForCall(this.connectionDetails);
+    }else{
+      let dynamicBlockDiv = $('#dynamicBlock');
+      let uuids = this.koreGenerateuuidPipe.transform();
+      let botResHtml = this.assisttabService.getUserMsgSmallTalkTemplate(uuids,data);
+      let titleData = `<div class="title-data" id="displayData-${uuids}">${this.sanitizeHtmlPipe.transform(data.userInput)}</div>`
+      dynamicBlockDiv.append(botResHtml);
+      $(`#smallTalk-${uuids} .agent-utt`).append(titleData);
     }
-
-    if (this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd) {
-      this.scrollToBottom();
-    }
-    let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(resultMsgResponse)[0].innerHTML;
-    this.commonService.removingSendCopyBtnForCall(this.connectionDetails);
-    // let a = document.getElementById(IdReferenceConst.DROPDOWNDATA + `-${this.dropdownHeaderUuids}`);
-    // if (a) {
-    //   a.innerHTML = a.innerHTML + html;
-    // }
   }
 
   updateAgentAssistResponse(data, botId, conversationId) {
@@ -767,7 +772,7 @@ export class AssistComponent implements OnInit {
       $('#dynamicBlock .empty-data-no-agents').addClass('hide');
       let dynamicBlockDiv = $('#dynamicBlock');
       data.buttons?.forEach((ele, i) => {
-        let botResHtml = this.assisttabService.smallTalkTemplateForTemplatePayload(ele, uuids);
+        let botResHtml = this.assisttabService.smallTalkTemplateForTemplatePayload(ele, uuids,data);
         let titleData = `<div class="title-data" id="displayData-${uuids}">${ele.value}</div>`
         if(result.parsedPayload){
             titleData = `<div class="title-data" ><ul class="chat-container" id="displayData-${uuids}"></ul></div>`;

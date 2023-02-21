@@ -74,6 +74,29 @@ export class AssistService {
     dynamicBlock.innerHTML = dynamicBlock.innerHTML + dropdownHtml;
   }
 
+  getUserMsgSmallTalkTemplate(uuids,data){
+    let template = `
+    <div class="collapse-acc-data before-none" id='smallTalk-${uuids}'>
+    <div class="steps-run-data">
+    <div class="icon_block">
+        <i class="ast-agent"></i>
+    </div>
+    <div class="run-info-content" >
+    <div class="title">Customer Said - </div>
+    <div class="agent-utt">
+        <div class="action-links">
+            <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}"  data-msg-data="${this.sanitizeHtmlPipe.transform(data.userInput)}">Send</button>
+            <div class="copy-btn hide" data-msg-id="${uuids}" data-msg-data="${this.sanitizeHtmlPipe.transform(data.userInput)}">
+                <i class="ast-copy" data-msg-id="${uuids}" data-msg-data="${this.sanitizeHtmlPipe.transform(data.userInput)}"></i>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+    </div>`;
+    return template;
+  }
+
   askUserTemplate(uuids, newTemp?, positionID?) {
     let template = `
     <div class="steps-run-data">
@@ -120,7 +143,8 @@ export class AssistService {
     return template;
   }
 
-  smallTalkTemplateForTemplatePayload(ele, uuids){
+  smallTalkTemplateForTemplatePayload(ele, uuids,data){
+    let tellOrAskCustomer = data.isPrompt ? 'Ask Customer' : 'Tell Customer';
     let template = `
     <div class="collapse-acc-data before-none" id='smallTalk-${uuids}'>
         <div class="steps-run-data">
@@ -128,7 +152,7 @@ export class AssistService {
             <i class="ast-agent"></i>
         </div>
         <div class="run-info-content" >
-        <div class="title">Tell Customer</div>
+        <div class="title">${tellOrAskCustomer}</div>
         <div class="agent-utt">
             <div class="action-links">
                 <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}">Send</button>
