@@ -3457,12 +3457,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         "traceId": "873209019a5adc26",
                                         "createdOnTimemillis": res._id
                                     }
-                                    currentTaskName = res.tN ? res.tN : currentTaskName;
-                                    currentTaskPositionId = res?.agentAssistDetails?.positionId ? res?.agentAssistDetails?.positionId : currentTaskPositionId;
-
+                                    let positionID = 'dg-'+koreGenerateUUID();
+                                    currentTaskPositionId = res?.agentAssistDetails?.positionId ?  res?.agentAssistDetails?.positionId : ((res.tN != currentTaskName) ? positionID : currentTaskPositionId);
+                                    currentTaskName = (res.tN) ? res.tN  : currentTaskName;
                                     let historyData = $('#dynamicBlock');
                                     let userInputHtml;
-                                    if (res.agentAssistDetails?.userInput) {
+                                    if (res.agentAssistDetails?.userInput && res?.agentAssistDetails?.positionId) {
                                         userInputHtml = `<div class="agent-utt-info" id="agentUttInfo-${res._id}">
                                             <div class="user-img">
                                                 <img src="./images/userIcon.svg">
@@ -3617,85 +3617,86 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             }
 
                                         }
-
-                                        _msgsResponse.message.push(body);
+                                        if(body['cInfo']['body'] != "" && body['cInfo']['body']){
+                                            _msgsResponse.message.push(body);
+                                        }
                                     });
-                                    let msgStringify = JSON.stringify(_msgsResponse);
-                                    let newTemp = encodeURI(msgStringify);
-                                    if((res.agentAssistDetails?.isPrompt === true || res.agentAssistDetails?.isPrompt === false) && previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) {
-                                    let runInfoContent = $(`#dropDownData-${previousId}`);
-                                    let askToUserHtml = `
-                                        <div class="steps-run-data">
-                                                    <div class="icon_block">
-                                                        <i class="ast-agent"></i>
-                                                    </div>
-                                                    <div class="run-info-content" >
-                                                    <div class="title">Ask customer</div>
-                                                    <div class="agent-utt">
-                                                        <div class="title-data"><ul class="chat-container" id="displayData-${res._id}"></ul></div>
-                                                        <div class="action-links">
-                                                        <button class="send-run-btn" id="sendMsg" data-msg-id="${res._id}" data-msg-data="${newTemp}">Send</button>
-                                                        <div class="copy-btn hide" data-msg-id="${res._id}">
-                                                            <i class="ast-copy" data-msg-id="${res._id}"></i>
+                                    if(_msgsResponse.message.length > 0){
+                                        let msgStringify = JSON.stringify(_msgsResponse);
+                                        let newTemp = encodeURI(msgStringify);
+                                        if((res.agentAssistDetails?.isPrompt === true || res.agentAssistDetails?.isPrompt === false) && (previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) || (previousTaskName != currentTaskName && previousTaskPositionId == currentTaskPositionId)) {
+                                        let runInfoContent = $(`#dropDownData-${previousId}`);
+                                        let askToUserHtml = `
+                                            <div class="steps-run-data">
+                                                        <div class="icon_block">
+                                                            <i class="ast-agent"></i>
                                                         </div>
-                                                    </div>
-                                                    </div>
-                                                    </div>
-                                                </div>
-                                        `;
-                                    let tellToUserHtml = `
-                                        <div class="steps-run-data">
-                                                    <div class="icon_block">
-                                                        <i class="ast-agent"></i>
-                                                    </div>
-                                                    <div class="run-info-content" >
-                                                    <div class="title">Tell Customer</div>
-                                                    <div class="agent-utt">
-                                                        <div class="title-data" ><ul class="chat-container" id="displayData-${res._id}"></ul></div>
-                                                        <div class="action-links">
+                                                        <div class="run-info-content" >
+                                                        <div class="title">Ask customer</div>
+                                                        <div class="agent-utt">
+                                                            <div class="title-data"><ul class="chat-container" id="displayData-${res._id}"></ul></div>
+                                                            <div class="action-links">
                                                             <button class="send-run-btn" id="sendMsg" data-msg-id="${res._id}" data-msg-data="${newTemp}">Send</button>
                                                             <div class="copy-btn hide" data-msg-id="${res._id}">
                                                                 <i class="ast-copy" data-msg-id="${res._id}"></i>
                                                             </div>
                                                         </div>
+                                                        </div>
+                                                        </div>
                                                     </div>
+                                            `;
+                                        let tellToUserHtml = `
+                                            <div class="steps-run-data">
+                                                        <div class="icon_block">
+                                                            <i class="ast-agent"></i>
+                                                        </div>
+                                                        <div class="run-info-content" >
+                                                        <div class="title">Tell Customer</div>
+                                                        <div class="agent-utt">
+                                                            <div class="title-data" ><ul class="chat-container" id="displayData-${res._id}"></ul></div>
+                                                            <div class="action-links">
+                                                                <button class="send-run-btn" id="sendMsg" data-msg-id="${res._id}" data-msg-data="${newTemp}">Send</button>
+                                                                <div class="copy-btn hide" data-msg-id="${res._id}">
+                                                                    <i class="ast-copy" data-msg-id="${res._id}"></i>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                        `;
-                                        var appStateStr = localStorage.getItem('agentAssistState') || '{}';
-                                        var appState = JSON.parse(appStateStr);  
-                                        if(appState[_conversationId]['automationGoingOnAfterRefresh']) {
-                                            isAutomationOnGoing = true;
-                                            dropdownHeaderUuids = previousId;
-                                            appState[_conversationId]['automationGoingOnAfterRefresh'] = isAutomationOnGoing;
-                                            localStorage.setItem('agentAssistState', JSON.stringify(appState))
+                                            `;
+                                            var appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                                            var appState = JSON.parse(appStateStr);  
+                                            if(appState[_conversationId]['automationGoingOnAfterRefresh']) {
+                                                isAutomationOnGoing = true;
+                                                dropdownHeaderUuids = previousId;
+                                                appState[_conversationId]['automationGoingOnAfterRefresh'] = isAutomationOnGoing;
+                                                localStorage.setItem('agentAssistState', JSON.stringify(appState))
+                                            }
+                                        if (res.agentAssistDetails.isPrompt || res.agentAssistDetails.entityRequest) {
+                                            if(appState[_conversationId]['automationGoingOnAfterRefresh']) {
+                                                $(`#overRideBtn-${previousId}`).removeClass('hide');
+                                                $(`#cancelOverRideBtn-${previousId}`).addClass('hide');
+                                                $("#inputFieldForAgent").remove();
+                                                $(`#terminateAgentDialog`).removeClass('hide');
+                                                $('#dynamicBlock .override-input-div').addClass('hide');
+                                                $(`#overRideDiv-${previousId}`).removeClass('hide');
+                                                $(`#overRideBtn-${previousId}`).attr('data-position-id', previousTaskPositionId);
+                                                $(`#terminateAgentDialog`).attr('data-position-id', previousTaskPositionId);
+                                                dialogPositionId = previousTaskPositionId;
+                                            }
+                                            runInfoContent.append(askToUserHtml);
+                                            if(!proactiveMode){
+                                                getOverRideMode('overRideBtn-' + dropdownHeaderUuids, dialogPositionId, true);
+                                                $(`.override-input-div`).addClass('hide');
+                                            }
+                                        } else {
+                                            runInfoContent.append(tellToUserHtml);
                                         }
-                                    if (res.agentAssistDetails.isPrompt || res.agentAssistDetails.entityRequest) {
-                                        if(appState[_conversationId]['automationGoingOnAfterRefresh']) {
-                                            $(`#overRideBtn-${previousId}`).removeClass('hide');
-                                            $(`#cancelOverRideBtn-${previousId}`).addClass('hide');
-                                            $("#inputFieldForAgent").remove();
-                                            $(`#terminateAgentDialog`).removeClass('hide');
-                                            $('#dynamicBlock .override-input-div').addClass('hide');
-                                            $(`#overRideDiv-${previousId}`).removeClass('hide');
-                                            $(`#overRideBtn-${previousId}`).attr('data-position-id', previousTaskPositionId);
-                                            $(`#terminateAgentDialog`).attr('data-position-id', previousTaskPositionId);
-                                            dialogPositionId = previousTaskPositionId;
+                                        hideSendOrCopyButtons(parsedPayload, runInfoContent)
+                                       
                                         }
-                                        runInfoContent.append(askToUserHtml);
-                                        if(!proactiveMode){
-                                            getOverRideMode('overRideBtn-' + dropdownHeaderUuids, dialogPositionId, true);
-					                        $(`.override-input-div`).addClass('hide');
-                                        }
-                                    } else {
-                                        runInfoContent.append(tellToUserHtml);
+                                        AgentChatInitialize.renderMessage(_msgsResponse, res._id, `dropDownData-${previousId}`);
                                     }
-                                    hideSendOrCopyButtons(parsedPayload, runInfoContent)
-                                   
-                                 }
-                              
-                                
-                                    AgentChatInitialize.renderMessage(_msgsResponse, res._id, `dropDownData-${previousId}`);
                                     let shouldProcessResponse = false;
                                     var appStateStr = localStorage.getItem('agentAssistState') || '{}';
                                     var appState = JSON.parse(appStateStr);
