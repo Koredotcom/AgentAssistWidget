@@ -1520,12 +1520,15 @@ export class AssistComponent implements OnInit {
           "traceId": "873209019a5adc26",
           "createdOnTimemillis": res._id
         }
-        currentTaskName = res.tN ? res.tN : currentTaskName;
-        currentTaskPositionId = res?.agentAssistDetails?.positionId ? res?.agentAssistDetails?.positionId : currentTaskPositionId;
 
+        let positionID = 'dg-'+ this.koreGenerateuuidPipe.transform();
+        currentTaskPositionId = res?.agentAssistDetails?.positionId ?  res?.agentAssistDetails?.positionId : ((res.tN != currentTaskName) ? positionID : currentTaskPositionId);
+        currentTaskName = (res.tN) ? res.tN  : currentTaskName;
+
+      
         let historyData = $('#dynamicBlock');
         let userInputHtml;
-        if (res.agentAssistDetails.userInput) {
+        if (res.agentAssistDetails.userInput && res?.agentAssistDetails?.positionId) {
           userInputHtml = `<div class="agent-utt-info" id="agentUttInfo-${res._id}">
                             <div class="user-img">
                                 <img src="${this.imageFilePath}${this.imageFileNames['USERICON']}">
@@ -1685,46 +1688,50 @@ export class AssistComponent implements OnInit {
               };
             }
           }
-          _msgsResponse.message.push(body);
+          if(body['cInfo']['body'] != "" && body['cInfo']['body']){
+            _msgsResponse.message.push(body);
+        }
         });
-        let msgStringify = JSON.stringify(_msgsResponse);
-        let newTemp = encodeURI(msgStringify);
-        if ((res.agentAssistDetails?.isPrompt === true || res.agentAssistDetails?.isPrompt === false) && previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) {
-          let runInfoContent = $(`#dropDownData-${previousId}`);
-          let askToUserHtml = this.assisttabService.askUserTemplate(res._id, newTemp, previousTaskPositionId);
-          let tellToUserHtml = this.assisttabService.tellToUserTemplate(res._id, newTemp, previousTaskPositionId);
-          if (this.localStorageService.checkStorageItemWithInConvId(this.connectionDetails.conversationId, storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH)) {
-            this.commonService.isAutomationOnGoing = true;
-            this.dropdownHeaderUuids = previousId;
-            let storageObject: any = {
-              [storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH]: this.commonService.isAutomationOnGoing
-            }
-            this.localStorageService.setLocalStorageItem(storageObject);
-          }
-          if (res.agentAssistDetails.isPrompt || res.agentAssistDetails.entityRequest) {
+        if(_msgsResponse.message.length > 0){
+          let msgStringify = JSON.stringify(_msgsResponse);
+          let newTemp = encodeURI(msgStringify);
+          if ((res.agentAssistDetails?.isPrompt === true || res.agentAssistDetails?.isPrompt === false) && previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) {
+            let runInfoContent = $(`#dropDownData-${previousId}`);
+            let askToUserHtml = this.assisttabService.askUserTemplate(res._id, newTemp, previousTaskPositionId);
+            let tellToUserHtml = this.assisttabService.tellToUserTemplate(res._id, newTemp, previousTaskPositionId);
             if (this.localStorageService.checkStorageItemWithInConvId(this.connectionDetails.conversationId, storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH)) {
-              $(`#overRideBtn-${previousId}`).removeClass('hide');
-              $(`#cancelOverRideBtn-${previousId}`).addClass('hide');
-              $("#inputFieldForAgent").remove();
-              $(`#terminateAgentDialog-${previousId}`).removeClass('hide');
-              $('#dynamicBlock .override-input-div').addClass('hide');
-              $(`#overRideDiv-${previousId}`).removeClass('hide');
-              $(`#overRideBtn-${previousId}`).attr('data-position-id', previousTaskPositionId);
-              $(`#terminateAgentDialog-${previousId}`).attr('data-position-id', previousTaskPositionId);
-              this.dialogPositionId = previousTaskPositionId;
+              this.commonService.isAutomationOnGoing = true;
+              this.dropdownHeaderUuids = previousId;
+              let storageObject: any = {
+                [storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH]: this.commonService.isAutomationOnGoing
+              }
+              this.localStorageService.setLocalStorageItem(storageObject);
             }
-
-            runInfoContent.append(askToUserHtml);
-            let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(_msgsResponse)[0].innerHTML;
-            let a = document.getElementById(IdReferenceConst.displayData + `-${res._id}`);
-            a.innerHTML = a?.innerHTML + html;
-          } else {
-            runInfoContent.append(tellToUserHtml);
-            let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(_msgsResponse)[0].innerHTML;
-            let a = document.getElementById(IdReferenceConst.displayData + `-${res._id}`);
-            a.innerHTML = a.innerHTML + html;
+            if (res.agentAssistDetails.isPrompt || res.agentAssistDetails.entityRequest) {
+              if (this.localStorageService.checkStorageItemWithInConvId(this.connectionDetails.conversationId, storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH)) {
+                $(`#overRideBtn-${previousId}`).removeClass('hide');
+                $(`#cancelOverRideBtn-${previousId}`).addClass('hide');
+                $("#inputFieldForAgent").remove();
+                $(`#terminateAgentDialog-${previousId}`).removeClass('hide');
+                $('#dynamicBlock .override-input-div').addClass('hide');
+                $(`#overRideDiv-${previousId}`).removeClass('hide');
+                $(`#overRideBtn-${previousId}`).attr('data-position-id', previousTaskPositionId);
+                $(`#terminateAgentDialog-${previousId}`).attr('data-position-id', previousTaskPositionId);
+                this.dialogPositionId = previousTaskPositionId;
+              }
+  
+              runInfoContent.append(askToUserHtml);
+              let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(_msgsResponse)[0].innerHTML;
+              let a = document.getElementById(IdReferenceConst.displayData + `-${res._id}`);
+              a.innerHTML = a?.innerHTML + html;
+            } else {
+              runInfoContent.append(tellToUserHtml);
+              let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(_msgsResponse)[0].innerHTML;
+              let a = document.getElementById(IdReferenceConst.displayData + `-${res._id}`);
+              a.innerHTML = a.innerHTML + html;
+            }
+            this.commonService.hideSendOrCopyButtons(parsedPayload, runInfoContent)
           }
-          this.commonService.hideSendOrCopyButtons(parsedPayload, runInfoContent)
         }
         let shouldProcessResponse = false;
         var appStateStr = localStorage.getItem('agentAssistState') || '{}';
