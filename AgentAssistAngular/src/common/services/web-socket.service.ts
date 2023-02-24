@@ -77,6 +77,7 @@ export class WebSocketService {
       'id': this.connectionDetails.conversationId,
       "isSendWelcomeMessage": shouldProcessResponse,
       'agentassistInfo' : agent_user_details,
+      'botId': this.connectionDetails.botId
     }
     if(this.connectionDetails?.autoBotId) {
       welcomeMessageParams['autoBotId'] = this.connectionDetails.autoBotId;
