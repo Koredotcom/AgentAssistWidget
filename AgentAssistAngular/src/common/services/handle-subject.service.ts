@@ -65,12 +65,14 @@ export class HandleSubjectService {
         parmasObj[ProjConstants.CONVESATIONID] = parmasObj[key];
         delete parmasObj[key];
       }
-      // else if(key == "autoBotId"){
-      //   console.log("------- autobotid----xxxxxxxxxxxxxx", key)
-      //   parmasObj[ProjConstants.AUTOMATIONBOTID] = parmasObj[key];
-      //   console.log("------- autobotid----xxxxxxxxxxxxxx", parmasObj[ProjConstants.AUTOMATIONBOTID])
-      //   delete parmasObj[key];
-      // }
+      else if(key == "autoBotId"){
+        console.log("------- autobotid----xxxxxxxxxxxxxx", key)
+        if(!parmasObj[key] || parmasObj[key] !== 'undefined' || parmasObj[key] !== null){
+          parmasObj['autoBotId'] = parmasObj[key];
+        }else{
+          parmasObj['autoBotId'] = '';
+        }
+      }
     }
     console.log("-----------parmasObj-----------", parmasObj)
     this.connectDetailsSubject.next(parmasObj);
