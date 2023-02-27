@@ -79,7 +79,7 @@ export class WebSocketService {
       'agentassistInfo' : agent_user_details,
       'botId': this.connectionDetails.botId
     }
-    if(this.connectionDetails?.autoBotId) {
+    if(this.connectionDetails?.autoBotId && this.connectionDetails?.autoBotId !== 'undefined') {
       welcomeMessageParams['autoBotId'] = this.connectionDetails.autoBotId;
       menu_request_params['autoBotId'] = this.connectionDetails.autoBotId;
     } else {

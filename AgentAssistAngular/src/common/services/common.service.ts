@@ -118,7 +118,7 @@ export class CommonService {
       agent_assist_request['childBotId'] = data.childBotId;
       agent_assist_request['childBotName'] = data.childBotName;
     }
-    if(this.configObj?.autoBotId) {
+    if(this.configObj?.autoBotId && this.configObj?.autoBotId !== 'undefined') {
       console.log(this.configObj);
       agent_assist_request['autoBotId'] = this.configObj.autoBotId;
     } else {
@@ -143,7 +143,7 @@ export class CommonService {
       agent_assist_agent_request_params['childBotId'] = data.childBotId;
       agent_assist_agent_request_params['childBotName'] = data.childBotName;
     }
-    if(this.configObj?.autoBotId) {
+    if(this.configObj?.autoBotId && this.configObj?.autoBotId !== 'undefined') {
       console.log(this.configObj);
       agent_assist_agent_request_params['autoBotId'] = this.configObj.autoBotId;
     } else {
