@@ -67,7 +67,7 @@ export class HandleSubjectService {
       }
       else if(key == "autoBotId"){
         console.log("------- autobotid----xxxxxxxxxxxxxx", key)
-        if(!parmasObj[key] || parmasObj[key] !== 'undefined' || parmasObj[key] !== null){
+        if(parmasObj[key] && (parmasObj[key] !== "undefined" && parmasObj[key] !== null)){
           parmasObj['autoBotId'] = parmasObj[key];
         }else{
           parmasObj['autoBotId'] = '';

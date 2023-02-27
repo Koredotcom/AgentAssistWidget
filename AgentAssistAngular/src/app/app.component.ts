@@ -59,7 +59,7 @@ export class AppComponent {
   initiateSocketConnection(params) {
     this.isGrantSuccess = true;
     this.handleSubjectService.setConnectionDetails(params);
-    this.service.configObj['autoBotId'] = params?.autoBotId;
+    this.service.configObj['autoBotId'] = params?.autoBotId && (params?.autoBotId !== "undefined" && params?.autoBotId !== null)? params?.autoBotId: '';
     this.handleSourceType(params);
     setTimeout(() => {
       this.handleSubjectService.setLoader(true);
