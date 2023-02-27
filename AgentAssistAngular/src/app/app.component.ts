@@ -69,6 +69,7 @@ export class AppComponent {
 
   grantCall(params) {
     this.handleSubjectService.setLoader(true);
+    // let botid = params?.autoBotId ? params?.autoBotId : params.botid;
     this.service.grantCall(params.token, params.botid, params.agentassisturl).then((res) => {
       console.log(res, "sucess")
       // this.isGrantSuccess = true;
@@ -120,8 +121,8 @@ export class AppComponent {
     else if (!this.service.configObj.token && !this.service.configObj.botid && !this.service.configObj.agentassisturl && !this.service.configObj.conversationId) {
       if (connectionObj.isAuthentication) {
         var jsonData = {
-          "clientId": connectionObj.botDetails.clientId,
-          "clientSecret": connectionObj.botDetails.clientSecret,
+          "clientId": connectionObj.botDetails.clientId, // instance bot clientid
+          "clientSecret": connectionObj.botDetails.clientSecret, // instance bot clientsecret
           "identity": this.randomID.transform(),
           "aud": "",
           "isAnonymous": false
@@ -131,9 +132,9 @@ export class AppComponent {
           let params = {};
           let conversationId = this.randomID.transform();
           params['token'] = res.jwt;
-          params['botid'] = connectionObj.botDetails.botId;
+          params['botid'] = connectionObj.botDetails.botId; // instance bot id
           params['agentassisturl'] = connectionObj.envinormentUrl;
-          params['conversationid'] = conversationId
+          params['conversationid'] = conversationId;
           this.service.configObj = params;
           this.grantCall(params)
         }).catch((err) => {

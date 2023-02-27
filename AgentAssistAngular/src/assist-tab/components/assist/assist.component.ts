@@ -103,8 +103,13 @@ export class AssistComponent implements OnInit {
       console.log("------------resposne of agent request")
       this.handleSubjectService.setLoader(true);
       if (response && Object.keys(response).length > 0) {
+        if(!this.connectionDetails?.autoBotId || !this.commonService.configObj?.autoBotId){
+          this.connectionDetails['autoBotId'] = response?.autoBotId;
+          this.commonService.configObj['autoBotId'] = response?.autoBotId;
+        }
         this.updateAgentAssistResponse(response, this.connectionDetails.botId, this.connectionDetails.conversationId);
         this.viewCustomTempAttachment()
+        
       }
       this.handleSubjectService.setLoader(false);
     });

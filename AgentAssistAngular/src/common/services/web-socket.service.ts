@@ -77,9 +77,10 @@ export class WebSocketService {
       'id': this.connectionDetails.conversationId,
       "isSendWelcomeMessage": shouldProcessResponse,
       'agentassistInfo' : agent_user_details,
-      'botId': this.connectionDetails.botId
+      'botId' : this.connectionDetails.botId,
     }
-    if(this.connectionDetails?.autoBotId && this.connectionDetails?.autoBotId !== 'undefined') {
+    console.log("-------------connectionDetails---------------", this.connectionDetails)
+    if(this.connectionDetails?.autoBotId) {
       welcomeMessageParams['autoBotId'] = this.connectionDetails.autoBotId;
       menu_request_params['autoBotId'] = this.connectionDetails.autoBotId;
     } else {

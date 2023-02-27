@@ -632,7 +632,7 @@ export class CommonService {
     let url = `${this.configObj.agentassisturl}/agentassist/api/v1/agent-feedback/${this.configObj.conversationId}?interaction=mybot`;
     let feedBackResult = await this.renderHistoryFeedBack(url);
     if(this.configObj.fromSAT) {
-      return this.getAgentHistoryData(`${this.configObj.agentassisturl}/agentassist/api/v1/conversations/${this.configObj.conversationId}/aa/messages?botId=${this.configObj.botid}&agentHistory=true`)
+      return this.getAgentHistoryData(`${this.configObj.agentassisturl}/agentassist/api/v1/conversations/${this.configObj.conversationId}/aa/messages?botId=${this.configObj.autoBotId}&agentHistory=true`)
       .then(response => {
         return { messages: response, feedbackDetails: feedBackResult }
       }).catch(err => {
@@ -640,7 +640,7 @@ export class CommonService {
         return err;
       });
     } else {
-      return this.getAgentHistoryData(`${this.configObj.agentassisturl}/api/1.1/botmessages/agentassist/${this.configObj.botid}/history?convId=${this.configObj.conversationId}&agentHistory=true`)
+      return this.getAgentHistoryData(`${this.configObj.agentassisturl}/api/1.1/botmessages/agentassist/${this.configObj.autoBotId}/history?convId=${this.configObj.conversationId}&agentHistory=true`)
       .then(response => {
         return { messages: response, feedbackDetails: feedBackResult }
       }).catch(err => {
@@ -661,7 +661,7 @@ export class CommonService {
     let url = `${this.configObj.agentassisturl}/agentassist/api/v1/agent-feedback/${this.configObj.conversationId}?interaction=assist`;
     let feedBackResult = await this.renderHistoryFeedBack(url);
     if(this.configObj.fromSAT) {
-      return this.getAgentHistoryData(`${this.configObj.agentassisturl}/agentassist/api/v1/conversations/${this.configObj.conversationId}/aa/messages?botId=${this.configObj.botid}&agentHistory=false`)
+      return this.getAgentHistoryData(`${this.configObj.agentassisturl}/agentassist/api/v1/conversations/${this.configObj.conversationId}/aa/messages?botId=${this.configObj.autoBotId}&agentHistory=false`)
       .then(response => {
         return { messages: response, feedbackDetails: feedBackResult }
       }).catch(err => {
@@ -669,7 +669,7 @@ export class CommonService {
         return err;
       });
     } else {
-      return this.getAgentHistoryData(`${this.configObj.agentassisturl}/api/1.1/botmessages/agentassist/${this.configObj.botid}/history?convId=${this.configObj.conversationId}&agentHistory=false`)
+      return this.getAgentHistoryData(`${this.configObj.agentassisturl}/api/1.1/botmessages/agentassist/${this.configObj.autoBotId}/history?convId=${this.configObj.conversationId}&agentHistory=false`)
       .then(response => {
         return { messages: response, feedbackDetails: feedBackResult }
       }).catch(err => {
