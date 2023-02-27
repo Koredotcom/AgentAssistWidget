@@ -105,6 +105,7 @@ export class AssistComponent implements OnInit {
       if (response && Object.keys(response).length > 0) {
         if(!this.connectionDetails?.autoBotId || this.connectionDetails?.autoBotId == 'undefined'){
           this.connectionDetails['autoBotId'] = response?.autoBotId; 
+          this.handleSubjectService.setConnectionDetails(this.connectionDetails);
         }
         if(!this.commonService.configObj?.autoBotId || this.commonService.configObj?.autoBotId == 'undefined'){
           this.commonService.configObj['autoBotId'] = response?.autoBotId;
