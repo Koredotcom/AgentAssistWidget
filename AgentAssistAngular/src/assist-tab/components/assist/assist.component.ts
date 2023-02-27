@@ -48,7 +48,7 @@ export class AssistComponent implements OnInit {
   interruptDialog: any = {};
   agentAssistResponse: any = {};
   waitingTimeForUUID: number = 1000;
-  proactiveModeStatus: boolean;
+  proactiveModeStatus: boolean = false;
   isFirstMessagOfDialog: boolean = false;
   answerPlaceableIDs : any = [];
 
@@ -67,7 +67,7 @@ export class AssistComponent implements OnInit {
 
   ngOnInit(): void {
     this.handleSubjectService.setLoader(true);
-    let response : any = this.commonService.renderingHistoryMessage();
+    let response : any = this.commonService.renderingHistoryMessage(this.connectionDetails);
     response.then((res) => {
       if(res && res.messages){
         this.handleSubjectService.setLoader(false);
@@ -100,9 +100,16 @@ export class AssistComponent implements OnInit {
     });
 
     let subscription2 = this.websocketService.agentAssistResponse$.subscribe((response: any) => {
-      console.log("------------resposne of agent request")
+      console.log("------------resposne of agent request", response)
       this.handleSubjectService.setLoader(true);
       if (response && Object.keys(response).length > 0) {
+        if(!this.connectionDetails?.autoBotId || this.connectionDetails?.autoBotId == 'undefined'){
+          this.connectionDetails['autoBotId'] = response?.autoBotId; 
+        }
+        if(!this.commonService.configObj?.autoBotId || this.commonService.configObj?.autoBotId == 'undefined'){
+          this.commonService.configObj['autoBotId'] = response?.autoBotId;
+        }
+        console.log("ater adding autobotid from response----------------------------,", this.connectionDetails, this.commonService.configObj)
         this.updateAgentAssistResponse(response, this.connectionDetails.botId, this.connectionDetails.conversationId);
         this.viewCustomTempAttachment()
       }
