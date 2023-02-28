@@ -100,17 +100,18 @@ export class AssistComponent implements OnInit {
         }
         if(!this.commonService.configObj?.autoBotId || this.commonService.configObj?.autoBotId == 'undefined'){
           this.commonService.configObj['autoBotId'] = response?.autoBotId;
-        }
-        this.handleSubjectService.setLoader(true);
-        let respons : any = this.commonService.renderingHistoryMessage(this.connectionDetails);
-        respons.then((res) => {
-          if(res && res.messages){
+          this.handleSubjectService.setLoader(true);
+          let respons : any = this.commonService.renderingHistoryMessage(this.connectionDetails);
+          respons.then((res) => {
+            if(res && res.messages){
+              this.handleSubjectService.setLoader(false);
+              this.renderHistoryMessages(res.messages, res.feedbackDetails)
+            }
+          }).catch((err) => {
             this.handleSubjectService.setLoader(false);
-            this.renderHistoryMessages(res.messages, res.feedbackDetails)
-          }
-        }).catch((err) => {
-          this.handleSubjectService.setLoader(false);
-        });
+          });
+        }
+        
         console.log("ater adding autobotid from response----------------------------,", this.connectionDetails, this.commonService.configObj)
         this.updateAgentAssistResponse(response, this.connectionDetails.botId, this.connectionDetails.conversationId);
         this.viewCustomTempAttachment()
