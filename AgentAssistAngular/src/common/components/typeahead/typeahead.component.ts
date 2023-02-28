@@ -23,7 +23,6 @@ export class TypeaheadComponent implements OnInit {
   isCursorOverFilterSet: boolean;
   isArryDataSet: boolean; 
   subscriptionsList: Subscription[] = [];
-  connectionDetails;
 
   constructor(public handleSubjectService: HandleSubjectService,private commonService: CommonService) {    
     this.dataSet = this.dataSet || [];
@@ -54,15 +53,7 @@ export class TypeaheadComponent implements OnInit {
       }
       this.handleSubjectService.setLoader(false);
     })
-
-    let subscription2 = this.handleSubjectService.connectDetailsSubject.subscribe((response: any) => {
-      if (response) {
-        this.connectionDetails = response;
-      }
-    });
-
     this.subscriptionsList.push(subscription1);
-    this.subscriptionsList.push(subscription2);
   }
   typeAHead = this.typeAHeadDeBounce((val, connectionDetails)=>this.getAutoSearchApiResult(val, connectionDetails));
   onSearch(event: any) {   
@@ -109,7 +100,7 @@ export class TypeaheadComponent implements OnInit {
        // }
         if (value?.length > 0) {        
             $.ajax({
-                url: `${connectionDetails.agentassisturl}/agentassist/api/v1/searchaccounts/autosearch?botId=${this.connectionDetails?.autoBotId ? this.connectionDetails?.autoBotId : connectionDetails.botId}`,
+                url: `${connectionDetails.agentassisturl}/agentassist/api/v1/searchaccounts/autosearch?botId=${connectionDetails.botId}`,
                 type: 'post',
                 headers: headersVal,
                 data: payload,
