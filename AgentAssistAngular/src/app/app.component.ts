@@ -34,25 +34,35 @@ export class AppComponent {
     });
 
     this.route.queryParams
-      .subscribe(params => {    
+      .subscribe(params => {
         this.service.configObj = {...params};
         window.addEventListener("message", this.receiveMessage.bind(this), false);
         // let parentUrl = window.parent.location.hostname;
-        let parentUrl = document.referrer;
-        console.log(parentUrl, "parent url")
-        let index = this.templateChatConfig.chatConfig.urls.findIndex(e=>parentUrl.includes(e));
-        console.log(index, "index");
-          if (!(index>-1)) {
-            console.log("inside if condition");
-            
-            this.initAgentAssist(this.templateChatConfig.chatConfig, params);
-          } else {
-            var message = {
-              method: 'agentassist_loaded',
-              name: "agent_assist"
-          };
-          window.parent.postMessage(message, "*");
-          }
+        let thirdParty = window.location.search;
+        let thirdParty_1 = document.location.search;
+        console.log(thirdParty, thirdParty_1);
+        const urlParams = new URLSearchParams(thirdParty);
+        const thirdPartyIntegration = urlParams.get('from');
+        console.log(thirdPartyIntegration);
+        if(thirdPartyIntegration === 'thirdparty') {
+          this.initAgentAssist(this.templateChatConfig.chatConfig, params);
+        } else {
+          let parentUrl = document.referrer;
+          console.log(parentUrl, "parent url")
+          let index = this.templateChatConfig.chatConfig.urls.findIndex(e=>parentUrl.includes(e));
+          console.log(index, "index");
+            if (!(index>-1)) {
+              console.log("inside if condition");
+              this.initAgentAssist(this.templateChatConfig.chatConfig, params);
+            } else {
+                var message = {
+                  method: 'agentassist_loaded',
+                  name: "agent_assist"
+              };
+              window.parent.postMessage(message, "*");
+            }
+        }
+
       });
   }
 
