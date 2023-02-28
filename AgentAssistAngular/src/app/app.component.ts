@@ -38,9 +38,8 @@ export class AppComponent {
         this.service.configObj = {...params};
         window.addEventListener("message", this.receiveMessage.bind(this), false);
         // let parentUrl = window.parent.location.hostname;
-        let thirdParty_1 = window.location.search;
-        let thirdParty = document.location.search;
-        console.log(thirdParty, thirdParty_1);
+        let thirdParty = parent.document.location.search;
+        console.log(thirdParty);
         const urlParams = new URLSearchParams(thirdParty);
         const thirdPartyIntegration = urlParams.get('from');
         console.log(thirdPartyIntegration);
