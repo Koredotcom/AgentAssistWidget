@@ -425,7 +425,7 @@ export class AssistComponent implements OnInit {
       let buldHtml = `
         <div class="buld-count-utt" id="buldCount-${uuids}">
                     <i class="ast-bulb" id="buldCountAst-${uuids}"></i>
-                    <span class="count-number" id="buldCountNumber-${uuids}">${(data.suggestions.dialogs?.length || 0) + (data.suggestions.faqs?.length || 0) + (data.suggestions.searchassist?.snippets?.length || 0) + (this.commonService.formatSearchResponse(data.suggestions)?.articles?.length || 0)}</span>
+                    <span class="count-number" id="buldCountNumber-${uuids}">${(data.suggestions.dialogs?.length || 0) + (data.suggestions.faqs?.length || 0) + (data.suggestions.searchassist?.snippets?.length || 0) + (this.commonService.formatSearchResponse(data)?.articles?.length || 0)}</span>
                 </div>`;
 
       let attrs = $('#scriptContainer .other-user-bubble .bubble-data');
