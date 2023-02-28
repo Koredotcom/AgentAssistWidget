@@ -51,6 +51,7 @@ export class AssistComponent implements OnInit {
   proactiveModeStatus: boolean;
   isFirstMessagOfDialog: boolean = false;
   answerPlaceableIDs : any = [];
+  isHistoryApiCalled = false;
 
   constructor(private templateRenderClassService: TemplateRenderClassService,
     public handleSubjectService: HandleSubjectService,
@@ -66,7 +67,6 @@ export class AssistComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    
     this.subscribeEvents();
     this.scrollToBottom();
   }
@@ -94,22 +94,13 @@ export class AssistComponent implements OnInit {
       console.log("------------resposne of agent request", response)
       this.handleSubjectService.setLoader(true);
       if (response && Object.keys(response).length > 0) {
-        if(!this.connectionDetails?.autoBotId || this.connectionDetails?.autoBotId == 'undefined'){
+        if(!this.connectionDetails?.autoBotId || this.connectionDetails?.autoBotId == 'undefined' || this.connectionDetails?.autoBotId == null){
           this.connectionDetails['autoBotId'] = response?.autoBotId; 
           this.handleSubjectService.setConnectionDetails(this.connectionDetails);
+          !this.isHistoryApiCalled ? this.callHistoryApi(): '';
         }
-        if(!this.commonService.configObj?.autoBotId || this.commonService.configObj?.autoBotId == 'undefined'){
+        if(!this.commonService.configObj?.autoBotId || this.commonService.configObj?.autoBotId == 'undefined' || this.commonService.configObj?.autoBotId == null){
           this.commonService.configObj['autoBotId'] = response?.autoBotId;
-          this.handleSubjectService.setLoader(true);
-          let respons : any = this.commonService.renderingHistoryMessage(this.connectionDetails);
-          respons.then((res) => {
-            if(res && res.messages){
-              this.handleSubjectService.setLoader(false);
-              this.renderHistoryMessages(res.messages, res.feedbackDetails)
-            }
-          }).catch((err) => {
-            this.handleSubjectService.setLoader(false);
-          });
         }
         
         console.log("ater adding autobotid from response----------------------------,", this.connectionDetails, this.commonService.configObj)
@@ -164,6 +155,9 @@ export class AssistComponent implements OnInit {
         this.connectionDetails = response;
         let appState = this.localStorageService.getLocalStorageState();
         this.proactiveModeStatus = appState[this.connectionDetails.conversationId][storageConst.PROACTIVE_MODE]
+      }
+      if(this.connectionDetails?.autoBotId && this.connectionDetails?.autoBotId !== 'undefined' && this.connectionDetails?.autoBotId !== null){
+        !this.isHistoryApiCalled ? this.callHistoryApi() : '';
       }
     });
 
@@ -243,6 +237,19 @@ export class AssistComponent implements OnInit {
     this.subscriptionsList.push(subscription13);
   }
 
+  callHistoryApi(){
+    this.isHistoryApiCalled = true;
+    this.handleSubjectService.setLoader(true);
+    let respons : any = this.commonService.renderingHistoryMessage(this.connectionDetails);
+    respons.then((res) => {
+      if(res && res.messages){
+        this.handleSubjectService.setLoader(false);
+        this.renderHistoryMessages(res.messages, res.feedbackDetails)
+      }
+    }).catch((err) => {
+      this.handleSubjectService.setLoader(false);
+    });
+  }
   //dialogue click and agent response handling code.
   AgentAssist_run_click(dialog, dialogPositionId, intent?) {
     let connectionDetails: any = Object.assign({}, this.connectionDetails);

@@ -121,12 +121,14 @@ export class MybotComponent implements OnInit {
       if (response) {
         this.connectionDetails = response;
       }
-      let respons: any = this.commonService.renderingAgentHistoryMessage(this.connectionDetails);
-      respons.then((res) => {
-        if (res && res.messages) {
-          this.renderHistoryMessages(res.messages, res.feedbackDetails)
-        }
-      })
+      if(this.connectionDetails?.autoBotId && this.connectionDetails?.autoBotId !== 'undefined' && this.connectionDetails?.autoBotId !== null){
+        let respons: any = this.commonService.renderingAgentHistoryMessage(this.connectionDetails);
+        respons.then((res) => {
+          if (res && res.messages) {
+            this.renderHistoryMessages(res.messages, res.feedbackDetails)
+          }
+        })
+      }
     });
 
     let subscription7 = this.websocketService.agentFeedbackResponse$.subscribe((data) => {
