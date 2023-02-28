@@ -48,7 +48,7 @@ export class AssistComponent implements OnInit {
   interruptDialog: any = {};
   agentAssistResponse: any = {};
   waitingTimeForUUID: number = 1000;
-  proactiveModeStatus: boolean = false;
+  proactiveModeStatus: boolean;
   isFirstMessagOfDialog: boolean = false;
   answerPlaceableIDs : any = [];
 
