@@ -95,8 +95,8 @@ export class AssistComponent implements OnInit {
       this.handleSubjectService.setLoader(true);
       if (response && Object.keys(response).length > 0) {
         if(!this.connectionDetails?.autoBotId || this.connectionDetails?.autoBotId == 'undefined' || this.connectionDetails?.autoBotId == null){
-          this.connectionDetails['autoBotId'] = response?.autoBotId; 
-          this.handleSubjectService.setConnectionDetails(this.connectionDetails);
+          this.connectionDetails['autoBotId'] = response?.autoBotId ? response.autoBotId: ''; 
+          this.handleSubjectService.setAutoBotIdFromAgentResponse({autoBotId: response?.autoBotId ? response.autoBotId: ''});
           if(!this.isHistoryApiCalled) {this.callHistoryApi()}
         }
         if(!this.commonService.configObj?.autoBotId || this.commonService.configObj?.autoBotId == 'undefined' || this.commonService.configObj?.autoBotId == null){

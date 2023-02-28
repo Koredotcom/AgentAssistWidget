@@ -20,6 +20,7 @@ export class HandleSubjectService {
   public overridebtnClickEventSubject = new BehaviorSubject<object>(null);
   public isLoaderSetSubject = new BehaviorSubject<boolean>(false);
   public proactiveModeSubject = new Subject<boolean>();
+  public autoBotIdSubject$ = new Subject<object>();
 
   constructor() { }
 
@@ -76,6 +77,10 @@ export class HandleSubjectService {
     }
     console.log("-----------parmasObj-----------", parmasObj)
     this.connectDetailsSubject.next(parmasObj);
+  }
+
+  setAutoBotIdFromAgentResponse(obj){
+    this.autoBotIdSubject$.next(obj)
   }
 
   setAgentOrTranscriptResponse(data){

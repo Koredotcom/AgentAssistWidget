@@ -44,6 +44,7 @@ export class MybotComponent implements OnInit {
   isMybotInputResponseClick: boolean = false;
   mybotEmptyState : boolean = true;
   dialogName : string;
+  isHistoryApiCalled = false;
 
   constructor(public handleSubjectService: HandleSubjectService,
     public randomUUIDPipe: RandomUUIDPipe,
@@ -121,19 +122,21 @@ export class MybotComponent implements OnInit {
       if (response) {
         this.connectionDetails = response;
       }
-      if(this.connectionDetails?.autoBotId && this.connectionDetails?.autoBotId !== 'undefined' && this.connectionDetails?.autoBotId !== null){
-        let respons: any = this.commonService.renderingAgentHistoryMessage(this.connectionDetails);
-        respons.then((res) => {
-          if (res && res.messages) {
-            this.renderHistoryMessages(res.messages, res.feedbackDetails)
-          }
-        })
+      if(this.connectionDetails?.autoBotId && this.connectionDetails?.autoBotId !== 'undefined' && this.connectionDetails?.autoBotId !== null && !this.isHistoryApiCalled){
+        this.callHistoryApi();
       }
     });
 
     let subscription7 = this.websocketService.agentFeedbackResponse$.subscribe((data) => {
       if (this.commonService.isUpdateFeedBackDetailsFlag && data) {
         this.commonService.UpdateFeedBackDetails(data, 'agentAutoContainer')
+      }
+    })
+
+    let subscription8 = this.handleSubjectService.autoBotIdSubject$.subscribe((data)=>{
+      if(data['autoBotId'] && data['autoBotId'] !== 'undefined' && data['autoBotId'] !== null){
+        this.connectionDetails['autoBotId'] = data['autoBotId'];
+        if(!this.isHistoryApiCalled){this.callHistoryApi()}
       }
     })
 
@@ -144,8 +147,18 @@ export class MybotComponent implements OnInit {
     this.subscriptionsList.push(subscription5);
     this.subscriptionsList.push(subscription6);
     this.subscriptionsList.push(subscription7);
+    this.subscriptionsList.push(subscription8);
   }
 
+  callHistoryApi(){
+    this.isHistoryApiCalled = true;
+    let respons: any = this.commonService.renderingAgentHistoryMessage(this.connectionDetails);
+    respons.then((res) => {
+      if (res && res.messages) {
+        this.renderHistoryMessages(res.messages, res.feedbackDetails)
+      }
+    })
+  }
   //running dialogue and mybot data response code.
   processMybotDataResponse(data) {
     let results: any = this.templateRenderClassService.getResponseUsingTemplate(data);
