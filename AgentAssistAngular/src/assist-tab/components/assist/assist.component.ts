@@ -48,7 +48,7 @@ export class AssistComponent implements OnInit {
   interruptDialog: any = {};
   agentAssistResponse: any = {};
   waitingTimeForUUID: number = 1000;
-  proactiveModeStatus: boolean = false;
+  proactiveModeStatus: boolean;
   isFirstMessagOfDialog: boolean = false;
   answerPlaceableIDs : any = [];
 
@@ -66,7 +66,16 @@ export class AssistComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    
+    this.handleSubjectService.setLoader(true);
+    let response : any = this.commonService.renderingHistoryMessage();
+    response.then((res) => {
+      if(res && res.messages){
+        this.handleSubjectService.setLoader(false);
+        this.renderHistoryMessages(res.messages, res.feedbackDetails)
+      }
+    }).catch((err) => {
+      this.handleSubjectService.setLoader(false);
+    });
     this.subscribeEvents();
     this.scrollToBottom();
   }
@@ -91,30 +100,11 @@ export class AssistComponent implements OnInit {
     });
 
     let subscription2 = this.websocketService.agentAssistResponse$.subscribe((response: any) => {
-      console.log("------------resposne of agent request", response)
+      console.log("------------resposne of agent request")
       this.handleSubjectService.setLoader(true);
       if (response && Object.keys(response).length > 0) {
-        if(!this.connectionDetails?.autoBotId || this.connectionDetails?.autoBotId == 'undefined'){
-          this.connectionDetails['autoBotId'] = response?.autoBotId; 
-          this.handleSubjectService.setConnectionDetails(this.connectionDetails);
-        }
-        if(!this.commonService.configObj?.autoBotId || this.commonService.configObj?.autoBotId == 'undefined'){
-          this.commonService.configObj['autoBotId'] = response?.autoBotId;
-        }
-        this.handleSubjectService.setLoader(true);
-        let respons : any = this.commonService.renderingHistoryMessage(this.connectionDetails);
-        respons.then((res) => {
-          if(res && res.messages){
-            this.handleSubjectService.setLoader(false);
-            this.renderHistoryMessages(res.messages, res.feedbackDetails)
-          }
-        }).catch((err) => {
-          this.handleSubjectService.setLoader(false);
-        });
-        console.log("ater adding autobotid from response----------------------------,", this.connectionDetails, this.commonService.configObj)
         this.updateAgentAssistResponse(response, this.connectionDetails.botId, this.connectionDetails.conversationId);
         this.viewCustomTempAttachment()
-        
       }
       this.handleSubjectService.setLoader(false);
     });

@@ -60,6 +60,12 @@ export class MybotComponent implements OnInit {
     private koreGenerateuuidPipe: KoreGenerateuuidPipe) { }
 
   ngOnInit(): void {
+    let response : any = this.commonService.renderingAgentHistoryMessage();
+    response.then((res) => {
+      if(res && res.messages){
+        this.renderHistoryMessages(res.messages, res.feedbackDetails)
+      }
+    })
     this.subscribeEvents();
   }
 
@@ -121,12 +127,6 @@ export class MybotComponent implements OnInit {
       if (response) {
         this.connectionDetails = response;
       }
-      let respons: any = this.commonService.renderingAgentHistoryMessage(this.connectionDetails);
-      respons.then((res) => {
-        if (res && res.messages) {
-          this.renderHistoryMessages(res.messages, res.feedbackDetails)
-        }
-      })
     });
 
     let subscription7 = this.websocketService.agentFeedbackResponse$.subscribe((data) => {
