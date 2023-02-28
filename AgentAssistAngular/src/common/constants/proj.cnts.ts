@@ -50,8 +50,9 @@ export const ProjConstants = {
     PS_Y_REACH_START : 'ps-y-reach-start',
     PS_Y_REACH_END : 'ps-y-reach-end',
     PS_SCROLL_UP : 'ps-scroll-up',
-    PROACTIVE_INITIAL_MODE : 'proactive_initial_mode',
-    jToken : "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NjUzODYxNzgyMjMsImV4cCI6MTY2NTM4NjE3OTEyMywiYXVkIjoiIiwiaXNzIjoiY3MtZTRhMmI0YjYtM2RiZC01NWQwLWIwMjUtNDY2ZTVkMDRjOTgxIiwic3ViIjoiYy00NzJhNjYyLTQ5ZDYtNDM5Ny1hMjY1LTViNzE4ZDQ0MWNiNCIsImlzQW5vbnltb3VzIjpmYWxzZX0.1SN5BIEaQ4Rr6XpyKXR1AerNcIEmyDcnK6P0cpPkQzM"
+    jToken : "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NjUzODYxNzgyMjMsImV4cCI6MTY2NTM4NjE3OTEyMywiYXVkIjoiIiwiaXNzIjoiY3MtZTRhMmI0YjYtM2RiZC01NWQwLWIwMjUtNDY2ZTVkMDRjOTgxIiwic3ViIjoiYy00NzJhNjYyLTQ5ZDYtNDM5Ny1hMjY1LTViNzE4ZDQ0MWNiNCIsImlzQW5vbnltb3VzIjpmYWxzZX0.1SN5BIEaQ4Rr6XpyKXR1AerNcIEmyDcnK6P0cpPkQzM",
+    AUTOMATIONBOTID: "autoBotId",
+    PROACTIVE_INITIAL_MODE : 'proactive_initial_mode'
 }
 
 export const IdReferenceConst = {
@@ -107,11 +108,12 @@ export const IdReferenceConst = {
 
 export const connectionObj = {
     envinormentUrl: 'https://dev-smartassist.kore.ai',
-    botDetails: {
+    botDetails: { // instance bot details 
         "clientId":'cs-0a7ab777-72e6-5a0d-944c-66ccd2be4d5c',
         "clientSecret":'HV4fd2UCmZJUbr3mVIla1+iMV07j6wHUWgXfgrnq0hs=',
         "botId":'st-fa82e7df-fa85-574c-92c7-a6ad6d6da07d'
     },
+    autoBotId:'', // if autobot id there
     isAuthentication: false
 }
 

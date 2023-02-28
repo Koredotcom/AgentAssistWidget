@@ -77,9 +77,10 @@ export class WebSocketService {
       'id': this.connectionDetails.conversationId,
       "isSendWelcomeMessage": shouldProcessResponse,
       'agentassistInfo' : agent_user_details,
-      'botId': this.connectionDetails.botId
+      'botId' : this.connectionDetails.botId,
     }
-    if(this.connectionDetails?.autoBotId && this.connectionDetails?.autoBotId !== 'undefined') {
+    console.log("-------------connectionDetails---------------", this.connectionDetails)
+    if(this.connectionDetails?.autoBotId) {
       welcomeMessageParams['autoBotId'] = this.connectionDetails.autoBotId;
       menu_request_params['autoBotId'] = this.connectionDetails.autoBotId;
     } else {
@@ -88,6 +89,31 @@ export class WebSocketService {
     }
     this.emitEvents(EVENTS.welcome_message_request, welcomeMessageParams);
     this.emitEvents(EVENTS.agent_menu_request, menu_request_params);
+    // this.agentAssistResponse$.next([
+    //   "agent_assist_response",
+    //   {
+    //   "type": "button",
+    //   "value": "Customer has waited for an agent for a few seconds. Here are some appropriate opening lines.",
+    //   "buttons": [
+    //   {
+    //   "type": "text",
+    //   "value": "Hello. How can I help you today?"
+    //   },
+    //   {
+    //   "type": "text",
+    //   "value": "Hello. Sorry for the long wait. How can I help you today?"
+    //   },
+    //   {
+    //   "type": "text",
+    //   "value": "Hi there. I apologize for your wait. How can I help you today?"
+    //   }
+    //   ],
+    //   "botId": "st-d0fcba36-68fd-5363-806b-1c622c53ab10",
+    //   "conversationId": "ch0987676",
+    //   "autoBotId": "st-fb33bc49-11ce-5ab0-82b3-1c61ef0f546e",
+    //   "event": "agent_assist_response"
+    //   }
+    //   ]);
   }
 
   emitEvents(eventName,requestParams) {
