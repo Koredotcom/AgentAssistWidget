@@ -97,7 +97,7 @@ export class AssistComponent implements OnInit {
         if(!this.connectionDetails?.autoBotId || this.connectionDetails?.autoBotId == 'undefined' || this.connectionDetails?.autoBotId == null){
           this.connectionDetails['autoBotId'] = response?.autoBotId; 
           this.handleSubjectService.setConnectionDetails(this.connectionDetails);
-          !this.isHistoryApiCalled ? this.callHistoryApi(): '';
+          if(!this.isHistoryApiCalled) {this.callHistoryApi()}
         }
         if(!this.commonService.configObj?.autoBotId || this.commonService.configObj?.autoBotId == 'undefined' || this.commonService.configObj?.autoBotId == null){
           this.commonService.configObj['autoBotId'] = response?.autoBotId;
@@ -155,8 +155,8 @@ export class AssistComponent implements OnInit {
         let appState = this.localStorageService.getLocalStorageState();
         this.proactiveModeStatus = appState[this.connectionDetails.conversationId][storageConst.PROACTIVE_MODE]
       }
-      if(this.connectionDetails?.autoBotId && this.connectionDetails?.autoBotId !== 'undefined' && this.connectionDetails?.autoBotId !== null){
-        !this.isHistoryApiCalled ? this.callHistoryApi() : '';
+      if(this.connectionDetails?.autoBotId && this.connectionDetails?.autoBotId !== 'undefined' && this.connectionDetails?.autoBotId !== null && !this.isHistoryApiCalled){
+        this.callHistoryApi();
       }
     });
 
