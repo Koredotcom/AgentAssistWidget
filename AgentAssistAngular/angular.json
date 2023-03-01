@@ -43,7 +43,7 @@
               "src/assets/css/emojione.sprites.css",
               "src/assets/css/purejscarousel.css",
               "src/assets/css/customTemplate.css",
-              "src/assets/adaptivecards.css"
+              "src/assets/css/adaptivecards.css"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
