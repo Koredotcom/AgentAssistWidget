@@ -57,8 +57,8 @@
               "src/common/agent-assistv2/agentAssistCustomTemplate.js",
               "src/common/agent-assistv2/KoreGraphAdapter.js",
               "src/common/agent-assistv2/socketConnection.js",
-              "src/common/adaptivecards.js",
-              "src/common/kore-adaptive-cards-plugin.js"
+              "src/common/agent-assistv2/adaptivecards.js",
+              "src/common/agent-assistv2/kore-adaptive-cards-plugin.js"
             ],
             "vendorChunk": true,
             "extractLicenses": false,
