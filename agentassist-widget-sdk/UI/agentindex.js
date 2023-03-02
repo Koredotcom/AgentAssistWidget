@@ -1575,7 +1575,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $(`#dropDownData-${myBotDropdownHeaderUuids}`).attr('data-task-id', data.uniqueTaskId)
                         }
                         isFirstMessagOfDialogInMyBot = false;
-                        let sendMsgData = encodeURI(JSON.stringify(_msgsResponse));
+                        let msgStringify = JSON.stringify(_msgsResponse);
+                        msgStringify = msgStringify.replaceAll("'", "&rsquo;")
+                        let sendMsgData = encodeURI(msgStringify);
                         let runInfoContent = $(`#dropDownData-${myBotDropdownHeaderUuids}`);
                         $('#inputFieldForMyBot').remove();
                         
@@ -2537,6 +2539,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     });
                     if (isAutomationOnGoing && dropdownHeaderUuids && data.buttons && !data.value.includes('Customer has waited') && (dialogPositionId && !data.positionId || data.positionId == dialogPositionId)) {
                         let msgStringify = JSON.stringify(_msgsResponse);
+                        msgStringify = msgStringify.replaceAll("'", "&rsquo;")
                         let newTemp = encodeURI(msgStringify);
                         $(`#overRideBtn-${dropdownHeaderUuids}`).removeClass('hide');
                         $(`#cancelOverRideBtn-${dropdownHeaderUuids}`).addClass('hide');
@@ -3623,6 +3626,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     });
                                     if(_msgsResponse.message.length > 0){
                                         let msgStringify = JSON.stringify(_msgsResponse);
+                                        msgStringify = msgStringify.replaceAll("'", "&rsquo;")
                                         let newTemp = encodeURI(msgStringify);
                                         if((res.agentAssistDetails?.isPrompt === true || res.agentAssistDetails?.isPrompt === false) && (previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) || (previousTaskName != currentTaskName && previousTaskPositionId == currentTaskPositionId)) {
                                         let runInfoContent = $(`#dropDownData-${previousId}`);
@@ -4088,6 +4092,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         _msgsResponse.message.push(body);
                                     });
                                     let msgStringify = JSON.stringify(_msgsResponse);
+                                    msgStringify = msgStringify.replaceAll("'", "&rsquo;")
                                     let newTemp = encodeURI(msgStringify);
                                     if((res.agentAssistDetails?.isPrompt === true || res.agentAssistDetails?.isPrompt === false)  && previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) {
                                     let runInfoContent = $(`#dropDownData-${previousId}`);
