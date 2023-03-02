@@ -2287,10 +2287,23 @@
 
                 /* checking for matched custom template */
                 messageHtml = me.customTemplateObj.renderMessage(msgData);
-                
-                if (messageHtml === '' && msgData && msgData.message && msgData.message[0]) {
 
-                    if (msgData.message[0] && msgData.message[0].component && msgData.message[0].component.payload && msgData.message[0].component.payload.template_type == "button") {
+                if (messageHtml === '' && msgData && msgData.message && msgData.message[0]) {
+                  if(msgData.message[0] && msgData.message[0].cInfo && msgData.message[0].cInfo.body && msgData.message[0].cInfo.body.attachments && msgData.message[0].cInfo.body.attachments[0].content && msgData.message[0].cInfo.body.attachments[0].content.type == 'AdaptiveCard' ){
+                    var _adaptiveCard =  new window.krAdaptiveCards.AdaptiveCard();
+                    _adaptiveCard.parse(msgData.message[0].cInfo.body.attachments[0].content);
+                    messageHtml = $(_adaptiveCard.render());
+                    try {
+                      _adaptiveCard.onExecuteAction = function(action) {
+                        if (action._propertyBag && action._propertyBag.type === "Action.OpenUrl") {
+                          window.open(action._propertyBag.url, "_blank");
+                        }
+                      };
+                    } catch (error) {
+
+                    }
+                  }
+                   else if (msgData.message[0] && msgData.message[0].component && msgData.message[0].component.payload && msgData.message[0].component.payload.template_type == "button") {
                         messageHtml = $(me.getChatTemplate("templatebutton")).tmpl({
                             'msgData': msgData,
                             'helpers': helpers,
