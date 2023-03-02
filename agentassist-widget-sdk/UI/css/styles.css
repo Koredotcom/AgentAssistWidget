@@ -851,6 +851,7 @@ html, body{
     cursor: pointer;
     padding: 3px 10px;
     text-transform: uppercase;
+    opacity: 1;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .copy-btn {
     background: var(--bg-color-containers);
@@ -865,6 +866,7 @@ html, body{
     font-size: 12px;
     margin-left: 6px;
     cursor: pointer;
+    opacity: 1;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .elipse-dropdown-info {
     margin-left: 6px;
@@ -1246,6 +1248,7 @@ border: 1px solid transparent !important;
     cursor: pointer;
     padding: 3px 10px;
     text-transform: uppercase;
+    opacity: 1;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data .run-info-content .agent-utt .action-links .copy-btn {
     background: var(--bg-color-containers);
@@ -1260,6 +1263,7 @@ border: 1px solid transparent !important;
     font-size: 12px;
     margin-left: 6px;
     cursor: pointer;
+    opacity: 1;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data .run-info-content .order-number-info {
     background: var(--bg-hover-tabs-color);
@@ -1750,6 +1754,7 @@ border: 1px solid transparent !important;
     cursor: pointer;
     padding: 3px 10px;
     text-transform: uppercase;
+    opacity: 1;
 }
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .copy-btn {
     background: var(--bg-color-containers);
@@ -1764,6 +1769,7 @@ border: 1px solid transparent !important;
     font-size: 12px;
     margin-left: 6px;
     cursor: pointer;
+    opacity: 1;
 }
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .elipse-dropdown-info {
     margin-left: 6px;
@@ -2174,6 +2180,7 @@ border: 1px solid transparent !important;
     cursor: pointer;
     padding: 3px 10px;
     text-transform: uppercase;
+    opacity: 1;
 }
 .overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .copy-btn {
     background: var(--bg-color-containers);
@@ -2188,6 +2195,7 @@ border: 1px solid transparent !important;
     font-size: 12px;
     margin-left: 6px;
     cursor: pointer;
+    opacity: 1;
 }
 .overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .elipse-dropdown-info {
     margin-left: 6px;
@@ -3056,6 +3064,7 @@ border: 1px solid transparent !important;
     cursor: pointer;
     padding: 3px 10px;
     text-transform: uppercase;
+    opacity: 1;
 }
 .collapse-acc-data .steps-run-data .run-info-content .agent-utt .action-links .copy-btn {
     background: var(--bg-color-containers);
@@ -3070,6 +3079,7 @@ border: 1px solid transparent !important;
     font-size: 12px;
     margin-left: 6px;
     cursor: pointer;
+    opacity: 1;
 }
 .collapse-acc-data .steps-run-data .run-info-content .order-number-info {
     background: var(--bg-hover-tabs-color);
