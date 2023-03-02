@@ -53,12 +53,12 @@
               "src/common/agent-assistv2/emoji.js",
               "src/common/agent-assistv2/d3.v4.min.js",
               "src/common/agent-assistv2/purejscarousel.js",
+              "src/common/agent-assistv2/adaptivecards.js",
+              "src/common/agent-assistv2/kore-adaptive-cards-plugin.js",
               "src/common/agent-assistv2/agentAssistChatWindow.js",
               "src/common/agent-assistv2/agentAssistCustomTemplate.js",
               "src/common/agent-assistv2/KoreGraphAdapter.js",
-              "src/common/agent-assistv2/socketConnection.js",
-              "src/common/agent-assistv2/adaptivecards.js",
-              "src/common/agent-assistv2/kore-adaptive-cards-plugin.js"
+              "src/common/agent-assistv2/socketConnection.js"
             ],
             "vendorChunk": true,
             "extractLicenses": false,
