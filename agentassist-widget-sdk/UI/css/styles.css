@@ -831,6 +831,7 @@ html, body{
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send:hover .action-links {
     display: flex;
+    z-index: 1;
 }
 
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type#dialoguesArea .content-dialog-task-type .type-info-run-send .action-links {
@@ -1174,6 +1175,7 @@ border: 1px solid transparent !important;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data .run-info-content .agent-utt:hover .action-links {
     display: flex;
+    z-index: 1
 }
 .overlay-library {
     width: 97.5% !important;
@@ -1197,6 +1199,7 @@ border: 1px solid transparent !important;
 }
 .overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send:hover .action-links {
     display: flex;
+    z-index: 1;
 }
 
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data .run-info-content .agent-utt .title-data {
@@ -1733,6 +1736,7 @@ border: 1px solid transparent !important;
 }
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send:hover .action-links {
     display: flex;
+    z-index: 1;
 }
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send:hover .title-text{
     white-space: nowrap !important;
@@ -3027,6 +3031,7 @@ border: 1px solid transparent !important;
 }
 .collapse-acc-data .steps-run-data .run-info-content .agent-utt:hover .action-links {
     display: flex;
+    z-index: 1;
 }
 .collapse-acc-data .steps-run-data .run-info-content .agent-utt .title-data {
     font-weight: 400;
