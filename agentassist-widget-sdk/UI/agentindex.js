@@ -4661,7 +4661,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
 
                 function UnCollapseDropdownForLastElement(lastElement){
-                    if(lastElement.className.includes('steps-run-data')){
+                    if(lastElement && lastElement.className.includes('steps-run-data')){
                         let lastElementId = getUUIDFromId(lastElement.id);
                         lastElementId = lastElementId.split("*")[0];
                         let collapseElement = document.getElementById('dropDownData-' + lastElementId);
