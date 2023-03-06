@@ -3534,7 +3534,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             }
                                         }
                                     }
-                                    if (res.agentAssistDetails?.entityName && res.agentAssistDetails?.entityResponse && res.agentAssistDetails?.entityValue) {
+                                    if (res.agentAssistDetails?.entityName && res.agentAssistDetails?.entityResponse && res.agentAssistDetails?.entityValue && res.agentAssistDetails?.userInput) {
                                         let runInfoContent = $(`#dropDownData-${previousId}`);
                                         let userQueryHtml = `
                                             <div class="steps-run-data">
@@ -3544,7 +3544,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                 <div class="run-info-content" id="userInput-${res._id}">
                                                     <div class="title">Customer Said - </div>
                                                     <div class="agent-utt">
-                                                        <div class="title-data">"${sanitizeHTML(res.agentAssistDetails.entityValue)}"</div>
+                                                        <div class="title-data">"${sanitizeHTML(res.agentAssistDetails.userInput)}"</div>
                                                     </div>
                                                     
                                                 </div>
@@ -3553,7 +3553,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         let entityHtml = $(`#dropDownData-${previousId}`).find(`#userInput-${res._id}`);
                                         let entityDisplayName = agentAssistResponse.newEntityDisplayName ? agentAssistResponse.newEntityDisplayName : agentAssistResponse.newEntityName;
                                         if (res.agentAssistDetails.entityValue && !res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
-                                            entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${sanitizeHTML(res.agentAssistDetails.entityValue)}</div>`);
+                                            let entityValueType = typeof res.agentAssistDetails.entityValue;
+                                            let entityValue = (entityValueType == 'object') ? JSON.stringify(res.agentAssistDetails.entityValue) : sanitizeHTML(res.agentAssistDetails.userInput);
+                                            entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${entityValue}</div>`);
                                         } else {
                                             if (res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
                                                 let entityHtmls = `<div class="order-number-info">${entityDisplayName} : 
@@ -4000,7 +4002,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             }
                                         }   
                                     }
-                                    if (res.agentAssistDetails?.entityName && res.agentAssistDetails?.entityResponse && res.agentAssistDetails?.entityValue) {
+                                    if (res.agentAssistDetails?.entityName && res.agentAssistDetails?.entityResponse && res.agentAssistDetails?.entityValue && res.agentAssistDetails.userInput) {
+                                       
                                         let runInfoContent = $(`#dropDownData-${previousId}`);
                                         let userQueryHtml = `
                                                 <div class="steps-run-data">
@@ -4010,7 +4013,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                     <div class="run-info-content" id="userInput-${res._id}">
                                                         <div class="title">Customer Said - </div>
                                                         <div class="agent-utt">
-                                                            <div class="title-data">"${sanitizeHTML(res.agentAssistDetails.entityValue)}"</div>
+                                                            <div class="title-data">"${sanitizeHTML(res.agentAssistDetails.userInput)}"</div>
                                                         </div>
                                                         
                                                     </div>
@@ -4019,7 +4022,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         let entityHtml = $(`#dropDownData-${previousId}`).find(`#userInput-${res._id}`);
                                         let entityDisplayName = myBotDataResponse.newEntityDisplayName ? myBotDataResponse.newEntityDisplayName : myBotDataResponse.newEntityName;
                                         if (res.agentAssistDetails.entityValue && !res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
-                                            entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${sanitizeHTML(res.agentAssistDetails.entityValue)}</div>`);
+                                            let entityValueType = typeof res.agentAssistDetails.entityValue;
+                                            let entityValue = (entityValueType == 'object') ? JSON.stringify(res.agentAssistDetails.entityValue) : sanitizeHTML(res.agentAssistDetails.userInput);
+                                            entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${entityValue}</div>`);
                                         } else {
                                             if (res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
                                                 let entityHtmls = `<div class="order-number-info">${entityDisplayName} : 
