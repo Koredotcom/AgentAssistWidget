@@ -614,91 +614,120 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
 
                 function processUserMessages(data, conversationId, botId) {
-                    var _msgsResponse = {
-                        "type": "bot_response",
-                        "from": "bot",
-                        "message": [
-
-                        ],
-                        "messageId": data._id,
-                        "botInfo": {
-                            "chatBot": "sample Bot",
-                            "taskBotId": botId
-                        },
-                        "createdOn": "2022-03-21T07:56:18.225Z",
-                        "icon": "https://uat.kore.ai:443/api/getMediaStream/market/f-cb381255-9aa1-5ce2-95e3-71233aef7084.png?n=17648985&s=IlRvUlUwalFVaFVMYm9sZStZQnlLc0l1UlZvdlNUUDcxR2o3U2lscHRrL3M9Ig$$",
-                        "traceId": "873209019a5adc26"
-                    }
-                    let _id = Math.floor(Math.random() * 100);
-                    let body = {};
-                    body['type'] = 'text';
-                    body['component'] = {
-                        "type": 'text',
-                        "payload": {
+                    if(isAutomationOnGoing){
+                        var _msgsResponse = {
+                            "type": "bot_response",
+                            "from": "bot",
+                            "message": [
+    
+                            ],
+                            "messageId": data._id,
+                            "botInfo": {
+                                "chatBot": "sample Bot",
+                                "taskBotId": botId
+                            },
+                            "createdOn": "2022-03-21T07:56:18.225Z",
+                            "icon": "https://uat.kore.ai:443/api/getMediaStream/market/f-cb381255-9aa1-5ce2-95e3-71233aef7084.png?n=17648985&s=IlRvUlUwalFVaFVMYm9sZStZQnlLc0l1UlZvdlNUUDcxR2o3U2lscHRrL3M9Ig$$",
+                            "traceId": "873209019a5adc26"
+                        }
+                        let _id = Math.floor(Math.random() * 100);
+                        let body = {};
+                        body['type'] = 'text';
+                        body['component'] = {
                             "type": 'text',
-                            "text": data.userInput
-                        }
-                    };
-                    body['cInfo'] = {
-                        "body": data.userInput
-                    };
-                    _msgsResponse.message.push(body);
-
-                    let titleText = '';
-                    let userQueryHtml = '';
-                    if(isOverRideMode) {
-                        titleText = "YouEntered -";
-                        userQueryHtml = `
-                                    <div class="steps-run-data last-msg-white-bg">
-                                        <div class="icon_block_img">
-                                            <img src="./images/userIcon.svg">
-                                        </div>
-                                        <div class="run-info-content" id="userInput-${_id}">
-                                            <div class="title">${titleText}</div>
-                                            <div class="agent-utt">
-                                                <div class="title-data">"${sanitizeHTML(data.userInput)}"</div>
+                            "payload": {
+                                "type": 'text',
+                                "text": data.userInput
+                            }
+                        };
+                        body['cInfo'] = {
+                            "body": data.userInput
+                        };
+                        _msgsResponse.message.push(body);
+    
+                        let titleText = '';
+                        let userQueryHtml = '';
+                        if(isOverRideMode) {
+                            titleText = "YouEntered -";
+                            userQueryHtml = `
+                                        <div class="steps-run-data last-msg-white-bg">
+                                            <div class="icon_block_img">
+                                                <img src="./images/userIcon.svg">
                                             </div>
-                                            
-                                        </div>
-                                    </div>`;
-                    } else {
-                        titleText = "Customer Said -"
-                        userQueryHtml = `
-                                    <div class="steps-run-data last-msg-white-bg">
-                                        <div class="icon_block_img">
-                                            <img src="./images/userIcon.svg">
-                                        </div>
-                                        <div class="run-info-content" id="userInput-${_id}">
-                                            <div class="title">${titleText}</div>
-                                            <div class="agent-utt">
-                                                <div class="title-data">"${sanitizeHTML(data.userInput)}"</div>
-                                            </div>
-                                            
-                                        </div>
-                                    </div>`;
-                    }
-                    let addUserQueryTodropdownData = document.getElementById(`dropDownData-${dropdownHeaderUuids}`);
-                    addUserQueryTodropdownData.innerHTML = addUserQueryTodropdownData.innerHTML + userQueryHtml;
-                    let entityHtml = $(`#dropDownData-${dropdownHeaderUuids}`).find(`#userInput-${_id}`);
-                    let entityDisplayName = agentAssistResponse.entityDisplayName ? agentAssistResponse.entityDisplayName : agentAssistResponse.entityName;
-                    if(agentAssistResponse.newEntityDisplayName || agentAssistResponse.newEntityName){
-                        entityDisplayName = agentAssistResponse.newEntityDisplayName ? agentAssistResponse.newEntityDisplayName : agentAssistResponse.newEntityName;
-                    }
-                    if (data.entityValue && !data.isErrorPrompt && entityDisplayName) {
-                        entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${sanitizeHTML(data.userInput)}</div>`);
-                    } else { 
-                        if (data.isErrorPrompt && entityDisplayName) {
-                            let entityHtmls = `<div class="order-number-info">${entityDisplayName} : 
-                                                    <span style="color:red">Value unidentified</span>
+                                            <div class="run-info-content" id="userInput-${_id}">
+                                                <div class="title">${titleText}</div>
+                                                <div class="agent-utt">
+                                                    <div class="title-data">"${sanitizeHTML(data.userInput)}"</div>
                                                 </div>
-                                                <div>
-                                                    <img src="./images/warning.svg" style="padding-right: 8px;">
-                                                    <span style="font-size: 12px; line-height: 18px; color: #202124;">Incorrect input format<span>
-                                                </div>`
-                            entityHtml.append(entityHtmls);
+                                                
+                                            </div>
+                                        </div>`;
+                        } else {
+                            titleText = "Customer Said -"
+                            userQueryHtml = `
+                                        <div class="steps-run-data last-msg-white-bg">
+                                            <div class="icon_block_img">
+                                                <img src="./images/userIcon.svg">
+                                            </div>
+                                            <div class="run-info-content" id="userInput-${_id}">
+                                                <div class="title">${titleText}</div>
+                                                <div class="agent-utt">
+                                                    <div class="title-data">"${sanitizeHTML(data.userInput)}"</div>
+                                                </div>
+                                                
+                                            </div>
+                                        </div>`;
                         }
+                        let addUserQueryTodropdownData = document.getElementById(`dropDownData-${dropdownHeaderUuids}`);
+                        addUserQueryTodropdownData.innerHTML = addUserQueryTodropdownData.innerHTML + userQueryHtml;
+                        let entityHtml = $(`#dropDownData-${dropdownHeaderUuids}`).find(`#userInput-${_id}`);
+                        let entityDisplayName = agentAssistResponse.entityDisplayName ? agentAssistResponse.entityDisplayName : agentAssistResponse.entityName;
+                        if(agentAssistResponse.newEntityDisplayName || agentAssistResponse.newEntityName){
+                            entityDisplayName = agentAssistResponse.newEntityDisplayName ? agentAssistResponse.newEntityDisplayName : agentAssistResponse.newEntityName;
+                        }
+                        if (data.entityValue && !data.isErrorPrompt && entityDisplayName) {
+                            entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${sanitizeHTML(data.userInput)}</div>`);
+                        } else { 
+                            if (data.isErrorPrompt && entityDisplayName) {
+                                let entityHtmls = `<div class="order-number-info">${entityDisplayName} : 
+                                                        <span style="color:red">Value unidentified</span>
+                                                    </div>
+                                                    <div>
+                                                        <img src="./images/warning.svg" style="padding-right: 8px;">
+                                                        <span style="font-size: 12px; line-height: 18px; color: #202124;">Incorrect input format<span>
+                                                    </div>`
+                                entityHtml.append(entityHtmls);
+                            }
+                        }
+                        AgentChatInitialize.renderMessage(_msgsResponse);
+                    }else{
+                        let dynamicBlockDiv = $('#dynamicBlock');
+                        let uuids = koreGenerateUUID();
+                        let botResHtml = `
+                                <div class="collapse-acc-data before-none" id='smallTalk-${uuids}'>
+                            <div class="steps-run-data">
+                            <div class="icon_block">
+                                <i class="ast-agent"></i>
+                            </div>
+                            <div class="run-info-content" >
+                            <div class="title">Customer Said - </div>
+                            <div class="agent-utt">
+                                <div class="action-links">
+                                    <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}"  data-msg-data="${sanitizeHTML(data.userInput)}">Send</button>
+                                    <div class="copy-btn hide" data-msg-id="${uuids}" data-msg-data="${sanitizeHTML(data.userInput)}">
+                                        <i class="ast-copy" data-msg-id="${uuids}" data-msg-data="${sanitizeHTML(data.userInput)}"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>`;
+                        let titleData = `<div class="title-data" id="displayData-${uuids}">${sanitizeHTML(data.userInput)}</div>`
+                        dynamicBlockDiv.append(botResHtml);
+                        $(`#smallTalk-${uuids} .agent-utt`).append(titleData);
+
+                        // hideSendOrCopyButtons(parsedPayload, `#smallTalk-${uuids} .agent-utt`, 'smallTalk')
                     }
-                    AgentChatInitialize.renderMessage(_msgsResponse);
                     // HtmlRenderMethod(_convId, _msgsResponse) {}
                     // setTimeout(() => {
                     //     // store HTML
@@ -1546,7 +1575,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $(`#dropDownData-${myBotDropdownHeaderUuids}`).attr('data-task-id', data.uniqueTaskId)
                         }
                         isFirstMessagOfDialogInMyBot = false;
-                        let sendMsgData = encodeURI(JSON.stringify(_msgsResponse));
+                        let msgStringify = JSON.stringify(_msgsResponse);
+                        msgStringify = msgStringify.replaceAll("'", "&rsquo;")
+                        let sendMsgData = encodeURI(msgStringify);
                         let runInfoContent = $(`#dropDownData-${myBotDropdownHeaderUuids}`);
                         $('#inputFieldForMyBot').remove();
                         
@@ -2508,6 +2539,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     });
                     if (isAutomationOnGoing && dropdownHeaderUuids && data.buttons && !data.value.includes('Customer has waited') && (dialogPositionId && !data.positionId || data.positionId == dialogPositionId)) {
                         let msgStringify = JSON.stringify(_msgsResponse);
+                        msgStringify = msgStringify.replaceAll("'", "&rsquo;")
                         let newTemp = encodeURI(msgStringify);
                         $(`#overRideBtn-${dropdownHeaderUuids}`).removeClass('hide');
                         $(`#cancelOverRideBtn-${dropdownHeaderUuids}`).addClass('hide');
@@ -2637,6 +2669,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     if(!isAutomationOnGoing && dropdownHeaderUuids && data.buttons && !data.value.includes('Customer has waited') && (dialogPositionId && !data.positionId || data.positionId == dialogPositionId)){
                         $('#dynamicBlock .empty-data-no-agents').addClass('hide');
                         let dynamicBlockDiv = $('#dynamicBlock');
+                        let tellOrAskCustomer = data.isPrompt ? 'Ask Customer' : 'Tell Customer';
                         data.buttons?.forEach((ele, i) => {
                             let botResHtml = `
                                 <div class="collapse-acc-data before-none" id='smallTalk-${uuids}'>
@@ -2645,7 +2678,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 <i class="ast-agent"></i>
                             </div>
                             <div class="run-info-content" >
-                            <div class="title">Tell Customer</div>
+                            <div class="title">${tellOrAskCustomer}</div>
                             <div class="agent-utt">
                                 <div class="action-links">
                                     <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}"  data-msg-data="${ele.value}">Send</button>
@@ -3427,12 +3460,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         "traceId": "873209019a5adc26",
                                         "createdOnTimemillis": res._id
                                     }
-                                    currentTaskName = res.tN ? res.tN : currentTaskName;
-                                    currentTaskPositionId = res?.agentAssistDetails?.positionId ? res?.agentAssistDetails?.positionId : currentTaskPositionId;
-
+                                    let positionID = 'dg-'+koreGenerateUUID();
+                                    currentTaskPositionId = res?.agentAssistDetails?.positionId ?  res?.agentAssistDetails?.positionId : ((res.tN != currentTaskName) ? positionID : currentTaskPositionId);
+                                    currentTaskName = (res.tN) ? res.tN  : currentTaskName;
                                     let historyData = $('#dynamicBlock');
                                     let userInputHtml;
-                                    if (res.agentAssistDetails?.userInput) {
+                                    if (res.agentAssistDetails?.userInput && res?.agentAssistDetails?.positionId) {
                                         userInputHtml = `<div class="agent-utt-info" id="agentUttInfo-${res._id}">
                                             <div class="user-img">
                                                 <img src="./images/userIcon.svg">
@@ -3501,7 +3534,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             }
                                         }
                                     }
-                                    if (res.agentAssistDetails?.entityName && res.agentAssistDetails?.entityResponse && res.agentAssistDetails?.entityValue) {
+                                    if (res.agentAssistDetails?.entityName && res.agentAssistDetails?.entityResponse && res.agentAssistDetails?.entityValue && res.agentAssistDetails?.userInput) {
                                         let runInfoContent = $(`#dropDownData-${previousId}`);
                                         let userQueryHtml = `
                                             <div class="steps-run-data">
@@ -3511,7 +3544,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                 <div class="run-info-content" id="userInput-${res._id}">
                                                     <div class="title">Customer Said - </div>
                                                     <div class="agent-utt">
-                                                        <div class="title-data">"${sanitizeHTML(res.agentAssistDetails.entityValue)}"</div>
+                                                        <div class="title-data">"${sanitizeHTML(res.agentAssistDetails.userInput)}"</div>
                                                     </div>
                                                     
                                                 </div>
@@ -3520,7 +3553,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         let entityHtml = $(`#dropDownData-${previousId}`).find(`#userInput-${res._id}`);
                                         let entityDisplayName = agentAssistResponse.newEntityDisplayName ? agentAssistResponse.newEntityDisplayName : agentAssistResponse.newEntityName;
                                         if (res.agentAssistDetails.entityValue && !res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
-                                            entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${sanitizeHTML(res.agentAssistDetails.entityValue)}</div>`);
+                                            let entityValueType = typeof res.agentAssistDetails.entityValue;
+                                            let entityValue = (entityValueType == 'object') ? JSON.stringify(res.agentAssistDetails.entityValue) : sanitizeHTML(res.agentAssistDetails.userInput);
+                                            entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${entityValue}</div>`);
                                         } else {
                                             if (res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
                                                 let entityHtmls = `<div class="order-number-info">${entityDisplayName} : 
@@ -3587,85 +3622,87 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             }
 
                                         }
-
-                                        _msgsResponse.message.push(body);
+                                        if(body['cInfo']['body'] != "" && body['cInfo']['body']){
+                                            _msgsResponse.message.push(body);
+                                        }
                                     });
-                                    let msgStringify = JSON.stringify(_msgsResponse);
-                                    let newTemp = encodeURI(msgStringify);
-                                    if((res.agentAssistDetails?.isPrompt === true || res.agentAssistDetails?.isPrompt === false) && previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) {
-                                    let runInfoContent = $(`#dropDownData-${previousId}`);
-                                    let askToUserHtml = `
-                                        <div class="steps-run-data">
-                                                    <div class="icon_block">
-                                                        <i class="ast-agent"></i>
-                                                    </div>
-                                                    <div class="run-info-content" >
-                                                    <div class="title">Ask customer</div>
-                                                    <div class="agent-utt">
-                                                        <div class="title-data"><ul class="chat-container" id="displayData-${res._id}"></ul></div>
-                                                        <div class="action-links">
-                                                        <button class="send-run-btn" id="sendMsg" data-msg-id="${res._id}" data-msg-data="${newTemp}">Send</button>
-                                                        <div class="copy-btn hide" data-msg-id="${res._id}">
-                                                            <i class="ast-copy" data-msg-id="${res._id}"></i>
+                                    if(_msgsResponse.message.length > 0){
+                                        let msgStringify = JSON.stringify(_msgsResponse);
+                                        msgStringify = msgStringify.replaceAll("'", "&rsquo;")
+                                        let newTemp = encodeURI(msgStringify);
+                                        if((res.agentAssistDetails?.isPrompt === true || res.agentAssistDetails?.isPrompt === false) && (previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) || (previousTaskName != currentTaskName && previousTaskPositionId == currentTaskPositionId)) {
+                                        let runInfoContent = $(`#dropDownData-${previousId}`);
+                                        let askToUserHtml = `
+                                            <div class="steps-run-data">
+                                                        <div class="icon_block">
+                                                            <i class="ast-agent"></i>
                                                         </div>
-                                                    </div>
-                                                    </div>
-                                                    </div>
-                                                </div>
-                                        `;
-                                    let tellToUserHtml = `
-                                        <div class="steps-run-data">
-                                                    <div class="icon_block">
-                                                        <i class="ast-agent"></i>
-                                                    </div>
-                                                    <div class="run-info-content" >
-                                                    <div class="title">Tell Customer</div>
-                                                    <div class="agent-utt">
-                                                        <div class="title-data" ><ul class="chat-container" id="displayData-${res._id}"></ul></div>
-                                                        <div class="action-links">
+                                                        <div class="run-info-content" >
+                                                        <div class="title">Ask customer</div>
+                                                        <div class="agent-utt">
+                                                            <div class="title-data"><ul class="chat-container" id="displayData-${res._id}"></ul></div>
+                                                            <div class="action-links">
                                                             <button class="send-run-btn" id="sendMsg" data-msg-id="${res._id}" data-msg-data="${newTemp}">Send</button>
                                                             <div class="copy-btn hide" data-msg-id="${res._id}">
                                                                 <i class="ast-copy" data-msg-id="${res._id}"></i>
                                                             </div>
                                                         </div>
+                                                        </div>
+                                                        </div>
                                                     </div>
+                                            `;
+                                        let tellToUserHtml = `
+                                            <div class="steps-run-data">
+                                                        <div class="icon_block">
+                                                            <i class="ast-agent"></i>
+                                                        </div>
+                                                        <div class="run-info-content" >
+                                                        <div class="title">Tell Customer</div>
+                                                        <div class="agent-utt">
+                                                            <div class="title-data" ><ul class="chat-container" id="displayData-${res._id}"></ul></div>
+                                                            <div class="action-links">
+                                                                <button class="send-run-btn" id="sendMsg" data-msg-id="${res._id}" data-msg-data="${newTemp}">Send</button>
+                                                                <div class="copy-btn hide" data-msg-id="${res._id}">
+                                                                    <i class="ast-copy" data-msg-id="${res._id}"></i>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                        `;
-                                        var appStateStr = localStorage.getItem('agentAssistState') || '{}';
-                                        var appState = JSON.parse(appStateStr);  
-                                        if(appState[_conversationId]['automationGoingOnAfterRefresh']) {
-                                            isAutomationOnGoing = true;
-                                            dropdownHeaderUuids = previousId;
-                                            appState[_conversationId]['automationGoingOnAfterRefresh'] = isAutomationOnGoing;
-                                            localStorage.setItem('agentAssistState', JSON.stringify(appState))
+                                            `;
+                                            var appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                                            var appState = JSON.parse(appStateStr);  
+                                            if(appState[_conversationId]['automationGoingOnAfterRefresh']) {
+                                                isAutomationOnGoing = true;
+                                                dropdownHeaderUuids = previousId;
+                                                appState[_conversationId]['automationGoingOnAfterRefresh'] = isAutomationOnGoing;
+                                                localStorage.setItem('agentAssistState', JSON.stringify(appState))
+                                            }
+                                        if (res.agentAssistDetails.isPrompt || res.agentAssistDetails.entityRequest) {
+                                            if(appState[_conversationId]['automationGoingOnAfterRefresh']) {
+                                                $(`#overRideBtn-${previousId}`).removeClass('hide');
+                                                $(`#cancelOverRideBtn-${previousId}`).addClass('hide');
+                                                $("#inputFieldForAgent").remove();
+                                                $(`#terminateAgentDialog`).removeClass('hide');
+                                                $('#dynamicBlock .override-input-div').addClass('hide');
+                                                $(`#overRideDiv-${previousId}`).removeClass('hide');
+                                                $(`#overRideBtn-${previousId}`).attr('data-position-id', previousTaskPositionId);
+                                                $(`#terminateAgentDialog`).attr('data-position-id', previousTaskPositionId);
+                                                dialogPositionId = previousTaskPositionId;
+                                            }
+                                            runInfoContent.append(askToUserHtml);
+                                            if(!proactiveMode){
+                                                getOverRideMode('overRideBtn-' + dropdownHeaderUuids, dialogPositionId, true);
+                                                $(`.override-input-div`).addClass('hide');
+                                            }
+                                        } else {
+                                            runInfoContent.append(tellToUserHtml);
                                         }
-                                    if (res.agentAssistDetails.isPrompt || res.agentAssistDetails.entityRequest) {
-                                        if(appState[_conversationId]['automationGoingOnAfterRefresh']) {
-                                            $(`#overRideBtn-${previousId}`).removeClass('hide');
-                                            $(`#cancelOverRideBtn-${previousId}`).addClass('hide');
-                                            $("#inputFieldForAgent").remove();
-                                            $(`#terminateAgentDialog`).removeClass('hide');
-                                            $('#dynamicBlock .override-input-div').addClass('hide');
-                                            $(`#overRideDiv-${previousId}`).removeClass('hide');
-                                            $(`#overRideBtn-${previousId}`).attr('data-position-id', previousTaskPositionId);
-                                            $(`#terminateAgentDialog`).attr('data-position-id', previousTaskPositionId);
-                                            dialogPositionId = previousTaskPositionId;
+                                        hideSendOrCopyButtons(parsedPayload, runInfoContent)
+                                       
                                         }
-                                        runInfoContent.append(askToUserHtml);
-                                        if(!proactiveMode){
-                                            getOverRideMode('overRideBtn-' + dropdownHeaderUuids, dialogPositionId, true);
-					                        $(`.override-input-div`).addClass('hide');
-                                        }
-                                    } else {
-                                        runInfoContent.append(tellToUserHtml);
+                                        AgentChatInitialize.renderMessage(_msgsResponse, res._id, `dropDownData-${previousId}`);
                                     }
-                                    hideSendOrCopyButtons(parsedPayload, runInfoContent)
-                                   
-                                 }
-                              
-                                
-                                    AgentChatInitialize.renderMessage(_msgsResponse, res._id, `dropDownData-${previousId}`);
                                     let shouldProcessResponse = false;
                                     var appStateStr = localStorage.getItem('agentAssistState') || '{}';
                                     var appState = JSON.parse(appStateStr);
@@ -3965,7 +4002,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             }
                                         }   
                                     }
-                                    if (res.agentAssistDetails?.entityName && res.agentAssistDetails?.entityResponse && res.agentAssistDetails?.entityValue) {
+                                    if (res.agentAssistDetails?.entityName && res.agentAssistDetails?.entityResponse && res.agentAssistDetails?.entityValue && res.agentAssistDetails.userInput) {
+                                       
                                         let runInfoContent = $(`#dropDownData-${previousId}`);
                                         let userQueryHtml = `
                                                 <div class="steps-run-data">
@@ -3975,7 +4013,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                     <div class="run-info-content" id="userInput-${res._id}">
                                                         <div class="title">Customer Said - </div>
                                                         <div class="agent-utt">
-                                                            <div class="title-data">"${sanitizeHTML(res.agentAssistDetails.entityValue)}"</div>
+                                                            <div class="title-data">"${sanitizeHTML(res.agentAssistDetails.userInput)}"</div>
                                                         </div>
                                                         
                                                     </div>
@@ -3984,7 +4022,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         let entityHtml = $(`#dropDownData-${previousId}`).find(`#userInput-${res._id}`);
                                         let entityDisplayName = myBotDataResponse.newEntityDisplayName ? myBotDataResponse.newEntityDisplayName : myBotDataResponse.newEntityName;
                                         if (res.agentAssistDetails.entityValue && !res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
-                                            entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${sanitizeHTML(res.agentAssistDetails.entityValue)}</div>`);
+                                            let entityValueType = typeof res.agentAssistDetails.entityValue;
+                                            let entityValue = (entityValueType == 'object') ? JSON.stringify(res.agentAssistDetails.entityValue) : sanitizeHTML(res.agentAssistDetails.userInput);
+                                            entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${entityValue}</div>`);
                                         } else {
                                             if (res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
                                                 let entityHtmls = `<div class="order-number-info">${entityDisplayName} : 
@@ -4057,6 +4097,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         _msgsResponse.message.push(body);
                                     });
                                     let msgStringify = JSON.stringify(_msgsResponse);
+                                    msgStringify = msgStringify.replaceAll("'", "&rsquo;")
                                     let newTemp = encodeURI(msgStringify);
                                     if((res.agentAssistDetails?.isPrompt === true || res.agentAssistDetails?.isPrompt === false)  && previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) {
                                     let runInfoContent = $(`#dropDownData-${previousId}`);
@@ -4625,7 +4666,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
 
                 function UnCollapseDropdownForLastElement(lastElement){
-                    if(lastElement.className.includes('steps-run-data')){
+                    if(lastElement && lastElement.className.includes('steps-run-data')){
                         let lastElementId = getUUIDFromId(lastElement.id);
                         lastElementId = lastElementId.split("*")[0];
                         let collapseElement = document.getElementById('dropDownData-' + lastElementId);

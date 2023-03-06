@@ -23,6 +23,8 @@ module.exports = function (grunt) {
             '../libs/anonymousassertion.js',
             '../kore-bot-sdk-client.js',
             '../libs/perfect-scrollbar.js',
+            './custom/adaptivecards.js',
+            './custom/kore-adaptive-cards-plugin.js',
             'chatWindow.js',
             'libs/jquery.daterangepicker.js',
             'libs/jquery-clockpicker.js',
@@ -54,7 +56,8 @@ module.exports = function (grunt) {
             '../libs/emojione.sprites.css',
             '../libs/purejscarousel.css',
             '../libs/prefect-scrollbar.css',
-            './custom/customTemplate.css'
+            './custom/customTemplate.css',
+            './custom/adaptivecards.css'
         ];
         fontFiles = [
             'Inter-Bold.woff',

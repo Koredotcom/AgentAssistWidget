@@ -13,7 +13,21 @@
 	 */
 	customTemplate.prototype.renderMessage = function (msgData) {
 		var messageHtml = '';
-		if (msgData.message[0] && msgData.message[0].component && msgData.message[0].component.payload && msgData.message[0].component.payload.template_type == "dropdown_template") {
+		console.log('ms teams data: ', msgData);
+		if( window.krAdaptiveCards && window.krAdaptiveCards.AdaptiveCard && msgData.message[0] && msgData.message[0].cInfo && msgData.message[0].cInfo.body && msgData.message[0].cInfo.body.attachments && msgData.message[0].cInfo.body.attachments[0].content && msgData.message[0].cInfo.body.attachments[0].content === "AdaptiveCard"){
+			var _adaptiveCard =  new window.krAdaptiveCards.AdaptiveCard();
+			_adaptiveCard.parse(msgData.message[0].cInfo.body.attachments[0].content);
+			messageHtml = _adaptiveCard.render();
+			try {
+				_adaptiveCard.onExecuteAction = function(action) {
+					if (action._propertyBag && action._propertyBag.type === "Action.OpenUrl") {
+						window.open(action._propertyBag.url, "_blank");
+					}
+				};
+			} catch (error) {
+				
+			}
+		} else if (msgData.message[0] && msgData.message[0].component && msgData.message[0].component.payload && msgData.message[0].component.payload.template_type == "dropdown_template") {
 			messageHtml = $(this.getChatTemplate("dropdown_template")).tmpl({
 				'msgData': msgData,
 				'helpers': this.helpers,
