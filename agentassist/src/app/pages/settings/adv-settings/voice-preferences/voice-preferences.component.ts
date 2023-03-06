@@ -166,7 +166,7 @@ export class VoicePreferencesComponent implements OnInit {
     this.selectedTTSLanguage = lang;
     this.voiceNames = this.selectedTTSLanguage.voicePreferences.map(o => { return { name: o } }) || [];
     this.previewText = this.selectedTTSLanguage.languagePreference === this.voicePreferences.languagePreference ? this.voiceWelcomeMessage : '';
-    
+
     this.resetDialectPreference();
   }
 
@@ -227,9 +227,8 @@ export class VoicePreferencesComponent implements OnInit {
     //   this.notificationService.notify(this.translate.instant('SELECT_VOICE_NAME'), 'warning');
     //   return;
     // }
-
     this.saveInProgress = true;
-    this.voicePreferences.languagePreference = this.selectedTTSLanguage.languagePreference;
+    this.voicePreferences.languagePreference = this.voicePreferences.asrPreference;
     this.voicePreferences.dialectPreference = this.selectedDialect;
     this.service.invoke('post.settings.voicePreferences', _params, this.voicePreferences)
       .pipe(finalize(() => this.saveInProgress = false))
