@@ -109,12 +109,14 @@ export class VoicePreferencesComponent implements OnInit {
 
   selectedSpeechPreferences(preference) {
     this.voicePreferences.asrPreference = preference.asrProvider;
+    console.log(this.voicePreferences)
     this.resetDialectPreference();
   }
 
   resetDialectPreference() {
     this.voicePreferences.dialectPreference = '';
     this.asrLanguages = this.asrPreferences.find(f => f.asrProvider === this.voicePreferences.asrPreference)?.languages || [];
+    console.log(this.voicePreferences)
     this.selectedASRLanguage = this.asrLanguages.find(f => f.languagePreference === (this.selectedTTSLanguage?.languagePreference || 'en'));
     this.dialects = this.selectedASRLanguage?.dialects.map(o => { return { name: o } }) || [];
     this.selectedDialect = this.dialects.find(f => f.name === this.voicePreferences.dialectPreference)?.name;
@@ -166,7 +168,7 @@ export class VoicePreferencesComponent implements OnInit {
     this.selectedTTSLanguage = lang;
     this.voiceNames = this.selectedTTSLanguage.voicePreferences.map(o => { return { name: o } }) || [];
     this.previewText = this.selectedTTSLanguage.languagePreference === this.voicePreferences.languagePreference ? this.voiceWelcomeMessage : '';
-    
+
     this.resetDialectPreference();
   }
 
@@ -227,9 +229,9 @@ export class VoicePreferencesComponent implements OnInit {
     //   this.notificationService.notify(this.translate.instant('SELECT_VOICE_NAME'), 'warning');
     //   return;
     // }
-
+    console.log(this.voicePreferences)
     this.saveInProgress = true;
-    this.voicePreferences.languagePreference = this.selectedTTSLanguage.languagePreference;
+    this.voicePreferences.languagePreference = this.voicePreferences.asrPreference;
     this.voicePreferences.dialectPreference = this.selectedDialect;
     this.service.invoke('post.settings.voicePreferences', _params, this.voicePreferences)
       .pipe(finalize(() => this.saveInProgress = false))
