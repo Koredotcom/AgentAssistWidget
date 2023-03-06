@@ -442,7 +442,9 @@ export class MybotComponent implements OnInit {
           let entityHtml = $(`#dropDownData-${previousId}`).find(`#userInput-${res._id}`);
           let entityDisplayName = '';
           if (res.agentAssistDetails.entityValue && !res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
-            entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${this.sanitizeHtmlPipe.transform(res.agentAssistDetails.entityValue)}</div>`);
+            let entityValueType = typeof res.agentAssistDetails.entityValue;
+            let entityValue = (entityValueType == 'object') ? JSON.stringify(res.agentAssistDetails.entityValue) : this.sanitizeHtmlPipe.transform(res.agentAssistDetails.userInput);
+            entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${entityValue}</div>`);
           } else {
             if (res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
               let entityHtmls = this.mybotDataService.mybotErrorTemplate(this.imageFilePath, this.imageFileNames, entityDisplayName);
