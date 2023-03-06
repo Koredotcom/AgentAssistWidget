@@ -1984,6 +1984,9 @@ border: 1px solid transparent !important;
     background: rgba(0, 0, 0, 0.16);
     transition: 0.3s all ease;
     display: none;
+    &.fixed-overlay{
+        position: fixed;
+    }
 }
 .overlay-suggestions.open-suggestions{
     bottom: 0;

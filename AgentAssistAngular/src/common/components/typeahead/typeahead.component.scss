@@ -1,12 +1,18 @@
 .overlay-box{
-    bottom:80%; display:block
+    bottom:46px; 
+    display:block
 }
 .overlay-box-libraray{
-    top:70px; display:block
+    top:88px; 
+    display:block;
+    .suggestion-content{
+      top: 0px;
+      bottom: auto;
+    }
 }
 .filter-list {
     list-style: none inside;
-    width: 30%;  
+    width: 100%;  
     text-align: left;
     padding: 0px;
   }

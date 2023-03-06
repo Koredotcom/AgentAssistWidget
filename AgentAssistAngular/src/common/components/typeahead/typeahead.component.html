@@ -2,7 +2,7 @@
     placeholder="Ask AgentAssist" (keyup.enter)="getSearchResults($event)" [(ngModel)]="searchText"
     (ngModelChange)="onSearch($event)" />
 
-<div class="overlay-suggestions" [ngClass]="isNotLibraryTab? 'overlay-box':'overlay-box-libraray'" id="overLayAutoSearchDiv" *ngIf="showOverlay">
+<div class="overlay-suggestions fixed-overlay" [ngClass]="isNotLibraryTab? 'overlay-box':'overlay-box-libraray'" id="overLayAutoSearchDiv" *ngIf="showOverlay">
     <div class="suggestion-content" id="overLayAutoSearch">
         <ul class="filter-list" *ngIf="isVisible && dataSet.length > 0" (mouseover)="cursorOverSet()">
             <li style="cursor: pointer;" *ngFor="let item of dataSet; index as i;" (click)="setValue(item)">
