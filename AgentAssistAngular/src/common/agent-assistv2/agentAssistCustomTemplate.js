@@ -5,7 +5,7 @@
 		this.helpers = null;
 		this.extension = null;
 	}
-	
+
 	/**
 	 * purpose: Function to render bot message for a given custom template
 	 * input  : Bot Message
@@ -13,7 +13,7 @@
 	 */
 	agentAssistCustomTemplate.prototype.renderMessage = function (msgData) {
 		var messageHtml = '';
-		if (msgData.message[0] && msgData.message[0].component && msgData.message[0].component.payload && msgData.message[0].component.payload.template_type == "dropdown_template") {
+    if (msgData.message[0] && msgData.message[0].component && msgData.message[0].component.payload && msgData.message[0].component.payload.template_type == "dropdown_template") {
 			messageHtml = $(this.getChatTemplate("dropdown_template")).tmpl({
 				'msgData': msgData,
 				'helpers': this.helpers,
@@ -180,7 +180,7 @@
 							modal.style.display = "none";
 							$(".largePreviewContent").removeClass("addheight");
 						}
-		
+
 					}
 				}
 			}, 350);
@@ -234,19 +234,19 @@
 			$(messageHtml).data(msgData);
 		}
 	   return messageHtml;
-	
+
 		return "";
 	}; // end of renderMessage method
-	
-	
+
+
 	/**
 	* purpose: Function to get custom template HTML
 	* input  : Template type
 	* output : Custom template HTML
 	*
 	*/
-	
-	
+
+
 	agentAssistCustomTemplate.prototype.getChatTemplate = function (tempType) {
 		/* Sample template structure for dropdown
 		var message =  {
@@ -279,11 +279,11 @@
 						"title": "Czech Koruna",
 						"value":"CZK"
 					}
-			   
-				], 
+
+				],
 			}
 		};
-		print(JSON.stringify(message)); 
+		print(JSON.stringify(message));
 		*/
 		var dropdownTemplate = '<script id="chat_message_tmpl" type="text/x-jqury-tmpl"> \
 			{{if msgData.message}} \
@@ -306,7 +306,7 @@
 				</li> \
 			{{/if}} \
 		</script>';
-	
+
 		/* Sample template structure for multi-select checkboxes
 			var message = {
 			"type": "template",
@@ -329,12 +329,12 @@
 			{
 			"title": "Done",
 			"type": "postback",
-			"payload": "payload" 
+			"payload": "payload"
 			}
-			] 
+			]
 			}
 			};
-			print(JSON.stringify(message)); 
+			print(JSON.stringify(message));
 		*/
 		var checkBoxesTemplate = '<script id="chat_message_tmpl" type="text/x-jqury-tmpl"> \
 			{{if msgData.message}} \
@@ -373,7 +373,7 @@
 				</li> \
 			{{/if}} \
 		</script>';
-	
+
 		/* Sample template structure for Like_dislike template
 			var message = {
 			"type": "template",
@@ -424,8 +424,8 @@
 	      }
 	}
 	print(JSON.stringify(message)); */
-	
-		
+
+
 var formTemplate='<script id="chat_message_tmpl" type="text/x-jqury-tmpl"> \
 {{if msgData.message}} \
 <li {{if msgData.type !== "bot_response"}} id="msg_${msgItem.clientMessageId}"{{/if}} class="{{if msgData.type === "bot_response"}}fromOtherUsers{{else}}fromCurrentUser{{/if}} with-icon"> \
@@ -460,7 +460,7 @@ var formTemplate='<script id="chat_message_tmpl" type="text/x-jqury-tmpl"> \
 {{/if}} \
 </script>';
 
-/* Sample template structure for Advanced Multi Select Checkbox 
+/* Sample template structure for Advanced Multi Select Checkbox
  var message = {
 "type": "template",
 "payload": {
@@ -641,7 +641,7 @@ print(JSON.stringify(message)); */
 		</li> \
 	{{/if}} \
    </scipt>';
-    /* Sample template structure for New List Template 
+    /* Sample template structure for New List Template
     	 var message={
 			"type": "template",
 			"payload": {
@@ -980,7 +980,7 @@ var message={
 							"size":"medium"
 						},
 						"type":"url",
-						"url":{ 
+						"url":{
 							"link":"https://www.marvel.com/movies/captain-marvel",
 							"title":"Captain Marvel",
 							"subtitle":"bskjfkejf",
@@ -1218,7 +1218,7 @@ var ratingTemplate='<script id="chat_message_tmpl" type="text/x-jqury-tmpl"> \
 {{/if}} \
 </script>';
 
-/* Sample template structure for List Widget Template 
+/* Sample template structure for List Widget Template
 	var message={
     	"type": "template",
     	"payload": {
@@ -1501,7 +1501,7 @@ var ratingTemplate='<script id="chat_message_tmpl" type="text/x-jqury-tmpl"> \
     	}
 }
 print(JSON.stringify(message)); */
-	
+
 	var listWidget = '<script id="chat-window-listTemplate" type="text/x-jqury-tmpl">\
 	{{if msgData.message}} \
 	<li {{if msgData.type !== "bot_response"}}id="msg_${msgItem.clientMessageId}"{{/if}} class="{{if msgData.type === "bot_response"}}fromOtherUsers{{else}}fromCurrentUser{{/if}} with-icon"> \
@@ -1758,7 +1758,7 @@ print(JSON.stringify(message)); */
 	</li>\
 	{{/if}} \
 	</script>';
-		/*custom table template 
+		/*custom table template
 		var elements = [
 			{id: "1", name: "Peter", designation: "Producer", salary: 1000},
 			 {id: "2", name: "Sam", designation: "Director", salary: 2000},
@@ -2644,8 +2644,8 @@ var advancedListTemplate = '<script id="chat_message_tmpl" type="text/x-jqury-tm
 		</div>\
 	</li>\
 		{{/if}}\
-	</scipt>'; 
-/* article Template json 
+	</scipt>';
+/* article Template json
 var message = {
     "type": "template",
     "payload": {
@@ -2867,7 +2867,7 @@ print(JSON.stringify(message)); */
     {{/if}} \
     </script>';
 
-	/* quick replies welcome template json 
+	/* quick replies welcome template json
 	var message = {
     "type": "template",
     "payload": {
@@ -3025,7 +3025,7 @@ print(JSON.stringify(message)); */
         </li>\
     {{/if}} \
     </script>';
-/* banking feedback template json 
+/* banking feedback template json
 var message= {
           "type": "template",
           "payload": {
@@ -3168,25 +3168,25 @@ var message= {
 			return customTableTemplate;
 		}else if(tempType === "advancedListTemplate"){
 			return advancedListTemplate;
-		} 
+		}
 		else if(tempType === "cardTemplate"){
 			return cardTemplate;
 		}
 		else if(tempType === "proposeTimes"){
 			return proposeTimesTemplate;
-		} 
+		}
 		else if(tempType === "proposeActionSheetTemplate"){
 			return proposeActionSheetTemplate;
 		}
 		else if(tempType === "default_card_template"){
 			return default_card_template;
-		} 
+		}
 		else if(tempType === "advancedMultiListTemplate"){
 			return advancedMultiListTemplate;
-		} 
+		}
 		else if(tempType === "articleTemplate"){
 			return articleTemplate;
-		} 
+		}
 		else if (tempType == "resetPinTemplate") {
             return resetPinTemplate;
         }
@@ -3197,7 +3197,7 @@ var message= {
             return otpValidationTemplate;
         } else if (tempType === "bankingFeedbackTemplate") {
             return bankingFeedbackTemplate;
-        } 
+        }
 		else {
 			return "";
 		}
@@ -3246,7 +3246,7 @@ var message= {
 			$ele.off('click', '.listViewLeftContent').on('click', '.listViewLeftContent', function (e) {
 			  e.stopPropagation();
 			  var actionObjString = $(e.currentTarget).attr('actionObj');
-	
+
 			  if (actionObjString) {
 				var actionObj = {};
 				actionObj = JSON.parse(actionObjString);
@@ -3259,16 +3259,16 @@ var message= {
 			});
 			$ele.off('click', '.tabs').on('click', '.tabs', function (e) {
 			  e.stopPropagation();
-	
+
 			  var _selectedTab = $(e.target).text();
-	
+
 			  var msgData = $(e.target).closest(".tab-list-template").data();
 			  var panelDetail = $(e.target).closest(".tab-list-template").attr('panelDetail');
-	
+
 			  if (panelDetail) {
 				panelDetail = JSON.parse(panelDetail);
 			  }
-	
+
 			  delete msgData.tmplItem;
 			  var tempObj = {
 				'tempdata': msgData,
@@ -3277,7 +3277,7 @@ var message= {
 				'viewmore': panelDetail.viewmore,
 				'panelDetail': panelDetail
 			  };
-	
+
 			  if (msgData && msgData.tabs && Object.keys(msgData.tabs) && Object.keys(msgData.tabs).length) {
 				tempObj = {
 				  'tempdata': msgData,
@@ -3288,7 +3288,7 @@ var message= {
 				  'panelDetail': panelDetail
 				};
 			  }
-	
+
 			  var viewTabValues = $(_self.getTemplate("TabbedList")).tmplProxy(tempObj);
 			  $(viewTabValues).find(".tabs[data-tabid='" + _selectedTab + "']").addClass("active");
 			  $(e.target).closest(".tab-list-template").html($(viewTabValues).html());
@@ -3303,7 +3303,7 @@ var message= {
 			});
 			$ele.off('click', '.wid-temp-showActions').on('click', '.wid-temp-showActions', function (e) {
 			  e.stopPropagation();
-	
+
 			  if ($(e.currentTarget) && $(e.currentTarget).closest(".listViewTmplContentChild") && $(e.currentTarget).closest(".listViewTmplContentChild").find(".wid-temp-showActions") && $(e.currentTarget).closest(".listViewTmplContentChild").find(".wid-temp-showActions").hasClass('active')) {
 				$(e.currentTarget).closest(".listViewTmplContentChild").find(".wid-temp-showActions").removeClass('active');
 				$(e.currentTarget).closest(".listViewTmplContentChild").find(".meetingActionButtons").addClass('hide'); // $(e.currentTarget).closest(".listViewTmplContentChild").find("#showMoreContents").removeClass('hide');
@@ -3315,7 +3315,7 @@ var message= {
 			$ele.off('click', '.action').on('click', '.action', function (e) {
 			  e.stopPropagation();
 			  var actionObjString = $(e.currentTarget).attr('actionObj');
-	
+
 			  if (actionObjString) {
 				var actionObj = {};
 				actionObj = JSON.parse(actionObjString);
@@ -3327,7 +3327,7 @@ var message= {
 			  // if(eData && eData.postbackValue && eData.payload){
 			  //   _self.triggerEvent('postback',eData);
 			  // }
-	            
+
 			   if(typeof actionObj=='object' && actionObj.link){
 				window.open(actionObj.link);
 			   }else {
@@ -3344,17 +3344,17 @@ var message= {
 			if ($(obj).next().hasClass('dropdown-contentWidgt')) {
 			  $(obj).next().toggleClass('show');
 			}
-	  
+
 			$('.dropdown-contentWidgt.show').not($(obj).next()).removeClass('show');
 		  })
 			window.onclick = function (event) {
 			  if (!event.target.matches('.dropbtnWidgt')) {
 				var dropdowns = document.getElementsByClassName("dropdown-contentWidgt");
 				var i;
-	  
+
 				for (i = 0; i < dropdowns.length; i++) {
 				  var openDropdown = dropdowns[i];
-	  
+
 				  if (openDropdown.classList.contains('show')) {
 					openDropdown.classList.remove('show');
 				  }
@@ -3374,7 +3374,7 @@ var message= {
 			var k = $.Event('keydown', { which: 13 });
 			k.keyCode = 13
 			$('.chatInputBox').trigger(k);
-	
+
 		});
 		/* Inline form submit click function starts here*/
 		$(messageHtml).find(".formMainComponent").on('keydown',function(e){
@@ -3391,7 +3391,7 @@ var message= {
 			messageData.tmplItem.data.msgData.message[0].component.payload.ignoreCheckMark=true;
 			var msgData=messageData.tmplItem.data.msgData;
 		}
-		
+
 		if(inputForm_id.find("#email").val()==""){
 			   $(parentElement).find(".buttonTmplContent").last().find(".errorMessage").removeClass("hide");
 			  $(".errorMessage").text("Please enter value");
@@ -3414,7 +3414,7 @@ var message= {
 		localStorage.setItem('innerTextValue', JSON.stringify(_innerText || selectedValue));
 		});
 		/* Inline form submit click function ends here*/
-		
+
 		/* Advanced multi select checkbox click functions starts here */
 		$(messageHtml).off('click', '.closeBottomSlider').on('click', '.closeBottomSlider', function (e) {
 			bottomSliderAction('hide');
@@ -3532,16 +3532,16 @@ var message= {
 					toShowText.push($(checkboxSelection[i]).attr('text'));
 				}
 				$('.chatInputBox').text('Here are the selected items ' + ': '+ selectedValue.toString());
-				
+
 				// chatInitialize.sendMessage($('.chatInputBox'),'Here are the selected items '+': '+ toShowText.toString());
 				localStorage.setItem('innerTextValue', JSON.stringify(_innerText || 'Here are the selected items '+': '+ toShowText.toString()));
 				$(messageHtml).find(".multiCheckboxBtn").hide();
 				$(messageHtml).find(".advancedMultiSelectScroll").css({"pointer-events":"none"});
 				$(messageHtml).find(".advancedMultiSelectScroll").css({"overflow":"hidden"});
-			
+
 		})
 		/* Advanced multi select checkbox click functions ends here */
-  
+
 		/* New List Template click functions starts here*/
 		$(messageHtml).off('click', '.listViewTmplContent .seeMoreList').on('click', '.listViewTmplContent .seeMoreList', function (e) {
 			if($(".list-template-sheet").length!==0){
@@ -3717,11 +3717,11 @@ var message= {
 				bottomSliderAction("hide");
 				msgData.message[0].component.payload.sliderView=true;
 		  });
-		
+
 		});
 		$(messageHtml).find(".buttonTmplContent .emojiComponent .close-btn,.buttonTmplContent .thumpsUpDownComponent .close-btn,.buttonTmplContent .numbersComponent .close-btn").click(function(e){
 			bottomSliderAction("hide");
-			
+
 			e.stopPropagation();
 		});
 
@@ -3739,8 +3739,8 @@ var message= {
 			var modal = document.getElementById('myPreviewModal');
             modal.style.display = "none";
 		});
-	
-	}; 
+
+	};
 	agentAssistCustomTemplate.prototype.suggestionComponent=function(){
             return '<div class="suggestionsMainComponent">\
 	<div class="suggestionsHeading">What can be improved?</div>\
@@ -3749,7 +3749,7 @@ var message= {
 	<div class="submitButton"><button type="button" class="submitBtn">Submit</button></div>\
 	</div>'
 		}
-	   
+
 		this.bottomSliderAction = function(action, appendElement){
 		$(".kore-action-sheet").animate({ height: 'toggle' });
 		if(action=='hide'){
@@ -3761,7 +3761,7 @@ var message= {
 		setTimeout(function(){
 		$(".kore-action-sheet .actionSheetContainer").append(appendElement);
 		},200);
-		
+
 		}
 		}
 		/* Action sheet Template functions starts here*/
@@ -3783,7 +3783,7 @@ var message= {
 			this.bottomSliderAction('show',$(".list-template-sheet"));
 			$(".kore-action-sheet .list-template-sheet .displayMonth .tabs").on('click', function (e) {
 				var _selectedTab = $(e.target).text();
-	
+
 				var viewTabValues = $(agentAssistCustomTemplate.prototype.getChatTemplate("actionSheetTemplate")).tmpl({
 					'msgData': msgData,
 					'dataItems': msgData.message[0].component.payload.moreData[_selectedTab],
@@ -3839,10 +3839,10 @@ var message= {
 			 $(".listViewTmplContentBox").css({"pointer-events":"none"});
 			 }
 			}
-			
+
 		}
 		/* Action sheet Template functions ends here*/
-	
+
 	/* advanced List template actions start here */
 	agentAssistCustomTemplate.prototype.advancedListTemplateEvents = function (ele, msgData) {
 		if (this.chatInitialize) {
@@ -4217,7 +4217,7 @@ var message= {
 							try {
 								msgData = JSON.parse($(this).attr('msgData'));
 							} catch (err) {
-		
+
 							}
 							if (msgData && msgData.message && msgData.message[0].component && (msgData.message[0].component.formData || (msgData.message[0].component.payload && msgData.message[0].component.payload.formData))) {
 								if (msgData.message[0].component.formData) {
@@ -4919,7 +4919,7 @@ var message= {
 							try {
 								msgData = JSON.parse($(this).attr('msgData'));
 							} catch (err) {
-		
+
 							}
 							if (msgData && msgData.message && msgData.message[0].component && (msgData.message[0].component.formData || (msgData.message[0].component.payload && msgData.message[0].component.payload.formData))) {
 								if (msgData.message[0].component.formData) {
@@ -4954,7 +4954,7 @@ var message= {
 							}
 						}
 					}
-		
+
 				});
 				$ele.off('click', '.advanced-multi-list-wrapper .main-title-text-block .search-block .search_icon').on('click', '.advanced-multi-list-wrapper .main-title-text-block .search-block .search_icon', function (e) {
 					var obj = this;
@@ -5024,7 +5024,7 @@ var message= {
 								}
 							}).appendTo($(obj).parent().parent().parent());
 						}
-			
+
 					} else if ($(obj).attr('type') == "desc") {
 						$(obj).attr('type', 'asc');
 						if (seeMoreDiv && seeMoreDiv.length) {
@@ -5044,7 +5044,7 @@ var message= {
 								}
 							}).appendTo($(obj).parent().parent().parent());
 						}
-			
+
 					}
 				});
 				$ele.off('click', '.advanced-multi-list-wrapper .see-more-data').on("click", '.advanced-multi-list-wrapper .see-more-data', function (e) {
@@ -5194,7 +5194,7 @@ var message= {
 									try {
 										msgData = JSON.parse($(this).attr('msgData'));
 									} catch (err) {
-				
+
 									}
 									if (msgData && msgData.message && msgData.message[0].component && (msgData.message[0].component.formData || (msgData.message[0].component.payload && msgData.message[0].component.payload.formData))) {
 										if (msgData.message[0].component.formData) {
@@ -5227,7 +5227,7 @@ var message= {
 						$(obj).find(".more-button-info").toggle(300);
 					}
 				});
-			
+
 				$ele.off('click', '.advanced-multi-list-wrapper .multiple-accor-rows .inner-acc-table-sec .table-sec .column-table-more').on("click", '.advanced-multi-list-wrapper .multiple-accor-rows .inner-acc-table-sec .table-sec .column-table-more', function (e) {
 					var modal = document.getElementById('myPreviewModal');
 					$(".largePreviewContent").empty();
@@ -5246,16 +5246,16 @@ var message= {
 						listItem: parsedActionObj
 					}));
 					bindModalPreviewEvents();
-			
-			
-			
+
+
+
 					function bindModalPreviewEvents() {
 						if ($(".largePreviewContent")) {
 							$(".largePreviewContent").find('.multiple-accor-rows').css({ 'border-bottom': '0' });
 							$(".largePreviewContent").find('.accor-inner-content').css({ display: 'block' });
 						}
 					}
-			
+
 					function buildPreviewModalTemplate(listItem) {
 						var modalPreview = '<script id="chat_message_tmpl" type="text/x-jqury-tmpl"> \
 						<div class="advanced-multi-list-wrapper img-with-title with-accordion if-multiple-accordions-list">\
@@ -5294,7 +5294,7 @@ var message= {
 						return modalPreview;
 					}
 				});
-			
+
 				$ele.off('click', '.advanced-multi-list-wrapper .button_,.advanced-multi-list-wrapper .inner-btns-acc .button_,.advanced-multi-list-wrapper .tags-data .tag-name,.advanced-multi-list-wrapper .btn_group .submitBtn,.advanced-multi-list-wrapper .btn_group .cancelBtn,.advanced-multi-list-wrapper .details-content .text-info,.advancelisttemplate .inner-btns-acc .button_,.advancelisttemplate .filter-icon .button_').on("click", '.advanced-multi-list-wrapper .button_,.advanced-multi-list-wrapper .inner-btns-acc .button_,.advanced-multi-list-wrapper .tags-data .tag-name,.advanced-multi-list-wrapper .btn_group .submitBtn,.advanced-multi-list-wrapper .btn_group .cancelBtn,.advanced-multi-list-wrapper .details-content .text-info,.advancelisttemplate .inner-btns-acc .button_,.advancelisttemplate .filter-icon .button_', function (e) {
 					e.preventDefault();
 					e.stopPropagation();
@@ -5321,7 +5321,7 @@ var message= {
 							try {
 								msgData = JSON.parse($(this).attr('msgData'));
 							} catch (err) {
-			
+
 							}
 							if (msgData && msgData.message && msgData.message[0].component && (msgData.message[0].component.formData || (msgData.message[0].component.payload && msgData.message[0].component.payload.formData))) {
 								if (msgData.message[0].component.formData) {
@@ -5820,9 +5820,9 @@ var message= {
 			}
 		});
 	};
-	/* bankingFeedbackTemplateEvents ends here */	
+	/* bankingFeedbackTemplateEvents ends here */
 
-	    window.agentAssistCustomTemplate=agentAssistCustomTemplate;	
+	    window.agentAssistCustomTemplate=agentAssistCustomTemplate;
 
 	return {
 		bottomSliderAction:bottomSliderAction,

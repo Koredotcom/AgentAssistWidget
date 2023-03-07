@@ -42,7 +42,8 @@
               "src/assets/css/chatWindow.css",
               "src/assets/css/emojione.sprites.css",
               "src/assets/css/purejscarousel.css",
-              "src/assets/css/customTemplate.css"
+              "src/assets/css/customTemplate.css",
+              "src/assets/css/adaptivecards.css"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
@@ -52,6 +53,8 @@
               "src/common/agent-assistv2/emoji.js",
               "src/common/agent-assistv2/d3.v4.min.js",
               "src/common/agent-assistv2/purejscarousel.js",
+              "src/common/agent-assistv2/adaptivecards.js",
+              "src/common/agent-assistv2/kore-adaptive-cards-plugin.js",
               "src/common/agent-assistv2/agentAssistChatWindow.js",
               "src/common/agent-assistv2/agentAssistCustomTemplate.js",
               "src/common/agent-assistv2/KoreGraphAdapter.js",
