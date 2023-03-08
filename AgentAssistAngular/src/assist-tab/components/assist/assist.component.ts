@@ -1404,7 +1404,7 @@ export class AssistComponent implements OnInit {
           let faqHtml = `
                 <div class="type-info-run-send" id="faqDiv-${uniqueID + index}">
                     <div class="left-content" id="faqSection-${uniqueID + index}">
-                        <div class="title-text" id="title-${uniqueID + index}">${ele.question}</div>
+                        <div class="title-text" id="title-${uniqueID + index}" title="${ele.displayName ? ele.displayName : ele.question}">${ ele.displayName ? ele.displayName : ele.question}</div>
                         
                         
                     </div>
@@ -1492,7 +1492,7 @@ export class AssistComponent implements OnInit {
           let faqHtml = `
                 <div class="type-info-run-send" id="faqDiv-${uniqueID + index}">
                     <div class="left-content" id="faqSection-${uniqueID + index}">
-                        <div class="title-text" id="title-${uniqueID + index}">${ele.question}</div>
+                        <div class="title-text" id="title-${uniqueID + index}" title="${ele.displayName ? ele.displayName : ele.question}">${ ele.displayName ? ele.displayName : ele.question}</div>
                     </div>
                 </div>`;
           faqsSuggestions.innerHTML += faqHtml;
