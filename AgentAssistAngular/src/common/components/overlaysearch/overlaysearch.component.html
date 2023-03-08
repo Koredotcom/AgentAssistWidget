@@ -72,8 +72,8 @@
                     <div class="type-with-img-title">FAQ ({{searchResponse.faqs?.length}})</div>
                     <div class="type-info-run-send is-dropdown-show-default is-dropdown-open" [id]="'faqDivLib-' + i" *ngFor="let faq of searchResponse.faqs | slice : 0 : faqViewCount; let i = index">
                         <div class="left-content" [id]="'faqSectionLib-' + i">
-                            <div class="title-text" [title]="faq.question" [id]="'titleLib-' + i"
-                                >{{faq.question}}
+                            <div class="title-text" [title]="faq.displayName? faq.displayName:faq.question" [id]="'titleLib-' + i"
+                                >{{faq.displayName ? faq.displayName : faq.question}}
                                 <i class="ast-carrotup" [id]="'checkLib-' + i" *ngIf="!faq.answerRender && !faq.toggle" (click)="getFaqAnswerAndtoggle(faq)"></i>
                                 <i class="ast-carrotup rotate-carrot" [id]="'checkLib-' + i" *ngIf="!faq.answerRender && faq.toggle" (click)="getFaqAnswerAndtoggle(faq)"></i>
                             </div>

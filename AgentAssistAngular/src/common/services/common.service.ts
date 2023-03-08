@@ -580,6 +580,7 @@ export class CommonService {
     for (let faq of faqArray) {
       let faqObject = {
         question: faq.question,
+        displayName: faq.displayName,
         answer: faq.answer || false,
         showMoreButton: false,
         showLessButton: false,
