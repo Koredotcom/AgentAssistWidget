@@ -1197,6 +1197,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 automationSuggestions.append(dialogAreaHtml);
     
                                 // faqs body
+                                // data.suggestions.faqs = [
+                                //     {question : "How does COVID -19 spread?", answer : ["Covid spreads through tiny virus particles that get inside the body. The most common way for covid to enter the body is by being breathed in from infected air. This can happen when people stand close togethe When a person breaths out, it’s not just air that leaves their nose or mouth. Tiny water droplets are also breathed out, and these can be infected with viruses like colds or covid. These water droplets can be breathed in by other people, or if they land on a surface that someone touches later, that person could catch coronavirus."]},
+                                //     {question : "Reset Password" , answer : ['to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click off', 'to change password on reset reset to reset password click on reset to reset password click on reset to reset password click on reset to reset password click on reset', 'to reset password click on reset', 'to change password click on reset']}
+                                // ]
                                 data.suggestions.faqs?.forEach((ele, index) => {
                                     let body = {};
                                     body['type'] = 'text';
@@ -1228,7 +1232,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                    
                                     let faqs = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${uuids+index}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${uuids+index}`);
                                     let positionID = "dg-"+koreGenerateUUID();
-                                    if (!ele.answer) {
+                                    if (!ele.answer || ele.answer.length <= 0) {
                                         let checkHtml = `
                                 <i class="ast-carrotup" data-conv-id="${data.conversationId}"
                                 data-bot-id="${botId}" data-intent-name="${ele.question}"
@@ -1240,21 +1244,44 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     } else {
                                         let a = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display #faqDivLib-${uuids+index}`) : $(`#overLaySearch #faqDivLib-${uuids+index}`);
                                         let faqActionHtml = `<div class="action-links">
-                                <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids+index}"  data-msg-data="${ele.answer}" data-position-id="${positionID}">Send</button>
-                                <div class="copy-btn" data-msg-id="${uuids+index}" data-msg-data="${ele.answer}" data-position-id="${positionID}">
-                                    <i class="ast-copy" data-msg-id="${uuids+index}" data-msg-data="${ele.answer}" data-position-id="${positionID}"></i>
+                                <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids+index}"  data-msg-data="${ele.answer[0]}" data-position-id="${positionID}">Send</button>
+                                <div class="copy-btn" data-msg-id="${uuids+index}" data-msg-data="${ele.answer[0]}" data-position-id="${positionID}">
+                                    <i class="ast-copy" data-msg-id="${uuids+index}" data-msg-data="${ele.answer[0]}" data-position-id="${positionID}"></i>
                                 </div>
                             </div>`;
                                         a.append(faqActionHtml);
-                                        faqs.append(`<div class="desc-text" id="descLib-${uuids+index}">${ele.answer}</div>`);
+                                        faqs.append(`<div class="desc-text" id="descLib-${uuids+index}">${ele.answer[0]}</div>`);
+
+                                        if(ele.answer && ele.answer.length > 1){
+                                            let seeMoreWrapper = `<div class="see-more-wrapper-info hide" id="seeMoreWrapper-${uuids+index}"></div>`;
+                                            faqs.append(seeMoreWrapper);
+                                            let faqIndex = 0;
+                                            for(let ans of ele.answer){
+                                                $(`#seeMoreWrapper-${uuids+index}`).append(`<div class="individual-data-text">
+                                                    <div class="desc-text-individual" id="desc-faq-lib-${uuids+index+faqIndex.toString()}">${ans}</div>
+                                                    <div class="seemore-link-text hide" id="seeMore-${uuids+index+faqIndex.toString()}" data-see-more="true" data-actual-id="${uuids+index}">See More</div>
+                                                    <div class="seemore-link-text hide" id="seeLess-${uuids+index+faqIndex.toString()}" data-see-less="true" data-actual-id="${uuids+index}">See Less</div>
+                                                    <div class="actions-send-copy">
+                                                        <div class="send-icon" data-msg-id="${uuids+index+faqIndex.toString()}"  data-msg-data="${ans}" data-position-id="${positionID}">
+                                                            <i class="ast-Send" data-msg-id="${uuids+index+faqIndex.toString()}"  data-msg-data="${ans}" data-position-id="${positionID}"></i>
+                                                        </div>
+                                                        <div class="copy-icon" data-msg-id="${uuids+index+faqIndex.toString()}" data-msg-data="${ans}" data-position-id="${positionID}">
+                                                            <i class="ast-copy" data-msg-id="${uuids+index+faqIndex.toString()}" data-msg-data="${ans}" data-position-id="${positionID}"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>`);
+                                                faqIndex++;
+                                            }
+                                        }
+
                                         let faqstypeInfo = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${uuids + index}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${uuids + index}`);
                                         let seeMoreButtonHtml = `
-                                      <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${uuids + index}" data-see-more="true">Show more</button>
-                                      <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${uuids + index}" data-see-less="true">Show less</button>                  
+                                      <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${uuids + index}" data-see-more="true" data-msg-answer="${ele.answer?.length > 1 ? ele.answer : null}">Show more</button>
+                                      <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${uuids + index}" data-see-less="true" data-msg-answer="${ele.answer?.length > 1 ? ele.answer : null}">Show less</button>                  
                                       `;
                                         faqstypeInfo.append(seeMoreButtonHtml);
                                         setTimeout(() => {
-                                            updateSeeMoreButtonForAgent(uuids + index);
+                                            updateSeeMoreButtonForAgent(uuids + index, 'faq', false, ele.answer);
                                         }, waitingTimeForSeeMoreButton);
                                     }                   
                                     // _msgsResponse.message.push(body);
@@ -1388,18 +1415,46 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         if (data.type === 'text' && data.suggestions) {
                             isSuggestionProcessed = false
                             let faqAnswerIdsPlace;
+                            data.suggestions.faqs = [
+                                {question : "Reset Password" , answer : ['to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click off', 'to change password on reset reset to reset password click on reset to reset password click on reset to reset password click on reset to reset password click on reset', 'to reset password click on reset', 'to change password click on reset']}
+                            ]
                             data.suggestions.faqs.forEach((ele) => {
                                 faqAnswerIdsPlace = answerPlaceableIDs.find(ele => ele.input == data.value);
                                 let splitedanswerPlaceableID = faqAnswerIdsPlace.id.split('-');
                                 splitedanswerPlaceableID.shift();
-                                
+                                let faqDiv = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display #faqDivLib-${splitedanswerPlaceableID.join('-')}`) : $(`#overLaySearch #faqDivLib-${splitedanswerPlaceableID.join('-')}`);
+                                let faqSection = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display #faqDivLib-${splitedanswerPlaceableID.join('-')} #faqSectionLib-${splitedanswerPlaceableID.join('-')}`) : $(`#overLaySearch #faqDivLib-${splitedanswerPlaceableID.join('-')} #faqSectionLib-${splitedanswerPlaceableID.join('-')}`);
+                               
+
+                                if(ele.answer && ele.answer.length > 1){
+                                    let seeMoreWrapper = `<div class="see-more-wrapper-info hide" id="seeMoreWrapper-${splitedanswerPlaceableID.join('-')}"></div>`;
+                                    faqSection.append(seeMoreWrapper);
+                                    let faqIndex = 0;
+                                    for(let ans of ele.answer){
+                                        $(`#seeMoreWrapper-${splitedanswerPlaceableID.join('-')}`).append(`<div class="individual-data-text">
+                                            <div class="desc-text-individual" id="desc-faq-lib-${splitedanswerPlaceableID.join('-')+faqIndex.toString()}">${ans}</div>
+                                            <div class="seemore-link-text hide" id="seeMore-${splitedanswerPlaceableID.join('-')+faqIndex.toString()}" data-see-more="true" data-actual-id="${splitedanswerPlaceableID.join('-')}">See More</div>
+                                            <div class="seemore-link-text hide" id="seeLess-${splitedanswerPlaceableID.join('-')+faqIndex.toString()}" data-see-less="true" data-actual-id="${splitedanswerPlaceableID.join('-')}">See Less</div>
+                                            <div class="actions-send-copy">
+                                                <div class="send-icon" data-msg-id="${splitedanswerPlaceableID.join('-')+faqIndex.toString()}"  data-msg-data="${ans}">
+                                                    <i class="ast-Send" data-msg-id="${splitedanswerPlaceableID.join('-')+faqIndex.toString()}"  data-msg-data="${ans}"></i>
+                                                </div>
+                                                <div class="copy-icon" data-msg-id="${splitedanswerPlaceableID.join('-')+faqIndex.toString()}" data-msg-data="${ans}">
+                                                    <i class="ast-copy" data-msg-id="${splitedanswerPlaceableID.join('-')+faqIndex.toString()}" data-msg-data="${ans}"></i>
+                                                </div>
+                                            </div>
+                                        </div>`);
+                                        faqIndex++;
+                                    }
+                                }
+
                                 if(currentTabActive == 'searchAutoIcon'){
 
-                                    let faqDiv = $(`#search-text-display #faqDivLib-${splitedanswerPlaceableID.join('-')}`);
+                                   
                                     let faqaction = `<div class="action-links">
-                                        <button class="send-run-btn" id="sendMsg" data-msg-id="${splitedanswerPlaceableID.join('-')}"  data-msg-data="${ele.answer}">Send</button>
-                                        <div class="copy-btn" data-msg-id="${splitedanswerPlaceableID.join('-')}" data-msg-data="${ele.answer}">
-                                            <i class="ast-copy" data-msg-id="${splitedanswerPlaceableID.join('-')}" data-msg-data="${ele.answer}"></i>
+                                        <button class="send-run-btn" id="sendMsg" data-msg-id="${splitedanswerPlaceableID.join('-')}"  data-msg-data="${ele.answer[0]}">Send</button>
+                                        <div class="copy-btn" data-msg-id="${splitedanswerPlaceableID.join('-')}" data-msg-data="${ele.answer[0]}">
+                                            <i class="ast-copy" data-msg-id="${splitedanswerPlaceableID.join('-')}" data-msg-data="${ele.answer[0]}"></i>
                                         </div>
                                     </div>`;
                                     faqDiv.append(faqaction);
@@ -1409,11 +1464,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     // let faqAnswerCopyMsg =  $(`#search-text-display #faqDivLib-${splitedanswerPlaceableID.join('-')}`).find(".copy-btn");
                                     // $(faqAnswerCopyMsg).attr('data-msg-data',ele.answer)
                                 }else{
-                                        let faqDiv = $(`#overLaySearch #faqDivLib-${splitedanswerPlaceableID.join('-')}`);
+                                       
                                         let faqaction = `<div class="action-links">
-                                            <button class="send-run-btn" id="sendMsg" data-msg-id="${splitedanswerPlaceableID.join('-')}"  data-msg-data="${ele.answer}">Send</button>
-                                            <div class="copy-btn" data-msg-id="${splitedanswerPlaceableID.join('-')}" data-msg-data="${ele.answer}">
-                                                <i class="ast-copy" data-msg-id="${splitedanswerPlaceableID.join('-')}" data-msg-data="${ele.answer}"></i>
+                                            <button class="send-run-btn" id="sendMsg" data-msg-id="${splitedanswerPlaceableID.join('-')}"  data-msg-data="${ele.answer[0]}">Send</button>
+                                            <div class="copy-btn" data-msg-id="${splitedanswerPlaceableID.join('-')}" data-msg-data="${ele.answer[0]}">
+                                                <i class="ast-copy" data-msg-id="${splitedanswerPlaceableID.join('-')}" data-msg-data="${ele.answer[0]}"></i>
                                             </div>
                                         </div>`;
                                         faqDiv.append(faqaction);
@@ -1428,8 +1483,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 $(`${currentTabActive == 'searchAutoIcon' ? `#search-text-display #${faqAnswerIdsPlace.id}` : `#overLaySearch #${faqAnswerIdsPlace.id}`}`).attr('data-answer-render', 'true');
                                 let faqs = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${splitedanswerPlaceableID.join('-')}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${splitedanswerPlaceableID.join('-')}`);
                                 let seeMoreButtonHtml = `
-                        <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${splitedanswerPlaceableID.join('-')}" data-see-more="true">Show more</button>
-                        <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${splitedanswerPlaceableID.join('-')}" data-see-less="true">Show less</button>
+                        <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${splitedanswerPlaceableID.join('-')}" data-see-more="true"  data-msg-answer="${ele.answer?.length > 1 ? ele.answer : null}">Show more</button>
+                        <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${splitedanswerPlaceableID.join('-')}" data-see-less="true"  data-msg-answer="${ele.answer?.length > 1 ? ele.answer : null}">Show less</button>
                         `;
                                 faqs.append(seeMoreButtonHtml);
                                 setTimeout(() => {                                 
@@ -1814,7 +1869,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     RemoveVerticalLineForLastResponse();
                 }
 
-                function updateSeeMoreButtonForAgent(id,article, snippet= false){
+                function updateSeeMoreButtonForAgent(id,article, snippet= false, answer=[]){
                     let faqSourceTypePixel = 5;
                     let titleElement = $("#titleLib-" + id);
                     let descElement = $("#descLib-" + id);
@@ -1843,11 +1898,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         viewLinkElement = $('#articleViewLinkLib-' + id);
                         console.log(seeMoreElement, "see more element");
                     }
-                    if(titleElement && descElement && sectionElement && divElement){
+                    if(article === "faq" && answer.length > 1){
+                        $(seeMoreElement).removeClass('hide');
+                        $(seeLessElement).addClass('hide');
+                    }else if(titleElement && descElement && sectionElement && divElement){
                         $(titleElement).css({"overflow": "inherit", "white-space": "normal", "text-overflow" : "unset"});
                         $(descElement).css({"overflow": "inherit", "text-overflow" : "unset", "display" : "block", "white-space": "normal"});
                         let faqSectionHeight = $(sectionElement).css("height");
-			  let divSectionHeight = $(descElement).css("height")  || '0px';;
+			            let divSectionHeight = $(descElement).css("height")  || '0px';;
                         faqSectionHeight = parseInt(faqSectionHeight?.slice(0,faqSectionHeight.length-2));
                         divSectionHeight = parseInt(divSectionHeight?.slice(0,divSectionHeight.length-2));
                         let faqMinHeight = $(divElement).css("min-height");
@@ -1874,8 +1932,36 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 }
                             }
                         
+                        }
                         $(titleElement).css({"overflow": "hidden", "white-space": "nowrap", "text-overflow" : "ellipsis"});
                         $(descElement).css({"overflow": "hidden", "text-overflow" : "ellipsis", "display": "-webkit-box"});
+                }
+
+                function updateSeeMoreButtonForFAQAgent(actualId, answerArray){
+                    let index = 0;
+                    console.log(answerArray, "answer array");
+                    for(let ans of answerArray){
+                        let id = actualId+index;
+                        console.log(id, "id inside update see more button");
+                        let faqSourceTypePixel = 5;
+                        let descElement = document.getElementById("desc-faq-lib-" + id) ? $("#desc-faq-lib-" + id) : $("#desc-faq-" + id);
+                        let seeMoreElement = $('#seeMore-' + id);
+                        let seeLessElement = $('#seeLess-' + id);
+                        $(descElement).css({"display" : "block"});
+                        if(descElement){
+                            let divSectionHeight = $(descElement).css("height")  || '0px';
+                            divSectionHeight = parseInt(divSectionHeight?.slice(0,divSectionHeight.length-2));
+                            console.log(divSectionHeight, "div section height");
+                            if(divSectionHeight > (24 + faqSourceTypePixel)){
+                                console.log('#seemore-faq-lib-' + id, "seemore element");
+                                $(seeMoreElement).removeClass('hide');
+                                $(seeLessElement).addClass('hide');
+                            }else{
+                                $(seeMoreElement).addClass('hide');
+                            }
+                            $(descElement).css({"display" : "-webkit-box"});
+                        }
+                        index++;
                     }
                 }
 
@@ -1900,7 +1986,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     });
                 }
 
-                function updateSeeMoreButtonForAssist(id, article, snippet=false){
+                function updateSeeMoreButtonForAssist(id, article, snippet=false, answer=[]){
                     // let faqSourceTypePixel = ((sourceType === 'smartassist-color-scheme') ? 5 : 2) ;
                     let faqSourceTypePixel = 5;
                     let titleElement = $("#title-" + id);
@@ -1928,7 +2014,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         seeLessElement = $('#articleseeLess-' + id);
                         console.log(seeMoreElement, 'see more element');
                     }
-                    if(titleElement && descElement && sectionElement && divElement){
+                    if(article === "faq" && answer.length > 1){
+                        $(seeMoreElement).removeClass('hide');
+                        $(seeLessElement).addClass('hide');
+                    }else if(titleElement && descElement && sectionElement && divElement){
                         $(titleElement).css({"overflow": "inherit", "white-space": "normal", "text-overflow" : "unset"});
                         $(descElement).css({"overflow": "inherit", "text-overflow" : "unset", "display" : "block"});
                         let faqSectionHeight = $(sectionElement).css("height");
@@ -2177,6 +2266,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 }
     
                                 if (data.suggestions.faqs?.length > 0) {
+                                    data.suggestions.faqs = [
+                                        {question : "How does COVID -19 spread?", answer : ["Covid spreads through tiny virus particles that get inside the body. The most common way for covid to enter the body is by being breathed in from infected air. This can happen when people stand close togethe When a person breaths out, it’s not just air that leaves their nose or mouth. Tiny water droplets are also breathed out, and these can be infected with viruses like colds or covid. These water droplets can be breathed in by other people, or if they land on a surface that someone touches later, that person could catch coronavirus."]},
+                                        {question : "Reset Password" , answer : ['to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click off', 'to change password on reset reset to reset password click on reset to reset password click on reset to reset password click on reset to reset password click on reset', 'to reset password click on reset', 'to change password click on reset']}
+                                    ]
                                     let automationSuggestions = document.getElementById(`automationSuggestions-${responseId}`);
                                     let dialogAreaHtml = `<div class="task-type" id="faqssArea">
                     <div class="img-block-info">
@@ -2389,7 +2482,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     faqsSuggestions.innerHTML += faqHtml;
                                     let faqs = $(`.type-info-run-send #faqSection-${uuids+index}`);
                                     let positionID = 'dg-'+koreGenerateUUID();
-                                    if (!ele.answer) {
+                                    if (!ele.answer || ele.answer.length <= 0) {
                                         let checkHtml = `
                             <i class="ast-carrotup" data-conv-id="${data.conversationId}"
                             data-bot-id="${botId}" data-intent-name="${ele.question}"
@@ -2401,22 +2494,45 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     } else {
                                         let a = $(`#faqDiv-${uuids+index}`);
                                         let faqActionHtml = `<div class="action-links">
-                            <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids+index}" data-msg-data="${ele.answer}" data-position-id="${positionID}">Send</button>
-                            <div class="copy-btn" data-msg-id="${uuids+index}" data-msg-data="${ele.answer}" data-position-id="${positionID}">
-                                <i class="ast-copy" data-msg-id="${uuids+index}" data-msg-data="${ele.answer}" data-position-id="${positionID}"></i>
+                            <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids+index}" data-msg-data="${ele.answer[0]}" data-position-id="${positionID}">Send</button>
+                            <div class="copy-btn" data-msg-id="${uuids+index}" data-msg-data="${ele.answer[0]}" data-position-id="${positionID}">
+                                <i class="ast-copy" data-msg-id="${uuids+index}" data-msg-data="${ele.answer[0]}" data-position-id="${positionID}"></i>
                             </div>
                         </div>`;
                                         a.append(faqActionHtml);
-                                        faqs.append(`<div class="desc-text" id="desc-${uuids+index}">${ele.answer}</div>`);
+                                        faqs.append(`<div class="desc-text" id="desc-${uuids+index}">${ele.answer[0]}</div>`);
+
+                                        if(ele.answer && ele.answer.length > 1){
+                                            let seeMoreWrapper = `<div class="see-more-wrapper-info hide" id="seeMoreWrapper-${uuids+index}"></div>`;
+                                            faqs.append(seeMoreWrapper);
+                                            let faqIndex = 0;
+                                            for(let ans of ele.answer){
+                                                $(`#seeMoreWrapper-${uuids+index}`).append(`<div class="individual-data-text">
+                                                    <div class="desc-text-individual" id="desc-faq-${uuids+index+faqIndex.toString()}">${ans}</div>
+                                                    <div class="seemore-link-text hide" id="seeMore-${uuids+index+faqIndex.toString()}" data-see-more="true" data-actual-id="${uuids+index}">See More</div>
+                                                    <div class="seemore-link-text hide" id="seeLess-${uuids+index+faqIndex.toString()}" data-see-less="true" data-actual-id="${uuids+index}">See Less</div>
+                                                    <div class="actions-send-copy">
+                                                        <div class="send-icon" data-msg-id="${uuids+index+faqIndex.toString()}"  data-msg-data="${ans}" data-position-id="${positionID}">
+                                                            <i class="ast-Send" data-msg-id="${uuids+index+faqIndex.toString()}"  data-msg-data="${ans}" data-position-id="${positionID}"></i>
+                                                        </div>
+                                                        <div class="copy-icon" data-msg-id="${uuids+index+faqIndex.toString()}" data-msg-data="${ans}" data-position-id="${positionID}">
+                                                            <i class="ast-copy" data-msg-id="${uuids+index+faqIndex.toString()}" data-msg-data="${ans}" data-position-id="${positionID}"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>`);
+                                                faqIndex++;
+                                            }
+                                        }
+
                                          
                                         let faqstypeInfo = $(`.type-info-run-send #faqSection-${uuids + index}`);
                                         let seeMoreButtonHtml = `
-                                    <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${uuids + index}" data-see-more="true">Show more</button>
-                                    <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${uuids + index}" data-see-less="true">Show less</button>
+                                    <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${uuids + index}" data-see-more="true"  data-msg-answer="${ele.answer?.length > 1 ? ele.answer : null}">Show more</button>
+                                    <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${uuids + index}" data-see-less="true"  data-msg-answer="${ele.answer?.length > 1 ? ele.answer : null}">Show less</button>
                                     `;
                                         faqstypeInfo.append(seeMoreButtonHtml);
                                         setTimeout(() => {
-                                            updateSeeMoreButtonForAssist(uuids + index);
+                                            updateSeeMoreButtonForAssist(uuids + index, 'faq', false, ele.answer);
                                         }, waitingTimeForSeeMoreButton);
                                     }
                                
@@ -2436,6 +2552,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     } else {
                         if (data.type === 'text' && data.suggestions) {
                             let faqAnswerIdsPlace ;
+                            data.suggestions.faqs = [
+                                {question : "Reset Password" , answer : ['to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click off', 'to change password on reset reset to reset password click on reset to reset password click on reset to reset password click on reset to reset password click on reset', 'to reset password click on reset', 'to change password click on reset']}
+                            ]
                             data.suggestions.faqs.forEach((ele) => {
                                 faqAnswerIdsPlace = answerPlaceableIDs.find(ele => ele.input == data.value);
                                 if(faqAnswerIdsPlace){
@@ -2443,10 +2562,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     splitedanswerPlaceableID.shift();
      
                                     let faqDiv = $(`#dynamicBlock #faqDiv-${splitedanswerPlaceableID.join('-')}`);
+                                    let faqSection = $(`#dynamicBlock #faqSection-${splitedanswerPlaceableID.join('-')}`);
                                     let faqaction = `<div class="action-links">
-                                        <button class="send-run-btn" id="sendMsg" data-msg-id="${splitedanswerPlaceableID.join('-')}"  data-msg-data="${ele.answer}">Send</button>
-                                        <div class="copy-btn" data-msg-id="${splitedanswerPlaceableID.join('-')}" data-msg-data="${ele.answer}">
-                                        <i class="ast-copy" data-msg-id="${splitedanswerPlaceableID.join('-')}" data-msg-data="${ele.answer}"></i>
+                                        <button class="send-run-btn" id="sendMsg" data-msg-id="${splitedanswerPlaceableID.join('-')}"  data-msg-data="${ele.answer[0]}">Send</button>
+                                        <div class="copy-btn" data-msg-id="${splitedanswerPlaceableID.join('-')}" data-msg-data="${ele.answer[0]}">
+                                        <i class="ast-copy" data-msg-id="${splitedanswerPlaceableID.join('-')}" data-msg-data="${ele.answer[0]}"></i>
                                         </div>
                                         </div>`;
                                      
@@ -2457,17 +2577,40 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                  //    let faqAnswerCopyMsg =  $(`#dynamicBlock #faqDiv-${splitedanswerPlaceableID.join('-')}`).find(".copy-btn");
                                  //    $(faqAnswerCopyMsg).attr('data-msg-data',ele.answer)
      
-                                     $(`#${faqAnswerIdsPlace.id}`).html(ele.answer);
+                                     $(`#${faqAnswerIdsPlace.id}`).html(ele.answer[0]);
                                      $(`#${faqAnswerIdsPlace.id}`).attr('data-answer-render', 'true');
                                      let faqs = $(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')}`);
-                                     let seeMoreButtonHtml = `
-                             <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${splitedanswerPlaceableID.join('-')}" data-see-more="true">Show more</button>
-                             <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${splitedanswerPlaceableID.join('-')}" data-see-less="true">Show less</button>
-                             `;
-                                     faqs.append(seeMoreButtonHtml);
+                                   
+
+                                     if(ele.answer && ele.answer.length > 1){
+                                        let seeMoreWrapper = `<div class="see-more-wrapper-info hide" id="seeMoreWrapper-${splitedanswerPlaceableID.join('-')}"></div>`;
+                                        faqSection.append(seeMoreWrapper);
+                                        let faqIndex = 0;
+                                        for(let ans of ele.answer){
+                                            $(`#seeMoreWrapper-${splitedanswerPlaceableID.join('-')}`).append(`<div class="individual-data-text">
+                                                <div class="desc-text-individual" id="desc-faq-${splitedanswerPlaceableID.join('-')+faqIndex.toString()}">${ans}</div>
+                                                <div class="seemore-link-text hide" id="seeMore-${splitedanswerPlaceableID.join('-')+faqIndex.toString()}" data-see-more="true" data-actual-id="${splitedanswerPlaceableID.join('-')}">See More</div>
+                                                <div class="seemore-link-text hide" id="seeLess-${splitedanswerPlaceableID.join('-')+faqIndex.toString()}" data-see-less="true" data-actual-id="${splitedanswerPlaceableID.join('-')}">See Less</div>
+                                                <div class="actions-send-copy">
+                                                    <div class="send-icon" data-msg-id="${splitedanswerPlaceableID.join('-')+faqIndex.toString()}"  data-msg-data="${ans}">
+                                                        <i class="ast-Send" data-msg-id="${splitedanswerPlaceableID.join('-')+faqIndex.toString()}"  data-msg-data="${ans}"></i>
+                                                    </div>
+                                                    <div class="copy-icon" data-msg-id="${splitedanswerPlaceableID.join('-')+faqIndex.toString()}" data-msg-data="${ans}">
+                                                        <i class="ast-copy" data-msg-id="${splitedanswerPlaceableID.join('-')+faqIndex.toString()}" data-msg-data="${ans}"></i>
+                                                    </div>
+                                                </div>
+                                            </div>`);
+                                            faqIndex++;
+                                        }
+                                    }
+                                    let seeMoreButtonHtml = `
+                                    <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${splitedanswerPlaceableID.join('-')}" data-see-more="true" data-msg-answer="${ele.answer?.length > 1 ? ele.answer : null}">Show more</button>
+                                    <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${splitedanswerPlaceableID.join('-')}" data-see-less="true" data-msg-answer="${ele.answer?.length > 1 ? ele.answer : null}">Show less</button>
+                                    `;
+                                            faqs.append(seeMoreButtonHtml);
                                      console.log("updat see more button for assist");
                                      setTimeout(() => {
-                                         updateSeeMoreButtonForAssist(splitedanswerPlaceableID.join('-'));
+                                        updateSeeMoreButtonForAssist(splitedanswerPlaceableID.join('-'), 'faq', false, ele.answer);
                                      }, waitingTimeForSeeMoreButton);
                                 }
                                 // $(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')} .ast-carrotup.rotate-carrot`).length>0?$(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')} #seeMore-${splitedanswerPlaceableID.join('-')}`).removeClass('hide'):$(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')} #seeMore-${splitedanswerPlaceableID.join('-')}`).removeClass('hide');
@@ -3175,6 +3318,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
 
                 async function renderingHistoryMessage (result) {
+                    console.log(_conversationId, "conversation");
+                    _conversationId = encodeURIComponent(_conversationId);
                     let url = `${connectionDetails.envinormentUrl}/agentassist/api/v1/agent-feedback/${_conversationId}?interaction=assist`;
                     let feedBackResult = await renderHistoryFeedBack(url);
                     // document.getElementById("loader").style.display = "block";
@@ -4962,7 +5107,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         //     }
                         // }
 
-                        if (target.id === 'sendMsg') {
+                        if (target.id === 'sendMsg' || target.className === 'ast-Send' || target.className == 'send-icon') {
                             let payload = target.dataset.msgData;
                             var message = {
                                 method: 'send',
@@ -4990,7 +5135,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         //     }, "*")
                         //     highLightAndStoreFaqId(evt);
                         // } else 
-                        if ((target.className == 'copy-btn' || target.className == 'ast-copy')) {
+                        if ((target.className == 'copy-btn' || target.className == 'ast-copy') || target.className == 'copy-icon') {
                             let ele = document.getElementById(`displayData-${target.dataset.msgId}`) ? document.getElementById(`displayData-${target.dataset.msgId}`) : document.getElementById(target.dataset.msgId);
                             let data = target.dataset.msgData && target.dataset.msgData !== '' ? target.dataset.msgData : (target.parentNode.dataset.msgData && target.parentNode.dataset.msgData !== '' ? target.parentNode.dataset.msgData : ele.innerText)
                             var message = {
@@ -5331,42 +5476,90 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         }
                         
                         if (seeMoreButton) {
-                            console.log("see more button", target);
+
+                            let answer = (target.dataset?.msgAnswer && target.dataset?.msgAnswer != 'null' )? target.dataset.msgAnswer.split(",") : null;
+                            console.log(answer, "answer");
                             let targets = target.id.split('-');
                             targets.shift();
+                            let parentId = target.dataset.actualId ? target.dataset.actualId : targets.join('-');
+
+                            let faqDiv = (currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ?
+                            $(`.type-info-run-send#faqDiv-${parentId}`) :
+                            (currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send#faqDivLib-${parentId}`) : $(`#overLaySearch .type-info-run-send#faqDivLib-${parentId}`));
+
                             let faqs = (currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ?
-                                $(`.type-info-run-send #faqSection-${targets.join('-')}`) :
-                                (currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${targets.join('-')}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${targets.join('-')}`));
+                                $(`.type-info-run-send #faqSection-${parentId}`) :
+                                (currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${parentId}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${parentId}`));
                             faqs.find(`#seeLess-${targets.join('-')}`).each((i, ele) => {
                                 if ($(ele).attr('id').includes(`seeLess-${targets.join('-')}`)) {
-                                    ele.classList.remove('hide')
+                                    ele.classList.remove('hide');
+                                    if(answer && answer.length > 0){
+                                        ele.classList.add('show-less-btn');
+                                    }
                                 }
                             })
                             evt.target.classList.add('hide')
-                            faqs.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#title-${targets.join('-')}` :
-                                `#titleLib-${targets.join('-')}`}`).attr('style', `overflow: inherit; white-space: normal; text-overflow: unset;`);
-                            faqs.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#desc-${targets.join('-')}` : `#descLib-${targets.join('-')}`}`).attr('style', `overflow: inherit; text-overflow: unset; display:block;`);
+                            faqs.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#title-${parentId}` :
+                                `#titleLib-${parentId}`}`).attr('style', `overflow: inherit; white-space: normal; text-overflow: unset;`);
+                            if(answer && answer.length > 0){
+                                console.log("inside answer");
+                                $(`#seeMoreWrapper-${parentId}`).removeClass('hide')
+                                faqs.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#desc-${targets.join('-')}` : `#descLib-${targets.join('-')}`}`).addClass('hide');
+                                faqDiv.find(`#sendMsg, .copy-btn`).each((i, ele) => {
+                                    console.log(ele, "send msgelement");
+                                    ele.classList.add('hide')
+                                });
+                                setTimeout(() => {
+                                    updateSeeMoreButtonForFAQAgent(targets.join('-'), answer);
+                                }, 100);
+                            }else if(target.dataset.actualId){
+                                console.log("see more button", target);
+                                faqs.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#desc-faq-${targets.join('-')}` : `#desc-faq-lib-${targets.join('-')}`}`).attr('style', `display :block;`);
+                            }else{
+                                faqs.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#desc-${targets.join('-')}` : `#descLib-${targets.join('-')}`}`).attr('style', `overflow: inherit; text-overflow: unset; display:block;`);
+                            }
+
                         }
                         if (seeLessButton) {
+                            let answer = (target.dataset?.msgAnswer && target.dataset?.msgAnswer != 'null' )? target.dataset.msgAnswer.split(",") : null;
                             let targets = target.id.split('-');
                             targets.shift();
-                            let faqs = (currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? $(`.type-info-run-send #faqSection-${targets.join('-')}`) :
-                                (currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${targets.join('-')}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${targets.join('-')}`));
+                            let parentId = target.dataset.actualId ? target.dataset.actualId : targets.join('-');
+                            
+                            let faqDiv = (currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ?
+                            $(`.type-info-run-send#faqDiv-${parentId}`) :
+                            (currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send#faqDivLib-${parentId}`) : $(`#overLaySearch .type-info-run-send#faqDivLib-${parentId}`));
+
+                            let faqs = (currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? $(`.type-info-run-send #faqSection-${parentId}`) :
+                                (currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${parentId}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${parentId}`));
 
                             faqs.find(`#seeMore-${targets.join('-')}`).each((i, ele) => {
                                 if ($(ele).attr('id').includes(`seeMore-${targets.join('-')}`)) {
                                     ele.classList.remove('hide')
                                 }
-                            })
-                            faqs.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#title-${targets.join('-')}` : `#titleLib-${targets.join('-')}`}`).attr('style', `overflow: hidden;
+                            });
+
+                            if(answer && answer.length > 0){
+                                $(`#seeMoreWrapper-${parentId}`).addClass('hide');
+                               faqs.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#desc-${targets.join('-')}` : `#descLib-${targets.join('-')}`}`).removeClass('hide');
+                               faqDiv.find(`#sendMsg, .copy-btn`).each((i, ele) => {
+                                console.log(ele, "send msgelement");
+                                ele.classList.remove('hide')
+                            });
+                            }else if(target.dataset.actualId){
+                                faqs.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#desc-faq-${targets.join('-')}` : `#desc-faq-lib-${targets.join('-')}`}`).attr('style', 
+                                `display : -webkit-box`);
+                            }else{
+                                faqs.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#desc-${targets.join('-')}` : `#descLib-${targets.join('-')}`}`).attr('style', `overflow: hidden;
+                                text-overflow: ellipsis;
+                                display : -webkit-box`);
+                            }
+                            faqs.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#title-${parentId}` : `#titleLib-${parentId}`}`).attr('style', `overflow: hidden;
                 white-space: nowrap;
                 text-overflow: ellipsis;`);
-                            faqs.find(`${(currentTabActive == 'userAutoIcon' && $('#agentSearch').val() == '') ? `#desc-${targets.join('-')}` : `#descLib-${targets.join('-')}`}`).attr('style', `overflow: hidden;
-                
-                text-overflow: ellipsis;
-                display : -webkit-box`);
                             evt.target.classList.add('hide')
                         }
+
                         let targetIds = (target.id).split('-');
                         if (['feedbackup', 'feedbackdown'].includes(targetIds[0])) {
 
@@ -5856,6 +6049,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 $(`#dynamicBlock #faqDiv-${id.join('-')}`).addClass('is-dropdown-open');
                                 $(`#dynamicBlock #faqDiv-${id.join('-')} .action-links`).removeClass('hide');
                                 $(`#dynamicBlock #desc-${id.join('-')}`).removeClass('hide');
+                                $(`#dynamicBlock #faqDiv-${id.join('-')}`).find(`#sendMsg, .copy-btn`).each((i, ele) => {
+                                    ele.classList.remove('hide')
+                                });
                                 setTimeout(() => {                                
                                     updateSeeMoreButtonForAssist(id.join('-'));
                                 }, waitingTimeForSeeMoreButton);
@@ -5866,6 +6062,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 $(`#dynamicBlock #faqDiv-${id.join('-')} .action-links`).addClass('hide');
                                 $(`#dynamicBlock #faqDiv-${id.join('-')}`).removeClass('is-dropdown-open');
                                 $(`#dynamicBlock #desc-${id.join('-')}`).addClass('hide');
+                                $(`#dynamicBlock #seeMoreWrapper-${id.join('-')}`).addClass('hide');
                                 $(`#dynamicBlock #seeMore-${id.join('-')}`).addClass('hide');
                                 $(`#dynamicBlock #seeLess-${id.join('-')}`).addClass('hide');
                             }
@@ -5919,6 +6116,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     $(`#search-text-display #${target.id}`).addClass('rotate-carrot');
                                     $(`#search-text-display #faqDivLib-${id.join('-')} .action-links`).removeClass('hide');
                                     $(`#search-text-display #descLib-${id.join('-')}`).removeClass('hide');
+
+                                    $(`#search-text-display #faqDivLib-${id.join('-')}`).find(`#sendMsg, .copy-btn`).each((i, ele) => {
+                                        ele.classList.remove('hide')
+                                    });
                                     // $(`#search-text-display #seeMore-${id.join('-')}`).removeClass('hide');
                                     // $(`#search-text-display #seeLess-${id.join('-')}`).addClass('hide');
                                     setTimeout(() => {
@@ -5930,6 +6131,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     $(`#search-text-display #${target.id}`).removeClass('rotate-carrot');
                                     $(`#search-text-display #faqDivLib-${id.join('-')} .action-links`).addClass('hide');
                                     $(`#search-text-display #descLib-${id.join('-')}`).addClass('hide');
+                                    $(`#search-text-display #seeMoreWrapper-${id.join('-')}`).addClass('hide');
                                     $(`#search-text-display #seeMore-${id.join('-')}`).addClass('hide');
                                     $(`#search-text-display #seeLess-${id.join('-')}`).addClass('hide');
                                     $(`#search-text-display #faqDivLib-${id.join('-')}`).removeClass('is-dropdown-open');
@@ -5939,6 +6141,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     $(`#overLaySearch #${target.id}`).addClass('rotate-carrot');
                                     $(`#overLaySearch #faqDivLib-${id.join('-')} .action-links`).removeClass('hide');
                                     $(`#overLaySearch #descLib-${id.join('-')}`).removeClass('hide');
+                                    $(`#overLaySearch #faqDivLib-${id.join('-')}`).find(`#sendMsg, .copy-btn`).each((i, ele) => {
+                                        ele.classList.remove('hide')
+                                    });
                                     // $(`#overLaySearch #seeMore-${id.join('-')}`).removeClass('hide');
                                     // $(`#overLaySearch #seeLess-${id.join('-')}`).addClass('hide');
                                     setTimeout(() => {                                  
@@ -5949,6 +6154,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     $(`#overLaySearch #${target.id}`).removeClass('rotate-carrot');
                                     $(`#overLaySearch #faqDivLib-${id.join('-')} .action-links`).addClass('hide');
                                     $(`#overLaySearch #descLib-${id.join('-')}`).addClass('hide');
+                                    $(`#overLaySearch #seeMoreWrapper-${id.join('-')}`).addClass('hide');
                                     $(`#overLaySearch #seeMore-${id.join('-')}`).addClass('hide');
                                     $(`#overLaySearch #seeLess-${id.join('-')}`).addClass('hide');
                                     $(`#overLaySearch #faqDivLib-${id.join('-')}`).removeClass('is-dropdown-open');

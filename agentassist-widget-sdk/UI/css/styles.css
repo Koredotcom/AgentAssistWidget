@@ -1896,7 +1896,9 @@ border: 1px solid transparent !important;
     transition: 0.2s all ease-in;
     background: transparent;
 }
-
+.show-less-btn{
+    color: #F59E0B !important;
+}
 .agent-assist-chat-container .show-back-recommendation-block{
     text-align: left;
     padding: 12px 8px;
@@ -3581,4 +3583,90 @@ input.no-autofill-bkg:-webkit-autofill {
 }
 .tt-open{
     display: none !important;
+}
+
+
+
+
+
+.see-more-wrapper-info .individual-data-text {
+    padding: 5px;
+    /* margin: 4px 0; */
+    /* display: flex;
+    align-items: center; */
+    flex-wrap: wrap;
+    position: relative;
+    /* min-height: 28px; */
+    transition: 0.2s all ease;
+}
+.see-more-wrapper-info .individual-data-text:hover {
+    background: #F8FAFC;
+}
+.see-more-wrapper-info .individual-data-text:hover .actions-send-copy {
+    background: #F8FAFC;
+    display: flex;
+}
+.see-more-wrapper-info .individual-data-text .desc-text-individual {
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 12px;
+    color: var(--secondary-color-3);
+    font-style: italic;
+    margin-top: 0;
+    overflow: hidden;
+    white-space: normal;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    text-align: justify;
+    word-break: break-word;
+    display: -webkit-box;
+}
+.see-more-wrapper-info .individual-data-text .seemore-link-text {
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 15px;
+    color: var(--theme-color);
+    border: 0;
+    outline: 0;
+    height: auto;
+    cursor: pointer;
+    transition: .2s all ease-in;
+    margin-top: 4px;
+}
+.see-more-wrapper-info .individual-data-text .actions-send-copy {
+    position: absolute;
+    display: none;
+    align-items: center;
+    justify-content: flex-end;
+    right: 5px;
+    top: 5px;
+}
+.see-more-wrapper-info .individual-data-text .actions-send-copy .send-icon {
+    background: #EAF1FC;
+    box-shadow: 4px 4px 10px rgba(0,0,0,0.05);
+    border-radius: 4px;
+    width: 28px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: #2B75E4;
+    margin: 0 2px;
+    cursor: pointer;
+}
+.see-more-wrapper-info .individual-data-text .actions-send-copy .copy-icon {
+    background: #F5F5F5;
+    box-shadow: 4px 4px 10px rgba(0,0,0,0.05);
+    border-radius: 4px;
+    width: 28px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: #202124;
+    margin: 0 2px;
+    cursor: pointer;
 }
