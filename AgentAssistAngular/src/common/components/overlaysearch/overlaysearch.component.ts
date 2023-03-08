@@ -209,7 +209,7 @@ export class OverlaysearchComponent implements OnInit {
       }, 1000);
       this.checkFaqAnswerNotRenderCountAndRequest()
     } else if (response && response.suggestions && this.answerPlaceableIDs.length > 0) {
-      let faqAnswerIdsPlace = this.answerPlaceableIDs.find(ele => ele.input == response.value);
+      let faqAnswerIdsPlace = this.answerPlaceableIDs.find(ele => ele.input == response.suggestions?.faqs[0].question);
       if (faqAnswerIdsPlace) {
         let accumulator = response.suggestions.faqs.reduce((acc, faq) => {
           if (faq.question == faqAnswerIdsPlace.input) {

@@ -693,7 +693,7 @@ export class AssistComponent implements OnInit {
       if (data.type === 'text' && data.suggestions) {
         let faqAnswerIdsPlace;
         data.suggestions.faqs.forEach((ele) => {
-          faqAnswerIdsPlace = this.answerPlaceableIDs.find(ele => ele.input == data.value);
+          faqAnswerIdsPlace = this.answerPlaceableIDs.find(ele => ele.input == data.suggestions?.faqs[0].question);
           if (faqAnswerIdsPlace) {
             let splitedanswerPlaceableID = faqAnswerIdsPlace.id.split('-');
             splitedanswerPlaceableID.shift();

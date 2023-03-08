@@ -292,7 +292,7 @@ export class AssistService {
     let template = `
     <div class="type-info-run-send" id="faqDiv-${uuids + index}">
         <div class="left-content" id="faqSection-${uuids + index}">
-            <div class="title-text" id="title-${uuids + index}" title="${ele.question}">${ele.question}</div>
+            <div class="title-text" id="title-${uuids + index}" title="${ele.displayName ? ele.displayName : ele.question}">${ele.displayName?ele.displayName:ele.question}</div>
             
             
         </div>
