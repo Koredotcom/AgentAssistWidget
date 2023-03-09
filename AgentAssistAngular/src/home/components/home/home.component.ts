@@ -503,15 +503,19 @@ setProactiveMode(){
   btnInit() {
     document.addEventListener("click", (evt: any) => {
       let target: any = evt.target;
-      if (target.id === 'sendMsg') {
+      if (target.id === 'sendMsg' || target.className === 'ast-Send' || target.className == 'send-icon') {
         let ele = document.getElementById(`displayData-${target.dataset.msgId}`) ? document.getElementById(`displayData-${target.dataset.msgId}`) : document.getElementById(target.dataset.msgId);
         let data = target.dataset.msgData && target.dataset.msgData !== '' ? target.dataset.msgData : (target.parentNode.dataset.msgData && target.parentNode.dataset.msgData !== '' ? target.parentNode.dataset.msgData : ele.innerText);
-        this.commonService.preparePostMessageForSendAndCopy(evt, data, IdReferenceConst.SENDMSG, this.connectionDetails);
+        if(data && data != 'Send'){
+          this.commonService.preparePostMessageForSendAndCopy(evt, data, IdReferenceConst.SENDMSG, this.connectionDetails);
+        }
       }
-      if ((target.className == 'copy-btn' || target.className == 'ast-copy')) {
+      if ((target.className == 'copy-btn' || target.className == 'ast-copy' || target.className == 'copy-icon')) {
         let ele = document.getElementById(`displayData-${target.dataset.msgId}`) ? document.getElementById(`displayData-${target.dataset.msgId}`) : document.getElementById(target.dataset.msgId);
         let data = target.dataset.msgData && target.dataset.msgData !== '' ? target.dataset.msgData : (target.parentNode.dataset.msgData && target.parentNode.dataset.msgData !== '' ? target.parentNode.dataset.msgData : ele.innerText);
-        this.commonService.preparePostMessageForSendAndCopy(evt, data, IdReferenceConst.COPYMSG, this.connectionDetails);
+        if(data && data != 'Send' && data != 'SEND'){
+          this.commonService.preparePostMessageForSendAndCopy(evt, data, IdReferenceConst.COPYMSG, this.connectionDetails);
+        }
       }
       if (target.id.split('-')[0] == 'buldCount' || target.className == 'ast-bulb' || target.className == 'count-number') {
         let bulbDiv;

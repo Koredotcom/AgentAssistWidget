@@ -9,6 +9,7 @@ import { ReplaceTextWithTagPipe } from 'src/common/pipes/replace-text-with-tag.p
 import { CommonService } from 'src/common/services/common.service';
 import { HandleSubjectService } from 'src/common/services/handle-subject.service';
 import { WebSocketService } from 'src/common/services/web-socket.service';
+import * as $ from 'jquery';
 
 @Component({
   selector: 'app-overlaysearch',
@@ -192,6 +193,10 @@ export class OverlaysearchComponent implements OnInit {
   handleSearchResponse(response) {
     if (response && response.suggestions && this.answerPlaceableIDs.length == 0) {
       this.searchResponse = {};
+      // response.suggestions.faqs = [
+      //   {question : "How does COVID -19 spread?", answer : ["Covid spreads through tiny virus particles that get inside the body. The most common way for covid to enter the body is by being breathed in from infected air. This can happen when people stand close togethe When a person breaths out, it’s not just air that leaves their nose or mouth. Tiny water droplets are also breathed out, and these can be infected with viruses like colds or covid. These water droplets can be breathed in by other people, or if they land on a surface that someone touches later, that person could catch coronavirus."]},
+      //   {question : "Reset Password" , answer : ['to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click off', 'to change password on reset reset to reset password click on reset to reset password click on reset to reset password click on reset to reset password click on reset', 'to reset password click on reset', 'to change password click on reset']}
+      // ]
       this.searchResponse = this.commonService.formatSearchResponse(response);
       this.searchResponse.totalSearchResults =  (this.searchResponse.dialogs?.length + this.searchResponse.faqs?.length + this.searchResponse?.articles?.length +this.searchResponse?.snippets?.length || 0);
       this.faqViewCount = (this.searchResponse.faqs && this.searchResponse.faqs.length <= 2) ? this.searchResponse.faqs.length : 2;
@@ -209,6 +214,8 @@ export class OverlaysearchComponent implements OnInit {
       }, 1000);
       this.checkFaqAnswerNotRenderCountAndRequest()
     } else if (response && response.suggestions && this.answerPlaceableIDs.length > 0) {
+      
+      response.suggestions.faqs = this.commonService.formatFAQResponse(response.suggestions.faqs);
       let faqAnswerIdsPlace = this.answerPlaceableIDs.find(ele => ele.input == response.suggestions?.faqs[0].question);
       if (faqAnswerIdsPlace) {
         let accumulator = response.suggestions.faqs.reduce((acc, faq) => {
@@ -244,12 +251,43 @@ export class OverlaysearchComponent implements OnInit {
 
   getFaqAnswerAndtoggle(faq){
     faq.toggle = !faq.toggle;
+    faq.seeMoreWrapper = false;
     if(!faq.answer && faq.toggle){
       this.answerPlaceableIDs.push({input : faq.displayName});
       let searchObj : any = {};
       searchObj.value = faq.displayName;
       searchObj.question = faq.question
       this.emitSearchRequest(searchObj, true);
+    //   let agentResponse = {
+    //     "isSearch": true,
+    //     "conversationId": "c-d083e94-03e9-4d50-ab01-46c68eb3b064",
+    //     "botId": "st-87f98832-62d4-5df3-860a-c048a917d647",
+    //     "experience": "chat",
+    //     "positionId": "dg-ua-a4cf3615-4e84-4785-a1ca-e60b64952b2e",
+    //     "type": "text",
+    //     "value": "How to reset password?",
+    //     "event": "agent_assist_agent_response",
+    //     "volleyTone": [],
+    //     "totalTone": [],
+    //     "suggestions": {
+    //         "faqs": [
+    //             {
+    //                 "question": "How to reset password?",
+    //                 "taskRefId": "6371ecadccf6bf24460c5a42",
+    //                 "answer": ["Login to application URL and click on forgot password button Login to application URL and click on forgot password button Login to application URL and click on forgot password button Login to application URL and click on forgot password button Login to application URL and click on forgot password button Login to application URL and click on forgot password button", "Login to application URL and click on forgot password button Login to application URL and click on forgot password button", "Login to application URL and click on forgot password button Login to application URL and click on forgot password button", "Login to application URL and click on forgot password button Login to application URL and click on forgot password button"]
+    //             },
+    //             // {
+    //             //   "question": "How can i get new password?",
+    //             //   "taskRefId": "6371ecadccf6bf24460c5a42",
+    //             //   "answer": ["Login to application URL and click on forgot password button", "Login to application URL and click on forgot password button", "Login to application URL and click on forgot password button Login to application URL and click on forgot password button Login to application URL and click on forgot password button Login to application URL and click on forgot password button Login to application URL and click on forgot password button"]
+    //             //  }
+    //         ],
+    //         "searchassist": {}
+    //     },
+    //     "endOfTask": true,
+    //     "isPrompt": false,
+    //     "userInput": "How to reset password?"
+    // }
     }
     setTimeout(() => {
       this.handleSeeMoreButton(this.searchResponse.faqs, this.projConstants.FAQ);
@@ -263,7 +301,7 @@ export class OverlaysearchComponent implements OnInit {
         method: 'send',
         name: "agentAssist.SendMessage",
         // conversationId: _conversationId,
-        payload: selectType == this.projConstants.FAQ ? faq_or_article_obj.answer : faq_or_article_obj.content
+        payload: selectType == this.projConstants.FAQ ? (faq_or_article_obj.answer || faq_or_article_obj.ans) : faq_or_article_obj.content
       };
       window.parent.postMessage(message, '*');
     } else {
@@ -271,7 +309,7 @@ export class OverlaysearchComponent implements OnInit {
         method: 'copy',
         name: "agentAssist.CopyMessage",
         // conversationId: _conversationId,
-        payload: selectType == this.projConstants.FAQ ? faq_or_article_obj.answer : faq_or_article_obj.content
+        payload: selectType == this.projConstants.FAQ ? (faq_or_article_obj.answer || faq_or_article_obj.ans) : faq_or_article_obj.content
       };
       parent.postMessage(message, '*');
     }
@@ -281,7 +319,7 @@ export class OverlaysearchComponent implements OnInit {
     if(array && array.length > 0){
       let index = 0;
       for (let item of array) {
-        this.commonService.updateSeeMoreButtonForAgent(index, item, type);
+        this.commonService.updateSeeMoreButtonForAgent(index, item, type, (type == this.projConstants.FAQ) ? item.answer : []);
         index++;
       }
     }
@@ -310,13 +348,85 @@ export class OverlaysearchComponent implements OnInit {
     faq_or_article_obj.showLessButton = !faq_or_article_obj.showLessButton;
     faq_or_article_obj.showMoreButton = !faq_or_article_obj.showMoreButton;
     if (faq_or_article_obj.showLessButton) {
-      titleElement.classList.add('no-text-truncate');
-      descElement.classList.add('no-text-truncate');
-    } else if (faq_or_article_obj.showMoreButton) {
-      titleElement.classList.remove('no-text-truncate');
-      descElement.classList.remove('no-text-truncate');
+      if(titleElement) titleElement.classList.add('no-text-truncate');
+      if(descElement) descElement.classList.add('no-text-truncate');
+      if(type == this.projConstants.FAQ && faq_or_article_obj.answer.length > 1){
+        faq_or_article_obj.seeMoreWrapper = true;
+        setTimeout(() => {
+          this.updateSeeMoreButtonForFAQAgent(index.toString(), faq_or_article_obj.answer);
+        }, 100);
+      }
+    }
+
+    if (faq_or_article_obj.showMoreButton) {
+      if(titleElement) titleElement.classList.remove('no-text-truncate');
+      if(descElement) descElement.classList.remove('no-text-truncate');
+      if(type == this.projConstants.FAQ){
+        faq_or_article_obj.seeMoreWrapper = false;
+      }
     }
   }
+
+  toggleShowMoreLessButtonsForFaq(faq_ans_obj, parentIndex, index){
+    parentIndex = parentIndex.toString();
+    let titleElement = document.getElementById("titleLib-" + parentIndex);
+    let descElement = document.getElementById("desc-faq-lib-" + parentIndex + index);
+    console.log("desc-faq-lib-" + parentIndex + index, "toggle id");
+    
+
+    faq_ans_obj.showLessButton = !faq_ans_obj.showLessButton;
+    faq_ans_obj.showMoreButton = !faq_ans_obj.showMoreButton;
+
+    if (faq_ans_obj.showLessButton) {
+      if(titleElement) titleElement.classList.add('no-text-truncate');
+      if(descElement) $(descElement).css({"display" : "block"});
+      faq_ans_obj.seeMoreWrapper = true;
+      console.log("show less button",faq_ans_obj.seeMoreWrapper);
+    }
+
+    if (faq_ans_obj.showMoreButton) {
+      if(titleElement) titleElement.classList.remove('no-text-truncate');
+      if(descElement) $(descElement).css({"display" : "-webkit-box"});
+      faq_ans_obj.seeMoreWrapper = false;
+      console.log("show more button", faq_ans_obj.seeMoreWrapper);
+    }
+  }
+
+  updateSeeMoreButtonForFAQAgent(actualId, answerArray){
+    let index = 0;
+    console.log(answerArray, "answer array");
+    for(let ans of answerArray){  
+        let id = actualId + index;
+        console.log(id, "id inside update see more button");
+        let faqSourceTypePixel = 5;
+        let descElement =  $("#desc-faq-lib-" + id);
+        $(descElement).css({"display" : "block"});
+        if(descElement){
+            let divSectionHeight = $(descElement).css("height")  || '0px';
+            divSectionHeight = parseInt(divSectionHeight?.slice(0,divSectionHeight.length-2));
+            console.log(divSectionHeight, "div section height");
+            if (divSectionHeight > (24 + faqSourceTypePixel)) {
+              ans.showLessButton = ans.showLessButton ? ans.showLessButton : false;
+              ans.showMoreButton = ans.showLessButton ? false : true;
+            } else {
+              ans.showLessButton = false;
+              ans.showMoreButton = false;
+            }
+            $(descElement).css({"display" : "-webkit-box"});
+        }
+        index++;
+        let dataObj : any = {
+          answer : [ans],
+          type : this.projConstants.FAQ
+        }
+        this.handleSeeMoreLessClickEventsForFaq(id, dataObj)
+    }
+}
+
+  handleSeeMoreLessClickEventsForFaq(id, data){
+    
+  }
+
 
 }
 

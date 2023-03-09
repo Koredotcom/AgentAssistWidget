@@ -443,7 +443,7 @@ export class MybotComponent implements OnInit {
           let entityDisplayName = '';
           if (res.agentAssistDetails.entityValue && !res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
             let entityValueType = typeof res.agentAssistDetails.entityValue;
-            let entityValue = (entityValueType == 'object') ? JSON.stringify(res.agentAssistDetails.entityValue) : this.sanitizeHtmlPipe.transform(res.agentAssistDetails.userInput);
+            let entityValue = (entityValueType == 'object') ? JSON.stringify(res.agentAssistDetails.entityValue) : this.sanitizeHtmlPipe.transform(res.agentAssistDetails.entityValue);
             entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${entityValue}</div>`);
           } else {
             if (res.agentAssistDetails.isErrorPrompt && entityDisplayName) {

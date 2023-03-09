@@ -578,13 +578,23 @@ export class CommonService {
       }
     }
     for (let faq of faqArray) {
-      let faqObject = {
+      let faqObject : any = {
         question: faq.question,
         displayName: faq.displayName,
-        answer: faq.answer || false,
+        answer: (faq.answer && faq.answer.length > 0) ? [] : false,
         showMoreButton: false,
         showLessButton: false,
         answerRender : faq.answer || false
+      }
+      if(faq.answer && faq.answer.length > 0){
+        for(let ans of faq.answer){
+          let object : any = {
+            ans : ans,
+            showMoreButton : false,
+            showLessButton : false
+          }
+          faqObject.answer.push(object);
+        }
       }
       searchResponse.faqs.push(faqObject);
     }
@@ -604,6 +614,26 @@ export class CommonService {
     }
     console.log(searchResponse, "searchresponse");
 
+    return searchResponse;
+  }
+
+  formatFAQResponse(faqArray){
+    let searchResponse = [];
+    for (let faq of faqArray) {
+      let faqObject : any = {
+        question: faq.question,
+        answer: (faq.answer && faq.answer.length > 0) ? [] : false
+      }
+      if(faq.answer && faq.answer.length > 0){
+        for(let ans of faq.answer){
+          let object : any = {
+            ans : ans
+          }
+          faqObject.answer.push(object);
+        }
+      }
+      searchResponse.push(faqObject);
+    }
     return searchResponse;
   }
 
@@ -665,6 +695,7 @@ export class CommonService {
     console.log("------- history ---", this.configObj)
     let url = `${this.configObj.agentassisturl}/agentassist/api/v1/agent-feedback/${this.configObj.conversationId}?interaction=assist`;
     let feedBackResult = await this.renderHistoryFeedBack(url);
+    // this.configObj.autoBotId = connectionDetails.botId;
     if(this.configObj.fromSAT && (this.configObj['autoBotId'] || connectionDetails['autoBotId'])) {
       return this.getAgentHistoryData(`${this.configObj.agentassisturl}/agentassist/api/v1/conversations/${this.configObj.conversationId}/aa/messages?botId=${connectionDetails?.autoBotId ? connectionDetails.autoBotId: this.configObj.autoBotId}&agentHistory=false`)
       .then(response => {
@@ -733,7 +764,7 @@ export class CommonService {
     });
   }
 
-  updateSeeMoreButtonForAssist(id, type?) {
+  updateSeeMoreButtonForAssist(id, type?, answer=[]) {
     let faqSourceTypePixel = 5;
     let titleElement = document.getElementById("title-" + id);
     let descElement = document.getElementById("desc-" + id);
@@ -758,7 +789,10 @@ export class CommonService {
       seeLessElement = document.getElementById('articleseeLess-' + id);
       viewLinkElement = document.getElementById('articleViewLink-' + id);
     }
-    if (titleElement && descElement && divElement) {
+    if(type === ProjConstants.FAQ && answer.length > 1){
+      $(seeMoreElement).removeClass('hide');
+      $(seeLessElement).addClass('hide');
+    }else if(titleElement && descElement && divElement) {
       titleElement.classList.add('no-text-truncate');
       descElement.classList.add('no-text-truncate');
       let divSectionHeight = descElement.clientHeight || 0;
@@ -778,13 +812,14 @@ export class CommonService {
     }
   }
 
-  updateSeeMoreButtonForAgent(id, faq_or_article_obj, type) {
+  updateSeeMoreButtonForAgent(id, faq_or_article_obj, type, answer=[]) {
     let faqSourceTypePixel = 5;
     let titleElement = $("#titleLib-" + id);
     let descElement = $("#descLib-" + id);
     let sectionElement = $('#faqSectionLib-' + id);
     let divElement = $('#faqDivLib-' + id);
     let seeMoreElement = $('#seeMore-' + id);
+    let seeLessElement = $('#seeLess-' + id);
     let snippetsendMsg;
     let viewLinkElement;
     if (type == ProjConstants.SNIPPET) {
@@ -803,7 +838,10 @@ export class CommonService {
       seeMoreElement = $('#articleseeMore-' + id);
       viewLinkElement = $('#articleViewLinkLib-' + id);
     }
-    if (titleElement && descElement && sectionElement && divElement) {
+    if(type === ProjConstants.FAQ && answer.length > 1){
+      faq_or_article_obj.showLessButton = false;
+      faq_or_article_obj.showMoreButton = true;
+    }else if(titleElement && descElement && sectionElement && divElement) {
       $(titleElement).css({ "overflow": "inherit", "white-space": "normal", "text-overflow": "unset" });
       $(descElement).css({ "overflow": "inherit", "text-overflow": "unset", "display": "block", "white-space": "normal" });
       let faqSectionHeight = $(sectionElement).css("height");

@@ -499,8 +499,8 @@ export class AssistComponent implements OnInit {
                     articles.append(articleActionHtml);
                     let articlestypeInfo = $(`.type-info-run-send #snippetSection-${uuids + index}`);
                     let seeMoreButtonHtml = `
-                <button class="ghost-btn hide" style="font-style: italic;" id="snippetseeMore-${uuids + index}" data-snippet-see-more="true">Show more</button>
-                <button class="ghost-btn hide" style="font-style: italic;" id="snippetseeLess-${uuids + index}" data-snippet-see-less="true">Show less</button>
+                <button class="ghost-btn hide" style="font-style: italic;" id="snippetseeMore-${uuids + index}" data-snippet-see-more="true">${this.projConstants.READ_MORE}</button>
+                <button class="ghost-btn hide" style="font-style: italic;" id="snippetseeLess-${uuids + index}" data-snippet-see-less="true">${this.projConstants.READ_LESS}</button>
                 `;
                     articlestypeInfo.append(seeMoreButtonHtml);
                     setTimeout(() => {
@@ -518,6 +518,10 @@ export class AssistComponent implements OnInit {
         }
 
         if (data.suggestions.faqs?.length > 0) {
+          // data.suggestions.faqs = [
+          //   {question : "How does COVID -19 spread?", answer : ["Covid spreads through tiny virus particles that get inside the body. The most common way for covid to enter the body is by being breathed in from infected air. This can happen when people stand close togethe When a person breaths out, it’s not just air that leaves their nose or mouth. Tiny water droplets are also breathed out, and these can be infected with viruses like colds or covid. These water droplets can be breathed in by other people, or if they land on a surface that someone touches later, that person could catch coronavirus."]},
+          //   {question : "Reset Password" , answer : ['to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click off', 'to change password on reset reset to reset password click on reset to reset password click on reset to reset password click on reset to reset password click on reset', 'to reset password click on reset', 'to change password click on reset']}
+          // ]
           let automationSuggestions = document.getElementById(`automationSuggestions-${responseId}`);
           let faqAreaHtml = this.assisttabService.getFaqAreaTemplate(responseId, data, this.imageFilePath, this.imageFileNames);
           automationSuggestions.innerHTML += faqAreaHtml;
@@ -567,8 +571,8 @@ export class AssistComponent implements OnInit {
 
               let articlestypeInfo = $(`.type-info-run-send #articleSection-${uuids + index}`);
               let seeMoreButtonHtml = `
-                    <button class="ghost-btn hide" style="font-style: italic;" id="articleseeMore-${uuids + index}" data-article-see-more="true">Show more</button>
-                    <button class="ghost-btn hide" style="font-style: italic;" id="articleseeLess-${uuids + index}" data-article-see-less="true">Show less</button>
+                    <button class="ghost-btn hide" style="font-style: italic;" id="articleseeMore-${uuids + index}" data-article-see-more="true">${this.projConstants.READ_MORE}</button>
+                    <button class="ghost-btn hide" style="font-style: italic;" id="articleseeLess-${uuids + index}" data-article-see-less="true">${this.projConstants.READ_LESS}</button>
                     `;
               articlestypeInfo.append(seeMoreButtonHtml);
               setTimeout(() => {
@@ -643,7 +647,7 @@ export class AssistComponent implements OnInit {
           let faqs = $(`.type-info-run-send #faqSection-${uuids + index}`);
           let positionID = 'dg-' + this.koreGenerateuuidPipe.transform();
           
-          if (!ele.answer) {
+          if (!ele.answer  || ele.answer.length <= 0) {
             let checkHtml = `
         <i class="ast-carrotup" id="check-${uuids + index}" data-intent-name="${ele.displayName}"
         data-check="true" data-position-id="${positionID}"></i>`;
@@ -653,23 +657,45 @@ export class AssistComponent implements OnInit {
           } else {
             let a = $(`#faqDiv-${uuids + index}`);
             let faqActionHtml = `<div class="action-links">
-            <button class="send-run-btn" id="sendMsg" data-msg-data="${ele.answer}">Send</button>
-            <div class="copy-btn" data-msg-data="${ele.answer}">
-                <i class="ast-copy"></i>
+            <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids+index}" data-msg-data="${ele.answer[0]}" data-position-id="${positionID}">Send</button>
+            <div class="copy-btn" data-msg-id="${uuids+index}" data-msg-data="${ele.answer[0]}" data-position-id="${positionID}">
+                <i class="ast-copy" data-msg-id="${uuids+index}" data-msg-data="${ele.answer[0]}" data-position-id="${positionID}"></i>
             </div>
             </div>`;
             a.append(faqActionHtml);
-            faqs.append(`<div class="desc-text" id="desc-${uuids + index}">${ele.answer}</div>`);
+            faqs.append(`<div class="desc-text" id="desc-${uuids + index}">${ele.answer[0]}</div>`);
+
+            if(ele.answer && ele.answer.length > 1){
+              let seeMoreWrapper = `<div class="see-more-wrapper-info hide" id="seeMoreWrapper-${uuids+index}"></div>`;
+              faqs.append(seeMoreWrapper);
+              let faqIndex = 0;
+              for(let ans of ele.answer){
+                  $(`#seeMoreWrapper-${uuids+index}`).append(`<div class="individual-data-text">
+                      <div class="desc-text-individual" id="desc-faq-${uuids+index+faqIndex.toString()}">${ans}</div>
+                      <div class="seemore-link-text hide" id="seeMore-${uuids+index+faqIndex.toString()}" data-see-more="true" data-actual-id="${uuids+index}">${this.projConstants.READ_MORE}</div>
+                      <div class="seemore-link-text hide" id="seeLess-${uuids+index+faqIndex.toString()}" data-see-less="true" data-actual-id="${uuids+index}">${this.projConstants.READ_LESS}</div>
+                      <div class="actions-send-copy">
+                          <div class="send-icon" data-msg-id="${uuids+index+faqIndex.toString()}"  data-msg-data="${ans}" data-position-id="${positionID}">
+                              <i class="ast-Send" data-msg-id="${uuids+index+faqIndex.toString()}"  data-msg-data="${ans}" data-position-id="${positionID}"></i>
+                          </div>
+                          <div class="copy-icon" data-msg-id="${uuids+index+faqIndex.toString()}" data-msg-data="${ans}" data-position-id="${positionID}">
+                              <i class="ast-copy" data-msg-id="${uuids+index+faqIndex.toString()}" data-msg-data="${ans}" data-position-id="${positionID}"></i>
+                          </div>
+                      </div>
+                  </div>`);
+                  faqIndex++;
+              }
+          }
 
             let faqstypeInfo = $(`.type-info-run-send #faqSection-${uuids + index}`);
             let seeMoreButtonHtml = `
-                <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${uuids + index}" data-see-more="true">Show more</button>
-                <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${uuids + index}" data-see-less="true">Show less</button>
+                <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${uuids + index}" data-see-more="true" data-msg-answer="${ele.answer?.length > 1 ? ele.answer : null}">${ele.answer?.length > 1 ? (this.projConstants.READ_MORE_EXPAND) : this.projConstants.READ_MORE}</button>
+                <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${uuids + index}" data-see-less="true" data-msg-answer="${ele.answer?.length > 1 ? ele.answer : null}">${this.projConstants.READ_LESS}</button>
                 `;
             faqstypeInfo.append(seeMoreButtonHtml);
             setTimeout(() => {
-              this.commonService.updateSeeMoreButtonForAssist(uuids + index);
-            }, 1000);
+              this.commonService.updateSeeMoreButtonForAssist(uuids + index,ProjConstants.FAQ,ele.answer);
+            }, 100);
           }
 
           if (data.suggestions.faqs.length === 1 && !ele.answer) {
@@ -692,35 +718,63 @@ export class AssistComponent implements OnInit {
     } else {
       if (data.type === 'text' && data.suggestions) {
         let faqAnswerIdsPlace;
+        // data.suggestions.faqs = [
+        //   {question : "Reset Password" , answer : ['to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click off', 'to change password on reset reset to reset password click on reset to reset password click on reset to reset password click on reset to reset password click on reset', 'to reset password click on reset', 'to change password click on reset']}
+        // ]
+        faqAnswerIdsPlace = this.answerPlaceableIDs.find(ele => ele.inputQuestion == data.suggestions?.faqs[0].question);
+        if (faqAnswerIdsPlace) {
+        let splitedanswerPlaceableID = faqAnswerIdsPlace.id.split('-');
+        splitedanswerPlaceableID.shift();
         data.suggestions.faqs.forEach((ele) => {
-          faqAnswerIdsPlace = this.answerPlaceableIDs.find(ele => ele.inputQuestion == data.suggestions?.faqs[0].question);
-          if (faqAnswerIdsPlace) {
-            let splitedanswerPlaceableID = faqAnswerIdsPlace.id.split('-');
-            splitedanswerPlaceableID.shift();
-
             let faqDiv = $(`#dynamicBlock #faqDiv-${splitedanswerPlaceableID.join('-')}`);
+            let faqSection = $(`#dynamicBlock #faqSection-${splitedanswerPlaceableID.join('-')}`);
             let faqaction = `<div class="action-links">
-                <button class="send-run-btn" id="sendMsg" data-msg-id="${splitedanswerPlaceableID.join('-')}"  data-msg-data="${ele.answer}">Send</button>
-                <div class="copy-btn" data-msg-id="${splitedanswerPlaceableID.join('-')}" data-msg-data="${ele.answer}">
-                <i class="ast-copy" data-msg-id="${splitedanswerPlaceableID.join('-')}" data-msg-data="${ele.answer}"></i>
+            <button class="send-run-btn" id="sendMsg" data-msg-id="${splitedanswerPlaceableID.join('-')}"  data-msg-data="${ele.answer[0]}">Send</button>
+            <div class="copy-btn" data-msg-id="${splitedanswerPlaceableID.join('-')}" data-msg-data="${ele.answer[0]}">
+            <i class="ast-copy" data-msg-id="${splitedanswerPlaceableID.join('-')}" data-msg-data="${ele.answer[0]}"></i>
                 </div>
                 </div>`;
 
             faqDiv.append(faqaction);
 
-            $(`#${faqAnswerIdsPlace.id}`).html(ele.answer);
+            $(`#${faqAnswerIdsPlace.id}`).html(ele.answer[0]);
             $(`#${faqAnswerIdsPlace.id}`).attr('data-answer-render', 'true');
             let faqs = $(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')}`);
-            let seeMoreButtonHtml = `
-          <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${splitedanswerPlaceableID.join('-')}" data-see-more="true">Show more</button>
-          <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${splitedanswerPlaceableID.join('-')}" data-see-less="true">Show less</button>
-          `;
-            faqs.append(seeMoreButtonHtml);
-            setTimeout(() => {
-              this.commonService.updateSeeMoreButtonForAssist(splitedanswerPlaceableID.join('-'), this.projConstants.FAQ);
-            }, 1000);
+
+            if(ele.answer && ele.answer.length > 1){
+              let seeMoreWrapper = `<div class="see-more-wrapper-info hide" id="seeMoreWrapper-${splitedanswerPlaceableID.join('-')}"></div>`;
+              faqSection.append(seeMoreWrapper);
+              let faqIndex = 0;
+              for(let ans of ele.answer){
+                  $(`#seeMoreWrapper-${splitedanswerPlaceableID.join('-')}`).append(`<div class="individual-data-text">
+                      <div class="desc-text-individual" id="desc-faq-${splitedanswerPlaceableID.join('-')+faqIndex.toString()}">${ans}</div>
+                      <div class="seemore-link-text hide" id="seeMore-${splitedanswerPlaceableID.join('-')+faqIndex.toString()}" data-see-more="true" data-actual-id="${splitedanswerPlaceableID.join('-')}">${this.projConstants.READ_MORE}</div>
+                      <div class="seemore-link-text hide" id="seeLess-${splitedanswerPlaceableID.join('-')+faqIndex.toString()}" data-see-less="true" data-actual-id="${splitedanswerPlaceableID.join('-')}">${this.projConstants.READ_LESS}</div>
+                      <div class="actions-send-copy">
+                          <div class="send-icon" data-msg-id="${splitedanswerPlaceableID.join('-')+faqIndex.toString()}"  data-msg-data="${ans}">
+                              <i class="ast-Send" data-msg-id="${splitedanswerPlaceableID.join('-')+faqIndex.toString()}"  data-msg-data="${ans}"></i>
+                          </div>
+                          <div class="copy-icon" data-msg-id="${splitedanswerPlaceableID.join('-')+faqIndex.toString()}" data-msg-data="${ans}">
+                              <i class="ast-copy" data-msg-id="${splitedanswerPlaceableID.join('-')+faqIndex.toString()}" data-msg-data="${ans}"></i>
+                          </div>
+                      </div>
+                  </div>`);
+                  faqIndex++;
+              }
           }
+
+          let seeMoreButtonHtml = `
+          <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${splitedanswerPlaceableID.join('-')}" data-see-more="true" data-msg-answer="${ele.answer?.length > 1 ? ele.answer : null}">${this.projConstants.READ_MORE}</button>
+          <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${splitedanswerPlaceableID.join('-')}" data-see-less="true" data-msg-answer="${ele.answer?.length > 1 ? ele.answer : null}">${this.projConstants.READ_LESS}</button>
+          `;
+                  faqs.append(seeMoreButtonHtml);
+            setTimeout(() => {
+              this.commonService.updateSeeMoreButtonForAssist(splitedanswerPlaceableID.join('-'), this.projConstants.FAQ, ele.answer);
+            }, 1000);
+        
         });
+        this.handleSeeMoreButton(splitedanswerPlaceableID.join('-'), data.suggestions.faqs, this.projConstants.FAQ, 'answerRender');
+        }
         if (faqAnswerIdsPlace) {
           let index = this.answerPlaceableIDs.indexOf(faqAnswerIdsPlace);
           this.answerPlaceableIDs.splice(index, 1);
@@ -851,18 +905,36 @@ export class AssistComponent implements OnInit {
   }
 
   // handling seemoe button
-  handleSeeMoreButton(responseId, array, type) {
+  handleSeeMoreButton(responseId, array, type, actualAns = null) {
     if (array && responseId && type) {
       let index = 0;
       for (let item of array) {
         let id = responseId + index;
-        this.commonService.updateSeeMoreButtonForAssist(id, type);
+        this.commonService.updateSeeMoreButtonForAssist(id, type, (type == ProjConstants.FAQ) ? item.answer : []);
         index++;
         if (item.answer) {
-          this.clickEvents(IdReferenceConst.SEEMORE_BTN, id, '', type)
+          let dataObj : any = {
+            question : item.question,
+            answer : item.answer,
+            type : type
+          }
+          setTimeout(() => {
+            this.clickEvents(IdReferenceConst.SEEMORE_BTN, id, '', dataObj)
+          }, 1000);
         }
       }
     }
+    if(actualAns){
+      let dataObj : any = {
+        question : array[0].question,
+        answer : array[0].answer,
+        type : type
+      }
+      setTimeout(() => {
+        this.clickEvents(IdReferenceConst.SEEMORE_BTN, responseId, '', dataObj)
+      }, 1000);
+    }
+
   }
 
   // new messages count and rendering code
@@ -1083,6 +1155,40 @@ export class AssistComponent implements OnInit {
             $(`#dynamicBlock #${target.id}`).addClass('rotate-carrot');
             $(`#dynamicBlock #faqDiv-${uuid}`).addClass('is-dropdown-open');
             this.AgentAssist_run_click(data, data.positionId);
+            // if(this.answerPlaceableIDs.length > 0){
+            // let response : any =  {
+            //         "isSearch": false,
+            //         "conversationId": "c-d083e94-03e9-4d50-ab01-46c68eb3b064",
+            //         "botId": "st-87f98832-62d4-5df3-860a-c048a917d647",
+            //         "experience": "chat",
+            //         "positionId": "dg-ua-a4cf3615-4e84-4785-a1ca-e60b64952b2e",
+            //         "type": "text",
+            //         "value": "How to reset password?",
+            //         "event": "agent_assist_agent_response",
+            //         "volleyTone": [],
+            //         "totalTone": [],
+            //         "suggestions": {
+            //             "faqs": [
+            //                 {
+            //                     "question": "How to reset password?",
+            //                     "taskRefId": "6371ecadccf6bf24460c5a42",
+            //                     "answer": ["Login to application URL and click on forgot password button Login to application URL and click on forgot password button Login to application URL and click on forgot password button Login to application URL and click on forgot password button Login to application URL and click on forgot password button Login to application URL and click on forgot password button", "Login to application URL and click on forgot password button Login to application URL and click on forgot password button", "Login to application URL and click on forgot password button Login to application URL and click on forgot password button", "Login to application URL and click on forgot password button Login to application URL and click on forgot password button"]
+            //                 },
+            //                 // {
+            //                 //   "question": "How can i get new password?",
+            //                 //   "taskRefId": "6371ecadccf6bf24460c5a42",
+            //                 //   "answer": ["Login to application URL and click on forgot password button", "Login to application URL and click on forgot password button", "Login to application URL and click on forgot password button Login to application URL and click on forgot password button Login to application URL and click on forgot password button Login to application URL and click on forgot password button Login to application URL and click on forgot password button"]
+            //                 //  }
+            //             ],
+            //             "searchassist": {}
+            //         },
+            //         "endOfTask": true,
+            //         "isPrompt": false,
+            //         "userInput": "How to reset password?"
+            //     }
+            //     this.updateAgentAssistResponse(response, this.connectionDetails.botId, this.connectionDetails.conversationId);
+            //     this.viewCustomTempAttachment()
+            // }
             return
         }
         if ($(`#dynamicBlock .type-info-run-send #faqSection-${uuid} .ast-carrotup.rotate-carrot`).length <= 0) {
@@ -1228,12 +1334,68 @@ export class AssistComponent implements OnInit {
     });
   }
 
-  handleSeeMoreLessClickEvents(id, type) {
+  updateSeeMoreButtonForFAQAgent(actualId, answerArray){
+    let index = 0;
+    console.log(answerArray, "answer array");
+    for(let ans of answerArray){
+        let id = actualId+index;
+        console.log(id, "id inside update ${this.projConstants.READ_MORE} button");
+        let faqSourceTypePixel = 5;
+        let descElement =  $("#desc-faq-" + id);
+        let seeMoreElement = $('#seeMore-' + id);
+        let seeLessElement = $('#seeLess-' + id);
+        $(descElement).css({"display" : "block"});
+        if(descElement){
+            let divSectionHeight = $(descElement).css("height")  || '0px';
+            divSectionHeight = parseInt(divSectionHeight?.slice(0,divSectionHeight.length-2));
+            console.log(divSectionHeight, "div section height");
+            if(divSectionHeight > (24 + faqSourceTypePixel)){
+                console.log('#seemore-faq-lib-' + id, "seemore element");
+                $(seeMoreElement).removeClass('hide');
+                $(seeLessElement).addClass('hide');
+            }else{
+                $(seeMoreElement).addClass('hide');
+            }
+            $(descElement).css({"display" : "-webkit-box"});
+        }
+        index++;
+        let dataObj : any = {
+          answer : [ans],
+          type : this.projConstants.FAQ
+        }
+        this.handleSeeMoreLessClickEventsForFaq(id, dataObj)
+    }
+}
+
+  handleSeeMoreLessClickEventsForFaq(id, data){
     let seeMoreElement = document.getElementById('seeMore-' + id);
+    let seeLessElement = document.getElementById('seeLess-' + id);
+    let descElement = document.getElementById("desc-faq-" + id);
+    seeMoreElement.addEventListener('click', (event: any) => {
+      event.target.classList.add('hide');
+      seeLessElement.classList.remove('hide');
+      $(descElement).css({"display" : "block"})
+    });
+    seeLessElement.addEventListener('click', (event: any) => {
+      event.target.classList.add('hide');
+      seeMoreElement.classList.remove('hide');
+      $(descElement).css({"display" : "-webkit-box"})
+    });
+  }
+
+  handleSeeMoreLessClickEvents(id, data) {
+    console.log("handle see more less click events", 'seeMore-'+id);
+    
+    let seeMoreElement = document.getElementById('seeMore-' + id);
+    console.log(seeMoreElement, "seemorelement");
+    
     let seeLessElement = document.getElementById('seeLess-' + id);
     let titleElement = document.getElementById("title-" + id);
     let descElement = document.getElementById("desc-" + id);
-    if (type == this.projConstants.ARTICLE) {
+    let seeMoreWrapper = document.getElementById("seeMoreWrapper-" + id);
+    let faqDiv = $(`.type-info-run-send#faqDiv-${id}`)
+
+    if (data.type == this.projConstants.ARTICLE) {
       seeMoreElement = document.getElementById('articleseeMore-' + id);
       seeLessElement = document.getElementById('articleseeLess-' + id);
       titleElement = document.getElementById("articletitle-" + id);
@@ -1242,14 +1404,44 @@ export class AssistComponent implements OnInit {
     seeMoreElement.addEventListener('click', (event: any) => {
       event.target.classList.add('hide');
       seeLessElement.classList.remove('hide');
-      titleElement.classList.add('no-text-truncate');
-      descElement.classList.add('no-text-truncate');
+      if(titleElement){
+        titleElement.classList.add('no-text-truncate');
+      }
+      if (data.type == this.projConstants.FAQ && seeMoreWrapper && data.answer && data.answer.length > 1) {
+          descElement.classList.add('hide');
+          seeMoreWrapper.classList.remove('hide');
+          seeLessElement.classList.add('show-less-btn');
+          seeLessElement.innerText = this.projConstants.CLOSE;
+          titleElement.innerText = data.question;
+          faqDiv.find(`#sendMsg, .copy-btn`).each((i, ele) => {
+            console.log(ele, "send msgelement");
+            ele.classList.add('hide')
+          });
+          setTimeout(() => {
+            this.updateSeeMoreButtonForFAQAgent(id, data.answer);
+          }, 100);
+
+      } else {
+        descElement.classList.add('no-text-truncate');
+      }
     });
     seeLessElement.addEventListener('click', (event: any) => {
       event.target.classList.add('hide');
       seeMoreElement.classList.remove('hide');
-      titleElement.classList.remove('no-text-truncate');
-      descElement.classList.remove('no-text-truncate');
+      if(titleElement){
+        titleElement.classList.remove('no-text-truncate');
+      }
+      if (data.type == this.projConstants.FAQ && seeMoreWrapper && data.answer && data.answer.length > 1) {
+          if(seeMoreWrapper) seeMoreWrapper.classList.add('hide');
+          descElement.classList.remove('hide');
+          titleElement.innerText = data.question + " 1/" + data.answer.length;
+          faqDiv.find(`#sendMsg, .copy-btn`).each((i, ele) => {
+            console.log(ele, "send msgelement");
+            ele.classList.remove('hide')
+        });
+      } else {
+        if(descElement) descElement.classList.remove('no-text-truncate');
+      }
     });
   }
 
@@ -1422,6 +1614,8 @@ export class AssistComponent implements OnInit {
             // $(`#title-${uniqueID}`).addClass('noPadding');
             $(`#faqDiv-${uniqueID + index}`).addClass('is-dropdown-show-default');
             document.getElementById(`title-${uniqueID + index}`).insertAdjacentHTML('beforeend', checkHtml);
+            this.clickEvents(IdReferenceConst.CHECK, uniqueID + index, uniqueID + index, {intentName : ele.question, positionID : uniqueID + index});
+
           } else {
             let a = $(`#faqDiv-${uniqueID + index}`);
             let faqActionHtml = `<div class="action-links">
@@ -1434,13 +1628,14 @@ export class AssistComponent implements OnInit {
             faqs.append(`<div class="desc-text" id="desc-${uniqueID + index}">${ele.answer}</div>`);
             let faqstypeInfo = $(`.type-info-run-send #faqSection-${uniqueID + index}`);
             let seeMoreButtonHtml = `
-                          <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${uniqueID + index}" data-see-more="true">Show more</button>
-                          <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${uniqueID + index}" data-see-less="true">Show less</button>
+                          <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${uniqueID + index}" data-see-more="true">${this.projConstants.READ_MORE}</button>
+                          <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${uniqueID + index}" data-see-less="true">${this.projConstants.READ_LESS}</button>
                           `;
             faqstypeInfo.append(seeMoreButtonHtml);
             setTimeout(() => {
               this.commonService.updateSeeMoreButtonForAssist(uniqueID, this.projConstants.FAQ);
             }, 1000);
+            this.clickEvents(IdReferenceConst.CHECK, uniqueID + index, uniqueID + index, {intentName : ele.question, positionID : uniqueID + index});
           }
 
         })
@@ -1508,13 +1703,14 @@ export class AssistComponent implements OnInit {
           faqs.append(`<div class="desc-text" id="desc-${uniqueID + index}">${res.components[0].data.text}</div>`);
           let faqstypeInfo = $(`.type-info-run-send #faqSection-${uniqueID + index}`);
           let seeMoreButtonHtml = `
-                          <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${uniqueID + index}" data-see-more="true">Show more</button>
-                          <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${uniqueID + index}" data-see-less="true">Show less</button>
+                          <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${uniqueID + index}" data-see-more="true">${this.projConstants.READ_MORE}</button>
+                          <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${uniqueID + index}" data-see-less="true">${this.projConstants.READ_LESS}</button>
                           `;
           faqstypeInfo.append(seeMoreButtonHtml);
           setTimeout(() => {
             this.commonService.updateSeeMoreButtonForAssist(uniqueID + index, this.projConstants.FAQ);
           }, 1000);
+          this.clickEvents(IdReferenceConst.CHECK, uniqueID + index, uniqueID + index, {intentName : ele.question, positionID : uniqueID + index});
         })
         setTimeout(() => {
           uniqueID = undefined;
@@ -1640,7 +1836,7 @@ export class AssistComponent implements OnInit {
           let entityDisplayName = this.agentAssistResponse.newEntityDisplayName ? this.agentAssistResponse.newEntityDisplayName : this.agentAssistResponse.newEntityName;
           if (res.agentAssistDetails.entityValue && !res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
             let entityValueType = typeof res.agentAssistDetails.entityValue;
-            let entityValue = (entityValueType == 'object') ? JSON.stringify(res.agentAssistDetails.entityValue) : this.sanitizeHtmlPipe.transform(res.agentAssistDetails.userInput);
+            let entityValue = (entityValueType == 'object') ? JSON.stringify(res.agentAssistDetails.entityValue) : this.sanitizeHtmlPipe.transform(res.agentAssistDetails.entityValue);
             entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${entityValue}</div>`);
           } else {
             if (res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
