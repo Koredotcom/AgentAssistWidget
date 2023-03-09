@@ -245,9 +245,10 @@ export class OverlaysearchComponent implements OnInit {
   getFaqAnswerAndtoggle(faq){
     faq.toggle = !faq.toggle;
     if(!faq.answer && faq.toggle){
-      this.answerPlaceableIDs.push({input : faq.question});
+      this.answerPlaceableIDs.push({input : faq.displayName});
       let searchObj : any = {};
-      searchObj.value = faq.question;
+      searchObj.value = faq.displayName;
+      searchObj.question = faq.question
       this.emitSearchRequest(searchObj, true);
     }
     setTimeout(() => {
