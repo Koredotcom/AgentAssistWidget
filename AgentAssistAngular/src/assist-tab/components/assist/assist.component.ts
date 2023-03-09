@@ -645,11 +645,11 @@ export class AssistComponent implements OnInit {
           
           if (!ele.answer) {
             let checkHtml = `
-        <i class="ast-carrotup" id="check-${uuids + index}" data-intent-name="${ele.question}"
+        <i class="ast-carrotup" id="check-${uuids + index}" data-intent-name="${ele.displayName}"
         data-check="true" data-position-id="${positionID}"></i>`;
             $(`#faqDiv-${uuids + index}`).addClass('is-dropdown-show-default');
             document.getElementById(`title-${uuids + index}`).insertAdjacentHTML('beforeend', checkHtml);
-            this.clickEvents(IdReferenceConst.CHECK, uuids + index, positionID, {intentName : ele.question, positionID : positionID});
+            this.clickEvents(IdReferenceConst.CHECK, uuids + index, positionID, {intentName : ele.displayName, positionID : positionID, question: ele.question});
           } else {
             let a = $(`#faqDiv-${uuids + index}`);
             let faqActionHtml = `<div class="action-links">
@@ -693,7 +693,7 @@ export class AssistComponent implements OnInit {
       if (data.type === 'text' && data.suggestions) {
         let faqAnswerIdsPlace;
         data.suggestions.faqs.forEach((ele) => {
-          faqAnswerIdsPlace = this.answerPlaceableIDs.find(ele => ele.input == data.suggestions?.faqs[0].question);
+          faqAnswerIdsPlace = this.answerPlaceableIDs.find(ele => ele.inputQuestion == data.suggestions?.faqs[0].question);
           if (faqAnswerIdsPlace) {
             let splitedanswerPlaceableID = faqAnswerIdsPlace.id.split('-');
             splitedanswerPlaceableID.shift();
@@ -757,7 +757,7 @@ export class AssistComponent implements OnInit {
         }
       }, 10);
       let askToUserHtml = this.assisttabService.askUserTemplate(uuids, newTemp, this.dialogPositionId)
-
+/// componentType === 'dialogAct' means its confirmation node or else not
       let tellToUserHtml = this.assisttabService.tellToUserTemplate(uuids, newTemp, this.dialogPositionId)
       if (data.isPrompt) {
         runInfoContent.append(askToUserHtml);
@@ -1079,7 +1079,7 @@ export class AssistComponent implements OnInit {
             faq.append(answerHtml);
             $(`#dynamicBlock #${target.id}`).attr('data-answer-render', 'false');
             // faqDiv.append(faqaction);
-            this.answerPlaceableIDs.push({id:`desc-${uuid}`, input: data.intentName, positionId: data.positionId});
+            this.answerPlaceableIDs.push({id:`desc-${uuid}`, input: data.intentName, inputQuestion: data.question, positionId: data.positionId});
             $(`#dynamicBlock #${target.id}`).addClass('rotate-carrot');
             $(`#dynamicBlock #faqDiv-${uuid}`).addClass('is-dropdown-open');
             this.AgentAssist_run_click(data, data.positionId);
@@ -1416,7 +1416,7 @@ export class AssistComponent implements OnInit {
           if (!ele.answer) {
             let checkHtml = `
                     <i class="ast-carrotup" data-conv-id="${this.commonService.configObj.conversationid}"
-                    data-bot-id="${res.botId}" data-intent-name="${ele.question}"
+                    data-bot-id="${res.botId}" data-intent-name="${ele.displayName}"
                     data-check="true" id="check-${uniqueID + index}" data-position-id="${uniqueID + index}"></i>`;
             // faqs.append(checkHtml);
             // $(`#title-${uniqueID}`).addClass('noPadding');
