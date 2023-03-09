@@ -1220,7 +1220,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     let faqHtml = `
                             <div class="${faqDivClass}" id="faqDivLib-${uuids+index}">
                                 <div class="left-content" id="faqSectionLib-${uuids+index}">
-                                    <div class="title-text" title="${ele.question}" id="titleLib-${uuids+index}">${ele.question}</div>
+                                    <div class="title-text" title="${ele.displayName? ele.displayName : ele.question}" id="titleLib-${uuids+index}">${ ele.displayName? ele.displayName : ele.question}</div>
                                 </div>
                             </div>`;
     
@@ -1231,7 +1231,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     if (!ele.answer) {
                                         let checkHtml = `
                                 <i class="ast-carrotup" data-conv-id="${data.conversationId}"
-                                data-bot-id="${botId}" data-intent-name="${ele.question}"
+                                data-bot-id="${botId}" data-intent-name="${ele.displayName}" data-question="${ele.question}"
                                 data-check-lib="true" id="checkLib-${uuids+index}" data-position-id="${positionID}"></i>`;
                                         // faqs.append(checkHtml);
                                         // $(`#titleLib-${uuids+index}`).addClass('noPadding');
@@ -1389,7 +1389,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             isSuggestionProcessed = false
                             let faqAnswerIdsPlace;
                             data.suggestions.faqs.forEach((ele) => {
-                                faqAnswerIdsPlace = answerPlaceableIDs.find(ele => ele.input == data.value);
+                                faqAnswerIdsPlace = answerPlaceableIDs.find(ele => ele.inputQuestion == data.value);
                                 let splitedanswerPlaceableID = faqAnswerIdsPlace.id.split('-');
                                 splitedanswerPlaceableID.shift();
                                 
@@ -2379,7 +2379,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     let faqHtml = `
                         <div class="type-info-run-send" id="faqDiv-${uuids+index}">
                             <div class="left-content" id="faqSection-${uuids+index}">
-                                <div class="title-text" title="${ele.question}" id="title-${uuids+index}">${ele.question}</div>
+                                <div class="title-text" title="${ ele.displayName? ele.displayName : ele.question}" id="title-${uuids+index}">${ele.displayName? ele.displayName : ele.question}</div>
                                 
                                 
                             </div>
@@ -2392,7 +2392,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     if (!ele.answer) {
                                         let checkHtml = `
                             <i class="ast-carrotup" data-conv-id="${data.conversationId}"
-                            data-bot-id="${botId}" data-intent-name="${ele.question}"
+                            data-bot-id="${botId}" data-intent-name="${ele.displayName}" data-question="${ele.question}"
                             data-check="true" id="check-${uuids+index}" data-position-id="${positionID}"></i>`;
                                         // faqs.append(checkHtml);
                                         // $(`#title-${uuids+index}`).addClass('noPadding');
@@ -2437,7 +2437,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         if (data.type === 'text' && data.suggestions) {
                             let faqAnswerIdsPlace ;
                             data.suggestions.faqs.forEach((ele) => {
-                                faqAnswerIdsPlace = answerPlaceableIDs.find(ele => ele.input == data.value);
+                                faqAnswerIdsPlace = answerPlaceableIDs.find(ele => ele.inputQuestion == data.value);
                                 if(faqAnswerIdsPlace){
                                     let splitedanswerPlaceableID = faqAnswerIdsPlace.id.split('-');
                                     splitedanswerPlaceableID.shift();
@@ -3321,7 +3321,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                 let faqHtml = `
                                 <div class="type-info-run-send" id="faqDiv-${uniqueID+index}">
                                     <div class="left-content" id="faqSection-${uniqueID+index}">
-                                        <div class="title-text" title="${ele.question}" id="title-${uniqueID+index}">${ele.question}</div>
+                                        <div class="title-text" title="${ele.displayName ? ele.displayName : ele.question}" id="title-${uniqueID+index}">${ele.displayName? ele.displayName : ele.question}</div>
                                         
                                         
                                     </div>
@@ -3333,7 +3333,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                 if (!ele.answer) {
                                                     let checkHtml = `
                                     <i class="ast-carrotup" data-conv-id="${_agentAssistDataObj.conversationId}"
-                                    data-bot-id="${res.botId}" data-intent-name="${ele.question}"
+                                    data-bot-id="${res.botId}" data-intent-name="${ele.displayName}" data-question="${ele.question}"
                                     data-check="true" id="check-${uniqueID+index}" data-position-id="${uniqueID+index}"></i>`;
                                                     // faqs.append(checkHtml);
                                                     // $(`#title-${uniqueID}`).addClass('noPadding');
@@ -5850,7 +5850,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 faq.append(answerHtml);
                                 $(`#dynamicBlock #${target.id}`).attr('data-answer-render', 'false');
                                 // faqDiv.append(faqaction);
-                                answerPlaceableIDs.push({id:`desc-${id.join('-')}`, input: target.dataset.intentName, positionId: target.dataset.positionId});
+                                answerPlaceableIDs.push({id:`desc-${id.join('-')}`, input: target.dataset.intentName, inputQuestion: target.dataset.question, positionId: target.dataset.positionId});
                                 $(`#dynamicBlock #${target.id}`).addClass('rotate-carrot');
                                 $(`#dynamicBlock #faqDiv-${id.join('-')}`).addClass('is-dropdown-open');
                                 AgentAssist_run_click(evt.target.dataset, target.dataset.positionId);
@@ -5893,7 +5893,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 faq.append(answerHtml);
                                 $(`#overLaySearch #${target.id}`).attr('data-answer-render', 'false');
                                 // faqDiv.append(faqaction);
-                                answerPlaceableIDs.push({id:`descLib-${id.join('-')}`, input: target.dataset.intentName, positionId: target.dataset.positionId});
+                                answerPlaceableIDs.push({id:`descLib-${id.join('-')}`, input: target.dataset.intentName, inputQuestion: target.dataset.question, positionId: target.dataset.positionId});
                                 $(`#overLaySearch #${target.id}`).addClass('rotate-carrot');
                                 $(`#overLaySearch #faqDivLib-${id.join('-')}`).addClass('is-dropdown-open');
                                 AgentAssistPubSub.publish('searched_Automation_details', { conversationId: evt.target.dataset.convId, botId: evt.target.dataset.botId, value: evt.target.dataset.intentName, isSearch: true, positionId: target.dataset.positionId });
@@ -5913,7 +5913,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 faq.append(answerHtml);
                                 $(`#search-text-display #${target.id}`).attr('data-answer-render', 'false');
                                 // faqDiv.append(faqaction);
-                                answerPlaceableIDs.push({id:`descLib-${id.join('-')}`, input: target.dataset.intentName, positionId: target.dataset.positionId});
+                                answerPlaceableIDs.push({id:`descLib-${id.join('-')}`, input: target.dataset.intentName, inputQuestion: target.dataset.question, positionId: target.dataset.positionId});
                                 $(`#search-text-display #${target.id}`).addClass('rotate-carrot');
                                 $(`#search-text-display #faqDivLib-${id.join('-')}`).addClass('is-dropdown-open');
                                 AgentAssistPubSub.publish('searched_Automation_details', { conversationId: evt.target.dataset.convId, botId: evt.target.dataset.botId, value: evt.target.dataset.intentName, isSearch: true, positionId: target.dataset.positionId });
