@@ -138,6 +138,7 @@ export class MybotComponent implements OnInit {
         this.connectionDetails['autoBotId'] = data['autoBotId'];
         if(!this.isHistoryApiCalled){this.callHistoryApi()}
       }
+      if(!this.isHistoryApiCalled){this.callHistoryApi()}
     })
 
     this.subscriptionsList.push(subscription1);
