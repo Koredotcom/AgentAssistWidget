@@ -657,6 +657,38 @@ export class CommonService {
     }
   }
 
+  formatHistoryResponseForFAQ(response){
+    let referenceObjvsAnswer : any = {};
+    let historyResp : any = [];
+    for(let resObj of response){
+      if(resObj && resObj.agentAssistDetails && resObj.agentAssistDetails.suggestions && resObj.agentAssistDetails.suggestions.faqs){
+        if(resObj.channels && resObj.channels[0] && resObj.channels[0].reqId){
+          if(!referenceObjvsAnswer[resObj.channels[0].reqId]){
+            referenceObjvsAnswer[resObj.channels[0].reqId] = [];
+          }
+          if(resObj.components && resObj.components[0] && resObj.components[0].data && resObj.components[0].data.text){
+            referenceObjvsAnswer[resObj.channels[0].reqId].push(resObj.components[0].data.text);
+          }
+        }
+      }
+    }
+    
+    for(let resObj of response){
+      if(resObj && resObj.agentAssistDetails && resObj.agentAssistDetails.suggestions && resObj.agentAssistDetails.suggestions.faqs){
+        if(resObj.channels && resObj.channels[0] && resObj.channels[0].reqId){
+          if(referenceObjvsAnswer[resObj.channels[0].reqId]){
+            resObj.components[0].data.text = referenceObjvsAnswer[resObj.channels[0].reqId];
+            historyResp.push(resObj);
+            referenceObjvsAnswer[resObj.channels[0].reqId] = false;
+          }
+        }
+      }else{
+        historyResp.push(resObj);
+      }
+    }
+    return historyResp;
+  }
+
   async renderingAgentHistoryMessage(connectionDetails) {
     console.log("agent history-----",this.configObj);
     

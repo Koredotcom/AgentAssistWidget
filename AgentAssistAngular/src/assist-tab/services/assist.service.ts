@@ -392,13 +392,37 @@ export class AssistService {
     let faqs = $(`#faqsSuggestions-${eleid} .type-info-run-send #faqSection-${ele}`);
     let a = $(`#faqsSuggestions-${eleid} #faqDiv-${ele}`);
     let faqActionHtml = `<div class="action-links">
-        <button class="send-run-btn" id="sendMsg" data-msg-id="${ele}"  data-msg-data="${res.components[0].data.text}">Send</button>
-        <div class="copy-btn" data-msg-id="${ele}" data-msg-data="${res.components[0].data.text}">
-        <i class="ast-copy" data-msg-id="${ele}" data-msg-data="${res.components[0].data.text}"></i>
+        <button class="send-run-btn" id="sendMsg" data-msg-id="${ele}"  data-msg-data="${res.components[0].data.text[0]}">Send</button>
+        <div class="copy-btn" data-msg-id="${ele}" data-msg-data="${res.components[0].data.text[0]}">
+        <i class="ast-copy" data-msg-id="${ele}" data-msg-data="${res.components[0].data.text[0]}"></i>
         </div>
         </div>`;
     a.append(faqActionHtml);
-    faqs.append(`<div class="desc-text" id="desc-${ele}">${res.components[0].data.text}</div>`);
+    faqs.append(`<div class="desc-text" id="desc-${ele}">${res.components[0].data.text[0]}</div>`);
+    ele.answer = res.components[0].data.text;
+    if(res.components[0].data.text && res.components[0].data.text.length > 1){
+      let seeMoreWrapper = `<div class="see-more-wrapper-info hide" id="seeMoreWrapper-${eleid}"></div>`;
+      faqs.append(seeMoreWrapper);
+      let faqIndex = 0;
+      for(let ans of ele.answer){
+          $(`#seeMoreWrapper-${eleid}`).append(`<div class="individual-data-text">
+              <div class="desc-text-individual" id="desc-faq-${eleid+faqIndex.toString()}">${ans}</div>
+              <div class="seemore-link-text hide" id="seeMore-${eleid+faqIndex.toString()}" data-see-more="true" data-actual-id="${eleid}">${this.projConstants.READ_MORE}</div>
+              <div class="seemore-link-text hide" id="seeLess-${eleid+faqIndex.toString()}" data-see-less="true" data-actual-id="${eleid}">${this.projConstants.READ_LESS}</div>
+              <div class="actions-send-copy">
+                  <div class="send-icon" data-msg-id="${eleid+faqIndex.toString()}"  data-msg-data="${ans}" data-position-id="${eleid}">
+                      <i class="ast-ast-send" data-msg-id="${eleid+faqIndex.toString()}"  data-msg-data="${ans}" data-position-id="${eleid}"></i>
+                  </div>
+                  <div class="copy-icon" data-msg-id="${eleid+faqIndex.toString()}" data-msg-data="${ans}" data-position-id="${eleid}">
+                      <i class="ast-copy" data-msg-id="${eleid+faqIndex.toString()}" data-msg-data="${ans}" data-position-id="${eleid}"></i>
+                  </div>
+              </div>
+          </div>`);
+          faqIndex++;
+      }
+  }
+
+
     let faqstypeInfo = $(`#faqsSuggestions-${eleid} .type-info-run-send #faqSection-${ele}`);
     let seeMoreButtonHtml = `
       <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${ele}" data-see-more="true">Show more</button>

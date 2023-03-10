@@ -641,7 +641,6 @@ export class AssistComponent implements OnInit {
         });
 
         data.suggestions.faqs?.forEach((ele, index) => {
-          console.log(data.suggestions.faqs, "suggestion faqs", ele);
           
           let faqsSuggestions = document.getElementById(`faqsSuggestions-${responseId}`);
 
@@ -727,10 +726,8 @@ export class AssistComponent implements OnInit {
         // ]
         
           data.suggestions.faqs.forEach((ele) => {
-           console.log(ele, "inside data.suggestions.faq");
            
             faqAnswerIdsPlace = this.answerPlaceableIDs.find(ele => ele.inputQuestion == data.suggestions?.faqs[0].question);
-            console.log(faqAnswerIdsPlace, "faq answer ids palce");
             
             if (faqAnswerIdsPlace) {
             let splitedanswerPlaceableID = faqAnswerIdsPlace.id.split('-');
@@ -774,7 +771,7 @@ export class AssistComponent implements OnInit {
             }
 
           let seeMoreButtonHtml = `
-          <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${splitedanswerPlaceableID.join('-')}" data-see-more="true" data-msg-answer="${ele.answer?.length > 1 ? ele.answer : null}">${this.projConstants.READ_MORE}</button>
+          <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${splitedanswerPlaceableID.join('-')}" data-see-more="true" data-msg-answer="${ele.answer?.length > 1 ? ele.answer : null}">${ele.answer?.length > 1 ? (this.projConstants.READ_MORE_EXPAND) : this.projConstants.READ_MORE}</button>
           <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${splitedanswerPlaceableID.join('-')}" data-see-less="true" data-msg-answer="${ele.answer?.length > 1 ? ele.answer : null}">${this.projConstants.READ_LESS}</button>
           `;
                   faqs.append(seeMoreButtonHtml);
@@ -927,6 +924,7 @@ export class AssistComponent implements OnInit {
 
   // handling seemoe button
   handleSeeMoreButton(responseId, array, type) {
+    
     if (array && responseId && type) {
       let index = 0;
       for (let item of array) {
@@ -945,17 +943,29 @@ export class AssistComponent implements OnInit {
         }
       }
     }
-    // if(actualAns){
-    //   let dataObj : any = {
-    //     question : array[0].question,
-    //     answer : array[0].answer,
-    //     type : type
-    //   }
-    //   setTimeout(() => {
-    //     this.clickEvents(IdReferenceConst.SEEMORE_BTN, responseId, '', dataObj)
-    //   }, 1000);
-    // }
+  }
 
+  handleSeeMoreButtonForHistory(responseId, array, type) {
+    
+    if (array && responseId && type) {
+      let index = 0;
+      for (let item of array) {
+        let id = responseId + index;
+        // item.answer = item.components[0].text;
+        this.commonService.updateSeeMoreButtonForAssist(id, type, (type == ProjConstants.FAQ) ? item.answer : []);
+        index++;
+        if (item.answer) {
+          let dataObj : any = {
+            question : item.question,
+            answer : item.answer,
+            type : type
+          }
+          setTimeout(() => {
+            this.clickEvents(IdReferenceConst.SEEMORE_BTN, id, '', dataObj)
+          }, 1000);
+        }
+      }
+    }
   }
 
   // new messages count and rendering code
@@ -1149,7 +1159,7 @@ export class AssistComponent implements OnInit {
         this.handleSaveBtnClick(uuid);
       } else if (eventName == IdReferenceConst.AGENT_RUN_BTN) {
         this.handleMybotRunClick(uuid, data);
-      } else if (eventName == IdReferenceConst.SEEMORE_BTN) {
+      } else if (eventName == IdReferenceConst.SEEMORE_BTN) {        
         this.handleSeeMoreLessClickEvents(uuid, data);
       } else if (eventName == IdReferenceConst.CHECK){
         setTimeout(() => {
@@ -1165,9 +1175,7 @@ export class AssistComponent implements OnInit {
     }
     let checkElement = document.getElementById(IdReferenceConst.CHECK + '-' + uuid);
     if(checkElement){
-      checkElement.addEventListener('click', (event) => {
-        console.log("check element click");
-                
+      checkElement.addEventListener('click', (event) => {                
         if (!$(`#${target.id}`).attr("data-answer-render")) {
             let faq = $(`#dynamicBlock .type-info-run-send #faqSection-${uuid}`);
             let answerHtml = `<div class="desc-text" id="desc-${uuid}"></div>`
@@ -1177,9 +1185,7 @@ export class AssistComponent implements OnInit {
             this.answerPlaceableIDs.push({id:`desc-${uuid}`, input: data.intentName, inputQuestion: data.question, positionId: data.positionId});
             $(`#dynamicBlock #${target.id}`).addClass('rotate-carrot');
             $(`#dynamicBlock #faqDiv-${uuid}`).addClass('is-dropdown-open');
-            // this.AgentAssist_run_click(data, data.positionId);
-            console.log(this.answerPlaceableIDs, data,"answer placeable ids");
-            
+            // this.AgentAssist_run_click(data, data.positionId);            
             if(this.answerPlaceableIDs.length > 0){
             let response : any =  {
                     "isSearch": false,
@@ -1361,10 +1367,8 @@ export class AssistComponent implements OnInit {
 
   updateSeeMoreButtonForFAQAgent(actualId, answerArray){
     let index = 0;
-    console.log(answerArray, "answer array");
     for(let ans of answerArray){
         let id = actualId+index;
-        console.log(id, "id inside update ${this.projConstants.READ_MORE} button");
         let faqSourceTypePixel = 5;
         let descElement =  $("#desc-faq-" + id);
         let seeMoreElement = $('#seeMore-' + id);
@@ -1373,9 +1377,7 @@ export class AssistComponent implements OnInit {
         if(descElement){
             let divSectionHeight = $(descElement).css("height")  || '0px';
             divSectionHeight = parseInt(divSectionHeight?.slice(0,divSectionHeight.length-2));
-            console.log(divSectionHeight, "div section height");
             if(divSectionHeight > (24 + faqSourceTypePixel)){
-                console.log('#seemore-faq-lib-' + id, "seemore element");
                 $(seeMoreElement).removeClass('hide');
                 $(seeLessElement).addClass('hide');
             }else{
@@ -1409,11 +1411,7 @@ export class AssistComponent implements OnInit {
   }
 
   handleSeeMoreLessClickEvents(id, data) {
-    console.log("handle see more less click events", 'seeMore-'+id);
-    
-    let seeMoreElement = document.getElementById('seeMore-' + id);
-    console.log(seeMoreElement, "seemorelement");
-    
+    let seeMoreElement = document.getElementById('seeMore-' + id);    
     let seeLessElement = document.getElementById('seeLess-' + id);
     let titleElement = document.getElementById("title-" + id);
     let descElement = document.getElementById("desc-" + id);
@@ -1427,8 +1425,6 @@ export class AssistComponent implements OnInit {
       descElement = document.getElementById("articledesc-" + id);
     }
     seeMoreElement.addEventListener('click', (event: any) => {
-      console.log("see more element click");
-      
       event.target.classList.add('hide');
       seeLessElement.classList.remove('hide');
       if(titleElement){
@@ -1441,7 +1437,6 @@ export class AssistComponent implements OnInit {
           seeLessElement.innerText = this.projConstants.CLOSE;
           titleElement.innerText = data.question;
           faqDiv.find(`#sendMsg, .copy-btn`).each((i, ele) => {
-            console.log(ele, "send msgelement");
             ele.classList.add('hide')
           });
           setTimeout(() => {
@@ -1463,7 +1458,6 @@ export class AssistComponent implements OnInit {
           descElement.classList.remove('hide');
           titleElement.innerText = data.question + " 1/" + data.answer.length;
           faqDiv.find(`#sendMsg, .copy-btn`).each((i, ele) => {
-            console.log(ele, "send msgelement");
             ele.classList.remove('hide')
         });
       } else {
@@ -1542,8 +1536,8 @@ export class AssistComponent implements OnInit {
     let previousId;
     let previousTaskPositionId, currentTaskPositionId, currentTaskName, previousTaskName;
     let resp = response.length > 0 ? response : undefined;
-    console.log(resp, "response inside history messages");
     
+    resp = this.commonService.formatHistoryResponseForFAQ(resp);    
     resp?.forEach((res, index) => {
 
       if ((res.agentAssistDetails?.suggestions || res.agentAssistDetails?.ambiguityList) && res.type == 'outgoing' && !res.agentAssistDetails?.faqResponse) {
@@ -1646,26 +1640,50 @@ export class AssistComponent implements OnInit {
           } else {
             let a = $(`#faqDiv-${uniqueID + index}`);
             let faqActionHtml = `<div class="action-links">
-                    <button class="send-run-btn" id="sendMsg" data-msg-id="${uniqueID + index}"  data-msg-data="${ele.answer}">Send</button>
-                    <div class="copy-btn" data-msg-id="${uniqueID + index}" data-msg-data="${ele.answer}">
-                        <i class="ast-copy" data-msg-id="${uniqueID + index}" data-msg-data="${ele.answer}"></i>
+                    <button class="send-run-btn" id="sendMsg" data-msg-id="${uniqueID + index}"  data-msg-data="${ele.answer[0]}">Send</button>
+                    <div class="copy-btn" data-msg-id="${uniqueID + index}" data-msg-data="${ele.answer[0]}">
+                        <i class="ast-copy" data-msg-id="${uniqueID + index}" data-msg-data="${ele.answer[0]}"></i>
                     </div>
                 </div>`;
             a.append(faqActionHtml);
-            faqs.append(`<div class="desc-text" id="desc-${uniqueID + index}">${ele.answer}</div>`);
+            faqs.append(`<div class="desc-text" id="desc-${uniqueID + index}">${ele.answer[0]}</div>`);
+
+            if(ele.answer && ele.answer.length > 1){
+              let seeMoreWrapper = `<div class="see-more-wrapper-info hide" id="seeMoreWrapper-${uniqueID+index}"></div>`;
+              faqs.append(seeMoreWrapper);
+              let faqIndex = 0;
+              for(let ans of ele.answer){
+                  $(`#seeMoreWrapper-${uniqueID+index}`).append(`<div class="individual-data-text">
+                      <div class="desc-text-individual" id="desc-faq-${uniqueID+index+faqIndex.toString()}">${ans}</div>
+                      <div class="seemore-link-text hide" id="seeMore-${uniqueID+index+faqIndex.toString()}" data-see-more="true" data-actual-id="${uniqueID+index}">${this.projConstants.READ_MORE}</div>
+                      <div class="seemore-link-text hide" id="seeLess-${uniqueID+index+faqIndex.toString()}" data-see-less="true" data-actual-id="${uniqueID+index}">${this.projConstants.READ_LESS}</div>
+                      <div class="actions-send-copy">
+                          <div class="send-icon" data-msg-id="${uniqueID+index+faqIndex.toString()}"  data-msg-data="${ans}" data-position-id="${uniqueID + index}">
+                              <i class="ast-ast-send" data-msg-id="${uniqueID+index+faqIndex.toString()}"  data-msg-data="${ans}" data-position-id="${uniqueID + index}"></i>
+                          </div>
+                          <div class="copy-icon" data-msg-id="${uniqueID+index+faqIndex.toString()}" data-msg-data="${ans}" data-position-id="${uniqueID + index}">
+                              <i class="ast-copy" data-msg-id="${uniqueID+index+faqIndex.toString()}" data-msg-data="${ans}" data-position-id="${uniqueID + index}"></i>
+                          </div>
+                      </div>
+                  </div>`);
+                  faqIndex++;
+              }
+          }
+
             let faqstypeInfo = $(`.type-info-run-send #faqSection-${uniqueID + index}`);
             let seeMoreButtonHtml = `
-                          <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${uniqueID + index}" data-see-more="true">${this.projConstants.READ_MORE}</button>
+                          <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${uniqueID + index}" data-see-more="true">${ele.answer?.length > 1 ? (this.projConstants.READ_MORE_EXPAND) : this.projConstants.READ_MORE}</button>
                           <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${uniqueID + index}" data-see-less="true">${this.projConstants.READ_LESS}</button>
                           `;
             faqstypeInfo.append(seeMoreButtonHtml);
             setTimeout(() => {
-              this.commonService.updateSeeMoreButtonForAssist(uniqueID, this.projConstants.FAQ);
+              this.commonService.updateSeeMoreButtonForAssist(uniqueID, this.projConstants.FAQ, ele.answer);
             }, 1000);
             // this.clickEvents(IdReferenceConst.CHECK, uniqueID + index, uniqueID + index, {intentName : ele.question, positionID : uniqueID + index});
           }
 
-        })
+        });
+        this.handleSeeMoreButtonForHistory(uniqueID, faqss, this.projConstants.FAQ);
         uniqueID = undefined;
       }
       if ((res.agentAssistDetails?.suggestions || res.agentAssistDetails?.ambiguityList) && res.type == 'outgoing' && res.agentAssistDetails?.faqResponse && res.agentAssistDetails?.positionId) {
@@ -1677,7 +1695,8 @@ export class AssistComponent implements OnInit {
               if (valOfDiv == '' && !valOfDiv)
                 this.assisttabService.historyFaqSuggestionsContainer(eleid, ele, res);
             }
-          })
+          });
+          this.handleSeeMoreButtonForHistory(eleid, res.agentAssistDetails.suggestions?.faqs, this.projConstants.FAQ);
         })
       }
 
@@ -1710,6 +1729,7 @@ export class AssistComponent implements OnInit {
         }
         let faqss = (res.agentAssistDetails?.suggestions) ? (res.agentAssistDetails?.suggestions?.faqs) : (res.agentAssistDetails?.ambiguityList?.faqs);
         faqss?.forEach((ele, index) => {
+          ele.answer = res.components[0].data.text;
           let faqsSuggestions = document.getElementById(`faqsSuggestions-${uniqueID}`);
           let faqHtml = `
                 <div class="type-info-run-send" id="faqDiv-${uniqueID + index}">
@@ -1721,24 +1741,49 @@ export class AssistComponent implements OnInit {
           let faqs = $(`.type-info-run-send #faqSection-${uniqueID + index}`);
           let a = $(`#faqDiv-${uniqueID + index}`);
           let faqActionHtml = `<div class="action-links">
-                    <button class="send-run-btn" id="sendMsg" data-msg-id="${uniqueID + index}"  data-msg-data="${res.components[0].data.text}">Send</button>
-                    <div class="copy-btn" data-msg-id="${uniqueID + index}" data-msg-data="${res.components[0].data.text}">
-                        <i class="ast-copy" data-msg-id="${uniqueID + index}" data-msg-data="${res.components[0].data.text}"></i>
+                    <button class="send-run-btn" id="sendMsg" data-msg-id="${uniqueID + index}"  data-msg-data="${res.components[0].data.text[0]}">Send</button>
+                    <div class="copy-btn" data-msg-id="${uniqueID + index}" data-msg-data="${res.components[0].data.text[0]}">
+                        <i class="ast-copy" data-msg-id="${uniqueID + index}" data-msg-data="${res.components[0].data.text[0]}"></i>
                     </div>
                 </div>`;
           a.append(faqActionHtml);
-          faqs.append(`<div class="desc-text" id="desc-${uniqueID + index}">${res.components[0].data.text}</div>`);
+          faqs.append(`<div class="desc-text" id="desc-${uniqueID + index}">${res.components[0].data.text[0]}</div>`);
+
+          if(res.components[0].data.text && res.components[0].data.text.length > 1){
+            let seeMoreWrapper = `<div class="see-more-wrapper-info hide" id="seeMoreWrapper-${uniqueID + index}"></div>`;
+            faqs.append(seeMoreWrapper);
+            let faqIndex = 0;
+            for(let ans of ele.answer){
+                $(`#seeMoreWrapper-${uniqueID + index}`).append(`<div class="individual-data-text">
+                    <div class="desc-text-individual" id="desc-faq-${uniqueID + index+faqIndex.toString()}">${ans}</div>
+                    <div class="seemore-link-text hide" id="seeMore-${uniqueID + index+faqIndex.toString()}" data-see-more="true" data-actual-id="${uniqueID + index}">${this.projConstants.READ_MORE}</div>
+                    <div class="seemore-link-text hide" id="seeLess-${uniqueID + index+faqIndex.toString()}" data-see-less="true" data-actual-id="${uniqueID + index}">${this.projConstants.READ_LESS}</div>
+                    <div class="actions-send-copy">
+                        <div class="send-icon" data-msg-id="${uniqueID + index+faqIndex.toString()}"  data-msg-data="${ans}" data-position-id="${uniqueID + index}">
+                            <i class="ast-ast-send" data-msg-id="${uniqueID + index+faqIndex.toString()}"  data-msg-data="${ans}" data-position-id="${uniqueID + index}"></i>
+                        </div>
+                        <div class="copy-icon" data-msg-id="${uniqueID + index+faqIndex.toString()}" data-msg-data="${ans}" data-position-id="${uniqueID + index}">
+                            <i class="ast-copy" data-msg-id="${uniqueID + index+faqIndex.toString()}" data-msg-data="${ans}" data-position-id="${uniqueID + index}"></i>
+                        </div>
+                    </div>
+                </div>`);
+                faqIndex++;
+            }
+        }
+
           let faqstypeInfo = $(`.type-info-run-send #faqSection-${uniqueID + index}`);
           let seeMoreButtonHtml = `
-                          <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${uniqueID + index}" data-see-more="true">${this.projConstants.READ_MORE}</button>
+                          <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${uniqueID + index}" data-see-more="true">${res.components[0].data.text?.length > 1 ? (this.projConstants.READ_MORE_EXPAND) : this.projConstants.READ_MORE}</button>
                           <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${uniqueID + index}" data-see-less="true">${this.projConstants.READ_LESS}</button>
                           `;
           faqstypeInfo.append(seeMoreButtonHtml);
           setTimeout(() => {
-            this.commonService.updateSeeMoreButtonForAssist(uniqueID + index, this.projConstants.FAQ);
+            this.commonService.updateSeeMoreButtonForAssist(uniqueID + index, this.projConstants.FAQ,res.components[0].data.text);
           }, 1000);
           this.clickEvents(IdReferenceConst.CHECK, uniqueID + index, uniqueID + index, {intentName : ele.question, positionID : uniqueID + index});
         })
+        this.handleSeeMoreButtonForHistory(uniqueID, faqss, this.projConstants.FAQ);
+
         setTimeout(() => {
           uniqueID = undefined;
         }, 1000)
