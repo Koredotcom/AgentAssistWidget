@@ -503,7 +503,7 @@ setProactiveMode(){
   btnInit() {
     document.addEventListener("click", (evt: any) => {
       let target: any = evt.target;
-      if (target.id === 'sendMsg' || target.className === 'ast-Send' || target.className == 'send-icon') {
+      if (target.id === 'sendMsg' || target.className === 'ast-ast-send' || target.className == 'send-icon') {
         let ele = document.getElementById(`displayData-${target.dataset.msgId}`) ? document.getElementById(`displayData-${target.dataset.msgId}`) : document.getElementById(target.dataset.msgId);
         let data = target.dataset.msgData && target.dataset.msgData !== '' ? target.dataset.msgData : (target.parentNode.dataset.msgData && target.parentNode.dataset.msgData !== '' ? target.parentNode.dataset.msgData : ele.innerText);
         if(data && data != 'Send'){

@@ -397,6 +397,8 @@ export class AssistComponent implements OnInit {
   }
 
   processAgentAssistResponse(data, botId) {
+    console.log("process agent assist response", data, this.proactiveModeStatus);
+    
     if (!this.commonService.isAutomationOnGoing && !this.proactiveModeStatus) {
       return;
     }
@@ -639,6 +641,8 @@ export class AssistComponent implements OnInit {
         });
 
         data.suggestions.faqs?.forEach((ele, index) => {
+          console.log(data.suggestions.faqs, "suggestion faqs", ele);
+          
           let faqsSuggestions = document.getElementById(`faqsSuggestions-${responseId}`);
 
           let faqHtml = this.assisttabService.faqTypeInfoTemplate(uuids, index, ele)
@@ -676,7 +680,7 @@ export class AssistComponent implements OnInit {
                       <div class="seemore-link-text hide" id="seeLess-${uuids+index+faqIndex.toString()}" data-see-less="true" data-actual-id="${uuids+index}">${this.projConstants.READ_LESS}</div>
                       <div class="actions-send-copy">
                           <div class="send-icon" data-msg-id="${uuids+index+faqIndex.toString()}"  data-msg-data="${ans}" data-position-id="${positionID}">
-                              <i class="ast-Send" data-msg-id="${uuids+index+faqIndex.toString()}"  data-msg-data="${ans}" data-position-id="${positionID}"></i>
+                              <i class="ast-ast-send" data-msg-id="${uuids+index+faqIndex.toString()}"  data-msg-data="${ans}" data-position-id="${positionID}"></i>
                           </div>
                           <div class="copy-icon" data-msg-id="${uuids+index+faqIndex.toString()}" data-msg-data="${ans}" data-position-id="${positionID}">
                               <i class="ast-copy" data-msg-id="${uuids+index+faqIndex.toString()}" data-msg-data="${ans}" data-position-id="${positionID}"></i>
@@ -721,11 +725,17 @@ export class AssistComponent implements OnInit {
         // data.suggestions.faqs = [
         //   {question : "Reset Password" , answer : ['to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click off', 'to change password on reset reset to reset password click on reset to reset password click on reset to reset password click on reset to reset password click on reset', 'to reset password click on reset', 'to change password click on reset']}
         // ]
-        faqAnswerIdsPlace = this.answerPlaceableIDs.find(ele => ele.inputQuestion == data.suggestions?.faqs[0].question);
-        if (faqAnswerIdsPlace) {
-        let splitedanswerPlaceableID = faqAnswerIdsPlace.id.split('-');
-        splitedanswerPlaceableID.shift();
-        data.suggestions.faqs.forEach((ele) => {
+        
+          data.suggestions.faqs.forEach((ele) => {
+           console.log(ele, "inside data.suggestions.faq");
+           
+            faqAnswerIdsPlace = this.answerPlaceableIDs.find(ele => ele.inputQuestion == data.suggestions?.faqs[0].question);
+            console.log(faqAnswerIdsPlace, "faq answer ids palce");
+            
+            if (faqAnswerIdsPlace) {
+            let splitedanswerPlaceableID = faqAnswerIdsPlace.id.split('-');
+            splitedanswerPlaceableID.shift();
+
             let faqDiv = $(`#dynamicBlock #faqDiv-${splitedanswerPlaceableID.join('-')}`);
             let faqSection = $(`#dynamicBlock #faqSection-${splitedanswerPlaceableID.join('-')}`);
             let faqaction = `<div class="action-links">
@@ -752,7 +762,7 @@ export class AssistComponent implements OnInit {
                       <div class="seemore-link-text hide" id="seeLess-${splitedanswerPlaceableID.join('-')+faqIndex.toString()}" data-see-less="true" data-actual-id="${splitedanswerPlaceableID.join('-')}">${this.projConstants.READ_LESS}</div>
                       <div class="actions-send-copy">
                           <div class="send-icon" data-msg-id="${splitedanswerPlaceableID.join('-')+faqIndex.toString()}"  data-msg-data="${ans}">
-                              <i class="ast-Send" data-msg-id="${splitedanswerPlaceableID.join('-')+faqIndex.toString()}"  data-msg-data="${ans}"></i>
+                              <i class="ast-ast-send" data-msg-id="${splitedanswerPlaceableID.join('-')+faqIndex.toString()}"  data-msg-data="${ans}"></i>
                           </div>
                           <div class="copy-icon" data-msg-id="${splitedanswerPlaceableID.join('-')+faqIndex.toString()}" data-msg-data="${ans}">
                               <i class="ast-copy" data-msg-id="${splitedanswerPlaceableID.join('-')+faqIndex.toString()}" data-msg-data="${ans}"></i>
@@ -761,7 +771,7 @@ export class AssistComponent implements OnInit {
                   </div>`);
                   faqIndex++;
               }
-          }
+            }
 
           let seeMoreButtonHtml = `
           <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${splitedanswerPlaceableID.join('-')}" data-see-more="true" data-msg-answer="${ele.answer?.length > 1 ? ele.answer : null}">${this.projConstants.READ_MORE}</button>
@@ -771,15 +781,13 @@ export class AssistComponent implements OnInit {
             setTimeout(() => {
               this.commonService.updateSeeMoreButtonForAssist(splitedanswerPlaceableID.join('-'), this.projConstants.FAQ, ele.answer);
             }, 1000);
-        
+            this.handleSeeMoreButtonForAmbiguityFAQ(splitedanswerPlaceableID.join('-'), ele, this.projConstants.FAQ);
+          }
         });
-        this.handleSeeMoreButton(splitedanswerPlaceableID.join('-'), data.suggestions.faqs, this.projConstants.FAQ, 'answerRender');
-        }
         if (faqAnswerIdsPlace) {
           let index = this.answerPlaceableIDs.indexOf(faqAnswerIdsPlace);
           this.answerPlaceableIDs.splice(index, 1);
         }
-
       }
       if (data.suggestions) {
         automationSuggestions.length >= 1 ? (automationSuggestions[automationSuggestions.length - 1].classList.remove('hide')) : ''
@@ -904,8 +912,21 @@ export class AssistComponent implements OnInit {
     this.dropdownHeaderUuids = undefined;
   }
 
+  handleSeeMoreButtonForAmbiguityFAQ(responseId,faq, type){
+    if (faq.answer) {
+      let dataObj : any = {
+        question : faq.question,
+        answer : faq.answer,
+        type : type
+      }
+      setTimeout(() => {
+        this.clickEvents(IdReferenceConst.SEEMORE_BTN, responseId, '', dataObj)
+      }, 1000);
+    }
+  }
+
   // handling seemoe button
-  handleSeeMoreButton(responseId, array, type, actualAns = null) {
+  handleSeeMoreButton(responseId, array, type) {
     if (array && responseId && type) {
       let index = 0;
       for (let item of array) {
@@ -924,16 +945,16 @@ export class AssistComponent implements OnInit {
         }
       }
     }
-    if(actualAns){
-      let dataObj : any = {
-        question : array[0].question,
-        answer : array[0].answer,
-        type : type
-      }
-      setTimeout(() => {
-        this.clickEvents(IdReferenceConst.SEEMORE_BTN, responseId, '', dataObj)
-      }, 1000);
-    }
+    // if(actualAns){
+    //   let dataObj : any = {
+    //     question : array[0].question,
+    //     answer : array[0].answer,
+    //     type : type
+    //   }
+    //   setTimeout(() => {
+    //     this.clickEvents(IdReferenceConst.SEEMORE_BTN, responseId, '', dataObj)
+    //   }, 1000);
+    // }
 
   }
 
@@ -1144,7 +1165,9 @@ export class AssistComponent implements OnInit {
     }
     let checkElement = document.getElementById(IdReferenceConst.CHECK + '-' + uuid);
     if(checkElement){
-      checkElement.addEventListener('click', (event) => {        
+      checkElement.addEventListener('click', (event) => {
+        console.log("check element click");
+                
         if (!$(`#${target.id}`).attr("data-answer-render")) {
             let faq = $(`#dynamicBlock .type-info-run-send #faqSection-${uuid}`);
             let answerHtml = `<div class="desc-text" id="desc-${uuid}"></div>`
@@ -1154,41 +1177,43 @@ export class AssistComponent implements OnInit {
             this.answerPlaceableIDs.push({id:`desc-${uuid}`, input: data.intentName, inputQuestion: data.question, positionId: data.positionId});
             $(`#dynamicBlock #${target.id}`).addClass('rotate-carrot');
             $(`#dynamicBlock #faqDiv-${uuid}`).addClass('is-dropdown-open');
-            this.AgentAssist_run_click(data, data.positionId);
-            // if(this.answerPlaceableIDs.length > 0){
-            // let response : any =  {
-            //         "isSearch": false,
-            //         "conversationId": "c-d083e94-03e9-4d50-ab01-46c68eb3b064",
-            //         "botId": "st-87f98832-62d4-5df3-860a-c048a917d647",
-            //         "experience": "chat",
-            //         "positionId": "dg-ua-a4cf3615-4e84-4785-a1ca-e60b64952b2e",
-            //         "type": "text",
-            //         "value": "How to reset password?",
-            //         "event": "agent_assist_agent_response",
-            //         "volleyTone": [],
-            //         "totalTone": [],
-            //         "suggestions": {
-            //             "faqs": [
-            //                 {
-            //                     "question": "How to reset password?",
-            //                     "taskRefId": "6371ecadccf6bf24460c5a42",
-            //                     "answer": ["Login to application URL and click on forgot password button Login to application URL and click on forgot password button Login to application URL and click on forgot password button Login to application URL and click on forgot password button Login to application URL and click on forgot password button Login to application URL and click on forgot password button", "Login to application URL and click on forgot password button Login to application URL and click on forgot password button", "Login to application URL and click on forgot password button Login to application URL and click on forgot password button", "Login to application URL and click on forgot password button Login to application URL and click on forgot password button"]
-            //                 },
-            //                 // {
-            //                 //   "question": "How can i get new password?",
-            //                 //   "taskRefId": "6371ecadccf6bf24460c5a42",
-            //                 //   "answer": ["Login to application URL and click on forgot password button", "Login to application URL and click on forgot password button", "Login to application URL and click on forgot password button Login to application URL and click on forgot password button Login to application URL and click on forgot password button Login to application URL and click on forgot password button Login to application URL and click on forgot password button"]
-            //                 //  }
-            //             ],
-            //             "searchassist": {}
-            //         },
-            //         "endOfTask": true,
-            //         "isPrompt": false,
-            //         "userInput": "How to reset password?"
-            //     }
-            //     this.updateAgentAssistResponse(response, this.connectionDetails.botId, this.connectionDetails.conversationId);
-            //     this.viewCustomTempAttachment()
-            // }
+            // this.AgentAssist_run_click(data, data.positionId);
+            console.log(this.answerPlaceableIDs, data,"answer placeable ids");
+            
+            if(this.answerPlaceableIDs.length > 0){
+            let response : any =  {
+                    "isSearch": false,
+                    "conversationId": "c-d083e94-03e9-4d50-ab01-46c68eb3b064",
+                    "botId": "st-87f98832-62d4-5df3-860a-c048a917d647",
+                    "experience": "chat",
+                    "positionId": "dg-ua-a4cf3615-4e84-4785-a1ca-e60b64952b2e",
+                    "type": "text",
+                    "value": "How to reset password?",
+                    "event": "agent_assist_agent_response",
+                    "volleyTone": [],
+                    "totalTone": [],
+                    "suggestions": {
+                        "faqs": [
+                            {
+                                "question": "How to reset password?",
+                                "taskRefId": "6371ecadccf6bf24460c5a42",
+                                "answer": ["Login to application URL and click on forgot password button Login to application URL and click on forgot password button Login to application URL and click on forgot password button Login to application URL and click on forgot password button Login to application URL and click on forgot password button Login to application URL and click on forgot password button", "Login to application URL and click on forgot password button Login to application URL and click on forgot password button", "Login to application URL and click on forgot password button Login to application URL and click on forgot password button", "Login to application URL and click on forgot password button Login to application URL and click on forgot password button"]
+                            },
+                            // {
+                            //   "question": "How can i get new password?",
+                            //   "taskRefId": "6371ecadccf6bf24460c5a42",
+                            //   "answer": ["Login to application URL and click on forgot password button", "Login to application URL and click on forgot password button", "Login to application URL and click on forgot password button Login to application URL and click on forgot password button Login to application URL and click on forgot password button Login to application URL and click on forgot password button Login to application URL and click on forgot password button"]
+                            //  }
+                        ],
+                        "searchassist": {}
+                    },
+                    "endOfTask": true,
+                    "isPrompt": false,
+                    "userInput": "How to reset password?"
+                }
+                this.updateAgentAssistResponse(response, this.connectionDetails.botId, this.connectionDetails.conversationId);
+                this.viewCustomTempAttachment()
+            }
             return
         }
         if ($(`#dynamicBlock .type-info-run-send #faqSection-${uuid} .ast-carrotup.rotate-carrot`).length <= 0) {
@@ -1402,6 +1427,8 @@ export class AssistComponent implements OnInit {
       descElement = document.getElementById("articledesc-" + id);
     }
     seeMoreElement.addEventListener('click', (event: any) => {
+      console.log("see more element click");
+      
       event.target.classList.add('hide');
       seeLessElement.classList.remove('hide');
       if(titleElement){
@@ -1614,7 +1641,7 @@ export class AssistComponent implements OnInit {
             // $(`#title-${uniqueID}`).addClass('noPadding');
             $(`#faqDiv-${uniqueID + index}`).addClass('is-dropdown-show-default');
             document.getElementById(`title-${uniqueID + index}`).insertAdjacentHTML('beforeend', checkHtml);
-            this.clickEvents(IdReferenceConst.CHECK, uniqueID + index, uniqueID + index, {intentName : ele.question, positionID : uniqueID + index});
+            this.clickEvents(IdReferenceConst.CHECK, uniqueID + index, uniqueID + index, {intentName : ele.question, positionID : uniqueID + index, question : ele.question});
 
           } else {
             let a = $(`#faqDiv-${uniqueID + index}`);
@@ -1635,7 +1662,7 @@ export class AssistComponent implements OnInit {
             setTimeout(() => {
               this.commonService.updateSeeMoreButtonForAssist(uniqueID, this.projConstants.FAQ);
             }, 1000);
-            this.clickEvents(IdReferenceConst.CHECK, uniqueID + index, uniqueID + index, {intentName : ele.question, positionID : uniqueID + index});
+            // this.clickEvents(IdReferenceConst.CHECK, uniqueID + index, uniqueID + index, {intentName : ele.question, positionID : uniqueID + index});
           }
 
         })
