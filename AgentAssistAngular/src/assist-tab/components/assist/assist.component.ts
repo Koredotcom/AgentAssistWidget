@@ -669,26 +669,8 @@ export class AssistComponent implements OnInit {
             faqs.append(`<div class="desc-text" id="desc-${uuids + index}">${ele.answer[0]}</div>`);
 
             if(ele.answer && ele.answer.length > 1){
-              let seeMoreWrapper = `<div class="see-more-wrapper-info hide" id="seeMoreWrapper-${uuids+index}"></div>`;
-              faqs.append(seeMoreWrapper);
-              let faqIndex = 0;
-              for(let ans of ele.answer){
-                  $(`#seeMoreWrapper-${uuids+index}`).append(`<div class="individual-data-text">
-                      <div class="desc-text-individual" id="desc-faq-${uuids+index+faqIndex.toString()}">${ans}</div>
-                      <div class="seemore-link-text hide" id="seeMore-${uuids+index+faqIndex.toString()}" data-see-more="true" data-actual-id="${uuids+index}">${this.projConstants.READ_MORE}</div>
-                      <div class="seemore-link-text hide" id="seeLess-${uuids+index+faqIndex.toString()}" data-see-less="true" data-actual-id="${uuids+index}">${this.projConstants.READ_LESS}</div>
-                      <div class="actions-send-copy">
-                          <div class="send-icon" data-msg-id="${uuids+index+faqIndex.toString()}"  data-msg-data="${ans}" data-position-id="${positionID}">
-                              <i class="ast-ast-send" data-msg-id="${uuids+index+faqIndex.toString()}"  data-msg-data="${ans}" data-position-id="${positionID}"></i>
-                          </div>
-                          <div class="copy-icon" data-msg-id="${uuids+index+faqIndex.toString()}" data-msg-data="${ans}" data-position-id="${positionID}">
-                              <i class="ast-copy" data-msg-id="${uuids+index+faqIndex.toString()}" data-msg-data="${ans}" data-position-id="${positionID}"></i>
-                          </div>
-                      </div>
-                  </div>`);
-                  faqIndex++;
-              }
-          }
+              this.commonService.appendSeeMoreWrapper(faqs, ele, uuids+index, positionID);
+            }
 
             let faqstypeInfo = $(`.type-info-run-send #faqSection-${uuids + index}`);
             let seeMoreButtonHtml = `
@@ -749,25 +731,7 @@ export class AssistComponent implements OnInit {
             let faqs = $(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')}`);
 
             if(ele.answer && ele.answer.length > 1){
-              let seeMoreWrapper = `<div class="see-more-wrapper-info hide" id="seeMoreWrapper-${splitedanswerPlaceableID.join('-')}"></div>`;
-              faqSection.append(seeMoreWrapper);
-              let faqIndex = 0;
-              for(let ans of ele.answer){
-                  $(`#seeMoreWrapper-${splitedanswerPlaceableID.join('-')}`).append(`<div class="individual-data-text">
-                      <div class="desc-text-individual" id="desc-faq-${splitedanswerPlaceableID.join('-')+faqIndex.toString()}">${ans}</div>
-                      <div class="seemore-link-text hide" id="seeMore-${splitedanswerPlaceableID.join('-')+faqIndex.toString()}" data-see-more="true" data-actual-id="${splitedanswerPlaceableID.join('-')}">${this.projConstants.READ_MORE}</div>
-                      <div class="seemore-link-text hide" id="seeLess-${splitedanswerPlaceableID.join('-')+faqIndex.toString()}" data-see-less="true" data-actual-id="${splitedanswerPlaceableID.join('-')}">${this.projConstants.READ_LESS}</div>
-                      <div class="actions-send-copy">
-                          <div class="send-icon" data-msg-id="${splitedanswerPlaceableID.join('-')+faqIndex.toString()}"  data-msg-data="${ans}">
-                              <i class="ast-ast-send" data-msg-id="${splitedanswerPlaceableID.join('-')+faqIndex.toString()}"  data-msg-data="${ans}"></i>
-                          </div>
-                          <div class="copy-icon" data-msg-id="${splitedanswerPlaceableID.join('-')+faqIndex.toString()}" data-msg-data="${ans}">
-                              <i class="ast-copy" data-msg-id="${splitedanswerPlaceableID.join('-')+faqIndex.toString()}" data-msg-data="${ans}"></i>
-                          </div>
-                      </div>
-                  </div>`);
-                  faqIndex++;
-              }
+              this.commonService.appendSeeMoreWrapper(faqSection, ele, splitedanswerPlaceableID.join('-'), splitedanswerPlaceableID.join('-'));
             }
 
           let seeMoreButtonHtml = `
@@ -1649,25 +1613,7 @@ export class AssistComponent implements OnInit {
             faqs.append(`<div class="desc-text" id="desc-${uniqueID + index}">${ele.answer[0]}</div>`);
 
             if(ele.answer && ele.answer.length > 1){
-              let seeMoreWrapper = `<div class="see-more-wrapper-info hide" id="seeMoreWrapper-${uniqueID+index}"></div>`;
-              faqs.append(seeMoreWrapper);
-              let faqIndex = 0;
-              for(let ans of ele.answer){
-                  $(`#seeMoreWrapper-${uniqueID+index}`).append(`<div class="individual-data-text">
-                      <div class="desc-text-individual" id="desc-faq-${uniqueID+index+faqIndex.toString()}">${ans}</div>
-                      <div class="seemore-link-text hide" id="seeMore-${uniqueID+index+faqIndex.toString()}" data-see-more="true" data-actual-id="${uniqueID+index}">${this.projConstants.READ_MORE}</div>
-                      <div class="seemore-link-text hide" id="seeLess-${uniqueID+index+faqIndex.toString()}" data-see-less="true" data-actual-id="${uniqueID+index}">${this.projConstants.READ_LESS}</div>
-                      <div class="actions-send-copy">
-                          <div class="send-icon" data-msg-id="${uniqueID+index+faqIndex.toString()}"  data-msg-data="${ans}" data-position-id="${uniqueID + index}">
-                              <i class="ast-ast-send" data-msg-id="${uniqueID+index+faqIndex.toString()}"  data-msg-data="${ans}" data-position-id="${uniqueID + index}"></i>
-                          </div>
-                          <div class="copy-icon" data-msg-id="${uniqueID+index+faqIndex.toString()}" data-msg-data="${ans}" data-position-id="${uniqueID + index}">
-                              <i class="ast-copy" data-msg-id="${uniqueID+index+faqIndex.toString()}" data-msg-data="${ans}" data-position-id="${uniqueID + index}"></i>
-                          </div>
-                      </div>
-                  </div>`);
-                  faqIndex++;
-              }
+              this.commonService.appendSeeMoreWrapper(faqs, ele, uniqueID+index, uniqueID+index);
           }
 
             let faqstypeInfo = $(`.type-info-run-send #faqSection-${uniqueID + index}`);
@@ -1750,25 +1696,7 @@ export class AssistComponent implements OnInit {
           faqs.append(`<div class="desc-text" id="desc-${uniqueID + index}">${res.components[0].data.text[0]}</div>`);
 
           if(res.components[0].data.text && res.components[0].data.text.length > 1){
-            let seeMoreWrapper = `<div class="see-more-wrapper-info hide" id="seeMoreWrapper-${uniqueID + index}"></div>`;
-            faqs.append(seeMoreWrapper);
-            let faqIndex = 0;
-            for(let ans of ele.answer){
-                $(`#seeMoreWrapper-${uniqueID + index}`).append(`<div class="individual-data-text">
-                    <div class="desc-text-individual" id="desc-faq-${uniqueID + index+faqIndex.toString()}">${ans}</div>
-                    <div class="seemore-link-text hide" id="seeMore-${uniqueID + index+faqIndex.toString()}" data-see-more="true" data-actual-id="${uniqueID + index}">${this.projConstants.READ_MORE}</div>
-                    <div class="seemore-link-text hide" id="seeLess-${uniqueID + index+faqIndex.toString()}" data-see-less="true" data-actual-id="${uniqueID + index}">${this.projConstants.READ_LESS}</div>
-                    <div class="actions-send-copy">
-                        <div class="send-icon" data-msg-id="${uniqueID + index+faqIndex.toString()}"  data-msg-data="${ans}" data-position-id="${uniqueID + index}">
-                            <i class="ast-ast-send" data-msg-id="${uniqueID + index+faqIndex.toString()}"  data-msg-data="${ans}" data-position-id="${uniqueID + index}"></i>
-                        </div>
-                        <div class="copy-icon" data-msg-id="${uniqueID + index+faqIndex.toString()}" data-msg-data="${ans}" data-position-id="${uniqueID + index}">
-                            <i class="ast-copy" data-msg-id="${uniqueID + index+faqIndex.toString()}" data-msg-data="${ans}" data-position-id="${uniqueID + index}"></i>
-                        </div>
-                    </div>
-                </div>`);
-                faqIndex++;
-            }
+            this.commonService.appendSeeMoreWrapper(faqs, ele, uniqueID + index, uniqueID + index);
         }
 
           let faqstypeInfo = $(`.type-info-run-send #faqSection-${uniqueID + index}`);

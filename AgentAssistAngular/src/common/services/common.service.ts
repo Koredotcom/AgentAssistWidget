@@ -786,6 +786,28 @@ export class CommonService {
 
   //See more buttons update
 
+  appendSeeMoreWrapper(faqs,ele, uniqueIndex , positionID){
+    let seeMoreWrapper = `<div class="see-more-wrapper-info hide" id="seeMoreWrapper-${uniqueIndex}"></div>`;
+    faqs.append(seeMoreWrapper);
+    let faqIndex = 0;
+    for(let ans of ele.answer){
+        $(`#seeMoreWrapper-${uniqueIndex}`).append(`<div class="individual-data-text">
+            <div class="desc-text-individual" id="desc-faq-${uniqueIndex+faqIndex.toString()}">${ans}</div>
+            <div class="seemore-link-text hide" id="seeMore-${uniqueIndex+faqIndex.toString()}" data-see-more="true" data-actual-id="${uniqueIndex}">${ProjConstants.READ_MORE}</div>
+            <div class="seemore-link-text hide" id="seeLess-${uniqueIndex+faqIndex.toString()}" data-see-less="true" data-actual-id="${uniqueIndex}">${ProjConstants.READ_LESS}</div>
+            <div class="actions-send-copy">
+                <div class="send-icon" data-msg-id="${uniqueIndex+faqIndex.toString()}"  data-msg-data="${ans}" data-position-id="${positionID}">
+                    <i class="ast-ast-send" data-msg-id="${uniqueIndex+faqIndex.toString()}"  data-msg-data="${ans}" data-position-id="${positionID}"></i>
+                </div>
+                <div class="copy-icon" data-msg-id="${uniqueIndex+faqIndex.toString()}" data-msg-data="${ans}" data-position-id="${positionID}">
+                    <i class="ast-copy" data-msg-id="${uniqueIndex+faqIndex.toString()}" data-msg-data="${ans}" data-position-id="${positionID}"></i>
+                </div>
+            </div>
+        </div>`);
+        faqIndex++;
+    }
+  }
+
   updateSeeMoreForArticles(articles){
     let articleSuggestionList = $('[id*="articleDivLib-"]');
     articleSuggestionList.each(function() {

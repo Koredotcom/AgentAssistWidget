@@ -44,7 +44,13 @@ export class AssistService {
     });
 
     actualIdList.forEach(id => {
-      this.commonService.updateSeeMoreButtonForAssist(id, ProjConstants.FAQ)
+      this.commonService.updateSeeMoreButtonForAssist(id, ProjConstants.FAQ);
+      if(document.getElementById('seeMoreWrapper-' + id)){
+        let seeMoreElement = document.getElementById('seeMore-' + id);
+        let seeLessElement = document.getElementById('seeLess-' + id);
+        $(seeMoreElement).removeClass('hide');
+        $(seeLessElement).addClass('hide');
+      }
     });
   }
 
