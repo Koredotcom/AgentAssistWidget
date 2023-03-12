@@ -1983,8 +1983,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 function handleEmptyLine(answer){
                     let eleanswer = '';
                     if(answer != undefined && answer != null){
-                        eleanswer = answer.split('\n').map(e => `<p>${e}</p>`);
-                        return eleanswer.join('');
+                        eleanswer = answer.replace(/(\r\n|\n|\r)/gm, "<br>");
+                        // eleanswer = answer.split('\n').map(e => `<p>${e}</p>`);
+                        // return eleanswer.join('');
+                        return eleanswer;
                     }
                     return eleanswer
                 }
