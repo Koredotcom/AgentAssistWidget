@@ -734,7 +734,7 @@ export class AssistComponent implements OnInit {
     }
 
     let result: any = this.templateRenderClassService.getResponseUsingTemplate(data);
-
+    this.commonService.currentPositionId = this.dialogPositionId;
     if (this.commonService.isAutomationOnGoing && this.dropdownHeaderUuids && data.buttons && !data.value.includes('Customer has waited') && (this.dialogPositionId && !data.positionId || (data.positionId == this.dialogPositionId))) {
       let msgStringify = JSON.stringify(result);
       let newTemp = encodeURI(msgStringify);

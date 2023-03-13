@@ -107,7 +107,132 @@ export class TemplateRenderClassService {
       _msgsResponse.parsePayLoad = parsedPayload;
       console.log(parsedPayload, "parsed payload inside template render");
 
-    })
+    });
+    if (res.componentType === 'dialogAct') {
+      _msgsResponse.message[0] = {
+        "type": "text",
+        "component": {
+          "type": "template",
+          "payload": {
+            "template_type": "button",
+            "text": `${res.buttons[0].value}`,
+            "buttons": [
+              {
+                "type": "postback",
+                "title": "Yes",
+                "payload": 'Yes'
+              },
+              {
+                "type": "postback",
+                "title": "No",
+                "payload": "No"
+              }
+            ]
+          }
+        },
+        "cInfo": {
+          "body": {
+            "type": "template",
+            "payload": {
+              "template_type": "button",
+              "text": `${res.buttons[0].value}`,
+              "buttons": [
+                {
+                  "type": "postback",
+                  "title": "Yes",
+                  "payload": 'Yes'
+                },
+                {
+                  "type": "postback",
+                  "title": "No",
+                  "payload": "No"
+                }
+              ]
+            }
+          }
+        }
+      }
+      _msgsResponse.parsePayLoad = {
+        "type": "template",
+        "payload": {
+          "template_type": "button",
+          "text": `${res.buttons[0].text}`,
+          "buttons": [
+            {
+              "type": "postback",
+              "title": "Yes",
+              "payload": "Yes"
+            },
+            {
+              "type": "postback",
+              "title": "No",
+              "payload": "No"
+            }
+          ]
+        }
+      }
+
+    } else if (res.entityType === "list_of_values") {
+      let arr = [];
+      if (res.buttons[0].value.includes('text')) {
+        let str = res.buttons[0].value.replace(/^\s+|\s+$/g, "");
+        let str1 = JSON.parse(str);
+        arr = str1.text.split('\n');
+      } else {
+        arr = res.buttons[0].value.split('\n');
+      }
+
+      _msgsResponse.message[0] = {
+        "type": "text",
+        "component": {
+          "type": "template",
+          "payload": {
+            "template_type": "button",
+            "text": `${arr[0]}`,
+            "buttons": [
+            ]
+          }
+        },
+        "cInfo": {
+          "body": {
+            "type": "template",
+            "payload": {
+              "template_type": "button",
+              "text": `${arr[0]}`,
+              "buttons": [
+              
+              ]
+            }
+          }
+        }
+      }
+    
+      let list = [];
+      arr.forEach((ele, i) => {
+        if (i !== 0 && i !== arr.length - 1 && ele !== '') {
+          let data = ele.substring(3, ele.length);
+          let obj = {
+            "type": "postback",
+            "title": data,
+            "payload": data
+          }
+          list.push(obj)
+        }
+
+      })
+      _msgsResponse.message[0].component.payload.buttons = list;
+      _msgsResponse.message[0].cInfo.body.payload.buttons = list;
+      _msgsResponse.parsePayLoad = {
+        "type": "template",
+        "payload": {
+          "template_type": "button",
+          "text": `${arr[0]}`,
+          "buttons": list
+        }
+      }
+
+      
+    }
     return _msgsResponse;
 
   }
