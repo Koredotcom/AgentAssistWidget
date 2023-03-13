@@ -32,6 +32,8 @@ export class CommonService {
   isAgentSentRequestOnClick: boolean = false;
   isMyBotAgentSentRequestOnClick: boolean = false;
   isUpdateFeedBackDetailsFlag : boolean = false;
+  currentPositionId;
+  currentPositionIdOfMyBot;
 
   clickEventObjectsBeforeTabShift : any = [];
   tabNamevsId : any = {
@@ -831,16 +833,38 @@ export class CommonService {
     if (JSON.parse(localStorage.getItem('innerTextValue'))) {
       if (this.activeTab == ProjConstants.ASSIST) {
 
-        let assistRequestParams = { conversationId: connectionObj.conversationId, botId: connectionObj.botId, value: JSON.parse(localStorage.getItem('innerTextValue')), check: true };
+        let assistRequestParams = 
+        {
+          "conversationId": connectionObj.conversationId,
+          "query": JSON.parse(localStorage.getItem('innerTextValue')),
+          "botId": connectionObj.botId,
+          "agentId": "",
+          "experience": this.isCallConversation === true ? 'voice' : 'chat',
+          "positionId": this.currentPositionId,
+          "entities": [],
+          "check": true,
+          "autoBotId": connectionObj.autoBotId
+      }
         this.webSocketService.emitEvents(EVENTS.agent_assist_request, assistRequestParams);
         this.isAgentSentRequestOnClick = true;
         localStorage.setItem('innerTextValue', null);
+        this.currentPositionId = "";
       } else if (this.activeTab == ProjConstants.MYBOT) {
 
-        let agent_assist_agent_request_params = { conversationId: connectionObj.conversationId, botId: connectionObj.botId, value: JSON.parse(localStorage.getItem('innerTextValue')), isSearch: false };
+        let agent_assist_agent_request_params = 
+        {
+          "isSearch": false,
+          "conversationId": connectionObj.conversationId,
+          "query": JSON.parse(localStorage.getItem('innerTextValue')),
+          "botId": connectionObj.botId,
+          "experience": this.isCallConversation === true ? 'voice' : 'chat',
+          "positionId": this.currentPositionIdOfMyBot,
+          "autoBotId": connectionObj.autoBotId
+      }
         this.webSocketService.emitEvents(EVENTS.agent_assist_agent_request, agent_assist_agent_request_params);
         this.isMyBotAgentSentRequestOnClick = true;
         localStorage.setItem('innerTextValue', null);
+        this.currentPositionIdOfMyBot = "";
       }
       e.stopImmediatePropagation();
       e.preventDefault();
