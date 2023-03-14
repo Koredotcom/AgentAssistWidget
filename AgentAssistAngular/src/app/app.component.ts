@@ -46,13 +46,13 @@ export class AppComponent {
             console.log("inside if condition");
             
             this.initAgentAssist(this.templateChatConfig.chatConfig, params);
-          } else {
-            var message = {
-              method: 'agentassist_loaded',
-              name: "agent_assist"
-          };
+          } 
+          var message = {
+            method: 'agentassist_loaded',
+            name: "agent_assist"
+        };
           window.parent.postMessage(message, "*");
-          }
+          
       });
   }
 
