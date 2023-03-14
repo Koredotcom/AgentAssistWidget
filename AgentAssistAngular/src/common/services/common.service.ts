@@ -692,12 +692,12 @@ export class CommonService {
   }
 
   async renderingAgentHistoryMessage(connectionDetails) {
-    console.log("agent history-----",this.configObj);
+    console.log(this.configObj.autoBotId, connectionDetails.autoBotId,"agent history-----",this.configObj, connectionDetails);
     
     let url = `${this.configObj.agentassisturl}/agentassist/api/v1/agent-feedback/${this.configObj.conversationId}?interaction=mybot`;
     let feedBackResult = await this.renderHistoryFeedBack(url);
     if(this.configObj.fromSAT) {
-      return this.getAgentHistoryData(`${this.configObj.agentassisturl}/agentassist/api/v1/conversations/${this.configObj.conversationId}/aa/messages?botId=${connectionDetails?.autoBotId ? connectionDetails.autoBotId: this.configObj.autoBotId? connectionDetails.botId:''}&agentHistory=true`)
+      return this.getAgentHistoryData(`${this.configObj.agentassisturl}/agentassist/api/v1/conversations/${this.configObj.conversationId}/aa/messages?botId=${this.isEmptyStr(connectionDetails.autoBotId) ? connectionDetails.autoBotId: this.isEmptyStr(this.configObj.autoBotId) ? this.configObj.autoBotId : connectionDetails.botId}&agentHistory=true`)
       .then(response => {
         return { messages: response, feedbackDetails: feedBackResult }
       }).catch(err => {
@@ -705,8 +705,7 @@ export class CommonService {
         return err;
       });
     } else {
-      
-        return this.getAgentHistoryData(`${this.configObj.agentassisturl}/api/1.1/botmessages/agentassist/${connectionDetails?.autoBotId ? connectionDetails.autoBotId: this.configObj.autoBotId ? connectionDetails.botId: ''}/history?convId=${this.configObj.conversationId}&agentHistory=true`)
+        return this.getAgentHistoryData(`${this.configObj.agentassisturl}/api/1.1/botmessages/agentassist/${this.isEmptyStr(connectionDetails.autoBotId)? connectionDetails.autoBotId: this.isEmptyStr(this.configObj.autoBotId) ? this.configObj.autoBotId: connectionDetails.botId}/history?convId=${this.configObj.conversationId}&agentHistory=true`)
         .then(response => {
           return { messages: response, feedbackDetails: feedBackResult }
         }).catch(err => {
@@ -725,12 +724,21 @@ export class CommonService {
     //   });
   }
 
+  isEmptyStr(s){
+    let str = s?.trim();
+    str = str?.replaceAll('"', '').replaceAll("'", '');
+    if(str && str.length>1 && str!==""){
+      return true;
+    }else{
+      return false;
+    }
+  }
   async renderingHistoryMessage(connectionDetails) {
     console.log("------- history ---", this.configObj)
     let url = `${this.configObj.agentassisturl}/agentassist/api/v1/agent-feedback/${this.configObj.conversationId}?interaction=assist`;
     let feedBackResult = await this.renderHistoryFeedBack(url);
     if(this.configObj.fromSAT) {
-      return this.getAgentHistoryData(`${this.configObj.agentassisturl}/agentassist/api/v1/conversations/${this.configObj.conversationId}/aa/messages?botId=${connectionDetails?.autoBotId ? connectionDetails.autoBotId: this.configObj.autoBotId ? connectionDetails.botId:''}&agentHistory=false`)
+      return this.getAgentHistoryData(`${this.configObj.agentassisturl}/agentassist/api/v1/conversations/${this.configObj.conversationId}/aa/messages?botId=${this.isEmptyStr(connectionDetails.autoBotId) ? connectionDetails.autoBotId: this.isEmptyStr(this.configObj.autoBotId) ? this.configObj.autoBotId : connectionDetails.botId}&agentHistory=false`)
       .then(response => {
         return { messages: response, feedbackDetails: feedBackResult }
       }).catch(err => {
@@ -738,8 +746,7 @@ export class CommonService {
         return err;
       });
     } else {
-      
-        return this.getAgentHistoryData(`${this.configObj.agentassisturl}/api/1.1/botmessages/agentassist/${connectionDetails?.autoBotId ? connectionDetails.autoBotId: this.configObj.autoBotId ? connectionDetails.botId:''}/history?convId=${connectionDetails.conversationId}&agentHistory=false`)
+        return this.getAgentHistoryData(`${this.configObj.agentassisturl}/api/1.1/botmessages/agentassist/${this.isEmptyStr(connectionDetails.autoBotId) ? connectionDetails.autoBotId : this.isEmptyStr(this.configObj.autoBotId) ? this.configObj.autoBotId : connectionDetails.botId}/history?convId=${connectionDetails.conversationId}&agentHistory=false`)
         .then(response => {
           return { messages: response, feedbackDetails: feedBackResult }
         }).catch(err => {

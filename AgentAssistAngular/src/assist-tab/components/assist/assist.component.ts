@@ -94,12 +94,12 @@ export class AssistComponent implements OnInit {
       console.log("------------resposne of agent request")
       this.handleSubjectService.setLoader(true);
       if (response && Object.keys(response).length > 0) {
-        if(!this.connectionDetails?.autoBotId || this.connectionDetails?.autoBotId == 'undefined' || this.connectionDetails?.autoBotId == null){
-          this.connectionDetails['autoBotId'] = response?.autoBotId ? response.autoBotId: ''; 
-          this.handleSubjectService.setAutoBotIdFromAgentResponse({autoBotId: response?.autoBotId ? response.autoBotId: ''});
+        if(!this.connectionDetails?.autoBotId || this.connectionDetails?.autoBotId == 'undefined' || this.connectionDetails?.autoBotId == "null" || this.connectionDetails?.autoBotId !== ""){
+          this.connectionDetails['autoBotId'] = response?.autoBotId ? response.autoBotId: undefined; 
+          this.handleSubjectService.setAutoBotIdFromAgentResponse({autoBotId: response?.autoBotId ? response.autoBotId: undefined});
           if(!this.isHistoryApiCalled) {this.callHistoryApi()}
         }
-        if(!this.commonService.configObj?.autoBotId || this.commonService.configObj?.autoBotId == 'undefined' || this.commonService.configObj?.autoBotId == null){
+        if(!this.commonService.configObj?.autoBotId || this.commonService.configObj?.autoBotId == 'undefined' || this.commonService.configObj?.autoBotId == "null" || this.commonService.configObj.autoBotId !== ""){
           this.commonService.configObj['autoBotId'] = response?.autoBotId;
         }
         
@@ -155,7 +155,7 @@ export class AssistComponent implements OnInit {
         let appState = this.localStorageService.getLocalStorageState();
         this.proactiveModeStatus = appState[this.connectionDetails.conversationId][storageConst.PROACTIVE_MODE]
       }
-      if(this.connectionDetails?.autoBotId && this.connectionDetails?.autoBotId !== 'undefined' && this.connectionDetails?.autoBotId !== null && !this.isHistoryApiCalled){
+      if(this.connectionDetails?.autoBotId && this.connectionDetails?.autoBotId !== 'undefined' && this.connectionDetails?.autoBotId !== "null" && this.connectionDetails?.autoBotId !== "" && !this.isHistoryApiCalled){
         this.callHistoryApi();
       }
     });
