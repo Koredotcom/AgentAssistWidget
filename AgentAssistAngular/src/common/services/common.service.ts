@@ -733,6 +733,23 @@ export class CommonService {
       return false;
     }
   }
+
+  checkAutoBotIdDefined(id){
+    if(!id || id == 'undefined' || id == "null" || id == ""){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
+  checkAutoBotId(id){
+    if(id && id !== 'undefined' && id !== "null" && id !== ""){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
   async renderingHistoryMessage(connectionDetails) {
     console.log("------- history ---", this.configObj)
     let url = `${this.configObj.agentassisturl}/agentassist/api/v1/agent-feedback/${this.configObj.conversationId}?interaction=assist`;
