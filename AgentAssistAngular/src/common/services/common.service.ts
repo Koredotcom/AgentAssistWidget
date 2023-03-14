@@ -580,13 +580,23 @@ export class CommonService {
       }
     }
     for (let faq of faqArray) {
-      let faqObject = {
+      let faqObject : any = {
         question: faq.question,
         displayName: faq.displayName,
-        answer: faq.answer || false,
+        answer: (faq.answer && faq.answer.length > 0) ? [] : false,
         showMoreButton: false,
         showLessButton: false,
         answerRender : faq.answer || false
+      }
+      if(faq.answer && faq.answer.length > 0){
+        for(let ans of faq.answer){
+          let object : any = {
+            ans : ans,
+            showMoreButton : false,
+            showLessButton : false
+          }
+          faqObject.answer.push(object);
+        }
       }
       searchResponse.faqs.push(faqObject);
     }
@@ -609,6 +619,26 @@ export class CommonService {
     return searchResponse;
   }
 
+  formatFAQResponse(faqArray){
+    let searchResponse = [];
+    for (let faq of faqArray) {
+      let faqObject : any = {
+        question: faq.question,
+        answer: (faq.answer && faq.answer.length > 0) ? [] : false
+      }
+      if(faq.answer && faq.answer.length > 0){
+        for(let ans of faq.answer){
+          let object : any = {
+            ans : ans
+          }
+          faqObject.answer.push(object);
+        }
+      }
+      searchResponse.push(faqObject);
+    }
+    return searchResponse;
+  }
+
   checkEmptyObjectsInArray(arr){
     arr = arr.filter(
         obj => !(obj && Object.keys(obj).length === 0)
@@ -627,6 +657,38 @@ export class CommonService {
     } else {
       console.log("error")
     }
+  }
+
+  formatHistoryResponseForFAQ(response){
+    let referenceObjvsAnswer : any = {};
+    let historyResp : any = [];
+    for(let resObj of response){
+      if(resObj && resObj.agentAssistDetails && resObj.agentAssistDetails.suggestions && resObj.agentAssistDetails.suggestions.faqs){
+        if(resObj.channels && resObj.channels[0] && resObj.channels[0].reqId){
+          if(!referenceObjvsAnswer[resObj.channels[0].reqId]){
+            referenceObjvsAnswer[resObj.channels[0].reqId] = [];
+          }
+          if(resObj.components && resObj.components[0] && resObj.components[0].data && resObj.components[0].data.text){
+            referenceObjvsAnswer[resObj.channels[0].reqId].push(resObj.components[0].data.text);
+          }
+        }
+      }
+    }
+    
+    for(let resObj of response){
+      if(resObj && resObj.agentAssistDetails && resObj.agentAssistDetails.suggestions && resObj.agentAssistDetails.suggestions.faqs){
+        if(resObj.channels && resObj.channels[0] && resObj.channels[0].reqId){
+          if(referenceObjvsAnswer[resObj.channels[0].reqId]){
+            resObj.components[0].data.text = referenceObjvsAnswer[resObj.channels[0].reqId];
+            historyResp.push(resObj);
+            referenceObjvsAnswer[resObj.channels[0].reqId] = false;
+          }
+        }
+      }else{
+        historyResp.push(resObj);
+      }
+    }
+    return historyResp;
   }
 
   async renderingAgentHistoryMessage(connectionDetails) {
@@ -725,6 +787,28 @@ export class CommonService {
 
   //See more buttons update
 
+  appendSeeMoreWrapper(faqs,ele, uniqueIndex , positionID){
+    let seeMoreWrapper = `<div class="see-more-wrapper-info hide" id="seeMoreWrapper-${uniqueIndex}"></div>`;
+    faqs.append(seeMoreWrapper);
+    let faqIndex = 0;
+    for(let ans of ele.answer){
+        $(`#seeMoreWrapper-${uniqueIndex}`).append(`<div class="individual-data-text">
+            <div class="desc-text-individual" id="desc-faq-${uniqueIndex+faqIndex.toString()}">${ans}</div>
+            <div class="seemore-link-text hide" id="seeMore-${uniqueIndex+faqIndex.toString()}" data-see-more="true" data-actual-id="${uniqueIndex}">${ProjConstants.READ_MORE}</div>
+            <div class="seemore-link-text hide" id="seeLess-${uniqueIndex+faqIndex.toString()}" data-see-less="true" data-actual-id="${uniqueIndex}">${ProjConstants.READ_LESS}</div>
+            <div class="actions-send-copy">
+                <div class="send-icon" data-msg-id="${uniqueIndex+faqIndex.toString()}"  data-msg-data="${ans}" data-position-id="${positionID}">
+                    <i class="ast-ast-send" data-msg-id="${uniqueIndex+faqIndex.toString()}"  data-msg-data="${ans}" data-position-id="${positionID}"></i>
+                </div>
+                <div class="copy-icon" data-msg-id="${uniqueIndex+faqIndex.toString()}" data-msg-data="${ans}" data-position-id="${positionID}">
+                    <i class="ast-copy" data-msg-id="${uniqueIndex+faqIndex.toString()}" data-msg-data="${ans}" data-position-id="${positionID}"></i>
+                </div>
+            </div>
+        </div>`);
+        faqIndex++;
+    }
+  }
+
   updateSeeMoreForArticles(articles){
     let articleSuggestionList = $('[id*="articleDivLib-"]');
     articleSuggestionList.each(function() {
@@ -735,7 +819,7 @@ export class CommonService {
     });
   }
 
-  updateSeeMoreButtonForAssist(id, type?) {
+  updateSeeMoreButtonForAssist(id, type?, answer=[]) {
     let faqSourceTypePixel = 5;
     let titleElement = document.getElementById("title-" + id);
     let descElement = document.getElementById("desc-" + id);
@@ -760,7 +844,10 @@ export class CommonService {
       seeLessElement = document.getElementById('articleseeLess-' + id);
       viewLinkElement = document.getElementById('articleViewLink-' + id);
     }
-    if (titleElement && descElement && divElement) {
+    if(type === ProjConstants.FAQ && answer.length > 1){
+      $(seeMoreElement).removeClass('hide');
+      $(seeLessElement).addClass('hide');
+    }else if(titleElement && descElement && divElement) {
       titleElement.classList.add('no-text-truncate');
       descElement.classList.add('no-text-truncate');
       let divSectionHeight = descElement.clientHeight || 0;
@@ -780,13 +867,14 @@ export class CommonService {
     }
   }
 
-  updateSeeMoreButtonForAgent(id, faq_or_article_obj, type) {
+  updateSeeMoreButtonForAgent(id, faq_or_article_obj, type, answer=[]) {
     let faqSourceTypePixel = 5;
     let titleElement = $("#titleLib-" + id);
     let descElement = $("#descLib-" + id);
     let sectionElement = $('#faqSectionLib-' + id);
     let divElement = $('#faqDivLib-' + id);
     let seeMoreElement = $('#seeMore-' + id);
+    let seeLessElement = $('#seeLess-' + id);
     let snippetsendMsg;
     let viewLinkElement;
     if (type == ProjConstants.SNIPPET) {
@@ -805,7 +893,10 @@ export class CommonService {
       seeMoreElement = $('#articleseeMore-' + id);
       viewLinkElement = $('#articleViewLinkLib-' + id);
     }
-    if (titleElement && descElement && sectionElement && divElement) {
+    if(type === ProjConstants.FAQ && answer.length > 1){
+      faq_or_article_obj.showLessButton = false;
+      faq_or_article_obj.showMoreButton = true;
+    }else if(titleElement && descElement && sectionElement && divElement) {
       $(titleElement).css({ "overflow": "inherit", "white-space": "normal", "text-overflow": "unset" });
       $(descElement).css({ "overflow": "inherit", "text-overflow": "unset", "display": "block", "white-space": "normal" });
       let faqSectionHeight = $(sectionElement).css("height");
