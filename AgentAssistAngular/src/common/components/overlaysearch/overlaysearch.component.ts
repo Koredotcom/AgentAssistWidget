@@ -175,7 +175,7 @@ export class OverlaysearchComponent implements OnInit {
       this.faqAllView = true;
       this.faqViewCount = 2;
     }
-    if(this.searchType = this.projConstants.AGENT_SEARCH){
+    if(this.searchType == this.projConstants.AGENT_SEARCH){
       this.overlayScrollTop.emit(true);
     }
      setTimeout(() => {
