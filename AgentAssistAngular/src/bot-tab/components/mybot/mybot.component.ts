@@ -138,6 +138,7 @@ export class MybotComponent implements OnInit {
         this.connectionDetails['autoBotId'] = data['autoBotId'];
         if(!this.isHistoryApiCalled){this.callHistoryApi()}
       }
+      if(!this.isHistoryApiCalled){this.callHistoryApi()}
     })
 
     this.subscriptionsList.push(subscription1);
@@ -162,6 +163,7 @@ export class MybotComponent implements OnInit {
   //running dialogue and mybot data response code.
   processMybotDataResponse(data) {
     let results: any = this.templateRenderClassService.getResponseUsingTemplate(data);
+    this.commonService.currentPositionIdOfMyBot = this.myBotDialogPositionId;
     let sendMsgData = encodeURI(JSON.stringify(results));
     let myBotuuids = this.koreGenerateuuidPipe.transform();
     let agentInputId = this.randomUUIDPipe.transform();

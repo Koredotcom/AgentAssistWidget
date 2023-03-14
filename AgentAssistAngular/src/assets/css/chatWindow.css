@@ -1147,19 +1147,19 @@
 }
 
 .kore-chat-window .buttonTmplContent .buttonTmplContentChild {
-    color: var(--sdk-chat-window-btn-font-clr);
-    border-top: 1px solid var(--sdk-chat-widow-primary-bg-color);
+    /* color: var(--sdk-chat-window-btn-font-clr); */
+    border: 1px solid lightgrey;
     padding: 10px;
     margin: 0 !important;    
     font-style: normal;
     text-align: center;
     cursor: pointer;
-    background-color: var(--sdk-chat-window-btn-default-bg);
+    background-color: transparent;
 }
 .kore-chat-window .buttonTmplContent .buttonTmplContentChild:hover{
-    color: var(--sdk-chat-window-btn-hover-font-clr);
+    /* color: var(--sdk-chat-window-btn-hover-font-clr); */
     /* border-color: var(--sdk-chat-window-btn-hover-border-clr); */
-    background-color: var(--sdk-chat-window-btn-hover-bg);
+    /* background-color: var(--sdk-chat-window-btn-hover-bg); */
 }
 
 .kore-chat-window .quick_replies_btn_parent {

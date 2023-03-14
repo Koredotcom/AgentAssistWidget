@@ -32,6 +32,8 @@ export class CommonService {
   isAgentSentRequestOnClick: boolean = false;
   isMyBotAgentSentRequestOnClick: boolean = false;
   isUpdateFeedBackDetailsFlag : boolean = false;
+  currentPositionId;
+  currentPositionIdOfMyBot;
 
   clickEventObjectsBeforeTabShift : any = [];
   tabNamevsId : any = {
@@ -694,8 +696,8 @@ export class CommonService {
     
     let url = `${this.configObj.agentassisturl}/agentassist/api/v1/agent-feedback/${this.configObj.conversationId}?interaction=mybot`;
     let feedBackResult = await this.renderHistoryFeedBack(url);
-    if(this.configObj.fromSAT && (this.configObj['autoBotId'] || connectionDetails['autoBotId'])) {
-      return this.getAgentHistoryData(`${this.configObj.agentassisturl}/agentassist/api/v1/conversations/${this.configObj.conversationId}/aa/messages?botId=${connectionDetails?.autoBotId ? connectionDetails.autoBotId: this.configObj.autoBotId}&agentHistory=true`)
+    if(this.configObj.fromSAT) {
+      return this.getAgentHistoryData(`${this.configObj.agentassisturl}/agentassist/api/v1/conversations/${this.configObj.conversationId}/aa/messages?botId=${connectionDetails?.autoBotId ? connectionDetails.autoBotId: this.configObj.autoBotId? connectionDetails.botId:''}&agentHistory=true`)
       .then(response => {
         return { messages: response, feedbackDetails: feedBackResult }
       }).catch(err => {
@@ -703,15 +705,15 @@ export class CommonService {
         return err;
       });
     } else {
-      if(this.configObj['autoBotId'] || connectionDetails['autoBotId']) {
-        return this.getAgentHistoryData(`${this.configObj.agentassisturl}/api/1.1/botmessages/agentassist/${connectionDetails?.autoBotId ? connectionDetails.autoBotId: this.configObj.autoBotId}/history?convId=${this.configObj.conversationId}&agentHistory=true`)
+      
+        return this.getAgentHistoryData(`${this.configObj.agentassisturl}/api/1.1/botmessages/agentassist/${connectionDetails?.autoBotId ? connectionDetails.autoBotId: this.configObj.autoBotId ? connectionDetails.botId: ''}/history?convId=${this.configObj.conversationId}&agentHistory=true`)
         .then(response => {
           return { messages: response, feedbackDetails: feedBackResult }
         }).catch(err => {
           console.log("error", err)
           return err;
         });
-      }
+      
      
     }
     // return this.getAgentHistoryData(`${this.configObj.agentassisturl}/api/1.1/botmessages/agentassist/${this.configObj.botid}/history?convId=${this.configObj.conversationId}&agentHistory=true`)
@@ -727,9 +729,8 @@ export class CommonService {
     console.log("------- history ---", this.configObj)
     let url = `${this.configObj.agentassisturl}/agentassist/api/v1/agent-feedback/${this.configObj.conversationId}?interaction=assist`;
     let feedBackResult = await this.renderHistoryFeedBack(url);
-    // this.configObj.autoBotId = connectionDetails.botId;
-    if(this.configObj.fromSAT && (this.configObj['autoBotId'] || connectionDetails['autoBotId'])) {
-      return this.getAgentHistoryData(`${this.configObj.agentassisturl}/agentassist/api/v1/conversations/${this.configObj.conversationId}/aa/messages?botId=${connectionDetails?.autoBotId ? connectionDetails.autoBotId: this.configObj.autoBotId}&agentHistory=false`)
+    if(this.configObj.fromSAT) {
+      return this.getAgentHistoryData(`${this.configObj.agentassisturl}/agentassist/api/v1/conversations/${this.configObj.conversationId}/aa/messages?botId=${connectionDetails?.autoBotId ? connectionDetails.autoBotId: this.configObj.autoBotId ? connectionDetails.botId:''}&agentHistory=false`)
       .then(response => {
         return { messages: response, feedbackDetails: feedBackResult }
       }).catch(err => {
@@ -737,15 +738,15 @@ export class CommonService {
         return err;
       });
     } else {
-      if(this.configObj['autoBotId'] || connectionDetails['autoBotId']){
-        return this.getAgentHistoryData(`${this.configObj.agentassisturl}/api/1.1/botmessages/agentassist/${connectionDetails?.autoBotId ? connectionDetails.autoBotId: this.configObj.autoBotId}/history?convId=${connectionDetails.conversationId}&agentHistory=false`)
+      
+        return this.getAgentHistoryData(`${this.configObj.agentassisturl}/api/1.1/botmessages/agentassist/${connectionDetails?.autoBotId ? connectionDetails.autoBotId: this.configObj.autoBotId ? connectionDetails.botId:''}/history?convId=${connectionDetails.conversationId}&agentHistory=false`)
         .then(response => {
           return { messages: response, feedbackDetails: feedBackResult }
         }).catch(err => {
           console.log("error", err)
           return err;
         });
-      }
+
     
     }
   }
@@ -923,16 +924,38 @@ export class CommonService {
     if (JSON.parse(localStorage.getItem('innerTextValue'))) {
       if (this.activeTab == ProjConstants.ASSIST) {
 
-        let assistRequestParams = { conversationId: connectionObj.conversationId, botId: connectionObj.botId, value: JSON.parse(localStorage.getItem('innerTextValue')), check: true };
+        let assistRequestParams = 
+        {
+          "conversationId": connectionObj.conversationId,
+          "query": JSON.parse(localStorage.getItem('innerTextValue')),
+          "botId": connectionObj.botId,
+          "agentId": "",
+          "experience": this.isCallConversation === true ? 'voice' : 'chat',
+          "positionId": this.currentPositionId,
+          "entities": [],
+          "check": true,
+          "autoBotId": connectionObj.autoBotId
+      }
         this.webSocketService.emitEvents(EVENTS.agent_assist_request, assistRequestParams);
         this.isAgentSentRequestOnClick = true;
         localStorage.setItem('innerTextValue', null);
+        this.currentPositionId = "";
       } else if (this.activeTab == ProjConstants.MYBOT) {
 
-        let agent_assist_agent_request_params = { conversationId: connectionObj.conversationId, botId: connectionObj.botId, value: JSON.parse(localStorage.getItem('innerTextValue')), isSearch: false };
+        let agent_assist_agent_request_params = 
+        {
+          "isSearch": false,
+          "conversationId": connectionObj.conversationId,
+          "query": JSON.parse(localStorage.getItem('innerTextValue')),
+          "botId": connectionObj.botId,
+          "experience": this.isCallConversation === true ? 'voice' : 'chat',
+          "positionId": this.currentPositionIdOfMyBot,
+          "autoBotId": connectionObj.autoBotId
+      }
         this.webSocketService.emitEvents(EVENTS.agent_assist_agent_request, agent_assist_agent_request_params);
         this.isMyBotAgentSentRequestOnClick = true;
         localStorage.setItem('innerTextValue', null);
+        this.currentPositionIdOfMyBot = "";
       }
       e.stopImmediatePropagation();
       e.preventDefault();
