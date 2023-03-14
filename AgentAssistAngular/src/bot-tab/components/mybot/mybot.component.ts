@@ -122,7 +122,7 @@ export class MybotComponent implements OnInit {
       if (response) {
         this.connectionDetails = response;
       }
-      if(this.connectionDetails?.autoBotId && this.connectionDetails?.autoBotId !== 'undefined' && this.connectionDetails?.autoBotId !== null && !this.isHistoryApiCalled){
+      if(this.commonService.checkAutoBotId(this.connectionDetails?.autoBotId) && !this.isHistoryApiCalled){
         this.callHistoryApi();
       }
     });
@@ -134,7 +134,7 @@ export class MybotComponent implements OnInit {
     })
 
     let subscription8 = this.handleSubjectService.autoBotIdSubject$.subscribe((data)=>{
-      if(data['autoBotId'] && data['autoBotId'] !== 'undefined' && data['autoBotId'] !== null){
+      if(this.commonService.checkAutoBotId(data['autoBotId'])){
         this.connectionDetails['autoBotId'] = data['autoBotId'];
         if(!this.isHistoryApiCalled){this.callHistoryApi()}
       }
