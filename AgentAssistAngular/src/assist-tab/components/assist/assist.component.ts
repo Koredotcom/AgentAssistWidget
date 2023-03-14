@@ -520,10 +520,6 @@ export class AssistComponent implements OnInit {
         }
 
         if (data.suggestions.faqs?.length > 0) {
-          // data.suggestions.faqs = [
-          //   {question : "How does COVID -19 spread?", answer : ["Covid spreads through tiny virus particles that get inside the body. The most common way for covid to enter the body is by being breathed in from infected air. This can happen when people stand close togethe When a person breaths out, it’s not just air that leaves their nose or mouth. Tiny water droplets are also breathed out, and these can be infected with viruses like colds or covid. These water droplets can be breathed in by other people, or if they land on a surface that someone touches later, that person could catch coronavirus."]},
-          //   {question : "Reset Password" , answer : ['to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click off', 'to change password on reset reset to reset password click on reset to reset password click on reset to reset password click on reset to reset password click on reset', 'to reset password click on reset', 'to change password click on reset']}
-          // ]
           let automationSuggestions = document.getElementById(`automationSuggestions-${responseId}`);
           let faqAreaHtml = this.assisttabService.getFaqAreaTemplate(responseId, data, this.imageFilePath, this.imageFileNames);
           automationSuggestions.innerHTML += faqAreaHtml;
@@ -703,9 +699,6 @@ export class AssistComponent implements OnInit {
     } else {
       if (data.type === 'text' && data.suggestions) {
         let faqAnswerIdsPlace;
-        // data.suggestions.faqs = [
-        //   {question : "Reset Password" , answer : ['to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click on to reset password click off', 'to change password on reset reset to reset password click on reset to reset password click on reset to reset password click on reset to reset password click on reset', 'to reset password click on reset', 'to change password click on reset']}
-        // ]
         
           data.suggestions.faqs.forEach((ele) => {
            
@@ -1149,41 +1142,7 @@ export class AssistComponent implements OnInit {
             this.answerPlaceableIDs.push({id:`desc-${uuid}`, input: data.intentName, inputQuestion: data.question, positionId: data.positionId});
             $(`#dynamicBlock #${target.id}`).addClass('rotate-carrot');
             $(`#dynamicBlock #faqDiv-${uuid}`).addClass('is-dropdown-open');
-            // this.AgentAssist_run_click(data, data.positionId);            
-            if(this.answerPlaceableIDs.length > 0){
-            let response : any =  {
-                    "isSearch": false,
-                    "conversationId": "c-d083e94-03e9-4d50-ab01-46c68eb3b064",
-                    "botId": "st-87f98832-62d4-5df3-860a-c048a917d647",
-                    "experience": "chat",
-                    "positionId": "dg-ua-a4cf3615-4e84-4785-a1ca-e60b64952b2e",
-                    "type": "text",
-                    "value": "How to reset password?",
-                    "event": "agent_assist_agent_response",
-                    "volleyTone": [],
-                    "totalTone": [],
-                    "suggestions": {
-                        "faqs": [
-                            {
-                                "question": "How to reset password?",
-                                "taskRefId": "6371ecadccf6bf24460c5a42",
-                                "answer": ["Login to application URL and click on forgot password button Login to application URL and click on forgot password button Login to application URL and click on forgot password button Login to application URL and click on forgot password button Login to application URL and click on forgot password button Login to application URL and click on forgot password button", "Login to application URL and click on forgot password button Login to application URL and click on forgot password button", "Login to application URL and click on forgot password button Login to application URL and click on forgot password button", "Login to application URL and click on forgot password button Login to application URL and click on forgot password button"]
-                            },
-                            // {
-                            //   "question": "How can i get new password?",
-                            //   "taskRefId": "6371ecadccf6bf24460c5a42",
-                            //   "answer": ["Login to application URL and click on forgot password button", "Login to application URL and click on forgot password button", "Login to application URL and click on forgot password button Login to application URL and click on forgot password button Login to application URL and click on forgot password button Login to application URL and click on forgot password button Login to application URL and click on forgot password button"]
-                            //  }
-                        ],
-                        "searchassist": {}
-                    },
-                    "endOfTask": true,
-                    "isPrompt": false,
-                    "userInput": "How to reset password?"
-                }
-                this.updateAgentAssistResponse(response, this.connectionDetails.botId, this.connectionDetails.conversationId);
-                this.viewCustomTempAttachment()
-            }
+            this.AgentAssist_run_click(data, data.positionId);            
             return
         }
         if ($(`#dynamicBlock .type-info-run-send #faqSection-${uuid} .ast-carrotup.rotate-carrot`).length <= 0) {

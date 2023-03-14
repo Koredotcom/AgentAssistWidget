@@ -69,7 +69,6 @@ export class OverlaysearchComponent implements OnInit {
         setTimeout(() => {
           this.emitSearchRequest(searchObj, true);
         }, 100);
-        console.log(this.showOverLay, "show overlya sub1"); 
       }
       this.handleSubjectService.setLoader(false);
     });
@@ -86,8 +85,6 @@ export class OverlaysearchComponent implements OnInit {
     let subscription3 = this.handleSubjectService.connectDetailsSubject.pipe(takeUntil(this.destroySubject)).subscribe((response: any) => {
       if (response) {
         this.connectionDetails = response;
-        console.log("connection details, 'inside assist tab");
-
       }
     });
     this.subscriptionsList.push(subscription1);
@@ -96,7 +93,6 @@ export class OverlaysearchComponent implements OnInit {
   }
 
   emitSearchRequest(searchObj, isSearchFlag) {
-    console.log("inside emit overlay request", searchObj, this.connectionDetails);
     let connectionDetails: any = Object.assign({}, this.connectionDetails);
     connectionDetails.value = searchObj.value;
     connectionDetails.isSearch = isSearchFlag;
@@ -137,9 +133,7 @@ export class OverlaysearchComponent implements OnInit {
     dialog.positionId = this.randomUUIDPipe.transform(IdReferenceConst.positionId);
     dialog.intentName = dialog.name;
     let runDialogueObject = Object.assign({}, this.searchConentObject);
-    Object.assign(runDialogueObject, dialog);
-    console.log(runDialogueObject, "runDialogueObject inside overlaysearch");
-    
+    Object.assign(runDialogueObject, dialog);    
     if (searchType == this.projConstants.ASSIST) {
       this.handleSubjectService.setActiveTab(this.projConstants.ASSIST);
     } else {
@@ -210,7 +204,6 @@ export class OverlaysearchComponent implements OnInit {
         this.handleSeeMoreButton(this.searchResponse.faqs, this.projConstants.FAQ);
         this.handleSeeMoreButton(this.searchResponse.articles, this.projConstants.ARTICLE);
         this.handleSeeMoreButton(this.searchResponse.snippets, this.projConstants.SNIPPET);
-        console.log(this.searchResponse.snippets, 'snippets');
       }, 1000);
       this.checkFaqAnswerNotRenderCountAndRequest()
     } else if (response && response.suggestions && this.answerPlaceableIDs.length > 0) {
@@ -241,9 +234,7 @@ export class OverlaysearchComponent implements OnInit {
   checkFaqAnswerNotRenderCountAndRequest(){
     let answerNotRenderendElements = (this.searchResponse.faqs || []).filter(faq => {
       return !faq.answer;
-    });
-    console.log(answerNotRenderendElements, "answer not rendered elements");
-    
+    });    
     if(answerNotRenderendElements.length == 1){
       this.getFaqAnswerAndtoggle(answerNotRenderendElements[0]);
     }
@@ -258,36 +249,6 @@ export class OverlaysearchComponent implements OnInit {
       searchObj.value = faq.displayName;
       searchObj.question = faq.question
       this.emitSearchRequest(searchObj, true);
-    //   let agentResponse = {
-    //     "isSearch": true,
-    //     "conversationId": "c-d083e94-03e9-4d50-ab01-46c68eb3b064",
-    //     "botId": "st-87f98832-62d4-5df3-860a-c048a917d647",
-    //     "experience": "chat",
-    //     "positionId": "dg-ua-a4cf3615-4e84-4785-a1ca-e60b64952b2e",
-    //     "type": "text",
-    //     "value": "How to reset password?",
-    //     "event": "agent_assist_agent_response",
-    //     "volleyTone": [],
-    //     "totalTone": [],
-    //     "suggestions": {
-    //         "faqs": [
-    //             {
-    //                 "question": "How to reset password?",
-    //                 "taskRefId": "6371ecadccf6bf24460c5a42",
-    //                 "answer": ["Login to application URL and click on forgot password button Login to application URL and click on forgot password button Login to application URL and click on forgot password button Login to application URL and click on forgot password button Login to application URL and click on forgot password button Login to application URL and click on forgot password button", "Login to application URL and click on forgot password button Login to application URL and click on forgot password button", "Login to application URL and click on forgot password button Login to application URL and click on forgot password button", "Login to application URL and click on forgot password button Login to application URL and click on forgot password button"]
-    //             },
-    //             // {
-    //             //   "question": "How can i get new password?",
-    //             //   "taskRefId": "6371ecadccf6bf24460c5a42",
-    //             //   "answer": ["Login to application URL and click on forgot password button", "Login to application URL and click on forgot password button", "Login to application URL and click on forgot password button Login to application URL and click on forgot password button Login to application URL and click on forgot password button Login to application URL and click on forgot password button Login to application URL and click on forgot password button"]
-    //             //  }
-    //         ],
-    //         "searchassist": {}
-    //     },
-    //     "endOfTask": true,
-    //     "isPrompt": false,
-    //     "userInput": "How to reset password?"
-    // }
     }
     setTimeout(() => {
       this.handleSeeMoreButton(this.searchResponse.faqs, this.projConstants.FAQ);
@@ -370,9 +331,7 @@ export class OverlaysearchComponent implements OnInit {
   toggleShowMoreLessButtonsForFaq(faq_ans_obj, parentIndex, index){
     parentIndex = parentIndex.toString();
     let titleElement = document.getElementById("titleLib-" + parentIndex);
-    let descElement = document.getElementById("desc-faq-lib-" + parentIndex + index);
-    console.log("desc-faq-lib-" + parentIndex + index, "toggle id");
-    
+    let descElement = document.getElementById("desc-faq-lib-" + parentIndex + index);    
 
     faq_ans_obj.showLessButton = !faq_ans_obj.showLessButton;
     faq_ans_obj.showMoreButton = !faq_ans_obj.showMoreButton;
@@ -381,30 +340,25 @@ export class OverlaysearchComponent implements OnInit {
       if(titleElement) titleElement.classList.add('no-text-truncate');
       if(descElement) $(descElement).css({"display" : "block"});
       faq_ans_obj.seeMoreWrapper = true;
-      console.log("show less button",faq_ans_obj.seeMoreWrapper);
     }
 
     if (faq_ans_obj.showMoreButton) {
       if(titleElement) titleElement.classList.remove('no-text-truncate');
       if(descElement) $(descElement).css({"display" : "-webkit-box"});
       faq_ans_obj.seeMoreWrapper = false;
-      console.log("show more button", faq_ans_obj.seeMoreWrapper);
     }
   }
 
   updateSeeMoreButtonForFAQAgent(actualId, answerArray){
     let index = 0;
-    console.log(answerArray, "answer array");
     for(let ans of answerArray){  
         let id = actualId + index;
-        console.log(id, "id inside update see more button");
         let faqSourceTypePixel = 5;
         let descElement =  $("#desc-faq-lib-" + id);
         $(descElement).css({"display" : "block"});
         if(descElement){
             let divSectionHeight = $(descElement).css("height")  || '0px';
             divSectionHeight = parseInt(divSectionHeight?.slice(0,divSectionHeight.length-2));
-            console.log(divSectionHeight, "div section height");
             if (divSectionHeight > (24 + faqSourceTypePixel)) {
               ans.showLessButton = ans.showLessButton ? ans.showLessButton : false;
               ans.showMoreButton = ans.showLessButton ? false : true;
@@ -419,13 +373,13 @@ export class OverlaysearchComponent implements OnInit {
           answer : [ans],
           type : this.projConstants.FAQ
         }
-        this.handleSeeMoreLessClickEventsForFaq(id, dataObj)
+        // this.handleSeeMoreLessClickEventsForFaq(id, dataObj)
     }
 }
 
-  handleSeeMoreLessClickEventsForFaq(id, data){
+  // handleSeeMoreLessClickEventsForFaq(id, data){
     
-  }
+  // }
 
 
 }
