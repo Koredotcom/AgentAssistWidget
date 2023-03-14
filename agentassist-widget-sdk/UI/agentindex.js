@@ -7186,7 +7186,7 @@ function AgentAssist_run_click(e, dialogId) {
 
     if (e.check || e.checkLib) {
         AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: convId, botId: botId, value: intentName, check: true, "positionId":dialogId, childBotId: childBotId, childBotName: childBotName });
-
+        document.getElementById("loader").style.display = "block";
     } else {
         //document.getElementById("addRemoveDropDown").style.display = "none";
         AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: convId, botId: botId, value: intentName, intentName: intentName, "positionId":dialogId, childBotId: childBotId, childBotName: childBotName, 'entities': isRetore ? JSON.parse(previousEntitiesValue) : entitiestValueArray });
