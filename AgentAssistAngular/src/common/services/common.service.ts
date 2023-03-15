@@ -879,10 +879,10 @@ export class CommonService {
         $(seeMoreElement).removeClass('hide');
       } else {
         $(seeMoreElement).addClass('hide');
-        if (type == ProjConstants.ARTICLE) {
+        if (type == ProjConstants.ARTICLE && viewLinkElement) {
           viewLinkElement.classList.remove('hide');
         }
-        if(type == ProjConstants.SNIPPET){
+        if(type == ProjConstants.SNIPPET && snippetviewMsg){
           snippetviewMsg.classList.remove('hide');
         }
       }
