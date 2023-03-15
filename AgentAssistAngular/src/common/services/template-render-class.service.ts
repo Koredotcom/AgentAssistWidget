@@ -109,13 +109,21 @@ export class TemplateRenderClassService {
 
     });
     if (res.componentType === 'dialogAct') {
+      let arr = [];
+      if (res.buttons[0].value.includes('text')) {
+        let str = res.buttons[0].value.replace(/^\s+|\s+$/g, "");
+        let str1 = JSON.parse(str);
+        arr = str1.text.split('\n');
+      } else {
+        arr = res.buttons[0].value.split('\n');
+      }
       _msgsResponse.message[0] = {
         "type": "text",
         "component": {
           "type": "template",
           "payload": {
             "template_type": "button",
-            "text": `${res.buttons[0].value}`,
+            "text": `${arr[0]}`,
             "buttons": [
               {
                 "type": "postback",
@@ -135,7 +143,7 @@ export class TemplateRenderClassService {
             "type": "template",
             "payload": {
               "template_type": "button",
-              "text": `${res.buttons[0].value}`,
+              "text": `${arr[0]}`,
               "buttons": [
                 {
                   "type": "postback",
@@ -156,7 +164,7 @@ export class TemplateRenderClassService {
         "type": "template",
         "payload": {
           "template_type": "button",
-          "text": `${res.buttons[0].text}`,
+          "text": `${arr[0]}`,
           "buttons": [
             {
               "type": "postback",
