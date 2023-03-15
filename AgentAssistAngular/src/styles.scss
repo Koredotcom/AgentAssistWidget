@@ -1144,6 +1144,9 @@ html, body{
     position: relative;
     transition: 0.2s all ease;
     margin: 0 0 8px 0;
+    display: inline-block;
+    width: 100%;
+    height: 100%;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data .run-info-content .agent-utt.enter-details-block{
     background: var(--bg-color-containers);
@@ -1223,7 +1226,7 @@ border: 1px solid transparent !important;
     right: 8px;
     top: 3px;
     border-radius: 0px 8px 8px 0px;
-    width: 100px;
+    width: 80px;
     background: linear-gradient(270deg,var(--default-white-color) 0%,rgba(255,255,255,0.8173) 78.65%,rgba(255,255,255,0) 100%);
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data.last-msg-white-bg .run-info-content .agent-utt .action-links{
@@ -3054,7 +3057,7 @@ border: 1px solid transparent !important;
     right: 8px;
     top: 3px;
     border-radius: 0px 8px 8px 0px;
-    width: 100px;
+    width: 80px;
     background: linear-gradient(270deg,var(--default-white-color) 0%,rgba(255,255,255,0.8173) 78.65%,rgba(255,255,255,0) 100%);
 }
 .collapse-acc-data .steps-run-data .run-info-content .agent-utt .action-links .send-run-btn {
