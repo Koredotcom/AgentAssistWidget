@@ -270,6 +270,7 @@ export class CommonService {
     var endOfDialoge;
     let taskIdOfDialog = $(`#dropDownData-${id}`).attr('data-task-id');
     let positionID = previousTaskPositionId;
+    this.isAutomationOnGoing = false;
     if (runForAgentBot) {
       $(`#myBotTerminateAgentDialog-${id}.btn-danger`).remove();
       dropDownData = $(`#dropDownData-${id}`);

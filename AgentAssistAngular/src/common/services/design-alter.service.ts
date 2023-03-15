@@ -239,20 +239,20 @@ export class DesignAlterService {
 }
 
   // toggle dropdown click events
-  handleDropdownToggle(uuid) {
-    document.getElementById(IdReferenceConst.DROPDOWN_HEADER + '-' + uuid).addEventListener('click', (event) => {
-      let dropdownDataElement = $(`#dropDownData-${uuid}`);
-      if ($(dropdownDataElement).hasClass('hide')) {
-        $(dropdownDataElement).removeClass('hide');
-        $(`#dropDownHeader-${uuid}`).find('.ast-carrotup').addClass('rotate-carrot');
-        $(`#endTaks-${uuid}`).removeClass('hide');
-      } else {
-        $(dropdownDataElement).addClass('hide')
-        $(`#dropDownHeader-${uuid}`).find('.ast-carrotup').removeClass('rotate-carrot');
-        $(`#endTaks-${uuid}`).removeClass('hide');
-      }
-    });
-  }
+  // handleDropdownToggle(uuid) {
+  //   document.getElementById(IdReferenceConst.DROPDOWN_HEADER + '-' + uuid).addEventListener('click', (event) => {
+  //     let dropdownDataElement = $(`#dropDownData-${uuid}`);
+  //     if ($(dropdownDataElement).hasClass('hide')) {
+  //       $(dropdownDataElement).removeClass('hide');
+  //       $(`#dropDownHeader-${uuid}`).find('.ast-carrotup').addClass('rotate-carrot');
+  //       $(`#endTaks-${uuid}`).removeClass('hide');
+  //     } else {
+  //       $(dropdownDataElement).addClass('hide')
+  //       $(`#dropDownHeader-${uuid}`).find('.ast-carrotup').removeClass('rotate-carrot');
+  //       $(`#endTaks-${uuid}`).removeClass('hide');
+  //     }
+  //   });
+  // }
 
   //empty deep
 
