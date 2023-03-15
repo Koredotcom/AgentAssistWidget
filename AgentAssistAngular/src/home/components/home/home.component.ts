@@ -740,6 +740,22 @@ setProactiveMode(){
         }
         this.handleSubjectService.setOverridebtnClickEvent(overrideObject);
       }
+      if (target.id.split('-')[0] === 'dropDownHeader' || target.id.split('-')[0] === 'dropDownTitle' || target.id.split('-')[0] === 'dialogueArrow') {
+        let targetIDs = (target.id).split('-');
+        targetIDs.shift();
+        let targetsss = targetIDs.join('-');
+        let dropdownDataElement = $(`#dropDownData-${targetsss}`);
+        if ($(dropdownDataElement).hasClass('hide')) {
+          $(dropdownDataElement).removeClass('hide');
+          $(`#dropDownHeader-${targetsss}`).find('.ast-carrotup').addClass('rotate-carrot');
+          $(`#endTaks-${targetsss}`).removeClass('hide');
+        } else {
+          $(dropdownDataElement).addClass('hide')
+          $(`#dropDownHeader-${targetsss}`).find('.ast-carrotup').removeClass('rotate-carrot');
+          $(`#endTaks-${targetsss}`).removeClass('hide');
+        }
+
+      }
     });
     document.addEventListener("keyup", (evt: any) => {
       let target = evt.target;
