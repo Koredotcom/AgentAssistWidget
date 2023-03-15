@@ -80,7 +80,7 @@ export class MybotDataService {
                             <i class="ast-rule"></i>
                         </div>
                         <div class="header-text" id="dropDownTitle-${agentBotuuids}">${intentName}</div>
-                        <i class="ast-carrotup rotate-carrot"></i>
+                        <i class="ast-carrotup rotate-carrot" id="dialogueArrow-${agentBotuuids}"></i>
                         <button class="btn-danger" id="myBotTerminateAgentDialog-${agentBotuuids}">Terminate</button>
                     </div>
                     <div class="collapse-acc-data" id="dropDownData-${agentBotuuids}">

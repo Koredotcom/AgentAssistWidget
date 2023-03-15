@@ -280,7 +280,7 @@ export class MybotComponent implements OnInit {
     let dropdownHtml = this.mybotDataService.createDialogTaskAccordionTemplate(agentBotuuids, intentName);
     this.mybotautomation.nativeElement.innerHTML += dropdownHtml;
     this.clickEvents(IdReferenceConst.MYBOTTERMINATE, agentBotuuids);
-    this.clickEvents(IdReferenceConst.DROPDOWN_HEADER, agentBotuuids);
+    // this.clickEvents(IdReferenceConst.DROPDOWN_HEADER, agentBotuuids);
   }
 
   //input value from mybot
@@ -340,7 +340,7 @@ export class MybotComponent implements OnInit {
     if (eventName == IdReferenceConst.MYBOTTERMINATE) {
       this.terminateButtonClick(uuid)
     } else if (eventName == IdReferenceConst.DROPDOWN_HEADER) {
-      this.designAlterService.handleDropdownToggle(uuid);
+      // this.designAlterService.handleDropdownToggle(uuid);
     }
   }
 
@@ -381,7 +381,7 @@ export class MybotComponent implements OnInit {
                               <i class="ast-rule"></i>
                           </div>
                           <div class="header-text" id="dropDownTitle-${res._id}">${res.tN}</div>
-                          <i class="ast-carrotup"></i>
+                          <i class="ast-carrotup" id="dialogueArrow-${res._id}"></i>
                           <button class="btn-danger hide" id="myBotTerminateAgentDialog-${res._id}">Terminate</button>
 
                       </div>
@@ -420,7 +420,7 @@ export class MybotComponent implements OnInit {
             previousId = res._id;
             previousTaskPositionId = currentTaskPositionId;
             this.clickEvents(IdReferenceConst.MYBOTTERMINATE, previousId);
-            this.clickEvents(IdReferenceConst.DROPDOWN_HEADER, previousId);
+            // this.clickEvents(IdReferenceConst.DROPDOWN_HEADER, previousId);
           }
         }
         if (resp.length - 1 == index && (!res.agentAssistDetails?.entityRequest && !res.agentAssistDetails?.entityResponse) && currentTaskPositionId == previousTaskPositionId) {

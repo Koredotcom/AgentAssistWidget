@@ -64,7 +64,7 @@ export class AssistService {
         <i class="ast-rule"></i>
       </div>
       <div class="header-text" id="dropDownTitle-${uuids}">${intentName}</div>
-      <i class="ast-carrotup rotate-carrot"></i>
+      <i class="ast-carrotup rotate-carrot" id="dialogueArrow-${uuids}"></i>
       <button class="btn-danger" id="terminateAgentDialog-${uuids}">Terminate</button>
       </div>
       <div class="collapse-acc-data" id="dropDownData-${uuids}">

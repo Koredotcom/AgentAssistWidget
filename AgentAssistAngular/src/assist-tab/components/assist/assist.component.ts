@@ -307,7 +307,7 @@ export class AssistComponent implements OnInit {
     }
     setTimeout(() => {
       this.clickEvents(IdReferenceConst.ASSISTTERMINATE, uuids);
-      this.clickEvents(IdReferenceConst.DROPDOWN_HEADER, uuids);
+      // this.clickEvents(IdReferenceConst.DROPDOWN_HEADER, uuids);
       this.scrollToBottom();
     }, 1000);
   }
@@ -1103,7 +1103,7 @@ export class AssistComponent implements OnInit {
       } else if (eventName == IdReferenceConst.CANCEL_OVERRIDE_BTN) {
         this.handleCancelOverrideBtnClick(uuid, dialogId);
       } else if (eventName == IdReferenceConst.DROPDOWN_HEADER) {
-        this.designAlterService.handleDropdownToggle(uuid);
+        // this.designAlterService.handleDropdownToggle(uuid);
       } else if (eventName == IdReferenceConst.ASSIST_RUN_BUTTON) {
         this.handleRunButtonClick(uuid, data);
       } else if (eventName == IdReferenceConst.ENTITY_EDIT) {
@@ -1719,7 +1719,7 @@ export class AssistComponent implements OnInit {
                                                 <i class="ast-rule"></i>
                                             </div>
                                             <div class="header-text" id="dropDownTitle-${res._id}">${res.tN}</div>
-                                            <i class="ast-carrotup"></i>
+                                            <i class="ast-carrotup" id="dialogueArrow-${res._id}"></i>
                                             <button class="btn-danger hide" id="terminateAgentDialog-${res._id}">Terminate</button>
                                         </div>
                                         <div class="collapse-acc-data hide" id="dropDownData-${res._id}">
@@ -1759,7 +1759,7 @@ export class AssistComponent implements OnInit {
             previousTaskPositionId = currentTaskPositionId;
             // setTimeout(()=>{
 
-            this.clickEvents(IdReferenceConst.DROPDOWN_HEADER, previousId);
+            // this.clickEvents(IdReferenceConst.DROPDOWN_HEADER, previousId);
             this.clickEvents(IdReferenceConst.ASSISTTERMINATE, previousId);
             // }, 10000)
 
