@@ -526,7 +526,7 @@ export class AssistComponent implements OnInit {
         }
 
         if (data?.suggestions?.searchassist && Object.keys(data.suggestions.searchassist).length > 0) {
-          data.suggestions = this.commonService.formatSearchResponse(data.suggestions);
+          data.suggestions = this.commonService.formatSearchResponse(data);
           if (data.suggestions.articles?.length > 0) {
             let automationSuggestions = document.getElementById(`automationSuggestions-${responseId}`);
             let articleAreaHtml = this.assisttabService.getArticleAreaTemplate(responseId, data, this.imageFilePath, this.imageFileNames);
@@ -1511,26 +1511,28 @@ export class AssistComponent implements OnInit {
           let dialogsHtml = `
                 <div class="type-info-run-send">
                     <div class="left-content">
-                        <div class="title-text" id="automation-${uniqueID}">${ele.name}</div>
+                        <div class="title-text" id="automation-${uniqueID + index}">${ele.name}</div>
                     </div>
                     <div class="action-links">
                         <button class="send-run-btn" data-conv-id="${this.commonService.configObj.conversationid}"
                         data-bot-id="${res.botId}" data-intent-name="${ele.name}"
-                        data-history-run="true" id="run-${uniqueID}" data-child-bot-id="${ele.childBotId}" data-child-bot-name="${ele.childBotName}"
+                        data-history-run="true" id="run-${uniqueID + index}" data-child-bot-id="${ele.childBotId}" data-child-bot-name="${ele.childBotName}"
                         >RUN</button>
-                        <div class="elipse-dropdown-info" id="showRunForAgentBtn-${uniqueID}">
-                            <div class="elipse-icon" id="elipseIcon-${uniqueID}">
-                                <i class="ast-overflow" id="overflowIcon-${uniqueID}"></i>
+                        <div class="elipse-dropdown-info" id="showRunForAgentBtn-${uniqueID + index}">
+                            <div class="elipse-icon" id="elipseIcon-${uniqueID + index}">
+                                <i class="ast-overflow" id="overflowIcon-${uniqueID + index}"></i>
                             </div>
-                            <div class="dropdown-content-elipse" id="runAgtBtn-${uniqueID}">
+                            <div class="dropdown-content-elipse" id="runAgtBtn-${uniqueID + index}">
                                 <div class="list-option" data-conv-id="${this.commonService.configObj.conversationid}"
                                 data-bot-id="${res.botId}" data-intent-name="${ele.name}" data-child-bot-id="${ele.childBotId}" data-child-bot-name="${ele.childBotName}"
-                                 id="agentSelect-${uniqueID}"
+                                 id="agentSelect-${uniqueID + index}"
                                 data-exhaustivelist-run="true">Run with Agent Inputs</div>
                             </div>
                     </div>
                 </div>`;
           dialogSuggestions.innerHTML += dialogsHtml;
+          this.clickEvents(IdReferenceConst.ASSIST_RUN_BUTTON, uniqueID + index, this.dialogPositionId, ele);
+          this.clickEvents(IdReferenceConst.AGENT_RUN_BTN, uniqueID + index, this.dialogPositionId, ele);
         });
         let faqss = (res.agentAssistDetails?.suggestions) ? (res.agentAssistDetails?.suggestions?.faqs) : (res.agentAssistDetails?.ambiguityList?.faqs);
         faqss?.forEach((ele, index) => {
