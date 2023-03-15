@@ -662,7 +662,7 @@ export class AssistComponent implements OnInit {
             </div>
             </div>`;
             a.append(faqActionHtml);
-            faqs.append(`<div class="desc-text" id="desc-${uuids + index}">${ele.answer[0]}</div>`);
+            faqs.append(`<div class="desc-text" id="desc-${uuids + index}">${this.commonService.handleEmptyLine(ele.answer[0])}</div>`);
 
             if(ele.answer && ele.answer.length > 1){
               this.commonService.appendSeeMoreWrapper(faqs, ele, uuids+index, positionID);
@@ -719,7 +719,7 @@ export class AssistComponent implements OnInit {
 
             faqDiv.append(faqaction);
 
-            $(`#${faqAnswerIdsPlace.id}`).html(ele.answer[0]);
+            $(`#${faqAnswerIdsPlace.id}`).html(this.commonService.handleEmptyLine(ele.answer[0]));
             $(`#${faqAnswerIdsPlace.id}`).attr('data-answer-render', 'true');
             let faqs = $(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')}`);
 
@@ -1571,7 +1571,7 @@ export class AssistComponent implements OnInit {
                     </div>
                 </div>`;
             a.append(faqActionHtml);
-            faqs.append(`<div class="desc-text" id="desc-${uniqueID + index}">${ele.answer[0]}</div>`);
+            faqs.append(`<div class="desc-text" id="desc-${uniqueID + index}">${this.commonService.handleEmptyLine(ele.answer[0])}</div>`);
 
             if(ele.answer && ele.answer.length > 1){
               this.commonService.appendSeeMoreWrapper(faqs, ele, uniqueID+index, uniqueID+index);
@@ -1654,7 +1654,7 @@ export class AssistComponent implements OnInit {
                     </div>
                 </div>`;
           a.append(faqActionHtml);
-          faqs.append(`<div class="desc-text" id="desc-${uniqueID + index}">${res.components[0].data.text[0]}</div>`);
+          faqs.append(`<div class="desc-text" id="desc-${uniqueID + index}">${this.commonService.handleEmptyLine(res.components[0].data.text[0])}</div>`);
 
           if(res.components[0].data.text && res.components[0].data.text.length > 1){
             this.commonService.appendSeeMoreWrapper(faqs, ele, uniqueID + index, uniqueID + index);
