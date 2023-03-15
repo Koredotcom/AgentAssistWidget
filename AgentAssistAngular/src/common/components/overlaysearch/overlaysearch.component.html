@@ -78,10 +78,10 @@
                                 <i class="ast-carrotup rotate-carrot" [id]="'checkLib-' + i" *ngIf="!faq.answerRender && faq.toggle" (click)="getFaqAnswerAndtoggle(faq)"></i>
                             </div>
                             <div class="desc-text" [id]="'descLib-' + i"
-                                *ngIf="faq.answer && faq.answer.length > 0 && (!faq.seeMoreWrapper) && ((faq.toggle && !faq.answerRender) || faq.answerRender)">{{faq.answer[0].ans}}</div>
+                                *ngIf="faq.answer && faq.answer.length > 0 && (!faq.seeMoreWrapper) && ((faq.toggle && !faq.answerRender) || faq.answerRender)" [innerHtml]="commonService.handleEmptyLine(faq.answer[0].ans)"></div>
                             <div class="see-more-wrapper-info"  [id]="'seeMoreWrapper-' + i" *ngIf="faq.showLessButton && faq.seeMoreWrapper">
                                 <div class="individual-data-text" *ngFor="let ansObj of faq.answer;let ii = index">
-                                    <div class="desc-text-individual" [id]="'desc-faq-lib-' + i + ii">{{ansObj.ans}}</div>
+                                    <div class="desc-text-individual" [id]="'desc-faq-lib-' + i + ii" [innerHtml]="commonService.handleEmptyLine(ansObj.ans)"></div>
                                     <div class="seemore-link-text" [id]="'desc-faq-lib-' + i + ii" (click)="toggleShowMoreLessButtonsForFaq(ansObj, i, ii)" *ngIf="ansObj.showMoreButton">{{projConstants.READ_MORE}}</div>
                                     <div class="seemore-link-text" [id]="'desc-faq-lib-' + i + ii" (click)="toggleShowMoreLessButtonsForFaq(ansObj, i, ii)" *ngIf="ansObj.showLessButton">{{projConstants.READ_LESS}}</div>
                                     <div class="actions-send-copy">

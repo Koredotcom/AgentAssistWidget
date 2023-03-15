@@ -818,7 +818,7 @@ export class CommonService {
     let faqIndex = 0;
     for(let ans of ele.answer){
         $(`#seeMoreWrapper-${uniqueIndex}`).append(`<div class="individual-data-text">
-            <div class="desc-text-individual" id="desc-faq-${uniqueIndex+faqIndex.toString()}">${ans}</div>
+            <div class="desc-text-individual" id="desc-faq-${uniqueIndex+faqIndex.toString()}">${this.handleEmptyLine(ans)}</div>
             <div class="seemore-link-text hide" id="seeMore-${uniqueIndex+faqIndex.toString()}" data-see-more="true" data-actual-id="${uniqueIndex}">${ProjConstants.READ_MORE}</div>
             <div class="seemore-link-text hide" id="seeLess-${uniqueIndex+faqIndex.toString()}" data-see-less="true" data-actual-id="${uniqueIndex}">${ProjConstants.READ_LESS}</div>
             <div class="actions-send-copy">
@@ -990,6 +990,15 @@ export class CommonService {
       e.preventDefault();
       e.stopPropagation();
     }
+  }
+
+  handleEmptyLine(answer){
+    let eleanswer = '';
+    if(answer != undefined && answer != null){
+        eleanswer = answer.replace(/(\r\n|\n|\r)/gm, "<br>");
+        return eleanswer;
+    }
+    return eleanswer
   }
 
   CustomTempClickEvents(tab, connectionObj) {
