@@ -512,9 +512,9 @@ export class MybotComponent implements OnInit {
 
           _msgsResponse.message.push(body);
         });
-        if(res.agentAssistDetails?.srcChannel === 'msTeams'){
-          // 
-       }else if(res.agentAssistDetails?.srcChannel !== 'msTeams' || res.agentAssistDetails?.srcChannel === ''){
+        if(res.agentAssistDetails?.srcChannel === 'msteams'){
+          //
+       }else if(res.agentAssistDetails?.srcChannel !== 'msteams' || res.agentAssistDetails?.srcChannel === ''){
          if (res.agentAssistDetails?.componentType === 'dialogAct') {
            let arr = [];
            if (res.components[0].data.text.includes('text')) {
