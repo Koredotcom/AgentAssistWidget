@@ -108,10 +108,9 @@ export class TemplateRenderClassService {
       console.log(parsedPayload, "parsed payload inside template render");
 
     });
-    let channel = 'msteams';
-    if (res.srcChannel === channel) {
+    if (res.srcChannel === 'msTeams') {
       return _msgsResponse;
-    } else if (res.srcChannel !== 'msTeams') {
+    } else if (res.srcChannel !== 'msTeams' || res.srcChannel === '') {
       if (res.componentType === 'dialogAct') {
         let arr = [];
         if (res.buttons[0].value.includes('text')) {
