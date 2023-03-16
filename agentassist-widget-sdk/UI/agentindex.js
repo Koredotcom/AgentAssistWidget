@@ -5908,6 +5908,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 $(`#overLaySearch #${target.id}`).addClass('rotate-carrot');
                                 $(`#overLaySearch #faqDivLib-${id.join('-')}`).addClass('is-dropdown-open');
                                 AgentAssistPubSub.publish('searched_Automation_details', { conversationId: evt.target.dataset.convId, botId: evt.target.dataset.botId, value: evt.target.dataset.intentName, isSearch: true, positionId: target.dataset.positionId });
+                                document.getElementById("loader").style.zIndex = 999;
+                                document.getElementById("loader").style.display = "block";
                                 return
                             }
 
@@ -5928,6 +5930,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 $(`#search-text-display #${target.id}`).addClass('rotate-carrot');
                                 $(`#search-text-display #faqDivLib-${id.join('-')}`).addClass('is-dropdown-open');
                                 AgentAssistPubSub.publish('searched_Automation_details', { conversationId: evt.target.dataset.convId, botId: evt.target.dataset.botId, value: evt.target.dataset.intentName, isSearch: true, positionId: target.dataset.positionId });
+                                // document.getElementById("loader").style.display = "block";
                                 return
                             }
                             if (currentTabActive == 'searchAutoIcon') {
@@ -6105,6 +6108,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             agentSearchVal = target.innerHTML;
                             document.getElementById("loader").style.display = "block";
                             AgentAssistPubSub.publish('searched_Automation_details', { conversationId: _conversationId, botId: _botId, value: target.innerHTML, isSearch: true, "positionId": evt.target.dataset.positionId });
+                            // document.getElementById("loader").style.display = "block";
                         }
 
                         if(target.id.split('-').includes('autoResultLib')){
@@ -6116,6 +6120,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                            // $('.search-block').find('.search-results-text-in-lib')?.remove();
                             document.getElementById("loader").style.display = "block";
                             AgentAssistPubSub.publish('searched_Automation_details', { conversationId: _conversationId, botId: _botId, value: target.innerHTML, isSearch: true, "positionId": evt.target.dataset.positionId });
+                            // document.getElementById("loader").style.display = "block";
                         }
                     })
                     
