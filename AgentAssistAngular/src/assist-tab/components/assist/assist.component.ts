@@ -501,8 +501,8 @@ export class AssistComponent implements OnInit {
                     articles.append(articleActionHtml);
                     let articlestypeInfo = $(`.type-info-run-send #snippetSection-${uuids + index}`);
                     let seeMoreButtonHtml = `
-                <button class="ghost-btn hide" style="font-style: italic;" id="snippetseeMore-${uuids + index}" data-snippet-see-more="true">${this.projConstants.READ_MORE}</button>
-                <button class="ghost-btn hide" style="font-style: italic;" id="snippetseeLess-${uuids + index}" data-snippet-see-less="true">${this.projConstants.READ_LESS}</button>
+                <button class="ghost-btn hide" id="snippetseeMore-${uuids + index}" data-snippet-see-more="true">${this.projConstants.READ_MORE}</button>
+                <button class="ghost-btn hide" id="snippetseeLess-${uuids + index}" data-snippet-see-less="true">${this.projConstants.READ_LESS}</button>
                 `;
                     articlestypeInfo.append(seeMoreButtonHtml);
                     setTimeout(() => {
@@ -569,8 +569,8 @@ export class AssistComponent implements OnInit {
 
               let articlestypeInfo = $(`.type-info-run-send #articleSection-${uuids + index}`);
               let seeMoreButtonHtml = `
-                    <button class="ghost-btn hide" style="font-style: italic;" id="articleseeMore-${uuids + index}" data-article-see-more="true">${this.projConstants.READ_MORE}</button>
-                    <button class="ghost-btn hide" style="font-style: italic;" id="articleseeLess-${uuids + index}" data-article-see-less="true">${this.projConstants.READ_LESS}</button>
+                    <button class="ghost-btn hide" id="articleseeMore-${uuids + index}" data-article-see-more="true">${this.projConstants.READ_MORE}</button>
+                    <button class="ghost-btn hide" id="articleseeLess-${uuids + index}" data-article-see-less="true">${this.projConstants.READ_LESS}</button>
                     `;
               articlestypeInfo.append(seeMoreButtonHtml);
               setTimeout(() => {
@@ -670,8 +670,8 @@ export class AssistComponent implements OnInit {
 
             let faqstypeInfo = $(`.type-info-run-send #faqSection-${uuids + index}`);
             let seeMoreButtonHtml = `
-                <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${uuids + index}" data-see-more="true" data-msg-answer="${ele.answer?.length > 1 ? ele.answer : null}">${ele.answer?.length > 1 ? (this.projConstants.READ_MORE_EXPAND) : this.projConstants.READ_MORE}</button>
-                <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${uuids + index}" data-see-less="true" data-msg-answer="${ele.answer?.length > 1 ? ele.answer : null}">${this.projConstants.READ_LESS}</button>
+                <button class="ghost-btn hide" id="seeMore-${uuids + index}" data-see-more="true" data-msg-answer="${ele.answer?.length > 1 ? ele.answer : null}">${ele.answer?.length > 1 ? (this.projConstants.READ_MORE_EXPAND) : this.projConstants.READ_MORE}</button>
+                <button class="ghost-btn hide" id="seeLess-${uuids + index}" data-see-less="true" data-msg-answer="${ele.answer?.length > 1 ? ele.answer : null}">${this.projConstants.READ_LESS}</button>
                 `;
             faqstypeInfo.append(seeMoreButtonHtml);
             setTimeout(() => {
@@ -728,8 +728,8 @@ export class AssistComponent implements OnInit {
             }
 
           let seeMoreButtonHtml = `
-          <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${splitedanswerPlaceableID.join('-')}" data-see-more="true" data-msg-answer="${ele.answer?.length > 1 ? ele.answer : null}">${ele.answer?.length > 1 ? (this.projConstants.READ_MORE_EXPAND) : this.projConstants.READ_MORE}</button>
-          <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${splitedanswerPlaceableID.join('-')}" data-see-less="true" data-msg-answer="${ele.answer?.length > 1 ? ele.answer : null}">${this.projConstants.READ_LESS}</button>
+          <button class="ghost-btn hide" id="seeMore-${splitedanswerPlaceableID.join('-')}" data-see-more="true" data-msg-answer="${ele.answer?.length > 1 ? ele.answer : null}">${ele.answer?.length > 1 ? (this.projConstants.READ_MORE_EXPAND) : this.projConstants.READ_MORE}</button>
+          <button class="ghost-btn hide" id="seeLess-${splitedanswerPlaceableID.join('-')}" data-see-less="true" data-msg-answer="${ele.answer?.length > 1 ? ele.answer : null}">${this.projConstants.READ_LESS}</button>
           `;
                   faqs.append(seeMoreButtonHtml);
             setTimeout(() => {
@@ -1579,8 +1579,8 @@ export class AssistComponent implements OnInit {
 
             let faqstypeInfo = $(`.type-info-run-send #faqSection-${uniqueID + index}`);
             let seeMoreButtonHtml = `
-                          <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${uniqueID + index}" data-see-more="true">${ele.answer?.length > 1 ? (this.projConstants.READ_MORE_EXPAND) : this.projConstants.READ_MORE}</button>
-                          <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${uniqueID + index}" data-see-less="true">${this.projConstants.READ_LESS}</button>
+                          <button class="ghost-btn hide" id="seeMore-${uniqueID + index}" data-see-more="true">${ele.answer?.length > 1 ? (this.projConstants.READ_MORE_EXPAND) : this.projConstants.READ_MORE}</button>
+                          <button class="ghost-btn hide" id="seeLess-${uniqueID + index}" data-see-less="true">${this.projConstants.READ_LESS}</button>
                           `;
             faqstypeInfo.append(seeMoreButtonHtml);
             setTimeout(() => {
@@ -1662,8 +1662,8 @@ export class AssistComponent implements OnInit {
 
           let faqstypeInfo = $(`.type-info-run-send #faqSection-${uniqueID + index}`);
           let seeMoreButtonHtml = `
-                          <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${uniqueID + index}" data-see-more="true">${res.components[0].data.text?.length > 1 ? (this.projConstants.READ_MORE_EXPAND) : this.projConstants.READ_MORE}</button>
-                          <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${uniqueID + index}" data-see-less="true">${this.projConstants.READ_LESS}</button>
+                          <button class="ghost-btn hide" id="seeMore-${uniqueID + index}" data-see-more="true">${res.components[0].data.text?.length > 1 ? (this.projConstants.READ_MORE_EXPAND) : this.projConstants.READ_MORE}</button>
+                          <button class="ghost-btn hide" id="seeLess-${uniqueID + index}" data-see-less="true">${this.projConstants.READ_LESS}</button>
                           `;
           faqstypeInfo.append(seeMoreButtonHtml);
           setTimeout(() => {
