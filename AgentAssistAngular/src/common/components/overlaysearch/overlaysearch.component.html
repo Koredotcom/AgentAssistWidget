@@ -22,8 +22,8 @@
                             <!-- <div class="link-view-full-article" [id]="'articleViewLinkLib-' + i" *ngIf="article.link"><a [href]="article.link" target="_blank">View Full Article</a></div> -->
                             <button class="know-more-btn" [id]="'snippetViewMsgLib-' + i" ><a style="color: #FFFFFF;" [href]="snippet.page_url" target="_blank">Know more</a></button>
                         </div>
-                        <button class="ghost-btn" style="font-style: italic;" [id]="'snippetseeMore-' + i" *ngIf="snippet.showMoreButton" (click)="toggleShowMoreLessButtons(snippet, i, projConstants.SNIPPET)">{{projConstants.READ_MORE}}</button>
-                        <button class="ghost-btn" style="font-style: italic;" [id]="'snippetseeLess-' + i" *ngIf="snippet.showLessButton" (click)="toggleShowMoreLessButtons(snippet, i, projConstants.SNIPPET)">{{projConstants.READ_LESS}}</button>
+                        <button class="ghost-btn" [id]="'snippetseeMore-' + i" *ngIf="snippet.showMoreButton" (click)="toggleShowMoreLessButtons(snippet, i, projConstants.SNIPPET)">{{projConstants.READ_MORE}}</button>
+                        <button class="ghost-btn" [id]="'snippetseeLess-' + i" *ngIf="snippet.showLessButton" (click)="toggleShowMoreLessButtons(snippet, i, projConstants.SNIPPET)">{{projConstants.READ_LESS}}</button>
                     </div>
                     <!-- <div class="action-links">
                         <button class="send-run-btn" [id]="sendMsg" (click)="handleSendCopyButton(projConstants.SEND, article, projConstants.ARTICLE)">{{projConstants.SEND}}</button>
@@ -94,10 +94,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <button class="ghost-btn" style="font-style: italic;" [id]="'seeMore-' + i" *ngIf="faq.showMoreButton && faq.answer.length == 1 && ((faq.answer && faq.toggle && !faq.answerRender) || (faq.answer && faq.answerRender))" (click)="toggleShowMoreLessButtons(faq, i, projConstants.FAQ)">{{projConstants.READ_MORE}}</button>
-                            <button class="ghost-btn" style="font-style: italic;" [id]="'seeMore-' + i" *ngIf="faq.showMoreButton && faq.answer.length > 1 && ((faq.answer && faq.toggle && !faq.answerRender) || (faq.answer && faq.answerRender))" (click)="toggleShowMoreLessButtons(faq, i, projConstants.FAQ)">{{projConstants.READ_MORE}} | {{projConstants.EXPAND}}</button>
-                            <button class="ghost-btn" style="font-style: italic;" [id]="'seeLess-' + i" *ngIf="faq.showLessButton && !faq.seeMoreWrapper && ((faq.answer && faq.toggle && !faq.answerRender) || (faq.answer && faq.answerRender))" (click)="toggleShowMoreLessButtons(faq, i, projConstants.FAQ)">{{projConstants.READ_LESS}}</button>
-                            <button class="ghost-btn show-less-btn" style="font-style: italic;" [id]="'seeLess-' + i" *ngIf="faq.showLessButton && faq.seeMoreWrapper && ((faq.answer && faq.toggle && !faq.answerRender) || (faq.answer && faq.answerRender))" (click)="toggleShowMoreLessButtons(faq, i, projConstants.FAQ)">{{projConstants.CLOSE}}</button>
+                            <button class="ghost-btn" [id]="'seeMore-' + i" *ngIf="faq.showMoreButton && faq.answer.length == 1 && ((faq.answer && faq.toggle && !faq.answerRender) || (faq.answer && faq.answerRender))" (click)="toggleShowMoreLessButtons(faq, i, projConstants.FAQ)">{{projConstants.READ_MORE}}</button>
+                            <button class="ghost-btn" [id]="'seeMore-' + i" *ngIf="faq.showMoreButton && faq.answer.length > 1 && ((faq.answer && faq.toggle && !faq.answerRender) || (faq.answer && faq.answerRender))" (click)="toggleShowMoreLessButtons(faq, i, projConstants.FAQ)">{{projConstants.READ_MORE}} | {{projConstants.EXPAND}}</button>
+                            <button class="ghost-btn" [id]="'seeLess-' + i" *ngIf="faq.showLessButton && !faq.seeMoreWrapper && ((faq.answer && faq.toggle && !faq.answerRender) || (faq.answer && faq.answerRender))" (click)="toggleShowMoreLessButtons(faq, i, projConstants.FAQ)">{{projConstants.READ_LESS}}</button>
+                            <button class="ghost-btn show-less-btn" [id]="'seeLess-' + i" *ngIf="faq.showLessButton && faq.seeMoreWrapper && ((faq.answer && faq.toggle && !faq.answerRender) || (faq.answer && faq.answerRender))" (click)="toggleShowMoreLessButtons(faq, i, projConstants.FAQ)">{{projConstants.CLOSE}}</button>
 
                         </div>
                         <div class="action-links" *ngIf="!faq.seeMoreWrapper">
@@ -128,8 +128,8 @@
                             <div class="desc-text" [id]="'articledescLib-' + i" [innerHTML]="article.content | removeTagFromString | replaceTextWithTag : article.userInput">
                                 <div class="link-view-full-article" [id]="'articleViewLinkLib-' + i" *ngIf="article.link"><a [href]="article.link" target="_blank">View Full Article</a></div>
                             </div>
-                            <button class="ghost-btn" style="font-style: italic;" [id]="'articleseeMore-' + i" *ngIf="article.showMoreButton" (click)="toggleShowMoreLessButtons(article, i, projConstants.ARTICLE)">{{projConstants.READ_MORE}}</button>
-                            <button class="ghost-btn" style="font-style: italic;" [id]="'articleseeLess-' + i" *ngIf="article.showLessButton" (click)="toggleShowMoreLessButtons(article, i, projConstants.ARTICLE)">{{projConstants.READ_LESS}}</button>
+                            <button class="ghost-btn" [id]="'articleseeMore-' + i" *ngIf="article.showMoreButton" (click)="toggleShowMoreLessButtons(article, i, projConstants.ARTICLE)">{{projConstants.READ_MORE}}</button>
+                            <button class="ghost-btn" [id]="'articleseeLess-' + i" *ngIf="article.showLessButton" (click)="toggleShowMoreLessButtons(article, i, projConstants.ARTICLE)">{{projConstants.READ_LESS}}</button>
                         </div>
                         <div class="action-links" *ngIf="article.content">
                             <button class="send-run-btn" [id]="sendMsg" (click)="handleSendCopyButton(projConstants.SEND, article, projConstants.ARTICLE)">{{projConstants.SEND}}</button>

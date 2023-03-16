@@ -431,8 +431,8 @@ export class AssistService {
 
     let faqstypeInfo = $(`#faqsSuggestions-${eleid} .type-info-run-send #faqSection-${ele}`);
     let seeMoreButtonHtml = `
-      <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${ele}" data-see-more="true">Show more</button>
-      <button class="ghost-btn hide" style="font-style: italic;" id="seeLess-${ele}" data-see-less="true">Show less</button>
+      <button class="ghost-btn hide" id="seeMore-${ele}" data-see-more="true">Show more</button>
+      <button class="ghost-btn hide" id="seeLess-${ele}" data-see-less="true">Show less</button>
       `;
     faqstypeInfo.append(seeMoreButtonHtml);
     setTimeout(() => {                                                    

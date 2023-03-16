@@ -31,7 +31,7 @@ export const ProjConstants = {
     READ_MORE : 'Read more',
     READ_LESS : 'Read less',
     EXPAND : 'Expand',
-    READ_MORE_EXPAND : 'Read more / Expand',
+    READ_MORE_EXPAND : 'Read more | Expand',
     CLOSE : 'Close',
     DIALOG : 'Dialog task',
     FAQ : 'FAQ',
