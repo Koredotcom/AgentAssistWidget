@@ -1866,13 +1866,121 @@ export class AssistComponent implements OnInit {
           }
           if(body['cInfo']['body'] != "" && body['cInfo']['body']){
             _msgsResponse.message.push(body);
-        }
+          }
         });
+        if (res.agentAssistDetails?.componentType === 'dialogAct') {
+          let arr = [];
+          if (res.components[0].data.text.includes('text')) {
+            let str = res.components[0].data.text.replace(/^\s+|\s+$/g, "");
+            let str1 = JSON.parse(str);
+            arr = str1.text.split('\n');
+          } else {
+            arr = res.components[0].data.text.split('\n');
+          }
+          _msgsResponse.message = [];
+          _msgsResponse.message[0] = {
+            "type": "text",
+            "component": {
+              "type": "template",
+              "payload": {
+                "template_type": "button",
+                "text": `${arr[0]}`,
+                "buttons": [
+                  {
+                    "type": "postback",
+                    "title": "Yes",
+                    "payload": 'Yes'
+                  },
+                  {
+                    "type": "postback",
+                    "title": "No",
+                    "payload": "No"
+                  }
+                ]
+              }
+            },
+            "cInfo": {
+              "body": {
+                "type": "template",
+                "payload": {
+                  "template_type": "button",
+                  "text": `${arr[0]}`,
+                  "buttons": [
+                    {
+                      "type": "postback",
+                      "title": "Yes",
+                      "payload": 'Yes'
+                    },
+                    {
+                      "type": "postback",
+                      "title": "No",
+                      "payload": "No"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+          
+    
+        } else if (res.agentAssistDetails?.newEntityType === "list_of_values") {
+          let arr = [];
+          if (res.components[0].data.text.includes('text')) {
+            let str = res.components[0].data.text.replace(/^\s+|\s+$/g, "");
+            let str1 = JSON.parse(str);
+            arr = str1.text.split('\n');
+          } else {
+            arr = res.components[0].data.text.split('\n');
+          }
+          _msgsResponse.message = [];
+          _msgsResponse.message[0] = {
+            "type": "text",
+            "component": {
+              "type": "template",
+              "payload": {
+                "template_type": "button",
+                "text": `${arr[0]}`,
+                "buttons": [
+                ]
+              }
+            },
+            "cInfo": {
+              "body": {
+                "type": "template",
+                "payload": {
+                  "template_type": "button",
+                  "text": `${arr[0]}`,
+                  "buttons": [
+                  
+                  ]
+                }
+              }
+            }
+          }
+        
+          let list = [];
+          arr.forEach((ele, i) => {
+            if (i !== 0 && i !== arr.length - 1 && ele !== '') {
+              let data = ele.substring(3, ele.length);
+              let obj = {
+                "type": "postback",
+                "title": data,
+                "payload": data
+              }
+              list.push(obj)
+            }
+    
+          })
+          _msgsResponse.message[0].component.payload.buttons = list;
+          _msgsResponse.message[0].cInfo.body.payload.buttons = list;
+
+        }
         if(_msgsResponse.message.length > 0){
           let msgStringify = JSON.stringify(_msgsResponse);
           let newTemp = encodeURI(msgStringify);
           if ((res.agentAssistDetails?.isPrompt === true || res.agentAssistDetails?.isPrompt === false) && previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) {
             let runInfoContent = $(`#dropDownData-${previousId}`);
+
             let askToUserHtml = this.assisttabService.askUserTemplate(res._id, newTemp, previousTaskPositionId);
             let tellToUserHtml = this.assisttabService.tellToUserTemplate(res._id, newTemp, previousTaskPositionId);
             if (this.localStorageService.checkStorageItemWithInConvId(this.connectionDetails.conversationId, storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH)) {
