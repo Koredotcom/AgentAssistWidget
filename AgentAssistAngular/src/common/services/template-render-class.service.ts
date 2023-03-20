@@ -43,7 +43,7 @@ export class TemplateRenderClassService {
       "createdOn": "2022-03-21T07:56:18.225Z",
       "icon": "https://uat.kore.ai:443/api/getMediaStream/market/f-cb381255-9aa1-5ce2-95e3-71233aef7084.png?n=17648985&s=IlRvUlUwalFVaFVMYm9sZStZQnlLc0l1UlZvdlNUUDcxR2o3U2lscHRrL3M9Ig$$",
       "traceId": "873209019a5adc26",
-      parsePayLoad: null
+      parsedPayload: null
     }
     res?.buttons?.forEach((elem) => {
       let parsedPayload;
@@ -104,7 +104,7 @@ export class TemplateRenderClassService {
 
       }
       _msgsResponse.message[0] = body;
-      _msgsResponse.parsePayLoad = parsedPayload;
+      _msgsResponse.parsedPayload = parsedPayload;
       console.log(parsedPayload, "parsed payload inside template render");
 
     });
@@ -163,7 +163,7 @@ export class TemplateRenderClassService {
             }
           }
         }
-        _msgsResponse.parsePayLoad = {
+        _msgsResponse.parsedPayload = {
           "type": "template",
           "payload": {
             "template_type": "button",
@@ -183,7 +183,7 @@ export class TemplateRenderClassService {
           }
         }
 
-      } else if (res.entityType === "list_of_values") {
+      } else if (res.entityType === "list_of_values" && !res.buttons[0].value.includes('payload')) {
         let arr = [];
         if (res.buttons[0].value.includes('text')) {
           let str = res.buttons[0].value.replace(/^\s+|\s+$/g, "");
@@ -233,7 +233,7 @@ export class TemplateRenderClassService {
         })
         _msgsResponse.message[0].component.payload.buttons = list;
         _msgsResponse.message[0].cInfo.body.payload.buttons = list;
-        _msgsResponse.parsePayLoad = {
+        _msgsResponse.parsedPayload = {
           "type": "template",
           "payload": {
             "template_type": "button",

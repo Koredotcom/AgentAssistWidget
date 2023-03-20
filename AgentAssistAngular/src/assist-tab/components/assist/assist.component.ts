@@ -398,7 +398,7 @@ export class AssistComponent implements OnInit {
 
   processAgentAssistResponse(data, botId) {
     console.log("process agent assist response", data, this.proactiveModeStatus);
-    
+    let isTemplateRender = false;
     if (!this.commonService.isAutomationOnGoing && !this.proactiveModeStatus) {
       return;
     }
@@ -412,7 +412,6 @@ export class AssistComponent implements OnInit {
 
     let uuids = this.koreGenerateuuidPipe.transform();
     let responseId = uuids;
-
     if (!this.commonService.isAutomationOnGoing && data.intentName && !data.suggestions && !this.commonService.isInitialDialogOnGoing) {
       let isInitialTaskRanORNot;
       let appState = this.localStorageService.getLocalStorageState();
@@ -803,12 +802,17 @@ export class AssistComponent implements OnInit {
 
     if (!this.commonService.isAutomationOnGoing && this.dropdownHeaderUuids && data.buttons && !data.value.includes('Customer has waited') && (this.dialogPositionId && !data.positionId || data.positionId == this.dialogPositionId)) {
       $('#dynamicBlock .empty-data-no-agents').addClass('hide');
+      let msgStringify = JSON.stringify(result);
+      let newTemp = encodeURI(msgStringify);
       let dynamicBlockDiv = $('#dynamicBlock');
       data.buttons?.forEach((ele, i) => {
-        let botResHtml = this.assisttabService.smallTalkTemplateForTemplatePayload(ele, uuids,data);
+        let botResHtml = this.assisttabService.smallTalkTemplateForTemplatePayload(ele, uuids,data, result,newTemp);
         let titleData = `<div class="title-data" id="displayData-${uuids}">${ele.value}</div>`
         if(result.parsedPayload){
+            isTemplateRender = false;
             titleData = `<div class="title-data" ><ul class="chat-container" id="displayData-${uuids}"></ul></div>`;
+        }else{
+            isTemplateRender = true;
         }
         dynamicBlockDiv.append(botResHtml);
         $(`#smallTalk-${uuids} .agent-utt`).append(titleData);
@@ -830,7 +834,7 @@ export class AssistComponent implements OnInit {
       }, this.waitingTimeForUUID);
     }
 
-    let renderedMessage = this.dropdownHeaderUuids ? this.templateRenderClassService.AgentChatInitialize.renderMessage(result) : '';
+    let renderedMessage = this.dropdownHeaderUuids && !isTemplateRender ? this.templateRenderClassService.AgentChatInitialize.renderMessage(result) : '';
     if (renderedMessage && renderedMessage[0]) {
       let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(result)[0].innerHTML;
       let a = document.getElementById(IdReferenceConst.displayData + `-${uuids}`);
@@ -863,7 +867,7 @@ export class AssistComponent implements OnInit {
     if (this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd) {
       this.scrollToBottom();
     }
-    this.dropdownHeaderUuids = undefined;
+    // this.dropdownHeaderUuids = undefined;
   }
 
   handleSeeMoreButtonForAmbiguityFAQ(responseId,faq, type){
