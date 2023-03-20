@@ -228,7 +228,7 @@ export class VoicePreferencesComponent implements OnInit {
     //   return;
     // }
     this.saveInProgress = true;
-    this.voicePreferences.languagePreference = this.voicePreferences.asrPreference;
+    this.voicePreferences.languagePreference = this.selectedTTSLanguage.languagePreference;
     this.voicePreferences.dialectPreference = this.selectedDialect;
     this.service.invoke('post.settings.voicePreferences', _params, this.voicePreferences)
       .pipe(finalize(() => this.saveInProgress = false))
