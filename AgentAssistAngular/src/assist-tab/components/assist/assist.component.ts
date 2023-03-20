@@ -802,9 +802,11 @@ export class AssistComponent implements OnInit {
 
     if (!this.commonService.isAutomationOnGoing && this.dropdownHeaderUuids && data.buttons && !data.value.includes('Customer has waited') && (this.dialogPositionId && !data.positionId || data.positionId == this.dialogPositionId)) {
       $('#dynamicBlock .empty-data-no-agents').addClass('hide');
+      let msgStringify = JSON.stringify(result);
+      let newTemp = encodeURI(msgStringify);
       let dynamicBlockDiv = $('#dynamicBlock');
       data.buttons?.forEach((ele, i) => {
-        let botResHtml = this.assisttabService.smallTalkTemplateForTemplatePayload(ele, uuids,data);
+        let botResHtml = this.assisttabService.smallTalkTemplateForTemplatePayload(ele, uuids,data, result,newTemp);
         let titleData = `<div class="title-data" id="displayData-${uuids}">${ele.value}</div>`
         if(result.parsedPayload){
             isTemplateRender = false;
