@@ -3003,6 +3003,9 @@ border: 1px solid transparent !important;
     position: relative;
     transition: 0.2s all ease;
     margin: 0 0 8px 0;
+    display: inline-block;
+    width: 100%;
+    height: 100%;
 }
 
 .collapse-acc-data .steps-run-data .run-info-content .agent-utt.enter-details-block{

@@ -1735,7 +1735,7 @@ export class AssistComponent implements OnInit {
                                         </div>
                                     `;
 
-        if (previousTaskPositionId && currentTaskPositionId !== previousTaskPositionId) {
+        if ((previousTaskPositionId && currentTaskPositionId !== previousTaskPositionId) ||  (currentTaskPositionId == previousTaskPositionId && currentTaskName != previousTaskName)) {
           let previousIdFeedBackDetails = feedBackResult.find((ele) => ele.positionId === previousTaskPositionId);
           this.commonService.addFeedbackHtmlToDomForHistory(res, res.botId, res?.agentAssistDetails?.userInput, previousId, false, previousTaskPositionId);
           if (previousIdFeedBackDetails) {
@@ -1746,9 +1746,15 @@ export class AssistComponent implements OnInit {
               $(`#feedbackHelpfulContainer-${previousId} .explore-more-negtive-data`).addClass('hide');
             }
           }
-          previousId = undefined;
-          previousTaskPositionId = undefined;
-          previousTaskName = undefined;
+
+          if((currentTaskPositionId == previousTaskPositionId && currentTaskName != previousTaskName)){
+            previousId = undefined;
+          }else{
+            previousId = undefined;
+            previousTaskPositionId = undefined;
+            previousTaskName = undefined;
+          }
+
         }
         if (res.tN && !previousId && previousTaskPositionId !== currentTaskPositionId) {
           let divExist = $(`#addRemoveDropDown-${res._id}`);
@@ -1767,18 +1773,6 @@ export class AssistComponent implements OnInit {
             this.clickEvents(IdReferenceConst.ASSISTTERMINATE, previousId);
             // }, 10000)
 
-          }
-        }
-        if (resp.length - 1 == index && (!res.agentAssistDetails?.entityRequest && !res.agentAssistDetails?.entityResponse) && currentTaskPositionId == previousTaskPositionId) {
-          let previousIdFeedBackDetails = feedBackResult.find((ele) => ele.positionId === currentTaskPositionId);
-          this.commonService.addFeedbackHtmlToDomForHistory(res, res.botId, res?.agentAssistDetails?.userInput, previousId, false, previousTaskPositionId);
-          if (previousIdFeedBackDetails) {
-            this.commonService.UpdateFeedBackDetails(previousIdFeedBackDetails, 'dynamicBlock');
-            if (previousIdFeedBackDetails.feedback == 'dislike' && (previousIdFeedBackDetails.feedbackDetails.length == 0 && previousIdFeedBackDetails.comment.length == 0)) {
-              $(`#feedbackHelpfulContainer-${previousId} .explore-more-negtive-data`).removeClass('hide');
-            } else {
-              $(`#feedbackHelpfulContainer-${previousId} .explore-more-negtive-data`).addClass('hide');
-            }
           }
         }
         if (res.agentAssistDetails.entityName && res.agentAssistDetails.entityResponse && res.agentAssistDetails.entityValue && res.agentAssistDetails.userInput) {
@@ -1928,7 +1922,25 @@ export class AssistComponent implements OnInit {
                 }
               }
             }
-            
+            parsedPayload = {
+              "type": "template",
+              "payload": {
+                "template_type": "button",
+                "text": `${arr[0]}`,
+                "buttons": [
+                  {
+                    "type": "postback",
+                    "title": "Yes",
+                    "payload": "Yes"
+                  },
+                  {
+                    "type": "postback",
+                    "title": "No",
+                    "payload": "No"
+                  }
+                ]
+              }
+            }
       
           } else if (res.agentAssistDetails?.newEntityType === "list_of_values") {
             let arr = [];
@@ -1980,13 +1992,43 @@ export class AssistComponent implements OnInit {
             })
             _msgsResponse.message[0].component.payload.buttons = list;
             _msgsResponse.message[0].cInfo.body.payload.buttons = list;
-  
+            parsedPayload = {
+              "type": "template",
+              "payload": {
+                "template_type": "button",
+                "text": `${arr[0]}`,
+                "buttons": list
+              }
+            }
           }
         }
        
         if(_msgsResponse.message.length > 0){
           let msgStringify = JSON.stringify(_msgsResponse);
           let newTemp = encodeURI(msgStringify);
+          if((previousTaskName != currentTaskName && previousTaskPositionId == currentTaskPositionId)){
+            let dynamicBlockDiv = $('#dynamicBlock');
+
+            let botResHtml = this.assisttabService.smallTalkTemplateForTemplatePayload(res, res._id,res, {parsedPayload : parsedPayload},newTemp);
+            let titleData = ``;
+            if(parsedPayload){
+                // isTemplateRender = false;
+                titleData = `<div class="title-data" ><ul class="chat-container" id="displayData-${res._id}"></ul></div>`;
+            }else{
+                // isTemplateRender = true;
+                titleData = `<div class="title-data" id="displayData-${res._id}">${res.components[0].data.text}</div>`;
+            }
+            dynamicBlockDiv.append(botResHtml);
+            $(`#smallTalk-${res._id} .agent-utt`).append(titleData);
+
+            if(parsedPayload){
+              let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(_msgsResponse)[0].innerHTML;
+              let a = document.getElementById(IdReferenceConst.displayData + `-${res._id}`);
+              a.innerHTML = a?.innerHTML + html;
+            }
+            this.commonService.hideSendOrCopyButtons(parsedPayload, `#smallTalk-${res._id} .agent-utt`, 'smallTalk')
+          }
+
           if ((res.agentAssistDetails?.isPrompt === true || res.agentAssistDetails?.isPrompt === false) && previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) {
             let runInfoContent = $(`#dropDownData-${previousId}`);
 
@@ -2059,6 +2101,23 @@ export class AssistComponent implements OnInit {
           });
         }
       }
+
+      if ((resp.length - 1 == index && (!res.agentAssistDetails?.entityRequest && !res.agentAssistDetails?.entityResponse) && currentTaskPositionId == previousTaskPositionId)) {
+        let previousIdFeedBackDetails = feedBackResult.find((ele) => ele.positionId === currentTaskPositionId);
+        this.commonService.addFeedbackHtmlToDomForHistory(res, res.botId, res?.agentAssistDetails?.userInput, previousId, false, previousTaskPositionId);
+        if (previousIdFeedBackDetails) {
+          this.commonService.UpdateFeedBackDetails(previousIdFeedBackDetails, 'dynamicBlock');
+          if (previousIdFeedBackDetails.feedback == 'dislike' && (previousIdFeedBackDetails.feedbackDetails.length == 0 && previousIdFeedBackDetails.comment.length == 0)) {
+            $(`#feedbackHelpfulContainer-${previousId} .explore-more-negtive-data`).removeClass('hide');
+          } else {
+            $(`#feedbackHelpfulContainer-${previousId} .explore-more-negtive-data`).addClass('hide');
+          }
+        }
+        previousId = undefined;
+        previousTaskPositionId = undefined;
+        previousTaskName = undefined;
+      }
+
     });
     if (this.commonService.isAutomationOnGoing) {
       $(`#dynamicBlock .collapse-acc-data.hide`)[$(`#dynamicBlock .collapse-acc-data.hide`).length - 1]?.classList.remove('hide');
