@@ -807,11 +807,12 @@ export class AssistComponent implements OnInit {
       let dynamicBlockDiv = $('#dynamicBlock');
       data.buttons?.forEach((ele, i) => {
         let botResHtml = this.assisttabService.smallTalkTemplateForTemplatePayload(ele, uuids,data, result,newTemp);
-        let titleData = `<div class="title-data" id="displayData-${uuids}">${ele.value}</div>`
-        if(result.parsedPayload){
+        let titleData = ``
+        if(result.parsedPayload && ((data?.componentType === 'dialogAct' && (data?.srcChannel == 'msteams' || data?.srcChannel == 'rtm')) || (data?.componentType != 'dialogAct'))){
             isTemplateRender = false;
             titleData = `<div class="title-data" ><ul class="chat-container" id="displayData-${uuids}"></ul></div>`;
         }else{
+            titleData = `<div class="title-data" id="displayData-${uuids}">${ele.value}</div>`
             isTemplateRender = true;
         }
         dynamicBlockDiv.append(botResHtml);
@@ -2011,7 +2012,7 @@ export class AssistComponent implements OnInit {
 
             let botResHtml = this.assisttabService.smallTalkTemplateForTemplatePayload(res, res._id,res, {parsedPayload : parsedPayload},newTemp);
             let titleData = ``;
-            if(parsedPayload){
+            if(parsedPayload && ((res.agentAssistDetails?.componentType === 'dialogAct' && (res.agentAssistDetails?.srcChannel == 'msteams' || res.agentAssistDetails?.srcChannel == 'rtm')) || (res.agentAssistDetails?.componentType != 'dialogAct'))){
                 // isTemplateRender = false;
                 titleData = `<div class="title-data" ><ul class="chat-container" id="displayData-${res._id}"></ul></div>`;
             }else{
