@@ -771,9 +771,9 @@ export class AssistComponent implements OnInit {
           this.agentAssistResponse = Object.assign({}, data);
         }
       }, 10);
-      let askToUserHtml = this.assisttabService.askUserTemplate(uuids, newTemp, this.dialogPositionId)
+      let askToUserHtml = this.assisttabService.askUserTemplate(uuids, newTemp, this.dialogPositionId, data.srcChannel, data.buttons[0].value, data.componentType)
 /// componentType === 'dialogAct' means its confirmation node or else not
-      let tellToUserHtml = this.assisttabService.tellToUserTemplate(uuids, newTemp, this.dialogPositionId)
+      let tellToUserHtml = this.assisttabService.tellToUserTemplate(uuids, newTemp, this.dialogPositionId, data.srcChannel, data.buttons[0].value, data.componentType)
       if (data.isPrompt) {
         runInfoContent.append(askToUserHtml);
         if (!this.proactiveModeStatus) {
@@ -785,8 +785,14 @@ export class AssistComponent implements OnInit {
         $(`.override-input-div`).addClass('hide');
         $(runInfoContent).append(tellToUserHtml);
       }
-
-      this.commonService.hideSendOrCopyButtons(result.parsePayLoad, runInfoContent)
+      if(data && data.componentType == 'dialogAct' && (data.srcChannel != 'msteams' && data.srcChannel != 'rtm')){
+        console.log("inside dialogact and channel");
+        isTemplateRender = true;
+        this.commonService.hideSendOrCopyButtons(result.parsePayLoad, runInfoContent);
+      }else{
+        isTemplateRender = false;
+       
+      }
       setTimeout(() => {
         this.updateNewMessageUUIDList(this.dropdownHeaderUuids);
       }, this.waitingTimeForUUID);
@@ -811,13 +817,13 @@ export class AssistComponent implements OnInit {
         if(result.parsedPayload && ((data?.componentType === 'dialogAct' && (data?.srcChannel == 'msteams' || data?.srcChannel == 'rtm')) || (data?.componentType != 'dialogAct'))){
             isTemplateRender = false;
             titleData = `<div class="title-data" ><ul class="chat-container" id="displayData-${uuids}"></ul></div>`;
+            this.commonService.hideSendOrCopyButtons(result.parsedPayload, `#smallTalk-${uuids} .agent-utt`, 'smallTalk')
         }else{
             titleData = `<div class="title-data" id="displayData-${uuids}">${ele.value}</div>`
             isTemplateRender = true;
         }
         dynamicBlockDiv.append(botResHtml);
         $(`#smallTalk-${uuids} .agent-utt`).append(titleData);
-        this.commonService.hideSendOrCopyButtons(result.parsedPayload, `#smallTalk-${uuids} .agent-utt`, 'smallTalk')
       });
     }
 
@@ -2012,29 +2018,29 @@ export class AssistComponent implements OnInit {
 
             let botResHtml = this.assisttabService.smallTalkTemplateForTemplatePayload(res, res._id,res, {parsedPayload : parsedPayload},newTemp);
             let titleData = ``;
-            if(parsedPayload && ((res.agentAssistDetails?.componentType === 'dialogAct' && (res.agentAssistDetails?.srcChannel == 'msteams' || res.agentAssistDetails?.srcChannel == 'rtm')) || (res.agentAssistDetails?.componentType != 'dialogAct'))){
+            if(parsedPayload && res.agentAssistDetails && ((res.agentAssistDetails?.componentType === 'dialogAct' && (res.agentAssistDetails?.srcChannel == 'msteams' || res.agentAssistDetails?.srcChannel == 'rtm')) || (res.agentAssistDetails?.componentType != 'dialogAct'))){
                 // isTemplateRender = false;
                 titleData = `<div class="title-data" ><ul class="chat-container" id="displayData-${res._id}"></ul></div>`;
+                dynamicBlockDiv.append(botResHtml);
+                $(`#smallTalk-${res._id} .agent-utt`).append(titleData);
+                let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(_msgsResponse)[0].innerHTML;
+                let a = document.getElementById(IdReferenceConst.displayData + `-${res._id}`);
+                a.innerHTML = a?.innerHTML + html;
+                this.commonService.hideSendOrCopyButtons(parsedPayload, `#smallTalk-${res._id} .agent-utt`, 'smallTalk')
             }else{
                 // isTemplateRender = true;
                 titleData = `<div class="title-data" id="displayData-${res._id}">${res.components[0].data.text}</div>`;
+                dynamicBlockDiv.append(botResHtml);
+                $(`#smallTalk-${res._id} .agent-utt`).append(titleData);
             }
-            dynamicBlockDiv.append(botResHtml);
-            $(`#smallTalk-${res._id} .agent-utt`).append(titleData);
-
-            if(parsedPayload){
-              let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(_msgsResponse)[0].innerHTML;
-              let a = document.getElementById(IdReferenceConst.displayData + `-${res._id}`);
-              a.innerHTML = a?.innerHTML + html;
-            }
-            this.commonService.hideSendOrCopyButtons(parsedPayload, `#smallTalk-${res._id} .agent-utt`, 'smallTalk')
           }
 
           if ((res.agentAssistDetails?.isPrompt === true || res.agentAssistDetails?.isPrompt === false) && previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) {
             let runInfoContent = $(`#dropDownData-${previousId}`);
 
-            let askToUserHtml = this.assisttabService.askUserTemplate(res._id, newTemp, previousTaskPositionId);
-            let tellToUserHtml = this.assisttabService.tellToUserTemplate(res._id, newTemp, previousTaskPositionId);
+            let askToUserHtml = this.assisttabService.askUserTemplate(res._id, newTemp, previousTaskPositionId,res.agentAssistDetails?.srcChannel, res.components[0].data.text, res.agentAssistDetails?.componentType);
+            let tellToUserHtml = this.assisttabService.tellToUserTemplate(res._id, newTemp, previousTaskPositionId, res.agentAssistDetails?.srcChannel, res.components[0].data.text, res.agentAssistDetails?.componentType);
+
             if (this.localStorageService.checkStorageItemWithInConvId(this.connectionDetails.conversationId, storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH)) {
               this.commonService.isAutomationOnGoing = true;
               this.dropdownHeaderUuids = previousId;
@@ -2055,18 +2061,20 @@ export class AssistComponent implements OnInit {
                 $(`#terminateAgentDialog-${previousId}`).attr('data-position-id', previousTaskPositionId);
                 this.dialogPositionId = previousTaskPositionId;
               }
-  
               runInfoContent.append(askToUserHtml);
+             
+            } else {
+              runInfoContent.append(tellToUserHtml);
+            }
+            if(res && res.agentAssistDetails && res.agentAssistDetails.componentType == 'dialogAct' && (res.agentAssistDetails?.srcChannel != 'msteams' && res.agentAssistDetails?.srcChannel != 'rtm')){
+              // console.log("inside dialogact and channel");
+             
+            }else{
               let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(_msgsResponse)[0].innerHTML;
               let a = document.getElementById(IdReferenceConst.displayData + `-${res._id}`);
               a.innerHTML = a?.innerHTML + html;
-            } else {
-              runInfoContent.append(tellToUserHtml);
-              let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(_msgsResponse)[0].innerHTML;
-              let a = document.getElementById(IdReferenceConst.displayData + `-${res._id}`);
-              a.innerHTML = a.innerHTML + html;
+              this.commonService.hideSendOrCopyButtons(parsedPayload, runInfoContent)
             }
-            this.commonService.hideSendOrCopyButtons(parsedPayload, runInfoContent)
           }
         }
         let shouldProcessResponse = false;
