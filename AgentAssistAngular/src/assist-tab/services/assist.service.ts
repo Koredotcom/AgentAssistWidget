@@ -103,49 +103,99 @@ export class AssistService {
     return template;
   }
 
-  askUserTemplate(uuids, newTemp?, positionID?) {
-    let template = `
-    <div class="steps-run-data">
-    <div class="icon_block">
-        <i class="ast-agent"></i>
-    </div>
-    <div class="run-info-content" >
-    <div class="title">Ask customer</div>
-    <div class="agent-utt">
-        <div class="title-data"><ul class="chat-container" id="displayData-${uuids}" data-msg-id="${uuids}"></ul></div>
-        <div class="action-links">
-            <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data="${newTemp}" data-position-id="${positionID}">Send</button>
-            <div class="copy-btn hide" data-msg-id="${uuids}" data-position-id="${positionID}">
-                <i class="ast-copy" data-msg-id="${uuids}" data-position-id="${positionID}"></i>
-            </div>
-        </div>
-    </div>
-    </div>
-</div>
-`;
+  askUserTemplate(uuids, newTemp?, positionID?,srcChannel=null, value='', componentType=null) {
+    let template= '';
+    if(componentType && componentType == 'dialogAct' && srcChannel != 'msteams' && srcChannel != 'rtm'){
+      template = `
+      <div class="steps-run-data">
+      <div class="icon_block">
+          <i class="ast-agent"></i>
+      </div>
+      <div class="run-info-content" >
+      <div class="title">Ask customer</div>
+      <div class="agent-utt">
+      <div class="title-data" id="displayData-${uuids}">${value}</div>
+          <div class="action-links">
+              <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data="${newTemp}" data-position-id="${positionID}">Send</button>
+              <div class="copy-btn" data-msg-id="${uuids}" data-position-id="${positionID}">
+                  <i class="ast-copy" data-msg-id="${uuids}" data-position-id="${positionID}"></i>
+              </div>
+          </div>
+      </div>
+      </div>
+  </div>
+  `;
+      
+    }else{
+      template = `
+      <div class="steps-run-data">
+      <div class="icon_block">
+          <i class="ast-agent"></i>
+      </div>
+      <div class="run-info-content" >
+      <div class="title">Ask customer</div>
+      <div class="agent-utt">
+          <div class="title-data"><ul class="chat-container" id="displayData-${uuids}" data-msg-id="${uuids}"></ul></div>
+          <div class="action-links">
+              <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data="${newTemp}" data-position-id="${positionID}">Send</button>
+              <div class="copy-btn hide" data-msg-id="${uuids}" data-position-id="${positionID}">
+                  <i class="ast-copy" data-msg-id="${uuids}" data-position-id="${positionID}"></i>
+              </div>
+          </div>
+      </div>
+      </div>
+  </div>
+  `;
+    }
     return template
   }
 
-  tellToUserTemplate(uuids, newTemp?, positionID?) {
-    let template = `
-    <div class="steps-run-data">
-    <div class="icon_block">
-        <i class="ast-agent"></i>
-    </div>
-    <div class="run-info-content" >
-    <div class="title">Tell Customer</div>
-    <div class="agent-utt">
-        <div class="title-data" ><ul class="chat-container" id="displayData-${uuids}" data-msg-id="${uuids}"></ul></div>
-        <div class="action-links">
-            <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data="${newTemp}" data-position-id="${positionID}">Send</button>
-            <div class="copy-btn hide" data-msg-id="${uuids}" data-position-id="${positionID}">
-                <i class="ast-copy" data-msg-id="${uuids}" data-position-id="${positionID}"></i>
-            </div>
-        </div>
-    </div>
-    </div>
-</div>
-`;
+  tellToUserTemplate(uuids, newTemp?, positionID?, srcChannel=null, value='', componentType=null) {
+    let template= '';
+    if(componentType && componentType == 'dialogAct' && (srcChannel != 'msteams' && srcChannel != 'rtm') ){
+      template = `
+      <div class="steps-run-data">
+      <div class="icon_block">
+          <i class="ast-agent"></i>
+      </div>
+      <div class="run-info-content" >
+      <div class="title">Tell Customer</div>
+      <div class="agent-utt">
+      <div class="title-data" id="displayData-${uuids}">${value}</div>
+          <div class="action-links">
+              <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data="${newTemp}" data-position-id="${positionID}">Send</button>
+              <div class="copy-btn" data-msg-id="${uuids}" data-position-id="${positionID}">
+                  <i class="ast-copy" data-msg-id="${uuids}" data-position-id="${positionID}"></i>
+              </div>
+          </div>
+      </div>
+      </div>
+  </div>
+  `;
+       
+    }else{
+      template = `
+      <div class="steps-run-data">
+      <div class="icon_block">
+          <i class="ast-agent"></i>
+      </div>
+      <div class="run-info-content" >
+      <div class="title">Tell Customer</div>
+      <div class="agent-utt">
+          <div class="title-data" ><ul class="chat-container" id="displayData-${uuids}" data-msg-id="${uuids}"></ul></div>
+          <div class="action-links">
+              <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data="${newTemp}" data-position-id="${positionID}">Send</button>
+              <div class="copy-btn hide" data-msg-id="${uuids}" data-position-id="${positionID}">
+                  <i class="ast-copy" data-msg-id="${uuids}" data-position-id="${positionID}"></i>
+              </div>
+          </div>
+      </div>
+      </div>
+  </div>
+  `;
+    }
+    console.log(template, 'template');
+    
     return template;
   }
 
@@ -164,7 +214,7 @@ export class AssistService {
         <div class="agent-utt">
             <div class="action-links">
                 <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data="${sendData}">Send</button>
-                <div class="copy-btn hide" data-msg-id="${uuids}">
+                <div class="copy-btn" data-msg-id="${uuids}">
                     <i class="ast-copy" data-msg-id="${uuids}"></i>
                 </div>
             </div>

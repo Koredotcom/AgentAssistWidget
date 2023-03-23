@@ -771,9 +771,9 @@ export class AssistComponent implements OnInit {
           this.agentAssistResponse = Object.assign({}, data);
         }
       }, 10);
-      let askToUserHtml = this.assisttabService.askUserTemplate(uuids, newTemp, this.dialogPositionId)
+      let askToUserHtml = this.assisttabService.askUserTemplate(uuids, newTemp, this.dialogPositionId, data.srcChannel, data.buttons[0].value, data.componentType)
 /// componentType === 'dialogAct' means its confirmation node or else not
-      let tellToUserHtml = this.assisttabService.tellToUserTemplate(uuids, newTemp, this.dialogPositionId)
+      let tellToUserHtml = this.assisttabService.tellToUserTemplate(uuids, newTemp, this.dialogPositionId, data.srcChannel, data.buttons[0].value, data.componentType)
       if (data.isPrompt) {
         runInfoContent.append(askToUserHtml);
         if (!this.proactiveModeStatus) {
@@ -785,8 +785,14 @@ export class AssistComponent implements OnInit {
         $(`.override-input-div`).addClass('hide');
         $(runInfoContent).append(tellToUserHtml);
       }
-
-      this.commonService.hideSendOrCopyButtons(result.parsePayLoad, runInfoContent)
+      if(data && data.componentType == 'dialogAct' && (data.srcChannel != 'msteams' && data.srcChannel != 'rtm')){
+        console.log("inside dialogact and channel");
+        isTemplateRender = true;
+        this.commonService.hideSendOrCopyButtons(result.parsePayLoad, runInfoContent);
+      }else{
+        isTemplateRender = false;
+       
+      }
       setTimeout(() => {
         this.updateNewMessageUUIDList(this.dropdownHeaderUuids);
       }, this.waitingTimeForUUID);
@@ -807,16 +813,17 @@ export class AssistComponent implements OnInit {
       let dynamicBlockDiv = $('#dynamicBlock');
       data.buttons?.forEach((ele, i) => {
         let botResHtml = this.assisttabService.smallTalkTemplateForTemplatePayload(ele, uuids,data, result,newTemp);
-        let titleData = `<div class="title-data" id="displayData-${uuids}">${ele.value}</div>`
-        if(result.parsedPayload){
+        let titleData = ``
+        if(result.parsedPayload && ((data?.componentType === 'dialogAct' && (data?.srcChannel == 'msteams' || data?.srcChannel == 'rtm')) || (data?.componentType != 'dialogAct'))){
             isTemplateRender = false;
             titleData = `<div class="title-data" ><ul class="chat-container" id="displayData-${uuids}"></ul></div>`;
+            this.commonService.hideSendOrCopyButtons(result.parsedPayload, `#smallTalk-${uuids} .agent-utt`, 'smallTalk')
         }else{
+            titleData = `<div class="title-data" id="displayData-${uuids}">${ele.value}</div>`
             isTemplateRender = true;
         }
         dynamicBlockDiv.append(botResHtml);
         $(`#smallTalk-${uuids} .agent-utt`).append(titleData);
-        this.commonService.hideSendOrCopyButtons(result.parsedPayload, `#smallTalk-${uuids} .agent-utt`, 'smallTalk')
       });
     }
 
@@ -1735,7 +1742,7 @@ export class AssistComponent implements OnInit {
                                         </div>
                                     `;
 
-        if (previousTaskPositionId && currentTaskPositionId !== previousTaskPositionId) {
+        if ((previousTaskPositionId && currentTaskPositionId !== previousTaskPositionId) ||  (currentTaskPositionId == previousTaskPositionId && currentTaskName != previousTaskName)) {
           let previousIdFeedBackDetails = feedBackResult.find((ele) => ele.positionId === previousTaskPositionId);
           this.commonService.addFeedbackHtmlToDomForHistory(res, res.botId, res?.agentAssistDetails?.userInput, previousId, false, previousTaskPositionId);
           if (previousIdFeedBackDetails) {
@@ -1746,9 +1753,15 @@ export class AssistComponent implements OnInit {
               $(`#feedbackHelpfulContainer-${previousId} .explore-more-negtive-data`).addClass('hide');
             }
           }
-          previousId = undefined;
-          previousTaskPositionId = undefined;
-          previousTaskName = undefined;
+
+          if((currentTaskPositionId == previousTaskPositionId && currentTaskName != previousTaskName)){
+            previousId = undefined;
+          }else{
+            previousId = undefined;
+            previousTaskPositionId = undefined;
+            previousTaskName = undefined;
+          }
+
         }
         if (res.tN && !previousId && previousTaskPositionId !== currentTaskPositionId) {
           let divExist = $(`#addRemoveDropDown-${res._id}`);
@@ -1767,18 +1780,6 @@ export class AssistComponent implements OnInit {
             this.clickEvents(IdReferenceConst.ASSISTTERMINATE, previousId);
             // }, 10000)
 
-          }
-        }
-        if (resp.length - 1 == index && (!res.agentAssistDetails?.entityRequest && !res.agentAssistDetails?.entityResponse) && currentTaskPositionId == previousTaskPositionId) {
-          let previousIdFeedBackDetails = feedBackResult.find((ele) => ele.positionId === currentTaskPositionId);
-          this.commonService.addFeedbackHtmlToDomForHistory(res, res.botId, res?.agentAssistDetails?.userInput, previousId, false, previousTaskPositionId);
-          if (previousIdFeedBackDetails) {
-            this.commonService.UpdateFeedBackDetails(previousIdFeedBackDetails, 'dynamicBlock');
-            if (previousIdFeedBackDetails.feedback == 'dislike' && (previousIdFeedBackDetails.feedbackDetails.length == 0 && previousIdFeedBackDetails.comment.length == 0)) {
-              $(`#feedbackHelpfulContainer-${previousId} .explore-more-negtive-data`).removeClass('hide');
-            } else {
-              $(`#feedbackHelpfulContainer-${previousId} .explore-more-negtive-data`).addClass('hide');
-            }
           }
         }
         if (res.agentAssistDetails.entityName && res.agentAssistDetails.entityResponse && res.agentAssistDetails.entityValue && res.agentAssistDetails.userInput) {
@@ -1928,7 +1929,25 @@ export class AssistComponent implements OnInit {
                 }
               }
             }
-            
+            parsedPayload = {
+              "type": "template",
+              "payload": {
+                "template_type": "button",
+                "text": `${arr[0]}`,
+                "buttons": [
+                  {
+                    "type": "postback",
+                    "title": "Yes",
+                    "payload": "Yes"
+                  },
+                  {
+                    "type": "postback",
+                    "title": "No",
+                    "payload": "No"
+                  }
+                ]
+              }
+            }
       
           } else if (res.agentAssistDetails?.newEntityType === "list_of_values") {
             let arr = [];
@@ -1980,18 +1999,48 @@ export class AssistComponent implements OnInit {
             })
             _msgsResponse.message[0].component.payload.buttons = list;
             _msgsResponse.message[0].cInfo.body.payload.buttons = list;
-  
+            parsedPayload = {
+              "type": "template",
+              "payload": {
+                "template_type": "button",
+                "text": `${arr[0]}`,
+                "buttons": list
+              }
+            }
           }
         }
        
         if(_msgsResponse.message.length > 0){
           let msgStringify = JSON.stringify(_msgsResponse);
           let newTemp = encodeURI(msgStringify);
+          if((previousTaskName != currentTaskName && previousTaskPositionId == currentTaskPositionId)){
+            let dynamicBlockDiv = $('#dynamicBlock');
+
+            let botResHtml = this.assisttabService.smallTalkTemplateForTemplatePayload(res, res._id,res, {parsedPayload : parsedPayload},newTemp);
+            let titleData = ``;
+            if(parsedPayload && res.agentAssistDetails && ((res.agentAssistDetails?.componentType === 'dialogAct' && (res.agentAssistDetails?.srcChannel == 'msteams' || res.agentAssistDetails?.srcChannel == 'rtm')) || (res.agentAssistDetails?.componentType != 'dialogAct'))){
+                // isTemplateRender = false;
+                titleData = `<div class="title-data" ><ul class="chat-container" id="displayData-${res._id}"></ul></div>`;
+                dynamicBlockDiv.append(botResHtml);
+                $(`#smallTalk-${res._id} .agent-utt`).append(titleData);
+                let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(_msgsResponse)[0].innerHTML;
+                let a = document.getElementById(IdReferenceConst.displayData + `-${res._id}`);
+                a.innerHTML = a?.innerHTML + html;
+                this.commonService.hideSendOrCopyButtons(parsedPayload, `#smallTalk-${res._id} .agent-utt`, 'smallTalk')
+            }else{
+                // isTemplateRender = true;
+                titleData = `<div class="title-data" id="displayData-${res._id}">${res.components[0].data.text}</div>`;
+                dynamicBlockDiv.append(botResHtml);
+                $(`#smallTalk-${res._id} .agent-utt`).append(titleData);
+            }
+          }
+
           if ((res.agentAssistDetails?.isPrompt === true || res.agentAssistDetails?.isPrompt === false) && previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) {
             let runInfoContent = $(`#dropDownData-${previousId}`);
 
-            let askToUserHtml = this.assisttabService.askUserTemplate(res._id, newTemp, previousTaskPositionId);
-            let tellToUserHtml = this.assisttabService.tellToUserTemplate(res._id, newTemp, previousTaskPositionId);
+            let askToUserHtml = this.assisttabService.askUserTemplate(res._id, newTemp, previousTaskPositionId,res.agentAssistDetails?.srcChannel, res.components[0].data.text, res.agentAssistDetails?.componentType);
+            let tellToUserHtml = this.assisttabService.tellToUserTemplate(res._id, newTemp, previousTaskPositionId, res.agentAssistDetails?.srcChannel, res.components[0].data.text, res.agentAssistDetails?.componentType);
+
             if (this.localStorageService.checkStorageItemWithInConvId(this.connectionDetails.conversationId, storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH)) {
               this.commonService.isAutomationOnGoing = true;
               this.dropdownHeaderUuids = previousId;
@@ -2012,18 +2061,20 @@ export class AssistComponent implements OnInit {
                 $(`#terminateAgentDialog-${previousId}`).attr('data-position-id', previousTaskPositionId);
                 this.dialogPositionId = previousTaskPositionId;
               }
-  
               runInfoContent.append(askToUserHtml);
+             
+            } else {
+              runInfoContent.append(tellToUserHtml);
+            }
+            if(res && res.agentAssistDetails && res.agentAssistDetails.componentType == 'dialogAct' && (res.agentAssistDetails?.srcChannel != 'msteams' && res.agentAssistDetails?.srcChannel != 'rtm')){
+              // console.log("inside dialogact and channel");
+             
+            }else{
               let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(_msgsResponse)[0].innerHTML;
               let a = document.getElementById(IdReferenceConst.displayData + `-${res._id}`);
               a.innerHTML = a?.innerHTML + html;
-            } else {
-              runInfoContent.append(tellToUserHtml);
-              let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(_msgsResponse)[0].innerHTML;
-              let a = document.getElementById(IdReferenceConst.displayData + `-${res._id}`);
-              a.innerHTML = a.innerHTML + html;
+              this.commonService.hideSendOrCopyButtons(parsedPayload, runInfoContent)
             }
-            this.commonService.hideSendOrCopyButtons(parsedPayload, runInfoContent)
           }
         }
         let shouldProcessResponse = false;
@@ -2059,6 +2110,23 @@ export class AssistComponent implements OnInit {
           });
         }
       }
+
+      if ((resp.length - 1 == index && (!res.agentAssistDetails?.entityRequest && !res.agentAssistDetails?.entityResponse) && currentTaskPositionId == previousTaskPositionId)) {
+        let previousIdFeedBackDetails = feedBackResult.find((ele) => ele.positionId === currentTaskPositionId);
+        this.commonService.addFeedbackHtmlToDomForHistory(res, res.botId, res?.agentAssistDetails?.userInput, previousId, false, previousTaskPositionId);
+        if (previousIdFeedBackDetails) {
+          this.commonService.UpdateFeedBackDetails(previousIdFeedBackDetails, 'dynamicBlock');
+          if (previousIdFeedBackDetails.feedback == 'dislike' && (previousIdFeedBackDetails.feedbackDetails.length == 0 && previousIdFeedBackDetails.comment.length == 0)) {
+            $(`#feedbackHelpfulContainer-${previousId} .explore-more-negtive-data`).removeClass('hide');
+          } else {
+            $(`#feedbackHelpfulContainer-${previousId} .explore-more-negtive-data`).addClass('hide');
+          }
+        }
+        previousId = undefined;
+        previousTaskPositionId = undefined;
+        previousTaskName = undefined;
+      }
+
     });
     if (this.commonService.isAutomationOnGoing) {
       $(`#dynamicBlock .collapse-acc-data.hide`)[$(`#dynamicBlock .collapse-acc-data.hide`).length - 1]?.classList.remove('hide');
