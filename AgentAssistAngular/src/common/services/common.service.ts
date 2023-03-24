@@ -9,6 +9,7 @@ import { DesignAlterService } from './design-alter.service';
 import { LocalStorageService } from './local-storage.service';
 import { TemplateRenderClassService } from './template-render-class.service';
 declare var $: any;
+declare const agentAssistHelpers: any;
 @Injectable({
   providedIn: 'root'
 })
@@ -48,10 +49,11 @@ export class CommonService {
     [ProjConstants.MYBOT] : IdReferenceConst.SCROLLBUTTON_MYBOT,
     [ProjConstants.TRANSCRIPT] : IdReferenceConst.SCROLLBUTTON_TRANSCRIPT
   }
-
+  aaHelpers = null;
   constructor(private route: ActivatedRoute, private webSocketService: WebSocketService, private designAlterService: DesignAlterService,
     private localStorageService: LocalStorageService,private templateRenderClassService: TemplateRenderClassService) {
     this.setScrollContent();
+    this.aaHelpers = new agentAssistHelpers();
   }
 
 
@@ -996,6 +998,7 @@ export class CommonService {
     let eleanswer = '';
     if(answer != undefined && answer != null){
         eleanswer = answer.replace(/(\r\n|\n|\r)/gm, "<br>");
+        eleanswer = this.aaHelpers.convertMDtoHTML(eleanswer, "bot", eleanswer)
         return eleanswer;
     }
     return eleanswer
