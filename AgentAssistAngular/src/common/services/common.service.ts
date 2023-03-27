@@ -518,7 +518,7 @@ export class CommonService {
   }
 
   removingSendCopyBtnForCall(connectionDetails) {
-    if (connectionDetails.isCall === 'true') {
+    if (connectionDetails.isCall && connectionDetails.isCall === 'true') {
       $(document.body).find('[id="sendMsg"], .copy-btn').remove();
     }
   }
