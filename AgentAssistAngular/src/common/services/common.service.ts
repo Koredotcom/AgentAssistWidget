@@ -8,6 +8,8 @@ import { IdReferenceConst, ProjConstants, storageConst } from '../constants/proj
 import { DesignAlterService } from './design-alter.service';
 import { LocalStorageService } from './local-storage.service';
 import { TemplateRenderClassService } from './template-render-class.service';
+import { SanitizeHtmlPipe } from '../pipes/sanitize-html.pipe';
+
 declare var $: any;
 declare const agentAssistHelpers: any;
 @Injectable({
@@ -993,14 +995,20 @@ export class CommonService {
       e.stopPropagation();
     }
   }
-
+  replaceLtGt(htmlString) {
+    htmlString = htmlString.replaceAll("&lt;", "<");
+    htmlString = htmlString.replaceAll('"', "&quot;");
+    return htmlString;
+  }
   handleEmptyLine(answer){
     let eleanswer = '';
     if(answer != undefined && answer != null){
         eleanswer = answer.replace(/(\r\n|\n|\r)/gm, "<br>");
         eleanswer = this.aaHelpers.convertMDtoHTML(eleanswer, "bot", eleanswer)
+        eleanswer = this.replaceLtGt(eleanswer);
         return eleanswer;
     }
+    eleanswer = this.replaceLtGt(eleanswer)
     return eleanswer
   }
 
