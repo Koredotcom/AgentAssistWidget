@@ -7,9 +7,9 @@
             <div class="run-info-content" *ngFor="let ele of welcomeMsgResponse?.buttons; let i=index">
                 <div class="title" *ngIf="i === 0">Customer has waited for an agent for few seconds.<br/>Here are some appropriate opening lines.</div>
                 <div class="agent-utt">
-                 <div class="title-data" id="displayData-${uuids}">{{ele.value}}</div>
+                 <div class="title-data" [id]="'displayData-'+i">{{ele.value}}</div>
                  <div class="action-links">
-                     <button class="send-run-btn" id="sendMsgWelcome" (click)="commonService.preparePostMessageForSendAndCopy($event, ele.value, idReferenceConst.SENDMSG, connectionDetails)">Send</button>
+                     <button class="send-run-btn" id="sendMsg" (click)="commonService.preparePostMessageForSendAndCopy($event, ele.value, idReferenceConst.SENDMSG, connectionDetails)">Send</button>
                      <div class="copy-btn welcome-msg-copy" (click)="commonService.preparePostMessageForSendAndCopy($event, ele.value, idReferenceConst.COPYMSG, connectionDetails)">
                          <i class="ast-copy welcome-msg-copy"></i>
                      </div>
