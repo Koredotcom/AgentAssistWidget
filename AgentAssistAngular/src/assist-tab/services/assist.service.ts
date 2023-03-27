@@ -193,9 +193,7 @@ export class AssistService {
       </div>
   </div>
   `;
-    }
-    console.log(template, 'template');
-    
+    }    
     return template;
   }
 
