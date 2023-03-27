@@ -19,7 +19,7 @@ import { Router } from '@angular/router';
 export class AppComponent {
   title = 'AgentAssistWidget';
   isGrantSuccess = false;
-  errorMsg;
+  errorMsg : string = '';
 
   constructor(private webSocketService: WebSocketService, private service: CommonService,
     private route: ActivatedRoute, private handleSubjectService: HandleSubjectService, private randomID: KoreGenerateuuidPipe,
@@ -43,9 +43,9 @@ export class AppComponent {
         let index = this.templateChatConfig.chatConfig.urls.findIndex(e=>parentUrl.includes(e));
         console.log(index, "index");
           if (!(index>-1)) {
-            console.log("inside if condition");
-            
-            this.initAgentAssist(this.templateChatConfig.chatConfig, params);
+            if(Object.keys(this.service.configObj).length > 0){
+              this.initAgentAssist(this.templateChatConfig.chatConfig, params);
+            }
           } 
           var message = {
             method: 'agentassist_loaded',
@@ -140,10 +140,12 @@ export class AppComponent {
           this.grantCall(params)
         }).catch((err) => {
           this.errorMsg = "jwt token generation failed";
+          this.isGrantSuccess = false;
         })
       } else {
         this.handleSubjectService.setLoader(false);
         this.errorMsg = "Issue identified in configuration settings! Please reach out to AgentAssist Admin."
+        this.isGrantSuccess = false;
       }
 
     } else {
