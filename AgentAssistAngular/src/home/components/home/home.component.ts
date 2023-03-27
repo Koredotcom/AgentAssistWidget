@@ -76,7 +76,7 @@ export class HomeComponent implements OnInit {
 
     let subscription2 = this.handleSubjectService.connectDetailsSubject.subscribe((urlParams: any) => {
       if (urlParams && urlParams?.token) {
-        this.commonService.isCallConversation = (urlParams.isCall == "false") ? false : true;
+        this.commonService.isCallConversation = (urlParams.isCall && urlParams.isCall == "true") ? true : false;
         this.localStorageService.initializeLocalStorageState();
         this.connectionDetails = urlParams;
         this.eventListenerFromParent();
@@ -833,7 +833,7 @@ setProactiveMode(){
       taskId: data.taskId,
       comment: data.comment,
       feedbackDetails: data.feedbackDetails,
-      'experience': this.commonService.configObj.isCall == 'false' ? 'chat' : 'voice',
+      'experience': (this.commonService.configObj.isCall && this.commonService.configObj.isCall == 'true') ? ProjConstants.VOICE : ProjConstants.CHAT,
       "interactionType": this.activeTab == 'Assist' ? 'assist' : 'mybot'
     }
     this.websocketService.emitEvents(EVENTS.agent_usage_feedback, agent_assist_request);
@@ -847,7 +847,7 @@ setProactiveMode(){
       orgId: '',
       taskId: e.taskId,
       positionId: e.dialogid,
-      'experience': this.commonService.configObj.isCall == 'false' ? 'chat' : 'voice',
+      'experience': (this.commonService.configObj.isCall && this.commonService.configObj.isCall == 'true') ? ProjConstants.VOICE : ProjConstants.CHAT,
       "interactionType": this.activeTab == 'Assist' ? 'assist' : 'mybot'
     }
 

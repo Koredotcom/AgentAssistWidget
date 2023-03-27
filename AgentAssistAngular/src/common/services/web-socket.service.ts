@@ -60,7 +60,7 @@ export class WebSocketService {
     let menu_request_params : any = {
       botId : this.connectionDetails.botId,
       conversationId : this.connectionDetails.conversationId,
-      experience : this.connectionDetails.isCall == "false" ? ProjConstants.CHAT : ProjConstants.VOICE
+      experience : (this.connectionDetails.isCall && this.connectionDetails.isCall == "true") ?  ProjConstants.VOICE : ProjConstants.CHAT
     }
    
 
