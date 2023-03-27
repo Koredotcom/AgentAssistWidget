@@ -225,6 +225,14 @@ export class AssistService {
   return template
   }
 
+  overrideTemplate(uuids){
+    let template = `<div class="override-input-div hide" id="overRideDiv-${uuids}" >
+    <button class="override-input-btn" id="overRideBtn-${uuids}">Override Input</button>
+    <button class="cancel-override-input-btn hide" id="cancelOverRideBtn-${uuids}">Cancel Override</button>
+  </div>`;
+  return template;
+  }
+
   historySmallTalkTemplate(ele, _id){
     let template = `
       <div class="collapse-acc-data before-none" id='smallTalk-${_id}'>
