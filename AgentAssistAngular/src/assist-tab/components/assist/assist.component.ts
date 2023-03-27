@@ -52,6 +52,7 @@ export class AssistComponent implements OnInit {
   isFirstMessagOfDialog: boolean = false;
   answerPlaceableIDs : any = [];
   isHistoryApiCalled = false;
+  smallTalkOverrideBtnId : string;
 
   constructor(private templateRenderClassService: TemplateRenderClassService,
     public handleSubjectService: HandleSubjectService,
@@ -200,22 +201,27 @@ export class AssistComponent implements OnInit {
     });
 
     let subscription13 = this.handleSubjectService.proactiveModeSubject.subscribe((response: any) => {
+      console.log("proactive mode subject", response);
+      
       if (response != null && response != undefined) {
         this.proactiveModeStatus = response;
+        let dropdownHeaderUuids = this.smallTalkOverrideBtnId ? this.smallTalkOverrideBtnId : this.dropdownHeaderUuids;
+        console.log(dropdownHeaderUuids, 'dropdown header uuids');
+        
         if (response) {          
           $(`.override-input-div`).removeClass('hide');
-          this.handleCancelOverrideBtnClick('overRideBtn-' + this.dropdownHeaderUuids, this.dialogPositionId);
-          $(`#overRideBtn-${this.dropdownHeaderUuids}`).removeClass('hide');
+          this.handleCancelOverrideBtnClick(dropdownHeaderUuids, this.dialogPositionId);
+          $(`#overRideBtn-${dropdownHeaderUuids}`).removeClass('hide');
         } else {
-          if (document.getElementById(`overRideBtn-${this.dropdownHeaderUuids}`)) {
+          if (document.getElementById(`overRideBtn-${dropdownHeaderUuids}`)) {
             if (document.getElementById(`inputFieldForAgent`)) {
               $(`#inputFieldForAgent`).remove();
             }
-            if (document.getElementById(`overRideBtn-${this.dropdownHeaderUuids}`)) {
-              $(`#overRideBtn-${this.dropdownHeaderUuids}`).addClass('hide');
-              $(`#cancelOverRideBtn-${this.dropdownHeaderUuids}`).addClass('hide');
+            if (document.getElementById(`overRideBtn-${dropdownHeaderUuids}`)) {
+              $(`#overRideBtn-${dropdownHeaderUuids}`).addClass('hide');
+              $(`#cancelOverRideBtn-${dropdownHeaderUuids}`).addClass('hide');
             }
-            this.handleOverridBtnClick('overRideBtn-' + this.dropdownHeaderUuids, this.dialogPositionId);
+            this.handleOverridBtnClick(dropdownHeaderUuids, this.dialogPositionId);
           }
         }
       }
@@ -398,6 +404,7 @@ export class AssistComponent implements OnInit {
 
   processAgentAssistResponse(data, botId) {
     console.log("process agent assist response", data, this.proactiveModeStatus);
+    this.smallTalkOverrideBtnId = null;
     let isTemplateRender = false;
     if (!this.commonService.isAutomationOnGoing && !this.proactiveModeStatus) {
       return;
@@ -824,17 +831,44 @@ export class AssistComponent implements OnInit {
         }
         dynamicBlockDiv.append(botResHtml);
         $(`#smallTalk-${uuids} .agent-utt`).append(titleData);
+        setTimeout(() => {
+          if (data.entityName) {
+            this.agentAssistResponse = {};
+            this.agentAssistResponse = Object.assign({}, data);
+          }
+        }, 10);
+        $(`.override-input-div`).remove();
+        if (data.isPrompt) {
+          this.smallTalkOverrideButtonTemplate(uuids);
+        }
       });
     }
 
     if (!this.commonService.isAutomationOnGoing && !this.dropdownHeaderUuids && !data.suggestions && !result.parsePayLoad) {
       $('#dynamicBlock .empty-data-no-agents').addClass('hide');
+      let msgStringify = JSON.stringify(result);
+      let newTemp = encodeURI(msgStringify);
       let dynamicBlockDiv = $('#dynamicBlock');
       if (data.buttons?.length > 1) {
         this.welcomeMsgResponse = data;
       } else {
-        let botResHtml = this.assisttabService.smallTalkTemplate(data.buttons[0], uuids);
+        let botResHtml = this.assisttabService.smallTalkTemplateForTemplatePayload(data.buttons[0], uuids, data, result,newTemp);
+        let titleData = ``
+        if(result.parsedPayload && ((data?.componentType === 'dialogAct' && (data?.srcChannel == 'msteams' || data?.srcChannel == 'rtm')) || (data?.componentType != 'dialogAct'))){
+            isTemplateRender = false;
+            titleData = `<div class="title-data" ><ul class="chat-container" id="displayData-${uuids}"></ul></div>`;
+            this.commonService.hideSendOrCopyButtons(result.parsedPayload, `#smallTalk-${uuids} .agent-utt`, 'smallTalk')
+        }else{
+            titleData = `<div class="title-data" id="displayData-${uuids}">${data.buttons[0].value}</div>`
+            isTemplateRender = true;
+        }
         dynamicBlockDiv.append(botResHtml);
+        $(`#smallTalk-${uuids} .agent-utt`).append(titleData);        
+        $(`.override-input-div`).remove();
+        if (data.isPrompt) {
+          this.smallTalkOverrideButtonTemplate(uuids);
+        }
+
       }
       setTimeout(() => {
         this.updateNewMessageUUIDList(uuids);
@@ -855,6 +889,17 @@ export class AssistComponent implements OnInit {
     }
     this.commonService.removingSendCopyBtnForCall(this.connectionDetails);
     this.designAlterService.addWhiteBackgroundClassToNewMessage(this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd, IdReferenceConst.DYNAMICBLOCK);
+  }
+
+  smallTalkOverrideButtonTemplate(uuids){
+    this.smallTalkOverrideBtnId = uuids;
+    let overrideTemplate = this.assisttabService.overrideTemplate(uuids);
+    $(`#smallTalk-${uuids}`).append(overrideTemplate);
+    if (!this.proactiveModeStatus) {
+      this.handleOverridBtnClick('overRideBtn-' + this.dropdownHeaderUuids, this.dialogPositionId, true);
+    } else {
+      $(`.override-input-div`).removeClass('hide');
+    }
   }
 
   //dialog terminate code
@@ -1226,7 +1271,7 @@ export class AssistComponent implements OnInit {
 
   }
 
-  handleOverridBtnClick(uuid, dialogId, noEmit?) {
+  handleOverridBtnClick(uuid, dialogId, noEmit?) {    
     let overRideObj: any = {
       "agentId": "",
       "botId": this.connectionDetails.botId,
@@ -1239,7 +1284,10 @@ export class AssistComponent implements OnInit {
     if (!noEmit) {
       this.websocketService.emitEvents(EVENTS.enable_override_userinput, overRideObj);
     }
-    let runInfoContent: any = document.getElementById(`dropDownData-${this.dropdownHeaderUuids}`);
+    let runInfoContent: any = document.getElementById(`dropDownData-${this.dropdownHeaderUuids}`);    
+    if(document.getElementById(`smallTalk-${uuid}`)){      
+      runInfoContent = document.getElementById(`smallTalk-${uuid}`);
+    }
     let agentInputId = this.randomUUIDPipe.transform();
     let agentInputEntityName = 'EnterDetails';
     if (this.agentAssistResponse.newEntityDisplayName || this.agentAssistResponse.newEntityName) {
@@ -1247,8 +1295,13 @@ export class AssistComponent implements OnInit {
     } else if (this.agentAssistResponse.entityDisplayName || this.agentAssistResponse.entityName) {
       agentInputEntityName = this.agentAssistResponse.entityDisplayName ? this.agentAssistResponse.entityDisplayName : this.agentAssistResponse.entityName;
     }
-    let agentInputToBotHtml = this.assisttabService.agentInputToBotTemplate(agentInputEntityName, agentInputId);
-    $(runInfoContent).append(agentInputToBotHtml);
+    $('#inputFieldForAgent').remove();
+    let agentInputToBotHtml = this.assisttabService.agentInputToBotTemplate(agentInputEntityName, agentInputId);    
+    if(document.getElementById(`smallTalk-${uuid}`)){
+      document.getElementById(`overRideDiv-${uuid}`).insertAdjacentHTML('beforebegin', agentInputToBotHtml);
+    }else{
+      $(runInfoContent).append(agentInputToBotHtml);
+    }
     if (document.getElementById('agentInput-' + agentInputId)) {
       document.getElementById('agentInput-' + agentInputId).focus();
       runInfoContent.querySelector(`#agentInput-${agentInputId}`).addEventListener('keypress', (e: any) => {
@@ -1258,7 +1311,7 @@ export class AssistComponent implements OnInit {
           this.AgentAssist_run_click({ intentName: this.sanitizeHtmlPipe.transform(e.target.value) }, this.dialogPositionId);
         }
       });
-    }
+    }    
     if (this.proactiveModeStatus) {
       $(`#overRideBtn-${uuid}`).addClass('hide');
       $(`#cancelOverRideBtn-${uuid}`).removeClass('hide');
