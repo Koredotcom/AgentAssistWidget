@@ -96,14 +96,14 @@ export class AssistComponent implements OnInit {
       this.handleSubjectService.setLoader(true);
       if (response && Object.keys(response).length > 0) {
         if(this.commonService.checkAutoBotIdDefined(this.connectionDetails?.autoBotId)){
-          this.connectionDetails['autoBotId'] = response?.autoBotId ? response.autoBotId: undefined; 
+          this.connectionDetails['autoBotId'] = response?.autoBotId ? response.autoBotId: undefined;
           this.handleSubjectService.setAutoBotIdFromAgentResponse({autoBotId: response?.autoBotId ? response.autoBotId: undefined});
           if(!this.isHistoryApiCalled) {this.callHistoryApi()}
         }
         if(this.commonService.checkAutoBotIdDefined(this.commonService.configObj?.autoBotId)){
           this.commonService.configObj['autoBotId'] = response?.autoBotId;
         }
-        
+
         console.log("ater adding autobotid from response----------------------------,", this.connectionDetails, this.commonService.configObj)
         this.updateAgentAssistResponse(response, this.connectionDetails.botId, this.connectionDetails.conversationId);
         this.viewCustomTempAttachment()
@@ -202,13 +202,13 @@ export class AssistComponent implements OnInit {
 
     let subscription13 = this.handleSubjectService.proactiveModeSubject.subscribe((response: any) => {
       console.log("proactive mode subject", response);
-      
+
       if (response != null && response != undefined) {
         this.proactiveModeStatus = response;
         let dropdownHeaderUuids = this.smallTalkOverrideBtnId ? this.smallTalkOverrideBtnId : this.dropdownHeaderUuids;
         console.log(dropdownHeaderUuids, 'dropdown header uuids');
-        
-        if (response) {          
+
+        if (response) {
           $(`.override-input-div`).removeClass('hide');
           this.handleCancelOverrideBtnClick(dropdownHeaderUuids, this.dialogPositionId);
           $(`#overRideBtn-${dropdownHeaderUuids}`).removeClass('hide');
@@ -347,7 +347,7 @@ export class AssistComponent implements OnInit {
           entityHtml.append(entityHtmls);
         }
       }
-  
+
       if (this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd) {
         this.scrollToBottom();
       }
@@ -402,10 +402,20 @@ export class AssistComponent implements OnInit {
     this.processAgentAssistResponse(data, botId);
   }
 
+  confirmationNodeRenderDataTransform(data){
+    if(data.componentType == 'dialogAct' && data.buttons && data.buttons.length > 0){
+      if(!data.buttons[0].value.includes("\n")){
+        data.componentType = '';
+      }
+    }
+    return data;
+  }
+
   processAgentAssistResponse(data, botId) {
     console.log("process agent assist response", data, this.proactiveModeStatus);
     this.smallTalkOverrideBtnId = null;
     let isTemplateRender = false;
+    data = this.confirmationNodeRenderDataTransform(data);
     if (!this.commonService.isAutomationOnGoing && !this.proactiveModeStatus) {
       return;
     }
@@ -478,7 +488,7 @@ export class AssistComponent implements OnInit {
       }
 
       if (data.suggestions) {
-    
+
           if(data.suggestions?.searchassist?.snippets?.length > 0){
             let automationSuggestions = document.getElementById(`automationSuggestions-${responseId}`);
             automationSuggestions.classList.remove('hide');
@@ -486,22 +496,22 @@ export class AssistComponent implements OnInit {
             automationSuggestions.innerHTML += dialogAreaHtml;
             data.suggestions?.searchassist?.snippets?.forEach((ele, index) => {
                 let articleSuggestions = document.getElementById(`snippetsSuggestions-${responseId}`);
-  
+
                 let articleHtml = `
                 <div class="type-info-run-send" id="snippetDiv-${uuids+index}">
                     <div class="left-content" id="snippetSection-${uuids+index}">
                         <div class="title-text" title="${ele.title}" id="snippettitle-${uuids+index}">${ele.title}</div>
                     </div>
-                    
+
                 </div>`;
-  
+
                 articleSuggestions.innerHTML += articleHtml;
                 let articles = $(`.type-info-run-send #snippetSection-${uuids+index}`);
-                
+
                         let a = $(`#snippetDiv-${uuids + index}`);
                         let articleActionHtml = `
                         <button class="know-more-btn hide" id="snippetviewMsg-${uuids+index}" data-msg-id="snippet-${uuids + index}" data-msg-data="${ele.page_url}"><a style="color: #FFFFFF;" href="${ele.page_url}" target="_blank">Know more</a></button>
-                        
+
                     `;
                     articles.append(`<div class="desc-text" id="snippetdesc-${uuids + index}">${ele.content}</div>`);
                     articles.append(articleActionHtml);
@@ -517,7 +527,7 @@ export class AssistComponent implements OnInit {
             })
           }
 
-      
+
         if (data.suggestions.dialogs?.length > 0) {
 
           let automationSuggestions = document.getElementById(`automationSuggestions-${responseId}`);
@@ -644,7 +654,7 @@ export class AssistComponent implements OnInit {
         });
 
         data.suggestions.faqs?.forEach((ele, index) => {
-          
+
           let faqsSuggestions = document.getElementById(`faqsSuggestions-${responseId}`);
 
           let faqHtml = this.assisttabService.faqTypeInfoTemplate(uuids, index, ele)
@@ -652,7 +662,7 @@ export class AssistComponent implements OnInit {
           faqsSuggestions.innerHTML += faqHtml;
           let faqs = $(`.type-info-run-send #faqSection-${uuids + index}`);
           let positionID = 'dg-' + this.koreGenerateuuidPipe.transform();
-          
+
           if (!ele.answer  || ele.answer.length <= 0) {
             let checkHtml = `
         <i class="ast-carrotup" id="check-${uuids + index}" data-intent-name="${ele.displayName}"
@@ -697,7 +707,7 @@ export class AssistComponent implements OnInit {
         });
         this.handleSeeMoreButton(responseId, data.suggestions.faqs, this.projConstants.FAQ);
         this.handleSeeMoreButton(responseId, data.suggestions.articles, this.projConstants.ARTICLE);
-      
+
 
       }
       setTimeout(() => {
@@ -801,7 +811,7 @@ export class AssistComponent implements OnInit {
         this.commonService.hideSendOrCopyButtons(result.parsePayLoad, runInfoContent);
       }else{
         isTemplateRender = false;
-       
+
       }
       setTimeout(() => {
         this.updateNewMessageUUIDList(this.dropdownHeaderUuids);
@@ -837,7 +847,7 @@ export class AssistComponent implements OnInit {
         }
         dynamicBlockDiv.append(botResHtml);
         $(`#smallTalk-${uuids} .agent-utt`).append(titleData);
-        $(`#smallTalk-${uuids} .agent-utt`).append(actionLinkTemplate);   
+        $(`#smallTalk-${uuids} .agent-utt`).append(actionLinkTemplate);
         setTimeout(() => {
           if (data.entityName) {
             this.agentAssistResponse = {};
@@ -848,9 +858,7 @@ export class AssistComponent implements OnInit {
         if (data.isPrompt) {
           this.smallTalkOverrideButtonTemplate(uuids);
         }
-        if(this.smallTalkTemplateRenderCheck(data, result)){
-          this.commonService.hideSendOrCopyButtons(result.parsedPayload, `#smallTalk-${uuids} .agent-utt`, 'smallTalk')
-        }
+        this.commonService.hideSendOrCopyButtons(result.parsedPayload, `#smallTalk-${uuids} .agent-utt`, 'smallTalk')
       });
     }
 
@@ -876,23 +884,20 @@ export class AssistComponent implements OnInit {
             isTemplateRender = true;
         }
         dynamicBlockDiv.append(botResHtml);
-        $(`#smallTalk-${uuids} .agent-utt`).append(titleData);  
-        $(`#smallTalk-${uuids} .agent-utt`).append(actionLinkTemplate);      
+        $(`#smallTalk-${uuids} .agent-utt`).append(titleData);
+        $(`#smallTalk-${uuids} .agent-utt`).append(actionLinkTemplate);
         $(`.override-input-div`).remove();
         if (data.isPrompt) {
           this.smallTalkOverrideButtonTemplate(uuids);
         }
-        if(this.smallTalkTemplateRenderCheck(data, result)){
-          this.commonService.hideSendOrCopyButtons(result.parsedPayload, `#smallTalk-${uuids} .agent-utt`, 'smallTalk')
-        }
-
+        this.commonService.hideSendOrCopyButtons(result.parsedPayload, `#smallTalk-${uuids} .agent-utt`, 'smallTalk')
       }
       setTimeout(() => {
         this.updateNewMessageUUIDList(uuids);
       }, this.waitingTimeForUUID);
     }
 
-    let renderedMessage = this.dropdownHeaderUuids && !isTemplateRender ? this.templateRenderClassService.AgentChatInitialize.renderMessage(result) : '';
+    let renderedMessage = !isTemplateRender ? this.templateRenderClassService.AgentChatInitialize.renderMessage(result) : '';
     if (renderedMessage && renderedMessage[0]) {
       let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(result)[0].innerHTML;
       let a = document.getElementById(IdReferenceConst.displayData + `-${uuids}`);
@@ -911,7 +916,7 @@ export class AssistComponent implements OnInit {
   smallTalkActionLinkTemplate(uuids,sendData){
     let actionLinkTemplate =  ` <div class="action-links">
     <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data="${sendData}">Send</button>
-    <div class="copy-btn" data-msg-id="${uuids}" data-msg-data="${sendData}">
+    <div class="copy-btn hide" data-msg-id="${uuids}" data-msg-data="${sendData}">
         <i class="ast-copy" data-msg-id="${uuids}" data-msg-data="${sendData}"></i>
     </div>
   </div>`;
@@ -978,7 +983,7 @@ export class AssistComponent implements OnInit {
 
   // handling seemoe button
   handleSeeMoreButton(responseId, array, type) {
-    
+
     if (array && responseId && type) {
       let index = 0;
       for (let item of array) {
@@ -1000,7 +1005,7 @@ export class AssistComponent implements OnInit {
   }
 
   handleSeeMoreButtonForHistory(responseId, array, type) {
-    
+
     if (array && responseId && type) {
       let index = 0;
       for (let item of array) {
@@ -1058,7 +1063,7 @@ export class AssistComponent implements OnInit {
     if (!this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd && this.commonService.scrollContent[ProjConstants.ASSIST].numberOfNewMessages) {
       $('.unread-msg').remove();
       let unreadHtml = ` <div class="unread-msg last-msg-white-bg">
-        <div class="text-dialog-task-end">Unread Messages</div>     
+        <div class="text-dialog-task-end">Unread Messages</div>
                    </div>`;
       this.designAlterService.UnCollapseDropdownForLastElement(this.commonService.scrollContent[ProjConstants.ASSIST].lastElementBeforeNewMessage);
       for (let i = 0; i < this.commonService.scrollContent[ProjConstants.ASSIST].newlyAddedIdList.length; i++) {
@@ -1183,7 +1188,7 @@ export class AssistComponent implements OnInit {
   }
 
   //click events related code.
-  clickEvents(eventName, uuid?, dialogId?, data?) {    
+  clickEvents(eventName, uuid?, dialogId?, data?) {
     if (this.commonService.activeTab != this.projConstants.ASSIST) {
       let clickObject: any = {
         eventName: eventName,
@@ -1213,7 +1218,7 @@ export class AssistComponent implements OnInit {
         this.handleSaveBtnClick(uuid);
       } else if (eventName == IdReferenceConst.AGENT_RUN_BTN) {
         this.handleMybotRunClick(uuid, data);
-      } else if (eventName == IdReferenceConst.SEEMORE_BTN) {        
+      } else if (eventName == IdReferenceConst.SEEMORE_BTN) {
         this.handleSeeMoreLessClickEvents(uuid, data);
       } else if (eventName == IdReferenceConst.CHECK){
         setTimeout(() => {
@@ -1229,7 +1234,7 @@ export class AssistComponent implements OnInit {
     }
     let checkElement = document.getElementById(IdReferenceConst.CHECK + '-' + uuid);
     if(checkElement){
-      checkElement.addEventListener('click', (event) => {                
+      checkElement.addEventListener('click', (event) => {
         if (!$(`#${target.id}`).attr("data-answer-render")) {
             let faq = $(`#dynamicBlock .type-info-run-send #faqSection-${uuid}`);
             let answerHtml = `<div class="desc-text" id="desc-${uuid}"></div>`
@@ -1239,7 +1244,7 @@ export class AssistComponent implements OnInit {
             this.answerPlaceableIDs.push({id:`desc-${uuid}`, input: data.intentName, inputQuestion: data.question, positionId: data.positionId});
             $(`#dynamicBlock #${target.id}`).addClass('rotate-carrot');
             $(`#dynamicBlock #faqDiv-${uuid}`).addClass('is-dropdown-open');
-            this.AgentAssist_run_click(data, data.positionId);            
+            this.AgentAssist_run_click(data, data.positionId);
             return
         }
         if ($(`#dynamicBlock .type-info-run-send #faqSection-${uuid} .ast-carrotup.rotate-carrot`).length <= 0) {
@@ -1247,7 +1252,7 @@ export class AssistComponent implements OnInit {
             $(`#dynamicBlock #faqDiv-${uuid}`).addClass('is-dropdown-open');
             $(`#dynamicBlock #faqDiv-${uuid} .action-links`).removeClass('hide');
             $(`#dynamicBlock #desc-${uuid}`).removeClass('hide');
-            setTimeout(() => {                                
+            setTimeout(() => {
               this.commonService.updateSeeMoreButtonForAssist(uuid);
             }, 1000);
         } else {
@@ -1312,7 +1317,7 @@ export class AssistComponent implements OnInit {
 
   }
 
-  handleOverridBtnClick(uuid, dialogId, noEmit?) {    
+  handleOverridBtnClick(uuid, dialogId, noEmit?) {
     let overRideObj: any = {
       "agentId": "",
       "botId": this.connectionDetails.botId,
@@ -1325,8 +1330,8 @@ export class AssistComponent implements OnInit {
     if (!noEmit) {
       this.websocketService.emitEvents(EVENTS.enable_override_userinput, overRideObj);
     }
-    let runInfoContent: any = document.getElementById(`dropDownData-${this.dropdownHeaderUuids}`);    
-    if(document.getElementById(`smallTalk-${uuid}`)){      
+    let runInfoContent: any = document.getElementById(`dropDownData-${this.dropdownHeaderUuids}`);
+    if(document.getElementById(`smallTalk-${uuid}`)){
       runInfoContent = document.getElementById(`smallTalk-${uuid}`);
     }
     let agentInputId = this.randomUUIDPipe.transform();
@@ -1337,7 +1342,7 @@ export class AssistComponent implements OnInit {
       agentInputEntityName = this.agentAssistResponse.entityDisplayName ? this.agentAssistResponse.entityDisplayName : this.agentAssistResponse.entityName;
     }
     $('#inputFieldForAgent').remove();
-    let agentInputToBotHtml = this.assisttabService.agentInputToBotTemplate(agentInputEntityName, agentInputId);    
+    let agentInputToBotHtml = this.assisttabService.agentInputToBotTemplate(agentInputEntityName, agentInputId);
     if(document.getElementById(`smallTalk-${uuid}`)){
       document.getElementById(`overRideDiv-${uuid}`).insertAdjacentHTML('beforebegin', agentInputToBotHtml);
     }else{
@@ -1352,7 +1357,7 @@ export class AssistComponent implements OnInit {
           this.AgentAssist_run_click({ intentName: this.sanitizeHtmlPipe.transform(e.target.value) }, this.dialogPositionId);
         }
       });
-    }    
+    }
     if (this.proactiveModeStatus) {
       $(`#overRideBtn-${uuid}`).addClass('hide');
       $(`#cancelOverRideBtn-${uuid}`).removeClass('hide');
@@ -1439,7 +1444,7 @@ export class AssistComponent implements OnInit {
   }
 
   handleSeeMoreLessClickEvents(id, data) {
-    let seeMoreElement = document.getElementById('seeMore-' + id);    
+    let seeMoreElement = document.getElementById('seeMore-' + id);
     let seeLessElement = document.getElementById('seeLess-' + id);
     let titleElement = document.getElementById("title-" + id);
     let descElement = document.getElementById("desc-" + id);
@@ -1564,8 +1569,8 @@ export class AssistComponent implements OnInit {
     let previousId;
     let previousTaskPositionId, currentTaskPositionId, currentTaskName, previousTaskName;
     let resp = response.length > 0 ? response : undefined;
-    
-    resp = this.commonService.formatHistoryResponseForFAQ(resp);    
+
+    resp = this.commonService.formatHistoryResponseForFAQ(resp);
     resp?.forEach((res, index) => {
 
       if ((res.agentAssistDetails?.suggestions || res.agentAssistDetails?.ambiguityList) && res.type == 'outgoing' && !res.agentAssistDetails?.faqResponse) {
@@ -1604,7 +1609,7 @@ export class AssistComponent implements OnInit {
             </div>
             <div class="content-dialog-task-type" id="faqsSuggestions-${uniqueID}">
                 <div class="type-with-img-title">FAQ (${res.agentAssistDetails?.suggestions ? res.agentAssistDetails?.suggestions.faqs.length : res.agentAssistDetails.ambiguityList.faqs.length})</div>
-                
+
             </div>
         </div>`;
           automationSuggestions.innerHTML += dialogAreaHtml;
@@ -1648,10 +1653,10 @@ export class AssistComponent implements OnInit {
                 <div class="type-info-run-send" id="faqDiv-${uniqueID + index}">
                     <div class="left-content" id="faqSection-${uniqueID + index}">
                         <div class="title-text" id="title-${uniqueID + index}" title="${ele.displayName ? ele.displayName : ele.question}">${ ele.displayName ? ele.displayName : ele.question}</div>
-                        
-                        
+
+
                     </div>
-                    
+
                 </div>`;
 
           faqsSuggestions.innerHTML += faqHtml;
@@ -1736,7 +1741,7 @@ export class AssistComponent implements OnInit {
     </div>
     <div class="content-dialog-task-type" id="faqsSuggestions-${uniqueID}">
         <div class="type-with-img-title">FAQ (${res.agentAssistDetails?.suggestions ? res.agentAssistDetails?.suggestions.faqs.length : res.agentAssistDetails.ambiguityList.faqs.length})</div>
-        
+
     </div>
 </div>`;
           automationSuggestions.innerHTML += dialogAreaHtml;
@@ -1808,7 +1813,7 @@ export class AssistComponent implements OnInit {
         currentTaskPositionId = res?.agentAssistDetails?.positionId ?  res?.agentAssistDetails?.positionId : ((res.tN != currentTaskName) ? positionID : currentTaskPositionId);
         currentTaskName = (res.tN) ? res.tN  : currentTaskName;
 
-      
+
         let historyData = $('#dynamicBlock');
         let userInputHtml;
         if (res.agentAssistDetails.userInput && res?.agentAssistDetails?.positionId) {
@@ -1820,7 +1825,7 @@ export class AssistComponent implements OnInit {
                         </div>`;
         }
         let dropdownHtml = `
-                        
+
                                     <div class="dialog-task-accordiaon-info" id="addRemoveDropDown-${res._id}" >
                                         <div class="accordion-header" id="dropDownHeader-${res._id}"
                                         data-drop-down-opened="true">
@@ -1836,7 +1841,7 @@ export class AssistComponent implements OnInit {
                                         <button class="override-input-btn hide" id="overRideBtn-${res._id}">Override Input</button>
                                         <button class="cancel-override-input-btn hide" id="cancelOverRideBtn-${res._id}">Cancel Override</button>
                                         </div>
-                                            
+
                                         </div>
                                     `;
 
@@ -1892,7 +1897,7 @@ export class AssistComponent implements OnInit {
                                     <div class="agent-utt">
                                         <div class="title-data">"${this.sanitizeHtmlPipe.transform(res.agentAssistDetails.userInput)}"</div>
                                     </div>
-                                    
+
                                 </div>
                             </div>`;
           runInfoContent.append(userQueryHtml);
@@ -1904,7 +1909,7 @@ export class AssistComponent implements OnInit {
             entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${entityValue}</div>`);
           } else {
             if (res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
-              let entityHtmls = `<div class="order-number-info">${entityDisplayName} : 
+              let entityHtmls = `<div class="order-number-info">${entityDisplayName} :
                                             <span style="color:red">Value unidentified</span>
                                         </div>
                                         <div>
@@ -2046,7 +2051,7 @@ export class AssistComponent implements OnInit {
                 ]
               }
             }
-      
+
           } else if (res.agentAssistDetails?.newEntityType === "list_of_values") {
             let arr = [];
             if (res.components[0].data.text.includes('text')) {
@@ -2075,13 +2080,13 @@ export class AssistComponent implements OnInit {
                     "template_type": "button",
                     "text": `${arr[0]}`,
                     "buttons": [
-                    
+
                     ]
                   }
                 }
               }
             }
-          
+
             let list = [];
             arr.forEach((ele, i) => {
               if (i !== 0 && i !== arr.length - 1 && ele !== '') {
@@ -2093,7 +2098,7 @@ export class AssistComponent implements OnInit {
                 }
                 list.push(obj)
               }
-      
+
             })
             _msgsResponse.message[0].component.payload.buttons = list;
             _msgsResponse.message[0].cInfo.body.payload.buttons = list;
@@ -2107,7 +2112,7 @@ export class AssistComponent implements OnInit {
             }
           }
         }
-       
+
         if(_msgsResponse.message.length > 0){
           let msgStringify = JSON.stringify(_msgsResponse);
           let newTemp = encodeURI(msgStringify);
@@ -2128,7 +2133,6 @@ export class AssistComponent implements OnInit {
                 let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(_msgsResponse)[0].innerHTML;
                 let a = document.getElementById(IdReferenceConst.displayData + `-${res._id}`);
                 a.innerHTML = a?.innerHTML + html;
-                this.commonService.hideSendOrCopyButtons(parsedPayload, `#smallTalk-${res._id} .agent-utt`, 'smallTalk')
             }else{
                 // isTemplateRender = true;
                 titleData = `<div class="title-data" id="displayData-${res._id}">${res.components[0].data.text}</div>`;
@@ -2137,6 +2141,7 @@ export class AssistComponent implements OnInit {
                 $(`#smallTalk-${res._id} .agent-utt`).append(titleData);
                 $(`#smallTalk-${res._id} .agent-utt`).append(actionLinkTemplate);
             }
+            this.commonService.hideSendOrCopyButtons(parsedPayload, `#smallTalk-${res._id} .agent-utt`, 'smallTalk')
           }
 
           if ((res.agentAssistDetails?.isPrompt === true || res.agentAssistDetails?.isPrompt === false) && previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) {
@@ -2166,13 +2171,13 @@ export class AssistComponent implements OnInit {
                 this.dialogPositionId = previousTaskPositionId;
               }
               runInfoContent.append(askToUserHtml);
-             
+
             } else {
               runInfoContent.append(tellToUserHtml);
             }
             if(res && res.agentAssistDetails && res.agentAssistDetails.componentType == 'dialogAct' && (res.agentAssistDetails?.srcChannel != 'msteams' && res.agentAssistDetails?.srcChannel != 'rtm')){
               // console.log("inside dialogact and channel");
-             
+
             }else{
               let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(_msgsResponse)[0].innerHTML;
               let a = document.getElementById(IdReferenceConst.displayData + `-${res._id}`);
