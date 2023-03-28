@@ -801,12 +801,13 @@ export class CommonService {
     return response;
   }
 
-  hideSendOrCopyButtons(parsedPayload, conatiner, smallTalk?){
+  hideSendOrCopyButtons(parsedPayload, conatiner, smallTalk?, componentType?){
     let lastchild = $(conatiner).children().last();
     if(smallTalk){
       lastchild = $(conatiner);
     }
-    if (!parsedPayload) {
+
+    if (!parsedPayload && componentType != 'dialogAct') {
         $(lastchild).find('.copy-btn').removeClass('hide')
     }
     if((!this.configObj.source || this.configObj.source !== 'smartassist-color-scheme') && parsedPayload){
