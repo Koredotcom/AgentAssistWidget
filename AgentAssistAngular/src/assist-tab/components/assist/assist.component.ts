@@ -555,10 +555,11 @@ export class AssistComponent implements OnInit {
             // } else {
               ele.content = this.removeTagFromString.transform(ele.content);
               let a = $(`#articleDiv-${uuids + index}`);
+              let answerSanitized = this.commonService.handleEmptyLine(ele.content);
               let articleActionHtml = `<div class="action-links">
-                            <button class="send-run-btn" id="sendMsg" data-msg-id="article-${uuids + index}" data-msg-data="${ele.content}">Send</button>
-                            <div class="copy-btn" data-msg-id="article-${uuids + index}" data-msg-data="${ele.content}">
-                                <i class="ast-copy" data-msg-id="article-${uuids + index}" data-msg-data="${ele.content}"></i>
+                            <button class="send-run-btn" id="sendMsg" data-msg-id="article-${uuids + index}" data-msg-data="${answerSanitized}">Send</button>
+                            <div class="copy-btn" data-msg-id="article-${uuids + index}" data-msg-data="${answerSanitized}">
+                                <i class="ast-copy" data-msg-id="article-${uuids + index}" data-msg-data="${answerSanitized}"></i>
                             </div>
                         </div>`;
               if(ele.content){
@@ -719,7 +720,7 @@ export class AssistComponent implements OnInit {
             let faqSection = $(`#dynamicBlock #faqSection-${splitedanswerPlaceableID.join('-')}`);
             let answerSanitized = this.commonService.handleEmptyLine(ele.answer[0]);
             let faqaction = `<div class="action-links">
-            <button class="send-run-btn" id="sendMsg" data-msg-id="${splitedanswerPlaceableID.join('-')}"  data-msg-data="${answerSanitized}">Send1</button>
+            <button class="send-run-btn" id="sendMsg" data-msg-id="${splitedanswerPlaceableID.join('-')}"  data-msg-data="${answerSanitized}">Send</button>
             <div class="copy-btn" data-msg-id="${splitedanswerPlaceableID.join('-')}" data-msg-data="${answerSanitized}">
             <i class="ast-copy" data-msg-id="${splitedanswerPlaceableID.join('-')}" data-msg-data="${answerSanitized}"></i>
                 </div>
@@ -1633,7 +1634,7 @@ export class AssistComponent implements OnInit {
             let answerSanitized = this.commonService.handleEmptyLine(ele.answer[0]);
 
             let faqActionHtml = `<div class="action-links">
-                    <button class="send-run-btn" id="sendMsg" data-msg-id="${uniqueID + index}"  data-msg-data="${answerSanitized}">Send2</button>
+                    <button class="send-run-btn" id="sendMsg" data-msg-id="${uniqueID + index}"  data-msg-data="${answerSanitized}">Send</button>
                     <div class="copy-btn" data-msg-id="${uniqueID + index}" data-msg-data="${answerSanitized}">
                         <i class="ast-copy" data-msg-id="${uniqueID + index}" data-msg-data="${answerSanitized}"></i>
                     </div>

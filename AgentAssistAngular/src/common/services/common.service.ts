@@ -997,20 +997,44 @@ export class CommonService {
   }
   replaceLtGt(htmlString) {
     htmlString = htmlString.replaceAll("&lt;", "<");
+    htmlString = htmlString.replaceAll("&gt;", ">");
     htmlString = htmlString.replaceAll('"', "&quot;");
     return htmlString;
   }
+
   handleEmptyLine(answer){
     let eleanswer = '';
     if(answer != undefined && answer != null){
         eleanswer = answer.replace(/(\r\n|\n|\r)/gm, "<br>");
+        eleanswer = this.replaceLtGt(eleanswer);
         eleanswer = this.aaHelpers.convertMDtoHTML(eleanswer, "bot", eleanswer)
         eleanswer = this.replaceLtGt(eleanswer);
         return eleanswer;
     }
-    eleanswer = this.replaceLtGt(eleanswer)
+    // eleanswer = this.replaceLtGt(eleanswer)
     return eleanswer
   }
+
+  replaceLtGt2(htmlStr) {
+    htmlStr = htmlStr.replaceAll("&lt;", "<");
+    htmlStr = htmlStr.replaceAll("&gt;", ">");
+    htmlStr = htmlStr.replaceAll("&quot;", "'");
+    return htmlStr;
+  }
+
+  handleEmptyLine2(answer){
+    let eleanswer = '';
+    if(answer != undefined && answer != null){
+        eleanswer = answer.replace(/(\r\n|\n|\r)/gm, "<br>");
+        eleanswer = this.replaceLtGt2(eleanswer);
+        eleanswer = this.aaHelpers.convertMDtoHTML(eleanswer, "bot", eleanswer)
+        return eleanswer;
+    }
+    // eleanswer = this.replaceLtGt2(eleanswer)
+    return eleanswer
+  }
+
+
 
   CustomTempClickEvents(tab, connectionObj) {
     let mythis = this;
