@@ -808,11 +808,11 @@ export class AssistComponent implements OnInit {
       if(data && data.componentType == 'dialogAct' && (data.srcChannel != 'msteams' && data.srcChannel != 'rtm')){
         console.log("inside dialogact and channel");
         isTemplateRender = true;
-        this.commonService.hideSendOrCopyButtons(result.parsePayLoad, runInfoContent);
       }else{
         isTemplateRender = false;
 
       }
+      this.commonService.hideSendOrCopyButtons(result.parsePayLoad, runInfoContent, false, data.componentType);
       setTimeout(() => {
         this.updateNewMessageUUIDList(this.dropdownHeaderUuids);
       }, this.waitingTimeForUUID);
