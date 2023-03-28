@@ -823,17 +823,21 @@ export class AssistComponent implements OnInit {
       let dynamicBlockDiv = $('#dynamicBlock');
       data.buttons?.forEach((ele, i) => {
         let botResHtml = this.assisttabService.smallTalkTemplateForTemplatePayload(ele, uuids,data, result,newTemp);
-        let titleData = ``
-        if(result.parsedPayload && ((data?.componentType === 'dialogAct' && (data?.srcChannel == 'msteams' || data?.srcChannel == 'rtm')) || (data?.componentType != 'dialogAct'))){
+        let titleData = ``;
+        let actionLinkTemplate = ``;
+        if(this.smallTalkTemplateRenderCheck(data, result)){
             isTemplateRender = false;
             titleData = `<div class="title-data" ><ul class="chat-container" id="displayData-${uuids}"></ul></div>`;
-            this.commonService.hideSendOrCopyButtons(result.parsedPayload, `#smallTalk-${uuids} .agent-utt`, 'smallTalk')
+            let sendData = result?.parsedPayload ? newTemp : data.buttons[0].value;
+            actionLinkTemplate = this.smallTalkActionLinkTemplate(uuids, sendData);
         }else{
-            titleData = `<div class="title-data" id="displayData-${uuids}">${ele.value}</div>`
+            titleData = `<div class="title-data" id="displayData-${uuids}">${ele.value}</div>`;
+            actionLinkTemplate = this.smallTalkActionLinkTemplate(uuids, data.buttons[0].value)
             isTemplateRender = true;
         }
         dynamicBlockDiv.append(botResHtml);
         $(`#smallTalk-${uuids} .agent-utt`).append(titleData);
+        $(`#smallTalk-${uuids} .agent-utt`).append(actionLinkTemplate);   
         setTimeout(() => {
           if (data.entityName) {
             this.agentAssistResponse = {};
@@ -843,6 +847,9 @@ export class AssistComponent implements OnInit {
         $(`.override-input-div`).remove();
         if (data.isPrompt) {
           this.smallTalkOverrideButtonTemplate(uuids);
+        }
+        if(this.smallTalkTemplateRenderCheck(data, result)){
+          this.commonService.hideSendOrCopyButtons(result.parsedPayload, `#smallTalk-${uuids} .agent-utt`, 'smallTalk')
         }
       });
     }
@@ -856,20 +863,27 @@ export class AssistComponent implements OnInit {
         this.welcomeMsgResponse = data;
       } else {
         let botResHtml = this.assisttabService.smallTalkTemplateForTemplatePayload(data.buttons[0], uuids, data, result,newTemp);
-        let titleData = ``
-        if(result.parsedPayload && ((data?.componentType === 'dialogAct' && (data?.srcChannel == 'msteams' || data?.srcChannel == 'rtm')) || (data?.componentType != 'dialogAct'))){
+        let titleData = ``;
+        let actionLinkTemplate = ``;
+        if(this.smallTalkTemplateRenderCheck(data, result)){
             isTemplateRender = false;
             titleData = `<div class="title-data" ><ul class="chat-container" id="displayData-${uuids}"></ul></div>`;
-            this.commonService.hideSendOrCopyButtons(result.parsedPayload, `#smallTalk-${uuids} .agent-utt`, 'smallTalk')
+            let sendData = result?.parsedPayload ? newTemp : data.buttons[0].value;
+            actionLinkTemplate = this.smallTalkActionLinkTemplate(uuids, sendData);
         }else{
+            actionLinkTemplate = this.smallTalkActionLinkTemplate(uuids, data.buttons[0].value)
             titleData = `<div class="title-data" id="displayData-${uuids}">${data.buttons[0].value}</div>`
             isTemplateRender = true;
         }
         dynamicBlockDiv.append(botResHtml);
-        $(`#smallTalk-${uuids} .agent-utt`).append(titleData);        
+        $(`#smallTalk-${uuids} .agent-utt`).append(titleData);  
+        $(`#smallTalk-${uuids} .agent-utt`).append(actionLinkTemplate);      
         $(`.override-input-div`).remove();
         if (data.isPrompt) {
           this.smallTalkOverrideButtonTemplate(uuids);
+        }
+        if(this.smallTalkTemplateRenderCheck(data, result)){
+          this.commonService.hideSendOrCopyButtons(result.parsedPayload, `#smallTalk-${uuids} .agent-utt`, 'smallTalk')
         }
 
       }
@@ -894,6 +908,16 @@ export class AssistComponent implements OnInit {
     this.designAlterService.addWhiteBackgroundClassToNewMessage(this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd, IdReferenceConst.DYNAMICBLOCK);
   }
 
+  smallTalkActionLinkTemplate(uuids,sendData){
+    let actionLinkTemplate =  ` <div class="action-links">
+    <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data="${sendData}">Send</button>
+    <div class="copy-btn" data-msg-id="${uuids}" data-msg-data="${sendData}">
+        <i class="ast-copy" data-msg-id="${uuids}" data-msg-data="${sendData}"></i>
+    </div>
+  </div>`;
+  return actionLinkTemplate;
+  }
+
   smallTalkOverrideButtonTemplate(uuids){
     this.smallTalkOverrideBtnId = uuids;
     let overrideTemplate = this.assisttabService.overrideTemplate(uuids);
@@ -903,6 +927,20 @@ export class AssistComponent implements OnInit {
     } else {
       $(`.override-input-div`).removeClass('hide');
     }
+  }
+
+  smallTalkTemplateRenderCheck(data,result){
+    if(result.parsedPayload && ((data?.componentType === 'dialogAct' && (data?.srcChannel == 'msteams' || data?.srcChannel == 'rtm')) || (data?.componentType != 'dialogAct'))){
+      return true;
+    }
+    return false;
+  }
+
+  smallTalkHistoryRenderCheck(parsedPayload,res){
+    if(parsedPayload && res.agentAssistDetails && ((res.agentAssistDetails?.componentType === 'dialogAct' && (res.agentAssistDetails?.srcChannel == 'msteams' || res.agentAssistDetails?.srcChannel == 'rtm')) || (res.agentAssistDetails?.componentType != 'dialogAct'))){
+      return true;
+    }
+    return false
   }
 
   //dialog terminate code
@@ -2078,11 +2116,15 @@ export class AssistComponent implements OnInit {
 
             let botResHtml = this.assisttabService.smallTalkTemplateForTemplatePayload(res, res._id,res, {parsedPayload : parsedPayload},newTemp);
             let titleData = ``;
-            if(parsedPayload && res.agentAssistDetails && ((res.agentAssistDetails?.componentType === 'dialogAct' && (res.agentAssistDetails?.srcChannel == 'msteams' || res.agentAssistDetails?.srcChannel == 'rtm')) || (res.agentAssistDetails?.componentType != 'dialogAct'))){
+            let actionLinkTemplate = ``;
+            if(this.smallTalkHistoryRenderCheck(parsedPayload,res)){
                 // isTemplateRender = false;
                 titleData = `<div class="title-data" ><ul class="chat-container" id="displayData-${res._id}"></ul></div>`;
+                let sendData = res?.parsedPayload ? newTemp : res.components[0].data.text;
+                actionLinkTemplate = this.smallTalkActionLinkTemplate(res._id, sendData);
                 dynamicBlockDiv.append(botResHtml);
                 $(`#smallTalk-${res._id} .agent-utt`).append(titleData);
+                $(`#smallTalk-${res._id} .agent-utt`).append(actionLinkTemplate);
                 let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(_msgsResponse)[0].innerHTML;
                 let a = document.getElementById(IdReferenceConst.displayData + `-${res._id}`);
                 a.innerHTML = a?.innerHTML + html;
@@ -2090,8 +2132,10 @@ export class AssistComponent implements OnInit {
             }else{
                 // isTemplateRender = true;
                 titleData = `<div class="title-data" id="displayData-${res._id}">${res.components[0].data.text}</div>`;
+                actionLinkTemplate = this.smallTalkActionLinkTemplate(res._id, res.components[0].data.text);
                 dynamicBlockDiv.append(botResHtml);
                 $(`#smallTalk-${res._id} .agent-utt`).append(titleData);
+                $(`#smallTalk-${res._id} .agent-utt`).append(actionLinkTemplate);
             }
           }
 
