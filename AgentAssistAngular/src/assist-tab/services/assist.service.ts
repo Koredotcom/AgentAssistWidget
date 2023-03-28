@@ -198,8 +198,6 @@ export class AssistService {
   }
 
   smallTalkTemplateForTemplatePayload(ele, uuids,data, res, newTemp?){
-    let sendData ;
-    sendData = res?.parsedPayload ? newTemp: undefined;
     let tellOrAskCustomer = data.isPrompt ? 'Ask Customer' : 'Tell Customer';
     let template = `
     <div class="collapse-acc-data before-none" id='smallTalk-${uuids}'>
@@ -210,12 +208,6 @@ export class AssistService {
         <div class="run-info-content" >
         <div class="title">${tellOrAskCustomer}</div>
         <div class="agent-utt">
-            <div class="action-links">
-                <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data="${sendData}">Send</button>
-                <div class="copy-btn" data-msg-id="${uuids}">
-                    <i class="ast-copy" data-msg-id="${uuids}"></i>
-                </div>
-            </div>
         </div>
         </div>
     </div>
