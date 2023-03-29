@@ -116,9 +116,9 @@ export class TemplateRenderClassService {
         if (res.buttons[0].value.includes('text')) {
           let str = res.buttons[0].value.replace(/^\s+|\s+$/g, "");
           let str1 = JSON.parse(str);
-          arr = str1.text.split('\n');
+          arr = str1.text.split('\nYes, No');
         } else {
-          arr = res.buttons[0].value.split('\n');
+          arr = res.buttons[0].value.split('\nYes, No');
         }
         _msgsResponse.message[0] = {
           "type": "text",
@@ -188,9 +188,9 @@ export class TemplateRenderClassService {
         if (res.buttons[0].value.includes('text')) {
           let str = res.buttons[0].value.replace(/^\s+|\s+$/g, "");
           let str1 = JSON.parse(str);
-          arr = str1.text.split('\n');
+          arr = str1.text.split('\nYes, No');
         } else {
-          arr = res.buttons[0].value.split('\n');
+          arr = res.buttons[0].value.split('\nYes, No');
         }
 
         _msgsResponse.message[0] = {
