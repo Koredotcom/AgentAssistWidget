@@ -404,7 +404,7 @@ export class AssistComponent implements OnInit {
 
   confirmationNodeRenderDataTransform(data){
     if(data.componentType == 'dialogAct' && data.buttons && data.buttons.length > 0){
-      if(!data.buttons[0].value.includes("\n")){
+      if(!data.buttons[0].value.includes("\nYes, No")){
         data.componentType = '';
       }
     }
@@ -1985,9 +1985,9 @@ export class AssistComponent implements OnInit {
             if (res.components[0].data.text.includes('text')) {
               let str = res.components[0].data.text.replace(/^\s+|\s+$/g, "");
               let str1 = JSON.parse(str);
-              arr = str1.text.split('\n');
+              arr = str1.text.split('\nYes, No');
             } else {
-              arr = res.components[0].data.text.split('\n');
+              arr = res.components[0].data.text.split('\nYes, No');
             }
             _msgsResponse.message = [];
             _msgsResponse.message[0] = {
@@ -2058,9 +2058,9 @@ export class AssistComponent implements OnInit {
             if (res.components[0].data.text.includes('text')) {
               let str = res.components[0].data.text.replace(/^\s+|\s+$/g, "");
               let str1 = JSON.parse(str);
-              arr = str1.text.split('\n');
+              arr = str1.text.split('\nYes, No');
             } else {
-              arr = res.components[0].data.text.split('\n');
+              arr = res.components[0].data.text.split('\nYes, No');
             }
             _msgsResponse.message = [];
             _msgsResponse.message[0] = {
