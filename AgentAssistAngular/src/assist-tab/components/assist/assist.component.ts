@@ -801,18 +801,19 @@ export class AssistComponent implements OnInit {
         } else {
           $(`.override-input-div`).removeClass('hide');
         }
+        this.commonService.hideSendOrCopyButtons(result.parsedPayload, runInfoContent, false, data.componentType);
       } else {
         $(`.override-input-div`).addClass('hide');
         $(runInfoContent).append(tellToUserHtml);
+        this.commonService.hideSendOrCopyButtons(result.parsedPayload, runInfoContent, false, data.componentType);
       }
       if(data && data.componentType == 'dialogAct' && (data.srcChannel != 'msteams' && data.srcChannel != 'rtm')){
         console.log("inside dialogact and channel");
         isTemplateRender = true;
       }else{
         isTemplateRender = false;
-       
+        this.commonService.hideSendOrCopyButtons(result.parsedPayload, runInfoContent, false, data.componentType);
       }
-      this.commonService.hideSendOrCopyButtons(result.parsePayLoad, runInfoContent, false, data.componentType);
       setTimeout(() => {
         this.updateNewMessageUUIDList(this.dropdownHeaderUuids);
       }, this.waitingTimeForUUID);
