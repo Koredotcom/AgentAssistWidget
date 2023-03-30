@@ -854,6 +854,7 @@ export class AssistComponent implements OnInit {
             titleData = `<div class="title-data" id="displayData-${uuids}">${ele.value}</div>`;
             actionLinkTemplate = this.smallTalkActionLinkTemplate(uuids, data.buttons[0].value)
             isTemplateRender = true;
+            result.parsedPayload = null;
         }
         dynamicBlockDiv.append(botResHtml);
         $(`#smallTalk-${uuids} .agent-utt`).append(titleData);
@@ -892,6 +893,7 @@ export class AssistComponent implements OnInit {
             actionLinkTemplate = this.smallTalkActionLinkTemplate(uuids, data.buttons[0].value)
             titleData = `<div class="title-data" id="displayData-${uuids}">${data.buttons[0].value}</div>`
             isTemplateRender = true;
+            result.parsedPayload = null;
         }
         dynamicBlockDiv.append(botResHtml);
         $(`#smallTalk-${uuids} .agent-utt`).append(titleData);  
@@ -2150,6 +2152,7 @@ export class AssistComponent implements OnInit {
                 dynamicBlockDiv.append(botResHtml);
                 $(`#smallTalk-${res._id} .agent-utt`).append(titleData);
                 $(`#smallTalk-${res._id} .agent-utt`).append(actionLinkTemplate);
+                parsedPayload = null;
             }
             this.commonService.hideSendOrCopyButtons(parsedPayload, `#smallTalk-${res._id} .agent-utt`, 'smallTalk')
           }
