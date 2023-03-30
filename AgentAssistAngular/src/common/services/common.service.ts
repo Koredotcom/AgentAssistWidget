@@ -823,7 +823,7 @@ export class CommonService {
     let faqIndex = 0;
     for(let ans of ele.answer){
         $(`#seeMoreWrapper-${uniqueIndex}`).append(`<div class="individual-data-text">
-            <div class="desc-text-individual" id="desc-faq-${uniqueIndex+faqIndex.toString()}">${this.handleEmptyLine(ans)}</div>
+            <div class="desc-text-individual" id="desc-faq-${uniqueIndex+faqIndex.toString()}">${this.handleEmptyLine(ans, false)}</div>
             <div class="seemore-link-text hide" id="seeMore-${uniqueIndex+faqIndex.toString()}" data-see-more="true" data-actual-id="${uniqueIndex}">${ProjConstants.READ_MORE}</div>
             <div class="seemore-link-text hide" id="seeLess-${uniqueIndex+faqIndex.toString()}" data-see-less="true" data-actual-id="${uniqueIndex}">${ProjConstants.READ_LESS}</div>
             <div class="actions-send-copy">
@@ -996,30 +996,42 @@ export class CommonService {
       e.stopPropagation();
     }
   }
-  replaceLtGt(htmlString) {
-    htmlString = htmlString.replaceAll("&lt;", "<");
-    htmlString = htmlString.replaceAll("&gt;", ">");
-    htmlString = htmlString.replaceAll('"', "&quot;");
-    return htmlString;
+
+  replaceDoubleQuot(val) {
+    val = val.replaceAll('"', "&quot;");
+    // val = encodeURI(val);
+    return val;
   }
 
-  handleEmptyLine(answer){
+  replaceLtGt(htmlString, quotflag) {
+    let newHtmlStr;
+    newHtmlStr = htmlString.replaceAll("&lt;", "<");
+    newHtmlStr = newHtmlStr.replaceAll("&gt;", ">");
+    if(quotflag) {
+      newHtmlStr = newHtmlStr.replaceAll('"', "&quot;");
+    }
+    return newHtmlStr;
+  }
+
+  handleEmptyLine(answer, quotflag){
     let eleanswer = '';
     if(answer != undefined && answer != null){
         eleanswer = answer.replace(/(\r\n|\n|\r)/gm, "<br>");
-        eleanswer = this.replaceLtGt(eleanswer);
+        eleanswer = this.replaceLtGt(eleanswer, quotflag)
         eleanswer = this.aaHelpers.convertMDtoHTML(eleanswer, "bot", eleanswer)
-        eleanswer = this.replaceLtGt(eleanswer);
+        if(quotflag) {
+          eleanswer = this.replaceLtGt(eleanswer, quotflag)
+        }
         return eleanswer;
+
     }
-    // eleanswer = this.replaceLtGt(eleanswer)
     return eleanswer
   }
 
   replaceLtGt2(htmlStr) {
     htmlStr = htmlStr.replaceAll("&lt;", "<");
     htmlStr = htmlStr.replaceAll("&gt;", ">");
-    htmlStr = htmlStr.replaceAll("&quot;", "'");
+    htmlStr = htmlStr.replaceAll("&quot;", '"');
     return htmlStr;
   }
 
@@ -1027,7 +1039,7 @@ export class CommonService {
     let eleanswer = '';
     if(answer != undefined && answer != null){
         eleanswer = answer.replace(/(\r\n|\n|\r)/gm, "<br>");
-        eleanswer = this.replaceLtGt2(eleanswer);
+        // eleanswer = this.replaceLtGt2(eleanswer);
         eleanswer = this.aaHelpers.convertMDtoHTML(eleanswer, "bot", eleanswer)
         return eleanswer;
     }
