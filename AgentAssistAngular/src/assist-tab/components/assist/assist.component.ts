@@ -574,7 +574,7 @@ export class AssistComponent implements OnInit {
             // } else {
               ele.content = this.removeTagFromString.transform(ele.content);
               let a = $(`#articleDiv-${uuids + index}`);
-              let answerSanitized = this.commonService.handleEmptyLine(ele.content);
+              let answerSanitized = this.commonService.handleEmptyLine(ele.content, true);
               let articleActionHtml = `<div class="action-links">
                             <button class="send-run-btn" id="sendMsg" data-msg-id="article-${uuids + index}" data-msg-data="${answerSanitized}">Send</button>
                             <div class="copy-btn" data-msg-id="article-${uuids + index}" data-msg-data="${answerSanitized}">
@@ -681,7 +681,9 @@ export class AssistComponent implements OnInit {
             this.clickEvents(IdReferenceConst.CHECK, uuids + index, positionID, {intentName : ele.displayName, positionID : positionID, question: ele.question});
           } else {
             let a = $(`#faqDiv-${uuids + index}`);
-            let answerSanitized = this.commonService.handleEmptyLine(ele.answer[0]);
+            let answerSanitized = (ele.answer[0]);
+            // if text only not template cond need to add
+            answerSanitized = this.commonService.replaceDoubleQuot(answerSanitized);
             let faqActionHtml = `<div class="action-links">
             <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids+index}" data-msg-data="${answerSanitized}" data-position-id="${positionID}">Send</button>
             <div class="copy-btn" data-msg-id="${uuids+index}" data-msg-data="${answerSanitized}" data-position-id="${positionID}">
@@ -689,7 +691,8 @@ export class AssistComponent implements OnInit {
             </div>
             </div>`;
             a.append(faqActionHtml);
-            faqs.append(`<div class="desc-text" id="desc-${uuids + index}">${this.commonService.handleEmptyLine(ele.answer[0])}</div>`);
+            console.log('handle2: ', this.commonService.handleEmptyLine2(ele.answer[0]))
+            faqs.append(`<div class="desc-text" id="desc-${uuids + index}">${this.commonService.handleEmptyLine2(ele.answer[0])}</div>`);
 
             if(ele.answer && ele.answer.length > 1){
               this.commonService.appendSeeMoreWrapper(faqs, ele, uuids+index, positionID);
@@ -737,7 +740,7 @@ export class AssistComponent implements OnInit {
 
             let faqDiv = $(`#dynamicBlock #faqDiv-${splitedanswerPlaceableID.join('-')}`);
             let faqSection = $(`#dynamicBlock #faqSection-${splitedanswerPlaceableID.join('-')}`);
-            let answerSanitized = this.commonService.handleEmptyLine(ele.answer[0]);
+            let answerSanitized = this.commonService.handleEmptyLine(ele.answer[0], true);
             let faqaction = `<div class="action-links">
             <button class="send-run-btn" id="sendMsg" data-msg-id="${splitedanswerPlaceableID.join('-')}"  data-msg-data="${answerSanitized}">Send</button>
             <div class="copy-btn" data-msg-id="${splitedanswerPlaceableID.join('-')}" data-msg-data="${answerSanitized}">
@@ -747,7 +750,7 @@ export class AssistComponent implements OnInit {
 
             faqDiv.append(faqaction);
 
-            $(`#${faqAnswerIdsPlace.id}`).html(this.commonService.handleEmptyLine(ele.answer[0]));
+            $(`#${faqAnswerIdsPlace.id}`).html(this.commonService.handleEmptyLine(ele.answer[0], false));
             $(`#${faqAnswerIdsPlace.id}`).attr('data-answer-render', 'true');
             let faqs = $(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')}`);
 
@@ -1686,7 +1689,7 @@ export class AssistComponent implements OnInit {
 
           } else {
             let a = $(`#faqDiv-${uniqueID + index}`);
-            let answerSanitized = this.commonService.handleEmptyLine(ele.answer[0]);
+            let answerSanitized = this.commonService.handleEmptyLine(ele.answer[0], true);
 
             let faqActionHtml = `<div class="action-links">
                     <button class="send-run-btn" id="sendMsg" data-msg-id="${uniqueID + index}"  data-msg-data="${answerSanitized}">Send</button>
@@ -1695,7 +1698,7 @@ export class AssistComponent implements OnInit {
                     </div>
                 </div>`;
             a.append(faqActionHtml);
-            faqs.append(`<div class="desc-text" id="desc-${uniqueID + index}">${this.commonService.handleEmptyLine(ele.answer[0])}</div>`);
+            faqs.append(`<div class="desc-text" id="desc-${uniqueID + index}">${this.commonService.handleEmptyLine(ele.answer[0], false)}</div>`);
 
             if(ele.answer && ele.answer.length > 1){
               this.commonService.appendSeeMoreWrapper(faqs, ele, uniqueID+index, uniqueID+index);
@@ -1771,7 +1774,7 @@ export class AssistComponent implements OnInit {
           faqsSuggestions.innerHTML += faqHtml;
           let faqs = $(`.type-info-run-send #faqSection-${uniqueID + index}`);
           let a = $(`#faqDiv-${uniqueID + index}`);
-          let answerSanitized = this.commonService.handleEmptyLine(res.components[0].data.text[0]);
+          let answerSanitized = this.commonService.handleEmptyLine(res.components[0].data.text[0], true);
           let faqActionHtml = `<div class="action-links">
                     <button class="send-run-btn" id="sendMsg" data-msg-id="${uniqueID + index}"  data-msg-data="${answerSanitized}">Send</button>
                     <div class="copy-btn" data-msg-id="${uniqueID + index}" data-msg-data="${answerSanitized}">
@@ -1780,7 +1783,7 @@ export class AssistComponent implements OnInit {
                 </div>`;
 
           a.append(faqActionHtml);
-          faqs.append(`<div class="desc-text" id="desc-${uniqueID + index}">${this.commonService.handleEmptyLine(res.components[0].data.text[0])}</div>`);
+          faqs.append(`<div class="desc-text" id="desc-${uniqueID + index}">${this.commonService.handleEmptyLine(res.components[0].data.text[0], false)}</div>`);
 
           if(res.components[0].data.text && res.components[0].data.text.length > 1){
             this.commonService.appendSeeMoreWrapper(faqs, ele, uniqueID + index, uniqueID + index);
