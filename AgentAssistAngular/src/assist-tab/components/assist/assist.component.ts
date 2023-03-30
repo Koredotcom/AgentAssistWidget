@@ -411,6 +411,15 @@ export class AssistComponent implements OnInit {
     return data;
   }
 
+  confirmationNodeRenderForHistoryDataTransform(res){
+    if(res && res.agentAssistDetails && res.agentAssistDetails.componentType == 'dialogAct' && res.components && res.components.length > 0 && res.components[0].data && res.components[0].data.text){
+      if(!res.components[0].data.text.includes("\nYes, No")){
+        res.agentAssistDetails.componentType = '';
+      }
+    }
+    return res;
+  }
+
   processAgentAssistResponse(data, botId) {
     console.log("process agent assist response", data, this.proactiveModeStatus);
     this.smallTalkOverrideBtnId = null;
@@ -845,6 +854,7 @@ export class AssistComponent implements OnInit {
             titleData = `<div class="title-data" id="displayData-${uuids}">${ele.value}</div>`;
             actionLinkTemplate = this.smallTalkActionLinkTemplate(uuids, data.buttons[0].value)
             isTemplateRender = true;
+            result.parsedPayload = null;
         }
         dynamicBlockDiv.append(botResHtml);
         $(`#smallTalk-${uuids} .agent-utt`).append(titleData);
@@ -883,6 +893,7 @@ export class AssistComponent implements OnInit {
             actionLinkTemplate = this.smallTalkActionLinkTemplate(uuids, data.buttons[0].value)
             titleData = `<div class="title-data" id="displayData-${uuids}">${data.buttons[0].value}</div>`
             isTemplateRender = true;
+            result.parsedPayload = null;
         }
         dynamicBlockDiv.append(botResHtml);
         $(`#smallTalk-${uuids} .agent-utt`).append(titleData);  
@@ -1573,7 +1584,7 @@ export class AssistComponent implements OnInit {
     
     resp = this.commonService.formatHistoryResponseForFAQ(resp);    
     resp?.forEach((res, index) => {
-
+      res = this.confirmationNodeRenderForHistoryDataTransform(res);
       if ((res.agentAssistDetails?.suggestions || res.agentAssistDetails?.ambiguityList) && res.type == 'outgoing' && !res.agentAssistDetails?.faqResponse) {
         let uniqueID = res._id;
         let historyDataHtml = $('#dynamicBlock');
@@ -2141,6 +2152,7 @@ export class AssistComponent implements OnInit {
                 dynamicBlockDiv.append(botResHtml);
                 $(`#smallTalk-${res._id} .agent-utt`).append(titleData);
                 $(`#smallTalk-${res._id} .agent-utt`).append(actionLinkTemplate);
+                parsedPayload = null;
             }
             this.commonService.hideSendOrCopyButtons(parsedPayload, `#smallTalk-${res._id} .agent-utt`, 'smallTalk')
           }
