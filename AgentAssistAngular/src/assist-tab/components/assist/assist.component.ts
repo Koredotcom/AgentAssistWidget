@@ -1809,20 +1809,6 @@ export class AssistComponent implements OnInit {
       }
 
       if ((!res.agentAssistDetails?.suggestions && !res.agentAssistDetails?.ambiguityList && !res.agentAssistDetails?.ambiguity) && res.type == 'outgoing') {
-        let _msgsResponse = {
-          "type": "bot_response",
-          "from": "bot",
-          "message": [],
-          "messageId": res._id,
-          "botInfo": {
-            "chatBot": "sample Bot",
-            "taskBotId": res.botId
-          },
-          "createdOn": "2022-03-21T07:56:18.225Z",
-          "icon": "https://uat.kore.ai:443/api/getMediaStream/market/f-cb381255-9aa1-5ce2-95e3-71233aef7084.png?n=17648985&s=IlRvUlUwalFVaFVMYm9sZStZQnlLc0l1UlZvdlNUUDcxR2o3U2lscHRrL3M9Ig$$",
-          "traceId": "873209019a5adc26",
-          "createdOnTimemillis": res._id
-        }
 
         let positionID = 'dg-'+ this.koreGenerateuuidPipe.transform();
         currentTaskPositionId = res?.agentAssistDetails?.positionId ?  res?.agentAssistDetails?.positionId : ((res.tN != currentTaskName) ? positionID : currentTaskPositionId);
@@ -1938,196 +1924,10 @@ export class AssistComponent implements OnInit {
         if (res.agentAssistDetails?.entityName) {
           this.agentAssistResponse = res.agentAssistDetails;
         }
-        let parsedPayload;
-        res.components?.forEach((elem) => {
-          if (elem.data?.text) {
-            elem.data.text = elem.data?.text.replace(/(^(&quot\;)|(&quot\;)$)/g, '');
-          }
-          let payloadType = (elem.data?.text).replace(/(&quot\;)/g, "\"");
-
-          try {
-            if (payloadType.indexOf('text') !== -1 || payloadType.indexOf('payload') !== -1) {
-              let withoutSpecials = payloadType.replace(/^\s+|\s+$/g, "");
-              parsedPayload = JSON.parse(withoutSpecials);
-            }
-          } catch (error) {
-            if (payloadType.text) {
-              let withoutSpecials = payloadType.replace(/^\s+|\s+$/g, "");
-              parsedPayload = withoutSpecials;
-            }
-          }
-
-          let body = {};
-          body['type'] = elem.cT;
-          if (!parsedPayload) {
-            body['component'] = {
-              "type": elem.cT,
-              "payload": {
-                "type": elem.cT,
-                "text": elem.data.text
-              }
-            };
-            body['cInfo'] = {
-              "body": elem.data.text
-            };
-
-          } else {
-            body['component'] = parsedPayload.payload ? parsedPayload : parsedPayload.text;
-            if (parsedPayload?.type === 'message') {
-              body['cInfo'] = {
-                "body": ''
-              };
-            } else if (parsedPayload?.text) {
-              body['cInfo'] = {
-                "body": parsedPayload.text
-              };
-            } else {
-              body['cInfo'] = {
-                "body": parsedPayload
-              };
-            }
-          }
-          if(body['cInfo']['body'] != "" && body['cInfo']['body']){
-            _msgsResponse.message.push(body);
-          }
-        });
-        if(res.agentAssistDetails?.srcChannel === 'msteams'){
-           //
-        }else if(res.agentAssistDetails?.srcChannel !== 'msteams' || res.agentAssistDetails?.srcChannel === ''){
-          if (res.agentAssistDetails?.componentType === 'dialogAct') {
-            let arr = [];
-            if (res.components[0].data.text.includes('text')) {
-              let str = res.components[0].data.text.replace(/^\s+|\s+$/g, "");
-              let str1 = JSON.parse(str);
-              arr = str1.text.split('\nYes, No');
-            } else {
-              arr = res.components[0].data.text.split('\nYes, No');
-            }
-            _msgsResponse.message = [];
-            _msgsResponse.message[0] = {
-              "type": "text",
-              "component": {
-                "type": "template",
-                "payload": {
-                  "template_type": "button",
-                  "text": `${arr[0]}`,
-                  "buttons": [
-                    {
-                      "type": "postback",
-                      "title": "Yes",
-                      "payload": 'Yes'
-                    },
-                    {
-                      "type": "postback",
-                      "title": "No",
-                      "payload": "No"
-                    }
-                  ]
-                }
-              },
-              "cInfo": {
-                "body": {
-                  "type": "template",
-                  "payload": {
-                    "template_type": "button",
-                    "text": `${arr[0]}`,
-                    "buttons": [
-                      {
-                        "type": "postback",
-                        "title": "Yes",
-                        "payload": 'Yes'
-                      },
-                      {
-                        "type": "postback",
-                        "title": "No",
-                        "payload": "No"
-                      }
-                    ]
-                  }
-                }
-              }
-            }
-            parsedPayload = {
-              "type": "template",
-              "payload": {
-                "template_type": "button",
-                "text": `${arr[0]}`,
-                "buttons": [
-                  {
-                    "type": "postback",
-                    "title": "Yes",
-                    "payload": "Yes"
-                  },
-                  {
-                    "type": "postback",
-                    "title": "No",
-                    "payload": "No"
-                  }
-                ]
-              }
-            }
-      
-          } else if (res.agentAssistDetails?.newEntityType === "list_of_values") {
-            let arr = [];
-            if (res.components[0].data.text.includes('text')) {
-              let str = res.components[0].data.text.replace(/^\s+|\s+$/g, "");
-              let str1 = JSON.parse(str);
-              arr = str1.text.split('\nYes, No');
-            } else {
-              arr = res.components[0].data.text.split('\nYes, No');
-            }
-            _msgsResponse.message = [];
-            _msgsResponse.message[0] = {
-              "type": "text",
-              "component": {
-                "type": "template",
-                "payload": {
-                  "template_type": "button",
-                  "text": `${arr[0]}`,
-                  "buttons": [
-                  ]
-                }
-              },
-              "cInfo": {
-                "body": {
-                  "type": "template",
-                  "payload": {
-                    "template_type": "button",
-                    "text": `${arr[0]}`,
-                    "buttons": [
-                    
-                    ]
-                  }
-                }
-              }
-            }
-          
-            let list = [];
-            arr.forEach((ele, i) => {
-              if (i !== 0 && i !== arr.length - 1 && ele !== '') {
-                let data = ele.substring(3, ele.length);
-                let obj = {
-                  "type": "postback",
-                  "title": data,
-                  "payload": data
-                }
-                list.push(obj)
-              }
-      
-            })
-            _msgsResponse.message[0].component.payload.buttons = list;
-            _msgsResponse.message[0].cInfo.body.payload.buttons = list;
-            parsedPayload = {
-              "type": "template",
-              "payload": {
-                "template_type": "button",
-                "text": `${arr[0]}`,
-                "buttons": list
-              }
-            }
-          }
-        }
+        
        
+        let _msgsResponse : any = this.templateRenderClassService.getResponseUsingTemplateForHistory(res);
+        let parsedPayload : any = _msgsResponse.parsedPayload;
         if(_msgsResponse.message.length > 0){
           let msgStringify = JSON.stringify(_msgsResponse);
           let newTemp = encodeURI(msgStringify);
@@ -2140,7 +1940,7 @@ export class AssistComponent implements OnInit {
             if(this.smallTalkHistoryRenderCheck(parsedPayload,res)){
                 // isTemplateRender = false;
                 titleData = `<div class="title-data" ><ul class="chat-container" id="displayData-${res._id}"></ul></div>`;
-                let sendData = res?.parsedPayload ? newTemp : res.components[0].data.text;
+                let sendData = _msgsResponse?.parsedPayload ? newTemp : res.components[0].data.text;
                 actionLinkTemplate = this.smallTalkActionLinkTemplate(res._id, sendData);
                 dynamicBlockDiv.append(botResHtml);
                 $(`#smallTalk-${res._id} .agent-utt`).append(titleData);
@@ -2188,8 +1988,10 @@ export class AssistComponent implements OnInit {
               }
               runInfoContent.append(askToUserHtml);
              
+              this.commonService.hideSendOrCopyButtons(parsedPayload, runInfoContent, false, res.agentAssistDetails?.componentType)
             } else {
               runInfoContent.append(tellToUserHtml);
+              this.commonService.hideSendOrCopyButtons(parsedPayload, runInfoContent, false, res.agentAssistDetails?.componentType)
             }
             if(res && res.agentAssistDetails && res.agentAssistDetails.componentType == 'dialogAct' && (res.agentAssistDetails?.srcChannel != 'msteams' && res.agentAssistDetails?.srcChannel != 'rtm')){
               // console.log("inside dialogact and channel");
@@ -2198,7 +2000,7 @@ export class AssistComponent implements OnInit {
               let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(_msgsResponse)[0].innerHTML;
               let a = document.getElementById(IdReferenceConst.displayData + `-${res._id}`);
               a.innerHTML = a?.innerHTML + html;
-              this.commonService.hideSendOrCopyButtons(parsedPayload, runInfoContent)
+              this.commonService.hideSendOrCopyButtons(parsedPayload, runInfoContent, false, res.agentAssistDetails?.componentType)
             }
           }
         }
