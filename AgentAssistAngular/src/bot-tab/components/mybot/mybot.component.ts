@@ -162,7 +162,7 @@ export class MybotComponent implements OnInit {
   }
   //running dialogue and mybot data response code.
   processMybotDataResponse(data) {
-    let results: any = this.templateRenderClassService.getResponseUsingTemplate(data);
+    let results: any = this.templateRenderClassService.getResponseUsingTemplate(data, this.commonService.configObj);
     this.commonService.currentPositionIdOfMyBot = this.myBotDialogPositionId;
     let sendMsgData = encodeURI(JSON.stringify(results));
     let myBotuuids = this.koreGenerateuuidPipe.transform();
