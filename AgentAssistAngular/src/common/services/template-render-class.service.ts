@@ -43,7 +43,7 @@ export class TemplateRenderClassService {
           "template_type": "button",
           "text": `${mainText}`,
           "buttons": [
-        
+
           ]
         }
       },
@@ -54,7 +54,7 @@ export class TemplateRenderClassService {
             "template_type": "button",
             "text": `${mainText}`,
             "buttons": [
-             
+
             ]
           }
         }
@@ -66,7 +66,7 @@ export class TemplateRenderClassService {
         "template_type": "button",
         "text": `${mainText}`,
         "buttons": [
-          
+
         ]
       }
     }
@@ -244,9 +244,9 @@ export class TemplateRenderClassService {
         if (res.buttons[0].value.includes('text')) {
           let str = res.buttons[0].value.replace(/^\s+|\s+$/g, "");
           let str1 = JSON.parse(str);
-          arr = str1.text.split('\n');
+          arr = str1.text.split('\nYes, No');
         } else {
-          arr = res.buttons[0].value.split('\n');
+          arr = res.buttons[0].value.split('\nYes, No');
         }
         _msgsResponse = this.formatMsgResponseForEnumeratedList(arr, _msgsResponse);
       }
@@ -278,7 +278,7 @@ export class TemplateRenderClassService {
         elem.data.text = elem.data?.text.replace(/(^(&quot\;)|(&quot\;)$)/g, '');
       }
       let payloadType = (elem.data?.text).replace(/(&quot\;)/g, "\"");
-      
+
       try {
         if (payloadType.indexOf('text') !== -1 || payloadType.indexOf('payload') !== -1) {
           let withoutSpecials = payloadType.replace(/^\s+|\s+$/g, "");
@@ -290,7 +290,7 @@ export class TemplateRenderClassService {
           parsedPayload = withoutSpecials;
         }
       }
-      
+
 
       let body = {};
       body['type'] = elem.cT;
@@ -340,7 +340,7 @@ export class TemplateRenderClassService {
           actualStringFromBE = res.components[0].data.text;
         }
         _msgsResponse = this.formatMsgResponseForConfirmationNode(actualStringFromBE, _msgsResponse);
-  
+
       } else if (res.agentAssistDetails?.newEntityType === "list_of_values") {
         let arr = [];
         if (res.components[0].data.text.includes('text')) {
