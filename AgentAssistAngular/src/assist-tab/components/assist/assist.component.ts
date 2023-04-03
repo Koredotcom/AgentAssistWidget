@@ -353,6 +353,7 @@ export class AssistComponent implements OnInit {
       let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(resultMsgResponse)[0].innerHTML;
       this.commonService.removingSendCopyBtnForCall(this.connectionDetails);
     }else{
+      $("#inputFieldForAgent").remove();
       let dynamicBlockDiv = $('#dynamicBlock');
       let uuids = this.koreGenerateuuidPipe.transform();
       let botResHtml = this.assisttabService.getUserMsgSmallTalkTemplate(uuids,data);
@@ -779,7 +780,7 @@ export class AssistComponent implements OnInit {
       }
     }
 
-    let result: any = this.templateRenderClassService.getResponseUsingTemplate(data);
+    let result: any = this.templateRenderClassService.getResponseUsingTemplate(data, this.commonService.configObj);
     this.commonService.currentPositionId = this.dialogPositionId;
     if (this.commonService.isAutomationOnGoing && this.dropdownHeaderUuids && data.buttons && !data.value.includes('Customer has waited') && (this.dialogPositionId && !data.positionId || (data.positionId == this.dialogPositionId))) {
       let msgStringify = JSON.stringify(result);

@@ -143,7 +143,7 @@ export class TemplateRenderClassService {
     return _msgsResponse;
   }
 
-  getResponseUsingTemplate(res) {
+  getResponseUsingTemplate(res,configObj) {
     let _msgsResponse = {
       "type": "bot_response",
       "from": "bot",
@@ -223,9 +223,7 @@ export class TemplateRenderClassService {
       console.log(parsedPayload, "parsed payload inside template render");
 
     });
-    if (res.srcChannel === 'msteams') {
-      return _msgsResponse;
-    } else if (res.srcChannel !== 'msteams' || res.srcChannel === '') {
+    if (res.srcChannel && res.srcChannel !== 'msteams') {
       if (res.componentType === 'dialogAct') {
         let actualStringFromBE = '';
         if (res.buttons[0].value.includes('text')) {
@@ -244,16 +242,14 @@ export class TemplateRenderClassService {
         if (res.buttons[0].value.includes('text')) {
           let str = res.buttons[0].value.replace(/^\s+|\s+$/g, "");
           let str1 = JSON.parse(str);
-          arr = str1.text.split('\nYes, No');
+          arr = str1.text.split('\n');
         } else {
-          arr = res.buttons[0].value.split('\nYes, No');
+          arr = res.buttons[0].value.split('\n');
         }
         _msgsResponse = this.formatMsgResponseForEnumeratedList(arr, _msgsResponse);
       }
-      return _msgsResponse;
     }
-
-
+    return _msgsResponse;
   }
 
   getResponseUsingTemplateForHistory(res){
@@ -327,9 +323,7 @@ export class TemplateRenderClassService {
         _msgsResponse.parsedPayload = parsedPayload;
       }
     });
-    if(res.agentAssistDetails?.srcChannel === 'msteams'){
-       return _msgsResponse
-    }else if(res.agentAssistDetails?.srcChannel !== 'msteams' || res.agentAssistDetails?.srcChannel === ''){
+    if(res.agentAssistDetails?.srcChannel && res.agentAssistDetails?.srcChannel !== 'msteams'){
       if (res.agentAssistDetails?.componentType === 'dialogAct') {
         let actualStringFromBE = '';
         if (res.components[0].data.text.includes('text')) {
@@ -352,10 +346,8 @@ export class TemplateRenderClassService {
         }
         _msgsResponse = this.formatMsgResponseForEnumeratedList(arr, _msgsResponse);
       }
-      return _msgsResponse;
     }
-
-
+    return _msgsResponse;
   }
 
   getMessageResponseForUserMessages(data, botId) {
