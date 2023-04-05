@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
-import { takeUntil } from 'rxjs/operators'
+import { finalize, takeUntil } from 'rxjs/operators'
 import { ImageFilePath, ImageFileNames, ProjConstants, IdReferenceConst, classNamesConst } from 'src/common/constants/proj.cnts';
 import { EVENTS } from 'src/common/helper/events';
 import { RandomUUIDPipe } from 'src/common/pipes/random-uuid.pipe';
@@ -62,7 +62,6 @@ export class OverlaysearchComponent implements OnInit {
     let subscription1 = this.handleSubjectService.searchTextSubject.pipe(takeUntil(this.destroySubject)).subscribe((searchObj : any) => {
       this.showOverLay = false;
       this.searchResponse = {};
-      this.handleSubjectService.setLoader(true);
       if (searchObj && searchObj.value && searchObj.searchFrom == this.commonService.activeTab) {
         console.log('inisde overlay component,,,,,,,,,,,,,,,,,,,', searchObj)
         this.searchConentObject = Object.assign({}, searchObj);
@@ -70,9 +69,13 @@ export class OverlaysearchComponent implements OnInit {
           this.emitSearchRequest(searchObj, true);
         }, 100);
       }
-      this.handleSubjectService.setLoader(false);
     });
-    let subscription2 = this.websocketService.agentAssistAgentResponse$.pipe(takeUntil(this.destroySubject)).subscribe((agentResponse: any) => {
+    let subscription2 = this.websocketService.agentAssistAgentResponse$.pipe(
+      finalize(()=> {
+        this.handleSubjectService.setLoader(false);
+      }),
+      takeUntil(this.destroySubject))
+    .subscribe((agentResponse: any) => {
       if(agentResponse){
         
         this.handleSearchResponse(agentResponse);
@@ -93,6 +96,7 @@ export class OverlaysearchComponent implements OnInit {
   }
 
   emitSearchRequest(searchObj, isSearchFlag) {
+    this.handleSubjectService.setLoader(true);
     let connectionDetails: any = Object.assign({}, this.connectionDetails);
     connectionDetails.value = searchObj.value;
     connectionDetails.isSearch = isSearchFlag;
