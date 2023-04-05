@@ -402,31 +402,11 @@ export class AssistComponent implements OnInit {
     this.processAgentAssistResponse(data, botId);
   }
 
-  confirmationNodeRenderDataTransform(data){
-    if((data.componentType == 'dialogAct' || data.entityType == 'list_of_values')  && data.buttons && data.buttons.length > 0){
-      if(!data.applyDefaultTemplate){
-        data.componentType = '';
-        data.entityType = '';
-      }
-    }
-    return data;
-  }
-
-  confirmationNodeRenderForHistoryDataTransform(res){
-    if(res && res.agentAssistDetails && (res.agentAssistDetails.componentType == 'dialogAct' || res.agentAssistDetails.entityType == 'list_of_values')  && res.components && res.components.length > 0 && res.components[0].data && res.components[0].data.text){
-      if(!res.agentAssistDetails.applyDefaultTemplate){
-        res.agentAssistDetails.componentType = '';
-        res.agentAssistDetails.entityType = '';
-      }
-    }
-    return res;
-  }
-
   processAgentAssistResponse(data, botId) {
     console.log("process agent assist response", data, this.proactiveModeStatus);
     this.smallTalkOverrideBtnId = null;
     let isTemplateRender = false;
-    data = this.confirmationNodeRenderDataTransform(data);
+    data = this.commonService.confirmationNodeRenderDataTransform(data);
     if (!this.commonService.isAutomationOnGoing && !this.proactiveModeStatus) {
       return;
     }
@@ -1589,7 +1569,7 @@ export class AssistComponent implements OnInit {
 
     resp = this.commonService.formatHistoryResponseForFAQ(resp);
     resp?.forEach((res, index) => {
-      res = this.confirmationNodeRenderForHistoryDataTransform(res);
+      res = this.commonService.confirmationNodeRenderForHistoryDataTransform(res);
       if ((res.agentAssistDetails?.suggestions || res.agentAssistDetails?.ambiguityList) && res.type == 'outgoing' && !res.agentAssistDetails?.faqResponse) {
         let uniqueID = res._id;
         let historyDataHtml = $('#dynamicBlock');

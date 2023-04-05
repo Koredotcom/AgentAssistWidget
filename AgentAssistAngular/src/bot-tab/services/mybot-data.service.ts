@@ -91,8 +91,31 @@ export class MybotDataService {
         return dialogTaskAccordion;
     }
 
-    askUserTemplate(myBotuuids, newTemp, positionID) {
-        let template = `
+    askUserTemplate(myBotuuids, newTemp, positionID,srcChannel=null, value='', componentType=null) {
+        let template= '';
+        if(componentType && componentType == 'dialogAct' && srcChannel != 'msteams' && srcChannel != 'rtm'){
+          template = `
+          <div class="steps-run-data">
+          <div class="icon_block">
+              <i class="ast-agent"></i>
+          </div>
+          <div class="run-info-content" >
+          <div class="title">Ask customer</div>
+          <div class="agent-utt">
+          <div class="title-data" id="displayData-${myBotuuids}">${value}</div>
+              <div class="action-links">
+                  <button class="send-run-btn" id="sendMsg" data-msg-id="${myBotuuids}" data-msg-data="${newTemp}" data-position-id="${positionID}">Send</button>
+                  <div class="copy-btn" data-msg-id="${myBotuuids}" data-position-id="${positionID}">
+                      <i class="ast-copy" data-msg-id="${myBotuuids}" data-position-id="${positionID}"></i>
+                  </div>
+              </div>
+          </div>
+          </div>
+      </div>
+      `;
+          
+        }else{ 
+            template = `
                 <div class="steps-run-data">
                    <div class="icon_block">
                        <i class="ast-agent"></i>
@@ -111,11 +134,35 @@ export class MybotDataService {
                    </div>
                </div>
     `;
+        }
         return template
     }
 
-    tellToUserTemplate(myBotuuids, newTemp, positionID) {
-        let template = `
+    tellToUserTemplate(myBotuuids, newTemp, positionID, srcChannel=null, value='', componentType=null) {
+        let template= '';
+        if(componentType && componentType == 'dialogAct' && (srcChannel != 'msteams' && srcChannel != 'rtm') ){
+          template = `
+          <div class="steps-run-data">
+          <div class="icon_block">
+              <i class="ast-agent"></i>
+          </div>
+          <div class="run-info-content" >
+          <div class="title">Tell Customer</div>
+          <div class="agent-utt">
+          <div class="title-data" id="displayData-${myBotuuids}">${value}</div>
+              <div class="action-links">
+                  <button class="send-run-btn" id="sendMsg" data-msg-id="${myBotuuids}" data-msg-data="${newTemp}" data-position-id="${positionID}">Send</button>
+                  <div class="copy-btn" data-msg-id="${myBotuuids}" data-position-id="${positionID}">
+                      <i class="ast-copy" data-msg-id="${myBotuuids}" data-position-id="${positionID}"></i>
+                  </div>
+              </div>
+          </div>
+          </div>
+      </div>
+      `;
+           
+        }else{ 
+            template = `
                 <div class="steps-run-data">
                    <div class="icon_block">
                        <i class="ast-agent"></i>
@@ -134,6 +181,7 @@ export class MybotDataService {
                    </div>
                </div>
     `;
+        }
         return template;
     }
 

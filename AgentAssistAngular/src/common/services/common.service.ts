@@ -485,6 +485,28 @@ export class CommonService {
     ;
   }
 
+  confirmationNodeRenderDataTransform(data){
+    if((data.componentType == 'dialogAct' || data.entityType == 'list_of_values')  && data.buttons && data.buttons.length > 0){
+      if(!data.applyDefaultTemplate){
+        data.componentType = '';
+        data.entityType = '';
+      }
+    }
+    return data;
+  }
+
+  confirmationNodeRenderForHistoryDataTransform(res){
+    if(res && res.agentAssistDetails && (res.agentAssistDetails.componentType == 'dialogAct' || res.agentAssistDetails.entityType == 'list_of_values' || res.agentAssistDetails.newEntityType == 'list_of_values')  && res.components && res.components.length > 0 && res.components[0].data && res.components[0].data.text){
+      
+      if(!res.agentAssistDetails.applyDefaultTemplate){
+        
+        res.agentAssistDetails.componentType = '';
+        res.agentAssistDetails.newEntityType = '';
+      }
+    }
+    return res;
+  }
+
   // send and copy button related code
   preparePostMessageForSendAndCopy(evt, data, eventName, connectionDetails) {
     if(eventName == IdReferenceConst.COPYMSG){
