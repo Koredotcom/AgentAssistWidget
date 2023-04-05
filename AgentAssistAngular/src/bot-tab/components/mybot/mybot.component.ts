@@ -162,6 +162,7 @@ export class MybotComponent implements OnInit {
   }
   //running dialogue and mybot data response code.
   processMybotDataResponse(data) {
+    data = this.commonService.confirmationNodeRenderDataTransform(data);
     let results: any = this.templateRenderClassService.getResponseUsingTemplate(data, this.commonService.configObj);
     this.commonService.currentPositionIdOfMyBot = this.myBotDialogPositionId;
     let sendMsgData = encodeURI(JSON.stringify(results));
@@ -194,8 +195,8 @@ export class MybotComponent implements OnInit {
         this.myBotDataResponse = Object.assign({}, data);
       }
 
-      let askToUserHtml = this.mybotDataService.askUserTemplate(myBotuuids, sendMsgData, this.myBotDialogPositionId);
-      let tellToUserHtml = this.mybotDataService.tellToUserTemplate(myBotuuids, sendMsgData, this.myBotDialogPositionId);
+      let askToUserHtml = this.mybotDataService.askUserTemplate(myBotuuids, sendMsgData, this.myBotDialogPositionId, data.srcChannel, data.buttons[0].value, data.componentType);
+      let tellToUserHtml = this.mybotDataService.tellToUserTemplate(myBotuuids, sendMsgData, this.myBotDialogPositionId, data.srcChannel, data.buttons[0].value, data.componentType);
 
       let agentInputEntityName = ProjConstants.ENTER_DETAILS;
       if (data.entityDisplayName || data.entityName) {
@@ -206,6 +207,7 @@ export class MybotComponent implements OnInit {
 
       if (data.isPrompt) {
         $(runInfoContent).append(askToUserHtml);
+        this.commonService.hideSendOrCopyButtons(results.parsedPayload, runInfoContent, false, data.componentType)
         $(runInfoContent).append(agentInputToBotHtml);
         document.getElementById(`agentInput-${agentInputId}`).focus();
         runInfoContent.querySelector(`#agentInput-${agentInputId}`).addEventListener('keypress', (e: any) => {
@@ -217,10 +219,11 @@ export class MybotComponent implements OnInit {
         });
       } else {
         $(runInfoContent).append(tellToUserHtml);
+        this.commonService.hideSendOrCopyButtons(results.parsedPayload, runInfoContent, false, data.componentType)
       }
      
       // let result = this.templateRenderClassService.getResponseUsingTemplate(data);
-      this.commonService.hideSendOrCopyButtons(results.parsePayLoad, runInfoContent)
+     
       if (this.commonService.isMyBotAgentSentRequestOnClick && !this.myBotDropdownHeaderUuids) {
         let mybotContainer = $('#myBotAutomationBlock');
         let botResHtml = `
@@ -270,7 +273,7 @@ export class MybotComponent implements OnInit {
     this._createRunTemplateContainerForMyTab(agentBotuuids, data.name, this.myBotDialogPositionId)
     let addRemoveDropDown = document.getElementById(IdReferenceConst.MYBOTADDREMOVEDROPDOWN + `-${agentBotuuids}`);
     addRemoveDropDown?.classList.remove('hide');
-    document.getElementById(IdReferenceConst.NO_AUTO_RUNNING).classList.add('hide');
+    document.getElementById(IdReferenceConst.NO_AUTO_RUNNING) ? document.getElementById(IdReferenceConst.NO_AUTO_RUNNING).classList.add('hide') : '';
     this.scrollToBottom();
   }
 
@@ -358,6 +361,7 @@ export class MybotComponent implements OnInit {
 
     let resp = response.length > 0 ? response : undefined;
     resp?.forEach((res, index) => {
+      res = this.commonService.confirmationNodeRenderForHistoryDataTransform(res);
       if ((!res.agentAssistDetails?.suggestions && !res.agentAssistDetails?.ambiguityList && !res.agentAssistDetails?.ambiguity) && res.type == 'outgoing') {
         let _msgsResponse = this.mybotDataService.getMybotMsgResponse(res._id, res.botId)
         currentTaskName = res.tN ? res.tN : currentTaskName;

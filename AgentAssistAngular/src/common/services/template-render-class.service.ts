@@ -335,7 +335,7 @@ export class TemplateRenderClassService {
         }
         _msgsResponse = this.formatMsgResponseForConfirmationNode(actualStringFromBE, _msgsResponse);
 
-      } else if (res.agentAssistDetails?.newEntityType === "list_of_values") {
+      } else if (res.agentAssistDetails?.newEntityType === "list_of_values" && !res.components[0].data.text.includes('payload')) {
         let arr = [];
         if (res.components[0].data.text.includes('text')) {
           let str = res.components[0].data.text.replace(/^\s+|\s+$/g, "");
