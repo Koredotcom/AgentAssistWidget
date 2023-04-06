@@ -265,7 +265,7 @@ export class OverlaysearchComponent implements OnInit {
       message = {
         method: 'send',
         name: "agentAssist.SendMessage",
-        // conversationId: _conversationId,
+        conversationId: this.connectionDetails.conversationId,
         payload: selectType == this.projConstants.FAQ ? (faq_or_article_obj.answer || faq_or_article_obj.ans) : faq_or_article_obj.content
       };
       window.parent.postMessage(message, '*');
@@ -273,7 +273,7 @@ export class OverlaysearchComponent implements OnInit {
       message = {
         method: 'copy',
         name: "agentAssist.CopyMessage",
-        // conversationId: _conversationId,
+        conversationId: this.connectionDetails.conversationId,
         payload: selectType == this.projConstants.FAQ ? (faq_or_article_obj.answer || faq_or_article_obj.ans) : faq_or_article_obj.content
       };
       parent.postMessage(message, '*');
