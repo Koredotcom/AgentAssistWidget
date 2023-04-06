@@ -401,7 +401,7 @@ export class AssistComponent implements OnInit {
     this.commonService.updateAgentAssistState(conversationId, this.projConstants.ASSIST, data);
     this.processAgentAssistResponse(data, botId);
   }
-
+  uuids = this.koreGenerateuuidPipe.transform();
   processAgentAssistResponse(data, botId) {
     console.log("process agent assist response", data, this.proactiveModeStatus);
     this.smallTalkOverrideBtnId = null;
@@ -814,7 +814,7 @@ export class AssistComponent implements OnInit {
     }
 
     if (this.commonService.isAutomationOnGoing && !data.suggestions && !result.parsePayLoad) {
-      this.welcomeMsgResponse = data;
+//      this.welcomeMsgResponse = data;
       if (this.commonService.scrollContent[ProjConstants.ASSIST].numberOfNewMessages == 1) {
         this.commonService.scrollContent[ProjConstants.ASSIST].numberOfNewMessages = 0;
       }
