@@ -399,9 +399,9 @@ export class AssistComponent implements OnInit {
     this.designAlterService.displayCustomerFeels(data, conversationId, botId, this.connectionDetails.source);
 
     this.commonService.updateAgentAssistState(conversationId, this.projConstants.ASSIST, data);
-    this.processAgentAssistResponse(data, botId);
+    // this.processAgentAssistResponse(data, botId);
   }
-  uuids = this.koreGenerateuuidPipe.transform();
+
   processAgentAssistResponse(data, botId) {
     console.log("process agent assist response", data, this.proactiveModeStatus);
     this.smallTalkOverrideBtnId = null;
@@ -814,7 +814,7 @@ export class AssistComponent implements OnInit {
     }
 
     if (this.commonService.isAutomationOnGoing && !data.suggestions && !result.parsePayLoad) {
-//      this.welcomeMsgResponse = data;
+      this.welcomeMsgResponse = data;
       if (this.commonService.scrollContent[ProjConstants.ASSIST].numberOfNewMessages == 1) {
         this.commonService.scrollContent[ProjConstants.ASSIST].numberOfNewMessages = 0;
       }
@@ -1559,15 +1559,17 @@ export class AssistComponent implements OnInit {
       $(`.edit-values-btn.restore`).addClass('hide');
     });
   }
-
+  renderData = [];
   renderHistoryMessages(response, feedBackResult) {
+    this.renderData = response;
+    return;
     let historyFaqIDs = [];
-
     let previousId;
     let previousTaskPositionId, currentTaskPositionId, currentTaskName, previousTaskName;
     let resp = response.length > 0 ? response : undefined;
 
     resp = this.commonService.formatHistoryResponseForFAQ(resp);
+    //done above
     resp?.forEach((res, index) => {
       res = this.commonService.confirmationNodeRenderForHistoryDataTransform(res);
       if ((res.agentAssistDetails?.suggestions || res.agentAssistDetails?.ambiguityList) && res.type == 'outgoing' && !res.agentAssistDetails?.faqResponse) {
@@ -1599,6 +1601,9 @@ export class AssistComponent implements OnInit {
             </div>`;
           automationSuggestions.innerHTML += dialogAreaHtml;
         }
+        //done above
+
+        
         if (res.agentAssistDetails?.ambiguityList?.faqs?.length > 0 || res.agentAssistDetails?.suggestions?.faqs?.length > 0) {
           let dialogAreaHtml = `<div class="task-type" id="faqssArea">
             <div class="img-block-info">

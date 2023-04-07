@@ -1,0 +1,41 @@
+<!-- {{response | json}} -->
+<ng-container *ngFor="let res of response">
+    <ng-container *ngIf="(res.agentAssistDetails?.suggestions || res.agentAssistDetails?.ambiguityList) && res.type == 'outgoing' && !res.agentAssistDetails?.faqResponse">
+        <div class="agent-utt-info" id="agentUttInfo-{{res._id}}">
+            <div class="user-img">
+                <img [src]="imageFilePath+imageFileNames['USERICON']">
+            </div>
+            <div class="text-user" >{{res.agentAssistDetails.userInput}}</div>
+        </div>
+        <div class="dialog-task-run-sec" id="automationSuggestions--{{res._id}}">
+            <ng-container *ngIf="res.agentAssistDetails?.ambiguityList?.dialogs?.length > 0 || res.agentAssistDetails?.suggestions?.dialogs?.length > 0">
+                <div class="task-type" id="dialoguesArea">
+                    <div class="img-block-info">
+                        <img [src]="imageFilePath+imageFileNames['USERICON']">
+                    </div>
+                    <div class="content-dialog-task-type" id="dialogSuggestions-{{res._id}}">
+                      <div class="type-with-img-title">
+                        Dialog task ({{res.agentAssistDetails?.suggestions ? 
+                            res.agentAssistDetails?.suggestions.dialogs?.length : 
+                            res.agentAssistDetails?.ambiguityList.dialogs?.length
+                        }})</div>
+                    </div>
+                  </div>
+            </ng-container>
+            <ng-container *ngIf="res.agentAssistDetails?.ambiguityList?.faqs?.length > 0 || res.agentAssistDetails?.suggestions?.faqs?.length > 0">
+                <div class="task-type" id="faqssArea">
+                    <div class="img-block-info">
+                        <img [src]="imageFilePath+imageFileNames['FAQ_SUGGESTION']">
+                    </div>
+                    <div class="content-dialog-task-type" id="faqsSuggestions-{{res._id}}">
+                        <div class="type-with-img-title">FAQ ({{ res.agentAssistDetails?.suggestions ? 
+                            res.agentAssistDetails?.suggestions.faqs.length : 
+                            res.agentAssistDetails.ambiguityList.faqs.length
+                         }})</div>
+        
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </ng-container>
+</ng-container>
