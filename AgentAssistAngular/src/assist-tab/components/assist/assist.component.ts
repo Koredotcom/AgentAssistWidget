@@ -896,10 +896,10 @@ export class AssistComponent implements OnInit {
 
     let renderedMessage = !isTemplateRender ? this.templateRenderClassService.AgentChatInitialize.renderMessage(result) : '';
     if (renderedMessage && renderedMessage[0]) {
-      let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(result)[0].innerHTML;
+      let obj = this.templateRenderClassService.AgentChatInitialize.renderMessage(result)[0];
       let a = document.getElementById(IdReferenceConst.displayData + `-${uuids}`);
       if (a) {
-        a.innerHTML = a.innerHTML + html;
+        a.appendChild(obj);
       }
     }
 
@@ -1927,9 +1927,10 @@ export class AssistComponent implements OnInit {
                 dynamicBlockDiv.append(botResHtml);
                 $(`#smallTalk-${res._id} .agent-utt`).append(titleData);
                 $(`#smallTalk-${res._id} .agent-utt`).append(actionLinkTemplate);
-                let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(_msgsResponse)[0].innerHTML;
+
+                let obj = this.templateRenderClassService.AgentChatInitialize.renderMessage(_msgsResponse)[0]
                 let a = document.getElementById(IdReferenceConst.displayData + `-${res._id}`);
-                a.innerHTML = a?.innerHTML + html;
+                a.appendChild(obj);
             }else{
                 // isTemplateRender = true;
                 titleData = `<div class="title-data" id="displayData-${res._id}">${res.components[0].data.text}</div>`;
@@ -1979,9 +1980,9 @@ export class AssistComponent implements OnInit {
               // console.log("inside dialogact and channel");
 
             }else{
-              let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(_msgsResponse)[0].innerHTML;
+              let obj = this.templateRenderClassService.AgentChatInitialize.renderMessage(_msgsResponse)[0]
               let a = document.getElementById(IdReferenceConst.displayData + `-${res._id}`);
-              a.innerHTML = a?.innerHTML + html;
+              a.appendChild(obj);
               this.commonService.hideSendOrCopyButtons(parsedPayload, runInfoContent, false, res.agentAssistDetails?.componentType)
             }
           }

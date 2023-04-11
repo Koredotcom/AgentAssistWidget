@@ -2292,7 +2292,9 @@
                   if(msgData.message[0] && msgData.message[0].cInfo && msgData.message[0].cInfo.body && msgData.message[0].cInfo.body.attachments && msgData.message[0].cInfo.body.attachments[0].content && msgData.message[0].cInfo.body.attachments[0].contentType.includes('.microsoft.') ){
                     var _adaptiveCard =  new window.krAdaptiveCards.AdaptiveCard();
                     _adaptiveCard.parse(msgData.message[0].cInfo.body.attachments[0].content);
-                    messageHtml = $(_adaptiveCard.render());
+                    let dummyDiv = document.createElement('div');
+                    dummyDiv.appendChild(_adaptiveCard.render())
+                    messageHtml = $(dummyDiv);
                     try {
                         _adaptiveCard.onExecuteAction = function(action) {
                           if (action._propertyBag && action._propertyBag.type === "Action.OpenUrl") {
@@ -2315,7 +2317,9 @@
                     }
                     var _adaptiveCard =  new window.krAdaptiveCards.AdaptiveCard();
                     _adaptiveCard.parse(msgClone.message[0].cInfo.body.attachments[0].content);
-                    messageHtml = $(_adaptiveCard.render());
+                    let dummyDiv = document.createElement('div');
+                    dummyDiv.appendChild(_adaptiveCard.render())
+                    messageHtml = $(dummyDiv);
                     try {
                         _adaptiveCard.onExecuteAction = function(action) {
                           if (action._propertyBag && action._propertyBag.type === "Action.OpenUrl") {
