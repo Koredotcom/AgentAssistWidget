@@ -25,3 +25,27 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+## How To Run the SDK application in the local environment
+- Pre-requirements:
+    - node version - 14.20.1^
+- Backend:
+    1. Open AgentDesktop latest code base navigate to ----> workflow.services.ts
+    2. In that file find the method ----> resolveAgentAssistHostUrl()
+    3. Add ----> if(url === 'http://localhost') return 'http://localhost/koreagentassist-sdk' <---- before return url
+    4. Open AgentAssistAngular SDK project and navigate to template-render-class.service.ts
+    5. Add this 'localhost' to the urls array as shown ----> urls: ['localhost']
+    6. npm install in this path "AgentAssistAngular" folder path
+    7. build the Angular project using the following command ----> node --max_old_space_size=6048 ./node_modules/@angular/cli/bin/ng build
+    
+- UI:
+    1. Open AgentDesktop latest code base navigate to workflow.services.ts
+    2. In that file find the method resolveAgentAssistHostUrl
+    3. Add if(url === 'http://localhost:{{agentdesktop port number}}') return 'http://localhost/{{http-server port number}}' before return url
+    4. Open AgentAssistAngular SDK project and navigate to template-render-class.service.ts
+    5. Add this 'localhost' to the urls array as shown----> urls: ['localhost']
+    6. npm install in this path "AgentAssistAngular" folder path
+    7. run ----> ng serve --port 8080 <---- in this path "AgentAssistAngular" folder
+
+```
+
