@@ -13,7 +13,7 @@ export class TemplateRenderClassService {
     "container": "body",
     botOptions: this.botOptions,
     agentAssistUrl: "https://dev-smartassist.kore.ai",
-    urls: ['smartassist.kore.ai', 'smartassist-jp.kore.ai', 'smartassist.korebots.com', 'smartassist-de.kore.ai'],
+    urls: ['smartassist.kore.ai', 'smartassist-jp.kore.ai', 'smartassist.korebots.com', 'smartassist-de.kore.ai', 'smartassist-korevg-np'],
     agentAssist: true,
 
   };
