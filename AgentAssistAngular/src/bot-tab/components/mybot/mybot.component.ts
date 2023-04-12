@@ -221,6 +221,7 @@ export class MybotComponent implements OnInit {
       } else {
         $(runInfoContent).append(tellToUserHtml);
         this.commonService.hideSendOrCopyButtons(results.parsedPayload, runInfoContent, false, data.componentType)
+
       }
 
       if(data && data.componentType == 'dialogAct' && (data.srcChannel != 'msteams' && data.srcChannel != 'rtm')){
@@ -229,9 +230,9 @@ export class MybotComponent implements OnInit {
         isTemplateRender = false;
         this.commonService.hideSendOrCopyButtons(results.parsedPayload, runInfoContent, false, data.componentType);
       }
-     
+
       // let result = this.templateRenderClassService.getResponseUsingTemplate(data);
-     
+
       if (this.commonService.isMyBotAgentSentRequestOnClick && !this.myBotDropdownHeaderUuids) {
         let mybotContainer = $('#myBotAutomationBlock');
         let botResHtml = `
@@ -390,7 +391,7 @@ export class MybotComponent implements OnInit {
                           </div>`;
         }
         let dropdownHtml = `
-                          
+
                   <div class="dialog-task-accordiaon-info" id="MyBotaddRemoveDropDown-${res._id}" >
                       <div class="accordion-header" id="dropDownHeader-${res._id}"
                       data-drop-down-opened="false">
@@ -403,10 +404,10 @@ export class MybotComponent implements OnInit {
 
                       </div>
                       <div class="collapse-acc-data hide" id="dropDownData-${res._id}">
-                          
-                          
+
+
                       </div>
-                      
+
                   `
 
         if (previousTaskPositionId && currentTaskPositionId !== previousTaskPositionId) {

@@ -22,7 +22,7 @@
         if(window.PerfectScrollbar && typeof PerfectScrollbar ==='function'){
           KRPerfectScrollbar=window.PerfectScrollbar;
         }
-        
+
         var returnFun =(function ($,KRPerfectScrollbar) {
 
             //Actual  chatwindow.js agentAssistChat function code starts here
@@ -38,7 +38,7 @@
             var prevRange, accessToken, koreAPIUrl, fileToken, fileUploaderCounter = 0, bearerToken = '', assertionToken = '', messagesQueue = [], historyLoading = false;
             var speechServerUrl = '', userIdentity = '', isListening = false, isRecordingStarted = false, speechPrefixURL = "", sidToken = "", carouselTemplateCount = 0, waiting_for_message = false, loadHistory = false;
             var EVENTS={
-                //chat window exposed events   
+                //chat window exposed events
                 OPEN_OVERRIDE:"cw:open:override",
                 MESSAGE_OVERRIDE:"cw:message:override"
             };
@@ -165,14 +165,14 @@
                 var target = this;
                 return target.replace(new RegExp(search, 'g'), replacement);
             };
-            
+
             if (!String.prototype.includes) {
               String.prototype.includes = function(search, start) {
                 'use strict';
 
                 if (search instanceof RegExp) {
                   throw TypeError('first argument must not be a RegExp');
-                } 
+                }
                 if (start === undefined) { start = 0; }
                 return this.indexOf(search, start) !== -1;
               };
@@ -181,7 +181,7 @@
             function findSortedIndex(array, value) {
                 var low = 0,
                     high = array.length;
-    
+
                 while (low < high) {
                     var mid = low + high >>> 1;
                     if (array[mid] < value) low = mid + 1;
@@ -189,7 +189,7 @@
                 }
                 return low;
             }
-            
+
             function xssAttack(txtStr) {
                 //   if (compObj && compObj[0] && compObj[0].componentType === "text") {
 
@@ -415,10 +415,10 @@
                     //     str = str || '';
                     // }
                     if(typeof str === 'number'){
-                        str =  str.toString(); 
+                        str =  str.toString();
                     }
                     str = str || '';
-                    
+
                     var newStr = '', wrapper1;
                     if (responseType === 'user') {
                         str = str.replace(/onerror=/gi, 'abc-error=');
@@ -441,7 +441,7 @@
                                 var _newLA = document.createElement('div');
                                 var _detectedLink=linkArray[x];
                                 _newLA.innerHTML = linkArray[x];
-                                //for mailto: links, new line character need to be repaced with %0A 
+                                //for mailto: links, new line character need to be repaced with %0A
                                 if (_detectedLink.indexOf("href='mailto:") > -1 || _detectedLink.indexOf('href="mailto:') > -1) {
                                     _detectedLink = _detectedLink.split('\n').join("%0A")
 
@@ -527,7 +527,7 @@
                             }
                             _lineBreakAdded = true;
                         } else if (txtArr[i].indexOf('&gt;&gt;') === 0) {
-                            if(txtArr[i].substring(8).indexOf('*') === 0){ // add ">>*" for sub bullet point 
+                            if(txtArr[i].substring(8).indexOf('*') === 0){ // add ">>*" for sub bullet point
                                 if (!isEven(txtArr[i].substring(8).split('*').length - 1)) {
                                     txtArr[i] = '\r\n&#9679; ' + txtArr[i].substring(9);
                                     _lineBreakAdded = true;
@@ -879,7 +879,7 @@
                         openModal(popupHtml[0], true);
                     }
                 }
-    
+
             }
         }
         // form event actions ends here //
@@ -895,7 +895,7 @@
                 if (navigator.onLine) {
                     this.hideError();
                     if(bot && bot.RtmClient){
-                            bot.getHistory({forHistorySync:true,limit:30});                           
+                            bot.getHistory({forHistorySync:true,limit:30});
                     }
 
                 } else {
@@ -1061,7 +1061,7 @@
                 }else if(key==='kr-cw-uid'){
                     storage=me.config.multiPageApp.userIdentityStore;
                 }
-                return storage; 
+                return storage;
             }
             chatWindow.prototype.init = function () {
                 var me = this;
@@ -1111,7 +1111,7 @@
                 if(!me.config.minimizeMode){
                     if (!me.config.agentAssist) {
                         me.bot.init(me.config.botOptions,me.config.messageHistoryLimit);
-                    }                 
+                    }
                     if (me.config.multiPageApp && me.config.multiPageApp.enable) {
                         me.setLocalStoreItem('kr-cw-state', 'open');
                         me.setLocalStoreItem('kr-cw-uid', me.config.botOptions.userIdentity);
@@ -1121,7 +1121,7 @@
                             }
                         }, 500);
                     }
-                    
+
                 }else{
                     chatWindowHtml.addClass('minimize');
                     chatWindowHtml.find('.minimized-title').html("Talk to " + me.config.chatTitle);
@@ -1238,7 +1238,7 @@
                     }else{
                         me.config.chatContainer.find('.kore-chat-header .header-title').html(me.config.botMessages.reconnecting);
                         me.config.chatContainer.addClass('minimize');
-                        me.skipedInit=true;                
+                        me.skipedInit=true;
                     }
                 }
                 if (ttsAudioSource) {
@@ -1260,13 +1260,13 @@
                 me.setLocalStoreItem('kr-cw-uid',me.config.botOptions.userIdentity);
                 if (!me.config.agentAssist) {
                     me.bot.init(me.config.botOptions);
-                }               
+                }
             };
 
             chatWindow.prototype.bindEvents = function (isEventEnable,e) {
                 var me = this;
                 me.bindCustomEvents();
-                
+
                 var _chatContainer = me.config.chatContainer;
                 // _chatContainer.draggable({
                 //     handle: _chatContainer.find(".kore-chat-header .header-title"),
@@ -1326,7 +1326,7 @@
                             } else {
                                 downloadUrl += "&download=1";
                             }
-        
+
                             var save = document.createElement('a');
                             document.body.appendChild(save);
                             save.href = downloadUrl;
@@ -1448,7 +1448,7 @@
                 //         setCaretEnd(_this);
                 //     }, 100);
                 // });
-                
+
                 // _chatContainer.off('click', '.sendChat').on('click', '.sendChat', function (event) {
                 //     var _footerContainer = $(me.config.container).find('.kore-chat-footer');
                 //     me.sendMessage(_footerContainer.find('.chatInputBox'));
@@ -1466,7 +1466,7 @@
                         try {
                          msgData = JSON.parse(msgDataText);
                         } catch (err) {
-        
+
                         }
                     }
                     if(msgData && msgData.message && msgData.message[0].component && msgData.message[0].component.payload && msgData.message[0].component.payload.formData){
@@ -1492,7 +1492,7 @@
                         }
                     }
                 }
-                   
+
               //  });
                 //_chatContainer.off('click', '.buttonTmplContentBox li,.listTmplContentChild .buyBtn,.viewMoreList .viewMore,.listItemPath,.quickReply,.carouselImageContent,.listRightContent,.checkboxBtn,.likeDislikeDiv').on('click', '.buttonTmplContentBox li,.listTmplContentChild .buyBtn, .viewMoreList .viewMore,.listItemPath,.quickReply,.carouselImageContent,.listRightContent,.checkboxBtn,.likeDislikeDiv', function (e) {
                 if(isEventEnable){
@@ -1508,16 +1508,16 @@
                         //var _innerText = $(e.target)[0].innerText.trim() || $(e.target).attr('data-value').trim();
                         var _innerText = $(e.target).attr('value')?$(e.target).attr('value').trim():'' ||($(e.target)[0] && $(e.target)[0].innerText) ? $(e.target)[0].innerText.trim() : "" || ($(e.target) && $(e.target).attr('data-value')) ? $(e.target).attr('data-value').trim() : "";
                        // me.sendMessage($('.chatInputBox'), _innerText);
-                       
+
                        localStorage.setItem('innerTextValue', JSON.stringify(_innerText));
-                       // } 
+                       // }
                     } else if (type == "url" || type == "web_url") {
                         if($(e.target).attr('msgData')!==undefined){
                             var msgData;
                             try {
                                 msgData = JSON.parse($(e.target).attr('msgData'));
                                } catch (err) {
-               
+
                             }
                             if(msgData && msgData.message && msgData.message[0].component && (msgData.message[0].component.formData || (msgData.message[0].component.payload &&  msgData.message[0].component.payload.formData))){
                                 if(msgData.message[0].component.formData){
@@ -1669,7 +1669,7 @@
 
                 // _chatContainer.off('click', '.retry').on('click', '.retry', function (event) {
                 //     var target=$(event.target);
-                //     _chatContainer.find(".failed-text").remove();  
+                //     _chatContainer.find(".failed-text").remove();
                 //     _chatContainer.find(".retry-icon").remove();
                 //     _chatContainer.find(".retry-text").text('Retrying...');
                 //     sendFailedMessage.messageId=target.closest('.fromCurrentUser').attr('id');
@@ -1758,7 +1758,7 @@
                 //     if(me.skipedInit){
                 //         if(me.config.multiPageApp && me.config.multiPageApp.enable){
                 //             me.setLocalStoreItem('kr-cw-uid',me.config.botOptions.userIdentity);
-                //         }                       
+                //         }
                 //         if (!me.config.agentAssist) {
                 //             bot.init(me.config.botOptions,me.config.messageHistoryLimit);
                 //         }
@@ -1816,11 +1816,11 @@
                 //                 }
                 //             }
                 //             $('.ttspeakerDiv').addClass('ttsOff');
-                //         } 
+                //         }
                 //         else {
                 //             if(me.config.ttsInterface && me.config.ttsInterface==="webapi"){
                 //                 _ttsConnection = me.speakWithWebAPI();
- 
+
                 //             }else if(me.config.ttsInterface &&me.config.ttsInterface === 'awspolly'){
                 //                 gainNode.gain.value = 1
                 //             }else{
@@ -1832,7 +1832,7 @@
                 //     }
                 // });
 
-               
+
                 var element = document.querySelector('.droppable');
                 function callback(files) {
                     // Here, we simply log the Array of files to the console.
@@ -1848,7 +1848,7 @@
                // me.makeDroppable(element, callback);
                 me.bindSDKEvents()
             };
-            
+
             chatWindow.prototype.getBotMetaData = function () {
                 var me = this;
                 me.bot.getBotMetaData(function(res){
@@ -1954,7 +1954,7 @@
                         }, 2000);
                     }
                 });
-                
+
                 me.bot.on("webhook_ready", function (response) {
                     if (!me.config.loadHistory) {
                         me.getBotMetaData();
@@ -2147,7 +2147,7 @@
                                 }
                             }, 350);
                         }
-                    });    
+                    });
                 }
                 me.attachmentInfo = {};
                 chatInput.html("");
@@ -2167,7 +2167,7 @@
                 msgData.message[0].cInfo.ignoreCheckMark=ignoreCheckMark;
                 me.renderMessage(msgData);
             };
-                 
+
             chatWindow.prototype.handleWebHookResponse = function (msgsData) {
                 var SUBSEQUENT_RENDER_DELAY = 500;
                 if (msgsData && msgsData.length) {
@@ -2210,7 +2210,7 @@
                     if(me.config.botOptions.webhookConfig.useSDKChannelResponses){
                         payload.preferredChannelForResponse='rtm';
                     }
-                        
+
                     if(me.config.botOptions.webhookConfig.apiVersion && me.config.botOptions.webhookConfig.apiVersion===2){
                         payload.message={
                             "type": "text",
@@ -2232,7 +2232,7 @@
                     console.error("KORE:Please provide webhookURL in webhookConfig")
                 }
             };
-            
+
 
             chatWindow.prototype.closeConversationSession = function () {
                 var me = this;
@@ -2292,6 +2292,8 @@
                   if(msgData.message[0] && msgData.message[0].cInfo && msgData.message[0].cInfo.body && msgData.message[0].cInfo.body.attachments && msgData.message[0].cInfo.body.attachments[0].content && msgData.message[0].cInfo.body.attachments[0].contentType.includes('.microsoft.') ){
                     var _adaptiveCard =  new window.krAdaptiveCards.AdaptiveCard();
                     _adaptiveCard.parse(msgData.message[0].cInfo.body.attachments[0].content);
+                    // let dummyDiv = document.createElement('div');
+                    // dummyDiv.appendChild(_adaptiveCard.render())
                     messageHtml = $(_adaptiveCard.render());
                     try {
                         _adaptiveCard.onExecuteAction = function(action) {
@@ -2315,6 +2317,8 @@
                     }
                     var _adaptiveCard =  new window.krAdaptiveCards.AdaptiveCard();
                     _adaptiveCard.parse(msgClone.message[0].cInfo.body.attachments[0].content);
+                    // let dummyDiv = document.createElement('div');
+                    // dummyDiv.appendChild(_adaptiveCard.render())
                     messageHtml = $(_adaptiveCard.render());
                     try {
                         _adaptiveCard.onExecuteAction = function(action) {
@@ -2877,8 +2881,8 @@
                         msgData.renderType = 'inline';
                         messageHtml = me.renderWebForm(msgData,true);
                     }
-                    else if(msgData.message[0] && msgData.message[0].component && msgData.message[0].component.payload && msgData.message[0].component.payload.template_type == "live_agent"){                      
-                        
+                    else if(msgData.message[0] && msgData.message[0].component && msgData.message[0].component.payload && msgData.message[0].component.payload.template_type == "live_agent"){
+
                         msgData.fromAgent=true;
 
                         if(msgData.message[0].component && msgData.message[0].component.payload){
@@ -2918,16 +2922,16 @@
                                 // pickerConfig.dateConfig.selectedDate="Selected Date";
                                 // pickerConfig.dateConfig.selectedDate=msgData.message[0].component.payload.selectedDate;
                                 // if(msgData.message[0].component.payload.showdueDate){
-                    
+
                                 //     pickerConfig.dateConfig.paymentDue="Payment Due Date";
-                    
+
                                 //     pickerConfig.dateConfig.paymentDue=msgData.message[0].component.payload.paymentDue;
                                 // }
-                    
+
                                 if (msgData.message[0].component.payload.title) {
                                     pickerConfig[1].datepicker.title = msgData.message[0].component.payload.title;
                                 }
-                    
+
                                 // $('.typingIndicatorContent').css('display', 'block');
                                 if(!msgData.fromHistory){
                                     KorePickers.prototype.showDatePicker(pickerConfig);
@@ -2968,11 +2972,11 @@
                 }
                 _chatContainer.find('li').attr('aria-live','off');
                 //_chatContainer.find('li').attr('aria-hidden','true');//for mac voiceover bug with aria-live
-   
+
                 if(msgData && msgData.message[0] && msgData.message[0].component && msgData.message[0].component.payload && msgData.message[0].component.payload.sliderView && !msgData.message[0].component.payload.fromHistory){
                     bottomSliderAction('show',messageHtml);
                 }else{
-                    //ignore message(msgId) if it is already in viewport           
+                    //ignore message(msgId) if it is already in viewport
                     // if ($(`${me.config.agentAssist?`#agentAssistContainer #${runInfoContent} #displayData-${elementID}  li#`:`.kore-chat-window .chat-container li#`}` + msgData.messageId).length < 1 || (msgData.renderType==='inline')) {
                     //     if (msgData.type === "bot_response" && msgData.fromHistorySync) {
                     //         var msgTimeStamps = [];
@@ -3053,7 +3057,7 @@
                 console.log("xxxxxxxxxxxxx line no 3014", messageHtml)
                 return messageHtml;
             };
-                                    
+
             chatWindow.prototype.pushTorenderMessagesQueue = function (msgItem) {
                 var me = this;
                 if( !me.renderMessagesQueue){
@@ -3090,7 +3094,7 @@
                     clearTimeout(me.renderEventLoop);
                     me.renderEventLoop=false;
                 }
-            };    
+            };
 
             chatWindow.prototype.formatMessages = function (msgContainer) {
                 /*adding target to a tags */
@@ -3118,8 +3122,8 @@
                 $(a).remove();
             };
 
-            chatWindow.prototype.getChatTemplate = function (tempType) {  
-                var me = this;             
+            chatWindow.prototype.getChatTemplate = function (tempType) {
+                var me = this;
                 var chatFooterTemplate =
                 '<div class="footerContainer pos-relative" id="id123"> \
                     {{if userAgentIE}} \
@@ -3833,7 +3837,7 @@
                                 var _ignoreMsgs = messagesQueue.filter(function (queMsg) {
                                     return queMsg.messageId === msgData.messageId;
                                 });
-                                //dont show the the history message if we already have same message came from socket connect  
+                                //dont show the the history message if we already have same message came from socket connect
                                 if (!_ignoreMsgs.length) {
                                     try {
                                         msgData.message[0].cInfo.body = JSON.parse(msgData.message[0].cInfo.body);
@@ -3843,7 +3847,7 @@
                                         msgData.message[0].component = msgData.message[0].cInfo.body;
                                         if (msgData.message[0].component.payload.template_type === 'dropdown_template') {
                                             msgData.message[0].component.payload.fromHistory = true;
-                                            msgData.message[0].component.selectedValue=res[1].messages[index+1].message[0].cInfo.body;                                    
+                                            msgData.message[0].component.selectedValue=res[1].messages[index+1].message[0].cInfo.body;
                                         }
                                         if (msgData.message[0].component.payload.template_type === 'multi_select' || msgData.message[0].component.payload.template_type === 'advanced_multi_select') {
                                             msgData.message[0].component.payload.fromHistory = true;
@@ -3888,7 +3892,7 @@
                                         }else{
                                             me.historyLoadingComplete();
                                         }
-        
+
                                     },500,messagesQueue);
                                 }
                             }, index * 100,me.messagesQueue);
@@ -3916,7 +3920,7 @@
                 } catch(e){
                     console.log(e);
                 }
-                
+
             }
             chatWindow.prototype.applySDKBranding = function (response) {
                 if (response && response.activeTheme) {
@@ -3987,7 +3991,7 @@
                                 defaultTheme = digitalViewsThemeMapping[response[key].panelTheme];
                                 $('.kr-wiz-menu-chat').addClass(defaultTheme);
                                 $('.kr-wiz-menu-chat').removeClass('defaultTheme-kore');
-                                
+
                               }
                             }
                         default:
@@ -4146,11 +4150,11 @@
                     chatInitialize = new chatWindow(cfg);
                     chatInitialize.customTemplateObj = new customTemplate(cfg,chatInitialize);
                 }
-                
+
                // isAgentAssistEnabled = cfg.agentAssist;
                 return this;
             };
-            
+
             this.addWidgetEvents = function (cfg) {
                 if (cfg) {
                     var wizSDK = cfg.widgetSDKInstace;
@@ -4160,13 +4164,13 @@
                     };
                 }
             };
-            
+
             this.setWidgetInstance=function(widgetSDKInstace){
                 if(widgetSDKInstace){
                     AgentChatInitializes.config.widgetSDKInstace=widgetSDKInstace;
                     this.addWidgetEvents(AgentChatInitializes.config);
                 }
-            }           
+            }
             this.destroy = function () {
                 if (AgentChatInitializes && AgentChatInitializes.destroy) {
                     _eventQueue = {};
@@ -4182,7 +4186,7 @@
             this.initToken = function (options) {
                 assertionToken = "bearer " + options.accessToken;
             };
-                      
+
             this.hideError = function () {
                 $('.errorMsgBlock').removeClass('showError');
             }
@@ -4204,7 +4208,7 @@
                         KoreAgentDesktop(response.userInfo.userId, response);
                     } else {
                         console.log("AgentDesktop initialization - did not receive authResponse")
-                    }    
+                    }
                 }
                 /* Remove hide class for tts and speech if sppech not enabled for this bot */
                 /*setTimeout(function () {
@@ -4224,7 +4228,7 @@
             //                         if (msgData.type === "outgoing" || msgData.type === "bot_response") {
             //                             //if ($('.kore-chat-window .chat-container li#' + msgData.messageId).length < 1) {
             //                                 msgData.fromHistorySync=true;
-                                                                                        
+
             //                                 try {
             //                                     msgData.message[0].cInfo.body = JSON.parse(msgData.message[0].cInfo.body);
             //                                     if (msgData.message[0].cInfo.body && msgData.message[0].cInfo.body.text) {
@@ -4232,7 +4236,7 @@
             //                                     }
             //                                     msgData.message[0].component = msgData.message[0].cInfo.body;
             //                                     if (msgData.message[0].component.payload.template_type === 'dropdown_template') {
-            //                                         msgData.message[0].component.selectedValue=res[1].messages[index+1].message[0].cInfo.body;                                    
+            //                                         msgData.message[0].component.selectedValue=res[1].messages[index+1].message[0].cInfo.body;
             //                                     }
             //                                     if (msgData.message[0].component.payload.template_type === 'feedbackTemplate') {
             //                                         msgData.message[0].cInfo.body="Rate this chat session";
@@ -4267,7 +4271,7 @@
             //                     var _ignoreMsgs = messagesQueue.filter(function (queMsg) {
             //                         return queMsg.messageId === msgData.messageId;
             //                     });
-            //                     //dont show the the history message if we already have same message came from socket connect  
+            //                     //dont show the the history message if we already have same message came from socket connect
             //                     if (!_ignoreMsgs.length) {
             //                         try {
             //                             msgData.message[0].cInfo.body = JSON.parse(msgData.message[0].cInfo.body);
@@ -4277,7 +4281,7 @@
             //                             msgData.message[0].component = msgData.message[0].cInfo.body;
             //                             if (msgData.message[0].component.payload.template_type === 'dropdown_template') {
             //                                 msgData.message[0].component.payload.fromHistory = true;
-            //                                 msgData.message[0].component.selectedValue=res[1].messages[index+1].message[0].cInfo.body;                                    
+            //                                 msgData.message[0].component.selectedValue=res[1].messages[index+1].message[0].cInfo.body;
             //                             }
             //                             if (msgData.message[0].component.payload.template_type === 'multi_select' || msgData.message[0].component.payload.template_type === 'advanced_multi_select') {
             //                                 msgData.message[0].component.payload.fromHistory = true;
@@ -4327,7 +4331,7 @@
             //                             }else{
             //                                 me.historyLoadingComplete();
             //                             }
-        
+
             //                         },500,messagesQueue);
             //                     }
             //                 }, index * 100,messagesQueue);
@@ -4341,7 +4345,7 @@
             this.closeConversationSession = function () {
                if(AgentChatInitializes){
                     AgentChatInitializes.closeConversationSession();
-               } 
+               }
             }
             /*************************************       Microphone code      **********************************************/
             var final_transcript = '';
@@ -4355,7 +4359,7 @@
                     }else{
                         console.warn("Please uncomment Google Speech files('speech/app.js','speech/key.js' and 'client_api.js' in index.html")
                     }
-        
+
                 }
             },2000);
             function isChrome() {
@@ -4786,7 +4790,7 @@
                     // Create a new instance of SpeechSynthesisUtterance.
                     var msg = new SpeechSynthesisUtterance();
                     msg.text =_txtToSpeak;
-                   //  msg.voice = speechSynthesis.getVoices().filter(function(voice) {        
+                   //  msg.voice = speechSynthesis.getVoices().filter(function(voice) {
                    //      return voice.default===true;
                    //     })[0];
                    // Queue this utterance.
