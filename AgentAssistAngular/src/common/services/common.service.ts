@@ -185,7 +185,6 @@ export class CommonService {
       crossDomain: true,
       contentType: 'application/json',
       headers: {
-        'User-Agent': '',
         "content-type": 'application/json'
       },
       data: JSON.stringify(payload),
