@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { EVENTS } from 'src/common/helper/events';
 import { WebSocketService } from 'src/common/services/web-socket.service';
@@ -499,266 +499,269 @@ setProactiveMode(){
     }
   }
 
+  @HostListener('click', ['$event'])
+  onClick(evt) {
+    // console.log('button', btn, 'number of clicks:', this.numberOfClicks++);
+    let target: any = evt.target;
+    if (target.id === 'sendMsg' || target.className === 'ast-ast-send' || target.className == 'send-icon') {
+      let ele = document.getElementById(`displayData-${target.dataset.msgId}`) ? document.getElementById(`displayData-${target.dataset.msgId}`) : document.getElementById(target.dataset.msgId);
+      let data = target.dataset?.msgData && target.dataset?.msgData !== '' ? target.dataset?.msgData : (target.parentNode.dataset?.msgData && target.parentNode.dataset?.msgData !== '' ? target.parentNode.dataset?.msgData : ele?.innerText);
+
+      if(data && data != 'Send'){
+        data = this.commonService.replaceLtGt(data, true);
+      this.commonService.preparePostMessageForSendAndCopy(evt, data, IdReferenceConst.SENDMSG, this.connectionDetails);
+      }
+      }
+      if ((target.className == 'copy-btn' || target.className == 'ast-copy' || target.className == 'copy-icon')) {
+      let ele = document.getElementById(`displayData-${target.dataset.msgId}`) ? document.getElementById(`displayData-${target.dataset.msgId}`) : document.getElementById(target.dataset.msgId);
+      let data = target.dataset.msgData && target.dataset.msgData !== '' ? target.dataset.msgData : (target.parentNode.dataset.msgData && target.parentNode.dataset.msgData !== '' ? target.parentNode.dataset.msgData : ele?.innerText);
+      if(data && data != 'Send' && data != 'SEND'){
+      this.commonService.preparePostMessageForSendAndCopy(evt, data, IdReferenceConst.COPYMSG, this.connectionDetails);
+      }
+      }
+    if (target.id.split('-')[0] == 'buldCount' || target.className == 'ast-bulb' || target.className == 'count-number') {
+      let bulbDiv;
+      if ($('#scriptContainer .other-user-bubble .bubble-data .buld-count-utt').length > 0) {
+        bulbDiv = $('#scriptContainer .other-user-bubble .bubble-data').find('.buld-count-utt, .buld-count-utt-after-click');
+      } else {
+        bulbDiv = $('#scriptContainer .other-user-bubble .bubble-data .buld-count-utt-after-click');
+      }
+      let bulbid = target.id.split('-');
+      bulbid.shift();
+      let idOfBuld = $(bulbDiv).last().attr('id').split('-');
+      idOfBuld.shift();
+      if (idOfBuld.join('-') === bulbid.join('-')) {
+        this.handleSubjectService.setActiveTab(this.projConstants.ASSIST)
+        this.designAlterService.scrollToEle(`automationSuggestions-${idOfBuld.join('-')}`)
+      } else {
+        this.handleSubjectService.setActiveTab(this.projConstants.ASSIST)
+        let theElement = `automationSuggestions-${bulbid.join('-')}`;
+        this.designAlterService.scrollToEle(theElement);
+      }
+      $(`#scriptContainer #buldCount-${bulbid.join('-')}`).removeClass('buld-count-utt').addClass('buld-count-utt-after-click');
+      $(`#scriptContainer #buldCountNumber-${bulbid.join('-')}`).html(`<span>&#10003;</span>`);
+    }
+    let targetIds = (target.id).split('-');
+    if (['feedbackup', 'feedbackdown'].includes(targetIds[0])) {
+
+      let cloneTargtIds = [...targetIds]
+      let isDivElement = evt.target instanceof HTMLDivElement;
+      if (targetIds.includes('feedbackup')) {
+        cloneTargtIds.shift()
+        if (isDivElement) {
+          $(`#${target.id}`).addClass('active-feedback');
+          target.firstElementChild.dataset.feedbacklike = 'true';
+          Object.assign(target.dataset, target.firstElementChild.dataset);
+          this.feedbackLoop(evt);
+        } else {
+          $(`#${target.parentElement.id}`).addClass('active-feedback');
+          target.dataset.feedbacklike = 'false';
+          this.feedbackLoop(evt);
+        }
+
+        $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .ast-thumbdown`).attr('data-comment', ``)
+        $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .ast-thumbdown`).attr('data-feedbackdetails', '[]');
+        $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .btn-chip-negtive.active-chip`).removeClass('active-chip');
+        $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} #feedBackComment-${cloneTargtIds.join('-')}`).val('');
+        $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .submit-btn`).attr('disabled', 'disabled')
+        $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .submit-btn`).html('Submit');
+        $(`#feedbackdown-${cloneTargtIds.join('-')}`).removeClass('active-feedback')
+        $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .thanks-update`).removeClass('hide');
+        $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .help-improve-arrow`).addClass('hide')
+        $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .explore-more-negtive-data`).addClass('hide');
+      }
+      if (targetIds.includes('feedbackdown')) {
+        cloneTargtIds.shift()
+        if (isDivElement) {
+          $(`#${target.id}`).addClass('active-feedback');
+          target.firstElementChild.dataset.feedbacklike = 'true';
+          Object.assign(target.dataset, target.firstElementChild.dataset);
+          this.feedbackLoop(evt);
+        } else {
+          $(`#${target.parentElement.id}`).addClass('active-feedback');
+          target.dataset.feedbacklike = 'false';
+          this.feedbackLoop(evt);
+        }
+        $(`#feedbackup-${cloneTargtIds.join('-')}`).removeClass('active-feedback')
+        $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .thanks-update`).addClass('hide');
+        $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .help-improve-arrow`).removeClass('hide')
+        $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .explore-more-negtive-data`).removeClass('hide');
+        $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .title-improve`).removeClass('hide');
+
+      }
+    }
+    if (target.id.split('-')[0] == 'dropdownArrowFeedBack' || target.id.split('-')[0] == 'dropdownArrowFeedBackIcon') {
+      let targteId = target.id.split('-');
+      targteId.shift();
+      let dataSets = $(`#feedbackdown-${targteId.join('-')} .ast-thumbdown`).data();
+      let activeChipCount = $(`#feedbackHelpfulContainer-${targteId.join('-')} .btn-chip-negtive.active-chip`);
+      if ((activeChipCount.length > 0 || dataSets.comment.length > 0) && target.dataset.feedbackDropDownOpened === 'true') {
+        $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).addClass('hide');
+      } else {
+        if ((activeChipCount.length == 0 && dataSets.comment.length == 0) && target.dataset.feedbackDropDownOpened === 'true') {
+          $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).removeClass('hide');
+        } else {
+          $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).addClass('hide');
+        }
+      }
+      if (target.dataset.feedbackDropDownOpened === 'false') {
+        $(`#dropdownArrowFeedBackIcon-${targteId.join('-')}`).attr('data-feedback-drop-down-opened', 'true');
+        $(`#dropdownArrowFeedBack-${targteId.join('-')}`).attr('data-feedback-drop-down-opened', 'true');
+        $(`#feedbackHelpfulContainer-${targteId.join('-')} .explore-more-negtive-data`).addClass('hide');
+      } else {
+        $(`#dropdownArrowFeedBackIcon-${targteId.join('-')}`).attr('data-feedback-drop-down-opened', 'false');
+        $(`#dropdownArrowFeedBack-${targteId.join('-')}`).attr('data-feedback-drop-down-opened', 'false');
+        $(`#feedbackHelpfulContainer-${targteId.join('-')} .explore-more-negtive-data`).removeClass('hide');
+      }
+      let updateFlag = $(`#feedbackHelpfulContainer-${targteId.join('-')} .submit-btn`).attr('data-updateflag');
+      if (updateFlag == 'true' && target.dataset.feedbackDropDownOpened === 'false') {
+        $(`#feedbackHelpfulContainer-${targteId.join('-')} .submit-btn`).html('Update');
+        $(`#feedbackHelpfulContainer-${targteId.join('-')} .submit-btn`).attr('disabled', 'disabled');
+        this.AgentAssist_feedBack_Update_Request(dataSets);
+        $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).addClass('hide');
+        this.commonService.isUpdateFeedBackDetailsFlag = true;
+      }
+    }
+    if (target.className.includes('btn-chip-negtive')) {
+      let id = target.parentElement.id.split('-');
+      id.shift();
+      let aaa = $(`#${target.parentElement.id} .btn-chip-negtive.active-chip`);
+      let arrayOfChips = [];
+      aaa.each((i, ele) => {
+        arrayOfChips.push($(ele).html())
+      });
+      let dataSets = $(`#feedbackdown-${id.join('-')} .ast-thumbdown`).data();
+      dataSets.feedbackdetails = arrayOfChips;
+
+      if (target.dataset.chipClick == 'false') {
+        $(target).addClass('active-chip');
+        target.dataset.chipClick = 'true';
+        let index;
+        if (typeof dataSets.feedbackdetails == 'string') {
+          dataSets.feedbackdetails = dataSets.feedbackdetails?.split(',');
+          index = dataSets.feedbackdetails.findIndex((ele) => ele == $(target).html());
+        }
+        index = dataSets.feedbackdetails.findIndex((ele) => ele == $(target).html());
+        if (index == -1) {
+          dataSets.feedbackdetails.push($(target).html());
+        }
+      } else {
+        $(target).removeClass('active-chip');
+        target.dataset.chipClick = 'false';
+        dataSets.feedbackdetails?.forEach((ele, i) => {
+          if (ele == $(target).html()) {
+            delete dataSets.feedbackdetails[i]
+          }
+        })
+      }
+      let activeChipCount = $(`#${target.parentElement.id} .btn-chip-negtive.active-chip`);
+      if (activeChipCount.length > 0) {
+        $(`#feedbackHelpfulContainer-${id.join('-')} .title-improve`).addClass('hide');
+        $(`#feedbackHelpfulContainer-${id.join('-')} .submit-btn`).removeAttr('disabled');
+      } else {
+        if (dataSets.comment.length == 0) {
+          $(`#feedbackHelpfulContainer-${id.join('-')} .title-improve`).removeClass('hide');
+        }
+      }
+      $(`#feedbackHelpfulContainer-${id.join('-')} .ast-thumbdown`).attr('data-feedbackdetails', dataSets.feedbackdetails)
+    }
+    if (target.id == 'feedbackSubmit') {
+      let id = target.parentElement.firstElementChild.id.split('-');
+      id.shift();
+      let feedbackComment = $(`#feedbackHelpfulContainer-${id.join('-')} #feedBackComment-${id.join('-')}`).val();
+      let aaa = $(`#feedbackHelpfulContainer-${id.join('-')} .btn-chip-negtive.active-chip`);
+      let arrayOfChips = [];
+      aaa.each((i, ele) => {
+        arrayOfChips.push($(ele).html())
+      });
+
+      let dataSets = $(`#feedbackdown-${id.join('-')} .ast-thumbdown`).data();
+      dataSets.comment = feedbackComment;
+      dataSets.feedbackdetails = arrayOfChips;
+      if (typeof dataSets.feedbackdetails == 'string' && dataSets.feedbackdetails.indexOf(',') > -1) {
+        dataSets.feedbackdetails = dataSets.feedbackdetails.split(',');
+      }
+      this.feedbackLoop(dataSets, true);
+      $(`#feedbackHelpfulContainer-${id.join('-')} .thanks-update`).css('right', '34px').removeClass('hide');
+      setTimeout(() => {
+        $(`#feedbackHelpfulContainer-${id.join('-')} .thanks-update`).css('right', '25px').addClass('hide');
+      }, 3000)
+      $(`#feedbackHelpfulContainer-${id.join('-')} .explore-more-negtive-data`).addClass('hide');
+      $(`#feedbackHelpfulContainer-${id.join('-')} #dropdownArrowFeedBackIcon-${id.join('-')}`).attr('data-feedback-drop-down-opened', 'true');
+      $(`#feedbackHelpfulContainer-${id.join('-')} #dropdownArrowFeedBack-${id.join('-')}`).attr('data-feedback-drop-down-opened', 'true');
+      target.dataset.updateflag = 'true';
+      $(`#feedbackHelpfulContainer-${id.join('-')}.submit-btn`).attr('disabled', 'disabled');
+
+      $(`#feedbackHelpfulContainer-${id.join('-')} .ast-thumbdown`).attr('data-comment', ``)
+      $(`#feedbackHelpfulContainer-${id.join('-')} .ast-thumbdown`).attr('data-feedbackdetails', '[]')
+      dataSets.comment = "";
+      dataSets.feedbackdetails = [];
+      $(`#feedbackHelpfulContainer-${id.join('-')} .btn-chip-negtive.active-chip`).removeClass('active-chip');
+      $(`#feedbackHelpfulContainer-${id.join('-')} #feedBackComment-${id.join('-')}`).val('');
+      this.commonService.isUpdateFeedBackDetailsFlag = false;
+    }
+    if (target.id.split("-")[0] == 'elipseIcon' || target.id.split("-")[0] == 'overflowIcon') {
+
+       if(!this.showSearchSuggestions){
+
+         if ($('.dropdown-content-elipse').length !== 0) {
+           $('.dropdown-content-elipse').addClass('hide');
+         }
+         let elementClicked;
+         if (target.id.split("-")[0] == 'elipseIcon') {
+           evt.stopPropagation();
+           (target.nextElementSibling)?.classList.remove('hide');
+           elementClicked = target.parentElement;
+
+         } else if (target.id.split("-")[0] == 'overflowIcon') {
+           elementClicked = target.parentElement.parentElement;
+           (target.parentElement.nextElementSibling)?.classList.remove('hide');
+         }
+         if (this.activeTab != this.projConstants.LIBRARY) {
+           $('.elipse-dropdown-info').each((i, ele) => {
+             $(ele).attr('class').includes('active-elipse') ? $(ele).removeClass('active-elipse') : elementClicked.classList.add('active-elipse');
+           });
+           $(`#overLaySearch .type-info-run-send`).find(elementClicked).length > 0 ? elementClicked.classList.add('active-elipse') : '';
+         }
+       }
+
+    }
+    if(target.id.split('-').includes('overRideBtn')){
+      let overrideObject : any = {
+        override : true,
+        cancelOverride : false,
+        data : target
+      }
+      this.handleSubjectService.setOverridebtnClickEvent(overrideObject);
+    }
+    if(target.id.split('-').includes('cancelOverRideBtn')){
+      let overrideObject : any = {
+        override : false,
+        cancelOverride : true,
+        data : target
+      }
+      this.handleSubjectService.setOverridebtnClickEvent(overrideObject);
+    }
+    if (target.id.split('-')[0] === 'dropDownHeader' || target.id.split('-')[0] === 'dropDownTitle' || target.id.split('-')[0] === 'dialogueArrow') {
+      let targetIDs = (target.id).split('-');
+      targetIDs.shift();
+      let targetsss = targetIDs.join('-');
+      let dropdownDataElement = $(`#dropDownData-${targetsss}`);
+      if ($(dropdownDataElement).hasClass('hide')) {
+        $(dropdownDataElement).removeClass('hide');
+        $(`#dropDownHeader-${targetsss}`).find('.ast-carrotup').addClass('rotate-carrot');
+        $(`#endTaks-${targetsss}`).removeClass('hide');
+      } else {
+        $(dropdownDataElement).addClass('hide')
+        $(`#dropDownHeader-${targetsss}`).find('.ast-carrotup').removeClass('rotate-carrot');
+        $(`#endTaks-${targetsss}`).removeClass('hide');
+      }
+
+    }
+  }
+
   // send and copy click operations.
   btnInit() {
-    document.addEventListener("click", (evt: any) => {
-      let target: any = evt.target;
-      if (target.id === 'sendMsg' || target.className === 'ast-ast-send' || target.className == 'send-icon') {
-        let ele = document.getElementById(`displayData-${target.dataset.msgId}`) ? document.getElementById(`displayData-${target.dataset.msgId}`) : document.getElementById(target.dataset.msgId);
-        let data = target.dataset?.msgData && target.dataset?.msgData !== '' ? target.dataset?.msgData : (target.parentNode.dataset?.msgData && target.parentNode.dataset?.msgData !== '' ? target.parentNode.dataset?.msgData : ele?.innerText);
-
-        if(data && data != 'Send'){
-          data = this.commonService.replaceLtGt(data, true);
-        this.commonService.preparePostMessageForSendAndCopy(evt, data, IdReferenceConst.SENDMSG, this.connectionDetails);
-        }
-        }
-        if ((target.className == 'copy-btn' || target.className == 'ast-copy' || target.className == 'copy-icon')) {
-        let ele = document.getElementById(`displayData-${target.dataset.msgId}`) ? document.getElementById(`displayData-${target.dataset.msgId}`) : document.getElementById(target.dataset.msgId);
-        let data = target.dataset.msgData && target.dataset.msgData !== '' ? target.dataset.msgData : (target.parentNode.dataset.msgData && target.parentNode.dataset.msgData !== '' ? target.parentNode.dataset.msgData : ele?.innerText);
-        if(data && data != 'Send' && data != 'SEND'){
-        this.commonService.preparePostMessageForSendAndCopy(evt, data, IdReferenceConst.COPYMSG, this.connectionDetails);
-        }
-        }
-      if (target.id.split('-')[0] == 'buldCount' || target.className == 'ast-bulb' || target.className == 'count-number') {
-        let bulbDiv;
-        if ($('#scriptContainer .other-user-bubble .bubble-data .buld-count-utt').length > 0) {
-          bulbDiv = $('#scriptContainer .other-user-bubble .bubble-data').find('.buld-count-utt, .buld-count-utt-after-click');
-        } else {
-          bulbDiv = $('#scriptContainer .other-user-bubble .bubble-data .buld-count-utt-after-click');
-        }
-        let bulbid = target.id.split('-');
-        bulbid.shift();
-        let idOfBuld = $(bulbDiv).last().attr('id').split('-');
-        idOfBuld.shift();
-        if (idOfBuld.join('-') === bulbid.join('-')) {
-          this.handleSubjectService.setActiveTab(this.projConstants.ASSIST)
-          this.designAlterService.scrollToEle(`automationSuggestions-${idOfBuld.join('-')}`)
-        } else {
-          this.handleSubjectService.setActiveTab(this.projConstants.ASSIST)
-          let theElement = `automationSuggestions-${bulbid.join('-')}`;
-          this.designAlterService.scrollToEle(theElement);
-        }
-        $(`#scriptContainer #buldCount-${bulbid.join('-')}`).removeClass('buld-count-utt').addClass('buld-count-utt-after-click');
-        $(`#scriptContainer #buldCountNumber-${bulbid.join('-')}`).html(`<span>&#10003;</span>`);
-      }
-      let targetIds = (target.id).split('-');
-      if (['feedbackup', 'feedbackdown'].includes(targetIds[0])) {
-
-        let cloneTargtIds = [...targetIds]
-        let isDivElement = evt.target instanceof HTMLDivElement;
-        if (targetIds.includes('feedbackup')) {
-          cloneTargtIds.shift()
-          if (isDivElement) {
-            $(`#${target.id}`).addClass('active-feedback');
-            target.firstElementChild.dataset.feedbacklike = 'true';
-            Object.assign(target.dataset, target.firstElementChild.dataset);
-            this.feedbackLoop(evt);
-          } else {
-            $(`#${target.parentElement.id}`).addClass('active-feedback');
-            target.dataset.feedbacklike = 'false';
-            this.feedbackLoop(evt);
-          }
-
-          $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .ast-thumbdown`).attr('data-comment', ``)
-          $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .ast-thumbdown`).attr('data-feedbackdetails', '[]');
-          $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .btn-chip-negtive.active-chip`).removeClass('active-chip');
-          $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} #feedBackComment-${cloneTargtIds.join('-')}`).val('');
-          $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .submit-btn`).attr('disabled', 'disabled')
-          $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .submit-btn`).html('Submit');
-          $(`#feedbackdown-${cloneTargtIds.join('-')}`).removeClass('active-feedback')
-          $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .thanks-update`).removeClass('hide');
-          $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .help-improve-arrow`).addClass('hide')
-          $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .explore-more-negtive-data`).addClass('hide');
-        }
-        if (targetIds.includes('feedbackdown')) {
-          cloneTargtIds.shift()
-          if (isDivElement) {
-            $(`#${target.id}`).addClass('active-feedback');
-            target.firstElementChild.dataset.feedbacklike = 'true';
-            Object.assign(target.dataset, target.firstElementChild.dataset);
-            this.feedbackLoop(evt);
-          } else {
-            $(`#${target.parentElement.id}`).addClass('active-feedback');
-            target.dataset.feedbacklike = 'false';
-            this.feedbackLoop(evt);
-          }
-          $(`#feedbackup-${cloneTargtIds.join('-')}`).removeClass('active-feedback')
-          $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .thanks-update`).addClass('hide');
-          $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .help-improve-arrow`).removeClass('hide')
-          $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .explore-more-negtive-data`).removeClass('hide');
-          $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .title-improve`).removeClass('hide');
-
-        }
-      }
-      if (target.id.split('-')[0] == 'dropdownArrowFeedBack' || target.id.split('-')[0] == 'dropdownArrowFeedBackIcon') {
-        let targteId = target.id.split('-');
-        targteId.shift();
-        let dataSets = $(`#feedbackdown-${targteId.join('-')} .ast-thumbdown`).data();
-        let activeChipCount = $(`#feedbackHelpfulContainer-${targteId.join('-')} .btn-chip-negtive.active-chip`);
-        if ((activeChipCount.length > 0 || dataSets.comment.length > 0) && target.dataset.feedbackDropDownOpened === 'true') {
-          $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).addClass('hide');
-        } else {
-          if ((activeChipCount.length == 0 && dataSets.comment.length == 0) && target.dataset.feedbackDropDownOpened === 'true') {
-            $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).removeClass('hide');
-          } else {
-            $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).addClass('hide');
-          }
-        }
-        if (target.dataset.feedbackDropDownOpened === 'false') {
-          $(`#dropdownArrowFeedBackIcon-${targteId.join('-')}`).attr('data-feedback-drop-down-opened', 'true');
-          $(`#dropdownArrowFeedBack-${targteId.join('-')}`).attr('data-feedback-drop-down-opened', 'true');
-          $(`#feedbackHelpfulContainer-${targteId.join('-')} .explore-more-negtive-data`).addClass('hide');
-        } else {
-          $(`#dropdownArrowFeedBackIcon-${targteId.join('-')}`).attr('data-feedback-drop-down-opened', 'false');
-          $(`#dropdownArrowFeedBack-${targteId.join('-')}`).attr('data-feedback-drop-down-opened', 'false');
-          $(`#feedbackHelpfulContainer-${targteId.join('-')} .explore-more-negtive-data`).removeClass('hide');
-        }
-        let updateFlag = $(`#feedbackHelpfulContainer-${targteId.join('-')} .submit-btn`).attr('data-updateflag');
-        if (updateFlag == 'true' && target.dataset.feedbackDropDownOpened === 'false') {
-          $(`#feedbackHelpfulContainer-${targteId.join('-')} .submit-btn`).html('Update');
-          $(`#feedbackHelpfulContainer-${targteId.join('-')} .submit-btn`).attr('disabled', 'disabled');
-          this.AgentAssist_feedBack_Update_Request(dataSets);
-          $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).addClass('hide');
-          this.commonService.isUpdateFeedBackDetailsFlag = true;
-        }
-      }
-      if (target.className.includes('btn-chip-negtive')) {
-        let id = target.parentElement.id.split('-');
-        id.shift();
-        let aaa = $(`#${target.parentElement.id} .btn-chip-negtive.active-chip`);
-        let arrayOfChips = [];
-        aaa.each((i, ele) => {
-          arrayOfChips.push($(ele).html())
-        });
-        let dataSets = $(`#feedbackdown-${id.join('-')} .ast-thumbdown`).data();
-        dataSets.feedbackdetails = arrayOfChips;
-
-        if (target.dataset.chipClick == 'false') {
-          $(target).addClass('active-chip');
-          target.dataset.chipClick = 'true';
-          let index;
-          if (typeof dataSets.feedbackdetails == 'string') {
-            dataSets.feedbackdetails = dataSets.feedbackdetails?.split(',');
-            index = dataSets.feedbackdetails.findIndex((ele) => ele == $(target).html());
-          }
-          index = dataSets.feedbackdetails.findIndex((ele) => ele == $(target).html());
-          if (index == -1) {
-            dataSets.feedbackdetails.push($(target).html());
-          }
-        } else {
-          $(target).removeClass('active-chip');
-          target.dataset.chipClick = 'false';
-          dataSets.feedbackdetails?.forEach((ele, i) => {
-            if (ele == $(target).html()) {
-              delete dataSets.feedbackdetails[i]
-            }
-          })
-        }
-        let activeChipCount = $(`#${target.parentElement.id} .btn-chip-negtive.active-chip`);
-        if (activeChipCount.length > 0) {
-          $(`#feedbackHelpfulContainer-${id.join('-')} .title-improve`).addClass('hide');
-          $(`#feedbackHelpfulContainer-${id.join('-')} .submit-btn`).removeAttr('disabled');
-        } else {
-          if (dataSets.comment.length == 0) {
-            $(`#feedbackHelpfulContainer-${id.join('-')} .title-improve`).removeClass('hide');
-          }
-        }
-        $(`#feedbackHelpfulContainer-${id.join('-')} .ast-thumbdown`).attr('data-feedbackdetails', dataSets.feedbackdetails)
-      }
-      if (target.id == 'feedbackSubmit') {
-        let id = target.parentElement.firstElementChild.id.split('-');
-        id.shift();
-        let feedbackComment = $(`#feedbackHelpfulContainer-${id.join('-')} #feedBackComment-${id.join('-')}`).val();
-        let aaa = $(`#feedbackHelpfulContainer-${id.join('-')} .btn-chip-negtive.active-chip`);
-        let arrayOfChips = [];
-        aaa.each((i, ele) => {
-          arrayOfChips.push($(ele).html())
-        });
-
-        let dataSets = $(`#feedbackdown-${id.join('-')} .ast-thumbdown`).data();
-        dataSets.comment = feedbackComment;
-        dataSets.feedbackdetails = arrayOfChips;
-        if (typeof dataSets.feedbackdetails == 'string' && dataSets.feedbackdetails.indexOf(',') > -1) {
-          dataSets.feedbackdetails = dataSets.feedbackdetails.split(',');
-        }
-        this.feedbackLoop(dataSets, true);
-        $(`#feedbackHelpfulContainer-${id.join('-')} .thanks-update`).css('right', '34px').removeClass('hide');
-        setTimeout(() => {
-          $(`#feedbackHelpfulContainer-${id.join('-')} .thanks-update`).css('right', '25px').addClass('hide');
-        }, 3000)
-        $(`#feedbackHelpfulContainer-${id.join('-')} .explore-more-negtive-data`).addClass('hide');
-        $(`#feedbackHelpfulContainer-${id.join('-')} #dropdownArrowFeedBackIcon-${id.join('-')}`).attr('data-feedback-drop-down-opened', 'true');
-        $(`#feedbackHelpfulContainer-${id.join('-')} #dropdownArrowFeedBack-${id.join('-')}`).attr('data-feedback-drop-down-opened', 'true');
-        target.dataset.updateflag = 'true';
-        $(`#feedbackHelpfulContainer-${id.join('-')}.submit-btn`).attr('disabled', 'disabled');
-
-        $(`#feedbackHelpfulContainer-${id.join('-')} .ast-thumbdown`).attr('data-comment', ``)
-        $(`#feedbackHelpfulContainer-${id.join('-')} .ast-thumbdown`).attr('data-feedbackdetails', '[]')
-        dataSets.comment = "";
-        dataSets.feedbackdetails = [];
-        $(`#feedbackHelpfulContainer-${id.join('-')} .btn-chip-negtive.active-chip`).removeClass('active-chip');
-        $(`#feedbackHelpfulContainer-${id.join('-')} #feedBackComment-${id.join('-')}`).val('');
-        this.commonService.isUpdateFeedBackDetailsFlag = false;
-      }
-      if (target.id.split("-")[0] == 'elipseIcon' || target.id.split("-")[0] == 'overflowIcon') {
-
-         if(!this.showSearchSuggestions){
-
-           if ($('.dropdown-content-elipse').length !== 0) {
-             $('.dropdown-content-elipse').addClass('hide');
-           }
-           let elementClicked;
-           if (target.id.split("-")[0] == 'elipseIcon') {
-             evt.stopPropagation();
-             (target.nextElementSibling)?.classList.remove('hide');
-             elementClicked = target.parentElement;
- 
-           } else if (target.id.split("-")[0] == 'overflowIcon') {
-             elementClicked = target.parentElement.parentElement;
-             (target.parentElement.nextElementSibling)?.classList.remove('hide');
-           }
-           if (this.activeTab != this.projConstants.LIBRARY) {
-             $('.elipse-dropdown-info').each((i, ele) => {
-               $(ele).attr('class').includes('active-elipse') ? $(ele).removeClass('active-elipse') : elementClicked.classList.add('active-elipse');
-             });
-             $(`#overLaySearch .type-info-run-send`).find(elementClicked).length > 0 ? elementClicked.classList.add('active-elipse') : '';
-           }
-         }
-        
-      }
-      if(target.id.split('-').includes('overRideBtn')){
-        let overrideObject : any = {
-          override : true,
-          cancelOverride : false,
-          data : target
-        }
-        this.handleSubjectService.setOverridebtnClickEvent(overrideObject);
-      }
-      if(target.id.split('-').includes('cancelOverRideBtn')){
-        let overrideObject : any = {
-          override : false,
-          cancelOverride : true,
-          data : target
-        }
-        this.handleSubjectService.setOverridebtnClickEvent(overrideObject);
-      }
-      if (target.id.split('-')[0] === 'dropDownHeader' || target.id.split('-')[0] === 'dropDownTitle' || target.id.split('-')[0] === 'dialogueArrow') {
-        let targetIDs = (target.id).split('-');
-        targetIDs.shift();
-        let targetsss = targetIDs.join('-');
-        let dropdownDataElement = $(`#dropDownData-${targetsss}`);
-        if ($(dropdownDataElement).hasClass('hide')) {
-          $(dropdownDataElement).removeClass('hide');
-          $(`#dropDownHeader-${targetsss}`).find('.ast-carrotup').addClass('rotate-carrot');
-          $(`#endTaks-${targetsss}`).removeClass('hide');
-        } else {
-          $(dropdownDataElement).addClass('hide')
-          $(`#dropDownHeader-${targetsss}`).find('.ast-carrotup').removeClass('rotate-carrot');
-          $(`#endTaks-${targetsss}`).removeClass('hide');
-        }
-
-      }
-    });
     document.addEventListener("keyup", (evt: any) => {
       let target = evt.target;
       let targetids = target.id.split('-');

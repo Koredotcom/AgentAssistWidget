@@ -1,5 +1,7 @@
-<div class="dynamic-block-content" id="dynamicBlock">
-  <div class = "welcome-msg collapse-acc-data before-none" id='smallTalk-${uuids}' *ngIf="(welcomeMsgResponse | json) != '{}'">
+
+
+<div class="dynamic-block-content">
+  <div class = "welcome-msg collapse-acc-data before-none" id='smallTalk-{{uuids}}' *ngIf="(welcomeMsgResponse | json) != '{}'">
         <div class="steps-run-data">
             <div class="icon_block">
                 <i class="ast-agent"></i>
@@ -7,9 +9,9 @@
             <div class="run-info-content" *ngFor="let ele of welcomeMsgResponse?.buttons; let i=index">
                 <div class="title" *ngIf="i === 0">Customer has waited for an agent for few seconds.<br/>Here are some appropriate opening lines.</div>
                 <div class="agent-utt">
-                 <div class="title-data" [id]="'displayData-'+i">{{ele.value}}</div>
+                 <div class="title-data" id="displayData-{{uuids}}">{{ele.value}}</div>
                  <div class="action-links">
-                     <button class="send-run-btn" id="sendMsg" (click)="commonService.preparePostMessageForSendAndCopy($event, ele.value, idReferenceConst.SENDMSG, connectionDetails)">Send</button>
+                     <button class="send-run-btn" id="sendMsgWelcome" (click)="commonService.preparePostMessageForSendAndCopy($event, ele.value, idReferenceConst.SENDMSG, connectionDetails)">Send</button>
                      <div class="copy-btn welcome-msg-copy" (click)="commonService.preparePostMessageForSendAndCopy($event, ele.value, idReferenceConst.COPYMSG, connectionDetails)">
                          <i class="ast-copy welcome-msg-copy"></i>
                      </div>
@@ -17,20 +19,21 @@
                 </div>
             </div>
         </div>
-    </div>
+  </div>
+    <div  id="dynamicBlock">
+      <div id="userTab-custSentimentAnalysis" class="customer-feeling-text">
+      </div>
 
-    <div id="userTab-custSentimentAnalysis" class="customer-feeling-text">
-    </div>
- 
-    <div class="scroll-bottom-show-btn hiddenEle">
-        <button id="scrollButtonAssist" class="scroll-bottom-btn">
-            <i class="ast-carrotup"></i>
-            <span>Scroll to bottom</span>
-        </button>
-    </div>
-    
-    <div class="empty-data-no-agents hide">
-        <div class="title">No Agent automations are in running state.</div>
-        <div class="desc-text">Use "Run with Agent Inputs" to execute.</div>
+      <div class="scroll-bottom-show-btn hiddenEle">
+          <button id="scrollButtonAssist" class="scroll-bottom-btn">
+              <i class="ast-carrotup"></i>
+              <span>Scroll to bottom</span>
+          </button>
+      </div>
+
+      <div class="empty-data-no-agents hide">
+          <div class="title">No Agent automations are in running state.</div>
+          <div class="desc-text">Use "Run with Agent Inputs" to execute.</div>
+      </div>
     </div>
 </div>

@@ -162,6 +162,7 @@ export class MybotComponent implements OnInit {
   }
   //running dialogue and mybot data response code.
   processMybotDataResponse(data) {
+    let isTemplateRender = false;
     data = this.commonService.confirmationNodeRenderDataTransform(data);
     let results: any = this.templateRenderClassService.getResponseUsingTemplate(data, this.commonService.configObj);
     this.commonService.currentPositionIdOfMyBot = this.myBotDialogPositionId;
@@ -220,10 +221,18 @@ export class MybotComponent implements OnInit {
       } else {
         $(runInfoContent).append(tellToUserHtml);
         this.commonService.hideSendOrCopyButtons(results.parsedPayload, runInfoContent, false, data.componentType)
+
       }
-     
+
+      if(data && data.componentType == 'dialogAct' && (data.srcChannel != 'msteams' && data.srcChannel != 'rtm')){
+        isTemplateRender = true;
+      }else{
+        isTemplateRender = false;
+        this.commonService.hideSendOrCopyButtons(results.parsedPayload, runInfoContent, false, data.componentType);
+      }
+
       // let result = this.templateRenderClassService.getResponseUsingTemplate(data);
-     
+
       if (this.commonService.isMyBotAgentSentRequestOnClick && !this.myBotDropdownHeaderUuids) {
         let mybotContainer = $('#myBotAutomationBlock');
         let botResHtml = `
@@ -249,11 +258,17 @@ export class MybotComponent implements OnInit {
         mybotContainer.append(botResHtml);
         this.commonService.isMyBotAgentSentRequestOnClick = false;
       }
-      let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(results)[0].innerHTML;
-      let a = document.getElementById(IdReferenceConst.displayData + `-${myBotuuids}`);
-      a.innerHTML = a.innerHTML + html;
-      this.designAlterService.addWhiteBackgroundClassToNewMessage(this.scrollAtEnd, IdReferenceConst.MYBOTAUTOMATIONBLOCK);
-      this.scrollToBottom();
+
+      let renderedMessage = !isTemplateRender ? this.templateRenderClassService.AgentChatInitialize.renderMessage(results) : '';
+      if (renderedMessage && renderedMessage[0]) {
+        let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(results)[0].innerHTML;
+        let a = document.getElementById(IdReferenceConst.displayData + `-${myBotuuids}`);
+        if (a) {
+          a.innerHTML = a.innerHTML + html;
+          this.designAlterService.addWhiteBackgroundClassToNewMessage(this.scrollAtEnd, IdReferenceConst.MYBOTAUTOMATIONBLOCK);
+          this.scrollToBottom();
+        }
+      }
     }
 
   }
@@ -363,7 +378,6 @@ export class MybotComponent implements OnInit {
     resp?.forEach((res, index) => {
       res = this.commonService.confirmationNodeRenderForHistoryDataTransform(res);
       if ((!res.agentAssistDetails?.suggestions && !res.agentAssistDetails?.ambiguityList && !res.agentAssistDetails?.ambiguity) && res.type == 'outgoing') {
-        let _msgsResponse = this.mybotDataService.getMybotMsgResponse(res._id, res.botId)
         currentTaskName = res.tN ? res.tN : currentTaskName;
         currentTaskPositionId = res?.agentAssistDetails?.positionId ? res?.agentAssistDetails?.positionId : currentTaskPositionId;
         let historyData = $('#myBotAutomationBlock');
@@ -377,7 +391,7 @@ export class MybotComponent implements OnInit {
                           </div>`;
         }
         let dropdownHtml = `
-                          
+
                   <div class="dialog-task-accordiaon-info" id="MyBotaddRemoveDropDown-${res._id}" >
                       <div class="accordion-header" id="dropDownHeader-${res._id}"
                       data-drop-down-opened="false">
@@ -390,10 +404,10 @@ export class MybotComponent implements OnInit {
 
                       </div>
                       <div class="collapse-acc-data hide" id="dropDownData-${res._id}">
-                          
-                          
+
+
                       </div>
-                      
+
                   `
 
         if (previousTaskPositionId && currentTaskPositionId !== previousTaskPositionId) {
@@ -463,176 +477,16 @@ export class MybotComponent implements OnInit {
           this.myBotDataResponse.entityDisplayName = this.myBotDataResponse.newEntityDisplayName;
           this.myBotDataResponse.entityName = this.myBotDataResponse.newEntityName;
         }
-        let parsedPayload;
-        res.components?.forEach((elem) => {
-          if (elem.data?.text) {
-            elem.data.text = elem.data?.text.replace(/(^(&quot\;)|(&quot\;)$)/g, '');
-          }
-          let payloadType = (elem.data?.text).replace(/(&quot\;)/g, "\"");
 
-          try {
-            if (payloadType.indexOf('text') !== -1 || payloadType.indexOf('payload') !== -1) {
-              let withoutSpecials = payloadType.replace(/^\s+|\s+$/g, "");
-              parsedPayload = JSON.parse(withoutSpecials);
-            }
-          } catch (error) {
-            if (payloadType.text) {
-              let withoutSpecials = payloadType.replace(/^\s+|\s+$/g, "");
-              parsedPayload = withoutSpecials;
-            }
-          }
+        let _msgsResponse : any = this.templateRenderClassService.getResponseUsingTemplateForHistory(res);
+        let parsedPayload : any = _msgsResponse.parsedPayload;
 
-          let body = {};
-          body['type'] = elem.cT;
-          if (!parsedPayload) {
-            body['component'] = {
-              "type": elem.cT,
-              "payload": {
-                "type": elem.cT,
-                "text": elem.data.text
-              }
-            };
-            body['cInfo'] = {
-              "body": elem.data.text
-            };
-
-          } else {
-            body['component'] = parsedPayload.payload ? parsedPayload : parsedPayload.text;
-            if (parsedPayload?.type === 'message') {
-              body['cInfo'] = {
-                "body": ''
-              };
-            } else if (parsedPayload?.text) {
-              body['cInfo'] = {
-                "body": parsedPayload.text
-              };
-            } else {
-              body['cInfo'] = {
-                "body": parsedPayload
-              };
-            }
-
-          }
-
-          _msgsResponse.message.push(body);
-        });
-        if(res.agentAssistDetails?.srcChannel === 'msteams'){
-          //
-       }else if(res.agentAssistDetails?.srcChannel !== 'msteams' || res.agentAssistDetails?.srcChannel === ''){
-         if (res.agentAssistDetails?.componentType === 'dialogAct') {
-           let arr = [];
-           if (res.components[0].data.text.includes('text')) {
-             let str = res.components[0].data.text.replace(/^\s+|\s+$/g, "");
-             let str1 = JSON.parse(str);
-             arr = str1.text.split('\n');
-           } else {
-             arr = res.components[0].data.text.split('\n');
-           }
-           _msgsResponse.message = [];
-           _msgsResponse.message[0] = {
-             "type": "text",
-             "component": {
-               "type": "template",
-               "payload": {
-                 "template_type": "button",
-                 "text": `${arr[0]}`,
-                 "buttons": [
-                   {
-                     "type": "postback",
-                     "title": "Yes",
-                     "payload": 'Yes'
-                   },
-                   {
-                     "type": "postback",
-                     "title": "No",
-                     "payload": "No"
-                   }
-                 ]
-               }
-             },
-             "cInfo": {
-               "body": {
-                 "type": "template",
-                 "payload": {
-                   "template_type": "button",
-                   "text": `${arr[0]}`,
-                   "buttons": [
-                     {
-                       "type": "postback",
-                       "title": "Yes",
-                       "payload": 'Yes'
-                     },
-                     {
-                       "type": "postback",
-                       "title": "No",
-                       "payload": "No"
-                     }
-                   ]
-                 }
-               }
-             }
-           }
-           
-     
-         } else if (res.agentAssistDetails?.newEntityType === "list_of_values") {
-           let arr = [];
-           if (res.components[0].data.text.includes('text')) {
-             let str = res.components[0].data.text.replace(/^\s+|\s+$/g, "");
-             let str1 = JSON.parse(str);
-             arr = str1.text.split('\n');
-           } else {
-             arr = res.components[0].data.text.split('\n');
-           }
-           _msgsResponse.message = [];
-           _msgsResponse.message[0] = {
-             "type": "text",
-             "component": {
-               "type": "template",
-               "payload": {
-                 "template_type": "button",
-                 "text": `${arr[0]}`,
-                 "buttons": [
-                 ]
-               }
-             },
-             "cInfo": {
-               "body": {
-                 "type": "template",
-                 "payload": {
-                   "template_type": "button",
-                   "text": `${arr[0]}`,
-                   "buttons": [
-                   
-                   ]
-                 }
-               }
-             }
-           }
-         
-           let list = [];
-           arr.forEach((ele, i) => {
-             if (i !== 0 && i !== arr.length - 1 && ele !== '') {
-               let data = ele.substring(3, ele.length);
-               let obj = {
-                 "type": "postback",
-                 "title": data,
-                 "payload": data
-               }
-               list.push(obj)
-             }
-     
-           })
-           _msgsResponse.message[0].component.payload.buttons = list;
-           _msgsResponse.message[0].cInfo.body.payload.buttons = list;
- 
-         }
-       }
         let msgStringify = JSON.stringify(_msgsResponse);
         let newTemp = encodeURI(msgStringify);
         if ((res.agentAssistDetails?.isPrompt === true || res.agentAssistDetails?.isPrompt === false) && previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) {
           let runInfoContent = $(`#dropDownData-${previousId}`);
-          let askToUserHtml = this.mybotDataService.askUserTemplate(res._id, newTemp, currentTaskPositionId);
-          let tellToUserHtml = this.mybotDataService.tellToUserTemplate(res._id, newTemp, currentTaskPositionId);
+          let askToUserHtml = this.mybotDataService.askUserTemplate(res._id, newTemp, currentTaskPositionId, res.agentAssistDetails?.srcChannel, res.components[0].data.text, res.agentAssistDetails?.componentType);
+          let tellToUserHtml = this.mybotDataService.tellToUserTemplate(res._id, newTemp, currentTaskPositionId, res.agentAssistDetails?.srcChannel, res.components[0].data.text, res.agentAssistDetails?.componentType);
 
 
           if (this.localStorageService.checkStorageItemWithInConvId(this.connectionDetails.conversationId, storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH_MYBOT)) {
@@ -675,9 +529,6 @@ export class MybotComponent implements OnInit {
           if (res.agentAssistDetails.isPrompt || res.agentAssistDetails.entityRequest) {
             runInfoContent.append(askToUserHtml);
             this.commonService.hideSendOrCopyButtons(parsedPayload, runInfoContent)
-            let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(_msgsResponse)[0].innerHTML;
-            let a = document.getElementById(IdReferenceConst.displayData + `-${res._id}`);
-            a.innerHTML = a?.innerHTML + html;
             if (!nextResponse || (nextResponse.status != 'received' && nextResponse.status != 'incoming')) {
               runInfoContent.append(agentInputToBotHtml);
               document.getElementById(`agentInput-${agentInputId}`).focus();
@@ -692,11 +543,19 @@ export class MybotComponent implements OnInit {
 
           } else {
             runInfoContent.append(tellToUserHtml);
-            this.commonService.hideSendOrCopyButtons(parsedPayload, runInfoContent)
+            this.commonService.hideSendOrCopyButtons(parsedPayload, runInfoContent);
+          }
+
+          if(res && res.agentAssistDetails && res.agentAssistDetails.componentType == 'dialogAct' && (res.agentAssistDetails?.srcChannel != 'msteams' && res.agentAssistDetails?.srcChannel != 'rtm')){
+            // console.log("inside dialogact and channel");
+
+          }else{
             let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(_msgsResponse)[0].innerHTML;
             let a = document.getElementById(IdReferenceConst.displayData + `-${res._id}`);
-            a.innerHTML = a.innerHTML + html;
+            a.innerHTML = a?.innerHTML + html;
+            this.commonService.hideSendOrCopyButtons(parsedPayload, runInfoContent, false, res.agentAssistDetails?.componentType)
           }
+
         }
       }
     });
