@@ -261,10 +261,18 @@ export class MybotComponent implements OnInit {
 
       let renderedMessage = !isTemplateRender ? this.templateRenderClassService.AgentChatInitialize.renderMessage(results) : '';
       if (renderedMessage && renderedMessage[0]) {
-        let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(results)[0].innerHTML;
+        // let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(results)[0].innerHTML;
+        // let a = document.getElementById(IdReferenceConst.displayData + `-${myBotuuids}`);
+        // if (a) {
+        //   a.innerHTML = a.innerHTML + html;
+        //   this.designAlterService.addWhiteBackgroundClassToNewMessage(this.scrollAtEnd, IdReferenceConst.MYBOTAUTOMATIONBLOCK);
+        //   this.scrollToBottom();
+        // }
+
+        let obj = this.templateRenderClassService.AgentChatInitialize.renderMessage(results)[0];
         let a = document.getElementById(IdReferenceConst.displayData + `-${myBotuuids}`);
         if (a) {
-          a.innerHTML = a.innerHTML + html;
+          a.appendChild(obj);
           this.designAlterService.addWhiteBackgroundClassToNewMessage(this.scrollAtEnd, IdReferenceConst.MYBOTAUTOMATIONBLOCK);
           this.scrollToBottom();
         }
@@ -550,9 +558,12 @@ export class MybotComponent implements OnInit {
             // console.log("inside dialogact and channel");
 
           }else{
-            let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(_msgsResponse)[0].innerHTML;
+            // let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(_msgsResponse)[0].innerHTML;
+            // let a = document.getElementById(IdReferenceConst.displayData + `-${res._id}`);
+            // a.innerHTML = a?.innerHTML + html;
+            let obj = this.templateRenderClassService.AgentChatInitialize.renderMessage(_msgsResponse)[0]
             let a = document.getElementById(IdReferenceConst.displayData + `-${res._id}`);
-            a.innerHTML = a?.innerHTML + html;
+            a.appendChild(obj);
             this.commonService.hideSendOrCopyButtons(parsedPayload, runInfoContent, false, res.agentAssistDetails?.componentType)
           }
 
