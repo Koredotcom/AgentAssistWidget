@@ -759,6 +759,8 @@ export class AssistComponent implements OnInit {
       }
       if (data.suggestions) {
         automationSuggestions.length >= 1 ? (automationSuggestions[automationSuggestions.length - 1].classList.remove('hide')) : ''
+      }
+      if(!this.commonService.isAutomationOnGoing){
         this.collapseOldDialoguesInAssist();
       }
     }
