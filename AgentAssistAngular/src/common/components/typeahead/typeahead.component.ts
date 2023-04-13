@@ -48,7 +48,9 @@ export class TypeaheadComponent implements OnInit {
       if(!searchObj?.value || searchObj?.value?.length == 0){
         this.searchText = '';
         this.showOverlay = false;
-      }else{
+      }else if(this.isNotLibraryTab && searchObj.searchFrom == 'Library'){
+        this.searchText =  '';
+      }else {
         this.searchText = searchObj.value;
       }
       this.handleSubjectService.setLoader(false);

@@ -87,15 +87,33 @@ export class LibraryComponent implements OnInit {
 
     let subscription4 = this.websocketService.socketConnectFlag$.subscribe((response) => {
       if (response) {
-        this.updateSearchTextFromStorage();
+        // this.updateSearchTextFromStorage();
       }
     });
+
+    let subscription5 = this.handleSubjectService.searchTextSubject.subscribe((searchObj : any) => {
+      if(searchObj){
+        this.searchText = searchObj.value;
+      }
+    });
+
+    let subscription6 = this.handleSubjectService.activeTabSubject.subscribe((tab : any) =>{
+      if(tab == this.projConstants.LIBRARY){
+        setTimeout(() => {
+          if(!this.searchText){
+            this.showSearchSuggestions = false;
+            this.updateSearchTextFromStorage();
+          }
+        }, 100);
+      }
+    })
 
     this.subscriptionsList.push(subscribtion1);
     this.subscriptionsList.push(subscription2);
     this.subscriptionsList.push(subscription3);
     this.subscriptionsList.push(subscription4);
-
+    this.subscriptionsList.push(subscription5);
+    this.subscriptionsList.push(subscription6);
   }
 
   handleRunAgent(dialogueId, event) {
