@@ -1151,7 +1151,7 @@ export class AssistComponent implements OnInit {
   }
 
   collapseOldDialoguesInAssist() {
-    if (this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd) {
+    if (this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd && this.commonService.activeTab == this.projConstants.ASSIST) {
       if ($(`#dynamicBlocksData .collapse-acc-data`).length > 0) {
         let listItems = $("#dynamicBlocksData .collapse-acc-data");
         listItems.each(function (idx, collapseElement) {
