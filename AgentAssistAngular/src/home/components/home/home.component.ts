@@ -391,9 +391,10 @@ setProactiveMode(){
   }
 
   clearSearchText(){
-    this.showSearchSuggestions=false;
     this.searchText = '';
     this.handleSubjectService.setSearchText({ searchFrom: this.projConstants.ASSIST, value: undefined });
+    this.websocketService.agentAssistAgentResponse$.next(null);
+    this.showSearchSuggestions=false;
     if(this.isBackBtnClicked){
       setTimeout(() => {
         this.handleSubjectService.setLibrarySearchTextFromAgentSearch({ eventFrom: this.projConstants.ASSIST, searchText: undefined });
