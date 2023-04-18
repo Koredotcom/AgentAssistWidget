@@ -92,13 +92,13 @@ export class OverlaysearchComponent implements OnInit {
     this.subscriptionsList.push(subscription3);
   }
 
-  emitSearchRequest(searchObj, isSearchFlag) {
+  emitSearchRequest(searchObj, isSearchFlag, faqToggle = false) {
     this.handleSubjectService.setLoader(true);
     let connectionDetails: any = Object.assign({}, this.connectionDetails);
     connectionDetails.value = searchObj.value;
     connectionDetails.isSearch = isSearchFlag;
     connectionDetails.positionId = searchObj?.positionId;
-    if(!isSearchFlag){
+    if(!isSearchFlag && !faqToggle){
       connectionDetails.intentName = searchObj.value;
     }
     connectionDetails.childBotId = searchObj.childBotId;
@@ -250,7 +250,7 @@ export class OverlaysearchComponent implements OnInit {
       searchObj.value = faq.displayName;
       searchObj.question = faq.question;
       searchObj.searchFrom = this.commonService.activeTab;
-      this.emitSearchRequest(searchObj, true);
+      this.emitSearchRequest(searchObj, false, true);
     }
     setTimeout(() => {
       this.handleSeeMoreButton(this.searchResponse.faqs, this.projConstants.FAQ);
