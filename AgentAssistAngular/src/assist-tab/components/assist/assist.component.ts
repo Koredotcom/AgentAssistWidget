@@ -53,6 +53,7 @@ export class AssistComponent implements OnInit {
   answerPlaceableIDs : any = [];
   isHistoryApiCalled = false;
   smallTalkOverrideBtnId : string;
+  faqManualClick : boolean = false;
 
   constructor(private templateRenderClassService: TemplateRenderClassService,
     public handleSubjectService: HandleSubjectService,
@@ -693,8 +694,11 @@ export class AssistComponent implements OnInit {
           }
 
           if (data.suggestions.faqs.length === 1 && !ele.answer) {
-            document.getElementById(`check-${uuids + index}`).click();
-            $(`#check-${uuids + index}`).addClass('hide');
+            setTimeout(() => {
+              this.faqManualClick = true;
+              document.getElementById(`check-${uuids + index}`).click();
+              // $(`#check-${uuids + index}`).addClass('hide');
+            }, 600);
             $(`#faqDiv-${uuids + index}`).removeClass('is-dropdown-show-default');
           }
           // this.clickEvents(IdReferenceConst.SENDMSG, uuids + index, this.dialogPositionId, ele);
@@ -750,6 +754,10 @@ export class AssistComponent implements OnInit {
               this.commonService.updateSeeMoreButtonForAssist(splitedanswerPlaceableID.join('-'), this.projConstants.FAQ, ele.answer);
             }, 1000);
             this.handleSeeMoreButtonForAmbiguityFAQ(splitedanswerPlaceableID.join('-'), ele, this.projConstants.FAQ);
+            if(this.faqManualClick && this.answerPlaceableIDs.length == 1){
+              $(`#check-${splitedanswerPlaceableID.join('-')}`).addClass('hide');
+              this.faqManualClick = false;
+            }
           }
         });
         if (faqAnswerIdsPlace) {
@@ -1221,9 +1229,9 @@ export class AssistComponent implements OnInit {
       } else if (eventName == IdReferenceConst.SEEMORE_BTN) {
         this.handleSeeMoreLessClickEvents(uuid, data);
       } else if (eventName == IdReferenceConst.CHECK){
-        setTimeout(() => {
-          this.handleFaqArrowClick(uuid, dialogId, data);
-        }, 1000);
+          setTimeout(() => {
+            this.handleFaqArrowClick(uuid, dialogId, data);
+          }, 500);
       }
     }
   }
