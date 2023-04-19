@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { ProjConstants, ImageFilePath, ImageFileNames, IdReferenceConst, storageConst } from 'src/common/constants/proj.cnts';
+import { ProjConstants, ImageFilePath, ImageFileNames, IdReferenceConst, storageConst, RenderResponseType } from 'src/common/constants/proj.cnts';
 import { RandomUUIDPipe } from 'src/common/pipes/random-uuid.pipe';
 import { RawHtmlPipe } from 'src/common/pipes/raw-html.pipe';
 import { RemoveSpecialCharPipe } from 'src/common/pipes/remove-special-char.pipe';
@@ -38,6 +38,7 @@ export class AssistComponent implements OnInit {
   imageFileNames: any = ImageFileNames;
   imageFilePath: string = ImageFilePath;
   idReferenceConst: any = IdReferenceConst;
+  renderResponseType : any = RenderResponseType
 
   dialogName: string;
   dialogPositionId: string;
@@ -54,6 +55,8 @@ export class AssistComponent implements OnInit {
   isHistoryApiCalled = false;
   smallTalkOverrideBtnId : string;
   faqManualClick : boolean = false;
+
+  assistResponseArray : any = [];
 
   constructor(private templateRenderClassService: TemplateRenderClassService,
     public handleSubjectService: HandleSubjectService,
@@ -405,6 +408,8 @@ export class AssistComponent implements OnInit {
 
   uuids = this.koreGenerateuuidPipe.transform();
   processAgentAssistResponse(data, botId) {
+    let renderResponse : any = {};
+
     console.log("process agent assist response", data, this.proactiveModeStatus);
     this.smallTalkOverrideBtnId = null;
     let isTemplateRender = false;
@@ -447,329 +452,23 @@ export class AssistComponent implements OnInit {
         }
       });
     }
-    if (!this.commonService.isAutomationOnGoing && data.suggestions && this.answerPlaceableIDs.length == 0) {
-      // $('#welcomeMsg').addClass('hide');
-      let dynamicBlock = document.getElementById('dynamicBlock');
-      let suggestionsblock = $('#dynamicBlock .dialog-task-run-sec');
-      if (suggestionsblock.length >= 0) {
-        suggestionsblock.each((i, ele) => {
-          $('#dynamicBlock .agent-utt-info').each((i, elem) => {
-            let elemID = elem.id.split('-');
-            elemID.shift();
-            if (ele.id.includes(elemID.join('-'))) {
-              let foundIndex = this.commonService.automationNotRanArray.findIndex((ele) => ele.id === elem.id);
-              if (foundIndex == -1) {
-                this.commonService.automationNotRanArray.push({ name: elem.innerText.trim(), id: elem.id });
-                // let storageObject: any = {
-                //   [storageConst.AUTOMATION_NOTRAN_ARRAY]: this.commonService.automationNotRanArray
-                // }
-                // this.localStorageService.setLocalStorageItem(storageObject, this.projConstants.ASSIST);
-              }
-
-            }
-          })
-        })
-      }
-      this.commonService.userIntentInput = data.userInput;
-      let htmls = this.assisttabService.agentUttInfoTemplate(data, responseId, this.imageFilePath, this.imageFileNames)
-
-      dynamicBlock.innerHTML = dynamicBlock.innerHTML + htmls;
-
-      if (data.type === 'intent' || data.type === 'text') {
-        let automationSuggestions = document.getElementById(`automationSuggestions-${responseId}`);
-        automationSuggestions.classList.remove('hide');
-      }
-
-      if (data.suggestions) {
-
-          if(data.suggestions?.searchassist?.snippets?.length > 0){
-            let automationSuggestions = document.getElementById(`automationSuggestions-${responseId}`);
-            automationSuggestions.classList.remove('hide');
-            let dialogAreaHtml = this.assisttabService.getSnippetAreaTemplate(responseId, data, this.imageFilePath, this.imageFileNames)
-            automationSuggestions.innerHTML += dialogAreaHtml;
-            data.suggestions?.searchassist?.snippets?.forEach((ele, index) => {
-                let articleSuggestions = document.getElementById(`snippetsSuggestions-${responseId}`);
-
-                let articleHtml = `
-                <div class="type-info-run-send" id="snippetDiv-${uuids+index}">
-                    <div class="left-content" id="snippetSection-${uuids+index}">
-                        <div class="title-text" title="${ele.title}" id="snippettitle-${uuids+index}">${ele.title}</div>
-                    </div>
-
-                </div>`;
-
-                articleSuggestions.innerHTML += articleHtml;
-                let articles = $(`.type-info-run-send #snippetSection-${uuids+index}`);
-
-                        let a = $(`#snippetDiv-${uuids + index}`);
-                        let articleActionHtml = `
-                        <button class="know-more-btn hide" id="snippetviewMsg-${uuids+index}" data-msg-id="snippet-${uuids + index}" data-msg-data="${ele.page_url}"><a style="color: #FFFFFF;" href="${ele.page_url}" target="_blank">Know more</a></button>
-
-                    `;
-                    articles.append(`<div class="desc-text" id="snippetdesc-${uuids + index}">${ele.content}</div>`);
-                    articles.append(articleActionHtml);
-                    let articlestypeInfo = $(`.type-info-run-send #snippetSection-${uuids + index}`);
-                    let seeMoreButtonHtml = `
-                <button class="ghost-btn hide" id="snippetseeMore-${uuids + index}" data-snippet-see-more="true">${this.projConstants.READ_MORE}</button>
-                <button class="ghost-btn hide" id="snippetseeLess-${uuids + index}" data-snippet-see-less="true">${this.projConstants.READ_LESS}</button>
-                `;
-                    articlestypeInfo.append(seeMoreButtonHtml);
-                    setTimeout(() => {
-                        this.commonService.updateSeeMoreButtonForAssist(uuids + index,'snippet');
-                    }, 100);
-            })
-          }
-
-
-        if (data.suggestions.dialogs?.length > 0) {
-
-          let automationSuggestions = document.getElementById(`automationSuggestions-${responseId}`);
-          let dialogAreaHtml = this.assisttabService.getDialogAreaTemplate(responseId, data, this.imageFilePath, this.imageFileNames);
-          automationSuggestions.innerHTML += dialogAreaHtml;
+    if (!this.commonService.isAutomationOnGoing && data.suggestions) {
+      if(this.commonService.suggestionsAnswerPlaceableIDs.length == 0){
+        renderResponse = {
+          data : data,
+          type : this.renderResponseType.SUGGESTIONS,
+          uuid : responseId
         }
-
-        if (data.suggestions.faqs?.length > 0) {
-          let automationSuggestions = document.getElementById(`automationSuggestions-${responseId}`);
-          let faqAreaHtml = this.assisttabService.getFaqAreaTemplate(responseId, data, this.imageFilePath, this.imageFileNames);
-          automationSuggestions.innerHTML += faqAreaHtml;
-        }
-
-        if (data?.suggestions?.searchassist && Object.keys(data.suggestions.searchassist).length > 0) {
-          data.suggestions = this.commonService.formatSearchResponse(data);
-          if (data.suggestions.articles?.length > 0) {
-            let automationSuggestions = document.getElementById(`automationSuggestions-${responseId}`);
-            let articleAreaHtml = this.assisttabService.getArticleAreaTemplate(responseId, data, this.imageFilePath, this.imageFileNames);
-            automationSuggestions.innerHTML += articleAreaHtml;
-          }
-
-          data.suggestions.articles?.forEach((ele, index) => {
-            let articleSuggestions = document.getElementById(`articleSuggestions-${responseId}`);
-
-            let articleHtml = this.assisttabService.articleTypeInfoTemplate(uuids, index, ele);
-
-            articleSuggestions.innerHTML += articleHtml;
-            let articles = $(`.type-info-run-send #articleSection-${uuids + index}`);
-            // if (!ele.content) {
-            //   let checkHtml = `
-            //             <i class="ast-carrotup" data-conv-id="${data.conversationId}"
-            //             data-bot-id="${botId}" data-intent-name="${ele.title}"
-            //             data-check="true" id="articlecheck-${uuids + index}"></i>`;
-            //   articles.append(checkHtml);
-            // } else {
-              ele.content = this.removeTagFromString.transform(ele.content);
-              let a = $(`#articleDiv-${uuids + index}`);
-              let answerSanitized = this.commonService.handleEmptyLine(ele.content, true);
-              let articleActionHtml = `<div class="action-links">
-                            <button class="send-run-btn" id="sendMsg" data-msg-id="article-${uuids + index}" data-msg-data="${answerSanitized}">Send</button>
-                            <div class="copy-btn" data-msg-id="article-${uuids + index}" data-msg-data="${answerSanitized}">
-                                <i class="ast-copy" data-msg-id="article-${uuids + index}" data-msg-data="${answerSanitized}"></i>
-                            </div>
-                        </div>`;
-              if(ele.content){
-                a.append(articleActionHtml);
-              }
-              if(data.userInput){
-                ele.content = this.replaceTextwithTag.transform(ele.content, data.userInput);
-              }
-              articles.append(`<div class="desc-text" id="articledesc-${uuids + index}">${ele.content}</div>`);
-              if (ele.link) {
-                let fullArticleLinkHtml = `<div class="link-view-full-article hide" id="articleViewLink-${uuids + index}"><a href="${ele.link}" target="_blank">View Full Article</a></div>`
-                document.getElementById(`articledesc-${uuids + index}`).insertAdjacentHTML('beforeend', fullArticleLinkHtml);
-              }
-
-              let articlestypeInfo = $(`.type-info-run-send #articleSection-${uuids + index}`);
-              let seeMoreButtonHtml = `
-                    <button class="ghost-btn hide" id="articleseeMore-${uuids + index}" data-article-see-more="true">${this.projConstants.READ_MORE}</button>
-                    <button class="ghost-btn hide" id="articleseeLess-${uuids + index}" data-article-see-less="true">${this.projConstants.READ_LESS}</button>
-                    `;
-              articlestypeInfo.append(seeMoreButtonHtml);
-              setTimeout(() => {
-                this.commonService.updateSeeMoreButtonForAssist(uuids + index, this.projConstants.ARTICLE);
-              }, 100);
-            // }
-          })
-
-        }
-
-        data.suggestions.dialogs?.forEach((ele, index) => {
-          ele.entities?.length > 0 ? (this.commonService.entitiestValueArray = ele.entities) : '';
-
-          let dialogSuggestions = document.getElementById(`dialogSuggestions-${responseId}`);
-          let dialogsHtml = this.assisttabService.dialogTypeInfoTemplate(uuids, index, ele);
-          dialogSuggestions.innerHTML += dialogsHtml;
-          if (ele.entities?.length > 0) {
-            this.commonService.previousEntitiesValue = JSON.stringify(ele.entities);
-            let entitesDiv = `<div class="entity-values-container" id="entitesDiv-${uuids}">
-                    <fieldset class="fieldsets">
-                        <legend>ENTITY VALUES</legend>
-                        </fieldset>
-                <div class="edit-values-btn" id="entityEdit-${uuids}">Edit Values</div>
-                <div class="edit-values-btn restore hide" id="restorebtn-${uuids}">Restore Values</div>
-            </div>`;
-            dialogSuggestions.innerHTML += entitesDiv;
-            let enentiesDomDiv = $(`#entitesDiv-${uuids}`).find('.fieldsets');
-            ele.entities?.forEach((eleData, i) => {
-
-              let eachEntitiesDiv = `
-                     <div class="entity-row-data" id="enityNameAndValue-${i}">
-                        <div class="label-data">${eleData.name}</div>
-                        <div class="edited-status hide">
-                            <i class="ast-edited"></i>
-                            <span>edited</span>
-                        </div>
-                        <div class="entity-input-content-data">
-                            <div class="entity-value" id="initialentityValue-${i}" >${eleData.value}</div>
-                            <div class="entity-input">
-                                <input type="text" id="entityValue-${i}"
-                                 value='${eleData.value}'>
-                            </div>
-                        </div>
-                    </div>`;
-              enentiesDomDiv.append(eachEntitiesDiv);
-              this.keyUpEvents(IdReferenceConst.ENTITY_VALUE, i);
-
-            });
-            let entiteSaveAndCancelDiv = `<div class="save-reset-cancel hide" id='saveAndCancel-${uuids}'>
-                 <div class="save-reset-disabled" >
-                     <i class="ast-check-right  disabled-color"></i>
-                     <span id='savebtn-${uuids}'>Save</span>
-                 </div>
-                 <div class="cancel-btn" id="cancelBtn-${uuids}">Cancel</div>
-             </div>`;
-            enentiesDomDiv.append(entiteSaveAndCancelDiv);
-          }
-          this.clickEvents(IdReferenceConst.ASSIST_RUN_BUTTON, uuids + index, this.dialogPositionId, ele);
-          this.clickEvents(IdReferenceConst.AGENT_RUN_BTN, uuids + index, this.dialogPositionId, ele);
-          this.clickEvents(IdReferenceConst.ENTITY_EDIT, uuids + index);
-          this.clickEvents(IdReferenceConst.EDIT_CANCEL_BTN, uuids + index);
-          this.clickEvents(IdReferenceConst.RESTORE_BTN, uuids + index);
-          this.clickEvents(IdReferenceConst.SAVE_BTN, uuids + index);
-        });
-
-        data.suggestions.faqs?.forEach((ele, index) => {
-
-          let faqsSuggestions = document.getElementById(`faqsSuggestions-${responseId}`);
-
-          let faqHtml = this.assisttabService.faqTypeInfoTemplate(uuids, index, ele)
-
-          faqsSuggestions.innerHTML += faqHtml;
-          let faqs = $(`.type-info-run-send #faqSection-${uuids + index}`);
-          let positionID = 'dg-' + this.koreGenerateuuidPipe.transform();
-
-          if (!ele.answer  || ele.answer.length <= 0) {
-            let checkHtml = `
-        <i class="ast-carrotup" id="check-${uuids + index}" data-intent-name="${ele.displayName}"
-        data-check="true" data-position-id="${positionID}"></i>`;
-            $(`#faqDiv-${uuids + index}`).addClass('is-dropdown-show-default');
-            document.getElementById(`title-${uuids + index}`).insertAdjacentHTML('beforeend', checkHtml);
-            this.clickEvents(IdReferenceConst.CHECK, uuids + index, positionID, {intentName : ele.displayName, positionID : positionID, question: ele.question});
-          } else {
-            let a = $(`#faqDiv-${uuids + index}`);
-            let answerSanitized = (ele.answer[0]);
-            // if text only not template cond need to add
-            answerSanitized = this.commonService.replaceDoubleQuot(answerSanitized);
-            let faqActionHtml = `<div class="action-links">
-            <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids+index}" data-msg-data="${answerSanitized}" data-position-id="${positionID}">Send</button>
-            <div class="copy-btn" data-msg-id="${uuids+index}" data-msg-data="${answerSanitized}" data-position-id="${positionID}">
-                <i class="ast-copy" data-msg-id="${uuids+index}" data-msg-data="${answerSanitized}" data-position-id="${positionID}"></i>
-            </div>
-            </div>`;
-            a.append(faqActionHtml);
-            console.log('handle2: ', this.commonService.handleEmptyLine2(ele.answer[0]))
-            faqs.append(`<div class="desc-text" id="desc-${uuids + index}">${this.commonService.handleEmptyLine2(ele.answer[0])}</div>`);
-
-            if(ele.answer && ele.answer.length > 1){
-              this.commonService.appendSeeMoreWrapper(faqs, ele, uuids+index, positionID);
-            }
-
-            let faqstypeInfo = $(`.type-info-run-send #faqSection-${uuids + index}`);
-            let seeMoreButtonHtml = `
-                <button class="ghost-btn hide" id="seeMore-${uuids + index}" data-see-more="true" data-msg-answer="${ele.answer?.length > 1 ? ele.answer : null}">${ele.answer?.length > 1 ? (this.projConstants.READ_MORE_EXPAND) : this.projConstants.READ_MORE}</button>
-                <button class="ghost-btn hide" id="seeLess-${uuids + index}" data-see-less="true" data-msg-answer="${ele.answer?.length > 1 ? ele.answer : null}">${this.projConstants.READ_LESS}</button>
-                `;
-            faqstypeInfo.append(seeMoreButtonHtml);
-            setTimeout(() => {
-              this.commonService.updateSeeMoreButtonForAssist(uuids + index,ProjConstants.FAQ,ele.answer);
-            }, 100);
-          }
-
-          if (data.suggestions.faqs.length === 1 && !ele.answer) {
-            setTimeout(() => {
-              this.faqManualClick = true;
-              document.getElementById(`check-${uuids + index}`).click();
-              // $(`#check-${uuids + index}`).addClass('hide');
-            }, 600);
-            $(`#faqDiv-${uuids + index}`).removeClass('is-dropdown-show-default');
-          }
-          // this.clickEvents(IdReferenceConst.SENDMSG, uuids + index, this.dialogPositionId, ele);
-          // this.clickEvents(IdReferenceConst.COPYMSG, uuids + index, this.dialogPositionId, ele);
-        });
-        this.handleSeeMoreButton(responseId, data.suggestions.faqs, this.projConstants.FAQ);
-        this.handleSeeMoreButton(responseId, data.suggestions.articles, this.projConstants.ARTICLE);
-
-
-      }
-      setTimeout(() => {
-        this.updateNewMessageUUIDList(responseId);
-      }, this.waitingTimeForUUID);
-      this.collapseOldDialoguesInAssist();
-    } else {
-      if (data.type === 'text' && data.suggestions) {
-        let faqAnswerIdsPlace;
-
-          data.suggestions.faqs.forEach((ele) => {
-
-            faqAnswerIdsPlace = this.answerPlaceableIDs.find(ele => ele.inputQuestion == data.suggestions?.faqs[0].question);
-
-            if (faqAnswerIdsPlace) {
-            let splitedanswerPlaceableID = faqAnswerIdsPlace.id.split('-');
-            splitedanswerPlaceableID.shift();
-
-            let faqDiv = $(`#dynamicBlock #faqDiv-${splitedanswerPlaceableID.join('-')}`);
-            let faqSection = $(`#dynamicBlock #faqSection-${splitedanswerPlaceableID.join('-')}`);
-            let answerSanitized = this.commonService.handleEmptyLine(ele.answer[0], true);
-            let faqaction = `<div class="action-links">
-            <button class="send-run-btn" id="sendMsg" data-msg-id="${splitedanswerPlaceableID.join('-')}"  data-msg-data="${answerSanitized}">Send</button>
-            <div class="copy-btn" data-msg-id="${splitedanswerPlaceableID.join('-')}" data-msg-data="${answerSanitized}">
-            <i class="ast-copy" data-msg-id="${splitedanswerPlaceableID.join('-')}" data-msg-data="${answerSanitized}"></i>
-                </div>
-                </div>`;
-
-            faqDiv.append(faqaction);
-
-            $(`#${faqAnswerIdsPlace.id}`).html(this.commonService.handleEmptyLine(ele.answer[0], false));
-            $(`#${faqAnswerIdsPlace.id}`).attr('data-answer-render', 'true');
-            let faqs = $(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')}`);
-
-            if(ele.answer && ele.answer.length > 1){
-              this.commonService.appendSeeMoreWrapper(faqSection, ele, splitedanswerPlaceableID.join('-'), splitedanswerPlaceableID.join('-'));
-            }
-
-          let seeMoreButtonHtml = `
-          <button class="ghost-btn hide" id="seeMore-${splitedanswerPlaceableID.join('-')}" data-see-more="true" data-msg-answer="${ele.answer?.length > 1 ? ele.answer : null}">${ele.answer?.length > 1 ? (this.projConstants.READ_MORE_EXPAND) : this.projConstants.READ_MORE}</button>
-          <button class="ghost-btn hide" id="seeLess-${splitedanswerPlaceableID.join('-')}" data-see-less="true" data-msg-answer="${ele.answer?.length > 1 ? ele.answer : null}">${this.projConstants.READ_LESS}</button>
-          `;
-                  faqs.append(seeMoreButtonHtml);
-            setTimeout(() => {
-              this.commonService.updateSeeMoreButtonForAssist(splitedanswerPlaceableID.join('-'), this.projConstants.FAQ, ele.answer);
-            }, 1000);
-            this.handleSeeMoreButtonForAmbiguityFAQ(splitedanswerPlaceableID.join('-'), ele, this.projConstants.FAQ);
-            if(this.faqManualClick && this.answerPlaceableIDs.length == 1){
-              $(`#check-${splitedanswerPlaceableID.join('-')}`).addClass('hide');
-              this.faqManualClick = false;
-            }
-          }
-        });
-        if (faqAnswerIdsPlace) {
-          let index = this.answerPlaceableIDs.indexOf(faqAnswerIdsPlace);
-          this.answerPlaceableIDs.splice(index, 1);
-        }
-      }
-      if (data.suggestions) {
-        automationSuggestions.length >= 1 ? (automationSuggestions[automationSuggestions.length - 1].classList.remove('hide')) : ''
-      }
-      if(!this.commonService.isAutomationOnGoing){
+        this.assistResponseArray.push(renderResponse);
+        setTimeout(() => {
+          this.updateNewMessageUUIDList(responseId);
+        }, this.waitingTimeForUUID);
         this.collapseOldDialoguesInAssist();
+      }else{
+        let faqAnswerIdsPlace = this.commonService.suggestionsAnswerPlaceableIDs.find(ele => ele.input == data.suggestions?.faqs[0].question);
+        if(faqAnswerIdsPlace){
+          this.handleSubjectService.setFaqAmbiguitySubject(data);
+        }
       }
     }
 
@@ -831,78 +530,115 @@ export class AssistComponent implements OnInit {
       }
       this.scrollToBottom();
     }
-
+    // small talk with templates
     if (!this.commonService.isAutomationOnGoing && this.dropdownHeaderUuids && data.buttons && !data.value.includes('Customer has waited') && (this.dialogPositionId && !data.positionId || data.positionId == this.dialogPositionId)) {
-      $('#dynamicBlock .empty-data-no-agents').addClass('hide');
       let msgStringify = JSON.stringify(result);
       let newTemp = encodeURI(msgStringify);
-      let dynamicBlockDiv = $('#dynamicBlock');
-      data.buttons?.forEach((ele, i) => {
-        let botResHtml = this.assisttabService.smallTalkTemplateForTemplatePayload(ele, uuids,data, result,newTemp);
-        let titleData = ``;
-        let actionLinkTemplate = ``;
-        if(this.smallTalkTemplateRenderCheck(data, result)){
-            isTemplateRender = false;
-            titleData = `<div class="title-data" ><ul class="chat-container" id="displayData-${uuids}"></ul></div>`;
-            let sendData = result?.parsedPayload ? newTemp : data.buttons[0].value;
-            actionLinkTemplate = this.smallTalkActionLinkTemplate(uuids, sendData);
-        }else{
-            titleData = `<div class="title-data" id="displayData-${uuids}">${ele.value}</div>`;
-            actionLinkTemplate = this.smallTalkActionLinkTemplate(uuids, data.buttons[0].value)
-            isTemplateRender = true;
-            result.parsedPayload = null;
-        }
-        dynamicBlockDiv.append(botResHtml);
-        $(`#smallTalk-${uuids} .agent-utt`).append(titleData);
-        $(`#smallTalk-${uuids} .agent-utt`).append(actionLinkTemplate);
-        setTimeout(() => {
-          if (data.entityName) {
-            this.agentAssistResponse = {};
-            this.agentAssistResponse = Object.assign({}, data);
-          }
-        }, 10);
-        $(`.override-input-div`).remove();
-        if (data.isPrompt) {
-          this.smallTalkOverrideButtonTemplate(uuids);
-        }
-        this.commonService.hideSendOrCopyButtons(result.parsedPayload, `#smallTalk-${uuids} .agent-utt`, 'smallTalk')
-      });
+      renderResponse = {
+        data : data,
+        type : this.renderResponseType.SMALLTALK,
+        uuid : responseId,
+        result : result,
+        temp : newTemp,
+        connectionDetails : this.connectionDetails
+      } 
+      this.assistResponseArray.push(renderResponse);
+      this.assistResponseArray = [...this.assistResponseArray];
+      console.log("assistResponseArray", this.assistResponseArray)
+      isTemplateRender = true;
+      
+      // $('#dynamicBlock .empty-data-no-agents').addClass('hide');
+      // let msgStringify = JSON.stringify(result);
+      // let newTemp = encodeURI(msgStringify);
+      // let dynamicBlockDiv = $('#dynamicBlock');
+      // data.buttons?.forEach((ele, i) => {
+      //   let botResHtml = this.assisttabService.smallTalkTemplateForTemplatePayload(ele, uuids,data, result,newTemp);
+      //   let titleData = ``;
+      //   let actionLinkTemplate = ``;
+      //   if(this.smallTalkTemplateRenderCheck(data, result)){
+      //       isTemplateRender = false;
+      //       titleData = `<div class="title-data" ><ul class="chat-container" id="displayData-${uuids}"></ul></div>`;
+      //       let sendData = result?.parsedPayload ? newTemp : data.buttons[0].value;
+      //       actionLinkTemplate = this.smallTalkActionLinkTemplate(uuids, sendData);
+      //   }else{
+      //       titleData = `<div class="title-data" id="displayData-${uuids}">${ele.value}</div>`;
+      //       actionLinkTemplate = this.smallTalkActionLinkTemplate(uuids, data.buttons[0].value)
+      //       isTemplateRender = true;
+      //       result.parsedPayload = null;
+      //   }
+      //   dynamicBlockDiv.append(botResHtml);
+      //   $(`#smallTalk-${uuids} .agent-utt`).append(titleData);
+      //   $(`#smallTalk-${uuids} .agent-utt`).append(actionLinkTemplate);
+      //   setTimeout(() => {
+      //     if (data.entityName) {
+      //       this.agentAssistResponse = {};
+      //       this.agentAssistResponse = Object.assign({}, data);
+      //     }
+      //   }, 10);
+      //   $(`.override-input-div`).remove();
+      //   if (data.isPrompt) {
+      //     this.smallTalkOverrideButtonTemplate(uuids);
+      //   }
+      //   this.commonService.hideSendOrCopyButtons(result.parsedPayload, `#smallTalk-${uuids} .agent-utt`, 'smallTalk')
+      // });
     }
+    // small talk with templates end
 
+    // small talk without templates
     if (!this.commonService.isAutomationOnGoing && !this.dropdownHeaderUuids && !data.suggestions && !result.parsePayLoad) {
-      $('#dynamicBlock .empty-data-no-agents').addClass('hide');
       let msgStringify = JSON.stringify(result);
       let newTemp = encodeURI(msgStringify);
-      let dynamicBlockDiv = $('#dynamicBlock');
-      if (data.buttons?.length > 1) {
+      if(data.buttons?.length > 1){
         this.welcomeMsgResponse = data;
-      } else {
-        let botResHtml = this.assisttabService.smallTalkTemplateForTemplatePayload(data.buttons[0], uuids, data, result,newTemp);
-        let titleData = ``;
-        let actionLinkTemplate = ``;
-        if(this.smallTalkTemplateRenderCheck(data, result)){
-            isTemplateRender = false;
-            titleData = `<div class="title-data" ><ul class="chat-container" id="displayData-${uuids}"></ul></div>`;
-            let sendData = result?.parsedPayload ? newTemp : data.buttons[0].value;
-            actionLinkTemplate = this.smallTalkActionLinkTemplate(uuids, sendData);
-        }else{
-            actionLinkTemplate = this.smallTalkActionLinkTemplate(uuids, data.buttons[0].value)
-            titleData = `<div class="title-data" id="displayData-${uuids}">${data.buttons[0].value}</div>`
-            isTemplateRender = true;
-            result.parsedPayload = null;
-        }
-        dynamicBlockDiv.append(botResHtml);
-        $(`#smallTalk-${uuids} .agent-utt`).append(titleData);
-        $(`#smallTalk-${uuids} .agent-utt`).append(actionLinkTemplate);
-        $(`.override-input-div`).remove();
-        if (data.isPrompt) {
-          this.smallTalkOverrideButtonTemplate(uuids);
-        }
-        this.commonService.hideSendOrCopyButtons(result.parsedPayload, `#smallTalk-${uuids} .agent-utt`, 'smallTalk')
+      }else{
+        renderResponse = {
+          data : data,
+          type : this.renderResponseType.SMALLTALK,
+          uuid : responseId,
+          result : result,
+          temp : newTemp
+        } 
+        this.assistResponseArray.push(renderResponse);
+        this.assistResponseArray = [...this.assistResponseArray];
+        console.log("assistResponseArray", this.assistResponseArray)
       }
-      setTimeout(() => {
-        this.updateNewMessageUUIDList(uuids);
-      }, this.waitingTimeForUUID);
+      isTemplateRender = true;
+
+
+
+      // $('#dynamicBlock .empty-data-no-agents').addClass('hide');
+      // let msgStringify = JSON.stringify(result);
+      // let newTemp = encodeURI(msgStringify);
+      // let dynamicBlockDiv = $('#dynamicBlock');
+      // if (data.buttons?.length > 1) {
+      //   this.welcomeMsgResponse = data;
+      // } else {
+      //   let botResHtml = this.assisttabService.smallTalkTemplateForTemplatePayload(data.buttons[0], uuids, data, result,newTemp);
+      //   let titleData = ``;
+      //   let actionLinkTemplate = ``;
+      //   if(this.smallTalkTemplateRenderCheck(data, result)){
+      //       isTemplateRender = false;
+      //       titleData = `<div class="title-data" ><ul class="chat-container" id="displayData-${uuids}"></ul></div>`;
+      //       let sendData = result?.parsedPayload ? newTemp : data.buttons[0].value;
+      //       actionLinkTemplate = this.smallTalkActionLinkTemplate(uuids, sendData);
+      //   }else{
+      //       actionLinkTemplate = this.smallTalkActionLinkTemplate(uuids, data.buttons[0].value)
+      //       titleData = `<div class="title-data" id="displayData-${uuids}">${data.buttons[0].value}</div>`
+      //       isTemplateRender = true;
+      //       result.parsedPayload = null;
+      //   }
+      //   dynamicBlockDiv.append(botResHtml);
+      //   $(`#smallTalk-${uuids} .agent-utt`).append(titleData);
+      //   $(`#smallTalk-${uuids} .agent-utt`).append(actionLinkTemplate);
+      //   $(`.override-input-div`).remove();
+      //   if (data.isPrompt) {
+      //     this.smallTalkOverrideButtonTemplate(uuids);
+      //   }
+      //   this.commonService.hideSendOrCopyButtons(result.parsedPayload, `#smallTalk-${uuids} .agent-utt`, 'smallTalk')
+      // }
+      // setTimeout(() => {
+      //   this.updateNewMessageUUIDList(uuids);
+      // }, this.waitingTimeForUUID);
     }
 
     let renderedMessage = !isTemplateRender ? this.templateRenderClassService.AgentChatInitialize.renderMessage(result) : '';

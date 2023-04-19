@@ -38,6 +38,8 @@ export class CommonService {
   currentPositionId;
   currentPositionIdOfMyBot;
 
+  suggestionsAnswerPlaceableIDs : any = [];
+
   clickEventObjectsBeforeTabShift : any = [];
   tabNamevsId : any = {
     [ProjConstants.ASSIST] : IdReferenceConst.DYNAMICBLOCK,

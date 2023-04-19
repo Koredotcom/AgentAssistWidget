@@ -22,20 +22,74 @@ import { LoaderComponent } from './components/loader/loader.component';
 import { TypeaheadComponent } from './components/typeahead/typeahead.component';
 import { RemoveTagFromStringPipe } from './pipes/remove-tag-from-string.pipe';
 import { ReplaceTextWithTagPipe } from './pipes/replace-text-with-tag.pipe';
+import { SuggestionsComponent } from './render-comp/suggestions/suggestions.component';
+import { SmalltalkComponent } from './render-comp/smalltalk/smalltalk.component';
 
 
 @NgModule({
-  declarations: [OverlaysearchComponent, InterruptPopupComponent, RestorePopupComponent, SummaryPopupComponent, TerminateComponent, RandomUUIDPipe, RemoveSpecialCharPipe, ReplaceQuotStringWithDoubleQuotPipe, SanitizeHtmlPipe, RawHtmlPipe, KoreGenerateuuidPipe, HtmlEntityPipe, EmptyObjectCheckPipe, FormatAMPMPipe, LoaderComponent, TypeaheadComponent, RemoveTagFromStringPipe, ReplaceTextWithTagPipe],
+  declarations: [
+    OverlaysearchComponent, 
+    InterruptPopupComponent, 
+    RestorePopupComponent, 
+    SummaryPopupComponent, 
+    TerminateComponent, 
+    RandomUUIDPipe,
+    RemoveSpecialCharPipe, 
+    ReplaceQuotStringWithDoubleQuotPipe, 
+    SanitizeHtmlPipe, 
+    RawHtmlPipe, 
+    KoreGenerateuuidPipe, 
+    HtmlEntityPipe, 
+    EmptyObjectCheckPipe,
+    FormatAMPMPipe, 
+    LoaderComponent, 
+    TypeaheadComponent, 
+    RemoveTagFromStringPipe, 
+    ReplaceTextWithTagPipe, 
+    SuggestionsComponent, 
+    SmalltalkComponent
+  ],
   imports: [
     CommonModule,
     FormsModule,
     HttpClientModule,
     PerfectScrollbarModule
   ],
-  providers:[TemplateRenderClassService, SanitizeHtmlPipe, RandomUUIDPipe, RemoveSpecialCharPipe,ReplaceQuotStringWithDoubleQuotPipe, RawHtmlPipe, KoreGenerateuuidPipe, HtmlEntityPipe,
-  EmptyObjectCheckPipe, FormatAMPMPipe, RemoveTagFromStringPipe, ReplaceTextWithTagPipe],
-  exports : [OverlaysearchComponent, InterruptPopupComponent, RestorePopupComponent, SummaryPopupComponent, TerminateComponent, RandomUUIDPipe,
-    RemoveSpecialCharPipe,ReplaceQuotStringWithDoubleQuotPipe, SanitizeHtmlPipe, RawHtmlPipe, KoreGenerateuuidPipe, HtmlEntityPipe, EmptyObjectCheckPipe,
-    FormatAMPMPipe, LoaderComponent, TypeaheadComponent,RemoveTagFromStringPipe, ReplaceTextWithTagPipe]
+  providers: [
+    TemplateRenderClassService, 
+    SanitizeHtmlPipe, 
+    RandomUUIDPipe, 
+    RemoveSpecialCharPipe, 
+    ReplaceQuotStringWithDoubleQuotPipe, 
+    RawHtmlPipe,
+    KoreGenerateuuidPipe,
+    HtmlEntityPipe,
+    EmptyObjectCheckPipe,
+    FormatAMPMPipe,
+    RemoveTagFromStringPipe, 
+    ReplaceTextWithTagPipe
+  ],
+  exports: [
+    OverlaysearchComponent, 
+    InterruptPopupComponent, 
+    RestorePopupComponent, 
+    SummaryPopupComponent, 
+    TerminateComponent, 
+    RandomUUIDPipe,
+    RemoveSpecialCharPipe, 
+    ReplaceQuotStringWithDoubleQuotPipe, 
+    SanitizeHtmlPipe, 
+    RawHtmlPipe, 
+    KoreGenerateuuidPipe, 
+    HtmlEntityPipe, 
+    EmptyObjectCheckPipe,
+    FormatAMPMPipe, 
+    LoaderComponent, 
+    TypeaheadComponent, 
+    RemoveTagFromStringPipe, 
+    ReplaceTextWithTagPipe, 
+    SuggestionsComponent,
+    SmalltalkComponent
+  ]
 })
 export class SharedModule { }

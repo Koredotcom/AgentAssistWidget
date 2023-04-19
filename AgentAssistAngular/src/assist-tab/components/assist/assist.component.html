@@ -21,6 +21,24 @@
         </div>
   </div>
     <div  id="dynamicBlock">
+        {{assistResponseArray | json}}
+        <ng-container *ngFor="let res of assistResponseArray">
+            <ng-container *ngIf="res.type == renderResponseType.SUGGESTIONS">
+                <div class="agent-utt-info" attr.id="agentUttInfo-{{res.uuid}}">
+                    <div class="user-img">
+                        <img src="assets/images/userIcon.svg">
+                    </div>
+                    <div class="text-user">{{res.data.userInput}}</div>
+                </div>
+                <app-suggestions [suggestionResponse]="res"></app-suggestions>
+            </ng-container>
+            {{res.type == renderResponseType.SMALLTALK}}
+            <ng-container *ngIf="res.type == renderResponseType.SMALLTALK">
+                <p>smalltalk</p>
+                <app-smalltalk [smallTalkData]="res"></app-smalltalk>
+            </ng-container>
+        </ng-container>
+
       <div id="userTab-custSentimentAnalysis" class="customer-feeling-text">
       </div>
 

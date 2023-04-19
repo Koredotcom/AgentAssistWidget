@@ -194,7 +194,7 @@ export class DesignAlterService {
     if (elem) {
       let parentRec = document.getElementById(IdReferenceConst.HOMESCROLLBAR).getBoundingClientRect();
       let childRec = elem.getBoundingClientRect();
-      if (childRec.top == 0 && $(elem).parent().attr('class').includes('hide')) {
+      if (childRec.top == 0 && $(elem).parent()?.attr('class').includes('hide')) {
         if ($(elem).parent().parent().length) {
           elem = $(elem).parent().parent()[0];
         }
