@@ -97,12 +97,12 @@ export class AssistComponent implements OnInit {
 
     let subscription2 = this.websocketService.agentAssistResponse$.subscribe((response: any) => {
       console.log("------------resposne of agent request")
-      this.handleSubjectService.setLoader(true);
+      // this.handleSubjectService.setLoader(true);
       if (response && Object.keys(response).length > 0) {
         if(this.commonService.checkAutoBotIdDefined(this.connectionDetails?.autoBotId)){
           this.connectionDetails['autoBotId'] = response?.autoBotId ? response.autoBotId: undefined;
           this.handleSubjectService.setAutoBotIdFromAgentResponse({autoBotId: response?.autoBotId ? response.autoBotId: undefined});
-          if(!this.isHistoryApiCalled) {this.callHistoryApi()}
+          // if(!this.isHistoryApiCalled) {this.callHistoryApi()}
         }
         if(this.commonService.checkAutoBotIdDefined(this.commonService.configObj?.autoBotId)){
           this.commonService.configObj['autoBotId'] = response?.autoBotId;
@@ -466,8 +466,13 @@ export class AssistComponent implements OnInit {
         this.collapseOldDialoguesInAssist();
       }else{
         let faqAnswerIdsPlace = this.commonService.suggestionsAnswerPlaceableIDs.find(ele => ele.input == data.suggestions?.faqs[0].question);
+        console.log(this.commonService.suggestionsAnswerPlaceableIDs, "suggestion answer replacable id", faqAnswerIdsPlace);
+        
         if(faqAnswerIdsPlace){
           this.handleSubjectService.setFaqAmbiguitySubject(data);
+        }
+        if(!this.commonService.isAutomationOnGoing){
+          this.collapseOldDialoguesInAssist();
         }
       }
     }
@@ -653,8 +658,10 @@ export class AssistComponent implements OnInit {
     if (this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd) {
       this.scrollToBottom();
     }
-    this.commonService.removingSendCopyBtnForCall(this.connectionDetails);
-    this.designAlterService.addWhiteBackgroundClassToNewMessage(this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd, IdReferenceConst.DYNAMICBLOCK);
+    setTimeout(() => {
+      this.commonService.removingSendCopyBtnForCall(this.connectionDetails);
+      this.designAlterService.addWhiteBackgroundClassToNewMessage(this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd, IdReferenceConst.DYNAMICBLOCK);
+    }, 100);
   }
 
   smallTalkActionLinkTemplate(uuids,sendData){

@@ -51,7 +51,7 @@ export class SuggestionsComponent implements OnInit, OnDestroy{
     this.destroySubject.next(true);
     this.destroySubject.unsubscribe();
     this.searchResponse = {};   
-    this.websocketService.agentAssistAgentResponse$.next(null); 
+    // this.websocketService.agentAssistAgentResponse$.next(null); 
   }
 
   subscribeEvents() {
@@ -63,6 +63,8 @@ export class SuggestionsComponent implements OnInit, OnDestroy{
 
     let subscription2 = this.handleSubjectService.faqAmbiguitySubject$.pipe(takeUntil(this.destroySubject)).subscribe((response : any) => {
       if(response){
+        console.log(response, "response");
+        
         this.handleSearchResponse(response);
       }
     });
@@ -188,6 +190,8 @@ export class SuggestionsComponent implements OnInit, OnDestroy{
       response.suggestions.faqs = this.commonService.formatFAQResponse(response.suggestions.faqs);
       let faqAnswerIdsPlace = this.commonService.suggestionsAnswerPlaceableIDs.find(ele => ele.input == response.suggestions?.faqs[0].question);
       if (faqAnswerIdsPlace) {
+        console.log(faqAnswerIdsPlace, "faq answer id place");
+        
         let accumulator = response.suggestions.faqs.reduce((acc, faq) => {
           if (faq.question == faqAnswerIdsPlace.input) {
             acc[faq.question] = faq;
@@ -199,6 +203,7 @@ export class SuggestionsComponent implements OnInit, OnDestroy{
             faq.answer = accumulator[faq.question].answer;
           }
         });
+        console.log(this.searchResponse, "end of search response");
         let index = this.commonService.suggestionsAnswerPlaceableIDs.indexOf(faqAnswerIdsPlace);
         this.commonService.suggestionsAnswerPlaceableIDs.splice(index, 1);
         setTimeout(() => {

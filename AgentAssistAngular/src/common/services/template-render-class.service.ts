@@ -226,12 +226,12 @@ export class TemplateRenderClassService {
     if (res.srcChannel && res.srcChannel !== 'msteams') {
       if (res.componentType === 'dialogAct') {
         let actualStringFromBE = '';
-        if (res?.buttons[0]?.value?.includes('text')) {
+        if (res && res?.buttons && res?.buttons[0]?.value?.includes('text')) {
           let str = res.buttons[0].value.replace(/^\s+|\s+$/g, "");
           let str1 = JSON.parse(str);
           actualStringFromBE = str1.text;
           // arr = str1.text.split('\nYes, No');
-        } else {
+        } else if(res && res?.buttons && res?.buttons[0]){
           actualStringFromBE = res.buttons[0].value;
           // arr = res.buttons[0].value.split('\nYes, No');
         }

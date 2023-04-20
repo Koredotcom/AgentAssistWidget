@@ -61,6 +61,8 @@ export class DesignAlterService {
 
   // new message arrival code
   addWhiteBackgroundClassToNewMessage(scrollAtEnd, blockId) {
+    console.log("add background class to new message");
+    
     let dynamicBlockId = blockId;
     let beforeLastElementArray: any = document.getElementById(blockId).querySelectorAll('.last-msg-white-bg');
     for (let ele of beforeLastElementArray) {
@@ -125,6 +127,8 @@ export class DesignAlterService {
   }
 
   getLastElement(id) {
+    console.log(id, "id");
+    
     let lastElement: any = ''
     let dynamicBlockElements = document.getElementById(id);
     if (id.includes('smallTalk') && dynamicBlockElements) {
@@ -167,6 +171,8 @@ export class DesignAlterService {
         }
       }
     }
+    console.log(lastElement, "last element");
+    
     return lastElement;
   }
 
