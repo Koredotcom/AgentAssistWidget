@@ -1,0 +1,24 @@
+<!-- {{smallTalkArray | json}}
+<ng-container *ngFor="let st of smallTalkArray;let i = index">
+    <div class="collapse-acc-data before-none" attr.id="smallTalk-{{smallTalkData.uuid + i}}">
+        <div class="steps-run-data">
+            <div class="icon_block">
+                <i class="ast-agent"></i>
+            </div>
+            <div class="run-info-content">
+                <div class="title">{{st.title}}</div>
+                <div class="agent-utt">
+                    <div class="title-data" attr.id="displayData-{{smallTalkData.uuid + i}}" *ngIf="!st.isTemplateRender">{{st.value}}</div>
+                    <div class="title-data" ><ul class="chat-container" attr.id="displayData-{{smallTalkData.uuid + i}}" *ngIf="st.isTemplateRender" [innerHTML]="st.template"></ul></div>
+                    <div class="action-links">
+                        <button class="send-run-btn" id="sendMsg" (click)="handleSendCopyButton(projConstants.SEND, st.sendData)">Send</button>
+                        <div class="copy-btn" (click)="handleSendCopyButton(projConstants.COPY, st.sendData)">
+                            <i class="ast-copy"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-container> -->
+<p>small talk</p>
