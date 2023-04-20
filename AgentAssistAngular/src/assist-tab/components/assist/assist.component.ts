@@ -601,7 +601,8 @@ export class AssistComponent implements OnInit {
           type : this.renderResponseType.SMALLTALK,
           uuid : responseId,
           result : result,
-          temp : newTemp
+          temp : newTemp,
+          connectionDetails : this.connectionDetails
         } 
         this.assistResponseArray.push(renderResponse);
         this.assistResponseArray = [...this.assistResponseArray];
