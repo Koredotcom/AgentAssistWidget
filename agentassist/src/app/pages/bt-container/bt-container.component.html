@@ -1,5 +1,5 @@
 <div class="builder-load-container">
-  <div *ngIf="hideMenu == false" class="left-menu-builder">
+  <div *ngIf="hideMenu == false" class="left-menu-builder" [ngClass]="{'d-none' : hideMenu}">
       <app-mainmenu class="toShowAppHeader" type="bt"></app-mainmenu>
   </div>
   <div class="bt-container-wrapper">
