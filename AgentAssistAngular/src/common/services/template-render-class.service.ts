@@ -226,7 +226,7 @@ export class TemplateRenderClassService {
     if (res.srcChannel && res.srcChannel !== 'msteams') {
       if (res.componentType === 'dialogAct') {
         let actualStringFromBE = '';
-        if (res.buttons[0]?.value?.includes('text')) {
+        if (res?.buttons[0]?.value?.includes('text')) {
           let str = res.buttons[0].value.replace(/^\s+|\s+$/g, "");
           let str1 = JSON.parse(str);
           actualStringFromBE = str1.text;

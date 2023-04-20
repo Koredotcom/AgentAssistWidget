@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { IdReferenceConst, ProjConstants } from 'src/common/constants/proj.cnts';
 import { TemplateRenderClassService } from 'src/common/services/template-render-class.service';
-
+import * as $ from 'jquery';
 @Component({
   selector: 'app-smalltalk',
   templateUrl: './smalltalk.component.html',
@@ -29,7 +29,6 @@ export class SmalltalkComponent implements OnInit, OnDestroy {
   }
 
   formatAssistSmallTalk(smallTalkData){
-
     let smallTalkObject : any = {
       title : smallTalkData.isPrompt ? ProjConstants.ASK_CUSTOMER : ProjConstants.TELL_CUSTOMER,
       isTemplateRender : this.smallTalkTemplateRenderCheck(smallTalkData.data,smallTalkData.result),
@@ -37,7 +36,7 @@ export class SmalltalkComponent implements OnInit, OnDestroy {
       sendData : smallTalkData.result?.parsedPayload ? smallTalkData.temp : smallTalkData.data?.buttons[0]?.value,
       isThirdParty : false
     }
-    // smallTalkObject.template = this.getTemplateHtml(smallTalkObject.isTemplateRender, smallTalkData.result);
+    smallTalkObject.template = this.getTemplateHtml(smallTalkObject.isTemplateRender, smallTalkData.result);
     this.smallTalkArray.push(smallTalkObject);
     console.log(this.smallTalkArray, "small talk array");
     
@@ -52,10 +51,10 @@ export class SmalltalkComponent implements OnInit, OnDestroy {
   }
 
   getTemplateHtml(isTemplateRender, result){
-    let renderedMessage = !isTemplateRender ? this.templateRenderClassService?.AgentChatInitialize?.renderMessage(result) : '';
+    let renderedMessage = isTemplateRender ? this.templateRenderClassService?.AgentChatInitialize?.renderMessage(result) : '';
     if (renderedMessage && renderedMessage[0]) {
-      let obj = this.templateRenderClassService.AgentChatInitialize?.renderMessage(result)[0];
-      return obj.toString();
+      let obj =  $(this.templateRenderClassService.AgentChatInitialize.renderMessage(result))[0].outerHTML
+      return (obj);
     }
     return null;
   }

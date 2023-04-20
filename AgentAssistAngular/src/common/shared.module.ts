@@ -24,6 +24,7 @@ import { RemoveTagFromStringPipe } from './pipes/remove-tag-from-string.pipe';
 import { ReplaceTextWithTagPipe } from './pipes/replace-text-with-tag.pipe';
 import { SuggestionsComponent } from './render-comp/suggestions/suggestions.component';
 import { SmalltalkComponent } from './render-comp/smalltalk/smalltalk.component';
+import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 
 
 @NgModule({
@@ -47,7 +48,8 @@ import { SmalltalkComponent } from './render-comp/smalltalk/smalltalk.component'
     RemoveTagFromStringPipe, 
     ReplaceTextWithTagPipe, 
     SuggestionsComponent, 
-    SmalltalkComponent
+    SmalltalkComponent,
+    SafeHtmlPipe
   ],
   imports: [
     CommonModule,
@@ -84,6 +86,7 @@ import { SmalltalkComponent } from './render-comp/smalltalk/smalltalk.component'
     HtmlEntityPipe, 
     EmptyObjectCheckPipe,
     FormatAMPMPipe, 
+    SafeHtmlPipe,
     LoaderComponent, 
     TypeaheadComponent, 
     RemoveTagFromStringPipe, 
