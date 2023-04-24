@@ -30,6 +30,7 @@ const routes: Routes = [
           { path: 'agents', component: AgentsComponent },
           { path: 'roleManagement', component: UserManagementComponent },
           { path: 'usecases', loadChildren: () => import('./pages/agent-usecases/agent-usecases.module').then(m => m.AgentUsecasesModule) },
+          { path: 'welcomeEvents', loadChildren: () => import('./pages/welcomeEvents/welcomeevent.module').then(m => m.WelcomeeventModule) },
           { path: 'channels', component: AutomationChannelsComponent },
           { path: 'languages', component: LanguagesSpeechComponent },
           { path: 'searchAssist', component: SearchAssistComponent},

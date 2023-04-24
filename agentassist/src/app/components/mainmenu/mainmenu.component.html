@@ -44,6 +44,9 @@
 			<div class="link-router" [routerLink]="['usecases']" routerLinkActive="active" *hasPermission="['admin']">
 				<img src="assets/icons/leftmenu/usecase.svg"><span class="link-name">{{'NAV.USECASES' | translate}}</span>
 			</div>
+			<div class="link-router" [routerLink]="['welcomeEvents']" routerLinkActive="active" *hasPermission="['admin']">
+				<img src="assets/icons/leftmenu/usecase.svg"><span class="link-name">{{'NAV.WELCOMEEVENT' | translate}}</span>
+			</div>
 		</div>
 
 		<!-- <div class="group-links">

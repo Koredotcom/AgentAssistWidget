@@ -2010,5 +2010,6 @@
     "SEARCHASSIST.LINK_SEARCHASSIST_DESC" : "Provide intelligent, contextual, and personalized search experience in every interaction across your web and mobile channels.",
     "SEARCHASSIST.KNOW_MORE" : "Know More",
     "SEARCHASSIST.CONNECTED_TITLE" : "Connected",
-    "SEARCHASSIST.DISCONNECT_TITLE" : "Error establishing connection"
+    "SEARCHASSIST.DISCONNECT_TITLE" : "Error establishing connection",
+    "NAV.WELCOMEEVENT": "Welcome Event"
 }
