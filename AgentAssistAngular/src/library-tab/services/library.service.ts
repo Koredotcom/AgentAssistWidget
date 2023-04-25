@@ -28,7 +28,7 @@ export class LibraryService {
     let formattedMenuResponse = {};
     for(let dialogue of menuResponse){
       let dialogueDetails : any = {};
-      dialogueDetails.intentName = dialogue.usecaseName;
+      dialogueDetails.intentName = dialogue.name|| dialogue.usecaseName ;
       dialogueDetails.type = dialogue.usecaseType;
       dialogueDetails.agentRunButton = false;
       dialogueDetails["childBotId"] = dialogue["childBotId"] || "";

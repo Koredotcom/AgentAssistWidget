@@ -592,7 +592,7 @@ export class AssistComponent implements OnInit {
 
         data.suggestions.dialogs?.forEach((ele, index) => {
           ele.entities?.length > 0 ? (this.commonService.entitiestValueArray = ele.entities) : '';
-
+          ele.name = ele.name || ele.usecaseName;
           let dialogSuggestions = document.getElementById(`dialogSuggestions-${responseId}`);
           let dialogsHtml = this.assisttabService.dialogTypeInfoTemplate(uuids, index, ele);
           dialogSuggestions.innerHTML += dialogsHtml;
