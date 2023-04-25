@@ -49,13 +49,10 @@ export class OverlaysearchComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    // this.subscriptionsList.forEach((subscription) => {
-    //   console.log(subscription, "subscription list");
-      
-    //   subscription.unsubscribe();
-    // });
     this.destroySubject.next(true);
     this.destroySubject.unsubscribe();
+    this.searchResponse = {};   
+    this.websocketService.agentAssistAgentResponse$.next(null); 
   }
 
   subscribeEvents() {
@@ -95,13 +92,13 @@ export class OverlaysearchComponent implements OnInit {
     this.subscriptionsList.push(subscription3);
   }
 
-  emitSearchRequest(searchObj, isSearchFlag) {
+  emitSearchRequest(searchObj, isSearchFlag, faqToggle = false) {
     this.handleSubjectService.setLoader(true);
     let connectionDetails: any = Object.assign({}, this.connectionDetails);
     connectionDetails.value = searchObj.value;
     connectionDetails.isSearch = isSearchFlag;
     connectionDetails.positionId = searchObj?.positionId;
-    if(!isSearchFlag){
+    if(!isSearchFlag && !faqToggle){
       connectionDetails.intentName = searchObj.value;
     }
     connectionDetails.childBotId = searchObj.childBotId;
@@ -248,11 +245,12 @@ export class OverlaysearchComponent implements OnInit {
     faq.toggle = !faq.toggle;
     faq.seeMoreWrapper = false;
     if(!faq.answer && faq.toggle){
-      this.answerPlaceableIDs.push({input : faq.displayName});
+      this.answerPlaceableIDs.push({input : faq.question});
       let searchObj : any = {};
       searchObj.value = faq.displayName;
-      searchObj.question = faq.question
-      this.emitSearchRequest(searchObj, true);
+      searchObj.question = faq.question;
+      searchObj.searchFrom = this.commonService.activeTab;
+      this.emitSearchRequest(searchObj, false, true);
     }
     setTimeout(() => {
       this.handleSeeMoreButton(this.searchResponse.faqs, this.projConstants.FAQ);

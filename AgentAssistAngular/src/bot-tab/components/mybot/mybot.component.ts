@@ -169,7 +169,7 @@ export class MybotComponent implements OnInit {
     let sendMsgData = encodeURI(JSON.stringify(results));
     let myBotuuids = this.koreGenerateuuidPipe.transform();
     let agentInputId = this.randomUUIDPipe.transform();
-    if (this.commonService.isMyBotAutomationOnGoing && data.buttons && !data.value.includes('Customer has waited') && data.positionId == this.myBotDialogPositionId) {
+    if (this.commonService.isMyBotAutomationOnGoing && data.buttons && !data.value.includes('Customer has waited') && (this.myBotDialogPositionId && !data.positionId || (data.positionId == this.myBotDialogPositionId))) {
       if (this.isFirstMessagOfDialogInMyBot) {
         $(`#dropDownData-${this.myBotDropdownHeaderUuids}`).attr('data-task-id', data.uniqueTaskId)
       }

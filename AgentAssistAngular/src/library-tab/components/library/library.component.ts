@@ -139,10 +139,10 @@ export class LibraryComponent implements OnInit {
 
   emptySearchTextCheck(value) {
     if (value == '') {
-      this.showSearchSuggestions = false;
-      this.searchFromAgentSearchBar = false;
       this.handleSubjectService.setSearchText({ searchFrom: this.projConstants.LIBRARY, value: undefined });
       this.websocketService.agentAssistAgentResponse$.next(null);
+      this.showSearchSuggestions = false;
+      this.searchFromAgentSearchBar = false;
       this.setSearchTextInLocalStorage(value);
     }else{
       this.getSearchResults(value);
@@ -150,10 +150,11 @@ export class LibraryComponent implements OnInit {
   }
 
   librarySearchClose() {
-    this.showSearchSuggestions = false;
-    this.searchFromAgentSearchBar = false;
     this.searchText = '';
     this.handleSubjectService.setSearchText({ searchFrom: this.projConstants.LIBRARY, value: undefined });
+    this.websocketService.agentAssistAgentResponse$.next(null);
+    this.showSearchSuggestions = false;
+    this.searchFromAgentSearchBar = false;
     this.setSearchTextInLocalStorage('');
   }
 
