@@ -44,7 +44,6 @@ export class TypeaheadComponent implements OnInit {
   }
   subScriberEvent(){
     let subscription1 = this.handleSubjectService.searchTextSubject.subscribe((searchObj : any) => {
-      this.handleSubjectService.setLoader(true);
       if(!searchObj?.value || searchObj?.value?.length == 0){
         this.searchText = '';
         this.showOverlay = false;

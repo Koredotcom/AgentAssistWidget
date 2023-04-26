@@ -69,12 +69,10 @@ export class OverlaysearchComponent implements OnInit {
     });
     let subscription2 = this.websocketService.agentAssistAgentResponse$.pipe(
       finalize(()=> {
-        this.handleSubjectService.setLoader(false);
       }),
       takeUntil(this.destroySubject))
     .subscribe((agentResponse: any) => {
       if(agentResponse){
-        
         this.handleSearchResponse(agentResponse);
         this.showOverLay = true;
         if(document.getElementById(IdReferenceConst.overLaySuggestions)){

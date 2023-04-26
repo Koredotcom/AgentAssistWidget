@@ -25,7 +25,9 @@ export class WebSocketService {
   agentFeedbackResponse$ : BehaviorSubject<any[]> = new BehaviorSubject(null);
   responseResolutionCommentsResponse$ : BehaviorSubject<any[]> = new BehaviorSubject(null);
 
-  
+  LoaderTimeout: number = 10000;
+
+
   constructor(private handleSubjectService : HandleSubjectService,
     private sanitizeHTMLPipe : SanitizeHtmlPipe, private localStorageService : LocalStorageService,
   ) {
@@ -41,7 +43,7 @@ export class WebSocketService {
     })
   }
 
-  socketConnection() {    
+  socketConnection() {
     let webSocketConnection = {
       "path": "/agentassist/api/v1/chat/", transports: ['websocket', 'polling', 'flashsocket'], query: { 'jToken': this.connectionDetails.token }
     };
@@ -62,10 +64,10 @@ export class WebSocketService {
       conversationId : this.connectionDetails.conversationId,
       experience : (this.connectionDetails.isCall && this.connectionDetails.isCall == "true") ?  ProjConstants.VOICE : ProjConstants.CHAT
     }
-   
+
 
     let appState = this.localStorageService.getLocalStorageState();
-    let shouldProcessResponse = true;    
+    let shouldProcessResponse = true;
     // if(appState[this.connectionDetails.conversationId] && appState[this.connectionDetails.conversationId][storageConst.IS_WELCOMEMSG_PROCESSED]){
     //   shouldProcessResponse = false;
     // }
@@ -91,6 +93,7 @@ export class WebSocketService {
   }
 
   emitEvents(eventName,requestParams) {
+    this.loaderOnTimer()
     this._agentAsisstSocket.emit(eventName, requestParams);
   }
 
@@ -111,26 +114,30 @@ export class WebSocketService {
     this._agentAsisstSocket.on(EVENTS.agent_assist_response, (data) => {
       console.log("inside agenta ssist");
       this.agentAssistResponse$.next(data);
+      this.addOrRemoveLoader(false);
 
     });
 
     this._agentAsisstSocket.on(EVENTS.agent_menu_response, (data) => {
       this.agentMenuResponse$.next(data);
+      this.addOrRemoveLoader(false);
     });
 
     this._agentAsisstSocket.on(EVENTS.agent_assist_agent_response, (data)=>{
       this.agentAssistAgentResponse$.next(data);
+      this.addOrRemoveLoader(false);
     });
 
     this._agentAsisstSocket.on(EVENTS.agent_assist_endoftask, (data) =>{
       this.endOfTaskResponse$.next(data);
+      this.addOrRemoveLoader(false);
     });
 
-    this._agentAsisstSocket.on(EVENTS.agent_assist_endoftask, (data) =>{
-      this.endOfTaskResponse$.next(data);
-    });
+    // this._agentAsisstSocket.on(EVENTS.agent_assist_endoftask, (data) =>{
+    //   this.endOfTaskResponse$.next(data);
+    // });
 
-    this._agentAsisstSocket.on(EVENTS.user_message, (data) =>{      
+    this._agentAsisstSocket.on(EVENTS.user_message, (data) =>{
       this.userMessageResponse$.next(data);
     });
 
@@ -140,14 +147,28 @@ export class WebSocketService {
 
     this._agentAsisstSocket.on(EVENTS.agent_assist_user_message, (data) => {
       this.agentAssistUserMessageResponse$.next(data);
+
     });
 
     this._agentAsisstSocket.on(EVENTS.agent_feedback_response, (data) =>{
       this.agentFeedbackResponse$.next(data);
+      this.addOrRemoveLoader(false);
     });
 
     this._agentAsisstSocket.on(EVENTS.response_resolution_comments, (data) =>{
       this.responseResolutionCommentsResponse$.next(data);
+      this.addOrRemoveLoader(false);
     })
+  }
+
+  loaderOnTimer() {
+    this.addOrRemoveLoader(true)
+    setTimeout(() => {
+      this.addOrRemoveLoader(false)
+    }, this.LoaderTimeout);
+  }
+
+  addOrRemoveLoader(falg: boolean) {
+    this.handleSubjectService.setLoader(falg)
   }
 }
