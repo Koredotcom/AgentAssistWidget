@@ -60,7 +60,6 @@ export class LibraryComponent implements OnInit {
 
   subscribeEvents() {
     let subscribtion1 = this.handleSubjectService.searchTextFromAgentSearch.subscribe((searchObj: any) => {
-      this.handleSubjectService.setLoader(true);
       if (searchObj && searchObj.eventFrom == this.projConstants.AGENT_SEARCH) {
         this.searchText = searchObj.searchText;
         this.searchFromAgentSearchBar = true;
@@ -69,14 +68,11 @@ export class LibraryComponent implements OnInit {
       if (searchObj && !searchObj.searchText && searchObj.eventFrom == this.projConstants.ASSIST) {
         this.librarySearchClose();
       }
-      this.handleSubjectService.setLoader(false);
     });
     let subscription2 = this.websocketService.agentMenuResponse$.subscribe((menuResponse: any) => {
-      this.handleSubjectService.setLoader(true);
       if (menuResponse && menuResponse.usecases) {
         this.menuResponse = this.libraryService.formatMenuResponse(menuResponse.usecases);
       }
-      this.handleSubjectService.setLoader(false);
     });
 
     let subscription3 = this.handleSubjectService.connectDetailsSubject.subscribe((response: any) => {
