@@ -22,10 +22,11 @@ import { LoaderComponent } from './components/loader/loader.component';
 import { TypeaheadComponent } from './components/typeahead/typeahead.component';
 import { RemoveTagFromStringPipe } from './pipes/remove-tag-from-string.pipe';
 import { ReplaceTextWithTagPipe } from './pipes/replace-text-with-tag.pipe';
+import { UserBotHistoryComponent } from './components/user-bot-history/user-bot-history.component';
 
 
 @NgModule({
-  declarations: [OverlaysearchComponent, InterruptPopupComponent, RestorePopupComponent, SummaryPopupComponent, TerminateComponent, RandomUUIDPipe, RemoveSpecialCharPipe, ReplaceQuotStringWithDoubleQuotPipe, SanitizeHtmlPipe, RawHtmlPipe, KoreGenerateuuidPipe, HtmlEntityPipe, EmptyObjectCheckPipe, FormatAMPMPipe, LoaderComponent, TypeaheadComponent, RemoveTagFromStringPipe, ReplaceTextWithTagPipe],
+  declarations: [OverlaysearchComponent, InterruptPopupComponent, RestorePopupComponent, SummaryPopupComponent, TerminateComponent, RandomUUIDPipe, RemoveSpecialCharPipe, ReplaceQuotStringWithDoubleQuotPipe, SanitizeHtmlPipe, RawHtmlPipe, KoreGenerateuuidPipe, HtmlEntityPipe, EmptyObjectCheckPipe, FormatAMPMPipe, LoaderComponent, TypeaheadComponent, RemoveTagFromStringPipe, ReplaceTextWithTagPipe, UserBotHistoryComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -36,6 +37,6 @@ import { ReplaceTextWithTagPipe } from './pipes/replace-text-with-tag.pipe';
   EmptyObjectCheckPipe, FormatAMPMPipe, RemoveTagFromStringPipe, ReplaceTextWithTagPipe],
   exports : [OverlaysearchComponent, InterruptPopupComponent, RestorePopupComponent, SummaryPopupComponent, TerminateComponent, RandomUUIDPipe,
     RemoveSpecialCharPipe,ReplaceQuotStringWithDoubleQuotPipe, SanitizeHtmlPipe, RawHtmlPipe, KoreGenerateuuidPipe, HtmlEntityPipe, EmptyObjectCheckPipe,
-    FormatAMPMPipe, LoaderComponent, TypeaheadComponent,RemoveTagFromStringPipe, ReplaceTextWithTagPipe]
+    FormatAMPMPipe, LoaderComponent, TypeaheadComponent,RemoveTagFromStringPipe, ReplaceTextWithTagPipe, UserBotHistoryComponent]
 })
 export class SharedModule { }

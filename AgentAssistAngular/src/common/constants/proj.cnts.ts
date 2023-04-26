@@ -52,6 +52,7 @@ export const ProjConstants = {
     RESTORE : 'Restore',
     SUMMARY : 'Summary',
     INTENT : 'IntentName',
+    HISTORY: 'History',
     PS_Y_REACH_START : 'ps-y-reach-start',
     PS_Y_REACH_END : 'ps-y-reach-end',
     PS_SCROLL_UP : 'ps-scroll-up',
