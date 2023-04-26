@@ -46,7 +46,7 @@ export class HomeComponent implements OnInit {
     public sanitizeHTMLPipe: SanitizeHtmlPipe, public commonService: CommonService, private koregenerateUUIDPipe: KoreGenerateuuidPipe,
     private designAlterService: DesignAlterService, private localStorageService: LocalStorageService) { }
   ngOnInit(): void {
-    this.handleSubjectService.setLoader(true);
+
     this.subscribeEvents();
   }
 
@@ -367,7 +367,6 @@ setProactiveMode(){
       setTimeout(() => {
         this.handleSubjectService.setLibrarySearchTextFromAgentSearch(eventObj);
       }, 10);
-      this.handleSubjectService.setLoader(true)
     } else if (eventObj.eventFrom == this.projConstants.LIBRARY_SEARCH) {
       this.isBackBtnClicked = true;
       this.changeActiveTab(this.projConstants.ASSIST);
@@ -375,7 +374,6 @@ setProactiveMode(){
       setTimeout(() => {
         this.getSearchResults(this.searchText)
       }, 10);
-      this.handleSubjectService.setLoader(true)
     }
   }
 

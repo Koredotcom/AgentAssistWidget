@@ -116,7 +116,6 @@ export class AppComponent {
     console.log(this.service.configObj, "configobj");
      this.service.configObj['conversationId'] = this.service.configObj.conversationid || this.service.configObj.conversationId
      if (this.service.configObj.token && this.service.configObj.botid && this.service.configObj.agentassisturl && this.service.configObj.conversationId && !this.service.configObj.fromSAT) {
-      this.handleSubjectService.setLoader(true);
       this.grantCall(params);
     }
     else if (!this.service.configObj.token && !this.service.configObj.botid && !this.service.configObj.agentassisturl && !this.service.configObj.conversationId) {
