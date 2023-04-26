@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?br6spu');
-  src:  url('fonts/icomoon.eot?br6spu#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?br6spu') format('truetype'),
-    url('fonts/icomoon.woff?br6spu') format('woff'),
-    url('fonts/icomoon.svg?br6spu#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?yeibm0');
+  src:  url('fonts/icomoon.eot?yeibm0#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?yeibm0') format('truetype'),
+    url('fonts/icomoon.woff?yeibm0') format('woff'),
+    url('fonts/icomoon.svg?yeibm0#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,24 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-sa-welcome-chat:before {
+  content: "\e951";
+}
+.icon-sa-welcome-delete:before {
+  content: "\e952";
+}
+.icon-sa-welcome-voice:before {
+  content: "\e953";
+}
+.icon-sa-call-welcome:before {
+  content: "\e954";
+}
+.icon-sa-welcome-edit:before {
+  content: "\e955";
+}
+.icon-sa-welcome-bulb:before {
+  content: "\e956";
+}
 .icon-sa-conv-info:before {
   content: "\e93c";
 }

@@ -3,13 +3,14 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { WelcomeeventComponent } from './welcomeevent.component';
+import { NewWelcomeEventComponent } from './new-welcome-event/new-welcome-event.component';
 
 const routes: Routes = [
   { path: '', component:  WelcomeeventComponent}
 ];
 
 @NgModule({
-  declarations: [WelcomeeventComponent],
+  declarations: [WelcomeeventComponent, NewWelcomeEventComponent],
   imports: [
     CommonModule,
     SharedModule,
