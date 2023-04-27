@@ -10,6 +10,7 @@ import { CommonService } from 'src/common/services/common.service';
 import { KoreGenerateuuidPipe } from 'src/common/pipes/kore-generateuuid.pipe';
 import { DesignAlterService } from 'src/common/services/design-alter.service';
 import { LocalStorageService } from 'src/common/services/local-storage.service';
+import { MockDataService } from 'src/common/services/mock-data.service';
 declare const $: any;
 @Component({
   selector: 'app-home',
@@ -42,9 +43,11 @@ export class HomeComponent implements OnInit {
   proactiveModeEnabled: boolean = false;
   isLoader;
   isBackBtnClicked: boolean = false;
+  showHistoryTab : boolean = false;
   constructor(public handleSubjectService: HandleSubjectService, public websocketService: WebSocketService,
     public sanitizeHTMLPipe: SanitizeHtmlPipe, public commonService: CommonService, private koregenerateUUIDPipe: KoreGenerateuuidPipe,
-    private designAlterService: DesignAlterService, private localStorageService: LocalStorageService) { }
+    private designAlterService: DesignAlterService, private localStorageService: LocalStorageService,
+    private mockDataService : MockDataService) { }
   ngOnInit(): void {
     this.handleSubjectService.setLoader(true);
     this.subscribeEvents();
@@ -100,13 +103,23 @@ export class HomeComponent implements OnInit {
 
     let subscription5 = this.handleSubjectService.isLoaderSetSubject.subscribe((val)=>{
       this.isLoader = val;
-    })
+    });
+
+    let subscription6 = this.mockDataService.getHistoryData().subscribe((res : any) => {
+      console.log(res, "response");
+      if(res && res.chatHistory){
+        this.handleSubjectService.setUserHistoryData(res);
+        this.showHistoryTab = !(this.connectionDetails.isCall == 'true') ? true : false;
+      }
+    });
+    this.subscriptionsList.push(subscription1)
 
     this.subscriptionsList.push(subscription1);
     this.subscriptionsList.push(subscription2);
     this.subscriptionsList.push(subscription3);
     this.subscriptionsList.push(subscription4);
     this.subscriptionsList.push(subscription5);
+    this.subscriptionsList.push(subscription6);
   }
 
   //summary popup related code

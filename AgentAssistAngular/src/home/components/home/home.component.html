@@ -18,7 +18,7 @@
                     <!-- If parent url is Smartassist and srcChannels are "RTM or msteams" should not show the History Tab -->
                     <!-- History Tab is applicable for 3rd party AgentDesktops -->
                     <div class="tab-icon" id="HistoryTabIcon" (click)="changeActiveTab(projConstants.HISTORY)"
-                        [ngClass]="{'active-tab': activeTab == projConstants.HISTORY}">
+                        [ngClass]="{'active-tab': activeTab == projConstants.HISTORY}" *ngIf="showHistoryTab">
                         <i class="ast-bot font-13" id="HistoryIcon"></i>
                         <div class="title-tab" id="AssistLabel">{{projConstants.HISTORY}}</div>
                         <div class="custom-tootltip-tabs">{{projConstants.HISTORY}}</div>
