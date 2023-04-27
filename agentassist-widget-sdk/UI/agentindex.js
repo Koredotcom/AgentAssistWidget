@@ -438,8 +438,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             'experience': isCallConversation === 'true' ? 'voice':'chat',
                             "enable_override_userinput": false
                         }
-                        if(!isOverRideMode) {
+                        if(isOverRideMode && proactiveMode) {
                              _agentAsisstSocket.emit('enable_override_userinput', overRideObj)
+                             isOverRideMode = false;
                         }
                         displayCustomerFeels(data, data.conversationId, _botId);
 
@@ -507,7 +508,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             document.getElementById("overLayAutoSearch").style.display = "block";
                             $('#overLayAutoSearch').find('.search-results-text')?.remove();
                             $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
-                            $('.search-block').find('.search-results-text-in-lib').remove();
+                            $('#overLayAutoSearchLibDiv').addClass('hide').removeAttr('style');
+                            $('#overLayAutoSearchLib').find('.search-results-text')?.remove();
+                            // $('.search-block').find('.search-results-text-in-lib').remove();
                         } else {
                           //  updateAgentAssistState(_conversationId, 'myBotTab', data);
                             // if(!(isMyBotAutomationOnGoing && data.suggestions)){
@@ -592,103 +595,142 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
 
                 function formatSearchAssistData(suggestions){
-            
                     let searchAssistData = suggestions.searchassist;
                     let articlesData = [];
                     for(let source in searchAssistData){
-                        articlesData.push.apply(articlesData,searchAssistData[source]);
+                        if(source != "snippets"){
+                            searchAssistData[source] = checkEmptyObjectsInArray(searchAssistData[source]);
+                            if(Object.keys(searchAssistData[source]).length > 0){
+                                articlesData.push.apply(articlesData,searchAssistData[source]);
+                            }
+                        }
                     }
                     suggestions.articles = articlesData;
-                    console.log(suggestions, "suggestions");
                     return suggestions;
                 }
 
+                function checkEmptyObjectsInArray(arr){
+                    arr = arr.filter(
+                        obj => !(obj && Object.keys(obj).length === 0)
+                    );
+                    return arr;
+                }
+
                 function processUserMessages(data, conversationId, botId) {
-                    var _msgsResponse = {
-                        "type": "bot_response",
-                        "from": "bot",
-                        "message": [
-
-                        ],
-                        "messageId": data._id,
-                        "botInfo": {
-                            "chatBot": "sample Bot",
-                            "taskBotId": botId
-                        },
-                        "createdOn": "2022-03-21T07:56:18.225Z",
-                        "icon": "https://uat.kore.ai:443/api/getMediaStream/market/f-cb381255-9aa1-5ce2-95e3-71233aef7084.png?n=17648985&s=IlRvUlUwalFVaFVMYm9sZStZQnlLc0l1UlZvdlNUUDcxR2o3U2lscHRrL3M9Ig$$",
-                        "traceId": "873209019a5adc26"
-                    }
-                    let _id = Math.floor(Math.random() * 100);
-                    let body = {};
-                    body['type'] = 'text';
-                    body['component'] = {
-                        "type": 'text',
-                        "payload": {
+                    if(isAutomationOnGoing){
+                        var _msgsResponse = {
+                            "type": "bot_response",
+                            "from": "bot",
+                            "message": [
+    
+                            ],
+                            "messageId": data._id,
+                            "botInfo": {
+                                "chatBot": "sample Bot",
+                                "taskBotId": botId
+                            },
+                            "createdOn": "2022-03-21T07:56:18.225Z",
+                            "icon": "https://uat.kore.ai:443/api/getMediaStream/market/f-cb381255-9aa1-5ce2-95e3-71233aef7084.png?n=17648985&s=IlRvUlUwalFVaFVMYm9sZStZQnlLc0l1UlZvdlNUUDcxR2o3U2lscHRrL3M9Ig$$",
+                            "traceId": "873209019a5adc26"
+                        }
+                        let _id = Math.floor(Math.random() * 100);
+                        let body = {};
+                        body['type'] = 'text';
+                        body['component'] = {
                             "type": 'text',
-                            "text": data.userInput
-                        }
-                    };
-                    body['cInfo'] = {
-                        "body": data.userInput
-                    };
-                    _msgsResponse.message.push(body);
-
-                    let titleText = '';
-                    let userQueryHtml = '';
-                    if(isOverRideMode) {
-                        titleText = "YouEntered -";
-                        userQueryHtml = `
-                                    <div class="steps-run-data last-msg-white-bg">
-                                        <div class="icon_block_img">
-                                            <img src="./images/userIcon.svg">
-                                        </div>
-                                        <div class="run-info-content" id="userInput-${_id}">
-                                            <div class="title">${titleText}</div>
-                                            <div class="agent-utt">
-                                                <div class="title-data">"${sanitizeHTML(data.userInput)}"</div>
+                            "payload": {
+                                "type": 'text',
+                                "text": data.userInput
+                            }
+                        };
+                        body['cInfo'] = {
+                            "body": data.userInput
+                        };
+                        _msgsResponse.message.push(body);
+    
+                        let titleText = '';
+                        let userQueryHtml = '';
+                        if(isOverRideMode) {
+                            titleText = "YouEntered -";
+                            userQueryHtml = `
+                                        <div class="steps-run-data last-msg-white-bg">
+                                            <div class="icon_block_img">
+                                                <img src="./images/userIcon.svg">
                                             </div>
-                                            
-                                        </div>
-                                    </div>`;
-                    } else {
-                        titleText = "Customer Said -"
-                        userQueryHtml = `
-                                    <div class="steps-run-data last-msg-white-bg">
-                                        <div class="icon_block_img">
-                                            <img src="./images/userIcon.svg">
-                                        </div>
-                                        <div class="run-info-content" id="userInput-${_id}">
-                                            <div class="title">${titleText}</div>
-                                            <div class="agent-utt">
-                                                <div class="title-data">"${sanitizeHTML(data.userInput)}"</div>
-                                            </div>
-                                            
-                                        </div>
-                                    </div>`;
-                    }
-                    let addUserQueryTodropdownData = document.getElementById(`dropDownData-${dropdownHeaderUuids}`);
-                    addUserQueryTodropdownData.innerHTML = addUserQueryTodropdownData.innerHTML + userQueryHtml;
-                    let entityHtml = $(`#dropDownData-${dropdownHeaderUuids}`).find(`#userInput-${_id}`);
-                    let entityDisplayName = agentAssistResponse.entityDisplayName ? agentAssistResponse.entityDisplayName : agentAssistResponse.entityName;
-                    if(agentAssistResponse.newEntityDisplayName || agentAssistResponse.newEntityName){
-                        entityDisplayName = agentAssistResponse.newEntityDisplayName ? agentAssistResponse.newEntityDisplayName : agentAssistResponse.newEntityName;
-                    }
-                    if (data.entityValue && !data.isErrorPrompt && entityDisplayName) {
-                        entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${sanitizeHTML(data.userInput)}</div>`);
-                    } else { 
-                        if (data.isErrorPrompt && entityDisplayName) {
-                            let entityHtmls = `<div class="order-number-info">${entityDisplayName} : 
-                                                    <span style="color:red">Value unidentified</span>
+                                            <div class="run-info-content" id="userInput-${_id}">
+                                                <div class="title">${titleText}</div>
+                                                <div class="agent-utt">
+                                                    <div class="title-data">"${sanitizeHTML(data.userInput)}"</div>
                                                 </div>
-                                                <div>
-                                                    <img src="./images/warning.svg" style="padding-right: 8px;">
-                                                    <span style="font-size: 12px; line-height: 18px; color: #202124;">Incorrect input format<span>
-                                                </div>`
-                            entityHtml.append(entityHtmls);
+                                                
+                                            </div>
+                                        </div>`;
+                        } else {
+                            titleText = "Customer Said -"
+                            userQueryHtml = `
+                                        <div class="steps-run-data last-msg-white-bg">
+                                            <div class="icon_block_img">
+                                                <img src="./images/userIcon.svg">
+                                            </div>
+                                            <div class="run-info-content" id="userInput-${_id}">
+                                                <div class="title">${titleText}</div>
+                                                <div class="agent-utt">
+                                                    <div class="title-data">"${sanitizeHTML(data.userInput)}"</div>
+                                                </div>
+                                                
+                                            </div>
+                                        </div>`;
                         }
+                        let addUserQueryTodropdownData = document.getElementById(`dropDownData-${dropdownHeaderUuids}`);
+                        addUserQueryTodropdownData.innerHTML = addUserQueryTodropdownData.innerHTML + userQueryHtml;
+                        let entityHtml = $(`#dropDownData-${dropdownHeaderUuids}`).find(`#userInput-${_id}`);
+                        let entityDisplayName = agentAssistResponse.entityDisplayName ? agentAssistResponse.entityDisplayName : agentAssistResponse.entityName;
+                        if(agentAssistResponse.newEntityDisplayName || agentAssistResponse.newEntityName){
+                            entityDisplayName = agentAssistResponse.newEntityDisplayName ? agentAssistResponse.newEntityDisplayName : agentAssistResponse.newEntityName;
+                        }
+                        if (data.entityValue && !data.isErrorPrompt && entityDisplayName) {
+                            entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${sanitizeHTML(data.userInput)}</div>`);
+                        } else { 
+                            if (data.isErrorPrompt && entityDisplayName) {
+                                let entityHtmls = `<div class="order-number-info">${entityDisplayName} : 
+                                                        <span style="color:red">Value unidentified</span>
+                                                    </div>
+                                                    <div>
+                                                        <img src="./images/warning.svg" style="padding-right: 8px;">
+                                                        <span style="font-size: 12px; line-height: 18px; color: #202124;">Incorrect input format<span>
+                                                    </div>`
+                                entityHtml.append(entityHtmls);
+                            }
+                        }
+                        AgentChatInitialize.renderMessage(_msgsResponse);
+                    }else{
+                        let dynamicBlockDiv = $('#dynamicBlock');
+                        let uuids = koreGenerateUUID();
+                        let botResHtml = `
+                                <div class="collapse-acc-data before-none" id='smallTalk-${uuids}'>
+                            <div class="steps-run-data">
+                            <div class="icon_block">
+                                <i class="ast-agent"></i>
+                            </div>
+                            <div class="run-info-content" >
+                            <div class="title">Customer Said - </div>
+                            <div class="agent-utt">
+                                <div class="action-links">
+                                    <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}"  data-msg-data="${sanitizeHTML(data.userInput)}">Send</button>
+                                    <div class="copy-btn hide" data-msg-id="${uuids}" data-msg-data="${sanitizeHTML(data.userInput)}">
+                                        <i class="ast-copy" data-msg-id="${uuids}" data-msg-data="${sanitizeHTML(data.userInput)}"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>`;
+                        let titleData = `<div class="title-data" id="displayData-${uuids}">${sanitizeHTML(data.userInput)}</div>`
+                        dynamicBlockDiv.append(botResHtml);
+                        $(`#smallTalk-${uuids} .agent-utt`).append(titleData);
+
+                        // hideSendOrCopyButtons(parsedPayload, `#smallTalk-${uuids} .agent-utt`, 'smallTalk')
                     }
-                    AgentChatInitialize.renderMessage(_msgsResponse);
                     // HtmlRenderMethod(_convId, _msgsResponse) {}
                     // setTimeout(() => {
                     //     // store HTML
@@ -938,7 +980,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
 
                     if (data.isSearch && answerPlaceableIDs.length == 0) {
                         ShowSearchContent();
-                        if (data.value.length > 0 && currentTabActive == 'searchAutoIcon') {
+                        if (data.value && data.value.length > 0 && currentTabActive == 'searchAutoIcon') {
                             document.getElementById('allAutomations-Exhaustivelist').classList.add('hide');
                             $('#dialogs-faqs').addClass('hide');
                         }
@@ -1032,7 +1074,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 let articleHtml = `
                         <div class="${articleDivClass}" id="snippetDivLib-${uuids+index}">
                             <div class="left-content" id="snippetSectionLib-${uuids+index}">
-                                <div class="title-text" id="snippettitleLib-${uuids+index}">${ele.title}</div>
+                                <div class="title-text" title="${ele.title}" id="snippettitleLib-${uuids+index}">${ele.title}</div>
                             </div>
                         </div>`;
 
@@ -1181,18 +1223,18 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     let faqHtml = `
                             <div class="${faqDivClass}" id="faqDivLib-${uuids+index}">
                                 <div class="left-content" id="faqSectionLib-${uuids+index}">
-                                    <div class="title-text" id="titleLib-${uuids+index}">${ele.question}</div>
+                                    <div class="title-text" title="${ele.displayName? ele.displayName : ele.question}" id="titleLib-${uuids+index}">${ ele.displayName? ele.displayName : ele.question}</div>
                                 </div>
                             </div>`;
     
                                     faqsSuggestions.append(faqHtml);
                                    
                                     let faqs = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${uuids+index}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${uuids+index}`);
+                                    let positionID = "dg-"+koreGenerateUUID();
                                     if (!ele.answer) {
-                                        let positionID = "dg-"+koreGenerateUUID();
                                         let checkHtml = `
                                 <i class="ast-carrotup" data-conv-id="${data.conversationId}"
-                                data-bot-id="${botId}" data-intent-name="${ele.question}"
+                                data-bot-id="${botId}" data-intent-name="${ele.displayName}" data-question="${ele.question}"
                                 data-check-lib="true" id="checkLib-${uuids+index}" data-position-id="${positionID}"></i>`;
                                         // faqs.append(checkHtml);
                                         // $(`#titleLib-${uuids+index}`).addClass('noPadding');
@@ -1207,7 +1249,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 </div>
                             </div>`;
                                         a.append(faqActionHtml);
-                                        faqs.append(`<div class="desc-text" id="descLib-${uuids+index}">${ele.answer}</div>`);
+                                        faqs.append(`<div class="desc-text" id="descLib-${uuids+index}">${handleEmptyLine(ele.answer)}</div>`);
                                         let faqstypeInfo = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${uuids + index}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${uuids + index}`);
                                         let seeMoreButtonHtml = `
                                       <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${uuids + index}" data-see-more="true">Show more</button>
@@ -1280,7 +1322,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     let articleHtml = `
                             <div class="${articleDivClass}" id="articleDivLib-${uuids+index}">
                                 <div class="left-content" id="articleSectionLib-${uuids+index}">
-                                    <div class="title-text" id="articletitleLib-${uuids+index}">${ele.title}</div>
+                                    <div class="title-text" title="${ele.title}" id="articletitleLib-${uuids+index}">${ele.title}</div>
                                 </div>
                             </div>`;
     
@@ -1288,13 +1330,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
     
                             
                                     let articles = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #articleSectionLib-${uuids+index}`) : $(`#overLaySearch .type-info-run-send #articleSectionLib-${uuids+index}`);
-                                    if (!ele.content) {
-                                        let articlecheckHtml = `
-                                <i class="ast-carrotup" data-conv-id="${data.conversationId}"
-                                data-bot-id="${botId}" data-intent-name="${ele.title}"
-                                data-check-lib="true" id="articlecheckLib-${uuids+index}"></i>`;
-                                articles.append(articlecheckHtml);
-                                    } else {
+                                //     if (!ele.content) {
+                                //         let articlecheckHtml = `
+                                // <i class="ast-carrotup" data-conv-id="${data.conversationId}"
+                                // data-bot-id="${botId}" data-intent-name="${ele.title}"
+                                // data-check-lib="true" id="articlecheckLib-${uuids+index}"></i>`;
+                                // articles.append(articlecheckHtml);
+                                //     } else {
+                                        ele.content = ele.content ? ele.content.replace( /(<([^>]+)>)/ig, '').replace(/"/g, "'") : '';
                                         let a = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display #articleDivLib-${uuids+index}`) : $(`#overLaySearch #articleDivLib-${uuids+index}`);
                                         let articlesActionHtml = `<div class="action-links">
                                 <button class="send-run-btn" id="sendMsg" data-msg-id="article-${uuids+index}"  data-msg-data="${ele.content}">Send</button>
@@ -1302,7 +1345,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     <i class="ast-copy" data-msg-id="article-${uuids+index}" data-msg-data="${ele.content}"></i>
                                 </div>
                             </div>`;
-                                        a.append(articlesActionHtml);
+                                        if(ele.content){
+                                            a.append(articlesActionHtml);
+                                        }
+                                        if(data.userInput){
+                                            ele.content = ele.content.replace(new RegExp('('+data.userInput+')', 'gi'), '<b>$1</b>');
+                                        }
                                         articles.append(`<div class="desc-text" id="articledescLib-${uuids+index}">${ele.content}
                                          </div>`);
                                          if(ele.link){
@@ -1318,7 +1366,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         setTimeout(() => {
                                             updateSeeMoreButtonForAgent(uuids + index, 'article');
                                         }, 10);
-                                    }
+                                    // }
                                     
                                     
                                     
@@ -1344,7 +1392,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             isSuggestionProcessed = false
                             let faqAnswerIdsPlace;
                             data.suggestions.faqs.forEach((ele) => {
-                                faqAnswerIdsPlace = answerPlaceableIDs.find(ele => ele.input == data.value);
+                                faqAnswerIdsPlace = answerPlaceableIDs.find(ele => ele.inputQuestion == data.value);
                                 let splitedanswerPlaceableID = faqAnswerIdsPlace.id.split('-');
                                 splitedanswerPlaceableID.shift();
                                 
@@ -1379,7 +1427,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     // $(faqAnswerCopyMsg).attr('data-msg-data',ele.answer)
                                 }
 
-                                $(`${currentTabActive == 'searchAutoIcon' ? `#search-text-display #${faqAnswerIdsPlace.id}` : `#overLaySearch #${faqAnswerIdsPlace.id}`}`).html(ele.answer);
+                                $(`${currentTabActive == 'searchAutoIcon' ? `#search-text-display #${faqAnswerIdsPlace.id}` : `#overLaySearch #${faqAnswerIdsPlace.id}`}`).html(handleEmptyLine(ele.answer));
                                 $(`${currentTabActive == 'searchAutoIcon' ? `#search-text-display #${faqAnswerIdsPlace.id}` : `#overLaySearch #${faqAnswerIdsPlace.id}`}`).attr('data-answer-render', 'true');
                                 let faqs = currentTabActive == 'searchAutoIcon' ? $(`#search-text-display .type-info-run-send #faqSectionLib-${splitedanswerPlaceableID.join('-')}`) : $(`#overLaySearch .type-info-run-send #faqSectionLib-${splitedanswerPlaceableID.join('-')}`);
                                 let seeMoreButtonHtml = `
@@ -1419,8 +1467,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     }
                 }
 
-                function hideSendOrCopyButtons(parsedPayload, conatiner){
+                function hideSendOrCopyButtons(parsedPayload, conatiner, smallTalk){
                     let lastchild = $(conatiner).children().last();
+                    if(smallTalk){
+                        lastchild = $(conatiner);
+                    }
                     if (!parsedPayload) {
                         $(lastchild).find('.copy-btn').removeClass('hide')
                     }
@@ -1527,7 +1578,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $(`#dropDownData-${myBotDropdownHeaderUuids}`).attr('data-task-id', data.uniqueTaskId)
                         }
                         isFirstMessagOfDialogInMyBot = false;
-                        let sendMsgData = encodeURI(JSON.stringify(_msgsResponse));
+                        let msgStringify = JSON.stringify(_msgsResponse);
+                        msgStringify = msgStringify.replaceAll("'", "&rsquo;")
+                        let sendMsgData = encodeURI(msgStringify);
                         let runInfoContent = $(`#dropDownData-${myBotDropdownHeaderUuids}`);
                         $('#inputFieldForMyBot').remove();
                         
@@ -1771,6 +1824,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     let sectionElement = $('#faqSectionLib-' + id);
                     let divElement = $('#faqDivLib-' + id);
                     let seeMoreElement = $('#seeMore-' + id);
+                    let seeLessElement = $('#seeLess-' + id);
                     console.log(article, 'article');
                     if(snippet){
                         titleElement = $("#snippettitleLib-" + id);
@@ -1778,6 +1832,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         sectionElement = $('#snippetSectionLib-' + id);
                         divElement = $('#snippetDivLib-' + id);
                         seeMoreElement = $('#snippetseeMore-' + id);
+                        seeLessElement = $('#snippetseeLess-' + id);
                         snippetsendMsg = $('#snippetViewMsgLib-' + id);
                        // console.log(seeMoreElement, "see more element");
                     }
@@ -1787,6 +1842,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         sectionElement = $('#articleSectionLib-' + id);
                         divElement = $('#articleDivLib-' + id);
                         seeMoreElement = $('#articleseeMore-' + id);
+                        seeLessElement = $('#articleseeLess-' + id);
                         viewLinkElement = $('#articleViewLinkLib-' + id);
                         console.log(seeMoreElement, "see more element");
                     }
@@ -1810,9 +1866,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         // }
                             if(divSectionHeight > (24 + faqSourceTypePixel)){
                                 $(seeMoreElement).removeClass('hide');
+                                $(seeLessElement).addClass('hide');
                             }else{
                                 $(seeMoreElement).addClass('hide');
-                                if(article){
+                                if(article && viewLinkElement){
                                     $(viewLinkElement).removeClass('hide');
                                 }
                                 if(snippet){
@@ -1854,6 +1911,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     let sectionElement = $('#faqSection-' + id);
                     let divElement = $('#faqDiv-' + id);
                     let seeMoreElement = $('#seeMore-' + id);
+                    let seeLessElement = $('#seeLess-' + id);
                     console.log(article, "article", snippet);
                     if(snippet){
                         titleElement = $("#snippettitle-" + id);
@@ -1861,6 +1919,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         sectionElement = $('#snippetSection-' + id);
                         divElement = $('#snippetDiv-' + id);
                         seeMoreElement = $('#snippetseeMore-' + id);
+                        seeLessElement = $('#snippetseeLess-' + id);
                         snippetviewMsg = $('#snippetviewMsg-' + id);
                     }
                     if(article == 'article'){
@@ -1869,6 +1928,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         sectionElement = $('#articleSection-' + id);
                         divElement = $('#articleDiv-' + id);
                         seeMoreElement = $('#articleseeMore-' + id);
+                        seeLessElement = $('#articleseeLess-' + id);
                         console.log(seeMoreElement, 'see more element');
                     }
                     if(titleElement && descElement && sectionElement && divElement){
@@ -1884,6 +1944,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         
                             if(divSectionHeight > (24 + faqSourceTypePixel)){
                                 $(seeMoreElement).removeClass('hide');
+                                $(seeLessElement).addClass('hide');
                             }else{
                                 $(seeMoreElement).addClass('hide');
                                 if(snippet){
@@ -1920,6 +1981,17 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             });
                         }
                     }
+                }
+
+                function handleEmptyLine(answer){
+                    let eleanswer = '';
+                    if(answer != undefined && answer != null){
+                        eleanswer = answer.replace(/(\r\n|\n|\r)/gm, "<br>");
+                        // eleanswer = answer.split('\n').map(e => `<p>${e}</p>`);
+                        // return eleanswer.join('');
+                        return eleanswer;
+                    }
+                    return eleanswer
                 }
 
                 function processAgentAssistResponse(data, convId, botId) {
@@ -2067,7 +2139,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     let articleHtml = `
                                     <div class="type-info-run-send" id="snippetDiv-${uuids+index}">
                                         <div class="left-content" id="snippetSection-${uuids+index}">
-                                            <div class="title-text" id="snippettitle-${uuids+index}">${ele.title}</div>
+                                            <div class="title-text" title="${ele.title}" id="snippettitle-${uuids+index}">${ele.title}</div>
                                         </div>
                                         
                                     </div>`;
@@ -2104,7 +2176,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     // }
                                 })
 
-                            }else{
+                            }
                                 if (data.suggestions.dialogs?.length > 0) {
                                     let automationSuggestions = document.getElementById(`automationSuggestions-${responseId}`);
                                     let dialogAreaHtml = `<div class="task-type" id="dialoguesArea">
@@ -2168,20 +2240,21 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             let articleHtml = `
                                             <div class="type-info-run-send" id="articleDiv-${uuids+index}">
                                                 <div class="left-content" id="articleSection-${uuids+index}">
-                                                    <div class="title-text" id="articletitle-${uuids+index}">${ele.title}</div>
+                                                    <div class="title-text" title="${ele.title}" id="articletitle-${uuids+index}">${ele.title}</div>
                                                 </div>
                                                 
                                             </div>`;
             
                                             articleSuggestions.innerHTML += articleHtml;
                                             let articles = $(`.type-info-run-send #articleSection-${uuids+index}`);
-                                            if (!ele.content) {
-                                                let checkHtml = `
-                                                <i class="ast-carrotup" data-conv-id="${data.conversationId}"
-                                                data-bot-id="${botId}" data-intent-name="${ele.title}"
-                                                data-check="true" id="articlecheck-${uuids + index}"></i>`;
-                                                            articles.append(checkHtml);
-                                            } else {
+                                            // if (!ele.content) {
+                                            //     let checkHtml = `
+                                            //     <i class="ast-carrotup" data-conv-id="${data.conversationId}"
+                                            //     data-bot-id="${botId}" data-intent-name="${ele.title}"
+                                            //     data-check="true" id="articlecheck-${uuids + index}"></i>`;
+                                            //                 articles.append(checkHtml);
+                                            // } else {
+                                                    ele.content = ele.content ? ele.content.replace( /(<([^>]+)>)/ig, '').replace(/"/g, "'") : '';
                                                     let a = $(`#articleDiv-${uuids + index}`);
                                                     let articleActionHtml = `<div class="action-links">
                                                     <button class="send-run-btn" id="sendMsg" data-msg-id="article-${uuids + index}" data-msg-data="${ele.content}">Send</button>
@@ -2189,7 +2262,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                         <i class="ast-copy" data-msg-id="article-${uuids + index}" data-msg-data="${ele.content}"></i>
                                                     </div>
                                                 </div>`;
-                                                a.append(articleActionHtml);
+                                                if(ele.content){
+                                                    a.append(articleActionHtml);
+                                                }
+                                                if(data.userInput){
+                                                    ele.content = ele.content.replace(new RegExp('('+data.userInput+')', 'gi'), '<b>$1</b>');
+                                                }
                                                 articles.append(`<div class="desc-text" id="articledesc-${uuids + index}">${ele.content}</div>`);
                                                 if(ele.link){
                                                     let fullArticleLinkHtml = `<div class="link-view-full-article hide" id="articleViewLink-${uuids+index}"><a href="${ele.link}" target="_blank">View Full Article</a></div>`
@@ -2205,7 +2283,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                 setTimeout(() => {
                                                     updateSeeMoreButtonForAssist(uuids + index,'article');
                                                 }, 100);
-                                            }
+                                            // }
             
                                             // if (data.suggestions.faqs.length === 1 && !ele.answer) {
                                             //     document.getElementById(`check-${uuids + index}`).click();
@@ -2315,7 +2393,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     let faqHtml = `
                         <div class="type-info-run-send" id="faqDiv-${uuids+index}">
                             <div class="left-content" id="faqSection-${uuids+index}">
-                                <div class="title-text" id="title-${uuids+index}">${ele.question}</div>
+                                <div class="title-text" title="${ ele.displayName? ele.displayName : ele.question}" id="title-${uuids+index}">${ele.displayName? ele.displayName : ele.question}</div>
                                 
                                 
                             </div>
@@ -2324,11 +2402,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
     
                                     faqsSuggestions.innerHTML += faqHtml;
                                     let faqs = $(`.type-info-run-send #faqSection-${uuids+index}`);
+                                    let positionID = 'dg-'+koreGenerateUUID();
                                     if (!ele.answer) {
-                                        let positionID = 'dg-'+koreGenerateUUID();
                                         let checkHtml = `
                             <i class="ast-carrotup" data-conv-id="${data.conversationId}"
-                            data-bot-id="${botId}" data-intent-name="${ele.question}"
+                            data-bot-id="${botId}" data-intent-name="${ele.displayName}" data-question="${ele.question}"
                             data-check="true" id="check-${uuids+index}" data-position-id="${positionID}"></i>`;
                                         // faqs.append(checkHtml);
                                         // $(`#title-${uuids+index}`).addClass('noPadding');
@@ -2343,7 +2421,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             </div>
                         </div>`;
                                         a.append(faqActionHtml);
-                                        faqs.append(`<div class="desc-text" id="desc-${uuids+index}">${ele.answer}</div>`);
+                                        faqs.append(`<div class="desc-text" id="desc-${uuids+index}">${handleEmptyLine(ele.answer)}</div>`);
                                          
                                         let faqstypeInfo = $(`.type-info-run-send #faqSection-${uuids + index}`);
                                         let seeMoreButtonHtml = `
@@ -2362,7 +2440,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     $(`#faqDiv-${uuids+index}`).removeClass('is-dropdown-show-default');
                                 }
                                 })
-                            }
+                            
                       
                         }
                         setTimeout(() => {         
@@ -2373,7 +2451,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         if (data.type === 'text' && data.suggestions) {
                             let faqAnswerIdsPlace ;
                             data.suggestions.faqs.forEach((ele) => {
-                                faqAnswerIdsPlace = answerPlaceableIDs.find(ele => ele.input == data.value);
+                                faqAnswerIdsPlace = answerPlaceableIDs.find(ele => ele.inputQuestion == data.value);
                                 if(faqAnswerIdsPlace){
                                     let splitedanswerPlaceableID = faqAnswerIdsPlace.id.split('-');
                                     splitedanswerPlaceableID.shift();
@@ -2393,7 +2471,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                  //    let faqAnswerCopyMsg =  $(`#dynamicBlock #faqDiv-${splitedanswerPlaceableID.join('-')}`).find(".copy-btn");
                                  //    $(faqAnswerCopyMsg).attr('data-msg-data',ele.answer)
      
-                                     $(`#${faqAnswerIdsPlace.id}`).html(ele.answer);
+                                     $(`#${faqAnswerIdsPlace.id}`).html(handleEmptyLine(ele.answer));
                                      $(`#${faqAnswerIdsPlace.id}`).attr('data-answer-render', 'true');
                                      let faqs = $(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')}`);
                                      let seeMoreButtonHtml = `
@@ -2475,6 +2553,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     });
                     if (isAutomationOnGoing && dropdownHeaderUuids && data.buttons && !data.value.includes('Customer has waited') && (dialogPositionId && !data.positionId || data.positionId == dialogPositionId)) {
                         let msgStringify = JSON.stringify(_msgsResponse);
+                        msgStringify = msgStringify.replaceAll("'", "&rsquo;")
                         let newTemp = encodeURI(msgStringify);
                         $(`#overRideBtn-${dropdownHeaderUuids}`).removeClass('hide');
                         $(`#cancelOverRideBtn-${dropdownHeaderUuids}`).addClass('hide');
@@ -2532,7 +2611,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         if (data.isPrompt) {
                             runInfoContent.append(askToUserHtml);
                             if(!proactiveMode){
-                                getOverRideMode('overRideBtn-' + dropdownHeaderUuids, dialogPositionId);
+                                getOverRideMode('overRideBtn-' + dropdownHeaderUuids, dialogPositionId, true);
                             }else{
                                 $(`.override-input-div`).removeClass('hide');
                             }
@@ -2604,6 +2683,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     if(!isAutomationOnGoing && dropdownHeaderUuids && data.buttons && !data.value.includes('Customer has waited') && (dialogPositionId && !data.positionId || data.positionId == dialogPositionId)){
                         $('#dynamicBlock .empty-data-no-agents').addClass('hide');
                         let dynamicBlockDiv = $('#dynamicBlock');
+                        let tellOrAskCustomer = data.isPrompt ? 'Ask Customer' : 'Tell Customer';
                         data.buttons?.forEach((ele, i) => {
                             let botResHtml = `
                                 <div class="collapse-acc-data before-none" id='smallTalk-${uuids}'>
@@ -2612,12 +2692,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 <i class="ast-agent"></i>
                             </div>
                             <div class="run-info-content" >
-                            <div class="title">Tell Customer</div>
+                            <div class="title">${tellOrAskCustomer}</div>
                             <div class="agent-utt">
-                                <div class="title-data" id="displayData-${uuids}">${ele.value}</div>
                                 <div class="action-links">
                                     <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}"  data-msg-data="${ele.value}">Send</button>
-                                    <div class="copy-btn" data-msg-id="${uuids}" data-msg-data="${ele.value}">
+                                    <div class="copy-btn hide" data-msg-id="${uuids}" data-msg-data="${ele.value}">
                                         <i class="ast-copy" data-msg-id="${uuids}" data-msg-data="${ele.value}"></i>
                                     </div>
                                 </div>
@@ -2625,7 +2704,14 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             </div>
                         </div>
                         </div>`;
+                            let titleData = `<div class="title-data" id="displayData-${uuids}">${ele.value}</div>`
+                            if(parsedPayload){
+                                titleData = `<div class="title-data" ><ul class="chat-container" id="displayData-${uuids}"></ul></div>`;
+                            }
                             dynamicBlockDiv.append(botResHtml);
+                            $(`#smallTalk-${uuids} .agent-utt`).append(titleData);
+
+                            hideSendOrCopyButtons(parsedPayload, `#smallTalk-${uuids} .agent-utt`, 'smallTalk')
                         });
                     }
                     if (!isAutomationOnGoing && !dropdownHeaderUuids && !parsedPayload && !data.suggestions) {
@@ -2703,7 +2789,11 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             updateNewMessageUUIDList(uuids);
                         }, waitingTimeForUUID);
                     }
-                    dropdownHeaderUuids ? AgentChatInitialize.renderMessage(_msgsResponse, uuids, `dropDownData-${dropdownHeaderUuids}`) : '';
+                    let dropdownUUID = `dropDownData-${dropdownHeaderUuids}`;
+                    if(!isAutomationOnGoing && parsedPayload){
+                        dropdownUUID = `smallTalk-${uuids}`;
+                    }
+                    dropdownHeaderUuids ? AgentChatInitialize.renderMessage(_msgsResponse, uuids, dropdownUUID) : '';
 
                     // let noOfStepsOfSmallTalk = $(`.body-data-container #dynamicBlock #welcomeMsg`).find('.steps-run-data').not('.hide');
                     // if (noOfStepsOfSmallTalk.length >= 2) {
@@ -3245,7 +3335,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                 let faqHtml = `
                                 <div class="type-info-run-send" id="faqDiv-${uniqueID+index}">
                                     <div class="left-content" id="faqSection-${uniqueID+index}">
-                                        <div class="title-text" id="title-${uniqueID+index}">${ele.question}</div>
+                                        <div class="title-text" title="${ele.displayName ? ele.displayName : ele.question}" id="title-${uniqueID+index}">${ele.displayName? ele.displayName : ele.question}</div>
                                         
                                         
                                     </div>
@@ -3257,7 +3347,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                 if (!ele.answer) {
                                                     let checkHtml = `
                                     <i class="ast-carrotup" data-conv-id="${_agentAssistDataObj.conversationId}"
-                                    data-bot-id="${res.botId}" data-intent-name="${ele.question}"
+                                    data-bot-id="${res.botId}" data-intent-name="${ele.displayName}" data-question="${ele.question}"
                                     data-check="true" id="check-${uniqueID+index}" data-position-id="${uniqueID+index}"></i>`;
                                                     // faqs.append(checkHtml);
                                                     // $(`#title-${uniqueID}`).addClass('noPadding');
@@ -3272,7 +3362,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     </div>
                                 </div>`;
                                                     a.append(faqActionHtml);
-                                                    faqs.append(`<div class="desc-text" id="desc-${uniqueID+index}">${ele.answer}</div>`);
+                                                    faqs.append(`<div class="desc-text" id="desc-${uniqueID+index}">${handleEmptyLine(ele.answer)}</div>`);
                                                     let faqstypeInfo = $(`.type-info-run-send #faqSection-${uniqueID+index}`);
                                                     let seeMoreButtonHtml = `
                                           <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${uniqueID+index}" data-see-more="true">Show more</button>
@@ -3339,7 +3429,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                 let faqHtml = `
                                 <div class="type-info-run-send" id="faqDiv-${uniqueID+index}">
                                     <div class="left-content" id="faqSection-${uniqueID+index}">
-                                        <div class="title-text" id="title-${uniqueID+index}">${ele.question}</div>
+                                        <div class="title-text" title="${ele.question}" id="title-${uniqueID+index}">${ele.question}</div>
                                     </div>
                                 </div>`;
                                                 faqsSuggestions.innerHTML += faqHtml;
@@ -3352,7 +3442,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                     </div>
                                 </div>`;
                                                     a.append(faqActionHtml);
-                                                    faqs.append(`<div class="desc-text" id="desc-${uniqueID+index}">${res.components[0].data.text}</div>`);
+                                                    faqs.append(`<div class="desc-text" id="desc-${uniqueID+index}">${handleEmptyLine(res.components[0].data.text)}</div>`);
                                                     let faqstypeInfo = $(`.type-info-run-send #faqSection-${uniqueID+index}`);
                                                     let seeMoreButtonHtml = `
                                           <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${uniqueID+index}" data-see-more="true">Show more</button>
@@ -3384,12 +3474,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         "traceId": "873209019a5adc26",
                                         "createdOnTimemillis": res._id
                                     }
-                                    currentTaskName = res.tN ? res.tN : currentTaskName;
-                                    currentTaskPositionId = res?.agentAssistDetails?.positionId ? res?.agentAssistDetails?.positionId : currentTaskPositionId;
-
+                                    let positionID = 'dg-'+koreGenerateUUID();
+                                    currentTaskPositionId = res?.agentAssistDetails?.positionId ?  res?.agentAssistDetails?.positionId : ((res.tN != currentTaskName) ? positionID : currentTaskPositionId);
+                                    currentTaskName = (res.tN) ? res.tN  : currentTaskName;
                                     let historyData = $('#dynamicBlock');
                                     let userInputHtml;
-                                    if (res.agentAssistDetails?.userInput) {
+                                    if (res.agentAssistDetails?.userInput && res?.agentAssistDetails?.positionId) {
                                         userInputHtml = `<div class="agent-utt-info" id="agentUttInfo-${res._id}">
                                             <div class="user-img">
                                                 <img src="./images/userIcon.svg">
@@ -3458,7 +3548,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             }
                                         }
                                     }
-                                    if (res.agentAssistDetails?.entityName && res.agentAssistDetails?.entityResponse && res.agentAssistDetails?.entityValue) {
+                                    if (res.agentAssistDetails?.entityName && res.agentAssistDetails?.entityResponse && res.agentAssistDetails?.entityValue && res.agentAssistDetails?.userInput) {
                                         let runInfoContent = $(`#dropDownData-${previousId}`);
                                         let userQueryHtml = `
                                             <div class="steps-run-data">
@@ -3468,7 +3558,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                 <div class="run-info-content" id="userInput-${res._id}">
                                                     <div class="title">Customer Said - </div>
                                                     <div class="agent-utt">
-                                                        <div class="title-data">"${sanitizeHTML(res.agentAssistDetails.entityValue)}"</div>
+                                                        <div class="title-data">"${sanitizeHTML(res.agentAssistDetails.userInput)}"</div>
                                                     </div>
                                                     
                                                 </div>
@@ -3477,7 +3567,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         let entityHtml = $(`#dropDownData-${previousId}`).find(`#userInput-${res._id}`);
                                         let entityDisplayName = agentAssistResponse.newEntityDisplayName ? agentAssistResponse.newEntityDisplayName : agentAssistResponse.newEntityName;
                                         if (res.agentAssistDetails.entityValue && !res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
-                                            entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${sanitizeHTML(res.agentAssistDetails.entityValue)}</div>`);
+                                            let entityValueType = typeof res.agentAssistDetails.entityValue;
+                                            let entityValue = (entityValueType == 'object') ? JSON.stringify(res.agentAssistDetails.entityValue) : sanitizeHTML(res.agentAssistDetails.userInput);
+                                            entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${entityValue}</div>`);
                                         } else {
                                             if (res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
                                                 let entityHtmls = `<div class="order-number-info">${entityDisplayName} : 
@@ -3544,85 +3636,87 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             }
 
                                         }
-
-                                        _msgsResponse.message.push(body);
+                                        if(body['cInfo']['body'] != "" && body['cInfo']['body']){
+                                            _msgsResponse.message.push(body);
+                                        }
                                     });
-                                    let msgStringify = JSON.stringify(_msgsResponse);
-                                    let newTemp = encodeURI(msgStringify);
-                                    if((res.agentAssistDetails?.isPrompt === true || res.agentAssistDetails?.isPrompt === false) && previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) {
-                                    let runInfoContent = $(`#dropDownData-${previousId}`);
-                                    let askToUserHtml = `
-                                        <div class="steps-run-data">
-                                                    <div class="icon_block">
-                                                        <i class="ast-agent"></i>
-                                                    </div>
-                                                    <div class="run-info-content" >
-                                                    <div class="title">Ask customer</div>
-                                                    <div class="agent-utt">
-                                                        <div class="title-data"><ul class="chat-container" id="displayData-${res._id}"></ul></div>
-                                                        <div class="action-links">
-                                                        <button class="send-run-btn" id="sendMsg" data-msg-id="${res._id}" data-msg-data="${newTemp}">Send</button>
-                                                        <div class="copy-btn hide" data-msg-id="${res._id}">
-                                                            <i class="ast-copy" data-msg-id="${res._id}"></i>
+                                    if(_msgsResponse.message.length > 0){
+                                        let msgStringify = JSON.stringify(_msgsResponse);
+                                        msgStringify = msgStringify.replaceAll("'", "&rsquo;")
+                                        let newTemp = encodeURI(msgStringify);
+                                        if((res.agentAssistDetails?.isPrompt === true || res.agentAssistDetails?.isPrompt === false) && (previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) || (previousTaskName != currentTaskName && previousTaskPositionId == currentTaskPositionId)) {
+                                        let runInfoContent = $(`#dropDownData-${previousId}`);
+                                        let askToUserHtml = `
+                                            <div class="steps-run-data">
+                                                        <div class="icon_block">
+                                                            <i class="ast-agent"></i>
                                                         </div>
-                                                    </div>
-                                                    </div>
-                                                    </div>
-                                                </div>
-                                        `;
-                                    let tellToUserHtml = `
-                                        <div class="steps-run-data">
-                                                    <div class="icon_block">
-                                                        <i class="ast-agent"></i>
-                                                    </div>
-                                                    <div class="run-info-content" >
-                                                    <div class="title">Tell Customer</div>
-                                                    <div class="agent-utt">
-                                                        <div class="title-data" ><ul class="chat-container" id="displayData-${res._id}"></ul></div>
-                                                        <div class="action-links">
+                                                        <div class="run-info-content" >
+                                                        <div class="title">Ask customer</div>
+                                                        <div class="agent-utt">
+                                                            <div class="title-data"><ul class="chat-container" id="displayData-${res._id}"></ul></div>
+                                                            <div class="action-links">
                                                             <button class="send-run-btn" id="sendMsg" data-msg-id="${res._id}" data-msg-data="${newTemp}">Send</button>
                                                             <div class="copy-btn hide" data-msg-id="${res._id}">
                                                                 <i class="ast-copy" data-msg-id="${res._id}"></i>
                                                             </div>
                                                         </div>
+                                                        </div>
+                                                        </div>
                                                     </div>
+                                            `;
+                                        let tellToUserHtml = `
+                                            <div class="steps-run-data">
+                                                        <div class="icon_block">
+                                                            <i class="ast-agent"></i>
+                                                        </div>
+                                                        <div class="run-info-content" >
+                                                        <div class="title">Tell Customer</div>
+                                                        <div class="agent-utt">
+                                                            <div class="title-data" ><ul class="chat-container" id="displayData-${res._id}"></ul></div>
+                                                            <div class="action-links">
+                                                                <button class="send-run-btn" id="sendMsg" data-msg-id="${res._id}" data-msg-data="${newTemp}">Send</button>
+                                                                <div class="copy-btn hide" data-msg-id="${res._id}">
+                                                                    <i class="ast-copy" data-msg-id="${res._id}"></i>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                        `;
-                                        var appStateStr = localStorage.getItem('agentAssistState') || '{}';
-                                        var appState = JSON.parse(appStateStr);  
-                                        if(appState[_conversationId]['automationGoingOnAfterRefresh']) {
-                                            isAutomationOnGoing = true;
-                                            dropdownHeaderUuids = previousId;
-                                            appState[_conversationId]['automationGoingOnAfterRefresh'] = isAutomationOnGoing;
-                                            localStorage.setItem('agentAssistState', JSON.stringify(appState))
+                                            `;
+                                            var appStateStr = localStorage.getItem('agentAssistState') || '{}';
+                                            var appState = JSON.parse(appStateStr);  
+                                            if(appState[_conversationId]['automationGoingOnAfterRefresh']) {
+                                                isAutomationOnGoing = true;
+                                                dropdownHeaderUuids = previousId;
+                                                appState[_conversationId]['automationGoingOnAfterRefresh'] = isAutomationOnGoing;
+                                                localStorage.setItem('agentAssistState', JSON.stringify(appState))
+                                            }
+                                        if (res.agentAssistDetails.isPrompt || res.agentAssistDetails.entityRequest) {
+                                            if(appState[_conversationId]['automationGoingOnAfterRefresh']) {
+                                                $(`#overRideBtn-${previousId}`).removeClass('hide');
+                                                $(`#cancelOverRideBtn-${previousId}`).addClass('hide');
+                                                $("#inputFieldForAgent").remove();
+                                                $(`#terminateAgentDialog`).removeClass('hide');
+                                                $('#dynamicBlock .override-input-div').addClass('hide');
+                                                $(`#overRideDiv-${previousId}`).removeClass('hide');
+                                                $(`#overRideBtn-${previousId}`).attr('data-position-id', previousTaskPositionId);
+                                                $(`#terminateAgentDialog`).attr('data-position-id', previousTaskPositionId);
+                                                dialogPositionId = previousTaskPositionId;
+                                            }
+                                            runInfoContent.append(askToUserHtml);
+                                            if(!proactiveMode){
+                                                getOverRideMode('overRideBtn-' + dropdownHeaderUuids, dialogPositionId, true);
+                                                $(`.override-input-div`).addClass('hide');
+                                            }
+                                        } else {
+                                            runInfoContent.append(tellToUserHtml);
                                         }
-                                    if (res.agentAssistDetails.isPrompt || res.agentAssistDetails.entityRequest) {
-                                        if(appState[_conversationId]['automationGoingOnAfterRefresh']) {
-                                            $(`#overRideBtn-${previousId}`).removeClass('hide');
-                                            $(`#cancelOverRideBtn-${previousId}`).addClass('hide');
-                                            $("#inputFieldForAgent").remove();
-                                            $(`#terminateAgentDialog`).removeClass('hide');
-                                            $('#dynamicBlock .override-input-div').addClass('hide');
-                                            $(`#overRideDiv-${previousId}`).removeClass('hide');
-                                            $(`#overRideBtn-${previousId}`).attr('data-position-id', previousTaskPositionId);
-                                            $(`#terminateAgentDialog`).attr('data-position-id', previousTaskPositionId);
-                                            dialogPositionId = previousTaskPositionId;
+                                        hideSendOrCopyButtons(parsedPayload, runInfoContent)
+                                       
                                         }
-                                        runInfoContent.append(askToUserHtml);
-                                        if(!proactiveMode){
-                                            getOverRideMode('overRideBtn-' + dropdownHeaderUuids, dialogPositionId);
-					                        $(`.override-input-div`).addClass('hide');
-                                        }
-                                    } else {
-                                        runInfoContent.append(tellToUserHtml);
+                                        AgentChatInitialize.renderMessage(_msgsResponse, res._id, `dropDownData-${previousId}`);
                                     }
-                                    hideSendOrCopyButtons(parsedPayload, runInfoContent)
-                                   
-                                 }
-                              
-                                
-                                    AgentChatInitialize.renderMessage(_msgsResponse, res._id, `dropDownData-${previousId}`);
                                     let shouldProcessResponse = false;
                                     var appStateStr = localStorage.getItem('agentAssistState') || '{}';
                                     var appState = JSON.parse(appStateStr);
@@ -3781,7 +3875,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
     </div>
 </div>`;
                     a.append(faqActionHtml);
-                    faqs.append(`<div class="desc-text" id="desc-${ele}">${res.components[0].data.text}</div>`);
+                    faqs.append(`<div class="desc-text" id="desc-${ele}">${handleEmptyLine(res.components[0].data.text)}</div>`);
                     let faqstypeInfo = $(`#faqsSuggestions-${eleid} .type-info-run-send #faqSection-${ele}`);
                     let seeMoreButtonHtml = `
           <button class="ghost-btn hide" style="font-style: italic;" id="seeMore-${ele}" data-see-more="true">Show more</button>
@@ -3922,7 +4016,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                             }
                                         }   
                                     }
-                                    if (res.agentAssistDetails?.entityName && res.agentAssistDetails?.entityResponse && res.agentAssistDetails?.entityValue) {
+                                    if (res.agentAssistDetails?.entityName && res.agentAssistDetails?.entityResponse && res.agentAssistDetails?.entityValue && res.agentAssistDetails.userInput) {
+                                       
                                         let runInfoContent = $(`#dropDownData-${previousId}`);
                                         let userQueryHtml = `
                                                 <div class="steps-run-data">
@@ -3932,7 +4027,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                                     <div class="run-info-content" id="userInput-${res._id}">
                                                         <div class="title">Customer Said - </div>
                                                         <div class="agent-utt">
-                                                            <div class="title-data">"${sanitizeHTML(res.agentAssistDetails.entityValue)}"</div>
+                                                            <div class="title-data">"${sanitizeHTML(res.agentAssistDetails.userInput)}"</div>
                                                         </div>
                                                         
                                                     </div>
@@ -3941,7 +4036,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         let entityHtml = $(`#dropDownData-${previousId}`).find(`#userInput-${res._id}`);
                                         let entityDisplayName = myBotDataResponse.newEntityDisplayName ? myBotDataResponse.newEntityDisplayName : myBotDataResponse.newEntityName;
                                         if (res.agentAssistDetails.entityValue && !res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
-                                            entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${sanitizeHTML(res.agentAssistDetails.entityValue)}</div>`);
+                                            let entityValueType = typeof res.agentAssistDetails.entityValue;
+                                            let entityValue = (entityValueType == 'object') ? JSON.stringify(res.agentAssistDetails.entityValue) : sanitizeHTML(res.agentAssistDetails.userInput);
+                                            entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${entityValue}</div>`);
                                         } else {
                                             if (res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
                                                 let entityHtmls = `<div class="order-number-info">${entityDisplayName} : 
@@ -4014,6 +4111,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                         _msgsResponse.message.push(body);
                                     });
                                     let msgStringify = JSON.stringify(_msgsResponse);
+                                    msgStringify = msgStringify.replaceAll("'", "&rsquo;")
                                     let newTemp = encodeURI(msgStringify);
                                     if((res.agentAssistDetails?.isPrompt === true || res.agentAssistDetails?.isPrompt === false)  && previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) {
                                     let runInfoContent = $(`#dropDownData-${previousId}`);
@@ -4204,12 +4302,13 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         userTabActive();
                     }
                     proactiveMode = (convState.proactiveMode != undefined && convState.proactiveMode != null) ? convState.proactiveMode : true;
-                    isOverRideMode = !proactiveMode;
+                    // isOverRideMode = !proactiveMode;
                     document.getElementById("checkProActive").checked = proactiveMode;
                     updateCurrentTabInState(_convId,  convState.currentTab);
                   //  convState.currentTab !== 'librarySearch' ? updateUIWithTabState(_convId, convState.currentTab):'';
                     document.getElementById("loader").style.display = "none";
                     hightLightFaqFromStoredList(_conversationId, 'assistTab');
+                    proactiveModeStatusChange();
                 }
 
                 function hightLightFaqFromStoredList(convId, currentTab) {
@@ -4581,7 +4680,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
 
                 function UnCollapseDropdownForLastElement(lastElement){
-                    if(lastElement.className.includes('steps-run-data')){
+                    if(lastElement && lastElement.className.includes('steps-run-data')){
                         let lastElementId = getUUIDFromId(lastElement.id);
                         lastElementId = lastElementId.split("*")[0];
                         let collapseElement = document.getElementById('dropDownData-' + lastElementId);
@@ -4646,7 +4745,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     scrollToBottom();
                 }
 
-                function getOverRideMode(targetId, positionId) {
+                function getOverRideMode(targetId, positionId, notEmit) {
                     let idsss = targetId.split('-');
                     idsss.shift();
                     let id = idsss.join('-')
@@ -4660,7 +4759,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         'experience': isCallConversation === 'true' ? 'voice' : 'chat',
                         "positionId": positionId
                     }
-                    _agentAsisstSocket.emit('enable_override_userinput', overRideObj);
+                    if(!notEmit){
+                        _agentAsisstSocket.emit('enable_override_userinput', overRideObj);
+                    }
+                
                     let runInfoContent = $(`#dropDownData-${dropdownHeaderUuids}`);
                     let agentInputId = Math.floor(Math.random() * 100);
                     let agentInputEntityName = 'EnterDetails';
@@ -4697,6 +4799,26 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
 
                 const typeAHead = typeAHeadDeBounce((e, falg)=>getAutoSearchApiResult(e, falg));
+
+                function proactiveModeStatusChange(){
+                    if(document.getElementById("checkProActive").checked == true){
+                        proactiveMode = true;
+                        $(`.override-input-div`).removeClass('hide');
+                        getCancelOverRideMode('overRideBtn-' + dropdownHeaderUuids, dialogPositionId);
+
+                    } else if (document.getElementById("checkProActive").checked == false) {   
+                        proactiveMode = false;
+                        if(document.getElementById(`inputFieldForAgent`)){
+                            $(`#inputFieldForAgent`).remove();
+                        }
+                        if(document.getElementById(`overRideBtn-${dropdownHeaderUuids}`)){
+                            $(`#overRideBtn-${dropdownHeaderUuids}`).addClass('hide');
+                            $(`#cancelOverRideBtn-${dropdownHeaderUuids}`).addClass('hide');
+                        }
+                        getOverRideMode('overRideBtn-' + dropdownHeaderUuids, dialogPositionId);
+                    }
+                }
+
                 function btnInit() {
 
                     document.querySelector('#bodyContainer').addEventListener('ps-scroll-up', (scrollUpevent) => {
@@ -4730,6 +4852,27 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         lastElementBeforeNewMessage = getLastElement(dynamicBlockId);
                         addWhiteBackgroundClassToNewMessage();
                     });
+                    
+                    function HandleClickAndSendRequest(e){
+                        if (JSON.parse(localStorage.getItem('innerTextValue'))) {
+                            if(currentTabActive == 'userAutoIcon'){
+                                 AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: _agentAssistDataObj.conversationId, botId: _agentAssistDataObj.botId, value: JSON.parse(localStorage.getItem('innerTextValue')), check: true });
+                                 isAgentSentRequestOnClick = true;
+                                 localStorage.setItem('innerTextValue', null);
+                             } else if(currentTabActive == 'agentAutoIcon'){
+                                 AgentAssistPubSub.publish('searched_Automation_details', { conversationId: _agentAssistDataObj.conversationId, botId: _agentAssistDataObj.botId, value: JSON.parse(localStorage.getItem('innerTextValue')), isSearch: false});
+                                 isMyBotAgentSentRequestOnClick = true;
+                                 localStorage.setItem('innerTextValue', null);
+                             }
+                             e.stopImmediatePropagation();
+                             e.preventDefault();
+                             e.stopPropagation();
+                         } else {
+                             e.stopImmediatePropagation();
+                             e.preventDefault();
+                             e.stopPropagation();
+                         }
+                    }
 
                     document.addEventListener("click", (evt) => {
                         var target = evt.target;
@@ -4743,24 +4886,57 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         $('.agent-assist-chat-container.kore-chat-window').off('click', '.buttonTmplContentBox li,.listTmplContentChild .buyBtn,.viewMoreList .viewMore,.listItemPath,.quickReply,.carouselImageContent,.listRightContent,.checkboxBtn,.likeDislikeDiv').on('click', '.buttonTmplContentBox li,.listTmplContentChild .buyBtn, .viewMoreList .viewMore,.listItemPath,.quickReply,.carouselImageContent,.listRightContent,.checkboxBtn,.likeDislikeDiv', function (e) {
 
                             AgentChatInitialize.bindEvents(true, e);
-                            if (JSON.parse(localStorage.getItem('innerTextValue'))) {
-                               if(currentTabActive == 'userAutoIcon'){
-                                    AgentAssistPubSub.publish('agent_assist_send_text', { conversationId: _agentAssistDataObj.conversationId, botId: _agentAssistDataObj.botId, value: JSON.parse(localStorage.getItem('innerTextValue')), check: true });
-                                    isAgentSentRequestOnClick = true;
-                                    localStorage.setItem('innerTextValue', null);
-                                } else if(currentTabActive == 'agentAutoIcon'){
-                                    AgentAssistPubSub.publish('searched_Automation_details', { conversationId: _agentAssistDataObj.conversationId, botId: _agentAssistDataObj.botId, value: JSON.parse(localStorage.getItem('innerTextValue')), isSearch: false});
-                                    isMyBotAgentSentRequestOnClick = true;
-                                    localStorage.setItem('innerTextValue', null);
-                                }
-                                e.stopImmediatePropagation();
-                                e.preventDefault();
-                                e.stopPropagation();
-                            } else {
-                                e.stopImmediatePropagation();
-                                e.preventDefault();
-                                e.stopPropagation();
-                            }
+                            HandleClickAndSendRequest(e);
+                        });
+                        $('.agent-assist-chat-container.kore-chat-window').off('click', '.advanced-list-wrapper .callendar-tabs .month-tab').on('click', '.advanced-list-wrapper .callendar-tabs .month-tab', function (e) {
+                              HandleClickAndSendRequest(e);
+                        });
+                        $('.agent-assist-chat-container.kore-chat-window').off('click', '.advanced-list-wrapper .multiple-accor-rows .accor-inner-content .option').on('click', '.advanced-list-wrapper .multiple-accor-rows .accor-inner-content .option', function (e) {
+                            HandleClickAndSendRequest(e)
+                        });
+                        $('.agent-assist-chat-container.kore-chat-window').off('click', '.advanced-list-wrapper .multiple-accor-rows .accor-inner-content .option .option-input').on('click', '.advanced-list-wrapper .multiple-accor-rows .accor-inner-content .option .option-input', function (e) {
+                             HandleClickAndSendRequest(e)
+                        });
+                        $('.agent-assist-chat-container.kore-chat-window').off('click', '.advanced-list-wrapper .multiple-accor-rows .accor-header-top').on('click', '.advanced-list-wrapper .multiple-accor-rows .accor-header-top', function (e) {
+                             HandleClickAndSendRequest(e)
+                        });
+
+                        $('.agent-assist-chat-container.kore-chat-window').off('click', '.advanced-list-wrapper .main-title-text-block .search-block .search_icon').on('click', '.advanced-list-wrapper .main-title-text-block .search-block .search_icon', function (e) {
+                             HandleClickAndSendRequest(e)
+                        });
+                        $('.agent-assist-chat-container.kore-chat-window').off('click', '.advanced-list-wrapper .main-title-text-block .search-block .close_icon').on('click', '.advanced-list-wrapper .main-title-text-block .search-block .close_icon', function (e) {
+                             HandleClickAndSendRequest(e);
+                        });
+                        $('.agent-assist-chat-container.kore-chat-window').off('click', '.advanced-list-wrapper .main-title-text-block .search-block .input_text').on("keyup", '.advanced-list-wrapper .main-title-text-block .search-block .input_text', function (e) {
+                             HandleClickAndSendRequest(e);
+                        });
+                        $('.agent-assist-chat-container.kore-chat-window').off('click', '.advanced-list-wrapper .main-title-text-block .filter-sort-block .sort-icon').on("click", '.advanced-list-wrapper .main-title-text-block .filter-sort-block .sort-icon', function (e) {
+                             HandleClickAndSendRequest(e); 
+                        });
+                        $('.agent-assist-chat-container.kore-chat-window').off('click', '.advanced-list-wrapper .see-more-data').on("click", '.advanced-list-wrapper .see-more-data', function (e) {
+                             HandleClickAndSendRequest(e);
+                        });
+                        $('.agent-assist-chat-container.kore-chat-window').off('click', '.advanced-list-wrapper .close-btn').on("click", '.advanced-list-wrapper .close-btn', function (e) {
+                            HandleClickAndSendRequest(e);
+                        });
+                        $('.agent-assist-chat-container.kore-chat-window').off('click', '.advanced-list-wrapper .multiple-accor-rows .accor-inner-content .inner-btns-acc .more-btn').on("click", '.advanced-list-wrapper .multiple-accor-rows .accor-inner-content .inner-btns-acc .more-btn', function (e) {
+                             HandleClickAndSendRequest(e);
+                        });
+                        $('.agent-assist-chat-container.kore-chat-window').off('click', '.advanced-list-wrapper .multiple-accor-rows .accor-inner-content .inner-btns-acc .more-button-info .close_btn,.filter-icon .close_btn').on("click", '.advanced-list-wrapper .multiple-accor-rows .accor-inner-content .inner-btns-acc .more-button-info .close_btn,.filter-icon .close_btn', function (e) {
+                             HandleClickAndSendRequest(e);
+                        });
+                        $('.agent-assist-chat-container.kore-chat-window').off('click', '.advanced-list-wrapper .multiple-accor-rows .accor-header-top .btn_block.dropdown,.filter-icon').on("click", '.advanced-list-wrapper .multiple-accor-rows .accor-header-top .btn_block.dropdown,.filter-icon', function (e) {
+                             HandleClickAndSendRequest(e);
+                        });
+                        $('.agent-assist-chat-container.kore-chat-window').off('click', ".advancelisttemplate .TaskPickerContainer .close-button").on('click', ".advancelisttemplate .TaskPickerContainer .close-button", function (event) {
+                             HandleClickAndSendRequest(e);
+                        });
+                        $('.agent-assist-chat-container.kore-chat-window').off('click', '.advanced-list-wrapper .multiple-accor-rows .inner-acc-table-sec .table-sec .column-table-more').on("click", '.advanced-list-wrapper .multiple-accor-rows .inner-acc-table-sec .table-sec .column-table-more', function (e) {
+                            HandleClickAndSendRequest(e);
+                        });
+                
+                        $('.agent-assist-chat-container.kore-chat-window').off('click', '.advanced-list-wrapper .button_,.advanced-list-wrapper .inner-btns-acc .button_,.advanced-list-wrapper .tags-data .tag-name,.advanced-list-wrapper .btn_group .submitBtn,.advanced-list-wrapper .btn_group .cancelBtn,.advanced-list-wrapper .details-content .text-info,.advancelisttemplate .inner-btns-acc .button_,.advancelisttemplate .filter-icon .button_').on("click", '.advanced-list-wrapper .button_,.advanced-list-wrapper .inner-btns-acc .button_,.advanced-list-wrapper .tags-data .tag-name,.advanced-list-wrapper .btn_group .submitBtn,.advanced-list-wrapper .btn_group .cancelBtn,.advanced-list-wrapper .details-content .text-info,.advancelisttemplate .inner-btns-acc .button_,.advancelisttemplate .filter-icon .button_', function (e) {
+                            HandleClickAndSendRequest(e);
                         });
 
                         if (target.className.includes('scroll-bottom-btn')) {
@@ -4785,18 +4961,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         // } else 
 
                         if(target.id === 'checkProActive'){
-                            if(document.getElementById("checkProActive").checked == true){
-                                proactiveMode = true;
-                                $(`.override-input-div`).removeClass('hide');
-                                getCancelOverRideMode('overRideBtn-' + dropdownHeaderUuids, dialogPositionId);
-
-                            } else if (document.getElementById("checkProActive").checked == false) {   
-                                proactiveMode = false;
-                                if(document.getElementById(`overRideBtn-${dropdownHeaderUuids}`)){
-                                    $(`#overRideBtn-${dropdownHeaderUuids}`).addClass('hide');
-                                    getOverRideMode('overRideBtn-' + dropdownHeaderUuids, dialogPositionId);
-                                }
-                            }
+                            proactiveModeStatusChange();
                             updateProactiveModeState(_conversationId, proactiveMode);
                         }
 
@@ -4873,7 +5038,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             searchedVal = '';
                             $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
                             $('#overLayAutoSearch').find('.search-results-text')?.remove();
-                            $('.search-block').find('.search-results-text-in-lib')?.remove();
+                            $('#overLayAutoSearchLibDiv').addClass('hide').removeAttr('style');
+                            $('#overLayAutoSearchLib').find('.search-results-text')?.remove();
+                            // $('.search-block').find('.search-results-text-in-lib')?.remove();
                             $('#autoFill').html('')
                         }
 
@@ -5697,7 +5864,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 faq.append(answerHtml);
                                 $(`#dynamicBlock #${target.id}`).attr('data-answer-render', 'false');
                                 // faqDiv.append(faqaction);
-                                answerPlaceableIDs.push({id:`desc-${id.join('-')}`, input: target.dataset.intentName, positionId: target.dataset.positionId});
+                                answerPlaceableIDs.push({id:`desc-${id.join('-')}`, input: target.dataset.intentName, inputQuestion: target.dataset.question, positionId: target.dataset.positionId});
                                 $(`#dynamicBlock #${target.id}`).addClass('rotate-carrot');
                                 $(`#dynamicBlock #faqDiv-${id.join('-')}`).addClass('is-dropdown-open');
                                 AgentAssist_run_click(evt.target.dataset, target.dataset.positionId);
@@ -5740,7 +5907,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 faq.append(answerHtml);
                                 $(`#overLaySearch #${target.id}`).attr('data-answer-render', 'false');
                                 // faqDiv.append(faqaction);
-                                answerPlaceableIDs.push({id:`descLib-${id.join('-')}`, input: target.dataset.intentName, positionId: target.dataset.positionId});
+                                answerPlaceableIDs.push({id:`descLib-${id.join('-')}`, input: target.dataset.intentName, inputQuestion: target.dataset.question, positionId: target.dataset.positionId});
                                 $(`#overLaySearch #${target.id}`).addClass('rotate-carrot');
                                 $(`#overLaySearch #faqDivLib-${id.join('-')}`).addClass('is-dropdown-open');
                                 AgentAssistPubSub.publish('searched_Automation_details', { conversationId: evt.target.dataset.convId, botId: evt.target.dataset.botId, value: evt.target.dataset.intentName, isSearch: true, positionId: target.dataset.positionId });
@@ -5760,7 +5927,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 faq.append(answerHtml);
                                 $(`#search-text-display #${target.id}`).attr('data-answer-render', 'false');
                                 // faqDiv.append(faqaction);
-                                answerPlaceableIDs.push({id:`descLib-${id.join('-')}`, input: target.dataset.intentName, positionId: target.dataset.positionId});
+                                answerPlaceableIDs.push({id:`descLib-${id.join('-')}`, input: target.dataset.intentName, inputQuestion: target.dataset.question, positionId: target.dataset.positionId});
                                 $(`#search-text-display #${target.id}`).addClass('rotate-carrot');
                                 $(`#search-text-display #faqDivLib-${id.join('-')}`).addClass('is-dropdown-open');
                                 AgentAssistPubSub.publish('searched_Automation_details', { conversationId: evt.target.dataset.convId, botId: evt.target.dataset.botId, value: evt.target.dataset.intentName, isSearch: true, positionId: target.dataset.positionId });
@@ -5934,7 +6101,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         if(target.id.split('-').includes('autoResult')){
                             $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
                             $('#overLayAutoSearch').find('.search-results-text')?.remove();
-                            $('.search-block').find('.search-results-text-in-lib')?.remove();
+                            $('#overLayAutoSearchLibDiv').addClass('hide').removeAttr('style');
+                            $('#overLayAutoSearchLib').find('.search-results-text')?.remove();
+                            // $('.search-block').find('.search-results-text-in-lib')?.remove();
                             $('#agentSearch').val(target.innerHTML);
                             agentSearchVal = target.innerHTML;
                             document.getElementById("loader").style.display = "block";
@@ -5945,7 +6114,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             $('#librarySearch').val(target.innerHTML);
                             $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
                             $('#overLayAutoSearch').find('.search-results-text')?.remove();
-                            $('.search-block').find('.search-results-text-in-lib')?.remove();
+                            $('#overLayAutoSearchLibDiv').addClass('hide').removeAttr('style');
+                            $('#overLayAutoSearchLib').find('.search-results-text')?.remove();
+                           // $('.search-block').find('.search-results-text-in-lib')?.remove();
                             document.getElementById("loader").style.display = "block";
                             AgentAssistPubSub.publish('searched_Automation_details', { conversationId: _conversationId, botId: _botId, value: target.innerHTML, isSearch: true, "positionId": evt.target.dataset.positionId });
                         }
@@ -5983,7 +6154,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                                 $('#overLayAutoSearch').find('.search-results-text')?.remove();
                                 $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
                             }
-                            $('#searchResults').addClass('hide');
+                           // $('#searchResults').addClass('hide');
                             $('#autoFill').html('')
                             if(evt.target.id == 'agentSearch' || evt.target.id == 'librarySearch'){
                                 try{
@@ -6023,7 +6194,9 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     let isLibraryTab = arguments[1];
                     $('#overLayAutoSearchDiv').addClass('hide').removeAttr('style');
                     $('#overLayAutoSearch').find('.search-results-text')?.remove();
-                    $('.search-block').find('.search-results-text-in-lib')?.remove();
+                    $('#overLayAutoSearchLibDiv').addClass('hide').removeAttr('style');
+                    $('#overLayAutoSearchLib').find('.search-results-text')?.remove();
+                    // $('.search-block').find('.search-results-text-in-lib')?.remove();
                     let headersVal = {};
                     if(connectionDetails.isSAT) {
                         headersVal = {
@@ -6048,8 +6221,8 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                             success: function (data) {
                                 if (!isLibraryTab && data.typeAheads.length>0) {
                                     typeaheadArray = data.typeAheads;
-                                    $('#overLaySearch').html('');
-                                    $('.overlay-suggestions').addClass('hide').removeAttr('style');
+                                    // $('#overLaySearch').html('');
+                                    // $('.overlay-suggestions').addClass('hide').removeAttr('style');
                                     addAutoSuggestionApi(data, e);
                                 } else {
                                     if(data.typeAheads.length>0){
@@ -6066,9 +6239,12 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                 }
                 
                 function addAutoSuggestionTolibrary(data, val){
-                    let autoDiv = $('.search-block');
+                    $('#overLayAutoSearchLib').find('.search-results-text')?.remove();
+                    $('#overLayAutoSearchLibDiv').removeClass('hide').attr('style', 'display:block;');
+                    // let autoDiv = $('.search-block');
+                    let autoDiv = $('#overLayAutoSearchLib');
                     data?.querySuggestions?.forEach((ele) => {
-                        autoDiv.append(`<div class="search-results-text-in-lib" id="autoResultLib-${ele}">${ele}</div>`)
+                        autoDiv.append(`<div class="search-results-text" style="cursor: pointer;" id="autoResultLib-${ele}">${ele}</div>`)
                     });
                 }
                 
@@ -6490,7 +6666,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                     $(`.customer-feeling-text`).addClass('bottom-95');
                     setTimeout(() => {
                         headerUUids = undefined;
-                        myBotDropdownHeaderUuids = undefined;
+                    //  myBotDropdownHeaderUuids = undefined;
                     }, 100)
                     // headerUUids = undefined;
 		    UnCollapseDropdownForLastElement(lastElementBeforeNewMessage);
@@ -6664,7 +6840,7 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
         var KRPerfectScrollbar;
         if(window.PerfectScrollbar && typeof PerfectScrollbar ==='function'){
           KRPerfectScrollbar=window.PerfectScrollbar;
-          let scrollbar = new KRPerfectScrollbar($(`#${agentContainer}`).find('.suggestion-content').get(0), {
+          let scrollbar = new KRPerfectScrollbar($(`#${agentContainer}`).find('#overLaySearch').get(0), {
             suppressScrollX: true
           });
         }
@@ -6802,6 +6978,10 @@ window.AgentAssist = function AgentAssist(containerId, _conversationId, _botId, 
                         <input class="typeahead" type="text" placeholder="Ask AgentAssist" id="librarySearch">
                         <i class="ast-search"></i>
                         <i class="ast-close close-search hide" id="cancelLibrarySearch"></i>
+                        <div class= "overlay-suggestions  overlay-library  hide" id="overLayAutoSearchLibDiv">
+                            <div class="suggestion-content suggestion-content-library" id="overLayAutoSearchLib">
+                            </div>
+                        </div>
                     </div>
                     <div class="search-block hide" id="searchBlocks">
                         <div class="input-text-search library-search-div" >

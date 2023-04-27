@@ -24,6 +24,7 @@ export class AutomationChannelsComponent implements OnInit {
   chatChannelData: Subscription;
   chatData: any;
   webhookUrl: any;
+  showOpenEyeIcon : boolean = true;
   
   constructor( public workflowService: workflowService,
     private notificationService: NotificationService,
@@ -90,9 +91,8 @@ export class AutomationChannelsComponent implements OnInit {
 
 
  getChatChannelData() {
-
     const params = {
-            instanceId:this.authService.smartAssistBots.map(x=>x._id),
+            instanceId: this.authService.getAgentAssistStreamId(),
             'isAgentAssist':true
           };
     this.chatChannelData = this.service.invoke('get.chatList', params).subscribe(data => {

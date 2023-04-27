@@ -748,9 +748,9 @@ html, body{
     text-overflow: unset;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content .title-text {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
     display: inline-block;
     max-width: 100%;
     position: relative;
@@ -801,7 +801,7 @@ html, body{
     right: 8px;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send:hover .title-text{
-    white-space: normal !important;
+    white-space: nowrap !important;
     padding-right: 80px;
     text-align: justify;
     word-break: break-word;
@@ -831,6 +831,7 @@ html, body{
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send:hover .action-links {
     display: flex;
+    z-index: 1;
 }
 
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type#dialoguesArea .content-dialog-task-type .type-info-run-send .action-links {
@@ -851,6 +852,7 @@ html, body{
     cursor: pointer;
     padding: 3px 10px;
     text-transform: uppercase;
+    opacity: 1;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .copy-btn {
     background: var(--bg-color-containers);
@@ -865,6 +867,7 @@ html, body{
     font-size: 12px;
     margin-left: 6px;
     cursor: pointer;
+    opacity: 1;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .elipse-dropdown-info {
     margin-left: 6px;
@@ -1172,15 +1175,31 @@ border: 1px solid transparent !important;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data .run-info-content .agent-utt:hover .action-links {
     display: flex;
+    z-index: 1
+}
+.overlay-library {
+    width: 97.5% !important;
+    height: 100% !important;
+    left: 13px !important;
+    bottom: -66% !important;
+    background: transparent !important;
+}
+.suggestion-content-library{
+    width: 100%;
+    border-radius: 0px 0px 10px 10px !important;
+    padding: 15px 15px 15px 15px !important;
+    bottom: -66% !important;
+    max-height: 156% !important;
 }
 .overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send:hover .title-text{
-    white-space: normal !important; 
-    padding-right: 80px;
+    white-space: nowrap !important; 
+    padding-right: 0px;
     text-align: justify;
     word-break: break-word;
 }
 .overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send:hover .action-links {
     display: flex;
+    z-index: 1;
 }
 
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data .run-info-content .agent-utt .title-data {
@@ -1232,6 +1251,7 @@ border: 1px solid transparent !important;
     cursor: pointer;
     padding: 3px 10px;
     text-transform: uppercase;
+    opacity: 1;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data .run-info-content .agent-utt .action-links .copy-btn {
     background: var(--bg-color-containers);
@@ -1246,6 +1266,7 @@ border: 1px solid transparent !important;
     font-size: 12px;
     margin-left: 6px;
     cursor: pointer;
+    opacity: 1;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data .run-info-content .order-number-info {
     background: var(--bg-hover-tabs-color);
@@ -1642,9 +1663,9 @@ border: 1px solid transparent !important;
     text-overflow: unset;
 }
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content .title-text {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
     display: inline-block;
     max-width: 100%;
     position: relative;
@@ -1715,9 +1736,10 @@ border: 1px solid transparent !important;
 }
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send:hover .action-links {
     display: flex;
+    z-index: 1;
 }
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send:hover .title-text{
-    white-space: normal !important;
+    white-space: nowrap !important;
     padding-right: 80px;
     text-align: justify;
     word-break: break-word;
@@ -1736,6 +1758,7 @@ border: 1px solid transparent !important;
     cursor: pointer;
     padding: 3px 10px;
     text-transform: uppercase;
+    opacity: 1;
 }
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .copy-btn {
     background: var(--bg-color-containers);
@@ -1750,6 +1773,7 @@ border: 1px solid transparent !important;
     font-size: 12px;
     margin-left: 6px;
     cursor: pointer;
+    opacity: 1;
 }
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .elipse-dropdown-info {
     margin-left: 6px;
@@ -2071,9 +2095,9 @@ border: 1px solid transparent !important;
     text-overflow: unset;
 }
 .overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content .title-text {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
     display: inline-block;
     max-width: 100%;
     text-align: justify;
@@ -2160,6 +2184,7 @@ border: 1px solid transparent !important;
     cursor: pointer;
     padding: 3px 10px;
     text-transform: uppercase;
+    opacity: 1;
 }
 .overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .copy-btn {
     background: var(--bg-color-containers);
@@ -2174,6 +2199,7 @@ border: 1px solid transparent !important;
     font-size: 12px;
     margin-left: 6px;
     cursor: pointer;
+    opacity: 1;
 }
 .overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .elipse-dropdown-info {
     margin-left: 6px;
@@ -3005,6 +3031,7 @@ border: 1px solid transparent !important;
 }
 .collapse-acc-data .steps-run-data .run-info-content .agent-utt:hover .action-links {
     display: flex;
+    z-index: 1;
 }
 .collapse-acc-data .steps-run-data .run-info-content .agent-utt .title-data {
     font-weight: 400;
@@ -3042,6 +3069,7 @@ border: 1px solid transparent !important;
     cursor: pointer;
     padding: 3px 10px;
     text-transform: uppercase;
+    opacity: 1;
 }
 .collapse-acc-data .steps-run-data .run-info-content .agent-utt .action-links .copy-btn {
     background: var(--bg-color-containers);
@@ -3056,6 +3084,7 @@ border: 1px solid transparent !important;
     font-size: 12px;
     margin-left: 6px;
     cursor: pointer;
+    opacity: 1;
 }
 .collapse-acc-data .steps-run-data .run-info-content .order-number-info {
     background: var(--bg-hover-tabs-color);
@@ -3124,6 +3153,7 @@ border: 1px solid transparent !important;
     cursor: pointer;
     position: relative;
     transition: 0.2s all ease;
+    z-index: 2;
 }
 .feedback-helpul-container .titles-content .btn-positive:hover {
     border: 1px solid #0077D2;
@@ -3139,15 +3169,15 @@ border: 1px solid transparent !important;
 }
 .feedback-helpul-container .titles-content .btn-positive .tootltip-tabs {
     position: absolute;
-    left: -6px;
     top: auto;
-    bottom: -28px;
-    z-index: 9;
+    left: 30px;
+    bottom: -1px;
 }
 
 .feedback-helpul-container .titles-content .btn-positive .tootltip-tabs::after{
-    top: -10px;
-    border-color: transparent transparent var(--default-text-color) transparent;
+    left: -4px;
+    top: 6px;
+    border-color: transparent var(--default-text-color) transparent transparent;
 }
 .feedback-helpul-container .titles-content .btn-negtive {
     background: #FFFFFF;
@@ -3181,14 +3211,15 @@ border: 1px solid transparent !important;
 }
 .feedback-helpul-container .titles-content .btn-negtive .tootltip-tabs {
     position: absolute;
-    left: -6px;
     top:auto;
-    bottom:-28px;
+    left: 30px;
+    bottom: -1px;
     z-index: 9;
 }
 .feedback-helpul-container .titles-content .btn-negtive .tootltip-tabs::after {
-    top: -10px;
-    border-color: transparent transparent var(--default-text-color) transparent;
+    left: -4px;
+    top: 6px;
+    border-color: transparent var(--default-text-color) transparent transparent;
 }
 .feedback-helpul-container .titles-content .thanks-update {
     font-weight: 400;

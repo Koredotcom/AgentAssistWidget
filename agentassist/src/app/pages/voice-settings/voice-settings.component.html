@@ -201,7 +201,7 @@
                                             <div class="col-2 text-center status-type d-flex align-items-center justify-content-center">
                                                 <div class="status-box" [ngClass]="{'status-completed': (sipDetails?.callFlowDetails.length>0 && sipDetails?.callFlowDetails[0]?.state === 'published')}"
                                                 [ngbTooltip]="(sipDetails.callFlowDetails.length>0? sipDetails.callFlowDetails[0].state: 'No flow attached') | titlecase">
-                                                    <img *ngIf="!sipDetails.callFlowDetails.length>0" src="assets/icons/channels/noFlowIcon.svg"/>
+                                                    <!-- <img *ngIf="!sipDetails.callFlowDetails.length>0" src="assets/icons/channels/noFlowIcon.svg"/> -->
                                                     <i class="icon-sa-time" *ngIf="sipDetails.callFlowDetails.length>0? (sipDetails?.callFlowDetails[0].state === 'configured'? true:false):''"></i>
                                                     <i class="icon-sa-round-check" ></i>
                                                 </div>

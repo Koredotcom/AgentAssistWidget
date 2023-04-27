@@ -1,0 +1,114 @@
+<div class="smartassist-color-scheme">
+    <div id="agent-assist-chat-container" class="agent-assist-chat-container kore-chat-window">
+        <div class="header-top-bar">
+            <div class="header-data hide">
+                <div class="main-title">
+                    <img [src]="imageFilePath + imageFileNames['AGENTASSIST_LOG']">
+                </div>
+                <div class="powerdby">
+                    <span>Powered by</span>
+                    <img [src]="imageFilePath + imageFileNames['KORE_LOGO']">
+                </div>
+            </div>
+            <div class="tab-toggles-sec">
+                <div class="top-tabs-actions">
+                    <div class="logo-assist">
+                        <img [src]="imageFilePath + imageFileNames['AGENT_LOGO']">
+                    </div>
+                    <div class="tab-icon" id="transcriptIcon" (click)="changeActiveTab(projConstants.TRANSCRIPT)"
+                        [ngClass]="{'active-tab': activeTab == projConstants.TRANSCRIPT}" [class.hide]="!commonService.isCallConversation">
+                        <i class="ast-transcipt font-15" id="scriptIcon"></i>
+                        <div class="title-tab" id="transcriptLabel">{{projConstants.TRANSCRIPT}}</div>
+                        <div class="custom-tootltip-tabs">{{projConstants.TRANSCRIPT}}</div>
+                    </div>
+                    <div class="tab-icon" id="userAutoIcon" (click)="changeActiveTab(projConstants.ASSIST)"
+                        [ngClass]="{'active-tab': activeTab == projConstants.ASSIST}">
+                        <i class="ast-bot font-13" id="userBotIcon"></i>
+                        <div class="title-tab" id="AssistLabel">{{projConstants.ASSIST}}</div>
+                        <div class="custom-tootltip-tabs">{{projConstants.ASSIST}}</div>
+                    </div>
+                    <div class="tab-icon" id="searchAutoIcon" (click)="changeActiveTab(projConstants.LIBRARY)"
+                        [ngClass]="{'active-tab': activeTab == projConstants.LIBRARY}">
+                        <i class="ast-library font-13" id="searchIcon"></i>
+                        <div class="title-tab" id="LibraryLabel">{{projConstants.LIBRARY}}</div>
+                        <div class="custom-tootltip-tabs">{{projConstants.LIBRARY}}</div>
+                    </div>
+                    <div class="tab-icon" id="agentAutoIcon" (click)="changeActiveTab(projConstants.MYBOT)"
+                        [ngClass]="{'active-tab': activeTab == projConstants.MYBOT}">
+                        <i class="ast-automation font-13" id="agentBotIcon"></i>
+                        <div class="title-tab" id="MybotLabel">{{projConstants.MYBOT}}</div>
+                        <div class="custom-tootltip-tabs">{{projConstants.MYBOT}}</div>
+                    </div>
+                </div>
+                <div class="taoggle-with-text">
+                    <div class="t-title">Proactive</div>
+                    <label class="kr-sg-toggle">
+                        <div class="hover-tooltip">Proactive</div>
+                        <input #proactiveMode type="checkbox" id="checkProActive" [checked]="proactiveModeEnabled"  (change)="proactiveToggle(proactiveMode.checked)">
+                        <div class="slider"></div>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <perfect-scrollbar id="homeScrollBar" class="home-scroll-bar" #psBottom (psYReachEnd)="onScrollEvent($event)" (psYReachStart)="onScrollEvent($event)" (psScrollUp)="onScrollEvent($event)">
+            <div class="body-data-container if-suggestion-search" id="bodyContainer" #tabBody>
+                <div class="dialog-task-data" id="dynamicBlocksData">
+                    <ng-container>
+                        <app-transcript [class.hide]="activeTab != projConstants.TRANSCRIPT"  (scrollToBottomEvent)="scrollToBottom($event)"  (newButtonScrollClickEvents)="scrollClickEvents($event)"></app-transcript>
+                    </ng-container>
+                    <ng-container>
+                        <div [class.hide]="activeTab != projConstants.ASSIST">
+                            
+                            <app-assist  (handlePopupEvent)="handlePopupEvent($event)" (scrollToBottomEvent)="scrollToBottom($event)" (newButtonScrollClickEvents)="scrollClickEvents($event)"
+                            ></app-assist>
+                        </div>
+                    </ng-container>
+                    <ng-container>
+                        <div [class.hide]="activeTab != projConstants.LIBRARY">
+                            
+                            <app-library 
+                                (handleSearchClickEvent)="handleSearchClickEvent($event)"></app-library>
+                        </div>
+                    </ng-container>
+                    <ng-container>
+                        <app-mybot [class.hide]="activeTab != projConstants.MYBOT" (handlePopupEvent)="handlePopupEvent($event)" (scrollToBottomEvent)="scrollToBottom($event)"></app-mybot>
+                    </ng-container>
+                </div>
+            </div>
+        </perfect-scrollbar>
+
+        <!-- searchbar -->
+        
+        
+        <div class="sugestions-info-data" *ngIf="activeTab != projConstants.LIBRARY">
+            <!-- <input type="text" class="suggestion-input typeahead" id="agentSearch" placeholder="Ask AgentAssist"
+                (keyup.enter)="getSearchResults()" [(ngModel)]="searchText" (ngModelChange)="emptySearchTextCheck()"> -->
+                <app-typeahead [isNotLibraryTab]="true"
+        (typeahead)="emptySearchTextCheck($event)"  (typeaheadEntered)="getSearchResults($event)" [connectionData]="connectionDetails"></app-typeahead>
+            <i class="ast-search search-icon"></i>
+            <i class="ast-close close-search" id="cancelAgentSearch" (click)="clearSearchText()"></i>
+        </div>
+        <div class="overlay-suggestions" style="bottom:0" *ngIf="showSearchSuggestions && (activeTab == projConstants.ASSIST || activeTab == projConstants.MYBOT)" id="overLaySuggestions">
+            <div class="suggestion-content" id="overLaySearch">
+                <perfect-scrollbar class="overlaysearch-scroll-bar" #overlayps id="overlaySearchScroll">
+                    <app-overlaysearch [searchType]="projConstants.AGENT_SEARCH"
+                        (handleSearchClickEvent)="handleSearchClickEvent($event)"
+                        (closeSearchSuggestions)="closeSearchSuggestions($event)" (overlayScrollTop)="overlayScrollTop($event)"></app-overlaysearch>
+                </perfect-scrollbar>
+            </div>
+        </div>
+      
+        <app-terminate [class.hide]="!showTerminatePopup" (handlePopupEvent)="handlePopupEvent($event)"></app-terminate>
+        <app-interrupt-popup [class.hide]="!showInterruptPopup" (handlePopupEvent)="handlePopupEvent($event)"></app-interrupt-popup>
+        <app-summary-popup [class.hide]="!showSummaryPopup" (handlePopupEvent)="handlePopupEvent($event)" [summaryText]="summaryText"></app-summary-popup>
+        <app-restore-popup [class.hide]="!showRestorePopup" (handlePopupEvent)="handlePopupEvent($event)"></app-restore-popup>
+        <!-- end -->
+        <div class="footer-info" id="cust-feeling">
+            <div class="event-bucket">
+                <img [src]="imageFilePath + imageFileNames['CUST_FEELING']">
+            </div>
+        </div>
+        <app-loader *ngIf="isLoader"></app-loader>
+    </div>
+</div>

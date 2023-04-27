@@ -43,14 +43,14 @@ export class NewConversationsComponent implements OnInit, OnChanges, AfterViewIn
   };
 
   triggerPoints: any = {
-    "isChatEnabled": true,
-    "isVoiceEnabled": true,
-    "isEmailEnabled": true,
+    "isChatEnabled": false,
+    "isVoiceEnabled": false,
+    "isEmailEnabled": false,
     "isSkillMatchEnabled": false,
     "isAgentGroupMatchEnabled": false,
     "agentGroups": [],
-    "isAutoDetectIntentEnabled": true,
-    "isLaunchByMenuEnabled": true,
+    "isAutoDetectIntentEnabled": false,
+    "isLaunchByMenuEnabled": false, 
     "skillMatchRules": []
   };
 
@@ -435,6 +435,7 @@ export class NewConversationsComponent implements OnInit, OnChanges, AfterViewIn
       payload.chatExperience.preTransferMsgs = this.chatExp.preTransferMsgs;
       payload.chatExperience.isConfigured = this.chatExp.isConfigured;
       payload.chatExperience.skills = this.chatSkills?.addedSkillsId;
+      payload.hasAgentAssistAccess = true;
     } else if (this.ucType === 'faq') {
       payload.utterances.primary.text = this.conv.usecaseName; //this.utterancesForm.value.primaryUtterance;
       payload.callExperience.responses = this.callExp?.responses;

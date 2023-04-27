@@ -1,0 +1,16 @@
+<div class="agent-body-data-container" id="agentAutoContainer">
+    <div class="dynamic-block-content" id="myBotAutomationBlock" #mybotautomation>
+        <div id="agentTab-custSentimentAnalysis" class="customer-feeling-text">
+        </div>
+        <div class="scroll-bottom-show-btn hiddenEle">
+            <button class="scroll-bottom-btn" id="scrollButtonMybot">
+                <i class="ast-carrotup"></i>
+                <span>Scroll to bottom</span>
+            </button>
+        </div>
+        <div class="empty-data-no-agents" id="noAutoRunning" *ngIf="mybotEmptyState">
+            <div class="title">No Agent automations are in running state.</div>
+            <div class="desc-text">Use "Run with Agent Inputs" to execute.</div>
+        </div>
+    </div>
+</div>

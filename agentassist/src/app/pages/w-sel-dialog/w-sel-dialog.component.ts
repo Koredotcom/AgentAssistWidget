@@ -732,7 +732,7 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
     this.importedVariablesData = JSON.parse(this.importedVariablesData);
     this.importedBotData = JSON.parse(this.importedBotData);
 
-    if((!this.importedBotData.hasOwnProperty('isLinkedSmartAssist')) || (this.importedBotData.hasOwnProperty('isLinkedSmartAssist') && !this.importedBotData.isLinkedSmartAssist)) {
+    if((!this.importedBotData.hasOwnProperty('isAgentAssist')) || (this.importedBotData.hasOwnProperty('isAgentAssist') && !this.importedBotData.isAgentAssist)) {
       this.conversionNeeded = true;
     } else {
       this.conversionNeeded = false;
