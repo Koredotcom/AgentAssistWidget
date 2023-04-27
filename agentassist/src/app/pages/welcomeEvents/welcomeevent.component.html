@@ -3,16 +3,16 @@
         <div class="left-sec">
             <div class="title">Welcome Event</div>
             <div class="tabs-list">
-                <div class="tab-name active-tab">Welcome Message</div>
-                <div class="tab-name">Welcome Task</div>
+                <!-- <div class="tab-name" [ngClass]="{'active-tab' : activeTab == welcomeMsg}" (click)="changeActiveTab(welcomeMsg)">Welcome Message</div> -->
+                <div class="tab-name" [ngClass]="{'active-tab' : activeTab == welcomeTask}" (click)="changeActiveTab(welcomeTask)">Welcome Task</div>
             </div>
         </div>
-        <button class="kr-sg-button-primary btn_lg" (click)="openWelcomeEvent()">New Welcome Message</button>
+        <button class="kr-sg-button-primary btn_lg" (click)="openWelcomeEvent()" *ngIf="activeTab == welcomeMsg">New Welcome Message</button>
     </div>
     <div class="events-block-wrapper">
         <perfect-scrollbar>
             <div class="inner-wrapper-details">
-                <div class="box-wrapper">
+                <div class="box-wrapper" [hidden]="activeTab != welcomeMsg">
                     <div class="heading-events">
                         <div class="icon_block">
                             <i class="icon-sa-call-welcome"></i>
@@ -30,10 +30,6 @@
                             </label>
                         </div>
                     </div>
-                    <!-- <div class="chat-voice-tabs">
-                        <div class="name-tab active-tab-name">Chat</div>
-                        <div class="name-tab">Voice</div>
-                    </div> -->
 
                     <div class="table-wrapper-info-padding">
                         <div class="body-data-table-info">
@@ -84,7 +80,7 @@
                     </div>
                 </div>
 
-                <div class="box-wrapper">
+                <div class="box-wrapper" [hidden]="activeTab != welcomeTask">
                     <div class="heading-events">
                         <div class="icon_block">
                             <i class="icon-sa-settings"></i>
@@ -96,53 +92,58 @@
                     </div>
                     <div class="table-wrapper-info-padding">
                         <div class="chat-voice-tabs">
-                            <div class="name-tab active-tab-name">Chat</div>
-                            <div class="name-tab">Voice</div>
+                            <div class="name-tab" [ngClass]="{'active-tab-name' : taskActive == chatTab}" (click)="changeTaskActive(chatTab)">Chat</div>
+                            <div class="name-tab"  [ngClass]="{'active-tab-name' : taskActive == voiceTab}" (click)="changeTaskActive(voiceTab)">Voice</div>
                         </div>
-                        <div class="radio-info-block">
-                            <div class="kr-sg-radiobutton">
-                                <input id="radio-1" name="radio" class="radio-custom" type="radio">
-                                <label for="radio-1" class="radio-custom-label">
-                                    <span class="bold_text">Disabled: </span>
-                                    <span>Stop welcome events</span>
-                                </label>
-                            </div> 
-                            <div class="kr-sg-radiobutton">
-                                <input id="radio-11" name="radio" class="radio-custom" type="radio">
-                                <label for="radio-11" class="radio-custom-label">
-                                    <span class="bold_text">Select Dialogue: </span>
-                                    <span>Make a choice among the bots and select the dialogue task you are interested in</span>
-                                </label>
-                            </div> 
-                            <div class="label-text">Automation</div>
-                            <div class="kr-sg-dropdowns" ngbDropdown>
-                                <div class="dropdown dropdown-open">
-                                    <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>Select Use Cases</button>
-                                    <ul class="dropdown-menu content-menu" ngbDropdownMenu>
-                                        <perfect-scrollbar>
-                                            <div class="scroll-ul">
-                                                <li>
-                                                    <a>Welcome Dialog</a>
-                                                </li>
-                                                <li>
-                                                    <a>Show Balance</a>
-                                                </li>
-                                                <li>
-                                                    <a>Email Verification</a>
-                                                </li>
-                                                <li>
-                                                    <a>Flight Status</a>
-                                                </li>
-                                            </div>
-                                        </perfect-scrollbar>
-                                    </ul>
-                                </div>
-                            </div> 
-                        </div>
+                            <div class="radio-info-block">
+                                <div class="kr-sg-radiobutton">
+                                    <input id="radio-1" name="taskEnable" class="radio-custom" type="radio" [(ngModel)]="taskEnable" [value]="false">
+                                    <label for="radio-1" class="radio-custom-label">
+                                        <span class="bold_text">Disabled: </span>
+                                        <span>Stop welcome events</span>
+                                    </label>
+                                </div> 
+                                <div class="kr-sg-radiobutton">
+                                    <input id="radio-11" name="taskEnable" class="radio-custom" type="radio" [(ngModel)]="taskEnable" [value]="true">
+                                    <label for="radio-11" class="radio-custom-label">
+                                        <span class="bold_text">Select Dialogue: </span>
+                                        <span>Make a choice among the bots and select the dialogue task you are interested in</span>
+                                    </label>
+                                </div> 
+                                <ng-container *ngIf="taskEnable">
+                                    <div class="label-text">Select Bot</div>
+                                    <div class="kr-sg-dropdowns" ngbDropdown>
+                                        <div class="dropdown dropdown-open">
+                                            <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{selectedBot?.name ? selectedBot?.name : 'Select bot'}}</button>
+                                            <ul class="dropdown-menu content-menu" ngbDropdownMenu>
+                                                <perfect-scrollbar>
+                                                    <div class="scroll-ul">
+                                                        <li ngbDropdownItem (click)="changeBot(bot)" *ngFor="let bot of automationBots"><a>{{bot.name}}</a></li>
+                                                    </div>
+                                                </perfect-scrollbar>
+                                            </ul>
+                                        </div>
+                                    </div> 
+
+                                    <div class="label-text">Automation</div>
+                                    <div class="kr-sg-dropdowns" ngbDropdown>
+                                        <div class="dropdown dropdown-open">
+                                            <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{selectedUseCase?.usecaseName ? selectedUseCase?.usecaseName : 'Select Use Cases'}}</button>
+                                            <ul class="dropdown-menu content-menu" ngbDropdownMenu>
+                                                <perfect-scrollbar>
+                                                    <div class="scroll-ul">
+                                                        <li ngbDropdownItem (click)="changeUseCase(conv)" *ngFor="let conv of conversations"><a>{{conv.usecaseName}}</a></li>
+                                                    </div>
+                                                </perfect-scrollbar>
+                                            </ul>
+                                        </div>
+                                    </div> 
+                                </ng-container>
+                            </div>
                     </div>
                     <div class="save-cancel-info">
-                        <button class="kr-sg-button-secondary-two btn_lg" type="submit">Cancel</button>
-                        <button class="kr-sg-button-primary btn_lg" type="submit">Save</button>
+                        <button class="kr-sg-button-secondary-two btn_lg" type="submit" (click)="updateDetails(cancel)" [disabled]="checkFieldChange()" >Cancel</button>
+                        <button class="kr-sg-button-primary btn_lg" type="submit" (click)="updateDetails(save)" [disabled]="(taskEnable && !selectedUseCase?.usecaseName) || checkFieldChange()">Save</button>
                     </div>
                 </div>
             </div>
