@@ -80,7 +80,7 @@
                     </div>
                 </div>
 
-                <div class="box-wrapper" [hidden]="activeTab != welcomeTask">
+                <div class="box-wrapper" [hidden]="activeTab != welcomeTask">                    
                     <div class="heading-events">
                         <div class="icon_block">
                             <i class="icon-sa-settings"></i>
@@ -95,6 +95,9 @@
                             <div class="name-tab" [ngClass]="{'active-tab-name' : taskActive == chatTab}" (click)="changeTaskActive(chatTab)">Chat</div>
                             <div class="name-tab"  [ngClass]="{'active-tab-name' : taskActive == voiceTab}" (click)="changeTaskActive(voiceTab)">Voice</div>
                         </div>
+                        <div class='init-loading' *ngIf="showSpinner">
+                            <mat-spinner diameter="25" strokeWidth="3"></mat-spinner>
+                            </div>
                             <div class="radio-info-block">
                                 <div class="kr-sg-radiobutton">
                                     <input id="radio-1" name="taskEnable" class="radio-custom" type="radio" [(ngModel)]="taskEnable" [value]="false">
@@ -111,48 +114,50 @@
                                     </label>
                                 </div> 
                                 <ng-container *ngIf="taskEnable">
-                                    <div class="label-text">Select Bot</div>
-                                    <div class="kr-sg-dropdowns" ngbDropdown>
-                                        <div class="dropdown dropdown-open">
-                                            <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{selectedBot?.name ? selectedBot?.name : 'Select bot'}}</button>
-                                            <ul class="dropdown-menu content-menu" ngbDropdownMenu>
-                                                <perfect-scrollbar>
-                                                    <div class="scroll-ul">
-                                                        <li ngbDropdownItem (click)="changeBot(bot)" *ngFor="let bot of automationBots"><a>{{bot.name}}</a></li>
-                                                    </div>
-                                                </perfect-scrollbar>
-                                            </ul>
+                                    <div class="d-flex">
+                                        <div class="col-6">
+                                            <div class="label-text">Select Bot</div>
+                                            <div class="kr-sg-dropdowns" ngbDropdown>
+                                                <div class="dropdown dropdown-open">
+                                                    <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{selectedBot?.name ? selectedBot?.name : 'Select bot'}}</button>
+                                                    <ul class="dropdown-menu content-menu" ngbDropdownMenu>
+                                                        <perfect-scrollbar>
+                                                            <div class="scroll-ul">
+                                                                <li ngbDropdownItem (click)="changeBot(bot)" *ngFor="let bot of linkedBots"><a>{{bot.name}}</a></li>
+                                                            </div>
+                                                        </perfect-scrollbar>
+                                                    </ul>
+                                                </div>
+                                            </div> 
                                         </div>
-                                    </div> 
-
-                                    <div class="label-text">Automation</div>
-                                    <div class="kr-sg-dropdowns" ngbDropdown>
-                                        <div class="dropdown dropdown-open">
-                                            <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{selectedUseCase?.usecaseName ? selectedUseCase?.usecaseName : 'Select Use Cases'}}</button>
-                                            <ul class="dropdown-menu content-menu" ngbDropdownMenu>
-                                                <perfect-scrollbar>
-                                                    <div class="scroll-ul">
-                                                        <li ngbDropdownItem (click)="changeUseCase(conv)" *ngFor="let conv of conversations"><a>{{conv.usecaseName}}</a></li>
-                                                    </div>
-                                                </perfect-scrollbar>
-                                            </ul>
+                                        <div class="col-6">
+                                            <div class="label-text">Automation</div>
+                                            <div class="kr-sg-dropdowns" ngbDropdown>
+                                                <div class="dropdown dropdown-open">
+                                                    <button class="dropdown-toggle dropdown-input" ngbDropdownToggle [disabled]="currentBt.type == 'universalbot' && !selectedBot?.name">{{selectedUseCase?.usecaseName ? selectedUseCase?.usecaseName : 'Select Use Cases'}}</button>
+                                                    <ul class="dropdown-menu content-menu" ngbDropdownMenu>
+                                                        <perfect-scrollbar>
+                                                            <div class="scroll-ul">
+                                                                <li ngbDropdownItem (click)="changeUseCase(conv)" *ngFor="let conv of conversations"><a>{{conv.usecaseName}}</a></li>
+                                                            </div>
+                                                        </perfect-scrollbar>
+                                                    </ul>
+                                                </div>
+                                            </div> 
                                         </div>
-                                    </div> 
+                                    </div>
                                 </ng-container>
                             </div>
                     </div>
                     <div class="save-cancel-info">
-                        <button class="kr-sg-button-secondary-two btn_lg" type="submit" (click)="updateDetails(cancel)" [disabled]="checkFieldChange()" >Cancel</button>
-                        <button class="kr-sg-button-primary btn_lg" type="submit" (click)="updateDetails(save)" [disabled]="(taskEnable && !selectedUseCase?.usecaseName) || checkFieldChange()">Save</button>
+                        <button class="kr-sg-button-secondary-two btn_lg" type="submit" (click)="updateDetails(cancel)" [disabled]="checkFieldChange() || showSpinner" >Cancel</button>
+                        <button class="kr-sg-button-primary btn_lg" type="submit" (click)="updateDetails(save)" [disabled]="(taskEnable && !selectedUseCase?.usecaseName) || checkFieldChange() || showSpinner">Save</button>
                     </div>
                 </div>
             </div>
         </perfect-scrollbar>
     </div>
 </div>
-
-
-
 
 <app-slider-component id="newWelcome" #newWelcomeEvent='app-slider'>
     <app-new-welcome-event (close)="closeWelcomeEvent()"></app-new-welcome-event>

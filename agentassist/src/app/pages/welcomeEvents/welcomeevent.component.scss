@@ -51,6 +51,11 @@
             .box-wrapper{
                 background: #F9F9FB;
                 border-radius: 5px;
+                .init-loading{
+                    position: absolute;
+                    left: 50%;
+                    top: 180px;
+                    }
                 .heading-events{
                     display: flex;
                     align-items: center;
