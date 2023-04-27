@@ -4,7 +4,7 @@ import { NgbDropdown, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { workflowService } from '@kore.services/workflow.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { BillingPlan } from '../../data/billing.model';
 import { NotificationService } from '@kore.services/notification.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -73,6 +73,14 @@ export class MainmenuComponent implements OnInit, OnDestroy {
     this.subs.sink = this.authService.isAgentDesktopEnabled$.subscribe(isEnabled => {
       this.isAgentDesktopEnabled = isEnabled;
     });
+
+    // this.workflowService.botChange.subscribe((bot : any)=>{
+    //   console.log(bot, "inside udpate use case");
+    //   if(bot && bot.name){
+    //     this.choosedBot = bot.name;
+    //   } 
+    // });
+
     let _id = this.localStoreService.getSelectedAccount()?.accountId || this.authService.getSelectedAccount()?.accountId;
     console.log('header', _id);
 
@@ -195,9 +203,16 @@ export class MainmenuComponent implements OnInit, OnDestroy {
     // } else {
     //   this.navigateToLiveBoard();
     // }
-    this.navigateToUc();
+    // this.navigateToUc();
     this.workflowService.updateAvailBal$.next();
     this.workflowService.headerInitCalls$.next();
+    this.changeBot(this.currentBt);
+  }
+
+
+  changeBot(res){
+    console.log("----- get use cases----")
+    this.workflowService.updateBotDetails$.next(res);
   }
 
   navigateToUc() {

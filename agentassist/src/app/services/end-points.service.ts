@@ -515,7 +515,7 @@ export class EndPointsService {
 
     /** ONBOARDING START **/
     this.serviceList['get.existingbots'] = {
-      endpoint: this.API_SERVER_URL + '/smartassist/apps/automationbots/existingbots',
+      endpoint: this.API_SERVER_URL + '/smartassist/apps/automationbots/existingbots?isAgentAssist=true',
       method: 'get'
     };
 

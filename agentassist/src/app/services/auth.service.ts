@@ -277,7 +277,8 @@ export class AuthService {
     if(this.universalBot && this.universalBot._id){
       return (this.universalBot._id);
     }else{
-      return this.smartAssistBots.map(x=>x._id);
+      return this.workflowService.getCurrentBt(true)?._id;
+      // return this.smartAssistBots.map(x=>x._id);
     }
   }
 

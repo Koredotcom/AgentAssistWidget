@@ -52,8 +52,15 @@ export class ConversationsComponent implements OnInit, OnChanges, OnDestroy {
   ngOnInit(): void {
     this.streamId = this.workflowService.getCurrentBt(true)._id;
     this.setAppStatusList();
-    // this.getUsecases();
+    this.getUsecases();
     this.getCategories();
+    this.workflowService.updateBotDetails$.subscribe((ele)=>{
+      console.log(ele, "inside udpate use case");
+      if(ele){
+        this.getUsecases();
+        this.getCategories();
+      } 
+    }) 
   }
 
   ngOnChanges() {
@@ -64,6 +71,7 @@ export class ConversationsComponent implements OnInit, OnChanges, OnDestroy {
   getUsecases(searchTerm?: string, pagination?: boolean) {
     this.searchTerm = searchTerm || '';
     this.ucOffset = pagination ? this.ucOffset + this.USECASES_LIMIT : 0;
+    this.streamId = this.workflowService.getCurrentBt(true)._id;
     const params = {
       streamId: this.streamId,
       search: searchTerm || '',

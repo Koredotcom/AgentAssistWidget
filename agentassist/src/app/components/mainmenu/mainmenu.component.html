@@ -1,4 +1,27 @@
 <perfect-scrollbar [config]="config" class="sidebar-fixed" [ngClass]="{'is-upgrade-true': isPlan && !workflowService.onPremise}">
+	<div ngbDropdown class="kr-sg-dropdowns automationBotDD" container="body" placement="end-top" >
+		<button type="button" class="btn btn-outline-primary automationBot" id="dropdownBasic1" ngbDropdownToggle>
+		  <img src="assets/icons/leftmenu/usecase.svg">
+		  <span class="link-name">{{ currentBt?.name }}</span>
+		  <i class="icon-sa-chevron-right-dark"></i>
+		</button>
+		<div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="automationBot-menu" >
+		  <perfect-scrollbar>
+			<div class="bot-name-icon" (click)="switchBots(bt)" *ngFor="let bt of smartABots">
+				<!-- <div class="bot-icon">
+					<img [src]="bt?.icon ? bt?.icon : (this.workflowService.resolveHostUrl() + '/botbuilder/assets/images/brokenImageSmall.png')">
+				</div>
+				<div class="bot-name text-truncate" [title]="bt.name">{{bt.name}}</div> -->
+				<button ngbDropdownItem class="automationBotlist">
+					<img src="assets/icons/leftmenu/usecase.svg">
+					<span class="link-name">{{bt.name}} <span  *ngIf="bt.type == 'universalbot'" class="ubautomationBot">ub</span></span>
+					<!-- <span class="makeDefault" *ngIf="!bt?.isBotDefault" (click)="makeBotAsDefault(bt)">Make Default Automation Bot</span> -->
+					<i class="icon-sa-conv-check"></i>
+				  </button>
+			</div>
+		</perfect-scrollbar>
+		</div>
+	  </div>
 	<div class="list-group list-group-flush" *ngIf="false">
 		<div class="group-links"  *hasPermission="['admin']">
 			<div class="group-heading">{{"ANALYTICS.AUTOMATION" | translate}}</div>
