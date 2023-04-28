@@ -8,6 +8,7 @@ import { debounceTime, distinctUntilChanged, finalize, map } from 'rxjs/operator
 import { DaterangepickerDirective } from 'ngx-daterangepicker-material';
 import { Moment } from 'moment';
 import { LocalStoreService } from '@kore.services/localstore.service';
+import { mock_logs } from 'src/app/data/conversational-logs.model';
 export interface IAnalyticsFilters {
   startDate: string,
   endDate: string,
@@ -89,25 +90,25 @@ export class ConversationalLogsComponent implements OnInit {
 
   }
   ngAfterViewInit() {
-    setTimeout(() => {
-      fromEvent(this.searchTerm.nativeElement, 'input')
-        .pipe(
-          map((event: any) => {
-            if (event.target.value == '') {
-              return event.target.value;
-            }
-          }),
-          debounceTime(1000),
-          distinctUntilChanged())
-        .subscribe((val) => {
-          if (val == '' && this.isSearched) {
-            console.log("called once search is cleared 222222222222222222222222222222222");
-            this.getUsecases('');
-            this.isDatePicked = false;
-            this.isSearched = false;
-          }
-        });
-    }, 100);
+    // setTimeout(() => {
+    //   fromEvent(this.searchTerm.nativeElement, 'input')
+    //     .pipe(
+    //       map((event: any) => {
+    //         if (event.target.value == '') {
+    //           return event.target.value;
+    //         }
+    //       }),
+    //       debounceTime(1000),
+    //       distinctUntilChanged())
+    //     .subscribe((val) => {
+    //       if (val == '' && this.isSearched) {
+    //         console.log("called once search is cleared 222222222222222222222222222222222");
+    //         this.getUsecases('');
+    //         this.isDatePicked = false;
+    //         this.isSearched = false;
+    //       }
+    //     });
+    // }, 100);
 
   }
 
@@ -171,29 +172,36 @@ export class ConversationalLogsComponent implements OnInit {
     //   this.erroMsg = undefined;
     //   this.realconvs = [...this.convs]
     // }
-    this.service.invoke('conversation.logs', params, payload)
-      .pipe(
-        finalize(() => {
-          this.isLoading = false;
-        }))
-      .subscribe((res) => {
-        console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', res)
-        if (pagination && res.data.length > 0) {
-           this.TransformConvsLogsData(res.data)
-        } else {
-          this.TransformConvsLogsData(res.data);
+    // this.service.invoke('conversation.logs', params, payload)
+    //   .pipe(
+    //     finalize(() => {
+    //       this.isLoading = false;
+    //     }))
+    //   .subscribe((res) => {
+    //     console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', res)
+    //     if (pagination && res.data.length > 0) {
+    //        this.TransformConvsLogsData(res.data)
+    //     } else {
+    //       this.TransformConvsLogsData(res.data);
 
-        }
-        this.isMoreAvailable = res.hasMore;
-        this.isInitialLoadDone = true;
-        if(datepicked && this.TransformConvsLogsData.length == 0){
-          this.isDatePicked = false;
-        }
-      }, err => {
-        this.isInitialLoadDone = false;
-        this.transformedConvsLogs = [];
-        this.isDatePicked = false;
-      });
+    //     }
+    //     this.isMoreAvailable = res.hasMore;
+    //     this.isInitialLoadDone = true;
+    //     if(datepicked && this.TransformConvsLogsData.length == 0){
+    //       this.isDatePicked = false;
+    //     }
+    //   }, err => {
+    //     this.isInitialLoadDone = false;
+    //     this.transformedConvsLogs = [];
+    //     this.isDatePicked = false;
+    //   });
+    let res = mock_logs;
+    this.TransformConvsLogsData(res.data);
+    this.isMoreAvailable = res.hasMore;
+    this.isInitialLoadDone = true;
+    if(datepicked && this.TransformConvsLogsData.length == 0){
+      this.isDatePicked = false;
+    }
   }
 
   TransformConvsLogsData(resData) {

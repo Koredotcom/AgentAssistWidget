@@ -39,6 +39,7 @@
             }
             .table-data-info{
                 .table-hader-wrapper{
+                    justify-content: space-between;
                     display: flex;
                     align-items: center;
                     flex-wrap: wrap;
@@ -66,6 +67,7 @@
                 }
                 .table-body-wrapper{
                     display: flex;
+                    justify-content: space-between;
                     align-items: center;
                     flex-wrap: wrap;
                     min-height: 56px;
