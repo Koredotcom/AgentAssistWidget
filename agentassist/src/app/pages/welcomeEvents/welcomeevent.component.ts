@@ -82,35 +82,37 @@ export class WelcomeeventComponent implements OnInit {
     let params : any = {
       streamId : this.streamId,
     }
-    this.welcomeTaskData = {
-      "events" : [
-        // {
-        //   "name": "AA_ON_CONNECT_EVENT",
-        //   "chat" : {
-        //     "enabled" : true,
-        //     "usecaseId": "sat-asdasda",
-        //     "refId" : "asdasda",
-        //     "dialogId": "dg-adasdasda",
-        //     "taskRefId": "fc10f6e2-ef31-5df7-9fa3-f88080a662bb",
-        //     "linkedBotId" : "st-2be8b912-da2f-53cc-a7f5-3713e387c5f5"
-        //   },
-        //   "voice":{
-        //     "enabled" : false,
-        //     "usecaseId": "sat-asdasda",
-        //     "refId" : "asdasda",
-        //     "dialogId": "dg-adasdasda",
-        //     "taskRefId": "d2879c1d-1dd8-5eff-8c15-6e9c9dd91199",
-        //   }
-        // }
-      ]
-    }
-    this.updateUseCaseData();
+    // this.welcomeTaskData = {
+    //   "events" : [
+    //     // {
+    //     //   "name": "AA_ON_CONNECT_EVENT",
+    //     //   "chat" : {
+    //     //     "enabled" : true,
+    //     //     "usecaseId": "sat-asdasda",
+    //     //     "refId" : "asdasda",
+    //     //     "dialogId": "dg-adasdasda",
+    //     //     "taskRefId": "fc10f6e2-ef31-5df7-9fa3-f88080a662bb",
+    //     //     "linkedBotId" : "st-2be8b912-da2f-53cc-a7f5-3713e387c5f5"
+    //     //   },
+    //     //   "voice":{
+    //     //     "enabled" : false,
+    //     //     "usecaseId": "sat-asdasda",
+    //     //     "refId" : "asdasda",
+    //     //     "dialogId": "dg-adasdasda",
+    //     //     "taskRefId": "d2879c1d-1dd8-5eff-8c15-6e9c9dd91199",
+    //     //   }
+    //     // }
+    //   ]
+    // }
+    // this.updateUseCaseData();
    
-    // this.service.invoke('get.searchaccounts', params).subscribe(data => {
-    //   if (data) {
-    //     this.updateWelcomeTaskData(data);
-    //   }
-    // });
+    this.service.invoke('get.welcomeevent', params).subscribe(data => {
+      if (data) {
+       this.welcomeTaskData = Object.assign({}, data);
+       this.updateUseCaseData();
+   
+      }
+    });
   }
   getUseCaseData(botId, update = true) { 
     const params = {
@@ -183,13 +185,13 @@ export class WelcomeeventComponent implements OnInit {
     this.showSpinner = true;
     if(type == this.save){
       let payLoad = this.prepareTaskPayLoad(this.taskEnable);
-      this.updateWelcomeTaskData(payLoad);
-      // this.service.invoke('post.welcomeevent', { streamId: this.streamId }, payLoad).subscribe((data) => {
-      //   console.log(data, "return data");
-      //   if(data){
-      //     this.updateTaskDetails(data);
-      //   }
-      // });      
+      // this.updateWelcomeTaskData(payLoad);
+      this.service.invoke('post.welcomeevent', { streamId: this.streamId }, payLoad).subscribe((data) => {
+        console.log(data, "return data");
+        if(data){
+           this.updateWelcomeTaskData(data);
+        }
+      });      
     }else if(type == this.cancel){
       this.updateUseCaseData();
     }
