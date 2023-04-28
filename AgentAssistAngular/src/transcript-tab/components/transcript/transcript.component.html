@@ -1,12 +1,14 @@
 <div class="transcipt-only-calls-data" id="scriptContainer">
-    <div class="data-contnet"></div>
+    <div class="data-contnet">
+        <app-user-bot-history ></app-user-bot-history>
+    </div>
     <div class="scroll-bottom-show-btn hiddenEle">
         <button id="scrollButtonTranscript" class="scroll-bottom-btn">
             <i class="ast-carrotup"></i>
             <span>Scroll to bottom</span>
         </button>
     </div>
-    <div class="empty-data-no-agents">
+    <div class="empty-data-no-agents" *ngIf="!historyResponse || historyResponse.length == 0">
         <div class="title">Voice based utterances from customer and Agent will render on this screen.</div>
     </div>
 </div>

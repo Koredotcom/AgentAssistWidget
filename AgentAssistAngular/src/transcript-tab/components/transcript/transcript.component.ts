@@ -34,6 +34,7 @@ export class TranscriptComponent implements OnInit {
 
   connectionDetails: any;
   parsedCustomData: any;
+  historyResponse : any;
 
   ngOnInit(): void {
     this.subscribeEvents();
@@ -102,12 +103,21 @@ export class TranscriptComponent implements OnInit {
           this.processAgentMessages(userInputData)
         }
       }
-    })
+    });
+
+    let subscription5 = this.handleSubjectService.userHistoryDataSubject$.subscribe((res : any) => {
+      console.log(res, "response inside history");
+      if(res && res.chatHistory){
+        this.historyResponse = res.chatHistory;
+        this.prepareConversation();
+      }
+    });
 
     this.subscriptionsList.push(subscription1);
     this.subscriptionsList.push(subscription2);
     this.subscriptionsList.push(subscription3);
     this.subscriptionsList.push(subscription4);
+    this.subscriptionsList.push(subscription5);
 
   }
 

@@ -62,12 +62,22 @@
         <perfect-scrollbar id="homeScrollBar" class="home-scroll-bar" #psBottom (psYReachEnd)="onScrollEvent($event)" (psYReachStart)="onScrollEvent($event)" (psScrollUp)="onScrollEvent($event)">
             <div class="body-data-container if-suggestion-search" id="bodyContainer" #tabBody>
                 <div class="dialog-task-data" id="dynamicBlocksData">
-
                   <ng-container>
-                    <app-user-bot-history [class.hide]="activeTab != projConstants.HISTORY"  (scrollToBottomEvent)="scrollToBottom($event)"  (newButtonScrollClickEvents)="scrollClickEvents($event)"></app-user-bot-history>
+                    <div class="transcipt-only-calls-data" id="historyContainer" [class.hide]="activeTab != projConstants.HISTORY">
+                        <div class="data-contnet">
+                            <app-user-bot-history ></app-user-bot-history>
+                        </div>
+                        <div class="scroll-bottom-show-btn hiddenEle">
+                            <button id="scrollButtonHistory" class="scroll-bottom-btn">
+                                <i class="ast-carrotup"></i>
+                                <span>Scroll to bottom</span>
+                            </button>
+                        </div>
+                    </div>
                 </ng-container>
                     <ng-container>
                         <app-transcript [class.hide]="activeTab != projConstants.TRANSCRIPT"  (scrollToBottomEvent)="scrollToBottom($event)"  (newButtonScrollClickEvents)="scrollClickEvents($event)"></app-transcript>
+                        <div *ngIf="commonService.isCallConversation && convHistoryResponse && convHistoryResponse.length > 0" id="transcriptTabHistoryText">{{transcriptScrollTopText}}</div>
                     </ng-container>
                     <ng-container>
                         <div [class.hide]="activeTab != projConstants.ASSIST">

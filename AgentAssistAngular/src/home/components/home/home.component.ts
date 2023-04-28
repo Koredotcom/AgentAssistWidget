@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { EVENTS } from 'src/common/helper/events';
 import { WebSocketService } from 'src/common/services/web-socket.service';
@@ -11,6 +11,7 @@ import { KoreGenerateuuidPipe } from 'src/common/pipes/kore-generateuuid.pipe';
 import { DesignAlterService } from 'src/common/services/design-alter.service';
 import { LocalStorageService } from 'src/common/services/local-storage.service';
 import { MockDataService } from 'src/common/services/mock-data.service';
+// import { ServiceInvokerService } from 'src/common/services/service-invoker.service';
 declare const $: any;
 @Component({
   selector: 'app-home',
@@ -44,10 +45,14 @@ export class HomeComponent implements OnInit {
   isLoader;
   isBackBtnClicked: boolean = false;
   showHistoryTab : boolean = false;
+  convHistoryResponse : any;
+  transcriptScrollTopText : string = 'Scroll up for Bot Conversation History';
+
   constructor(public handleSubjectService: HandleSubjectService, public websocketService: WebSocketService,
     public sanitizeHTMLPipe: SanitizeHtmlPipe, public commonService: CommonService, private koregenerateUUIDPipe: KoreGenerateuuidPipe,
     private designAlterService: DesignAlterService, private localStorageService: LocalStorageService,
-    private mockDataService : MockDataService) { }
+    private mockDataService : MockDataService,
+    private cdRef : ChangeDetectorRef ) { }
   ngOnInit(): void {
     this.handleSubjectService.setLoader(true);
     this.subscribeEvents();
@@ -109,10 +114,12 @@ export class HomeComponent implements OnInit {
       console.log(res, "response");
       if(res && res.chatHistory){
         this.handleSubjectService.setUserHistoryData(res);
-        this.showHistoryTab = !(this.connectionDetails.isCall == 'true') ? true : false;
+        this.convHistoryResponse = res.chatHistory;
+        this.showHistoryTab = !(this.commonService.isCallConversation) ? true : false;
       }
     });
-    this.subscriptionsList.push(subscription1)
+
+
 
     this.subscriptionsList.push(subscription1);
     this.subscriptionsList.push(subscription2);
@@ -451,7 +458,7 @@ setProactiveMode(){
   }
 
   onScrollEvent(event) {
-    if (this.activeTab == this.projConstants.ASSIST || this.activeTab == this.projConstants.MYBOT || this.activeTab == this.projConstants.TRANSCRIPT) {
+    if (this.activeTab == this.projConstants.ASSIST || this.activeTab == this.projConstants.MYBOT || this.activeTab == this.projConstants.TRANSCRIPT || this.activeTab == this.projConstants.HISTORY) {
       if (event && event?.type) {
         if (event.type == this.projConstants.PS_Y_REACH_END) {
           this.commonService.scrollContent[this.activeTab].scrollAtEnd = true;
@@ -501,16 +508,21 @@ setProactiveMode(){
   }
 
   updateScrollButton() {
-    let dynamicBlockId = this.commonService.tabNamevsId[this.activeTab];
-    let lastelement = this.designAlterService.getLastElement(dynamicBlockId);
-    let scrollAtEnd = !this.designAlterService.isScrolledIntoView(lastelement) ? true : false;
+    let dynamicBlockId = this.commonService.tabNamevsId[this.activeTab];    
+    let lastelement = this.designAlterService.getLastElement(dynamicBlockId);    
+    let scrollAtEnd = !this.designAlterService.isScrolledIntoView(lastelement) ? true : false;    
     this.commonService.scrollContent[this.activeTab].scrollAtEnd = scrollAtEnd;
+    let trascriptTextEle = document.getElementById('transcriptTabHistoryText');
+    if(this.designAlterService.isScrolledIntoView(trascriptTextEle)){
+      this.transcriptScrollTopText = 'Agent Joined the Conversation';
+    }
     if (!scrollAtEnd) {
       $(".scroll-bottom-show-btn").removeClass('hiddenEle');
       this.scrollClickEvents(true);
     } else {
       $(".scroll-bottom-show-btn").addClass('hiddenEle');
     }
+    this.cdRef.detectChanges();
   }
 
   @HostListener('click', ['$event'])
