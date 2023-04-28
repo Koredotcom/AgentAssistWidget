@@ -3704,3 +3704,38 @@ input.no-autofill-bkg:-webkit-autofill {
     margin: 0 2px;
     cursor: pointer;
 }
+
+
+.transcript-history-scroll-bottom{
+    text-align: center;
+    margin: 20px 0;
+    span{
+        padding: 6px 10px;
+        background: #F7E2C1;
+        border-radius: 5px;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 18px;
+        color: #09172E;
+        cursor: pointer;
+    }
+}
+
+.arrow-sticky-icon{
+    position: fixed;
+    top: 45px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    margin: 0 auto;
+    width: 16px;
+    height: 16px;
+    font-size: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transform: rotate(180deg);
+    z-index: 999;
+    background: #F5F8FA;
+}

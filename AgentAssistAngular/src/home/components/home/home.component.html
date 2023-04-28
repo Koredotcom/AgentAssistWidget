@@ -76,8 +76,7 @@
                     </div>
                 </ng-container>
                     <ng-container>
-                        <app-transcript [class.hide]="activeTab != projConstants.TRANSCRIPT"  (scrollToBottomEvent)="scrollToBottom($event)"  (newButtonScrollClickEvents)="scrollClickEvents($event)"></app-transcript>
-                        <div *ngIf="commonService.isCallConversation && convHistoryResponse && convHistoryResponse.length > 0" id="transcriptTabHistoryText">{{transcriptScrollTopText}}</div>
+                        <app-transcript [class.hide]="activeTab != projConstants.TRANSCRIPT"  (scrollToBottomEvent)="scrollToBottom($event)"  (newButtonScrollClickEvents)="scrollClickEvents($event)" [transcriptScrollTopText]="transcriptScrollTopText"></app-transcript>
                     </ng-container>
                     <ng-container>
                         <div [class.hide]="activeTab != projConstants.ASSIST">

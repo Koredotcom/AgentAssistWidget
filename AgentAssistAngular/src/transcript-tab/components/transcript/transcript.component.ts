@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { HandleSubjectService } from 'src/common/services/handle-subject.service';
 import { WebSocketService } from 'src/common/services/web-socket.service';
@@ -18,6 +18,7 @@ import { RandomUUIDPipe } from 'src/common/pipes/random-uuid.pipe';
 })
 export class TranscriptComponent implements OnInit {
 
+  @Input() transcriptScrollTopText;
   @Output() scrollToBottomEvent = new EventEmitter();
   @Output() newButtonScrollClickEvents = new EventEmitter();
 
