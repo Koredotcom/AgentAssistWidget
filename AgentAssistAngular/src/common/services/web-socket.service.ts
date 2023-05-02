@@ -24,7 +24,7 @@ export class WebSocketService {
   agentAssistUserMessageResponse$ : BehaviorSubject<any[]> = new BehaviorSubject(null);
   agentFeedbackResponse$ : BehaviorSubject<any[]> = new BehaviorSubject(null);
   responseResolutionCommentsResponse$ : BehaviorSubject<any[]> = new BehaviorSubject(null);
-
+  isWelcomeResonse = false;
   LoaderTimeout: number = 10000;
 
 
@@ -59,11 +59,7 @@ export class WebSocketService {
   }
 
   commonEmitEvents(){
-    let menu_request_params : any = {
-      botId : this.connectionDetails.botId,
-      conversationId : this.connectionDetails.conversationId,
-      experience : (this.connectionDetails.isCall && this.connectionDetails.isCall == "true") ?  ProjConstants.VOICE : ProjConstants.CHAT
-    }
+
 
 
     let appState = this.localStorageService.getLocalStorageState();
@@ -79,26 +75,39 @@ export class WebSocketService {
       'id': this.connectionDetails.conversationId,
       "isSendWelcomeMessage": shouldProcessResponse,
       'agentassistInfo' : agent_user_details,
-      'botId': this.connectionDetails.botId
+      'botId': this.connectionDetails.botId,
+      'sendMenuRequest': true,
     }
     if(this.connectionDetails?.autoBotId && this.connectionDetails?.autoBotId !== 'undefined') {
       welcomeMessageParams['autoBotId'] = this.connectionDetails.autoBotId;
-      menu_request_params['autoBotId'] = this.connectionDetails.autoBotId;
+      // menu_request_params['autoBotId'] = this.connectionDetails.autoBotId;
     } else {
       welcomeMessageParams['autoBotId'] = '';
-      menu_request_params['autoBotId'] = '';
+      // menu_request_params['autoBotId'] = '';
     }
     this.emitEvents(EVENTS.welcome_message_request, welcomeMessageParams);
-    this.emitEvents(EVENTS.agent_menu_request, menu_request_params);
   }
 
   emitEvents(eventName,requestParams) {
+    if(requestParams){
+      requestParams.isExtAD = this.connectionDetails.fromSAT ? false : true;
+      requestParams.source = this.connectionDetails.source;
+    }
     this.loaderOnTimer()
     this._agentAsisstSocket.emit(eventName, requestParams);
   }
 
   listenEvents() {
-
+    let menu_request_params : any = {
+      botId : this.connectionDetails.botId,
+      conversationId : this.connectionDetails.conversationId,
+      experience : (this.connectionDetails.isCall && this.connectionDetails.isCall == "true") ?  ProjConstants.VOICE : ProjConstants.CHAT
+    }
+    if(this.connectionDetails?.autoBotId && this.connectionDetails?.autoBotId !== 'undefined') {
+      menu_request_params['autoBotId'] = this.connectionDetails.autoBotId;
+    } else {
+      menu_request_params['autoBotId'] = '';
+    }
     // const channel = new BroadcastChannel('app-data');
     // channel.addEventListener('message', (event) => {
     //     console.log("event recived", event.data);
@@ -112,10 +121,12 @@ export class WebSocketService {
     // });
 
     this._agentAsisstSocket.on(EVENTS.agent_assist_response, (data) => {
-      console.log("inside agenta ssist");
+      if(data.sendMenuRequest && !this.isWelcomeResonse){
+        this.isWelcomeResonse = true;
+        this.emitEvents(EVENTS.agent_menu_request, menu_request_params);
+      }
       this.agentAssistResponse$.next(data);
       this.addOrRemoveLoader(false);
-
     });
 
     this._agentAsisstSocket.on(EVENTS.agent_menu_response, (data) => {
