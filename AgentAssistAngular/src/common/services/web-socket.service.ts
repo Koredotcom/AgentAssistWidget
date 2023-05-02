@@ -89,6 +89,10 @@ export class WebSocketService {
   }
 
   emitEvents(eventName,requestParams) {
+    if(requestParams){
+      requestParams.isExtAD = this.connectionDetails.fromSAT ? false : true;
+      requestParams.source = this.connectionDetails.source;
+    }
     this.loaderOnTimer()
     this._agentAsisstSocket.emit(eventName, requestParams);
   }
