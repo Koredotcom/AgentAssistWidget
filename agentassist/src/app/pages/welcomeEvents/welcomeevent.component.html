@@ -4,7 +4,7 @@
             <div class="title">Welcome Event</div>
             <div class="tabs-list">
                 <!-- <div class="tab-name" [ngClass]="{'active-tab' : activeTab == welcomeMsg}" (click)="changeActiveTab(welcomeMsg)">Welcome Message</div> -->
-                <div class="tab-name" [ngClass]="{'active-tab' : activeTab == welcomeTask}" (click)="changeActiveTab(welcomeTask)">Welcome Task</div>
+                <!-- <div class="tab-name" [ngClass]="{'active-tab' : activeTab == welcomeTask}" (click)="changeActiveTab(welcomeTask)">Welcome Task</div> -->
             </div>
         </div>
         <button class="kr-sg-button-primary btn_lg" (click)="openWelcomeEvent()" *ngIf="activeTab == welcomeMsg">New Welcome Message</button>
@@ -12,7 +12,7 @@
     <div class="events-block-wrapper">
         <perfect-scrollbar>
             <div class="inner-wrapper-details">
-                <div class="box-wrapper" [hidden]="activeTab != welcomeMsg">
+                <!-- <div class="box-wrapper" [hidden]="activeTab != welcomeMsg">
                     <div class="heading-events">
                         <div class="icon_block">
                             <i class="icon-sa-call-welcome"></i>
@@ -78,7 +78,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
 
                 <div class="box-wrapper" [hidden]="activeTab != welcomeTask">                    
                     <div class="heading-events">
@@ -115,7 +115,7 @@
                                 </div> 
                                 <ng-container *ngIf="taskEnable">
                                     <div class="d-flex">
-                                        <div class="col-6">
+                                        <div class="col-6" *ngIf="currentBt?.type == universalBot">
                                             <div class="label-text">Select Bot</div>
                                             <div class="kr-sg-dropdowns" ngbDropdown>
                                                 <div class="dropdown dropdown-open">
@@ -130,11 +130,11 @@
                                                 </div>
                                             </div> 
                                         </div>
-                                        <div class="col-6">
+                                        <div class="col-6" [ngClass]="{'col-12' : currentBt?.type != universalBot}">
                                             <div class="label-text">Automation</div>
                                             <div class="kr-sg-dropdowns" ngbDropdown>
                                                 <div class="dropdown dropdown-open">
-                                                    <button class="dropdown-toggle dropdown-input" ngbDropdownToggle [disabled]="currentBt.type == 'universalbot' && !selectedBot?.name">{{selectedUseCase?.usecaseName ? selectedUseCase?.usecaseName : 'Select Use Cases'}}</button>
+                                                    <button class="dropdown-toggle dropdown-input" ngbDropdownToggle [disabled]="currentBt.type == universalBot && !selectedBot?.name">{{selectedUseCase?.usecaseName ? selectedUseCase?.usecaseName : 'Select Use Cases'}}</button>
                                                     <ul class="dropdown-menu content-menu" ngbDropdownMenu>
                                                         <perfect-scrollbar>
                                                             <div class="scroll-ul">
