@@ -1184,7 +1184,10 @@ body{
             width: auto;
             min-width: auto;
             max-width: initial;
-            width: 150px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            width: auto;
             cursor: pointer;
         }
         .ranges{
