@@ -77,6 +77,7 @@ export class WebSocketService {
       'agentassistInfo' : agent_user_details,
       'botId': this.connectionDetails.botId,
       'sendMenuRequest': true,
+      'experience' : (this.connectionDetails.isCall && this.connectionDetails.isCall == "true") ?  ProjConstants.VOICE : ProjConstants.CHAT
     }
     if(this.connectionDetails?.autoBotId && this.connectionDetails?.autoBotId !== 'undefined') {
       welcomeMessageParams['autoBotId'] = this.connectionDetails.autoBotId;
