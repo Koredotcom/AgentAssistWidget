@@ -1525,12 +1525,12 @@ export class EndPointsService {
     }
 
     this.serviceList['get.welcomeevent'] = {
-      endpoint : this.SERVER_URL + '/smartassist/apps/instances/:streamId/events?isAgentAssist=true',
+      endpoint : this.API_SERVER_URL + '/smartassist/apps/instances/:streamId/events?isAgentAssist=true',
       method: 'get'
     }
 
     this.serviceList['post.welcomeevent'] = {
-      endpoint : this.SERVER_URL + '/smartassist/apps/instances/:streamId/events?isAgentAssist=true',
+      endpoint : this.API_SERVER_URL + '/smartassist/apps/instances/:streamId/events?isAgentAssist=true',
       method: 'post'
     }
 

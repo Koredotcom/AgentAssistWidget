@@ -201,12 +201,8 @@ export class WelcomeeventComponent implements OnInit {
       "events" : [
         {
           "name": "AA_ON_CONNECT_EVENT",
-          "chat" : {
-            "enabled" : false
-          },
-          "voice":{
-            "enabled" : false
-          }
+          "chat" : this.welcomeTaskData && this.welcomeTaskData.events && this.welcomeTaskData.events[0] && this.welcomeTaskData.events[0].chat ? this.welcomeTaskData.events[0].chat : {enabled : false},
+          "voice": this.welcomeTaskData && this.welcomeTaskData.events && this.welcomeTaskData.events[0] && this.welcomeTaskData.events[0].voice ? this.welcomeTaskData.events[0].voice : {enabled : false}
         }
       ]
     }
@@ -221,7 +217,7 @@ export class WelcomeeventComponent implements OnInit {
         refId : this.selectedUseCase.refId,
         dialogId : this.selectedUseCase.dialogId,
         taskRefId : this.selectedUseCase.taskRefId,
-        linkedBotId : this.selectedBot._id ? this.selectedBot._id : ''
+        linkedBotId : this.selectedBot && this.selectedBot._id ? this.selectedBot._id : ''
       }
       payLoad.events[0][this.taskActive] = Object.assign({}, innerObject);
     }
