@@ -204,7 +204,7 @@ export class WelcomeeventComponent implements OnInit {
     }else{
       let innerObject : any = {
         enabled : true,
-        usecaseId : this.selectedUseCase.usecaseId ? this.selectedUseCase.usecaseId  : '',
+        usecaseId : this.selectedUseCase && this.selectedUseCase.usecaseId ? this.selectedUseCase.usecaseId  : '',
         refId : this.selectedUseCase.refId,
         dialogId : this.selectedUseCase.dialogId,
         taskRefId : this.selectedUseCase.taskRefId,
