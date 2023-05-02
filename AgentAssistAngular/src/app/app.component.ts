@@ -10,6 +10,8 @@ import { WebSocketService } from '../common/services/web-socket.service';
 import * as $ from 'jquery';
 import { TemplateRenderClassService } from 'src/common/services/template-render-class.service';
 import { Router } from '@angular/router';
+import { userAgInputMessages } from 'src/common/helper/data-models';
+import { EVENTS } from 'src/common/helper/events';
 
 @Component({
   selector: 'app-root',
@@ -21,9 +23,14 @@ export class AppComponent {
   isGrantSuccess = false;
   errorMsg : string = '';
 
-  constructor(private webSocketService: WebSocketService, private service: CommonService,
-    private route: ActivatedRoute, private handleSubjectService: HandleSubjectService, private randomID: KoreGenerateuuidPipe,
-    private localStorageService: LocalStorageService, private templateChatConfig: TemplateRenderClassService, private router: Router) {
+  constructor(private webSocketService: WebSocketService,
+              private service: CommonService,
+              private route: ActivatedRoute,
+              private handleSubjectService: HandleSubjectService,
+              private randomID: KoreGenerateuuidPipe,
+              private localStorageService: LocalStorageService,
+              private templateChatConfig: TemplateRenderClassService,
+              private router: Router) {
   }
 
   ngOnInit() {
@@ -109,7 +116,24 @@ export class AppComponent {
     }else if(e.data.name === 'setUserInfo'){
       console.log(e, "event", e.data.userDetails, "user details");
       this.localStorageService.userDetails = e.data.userDetails ? e.data.userDetails : null;
+    } else if(e.data.from === 'agent') {
+      console.log(e.data);
+      this.emitUserAgentMessage(e.data, 'agent_inp_msg');
+    }else if(e.data.from === 'user') {
+      console.log(e.data);
+      this.emitUserAgentMessage(e.data, 'user_inp_msg');
     }
+  }
+
+  emitUserAgentMessage(payload: userAgInputMessages, eType='') {
+    // emit userAgentMsg
+    if( eType === 'user_inp_msg') {
+      this.webSocketService.emitEvents(EVENTS.user_sent_message, payload);
+    } else if(eType === 'agent_inp_msg') {
+      this.webSocketService.emitEvents(EVENTS.agent_sent_message, payload);
+    }
+
+
   }
 
   initAgentAssist(chatConfig, params) {
