@@ -1,9 +1,11 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { AuthService } from '@kore.services/auth.service';
+import { NotificationService } from '@kore.services/notification.service';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { workflowService } from '@kore.services/workflow.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateService } from '@ngx-translate/core';
 import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
 import { SubSink } from 'subsink';
 
@@ -49,7 +51,9 @@ export class WelcomeeventComponent implements OnInit {
     private service: ServiceInvokerService,
     private workflowService : workflowService,
     private authService: AuthService,
-    private cdRef : ChangeDetectorRef
+    private cdRef : ChangeDetectorRef,
+    private notificationService : NotificationService,
+    private translate : TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -82,36 +86,15 @@ export class WelcomeeventComponent implements OnInit {
     let params : any = {
       streamId : this.streamId,
     }
-    // this.welcomeTaskData = {
-    //   "events" : [
-    //     // {
-    //     //   "name": "AA_ON_CONNECT_EVENT",
-    //     //   "chat" : {
-    //     //     "enabled" : true,
-    //     //     "usecaseId": "sat-asdasda",
-    //     //     "refId" : "asdasda",
-    //     //     "dialogId": "dg-adasdasda",
-    //     //     "taskRefId": "fc10f6e2-ef31-5df7-9fa3-f88080a662bb",
-    //     //     "linkedBotId" : "st-2be8b912-da2f-53cc-a7f5-3713e387c5f5"
-    //     //   },
-    //     //   "voice":{
-    //     //     "enabled" : false,
-    //     //     "usecaseId": "sat-asdasda",
-    //     //     "refId" : "asdasda",
-    //     //     "dialogId": "dg-adasdasda",
-    //     //     "taskRefId": "d2879c1d-1dd8-5eff-8c15-6e9c9dd91199",
-    //     //   }
-    //     // }
-    //   ]
-    // }
-    // this.updateUseCaseData();
-   
+    this.showSpinner = true;
     this.service.invoke('get.welcomeevent', params).subscribe(data => {
+      this.showSpinner = false;
       if (data) {
        this.welcomeTaskData = Object.assign({}, data);
        this.updateUseCaseData();
-   
       }
+    },error => {
+      this.showSpinner = false;
     });
   }
   getUseCaseData(botId, update = true) { 
@@ -123,13 +106,16 @@ export class WelcomeeventComponent implements OnInit {
       usecaseType: 'dialog',
       offset: 0
     }
+    this.showSpinner = true;
     this.subs.sink = this.service.invoke('get.usecases', params, {})
       .subscribe((res) => {
+        this.showSpinner = false;
         this.conversations = res.usecases;
         if(update){
           this.updateTaskDetails(this.welcomeTaskData)
         }
       }, err => {
+        this.showSpinner = false;
         this.conversations  = [];
       });
   }
@@ -144,12 +130,10 @@ export class WelcomeeventComponent implements OnInit {
     }else if(this.currentBt.type != this.universalBot){
       this.getUseCaseData(usecaseId);
     }
-    this.showSpinner = false;
   }
   updateWelcomeTaskData(data){
     this.welcomeTaskData = data;
     this.updateTaskDetails(data);
-    this.showSpinner = false;
   }
 
   // updating ngmodels in UI based on data from backend.
@@ -187,13 +171,20 @@ export class WelcomeeventComponent implements OnInit {
       let payLoad = this.prepareTaskPayLoad(this.taskEnable);
       // this.updateWelcomeTaskData(payLoad);
       this.service.invoke('post.welcomeevent', { streamId: this.streamId }, payLoad).subscribe((data) => {
-        console.log(data, "return data");
+        this.showSpinner = false;
         if(data){
            this.updateWelcomeTaskData(data);
+           this.notificationService.notify(this.translate.instant("WELCOMEEVENT.SAVE_SUCCESS"), 'success');
+        }else{
+          this.notificationService.showError(this.translate.instant("WELCOMEEVENT.SAVE_FALIED"));
         }
+      },error => {
+        this.notificationService.showError(this.translate.instant("WELCOMEEVENT.SAVE_FALIED"));
+        this.showSpinner = false;
       });      
     }else if(type == this.cancel){
       this.updateUseCaseData();
+      this.showSpinner = false;
     }
   }
   prepareTaskPayLoad(taskEnable){
