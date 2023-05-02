@@ -12,7 +12,8 @@
             <div class="data-content-wrapper">
                 <div class="search-header">
                     <div class="custom_date_picker_sec date-sec ngx-daterangepicker-action" (click)="openPicker()">
-                        <i class="icon-sa-calendar ngx-daterangepicker-action" (click)="openPicker()"></i>
+                        <!-- <i class=" ngx-daterangepicker-action" (click)="openPicker()"></i> -->
+                        <img class="calendar m-r-5" src="assets/images/calendar.svg" (click)="openPicker()">
                         <input type="text"
                             readonly
                             ngxDaterangepickerMd
@@ -30,7 +31,7 @@
                             class="input-date-custom"
                             [locale] = "calendarLocale"
                             (datesUpdated)="onDatesUpdated($event)"/>
-                        <img src="assets/icons/analytics/carrotup.svg" alt="not found" class="ml-2 mr-0 ngx-daterangepicker-action" (click)="openPicker()">
+                        <!-- <img src="assets/icons/analytics/carrotup.svg" alt="not found" class="ml-2 mr-0 ngx-daterangepicker-action" (click)="openPicker()"> -->
                     </div>
                     <!-- <div class="kr-sg-input-search">
                         <input type="text" placeholder="Search" class="input-search" name="userSearch" id="searchConv" #searchTerm (keydown.enter)="save($event)">
