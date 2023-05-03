@@ -46,7 +46,6 @@ export class HomeComponent implements OnInit {
   isBackBtnClicked: boolean = false;
   showHistoryTab : boolean = false;
   convHistoryResponse : any;
-  transcriptScrollTopText : string = 'Scroll up for Bot Conversation History';
 
   constructor(public handleSubjectService: HandleSubjectService, public websocketService: WebSocketService,
     public sanitizeHTMLPipe: SanitizeHtmlPipe, public commonService: CommonService, private koregenerateUUIDPipe: KoreGenerateuuidPipe,
@@ -512,10 +511,6 @@ setProactiveMode(){
     let lastelement = this.designAlterService.getLastElement(dynamicBlockId);    
     let scrollAtEnd = !this.designAlterService.isScrolledIntoView(lastelement) ? true : false;    
     this.commonService.scrollContent[this.activeTab].scrollAtEnd = scrollAtEnd;
-    let trascriptTextEle = document.getElementById('transcriptTabHistoryText');
-    if(this.designAlterService.isScrolledIntoView(trascriptTextEle)){
-      this.transcriptScrollTopText = 'Agent Joined the Conversation';
-    }
     if (!scrollAtEnd) {
       $(".scroll-bottom-show-btn").removeClass('hiddenEle');
       this.scrollClickEvents(true);

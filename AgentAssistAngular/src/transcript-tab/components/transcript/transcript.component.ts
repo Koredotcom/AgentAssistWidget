@@ -9,6 +9,7 @@ import { EVENTS } from 'src/common/helper/events';
 import { SanitizeHtmlPipe } from 'src/common/pipes/sanitize-html.pipe';
 import { IdReferenceConst, ProjConstants } from 'src/common/constants/proj.cnts';
 import { RandomUUIDPipe } from 'src/common/pipes/random-uuid.pipe';
+import { DesignAlterService } from 'src/common/services/design-alter.service';
 
 
 @Component({
@@ -18,7 +19,7 @@ import { RandomUUIDPipe } from 'src/common/pipes/random-uuid.pipe';
 })
 export class TranscriptComponent implements OnInit {
 
-  @Input() transcriptScrollTopText;
+   
   @Output() scrollToBottomEvent = new EventEmitter();
   @Output() newButtonScrollClickEvents = new EventEmitter();
 
@@ -27,7 +28,8 @@ export class TranscriptComponent implements OnInit {
     public commonService: CommonService,
     private formatAMPMPipe: FormatAMPMPipe,
     private sanitizeHTMLPipe: SanitizeHtmlPipe,
-    private randomUUidPipe : RandomUUIDPipe) { }
+    private randomUUidPipe : RandomUUIDPipe,
+    private designAlterService: DesignAlterService) { }
 
   subscriptionsList: Subscription[] = [];
 
@@ -36,6 +38,8 @@ export class TranscriptComponent implements OnInit {
   connectionDetails: any;
   parsedCustomData: any;
   historyResponse : any;
+  scrollEventDone : boolean = false;
+  transcriptScrollTopText : string = 'Scroll up for Bot Conversation History';
 
   ngOnInit(): void {
     this.subscribeEvents();
@@ -218,6 +222,23 @@ export class TranscriptComponent implements OnInit {
         }
       }
     }
+  }
+
+  onScroll(){
+    if(!this.scrollEventDone){
+      console.log("scroll event ******");
+      let trascriptTextEle = document.getElementById('transcriptTabHistoryText');
+      let scrollInView = !this.designAlterService.isScrolledIntoView(trascriptTextEle)
+      console.log(scrollInView);
+      if(scrollInView){
+        this.scrollEventDone = true;
+        setTimeout(() => {
+          this.designAlterService.scrollToEle('transcriptTabHistoryText')
+          this.transcriptScrollTopText = 'Agent Joined the Conversation';
+        }, 1000);
+      }
+    }
+    
   }
 
 }

@@ -1,7 +1,8 @@
-<div class="transcipt-only-calls-data" id="scriptContainer">
+<div class="transcipt-only-calls-data" id="scriptContainer" (wheel)="onScroll()">
     <div class="data-contnet">
-        <app-user-bot-history ></app-user-bot-history>
-        <div class="arrow-sticky-icon">
+       
+        <app-user-bot-history [ngClass]="commonService.isCallConversation && historyResponse && historyResponse.length > 0 && scrollEventDone ? 'd-block' : 'd-none'"></app-user-bot-history>
+        <div class="arrow-sticky-icon" *ngIf="!scrollEventDone">
             <i class="ast-carrotup"></i>
         </div>
         <div class="transcript-history-scroll-bottom" *ngIf="commonService.isCallConversation && historyResponse && historyResponse.length > 0" id="transcriptTabHistoryText">
