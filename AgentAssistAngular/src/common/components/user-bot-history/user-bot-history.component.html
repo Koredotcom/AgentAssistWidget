@@ -7,7 +7,9 @@
                 <div class="u-time">{{conv.timestampValue | converTimestampToDate}}</div>
             </div>
             <div class="bubble-data" id="userInputMsg">
-                <div class="b-text">{{conv.components[0]?.data.text}}</div>
+                <div class="b-text" *ngIf="!conv.isTemplateRender">{{conv.value}}</div>
+                <div class="title-data"  *ngIf="conv.isTemplateRender">
+                    <ul class="chat-container"  [id]="'displayData-' + conv._id" [innerHTML]="conv.template | safeHtml"></ul></div>
             </div>
         </div>
         <div class="current-user-bubble" [id]="'currentUser-' + conv._id"
@@ -17,7 +19,9 @@
                 <div class="u-name">You</div>
             </div>
             <div class="bubble-data">
-                <div class="b-text">{{conv.components[0]?.data.text}}</div>
+                <div class="b-text" *ngIf="!conv.isTemplateRender">{{conv.value}}</div>
+                <div class="title-data"  *ngIf="conv.isTemplateRender">
+                    <ul class="chat-container"  [id]="'displayData-' + conv._id" [innerHTML]="conv.template | safeHtml"></ul></div>
             </div>
         </div>
     </ng-container>
