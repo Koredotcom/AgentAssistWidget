@@ -7,26 +7,26 @@
 		</button>
 		<div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="automationBot-menu" >
 		  <perfect-scrollbar>
-			<div class="bot-name-icon" (click)="switchBots(bt)" *ngFor="let bt of filteredSmartABots | keyvalue">
+			<div class="bot-name-icon" *ngFor="let bt of filteredSmartABots | keyvalue">
 				<!-- <div class="bot-icon">
 					<img [src]="bt?.icon ? bt?.icon : (this.workflowService.resolveHostUrl() + '/botbuilder/assets/images/brokenImageSmall.png')">
 				</div>
 				<div class="bot-name text-truncate" [title]="bt.name">{{bt.name}}</div> -->
-				<button ngbDropdownItem class="automationBotlist active">
+				<button ngbDropdownItem class="automationBotlist active" (click)="switchBots(bt.value)" >
 					<img src="assets/icons/leftmenu/usecase.svg">
 					<span class="link-name">
 						<span class="name-bot">{{bt.value.name}}</span>
-						<span class="ubautomationBot" *ngIf="bt.type == 'universalbot'">ub</span>
+						<span class="ubautomationBot" *ngIf="bt.value.type == 'universalbot'">ub</span>
 						<!-- <span *ngIf="bt.type == 'universalbot'" class="ubautomationBot">ub</span> -->
 					</span>
 					<!-- <span class="makeDefault" *ngIf="!bt?.isBotDefault" (click)="makeBotAsDefault(bt)">Make Default Automation Bot</span> -->
 					<i class="icon-sa-conv-check"></i>
 				</button>
-				<div class="ub-bot-list-wrapper">
-					<button ngbDropdownItem class="automationBotlist active">
+				<div class="ub-bot-list-wrapper" *ngIf="bt.value.type == 'universalbot' && bt.value.linkedBots && bt.value.linkedBots.length > 0">
+					<button ngbDropdownItem class="automationBotlist active" (click)="switchBots(lbot)" *ngFor="let lbot of bt.value.linkedBots">
 						<img src="assets/icons/leftmenu/usecase.svg">
 						<span class="link-name">
-							<span class="name-bot">{{bt.value.name}}</span>
+							<span class="name-bot">{{lbot.name}}</span>
 						</span>
 						<i class="icon-sa-conv-check"></i>
 					</button>

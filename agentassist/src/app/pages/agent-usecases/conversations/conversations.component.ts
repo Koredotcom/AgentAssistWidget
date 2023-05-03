@@ -34,6 +34,7 @@ export class ConversationsComponent implements OnInit, OnChanges, OnDestroy {
   noResults = false;
   appStatesList: any[] = [];
   defaultConfigs: any = {};
+  currentBt : any = {};
 
   tabActive: 'call' | 'chat' | '' = "";
 
@@ -51,6 +52,7 @@ export class ConversationsComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit(): void {
     this.streamId = this.workflowService.getCurrentBt(true)._id;
+    this.currentBt = this.workflowService.getCurrentBt(true);
     this.setAppStatusList();
     this.getUsecases();
     this.getCategories();
@@ -65,12 +67,14 @@ export class ConversationsComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnChanges() {
     this.streamId = this.workflowService.getCurrentBt(true)._id;
+    this.currentBt = this.workflowService.getCurrentBt(true);
     this.getUsecases();
   }
 
   getUsecases(searchTerm?: string, pagination?: boolean) {
     this.searchTerm = searchTerm || '';
     this.ucOffset = pagination ? this.ucOffset + this.USECASES_LIMIT : 0;
+    this.currentBt = this.workflowService.getCurrentBt(true);
     this.streamId = this.workflowService.getCurrentBt(true)._id;
     const params = {
       streamId: this.streamId,
@@ -290,7 +294,6 @@ export class ConversationsComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnDestroy() {
     this.subs.unsubscribe();
-
   }
 
 }

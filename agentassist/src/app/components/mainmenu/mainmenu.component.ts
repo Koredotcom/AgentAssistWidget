@@ -138,23 +138,14 @@ export class MainmenuComponent implements OnInit, OnDestroy {
         config_publish_bot_array.forEach((config_publish_bot) => {
           linkedBotIds[config_publish_bot._id] = true;
         });  
-
-        
-        console.log(linkedBotIds, "linked botids");
-               
+   
         linkedBots = this.smartABots.filter(element => linkedBotIds[element._id]); 
         filterdBot.linkedBots = Object.assign([], linkedBots);
         for(let botId in linkedBotIds){
-          console.log(botId, "botid");
-          
           delete this.filteredSmartABots[botId]
-        }
-        console.log(filterdBot.linkedBots, "linked bots ****************");
-        
+        }        
       }
-    }  
-    console.log(this.filteredSmartABots, "filter smartAbots");
-      
+    }        
   }
 
   getBalance() {
