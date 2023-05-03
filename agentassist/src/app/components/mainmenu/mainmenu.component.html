@@ -7,14 +7,14 @@
 		</button>
 		<div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="automationBot-menu" >
 		  <perfect-scrollbar>
-			<div class="bot-name-icon" (click)="switchBots(bt)" *ngFor="let bt of smartABots">
+			<div class="bot-name-icon" (click)="switchBots(bt)" *ngFor="let bt of filteredSmartABots | keyvalue">
 				<!-- <div class="bot-icon">
 					<img [src]="bt?.icon ? bt?.icon : (this.workflowService.resolveHostUrl() + '/botbuilder/assets/images/brokenImageSmall.png')">
 				</div>
 				<div class="bot-name text-truncate" [title]="bt.name">{{bt.name}}</div> -->
 				<button ngbDropdownItem class="automationBotlist">
 					<img src="assets/icons/leftmenu/usecase.svg">
-					<span class="link-name">{{bt.name}} <span  *ngIf="bt.type == 'universalbot'" class="ubautomationBot">ub</span></span>
+					<span class="link-name">{{bt.value.name}} <span  *ngIf="bt.type == 'universalbot'" class="ubautomationBot">ub</span></span>
 					<!-- <span class="makeDefault" *ngIf="!bt?.isBotDefault" (click)="makeBotAsDefault(bt)">Make Default Automation Bot</span> -->
 					<i class="icon-sa-conv-check"></i>
 				  </button>

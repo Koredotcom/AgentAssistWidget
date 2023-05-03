@@ -36,7 +36,7 @@ export class MainmenuComponent implements OnInit, OnDestroy {
   availBal: Subscription;
   upBtSub: Subscription;
   swtchBot: Subscription;
-  smartABots: string[];
+  smartABots: any[];
   currentBt: any;
   searchBt = "";
   isAgentDesktopEnabled: boolean;
@@ -44,6 +44,7 @@ export class MainmenuComponent implements OnInit, OnDestroy {
   channelList: any;
   loading: boolean = false;
   voicePreferences: VoicePreferencesModel;
+  filteredSmartABots : any = {};
 
   @ViewChild('wUpdateBot', { static: false }) private wUpdateBot;
   @ViewChild('wSContent', { static: false }) private wSContent;
@@ -96,6 +97,7 @@ export class MainmenuComponent implements OnInit, OnDestroy {
       this.currentBt = _.findWhere(this.authService.smartAssistBots, { _id: this.workflowService.deflectApps()._id || this.workflowService.deflectApps()[0]._id });
       this.workflowService.setCurrentBt(this.currentBt);
     }
+    this.filterLinkedBotIds();
     this.availBal = this.workflowService.updateAvailBal$.subscribe(
       res => {
         this.getBalance();
@@ -113,6 +115,46 @@ export class MainmenuComponent implements OnInit, OnDestroy {
         this.switchBots(res);
       }
     );
+  }
+
+  filterLinkedBotIds(){
+    this.filteredSmartABots = {};
+    this.smartABots.forEach((bot) => {
+      if(bot._id){
+        this.filteredSmartABots[bot._id] = bot;
+      }
+    });
+
+    
+    for(let bot of this.smartABots){
+      let filterdBot = this.filteredSmartABots[bot._id];
+      if(bot.type == 'universalbot'){
+
+        let linkedBots = [];
+        let linkedBotIds = {};
+
+        let config_publish_bot_array = [...bot?.configuredBots, ...bot.publishedBots];
+
+        config_publish_bot_array.forEach((config_publish_bot) => {
+          linkedBotIds[config_publish_bot._id] = true;
+        });  
+
+        
+        console.log(linkedBotIds, "linked botids");
+               
+        linkedBots = this.smartABots.filter(element => linkedBotIds[element._id]); 
+        filterdBot.linkedBots = Object.assign([], linkedBots);
+        for(let botId in linkedBotIds){
+          console.log(botId, "botid");
+          
+          delete this.filteredSmartABots[botId]
+        }
+        console.log(filterdBot.linkedBots, "linked bots ****************");
+        
+      }
+    }  
+    console.log(this.filteredSmartABots, "filter smartAbots");
+      
   }
 
   getBalance() {

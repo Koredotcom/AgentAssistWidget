@@ -37,6 +37,16 @@ export class AutomationChannelsComponent implements OnInit {
     this.showChatSection = false;
     this.showEmailSection = false;
     this.getChatChannelData();
+    this.subscribeEvents();
+  }
+
+  subscribeEvents(){
+    this.workflowService.updateBotDetails$.subscribe((ele)=>{
+      console.log(ele, "inside udpate use case");
+      if(ele){
+        this.getChatChannelData();
+      } 
+    });
   }
 
   
