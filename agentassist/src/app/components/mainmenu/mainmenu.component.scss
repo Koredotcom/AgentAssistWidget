@@ -30,10 +30,12 @@ app-mainmenu{
 			  min-height: 56px;
 			  position: relative;
 			  width: auto !important;
-			  background: #fff;
+			  background: #fff !important;
 			  width: 100% !important;
 			  border: 0;
 			  border-radius: 0;
+			  text-align: left;
+			  box-shadow: none !important;
 			  &::before{
 				display: none;
 			  }
@@ -57,24 +59,20 @@ app-mainmenu{
 				overflow: hidden;
 				text-overflow: ellipsis;
 			  }
-			  .icon-sa-chevron-right-dark{
+			  .icon-sa-arrow-down{
 				width: 26px;
 				flex-shrink: 0;
-				font-size: 16px;
+				font-size: 12px;
 				display: flex;
 				justify-content: center;
-				padding-left: 6px;
+				color: #202124;
+				transform: rotate(-90deg);
 			  }
 			  &:hover{
 				// background: var(--leftmenubg);
-				background: rgba(255, 255, 255, 0.6);
 				font-weight: 500;
 				// box-shadow: inset 0px 1px 4px rgba(0, 0, 0, 0.05);
 				border-radius: 4px;
-				.link-name{
-				  font-weight: 400;
-				  padding-left: 10px;
-				}
 			  }
 			  &.active{
 				background: var(--whiteColor);

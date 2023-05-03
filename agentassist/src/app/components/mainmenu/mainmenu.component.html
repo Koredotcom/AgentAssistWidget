@@ -1,9 +1,9 @@
 <perfect-scrollbar [config]="config" class="sidebar-fixed" [ngClass]="{'is-upgrade-true': isPlan && !workflowService.onPremise}">
-	<div ngbDropdown class="kr-sg-dropdowns automationBotDD" container="body" placement="end-top" >
+	<div ngbDropdown class="kr-sg-dropdowns automationBotDD" container="body" placement="right-top">
 		<button type="button" class="btn btn-outline-primary automationBot" id="dropdownBasic1" ngbDropdownToggle>
 		  <img src="assets/icons/leftmenu/usecase.svg">
 		  <span class="link-name">{{ currentBt?.name }}</span>
-		  <i class="icon-sa-chevron-right-dark"></i>
+		  <i class="icon-sa-arrow-down"></i>
 		</button>
 		<div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="automationBot-menu" >
 		  <perfect-scrollbar>
@@ -12,12 +12,25 @@
 					<img [src]="bt?.icon ? bt?.icon : (this.workflowService.resolveHostUrl() + '/botbuilder/assets/images/brokenImageSmall.png')">
 				</div>
 				<div class="bot-name text-truncate" [title]="bt.name">{{bt.name}}</div> -->
-				<button ngbDropdownItem class="automationBotlist">
+				<button ngbDropdownItem class="automationBotlist active">
 					<img src="assets/icons/leftmenu/usecase.svg">
-					<span class="link-name">{{bt.value.name}} <span  *ngIf="bt.type == 'universalbot'" class="ubautomationBot">ub</span></span>
+					<span class="link-name">
+						<span class="name-bot">{{bt.value.name}}</span>
+						<span class="ubautomationBot" *ngIf="bt.type == 'universalbot'">ub</span>
+						<!-- <span *ngIf="bt.type == 'universalbot'" class="ubautomationBot">ub</span> -->
+					</span>
 					<!-- <span class="makeDefault" *ngIf="!bt?.isBotDefault" (click)="makeBotAsDefault(bt)">Make Default Automation Bot</span> -->
 					<i class="icon-sa-conv-check"></i>
-				  </button>
+				</button>
+				<div class="ub-bot-list-wrapper">
+					<button ngbDropdownItem class="automationBotlist active">
+						<img src="assets/icons/leftmenu/usecase.svg">
+						<span class="link-name">
+							<span class="name-bot">{{bt.value.name}}</span>
+						</span>
+						<i class="icon-sa-conv-check"></i>
+					</button>
+				</div>
 			</div>
 		</perfect-scrollbar>
 		</div>

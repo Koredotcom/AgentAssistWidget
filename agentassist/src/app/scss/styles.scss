@@ -2189,19 +2189,20 @@ body{
 }
 
 .automationBot-menu{
-    box-shadow: 0px 10px 15px -3px rgb(16 24 40 / 10%), 0px 4px 6px -4px rgb(16 24 40 / 10%);
+    box-shadow: 0px 10px 15px -3px rgba(16, 24, 40, 0.1), 0px 4px 6px -4px rgba(16, 24, 40, 0.1);
+    border-radius: 12px !important;
     border-radius: 12px !important;
     border: 0 !important;
-    width: 354px !important;
-    left: 224px !important;
-    margin-top: 60px;
-    margin-top: 80px !important;
-    height: 192px !important;
+    width: 355px !important;
+    margin-top: 60px !important;
+    .ub-bot-list-wrapper{
+        padding: 0px 20px;
+    }
     .automationBotlist{
       // margin-top: 15px;
       display: flex;
       align-items: center;
-      padding: 10px 10px 10px 20px;
+      padding: 7px 20px;
       // border-radius: 4px;
       margin-bottom: 6px !important;
       transition: 0.2s all ease-in;
@@ -2235,10 +2236,18 @@ body{
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        display: flex;
+        align-items: center;
+        .name-bot{
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+        }
         // display: flex;
         // align-items: center;
         .ubautomationBot{
-          margin-left: 5px;
+          margin-left: 8px;
           color: #2B75E4;
           font-size: 11px;
           font-weight: 400;
@@ -2251,6 +2260,7 @@ body{
           display: inline-block;
           text-align: center;
           line-height: 22px;
+          flex-shrink: 0;
           // display: flex;
           // align-items: center;
           // justify-content: center;
@@ -2271,6 +2281,13 @@ body{
       .icon-sa-check-blue{
         color: #16A34A;
         margin-right: 10px;
+      }
+      .icon-sa-conv-check{
+        color: #16A34A;
+        display: none;
+        font-size: 10px;
+        flex-shrink: 0;
+        margin-left: 10px;
       }
       &:hover{
         background-color: #EEF2F6;
