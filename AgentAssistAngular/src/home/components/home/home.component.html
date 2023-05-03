@@ -76,7 +76,7 @@
                     </div>
                 </ng-container>
                     <ng-container>
-                        <app-transcript [class.hide]="activeTab != projConstants.TRANSCRIPT"  (scrollToBottomEvent)="scrollToBottom($event)"  (newButtonScrollClickEvents)="scrollClickEvents($event)"></app-transcript>
+                        <app-transcript [class.hide]="activeTab != projConstants.TRANSCRIPT"  (scrollToBottomEvent)="scrollToBottom($event)"  (newButtonScrollClickEvents)="scrollClickEvents($event)" (scrollToTranscriptElement)="scrollToTranscriptElement($event)"></app-transcript>
                     </ng-container>
                     <ng-container>
                         <div [class.hide]="activeTab != projConstants.ASSIST">

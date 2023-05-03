@@ -218,6 +218,20 @@ export class DesignAlterService {
     }
   }
 
+  getScrollElementHeight(id){
+    let _scrollHeight = -1;
+    let element = document.getElementById(id);
+    var _PanelEle = $(element);
+    if (_PanelEle) {
+        var _container = _PanelEle.closest('.body-data-container');
+        if (_container && _container.offset()) {
+            _scrollHeight = _PanelEle.offset().top - _container.offset().top + _container.scrollTop();
+            console.log(_scrollHeight, "scroll height");
+        }
+    }
+    return _scrollHeight;
+  }
+
   scrollToEle(id) {
     let element = document.getElementById(id);
     var _PanelEle = $(element);

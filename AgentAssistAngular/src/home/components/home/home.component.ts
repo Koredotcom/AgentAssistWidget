@@ -881,4 +881,10 @@ setProactiveMode(){
 
   }
 
+  scrollToTranscriptElement(top){
+    if(top > 0){
+      this.psBottom.directiveRef.scrollToTop(top);
+    }
+  }
+
 }

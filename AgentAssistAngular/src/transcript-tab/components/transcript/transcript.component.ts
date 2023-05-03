@@ -22,6 +22,7 @@ export class TranscriptComponent implements OnInit {
    
   @Output() scrollToBottomEvent = new EventEmitter();
   @Output() newButtonScrollClickEvents = new EventEmitter();
+  @Output() scrollToTranscriptElement = new EventEmitter();
 
   constructor(private websocketService: WebSocketService,
     private handleSubjectService: HandleSubjectService,
@@ -232,10 +233,11 @@ export class TranscriptComponent implements OnInit {
       console.log(scrollInView);
       if(scrollInView){
         this.scrollEventDone = true;
+        this.transcriptScrollTopText = 'Agent Joined the Conversation';
         setTimeout(() => {
-          this.designAlterService.scrollToEle('transcriptTabHistoryText')
-          this.transcriptScrollTopText = 'Agent Joined the Conversation';
-        }, 1000);
+          let scrollHeight = this.designAlterService.getScrollElementHeight('transcriptTabHistoryText');
+          this.scrollToTranscriptElement.emit(scrollHeight);
+        }, 100);
       }
     }
     
