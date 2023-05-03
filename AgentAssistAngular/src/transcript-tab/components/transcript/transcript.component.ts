@@ -90,16 +90,43 @@ export class TranscriptComponent implements OnInit {
           },
           "event": "user_message"
       }
+      let userAgentMessage = {
+        "author": {
+          "id": '',
+          "firstName": '',
+          "email": '',
+          "lastName": '',
+          "profImage": '' //url
+        },
+        "botId": this.connectionDetails.botId,
+        "sessionId": '',
+        "conversationId": userInputData.conversationid,
+        "timestamp": '',
+        "message": this.sanitizeHTMLPipe.transform(userInputData.value), // user or agent sent message
+        "isTemplate": false,
+        "isAttachement": false,
+        "attachmentDetails": [{
+          "fileName": '',
+          "fileUrl": '',
+          "fileType": ''
+        }],
+        "templatePayload": [],
+        "sentType": '' // send (or) copy
+    }
         this.prepareConversation();
         if (userInputData.author.type === 'USER') {
           this.processTranscriptData(userInputData);
           if(this.commonService.OverRideMode) {
+            userAgentMessage['from'] = 'user';
+            this.websocketService.emitEvents(EVENTS.user_sent_message, userAgentMessage)
             this.websocketService.emitEvents(EVENTS.user_message, user_messsage);
           }else{
             this.websocketService.emitEvents(EVENTS.agent_assist_request, agent_assist_request);
           }
         } else {
-          this.processAgentMessages(userInputData)
+          this.processAgentMessages(userInputData);
+          userAgentMessage['from'] = 'agent';
+          this.websocketService.emitEvents(EVENTS.user_sent_message, userAgentMessage)
         }
       }
     })
@@ -197,7 +224,7 @@ export class TranscriptComponent implements OnInit {
     if (!this.commonService.scrollContent[ProjConstants.TRANSCRIPT].scrollAtEnd && this.commonService.scrollContent[ProjConstants.TRANSCRIPT].numberOfNewMessages) {
       $('.unread-msg').remove();
       let unreadHtml = ` <div class="unread-msg last-msg-white-bg">
-        <div class="text-dialog-task-end">Unread Messages</div>     
+        <div class="text-dialog-task-end">Unread Messages</div>
                    </div>`;
       for (let i = 0; i < this.commonService.scrollContent[ProjConstants.TRANSCRIPT].newlyAddedIdList.length; i++) {
         if (document.getElementById(this.commonService.scrollContent[ProjConstants.TRANSCRIPT].newlyAddedIdList[i])) {
