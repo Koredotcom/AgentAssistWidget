@@ -129,8 +129,10 @@ export class DesignAlterService {
     let dynamicBlockElements = document.getElementById(id);
     if (id.includes('smallTalk') && dynamicBlockElements) {
       lastElement = dynamicBlockElements;
-    } else if (id.includes(IdReferenceConst.SCRIPTCONTAINER) && dynamicBlockElements){
-      let numOfdynamicBlockElements = dynamicBlockElements.getElementsByClassName('data-contnet');
+    } else if ((id.includes(IdReferenceConst.SCRIPTCONTAINER) || id.includes(IdReferenceConst.HISTORY_CONTAINER)) && dynamicBlockElements){
+      let className = id.includes(IdReferenceConst.SCRIPTCONTAINER) ? 'data-contnet' : 'history-content';
+      let numOfdynamicBlockElements = dynamicBlockElements.getElementsByClassName(className);
+
       let childElements = numOfdynamicBlockElements[0].children;
       if (childElements) {
         for (let i = 0; i < childElements.length; i++) {
@@ -194,7 +196,7 @@ export class DesignAlterService {
     if (elem) {
       let parentRec = document.getElementById(IdReferenceConst.HOMESCROLLBAR).getBoundingClientRect();
       let childRec = elem.getBoundingClientRect();
-      if (childRec.top == 0 && $(elem).parent().attr('class').includes('hide')) {
+      if (childRec.top == 0 && $(elem).parent().attr('class')?.includes('hide')) {
         if ($(elem).parent().parent().length) {
           elem = $(elem).parent().parent()[0];
         }
@@ -214,6 +216,20 @@ export class DesignAlterService {
       }
       return (childRec.top + paddingTop) > (parentRec.height + parentRec.top);
     }
+  }
+
+  getScrollElementHeight(id){
+    let _scrollHeight = -1;
+    let element = document.getElementById(id);
+    var _PanelEle = $(element);
+    if (_PanelEle) {
+        var _container = _PanelEle.closest('.body-data-container');
+        if (_container && _container.offset()) {
+            _scrollHeight = _PanelEle.offset().top - _container.offset().top + _container.scrollTop();
+            console.log(_scrollHeight, "scroll height");
+        }
+    }
+    return _scrollHeight;
   }
 
   scrollToEle(id) {

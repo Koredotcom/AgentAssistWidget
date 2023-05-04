@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { HandleSubjectService } from 'src/common/services/handle-subject.service';
 import { WebSocketService } from 'src/common/services/web-socket.service';
@@ -9,6 +9,7 @@ import { EVENTS } from 'src/common/helper/events';
 import { SanitizeHtmlPipe } from 'src/common/pipes/sanitize-html.pipe';
 import { IdReferenceConst, ProjConstants } from 'src/common/constants/proj.cnts';
 import { RandomUUIDPipe } from 'src/common/pipes/random-uuid.pipe';
+import { DesignAlterService } from 'src/common/services/design-alter.service';
 
 
 @Component({
@@ -18,15 +19,18 @@ import { RandomUUIDPipe } from 'src/common/pipes/random-uuid.pipe';
 })
 export class TranscriptComponent implements OnInit {
 
+   
   @Output() scrollToBottomEvent = new EventEmitter();
   @Output() newButtonScrollClickEvents = new EventEmitter();
+  @Output() scrollToTranscriptElement = new EventEmitter();
 
   constructor(private websocketService: WebSocketService,
     private handleSubjectService: HandleSubjectService,
     public commonService: CommonService,
     private formatAMPMPipe: FormatAMPMPipe,
     private sanitizeHTMLPipe: SanitizeHtmlPipe,
-    private randomUUidPipe : RandomUUIDPipe) { }
+    private randomUUidPipe : RandomUUIDPipe,
+    private designAlterService: DesignAlterService) { }
 
   subscriptionsList: Subscription[] = [];
 
@@ -34,6 +38,9 @@ export class TranscriptComponent implements OnInit {
 
   connectionDetails: any;
   parsedCustomData: any;
+  historyResponse : any;
+  scrollEventDone : boolean = false;
+  transcriptScrollTopText : string = 'Scroll up for Bot Conversation History';
 
   ngOnInit(): void {
     this.subscribeEvents();
@@ -135,12 +142,21 @@ export class TranscriptComponent implements OnInit {
           this.websocketService.emitEvents(EVENTS.user_sent_message, userAgentMessage)
         }
       }
-    })
+    });
+
+    let subscription5 = this.handleSubjectService.userHistoryDataSubject$.subscribe((res : any) => {
+      console.log(res, "response inside history");
+      if(res && res.chatHistory){
+        this.historyResponse = res.chatHistory;
+        this.prepareConversation();
+      }
+    });
 
     this.subscriptionsList.push(subscription1);
     this.subscriptionsList.push(subscription2);
     this.subscriptionsList.push(subscription3);
     this.subscriptionsList.push(subscription4);
+    this.subscriptionsList.push(subscription5);
 
   }
 
@@ -240,6 +256,24 @@ export class TranscriptComponent implements OnInit {
         }
       }
     }
+  }
+
+  onScroll(){
+    if(!this.scrollEventDone){
+      console.log("scroll event ******");
+      let trascriptTextEle = document.getElementById('transcriptTabHistoryText');
+      let scrollInView = !this.designAlterService.isScrolledIntoView(trascriptTextEle)
+      console.log(scrollInView);
+      if(scrollInView){
+        this.scrollEventDone = true;
+        this.transcriptScrollTopText = 'Agent Joined the Conversation';
+        setTimeout(() => {
+          let scrollHeight = this.designAlterService.getScrollElementHeight('transcriptTabHistoryText');
+          this.scrollToTranscriptElement.emit(scrollHeight);
+        }, 100);
+      }
+    }
+    
   }
 
 }

@@ -21,6 +21,7 @@ export class HandleSubjectService {
   public isLoaderSetSubject = new BehaviorSubject<boolean>(false);
   public proactiveModeSubject = new Subject<boolean>();
   public autoBotIdSubject$ = new Subject<object>();
+  public userHistoryDataSubject$ = new BehaviorSubject<object>(null);
 
   constructor() { }
 
@@ -96,5 +97,9 @@ export class HandleSubjectService {
 
   setProactiveModeStatus(flag){
     this.proactiveModeSubject.next(flag);
+  }
+
+  setUserHistoryData(data){
+    this.userHistoryDataSubject$.next(data);
   }
 }

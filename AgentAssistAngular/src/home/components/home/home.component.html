@@ -15,6 +15,14 @@
                     <div class="logo-assist">
                         <img [src]="imageFilePath + imageFileNames['AGENT_LOGO']">
                     </div>
+                    <!-- If parent url is Smartassist and srcChannels are "RTM or msteams" should not show the History Tab -->
+                    <!-- History Tab is applicable for 3rd party AgentDesktops -->
+                    <div class="tab-icon" id="HistoryTabIcon" (click)="changeActiveTab(projConstants.HISTORY)"
+                        [ngClass]="{'active-tab': activeTab == projConstants.HISTORY}" *ngIf="showHistoryTab">
+                        <i class="ast-bot font-13" id="HistoryIcon"></i>
+                        <div class="title-tab" id="AssistLabel">{{projConstants.HISTORY}}</div>
+                        <div class="custom-tootltip-tabs">{{projConstants.HISTORY}}</div>
+                    </div>
                     <div class="tab-icon" id="transcriptIcon" (click)="changeActiveTab(projConstants.TRANSCRIPT)"
                         [ngClass]="{'active-tab': activeTab == projConstants.TRANSCRIPT}" [class.hide]="!commonService.isCallConversation">
                         <i class="ast-transcipt font-15" id="scriptIcon"></i>
@@ -54,20 +62,33 @@
         <perfect-scrollbar id="homeScrollBar" class="home-scroll-bar" #psBottom (psYReachEnd)="onScrollEvent($event)" (psYReachStart)="onScrollEvent($event)" (psScrollUp)="onScrollEvent($event)">
             <div class="body-data-container if-suggestion-search" id="bodyContainer" #tabBody>
                 <div class="dialog-task-data" id="dynamicBlocksData">
+                  <ng-container>
+                    <div class="transcipt-only-calls-data" id="historyContainer" [class.hide]="activeTab != projConstants.HISTORY">
+                        <div class="data-contnet">
+                            <app-user-bot-history ></app-user-bot-history>
+                        </div>
+                        <div class="scroll-bottom-show-btn hiddenEle">
+                            <button id="scrollButtonHistory" class="scroll-bottom-btn">
+                                <i class="ast-carrotup"></i>
+                                <span>Scroll to bottom</span>
+                            </button>
+                        </div>
+                    </div>
+                </ng-container>
                     <ng-container>
-                        <app-transcript [class.hide]="activeTab != projConstants.TRANSCRIPT"  (scrollToBottomEvent)="scrollToBottom($event)"  (newButtonScrollClickEvents)="scrollClickEvents($event)"></app-transcript>
+                        <app-transcript [class.hide]="activeTab != projConstants.TRANSCRIPT"  (scrollToBottomEvent)="scrollToBottom($event)"  (newButtonScrollClickEvents)="scrollClickEvents($event)" (scrollToTranscriptElement)="scrollToTranscriptElement($event)"></app-transcript>
                     </ng-container>
                     <ng-container>
                         <div [class.hide]="activeTab != projConstants.ASSIST">
-                            
+
                             <app-assist  (handlePopupEvent)="handlePopupEvent($event)" (scrollToBottomEvent)="scrollToBottom($event)" (newButtonScrollClickEvents)="scrollClickEvents($event)"
                             ></app-assist>
                         </div>
                     </ng-container>
                     <ng-container>
                         <div [class.hide]="activeTab != projConstants.LIBRARY">
-                            
-                            <app-library 
+
+                            <app-library
                                 (handleSearchClickEvent)="handleSearchClickEvent($event)"></app-library>
                         </div>
                     </ng-container>
@@ -79,8 +100,8 @@
         </perfect-scrollbar>
 
         <!-- searchbar -->
-        
-        
+
+
         <div class="sugestions-info-data" *ngIf="activeTab != projConstants.LIBRARY">
             <!-- <input type="text" class="suggestion-input typeahead" id="agentSearch" placeholder="Ask AgentAssist"
                 (keyup.enter)="getSearchResults()" [(ngModel)]="searchText" (ngModelChange)="emptySearchTextCheck()"> -->
@@ -98,7 +119,7 @@
                 </perfect-scrollbar>
             </div>
         </div>
-      
+
         <app-terminate [class.hide]="!showTerminatePopup" (handlePopupEvent)="handlePopupEvent($event)"></app-terminate>
         <app-interrupt-popup [class.hide]="!showInterruptPopup" (handlePopupEvent)="handlePopupEvent($event)"></app-interrupt-popup>
         <app-summary-popup [class.hide]="!showSummaryPopup" (handlePopupEvent)="handlePopupEvent($event)" [summaryText]="summaryText"></app-summary-popup>

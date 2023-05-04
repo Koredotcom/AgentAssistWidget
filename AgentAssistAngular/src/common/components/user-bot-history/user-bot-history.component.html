@@ -1,0 +1,28 @@
+<div class="history-content" *ngIf="historyResponse && historyResponse.length > 0">
+    <ng-container *ngFor="let conv of historyResponse">
+        <div class="other-user-bubble" [id]="'otherBubble-' + conv._id"
+            *ngIf="conv.type == 'incoming' && conv.components && conv.components[0]?.data.text">
+            <div class="name-with-time">
+                <!-- <div class="u-name">${this.parsedCustomData?.userName || this.parsedCustomData?.fName + this.parsedCustomData?.lName || 'Customer'}</div> -->
+                <div class="u-time">{{conv.timestampValue | converTimestampToDate}}</div>
+            </div>
+            <div class="bubble-data" id="userInputMsg">
+                <div class="b-text" *ngIf="!conv.isTemplateRender">{{conv.value}}</div>
+                <div class="title-data"  *ngIf="conv.isTemplateRender">
+                    <ul class="chat-container"  [id]="'displayData-' + conv._id" [innerHTML]="conv.template | safeHtml"></ul></div>
+            </div>
+        </div>
+        <div class="current-user-bubble" [id]="'currentUser-' + conv._id"
+            *ngIf="conv.type == 'outgoing' && conv.components && conv.components[0]?.data.text">
+            <div class="name-with-time">
+                <div class="u-time">{{conv.timestampValue | converTimestampToDate}}</div>
+                <div class="u-name">You</div>
+            </div>
+            <div class="bubble-data">
+                <div class="b-text" *ngIf="!conv.isTemplateRender">{{conv.value}}</div>
+                <div class="title-data"  *ngIf="conv.isTemplateRender">
+                    <ul class="chat-container"  [id]="'displayData-' + conv._id" [innerHTML]="conv.template | safeHtml"></ul></div>
+            </div>
+        </div>
+    </ng-container>
+</div>

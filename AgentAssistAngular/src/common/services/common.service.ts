@@ -44,12 +44,14 @@ export class CommonService {
     [ProjConstants.MYBOT] : IdReferenceConst.MYBOTAUTOMATIONBLOCK,
     [ProjConstants.TRANSCRIPT] : IdReferenceConst.SCRIPTCONTAINER,
     [ProjConstants.LIBRARY] : IdReferenceConst.LIBRARY_CONATINER,
+    [ProjConstants.HISTORY] : IdReferenceConst.HISTORY_CONTAINER
   }
 
   tabNamevsScrollId : any = {
     [ProjConstants.ASSIST] : IdReferenceConst.SCROLLBUTTON_ASSIST,
     [ProjConstants.MYBOT] : IdReferenceConst.SCROLLBUTTON_MYBOT,
-    [ProjConstants.TRANSCRIPT] : IdReferenceConst.SCROLLBUTTON_TRANSCRIPT
+    [ProjConstants.TRANSCRIPT] : IdReferenceConst.SCROLLBUTTON_TRANSCRIPT,
+    [ProjConstants.HISTORY] : IdReferenceConst.SCROLLBUTTON_HISTORY
   }
   aaHelpers = null;
   constructor(private route: ActivatedRoute, private webSocketService: WebSocketService, private designAlterService: DesignAlterService,
@@ -81,6 +83,15 @@ export class CommonService {
         scrollAtEnd: true
       },
       [ProjConstants.TRANSCRIPT]: {
+        numberOfNewMessages: 0,
+        newlyAddedIdList: [],
+        newlyAddedMessagesUUIDlist: [],
+        removedIdListOnScroll: [],
+        lastElement: '',
+        lastElementBeforeNewMessage: '',
+        scrollAtEnd: true
+      },
+      [ProjConstants.HISTORY]: {
         numberOfNewMessages: 0,
         newlyAddedIdList: [],
         newlyAddedMessagesUUIDlist: [],
