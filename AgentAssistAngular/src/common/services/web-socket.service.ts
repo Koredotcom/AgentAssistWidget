@@ -77,6 +77,7 @@ export class WebSocketService {
       'agentassistInfo' : agent_user_details,
       'botId': this.connectionDetails.botId,
       'sendMenuRequest': true,
+      'experience' : (this.connectionDetails.isCall && this.connectionDetails.isCall === "true") ?  ProjConstants.VOICE : ProjConstants.CHAT
     }
     if(this.connectionDetails?.autoBotId && this.connectionDetails?.autoBotId !== 'undefined') {
       welcomeMessageParams['autoBotId'] = this.connectionDetails.autoBotId;
@@ -92,6 +93,7 @@ export class WebSocketService {
     if(requestParams){
       requestParams.isExtAD = this.connectionDetails.fromSAT ? false : true;
       requestParams.source = this.connectionDetails.source;
+      requestParams.experience = (this.connectionDetails.isCall && this.connectionDetails.isCall == "true") ?  ProjConstants.VOICE : ProjConstants.CHAT
     }
     this.loaderOnTimer()
     this._agentAsisstSocket.emit(eventName, requestParams);
@@ -101,7 +103,7 @@ export class WebSocketService {
     let menu_request_params : any = {
       botId : this.connectionDetails.botId,
       conversationId : this.connectionDetails.conversationId,
-      experience : (this.connectionDetails.isCall && this.connectionDetails.isCall == "true") ?  ProjConstants.VOICE : ProjConstants.CHAT
+      experience : (this.connectionDetails.isCall && this.connectionDetails.isCall === "true") ?  ProjConstants.VOICE : ProjConstants.CHAT
     }
     if(this.connectionDetails?.autoBotId && this.connectionDetails?.autoBotId !== 'undefined') {
       menu_request_params['autoBotId'] = this.connectionDetails.autoBotId;

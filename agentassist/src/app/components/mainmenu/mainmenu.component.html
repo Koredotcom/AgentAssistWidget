@@ -41,8 +41,11 @@
 			<div class="link-router" [routerLink]="['usecases']" routerLinkActive="active" *hasPermission="['admin']">
 				<img src="assets/icons/leftmenu/usecase.svg"><span class="link-name">{{'NAV.USECASES' | translate}}</span>
 			</div>
-      <div class="link-router" [routerLink]="['conversationalLogs']" routerLinkActive="active" *hasPermission="['admin']">
+			<div class="link-router" [routerLink]="['conversationalLogs']" routerLinkActive="active" *hasPermission="['admin']">
 				<img src="assets/icons/leftmenu/conv-logs.svg"><span class="link-name">{{'NAV.CONVERSATIONAL_LOGS' | translate}}</span>
+			</div>
+			<div class="link-router" [routerLink]="['welcomeEvents']" routerLinkActive="active" *hasPermission="['admin']">
+				<img src="assets/icons/leftmenu/usecase.svg"><span class="link-name">{{'NAV.WELCOMEEVENT' | translate}}</span>
 			</div>
 		</div>
 
