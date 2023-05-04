@@ -1,13 +1,12 @@
 <app-slider-component id="convsLogSilder" #newConvSlider='app-slider' class="conv-history-log-slider">
   <app-convs-history-logs *ngIf="showConversation" (onClose)="closeConvsHistorySlider($event)" [conversationId]="conversationId"></app-convs-history-logs>
 </app-slider-component>
-
 <div class="conversational-logs-wrappper-content">
     <div class="header-info-title">
         <div class="title">Conversation Logs</div>
         <div class="desc-text">Library of conversations  you have had with your customers</div>
     </div>
-    <perfect-scrollbar class="scroll-tabs" #psTableView (psYReachEnd)="onReachEnd()" [config]="{useBothWheelAxes: true, suppressScrollX: false, suppressScrollY: false}">
+    <perfect-scrollbar class="scroll-tabs" #psTableView (psYReachEnd)="onReachEnd($event)" [config]="{useBothWheelAxes: true, suppressScrollX: false, suppressScrollY: false}">
         <div class="scroll-data-info">
             <div class="data-content-wrapper">
                 <div class="search-header">
@@ -72,7 +71,7 @@
                         <div *ngIf="transformedConvsLogs.length > 0">
                           <div class="table-body-wrapper"  *ngFor="let data of transformedConvsLogs" (click)="openConvsHistorySlider($event, data)">
                             <div class="text-title w-20 text-truncate">{{data.conversationId}}</div>
-                            <div class="title-text w-15 text-truncate">{{data.start}}</div>
+                            <div class="title-text w-15 text-truncate">{{ getStartTime(data.time) }}</div>
                             <!-- <div class="title-text w-15">{{data?.agent}}</div> -->
                             <!-- <div class="title-text-info w-20">
                                 <span class="m-r-5" *ngFor="let ele of data?.automations?.slice(0,2)" >{{ele}}</span>
@@ -81,30 +80,43 @@
                             <div class="title-text w-15">{{data.channel}}</div>
                             <div class="title-text w-15">{{durationCalc(data.duration)}}</div>
                         </div>
+                        <!-- {{onScroll}} -->
+                        <div class="table-body-wrapper scroll-loading" *ngIf="onScroll">
+                            <div>
+                                <mat-spinner diameter="25" strokeWidth="3"></mat-spinner>
+                            </div>
+                        </div>
                         </div>
                     </ng-container>
                     <ng-container *ngIf="this.transformedConvsLogs.length == 0">
-                        <div class="empty-results-data" *ngIf="this.isSearched && this.transformedConvsLogs.length == 0">
+                        <!-- <div class="empty-results-data" *ngIf="this.transformedConvsLogs.length == 0 && !isLoading; else elseBlock">
                             <div class="img-block">
                                 <img src="assets/images/conv-logs/search-no-results.svg">
                             </div>
                             <div class="title">No results found</div>
                             <div class="text-desc">No results found for your query “{{seachedConvsId}}”</div>
-                        </div>
-                        <div class="empty-results-data" *ngIf="this.isDatePicked && this.transformedConvsLogs.length == 0">
+                        </div> -->
+                        <!-- this.transformedConvsLogs.length == 0 && !isLoading -->
+                        
+                        <div class="empty-results-data" *ngIf="this.transformedConvsLogs.length == 0 && !isLoading; else elseBlock">
                             <div class="img-block">
                                 <img src="assets/images/conv-logs/no-results-calendar.svg">
                             </div>
                             <div class="title">No results found</div>
                             <div class="text-desc">Could not find any result for the selected date range <span>“{{selected.startDate.toISOString() | date}} - {{this.selected.endDate.toISOString() | date}}”</span></div>
                         </div>
-                        <div class="empty-results-data" *ngIf="this.transformedConvsLogs.length == 0 && !this.isSearched && !this.isDatePicked">
-                            <div class="img-block">
-                                <img src="assets/images/conv-logs/no-comments.svg">
+                        <ng-template #elseBlock>
+                            <!-- <div class="empty-results-data" *ngIf="this.transformedConvsLogs.length == 0 && !this.isSearched">
+                                <div class="img-block">
+                                    <img src="assets/images/conv-logs/no-comments.svg">
+                                </div>
+                                <div class="title no-conv-title">There are no conversations to show</div>
+                                <div class="text-desc no-conv-desc">You have had no conversation with your customers yet. Conversations log records the transcript, decisions and interactions made while chatting with your customers.</div>
+                            </div> -->
+                            <div class="empty-results-data">
+                                <mat-spinner diameter="25" strokeWidth="3"></mat-spinner>
                             </div>
-                            <div class="title no-conv-title">There are no conversations to show</div>
-                            <div class="text-desc no-conv-desc">You have had no conversation with your customers yet. Conversations log records the transcript, decisions and interactions made while chatting with your customers.</div>
-                        </div>
+                        </ng-template>
                     </ng-container>
                 </div>
             </div>
