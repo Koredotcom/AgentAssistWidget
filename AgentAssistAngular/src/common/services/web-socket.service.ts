@@ -93,6 +93,7 @@ export class WebSocketService {
     if(requestParams){
       requestParams.isExtAD = this.connectionDetails.fromSAT ? false : true;
       requestParams.source = this.connectionDetails.source;
+      requestParams.experience = (this.connectionDetails.isCall && this.connectionDetails.isCall == "true") ?  ProjConstants.VOICE : ProjConstants.CHAT
     }
     this.loaderOnTimer()
     this._agentAsisstSocket.emit(eventName, requestParams);
