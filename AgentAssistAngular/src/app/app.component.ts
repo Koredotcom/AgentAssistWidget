@@ -116,10 +116,10 @@ export class AppComponent {
     }else if(e.data.name === 'setUserInfo'){
       console.log(e, "event", e.data.userDetails, "user details");
       this.localStorageService.userDetails = e.data.userDetails ? e.data.userDetails : null;
-    } else if(e.data.from === 'agent') {
+    } else if(e.data.type === 'agent') {
       console.log(e.data);
       this.emitUserAgentMessage(e.data, 'agent_inp_msg');
-    }else if(e.data.from === 'user') {
+    }else if(e.data.type === 'user') {
       console.log(e.data);
       this.emitUserAgentMessage(e.data, 'user_inp_msg');
     }

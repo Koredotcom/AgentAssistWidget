@@ -4,16 +4,21 @@ export interface userAgInputMessages {
       "firstName": string,
       "email": string,
       "lastName": string,
-      "profImage": string //url
+      "profImage": string, //url
+      "type": string
     },
     "botId"?: string,
-    "from": string, //AGENT (or) USER
+    "type": string, //AGENT (or) USER
     "sessionId"?: string,
     "conversationId"?: string,
     "timestamp"?: string,
+    "accountId"?: string,
+    "orgId"?: string,
+    "userId"?: string,
     "message": "", // user or agent sent message
     "isTemplate"?: boolean,
     "isAttachement"?: boolean,
+
     "attachmentDetails"?: [{
       "fileName": string,
       "fileUrl": string,

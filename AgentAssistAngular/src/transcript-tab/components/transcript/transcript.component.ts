@@ -96,12 +96,16 @@ export class TranscriptComponent implements OnInit {
           "firstName": '',
           "email": '',
           "lastName": '',
-          "profImage": '' //url
+          "profImage": '', //url
+          "type": ""
         },
         "botId": this.connectionDetails.botId,
         "sessionId": '',
         "conversationId": userInputData.conversationid,
         "timestamp": '',
+        "accountId": '',
+        "orgId": '',
+        "userId": '',
         "message": this.sanitizeHTMLPipe.transform(userInputData.value), // user or agent sent message
         "isTemplate": false,
         "isAttachement": false,
@@ -117,7 +121,8 @@ export class TranscriptComponent implements OnInit {
         if (userInputData.author.type === 'USER') {
           this.processTranscriptData(userInputData);
           if(this.commonService.OverRideMode) {
-            userAgentMessage['from'] = 'user';
+            userAgentMessage['type'] = 'user';
+            userAgentMessage.author['type'] = 'user';
             this.websocketService.emitEvents(EVENTS.user_sent_message, userAgentMessage)
             this.websocketService.emitEvents(EVENTS.user_message, user_messsage);
           }else{
@@ -125,7 +130,8 @@ export class TranscriptComponent implements OnInit {
           }
         } else {
           this.processAgentMessages(userInputData);
-          userAgentMessage['from'] = 'agent';
+          userAgentMessage['type'] = 'agent';
+          userAgentMessage.author['type'] = 'agent';
           this.websocketService.emitEvents(EVENTS.user_sent_message, userAgentMessage)
         }
       }
