@@ -2018,5 +2018,8 @@
     "CREATE_BOT": "Create a bot from scratch",
     "DESIGN_BOT": "Design your own bot from scratch.",
     "SORT_BY": "Sort by",
-    "NO_BOTS": "No bots found."
+    "NO_BOTS": "No bots found.",
+    "NAV.WELCOMEEVENT": "Welcome Event",
+    "WELCOMEEVENT.SAVE_SUCCESS" : "Configuration has been Saved",
+    "WELCOMEEVENT.SAVE_FALIED" : "Failed to upate the Configuration"
 }

@@ -1524,5 +1524,15 @@ export class EndPointsService {
       method: 'delete'
     }
 
+    this.serviceList['get.welcomeevent'] = {
+      endpoint : this.API_SERVER_URL + '/smartassist/apps/instances/:streamId/events?isAgentAssist=true',
+      method: 'get'
+    }
+
+    this.serviceList['post.welcomeevent'] = {
+      endpoint : this.API_SERVER_URL + '/smartassist/apps/instances/:streamId/events?isAgentAssist=true',
+      method: 'post'
+    }
+
   }
 }

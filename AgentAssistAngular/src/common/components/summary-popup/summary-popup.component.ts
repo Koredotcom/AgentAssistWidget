@@ -12,7 +12,7 @@ export class SummaryPopupComponent implements OnInit {
   @Output() handlePopupEvent = new EventEmitter();
 
   editedSummaryText : any;
-  
+
   constructor() { }
 
   ngOnInit(): void {
@@ -20,7 +20,11 @@ export class SummaryPopupComponent implements OnInit {
   }
 
   ngOnChanges(changes){
-    this.editedSummaryText = (changes.summaryText && changes.summaryText.currentValue?.summary[0]?.summary_text) ? changes.summaryText.currentValue?.summary[0]?.summary_text : '';
+    this.editedSummaryText = (
+      changes.summaryText &&
+      changes.summaryText.currentValue?.summary &&
+      changes.summaryText.currentValue?.summary[0]?.summary_text) ?
+      changes.summaryText.currentValue?.summary[0]?.summary_text : '';
   }
 
   summaryButtonClick(flag){
