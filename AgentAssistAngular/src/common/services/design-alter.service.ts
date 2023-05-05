@@ -133,7 +133,7 @@ export class DesignAlterService {
       let className = id.includes(IdReferenceConst.SCRIPTCONTAINER) ? 'data-contnet' : 'history-content';
       let numOfdynamicBlockElements = dynamicBlockElements.getElementsByClassName(className);
 
-      let childElements = numOfdynamicBlockElements[0].children;
+      let childElements = numOfdynamicBlockElements[0]?.children;
       if (childElements) {
         for (let i = 0; i < childElements.length; i++) {
           lastElement = childElements[i];
@@ -141,7 +141,7 @@ export class DesignAlterService {
       }
 
     }else if (dynamicBlockElements) {
-      let numOfdynamicBlockElements = dynamicBlockElements.children;      
+      let numOfdynamicBlockElements = dynamicBlockElements.children;
       if (numOfdynamicBlockElements) {
         for (let i = 0; i < numOfdynamicBlockElements.length; i++) {
           lastElement = numOfdynamicBlockElements[i];
@@ -155,7 +155,7 @@ export class DesignAlterService {
         //             lastElement = typeInfoRunNodes[typeInfoRunNodes.length - 1];
         //         }
         //     }
-        // } else        
+        // } else
         if (lastElement.className == 'dialog-task-accordiaon-info') {
           let listOfNodes = lastElement.querySelectorAll('.steps-run-data');
           let index = 0;

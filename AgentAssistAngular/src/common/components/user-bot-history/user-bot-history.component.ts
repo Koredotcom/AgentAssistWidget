@@ -25,7 +25,7 @@ export class UserBotHistoryComponent implements OnInit, OnDestroy{
 
   ngOnInit(): void {
     this.subscribeEvents();
-    
+
   }
 
   ngOnDestroy(): void {
@@ -37,8 +37,8 @@ export class UserBotHistoryComponent implements OnInit, OnDestroy{
   subscribeEvents(){
     let subscription1 = this.handleSubjectService.userHistoryDataSubject$.subscribe((res : any) => {
       console.log(res, "response inside history");
-      if(res && res.chatHistory){
-        this.historyResponse = res.chatHistory;
+      if(res && res.length > 0){
+        this.historyResponse = res;
         this.formatHistoryResponse();
       }
     });

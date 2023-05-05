@@ -110,34 +110,34 @@ export class AppComponent {
         let urlParams = e.data.urlParams;
         this.service.configObj = urlParams;
         this.initAgentAssist(chatConfig, urlParams);
-    } else if(e.data.name === 'userBotConvos') {
-      console.log(e.data);
-      let userBotConvosData = e.data;
-      this.handleSubjectService.setUserBotConvosDetails(e.data);
-      let connectionDetails;
-      let headersVal = {};
-      this.handleSubjectService.connectDetailsSubject.subscribe((response: any) => {
-        if (response) {
-          connectionDetails = response;
-          headersVal = {
-            'Authorization': this.service.grantResponseObj?.authorization?.token_type + ' ' + this.service.grantResponseObj?.authorization?.accessToken,
-            'eAD': true,
-        }
-          $.ajax({
-            url: `${connectionDetails.agentassisturl}/api/1.1/botmessages/chathistorytoagentassist?botId=${userBotConvosData.botId}&userId=${userBotConvosData.userId}&sessionId=${userBotConvosData.sessionId}`,
-            type: 'get',
-            headers: headersVal,
-            dataType: 'json',
-            success:  (data) => {
-              console.log(data);
-            },
-            error: function (err) {
-                console.error("Unable to fetch the details with the provided data");
+      } else if(e.data.name === 'userBotConvos') {
+        console.log(e.data);
+        let userBotConversationDetails = e.data;
+          let connectionDetails;
+          let headersVal = {};
+          this.handleSubjectService.connectDetailsSubject.subscribe((response: any) => {
+            if (response) {
+              connectionDetails = response;
+              headersVal = {
+                'Authorization': this.service.grantResponseObj?.authorization?.token_type + ' ' + this.service.grantResponseObj?.authorization?.accessToken,
+                'eAD': true,
             }
-        });
-    }});
-
-
+              $.ajax({
+                url: `${connectionDetails.agentassisturl}/api/1.1/botmessages/chathistorytoagentassist?botId=${userBotConversationDetails.botId}&userId=${userBotConversationDetails.userId}&sessionId=${userBotConversationDetails.sessionId}`,
+                type: 'get',
+                headers: headersVal,
+                dataType: 'json',
+                success:  (data) => {
+                  console.log(data);
+                  if(data && data.length > 0) {
+                    this.handleSubjectService.setUserHistoryData(data);
+                  }
+                },
+                error: function (err) {
+                    console.error("Unable to fetch the details with the provided data", err);
+                }
+            });
+        }});
     }
     else if(e.data.name === 'setAgentInfo'){
       console.log(e, "event", e.data.agentDetails, "agent details");

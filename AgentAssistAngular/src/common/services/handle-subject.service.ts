@@ -23,6 +23,7 @@ export class HandleSubjectService {
   public autoBotIdSubject$ = new Subject<object>();
   public userHistoryDataSubject$ = new BehaviorSubject<object>(null);
   public userBotConversationDetails$ = new BehaviorSubject<object>(null);
+  public userAgentTranscriptionConversationHistory$ = new BehaviorSubject<object>(null);
 
   constructor() { }
 
@@ -101,7 +102,13 @@ export class HandleSubjectService {
   }
 
   setUserHistoryData(data){
-    this.userHistoryDataSubject$.next(data);
+    if(data && data.length > 0) {
+      this.userHistoryDataSubject$.next(data);
+    }
+  }
+
+  setUserAgentTranscriptionHistory(data) {
+    this.userAgentTranscriptionConversationHistory$.next(data);
   }
 
   setUserBotConvosDetails(data) {

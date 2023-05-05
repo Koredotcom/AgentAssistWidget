@@ -87,8 +87,8 @@ export class WebSocketService {
       "isSendWelcomeMessage": shouldProcessResponse,
       'agentassistInfo' : agent_user_details,
       'botId': this.connectionDetails.botId,
-      'uId': this.userBotSessionDetails.userId || '',
-      'sId': this.userBotSessionDetails.sessionId || ''
+      'uId': this.userBotSessionDetails?.userId || '',
+      'sId': this.userBotSessionDetails?.sessionId || ''
     }
     if(this.connectionDetails?.autoBotId && this.connectionDetails?.autoBotId !== 'undefined') {
       welcomeMessageParams['autoBotId'] = this.connectionDetails.autoBotId;

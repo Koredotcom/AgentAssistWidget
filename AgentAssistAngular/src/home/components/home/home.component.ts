@@ -109,11 +109,10 @@ export class HomeComponent implements OnInit {
       this.isLoader = val;
     });
 
-    let subscription6 = this.mockDataService.getHistoryData().subscribe((res : any) => {
+    let subscription6 = this.handleSubjectService.userHistoryDataSubject$.subscribe((res : any) => {
       console.log(res, "response");
-      if(res && res.chatHistory){
-        this.handleSubjectService.setUserHistoryData(res);
-        this.convHistoryResponse = res.chatHistory;
+      if(res && res.length > 0){
+        this.convHistoryResponse = res;
         this.showHistoryTab = !(this.commonService.isCallConversation) ? true : false;
       }
     });
