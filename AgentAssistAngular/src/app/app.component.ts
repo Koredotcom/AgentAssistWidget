@@ -41,7 +41,7 @@ export class AppComponent {
     });
 
     this.route.queryParams
-      .subscribe(params => {    
+      .subscribe(params => {
         this.service.configObj = {...params};
         window.addEventListener("message", this.receiveMessage.bind(this), false);
         // let parentUrl = window.parent.location.hostname;
@@ -53,13 +53,13 @@ export class AppComponent {
             if(Object.keys(this.service.configObj).length > 0){
               this.initAgentAssist(this.templateChatConfig.chatConfig, params);
             }
-          } 
+          }
           var message = {
             method: 'agentassist_loaded',
             name: "agent_assist"
         };
           window.parent.postMessage(message, "*");
-          
+
       });
   }
 
@@ -145,10 +145,10 @@ export class AppComponent {
     }else if(e.data.name === 'setUserInfo'){
       console.log(e, "event", e.data.userDetails, "user details");
       this.localStorageService.userDetails = e.data.userDetails ? e.data.userDetails : null;
-    } else if(e.data.type === 'agent') {
+    } else if(e.data.type === 'AGENT') {
       console.log(e.data);
       this.emitUserAgentMessage(e.data, 'agent_inp_msg');
-    }else if(e.data.type === 'user') {
+    }else if(e.data.type === 'USER') {
       console.log(e.data);
       this.emitUserAgentMessage(e.data, 'user_inp_msg');
     }
