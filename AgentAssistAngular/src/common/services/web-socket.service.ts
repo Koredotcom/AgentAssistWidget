@@ -26,6 +26,7 @@ export class WebSocketService {
   responseResolutionCommentsResponse$ : BehaviorSubject<any[]> = new BehaviorSubject(null);
 
   LoaderTimeout: number = 10000;
+  userBotSessionDetails: any;
 
 
   constructor(private handleSubjectService : HandleSubjectService,
@@ -40,8 +41,14 @@ export class WebSocketService {
         this.connectionDetails = urlParams;
         // this.socketConnection();
       }
+    });
+    this.handleSubjectService.userBotConversationDetails$.subscribe((res) => {
+      if(res) {
+        this.userBotSessionDetails = res;
+      }
     })
   }
+
 
   socketConnection() {
     let webSocketConnection = {
@@ -79,7 +86,9 @@ export class WebSocketService {
       'id': this.connectionDetails.conversationId,
       "isSendWelcomeMessage": shouldProcessResponse,
       'agentassistInfo' : agent_user_details,
-      'botId': this.connectionDetails.botId
+      'botId': this.connectionDetails.botId,
+      'uId': this.userBotSessionDetails.userId || '',
+      'sId': this.userBotSessionDetails.sessionId || ''
     }
     if(this.connectionDetails?.autoBotId && this.connectionDetails?.autoBotId !== 'undefined') {
       welcomeMessageParams['autoBotId'] = this.connectionDetails.autoBotId;
