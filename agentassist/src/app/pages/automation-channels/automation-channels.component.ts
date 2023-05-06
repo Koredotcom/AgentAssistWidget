@@ -138,20 +138,34 @@ confirmDefaultBot(type){
   this.modalService.dismissAll();
 }
 
-updateMakeDefault(){
-  let params : any = {
-    streamId : this.authService.getAgentAssistStreamId()
+async updateMakeDefault(){
+  let streamId = this.authService.getAgentAssistStreamId()
+  let automationBots = this.authService.smartAssistBots;
+  if(!this.markDefaultBot){
+    const automationBotIdArray = automationBots => automationBots
+    .filter(obj => obj._id != streamId && obj.connectedBot)
+    .map(obj => obj._id);
+   
+    for(let autoBot of automationBotIdArray(automationBots)){
+      let remainingBotMarkDefaultCall = await this.getMarkDefaultEnableDisableCall(autoBot,false);
+    }
   }
-  
-  this.service.invoke('post.markDefault', params, {enabled : !this.markDefaultBot}).subscribe((res) => {
+  let actualMarkDefaultCall = await this.getMarkDefaultEnableDisableCall(streamId,!this.markDefaultBot).then((res)=>{
     this.markDefaultBot = !this.markDefaultBot;
     this.authService.getDeflectApps();
     this.isLoading = false;
     this.notificationService.notify(this.translate.instant("CHANNELCHAT.SAVE_SUCCESS"), 'success');
-  },(error) => {
+  },(error)=>{
     this.isLoading = false;
     this.notificationService.showError(this.translate.instant("CHANNELCHAT.SAVE_FALIED"));
   });
+}
+
+getMarkDefaultEnableDisableCall(streamId, enabledFlag){
+  let params : any = {
+    streamId : streamId
+  }
+  return this.service.invoke('post.markDefault', params, {enabled : enabledFlag}).toPromise();
 }
  
 }
