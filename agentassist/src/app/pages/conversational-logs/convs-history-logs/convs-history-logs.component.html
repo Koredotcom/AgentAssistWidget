@@ -34,35 +34,40 @@
         </div>
     </div> -->
 
-    <perfect-scrollbar>
+    <perfect-scrollbar (psYReachEnd)="onReachEnd($event)">
         <div class="scroll-data">
-            <ng-container *ngFor="let data of chatHistData.data">
-                <ng-container *ngIf="data.author.type === 'user'">
+            <ng-container *ngFor="let data of chatHistData">
+                <ng-container *ngIf="data.interruption">
+                    <div class="aget-joined">
+                        Agent joined the conversation
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="data.author?.type === 'USER'">
                     <div class="customer-info-wrapper-template">
                         <div class="img-icon-title">
                             <div class="img-block">
                                 <img src="assets/images/conv-logs/agent-dummy.svg">
                             </div>
-                            <div class="time-name">Customer <span>{{data.timestamp | date:'h:mm a'}}</span></div>
+                            <div class="time-name">Customer <span>{{data.createdOn | date:'h:mm a'}}</span></div>
                         </div>
                         <div class="cust-msg-template">
-                            <div class="title-cust-msg">{{data.message}}</div>
+                            <div class="title-cust-msg">{{data.components[0]?.data?.text}}</div>
                             <!-- <div class="title-cust-msg m-t-8">
                                 <i class="icon-sa-warning m-r-4 f-s-12"></i>Entity ‘digits’ not found
                             </div> -->
                         </div>
                     </div>
                 </ng-container>
-                <ng-container *ngIf="data.author.type === 'agent'">
+                <ng-container *ngIf="data.author?.type === 'AGENT'">
                 <div class="agent-info-wrapper-template">
                     <div class="img-icon-title">
-                        <div class="time-name"><span>{{data.timestamp | date:'h:mm a'}}</span> Agent</div>
+                        <div class="time-name">Agent <span>{{data.createdOn | date:'h:mm a'}}</span> Agent</div>
                         <div class="img-block">
                             <img src="assets/images/conv-logs/agent-dummy.svg">
                         </div>                   
                     </div>
                     <div class="agent-msg-template">
-                        <div class="title-agent-msg">{{data.message}}</div>
+                        <div class="title-agent-msg">{{data.components[0]?.data?.text}}</div>
                         <!-- <div class="copied-via-agent-assist" data-toggle="collapse" data-target="#agent-selected">
                             <img src="assets/images/conv-logs/agent-assist.svg">
                             <span class="text-title">Copied via AgentAssist</span>
@@ -80,7 +85,11 @@
                 </div>
             </ng-container>
             </ng-container>
-
+            <ng-container *ngIf="chatHistData.length == 0">
+                <div style="display: flex; justify-content: center; align-items: center;">
+                    No data
+                </div>
+            </ng-container>
             
             <!-- <div class="joined-info-social">
                 <div class="title-social-text">Mark Jones via WhatsApp</div>

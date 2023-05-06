@@ -136,10 +136,16 @@ export class ConversationalLogsComponent implements OnInit {
       this.getConversationLogs(undefined, true)
     }
   }
+  botId = '';
+  userId = '';
+  sessionId = '';
   openSlider(event, data) {
     this.showConversation = true;
     this.newConvSlider.openSlider("#convsLogSilder", "width500");
     this.conversationId = data.conversationId;
+    this.botId = data.botId;
+    this.userId = data.userId;
+    this.sessionId = data.sessionId;
   }
 
 

@@ -31,8 +31,13 @@ export class EndPointsService {
   public init() {
     this.serviceList['conversation.history'] = {
      // ${connectionDetails.envinormentUrl}/api/1.1/botmessages/agentassist/${_botId}/history?convId=${_conversationId}&agentHistory=false
-      endpoint: this.API_SERVER_URL + '/botmessages/agentassist/:botId/history?convId=:convId&agentHistory=false',
+      endpoint: this.SERVER_URL + '/agentassist/api/v1/agentassistconversations/:convId/conversation?limit=:limit&page=:page',
       method: 'get'
+    }
+    this.serviceList['conversation.userbot'] = {
+      // ${connectionDetails.envinormentUrl}/api/1.1/botmessages/agentassist/${_botId}/history?convId=${_conversationId}&agentHistory=false
+       endpoint: this.API_SERVER_URL + '/botmessages/chathistorytoagentassist?botId=:botId&userId=:userId&sessionId=:sessionId',
+       method: 'get'
     }
     this.serviceList['conversation.logs'] = {
       endpoint: this.SERVER_URL + '/agentassist/api/v1/agentassistconversationslogs/accounts/:accountId',

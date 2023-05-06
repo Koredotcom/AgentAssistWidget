@@ -1,5 +1,5 @@
 <app-slider-component id="convsLogSilder" #newConvSlider='app-slider' class="conv-history-log-slider">
-  <app-convs-history-logs *ngIf="showConversation" (onClose)="closeConvsHistorySlider($event)" [conversationId]="conversationId"></app-convs-history-logs>
+  <app-convs-history-logs *ngIf="showConversation" (onClose)="closeConvsHistorySlider($event)" [conversationId]="conversationId" [sessionId]="sessionId" [botId]="botId" [userId]="userId"></app-convs-history-logs>
 </app-slider-component>
 <div class="conversational-logs-wrappper-content">
     <div class="header-info-title">
@@ -70,8 +70,8 @@
                         </div> -->
                         <div *ngIf="transformedConvsLogs.length > 0">
                           <div class="table-body-wrapper"  *ngFor="let data of transformedConvsLogs" (click)="openConvsHistorySlider($event, data)">
-                            <div class="text-title w-20 text-truncate">{{data.conversationId}}</div>
-                            <div class="title-text w-15 text-truncate">{{ getStartTime(data.time) }}</div>
+                            <div class="text-title w-20 text-truncate" title="{{data.conversationId}}">{{data.sessionId}}</div>
+                            <div class="title-text w-15 text-truncate" title="{{ getStartTime(data.time) }}">{{ getStartTime(data.time) }}</div>
                             <!-- <div class="title-text w-15">{{data?.agent}}</div> -->
                             <!-- <div class="title-text-info w-20">
                                 <span class="m-r-5" *ngFor="let ele of data?.automations?.slice(0,2)" >{{ele}}</span>
