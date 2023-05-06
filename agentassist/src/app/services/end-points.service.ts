@@ -529,7 +529,7 @@ export class EndPointsService {
 
     /** ONBOARDING START **/
     this.serviceList['get.existingbots'] = {
-      endpoint: this.API_SERVER_URL + '/smartassist/apps/automationbots/existingbots',
+      endpoint: this.API_SERVER_URL + '/smartassist/apps/automationbots/existingbots?isAgentAssist=true',
       method: 'get'
     };
 
@@ -1546,6 +1546,11 @@ export class EndPointsService {
     this.serviceList['post.welcomeevent'] = {
       endpoint : this.API_SERVER_URL + '/smartassist/apps/instances/:streamId/events?isAgentAssist=true',
       method: 'post'
+    }
+
+    this.serviceList['post.markDefault'] = {
+      endpoint : this.API_SERVER_URL + '/smartassist/apps/:streamId/markconnectedbot',
+      method : 'post'
     }
 
   }

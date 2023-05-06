@@ -65,7 +65,14 @@ export class AgentUsecasesComponent implements OnInit, OnDestroy {
         this.currentBt = _.findWhere(this.authService.smartAssistBots, { _id: this.workflowService.deflectApps()._id || this.workflowService.deflectApps()[0]._id });
         this.workflowService.setCurrentBt(this.currentBt);
       }
-    })
+    });
+
+    this.subs.sink = this.workflowService.updateBotDetails$.subscribe((bot)=>{
+      console.log(bot, "inside udpate use case");
+      if(bot){
+        this.currentBt = bot;
+      }
+    });
   }
 
   openConversation() {
