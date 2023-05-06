@@ -274,11 +274,11 @@ export class AuthService {
   }
 
   public getAgentAssistStreamId(){
-    if(this.universalBot && this.universalBot._id){
-      return (this.universalBot._id);
-    }else{
-      return this.smartAssistBots.map(x=>x._id);
-    }
+    // if(this.universalBot && this.universalBot._id){
+    //   return (this.universalBot._id);
+    // }else{
+      return this.workflowService.getCurrentBt(true)?._id;
+    // }
   }
 
   public getDeflectApps() {

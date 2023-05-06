@@ -75,6 +75,15 @@
                               
                         </div>
                     </div>
+                    <div class='init-loading' *ngIf="isLoading">
+                        <mat-spinner diameter="25" strokeWidth="3"></mat-spinner>
+                    </div>
+                    <div class="row-data">
+                        <div class="kr-sg-checkbox">
+                            <input id="checkbox-1" class="checkbox-custom" type="checkbox" name="markDefaultBot"  [checked]="markDefaultBot" (change)="EnableDefaultSelection($event,contentConfirmChatChannel)">
+                            <label for="checkbox-1" class="checkbox-custom-label">Mark as connected AgentAssist Bot <i class="icon-sa-help"></i> </label>
+                        </div>     
+                    </div>
                 </div>
                 <div class="input-box-data">
                     <div class="text-heading">Webhook URL</div>
@@ -93,6 +102,25 @@
         </perfect-scrollbar>
     </div>
 </div>
+
+<ng-template #contentConfirmChatChannel let-modal>
+	<div class="delete-comp-wrapper">
+        <div class="icon_block">
+            <i class="icon-sa-info"></i>
+        </div>
+        <div class="close-delete" (click)="modal.dismiss()">
+            <i class="icon-sa-close"></i>
+        </div>
+        <div class="body-data-delete">
+            <div class="t-heading">Confirm Changes</div>
+            <div class="d-desc">This bot will be your default automation bot</div>
+        </div>
+        <div class="footer-btns-data">
+            <button class="kr-sg-button-secondary btn_lg" (click)="confirmDefaultBot('no')">No</button>
+            <button class="kr-sg-button-primary btn_lg" (click)="confirmDefaultBot('yes')">Yes</button>
+        </div>
+    </div>
+</ng-template>
 
 
 

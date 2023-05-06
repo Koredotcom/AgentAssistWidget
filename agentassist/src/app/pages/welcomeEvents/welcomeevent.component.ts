@@ -57,10 +57,7 @@ export class WelcomeeventComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.currentBt = this.workflowService.getCurrentBt(true);
-    this.streamId = this.currentBt._id;
-    this.getWelcomeTaskData();
-    this.subscribeEvents();
+    this.updateDetailsOnBotUpdation(this.workflowService.getCurrentBt(true));
   }
 
   ngOnDestroy() {
@@ -79,6 +76,18 @@ export class WelcomeeventComponent implements OnInit {
         }
       }
     });
+    this.subs.sink = this.workflowService.updateBotDetails$.subscribe((bot)=>{
+      if(bot){
+        this.updateDetailsOnBotUpdation(bot);
+      }
+    });
+  }
+
+  updateDetailsOnBotUpdation(bot){
+    this.currentBt = bot;
+    this.streamId = this.currentBt._id;
+    this.getWelcomeTaskData();
+    this.subscribeEvents();
   }
 
   // get welcome task and use case data from backend api

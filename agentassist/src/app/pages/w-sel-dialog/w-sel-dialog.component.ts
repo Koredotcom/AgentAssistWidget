@@ -732,7 +732,7 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
     this.importedVariablesData = JSON.parse(this.importedVariablesData);
     this.importedBotData = JSON.parse(this.importedBotData);
 
-    if((!this.importedBotData.hasOwnProperty('isAgentAssist')) || (this.importedBotData.hasOwnProperty('isAgentAssist') && !this.importedBotData.isAgentAssist)) {
+    if(this.checkConversionPropertyValue('isAgentAssist') && this.checkConversionPropertyValue('isLinkedSmartAssist')){
       this.conversionNeeded = true;
     } else {
       this.conversionNeeded = false;
@@ -783,6 +783,14 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
       }
     );
   }
+
+  checkConversionPropertyValue(propName){
+    if(!this.importedBotData.hasOwnProperty(propName) || (this.importedBotData.hasOwnProperty(propName) && !this.importedBotData[propName])){
+      return true
+    }
+    return false
+  }
+
 
   getConvStatus(convId: string) {
     const params = {
