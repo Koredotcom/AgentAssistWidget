@@ -53,9 +53,6 @@
 			<div class="link-router" [routerLink]="['settings', 'in']" routerLinkActive="active">
 				<img src="assets/icons/leftmenu/settings.svg"><span class="link-name">{{'NAV.SETTINGS' | translate}}</span>
 			</div>
-			<div class="link-router" [routerLink]="['conversationalLogs']" routerLinkActive="active">
-				<img src="assets/icons/leftmenu/conv-logs.svg"><span class="link-name">{{'NAV.CONVERSATIONAL_LOGS' | translate}}</span>
-			</div>
 			<!-- <div *ngIf="isAgentDesktopEnabled" class="link-router" [routerLink]="['channels']" routerLinkActive="active">
 				<img src="assets/icons/leftmenu/channels.svg"><span class="link-name">{{'NAV.CHANNELS' | translate}}</span>
 			</div> -->
@@ -81,6 +78,9 @@
 				<!-- <img src="assets/icons/leftmenu/usecase.svg"> -->
 				<i class="icon-sa-union"></i>
 				<span class="link-name">{{'NAV.USECASES' | translate}}</span>
+			</div>
+			<div class="link-router" [routerLink]="['conversationalLogs']" routerLinkActive="active" *hasPermission="['admin']">
+				<img src="assets/icons/leftmenu/conv-logs.svg"><span class="link-name">{{'NAV.CONVERSATIONAL_LOGS' | translate}}</span>
 			</div>
 			<div class="link-router" [routerLink]="['welcomeEvents']" routerLinkActive="active" *hasPermission="['admin']">
 				<!-- <img src="assets/icons/leftmenu/usecase.svg"> -->

@@ -1157,17 +1157,38 @@ body{
 }
 
 .custom_date_picker_sec{
+    padding: 6px 10px;
+    background: #FFFFFF;
+    border: 1px solid #E5E5E5;
+    border-radius: 4px;
+    text-align: left;
+    cursor: pointer;
+    position: relative;
     &.date-sec{
+        img.calendar{
+            margin-right: 10px;
+            position: relative;
+            top: -1px;
+        }
         .input-date-custom{
             height: auto;
             border: 0;
-            width: 320px;
+            width: auto;
             padding: 0;
             text-align: center;
-            color: $primaryActionColor;
-            font-weight: 600;
+            font-weight: 500;
             font-size: 14px;
             line-height: 20px;
+            text-align: left;
+            color: #404040;
+            width: auto;
+            min-width: auto;
+            max-width: initial;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            width: auto;
+            cursor: pointer;
         }
         .ranges{
             background: $whiteColor;
@@ -1250,6 +1271,7 @@ body{
         font-weight: 600;
         font-size: 14px;
         line-height: 20px;
+        background: transparent;
     }
     .md-drppicker {
         border-radius: 4px;
@@ -1257,10 +1279,15 @@ body{
         background-color: $whiteColor;
         padding: 0;     
         &.drops-down-auto{
-            left: -50px !important;   
-            font-family: 'Inter';
-            border: 1px solid $borderlite;    
-            width: 733px;         
+            // left: -50px !important;   
+            // font-family: 'Inter';
+            // border: 1px solid $borderlite;    
+            // width: 733px;      
+            left: auto !important;
+            font-family: "Inter";
+            border: 1px solid #E5E8EC;
+            width: 733px;
+            right: 0 !important;   
         }
         .ranges{
             background: $whiteColor;
@@ -2188,6 +2215,36 @@ body{
     }
 }
 
+
+.tooltip-global-styles{
+    opacity: 1 !important;
+    &.bs-tooltip-top{
+        .arrow{
+            &::before{
+                top: -1px;
+                border-top-color: #202124;
+            }
+        }
+    }
+    &.no-wrap{
+        .tooltip-inner{
+            white-space: nowrap;
+        }
+    }
+    .tooltip-inner{
+        text-align: left;
+        max-width: 200px !important;
+        border: 0;
+        background: #202124;
+        box-shadow: 0px 4px 4px rgba(32, 33, 36, 0.2);
+        border-radius: 4px;
+        padding: 10px 15px;
+        font-weight: 600;
+        font-size: 10px;
+        line-height: 14px;
+        color: #FFFFFF;
+    }
+}
 .automationBot-menu{
     box-shadow: 0px 10px 15px -3px rgba(16, 24, 40, 0.1), 0px 4px 6px -4px rgba(16, 24, 40, 0.1);
     border-radius: 12px !important;
