@@ -103,8 +103,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.selectedApp = this.authService.smartAssistBots.map(x=>x._id);
-    this.initCalls();
+    this.selectedApp = this.workflowService.getCurrentBt(true)._id;
+    // this.selectedApp = this.authService.smartAssistBots.map(x=>x._id);
+    // this.initCalls();
     this.getWidget();
     this.subs.sink = this.authService.isAgentDesktopEnabled$.subscribe(isEnabled => {
       this.isAgentDesktopEnabled = isEnabled;
@@ -123,11 +124,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.ref.detectChanges();
     });
 
-    if (this.authService.smartAssistBots.map(x=>x._id)) {
+    // if (this.authService.smartAssistBots.map(x=>x._id)) {
+    //   this.initCalls();
+    // }
+    if(this.workflowService.getCurrentBt(true) && this.workflowService.getCurrentBt(true)._id){
       this.initCalls();
     }
     this.initSub = this.workflowService.headerInitCalls$.subscribe(() => {
-      this.initCalls();
+      if(this.workflowService.getCurrentBt(true)._id){
+        this.initCalls();
+      }
     });
     this.showSwichAccountOption = this.localStoreService.getAssociatedAccounts().length > 1;
     this.kgService.kgTrainingInProgess$.subscribe((res: boolean) => {
@@ -177,7 +183,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
       paramsEmail = {
         userId: this.authService.getUserId(),
-        streamId: this.authService.smartAssistBots.map(x=>x._id),
+        streamId : this.workflowService.getCurrentBt(true)._id,
+        // streamId: this.authService.smartAssistBots.map(x=>x._id),
         orgId: this.authService.getOrgId()
       }
 
@@ -256,7 +263,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(InviteDialogComponent);
     const params = {
       userId: this.authService.getUserId(),
-      streamId: this.authService.smartAssistBots.map(x=>x._id),
+      streamId : this.workflowService.getCurrentBt(true)._id,
+      // streamId: this.authService.smartAssistBots.map(x=>x._id),
       'isAgentAssistApp':true
 
     }
