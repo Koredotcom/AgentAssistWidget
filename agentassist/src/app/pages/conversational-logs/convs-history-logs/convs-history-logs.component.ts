@@ -57,9 +57,12 @@ export class ConvsHistoryLogsComponent implements OnInit {
       })
     )
     .subscribe(res=>{
-      if(res.result){
+      if(res.result.length){
         this.page = this.page+1;
         this.hasMore = res.hasMore;
+        this.chatHistData.push({
+          'interruption': true
+        })
         this.chatHistData.push(...res.result);
         this.cdRef.detectChanges();
       }
@@ -91,9 +94,6 @@ export class ConvsHistoryLogsComponent implements OnInit {
     }))
     .subscribe((data)=>{
       this.chatHistData.push(...data);
-      this.chatHistData.push({
-        'interruption': true
-      })
       // this.historyData = data ? data : [];
     });
   }
