@@ -54,6 +54,7 @@ export class AssistComponent implements OnInit {
   isHistoryApiCalled = false;
   smallTalkOverrideBtnId : string;
   faqManualClick : boolean = false;
+  userBotSessionDetails;
 
   constructor(private templateRenderClassService: TemplateRenderClassService,
     public handleSubjectService: HandleSubjectService,
@@ -223,6 +224,12 @@ export class AssistComponent implements OnInit {
       }
     });
 
+    let subscription14 = this.handleSubjectService.userBotConversationDetails$.subscribe((res) => {
+      if(res) {
+        this.userBotSessionDetails = res;
+      }
+    });
+
     this.subscriptionsList.push(subscription1);
     this.subscriptionsList.push(subscription2);
     this.subscriptionsList.push(subscription3);
@@ -236,6 +243,7 @@ export class AssistComponent implements OnInit {
     this.subscriptionsList.push(subscription11);
     this.subscriptionsList.push(subscription12);
     this.subscriptionsList.push(subscription13);
+    this.subscriptionsList.push(subscription14);
   }
 
   callHistoryApi(){
@@ -271,6 +279,8 @@ export class AssistComponent implements OnInit {
       'agentassistInfo' : agent_user_details,
       'botId': this.connectionDetails.botId,
       'sendMenuRequest': true,
+      'uId': this.userBotSessionDetails?.userId || '',
+      'sId': this.userBotSessionDetails?.sessionId || '',
       'experience' : (this.connectionDetails.isCall && this.connectionDetails.isCall === "true") ?  ProjConstants.VOICE : ProjConstants.CHAT
     }
     if(this.connectionDetails?.autoBotId && this.connectionDetails?.autoBotId !== 'undefined') {

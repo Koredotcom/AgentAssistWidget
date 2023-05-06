@@ -25,5 +25,7 @@ export enum EVENTS {
     'response_resolution_comments' = 'response_resolution_comments',
     'enable_override_userinput' = 'enable_override_userinput',
     'agent_send_or_copy' = 'agent_send_or_copy',
-    'end_of_conversation' = 'end_of_conversation'
+    'end_of_conversation' = 'end_of_conversation',
+    'user_sent_message' = 'user_sent_message',
+    'agent_sent_message' = 'agent_sent_message'
 }
