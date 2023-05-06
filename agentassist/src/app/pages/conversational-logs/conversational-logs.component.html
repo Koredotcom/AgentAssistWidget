@@ -70,7 +70,7 @@
                         </div> -->
                         <div *ngIf="transformedConvsLogs.length > 0">
                           <div class="table-body-wrapper"  *ngFor="let data of transformedConvsLogs" (click)="openConvsHistorySlider($event, data)">
-                            <div class="text-title w-20 text-truncate" title="{{data.conversationId}}">{{data.sessionId}}</div>
+                            <div class="text-title w-20 text-truncate" title="{{data.conversationId}}">{{data.conversationId}}</div>
                             <div class="title-text w-15 text-truncate" title="{{ getStartTime(data.time) }}">{{ getStartTime(data.time) }}</div>
                             <!-- <div class="title-text w-15">{{data?.agent}}</div> -->
                             <!-- <div class="title-text-info w-20">
