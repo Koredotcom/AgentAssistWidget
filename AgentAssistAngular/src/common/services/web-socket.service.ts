@@ -50,7 +50,7 @@ export class WebSocketService {
     this._agentAsisstSocket = io(`${this.connectionDetails.agentassisturl}/koreagentassist`, webSocketConnection);
     this._agentAsisstSocket.on("connect", () => {
       if(!window._agentAssistSocketEventListener){
-        this.commonEmitEvents();
+        // this.commonEmitEvents();
         this.listenEvents();
         this.socketConnectFlag$.next(true);
         window._agentAssistSocketEventListener = true;
@@ -58,41 +58,11 @@ export class WebSocketService {
     });
   }
 
-  commonEmitEvents(){
-
-
-
-    let appState = this.localStorageService.getLocalStorageState();
-    let shouldProcessResponse = true;
-    // if(appState[this.connectionDetails.conversationId] && appState[this.connectionDetails.conversationId][storageConst.IS_WELCOMEMSG_PROCESSED]){
-    //   shouldProcessResponse = false;
-    // }
-    let parsedCustomData: any = {};
-    let agent_user_details = {...this.localStorageService.agentDetails, ...this.localStorageService.userDetails};
-    let welcomeMessageParams: any = {
-      'waitTime': 2000,
-      'userName': parsedCustomData?.userName || parsedCustomData?.fName + parsedCustomData?.lName || 'user',
-      'id': this.connectionDetails.conversationId,
-      "isSendWelcomeMessage": shouldProcessResponse,
-      'agentassistInfo' : agent_user_details,
-      'botId': this.connectionDetails.botId,
-      'sendMenuRequest': true,
-      'experience' : (this.connectionDetails.isCall && this.connectionDetails.isCall === "true") ?  ProjConstants.VOICE : ProjConstants.CHAT
-    }
-    if(this.connectionDetails?.autoBotId && this.connectionDetails?.autoBotId !== 'undefined') {
-      welcomeMessageParams['autoBotId'] = this.connectionDetails.autoBotId;
-      // menu_request_params['autoBotId'] = this.connectionDetails.autoBotId;
-    } else {
-      welcomeMessageParams['autoBotId'] = '';
-      // menu_request_params['autoBotId'] = '';
-    }
-    this.emitEvents(EVENTS.welcome_message_request, welcomeMessageParams);
-  }
-
   emitEvents(eventName,requestParams) {
     if(requestParams){
       requestParams.isExtAD = this.connectionDetails.fromSAT ? false : true;
       requestParams.source = this.connectionDetails.source;
+      requestParams.experience = (this.connectionDetails.isCall && this.connectionDetails.isCall == "true") ?  ProjConstants.VOICE : ProjConstants.CHAT
     }
     this.loaderOnTimer()
     this._agentAsisstSocket.emit(eventName, requestParams);
