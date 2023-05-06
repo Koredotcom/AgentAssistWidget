@@ -1,0 +1,18 @@
+
+
+.empty-block-data{
+    padding: 100px 0;
+    width: 500px;
+    margin: 0 auto;
+    text-align: center;
+    .img-empty{
+        margin-bottom: 20px;
+    }
+    .e-title{
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 20px;
+        color: #BDBDBD;
+        font-feature-settings: 'salt' on;
+    }
+}

@@ -4,7 +4,7 @@
             <!-- <div class="heading">{{"AGENT_USE_CASES" | translate}}</div> -->
            
             <ul class="nav nav-tabs uc-tabs" role="tablist">
-                <li>
+                <!-- <li>
                     <div class="kr-sg-dropdowns regular-user-bots-dropdown" ngbDropdown [placement]="'bottom-left'">
                         <div class="dropdown dropdown-open">
                             <div class="dropdown-toggle dropdown-input">
@@ -47,15 +47,6 @@
                                                         <div class="desc-text">Use a bot you already created on bot platform</div>
                                                     </div>
                                                 </div>
-                                                <!-- <div class="bot-select-source" (click)="choosePreBot()">
-                                                    <div class="img-block">
-                                                        <img src="assets/icons/use-case/attachbot2.svg">
-                                                    </div>
-                                                    <div class="content-data">
-                                                        <div class="title">Choose a template bot</div>
-                                                        <div class="desc-text">Choose a template from our store</div>
-                                                    </div>
-                                                </div> -->
                                                 <div class="bot-select-source" (click)="newBot('createNew')">
                                                     <div class="img-block">
                                                         <img src="assets/icons/use-case/attachbot3.svg">
@@ -72,7 +63,7 @@
                             </ul>
                         </div>
                     </div>
-                </li>
+                </li> -->
                 <li [class.disabled]="!currentBt">
                     <div class="tab-name active" data-toggle="tab" href="#qa" (click)="ucType = 'faq'; selectGroup('')">{{"AGENTASSIST.QUEST_ANSWER" | translate}}</div>
                 </li>               

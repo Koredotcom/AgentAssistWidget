@@ -54,6 +54,7 @@ export class AssistComponent implements OnInit {
   isHistoryApiCalled = false;
   smallTalkOverrideBtnId : string;
   faqManualClick : boolean = false;
+  userBotSessionDetails;
 
   constructor(private templateRenderClassService: TemplateRenderClassService,
     public handleSubjectService: HandleSubjectService,
@@ -98,7 +99,7 @@ export class AssistComponent implements OnInit {
         if(this.commonService.checkAutoBotIdDefined(this.connectionDetails?.autoBotId)){
           this.connectionDetails['autoBotId'] = response?.autoBotId ? response.autoBotId: undefined;
           this.handleSubjectService.setAutoBotIdFromAgentResponse({autoBotId: response?.autoBotId ? response.autoBotId: undefined});
-          if(!this.isHistoryApiCalled) {this.callHistoryApi()}
+          // if(!this.isHistoryApiCalled) {this.callHistoryApi()}
         }
         if(this.commonService.checkAutoBotIdDefined(this.commonService.configObj?.autoBotId)){
           this.commonService.configObj['autoBotId'] = response?.autoBotId;
@@ -152,9 +153,9 @@ export class AssistComponent implements OnInit {
         this.connectionDetails = response;
         let appState = this.localStorageService.getLocalStorageState();
         this.proactiveModeStatus = appState[this.connectionDetails.conversationId][storageConst.PROACTIVE_MODE]
-      }
-      if(this.commonService.checkAutoBotId(this.connectionDetails?.autoBotId) && !this.isHistoryApiCalled){
-        this.callHistoryApi();
+        if(!this.isHistoryApiCalled){
+          this.callHistoryApi();
+        }
       }
     });
 
@@ -223,6 +224,12 @@ export class AssistComponent implements OnInit {
       }
     });
 
+    let subscription14 = this.handleSubjectService.userBotConversationDetails$.subscribe((res) => {
+      if(res) {
+        this.userBotSessionDetails = res;
+      }
+    });
+
     this.subscriptionsList.push(subscription1);
     this.subscriptionsList.push(subscription2);
     this.subscriptionsList.push(subscription3);
@@ -236,21 +243,54 @@ export class AssistComponent implements OnInit {
     this.subscriptionsList.push(subscription11);
     this.subscriptionsList.push(subscription12);
     this.subscriptionsList.push(subscription13);
+    this.subscriptionsList.push(subscription14);
   }
 
   callHistoryApi(){
     this.isHistoryApiCalled = true;
     this.handleSubjectService.setLoader(true);
+    let shouldProcessResponse = true;
     let respons : any = this.commonService.renderingHistoryMessage(this.connectionDetails);
     respons.then((res) => {
       if(res && res.messages){
         this.handleSubjectService.setLoader(false);
         this.renderHistoryMessages(res.messages, res.feedbackDetails)
       }
+      if (res && res.messages && res.messages.length > 0 && this.connectionDetails.conversationId) {
+        shouldProcessResponse = false;
+      }else{
+        shouldProcessResponse = true;
+      }
+      this.commonEmitEvents(shouldProcessResponse);
     }).catch((err) => {
       this.handleSubjectService.setLoader(false);
+      this.commonEmitEvents(shouldProcessResponse);
     });
   }
+
+  commonEmitEvents(shouldProcessResponse){
+    let parsedCustomData: any = {};
+    let agent_user_details = {...this.localStorageService.agentDetails, ...this.localStorageService.userDetails};
+    let welcomeMessageParams: any = {
+      'waitTime': 2000,
+      'userName': parsedCustomData?.userName || parsedCustomData?.fName + parsedCustomData?.lName || 'user',
+      'id': this.connectionDetails.conversationId,
+      "isSendWelcomeMessage": shouldProcessResponse,
+      'agentassistInfo' : agent_user_details,
+      'botId': this.connectionDetails.botId,
+      'sendMenuRequest': true,
+      'uId': this.userBotSessionDetails?.userId || '',
+      'sId': this.userBotSessionDetails?.sessionId || '',
+      'experience' : (this.connectionDetails.isCall && this.connectionDetails.isCall === "true") ?  ProjConstants.VOICE : ProjConstants.CHAT
+    }
+    if(this.connectionDetails?.autoBotId && this.connectionDetails?.autoBotId !== 'undefined') {
+      welcomeMessageParams['autoBotId'] = this.connectionDetails.autoBotId;
+    } else {
+      welcomeMessageParams['autoBotId'] = '';
+    }
+    this.websocketService.emitEvents(EVENTS.welcome_message_request, welcomeMessageParams);
+  }
+
   //dialogue click and agent response handling code.
   AgentAssist_run_click(dialog, dialogPositionId, intent?) {
     let connectionDetails: any = Object.assign({}, this.connectionDetails);

@@ -2010,5 +2010,18 @@
     "SEARCHASSIST.LINK_SEARCHASSIST_DESC" : "Provide intelligent, contextual, and personalized search experience in every interaction across your web and mobile channels.",
     "SEARCHASSIST.KNOW_MORE" : "Know More",
     "SEARCHASSIST.CONNECTED_TITLE" : "Connected",
-    "SEARCHASSIST.DISCONNECT_TITLE" : "Error establishing connection"
+    "SEARCHASSIST.DISCONNECT_TITLE" : "Error establishing connection",
+    "ATTACHED_BOTS": "Attached bots",
+    "ADD_BOT": "Add Bot",
+    "ATTACH_BOT": "Attach a bot from library",
+    "USE_BOT": "Use a bot you already created on bot platform",
+    "CREATE_BOT": "Create a bot from scratch",
+    "DESIGN_BOT": "Design your own bot from scratch.",
+    "SORT_BY": "Sort by",
+    "NO_BOTS": "No bots found.",
+    "NAV.WELCOMEEVENT": "Welcome Event",
+    "WELCOMEEVENT.SAVE_SUCCESS" : "Configuration has been Saved",
+    "WELCOMEEVENT.SAVE_FALIED" : "Failed to upate the Configuration",
+    "CHANNELCHAT.SAVE_SUCCESS" : "Configuration has been Saved",
+    "CHANNELCHAT.SAVE_FAILED" : "Failed to update the Configuration"
 }

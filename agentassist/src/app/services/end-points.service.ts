@@ -29,6 +29,20 @@ export class EndPointsService {
     return this.serviceList[serviceId] || {};
   }
   public init() {
+    this.serviceList['conversation.history'] = {
+     // ${connectionDetails.envinormentUrl}/api/1.1/botmessages/agentassist/${_botId}/history?convId=${_conversationId}&agentHistory=false
+      endpoint: this.SERVER_URL + '/agentassist/api/v1/agentassistconversations/:convId/conversation?limit=:limit&page=:page',
+      method: 'get'
+    }
+    this.serviceList['conversation.userbot'] = {
+      // ${connectionDetails.envinormentUrl}/api/1.1/botmessages/agentassist/${_botId}/history?convId=${_conversationId}&agentHistory=false
+       endpoint: this.API_SERVER_URL + '/botmessages/chathistorytoagentassist?botId=:botId&userId=:userId&sessionId=:sessionId',
+       method: 'get'
+    }
+    this.serviceList['conversation.logs'] = {
+      endpoint: this.SERVER_URL + '/agentassist/api/v1/agentassistconversationslogs/accounts/:accountId',
+      method: 'post'
+    }
     this.serviceList['sales.signout'] = {
       endpoint: this.API_SERVER_URL + '/oAuth/signout',
       method: 'delete'
@@ -515,7 +529,7 @@ export class EndPointsService {
 
     /** ONBOARDING START **/
     this.serviceList['get.existingbots'] = {
-      endpoint: this.API_SERVER_URL + '/smartassist/apps/automationbots/existingbots',
+      endpoint: this.API_SERVER_URL + '/smartassist/apps/automationbots/existingbots?isAgentAssist=true',
       method: 'get'
     };
 
@@ -1522,6 +1536,21 @@ export class EndPointsService {
     this.serviceList['delete.searchaccounts'] = {
       endpoint: this.SERVER_URL + '/agentassist/api/v1/searchaccounts/?accountId=:accountId',
       method: 'delete'
+    }
+
+    this.serviceList['get.welcomeevent'] = {
+      endpoint : this.API_SERVER_URL + '/smartassist/apps/instances/:streamId/events?isAgentAssist=true',
+      method: 'get'
+    }
+
+    this.serviceList['post.welcomeevent'] = {
+      endpoint : this.API_SERVER_URL + '/smartassist/apps/instances/:streamId/events?isAgentAssist=true',
+      method: 'post'
+    }
+
+    this.serviceList['post.markDefault'] = {
+      endpoint : this.API_SERVER_URL + '/smartassist/apps/:streamId/markconnectedbot',
+      method : 'post'
     }
 
   }
