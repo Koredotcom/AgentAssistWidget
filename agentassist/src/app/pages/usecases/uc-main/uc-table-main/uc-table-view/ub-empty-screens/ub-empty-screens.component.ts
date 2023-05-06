@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-ub-empty-screens',
@@ -6,6 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./ub-empty-screens.component.scss']
 })
 export class UbEmptyScreensComponent implements OnInit {
+
+  @Input() currentBt;
 
   constructor() { }
 

@@ -1534,5 +1534,10 @@ export class EndPointsService {
       method: 'post'
     }
 
+    this.serviceList['post.markDefault'] = {
+      endpoint : this.API_SERVER_URL + '/smartassist/apps/:streamId/markconnectedbot',
+      method : 'post'
+    }
+
   }
 }

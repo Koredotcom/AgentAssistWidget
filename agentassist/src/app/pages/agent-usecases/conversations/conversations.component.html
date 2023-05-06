@@ -32,7 +32,7 @@
             </ng-container>
             <ng-container *ngIf="!isLoading">
                 <app-empty-screens [isSearch]="searchTerm?.length" *ngIf="conversations.length == 0 && currentBt?.type != 'universalbot'"></app-empty-screens>
-                <app-ub-empty-screens [isSearch]="searchTerm?.length" *ngIf="currentBt?.type == 'universalbot'"></app-ub-empty-screens>
+                <app-ub-empty-screens [currentBt]="currentBt" *ngIf="currentBt?.type == 'universalbot'"></app-ub-empty-screens>
             </ng-container>
         </perfect-scrollbar>
     </div>
@@ -52,7 +52,7 @@
                 </div>
                 <div *ngIf="noResults">
                     <app-empty-screens [isSearch]="false" *ngIf="currentBt?.type != 'universalbot'"></app-empty-screens>
-                    <app-ub-empty-screens  *ngIf="currentBt?.type == 'universalbot'"></app-ub-empty-screens>
+                    <app-ub-empty-screens  [currentBt]="currentBt" *ngIf="currentBt?.type == 'universalbot'"></app-ub-empty-screens>
 
                 </div>
             </div>

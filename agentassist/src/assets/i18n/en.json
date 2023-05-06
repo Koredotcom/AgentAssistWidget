@@ -2021,5 +2021,7 @@
     "NO_BOTS": "No bots found.",
     "NAV.WELCOMEEVENT": "Welcome Event",
     "WELCOMEEVENT.SAVE_SUCCESS" : "Configuration has been Saved",
-    "WELCOMEEVENT.SAVE_FALIED" : "Failed to upate the Configuration"
+    "WELCOMEEVENT.SAVE_FALIED" : "Failed to upate the Configuration",
+    "CHANNELCHAT.SAVE_SUCCESS" : "Configuration has been Saved",
+    "CHANNELCHAT.SAVE_FAILED" : "Failed to update the Configuration"
 }

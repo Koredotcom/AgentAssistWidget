@@ -2198,6 +2198,9 @@ body{
     .ub-bot-list-wrapper{
         padding: 0px 20px;
     }
+    .ps-content {
+        max-height: 250px !important;
+    }
     .automationBotlist{
       // margin-top: 15px;
       display: flex;

@@ -6,6 +6,8 @@ import { Subscription,Observable } from 'rxjs';
 import { NotificationService } from '@kore.services/notification.service';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { AuthService } from '@kore.services/auth.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-automation-channels',
@@ -25,11 +27,17 @@ export class AutomationChannelsComponent implements OnInit {
   chatData: any;
   webhookUrl: any;
   showOpenEyeIcon : boolean = true;
-  
+  markDefaultBot : boolean = false;
+  isLoading : boolean = false;
+  currentBt : any = {};
+  checkBotMarkEvent : any;
+
   constructor( public workflowService: workflowService,
     private notificationService: NotificationService,
     private service: ServiceInvokerService,
     private authService: AuthService,
+    public modalService : NgbModal,
+    private translate : TranslateService
               ) { }
   
   ngOnInit(): void {  
@@ -105,12 +113,46 @@ export class AutomationChannelsComponent implements OnInit {
             instanceId: this.authService.getAgentAssistStreamId(),
             'isAgentAssist':true
           };
+    this.currentBt = this.workflowService.getCurrentBt(true);
     this.chatChannelData = this.service.invoke('get.chatList', params).subscribe(data => {
     
     this.chatList = data.app;
     this.webhookUrl = data.webhookUrl;
+    this.markDefaultBot = this.currentBt.connectedBot;
    });
  }
+
+ EnableDefaultSelection(event,contentConfirmChatChannel) {
+  this.checkBotMarkEvent = event;
+  event.target.checked = false;
+  this.modalService.open(contentConfirmChatChannel,{ centered: true, windowClass: 'delete-welcome-events-dialog', backdrop: 'static', keyboard: false });
+}
+
+confirmDefaultBot(type){  
+  if(type == 'yes'){
+    this.isLoading = true;
+    this.updateMakeDefault();
+  }else{
+    this.checkBotMarkEvent.target.checked = this.markDefaultBot;
+  }
+  this.modalService.dismissAll();
+}
+
+updateMakeDefault(){
+  let params : any = {
+    streamId : this.authService.getAgentAssistStreamId()
+  }
+  
+  this.service.invoke('post.markDefault', params, {enabled : !this.markDefaultBot}).subscribe((res) => {
+    this.markDefaultBot = !this.markDefaultBot;
+    this.authService.getDeflectApps();
+    this.isLoading = false;
+    this.notificationService.notify(this.translate.instant("CHANNELCHAT.SAVE_SUCCESS"), 'success');
+  },(error) => {
+    this.isLoading = false;
+    this.notificationService.showError(this.translate.instant("CHANNELCHAT.SAVE_FALIED"));
+  });
+}
  
 }
 

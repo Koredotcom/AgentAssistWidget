@@ -82,22 +82,8 @@ export class MainmenuComponent implements OnInit, OnDestroy {
     //   } 
     // });
 
-    let _id = this.localStoreService.getSelectedAccount()?.accountId || this.authService.getSelectedAccount()?.accountId;
-    console.log('header', _id);
-
-    if (this.appService.selectedInstanceApp$.value) {
-      this.getBalance();
-    }
-    if (this.workflowService.deflectAppsData.length || this.workflowService.deflectAppsData._id) {
-     
-      this.smartABots = this.authService.smartAssistBots || [];
-      this.smartABots.forEach((v: any) => {
-        v.name = v.name.replaceAll('&lt;', '<').replaceAll('&gt;', '>');
-      });
-      this.currentBt = _.findWhere(this.authService.smartAssistBots, { _id: this.workflowService.deflectApps()._id || this.workflowService.deflectApps()[0]._id });
-      this.workflowService.setCurrentBt(this.currentBt);
-    }
-    this.filterLinkedBotIds();
+    // this.getCurrentBotFromAutomationBotList();
+    
     this.availBal = this.workflowService.updateAvailBal$.subscribe(
       res => {
         this.getBalance();
@@ -115,6 +101,33 @@ export class MainmenuComponent implements OnInit, OnDestroy {
         this.switchBots(res);
       }
     );
+
+    this.subs.sink = this.authService.deflectApps.subscribe( (res : any) => {
+      if(res){
+        console.log("inside subscribe", res);
+        
+        this.getCurrentBotFromAutomationBotList();
+      }
+    });
+  }
+
+  getCurrentBotFromAutomationBotList(){
+    let _id = this.localStoreService.getSelectedAccount()?.accountId || this.authService.getSelectedAccount()?.accountId;
+  
+    if (this.appService.selectedInstanceApp$.value) {
+      this.getBalance();
+    }
+    if (this.workflowService.deflectAppsData.length || this.workflowService.deflectAppsData._id) {
+     
+      this.smartABots = this.authService.smartAssistBots || [];
+      this.smartABots.forEach((v: any) => {
+        v.name = v.name.replaceAll('&lt;', '<').replaceAll('&gt;', '>');
+      });
+      
+      this.currentBt = this.workflowService.getCurrentBt(true) && Object.keys(this.workflowService.getCurrentBt(true)).length > 0 ? this.workflowService.getCurrentBt(true) : _.findWhere(this.authService.smartAssistBots, { _id: this.workflowService.deflectApps()._id || this.workflowService.deflectApps()[0]._id });
+      this.workflowService.setCurrentBt(this.currentBt);
+    }
+    this.filterLinkedBotIds();
   }
 
   filterLinkedBotIds(){
