@@ -38,7 +38,8 @@ export class DockStatusService {
     }
 
     getDockStatus(job: string, id?) {
-        let streamId = this.authService.smartAssistBots.map(x=>x._id);
+        // let streamId = this.authService.smartAssistBots.map(x=>x._id);
+        let streamId = this.workflowService.getCurrentBt(true)._id;
         let params = { streamId: streamId, callflowId: id};
         return Observable.create(observer => {
             const polling = interval(1000).pipe(startWith(0)).subscribe(() => {
@@ -96,7 +97,8 @@ export class DockStatusService {
 
     updateProgress(payload, _id: string, callFlowId?: string) {
         let _params = {
-            streamId: this.authService.smartAssistBots.map(x=>x._id),
+            // streamId: this.authService.smartAssistBots.map(x=>x._id),
+            streamId : this.workflowService.getCurrentBt(true)._id,
             dsId: _id,
             callflowId: callFlowId
         };
@@ -131,7 +133,8 @@ export class DockStatusService {
         if (this.pollingSub) this.pollingSub.unsubscribe();
         if (this.dockStatusSub) this.dockStatusSub.unsubscribe();
 
-        let streamId = this.authService.smartAssistBots.map(x=>x._id);
+        // let streamId = this.authService.smartAssistBots.map(x=>x._id);
+        let streamId = this.workflowService.getCurrentBt(true)._id;
         let params = { streamId: streamId };
         this.pollingSub = interval(50000).pipe(startWith(0)).subscribe(() => {
             // this.statusDockerLoading = true;
@@ -147,7 +150,8 @@ export class DockStatusService {
         if (task._id) {
             // this.statusDockerLoading = true;
 
-            let streamId = this.authService.smartAssistBots.map(x=>x._id);
+            // let streamId = this.authService.smartAssistBots.map(x=>x._id);
+            let streamId = this.workflowService.getCurrentBt(true)._id;
             const queryParms = {
                 streamId: streamId,
                 dsId: task._id,
@@ -172,7 +176,8 @@ export class DockStatusService {
 
     clearAllRecords() {
         const queryParms = {
-            streamId: this.authService.smartAssistBots.map(x=>x._id),
+            // streamId: this.authService.smartAssistBots.map(x=>x._id),
+            streamId : this.workflowService.getCurrentBt(true)._id
         }
         this.service.invoke('deleteAll.dockstatus', queryParms).subscribe(
             res => {
@@ -194,7 +199,8 @@ export class DockStatusService {
         };
 
         const params = {
-            appId: this.authService.smartAssistBots.map(x=>x._id),
+            // appId: this.authService.smartAssistBots.map(x=>x._id),
+            appId : this.workflowService.getCurrentBt(true)._id,
             'isAgentAssist':true
         };
         return new Promise((resolve, reject) => {

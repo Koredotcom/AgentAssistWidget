@@ -147,7 +147,9 @@ export class UpdateBotComponent implements OnInit {
   }
 
   proceedBackup(cb) {
-    const params = { streamId:this.authService.smartAssistBots.map(x=>x._id),
+    const params = { 
+      // streamId:this.authService.smartAssistBots.map(x=>x._id),
+      streamId : this.workflowService.getCurrentBt(true)._id,
       'isAgentAssist':true };
     const self = this;
     let payload = {

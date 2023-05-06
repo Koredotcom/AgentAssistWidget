@@ -38,8 +38,8 @@ export class DockStatusComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit(): void {
-    //this.streamId = this.workflowService.getCurrentBt()._id;
-    this.streamId = this.authService.smartAssistBots.map(x=>x._id);
+    // this.streamId = this.authService.smartAssistBots.map(x=>x._id);
+    this.streamId = this.workflowService.getCurrentBt(true)._id;
     this.dockServiceSubscriber = this.dockStatusService.change.subscribe(data => {
       // this.polling();
       const index = this.dockersList.findIndex(f => f._id === data._id);
@@ -138,7 +138,8 @@ export class DockStatusComponent implements OnInit {
   removeRecord(task, index) {
     if (task._id) {
       // this.statusDockerLoading = true;
-      let streamId = this.authService.smartAssistBots.map(x=>x._id);
+      // let streamId = this.authService.smartAssistBots.map(x=>x._id);
+      let streamId = this.workflowService.getCurrentBt(true)._id;
       const queryParms = {
         streamId: streamId,
         dsId: task._id,
@@ -162,8 +163,11 @@ export class DockStatusComponent implements OnInit {
   }
 
   clearAllRecords() {
+    // const queryParms = {
+    //   streamId: this.authService.smartAssistBots.map(x=>x._id),
+    // }
     const queryParms = {
-      streamId: this.authService.smartAssistBots.map(x=>x._id),
+      streamId : this.workflowService.getCurrentBt(true)._id
     }
     this.service.invoke('deleteAll.dockstatus', queryParms).subscribe(
       res => {
