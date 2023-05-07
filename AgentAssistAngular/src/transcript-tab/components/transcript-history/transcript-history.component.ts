@@ -53,7 +53,6 @@ export class TranscriptHistoryComponent {
             if(data && data.result.length > 0) {
               this.historyResponse = data.result;
             }
-
           },
           error: function (err) {
               console.error("Unable to fetch the details with the provided data");
