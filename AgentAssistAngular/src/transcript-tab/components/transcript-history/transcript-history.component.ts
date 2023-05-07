@@ -37,7 +37,7 @@ export class TranscriptHistoryComponent {
         if (response) {
           connectionDetails = response;
           console.log('testing',connectionDetails)
-          console.log('sandeep', this.commonService.configObj.accountId)
+          console.log(this.commonService.configObj.accountId)
           headersVal = {
             'Authorization': this.commonService.grantResponseObj?.authorization?.token_type + ' ' + this.commonService.grantResponseObj?.authorization?.accessToken,
             'eAD': true,
@@ -50,6 +50,10 @@ export class TranscriptHistoryComponent {
           dataType: 'json',
           success:  (data) => {
             console.log(data);
+            if(data && data.result.length > 0) {
+              this.historyResponse = data.result;
+            }
+
           },
           error: function (err) {
               console.error("Unable to fetch the details with the provided data");
@@ -70,9 +74,10 @@ export class TranscriptHistoryComponent {
   subscribeEvents(){
     let subscription1 = this.mockDataService.getHistoryData().subscribe((res : any) => {
       console.log(res, "response");
-      if(res && res.chatHistory){
+      if(res && res.result){
+        console.log('testing: ',res, res.result);
         this.handleSubjectService.setUserAgentTranscriptionHistory(res);
-        this.historyResponse = res.chatHistory;
+        this.historyResponse = res.result;
       }
     });
     this.subscriptionsList.push(subscription1);
