@@ -5,7 +5,7 @@ export interface userAgInputMessages {
       "email": string,
       "lastName": string,
       "profImage": string, //url
-      "type": string
+      "type": string //AGENT (or) USER
     },
     "botId"?: string,
     "type": string, //AGENT (or) USER
