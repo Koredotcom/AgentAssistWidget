@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { workflowService } from '@kore.services/workflow.service';
 import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
 import { INewChatsTransfer } from 'src/app/data/channels-chat.model';
@@ -8,13 +8,14 @@ import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { AuthService } from '@kore.services/auth.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
+import { SubSink } from 'subsink';
 
 @Component({
   selector: 'app-automation-channels',
   templateUrl: './automation-channels.component.html',
   styleUrls: ['./automation-channels.component.scss']
 })
-export class AutomationChannelsComponent implements OnInit {
+export class AutomationChannelsComponent implements OnInit, OnDestroy {
 
   showEmailSlider: boolean = false;
   @ViewChild('emailSlider', { static: true }) emailSlider: SliderComponentComponent;
@@ -32,6 +33,8 @@ export class AutomationChannelsComponent implements OnInit {
   currentBt : any = {};
   checkBotMarkEvent : any;
 
+  subs = new SubSink();
+
   constructor( public workflowService: workflowService,
     private notificationService: NotificationService,
     private service: ServiceInvokerService,
@@ -48,8 +51,12 @@ export class AutomationChannelsComponent implements OnInit {
     this.subscribeEvents();
   }
 
+  ngOnDestroy(): void {
+    this.subs.unsubscribe();
+  }
+
   subscribeEvents(){
-    this.workflowService.updateBotDetails$.subscribe((ele)=>{
+    this.subs.sink = this.workflowService.updateBotDetails$.subscribe((ele)=>{
       console.log(ele, "inside udpate use case");
       if(ele){
         this.getChatChannelData();

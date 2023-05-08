@@ -142,10 +142,23 @@ export class VoiceSettingsComponent implements OnInit, AfterViewInit, OnDestroy 
     this.streamId = this.authService.getAgentAssistStreamId();
     this.instanceAppDetails = this.voiceService.instantAppData();
     this.getFlows();
+    this.subscribeEvents();
     this.route.queryParams.subscribe(params => {
       if (params.option) {
         this.openPhSlider()
       }
+    });
+  }
+
+
+
+  subscribeEvents(){
+    this.subs.sink = this.workflowService.updateBotDetails$.subscribe((ele)=>{
+      if(ele){
+        this.streamId = this.authService.getAgentAssistStreamId();
+        this.instanceAppDetails = this.voiceService.instantAppData();
+        this.getFlows();
+      } 
     });
   }
 
