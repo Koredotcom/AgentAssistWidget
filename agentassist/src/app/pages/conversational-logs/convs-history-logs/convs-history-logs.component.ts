@@ -38,11 +38,8 @@ export class ConvsHistoryLogsComponent implements OnInit {
   close() {
     this.onClose.emit();
   }
-<<<<<<< HEAD
   isAgentJoined = false;
-=======
 
->>>>>>> f4869708144b9da7eab125de183c71ec91089f34
   getclickedConversationHistory(scroll = false){
     if(scroll){
       this.isPendingOnScroll = true;
