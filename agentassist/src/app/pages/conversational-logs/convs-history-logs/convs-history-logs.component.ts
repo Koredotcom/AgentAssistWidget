@@ -38,6 +38,7 @@ export class ConvsHistoryLogsComponent implements OnInit {
   close() {
     this.onClose.emit();
   }
+  isAgentJoined = false;
 
   getclickedConversationHistory(scroll = false){
     if(scroll){
@@ -60,6 +61,12 @@ export class ConvsHistoryLogsComponent implements OnInit {
       if(res.result.length){
         this.page = this.page+1;
         this.hasMore = res.hasMore;
+        if(!this.isAgentJoined){
+          this.chatHistData.push({
+            'interruption': true
+          });
+          this.isAgentJoined = true;
+        }
         this.chatHistData.push({
           'interruption': true
         })
