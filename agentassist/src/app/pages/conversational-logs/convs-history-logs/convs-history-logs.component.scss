@@ -229,7 +229,8 @@
                 }
             }
             .agent-msg-template{
-                width: 320px;
+                width: max-content;
+                max-width: 320px;
                 background: #EAF1FC;
                 border-radius: 8px 0px 8px 8px;
                 padding: 8px 12px;   
@@ -335,7 +336,8 @@
             .cust-msg-template{
                 background: #1A4689;
                 border-radius: 0px 8px 8px 8px;
-                width: 320px;
+                width: max-content;
+                max-width: 320px;
                 padding: 8px 12px;  
                 .title-cust-msg{
                     font-weight: 400;

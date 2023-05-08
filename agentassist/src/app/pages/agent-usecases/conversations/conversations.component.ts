@@ -56,7 +56,7 @@ export class ConversationsComponent implements OnInit, OnChanges, OnDestroy {
     this.setAppStatusList();
     this.getUsecases();
     this.getCategories();
-    this.workflowService.updateBotDetails$.subscribe((ele)=>{
+    this.subs.sink = this.workflowService.updateBotDetails$.subscribe((ele)=>{
       console.log(ele, "inside udpate use case");
       if(ele){
         this.getUsecases();
