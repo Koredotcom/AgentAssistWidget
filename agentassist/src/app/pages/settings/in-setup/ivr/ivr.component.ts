@@ -291,7 +291,9 @@ export class IvrComponent implements OnInit {
   }
   onSave() {
     this.saveInProgress = true;
-    const _params = { streamId: this.authService.smartAssistBots.map(x=>x._id),
+    const _params = { 
+      // streamId: this.authService.smartAssistBots.map(x=>x._id),
+      streamId : this.workflowService.getCurrentBt(true)._id,
       'isAgentAssist':true }
       this.sipValue = this.model.sipURI.split(/[:]/);
       this.sipMerge = this.didNumbers[0] +'@';

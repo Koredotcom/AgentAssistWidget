@@ -87,7 +87,8 @@ export class VoicePreferencesComponent implements OnInit {
   getDafaultWelcomeMsg() {
     this.selectedApp = this.workflowService.deflectApps();
     const _params = {
-      'appId': this.authService.smartAssistBots.map(x=>x._id),
+      'appId' : this.workflowService.getCurrentBt(true)._id,
+      // 'appId': this.authService.smartAssistBots.map(x=>x._id),
       'isAgentAssist':true
     }
 
@@ -222,7 +223,8 @@ export class VoicePreferencesComponent implements OnInit {
   }
 
   configureVoicePreferenaces() {
-    let _params: any = { streamId:this.authService.smartAssistBots.map(x=>x._id),'isAgentAssist':true };
+    let _params: any = { streamId:this.workflowService.getCurrentBt(true)._id,'isAgentAssist':true };
+    // let _params: any = { streamId:this.authService.smartAssistBots.map(x=>x._id),'isAgentAssist':true };
     // if (!this.voicePreferences?.voicePreference) {
     //   this.notificationService.notify(this.translate.instant('SELECT_VOICE_NAME'), 'warning');
     //   return;

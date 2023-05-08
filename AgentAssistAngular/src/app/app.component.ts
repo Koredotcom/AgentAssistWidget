@@ -10,6 +10,8 @@ import { WebSocketService } from '../common/services/web-socket.service';
 import * as $ from 'jquery';
 import { TemplateRenderClassService } from 'src/common/services/template-render-class.service';
 import { Router } from '@angular/router';
+import { userAgInputMessages } from 'src/common/helper/data-models';
+import { EVENTS } from 'src/common/helper/events';
 
 @Component({
   selector: 'app-root',
@@ -21,9 +23,14 @@ export class AppComponent {
   isGrantSuccess = false;
   errorMsg : string = '';
 
-  constructor(private webSocketService: WebSocketService, private service: CommonService,
-    private route: ActivatedRoute, private handleSubjectService: HandleSubjectService, private randomID: KoreGenerateuuidPipe,
-    private localStorageService: LocalStorageService, private templateChatConfig: TemplateRenderClassService, private router: Router) {
+  constructor(private webSocketService: WebSocketService,
+              private service: CommonService,
+              private route: ActivatedRoute,
+              private handleSubjectService: HandleSubjectService,
+              private randomID: KoreGenerateuuidPipe,
+              private localStorageService: LocalStorageService,
+              private templateChatConfig: TemplateRenderClassService,
+              private router: Router) {
   }
 
   ngOnInit() {
@@ -34,7 +41,7 @@ export class AppComponent {
     });
 
     this.route.queryParams
-      .subscribe(params => {    
+      .subscribe(params => {
         this.service.configObj = {...params};
         window.addEventListener("message", this.receiveMessage.bind(this), false);
         // let parentUrl = window.parent.location.hostname;
@@ -46,13 +53,13 @@ export class AppComponent {
             if(Object.keys(this.service.configObj).length > 0){
               this.initAgentAssist(this.templateChatConfig.chatConfig, params);
             }
-          } 
+          }
           var message = {
             method: 'agentassist_loaded',
             name: "agent_assist"
         };
           window.parent.postMessage(message, "*");
-          
+
       });
   }
 
@@ -103,13 +110,59 @@ export class AppComponent {
         let urlParams = e.data.urlParams;
         this.service.configObj = urlParams;
         this.initAgentAssist(chatConfig, urlParams);
-    }else if(e.data.name === 'setAgentInfo'){
+      } else if(e.data.name === 'userBotConvos') {
+        console.log(e.data);
+        let userBotConversationDetails = e.data;
+          let connectionDetails;
+          let headersVal = {};
+          this.handleSubjectService.connectDetailsSubject.subscribe((response: any) => {
+            if (response) {
+              connectionDetails = response;
+              headersVal = {
+                'Authorization': this.service.grantResponseObj?.authorization?.token_type + ' ' + this.service.grantResponseObj?.authorization?.accessToken,
+                'eAD': true,
+            }
+              $.ajax({
+                url: `${connectionDetails.agentassisturl}/api/1.1/botmessages/chathistorytoagentassist?botId=${userBotConversationDetails.botId}&userId=${userBotConversationDetails.userId}&sessionId=${userBotConversationDetails.sessionId}`,
+                type: 'get',
+                headers: headersVal,
+                dataType: 'json',
+                success:  (data) => {
+                  console.log(data);
+                  if(data && data.length > 0) {
+                    this.handleSubjectService.setUserHistoryData(data);
+                  }
+                },
+                error: function (err) {
+                    console.error("Unable to fetch the details with the provided data", err);
+                }
+            });
+        }});
+    }
+    else if(e.data.name === 'setAgentInfo'){
       console.log(e, "event", e.data.agentDetails, "agent details");
       this.localStorageService.agentDetails = e.data.agentDetails ? e.data.agentDetails : null;
     }else if(e.data.name === 'setUserInfo'){
       console.log(e, "event", e.data.userDetails, "user details");
       this.localStorageService.userDetails = e.data.userDetails ? e.data.userDetails : null;
+    } else if(e.data.type === 'AGENT') {
+      console.log(e.data);
+      this.emitUserAgentMessage(e.data, 'agent_inp_msg');
+    }else if(e.data.type === 'USER') {
+      console.log(e.data);
+      this.emitUserAgentMessage(e.data, 'user_inp_msg');
     }
+  }
+
+  emitUserAgentMessage(payload: userAgInputMessages, eType='') {
+    // emit userAgentMsg
+    if( eType === 'user_inp_msg') {
+      this.webSocketService.emitEvents(EVENTS.user_sent_message, payload);
+    } else if(eType === 'agent_inp_msg') {
+      this.webSocketService.emitEvents(EVENTS.agent_sent_message, payload);
+    }
+
+
   }
 
   initAgentAssist(chatConfig, params) {

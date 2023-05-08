@@ -1,0 +1,24 @@
+<div class="history-content" *ngIf="historyResponse && historyResponse.length > 0">
+  <ng-container *ngFor="let conv of historyResponse">
+      <div class="other-user-bubble" [id]="'otherBubble-' + conv._id"
+          *ngIf="conv.from == 'User' && conv.message && conv.message !== ''">
+          <div class="name-with-time">
+              <!-- <div class="u-name">${this.parsedCustomData?.userName || this.parsedCustomData?.fName + this.parsedCustomData?.lName || 'Customer'}</div> -->
+              <div class="u-time">{{conv.timestampValue | converTimestampToDate}}</div>
+          </div>
+          <div class="bubble-data" id="userInputMsg">
+              <div class="b-text">{{conv.message}}</div>
+          </div>
+      </div>
+      <div class="current-user-bubble" [id]="'currentUser-' + conv._id"
+          *ngIf="conv.from == 'Agent' && conv.message && conv.message !== ''">
+          <div class="name-with-time">
+              <div class="u-time">{{conv.timestampValue | converTimestampToDate}}</div>
+              <div class="u-name">You</div>
+          </div>
+          <div class="bubble-data">
+              <div class="b-text">{{conv.message}}</div>
+          </div>
+      </div>
+  </ng-container>
+</div>

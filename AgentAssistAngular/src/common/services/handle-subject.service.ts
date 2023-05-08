@@ -21,6 +21,9 @@ export class HandleSubjectService {
   public isLoaderSetSubject = new BehaviorSubject<boolean>(false);
   public proactiveModeSubject = new Subject<boolean>();
   public autoBotIdSubject$ = new Subject<object>();
+  public userHistoryDataSubject$ = new BehaviorSubject<object>(null);
+  public userBotConversationDetails$ = new BehaviorSubject<object>(null);
+  public userAgentTranscriptionConversationHistory$ = new BehaviorSubject<object>(null);
 
   constructor() { }
 
@@ -96,5 +99,19 @@ export class HandleSubjectService {
 
   setProactiveModeStatus(flag){
     this.proactiveModeSubject.next(flag);
+  }
+
+  setUserHistoryData(data){
+    if(data && data.length > 0) {
+      this.userHistoryDataSubject$.next(data);
+    }
+  }
+
+  setUserAgentTranscriptionHistory(data) {
+    this.userAgentTranscriptionConversationHistory$.next(data);
+  }
+
+  setUserBotConvosDetails(data) {
+    this.userBotConversationDetails$.next(data);
   }
 }

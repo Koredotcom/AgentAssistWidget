@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { EVENTS } from 'src/common/helper/events';
 import { WebSocketService } from 'src/common/services/web-socket.service';
@@ -10,6 +10,8 @@ import { CommonService } from 'src/common/services/common.service';
 import { KoreGenerateuuidPipe } from 'src/common/pipes/kore-generateuuid.pipe';
 import { DesignAlterService } from 'src/common/services/design-alter.service';
 import { LocalStorageService } from 'src/common/services/local-storage.service';
+import { MockDataService } from 'src/common/services/mock-data.service';
+// import { ServiceInvokerService } from 'src/common/services/service-invoker.service';
 declare const $: any;
 @Component({
   selector: 'app-home',
@@ -42,9 +44,14 @@ export class HomeComponent implements OnInit {
   proactiveModeEnabled: boolean = false;
   isLoader;
   isBackBtnClicked: boolean = false;
+  showHistoryTab : boolean = false;
+  convHistoryResponse : any;
+
   constructor(public handleSubjectService: HandleSubjectService, public websocketService: WebSocketService,
     public sanitizeHTMLPipe: SanitizeHtmlPipe, public commonService: CommonService, private koregenerateUUIDPipe: KoreGenerateuuidPipe,
-    private designAlterService: DesignAlterService, private localStorageService: LocalStorageService) { }
+    private designAlterService: DesignAlterService, private localStorageService: LocalStorageService,
+    private mockDataService : MockDataService,
+    private cdRef : ChangeDetectorRef ) { }
   ngOnInit(): void {
 
     this.subscribeEvents();
@@ -100,13 +107,24 @@ export class HomeComponent implements OnInit {
 
     let subscription5 = this.handleSubjectService.isLoaderSetSubject.subscribe((val)=>{
       this.isLoader = val;
-    })
+    });
+
+    let subscription6 = this.handleSubjectService.userHistoryDataSubject$.subscribe((res : any) => {
+      console.log(res, "response");
+      if(res && res.length > 0){
+        this.convHistoryResponse = res;
+        this.showHistoryTab = !(this.commonService.isCallConversation) ? true : false;
+      }
+    });
+
+
 
     this.subscriptionsList.push(subscription1);
     this.subscriptionsList.push(subscription2);
     this.subscriptionsList.push(subscription3);
     this.subscriptionsList.push(subscription4);
     this.subscriptionsList.push(subscription5);
+    this.subscriptionsList.push(subscription6);
   }
 
   //summary popup related code
@@ -436,7 +454,7 @@ setProactiveMode(){
   }
 
   onScrollEvent(event) {
-    if (this.activeTab == this.projConstants.ASSIST || this.activeTab == this.projConstants.MYBOT || this.activeTab == this.projConstants.TRANSCRIPT) {
+    if (this.activeTab == this.projConstants.ASSIST || this.activeTab == this.projConstants.MYBOT || this.activeTab == this.projConstants.TRANSCRIPT || this.activeTab == this.projConstants.HISTORY) {
       if (event && event?.type) {
         if (event.type == this.projConstants.PS_Y_REACH_END) {
           this.commonService.scrollContent[this.activeTab].scrollAtEnd = true;
@@ -486,9 +504,9 @@ setProactiveMode(){
   }
 
   updateScrollButton() {
-    let dynamicBlockId = this.commonService.tabNamevsId[this.activeTab];
-    let lastelement = this.designAlterService.getLastElement(dynamicBlockId);
-    let scrollAtEnd = !this.designAlterService.isScrolledIntoView(lastelement) ? true : false;
+    let dynamicBlockId = this.commonService.tabNamevsId[this.activeTab];    
+    let lastelement = this.designAlterService.getLastElement(dynamicBlockId);    
+    let scrollAtEnd = !this.designAlterService.isScrolledIntoView(lastelement) ? true : false;    
     this.commonService.scrollContent[this.activeTab].scrollAtEnd = scrollAtEnd;
     if (!scrollAtEnd) {
       $(".scroll-bottom-show-btn").removeClass('hiddenEle');
@@ -496,6 +514,7 @@ setProactiveMode(){
     } else {
       $(".scroll-bottom-show-btn").addClass('hiddenEle');
     }
+    this.cdRef.detectChanges();
   }
 
   @HostListener('click', ['$event'])
@@ -857,6 +876,12 @@ setProactiveMode(){
 
     this.websocketService.emitEvents(EVENTS.agent_feedback_request, agent_assist_feedback_request);
 
+  }
+
+  scrollToTranscriptElement(top){
+    if(top > 0){
+      this.psBottom.directiveRef.scrollToTop(top);
+    }
   }
 
 }
