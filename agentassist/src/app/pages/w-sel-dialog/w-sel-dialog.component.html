@@ -43,7 +43,7 @@
         <ng-container *ngIf="!existingBotsFetching">
             <div *ngIf='selectBotMod.first' [ngClass]="{'backing-up': isBackInProgress}" class="existing-bot-data">
                 <div class="header-sec">
-                    <div class="title-arrow"><img src="assets/icons/welcome/arrow-back.svg" (click)="selectBackStep()">{{ "ONBOARDING.SELECT_EXISTING_BOTS" | translate }}</div>
+                    <div class="title-arrow"><img src="assets/icons/welcome/arrow-back.svg" (click)="selectBackStep()" class="d-none">{{ "ONBOARDING.SELECT_EXISTING_BOTS" | translate }}</div>
                     <div class="kr-sg-input-search" [hidden]="!botList?.length">                                                 
                         <input type="text" [placeholder]="'PLACEHOLDERS.SEARCH_BOT' | translate" maxlength="50" [(ngModel)]="searchBot" class="input-search">
                         <img src="assets/icons/search_gray.svg" class="search-icon">
@@ -83,7 +83,7 @@
                                 {{ "ONBOARDING.PLS_CREATE_NEW_BOT" | translate }}
                             </div>
                         </div>
-                        <!-- <div class="create-backup">
+                        <div class="create-backup">
                             <div class="kr-sg-checkbox">
                                 <input id="checkbox-1" checked class="checkbox-custom" [(ngModel)]="isBackup" type="checkbox">
                                 <label for="checkbox-1" class="checkbox-custom-label">{{ "ONBOARDING.CREATE_BACKUP" | translate }}</label>
@@ -91,7 +91,7 @@
                             <div class="sub-desc">
                                 ({{ "ONBOARDING.UR_BOT_WILL_MODIFIED" | translate }})
                             </div>
-                        </div> --> <!--commented code for agent assist-->
+                        </div> <!--commented code for agent assist-->
                     </div>
                 </perfect-scrollbar>
                 <div class="please-wait" *ngIf='isBackInProgress'>
@@ -172,7 +172,7 @@
     <div class="container-selection-bots p-0" *ngIf="step == 2 && activeMod.createNew">
         <div class="createnew-bot-container" *ngIf='!isNewBot'>
             <div class="header-sec-new-bot">
-                <img src="assets/icons/welcome/arrow-back.svg" (click)="backStep()">{{ "ONBOARDING.CREATE_A_NEW_BOT" | translate }}
+                <img src="assets/icons/welcome/arrow-back.svg" (click)="backStep()" class="d-none">{{ "ONBOARDING.CREATE_A_NEW_BOT" | translate }}
             </div>
             <perfect-scrollbar class="create-new-scroll">
                 <div class="bot-add-inputs">
