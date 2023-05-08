@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { connectionObj } from 'src/common/constants/proj.cnts';
 import { KoreGenerateuuidPipe } from 'src/common/pipes/kore-generateuuid.pipe';
@@ -12,17 +12,18 @@ import { TemplateRenderClassService } from 'src/common/services/template-render-
 import { Router } from '@angular/router';
 import { userAgInputMessages } from 'src/common/helper/data-models';
 import { EVENTS } from 'src/common/helper/events';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnDestroy {
   title = 'AgentAssistWidget';
   isGrantSuccess = false;
   errorMsg : string = '';
-
+  subsciption = new Subscription();
   constructor(private webSocketService: WebSocketService,
               private service: CommonService,
               private route: ActivatedRoute,
@@ -32,6 +33,10 @@ export class AppComponent {
               private templateChatConfig: TemplateRenderClassService,
               private router: Router) {
   }
+  ngOnDestroy(): void {
+    this.subsciption1.unsubscribe();
+    this.subsciption.unsubscribe();
+  }
 
   ngOnInit() {
     window.addEventListener("unload", (event) => {
@@ -40,8 +45,11 @@ export class AppComponent {
       this.localStorageService.userDetails = {};
     });
 
-    this.route.queryParams
+    this.subsciption = this.route.queryParams
       .subscribe(params => {
+        if(!(Object.keys(params)?.length > 0)){
+          return
+        }
         this.service.configObj = {...params};
         window.addEventListener("message", this.receiveMessage.bind(this), false);
         // let parentUrl = window.parent.location.hostname;
@@ -102,7 +110,7 @@ export class AppComponent {
       $('body').addClass('default-color-scheme')
     }
   }
-
+  subsciption1 = new Subscription()
   receiveMessage(e) {
     if(e.data.name === 'init_agentassist') {
       console.log(e, "data from smartAssist");
@@ -115,7 +123,7 @@ export class AppComponent {
         let userBotConversationDetails = e.data;
           let connectionDetails;
           let headersVal = {};
-          this.handleSubjectService.connectDetailsSubject.subscribe((response: any) => {
+          this.subsciption1 = this.handleSubjectService.connectDetailsSubject.subscribe((response: any) => {
             if (response) {
               connectionDetails = response;
               headersVal = {
