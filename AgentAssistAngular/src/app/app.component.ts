@@ -137,7 +137,7 @@ export class AppComponent implements OnDestroy {
                 dataType: 'json',
                 success:  (data) => {
                   console.log(data);
-                  if(data && data.length > 0) {
+                  if(data && data.messages > 0) {
                     this.handleSubjectService.setUserHistoryData(data);
                   }
                 },
