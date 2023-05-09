@@ -146,7 +146,7 @@ export class TranscriptComponent implements OnInit {
 
     let subscription5 = this.handleSubjectService.userHistoryDataSubject$.subscribe((res : any) => {
       console.log(res, "response inside history");
-      if(res && res.messages > 0){
+      if(res && res.messages.length > 0){
         this.historyResponse = res;
         this.prepareConversation();
       }

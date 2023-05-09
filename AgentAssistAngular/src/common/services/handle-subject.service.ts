@@ -102,7 +102,7 @@ export class HandleSubjectService {
   }
 
   setUserHistoryData(data){
-    if(data && data.messages > 0) {
+    if(data && data.messages.length > 0) {
       this.userHistoryDataSubject$.next(data);
     }
   }

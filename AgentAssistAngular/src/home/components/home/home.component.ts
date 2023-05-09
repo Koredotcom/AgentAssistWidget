@@ -111,7 +111,7 @@ export class HomeComponent implements OnInit {
 
     let subscription6 = this.handleSubjectService.userHistoryDataSubject$.subscribe((res : any) => {
       console.log(res, "response");
-      if(res && res.messages > 0){
+      if(res && res.messages.length > 0){
         this.convHistoryResponse = res;
         this.showHistoryTab = !(this.commonService.isCallConversation) ? true : false;
       }

@@ -37,7 +37,7 @@ export class UserBotHistoryComponent implements OnInit, OnDestroy{
   subscribeEvents(){
     let subscription1 = this.handleSubjectService.userHistoryDataSubject$.subscribe((res : any) => {
       console.log(res, "response inside history");
-      if(res && res.messages > 0){
+      if(res && res.messages.length > 0){
         this.historyResponse = res;
         this.formatHistoryResponse();
       }
