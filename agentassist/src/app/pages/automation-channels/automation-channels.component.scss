@@ -221,14 +221,20 @@
                 .icon_block{
                     width: 48px;
                     height: 48px;
-                    background: #FEF2F2;
                     border-radius: 24px;
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    color: #EF4444;
                     font-size: 16px;
                     margin-bottom: 20px;
+                }
+                .icon_block_red{
+                    background: #FEF2F2;
+                    color: #EF4444;
+                }
+                .icon_block_blue{
+                    color: #225EB6;
+                    background: #EAF1FC;
                 }
                 .close-delete{
                     position: absolute;

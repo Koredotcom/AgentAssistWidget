@@ -1,5 +1,6 @@
 <perfect-scrollbar [config]="config" class="sidebar-fixed" [ngClass]="{'is-upgrade-true': isPlan && !workflowService.onPremise}">
-	<div ngbDropdown class="kr-sg-dropdowns automationBotDD" container="body" placement="right-top">
+	<ng-container *ngIf="type === 'config'">
+		<div ngbDropdown class="kr-sg-dropdowns automationBotDD" container="body" placement="right-top">
 		<button type="button" class="btn btn-outline-primary automationBot" id="dropdownBasic1" ngbDropdownToggle>
 		  <img src="{{ currentBt?.icon }}">
 		  <span class="link-name">{{ currentBt?.name }}</span>
@@ -35,6 +36,7 @@
 		</perfect-scrollbar>
 		</div>
 	  </div>
+	</ng-container>
 	<div class="list-group list-group-flush" *ngIf="false">
 		<div class="group-links"  *hasPermission="['admin']">
 			<div class="group-heading">{{"ANALYTICS.AUTOMATION" | translate}}</div>
