@@ -908,36 +908,37 @@ export class AssistComponent implements OnInit {
       $('#dynamicBlock .empty-data-no-agents').addClass('hide');
       let msgStringify = JSON.stringify(result);
       let newTemp = encodeURI(msgStringify);
-      let dynamicBlockDiv = $('#dynamicBlock');
-      if (data.buttons?.length > 1) {
-        this.welcomeMsgResponse = data;
-      } else {
-        let botResHtml = this.assisttabService.smallTalkTemplateForTemplatePayload(data.buttons[0], uuids, data, result,newTemp);
-        let titleData = ``;
-        let actionLinkTemplate = ``;
-        if(this.smallTalkTemplateRenderCheck(data, result)){
-            isTemplateRender = false;
-            titleData = `<div class="title-data" ><ul class="chat-container" id="displayData-${uuids}"></ul></div>`;
-            let sendData = result?.parsedPayload ? newTemp : data.buttons[0].value;
-            actionLinkTemplate = this.smallTalkActionLinkTemplate(uuids, sendData);
-        }else{
-            actionLinkTemplate = this.smallTalkActionLinkTemplate(uuids, data.buttons[0].value)
-            titleData = `<div class="title-data" id="displayData-${uuids}">${data.buttons[0].value}</div>`
-            isTemplateRender = true;
-            result.parsedPayload = null;
-        }
-        dynamicBlockDiv.append(botResHtml);
-        $(`#smallTalk-${uuids} .agent-utt`).append(titleData);
-        $(`#smallTalk-${uuids} .agent-utt`).append(actionLinkTemplate);
-        $(`.override-input-div`).remove();
-        if (data.isPrompt) {
-          this.smallTalkOverrideButtonTemplate(uuids);
-        }
-        this.commonService.hideSendOrCopyButtons(result.parsedPayload, `#smallTalk-${uuids} .agent-utt`, 'smallTalk')
+      let dynamicBlockDiv = $('#dynamicBlock');      
+      let botResHtml = this.assisttabService.smallTalkTemplateForTemplatePayload(data.buttons[0], uuids, data, result,newTemp);
+      let titleData = ``;
+      let actionLinkTemplate = ``;
+      if(this.smallTalkTemplateRenderCheck(data, result)){
+          isTemplateRender = false;
+          titleData = `<div class="title-data" ><ul class="chat-container" id="displayData-${uuids}"></ul></div>`;
+          let sendData = result?.parsedPayload ? newTemp : data.buttons[0].value;
+          actionLinkTemplate = this.smallTalkActionLinkTemplate(uuids, sendData);
+      }else{
+          actionLinkTemplate = this.smallTalkActionLinkTemplate(uuids, data.buttons[0].value)
+          titleData = `<div class="title-data" id="displayData-${uuids}">${data.buttons[0].value}</div>`
+          isTemplateRender = true;
+          result.parsedPayload = null;
       }
+      dynamicBlockDiv.append(botResHtml);
+      $(`#smallTalk-${uuids} .agent-utt`).append(titleData);
+      $(`#smallTalk-${uuids} .agent-utt`).append(actionLinkTemplate);
+      $(`.override-input-div`).remove();
+      if (data.isPrompt) {
+        this.smallTalkOverrideButtonTemplate(uuids);
+      }
+      this.commonService.hideSendOrCopyButtons(result.parsedPayload, `#smallTalk-${uuids} .agent-utt`, 'smallTalk')
+      
       setTimeout(() => {
         this.updateNewMessageUUIDList(uuids);
       }, this.waitingTimeForUUID);
+    }
+
+    if (data.buttons?.length > 1 && data.sendMenuRequest) {
+      this.welcomeMsgResponse = data;
     }
 
     let renderedMessage = !isTemplateRender ? this.templateRenderClassService.AgentChatInitialize.renderMessage(result) : '';

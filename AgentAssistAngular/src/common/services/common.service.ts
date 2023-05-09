@@ -845,6 +845,11 @@ export class CommonService {
     if((!this.configObj.source || this.configObj.source !== 'smartassist-color-scheme') && parsedPayload){
         $(lastchild).find('.send-run-btn').addClass('hide')
     }
+
+    if(this.isCallConversation == true){
+      $(lastchild).find('.copy-btn').addClass('hide')
+      $(lastchild).find('.send-run-btn').addClass('hide')
+    }
   }
 
   //See more buttons update
