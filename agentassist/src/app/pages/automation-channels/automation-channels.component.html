@@ -105,7 +105,7 @@
 
 <ng-template #contentConfirmChatChannel let-modal>
 	<div class="delete-comp-wrapper">
-        <div class="icon_block">
+        <div class="icon_block"  [ngClass]="markDefaultBot ? 'icon_block_red' : 'icon_block_blue'">
             <i class="icon-sa-info"></i>
         </div>
         <div class="close-delete" (click)="modal.dismiss()">
@@ -113,7 +113,8 @@
         </div>
         <div class="body-data-delete">
             <div class="t-heading">Confirm Changes</div>
-            <div class="d-desc">This bot will be your default automation bot</div>
+            <div class="d-desc" *ngIf="!markDefaultBot">This bot will be your default automation bot</div>
+            <div class="d-desc" *ngIf="markDefaultBot">Are you Sure, you want to remove this bot as your default automation bot?</div>
         </div>
         <div class="footer-btns-data">
             <button class="kr-sg-button-secondary btn_lg" (click)="confirmDefaultBot('no')">No</button>
