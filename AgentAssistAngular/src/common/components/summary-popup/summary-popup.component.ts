@@ -20,11 +20,9 @@ export class SummaryPopupComponent implements OnInit {
   }
 
   ngOnChanges(changes){
-    this.editedSummaryText = (
-      changes.summaryText &&
-      changes.summaryText.currentValue?.summary &&
-      changes.summaryText.currentValue?.summary[0]?.summary_text) ?
-      changes.summaryText.currentValue?.summary[0]?.summary_text : '';
+    if(changes?.summaryText?.currentValue?.summary?.length > 0){
+        this.editedSummaryText = changes.summaryText.currentValue.summary[0]
+    }
   }
 
   summaryButtonClick(flag){
