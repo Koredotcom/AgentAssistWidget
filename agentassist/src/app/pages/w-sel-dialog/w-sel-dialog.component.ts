@@ -931,6 +931,9 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
     // payload.deflectAppStatus.virtualAssistant.enabled = !!this.config.deflectAppStatus.virtualAssistant.type;
     this.service.invoke('post.automationbots',{params:{'isAgentAssist':true}}, payload).subscribe(
       res => {
+        if(!res.name){
+              res.name = payload.name
+        }
         if(_.isArray(this.appsData)) {
           this.appsData.unshift(res);
         }
@@ -940,10 +943,10 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
         this.workflowService.deflectApps(this.appsData);
         this.notificationService.notify(this.translate.instant("ONBOARDING.BT_CREATION_SUCCESS"), 'success');
         setTimeout(() => {
-             this.workflowService.switchBt$.next(res);
-             this.router.navigate(['/config/usecases']);
-             this.wSel.emit();
-             this.isNewBot = false;
+          this.router.navigate(['/config/usecases']);
+          this.workflowService.switchBt$.next(res);
+          this.wSel.emit();
+          this.isNewBot = false;
         }, 500);
       },
       errRes => {
