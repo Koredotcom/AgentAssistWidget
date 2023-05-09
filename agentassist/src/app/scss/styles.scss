@@ -2370,3 +2370,15 @@ body{
       }
     }
   }
+
+  app-bt-container{
+	.builder-load-container{
+		.left-menu-builder{
+			app-mainmenu{
+				.sidebar-fixed{
+					height: calc(100vh - 60px) !important;
+				}
+			}
+		}
+	}
+}
