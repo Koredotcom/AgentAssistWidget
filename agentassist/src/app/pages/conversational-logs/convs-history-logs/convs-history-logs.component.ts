@@ -100,7 +100,7 @@ export class ConvsHistoryLogsComponent implements OnInit {
       this.getclickedConversationHistory();
     }))
     .subscribe((data)=>{
-      this.chatHistData.push(...data);
+      this.chatHistData.push(...data.messages);
       // this.historyData = data ? data : [];
     });
   }
