@@ -47,9 +47,9 @@ export class AppComponent implements OnDestroy {
 
     this.subsciption = this.route.queryParams
       .subscribe(params => {
-        if(!(Object.keys(params)?.length > 0)){
-          return
-        }
+        // if(!(Object.keys(params)?.length > 0)){
+        //   return
+        // }
         this.service.configObj = {...params};
         window.addEventListener("message", this.receiveMessage.bind(this), false);
         // let parentUrl = window.parent.location.hostname;
