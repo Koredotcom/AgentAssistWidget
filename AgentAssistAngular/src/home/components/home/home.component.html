@@ -17,12 +17,12 @@
                     </div>
                     <!-- If parent url is Smartassist and srcChannels are "RTM or msteams" should not show the History Tab -->
                     <!-- History Tab is applicable for 3rd party AgentDesktops -->
-                    <div class="tab-icon" id="HistoryTabIcon" (click)="changeActiveTab(projConstants.HISTORY)"
+                    <!-- <div class="tab-icon" id="HistoryTabIcon" (click)="changeActiveTab(projConstants.HISTORY)"
                         [ngClass]="{'active-tab': activeTab == projConstants.HISTORY}" *ngIf="showHistoryTab">
                         <i class="ast-bot font-13" id="HistoryIcon"></i>
                         <div class="title-tab" id="AssistLabel">{{projConstants.HISTORY}}</div>
                         <div class="custom-tootltip-tabs">{{projConstants.HISTORY}}</div>
-                    </div>
+                    </div> -->
                     <div class="tab-icon" id="transcriptIcon" (click)="changeActiveTab(projConstants.TRANSCRIPT)"
                         [ngClass]="{'active-tab': activeTab == projConstants.TRANSCRIPT}" [class.hide]="!commonService.isCallConversation">
                         <i class="ast-transcipt font-15" id="scriptIcon"></i>
@@ -62,7 +62,7 @@
         <perfect-scrollbar id="homeScrollBar" class="home-scroll-bar" #psBottom (psYReachEnd)="onScrollEvent($event)" (psYReachStart)="onScrollEvent($event)" (psScrollUp)="onScrollEvent($event)">
             <div class="body-data-container if-suggestion-search" id="bodyContainer" #tabBody>
                 <div class="dialog-task-data" id="dynamicBlocksData">
-                  <ng-container>
+                  <!-- <ng-container >
                     <div class="transcipt-only-calls-data" id="historyContainer" [class.hide]="activeTab != projConstants.HISTORY">
                         <div class="data-contnet">
                             <app-user-bot-history ></app-user-bot-history>
@@ -74,7 +74,7 @@
                             </button>
                         </div>
                     </div>
-                </ng-container>
+                </ng-container> -->
                     <ng-container>
                         <app-transcript [class.hide]="activeTab != projConstants.TRANSCRIPT"  (scrollToBottomEvent)="scrollToBottom($event)"  (newButtonScrollClickEvents)="scrollClickEvents($event)" (scrollToTranscriptElement)="scrollToTranscriptElement($event)"></app-transcript>
                     </ng-container>
