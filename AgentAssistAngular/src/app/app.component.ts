@@ -130,21 +130,21 @@ export class AppComponent implements OnDestroy {
                 'Authorization': this.service.grantResponseObj?.authorization?.token_type + ' ' + this.service.grantResponseObj?.authorization?.accessToken,
                 'eAD': true,
             }
-              $.ajax({
-                url: `${connectionDetails.agentassisturl}/api/1.1/botmessages/chathistorytoagentassist?botId=${userBotConversationDetails.botId}&userId=${userBotConversationDetails.userId}&sessionId=${userBotConversationDetails.sessionId}`,
-                type: 'get',
-                headers: headersVal,
-                dataType: 'json',
-                success:  (data) => {
-                  console.log(data);
-                  if(data && data.messages.length > 0) {
-                    this.handleSubjectService.setUserHistoryData(data);
-                  }
-                },
-                error: function (err) {
-                    console.error("Unable to fetch the details with the provided data", err);
-                }
-            });
+            //   $.ajax({
+            //     url: `${connectionDetails.agentassisturl}/api/1.1/botmessages/chathistorytoagentassist?botId=${userBotConversationDetails.botId}&userId=${userBotConversationDetails.userId}&sessionId=${userBotConversationDetails.sessionId}`,
+            //     type: 'get',
+            //     headers: headersVal,
+            //     dataType: 'json',
+            //     success:  (data) => {
+            //       console.log(data);
+            //       if(data && data.messages.length > 0) {
+            //         this.handleSubjectService.setUserHistoryData(data);
+            //       }
+            //     },
+            //     error: function (err) {
+            //         console.error("Unable to fetch the details with the provided data", err);
+            //     }
+            // });
         }});
     }
     else if(e.data.name === 'setAgentInfo'){
