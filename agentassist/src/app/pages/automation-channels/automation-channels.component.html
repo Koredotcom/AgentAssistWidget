@@ -81,7 +81,8 @@
                     <div class="row-data">
                         <div class="kr-sg-checkbox">
                             <input id="checkbox-1" class="checkbox-custom" type="checkbox" name="markDefaultBot"  [checked]="markDefaultBot" (change)="EnableDefaultSelection($event,contentConfirmChatChannel)">
-                            <label for="checkbox-1" class="checkbox-custom-label">Mark as connected AgentAssist Bot <i class="icon-sa-help"></i> </label>
+                            <label for="checkbox-1" class="checkbox-custom-label">Mark as connected AgentAssist Bot </label>
+                            <span tooltipClass="tooltip-global-styles" ngbTooltip="Marking the bot is just to inform the config manager about which bot is being used in third party agent desktop. It doesn't affect the working of bot in any way" class="m-l-6"> <i class="icon-sa-help"></i></span>
                         </div>     
                     </div>
                 </div>
