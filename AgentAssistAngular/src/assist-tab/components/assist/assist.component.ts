@@ -909,7 +909,7 @@ export class AssistComponent implements OnInit {
       let msgStringify = JSON.stringify(result);
       let newTemp = encodeURI(msgStringify);
       let dynamicBlockDiv = $('#dynamicBlock');  
-      if(data?.buttons.length == 1){
+      if(data?.buttons?.length == 1){
         let botResHtml = this.assisttabService.smallTalkTemplateForTemplatePayload(data.buttons[0], uuids, data, result,newTemp);
         let titleData = ``;
         let actionLinkTemplate = ``;
