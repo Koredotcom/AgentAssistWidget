@@ -167,7 +167,7 @@ export class WelcomeeventComponent implements OnInit {
     this.taskEnable = welcomeTaskData && welcomeTaskData.events && welcomeTaskData.events[0] && welcomeTaskData.events[0][this.taskActive]?.enabled ? true : false;
     this.selectedBot = this.taskEnable ? this.filterBotfromAutomationBotList(welcomeTaskData.events[0][this.taskActive].linkedBotId) : null;
     if(this.currentBt.type == this.universalBot && tabChange && this.selectedBot?._id){
-      let usecaseList = await this.getUseCaseData(this.selectedBot._id);
+      this.getUseCaseData(this.selectedBot._id);
     }
     this.selectedUseCase = this.taskEnable ? this.filterUseCaseFromUseCaseList(welcomeTaskData.events[0][this.taskActive].taskRefId) : null;
   }
