@@ -50,7 +50,7 @@ export class TranscriptHistoryComponent {
           dataType: 'json',
           success:  (data) => {
             console.log(data);
-            if(data && data.result.length > 0) {
+            if(data && data?.result?.length > 0) {
               this.historyResponse = data.result;
             }
           },

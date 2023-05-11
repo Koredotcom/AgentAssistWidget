@@ -224,12 +224,6 @@ export class AssistComponent implements OnInit {
       }
     });
 
-    let subscription14 = this.handleSubjectService.userBotConversationDetails$.subscribe((res) => {
-      if(res) {
-        this.userBotSessionDetails = res;
-      }
-    });
-
     this.subscriptionsList.push(subscription1);
     this.subscriptionsList.push(subscription2);
     this.subscriptionsList.push(subscription3);
@@ -243,7 +237,6 @@ export class AssistComponent implements OnInit {
     this.subscriptionsList.push(subscription11);
     this.subscriptionsList.push(subscription12);
     this.subscriptionsList.push(subscription13);
-    this.subscriptionsList.push(subscription14);
   }
 
   callHistoryApi(){
@@ -908,7 +901,7 @@ export class AssistComponent implements OnInit {
       $('#dynamicBlock .empty-data-no-agents').addClass('hide');
       let msgStringify = JSON.stringify(result);
       let newTemp = encodeURI(msgStringify);
-      let dynamicBlockDiv = $('#dynamicBlock');  
+      let dynamicBlockDiv = $('#dynamicBlock');
       if(data?.buttons?.length == 1){
         let botResHtml = this.assisttabService.smallTalkTemplateForTemplatePayload(data.buttons[0], uuids, data, result,newTemp);
         let titleData = ``;
@@ -932,8 +925,8 @@ export class AssistComponent implements OnInit {
           this.smallTalkOverrideButtonTemplate(uuids);
         }
         this.commonService.hideSendOrCopyButtons(result.parsedPayload, `#smallTalk-${uuids} .agent-utt`, 'smallTalk')
-      }    
-      
+      }
+
       setTimeout(() => {
         this.updateNewMessageUUIDList(uuids);
       }, this.waitingTimeForUUID);
