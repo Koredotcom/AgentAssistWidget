@@ -84,7 +84,7 @@ export class WelcomeeventComponent implements OnInit {
     });
   }
 
-  async updateDetailsOnBotUpdation(bot){    
+  updateDetailsOnBotUpdation(bot){    
     this.currentBt = bot;
     this.streamId = this.currentBt._id;
     if(this.currentBt.type == this.universalBot){
