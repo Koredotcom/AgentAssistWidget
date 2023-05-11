@@ -140,15 +140,17 @@ export class HomeComponent implements OnInit {
 
 
     let data = response.summaryText;
-    let editedSummaryText = response.editedSummary;
-    data["summary"] = []
+    // let editedSummaryText = response.editedSummary;
+    data["summary"] = [
+      { 'summary_text': '' }
+    ]
 
     // if (data?.summary != '') {
       // data['summary'][0]['summary_text'] = editedSummaryText;
     // } else {
       // data['summary'] = [];
-      data['summary'].push({ 'summary_text': editedSummaryText });
-    // }
+      // }
+    data['summary'].summary_text = response.editedSummary;
     var message = {
       name: "agentAssist.conversation_summary",
       conversationId: this.connectionDetails.conversationId,
@@ -318,10 +320,10 @@ export class HomeComponent implements OnInit {
         this.handleSubjectService.setRestoreClickEvent({ activeTab: this.activeTab, status: popupObject.status });
       }
     } else if (popupObject.type == this.projConstants.SUMMARY) {
-      this.summaryText = popupObject.summaryText ? popupObject.summaryText : '';
+      this.summaryText = popupObject.editedSummary || '';
       this.showSummaryPopup = popupObject.status;
       if (popupObject.summary) {
-        this.handleSubjectService.setSummarySubmitClickEvent({ activeTab: this.activeTab, summaryText: popupObject.summaryText, editedSummary: popupObject.editedSummaryText });
+        this.handleSubjectService.setSummarySubmitClickEvent({ activeTab: this.activeTab, summaryText: popupObject.summaryText, editedSummary: popupObject.editedSummary });
       }
     }
 
