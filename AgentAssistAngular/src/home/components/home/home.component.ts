@@ -142,7 +142,7 @@ export class HomeComponent implements OnInit {
     let data = response.summaryText;
     // let editedSummaryText = response.editedSummary;
     data["summary"] = [
-      { 'summary_text': '' }
+      { 'summary_text': response.editedSummary }
     ]
 
     // if (data?.summary != '') {
@@ -150,11 +150,13 @@ export class HomeComponent implements OnInit {
     // } else {
       // data['summary'] = [];
       // }
-    data['summary'].summary_text = response.editedSummary;
+    // data['summary'].summary_text = response.editedSummary;
     var message = {
       name: "agentAssist.conversation_summary",
       conversationId: this.connectionDetails.conversationId,
-      payload: data
+      payload: data["summary"] = [
+        { 'summary_text': response.editedSummary }
+      ]
     };
     window.parent.postMessage(message, '*');
   }
