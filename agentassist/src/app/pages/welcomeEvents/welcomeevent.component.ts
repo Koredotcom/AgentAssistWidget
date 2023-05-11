@@ -57,6 +57,7 @@ export class WelcomeeventComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.subscribeEvents();
     this.updateDetailsOnBotUpdation(this.workflowService.getCurrentBt(true));
   }
 
@@ -65,17 +66,17 @@ export class WelcomeeventComponent implements OnInit {
   }
 
   subscribeEvents(){
-    this.subs.sink = this.authService.deflectApps.subscribe( (res : any) => {
-      if(res){
-        this.automationBots = Object.assign([], res);
-        if(this.currentBt.type == this.universalBot){
-          let linkedBotIds = [];
-          let config_publish_bot_array = [...this.currentBt?.configuredBots, ...this.currentBt.publishedBots];
-          linkedBotIds = config_publish_bot_array.map(a => a._id);          
-          this.linkedBots = res.filter(element => linkedBotIds.includes(element._id));          
-        }
-      }
-    });
+    // this.subs.sink = this.authService.deflectApps.subscribe( (res : any) => {
+    //   if(res){
+    //     this.automationBots = Object.assign([], res);
+    //     if(this.currentBt.type == this.universalBot){
+    //       let linkedBotIds = [];
+    //       let config_publish_bot_array = [...this.currentBt?.configuredBots, ...this.currentBt.publishedBots];
+    //       linkedBotIds = config_publish_bot_array.map(a => a._id);          
+    //       this.linkedBots = res.filter(element => linkedBotIds.includes(element._id));          
+    //     }
+    //   }
+    // });
     this.subs.sink = this.workflowService.updateBotDetails$.subscribe((bot)=>{
       if(bot){
         this.updateDetailsOnBotUpdation(bot);
@@ -83,11 +84,28 @@ export class WelcomeeventComponent implements OnInit {
     });
   }
 
-  updateDetailsOnBotUpdation(bot){
+  updateDetailsOnBotUpdation(bot){    
     this.currentBt = bot;
     this.streamId = this.currentBt._id;
-    this.getWelcomeTaskData();
-    this.subscribeEvents();
+    if(this.currentBt.type == this.universalBot){
+      this.getLinkedBots().subscribe(data => {
+        if(data){
+          this.linkedBots = [...data.configuredBots, ...data.publishedBots];
+          this.getWelcomeTaskData();
+        } 
+      });
+    }else{
+      this.getWelcomeTaskData();
+    }
+    
+  }
+
+  getLinkedBots(){
+    let params : any = {
+      'userId' : this.authService.getUserId(),
+      'streamId' : this.streamId
+    }
+    return this.service.invoke('get.universalLinkedBots', params);
   }
 
   // get welcome task and use case data from backend api
@@ -107,16 +125,17 @@ export class WelcomeeventComponent implements OnInit {
     });
   }
   getUseCaseData(botId, update = true) { 
-    const params = {
+    const params : any = {
       streamId: botId,
       search: '',
       filterby: '',
       status: '',
       usecaseType: 'dialog',
-      offset: 0
+      offset: 0,
+      parentBotId : (this.currentBt.type == this.universalBot) ? this.currentBt._id : null
     }
     this.showSpinner = true;
-    this.subs.sink = this.service.invoke('get.usecases', params, {})
+    this.subs.sink = this.service.invoke('get.LinkedBotUsecase', params, {})
       .subscribe((res) => {
         this.showSpinner = false;
         this.conversations = res.usecases;
@@ -131,13 +150,13 @@ export class WelcomeeventComponent implements OnInit {
 
   // updating the welcome task and use case data after api call
   updateUseCaseData(){
-    let usecaseId = this.currentBt._id;
+    let botId = this.currentBt._id;
     if(this.currentBt.type == this.universalBot && this.welcomeTaskData?.events[0]?.[this.taskActive]?.linkedBotId){
       this.getUseCaseData(this.welcomeTaskData.events[0][this.taskActive].linkedBotId);
     }else if(this.currentBt.type == this.universalBot && !this.welcomeTaskData?.events[0]?.[this.taskActive]?.linkedBotId){
       this.updateTaskDetails(this.welcomeTaskData);
     }else if(this.currentBt.type != this.universalBot){
-      this.getUseCaseData(usecaseId);
+      this.getUseCaseData(botId);
     }
   }
   updateWelcomeTaskData(data){
@@ -146,10 +165,13 @@ export class WelcomeeventComponent implements OnInit {
   }
 
   // updating ngmodels in UI based on data from backend.
-  updateTaskDetails(data){
+  updateTaskDetails(data, tabChange=false){
     let welcomeTaskData = Object.assign({}, data);
     this.taskEnable = welcomeTaskData && welcomeTaskData.events && welcomeTaskData.events[0] && welcomeTaskData.events[0][this.taskActive]?.enabled ? true : false;
     this.selectedBot = this.taskEnable ? this.filterBotfromAutomationBotList(welcomeTaskData.events[0][this.taskActive].linkedBotId) : null;
+    if(this.currentBt.type == this.universalBot && tabChange && this.selectedBot?._id){
+      this.getUseCaseData(this.selectedBot._id);
+    }
     this.selectedUseCase = this.taskEnable ? this.filterUseCaseFromUseCaseList(welcomeTaskData.events[0][this.taskActive].taskRefId) : null;
   }
 
@@ -165,7 +187,7 @@ export class WelcomeeventComponent implements OnInit {
   }
   filterUseCaseFromUseCaseList(trid){
     let filteredArray = this.conversations.filter(obj => obj.taskRefId == trid);    
-    if(this.currentBt.type != this.universalBot || (this.currentBt.type == this.universalBot && this.selectedBot && this.selectedBot.name)){
+    if(this.currentBt.type != this.universalBot || (this.currentBt.type == this.universalBot && this.selectedBot && this.selectedBot.botName)){
       if(Object.keys(filteredArray).length > 0){
         return filteredArray[0];
       }
@@ -256,7 +278,9 @@ export class WelcomeeventComponent implements OnInit {
   }
   changeTaskActive(tab){
     this.taskActive = tab;
-    this.updateTaskDetails(this.welcomeTaskData);
+    this.selectedBot = null;
+    this.selectedUseCase = null;
+    this.updateTaskDetails(this.welcomeTaskData, true);
   }
 
   // slider events
