@@ -11,23 +11,30 @@ export class SummaryPopupComponent {
   @Input() summaryText: any;
   @Output() handlePopupEvent = new EventEmitter();
 
-  // editedSummaryText : any;
+  editedSummaryText : any;
 
   constructor() { }
 
-  // ngOnInit(): void {
-  //   this.editedSummaryText = this.summaryText?.summary ? this.summaryText?.summary[0]?.summary_text:'';
-  // }
+  ngOnInit(): void {
+    this.editedSummaryText = this.summaryText?.summary ? this.summaryText?.summary[0] : '';
+  }
 
   ngOnChanges(changes){
     if(changes?.summaryText?.currentValue?.summary?.length > 0){
-        this.summaryText = changes.summaryText.currentValue.summary[0]
+        this.editedSummaryText = changes.summaryText.currentValue.summary[0]
     }
   }
 
   summaryButtonClick(flag){
     if(flag){
-      this.handlePopupEvent.emit({status : false, summary : true, type : ProjConstants.SUMMARY, summaryText : this.summaryText, editedSummary : this.summaryText})
+      this.handlePopupEvent.emit(
+        {
+          status : false, 
+          summary : true, 
+          type : ProjConstants.SUMMARY, 
+          summaryText : this.summaryText, 
+          editedSummary : this.editedSummaryText  
+        })
     }
   }
 

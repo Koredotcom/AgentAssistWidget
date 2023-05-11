@@ -3,8 +3,8 @@
         <div class="header-text summary-header">Summary</div>
             <div class="input-block-optional">
             <div class="label-text">Remarks</div>
-            {{summaryText | json}}
-            <textarea class="input-text" id="summaryText" rows="4" cols="50" [(ngModel)]="summaryText"></textarea>
+            {{editedSummaryText | json}}
+            <textarea class="input-text" id="summaryText" rows="4" cols="50" [(ngModel)]="editedSummaryText"></textarea>
         </div>
         <button class="submit-btn" id="summarySubmit" (click)="summaryButtonClick(true)">Submit</button>
     </div>
