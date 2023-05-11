@@ -2023,5 +2023,7 @@
     "WELCOMEEVENT.SAVE_SUCCESS" : "Configuration has been Saved",
     "WELCOMEEVENT.SAVE_FALIED" : "Failed to upate the Configuration",
     "CHANNELCHAT.SAVE_SUCCESS" : "Configuration has been Saved",
-    "CHANNELCHAT.SAVE_FAILED" : "Failed to update the Configuration"
+    "CHANNELCHAT.SAVE_FAILED" : "Failed to update the Configuration",
+    "NAV.COACHING": "Coaching",
+    "NAV.COACH_TITLE": "Agent Experiences"
 }
