@@ -119,11 +119,11 @@
                                             <div class="label-text">Select Bot</div>
                                             <div class="kr-sg-dropdowns" ngbDropdown>
                                                 <div class="dropdown dropdown-open">
-                                                    <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{selectedBot?.name ? selectedBot?.name : 'Select bot'}}</button>
+                                                    <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{selectedBot?.botName ? selectedBot?.botName : 'Select bot'}}</button>
                                                     <ul class="dropdown-menu content-menu" ngbDropdownMenu>
                                                         <perfect-scrollbar>
                                                             <div class="scroll-ul">
-                                                                <li ngbDropdownItem (click)="changeBot(bot)" *ngFor="let bot of linkedBots"><a>{{bot.name}}</a></li>
+                                                                <li ngbDropdownItem (click)="changeBot(bot)" *ngFor="let bot of linkedBots"><a>{{bot.botName}}</a></li>
                                                             </div>
                                                         </perfect-scrollbar>
                                                     </ul>
@@ -134,7 +134,7 @@
                                             <div class="label-text">Automation</div>
                                             <div class="kr-sg-dropdowns" ngbDropdown>
                                                 <div class="dropdown dropdown-open">
-                                                    <button class="dropdown-toggle dropdown-input" ngbDropdownToggle [disabled]="currentBt.type == universalBot && !selectedBot?.name">{{selectedUseCase?.usecaseName ? selectedUseCase?.usecaseName : 'Select Use Cases'}}</button>
+                                                    <button class="dropdown-toggle dropdown-input" ngbDropdownToggle [disabled]="currentBt.type == universalBot && !selectedBot?.botName">{{selectedUseCase?.usecaseName ? selectedUseCase?.usecaseName : 'Select Use Cases'}}</button>
                                                     <ul class="dropdown-menu content-menu" ngbDropdownMenu>
                                                         <perfect-scrollbar>
                                                             <div class="scroll-ul">

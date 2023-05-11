@@ -1553,5 +1553,15 @@ export class EndPointsService {
       method : 'post'
     }
 
+    this.serviceList['get.universalLinkedBots'] = {
+      endpoint : this.API_SERVER_URL + '/users/:userId/builder/streams/:streamId',
+      method : 'get'
+    }
+
+    this.serviceList['get.LinkedBotUsecase'] = {
+      endpoint: this.API_SERVER_URL + '/smartassist/apps/:streamId/usecases?limit=:limit&offset=:offset&search=:search&filterby=:filterby&usecaseType=:usecaseType&status=:status&parentBotId=:parentBotId&isAgentAssist=true',
+      method : 'get'
+    }
+
   }
 }
