@@ -88,13 +88,16 @@ export class WelcomeeventComponent implements OnInit {
     this.currentBt = bot;
     this.streamId = this.currentBt._id;
     if(this.currentBt.type == this.universalBot){
-      let linkedBots = await this.getLinkedBots().then(data => {
+      this.getLinkedBots().subscribe(data => {
         if(data){
           this.linkedBots = [...data.configuredBots, ...data.publishedBots];
+          this.getWelcomeTaskData();
         } 
       });
+    }else{
+      this.getWelcomeTaskData();
     }
-    this.getWelcomeTaskData();
+    
   }
 
   getLinkedBots(){
@@ -102,7 +105,7 @@ export class WelcomeeventComponent implements OnInit {
       'userId' : this.authService.getUserId(),
       'streamId' : this.streamId
     }
-    return this.service.invoke('get.universalLinkedBots', params).toPromise();
+    return this.service.invoke('get.universalLinkedBots', params);
   }
 
   // get welcome task and use case data from backend api
@@ -162,7 +165,7 @@ export class WelcomeeventComponent implements OnInit {
   }
 
   // updating ngmodels in UI based on data from backend.
-  async updateTaskDetails(data, tabChange=false){
+  updateTaskDetails(data, tabChange=false){
     let welcomeTaskData = Object.assign({}, data);
     this.taskEnable = welcomeTaskData && welcomeTaskData.events && welcomeTaskData.events[0] && welcomeTaskData.events[0][this.taskActive]?.enabled ? true : false;
     this.selectedBot = this.taskEnable ? this.filterBotfromAutomationBotList(welcomeTaskData.events[0][this.taskActive].linkedBotId) : null;
