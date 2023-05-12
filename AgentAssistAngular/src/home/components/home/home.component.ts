@@ -141,9 +141,9 @@ export class HomeComponent implements OnInit {
 
     let data = response.summaryText;
     // let editedSummaryText = response.editedSummary;
-    data["summary"] = [
-      { 'summary_text': response.editedSummary }
-    ]
+    // data["summary"] = [
+    //   { 'summary_text': response.editedSummary }
+    // ]
 
     // if (data?.summary != '') {
       // data['summary'][0]['summary_text'] = editedSummaryText;
@@ -154,9 +154,13 @@ export class HomeComponent implements OnInit {
     var message = {
       name: "agentAssist.conversation_summary",
       conversationId: this.connectionDetails.conversationId,
-      payload: data["summary"] = [
-        { 'summary_text': response.editedSummary }
-      ]
+      payload: {
+        "summary" : [
+          { 
+            'summary_text': response.editedSummary 
+          }
+        ]
+      }
     };
     window.parent.postMessage(message, '*');
   }
