@@ -133,18 +133,29 @@ export class HomeComponent implements OnInit {
   }
 
   handleSummarySubmitClickEvent(response) {
-    let data = response.summaryText;
-    let editedSummaryText = response.editedSummary;
-    if (data?.summary != '') {
-      data['summary'][0]['summary_text'] = editedSummaryText;
-    } else {
-      data['summary'] = [];
-      data['summary'].push({ 'summary_text': editedSummaryText });
-    }
-    var message = {
+    // let data = response.summaryText;
+    // let editedSummaryText = response.editedSummary;
+    // if (data?.summary != '') {
+    //   data['summary'][0]['summary_text'] = editedSummaryText;
+    // } else {
+    //   data['summary'] = [];
+    //   data['summary'].push({ 'summary_text': editedSummaryText });
+    // }
+    // var message = {
+    //   name: "agentAssist.conversation_summary",
+    //   conversationId: this.connectionDetails.conversationId,
+    //   payload: data
+    // };
+    let message = {
       name: "agentAssist.conversation_summary",
       conversationId: this.connectionDetails.conversationId,
-      payload: data
+      payload: {
+        "summary" : [
+          { 
+            'summary_text': response.editedSummary || '',
+          }
+        ]
+      }
     };
     window.parent.postMessage(message, '*');
   }
