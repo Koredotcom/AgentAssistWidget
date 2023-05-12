@@ -91,7 +91,7 @@ export class AssistService {
     <div class="title">Customer Said - </div>
     <div class="agent-utt">
         <div class="action-links">
-            <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}"  data-msg-data="${this.sanitizeHtmlPipe.transform(data.userInput)}">Send</button>
+            <button class="send-run-btn hide" id="sendMsg" data-msg-id="${uuids}"  data-msg-data="${this.sanitizeHtmlPipe.transform(data.userInput)}">Send</button>
             <div class="copy-btn hide" data-msg-id="${uuids}" data-msg-data="${this.sanitizeHtmlPipe.transform(data.userInput)}">
                 <i class="ast-copy" data-msg-id="${uuids}" data-msg-data="${this.sanitizeHtmlPipe.transform(data.userInput)}"></i>
             </div>
