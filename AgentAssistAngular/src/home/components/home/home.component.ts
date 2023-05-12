@@ -321,10 +321,10 @@ export class HomeComponent implements OnInit {
         this.handleSubjectService.setRestoreClickEvent({ activeTab: this.activeTab, status: popupObject.status });
       }
     } else if (popupObject.type == this.projConstants.SUMMARY) {
-      this.summaryText = popupObject.summaryText ? popupObject.summaryText : '';
+      this.summaryText = popupObject.summaryText || '';
       this.showSummaryPopup = popupObject.status;
       if (popupObject.summary) {
-        this.handleSubjectService.setSummarySubmitClickEvent({ activeTab: this.activeTab, summaryText: popupObject.summaryText, editedSummary: popupObject.editedSummaryText });
+        this.handleSubjectService.setSummarySubmitClickEvent({ activeTab: this.activeTab, summaryText: popupObject.summaryText, editedSummary: popupObject.editedSummary });
       }
     }
 
