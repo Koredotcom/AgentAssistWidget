@@ -16,7 +16,7 @@ export class SummaryPopupComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    this.editedSummaryText = this.summaryText?.summary ? this.summaryText?.summary[0]?.summary_text:'';
+    this.editedSummaryText = this.summaryText?.summary ? this.summaryText?.summary[0]: '';
   }
 
   ngOnChanges(changes){
