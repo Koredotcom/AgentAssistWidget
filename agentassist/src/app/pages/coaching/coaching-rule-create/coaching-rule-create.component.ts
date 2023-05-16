@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-coaching-rule-create',
@@ -9,7 +9,13 @@ export class CoachingRuleCreateComponent implements OnInit {
 
   constructor() { }
 
+  @Output() onCloseRule = new EventEmitter();
+
   ngOnInit(): void {
+  }
+
+  closeRule(rule?) {
+    this.onCloseRule.emit(rule);
   }
 
 }
