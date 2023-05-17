@@ -254,67 +254,6 @@
                         .body-data-table-wrapper-coaching{
                             @include table-body-coaching-mixin; 
                         }
-                        // .body-data-table-wrapper-coaching{
-                        //     display: flex;
-                        //     align-items: center;
-                        //     border-bottom: 1px solid #E5E7EB;
-                        //     min-height: 53px;
-                        //     position: relative;
-                        //     .drag-drop-element{
-                        //         position: absolute;
-                        //         right: -20px;
-                        //         top: auto;
-                        //         width: 16px;
-                        //         height: 24px;
-                        //         display: flex;
-                        //         align-items: center;
-                        //         justify-content: center;
-                        //         font-size: 12px;
-                        //         z-index: 9;
-                        //         cursor: grab;
-                        //     }
-                        //     .title-text{
-                        //         font-weight: 400;
-                        //         font-size: 12px;
-                        //         line-height: 18px;
-                        //         color: #404040;
-                        //         position: relative;
-                        //         padding: 0 10px;
-                        //         overflow: hidden;
-                        //         text-overflow: ellipsis;
-                        //         white-space: nowrap;
-                        //         &.rule-text{
-                        //             padding: 17px 10px;
-                        //             z-index: 1;
-                        //             cursor: pointer;
-                        //         }
-                        //     }
-                        //     .actions-info{
-                        //         padding: 0 10px;
-                        //         display: flex;
-                        //         align-items: center;
-                        //         .edit-btn{
-                        //             width: 36px;
-                        //             height: 36px;
-                        //             background: #FFFFFF;
-                        //             border: 1px solid #E5E7EB;
-                        //             border-radius: 6px;
-                        //             outline: 0;
-                        //             display: flex;
-                        //             align-items: center;
-                        //             justify-content: center;
-                        //             color: #404040;
-                        //             cursor: pointer;
-                        //         }
-                        //         .delete-btn{
-                        //             @extend .edit-btn;
-                        //             margin-left: 10px;
-                        //         }
-                        //     }
-                        //     .last-updated-toggle{
-                        //         text-align: right;
-                        //     }
-                        // }
                     }
 
                 }

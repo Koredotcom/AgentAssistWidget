@@ -20,8 +20,136 @@
     <div class="flow-wrapper-body-scroll">
         <perfect-scrollbar>
             <div class="inner-scroll-data-flows">
-                <h1>dajdba</h1>
+                <div class="block-data-triggers">
+                    <div class="triggers-icon-block">
+                        <div class="indication-icon">
+                            <i class="icon-sa-onboarding"></i>
+                        </div>
+                        <div class="title">When...</div>
+                    </div>
+                    <div class="content-data-triggers">
+                        <ng-container *ngTemplateOutlet="addTriggerTemplate;"></ng-container> 
+                    </div>
+                </div>
+                <div class="block-data-triggers">
+                    <div class="triggers-icon-block">
+                        <div class="indication-icon">
+                            <i class="icon-sa-onboarding"></i>
+                        </div>
+                        <div class="title">then do...</div>
+                    </div>
+                    <div class="content-data-triggers">
+                        <ng-container *ngTemplateOutlet="addTriggerTemplate;"></ng-container>
+                    </div>
+                </div>
+                <div class="block-data-triggers">
+                    <div class="triggers-icon-block">
+                        <div class="indication-icon">
+                            <i class="icon-sa-onboarding"></i>
+                        </div>
+                        <div class="title">Assign this to...</div>
+                    </div>
+                    <div class="content-data-triggers">
+                        <ng-container *ngTemplateOutlet="addTriggerTemplate;"></ng-container>
+                    </div>
+                </div>
             </div>
         </perfect-scrollbar>
     </div>
 </div>
+
+
+
+<!-- COmmon trigger template -->
+<ng-template #addTriggerTemplate>
+    <div class="add-triggers">
+        <button class="add-triggers-btn trigger-btn-active">+ Add a trigger</button>
+        <div class="line-indicator"></div>
+        <div class="choose-triggers-block">
+            <div class="heading-title">Choose a Trigger</div>
+            <div class="choose-t-block-bg">
+                <div class="choose-t-block">
+                    <div class="inner-card-choose">
+                        <div class="content-choose-triggers">
+                            <div class="icon_blk">
+                                <i class="icon-sa-chat"></i>
+                            </div>
+                            <div class="info-data-content">
+                                <div class="title-choose">Utterance</div>
+                                <div class="desc-text">Agent/Customer utterances</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="inner-card-choose">
+                        <div class="content-choose-triggers">
+                            <div class="icon_blk">
+                                <i class="icon-sa-chat"></i>
+                            </div>
+                            <div class="info-data-content">
+                                <div class="title-choose">Speech Analysis</div>
+                                <div class="desc-text">Agent speech patterns</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="inner-card-choose">
+                        <div class="content-choose-triggers">
+                            <div class="icon_blk">
+                                <i class="icon-sa-chat"></i>
+                            </div>
+                            <div class="info-data-content">
+                                <div class="title-choose">Variable</div>
+                                <div class="desc-text">Monitor context variable</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="inner-card-choose">
+                        <div class="content-choose-triggers">
+                            <div class="icon_blk">
+                                <i class="icon-sa-chat"></i>
+                            </div>
+                            <div class="info-data-content">
+                                <div class="title-choose">Dialog</div>
+                                <div class="desc-text">Monitor dialog execution</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="choose-t-block-bg pre-built-triggers d-none">
+                <div class="title-with-icon">
+                    <i class="icon-sa-chat"></i>
+                    <span>Pre Build Triggers</span>
+                </div>
+                <perfect-scrollbar class="mx-h-300">
+                    <div class="choose-t-block">
+                        <div class="inner-card-choose">
+                            <div class="content-choose-triggers">
+                                <div class="icon_blk">
+                                    <i class="icon-sa-chat"></i>
+                                </div>
+                                <div class="info-data-content">
+                                    <div class="title-choose">Pricing Objection</div>
+                                    <div class="desc-text">Utterance Trigger / By Customer</div>
+                                    <div class="desc-text">“Example utterance sentence that can go here and will trunk after this point</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="inner-card-choose">
+                            <div class="content-choose-triggers">
+                                <div class="icon_blk">
+                                    <i class="icon-sa-chat"></i>
+                                </div>
+                                <div class="info-data-content">
+                                    <div class="title-choose">Escalation to Manager</div>
+                                    <div class="desc-text">Utterance Trigger / By Customer</div>
+                                    <div class="desc-text">“Example utterance sentence that can go here and will trunk after this point</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </perfect-scrollbar>
+            </div>
+        </div>
+    </div>
+</ng-template> 
+
