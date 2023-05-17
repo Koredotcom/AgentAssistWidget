@@ -67,9 +67,6 @@ export class ConvsHistoryLogsComponent implements OnInit {
           });
           this.isAgentJoined = true;
         }
-        this.chatHistData.push({
-          'interruption': true
-        })
         this.chatHistData.push(...res.result);
         this.cdRef.detectChanges();
       }
