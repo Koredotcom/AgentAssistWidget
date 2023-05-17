@@ -1,7 +1,7 @@
 <div class="history-content" *ngIf="historyResponse && historyResponse.length > 0">
   <div class="transcript-history-scroll-bottom">
-    <div>Bot Conversation Started</div>
-    <div>{{historyResponse[0].timestampValue | converTimestampToDate}}</div>
+    <div class="conversation-title">Bot Conversation Started</div>
+    <div class="conversation-timestamp">{{historyResponse[0].timestampValue | converTimestampToDate}}</div>
 </div>
     <ng-container *ngFor="let conv of historyResponse">
         <div class="other-user-bubble" [id]="'otherBubble-' + conv._id"

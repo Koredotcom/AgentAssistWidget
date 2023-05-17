@@ -40,7 +40,6 @@ export class TranscriptHistoryComponent {
           console.log(this.commonService.configObj.accountId)
           headersVal = {
             'Authorization': this.commonService.grantResponseObj?.authorization?.token_type + ' ' + this.commonService.grantResponseObj?.authorization?.accessToken,
-            'eAD': true,
             'accountId': this.commonService.grantResponseObj?.userInfo?.accountId
         }
         $.ajax({
@@ -50,7 +49,7 @@ export class TranscriptHistoryComponent {
           dataType: 'json',
           success:  (data) => {
             console.log(data);
-            if(data && data.result.length > 0) {
+            if(data && data?.result?.length > 0) {
               this.historyResponse = data.result;
             }
           },
