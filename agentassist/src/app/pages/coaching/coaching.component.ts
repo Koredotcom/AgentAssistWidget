@@ -2,6 +2,7 @@ import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
 
 @Component({
   selector: 'app-coaching',
@@ -12,11 +13,14 @@ export class CoachingComponent implements OnInit {
 
   modalRef:any;
   modalFlowCreateRef:any;
-  constructor(private modalService: NgbModal) { }
-  @HostListener('mousemove', ['$event']) onMouseMove(event) {
-    console.log(event.clientY, event.pageY, event.offsetY, event.target.scrollTop, event.target.scrollHeight);
-  }
+  bottomInt: any;
+  topInt: any;
+  dragStart : boolean = false;
+  @ViewChild('ps') ps: PerfectScrollbarComponent;
   @ViewChild('newCoachingGroup', { static: true }) newCoachingGroup: SliderComponentComponent;
+
+  constructor(private modalService: NgbModal) { }
+
   respData = {
     hasMore: false,
     results: [{
@@ -231,5 +235,39 @@ export class CoachingComponent implements OnInit {
         event.currentIndex,
       );
     }
+  }
+
+  bottomMouseOver(){
+    if(this.dragStart){
+      clearInterval(this.bottomInt);
+      this.ps.directiveRef.update();
+      this.topInt = setInterval(()=>{
+        let scrollTo: any;
+        const scrollY = this.ps.directiveRef.ps();
+        scrollTo = (scrollY.lastScrollTop as any) + 100;
+        this.ps.directiveRef.scrollToTop(scrollTo);
+        this.ps.directiveRef.update();
+        
+      },200);
+    }    
+  }
+ 
+  topMouseOver(){
+    if(this.dragStart){
+      this.ps.directiveRef.update();
+      clearInterval(this.topInt);
+      this.bottomInt = setInterval(()=>{
+        let scrollTo: any;
+        const scrollY = this.ps.directiveRef.ps();
+        scrollTo = (scrollY.lastScrollTop as any) - 100;
+        this.ps.directiveRef.scrollToTop(scrollTo);
+        this.ps.directiveRef.update();
+      },200);
+    }
+  }
+
+  clearInterVal(){
+    clearInterval(this.bottomInt);
+    clearInterval(this.topInt)
   }
 }

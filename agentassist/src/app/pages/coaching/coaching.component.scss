@@ -384,3 +384,20 @@
 ::ng-deep .body-data-table-wrapper-coaching{
     @include table-body-coaching-mixin;
 }
+
+.topdiv, .bottomdiv{
+    height: 60px;
+    width: 100%;
+    position: absolute;
+    z-index: -999;
+    background :transparent;
+}
+.topdiv {
+    top : 0px;
+}
+.bottomdiv{
+    bottom : 0px;
+}
+.addIndex{
+    z-index: 9999;
+}

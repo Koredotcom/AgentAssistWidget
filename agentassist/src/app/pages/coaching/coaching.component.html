@@ -12,8 +12,14 @@
             </div>
         </div>
         <div class="agents-grid-data-table" cdkDropListGroup>
-            <perfect-scrollbar class="scroll-data">
+            <perfect-scrollbar class="scroll-data" #ps>
                 <div id="accordion" class="agent-groups-table-container">
+                    <div class="topdiv" [ngClass]="{'addIndex': dragStart}" (mouseover)="topMouseOver()">
+
+                    </div>
+                    <div class="bottomdiv" [ngClass]="{'addIndex': dragStart}" (mouseover)="bottomMouseOver()">
+
+                    </div>
                     <ng-container *ngFor="let res of respData.results; let i = index">
                         <div class="card_content" 
                         cdkDropList
@@ -53,7 +59,7 @@
                                             <div class="titles-data w-16">Last UPDATED</div>
                                             <div class="titles-data w-9 text-right">Enabled</div>
                                         </div>
-                                        <div class="body-data-table-wrapper-coaching" *ngFor="let rule of res?.rules" cdkDrag>
+                                        <div class="body-data-table-wrapper-coaching" *ngFor="let rule of res?.rules" cdkDrag (cdkDragStarted)="dragStart=true" (cdkDragEnded)="dragStart=false;clearInterVal()">
                                             <div class="title-text rule-text w-22">{{rule.ruleName}}</div>
                                             <div class="actions-info w-16">
                                                 <button class="edit-btn">
