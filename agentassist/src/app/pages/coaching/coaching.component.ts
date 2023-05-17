@@ -1,6 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
+import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-coaching',
@@ -12,8 +13,181 @@ export class CoachingComponent implements OnInit {
   modalRef:any;
   modalFlowCreateRef:any;
   constructor(private modalService: NgbModal) { }
-
+  @HostListener('mousemove', ['$event']) onMouseMove(event) {
+    console.log(event.clientY, event.pageY, event.offsetY, event.target.scrollTop, event.target.scrollHeight);
+  }
   @ViewChild('newCoachingGroup', { static: true }) newCoachingGroup: SliderComponentComponent;
+  respData = {
+    hasMore: false,
+    results: [{
+      groupName: 'Pricing',
+      description: 'Pricing objection',
+      ruleCount: 6,
+      rules: [{
+        ruleName: 'Interest Rate',
+        description: 'Interest Rate description',
+        assignedTo: 'All',
+        lastUpdated: '1st Jul, 2023 AT 09:15PM',
+        enabled: true,
+      },{
+        ruleName: 'Interest Rate',
+        description: 'Interest Rate description',
+        assignedTo: 'All',
+        lastUpdated: '1st Jul, 2023 AT 09:15PM',
+        enabled: true,
+      },{
+        ruleName: 'Interest Rate',
+        description: 'Interest Rate description',
+        assignedTo: 'All',
+        lastUpdated: '1st Jul, 2023 AT 09:15PM',
+        enabled: false,
+      },]
+    },{
+      groupName: 'Pricing',
+      description: 'Pricing objection',
+      ruleCount: 6,
+      rules: [{
+        ruleName: 'Interest Rate',
+        description: 'Interest Rate description',
+        assignedTo: 'All',
+        lastUpdated: '1st Jul, 2023 AT 09:15PM',
+        enabled: true,
+      },{
+        ruleName: 'Interest Rate',
+        description: 'Interest Rate description',
+        assignedTo: 'All',
+        lastUpdated: '1st Jul, 2023 AT 09:15PM',
+        enabled: true,
+      },{
+        ruleName: 'Interest Rate',
+        description: 'Interest Rate description',
+        assignedTo: 'All',
+        lastUpdated: '1st Jul, 2023 AT 09:15PM',
+        enabled: false,
+      }]
+    },
+    {
+      groupName: 'Pricing',
+      description: 'Pricing objection',
+      ruleCount: 6,
+      rules: [{
+        ruleName: 'Interest Rate',
+        description: 'Interest Rate description',
+        assignedTo: 'All',
+        lastUpdated: '1st Jul, 2023 AT 09:15PM',
+        enabled: true,
+      },{
+        ruleName: 'Interest Rate',
+        description: 'Interest Rate description',
+        assignedTo: 'All',
+        lastUpdated: '1st Jul, 2023 AT 09:15PM',
+        enabled: true,
+      },{
+        ruleName: 'Interest Rate',
+        description: 'Interest Rate description',
+        assignedTo: 'All',
+        lastUpdated: '1st Jul, 2023 AT 09:15PM',
+        enabled: false,
+      }]
+    },
+    {
+      groupName: 'Pricing',
+      description: 'Pricing objection',
+      ruleCount: 6,
+      rules: [{
+        ruleName: 'Interest Rate',
+        description: 'Interest Rate description',
+        assignedTo: 'All',
+        lastUpdated: '1st Jul, 2023 AT 09:15PM',
+        enabled: true,
+      },{
+        ruleName: 'Interest Rate',
+        description: 'Interest Rate description',
+        assignedTo: 'All',
+        lastUpdated: '1st Jul, 2023 AT 09:15PM',
+        enabled: true,
+      },{
+        ruleName: 'Interest Rate',
+        description: 'Interest Rate description',
+        assignedTo: 'All',
+        lastUpdated: '1st Jul, 2023 AT 09:15PM',
+        enabled: false,
+      }]
+    },
+    {
+      groupName: 'Pricing',
+      description: 'Pricing objection',
+      ruleCount: 6,
+      rules: [{
+        ruleName: 'Interest Rate',
+        description: 'Interest Rate description',
+        assignedTo: 'All',
+        lastUpdated: '1st Jul, 2023 AT 09:15PM',
+        enabled: true,
+      },{
+        ruleName: 'Interest Rate',
+        description: 'Interest Rate description',
+        assignedTo: 'All',
+        lastUpdated: '1st Jul, 2023 AT 09:15PM',
+        enabled: true,
+      },{
+        ruleName: 'Interest Rate',
+        description: 'Interest Rate description',
+        assignedTo: 'All',
+        lastUpdated: '1st Jul, 2023 AT 09:15PM',
+        enabled: false,
+      }]
+    },
+    {
+      groupName: 'Pricing',
+      description: 'Pricing objection',
+      ruleCount: 6,
+      rules: [{
+        ruleName: 'Interest Rate',
+        description: 'Interest Rate description',
+        assignedTo: 'All',
+        lastUpdated: '1st Jul, 2023 AT 09:15PM',
+        enabled: true,
+      },{
+        ruleName: 'Interest Rate',
+        description: 'Interest Rate description',
+        assignedTo: 'All',
+        lastUpdated: '1st Jul, 2023 AT 09:15PM',
+        enabled: true,
+      },{
+        ruleName: 'Interest Rate',
+        description: 'Interest Rate description',
+        assignedTo: 'All',
+        lastUpdated: '1st Jul, 2023 AT 09:15PM',
+        enabled: false,
+      }]
+    },
+    {
+      groupName: 'Pricing',
+      description: 'Pricing objection',
+      ruleCount: 6,
+      rules: [{
+        ruleName: 'Interest Rate',
+        description: 'Interest Rate description',
+        assignedTo: 'All',
+        lastUpdated: '1st Jul, 2023 AT 09:15PM',
+        enabled: true,
+      },{
+        ruleName: 'Interest Rate',
+        description: 'Interest Rate description',
+        assignedTo: 'All',
+        lastUpdated: '1st Jul, 2023 AT 09:15PM',
+        enabled: true,
+      },{
+        ruleName: 'Interest Rate',
+        description: 'Interest Rate description',
+        assignedTo: 'All',
+        lastUpdated: '1st Jul, 2023 AT 09:15PM',
+        enabled: false,
+      }]
+    }],
+    totalCount: 5,
+  }
 
   ngOnInit(): void {
   }
@@ -44,5 +218,18 @@ export class CoachingComponent implements OnInit {
   }
   closeCoachingGroup(group){
     this.newCoachingGroup.closeSlider("#newCoachingGroup");
+  }
+
+  drop(event: CdkDragDrop<string[]>) {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      transferArrayItem(
+        event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex,
+      );
+    }
   }
 }

@@ -11,384 +11,77 @@
                 <i class="icon-sa-conv-search search-icon"></i>
             </div>
         </div>
-        <div class="agents-grid-data-table">
+        <div class="agents-grid-data-table" cdkDropListGroup>
             <perfect-scrollbar class="scroll-data">
                 <div id="accordion" class="agent-groups-table-container">
-                    <div class="card_content">
-                        <div class="card_header">
-                          <div data-toggle="collapse" data-parent="#accordion" href="#agentGroupData" class="card_link collapsed" aria-expanded="false">
-                                <div class="accordion-content-header">
-                                    <div class="left-title">
-                                        <span>Pricing</span>
-                                        <i class="icon-sa-welcome-edit" (click)="$event.stopPropagation();openCoachingGroup()"></i>
-                                    </div>
-                                    <div class="right-info">
-                                        <div class="items-count">6 Items</div>
-                                        <button class="new-rule-btn" (click)="$event.stopPropagation();openFLowCreation(flowCreation)">+ New Rule</button>
-                                        <div class="arrow-rotate">
-                                            <i class="icon-sa-arrow-down"></i>
+                    <ng-container *ngFor="let res of respData.results; let i = index">
+                        <div class="card_content" 
+                        cdkDropList
+                        cdkDropListSortingDisabled
+                        [cdkDropListData]="res.rules"
+                        (cdkDropListDropped)="drop($event)">
+                            <div class="card_header">
+                              <div data-toggle="collapse" data-parent="#accordion" [attr.href]="'#agentGroupData' + i" class="card_link collapsed" aria-expanded="false">
+                                    <div class="accordion-content-header">
+                                        <div class="left-title">
+                                            <span>{{res.groupName}}</span>
+                                            <i class="icon-sa-welcome-edit" (click)="$event.stopPropagation();openCoachingGroup()"></i>
+                                        </div>
+                                        <div class="right-info">
+                                            <div class="items-count">{{res.ruleCount}} Items</div>
+                                            <button class="new-rule-btn" (click)="$event.stopPropagation();openFLowCreation(flowCreation)">+ New Rule</button>
+                                            <div class="arrow-rotate">
+                                                <i class="icon-sa-arrow-down"></i>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                          </div>
-                        </div>
-                
-                        <div id="agentGroupData" class="collapse inside-accordioncontent">
-                          <perfect-scrollbar class="mx-h-300">                            
-                              <div class="card-body inner-accordion-table">
-                                <div class="content-scroll-data-agents">
-                                    <div class="shadow-freeze"></div>
-                                    <div class="header-table-agents">
-                                        <div class="titles-data w-22">
-                                            <div class="title-header">Rule name</div>
-                                        </div>
-                                        <div class="titles-data w-16">Actions</div>
-                                        <div class="titles-data w-20">Description</div>
-                                        <div class="titles-data w-15">ASSIGNED TO</div>
-                                        <div class="titles-data w-18">Last UPDATED</div>
-                                        <div class="titles-data w-9 text-right">Enabled</div>
-                                    </div>
-                                    <ng-container>
-                                        <div class="body-data-table-wrapper-coaching">
-                                            <div class="title-text rule-text w-22">Interest Rate</div>
-                                            <div class="actions-info w-16">
-                                                <button class="edit-btn">
-                                                    <i class="icon-sa-welcome-edit"></i>
-                                                </button>
-                                                <button class="delete-btn" (click)="openDeleteRule(ruleDelete)">
-                                                    <i class="icon-sa-welcome-delete"></i>
-                                                </button>
-                                            </div>
-                                            <div class="title-text w-20">High Interest Rate</div>
-                                            <div class="title-text w-15">All Agents</div>
-                                            <div class="title-text w-18">1st Jul, 2023 AT 09:15PM</div>
-                                            <div class="title-text last-updated-toggle w-9">
-                                                <label class="kr-sg-toggle">
-                                                    <input type="checkbox" checked>
-                                                    <div class="slider"></div>
-                                                </label>
-                                            </div>
-                                            <div class="drag-drop-element">
-                                                <i class="icon-sa-elipse"></i>
-                                            </div>
-                                        </div>
-                                        <div class="body-data-table-wrapper-coaching">
-                                            <div class="title-text rule-text w-22">Interest Rate</div>
-                                            <div class="actions-info w-16">
-                                                <button class="edit-btn">
-                                                    <i class="icon-sa-welcome-edit"></i>
-                                                </button>
-                                                <button class="delete-btn">
-                                                    <i class="icon-sa-welcome-delete"></i>
-                                                </button>
-                                            </div>
-                                            <div class="title-text w-20">High Interest Rate</div>
-                                            <div class="title-text w-15">All Agents</div>
-                                            <div class="title-text w-18">1st Jul, 2023 AT 09:15PM</div>
-                                            <div class="title-text last-updated-toggle w-9">
-                                                <label class="kr-sg-toggle">
-                                                    <input type="checkbox" checked>
-                                                    <div class="slider"></div>
-                                                </label>
-                                            </div>
-                                            <div class="drag-drop-element">
-                                                <i class="icon-sa-elipse"></i>
-                                            </div>
-                                        </div>
-                                        <div class="body-data-table-wrapper-coaching">
-                                            <div class="title-text rule-text w-22">Interest Rate</div>
-                                            <div class="actions-info w-16">
-                                                <button class="edit-btn">
-                                                    <i class="icon-sa-welcome-edit"></i>
-                                                </button>
-                                                <button class="delete-btn">
-                                                    <i class="icon-sa-welcome-delete"></i>
-                                                </button>
-                                            </div>
-                                            <div class="title-text w-20">High Interest Rate</div>
-                                            <div class="title-text w-15">All Agents</div>
-                                            <div class="title-text w-18">1st Jul, 2023 AT 09:15PM</div>
-                                            <div class="title-text last-updated-toggle w-9">
-                                                <label class="kr-sg-toggle">
-                                                    <input type="checkbox" checked>
-                                                    <div class="slider"></div>
-                                                </label>
-                                            </div>
-                                            <div class="drag-drop-element">
-                                                <i class="icon-sa-elipse"></i>
-                                            </div>
-                                        </div>
-                                        <div class="body-data-table-wrapper-coaching">
-                                            <div class="title-text rule-text w-22">Interest Rate</div>
-                                            <div class="actions-info w-16">
-                                                <button class="edit-btn">
-                                                    <i class="icon-sa-welcome-edit"></i>
-                                                </button>
-                                                <button class="delete-btn">
-                                                    <i class="icon-sa-welcome-delete"></i>
-                                                </button>
-                                            </div>
-                                            <div class="title-text w-20">High Interest Rate</div>
-                                            <div class="title-text w-15">All Agents</div>
-                                            <div class="title-text w-18">1st Jul, 2023 AT 09:15PM</div>
-                                            <div class="title-text last-updated-toggle w-9">
-                                                <label class="kr-sg-toggle">
-                                                    <input type="checkbox" checked>
-                                                    <div class="slider"></div>
-                                                </label>
-                                            </div>
-                                            <div class="drag-drop-element">
-                                                <i class="icon-sa-elipse"></i>
-                                            </div>
-                                        </div>
-                                    </ng-container>
-                                </div>
                               </div>
-                          </perfect-scrollbar>
-                        </div>
-                    </div>
-                    <div class="card_content">
-                        <div class="card_header">
-                          <div data-toggle="collapse" data-parent="#accordion" href="#agentGroupData1" class="card_link collapsed" aria-expanded="false">
-                                <div class="accordion-content-header">
-                                    <div class="left-title">
-                                        <span>Pricing</span>
-                                        <i class="icon-sa-welcome-edit"></i>
-                                    </div>
-                                    <div class="right-info">
-                                        <div class="items-count">6 Items</div>
-                                        <button class="new-rule-btn">+ New Rule</button>
-                                        <div class="arrow-rotate">
-                                            <i class="icon-sa-arrow-down"></i>
+                            </div>
+                    
+                            <div [attr.id]="'agentGroupData' + i" class="collapse inside-accordioncontent">
+                              <perfect-scrollbar class="mx-h-300">                            
+                                  <div class="card-body inner-accordion-table" >
+                                    <div class="content-scroll-data-agents">
+                                        <div class="shadow-freeze"></div>
+                                        <div class="header-table-agents"                         >
+                                            <div class="titles-data w-22">
+                                                <div class="title-header">Rule name</div>
+                                            </div>
+                                            <div class="titles-data w-14">Actions</div>
+                                            <div class="titles-data w-16">Description</div>
+                                            <div class="titles-data w-14">ASSIGNED TO</div>
+                                            <div class="titles-data w-16">Last UPDATED</div>
+                                            <div class="titles-data w-9 text-right">Enabled</div>
+                                        </div>
+                                        <div class="body-data-table-wrapper-coaching" *ngFor="let rule of res?.rules" cdkDrag>
+                                            <div class="title-text rule-text w-22">{{rule.ruleName}}</div>
+                                            <div class="actions-info w-16">
+                                                <button class="edit-btn">
+                                                    <i class="icon-sa-welcome-edit"></i>
+                                                </button>
+                                                <button class="delete-btn">
+                                                    <i class="icon-sa-welcome-delete"></i>
+                                                </button>
+                                            </div>
+                                            <div class="title-text w-16">{{rule.description}}</div>
+                                            <div class="title-text w-14">{{rule.assignedTo}}</div>
+                                            <div class="title-text w-16">{{rule.lastUpdated}}</div>
+                                            <div class="title-text last-updated-toggle w-9">
+                                                <label class="kr-sg-toggle">
+                                                    <input type="checkbox" [checked]="rule.enabled">
+                                                    <div class="slider"></div>
+                                                </label>
+                                            </div>
+                                            <div class="drag-drop-element" cdkDragHandle>
+                                                <i class="icon-sa-elipse"></i>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                          </div>
-                        </div>
-                
-                        <div id="agentGroupData1" class="collapse inside-accordioncontent">
-                            <perfect-scrollbar class="mx-h-300">                            
-                                <div class="card-body inner-accordion-table">
-                                  <div class="content-scroll-data-agents">
-                                      <div class="shadow-freeze"></div>
-                                      <div class="header-table-agents">
-                                          <div class="titles-data w-22">
-                                              <div class="title-header">Rule name</div>
-                                          </div>
-                                          <div class="titles-data w-16">Actions</div>
-                                          <div class="titles-data w-20">Description</div>
-                                          <div class="titles-data w-15">ASSIGNED TO</div>
-                                          <div class="titles-data w-18">Last UPDATED</div>
-                                          <div class="titles-data w-9 text-right">Enabled</div>
-                                      </div>
-                                      <ng-container>
-                                          <div class="body-data-table-wrapper-coaching">
-                                              <div class="title-text rule-text w-22">Interest Rate</div>
-                                              <div class="actions-info w-16">
-                                                  <button class="edit-btn">
-                                                      <i class="icon-sa-welcome-edit"></i>
-                                                  </button>
-                                                  <button class="delete-btn">
-                                                      <i class="icon-sa-welcome-delete"></i>
-                                                  </button>
-                                              </div>
-                                              <div class="title-text w-20">High Interest Rate</div>
-                                              <div class="title-text w-15">All Agents</div>
-                                              <div class="title-text w-18">1st Jul, 2023 AT 09:15PM</div>
-                                              <div class="title-text last-updated-toggle w-9">
-                                                  <label class="kr-sg-toggle">
-                                                      <input type="checkbox" checked>
-                                                      <div class="slider"></div>
-                                                  </label>
-                                              </div>
-                                          </div>
-                                          <div class="body-data-table-wrapper-coaching">
-                                              <div class="title-text rule-text w-22">Interest Rate</div>
-                                              <div class="actions-info w-16">
-                                                  <button class="edit-btn">
-                                                      <i class="icon-sa-welcome-edit"></i>
-                                                  </button>
-                                                  <button class="delete-btn">
-                                                      <i class="icon-sa-welcome-delete"></i>
-                                                  </button>
-                                              </div>
-                                              <div class="title-text w-20">High Interest Rate</div>
-                                              <div class="title-text w-15">All Agents</div>
-                                              <div class="title-text w-18">1st Jul, 2023 AT 09:15PM</div>
-                                              <div class="title-text last-updated-toggle w-9">
-                                                  <label class="kr-sg-toggle">
-                                                      <input type="checkbox" checked>
-                                                      <div class="slider"></div>
-                                                  </label>
-                                              </div>
-                                          </div>
-                                          <div class="body-data-table-wrapper-coaching">
-                                              <div class="title-text rule-text w-22">Interest Rate</div>
-                                              <div class="actions-info w-16">
-                                                  <button class="edit-btn">
-                                                      <i class="icon-sa-welcome-edit"></i>
-                                                  </button>
-                                                  <button class="delete-btn">
-                                                      <i class="icon-sa-welcome-delete"></i>
-                                                  </button>
-                                              </div>
-                                              <div class="title-text w-20">High Interest Rate</div>
-                                              <div class="title-text w-15">All Agents</div>
-                                              <div class="title-text w-18">1st Jul, 2023 AT 09:15PM</div>
-                                              <div class="title-text last-updated-toggle w-9">
-                                                  <label class="kr-sg-toggle">
-                                                      <input type="checkbox" checked>
-                                                      <div class="slider"></div>
-                                                  </label>
-                                              </div>
-                                          </div>
-                                          <div class="body-data-table-wrapper-coaching">
-                                              <div class="title-text rule-text w-22">Interest Rate</div>
-                                              <div class="actions-info w-16">
-                                                  <button class="edit-btn">
-                                                      <i class="icon-sa-welcome-edit"></i>
-                                                  </button>
-                                                  <button class="delete-btn">
-                                                      <i class="icon-sa-welcome-delete"></i>
-                                                  </button>
-                                              </div>
-                                              <div class="title-text w-20">High Interest Rate</div>
-                                              <div class="title-text w-15">All Agents</div>
-                                              <div class="title-text w-18">1st Jul, 2023 AT 09:15PM</div>
-                                              <div class="title-text last-updated-toggle w-9">
-                                                  <label class="kr-sg-toggle">
-                                                      <input type="checkbox" checked>
-                                                      <div class="slider"></div>
-                                                  </label>
-                                              </div>
-                                          </div>
-                                      </ng-container>
                                   </div>
-                                </div>
-                            </perfect-scrollbar>
+                              </perfect-scrollbar>
+                            </div>
                         </div>
-                    </div>
-                    <div class="card_content">
-                        <div class="card_header">
-                          <div data-toggle="collapse" data-parent="#accordion" href="#agentGroupData2" class="card_link collapsed" aria-expanded="false">
-                                <div class="accordion-content-header">
-                                    <div class="left-title">
-                                        <span>Pricing</span>
-                                        <i class="icon-sa-welcome-edit"></i>
-                                    </div>
-                                    <div class="right-info">
-                                        <div class="items-count">6 Items</div>
-                                        <button class="new-rule-btn">+ New Rule</button>
-                                        <div class="arrow-rotate">
-                                            <i class="icon-sa-arrow-down"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                          </div>
-                        </div>
-                
-                        <div id="agentGroupData2" class="collapse inside-accordioncontent">
-                            <perfect-scrollbar class="mx-h-300">                            
-                                <div class="card-body inner-accordion-table">
-                                  <div class="content-scroll-data-agents">
-                                      <div class="shadow-freeze"></div>
-                                      <div class="header-table-agents">
-                                          <div class="titles-data w-22">
-                                              <div class="title-header">Rule name</div>
-                                          </div>
-                                          <div class="titles-data w-16">Actions</div>
-                                          <div class="titles-data w-20">Description</div>
-                                          <div class="titles-data w-15">ASSIGNED TO</div>
-                                          <div class="titles-data w-18">Last UPDATED</div>
-                                          <div class="titles-data w-9 text-right">Enabled</div>
-                                      </div>
-                                      <ng-container>
-                                          <div class="body-data-table-wrapper-coaching">
-                                              <div class="title-text rule-text w-22">Interest Rate</div>
-                                              <div class="actions-info w-16">
-                                                  <button class="edit-btn">
-                                                      <i class="icon-sa-welcome-edit"></i>
-                                                  </button>
-                                                  <button class="delete-btn">
-                                                      <i class="icon-sa-welcome-delete"></i>
-                                                  </button>
-                                              </div>
-                                              <div class="title-text w-20">High Interest Rate</div>
-                                              <div class="title-text w-15">All Agents</div>
-                                              <div class="title-text w-18">1st Jul, 2023 AT 09:15PM</div>
-                                              <div class="title-text last-updated-toggle w-9">
-                                                  <label class="kr-sg-toggle">
-                                                      <input type="checkbox" checked>
-                                                      <div class="slider"></div>
-                                                  </label>
-                                              </div>
-                                          </div>
-                                          <div class="body-data-table-wrapper-coaching">
-                                              <div class="title-text rule-text w-22">Interest Rate</div>
-                                              <div class="actions-info w-16">
-                                                  <button class="edit-btn">
-                                                      <i class="icon-sa-welcome-edit"></i>
-                                                  </button>
-                                                  <button class="delete-btn">
-                                                      <i class="icon-sa-welcome-delete"></i>
-                                                  </button>
-                                              </div>
-                                              <div class="title-text w-20">High Interest Rate</div>
-                                              <div class="title-text w-15">All Agents</div>
-                                              <div class="title-text w-18">1st Jul, 2023 AT 09:15PM</div>
-                                              <div class="title-text last-updated-toggle w-9">
-                                                  <label class="kr-sg-toggle">
-                                                      <input type="checkbox" checked>
-                                                      <div class="slider"></div>
-                                                  </label>
-                                              </div>
-                                          </div>
-                                          <div class="body-data-table-wrapper-coaching">
-                                              <div class="title-text rule-text w-22">Interest Rate</div>
-                                              <div class="actions-info w-16">
-                                                  <button class="edit-btn">
-                                                      <i class="icon-sa-welcome-edit"></i>
-                                                  </button>
-                                                  <button class="delete-btn">
-                                                      <i class="icon-sa-welcome-delete"></i>
-                                                  </button>
-                                              </div>
-                                              <div class="title-text w-20">High Interest Rate</div>
-                                              <div class="title-text w-15">All Agents</div>
-                                              <div class="title-text w-18">1st Jul, 2023 AT 09:15PM</div>
-                                              <div class="title-text last-updated-toggle w-9">
-                                                  <label class="kr-sg-toggle">
-                                                      <input type="checkbox" checked>
-                                                      <div class="slider"></div>
-                                                  </label>
-                                              </div>
-                                          </div>
-                                          <div class="body-data-table-wrapper-coaching">
-                                              <div class="title-text rule-text w-22">Interest Rate</div>
-                                              <div class="actions-info w-16">
-                                                  <button class="edit-btn">
-                                                      <i class="icon-sa-welcome-edit"></i>
-                                                  </button>
-                                                  <button class="delete-btn">
-                                                      <i class="icon-sa-welcome-delete"></i>
-                                                  </button>
-                                              </div>
-                                              <div class="title-text w-20">High Interest Rate</div>
-                                              <div class="title-text w-15">All Agents</div>
-                                              <div class="title-text w-18">1st Jul, 2023 AT 09:15PM</div>
-                                              <div class="title-text last-updated-toggle w-9">
-                                                  <label class="kr-sg-toggle">
-                                                      <input type="checkbox" checked>
-                                                      <div class="slider"></div>
-                                                  </label>
-                                              </div>
-                                          </div>
-                                      </ng-container>
-                                  </div>
-                                </div>
-                            </perfect-scrollbar>
-                        </div>
-                    </div>
+                    </ng-container>
                 </div>
             </perfect-scrollbar>
         </div>

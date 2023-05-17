@@ -5,6 +5,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { CoachingGroupCreateComponent } from './coaching-group-create/coaching-group-create.component';
 import { CoachingRuleCreateComponent } from './coaching-rule-create/coaching-rule-create.component';
 import { CoachingComponent } from './coaching.component';
+import { DragDropModule } from "@angular/cdk/drag-drop";
 
 const routes: Routes = [
   { path: '', component:  CoachingComponent}
@@ -13,6 +14,7 @@ const routes: Routes = [
 @NgModule({
   declarations: [CoachingGroupCreateComponent, CoachingRuleCreateComponent, CoachingComponent],
   imports: [
+    DragDropModule,
     CommonModule,
     SharedModule,
     RouterModule.forChild(routes)
