@@ -42,7 +42,7 @@
                         Agent joined the conversation
                     </div>
                 </ng-container>
-                <ng-container *ngIf="data.author?.type === 'USER'">
+                <ng-container *ngIf="data?.msgType === 'USER'">
                     <div class="customer-info-wrapper-template">
                         <div class="img-icon-title">
                             <div class="img-block">
@@ -58,13 +58,13 @@
                         </div>
                     </div>
                 </ng-container>
-                <ng-container *ngIf="data.author?.type === 'AGENT'">
+                <ng-container *ngIf="data?.msgType === 'AGENT'">
                 <div class="agent-info-wrapper-template">
                     <div class="img-icon-title">
                         <div class="time-name">Agent <span>{{data.createdOn | date:'h:mm a'}}</span> Agent</div>
                         <div class="img-block">
                             <img src="assets/images/conv-logs/agent-dummy.svg">
-                        </div>                   
+                        </div>
                     </div>
                     <div class="agent-msg-template">
                         <div class="title-agent-msg">{{data.components[0]?.data?.text}}</div>

@@ -201,7 +201,7 @@ export class ConversationalLogsComponent implements OnInit {
         }))
       .subscribe((res) => {
         // console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', res)
-        if (res.data.length > 0) {
+        if (res?.data?.length > 0) {
             this.page = this.page+1;
             this.hasMore = res.hasMore;
            this.TransformConvsLogsData(res.data)
