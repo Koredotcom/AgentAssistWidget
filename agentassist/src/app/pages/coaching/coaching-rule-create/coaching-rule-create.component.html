@@ -28,6 +28,10 @@
                         <div class="title">When...</div>
                     </div>
                     <div class="content-data-triggers">
+                        <app-utterance></app-utterance>
+                        <app-speech-analysis></app-speech-analysis>
+                        <app-variable></app-variable>
+                        <app-dialog></app-dialog>
                         <ng-container *ngTemplateOutlet="addTriggerTemplate;"></ng-container> 
                     </div>
                 </div>
@@ -63,8 +67,9 @@
 <!-- COmmon trigger template -->
 <ng-template #addTriggerTemplate>
     <div class="add-triggers">
-        <button class="add-triggers-btn trigger-btn-active">+ Add a trigger</button>
-        <div class="line-indicator"></div>
+        <!-- trigger-btn-active -->
+        <button class="add-triggers-btn">+ Add a trigger</button>
+        <!-- <div class="line-indicator"></div>
         <div class="choose-triggers-block">
             <div class="heading-title">Choose a Trigger</div>
             <div class="choose-t-block-bg">
@@ -149,7 +154,7 @@
                     </div>
                 </perfect-scrollbar>
             </div>
-        </div>
+        </div> -->
     </div>
 </ng-template> 
 
