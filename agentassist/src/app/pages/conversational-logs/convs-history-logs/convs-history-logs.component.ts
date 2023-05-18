@@ -67,13 +67,30 @@ export class ConvsHistoryLogsComponent implements OnInit {
           });
           this.isAgentJoined = true;
         }
-        this.chatHistData.push(...res.result);
+        let userAgenthistoryData = this.historResponseType(res)
+        this.chatHistData.push(...userAgenthistoryData);
         this.cdRef.detectChanges();
       }
     },
     (err)=>{
       console.log(err);
     })
+  }
+
+  historResponseType(response) {
+    let Data = response.result.map(data=>{
+      if (data.msgType === 'AGENT') {
+        try {
+          data.components[0].data.text = JSON.parse(data.components[0].data.text).payload.text;
+          return data;
+        } catch(err) {
+          return data;
+        }
+      } else {
+        return data;
+      }
+    });
+    return Data;
   }
 
   selectedDropDown(data){
