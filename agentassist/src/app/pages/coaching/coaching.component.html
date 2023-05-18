@@ -1,7 +1,7 @@
 <div class="agents-container-wrapper">
     <div class="header-sec-top">
         <div class="main-heading">Coaching</div>
-        <button class="kr-sg-button-primary btn_lg" (click)="openCoachingGroup()">+ New Coaching Group</button>
+        <button class="kr-sg-button-primary btn_lg" (click)="openCoachingGroup(coachingConst.CREATE, {})">+ New Coaching Group</button>
     </div>
 
     <div class="tab-sec-details-wrapper">
@@ -31,7 +31,7 @@
                                     <div class="accordion-content-header">
                                         <div class="left-title">
                                             <span>{{res.name}}</span>
-                                            <i class="icon-sa-welcome-edit" (click)="$event.stopPropagation();openCoachingGroup()"></i>
+                                            <i class="icon-sa-welcome-edit" (click)="$event.stopPropagation();openCoachingGroup(coachingConst.EDIT, res)"></i>
                                         </div>
                                         <div class="right-info">
                                             <div class="items-count">{{res.rules?.length}} Items</div>
@@ -96,10 +96,8 @@
 
 
 <app-slider-component id="newCoachingGroup" #newCoachingGroup='app-slider'>
-    <app-coaching-group-create (onClose)="closeCoachingGroup($event)"></app-coaching-group-create>
+    <app-coaching-group-create (onClose)="closeCoachingGroup($event)" [type]="coachGroupEvent" [data]="coachGroupData"></app-coaching-group-create>
 </app-slider-component>
-
-
 
 
 <ng-template #ruleDelete>

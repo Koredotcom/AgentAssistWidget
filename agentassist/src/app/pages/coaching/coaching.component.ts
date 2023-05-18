@@ -3,6 +3,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
+import { COACHINGCNST } from './coaching.cnst';
 
 @Component({
   selector: 'app-coaching',
@@ -16,6 +17,10 @@ export class CoachingComponent implements OnInit {
   bottomInt: any;
   topInt: any;
   dragStart : boolean = false;
+  coachingConst : any = COACHINGCNST;
+  coachGroupEvent : string;
+  coachGroupData : any;
+
   @ViewChild('ps') ps: PerfectScrollbarComponent;
   @ViewChild('newCoachingGroup', { static: true }) newCoachingGroup: SliderComponentComponent;
 
@@ -165,10 +170,14 @@ export class CoachingComponent implements OnInit {
     }
   // End
 
-  openCoachingGroup(){
+  openCoachingGroup(type, editData){
+    this.coachGroupEvent = type;
+    this.coachGroupData  = editData;
     this.newCoachingGroup.openSlider("#newCoachingGroup", "width550");
   }
+  
   closeCoachingGroup(group){
+    this.coachGroupData = null;
     this.newCoachingGroup.closeSlider("#newCoachingGroup");
   }
 
