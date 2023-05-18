@@ -28,14 +28,18 @@
                         <div class="title">When...</div>
                     </div>
                     <div class="content-data-triggers">
-                        <app-utterance></app-utterance>
-                        <app-speech-analysis></app-speech-analysis>
-                        <app-variable></app-variable>
-                        <app-dialog></app-dialog>
-                        <!-- <ng-container *ngTemplateOutlet="addTriggerTemplate;"></ng-container>  -->
-                        <div class="add-triggers">
+                        <ng-container *ngFor="let triggertype of triggerFormControlsArray">
+                            <app-utterance *ngIf="triggertype?.value?.type == coachingCnst.UTTERANCE"></app-utterance>
+                            <app-speech-analysis *ngIf="triggertype?.value?.type == coachingCnst.SPEECH_ANALYSIS"></app-speech-analysis>
+                            <app-variable *ngIf="triggertype?.value?.type == coachingCnst.VARIABLE"></app-variable>
+                            <app-dialog *ngIf="triggertype?.value?.type == coachingCnst.DIALOG"></app-dialog>
+                        </ng-container>
+                        <ng-container *ngIf="triggerClick">
+                            <ng-container *ngTemplateOutlet="addTriggerTemplate;"></ng-container> 
+                        </ng-container>
+                        <div class="add-triggers" *ngIf="!triggerClick">
                             <!-- trigger-btn-active -->
-                            <button class="add-triggers-btn">+ Add a trigger</button>
+                            <button class="add-triggers-btn" (click)="addTriggerClick()"> + Add a trigger</button>
                         </div>
                     </div>
                 </div>
@@ -83,7 +87,7 @@
                             <div class="icon_blk">
                                 <i class="icon-sa-chat"></i>
                             </div>
-                            <div class="info-data-content">
+                            <div class="info-data-content" (click)="selectTriggerClick(coachingCnst.UTTERANCE)">
                                 <div class="title-choose">Utterance</div>
                                 <div class="desc-text">Agent/Customer utterances</div>
                             </div>
@@ -94,7 +98,7 @@
                             <div class="icon_blk">
                                 <i class="icon-sa-chat"></i>
                             </div>
-                            <div class="info-data-content">
+                            <div class="info-data-content" (click)="selectTriggerClick(coachingCnst.SPEECH_ANALYSIS)">
                                 <div class="title-choose">Speech Analysis</div>
                                 <div class="desc-text">Agent speech patterns</div>
                             </div>
@@ -105,7 +109,7 @@
                             <div class="icon_blk">
                                 <i class="icon-sa-chat"></i>
                             </div>
-                            <div class="info-data-content">
+                            <div class="info-data-content" (click)="selectTriggerClick(coachingCnst.VARIABLE)">
                                 <div class="title-choose">Variable</div>
                                 <div class="desc-text">Monitor context variable</div>
                             </div>
@@ -116,7 +120,7 @@
                             <div class="icon_blk">
                                 <i class="icon-sa-chat"></i>
                             </div>
-                            <div class="info-data-content">
+                            <div class="info-data-content" (click)="selectTriggerClick(coachingCnst.DIALOG)">
                                 <div class="title-choose">Dialog</div>
                                 <div class="desc-text">Monitor dialog execution</div>
                             </div>
