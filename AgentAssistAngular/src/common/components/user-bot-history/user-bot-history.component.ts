@@ -24,25 +24,46 @@ export class UserBotHistoryComponent implements OnInit, OnDestroy{
     ) { }
 
   ngOnInit(): void {
-    this.subscribeEvents();
+    // this.subscribeEvents();
+    this.userBotConversationHistory();
+  }
 
+  userBotConversationHistory() {
+    let userBotConversationDetails = this.handleSubjectService.getUserBotConvosDataDetails();
+    let connectionDetails;
+    let headersVal = {};
+    let subscription2 = this.handleSubjectService.connectDetailsSubject.subscribe((response: any) => {
+      if (response) {
+        connectionDetails = response;
+        headersVal = {
+          'Authorization': this.commonService.grantResponseObj?.authorization?.token_type + ' ' + this.commonService.grantResponseObj?.authorization?.accessToken,
+        }
+          $.ajax({
+            url: `${connectionDetails.agentassisturl}/api/1.1/botmessages/chathistorytoagentassist?botId=${userBotConversationDetails.botId || connectionDetails?.botId}&userId=${userBotConversationDetails?.userId}&sessionId=${userBotConversationDetails?.sessionId}&limit=-1&msgDirection=true`,
+            type: 'get',
+            headers: headersVal,
+            dataType: 'json',
+            success:  (data) => {
+              console.log(data);
+              if(data && data.messages.length > 0) {
+                this.handleSubjectService.setUserHistoryData(data);
+                this.historyResponse = data.messages;
+                this.formatHistoryResponse();
+              }
+            },
+            error: function (err) {
+              this.historyResponse = [];
+                console.error("Unable to fetch the details with the provided data", err);
+            }
+        });
+    }});
+    this.subscriptionsList.push(subscription2);
   }
 
   ngOnDestroy(): void {
     this.subscriptionsList.forEach((subscription) => {
       subscription.unsubscribe();
     });
-  }
-
-  subscribeEvents(){
-    let subscription1 = this.handleSubjectService.userHistoryDataSubject$.subscribe((res : any) => {
-      console.log(res, "response inside history");
-      if(res && res.messages.length > 0){
-        this.historyResponse = res;
-        this.formatHistoryResponse();
-      }
-    });
-    this.subscriptionsList.push(subscription1);
   }
 
   formatHistoryResponse(){

@@ -22,8 +22,8 @@ export class HandleSubjectService {
   public proactiveModeSubject = new Subject<boolean>();
   public autoBotIdSubject$ = new Subject<object>();
   public userHistoryDataSubject$ = new BehaviorSubject<object>(null);
-  public userBotConversationDetails$ = new BehaviorSubject<object>(null);
   public userAgentTranscriptionConversationHistory$ = new BehaviorSubject<object>(null);
+  public userBotConversationDetails;
 
   constructor() { }
 
@@ -111,7 +111,13 @@ export class HandleSubjectService {
     this.userAgentTranscriptionConversationHistory$.next(data);
   }
 
-  setUserBotConvosDetails(data) {
-    this.userBotConversationDetails$.next(data);
+  setUserBotConversationDataDetails(data) {
+    if (data && data.sessionId) {
+      this.userBotConversationDetails = data;
+    }
+  }
+
+  getUserBotConvosDataDetails() {
+    return this.userBotConversationDetails;
   }
 }

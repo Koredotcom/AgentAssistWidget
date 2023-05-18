@@ -19,7 +19,7 @@ import { DesignAlterService } from 'src/common/services/design-alter.service';
 })
 export class TranscriptComponent implements OnInit {
 
-   
+
   @Output() scrollToBottomEvent = new EventEmitter();
   @Output() newButtonScrollClickEvents = new EventEmitter();
   @Output() scrollToTranscriptElement = new EventEmitter();
@@ -147,7 +147,7 @@ export class TranscriptComponent implements OnInit {
     let subscription5 = this.handleSubjectService.userHistoryDataSubject$.subscribe((res : any) => {
       console.log(res, "response inside history");
       if(res && res.messages.length > 0){
-        this.historyResponse = res;
+        this.historyResponse = res.messages || [];
         this.prepareConversation();
       }
     });
@@ -273,7 +273,7 @@ export class TranscriptComponent implements OnInit {
         }, 100);
       }
     }
-    
+
   }
 
 }
