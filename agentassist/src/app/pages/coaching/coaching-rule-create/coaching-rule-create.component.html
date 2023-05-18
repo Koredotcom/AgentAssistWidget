@@ -34,12 +34,17 @@
                             <app-variable *ngIf="triggertype?.value?.type == coachingCnst.VARIABLE"></app-variable>
                             <app-dialog *ngIf="triggertype?.value?.type == coachingCnst.DIALOG"></app-dialog>
                         </ng-container>
-                        <ng-container *ngIf="triggerClick">
+                        <!-- <ng-container *ngIf="triggerClick">
                             <ng-container *ngTemplateOutlet="addTriggerTemplate;"></ng-container> 
-                        </ng-container>
-                        <div class="add-triggers" *ngIf="!triggerClick">
-                            <!-- trigger-btn-active -->
+                        </ng-container> -->
+                        <!-- <div class="add-triggers" *ngIf="!triggerClick">
                             <button class="add-triggers-btn" (click)="addTriggerClick()"> + Add a trigger</button>
+                        </div> -->
+                        <div class="add-trgigger-dropdown" ngbDropdown placement="right-top">
+                            <button class="add-triggers-btn" ngbDropdownToggle> + Add a trigger</button>
+                            <div class="drop-add-trigger" ngbDropdownMenu>
+                                <ng-container *ngTemplateOutlet="addTriggerTemplate;"></ng-container> 
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -51,7 +56,12 @@
                         <div class="title">then do...</div>
                     </div>
                     <div class="content-data-triggers">
-                        <ng-container *ngTemplateOutlet="addTriggerTemplate;"></ng-container>
+                        <div class="add-trgigger-dropdown" ngbDropdown placement="right-top">
+                            <button class="add-triggers-btn" ngbDropdownToggle> + Add a trigger</button>
+                            <div class="drop-add-trigger" ngbDropdownMenu>
+                                <ng-container *ngTemplateOutlet="addTriggerTemplate;"></ng-container> 
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="block-data-triggers">
@@ -62,7 +72,12 @@
                         <div class="title">Assign this to...</div>
                     </div>
                     <div class="content-data-triggers">
-                        <ng-container *ngTemplateOutlet="addTriggerTemplate;"></ng-container>
+                        <div class="add-trgigger-dropdown" ngbDropdown placement="right-top">
+                            <button class="add-triggers-btn" ngbDropdownToggle> + Add a trigger</button>
+                            <div class="drop-add-trigger" ngbDropdownMenu>
+                                <ng-container *ngTemplateOutlet="addTriggerTemplate;"></ng-container> 
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -76,51 +91,51 @@
 <ng-template #addTriggerTemplate>
     <div class="add-triggers">
         <!-- trigger-btn-active -->
-        <button class="add-triggers-btn trigger-btn-active">+ Add a trigger</button>
+        <!-- <button class="add-triggers-btn trigger-btn-active">+ Add a trigger</button> -->
         <div class="line-indicator"></div>
         <div class="choose-triggers-block">
             <div class="heading-title">Choose a Trigger</div>
             <div class="choose-t-block-bg">
                 <div class="choose-t-block">
                     <div class="inner-card-choose">
-                        <div class="content-choose-triggers">
+                        <div class="content-choose-triggers" ngbDropdownItem (click)="selectTriggerClick(coachingCnst.UTTERANCE)">
                             <div class="icon_blk">
                                 <i class="icon-sa-chat"></i>
                             </div>
-                            <div class="info-data-content" (click)="selectTriggerClick(coachingCnst.UTTERANCE)">
+                            <div class="info-data-content">
                                 <div class="title-choose">Utterance</div>
                                 <div class="desc-text">Agent/Customer utterances</div>
                             </div>
                         </div>
                     </div>
                     <div class="inner-card-choose">
-                        <div class="content-choose-triggers">
+                        <div class="content-choose-triggers" ngbDropdownItem (click)="selectTriggerClick(coachingCnst.SPEECH_ANALYSIS)">
                             <div class="icon_blk">
                                 <i class="icon-sa-chat"></i>
                             </div>
-                            <div class="info-data-content" (click)="selectTriggerClick(coachingCnst.SPEECH_ANALYSIS)">
+                            <div class="info-data-content">
                                 <div class="title-choose">Speech Analysis</div>
                                 <div class="desc-text">Agent speech patterns</div>
                             </div>
                         </div>
                     </div>
                     <div class="inner-card-choose">
-                        <div class="content-choose-triggers">
+                        <div class="content-choose-triggers" ngbDropdownItem (click)="selectTriggerClick(coachingCnst.VARIABLE)">
                             <div class="icon_blk">
                                 <i class="icon-sa-chat"></i>
                             </div>
-                            <div class="info-data-content" (click)="selectTriggerClick(coachingCnst.VARIABLE)">
+                            <div class="info-data-content">
                                 <div class="title-choose">Variable</div>
                                 <div class="desc-text">Monitor context variable</div>
                             </div>
                         </div>
                     </div>
                     <div class="inner-card-choose">
-                        <div class="content-choose-triggers">
+                        <div class="content-choose-triggers" ngbDropdownItem (click)="selectTriggerClick(coachingCnst.DIALOG)">
                             <div class="icon_blk">
                                 <i class="icon-sa-chat"></i>
                             </div>
-                            <div class="info-data-content" (click)="selectTriggerClick(coachingCnst.DIALOG)">
+                            <div class="info-data-content">
                                 <div class="title-choose">Dialog</div>
                                 <div class="desc-text">Monitor dialog execution</div>
                             </div>
@@ -136,7 +151,7 @@
                 <perfect-scrollbar class="mx-h-300">
                     <div class="choose-t-block">
                         <div class="inner-card-choose">
-                            <div class="content-choose-triggers">
+                            <div class="content-choose-triggers" ngbDropdownItem>
                                 <div class="icon_blk">
                                     <i class="icon-sa-chat"></i>
                                 </div>
@@ -148,7 +163,7 @@
                             </div>
                         </div>
                         <div class="inner-card-choose">
-                            <div class="content-choose-triggers">
+                            <div class="content-choose-triggers" ngbDropdownItem>
                                 <div class="icon_blk">
                                     <i class="icon-sa-chat"></i>
                                 </div>

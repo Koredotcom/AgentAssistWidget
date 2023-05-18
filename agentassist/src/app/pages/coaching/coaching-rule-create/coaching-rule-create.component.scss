@@ -87,9 +87,16 @@
                     padding-left: 52px;
                     display: inline-block;
                     width: 100%;
-                    .add-triggers{
+                    .add-trgigger-dropdown{
                         display: flex;
                         align-items: flex-start;
+                        &.show{
+                            .add-triggers-btn{
+                                border: 1px solid #2970FF;
+                                background: #EFF8FF;
+                                color: #175CD3;
+                            }
+                        }
                         .add-triggers-btn{
                             padding: 3px 12px 3px 10px;
                             background: #F9FAFB;
@@ -102,12 +109,28 @@
                             outline: 0;
                             // margin-top: 12px;
                             cursor: pointer;
-                            &.trigger-btn-active{
+                            &:hover{
                                 border: 1px solid #2970FF;
                                 background: #EFF8FF;
                                 color: #175CD3;
                             }
                         }
+                        .drop-add-trigger{
+                            padding: 0;
+                            border: 0;
+                            background: transparent;
+                            margin: 0;
+                            min-width: auto;
+                            max-width: initial;
+                            border-radius: 0;
+                            font-size: 14px;
+                            transform: none !important;
+                            position: relative !important;
+                        }
+                    }                    
+                    .add-triggers{
+                        display: flex;
+                        align-items: flex-start;
                         .line-indicator{
                             width: 34px;
                             flex-shrink: 0;
@@ -162,6 +185,8 @@
                                             align-items: flex-start;
                                             min-height: 66px;
                                             cursor: pointer;
+                                            white-space: normal;
+                                            color: #121314 !important;
                                             .icon_blk{
                                                 width: 21px;
                                                 height: 21px;
