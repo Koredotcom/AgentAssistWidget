@@ -32,7 +32,11 @@
                         <app-speech-analysis></app-speech-analysis>
                         <app-variable></app-variable>
                         <app-dialog></app-dialog>
-                        <ng-container *ngTemplateOutlet="addTriggerTemplate;"></ng-container> 
+                        <!-- <ng-container *ngTemplateOutlet="addTriggerTemplate;"></ng-container>  -->
+                        <div class="add-triggers">
+                            <!-- trigger-btn-active -->
+                            <button class="add-triggers-btn">+ Add a trigger</button>
+                        </div>
                     </div>
                 </div>
                 <div class="block-data-triggers">
@@ -68,8 +72,8 @@
 <ng-template #addTriggerTemplate>
     <div class="add-triggers">
         <!-- trigger-btn-active -->
-        <button class="add-triggers-btn">+ Add a trigger</button>
-        <!-- <div class="line-indicator"></div>
+        <button class="add-triggers-btn trigger-btn-active">+ Add a trigger</button>
+        <div class="line-indicator"></div>
         <div class="choose-triggers-block">
             <div class="heading-title">Choose a Trigger</div>
             <div class="choose-t-block-bg">
@@ -120,7 +124,7 @@
                     </div>
                 </div>
             </div>
-            <div class="choose-t-block-bg pre-built-triggers d-none">
+            <div class="choose-t-block-bg pre-built-triggers">
                 <div class="title-with-icon">
                     <i class="icon-sa-chat"></i>
                     <span>Pre Build Triggers</span>
@@ -154,7 +158,7 @@
                     </div>
                 </perfect-scrollbar>
             </div>
-        </div> -->
+        </div>
     </div>
 </ng-template> 
 
