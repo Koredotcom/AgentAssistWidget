@@ -58,7 +58,7 @@ export class ConvsHistoryLogsComponent implements OnInit {
       })
     )
     .subscribe(res=>{
-      if(res.result.length){
+      if(res?.result?.length){
         this.page = this.page+1;
         this.hasMore = res.hasMore;
         if(!this.isAgentJoined){
@@ -78,7 +78,7 @@ export class ConvsHistoryLogsComponent implements OnInit {
   }
 
   historResponseType(response) {
-    let Data = response.result.map(data=>{
+    let Data = (response?.result || []).map(data=>{
       if (data.msgType === 'AGENT') {
         try {
           data.components[0].data.text = JSON.parse(data.components[0].data.text).payload.text;
