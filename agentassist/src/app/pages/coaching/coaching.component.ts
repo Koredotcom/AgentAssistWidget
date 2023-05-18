@@ -24,172 +24,120 @@ export class CoachingComponent implements OnInit {
   respData = {
     hasMore: false,
     results: [{
-      groupName: 'Pricing',
-      description: 'Pricing objection',
-      ruleCount: 6,
-      rules: [{
-        ruleName: 'Interest Rate',
-        description: 'Interest Rate description',
-        assignedTo: 'All',
-        lastUpdated: '1st Jul, 2023 AT 09:15PM',
-        enabled: true,
-      },{
-        ruleName: 'Interest Rate',
-        description: 'Interest Rate description',
-        assignedTo: 'All',
-        lastUpdated: '1st Jul, 2023 AT 09:15PM',
-        enabled: true,
-      },{
-        ruleName: 'Interest Rate',
-        description: 'Interest Rate description',
-        assignedTo: 'All',
-        lastUpdated: '1st Jul, 2023 AT 09:15PM',
-        enabled: false,
-      },]
-    },{
-      groupName: 'Pricing',
-      description: 'Pricing objection',
-      ruleCount: 6,
-      rules: [{
-        ruleName: 'Interest Rate',
-        description: 'Interest Rate description',
-        assignedTo: 'All',
-        lastUpdated: '1st Jul, 2023 AT 09:15PM',
-        enabled: true,
-      },{
-        ruleName: 'Interest Rate',
-        description: 'Interest Rate description',
-        assignedTo: 'All',
-        lastUpdated: '1st Jul, 2023 AT 09:15PM',
-        enabled: true,
-      },{
-        ruleName: 'Interest Rate',
-        description: 'Interest Rate description',
-        assignedTo: 'All',
-        lastUpdated: '1st Jul, 2023 AT 09:15PM',
-        enabled: false,
-      }]
-    },
-    {
-      groupName: 'Pricing',
-      description: 'Pricing objection',
-      ruleCount: 6,
-      rules: [{
-        ruleName: 'Interest Rate',
-        description: 'Interest Rate description',
-        assignedTo: 'All',
-        lastUpdated: '1st Jul, 2023 AT 09:15PM',
-        enabled: true,
-      },{
-        ruleName: 'Interest Rate',
-        description: 'Interest Rate description',
-        assignedTo: 'All',
-        lastUpdated: '1st Jul, 2023 AT 09:15PM',
-        enabled: true,
-      },{
-        ruleName: 'Interest Rate',
-        description: 'Interest Rate description',
-        assignedTo: 'All',
-        lastUpdated: '1st Jul, 2023 AT 09:15PM',
-        enabled: false,
-      }]
-    },
-    {
-      groupName: 'Pricing',
-      description: 'Pricing objection',
-      ruleCount: 6,
-      rules: [{
-        ruleName: 'Interest Rate',
-        description: 'Interest Rate description',
-        assignedTo: 'All',
-        lastUpdated: '1st Jul, 2023 AT 09:15PM',
-        enabled: true,
-      },{
-        ruleName: 'Interest Rate',
-        description: 'Interest Rate description',
-        assignedTo: 'All',
-        lastUpdated: '1st Jul, 2023 AT 09:15PM',
-        enabled: true,
-      },{
-        ruleName: 'Interest Rate',
-        description: 'Interest Rate description',
-        assignedTo: 'All',
-        lastUpdated: '1st Jul, 2023 AT 09:15PM',
-        enabled: false,
-      }]
-    },
-    {
-      groupName: 'Pricing',
-      description: 'Pricing objection',
-      ruleCount: 6,
-      rules: [{
-        ruleName: 'Interest Rate',
-        description: 'Interest Rate description',
-        assignedTo: 'All',
-        lastUpdated: '1st Jul, 2023 AT 09:15PM',
-        enabled: true,
-      },{
-        ruleName: 'Interest Rate',
-        description: 'Interest Rate description',
-        assignedTo: 'All',
-        lastUpdated: '1st Jul, 2023 AT 09:15PM',
-        enabled: true,
-      },{
-        ruleName: 'Interest Rate',
-        description: 'Interest Rate description',
-        assignedTo: 'All',
-        lastUpdated: '1st Jul, 2023 AT 09:15PM',
-        enabled: false,
-      }]
-    },
-    {
-      groupName: 'Pricing',
-      description: 'Pricing objection',
-      ruleCount: 6,
-      rules: [{
-        ruleName: 'Interest Rate',
-        description: 'Interest Rate description',
-        assignedTo: 'All',
-        lastUpdated: '1st Jul, 2023 AT 09:15PM',
-        enabled: true,
-      },{
-        ruleName: 'Interest Rate',
-        description: 'Interest Rate description',
-        assignedTo: 'All',
-        lastUpdated: '1st Jul, 2023 AT 09:15PM',
-        enabled: true,
-      },{
-        ruleName: 'Interest Rate',
-        description: 'Interest Rate description',
-        assignedTo: 'All',
-        lastUpdated: '1st Jul, 2023 AT 09:15PM',
-        enabled: false,
-      }]
-    },
-    {
-      groupName: 'Pricing',
-      description: 'Pricing objection',
-      ruleCount: 6,
-      rules: [{
-        ruleName: 'Interest Rate',
-        description: 'Interest Rate description',
-        assignedTo: 'All',
-        lastUpdated: '1st Jul, 2023 AT 09:15PM',
-        enabled: true,
-      },{
-        ruleName: 'Interest Rate',
-        description: 'Interest Rate description',
-        assignedTo: 'All',
-        lastUpdated: '1st Jul, 2023 AT 09:15PM',
-        enabled: true,
-      },{
-        ruleName: 'Interest Rate',
-        description: 'Interest Rate description',
-        assignedTo: 'All',
-        lastUpdated: '1st Jul, 2023 AT 09:15PM',
-        enabled: false,
-      }]
-    }],
+      "_id":"",
+      "name": "pricing",
+      "displayName": "pricing",
+      "description": "pricing desc",
+      "rules": [
+          {
+              "ruleId": "1",
+              "isEnabled": true // true/false
+          }, 
+          {
+              "ruleId": "2",
+              "isEnabled": false //true/false
+          }
+      ],
+      "createdBy": "kore",
+      "createdOn": "2023-05-16 20:00:00",
+      "lModOn": "2023-05-16 20:00:00",
+      "lModBy": "kore",
+  },{
+      "_id":"",
+      "name": "pricing",
+      "displayName": "pricing",
+      "description": "pricing desc",
+      "rules": [
+          {
+              "ruleId": "1",
+              "isEnabled": true // true/false
+          }, 
+          {
+              "ruleId": "2",
+              "isEnabled": false //true/false
+          }
+      ],
+      "createdBy": "kore",
+      "createdOn": "2023-05-16 20:00:00",
+      "lModOn": "2023-05-16 20:00:00",
+      "lModBy": "kore",
+  },{
+      "_id":"",
+      "name": "pricing",
+      "displayName": "pricing",
+      "description": "pricing desc",
+      "rules": [
+          {
+              "ruleId": "1",
+              "isEnabled": true // true/false
+          }, 
+          {
+              "ruleId": "2",
+              "isEnabled": false //true/false
+          }
+      ],
+      "createdBy": "kore",
+      "createdOn": "2023-05-16 20:00:00",
+      "lModOn": "2023-05-16 20:00:00",
+      "lModBy": "kore",
+  },{
+      "_id":"",
+      "name": "pricing",
+      "displayName": "pricing",
+      "description": "pricing desc",
+      "rules": [
+          {
+              "ruleId": "1",
+              "isEnabled": true // true/false
+          }, 
+          {
+              "ruleId": "2",
+              "isEnabled": false //true/false
+          }
+      ],
+      "createdBy": "kore",
+      "createdOn": "2023-05-16 20:00:00",
+      "lModOn": "2023-05-16 20:00:00",
+      "lModBy": "kore",
+  },{
+      "_id":"",
+      "name": "pricing",
+      "displayName": "pricing",
+      "description": "pricing desc",
+      "rules": [
+          {
+              "ruleId": "1",
+              "isEnabled": true // true/false
+          }, 
+          {
+              "ruleId": "2",
+              "isEnabled": false //true/false
+          }
+      ],
+      "createdBy": "kore",
+      "createdOn": "2023-05-16 20:00:00",
+      "lModOn": "2023-05-16 20:00:00",
+      "lModBy": "kore",
+  },{
+      "_id":"",
+      "name": "pricing",
+      "displayName": "pricing",
+      "description": "pricing desc",
+      "rules": [
+          {
+              "ruleId": "1",
+              "isEnabled": true // true/false
+          }, 
+          {
+              "ruleId": "2",
+              "isEnabled": false //true/false
+          }
+      ],
+      "createdBy": "kore",
+      "createdOn": "2023-05-16 20:00:00",
+      "lModOn": "2023-05-16 20:00:00",
+      "lModBy": "kore",
+  }],
     totalCount: 5,
   }
 
@@ -239,29 +187,24 @@ export class CoachingComponent implements OnInit {
 
   bottomMouseOver(){
     if(this.dragStart){
-      clearInterval(this.bottomInt);
-      this.ps.directiveRef.update();
-      this.topInt = setInterval(()=>{
+      this.clearInterVal();
+      this.bottomInt = setInterval(()=>{
         let scrollTo: any;
         const scrollY = this.ps.directiveRef.ps();
         scrollTo = (scrollY.lastScrollTop as any) + 100;
         this.ps.directiveRef.scrollToTop(scrollTo);
-        this.ps.directiveRef.update();
-        
       },200);
     }    
   }
  
   topMouseOver(){
     if(this.dragStart){
-      this.ps.directiveRef.update();
-      clearInterval(this.topInt);
-      this.bottomInt = setInterval(()=>{
+      this.clearInterVal();
+      this.topInt = setInterval(()=>{
         let scrollTo: any;
         const scrollY = this.ps.directiveRef.ps();
         scrollTo = (scrollY.lastScrollTop as any) - 100;
         this.ps.directiveRef.scrollToTop(scrollTo);
-        this.ps.directiveRef.update();
       },200);
     }
   }
@@ -270,4 +213,5 @@ export class CoachingComponent implements OnInit {
     clearInterval(this.bottomInt);
     clearInterval(this.topInt)
   }
+  
 }

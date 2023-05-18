@@ -14,8 +14,12 @@
         <div class="agents-grid-data-table" cdkDropListGroup>
             <perfect-scrollbar class="scroll-data" #ps>
                 <div id="accordion" class="agent-groups-table-container">
-                    <div class="scrolltopdiv" [ngClass]="{'addIndex': dragStart}" (mouseover)="topMouseOver()"></div>
-                    <div class="scrollbottomdiv" [ngClass]="{'addIndex': dragStart}" (mouseover)="bottomMouseOver()"></div>
+                    <div class="scrolltopdiv" [ngClass]="{'addIndex': dragStart}" (mouseleave)="clearInterVal()" (mouseenter)="topMouseOver()">
+
+                    </div>
+                    <div class="scrollbottomdiv" [ngClass]="{'addIndex': dragStart}" (mouseleave)="clearInterVal()" (mouseenter)="bottomMouseOver()">
+
+                    </div>
                     <ng-container *ngFor="let res of respData.results; let i = index">
                         <div class="card_content" 
                         cdkDropList
@@ -26,11 +30,11 @@
                               <div data-toggle="collapse" data-parent="#accordion" [attr.href]="'#agentGroupData' + i" class="card_link collapsed" aria-expanded="false">
                                     <div class="accordion-content-header">
                                         <div class="left-title">
-                                            <span>{{res.groupName}}</span>
+                                            <span>{{res.name}}</span>
                                             <i class="icon-sa-welcome-edit" (click)="$event.stopPropagation();openCoachingGroup()"></i>
                                         </div>
                                         <div class="right-info">
-                                            <div class="items-count">{{res.ruleCount}} Items</div>
+                                            <div class="items-count">{{res.rules?.length}} Items</div>
                                             <button class="new-rule-btn" (click)="$event.stopPropagation();openFLowCreation(flowCreation)">+ New Rule</button>
                                             <div class="arrow-rotate">
                                                 <i class="icon-sa-arrow-down"></i>
@@ -70,7 +74,7 @@
                                             <div class="title-text w-16">{{rule.lastUpdated}}</div>
                                             <div class="title-text last-updated-toggle w-9">
                                                 <label class="kr-sg-toggle">
-                                                    <input type="checkbox" [checked]="rule.enabled">
+                                                    <input type="checkbox" [checked]="rule.isEnabled">
                                                     <div class="slider"></div>
                                                 </label>
                                             </div>
