@@ -425,7 +425,7 @@ export class AssistComponent implements OnInit {
       this.websocketService.emitEvents(EVENTS.enable_override_userinput, overRideObj)
       this.commonService.OverRideMode = false;
     }
-    this.designAlterService.displayCustomerFeels(data, conversationId, botId, this.connectionDetails.source);
+    // this.designAlterService.displayCustomerFeels(data, conversationId, botId, this.connectionDetails.source);
 
     this.commonService.updateAgentAssistState(conversationId, this.projConstants.ASSIST, data);
     this.processAgentAssistResponse(data, botId);

@@ -88,7 +88,7 @@ export class MybotComponent implements OnInit {
     let subscription2 = this.websocketService.agentAssistAgentResponse$.subscribe((response: any) => {
       this.handleSubjectService.setLoader(true);
       if (response && !response.isSearch) {
-        this.designAlterService.displayCustomerFeels(response, response.conversationId, response.botId, this.connectionDetails.source);
+        // this.designAlterService.displayCustomerFeels(response, response.conversationId, response.botId, this.connectionDetails.source);
         this.processMybotDataResponse(response);
         this.viewCustomTempAttachment();
       }
