@@ -14,7 +14,7 @@ export class ConvsHistoryLogsComponent implements OnInit {
   @Input() sessionId;
   @Input() botId;
   @Input() userId;
-  USECASES_LIMIT = 15;
+  USECASES_LIMIT = 100;
   page = 0;
   dropDownOptions = [
     {name: 'All suggestions', description:'All suggestions made by AgentAssist will be shown'},
@@ -81,7 +81,7 @@ export class ConvsHistoryLogsComponent implements OnInit {
     let Data = (response?.result || []).map(data=>{
       if (data.msgType === 'AGENT') {
         try {
-          data.components[0].data.text = JSON.parse(data.components[0].data.text).payload.text;
+          data.components[0].data.text = JSON.parse(data.components[0]?.data?.text).payload.text;
           return data;
         } catch(err) {
           return data;
