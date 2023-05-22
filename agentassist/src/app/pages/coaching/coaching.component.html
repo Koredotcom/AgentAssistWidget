@@ -5,13 +5,14 @@
     </div>
 
     <div class="tab-sec-details-wrapper">
-        <div class="search-data-input">
-            <div class="kr-sg-input-inline-search">
-                <input type="text" placeholder="Search" class="input-search">
-                <i class="icon-sa-conv-search search-icon"></i>
+        <ng-container *ngIf="true">
+            <div class="search-data-input">
+                <div class="kr-sg-input-inline-search">
+                    <input type="text" placeholder="Search" class="input-search">
+                    <i class="icon-sa-conv-search search-icon"></i>
+                </div>
             </div>
-        </div>
-        <div class="agents-grid-data-table" cdkDropListGroup>
+            <div class="agents-grid-data-table" cdkDropListGroup>
             <perfect-scrollbar class="scroll-data" #ps>
                 <div id="accordion" class="agent-groups-table-container">
                     <div class="scrolltopdiv" [ngClass]="{'addIndex': dragStart}" (mouseleave)="clearInterVal()" (mouseenter)="topMouseOver()">
@@ -37,25 +38,13 @@
                                             <div class="arrow-rotate">
                                                 <i class="icon-sa-arrow-down"></i>
                                             </div>
-                                        </div>
-                                    </div>
-                              </div>
-                            </div>
-                    
-                            <div [attr.id]="'agentGroupData' + i" class="collapse inside-accordioncontent">
-                              <perfect-scrollbar class="mx-h-300">                            
-                                  <div class="card-body inner-accordion-table" >
-                                    <div class="content-scroll-data-agents">
-                                        <div class="shadow-freeze"></div>
-                                        <div class="header-table-agents"                         >
-                                            <div class="titles-data w-22">
-                                                <div class="title-header">Rule name</div>
+                                            <div class="right-info">
+                                                <div class="items-count">{{res.rules?.length}} Items</div>
+                                                <button class="new-rule-btn" (click)="$event.stopPropagation();openFLowCreation(flowCreation)">+ New Rule</button>
+                                                <div class="arrow-rotate">
+                                                    <i class="icon-sa-arrow-down"></i>
+                                                </div>
                                             </div>
-                                            <div class="titles-data w-14">Actions</div>
-                                            <div class="titles-data w-16">Description</div>
-                                            <div class="titles-data w-14">ASSIGNED TO</div>
-                                            <div class="titles-data w-16">Last UPDATED</div>
-                                            <div class="titles-data w-9 text-right">Enabled</div>
                                         </div>
                                         <div class="body-data-table-wrapper-coaching" *ngFor="let rule of res?.rules" cdkDrag (cdkDragStarted)="dragStart=true" (cdkDragEnded)="dragStart=false;clearInterVal()">
                                             <div class="title-text rule-text w-22">{{rule.name}}</div>
@@ -76,19 +65,50 @@
                                                     <div class="slider"></div>
                                                 </label>
                                             </div>
-                                            <div class="drag-drop-element" cdkDragHandle>
-                                                <i class="icon-sa-elipse"></i>
+                                            <div class="body-data-table-wrapper-coaching" *ngFor="let rule of res?.rules" cdkDrag (cdkDragStarted)="dragStart=true" (cdkDragEnded)="dragStart=false;clearInterVal()">
+                                                <div class="title-text rule-text w-25">{{rule.ruleName}}</div>
+                                                <div class="actions-info w-15">
+                                                    <button class="edit-btn">
+                                                        <i class="icon-sa-welcome-edit"></i>
+                                                    </button>
+                                                    <button class="delete-btn">
+                                                        <i class="icon-sa-welcome-delete"></i>
+                                                    </button>
+                                                </div>
+                                                <div class="title-text w-20">{{rule.description}}</div>
+                                                <div class="title-text w-14">{{rule.assignedTo}}</div>
+                                                <div class="title-text w-16">{{rule.lastUpdated}}</div>
+                                                <div class="title-text last-updated-toggle w-10">
+                                                    <label class="kr-sg-toggle">
+                                                        <input type="checkbox" [checked]="rule.isEnabled">
+                                                        <div class="slider"></div>
+                                                    </label>
+                                                </div>
+                                                <div class="drag-drop-element" cdkDragHandle>
+                                                    <i class="icon-sa-elipse"></i>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                  </div>
-                              </perfect-scrollbar>
-                            </div>
+                                </div>
+                            </div>                      
                         </div>
                     </ng-container>
+                </perfect-scrollbar>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="false">
+            <div class="empty-coaching-wrapper">
+                <div class="empty-content">
+                    <div class="img-block">
+                        <img src="assets/images/coaching/empty-coaching.png">
+                    </div>
+                    <div class="empty-title">Create your first Coaching Experience</div>
+                    <div class="desc-text">help agents deliver better customer service and improve overall customer satisfaction. Get started by clicking on the New Coaching  button above.</div>
+                    <button class="kr-sg-button-primary btn_lg" (click)="openCoachingGroup(coachingConst.CREATE, {})">+ New Coaching Group</button>
                 </div>
-            </perfect-scrollbar>
-        </div>
+            </div>
+        </ng-container>
     </div>
 </div>
 

@@ -26,6 +26,9 @@ html{
         font-size: $font-md;
         color: $primaryFontColor;
         -webkit-font-smoothing: antialiased; 
+        *{
+            font-family: 'Inter';
+        }
         a{
             color: $BlueColor;
             text-decoration: none !important;

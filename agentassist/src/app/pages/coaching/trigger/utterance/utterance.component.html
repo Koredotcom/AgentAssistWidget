@@ -46,6 +46,12 @@
             </perfect-scrollbar>
         </ul>
     </div>
+    <div class="add-adherence">
+        <button class="add-adherence-btn" (click)="openAdherence()">+ Add Adherence</button>
+    </div>
+    <div class="delete-row">
+        <i class="icon-sa-welcome-delete"></i>
+    </div>
     <div class="dropdown-occurences no_border" ngbDropdown [placement]="'bottom'" container="body">
         <button class="dropdown-toggle btn-toggle" ngbDropdownToggle>in {{timer}} seconds</button>
         <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
@@ -58,3 +64,9 @@
         </ul>
     </div>
 </div>
+
+
+
+<app-slider-component id="adherenceSlider" #adherenceSlider='app-slider'>
+    <app-utterance-adherence (onClose)="closeAdherence($event)"></app-utterance-adherence>
+</app-slider-component>

@@ -1,5 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
 
 @Component({
   selector: 'app-utterance',
@@ -16,6 +17,7 @@ export class UtteranceComponent implements OnInit {
   selOcc = 1;
   timer = 30;
   selUser: '';
+  @ViewChild('adherenceSlider', { static: true }) adherenceSlider: SliderComponentComponent;
 
   ngOnInit(): void {
     console.log("form", this.form);
@@ -31,4 +33,12 @@ export class UtteranceComponent implements OnInit {
     this.selOcc = occ;
     this.form.controls.frequency.controls.nOccurences.setValue(occ);
   }
+  openAdherence(){
+    this.adherenceSlider.openSlider("#adherenceSlider", "width900");
+  }
+  
+  closeAdherence(group){
+    this.adherenceSlider.closeSlider("#adherenceSlider");
+  }
+
 }
