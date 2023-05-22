@@ -1,9 +1,9 @@
 <div class="utterance-triggers">
-    <div class="drag-content">
+    <!-- <div class="drag-content">
         <i class="icon-sa-elipse"></i>
-    </div>
+    </div> -->
     <div class="and-or-btns" *ngIf="index < length">
-        <ng-container *ngFor="let operator of ['And', 'Or']">
+        <ng-container *ngFor="let operator of opList">
             <button class="and-or-btn" (click)="changeOperator(operator)" [ngClass]="{'active-btn' : selectedOperator === operator}">{{operator}}</button>
         </ng-container>
     </div>

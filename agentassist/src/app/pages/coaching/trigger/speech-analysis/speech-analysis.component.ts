@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, SimpleChange } from '@angular/core';
 import { COACHINGCNST } from '../../coaching.cnst';
 
 @Component({
@@ -16,6 +16,7 @@ export class SpeechAnalysisComponent implements OnInit {
   occurances = COACHINGCNST.OCCURENCES;
   selOcc = COACHINGCNST.SELECTED_OCCURENCE;
   timer = COACHINGCNST.SELECTED_TIMER;
+  opList = COACHINGCNST.OPERATOR_LIST;
   selectedSpeechType : string = '';
   selectedOperator : string;
 
@@ -25,6 +26,13 @@ export class SpeechAnalysisComponent implements OnInit {
     console.log("form", this.form, this.index, this.length);
     this.form.controls.frequency.controls.every.setValue(this.timer+'s');
     this.selectedOperator = this.form.controls.operator.value;
+  }
+
+  ngOnChanges(changes : SimpleChange){
+    console.log(changes, "changes");
+    if(changes["index"]?.currentValue ==  length){
+      this.form?.controls?.operator?.setValue(COACHINGCNST.AND_OPERATOR);
+    }    
   }
 
   clickOnType(type){

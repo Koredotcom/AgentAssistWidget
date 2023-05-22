@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, SimpleChange, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
 import { COACHINGCNST } from '../../coaching.cnst';
@@ -19,6 +19,7 @@ export class UtteranceComponent implements OnInit {
   occurances = COACHINGCNST.OCCURENCES;
   selOcc = COACHINGCNST.SELECTED_OCCURENCE;
   timer = COACHINGCNST.SELECTED_TIMER;
+  opList = COACHINGCNST.OPERATOR_LIST;
   selectedOperator : string;
   selUser: '';
   @ViewChild('adherenceSlider', { static: true }) adherenceSlider: SliderComponentComponent;
@@ -27,6 +28,13 @@ export class UtteranceComponent implements OnInit {
     console.log("form", this.form);
     this.form.controls.frequency.controls.every.setValue(this.timer+'s');
     this.selectedOperator = this.form.controls.operator.value;
+  }
+
+  ngOnChanges(changes : SimpleChange){
+    console.log(changes, "changes");
+    if(changes["index"]?.currentValue ==  length){
+      this.form?.controls?.operator?.setValue(COACHINGCNST.AND_OPERATOR);
+    }    
   }
 
   clickOnUser(user){
@@ -38,6 +46,14 @@ export class UtteranceComponent implements OnInit {
     this.selOcc = occ;
     this.form.controls.frequency.controls.nOccurences.setValue(occ);
   }
+
+  changeOperator(op){
+    this.selectedOperator = op
+    this.form.controls.operator.setValue(op);
+    console.log(this.form, 'from');
+    
+  }
+
   openAdherence(){
     this.adherenceSlider.openSlider("#adherenceSlider", "width900");
   }

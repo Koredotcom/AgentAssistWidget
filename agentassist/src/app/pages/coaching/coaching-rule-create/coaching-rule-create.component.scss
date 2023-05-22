@@ -342,7 +342,7 @@
   
   .cdk-drag-placeholder {
     opacity: 0.5;
-    background-color: white;
+    // background-color: white;
   }
   
   .cdk-drag-animating {
@@ -355,4 +355,15 @@
   
   .content-data-triggers.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
     transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  }
+  .example-box{
+    display: flex;
+    .drag-content{
+        height: max-content;
+        margin-top: 4px;
+        cursor: move;
+    }
+  }
+  .comp{
+    width: 100%;
   }

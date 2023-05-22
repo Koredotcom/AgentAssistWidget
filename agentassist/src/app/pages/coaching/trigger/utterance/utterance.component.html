@@ -1,10 +1,8 @@
 <div class="utterance-triggers">
-    <div class="drag-content">
-        <i class="icon-sa-elipse"></i>
-    </div>
+
     <div class="and-or-btns" *ngIf="index < length">
-        <ng-container *ngFor="let operator of ['And', 'Or']">
-            <button class="and-or-btn" (click)="selectedOperator = operator" [ngClass]="{'active-btn' : selectedOperator === operator}">{{operator}}</button>
+        <ng-container *ngFor="let operator of opList">
+            <button class="and-or-btn" (click)="changeOperator(operator)" [ngClass]="{'active-btn' : selectedOperator === operator}">{{operator}}</button>
         </ng-container>
     </div>
     <span class="utt-name-desc">...a</span>
@@ -22,16 +20,19 @@
         </ul>
     </div>
     <span class="utt-name-desc">uses any of these</span>
-    <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body">
-        <button class="dropdown-toggle btn-toggle text-choosen" ngbDropdownToggle>
-            <span class="choose-text">5 price objection utterances</span>
+    <div class="dropdown-custom-flows" container="body">
+        <button class="dropdown-toggle btn-toggle text-choosen" (click)="openAdherence()">
+            <span class="choose-text"> {{'{ set utterances }'}}</span>
         </button>
-        <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
+        <!-- <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
             <li ngbDropdownItem class="list-item-li">
                 <span class="title">Agent</span>
                 <i class="icon-sa-conv-check"></i>
             </li>
-        </ul>
+        </ul> -->
+    </div>
+    <div class="delete-row">
+        <i class="icon-sa-welcome-delete"></i>
     </div>
     <!-- <div class="dropdown-occurences" ngbDropdown [placement]="'bottom'" container="body">
         <button class="dropdown-toggle btn-toggle" ngbDropdownToggle><i class="icon-sa-conv-refreshten"></i> {{selOcc}}x</button>
@@ -69,8 +70,9 @@
 
 
 
-<app-slider-component id="adherenceSlider" #adherenceSlider='app-slider'>
-    <app-utterance-adherence (onClose)="closeAdherence($event)"></app-utterance-adherence>
-</app-slider-component>
+
     </div> -->
+    <app-slider-component id="adherenceSlider" #adherenceSlider='app-slider'>
+        <app-utterance-adherence (onClose)="closeAdherence($event)"></app-utterance-adherence>
+    </app-slider-component>
 </div>
