@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { COACHINGCNST } from './coaching.cnst';
 
 @Injectable({
@@ -8,18 +8,19 @@ import { COACHINGCNST } from './coaching.cnst';
 export class CoachingService {
 
   coachingCnst : any = COACHINGCNST;
-  constructor() { }
+  constructor(private fb: FormBuilder) { }
 
   getUtteranceFormControlObject(){
     return {
       type: this.coachingCnst.UTTERANCE,
-      by: [null, [Validators.required]],
-      when : [[], [Validators.required]],
-      streetType: [null, [Validators.required]],
-      frequency: [null, [Validators.required]],
-      nOccurences: [null, [Validators.required]],
-      every: [null, [Validators.required]],
-      operator : [null, [Validators.required]]
+      by: ['', [Validators.required]],
+      when : this.fb.group({
+        utterancesId: this.fb.array([], Validators.required)
+      }),
+      frequency: this.fb.group({
+        nOccurences: [1, Validators.required],
+        every: ['', Validators.required]
+      })
     }
   }
 

@@ -15,10 +15,8 @@
             <perfect-scrollbar class="scroll-data" #ps>
                 <div id="accordion" class="agent-groups-table-container">
                     <div class="scrolltopdiv" [ngClass]="{'addIndex': dragStart}" (mouseleave)="clearInterVal()" (mouseenter)="topMouseOver()">
-
                     </div>
                     <div class="scrollbottomdiv" [ngClass]="{'addIndex': dragStart}" (mouseleave)="clearInterVal()" (mouseenter)="bottomMouseOver()">
-
                     </div>
                     <ng-container *ngFor="let res of respData.results; let i = index">
                         <div class="card_content" 
@@ -26,7 +24,7 @@
                         cdkDropListSortingDisabled
                         [cdkDropListData]="res.rules"
                         (cdkDropListDropped)="drop($event)">
-                            <div class="card_header">
+                            <div class="card_header" (click)="collapseAcc(i)">
                               <div data-toggle="collapse" data-parent="#accordion" [attr.href]="'#agentGroupData' + i" class="card_link collapsed" aria-expanded="false">
                                     <div class="accordion-content-header">
                                         <div class="left-title">
@@ -60,7 +58,7 @@
                                             <div class="titles-data w-9 text-right">Enabled</div>
                                         </div>
                                         <div class="body-data-table-wrapper-coaching" *ngFor="let rule of res?.rules" cdkDrag (cdkDragStarted)="dragStart=true" (cdkDragEnded)="dragStart=false;clearInterVal()">
-                                            <div class="title-text rule-text w-22">{{rule.ruleName}}</div>
+                                            <div class="title-text rule-text w-22">{{rule.name}}</div>
                                             <div class="actions-info w-16">
                                                 <button class="edit-btn">
                                                     <i class="icon-sa-welcome-edit"></i>
@@ -71,7 +69,7 @@
                                             </div>
                                             <div class="title-text w-16">{{rule.description}}</div>
                                             <div class="title-text w-14">{{rule.assignedTo}}</div>
-                                            <div class="title-text w-16">{{rule.lastUpdated}}</div>
+                                            <div class="title-text w-16">{{rule.lModOn}}</div>
                                             <div class="title-text last-updated-toggle w-9">
                                                 <label class="kr-sg-toggle">
                                                     <input type="checkbox" [checked]="rule.isEnabled">

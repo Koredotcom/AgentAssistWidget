@@ -27,12 +27,14 @@
                         </div>
                         <div class="title">When...</div>
                     </div>
-                    <div class="content-data-triggers">
-                        <ng-container *ngFor="let triggertype of triggerFormControlsArray">
-                            <app-utterance *ngIf="triggertype?.value?.type == coachingCnst.UTTERANCE"></app-utterance>
-                            <app-speech-analysis *ngIf="triggertype?.value?.type == coachingCnst.SPEECH_ANALYSIS"></app-speech-analysis>
-                            <app-variable *ngIf="triggertype?.value?.type == coachingCnst.VARIABLE"></app-variable>
-                            <app-dialog *ngIf="triggertype?.value?.type == coachingCnst.DIALOG"></app-dialog>
+                    <div class="content-data-triggers" cdkDropList (cdkDropListDropped)="drop($event)">
+                        <ng-container *ngFor="let triggertype of ruleForm.controls['triggers']['controls']">
+                            <div cdkDrag class="example-box">
+                                <app-utterance [form]="triggertype" *ngIf="triggertype?.controls?.type?.value == coachingCnst.UTTERANCE"></app-utterance>
+                                <app-speech-analysis [form]="triggertype" *ngIf="triggertype?.controls?.type?.value == coachingCnst.SPEECH_ANALYSIS"></app-speech-analysis>
+                                <app-variable [form]="triggertype" *ngIf="triggertype?.controls?.type?.value == coachingCnst.VARIABLE"></app-variable>
+                                <app-dialog [form]="triggertype" *ngIf="triggertype?.controls?.type?.value == coachingCnst.DIALOG"></app-dialog>
+                            </div>
                         </ng-container>
                         <!-- <ng-container *ngIf="triggerClick">
                             <ng-container *ngTemplateOutlet="addTriggerTemplate;"></ng-container> 
@@ -97,50 +99,19 @@
             <div class="heading-title">Choose a Trigger</div>
             <div class="choose-t-block-bg">
                 <div class="choose-t-block">
-                    <div class="inner-card-choose">
-                        <div class="content-choose-triggers" ngbDropdownItem (click)="selectTriggerClick(coachingCnst.UTTERANCE)">
-                            <div class="icon_blk">
-                                <i class="icon-sa-chat"></i>
-                            </div>
-                            <div class="info-data-content">
-                                <div class="title-choose">Utterance</div>
-                                <div class="desc-text">Agent/Customer utterances</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="inner-card-choose">
-                        <div class="content-choose-triggers" ngbDropdownItem (click)="selectTriggerClick(coachingCnst.SPEECH_ANALYSIS)">
-                            <div class="icon_blk">
-                                <i class="icon-sa-chat"></i>
-                            </div>
-                            <div class="info-data-content">
-                                <div class="title-choose">Speech Analysis</div>
-                                <div class="desc-text">Agent speech patterns</div>
+                    <ng-container *ngFor="let trigger of allTriggers">
+                        <div class="inner-card-choose">
+                            <div class="content-choose-triggers" ngbDropdownItem (click)="selectTriggerClick(trigger.type)">
+                                <div class="icon_blk">
+                                    <i class="icon-sa-chat"></i>
+                                </div>
+                                <div class="info-data-content">
+                                    <div class="title-choose">{{trigger.title}}</div>
+                                    <div class="desc-text">{{trigger.desc}}</div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="inner-card-choose">
-                        <div class="content-choose-triggers" ngbDropdownItem (click)="selectTriggerClick(coachingCnst.VARIABLE)">
-                            <div class="icon_blk">
-                                <i class="icon-sa-chat"></i>
-                            </div>
-                            <div class="info-data-content">
-                                <div class="title-choose">Variable</div>
-                                <div class="desc-text">Monitor context variable</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="inner-card-choose">
-                        <div class="content-choose-triggers" ngbDropdownItem (click)="selectTriggerClick(coachingCnst.DIALOG)">
-                            <div class="icon_blk">
-                                <i class="icon-sa-chat"></i>
-                            </div>
-                            <div class="info-data-content">
-                                <div class="title-choose">Dialog</div>
-                                <div class="desc-text">Monitor dialog execution</div>
-                            </div>
-                        </div>
-                    </div>
+                    </ng-container>
                 </div>
             </div>
             <div class="choose-t-block-bg pre-built-triggers">
