@@ -57,6 +57,11 @@ export class CoachingRuleCreateComponent implements OnInit {
   }
 
   selectTriggerClick(clickType){
+    // if (this.ruleForm.invalid) {
+    //   console.log("invalid");
+      
+    //   return;
+    // }
     this.triggerClick = false;
     if(clickType == this.coachingCnst.UTTERANCE){
       (<FormArray>this.ruleForm.controls["triggers"])

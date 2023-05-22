@@ -14,6 +14,7 @@ export class CoachingService {
     return {
       type: this.coachingCnst.UTTERANCE,
       by: ['', [Validators.required]],
+      operator : ['And', [Validators.required]],
       when : this.fb.group({
         utterancesId: this.fb.array([], Validators.required)
       }),
@@ -27,13 +28,12 @@ export class CoachingService {
   getSpeechAnalysisFormControlObject(){
     return {
       type: this.coachingCnst.SPEECH_ANALYSIS,
-      by: [null, [Validators.required]],
-      when : [[], [Validators.required]],
-      streetType: [null, [Validators.required]],
-      frequency: [null, [Validators.required]],
-      nOccurences: [null, [Validators.required]],
-      every: [null, [Validators.required]],
-      operator : [null, [Validators.required]]
+      subType: ['', [Validators.required]],
+      operator : ['And', [Validators.required]],
+      frequency: this.fb.group({
+        nOccurences: [1, Validators.required],
+        every: ['', Validators.required]
+      })
     }
   }
 

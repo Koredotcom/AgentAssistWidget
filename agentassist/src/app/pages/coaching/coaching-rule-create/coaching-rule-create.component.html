@@ -49,12 +49,12 @@
                         <div class="title">When...</div>
                     </div>
                     <div class="content-data-triggers" cdkDropList (cdkDropListDropped)="drop($event)">
-                        <ng-container *ngFor="let triggertype of ruleForm.controls['triggers']['controls']">
+                        <ng-container *ngFor="let triggertype of ruleForm.controls['triggers']['controls']; let i = index">
                             <div cdkDrag class="example-box">
-                                <app-utterance [form]="triggertype" *ngIf="triggertype?.controls?.type?.value == coachingCnst.UTTERANCE"></app-utterance>
-                                <app-speech-analysis [form]="triggertype" *ngIf="triggertype?.controls?.type?.value == coachingCnst.SPEECH_ANALYSIS"></app-speech-analysis>
-                                <app-variable [form]="triggertype" *ngIf="triggertype?.controls?.type?.value == coachingCnst.VARIABLE"></app-variable>
-                                <app-dialog [form]="triggertype" *ngIf="triggertype?.controls?.type?.value == coachingCnst.DIALOG"></app-dialog>
+                                <app-utterance [form]="triggertype" *ngIf="triggertype?.controls?.type?.value == coachingCnst.UTTERANCE" [index]="i+1" [length]="ruleForm.controls['triggers']['controls']?.length"></app-utterance>
+                                <app-speech-analysis [form]="triggertype" *ngIf="triggertype?.controls?.type?.value == coachingCnst.SPEECH_ANALYSIS" [index]="i+1" [length]="ruleForm.controls['triggers']['controls']?.length"></app-speech-analysis>
+                                <app-variable [form]="triggertype" *ngIf="triggertype?.controls?.type?.value == coachingCnst.VARIABLE" [index]="i+1" [length]="ruleForm.controls['triggers']['controls']?.length"></app-variable>
+                                <app-dialog [form]="triggertype" *ngIf="triggertype?.controls?.type?.value == coachingCnst.DIALOG" [index]="i+1" [length]="ruleForm.controls['triggers']['controls']?.length"></app-dialog>
                             </div>
                         </ng-container>
                         <!-- <ng-container *ngIf="triggerClick">

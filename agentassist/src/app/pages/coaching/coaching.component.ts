@@ -4,6 +4,7 @@ import { SliderComponentComponent } from 'src/app/shared/slider-component/slider
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
 import { COACHINGCNST } from './coaching.cnst';
+import { CoachingGroupRuleDeleteComponent } from './coaching-group-rule-delete/coaching-group-rule-delete.component';
 
 @Component({
   selector: 'app-coaching',
@@ -158,8 +159,13 @@ export class CoachingComponent implements OnInit {
   }
 
   // Delete Popup
-  openDeleteRule(ruleDelete) {
-		this.modalRef = this.modalService.open(ruleDelete, { centered: true, keyboard: false, windowClass: 'delete-uc-rule-modal', backdrop: 'static' });
+  openDeleteRule() {
+		this.modalRef = this.modalService.open(CoachingGroupRuleDeleteComponent, { centered: true, keyboard: false, windowClass: 'delete-uc-rule-modal', backdrop: 'static' });
+    this.modalRef.componentInstance.data = this.coachingConst.DELETE_RULE;
+    this.modalRef.componentInstance.emitDeleteService.subscribe((emitedValue) => {
+      console.log(emitedValue);
+      
+    });
 	}
 
   closeDeleteRule(rule?) {

@@ -2,9 +2,9 @@
     <div class="drag-content">
         <i class="icon-sa-elipse"></i>
     </div>
-    <div class="and-or-btns">
-        <ng-container *ngFor="let condition of ['And', 'Or']">
-            <button class="and-or-btn" (click)="selectedCond = condition" [ngClass]="{'active-btn' : selectedCond === condition}">{{condition}}</button>
+    <div class="and-or-btns" *ngIf="index < length">
+        <ng-container *ngFor="let operator of ['And', 'Or']">
+            <button class="and-or-btn" (click)="selectedOperator = operator" [ngClass]="{'active-btn' : selectedOperator === operator}">{{operator}}</button>
         </ng-container>
     </div>
     <span class="utt-name-desc">...a</span>
@@ -33,7 +33,7 @@
             </li>
         </ul>
     </div>
-    <div class="dropdown-occurences" ngbDropdown [placement]="'bottom'" container="body">
+    <!-- <div class="dropdown-occurences" ngbDropdown [placement]="'bottom'" container="body">
         <button class="dropdown-toggle btn-toggle" ngbDropdownToggle><i class="icon-sa-conv-refreshten"></i> {{selOcc}}x</button>
         <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
             <perfect-scrollbar class="mx-h-220">
@@ -53,6 +53,8 @@
         <i class="icon-sa-welcome-delete"></i>
     </div>
     <div class="dropdown-occurences no_border" ngbDropdown [placement]="'bottom'" container="body">
+    </div> -->
+    <!-- <div class="dropdown-occurences no_border" ngbDropdown [placement]="'bottom'" container="body">
         <button class="dropdown-toggle btn-toggle" ngbDropdownToggle>in {{timer}} seconds</button>
         <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
             <div class="seconds-input">
@@ -70,3 +72,5 @@
 <app-slider-component id="adherenceSlider" #adherenceSlider='app-slider'>
     <app-utterance-adherence (onClose)="closeAdherence($event)"></app-utterance-adherence>
 </app-slider-component>
+    </div> -->
+</div>

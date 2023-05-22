@@ -63,7 +63,7 @@
                                                         <button class="edit-btn">
                                                             <i class="icon-sa-welcome-edit"></i>
                                                         </button>
-                                                        <button class="delete-btn">
+                                                        <button class="delete-btn" (click)="openDeleteRule()">
                                                             <i class="icon-sa-welcome-delete"></i>
                                                         </button>
                                                     </div>
@@ -109,28 +109,6 @@
 <app-slider-component id="newCoachingGroup" #newCoachingGroup='app-slider'>
     <app-coaching-group-create (onClose)="closeCoachingGroup($event)" [type]="coachGroupEvent" [data]="coachGroupData"></app-coaching-group-create>
 </app-slider-component>
-
-
-<ng-template #ruleDelete>
-	<div class="dlete-rule-common-dialg">
-        <div class="close-rule-modal" (click)="closeDeleteRule()">
-            <i class="icon-sa-close"></i>
-        </div>
-        <div class="content-data">
-            <div class="delete-icon">
-                <i class="icon-sa-welcome-delete"></i>
-            </div>
-            <div class="info-titles">
-                <div class="title">Delete Rule</div>
-                <div class="desc-text">Are you sure you want to delete Negotiation?</div>
-            </div>
-        </div>
-        <div class="btn-actions-footer">
-            <button class="kr-sg-button-secondary btn_lg" (click)="closeDeleteRule()">No</button>
-            <button class="kr-sg-button-danger btn_lg">Yes</button>
-        </div>
-    </div>
-</ng-template>
 
 
 <ng-template #flowCreation>
