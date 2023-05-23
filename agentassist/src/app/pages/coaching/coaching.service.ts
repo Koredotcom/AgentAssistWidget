@@ -63,4 +63,30 @@ export class CoachingService {
     }
   }
 
+  getNudgeFromObj(){
+    return {
+      type: this.coachingCnst.NUDGE_AGENT,
+      by: [null, [Validators.required]],
+      when : [[], [Validators.required]],
+      streetType: [null, [Validators.required]],
+      frequency: [null, [Validators.required]],
+      nOccurences: [null, [Validators.required]],
+      every: [null, [Validators.required]],
+      operator : [null, [Validators.required]]
+    }
+  }
+
+  getHintFromObj(){
+    return {
+      type: this.coachingCnst.HINT_AGENT,
+      by: [null, [Validators.required]],
+      when : [[], [Validators.required]],
+      streetType: [null, [Validators.required]],
+      frequency: [null, [Validators.required]],
+      nOccurences: [null, [Validators.required]],
+      every: [null, [Validators.required]],
+      operator : [null, [Validators.required]]
+    }
+  }
+
 }

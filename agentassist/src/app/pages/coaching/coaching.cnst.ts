@@ -17,5 +17,10 @@ export const COACHINGCNST = {
     USER_LIST : ['Agent', 'Customer'],
     OPERATOR_LIST : ['And', 'Or'],
     AND_OPERATOR : 'And',
-    OR_OPERATOR : 'Or'
+    OR_OPERATOR : 'Or',
+    NUDGE_AGENT: 'Nudge Agent',
+    HINT_AGENT: 'Hint Agent',
+    ALERT_MANAGER: 'Alert Manager',
+    EMAIL_MANAGER: 'Email Manager',
+    FAQ: 'FAQ',
 }
