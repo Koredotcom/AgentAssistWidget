@@ -1563,5 +1563,40 @@ export class EndPointsService {
       method : 'get'
     }
 
+    // agent coaching 
+
+    this.serviceList['get.allagentCoachingGroup'] = {
+      endpoint : this.SUPPORT_API_SERVER_URL + '/agentcoachinggroup',
+      method : 'get'
+    }
+
+    this.serviceList['post.agentCoachingGroup'] = {
+      endpoint : this.SUPPORT_API_SERVER_URL + '/agentcoachinggroup',
+      method : 'post'
+    }
+
+    this.serviceList['get.agentCoachingGroupById'] = {
+      endpoint : this.SUPPORT_API_SERVER_URL + '/agentcoachinggroup/:groupId',
+      method : 'get'
+    }
+
+    this.serviceList['put.agentCoachingGroup'] = {
+      endpoint : this.SUPPORT_API_SERVER_URL + '/agentcoachinggroup/:groupId',
+      method : 'put'
+    }
+
+    this.serviceList['delete.agentCoachingGroup'] = {
+      endpoint : this.SUPPORT_API_SERVER_URL + '/agentcoachinggroup/:groupId',
+      method : 'delete'
+    }
+
+
+    this.serviceList['put.agentCoachingRule'] = {
+      endpoint : this.SUPPORT_API_SERVER_URL + '/agentcoachinggroups/:groupId/rule/:ruleId',
+      method : 'put'
+    }
+
+
+
   }
 }
