@@ -1,4 +1,5 @@
 
+<form [formGroup]="ruleForm">
 <div class="flow-creation-wrapper-container">
     <div class="heading-actions-block">
         <div class="left-content">
@@ -6,11 +7,11 @@
                 <i class="icon-sa-arrow-down"></i>
             </div>
             <div class="kr-sg-input-text">
-                <input type="text" placeholder="new coaching rule #4" class="input-text">
+                <input type="text" placeholder="new coaching rule" class="input-text" formControlName="name">
             </div>
         </div>
         <div class="middle-content">
-            <div class="utt-name">Pricing /</div>
+            <div class="utt-name">{{groupDetails.name}} /</div>
             <div class="dropdown-adherence" ngbDropdown>
                 <button class="dropdown-toggle btn-toggle" ngbDropdownToggle>new coaching rule #4 <i class="icon-sa-arrow-down"></i></button>
                 <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
@@ -34,7 +35,7 @@
         <div class="btn-actions">
             <button class="kr-sg-button-secondary btn_lg" (click)="closeRule()">Cancel</button>
             <button class="kr-sg-button-secondary-two btn_lg">Publish</button>
-            <button class="kr-sg-button-primary btn_lg">Save</button>
+            <button class="kr-sg-button-primary btn_lg" [disabled]="ruleForm.invalid" (click)="saveRule()">Save</button>
         </div>
     </div>
 
@@ -121,6 +122,7 @@
         </perfect-scrollbar>
     </div>
 </div>
+</form>
 
 
 

@@ -1,8 +1,10 @@
-import { ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { COACHINGCNST } from '../coaching.cnst';
 import { CoachingService } from '../coaching.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { workflowService } from '@kore.services/workflow.service';
+import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 
 @Component({
   selector: 'app-coaching-rule-create',
@@ -10,6 +12,10 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
   styleUrls: ['./coaching-rule-create.component.scss']
 })
 export class CoachingRuleCreateComponent implements OnInit {
+
+  @Input() groupDetails : any;
+  @Input() groupIndex : number;
+  @Output() onCloseRule = new EventEmitter();
 
   coachingCnst : any = COACHINGCNST
   triggerClick : boolean = false;
@@ -71,13 +77,16 @@ export class CoachingRuleCreateComponent implements OnInit {
   ]
   // triggerFormControlsArray : any = [];
 
-  constructor(private fb: FormBuilder, private coachingService : CoachingService, private cd: ChangeDetectorRef) { }
+  constructor(private fb: FormBuilder, private coachingService : CoachingService, private cd: ChangeDetectorRef,
+    private workflowService : workflowService, private service : ServiceInvokerService) { }
   ruleForm :FormGroup;
-  @Output() onCloseRule = new EventEmitter();
+ 
 
   ngOnInit(): void {
     this.ruleForm = this.fb.group(
       {
+        "botId" : this.fb.control(this.workflowService.getCurrentBt(true)._id),
+        "name" : this.fb.control('', Validators.required),
         "triggers" : this.fb.array([]),
         "actions" : this.fb.array([]),
         "assignees" : this.fb.array([]),
@@ -89,10 +98,16 @@ export class CoachingRuleCreateComponent implements OnInit {
     this.onCloseRule.emit(rule);
   }
 
-  // addTriggerClick(){
-  //   this.triggerClick = true;
-  // this.triggerClick = false;
-  // }
+  saveRule(){
+    console.log("save rule", this.ruleForm);
+    let payload : any = this.ruleForm.value;
+    this.service.invoke('post.agentcoachingrule', {addToGroup : true, groupId : this.groupDetails._id}, payload).subscribe(data => {
+      if (data) {
+        console.log(data, 'data inside rule creation');
+        this.closeRule(data);
+      }
+    });
+  }
 
   selectTriggerClick(clickType){
     if(clickType == this.coachingCnst.UTTERANCE){

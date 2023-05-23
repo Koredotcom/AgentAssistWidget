@@ -19,6 +19,9 @@
                         </div>
                         <div class="scrollbottomdiv" [ngClass]="{'addIndex': dragStart}" (mouseleave)="clearInterVal()" (mouseenter)="bottomMouseOver()">
                         </div>
+                        <div class='init-loading' *ngIf="isLoading">
+                            <mat-spinner diameter="25" strokeWidth="3"></mat-spinner>
+                        </div>
                         <ng-container *ngFor="let res of respData.results; let i = index">
                             <div class="card_content" 
                             cdkDropList
@@ -30,11 +33,11 @@
                                         <div class="accordion-content-header">
                                             <div class="left-title">
                                                 <span>{{res.name}}</span>
-                                                <i class="icon-sa-welcome-edit" (click)="$event.stopPropagation();openCoachingGroup(coachingConst.EDIT, res)"></i>
+                                                <i class="icon-sa-welcome-edit" (click)="$event.stopPropagation();openCoachingGroup(coachingConst.EDIT, res, i)"></i>
                                             </div>
                                             <div class="right-info">
                                                 <div class="items-count">{{res.rules?.length}} Items</div>
-                                                <button class="new-rule-btn" (click)="$event.stopPropagation();openFLowCreation(flowCreation)">+ New Rule</button>
+                                                <button class="new-rule-btn" (click)="$event.stopPropagation();openFLowCreation(flowCreation, res, i)">+ New Rule</button>
                                                 <div class="arrow-rotate">
                                                     <i class="icon-sa-arrow-down"></i>
                                                 </div>
@@ -112,5 +115,5 @@
 
 
 <ng-template #flowCreation>
-    <app-coaching-rule-create (onCloseRule)="closeFLowCreation($event)"></app-coaching-rule-create>
+    <app-coaching-rule-create (onCloseRule)="closeFLowCreation($event)" [groupDetails]="selectedRuleGroup" [groupIndex]="selectedRuleGroupIndex"></app-coaching-rule-create>
 </ng-template>
