@@ -49,7 +49,6 @@ export class CoachingGroupCreateComponent implements OnInit {
   }
 
   onSubmit(){
-    console.log("submit form", this.createGroupForm);
     if(this.type == this.coachingConst.CREATE){
       this.createOrUpdateGroupApiCall("post.agentCoachingGroup");
     }else if(this.type == this.coachingConst.EDIT){

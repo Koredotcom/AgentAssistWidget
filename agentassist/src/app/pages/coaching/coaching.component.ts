@@ -59,12 +59,11 @@ export class CoachingComponent implements OnInit {
       }else if(updateObj.type == COACHINGCNST.EDIT){
         let groupId = updateObj.data.id;
         let matchIndex = this.respData.results.findIndex(x => x._id == groupId);
-        this.respData.results[matchIndex] = {...updateObj.data};
+        this.respData.results.splice(matchIndex, 1,updateObj.data);
       }else if(updateObj.type == COACHINGCNST.DELETE){
         let groupId = updateObj.data.id;
         let matchIndex = this.respData.results.findIndex(x => x._id == groupId);
         this.respData.results.splice(matchIndex, 1);
-
       }      
     }
   }
