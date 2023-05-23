@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, SimpleChange, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChange, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
 import { COACHINGCNST } from '../../coaching.cnst';
@@ -14,7 +14,8 @@ export class UtteranceComponent implements OnInit {
   @Input() form:FormGroup;
   @Input() index : number;
   @Input() length : number;
-  
+  @Output() deleteTrigger = new EventEmitter();
+
   users = COACHINGCNST.USER_LIST;
   occurances = COACHINGCNST.OCCURENCES;
   selOcc = COACHINGCNST.SELECTED_OCCURENCE;
@@ -59,6 +60,10 @@ export class UtteranceComponent implements OnInit {
   
   closeAdherence(group){
     this.adherenceSlider.closeSlider("#adherenceSlider");
+  }
+
+  deleteTriggerRule(){
+    this.deleteTrigger.emit(this.index-1);
   }
 
 }

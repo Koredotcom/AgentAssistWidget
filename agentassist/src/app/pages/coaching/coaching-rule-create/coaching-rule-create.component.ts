@@ -78,9 +78,9 @@ export class CoachingRuleCreateComponent implements OnInit {
   ngOnInit(): void {
     this.ruleForm = this.fb.group(
       {
-        "triggers" : this.fb.array([]),
-        "actions" : this.fb.array([]),
-        "assignees" : this.fb.array([]),
+        "triggers" : this.fb.array([], Validators.required),
+        "actions" : this.fb.array([], Validators.required),
+        "assignees" : this.fb.array([], Validators.required),
       }
     )
   }
@@ -110,6 +110,7 @@ export class CoachingRuleCreateComponent implements OnInit {
     }
   }
 
+
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.ruleForm.controls['triggers']['controls'], event.previousIndex, event.currentIndex);
   }
@@ -133,6 +134,14 @@ export class CoachingRuleCreateComponent implements OnInit {
     }else if(clickType == this.coachingCnst.FAQ){
       (<FormArray>this.ruleForm.controls["actions"])
       .push(this.fb.group(this.coachingService.getDialogFormControlObject()))
+    }
+  }
+
+  deleteTrigger(index){
+    console.log(index, "index");
+    
+    if(index != null && index != undefined){
+      (<FormArray>this.ruleForm.controls["triggers"]).removeAt(index);
     }
   }
 }
