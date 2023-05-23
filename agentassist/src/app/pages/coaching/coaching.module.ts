@@ -16,13 +16,14 @@ import { AlertManagerComponent } from './then-action/alert-manager/alert-manager
 import { EmailManagerComponent } from './then-action/email-manager/email-manager.component';
 import { FaqComponent } from './then-action/faq/faq.component';
 import { UtteranceAdherenceComponent } from './then-action/utterance-adherence/utterance-adherence.component';
+import { CoachingGroupRuleDeleteComponent } from './coaching-group-rule-delete/coaching-group-rule-delete.component';
 
 const routes: Routes = [
   { path: '', component:  CoachingComponent}
 ];
 
 @NgModule({
-  declarations: [CoachingGroupCreateComponent, CoachingRuleCreateComponent, CoachingComponent, UtteranceComponent, SpeechAnalysisComponent, VariableComponent, DialogComponent, NudgeAgentComponent, HintAgentComponent, AlertManagerComponent, EmailManagerComponent, FaqComponent, UtteranceAdherenceComponent],
+  declarations: [CoachingGroupCreateComponent, CoachingRuleCreateComponent, CoachingComponent, UtteranceComponent, SpeechAnalysisComponent, VariableComponent, DialogComponent, NudgeAgentComponent, HintAgentComponent, AlertManagerComponent, EmailManagerComponent, FaqComponent, UtteranceAdherenceComponent, CoachingGroupRuleDeleteComponent],
   imports: [
     DragDropModule,
     CommonModule,

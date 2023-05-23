@@ -10,6 +10,7 @@ export class EndPointsService {
   private SERVER_URL: String;
   private API_SERVER_URL: String;
   private SUPPORT_API_SERVER_URL: String;
+  private SMARTASSIST_API_SERVER_URL : String;
 
   private serviceList: Object = {};
 
@@ -22,6 +23,7 @@ export class EndPointsService {
       this.API_SERVER_URL = environment['API_SERVER_URL'] + this.API_URL_PREFIX + this.API_VERSION_PREFIX;
     }
     this.SUPPORT_API_SERVER_URL = environment['SUPPORT_API_SERVER_URL'] + this.API_URL_PREFIX + this.API_VERSION_PREFIX;
+    this.SMARTASSIST_API_SERVER_URL = environment['SUPPORT_API_SERVER_URL'] + '/agentassist' + this.API_URL_PREFIX + '/v1'
     this.init();
   }
 
@@ -1562,6 +1564,41 @@ export class EndPointsService {
       endpoint: this.API_SERVER_URL + '/smartassist/apps/:streamId/usecases?limit=:limit&offset=:offset&search=:search&filterby=:filterby&usecaseType=:usecaseType&status=:status&parentBotId=:parentBotId&isAgentAssist=true',
       method : 'get'
     }
+
+    // agent coaching 
+
+    this.serviceList['get.allagentCoachingGroup'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachinggroup/?botId=:botId&isExpand=:isExpand',
+      method : 'get'
+    }
+
+    this.serviceList['post.agentCoachingGroup'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachinggroup',
+      method : 'post'
+    }
+
+    this.serviceList['get.agentCoachingGroupById'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachinggroup/:groupId',
+      method : 'get'
+    }
+
+    this.serviceList['put.agentCoachingGroup'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachinggroup/:groupId',
+      method : 'put'
+    }
+
+    this.serviceList['delete.agentCoachingGroup'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachinggroup/:groupId',
+      method : 'delete'
+    }
+
+
+    this.serviceList['put.agentCoachingRule'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachinggroups/:groupId/rule/:ruleId',
+      method : 'put'
+    }
+
+
 
   }
 }

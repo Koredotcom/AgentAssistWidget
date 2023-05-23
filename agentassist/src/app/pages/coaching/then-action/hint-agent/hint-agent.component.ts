@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
 
 @Component({
   selector: 'app-hint-agent',
@@ -7,9 +9,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HintAgentComponent implements OnInit {
 
+  @ViewChild('adherenceSlider', { static: true }) adherenceSlider: SliderComponentComponent;
+  @Input() form: FormGroup
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  openAdherence(){
+    this.adherenceSlider.openSlider("#adherenceSlider", "width900");
+  }
+  
+  closeAdherence(group){
+    this.adherenceSlider.closeSlider("#adherenceSlider");
   }
 
 }

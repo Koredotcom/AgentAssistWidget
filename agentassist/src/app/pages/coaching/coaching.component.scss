@@ -220,7 +220,7 @@
                         position: relative;
                         .shadow-freeze {
                           position: absolute;
-                          width: 22%;
+                          width: 25%;
                           height: 100%;
                           left: 0px;
                           box-shadow: 4px 0px 12px rgba(0, 0, 0, 0.1);
@@ -270,7 +270,53 @@
     }
 }
 
-
+.search-empty-wrapper{
+    padding: 100px;
+    text-align: center;
+    .img-block{
+        margin-bottom: 20px;
+    }
+    .search-empty-title{
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 20px;
+        color: #737373;
+        margin-bottom: 10px;
+    }
+    .desc-searh{
+        font-weight: 400;
+        font-size: 11px;
+        line-height: 16px;
+        color: #A3A3A3;
+    }
+}
+.empty-coaching-wrapper{
+    height: calc(100vh - 143px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .empty-content{
+        width: 524px;
+        margin: 0 auto;
+        text-align: center;
+        padding: 0 20px;
+        .empty-title{
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 20px;
+            color: #171717;
+            margin-bottom: 5px;
+            margin-top: -20px;
+        }
+        .desc-text{
+            font-weight: 400;
+            font-size: 12px;
+            line-height: 18px;
+            color: #7D89B0;
+            margin-bottom: 15px;
+        }
+    }
+}
 ::ng-deep .delete-uc-rule-modal{
     .modal-dialog{
         margin: 0 auto;
@@ -353,8 +399,7 @@
             height: 100%;
             border: 0;
             border-radius: 0;
-            // background: #F2F4F7;
-            background: #F5F7FB;
+            background: #F2F4F7;
         }
     }
 }

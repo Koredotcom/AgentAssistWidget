@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, SimpleChange } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SubSink } from 'subsink';
+import { CoachingGroupRuleDeleteComponent } from '../coaching-group-rule-delete/coaching-group-rule-delete.component';
 import { COACHINGCNST } from '../coaching.cnst';
 
 @Component({
@@ -14,10 +16,12 @@ export class CoachingGroupCreateComponent implements OnInit {
   @Input() data : any;
   @Output() onClose = new EventEmitter();
 
+  modalRef:any;
+
   
   createGroupForm : FormGroup;
   coachingConst : any = COACHINGCNST;
-  constructor() { }
+  constructor(private modalService: NgbModal) { }
   
 
   ngOnInit(): void {
@@ -44,5 +48,19 @@ export class CoachingGroupCreateComponent implements OnInit {
   onSubmit(){
     console.log("submit form", this.createGroupForm);
   }
+
+  openDeleteGroup() {
+    this.closeGroup();
+		this.modalRef = this.modalService.open(CoachingGroupRuleDeleteComponent, { centered: true, keyboard: false, windowClass: 'delete-uc-rule-modal', backdrop: 'static' });
+    this.modalRef.componentInstance.data = {
+      title : "Delete Rule",
+      desc : "Are you sure you want to delete group " + this.createGroupForm.controls.name.value + " all rules under the group will be deleted.",
+      type : "Group"
+    };
+    this.modalRef.componentInstance.emitDeleteService.subscribe((emitedValue) => {
+      console.log(emitedValue);
+      
+    });
+	}
 
 }

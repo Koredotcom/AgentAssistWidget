@@ -1,72 +1,62 @@
 <div class="utterance-triggers">
-    <div class="drag-content">
-        <i class="icon-sa-elipse"></i>
+
+    <div class="and-or-btns" *ngIf="!(index === length)">
+        <ng-container *ngFor="let operator of opList">
+            <button class="and-or-btn" (click)="changeOperator(operator)" [ngClass]="{'active-btn' : selectedOperator === operator}">{{operator}}</button>
+        </ng-container>
     </div>
-    <div class="and-or-btns">
-        <button class="and-or-btn active-btn">And</button>
-        <button class="and-or-btn">Or</button>
-    </div>
-    <span class="utt-name-desc">Triggered by utterance by</span>
+    <span class="utt-name-desc">...a</span>
     <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body">
-        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle>
-            <span class="choose-text">{{'{ Choose }'}}</span>
+        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!selUser}">
+            <span class="choose-text">{{selUser ? selUser : '{ select person }'}}</span>
         </button>
         <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
+            <ng-container *ngFor="let user of users">
+                <li ngbDropdownItem class="list-item-li" (click)="clickOnUser(user)">
+                    <span class="title">{{user}}</span>
+                    <i [ngClass]="{'icon-sa-conv-check' : user === selUser}" ></i>
+                </li>
+            </ng-container>
+        </ul>
+    </div>
+    <span class="utt-name-desc">uses any of these</span>
+    <div class="dropdown-custom-flows" container="body">
+        <button class="dropdown-toggle btn-toggle text-choosen" (click)="openAdherence()">
+            <span class="choose-text"> {{'{ set utterances }'}}</span>
+        </button>
+        <!-- <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
             <li ngbDropdownItem class="list-item-li">
                 <span class="title">Agent</span>
                 <i class="icon-sa-conv-check"></i>
             </li>
-            <li ngbDropdownItem class="list-item-li">
-                <span class="title">Customer</span>
-                <i class="icon-sa-conv-check"></i>
-            </li>
-        </ul>
+        </ul> -->
     </div>
-    <span class="utt-name-desc">when they use any of these</span>
-    <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body">
-        <button class="dropdown-toggle btn-toggle text-choosen" ngbDropdownToggle>
-            <span class="choose-text">5 price objection utterances</span>
-        </button>
-        <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
-            <li ngbDropdownItem class="list-item-li">
-                <span class="title">Agent</span>
-                <i class="icon-sa-conv-check"></i>
-            </li>
-            <li ngbDropdownItem class="list-item-li">
-                <span class="title">Customer</span>
-                <i class="icon-sa-conv-check"></i>
-            </li>
-        </ul>
+    <div class="delete-row">
+        <i class="icon-sa-welcome-delete"></i>
     </div>
-    <div class="dropdown-occurences" ngbDropdown [placement]="'bottom'" container="body">
-        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle><i class="icon-sa-conv-refreshten"></i> 1x</button>
+    <!-- <div class="dropdown-occurences" ngbDropdown [placement]="'bottom'" container="body">
+        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle><i class="icon-sa-conv-refreshten"></i> {{selOcc}}x</button>
         <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
             <perfect-scrollbar class="mx-h-220">
-                <li ngbDropdownItem class="list-item-li">
-                    <span class="title">Each Occurrence <span>1x</span></span>
-                    <i class="icon-sa-conv-check"></i>
-                </li>
-                <li ngbDropdownItem class="list-item-li">
-                    <span class="title">After 2 Occurrences <span>2x</span></span>
-                    <i class="icon-sa-conv-check"></i>
-                </li>
-                <li ngbDropdownItem class="list-item-li">
-                    <span class="title">After 3 Occurrences <span>3x</span></span>
-                    <i class="icon-sa-conv-check"></i>
-                </li>
-                <li ngbDropdownItem class="list-item-li">
-                    <span class="title">After 4 Occurrences <span>4x</span></span>
-                    <i class="icon-sa-conv-check"></i>
-                </li>
-                <li ngbDropdownItem class="list-item-li">
-                    <span class="title">After 5 Occurrences <span>5x</span></span>
-                    <i class="icon-sa-conv-check"></i>
-                </li>
+                <ng-container *ngFor="let occ of occurances">
+                    <li ngbDropdownItem class="list-item-li" (click)="clickOcc(occ)">
+                        <span class="title">Each Occurrence <span>{{occ}}x</span></span>
+                        <i [ngClass]="{'icon-sa-conv-check': occ === selOcc}"></i>
+                    </li>
+                </ng-container>
             </perfect-scrollbar>
         </ul>
     </div>
+    <div class="add-adherence">
+        <button class="add-adherence-btn" (click)="openAdherence()">+ Add Adherence</button>
+    </div>
+    <div class="delete-row">
+        <i class="icon-sa-welcome-delete"></i>
+    </div>
     <div class="dropdown-occurences no_border" ngbDropdown [placement]="'bottom'" container="body">
-        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle>in 30 seconds</button>
+    </div> -->
+    <!-- <div class="dropdown-occurences no_border" ngbDropdown [placement]="'bottom'" container="body">
+        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle>in {{timer}} seconds</button>
         <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
             <div class="seconds-input">
                 <div class="kr-sg-input-text">
@@ -76,4 +66,13 @@
             </div>
         </ul>
     </div>
+</div>
+
+
+
+
+    </div> -->
+    <app-slider-component id="adherenceSlider" #adherenceSlider='app-slider'>
+        <app-utterance-adherence (onClose)="closeAdherence($event)"></app-utterance-adherence>
+    </app-slider-component>
 </div>
