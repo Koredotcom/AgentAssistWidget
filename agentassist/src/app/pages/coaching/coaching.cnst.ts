@@ -1,6 +1,7 @@
 export const COACHINGCNST = {
     CREATE : 'create',
     EDIT : 'edit',
+    DELETE : 'delete',
     UTTERANCE : 'utterance',
     SPEECH_ANALYSIS : 'speech analysis',
     VARIABLE : 'variable',

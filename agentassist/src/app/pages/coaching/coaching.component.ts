@@ -24,6 +24,7 @@ export class CoachingComponent implements OnInit {
   coachingConst : any = COACHINGCNST;
   coachGroupEvent : string;
   coachGroupData : any;
+  respData : any = {};
 
   @ViewChild('ps') ps: PerfectScrollbarComponent;
   @ViewChild('newCoachingGroup', { static: true }) newCoachingGroup: SliderComponentComponent;
@@ -31,149 +32,42 @@ export class CoachingComponent implements OnInit {
   constructor(private modalService: NgbModal, private service : ServiceInvokerService,
     private workflowService : workflowService) { }
 
-  respData: any = {
-    hasMore: false,
-    results: [
-      {
-      "isOpen": false,
-      "_id":"1",
-      "name": "pricing",
-      "displayName": "pricing",
-      "description": "pricing desc",
-      "rules": [
-          {
-              "ruleId": "1",
-              "isEnabled": true // true/false
-          }, 
-          {
-              "ruleId": "2",
-              "isEnabled": false //true/false
-          }
-      ],
-      "createdBy": "kore",
-      "createdOn": "2023-05-16 20:00:00",
-      "lModOn": "2023-05-16 20:00:00",
-      "lModBy": "kore",
-  },
-  {
-      "_id":"2",
-      "isOpen": false,
-      "name": "pricing",
-      "displayName": "pricing",
-      "description": "pricing desc",
-      "rules": [
-          {
-              "ruleId": "1",
-              "isEnabled": true // true/false
-          }, 
-          {
-              "ruleId": "2",
-              "isEnabled": false //true/false
-          }
-      ],
-      "createdBy": "kore",
-      "createdOn": "2023-05-16 20:00:00",
-      "lModOn": "2023-05-16 20:00:00",
-      "lModBy": "kore",
-  },{
-      "_id":"3",
-      "isOpen": false,
-      "name": "pricing",
-      "displayName": "pricing",
-      "description": "pricing desc",
-      "rules": [
-          {
-              "ruleId": "1",
-              "isEnabled": true // true/false
-          }, 
-          {
-              "ruleId": "2",
-              "isEnabled": false //true/false
-          }
-      ],
-      "createdBy": "kore",
-      "createdOn": "2023-05-16 20:00:00",
-      "lModOn": "2023-05-16 20:00:00",
-      "lModBy": "kore",
-  },{
-      "_id":"4",
-      "isOpen": false,
-      "name": "pricing",
-      "displayName": "pricing",
-      "description": "pricing desc",
-      "rules": [
-          {
-              "ruleId": "1",
-              "isEnabled": true // true/false
-          }, 
-          {
-              "ruleId": "2",
-              "isEnabled": false //true/false
-          }
-      ],
-      "createdBy": "kore",
-      "createdOn": "2023-05-16 20:00:00",
-      "lModOn": "2023-05-16 20:00:00",
-      "lModBy": "kore",
-  },{
-      "_id":"5",
-      "isOpen": false,
-      "name": "pricing",
-      "displayName": "pricing",
-      "description": "pricing desc",
-      "rules": [
-          {
-              "ruleId": "1",
-              "isEnabled": true // true/false
-          }, 
-          {
-              "ruleId": "2",
-              "isEnabled": false //true/false
-          }
-      ],
-      "createdBy": "kore",
-      "createdOn": "2023-05-16 20:00:00",
-      "lModOn": "2023-05-16 20:00:00",
-      "lModBy": "kore",
-  },{
-      "_id":"6",
-      "isOpen": false,
-      "name": "pricing",
-      "displayName": "pricing",
-      "description": "pricing desc",
-      "rules": [
-          {
-              "ruleId": "1",
-              "isEnabled": true // true/false
-          }, 
-          {
-              "ruleId": "2",
-              "isEnabled": false //true/false
-          }
-      ],
-      "createdBy": "kore",
-      "createdOn": "2023-05-16 20:00:00",
-      "lModOn": "2023-05-16 20:00:00",
-      "lModBy": "kore",
-  }],
-    totalCount: 5,
-  }
-
   ngOnInit(): void {
     this.getAgentCoachingGroupData();
   }
 
+  // get or update GroupData Starts
   getAgentCoachingGroupData(){
     let params : any = {
       botId : this.workflowService.getCurrentBt(true)._id,
       isExpand : true
     }
+    this.respData = {
+      results : []
+    };
     this.service.invoke('get.allagentCoachingGroup',params).subscribe(data => {
       if (data) {
-
+        this.respData.results = data;
       }
     });
   }
+
+  updateGroupData(updateObj){    
+    if(updateObj.data && updateObj.data.id){
+      if(updateObj.type == COACHINGCNST.CREATE){
+        this.respData.results.push(updateObj.data);
+      }else if(updateObj.type == COACHINGCNST.EDIT){
+        let groupId = updateObj.data.id;
+        let matchIndex = this.respData.results.findIndex(x => x._id == groupId);
+        this.respData.results.splice(matchIndex, 1,updateObj.data);
+      }else if(updateObj.type == COACHINGCNST.DELETE){
+        let groupId = updateObj.data.id;
+        let matchIndex = this.respData.results.findIndex(x => x._id == groupId);
+        this.respData.results.splice(matchIndex, 1);
+      }      
+    }
+  }
+  // get or update GroupData Ends
 
   // Delete Popup
   openDeleteRule() {
@@ -184,14 +78,10 @@ export class CoachingComponent implements OnInit {
       
     });
 	}
-
-  closeDeleteRule(rule?) {
-		this.modalRef.close();
-	}
-
   // END
 
-  // Open Flow
+
+  // Create or Edit Rule Flow Starts
     openFLowCreation(flowCreation) {
       this.modalFlowCreateRef = this.modalService.open(flowCreation, { centered: true, keyboard: false, windowClass: 'flow-creation-full-modal', backdrop: 'static' });
     }
@@ -199,8 +89,10 @@ export class CoachingComponent implements OnInit {
     closeFLowCreation(rule?) {
       this.modalFlowCreateRef.close();
     }
-  // End
+  // Create or Edit Rule Flow Ends
 
+
+  // Create or Edit Group Slider Starts
   openCoachingGroup(type, editData){
     this.coachGroupEvent = type;
     this.coachGroupData  = editData;
@@ -211,7 +103,10 @@ export class CoachingComponent implements OnInit {
     this.coachGroupData = null;
     this.newCoachingGroup.closeSlider("#newCoachingGroup");
   }
+  //Create or Edit Group Slider End
 
+
+  // drag and drop Starts
   drop(event: CdkDragDrop<string[]>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
@@ -254,147 +149,6 @@ export class CoachingComponent implements OnInit {
     clearInterval(this.bottomInt);
     clearInterval(this.topInt)
   }
-/* 
-  collapseAcc(i){
-    if(!this.respData.results[i].isOpen){
-      this.respData.results[i].isOpen = true;
-      let groupId = this.respData.results[i]._id;
-      this.getAgentCoachingSelectedGroupData(groupId, i)
-    }
-  } */
-
-/*   getAgentCoachingSelectedGroupData(id, i){
-    this.service.invoke('get.agentCoachingGroupById', {groupId : id}).subscribe(data => {
-      if (data) {
-
-      }
-    });
-
-    let obj = {
-      "id": "1",
-      "name": "utterance_rule",
-      "description": "utterance_rule",
-      "tags":[],
-      "createdBy":"",
-      "createdOn":"2023-05-16 20:00:00",
-      "lModBy":"",
-      "lModOn":"2023-05-16 20:00:00",
-      "accountId":"",
-      "botId":"",
-      "isEnabled": false,
-      "triggers": [
-          {
-              "type": "utterance", //utterance/speech_analysis/variable/dialog_task
-              "by":"customer", //agent or customer
-              "when":{
-                  "utterancesId":[""]
-              },
-              "frequency":{
-                  "nOccurences":1,
-                  "every":"20s"
-              },
-              "operator":"and" //and or or
-          },{
-              "type": "speech_analysis", //utterance/speech_analysis/variable/dialog_task
-              "subType":"crossTalk",
-              "frequency":{
-                  "nOccurences":1,
-                  "timeTaken":"20s"
-              },
-              "operator":"or" //and or or
-          },{
-              "type": "speech_analysis", //utterance/speech_analysis/variable/dialog_task
-              "subType":"deadair",
-              "by":"customer", //customer or agent or both
-              "frequency":{
-                  "nOccurences":1,
-                  "timeTaken":60 //time taken in seconds
-              },
-              "operator":"or" //and or or
-          },
-          {
-              "type": "speech_analysis", //utterance/speech_analysis/variable/dialog_task
-              "subType":"speech_speed",
-              "by":"customer", //customer or agent or both
-              "frequency":{
-                  "nWords":200,
-                  "timeTaken":60 //time taken in seconds
-              },
-              "operator":"or" //and or or
-          },
-          {
-              "type": "variable", //utterance/speech_analysis/variable/dialog_task
-              "variable":"",
-              "conditons":{
-                  "operator":"eq", //eq,lt,gt,lte,gte,neq,range,
-                  "value":"",
-                  "from":"",
-                  "to":""
-              },
-              "operator":"or" //and or or
-          },
-          {
-              "type": "dialog_task", //utterance/speech_analysis/variable/dialog_task
-              "botId":"",
-              "taskId":"",
-              "executionPhase": "start/end" //start or end
-  
-          }  
-      ],
-      "actions":[
-          {
-              "type":"nudge", //hint,nudge,alert_manager,email_manager
-              "expression": "postive", //+ve,warning,neutral,critical
-              "message":{
-                  "title":""
-              },
-              "adherence":{
-                  "utteranceId":[""]
-              } 
-          },
-          {
-              "type":"hint", //hint,nudge,alert_manager,email_manager
-              "expression": "postive", //+ve,warning,neutral,critical
-              "message":{
-                  "title":"",
-                  "body":"",
-                  "button":"",
-                  "postAction":"auto_close" //auto_close, doesnot_auto_close
-              },
-              "adherence":{
-                  "utteranceId":[""]
-              } 
-          },
-          {
-              "type":"alert_manager", //hint,nudge,alert_manager,email_manager
-              "emails":[""],
-              "message":{
-                  "title":"",
-                  "body":""
-              } 
-          },
-          {
-              "type":"email_manager", //hint,nudge,alert_manager,email_manager
-              "emails":[""],
-              "when":"immediately", //immediatley or eod How to calculate EOD
-              "message":{
-                  "title":"",
-                  "body":""
-              } 
-          }
-      ],
-      "assignees":[
-          {
-              "groups":[],
-              "agents":[]
-          }
-      ],
-      "state":""
-    }
-    this.respData.results[i].rules.push(
-      {...obj, grpId: this.respData.results[i]._id}, {...obj, grpId: this.respData.results[i]._id}, {...obj, grpId: this.respData.results[i]._id}
-    );
-  }
- */
+  // drag and drop ends
   
 }
