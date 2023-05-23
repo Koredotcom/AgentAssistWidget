@@ -25,7 +25,7 @@
                             cdkDropListSortingDisabled
                             [cdkDropListData]="res.rules"
                             (cdkDropListDropped)="drop($event)" id="{{res._id}}">
-                                <div class="card_header" (click)="collapseAcc(i)">
+                                <div class="card_header">
                                     <div data-toggle="collapse" data-parent="#accordion" [attr.href]="'#agentGroupData' + i" class="card_link collapsed" aria-expanded="false">
                                         <div class="accordion-content-header">
                                             <div class="left-title">
