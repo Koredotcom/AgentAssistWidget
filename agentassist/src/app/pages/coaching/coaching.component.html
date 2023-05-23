@@ -107,7 +107,7 @@
 
 
 <app-slider-component id="newCoachingGroup" #newCoachingGroup='app-slider'>
-    <app-coaching-group-create (onClose)="closeCoachingGroup($event)" [type]="coachGroupEvent" [data]="coachGroupData"></app-coaching-group-create>
+    <app-coaching-group-create (onClose)="closeCoachingGroup($event)" [type]="coachGroupEvent" [groupData]="coachGroupData" (updateGroup)="updateGroupData($event)"></app-coaching-group-create>
 </app-slider-component>
 
 

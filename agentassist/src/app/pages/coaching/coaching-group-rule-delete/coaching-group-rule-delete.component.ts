@@ -21,8 +21,10 @@ export class CoachingGroupRuleDeleteComponent implements OnInit {
   }
 
   deletGroupRule(){
+    console.log(this.data.groupId, 'groupId');
+    
     this.emitDeleteService.next(true);
-    this.activeModal.close();
+    this.activeModal.close(this.data.groupId);
   }
 
 }
