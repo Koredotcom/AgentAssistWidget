@@ -1,6 +1,6 @@
 <div class="utterance-triggers">
 
-    <div class="and-or-btns" *ngIf="index < length">
+    <div class="and-or-btns" *ngIf="!(index === length)">
         <ng-container *ngFor="let operator of opList">
             <button class="and-or-btn" (click)="changeOperator(operator)" [ngClass]="{'active-btn' : selectedOperator === operator}">{{operator}}</button>
         </ng-container>

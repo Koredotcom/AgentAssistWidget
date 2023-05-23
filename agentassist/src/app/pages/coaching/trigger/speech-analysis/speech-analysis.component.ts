@@ -1,4 +1,5 @@
 import { Component, Input, OnInit, SimpleChange } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { COACHINGCNST } from '../../coaching.cnst';
 
 @Component({
@@ -8,7 +9,7 @@ import { COACHINGCNST } from '../../coaching.cnst';
 })
 export class SpeechAnalysisComponent implements OnInit {
 
-  @Input() form:any;
+  @Input() form : FormGroup;
   @Input() index : number;
   @Input() length : number;
 
@@ -24,14 +25,13 @@ export class SpeechAnalysisComponent implements OnInit {
 
   ngOnInit(): void {
     console.log("form", this.form, this.index, this.length);
-    this.form.controls.frequency.controls.every.setValue(this.timer+'s');
+    (this.form.controls.frequency as FormGroup).controls.every.setValue(this.timer+'s');
     this.selectedOperator = this.form.controls.operator.value;
   }
 
   ngOnChanges(changes : SimpleChange){
-    console.log(changes, "changes");
     if(changes["index"]?.currentValue ==  length){
-      this.form?.controls?.operator?.setValue(COACHINGCNST.AND_OPERATOR);
+      this.changeOperator(COACHINGCNST.AND_OPERATOR);
     }    
   }
 
