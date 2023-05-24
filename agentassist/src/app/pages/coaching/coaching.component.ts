@@ -25,7 +25,7 @@ export class CoachingComponent implements OnInit {
   coachingConst : any = COACHINGCNST;
   coachGroupEvent : string;
   coachGroupData : any;
-  respData : any = {};
+  respData:any = {};
   isLoading : boolean = false;
   selectedRuleGroup : any;
   selectedRuleGroupIndex : number;
@@ -46,15 +46,12 @@ export class CoachingComponent implements OnInit {
       botId : this.workflowService.getCurrentBt(true)._id,
       isExpand : true
     }
-    this.respData = {
-      results : []
-    };
     this.isLoading = true;
     this.service.invoke('get.allagentCoachingGroup',params).pipe(finalize(() => {
       this.isLoading = false;
     })).subscribe(data => {
       if (data) {
-        this.respData.results = data;
+        this.respData = data||{"results":[]};
       }
     });
   }

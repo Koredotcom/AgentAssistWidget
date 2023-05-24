@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
+import { COACHINGCNST } from '../../coaching.cnst';
 
 @Component({
   selector: 'app-nudge-agent',
@@ -9,7 +10,11 @@ import { SliderComponentComponent } from 'src/app/shared/slider-component/slider
 })
 export class NudgeAgentComponent implements OnInit {
   @ViewChild('adherenceSlider', { static: true }) adherenceSlider: SliderComponentComponent;
-  @Input() form: FormGroup
+  @Input() form: FormGroup;
+  msgTypes = COACHINGCNST.TYPE_OF_HINT;
+  selMsgType: string = '';
+  nudgeMsg: string = '';
+  showNudgeMsg: string = ''
   constructor() { }
 
   ngOnInit(): void {
@@ -21,5 +26,13 @@ export class NudgeAgentComponent implements OnInit {
   
   closeAdherence(group){
     this.adherenceSlider.closeSlider("#adherenceSlider");
+  }
+
+  selectMsgType(type){
+    this.selMsgType = type;
+  }
+
+  submitnudgeMsg(){
+    this.showNudgeMsg = this.nudgeMsg;
   }
 }

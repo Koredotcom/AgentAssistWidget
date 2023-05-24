@@ -130,24 +130,27 @@ export class CoachingRuleCreateComponent implements OnInit {
   }
     
   selectActionClick(clickType){
-    if(clickType == this.coachingCnst.NUDGE_AGENT){
+    if(clickType == this.coachingCnst.NUDGE_AGENT) {
       (<FormArray>this.ruleForm.controls["actions"])
       .push(this.fb.group(this.coachingService.getNudgeFromObj()))
-    }else if(clickType == this.coachingCnst.HINT_AGENT){
+    } else if(clickType == this.coachingCnst.HINT_AGENT){
       (<FormArray>this.ruleForm.controls["actions"])
       .push(this.fb.group(this.coachingService.getHintFromObj()))
-    }else if(clickType == this.coachingCnst.ALERT_MANAGER){
-      (<FormArray>this.ruleForm.controls["actions"])
-      .push(this.fb.group(this.coachingService.getVariableFormControlObject()))
-    }else if(clickType == this.coachingCnst.EMAIL_MANAGER){
-      (<FormArray>this.ruleForm.controls["actions"])
-      .push(this.fb.group(this.coachingService.getDialogFormControlObject()))
-    }else if(clickType == this.coachingCnst.DIALOG){
-      (<FormArray>this.ruleForm.controls["actions"])
-      .push(this.fb.group(this.coachingService.getDialogFormControlObject()))
-    }else if(clickType == this.coachingCnst.FAQ){
-      (<FormArray>this.ruleForm.controls["actions"])
-      .push(this.fb.group(this.coachingService.getDialogFormControlObject()))
     }
+    
+    // else if(clickType == this.coachingCnst.ALERT_MANAGER){
+    //   (<FormArray>this.ruleForm.controls["actions"])
+    //   .push(this.fb.group(this.coachingService.getVariableFormControlObject()))
+    // }else if(clickType == this.coachingCnst.EMAIL_MANAGER){
+    //   (<FormArray>this.ruleForm.controls["actions"])
+    //   .push(this.fb.group(this.coachingService.getDialogFormControlObject()))
+    // }else if(clickType == this.coachingCnst.DIALOG){
+    //   (<FormArray>this.ruleForm.controls["actions"])
+    //   .push(this.fb.group(this.coachingService.getDialogFormControlObject()))
+    // }else if(clickType == this.coachingCnst.FAQ){
+    //   (<FormArray>this.ruleForm.controls["actions"])
+    //   .push(this.fb.group(this.coachingService.getDialogFormControlObject()))
+    // }
+
   }
 }
