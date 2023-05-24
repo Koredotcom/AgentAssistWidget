@@ -437,8 +437,8 @@ export class AssistComponent implements OnInit {
     this.smallTalkOverrideBtnId = null;
     let isTemplateRender = false;
     data = this.commonService.confirmationNodeRenderDataTransform(data);
-    console.log('Suggestions check: ',data.suggestions, data.suggestions.length);
-    if(this.commonService.isAutomationOnGoing && this.dropdownHeaderUuids && data.suggestions && (data.suggestions.length > 0) ) {
+    console.log('Suggestions check: ',data.suggestions, data.suggestions.dialogs);
+    if(this.commonService.isAutomationOnGoing && this.dropdownHeaderUuids && data.suggestions && (data.suggestions.dialogs > 0) ) {
       this.dialogTerminatedOrIntruppted();
     }
     if (!this.commonService.isAutomationOnGoing && !this.proactiveModeStatus) {
