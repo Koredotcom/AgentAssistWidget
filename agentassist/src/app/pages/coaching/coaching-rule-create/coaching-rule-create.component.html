@@ -55,10 +55,10 @@
                                 <div class="drag-content" cdkDragHandle>
                                     <i class="icon-sa-elipse"></i>
                                 </div>
-                                <app-utterance class="comp" [form]="triggertype" *ngIf="triggertype?.controls?.type?.value == coachingCnst.UTTERANCE" [index]="i+1" [length]="ruleForm.controls['triggers']['controls']?.length"></app-utterance>
-                                <app-speech-analysis class="comp" [form]="triggertype" *ngIf="triggertype?.controls?.type?.value == coachingCnst.SPEECH_ANALYSIS" [index]="i+1" [length]="ruleForm.controls['triggers']['controls']?.length"></app-speech-analysis>
-                                <app-variable [form]="triggertype" class="comp" *ngIf="triggertype?.controls?.type?.value == coachingCnst.VARIABLE" [index]="i+1" [length]="ruleForm.controls['triggers']['controls']?.length"></app-variable>
-                                <app-dialog [form]="triggertype" class="comp" *ngIf="triggertype?.controls?.type?.value == coachingCnst.DIALOG" [index]="i+1" [length]="ruleForm.controls['triggers']['controls']?.length"></app-dialog>
+                                <app-utterance class="comp" [form]="triggertype" *ngIf="triggertype?.controls?.type?.value == coachingCnst.UTTERANCE" [index]="i+1" [length]="ruleForm.controls['triggers']['controls']?.length" (deleteTrigger)="deleteTrigger($event)"></app-utterance>
+                                <app-speech-analysis class="comp" [form]="triggertype" *ngIf="triggertype?.controls?.type?.value == coachingCnst.SPEECH_ANALYSIS" [index]="i+1" [length]="ruleForm.controls['triggers']['controls']?.length" (deleteTrigger)="deleteTrigger($event)"></app-speech-analysis>
+                                <app-variable [form]="triggertype" class="comp" *ngIf="triggertype?.controls?.type?.value == coachingCnst.VARIABLE" [index]="i+1" [length]="ruleForm.controls['triggers']['controls']?.length" (deleteTrigger)="deleteTrigger($event)"></app-variable>
+                                <app-dialog [form]="triggertype" class="comp" *ngIf="triggertype?.controls?.type?.value == coachingCnst.DIALOG" [index]="i+1" [length]="ruleForm.controls['triggers']['controls']?.length" (deleteTrigger)="deleteTrigger($event)"></app-dialog>
                             </div>
                         </ng-container>
                         <!-- <ng-container *ngIf="triggerClick">

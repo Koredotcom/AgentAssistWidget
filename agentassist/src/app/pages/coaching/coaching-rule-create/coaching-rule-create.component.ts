@@ -125,6 +125,7 @@ export class CoachingRuleCreateComponent implements OnInit {
     }
   }
 
+
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.ruleForm.controls['triggers']['controls'], event.previousIndex, event.currentIndex);
   }
@@ -152,5 +153,13 @@ export class CoachingRuleCreateComponent implements OnInit {
     //   .push(this.fb.group(this.coachingService.getDialogFormControlObject()))
     // }
 
+  }
+
+  deleteTrigger(index){
+    console.log(index, "index");
+    
+    if(index != null && index != undefined){
+      (<FormArray>this.ruleForm.controls["triggers"]).removeAt(index);
+    }
   }
 }

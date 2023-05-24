@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, SimpleChange } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChange } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { COACHINGCNST } from '../../coaching.cnst';
 
@@ -12,6 +12,7 @@ export class SpeechAnalysisComponent implements OnInit {
   @Input() form : FormGroup;
   @Input() index : number;
   @Input() length : number;
+  @Output() deleteTrigger = new EventEmitter();
 
   speechType = COACHINGCNST.SPEECH_TYPE;
   occurances = COACHINGCNST.OCCURENCES;
@@ -47,5 +48,8 @@ export class SpeechAnalysisComponent implements OnInit {
     
   }
 
+  deleteTriggerRule(){
+    this.deleteTrigger.emit(this.index-1);
+  }
 
 }

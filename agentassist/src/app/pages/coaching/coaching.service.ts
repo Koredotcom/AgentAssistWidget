@@ -16,11 +16,11 @@ export class CoachingService {
       by: ['', [Validators.required]],
       operator : ['And', [Validators.required]],
       when : this.fb.group({
-        utterancesId: this.fb.array([], Validators.required)
+        utterancesId: this.fb.array([1,2,3,4], Validators.required)
       }),
       frequency: this.fb.group({
         nOccurences: [1, Validators.required],
-        every: ['', Validators.required]
+        every: ['30s', Validators.required]
       })
     }
   }
@@ -32,7 +32,7 @@ export class CoachingService {
       operator : ['And', [Validators.required]],
       frequency: this.fb.group({
         nOccurences: [1, Validators.required],
-        every: ['', Validators.required]
+        every: ['30s', Validators.required]
       })
     }
   }
