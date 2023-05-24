@@ -107,6 +107,12 @@
         .scroll-data{
 
         }
+        .init-loading {
+            display: flex;
+            justify-content: center;
+            // padding-top: 40px;
+            // padding-bottom: 20px;
+        }
         .agent-groups-table-container{
             padding: 0 40px;
             display: inline-block;

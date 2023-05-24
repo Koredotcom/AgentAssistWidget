@@ -8,6 +8,7 @@ import { CoachingGroupRuleDeleteComponent } from './coaching-group-rule-delete/c
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { LocalStoreService } from '@kore.services/localstore.service';
 import { workflowService } from '@kore.services/workflow.service';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-coaching',
@@ -24,7 +25,10 @@ export class CoachingComponent implements OnInit {
   coachingConst : any = COACHINGCNST;
   coachGroupEvent : string;
   coachGroupData : any;
-  respData : any = {};
+  respData:any = {};
+  isLoading : boolean = false;
+  selectedRuleGroup : any;
+  selectedRuleGroupIndex : number;
 
   @ViewChild('ps') ps: PerfectScrollbarComponent;
   @ViewChild('newCoachingGroup', { static: true }) newCoachingGroup: SliderComponentComponent;
@@ -42,12 +46,12 @@ export class CoachingComponent implements OnInit {
       botId : this.workflowService.getCurrentBt(true)._id,
       isExpand : true
     }
-    this.respData = {
-      results : []
-    };
-    this.service.invoke('get.allagentCoachingGroup',params).subscribe(data => {
+    this.isLoading = true;
+    this.service.invoke('get.allagentCoachingGroup',params).pipe(finalize(() => {
+      this.isLoading = false;
+    })).subscribe(data => {
       if (data) {
-        this.respData.results = data;
+        this.respData = data||{"results":[]};
       }
     });
   }
@@ -82,12 +86,17 @@ export class CoachingComponent implements OnInit {
 
 
   // Create or Edit Rule Flow Starts
-    openFLowCreation(flowCreation) {
+    openFLowCreation(flowCreation, group,index) {
+      this.selectedRuleGroup = group;
+      this.selectedRuleGroupIndex = index;
       this.modalFlowCreateRef = this.modalService.open(flowCreation, { centered: true, keyboard: false, windowClass: 'flow-creation-full-modal', backdrop: 'static' });
     }
 
     closeFLowCreation(rule?) {
       this.modalFlowCreateRef.close();
+      if(rule){
+        // this.respData.
+      }
     }
   // Create or Edit Rule Flow Ends
 

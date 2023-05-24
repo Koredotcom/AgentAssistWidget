@@ -24,4 +24,21 @@ export const COACHINGCNST = {
     ALERT_MANAGER: 'Alert Manager',
     EMAIL_MANAGER: 'Email Manager',
     FAQ: 'FAQ',
+    TYPE_OF_HINT: [{
+        type: 'Positive',
+        class: '' 
+    },{
+        type: 'Neutral',
+        class: 'neutral' 
+    },{
+        type: 'Alert',
+        class: 'alertbg' 
+    },{
+        type: 'Critical',
+        class: 'critical' 
+    }],
+    TYPE_OF_CLOSE: [
+        "Does not auto close",
+        "Auto close"
+    ]
 }
