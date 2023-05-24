@@ -1599,7 +1599,7 @@ export class EndPointsService {
     }
 
     this.serviceList['post.agentcoachingrule'] = {
-      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule/?addToGroup=:addToGroup&groupId=:groupId',
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule',
       method : 'post'
     }
 

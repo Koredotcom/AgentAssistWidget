@@ -101,6 +101,8 @@ export class CoachingRuleCreateComponent implements OnInit {
   saveRule(){
     console.log("save rule", this.ruleForm);
     let payload : any = this.ruleForm.value;
+    payload["addToGroup"] = true;
+    payload["groupId"] = this.groupDetails._id;
     this.service.invoke('post.agentcoachingrule', {addToGroup : true, groupId : this.groupDetails._id}, payload).subscribe(data => {
       if (data) {
         console.log(data, 'data inside rule creation');
