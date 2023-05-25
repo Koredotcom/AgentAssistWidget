@@ -23,7 +23,7 @@ export class EndPointsService {
       this.API_SERVER_URL = environment['API_SERVER_URL'] + this.API_URL_PREFIX + this.API_VERSION_PREFIX;
     }
     this.SUPPORT_API_SERVER_URL = environment['SUPPORT_API_SERVER_URL'] + this.API_URL_PREFIX + this.API_VERSION_PREFIX;
-    this.SMARTASSIST_API_SERVER_URL = environment['SUPPORT_API_SERVER_URL'] + '/agentassist' + this.API_URL_PREFIX + '/v1'
+    this.SMARTASSIST_API_SERVER_URL = environment['API_SERVER_URL'] + '/agentassist' + this.API_URL_PREFIX + '/v1'
     this.init();
   }
 
