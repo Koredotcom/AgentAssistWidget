@@ -300,6 +300,7 @@ export class AssistComponent implements OnInit {
   }
 
   runDialogForAssistTab(data, idTarget?, runInitent?) {
+    this.collapseOldDialoguesInAssist();
     this.isFirstMessagOfDialog = true;
     let uuids = this.koreGenerateuuidPipe.transform();
     this.dropdownHeaderUuids = uuids;
@@ -799,7 +800,7 @@ export class AssistComponent implements OnInit {
       if (data.suggestions) {
         automationSuggestions.length >= 1 ? (automationSuggestions[automationSuggestions.length - 1].classList.remove('hide')) : ''
       }
-      if(!this.commonService.isAutomationOnGoing){
+      if(!this.commonService.isAutomationOnGoing && ((this.dialogPositionId != data.positionId) && !data.entityName)){
         this.collapseOldDialoguesInAssist();
       }
     }
