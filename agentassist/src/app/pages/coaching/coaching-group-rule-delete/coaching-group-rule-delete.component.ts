@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { COACHINGCNST } from '../coaching.cnst';
 
 @Component({
   selector: 'app-coaching-group-rule-delete',
@@ -20,11 +21,9 @@ export class CoachingGroupRuleDeleteComponent implements OnInit {
     this.activeModal.close();
   }
 
-  deletGroupRule(){
-    console.log(this.data.groupId, 'groupId');
-    
+  deletGroupRule(){    
     this.emitDeleteService.next(true);
-    this.activeModal.close(this.data.groupId);
+    this.activeModal.close(this.data.type == COACHINGCNST.GROUP ? this.data.groupId : this.data.ruleId);
   }
 
 }

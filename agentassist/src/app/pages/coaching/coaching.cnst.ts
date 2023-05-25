@@ -9,7 +9,7 @@ export const COACHINGCNST = {
     DELETE_RULE : {
         title : "Delete Rule",
         desc : "Are you sure you want to delete Negotiation?",
-        type : "Rule"
+        type : "rule"
     },
     SPEECH_TYPE : ['Cross Talk', 'Dead Air', 'Speech Speed'],
     OCCURENCES : [1,2,3,4,5],
@@ -40,5 +40,7 @@ export const COACHINGCNST = {
     TYPE_OF_CLOSE: [
         "Does not auto close",
         "Auto close"
-    ]
+    ],
+    RULE : "rule",
+    GROUP : "group"
 }

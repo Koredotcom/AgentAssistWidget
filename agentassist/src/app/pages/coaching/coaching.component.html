@@ -66,16 +66,16 @@
                                                         <button class="edit-btn">
                                                             <i class="icon-sa-welcome-edit"></i>
                                                         </button>
-                                                        <button class="delete-btn" (click)="openDeleteRule()">
+                                                        <button class="delete-btn" (click)="openDeleteRule(rule, res._id, i)">
                                                             <i class="icon-sa-welcome-delete"></i>
                                                         </button>
                                                     </div>
                                                     <div class="title-text w-20">{{rule.description}}</div>
                                                     <div class="title-text w-14">{{rule.assignedTo}}</div>
-                                                    <div class="title-text w-16">{{rule.lModOn}}</div>
+                                                    <div class="title-text w-16">{{rule.lModOn | date : 'MMM dd, yyyy h:mm a'}}</div>
                                                     <div class="title-text last-updated-toggle w-10">
                                                         <label class="kr-sg-toggle">
-                                                            <input type="checkbox" [checked]="rule.isEnabled">
+                                                            <input type="checkbox" [checked]="rule.isActive" (click)="changeRuleStatus(rule, res._id, i)">
                                                             <div class="slider"></div>
                                                         </label>
                                                     </div>      
