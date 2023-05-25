@@ -63,7 +63,7 @@
                                                 <div class="body-data-table-wrapper-coaching" *ngFor="let rule of res?.rules" cdkDrag (cdkDragStarted)="dragStart=true" (cdkDragEnded)="dragStart=false;clearInterVal()">
                                                     <div class="title-text rule-text w-25">{{rule.name}}</div>
                                                     <div class="actions-info w-15">
-                                                        <button class="edit-btn">
+                                                        <button class="edit-btn" (click)="openFLowCreation(flowCreation, res, i)">
                                                             <i class="icon-sa-welcome-edit"></i>
                                                         </button>
                                                         <button class="delete-btn" (click)="openDeleteRule(rule, res._id, i)">
