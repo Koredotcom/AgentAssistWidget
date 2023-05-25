@@ -1,8 +1,10 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, SimpleChange } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { NotificationService } from '@kore.services/notification.service';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { workflowService } from '@kore.services/workflow.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateService } from '@ngx-translate/core';
 import { SubSink } from 'subsink';
 import { CoachingGroupRuleDeleteComponent } from '../coaching-group-rule-delete/coaching-group-rule-delete.component';
 import { COACHINGCNST } from '../coaching.cnst';
@@ -24,7 +26,8 @@ export class CoachingGroupCreateComponent implements OnInit {
   
   createGroupForm : FormGroup;
   coachingConst : any = COACHINGCNST;
-  constructor(private modalService: NgbModal, private workflowService : workflowService, private service : ServiceInvokerService) { }
+  constructor(private modalService: NgbModal, private workflowService : workflowService, private service : ServiceInvokerService,
+    private notificationService : NotificationService, private translate: TranslateService) { }
   
 
   ngOnInit(): void {
@@ -71,7 +74,12 @@ export class CoachingGroupCreateComponent implements OnInit {
         updateGroupObj.data = data;
         this.updateGroup.emit(updateGroupObj); 
         this.closeGroup();
+        let notificationName = (this.type == this.coachingConst.CREATE) ? "COACHING.GROUPCREATED_SUCCESS" : "COACHING.GROUPUPDATED_SUCCESS";
+        this.notificationService.notify(this.translate.instant(notificationName), 'success');
       }
+    },(error)=> {
+      let notificationName = (this.type == this.coachingConst.CREATE) ? "COACHING.GROUPCREATED_FAILURE" : "COACHING.GROUPUPDATED_FAILURE";
+      this.notificationService.showError(this.translate.instant(notificationName));
     });
   }
 
@@ -82,7 +90,7 @@ export class CoachingGroupCreateComponent implements OnInit {
     this.modalRef.componentInstance.data = {
       title : "Delete Rule",
       desc : "Are you sure you want to delete group " + this.createGroupForm.controls.name.value + " all rules under the group will be deleted.",
-      type : "Group",
+      type : COACHINGCNST.GROUP,
       groupId : this.groupData._id
     };
     this.modalRef.result.then(res => {
@@ -93,6 +101,9 @@ export class CoachingGroupCreateComponent implements OnInit {
             data : data
           }  
           this.updateGroup.emit(updateGroupObj);
+          this.notificationService.notify(this.translate.instant("COACHING.GROUPDELETE_SUCCESS"), 'success');
+        },(error)=>{
+          this.notificationService.showError(this.translate.instant("COACHING.GROUPDELETE_FAILURE"));
         });
       }
       

@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
@@ -9,6 +9,9 @@ import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { LocalStoreService } from '@kore.services/localstore.service';
 import { workflowService } from '@kore.services/workflow.service';
 import { finalize } from 'rxjs/operators';
+import { forkJoin } from 'rxjs';
+import { NotificationService } from '@kore.services/notification.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-coaching',
@@ -34,7 +37,8 @@ export class CoachingComponent implements OnInit {
   @ViewChild('newCoachingGroup', { static: true }) newCoachingGroup: SliderComponentComponent;
 
   constructor(private modalService: NgbModal, private service : ServiceInvokerService,
-    private workflowService : workflowService) { }
+    private workflowService : workflowService, private cdRef : ChangeDetectorRef,
+    private notificationService : NotificationService, private translate: TranslateService) { }
 
   ngOnInit(): void {
     this.getAgentCoachingGroupData();
@@ -51,7 +55,7 @@ export class CoachingComponent implements OnInit {
       this.isLoading = false;
     })).subscribe(data => {
       if (data) {
-        this.respData = data||{"results":[]};
+        this.respData = data || {"results":[]};
       }
     });
   }
@@ -73,17 +77,6 @@ export class CoachingComponent implements OnInit {
   }
   // get or update GroupData Ends
 
-  // Delete Popup
-  openDeleteRule() {
-		this.modalRef = this.modalService.open(CoachingGroupRuleDeleteComponent, { centered: true, keyboard: false, windowClass: 'delete-uc-rule-modal', backdrop: 'static' });
-    this.modalRef.componentInstance.data = this.coachingConst.DELETE_RULE;
-    this.modalRef.componentInstance.emitDeleteService.subscribe((emitedValue) => {
-      console.log(emitedValue);
-      
-    });
-	}
-  // END
-
 
   // Create or Edit Rule Flow Starts
     openFLowCreation(flowCreation, group,index) {
@@ -95,8 +88,10 @@ export class CoachingComponent implements OnInit {
     closeFLowCreation(rule?) {
       this.modalFlowCreateRef.close();
       if(rule){
-        // this.respData.
+        this.respData?.results[this.selectedRuleGroupIndex]?.rules.push(rule);
       }
+      this.selectedRuleGroup = null;
+      this.selectedRuleGroupIndex = null;
     }
   // Create or Edit Rule Flow Ends
 
@@ -127,7 +122,21 @@ export class CoachingComponent implements OnInit {
         event.currentIndex,
       );
     };
+    this.updateGroupApis(event);
+  }
 
+  updateGroupApis(event){
+    let previousgroupId = event.previousContainer.id;
+    let currentgroupId = event.container.id;
+    let currentGroupPayload = this.respData.results[this.respData.results.findIndex(x => x._id == currentgroupId)];
+    let previousGroupPayload = this.respData.results[this.respData.results.findIndex(x => x._id == previousgroupId)];
+
+    forkJoin([this.service.invoke('put.agentCoachingGroup', {groupId : currentgroupId}, currentGroupPayload),
+    this.service.invoke('put.agentCoachingGroup', {groupId : previousgroupId}, previousGroupPayload)]).subscribe((response) => {
+      this.notificationService.notify(this.translate.instant("COACHING.GROUPUPDATED_SUCCESS"), 'success');
+    },(error)=>{
+      this.notificationService.showError(this.translate.instant("COACHING.GROUPUPDATED_FAILURE"));
+    })
   }
 
   bottomMouseOver(){
@@ -159,5 +168,52 @@ export class CoachingComponent implements OnInit {
     clearInterval(this.topInt)
   }
   // drag and drop ends
+
+ // rule activities like active or inactive and delete rule starts
+  changeRuleStatus(rule, groupId){
+    rule.isActive = !rule.isActive;
+    this.isLoading = true;
+    let params : any = {
+      ruleId : rule.ruleId,
+      groupId : groupId
+    }
+    this.service.invoke('put.agentCoachingRule',params, {active : rule.isActive}).pipe(finalize(() => {
+      this.isLoading = false;
+    })).subscribe(data => {
+      if (data) {
+        this.notificationService.notify(this.translate.instant("COACHING.GROUPUPDATED_SUCCESS"), 'success');
+      }
+    },(error)=>{
+      this.notificationService.showError(this.translate.instant("COACHING.GROUPUPDATED_FAILURE"));
+    }); 
+  }
+
+  openDeleteRule(rule, groupId, index) {    
+    this.modalRef = this.modalService.open(CoachingGroupRuleDeleteComponent, { centered: true, keyboard: false, windowClass: 'delete-uc-rule-modal', backdrop: 'static' });
+    this.modalRef.componentInstance.data = {...COACHINGCNST.DELETE_RULE, ruleId : rule.ruleId};
+    this.modalRef.result.then(emitedValue => {
+      if(emitedValue){
+  
+        let responseData : any = JSON.parse(JSON.stringify(this.respData));
+
+        let matchIndex = responseData?.results[index]?.rules?.findIndex(x => x.ruleId == rule.ruleId);
+        responseData?.results[index]?.rules.splice(matchIndex, 1);
+
+        let payload : any = responseData?.results[index];
+
+        this.service.invoke('put.agentCoachingGroup', {groupId : groupId}, payload).subscribe(data => {
+          
+          let matchIndex = this.respData?.results[index]?.rules?.findIndex(x => x.ruleId == rule.ruleId);
+          this.respData?.results[index]?.rules.splice(matchIndex, 1);
+
+          this.cdRef.detectChanges();
+          this.notificationService.notify(this.translate.instant("COACHING.RULEDELETE_SUCCESS"), 'success');
+        },(error)=>{
+          this.notificationService.showError(this.translate.instant("COACHING.RULEDELETE_FAILURE"));
+        });
+      }
+    });
+  }
+  // END
   
 }

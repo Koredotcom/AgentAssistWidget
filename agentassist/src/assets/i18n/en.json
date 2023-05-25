@@ -2025,5 +2025,13 @@
     "CHANNELCHAT.SAVE_SUCCESS" : "Configuration has been Saved",
     "CHANNELCHAT.SAVE_FAILED" : "Failed to update the Configuration",
     "NAV.COACHING": "Coaching",
-    "NAV.COACH_TITLE": "Agent Experiences"
+    "NAV.COACH_TITLE": "Agent Experiences",
+    "COACHING.GROUPCREATED_SUCCESS" : "Group has been Created",
+    "COACHING.GROUPCREATED_FAILURE" : "Failed to save the Group",
+    "COACHING.GROUPUPDATED_SUCCESS" : "Configuration has been Saved",
+    "COACHING.GROUPUPDATED_FAILURE" : "Failed to save the Configuration",
+    "COACHING.GROUPDELETE_SUCCESS" : "Group Deleted Successfully",
+    "COACHING.GROUPDELETE_FAILURE" : "Failed to delete the Group",
+    "COACHING.RULEDELETE_SUCCESS" : "Rule Deleted Successfully",
+    "COACHING.RULEDELETE_FAILURE" : "Failed to delete the Rule"
 }
