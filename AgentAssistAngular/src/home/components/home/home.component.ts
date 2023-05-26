@@ -11,6 +11,7 @@ import { KoreGenerateuuidPipe } from 'src/common/pipes/kore-generateuuid.pipe';
 import { DesignAlterService } from 'src/common/services/design-alter.service';
 import { LocalStorageService } from 'src/common/services/local-storage.service';
 import { MockDataService } from 'src/common/services/mock-data.service';
+import { RandomUUIDPipe } from 'src/common/pipes/random-uuid.pipe';
 // import { ServiceInvokerService } from 'src/common/services/service-invoker.service';
 declare const $: any;
 @Component({
@@ -51,7 +52,8 @@ export class HomeComponent implements OnInit {
     public sanitizeHTMLPipe: SanitizeHtmlPipe, public commonService: CommonService, private koregenerateUUIDPipe: KoreGenerateuuidPipe,
     private designAlterService: DesignAlterService, private localStorageService: LocalStorageService,
     private mockDataService : MockDataService,
-    private cdRef : ChangeDetectorRef ) { }
+    private cdRef : ChangeDetectorRef,
+    private randomUUIDPipe : RandomUUIDPipe) { }
   ngOnInit(): void {
 
     this.subscribeEvents();
@@ -781,6 +783,31 @@ setProactiveMode(){
         $(`#endTaks-${targetsss}`).removeClass('hide');
       }
 
+    }
+    if(target.id.split('-')[0] === 'run'){
+      let data = JSON.parse(target.dataset?.dialogRun);
+      let runEventObj: any = {
+        agentRunButton: false,
+        intentName: data.name,
+        childBotId : data.childBotId,
+        childBotName : data.childBotName
+      }
+      this.handleSubjectService.setRunButtonClickEvent(runEventObj);
+    }
+    if(target.id.split('-')[0] === 'agentSelect'){
+      let data = JSON.parse(target.dataset?.dialogRun);
+      let runDialogueObject: any = {
+        agentRunButton: true,
+        name: data.name,
+        intentName: data.name,
+        searchFrom: this.projConstants.ASSIST,
+        positionId: this.randomUUIDPipe.transform(IdReferenceConst.positionId),
+        childBotId : data.childBotId,
+        childBotName : data.childBotName
+      }
+      this.handleSubjectService.setActiveTab(this.projConstants.MYBOT);
+      this.commonService.agent_run_click(runDialogueObject, false);
+      this.handleSubjectService.setRunButtonClickEvent(runDialogueObject);
     }
   }
 
