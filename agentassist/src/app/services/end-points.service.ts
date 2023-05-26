@@ -1598,6 +1598,11 @@ export class EndPointsService {
       method : 'put'
     }
 
+    this.serviceList['delete.agentCoachingRule'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachinggroup/:groupId/rule/:ruleId',
+      method : 'delete'
+    }
+
     this.serviceList['post.agentcoachingrule'] = {
       endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule',
       method : 'post'

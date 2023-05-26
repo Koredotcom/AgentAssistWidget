@@ -88,6 +88,7 @@ export class CoachingComponent implements OnInit {
     closeFLowCreation(rule?) {
       this.modalFlowCreateRef.close();
       if(rule){
+        rule["ruleId"] = rule.id;
         this.respData?.results[this.selectedRuleGroupIndex]?.rules.push(rule);
       }
       this.selectedRuleGroup = null;
@@ -193,15 +194,7 @@ export class CoachingComponent implements OnInit {
     this.modalRef.componentInstance.data = {...COACHINGCNST.DELETE_RULE, ruleId : rule.ruleId};
     this.modalRef.result.then(emitedValue => {
       if(emitedValue){
-  
-        let responseData : any = JSON.parse(JSON.stringify(this.respData));
-
-        let matchIndex = responseData?.results[index]?.rules?.findIndex(x => x.ruleId == rule.ruleId);
-        responseData?.results[index]?.rules.splice(matchIndex, 1);
-
-        let payload : any = responseData?.results[index];
-
-        this.service.invoke('put.agentCoachingGroup', {groupId : groupId}, payload).subscribe(data => {
+        this.service.invoke('delete.agentCoachingRule', {groupId : groupId, ruleId: rule.ruleId}).subscribe(_data => {
           
           let matchIndex = this.respData?.results[index]?.rules?.findIndex(x => x.ruleId == rule.ruleId);
           this.respData?.results[index]?.rules.splice(matchIndex, 1);
