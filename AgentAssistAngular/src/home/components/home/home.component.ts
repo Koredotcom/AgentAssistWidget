@@ -785,29 +785,33 @@ setProactiveMode(){
 
     }
     if(target.id.split('-')[0] === 'run'){
-      let data = JSON.parse(target.dataset?.dialogRun);
-      let runEventObj: any = {
-        agentRunButton: false,
-        intentName: data.name,
-        childBotId : data.childBotId,
-        childBotName : data.childBotName
+      if(target.dataset?.dialogRun){
+        let data = JSON.parse(target.dataset?.dialogRun);
+        let runEventObj: any = {
+          agentRunButton: false,
+          intentName: data.name,
+          childBotId : data.childBotId,
+          childBotName : data.childBotName
+        }
+        this.handleSubjectService.setRunButtonClickEvent(runEventObj);
       }
-      this.handleSubjectService.setRunButtonClickEvent(runEventObj);
     }
     if(target.id.split('-')[0] === 'agentSelect'){
-      let data = JSON.parse(target.dataset?.dialogRun);
-      let runDialogueObject: any = {
-        agentRunButton: true,
-        name: data.name,
-        intentName: data.name,
-        searchFrom: this.projConstants.ASSIST,
-        positionId: this.randomUUIDPipe.transform(IdReferenceConst.positionId),
-        childBotId : data.childBotId,
-        childBotName : data.childBotName
+      if(target.dataset?.dialogRun){
+        let data = JSON.parse(target.dataset?.dialogRun);
+        let runDialogueObject: any = {
+          agentRunButton: true,
+          name: data.name,
+          intentName: data.name,
+          searchFrom: this.projConstants.ASSIST,
+          positionId: this.randomUUIDPipe.transform(IdReferenceConst.positionId),
+          childBotId : data.childBotId,
+          childBotName : data.childBotName
+        }
+        this.handleSubjectService.setActiveTab(this.projConstants.MYBOT);
+        this.commonService.agent_run_click(runDialogueObject, false);
+        this.handleSubjectService.setRunButtonClickEvent(runDialogueObject);
       }
-      this.handleSubjectService.setActiveTab(this.projConstants.MYBOT);
-      this.commonService.agent_run_click(runDialogueObject, false);
-      this.handleSubjectService.setRunButtonClickEvent(runDialogueObject);
     }
   }
 
