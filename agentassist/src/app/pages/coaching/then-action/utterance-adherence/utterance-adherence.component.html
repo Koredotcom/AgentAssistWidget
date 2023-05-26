@@ -60,11 +60,11 @@
                                                 <div class="found-desc">Similar utterances with the same meaning</div>
                                                 <perfect-scrollbar>
                                                     <div class="found-items-scroll">
-                                                        <ng-container *ngFor="let utter of openAiUtteranceArray">
+                                                        <ng-container *ngFor="let utter of openAiUtteranceArray;let i = index">
                                                             <div class="item-data-found" >
                                                                 <div class="kr-sg-checkbox">
-                                                                    <input id="checkbox-11" class="checkbox-custom" type="checkbox">
-                                                                    <label for="checkbox-11" class="checkbox-custom-label">{{utter}}</label>
+                                                                    <input id="'checkbox-' + {{i}}" class="checkbox-custom" type="checkbox" [checked]="utter.enabled" (click)="changeUtterActiveStatus(utter)">
+                                                                    <label for="'checkbox-' + {{i}}" class="checkbox-custom-label">{{utter.value}}</label>
                                                                 </div>
                                                                 <div class="percentage-colr">
                                                                     <span class="percentage">12%</span>
@@ -104,7 +104,7 @@
                                     </div>
                                     <div class="footer-add" *ngIf="isGeneratingText">
                                         <button class="kr-sg-button-secondary btn_lg" (click)="clearAIsuggestions()">Clear</button>
-                                        <button class="kr-sg-button-primary btn_lg">Add</button>
+                                        <button class="kr-sg-button-primary btn_lg" (click)="getUtteranceIds()">Add</button>
                                     </div>
                                 </ul>
                             </div>
@@ -246,6 +246,6 @@
     </div>
     <div class="footer-actions">
         <button class="kr-sg-button-secondary btn_lg">Cancel</button>
-        <button class="kr-sg-button-primary btn_lg">Save</button>
+        <button class="kr-sg-button-primary btn_lg" (click)="saveUtteranceStrings()">Save</button>
     </div>
 </div>

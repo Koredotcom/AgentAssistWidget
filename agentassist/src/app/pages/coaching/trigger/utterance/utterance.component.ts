@@ -49,16 +49,21 @@ export class UtteranceComponent implements OnInit {
 
   changeOperator(op){
     this.selectedOperator = op
-    this.form.controls.operator.setValue(op);
-    console.log(this.form, 'from');
-    
+    this.form.controls.operator.setValue(op);    
+  }
+
+  saveUtteranceList(data){
+    if(data && data.length > 0){
+      (this.form.controls.when as FormGroup).controls.utterancesId.setValue(data);
+      this.closeAdherence();
+    }
   }
 
   openAdherence(){
     this.adherenceSlider.openSlider("#adherenceSlider", "width900");
   }
   
-  closeAdherence(group){
+  closeAdherence(group?){
     this.adherenceSlider.closeSlider("#adherenceSlider");
   }
 
