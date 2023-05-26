@@ -1328,7 +1328,7 @@ export class AssistComponent implements OnInit {
       childBotId : data.childBotId,
       childBotName : data.childBotName
     }
-    document.getElementById(IdReferenceConst.AGENT_RUN_BTN + '-' + uuid).addEventListener('click', (event) => {
+    document.getElementById(IdReferenceConst.AGENT_RUN_BTN + '-' + uuid)?.addEventListener('click', (event) => {
       this.handleSubjectService.setActiveTab(this.projConstants.MYBOT);
       this.commonService.agent_run_click(runDialogueObject, false);
       this.handleSubjectService.setRunButtonClickEvent(runDialogueObject);
@@ -1336,7 +1336,7 @@ export class AssistComponent implements OnInit {
   }
 
   terminateButtonClick(uuid) {
-    document.getElementById(IdReferenceConst.ASSISTTERMINATE + '-' + uuid).addEventListener('click', (event) => {
+    document.getElementById(IdReferenceConst.ASSISTTERMINATE + '-' + uuid)?.addEventListener('click', (event) => {
       this.handlePopupEvent.emit({ status: true, type: this.projConstants.TERMINATE });
     });
 
@@ -1412,7 +1412,7 @@ export class AssistComponent implements OnInit {
   }
 
   handleRunButtonClick(uuid, data) {
-    document.getElementById(IdReferenceConst.ASSIST_RUN_BUTTON + '-' + uuid).addEventListener('click', (event) => {
+    document.getElementById(IdReferenceConst.ASSIST_RUN_BUTTON + '-' + uuid)?.addEventListener('click', (event) => {
       let runEventObj: any = {
         agentRunButton: false,
         intentName: data.name,
