@@ -1084,7 +1084,21 @@ export class CommonService {
     return eleanswer
   }
 
-
+  agent_run_click(dialog, isSearchFlag) {
+    if (!this.isMyBotAutomationOnGoing) {
+      let connectionDetails: any = Object.assign({}, this.configObj);
+      connectionDetails.value = dialog.intentName;
+      connectionDetails.isSearch = isSearchFlag;
+      if (!isSearchFlag) {
+        connectionDetails.intentName = dialog.intentName;
+      }
+      connectionDetails.positionId = dialog.positionId;
+      connectionDetails.childBotId = dialog.childBotId;
+      connectionDetails.childBotName = dialog.childBotName;
+      let agent_assist_agent_request_params = this.prepareAgentAssistAgentRequestParams(connectionDetails);
+      this.webSocketService.emitEvents(EVENTS.agent_assist_agent_request, agent_assist_agent_request_params);
+    }
+  }
 
   CustomTempClickEvents(tab, connectionObj) {
     let mythis = this;
