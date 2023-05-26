@@ -1120,8 +1120,8 @@ export class AssistComponent implements OnInit {
               elements = document.getElementById(agentUttInfoId);
             }
             elements?.insertAdjacentHTML('beforeBegin', unreadHtml);
-          } else if (elements.id.includes('stepsrundata') && this.commonService.scrollContent[ProjConstants.ASSIST].lastElementBeforeNewMessage.id.includes('stepsrundata')) {
-            elements = document.getElementById(this.commonService.scrollContent[ProjConstants.ASSIST].lastElementBeforeNewMessage.id);
+          } else if (elements.id.includes('stepsrundata') && this.commonService.scrollContent[ProjConstants.ASSIST]?.lastElementBeforeNewMessage?.id?.includes('stepsrundata')) {
+            elements = document.getElementById(this.commonService.scrollContent[ProjConstants.ASSIST]?.lastElementBeforeNewMessage?.id);
             elements?.insertAdjacentHTML('afterend', unreadHtml);
           }
           break;
@@ -1157,8 +1157,8 @@ export class AssistComponent implements OnInit {
               }
             }
           }
-          if (childIdList.indexOf(this.commonService.scrollContent[ProjConstants.ASSIST].lastElementBeforeNewMessage.id) != -1) {
-            childIdList.splice(0, childIdList.indexOf(this.commonService.scrollContent[ProjConstants.ASSIST].lastElementBeforeNewMessage.id) + 1);
+          if (childIdList.indexOf(this.commonService.scrollContent[ProjConstants.ASSIST]?.lastElementBeforeNewMessage?.id) != -1) {
+            childIdList.splice(0, childIdList.indexOf(this.commonService.scrollContent[ProjConstants.ASSIST]?.lastElementBeforeNewMessage?.id) + 1);
           }
         } else {
           let actualParentId = name + '-' + uuid;
@@ -1250,7 +1250,7 @@ export class AssistComponent implements OnInit {
       } else if (eventName == IdReferenceConst.DROPDOWN_HEADER) {
         // this.designAlterService.handleDropdownToggle(uuid);
       } else if (eventName == IdReferenceConst.ASSIST_RUN_BUTTON) {
-        this.handleRunButtonClick(uuid, data);
+        // this.handleRunButtonClick(uuid, data);
       } else if (eventName == IdReferenceConst.ENTITY_EDIT) {
         this.handleEntityEditClick(uuid);
       } else if (eventName == IdReferenceConst.EDIT_CANCEL_BTN) {
@@ -1260,7 +1260,7 @@ export class AssistComponent implements OnInit {
       } else if (eventName == IdReferenceConst.SAVE_BTN) {
         this.handleSaveBtnClick(uuid);
       } else if (eventName == IdReferenceConst.AGENT_RUN_BTN) {
-        this.handleMybotRunClick(uuid, data);
+        // this.handleMybotRunClick(uuid, data);
       } else if (eventName == IdReferenceConst.SEEMORE_BTN) {
         this.handleSeeMoreLessClickEvents(uuid, data);
       } else if (eventName == IdReferenceConst.CHECK){
@@ -1328,31 +1328,15 @@ export class AssistComponent implements OnInit {
       childBotId : data.childBotId,
       childBotName : data.childBotName
     }
-    document.getElementById(IdReferenceConst.AGENT_RUN_BTN + '-' + uuid).addEventListener('click', (event) => {
+    document.getElementById(IdReferenceConst.AGENT_RUN_BTN + '-' + uuid)?.addEventListener('click', (event) => {
       this.handleSubjectService.setActiveTab(this.projConstants.MYBOT);
-      this.agent_run_click(runDialogueObject, false);
+      this.commonService.agent_run_click(runDialogueObject, false);
       this.handleSubjectService.setRunButtonClickEvent(runDialogueObject);
     })
   }
 
-  agent_run_click(dialog, isSearchFlag) {
-    if (!this.commonService.isMyBotAutomationOnGoing) {
-      let connectionDetails: any = Object.assign({}, this.connectionDetails);
-      connectionDetails.value = dialog.intentName;
-      connectionDetails.isSearch = isSearchFlag;
-      if (!isSearchFlag) {
-        connectionDetails.intentName = dialog.intentName;
-      }
-      connectionDetails.positionId = dialog.positionId;
-      connectionDetails.childBotId = dialog.childBotId;
-      connectionDetails.childBotName = dialog.childBotName;
-      let agent_assist_agent_request_params = this.commonService.prepareAgentAssistAgentRequestParams(connectionDetails);
-      this.websocketService.emitEvents(EVENTS.agent_assist_agent_request, agent_assist_agent_request_params);
-    }
-  }
-
   terminateButtonClick(uuid) {
-    document.getElementById(IdReferenceConst.ASSISTTERMINATE + '-' + uuid).addEventListener('click', (event) => {
+    document.getElementById(IdReferenceConst.ASSISTTERMINATE + '-' + uuid)?.addEventListener('click', (event) => {
       this.handlePopupEvent.emit({ status: true, type: this.projConstants.TERMINATE });
     });
 
@@ -1428,7 +1412,7 @@ export class AssistComponent implements OnInit {
   }
 
   handleRunButtonClick(uuid, data) {
-    document.getElementById(IdReferenceConst.ASSIST_RUN_BUTTON + '-' + uuid).addEventListener('click', (event) => {
+    document.getElementById(IdReferenceConst.ASSIST_RUN_BUTTON + '-' + uuid)?.addEventListener('click', (event) => {
       let runEventObj: any = {
         agentRunButton: false,
         intentName: data.name,
@@ -1668,16 +1652,16 @@ export class AssistComponent implements OnInit {
                         <button class="send-run-btn" data-conv-id="${this.commonService.configObj.conversationid}"
                         data-bot-id="${res.botId}" data-intent-name="${ele.name}"
                         data-history-run="true" id="run-${uniqueID + index}" data-child-bot-id="${ele.childBotId}" data-child-bot-name="${ele.childBotName}"
-                        >RUN</button>
+                        data-dialog-run='${JSON.stringify(ele)}'>RUN</button>
                         <div class="elipse-dropdown-info" id="showRunForAgentBtn-${uniqueID + index}">
                             <div class="elipse-icon" id="elipseIcon-${uniqueID + index}">
                                 <i class="ast-overflow" id="overflowIcon-${uniqueID + index}"></i>
                             </div>
-                            <div class="dropdown-content-elipse" id="runAgtBtn-${uniqueID + index}">
+                            <div class="dropdown-content-elipse" id="runAgtBtn-${uniqueID + index}" data-dialog-run='${JSON.stringify(ele)}'>
                                 <div class="list-option" data-conv-id="${this.commonService.configObj.conversationid}"
                                 data-bot-id="${res.botId}" data-intent-name="${ele.name}" data-child-bot-id="${ele.childBotId}" data-child-bot-name="${ele.childBotName}"
                                  id="agentSelect-${uniqueID + index}"
-                                data-exhaustivelist-run="true">Run with Agent Inputs</div>
+                                data-exhaustivelist-run="true" data-dialog-run='${JSON.stringify(ele)}'>Run with Agent Inputs</div>
                             </div>
                     </div>
                 </div>`;
