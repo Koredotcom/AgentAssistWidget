@@ -104,7 +104,7 @@
                                     </div>
                                     <div class="footer-add" *ngIf="isGeneratingText">
                                         <button class="kr-sg-button-secondary btn_lg" (click)="clearAIsuggestions()">Clear</button>
-                                        <button class="kr-sg-button-primary btn_lg" (click)="getUtteranceIds()">Add</button>
+                                        <button class="kr-sg-button-primary btn_lg" (click)="getUtteranceIds()" [disabled]="addButtonClick">Add</button>
                                     </div>
                                 </ul>
                             </div>

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChange, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, SimpleChange, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
 import { COACHINGCNST } from '../../coaching.cnst';
@@ -10,7 +10,7 @@ import { COACHINGCNST } from '../../coaching.cnst';
 })
 export class UtteranceComponent implements OnInit {
 
-  constructor() { }
+  constructor(private cdRef : ChangeDetectorRef) { }
   @Input() form:FormGroup;
   @Input() index : number;
   @Input() length : number;
@@ -23,7 +23,15 @@ export class UtteranceComponent implements OnInit {
   opList = COACHINGCNST.OPERATOR_LIST;
   selectedOperator : string;
   selUser: '';
-  @ViewChild('adherenceSlider', { static: true }) adherenceSlider: SliderComponentComponent;
+  openSetUtterance : boolean = false;
+
+  private adherenceSlider: SliderComponentComponent;
+
+  @ViewChild('adherenceSlider') set content(content: SliderComponentComponent) {
+     if(content) { // initially setter gets called with undefined
+          this.adherenceSlider = content;
+     }
+  }
 
   ngOnInit(): void {
     (this.form.controls.frequency as FormGroup).controls.every.setValue(this.timer+'s');
@@ -53,10 +61,15 @@ export class UtteranceComponent implements OnInit {
   }
 
   openAdherence(){
-    this.adherenceSlider.openSlider("#adherenceSlider", "width900");
+    this.openSetUtterance = true;
+    this.cdRef.detectChanges();
+    setTimeout(() => {
+      this.adherenceSlider.openSlider("#adherenceSlider", "width900");
+    },);
   }
   
   closeAdherence(group?){
+    this.openSetUtterance = false;
     this.adherenceSlider.closeSlider("#adherenceSlider");
   }
 

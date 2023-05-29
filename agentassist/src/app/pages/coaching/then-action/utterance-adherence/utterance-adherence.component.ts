@@ -25,6 +25,7 @@ export class UtteranceAdherenceComponent implements OnInit {
   sampleUtterArray : any = ['price high', 'price too high', 'price is much', 'price expensive'];
   utteranceText : string;
   selectedUtterancesArray : any = [];
+  addButtonClick : boolean = false;
 
 
   @ViewChild(NgbDropdown, { static: true })
@@ -93,16 +94,20 @@ export class UtteranceAdherenceComponent implements OnInit {
   }
 
   getUtteranceIds(){
+    this.addButtonClick = true;
     let utteranceArray : any = this.getSelectedUtterance();
     let payload : any = {
       utterance : utteranceArray
     }    
     this.service.invoke('post.agentcoachingutterance',{}, payload).pipe(finalize(() => {
     })).subscribe(data => {
+      this.addButtonClick = false;
       if (data) {
         this.isGeneratingText = false;
         this.selectedUtterancesArray = Object.assign([], data);
       }
+    },(error)=>{
+      this.addButtonClick = false;
     });
   }
 
