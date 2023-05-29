@@ -17,7 +17,7 @@ export const COACHINGCNST = {
         speechSpeed: 'Speech Speed'
     },
     OCCURENCES : [1,2,3,4,5],
-    SELECTED_TIMER : 30,
+    SELECTED_TIMER : '30s',
     SELECTED_OCCURENCE : 1,
     USER_LIST : ['agent', 'customer'],
     OPERATOR_LIST : ['and', 'or'],

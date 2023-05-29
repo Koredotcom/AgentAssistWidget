@@ -122,7 +122,7 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
     payload["addToGroup"] = true;
     payload["groupId"] = this.groupDetails._id;
     let methodName = this.createOrEdit == COACHINGCNST.CREATE ? "post.agentcoachingrule" : "put.agentcoachingrule"
-    this.service.invoke(methodName, {addToGroup : true, groupId : this.groupDetails._id, ruleId : this.currentRule.ruleId}, payload).subscribe(data => {
+    this.service.invoke(methodName, {addToGroup : true, groupId : this.groupDetails._id, ruleId : this.currentRule?.ruleId}, payload).subscribe(data => {
       if (data && (data._id || data.id)) {
         data._id = data.id ? data.id : data._id;
         data.ruleId = data._id;

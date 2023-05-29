@@ -52,7 +52,7 @@
         <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
             <div class="seconds-input">
                 <div class="kr-sg-input-text">
-                    <input type="text" placeholder="Placeholder text" class="input-text">
+                    <input type="text" placeholder="Placeholder text" (keyup.enter)="onEnterTime($event)" class="input-text">
                 </div>
                 <div class="s-title">seconds</div>
             </div>

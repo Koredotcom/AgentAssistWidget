@@ -49,8 +49,13 @@ export class UtteranceComponent implements OnInit {
     if(changes?.createOrEdit?.currentValue === COACHINGCNST.CREATE){
       this.form?.controls?.operator?.setValue(COACHINGCNST.AND_OPERATOR);
       this.selectedOperator = this.form.controls.operator.value;
-      (this.form.controls.frequency as FormGroup).controls?.every.setValue(this.timer+'s');
+      (this.form.controls.frequency as FormGroup).controls?.every.setValue(this.timer);
     }
+  }
+
+  onEnterTime(e){
+    this.timer = e.target.value+'s';
+    (this.form.controls.frequency as FormGroup).controls?.every.setValue(this.timer);
   }
 
   clickOnUser(user){
