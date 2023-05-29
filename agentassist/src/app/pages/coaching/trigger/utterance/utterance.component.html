@@ -73,6 +73,6 @@
 
     </div> -->
     <app-slider-component id="adherenceSlider" #adherenceSlider='app-slider'>
-        <app-utterance-adherence (onClose)="closeAdherence($event)" (saveUtterance)="saveUtteranceList($event)"></app-utterance-adherence>
+        <app-utterance-adherence (onClose)="closeAdherence($event)" [form]="form"></app-utterance-adherence>
     </app-slider-component>
 </div>

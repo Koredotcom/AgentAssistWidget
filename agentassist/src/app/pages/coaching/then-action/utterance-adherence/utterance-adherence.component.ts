@@ -1,16 +1,20 @@
-import { ChangeDetectorRef, Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 import {ProgressSpinnerMode} from '@angular/material/progress-spinner';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
 import { OpenAIService } from '../../open-ai.service';
 import { finalize } from 'rxjs/operators';
+import { FormGroup } from '@angular/forms';
+import { COACHINGCNST } from '../../coaching.cnst';
 @Component({
   selector: 'app-utterance-adherence',
   templateUrl: './utterance-adherence.component.html',
   styleUrls: ['./utterance-adherence.component.scss']
 })
 export class UtteranceAdherenceComponent implements OnInit {
+
+  @Input() form : FormGroup;
   @Output() onClose = new EventEmitter();
   color: ThemePalette = 'primary';
   mode: ProgressSpinnerMode = 'determinate';
@@ -74,7 +78,8 @@ export class UtteranceAdherenceComponent implements OnInit {
         return true;
       }
     });
-    this.saveUtterance.emit(saveUtteranceArray);
+    (this.form.controls.when as FormGroup).controls.utterancesId.setValue(saveUtteranceArray);
+    this.closeAdherence(COACHINGCNST.UTTERANCE);
   }
 
   getSelectedUtterance(){
