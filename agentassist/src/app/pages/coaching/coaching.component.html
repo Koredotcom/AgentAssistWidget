@@ -5,7 +5,7 @@
     </div>
 
     <div class="tab-sec-details-wrapper">
-        <ng-container *ngIf="true">
+        <ng-container *ngIf="respData?.results?.length != 0">
             <div class="search-data-input">
                 <div class="kr-sg-input-inline-search">
                     <input type="text" placeholder="Search" class="input-search">
@@ -96,7 +96,7 @@
                 </perfect-scrollbar>
             </div>
         </ng-container>
-        <ng-container *ngIf="false">
+        <ng-container *ngIf="respData?.results?.length == 0">
             <div class="empty-coaching-wrapper">
                 <div class="empty-content">
                     <div class="img-block">
