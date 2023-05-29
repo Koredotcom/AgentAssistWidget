@@ -1,5 +1,5 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { COACHINGCNST } from '../coaching.cnst';
 import { CoachingService } from '../coaching.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
@@ -11,12 +11,12 @@ import { ServiceInvokerService } from '@kore.services/service-invoker.service';
   templateUrl: './coaching-rule-create.component.html',
   styleUrls: ['./coaching-rule-create.component.scss']
 })
-export class CoachingRuleCreateComponent implements OnInit {
+export class CoachingRuleCreateComponent implements OnInit, OnChanges {
 
   @Input() groupDetails : any;
   @Input() groupIndex : number;
   @Output() onCloseRule = new EventEmitter();
-
+  @Input() createOrEdit = '';
   coachingCnst : any = COACHINGCNST
   triggerClick : boolean = false;
   allTriggers = [
@@ -75,21 +75,38 @@ export class CoachingRuleCreateComponent implements OnInit {
       icon: "icon-sa-chat"
     }
   ]
+  ruleForm :FormGroup;
+  @Input() currentRule:any;
   // triggerFormControlsArray : any = [];
 
   constructor(private fb: FormBuilder, private coachingService : CoachingService, private cd: ChangeDetectorRef,
     private workflowService : workflowService, private service : ServiceInvokerService) { }
-  ruleForm :FormGroup;
- 
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if(changes?.createOrEdit?.currentValue === COACHINGCNST.EDIT){
+      this.createForm();
+      setTimeout(() => {
+        this.ruleForm.controls["name"].patchValue(this.currentRule?.name);
+        (this.currentRule?.triggers || []).forEach(element => {
+          (<FormArray>this.ruleForm.controls["triggers"])
+          .push(this.fb.group(this.coachingService.setUtteranceForm(element)))
+        });
+      });
+    };
+  }
+  
   ngOnInit(): void {
-    this.ruleForm = this.fb.group(
+    this.createForm();
+  }
+
+  createForm(){
+    this.ruleForm = new FormGroup(
       {
-        "botId" : this.fb.control(this.workflowService.getCurrentBt(true)._id),
-        "name" : this.fb.control('', Validators.required),
-        "triggers" : this.fb.array([]),
-        "actions" : this.fb.array([]),
-        "assignees" : this.fb.array([]),
+        "botId": new FormControl(this.workflowService.getCurrentBt(true)._id, [Validators.required]),
+        "name": new FormControl('',[Validators.required]),
+        "triggers": this.fb.array([]),
+        "actions": this.fb.array([]),
+        "assignees": this.fb.array([]),
       }
     )
   }
@@ -97,7 +114,7 @@ export class CoachingRuleCreateComponent implements OnInit {
   closeRule(rule?) {
     this.onCloseRule.emit(rule);
   }
-
+ 
   saveRule(){
     let payload : any = this.ruleForm.value;
     payload["addToGroup"] = true;

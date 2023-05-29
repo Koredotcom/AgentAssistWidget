@@ -79,7 +79,7 @@ export class UtteranceAdherenceComponent implements OnInit {
         return true;
       }
     });
-    (this.form.controls.when as FormGroup).controls.utterancesId.setValue(saveUtteranceArray);
+    (this.form.controls.when as FormGroup).controls?.utterancesId?.setValue(saveUtteranceArray);
     this.closeAdherence(COACHINGCNST.UTTERANCE);
   }
 

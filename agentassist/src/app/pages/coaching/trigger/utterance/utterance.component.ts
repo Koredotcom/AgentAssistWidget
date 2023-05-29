@@ -24,25 +24,28 @@ export class UtteranceComponent implements OnInit {
   selectedOperator : string;
   selUser: '';
   openSetUtterance : boolean = false;
-
+  @Input() createOrEdit: string = '';
   private adherenceSlider: SliderComponentComponent;
-
   @ViewChild('adherenceSlider') set content(content: SliderComponentComponent) {
      if(content) { // initially setter gets called with undefined
           this.adherenceSlider = content;
      }
   }
-
   ngOnInit(): void {
-    (this.form.controls.frequency as FormGroup).controls.every.setValue(this.timer+'s');
-    this.form?.controls?.operator?.setValue(COACHINGCNST.AND_OPERATOR);
-    this.selectedOperator = this.form.controls.operator.value;
+    (this.form.controls.frequency as FormGroup).controls?.every.setValue(this.timer+'s');
   }
 
-  ngOnChanges(changes : SimpleChange){
+  ngOnChanges(changes : any){
     if(changes["index"]?.currentValue ==  this.length){
       this.changeOperator(COACHINGCNST.AND_OPERATOR)
     }    
+    if(changes?.createOrEdit?.currentValue === COACHINGCNST.EDIT){
+      console.log("this.form", this.form);
+    }
+    if(changes?.createOrEdit?.currentValue === COACHINGCNST.CREATE){
+      this.form?.controls?.operator?.setValue(COACHINGCNST.AND_OPERATOR);
+      this.selectedOperator = this.form.controls.operator.value;
+    }
   }
 
   clickOnUser(user){

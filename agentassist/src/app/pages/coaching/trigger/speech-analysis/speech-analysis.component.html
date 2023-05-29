@@ -14,10 +14,10 @@
             <span class="choose-text">{{selectedSpeechType ? selectedSpeechType : '{ speech type }'}}</span>
         </button>
         <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
-            <ng-container *ngFor="let type of speechType" >
-                <li ngbDropdownItem class="list-item-li" (click)="clickOnType(type)">
-                    <span class="title">{{type}}</span>
-                    <i [ngClass]="{'icon-sa-conv-check' : type === selectedSpeechType}"></i>
+            <ng-container *ngFor="let type of speechType | keyvalue" >
+                <li ngbDropdownItem class="list-item-li" (click)="clickOnType(type.key)">
+                    <span class="title">{{type.value}}</span>
+                    <i [ngClass]="{'icon-sa-conv-check' : type.key === selectedSpeechType}"></i>
                 </li>
             </ng-container>
         </ul>

@@ -37,7 +37,7 @@
                                             </div>
                                             <div class="right-info">
                                                 <div class="items-count">{{res.rules?.length}} Items</div>
-                                                <button class="new-rule-btn" (click)="$event.stopPropagation();openFLowCreation(flowCreation, res, i)">+ New Rule</button>
+                                                <button class="new-rule-btn" (click)="$event.stopPropagation();openFLowCreation(flowCreation, res, i, {}, 'create')">+ New Rule</button>
                                                 <div class="arrow-rotate">
                                                     <i class="icon-sa-arrow-down"></i>
                                                 </div>
@@ -60,10 +60,10 @@
                                                     <div class="titles-data w-16">Last UPDATED</div>
                                                     <div class="titles-data w-10 text-right">Enabled</div>
                                                 </div>
-                                                <div class="body-data-table-wrapper-coaching" *ngFor="let rule of res?.rules" cdkDrag (cdkDragStarted)="dragStart=true" (cdkDragEnded)="dragStart=false;clearInterVal()">
+                                                <div class="body-data-table-wrapper-coaching" *ngFor="let rule of res?.rules; let inx = index" cdkDrag (cdkDragStarted)="dragStart=true" (cdkDragEnded)="dragStart=false;clearInterVal()">
                                                     <div class="title-text rule-text w-25">{{rule.name}}</div>
                                                     <div class="actions-info w-15">
-                                                        <button class="edit-btn" (click)="openFLowCreation(flowCreation, res, i)">
+                                                        <button class="edit-btn" (click)="openFLowCreation(flowCreation, res, i, rule, 'edit');">
                                                             <i class="icon-sa-welcome-edit"></i>
                                                         </button>
                                                         <button class="delete-btn" (click)="openDeleteRule(rule, res._id, i)">
@@ -115,5 +115,5 @@
 
 
 <ng-template #flowCreation>
-    <app-coaching-rule-create (onCloseRule)="closeFLowCreation($event)" [groupDetails]="selectedRuleGroup" [groupIndex]="selectedRuleGroupIndex"></app-coaching-rule-create>
+    <app-coaching-rule-create (onCloseRule)="closeFLowCreation($event)" [createOrEdit]="createOrEdit" [currentRule]="currentRule" [groupDetails]="selectedRuleGroup" [groupIndex]="selectedRuleGroupIndex"></app-coaching-rule-create>
 </ng-template>

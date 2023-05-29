@@ -2,18 +2,18 @@
 
     <div class="and-or-btns" *ngIf="!(index === length)">
         <ng-container *ngFor="let operator of opList">
-            <button class="and-or-btn" (click)="changeOperator(operator)" [ngClass]="{'active-btn' : selectedOperator === operator}">{{operator}}</button>
+            <button class="and-or-btn" (click)="changeOperator(operator)" [ngClass]="{'active-btn' : selectedOperator === operator}">{{operator | titlecase}}</button>
         </ng-container>
     </div>
     <span class="utt-name-desc">...a</span>
     <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body">
         <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!selUser}">
-            <span class="choose-text">{{selUser ? selUser : '{ select person }'}}</span>
+            <span class="choose-text">{{selUser ? (selUser | titlecase) : '{ select person }'}}</span>
         </button>
         <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
             <ng-container *ngFor="let user of users">
                 <li ngbDropdownItem class="list-item-li" (click)="clickOnUser(user)">
-                    <span class="title">{{user}}</span>
+                    <span class="title">{{user | titlecase}}</span>
                     <i [ngClass]="{'icon-sa-conv-check' : user === selUser}" ></i>
                 </li>
             </ng-container>
@@ -34,7 +34,7 @@
     <div class="delete-row" (click)="deleteTriggerRule()"> 
         <i class="icon-sa-welcome-delete"></i>
     </div>
-    <!-- <div class="dropdown-occurences" ngbDropdown [placement]="'bottom'" container="body">
+    <div class="dropdown-occurences" ngbDropdown [placement]="'bottom'" container="body">
         <button class="dropdown-toggle btn-toggle" ngbDropdownToggle><i class="icon-sa-conv-refreshten"></i> {{selOcc}}x</button>
         <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
             <perfect-scrollbar class="mx-h-220">
@@ -47,7 +47,18 @@
             </perfect-scrollbar>
         </ul>
     </div>
-    <div class="add-adherence">
+    <div class="dropdown-occurences no_border" ngbDropdown [placement]="'bottom'" container="body">
+        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle>in {{timer}} seconds</button>
+        <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
+            <div class="seconds-input">
+                <div class="kr-sg-input-text">
+                    <input type="text" placeholder="Placeholder text" class="input-text">
+                </div>
+                <div class="s-title">seconds</div>
+            </div>
+        </ul>
+    </div>
+    <!-- <div class="add-adherence">
         <button class="add-adherence-btn" (click)="openAdherence()">+ Add Adherence</button>
     </div>
     <div class="delete-row">

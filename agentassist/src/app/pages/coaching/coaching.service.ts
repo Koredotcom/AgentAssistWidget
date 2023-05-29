@@ -25,6 +25,21 @@ export class CoachingService {
     }
   }
 
+  setUtteranceForm(obj){
+    return {
+      type: this.coachingCnst.UTTERANCE,
+      by: [obj.by, [Validators.required]],
+      operator : [obj.operator, [Validators.required]],
+      when : this.fb.group({
+        utterancesId: [obj.when?.utterancesId, Validators.required]
+      }),
+      frequency: this.fb.group({
+        nOccurences: [obj.frequency?.nOccurences, Validators.required],
+        every: [obj.frequency?.every, Validators.required]
+      })
+    } 
+  }
+
   getSpeechAnalysisFormControlObject(){
     return {
       type: this.coachingCnst.SPEECH_ANALYSIS,

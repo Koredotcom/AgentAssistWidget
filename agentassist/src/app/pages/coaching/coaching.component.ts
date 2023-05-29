@@ -32,7 +32,8 @@ export class CoachingComponent implements OnInit {
   isLoading : boolean = false;
   selectedRuleGroup : any;
   selectedRuleGroupIndex : number;
-
+  createOrEdit: string = COACHINGCNST.CREATE;
+  currentRule:any;
   @ViewChild('ps') ps: PerfectScrollbarComponent;
   @ViewChild('newCoachingGroup', { static: true }) newCoachingGroup: SliderComponentComponent;
 
@@ -80,9 +81,17 @@ export class CoachingComponent implements OnInit {
 
 
   // Create or Edit Rule Flow Starts
-    openFLowCreation(flowCreation, group,index) {
+    openFLowCreation(flowCreation, group,index, rule, type) {
       this.selectedRuleGroup = group;
       this.selectedRuleGroupIndex = index;
+      if(type === COACHINGCNST.EDIT){
+        console.log("rulerulerulerule", rule);
+        this.createOrEdit = COACHINGCNST.EDIT;
+        this.currentRule = rule;
+      }
+      if(type === COACHINGCNST.CREATE){
+        this.createOrEdit = COACHINGCNST.CREATE;
+      }
       this.modalFlowCreateRef = this.modalService.open(flowCreation, { centered: true, keyboard: false, windowClass: 'flow-creation-full-modal', backdrop: 'static' });
     }
 

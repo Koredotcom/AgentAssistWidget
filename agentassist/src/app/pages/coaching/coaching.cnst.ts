@@ -11,14 +11,18 @@ export const COACHINGCNST = {
         desc : "Are you sure you want to delete Negotiation?",
         type : "rule"
     },
-    SPEECH_TYPE : ['Cross Talk', 'Dead Air', 'Speech Speed'],
+    SPEECH_TYPE : {
+        crossTalk: 'Cross Talk', 
+        deadAir: 'Dead Air', 
+        speechSpeed: 'Speech Speed'
+    },
     OCCURENCES : [1,2,3,4,5],
     SELECTED_TIMER : 30,
     SELECTED_OCCURENCE : 1,
-    USER_LIST : ['Agent', 'Customer'],
-    OPERATOR_LIST : ['And', 'Or'],
-    AND_OPERATOR : 'And',
-    OR_OPERATOR : 'Or',
+    USER_LIST : ['agent', 'customer'],
+    OPERATOR_LIST : ['and', 'or'],
+    AND_OPERATOR : 'and',
+    OR_OPERATOR : 'or',
     NUDGE_AGENT: 'Nudge Agent',
     HINT_AGENT: 'Hint Agent',
     ALERT_MANAGER: 'Alert Manager',
