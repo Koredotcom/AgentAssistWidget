@@ -32,7 +32,7 @@ export class UtteranceComponent implements OnInit {
      }
   }
   ngOnInit(): void {
-    (this.form.controls.frequency as FormGroup).controls?.every.setValue(this.timer+'s');
+    
   }
   
   ngOnChanges(changes : any){
@@ -49,6 +49,7 @@ export class UtteranceComponent implements OnInit {
     if(changes?.createOrEdit?.currentValue === COACHINGCNST.CREATE){
       this.form?.controls?.operator?.setValue(COACHINGCNST.AND_OPERATOR);
       this.selectedOperator = this.form.controls.operator.value;
+      (this.form.controls.frequency as FormGroup).controls?.every.setValue(this.timer+'s');
     }
   }
 
