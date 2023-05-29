@@ -41,9 +41,16 @@
     .footer-sec{
         background: #EAF1FC;
         padding: 20px 30px;
-        text-align: right;
-        button{
-            margin-left: 10px;
-        }
+        display: flex;
+        align-items: center;
+        .right-btns{
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            button{
+                margin-left: 10px;
+            }
+        }        
     }
 }
