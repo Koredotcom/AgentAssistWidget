@@ -34,13 +34,17 @@ export class UtteranceComponent implements OnInit {
   ngOnInit(): void {
     (this.form.controls.frequency as FormGroup).controls?.every.setValue(this.timer+'s');
   }
-
+  
   ngOnChanges(changes : any){
     if(changes["index"]?.currentValue ==  this.length){
       this.changeOperator(COACHINGCNST.AND_OPERATOR)
     }    
     if(changes?.createOrEdit?.currentValue === COACHINGCNST.EDIT){
-      console.log("this.form", this.form);
+      const formVal = this.form.value;
+      this.selectedOperator = formVal.operator;
+      this.selUser = formVal.by;
+      this.selOcc = formVal.frequency.nOccurences;
+      this.timer = formVal.frequency.every
     }
     if(changes?.createOrEdit?.currentValue === COACHINGCNST.CREATE){
       this.form?.controls?.operator?.setValue(COACHINGCNST.AND_OPERATOR);
