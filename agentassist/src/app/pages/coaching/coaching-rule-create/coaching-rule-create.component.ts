@@ -17,6 +17,9 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
   @Input() groupIndex : number;
   @Output() onCloseRule = new EventEmitter();
   @Input() createOrEdit = '';
+  @Input() currentRule:any;
+  ruleForm :FormGroup;
+
   coachingCnst : any = COACHINGCNST
   triggerClick : boolean = false;
   allTriggers = [
@@ -75,8 +78,7 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
       icon: "icon-sa-chat"
     }
   ]
-  ruleForm :FormGroup;
-  @Input() currentRule:any;
+  
   // triggerFormControlsArray : any = [];
 
   constructor(private fb: FormBuilder, private coachingService : CoachingService, private cd: ChangeDetectorRef,
@@ -119,8 +121,10 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
     let payload : any = this.ruleForm.value;
     payload["addToGroup"] = true;
     payload["groupId"] = this.groupDetails._id;
-    this.service.invoke('post.agentcoachingrule', {addToGroup : true, groupId : this.groupDetails._id}, payload).subscribe(data => {
-      if (data && data._id) {
+    let methodName = this.createOrEdit == COACHINGCNST.CREATE ? "post.agentcoachingrule" : "put.agentcoachingrule"
+    this.service.invoke(methodName, {addToGroup : true, groupId : this.groupDetails._id, ruleId : this.currentRule.ruleId}, payload).subscribe(data => {
+      if (data && (data._id || data.id)) {
+        data._id = data.id ? data.id : data._id;
         data.ruleId = data._id;
         data.isActive = true;
         this.closeRule(data);
