@@ -103,6 +103,7 @@ export class CoachingComponent implements OnInit {
         this.respData?.results[this.selectedRuleGroupIndex]?.rules.push(rule);
       }else if(rule){
         this.respData?.results[this.selectedRuleGroupIndex]?.rules.splice(this.selectedRuleIndex, 1, rule);
+        this.respData = {...this.respData};
       }
       this.selectedRuleGroup = null;
       this.selectedRuleGroupIndex = null;
