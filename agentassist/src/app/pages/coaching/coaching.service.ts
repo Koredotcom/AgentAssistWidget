@@ -16,7 +16,7 @@ export class CoachingService {
       by: ['', [Validators.required]],
       operator : ['And', [Validators.required]],
       when : this.fb.group({
-        utterancesId: this.fb.array([1,2,3,4], Validators.required)
+        utterancesId: [[], Validators.required]
       }),
       frequency: this.fb.group({
         nOccurences: [1, Validators.required],

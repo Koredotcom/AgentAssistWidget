@@ -36,16 +36,16 @@
                     <div class="scrol-data">
                         <div class="add-utterences-drp">
                             <div class="label-text">Utterances</div>
-                            <div class="dropdown-adherence" ngbDropdown>
-                                <input type="text" class="drp-input-search" ngbDropdownToggle>
+                            <div class="dropdown-adherence" ngbDropdown #utteranceDropdown>
+                                <input type="text" class="drp-input-search"  ngbDropdownToggle (keydown.enter)="getSuggestion('formal')" [(ngModel)]="utteranceText">
                                 <div class="text_info">Type an utterance that the customer might say...</div>
                                 <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
                                     <div class="body-dropdown">
-                                        <ng-container *ngIf="true">
+                                        <ng-container *ngIf="isGeneratingText">
                                             <div class="searchedutt">
                                                 <div class="kr-sg-checkbox">
-                                                    <input id="checkbox-1" class="checkbox-custom" type="checkbox">
-                                                    <label for="checkbox-1" class="checkbox-custom-label">This price is too expensive</label>
+                                                    <input id="checkbox-1" class="checkbox-custom" type="checkbox" (click)="getSuggestion('formal')">
+                                                    <label for="checkbox-1" class="checkbox-custom-label">{{utteranceText}}</label>
                                                 </div>
                                                 <div class="percentage-colr">
                                                     <span class="percentage">12%</span>
@@ -55,146 +55,16 @@
                                             <div class="found-details-info">
                                                 <div class="found-ai-count">
                                                     <i class="icon-sa-common-properties"></i>
-                                                    <span>Found 6</span>
+                                                    <span>Found {{openAiUtteranceArray?.length}}</span>
                                                 </div>
                                                 <div class="found-desc">Similar utterances with the same meaning</div>
                                                 <perfect-scrollbar>
                                                     <div class="found-items-scroll">
-                                                        <ng-container *ngIf="true">
-                                                            <div class="item-data-found">
+                                                        <ng-container *ngFor="let utter of openAiUtteranceArray;let i = index">
+                                                            <div class="item-data-found" >
                                                                 <div class="kr-sg-checkbox">
-                                                                    <input id="checkbox-11" class="checkbox-custom" type="checkbox">
-                                                                    <label for="checkbox-11" class="checkbox-custom-label">I can’t afford this</label>
-                                                                </div>
-                                                                <div class="percentage-colr">
-                                                                    <span class="percentage">12%</span>
-                                                                    <span class="bgcolor"></span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="item-data-found">
-                                                                <div class="kr-sg-checkbox">
-                                                                    <input id="checkbox-11" class="checkbox-custom" type="checkbox">
-                                                                    <label for="checkbox-11" class="checkbox-custom-label">I can’t afford this</label>
-                                                                </div>
-                                                                <div class="percentage-colr">
-                                                                    <span class="percentage">12%</span>
-                                                                    <span class="bgcolor"></span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="item-data-found">
-                                                                <div class="kr-sg-checkbox">
-                                                                    <input id="checkbox-11" class="checkbox-custom" type="checkbox">
-                                                                    <label for="checkbox-11" class="checkbox-custom-label">I can’t afford this</label>
-                                                                </div>
-                                                                <div class="percentage-colr">
-                                                                    <span class="percentage">12%</span>
-                                                                    <span class="bgcolor"></span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="item-data-found">
-                                                                <div class="kr-sg-checkbox">
-                                                                    <input id="checkbox-11" class="checkbox-custom" type="checkbox">
-                                                                    <label for="checkbox-11" class="checkbox-custom-label">I can’t afford this</label>
-                                                                </div>
-                                                                <div class="percentage-colr">
-                                                                    <span class="percentage">12%</span>
-                                                                    <span class="bgcolor"></span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="item-data-found">
-                                                                <div class="kr-sg-checkbox">
-                                                                    <input id="checkbox-11" class="checkbox-custom" type="checkbox">
-                                                                    <label for="checkbox-11" class="checkbox-custom-label">I can’t afford this</label>
-                                                                </div>
-                                                                <div class="percentage-colr">
-                                                                    <span class="percentage">12%</span>
-                                                                    <span class="bgcolor"></span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="item-data-found">
-                                                                <div class="kr-sg-checkbox">
-                                                                    <input id="checkbox-11" class="checkbox-custom" type="checkbox">
-                                                                    <label for="checkbox-11" class="checkbox-custom-label">I can’t afford this</label>
-                                                                </div>
-                                                                <div class="percentage-colr">
-                                                                    <span class="percentage">12%</span>
-                                                                    <span class="bgcolor"></span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="item-data-found">
-                                                                <div class="kr-sg-checkbox">
-                                                                    <input id="checkbox-11" class="checkbox-custom" type="checkbox">
-                                                                    <label for="checkbox-11" class="checkbox-custom-label">I can’t afford this</label>
-                                                                </div>
-                                                                <div class="percentage-colr">
-                                                                    <span class="percentage">12%</span>
-                                                                    <span class="bgcolor"></span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="item-data-found">
-                                                                <div class="kr-sg-checkbox">
-                                                                    <input id="checkbox-11" class="checkbox-custom" type="checkbox">
-                                                                    <label for="checkbox-11" class="checkbox-custom-label">I can’t afford this</label>
-                                                                </div>
-                                                                <div class="percentage-colr">
-                                                                    <span class="percentage">12%</span>
-                                                                    <span class="bgcolor"></span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="item-data-found">
-                                                                <div class="kr-sg-checkbox">
-                                                                    <input id="checkbox-11" class="checkbox-custom" type="checkbox">
-                                                                    <label for="checkbox-11" class="checkbox-custom-label">I can’t afford this</label>
-                                                                </div>
-                                                                <div class="percentage-colr">
-                                                                    <span class="percentage">12%</span>
-                                                                    <span class="bgcolor"></span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="item-data-found">
-                                                                <div class="kr-sg-checkbox">
-                                                                    <input id="checkbox-11" class="checkbox-custom" type="checkbox">
-                                                                    <label for="checkbox-11" class="checkbox-custom-label">I can’t afford this</label>
-                                                                </div>
-                                                                <div class="percentage-colr">
-                                                                    <span class="percentage">12%</span>
-                                                                    <span class="bgcolor"></span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="item-data-found">
-                                                                <div class="kr-sg-checkbox">
-                                                                    <input id="checkbox-11" class="checkbox-custom" type="checkbox">
-                                                                    <label for="checkbox-11" class="checkbox-custom-label">I can’t afford this</label>
-                                                                </div>
-                                                                <div class="percentage-colr">
-                                                                    <span class="percentage">12%</span>
-                                                                    <span class="bgcolor"></span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="item-data-found">
-                                                                <div class="kr-sg-checkbox">
-                                                                    <input id="checkbox-11" class="checkbox-custom" type="checkbox">
-                                                                    <label for="checkbox-11" class="checkbox-custom-label">I can’t afford this</label>
-                                                                </div>
-                                                                <div class="percentage-colr">
-                                                                    <span class="percentage">12%</span>
-                                                                    <span class="bgcolor"></span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="item-data-found">
-                                                                <div class="kr-sg-checkbox">
-                                                                    <input id="checkbox-11" class="checkbox-custom" type="checkbox">
-                                                                    <label for="checkbox-11" class="checkbox-custom-label">I can’t afford this</label>
-                                                                </div>
-                                                                <div class="percentage-colr">
-                                                                    <span class="percentage">12%</span>
-                                                                    <span class="bgcolor"></span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="item-data-found">
-                                                                <div class="kr-sg-checkbox">
-                                                                    <input id="checkbox-11" class="checkbox-custom" type="checkbox">
-                                                                    <label for="checkbox-11" class="checkbox-custom-label">I can’t afford this</label>
+                                                                    <input id="'checkbox-' + {{i}}" class="checkbox-custom" type="checkbox" [checked]="utter.enabled" (click)="changeUtterActiveStatus(utter)">
+                                                                    <label for="'checkbox-' + {{i}}" class="checkbox-custom-label">{{utter.value}}</label>
                                                                 </div>
                                                                 <div class="percentage-colr">
                                                                     <span class="percentage">12%</span>
@@ -202,14 +72,14 @@
                                                                 </div>
                                                             </div>
                                                         </ng-container>
-                                                        <div class="ai-working-loader">
+                                                        <!-- <div class="ai-working-loader">
                                                             <div class="loader-round"></div>
-                                                        </div>
+                                                        </div> -->
                                                     </div>
                                                 </perfect-scrollbar>
                                             </div>
                                         </ng-container>
-                                        <ng-container *ngIf="true">
+                                        <ng-container *ngIf="isGeneratingText == false && openAiUtteranceArray.length == 0 && utteranceText">
                                             <div class="ai-itassist-wrapper">
                                                 <div class="label-heading">AI Assistant</div>
                                                 <div class="no-data-loader">
@@ -232,9 +102,9 @@
                                             </div>
                                         </ng-container>
                                     </div>
-                                    <div class="footer-add">
-                                        <button class="kr-sg-button-secondary btn_lg">Clear</button>
-                                        <button class="kr-sg-button-primary btn_lg">Add 1</button>
+                                    <div class="footer-add" *ngIf="isGeneratingText">
+                                        <button class="kr-sg-button-secondary btn_lg" (click)="clearAIsuggestions()">Clear</button>
+                                        <button class="kr-sg-button-primary btn_lg" (click)="getUtteranceIds()">Add</button>
                                     </div>
                                 </ul>
                             </div>
@@ -376,6 +246,6 @@
     </div>
     <div class="footer-actions">
         <button class="kr-sg-button-secondary btn_lg">Cancel</button>
-        <button class="kr-sg-button-primary btn_lg">Save</button>
+        <button class="kr-sg-button-primary btn_lg" (click)="saveUtteranceStrings()">Save</button>
     </div>
 </div>

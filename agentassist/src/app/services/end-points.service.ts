@@ -1613,5 +1613,10 @@ export class EndPointsService {
       method : 'put'
     }
 
+    this.serviceList['post.agentcoachingutterance'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingutterance',
+      method : 'post'
+    }
+
   }
 }
