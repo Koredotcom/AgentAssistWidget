@@ -61,15 +61,16 @@ export class CoachingComponent implements OnInit {
   }
 
   updateGroupData(updateObj){    
-    if(updateObj.data && updateObj.data.id){
+    if(updateObj.data && (updateObj.data._id || updateObj.data.id)){
+      updateObj.data._id = updateObj.data.id ? updateObj.data.id : updateObj.data._id;
       if(updateObj.type == COACHINGCNST.CREATE){
         this.respData.results.push(updateObj.data);
       }else if(updateObj.type == COACHINGCNST.EDIT){
-        let groupId = updateObj.data.id;
+        let groupId = updateObj.data._id;
         let matchIndex = this.respData.results.findIndex(x => x._id == groupId);
         this.respData.results.splice(matchIndex, 1,updateObj.data);
       }else if(updateObj.type == COACHINGCNST.DELETE){
-        let groupId = updateObj.data.id;
+        let groupId = updateObj.data._id;
         let matchIndex = this.respData.results.findIndex(x => x._id == groupId);
         this.respData.results.splice(matchIndex, 1);
       }      
@@ -88,7 +89,6 @@ export class CoachingComponent implements OnInit {
     closeFLowCreation(rule?) {
       this.modalFlowCreateRef.close();
       if(rule){
-        rule["ruleId"] = rule.id;
         this.respData?.results[this.selectedRuleGroupIndex]?.rules.push(rule);
       }
       this.selectedRuleGroup = null;

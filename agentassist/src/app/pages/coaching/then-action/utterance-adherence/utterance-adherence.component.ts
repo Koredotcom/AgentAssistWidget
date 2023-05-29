@@ -95,6 +95,7 @@ export class UtteranceAdherenceComponent implements OnInit {
     this.service.invoke('post.agentcoachingutterance',{}, payload).pipe(finalize(() => {
     })).subscribe(data => {
       if (data) {
+        this.isGeneratingText = false;
         this.selectedUtterancesArray = Object.assign([], data);
       }
     });

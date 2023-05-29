@@ -103,7 +103,9 @@ export class CoachingRuleCreateComponent implements OnInit {
     payload["addToGroup"] = true;
     payload["groupId"] = this.groupDetails._id;
     this.service.invoke('post.agentcoachingrule', {addToGroup : true, groupId : this.groupDetails._id}, payload).subscribe(data => {
-      if (data) {
+      if (data && data._id) {
+        data.ruleId = data._id;
+        data.isActive = true;
         this.closeRule(data);
       }
     });

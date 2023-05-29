@@ -119,39 +119,9 @@
                         <div class="saved-utterances">
                             <div class="heading-saved">Saved Utterances</div>
                             <!-- Repeat Data -->
-                            <ng-container>
+                            <ng-container *ngFor="let utter of selectedUtterancesArray">
                                 <div class="saved-utt-body-sec">
-                                    <div class="saved-title-utt">I cannot afford this</div>
-                                    <div class="percentage-colr">
-                                        <span class="percentage">12%</span>
-                                        <span class="bgcolor"></span>
-                                    </div>
-                                    <div class="delete-saved-utt">
-                                        <i class="icon-sa-welcome-delete"></i>
-                                    </div>
-                                </div>
-                                <div class="saved-utt-body-sec">
-                                    <div class="saved-title-utt">This price is too expensive</div>
-                                    <div class="percentage-colr">
-                                        <span class="percentage">12%</span>
-                                        <span class="bgcolor"></span>
-                                    </div>
-                                    <div class="delete-saved-utt">
-                                        <i class="icon-sa-welcome-delete"></i>
-                                    </div>
-                                </div>
-                                <div class="saved-utt-body-sec">
-                                    <div class="saved-title-utt">This is to expensive for me</div>
-                                    <div class="percentage-colr">
-                                        <span class="percentage">12%</span>
-                                        <span class="bgcolor"></span>
-                                    </div>
-                                    <div class="delete-saved-utt">
-                                        <i class="icon-sa-welcome-delete"></i>
-                                    </div>
-                                </div>
-                                <div class="saved-utt-body-sec">
-                                    <div class="saved-title-utt">Price is too high</div>
+                                    <div class="saved-title-utt">{{utter?.utterance}}</div>
                                     <div class="percentage-colr">
                                         <span class="percentage">12%</span>
                                         <span class="bgcolor"></span>
