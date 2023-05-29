@@ -31,9 +31,12 @@
                                 <div class="card_header">
                                     <div data-toggle="collapse" data-parent="#accordion" [attr.href]="'#agentGroupData' + i" class="card_link collapsed" aria-expanded="false">
                                         <div class="accordion-content-header">
-                                            <div class="left-title">
-                                                <span>{{res.name}}</span>
-                                                <i class="icon-sa-welcome-edit" (click)="$event.stopPropagation();openCoachingGroup(coachingConst.EDIT, res, i)"></i>
+                                            <div class="left-title text-truncate">
+                                                <div class="left-content-info">
+                                                    <div class="title-info">{{res.name}}</div>
+                                                    <i class="icon-sa-welcome-edit" (click)="$event.stopPropagation();openCoachingGroup(coachingConst.EDIT, res, i)"></i>                                                                                                   
+                                                </div>
+                                                <div class="desc_text text-truncate">{{res.description}}</div>                                                 
                                             </div>
                                             <div class="right-info">
                                                 <div class="items-count">{{res.rules?.length}} Items</div>

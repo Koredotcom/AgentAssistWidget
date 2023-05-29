@@ -130,28 +130,37 @@
                             display: flex;
                             align-items: center;
                             min-height: 30px;
-                            .left-title{
-                                display: flex;
-                                align-items: center;
-                                width: 100%;
-                                overflow: hidden;
-                                text-overflow: ellipsis;
-                                white-space: nowrap;
-                                span{
-                                    max-width: 100%;
-                                    font-weight: 600;
-                                    font-size: 14px;
-                                    line-height: normal;
+                            .left-title{                                
+                                width: 100%;                                
+                                .left-content-info{
                                     overflow: hidden;
                                     text-overflow: ellipsis;
                                     white-space: nowrap;
-                                }
-                                i{
-                                    flex-shrink: 0;
-                                    margin-left: 5px;
-                                    cursor: pointer;
+                                    display: flex;
+                                    align-items: center;
+                                    .title-info{
+                                        max-width: 100%;
+                                        font-weight: 600;
+                                        font-size: 14px;
+                                        line-height: normal;
+                                        overflow: hidden;
+                                        text-overflow: ellipsis;
+                                        white-space: nowrap;
+                                    }
+                                    i{
+                                        flex-shrink: 0;
+                                        margin-left: 5px;
+                                        cursor: pointer;
+                                        font-size: 12px;
+                                    }
+                                }  
+                                .desc_text{
+                                    font-weight: 400;
                                     font-size: 12px;
-                                }
+                                    line-height: 18px;
+                                    color: #737373;
+                                    margin-top: 4px;
+                                }                              
                             }
                             .right-info{
                                 flex-shrink: 0;
