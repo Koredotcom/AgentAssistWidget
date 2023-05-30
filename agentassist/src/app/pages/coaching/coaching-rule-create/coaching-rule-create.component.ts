@@ -7,6 +7,9 @@ import { workflowService } from '@kore.services/workflow.service';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CoachingConfirmationComponent } from '../coaching-confirmation/coaching-confirmation.component';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/internal/operators/map';
 
 @Component({
   selector: 'app-coaching-rule-create',
@@ -15,11 +18,11 @@ import { CoachingConfirmationComponent } from '../coaching-confirmation/coaching
 })
 export class CoachingRuleCreateComponent implements OnInit, OnChanges {
 
-  @Input() groupDetails : any;
-  @Input() groupIndex : number;
-  @Output() onCloseRule = new EventEmitter();
-  @Input() createOrEdit = '';
-  @Input() currentRule:any;
+  groupDetails : any;
+  // @Input() groupIndex : number;
+  // @Output() onCloseRule = new EventEmitter();
+  // @Input() createOrEdit = '';
+  // @Input() currentRule:any;
   ruleForm :FormGroup;
   modalRef : any;
 
@@ -84,42 +87,68 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
       desc: "Trigger FAQ for agent",
       icon: "icon-sa-chat"
     }
-  ]
+  ];
+  botId = '';
   
   // triggerFormControlsArray : any = [];
 
-  constructor(private fb: FormBuilder, private coachingService : CoachingService, private cd: ChangeDetectorRef,
-    private workflowService : workflowService, private service : ServiceInvokerService, private modalService : NgbModal) { }
+  constructor(
+    private fb: FormBuilder, 
+    private coachingService : CoachingService, 
+    // private cd: ChangeDetectorRef,
+    private workflowService : workflowService, 
+    private service : ServiceInvokerService, 
+    // private modalService : NgbModal,
+    private route: ActivatedRoute,
+    private router: Router
+  ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(this.groupDetails, 'group details');
+    // console.log(this.groupDetails, 'group details');
     if(changes?.createOrEdit?.currentValue === COACHINGCNST.EDIT){
-     this.updateRuleForm();
+    //  this.updateRuleForm();
     };
   }
 
   
   ngOnInit(): void {
+    this.botId = this.workflowService.getCurrentBt(true)._id;
     this.createForm();
+    this.subscribeToRoute();
   }
-
-  updateRuleForm(){
-    this.createForm();
-    setTimeout(() => {
-      this.ruleForm.controls["name"].patchValue(this.currentRule?.name);
-      (this.currentRule?.triggers || []).forEach(element => {
-        (<FormArray>this.ruleForm.controls["triggers"])
-        .push(this.fb.group(this.coachingService.setUtteranceForm(element)));
-        this.cd.detectChanges();
-      });
-      console.log("updateRuleForm", this.ruleForm, this.currentRule);
+  isCreateOrUpdate = '';
+  groupId = '';
+  subscribeToRoute(){
+    this.route.url.subscribe(data=>{
+      this.isCreateOrUpdate = data[0].path;
+      this.groupId = data[1].path;
+      this.getGroupDetails();
     });
   }
 
+  getGroupDetails(){
+    this.service.invoke('get.agentCoachingGroupById', {groupId : this.groupId, botId: this.botId}).subscribe(data => {
+      this.groupDetails = data[0];
+    });
+  }
+  //need to modify
+  updateRuleForm(){
+    // this.createForm();
+    // setTimeout(() => {
+    //   this.ruleForm.controls["name"].patchValue(this.currentRule?.name);
+    //   (this.currentRule?.triggers || []).forEach(element => {
+    //     (<FormArray>this.ruleForm.controls["triggers"])
+    //     .push(this.fb.group(this.coachingService.setUtteranceForm(element)));
+    //     this.cd.detectChanges();
+    //   });
+    //   console.log("updateRuleForm", this.ruleForm, this.currentRule);
+    // });
+  }
+
   changeRule(rule){
-    console.log(rule, 'rule');
-    this.currentRule = rule;
-    this.updateRuleForm();
+    // console.log(rule, 'rule');
+    // this.currentRule = rule;
+    // this.updateRuleForm();
   }
 
   createForm(){
@@ -135,23 +164,23 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
     )
   }
 
-  closeRule(rule?) {
-    this.onCloseRule.emit(rule);
-  }
+  // closeRule(rule?) {
+  //   this.onCloseRule.emit(rule);
+  // }
  
   saveRule(){
-    let payload : any = this.ruleForm.value;
-    payload["addToGroup"] = true;
-    payload["groupId"] = this.groupDetails._id;
-    let methodName = this.createOrEdit == COACHINGCNST.CREATE ? "post.agentcoachingrule" : "put.agentcoachingrule"
-    this.service.invoke(methodName, {addToGroup : true, groupId : this.groupDetails._id, ruleId : this.currentRule?.ruleId}, payload).subscribe(data => {
-      if (data && (data._id || data.id)) {
-        data._id = data.id ? data.id : data._id;
-        data.ruleId = data._id;
-        data.isActive = true;
-        this.closeRule(data);
-      }
-    });
+    // let payload : any = this.ruleForm.value;
+    // payload["addToGroup"] = true;
+    // payload["groupId"] = this.groupDetails._id;
+    // let methodName = this.createOrEdit == COACHINGCNST.CREATE ? "post.agentcoachingrule" : "put.agentcoachingrule"
+    // this.service.invoke(methodName, {addToGroup : true, groupId : this.groupDetails._id, ruleId : this.currentRule?.ruleId}, payload).subscribe(data => {
+    //   if (data && (data._id || data.id)) {
+    //     data._id = data.id ? data.id : data._id;
+    //     data.ruleId = data._id;
+    //     data.isActive = true;
+    //     this.closeRule(data);
+    //   }
+    // });
   }
 
   selectTriggerClick(clickType){
@@ -207,20 +236,22 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
   }
 
   closeRuleScreen() {    
-    if(!this.ruleForm.pristine){
-      this.modalRef = this.modalService.open(CoachingConfirmationComponent, { centered: true, keyboard: false, windowClass: 'delete-uc-rule-modal', backdrop: 'static' });
-      this.modalRef.result.then(emitedValue => {
-        console.log(emitedValue, 'emted value');
+    this.router.navigate(["/config/coaching"]);
+    // this.router.navigateByUrl("/");
+    // if(!this.ruleForm.pristine){
+    //   this.modalRef = this.modalService.open(CoachingConfirmationComponent, { centered: true, keyboard: false, windowClass: 'delete-uc-rule-modal', backdrop: 'static' });
+    //   this.modalRef.result.then(emitedValue => {
+    //     console.log(emitedValue, 'emted value');
         
-        if(emitedValue){
-          console.log(emitedValue, "emited value");
+    //     if(emitedValue){
+    //       console.log(emitedValue, "emited value");
           
-          this.closeRule();
-        }
-      });
-    }else{
-      this.closeRule();
-    }
+    //       this.closeRule();
+    //     }
+    //   });
+    // }else{
+    //   this.closeRule();
+    // }
   }
 
 }

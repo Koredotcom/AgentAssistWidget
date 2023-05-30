@@ -1578,7 +1578,7 @@ export class EndPointsService {
     }
 
     this.serviceList['get.agentCoachingGroupById'] = {
-      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachinggroup/:groupId',
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachinggroup/:groupId?botId=:botId',
       method : 'get'
     }
 
@@ -1618,5 +1618,9 @@ export class EndPointsService {
       method : 'post'
     }
 
+    this.serviceList['get.agentcoachingSingleGroup'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachinggroup/:groupId',
+      method : 'get'
+    }
   }
 }

@@ -40,7 +40,7 @@
                                             </div>
                                             <div class="right-info">
                                                 <div class="items-count">{{res.rules?.length}} Items</div>
-                                                <button class="new-rule-btn" (click)="$event.stopPropagation();openFLowCreation(flowCreation, res, i, {}, 'create')">+ New Rule</button>
+                                                <button class="new-rule-btn" [routerLink]="['create', res._id ]">+ New Rule</button>
                                                 <div class="arrow-rotate">
                                                     <i class="icon-sa-arrow-down"></i>
                                                 </div>

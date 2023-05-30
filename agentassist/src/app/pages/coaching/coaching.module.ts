@@ -20,7 +20,9 @@ import { CoachingGroupRuleDeleteComponent } from './coaching-group-rule-delete/c
 import { CoachingConfirmationComponent } from './coaching-confirmation/coaching-confirmation.component';
 
 const routes: Routes = [
-  { path: '', component:  CoachingComponent}
+  { path: '', component:  CoachingComponent},
+  { path: 'create/:groupId', component: CoachingRuleCreateComponent},
+  { path: 'create/:groupId/:ruleId', component: CoachingRuleCreateComponent}
 ];
 
 @NgModule({
