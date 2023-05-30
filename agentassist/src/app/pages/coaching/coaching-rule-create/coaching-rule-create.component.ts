@@ -104,8 +104,6 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
   }
 
   updateRuleForm(){
-    
-    
     this.createForm();
     setTimeout(() => {
       this.ruleForm.controls["name"].patchValue(this.currentRule?.name);
@@ -129,7 +127,8 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
       {
         "botId": new FormControl(this.workflowService.getCurrentBt(true)._id, [Validators.required]),
         "name": new FormControl('',[Validators.required]),
-        "triggers": this.fb.array([]),
+        "description": new FormControl('',[Validators.required]),
+        "triggers": this.fb.array([],[Validators.required]),
         "actions": this.fb.array([]),
         "assignees": this.fb.array([]),
       }
