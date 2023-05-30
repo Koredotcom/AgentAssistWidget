@@ -205,8 +205,14 @@ export class CoachingComponent implements OnInit {
   }
 
   openDeleteRule(rule, groupId, index) {    
+    let deleteRule = {
+      title : "Delete Rule",
+      desc : "Are you sure, you want to delete rule '" +rule.name+"'.",
+      type : "rule",
+      ruleId : rule.ruleId
+    }
     this.modalRef = this.modalService.open(CoachingGroupRuleDeleteComponent, { centered: true, keyboard: false, windowClass: 'delete-uc-rule-modal', backdrop: 'static' });
-    this.modalRef.componentInstance.data = {...COACHINGCNST.DELETE_RULE, ruleId : rule.ruleId};
+    this.modalRef.componentInstance.data = deleteRule;
     this.modalRef.result.then(emitedValue => {
       if(emitedValue){
         this.service.invoke('delete.agentCoachingRule', {groupId : groupId, ruleId: rule.ruleId}).subscribe(_data => {

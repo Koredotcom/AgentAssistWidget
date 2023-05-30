@@ -5,6 +5,8 @@ import { CoachingService } from '../coaching.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { workflowService } from '@kore.services/workflow.service';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { CoachingConfirmationComponent } from '../coaching-confirmation/coaching-confirmation.component';
 
 @Component({
   selector: 'app-coaching-rule-create',
@@ -19,6 +21,7 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
   @Input() createOrEdit = '';
   @Input() currentRule:any;
   ruleForm :FormGroup;
+  modalRef : any;
 
   coachingCnst : any = COACHINGCNST
   triggerClick : boolean = false;
@@ -27,22 +30,26 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
       type: this.coachingCnst.UTTERANCE,
       title: "Utterance",
       desc: "Agent/Customer utterances",
-      icon: "icon-sa-chat"
+      icon: "icon-sa-chat",
+      disable : false
     },    {
       type: this.coachingCnst.SPEECH_ANALYSIS,
       title: "Speech Analysis",
       desc: "Agent speech patterns",
-      icon: "icon-sa-chat"
+      icon: "icon-sa-chat",
+      disable : false
     },    {
       type: this.coachingCnst.VARIABLE,
       title: "Variable",
       desc: "Monitor context variable",
-      icon: "icon-sa-chat"
+      icon: "icon-sa-chat",
+      disable : true
     },    {
       type: this.coachingCnst.DIALOG,
       title: "Dialog",
       desc: "Monitor dialog execution",
-      icon: "icon-sa-chat"
+      icon: "icon-sa-chat",
+      disable : true
     }
   ];
   allActions = [
@@ -82,24 +89,37 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
   // triggerFormControlsArray : any = [];
 
   constructor(private fb: FormBuilder, private coachingService : CoachingService, private cd: ChangeDetectorRef,
-    private workflowService : workflowService, private service : ServiceInvokerService) { }
+    private workflowService : workflowService, private service : ServiceInvokerService, private modalService : NgbModal) { }
 
   ngOnChanges(changes: SimpleChanges): void {
+    console.log(this.groupDetails, 'group details');
     if(changes?.createOrEdit?.currentValue === COACHINGCNST.EDIT){
-      this.createForm();
-      setTimeout(() => {
-        this.ruleForm.controls["name"].patchValue(this.currentRule?.name);
-        this.ruleForm.controls["description"].patchValue(this.currentRule?.description);
-        (this.currentRule?.triggers || []).forEach(element => {
-          (<FormArray>this.ruleForm.controls["triggers"])
-          .push(this.fb.group(this.coachingService.setUtteranceForm(element)))
-        });
-      });
+     this.updateRuleForm();
     };
   }
+
   
   ngOnInit(): void {
     this.createForm();
+  }
+
+  updateRuleForm(){
+    this.createForm();
+    setTimeout(() => {
+      this.ruleForm.controls["name"].patchValue(this.currentRule?.name);
+      (this.currentRule?.triggers || []).forEach(element => {
+        (<FormArray>this.ruleForm.controls["triggers"])
+        .push(this.fb.group(this.coachingService.setUtteranceForm(element)));
+        this.cd.detectChanges();
+      });
+      console.log("updateRuleForm", this.ruleForm, this.currentRule);
+    });
+  }
+
+  changeRule(rule){
+    console.log(rule, 'rule');
+    this.currentRule = rule;
+    this.updateRuleForm();
   }
 
   createForm(){
@@ -185,4 +205,22 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
       (<FormArray>this.ruleForm.controls["triggers"]).removeAt(index);
     }
   }
+
+  closeRuleScreen() {    
+    if(!this.ruleForm.pristine){
+      this.modalRef = this.modalService.open(CoachingConfirmationComponent, { centered: true, keyboard: false, windowClass: 'delete-uc-rule-modal', backdrop: 'static' });
+      this.modalRef.result.then(emitedValue => {
+        console.log(emitedValue, 'emted value');
+        
+        if(emitedValue){
+          console.log(emitedValue, "emited value");
+          
+          this.closeRule();
+        }
+      });
+    }else{
+      this.closeRule();
+    }
+  }
+
 }

@@ -1,7 +1,8 @@
 
 <div class="coaching-group-create-slide">
     <div class="header-sec">
-        <div class="title">New Coaching Group</div>
+        <div class="title" *ngIf="this.type == coachingConst.CREATE">New Coaching Group</div>
+        <div class="title" *ngIf="this.type == coachingConst.EDIT">Update Coaching Group</div>
         <div class="close-slider" (click)="closeGroup()">
             <i class="icon-sa-close"></i>
         </div>
