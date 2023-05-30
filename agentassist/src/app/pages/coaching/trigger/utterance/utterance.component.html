@@ -5,7 +5,7 @@
             <button class="and-or-btn" (click)="changeOperator(operator)" [ngClass]="{'active-btn' : selectedOperator === operator}">{{operator | titlecase}}</button>
         </ng-container>
     </div>
-    <span class="utt-name-desc">...a</span>
+    <!-- <span class="utt-name-desc">...a</span> -->
     <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body">
         <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!selUser}">
             <span class="choose-text">{{selUser ? (selUser | titlecase) : '{ select person }'}}</span>
@@ -52,7 +52,7 @@
         <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
             <div class="seconds-input">
                 <div class="kr-sg-input-text">
-                    <input type="text" placeholder="Placeholder text" (keyup.enter)="onEnterTime($event)" class="input-text">
+                    <input type="text" placeholder="Enter Seconds here" (keyup.enter)="onEnterTime($event)" class="input-text">
                 </div>
                 <div class="s-title">seconds</div>
             </div>

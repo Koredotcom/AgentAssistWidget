@@ -6,11 +6,6 @@ export const COACHINGCNST = {
     SPEECH_ANALYSIS : 'speech analysis',
     VARIABLE : 'variable',
     DIALOG : 'dialog',
-    DELETE_RULE : {
-        title : "Delete Rule",
-        desc : "Are you sure you want to delete Negotiation?",
-        type : "rule"
-    },
     SPEECH_TYPE : {
         crossTalk: 'Cross Talk', 
         deadAir: 'Dead Air', 

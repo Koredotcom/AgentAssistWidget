@@ -1,9 +1,9 @@
 
-<form [formGroup]="ruleForm">
+<form [formGroup]="ruleForm" (keydown.enter)="$event.preventDefault()">
 <div class="flow-creation-wrapper-container">
     <div class="heading-actions-block">
         <div class="left-content">
-            <div class="arrow-back" (click)="closeRule()">
+            <div class="arrow-back" (click)="closeRuleScreen()">
                 <i class="icon-sa-arrow-down"></i>
             </div>
             <div class="kr-sg-input-text">
@@ -12,24 +12,15 @@
         </div>
         <div class="middle-content">
             <div class="utt-name">{{groupDetails?.name}} /</div>
-            <div class="dropdown-adherence" ngbDropdown placement="bottom-center">
+            <div class="dropdown-adherence" ngbDropdown placement="bottom-center" #ruleSelection="ngbDropdown">
                 <button class="dropdown-toggle btn-toggle" ngbDropdownToggle><i class="icon-sa-arrow-down"></i></button>
-                <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
-                    <!-- <perfect-scrollbar class="mx-h-300">
-                        <li ngbDropdownItem class="list-item-li">
-                            <span class="title">Options</span>
+                <ul class="dropdown_menu-wrapper" ngbDropdownMenu id="ruleSelectionMenu">
+                    <perfect-scrollbar class="mx-h-300">
+                        <li ngbDropdownItem class="list-item-li" *ngFor="let rule of groupDetails?.rules" (click)="changeRule(rule)">
+                            <span class="title">{{rule.name}}</span>
                         </li>
-                        <li ngbDropdownItem class="list-item-li">
-                            <span class="title">Options</span>
-                        </li>
-                        <li ngbDropdownItem class="list-item-li">
-                            <span class="title">Options</span>
-                        </li>
-                        <li ngbDropdownItem class="list-item-li">
-                            <span class="title">Options</span>
-                        </li>
-                    </perfect-scrollbar> -->
-                    <div class="variable-value-input with-check-icon">
+                    </perfect-scrollbar>
+                    <!-- <div class="variable-value-input with-check-icon">
                         <div class="input-variable-sec">
                             <div class="label-text">Rule Description</div>
                             <div class="kr-sg-input-text">
@@ -43,12 +34,12 @@
                         <div class="check-icon-block">
                             <i class="icon-sa-conv-check"></i>
                         </div>
-                    </div>
+                    </div> -->
                 </ul>
             </div>
         </div>
         <div class="btn-actions">
-            <button class="kr-sg-button-secondary btn_lg" (click)="closeRule()">Cancel</button>
+            <button class="kr-sg-button-secondary btn_lg" (click)="closeRuleScreen()">Cancel</button>
             <button class="kr-sg-button-secondary-two btn_lg">Publish</button>
             <button class="kr-sg-button-primary btn_lg" [disabled]="ruleForm.invalid" (click)="saveRule()">Save</button>
         </div>
@@ -60,7 +51,7 @@
                 <div class="block-data-triggers">
                     <div class="triggers-icon-block">
                         <div class="indication-icon">
-                            <i class="icon-sa-onboarding"></i>
+                            <i class="icon-coaching--when"></i>
                         </div>
                         <div class="title">When...</div>
                     </div>
@@ -68,7 +59,7 @@
                         <ng-container *ngFor="let triggertype of ruleForm.controls['triggers']['controls']; let i = index">
                             <div cdkDrag class="example-box">
                                 <div class="drag-content" cdkDragHandle>
-                                    <i class="icon-sa-elipse"></i>
+                                    <i class="icon-coaching--move1"></i>
                                 </div>
                                 <app-utterance [createOrEdit]="createOrEdit" class="comp" [form]="triggertype" *ngIf="triggertype?.controls?.type?.value == coachingCnst.UTTERANCE" [index]="i+1" [length]="ruleForm.controls['triggers']['controls']?.length" (deleteTrigger)="deleteTrigger($event)"></app-utterance>
                                 <app-speech-analysis class="comp" [form]="triggertype" *ngIf="triggertype?.controls?.type?.value == coachingCnst.SPEECH_ANALYSIS" [index]="i+1" [length]="ruleForm.controls['triggers']['controls']?.length" (deleteTrigger)="deleteTrigger($event)"></app-speech-analysis>
@@ -93,9 +84,9 @@
                 <div class="block-data-triggers">
                     <div class="triggers-icon-block">
                         <div class="indication-icon">
-                            <i class="icon-sa-onboarding"></i>
+                            <i class="icon-coaching--thendo"></i>
                         </div>
-                        <div class="title">then do...</div>
+                        <div class="title">Then do...</div>
                     </div>
                     <div class="content-data-triggers">
                         <ng-container *ngFor="let actionType of ruleForm.controls['actions']['controls']; let i = index">
@@ -120,7 +111,7 @@
                 <div class="block-data-triggers">
                     <div class="triggers-icon-block">
                         <div class="indication-icon">
-                            <i class="icon-sa-onboarding"></i>
+                            <i class="icon-coaching-assign-this"></i>
                         </div>
                         <div class="title">Assign this to...</div>
                     </div>
@@ -152,7 +143,7 @@
             <div class="choose-t-block-bg">
                 <div class="choose-t-block">
                     <ng-container *ngFor="let trigger of allTriggers">
-                        <div class="inner-card-choose">
+                        <div class="inner-card-choose" [ngClass]="{'disableTrigger' : trigger.disable}">
                             <div class="content-choose-triggers" ngbDropdownItem (click)="selectTriggerClick(trigger.type)">
                                 <div class="icon_blk">
                                     <i class="{{trigger.icon}}"></i>
