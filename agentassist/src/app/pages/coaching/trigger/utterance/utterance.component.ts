@@ -32,7 +32,7 @@ export class UtteranceComponent implements OnInit {
      }
   }
   ngOnInit(): void {
-    
+  
   }
   
   ngOnChanges(changes : any){

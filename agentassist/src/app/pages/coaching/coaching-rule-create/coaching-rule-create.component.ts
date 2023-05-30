@@ -22,6 +22,7 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
   @Input() currentRule:any;
   ruleForm :FormGroup;
   modalRef : any;
+  formTouched : boolean = false;
 
   coachingCnst : any = COACHINGCNST
   triggerClick : boolean = false;
@@ -92,19 +93,25 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
     private workflowService : workflowService, private service : ServiceInvokerService, private modalService : NgbModal) { }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(this.groupDetails, 'group details');
     if(changes?.createOrEdit?.currentValue === COACHINGCNST.EDIT){
+      this.createForm();
      this.updateRuleForm();
+    }
+    if(changes?.createOrEdit?.currentValue === COACHINGCNST.CREATE){
+      this.createForm();
+      this.subscribeValChanges();
     };
   }
 
-  
+  subscribeValChanges(){
+    this.ruleForm?.valueChanges.subscribe((_change)=>{
+      this.formTouched = true;
+    })
+  }
   ngOnInit(): void {
-    this.createForm();
   }
 
   updateRuleForm(){
-    this.createForm();
     setTimeout(() => {
       this.ruleForm.controls["name"].patchValue(this.currentRule?.name);
       (this.currentRule?.triggers || []).forEach(element => {
@@ -112,12 +119,11 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
         .push(this.fb.group(this.coachingService.setUtteranceForm(element)));
         this.cd.detectChanges();
       });
-      console.log("updateRuleForm", this.ruleForm, this.currentRule);
+      this.subscribeValChanges();
     });
   }
 
   changeRule(rule){
-    console.log(rule, 'rule');
     this.currentRule = rule;
     this.updateRuleForm();
   }
@@ -127,12 +133,12 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
       {
         "botId": new FormControl(this.workflowService.getCurrentBt(true)._id, [Validators.required]),
         "name": new FormControl('',[Validators.required]),
-        "description": new FormControl('',[Validators.required]),
-        "triggers": this.fb.array([],[Validators.required]),
+        "description": new FormControl(''),
+        "triggers": this.fb.array([]),
         "actions": this.fb.array([]),
         "assignees": this.fb.array([]),
       }
-    )
+    );
   }
 
   closeRule(rule?) {
@@ -206,16 +212,13 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
     }
   }
 
-  closeRuleScreen() {    
-    if(!this.ruleForm.pristine){
+  closeRuleScreen() {        
+    if(this.formTouched){
       this.modalRef = this.modalService.open(CoachingConfirmationComponent, { centered: true, keyboard: false, windowClass: 'delete-uc-rule-modal', backdrop: 'static' });
       this.modalRef.result.then(emitedValue => {
-        console.log(emitedValue, 'emted value');
-        
         if(emitedValue){
-          console.log(emitedValue, "emited value");
-          
           this.closeRule();
+          this.formTouched = false;
         }
       });
     }else{

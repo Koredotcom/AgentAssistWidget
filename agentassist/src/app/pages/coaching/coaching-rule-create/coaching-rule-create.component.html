@@ -11,8 +11,8 @@
             </div>
         </div>
         <div class="middle-content">
-            <div class="utt-name">{{groupDetails?.name}} /</div>
-            <div class="dropdown-adherence" ngbDropdown placement="bottom-center" #ruleSelection="ngbDropdown">
+            <div class="utt-name">{{groupDetails?.name}}</div>
+            <div class="dropdown-adherence" ngbDropdown placement="bottom-center" #ruleSelection="ngbDropdown"  *ngIf="createOrEdit == coachingCnst.EDIT">
                 <button class="dropdown-toggle btn-toggle" ngbDropdownToggle><i class="icon-sa-arrow-down"></i></button>
                 <ul class="dropdown_menu-wrapper" ngbDropdownMenu id="ruleSelectionMenu">
                     <perfect-scrollbar class="mx-h-300">
@@ -41,10 +41,9 @@
         <div class="btn-actions">
             <button class="kr-sg-button-secondary btn_lg" (click)="closeRuleScreen()">Cancel</button>
             <button class="kr-sg-button-secondary-two btn_lg">Publish</button>
-            <button class="kr-sg-button-primary btn_lg" [disabled]="ruleForm.invalid" (click)="saveRule()">Save</button>
+            <button class="kr-sg-button-primary btn_lg" [disabled]="ruleForm.invalid || (createOrEdit == coachingCnst.EDIT && !formTouched)" (click)="saveRule()">Save</button>
         </div>
     </div>
-
     <div class="flow-wrapper-body-scroll">
         <perfect-scrollbar>
             <div class="inner-scroll-data-flows">
