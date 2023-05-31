@@ -31,9 +31,7 @@
             </li>
         </ul> -->
     </div>
-    <div class="delete-row" (click)="deleteTriggerRule()"> 
-        <i class="icon-sa-welcome-delete"></i>
-    </div>
+    
     <div class="dropdown-occurences" ngbDropdown [placement]="'bottom'" container="body">
         <button class="dropdown-toggle btn-toggle" ngbDropdownToggle><i class="icon-sa-conv-refreshten"></i> {{selOcc}}x</button>
         <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
@@ -57,6 +55,9 @@
                 <div class="s-title">seconds</div>
             </div>
         </ul>
+    </div>
+    <div class="delete-row" (click)="deleteTriggerRule()"> 
+        <i class="icon-sa-welcome-delete"></i>
     </div>
     <!-- <div class="add-adherence">
         <button class="add-adherence-btn" (click)="openAdherence()">+ Add Adherence</button>

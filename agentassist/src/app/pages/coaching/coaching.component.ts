@@ -87,7 +87,6 @@ export class CoachingComponent implements OnInit {
       this.selectedRuleGroupIndex = index;
       this.selectedRuleIndex = ruleIndex;
       if(type === COACHINGCNST.EDIT){
-        console.log("rulerulerulerule", rule);
         this.createOrEdit = COACHINGCNST.EDIT;
         this.currentRule = rule;
       }
@@ -188,7 +187,7 @@ export class CoachingComponent implements OnInit {
  // rule activities like active or inactive and delete rule starts
   changeRuleStatus(rule, groupId){
     rule.isActive = !rule.isActive;
-    this.isLoading = true;
+    // this.isLoading = true;
     let params : any = {
       ruleId : rule.ruleId,
       groupId : groupId

@@ -3,16 +3,20 @@ export const COACHINGCNST = {
     EDIT : 'edit',
     DELETE : 'delete',
     UTTERANCE : 'utterance',
-    SPEECH_ANALYSIS : 'speech analysis',
+    SPEECH_ANALYSIS : 'speech_analysis',
     VARIABLE : 'variable',
-    DIALOG : 'dialog',
+    DIALOG : 'dialog_task',
     SPEECH_TYPE : {
         crossTalk: 'Cross Talk', 
-        deadAir: 'Dead Air', 
-        speechSpeed: 'Speech Speed'
+        deadair: 'Dead Air', 
+        speech_speed: 'Speech Speed'
     },
+    CROSSTALK : 'crossTalk',
+    DEADAIR : 'deadair',
+    SPEECHSPEED : 'speech_speed',
     OCCURENCES : [1,2,3,4,5],
     SELECTED_TIMER : '30s',
+    SELECTED_WORDCOUNT : '180',
     SELECTED_OCCURENCE : 1,
     USER_LIST : ['agent', 'customer'],
     OPERATOR_LIST : ['and', 'or'],
@@ -41,5 +45,10 @@ export const COACHINGCNST = {
         "Auto close"
     ],
     RULE : "rule",
-    GROUP : "group"
+    GROUP : "group",
+    VALIDATORS : {
+        'crossTalk' : ['nOccurences'],
+        'deadair' : ['nOccurences','timeTaken'],
+        'speech_speed' : ['nOccurences', 'nWords']
+    }
 }

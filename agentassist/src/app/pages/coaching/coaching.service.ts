@@ -38,21 +38,37 @@ export class CoachingService {
       }),
       frequency: this.fb.group({
         nOccurences: [obj.frequency?.nOccurences, Validators.required],
-        every: [obj.frequency?.every, Validators.required]
+        every: [obj.frequency?.every, Validators.required],
       })
     } 
   }
 
   getSpeechAnalysisFormControlObject(){
     return {
-      type: this.coachingCnst.SPEECH_ANALYSIS,
+      _id: [uuid(), [Validators.required]],
+      type: [this.coachingCnst.SPEECH_ANALYSIS, [Validators.required]],
       subType: ['', [Validators.required]],
       operator : ['And', [Validators.required]],
       frequency: this.fb.group({
         nOccurences: [1, Validators.required],
-        every: ['30s', Validators.required]
+        timeTaken: ['30s'],
+        nWords : [180]
       })
     }
+  }
+
+  setSpeechAnalysisForm(obj){
+    return {
+      _id: [obj._id, [Validators.required]],
+      type: this.coachingCnst.SPEECH_ANALYSIS,
+      subType: [obj.subType, [Validators.required]],
+      operator : [obj.operator, [Validators.required]],
+      frequency: this.fb.group({
+        nOccurences: [obj.frequency?.nOccurences],
+        timeTaken: [obj.frequency?.timeTaken],
+        nWords : [obj.frequency?.nWords]
+      })
+    } 
   }
 
   getVariableFormControlObject(){
