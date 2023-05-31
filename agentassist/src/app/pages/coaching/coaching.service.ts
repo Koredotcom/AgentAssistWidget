@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { COACHINGCNST } from './coaching.cnst';
+import { v4 as uuid } from 'uuid';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,8 @@ export class CoachingService {
 
   getUtteranceFormControlObject(){
     return {
-      type: this.coachingCnst.UTTERANCE,
+      _id: [uuid(), [Validators.required]],
+      type: [this.coachingCnst.UTTERANCE, [Validators.required]],
       by: ['', [Validators.required]],
       operator : ['And', [Validators.required]],
       when : this.fb.group({
@@ -27,6 +29,7 @@ export class CoachingService {
 
   setUtteranceForm(obj){
     return {
+      _id: [obj._id, [Validators.required]],
       type: this.coachingCnst.UTTERANCE,
       by: [obj.by, [Validators.required]],
       operator : [obj.operator, [Validators.required]],

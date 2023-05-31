@@ -37,22 +37,45 @@
                         <div class="add-utterences-drp">
                             <div class="label-text">Utterances</div>
                             <div class="dropdown-adherence" ngbDropdown #utteranceDropdown="ngbDropdown">
-                                <input type="text" class="drp-input-search"  ngbDropdownToggle (keydown.enter)="getSuggestion('formal')" [(ngModel)]="utteranceText">
+                                <input type="text" class="drp-input-search"  ngbDropdownToggle [formControl]="searchKey">
                                 <div class="text_info">Type an utterance that the customer might say...</div>
                                 <ul class="dropdown_menu-wrapper" ngbDropdownMenu id="utteranceDropdownMenu">
                                     <div class="body-dropdown">
-                                        <ng-container *ngIf="isGeneratingText">
+                                        <ng-container *ngIf="loaded; else loading">
                                             <div class="searchedutt">
                                                 <div class="kr-sg-checkbox">
-                                                    <input id="checkbox-1" class="checkbox-custom" type="checkbox" (click)="getSuggestion('formal')">
-                                                    <label for="checkbox-1" class="checkbox-custom-label">{{utteranceText}}</label>
+                                                    <input id="checkbox-1" class="checkbox-custom" type="checkbox" [checked]="prevVal === searchKey.value" (click)="createNewUtter($event, searchKey.value)">
+                                                    <label for="checkbox-1" class="checkbox-custom-label">{{searchKey.value}}</label>
                                                 </div>
                                                 <div class="percentage-colr">
                                                     <span class="percentage">12%</span>
                                                     <span class="bgcolor"></span>
                                                 </div>
                                             </div>
-                                            <div class="found-details-info">
+                                            <div class="found-details-info" *ngIf="createOrEdit">
+                                                <div class="found-ai-count">
+                                                    <i class="icon-coaching--ai"></i>
+                                                    <span>Added Utterances</span>
+                                                </div>
+                                                <!-- <div class="found-desc">Similar utterances with the same meaning</div> -->
+                                                <perfect-scrollbar>
+                                                    <div class="found-items-scroll">
+                                                        <ng-container *ngFor="let utter of addedUtterances;let i = index">
+                                                            <div class="item-data-found" >
+                                                                <div class="kr-sg-checkbox">
+                                                                    <input id="'checkbox-' + {{i}}" class="checkbox-custom" type="checkbox" [checked]="utter.utterance" (click)="changeUtterActiveStatus(utter)">
+                                                                    <label for="'checkbox-' + {{i}}" class="checkbox-custom-label">{{utter.utterance}}</label>
+                                                                </div>
+                                                                <div class="percentage-colr">
+                                                                    <span class="percentage">12%</span>
+                                                                    <span class="bgcolor"></span>
+                                                                </div>
+                                                            </div>
+                                                        </ng-container>
+                                                    </div>
+                                                </perfect-scrollbar>
+                                            </div>
+                                            <div class="found-details-info" *ngIf="searchKey.value?.length > 0">
                                                 <div class="found-ai-count">
                                                     <i class="icon-coaching--ai"></i>
                                                     <span>Found {{openAiUtteranceArray?.length}}</span>
@@ -79,44 +102,46 @@
                                                 </perfect-scrollbar>
                                             </div>
                                         </ng-container>
-                                        <ng-container *ngIf="isGeneratingText == false && openAiUtteranceArray.length == 0 && utteranceText">
-                                            <div class="ai-itassist-wrapper">
-                                                <div class="label-heading"><i class="icon-coaching--ai"></i> Assistant</div>
-                                                <div class="no-data-loader">
-                                                    <div class="sk-fading-circle">
-                                                        <div class="sk-circle1 sk-circle"></div>
-                                                        <div class="sk-circle2 sk-circle"></div>
-                                                        <div class="sk-circle3 sk-circle"></div>
-                                                        <div class="sk-circle4 sk-circle"></div>
-                                                        <div class="sk-circle5 sk-circle"></div>
-                                                        <div class="sk-circle6 sk-circle"></div>
-                                                        <div class="sk-circle7 sk-circle"></div>
-                                                        <div class="sk-circle8 sk-circle"></div>
-                                                        <div class="sk-circle9 sk-circle"></div>
-                                                        <div class="sk-circle10 sk-circle"></div>
-                                                        <div class="sk-circle11 sk-circle"></div>
-                                                        <div class="sk-circle12 sk-circle"></div>
+                                        <ng-template #loading>
+                                            <ng-container>
+                                                <div class="ai-itassist-wrapper">
+                                                    <div class="label-heading"><i class="icon-coaching--ai"></i> Assistant</div>
+                                                    <div class="no-data-loader">
+                                                        <div class="sk-fading-circle">
+                                                            <div class="sk-circle1 sk-circle"></div>
+                                                            <div class="sk-circle2 sk-circle"></div>
+                                                            <div class="sk-circle3 sk-circle"></div>
+                                                            <div class="sk-circle4 sk-circle"></div>
+                                                            <div class="sk-circle5 sk-circle"></div>
+                                                            <div class="sk-circle6 sk-circle"></div>
+                                                            <div class="sk-circle7 sk-circle"></div>
+                                                            <div class="sk-circle8 sk-circle"></div>
+                                                            <div class="sk-circle9 sk-circle"></div>
+                                                            <div class="sk-circle10 sk-circle"></div>
+                                                            <div class="sk-circle11 sk-circle"></div>
+                                                            <div class="sk-circle12 sk-circle"></div>
+                                                        </div>
+                                                        <div class="thinking-text">Working...</div>
                                                     </div>
-                                                    <div class="thinking-text">Working...</div>
                                                 </div>
-                                            </div>
-                                        </ng-container>
+                                            </ng-container>
+                                        </ng-template>
                                     </div>
-                                    <div class="footer-add" *ngIf="isGeneratingText">
+                                    <div class="footer-add">
                                         <button class="kr-sg-button-secondary btn_lg" (click)="clearAIsuggestions()">Clear</button>
-                                        <button class="kr-sg-button-primary btn_lg" (click)="getUtteranceIds()" [disabled]="addButtonClick">Add</button>
+                                        <button class="kr-sg-button-primary btn_lg" (click)="getUtteranceIds();utteranceDropdown.close()" [disabled]="addButtonClick">Add</button>
                                     </div>
                                 </ul>
                             </div>
                         </div>
-                        <div class="protip-hint-info" *ngIf="openAiUtteranceArray.length == 0 && !isGeneratingText">
+                        <div class="protip-hint-info" *ngIf="selectedUtterancesArray.length == 0">
                             <i class="icon-sa-welcome-bulb"></i>
                             <div class="content-data-hint">
                                 <div class="title">New! Enhanced module</div>
                                 <div class="desc-hint">The utterance module is now enhanced with generative AI functionality that will simplify the need for utterance additions. </div>
                             </div>
                         </div>
-                        <div class="saved-utterances" *ngIf="openAiUtteranceArray.length > 0">
+                        <div class="saved-utterances" *ngIf="selectedUtterancesArray.length > 0">
                             <div class="heading-saved">Saved Utterances</div>
                             <!-- Repeat Data -->
                             <ng-container *ngFor="let utter of selectedUtterancesArray">
