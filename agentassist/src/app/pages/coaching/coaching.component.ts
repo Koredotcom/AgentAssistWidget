@@ -87,7 +87,6 @@ export class CoachingComponent implements OnInit {
       this.selectedRuleGroupIndex = index;
       this.selectedRuleIndex = ruleIndex;
       if(type === COACHINGCNST.EDIT){
-        console.log("rulerulerulerule", rule);
         this.createOrEdit = COACHINGCNST.EDIT;
         this.currentRule = rule;
       }

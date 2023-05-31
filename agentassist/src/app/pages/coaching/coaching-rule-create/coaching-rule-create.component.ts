@@ -115,11 +115,19 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
       this.ruleForm.controls["name"].patchValue(this.currentRule?.name);
       (this.currentRule?.triggers || []).forEach(element => {
         (<FormArray>this.ruleForm.controls["triggers"])
-        .push(this.fb.group(this.coachingService.setUtteranceForm(element)));
+        .push(this.getFormGroupObject(element));
         this.cd.detectChanges();
       });
       this.subscribeValChanges();
     });
+  }
+
+  getFormGroupObject(element){
+    if(element.type == this.coachingCnst.UTTERANCE){
+      return this.fb.group(this.coachingService.setUtteranceForm(element))
+    }else if(element.type == this.coachingCnst.SPEECH_ANALYSIS){
+      return this.fb.group(this.coachingService.setSpeechAnalysisForm(element))
+    }
   }
 
   changeRule(rule){

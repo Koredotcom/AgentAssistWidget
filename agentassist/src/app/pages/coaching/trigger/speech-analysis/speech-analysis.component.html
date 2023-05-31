@@ -4,14 +4,33 @@
     </div> -->
     <div class="and-or-btns" *ngIf="index < length">
         <ng-container *ngFor="let operator of opList">
-            <button class="and-or-btn" (click)="changeOperator(operator)" [ngClass]="{'active-btn' : selectedOperator === operator}">{{operator}}</button>
+            <button class="and-or-btn" (click)="changeOperator(operator)" [ngClass]="{'active-btn' : selectedOperator === operator}">{{operator | titlecase}}</button>
         </ng-container>
     </div>
-    <span class="utt-name-desc">Triggered when</span>
+    
+    <ng-container *ngIf="!selectedSpeechType || selectedSpeechType == coachingCnst.CROSSTALK">
+        <span class="utt-name-desc">The agent's</span>
+        <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body" #selectedTypeDropdown = "ngbDropdown">
+            <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!selectedSpeechType}">
+                <span class="choose-text">{{selectedSpeechType ? coachingCnst.SPEECH_TYPE[selectedSpeechType] : '{ speech type }'}}</span>
+            </button>
+            <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
+                <ng-container *ngFor="let type of speechType | keyvalue" >
+                    <li ngbDropdownItem class="list-item-li" (click)="clickOnType(type.key)">
+                        <span class="title">{{type.value}}</span>
+                        <i [ngClass]="{'icon-sa-conv-check' : type.key === selectedSpeechType}"></i>
+                    </li>
+                </ng-container>
+            </ul>
+        </div>
+        <span class="utt-name-desc" *ngIf="!selectedSpeechType">is...</span>
+        <span class="utt-name-desc" *ngIf="selectedSpeechType && selectedSpeechType == coachingCnst.CROSSTALK">is detected.</span>
+    </ng-container>
 
-    <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body">
-        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle>
-            <span class="choose-text">{{selectedSpeechType ? selectedSpeechType : '{ speech type }'}}</span>
+   <ng-container *ngIf="selectedSpeechType && selectedSpeechType == coachingCnst.DEADAIR">
+    <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body" #deadairDropdown = "ngbDropdown">
+        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!selectedSpeechType}">
+            <span class="choose-text">{{selectedSpeechType ? coachingCnst.SPEECH_TYPE[selectedSpeechType] : '{ speech type }'}}</span>
         </button>
         <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
             <ng-container *ngFor="let type of speechType | keyvalue" >
@@ -22,13 +41,54 @@
             </ng-container>
         </ul>
     </div>
-    <span class="utt-name-desc" *ngIf="!selectedSpeechType">by.</span>
-    <span class="utt-name-desc" *ngIf="selectedSpeechType">is detected.</span>
-    <div class="delete-row" (click)="deleteTriggerRule()">
-        <i class="icon-sa-welcome-delete"></i>
+    <span class="utt-name-desc">is detected for more than </span>
+
+    <div class="dropdown-occurences no_border" ngbDropdown [placement]="'bottom'" container="body"  #deadairtimerdropdown = "ngbDropdown">
+        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!timer}">in {{timer}}</button>
+        <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
+            <div class="seconds-input">
+                <div class="kr-sg-input-text">
+                    <input type="text" placeholder="Enter Seconds here" class="input-text" (keyup.enter)="onEnterTime($event.target.value);deadairtimerdropdown.close()">
+                </div>
+                <!-- <div class="s-title">seconds</div> -->
+            </div>
+        </ul>
     </div>
-     <!-- <div class="dropdown-occurences" ngbDropdown [placement]="'bottom'" container="body">
-        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle><i class="icon-sa-conv-refreshten"></i> {{selOcc}}x</button>
+    <span class="utt-name-desc">seconds </span>
+   </ng-container>
+
+   <ng-container *ngIf="selectedSpeechType && selectedSpeechType == coachingCnst.SPEECHSPEED">
+        <span class="utt-name-desc">The agent's </span>
+        <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body" #speechspeedDropdown = "ngbDropdown">
+            <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!selectedSpeechType}">
+                <span class="choose-text">{{selectedSpeechType ? coachingCnst.SPEECH_TYPE[selectedSpeechType] : '{ speech type }'}}</span>
+            </button>
+            <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
+                <ng-container *ngFor="let type of speechType | keyvalue" >
+                    <li ngbDropdownItem class="list-item-li" (click)="clickOnType(type.key)">
+                        <span class="title">{{type.value}}</span>
+                        <i [ngClass]="{'icon-sa-conv-check' : type.key === selectedSpeechType}"></i>
+                    </li>
+                </ng-container>
+            </ul>
+        </div>
+        <span class="utt-name-desc">is over </span>
+        <div class="dropdown-occurences no_border" ngbDropdown [placement]="'bottom'" container="body" #speechspeedwordcount="ngbDropdown">
+            <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!wordcount}">{{wordcount}}</button>
+            <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
+                <div class="seconds-input">
+                    <div class="kr-sg-input-text">
+                        <input type="text" placeholder="Placeholder text" class="input-text" (keyup.enter)="onEnterWords($event.target.value);speechspeedwordcount.close()">
+                    </div>
+                    <!-- <div class="s-title">words per minute</div> -->
+                </div>
+            </ul>
+        </div>
+        <span class="utt-name-desc">words per minute </span>
+   </ng-container>
+
+    <div class="dropdown-occurences" ngbDropdown [placement]="'bottom'" container="body">
+        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!selOcc}"><i class="icon-sa-conv-refreshten"></i> {{selOcc}}x</button>
         <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
             <perfect-scrollbar class="mx-h-220">
                 <ng-container *ngFor="let occ of occurances">
@@ -39,16 +99,10 @@
                 </ng-container>
             </perfect-scrollbar>
         </ul>
-    </div> -->
-    <!-- <div class="dropdown-occurences no_border" ngbDropdown [placement]="'bottom'" container="body">
-        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle>in 30 seconds</button>
-        <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
-            <div class="seconds-input">
-                <div class="kr-sg-input-text">
-                    <input type="text" placeholder="Placeholder text" class="input-text">
-                </div>
-                <div class="s-title">seconds</div>
-            </div>
-        </ul>
-    </div> -->
+    </div>
+    <div class="delete-row" (click)="deleteTriggerRule()">
+        <i class="icon-sa-welcome-delete"></i>
+    </div>
+
+  
 </div>
