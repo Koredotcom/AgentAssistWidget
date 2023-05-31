@@ -187,7 +187,7 @@ export class CoachingComponent implements OnInit {
  // rule activities like active or inactive and delete rule starts
   changeRuleStatus(rule, groupId){
     rule.isActive = !rule.isActive;
-    this.isLoading = true;
+    // this.isLoading = true;
     let params : any = {
       ruleId : rule.ruleId,
       groupId : groupId
