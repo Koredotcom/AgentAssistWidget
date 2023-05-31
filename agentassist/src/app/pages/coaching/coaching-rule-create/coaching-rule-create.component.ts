@@ -7,7 +7,6 @@ import { workflowService } from '@kore.services/workflow.service';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CoachingConfirmationComponent } from '../coaching-confirmation/coaching-confirmation.component';
-
 @Component({
   selector: 'app-coaching-rule-create',
   templateUrl: './coaching-rule-create.component.html',
@@ -133,8 +132,8 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
       {
         "botId": new FormControl(this.workflowService.getCurrentBt(true)._id, [Validators.required]),
         "name": new FormControl('',[Validators.required]),
-        "description": new FormControl(''),
-        "triggers": this.fb.array([]),
+        // "description": new FormControl('',[Validators.required]),
+        "triggers": this.fb.array([],[Validators.required]),
         "actions": this.fb.array([]),
         "assignees": this.fb.array([]),
       }
