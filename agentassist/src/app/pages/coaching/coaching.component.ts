@@ -8,10 +8,11 @@ import { CoachingGroupRuleDeleteComponent } from './coaching-group-rule-delete/c
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { LocalStoreService } from '@kore.services/localstore.service';
 import { workflowService } from '@kore.services/workflow.service';
-import { finalize } from 'rxjs/operators';
+import { finalize, debounceTime } from 'rxjs/operators';
 import { forkJoin } from 'rxjs';
 import { NotificationService } from '@kore.services/notification.service';
 import { TranslateService } from '@ngx-translate/core';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-coaching',
@@ -35,6 +36,9 @@ export class CoachingComponent implements OnInit {
   selectedRuleIndex : number;
   createOrEdit: string = COACHINGCNST.CREATE;
   currentRule:any;
+  searchField = new FormControl();
+  searchedData = {"results":[]};
+
   @ViewChild('ps') ps: PerfectScrollbarComponent;
   @ViewChild('newCoachingGroup', { static: true }) newCoachingGroup: SliderComponentComponent;
 
@@ -44,6 +48,30 @@ export class CoachingComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAgentCoachingGroupData();
+  }
+
+  ngAfterViewInit(){
+    this.subscribeEvents();
+  }
+  
+  subscribeEvents() {
+    this.searchField.valueChanges.pipe(debounceTime(300))
+      .subscribe(term => {
+        term = term.trim()
+        if (term.trim()) {
+          this.searchedData = JSON.parse(JSON.stringify(this.respData));
+          this.searchedData["results"].forEach((item, i) => {
+            item.rules = item.rules.filter((iItem) => {
+              return iItem.name.includes(term);
+            });
+            if(item.rules?.length === 0){
+              (this.searchedData.results || []).splice(i, 1)
+            }
+          });
+        }else if(term == ''){
+          this.searchedData.results = this.respData.results;
+        }
+      });
   }
 
   // get or update GroupData Starts
@@ -58,6 +86,8 @@ export class CoachingComponent implements OnInit {
     })).subscribe(data => {
       if (data) {
         this.respData = data || {"results":[]};
+        this.searchedData.results = data?.results || [];
+        this.cdRef.detectChanges();
       }
     });
   }
@@ -228,5 +258,5 @@ export class CoachingComponent implements OnInit {
     });
   }
   // END
-  
+
 }
