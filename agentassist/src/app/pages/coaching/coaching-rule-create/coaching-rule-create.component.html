@@ -204,7 +204,7 @@
             <div class="choose-t-block-bg">
                 <div class="choose-t-block">
                     <ng-container *ngFor="let action of allActions">
-                        <div class="inner-card-choose">
+                        <div class="inner-card-choose" [ngClass]="{'disableTrigger' : action.disable}">
                             <div class="content-choose-triggers" ngbDropdownItem (click)="selectActionClick(action.type)">
                                 <div class="icon_blk">
                                     <i class="{{action.icon}}"></i>

@@ -67,22 +67,26 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
       type: this.coachingCnst.ALERT_MANAGER,
       title: "Alert Manager",
       desc: "Push notification to Manager",
-      icon: "icon-sa-chat"
+      icon: "icon-sa-chat",
+      disable : true
     },    {
       type: this.coachingCnst.EMAIL_MANAGER,
       title: "Email Manager",
       desc: "Send email to manager",
-      icon: "icon-sa-chat"
+      icon: "icon-sa-chat",
+      disable : true
     },{
       type: this.coachingCnst.DIALOG,
       title: "Dialog",
       desc: "Trigger dialog for agent",
-      icon: "icon-sa-chat"
+      icon: "icon-sa-chat",
+      disable : true
     },    {
       type: this.coachingCnst.FAQ,
       title: "FAQ",
       desc: "Trigger FAQ for agent",
-      icon: "icon-sa-chat"
+      icon: "icon-sa-chat",
+      disable : true
     }
   ]
   

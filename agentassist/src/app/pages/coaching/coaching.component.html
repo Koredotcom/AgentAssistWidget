@@ -5,31 +5,32 @@
     </div>
 
     <div class="tab-sec-details-wrapper">
-        <ng-container *ngIf="respData?.results?.length != 0">
+        <ng-container >
             <div class="search-data-input">
                 <div class="kr-sg-input-inline-search">
-                    <input type="text" placeholder="Search" class="input-search">
+                    <input type="text" placeholder="Search" class="input-search" [formControl]="searchField" name="searchRule">
                     <i class="icon-sa-conv-search search-icon"></i>
                 </div>
             </div>
-            <div class="agents-grid-data-table" cdkDropListGroup>
+            <div class='init-loading' *ngIf="isLoading">
+                <mat-spinner diameter="25" strokeWidth="3"></mat-spinner>
+            </div>
+            <div class="agents-grid-data-table" cdkDropListGroup *ngIf="searchedData?.results?.length != 0">
                 <perfect-scrollbar class="scroll-data" #ps>
                     <div id="accordion" class="agent-groups-table-container">
                         <div class="scrolltopdiv" [ngClass]="{'addIndex': dragStart}" (mouseleave)="clearInterVal()" (mouseenter)="topMouseOver()">
                         </div>
                         <div class="scrollbottomdiv" [ngClass]="{'addIndex': dragStart}" (mouseleave)="clearInterVal()" (mouseenter)="bottomMouseOver()">
                         </div>
-                        <div class='init-loading' *ngIf="isLoading">
-                            <mat-spinner diameter="25" strokeWidth="3"></mat-spinner>
-                        </div>
-                        <ng-container *ngFor="let res of respData.results; let i = index">
+                        
+                        <ng-container *ngFor="let res of searchedData.results; let i = index">
                             <div class="card_content" 
                             cdkDropList
                             cdkDropListSortingDisabled
                             [cdkDropListData]="res.rules"
                             (cdkDropListDropped)="drop($event)" id="{{res._id}}">
                                 <div class="card_header">
-                                    <div data-toggle="collapse" data-parent="#accordion" [attr.href]="'#agentGroupData' + i" class="card_link collapsed" aria-expanded="false">
+                                    <div data-toggle="collapse" data-parent="#accordion" [attr.href]="'#agentGroupData' + i" class="card_link" aria-expanded="true">
                                         <div class="accordion-content-header">
                                             <div class="left-title text-truncate">
                                                 <div class="left-content-info">
@@ -48,7 +49,7 @@
                                         </div>
                                     </div>
                                 </div> 
-                                <div [attr.id]="'agentGroupData' + i" class="collapse inside-accordioncontent">
+                                <div [attr.id]="'agentGroupData' + i" class="inside-accordioncontent show">
                                     <perfect-scrollbar class="mx-h-300">                            
                                         <div class="card-body inner-accordion-table" >
                                             <div class="content-scroll-data-agents">
@@ -96,7 +97,7 @@
                 </perfect-scrollbar>
             </div>
         </ng-container>
-        <ng-container *ngIf="respData?.results?.length == 0">
+        <ng-container *ngIf="searchedData.results?.length == 0 && !isLoading && searchField?.value?.trim() == '' && !searching">
             <div class="empty-coaching-wrapper">
                 <div class="empty-content">
                     <div class="img-block">
@@ -105,6 +106,17 @@
                     <div class="empty-title">Create your first Coaching Experience</div>
                     <div class="desc-text">Help agents deliver better customer service and improve overall customer satisfaction. Get started by clicking on the New Coaching  button above.</div>
                     <button class="kr-sg-button-primary btn_lg" (click)="openCoachingGroup(coachingConst.CREATE, {})">+ New Coaching Group</button>
+                </div>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="searchedData.results?.length == 0 && searchField?.value?.trim() != '' && !isLoading && !searching">
+            <div class="empty-coaching-wrapper">
+                <div class="empty-content">
+                    <div class="img-block">
+                        <img src="assets/images/coaching/empty-coaching.png">
+                    </div>
+                    <div class="empty-title">No Search Results found.</div>
+                   
                 </div>
             </div>
         </ng-container>
