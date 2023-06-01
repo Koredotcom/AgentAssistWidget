@@ -1091,6 +1091,7 @@ export class CommonService {
       connectionDetails.isSearch = isSearchFlag;
       if (!isSearchFlag) {
         connectionDetails.intentName = dialog.intentName;
+        connectionDetails.botId = dialog.botId;
       }
       connectionDetails.positionId = dialog.positionId;
       connectionDetails.childBotId = dialog.childBotId;
