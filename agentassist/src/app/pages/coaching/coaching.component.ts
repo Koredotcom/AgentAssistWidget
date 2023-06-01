@@ -8,7 +8,7 @@ import { CoachingGroupRuleDeleteComponent } from './coaching-group-rule-delete/c
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { LocalStoreService } from '@kore.services/localstore.service';
 import { workflowService } from '@kore.services/workflow.service';
-import { finalize, debounceTime } from 'rxjs/operators';
+import { finalize, debounceTime, tap } from 'rxjs/operators';
 import { forkJoin } from 'rxjs';
 import { NotificationService } from '@kore.services/notification.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -38,6 +38,7 @@ export class CoachingComponent implements OnInit {
   currentRule:any;
   searchField = new FormControl();
   searchedData = {"results":[]};
+  searching : boolean = false;
 
   @ViewChild('ps') ps: PerfectScrollbarComponent;
   @ViewChild('newCoachingGroup', { static: true }) newCoachingGroup: SliderComponentComponent;
@@ -55,7 +56,7 @@ export class CoachingComponent implements OnInit {
   }
   
   subscribeEvents() {
-    this.searchField.valueChanges.pipe(debounceTime(300))
+    this.searchField.valueChanges.pipe(tap(() => { this.searching = true; }), debounceTime(300))
       .subscribe(term => {
         term = term.trim()
         if (term.trim()) {
@@ -71,6 +72,7 @@ export class CoachingComponent implements OnInit {
         }else if(term == ''){
           this.searchedData.results = this.respData.results;
         }
+        this.searching = false;
       });
   }
 

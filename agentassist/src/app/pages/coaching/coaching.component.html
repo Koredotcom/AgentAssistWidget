@@ -12,6 +12,9 @@
                     <i class="icon-sa-conv-search search-icon"></i>
                 </div>
             </div>
+            <div class='init-loading' *ngIf="isLoading">
+                <mat-spinner diameter="25" strokeWidth="3"></mat-spinner>
+            </div>
             <div class="agents-grid-data-table" cdkDropListGroup *ngIf="searchedData?.results?.length != 0">
                 <perfect-scrollbar class="scroll-data" #ps>
                     <div id="accordion" class="agent-groups-table-container">
@@ -19,9 +22,7 @@
                         </div>
                         <div class="scrollbottomdiv" [ngClass]="{'addIndex': dragStart}" (mouseleave)="clearInterVal()" (mouseenter)="bottomMouseOver()">
                         </div>
-                        <div class='init-loading' *ngIf="isLoading">
-                            <mat-spinner diameter="25" strokeWidth="3"></mat-spinner>
-                        </div>
+                        
                         <ng-container *ngFor="let res of searchedData.results; let i = index">
                             <div class="card_content" 
                             cdkDropList
@@ -96,7 +97,7 @@
                 </perfect-scrollbar>
             </div>
         </ng-container>
-        <ng-container *ngIf="searchedData.results?.length == 0 && !isLoading && searchField?.value?.trim() == ''">
+        <ng-container *ngIf="searchedData.results?.length == 0 && !isLoading && searchField?.value?.trim() == '' && !searching">
             <div class="empty-coaching-wrapper">
                 <div class="empty-content">
                     <div class="img-block">
@@ -108,7 +109,7 @@
                 </div>
             </div>
         </ng-container>
-        <ng-container *ngIf="searchedData.results?.length == 0 && searchField?.value?.trim() != '' && !isLoading">
+        <ng-container *ngIf="searchedData.results?.length == 0 && searchField?.value?.trim() != '' && !isLoading && !searching">
             <div class="empty-coaching-wrapper">
                 <div class="empty-content">
                     <div class="img-block">
