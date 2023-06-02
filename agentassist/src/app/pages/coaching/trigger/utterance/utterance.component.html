@@ -22,7 +22,7 @@
     <span class="utt-name-desc">uses any of these</span>
     <div class="dropdown-custom-flows" container="body">
         <button class="dropdown-toggle btn-toggle text-choosen" (click)="openAdherence()">
-            <span class="choose-text"> {{(form?.value?.when?.utterancesId?.length > 0) ? form.value.when.utterancesId.length + ' utterance(s)' : '{ set utterances }'}}</span>
+            <span class="choose-text"> {{(form?.value?.when?.utteranceCount) ? form?.value?.when?.utteranceCount + ' utterance(s)' : '{ set utterances }'}}</span>
         </button>
         <!-- <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
             <li ngbDropdownItem class="list-item-li">
@@ -86,7 +86,7 @@
     </div> -->
     <ng-container *ngIf="openSetUtterance"> 
     <app-slider-component id="adherenceSlider" #adherenceSlider='app-slider'>
-            <app-utterance-adherence (onClose)="closeAdherence($event)" [form]="form"></app-utterance-adherence>
+            <app-utterance-adherence [createOrEdit]="createOrEdit" (onClose)="closeAdherence($event)" [form]="form"></app-utterance-adherence>
         </app-slider-component>
     </ng-container>
 </div>

@@ -44,36 +44,13 @@
                                         <ng-container *ngIf="loaded; else loading">
                                             <div class="searchedutt">
                                                 <div class="kr-sg-checkbox">
-                                                    <input id="checkbox-1" class="checkbox-custom" type="checkbox" [checked]="prevVal === searchKey.value" (click)="createNewUtter($event, searchKey.value)">
+                                                    <input id="checkbox-1" class="checkbox-custom" type="checkbox">
                                                     <label for="checkbox-1" class="checkbox-custom-label">{{searchKey.value}}</label>
                                                 </div>
                                                 <div class="percentage-colr">
                                                     <span class="percentage">12%</span>
                                                     <span class="bgcolor"></span>
                                                 </div>
-                                            </div>
-                                            <div class="found-details-info" *ngIf="createOrEdit">
-                                                <div class="found-ai-count">
-                                                    <i class="icon-coaching--ai"></i>
-                                                    <span>Added Utterances</span>
-                                                </div>
-                                                <!-- <div class="found-desc">Similar utterances with the same meaning</div> -->
-                                                <perfect-scrollbar>
-                                                    <div class="found-items-scroll">
-                                                        <ng-container *ngFor="let utter of addedUtterances;let i = index">
-                                                            <div class="item-data-found" >
-                                                                <div class="kr-sg-checkbox">
-                                                                    <input id="'checkbox-' + {{i}}" class="checkbox-custom" type="checkbox" [checked]="utter.utterance" (click)="changeUtterActiveStatus(utter)">
-                                                                    <label for="'checkbox-' + {{i}}" class="checkbox-custom-label">{{utter.utterance}}</label>
-                                                                </div>
-                                                                <div class="percentage-colr">
-                                                                    <span class="percentage">12%</span>
-                                                                    <span class="bgcolor"></span>
-                                                                </div>
-                                                            </div>
-                                                        </ng-container>
-                                                    </div>
-                                                </perfect-scrollbar>
                                             </div>
                                             <div class="found-details-info" *ngIf="searchKey.value?.length > 0">
                                                 <div class="found-ai-count">
@@ -128,30 +105,42 @@
                                         </ng-template>
                                     </div>
                                     <div class="footer-add">
-                                        <button class="kr-sg-button-secondary btn_lg" (click)="clearAIsuggestions()">Clear</button>
-                                        <button class="kr-sg-button-primary btn_lg" (click)="getUtteranceIds();utteranceDropdown.close()" [disabled]="addButtonClick">Add</button>
+                                        <button class="kr-sg-button-secondary btn_lg" (click)="clearAIsuggestions(utteranceDropdown)">Clear</button>
+                                        <button class="kr-sg-button-primary btn_lg" (click)="saveUtterances();clearAIsuggestions(utteranceDropdown)" [disabled]="addButtonClick">Add</button>
                                     </div>
                                 </ul>
                             </div>
                         </div>
-                        <div class="protip-hint-info" *ngIf="selectedUtterancesArray.length == 0">
+                        <div class="protip-hint-info" *ngIf="selectedUtterancesArray.length == 0 && selectedNewUtterances?.length == 0">
                             <i class="icon-sa-welcome-bulb"></i>
                             <div class="content-data-hint">
                                 <div class="title">New! Enhanced module</div>
                                 <div class="desc-hint">The utterance module is now enhanced with generative AI functionality that will simplify the need for utterance additions. </div>
                             </div>
                         </div>
-                        <div class="saved-utterances" *ngIf="selectedUtterancesArray.length > 0">
+                        <div class="saved-utterances" *ngIf="selectedUtterancesArray?.length > 0 || selectedNewUtterances?.length > 0">
                             <div class="heading-saved">Saved Utterances</div>
                             <!-- Repeat Data -->
-                            <ng-container *ngFor="let utter of selectedUtterancesArray">
+                            <ng-container *ngFor="let utter of selectedUtterancesArray; let iD = index">
                                 <div class="saved-utt-body-sec">
                                     <div class="saved-title-utt">{{utter?.utterance}}</div>
                                     <div class="percentage-colr">
                                         <span class="percentage">12%</span>
                                         <span class="bgcolor"></span>
                                     </div>
-                                    <div class="delete-saved-utt">
+                                    <div class="delete-saved-utt" (click)="deleteUtternce(utter, iD)">
+                                        <i class="icon-sa-welcome-delete"></i>
+                                    </div>
+                                </div>
+                            </ng-container>
+                            <ng-container *ngFor="let utter of selectedNewUtterances;let iDx = index">
+                                <div class="saved-utt-body-sec">
+                                    <div class="saved-title-utt">{{utter?.utterance}}</div>
+                                    <div class="percentage-colr">
+                                        <span class="percentage">12%</span>
+                                        <span class="bgcolor"></span>
+                                    </div>
+                                    <div class="delete-saved-utt" (click)="deleteUtternceNew(utter?.utterance, iDx)">
                                         <i class="icon-sa-welcome-delete"></i>
                                     </div>
                                 </div>

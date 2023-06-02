@@ -9,6 +9,7 @@ import { v4 as uuid } from 'uuid';
 export class CoachingService {
 
   coachingCnst : any = COACHINGCNST;
+  deletedUIds = [];
   constructor(private fb: FormBuilder) { }
 
   getUtteranceFormControlObject(){
@@ -16,9 +17,11 @@ export class CoachingService {
       _id: [uuid(), [Validators.required]],
       type: [this.coachingCnst.UTTERANCE, [Validators.required]],
       by: ['', [Validators.required]],
-      operator : ['And', [Validators.required]],
+      operator : ['and', [Validators.required]],
       when : this.fb.group({
-        utterancesId: [[], Validators.required]
+        addUtterances: [[]],
+        deleteUtterances: [[]],
+        utteranceCount: ['', [Validators.required]]
       }),
       frequency: this.fb.group({
         nOccurences: [1, Validators.required],
@@ -34,7 +37,9 @@ export class CoachingService {
       by: [obj.by, [Validators.required]],
       operator : [obj.operator, [Validators.required]],
       when : this.fb.group({
-        utterancesId: [obj.when?.utterancesId, Validators.required]
+        addUtterances: [[]],
+        deleteUtterances: [[]],
+        utteranceCount: [obj.frequency?.nOccurences,[Validators.required]]
       }),
       frequency: this.fb.group({
         nOccurences: [obj.frequency?.nOccurences, Validators.required],

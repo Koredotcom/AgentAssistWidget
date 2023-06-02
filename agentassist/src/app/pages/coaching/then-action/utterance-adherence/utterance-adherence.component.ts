@@ -1,195 +1,174 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
-import {ProgressSpinnerMode} from '@angular/material/progress-spinner';
+import { ProgressSpinnerMode } from '@angular/material/progress-spinner';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
 import { OpenAIService } from '../../open-ai.service';
-import { debounceTime, finalize } from 'rxjs/operators';
+import { debounceTime, finalize, tap } from 'rxjs/operators';
 import { FormControl, FormGroup } from '@angular/forms';
 import { COACHINGCNST } from '../../coaching.cnst';
+import { CoachingService } from '../../coaching.service';
 @Component({
   selector: 'app-utterance-adherence',
   templateUrl: './utterance-adherence.component.html',
   styleUrls: ['./utterance-adherence.component.scss']
 })
-export class UtteranceAdherenceComponent implements OnInit, OnChanges {
+export class UtteranceAdherenceComponent implements OnInit {
 
-  @Input() form : FormGroup;
+  @Input() form: FormGroup;
+  @Input() createOrEdit = '';
   @Output() onClose = new EventEmitter();
+  @Output() saveUtterance = new EventEmitter();
+
   color: ThemePalette = 'primary';
-  createOrEdit = false; //true on edit, false on create;
+  // createOrEdit = false; //true on edit, false on create;
   mode: ProgressSpinnerMode = 'determinate';
   value = 50;
   loaded = false;
-  // loading = false;
-  isGeneratingText : boolean = null;
-  openAiUtteranceArray : any = [];
+  isGeneratingText: boolean = null;
+  openAiUtteranceArray: any = [];
   searchKey = new FormControl();
-  sampleUtterPrice : any = ['price high', 'price too high', 'price is much', 'price expensive'];
-  sampleUtterNoResp : any = ['hey', 'hello there!', 'helloo', 'can you here me!'];
-  utteranceText : string;
-  selectedUtterancesArray : any = [];
-  addButtonClick : boolean = false;
-
-
-  @ViewChild(NgbDropdown, { static: true })
+  sampleUtterPrice: any = ['price high', 'price too high', 'price is much', 'price expensive'];
+  sampleUtterNoResp: any = ['hey', 'hello there!', 'helloo', 'can you here me!'];
+  utteranceText: string;
+  selectedUtterancesArray: any = [];
+  addButtonClick: boolean = false;
+  utterances = {};
+  addedUtterances = [];
+  deletedUtter = [];
+  selectedNewUtterances = [];
   public utteranceDropdown: NgbDropdown;
 
-  @Output() saveUtterance = new EventEmitter();
-
-  // @ViewChild('utteranceDropdown') utteranceDropdown:NgbDropdown;
-  addedUtterances = [];
-  constructor(private openAIService : OpenAIService,
-    private cdRef:ChangeDetectorRef,
-    private service : ServiceInvokerService) { }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    // if(changes.createOrEdit.currentValue === COACHINGCNST.CREATE){
-
-    // }
-    // if(changes.createOrEdit.currentValue === COACHINGCNST.EDIT){
-    //   this.service.invoke("get.agentcoachingutteranceByRef",
-    //   {
-    //     refId: this.form.value._id,
-    //   }).subscribe((data)=>{
-    //     this.addedUtterances = [...data] || [];
-    //     this.selectedUtterancesArray = [...data] || [];
-    //     this.loaded = true;
-    //   })
-    // }
-  }
-
-  getAddedUtterances(){
-    this.service.invoke("get.agentcoachingutteranceByRef",
-      {
-        refId: this.form.value._id,
-      }).subscribe((data)=>{
-        this.addedUtterances = [...data] || [];
-        this.selectedUtterancesArray = [...data] || [];
-        this.loaded = true;
-      })
-  }
+  constructor(private openAIService: OpenAIService,
+    private cdRef: ChangeDetectorRef,
+    private service: ServiceInvokerService,
+    private cService: CoachingService
+  ) { }
 
   ngOnInit(): void {
     let form = this.form.value;
-    if(form?.when?.utterancesId.length > 0){
+    if (this.createOrEdit === COACHINGCNST.EDIT) {
       this.getAddedUtterances();
-      this.createOrEdit = true;
     }else{
-      this.createOrEdit = false;
+      this.selectedNewUtterances.push(...form?.when.addUtterances);
+      this.selectedNewUtterances.forEach((item)=>{
+        this.utterances[item.utterance] = true;
+      })
     }
     this.searchKey.valueChanges
-    .pipe(debounceTime(300))
-    .subscribe((val)=>{
-      this.loaded  =false;
-      this.formatUtterArray(val.includes('price') ? this.sampleUtterPrice : this.sampleUtterNoResp);
-    })
+      .pipe(
+        tap(() => { 
+          this.openAiUtteranceArray = [];
+        },
+        debounceTime(300)
+        )
+      )
+      .subscribe((val) => {
+        this.loaded = false;
+        this.formatUtterArray(val.includes('price') ? this.sampleUtterPrice : this.sampleUtterNoResp);
+      });
   }
 
-  formatUtterArray(openAiUtteranceArray){
-    this.openAiUtteranceArray = [];
-    setTimeout(() => {      
-      for(let utter of openAiUtteranceArray){
-          let obj : any = {
-            enabled : false,
-            value : utter
+  getAddedUtterances() {
+    let form = this.form?.value;
+    this.service.invoke("get.agentcoachingutteranceByRef",
+      {
+        refId: this.form.value._id,
+      }).subscribe((data) => {
+        let deletedItem = form?.when?.deleteUtterances;
+        if (deletedItem?.length > 0) {
+          this.selectedUtterancesArray = (data || []).filter((item) => {
+            return !deletedItem.includes(item._id)
+          });
+        } else {
+          this.selectedUtterancesArray = [...data];
+        };
+        this.selectedNewUtterances.push(...form?.when.addUtterances);
+        this.selectedNewUtterances.forEach((item)=>{
+          this.utterances[item.utterance] = true;
+        });
+      })
+  }
+
+  formatUtterArray(openAiUtteranceArray) {
+    setTimeout(() => {
+      this.openAiUtteranceArray = [];
+      for (let utter of openAiUtteranceArray) {
+        const u = this.getAddedUtteranceKeys()
+        if(!u[utter]){
+          let obj: any = {
+            enabled: false,
+            value: utter,
+            _id: null
           }
-        this.openAiUtteranceArray.push(obj);
-        this.loaded  =true;
+          this.openAiUtteranceArray.push(obj);
+        }
+        this.loaded = true;
       }
     }, 500);
   }
 
-  // getSuggestion(type: string) {
-  //   this.isGeneratingText = false;
-  //   // this.openAiUtteranceArray = [];
-  //   this.openAIService.generateText(this.utteranceText, type)
-  //     .then((res: any) => {
-  //       res = res.replace(/\n/g,'&&&');
-  //       if (res) {
-  //         let openAiUtteranceArray = Object.assign([], res.split('&&&'));
-  //         this.formatUtterArray(openAiUtteranceArray);
-  //       };
-  //       this.isGeneratingText = true;
-  //     })
-  //     .catch(err => {
-  //       this.isGeneratingText = true;
-  //     })
-  // }
 
-  saveUtteranceStrings(){
-    // let utteranceArray : any = this.getSelectedUtterance();
-    let saveUtteranceArray = this.selectedUtterancesArray.map((utterObj : any) => {
-      // if(utteranceArray.includes(utterObj.utterance)){
-      //   return true;
-      // }
-      return utterObj?.id;
-    });
-    (this.form.controls.when as FormGroup).controls?.utterancesId?.setValue(saveUtteranceArray);
+  getAddedUtteranceKeys(): {}{
+    return [...this.selectedUtterancesArray, ...this.selectedNewUtterances].reduce((acc, item)=>{
+      acc[item.utterance] = true;
+      return acc;
+    }, {})
+  }
+
+  saveUtteranceStrings() {
+    (this.form.controls.when as FormGroup).controls?.deleteUtterances?.setValue([...this.cService.deletedUIds, ...this.form.value.when.deleteUtterances]);
+    (this.form.controls.when as FormGroup).controls?.addUtterances?.setValue(this.selectedNewUtterances);
+    const le = this.selectedNewUtterances?.length + this.selectedUtterancesArray?.length;
+    (this.form.controls.when as FormGroup).controls?.utteranceCount?.setValue(le > 0 ? le : '');
     this.closeAdherence(COACHINGCNST.UTTERANCE);
+    this.cService.deletedUIds = [];
   }
 
-  getSelectedUtterance(){
-    let utteranceArray : any = [];
-    this.openAiUtteranceArray.forEach((item) => {
-      if(item.enabled){
-        utteranceArray.push({utterance: item.value, language: "english"});
-      }
-    });
-    return utteranceArray;
+  getSelectedUtterance() {
+    return this.openAiUtteranceArray.map((item) => item.value)
   }
 
-  getUtteranceIds(){
-    this.addButtonClick = true;
-    // let utteranceArray : any = this.getSelectedUtterance();
-    let payload : any = {
-      utterances : this.getSelectedUtterance(),
-      type: "trigger"
-    }
-    this.service.invoke('post.agentcoachingutterance',{
-      refId: this.form.value._id,
-    }, payload).pipe(finalize(() => {
-    })).subscribe(data => {
-      this.addButtonClick = false;
-      if (data) {
-        this.isGeneratingText = false;
-        this.selectedUtterancesArray = data;
-      }
-    },(error)=>{
-      this.addButtonClick = false;
+  saveUtterances() {
+    this.selectedNewUtterances = Object.keys(this.utterances).map((item) => {
+      return { utterance: item, language: 'english' };
     });
   }
 
-  changeUtterActiveStatus(utter){
-    utter.enabled = !utter.enabled;    
-  }
-  prevVal = ''
-  createNewUtter(e, val){
-    this.prevVal = val;
-    console.log(e.target.checked)
-    if(e.target.checked){
-      let exist = this.openAiUtteranceArray.find((item)=>item.value === val);
-      if(!exist){
-        this.openAiUtteranceArray.push({
-          enabled : true,
-          value : val
-        })
-      }
-    }else{
-      let inx = this.openAiUtteranceArray.findIndex((item)=>item.value === val);
-      this.openAiUtteranceArray.splice(inx, 1);
+  changeUtterActiveStatus(utter) {
+    utter.enabled = !utter.enabled;
+    if (utter.enabled) {
+      this.utterances[utter.value] = true;
+    } else {
+      delete this.utterances[utter.value];
     }
-
   }
 
-  clearAIsuggestions(){
-    // this.utteranceText = '';
-    // this.isGeneratingText = false;
-    // this.openAiUtteranceArray = [];
-    // this.cdRef.detectChanges();
+  clearAIsuggestions(ref) {
+    this.clearSeachVal();
+    ref.close();
+  }
+
+  clearSeachVal() {
+    this.searchKey.patchValue('', { emitEvent: false });
   }
 
   closeAdherence(e?) {
     this.onClose.emit(e);
+    this.cService.deletedUIds = [];
   }
+
+  deleteUtternce(utter, i) {
+    if (utter._id) {
+      this.cService.deletedUIds.push(utter._id);
+    }
+    this.selectedUtterancesArray.splice(i, 1);
+  }
+
+  deleteUtternceNew(utter, i) {
+    this.selectedNewUtterances.splice(i, 1);
+    this.cdRef.detectChanges();
+    delete this.utterances[utter];
+  }
+
 }

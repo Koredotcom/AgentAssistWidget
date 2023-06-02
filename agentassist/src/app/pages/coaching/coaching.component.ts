@@ -49,10 +49,10 @@ export class CoachingComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAgentCoachingGroupData();
+    this.subscribeEvents();
   }
 
   ngAfterViewInit(){
-    this.subscribeEvents();
   }
   
   subscribeEvents() {
@@ -62,9 +62,9 @@ export class CoachingComponent implements OnInit {
         if (term.trim()) {
           this.searchedData = JSON.parse(JSON.stringify(this.respData));
           this.searchedData["results"].forEach((item, i) => {
-            item.rules = item.rules.filter((iItem) => {
+            item.rules = [...item.rules.filter((iItem) => {
               return iItem.name.includes(term);
-            });
+            })];
             if(item.rules?.length === 0){
               (this.searchedData.results || []).splice(i, 1)
             }
