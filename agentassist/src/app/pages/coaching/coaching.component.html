@@ -1,6 +1,6 @@
 <div class="agents-container-wrapper">
     <div class="header-sec-top">
-        <div class="main-heading">Coaching</div>
+        <div class="main-heading">Agent Coaching</div>
         <button class="kr-sg-button-primary btn_lg" (click)="openCoachingGroup(coachingConst.CREATE, {})">+ New Coaching Group</button>
     </div>
 
@@ -37,7 +37,7 @@
                                                     <div class="title-info">{{res.name}}</div>
                                                     <i class="icon-sa-welcome-edit" (click)="$event.stopPropagation();openCoachingGroup(coachingConst.EDIT, res, i)"></i>                                                                                                   
                                                 </div>
-                                                <div class="desc_text text-truncate">{{res.description}}</div>                                                 
+                                                <div class="desc_text text-truncate" [title]="res.description">{{res.description}}</div>                                                 
                                             </div>
                                             <div class="right-info">
                                                 <div class="items-count">{{res.rules?.length}} Items</div>

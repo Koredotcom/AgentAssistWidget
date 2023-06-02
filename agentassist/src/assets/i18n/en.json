@@ -2024,7 +2024,7 @@
     "WELCOMEEVENT.SAVE_FALIED" : "Failed to upate the Configuration",
     "CHANNELCHAT.SAVE_SUCCESS" : "Configuration has been Saved",
     "CHANNELCHAT.SAVE_FAILED" : "Failed to update the Configuration",
-    "NAV.COACHING": "Coaching",
+    "NAV.COACHING": "Agent Coaching",
     "NAV.COACH_TITLE": "Agent Experiences",
     "COACHING.GROUPCREATED_SUCCESS" : "Group has been Created",
     "COACHING.GROUPCREATED_FAILURE" : "Failed to save the Group",
