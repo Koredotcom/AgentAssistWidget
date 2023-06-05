@@ -46,7 +46,7 @@ export class UtteranceAdherenceComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    let form = this.form.value;
+    let form = this.form?.value;
     if (this.createOrEdit === COACHINGCNST.EDIT) {
       this.getAddedUtterances();
     }else{

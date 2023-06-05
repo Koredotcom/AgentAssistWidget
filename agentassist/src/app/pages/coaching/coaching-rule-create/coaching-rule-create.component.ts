@@ -122,6 +122,11 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
         .push(this.getFormGroupObject(element));
         this.cd.detectChanges();
       });
+      (this.currentRule?.actions || []).forEach(element => {
+        (<FormArray>this.ruleForm.controls["actions"])
+        .push(this.getFormGroupObject(element));
+        this.cd.detectChanges();
+      });
       this.subscribeValChanges();
     });
   }
@@ -131,6 +136,10 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
       return this.fb.group(this.coachingService.setUtteranceForm(element))
     }else if(element.type == this.coachingCnst.SPEECH_ANALYSIS){
       return this.fb.group(this.coachingService.setSpeechAnalysisForm(element))
+    }else if(element.type == this.coachingCnst.NUDGE_AGENT){
+      return this.fb.group(this.coachingService.setNudgeForm(element))
+    }else if(element.type == this.coachingCnst.HINT_AGENT){
+      return this.fb.group(this.coachingService.setHintForm(element))
     }
   }
 
@@ -145,7 +154,7 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
         "botId": new FormControl(this.workflowService.getCurrentBt(true)._id, [Validators.required]),
         "name": new FormControl('',[Validators.required]),
         // "description": new FormControl('',[Validators.required]),
-        "triggers": this.fb.array([],[Validators.required]),
+        "triggers": this.fb.array([]),
         "actions": this.fb.array([]),
         "assignees": this.fb.array([]),
       }
@@ -220,6 +229,12 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
   deleteTrigger(index){    
     if(index != null && index != undefined){
       (<FormArray>this.ruleForm.controls["triggers"]).removeAt(index);
+    }
+  }
+
+  deleteAction(index){
+    if(index != null && index != undefined){
+      (<FormArray>this.ruleForm.controls["actions"]).removeAt(index);
     }
   }
 

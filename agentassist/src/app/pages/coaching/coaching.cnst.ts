@@ -22,28 +22,28 @@ export const COACHINGCNST = {
     OPERATOR_LIST : ['and', 'or'],
     AND_OPERATOR : 'and',
     OR_OPERATOR : 'or',
-    NUDGE_AGENT: 'Nudge Agent',
-    HINT_AGENT: 'Hint Agent',
+    NUDGE_AGENT: 'nudge',
+    HINT_AGENT: 'hint',
     ALERT_MANAGER: 'Alert Manager',
     EMAIL_MANAGER: 'Email Manager',
     FAQ: 'FAQ',
     TYPE_OF_HINT: [{
-        type: 'Positive',
+        type: 'positive',
         class: '' 
     },{
-        type: 'Neutral',
+        type: 'neutral',
         class: 'neutral' 
     },{
-        type: 'Alert',
+        type: 'alert',
         class: 'alertbg' 
     },{
-        type: 'Critical',
+        type: 'critical',
         class: 'critical' 
     }],
-    TYPE_OF_CLOSE: [
-        "Does not auto close",
-        "Auto close"
-    ],
+    TYPE_OF_CLOSE: {
+        "doesnot_auto_close" : "Does not auto close",
+        "auto_close" : "Auto Close"
+    },
     RULE : "rule",
     GROUP : "group",
     VALIDATORS : {
