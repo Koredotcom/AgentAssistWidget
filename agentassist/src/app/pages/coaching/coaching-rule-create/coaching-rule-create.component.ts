@@ -104,6 +104,9 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
       this.createForm();
       this.subscribeValChanges();
     };
+    setTimeout(() => {
+      this.subscribeValChanges();
+    }, 0);
   }
 
   subscribeValChanges(){
@@ -116,17 +119,18 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
 
   updateRuleForm(){
     setTimeout(() => {
-      this.ruleForm.controls["name"].patchValue(this.currentRule?.name);
+      this.ruleForm.controls["name"].patchValue(this.currentRule?.name);      
       (this.currentRule?.triggers || []).forEach(element => {
-        (<FormArray>this.ruleForm.controls["triggers"])
+        (<FormArray>this.ruleForm?.controls["triggers"])
         .push(this.getFormGroupObject(element));
+        // this.cd.detectChanges();
       });
       (this.currentRule?.actions || []).forEach(element => {
-        (<FormArray>this.ruleForm.controls["actions"])
+        (<FormArray>this.ruleForm?.controls["actions"])
         .push(this.getFormGroupObject(element));
+        // this.cd.detectChanges();
       });
       this.cd.detectChanges();
-      this.subscribeValChanges();
     });
   }
 

@@ -111,7 +111,9 @@ export class CoachingService {
         title: ['', Validators.required]
       }),
       adherence : this.fb.group({
-        utterancesId: [[]]
+        addUtterances: [[]],
+        deleteUtterances: [[]],
+        utteranceCount: ['', [Validators.required]]
       })
     }
   }
@@ -125,7 +127,9 @@ export class CoachingService {
         title: [obj.message?.title, Validators.required]
       }),
       adherence : this.fb.group({
-        utterancesId: [obj.adherence?.utterancesId]
+        addUtterances: [[]],
+        deleteUtterances: [[]],
+        utteranceCount: [obj.adherence?.utteranceCount,[Validators.required]]
       })
     }
   }
@@ -141,7 +145,9 @@ export class CoachingService {
         postAction : ['', Validators.required]
       }),
       adherence : this.fb.group({
-        utterancesId: [[]]
+        addUtterances: [[]],
+        deleteUtterances: [[]],
+        utteranceCount: ['', [Validators.required]]
       })
     }
   }
@@ -157,7 +163,9 @@ export class CoachingService {
         postAction : [obj.message?.postAction, Validators.required]
       }),
       adherence : this.fb.group({
-        utterancesId: [[]]
+        addUtterances: [[]],
+        deleteUtterances: [[]],
+        utteranceCount: [obj.adherence?.utteranceCount,[Validators.required]]
       })
     }
   }

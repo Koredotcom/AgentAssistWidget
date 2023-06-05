@@ -1,25 +1,26 @@
-import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 import { ProgressSpinnerMode } from '@angular/material/progress-spinner';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
-// import { OpenAIService } from '../../open-ai.service';
+import { OpenAIService } from '../../open-ai.service';
 import { debounceTime, finalize, tap } from 'rxjs/operators';
 import { FormControl, FormGroup } from '@angular/forms';
 import { COACHINGCNST } from '../../coaching.cnst';
 import { CoachingService } from '../../coaching.service';
+
 @Component({
-  selector: 'app-utterance-adherence',
-  templateUrl: './utterance-adherence.component.html',
-  styleUrls: ['./utterance-adherence.component.scss']
+  selector: 'app-adherence',
+  templateUrl: './adherence.component.html',
+  styleUrls: ['./adherence.component.scss']
 })
-export class UtteranceAdherenceComponent implements OnInit {
+export class AdherenceComponent implements OnInit {
 
   @Input() form: FormGroup;
   @Input() createOrEdit = '';
   @Output() onClose = new EventEmitter();
   @Output() saveUtterance = new EventEmitter();
-  @ViewChild('searchRef') searchRef : ElementRef;
+
   color: ThemePalette = 'primary';
   // createOrEdit = false; //true on edit, false on create;
   mode: ProgressSpinnerMode = 'determinate';
@@ -39,8 +40,7 @@ export class UtteranceAdherenceComponent implements OnInit {
   selectedNewUtterances = [];
   public utteranceDropdown: NgbDropdown;
 
-  constructor(
-    // private openAIService: OpenAIService,
+  constructor(private openAIService: OpenAIService,
     private cdRef: ChangeDetectorRef,
     private service: ServiceInvokerService,
     private cService: CoachingService
@@ -51,8 +51,8 @@ export class UtteranceAdherenceComponent implements OnInit {
     if (this.createOrEdit === COACHINGCNST.EDIT) {
       this.getAddedUtterances();
     }else{
-      if(form?.when?.addedUtterances){
-        this.selectedNewUtterances?.push(...form?.when.addUtterances);
+      if(form?.adherence?.addedUtterances){
+        this.selectedNewUtterances?.push(...form?.adherence.addUtterances);
       }
       this.selectedNewUtterances?.forEach((item)=>{
         this.utterances[item.utterance] = true;
@@ -78,7 +78,7 @@ export class UtteranceAdherenceComponent implements OnInit {
       {
         refId: this.form.value._id,
       }).subscribe((data) => {
-        let deletedItem = form?.when?.deleteUtterances;
+        let deletedItem = form?.adherence?.deleteUtterances;
         if (deletedItem?.length > 0) {
           this.selectedUtterancesArray = (data || []).filter((item) => {
             return !deletedItem.includes(item._id)
@@ -86,7 +86,7 @@ export class UtteranceAdherenceComponent implements OnInit {
         } else {
           this.selectedUtterancesArray = [...data];
         };
-        this.selectedNewUtterances.push(...form?.when.addUtterances);
+        this.selectedNewUtterances.push(...form?.adherence.addUtterances);
         this.selectedNewUtterances.forEach((item)=>{
           this.utterances[item.utterance] = true;
         });
@@ -120,12 +120,13 @@ export class UtteranceAdherenceComponent implements OnInit {
   }
 
   saveUtteranceStrings() {
-    (this.form.controls.when as FormGroup).controls?.deleteUtterances?.setValue([...Object.keys(this.cService.deletedUIds), ...this.form.value.when.deleteUtterances]);
-    (this.form.controls.when as FormGroup).controls?.addUtterances?.setValue(this.selectedNewUtterances);
+    (this.form.controls.adherence as FormGroup).controls?.deleteUtterances?.setValue([...Object.keys(this.cService.deletedUIds), ...this.form.value.adherence.deleteUtterances]);
+    (this.form.controls.adherence as FormGroup).controls?.addUtterances?.setValue(this.selectedNewUtterances);
     const le = this.selectedNewUtterances?.length + this.selectedUtterancesArray?.length;
-    (this.form.controls.when as FormGroup).controls?.utteranceCount?.setValue(le > 0 ? le : '');
+    (this.form.controls.adherence as FormGroup).controls?.utteranceCount?.setValue(le > 0 ? le : '');
     this.closeAdherence(COACHINGCNST.UTTERANCE);
     this.cService.deletedUIds = {};
+    
   }
 
   getSelectedUtterance() {
@@ -133,9 +134,6 @@ export class UtteranceAdherenceComponent implements OnInit {
   }
 
   saveUtterances() {
-    if(this.searchRef?.nativeElement?.checked){
-      this.utterances[this.searchKey?.value] = true;
-    }
     this.selectedNewUtterances = Object.keys(this.utterances).map((item) => {
       return { utterance: item, language: 'english' };
     });
@@ -177,9 +175,4 @@ export class UtteranceAdherenceComponent implements OnInit {
     delete this.utterances[utter];
   }
 
-  get diabledCheckbox(): boolean{
-      return [...this.selectedUtterancesArray, ...this.selectedNewUtterances].some((item)=>{
-        return item.utterance == this.searchKey.value;
-      })
-    }
 }

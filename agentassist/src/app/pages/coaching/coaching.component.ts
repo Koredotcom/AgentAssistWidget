@@ -61,14 +61,18 @@ export class CoachingComponent implements OnInit {
         term = term.trim()
         if (term.trim()) {
           this.searchedData = JSON.parse(JSON.stringify(this.respData));
-          this.searchedData["results"].forEach((item, i) => {
+          let results = this.searchedData["results"];
+          for(let i=0; i<results.length; i++){
+            let item = results[i];
             item.rules = [...item.rules.filter((iItem) => {
               return iItem.name.includes(term);
             })];
             if(item.rules?.length === 0){
-              (this.searchedData.results || []).splice(i, 1)
+              (this.searchedData.results || []).splice(i, 1);
+              i = i-1;
             }
-          });
+          }
+
         }else if(term == ''){
           this.searchedData.results = this.respData.results;
         }
