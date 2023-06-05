@@ -47,6 +47,7 @@ export class HomeComponent implements OnInit {
   isBackBtnClicked: boolean = false;
   showHistoryTab : boolean = false;
   convHistoryResponse : any;
+  sourceDesktop : any = this.commonService?.configObj?.source;
 
   constructor(public handleSubjectService: HandleSubjectService, public websocketService: WebSocketService,
     public sanitizeHTMLPipe: SanitizeHtmlPipe, public commonService: CommonService, private koregenerateUUIDPipe: KoreGenerateuuidPipe,
@@ -148,7 +149,7 @@ export class HomeComponent implements OnInit {
       conversationId: this.connectionDetails.conversationId,
       payload: {
         "summary" : [
-          { 
+          {
             'summary_text': response.editedSummary || '',
           }
         ]
@@ -505,16 +506,16 @@ setProactiveMode(){
     setTimeout(() => {
       document.getElementById(scrollbuttonId).addEventListener('click', (event) => {
         console.log("click event *************" );
-        
+
         this.scrollToBottom(true);
       }, { once: true });
     }, 10);
   }
 
   updateScrollButton() {
-    let dynamicBlockId = this.commonService.tabNamevsId[this.activeTab];    
-    let lastelement = this.designAlterService.getLastElement(dynamicBlockId);    
-    let scrollAtEnd = !this.designAlterService.isScrolledIntoView(lastelement) ? true : false;    
+    let dynamicBlockId = this.commonService.tabNamevsId[this.activeTab];
+    let lastelement = this.designAlterService.getLastElement(dynamicBlockId);
+    let scrollAtEnd = !this.designAlterService.isScrolledIntoView(lastelement) ? true : false;
     this.commonService.scrollContent[this.activeTab].scrollAtEnd = scrollAtEnd;
     if (!scrollAtEnd) {
       $(".scroll-bottom-show-btn").removeClass('hiddenEle');
