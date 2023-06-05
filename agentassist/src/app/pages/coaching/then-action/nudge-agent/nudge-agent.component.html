@@ -8,7 +8,7 @@
             <ng-container *ngFor="let type of msgTypes">
                 <li ngbDropdownItem class="list-item-li" (click)="selectMsgType(type.type)">
                     <span class="bg-action {{type.class}}"></span>
-                    <span class="title">{{type.type}}</span>
+                    <span class="title">{{type.type | titlecase}}</span>
                 </li>
             </ng-container>
         </ul>
@@ -41,6 +41,9 @@
     </div>
     <div class="add-adherence">
         <button class="add-adherence-btn" (click)="openAdherence()">+ Add Adherence</button>
+    </div>
+    <div class="delete-row" (click)="deleteActionRule()"> 
+        <i class="icon-sa-welcome-delete"></i>
     </div>
 </div>
 

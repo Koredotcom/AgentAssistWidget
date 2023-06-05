@@ -104,27 +104,61 @@ export class CoachingService {
 
   getNudgeFromObj(){
     return {
+      _id: [uuid(), [Validators.required]],
       type: this.coachingCnst.NUDGE_AGENT,
-      by: [null, [Validators.required]],
-      when : [[], [Validators.required]],
-      streetType: [null, [Validators.required]],
-      frequency: [null, [Validators.required]],
-      nOccurences: [null, [Validators.required]],
-      every: [null, [Validators.required]],
-      operator : [null, [Validators.required]]
+      expression: [null, [Validators.required]],
+      message : this.fb.group({
+        title: ['', Validators.required]
+      }),
+      adherence : this.fb.group({
+        utterancesId: [[]]
+      })
+    }
+  }
+
+  setNudgeForm(obj){
+    return {
+      _id: [obj._id, [Validators.required]],
+      type: this.coachingCnst.NUDGE_AGENT,
+      expression: [obj.expression, [Validators.required]],
+      message : this.fb.group({
+        title: [obj.message?.title, Validators.required]
+      }),
+      adherence : this.fb.group({
+        utterancesId: [obj.adherence?.utterancesId]
+      })
     }
   }
 
   getHintFromObj(){
     return {
+      _id: [uuid(), [Validators.required]],
       type: this.coachingCnst.HINT_AGENT,
-      by: [null, [Validators.required]],
-      when : [[], [Validators.required]],
-      streetType: [null, [Validators.required]],
-      frequency: [null, [Validators.required]],
-      nOccurences: [null, [Validators.required]],
-      every: [null, [Validators.required]],
-      operator : [null, [Validators.required]]
+      expression: [null, [Validators.required]],
+      message : this.fb.group({
+        title: ['', Validators.required],
+        body : ['', Validators.required],
+        postAction : ['', Validators.required]
+      }),
+      adherence : this.fb.group({
+        utterancesId: [[]]
+      })
+    }
+  }
+
+  setHintForm(obj){
+    return {
+      _id: [uuid(), [Validators.required]],
+      type: this.coachingCnst.HINT_AGENT,
+      expression: [obj.expression, [Validators.required]],
+      message : this.fb.group({
+        title: [obj.message?.title, Validators.required],
+        body : [obj.message?.body, Validators.required],
+        postAction : [obj.message?.postAction, Validators.required]
+      }),
+      adherence : this.fb.group({
+        utterancesId: [[]]
+      })
     }
   }
 

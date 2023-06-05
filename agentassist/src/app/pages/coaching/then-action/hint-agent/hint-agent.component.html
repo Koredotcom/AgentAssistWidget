@@ -56,16 +56,19 @@
             <span class="choose-text">{{ closeType ? closeType : '{ Choose }' }}</span>
         </button>
         <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
-            <ng-container *ngFor="let closeT of closeTypes">
-                <li ngbDropdownItem class="list-item-li" (click)="clickCloseT(closeT)">
-                    <span class="title">{{closeT}}</span>
-                    <i [ngClass]="{'icon-sa-conv-check' : closeType === closeT}"></i>
+            <ng-container *ngFor="let closeT of closeTypes | keyvalue">
+                <li ngbDropdownItem class="list-item-li" (click)="clickCloseT(closeT.key)">
+                    <span class="title">{{closeT.value}}</span>
+                    <i [ngClass]="{'icon-sa-conv-check' : closeType === closeT.key}"></i>
                 </li>
             </ng-container>
         </ul>
     </div>
     <div class="add-adherence">
         <button class="add-adherence-btn" (click)="openAdherence()">+ Add Adherence</button>
+    </div>
+    <div class="delete-row" (click)="deleteActionRule()"> 
+        <i class="icon-sa-welcome-delete"></i>
     </div>
 </div>
 
