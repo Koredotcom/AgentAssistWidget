@@ -104,6 +104,9 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
       this.createForm();
       this.subscribeValChanges();
     };
+    setTimeout(() => {
+      this.subscribeValChanges();
+    }, 0);
   }
 
   subscribeValChanges(){
@@ -128,9 +131,6 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
         // this.cd.detectChanges();
       });
       this.cd.detectChanges();
-      setTimeout(() => {
-        this.subscribeValChanges();
-      }, 0);
     });
   }
 
