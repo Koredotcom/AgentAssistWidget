@@ -87,9 +87,12 @@
     </div>
 </ng-template>
 
-<app-slider-component id="adherenceSlider" #adherenceSlider='app-slider'>
-    <app-utterance-adherence (onClose)="closeAdherence($event)"></app-utterance-adherence>
-</app-slider-component>
+<ng-container *ngIf="openAdherenceSlider">
+    <app-slider-component id="adherenceSlider" #adherenceSlider='app-slider'>
+        <app-adherence [createOrEdit]="createOrEdit" (onClose)="closeAdherence($event)" [form]="form"></app-adherence>
+    </app-slider-component>
+</ng-container>
+
 <ng-template #hintActions>
 
 </ng-template>

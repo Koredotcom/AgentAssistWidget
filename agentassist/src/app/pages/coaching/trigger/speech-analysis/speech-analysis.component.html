@@ -78,7 +78,7 @@
             <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
                 <div class="seconds-input">
                     <div class="kr-sg-input-text">
-                        <input type="text" placeholder="Placeholder text" class="input-text" (keyup.enter)="onEnterWords($event.target.value);speechspeedwordcount.close()">
+                        <input type="number" step="0.01" placeholder="Enter wordcount" class="input-text" (keyup.enter)="onEnterWords($event.target.value);speechspeedwordcount.close()">
                     </div>
                     <!-- <div class="s-title">words per minute</div> -->
                 </div>

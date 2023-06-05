@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
 import { COACHINGCNST } from '../../coaching.cnst';
@@ -9,13 +9,11 @@ import { COACHINGCNST } from '../../coaching.cnst';
 })
 export class HintAgentComponent implements OnInit {
 
-  @ViewChild('adherenceSlider', { static: true }) adherenceSlider: SliderComponentComponent;
   @Input() form: FormGroup;
   @Input() index : number;
   @Input() length : number;
   @Input() createOrEdit: string = '';
   @Output() deleteAction = new EventEmitter();
-  constructor() { }
   selMsgType:string = '';
   msgTypes = COACHINGCNST.TYPE_OF_HINT;
   closeTypes = COACHINGCNST.TYPE_OF_CLOSE;
@@ -23,7 +21,18 @@ export class HintAgentComponent implements OnInit {
   desc: string = '';
   bodyMsg: string = '';
   variableName: string = '';
-  closeType: string = ''
+  closeType: string = '';
+  openAdherenceSlider : boolean = false;
+  
+  private adherenceSlider: SliderComponentComponent;
+  @ViewChild('adherenceSlider') set content(content: SliderComponentComponent) {
+    if(content) { // initially setter gets called with undefined
+      this.adherenceSlider = content;
+    }
+  }
+
+  constructor(private cdRef : ChangeDetectorRef) { }
+
   ngOnInit(): void {
   }
 
@@ -38,12 +47,16 @@ export class HintAgentComponent implements OnInit {
     }
   }
 
-
   openAdherence(){
-    this.adherenceSlider.openSlider("#adherenceSlider", "width900");
+    this.openAdherenceSlider = true;
+    this.cdRef.detectChanges();
+    setTimeout(() => {
+      this.adherenceSlider.openSlider("#adherenceSlider", "width900");
+    },);
   }
   
   closeAdherence(group){
+    this.openAdherenceSlider = false;
     this.adherenceSlider.closeSlider("#adherenceSlider");
   }
 
