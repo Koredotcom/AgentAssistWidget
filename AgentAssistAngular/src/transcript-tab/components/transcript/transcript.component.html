@@ -6,7 +6,8 @@
             <i class="ast-carrotup"></i>
         </div>
       </ng-container>
-        <div class="transcript-history-scroll-bottom" *ngIf="commonService.isCallConversation && historyResponse && historyResponse.length > 0" id="transcriptTabHistoryText">
+
+        <div class="transcript-history-scroll-bottom" *ngIf="commonService.isCallConversation && historyResponse && historyResponse?.length" id="transcriptTabHistoryText">
             <span>{{transcriptScrollTopText}}</span>
         </div>
         <!-- <app-transcript-history></app-transcript-history> -->
@@ -17,7 +18,7 @@
             <span>Scroll to bottom</span>
         </button>
     </div>
-    <div class="empty-data-no-agents" *ngIf="!historyResponse || historyResponse.length == 0">
+    <div class="empty-data-no-agents" *ngIf="!historyResponse || !historyResponse?.length">
         <div class="title">Voice based utterances from customer and Agent will render on this screen.</div>
     </div>
 </div>
