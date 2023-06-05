@@ -120,13 +120,12 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
       (this.currentRule?.triggers || []).forEach(element => {
         (<FormArray>this.ruleForm.controls["triggers"])
         .push(this.getFormGroupObject(element));
-        this.cd.detectChanges();
       });
       (this.currentRule?.actions || []).forEach(element => {
         (<FormArray>this.ruleForm.controls["actions"])
         .push(this.getFormGroupObject(element));
-        this.cd.detectChanges();
       });
+      this.cd.detectChanges();
       this.subscribeValChanges();
     });
   }
@@ -227,13 +226,13 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
   }
 
   deleteTrigger(index){    
-    if(index != null && index != undefined){
+    if(typeof index === "number"){
       (<FormArray>this.ruleForm.controls["triggers"]).removeAt(index);
     }
   }
 
   deleteAction(index){
-    if(index != null && index != undefined){
+    if(typeof index === "number"){
       (<FormArray>this.ruleForm.controls["actions"]).removeAt(index);
     }
   }

@@ -36,9 +36,6 @@ export class HintAgentComponent implements OnInit {
       this.desc = formVal.message.body;
       this.closeType = formVal.message.postAction;
     }
-    if(changes?.createOrEdit?.currentValue === COACHINGCNST.CREATE){
-      // console.log(this.form, 'form', this.selMsgType, this.nudgeMsg, this.showNudgeMsg); 
-    }  
   }
 
 

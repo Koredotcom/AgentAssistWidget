@@ -33,9 +33,6 @@ export class NudgeAgentComponent implements OnInit {
       console.log(this.form, 'form', this.selMsgType, this.nudgeMsg, this.showNudgeMsg);
 
     }
-    if(changes?.createOrEdit?.currentValue === COACHINGCNST.CREATE){
-      console.log(this.form, 'form', this.selMsgType, this.nudgeMsg, this.showNudgeMsg); 
-    }  
   }
 
   openAdherence(){
