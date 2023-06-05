@@ -41,6 +41,7 @@ export class TranscriptComponent implements OnInit {
   historyResponse : any;
   scrollEventDone : boolean = false;
   transcriptScrollTopText : string = 'Scroll up for Bot Conversation History';
+  sourceDesktop: any = this.commonService?.configObj?.source;
 
   ngOnInit(): void {
     this.subscribeEvents();
@@ -54,7 +55,9 @@ export class TranscriptComponent implements OnInit {
         this.connectionDetails = response;
         if (this.connectionDetails.customdata) {
           let decodedCustomData = decodeURI(this.connectionDetails.customdata);
-          this.parsedCustomData = JSON.parse(decodedCustomData);
+          if( decodedCustomData) {
+            this.parsedCustomData = JSON.parse(decodedCustomData);
+          }
         }
       }
     });

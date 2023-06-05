@@ -35,27 +35,29 @@ export class UserBotHistoryComponent implements OnInit, OnDestroy{
     let subscription2 = this.handleSubjectService.connectDetailsSubject.subscribe((response: any) => {
       if (response) {
         connectionDetails = response;
-        headersVal = {
-          'Authorization': this.commonService.grantResponseObj?.authorization?.token_type + ' ' + this.commonService.grantResponseObj?.authorization?.accessToken,
-        }
-          $.ajax({
-            url: `${connectionDetails.agentassisturl}/api/1.1/botmessages/chathistorytoagentassist?botId=${userBotConversationDetails?.botId || connectionDetails?.botId}&userId=${userBotConversationDetails?.userId}&sessionId=${userBotConversationDetails?.sessionId}&limit=-1&msgDirection=true`,
-            type: 'get',
-            headers: headersVal,
-            dataType: 'json',
-            success:  (data) => {
-              console.log(data);
-              if(data && data.messages.length > 0) {
-                this.handleSubjectService.setUserHistoryData(data);
-                this.historyResponse = data.messages;
-                this.formatHistoryResponse();
+        if((userBotConversationDetails?.botId || connectionDetails?.botId) && userBotConversationDetails?.userId && userBotConversationDetails?.sessionId) {
+          headersVal = {
+            'Authorization': this.commonService.grantResponseObj?.authorization?.token_type + ' ' + this.commonService.grantResponseObj?.authorization?.accessToken,
+          }
+            $.ajax({
+              url: `${connectionDetails.agentassisturl}/api/1.1/botmessages/chathistorytoagentassist?botId=${userBotConversationDetails?.botId || connectionDetails?.botId}&userId=${userBotConversationDetails?.userId}&sessionId=${userBotConversationDetails?.sessionId}&limit=-1&msgDirection=true`,
+              type: 'get',
+              headers: headersVal,
+              dataType: 'json',
+              success:  (data) => {
+                console.log(data);
+                if(data && data.messages.length > 0) {
+                  this.handleSubjectService.setUserHistoryData(data);
+                  this.historyResponse = data.messages;
+                  this.formatHistoryResponse();
+                }
+              },
+              error: function (err) {
+                this.historyResponse = [];
+                  console.error("Unable to fetch the details with the provided data", err);
               }
-            },
-            error: function (err) {
-              this.historyResponse = [];
-                console.error("Unable to fetch the details with the provided data", err);
-            }
-        });
+          });
+        }
     }});
     this.subscriptionsList.push(subscription2);
   }
