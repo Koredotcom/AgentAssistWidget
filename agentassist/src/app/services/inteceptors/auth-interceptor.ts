@@ -43,7 +43,6 @@ export class AuthInterceptor implements HttpInterceptor {
     // _reqAdditions.setHeaders.agentassist = 'true';
     _reqAdditions.setHeaders['X-Timezone-Offset'] = new Date().getTimezoneOffset().toString();
     _reqAdditions.setHeaders['X-Request-Id'] = uuidv4();
-    _reqAdditions.setHeaders['iid'] = 'st-2b494416-a003-5688-b963-47ea92fe072b';
     _reqAdditions.setHeaders['app-language'] = this.localStoreService.appLanguage || 'en';
 
     if (req.url.includes('/deflectai/apps') && req.method === 'POST') {
