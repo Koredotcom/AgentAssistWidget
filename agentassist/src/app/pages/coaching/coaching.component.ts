@@ -56,7 +56,7 @@ export class CoachingComponent implements OnInit {
   }
   
   subscribeEvents() {
-    this.searchField.valueChanges.pipe(tap(() => { this.searching = true; }), debounceTime(300))
+    this.searchField.valueChanges.pipe(tap(() => { this.isLoading = true; }), debounceTime(300))
       .subscribe(term => {
         term = term.trim()
         if (term.trim()) {
@@ -72,7 +72,7 @@ export class CoachingComponent implements OnInit {
         }else if(term == ''){
           this.searchedData.results = this.respData.results;
         }
-        this.searching = false;
+        this.isLoading = false;
       });
   }
 

@@ -39,7 +39,7 @@ export class CoachingService {
       when : this.fb.group({
         addUtterances: [[]],
         deleteUtterances: [[]],
-        utteranceCount: [obj.frequency?.nOccurences,[Validators.required]]
+        utteranceCount: [obj.when?.utteranceCount,[Validators.required]]
       }),
       frequency: this.fb.group({
         nOccurences: [obj.frequency?.nOccurences, Validators.required],

@@ -97,7 +97,7 @@
                 </perfect-scrollbar>
             </div>
         </ng-container>
-        <ng-container *ngIf="searchedData.results?.length == 0 && !isLoading && searchField?.value?.trim() == '' && !searching">
+        <ng-container *ngIf="searchedData.results?.length == 0 && !isLoading && !searchField?.value?.trim()">
             <div class="empty-coaching-wrapper">
                 <div class="empty-content">
                     <div class="img-block">
@@ -105,11 +105,11 @@
                     </div>
                     <div class="empty-title">Create your first Coaching Experience</div>
                     <div class="desc-text">Help agents deliver better customer service and improve overall customer satisfaction. Get started by clicking on the New Coaching  button above.</div>
-                    <button class="kr-sg-button-primary btn_lg" (click)="openCoachingGroup(coachingConst.CREATE, {})">+ New Coaching Group</button>
+                    <!-- <button class="kr-sg-button-primary btn_lg" (click)="openCoachingGroup(coachingConst.CREATE, {})">+ New Coaching Group</button> -->
                 </div>
             </div>
         </ng-container>
-        <ng-container *ngIf="searchedData.results?.length == 0 && searchField?.value?.trim() != '' && !isLoading && !searching">
+        <ng-container *ngIf="searchedData.results?.length == 0 && searchField?.value?.trim() && !isLoading">
             <div class="empty-coaching-wrapper">
                 <div class="empty-content">
                     <div class="img-block">
