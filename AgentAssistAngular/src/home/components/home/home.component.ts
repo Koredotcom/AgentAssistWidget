@@ -805,12 +805,11 @@ setProactiveMode(){
           intentName: data.name,
           searchFrom: this.projConstants.ASSIST,
           positionId: this.randomUUIDPipe.transform(IdReferenceConst.positionId),
-          childBotId : data.childBotId,
-          childBotName : data.childBotName,
-          botId : this.connectionDetails.botId
+          childBotId : data?.childBotId,
+          childBotName : data?.childBotName,
+          botId : this.connectionDetails?.botId
         }
         this.handleSubjectService.setActiveTab(this.projConstants.MYBOT);
-        console.log('home Component1: ', data, this.connectionDetails);
         this.commonService.agent_run_click(runDialogueObject, false);
         this.handleSubjectService.setRunButtonClickEvent(runDialogueObject);
       }
