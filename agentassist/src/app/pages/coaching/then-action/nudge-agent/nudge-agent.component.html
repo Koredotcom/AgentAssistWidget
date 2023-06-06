@@ -16,7 +16,7 @@
 
     <span class="utt-name-desc">message</span>
 
-    <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body">
+    <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body" #nudgeMessage="ngbDropdown">
         <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!showNudgeMsg}">
             <span class="choose-text">{{showNudgeMsg ? showNudgeMsg : '{ Choose }'}}</span>
         </button>
@@ -33,7 +33,7 @@
                     </div>
                     <div class="count-char">{{nudgeMsg.length}}/42</div>
                 </div>
-                <div class="check-icon-block" (click)="submitnudgeMsg()">
+                <div class="check-icon-block" (click)="submitnudgeMsg();nudgeMessage.close()">
                     <i class="icon-sa-conv-check"></i>
                 </div>
             </div>

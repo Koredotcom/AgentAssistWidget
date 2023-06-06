@@ -45,12 +45,12 @@
             </perfect-scrollbar>
         </ul>
     </div>
-    <div class="dropdown-occurences no_border" ngbDropdown [placement]="'bottom'" container="body">
+    <div class="dropdown-occurences no_border" ngbDropdown [placement]="'bottom'" container="body" #utteranceTimer="ngbDropdown">
         <button class="dropdown-toggle btn-toggle" ngbDropdownToggle>in {{timer}} seconds</button>
         <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
             <div class="seconds-input">
                 <div class="kr-sg-input-text">
-                    <input type="text" placeholder="Enter Seconds here" (keyup.enter)="onEnterTime($event)" class="input-text">
+                    <input type="number" step="0.01" placeholder="Enter Seconds here" (keyup.enter)="onEnterTime($event);utteranceTimer.close()" class="input-text">
                 </div>
                 <div class="s-title">seconds</div>
             </div>

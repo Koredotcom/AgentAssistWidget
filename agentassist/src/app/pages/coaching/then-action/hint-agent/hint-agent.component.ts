@@ -41,6 +41,7 @@ export class HintAgentComponent implements OnInit {
       const formVal = this.form.value;
       this.selMsgType = formVal.expression;
       this.title = formVal.message.title;
+      this.variableName = formVal.message.title;
       this.bodyMsg = formVal.message.body;
       this.desc = formVal.message.body;
       this.closeType = formVal.message.postAction;

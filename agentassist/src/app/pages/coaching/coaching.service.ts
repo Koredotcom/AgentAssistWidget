@@ -106,7 +106,7 @@ export class CoachingService {
     return {
       _id: [uuid(), [Validators.required]],
       type: this.coachingCnst.NUDGE_AGENT,
-      expression: [null, [Validators.required]],
+      expression: ['', [Validators.required]],
       message : this.fb.group({
         title: ['', Validators.required]
       }),
@@ -138,7 +138,7 @@ export class CoachingService {
     return {
       _id: [uuid(), [Validators.required]],
       type: this.coachingCnst.HINT_AGENT,
-      expression: [null, [Validators.required]],
+      expression: ['', [Validators.required]],
       message : this.fb.group({
         title: ['', Validators.required],
         body : ['', Validators.required],

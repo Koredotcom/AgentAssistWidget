@@ -15,7 +15,7 @@
     </div>
 
     <span class="utt-name-desc">message with this title</span>
-    <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body">
+    <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body" #hinttitle="ngbDropdown">
         <button class="dropdown-toggle btn-toggle" [ngClass]="{'text-choosen': !!title}" ngbDropdownToggle>
             <span class="choose-text">{{ title ? title : '{ Choose }' }}</span>
         </button>
@@ -28,12 +28,12 @@
                         <span class="info-tip" tooltipClass="tooltip-global-styles" ngbTooltip="Tooltip info">
                             <i class="icon-sa-help"></i>
                         </span>
-                        <input type="text" placeholder="Placeholder text"
+                        <input type="text" placeholder="Enter title"
                             class="input-text" maxlength="42" [(ngModel)]="variableName">
                     </div>
                     <div class="count-char">{{variableName.length}}/42</div>
                 </div>
-                <div class="check-icon-block" (click)="submitVariable()">
+                <div class="check-icon-block" (click)="submitVariable();hinttitle.close()">
                     <i class="icon-sa-conv-check"></i>
                 </div>
             </div>
@@ -41,7 +41,7 @@
     </div>
 
     <span class="utt-name-desc">and body</span>
-    <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body">
+    <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body" #hintBody="ngbDropdown">
         <button class="dropdown-toggle btn-toggle" [ngClass]="{'text-choosen': !!bodyMsg}" ngbDropdownToggle>
             <span class="choose-text">{{bodyMsg ? bodyMsg : '{ Choose }'}}</span>
         </button>
@@ -77,11 +77,11 @@
         <div class="input-variable-sec">
             <div class="label-text">Body</div>
             <div class="kr-sg-input-text-area">
-                <textarea placeholder="Provide a body" maxlength="42" [(ngModel)]="desc" class="input-text"></textarea>
+                <textarea placeholder="Enter hint body" maxlength="42" [(ngModel)]="desc" class="input-text"></textarea>
             </div>
             <div class="count-char">{{desc.length}}/42</div>
         </div>
-        <div class="check-icon-block" (click)="submitBody()">
+        <div class="check-icon-block" (click)="submitBody();hintBody.close()">
             <i class="icon-sa-conv-check"></i>
         </div>
     </div>
