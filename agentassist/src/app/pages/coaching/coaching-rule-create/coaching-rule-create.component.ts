@@ -102,11 +102,11 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
     }
     if(changes?.createOrEdit?.currentValue === COACHINGCNST.CREATE){
       this.createForm();
-      this.subscribeValChanges();
+      // this.subscribeValChanges();
     };
     setTimeout(() => {
       this.subscribeValChanges();
-    }, 0);
+    }, 10);
   }
 
   subscribeValChanges(){
@@ -117,11 +117,8 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
   ngOnInit(): void {
   }
 
-  updateRuleForm(reset?){
+  updateRuleForm(){
     setTimeout(() => {
-      if(reset){
-        this.resetForm();
-      }
       this.ruleForm.controls["name"].patchValue(this.currentRule?.name);      
       (this.currentRule?.triggers || []).forEach(element => {
         (<FormArray>this.ruleForm?.controls["triggers"])
@@ -151,7 +148,12 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
 
   changeRule(rule){
     this.currentRule = rule;
-    this.updateRuleForm(true);
+    this.createForm();
+    this.updateRuleForm();
+    setTimeout(() => {
+      this.subscribeValChanges();
+      this.formTouched = false;
+    }, 10);
   }
 
   resetForm(){
