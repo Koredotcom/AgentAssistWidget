@@ -162,17 +162,6 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
     }, 10);
   }
 
-  resetForm(){
-    this.ruleForm.reset();
-    this.ruleForm.patchValue({
-      "botId": new FormControl(this.workflowService.getCurrentBt(true)._id, [Validators.required]),
-      "name": new FormControl('',[Validators.required])
-    });
-    this.ruleForm.setControl("triggers", this.fb.array([]));
-    this.ruleForm.setControl("actions", this.fb.array([]));
-    this.ruleForm.setControl("assignees", this.fb.array([]));
-  }
-
   createForm(){
     this.ruleForm = new FormGroup(
       {
