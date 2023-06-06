@@ -9,7 +9,6 @@ import { v4 as uuid } from 'uuid';
 export class CoachingService {
 
   coachingCnst : any = COACHINGCNST;
-  deletedUIds = {};
   constructor(private fb: FormBuilder) { }
 
   getUtteranceFormControlObject(){

@@ -38,6 +38,7 @@ export class AdherenceComponent implements OnInit {
   addedUtterances = [];
   deletedUtter = [];
   selectedNewUtterances = [];
+  deletedUIds = {};
   public utteranceDropdown: NgbDropdown;
 
   constructor(private openAIService: OpenAIService,
@@ -51,7 +52,7 @@ export class AdherenceComponent implements OnInit {
     if (this.createOrEdit === COACHINGCNST.EDIT) {
       this.getAddedUtterances();
     }else{
-      if(form?.adherence?.addedUtterances){
+      if(form?.adherence?.addUtterances?.length){
         this.selectedNewUtterances?.push(...form?.adherence.addUtterances);
       }
       this.selectedNewUtterances?.forEach((item)=>{
@@ -120,12 +121,11 @@ export class AdherenceComponent implements OnInit {
   }
 
   saveUtteranceStrings() {
-    (this.form.controls.adherence as FormGroup).controls?.deleteUtterances?.setValue([...Object.keys(this.cService.deletedUIds), ...this.form.value.adherence.deleteUtterances]);
+    (this.form.controls.adherence as FormGroup).controls?.deleteUtterances?.setValue([...Object.keys(this.deletedUIds), ...this.form.value.adherence.deleteUtterances]);
     (this.form.controls.adherence as FormGroup).controls?.addUtterances?.setValue(this.selectedNewUtterances);
     const le = this.selectedNewUtterances?.length + this.selectedUtterancesArray?.length;
     (this.form.controls.adherence as FormGroup).controls?.utteranceCount?.setValue(le > 0 ? le : '');
     this.closeAdherence(COACHINGCNST.UTTERANCE);
-    this.cService.deletedUIds = {};
     
   }
 
@@ -159,12 +159,11 @@ export class AdherenceComponent implements OnInit {
 
   closeAdherence(e?) {
     this.onClose.emit(e);
-    this.cService.deletedUIds = {};
   }
 
   deleteUtternce(utter, i) {
     if (utter._id) {
-      this.cService.deletedUIds[utter._id] = true;
+      this.deletedUIds[utter._id] = true;
     }
     this.selectedUtterancesArray.splice(i, 1);
   }

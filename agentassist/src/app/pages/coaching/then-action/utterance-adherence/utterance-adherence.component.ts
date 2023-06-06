@@ -37,6 +37,7 @@ export class UtteranceAdherenceComponent implements OnInit {
   addedUtterances = [];
   deletedUtter = [];
   selectedNewUtterances = [];
+  deletedUIds = {};
   public utteranceDropdown: NgbDropdown;
 
   constructor(
@@ -51,7 +52,7 @@ export class UtteranceAdherenceComponent implements OnInit {
     if (this.createOrEdit === COACHINGCNST.EDIT) {
       this.getAddedUtterances();
     }else{
-      if(form?.when?.addedUtterances){
+      if(form?.when?.addUtterances?.length){
         this.selectedNewUtterances?.push(...form?.when.addUtterances);
       }
       this.selectedNewUtterances?.forEach((item)=>{
@@ -120,12 +121,11 @@ export class UtteranceAdherenceComponent implements OnInit {
   }
 
   saveUtteranceStrings() {
-    (this.form.controls.when as FormGroup).controls?.deleteUtterances?.setValue([...Object.keys(this.cService.deletedUIds), ...this.form.value.when.deleteUtterances]);
+    (this.form.controls.when as FormGroup).controls?.deleteUtterances?.setValue([...Object.keys(this.deletedUIds), ...this.form.value.when.deleteUtterances]);
     (this.form.controls.when as FormGroup).controls?.addUtterances?.setValue(this.selectedNewUtterances);
     const le = this.selectedNewUtterances?.length + this.selectedUtterancesArray?.length;
     (this.form.controls.when as FormGroup).controls?.utteranceCount?.setValue(le > 0 ? le : '');
     this.closeAdherence(COACHINGCNST.UTTERANCE);
-    this.cService.deletedUIds = {};
   }
 
   getSelectedUtterance() {
@@ -161,12 +161,11 @@ export class UtteranceAdherenceComponent implements OnInit {
 
   closeAdherence(e?) {
     this.onClose.emit(e);
-    this.cService.deletedUIds = {};
   }
 
   deleteUtternce(utter, i) {
     if (utter._id) {
-      this.cService.deletedUIds[utter._id] = true;
+      this.deletedUIds[utter._id] = true;
     }
     this.selectedUtterancesArray.splice(i, 1);
   }
@@ -177,9 +176,9 @@ export class UtteranceAdherenceComponent implements OnInit {
     delete this.utterances[utter];
   }
 
-  get diabledCheckbox(): boolean{
-      return [...this.selectedUtterancesArray, ...this.selectedNewUtterances].some((item)=>{
-        return item.utterance == this.searchKey.value;
-      })
-    }
+  // get diabledCheckbox(): boolean{
+  //     return [...this.selectedUtterancesArray, ...this.selectedNewUtterances].some((item)=>{
+  //       return item.utterance == this.searchKey.value;
+  //     })
+  //   }
 }

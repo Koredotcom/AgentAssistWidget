@@ -4,8 +4,8 @@
             <div class="icon_block">
                 <i class="icon-sa-welcome-chat"></i>
             </div>
-            <div class="utt-name">Utterance /</div>
-            <div class="dropdown-adherence" ngbDropdown #utteranceTrigger="ngbDropdown">
+            <div class="utt-name">Utterance</div>
+            <!-- <div class="dropdown-adherence" ngbDropdown #utteranceTrigger="ngbDropdown">
                 <button class="dropdown-toggle btn-toggle" ngbDropdownToggle>Utterance Trigger <i class="icon-sa-arrow-down"></i></button>
                 <ul class="dropdown_menu-wrapper" ngbDropdownMenu id="utteranceTriggerMenu">
                     <perfect-scrollbar class="mx-h-300">
@@ -23,7 +23,7 @@
                         </li>
                     </perfect-scrollbar>
                 </ul>
-            </div>
+            </div> -->
         </div>
         <div class="close-slider" (click)="closeAdherence()">
             <i class="icon-sa-close"></i>
@@ -44,7 +44,7 @@
                                         <ng-container *ngIf="loaded; else loading">
                                             <div class="searchedutt" *ngIf="searchKey.value">
                                                 <div class="kr-sg-checkbox">
-                                                    <input id="checkbox-1" #searchRef [disabled]="diabledCheckbox" class="checkbox-custom" type="checkbox">
+                                                    <input id="checkbox-1" #searchRef class="checkbox-custom" type="checkbox">
                                                     <label for="checkbox-1" class="checkbox-custom-label">{{searchKey.value}}</label>
                                                 </div>
                                                 <div class="percentage-colr">
