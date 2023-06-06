@@ -14,7 +14,7 @@ export class CoachingService {
 
   getUtteranceFormControlObject(){
     return {
-      _id: [uuid(), [Validators.required]],
+      _id: ['aat-'+uuid(), [Validators.required]],
       type: [this.coachingCnst.UTTERANCE, [Validators.required]],
       by: ['', [Validators.required]],
       operator : ['and', [Validators.required]],
@@ -50,7 +50,7 @@ export class CoachingService {
 
   getSpeechAnalysisFormControlObject(){
     return {
-      _id: [uuid(), [Validators.required]],
+      _id: ['aat-'+uuid(), [Validators.required]],
       type: [this.coachingCnst.SPEECH_ANALYSIS, [Validators.required]],
       subType: ['', [Validators.required]],
       operator : ['And', [Validators.required]],
@@ -104,9 +104,9 @@ export class CoachingService {
 
   getNudgeFromObj(){
     return {
-      _id: [uuid(), [Validators.required]],
+      _id: ['aat-'+uuid(), [Validators.required]],
       type: this.coachingCnst.NUDGE_AGENT,
-      expression: [null, [Validators.required]],
+      expression: ['', [Validators.required]],
       message : this.fb.group({
         title: ['', Validators.required]
       }),
@@ -136,9 +136,9 @@ export class CoachingService {
 
   getHintFromObj(){
     return {
-      _id: [uuid(), [Validators.required]],
+      _id: ['aat-'+uuid(), [Validators.required]],
       type: this.coachingCnst.HINT_AGENT,
-      expression: [null, [Validators.required]],
+      expression: ['', [Validators.required]],
       message : this.fb.group({
         title: ['', Validators.required],
         body : ['', Validators.required],
@@ -154,7 +154,7 @@ export class CoachingService {
 
   setHintForm(obj){
     return {
-      _id: [uuid(), [Validators.required]],
+      _id: [obj._id, [Validators.required]],
       type: this.coachingCnst.HINT_AGENT,
       expression: [obj.expression, [Validators.required]],
       message : this.fb.group({

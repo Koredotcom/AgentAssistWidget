@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, HostListener, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { COACHINGCNST } from '../coaching.cnst';
 import { CoachingService } from '../coaching.service';
@@ -95,18 +95,24 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
   constructor(private fb: FormBuilder, private coachingService : CoachingService, private cd: ChangeDetectorRef,
     private workflowService : workflowService, private service : ServiceInvokerService, private modalService : NgbModal) { }
 
+    @HostListener("window:beforeunload", ["$event"]) unloadHandler(event: Event) {
+      if(this.formTouched){
+        event.returnValue = false;
+      }
+   }
+
   ngOnChanges(changes: SimpleChanges): void {
     if(changes?.createOrEdit?.currentValue === COACHINGCNST.EDIT){
       this.createForm();
-     this.updateRuleForm();
+      this.updateRuleForm();
     }
     if(changes?.createOrEdit?.currentValue === COACHINGCNST.CREATE){
       this.createForm();
-      this.subscribeValChanges();
+      // this.subscribeValChanges();
     };
     setTimeout(() => {
       this.subscribeValChanges();
-    }, 0);
+    }, 10);
   }
 
   subscribeValChanges(){
@@ -148,7 +154,12 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
 
   changeRule(rule){
     this.currentRule = rule;
+    this.createForm();
     this.updateRuleForm();
+    setTimeout(() => {
+      this.subscribeValChanges();
+      this.formTouched = false;
+    }, 10);
   }
 
   createForm(){
@@ -241,17 +252,17 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
     }
   }
 
-  closeRuleScreen() {        
+  closeRuleScreen(rule?) {        
     if(this.formTouched){
       this.modalRef = this.modalService.open(CoachingConfirmationComponent, { centered: true, keyboard: false, windowClass: 'delete-uc-rule-modal', backdrop: 'static' });
       this.modalRef.result.then(emitedValue => {
         if(emitedValue){
-          this.closeRule();
+          let closeRule = rule ? this.changeRule(rule) : this.closeRule();
           this.formTouched = false;
         }
       });
     }else{
-      this.closeRule();
+      let closeRule = rule ? this.changeRule(rule) : this.closeRule();
     }
   }
 
