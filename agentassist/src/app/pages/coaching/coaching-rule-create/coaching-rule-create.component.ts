@@ -98,7 +98,7 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if(changes?.createOrEdit?.currentValue === COACHINGCNST.EDIT){
       this.createForm();
-     this.updateRuleForm();
+      this.updateRuleForm();
     }
     if(changes?.createOrEdit?.currentValue === COACHINGCNST.CREATE){
       this.createForm();
@@ -117,8 +117,11 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
   ngOnInit(): void {
   }
 
-  updateRuleForm(){
+  updateRuleForm(reset?){
     setTimeout(() => {
+      if(reset){
+        this.resetForm();
+      }
       this.ruleForm.controls["name"].patchValue(this.currentRule?.name);      
       (this.currentRule?.triggers || []).forEach(element => {
         (<FormArray>this.ruleForm?.controls["triggers"])
@@ -148,7 +151,18 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
 
   changeRule(rule){
     this.currentRule = rule;
-    this.updateRuleForm();
+    this.updateRuleForm(true);
+  }
+
+  resetForm(){
+    this.ruleForm.reset();
+    this.ruleForm.patchValue({
+      "botId": new FormControl(this.workflowService.getCurrentBt(true)._id, [Validators.required]),
+      "name": new FormControl('',[Validators.required])
+    });
+    this.ruleForm.setControl("triggers", this.fb.array([]));
+    this.ruleForm.setControl("actions", this.fb.array([]));
+    this.ruleForm.setControl("assignees", this.fb.array([]));
   }
 
   createForm(){

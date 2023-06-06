@@ -154,7 +154,7 @@ export class CoachingService {
 
   setHintForm(obj){
     return {
-      _id: [uuid(), [Validators.required]],
+      _id: [obj._id, [Validators.required]],
       type: this.coachingCnst.HINT_AGENT,
       expression: [obj.expression, [Validators.required]],
       message : this.fb.group({
