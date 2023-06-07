@@ -2033,5 +2033,7 @@
     "COACHING.GROUPDELETE_SUCCESS" : "Group Deleted Successfully",
     "COACHING.GROUPDELETE_FAILURE" : "Failed to delete the Group",
     "COACHING.RULEDELETE_SUCCESS" : "Rule Deleted Successfully",
-    "COACHING.RULEDELETE_FAILURE" : "Failed to delete the Rule"
+    "COACHING.RULEDELETE_FAILURE" : "Failed to delete the Rule",
+    "COACHING.PUBLISH_SUCCESS" : "Published Successfully",
+    "COACHING.PUBLISH_FAILURE" : "Failed to publish"
 }

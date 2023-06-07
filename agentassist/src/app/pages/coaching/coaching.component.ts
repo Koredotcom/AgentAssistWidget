@@ -39,6 +39,7 @@ export class CoachingComponent implements OnInit {
   searchField = new FormControl();
   searchedData = {"results":[]};
   searching : boolean = false;
+  publishInprogress : boolean = false;
 
   @ViewChild('ps') ps: PerfectScrollbarComponent;
   @ViewChild('newCoachingGroup', { static: true }) newCoachingGroup: SliderComponentComponent;
@@ -149,13 +150,16 @@ export class CoachingComponent implements OnInit {
   //publish coaching
 
   publishCoaching(){
-    this.isLoading = true;
+    this.publishInprogress = true;
     this.service.invoke('post.publishcoaching',{}, {botId : this.workflowService.getCurrentBt(true)._id}).pipe(finalize(() => {
-      this.isLoading = false;
+      this.publishInprogress = false;
     })).subscribe(data => {
       if (data) {
         console.log(data, 'data inside publish');
+        this.notificationService.notify(this.translate.instant("COACHING.PUBLISH_SUCCESS"), 'success');
       }
+    },(error)=>{
+      this.notificationService.showError(this.translate.instant("COACHING.PUBLISH_FAILURE"));
     });
     
   }
