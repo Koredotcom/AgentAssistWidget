@@ -146,6 +146,20 @@ export class CoachingComponent implements OnInit {
     }
   // Create or Edit Rule Flow Ends
 
+  //publish coaching
+
+  publishCoaching(){
+    this.isLoading = true;
+    this.service.invoke('post.publishcoaching',{}, {botId : this.workflowService.getCurrentBt(true)._id}).pipe(finalize(() => {
+      this.isLoading = false;
+    })).subscribe(data => {
+      if (data) {
+        console.log(data, 'data inside publish');
+      }
+    });
+    
+  }
+
 
   // Create or Edit Group Slider Starts
   openCoachingGroup(type, editData){

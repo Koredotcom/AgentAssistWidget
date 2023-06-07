@@ -118,7 +118,8 @@
                         <div class="add-trgigger-dropdown" ngbDropdown placement="right-top">
                             <button class="add-triggers-btn" ngbDropdownToggle> + Add a trigger</button>
                             <div class="drop-add-trigger" ngbDropdownMenu>
-                                <ng-container *ngTemplateOutlet="addTriggerTemplate;"></ng-container> 
+                                <ng-container *ngTemplateOutlet="addAssignTemplate;"></ng-container> 
+
                             </div>
                         </div>
                     </div>
@@ -220,4 +221,24 @@
             </div>
         </div>
     </div>
-</ng-template> 
+</ng-template>
+
+<ng-template #addAssignTemplate>
+    <div class="add-triggers">
+        <div class="line-indicator"></div>
+        <div class="choose-triggers-block">
+            <div class="choose-t-block-bg">
+                <div class="choose-t-block">
+                    <div class="row-data">
+                        <div class="kr-sg-checkbox">
+                            <input id="checkbox-1" type="checkbox" name="agentselection"
+                                class="checkbox-custom" checked disabled>
+                            <label for="checkbox-1" class="checkbox-custom-label" >All Agents </label>
+                        </div>
+                        <!-- <button class="kr-sg-button-primary btn_lg" (click)="addAssignee()">Add</button> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>

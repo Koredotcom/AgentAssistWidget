@@ -24,7 +24,7 @@ export class CoachingService {
       }),
       frequency: this.fb.group({
         nOccurences: [1, Validators.required],
-        every: ['30s', Validators.required]
+        every: [30, Validators.required]
       })
     }
   }
@@ -55,7 +55,7 @@ export class CoachingService {
       operator : ['And', [Validators.required]],
       frequency: this.fb.group({
         nOccurences: [1, Validators.required],
-        timeTaken: ['30s'],
+        timeTaken: [30],
         nWords : [180]
       })
     }

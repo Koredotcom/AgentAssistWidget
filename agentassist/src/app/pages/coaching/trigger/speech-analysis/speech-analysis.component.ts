@@ -20,15 +20,17 @@ export class SpeechAnalysisComponent implements OnInit {
   occurances = COACHINGCNST.OCCURENCES;
   selOcc = COACHINGCNST.SELECTED_OCCURENCE;
   timer = COACHINGCNST.SELECTED_TIMER;
+  showTimer = COACHINGCNST.SELECTED_TIMER;
   opList = COACHINGCNST.OPERATOR_LIST;
   selectedSpeechType : string = '';
   selectedOperator : string;
   wordcount = COACHINGCNST.SELECTED_WORDCOUNT;
+  showWordcount = COACHINGCNST.SELECTED_WORDCOUNT;
 
   constructor() { }
 
   ngOnInit(): void {
-    (this.form.controls.frequency as FormGroup).controls.timeTaken.setValue(this.timer+'s');
+    (this.form.controls.frequency as FormGroup).controls.timeTaken.setValue(this.timer);
     this.selectedOperator = this.form.controls.operator.value;
   }
 
@@ -42,7 +44,9 @@ export class SpeechAnalysisComponent implements OnInit {
       this.selectedOperator = formVal.operator;
       this.selOcc = formVal.frequency.nOccurences;
       this.timer = formVal.frequency.timeTaken;
+      this.showTimer = formVal.frequency.timeTaken;
       this.wordcount = formVal.frequency.nWords;
+      this.showWordcount = formVal.frequency.nWords;
       this.resetFormValidators(this.selectedSpeechType);
     }
     if(changes?.createOrEdit?.currentValue === COACHINGCNST.CREATE){
@@ -82,12 +86,12 @@ export class SpeechAnalysisComponent implements OnInit {
   }
 
   onEnterTime(e){
-    this.timer = e +'s';
+    this.timer = e;
     (this.form.controls.frequency as FormGroup).controls?.timeTaken.setValue(this.timer);
   }
 
   onEnterWords(e){
-    this.wordcount = e + '';
+    this.wordcount = e;
     (this.form.controls.frequency as FormGroup).controls?.nWords.setValue(this.wordcount);
   }
 

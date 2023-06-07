@@ -40,7 +40,10 @@
         </ul>
     </div>
     <div class="add-adherence">
-        <button class="add-adherence-btn" (click)="openAdherence()">+ Add Adherence</button>
+        <button class="add-adherence-btn btn-toggle" (click)="openAdherence()">
+            <span class="choose-text"> {{(form?.value?.adherence?.utteranceCount) ? form?.value?.adherence?.utteranceCount + ' utterance(s)' : '+ Add Adherence'}}</span>
+        </button>
+
     </div>
     <div class="delete-row" (click)="deleteActionRule()"> 
         <i class="icon-sa-welcome-delete"></i>
