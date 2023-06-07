@@ -816,7 +816,7 @@ export class CommonService {
   }
 
   async getAgentHistoryData(url = '', data = {}) {
-    let headersVal = {};
+    let headersVal : any = {};
     if(this.configObj.fromSAT) {
         headersVal = {
             'Authorization': 'bearer' + ' ' + this.configObj.token,
