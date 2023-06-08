@@ -20,6 +20,7 @@ export class UtteranceComponent implements OnInit {
   occurances = COACHINGCNST.OCCURENCES;
   selOcc = COACHINGCNST.SELECTED_OCCURENCE;
   timer = COACHINGCNST.SELECTED_TIMER;
+  showTimer = COACHINGCNST.SELECTED_TIMER;
   opList = COACHINGCNST.OPERATOR_LIST;
   selectedOperator : string;
   selUser: '';
@@ -44,7 +45,8 @@ export class UtteranceComponent implements OnInit {
       this.selectedOperator = formVal.operator;
       this.selUser = formVal.by;
       this.selOcc = formVal.frequency.nOccurences;
-      this.timer = formVal.frequency.every
+      this.timer = formVal.frequency.every;
+      this.showTimer = formVal.frequency.every;
     }
     if(changes?.createOrEdit?.currentValue === COACHINGCNST.CREATE){
       this.form?.controls?.operator?.setValue(COACHINGCNST.AND_OPERATOR);
@@ -54,7 +56,7 @@ export class UtteranceComponent implements OnInit {
   }
 
   onEnterTime(e){
-    this.timer = e.target.value+'s';
+    this.timer = e;
     (this.form.controls.frequency as FormGroup).controls?.every.setValue(this.timer);
   }
 

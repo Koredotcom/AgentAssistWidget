@@ -213,6 +213,9 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
 
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.ruleForm.controls['triggers']['controls'], event.previousIndex, event.currentIndex);
+    if(event.previousIndex != event.currentIndex){
+      this.formTouched = true;
+    }
   }
     
   selectActionClick(clickType){

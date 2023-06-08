@@ -48,7 +48,7 @@
         <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
             <div class="seconds-input">
                 <div class="kr-sg-input-text">
-                    <input type="number" step="0.01" placeholder="Enter Seconds here" class="input-text" (keyup.enter)="onEnterTime($event.target.value);deadairtimerdropdown.close()">
+                    <input type="number" step="0.01" placeholder="Enter Seconds here" class="input-text" (keyup.enter)="onEnterTime(showTimer);deadairtimerdropdown.close()" [(ngModel)]="showTimer">
                 </div>
                 <!-- <div class="s-title">seconds</div> -->
             </div>
@@ -78,7 +78,7 @@
             <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
                 <div class="seconds-input">
                     <div class="kr-sg-input-text">
-                        <input type="number" step="0.01" placeholder="Enter wordcount" class="input-text" (keyup.enter)="onEnterWords($event.target.value);speechspeedwordcount.close()">
+                        <input type="number" step="0.01" placeholder="Enter wordcount" class="input-text" (keyup.enter)="onEnterWords(showWordcount);speechspeedwordcount.close()" [(ngModel)]="showWordcount">
                     </div>
                     <!-- <div class="s-title">words per minute</div> -->
                 </div>

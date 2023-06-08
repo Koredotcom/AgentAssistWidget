@@ -1623,5 +1623,10 @@ export class EndPointsService {
       method : 'get'
     }
 
+    this.serviceList['post.publishcoaching'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachinggroup/publishCoachingGroups',
+      method : 'post'
+    }
+
   }
 }
