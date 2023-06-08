@@ -5,6 +5,7 @@ import { CommonService } from 'src/common/services/common.service';
 import { HandleSubjectService } from 'src/common/services/handle-subject.service';
 import { TemplateRenderClassService } from 'src/common/services/template-render-class.service';
 import * as $ from 'jquery';
+declare const agentAssistHelpersTest: any;
 
 @Component({
   selector: 'app-user-bot-history',
@@ -16,12 +17,15 @@ export class UserBotHistoryComponent implements OnInit, OnDestroy{
   subscriptionsList: Subscription[] = [];
   historyResponse : any = [];
   projconstants : any = ProjConstants
+  aaHelpers = null;
 
   constructor(
     private handleSubjectService : HandleSubjectService,
     private templateRenderClassService : TemplateRenderClassService,
     public commonService : CommonService
-    ) { }
+    ) {
+      this.aaHelpers = new agentAssistHelpersTest();
+     }
 
   ngOnInit(): void {
     // this.subscribeEvents();
@@ -73,9 +77,19 @@ export class UserBotHistoryComponent implements OnInit, OnDestroy{
       hisRes = this.commonService.confirmationNodeRenderForHistoryDataTransform(hisRes);
       let result : any = this.templateRenderClassService.getResponseUsingTemplateForHistory(hisRes);
       hisRes.isTemplateRender = this.templateRenderCheck(hisRes,result);
-      hisRes.value = hisRes?.components[0]?.data?.text || null;
       hisRes.template = this.getTemplateHtml(hisRes.isTemplateRender, result);
     }
+  }
+
+  renderHTMLPrompt(value) {
+    let temp_hisRes = value
+        if(temp_hisRes.includes('<vxml') && temp_hisRes.includes('</vxml>')) {
+          return null;
+        } else {
+          temp_hisRes = this.commonService.handleEmptyLine(temp_hisRes, true);
+          return temp_hisRes;
+        }
+
   }
 
   getTemplateHtml(isTemplateRender, result){
