@@ -443,7 +443,7 @@ export class AssistComponent implements OnInit {
     if(this.commonService.isAutomationOnGoing && this.dropdownHeaderUuids && data.suggestions?.dialogs?.length > 0) {
       this.dialogTerminatedOrIntruppted();
     }
-    if (!this.commonService.isAutomationOnGoing && !this.proactiveModeStatus) {
+    if (!this.commonService.isAutomationOnGoing && !this.proactiveModeStatus && !data.sendMenuRequest) {
       return;
     }
     let automationSuggestions = $('#dynamicBlock .dialog-task-accordiaon-info');
