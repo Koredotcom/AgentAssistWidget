@@ -97,7 +97,7 @@ export class LocalStorageService {
         appState[conversationId][storageConst.INITIALTASK_GOING_ON] = false;
         appState[conversationId][storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH] = false;
         appState[conversationId][storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH_MYBOT] = false;
-        appState[conversationId][storageConst.PROACTIVE_MODE] = true;
+        // appState[conversationId][storageConst.PROACTIVE_MODE] = true;
         localStorage.setItem(storageConst.AGENT_ASSIST_STATE, JSON.stringify(appState));
         console.log("initialize local storage");
       }
