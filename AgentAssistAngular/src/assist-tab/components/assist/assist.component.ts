@@ -219,6 +219,8 @@ export class AssistComponent implements OnInit {
               $(`#cancelOverRideBtn-${dropdownHeaderUuids}`).addClass('hide');
             }
             this.handleOverridBtnClick(dropdownHeaderUuids, this.dialogPositionId);
+          }else{
+            this.handleProactiveDisableEvent(this.dialogPositionId);
           }
         }
       }
@@ -1343,7 +1345,7 @@ export class AssistComponent implements OnInit {
 
   }
 
-  handleOverridBtnClick(uuid, dialogId, noEmit?) {
+  handleProactiveDisableEvent(dialogId,noEmit?){
     let overRideObj: any = {
       "agentId": "",
       "botId": this.connectionDetails.botId,
@@ -1356,6 +1358,10 @@ export class AssistComponent implements OnInit {
     if (!noEmit) {
       this.websocketService.emitEvents(EVENTS.enable_override_userinput, overRideObj);
     }
+  }
+
+  handleOverridBtnClick(uuid, dialogId, noEmit?) {
+    this.handleProactiveDisableEvent(dialogId, noEmit);
     let runInfoContent: any = document.getElementById(`dropDownData-${this.dropdownHeaderUuids}`);
     if(document.getElementById(`smallTalk-${uuid}`)){
       runInfoContent = document.getElementById(`smallTalk-${uuid}`);
