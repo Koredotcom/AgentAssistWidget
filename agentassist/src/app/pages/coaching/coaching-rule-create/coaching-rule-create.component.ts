@@ -171,6 +171,8 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
         "triggers": this.fb.array([]),
         "actions": this.fb.array([]),
         "assignees": this.fb.array([]),
+        "deleteTriggers": new FormControl([]),
+        "deleteActions": new FormControl([]),
       }
     );
   }
@@ -201,13 +203,13 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
     }else if(clickType == this.coachingCnst.SPEECH_ANALYSIS){
       (<FormArray>this.ruleForm.controls["triggers"])
       .push(this.fb.group(this.coachingService.getSpeechAnalysisFormControlObject()))
-    }else if(clickType == this.coachingCnst.VARIABLE){
+    }/* else if(clickType == this.coachingCnst.VARIABLE){
       (<FormArray>this.ruleForm.controls["triggers"])
       .push(this.fb.group(this.coachingService.getVariableFormControlObject()))
     }else if(clickType == this.coachingCnst.DIALOG){
       (<FormArray>this.ruleForm.controls["triggers"])
       .push(this.fb.group(this.coachingService.getDialogFormControlObject()))
-    }
+    } */
   }
 
 
@@ -243,16 +245,22 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
 
   }
 
-  deleteTrigger(index){    
-    if(typeof index === "number"){
-      (<FormArray>this.ruleForm.controls["triggers"]).removeAt(index);
+  deleteTrigger(index){
+    if(this.createOrEdit === COACHINGCNST.EDIT){
+      let id = (<FormArray>this.ruleForm.controls["triggers"]).at(index)?.value?._id;
+      // (<FormArray>this.ruleForm.controls["deleteTriggers"]).push(id);
+      this.ruleForm.controls["deleteTriggers"].value.push(id);
     }
+    (<FormArray>this.ruleForm.controls["triggers"]).removeAt(index);
   }
 
   deleteAction(index){
-    if(typeof index === "number"){
-      (<FormArray>this.ruleForm.controls["actions"]).removeAt(index);
+    if(this.createOrEdit === COACHINGCNST.EDIT){
+      let id = (<FormArray>this.ruleForm.controls["actions"]).at(index)?.value?._id;
+      // (<FormArray>this.ruleForm.controls["deleteActions"]).push(id);
+      this.ruleForm.controls["deleteActions"].value.push(id);
     }
+    (<FormArray>this.ruleForm.controls["actions"]).removeAt(index);
   }
 
   closeRuleScreen(rule?) {        
