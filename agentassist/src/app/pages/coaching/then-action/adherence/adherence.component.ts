@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 import { ProgressSpinnerMode } from '@angular/material/progress-spinner';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
@@ -20,6 +20,7 @@ export class AdherenceComponent implements OnInit {
   @Input() createOrEdit = '';
   @Output() onClose = new EventEmitter();
   @Output() saveUtterance = new EventEmitter();
+  @ViewChild('searchRef') searchRef : ElementRef;
 
   color: ThemePalette = 'primary';
   // createOrEdit = false; //true on edit, false on create;
@@ -134,6 +135,9 @@ export class AdherenceComponent implements OnInit {
   }
 
   saveUtterances() {
+    if(this.searchRef?.nativeElement?.checked){
+      this.utterances[this.searchKey?.value] = true;
+    }
     this.selectedNewUtterances = Object.keys(this.utterances).map((item) => {
       return { utterance: item, language: 'english' };
     });
