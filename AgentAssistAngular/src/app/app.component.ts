@@ -1,6 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { connectionObj } from 'src/common/constants/proj.cnts';
+import { connectionObj, ProjConstants } from 'src/common/constants/proj.cnts';
 import { KoreGenerateuuidPipe } from 'src/common/pipes/kore-generateuuid.pipe';
 import { RandomUUIDPipe } from 'src/common/pipes/random-uuid.pipe';
 import { CommonService } from 'src/common/services/common.service';
@@ -104,7 +104,7 @@ export class AppComponent implements OnDestroy {
 
   handleSourceType(params) {
     let sourceType = params.source;
-    if (sourceType === 'smartassist-color-scheme') {
+    if (sourceType === ProjConstants.SMARTASSIST_SOURCE) {
       $('body').addClass(sourceType);
     } else {
       $('body').addClass('default-color-scheme')
