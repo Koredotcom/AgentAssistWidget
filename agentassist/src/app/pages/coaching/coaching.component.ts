@@ -191,7 +191,9 @@ export class CoachingComponent implements OnInit {
         event.currentIndex,
       );
     };
-    this.updateGroupApis(event);
+    if(event.container?.id !== event.previousContainer?.id){
+      this.updateGroupApis(event);
+    }
   }
 
   updateGroupApis(event){
