@@ -46,6 +46,8 @@ export class HomeComponent implements OnInit {
   isBackBtnClicked: boolean = false;
   showHistoryTab : boolean = false;
   convHistoryResponse : any;
+  nudges = ['Great Job', 'Good Job', 'Nice Job'];
+  hints = [1,2]
 
   constructor(public handleSubjectService: HandleSubjectService, public websocketService: WebSocketService,
     public sanitizeHTMLPipe: SanitizeHtmlPipe, public commonService: CommonService, private koregenerateUUIDPipe: KoreGenerateuuidPipe,
