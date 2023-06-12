@@ -318,7 +318,10 @@ export class HomeComponent implements OnInit {
 setProactiveMode(){
   let appState : any = this.localStorageService.getLocalStorageState();
   let convState = appState[this.connectionDetails.conversationId];
-  let proactiveModeStatus = (convState[storageConst.PROACTIVE_MODE] != undefined && convState[storageConst.PROACTIVE_MODE] != null) ? convState[storageConst.PROACTIVE_MODE] : true;
+  if(this.connectionDetails.source == 'smartassist-color-scheme' && typeof convState[storageConst.PROACTIVE_MODE] != 'boolean'){
+    convState[storageConst.PROACTIVE_MODE] = this.connectionDetails.isProactiveAgentAssistEnabled;
+  }
+  let proactiveModeStatus = (typeof convState[storageConst.PROACTIVE_MODE] === 'boolean') ? convState[storageConst.PROACTIVE_MODE] : true;
   this.proactiveToggle(proactiveModeStatus);
 }
 

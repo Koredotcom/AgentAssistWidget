@@ -418,7 +418,7 @@ export class AssistComponent implements OnInit {
     this.smallTalkOverrideBtnId = null;
     let isTemplateRender = false;
     data = this.confirmationNodeRenderDataTransform(data);
-    if (!this.commonService.isAutomationOnGoing && !this.proactiveModeStatus) {
+    if (!this.commonService.isAutomationOnGoing && !this.proactiveModeStatus && data.buttons?.length <= 1) {
       return;
     }
     let automationSuggestions = $('#dynamicBlock .dialog-task-accordiaon-info');
