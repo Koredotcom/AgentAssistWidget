@@ -221,12 +221,13 @@ export class workflowService {
     }
     return this._seedData;
   }
-
+  
   resolveHostUrl(): string {
     const url = window.location.protocol + '//' + window.location.host;
     if (url === 'https://dev-app.smartassist.ai' || url === 'https://dev-smartassist.kore.ai') return 'https://agentassist-dev.kore.ai';
     if (url === 'https://qa-app.smartassist.ai') return 'https://qa-bots.kore.ai';
     if (url === 'https://qa1-app.smartassist.ai' || url === 'https://qa1-smartassist.kore.ai') return 'https://qa1-bots.kore.ai';
+    if (url === 'https://huddl-agentassist-dev.kore.ai' || url === 'https://huddl-agentassist-dev.kore.ai') return 'https://huddl-agentassist-dev.kore.ai';
     if (url === 'https://uat-app.smartassist.ai' || url === 'https://uat-smartassist.kore.ai') return 'https://uat.kore.ai';
     if (url === 'https://staging-app.deflect.ai' || url === 'https://staging-app.smartassist.ai' || url === 'https://staging-smartassist.kore.ai') return 'https://staging-bots.korebots.com';
     if (url === 'https://pilots-app.deflect.ai' || url === 'https://pilots-app.smartassist.ai') return 'https://pilot-bots.kore.ai';
