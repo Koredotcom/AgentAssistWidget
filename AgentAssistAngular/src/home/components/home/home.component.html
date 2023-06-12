@@ -44,8 +44,16 @@
                     <div class="t-title">Proactive</div>
                     <label class="kr-sg-toggle">
                         <div class="hover-tooltip">Proactive</div>
-                        <input #proactiveMode type="checkbox" id="checkProActive" [checked]="proactiveModeEnabled"  (change)="proactiveToggle(proactiveMode.checked)">
-                        <div class="slider"></div>
+                        <input #proactiveMode 
+                            type="checkbox" 
+                            id="checkProActive" 
+                            [checked]="proactiveModeEnabled"  
+                            (change)="proactiveToggle(proactiveMode.checked)" 
+                            [disabled]="connectionDetails.source === projConstants.SMARTASSIST_SOURCE && connectionDetails.isProactiveAgentAssistEnabled === false"
+                        >
+                        <div class="slider"  
+                            [ngClass]="{'cursor-notallowed' : connectionDetails.source === projConstants.SMARTASSIST_SOURCE && connectionDetails.isProactiveAgentAssistEnabled === false}">
+                        </div>
                     </label>
                 </div>
             </div>
