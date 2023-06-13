@@ -32,7 +32,7 @@ const routes: Routes = [
           { path: 'usecases', loadChildren: () => import('./pages/agent-usecases/agent-usecases.module').then(m => m.AgentUsecasesModule) },
           { path: 'welcomeEvents', loadChildren: () => import('./pages/welcomeEvents/welcomeevent.module').then(m => m.WelcomeeventModule) },
           { path: 'channels', component: AutomationChannelsComponent },
-          // { path: 'conversationalLogs', component: ConversationalLogsComponent },
+          { path: 'conversationalLogs', component: ConversationalLogsComponent },
           { path: 'languages', component: LanguagesSpeechComponent },
           { path: 'searchAssist', component: SearchAssistComponent},
           { path: '**', redirectTo: 'usecases' },
