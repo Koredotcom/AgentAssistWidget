@@ -233,4 +233,23 @@ export class MybotDataService {
                 </div>`;
         return template;
     }
+
+    smallTalkTemplateForTemplatePayload(ele, uuids,data, res, newTemp?){
+        let tellOrAskCustomer = data.isPrompt ? 'Ask Customer' : 'Tell Customer';
+        let template = `
+        <div class="collapse-acc-data before-none" id='smallTalk-${uuids}'>
+            <div class="steps-run-data">
+            <div class="icon_block">
+                <i class="ast-agent"></i>
+            </div>
+            <div class="run-info-content" >
+            <div class="title">${tellOrAskCustomer}</div>
+            <div class="agent-utt">
+            </div>
+            </div>
+        </div>
+        </div>`
+      return template
+    }
+
 }
