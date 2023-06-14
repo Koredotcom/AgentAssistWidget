@@ -3590,6 +3590,9 @@ input.no-autofill-bkg:-webkit-autofill {
 .overlaysearch-scroll-bar-typehead{
     max-height: 300px !important;
 }
+.hint-overlay {
+    max-height: 400px;
+}
 
 //seemore less button css 
 .no-text-truncate {

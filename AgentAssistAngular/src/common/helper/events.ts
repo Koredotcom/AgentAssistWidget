@@ -27,5 +27,6 @@ export enum EVENTS {
     'agent_send_or_copy' = 'agent_send_or_copy',
     'end_of_conversation' = 'end_of_conversation',
     'user_sent_message' = 'user_sent_message',
-    'agent_sent_message' = 'agent_sent_message'
+    'agent_sent_message' = 'agent_sent_message',
+    'agent_coaching_response' = 'agent_coaching_response'
 }
