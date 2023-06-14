@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 import { EVENTS } from 'src/common/helper/events';
 import { WebSocketService } from 'src/common/services/web-socket.service';
 import { HandleSubjectService } from 'src/common/services/handle-subject.service';
-import { classNamesConst, IdReferenceConst, ImageFileNames, ImageFilePath, ProjConstants, storageConst } from '../../../common/constants/proj.cnts'
+import { classNamesConst, coachingConst, IdReferenceConst, ImageFileNames, ImageFilePath, ProjConstants, storageConst } from '../../../common/constants/proj.cnts'
 import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
 import { SanitizeHtmlPipe } from 'src/common/pipes/sanitize-html.pipe';
 import { CommonService } from 'src/common/services/common.service';
@@ -11,6 +11,7 @@ import { KoreGenerateuuidPipe } from 'src/common/pipes/kore-generateuuid.pipe';
 import { DesignAlterService } from 'src/common/services/design-alter.service';
 import { LocalStorageService } from 'src/common/services/local-storage.service';
 import { MockDataService } from 'src/common/services/mock-data.service';
+import { CoachingActionStoreService } from 'src/app/coaching-action-store.service';
 // import { ServiceInvokerService } from 'src/common/services/service-invoker.service';
 declare const $: any;
 @Component({
@@ -23,6 +24,7 @@ export class HomeComponent implements OnInit {
   @ViewChild('tabBody', { read: ElementRef }) public homescroll: ElementRef<any>;
   @ViewChild('psBottom') psBottom: PerfectScrollbarComponent;
   @ViewChild('overlayps') overlayps : PerfectScrollbarComponent;
+  @ViewChild('overlayhint') overlayhint : PerfectScrollbarComponent;
 
   imageFilePath: string = ImageFilePath;
   imageFileNames: any = ImageFileNames;
@@ -46,16 +48,19 @@ export class HomeComponent implements OnInit {
   isBackBtnClicked: boolean = false;
   showHistoryTab : boolean = false;
   convHistoryResponse : any;
-  nudges = ['Great Job', 'Good Job', 'Nice Job'];
-  hints = [1,2]
+  coachingConst : any = coachingConst;
+  coachingNudges : any = [];
+  coachingHints : any = [];
 
   constructor(public handleSubjectService: HandleSubjectService, public websocketService: WebSocketService,
     public sanitizeHTMLPipe: SanitizeHtmlPipe, public commonService: CommonService, private koregenerateUUIDPipe: KoreGenerateuuidPipe,
     private designAlterService: DesignAlterService, private localStorageService: LocalStorageService,
     private mockDataService : MockDataService,
-    private cdRef : ChangeDetectorRef ) { }
+    private cdRef : ChangeDetectorRef,
+    private coachingActionStore : CoachingActionStoreService ) { }
   ngOnInit(): void {
-
+    // this.handleNudgeData(true);
+    this.handleHintData(true);
     this.subscribeEvents();
   }
 
@@ -67,6 +72,35 @@ export class HomeComponent implements OnInit {
 
   ngAfterViewInit() {
     this.scrollContainer = document.getElementById(IdReferenceConst.HOMESCROLLBAR);
+  }
+
+  handleNudgeData(flag){
+    this.coachingNudges.push(this.coachingActionStore.getNudgeData(flag));
+    setTimeout(() => {
+      for(let i = 0; i < this.coachingNudges.length; i++){
+        if(this.coachingNudges[i]){
+          this.coachingNudges.splice(i,1, null);
+          break;
+        }
+      }
+    }, 5000);
+  }
+
+  handleHintData(flag){
+    let hintObject : any = this.coachingActionStore.getHintData(flag)
+    this.coachingHints.push(hintObject);
+    if(hintObject.auto_close && hintObject.timer){
+      setTimeout(() => {
+        for(let i = 0; i < this.coachingHints.length; i++){
+          if(this.coachingHints[i] && this.coachingHints[i].auto_close){
+            this.coachingHints.splice(i,1, null);
+            this.hintScrollBottom(true);
+            break;
+          }
+        }
+      }, hintObject.timer * 1000);
+    }
+    this.hintScrollBottom(true);
   }
 
   subscribeEvents() {
@@ -329,9 +363,10 @@ export class HomeComponent implements OnInit {
 
   //proactive tab toggle click
   proactiveToggle(proactiveModeEnabled) {
-    this.proactiveModeEnabled = (proactiveModeEnabled == ProjConstants.PROACTIVE_INITIAL_MODE) ? true : proactiveModeEnabled;
-    this.handleSubjectService.setProactiveModeStatus(proactiveModeEnabled);
-    this.updateProactiveModeState(this.proactiveModeEnabled);
+    // this.proactiveModeEnabled = (proactiveModeEnabled == ProjConstants.PROACTIVE_INITIAL_MODE) ? true : proactiveModeEnabled;
+    // this.handleSubjectService.setProactiveModeStatus(proactiveModeEnabled);
+    // this.updateProactiveModeState(this.proactiveModeEnabled);
+    this.handleHintData(proactiveModeEnabled);
   }
 
   updateProactiveModeState(modeStatus){
@@ -458,6 +493,15 @@ setProactiveMode(){
           this.psBottom.directiveRef.update();
         }, this.scrollbottomwaitingTime);
       }
+    }
+  }
+
+  hintScrollBottom(flag){
+    if(flag && this.overlayhint){
+      this.overlayhint.directiveRef.scrollToBottom(0);
+      setTimeout(() => {
+        this.overlayhint.directiveRef.update();
+      }, 10);
     }
   }
 

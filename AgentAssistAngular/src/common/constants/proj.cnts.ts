@@ -147,3 +147,41 @@ export const storageConst = {
     SEARCH_VALUE : 'search',
     PROACTIVE_MODE : 'proactiveMode'
 }
+
+export const coachingConst = {
+    NUDGE_DATA: {
+        positive: {
+            color: '#22C55E',
+            icon: 'ast-positive-nudge'
+        },
+        neutral: {
+            color: '#E5E5E5'
+        },
+        warning: {
+            color: '#F59E0B',
+            icon: 'ast-warning-nudge'
+        },
+        critical: {
+            color: '#EF4444',
+            icon: 'ast-hand-drag-solid'
+        }
+    },
+
+    HINT_DATA: {
+        positive: {
+            color: '#22C55E',
+            icon: 'ast-positive-nudge'
+        },
+        neutral: {
+            color: '#E5E5E5'
+        },
+        warning: {
+            color: '#F59E0B',
+            icon: 'ast-warning-nudge'
+        },
+        critical: {
+            color: '#EF4444',
+            icon: 'ast-hand-drag-solid'
+        }
+    },
+}
