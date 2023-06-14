@@ -14,6 +14,8 @@ export class HintAgentComponent implements OnInit {
   @Input() length : number;
   @Input() createOrEdit: string = '';
   @Output() deleteAction = new EventEmitter();
+
+  coachingCnst : any = COACHINGCNST;
   selMsgType:string = '';
   msgTypes = COACHINGCNST.TYPE_OF_HINT;
   closeTypes = COACHINGCNST.TYPE_OF_CLOSE;
@@ -22,6 +24,8 @@ export class HintAgentComponent implements OnInit {
   bodyMsg: string = '';
   variableName: string = '';
   closeType: string = '';
+  time : number;
+  variableTime : number;
   openAdherenceSlider : boolean = false;
   
   private adherenceSlider: SliderComponentComponent;
@@ -45,6 +49,8 @@ export class HintAgentComponent implements OnInit {
       this.bodyMsg = formVal.message.body;
       this.desc = formVal.message.body;
       this.closeType = formVal.message.postAction;
+      this.time = formVal.message.time;
+      this.variableTime = formVal.message.time;
     }
   }
 
@@ -83,6 +89,11 @@ export class HintAgentComponent implements OnInit {
   
   deleteActionRule(){
     this.deleteAction.emit(this.index-1);
+  }
+
+  onEnterTime(e){
+    this.time = e;
+    (this.form.controls.message as FormGroup).controls?.time.setValue(this.time);
   }
 }
 
