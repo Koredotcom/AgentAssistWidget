@@ -150,11 +150,11 @@
 </div>
 <div class="nudge-exp-toast-msg-wrapper">
     <ng-container *ngFor="let item of coachingNudges; let i = index">
-        <div class="nudge-exp-toast-msg" [style.background-color]="coachingConst.NUDGE_DATA[item?.type]?.color" *ngIf="item">
+        <div class="nudge-exp-toast-msg" [style.background-color]="coachingConst.NUDGE_DATA[item?.expression]?.color" *ngIf="item">
             <div class="icon_blcok" *ngIf="coachingConst.NUDGE_DATA[item?.type]?.icon">
                 <i [ngClass]="coachingConst.NUDGE_DATA[item?.type].icon"></i>
             </div>
-            <div class="title-toast">{{item?.text}}</div>
+            <div class="title-toast">{{item?.message?.title}}</div>
             <div class="close-toast" (click)="coachingNudges.splice(i, 1, null)">
                 <i class="ast-close"></i>
             </div>
@@ -165,14 +165,14 @@
     <perfect-scrollbar class="hint-overlay" #overlayhint id="coachingHintScroll">
         <ng-container *ngFor="let item of coachingHints; let i = index">
             <div class="hint-blck" *ngIf="item">
-                <div class="icon_blcok" *ngIf="coachingConst.HINT_DATA[item?.type]?.icon">
-                    <i [ngClass]="coachingConst.HINT_DATA[item?.type].icon"></i>
+                <div class="icon_blcok" *ngIf="coachingConst.HINT_DATA[item?.expression]?.icon">
+                    <i [ngClass]="coachingConst.HINT_DATA[item?.expression].icon"></i>
                 </div>
                 <div class="content-data">
-                    <div class="title">{{item?.text}}</div>
-                    <div class="text-desc">{{item?.desc}}</div>
+                    <div class="title">{{item?.message?.title}}</div>
+                    <div class="text-desc">{{item?.message?.body}}</div>
                     <div class="btn_okay">
-                        <button class="ok-btn" (click)="coachingHints.splice(i, 1, null)">{{item?.button}}</button>
+                        <button class="ok-btn" (click)="coachingHints.splice(i, 1, null)">Got it</button>
                     </div>
                 </div>
                 <div class="close-hint" (click)="coachingHints.splice(i, 1, null)">

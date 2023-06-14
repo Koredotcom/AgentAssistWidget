@@ -6,7 +6,8 @@ import { Injectable } from '@angular/core';
 export class CoachingActionStoreService {
 
   constructor() { }
-
+  nudges = [];
+  hint = [];
   getNudgeData(flag){
     let nudgeData : any = [
       {type : 'positive', text : "Great Job"},

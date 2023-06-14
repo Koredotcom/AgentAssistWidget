@@ -59,9 +59,14 @@ export class HomeComponent implements OnInit {
     private cdRef : ChangeDetectorRef,
     private coachingActionStore : CoachingActionStoreService ) { }
   ngOnInit(): void {
-    // this.handleNudgeData(true);
-    this.handleHintData(true);
     this.subscribeEvents();
+    this.websocketService.agentCoachingResponse$.subscribe((data)=>{
+      if(data?.action === 'hint'){
+        this.handleHintData(data);
+      }else if(data?.action === 'nudge'){
+        this.handleNudgeData(data);
+      }
+    })
   }
 
   ngOnDestroy() {
@@ -74,8 +79,8 @@ export class HomeComponent implements OnInit {
     this.scrollContainer = document.getElementById(IdReferenceConst.HOMESCROLLBAR);
   }
 
-  handleNudgeData(flag){
-    this.coachingNudges.push(this.coachingActionStore.getNudgeData(flag));
+  handleNudgeData(data){
+    this.coachingNudges.push(data);
     setTimeout(() => {
       for(let i = 0; i < this.coachingNudges.length; i++){
         if(this.coachingNudges[i]){
@@ -86,19 +91,18 @@ export class HomeComponent implements OnInit {
     }, 5000);
   }
 
-  handleHintData(flag){
-    let hintObject : any = this.coachingActionStore.getHintData(flag)
+  handleHintData(hintObject){
     this.coachingHints.push(hintObject);
-    if(hintObject.auto_close && hintObject.timer){
+    if(hintObject?.message?.postAction !== 'doesnot_auto_close'){
       setTimeout(() => {
         for(let i = 0; i < this.coachingHints.length; i++){
-          if(this.coachingHints[i] && this.coachingHints[i].auto_close){
+          if(this.coachingHints[i] && this.coachingHints[i]?.message?.postAction !== 'doesnot_auto_close'){
             this.coachingHints.splice(i,1, null);
             this.hintScrollBottom(true);
             break;
           }
         }
-      }, hintObject.timer * 1000);
+      }, (hintObject.timer ? hintObject.timer : 5) * 1000);
     }
     this.hintScrollBottom(true);
   }
@@ -363,10 +367,9 @@ export class HomeComponent implements OnInit {
 
   //proactive tab toggle click
   proactiveToggle(proactiveModeEnabled) {
-    // this.proactiveModeEnabled = (proactiveModeEnabled == ProjConstants.PROACTIVE_INITIAL_MODE) ? true : proactiveModeEnabled;
-    // this.handleSubjectService.setProactiveModeStatus(proactiveModeEnabled);
-    // this.updateProactiveModeState(this.proactiveModeEnabled);
-    this.handleHintData(proactiveModeEnabled);
+    this.proactiveModeEnabled = (proactiveModeEnabled == ProjConstants.PROACTIVE_INITIAL_MODE) ? true : proactiveModeEnabled;
+    this.handleSubjectService.setProactiveModeStatus(proactiveModeEnabled);
+    this.updateProactiveModeState(this.proactiveModeEnabled);
   }
 
   updateProactiveModeState(modeStatus){
