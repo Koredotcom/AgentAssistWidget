@@ -64,6 +64,21 @@
             </ng-container>
         </ul>
     </div>
+    <ng-container *ngIf="closeType == 'auto_close'">
+        <span class="utt-name-desc">after</span>
+        <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body" #closeTimer="ngbDropdown">
+            <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!time}">{{time}} seconds</button>
+            <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
+                <div class="seconds-input">
+                    <div class="kr-sg-input-text">
+                        <input type="number" step="0.01" placeholder="Enter Seconds here" (keyup.enter)="onEnterTime(variableTime);closeTimer.close()" class="input-text" [(ngModel)]="variableTime">
+                    </div>
+                    <div class="s-title">seconds</div>
+                </div>
+            </ul>
+        </div>
+    </ng-container>
+
     <div class="add-adherence">
         <button class="add-adherence-btn" (click)="openAdherence()">
             <span class="choose-text"> {{(form?.value?.adherence?.utteranceCount) ? form?.value?.adherence?.utteranceCount + ' utterance(s)' : '+ Add Adherence'}}</span>
@@ -88,6 +103,7 @@
         </div>
     </div>
 </ng-template>
+
 
 <ng-container *ngIf="openAdherenceSlider">
     <app-slider-component id="adherenceSlider" #adherenceSlider='app-slider'>
