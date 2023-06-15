@@ -48,8 +48,8 @@
                                                     <label for="checkbox-1" class="checkbox-custom-label">{{searchKey.value}}</label>
                                                 </div>
                                                 <div class="percentage-colr">
-                                                    <span class="percentage">12%</span>
-                                                    <span class="bgcolor"></span>
+                                                    <!-- <span class="percentage">12%</span> -->
+                                                    <!-- <span class="bgcolor"></span> -->
                                                 </div>
                                             </div>
                                             <div class="found-details-info" *ngIf="searchKey.value?.length > 0">
@@ -67,8 +67,8 @@
                                                                     <label for="'checkbox-' + {{i}}" class="checkbox-custom-label">{{utter.value}}</label>
                                                                 </div>
                                                                 <div class="percentage-colr">
-                                                                    <span class="percentage">12%</span>
-                                                                    <span class="bgcolor"></span>
+                                                                    <!-- <span class="percentage">12%</span> -->
+                                                                    <!-- <span class="bgcolor"></span> -->
                                                                 </div>
                                                             </div>
                                                         </ng-container>
@@ -125,8 +125,8 @@
                                 <div class="saved-utt-body-sec">
                                     <div class="saved-title-utt">{{utter?.utterance}}</div>
                                     <div class="percentage-colr">
-                                        <span class="percentage">12%</span>
-                                        <span class="bgcolor"></span>
+                                        <!-- <span class="percentage">12%</span> -->
+                                        <!-- <span class="bgcolor"></span> -->
                                     </div>
                                     <div class="delete-saved-utt" (click)="deleteUtternce(utter, iD)">
                                         <i class="icon-sa-welcome-delete"></i>
@@ -137,8 +137,8 @@
                                 <div class="saved-utt-body-sec">
                                     <div class="saved-title-utt">{{utter?.utterance}}</div>
                                     <div class="percentage-colr">
-                                        <span class="percentage">12%</span>
-                                        <span class="bgcolor"></span>
+                                        <!-- <span class="percentage">12%</span> -->
+                                        <!-- <span class="bgcolor"></span> -->
                                     </div>
                                     <div class="delete-saved-utt" (click)="deleteUtternceNew(utter?.utterance, iDx)">
                                         <i class="icon-sa-welcome-delete"></i>
@@ -150,42 +150,22 @@
                 </perfect-scrollbar>
             </div>
             <div class="found-utternaces">
-                <div class="loading-data-sec">
+                <!-- <div class="loading-data-sec">
                     <div class="empty-loader"></div>
-                    <!-- <mat-progress-spinner
-                        class="example-margin"
-                        [color]="color"
-                        [mode]="mode"
-                        [value]="value">
-                    </mat-progress-spinner> -->
                     <div class="empty-text">Waiting for utterance</div>
-                </div>
+                </div> -->
                 <div class="data-loaded-searched-utt">
                     <perfect-scrollbar>
                         <div class="scroll-data">
-                            <div class="skelton-load-empty d-none">
-                                <div class="loading-skelton">
-                                    <div class="bg-1"></div>
-                                    <div class="bg-2"></div>
-                                </div>
-                                <div class="loading-skelton">
-                                    <div class="bg-1"></div>
-                                    <div class="bg-2"></div>
-                                </div>
-                                <div class="loading-skelton">
-                                    <div class="bg-1"></div>
-                                    <div class="bg-2"></div>
-                                </div>
-                                <div class="loading-skelton">
-                                    <div class="bg-1"></div>
-                                    <div class="bg-2"></div>
-                                </div>
-                                <div class="loading-skelton">
-                                    <div class="bg-1"></div>
-                                    <div class="bg-2"></div>
-                                </div>
+                            <div class="skelton-load-empty">
+                                <ng-container *ngFor="let item of [].constructor(12)">
+                                    <div class="loading-skelton">
+                                        <div class="bg-1"></div>
+                                        <div class="bg-2"></div>
+                                    </div>
+                                </ng-container>
                             </div>
-                            <div class="chat-conv-utterance">
+                            <div class="chat-conv-utterance d-none">
                                 <div class="conversations-type">
                                     <div class="top-info-conv">
                                         <span class="u-name">Eddison Tom</span>
