@@ -11,7 +11,7 @@ export class DesignAlterService {
   // display customer feels
   displayCustomerFeels(data, convId, botId, sourceType) {
     let custTone;
-    if(sourceType !== 'smartassist-color-scheme') {
+    if(sourceType !== ProjConstants.SMARTASSIST_SOURCE) {
       if (data.sentimentTone) {
           custTone = data;
       }

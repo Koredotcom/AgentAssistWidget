@@ -53,9 +53,16 @@
                     <div class="t-title">Proactive</div>
                     <label class="kr-sg-toggle">
                         <div class="hover-tooltip">Proactive</div>
-                        <input #proactiveMode type="checkbox" id="checkProActive" [checked]="proactiveModeEnabled"
-                            (change)="proactiveToggle(proactiveMode.checked)">
-                        <div class="slider"></div>
+                        <input #proactiveMode 
+                            type="checkbox" 
+                            id="checkProActive" 
+                            [checked]="proactiveModeEnabled"  
+                            (change)="proactiveToggle(proactiveMode.checked)" 
+                            [disabled]="connectionDetails.source === projConstants.SMARTASSIST_SOURCE && connectionDetails.isProactiveAgentAssistEnabled === false"
+                        >
+                        <div class="slider"  
+                            [ngClass]="{'cursor-notallowed' : connectionDetails.source === projConstants.SMARTASSIST_SOURCE && connectionDetails.isProactiveAgentAssistEnabled === false}">
+                        </div>
                     </label>
                 </div>
             </div>
@@ -65,18 +72,16 @@
             (psYReachStart)="onScrollEvent($event)" (psScrollUp)="onScrollEvent($event)">
             <div class="body-data-container if-suggestion-search" id="bodyContainer" #tabBody>
                 <div class="dialog-task-data" id="dynamicBlocksData">
-                    <ng-container>
-                        <div class="transcipt-only-calls-data" id="historyContainer"
-                            [class.hide]="activeTab != projConstants.HISTORY">
-                            <div class="data-contnet">
-                                <app-user-bot-history></app-user-bot-history>
-                            </div>
-                            <div class="scroll-bottom-show-btn hiddenEle">
-                                <button id="scrollButtonHistory" class="scroll-bottom-btn">
-                                    <i class="ast-carrotup"></i>
-                                    <span>Scroll to bottom</span>
-                                </button>
-                            </div>
+                  <ng-container *ngIf = "sourceDesktop !== 'smartassist-color-scheme'">
+                    <div class="transcipt-only-calls-data" id="historyContainer" [class.hide]="activeTab != projConstants.HISTORY">
+                        <div class="data-contnet">
+                            <app-user-bot-history></app-user-bot-history>
+                        </div>
+                        <div class="scroll-bottom-show-btn hiddenEle">
+                            <button id="scrollButtonHistory" class="scroll-bottom-btn">
+                                <i class="ast-carrotup"></i>
+                                <span>Scroll to bottom</span>
+                            </button>
                         </div>
                     </ng-container>
                     <ng-container>

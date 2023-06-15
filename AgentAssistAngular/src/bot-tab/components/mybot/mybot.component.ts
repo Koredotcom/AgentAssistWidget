@@ -88,7 +88,7 @@ export class MybotComponent implements OnInit {
     let subscription2 = this.websocketService.agentAssistAgentResponse$.subscribe((response: any) => {
       this.handleSubjectService.setLoader(true);
       if (response && !response.isSearch) {
-        this.designAlterService.displayCustomerFeels(response, response.conversationId, response.botId, this.connectionDetails.source);
+        // this.designAlterService.displayCustomerFeels(response, response.conversationId, response.botId, this.connectionDetails.source);
         this.processMybotDataResponse(response);
         this.viewCustomTempAttachment();
       }
@@ -257,28 +257,113 @@ export class MybotComponent implements OnInit {
          </div>`;
         mybotContainer.append(botResHtml);
         this.commonService.isMyBotAgentSentRequestOnClick = false;
-      }
+      } 
+    }
 
-      let renderedMessage = !isTemplateRender ? this.templateRenderClassService.AgentChatInitialize.renderMessage(results) : '';
-      if (renderedMessage && renderedMessage[0]) {
-        // let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(results)[0].innerHTML;
-        // let a = document.getElementById(IdReferenceConst.displayData + `-${myBotuuids}`);
-        // if (a) {
-        //   a.innerHTML = a.innerHTML + html;
-        //   this.designAlterService.addWhiteBackgroundClassToNewMessage(this.scrollAtEnd, IdReferenceConst.MYBOTAUTOMATIONBLOCK);
-        //   this.scrollToBottom();
-        // }
-
-        let obj = this.templateRenderClassService.AgentChatInitialize.renderMessage(results)[0];
-        let a = document.getElementById(IdReferenceConst.displayData + `-${myBotuuids}`);
-        if (a) {
-          a.appendChild(obj);
-          this.designAlterService.addWhiteBackgroundClassToNewMessage(this.scrollAtEnd, IdReferenceConst.MYBOTAUTOMATIONBLOCK);
-          this.scrollToBottom();
+    if (!this.commonService.isMyBotAutomationOnGoing && this.myBotDropdownHeaderUuids && data.buttons && (this.myBotDialogPositionId && !data.positionId || data.positionId == this.myBotDialogPositionId)) {
+      // $('#myBotAutomationBlock .empty-data-no-agents').addClass('hide');
+      let msgStringify = JSON.stringify(results);
+      let newTemp = encodeURI(msgStringify);
+      let dynamicBlockDiv = $('#myBotAutomationBlock');
+      data.buttons?.forEach((ele, i) => {
+        let botResHtml = this.mybotDataService.smallTalkTemplateForTemplatePayload(ele, myBotuuids,data, results,newTemp);
+        let titleData = ``;
+        let actionLinkTemplate = ``;
+        if(this.smallTalkTemplateRenderCheck(data, results)){
+            isTemplateRender = false;
+            titleData = `<div class="title-data" ><ul class="chat-container" id="displayData-${myBotuuids}"></ul></div>`;
+            let sendData = results?.parsedPayload ? newTemp : data.buttons[0].value;
+            actionLinkTemplate = this.smallTalkActionLinkTemplate(myBotuuids, sendData);
+        }else{
+            titleData = `<div class="title-data" id="displayData-${myBotuuids}">${ele.value}</div>`;
+            actionLinkTemplate = this.smallTalkActionLinkTemplate(myBotuuids, data.buttons[0].value)
+            isTemplateRender = true;
+            results.parsedPayload = null;
         }
+        dynamicBlockDiv.append(botResHtml);
+        $(`#smallTalk-${myBotuuids} .agent-utt`).append(titleData);
+        $(`#smallTalk-${myBotuuids} .agent-utt`).append(actionLinkTemplate);
+        setTimeout(() => {
+          if (data.entityName) {
+            this.myBotDataResponse = {};
+            this.myBotDataResponse = Object.assign({}, data);
+          }
+        }, 10);
+        $(`.override-input-div`).remove();
+        if (data.isPrompt) {
+          this.smallTalkInputTemplate(myBotuuids, data);
+        }
+        this.commonService.hideSendOrCopyButtons(results.parsedPayload, `#smallTalk-${myBotuuids} .agent-utt`, 'smallTalk')
+      });
+    }
+
+    let renderedMessage = !isTemplateRender ? this.templateRenderClassService.AgentChatInitialize.renderMessage(results) : '';
+
+    if (renderedMessage && renderedMessage[0]) {
+      // let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(results)[0].innerHTML;
+      // let a = document.getElementById(IdReferenceConst.displayData + `-${myBotuuids}`);
+      // if (a) {
+      //   a.innerHTML = a.innerHTML + html;
+      //   this.designAlterService.addWhiteBackgroundClassToNewMessage(this.scrollAtEnd, IdReferenceConst.MYBOTAUTOMATIONBLOCK);
+      //   this.scrollToBottom();
+      // }
+
+      let obj = this.templateRenderClassService.AgentChatInitialize.renderMessage(results)[0];
+      let a = document.getElementById(IdReferenceConst.displayData + `-${myBotuuids}`);
+      if (a) {
+        a.appendChild(obj);
+        this.designAlterService.addWhiteBackgroundClassToNewMessage(this.scrollAtEnd, IdReferenceConst.MYBOTAUTOMATIONBLOCK);
+        this.scrollToBottom();
       }
     }
 
+
+  }
+
+  smallTalkActionLinkTemplate(uuids,sendData){
+    let actionLinkTemplate =  ` <div class="action-links">
+    <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data="${sendData}">Send</button>
+    <div class="copy-btn hide" data-msg-id="${uuids}" data-msg-data="${sendData}">
+        <i class="ast-copy" data-msg-id="${uuids}" data-msg-data="${sendData}"></i>
+    </div>
+  </div>`;
+  return actionLinkTemplate;
+  }
+
+  smallTalkInputTemplate(myBotuuids, data){
+    let agentInputEntityName = ProjConstants.ENTER_DETAILS;
+    if (data.entityDisplayName || data.entityName) {
+      agentInputEntityName = data.entityDisplayName ? data.entityDisplayName : data.entityName
+    }
+    let agentInputToBotHtml = this.mybotDataService.agentInputToBotTemplate(agentInputEntityName, myBotuuids, this.connectionDetails, this.myBotDialogPositionId);
+    if(document.getElementById(`smallTalk-${myBotuuids}`)){
+      let runInfoContent = document.getElementById(`smallTalk-${myBotuuids}`);
+      $(runInfoContent).append(agentInputToBotHtml);
+        document.getElementById(`agentInput-${myBotuuids}`).focus();
+        runInfoContent.querySelector(`#agentInput-${myBotuuids}`).addEventListener('keypress', (e: any) => {
+          let key = e.which || e.keyCode || 0;
+          if (key === 13) {
+            this.getAgentInputValue(e.target.value);
+            this.isMybotInputResponseClick = true;
+          }
+        });
+        $(`#smallTalk-${myBotuuids}`).append(runInfoContent);
+    }
+
+  }
+
+  smallTalkTemplateRenderCheck(data,results){
+    if(results.parsedPayload && ((data?.componentType === 'dialogAct' && (data?.srcChannel == 'msteams' || data?.srcChannel == 'rtm')) || (data?.componentType != 'dialogAct'))){
+      return true;
+    }
+    return false;
+  }
+
+  smallTalkHistoryRenderCheck(parsedPayload,res){
+    if(parsedPayload && res.agentAssistDetails && ((res.agentAssistDetails?.componentType === 'dialogAct' && (res.agentAssistDetails?.srcChannel == 'msteams' || res.agentAssistDetails?.srcChannel == 'rtm')) || (res.agentAssistDetails?.componentType != 'dialogAct'))){
+      return true;
+    }
+    return false
   }
 
   runDialogFormyBotTab(data) {
@@ -386,8 +471,11 @@ export class MybotComponent implements OnInit {
     resp?.forEach((res, index) => {
       res = this.commonService.confirmationNodeRenderForHistoryDataTransform(res);
       if ((!res.agentAssistDetails?.suggestions && !res.agentAssistDetails?.ambiguityList && !res.agentAssistDetails?.ambiguity) && res.type == 'outgoing') {
-        currentTaskName = res.tN ? res.tN : currentTaskName;
-        currentTaskPositionId = res?.agentAssistDetails?.positionId ? res?.agentAssistDetails?.positionId : currentTaskPositionId;
+
+        let positionID = 'dg-'+ this.koreGenerateuuidPipe.transform();
+        currentTaskPositionId = res?.agentAssistDetails?.positionId ?  res?.agentAssistDetails?.positionId : ((res.tN != currentTaskName) ? positionID : currentTaskPositionId);
+        currentTaskName = (res.tN) ? res.tN  : currentTaskName;
+
         let historyData = $('#myBotAutomationBlock');
         let userInputHtml;
         if (res.agentAssistDetails.userInput) {
@@ -417,8 +505,8 @@ export class MybotComponent implements OnInit {
                       </div>
 
                   `
-
-        if (previousTaskPositionId && currentTaskPositionId !== previousTaskPositionId) {
+                          
+        if ((previousTaskPositionId && currentTaskPositionId !== previousTaskPositionId) ||  (currentTaskPositionId == previousTaskPositionId && currentTaskName != previousTaskName)) {
           let previousIdFeedBackDetails = feedBackResult.find((ele) => ele.positionId === previousTaskPositionId);
           this.commonService.addFeedbackHtmlToDomForHistory(res, res.botId, res?.agentAssistDetails?.userInput, previousId, true, previousTaskPositionId);
           if (previousIdFeedBackDetails) {
@@ -429,9 +517,15 @@ export class MybotComponent implements OnInit {
               $(`#feedbackHelpfulContainer-${previousId} .explore-more-negtive-data`).addClass('hide');
             }
           }
-          previousId = undefined;
-          previousTaskPositionId = undefined;
-          previousTaskName = undefined;
+
+          if((currentTaskPositionId == previousTaskPositionId && currentTaskName != previousTaskName)){
+            previousId = undefined;
+          }else{
+            previousId = undefined;
+            previousTaskPositionId = undefined;
+            previousTaskName = undefined;
+          }
+
         }
 
         if (res.tN && !previousId && previousTaskPositionId !== currentTaskPositionId) {
@@ -449,18 +543,7 @@ export class MybotComponent implements OnInit {
             // this.clickEvents(IdReferenceConst.DROPDOWN_HEADER, previousId);
           }
         }
-        if (resp.length - 1 == index && (!res.agentAssistDetails?.entityRequest && !res.agentAssistDetails?.entityResponse) && currentTaskPositionId == previousTaskPositionId) {
-          let previousIdFeedBackDetails = feedBackResult.find((ele) => ele.positionId === previousTaskPositionId);
-          this.commonService.addFeedbackHtmlToDomForHistory(res, res.botId, res?.agentAssistDetails?.userInput, previousId, true, previousTaskPositionId);
-          if (previousIdFeedBackDetails) {
-            this.commonService.UpdateFeedBackDetails(previousIdFeedBackDetails, 'agentAutoContainer');
-            if (previousIdFeedBackDetails.feedback == 'dislike' && (previousIdFeedBackDetails.feedbackDetails.length == 0 && previousIdFeedBackDetails.comment.length == 0)) {
-              $(`#feedbackHelpfulContainer-${previousId} .explore-more-negtive-data`).removeClass('hide');
-            } else {
-              $(`#feedbackHelpfulContainer-${previousId} .explore-more-negtive-data`).addClass('hide');
-            }
-          }
-        }
+       
         if (res.agentAssistDetails.entityName && res.agentAssistDetails.entityResponse && res.agentAssistDetails.entityValue) {
           let runInfoContent = $(`#dropDownData-${previousId}`);
           let data = {};
@@ -489,85 +572,143 @@ export class MybotComponent implements OnInit {
         let _msgsResponse : any = this.templateRenderClassService.getResponseUsingTemplateForHistory(res);
         let parsedPayload : any = _msgsResponse.parsedPayload;
 
-        let msgStringify = JSON.stringify(_msgsResponse);
-        let newTemp = encodeURI(msgStringify);
-        if ((res.agentAssistDetails?.isPrompt === true || res.agentAssistDetails?.isPrompt === false) && previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) {
-          let runInfoContent = $(`#dropDownData-${previousId}`);
-          let askToUserHtml = this.mybotDataService.askUserTemplate(res._id, newTemp, currentTaskPositionId, res.agentAssistDetails?.srcChannel, res.components[0].data.text, res.agentAssistDetails?.componentType);
-          let tellToUserHtml = this.mybotDataService.tellToUserTemplate(res._id, newTemp, currentTaskPositionId, res.agentAssistDetails?.srcChannel, res.components[0].data.text, res.agentAssistDetails?.componentType);
+        if(_msgsResponse.message.length > 0){
+          let msgStringify = JSON.stringify(_msgsResponse);
+          let newTemp = encodeURI(msgStringify);
 
+          if((previousTaskName != currentTaskName && previousTaskPositionId == currentTaskPositionId)){
+            let dynamicBlockDiv = $('#myBotAutomationBlock');
 
-          if (this.localStorageService.checkStorageItemWithInConvId(this.connectionDetails.conversationId, storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH_MYBOT)) {
-            this.commonService.isMyBotAutomationOnGoing = true;
-            this.commonService.noAutomationrunninginMyBot = false;
-            this.myBotDropdownHeaderUuids = previousId;
-            $('#inputFieldForMyBot').remove();
-            let storageObject: any = {
-              [storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH_MYBOT]: this.commonService.isMyBotAutomationOnGoing
+            let botResHtml = this.mybotDataService.smallTalkTemplateForTemplatePayload(res, res._id,res, {parsedPayload : parsedPayload},newTemp);
+            let titleData = ``;
+            let actionLinkTemplate = ``;
+            if(this.smallTalkHistoryRenderCheck(parsedPayload,res)){
+                // isTemplateRender = false;
+                titleData = `<div class="title-data" ><ul class="chat-container" id="displayData-${res._id}"></ul></div>`;
+                let sendData = _msgsResponse?.parsedPayload ? newTemp : res.components[0].data.text;
+                actionLinkTemplate = this.smallTalkActionLinkTemplate(res._id, sendData);
+                dynamicBlockDiv.append(botResHtml);
+                $(`#smallTalk-${res._id} .agent-utt`).append(titleData);
+                $(`#smallTalk-${res._id} .agent-utt`).append(actionLinkTemplate);
+
+                let obj = this.templateRenderClassService.AgentChatInitialize.renderMessage(_msgsResponse)[0]
+                let a = document.getElementById(IdReferenceConst.displayData + `-${res._id}`);
+                a.appendChild(obj);
+            }else{
+                // isTemplateRender = true;
+                titleData = `<div class="title-data" id="displayData-${res._id}">${res.components[0].data.text}</div>`;
+                actionLinkTemplate = this.smallTalkActionLinkTemplate(res._id, res.components[0].data.text);
+                dynamicBlockDiv.append(botResHtml);
+                $(`#smallTalk-${res._id} .agent-utt`).append(titleData);
+                $(`#smallTalk-${res._id} .agent-utt`).append(actionLinkTemplate);
+                parsedPayload = null;
             }
-            this.localStorageService.setLocalStorageItem(storageObject);
-            let terminateButtonElement = document.getElementById('myBotTerminateAgentDialog-' + previousId);
-            $(`#myBotTerminateAgentDialog-${previousId}`).attr('data-position-id', previousTaskPositionId);
-            terminateButtonElement.classList.remove('hide');
-            this.myBotDialogPositionId = previousTaskPositionId;
+            this.commonService.hideSendOrCopyButtons(parsedPayload, `#smallTalk-${res._id} .agent-utt`, 'smallTalk')
           }
 
-          let agentInputEntityName = 'EnterDetails';
-          if (res.agentAssistDetails?.newEntityDisplayName || res.agentAssistDetails?.newEntityName) {
-            agentInputEntityName = res.agentAssistDetails.newEntityDisplayName ? res.agentAssistDetails.newEntityDisplayName : res.agentAssistDetails.newEntityName
-          }
-          let agentInputId = this.randomUUIDPipe.transform();
-          let agentInputToBotHtml = `
-                      <div class="steps-run-data">
-                          <div class="icon_block">
-                              <i class="ast-agent"></i>
-                          </div>
-                          <div class="run-info-content">
-                          <div class="title">Input</div>
-                          <div class="agent-utt enter-details-block">
-                          <div class="title-data" ><span class="enter-details-title">${agentInputEntityName} : </span>
-                          <input type="text" placeholder="Enter Value" class="input-text chat-container" id="agentInput-${agentInputId}" data-conv-id="${convId}" data-bot-id="${botId}"  data-mybot-input="true">
-                          </div>
-                          </div>
-                          </div>
-                      </div>`;
-
-
-          let nextResponse = resp[index + 1];
-          if (res.agentAssistDetails.isPrompt || res.agentAssistDetails.entityRequest) {
-            runInfoContent.append(askToUserHtml);
-            this.commonService.hideSendOrCopyButtons(parsedPayload, runInfoContent)
-            if (!nextResponse || (nextResponse.status != 'received' && nextResponse.status != 'incoming')) {
-              runInfoContent.append(agentInputToBotHtml);
-              document.getElementById(`agentInput-${agentInputId}`).focus();
-              runInfoContent.find(`#agentInput-${agentInputId}`).on('keypress', (e: any) => {
-                let key = e.which || e.keyCode || 0;
-                if (key === 13) {
-                  this.getAgentInputValue(e.target.value);
-                  this.isMybotInputResponseClick = true;
-                }
-              });
+          if ((res.agentAssistDetails?.isPrompt === true || res.agentAssistDetails?.isPrompt === false) && previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) {
+            let runInfoContent = $(`#dropDownData-${previousId}`);
+            let askToUserHtml = this.mybotDataService.askUserTemplate(res._id, newTemp, currentTaskPositionId, res.agentAssistDetails?.srcChannel, res.components[0].data.text, res.agentAssistDetails?.componentType);
+            let tellToUserHtml = this.mybotDataService.tellToUserTemplate(res._id, newTemp, currentTaskPositionId, res.agentAssistDetails?.srcChannel, res.components[0].data.text, res.agentAssistDetails?.componentType);
+  
+  
+            if (this.localStorageService.checkStorageItemWithInConvId(this.connectionDetails.conversationId, storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH_MYBOT)) {
+              this.commonService.isMyBotAutomationOnGoing = true;
+              this.commonService.noAutomationrunninginMyBot = false;
+              this.myBotDropdownHeaderUuids = previousId;
+              $('#inputFieldForMyBot').remove();
+              let storageObject: any = {
+                [storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH_MYBOT]: this.commonService.isMyBotAutomationOnGoing
+              }
+              this.localStorageService.setLocalStorageItem(storageObject);
+              let terminateButtonElement = document.getElementById('myBotTerminateAgentDialog-' + previousId);
+              $(`#myBotTerminateAgentDialog-${previousId}`).attr('data-position-id', previousTaskPositionId);
+              terminateButtonElement.classList.remove('hide');
+              this.myBotDialogPositionId = previousTaskPositionId;
             }
+  
+            let agentInputEntityName = 'EnterDetails';
+            if (res.agentAssistDetails?.newEntityDisplayName || res.agentAssistDetails?.newEntityName) {
+              agentInputEntityName = res.agentAssistDetails.newEntityDisplayName ? res.agentAssistDetails.newEntityDisplayName : res.agentAssistDetails.newEntityName
+            }
+            let agentInputId = this.randomUUIDPipe.transform();
+            let agentInputToBotHtml = `
+                        <div class="steps-run-data">
+                            <div class="icon_block">
+                                <i class="ast-agent"></i>
+                            </div>
+                            <div class="run-info-content">
+                            <div class="title">Input</div>
+                            <div class="agent-utt enter-details-block">
+                            <div class="title-data" ><span class="enter-details-title">${agentInputEntityName} : </span>
+                            <input type="text" placeholder="Enter Value" class="input-text chat-container" id="agentInput-${agentInputId}" data-conv-id="${convId}" data-bot-id="${botId}"  data-mybot-input="true">
+                            </div>
+                            </div>
+                            </div>
+                        </div>`;
+  
+  
+            let nextResponse = resp[index + 1];
+            if (res.agentAssistDetails.isPrompt || res.agentAssistDetails.entityRequest) {
 
-          } else {
-            runInfoContent.append(tellToUserHtml);
-            this.commonService.hideSendOrCopyButtons(parsedPayload, runInfoContent);
+              if (this.localStorageService.checkStorageItemWithInConvId(this.connectionDetails.conversationId, storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH_MYBOT)) {
+                // $("#inputFieldForMyBot").remove();
+                $(`#terminateAgentDialog-${previousId}`).removeClass('hide');
+                $(`#terminateAgentDialog-${previousId}`).attr('data-position-id', previousTaskPositionId);
+                this.myBotDialogPositionId = previousTaskPositionId;
+              }
+
+              runInfoContent.append(askToUserHtml);
+              this.commonService.hideSendOrCopyButtons(parsedPayload, runInfoContent)
+              if (!nextResponse || (nextResponse.status != 'received' && nextResponse.status != 'incoming')) {
+                runInfoContent.append(agentInputToBotHtml);
+                document.getElementById(`agentInput-${agentInputId}`).focus();
+                runInfoContent.find(`#agentInput-${agentInputId}`).on('keypress', (e: any) => {
+                  let key = e.which || e.keyCode || 0;
+                  if (key === 13) {
+                    this.getAgentInputValue(e.target.value);
+                    this.isMybotInputResponseClick = true;
+                  }
+                });
+              }
+  
+            } else {
+              runInfoContent.append(tellToUserHtml);
+              this.commonService.hideSendOrCopyButtons(parsedPayload, runInfoContent);
+            }
+  
+            if(res && res.agentAssistDetails && res.agentAssistDetails.componentType == 'dialogAct' && (res.agentAssistDetails?.srcChannel != 'msteams' && res.agentAssistDetails?.srcChannel != 'rtm')){
+              // console.log("inside dialogact and channel");
+  
+            }else{
+              // let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(_msgsResponse)[0].innerHTML;
+              // let a = document.getElementById(IdReferenceConst.displayData + `-${res._id}`);
+              // a.innerHTML = a?.innerHTML + html;
+              let obj = this.templateRenderClassService.AgentChatInitialize.renderMessage(_msgsResponse)[0]
+              let a = document.getElementById(IdReferenceConst.displayData + `-${res._id}`);
+              a.appendChild(obj);
+              this.commonService.hideSendOrCopyButtons(parsedPayload, runInfoContent, false, res.agentAssistDetails?.componentType)
+            }
+  
           }
-
-          if(res && res.agentAssistDetails && res.agentAssistDetails.componentType == 'dialogAct' && (res.agentAssistDetails?.srcChannel != 'msteams' && res.agentAssistDetails?.srcChannel != 'rtm')){
-            // console.log("inside dialogact and channel");
-
-          }else{
-            // let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(_msgsResponse)[0].innerHTML;
-            // let a = document.getElementById(IdReferenceConst.displayData + `-${res._id}`);
-            // a.innerHTML = a?.innerHTML + html;
-            let obj = this.templateRenderClassService.AgentChatInitialize.renderMessage(_msgsResponse)[0]
-            let a = document.getElementById(IdReferenceConst.displayData + `-${res._id}`);
-            a.appendChild(obj);
-            this.commonService.hideSendOrCopyButtons(parsedPayload, runInfoContent, false, res.agentAssistDetails?.componentType)
-          }
-
         }
+
+        if (resp.length - 1 == index && (!res.agentAssistDetails?.entityRequest && !res.agentAssistDetails?.entityResponse) && currentTaskPositionId == previousTaskPositionId) {
+          let previousIdFeedBackDetails = feedBackResult.find((ele) => ele.positionId === previousTaskPositionId);
+          this.commonService.addFeedbackHtmlToDomForHistory(res, res.botId, res?.agentAssistDetails?.userInput, previousId, true, previousTaskPositionId);
+          if (previousIdFeedBackDetails) {
+            this.commonService.UpdateFeedBackDetails(previousIdFeedBackDetails, 'agentAutoContainer');
+            if (previousIdFeedBackDetails.feedback == 'dislike' && (previousIdFeedBackDetails.feedbackDetails.length == 0 && previousIdFeedBackDetails.comment.length == 0)) {
+              $(`#feedbackHelpfulContainer-${previousId} .explore-more-negtive-data`).removeClass('hide');
+            } else {
+              $(`#feedbackHelpfulContainer-${previousId} .explore-more-negtive-data`).addClass('hide');
+            }
+          }
+          previousId = undefined;
+          previousTaskPositionId = undefined;
+          previousTaskName = undefined;
+        }
+
       }
     });
     if (this.commonService.isMyBotAutomationOnGoing) {

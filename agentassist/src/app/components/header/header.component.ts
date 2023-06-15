@@ -352,7 +352,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   navigateToDoc() {
-    window.open('https://docs.kore.ai/smartassist/');
+    window.open('https://docs.kore.ai/agentassist/');
     this.mixPanel.postEvent('SG - Help doc viewed', this.mixPanel.events['SG - Help doc viewed']);
   }
 

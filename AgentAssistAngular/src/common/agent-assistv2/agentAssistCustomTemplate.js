@@ -102,15 +102,30 @@
 			 this.templateEvents(messageHtml, 'listWidget');
 			 $(messageHtml).data(messageHtml);
 		}		else if(msgData && msgData.message[0] && msgData.message[0].component && msgData.message[0].component.payload && msgData.message[0].component.payload.template_type == "advancedListTemplate"){
-			messageHtml = $(this.getChatTemplate("advancedListTemplate")).tmpl({
-				'msgData': msgData,
-				'tempdata':msgData.message[0].component.payload,
-				'dataItems': msgData.message[0].component.payload.elements || {},
-				 'helpers': this.helpers,
-				'extension': this.extension
-			});
-			 this.advancedListTemplateEvents(messageHtml,msgData);
-			 $(messageHtml).data(msgData);
+        if(msgData.message[0]?.component?.payload?.seeMore && ((msgData.message[0]?.component?.payload?.listItems).length > msgData.message[0]?.component?.payload.listItemDisplayCount)) {
+          msgData.message[0].component.payload.seeMore = false;
+          msgData.message[0].component.payload.listItemDisplayCount = (msgData.message[0].component.payload.listItems).length;
+          messageHtml = $(this.getChatTemplate("advancedListTemplate")).tmpl({
+            'msgData': msgData,
+            'tempdata':msgData.message[0].component.payload,
+            'dataItems': msgData.message[0].component.payload.elements || {},
+            'helpers': this.helpers,
+            'extension': this.extension
+          });
+          this.advancedListTemplateEvents(messageHtml,msgData);
+          $(messageHtml).data(msgData);
+        } else {
+          messageHtml = $(this.getChatTemplate("advancedListTemplate")).tmpl({
+            'msgData': msgData,
+            'tempdata':msgData.message[0].component.payload,
+            'dataItems': msgData.message[0].component.payload.elements || {},
+            'helpers': this.helpers,
+            'extension': this.extension
+          });
+          this.advancedListTemplateEvents(messageHtml,msgData);
+          $(messageHtml).data(msgData);
+        }
+
 		}
 		else if(msgData && msgData.message[0] && msgData.message[0].component && msgData.message[0].component.payload && msgData.message[0].component.payload.template_type == "cardTemplate"){
 			messageHtml = $(this.getChatTemplate("cardTemplate")).tmpl({

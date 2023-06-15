@@ -3520,7 +3520,7 @@
                                     </tr>\
                                     {{each(key, tableRow) msgData.message[0].component.payload.elements}} \
                                         {{if tableRow.Values.length>1}}\
-                                            <tr {{if key > 4}}class="hide"{{/if}}>\
+                                            <tr>\
                                                 {{each(cellkey, cellValue) tableRow.Values}} \
                                                     <td  {{if cellkey === tableRow.Values.length-1}}colspan="2"{{/if}} class=" {{if key == 0}} addTopBorder {{/if}}" {{if msgData.message[0].component.payload.columns[cellkey][1]}}style="text-align:${msgData.message[0].component.payload.columns[cellkey][1]};" {{/if}} title="${cellValue}">${cellValue}</td>\
                                                 {{/each}} \
@@ -3529,7 +3529,6 @@
                                     {{/each}} \
                                 </table>\
                             </div>\
-                            {{if msgData.message[0].component.payload.elements.length > 5 && msgData.message[0].component.payload.table_design && msgData.message[0].component.payload.table_design == "regular"}}<div class="showMore">Show more</div>{{/if}}\
                         </div>\
                          <div class="accordionTable {{if msgData.message[0].component.payload.table_design && msgData.message[0].component.payload.table_design == "regular"}}hide{{else}}responsive{{/if}}">\
                             {{each(key, tableRow) msgData.message[0].component.payload.elements}} \

@@ -12,6 +12,7 @@ import { DesignAlterService } from 'src/common/services/design-alter.service';
 import { LocalStorageService } from 'src/common/services/local-storage.service';
 import { MockDataService } from 'src/common/services/mock-data.service';
 import { CoachingActionStoreService } from 'src/app/coaching-action-store.service';
+import { RandomUUIDPipe } from 'src/common/pipes/random-uuid.pipe';
 // import { ServiceInvokerService } from 'src/common/services/service-invoker.service';
 declare const $: any;
 @Component({
@@ -51,13 +52,14 @@ export class HomeComponent implements OnInit {
   coachingConst : any = coachingConst;
   coachingNudges : any = [];
   coachingHints : any = [];
+  sourceDesktop : any = this.commonService?.configObj?.source;
 
   constructor(public handleSubjectService: HandleSubjectService, public websocketService: WebSocketService,
     public sanitizeHTMLPipe: SanitizeHtmlPipe, public commonService: CommonService, private koregenerateUUIDPipe: KoreGenerateuuidPipe,
     private designAlterService: DesignAlterService, private localStorageService: LocalStorageService,
     private mockDataService : MockDataService,
     private cdRef : ChangeDetectorRef,
-    private coachingActionStore : CoachingActionStoreService ) { }
+    private coachingActionStore : CoachingActionStoreService, private randomUUIDPipe : RandomUUIDPipe ) { }
   ngOnInit(): void {
     this.subscribeEvents();
     this.websocketService.agentCoachingResponse$.subscribe((data)=>{
@@ -186,7 +188,7 @@ export class HomeComponent implements OnInit {
       conversationId: this.connectionDetails.conversationId,
       payload: {
         "summary" : [
-          { 
+          {
             'summary_text': response.editedSummary || '',
           }
         ]
@@ -382,7 +384,10 @@ export class HomeComponent implements OnInit {
 setProactiveMode(){
   let appState : any = this.localStorageService.getLocalStorageState();
   let convState = appState[this.connectionDetails.conversationId];
-  let proactiveModeStatus = (convState[storageConst.PROACTIVE_MODE] != undefined && convState[storageConst.PROACTIVE_MODE] != null) ? convState[storageConst.PROACTIVE_MODE] : true;
+  if(this.connectionDetails.source == this.projConstants.SMARTASSIST_SOURCE && typeof convState[storageConst.PROACTIVE_MODE] != 'boolean'){
+    convState[storageConst.PROACTIVE_MODE] = this.connectionDetails.isProactiveAgentAssistEnabled;
+  }
+  let proactiveModeStatus = (typeof convState[storageConst.PROACTIVE_MODE] === 'boolean') ? convState[storageConst.PROACTIVE_MODE] : true;
   this.proactiveToggle(proactiveModeStatus);
 }
 
@@ -552,16 +557,16 @@ setProactiveMode(){
     setTimeout(() => {
       document.getElementById(scrollbuttonId).addEventListener('click', (event) => {
         console.log("click event *************" );
-        
+
         this.scrollToBottom(true);
       }, { once: true });
     }, 10);
   }
 
   updateScrollButton() {
-    let dynamicBlockId = this.commonService.tabNamevsId[this.activeTab];    
-    let lastelement = this.designAlterService.getLastElement(dynamicBlockId);    
-    let scrollAtEnd = !this.designAlterService.isScrolledIntoView(lastelement) ? true : false;    
+    let dynamicBlockId = this.commonService.tabNamevsId[this.activeTab];
+    let lastelement = this.designAlterService.getLastElement(dynamicBlockId);
+    let scrollAtEnd = !this.designAlterService.isScrolledIntoView(lastelement) ? true : false;
     this.commonService.scrollContent[this.activeTab].scrollAtEnd = scrollAtEnd;
     if (!scrollAtEnd) {
       $(".scroll-bottom-show-btn").removeClass('hiddenEle');
@@ -830,6 +835,36 @@ setProactiveMode(){
         $(`#endTaks-${targetsss}`).removeClass('hide');
       }
 
+    }
+    if(target.id.split('-')[0] === 'run'){
+      if(target.dataset?.dialogRun){
+        let data = JSON.parse(target.dataset?.dialogRun);
+        let runEventObj: any = {
+          agentRunButton: false,
+          intentName: data.name,
+          childBotId : data.childBotId,
+          childBotName : data.childBotName
+        }
+        this.handleSubjectService.setRunButtonClickEvent(runEventObj);
+      }
+    }
+    if(target.id.split('-')[0] === 'agentSelect'){
+      if(target.dataset?.dialogRun){
+        let data = JSON.parse(target.dataset?.dialogRun);
+        let runDialogueObject: any = {
+          agentRunButton: true,
+          name: data.name,
+          intentName: data.name,
+          searchFrom: this.projConstants.ASSIST,
+          positionId: this.randomUUIDPipe.transform(IdReferenceConst.positionId),
+          childBotId : data?.childBotId,
+          childBotName : data?.childBotName,
+          botId : this.connectionDetails?.botId
+        }
+        this.handleSubjectService.setActiveTab(this.projConstants.MYBOT);
+        this.commonService.agent_run_click(runDialogueObject, false);
+        this.handleSubjectService.setRunButtonClickEvent(runDialogueObject);
+      }
     }
   }
 
