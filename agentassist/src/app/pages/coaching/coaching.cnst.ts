@@ -41,6 +41,8 @@ export const COACHINGCNST = {
         type: 'critical',
         class: 'critical' 
     }],
+    AUTO_CLOSE : 'auto_close',
+    DOES_NOT_AUTO_CLOSE : 'doesnot_auto_close',
     TYPE_OF_CLOSE: {
         "doesnot_auto_close" : "Does not auto close",
         "auto_close" : "Auto Close"

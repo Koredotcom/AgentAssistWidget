@@ -28,7 +28,7 @@
                         <span class="info-tip" tooltipClass="tooltip-global-styles" ngbTooltip="Tooltip info">
                             <i class="icon-sa-help"></i>
                         </span>
-                        <input type="text" placeholder="Enter title"
+                        <input type="text" placeholder="Enter Hint title"
                             class="input-text" maxlength="42" [(ngModel)]="variableName">
                     </div>
                     <div class="count-char">{{variableName.length}}/42</div>
@@ -64,7 +64,7 @@
             </ng-container>
         </ul>
     </div>
-    <ng-container *ngIf="closeType == 'auto_close'">
+    <ng-container *ngIf="closeType == coachingCnst.AUTO_CLOSE">
         <span class="utt-name-desc">after</span>
         <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body" #closeTimer="ngbDropdown">
             <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!time}">{{time}} seconds</button>
