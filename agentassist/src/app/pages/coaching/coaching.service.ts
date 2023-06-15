@@ -142,7 +142,7 @@ export class CoachingService {
         title: ['', Validators.required],
         body : ['', Validators.required],
         postAction : ['', Validators.required],
-        time : [5, Validators.required]
+        time : [5]
       }),
       adherence : this.fb.group({
         addUtterances: [[]],
@@ -161,7 +161,7 @@ export class CoachingService {
         title: [obj.message?.title, Validators.required],
         body : [obj.message?.body, Validators.required],
         postAction : [obj.message?.postAction, Validators.required],
-        time : [obj.message?.time, Validators.required]
+        time : [obj.message?.time]
       }),
       adherence : this.fb.group({
         addUtterances: [[]],

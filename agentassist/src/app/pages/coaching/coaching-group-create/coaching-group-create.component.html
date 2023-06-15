@@ -14,11 +14,13 @@
                     <form [formGroup]="createGroupForm" >
                     <div class="kr-sg-input-text m-b-20">
                         <div class="label-text">Name</div>
-                        <input type="text" placeholder="Placeholder text" class="input-text" formControlName = "name">
+                        <input type="text" placeholder="Enter Name" class="input-text" formControlName = "name">
                     </div>
-                    <div class="kr-sg-input-text">
+                    <div class="kr-sg-input-text-area">
                         <div class="label-text">Description</div>
-                        <input type="text" placeholder="Placeholder text" class="input-text" formControlName = "description">
+                        <textarea placeholder="Enter Description" class="input-text" formControlName = "description"></textarea>
+
+                        <!-- <input type="text" placeholder="Placeholder text" class="input-text" formControlName = "description"> -->
                     </div>
                     </form>
                 </div>

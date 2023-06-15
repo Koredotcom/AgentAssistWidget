@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
 import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
 import { COACHINGCNST } from '../../coaching.cnst';
 @Component({
@@ -49,6 +49,11 @@ export class HintAgentComponent implements OnInit {
       this.bodyMsg = formVal.message.body;
       this.desc = formVal.message.body;
       this.closeType = formVal.message.postAction;
+      this.time = formVal.message.time ? formVal.message.time : 5;
+      this.variableTime = formVal.message.time ? formVal.message.time : 5;
+
+    }else if(changes?.createOrEdit?.currentValue === COACHINGCNST.CREATE){
+      const formVal = this.form.value;
       this.time = formVal.message.time;
       this.variableTime = formVal.message.time;
     }
@@ -85,6 +90,7 @@ export class HintAgentComponent implements OnInit {
   clickCloseT(closeT){
     this.closeType = closeT;
     (this.form.controls.message as FormGroup).controls.postAction.setValue(this.closeType);
+    this.resetValidators();
   }
   
   deleteActionRule(){
@@ -94,6 +100,15 @@ export class HintAgentComponent implements OnInit {
   onEnterTime(e){
     this.time = e;
     (this.form.controls.message as FormGroup).controls?.time.setValue(this.time);
+  }
+
+  resetValidators(){
+    if(this.closeType == this.coachingCnst.AUTO_CLOSE){
+      (this.form.controls?.message as FormGroup)?.controls?.time.setValidators(Validators.required);
+    }else{
+      (this.form.controls?.message as FormGroup)?.controls?.time.clearValidators();
+    }
+    (this.form.controls?.message as FormGroup)?.controls?.time.updateValueAndValidity();
   }
 }
 
