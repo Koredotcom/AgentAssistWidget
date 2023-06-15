@@ -72,16 +72,17 @@
             (psYReachStart)="onScrollEvent($event)" (psScrollUp)="onScrollEvent($event)">
             <div class="body-data-container if-suggestion-search" id="bodyContainer" #tabBody>
                 <div class="dialog-task-data" id="dynamicBlocksData">
-                  <ng-container *ngIf = "sourceDesktop !== 'smartassist-color-scheme'">
-                    <div class="transcipt-only-calls-data" id="historyContainer" [class.hide]="activeTab != projConstants.HISTORY">
-                        <div class="data-contnet">
-                            <app-user-bot-history></app-user-bot-history>
-                        </div>
-                        <div class="scroll-bottom-show-btn hiddenEle">
-                            <button id="scrollButtonHistory" class="scroll-bottom-btn">
-                                <i class="ast-carrotup"></i>
-                                <span>Scroll to bottom</span>
-                            </button>
+                    <ng-container *ngIf = "sourceDesktop !== 'smartassist-color-scheme'">
+                        <div class="transcipt-only-calls-data" id="historyContainer" [class.hide]="activeTab != projConstants.HISTORY">
+                            <div class="data-contnet">
+                                <app-user-bot-history></app-user-bot-history>
+                            </div>
+                            <div class="scroll-bottom-show-btn hiddenEle">
+                                <button id="scrollButtonHistory" class="scroll-bottom-btn">
+                                    <i class="ast-carrotup"></i>
+                                    <span>Scroll to bottom</span>
+                                </button>
+                            </div>
                         </div>
                     </ng-container>
                     <ng-container>
