@@ -7,11 +7,11 @@ export const COACHINGCNST = {
     VARIABLE : 'variable',
     DIALOG : 'dialog_task',
     SPEECH_TYPE : {
-        crossTalk: 'Cross Talk', 
+        cross_talk: 'Cross Talk', 
         deadair: 'Dead Air', 
         speech_speed: 'Speech Speed'
     },
-    CROSSTALK : 'crossTalk',
+    CROSSTALK : 'cross_talk',
     DEADAIR : 'deadair',
     SPEECHSPEED : 'speech_speed',
     OCCURENCES : [1,2,3,4,5],
@@ -50,8 +50,8 @@ export const COACHINGCNST = {
     RULE : "rule",
     GROUP : "group",
     VALIDATORS : {
-        'crossTalk' : ['nOccurences'],
-        'deadair' : ['nOccurences','timeTaken'],
-        'speech_speed' : ['nOccurences', 'nWords']
+        'cross_talk' : ['nOccurrences'],
+        'deadair' : ['nOccurrences','timeTaken'],
+        'speech_speed' : ['nOccurrences', 'nWords']
     }
 }

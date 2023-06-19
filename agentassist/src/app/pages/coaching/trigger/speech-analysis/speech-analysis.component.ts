@@ -42,7 +42,7 @@ export class SpeechAnalysisComponent implements OnInit {
       const formVal = this.form.value;
       this.selectedSpeechType = formVal.subType;
       this.selectedOperator = formVal.operator;
-      this.selOcc = formVal.frequency.nOccurences;
+      this.selOcc = formVal.frequency.nOccurrences;
       this.timer = formVal.frequency.timeTaken;
       this.showTimer = formVal.frequency.timeTaken;
       this.wordcount = formVal.frequency.nWords;
@@ -82,7 +82,7 @@ export class SpeechAnalysisComponent implements OnInit {
 
   clickOcc(occ){
     this.selOcc = occ;
-    (this.form.controls.frequency as FormGroup).controls.nOccurences.setValue(occ);
+    (this.form.controls.frequency as FormGroup).controls.nOccurrences.setValue(occ);
   }
 
   onEnterTime(e){
