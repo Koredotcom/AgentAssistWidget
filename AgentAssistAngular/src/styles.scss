@@ -858,6 +858,7 @@ html, body{
     padding: 3px 10px;
     text-transform: uppercase;
     opacity: 1;
+    display: none;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .copy-btn {
     background: var(--bg-color-containers);
@@ -873,6 +874,7 @@ html, body{
     margin-left: 6px;
     cursor: pointer;
     opacity: 1;
+    display: none;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .elipse-dropdown-info {
     margin-left: 6px;
@@ -1190,7 +1192,7 @@ border: 1px solid transparent !important;
     z-index: 1;
 }
 .overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send:hover .title-text{
-    white-space: nowrap !important; 
+    white-space: nowrap !important;
     padding-right: 80px;
     text-align: justify;
     word-break: break-word;
@@ -1250,6 +1252,7 @@ border: 1px solid transparent !important;
     padding: 3px 10px;
     text-transform: uppercase;
     opacity: 1;
+    display: none;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data .run-info-content .agent-utt .action-links .copy-btn {
     background: var(--bg-color-containers);
@@ -1265,6 +1268,7 @@ border: 1px solid transparent !important;
     margin-left: 6px;
     cursor: pointer;
     opacity: 1;
+    display: none;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data .run-info-content .order-number-info {
     background: var(--bg-hover-tabs-color);
@@ -1695,7 +1699,7 @@ border: 1px solid transparent !important;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
     text-align: justify;
-    word-break: break-word; 
+    word-break: break-word;
     display: -webkit-box;
 }
 
@@ -1758,6 +1762,7 @@ border: 1px solid transparent !important;
     padding: 3px 10px;
     text-transform: uppercase;
     opacity: 1;
+    display: none;
 }
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .copy-btn {
     background: var(--bg-color-containers);
@@ -1773,6 +1778,7 @@ border: 1px solid transparent !important;
     margin-left: 6px;
     cursor: pointer;
     opacity: 1;
+    display: none;
 }
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .elipse-dropdown-info {
     margin-left: 6px;
@@ -2140,7 +2146,7 @@ border: 1px solid transparent !important;
 }
 .overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send.is-dropdown-show-default.is-dropdown-open .left-content .ast-carrotup{
     position: relative;
-    top: 0 !important; 
+    top: 0 !important;
     margin-left: 5px;
 }
 
@@ -2192,6 +2198,7 @@ border: 1px solid transparent !important;
     padding: 3px 10px;
     text-transform: uppercase;
     opacity: 1;
+    display: none;
 }
 .overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .copy-btn {
     background: var(--bg-color-containers);
@@ -2207,6 +2214,7 @@ border: 1px solid transparent !important;
     margin-left: 6px;
     cursor: pointer;
     opacity: 1;
+    display: none;
 }
 .overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .elipse-dropdown-info {
     margin-left: 6px;
@@ -2377,10 +2385,10 @@ border: 1px solid transparent !important;
     border: 1px solid transparent;
 }
 
-.btn-danger:hover 
+.btn-danger:hover
 {background-color: var(--btn-ganger-color)}
 
-.btn-danger:active 
+.btn-danger:active
 {
   background-color: var(--btn-ganger-color);
   box-shadow: 0 1px var(--shadow-color);
@@ -2401,10 +2409,10 @@ border: 1px solid transparent !important;
     color: var(--default-text-color);
 }
 
-.btn-cancel:hover 
+.btn-cancel:hover
 {background-color: var(--default-white-color)}
 
-.btn-cancel:active 
+.btn-cancel:active
 {
   background-color: var(--default-white-color);
   box-shadow: 0 1px var(--shadow-color);
@@ -2443,7 +2451,7 @@ border: 1px solid transparent !important;
 @-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
 @-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
 @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
-  
+
 .override-input-div{
     padding-left: 28px;
     margin: 10px 0;
@@ -2531,12 +2539,14 @@ border: 1px solid transparent !important;
 
 .send-run-btn:hover {
     background-color: var(--theme-color);
+    display: none;
 }
 
 .send-run-btn:active {
   background-color: var(--theme-color);
   box-shadow: 0 1px var(--shadow-color);
   transform: translateY(1px);
+  display: none;
 }
 
 .feedbackup-data{
@@ -2846,7 +2856,7 @@ border: 1px solid transparent !important;
     background-color: var(--sdk-chat-window-bg-color);
 }
 
-.btn-restore:active 
+.btn-restore:active
 {
   background-color: var(--sdk-chat-window-bg-color);
   box-shadow: 0 1px var(--shadow-color);
@@ -3081,6 +3091,7 @@ border: 1px solid transparent !important;
     padding: 3px 10px;
     text-transform: uppercase;
     opacity: 1;
+    display: none;
 }
 .collapse-acc-data .steps-run-data .run-info-content .agent-utt .action-links .copy-btn {
     background: var(--bg-color-containers);
@@ -3096,6 +3107,7 @@ border: 1px solid transparent !important;
     margin-left: 6px;
     cursor: pointer;
     opacity: 1;
+    display: none;
 }
 .collapse-acc-data .steps-run-data .run-info-content .order-number-info {
     background: var(--bg-hover-tabs-color);
@@ -3591,7 +3603,7 @@ input.no-autofill-bkg:-webkit-autofill {
     max-height: 300px !important;
 }
 
-//seemore less button css 
+//seemore less button css
 .no-text-truncate {
     overflow: inherit !important;
     white-space: normal !important;
