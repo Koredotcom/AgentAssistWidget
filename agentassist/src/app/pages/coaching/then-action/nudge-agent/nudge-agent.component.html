@@ -17,7 +17,7 @@
     <span class="utt-name-desc">message</span>
 
     <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body" #nudgeMessage="ngbDropdown">
-        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!showNudgeMsg}">
+        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!showNudgeMsg}" (click)="nudgeMsg = showNudgeMsg">
             <span class="choose-text">{{showNudgeMsg ? showNudgeMsg : '{ Choose }'}}</span>
         </button>
         <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
@@ -53,7 +53,7 @@
 
 
 
-<ng-template #variableName>
+<!-- <ng-template #variableName>
     <div class="variable-value-input with-check-icon">
         <div class="input-variable-sec">
             <div class="kr-sg-input-text-area">
@@ -72,7 +72,7 @@
             <i class="icon-sa-conv-check"></i>
         </div>
     </div>
-</ng-template>
+</ng-template> -->
 
 <ng-container *ngIf="openAdherenceSlider">
     <app-slider-component id="adherenceSlider" #adherenceSlider='app-slider'>

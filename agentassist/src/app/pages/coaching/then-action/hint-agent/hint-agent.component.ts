@@ -22,7 +22,7 @@ export class HintAgentComponent implements OnInit {
   title: string = '';
   desc: string = '';
   bodyMsg: string = '';
-  variableName: string = '';
+  hintTitle: string = '';
   closeType: string = '';
   time : number;
   variableTime : number;
@@ -45,7 +45,7 @@ export class HintAgentComponent implements OnInit {
       const formVal = this.form.value;
       this.selMsgType = formVal.expression;
       this.title = formVal.message.title;
-      this.variableName = formVal.message.title;
+      this.hintTitle = formVal.message.title;
       this.bodyMsg = formVal.message.body;
       this.desc = formVal.message.body;
       this.closeType = formVal.message.postAction;
@@ -78,7 +78,7 @@ export class HintAgentComponent implements OnInit {
   }
 
   submitVariable(){
-    this.title = this.variableName;
+    this.title = this.hintTitle;
     (this.form.controls.message as FormGroup).controls.title.setValue(this.title);
   }
 

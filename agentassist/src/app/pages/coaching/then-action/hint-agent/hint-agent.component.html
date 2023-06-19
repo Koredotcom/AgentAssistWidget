@@ -16,7 +16,7 @@
 
     <span class="utt-name-desc">message with this title</span>
     <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body" #hinttitle="ngbDropdown">
-        <button class="dropdown-toggle btn-toggle" [ngClass]="{'text-choosen': !!title}" ngbDropdownToggle>
+        <button class="dropdown-toggle btn-toggle" [ngClass]="{'text-choosen': !!title}" ngbDropdownToggle (click)="hintTitle = title">
             <span class="choose-text">{{ title ? title : '{ Choose }' }}</span>
         </button>
         <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
@@ -29,9 +29,9 @@
                             <i class="icon-sa-help"></i>
                         </span>
                         <input type="text" placeholder="Enter Hint title"
-                            class="input-text" maxlength="42" [(ngModel)]="variableName">
+                            class="input-text" maxlength="42" [(ngModel)]="hintTitle">
                     </div>
-                    <div class="count-char">{{variableName.length}}/42</div>
+                    <div class="count-char">{{hintTitle.length}}/42</div>
                 </div>
                 <div class="check-icon-block" (click)="submitVariable();hinttitle.close()">
                     <i class="icon-sa-conv-check"></i>
@@ -42,7 +42,7 @@
 
     <span class="utt-name-desc">and body</span>
     <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body" #hintBody="ngbDropdown">
-        <button class="dropdown-toggle btn-toggle" [ngClass]="{'text-choosen': !!bodyMsg}" ngbDropdownToggle>
+        <button class="dropdown-toggle btn-toggle" [ngClass]="{'text-choosen': !!bodyMsg}" ngbDropdownToggle (click)="desc = bodyMsg">
             <span class="choose-text">{{bodyMsg ? bodyMsg : '{ Choose }'}}</span>
         </button>
         <ul class="dropdown_menu-wrapper" ngbDropdownMenu>

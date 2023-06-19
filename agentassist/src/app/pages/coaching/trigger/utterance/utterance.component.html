@@ -46,7 +46,7 @@
         </ul>
     </div>
     <div class="dropdown-occurences no_border" ngbDropdown [placement]="'bottom'" container="body" #utteranceTimer="ngbDropdown">
-        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle>in {{timer}} seconds</button>
+        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle (click)="showTimer = timer">in {{timer}} seconds</button>
         <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
             <div class="seconds-input">
                 <div class="kr-sg-input-text">
