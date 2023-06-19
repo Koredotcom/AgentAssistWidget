@@ -44,7 +44,7 @@ export class UtteranceComponent implements OnInit {
       const formVal = this.form.value;
       this.selectedOperator = formVal.operator;
       this.selUser = formVal.by;
-      this.selOcc = formVal.frequency.nOccurences;
+      this.selOcc = formVal.frequency.nOccurrences;
       this.timer = formVal.frequency.every;
       this.showTimer = formVal.frequency.every;
     }
@@ -67,7 +67,7 @@ export class UtteranceComponent implements OnInit {
 
   clickOcc(occ){
     this.selOcc = occ;
-    (this.form.controls.frequency as FormGroup).controls.nOccurences.setValue(occ);
+    (this.form.controls.frequency as FormGroup).controls.nOccurrences.setValue(occ);
   }
 
   changeOperator(op){

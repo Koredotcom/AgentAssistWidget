@@ -23,7 +23,7 @@ export class CoachingService {
         utteranceCount: ['', [Validators.required]]
       }),
       frequency: this.fb.group({
-        nOccurences: [1, Validators.required],
+        nOccurrences: [1, Validators.required],
         every: [30, Validators.required]
       })
     }
@@ -41,7 +41,7 @@ export class CoachingService {
         utteranceCount: [obj.when?.utteranceCount,[Validators.required]]
       }),
       frequency: this.fb.group({
-        nOccurences: [obj.frequency?.nOccurences, Validators.required],
+        nOccurrences: [obj.frequency?.nOccurrences, Validators.required],
         every: [obj.frequency?.every, Validators.required],
       })
     } 
@@ -54,7 +54,7 @@ export class CoachingService {
       subType: ['', [Validators.required]],
       operator : ['And', [Validators.required]],
       frequency: this.fb.group({
-        nOccurences: [1, Validators.required],
+        nOccurrences: [1, Validators.required],
         timeTaken: [30],
         nWords : [180]
       })
@@ -68,7 +68,7 @@ export class CoachingService {
       subType: [obj.subType, [Validators.required]],
       operator : [obj.operator, [Validators.required]],
       frequency: this.fb.group({
-        nOccurences: [obj.frequency?.nOccurences],
+        nOccurrences: [obj.frequency?.nOccurrences],
         timeTaken: [obj.frequency?.timeTaken],
         nWords : [obj.frequency?.nWords]
       })
@@ -82,7 +82,7 @@ export class CoachingService {
       when : [[], [Validators.required]],
       streetType: [null, [Validators.required]],
       frequency: [null, [Validators.required]],
-      nOccurences: [null, [Validators.required]],
+      nOccurrences: [null, [Validators.required]],
       every: [null, [Validators.required]],
       operator : [null, [Validators.required]]
     }
@@ -95,7 +95,7 @@ export class CoachingService {
       when : [[], [Validators.required]],
       streetType: [null, [Validators.required]],
       frequency: [null, [Validators.required]],
-      nOccurences: [null, [Validators.required]],
+      nOccurrences: [null, [Validators.required]],
       every: [null, [Validators.required]],
       operator : [null, [Validators.required]]
     }
