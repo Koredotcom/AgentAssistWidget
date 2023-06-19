@@ -45,6 +45,7 @@ export class MybotComponent implements OnInit {
   mybotEmptyState : boolean = true;
   dialogName : string;
   isHistoryApiCalled = false;
+  interruptDialogFlag = false;
 
   constructor(public handleSubjectService: HandleSubjectService,
     public randomUUIDPipe: RandomUUIDPipe,
@@ -99,6 +100,10 @@ export class MybotComponent implements OnInit {
       if (endoftaskresponse && this.myBotDialogPositionId == endoftaskresponse.positionId) {
         this.dialogTerminatedOrIntrupptedInMyBot();
         this.viewCustomTempAttachment();
+        if(this.interruptDialogFlag) {
+            this.getAgentInputValue(this.interruptDialog.name, this.projConstants.INTENT);
+            this.interruptDialogFlag = false;
+        }
       }
     })
 
@@ -114,9 +119,7 @@ export class MybotComponent implements OnInit {
         this.getAgentInputValue(this.projConstants.DISCARD_ALL);
         this.dialogTerminatedOrIntrupptedInMyBot();
         this.runDialogFormyBotTab(this.interruptDialog);
-        setTimeout(() => {
-          this.getAgentInputValue(this.interruptDialog.name, this.projConstants.INTENT);
-         }, 2000)
+        this.interruptDialogFlag = true;
       }
     });
 
