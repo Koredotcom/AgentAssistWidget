@@ -114,9 +114,13 @@ export class MybotComponent implements OnInit {
         this.getAgentInputValue(this.projConstants.DISCARD_ALL);
         this.dialogTerminatedOrIntrupptedInMyBot();
         this.runDialogFormyBotTab(this.interruptDialog);
-        this.getAgentInputValue(this.interruptDialog.name, this.projConstants.INTENT);
+        setTimeout(() => {
+          this.getAgentInputValue(this.interruptDialog.name, this.projConstants.INTENT);
+         }, 2000)
       }
     });
+
+
 
     let subscription6 = this.handleSubjectService.connectDetailsSubject.subscribe((response: any) => {
       if (response) {
