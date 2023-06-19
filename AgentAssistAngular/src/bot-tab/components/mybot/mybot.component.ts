@@ -100,11 +100,11 @@ export class MybotComponent implements OnInit {
       if (endoftaskresponse && this.myBotDialogPositionId == endoftaskresponse.positionId) {
         this.dialogTerminatedOrIntrupptedInMyBot();
         this.viewCustomTempAttachment();
-        if(this.interruptDialogFlag) {
-            this.getAgentInputValue(this.interruptDialog.name, this.projConstants.INTENT);
-            this.interruptDialogFlag = false;
-        }
       }
+      if(this.interruptDialogFlag) {
+        this.getAgentInputValue(this.interruptDialog.name, this.projConstants.INTENT);
+        this.interruptDialogFlag = false;
+    }
     })
 
     let subscription4 = this.handleSubjectService.terminateClickEventSubject.subscribe((response: any) => {
