@@ -591,7 +591,7 @@ export class AssistComponent implements OnInit {
               ele.content = this.removeTagFromString.transform(ele.content);
               let a = $(`#articleDiv-${uuids + index}`);
               let answerSanitized = this.commonService.handleEmptyLine(ele.content, true);
-              let articleActionHtml = `<div class="action-links">
+              let articleActionHtml = `<div class="action-links data-send-btn">
                             <button class="send-run-btn" id="sendMsg" data-msg-id="article-${uuids + index}" data-msg-data="${answerSanitized}">Send</button>
                             <div class="copy-btn" data-msg-id="article-${uuids + index}" data-msg-data="${answerSanitized}">
                                 <i class="ast-copy" data-msg-id="article-${uuids + index}" data-msg-data="${answerSanitized}"></i>
@@ -700,7 +700,7 @@ export class AssistComponent implements OnInit {
             let answerSanitized = (ele.answer[0]);
             // if text only not template cond need to add
             answerSanitized = this.commonService.replaceDoubleQuot(answerSanitized);
-            let faqActionHtml = `<div class="action-links">
+            let faqActionHtml = `<div class="action-links data-send-btn">
             <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids+index}" data-msg-data="${answerSanitized}" data-position-id="${positionID}">Send</button>
             <div class="copy-btn" data-msg-id="${uuids+index}" data-msg-data="${answerSanitized}" data-position-id="${positionID}">
                 <i class="ast-copy" data-msg-id="${uuids+index}" data-msg-data="${answerSanitized}" data-position-id="${positionID}"></i>
@@ -760,7 +760,7 @@ export class AssistComponent implements OnInit {
             let faqDiv = $(`#dynamicBlock #faqDiv-${splitedanswerPlaceableID.join('-')}`);
             let faqSection = $(`#dynamicBlock #faqSection-${splitedanswerPlaceableID.join('-')}`);
             let answerSanitized = this.commonService.handleEmptyLine(ele.answer[0], true);
-            let faqaction = `<div class="action-links">
+            let faqaction = `<div class="action-links data-send-btn">
             <button class="send-run-btn" id="sendMsg" data-msg-id="${splitedanswerPlaceableID.join('-')}"  data-msg-data="${answerSanitized}">Send</button>
             <div class="copy-btn" data-msg-id="${splitedanswerPlaceableID.join('-')}" data-msg-data="${answerSanitized}">
             <i class="ast-copy" data-msg-id="${splitedanswerPlaceableID.join('-')}" data-msg-data="${answerSanitized}"></i>
@@ -957,7 +957,7 @@ export class AssistComponent implements OnInit {
   }
 
   smallTalkActionLinkTemplate(uuids,sendData){
-    let actionLinkTemplate =  ` <div class="action-links">
+    let actionLinkTemplate =  ` <div class="action-links data-send-btn">
     <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data="${sendData}">Send</button>
     <div class="copy-btn hide" data-msg-id="${uuids}" data-msg-data="${sendData}">
         <i class="ast-copy" data-msg-id="${uuids}" data-msg-data="${sendData}"></i>
@@ -1701,7 +1701,7 @@ export class AssistComponent implements OnInit {
             let a = $(`#faqDiv-${uniqueID + index}`);
             let answerSanitized = this.commonService.handleEmptyLine(ele.answer[0], true);
 
-            let faqActionHtml = `<div class="action-links">
+            let faqActionHtml = `<div class="action-links data-send-btn">
                     <button class="send-run-btn" id="sendMsg" data-msg-id="${uniqueID + index}"  data-msg-data="${answerSanitized}">Send</button>
                     <div class="copy-btn" data-msg-id="${uniqueID + index}" data-msg-data="${answerSanitized}">
                         <i class="ast-copy" data-msg-id="${uniqueID + index}" data-msg-data="${answerSanitized}"></i>
@@ -1785,7 +1785,7 @@ export class AssistComponent implements OnInit {
           let faqs = $(`.type-info-run-send #faqSection-${uniqueID + index}`);
           let a = $(`#faqDiv-${uniqueID + index}`);
           let answerSanitized = this.commonService.handleEmptyLine(res.components[0].data.text[0], true);
-          let faqActionHtml = `<div class="action-links">
+          let faqActionHtml = `<div class="action-links data-send-btn">
                     <button class="send-run-btn" id="sendMsg" data-msg-id="${uniqueID + index}"  data-msg-data="${answerSanitized}">Send</button>
                     <div class="copy-btn" data-msg-id="${uniqueID + index}" data-msg-data="${answerSanitized}">
                         <i class="ast-copy" data-msg-id="${uniqueID + index}" data-msg-data="${answerSanitized}"></i>

@@ -858,8 +858,12 @@ html, body{
     padding: 3px 10px;
     text-transform: uppercase;
     opacity: 1;
-    display: none;
 }
+
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .data-send-btn .send-run-btn {
+  visibility: hidden;
+ }
+
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .copy-btn {
     background: var(--bg-color-containers);
     box-shadow: 0px 2px 8px rgba(0,0,0,0.05);
@@ -1254,6 +1258,11 @@ border: 1px solid transparent !important;
     opacity: 1;
     display: none;
 }
+
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data .run-info-content .agent-utt .data-send-btn .send-run-btn {
+  display: none;
+}
+
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data .run-info-content .agent-utt .action-links .copy-btn {
     background: var(--bg-color-containers);
     box-shadow: 0px 2px 8px rgba(0,0,0,0.05);
@@ -1762,8 +1771,12 @@ border: 1px solid transparent !important;
     padding: 3px 10px;
     text-transform: uppercase;
     opacity: 1;
-    display: none;
 }
+
+.agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .data-send-btn .send-run-btn {
+  visibility: hidden;
+}
+
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .copy-btn {
     background: var(--bg-color-containers);
     box-shadow: 0px 2px 8px rgba(0,0,0,0.05);
@@ -2198,8 +2211,12 @@ border: 1px solid transparent !important;
     padding: 3px 10px;
     text-transform: uppercase;
     opacity: 1;
-    display: none;
 }
+
+.overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .data-send-btn .send-run-btn {
+  visibility: hidden;
+}
+
 .overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .copy-btn {
     background: var(--bg-color-containers);
     box-shadow: 0px 2px 8px rgba(0,0,0,0.05);
@@ -2539,14 +2556,12 @@ border: 1px solid transparent !important;
 
 .send-run-btn:hover {
     background-color: var(--theme-color);
-    display: none;
 }
 
 .send-run-btn:active {
   background-color: var(--theme-color);
   box-shadow: 0 1px var(--shadow-color);
   transform: translateY(1px);
-  display: none;
 }
 
 .feedbackup-data{
@@ -3093,6 +3108,11 @@ border: 1px solid transparent !important;
     opacity: 1;
     display: none;
 }
+
+.collapse-acc-data .steps-run-data .run-info-content .agent-utt .data-send-btn .send-run-btn {
+  visibility: hidden;
+}
+
 .collapse-acc-data .steps-run-data .run-info-content .agent-utt .action-links .copy-btn {
     background: var(--bg-color-containers);
     box-shadow: 0px 2px 8px rgba(0,0,0,0.05);
@@ -3757,3 +3777,4 @@ input.no-autofill-bkg:-webkit-autofill {
 .d-none {
     display: none;
 }
+
