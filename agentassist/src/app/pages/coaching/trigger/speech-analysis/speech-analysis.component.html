@@ -44,7 +44,7 @@
     <span class="utt-name-desc">is detected for more than </span>
 
     <div class="dropdown-occurences no_border" ngbDropdown [placement]="'bottom'" container="body"  #deadairtimerdropdown = "ngbDropdown">
-        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!timer}">in {{timer}}</button>
+        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!timer}">{{timer}}</button>
         <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
             <div class="seconds-input">
                 <div class="kr-sg-input-text">

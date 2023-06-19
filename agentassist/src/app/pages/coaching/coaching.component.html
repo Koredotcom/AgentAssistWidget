@@ -2,7 +2,7 @@
     <div class="header-sec-top">
         <div class="main-heading">Agent Coaching</div>
         <div>
-            <button class="kr-sg-button-secondary-two btn_lg mr-2" (click)="publishCoaching()" [disabled]="publishInprogress || searchedData?.results?.length == 0">Publish</button>
+            <button class="kr-sg-button-secondary-two btn_lg mr-2" (click)="publishCoaching()" [disabled]="publishInprogress || respData?.results?.length == 0">Publish</button>
            <button class="kr-sg-button-primary btn_lg" (click)="openCoachingGroup(coachingConst.CREATE, {})">+ New Coaching Group</button>
         </div>
     </div>
@@ -78,7 +78,7 @@
                                                         </button>
                                                     </div>
                                                     <!-- <div class="title-text w-20">{{rule.description}}</div> -->
-                                                    <div class="title-text w-14">{{rule.assignedTo}}</div>
+                                                    <div class="title-text w-14">{{'All Agents'}}</div>
                                                     <div class="title-text w-16">{{rule.lModOn | date : 'MMM dd, yyyy h:mm a'}}</div>
                                                     <div class="title-text last-updated-toggle w-10">
                                                         <label class="kr-sg-toggle">

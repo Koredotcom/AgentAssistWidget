@@ -135,12 +135,13 @@ export class CoachingComponent implements OnInit {
 
     closeFLowCreation(rule?) {
       this.modalFlowCreateRef.close();
-      if(rule && (this.createOrEdit == COACHINGCNST.CREATE)){
-        this.respData?.results[this.selectedRuleGroupIndex]?.rules.push(rule);
-      }else if(rule){
-        this.respData?.results[this.selectedRuleGroupIndex]?.rules.splice(this.selectedRuleIndex, 1, rule);
-        this.respData = {...this.respData};
-      }
+      // if(rule && (this.createOrEdit == COACHINGCNST.CREATE)){
+      //   this.respData?.results[this.selectedRuleGroupIndex]?.rules.push(rule);
+      // }else if(rule){
+      //   this.respData?.results[this.selectedRuleGroupIndex]?.rules.splice(this.selectedRuleIndex, 1, rule);
+      //   this.respData = {...this.respData};
+      // }
+      this.getAgentCoachingGroupData();
       this.selectedRuleGroup = null;
       this.selectedRuleGroupIndex = null;
       this.selectedRuleIndex = null;

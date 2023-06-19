@@ -7,6 +7,7 @@ import { workflowService } from '@kore.services/workflow.service';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CoachingConfirmationComponent } from '../coaching-confirmation/coaching-confirmation.component';
+import { finalize } from 'rxjs/operators';
 @Component({
   selector: 'app-coaching-rule-create',
   templateUrl: './coaching-rule-create.component.html',
@@ -19,6 +20,7 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
   @Output() onCloseRule = new EventEmitter();
   @Input() createOrEdit = '';
   @Input() currentRule:any;
+  loading = false;
   ruleForm :FormGroup;
   modalRef : any;
   formTouched : boolean = false;
@@ -182,11 +184,16 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
   }
  
   saveRule(){
+    this.loading = true;
     let payload : any = this.ruleForm.value;
     payload["addToGroup"] = true;
     payload["groupId"] = this.groupDetails._id;
     let methodName = this.createOrEdit == COACHINGCNST.CREATE ? "post.agentcoachingrule" : "put.agentcoachingrule"
-    this.service.invoke(methodName, {addToGroup : true, groupId : this.groupDetails._id, ruleId : this.currentRule?.ruleId}, payload).subscribe(data => {
+    this.service.invoke(methodName, {addToGroup : true, groupId : this.groupDetails._id, ruleId : this.currentRule?.ruleId}, payload)
+    .pipe(finalize(()=>{
+      this.loading = false;
+    }))
+    .subscribe(data => {
       if (data && (data._id || data.id)) {
         data._id = data.id ? data.id : data._id;
         data.ruleId = data._id;
