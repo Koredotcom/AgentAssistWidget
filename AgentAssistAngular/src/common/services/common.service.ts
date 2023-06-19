@@ -37,6 +37,10 @@ export class CommonService {
   isUpdateFeedBackDetailsFlag : boolean = false;
   currentPositionId;
   currentPositionIdOfMyBot;
+  childBotDetails = {
+    childBotName : '',
+    childBotId : ''
+  }
 
   clickEventObjectsBeforeTabShift : any = [];
   tabNamevsId : any = {
@@ -151,15 +155,17 @@ export class CommonService {
       'query': data.value,
       'botId': data.botId,
       'experience': this.isCallConversation === true ? 'voice' : 'chat',
-      'positionId': data?.positionId
+      'positionId': data?.positionId,
+      'childBotId': data?.childBotId || '',
+      'childBotName': data?.childBotName || ''
     }
     if (data.intentName) {
       agent_assist_agent_request_params.intentName = data.intentName;
     }
-    if(data.childBotId) {
-      agent_assist_agent_request_params['childBotId'] = data.childBotId;
-      agent_assist_agent_request_params['childBotName'] = data.childBotName;
-    }
+    // if(data.childBotId) {
+    //   agent_assist_agent_request_params['childBotId'] = data.childBotId;
+    //   agent_assist_agent_request_params['childBotName'] = data.childBotName;
+    // }
     if(this.configObj?.autoBotId && this.configObj?.autoBotId !== 'undefined') {
       console.log(this.configObj);
       agent_assist_agent_request_params['autoBotId'] = this.configObj.autoBotId;
