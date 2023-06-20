@@ -67,7 +67,7 @@
     <ng-container *ngIf="closeType == coachingCnst.AUTO_CLOSE">
         <span class="utt-name-desc">after</span>
         <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body" #closeTimer="ngbDropdown">
-            <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!time}">{{time}} seconds</button>
+            <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!time}" (click)="variableTime = time">{{time}} seconds</button>
             <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
                 <div class="seconds-input">
                     <div class="kr-sg-input-text">
