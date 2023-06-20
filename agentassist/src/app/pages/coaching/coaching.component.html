@@ -2,7 +2,7 @@
     <div class="header-sec-top">
         <div class="main-heading">Agent Coaching</div>
         <div>
-            <button class="kr-sg-button-secondary-two btn_lg mr-2" (click)="publishCoaching()" [disabled]="publishInprogress || respData?.results?.length == 0">Publish</button>
+            <button class="kr-sg-button-secondary-two btn_lg mr-2" (click)="publishCoaching()" [disabled]="publishInprogress || !(respData?.results?.length > 0 && (respData?.results[0].rules?.length > 0))">Publish</button>
            <button class="kr-sg-button-primary btn_lg" (click)="openCoachingGroup(coachingConst.CREATE, {})">+ New Coaching Group</button>
         </div>
     </div>
