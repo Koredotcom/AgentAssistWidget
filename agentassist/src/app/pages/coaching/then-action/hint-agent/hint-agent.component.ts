@@ -105,6 +105,7 @@ export class HintAgentComponent implements OnInit {
   resetValidators(){
     if(this.closeType == this.coachingCnst.AUTO_CLOSE){
       (this.form.controls?.message as FormGroup)?.controls?.time.setValidators(Validators.required);
+      (this.form.controls?.message as FormGroup)?.controls?.time.setValue(this.time);
     }else{
       (this.form.controls?.message as FormGroup)?.controls?.time.clearValidators();
     }

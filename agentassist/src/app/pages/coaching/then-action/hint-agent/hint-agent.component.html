@@ -53,7 +53,7 @@
     <span class="utt-name-desc">that</span>
     <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body">
         <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!closeType}">
-            <span class="choose-text">{{ closeType ? closeType : '{ Choose }' }}</span>
+            <span class="choose-text">{{ closeTypes[closeType] ? closeTypes[closeType] : '{ Choose }' }}</span>
         </button>
         <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
             <ng-container *ngFor="let closeT of closeTypes | keyvalue">
