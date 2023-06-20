@@ -86,12 +86,12 @@ export class SpeechAnalysisComponent implements OnInit {
   }
 
   onEnterTime(e){
-    this.timer = e;
+    this.timer = e ? e : 1;
     (this.form.controls.frequency as FormGroup).controls?.timeTaken.setValue(this.timer);
   }
 
   onEnterWords(e){
-    this.wordcount = e;
+    this.wordcount = e ? e : 1;
     (this.form.controls.frequency as FormGroup).controls?.nWords.setValue(this.wordcount);
   }
 

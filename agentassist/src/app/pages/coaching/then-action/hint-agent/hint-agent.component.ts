@@ -98,7 +98,7 @@ export class HintAgentComponent implements OnInit {
   }
 
   onEnterTime(e){
-    this.time = e;
+    this.time = e ? e : 1;
     (this.form.controls.message as FormGroup).controls?.time.setValue(this.time);
   }
 
