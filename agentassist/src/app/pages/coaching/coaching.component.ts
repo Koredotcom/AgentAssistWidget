@@ -99,21 +99,8 @@ export class CoachingComponent implements OnInit {
     });
   }
 
-  updateGroupData(updateObj){    
-    if(updateObj.data && (updateObj.data._id || updateObj.data.id)){
-      updateObj.data._id = updateObj.data.id ? updateObj.data.id : updateObj.data._id;
-      if(updateObj.type == COACHINGCNST.CREATE){
-        this.respData.results.push(updateObj.data);
-      }else if(updateObj.type == COACHINGCNST.EDIT){
-        let groupId = updateObj.data._id;
-        let matchIndex = this.respData.results.findIndex(x => x._id == groupId);
-        this.respData.results.splice(matchIndex, 1,updateObj.data);
-      }else if(updateObj.type == COACHINGCNST.DELETE){
-        let groupId = updateObj.data._id;
-        let matchIndex = this.respData.results.findIndex(x => x._id == groupId);
-        this.respData.results.splice(matchIndex, 1);
-      }      
-    }
+  updateGroupData(updateObj){
+    this.getAgentCoachingGroupData();
   }
   // get or update GroupData Ends
 
@@ -141,6 +128,9 @@ export class CoachingComponent implements OnInit {
       //   this.respData?.results[this.selectedRuleGroupIndex]?.rules.splice(this.selectedRuleIndex, 1, rule);
       //   this.respData = {...this.respData};
       // }
+      if(!rule){
+        return;
+      }
       this.getAgentCoachingGroupData();
       this.selectedRuleGroup = null;
       this.selectedRuleGroupIndex = null;
