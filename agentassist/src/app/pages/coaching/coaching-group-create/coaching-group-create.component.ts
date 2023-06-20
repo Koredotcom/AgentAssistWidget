@@ -43,7 +43,7 @@ export class CoachingGroupCreateComponent implements OnInit {
   createFormGroup(data){
     this.createGroupForm = new FormGroup({
       'name' : new FormControl(data?.name || '',[Validators.required]),
-      'description' : new FormControl(data?.description || '',[Validators.required])
+      'description' : new FormControl(data?.description || '')
     }); 
   }
 
