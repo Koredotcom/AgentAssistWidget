@@ -12,9 +12,9 @@
         </div>
         <div class="middle-content">
             <div class="utt-name">{{groupDetails?.name}} / </div>
-            <div class="dropdown-adherence" ngbDropdown placement="bottom-center" #ruleSelection="ngbDropdown"  *ngIf="createOrEdit == coachingCnst.EDIT">
-                <button class="dropdown-toggle btn-toggle" ngbDropdownToggle>{{currentRule?.name}}<i class="icon-sa-arrow-down"></i></button>
-                <ul class="dropdown_menu-wrapper" ngbDropdownMenu id="ruleSelectionMenu">
+            <div class="dropdown-adherence" ngbDropdown placement="bottom-center" #ruleSelection="ngbDropdown">
+                <button class="dropdown-toggle btn-toggle" ngbDropdownToggle>{{ruleForm.get('name')?.value}}<i *ngIf="groupDetails?.rules?.length > 1 && createOrEdit == coachingCnst.EDIT" class="icon-sa-arrow-down"></i></button>
+                <ul class="dropdown_menu-wrapper" ngbDropdownMenu id="ruleSelectionMenu" *ngIf="groupDetails?.rules?.length > 1 && createOrEdit == coachingCnst.EDIT">
                     <perfect-scrollbar class="mx-h-300">
                         <ng-container *ngFor="let rule of groupDetails?.rules">
                             <li ngbDropdownItem class="list-item-li" *ngIf="rule.name !== currentRule?.name"

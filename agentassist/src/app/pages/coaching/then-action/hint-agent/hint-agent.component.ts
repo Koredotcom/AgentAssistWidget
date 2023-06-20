@@ -98,13 +98,14 @@ export class HintAgentComponent implements OnInit {
   }
 
   onEnterTime(e){
-    this.time = e;
+    this.time = e ? e : 1;
     (this.form.controls.message as FormGroup).controls?.time.setValue(this.time);
   }
 
   resetValidators(){
     if(this.closeType == this.coachingCnst.AUTO_CLOSE){
       (this.form.controls?.message as FormGroup)?.controls?.time.setValidators(Validators.required);
+      (this.form.controls?.message as FormGroup)?.controls?.time.setValue(this.time);
     }else{
       (this.form.controls?.message as FormGroup)?.controls?.time.clearValidators();
     }
