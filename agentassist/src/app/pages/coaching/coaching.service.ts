@@ -52,10 +52,9 @@ export class CoachingService {
       _id: ['aat-'+uuid(), [Validators.required]],
       type: [this.coachingCnst.SPEECH_ANALYSIS, [Validators.required]],
       subType: ['', [Validators.required]],
-      operator : ['And', [Validators.required]],
+      operator : ['and', [Validators.required]],
       frequency: this.fb.group({
         nOccurrences: [1, Validators.required],
-        timeTaken: [30],
       })
     };
   }
@@ -68,11 +67,13 @@ export class CoachingService {
       operator : [obj.operator, [Validators.required]],
       frequency: this.fb.group({
         nOccurrences: [obj.frequency?.nOccurrences],
-        timeTaken: [obj.frequency?.timeTaken]
       })
     };
     if(obj.frequency?.nWords){
       (<FormGroup> objC.frequency).addControl('nWords', new FormControl(obj.frequency?.nWords))
+    }
+    if(obj.frequency?.timeTaken){
+      (<FormGroup> objC.frequency).addControl('timeTaken', new FormControl(obj.frequency?.timeTaken))
     }
     return objC;
   }
