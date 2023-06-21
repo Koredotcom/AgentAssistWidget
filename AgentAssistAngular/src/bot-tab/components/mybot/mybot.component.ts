@@ -45,6 +45,7 @@ export class MybotComponent implements OnInit {
   mybotEmptyState : boolean = true;
   dialogName : string;
   isHistoryApiCalled = false;
+  interruptDialogFlag = false;
 
   constructor(public handleSubjectService: HandleSubjectService,
     public randomUUIDPipe: RandomUUIDPipe,
@@ -100,6 +101,10 @@ export class MybotComponent implements OnInit {
         this.dialogTerminatedOrIntrupptedInMyBot();
         this.viewCustomTempAttachment();
       }
+      if(this.interruptDialogFlag) {
+        this.getAgentInputValue(this.interruptDialog.name, this.projConstants.INTENT);
+        this.interruptDialogFlag = false;
+    }
     })
 
     let subscription4 = this.handleSubjectService.terminateClickEventSubject.subscribe((response: any) => {
@@ -114,9 +119,11 @@ export class MybotComponent implements OnInit {
         this.getAgentInputValue(this.projConstants.DISCARD_ALL);
         this.dialogTerminatedOrIntrupptedInMyBot();
         this.runDialogFormyBotTab(this.interruptDialog);
-        this.getAgentInputValue(this.interruptDialog.name, this.projConstants.INTENT);
+        this.interruptDialogFlag = true;
       }
     });
+
+
 
     let subscription6 = this.handleSubjectService.connectDetailsSubject.subscribe((response: any) => {
       if (response) {
