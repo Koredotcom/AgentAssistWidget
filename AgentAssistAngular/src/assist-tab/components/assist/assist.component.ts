@@ -601,6 +601,7 @@ export class AssistComponent implements OnInit {
                         </div>`;
               if(ele.content){
                 a.append(articleActionHtml);
+                this.commonService.hideSendAndCopyBtnsforCallconversation(a)
               }
               if(data.userInput){
                 ele.content = this.replaceTextwithTag.transform(ele.content, data.userInput);
@@ -709,6 +710,7 @@ export class AssistComponent implements OnInit {
             </div>
             </div>`;
             a.append(faqActionHtml);
+            this.commonService.hideSendAndCopyBtnsforCallconversation(a);
             console.log('handle2: ', this.commonService.handleEmptyLine2(ele.answer[0]))
             faqs.append(`<div class="desc-text" id="desc-${uuids + index}">${this.commonService.handleEmptyLine2(ele.answer[0])}</div>`);
 
@@ -774,6 +776,7 @@ export class AssistComponent implements OnInit {
             $(`#${faqAnswerIdsPlace.id}`).html(this.commonService.handleEmptyLine(ele.answer[0], false));
             $(`#${faqAnswerIdsPlace.id}`).attr('data-answer-render', 'true');
             let faqs = $(`#dynamicBlock .type-info-run-send #faqSection-${splitedanswerPlaceableID.join('-')}`);
+            this.commonService.hideSendAndCopyBtnsforCallconversation(faqDiv);
 
             if(ele.answer && ele.answer.length > 1){
               this.commonService.appendSeeMoreWrapper(faqSection, ele, splitedanswerPlaceableID.join('-'), splitedanswerPlaceableID.join('-'));
@@ -1715,6 +1718,7 @@ export class AssistComponent implements OnInit {
                 </div>`;
             a.append(faqActionHtml);
             faqs.append(`<div class="desc-text" id="desc-${uniqueID + index}">${this.commonService.handleEmptyLine(ele.answer[0], false)}</div>`);
+            this.commonService.hideSendAndCopyBtnsforCallconversation(faqs);
 
             if(ele.answer && ele.answer.length > 1){
               this.commonService.appendSeeMoreWrapper(faqs, ele, uniqueID+index, uniqueID+index);
@@ -1800,6 +1804,7 @@ export class AssistComponent implements OnInit {
 
           a.append(faqActionHtml);
           faqs.append(`<div class="desc-text" id="desc-${uniqueID + index}">${this.commonService.handleEmptyLine(res.components[0].data.text[0], false)}</div>`);
+          this.commonService.hideSendAndCopyBtnsforCallconversation(faqs);
 
           if(res.components[0].data.text && res.components[0].data.text.length > 1){
             this.commonService.appendSeeMoreWrapper(faqs, ele, uniqueID + index, uniqueID + index);

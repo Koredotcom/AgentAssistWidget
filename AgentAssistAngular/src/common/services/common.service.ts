@@ -839,6 +839,14 @@ export class CommonService {
     return response;
   }
 
+  hideSendAndCopyBtnsforCallconversation(contanier) {
+    let lastchild = $(contanier).children().last();
+    if(this.isCallConversation == true){
+      $(lastchild).find('.copy-btn').addClass('hide')
+      $(lastchild).find('.send-run-btn').addClass('hide')
+    }
+  }
+
   hideSendOrCopyButtons(parsedPayload, conatiner, smallTalk?, componentType?){
     let lastchild = $(conatiner).children().last();
     if(smallTalk){
