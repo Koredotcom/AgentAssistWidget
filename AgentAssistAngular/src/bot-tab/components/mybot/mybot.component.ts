@@ -328,7 +328,7 @@ export class MybotComponent implements OnInit {
   }
 
   smallTalkActionLinkTemplate(uuids,sendData){
-    let actionLinkTemplate =  ` <div class="action-links data-send-btn">
+    let actionLinkTemplate =  ` <div class="action-links">
     <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data="${sendData}">Send</button>
     <div class="copy-btn hide" data-msg-id="${uuids}" data-msg-data="${sendData}">
         <i class="ast-copy" data-msg-id="${uuids}" data-msg-data="${sendData}"></i>
