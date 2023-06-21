@@ -848,7 +848,7 @@ export class CommonService {
     if (!parsedPayload && componentType != 'dialogAct') {
         $(lastchild).find('.copy-btn').removeClass('hide')
     }
-    if((!this.configObj.source || this.configObj.source !== 'smartassist-color-scheme') && parsedPayload){
+    if((!this.configObj.source || this.configObj.source !== ProjConstants.SMARTASSIST_SOURCE) && parsedPayload){
         $(lastchild).find('.send-run-btn').addClass('hide')
     }
 
