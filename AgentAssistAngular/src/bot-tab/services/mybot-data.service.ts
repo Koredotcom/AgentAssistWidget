@@ -102,7 +102,7 @@ export class MybotDataService {
           <div class="run-info-content" >
           <div class="title">Ask customer</div>
           <div class="agent-utt">
-          <div class="title-data" id="dislayData-${myBotuuids}">${value}</div>
+          <div class="title-data" id="displayData-${myBotuuids}">${value}</div>
               <div class="action-links ">
                   <button class="send-run-btn" id="sendMsg" data-msg-id="${myBotuuids}" data-msg-data="${newTemp}" data-position-id="${positionID}">Send</button>
                   <div class="copy-btn" data-msg-id="${myBotuuids}" data-position-id="${positionID}">
