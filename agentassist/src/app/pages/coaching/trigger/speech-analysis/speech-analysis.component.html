@@ -24,7 +24,19 @@
             </ul>
         </div>
         <span class="utt-name-desc" *ngIf="!selectedSpeechType">is...</span>
-        <span class="utt-name-desc" *ngIf="selectedSpeechType && selectedSpeechType == coachingCnst.CROSSTALK">is detected.</span>
+        <span class="utt-name-desc" *ngIf="selectedSpeechType && selectedSpeechType == coachingCnst.CROSSTALK">of</span>
+        <div class="dropdown-occurences no_border" ngbDropdown [placement]="'bottom'" container="body"  #deadairtimerdropdownct = "ngbDropdown">
+            <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!timer}" (click)="showTimerCT = timer">{{timer}}</button>
+            <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
+                <div class="seconds-input">
+                    <div class="kr-sg-input-text">
+                        <input type="number" step="0.01" placeholder="Enter Seconds here" class="input-text" (keyup.enter)="onEnterTimeCT(showTimerCT);deadairtimerdropdownct.close()" [(ngModel)]="showTimerCT">
+                    </div>
+                    <!-- <div class="s-title">seconds</div> -->
+                </div>
+            </ul>
+        </div>
+        <span class="utt-name-desc" *ngIf="selectedSpeechType && selectedSpeechType == coachingCnst.CROSSTALK">seconds is detected.</span>
     </ng-container>
 
    <ng-container *ngIf="selectedSpeechType && selectedSpeechType == coachingCnst.DEADAIR">

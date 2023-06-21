@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChange } from '@angular/core';
-import { FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { COACHINGCNST } from '../../coaching.cnst';
 
 @Component({
@@ -26,7 +26,6 @@ export class SpeechAnalysisComponent implements OnInit {
   selectedOperator : string;
   wordcount = COACHINGCNST.SELECTED_WORDCOUNT;
   showWordcount = COACHINGCNST.SELECTED_WORDCOUNT;
-
   constructor() { }
 
   ngOnInit(): void {
@@ -57,6 +56,15 @@ export class SpeechAnalysisComponent implements OnInit {
 
   clickOnType(type){
     this.selectedSpeechType = type;
+    if(type === 'speech_speed'){
+      this.wordcount = COACHINGCNST.SELECTED_WORDCOUNT;
+      (<FormGroup>this.form.controls.frequency).addControl('nWords', new FormControl(COACHINGCNST.SELECTED_WORDCOUNT));
+      (<FormGroup>this.form.controls.frequency).removeControl('timeTaken');
+    }else{
+      this.timer = COACHINGCNST.SELECTED_TIMER;
+      (<FormGroup>this.form.controls.frequency).addControl('timeTaken', new FormControl(COACHINGCNST.SELECTED_TIMER));
+      (<FormGroup>this.form.controls.frequency).removeControl('nWords');
+    };
     this.form.controls.subType.setValue(type);
     this.resetFormValuesBasedOnSpeechSelection(type);
   }
@@ -90,9 +98,14 @@ export class SpeechAnalysisComponent implements OnInit {
     (this.form.controls.frequency as FormGroup).controls?.timeTaken.setValue(this.timer);
   }
 
+  onEnterTimeCT(e){
+    this.timer = e && e > 1 ? e : 2;
+    (this.form.controls.frequency as FormGroup).controls?.timeTaken.setValue(this.timer);
+  }
+
   onEnterWords(e){
     this.wordcount = e ? e : 1;
-    (this.form.controls.frequency as FormGroup).controls?.nWords.setValue(this.wordcount);
+    (this.form.controls.frequency as FormGroup).controls?.nWords?.setValue(this.wordcount);
   }
 
   resetFormValidators(type){
