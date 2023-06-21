@@ -124,7 +124,7 @@ export class MybotDataService {
                    <div class="title">Ask customer</div>
                    <div class="agent-utt">
                        <div class="title-data"><ul class="chat-container" id="displayData-${myBotuuids}"></ul></div>
-                       <div class="action-links">
+                       <div class="action-links data-send-btn">
                            <button class="send-run-btn" id="sendMsg" data-msg-id="${myBotuuids}" data-msg-data="${newTemp}" data-position-id="${positionID}">Send</button>
                            <div class="copy-btn hide" data-msg-id="${myBotuuids}" data-position-id="${positionID}">
                                <i class="ast-copy" data-msg-id="${myBotuuids}" data-position-id="${positionID}"></i>
@@ -150,7 +150,7 @@ export class MybotDataService {
           <div class="title">Tell Customer</div>
           <div class="agent-utt">
           <div class="title-data" id="displayData-${myBotuuids}">${value}</div>
-              <div class="action-links">
+              <div class="action-links data-send-btn">
                   <button class="send-run-btn" id="sendMsg" data-msg-id="${myBotuuids}" data-msg-data="${newTemp}" data-position-id="${positionID}">Send</button>
                   <div class="copy-btn" data-msg-id="${myBotuuids}" data-position-id="${positionID}">
                       <i class="ast-copy" data-msg-id="${myBotuuids}" data-position-id="${positionID}"></i>
@@ -171,7 +171,7 @@ export class MybotDataService {
                    <div class="title">Tell Customer</div>
                    <div class="agent-utt">
                        <div class="title-data" ><ul class="chat-container" id="displayData-${myBotuuids}"></ul></div>
-                       <div class="action-links">
+                       <div class="action-links data-send-btn">
                            <button class="send-run-btn" id="sendMsg" data-msg-id="${myBotuuids}" data-msg-data="${newTemp}" data-position-id="${positionID}">Send</button>
                            <div class="copy-btn hide" data-msg-id="${myBotuuids}" data-position-id="${positionID}">
                                <i class="ast-copy" data-msg-id="${myBotuuids}" data-position-id="${positionID}"></i>

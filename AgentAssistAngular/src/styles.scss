@@ -874,6 +874,7 @@ html, body{
     margin-left: 6px;
     cursor: pointer;
     opacity: 1;
+    visibility: hidden;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .elipse-dropdown-info {
     margin-left: 6px;
@@ -1251,6 +1252,11 @@ border: 1px solid transparent !important;
     padding: 3px 10px;
     text-transform: uppercase;
     opacity: 1;
+    display: none;
+}
+
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data .run-info-content .agent-utt .data-send-btn .send-run-btn {
+  display: none;
 }
 
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data .run-info-content .agent-utt .action-links .copy-btn {
@@ -1267,6 +1273,7 @@ border: 1px solid transparent !important;
     margin-left: 6px;
     cursor: pointer;
     opacity: 1;
+    visibility: hidden;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data .run-info-content .order-number-info {
     background: var(--bg-hover-tabs-color);
@@ -1776,6 +1783,7 @@ border: 1px solid transparent !important;
     margin-left: 6px;
     cursor: pointer;
     opacity: 1;
+    visibility: hidden;
 }
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .elipse-dropdown-info {
     margin-left: 6px;
@@ -2211,6 +2219,7 @@ border: 1px solid transparent !important;
     margin-left: 6px;
     cursor: pointer;
     opacity: 1;
+    visibility: hidden;
 }
 .overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .elipse-dropdown-info {
     margin-left: 6px;
@@ -3085,6 +3094,7 @@ border: 1px solid transparent !important;
     padding: 3px 10px;
     text-transform: uppercase;
     opacity: 1;
+    display: none;
 }
 
 .collapse-acc-data .steps-run-data .run-info-content .agent-utt .action-links .copy-btn {
@@ -3101,6 +3111,7 @@ border: 1px solid transparent !important;
     margin-left: 6px;
     cursor: pointer;
     opacity: 1;
+    visibility: hidden;
 }
 .collapse-acc-data .steps-run-data .run-info-content .order-number-info {
     background: var(--bg-hover-tabs-color);
