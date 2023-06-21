@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
 import { COACHINGCNST } from '../../coaching.cnst';
 @Component({
@@ -90,6 +90,11 @@ export class HintAgentComponent implements OnInit {
   clickCloseT(closeT){
     this.closeType = closeT;
     (this.form.controls.message as FormGroup).controls.postAction.setValue(this.closeType);
+    if(closeT === 'doesnot_auto_close'){
+      (this.form.controls?.message as FormGroup)?.removeControl('time');
+    }else{
+      (this.form.controls?.message as FormGroup)?.addControl('time', new FormControl(5));
+    }
     this.resetValidators();
   }
   
