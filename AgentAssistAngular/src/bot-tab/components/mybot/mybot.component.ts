@@ -252,7 +252,7 @@ export class MybotComponent implements OnInit {
              <div class="title">Tell Customer</div>
              <div class="agent-utt">
                  <div class="title-data" id="displayData-${myBotuuids}">${data.buttons[0].value}</div>
-                 <div class="action-links data-send-btn">
+                 <div class="action-links">
                      <button class="send-run-btn" id="sendMsg" data-msg-id="${myBotuuids}"  data-msg-data="${data.buttons[0].value}">Send</button>
                      <div class="copy-btn" data-msg-id="${myBotuuids}" data-msg-data="${data.buttons[0].value}">
                          <i class="ast-copy" data-msg-id="${myBotuuids}" data-msg-data="${data.buttons[0].value}"></i>
@@ -328,7 +328,7 @@ export class MybotComponent implements OnInit {
   }
 
   smallTalkActionLinkTemplate(uuids,sendData){
-    let actionLinkTemplate =  ` <div class="action-links data-send-btn">
+    let actionLinkTemplate =  ` <div class="action-links">
     <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data="${sendData}">Send</button>
     <div class="copy-btn hide" data-msg-id="${uuids}" data-msg-data="${sendData}">
         <i class="ast-copy" data-msg-id="${uuids}" data-msg-data="${sendData}"></i>

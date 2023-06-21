@@ -1,6 +1,6 @@
 
 <ng-container *ngIf="searchConentObject && searchConentObject.value && showOverLay">
-    <div id="librarySearchText" [ngClass]=" searchType == projConstants.AGENT_SEARCH ? 'search-results-text' : 'searched-intent' ">{{searchResponse.totalSearchResults}} {{searchResultText}} {{searchConentObject.value}} 
+    <div id="librarySearchText" [ngClass]=" searchType == projConstants.AGENT_SEARCH ? 'search-results-text' : 'searched-intent' ">{{searchResponse.totalSearchResults}} {{searchResultText}} {{searchConentObject.value}}
         <span class="show-all" *ngIf="searchType == projConstants.AGENT_SEARCH && searchResponse.totalSearchResults > 2" (click)="handleShowAllClick()">Show all</span>
     </div>
     <div class="dialog-task-run-sec p-0" id="searchedDialogs">
@@ -10,7 +10,7 @@
             </div>
             <div class="content-dialog-task-type arr-cont-dialogtask" id="snippetsSuggestions-results">
                 <div class="type-with-img-title">Snippets ({{searchResponse.snippets?.length}})</div>
-    
+
                 <div class="type-info-run-send is-dropdown-show-default is-dropdown-open" [id]="'snippetDivLib-' + i" *ngFor="let snippet of searchResponse.snippets | slice : 0 : snippetViewCount; let i = index">
                     <div class="left-content" [id]="'snippetSectionLib-' + i">
                         <div class="title-text" [title]="snippet.title" [id]="'snippettitleLib-' + i"
@@ -36,15 +36,15 @@
                 <div class="link-view-full-article ghost-btn" [id]="'snippetFewView-' + i" *ngIf="!snippetAllView && searchResponse.snippets?.length > 2" (click)="showAllResultsClick(projConstants.VIEW_FEW_SNIPPETS)">{{projConstants.VIEW_FEW_SNIPPETS}}</div>
             </div>
         </div>
-        
+
             <div class="task-type" id="dialoguesArea" *ngIf="searchResponse.dialogs?.length > 0">
                 <div class="img-block-info">
                     <img [src]="imageFilePath + imageFileNames['DIALOG_TASK']">
                 </div>
-        
+
                 <div class="content-dialog-task-type arr-cont-dialogtask" id="dialogSuggestions-results">
                     <div class="type-with-img-title">Dialog task ({{searchResponse.dialogs?.length}})</div>
-        
+
                     <div class="type-info-run-send" *ngFor="let dialog of searchResponse.dialogs; let i = index">
                         <div class="left-content">
                             <div class="title-text" [id]="'automation-' + i">{{dialog.name}}</div>
@@ -100,7 +100,7 @@
                             <button class="ghost-btn show-less-btn" [id]="'seeLess-' + i" *ngIf="faq.showLessButton && faq.seeMoreWrapper && ((faq.answer && faq.toggle && !faq.answerRender) || (faq.answer && faq.answerRender))" (click)="toggleShowMoreLessButtons(faq, i, projConstants.FAQ)">{{projConstants.CLOSE}}</button>
 
                         </div>
-                        <div class="action-links data-send-btn" *ngIf="!faq.seeMoreWrapper && faq.answer && faq.answer.length > 0">
+                        <div class="action-links" *ngIf="!commonService.isCallConversation && (!faq.seeMoreWrapper && faq.answer && faq.answer.length > 0)">
                             <button class="send-run-btn" [id]="sendMsg" (click)="handleSendCopyButton(projConstants.SEND,faq.answer[0], projConstants.FAQ)">{{projConstants.SEND}}</button>
                             <div class="copy-btn" (click)="handleSendCopyButton(projConstants.COPY,faq.answer[0], projConstants.FAQ)">
                                 <i class="ast-copy"></i>
@@ -111,14 +111,14 @@
                     <div class="link-view-full-article ghost-btn" [id]="'faqFewView-' + i" *ngIf="!faqAllView && searchResponse.faqs?.length > 2" (click)="showAllResultsClick(projConstants.VIEW_FEW_FAQ)">{{projConstants.VIEW_FEW_FAQ}}</div>
                 </div>
             </div>
-        
+
             <div class="task-type" id="articlesArea" *ngIf="searchResponse.articles?.length > 0">
                 <div class="img-block-info">
                     <img [src]="imageFilePath + imageFileNames['FAQ_SUGGESTION']">
                 </div>
                 <div class="content-dialog-task-type arr-cont-dialogtask" id="articleSuggestions-results">
                     <div class="type-with-img-title">Article ({{searchResponse.articles?.length}})</div>
-        
+
                     <div class="type-info-run-send is-dropdown-show-default is-dropdown-open" [id]="'articleDivLib-' + i" *ngFor="let article of searchResponse.articles | slice : 0 : articleViewCount; let i = index">
                         <div class="left-content" [id]="'articleSectionLib-' + i">
                             <div class="title-text" [title]="article.title" [id]="'articletitleLib-' + i"
@@ -131,7 +131,7 @@
                             <button class="ghost-btn" [id]="'articleseeMore-' + i" *ngIf="article.showMoreButton" (click)="toggleShowMoreLessButtons(article, i, projConstants.ARTICLE)">{{projConstants.READ_MORE}}</button>
                             <button class="ghost-btn" [id]="'articleseeLess-' + i" *ngIf="article.showLessButton" (click)="toggleShowMoreLessButtons(article, i, projConstants.ARTICLE)">{{projConstants.READ_LESS}}</button>
                         </div>
-                        <div class="action-links data-send-btn" *ngIf="article.content">
+                        <div class="action-links" *ngIf="!commonService.isCallConversation && article.content">
                             <button class="send-run-btn" [id]="sendMsg" (click)="handleSendCopyButton(projConstants.SEND, article, projConstants.ARTICLE)">{{projConstants.SEND}}</button>
                             <div class="copy-btn" (click)="handleSendCopyButton(projConstants.COPY, article, projConstants.ARTICLE)">
                                 <i class="ast-copy"></i>
@@ -142,8 +142,8 @@
                     <div class="link-view-full-article ghost-btn" [id]="'articleFewView-' + i" *ngIf="!articleAllView && searchResponse.articles?.length > 2" (click)="showAllResultsClick(projConstants.VIEW_FEW_ARTICLES)">{{projConstants.VIEW_FEW_ARTICLES}}</div>
                 </div>
             </div>
-        
-    
+
+
     </div>
 </ng-container>
 

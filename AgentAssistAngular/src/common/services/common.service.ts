@@ -513,9 +513,9 @@ export class CommonService {
 
   confirmationNodeRenderForHistoryDataTransform(res){
     if(res && res.agentAssistDetails && (res.agentAssistDetails.componentType == 'dialogAct' || res.agentAssistDetails.entityType == 'list_of_values' || res.agentAssistDetails.newEntityType == 'list_of_values')  && res.components && res.components.length > 0 && res.components[0].data && res.components[0].data.text){
-      
+
       if(!res.agentAssistDetails.applyDefaultTemplate){
-        
+
         res.agentAssistDetails.componentType = '';
         res.agentAssistDetails.newEntityType = '';
       }
@@ -717,7 +717,7 @@ export class CommonService {
         }
       }
     }
-    
+
     for(let resObj of response){
       if(resObj && resObj.agentAssistDetails && resObj.agentAssistDetails.suggestions && resObj.agentAssistDetails.suggestions.faqs){
         if(resObj.channels && resObj.channels[0] && resObj.channels[0].reqId){
@@ -736,7 +736,7 @@ export class CommonService {
 
   async renderingAgentHistoryMessage(connectionDetails) {
     console.log(this.configObj.autoBotId, connectionDetails.autoBotId,"agent history-----",this.configObj, connectionDetails);
-    
+
     let url = `${this.configObj.agentassisturl}/agentassist/api/v1/agent-feedback/${this.configObj.conversationId}?interaction=mybot`;
     let feedBackResult = await this.renderHistoryFeedBack(url);
     if(this.configObj.fromSAT) {
@@ -755,8 +755,8 @@ export class CommonService {
           console.log("error", err)
           return err;
         });
-      
-     
+
+
     }
     // return this.getAgentHistoryData(`${this.configObj.agentassisturl}/api/1.1/botmessages/agentassist/${this.configObj.botid}/history?convId=${this.configObj.conversationId}&agentHistory=true`)
     //   .then(response => {
@@ -814,7 +814,7 @@ export class CommonService {
           return err;
         });
 
-    
+
     }
   }
 
@@ -837,6 +837,14 @@ export class CommonService {
         headers: headersVal
     }) // parses JSON response into native JavaScript objects
     return response;
+  }
+
+  hideSendAndCopyBtnsforCallconversation(contanier) {
+    let lastchild = $(contanier).children().last();
+    if(this.isCallConversation == true){
+      $(lastchild).find('.copy-btn').addClass('hide')
+      $(lastchild).find('.send-run-btn').addClass('hide')
+    }
   }
 
   hideSendOrCopyButtons(parsedPayload, conatiner, smallTalk?, componentType?){
@@ -997,7 +1005,7 @@ export class CommonService {
     if (JSON.parse(localStorage.getItem('innerTextValue'))) {
       if (this.activeTab == ProjConstants.ASSIST) {
 
-        let assistRequestParams = 
+        let assistRequestParams =
         {
           "conversationId": connectionObj.conversationId,
           "query": JSON.parse(localStorage.getItem('innerTextValue')),
@@ -1015,7 +1023,7 @@ export class CommonService {
         this.currentPositionId = "";
       } else if (this.activeTab == ProjConstants.MYBOT) {
 
-        let agent_assist_agent_request_params = 
+        let agent_assist_agent_request_params =
         {
           "isSearch": false,
           "conversationId": connectionObj.conversationId,

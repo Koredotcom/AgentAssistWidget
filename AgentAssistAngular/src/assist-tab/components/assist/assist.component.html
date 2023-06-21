@@ -10,7 +10,7 @@
                 <div class="title" *ngIf="i === 0">Customer has waited for an agent for few seconds.<br/>Here are some appropriate opening lines.</div>
                 <div class="agent-utt">
                  <div class="title-data" id="displayData-{{uuids}}">{{ele.value}}</div>
-                 <div class="action-links data-send-btn" *ngIf="!commonService.isCallConversation">
+                 <div class="action-links" *ngIf="!commonService.isCallConversation">
                      <button class="send-run-btn" id="sendMsgWelcome" (click)="commonService.preparePostMessageForSendAndCopy($event, ele.value, idReferenceConst.SENDMSG, connectionDetails)">Send</button>
                      <div class="copy-btn welcome-msg-copy" (click)="commonService.preparePostMessageForSendAndCopy($event, ele.value, idReferenceConst.COPYMSG, connectionDetails)">
                          <i class="ast-copy welcome-msg-copy"></i>
