@@ -26,7 +26,6 @@ export class SpeechAnalysisComponent implements OnInit {
   selectedOperator : string;
   wordcount = COACHINGCNST.SELECTED_WORDCOUNT;
   showWordcount = COACHINGCNST.SELECTED_WORDCOUNT;
-
   constructor() { }
 
   ngOnInit(): void {
@@ -58,9 +57,11 @@ export class SpeechAnalysisComponent implements OnInit {
   clickOnType(type){
     this.selectedSpeechType = type;
     if(type === 'speech_speed'){
-      (<FormGroup>this.form.controls.frequency).addControl('nWords', new FormControl(180))  
+      this.onEnterWords(180);
+      (<FormGroup>this.form.controls.frequency).addControl('nWords', new FormControl(180));
+      (<FormGroup>this.form.controls.frequency).removeControl('timeTaken');
     }else{
-      (<FormGroup>this.form.controls.frequency).removeControl('nWords')  
+      (<FormGroup>this.form.controls.frequency).removeControl('nWords');
     }
     this.form.controls.subType.setValue(type);
     this.resetFormValuesBasedOnSpeechSelection(type);
@@ -92,6 +93,11 @@ export class SpeechAnalysisComponent implements OnInit {
 
   onEnterTime(e){
     this.timer = e ? e : 1;
+    (this.form.controls.frequency as FormGroup).controls?.timeTaken.setValue(this.timer);
+  }
+
+  onEnterTimeCT(e){
+    this.timer = e && e > 1 ? e : 2;
     (this.form.controls.frequency as FormGroup).controls?.timeTaken.setValue(this.timer);
   }
 
