@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { COACHINGCNST } from './coaching.cnst';
 import { v4 as uuid } from 'uuid';
 
@@ -56,23 +56,25 @@ export class CoachingService {
       frequency: this.fb.group({
         nOccurrences: [1, Validators.required],
         timeTaken: [30],
-        nWords : [180]
       })
-    }
+    };
   }
 
   setSpeechAnalysisForm(obj){
-    return {
+    let objC = {
       _id: [obj._id, [Validators.required]],
       type: this.coachingCnst.SPEECH_ANALYSIS,
       subType: [obj.subType, [Validators.required]],
       operator : [obj.operator, [Validators.required]],
       frequency: this.fb.group({
         nOccurrences: [obj.frequency?.nOccurrences],
-        timeTaken: [obj.frequency?.timeTaken],
-        nWords : [obj.frequency?.nWords]
+        timeTaken: [obj.frequency?.timeTaken]
       })
-    } 
+    };
+    if(obj.frequency?.nWords){
+      (<FormGroup> objC.frequency).addControl('nWords', new FormControl(obj.frequency?.nWords))
+    }
+    return objC;
   }
 
   getVariableFormControlObject(){

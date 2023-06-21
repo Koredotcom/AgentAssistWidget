@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChange } from '@angular/core';
-import { FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { COACHINGCNST } from '../../coaching.cnst';
 
 @Component({
@@ -57,6 +57,11 @@ export class SpeechAnalysisComponent implements OnInit {
 
   clickOnType(type){
     this.selectedSpeechType = type;
+    if(type === 'speech_speed'){
+      (<FormGroup>this.form.controls.frequency).addControl('nWords', new FormControl(180))  
+    }else{
+      (<FormGroup>this.form.controls.frequency).removeControl('nWords')  
+    }
     this.form.controls.subType.setValue(type);
     this.resetFormValuesBasedOnSpeechSelection(type);
   }
@@ -92,7 +97,7 @@ export class SpeechAnalysisComponent implements OnInit {
 
   onEnterWords(e){
     this.wordcount = e ? e : 1;
-    (this.form.controls.frequency as FormGroup).controls?.nWords.setValue(this.wordcount);
+    (this.form.controls.frequency as FormGroup).controls?.nWords?.setValue(this.wordcount);
   }
 
   resetFormValidators(type){
