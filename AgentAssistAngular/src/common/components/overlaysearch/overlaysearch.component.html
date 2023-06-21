@@ -100,7 +100,7 @@
                             <button class="ghost-btn show-less-btn" [id]="'seeLess-' + i" *ngIf="faq.showLessButton && faq.seeMoreWrapper && ((faq.answer && faq.toggle && !faq.answerRender) || (faq.answer && faq.answerRender))" (click)="toggleShowMoreLessButtons(faq, i, projConstants.FAQ)">{{projConstants.CLOSE}}</button>
 
                         </div>
-                        <div class="action-links" *ngIf="!faq.seeMoreWrapper && faq.answer && faq.answer.length > 0">
+                        <div class="action-links" *ngIf="!commonService.isCallConversation && (!faq.seeMoreWrapper && faq.answer && faq.answer.length > 0)">
                             <button class="send-run-btn" [id]="sendMsg" (click)="handleSendCopyButton(projConstants.SEND,faq.answer[0], projConstants.FAQ)">{{projConstants.SEND}}</button>
                             <div class="copy-btn" (click)="handleSendCopyButton(projConstants.COPY,faq.answer[0], projConstants.FAQ)">
                                 <i class="ast-copy"></i>
@@ -131,7 +131,7 @@
                             <button class="ghost-btn" [id]="'articleseeMore-' + i" *ngIf="article.showMoreButton" (click)="toggleShowMoreLessButtons(article, i, projConstants.ARTICLE)">{{projConstants.READ_MORE}}</button>
                             <button class="ghost-btn" [id]="'articleseeLess-' + i" *ngIf="article.showLessButton" (click)="toggleShowMoreLessButtons(article, i, projConstants.ARTICLE)">{{projConstants.READ_LESS}}</button>
                         </div>
-                        <div class="action-links" *ngIf="article.content">
+                        <div class="action-links" *ngIf="!commonService.isCallConversation && article.content">
                             <button class="send-run-btn" [id]="sendMsg" (click)="handleSendCopyButton(projConstants.SEND, article, projConstants.ARTICLE)">{{projConstants.SEND}}</button>
                             <div class="copy-btn" (click)="handleSendCopyButton(projConstants.COPY, article, projConstants.ARTICLE)">
                                 <i class="ast-copy"></i>
