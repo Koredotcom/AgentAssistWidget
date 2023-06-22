@@ -25,8 +25,8 @@ export const COACHINGCNST = {
     NUDGE_AGENT: 'nudge',
     HINT_AGENT: 'hint',
     ASSIGN : 'assign',
-    ALERT_MANAGER: 'Alert Manager',
-    EMAIL_MANAGER: 'Email Manager',
+    ALERT_MANAGER: 'alert_manager',
+    EMAIL_MANAGER: 'email_manager',
     FAQ: 'FAQ',
     TYPE_OF_HINT: [{
         type: 'positive',
@@ -53,5 +53,9 @@ export const COACHINGCNST = {
         'cross_talk' : ['nOccurrences'],
         'deadair' : ['nOccurrences','timeTaken'],
         'speech_speed' : ['nOccurrences', 'nWords']
+    },
+    WHEN_TYPE : {
+        "immediately" : "Immediately",
+        "eod" : "Add to end of the day email"
     }
 }

@@ -155,6 +155,32 @@ export class CoachingService {
     }
   }
 
+  getEmailManagerFromObj(){
+    return {
+      _id: ['aat-'+uuid(), [Validators.required]],
+      type: this.coachingCnst.EMAIL_MANAGER,
+      emails : [['sarada@gmal.com'],Validators.required],
+      when: ['', [Validators.required]],
+      message : this.fb.group({
+        title: ['', Validators.required],
+        body : ['', Validators.required]
+      })
+    }
+  }
+
+  setEmailManagerForm(obj){
+    return {
+      _id: [obj._id, [Validators.required]],
+      type: this.coachingCnst.EMAIL_MANAGER,
+      emails : [obj.emails,Validators.required],
+      when: [obj.when, [Validators.required]],
+      message : this.fb.group({
+        title: [obj.message?.title, Validators.required],
+        body : [obj.message?.body, Validators.required]
+      })
+    }
+  }
+
   setHintForm(obj){
     return {
       _id: [obj._id, [Validators.required]],
