@@ -89,7 +89,7 @@ export class CoachingGroupCreateComponent implements OnInit {
 		this.modalRef = this.modalService.open(CoachingGroupRuleDeleteComponent, { centered: true, keyboard: false, windowClass: 'delete-uc-rule-modal', backdrop: 'static' });
     this.modalRef.componentInstance.data = {
       title : "Delete Group",
-      desc : "Are you sure, you want to delete group '" + this.createGroupForm.controls.name.value + "', All the rules under the group will be deleted.",
+      desc : "Are you sure you want to delete group '" + this.createGroupForm.controls.name.value + "'? All the rules under the group will be deleted.",
       type : COACHINGCNST.GROUP,
       groupId : this.groupData._id
     };
