@@ -170,6 +170,45 @@
     align-items: flex-start;
     padding: 0 110px 0 20px;
     margin-bottom: 25px;
+    &.bg-triggers-info{
+        margin-left: 20px;
+        border-radius: 6px;
+        background: #FFFFFF;
+        display: inline-flex;
+        padding: 5px 30px 0px 30px;
+        .adherence-tag-text{
+            padding: 0 2px;
+            border-bottom: 1px dashed #98A2B3;
+            padding-bottom: 4px;
+            min-height: 30px;
+            display: flex;
+            align-items: center;
+            span{
+                padding: 2px 8px 2px 20px;
+                border-radius: 16px;
+                background: #ECFDF3;
+                height: 22px;
+                display: flex;
+                align-items: center;
+                font-size: 12px;
+                font-weight: 500;
+                line-height: 18px;
+                color: #027A48;
+                position: relative;
+                &::before{
+                    content: "";
+                    position: absolute;
+                    width: 8px;
+                    height: 8px;
+                    background: #12B76A;
+                    border: 1px solid #fff;
+                    border-radius: 100%;
+                    left: 6px;
+                    top: auto;
+                }
+            }
+        }
+    }
     .drag-content{
         position: absolute;
         left: 0;
