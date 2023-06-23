@@ -1,7 +1,8 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
 import { COACHINGCNST } from '../../coaching.cnst';
+import { CoachingService } from '../../coaching.service';
 
 @Component({
   selector: 'app-nudge-agent',
@@ -18,7 +19,9 @@ export class NudgeAgentComponent implements OnInit {
   selMsgType: string = '';
   nudgeMsg: string = '';
   showNudgeMsg: string = '';
+  selectedAdherence : string;
   openAdherenceSlider : boolean = false;
+  allAdherences = this.coachingService.allactionList;
 
   private adherenceSlider: SliderComponentComponent;
   @ViewChild('adherenceSlider') set content(content: SliderComponentComponent) {
@@ -27,7 +30,8 @@ export class NudgeAgentComponent implements OnInit {
      }
   }
 
-  constructor(private cdRef : ChangeDetectorRef) { }
+  constructor(private cdRef : ChangeDetectorRef, private coachingService : CoachingService,
+    private fb : FormBuilder) { }
 
   ngOnInit(): void {
     
@@ -39,6 +43,7 @@ export class NudgeAgentComponent implements OnInit {
       this.selMsgType = formVal.expression;
       this.nudgeMsg = formVal.message.title;
       this.showNudgeMsg = formVal.message.title;
+      this.selectedAdherence = formVal.adherence?.adType;
     }
   }
 
@@ -68,4 +73,16 @@ export class NudgeAgentComponent implements OnInit {
   deleteActionRule(){
     this.deleteAction.emit(this.index-1);
   }
+
+  selectAdherenceClick(type){
+    this.selectedAdherence = type;
+    (<FormGroup> this.form).addControl('adherence',this.fb.group(this.coachingService.getAdherenceForm()));
+    this.cdRef.detectChanges();
+  }
+
+  deleteAdherenceClick(){
+    this.selectedAdherence = null;
+    (<FormGroup> this.form).removeControl('adherence');    
+  }
+
 }

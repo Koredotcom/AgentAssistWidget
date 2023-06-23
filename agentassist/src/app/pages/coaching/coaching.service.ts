@@ -136,45 +136,44 @@ export class CoachingService {
       expression: ['', [Validators.required]],
       message : this.fb.group({
         title: ['', Validators.required]
-      }),
-      adherence : this.fb.group({
-        adType : [''],
-        addUtterances: [[]],
-        deleteUtterances: [[]],
       })
     }
   }
 
   setNudgeForm(obj){
-    let nudgeForm = {
+    let nudgeForm : any = {
       _id: [obj._id, [Validators.required]],
       type: this.coachingCnst.NUDGE_AGENT,
       expression: [obj.expression, [Validators.required]],
       message : this.fb.group({
         title: [obj.message?.title, Validators.required]
-      }),
-      adherence : this.fb.group({
-        addUtterances: [[]],
-        deleteUtterances: [[]]
       })
     }
+    if(obj.adherence){
 
-    if(obj.adherence?.adType){
-      (<FormGroup> nudgeForm.adherence).addControl('adType', new FormControl(obj.adherence?.adType))
+      nudgeForm.adherence = this.fb.group({
+        addUtterances: [[]],
+        deleteUtterances: [[]],
+      });
+
+      if(obj.adherence?.adType){
+        (<FormGroup> nudgeForm.adherence).addControl('adType', new FormControl(obj.adherence?.adType))
+      }
+  
+      if(obj.adherence?.session){
+        (<FormGroup> nudgeForm.adherence).addControl('session', new FormControl(obj.adherence?.session))
+      }
+      if(obj.adherence?.nMins){
+        (<FormGroup> nudgeForm.adherence).addControl('nMins', new FormControl(obj.adherence?.nMins))
+      }
+      if(obj.adherence?.nMessages){
+        (<FormGroup> nudgeForm.adherence).addControl('nMessages', new FormControl(obj.adherence?.nMessages))
+      }
+      if(obj.adherence?.utteranceCount){
+        (<FormGroup> nudgeForm.adherence).addControl('utteranceCount', new FormControl(obj.adherence?.utteranceCount))
+      }
     }
 
-    if(obj.adherence?.session){
-      (<FormGroup> nudgeForm.adherence).addControl('session', new FormControl(obj.adherence?.session))
-    }
-    if(obj.adherence?.nMins){
-      (<FormGroup> nudgeForm.adherence).addControl('nMins', new FormControl(obj.adherence?.nMins))
-    }
-    if(obj.adherence?.nMessages){
-      (<FormGroup> nudgeForm.adherence).addControl('nMessages', new FormControl(obj.adherence?.nMessages))
-    }
-    if(obj.adherence?.utteranceCount){
-      (<FormGroup> nudgeForm.adherence).addControl('utteranceCount', new FormControl(obj.adherence?.utteranceCount))
-    }
     return nudgeForm;
   }
 
@@ -187,11 +186,6 @@ export class CoachingService {
         title: ['', Validators.required],
         body : ['', Validators.required],
         postAction : ['', Validators.required],
-      }),
-      adherence : this.fb.group({
-        adType : [''],
-        addUtterances: [[]],
-        deleteUtterances: [[]]
       })
     }
   }
