@@ -1,1 +1,104 @@
-<p>email-manager works!</p>
+<div class="utterance-triggers">
+    <span class="utt-name-desc">Email </span>
+    <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body">
+         <!-- <button class="dropdown-toggle btn-toggle">
+            <span class="choose-text">{{'{ select people }'}}</span>
+
+        </button> -->
+        <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body" #emailListDropdown="ngbDropdown">
+        
+            <button class="dropdown-toggle btn-toggle" [ngClass]="{'text-choosen': !!title}" ngbDropdownToggle
+                (click)="emailTitle = title">
+                <span class="choose-text">{{ emailList.length ? emailList.length + ' people' : '{ select people }' }}</span>
+            </button>
+            <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
+        
+                <div class="variable-value-input with-check-icon">
+                    <div class="input-variable-sec">
+                        <div class="label-text">Add people</div>
+                        <div class="kr-sg-input-text">
+                            <span class="info-tip" tooltipClass="tooltip-global-styles" ngbTooltip="Tooltip info">
+                                <i class="icon-sa-help"></i>
+                            </span>
+                            <input type="text" placeholder="Enter Comma Seperated Email Id's" class="input-text" [(ngModel)]="emailListString">
+                        </div>
+                    </div>
+                    <div class="check-icon-block" (click)="submitEmails();emailListDropdown.close()">
+                        <i class="icon-sa-conv-check"></i>
+                    </div>
+                </div>
+            </ul>
+        </div>
+      
+    </div>
+
+    <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body">
+        <button class="dropdown-toggle btn-toggle" [ngClass]="{'text-choosen': !!selWhenType}">
+            <span class="choose-text">{{selWhenType ? whenTypeList[selWhenType] : '{ when }'}}</span>
+        </button>
+        <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
+            <ng-container *ngFor="let type of whenTypeList | keyvalue">
+                <li ngbDropdownItem class="list-item-li" (click)="selectWhenType(type.key)">
+                    <span class="title">{{type.value}}</span>
+                </li>
+            </ng-container>
+        </ul>
+    </div>
+
+    <span class="utt-name-desc">with this subject</span>
+    <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body" #emailtitleB="ngbDropdown">
+        <button class="dropdown-toggle btn-toggle" [ngClass]="{'text-choosen': !!title}" ngbDropdownToggle (click)="emailTitle = title">
+            <span class="choose-text">{{ title ? title : '{ set subject }' }}</span>
+        </button>
+        <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
+            
+            <div class="variable-value-input with-check-icon">
+                <div class="input-variable-sec">
+                    <div class="label-text">Subject</div>
+                    <div class="kr-sg-input-text">
+                        <span class="info-tip" tooltipClass="tooltip-global-styles" ngbTooltip="Tooltip info">
+                            <i class="icon-sa-help"></i>
+                        </span>
+                        <input type="text" placeholder="Email subject"
+                            class="input-text" maxlength="42" [(ngModel)]="emailTitle">
+                    </div>
+                    <div class="count-char">{{emailTitle.length}}/42</div>
+                </div>
+                <div class="check-icon-block" (click)="submitTitle();emailtitleB.close()">
+                    <i class="icon-sa-conv-check"></i>
+                </div>
+            </div>
+        </ul>
+    </div>
+
+    <span class="utt-name-desc">and body</span>
+    <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body" #emailbody="ngbDropdown">
+        <button class="dropdown-toggle btn-toggle" [ngClass]="{'text-choosen': !!bodyMsg}" ngbDropdownToggle (click)="emailBody = bodyMsg">
+            <span class="choose-text">{{bodyMsg ? bodyMsg : '{ set body }'}}</span>
+        </button>
+        <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
+            <ng-container *ngTemplateOutlet="emailmanagerbody;"></ng-container>
+        </ul>
+    </div>
+
+    <div class="delete-row" (click)="deleteActionRule()"> 
+        <i class="icon-sa-welcome-delete"></i>
+    </div>
+</div>
+
+<ng-template #emailmanagerbody>
+    <div class="variable-value-input with-check-icon">
+        <div class="input-variable-sec">
+            <div class="kr-sg-input-text-area">
+                <textarea placeholder="Provide a body" maxlength="1000" [(ngModel)]="emailBody" class="input-text"></textarea>
+            </div>
+            <div class="count-char">{{emailBody.length}}/1000</div>
+        </div>
+        <div class="check-icon-block" (click)="submitBody();emailbody.close()">
+            <i class="icon-sa-conv-check"></i>
+        </div>
+    </div>
+</ng-template>
+
+
+

@@ -75,8 +75,7 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
       type: this.coachingCnst.EMAIL_MANAGER,
       title: "Email Manager",
       desc: "Send email to manager",
-      icon: "icon-sa-chat",
-      disable : true
+      icon: "icon-sa-chat"
     },{
       type: this.coachingCnst.DIALOG,
       title: "Dialog",
@@ -151,6 +150,8 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
       return this.fb.group(this.coachingService.setNudgeForm(element))
     }else if(element.type == this.coachingCnst.HINT_AGENT){
       return this.fb.group(this.coachingService.setHintForm(element))
+    }else if(element.type == this.coachingCnst.EMAIL_MANAGER){
+      return this.fb.group(this.coachingService.setEmailManagerForm(element));
     }
   }
 
@@ -234,6 +235,9 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
     } else if(clickType == this.coachingCnst.HINT_AGENT){
       (<FormArray>this.ruleForm.controls["actions"])
       .push(this.fb.group(this.coachingService.getHintFromObj()))
+    } else if(clickType == this.coachingCnst.EMAIL_MANAGER){
+        (<FormArray>this.ruleForm.controls["actions"])
+        .push(this.fb.group(this.coachingService.getEmailManagerFromObj()))
     }
     
     // else if(clickType == this.coachingCnst.ALERT_MANAGER){
