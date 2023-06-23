@@ -57,5 +57,6 @@ export const COACHINGCNST = {
     WHEN_TYPE : {
         "immediately" : "Immediately",
         "eod" : "Add to end of the day email"
-    }
+    },
+    IMMEDIATELY : 'immediately'
 }

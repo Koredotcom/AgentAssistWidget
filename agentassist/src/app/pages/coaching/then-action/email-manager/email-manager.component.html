@@ -15,7 +15,7 @@
         
                 <div class="variable-value-input with-check-icon">
                     <div class="input-variable-sec">
-                        <div class="label-text">Title</div>
+                        <div class="label-text">Add people</div>
                         <div class="kr-sg-input-text">
                             <span class="info-tip" tooltipClass="tooltip-global-styles" ngbTooltip="Tooltip info">
                                 <i class="icon-sa-help"></i>
@@ -33,7 +33,7 @@
     </div>
 
     <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body">
-        <button class="dropdown-toggle btn-toggle" [ngClass]="{'text-choosen': !!selWhenType}" ngbDropdownToggle>
+        <button class="dropdown-toggle btn-toggle" [ngClass]="{'text-choosen': !!selWhenType}">
             <span class="choose-text">{{selWhenType ? whenTypeList[selWhenType] : '{ when }'}}</span>
         </button>
         <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
@@ -46,7 +46,7 @@
     </div>
 
     <span class="utt-name-desc">with this subject</span>
-    <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body" #emailtitle="ngbDropdown">
+    <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body" #emailtitleB="ngbDropdown">
         <button class="dropdown-toggle btn-toggle" [ngClass]="{'text-choosen': !!title}" ngbDropdownToggle (click)="emailTitle = title">
             <span class="choose-text">{{ title ? title : '{ set subject }' }}</span>
         </button>
@@ -54,7 +54,7 @@
             
             <div class="variable-value-input with-check-icon">
                 <div class="input-variable-sec">
-                    <div class="label-text">Title</div>
+                    <div class="label-text">Subject</div>
                     <div class="kr-sg-input-text">
                         <span class="info-tip" tooltipClass="tooltip-global-styles" ngbTooltip="Tooltip info">
                             <i class="icon-sa-help"></i>
@@ -64,7 +64,7 @@
                     </div>
                     <div class="count-char">{{emailTitle.length}}/42</div>
                 </div>
-                <div class="check-icon-block" (click)="submitTitle();emailtitle.close()">
+                <div class="check-icon-block" (click)="submitTitle();emailtitleB.close()">
                     <i class="icon-sa-conv-check"></i>
                 </div>
             </div>
@@ -90,9 +90,9 @@
     <div class="variable-value-input with-check-icon">
         <div class="input-variable-sec">
             <div class="kr-sg-input-text-area">
-                <textarea placeholder="Provide a body" maxlength="42" [(ngModel)]="emailBody" class="input-text"></textarea>
+                <textarea placeholder="Provide a body" maxlength="1000" [(ngModel)]="emailBody" class="input-text"></textarea>
             </div>
-            <div class="count-char">{{emailbody.length}}/42</div>
+            <div class="count-char">{{emailBody.length}}/1000</div>
         </div>
         <div class="check-icon-block" (click)="submitBody();emailbody.close()">
             <i class="icon-sa-conv-check"></i>

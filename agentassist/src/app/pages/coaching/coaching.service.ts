@@ -160,7 +160,7 @@ export class CoachingService {
       _id: ['aat-'+uuid(), [Validators.required]],
       type: this.coachingCnst.EMAIL_MANAGER,
       emails : [[],Validators.required],
-      when: ['', [Validators.required]],
+      when: [this.coachingCnst.IMMEDIATELY, [Validators.required]],
       message : this.fb.group({
         title: ['', Validators.required],
         body : ['', Validators.required]
