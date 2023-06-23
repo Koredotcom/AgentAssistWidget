@@ -9,6 +9,31 @@ import { v4 as uuid } from 'uuid';
 export class CoachingService {
 
   coachingCnst : any = COACHINGCNST;
+  allactionList : any = [
+    {
+      type: this.coachingCnst.ACKNOWLEDGE_PRESSED,
+      title: "Acknowledge Pressed",
+      desc: "Hint's button pressed",
+      icon: "icon-sa-chat"
+    },{
+      type: this.coachingCnst.UTTERANCE,
+      title: "Utterance",
+      desc: "Checks Agent's utterances",
+      icon: "icon-sa-chat"
+    },    {
+      type: this.coachingCnst.FAQ_USED,
+      title: "FAQ Used",
+      desc: "Checks for the use of an FAQ",
+      icon: "icon-sa-chat",
+      disable : true
+    },    {
+      type: this.coachingCnst.DIALOG_RUN,
+      title: "Dialog Run",
+      desc: "Checks for a Dialog run",
+      icon: "icon-sa-chat",
+      disable : true
+    }
+  ]
   constructor(private fb: FormBuilder) { }
 
   getUtteranceFormControlObject(){
@@ -113,15 +138,15 @@ export class CoachingService {
         title: ['', Validators.required]
       }),
       adherence : this.fb.group({
+        adType : [''],
         addUtterances: [[]],
         deleteUtterances: [[]],
-        utteranceCount: ['', [Validators.required]]
       })
     }
   }
 
   setNudgeForm(obj){
-    return {
+    let nudgeForm = {
       _id: [obj._id, [Validators.required]],
       type: this.coachingCnst.NUDGE_AGENT,
       expression: [obj.expression, [Validators.required]],
@@ -130,10 +155,27 @@ export class CoachingService {
       }),
       adherence : this.fb.group({
         addUtterances: [[]],
-        deleteUtterances: [[]],
-        utteranceCount: [obj.adherence?.utteranceCount,[Validators.required]]
+        deleteUtterances: [[]]
       })
     }
+
+    if(obj.adherence?.adType){
+      (<FormGroup> nudgeForm.adherence).addControl('adType', new FormControl(obj.adherence?.adType))
+    }
+
+    if(obj.adherence?.session){
+      (<FormGroup> nudgeForm.adherence).addControl('session', new FormControl(obj.adherence?.session))
+    }
+    if(obj.adherence?.nMins){
+      (<FormGroup> nudgeForm.adherence).addControl('nMins', new FormControl(obj.adherence?.nMins))
+    }
+    if(obj.adherence?.nMessages){
+      (<FormGroup> nudgeForm.adherence).addControl('nMessages', new FormControl(obj.adherence?.nMessages))
+    }
+    if(obj.adherence?.utteranceCount){
+      (<FormGroup> nudgeForm.adherence).addControl('utteranceCount', new FormControl(obj.adherence?.utteranceCount))
+    }
+    return nudgeForm;
   }
 
   getHintFromObj(){
@@ -145,33 +187,64 @@ export class CoachingService {
         title: ['', Validators.required],
         body : ['', Validators.required],
         postAction : ['', Validators.required],
-        time : [5]
       }),
       adherence : this.fb.group({
+        adType : [''],
         addUtterances: [[]],
-        deleteUtterances: [[]],
-        utteranceCount: ['', [Validators.required]]
+        deleteUtterances: [[]]
       })
     }
   }
 
   setHintForm(obj){
-    return {
+    let hintForm : any =  {
       _id: [obj._id, [Validators.required]],
       type: this.coachingCnst.HINT_AGENT,
       expression: [obj.expression, [Validators.required]],
       message : this.fb.group({
         title: [obj.message?.title, Validators.required],
         body : [obj.message?.body, Validators.required],
-        postAction : [obj.message?.postAction, Validators.required],
-        time : [obj.message?.time]
+        postAction : [obj.message?.postAction, Validators.required]
       }),
-      adherence : this.fb.group({
+    }
+
+    if(obj.message?.time){
+      (<FormGroup> hintForm.message).addControl('time', new FormControl(obj.message?.time))
+    }
+  
+    if (obj.adherence) {
+      hintForm.adherence = this.fb.group({
         addUtterances: [[]],
         deleteUtterances: [[]],
-        utteranceCount: [obj.adherence?.utteranceCount,[Validators.required]]
-      })
+      });
+      if (obj.adherence?.adType) {
+        (<FormGroup>hintForm.adherence).addControl('adType', new FormControl(obj.adherence?.adType))
+      }
+
+      if (obj.adherence?.session) {
+        (<FormGroup>hintForm.adherence).addControl('session', new FormControl(obj.adherence?.session))
+      }
+      if (obj.adherence?.nMins) {
+        (<FormGroup>hintForm.adherence).addControl('nMins', new FormControl(obj.adherence?.nMins))
+      }
+      if (obj.adherence?.nMessages) {
+        (<FormGroup>hintForm.adherence).addControl('nMessages', new FormControl(obj.adherence?.nMessages))
+      }
+      if (obj.adherence?.utteranceCount) {
+        (<FormGroup>hintForm.adherence).addControl('utteranceCount', new FormControl(obj.adherence?.utteranceCount))
+      }
+    }
+
+    return hintForm;
+  }
+
+  getAdherenceForm(){
+    return {
+      adType : ['', [Validators.required]],
+      addUtterances: [[]],
+      deleteUtterances: [[]]
     }
   }
 
+ 
 }

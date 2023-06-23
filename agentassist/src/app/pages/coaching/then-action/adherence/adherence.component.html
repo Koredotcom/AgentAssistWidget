@@ -48,8 +48,8 @@
                                                     <label for="checkbox-1" class="checkbox-custom-label">{{searchKey.value}}</label>
                                                 </div>
                                                 <div class="percentage-colr">
-                                                    <!-- <span class="percentage">12%</span> -->
-                                                    <!-- <span class="bgcolor"></span> -->
+                                                    <!-- <span class="percentage">12%</span>
+                                                    <span class="bgcolor"></span> -->
                                                 </div>
                                             </div>
                                             <div class="found-details-info" *ngIf="searchKey.value?.length > 0">
@@ -67,8 +67,8 @@
                                                                     <label for="'checkbox-' + {{i}}" class="checkbox-custom-label">{{utter.value}}</label>
                                                                 </div>
                                                                 <div class="percentage-colr">
-                                                                    <!-- <span class="percentage">12%</span> -->
-                                                                    <!-- <span class="bgcolor"></span> -->
+                                                                    <!-- <span class="percentage">12%</span>
+                                                                    <span class="bgcolor"></span> -->
                                                                 </div>
                                                             </div>
                                                         </ng-container>
@@ -125,8 +125,8 @@
                                 <div class="saved-utt-body-sec">
                                     <div class="saved-title-utt">{{utter?.utterance}}</div>
                                     <div class="percentage-colr">
-                                        <!-- <span class="percentage">12%</span> -->
-                                        <!-- <span class="bgcolor"></span> -->
+                                        <!-- <span class="percentage">12%</span>
+                                        <span class="bgcolor"></span> -->
                                     </div>
                                     <div class="delete-saved-utt" (click)="deleteUtternce(utter, iD)">
                                         <i class="icon-sa-welcome-delete"></i>
@@ -137,8 +137,8 @@
                                 <div class="saved-utt-body-sec">
                                     <div class="saved-title-utt">{{utter?.utterance}}</div>
                                     <div class="percentage-colr">
-                                        <!-- <span class="percentage">12%</span> -->
-                                        <!-- <span class="bgcolor"></span> -->
+                                        <!-- <span class="percentage">12%</span>
+                                        <span class="bgcolor"></span> -->
                                     </div>
                                     <div class="delete-saved-utt" (click)="deleteUtternceNew(utter?.utterance, iDx)">
                                         <i class="icon-sa-welcome-delete"></i>
@@ -209,7 +209,7 @@
         </div>
     </div>
     <div class="footer-actions">
-        <button class="kr-sg-button-secondary btn_lg">Cancel</button>
+        <button class="kr-sg-button-secondary btn_lg" (click)="closeAdherence('utterance')">Cancel</button>
         <button class="kr-sg-button-primary btn_lg" (click)="saveUtteranceStrings()">Save</button>
     </div>
 </div>
