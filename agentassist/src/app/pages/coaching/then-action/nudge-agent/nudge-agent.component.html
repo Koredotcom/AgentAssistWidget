@@ -39,11 +39,16 @@
             </div>
         </ul>
     </div>
-    <div class="add-adherence">
-        <button class="add-adherence-btn btn-toggle" (click)="openAdherence()">
+    <div class="add-adherence" *ngIf="!selectedAdherence">
+        <!-- <button class="add-adherence-btn" (click)="openAdherence()">
             <span class="choose-text"> {{(form?.value?.adherence?.utteranceCount) ? form?.value?.adherence?.utteranceCount + ' utterance(s)' : '+ Add Adherence'}}</span>
-        </button>
-
+        </button> -->
+        <div class="add-trgigger-dropdown" ngbDropdown placement="bottom">
+            <button class="add-triggers-btn" ngbDropdownToggle> + Add Adherence</button>
+            <div class="drop-add-trigger" ngbDropdownMenu>
+                <ng-container *ngTemplateOutlet="addAdherenceTemplate;"></ng-container> 
+            </div>
+        </div>
     </div>
     <div class="delete-row" (click)="deleteActionRule()"> 
         <i class="icon-sa-welcome-delete"></i>
@@ -51,35 +56,40 @@
 </div>
 
 
-
-
-<!-- <ng-template #variableName>
-    <div class="variable-value-input with-check-icon">
-        <div class="input-variable-sec">
-            <div class="kr-sg-input-text-area">
-                <textarea placeholder="Provide a body" class="input-text"></textarea>                                
-            </div>
-            <div class="count-char">6/42</div>
-            <div class="label-text m-t-20">Variable Name</div>
-            <div class="kr-sg-input-text">
-                <span class="info-tip" tooltipClass="tooltip-global-styles" ngbTooltip="Tooltip info">
-                    <i class="icon-sa-help"></i>
-                </span>
-                <input type="text" placeholder="Placeholder text" class="input-text">
-            </div>
-        </div>
-        <div class="check-icon-block">
-            <i class="icon-sa-conv-check"></i>
-        </div>
-    </div>
-</ng-template> -->
-
-<ng-container *ngIf="openAdherenceSlider">
-    <app-slider-component id="adherenceSlider" #adherenceSlider='app-slider'>
-        <app-adherence [createOrEdit]="createOrEdit" (onClose)="closeAdherence($event)" [form]="form"></app-adherence>
-    </app-slider-component>
-</ng-container>
-
 <ng-template #hintActions>
 
 </ng-template>
+
+<!-- adherence selection starts -->
+<ng-container *ngIf="selectedAdherence">
+    <app-adherence-selection [adherenceForm]="form" [createOrEdit]="createOrEdit" [adherenceSelection]="selectedAdherence" (deleteAdherence)="deleteAdherenceClick(event)"></app-adherence-selection>
+</ng-container>
+
+<!-- COmmon trigger template -->
+<ng-template #addAdherenceTemplate>
+    <div class="add-triggers">
+        <!-- <div class="line-indicator"></div> -->
+        <div class="choose-triggers-block">
+            <div class="heading-title">Choose a Trigger</div>
+            <div class="choose-t-block-bg">
+                <div class="choose-t-block">
+                    <ng-container *ngFor="let adherence of allAdherences">
+
+                        <div class="inner-card-choose" [ngClass]="{'disableTrigger' : adherence.disable}">
+                            <div class="content-choose-triggers" ngbDropdownItem (click)="selectAdherenceClick(adherence.type)">
+                                <div class="icon_blk">
+                                    <i class="{{adherence.icon}}"></i>
+                                </div>
+                                <div class="info-data-content">
+                                    <div class="title-choose">{{adherence.title}}</div>
+                                    <div class="desc-text">{{adherence.desc}}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template> 

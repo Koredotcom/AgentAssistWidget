@@ -1,7 +1,8 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
 import { COACHINGCNST } from '../../coaching.cnst';
+import { CoachingService } from '../../coaching.service';
 @Component({
   selector: 'app-hint-agent',
   templateUrl: './hint-agent.component.html',
@@ -19,14 +20,20 @@ export class HintAgentComponent implements OnInit {
   selMsgType:string = '';
   msgTypes = COACHINGCNST.TYPE_OF_HINT;
   closeTypes = COACHINGCNST.TYPE_OF_CLOSE;
+
   title: string = '';
   desc: string = '';
   bodyMsg: string = '';
   hintTitle: string = '';
   closeType: string = '';
+  selectedAdherence : string;
+
   time : number;
   variableTime : number;
+
   openAdherenceSlider : boolean = false;
+  allAdherences = this.coachingService.allactionList;
+  
   
   private adherenceSlider: SliderComponentComponent;
   @ViewChild('adherenceSlider') set content(content: SliderComponentComponent) {
@@ -35,7 +42,11 @@ export class HintAgentComponent implements OnInit {
     }
   }
 
-  constructor(private cdRef : ChangeDetectorRef) { }
+  constructor(
+    private cdRef : ChangeDetectorRef,
+    private coachingService : CoachingService,
+    private fb: FormBuilder,
+  ) { }
 
   ngOnInit(): void {
   }
@@ -51,6 +62,7 @@ export class HintAgentComponent implements OnInit {
       this.closeType = formVal.message.postAction;
       this.time = formVal.message.time ? formVal.message.time : 5;
       this.variableTime = formVal.message.time ? formVal.message.time : 5;
+      this.selectedAdherence = formVal.adherence?.adType;
 
     }else if(changes?.createOrEdit?.currentValue === COACHINGCNST.CREATE){
       const formVal = this.form.value;
@@ -107,14 +119,26 @@ export class HintAgentComponent implements OnInit {
     (this.form.controls.message as FormGroup).controls?.time.setValue(this.time);
   }
 
-  resetValidators(){
-    if(this.closeType == this.coachingCnst.AUTO_CLOSE){
-      (this.form.controls?.message as FormGroup)?.controls?.time.setValidators(Validators.required);
-      (this.form.controls?.message as FormGroup)?.controls?.time.setValue(this.time);
-    }else{
-      (this.form.controls?.message as FormGroup)?.controls?.time.clearValidators();
+  resetValidators() {
+    if (this.closeType == this.coachingCnst.AUTO_CLOSE) {
+      (this.form.controls?.message as FormGroup)?.controls?.time?.setValidators(Validators.required);
+      (this.form.controls?.message as FormGroup)?.controls?.time?.setValue(this.time);
+    } else {
+      (this.form.controls?.message as FormGroup)?.controls?.time?.clearValidators();
     }
-    (this.form.controls?.message as FormGroup)?.controls?.time.updateValueAndValidity();
+    (this.form.controls?.message as FormGroup)?.controls?.time?.updateValueAndValidity();
   }
+
+  selectAdherenceClick(type){
+    this.selectedAdherence = type;
+    (<FormGroup> this.form).addControl('adherence',this.fb.group(this.coachingService.getAdherenceForm()));
+    this.cdRef.detectChanges();
+  }
+
+  deleteAdherenceClick(){
+    this.selectedAdherence = null;
+    (<FormGroup> this.form).removeControl('adherence');    
+  }
+
 }
 
