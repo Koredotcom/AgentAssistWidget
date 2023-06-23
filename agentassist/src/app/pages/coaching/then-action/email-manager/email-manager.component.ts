@@ -23,6 +23,7 @@ export class EmailManagerComponent implements OnInit {
   emailTitle : string = '';
   emailBody : string = '';
   emailList : any = [];
+  emailListString : string;
 
   constructor() { }
 
@@ -36,10 +37,22 @@ export class EmailManagerComponent implements OnInit {
       this.title = formVal.message.title;
       this.bodyMsg = formVal.message.body;
       this.selWhenType = formVal.when;
+      this.emailList = formVal.emails;      
+      this.emailListString = (formVal.emails?.length) ? (formVal.emails?.join(',')) : '';      
     }else if(changes?.createOrEdit?.currentValue === COACHINGCNST.CREATE){
       const formVal = this.form.value;
-      this.emailList = formVal.emails;
     }
+  }
+
+  submitEmails(){
+    let emailList = this.emailListString?.trim()?.split(',');
+    this.emailList = [];
+    emailList.forEach(email =>{
+      if(email && email.trim()){
+        this.emailList.push(email.trim());
+      }
+    });
+    this.form.controls?.emails.setValue(this.emailList);
   }
 
   selectWhenType(type){

@@ -1,20 +1,35 @@
 <div class="utterance-triggers">
     <span class="utt-name-desc">Email </span>
     <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body">
-         <button class="dropdown-toggle btn-toggle">
+         <!-- <button class="dropdown-toggle btn-toggle">
             <span class="choose-text">{{'{ select people }'}}</span>
-        </button>
-        <!-- <button class="dropdown-toggle btn-toggle" [ngClass]="{'text-choosen': !!selMsgType}" ngbDropdownToggle>
-            <span class="choose-text">{{selMsgType ? selMsgType : '{ select people }'}}</span>
+
         </button> -->
-        <!-- <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
-            <ng-container *ngFor="let type of msgTypes">
-                <li ngbDropdownItem class="list-item-li" (click)="selectMsgType(type.type)">
-                    <span class="bg-action {{type.class}}"></span>
-                    <span class="title">{{type.type}}</span>
-                </li>
-            </ng-container>
-        </ul> -->
+        <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body" #emailListDropdown="ngbDropdown">
+        
+            <button class="dropdown-toggle btn-toggle" [ngClass]="{'text-choosen': !!title}" ngbDropdownToggle
+                (click)="emailTitle = title">
+                <span class="choose-text">{{ emailList.length ? emailList.length + ' people' : '{ select people }' }}</span>
+            </button>
+            <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
+        
+                <div class="variable-value-input with-check-icon">
+                    <div class="input-variable-sec">
+                        <div class="label-text">Title</div>
+                        <div class="kr-sg-input-text">
+                            <span class="info-tip" tooltipClass="tooltip-global-styles" ngbTooltip="Tooltip info">
+                                <i class="icon-sa-help"></i>
+                            </span>
+                            <input type="text" placeholder="Enter Comma Seperated Email Id's" class="input-text" [(ngModel)]="emailListString">
+                        </div>
+                    </div>
+                    <div class="check-icon-block" (click)="submitEmails();emailListDropdown.close()">
+                        <i class="icon-sa-conv-check"></i>
+                    </div>
+                </div>
+            </ul>
+        </div>
+      
     </div>
 
     <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body">
