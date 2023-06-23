@@ -40,6 +40,7 @@ export class CoachingComponent implements OnInit {
   searchedData = {"results":[]};
   searching : boolean = false;
   publishInprogress : boolean = false;
+  rulePresent : boolean = false;
 
   @ViewChild('ps') ps: PerfectScrollbarComponent;
   @ViewChild('newCoachingGroup', { static: true }) newCoachingGroup: SliderComponentComponent;
@@ -94,8 +95,15 @@ export class CoachingComponent implements OnInit {
       if (data) {
         this.respData = data || {"results":[]};
         this.searchedData.results = data?.results || [];
+        this.checkRulePresence(this.respData);
         this.cdRef.detectChanges();
       }
+    });
+  }
+
+  checkRulePresence(respData){
+    this.rulePresent = respData.results.some(group => {
+      return (group.rules.length > 0)
     });
   }
 
@@ -265,7 +273,7 @@ export class CoachingComponent implements OnInit {
           
           let matchIndex = this.respData?.results[index]?.rules?.findIndex(x => x.ruleId == rule.ruleId);
           this.respData?.results[index]?.rules.splice(matchIndex, 1);
-
+          this.checkRulePresence(this.respData);
           this.cdRef.detectChanges();
           this.notificationService.notify(this.translate.instant("COACHING.RULEDELETE_SUCCESS"), 'success');
         },(error)=>{
