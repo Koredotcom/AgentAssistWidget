@@ -113,27 +113,17 @@ export class AdherenceSelectionComponent implements OnInit {
         }
       }
       if(type == COACHINGCNST.UTTERANCE){
+
         (<FormGroup>this.adherenceForm.controls.adherence).addControl('session', new FormControl(this.selectedSession));
         (<FormGroup>this.adherenceForm.controls.adherence).addControl('utteranceCount', new FormControl(''));
-  
+        setTimeout(() => {
+          (this.adherenceForm.controls?.adherence as FormGroup)?.controls['utteranceCount'].setValidators(Validators.required);
+          (this.adherenceForm.controls?.adherence as FormGroup)?.controls['utteranceCount'].updateValueAndValidity();
+
+        }, 100);
       };
     }
-    this.resetFormValidatorsBasedOnAdherenceSeletion(type);
-  }
-
-  resetFormValidatorsBasedOnAdherenceSeletion(type){
-    if(type){
-      let actualParams = COACHINGCNST.ADHERENCE_SELECTION_LIST[type];
-      for(let key in (this.adherenceForm.controls?.adherence as FormGroup)?.controls){
-        if(actualParams.includes(key)){
-          (this.adherenceForm.controls?.adherence as FormGroup)?.controls[key].setValidators(Validators.required);
-        }else{
-          (this.adherenceForm.controls?.adherence as FormGroup)?.controls[key].clearValidators();
-        }
-        (this.adherenceForm.controls?.adherence as FormGroup)?.controls[key].updateValueAndValidity();
-      }
-      (this.adherenceForm.controls?.adherence as FormGroup)?.controls?.adType.setValue(type);
-    }    
+    (this.adherenceForm.controls?.adherence as FormGroup)?.controls?.adType.setValue(type);
   }
 
   clickOnSessionSelection(session){
