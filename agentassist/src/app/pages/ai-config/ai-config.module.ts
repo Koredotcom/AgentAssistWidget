@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { AiConfigComponent } from './ai-config/ai-config.component';
 import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { AzureConfigComponent } from './azure-config/azure-config.component';
+import { OpenaiConfigComponent } from './openai-config/openai-config.component';
 
 
 const routes: Routes = [
@@ -10,7 +12,9 @@ const routes: Routes = [
 ];
 @NgModule({
   declarations: [
-    AiConfigComponent
+    AiConfigComponent,
+    AzureConfigComponent,
+    OpenaiConfigComponent
   ],
   imports: [
     CommonModule,

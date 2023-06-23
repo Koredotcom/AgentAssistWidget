@@ -1,1 +1,16 @@
-<p>ai-config works!</p>
+<button (click)="openAzureConf()">Azure</button>
+<button (click)="openOpenAIConf()">openAI</button>
+
+
+<app-slider-component id="openAIAndAzureConf" #openAIAndAzureConf='app-slider'>
+    <ng-container *ngIf="azureConfig">
+        <app-azure-config></app-azure-config>
+    </ng-container>
+    <ng-container *ngIf="aiConfig">
+        <app-openai-config></app-openai-config>
+    </ng-container>
+</app-slider-component>
+
+<!-- <app-slider-component id="openOpenAIConfRef" #openOpenAIConfRef='app-slider'>
+    <app-ai-config></app-ai-config>
+</app-slider-component> -->
