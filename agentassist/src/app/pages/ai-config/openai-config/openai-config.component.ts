@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-openai-config',
@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./openai-config.component.scss']
 })
 export class OpenaiConfigComponent implements OnInit {
-
+  @Output() closeEvent = new EventEmitter();
   constructor() { }
 
   ngOnInit(): void {

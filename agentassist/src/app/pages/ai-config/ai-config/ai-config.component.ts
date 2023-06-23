@@ -24,6 +24,12 @@ export class AiConfigComponent implements OnInit {
     this.aiConfig = true;
     this.openAIAndAzureConf.openSlider("#openAIAndAzureConf", "width550");
   }  
+
+  closeModal(){
+    this.openAIAndAzureConf.closeSlider("#openAIAndAzureConf");
+    this.aiConfig = false;
+    this.azureConfig = false;
+  }
   
 
 }

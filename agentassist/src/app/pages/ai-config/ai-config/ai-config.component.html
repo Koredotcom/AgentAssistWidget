@@ -4,10 +4,10 @@
 
 <app-slider-component id="openAIAndAzureConf" #openAIAndAzureConf='app-slider'>
     <ng-container *ngIf="azureConfig">
-        <app-azure-config></app-azure-config>
+        <app-azure-config (closeEvent)="closeModal()"></app-azure-config>
     </ng-container>
     <ng-container *ngIf="aiConfig">
-        <app-openai-config></app-openai-config>
+        <app-openai-config (closeEvent)="closeModal()"></app-openai-config>
     </ng-container>
 </app-slider-component>
 
