@@ -42,7 +42,8 @@ export class AdherenceComponent implements OnInit {
   deletedUIds = {};
   public utteranceDropdown: NgbDropdown;
 
-  constructor(private openAIService: OpenAIService,
+  constructor(
+    // private openAIService: OpenAIService,
     private cdRef: ChangeDetectorRef,
     private service: ServiceInvokerService,
     private cService: CoachingService
@@ -178,4 +179,9 @@ export class AdherenceComponent implements OnInit {
     delete this.utterances[utter];
   }
 
+  // get diabledCheckbox(): boolean{
+  //     return [...this.selectedUtterancesArray, ...this.selectedNewUtterances].some((item)=>{
+  //       return item.utterance == this.searchKey.value;
+  //     })
+  //   }
 }
