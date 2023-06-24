@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
 
 @Component({
@@ -10,7 +11,7 @@ export class AiConfigComponent implements OnInit {
   @ViewChild('openAIAndAzureConf', { static: true }) openAIAndAzureConf: SliderComponentComponent;
   azureConfig = false;
   aiConfig = false;
-  constructor() { }
+  constructor(private modalService: NgbModal) { }
 
   ngOnInit(): void {
   }
@@ -31,5 +32,11 @@ export class AiConfigComponent implements OnInit {
     this.azureConfig = false;
   }
   
+  openPolieGuidelines(policiesAndGuideLines) {
+    this.modalService.open(policiesAndGuideLines, {backdropClass: 'light-blue-backdrop', windowClass: 'dark-modal', centered: true, backdrop: 'static', keyboard: false});
+  }
 
+  closePolieGuidelines() {
+    this.modalService.dismissAll();
+  }
 }
