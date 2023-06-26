@@ -41,6 +41,7 @@ export class EmailManagerComponent implements OnInit {
       this.emailListString = (formVal.emails?.length) ? (formVal.emails?.join(',')) : '';      
     }else if(changes?.createOrEdit?.currentValue === COACHINGCNST.CREATE){
       const formVal = this.form.value;
+      this.selWhenType = formVal.when;
     }
   }
 
