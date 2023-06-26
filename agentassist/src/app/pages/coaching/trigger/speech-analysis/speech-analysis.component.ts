@@ -29,8 +29,8 @@ export class SpeechAnalysisComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    (this.form.controls.frequency as FormGroup).controls.timeTaken.setValue(this.timer);
-    this.selectedOperator = this.form.controls.operator.value;
+    (this.form.controls.frequency as FormGroup).controls.timeTaken?.setValue(this.timer);
+    this.selectedOperator = this.form.controls.operator?.value;
   }
 
   ngOnChanges(changes : any){
@@ -95,7 +95,7 @@ export class SpeechAnalysisComponent implements OnInit {
 
   onEnterTime(e){
     this.timer = e ? e : 1;
-    (this.form.controls.frequency as FormGroup).controls?.timeTaken.setValue(this.timer);
+    (this.form.controls.frequency as FormGroup).controls?.timeTaken?.setValue(this.timer);
   }
 
   onEnterTimeCT(e){
