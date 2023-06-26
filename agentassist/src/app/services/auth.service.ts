@@ -282,7 +282,11 @@ export class AuthService {
   }
 
   public getDeflectApps() {
-    this.service.invoke('get.automationbots').subscribe(res => {
+    let isAgentAssist:any = true;
+    if(window.location.href.includes('smartassist')){
+      isAgentAssist = ''
+    }
+    this.service.invoke('get.automationbots', {isAgentAssist}).subscribe(res => {
       if (res && res.length) {
         this.workflowService.showAppCreationHeader(false);
         this.smartAssistBots = res;
