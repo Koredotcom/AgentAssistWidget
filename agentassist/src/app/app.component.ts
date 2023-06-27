@@ -60,14 +60,12 @@ export class AppComponent implements OnDestroy {
   }
 
   ngOnInit() {
-    window.addEventListener("message", (event) => {
-      console.log('outside tester1:', event);
-      debugger;
-      if(event.data.method == 'agentassist_in_smartassist') {
-        console.log('insidetester1:', event);
-        $('body').addClass('init-smartassist1');
-      }
-    });
+    var message = {
+      method: 'agentassistConfig_loaded',
+      name: "agent_assist"
+    };
+    window.parent.postMessage(message, "*");
+    window.addEventListener("message", this.receiveMessage.bind(this), false);
     // the lang to use, if the lang isn't available, it will use the current loader to get them
     const self = this;
     this.iFrameUrl = `${this.workflowService.resolveHostUrl()}/botstore/store?product=SmartAssist-App#from=SmartAssist`;
@@ -148,6 +146,15 @@ export class AppComponent implements OnDestroy {
 
     this.scriptLoader.loadScripts();
     this.setMixPanel();
+  }
+
+  receiveMessage (event) {
+    console.log('outside tester1:', event);
+      debugger;
+      if(event.data.method === 'agentassist_in_smartassist') {
+        console.log('insidetester1:', event);
+        $('body').addClass('init-smartassist1');
+      }
   }
 
   bindEvent(element, eventName, eventHandler) {
