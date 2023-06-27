@@ -61,9 +61,11 @@ export class AppComponent implements OnDestroy {
 
   ngOnInit() {
     window.addEventListener("message", (event) => {
-      if(event.data.method === 'agentassist_in_smartassist') {
-        console.log('tester1:', event);
-        $("body").addClass('init-smartassist1');
+      console.log('outside tester1:', event);
+      debugger;
+      if(event.data.method == 'agentassist_in_smartassist') {
+        console.log('insidetester1:', event);
+        $('body').addClass('init-smartassist1');
       }
     });
     // the lang to use, if the lang isn't available, it will use the current loader to get them

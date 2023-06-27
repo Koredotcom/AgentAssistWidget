@@ -288,9 +288,11 @@ export class AuthService {
     if(window.location.href.includes('smartassist')){
       isAgentAssist = '';
       window.addEventListener("message", (event) => {
+        debugger;
+        console.log('outside Tester:', event);
         if(event.data.method === 'agentassist_in_smartassist') {
-          console.log('tester:', event);
-          $("body").addClass('init-smartassist');
+          console.log('inside Tester:', event);
+          $('body').addClass('init-smartassist');
         }
       });
     }
