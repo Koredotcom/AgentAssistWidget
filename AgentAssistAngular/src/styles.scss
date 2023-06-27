@@ -3897,6 +3897,21 @@ input.no-autofill-bkg:-webkit-autofill {
             margin-left: 25px;
         }
     }
+    .hint-bg-progress{
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 8px;
+        left: 0;
+        border-radius: 0px 0px 8px 8px;
+        background: rgba(16, 24, 40, 0.03);
+        .bg-progress{
+            background: #2970FF;
+            width: 46%;
+            height: 100%;
+            border-radius: 0px 0px 8px 8px;
+        }
+    }
 }
 .cursor-notallowed {
     cursor: not-allowed !important;

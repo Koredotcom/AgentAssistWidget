@@ -171,6 +171,9 @@
     <perfect-scrollbar class="hint-overlay" #overlayhint id="coachingHintScroll">
         <ng-container *ngFor="let item of coachingHints; let i = index">
             <div class="hint-blck" *ngIf="item">
+                <div class="hint-bg-progress">
+                    <div class="bg-progress"></div>
+                </div>
                 <div class="icon_blcok" *ngIf="coachingConst.HINT_DATA[item?.expression]?.icon">
                     <i [ngClass]="coachingConst.HINT_DATA[item?.expression].icon"></i>
                 </div>
