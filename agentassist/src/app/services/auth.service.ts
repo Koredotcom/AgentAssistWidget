@@ -281,11 +281,20 @@ export class AuthService {
     // }
   }
 
+
+
   public getDeflectApps() {
     let isAgentAssist:any = true;
     if(window.location.href.includes('smartassist')){
-      isAgentAssist = ''
+      isAgentAssist = '';
+      window.addEventListener("message", (event) => {
+        console.log(event);
+        if(event.data.method === 'agentassist_in_smartassist') {
+          document.body.classList.add('init_smartassist');
+        }
+      });
     }
+
     this.service.invoke('get.automationbots', {isAgentAssist}).subscribe(res => {
       if (res && res.length) {
         this.workflowService.showAppCreationHeader(false);
