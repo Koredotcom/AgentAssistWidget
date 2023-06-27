@@ -145,6 +145,9 @@ export class CommonService {
     } else {
       agent_assist_request['autoBotId'] = '';
     }
+    if (data.intentName && data.userInput) {
+      agent_assist_request['query'] = data.userInput
+    }
     return agent_assist_request;
   }
 
@@ -171,6 +174,9 @@ export class CommonService {
       agent_assist_agent_request_params['autoBotId'] = this.configObj.autoBotId;
     } else {
       agent_assist_agent_request_params['autoBotId'] = '';
+    }
+    if (data.intentName && data.userInput) {
+      agent_assist_agent_request_params['query'] = data.userInput
     }
     return agent_assist_agent_request_params;
   }
@@ -513,9 +519,9 @@ export class CommonService {
 
   confirmationNodeRenderForHistoryDataTransform(res){
     if(res && res.agentAssistDetails && (res.agentAssistDetails.componentType == 'dialogAct' || res.agentAssistDetails.entityType == 'list_of_values' || res.agentAssistDetails.newEntityType == 'list_of_values')  && res.components && res.components.length > 0 && res.components[0].data && res.components[0].data.text){
-      
+
       if(!res.agentAssistDetails.applyDefaultTemplate){
-        
+
         res.agentAssistDetails.componentType = '';
         res.agentAssistDetails.newEntityType = '';
       }
@@ -717,7 +723,7 @@ export class CommonService {
         }
       }
     }
-    
+
     for(let resObj of response){
       if(resObj && resObj.agentAssistDetails && resObj.agentAssistDetails.suggestions && resObj.agentAssistDetails.suggestions.faqs){
         if(resObj.channels && resObj.channels[0] && resObj.channels[0].reqId){
@@ -736,7 +742,7 @@ export class CommonService {
 
   async renderingAgentHistoryMessage(connectionDetails) {
     console.log(this.configObj.autoBotId, connectionDetails.autoBotId,"agent history-----",this.configObj, connectionDetails);
-    
+
     let url = `${this.configObj.agentassisturl}/agentassist/api/v1/agent-feedback/${this.configObj.conversationId}?interaction=mybot`;
     let feedBackResult = await this.renderHistoryFeedBack(url);
     if(this.configObj.fromSAT) {
@@ -755,8 +761,8 @@ export class CommonService {
           console.log("error", err)
           return err;
         });
-      
-     
+
+
     }
     // return this.getAgentHistoryData(`${this.configObj.agentassisturl}/api/1.1/botmessages/agentassist/${this.configObj.botid}/history?convId=${this.configObj.conversationId}&agentHistory=true`)
     //   .then(response => {
@@ -814,7 +820,7 @@ export class CommonService {
           return err;
         });
 
-    
+
     }
   }
 
@@ -1005,7 +1011,7 @@ export class CommonService {
     if (JSON.parse(localStorage.getItem('innerTextValue'))) {
       if (this.activeTab == ProjConstants.ASSIST) {
 
-        let assistRequestParams = 
+        let assistRequestParams =
         {
           "conversationId": connectionObj.conversationId,
           "query": JSON.parse(localStorage.getItem('innerTextValue')),
@@ -1023,7 +1029,7 @@ export class CommonService {
         this.currentPositionId = "";
       } else if (this.activeTab == ProjConstants.MYBOT) {
 
-        let agent_assist_agent_request_params = 
+        let agent_assist_agent_request_params =
         {
           "isSearch": false,
           "conversationId": connectionObj.conversationId,
@@ -1032,6 +1038,9 @@ export class CommonService {
           "experience": this.isCallConversation === true ? 'voice' : 'chat',
           "positionId": this.currentPositionIdOfMyBot,
           "autoBotId": connectionObj.autoBotId
+      }
+      if(connectionObj.userInput && connectionObj.intentName) {
+        agent_assist_agent_request_params['query'] = connectionObj.userInput;
       }
         this.webSocketService.emitEvents(EVENTS.agent_assist_agent_request, agent_assist_agent_request_params);
         this.isMyBotAgentSentRequestOnClick = true;
@@ -1107,9 +1116,13 @@ export class CommonService {
         connectionDetails.intentName = dialog.intentName;
         connectionDetails.botId = dialog.botId;
       }
+      if(dialog.userInput && !isSearchFlag && dialog.intentName) {
+        connectionDetails.value = dialog.intentName;
+      }
       connectionDetails.positionId = dialog.positionId;
       connectionDetails.childBotId = dialog.childBotId;
       connectionDetails.childBotName = dialog.childBotName;
+
       let agent_assist_agent_request_params = this.prepareAgentAssistAgentRequestParams(connectionDetails);
       this.webSocketService.emitEvents(EVENTS.agent_assist_agent_request, agent_assist_agent_request_params);
     }

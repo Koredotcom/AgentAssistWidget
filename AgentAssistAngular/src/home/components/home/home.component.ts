@@ -795,7 +795,8 @@ setProactiveMode(){
           agentRunButton: false,
           intentName: data.name,
           childBotId : data.childBotId,
-          childBotName : data.childBotName
+          childBotName : data.childBotName,
+          userInput : data.userInput
         }
         this.handleSubjectService.setRunButtonClickEvent(runEventObj);
       }
@@ -811,7 +812,8 @@ setProactiveMode(){
           positionId: this.randomUUIDPipe.transform(IdReferenceConst.positionId),
           childBotId : data?.childBotId,
           childBotName : data?.childBotName,
-          botId : this.connectionDetails?.botId
+          botId : this.connectionDetails?.botId,
+          userInput : data.userInput
         }
         this.handleSubjectService.setActiveTab(this.projConstants.MYBOT);
         this.commonService.agent_run_click(runDialogueObject, false);
