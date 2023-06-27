@@ -288,9 +288,9 @@ export class AuthService {
     if(window.location.href.includes('smartassist')){
       isAgentAssist = '';
       window.addEventListener("message", (event) => {
-        console.log(event);
+        console.log('tester:', event);
         if(event.data.method === 'agentassist_in_smartassist') {
-          document.body.classList.add('init_smartassist');
+          $("body").addClass('init_smartassist');
         }
       });
     }

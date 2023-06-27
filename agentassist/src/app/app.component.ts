@@ -60,7 +60,12 @@ export class AppComponent implements OnDestroy {
   }
 
   ngOnInit() {
-
+    window.addEventListener("message", (event) => {
+      console.log('tester1:', event);
+      if(event.data.method === 'agentassist_in_smartassist') {
+        $("body").addClass('init_smartassist_1');
+      }
+    });
     // the lang to use, if the lang isn't available, it will use the current loader to get them
     const self = this;
     this.iFrameUrl = `${this.workflowService.resolveHostUrl()}/botstore/store?product=SmartAssist-App#from=SmartAssist`;
