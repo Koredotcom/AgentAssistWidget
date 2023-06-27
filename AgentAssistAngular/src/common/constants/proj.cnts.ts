@@ -185,4 +185,28 @@ export const coachingConst = {
             icon: 'ast-hand-drag-solid'
         }
     },
+    SENTIMENT_ANALYSIS : {
+        negative : {
+            color : "#EF4444",
+            title : "Negative",
+            percentage : "20%"
+        },
+        neutral : {
+            color : "#FBBF24",
+            title : "Neutral",
+            percentage : "40%"
+        },
+        positive : {
+            color : "#47B39C",
+            title : "Positive",
+            percentage : "40%"
+        },
+    },
+    SENTI_CHART_YAXIS_LIST : {
+        '-2' : '-Neg',
+        '-1' : '',
+        '0' : 'Neu',
+        '1' : '',
+        '2' : '+Pos'
+      }
 }

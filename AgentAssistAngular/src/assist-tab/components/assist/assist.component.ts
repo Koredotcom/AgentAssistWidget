@@ -1,6 +1,6 @@
-import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { ProjConstants, ImageFilePath, ImageFileNames, IdReferenceConst, storageConst } from 'src/common/constants/proj.cnts';
+import { ProjConstants, ImageFilePath, ImageFileNames, IdReferenceConst, storageConst, coachingConst } from 'src/common/constants/proj.cnts';
 import { RandomUUIDPipe } from 'src/common/pipes/random-uuid.pipe';
 import { RawHtmlPipe } from 'src/common/pipes/raw-html.pipe';
 import { RemoveSpecialCharPipe } from 'src/common/pipes/remove-special-char.pipe';
@@ -19,13 +19,14 @@ import { EVENTS } from 'src/common/helper/events';
 import { LocalStorageService } from 'src/common/services/local-storage.service';
 import { ReplaceTextWithTagPipe } from 'src/common/pipes/replace-text-with-tag.pipe';
 import { RemoveTagFromStringPipe } from 'src/common/pipes/remove-tag-from-string.pipe';
+import { EChartsOption } from 'echarts';
 @Component({
   selector: 'app-assist',
   templateUrl: './assist.component.html',
   styleUrls: ['./assist.component.scss'],
   providers: [RandomUUIDPipe]
 })
-export class AssistComponent implements OnInit {
+export class AssistComponent implements OnInit, AfterViewInit {
 
   @Output() scrollToBottomEvent = new EventEmitter();
   @ViewChild('dynamicBlockRef') dynamicBlockRef: ElementRef;
@@ -56,6 +57,12 @@ export class AssistComponent implements OnInit {
   faqManualClick : boolean = false;
   userBotSessionDetails;
 
+  chartOption: EChartsOption;
+  initChartOption : EChartsOption;
+  showFullSentiChart : boolean = false;
+  sentiObject : any = coachingConst.SENTI_CHART_YAXIS_LIST;
+
+
   constructor(private templateRenderClassService: TemplateRenderClassService,
     public handleSubjectService: HandleSubjectService,
     public randomUUIDPipe: RandomUUIDPipe,
@@ -72,8 +79,12 @@ export class AssistComponent implements OnInit {
   ngOnInit(): void {
     this.subscribeEvents();
     this.scrollToBottom();
+    
   }
-
+  ngAfterViewInit(): void {
+    this.setSentimentAnalysisOption();
+  }
+  
   ngOnDestroy() {
     this.subscriptionsList.forEach((subscription) => {
       subscription.unsubscribe();
@@ -284,6 +295,15 @@ export class AssistComponent implements OnInit {
       welcomeMessageParams['autoBotId'] = '';
     }
     this.websocketService.emitEvents(EVENTS.welcome_message_request, welcomeMessageParams);
+  }
+
+  toggleSentiChart(){
+    this.showFullSentiChart = !this.showFullSentiChart;
+  }
+
+  setSentimentAnalysisOption() {
+    this.chartOption = this.assisttabService.getSentiAnalysisChartOptions(this.sentiObject);
+    this.initChartOption = this.assisttabService.getInitialSentiChartOptions(this.sentiObject);
   }
 
   //dialogue click and agent response handling code.

@@ -25,7 +25,8 @@ import { ReplaceTextWithTagPipe } from './pipes/replace-text-with-tag.pipe';
 import { UserBotHistoryComponent } from './components/user-bot-history/user-bot-history.component';
 import { ConverTimestampToDatePipe } from './pipes/conver-timestamp-to-date.pipe';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
-
+import { NgxEchartsModule } from 'ngx-echarts';
+import * as echarts from 'echarts';
 
 @NgModule({
   declarations: [OverlaysearchComponent, InterruptPopupComponent, RestorePopupComponent, SummaryPopupComponent, TerminateComponent, RandomUUIDPipe, RemoveSpecialCharPipe, ReplaceQuotStringWithDoubleQuotPipe, SanitizeHtmlPipe, RawHtmlPipe, KoreGenerateuuidPipe, HtmlEntityPipe, EmptyObjectCheckPipe, FormatAMPMPipe, LoaderComponent, TypeaheadComponent, RemoveTagFromStringPipe, ReplaceTextWithTagPipe, UserBotHistoryComponent, ConverTimestampToDatePipe, SafeHtmlPipe],
@@ -33,13 +34,14 @@ import { SafeHtmlPipe } from './pipes/safe-html.pipe';
     CommonModule,
     FormsModule,
     HttpClientModule,
-    PerfectScrollbarModule
+    PerfectScrollbarModule,
+    NgxEchartsModule.forRoot({ echarts }),
   ],
   providers:[TemplateRenderClassService, SanitizeHtmlPipe, RandomUUIDPipe, RemoveSpecialCharPipe,ReplaceQuotStringWithDoubleQuotPipe, RawHtmlPipe, KoreGenerateuuidPipe, HtmlEntityPipe,
   EmptyObjectCheckPipe, FormatAMPMPipe, RemoveTagFromStringPipe, ReplaceTextWithTagPipe],
   exports : [OverlaysearchComponent, InterruptPopupComponent, RestorePopupComponent, SummaryPopupComponent, TerminateComponent, RandomUUIDPipe,
     RemoveSpecialCharPipe,ReplaceQuotStringWithDoubleQuotPipe, SanitizeHtmlPipe, RawHtmlPipe, KoreGenerateuuidPipe, HtmlEntityPipe, EmptyObjectCheckPipe,
     FormatAMPMPipe, LoaderComponent, TypeaheadComponent,RemoveTagFromStringPipe, ReplaceTextWithTagPipe, UserBotHistoryComponent, ConverTimestampToDatePipe,
-    SafeHtmlPipe]
+    SafeHtmlPipe,NgxEchartsModule]
 })
 export class SharedModule { }

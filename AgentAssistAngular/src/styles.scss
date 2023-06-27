@@ -3937,11 +3937,6 @@ input.no-autofill-bkg:-webkit-autofill {
     }
     .positive-negtive-wrapper-analysis{
         transition: 0.2s all ease-in-out;
-        &:hover{
-            .tooltip-analysis{
-                display: block;
-            }
-        }
         .title-info{
             display: flex;
             align-items: center;
@@ -3971,8 +3966,7 @@ input.no-autofill-bkg:-webkit-autofill {
             border: 0;
             left: 12px;
             top: 30px;
-            width: 314px;
-            display: none;
+            width: 100%;
             .title-text{
                 color: #44474C;
                 font-size: 12px;
@@ -3988,7 +3982,7 @@ input.no-autofill-bkg:-webkit-autofill {
                 border-radius: 6px;
                 .bg-progress{
                     height: 100%;
-                    width: 33.3%;
+                    // width: 33.3%;
                     background: #EF4444;
                     &:first-child{
                         border-radius: 6px 0px 0px 6px;

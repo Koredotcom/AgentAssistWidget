@@ -1,25 +1,18 @@
-
-
 <div class="dynamic-block-content">
+    <!-- <div class="sentiment-analysis">
+        <div echarts [options]="chartOption" class="chart-container"></div>
+    </div> -->
     <div class="sentiment-analysis">
         <div class="title">Current Sentiment</div>
         <div class="positive-negtive-wrapper-analysis">
-            <span class="title-info">
+            <span class="title-info" (click)="toggleSentiChart()">
                 <i class="ast-thumbup"></i>
                 <span>Positive</span>
             </span>
-            <div class="tooltip-analysis">
-                <div class="title-text">Sentiment Analysis</div>
-                <div class="progress-block">
-                    <div class="bg-progress" style="background: #EF4444;"></div>
-                    <div class="bg-progress" style="background: #FBBF24;"></div>
-                    <div class="bg-progress" style="background: #47B39C;"></div>
-                </div>
-                <div class="legends-info">
-                    <div class="legent-title">Negative</div>
-                    <div class="legent-title neutral">Neutral</div>
-                    <div class="legent-title positive">Positive</div>
-                </div>
+            <div echarts [options]="initChartOption" class="chart-container-small"></div>
+            <div class="tooltip-analysis" *ngIf="showFullSentiChart">
+                <div class="title">Sentiment Analysis</div>
+                <div echarts [options]="chartOption" class="chart-container"></div>
             </div>
         </div>
     </div>

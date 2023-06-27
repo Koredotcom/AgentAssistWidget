@@ -3,6 +3,7 @@ import { ProjConstants } from 'src/common/constants/proj.cnts';
 import { SanitizeHtmlPipe } from 'src/common/pipes/sanitize-html.pipe';
 import * as $ from 'jquery';
 import { CommonService } from 'src/common/services/common.service';
+import { EChartsOption } from 'echarts';
 
 @Injectable({
   providedIn: 'root'
@@ -488,6 +489,131 @@ export class AssistService {
     setTimeout(() => {                                                    
         this.commonService.updateSeeMoreButtonForAssist(ele, this.projConstants.FAQ);
     }, 1000);
+  }
+  
+  getInitialSentiChartOptions(object): EChartsOption{
+    return {
+      xAxis: {
+        splitLine:{ show: false },
+        axisLine: { show: false },
+        axisTick: { show: false },
+        axisLabel: { show: false }
+      },
+      yAxis: {
+        type: 'value',
+        data : [-2,-1,0,1,2],
+        nameLocation : 'middle',
+        axisLabel: {show : false },
+        axisTick: { show: false },
+        splitLine:{ show: true },
+        axisLine : {show : false},
+        min: -2
+      },
+      legend : {
+        show : false
+      },
+      visualMap: {
+        show : false,
+        dimension: 1,
+        pieces: [
+         {
+           lte: -1,
+           color: '#ef5055'
+         },
+         {
+          gt : -1,
+          lte : 0,
+          color : "#e1b1b1"
+         },
+         {
+           gt: 0,
+           lte: 1,
+           color: '#9ddda4'
+         },
+         {
+           gt: 1,
+           lte: 2,
+           color: '#42cc5e'
+         }
+          ],
+          
+        },
+      series: [
+        {
+          data: [[0,-2], [1,-2], [2,0], [3,1],[4,1],[5,2],[6,1],[7,0],[8,1],[9,2],[10,-2]],
+          type: 'line',
+          smooth: true,
+          showSymbol: false,
+          lineStyle : {
+            width : 4
+          }
+        }
+      ],
+    };
+  }
+
+  getSentiAnalysisChartOptions(object) : EChartsOption{
+    return {
+      xAxis: {
+        splitLine:{ show: false },
+        axisLine: { show: false },
+        axisTick: { show: false },
+        axisLabel: { show: false }
+      },
+      yAxis: {
+        type: 'value',
+        data : [-2,-1,0,1,2],
+        nameLocation : 'middle',
+        axisLabel: {
+          formatter: val =>  object[val.toString()],
+          show : true
+        },
+        axisTick: { show: false },
+        splitLine:{ show: true },
+        axisLine : {show : false},
+        min: -2
+      },
+      legend : {
+        show : false
+      },
+      visualMap: {
+        show : false,
+        dimension: 1,
+        pieces: [
+         {
+           lte: -1,
+           color: '#ef5055'
+         },
+         {
+          gt : -1,
+          lte : 0,
+          color : "#e1b1b1"
+         },
+         {
+           gt: 0,
+           lte: 1,
+           color: '#9ddda4'
+         },
+         {
+           gt: 1,
+           lte: 2,
+           color: '#42cc5e'
+         }
+          ],
+          
+        },
+      series: [
+        {
+          data: [[0,-2], [1,-2], [2,0], [3,1],[4,1],[5,2],[6,1],[7,0],[8,1],[9,2],[10,-2]],
+          type: 'line',
+          smooth: true,
+          showSymbol: false,
+          lineStyle : {
+            width : 4
+          }
+        }
+      ],
+    };
   }
 
 }
