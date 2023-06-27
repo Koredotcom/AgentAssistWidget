@@ -67,9 +67,27 @@
                 </div>
             </div>
         </div>
-
+        <div class="sentiment-analysis" *ngIf="showSentiChart">
+            <div class="title">Current Sentiment</div>
+            <div class="positive-negtive-wrapper-analysis">
+                <div echarts [options]="initChartOption" class="chart-container-small"></div>
+                <span class="title-info" (click)="toggleSentiChart()">
+                    <i class="ast-thumbup"></i>
+                    <span>Positive</span>
+                </span>           
+                <div class="tooltip-analysis" *ngIf="showFullSentiChart">
+                    <div class="header-title-close">
+                        <div class="title-text">Sentiment Analysis</div>
+                        <div class="close-sentiment-anly" (click)="showFullSentiChart = false">
+                            <i class="ast-close"></i>
+                        </div>
+                    </div>
+                    <div echarts [options]="chartOption" class="chart-container"></div>
+                </div>
+            </div>
+        </div>
         <perfect-scrollbar id="homeScrollBar" class="home-scroll-bar" #psBottom (psYReachEnd)="onScrollEvent($event)"
-            (psYReachStart)="onScrollEvent($event)" (psScrollUp)="onScrollEvent($event)">
+            (psYReachStart)="onScrollEvent($event)" (psScrollUp)="onScrollEvent($event)" [ngClass]="{'if-sentiment-analysis-added' : showSentiChart}">
             <div class="body-data-container if-suggestion-search" id="bodyContainer" #tabBody>
                 <div class="dialog-task-data" id="dynamicBlocksData">
                     <ng-container *ngIf = "sourceDesktop !== 'smartassist-color-scheme'">

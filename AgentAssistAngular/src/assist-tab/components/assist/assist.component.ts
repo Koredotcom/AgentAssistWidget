@@ -19,14 +19,13 @@ import { EVENTS } from 'src/common/helper/events';
 import { LocalStorageService } from 'src/common/services/local-storage.service';
 import { ReplaceTextWithTagPipe } from 'src/common/pipes/replace-text-with-tag.pipe';
 import { RemoveTagFromStringPipe } from 'src/common/pipes/remove-tag-from-string.pipe';
-import { EChartsOption } from 'echarts';
 @Component({
   selector: 'app-assist',
   templateUrl: './assist.component.html',
   styleUrls: ['./assist.component.scss'],
   providers: [RandomUUIDPipe]
 })
-export class AssistComponent implements OnInit, AfterViewInit {
+export class AssistComponent implements OnInit {
 
   @Output() scrollToBottomEvent = new EventEmitter();
   @ViewChild('dynamicBlockRef') dynamicBlockRef: ElementRef;
@@ -57,10 +56,7 @@ export class AssistComponent implements OnInit, AfterViewInit {
   faqManualClick : boolean = false;
   userBotSessionDetails;
 
-  chartOption: EChartsOption;
-  initChartOption : EChartsOption;
-  showFullSentiChart : boolean = false;
-  sentiObject : any = coachingConst.SENTI_CHART_YAXIS_LIST;
+
 
 
   constructor(private templateRenderClassService: TemplateRenderClassService,
@@ -81,10 +77,7 @@ export class AssistComponent implements OnInit, AfterViewInit {
     this.scrollToBottom();
     
   }
-  ngAfterViewInit(): void {
-    this.setSentimentAnalysisOption();
-  }
-  
+ 
   ngOnDestroy() {
     this.subscriptionsList.forEach((subscription) => {
       subscription.unsubscribe();
@@ -295,15 +288,6 @@ export class AssistComponent implements OnInit, AfterViewInit {
       welcomeMessageParams['autoBotId'] = '';
     }
     this.websocketService.emitEvents(EVENTS.welcome_message_request, welcomeMessageParams);
-  }
-
-  toggleSentiChart(){
-    this.showFullSentiChart = !this.showFullSentiChart;
-  }
-
-  setSentimentAnalysisOption() {
-    this.chartOption = this.assisttabService.getSentiAnalysisChartOptions(this.sentiObject);
-    this.initChartOption = this.assisttabService.getInitialSentiChartOptions(this.sentiObject);
   }
 
   //dialogue click and agent response handling code.

@@ -13,6 +13,7 @@ import { LocalStorageService } from 'src/common/services/local-storage.service';
 import { MockDataService } from 'src/common/services/mock-data.service';
 import { CoachingActionStoreService } from 'src/app/coaching-action-store.service';
 import { RandomUUIDPipe } from 'src/common/pipes/random-uuid.pipe';
+import { EChartsOption } from 'echarts';
 // import { ServiceInvokerService } from 'src/common/services/service-invoker.service';
 declare const $: any;
 @Component({
@@ -54,6 +55,13 @@ export class HomeComponent implements OnInit {
   coachingHints : any = [];
   sourceDesktop : any = this.commonService?.configObj?.source;
 
+  chartOption: EChartsOption;
+  initChartOption : EChartsOption;
+  showFullSentiChart : boolean = false;
+  sentiObject : any = coachingConst.SENTI_CHART_YAXIS_LIST;
+  showSentiChart : boolean = false;
+  
+
   constructor(public handleSubjectService: HandleSubjectService, public websocketService: WebSocketService,
     public sanitizeHTMLPipe: SanitizeHtmlPipe, public commonService: CommonService, private koregenerateUUIDPipe: KoreGenerateuuidPipe,
     private designAlterService: DesignAlterService, private localStorageService: LocalStorageService,
@@ -79,6 +87,17 @@ export class HomeComponent implements OnInit {
 
   ngAfterViewInit() {
     this.scrollContainer = document.getElementById(IdReferenceConst.HOMESCROLLBAR);
+    this.setSentimentAnalysisOption();
+  }
+
+  setSentimentAnalysisOption() {
+    this.showSentiChart = true;
+    this.chartOption = this.commonService.getSentiAnalysisChartOptions(this.sentiObject);
+    this.initChartOption = this.commonService.getInitialSentiChartOptions(this.sentiObject);
+  }
+
+  toggleSentiChart(){
+    this.showFullSentiChart = !this.showFullSentiChart;
   }
 
   handleNudgeData(data){

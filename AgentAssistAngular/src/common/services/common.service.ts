@@ -9,6 +9,7 @@ import { DesignAlterService } from './design-alter.service';
 import { LocalStorageService } from './local-storage.service';
 import { TemplateRenderClassService } from './template-render-class.service';
 import { SanitizeHtmlPipe } from '../pipes/sanitize-html.pipe';
+import { EChartsOption } from 'echarts';
 
 declare var $: any;
 declare const agentAssistHelpers: any;
@@ -1175,5 +1176,130 @@ export class CommonService {
     $('.agent-assist-chat-container.kore-chat-window').off('click', '.advanced-list-wrapper .button_,.advanced-list-wrapper .inner-btns-acc .button_,.advanced-list-wrapper .tags-data .tag-name,.advanced-list-wrapper .btn_group .submitBtn,.advanced-list-wrapper .btn_group .cancelBtn,.advanced-list-wrapper .details-content .text-info,.advancelisttemplate .inner-btns-acc .button_,.advancelisttemplate .filter-icon .button_').on("click", '.advanced-list-wrapper .button_,.advanced-list-wrapper .inner-btns-acc .button_,.advanced-list-wrapper .tags-data .tag-name,.advanced-list-wrapper .btn_group .submitBtn,.advanced-list-wrapper .btn_group .cancelBtn,.advanced-list-wrapper .details-content .text-info,.advancelisttemplate .inner-btns-acc .button_,.advancelisttemplate .filter-icon .button_', function (e) {
       mythis.HandleClickAndSendRequest(tab, connectionObj, e)
     });
+  }
+
+  getInitialSentiChartOptions(object): EChartsOption{
+    return {
+      xAxis: {
+        splitLine:{ show: false },
+        axisLine: { show: false },
+        axisTick: { show: false },
+        axisLabel: { show: false }
+      },
+      yAxis: {
+        type: 'value',
+        data : [-2,-1,0,1,2],
+        nameLocation : 'middle',
+        axisLabel: {show : false },
+        axisTick: { show: false },
+        splitLine:{ show: false },
+        axisLine : {show : false},
+        min: -2
+      },
+      legend : {
+        show : false
+      },
+      visualMap: {
+        show : false,
+        dimension: 1,
+        pieces: [
+         {
+           lte: -1,
+           color: '#ef5055'
+         },
+         {
+          gt : -1,
+          lte : 0,
+          color : "#e1b1b1"
+         },
+         {
+           gt: 0,
+           lte: 1,
+           color: '#9ddda4'
+         },
+         {
+           gt: 1,
+           lte: 2,
+           color: '#42cc5e'
+         }
+          ],
+          
+        },
+      series: [
+        {
+          data: [[0,-2], [1,-2], [2,0], [3,1],[4,1],[5,2],[6,1],[7,0],[8,1],[9,2],[10,-2]],
+          type: 'line',
+          smooth: true,
+          showSymbol: false,
+          lineStyle : {
+            width : 4
+          }
+        }
+      ],
+    };
+  }
+
+  getSentiAnalysisChartOptions(object) : EChartsOption{
+    return {
+      xAxis: {
+        splitLine:{ show: false },
+        axisLine: { show: false },
+        axisTick: { show: false },
+        axisLabel: { show: false }
+      },
+      yAxis: {
+        type: 'value',
+        data : [-2,-1,0,1,2],
+        nameLocation : 'middle',
+        axisLabel: {
+          formatter: val =>  object[val.toString()],
+          show : true
+        },
+        axisTick: { show: false },
+        splitLine:{ show: true },
+        axisLine : {show : false},
+        min: -2
+      },
+      legend : {
+        show : false
+      },
+      visualMap: {
+        show : false,
+        dimension: 1,
+        pieces: [
+         {
+           lte: -1,
+           color: '#ef5055'
+         },
+         {
+          gt : -1,
+          lte : 0,
+          color : "#e1b1b1"
+         },
+         {
+           gt: 0,
+           lte: 1,
+           color: '#9ddda4'
+         },
+         {
+           gt: 1,
+           lte: 2,
+           color: '#42cc5e'
+         }
+          ],
+          
+        },
+      series: [
+        {
+          data: [[0,-2], [1,-2], [2,0], [3,1],[4,1],[5,2],[6,1],[7,0],[8,1],[9,2],[10,-2]],
+          type: 'line',
+          smooth: true,
+          showSymbol: false,
+          lineStyle : {
+            width : 4
+          }
+        }
+      ],
+    };
   }
 }
