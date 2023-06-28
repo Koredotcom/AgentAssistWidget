@@ -13,6 +13,7 @@ import { forkJoin } from 'rxjs';
 import { NotificationService } from '@kore.services/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { FormControl } from '@angular/forms';
+import { AuthService } from '@kore.services/auth.service';
 
 @Component({
   selector: 'app-coaching',
@@ -47,7 +48,8 @@ export class CoachingComponent implements OnInit {
 
   constructor(private modalService: NgbModal, private service : ServiceInvokerService,
     private workflowService : workflowService, private cdRef : ChangeDetectorRef,
-    private notificationService : NotificationService, private translate: TranslateService) { }
+    private notificationService : NotificationService, private translate: TranslateService,
+    private auth: AuthService, private local: LocalStoreService) { }
 
   ngOnInit(): void {
     this.getAgentCoachingGroupData();
@@ -85,7 +87,7 @@ export class CoachingComponent implements OnInit {
   // get or update GroupData Starts
   getAgentCoachingGroupData(){
     let params : any = {
-      botId : this.workflowService.getCurrentBt(true)._id,
+      botId : this.auth.isLoadingOnSm ? this.local.setSelectedAccount['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id,
       isExpand : true
     }
     this.isLoading = true;
@@ -150,7 +152,7 @@ export class CoachingComponent implements OnInit {
 
   publishCoaching(){
     this.publishInprogress = true;
-    this.service.invoke('post.publishcoaching',{}, {botId : this.workflowService.getCurrentBt(true)._id}).pipe(finalize(() => {
+    this.service.invoke('post.publishcoaching',{}, {botId : this.auth.isLoadingOnSm ? this.local.setSelectedAccount['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id}).pipe(finalize(() => {
       this.publishInprogress = false;
     })).subscribe(data => {
       if (data) {

@@ -8,6 +8,8 @@ import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CoachingConfirmationComponent } from '../coaching-confirmation/coaching-confirmation.component';
 import { finalize } from 'rxjs/operators';
+import { AuthService } from '@kore.services/auth.service';
+import { LocalStoreService } from '@kore.services/localstore.service';
 @Component({
   selector: 'app-coaching-rule-create',
   templateUrl: './coaching-rule-create.component.html',
@@ -90,11 +92,11 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
       disable : true
     }
   ]
-  
+
   // triggerFormControlsArray : any = [];
 
   constructor(private fb: FormBuilder, private coachingService : CoachingService, private cd: ChangeDetectorRef,
-    private workflowService : workflowService, private service : ServiceInvokerService, private modalService : NgbModal) { }
+    private workflowService : workflowService, private service : ServiceInvokerService, private modalService : NgbModal, private auth: AuthService, private local: LocalStoreService) { }
 
     @HostListener("window:beforeunload", ["$event"]) unloadHandler(event: Event) {
       if(this.formTouched){
@@ -168,7 +170,7 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
   createForm(){
     this.ruleForm = new FormGroup(
       {
-        "botId": new FormControl(this.workflowService.getCurrentBt(true)._id, [Validators.required]),
+        "botId": new FormControl(this.auth.isLoadingOnSm ? this.local.setSelectedAccount['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id, [Validators.required]),
         "name": new FormControl('',[Validators.required]),
         // "description": new FormControl('',[Validators.required]),
         "triggers": this.fb.array([]),

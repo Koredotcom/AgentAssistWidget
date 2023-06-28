@@ -8,6 +8,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { SubSink } from 'subsink';
 import { CoachingGroupRuleDeleteComponent } from '../coaching-group-rule-delete/coaching-group-rule-delete.component';
 import { COACHINGCNST } from '../coaching.cnst';
+import { AuthService } from '@kore.services/auth.service';
+import { LocalStoreService } from '@kore.services/localstore.service';
 
 @Component({
   selector: 'app-coaching-group-create',
@@ -23,12 +25,12 @@ export class CoachingGroupCreateComponent implements OnInit {
 
   modalRef:any;
 
-  
+
   createGroupForm : FormGroup;
   coachingConst : any = COACHINGCNST;
   constructor(private modalService: NgbModal, private workflowService : workflowService, private service : ServiceInvokerService,
-    private notificationService : NotificationService, private translate: TranslateService) { }
-  
+    private notificationService : NotificationService, private translate: TranslateService, private auth: AuthService, private local: LocalStoreService) { }
+
 
   ngOnInit(): void {
     this.createFormGroup(null);
@@ -64,7 +66,8 @@ export class CoachingGroupCreateComponent implements OnInit {
       "name": this.createGroupForm.controls.name.value,
       "description": this.createGroupForm.controls.description.value,
       "displayName": this.createGroupForm.controls.name.value,
-      "botId": this.workflowService.getCurrentBt(true)._id
+      "botId": this.auth.isLoadingOnSm ? this.local.setSelectedAccount['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id
+      // "botId": this.workflowService.getCurrentBt(true)._id
     }
     let updateGroupObj : any = {
         type : this.type
