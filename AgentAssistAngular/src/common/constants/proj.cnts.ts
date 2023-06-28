@@ -185,4 +185,54 @@ export const coachingConst = {
             icon: 'ast-hand-drag-solid'
         }
     },
+    SENTIMENT_ANALYSIS : {
+        negative : {
+            color : "#EF4444",
+            title : "Negative",
+            percentage : "20%"
+        },
+        neutral : {
+            color : "#FBBF24",
+            title : "Neutral",
+            percentage : "40%"
+        },
+        positive : {
+            color : "#47B39C",
+            title : "Positive",
+            percentage : "40%"
+        },
+    },
+    SENTI_CHART_YAXIS_LIST : {
+        [-2] : '-Neg',
+        [-1] : '',
+        0 : 'Neu',
+        1 : '',
+        2 : '+Pos'
+    },
+    SENTI_POLARITY_MAP : {
+        1 : -2,
+        2 : -1,
+        3 : -1,
+        4 : 0,
+        5 : 0,
+        6 : 0,
+        7 : 1,
+        8 : 1,
+        9 : 2,
+        10 : 2
+    },
+    POLARITY_VS_STYLES : {
+        'Positive' : {
+            className : 'positive-title',
+            icon : 'ast-thumbup'
+        },
+        'Neutral' : {
+            className : 'neutral-title',
+            icon : 'ast-thumbup'
+        },
+        'Negative' : {
+            className : 'negative-title',
+            icon : 'ast-thumbdown'
+        }
+    }
 }
