@@ -159,17 +159,6 @@ export class AppComponent implements OnDestroy {
     this.setMixPanel();
   }
 
-  receiveMessage (event) {
-    console.log('outside tester:', event.data);
-      debugger
-      if(event.data.method === 'agentassist_in_smartassist') {
-        console.log('insidetester:', event.data);
-        document.getElementsByTagName('body')[0].classList.add('init-smartassist');
-
-        // $('body').addClass('init-smartassist1');
-      }
-  }
-
   bindEvent(element, eventName, eventHandler) {
     element.addEventListener(eventName, eventHandler, false);
   }
