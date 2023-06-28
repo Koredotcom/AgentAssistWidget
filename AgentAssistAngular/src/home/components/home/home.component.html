@@ -70,11 +70,11 @@
         <div class="sentiment-analysis" *ngIf="showSentiChart">
             <div class="title">Current Sentiment</div>
             <div class="positive-negtive-wrapper-analysis">
-                <div echarts [options]="initChartOption" class="chart-container-small"></div>
-                <span class="title-info" (click)="toggleSentiChart()">
-                    <i class="ast-thumbup"></i>
-                    <span>Positive</span>
-                </span>           
+                <div echarts [options]="initChartOption" class="chart-container-small" (click)="toggleSentiChart()" [merge]="mergeSentiOptions"></div>
+                <span class="title-info" [ngClass]="coachingConst.POLARITY_VS_STYLES[currentPolarity].className">
+                    <i [ngClass]="coachingConst.POLARITY_VS_STYLES[currentPolarity].icon"></i>
+                    <span>{{currentPolarity}}</span>
+                </span>
                 <div class="tooltip-analysis" *ngIf="showFullSentiChart">
                     <div class="header-title-close">
                         <div class="title-text">Sentiment Analysis</div>
@@ -82,7 +82,7 @@
                             <i class="ast-close"></i>
                         </div>
                     </div>
-                    <div echarts [options]="chartOption" class="chart-container"></div>
+                    <div echarts [options]="chartOption" class="chart-container" [merge]="mergeSentiOptions"></div>
                 </div>
             </div>
         </div>

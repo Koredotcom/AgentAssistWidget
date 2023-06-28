@@ -60,6 +60,8 @@ export class HomeComponent implements OnInit {
   showFullSentiChart : boolean = false;
   sentiObject : any = coachingConst.SENTI_CHART_YAXIS_LIST;
   showSentiChart : boolean = false;
+  mergeSentiOptions : any = {};
+  currentPolarity : string;
   
 
   constructor(public handleSubjectService: HandleSubjectService, public websocketService: WebSocketService,
@@ -67,16 +69,23 @@ export class HomeComponent implements OnInit {
     private designAlterService: DesignAlterService, private localStorageService: LocalStorageService,
     private mockDataService : MockDataService,
     private cdRef : ChangeDetectorRef,
-    private coachingActionStore : CoachingActionStoreService, private randomUUIDPipe : RandomUUIDPipe ) { }
+    private coachingActionStore : CoachingActionStoreService, private randomUUIDPipe : RandomUUIDPipe ) {
+      setInterval(() => {
+        let object : any = 
+        {"label":"dissatisfied",
+        "coarse":"negative",
+        "polarity":3,
+        "text":"fuckoff",
+        "timestamp":1687876568281
+       }
+       object.polarity = Math.floor(Math.random() * (10 - 1 + 1) + 1);
+       console.log(object.polarity, "polarity actual");
+       
+        this.handleRealtimeSentiResponse(object);
+      },3000);
+     }
   ngOnInit(): void {
     this.subscribeEvents();
-    this.websocketService.agentCoachingResponse$.subscribe((data)=>{
-      if(data?.action === 'hint'){
-        this.handleHintData(data);
-      }else if(data?.action === 'nudge'){
-        this.handleNudgeData(data);
-      }
-    })
   }
 
   ngOnDestroy() {
@@ -87,13 +96,7 @@ export class HomeComponent implements OnInit {
 
   ngAfterViewInit() {
     this.scrollContainer = document.getElementById(IdReferenceConst.HOMESCROLLBAR);
-    this.setSentimentAnalysisOption();
-  }
-
-  setSentimentAnalysisOption() {
-    this.showSentiChart = true;
-    this.chartOption = this.commonService.getSentiAnalysisChartOptions(this.sentiObject);
-    this.initChartOption = this.commonService.getInitialSentiChartOptions(this.sentiObject);
+    this.setRealtimeIntialOptions();
   }
 
   toggleSentiChart(){
@@ -178,6 +181,21 @@ export class HomeComponent implements OnInit {
       }
     });
 
+    let subscription7 = this.websocketService.agentCoachingResponse$.subscribe((data)=>{
+      if(data?.action === 'hint'){
+        this.handleHintData(data);
+      }else if(data?.action === 'nudge'){
+        this.handleNudgeData(data);
+      }
+    });
+
+    let subscription8 = this.websocketService.realtimeSentimeResponse$.subscribe((data)=> {
+      console.log(data, 'realtime response');
+      if(data){
+        this.handleRealtimeSentiResponse(data);
+      }
+    });
+
 
 
     this.subscriptionsList.push(subscription1);
@@ -186,6 +204,68 @@ export class HomeComponent implements OnInit {
     this.subscriptionsList.push(subscription4);
     this.subscriptionsList.push(subscription5);
     this.subscriptionsList.push(subscription6);
+    this.subscriptionsList.push(subscription7);
+    this.subscriptionsList.push(subscription8);
+  }
+
+  handleRealtimeSentiResponse(data){
+    if(!this.commonService.realtimeSentiData[this.connectionDetails.conversationId]){
+      this.commonService.realtimeSentiData[this.connectionDetails.conversationId] = [];
+    }
+    let polarity = coachingConst.SENTI_POLARITY_MAP[data.polarity];
+    this.commonService.realtimeSentiData[this.connectionDetails.conversationId].push(polarity);
+    this.formatRealtimeSentiChartData();
+  }
+
+  formatRealtimeSentiChartData(){
+    this.setSentimentAnalysisOption();
+  }
+
+  setSentimentAnalysisOption() {
+    let chartData = this.chartOption.series[0].data;
+    if(this.commonService.realtimeSentiData[this.connectionDetails.conversationId]?.length > 0){
+      let polaritySum = 0;
+      this.commonService.realtimeSentiData[this.connectionDetails.conversationId].forEach(ele =>{
+        polaritySum += ele;
+      })
+      console.log(polaritySum, "polaritySum");
+      let average = polaritySum/this.commonService.realtimeSentiData[this.connectionDetails.conversationId].length;
+      console.log(average, 'aver******');
+      
+      chartData.push([chartData.length, average]);
+      this.updatePolarity(average);
+    }
+    this.mergeSentiOptions = {
+      series: [
+        {
+          data: chartData,
+          type: 'line',
+          smooth: true,
+          showSymbol: false,
+          lineStyle: {
+            width: 4
+          }
+        }
+      ]
+    }
+    this.showSentiChart = true;
+  }
+
+  updatePolarity(avg){
+    let polarityStr = '';
+    if(avg > 0){
+      polarityStr = 'Positive'
+    }else if(avg == 0 || avg >= -0.25){
+      polarityStr = 'Neutral'
+    }else if(avg < -0.25){
+      polarityStr = 'Negative'
+    }
+    this.currentPolarity = polarityStr;
+  }
+
+  setRealtimeIntialOptions(){
+    this.chartOption = this.commonService.getSentiAnalysisChartOptions(this.sentiObject);
+    this.initChartOption = this.commonService.getInitialSentiChartOptions(this.sentiObject);
   }
 
   //summary popup related code

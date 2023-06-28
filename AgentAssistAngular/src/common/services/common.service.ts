@@ -59,6 +59,7 @@ export class CommonService {
     [ProjConstants.HISTORY] : IdReferenceConst.SCROLLBUTTON_HISTORY
   }
   aaHelpers = null;
+  realtimeSentiData : any = {};
   constructor(private route: ActivatedRoute, private webSocketService: WebSocketService, private designAlterService: DesignAlterService,
     private localStorageService: LocalStorageService,private templateRenderClassService: TemplateRenderClassService) {
     this.setScrollContent();
@@ -1178,125 +1179,113 @@ export class CommonService {
     });
   }
 
-  getInitialSentiChartOptions(object): EChartsOption{
+  getInitialSentiChartOptions(object): EChartsOption {
     return {
       xAxis: {
-        splitLine:{ show: false },
+        splitLine: { show: false },
         axisLine: { show: false },
         axisTick: { show: false },
         axisLabel: { show: false }
       },
       yAxis: {
         type: 'value',
-        data : [-2,-1,0,1,2],
-        nameLocation : 'middle',
-        axisLabel: {show : false },
+        data: [-2, -1, 0, 1, 2],
+        nameLocation: 'middle',
+        axisLabel: { show: false },
         axisTick: { show: false },
-        splitLine:{ show: false },
-        axisLine : {show : false},
+        splitLine: { show: false },
+        axisLine: { show: false },
         min: -2
       },
-      legend : {
-        show : false
+      legend: {
+        show: false
       },
       visualMap: {
-        show : false,
+        show: false,
         dimension: 1,
         pieces: [
-         {
-           lte: -1,
-           color: '#ef5055'
-         },
-         {
-          gt : -1,
-          lte : 0,
-          color : "#e1b1b1"
-         },
-         {
-           gt: 0,
-           lte: 1,
-           color: '#9ddda4'
-         },
-         {
-           gt: 1,
-           lte: 2,
-           color: '#42cc5e'
-         }
-          ],
-          
-        },
+          {
+            lt: -0.25,
+            color: 'red'
+          },
+          {
+            lt: 0,
+            gte: -0.25,
+            color: 'grey'
+          },
+          {
+            gt: 0,
+            color: 'green'
+          }
+        ],
+
+      },
       series: [
         {
-          data: [[0,-2], [1,-2], [2,0], [3,1],[4,1],[5,2],[6,1],[7,0],[8,1],[9,2],[10,-2]],
+          data: [[0,0]],
           type: 'line',
           smooth: true,
           showSymbol: false,
-          lineStyle : {
-            width : 4
+          lineStyle: {
+            width: 4
           }
         }
       ],
     };
   }
 
-  getSentiAnalysisChartOptions(object) : EChartsOption{
+  getSentiAnalysisChartOptions(object): EChartsOption {
     return {
       xAxis: {
-        splitLine:{ show: false },
+        splitLine: { show: false },
         axisLine: { show: false },
         axisTick: { show: false },
         axisLabel: { show: false }
       },
       yAxis: {
         type: 'value',
-        data : [-2,-1,0,1,2],
-        nameLocation : 'middle',
+        data: [-2, -1, 0, 1, 2],
+        nameLocation: 'middle',
         axisLabel: {
-          formatter: val =>  object[val.toString()],
-          show : true
+          formatter: val => object[val.toString()],
+          show: true
         },
         axisTick: { show: false },
-        splitLine:{ show: true },
-        axisLine : {show : false},
+        splitLine: { show: true },
+        axisLine: { show: false },
         min: -2
       },
-      legend : {
-        show : false
+      legend: {
+        show: false
       },
       visualMap: {
-        show : false,
+        show: false,
         dimension: 1,
         pieces: [
-         {
-           lte: -1,
-           color: '#ef5055'
-         },
-         {
-          gt : -1,
-          lte : 0,
-          color : "#e1b1b1"
-         },
-         {
-           gt: 0,
-           lte: 1,
-           color: '#9ddda4'
-         },
-         {
-           gt: 1,
-           lte: 2,
-           color: '#42cc5e'
-         }
-          ],
-          
-        },
+          {
+            lt: -0.25,
+            color: 'red'
+          },
+          {
+            lt: 0,
+            gte: -0.25,
+            color: 'grey'
+          },
+          {
+            gt: 0,
+            color: 'green'
+          }
+        ],
+
+      },
       series: [
         {
-          data: [[0,-2], [1,-2], [2,0], [3,1],[4,1],[5,2],[6,1],[7,0],[8,1],[9,2],[10,-2]],
+          data: [[0,0]],
           type: 'line',
           smooth: true,
           showSymbol: false,
-          lineStyle : {
-            width : 4
+          lineStyle: {
+            width: 4
           }
         }
       ],

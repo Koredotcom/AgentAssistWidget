@@ -208,5 +208,31 @@ export const coachingConst = {
         '0' : 'Neu',
         '1' : '',
         '2' : '+Pos'
-      }
+    },
+    SENTI_POLARITY_MAP : {
+        1 : -2,
+        2 : -1,
+        3 : -1,
+        4 : 0,
+        5 : 0,
+        6 : 0,
+        7 : 1,
+        8 : 1,
+        9 : 2,
+        10 : 2
+    },
+    POLARITY_VS_STYLES : {
+        'Positive' : {
+            className : 'positive-title',
+            icon : 'ast-thumbup'
+        },
+        'Neutral' : {
+            className : 'neutral-title',
+            icon : 'ast-thumbup'
+        },
+        'Negative' : {
+            className : 'negative-title',
+            icon : 'ast-thumbdown'
+        }
+    }
 }

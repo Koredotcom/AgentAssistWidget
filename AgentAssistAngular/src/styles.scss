@@ -3956,8 +3956,6 @@ input.no-autofill-bkg:-webkit-autofill {
             padding: 2px 8px 2px 6px;
             font-size: 10px;
             font-weight: 500;
-            color: #027A48;
-            background: #ECFDF3;
             height: 16px;
             cursor: pointer;
             margin-left: 10px;
@@ -3965,9 +3963,17 @@ input.no-autofill-bkg:-webkit-autofill {
             i{
                 margin-right: 6px;
             }
-            &.negtive-title{
+            &.positive-title{
+                color: #027A48;
+                background: #ECFDF3;
+            }
+            &.negative-title{
                 background: #FEF2F2;
                 color: #DC2626;
+            }
+            &.neutral-title{
+                background: rgb(201, 193, 193);
+                color :#605E5C
             }
         }
         .tooltip-analysis{
