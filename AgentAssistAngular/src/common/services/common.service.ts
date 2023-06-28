@@ -1247,7 +1247,7 @@ export class CommonService {
         data: [-2, -1, 0, 1, 2],
         nameLocation: 'middle',
         axisLabel: {
-          formatter: val => object[val],
+          formatter: val => val,
           show: true
         },
         axisTick: { show: false },
@@ -1256,30 +1256,39 @@ export class CommonService {
         min: -2
       },
       legend: {
-        show: false
+        show: false,
+        right : '20%',
+        top : '10%'
+      },
+      grid : {
+        top :80
       },
       visualMap: {
-        show: false,
+        right : '1%',
+        top : '1%',
+        show: true,
         dimension: 1,
         pieces: [
           {
             lt: -0.25,
-            color: 'red'
+            color: 'red',
+            label : '< (-0.25 Neg)'
           },
           {
             lt: 0,
             gte: -0.25,
-            color: 'grey'
+            color: 'grey',
+            label : '0 - (-0.25 Neu)'
           },
           {
             gt: 0,
-            color: 'green'
+            color: 'green',
+            label : '> 0 (Pos)'
           }
-        ],
-
+        ]
       },
       series: [
-        {
+        { 
           data: [[0,0]],
           type: 'line',
           smooth: true,

@@ -69,21 +69,9 @@ export class HomeComponent implements OnInit {
     private designAlterService: DesignAlterService, private localStorageService: LocalStorageService,
     private mockDataService : MockDataService,
     private cdRef : ChangeDetectorRef,
-    private coachingActionStore : CoachingActionStoreService, private randomUUIDPipe : RandomUUIDPipe ) {
-      setInterval(() => {
-        let object : any = 
-        {"label":"dissatisfied",
-        "coarse":"negative",
-        "polarity":3,
-        "text":"fuckoff",
-        "timestamp":1687876568281
-       }
-       object.polarity = Math.floor(Math.random() * (10 - 1 + 1) + 1);
-       console.log(object.polarity, "polarity actual");
-       
-        this.handleRealtimeSentiResponse(object);
-      },3000);
-     }
+    private coachingActionStore : CoachingActionStoreService, private randomUUIDPipe : RandomUUIDPipe ) {}
+
+
   ngOnInit(): void {
     this.subscribeEvents();
   }
@@ -97,10 +85,6 @@ export class HomeComponent implements OnInit {
   ngAfterViewInit() {
     this.scrollContainer = document.getElementById(IdReferenceConst.HOMESCROLLBAR);
     this.setRealtimeIntialOptions();
-  }
-
-  toggleSentiChart(){
-    this.showFullSentiChart = !this.showFullSentiChart;
   }
 
   handleNudgeData(data){
@@ -221,6 +205,10 @@ export class HomeComponent implements OnInit {
     this.setSentimentAnalysisOption();
   }
 
+  toggleSentiChart(){
+    this.showFullSentiChart = !this.showFullSentiChart;
+  }
+
   setSentimentAnalysisOption() {
     let chartData = this.chartOption.series[0].data;
     if(this.commonService.realtimeSentiData[this.connectionDetails.conversationId]?.length > 0){
@@ -228,10 +216,7 @@ export class HomeComponent implements OnInit {
       this.commonService.realtimeSentiData[this.connectionDetails.conversationId].forEach(ele =>{
         polaritySum += ele;
       })
-      console.log(polaritySum, "polaritySum");
-      let average = polaritySum/this.commonService.realtimeSentiData[this.connectionDetails.conversationId].length;
-      console.log(average, 'aver******');
-      
+      let average = polaritySum/this.commonService.realtimeSentiData[this.connectionDetails.conversationId].length;      
       chartData.push([chartData.length, average]);
       this.updatePolarity(average);
     }

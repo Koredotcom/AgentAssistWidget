@@ -67,12 +67,12 @@
                 </div>
             </div>
         </div>
-        <div class="sentiment-analysis" *ngIf="showSentiChart">
+        <div class="sentiment-analysis" *ngIf="showSentiChart && currentPolarity">
             <div class="title">Current Sentiment</div>
             <div class="positive-negtive-wrapper-analysis">
                 <div echarts [options]="initChartOption" class="chart-container-small" (click)="toggleSentiChart()" [merge]="mergeSentiOptions"></div>
-                <span class="title-info" [ngClass]="coachingConst.POLARITY_VS_STYLES[currentPolarity].className">
-                    <i [ngClass]="coachingConst.POLARITY_VS_STYLES[currentPolarity].icon"></i>
+                <span class="title-info" [ngClass]="coachingConst.POLARITY_VS_STYLES[currentPolarity]?.className">
+                    <i [ngClass]="coachingConst.POLARITY_VS_STYLES[currentPolarity]?.icon"></i>
                     <span>{{currentPolarity}}</span>
                 </span>
                 <div class="tooltip-analysis" *ngIf="showFullSentiChart">
