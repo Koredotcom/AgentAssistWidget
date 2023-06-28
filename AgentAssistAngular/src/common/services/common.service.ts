@@ -1247,7 +1247,7 @@ export class CommonService {
         data: [-2, -1, 0, 1, 2],
         nameLocation: 'middle',
         axisLabel: {
-          formatter: val => object[val.toString()],
+          formatter: val => object[val],
           show: true
         },
         axisTick: { show: false },

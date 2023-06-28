@@ -203,11 +203,11 @@ export const coachingConst = {
         },
     },
     SENTI_CHART_YAXIS_LIST : {
-        '-2' : '-Neg',
-        '-1' : '',
-        '0' : 'Neu',
-        '1' : '',
-        '2' : '+Pos'
+        [-2] : '-Neg',
+        [-1] : '',
+        0 : 'Neu',
+        1 : '',
+        2 : '+Pos'
     },
     SENTI_POLARITY_MAP : {
         1 : -2,
