@@ -32,7 +32,7 @@ export class AuthService {
   public fromToken_tokenId = null;
   public externalQp: any;
   userAccIdDetail: any;
-  public loadingOnSm = window.location.href.includes('smartassist') ? true : false;
+  public isLoadingOnSm = window.location.href.includes('smartassist') ? true : false;
   public isAgentDesktopEnabled$ =  new BehaviorSubject(false);
 
   constructor(
