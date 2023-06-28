@@ -59,6 +59,17 @@ export class AppComponent implements OnDestroy {
     // this.authInfo = localstore.getAuthInfo();
   }
 
+  receiveMessage (event) {
+    console.log('outside tester:', event.data);
+      debugger
+      if(event.data.method === 'agentassist_in_smartassist') {
+        console.log('insidetester:', event.data);
+        document.getElementsByTagName('body')[0].classList.add('init-smartassist');
+
+        // $('body').addClass('init-smartassist1');
+      }
+  }
+
   ngOnInit() {
 
     // the lang to use, if the lang isn't available, it will use the current loader to get them
@@ -79,7 +90,7 @@ export class AppComponent implements OnDestroy {
         this.service.invoke('get.token').subscribe(
           res => {
             // this.url = `http://localhost:4200/botstore/store?product=SmartAssist-App#from=SmartAssist`;
-            // this.url = `${this.workflowService.resolveHostUrl()}/botstore/store?product=SmartAssist-App#from=SmartAssist`; 
+            // this.url = `${this.workflowService.resolveHostUrl()}/botstore/store?product=SmartAssist-App#from=SmartAssist`;
             // this.isBufferIFrame = true;
             // this.showIframe = true;
             setTimeout(() => {
@@ -118,7 +129,7 @@ export class AppComponent implements OnDestroy {
     // this.localstore.appLanguage = this.localstore.appLanguage || (browserLang.match(/ja/) ? browserLang : 'en');
     const lang = this.authService.externalQp?.appLanguage || this.localstore.appLanguage;
     if (lang) { this.translate.use(lang); }
-    
+
     this.route.queryParamMap.subscribe(paramMap => {
       let qParamLang = paramMap.get('lang');
 
