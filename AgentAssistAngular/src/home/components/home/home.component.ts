@@ -175,8 +175,8 @@ export class HomeComponent implements OnInit {
 
     let subscription8 = this.websocketService.realtimeSentimeResponse$.subscribe((data)=> {
       console.log(data, 'realtime response');
-      if(data){
-        this.handleRealtimeSentiResponse(data);
+      if(data && data.sentiment){
+        this.handleRealtimeSentiResponse(data.sentiment);
       }
     });
 
