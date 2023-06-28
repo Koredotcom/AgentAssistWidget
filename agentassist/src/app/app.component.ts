@@ -77,6 +77,9 @@ export class AppComponent implements OnDestroy {
     };
     window.parent.postMessage(message, "*");
     window.addEventListener("message", this.receiveMessage.bind(this), false);
+    if(window.location.href.includes('smartassist')){
+      document.getElementsByTagName('body')[0].classList.add('init-smartassist');
+    }
     // the lang to use, if the lang isn't available, it will use the current loader to get them
     const self = this;
     this.iFrameUrl = `${this.workflowService.resolveHostUrl()}/botstore/store?product=SmartAssist-App#from=SmartAssist`;
