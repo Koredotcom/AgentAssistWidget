@@ -11,18 +11,18 @@
     <div class="body-sec-coaching">
         <perfect-scrollbar>
             <div class="inner-scroll">
-                <form>
+                <form [formGroup]="getAzureForm">
                     <div class="kr-sg-input-text m-b-20">
                         <div class="label-text">Sub Domain</div>
-                        <input type="text" placeholder="Enter your Sub Domain here" class="input-text">
+                        <input formControlName="tenant" type="text" placeholder="Enter your Sub Domain here" class="input-text">
                     </div>
-                    <div class="kr-sg-input-text m-b-20">
+                    <div [formGroup]="getAzureForm.controls['modelConfig']" class="kr-sg-input-text m-b-20">
                         <div class="label-text">Deployment ID</div>
-                        <input type="text" placeholder="Enter your Deployment ID here" class="input-text">
+                        <input formControlName="GPT-3" type="text" placeholder="Enter your Deployment ID here" class="input-text">
                     </div>
                     <div class="kr-sg-input-text m-b-20">
                         <div class="label-text">API Key</div>
-                        <input type="text" placeholder="Enter your API Key" class="input-text">
+                        <input formControlName="apiKey" type="text" placeholder="Enter your API Key" class="input-text">
                         <div class="info-key">Found at View API Keys > Secret Key</div>
                     </div>
                 </form>
@@ -32,7 +32,7 @@
     <div class="footer-sec">
         <div class="right-btns">
             <button class="kr-sg-button-secondary-two btn_md" (click)="closeEvent.emit(true)">Cancel</button>
-            <button class="kr-sg-button-primary btn_md" type="submit">Enable</button>
+            <button class="kr-sg-button-primary btn_md" type="submit" [disabled]="!azureForm.valid || !azureForm.dirty" (click)="saveAzure()">{{mode === 'create' ? 'Enable' : 'Update'}}</button>
         </div>
     </div>
 </div>

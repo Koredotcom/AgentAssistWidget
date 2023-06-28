@@ -2035,5 +2035,6 @@
     "COACHING.RULEDELETE_SUCCESS" : "Rule Deleted Successfully",
     "COACHING.RULEDELETE_FAILURE" : "Failed to delete the Rule",
     "COACHING.PUBLISH_SUCCESS" : "Published Successfully",
-    "COACHING.PUBLISH_FAILURE" : "Failed to publish"
+    "COACHING.PUBLISH_FAILURE" : "Failed to publish",
+    "SUCCESSFULLY.UPDATED": "Successfully updated"
 }

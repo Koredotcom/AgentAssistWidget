@@ -13,7 +13,7 @@
                 <form>
                     <div class="kr-sg-input-text m-b-20">
                         <div class="label-text">API Key</div>
-                        <input type="text" placeholder="Enter your API Key" class="input-text">
+                        <input type="text" name="apiKey" placeholder="Enter your API Key" class="input-text" [formControl]="apiKey">
                         <div class="info-key">Found at View API Keys > Secret Key</div>
                     </div>
                 </form>
@@ -23,7 +23,7 @@
     <div class="footer-sec">
         <div class="right-btns">
             <button class="kr-sg-button-secondary-two btn_md" (click)="closeEvent.emit(true)">Cancel</button>
-            <button class="kr-sg-button-primary btn_md" type="submit">Enable</button>
+            <button class="kr-sg-button-primary btn_md" type="submit" (click)="saveApi()" [disabled]="!apiKey.valid || !apiKey.dirty">{{mode === 'create' ? 'Enable' : 'Update'}}</button>
         </div>
     </div>
 </div>
