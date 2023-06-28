@@ -149,10 +149,10 @@ export class AppComponent implements OnDestroy {
   }
 
   receiveMessage (event) {
-    console.log('outside tester1:', event);
+    console.log('outside tester:', event.data);
       debugger
       if(event.data.method === 'agentassist_in_smartassist') {
-        console.log('insidetester1:', event);
+        console.log('insidetester:', event.data);
         document.getElementsByTagName('body')[0].classList.add('init-smartassist');
 
         // $('body').addClass('init-smartassist1');
