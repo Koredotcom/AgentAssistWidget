@@ -9,6 +9,7 @@ import { DesignAlterService } from './design-alter.service';
 import { LocalStorageService } from './local-storage.service';
 import { TemplateRenderClassService } from './template-render-class.service';
 import { SanitizeHtmlPipe } from '../pipes/sanitize-html.pipe';
+import { EChartsOption } from 'echarts';
 
 declare var $: any;
 declare const agentAssistHelpers: any;
@@ -58,6 +59,7 @@ export class CommonService {
     [ProjConstants.HISTORY] : IdReferenceConst.SCROLLBUTTON_HISTORY
   }
   aaHelpers = null;
+  realtimeSentiData : any = {};
   constructor(private route: ActivatedRoute, private webSocketService: WebSocketService, private designAlterService: DesignAlterService,
     private localStorageService: LocalStorageService,private templateRenderClassService: TemplateRenderClassService) {
     this.setScrollContent();
@@ -1175,5 +1177,127 @@ export class CommonService {
     $('.agent-assist-chat-container.kore-chat-window').off('click', '.advanced-list-wrapper .button_,.advanced-list-wrapper .inner-btns-acc .button_,.advanced-list-wrapper .tags-data .tag-name,.advanced-list-wrapper .btn_group .submitBtn,.advanced-list-wrapper .btn_group .cancelBtn,.advanced-list-wrapper .details-content .text-info,.advancelisttemplate .inner-btns-acc .button_,.advancelisttemplate .filter-icon .button_').on("click", '.advanced-list-wrapper .button_,.advanced-list-wrapper .inner-btns-acc .button_,.advanced-list-wrapper .tags-data .tag-name,.advanced-list-wrapper .btn_group .submitBtn,.advanced-list-wrapper .btn_group .cancelBtn,.advanced-list-wrapper .details-content .text-info,.advancelisttemplate .inner-btns-acc .button_,.advancelisttemplate .filter-icon .button_', function (e) {
       mythis.HandleClickAndSendRequest(tab, connectionObj, e)
     });
+  }
+
+  getInitialSentiChartOptions(object): EChartsOption {
+    return {
+      xAxis: {
+        splitLine: { show: false },
+        axisLine: { show: false },
+        axisTick: { show: false },
+        axisLabel: { show: false }
+      },
+      yAxis: {
+        type: 'value',
+        data: [-2, -1, 0, 1, 2],
+        nameLocation: 'middle',
+        axisLabel: { show: false },
+        axisTick: { show: false },
+        splitLine: { show: false },
+        axisLine: { show: false },
+        min: -2
+      },
+      legend: {
+        show: false
+      },
+      visualMap: {
+        show: false,
+        dimension: 1,
+        pieces: [
+          {
+            lt: -0.25,
+            color: 'red'
+          },
+          {
+            lt: 0,
+            gte: -0.25,
+            color: 'grey'
+          },
+          {
+            gt: 0,
+            color: 'green'
+          }
+        ],
+
+      },
+      series: [
+        {
+          data: [[0,0]],
+          type: 'line',
+          smooth: true,
+          showSymbol: false,
+          lineStyle: {
+            width: 4
+          }
+        }
+      ],
+    };
+  }
+
+  getSentiAnalysisChartOptions(object): EChartsOption {
+    return {
+      xAxis: {
+        splitLine: { show: false },
+        axisLine: { show: false },
+        axisTick: { show: false },
+        axisLabel: { show: false }
+      },
+      yAxis: {
+        type: 'value',
+        data: [-2, -1, 0, 1, 2],
+        nameLocation: 'middle',
+        axisLabel: {
+          formatter: val => val,
+          show: true
+        },
+        axisTick: { show: false },
+        splitLine: { show: true },
+        axisLine: { show: false },
+        min: -2
+      },
+      legend: {
+        show: false,
+        right : '20%',
+        top : '10%'
+      },
+      grid : {
+        top :80
+      },
+      visualMap: {
+        right : '1%',
+        top : '1%',
+        show: true,
+        dimension: 1,
+        pieces: [
+          {
+            lt: -0.25,
+            color: 'red',
+            label : '< (-0.25 Neg)'
+          },
+          {
+            lt: 0,
+            gte: -0.25,
+            color: 'grey',
+            label : '0 - (-0.25 Neu)'
+          },
+          {
+            gt: 0,
+            color: 'green',
+            label : '> 0 (Pos)'
+          }
+        ]
+      },
+      series: [
+        { 
+          data: [[0,0]],
+          type: 'line',
+          smooth: true,
+          showSymbol: false,
+          lineStyle: {
+            width: 4
+          }
+        }
+      ],
+    };
   }
 }

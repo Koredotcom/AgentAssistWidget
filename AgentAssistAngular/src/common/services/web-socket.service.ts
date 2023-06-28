@@ -25,6 +25,7 @@ export class WebSocketService {
   agentFeedbackResponse$ : BehaviorSubject<any[]> = new BehaviorSubject(null);
   responseResolutionCommentsResponse$ : BehaviorSubject<any[]> = new BehaviorSubject(null);
   agentCoachingResponse$ = new Subject<any>();
+  realtimeSentimeResponse$ = new Subject<any>();
   isWelcomeResonse = false;
   LoaderTimeout: number = 10000;
 
@@ -108,6 +109,11 @@ export class WebSocketService {
 
     this._agentAsisstSocket.on(EVENTS.agent_coaching_response, (data)=>{
       this.agentCoachingResponse$.next(data);
+      this.addOrRemoveLoader(false);
+    });
+
+    this._agentAsisstSocket.on(EVENTS.realtime_sentiment_response, (data) => {
+      this.realtimeSentimeResponse$.next(data);
       this.addOrRemoveLoader(false);
     });
 

@@ -3581,6 +3581,9 @@ input.no-autofill-bkg:-webkit-autofill {
 //perfect scrollbar
 .home-scroll-bar{
     height: calc(100vh - 90px);
+    &.if-sentiment-analysis-added{
+        height: calc(100vh - 190px);
+    }
 }
 
 .overlaysearch-scroll-bar{
@@ -3925,6 +3928,7 @@ input.no-autofill-bkg:-webkit-autofill {
     opacity: 1;
     padding: 10px;
     position: relative;
+    background: #EBF2F6;
     *{
         opacity: 1 !important;
     }
@@ -3937,10 +3941,14 @@ input.no-autofill-bkg:-webkit-autofill {
     }
     .positive-negtive-wrapper-analysis{
         transition: 0.2s all ease-in-out;
-        &:hover{
-            .tooltip-analysis{
-                display: block;
-            }
+        display: flex;
+        align-items: center;
+        width: 100%;
+        .chart-container-small {
+            height: 80px;
+            width: 100%;
+            border-radius: 8px;
+            background: #FFF;
         }
         .title-info{
             display: flex;
@@ -3948,17 +3956,24 @@ input.no-autofill-bkg:-webkit-autofill {
             padding: 2px 8px 2px 6px;
             font-size: 10px;
             font-weight: 500;
-            color: #027A48;
-            background: #ECFDF3;
             height: 16px;
             cursor: pointer;
+            margin-left: 10px;
             border-radius: 16px;
             i{
                 margin-right: 6px;
             }
-            &.negtive-title{
+            &.positive-title{
+                color: #027A48;
+                background: #ECFDF3;
+            }
+            &.negative-title{
                 background: #FEF2F2;
                 color: #DC2626;
+            }
+            &.neutral-title{
+                background: rgb(201, 193, 193);
+                color :#605E5C
             }
         }
         .tooltip-analysis{
@@ -3966,18 +3981,31 @@ input.no-autofill-bkg:-webkit-autofill {
             z-index: 9;
             border-radius: 6px;
             background: #FFF;
-            box-shadow: 0px 1px 2px 0px #BDC1C6;
+            box-shadow: 0px 1px 2px 0px #bdc1c6;
             padding: 12px 18px;
             border: 0;
-            left: 12px;
-            top: 30px;
-            width: 314px;
-            display: none;
-            .title-text{
-                color: #44474C;
-                font-size: 12px;
-                font-weight: 500;
-                line-height: 18px;
+            left: 10px;
+            top: 6px;
+            width: calc(100% - 20px);
+            .header-title-close{
+                display: flex;
+                align-items: center;
+                .title-text{
+                    color: #44474C;
+                    font-size: 12px;
+                    font-weight: 500;
+                    line-height: 16px;
+                    width: 100%;
+                    margin-left: 20px;
+                }
+                .close-sentiment-anly{
+                    flex-shrink: 0;
+                    cursor: pointer;
+                    margin-left: 10px;
+                }
+            }            
+            .chart-container{
+                height: 240px;
             }
             .progress-block{
                 display: flex;
@@ -3988,7 +4016,7 @@ input.no-autofill-bkg:-webkit-autofill {
                 border-radius: 6px;
                 .bg-progress{
                     height: 100%;
-                    width: 33.3%;
+                    // width: 33.3%;
                     background: #EF4444;
                     &:first-child{
                         border-radius: 6px 0px 0px 6px;
