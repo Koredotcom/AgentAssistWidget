@@ -28,6 +28,8 @@ export class CoachingGroupCreateComponent implements OnInit {
 
   createGroupForm : FormGroup;
   coachingConst : any = COACHINGCNST;
+  selAcc = this.local.getSelectedAccount();
+
   constructor(private modalService: NgbModal, private workflowService : workflowService, private service : ServiceInvokerService,
     private notificationService : NotificationService, private translate: TranslateService, private auth: AuthService, private local: LocalStoreService) { }
 
@@ -62,11 +64,12 @@ export class CoachingGroupCreateComponent implements OnInit {
   }
 
   createOrUpdateGroupApiCall(serviceName){
+
     let payload : any = {
       "name": this.createGroupForm.controls.name.value,
       "description": this.createGroupForm.controls.description.value,
       "displayName": this.createGroupForm.controls.name.value,
-      "botId": this.auth.isLoadingOnSm ? this.local.setSelectedAccount['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id
+      "botId": this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id
       // "botId": this.workflowService.getCurrentBt(true)._id
     }
     let updateGroupObj : any = {

@@ -42,6 +42,7 @@ export class CoachingComponent implements OnInit {
   searching : boolean = false;
   publishInprogress : boolean = false;
   rulePresent : boolean = false;
+  selAcc = this.local.getSelectedAccount();
 
   @ViewChild('ps') ps: PerfectScrollbarComponent;
   @ViewChild('newCoachingGroup', { static: true }) newCoachingGroup: SliderComponentComponent;
@@ -87,7 +88,7 @@ export class CoachingComponent implements OnInit {
   // get or update GroupData Starts
   getAgentCoachingGroupData(){
     let params : any = {
-      botId : this.auth.isLoadingOnSm ? this.local.setSelectedAccount['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id,
+      botId : this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id,
       isExpand : true
     }
     this.isLoading = true;
@@ -152,7 +153,7 @@ export class CoachingComponent implements OnInit {
 
   publishCoaching(){
     this.publishInprogress = true;
-    this.service.invoke('post.publishcoaching',{}, {botId : this.auth.isLoadingOnSm ? this.local.setSelectedAccount['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id}).pipe(finalize(() => {
+    this.service.invoke('post.publishcoaching',{}, {botId : this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id}).pipe(finalize(() => {
       this.publishInprogress = false;
     })).subscribe(data => {
       if (data) {

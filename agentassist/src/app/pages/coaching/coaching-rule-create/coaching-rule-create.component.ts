@@ -26,6 +26,7 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
   ruleForm :FormGroup;
   modalRef : any;
   formTouched : boolean = false;
+  selAcc = this.local.getSelectedAccount();
 
   coachingCnst : any = COACHINGCNST
   triggerClick : boolean = false;
@@ -170,7 +171,7 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
   createForm(){
     this.ruleForm = new FormGroup(
       {
-        "botId": new FormControl(this.auth.isLoadingOnSm ? this.local.setSelectedAccount['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id, [Validators.required]),
+        "botId": new FormControl(this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id, [Validators.required]),
         "name": new FormControl('',[Validators.required]),
         // "description": new FormControl('',[Validators.required]),
         "triggers": this.fb.array([]),
