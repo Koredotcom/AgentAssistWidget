@@ -19,6 +19,9 @@ export class AuthInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler) {
     // Get the auth token from the service.
     let authToken;
+    let selAcc = this.localStoreService.getSelectedAccount();
+    let iid = this.auth?.isLoadingOnSm && selAcc && selAcc?.instanceBots?.length ? selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
+    // console.log()
     if (req.headers.get('authorization')) { authToken = req.headers.get('authorization'); }
     else { authToken = this.auth.getAccessToken(); }
     if (!authToken && !req.url.includes('assets/i18n/en.json')) {
@@ -44,7 +47,11 @@ export class AuthInterceptor implements HttpInterceptor {
     _reqAdditions.setHeaders['X-Timezone-Offset'] = new Date().getTimezoneOffset().toString();
     _reqAdditions.setHeaders['X-Request-Id'] = uuidv4();
     // _reqAdditions.setHeaders['iid'] = this.workflowService?.getCurrentBt(true)?._id ? this.workflowService?.getCurrentBt(true)?._id : 'st-1c3a28c8-335d-5322-bd21-f5753dc7f1f9';
-    _reqAdditions.setHeaders['iid'] = this.auth.isLoadingOnSm && this.auth.getSelectedAccount() ? this.auth.getSelectedAccount()['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
+    if(iid){
+      _reqAdditions.setHeaders['iid'] = iid;
+    }else{
+      _reqAdditions.setHeaders['iid'] = this.workflowService?.getCurrentBt(true)?._id || 'st-1c3a28c8-335d-5322-bd21-f5753dc7f1f9';
+    }
     _reqAdditions.setHeaders['app-language'] = this.localStoreService.appLanguage || 'en';
 
     if (req.url.includes('/deflectai/apps') && req.method === 'POST') {
