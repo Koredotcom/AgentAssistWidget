@@ -1266,7 +1266,7 @@ export class CommonService {
       visualMap: {
         right : '1%',
         top : '1%',
-        show: true,
+        show: false,
         dimension: 1,
         pieces: [
           {
