@@ -2401,3 +2401,7 @@ body{
     width: 100% !important;
   }
 }
+.disabled{
+    pointer-events: none;
+    opacity: 0.5;
+}

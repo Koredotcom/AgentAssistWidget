@@ -1628,5 +1628,24 @@ export class EndPointsService {
       method : 'post'
     }
 
+    this.serviceList['post.openApi'] = {
+      endpoint : this.API_SERVER_URL + '/users/:userId/builder/streams/:streamId/llmconfigs/integration/openai',
+      method : 'post'
+    }
+
+    this.serviceList['post.azure'] = {
+      endpoint : this.API_SERVER_URL + '/users/:userId/builder/streams/:streamId/llmconfigs/integration/azure',
+      method : 'post'
+    }
+
+    this.serviceList['get.AIconfigs'] = {
+      endpoint : this.API_SERVER_URL + '/users/:userId/builder/streams/:streamId/llmconfigs',
+      method : 'get'
+    }
+
+    this.serviceList['post.features'] = {
+      endpoint : this.API_SERVER_URL + '/users/:userId/builder/streams/:streamId/llmconfigs/:llmId',
+      method : 'post'
+    }
   }
 }

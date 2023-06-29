@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 import { EVENTS } from '../helper/events';
 import { WebSocketService } from './web-socket.service';
 import * as $ from 'jquery';
-import { IdReferenceConst, ProjConstants, storageConst } from '../constants/proj.cnts';
+import { coachingConst, IdReferenceConst, ProjConstants, storageConst } from '../constants/proj.cnts';
 import { DesignAlterService } from './design-alter.service';
 import { LocalStorageService } from './local-storage.service';
 import { TemplateRenderClassService } from './template-render-class.service';
@@ -1244,10 +1244,10 @@ export class CommonService {
       },
       yAxis: {
         type: 'value',
-        data: [-2, -1, 0, 1, 2],
+        data: [-2, 0, 2],
         nameLocation: 'middle',
         axisLabel: {
-          formatter: val => val,
+          formatter: val => this.showExtrems(val),
           show: true
         },
         axisTick: { show: false },
@@ -1266,7 +1266,7 @@ export class CommonService {
       visualMap: {
         right : '1%',
         top : '1%',
-        show: true,
+        show: false,
         dimension: 1,
         pieces: [
           {
@@ -1300,4 +1300,12 @@ export class CommonService {
       ],
     };
   }
+
+  showExtrems(val){
+    if(val == 0 || val == 2 || val == -2){
+      return val;
+    }else 
+      return '';
+  }
+
 }

@@ -11,46 +11,125 @@
                 <div class="setup-integrations">
                     <div class="title-text">Integration Setup</div>
                     <div class="title-desc">Use any of the below connectors to enable the integration with LLM and Generative AI models. Integration is a pre-requisite to use these features.</div>
-                    <div class="group-radiobutton">
+                    <!-- <div class="group-radiobutton">
                         <div class="kr-sg-radiobutton" (click)="openOpenAIConf()">
-                            <input id="radio-22" name="radio" class="radio-custom" type="radio" checked>
+                            <input id="radio-22" name="radio" class="radio-custom" type="radio" (change)="isOpenAi = 'openai'" [(ngModel)]="isOpenAi" value="openai">
                             <label for="radio-22" class="radio-custom-label">OpenAI</label>
                         </div>
                         <div class="kr-sg-radiobutton" (click)="openAzureConf()">
-                            <input id="radio-23" name="radio" class="radio-custom" type="radio">
+                            <input id="radio-23" name="radio" class="radio-custom" type="radio" (change)="isOpenAi = 'azure'" [(ngModel)]="isOpenAi" value="azure">
                             <label for="radio-23" class="radio-custom-label">Azure OpenAI</label>
                         </div>
-                    </div> 
-                    <div class="title-heading">Features List</div>
-                    <div class="title-desc">Setup the integration and enable the features to start exploring the new features.</div>
-                    <div class="features-list-info">
-                        <label class="kr-sg-new-toggle large">
-                            <input type="checkbox" checked (click)="openPolieGuidelines(policiesAndGuideLines)">
-                            <div class="slider">
-                                <span class="no">Disable</span>
-                                <div class="slide-parent">
-                                    <div class="slider-btn"></div>
-                                </div>                                    
-                                <span class="yes">Enable</span>
+                    </div>  -->
+
+                    <div class="actionsCardList">
+                        <div class="wsCardsListCntr">
+                            <div class="actionCardTile" (click)="openOpenAIConf()">
+                                <div class="actionCard">
+                                    <div class="appIconName">
+                                        <div class="iconBG">
+                                            <img class="appIcon" src="https://qa-static.kore.ai/integrations/32/openai.png">
+                                        </div>
+                                        <div class="notConfiguredState">
+                                            <div class="appName">OpenAI</div>
+                                        </div>
+                                    </div>
+                                    <div class="configuredStateDiv">
+                                        <div class="configure_now">
+                                            <span *ngIf="integrations?.openai?.apiKey"> 
+                                                <i class="icon-sa-check-round"></i>
+                                            </span>
+                                            <span >{{integrations?.openai?.apiKey ? 'configured' : 'configure now'}}</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </label>
-                        <div class="features-list-box-data">
-                            <div class="kr-sg-checkbox">
-                                <input id="checkbox-1" class="checkbox-custom" type="checkbox">
-                                <label for="checkbox-1" class="checkbox-custom-label">
-                                    <div class="checkbox-title">Training Utterance Suggestions</div>
-                                    <div class="checkbox-desc">Generate high-quality training data quickly and easily with our platform's suggested utterances for each intent. Review and add the suggestions as needed to create a powerful training set for your bot.</div>
-                                </label>
-                            </div>
-                            <div class="kr-sg-checkbox">
-                                <input id="checkbox-11" class="checkbox-custom" type="checkbox">
-                                <label for="checkbox-11" class="checkbox-custom-label">
-                                    <div class="checkbox-title">None Intent Utterance Suggestions</div>
-                                    <div class="checkbox-desc">None intent utterances are used to prevent false positives while doing intent recognition</div>
-                                </label>
+                            <div class="actionCardTile" (click)="openAzureConf()">
+                                <div class="actionCard">
+                                    <div class="appIconName">
+                                        <div class="iconBG">
+                                            <img class="appIcon" src="https://qa-static.kore.ai/integrations/32/azureOpenAI.png">
+                                        </div>
+                                        <div class="notConfiguredState">
+                                            <div class="appName">Azure OpenAI</div>
+                                        </div>
+                                    </div>
+                                    <div class="configuredStateDiv">
+                                        <div class="configure_now">
+                                            <span *ngIf="integrations?.azure?.apiKey">
+                                                <i class="icon-sa-check-round"></i>
+                                            </span>
+                                            <span>{{integrations?.azure?.apiKey ? 'configured' : 'configure now'}}</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <ng-container>
+                        <div class="title-heading">Features List</div>
+                        <div class="title-desc">Setup the integration and enable the features to start exploring the new features.</div>
+                        <div class="features-list-info" [ngClass]="{'disabled': (!integrations?.openai?.apiKey && !integrations?.azure?.apiKey)}">
+                            <div class="features-list-box-data">
+                                <ng-container *ngFor="let fea of features; let i = index">
+                                    <div class="list-data-wrapper">
+                                        <div class="kr-sg-checkbox">
+                                            <input (change)="changed($event, fea.nameC)" [checked]="fea.enable" [disabled]="!integrations?.openai?.apiKey && !integrations?.azure?.apiKey" id="checkbox-{{i}}" class="checkbox-custom" type="checkbox">
+                                            <label for="checkbox-{{i}}" class="checkbox-custom-label">
+                                                <div class="checkbox-title">{{fea.name}}</div>
+                                                <div class="checkbox-desc">{{fea.description}}</div>
+                                            </label>
+                                        </div>
+                                        <div class="kr-sg-dropdowns" ngbDropdown>
+                                            <div class="dropdown dropdown-open">
+                                              <button class="dropdown-toggle dropdown-input" ngbDropdownToggle> 
+                                                <img *ngIf="fea.selectedSrc" [src]="fea.selectedSrc">
+                                                <span>{{fea.selected}}</span>
+                                              </button>
+                                              <ul class="dropdown-menu content-menu p-0" ngbDropdownMenu>
+                                                    <ng-container *ngFor="let item of configOpts;">
+                                                        <li ngbDropdownItem class="p-0" (click)="selectOption(item, fea.nameC)">
+                                                            <a>
+                                                                <img [src]="item.src">
+                                                                <span>{{item.name}}</span>
+                                                            </a>
+                                                        </li>
+                                                    </ng-container>
+                                                  </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                                <!-- <div class="list-data-wrapper">
+                                    <div class="kr-sg-checkbox">
+                                        <input id="checkbox-11" [disabled]="!integrations?.openai?.apiKey && !integrations?.azure?.apiKey" class="checkbox-custom" type="checkbox">
+                                        <label for="checkbox-11" class="checkbox-custom-label">
+                                            <div class="checkbox-title">None Intent Utterance Suggestions</div>
+                                            <div class="checkbox-desc">None intent utterances are used to prevent false positives while doing intent recognition</div>
+                                        </label>
+                                    </div>
+                                    <div class="kr-sg-dropdowns" ngbDropdown>
+                                        <div class="dropdown dropdown-open">
+                                          <button class="dropdown-toggle dropdown-input" ngbDropdownToggle> 
+                                            <img src="https://qa-static.kore.ai/integrations/32/azureOpenAI.png">
+                                            <span>{{configArr[1]?.displayName}}</span>
+                                          </button>
+                                          <ul class="dropdown-menu content-menu p-0" ngbDropdownMenu>
+                                            <ng-container *ngFor="let item of configOpts;">
+                                                <li ngbDropdownItem class="p-0" (click)="selectNone(item.name, item.type, item.model)">
+                                                    <a>
+                                                        <img [src]="item.src">
+                                                        <span>{{item.name}}</span>
+                                                    </a>
+                                                </li>
+                                            </ng-container>
+                                          </ul>
+                                        </div>
+                                    </div>
+                                </div> -->
+                            </div>
+                        </div>
+                    </ng-container>
                 </div>
             </div>
         </perfect-scrollbar>
@@ -60,11 +139,11 @@
 
 
 <app-slider-component id="openAIAndAzureConf" #openAIAndAzureConf='app-slider'>
-    <ng-container *ngIf="azureConfig">
-        <app-azure-config (closeEvent)="closeModal()"></app-azure-config>
-    </ng-container>
     <ng-container *ngIf="aiConfig">
-        <app-openai-config (closeEvent)="closeModal()"></app-openai-config>
+        <app-openai-config [integrations]="integrations?.openai" (saveSuccess)="saveSuccess($event)" (closeEvent)="closeModal()"></app-openai-config>
+    </ng-container>
+    <ng-container *ngIf="azureConfig">
+        <app-azure-config [integrations]="integrations?.azure" (successAzureObj)="successAzureObj($event)" (closeEvent)="closeModal()"></app-azure-config>
     </ng-container>
 </app-slider-component>
 
@@ -84,3 +163,15 @@
       <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
     </div>
 </ng-template>
+
+
+                            <!-- <label class="kr-sg-new-toggle large">
+                                <input type="checkbox" [checked]="" (click)="openPolieGuidelines(policiesAndGuideLines)">
+                                <div class="slider">
+                                    <span class="no">Disable</span>
+                                    <div class="slide-parent">
+                                        <div class="slider-btn"></div>
+                                    </div>                                    
+                                    <span class="yes">Enable</span>
+                                </div>
+                            </label> -->
