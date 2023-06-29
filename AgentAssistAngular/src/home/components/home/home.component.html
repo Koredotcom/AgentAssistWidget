@@ -174,9 +174,9 @@
 </div>
 <div class="nudge-exp-toast-msg-wrapper">
     <ng-container *ngFor="let item of coachingNudges; let i = index">
-        <div class="nudge-exp-toast-msg" [style.background-color]="coachingConst.NUDGE_DATA[item?.expression]?.color" *ngIf="item">
-            <div class="icon_blcok" *ngIf="coachingConst.NUDGE_DATA[item?.type]?.icon">
-                <i [ngClass]="coachingConst.NUDGE_DATA[item?.type].icon"></i>
+        <div class="nudge-exp-toast-msg" *ngIf="item" [ngClass]="coachingConst.NUDGE_DATA[item?.expression]?.className">
+            <div class="icon_blcok" *ngIf="coachingConst.NUDGE_DATA[item?.expression]?.icon">
+                <i [ngClass]="coachingConst.NUDGE_DATA[item?.expression]?.icon"></i>
             </div>
             <div class="title-toast">{{item?.message?.title}}</div>
             <div class="close-toast" (click)="coachingNudges.splice(i, 1, null)">
@@ -188,12 +188,12 @@
 <div class="hint-experience-nudge">
     <perfect-scrollbar class="hint-overlay" #overlayhint id="coachingHintScroll">
         <ng-container *ngFor="let item of coachingHints; let i = index">
-            <div class="hint-blck" *ngIf="item">
+            <div class="hint-blck" *ngIf="item" [ngClass]="coachingConst.HINT_DATA[item?.expression]?.className">
                 <div class="hint-bg-progress">
                     <div class="bg-progress"></div>
                 </div>
                 <div class="icon_blcok" *ngIf="coachingConst.HINT_DATA[item?.expression]?.icon">
-                    <i [ngClass]="coachingConst.HINT_DATA[item?.expression].icon"></i>
+                    <i [ngClass]="coachingConst.HINT_DATA[item?.expression]?.icon"></i>
                 </div>
                 <div class="content-data">
                     <div class="title">{{item?.message?.title}}</div>

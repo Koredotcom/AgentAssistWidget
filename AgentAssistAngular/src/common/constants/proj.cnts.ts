@@ -156,15 +156,18 @@ export const coachingConst = {
             icon: 'ast-positive-nudge'
         },
         neutral: {
-            color: '#E5E5E5'
+            color: '#E5E5E5',
+            className : 'neutral-nudge'
         },
-        warning: {
+        alert: {
             color: '#F59E0B',
-            icon: 'ast-warning-nudge'
+            icon: 'ast-warning-nudge',
+            className : 'warning-nudge'
         },
         critical: {
             color: '#EF4444',
-            icon: 'ast-hand-drag-solid'
+            icon: 'ast-hand-drag-solid',
+            className : 'critical-nudge'
         }
     },
 
@@ -174,15 +177,18 @@ export const coachingConst = {
             icon: 'ast-positive-nudge'
         },
         neutral: {
-            color: '#E5E5E5'
+            color: '#E5E5E5',
+            className : 'natural-hint'
         },
-        warning: {
+        alert: {
             color: '#F59E0B',
-            icon: 'ast-warning-nudge'
+            icon: 'ast-warning-nudge',
+            className : 'warning-hint'
         },
         critical: {
             color: '#EF4444',
-            icon: 'ast-hand-drag-solid'
+            icon: 'ast-hand-drag-solid',
+            className : 'critical-hint'
         }
     },
     SENTIMENT_ANALYSIS : {
@@ -204,9 +210,7 @@ export const coachingConst = {
     },
     SENTI_CHART_YAXIS_LIST : {
         [-2] : '-Neg',
-        [-1] : '',
         0 : 'Neu',
-        1 : '',
         2 : '+Pos'
     },
     SENTI_POLARITY_MAP : {
