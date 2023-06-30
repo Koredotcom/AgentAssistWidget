@@ -39,7 +39,7 @@
                 <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
                     <div class="seconds-input">
                         <div class="kr-sg-input-text">
-                            <input type="number" step="0.01" placeholder="Enter Message Count" (keyup.enter)="onEnterMinOrMessages(variableMessage);closeMessage.close()" class="input-text" [(ngModel)]="variableMessage">
+                            <input type="number" digitOnly placeholder="Enter Message Count" (keyup.enter)="onEnterMinOrMessages(variableMessage);closeMessage.close()" class="input-text" [(ngModel)]="variableMessage">
                         </div>
                     </div>
                 </ul>

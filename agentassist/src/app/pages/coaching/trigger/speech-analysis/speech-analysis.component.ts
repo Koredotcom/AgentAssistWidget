@@ -100,7 +100,7 @@ export class SpeechAnalysisComponent implements OnInit {
 
   onEnterTimeCT(e){
     this.timer = e && e > 1 ? e : 2;
-    (this.form.controls.frequency as FormGroup).controls?.timeTaken.setValue(this.timer);
+    (this.form.controls.frequency as FormGroup).controls?.timeTaken?.setValue(this.timer);
   }
 
   onEnterWords(e){
