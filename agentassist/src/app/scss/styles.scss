@@ -1,5 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
-/* 
+/*
     Created on : 23 Aug, 2018, 3:52:47 PM
     Author     : Ravi Kiran Maddi
 */
@@ -25,7 +25,7 @@ html{
         overflow: hidden;
         font-size: $font-md;
         color: $primaryFontColor;
-        -webkit-font-smoothing: antialiased; 
+        -webkit-font-smoothing: antialiased;
         *{
             font-family: 'Inter';
         }
@@ -44,7 +44,7 @@ html{
             margin-top: 10px !important;
         }
         .mat-form-field{
-            &.mat-focused{ 
+            &.mat-focused{
                 .mat-form-field-label{
                 color:$primaryFontColor !important;
                 font-weight: 500 !important;
@@ -127,7 +127,7 @@ html{
             width: 100%;
             height: 100%;
             z-index: 9999;
-            background-color: $whiteColor; 
+            background-color: $whiteColor;
             opacity: 0.9;
             .loaderLogoImage {
                 width: 50px;
@@ -165,7 +165,7 @@ html{
                     0% { -webkit-transform: rotate(0deg); }
                     100% { -webkit-transform: rotate(360deg); }
                 }
-                
+
                 @keyframes spin {
                     0% { transform: rotate(0deg); }
                     100% { transform: rotate(360deg); }
@@ -183,14 +183,14 @@ html{
             background-color: $whiteColor;
             border-style: solid;
             border-color: $borderColor;
-            border-width: 0.5px;     
+            border-width: 0.5px;
             text-align: center;
-            margin: 0;   
+            margin: 0;
         }
         .background-logout{
             border-style: solid;
             border-color: $borderColor;
-            border-width: 0.5px;     
+            border-width: 0.5px;
             text-align: center;
             margin: 0;
             margin-top: 150px;
@@ -238,14 +238,14 @@ html{
           .mat-radio-button.mat-accent .mat-radio-inner-circle {
             background-color: $primaryHoverColor !important;
           }
-    }    
+    }
 }
 
 .mat-drawer-backdrop.mat-drawer-shown {
     background-color: rgba(0, 0, 0, 0.09);
 }
 
-.manage-deflection-exp-popup{   
+.manage-deflection-exp-popup{
     .mat-dialog-container{
         box-shadow: none !important;
     }
@@ -273,12 +273,12 @@ body::-webkit-scrollbar {
   }
   /********* Scroll bar global css end *********************/
 
- 
+
 .live-chat-instructions-modal{
     .mat-dialog-container{
         overflow: hidden;
         box-shadow: none;
-    }   
+    }
 }
 .loader-in-button{
     // border: 2px solid $borderColor;
@@ -294,7 +294,7 @@ body::-webkit-scrollbar {
     0% { -webkit-transform: rotate(0deg); }
     100% { -webkit-transform: rotate(360deg); }
 }
-  
+
 @keyframes spin-in-button {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
@@ -302,7 +302,7 @@ body::-webkit-scrollbar {
 
 .success-message-notification{
     margin-left: 20px;
-    font-size: 14px;                                           
+    font-size: 14px;
     color: #09a624;
     img{
         margin-right: 12px;
@@ -310,7 +310,7 @@ body::-webkit-scrollbar {
 }
 .error-message-notification{
     margin-left: 20px;
-    font-size: 14px;                                           
+    font-size: 14px;
     color: $warningRed;
     img{
         margin-right: 12px;
@@ -352,7 +352,7 @@ body{
             .sliderDialogComponent {
                 .sliderContent{
                     .sliderContainer{
-                        &.width500{                            
+                        &.width500{
                             &.callHistory{
                                 float: right;
                                 width: 90% !important;
@@ -404,7 +404,7 @@ body{
 }
 .js-preview-sec{
     position: relative;
-    height: calc(100% - 60px);    
+    height: calc(100% - 60px);
     background: $primaryFontColor;
     .content-js-preview{
         height: 100%;
@@ -439,7 +439,7 @@ body{
 }
 
 .script-my-custom-class{
-    width: 200px;   
+    width: 200px;
     background-color: $primaryFontColor;
     .arrow{
         &::before{
@@ -502,8 +502,8 @@ body{
             &.voice{
                 background: $primaryActionColor;
             }
-            &.chat{            
-                background: $orange;                        
+            &.chat{
+                background: $orange;
             }
             &.both {
                 background: #6fb086;
@@ -527,7 +527,7 @@ body{
             font-size: 10px;
             font-weight: bold;
             padding-left: 5px;
-        }        
+        }
     }
     .success_message_data{
         color: #09A624;
@@ -541,58 +541,58 @@ body{
         line-height: 14px;
         color: $primaryFontColor;
     }
-    &.total_activity_tooltips{               
+    &.total_activity_tooltips{
         .data-content{
             .total-all{
                 .agentTransfer{
                     width: 12px;
-                    height: 3px;                    
+                    height: 3px;
                     display: block;
                     background: #6554C0;
                 }
                 .dropoff{
                     width: 12px;
-                    height: 3px;                    
+                    height: 3px;
                     display: block;
                     background: $warningColor;
                 }
                 .deflection{
                     width: 12px;
-                    height: 3px;                    
+                    height: 3px;
                     display: block;
                     background: #FFAB00;
                 }
                 .automation{
                     width: 12px;
-                    height: 3px;                    
+                    height: 3px;
                     display: block;
                     background: #00B8D9;
-                }               
+                }
             }
             .agentTransfer{
                 width: 12px;
-                height: 12px;                    
+                height: 12px;
                 display: block;
                 background: #6554C0;
             }
             .dropoff{
                 width: 12px;
-                height: 12px;                    
+                height: 12px;
                 display: block;
                 background: $warningColor;
             }
             .deflection{
                 width: 12px;
-                height: 12px;                  
+                height: 12px;
                 display: block;
                 background: #FFAB00;
             }
             .automation{
                 width: 12px;
-                height: 12px;                    
+                height: 12px;
                 display: block;
                 background: #00B8D9;
-            }  
+            }
         }
     }
     &.user_Interactions{
@@ -656,7 +656,7 @@ body{
                 font-weight: bold;
                 font-size: 12px;
                 line-height: 16px;
-                margin: 0;                
+                margin: 0;
             }
         }
         .info-data{
@@ -677,7 +677,7 @@ body{
     }
     .mr-10{
         margin-right: 10px;
-    } 
+    }
 }
 
 .ngx-slider-span.ngx-slider-pointer.ngx-slider-pointer-min,
@@ -717,7 +717,7 @@ body{
  .mat-custom-progress{
     margin: 12px 0 0 0;
     height: 5px;
-    border-radius: 100px;                    
+    border-radius: 100px;
     .mat-progress-bar-buffer{
         background-color:$borderColor;
         border-radius: 100px;
@@ -804,7 +804,7 @@ body{
     width: auto;
     height: auto;
     min-height: auto !important;
-    max-width: 100% !important; 
+    max-width: 100% !important;
     box-shadow: 0px 4px 6px rgba(168, 200, 221, 0.25);
     .mat-menu-content{
         padding: 0 !important;
@@ -814,7 +814,7 @@ body{
             box-sizing: border-box;
             // box-shadow: 0px 4px 6px rgba(168, 200, 221, 0.25);
             border-radius: 4px;
-            width: 425px;           
+            width: 425px;
             padding: 20px;
             .u-alternates {
                 max-height: 100px;
@@ -855,7 +855,7 @@ body{
         align-items: center;
         justify-content: center;
         max-width: 709px !important;
-    }       
+    }
     .modal-content{
         // max-height: 90%;
         display: flex;
@@ -870,7 +870,7 @@ body{
             align-items: center;
             justify-content: center;
             flex-direction: column;
-            overflow: auto;      
+            overflow: auto;
         }
     }
 }
@@ -883,7 +883,7 @@ body{
         align-items: center;
         justify-content: center;
         max-width: 840px !important;
-    }       
+    }
     .modal-content{
         // max-height: 90%;
         display: flex;
@@ -899,7 +899,7 @@ body{
             align-items: center;
             justify-content: center;
             flex-direction: column;
-            overflow: auto; 
+            overflow: auto;
         }
     }
 }
@@ -920,24 +920,24 @@ body{
             position: absolute;
             right: 0;
             z-index: 9999;
-            left: 14px;         
+            left: 14px;
             cursor: pointer;
-        } 
+        }
         .static-title{
             color: #000000;
             font-weight: normal;
             font-size: 10px;
             line-height: 12px;
-        }        
+        }
 
     }
     .endChatContainer{
         display: none;
-    }       
+    }
     .kore-chat-window{
         position: absolute;
         right: 0;
-        left: auto !important; 
+        left: auto !important;
         width: 100% !important;
         min-width: 100%;
         height: calc(100% - 58px);
@@ -946,18 +946,18 @@ body{
         border-radius: 20px;
         border: 0;
         max-height: calc(100% - 60px);
-        font-family: 'Inter';     
+        font-family: 'Inter';
         .ui-resizable-handle {
             pointer-events: none;
         }
         .typingIndicator{
             background-image: none !important;
             display: none !important;
-        }   
+        }
         .typingIndicatorContent{
             bottom: 76px;
             left: 20px;
-        }              
+        }
         ul{
             &.chat-container {
                 li {
@@ -975,7 +975,7 @@ body{
                             }
                         }
                     }
-                    &.fromOtherUsers{                        
+                    &.fromOtherUsers{
                         &.with-icon{
                             .messageBubble{
                                 // margin-left: 20px;
@@ -997,18 +997,18 @@ body{
                     .profile-photo {
                         top: 33px;
                         bottom: auto;
-                        background-repeat: no-repeat;        
+                        background-repeat: no-repeat;
                         width: 25px;
-                        height: 25px;     
+                        height: 25px;
                         .user-account{
                             width: 25px;
-                            height: 25px; 
-                        }           
+                            height: 25px;
+                        }
                         &.userBubbleIcon{
                             left: auto;
                             right: 3px;
                             top: 33px;
-                        }  
+                        }
                         &.dummyImage{
                             border-radius: 100%;
                             width: 25px;
@@ -1021,8 +1021,8 @@ body{
                 }
             }
         }
-        .kore-chat-header{   
-            pointer-events: none !important;           
+        .kore-chat-header{
+            pointer-events: none !important;
             display: flex;
             align-items: center;
             padding: 12px 10px;
@@ -1035,7 +1035,7 @@ body{
             &.selected-tab{
                 border: 1px solid $primaryActionColor;
             }
-            .h-image-block{               
+            .h-image-block{
                 margin-right: 10px;
                 img{
                     width: 32px;
@@ -1050,7 +1050,7 @@ body{
                         border-radius: 100%;
                         display: inline-block;
                         background: $primaryBackgroundColor;
-                    }                    
+                    }
                 }
             }
             .titles-sec{
@@ -1235,7 +1235,7 @@ body{
             .buttons_input{
                 display: inline-flex;
                 align-items: center;
-                flex-direction: row-reverse;                   
+                flex-direction: row-reverse;
                 .btn{
                     background: $primaryActionColor;
                     border-radius: 4px;
@@ -1278,19 +1278,19 @@ body{
     }
     .md-drppicker {
         border-radius: 4px;
-        box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2);        
+        box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2);
         background-color: $whiteColor;
-        padding: 0;     
+        padding: 0;
         &.drops-down-auto{
-            // left: -50px !important;   
+            // left: -50px !important;
             // font-family: 'Inter';
-            // border: 1px solid $borderlite;    
-            // width: 733px;      
+            // border: 1px solid $borderlite;
+            // width: 733px;
             left: auto !important;
             font-family: "Inter";
             border: 1px solid #E5E8EC;
             width: 733px;
-            right: 0 !important;   
+            right: 0 !important;
         }
         .ranges{
             background: $whiteColor;
@@ -1328,12 +1328,12 @@ body{
             width: 34px;
             height: 34px;
             min-width: 34px !important;
-            border: 0px solid transparent;            
+            border: 0px solid transparent;
             span{
                 font-size: 14px;
                 color: $primaryFontColor;
                 font-weight: normal;
-            }            
+            }
             &:hover:not(.disabled){
                 border-radius: 0;
                 background-color: $primaryActionColor !important;
@@ -1357,7 +1357,7 @@ body{
                 }
             }
             // &.today{
-            //     background-color: transparent !important;                
+            //     background-color: transparent !important;
             //     border: 1px solid $primaryActionColor !important;
             //     span{
             //         color: $primaryActionColor !important;
@@ -1383,10 +1383,10 @@ body{
             }
 
             &.off, &.off.in-range.available {
-                background-color: $whiteColor !important; 
-                color: #bbb !important; 
+                background-color: $whiteColor !important;
+                color: #bbb !important;
                 span {
-                    color: #bbb !important; 
+                    color: #bbb !important;
                 }
             }
         }
@@ -1395,15 +1395,15 @@ body{
             height: 34px;
             border: 0px solid transparent;
             color: $descFontColor;
-            font-size: 14px;      
+            font-size: 14px;
             border: 0px solid transparent;
-            font-weight: normal;     
+            font-weight: normal;
             span{
                 font-size: 14px;
                 color: $descFontColor;
                 font-weight: normal;
             }
-            &.month{    
+            &.month{
                 font-weight: bold;
             }
             &.available{
@@ -1418,7 +1418,7 @@ body{
                     background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4NCjxzdmcgd2lkdGg9IjlweCIgaGVpZ2h0PSIxNnB4IiB2aWV3Qm94PSIwIDAgOSAxNiIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIj4NCiAgICA8IS0tIEdlbmVyYXRvcjogU2tldGNoIDUzLjIgKDcyNjQzKSAtIGh0dHBzOi8vc2tldGNoYXBwLmNvbSAtLT4NCiAgICA8dGl0bGU+Y2hldnJvbi1yaWdodC1kYXJrPC90aXRsZT4NCiAgICA8ZGVzYz5DcmVhdGVkIHdpdGggU2tldGNoLjwvZGVzYz4NCiAgICA8ZyBpZD0iUGFnZS0xIiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4NCiAgICAgICAgPGcgaWQ9ImNoZXZyb24tcmlnaHQtZGFyayIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTMuMDAwMDAwLCAwLjAwMDAwMCkiIGZpbGwtcnVsZT0ibm9uemVybyI+DQogICAgICAgICAgICA8ZyBpZD0iY2hldnJvbi1yaWdodC1ncmF5IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg4LjAwMDAwMCwgOC4wMDAwMDApIHNjYWxlKC0xLCAxKSByb3RhdGUoLTkwLjAwMDAwMCkgdHJhbnNsYXRlKC04LjAwMDAwMCwgLTguMDAwMDAwKSAiPg0KICAgICAgICAgICAgICAgIDxwb2x5Z29uIGlkPSJQYXRoIiBmaWxsLW9wYWNpdHk9IjAiIGZpbGw9IiNEOEQ4RDgiIHBvaW50cz0iMCAwIDE2IDAgMTYgMTYgMCAxNiI+PC9wb2x5Z29uPg0KICAgICAgICAgICAgICAgIDxwYXRoIGQ9Ik03LjYyOCw0LjU5OSBDNy44MjEsNC40MDUgOC4xMjgsNC4zOTQgOC4zMzUsNC41NjUgTDguMzcyLDQuNTk5IEwxNC45NTcsMTEuMTgzIEMxNS4xNjMsMTEuMzg5IDE1LjE2MywxMS43MjMgMTQuOTU3LDExLjkyOCBDMTQuNzYzLDEyLjEyMiAxNC40NTcsMTIuMTMzIDE0LjI0OSwxMS45NjIgTDE0LjIxMiwxMS45MjggTDgsNS43MTYgTDEuNzg4LDExLjkyOCBDMS41OTQsMTIuMTIyIDEuMjg4LDEyLjEzMyAxLjA4MSwxMS45NjIgTDEuMDQzLDExLjkyOCBDMC44NSwxMS43MzQgMC44MzgsMTEuNDI4IDEuMDA5LDExLjIyMSBMMS4wNDMsMTEuMTgzIEw3LjYyOCw0LjYgTDcuNjI4LDQuNTk5IFoiIGlkPSJQYXRoIiBmaWxsPSIjMjYzNDRBIj48L3BhdGg+DQogICAgICAgICAgICA8L2c+DQogICAgICAgIDwvZz4NCiAgICA8L2c+DQo8L3N2Zz4=');
                 }
             }
-        }        
+        }
         .calendar{
             margin: 0;
             .calendar-table{
@@ -1449,12 +1449,12 @@ body{
                 }
             }
         }
-        .buttons{           
-            padding: 15px;            
+        .buttons{
+            padding: 15px;
             .buttons_input{
                 display: inline-flex;
                 align-items: center;
-                flex-direction: row-reverse;                   
+                flex-direction: row-reverse;
                 .btn{
                     background: $primaryActionColor;
                     border-radius: 4px;
@@ -1538,7 +1538,7 @@ body{
 }
 .usecase_table_tooltip{
     padding: 0;
-    opacity: 1 !important;    
+    opacity: 1 !important;
     margin-top: -20px;
     filter: drop-shadow(0px 5px 15px rgba(38, 52, 74, 0.3));
     .arrow{
@@ -1555,8 +1555,8 @@ body{
         max-width: 323px;
         color: $primaryFontColor;
         font-weight: normal;
-        font-size: 14px;  
-        line-height: 20px;          
+        font-size: 14px;
+        line-height: 20px;
     }
 }
 
@@ -1571,7 +1571,7 @@ body{
         font-weight: normal;
         font-weight: 600;
         font-size: 10px;
-        line-height: 14px;      
+        line-height: 14px;
     }
 }
 .mat-pseudo-checkbox{
@@ -1583,8 +1583,8 @@ body{
     border: 0px solid $borderColor !important;
     &::after{
         top: 5px !important;
-        left: 4px !important; 
-        width: 8px !important; 
+        left: 4px !important;
+        width: 8px !important;
     }
 }
 
@@ -1641,7 +1641,7 @@ body{
             -webkit-animation: .4s linear infinite spin;
             -moz-animation: .4s linear infinite spin;
             -o-animation: .4s linear infinite spin;
-        }   
+        }
     }
     @-ms-keyframes spin {
         from { -ms-transform: rotate(0deg); }
@@ -1663,7 +1663,7 @@ body{
             transform:rotate(360deg);
         }
     }
-    
+
     &.top-metrics {
         height: auto;
         position: absolute;
@@ -1699,7 +1699,7 @@ body{
         position: relative;
         &:hover{
             background-color: $primaryHoverColor;
-        }       
+        }
     }
 }
 
@@ -1776,7 +1776,7 @@ body{
         background: transparent;
         padding: 0;
         box-shadow: none;
-        margin-top: 0px;    
+        margin-top: 0px;
         position: relative;
     }
 }
@@ -1819,7 +1819,7 @@ body{
             left: 6px;
             z-index: 9;
             top: -12px;
-        }        
+        }
     }
     .tooltip-inner{
         width: 100%;
@@ -1827,7 +1827,7 @@ body{
         background: transparent;
         padding: 0;
         box-shadow: none;
-        margin-top: -1px;    
+        margin-top: -1px;
         position: relative;
         &::before{
             content: "";
@@ -1866,7 +1866,7 @@ body{
         background: #93D3A2 !important;
         border: 0.5px solid #135423;
         color: #135423 !important;
-    }   
+    }
     .red-bg {
         background: #EF9AA3 !important;
         border: 0.5px solid #59141C;
@@ -1963,7 +1963,7 @@ body{
                     }
                 }
             }
-        }       
+        }
     }
 }
 
@@ -1978,7 +1978,7 @@ body{
                                 .md-editor-container{
                                     width: 540px !important;
                                 }
-                            }                        
+                            }
                         }
                     }
                 }
@@ -2031,7 +2031,7 @@ body{
         #sliderComponent {
             width: 100%;
         }
-    
+
         .sliderDialogComponent {
             width: 100% !important;
         }
@@ -2059,7 +2059,7 @@ body{
         .minimized{
             display: none;
         }
-        .kore-chat-header{   
+        .kore-chat-header{
             pointer-events: auto !important;
             border-radius: 10px 10px 0px 0px;
             &.historyLoadingDiv{
@@ -2089,7 +2089,7 @@ body{
                         height: 11px;
                     }
                 }
-            }   
+            }
           }
         .kore-chat-footer{
             .sdkAttachment.attachmentBtn {
@@ -2097,7 +2097,7 @@ body{
             }
         }
       }
-     
+
 }
 
 
@@ -2130,7 +2130,7 @@ body{
                 left: 20px !important;
             }
         }
-    } 
+    }
 }
 
 .jsoneditor{
@@ -2174,7 +2174,7 @@ body{
         padding: 0;
         border: 0;
         list-style: none;
-        height: auto; 
+        height: auto;
         background-color: none !important;
         box-shadow:none;
         font-family: inter !important;
@@ -2201,10 +2201,10 @@ body{
             padding: 10px;
             color:$primaryFontColor !important;
             font-size: 14px;
-            text-decoration: none !important;	
+            text-decoration: none !important;
             display: block;
             cursor: pointer;
-            &:hover{               
+            &:hover{
                 background-color:$primaryHoverColor;
             }
         }
@@ -2386,7 +2386,22 @@ body{
 	}
 }
 
+
+
+// iframe load in smartassist styles
+
+.init-smartassist{
+  app-header{
+    display: none;
+  }
+  app-mainmenu {
+    display: none;
+  }
+  .deflectContainer{
+    width: 100% !important;
+  }
+}
 .disabled{
     pointer-events: none;
-    opacity: 0.5;   
+    opacity: 0.5;
 }

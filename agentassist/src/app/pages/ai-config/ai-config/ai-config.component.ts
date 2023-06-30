@@ -105,14 +105,14 @@ export class AiConfigComponent implements OnInit {
   openOpenAIConf(){
     this.aiConfig = true;
     this.openAIAndAzureConf.openSlider("#openAIAndAzureConf", "width550");
-  }  
+  }
 
   closeModal(){
     this.openAIAndAzureConf.closeSlider("#openAIAndAzureConf");
     this.aiConfig = false;
     this.azureConfig = false;
   }
-  
+
   openPolieGuidelines(policiesAndGuideLines) {
     this.modalService.open(policiesAndGuideLines, {backdropClass: 'light-blue-backdrop', windowClass: 'dark-modal', centered: true, backdrop: 'static', keyboard: false});
   }
@@ -203,13 +203,13 @@ export class AiConfigComponent implements OnInit {
         }, err => {
           this.notificationService.showError(err, this.translate.instant("USECASES.FAILED_CREATE_CATE"));
         });
-      } 
+      }
     }else if(!exists){
         this.configOpts.push(this.azureObj);
     }
     this.closeModal();
   }
-  
+
   integrations:any = {}
   getConfigDetails(){
     let params: any = {
@@ -218,9 +218,10 @@ export class AiConfigComponent implements OnInit {
     };
     this.service.invoke('get.AIconfigs', params)
       .subscribe(res => {
-        this.id = res[0]._id
+        this.id = res[0]._id;
+        this.configArr = res[0].featureList?.length ? res[0].featureList  : this.configArr;
         this.integrations = res[0].integrations;
-        
+
         (res[0].featureList || []).forEach((item)=>{
           this.features.forEach((iIte,)=>{
             if(item.name === iIte.nameC){
@@ -230,7 +231,7 @@ export class AiConfigComponent implements OnInit {
             }
           })
         })
-        
+
         if(this.integrations.azure){
           this.configOpts.push(this.azureObj);
         }if(this.integrations.openai){

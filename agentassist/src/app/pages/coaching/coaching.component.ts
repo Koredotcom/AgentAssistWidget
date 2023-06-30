@@ -43,6 +43,7 @@ export class CoachingComponent implements OnInit {
   searching : boolean = false;
   publishInprogress : boolean = false;
   rulePresent : boolean = false;
+  selAcc = this.local.getSelectedAccount();
 
   @ViewChild('ps') ps: PerfectScrollbarComponent;
   @ViewChild('newCoachingGroup', { static: true }) newCoachingGroup: SliderComponentComponent;
@@ -64,7 +65,7 @@ export class CoachingComponent implements OnInit {
 
   ngAfterViewInit(){
   }
-  
+
   subscribeEvents() {
     this.searchField.valueChanges.pipe(tap(() => { this.isLoading = true; }), debounceTime(300))
       .subscribe(term => {
@@ -93,7 +94,7 @@ export class CoachingComponent implements OnInit {
   // get or update GroupData Starts
   getAgentCoachingGroupData(){
     let params : any = {
-      botId : this.workflowService.getCurrentBt(true)._id,
+      botId : this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id,
       isExpand : true
     }
     this.isLoading = true;
@@ -158,7 +159,7 @@ export class CoachingComponent implements OnInit {
 
   publishCoaching(){
     this.publishInprogress = true;
-    this.service.invoke('post.publishcoaching',{}, {botId : this.workflowService.getCurrentBt(true)._id}).pipe(finalize(() => {
+    this.service.invoke('post.publishcoaching',{}, {botId : this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id}).pipe(finalize(() => {
       this.publishInprogress = false;
     })).subscribe(data => {
       if (data) {
@@ -168,7 +169,7 @@ export class CoachingComponent implements OnInit {
     },(error)=>{
       this.notificationService.showError(this.translate.instant("COACHING.PUBLISH_FAILURE"));
     });
-    
+
   }
 
 
@@ -178,7 +179,7 @@ export class CoachingComponent implements OnInit {
     this.coachGroupData  = editData;
     this.newCoachingGroup.openSlider("#newCoachingGroup", "width550");
   }
-  
+
   closeCoachingGroup(group){
     this.coachGroupData = null;
     this.newCoachingGroup.closeSlider("#newCoachingGroup");
@@ -226,9 +227,9 @@ export class CoachingComponent implements OnInit {
         scrollTo = (scrollY.lastScrollTop as any) + 100;
         this.ps.directiveRef.scrollToTop(scrollTo);
       },200);
-    }    
+    }
   }
- 
+
   topMouseOver(){
     if(this.dragStart){
       this.clearInterVal();
@@ -263,10 +264,10 @@ export class CoachingComponent implements OnInit {
       }
     },(error)=>{
       this.notificationService.showError(this.translate.instant("COACHING.GROUPUPDATED_FAILURE"));
-    }); 
+    });
   }
 
-  openDeleteRule(rule, groupId, index) {    
+  openDeleteRule(rule, groupId, index) {
     let deleteRule = {
       title : "Delete Rule",
       desc : "Are you sure, you want to delete rule '" +rule.name+"'.",
@@ -278,7 +279,7 @@ export class CoachingComponent implements OnInit {
     this.modalRef.result.then(emitedValue => {
       if(emitedValue){
         this.service.invoke('delete.agentCoachingRule', {groupId : groupId, ruleId: rule.ruleId}).subscribe(_data => {
-          
+
           let matchIndex = this.respData?.results[index]?.rules?.findIndex(x => x.ruleId == rule.ruleId);
           this.respData?.results[index]?.rules.splice(matchIndex, 1);
           this.checkRulePresence(this.respData);
