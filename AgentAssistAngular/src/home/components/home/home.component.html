@@ -187,11 +187,11 @@
 </div>
 <div class="hint-experience-nudge">
     <perfect-scrollbar class="hint-overlay" #overlayhint id="coachingHintScroll">
-        <ng-container *ngFor="let item of coachingHints; let i = index">
+        <ng-container *ngFor="let item of [1]; let i = index">
             <div class="hint-blck" *ngIf="item" [ngClass]="coachingConst.HINT_DATA[item?.expression]?.className">
-                <div class="hint-bg-progress">
+                <!-- <div class="hint-bg-progress">
                     <div class="bg-progress"></div>
-                </div>
+                </div> -->
                 <div class="icon_blcok" *ngIf="coachingConst.HINT_DATA[item?.expression]?.icon">
                     <i [ngClass]="coachingConst.HINT_DATA[item?.expression]?.icon"></i>
                 </div>
