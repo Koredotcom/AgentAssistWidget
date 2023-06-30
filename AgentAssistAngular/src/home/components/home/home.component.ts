@@ -88,7 +88,7 @@ export class HomeComponent implements OnInit {
   }
 
   handleNudgeData(data){
-    this.coachingNudges.push(data);
+    this.coachingNudges.unshift(data);
     setTimeout(() => {
       for(let i = 0; i < this.coachingNudges.length; i++){
         if(this.coachingNudges[i]){
@@ -100,7 +100,7 @@ export class HomeComponent implements OnInit {
   }
 
   handleHintData(hintObject){
-    this.coachingHints.push(hintObject);
+    this.coachingHints.unshift(hintObject);
     if(hintObject?.message?.postAction !== 'doesnot_auto_close'){
       setTimeout(() => {
         for(let i = 0; i < this.coachingHints.length; i++){
@@ -110,9 +110,9 @@ export class HomeComponent implements OnInit {
             break;
           }
         }
-      }, (hintObject.time) * 1000);
+      }, (hintObject.message?.time) * 1000);
     }
-    this.hintScrollBottom(true);
+    // this.hintScrollBottom(true);
   }
 
   subscribeEvents() {
