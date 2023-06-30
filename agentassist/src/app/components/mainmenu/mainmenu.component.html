@@ -121,9 +121,6 @@
 			<div class="link-router" [routerLink]="['coaching']" routerLinkActive="active" *hasPermission="['admin']">
 				<img src="assets/icons/leftmenu/new/network.svg"><span class="link-name">{{'NAV.COACHING' | translate}}</span>
 			</div>
-			<div class="link-router" [routerLink]="['aiconfig']" routerLinkActive="active" *hasPermission="['admin']">
-				<img src="assets/icons/leftmenu/new/network.svg"><span class="link-name">AI Config</span>
-			</div>
 		</div>
 
 		<div class="group-links">
@@ -151,6 +148,9 @@
 			<div class="link-router" [routerLink]="['searchAssist']" routerLinkActive="active"
 				*hasPermission="['admin']" (click)="getAdvSettings()">
 				<i class="icon-sa-search"></i><span class="link-name">SearchAssist</span>
+			</div>
+			<div class="link-router" [routerLink]="['advanced-nlu']" routerLinkActive="active" *hasPermission="['admin']">
+				<i class="icon-sa-settings"></i><span class="link-name">Advanced NLU</span>
 			</div>
 			<!-- <div class="link-router" [routerLink]="['agent-assist']" routerLinkActive="active" *hasPermission="['STANDARD_RESPONSE_VIEW']">
 				<img src="assets/icons/leftmenu/agent-assist.svg"><span class="link-name">{{'ONBOARDING.STD_RESPONSE' | translate}}</span>

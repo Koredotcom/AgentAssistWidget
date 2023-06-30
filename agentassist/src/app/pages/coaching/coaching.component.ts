@@ -14,6 +14,7 @@ import { NotificationService } from '@kore.services/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { FormControl } from '@angular/forms';
 import { AuthService } from '@kore.services/auth.service';
+import { CoachingService } from './coaching.service';
 
 @Component({
   selector: 'app-coaching',
@@ -47,19 +48,24 @@ export class CoachingComponent implements OnInit {
   @ViewChild('ps') ps: PerfectScrollbarComponent;
   @ViewChild('newCoachingGroup', { static: true }) newCoachingGroup: SliderComponentComponent;
 
-  constructor(private modalService: NgbModal, private service : ServiceInvokerService,
+  constructor(
+    private modalService: NgbModal, private service : ServiceInvokerService,
     private workflowService : workflowService, private cdRef : ChangeDetectorRef,
     private notificationService : NotificationService, private translate: TranslateService,
-    private auth: AuthService, private local: LocalStoreService) { }
+    private auth: AuthService, private local: LocalStoreService,
+    private authService: AuthService,
+    private cs: CoachingService
+    ) { }
 
   ngOnInit(): void {
     this.getAgentCoachingGroupData();
     this.subscribeEvents();
+    this.getConfigDetails();
   }
 
   ngAfterViewInit(){
   }
-  
+
   subscribeEvents() {
     this.searchField.valueChanges.pipe(tap(() => { this.isLoading = true; }), debounceTime(300))
       .subscribe(term => {
@@ -163,7 +169,7 @@ export class CoachingComponent implements OnInit {
     },(error)=>{
       this.notificationService.showError(this.translate.instant("COACHING.PUBLISH_FAILURE"));
     });
-    
+
   }
 
 
@@ -173,7 +179,7 @@ export class CoachingComponent implements OnInit {
     this.coachGroupData  = editData;
     this.newCoachingGroup.openSlider("#newCoachingGroup", "width550");
   }
-  
+
   closeCoachingGroup(group){
     this.coachGroupData = null;
     this.newCoachingGroup.closeSlider("#newCoachingGroup");
@@ -221,9 +227,9 @@ export class CoachingComponent implements OnInit {
         scrollTo = (scrollY.lastScrollTop as any) + 100;
         this.ps.directiveRef.scrollToTop(scrollTo);
       },200);
-    }    
+    }
   }
- 
+
   topMouseOver(){
     if(this.dragStart){
       this.clearInterVal();
@@ -258,10 +264,10 @@ export class CoachingComponent implements OnInit {
       }
     },(error)=>{
       this.notificationService.showError(this.translate.instant("COACHING.GROUPUPDATED_FAILURE"));
-    }); 
+    });
   }
 
-  openDeleteRule(rule, groupId, index) {    
+  openDeleteRule(rule, groupId, index) {
     let deleteRule = {
       title : "Delete Rule",
       desc : "Are you sure, you want to delete rule '" +rule.name+"'.",
@@ -273,7 +279,7 @@ export class CoachingComponent implements OnInit {
     this.modalRef.result.then(emitedValue => {
       if(emitedValue){
         this.service.invoke('delete.agentCoachingRule', {groupId : groupId, ruleId: rule.ruleId}).subscribe(_data => {
-          
+
           let matchIndex = this.respData?.results[index]?.rules?.findIndex(x => x.ruleId == rule.ruleId);
           this.respData?.results[index]?.rules.splice(matchIndex, 1);
           this.checkRulePresence(this.respData);
@@ -286,5 +292,19 @@ export class CoachingComponent implements OnInit {
     });
   }
   // END
-
+  getConfigDetails(){
+    let params: any = {
+      userId: this.authService.getUserId(),
+      streamId: this.workflowService.getCurrentBt(true)._id
+    };
+    this.service.invoke('get.AIconfigs', params)
+      .subscribe(res => {
+          if(res){
+            this.cs.metaForUtternace = (res[0].featureList || [])
+            .find(item=> item.name ==="aa_utterance")
+          };
+      }, err => {
+        // this.notificationService.showError(err, this.translate.instant("USECASES.FAILED_CREATE_CATE"));
+    });
+  }
 }

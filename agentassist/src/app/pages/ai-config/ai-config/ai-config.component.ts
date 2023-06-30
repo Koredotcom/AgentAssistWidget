@@ -19,15 +19,21 @@ export class AiConfigComponent implements OnInit {
       description: "Generate high-quality training data quickly and easily with our platform's suggested utterances for each intent. Review and add the suggestions as needed to create a powerful training set for your bot.",
       selected: '',
       nameC: 'aa_utterance',
-      selectedSrc: ''
+      selectedSrc: '',
+      enable: false
     },{
       name: 'None Intent Utterance Suggestions',
       description: 'None intent utterances are used to prevent false positives while doing intent recognition',
       selected: '',
       nameC: 'aa_noneintent',
-      selectedSrc: ''
+      selectedSrc: '',
+      enable: false
     }
   ];
+  srcs = {
+    azure: 'https://qa-static.kore.ai/integrations/32/azureOpenAI.png',
+    openai: 'https://qa-static.kore.ai/integrations/32/openai.png'
+  }
   azureObj = {
     name: 'Azure OpenAI - GPT-3',
     src: 'https://qa-static.kore.ai/integrations/32/azureOpenAI.png',
@@ -35,10 +41,10 @@ export class AiConfigComponent implements OnInit {
     model: 'GPT-3',
   };
   openAiObj = {
-    name: 'OpenAI - GPT-3.5',
+    name: 'OpenAI - GPT-3',
     src: 'https://qa-static.kore.ai/integrations/32/openai.png',
     type: 'openai',
-    model: 'GPT-3.5'
+    model: 'GPT-3'
   };
   configOpts = [];
 
@@ -63,8 +69,8 @@ export class AiConfigComponent implements OnInit {
       },
       "name": "aa_noneintent",
       "integration": "openai",
-      "defaultModel": "GPT-3.5",
-      "displayName": "OpenAI - GPT-3.5",
+      "defaultModel": "GPT-3",
+      "displayName": "OpenAI - GPT-3",
       "enable": false,
     }
   ]
@@ -99,14 +105,14 @@ export class AiConfigComponent implements OnInit {
   openOpenAIConf(){
     this.aiConfig = true;
     this.openAIAndAzureConf.openSlider("#openAIAndAzureConf", "width550");
-  }  
+  }
 
   closeModal(){
     this.openAIAndAzureConf.closeSlider("#openAIAndAzureConf");
     this.aiConfig = false;
     this.azureConfig = false;
   }
-  
+
   openPolieGuidelines(policiesAndGuideLines) {
     this.modalService.open(policiesAndGuideLines, {backdropClass: 'light-blue-backdrop', windowClass: 'dark-modal', centered: true, backdrop: 'static', keyboard: false});
   }
@@ -124,33 +130,37 @@ export class AiConfigComponent implements OnInit {
         exists = true;
       };
     });
-    if(!exists){
-      this.configOpts.push(this.openAiObj);
-    }
     if(this.configOpts.length === 0){
+      if(!exists){
+        this.configOpts.push(this.openAiObj);
+      }
       this.configArr.forEach((item)=>{
         item.displayName = this.openAiObj.name;
         item.enable = true;
         item.integration = this.openAiObj.type;
         item.defaultModel = this.openAiObj.model;
       });
-      let payload = this.configArr;
+      let featureList = this.configArr;
       let params: any = {
         userId: this.authService.getUserId(),
         streamId: this.workflowService.getCurrentBt(true)._id,
         llmId: this.id
       };
       if(this.id){
-        this.service.invoke('post.features', params, payload)
+        this.service.invoke('post.features', params, {featureList})
         .subscribe(res => {
           this.notificationService.notify(this.translate.instant('SUCCESSFULLY.UPDATED'), 'success');
           this.features.forEach((iItem)=>{
-            iItem.selected = 'OpenAI - GPT-3.5';
+            iItem.selected = 'OpenAI - GPT-3';
+            iItem.selectedSrc = this.srcs['openai'];
+            iItem.enable = true;
           })
         }, err => {
           this.notificationService.showError(err, this.translate.instant("USECASES.FAILED_CREATE_CATE"));
        });
       }
+    }else if(!exists){
+      this.configOpts.push(this.openAiObj);
     }
     this.closeModal()
   }
@@ -164,38 +174,42 @@ export class AiConfigComponent implements OnInit {
         exists = true;
       };
     });
-    if(!exists){
-      this.configOpts.push(this.azureObj);
-    }
     // let inx = this.configOpts.findIndex((item)=>item.type === 'openai');
     if(this.configOpts.length === 0){
+      if(!exists){
+        this.configOpts.push(this.azureObj);
+      }
       this.configArr.forEach((item)=>{
         item.displayName = this.azureObj.name;
         item.enable = true;
         item.integration = this.azureObj.type;
         item.defaultModel = this.azureObj.model;
       });
-      let payload = this.configArr;
+      let featureList = this.configArr;
       let params: any = {
         userId: this.authService.getUserId(),
         streamId: this.workflowService.getCurrentBt(true)._id,
         llmId: this.id
       };
       if(this.id){
-        this.service.invoke('post.features', params, {featureList: payload})
+        this.service.invoke('post.features', params, {featureList})
         .subscribe(res => {
           this.notificationService.notify(this.translate.instant('SUCCESSFULLY.UPDATED'), 'success');
           this.features.forEach((iItem)=>{
             iItem.selected = 'Azure OpenAI - GPT-3';
+            iItem.selectedSrc = this.srcs['azure'];
+            iItem.enable = true;
           })
         }, err => {
           this.notificationService.showError(err, this.translate.instant("USECASES.FAILED_CREATE_CATE"));
         });
-      } 
+      }
+    }else if(!exists){
+        this.configOpts.push(this.azureObj);
     }
     this.closeModal();
   }
-  
+
   integrations:any = {}
   getConfigDetails(){
     let params: any = {
@@ -205,33 +219,28 @@ export class AiConfigComponent implements OnInit {
     this.service.invoke('get.AIconfigs', params)
       .subscribe(res => {
         this.id = res[0]._id;
-        this.configArr = res[0].featureList || this.configArr;
+        this.configArr = res[0].featureList?.length ? res[0].featureList  : this.configArr;
         this.integrations = res[0].integrations;
+
+        (res[0].featureList || []).forEach((item)=>{
+          this.features.forEach((iIte,)=>{
+            if(item.name === iIte.nameC){
+              iIte.selected = item.displayName;
+              iIte.selectedSrc = this.srcs[item.integration];
+              iIte.enable = item.enable;
+            }
+          })
+        })
+
         if(this.integrations.azure){
           this.configOpts.push(this.azureObj);
         }if(this.integrations.openai){
           this.configOpts.push(this.openAiObj);
         }
-        if(this.integrations.featureList){
-          this.integrations.featureList.forEach((item)=>{
-            this.features.forEach((iItem)=>{
-              if(iItem.nameC === iItem.name){
-                iItem.selected = item.displayName;
-              }
-            });
-          })
-        }
       }, err => {
         this.notificationService.showError(err, this.translate.instant("USECASES.FAILED_CREATE_CATE"));
     });
   }
-
-  // selectNone(name, type, model){
-  //   const inx = this.configArr.findIndex((item)=> item.name === 'aa_noneintent');
-  //   this.configArr[inx].displayName = name;
-  //   this.configArr[inx].integration = type;
-  //   this.configArr[inx].defaultModel = model;
-  // }
 
   selectOption(item, name){
     const inx = this.configArr.findIndex((item)=> item.name === name);

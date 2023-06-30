@@ -56,7 +56,10 @@ export class OpenaiConfigComponent implements OnInit, OnChanges {
     this.service.invoke('post.openApi', params, payload)
       .subscribe(res => {
         this.notificationService.notify(this.translate.instant('SUCCESSFULLY.UPDATED'), 'success');
-        this.saveSuccess.emit(res)
+        if(this.mode !== 'edit'){
+          this.saveSuccess.emit(res)
+        }
+        this.closeEvent.emit(true);
       }, err => {
         this.notificationService.showError(err, this.translate.instant("USECASES.FAILED_CREATE_CATE"));
       });

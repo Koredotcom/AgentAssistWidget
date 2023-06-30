@@ -7,7 +7,7 @@ import { v4 as uuid } from 'uuid';
   providedIn: 'root'
 })
 export class CoachingService {
-
+  metaForUtternace:any = {};
   coachingCnst : any = COACHINGCNST;
   allactionList : any = [
     {
