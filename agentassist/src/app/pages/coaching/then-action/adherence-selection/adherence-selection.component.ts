@@ -119,7 +119,6 @@ export class AdherenceSelectionComponent implements OnInit {
         setTimeout(() => {
           (this.adherenceForm.controls?.adherence as FormGroup)?.controls['utteranceCount'].setValidators(Validators.required);
           (this.adherenceForm.controls?.adherence as FormGroup)?.controls['utteranceCount'].updateValueAndValidity();
-
         }, 100);
       };
     }

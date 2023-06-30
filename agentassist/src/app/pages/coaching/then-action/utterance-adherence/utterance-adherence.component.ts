@@ -69,7 +69,7 @@ export class UtteranceAdherenceComponent implements OnInit {
       )
       .subscribe((val) => {
         this.loaded = false;
-        this.formatUtterArray(this.searchKey.value.trim());
+        this.formatUtterArray(this.searchKey.value?.trim());
       });
   }
 
