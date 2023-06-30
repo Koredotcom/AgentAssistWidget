@@ -276,15 +276,20 @@ export class AssistComponent implements OnInit {
       'sendMenuRequest': true,
       'uId': this.userBotSessionDetails?.userId || '',
       'sId': this.userBotSessionDetails?.sessionId || '',
-      'experience' : (this.connectionDetails.isCall && this.connectionDetails.isCall === "true") ?  ProjConstants.VOICE : ProjConstants.CHAT
+      'experience' : (this.connectionDetails.isCall && this.connectionDetails.isCall === "true") ?  ProjConstants.VOICE : ProjConstants.CHAT,
     }
     if(this.connectionDetails?.autoBotId && this.connectionDetails?.autoBotId !== 'undefined') {
       welcomeMessageParams['autoBotId'] = this.connectionDetails.autoBotId;
     } else {
       welcomeMessageParams['autoBotId'] = '';
     }
+    if (this.connectionDetails?.interactiveLanguage !== null && typeof this.connectionDetails?.interactiveLanguage !== 'undefined' && this.connectionDetails?.interactiveLanguage !== "''") {
+      welcomeMessageParams['language'] = this.connectionDetails?.interactiveLanguage; // Return the default value for null, undefined, or "''"
+    }
     this.websocketService.emitEvents(EVENTS.welcome_message_request, welcomeMessageParams);
   }
+
+
 
   //dialogue click and agent response handling code.
   AgentAssist_run_click(dialog, dialogPositionId, intent?) {
