@@ -110,7 +110,7 @@ export class HomeComponent implements OnInit {
             break;
           }
         }
-      }, (hintObject.timer ? hintObject.timer : 5) * 1000);
+      }, (hintObject.time) * 1000);
     }
     this.hintScrollBottom(true);
   }
