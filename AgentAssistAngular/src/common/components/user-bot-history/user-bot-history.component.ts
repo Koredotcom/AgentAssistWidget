@@ -42,6 +42,8 @@ export class UserBotHistoryComponent implements OnInit, OnDestroy{
         if((userBotConversationDetails?.botId || connectionDetails?.botId) && userBotConversationDetails?.userId && userBotConversationDetails?.sessionId) {
           headersVal = {
             'Authorization': this.commonService.grantResponseObj?.authorization?.token_type + ' ' + this.commonService.grantResponseObj?.authorization?.accessToken,
+            'iid' : userBotConversationDetails.botId ? userBotConversationDetails.botId : 'st-1c3a28c8-335d-5322-bd21-f5753dc7f1f9'
+
           }
             $.ajax({
               url: `${connectionDetails.agentassisturl}/api/1.1/botmessages/chathistorytoagentassist?botId=${userBotConversationDetails?.botId || connectionDetails?.botId}&userId=${userBotConversationDetails?.userId}&sessionId=${userBotConversationDetails?.sessionId}&limit=-1&msgDirection=true`,
