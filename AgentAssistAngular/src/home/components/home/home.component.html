@@ -53,14 +53,14 @@
                     <div class="t-title">Proactive</div>
                     <label class="kr-sg-toggle">
                         <div class="hover-tooltip">Proactive</div>
-                        <input #proactiveMode 
-                            type="checkbox" 
-                            id="checkProActive" 
-                            [checked]="proactiveModeEnabled"  
-                            (change)="proactiveToggle(proactiveMode.checked)" 
+                        <input #proactiveMode
+                            type="checkbox"
+                            id="checkProActive"
+                            [checked]="proactiveModeEnabled"
+                            (change)="proactiveToggle(proactiveMode.checked)"
                             [disabled]="connectionDetails.source === projConstants.SMARTASSIST_SOURCE && connectionDetails.isProactiveAgentAssistEnabled === false"
                         >
-                        <div class="slider"  
+                        <div class="slider"
                             [ngClass]="{'cursor-notallowed' : connectionDetails.source === projConstants.SMARTASSIST_SOURCE && connectionDetails.isProactiveAgentAssistEnabled === false}">
                         </div>
                     </label>
@@ -189,9 +189,9 @@
     <perfect-scrollbar class="hint-overlay" #overlayhint id="coachingHintScroll">
         <ng-container *ngFor="let item of coachingHints; let i = index">
             <div class="hint-blck" *ngIf="item" [ngClass]="coachingConst.HINT_DATA[item?.expression]?.className">
-                <div class="hint-bg-progress">
+                <!-- <div class="hint-bg-progress">
                     <div class="bg-progress"></div>
-                </div>
+                </div> -->
                 <div class="icon_blcok" *ngIf="coachingConst.HINT_DATA[item?.expression]?.icon">
                     <i [ngClass]="coachingConst.HINT_DATA[item?.expression]?.icon"></i>
                 </div>
@@ -208,5 +208,5 @@
             </div>
         </ng-container>
     </perfect-scrollbar>
-        
+
 </div>
