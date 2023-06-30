@@ -283,10 +283,8 @@ export class AssistComponent implements OnInit {
     } else {
       welcomeMessageParams['autoBotId'] = '';
     }
-    if (this.connectionDetails?.interactiveLanguage === null || typeof this.connectionDetails?.interactiveLanguage === 'undefined' || this.connectionDetails?.interactiveLanguage === "''") {
-      welcomeMessageParams['interactiveLanguage'] = 'en'; // Return the default value for null, undefined, or "''"
-    } else {
-      welcomeMessageParams['interactiveLanguage'] = this.connectionDetails?.interactiveLanguage;
+    if (this.connectionDetails?.interactiveLanguage !== null && typeof this.connectionDetails?.interactiveLanguage !== 'undefined' && this.connectionDetails?.interactiveLanguage !== "''") {
+      welcomeMessageParams['language'] = this.connectionDetails?.interactiveLanguage; // Return the default value for null, undefined, or "''"
     }
     this.websocketService.emitEvents(EVENTS.welcome_message_request, welcomeMessageParams);
   }
