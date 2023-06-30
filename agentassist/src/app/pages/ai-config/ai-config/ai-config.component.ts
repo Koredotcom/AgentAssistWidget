@@ -204,7 +204,8 @@ export class AiConfigComponent implements OnInit {
     };
     this.service.invoke('get.AIconfigs', params)
       .subscribe(res => {
-        this.id = res[0]._id
+        this.id = res[0]._id;
+        this.configArr = res[0].featureList || this.configArr;
         this.integrations = res[0].integrations;
         if(this.integrations.azure){
           this.configOpts.push(this.azureObj);
