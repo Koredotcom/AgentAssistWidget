@@ -13,6 +13,8 @@ import { forkJoin } from 'rxjs';
 import { NotificationService } from '@kore.services/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { FormControl } from '@angular/forms';
+import { AuthService } from '@kore.services/auth.service';
+import { CoachingService } from './coaching.service';
 
 @Component({
   selector: 'app-coaching',
@@ -45,13 +47,19 @@ export class CoachingComponent implements OnInit {
   @ViewChild('ps') ps: PerfectScrollbarComponent;
   @ViewChild('newCoachingGroup', { static: true }) newCoachingGroup: SliderComponentComponent;
 
-  constructor(private modalService: NgbModal, private service : ServiceInvokerService,
+  constructor(
+    private modalService: NgbModal, private service : ServiceInvokerService,
     private workflowService : workflowService, private cdRef : ChangeDetectorRef,
-    private notificationService : NotificationService, private translate: TranslateService) { }
+    private notificationService : NotificationService, private translate: TranslateService,
+    private auth: AuthService, private local: LocalStoreService,
+    private authService: AuthService,
+    private cs: CoachingService
+    ) { }
 
   ngOnInit(): void {
     this.getAgentCoachingGroupData();
     this.subscribeEvents();
+    this.getConfigDetails();
   }
 
   ngAfterViewInit(){
@@ -283,5 +291,19 @@ export class CoachingComponent implements OnInit {
     });
   }
   // END
-
+  getConfigDetails(){
+    let params: any = {
+      userId: this.authService.getUserId(),
+      streamId: this.workflowService.getCurrentBt(true)._id
+    };
+    this.service.invoke('get.AIconfigs', params)
+      .subscribe(res => {
+          if(res){
+            this.cs.metaForUtternace = (res[0].featureList || [])
+            .find(item=> item.name ==="aa_utterance")
+          };
+      }, err => {
+        // this.notificationService.showError(err, this.translate.instant("USECASES.FAILED_CREATE_CATE"));
+    });
+  }
 }

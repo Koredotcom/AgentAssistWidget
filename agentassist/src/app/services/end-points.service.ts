@@ -1647,5 +1647,10 @@ export class EndPointsService {
       endpoint : this.API_SERVER_URL + '/users/:userId/builder/streams/:streamId/llmconfigs/:llmId',
       method : 'post'
     }
+
+    this.serviceList['get.utternaces'] = {
+      endpoint : this.API_SERVER_URL + '/users/:userId/builder/streams/:streamId/utterances/generate',
+      method : 'post'
+    }
   }
 }

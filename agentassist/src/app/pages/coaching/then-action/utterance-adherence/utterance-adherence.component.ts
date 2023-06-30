@@ -8,6 +8,8 @@ import { debounceTime, finalize, tap } from 'rxjs/operators';
 import { FormControl, FormGroup } from '@angular/forms';
 import { COACHINGCNST } from '../../coaching.cnst';
 import { CoachingService } from '../../coaching.service';
+import { AuthService } from '@kore.services/auth.service';
+import { workflowService } from '@kore.services/workflow.service';
 @Component({
   selector: 'app-utterance-adherence',
   templateUrl: './utterance-adherence.component.html',
@@ -44,7 +46,9 @@ export class UtteranceAdherenceComponent implements OnInit {
     // private openAIService: OpenAIService,
     private cdRef: ChangeDetectorRef,
     private service: ServiceInvokerService,
-    private cService: CoachingService
+    private authService: AuthService,
+    private workflowService: workflowService,
+    private cs: CoachingService
   ) { }
 
   ngOnInit(): void {
@@ -61,15 +65,11 @@ export class UtteranceAdherenceComponent implements OnInit {
     }
     this.searchKey.valueChanges
       .pipe(
-        tap(() => { 
-          this.openAiUtteranceArray = [];
-        },
         debounceTime(300)
-        )
       )
       .subscribe((val) => {
         this.loaded = false;
-        this.formatUtterArray(val.includes('price') ? this.sampleUtterPrice : this.sampleUtterNoResp);
+        this.formatUtterArray(this.searchKey.value.trim());
       });
   }
 
@@ -94,22 +94,44 @@ export class UtteranceAdherenceComponent implements OnInit {
       })
   }
 
-  formatUtterArray(openAiUtteranceArray) {
-    setTimeout(() => {
-      this.openAiUtteranceArray = [];
-      for (let utter of openAiUtteranceArray) {
-        const u = this.getAddedUtteranceKeys()
-        if(!u[utter]){
-          let obj: any = {
-            enabled: false,
-            value: utter,
-            _id: null
-          }
-          this.openAiUtteranceArray.push(obj);
-        }
-        this.loaded = true;
+  formatUtterArray(text) {
+    // setTimeout(() => {
+    //   this.openAiUtteranceArray = [];
+    //   for (let utter of openAiUtteranceArray) {
+    //     const u = this.getAddedUtteranceKeys()
+    //     if(!u[utter]){
+    //       let obj: any = {
+    //         enabled: false,
+    //         value: utter,
+    //         _id: null
+    //       }
+    //       this.openAiUtteranceArray.push(obj);
+    //     }
+    //     this.loaded = true;
+    //   }
+    // }, 500);
+
+    
+    let params: any = {
+      userId: this.authService.getUserId(),
+      streamId: this.workflowService.getCurrentBt(true)._id
+    };
+    let body = {
+      "intentName": text,
+      "meta": {
+          params: this.cs.metaForUtternace?.params,
+          "integration": this.cs.metaForUtternace?.integration,
+          "model": this.cs.metaForUtternace?.defaultModel
       }
-    }, 500);
+  }
+    this.service.invoke("get.utternaces", params, body).subscribe((data) => {
+      this.loaded = true;
+      this.openAiUtteranceArray = (data || []).map((item)=>{
+        return {...item, enabled: false}
+      });
+    }, (err)=>{
+      this.loaded = true;
+    });
   }
 
 
@@ -129,7 +151,7 @@ export class UtteranceAdherenceComponent implements OnInit {
   }
 
   getSelectedUtterance() {
-    return this.openAiUtteranceArray.map((item) => item.value)
+    return this.openAiUtteranceArray.map((item) => item.sentence)
   }
 
   saveUtterances() {
@@ -144,9 +166,9 @@ export class UtteranceAdherenceComponent implements OnInit {
   changeUtterActiveStatus(utter) {
     utter.enabled = !utter.enabled;
     if (utter.enabled) {
-      this.utterances[utter.value] = true;
+      this.utterances[utter.sentence] = true;
     } else {
-      delete this.utterances[utter.value];
+      delete this.utterances[utter.sentence];
     }
   }
 

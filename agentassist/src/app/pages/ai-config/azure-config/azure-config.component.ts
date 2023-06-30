@@ -68,7 +68,10 @@ export class AzureConfigComponent implements OnInit, OnChanges {
     let payload = this.azureForm.value;
     this.service.invoke('post.azure', params, payload)
       .subscribe(res => {
-        this.successAzureObj.emit(res);
+        if(this.mode !== 'edit'){
+          this.successAzureObj.emit(res);
+        };
+        this.closeEvent.emit(true);
         this.notificationService.notify(this.translate.instant('SUCCESSFULLY.UPDATED'), 'success');
       }, err => {
         this.notificationService.showError(err, this.translate.instant("USECASES.FAILED_CREATE_CATE"));
