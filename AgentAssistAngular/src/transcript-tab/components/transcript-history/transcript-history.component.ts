@@ -40,7 +40,8 @@ export class TranscriptHistoryComponent {
           console.log(this.commonService.configObj.accountId)
           headersVal = {
             'Authorization': this.commonService.grantResponseObj?.authorization?.token_type + ' ' + this.commonService.grantResponseObj?.authorization?.accessToken,
-            'accountId': this.commonService.grantResponseObj?.userInfo?.accountId
+            'accountId': this.commonService.grantResponseObj?.userInfo?.accountId,
+            'iid' : connectionDetails.botId ? connectionDetails.botId : 'st-1c3a28c8-335d-5322-bd21-f5753dc7f1f9'
         }
         $.ajax({
           url: `${connectionDetails.agentassisturl}/agentassist/api/v1/agentassistconversations/${connectionDetails.conversationId}/conversation?page=1&&limit=1000`,

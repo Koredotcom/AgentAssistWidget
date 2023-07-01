@@ -699,7 +699,10 @@ export class CommonService {
   async renderHistoryFeedBack(url) {
     const response = await $.ajax({
       method: 'GET',
-      url: url
+      url: url,
+      headers :  {
+        'iid' : this.configObj.botId ? this.configObj.botId : 'st-1c3a28c8-335d-5322-bd21-f5753dc7f1f9'
+    }
     });
     if (response.results) {
       return response.results;
@@ -825,7 +828,7 @@ export class CommonService {
   }
 
   async getAgentHistoryData(url = '', data = {}) {
-    let headersVal = {};
+    let headersVal : any = {};
     if(this.configObj.fromSAT) {
         headersVal = {
             'Authorization': 'bearer' + ' ' + this.configObj.token,
@@ -837,6 +840,7 @@ export class CommonService {
             'Authorization': this.grantResponseObj?.authorization.token_type + ' ' + this.getAccessToken()
         }
     }
+    headersVal.iid = this.configObj.botId ? this.configObj.botId : 'st-1c3a28c8-335d-5322-bd21-f5753dc7f1f9'
     const response = await $.ajax({
         method: 'GET',
         url: url,
