@@ -121,7 +121,7 @@
 
 <!-- adherence selection starts -->
 <ng-container *ngIf="selectedAdherence">
-    <app-adherence-selection [adherenceForm]="form" [createOrEdit]="createOrEdit" [adherenceSelection]="selectedAdherence" (deleteAdherence)="deleteAdherenceClick(event)"></app-adherence-selection>
+    <app-adherence-selection [adherenceForm]="form" [createOrEdit]="createOrEdit" [adherenceSelection]="selectedAdherence" [adhereClick]=" adherenceClick" (deleteAdherence)="deleteAdherenceClick(event)"></app-adherence-selection>
 </ng-container>
 
 <!-- COmmon trigger template -->

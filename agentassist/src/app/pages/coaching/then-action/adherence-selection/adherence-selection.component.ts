@@ -14,6 +14,7 @@ export class AdherenceSelectionComponent implements OnInit {
   @Input() adherenceForm: FormGroup;
   @Input() createOrEdit: string = '';
   @Input() adherenceSelection : string;
+  @Input() adhereClick : boolean;
   @Output() deleteAdherence = new EventEmitter();
 
   openSetUtterance : boolean = false;
@@ -54,7 +55,7 @@ export class AdherenceSelectionComponent implements OnInit {
       this.selectedMinutes = COACHINGCNST.SELECTED_ACTION_MINS;
       this.selectedMessages = COACHINGCNST.SELECTED_ACTION_MESSAGES;
     }
-    if(this.adherenceSelection){
+    if(this.adhereClick && this.adherenceSelection){
       this.clickOnAdherenceSelection(this.adherenceSelection);
     }
   }

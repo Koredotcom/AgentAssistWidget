@@ -27,6 +27,7 @@ export class HintAgentComponent implements OnInit {
   hintTitle: string = '';
   closeType: string = '';
   selectedAdherence : string;
+  adherenceClick : boolean = false;
 
   time : number;
   variableTime : number;
@@ -132,13 +133,15 @@ export class HintAgentComponent implements OnInit {
 
   selectAdherenceClick(type){
     this.selectedAdherence = type;
+    this.adherenceClick = true;
     (<FormGroup> this.form).addControl('adherence',this.fb.group(this.coachingService.getAdherenceForm()));
     this.cdRef.detectChanges();
   }
 
   deleteAdherenceClick(){
     this.selectedAdherence = null;
-    (<FormGroup> this.form).removeControl('adherence');    
+    this.adherenceClick = true;
+    (<FormGroup> this.form).removeControl('adherence');  
   }
 
 }

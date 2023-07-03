@@ -22,6 +22,7 @@ export class NudgeAgentComponent implements OnInit {
   selectedAdherence : string;
   openAdherenceSlider : boolean = false;
   allAdherences = this.coachingService.allactionList;
+  adherenceClick : boolean = false;
 
   private adherenceSlider: SliderComponentComponent;
   @ViewChild('adherenceSlider') set content(content: SliderComponentComponent) {
@@ -76,13 +77,15 @@ export class NudgeAgentComponent implements OnInit {
 
   selectAdherenceClick(type){
     this.selectedAdherence = type;
+    this.adherenceClick = true;
     (<FormGroup> this.form).addControl('adherence',this.fb.group(this.coachingService.getAdherenceForm()));
     this.cdRef.detectChanges();
   }
 
   deleteAdherenceClick(){
     this.selectedAdherence = null;
-    (<FormGroup> this.form).removeControl('adherence');    
+    this.adherenceClick = true; 
+    (<FormGroup> this.form).removeControl('adherence');  
   }
 
 }
