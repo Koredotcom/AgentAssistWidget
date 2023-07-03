@@ -203,4 +203,8 @@ export class UtteranceAdherenceComponent implements OnInit {
   //       return item.utterance == this.searchKey.value;
   //     })
   //   }
+
+  get getAddedCount(): number{
+    return Object.keys(this.utterances)?.length || 0;
+  }
 }

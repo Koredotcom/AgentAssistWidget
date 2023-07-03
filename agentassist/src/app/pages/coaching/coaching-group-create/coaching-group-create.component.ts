@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, SimpleChange } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, SimpleChange } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NotificationService } from '@kore.services/notification.service';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
@@ -10,13 +10,14 @@ import { CoachingGroupRuleDeleteComponent } from '../coaching-group-rule-delete/
 import { COACHINGCNST } from '../coaching.cnst';
 import { AuthService } from '@kore.services/auth.service';
 import { LocalStoreService } from '@kore.services/localstore.service';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-coaching-group-create',
   templateUrl: './coaching-group-create.component.html',
   styleUrls: ['./coaching-group-create.component.scss']
 })
-export class CoachingGroupCreateComponent implements OnInit {
+export class CoachingGroupCreateComponent implements OnInit, AfterViewInit {
   
   @Input() type : any;
   @Input() groupData : any;
@@ -32,6 +33,10 @@ export class CoachingGroupCreateComponent implements OnInit {
 
   constructor(private modalService: NgbModal, private workflowService : workflowService, private service : ServiceInvokerService,
     private notificationService : NotificationService, private translate: TranslateService, private auth: AuthService, private local: LocalStoreService) { }
+  
+  ngAfterViewInit(): void {
+
+  }
 
 
   ngOnInit(): void {

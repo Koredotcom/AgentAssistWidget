@@ -37,7 +37,7 @@
                                         <div class="accordion-content-header">
                                             <div class="left-title text-truncate">
                                                 <div class="left-content-info">
-                                                    <div class="title-info">{{res.name}}</div>
+                                                    <div class="title-info" [title]="res.name">{{res.name}}</div>
                                                     <i class="icon-sa-welcome-edit" (click)="$event.stopPropagation();openCoachingGroup(coachingConst.EDIT, res, i)"></i>                                                                                                   
                                                 </div>
                                                 <div class="desc_text text-truncate" [title]="res.description">{{res.description}}</div>                                                 
@@ -68,7 +68,7 @@
                                                     <div class="titles-data w-10 text-right">Enabled</div>
                                                 </div>
                                                 <div class="body-data-table-wrapper-coaching" *ngFor="let rule of res?.rules; let inx = index" cdkDrag (cdkDragStarted)="dragStart=true" (cdkDragEnded)="dragStart=false;clearInterVal()">
-                                                    <div class="title-text rule-text w-25">{{rule.name}}</div>
+                                                    <div class="title-text rule-text w-25" [title]="rule.name">{{rule.name}}</div>
                                                     <div class="actions-info w-15">
                                                         <button class="edit-btn" (click)="openFLowCreation(flowCreation, res, i, rule, 'edit', inx);">
                                                             <i class="icon-sa-welcome-edit"></i>

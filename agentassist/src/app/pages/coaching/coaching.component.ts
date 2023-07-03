@@ -71,24 +71,27 @@ export class CoachingComponent implements OnInit {
       .subscribe(term => {
         term = term.trim()
         if (term.trim()) {
-          this.searchedData = JSON.parse(JSON.stringify(this.respData));
-          let results = this.searchedData["results"];
-          for(let i=0; i<results.length; i++){
-            let item = results[i];
-            item.rules = [...item.rules.filter((iItem) => {
-              return iItem.name.includes(term);
-            })];
-            if(item.rules?.length === 0){
-              (this.searchedData.results || []).splice(i, 1);
-              i = i-1;
-            }
-          }
-
+          this.serachRules(term);
         }else if(term == ''){
           this.searchedData.results = this.respData.results;
         }
         this.isLoading = false;
       });
+  }
+
+  serachRules(term){
+    this.searchedData = JSON.parse(JSON.stringify(this.respData));
+    let results = this.searchedData["results"];
+    for(let i=0; i<results.length; i++){
+      let item = results[i];
+      item.rules = [...item.rules.filter((iItem) => {
+        return iItem.name.toLowerCase().includes(term.toLowerCase());
+      })];
+      if(item.rules?.length === 0){
+        (this.searchedData.results || []).splice(i, 1);
+        i = i-1;
+      }
+    }
   }
 
   // get or update GroupData Starts
@@ -102,9 +105,12 @@ export class CoachingComponent implements OnInit {
       this.isLoading = false;
     })).subscribe(data => {
       if (data) {
-        this.respData = data || {"results":[]};
-        this.searchedData.results = data?.results || [];
+        this.respData = Object.assign(data) || {"results":[]};
+        this.searchedData.results = JSON.parse(JSON.stringify(data?.results)) || [];
         this.checkRulePresence(this.respData);
+        if(this.searchField.value?.trim()){
+          this.serachRules(this.searchField.value.trim());
+        }
         this.cdRef.detectChanges();
       }
     });
@@ -212,6 +218,7 @@ export class CoachingComponent implements OnInit {
 
     forkJoin([this.service.invoke('put.agentCoachingGroup', {groupId : currentgroupId}, currentGroupPayload),
     this.service.invoke('put.agentCoachingGroup', {groupId : previousgroupId}, previousGroupPayload)]).subscribe((response) => {
+      this.getAgentCoachingGroupData();
       this.notificationService.notify(this.translate.instant("COACHING.GROUPUPDATED_SUCCESS"), 'success');
     },(error)=>{
       this.notificationService.showError(this.translate.instant("COACHING.GROUPUPDATED_FAILURE"));
@@ -279,12 +286,12 @@ export class CoachingComponent implements OnInit {
     this.modalRef.result.then(emitedValue => {
       if(emitedValue){
         this.service.invoke('delete.agentCoachingRule', {groupId : groupId, ruleId: rule.ruleId}).subscribe(_data => {
-
-          let matchIndex = this.respData?.results[index]?.rules?.findIndex(x => x.ruleId == rule.ruleId);
-          this.respData?.results[index]?.rules.splice(matchIndex, 1);
-          this.checkRulePresence(this.respData);
-          this.cdRef.detectChanges();
+          // let matchIndex = this.respData?.results[index]?.rules?.findIndex(x => x.ruleId == rule.ruleId);
+          // this.respData?.results[index]?.rules.splice(matchIndex, 1);
+          // this.checkRulePresence(this.respData);
+          // this.cdRef.detectChanges();
           this.notificationService.notify(this.translate.instant("COACHING.RULEDELETE_SUCCESS"), 'success');
+          this.getAgentCoachingGroupData();
         },(error)=>{
           this.notificationService.showError(this.translate.instant("COACHING.RULEDELETE_FAILURE"));
         });
