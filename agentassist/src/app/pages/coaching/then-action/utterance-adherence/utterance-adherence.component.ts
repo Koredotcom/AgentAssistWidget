@@ -204,7 +204,7 @@ export class UtteranceAdherenceComponent implements OnInit {
   //     })
   //   }
 
-  get getAddedCount(): number{
-    return Object.keys(this.utterances)?.length || 0;
-  }
+  // get getAddedCount(): number{
+  //   return Object.keys(this.utterances)?.length + (this.searchRef?.nativeElement?.checked ? 1 : 0) || 0;
+  // }
 }
