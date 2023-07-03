@@ -2036,5 +2036,6 @@
     "COACHING.RULEDELETE_FAILURE" : "Failed to delete the Rule",
     "COACHING.PUBLISH_SUCCESS" : "Published Successfully",
     "COACHING.PUBLISH_FAILURE" : "Failed to publish",
-    "SUCCESSFULLY.UPDATED": "Successfully updated"
+    "SUCCESSFULLY.UPDATED": "Successfully updated",
+    "VALID.NAME": "Please enter a valid name"
 }

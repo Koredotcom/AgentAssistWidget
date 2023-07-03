@@ -10,6 +10,8 @@ import { CoachingConfirmationComponent } from '../coaching-confirmation/coaching
 import { finalize } from 'rxjs/operators';
 import { AuthService } from '@kore.services/auth.service';
 import { LocalStoreService } from '@kore.services/localstore.service';
+import { NotificationService } from '@kore.services/notification.service';
+import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-coaching-rule-create',
   templateUrl: './coaching-rule-create.component.html',
@@ -96,8 +98,18 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
 
   // triggerFormControlsArray : any = [];
 
-  constructor(private fb: FormBuilder, private coachingService : CoachingService, private cd: ChangeDetectorRef,
-    private workflowService : workflowService, private service : ServiceInvokerService, private modalService : NgbModal, private auth: AuthService, private local: LocalStoreService) { }
+  constructor(
+    private fb: FormBuilder, 
+    private coachingService : CoachingService, 
+    private cd: ChangeDetectorRef,
+    private workflowService : workflowService, 
+    private service : ServiceInvokerService, 
+    private modalService : NgbModal, 
+    private auth: AuthService, 
+    private local: LocalStoreService,
+    private notificationService: NotificationService,
+    private translate: TranslateService
+  ) { }
 
     @HostListener("window:beforeunload", ["$event"]) unloadHandler(event: Event) {
       if(this.formTouched){
@@ -188,6 +200,10 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
   }
  
   saveRule(){
+    if((this.ruleForm.controls.name.value as string).trim() === ''){
+      this.notificationService.showError({}, this.translate.instant('VALID.NAME'));
+      return;
+    }
     this.loading = true;
     let payload : any = this.ruleForm.value;
     payload["addToGroup"] = true;

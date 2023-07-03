@@ -61,6 +61,10 @@ export class CoachingGroupCreateComponent implements OnInit, AfterViewInit {
   }
 
   onSubmit(){
+    if((this.createGroupForm.controls.name.value as string).trim() === ''){
+      this.notificationService.showError({}, this.translate.instant('VALID.NAME'));
+      return;
+    }
     if(this.type == this.coachingConst.CREATE){
       this.createOrUpdateGroupApiCall("post.agentCoachingGroup");
     }else if(this.type == this.coachingConst.EDIT){
