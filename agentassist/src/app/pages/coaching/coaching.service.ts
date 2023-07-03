@@ -170,7 +170,7 @@ export class CoachingService {
         (<FormGroup> nudgeForm.adherence).addControl('nMessages', new FormControl(obj.adherence?.nMessages))
       }
       if(obj.adherence?.utteranceCount){
-        (<FormGroup> nudgeForm.adherence).addControl('utteranceCount', new FormControl(obj.adherence?.utteranceCount))
+        (<FormGroup> nudgeForm.adherence).addControl('utteranceCount', new FormControl(obj.adherence?.utteranceCount, Validators.required))
       }
     }
 
@@ -251,7 +251,7 @@ export class CoachingService {
         (<FormGroup>hintForm.adherence).addControl('nMessages', new FormControl(obj.adherence?.nMessages))
       }
       if (obj.adherence?.utteranceCount) {
-        (<FormGroup>hintForm.adherence).addControl('utteranceCount', new FormControl(obj.adherence?.utteranceCount))
+        (<FormGroup>hintForm.adherence).addControl('utteranceCount', new FormControl(obj.adherence?.utteranceCount,Validators.required))
       }
     }
 
