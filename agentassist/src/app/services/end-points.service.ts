@@ -1649,7 +1649,7 @@ export class EndPointsService {
     }
 
     this.serviceList['get.utternaces'] = {
-      endpoint : this.API_SERVER_URL + '/users/:userId/builder/streams/:streamId/utterances/generate',
+      endpoint : this.API_SERVER_URL + '/users/:userId/builder/streams/:streamId/aa_utterance/generate',
       method : 'post'
     }
   }

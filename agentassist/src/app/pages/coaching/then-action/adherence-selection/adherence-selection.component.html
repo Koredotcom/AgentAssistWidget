@@ -6,7 +6,7 @@
         <span class="utt-name-desc">Agent pressed the "Ok, Got it" button in the hint </span>
     </ng-container>
     <ng-container *ngIf="selectedAdherenceType == coachingConst.UTTERANCE">
-        <span class="utt-name-desc">Agent says the one of these </span>
+        <span class="utt-name-desc">Agent says one of these </span>
         <div class="dropdown-custom-flows" container="body">
             <button class="dropdown-toggle btn-toggle text-choosen" (click)="openAdherence()">
                 <span class="choose-text"> {{(adherenceForm?.value?.adherence?.utteranceCount) ? adherenceForm?.value?.adherence?.utteranceCount + ' utterance(s).' : '{ set utterances }'}}</span>
