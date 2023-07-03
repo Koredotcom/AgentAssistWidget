@@ -29,9 +29,9 @@
                             <i class="icon-sa-help"></i>
                         </span> -->
                         <input type="text" placeholder="Enter Hint title"
-                            class="input-text" maxlength="42" [(ngModel)]="hintTitle">
+                            class="input-text" maxlength="300" [(ngModel)]="hintTitle">
                     </div>
-                    <div class="count-char">{{hintTitle.length}}/42</div>
+                    <div class="count-char">{{hintTitle.length}}/300</div>
                 </div>
                 <div class="check-icon-block" (click)="submitVariable();hinttitle.close()">
                     <i class="icon-sa-conv-check"></i>
