@@ -1,0 +1,92 @@
+<div class="utterance-triggers">
+
+    <div class="and-or-btns" *ngIf="!(index === length)">
+        <ng-container *ngFor="let operator of opList">
+            <button class="and-or-btn" (click)="changeOperator(operator)" [ngClass]="{'active-btn' : selectedOperator === operator}">{{operator | titlecase}}</button>
+        </ng-container>
+    </div>
+    <!-- <span class="utt-name-desc">...a</span> -->
+    <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body">
+        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!selUser}">
+            <span class="choose-text">{{selUser ? (selUser | titlecase) : '{ select person }'}}</span>
+        </button>
+        <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
+            <ng-container *ngFor="let user of users">
+                <li ngbDropdownItem class="list-item-li" (click)="clickOnUser(user)">
+                    <span class="title">{{user | titlecase}}</span>
+                    <i [ngClass]="{'icon-sa-conv-check' : user === selUser}" ></i>
+                </li>
+            </ng-container>
+        </ul>
+    </div>
+    <span class="utt-name-desc">uses any of these</span>
+    <div class="dropdown-custom-flows" container="body">
+        <button class="dropdown-toggle btn-toggle text-choosen" (click)="openAdherence()">
+            <span class="choose-text"> {{(form?.value?.when?.utteranceCount) ? form?.value?.when?.utteranceCount + ' utterance(s)' : '{ set utterances }'}}</span>
+        </button>
+        <!-- <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
+            <li ngbDropdownItem class="list-item-li">
+                <span class="title">Agent</span>
+                <i class="icon-sa-conv-check"></i>
+            </li>
+        </ul> -->
+    </div>
+    
+    <div class="dropdown-occurences" ngbDropdown [placement]="'bottom'" container="body">
+        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle><i class="icon-sa-conv-refreshten"></i> {{selOcc}}x</button>
+        <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
+            <perfect-scrollbar class="mx-h-220">
+                <ng-container *ngFor="let occ of occurances">
+                    <li ngbDropdownItem class="list-item-li" (click)="clickOcc(occ)">
+                        <span class="title">Each Occurrence <span>{{occ}}x</span></span>
+                        <i [ngClass]="{'icon-sa-conv-check': occ === selOcc}"></i>
+                    </li>
+                </ng-container>
+            </perfect-scrollbar>
+        </ul>
+    </div>
+    <div class="dropdown-occurences no_border" ngbDropdown [placement]="'bottom'" container="body" #utteranceTimer="ngbDropdown">
+        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle (click)="showTimer = timer">in {{timer}} seconds</button>
+        <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
+            <div class="seconds-input">
+                <div class="kr-sg-input-text">
+                    <input type="number" digitOnly placeholder="Enter Seconds here" (keyup.enter)="onEnterTime(showTimer);utteranceTimer.close()" class="input-text" [(ngModel)]="showTimer">
+                </div>
+                <div class="s-title">seconds</div>
+            </div>
+        </ul>
+    </div>
+    <div class="delete-row" (click)="deleteTriggerRule()"> 
+        <i class="icon-sa-welcome-delete"></i>
+    </div>
+    <!-- <div class="add-adherence">
+        <button class="add-adherence-btn" (click)="openAdherence()">+ Add Adherence</button>
+    </div>
+    <div class="delete-row">
+        <i class="icon-sa-welcome-delete"></i>
+    </div>
+    <div class="dropdown-occurences no_border" ngbDropdown [placement]="'bottom'" container="body">
+    </div> -->
+    <!-- <div class="dropdown-occurences no_border" ngbDropdown [placement]="'bottom'" container="body">
+        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle>in {{timer}} seconds</button>
+        <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
+            <div class="seconds-input">
+                <div class="kr-sg-input-text">
+                    <input type="text" placeholder="Placeholder text" class="input-text">
+                </div>
+                <div class="s-title">seconds</div>
+            </div>
+        </ul>
+    </div>
+</div>
+
+
+
+
+    </div> -->
+    <ng-container *ngIf="openSetUtterance"> 
+    <app-slider-component id="adherenceSlider" #adherenceSlider='app-slider'>
+            <app-utterance-adherence [createOrEdit]="createOrEdit" (onClose)="closeAdherence($event)" [form]="form"></app-utterance-adherence>
+        </app-slider-component>
+    </ng-container>
+</div>

@@ -1,0 +1,163 @@
+@import "../../trigger/utterance/utterance.component.scss";
+
+
+.add-trgigger-dropdown{
+    display: flex;
+    align-items: flex-start;
+    &.show{
+        .add-triggers-btn{
+            border: 1px solid #2970FF;
+            background: #EFF8FF;
+            color: #175CD3;
+        }
+    }
+    .add-triggers-btn{
+        // padding: 3px 12px 3px 10px;
+        // background: #EAECF0;
+        // border-radius: 16px;
+        // border: 1px solid transparent;
+        // font-weight: 500;
+        // font-size: 14px;
+        // line-height: 20px;
+        // color: #344054;
+        // outline: 0;
+        // margin-top: 12px;
+        cursor: pointer;
+        background: #EAECF0;
+        border-radius: 16px;
+        padding: 2px 8px 2px 6px;
+        border: 1px solid transparent;
+        outline: 0;
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 18px;
+        color: #363F72;
+        cursor: pointer;
+        &:hover{
+            border: 1px solid #2970FF;
+            background: #EFF8FF;
+            color: #175CD3;
+        }
+    }
+    .drop-add-trigger{
+        padding: 0;
+        border: 0;
+        background: transparent;
+        margin: 0;
+        min-width: auto;
+        max-width: initial;
+        border-radius: 0;
+        font-size: 14px;
+        margin-top: 10px;
+        // transform: none !important;
+        // position: relative !important;
+    }
+}
+
+.add-triggers{
+    display: flex;
+    align-items: flex-start;
+    .line-indicator{
+        width: 34px;
+        flex-shrink: 0;
+        border-top: 1px solid #2970FF;
+        margin-top: 15px;
+    }
+    .choose-triggers-block{
+        background: #EFF4FF;
+        border: 1px solid #2970FF;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        padding: 10px;
+        width: 544px;
+        .heading-title{
+            font-weight: 700;
+            font-size: 14px;
+            line-height: 17px;
+            color: #2970FF;
+            margin-bottom: 14px;
+        }
+        .choose-t-block-bg{
+            background: #FFFFFF;
+            border-radius: 10px;
+            .title-with-icon{
+                font-weight: 600;
+                font-size: 12px;
+                line-height: 15px;
+                display: flex;
+                align-items: center;
+                padding: 12px 14px 0px 14px;
+                color: #9DA1A6;
+                i{
+                    flex-shrink: 0;
+                    margin-right: 5px;
+                    font-size: 20px;
+                }
+            }
+            .choose-t-block{
+                padding: 10px;
+                display: flex;
+                flex-wrap: wrap;
+                max-width: 544px;
+                .inner-card-choose{
+                    padding: 4px;
+                    width: 50%;
+                    .content-choose-triggers{
+                        background: #F7F9FA;
+                        border: 1px solid #98A2B3;
+                        box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
+                        border-radius: 8px;
+                        padding: 11px 14px;
+                        display: flex;
+                        align-items: flex-start;
+                        min-height: 66px;
+                        cursor: pointer;
+                        white-space: normal;
+                        color: #121314 !important;
+                        .icon_blk{
+                            width: 21px;
+                            height: 21px;
+                            flex-shrink: 0;
+                            font-size: 21px;
+                            opacity: 0.4;
+                            margin-right: 10px;
+                        }
+                        .info-data-content{
+                            width: 100%;
+                            .title-choose{
+                                font-weight: 500;
+                                font-size: 14px;
+                                line-height: 20px;
+                                color: #121314;
+                            }
+                            .desc-text{
+                                font-weight: 400;
+                                font-size: 12px;
+                                line-height: 18px;
+                                color: #5F6368;
+                                margin-bottom: 4px;
+                            }
+                        }
+                    }
+                }
+            }
+            &.pre-built-triggers{
+                margin-top: 5px;
+                .choose-t-block{
+                    .inner-card-choose{
+                        padding: 4px 0;
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
+    
+}
+
+.disableTrigger{
+    pointer-events: none;
+    opacity: 0.4;
+}
+
+

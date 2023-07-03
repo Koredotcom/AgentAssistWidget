@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?yeibm0');
-  src:  url('fonts/icomoon.eot?yeibm0#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?yeibm0') format('truetype'),
-    url('fonts/icomoon.woff?yeibm0') format('woff'),
-    url('fonts/icomoon.svg?yeibm0#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?jgecgc');
+  src:  url('fonts/icomoon.eot?jgecgc#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?jgecgc') format('truetype'),
+    url('fonts/icomoon.woff?jgecgc') format('woff'),
+    url('fonts/icomoon.svg?jgecgc#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,191 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-coaching-publish:before {
+  content: "\e982";
+}
+.icon-coaching-menu-icon:before {
+  content: "\e983";
+}
+.icon-coaching--clock-refresh:before {
+  content: "\e957";
+}
+.icon-coaching--delete:before {
+  content: "\e958";
+}
+.icon-coaching--edit:before {
+  content: "\e959";
+}
+.icon-coaching--email-manager .path1:before {
+  content: "\e95a";
+  color: rgb(16, 24, 40);
+  opacity: 0.12;
+}
+.icon-coaching--email-manager .path2:before {
+  content: "\e95b";
+  margin-left: -1em;
+  color: rgb(16, 24, 40);
+}
+.icon-coaching--faq .path1:before {
+  content: "\e95c";
+  color: rgb(16, 24, 40);
+  opacity: 0.12;
+}
+.icon-coaching--faq .path2:before {
+  content: "\e95d";
+  margin-left: -1em;
+  color: rgb(16, 24, 40);
+}
+.icon-coaching--hint-agent .path1:before {
+  content: "\e95e";
+  color: rgb(16, 24, 40);
+  opacity: 0.4;
+}
+.icon-coaching--hint-agent .path2:before {
+  content: "\e95f";
+  margin-left: -1em;
+  color: rgb(16, 24, 40);
+}
+.icon-coaching--hint-agent .path3:before {
+  content: "\e960";
+  margin-left: -1em;
+  color: rgb(16, 24, 40);
+}
+.icon-coaching--left-arrow:before {
+  content: "\e961";
+}
+.icon-coaching--message-chat-square .path1:before {
+  content: "\e962";
+  color: rgb(16, 24, 40);
+  opacity: 0.4;
+}
+.icon-coaching--message-chat-square .path2:before {
+  content: "\e963";
+  margin-left: -1em;
+  color: rgb(16, 24, 40);
+}
+.icon-coaching--message-check-square .path1:before {
+  content: "\e964";
+  color: rgb(16, 24, 40);
+  opacity: 0.4;
+}
+.icon-coaching--message-check-square .path2:before {
+  content: "\e965";
+  margin-left: -1em;
+  color: rgb(16, 24, 40);
+}
+.icon-coaching--move:before {
+  content: "\e966";
+}
+.icon-coaching--move1:before {
+  content: "\e967";
+}
+.icon-coaching--nudge-agent .path1:before {
+  content: "\e968";
+  color: rgb(16, 24, 40);
+  opacity: 0.4;
+}
+.icon-coaching--nudge-agent .path2:before {
+  content: "\e969";
+  margin-left: -1em;
+  color: rgb(16, 24, 40);
+}
+.icon-coaching--plus:before {
+  content: "\e96a";
+}
+.icon-coaching--search:before {
+  content: "\e96b";
+}
+.icon-coaching--settings:before {
+  content: "\e96c";
+}
+.icon-coaching--tag:before {
+  content: "\e96d";
+}
+.icon-coaching--thendo:before {
+  content: "\e96e";
+}
+.icon-coaching--trigger-dialog .path1:before {
+  content: "\e96f";
+  color: rgb(16, 24, 40);
+  opacity: 0.4;
+}
+.icon-coaching--trigger-dialog .path2:before {
+  content: "\e970";
+  margin-left: -1em;
+  color: rgb(16, 24, 40);
+}
+.icon-coaching--trigger-dialog .path3:before {
+  content: "\e971";
+  margin-left: -1em;
+  color: rgb(16, 24, 40);
+}
+.icon-coaching--trigger-dialog .path4:before {
+  content: "\e972";
+  margin-left: -1em;
+  color: rgb(16, 24, 40);
+}
+.icon-coaching--trigger-speech1 .path1:before {
+  content: "\e973";
+  color: rgb(16, 24, 40);
+  opacity: 0.4;
+}
+.icon-coaching--trigger-speech1 .path2:before {
+  content: "\e974";
+  margin-left: -1em;
+  color: rgb(16, 24, 40);
+}
+.icon-coaching--trigger-speech:before {
+  content: "\e975";
+}
+.icon-coaching--trigger-variable .path1:before {
+  content: "\e976";
+  color: rgb(16, 24, 40);
+  opacity: 0.4;
+}
+.icon-coaching--trigger-variable .path2:before {
+  content: "\e977";
+  margin-left: -1em;
+  color: rgb(16, 24, 40);
+}
+.icon-coaching--when:before {
+  content: "\e978";
+}
+.icon-coaching--adherence-set:before {
+  content: "\e979";
+}
+.icon-coaching--ai:before {
+  content: "\e97a";
+}
+.icon-coaching--aleart-manager .path1:before {
+  content: "\e97b";
+  color: rgb(16, 24, 40);
+  opacity: 0.4;
+}
+.icon-coaching--aleart-manager .path2:before {
+  content: "\e97c";
+  margin-left: -1em;
+  color: rgb(16, 24, 40);
+}
+.icon-coaching--announce:before {
+  content: "\e97d";
+}
+.icon-coaching-assign-this .path1:before {
+  content: "\e97e";
+  color: rgb(16, 24, 40);
+  opacity: 0.4;
+}
+.icon-coaching-assign-this .path2:before {
+  content: "\e97f";
+  margin-left: -1em;
+  color: rgb(16, 24, 40);
+}
+.icon-coaching--award:before {
+  content: "\e980";
+}
+.icon-coaching--check:before {
+  content: "\e981";
+}
 .icon-sa-welcome-chat:before {
   content: "\e951";
 }

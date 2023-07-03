@@ -4,11 +4,12 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 import { EVENTS } from '../helper/events';
 import { WebSocketService } from './web-socket.service';
 import * as $ from 'jquery';
-import { IdReferenceConst, ProjConstants, storageConst } from '../constants/proj.cnts';
+import { coachingConst, IdReferenceConst, ProjConstants, storageConst } from '../constants/proj.cnts';
 import { DesignAlterService } from './design-alter.service';
 import { LocalStorageService } from './local-storage.service';
 import { TemplateRenderClassService } from './template-render-class.service';
 import { SanitizeHtmlPipe } from '../pipes/sanitize-html.pipe';
+import { EChartsOption } from 'echarts';
 
 declare var $: any;
 declare const agentAssistHelpers: any;
@@ -58,6 +59,7 @@ export class CommonService {
     [ProjConstants.HISTORY] : IdReferenceConst.SCROLLBUTTON_HISTORY
   }
   aaHelpers = null;
+  realtimeSentiData : any = {};
   constructor(private route: ActivatedRoute, private webSocketService: WebSocketService, private designAlterService: DesignAlterService,
     private localStorageService: LocalStorageService,private templateRenderClassService: TemplateRenderClassService) {
     this.setScrollContent();
@@ -1193,4 +1195,134 @@ export class CommonService {
       mythis.HandleClickAndSendRequest(tab, connectionObj, e)
     });
   }
+
+  getInitialSentiChartOptions(object): EChartsOption {
+    return {
+      xAxis: {
+        splitLine: { show: false },
+        axisLine: { show: false },
+        axisTick: { show: false },
+        axisLabel: { show: false }
+      },
+      yAxis: {
+        type: 'value',
+        data: [-2, -1, 0, 1, 2],
+        nameLocation: 'middle',
+        axisLabel: { show: false },
+        axisTick: { show: false },
+        splitLine: { show: false },
+        axisLine: { show: false },
+        min: -2
+      },
+      legend: {
+        show: false
+      },
+      visualMap: {
+        show: false,
+        dimension: 1,
+        pieces: [
+          {
+            lt: -0.25,
+            color: 'red'
+          },
+          {
+            lt: 0,
+            gte: -0.25,
+            color: 'grey'
+          },
+          {
+            gt: 0,
+            color: 'green'
+          }
+        ],
+
+      },
+      series: [
+        {
+          data: [[0,0]],
+          type: 'line',
+          smooth: true,
+          showSymbol: false,
+          lineStyle: {
+            width: 4
+          }
+        }
+      ],
+    };
+  }
+
+  getSentiAnalysisChartOptions(object): EChartsOption {
+    return {
+      xAxis: {
+        splitLine: { show: false },
+        axisLine: { show: false },
+        axisTick: { show: false },
+        axisLabel: { show: false }
+      },
+      yAxis: {
+        type: 'value',
+        data: [-2, 0, 2],
+        nameLocation: 'middle',
+        axisLabel: {
+          formatter: val => this.showExtrems(val),
+          show: true
+        },
+        axisTick: { show: false },
+        splitLine: { show: true },
+        axisLine: { show: false },
+        min: -2
+      },
+      legend: {
+        show: false,
+        right : '20%',
+        top : '10%'
+      },
+      grid : {
+        top :80
+      },
+      visualMap: {
+        right : '1%',
+        top : '1%',
+        show: false,
+        dimension: 1,
+        pieces: [
+          {
+            lt: -0.25,
+            color: 'red',
+            label : '< (-0.25 Neg)'
+          },
+          {
+            lt: 0,
+            gte: -0.25,
+            color: 'grey',
+            label : '0 - (-0.25 Neu)'
+          },
+          {
+            gt: 0,
+            color: 'green',
+            label : '> 0 (Pos)'
+          }
+        ]
+      },
+      series: [
+        { 
+          data: [[0,0]],
+          type: 'line',
+          smooth: true,
+          showSymbol: false,
+          lineStyle: {
+            width: 4
+          }
+        }
+      ],
+    };
+  }
+
+  showExtrems(val){
+    if(val == 0 || val == 2 || val == -2){
+      return val;
+    }else 
+      return '';
+  }
+
 }

@@ -221,7 +221,7 @@ export class workflowService {
     }
     return this._seedData;
   }
-
+  
   resolveHostUrl(): string {
     const url = window.location.protocol + '//' + window.location.host;
     if (url === 'https://dev-app.smartassist.ai' || url === 'https://dev-smartassist.kore.ai') return 'https://agentassist-dev.kore.ai';

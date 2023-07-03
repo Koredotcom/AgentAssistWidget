@@ -51,6 +51,7 @@
     "ngx-moment": "^5.0.0",
     "ngx-perfect-scrollbar": "^8.0.0",
     "ngx-toastr": "^13.1.0",
+    "openai": "^3.2.1",
     "popper.js": "^1.16.1",
     "rete": "1.4.1",
     "rete-angular-render-plugin": "0.2.1",
