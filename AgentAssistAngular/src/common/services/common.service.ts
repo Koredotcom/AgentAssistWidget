@@ -1055,9 +1055,12 @@ export class CommonService {
   }
 
   replaceDoubleQuot(val) {
-    val = val.replaceAll('"', "&quot;");
-    // val = encodeURI(val);
-    return val;
+    if(typeof val !== 'object') {
+      val = val.replaceAll('"', "&quot;");
+      // val = encodeURI(val);
+      return val;
+    }
+
   }
 
   replaceLtGt(htmlString, quotflag) {
@@ -1094,7 +1097,7 @@ export class CommonService {
 
   handleEmptyLine2(answer){
     let eleanswer = '';
-    if(answer != undefined && answer != null){
+    if(answer != undefined && answer != null && typeof answer !== 'object'){
         eleanswer = answer.replace(/(\r\n|\n|\r)/gm, "<br>");
         // eleanswer = this.replaceLtGt2(eleanswer);
         eleanswer = this.aaHelpers.convertMDtoHTML(eleanswer, "bot", eleanswer)
