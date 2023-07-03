@@ -258,9 +258,9 @@ export class CoachingService {
     return hintForm;
   }
 
-  getAdherenceForm(){
+  getAdherenceForm(type?){
     return {
-      adType : ['', [Validators.required]],
+      adType : [type ? type : '', [Validators.required]],
       addUtterances: [[]],
       deleteUtterances: [[]]
     }

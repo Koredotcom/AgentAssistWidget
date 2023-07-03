@@ -27,6 +27,7 @@ export class HintAgentComponent implements OnInit {
   hintTitle: string = '';
   closeType: string = '';
   selectedAdherence : string;
+  adherenceClick : boolean = false;
 
   time : number;
   variableTime : number;
@@ -63,6 +64,9 @@ export class HintAgentComponent implements OnInit {
       this.time = formVal.message.time ? formVal.message.time : 5;
       this.variableTime = formVal.message.time ? formVal.message.time : 5;
       this.selectedAdherence = formVal.adherence?.adType;
+      if(this.selectedAdherence == this.coachingCnst.UTTERANCE && !formVal?.adherence.utteranceCount){
+        this.selectedAdherence = null;
+      }
 
     }else if(changes?.createOrEdit?.currentValue === COACHINGCNST.CREATE){
       const formVal = this.form.value;
@@ -132,13 +136,19 @@ export class HintAgentComponent implements OnInit {
 
   selectAdherenceClick(type){
     this.selectedAdherence = type;
-    (<FormGroup> this.form).addControl('adherence',this.fb.group(this.coachingService.getAdherenceForm()));
+    this.adherenceClick = true;
+    if(!this.form.get('adherence')){
+      (<FormGroup> this.form).addControl('adherence',this.fb.group(this.coachingService.getAdherenceForm()));
+    }
     this.cdRef.detectChanges();
   }
 
-  deleteAdherenceClick(){
+  deleteAdherenceClick(flag){
     this.selectedAdherence = null;
-    (<FormGroup> this.form).removeControl('adherence');    
+    this.adherenceClick = true;
+    if(!flag){
+      (<FormGroup> this.form).removeControl('adherence');    
+    }
   }
 
 }
