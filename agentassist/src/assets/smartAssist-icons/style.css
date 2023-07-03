@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?2inoo4');
-  src:  url('fonts/icomoon.eot?2inoo4#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?2inoo4') format('truetype'),
-    url('fonts/icomoon.woff?2inoo4') format('woff'),
-    url('fonts/icomoon.svg?2inoo4#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?jgecgc');
+  src:  url('fonts/icomoon.eot?jgecgc#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?jgecgc') format('truetype'),
+    url('fonts/icomoon.woff?jgecgc') format('woff'),
+    url('fonts/icomoon.svg?jgecgc#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-coaching-publish:before {
+  content: "\e982";
+}
+.icon-coaching-menu-icon:before {
+  content: "\e983";
+}
 .icon-coaching--clock-refresh:before {
   content: "\e957";
 }

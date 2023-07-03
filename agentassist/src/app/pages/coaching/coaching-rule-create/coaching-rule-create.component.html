@@ -99,7 +99,7 @@
                 <div class="block-data-triggers">
                     <div class="triggers-icon-block">
                         <div class="indication-icon">
-                            <i class="icon-coaching-assign-this"></i>
+                            <img src="assets/icons/coaching/coaching-assign-this.svg">
                         </div>
                         <div class="title">Assign this to...</div>
                     </div>
@@ -135,7 +135,8 @@
                         <div class="inner-card-choose" [ngClass]="{'disableTrigger' : trigger.disable}">
                             <div class="content-choose-triggers" ngbDropdownItem (click)="selectTriggerClick(trigger.type)">
                                 <div class="icon_blk">
-                                    <i class="{{trigger.icon}}"></i>
+                                    <!-- <i class="{{trigger.icon}}"></i> -->
+                                    <img src="{{trigger.icon}}">
                                 </div>
                                 <div class="info-data-content">
                                     <div class="title-choose">{{trigger.title}}</div>
@@ -197,7 +198,8 @@
                         <div class="inner-card-choose" [ngClass]="{'disableTrigger' : action.disable}">
                             <div class="content-choose-triggers" ngbDropdownItem (click)="selectActionClick(action.type)">
                                 <div class="icon_blk">
-                                    <i class="{{action.icon}}"></i>
+                                    <!-- <i class="{{action.icon}}"></i> -->
+                                    <img src="{{action.icon}}">
                                 </div>
                                 <div class="info-data-content">
                                     <div class="title-choose">{{action.title}}</div>

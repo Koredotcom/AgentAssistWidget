@@ -37,25 +37,25 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
       type: this.coachingCnst.UTTERANCE,
       title: "Utterance",
       desc: "Agent/Customer utterances",
-      icon: "icon-sa-chat",
+      icon: "assets/icons/coaching/coaching--message-check-square.svg",
       disable : false
     },    {
       type: this.coachingCnst.SPEECH_ANALYSIS,
       title: "Speech Analysis",
       desc: "Agent speech patterns",
-      icon: "icon-sa-chat",
+      icon: "assets/icons/coaching/coaching--trigger-speech.svg",
       disable : false
     },    {
       type: this.coachingCnst.VARIABLE,
       title: "Variable",
       desc: "Monitor context variable",
-      icon: "icon-sa-chat",
+      icon: "assets/icons/coaching/coaching--trigger-variable.svg",
       disable : true
     },    {
       type: this.coachingCnst.DIALOG,
       title: "Dialog",
       desc: "Monitor dialog execution",
-      icon: "icon-sa-chat",
+      icon: "assets/icons/coaching/coaching--trigger-dialog.svg",
       disable : true
     }
   ];
@@ -64,34 +64,34 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
       type: this.coachingCnst.NUDGE_AGENT,
       title: "Nudge Agent",
       desc: "A simple toast message",
-      icon: "icon-sa-chat"
+      icon: "assets/icons/coaching/coaching--nudge-agent.svg"
     },    {
       type: this.coachingCnst.HINT_AGENT,
       title: "Hint Agent",
       desc: "A hint notification box",
-      icon: "icon-sa-chat"
+      icon: "assets/icons/coaching/coaching--hint-agent.svg"
     },    {
       type: this.coachingCnst.ALERT_MANAGER,
       title: "Alert Manager",
       desc: "Push notification to Manager",
-      icon: "icon-sa-chat",
+      icon: "assets/icons/coaching/coaching--aleart-manager.svg",
       disable : true
     },    {
       type: this.coachingCnst.EMAIL_MANAGER,
       title: "Email Manager",
       desc: "Send email to manager",
-      icon: "icon-sa-chat"
+      icon: "assets/icons/coaching/coaching--email-manager.svg"
     },{
       type: this.coachingCnst.DIALOG,
       title: "Dialog",
       desc: "Trigger dialog for agent",
-      icon: "icon-sa-chat",
+      icon: "assets/icons/coaching/coaching--trigger-dialog.svg",
       disable : true
     },    {
       type: this.coachingCnst.FAQ,
       title: "FAQ",
       desc: "Trigger FAQ for agent",
-      icon: "icon-sa-chat",
+      icon: "assets/icons/coaching/coaching--faq.svg",
       disable : true
     }
   ]
