@@ -63,6 +63,7 @@
         .delete-btn{
             @extend .edit-btn;
             margin-left: 10px;
+            color: #DC2626;
         }
     }
     .last-updated-toggle{
@@ -80,14 +81,25 @@
     .header-sec-top {
         display: flex;
         align-items: center;
-        justify-content: space-between;
         padding: 30px 40px 20px 40px;
         .main-heading {
             font-weight: 600;
             font-size: 20px;
             line-height: 28px;
             color: #171717;
+            width: 100%;
         }
+        .right-action-btns{
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            flex-shrink: 0;
+            .kr-sg-button-secondary-two{
+                display: flex;
+                align-items: center;
+            }
+        }
+
     }
     .search-data-input{
         text-align: right;
