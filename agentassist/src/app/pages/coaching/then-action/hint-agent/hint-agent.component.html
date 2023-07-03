@@ -29,9 +29,9 @@
                             <i class="icon-sa-help"></i>
                         </span> -->
                         <input type="text" placeholder="Enter Hint title"
-                            class="input-text" maxlength="300" [(ngModel)]="hintTitle">
+                            class="input-text" maxlength="42" [(ngModel)]="hintTitle">
                     </div>
-                    <div class="count-char">{{hintTitle.length}}/300</div>
+                    <div class="count-char">{{hintTitle.length}}/42</div>
                 </div>
                 <div class="check-icon-block" (click)="submitVariable();hinttitle.close()">
                     <i class="icon-sa-conv-check"></i>
@@ -103,9 +103,9 @@
         <div class="input-variable-sec">
             <div class="label-text">Body</div>
             <div class="kr-sg-input-text-area">
-                <textarea placeholder="Enter hint body" maxlength="42" [(ngModel)]="desc" class="input-text"></textarea>
+                <textarea placeholder="Enter hint body" maxlength="300" [(ngModel)]="desc" class="input-text"></textarea>
             </div>
-            <div class="count-char">{{desc.length}}/42</div>
+            <div class="count-char">{{desc.length}}/300</div>
         </div>
         <div class="check-icon-block" (click)="submitBody();hintBody.close()">
             <i class="icon-sa-conv-check"></i>
