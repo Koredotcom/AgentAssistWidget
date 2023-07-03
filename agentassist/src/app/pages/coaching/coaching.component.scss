@@ -63,7 +63,8 @@
         .delete-btn{
             @extend .edit-btn;
             margin-left: 10px;
-            color: #DC2626;
+            color: #EF4444;
+            border: 1px solid #FCA5A5;
         }
     }
     .last-updated-toggle{
@@ -77,6 +78,14 @@
     .init-loading {
         display: flex;
         justify-content: center;
+        position: absolute;
+        margin: 0 auto;
+        left: 0;
+        right: 0;
+        width: 100%;
+        align-items: center;
+        z-index: 1;
+        height: calc(100vh - 190px);
     }
     .header-sec-top {
         display: flex;
@@ -88,6 +97,25 @@
             line-height: 28px;
             color: #171717;
             width: 100%;
+            display: flex;
+            align-items: center;
+            .beta-tag{
+                border-radius: 5px;
+                border: 1px solid #CDD5DF;
+                display: flex;
+                padding: 2px 5px;
+                justify-content: center;
+                align-items: center;
+                gap: 6px;
+                height: 20px;
+                color: #697586;
+                text-align: center;
+                font-size: 11px;
+                font-weight: 500;
+                line-height: 16px;
+                background: #fff;
+                margin-left: 5px;
+            }
         }
         .right-action-btns{
             display: flex;
@@ -100,6 +128,9 @@
             }
         }
 
+    }
+    .tab-sec-details-wrapper{
+        position: relative;
     }
     .search-data-input{
         text-align: right;
