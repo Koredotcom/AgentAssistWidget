@@ -14,4 +14,4 @@ export const environment = {
     CLIENT_SECRET_ID: "vvAxkeF1Hu1SPDtF8iplkv6eqScRejbeI89ppNf7ujM=",
     INLINE_MANUAL_SITE_KEY: "8c0da373990588f43a6e20d8d22228ee"
   };
-  
+

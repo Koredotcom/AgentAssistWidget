@@ -1,0 +1,221 @@
+<div class="utterance-triggers">
+    <span class="utt-name-desc">Hint agent with this </span>
+    <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body">
+        <button class="dropdown-toggle btn-toggle" [ngClass]="{'text-choosen': !!selMsgType}" ngbDropdownToggle>
+            <span class="choose-text">{{selMsgType ? selMsgType : '{ Choose }'}}</span>
+        </button>
+        <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
+            <ng-container *ngFor="let type of msgTypes">
+                <li ngbDropdownItem class="list-item-li" (click)="selectMsgType(type.type)">
+                    <span class="bg-action {{type.class}}"></span>
+                    <span class="title">{{type.type}}</span>
+                </li>
+            </ng-container>
+        </ul>
+    </div>
+
+    <span class="utt-name-desc">message with this title</span>
+    <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body" #hinttitle="ngbDropdown">
+        <button class="dropdown-toggle btn-toggle" [ngClass]="{'text-choosen': !!title}" ngbDropdownToggle (click)="hintTitle = title">
+            <span class="choose-text">{{ title ? title : '{ Choose }' }}</span>
+        </button>
+        <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
+            
+            <div class="variable-value-input with-check-icon">
+                <div class="input-variable-sec">
+                    <div class="label-text">Title</div>
+                    <div class="kr-sg-input-text">
+                        <!-- <span class="info-tip" tooltipClass="tooltip-global-styles" ngbTooltip="Tooltip info">
+                            <i class="icon-sa-help"></i>
+                        </span> -->
+                        <input type="text" placeholder="Enter Hint title"
+                            class="input-text" maxlength="42" [(ngModel)]="hintTitle">
+                    </div>
+                    <div class="count-char">{{hintTitle.length}}/42</div>
+                </div>
+                <div class="check-icon-block" (click)="submitVariable();hinttitle.close()">
+                    <i class="icon-sa-conv-check"></i>
+                </div>
+            </div>
+        </ul>
+    </div>
+
+    <span class="utt-name-desc">and body</span>
+    <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body" #hintBody="ngbDropdown">
+        <button class="dropdown-toggle btn-toggle" [ngClass]="{'text-choosen': !!bodyMsg}" ngbDropdownToggle (click)="desc = bodyMsg">
+            <span class="choose-text">{{bodyMsg ? bodyMsg : '{ Choose }'}}</span>
+        </button>
+        <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
+            <ng-container *ngTemplateOutlet="body;"></ng-container>
+        </ul>
+    </div>
+
+    <span class="utt-name-desc">that</span>
+    <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body">
+        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!closeType}">
+            <span class="choose-text">{{ closeTypes[closeType] ? closeTypes[closeType] : '{ Choose }' }}</span>
+        </button>
+        <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
+            <ng-container *ngFor="let closeT of closeTypes | keyvalue">
+                <li ngbDropdownItem class="list-item-li" (click)="clickCloseT(closeT.key)">
+                    <span class="title">{{closeT.value}}</span>
+                    <i [ngClass]="{'icon-sa-conv-check' : closeType === closeT.key}"></i>
+                </li>
+            </ng-container>
+        </ul>
+    </div>
+    <ng-container *ngIf="closeType == coachingCnst.AUTO_CLOSE">
+        <span class="utt-name-desc">after</span>
+        <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body" #closeTimer="ngbDropdown">
+            <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!time}" (click)="variableTime = time">{{time}} seconds</button>
+            <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
+                <div class="seconds-input">
+                    <div class="kr-sg-input-text">
+                        <input type="number" digitOnly placeholder="Enter Seconds here" (keyup.enter)="onEnterTime(variableTime);closeTimer.close()" class="input-text" [(ngModel)]="variableTime">
+                    </div>
+                    <div class="s-title">seconds</div>
+                </div>
+            </ul>
+        </div>
+    </ng-container>
+
+    <div class="add-adherence" *ngIf="!selectedAdherence">
+        <!-- <button class="add-adherence-btn" (click)="openAdherence()">
+            <span class="choose-text"> {{(form?.value?.adherence?.utteranceCount) ? form?.value?.adherence?.utteranceCount + ' utterance(s)' : '+ Add Adherence'}}</span>
+        </button> -->
+        <div class="add-trgigger-dropdown" ngbDropdown placement="bottom">
+            <button class="add-triggers-btn" ngbDropdownToggle> + Add Adherence</button>
+            <div class="drop-add-trigger" ngbDropdownMenu>
+                <ng-container *ngTemplateOutlet="addAdherenceTemplate;"></ng-container> 
+            </div>
+        </div>
+    </div>
+    <div class="delete-row" (click)="deleteActionRule()"> 
+        <i class="icon-sa-welcome-delete"></i>
+    </div>
+</div>
+
+
+
+
+<ng-template #body>
+    <div class="variable-value-input with-check-icon">
+        <div class="input-variable-sec">
+            <div class="label-text">Body</div>
+            <div class="kr-sg-input-text-area">
+                <textarea placeholder="Enter hint body" maxlength="42" [(ngModel)]="desc" class="input-text"></textarea>
+            </div>
+            <div class="count-char">{{desc.length}}/42</div>
+        </div>
+        <div class="check-icon-block" (click)="submitBody();hintBody.close()">
+            <i class="icon-sa-conv-check"></i>
+        </div>
+    </div>
+</ng-template>
+
+
+<ng-template #hintActions>
+
+</ng-template>
+
+
+<!-- adherence selection starts -->
+<ng-container *ngIf="selectedAdherence">
+    <app-adherence-selection [adherenceForm]="form" [createOrEdit]="createOrEdit" [adherenceSelection]="selectedAdherence" (deleteAdherence)="deleteAdherenceClick(event)"></app-adherence-selection>
+</ng-container>
+
+<!-- COmmon trigger template -->
+<ng-template #addAdherenceTemplate>
+    <div class="add-triggers">
+        <!-- <div class="line-indicator"></div> -->
+        <div class="choose-triggers-block">
+            <div class="heading-title">Choose a Trigger</div>
+            <div class="choose-t-block-bg">
+                <div class="choose-t-block">
+                    <ng-container *ngFor="let adherence of allAdherences">
+
+                        <div class="inner-card-choose" [ngClass]="{'disableTrigger' : adherence.disable}">
+                            <div class="content-choose-triggers" ngbDropdownItem (click)="selectAdherenceClick(adherence.type)">
+                                <div class="icon_blk">
+                                    <i class="{{adherence.icon}}"></i>
+                                </div>
+                                <div class="info-data-content">
+                                    <div class="title-choose">{{adherence.title}}</div>
+                                    <div class="desc-text">{{adherence.desc}}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- <div class="inner-card-choose">
+                            <div class="content-choose-triggers" ngbDropdownItem>
+                                <div class="icon_blk">
+                                    <i class="icon-sa-chat"></i>
+                                </div>
+                                <div class="info-data-content">
+                                    <div class="title-choose">Acknowledge Pressed</div>
+                                    <div class="desc-text">Hint’s button pressed</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="inner-card-choose">
+                            <div class="content-choose-triggers" ngbDropdownItem>
+                                <div class="icon_blk">
+                                    <i class="icon-sa-chat"></i>
+                                </div>
+                                <div class="info-data-content">
+                                    <div class="title-choose">Acknowledge Pressed</div>
+                                    <div class="desc-text">Hint’s button pressed</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="inner-card-choose">
+                            <div class="content-choose-triggers" ngbDropdownItem>
+                                <div class="icon_blk">
+                                    <i class="icon-sa-chat"></i>
+                                </div>
+                                <div class="info-data-content">
+                                    <div class="title-choose">Acknowledge Pressed</div>
+                                    <div class="desc-text">Hint’s button pressed</div>
+                                </div>
+                            </div>
+                        </div> -->
+                    </ng-container>
+                </div>
+            </div>
+            <!-- <div class="choose-t-block-bg pre-built-triggers">
+                <div class="title-with-icon">
+                    <i class="icon-sa-chat"></i>
+                    <span>Pre Build Triggers</span>
+                </div>
+                <perfect-scrollbar class="mx-h-300">
+                    <div class="choose-t-block">
+                        <div class="inner-card-choose">
+                            <div class="content-choose-triggers" ngbDropdownItem>
+                                <div class="icon_blk">
+                                    <i class="icon-sa-chat"></i>
+                                </div>
+                                <div class="info-data-content">
+                                    <div class="title-choose">Pricing Objection</div>
+                                    <div class="desc-text">Utterance Trigger / By Customer</div>
+                                    <div class="desc-text">“Example utterance sentence that can go here and will trunk after this point</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="inner-card-choose">
+                            <div class="content-choose-triggers" ngbDropdownItem>
+                                <div class="icon_blk">
+                                    <i class="icon-sa-chat"></i>
+                                </div>
+                                <div class="info-data-content">
+                                    <div class="title-choose">Escalation to Manager</div>
+                                    <div class="desc-text">Utterance Trigger / By Customer</div>
+                                    <div class="desc-text">“Example utterance sentence that can go here and will trunk after this point</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </perfect-scrollbar>
+            </div> -->
+        </div>
+    </div>
+</ng-template> 

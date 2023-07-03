@@ -1,6 +1,6 @@
-import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { ProjConstants, ImageFilePath, ImageFileNames, IdReferenceConst, storageConst } from 'src/common/constants/proj.cnts';
+import { ProjConstants, ImageFilePath, ImageFileNames, IdReferenceConst, storageConst, coachingConst } from 'src/common/constants/proj.cnts';
 import { RandomUUIDPipe } from 'src/common/pipes/random-uuid.pipe';
 import { RawHtmlPipe } from 'src/common/pipes/raw-html.pipe';
 import { RemoveSpecialCharPipe } from 'src/common/pipes/remove-special-char.pipe';
@@ -56,6 +56,9 @@ export class AssistComponent implements OnInit {
   faqManualClick : boolean = false;
   userBotSessionDetails;
 
+
+
+
   constructor(private templateRenderClassService: TemplateRenderClassService,
     public handleSubjectService: HandleSubjectService,
     public randomUUIDPipe: RandomUUIDPipe,
@@ -72,8 +75,9 @@ export class AssistComponent implements OnInit {
   ngOnInit(): void {
     this.subscribeEvents();
     this.scrollToBottom();
+    
   }
-
+ 
   ngOnDestroy() {
     this.subscriptionsList.forEach((subscription) => {
       subscription.unsubscribe();

@@ -10,6 +10,7 @@ export class EndPointsService {
   private SERVER_URL: String;
   private API_SERVER_URL: String;
   private SUPPORT_API_SERVER_URL: String;
+  private SMARTASSIST_API_SERVER_URL : String;
 
   private serviceList: Object = {};
 
@@ -22,6 +23,7 @@ export class EndPointsService {
       this.API_SERVER_URL = environment['API_SERVER_URL'] + this.API_URL_PREFIX + this.API_VERSION_PREFIX;
     }
     this.SUPPORT_API_SERVER_URL = environment['SUPPORT_API_SERVER_URL'] + this.API_URL_PREFIX + this.API_VERSION_PREFIX;
+    this.SMARTASSIST_API_SERVER_URL = environment['API_SERVER_URL'] + '/agentassist' + this.API_URL_PREFIX + '/v1'
     this.init();
   }
 
@@ -1451,7 +1453,7 @@ export class EndPointsService {
     }
 
     this.serviceList['get.automationbots'] = {
-      endpoint: this.API_SERVER_URL + '/smartassist/apps/automationbots?isAgentAssist=true',
+      endpoint: this.API_SERVER_URL + '/smartassist/apps/automationbots?isAgentAssist=:isAgentAssist',
       method: 'get'
     }
 
@@ -1563,5 +1565,92 @@ export class EndPointsService {
       method : 'get'
     }
 
+    // agent coaching 
+
+    this.serviceList['get.allagentCoachingGroup'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachinggroup/?botId=:botId&isExpand=:isExpand',
+      method : 'get'
+    }
+
+    this.serviceList['post.agentCoachingGroup'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachinggroup',
+      method : 'post'
+    }
+
+    this.serviceList['get.agentCoachingGroupById'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachinggroup/:groupId',
+      method : 'get'
+    }
+
+    this.serviceList['put.agentCoachingGroup'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachinggroup/:groupId',
+      method : 'put'
+    }
+
+    this.serviceList['delete.agentCoachingGroup'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachinggroup/:groupId',
+      method : 'delete'
+    }
+
+
+    this.serviceList['put.agentCoachingRule'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachinggroup/:groupId/rule/:ruleId',
+      method : 'put'
+    }
+
+    this.serviceList['delete.agentCoachingRule'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachinggroup/:groupId/rule/:ruleId',
+      method : 'delete'
+    }
+
+    this.serviceList['post.agentcoachingrule'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule',
+      method : 'post'
+    }
+
+    this.serviceList['put.agentcoachingrule'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule/:ruleId',
+      method : 'put'
+    }
+
+    this.serviceList['post.agentcoachingutterance'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingutterance/:refId/utterances',
+      method : 'post'
+    }
+
+    this.serviceList['get.agentcoachingutteranceByRef'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingutterance/:refId/utterances',
+      method : 'get'
+    }
+
+    this.serviceList['post.publishcoaching'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachinggroup/publishCoachingGroups',
+      method : 'post'
+    }
+
+    this.serviceList['post.openApi'] = {
+      endpoint : this.API_SERVER_URL + '/users/:userId/builder/streams/:streamId/llmconfigs/integration/openai',
+      method : 'post'
+    }
+
+    this.serviceList['post.azure'] = {
+      endpoint : this.API_SERVER_URL + '/users/:userId/builder/streams/:streamId/llmconfigs/integration/azure',
+      method : 'post'
+    }
+
+    this.serviceList['get.AIconfigs'] = {
+      endpoint : this.API_SERVER_URL + '/users/:userId/builder/streams/:streamId/llmconfigs',
+      method : 'get'
+    }
+
+    this.serviceList['post.features'] = {
+      endpoint : this.API_SERVER_URL + '/users/:userId/builder/streams/:streamId/llmconfigs/:llmId',
+      method : 'post'
+    }
+
+    this.serviceList['get.utternaces'] = {
+      endpoint : this.API_SERVER_URL + '/users/:userId/builder/streams/:streamId/utterances/generate',
+      method : 'post'
+    }
   }
 }

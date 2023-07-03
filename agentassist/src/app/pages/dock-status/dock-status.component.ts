@@ -187,7 +187,7 @@ export class DockStatusComponent implements OnInit {
     } else if (message) {
       this.notify.notify(message, 'error');
     } else {
-      this.notify.notify('Somthing went worng', 'error');
+      this.notify.notify('Somthing went wrong', 'error');
     }
   }
 
