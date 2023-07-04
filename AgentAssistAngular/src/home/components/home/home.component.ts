@@ -100,11 +100,8 @@ export class HomeComponent implements OnInit {
   }
 
   hintAckPressed(data) {
-    let agent_coaching_ackpress = {
-      "ackPressed": true,
-    }
-  agent_coaching_ackpress = {...agent_coaching_ackpress, ...data}
-    this.websocketService.emitEvents(EVENTS.agent_coaching_ackpress, agent_coaching_ackpress);
+    data["ackPressed"] = true;
+    this.websocketService.emitEvents(EVENTS.agent_coaching_ackpress, data);
   }
 
   handleHintData(hintObject){
@@ -182,7 +179,6 @@ export class HomeComponent implements OnInit {
     });
 
     let subscription8 = this.websocketService.realtimeSentimeResponse$.subscribe((data)=> {
-      console.log(data, 'realtime response');
       if(data && data.sentiment){
         this.handleRealtimeSentiResponse(data.sentiment);
       }
