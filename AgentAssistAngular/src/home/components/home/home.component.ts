@@ -101,8 +101,6 @@ export class HomeComponent implements OnInit {
 
   hintAckPressed(data) {
     let agent_coaching_ackpress = {
-      "botId": this.connectionDetails.botId,
-      "conversationId": this.connectionDetails?.conversationId,
       "ackPressed": true,
     }
   agent_coaching_ackpress = {...agent_coaching_ackpress, ...data}
