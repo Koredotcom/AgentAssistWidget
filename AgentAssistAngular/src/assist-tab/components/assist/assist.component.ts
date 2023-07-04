@@ -630,6 +630,8 @@ export class AssistComponent implements OnInit {
                     <button class="ghost-btn hide" id="articleseeLess-${uuids + index}" data-article-see-less="true">${this.projConstants.READ_LESS}</button>
                     `;
               articlestypeInfo.append(seeMoreButtonHtml);
+              ele.answer = ele.content;
+              ele.question = ele.title;
               setTimeout(() => {
                 this.commonService.updateSeeMoreButtonForAssist(uuids + index, this.projConstants.ARTICLE);
               }, 100);
@@ -753,9 +755,8 @@ export class AssistComponent implements OnInit {
           // this.clickEvents(IdReferenceConst.SENDMSG, uuids + index, this.dialogPositionId, ele);
           // this.clickEvents(IdReferenceConst.COPYMSG, uuids + index, this.dialogPositionId, ele);
         });
-        this.handleSeeMoreButton(responseId, data.suggestions.faqs, this.projConstants.FAQ);
         this.handleSeeMoreButton(responseId, data.suggestions.articles, this.projConstants.ARTICLE);
-
+        this.handleSeeMoreButton(responseId, data.suggestions.faqs, this.projConstants.FAQ);
 
       }
       setTimeout(() => {
