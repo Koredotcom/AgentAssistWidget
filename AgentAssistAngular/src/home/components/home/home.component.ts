@@ -62,7 +62,7 @@ export class HomeComponent implements OnInit {
   showSentiChart : boolean = false;
   mergeSentiOptions : any = {};
   currentPolarity : string;
-  
+
 
   constructor(public handleSubjectService: HandleSubjectService, public websocketService: WebSocketService,
     public sanitizeHTMLPipe: SanitizeHtmlPipe, public commonService: CommonService, private koregenerateUUIDPipe: KoreGenerateuuidPipe,
@@ -97,6 +97,29 @@ export class HomeComponent implements OnInit {
         }
       }
     }, 5000);
+  }
+
+  hintAckPressed(data) {
+    console.log('Hints Data here: ', data)
+    let agent_coaching_ackpress = {
+    "botId": this.connectionDetails.botId,
+    "event": data?.event,
+    "conversationId": this.connectionDetails?.conversationId,
+    "action": data?.action || '',
+    "message": {
+      "title": data?.message?.title || '',
+      "body": data?.message?.body || '',
+      "postAction": data?.message?.postAction
+    },
+    "expression": data?.expression || '',
+    "isPrompt": data?.isPrompt || '',
+    "adherence": {
+      "adType": data?.adherehce?.adType || '',
+      "ackText": data?.adherehce?.ackText || ''
+      },
+    "ackPressed": true,
+  }
+    this.websocketService.emitEvents(EVENTS.agent_coaching_ackpress, agent_coaching_ackpress);
   }
 
   handleHintData(hintObject){
@@ -216,7 +239,7 @@ export class HomeComponent implements OnInit {
       this.commonService.realtimeSentiData[this.connectionDetails.conversationId].forEach(ele =>{
         polaritySum += ele;
       })
-      let average = polaritySum/this.commonService.realtimeSentiData[this.connectionDetails.conversationId].length;      
+      let average = polaritySum/this.commonService.realtimeSentiData[this.connectionDetails.conversationId].length;
       chartData.push([chartData.length, average]);
       this.updatePolarity(average);
     }

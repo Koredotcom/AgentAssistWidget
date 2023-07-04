@@ -187,7 +187,7 @@
 </div>
 <div class="hint-experience-nudge">
     <perfect-scrollbar class="hint-overlay" #overlayhint id="coachingHintScroll">
-        <ng-container *ngFor="let item of coachingHints; let i = index">
+        <ng-container *ngFor="let item of [1]; let i = index">
             <div class="hint-blck" *ngIf="item" [ngClass]="coachingConst.HINT_DATA[item?.expression]?.className">
                 <!-- <div class="hint-bg-progress">
                     <div class="bg-progress"></div>
@@ -199,7 +199,7 @@
                     <div class="title">{{item?.message?.title}}</div>
                     <div class="text-desc">{{item?.message?.body}}</div>
                     <div class="btn_okay">
-                        <button class="ok-btn" (click)="coachingHints.splice(i, 1, null)">Got it</button>
+                        <button class="ok-btn" (click)="coachingHints.splice(i, 1, null); hintAckPressed(item)" *ngIf="item.adherence.adType === 'adType'">{{item?.adherence?.adType}}</button>
                     </div>
                 </div>
                 <div class="close-hint" (click)="coachingHints.splice(i, 1, null)">
