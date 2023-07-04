@@ -33,7 +33,7 @@ export class HintAgentComponent implements OnInit {
   variableTime : number;
 
   openAdherenceSlider : boolean = false;
-  allAdherences = this.coachingService.allactionList;
+  allAdherences = this.coachingService.allactionList[COACHINGCNST.ADHERENCE_DATA];
   
   
   private adherenceSlider: SliderComponentComponent;
