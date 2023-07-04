@@ -77,13 +77,13 @@ export const COACHINGCNST = {
     ACTION_SESSION_NMESSAGES : 'nMessages',
 
     ADHERENCE_REMOVE_LIST : {
-        'ack' : [],
+        'ack' : ['ackText'],
         'utterance' : ['session', 'utteranceCount', 'nMins', 'nMessages'],
         'faq' : [],
         'task' : []
     },
     ADHERENCE_SELECTION_LIST : {
-        'ack' : [],
+        'ack' : ['ackText'],
         'utterance' : ['session', 'utteranceCount'],
         'faq' : [],
         'task' : []

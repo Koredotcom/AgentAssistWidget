@@ -51,13 +51,15 @@ export class AdherenceSelectionComponent implements OnInit {
       this.selectedAdherenceType = formVal.adherence.adType;
       this.selectedSession = formVal.adherence.session ? formVal.adherence.session : COACHINGCNST.SELECTED_ACTION_ANYTIME;
       this.selectedMinutes = formVal.adherence.nMins ? formVal.adherence.nMins : COACHINGCNST.SELECTED_ACTION_MINS;
-      this.selectedMessages = formVal.adherence.nMessages ? formVal.adherence.nMessages : COACHINGCNST.SELECTED_ACTION_MESSAGES;      
+      this.selectedMessages = formVal.adherence.nMessages ? formVal.adherence.nMessages : COACHINGCNST.SELECTED_ACTION_MESSAGES;    
+      this.selectedAckButtonText = formVal.adherence.ackText ? formVal.adherence.ackText : COACHINGCNST.GOT_IT;   
     }else if(changes?.createOrEdit?.currentValue === COACHINGCNST.CREATE){
       const formVal = this.adherenceForm.value;
       //adherence create
       this.selectedSession = COACHINGCNST.SELECTED_ACTION_ANYTIME;
       this.selectedMinutes = COACHINGCNST.SELECTED_ACTION_MINS;
       this.selectedMessages = COACHINGCNST.SELECTED_ACTION_MESSAGES;
+      this.selectedAckButtonText = COACHINGCNST.GOT_IT;
     }
     if(this.adhereClick && this.adherenceSelection){
       this.clickOnAdherenceSelection(this.adherenceSelection);
@@ -150,7 +152,9 @@ export class AdherenceSelectionComponent implements OnInit {
         //   (this.adherenceForm.controls?.adherence as FormGroup)?.controls['utteranceCount'].setValidators(Validators.required);
         //   (this.adherenceForm.controls?.adherence as FormGroup)?.controls['utteranceCount'].updateValueAndValidity();
         // }, 100);
-      };
+      }else if(type == COACHINGCNST.ACKNOWLEDGE){
+        (<FormGroup>this.adherenceForm.controls.adherence).addControl('ackText', new FormControl(this.selectedAckButtonText,[Validators.required]));
+      }
     }
     (this.adherenceForm.controls?.adherence as FormGroup)?.controls?.adType.setValue(type);
   }
@@ -197,6 +201,7 @@ export class AdherenceSelectionComponent implements OnInit {
       this.ackButtonText = 'Ok';
     }
     this.selectedAckButtonText = this.ackButtonText;
+    (this.adherenceForm.controls.adherence as FormGroup).controls?.ackText?.setValue(this.ackButtonText);
   }
 
 

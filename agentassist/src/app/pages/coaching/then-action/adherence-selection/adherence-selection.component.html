@@ -3,7 +3,7 @@
         <span>Adherence</span>
     </span>
     <ng-container *ngIf="selectedAdherenceType == coachingConst.ACKNOWLEDGE_PRESSED">
-        <!-- <span class="utt-name-desc">Agent pressed the </span>
+        <span class="utt-name-desc">Agent pressed the </span>
 
         <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body" #ackButton="ngbDropdown">
             <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!selectedAckButtonText}" (click)="ackButtonText = selectedAckButtonText">
@@ -25,8 +25,8 @@
                 </div>
             </ul>
         </div>
-        <span class="utt-name-desc"> button in the hint </span> -->
-        <span class="utt-name-desc">Agent pressed the "Ok, Got it" button in the hint </span>
+        <span class="utt-name-desc"> button in the hint </span>
+        <!-- <span class="utt-name-desc">Agent pressed the "Ok, Got it" button in the hint </span> -->
 
     </ng-container>
     <ng-container *ngIf="selectedAdherenceType == coachingConst.UTTERANCE">
