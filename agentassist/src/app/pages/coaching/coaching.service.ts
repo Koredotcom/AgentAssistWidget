@@ -172,6 +172,10 @@ export class CoachingService {
       if(obj.adherence?.adType){
         (<FormGroup> nudgeForm.adherence).addControl('adType', new FormControl(obj.adherence?.adType))
       }
+
+      if(obj.adherence?.ackText){
+        (<FormGroup>nudgeForm.adherence).addControl('ackText', new FormControl(obj.adherence?.ackText))
+      }
   
       if(obj.adherence?.session){
         (<FormGroup> nudgeForm.adherence).addControl('session', new FormControl(obj.adherence?.session))
@@ -252,6 +256,10 @@ export class CoachingService {
       });
       if (obj.adherence?.adType) {
         (<FormGroup>hintForm.adherence).addControl('adType', new FormControl(obj.adherence?.adType))
+      }
+
+      if(obj.adherence?.ackText){
+        (<FormGroup>hintForm.adherence).addControl('ackText', new FormControl(obj.adherence?.ackText))
       }
 
       if (obj.adherence?.session) {
