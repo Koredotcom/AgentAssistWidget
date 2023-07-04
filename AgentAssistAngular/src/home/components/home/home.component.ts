@@ -100,25 +100,12 @@ export class HomeComponent implements OnInit {
   }
 
   hintAckPressed(data) {
-    console.log('Hints Data here: ', data)
     let agent_coaching_ackpress = {
-    "botId": this.connectionDetails.botId,
-    "event": data?.event,
-    "conversationId": this.connectionDetails?.conversationId,
-    "action": data?.action || '',
-    "message": {
-      "title": data?.message?.title || '',
-      "body": data?.message?.body || '',
-      "postAction": data?.message?.postAction
-    },
-    "expression": data?.expression || '',
-    "isPrompt": data?.isPrompt || '',
-    "adherence": {
-      "adType": data?.adherehce?.adType || '',
-      "ackText": data?.adherehce?.ackText || ''
-      },
-    "ackPressed": true,
-  }
+      "botId": this.connectionDetails.botId,
+      "conversationId": this.connectionDetails?.conversationId,
+      "ackPressed": true,
+    }
+  agent_coaching_ackpress = {...agent_coaching_ackpress, ...data}
     this.websocketService.emitEvents(EVENTS.agent_coaching_ackpress, agent_coaching_ackpress);
   }
 
