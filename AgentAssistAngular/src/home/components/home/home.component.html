@@ -67,7 +67,7 @@
                 </div>
             </div>
         </div>
-        <div class="sentiment-analysis" *ngIf="showSentiChart && currentPolarity">
+        <div class="sentiment-analysis" *ngIf="showSentiChart && currentPolarity && activeTab == projConstants.ASSIST">
             <div class="title">Current Sentiment</div>
             <div class="positive-negtive-wrapper-analysis">
                 <div echarts [options]="initChartOption" class="chart-container-small" (click)="toggleSentiChart()" [merge]="mergeSentiOptions"></div>
