@@ -15,7 +15,7 @@ export class CoachingService {
         type: this.coachingCnst.ACKNOWLEDGE_PRESSED,
         title: "Acknowledge Pressed",
         desc: "Hint's button pressed",
-        icon: "icon-sa-chat",
+        icon: "assets/icons/coaching/coaching--acknowledge-search.svg",
         disable : {
           'nudge': true,
         }
@@ -23,12 +23,12 @@ export class CoachingService {
         type: this.coachingCnst.UTTERANCE,
         title: "Utterance",
         desc: "Checks Agent's utterances",
-        icon: "icon-sa-chat"
+        icon: "assets/icons/coaching/coaching--message-check-square.svg",
       },    {
         type: this.coachingCnst.FAQ_USED,
         title: "FAQ Used",
         desc: "Checks for the use of an FAQ",
-        icon: "icon-sa-chat",
+        icon: "assets/icons/coaching/coaching--trigger-variable.svg",
         disable : {
           'nudge': true,
           'hint': true
@@ -37,7 +37,7 @@ export class CoachingService {
         type: this.coachingCnst.DIALOG_RUN,
         title: "Dialog Run",
         desc: "Checks for a Dialog run",
-        icon: "icon-sa-chat",
+        icon: "assets/icons/coaching/coaching--trigger-dialog.svg",
         disable : {
           'nudge': true,
           'hint': true

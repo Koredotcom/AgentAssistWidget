@@ -137,7 +137,8 @@
                         <div class="inner-card-choose" [ngClass]="{'disableTrigger' : adherence.disable?.hint}">
                             <div class="content-choose-triggers" ngbDropdownItem (click)="selectAdherenceClick(adherence.type)">
                                 <div class="icon_blk">
-                                    <i class="{{adherence.icon}}"></i>
+                                    <!-- <i class="{{adherence.icon}}"></i> -->
+                                    <img src="{{adherence.icon}}">
                                 </div>
                                 <div class="info-data-content">
                                     <div class="title-choose">{{adherence.title}}</div>
