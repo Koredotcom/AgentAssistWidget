@@ -1238,6 +1238,12 @@ export class CommonService {
         ],
 
       },
+      grid: {
+        left: '0%',
+        bottom: '0%',
+        right: '0%',
+        top: '3%'
+      },
       series: [
         {
           data: [[0,0]],
@@ -1245,7 +1251,7 @@ export class CommonService {
           smooth: true,
           showSymbol: false,
           lineStyle: {
-            width: 4
+           width : 2
           }
         }
       ],
@@ -1273,17 +1279,14 @@ export class CommonService {
         axisLine: { show: false },
         min: -2
       },
-      legend: {
-        show: false,
-        right : '20%',
-        top : '10%'
-      },
       grid : {
-        top :80
+        left: '0%',
+        bottom: '3%',
+        right: '0%',
+        top: '7%',
+        containLabel : true
       },
       visualMap: {
-        right : '1%',
-        top : '1%',
         show: false,
         dimension: 1,
         pieces: [
@@ -1305,6 +1308,7 @@ export class CommonService {
           }
         ]
       },
+    
       series: [
         { 
           data: [[0,0]],
@@ -1312,7 +1316,7 @@ export class CommonService {
           smooth: true,
           showSymbol: false,
           lineStyle: {
-            width: 4
+            width : 2
           }
         }
       ],
@@ -1321,9 +1325,10 @@ export class CommonService {
 
   showExtrems(val){
     if(val == 0 || val == 2 || val == -2){
-      return val;
-    }else 
+      return coachingConst.SENTI_CHART_YAXIS_LIST[val];
+    }else {
       return '';
+    }
   }
 
 }

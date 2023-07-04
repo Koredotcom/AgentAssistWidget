@@ -28,6 +28,8 @@ export class AdherenceSelectionComponent implements OnInit {
   variableMessage : number;
   VariableMinute : number;
   openAdherenceSlider : boolean = false;
+  ackButtonText : string = COACHINGCNST.GOT_IT;
+  selectedAckButtonText : string = COACHINGCNST.GOT_IT;
   
   
   private adherenceSlider: SliderComponentComponent;
@@ -188,6 +190,13 @@ export class AdherenceSelectionComponent implements OnInit {
       }
       (this.adherenceForm.controls?.adherence as FormGroup)?.controls?.session.setValue(sessionType);
     }
+  }
+
+  submitAckButtonText(){
+    if(!this.ackButtonText){
+      this.ackButtonText = 'Ok';
+    }
+    this.selectedAckButtonText = this.ackButtonText;
   }
 
 

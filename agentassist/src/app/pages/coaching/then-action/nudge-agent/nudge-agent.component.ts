@@ -21,7 +21,7 @@ export class NudgeAgentComponent implements OnInit {
   showNudgeMsg: string = '';
   selectedAdherence : string;
   openAdherenceSlider : boolean = false;
-  allAdherences = this.coachingService.allactionList;
+  allAdherences = this.coachingService.allactionList[COACHINGCNST.NUDGE_AGENT];
   adherenceClick : boolean = false;
 
   private adherenceSlider: SliderComponentComponent;
