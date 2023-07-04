@@ -10,6 +10,8 @@ import { COACHINGCNST } from '../../coaching.cnst';
 import { CoachingService } from '../../coaching.service';
 import { AuthService } from '@kore.services/auth.service';
 import { workflowService } from '@kore.services/workflow.service';
+import { NotificationService } from '@kore.services/notification.service';
+import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-utterance-adherence',
   templateUrl: './utterance-adherence.component.html',
@@ -30,8 +32,6 @@ export class UtteranceAdherenceComponent implements OnInit {
   isGeneratingText: boolean = null;
   openAiUtteranceArray: any = [];
   searchKey = new FormControl();
-  sampleUtterPrice: any = ['price high', 'price too high', 'price is much', 'price expensive'];
-  sampleUtterNoResp: any = ['hey', 'hello there!', 'helloo', 'can you here me!'];
   utteranceText: string;
   selectedUtterancesArray: any = [];
   addButtonClick: boolean = false;
@@ -48,7 +48,9 @@ export class UtteranceAdherenceComponent implements OnInit {
     private service: ServiceInvokerService,
     private authService: AuthService,
     private workflowService: workflowService,
-    private cs: CoachingService
+    private cs: CoachingService,
+    private notificationService: NotificationService,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -95,23 +97,9 @@ export class UtteranceAdherenceComponent implements OnInit {
   }
 
   formatUtterArray(text) {
-    // setTimeout(() => {
-    //   this.openAiUtteranceArray = [];
-    //   for (let utter of openAiUtteranceArray) {
-    //     const u = this.getAddedUtteranceKeys()
-    //     if(!u[utter]){
-    //       let obj: any = {
-    //         enabled: false,
-    //         value: utter,
-    //         _id: null
-    //       }
-    //       this.openAiUtteranceArray.push(obj);
-    //     }
-    //     this.loaded = true;
-    //   }
-    // }, 500);
-
-    
+    if(!this.cs.metaForUtternace?.integration){
+      return;
+    }
     let params: any = {
       userId: this.authService.getUserId(),
       streamId: this.workflowService.getCurrentBt(true)._id
@@ -123,7 +111,7 @@ export class UtteranceAdherenceComponent implements OnInit {
           "integration": this.cs.metaForUtternace?.integration,
           "model": this.cs.metaForUtternace?.defaultModel
       }
-  }
+    }
     this.service.invoke("get.utternaces", params, body).subscribe((data) => {
       this.loaded = true;
       this.openAiUtteranceArray = (data || []).map((item)=>{
@@ -131,6 +119,14 @@ export class UtteranceAdherenceComponent implements OnInit {
       });
     }, (err)=>{
       this.loaded = true;
+      try{
+        let type = JSON.parse(err.error?.errors[0]?.msg)?.type;
+        if(type === 'insufficient_quota'){
+          this.notificationService.showError({}, this.translate.instant("QUOTA_EXCEEDED"));
+        }
+      }catch(e){
+        this.notificationService.showError(this.translate.instant("QUOTA_EXCEEDED"));
+      }
     });
   }
 

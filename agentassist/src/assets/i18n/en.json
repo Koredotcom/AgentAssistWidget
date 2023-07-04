@@ -2026,7 +2026,7 @@
     "CHANNELCHAT.SAVE_FAILED" : "Failed to update the Configuration",
     "NAV.COACHING": "Agent Coaching",
     "NAV.COACH_TITLE": "Agent Experiences",
-    "COACHING.GROUPCREATED_SUCCESS" : "Group has been Created",
+    "COACHING.GROUPCREATED_SUCCESS" : "Group has been created",
     "COACHING.GROUPCREATED_FAILURE" : "Failed to save the Group",
     "COACHING.GROUPUPDATED_SUCCESS" : "Configuration has been Saved",
     "COACHING.GROUPUPDATED_FAILURE" : "Failed to save the Configuration",
@@ -2037,5 +2037,7 @@
     "COACHING.PUBLISH_SUCCESS" : "Published Successfully",
     "COACHING.PUBLISH_FAILURE" : "Failed to publish",
     "SUCCESSFULLY.UPDATED": "Successfully updated",
-    "VALID.NAME": "Please enter a valid name"
+    "VALID.NAME": "Please enter a valid name",
+    "QUOTA_EXCEEDED": "You exceeded your current quota.",
+    "RULE.SUCCESS": "Rule has been created"
 }

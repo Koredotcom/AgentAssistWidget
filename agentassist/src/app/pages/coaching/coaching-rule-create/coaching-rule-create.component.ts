@@ -219,7 +219,11 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
         data.ruleId = data._id;
         data.isActive = true;
         this.closeRule(data);
+        this.notificationService.notify(this.translate.instant("RULE.SUCCESS"), 'success');
       }
+    },
+    (err)=>{
+      this.notificationService.showError(err, this.translate.instant("QUOTA_EXCEEDED"));
     });
   }
 

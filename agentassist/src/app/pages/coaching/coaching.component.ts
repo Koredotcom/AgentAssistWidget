@@ -173,7 +173,7 @@ export class CoachingComponent implements OnInit {
         this.notificationService.notify(this.translate.instant("COACHING.PUBLISH_SUCCESS"), 'success');
       }
     },(error)=>{
-      this.notificationService.showError(this.translate.instant("COACHING.PUBLISH_FAILURE"));
+      this.notificationService.showError(error, this.translate.instant("COACHING.PUBLISH_FAILURE"));
     });
 
   }

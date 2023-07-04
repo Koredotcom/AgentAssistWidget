@@ -94,7 +94,7 @@ export class CoachingGroupCreateComponent implements OnInit, AfterViewInit {
       }
     },(error)=> {
       let notificationName = (this.type == this.coachingConst.CREATE) ? "COACHING.GROUPCREATED_FAILURE" : "COACHING.GROUPUPDATED_FAILURE";
-      this.notificationService.showError(this.translate.instant(notificationName));
+      this.notificationService.showError(error, this.translate.instant(notificationName));
     });
   }
 
@@ -118,7 +118,7 @@ export class CoachingGroupCreateComponent implements OnInit, AfterViewInit {
           this.updateGroup.emit(updateGroupObj);
           this.notificationService.notify(this.translate.instant("COACHING.GROUPDELETE_SUCCESS"), 'success');
         },(error)=>{
-          this.notificationService.showError(this.translate.instant("COACHING.GROUPDELETE_FAILURE"));
+          this.notificationService.showError(error,this.translate.instant("COACHING.GROUPDELETE_FAILURE"));
         });
       }
       
