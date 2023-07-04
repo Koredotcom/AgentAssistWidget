@@ -199,6 +199,9 @@ export class LibraryComponent implements OnInit {
       if (!isSearchFlag) {
         connectionDetails.intentName = dialog.intentName;
       }
+      if(!isSearchFlag && dialog.intentName && dialog.userInput) {
+        connectionDetails.value = dialog.userInput;
+      }
       connectionDetails.positionId = dialog.positionId;
       connectionDetails.childBotId = dialog.childBotId;
       connectionDetails.childBotName = dialog.childBotName;

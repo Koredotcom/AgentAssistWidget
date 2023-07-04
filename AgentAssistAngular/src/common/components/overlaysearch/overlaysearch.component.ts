@@ -51,8 +51,8 @@ export class OverlaysearchComponent implements OnInit {
   ngOnDestroy() {
     this.destroySubject.next(true);
     this.destroySubject.unsubscribe();
-    this.searchResponse = {};   
-    this.websocketService.agentAssistAgentResponse$.next(null); 
+    this.searchResponse = {};
+    this.websocketService.agentAssistAgentResponse$.next(null);
   }
 
   subscribeEvents() {
@@ -132,7 +132,7 @@ export class OverlaysearchComponent implements OnInit {
     dialog.positionId = this.randomUUIDPipe.transform(IdReferenceConst.positionId);
     dialog.intentName = dialog.name;
     let runDialogueObject = Object.assign({}, this.searchConentObject);
-    Object.assign(runDialogueObject, dialog);    
+    Object.assign(runDialogueObject, dialog);
     if (searchType == this.projConstants.ASSIST) {
       this.handleSubjectService.setActiveTab(this.projConstants.ASSIST);
     } else {
@@ -141,7 +141,7 @@ export class OverlaysearchComponent implements OnInit {
     }
     this.closeSearchSuggestions.emit(true);
     this.handleSubjectService.setRunButtonClickEvent(runDialogueObject);
-    
+
   }
 
   AgentAssist_agent_run_click(dialog){
@@ -206,7 +206,7 @@ export class OverlaysearchComponent implements OnInit {
       }, 1000);
       this.checkFaqAnswerNotRenderCountAndRequest()
     } else if (response && response.suggestions && this.answerPlaceableIDs.length > 0) {
-      
+
       response.suggestions.faqs = this.commonService.formatFAQResponse(response.suggestions.faqs);
       let faqAnswerIdsPlace = this.answerPlaceableIDs.find(ele => ele.input == response.suggestions?.faqs[0].question);
       if (faqAnswerIdsPlace) {
@@ -233,7 +233,7 @@ export class OverlaysearchComponent implements OnInit {
   checkFaqAnswerNotRenderCountAndRequest(){
     let answerNotRenderendElements = (this.searchResponse.faqs || []).filter(faq => {
       return !faq.answer;
-    });    
+    });
     if(answerNotRenderendElements.length == 1){
       this.getFaqAnswerAndtoggle(answerNotRenderendElements[0]);
     }
@@ -331,7 +331,7 @@ export class OverlaysearchComponent implements OnInit {
   toggleShowMoreLessButtonsForFaq(faq_ans_obj, parentIndex, index){
     parentIndex = parentIndex.toString();
     let titleElement = document.getElementById("titleLib-" + parentIndex);
-    let descElement = document.getElementById("desc-faq-lib-" + parentIndex + index);    
+    let descElement = document.getElementById("desc-faq-lib-" + parentIndex + index);
 
     faq_ans_obj.showLessButton = !faq_ans_obj.showLessButton;
     faq_ans_obj.showMoreButton = !faq_ans_obj.showMoreButton;
@@ -351,7 +351,7 @@ export class OverlaysearchComponent implements OnInit {
 
   updateSeeMoreButtonForFAQAgent(actualId, answerArray){
     let index = 0;
-    for(let ans of answerArray){  
+    for(let ans of answerArray){
         let id = actualId + index;
         let faqSourceTypePixel = 5;
         let descElement =  $("#desc-faq-lib-" + id);
@@ -378,7 +378,7 @@ export class OverlaysearchComponent implements OnInit {
 }
 
   // handleSeeMoreLessClickEventsForFaq(id, data){
-    
+
   // }
 
 

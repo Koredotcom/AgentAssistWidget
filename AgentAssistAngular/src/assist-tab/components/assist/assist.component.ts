@@ -306,6 +306,9 @@ export class AssistComponent implements OnInit {
     connectionDetails.entities = this.commonService.isRestore ? JSON.parse(this.commonService.previousEntitiesValue) : this.commonService.entitiestValueArray
     connectionDetails.childBotId = dialog.childBotId;
     connectionDetails.childBotName = dialog.childBotName;
+    if(dialog.userInput){
+     connectionDetails.userInput = dialog.userInput;
+    }
     let assistRequestParams = this.commonService.prepareAgentAssistRequestParams(connectionDetails);
     this.websocketService.emitEvents(EVENTS.agent_assist_request, assistRequestParams);
   }
@@ -627,6 +630,8 @@ export class AssistComponent implements OnInit {
                     <button class="ghost-btn hide" id="articleseeLess-${uuids + index}" data-article-see-less="true">${this.projConstants.READ_LESS}</button>
                     `;
               articlestypeInfo.append(seeMoreButtonHtml);
+              ele.answer = ele.content;
+              ele.question = ele.title;
               setTimeout(() => {
                 this.commonService.updateSeeMoreButtonForAssist(uuids + index, this.projConstants.ARTICLE);
               }, 100);
@@ -638,6 +643,7 @@ export class AssistComponent implements OnInit {
         data.suggestions.dialogs?.forEach((ele, index) => {
           ele.entities?.length > 0 ? (this.commonService.entitiestValueArray = ele.entities) : '';
           ele.name = ele.name || ele.usecaseName;
+          ele.userInput = data.userInput;
           let dialogSuggestions = document.getElementById(`dialogSuggestions-${responseId}`);
           let dialogsHtml = this.assisttabService.dialogTypeInfoTemplate(uuids, index, ele);
           dialogSuggestions.innerHTML += dialogsHtml;
@@ -749,9 +755,8 @@ export class AssistComponent implements OnInit {
           // this.clickEvents(IdReferenceConst.SENDMSG, uuids + index, this.dialogPositionId, ele);
           // this.clickEvents(IdReferenceConst.COPYMSG, uuids + index, this.dialogPositionId, ele);
         });
-        this.handleSeeMoreButton(responseId, data.suggestions.faqs, this.projConstants.FAQ);
         this.handleSeeMoreButton(responseId, data.suggestions.articles, this.projConstants.ARTICLE);
-
+        this.handleSeeMoreButton(responseId, data.suggestions.faqs, this.projConstants.FAQ);
 
       }
       setTimeout(() => {
