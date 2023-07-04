@@ -222,11 +222,8 @@ export class CoachingComponent implements OnInit {
       let addRuleId = event.container.data[event.currentIndex].ruleId;
       currentResGroupPayload.rules.splice(event.currentIndex,0,event.container.data[event.currentIndex]);
 
-      for(let i=0;i<previousResGroupPayload.rules.length;i++){
-        if(previousResGroupPayload.rules[i].ruleId == addRuleId){
-          previousResGroupPayload.rules.splice(i,1);
-        }
-      }
+      const inx = previousResGroupPayload.rules.findIndex(item=>item.ruleId == addRuleId);
+      previousResGroupPayload.rules.splice(inx,1);
 
     }else{
       currentResGroupPayload.rules = event.container.data;
