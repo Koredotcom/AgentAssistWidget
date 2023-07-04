@@ -73,7 +73,7 @@ export class CoachingComponent implements OnInit {
         if (term.trim()) {
           this.serachRules(term);
         }else if(term == ''){
-          this.searchedData.results = this.respData.results;
+          this.searchedData.results = JSON.parse(JSON.stringify(this.respData.results));
         }
         this.isLoading = false;
       });
@@ -210,14 +210,28 @@ export class CoachingComponent implements OnInit {
     }
   }
 
-  updateGroupApis(event){
+  updateGroupApis(event){    
     let previousgroupId = event.previousContainer.id;
-    let currentgroupId = event.container.id;
-    let currentGroupPayload = this.respData.results[this.respData.results.findIndex(x => x._id == currentgroupId)];
-    let previousGroupPayload = this.respData.results[this.respData.results.findIndex(x => x._id == previousgroupId)];
+    let currentgroupId = event.container.id;    
 
-    forkJoin([this.service.invoke('put.agentCoachingGroup', {groupId : currentgroupId}, currentGroupPayload),
-    this.service.invoke('put.agentCoachingGroup', {groupId : previousgroupId}, previousGroupPayload)]).subscribe((response) => {
+    let currentResGroupPayload = JSON.parse(JSON.stringify(this.respData.results[this.respData.results.findIndex(x => x._id == currentgroupId)]));
+    let previousResGroupPayload = JSON.parse(JSON.stringify(this.respData.results[this.respData.results.findIndex(x => x._id == previousgroupId)]));
+    
+  
+    if(this.searchField.value){
+      let addRuleId = event.container.data[event.currentIndex].ruleId;
+      currentResGroupPayload.rules.splice(event.currentIndex,0,event.container.data[event.currentIndex]);
+
+      const inx = previousResGroupPayload.rules.findIndex(item=>item.ruleId == addRuleId);
+      previousResGroupPayload.rules.splice(inx,1);
+
+    }else{
+      currentResGroupPayload.rules = event.container.data;
+      previousResGroupPayload.rules = event.previousContainer.data;
+    }
+    
+    forkJoin([this.service.invoke('put.agentCoachingGroup', {groupId : currentgroupId}, currentResGroupPayload),
+    this.service.invoke('put.agentCoachingGroup', {groupId : previousgroupId}, previousResGroupPayload)]).subscribe((response) => {
       this.getAgentCoachingGroupData();
       this.notificationService.notify(this.translate.instant("COACHING.GROUPUPDATED_SUCCESS"), 'success');
     },(error)=>{
