@@ -199,7 +199,7 @@
                     <div class="title">{{item?.message?.title}}</div>
                     <div class="text-desc">{{item?.message?.body}}</div>
                     <div class="btn_okay">
-                        <button class="ok-btn" (click)="coachingHints.splice(i, 1, null)">Got it</button>
+                        <button class="ok-btn" (click)="coachingHints.splice(i, 1, null); hintAckPressed(item)" *ngIf="item?.adherence?.adType === 'ack'">{{item?.adherence?.ackText}}</button>
                     </div>
                 </div>
                 <div class="close-hint" (click)="coachingHints.splice(i, 1, null)">
