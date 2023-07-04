@@ -3,7 +3,31 @@
         <span>Adherence</span>
     </span>
     <ng-container *ngIf="selectedAdherenceType == coachingConst.ACKNOWLEDGE_PRESSED">
+        <!-- <span class="utt-name-desc">Agent pressed the </span>
+
+        <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body" #ackButton="ngbDropdown">
+            <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!selectedAckButtonText}" (click)="ackButtonText = selectedAckButtonText">
+                <span class="choose-text">{{selectedAckButtonText ? selectedAckButtonText : '{ Choose }'}}</span>
+            </button>
+            <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
+                <div class="variable-value-input with-check-icon">
+                    <div class="input-variable-sec">
+                        <div class="label-text">Acknowledge Button</div>
+                        <div class="kr-sg-input-text">
+                            <input type="text" placeholder="Enter Nudge Message"
+                                class="input-text" maxlength="15" [(ngModel)]="ackButtonText">
+                        </div>
+                        <div class="count-char">{{ackButtonText.length}}/15</div>
+                    </div>
+                    <div class="check-icon-block" (click)="submitAckButtonText();ackButton.close()">
+                        <i class="icon-sa-conv-check"></i>
+                    </div>
+                </div>
+            </ul>
+        </div>
+        <span class="utt-name-desc"> button in the hint </span> -->
         <span class="utt-name-desc">Agent pressed the "Ok, Got it" button in the hint </span>
+
     </ng-container>
     <ng-container *ngIf="selectedAdherenceType == coachingConst.UTTERANCE">
         <span class="utt-name-desc">Agent says one of these </span>

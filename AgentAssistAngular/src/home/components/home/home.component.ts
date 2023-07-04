@@ -228,7 +228,7 @@ export class HomeComponent implements OnInit {
           smooth: true,
           showSymbol: false,
           lineStyle: {
-            width: 4
+            width: 2
           }
         }
       ]

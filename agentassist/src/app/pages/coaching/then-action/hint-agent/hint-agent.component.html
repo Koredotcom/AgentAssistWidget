@@ -134,7 +134,7 @@
                 <div class="choose-t-block">
                     <ng-container *ngFor="let adherence of allAdherences">
 
-                        <div class="inner-card-choose" [ngClass]="{'disableTrigger' : adherence.disable}">
+                        <div class="inner-card-choose" [ngClass]="{'disableTrigger' : adherence.disable?.hint}">
                             <div class="content-choose-triggers" ngbDropdownItem (click)="selectAdherenceClick(adherence.type)">
                                 <div class="icon_blk">
                                     <i class="{{adherence.icon}}"></i>
