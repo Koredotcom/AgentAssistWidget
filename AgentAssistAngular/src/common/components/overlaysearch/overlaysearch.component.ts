@@ -91,7 +91,6 @@ export class OverlaysearchComponent implements OnInit {
   }
 
   emitSearchRequest(searchObj, isSearchFlag, faqToggle = false) {
-    console.log('Sandeep Test1: ', searchObj, isSearchFlag);
     this.handleSubjectService.setLoader(true);
     let connectionDetails: any = Object.assign({}, this.connectionDetails);
     connectionDetails.value = searchObj.value;

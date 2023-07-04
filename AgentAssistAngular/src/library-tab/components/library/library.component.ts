@@ -193,7 +193,6 @@ export class LibraryComponent implements OnInit {
 
   agent_run_click(dialog, isSearchFlag) {
     if (!this.commonService.isMyBotAutomationOnGoing) {
-      console.log('libraryComponent: ', dialog);
       let connectionDetails: any = Object.assign({}, this.connectionDetails);
       connectionDetails.value = dialog.intentName;
       connectionDetails.isSearch = isSearchFlag;

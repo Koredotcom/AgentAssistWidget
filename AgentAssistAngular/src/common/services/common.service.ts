@@ -142,7 +142,6 @@ export class CommonService {
       agent_assist_request['childBotName'] = data.childBotName;
     }
     if(this.configObj?.autoBotId && this.configObj?.autoBotId !== 'undefined') {
-      console.log(this.configObj);
       agent_assist_request['autoBotId'] = this.configObj.autoBotId;
     } else {
       agent_assist_request['autoBotId'] = '';
@@ -172,7 +171,6 @@ export class CommonService {
     //   agent_assist_agent_request_params['childBotName'] = data.childBotName;
     // }
     if(this.configObj?.autoBotId && this.configObj?.autoBotId !== 'undefined') {
-      console.log(this.configObj);
       agent_assist_agent_request_params['autoBotId'] = this.configObj.autoBotId;
     } else {
       agent_assist_agent_request_params['autoBotId'] = '';
@@ -746,7 +744,7 @@ export class CommonService {
   }
 
   async renderingAgentHistoryMessage(connectionDetails) {
-    console.log(this.configObj.autoBotId, connectionDetails.autoBotId,"agent history-----",this.configObj, connectionDetails);
+    // console.log(this.configObj.autoBotId, connectionDetails.autoBotId,"agent history-----",this.configObj, connectionDetails);
 
     let url = `${this.configObj.agentassisturl}/agentassist/api/v1/agent-feedback/${this.configObj.conversationId}?interaction=mybot`;
     let feedBackResult = await this.renderHistoryFeedBack(url);
