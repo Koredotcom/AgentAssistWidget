@@ -99,5 +99,6 @@ export const COACHINGCNST = {
         "eod" : "Add to end of the day email"
     },
     IMMEDIATELY : 'immediately',
-    GOT_IT : 'Ok, Got it'
+    GOT_IT : 'Ok, Got it',
+    ADHERENCE_DATA: 'adherence'
 }

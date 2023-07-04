@@ -10,12 +10,15 @@ export class CoachingService {
   metaForUtternace:any = {};
   coachingCnst : any = COACHINGCNST;
   allactionList : any = {
-    [COACHINGCNST.HINT_AGENT] : [
+    [COACHINGCNST.ADHERENCE_DATA] : [
       {
         type: this.coachingCnst.ACKNOWLEDGE_PRESSED,
         title: "Acknowledge Pressed",
         desc: "Hint's button pressed",
-        icon: "icon-sa-chat"
+        icon: "icon-sa-chat",
+        disable : {
+          'nudge': true,
+        }
       },{
         type: this.coachingCnst.UTTERANCE,
         title: "Utterance",
@@ -26,41 +29,21 @@ export class CoachingService {
         title: "FAQ Used",
         desc: "Checks for the use of an FAQ",
         icon: "icon-sa-chat",
-        disable : true
+        disable : {
+          'nudge': true,
+          'hint': true
+        }
       },    {
         type: this.coachingCnst.DIALOG_RUN,
         title: "Dialog Run",
         desc: "Checks for a Dialog run",
         icon: "icon-sa-chat",
-        disable : true
+        disable : {
+          'nudge': true,
+          'hint': true
+        }
       }
-    ],
-   [COACHINGCNST.NUDGE_AGENT] : [
-      {
-        type: this.coachingCnst.ACKNOWLEDGE_PRESSED,
-        title: "Acknowledge Pressed",
-        desc: "Hint's button pressed",
-        icon: "icon-sa-chat",
-        disable : "true"
-      },{
-        type: this.coachingCnst.UTTERANCE,
-        title: "Utterance",
-        desc: "Checks Agent's utterances",
-        icon: "icon-sa-chat"
-      },    {
-        type: this.coachingCnst.FAQ_USED,
-        title: "FAQ Used",
-        desc: "Checks for the use of an FAQ",
-        icon: "icon-sa-chat",
-        disable : true
-      },    {
-        type: this.coachingCnst.DIALOG_RUN,
-        title: "Dialog Run",
-        desc: "Checks for a Dialog run",
-        icon: "icon-sa-chat",
-        disable : true
-      }
-   ]
+    ]
   }
     
   
