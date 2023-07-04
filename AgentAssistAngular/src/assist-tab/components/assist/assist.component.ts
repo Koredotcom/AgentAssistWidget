@@ -306,6 +306,9 @@ export class AssistComponent implements OnInit {
     connectionDetails.entities = this.commonService.isRestore ? JSON.parse(this.commonService.previousEntitiesValue) : this.commonService.entitiestValueArray
     connectionDetails.childBotId = dialog.childBotId;
     connectionDetails.childBotName = dialog.childBotName;
+    if(dialog.userInput){
+     connectionDetails.userInput = dialog.userInput;
+    }
     let assistRequestParams = this.commonService.prepareAgentAssistRequestParams(connectionDetails);
     this.websocketService.emitEvents(EVENTS.agent_assist_request, assistRequestParams);
   }
@@ -640,6 +643,7 @@ export class AssistComponent implements OnInit {
         data.suggestions.dialogs?.forEach((ele, index) => {
           ele.entities?.length > 0 ? (this.commonService.entitiestValueArray = ele.entities) : '';
           ele.name = ele.name || ele.usecaseName;
+          ele.userInput = data.userInput;
           let dialogSuggestions = document.getElementById(`dialogSuggestions-${responseId}`);
           let dialogsHtml = this.assisttabService.dialogTypeInfoTemplate(uuids, index, ele);
           dialogSuggestions.innerHTML += dialogsHtml;
