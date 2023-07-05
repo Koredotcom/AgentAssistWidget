@@ -15,6 +15,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { FormControl } from '@angular/forms';
 import { AuthService } from '@kore.services/auth.service';
 import { CoachingService } from './coaching.service';
+import { SubSink } from 'subsink';
 
 @Component({
   selector: 'app-coaching',
@@ -44,7 +45,7 @@ export class CoachingComponent implements OnInit {
   publishInprogress : boolean = false;
   rulePresent : boolean = false;
   selAcc = this.local.getSelectedAccount();
-
+  subs = new SubSink();
   @ViewChild('ps') ps: PerfectScrollbarComponent;
   @ViewChild('newCoachingGroup', { static: true }) newCoachingGroup: SliderComponentComponent;
 
@@ -58,11 +59,20 @@ export class CoachingComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
+    this.subs.sink = this.workflowService.updateBotDetails$.subscribe((ele)=>{
+      if(ele){
+        this.initApiCalls();
+      } 
+    });
+    this.initApiCalls();
+  }
+
+  initApiCalls(){
     this.getAgentCoachingGroupData();
     this.subscribeEvents();
     this.getConfigDetails();
   }
-
+  
   ngAfterViewInit(){
   }
 

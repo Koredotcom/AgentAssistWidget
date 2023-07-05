@@ -98,6 +98,7 @@ export class UtteranceAdherenceComponent implements OnInit {
 
   formatUtterArray(text) {
     if(!this.cs.metaForUtternace?.integration){
+      this.loaded = true;
       return;
     }
     let params: any = {
