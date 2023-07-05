@@ -21,6 +21,27 @@
         </div>
   </div>
     <div  id="dynamicBlock">
+        <ng-container *ngFor="let res of assistResponseArray; let i = index">
+            <ng-container *ngIf="res.type == renderResponseType.SUGGESTIONS">
+                <div class="agent-utt-info" attr.id="agentUttInfo-{{res.uuid}}">
+                    <div class="user-img">
+                        <img src="assets/images/userIcon.svg">
+                    </div>
+                    <div class="text-user">{{res.data.userInput}}</div>
+                </div>
+                <app-suggestions [suggestionResponse]="res" [agentassistArrayIndex]="i" [agentassistResponseArrayLength]="assistResponseArray.length" (updateFaqAmbiguity)="updateFaqAmbiguity($event, i)" ></app-suggestions>
+            </ng-container>
+            <ng-container *ngIf="res.type == renderResponseType.SMALLTALK">
+                <app-smalltalk [smallTalkData]="res" [agentassistArrayIndex]="i" [agentassistResponseArrayLength]="assistResponseArray.length"
+                [agentAssistResp]="agentAssistResponse"></app-smalltalk>
+            </ng-container>
+            <ng-container  *ngIf="res.type == renderResponseType.AUTOMATION">
+                <app-automation [automationData]="res" (scrollBottom)="scrollToBottom($event)" (handlePopupEvent)="handleTerminatePopup(event)" [agentassistArrayIndex]="i" [agentassistResponseArrayLength]="assistResponseArray.length"></app-automation>
+            </ng-container>
+            <ng-container *ngIf="res.type == renderResponseType.FEEDBACK">
+                <app-feedback [feedbackData]="res" (updateFeedbackProperties)="updateFeedbackProperties($event,i)" [agentassistArrayIndex]="i" [agentassistResponseArrayLength]="assistResponseArray.length"></app-feedback>
+            </ng-container>
+        </ng-container>
       <div id="userTab-custSentimentAnalysis" class="customer-feeling-text">
       </div>
 
@@ -31,7 +52,7 @@
           </button>
       </div>
 
-      <div class="empty-data-no-agents hide">
+      <div class="empty-data-no-agents" *ngIf="!welcomeMsgResponse">
           <div class="title">No Agent automations are in running state.</div>
           <div class="desc-text">Use "Run with Agent Inputs" to execute.</div>
       </div>

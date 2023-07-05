@@ -533,22 +533,22 @@ setProactiveMode(){
   onClick(evt) {
     // console.log('button', btn, 'number of clicks:', this.numberOfClicks++);
     let target: any = evt.target;
-    if (target.id === 'sendMsg' || target.className === 'ast-ast-send' || target.className == 'send-icon') {
-      let ele = document.getElementById(`displayData-${target.dataset.msgId}`) ? document.getElementById(`displayData-${target.dataset.msgId}`) : document.getElementById(target.dataset.msgId);
-      let data = target.dataset?.msgData && target.dataset?.msgData !== '' ? target.dataset?.msgData : (target.parentNode.dataset?.msgData && target.parentNode.dataset?.msgData !== '' ? target.parentNode.dataset?.msgData : ele?.innerText);
+    // if (target.id === 'sendMsg' || target.className === 'ast-ast-send' || target.className == 'send-icon') {
+    //   let ele = document.getElementById(`displayData-${target.dataset.msgId}`) ? document.getElementById(`displayData-${target.dataset.msgId}`) : document.getElementById(target.dataset.msgId);
+    //   let data = target.dataset?.msgData && target.dataset?.msgData !== '' ? target.dataset?.msgData : (target.parentNode.dataset?.msgData && target.parentNode.dataset?.msgData !== '' ? target.parentNode.dataset?.msgData : ele?.innerText);
 
-      if(data && data != 'Send'){
-        data = this.commonService.replaceLtGt(data, true);
-      this.commonService.preparePostMessageForSendAndCopy(evt, data, IdReferenceConst.SENDMSG, this.connectionDetails);
-      }
-      }
-      if ((target.className == 'copy-btn' || target.className == 'ast-copy' || target.className == 'copy-icon')) {
-      let ele = document.getElementById(`displayData-${target.dataset.msgId}`) ? document.getElementById(`displayData-${target.dataset.msgId}`) : document.getElementById(target.dataset.msgId);
-      let data = target.dataset.msgData && target.dataset.msgData !== '' ? target.dataset.msgData : (target.parentNode.dataset.msgData && target.parentNode.dataset.msgData !== '' ? target.parentNode.dataset.msgData : ele?.innerText);
-      if(data && data != 'Send' && data != 'SEND'){
-      this.commonService.preparePostMessageForSendAndCopy(evt, data, IdReferenceConst.COPYMSG, this.connectionDetails);
-      }
-      }
+    //   if(data && data != 'Send'){
+    //     data = this.commonService.replaceLtGt(data, true);
+    //   this.commonService.preparePostMessageForSendAndCopy(evt, data, IdReferenceConst.SENDMSG, this.connectionDetails);
+    //   }
+    //   }
+    //   if ((target.className == 'copy-btn' || target.className == 'ast-copy' || target.className == 'copy-icon')) {
+    //   let ele = document.getElementById(`displayData-${target.dataset.msgId}`) ? document.getElementById(`displayData-${target.dataset.msgId}`) : document.getElementById(target.dataset.msgId);
+    //   let data = target.dataset.msgData && target.dataset.msgData !== '' ? target.dataset.msgData : (target.parentNode.dataset.msgData && target.parentNode.dataset.msgData !== '' ? target.parentNode.dataset.msgData : ele?.innerText);
+    //   if(data && data != 'Send' && data != 'SEND'){
+    //   this.commonService.preparePostMessageForSendAndCopy(evt, data, IdReferenceConst.COPYMSG, this.connectionDetails);
+    //   }
+    //   }
     if (target.id.split('-')[0] == 'buldCount' || target.className == 'ast-bulb' || target.className == 'count-number') {
       let bulbDiv;
       if ($('#scriptContainer .other-user-bubble .bubble-data .buld-count-utt').length > 0) {
@@ -572,353 +572,353 @@ setProactiveMode(){
       $(`#scriptContainer #buldCountNumber-${bulbid.join('-')}`).html(`<span>&#10003;</span>`);
     }
     let targetIds = (target.id).split('-');
-    if (['feedbackup', 'feedbackdown'].includes(targetIds[0])) {
+    // if (['feedbackup', 'feedbackdown'].includes(targetIds[0])) {
 
-      let cloneTargtIds = [...targetIds]
-      let isDivElement = evt.target instanceof HTMLDivElement;
-      if (targetIds.includes('feedbackup')) {
-        cloneTargtIds.shift()
-        if (isDivElement) {
-          $(`#${target.id}`).addClass('active-feedback');
-          target.firstElementChild.dataset.feedbacklike = 'true';
-          Object.assign(target.dataset, target.firstElementChild.dataset);
-          this.feedbackLoop(evt);
-        } else {
-          $(`#${target.parentElement.id}`).addClass('active-feedback');
-          target.dataset.feedbacklike = 'false';
-          this.feedbackLoop(evt);
-        }
+    //   let cloneTargtIds = [...targetIds]
+    //   let isDivElement = evt.target instanceof HTMLDivElement;
+    //   if (targetIds.includes('feedbackup')) {
+    //     cloneTargtIds.shift()
+    //     if (isDivElement) {
+    //       $(`#${target.id}`).addClass('active-feedback');
+    //       target.firstElementChild.dataset.feedbacklike = 'true';
+    //       Object.assign(target.dataset, target.firstElementChild.dataset);
+    //       this.feedbackLoop(evt);
+    //     } else {
+    //       $(`#${target.parentElement.id}`).addClass('active-feedback');
+    //       target.dataset.feedbacklike = 'false';
+    //       this.feedbackLoop(evt);
+    //     }
 
-        $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .ast-thumbdown`).attr('data-comment', ``)
-        $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .ast-thumbdown`).attr('data-feedbackdetails', '[]');
-        $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .btn-chip-negtive.active-chip`).removeClass('active-chip');
-        $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} #feedBackComment-${cloneTargtIds.join('-')}`).val('');
-        $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .submit-btn`).attr('disabled', 'disabled')
-        $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .submit-btn`).html('Submit');
-        $(`#feedbackdown-${cloneTargtIds.join('-')}`).removeClass('active-feedback')
-        $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .thanks-update`).removeClass('hide');
-        $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .help-improve-arrow`).addClass('hide')
-        $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .explore-more-negtive-data`).addClass('hide');
-      }
-      if (targetIds.includes('feedbackdown')) {
-        cloneTargtIds.shift()
-        if (isDivElement) {
-          $(`#${target.id}`).addClass('active-feedback');
-          target.firstElementChild.dataset.feedbacklike = 'true';
-          Object.assign(target.dataset, target.firstElementChild.dataset);
-          this.feedbackLoop(evt);
-        } else {
-          $(`#${target.parentElement.id}`).addClass('active-feedback');
-          target.dataset.feedbacklike = 'false';
-          this.feedbackLoop(evt);
-        }
-        $(`#feedbackup-${cloneTargtIds.join('-')}`).removeClass('active-feedback')
-        $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .thanks-update`).addClass('hide');
-        $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .help-improve-arrow`).removeClass('hide')
-        $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .explore-more-negtive-data`).removeClass('hide');
-        $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .title-improve`).removeClass('hide');
+    //     $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .ast-thumbdown`).attr('data-comment', ``)
+    //     $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .ast-thumbdown`).attr('data-feedbackdetails', '[]');
+    //     $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .btn-chip-negtive.active-chip`).removeClass('active-chip');
+    //     $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} #feedBackComment-${cloneTargtIds.join('-')}`).val('');
+    //     $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .submit-btn`).attr('disabled', 'disabled')
+    //     $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .submit-btn`).html('Submit');
+    //     $(`#feedbackdown-${cloneTargtIds.join('-')}`).removeClass('active-feedback')
+    //     $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .thanks-update`).removeClass('hide');
+    //     $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .help-improve-arrow`).addClass('hide')
+    //     $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .explore-more-negtive-data`).addClass('hide');
+    //   }
+    //   if (targetIds.includes('feedbackdown')) {
+    //     cloneTargtIds.shift()
+    //     if (isDivElement) {
+    //       $(`#${target.id}`).addClass('active-feedback');
+    //       target.firstElementChild.dataset.feedbacklike = 'true';
+    //       Object.assign(target.dataset, target.firstElementChild.dataset);
+    //       this.feedbackLoop(evt);
+    //     } else {
+    //       $(`#${target.parentElement.id}`).addClass('active-feedback');
+    //       target.dataset.feedbacklike = 'false';
+    //       this.feedbackLoop(evt);
+    //     }
+    //     $(`#feedbackup-${cloneTargtIds.join('-')}`).removeClass('active-feedback')
+    //     $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .thanks-update`).addClass('hide');
+    //     $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .help-improve-arrow`).removeClass('hide')
+    //     $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .explore-more-negtive-data`).removeClass('hide');
+    //     $(`#feedbackHelpfulContainer-${cloneTargtIds.join('-')} .title-improve`).removeClass('hide');
 
-      }
-    }
-    if (target.id.split('-')[0] == 'dropdownArrowFeedBack' || target.id.split('-')[0] == 'dropdownArrowFeedBackIcon') {
-      let targteId = target.id.split('-');
-      targteId.shift();
-      let dataSets = $(`#feedbackdown-${targteId.join('-')} .ast-thumbdown`).data();
-      let activeChipCount = $(`#feedbackHelpfulContainer-${targteId.join('-')} .btn-chip-negtive.active-chip`);
-      if ((activeChipCount.length > 0 || dataSets.comment.length > 0) && target.dataset.feedbackDropDownOpened === 'true') {
-        $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).addClass('hide');
-      } else {
-        if ((activeChipCount.length == 0 && dataSets.comment.length == 0) && target.dataset.feedbackDropDownOpened === 'true') {
-          $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).removeClass('hide');
-        } else {
-          $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).addClass('hide');
-        }
-      }
-      if (target.dataset.feedbackDropDownOpened === 'false') {
-        $(`#dropdownArrowFeedBackIcon-${targteId.join('-')}`).attr('data-feedback-drop-down-opened', 'true');
-        $(`#dropdownArrowFeedBack-${targteId.join('-')}`).attr('data-feedback-drop-down-opened', 'true');
-        $(`#feedbackHelpfulContainer-${targteId.join('-')} .explore-more-negtive-data`).addClass('hide');
-      } else {
-        $(`#dropdownArrowFeedBackIcon-${targteId.join('-')}`).attr('data-feedback-drop-down-opened', 'false');
-        $(`#dropdownArrowFeedBack-${targteId.join('-')}`).attr('data-feedback-drop-down-opened', 'false');
-        $(`#feedbackHelpfulContainer-${targteId.join('-')} .explore-more-negtive-data`).removeClass('hide');
-      }
-      let updateFlag = $(`#feedbackHelpfulContainer-${targteId.join('-')} .submit-btn`).attr('data-updateflag');
-      if (updateFlag == 'true' && target.dataset.feedbackDropDownOpened === 'false') {
-        $(`#feedbackHelpfulContainer-${targteId.join('-')} .submit-btn`).html('Update');
-        $(`#feedbackHelpfulContainer-${targteId.join('-')} .submit-btn`).attr('disabled', 'disabled');
-        this.AgentAssist_feedBack_Update_Request(dataSets);
-        $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).addClass('hide');
-        this.commonService.isUpdateFeedBackDetailsFlag = true;
-      }
-    }
-    if (target.className.includes('btn-chip-negtive')) {
-      let id = target.parentElement.id.split('-');
-      id.shift();
-      let aaa = $(`#${target.parentElement.id} .btn-chip-negtive.active-chip`);
-      let arrayOfChips = [];
-      aaa.each((i, ele) => {
-        arrayOfChips.push($(ele).html())
-      });
-      let dataSets = $(`#feedbackdown-${id.join('-')} .ast-thumbdown`).data();
-      dataSets.feedbackdetails = arrayOfChips;
+    //   }
+    // }
+    // if (target.id.split('-')[0] == 'dropdownArrowFeedBack' || target.id.split('-')[0] == 'dropdownArrowFeedBackIcon') {
+    //   let targteId = target.id.split('-');
+    //   targteId.shift();
+    //   let dataSets = $(`#feedbackdown-${targteId.join('-')} .ast-thumbdown`).data();
+    //   let activeChipCount = $(`#feedbackHelpfulContainer-${targteId.join('-')} .btn-chip-negtive.active-chip`);
+    //   if ((activeChipCount.length > 0 || dataSets.comment.length > 0) && target.dataset.feedbackDropDownOpened === 'true') {
+    //     $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).addClass('hide');
+    //   } else {
+    //     if ((activeChipCount.length == 0 && dataSets.comment.length == 0) && target.dataset.feedbackDropDownOpened === 'true') {
+    //       $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).removeClass('hide');
+    //     } else {
+    //       $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).addClass('hide');
+    //     }
+    //   }
+    //   if (target.dataset.feedbackDropDownOpened === 'false') {
+    //     $(`#dropdownArrowFeedBackIcon-${targteId.join('-')}`).attr('data-feedback-drop-down-opened', 'true');
+    //     $(`#dropdownArrowFeedBack-${targteId.join('-')}`).attr('data-feedback-drop-down-opened', 'true');
+    //     $(`#feedbackHelpfulContainer-${targteId.join('-')} .explore-more-negtive-data`).addClass('hide');
+    //   } else {
+    //     $(`#dropdownArrowFeedBackIcon-${targteId.join('-')}`).attr('data-feedback-drop-down-opened', 'false');
+    //     $(`#dropdownArrowFeedBack-${targteId.join('-')}`).attr('data-feedback-drop-down-opened', 'false');
+    //     $(`#feedbackHelpfulContainer-${targteId.join('-')} .explore-more-negtive-data`).removeClass('hide');
+    //   }
+    //   let updateFlag = $(`#feedbackHelpfulContainer-${targteId.join('-')} .submit-btn`).attr('data-updateflag');
+    //   if (updateFlag == 'true' && target.dataset.feedbackDropDownOpened === 'false') {
+    //     $(`#feedbackHelpfulContainer-${targteId.join('-')} .submit-btn`).html('Update');
+    //     $(`#feedbackHelpfulContainer-${targteId.join('-')} .submit-btn`).attr('disabled', 'disabled');
+    //     this.AgentAssist_feedBack_Update_Request(dataSets);
+    //     $(`#feedbackHelpfulContainer-${targteId.join('-')} .title-improve`).addClass('hide');
+    //     this.commonService.isUpdateFeedBackDetailsFlag = true;
+    //   }
+    // }
+    // if (target.className.includes('btn-chip-negtive')) {
+    //   let id = target.parentElement.id.split('-');
+    //   id.shift();
+    //   let aaa = $(`#${target.parentElement.id} .btn-chip-negtive.active-chip`);
+    //   let arrayOfChips = [];
+    //   aaa.each((i, ele) => {
+    //     arrayOfChips.push($(ele).html())
+    //   });
+    //   let dataSets = $(`#feedbackdown-${id.join('-')} .ast-thumbdown`).data();
+    //   dataSets.feedbackdetails = arrayOfChips;
 
-      if (target.dataset.chipClick == 'false') {
-        $(target).addClass('active-chip');
-        target.dataset.chipClick = 'true';
-        let index;
-        if (typeof dataSets.feedbackdetails == 'string') {
-          dataSets.feedbackdetails = dataSets.feedbackdetails?.split(',');
-          index = dataSets.feedbackdetails.findIndex((ele) => ele == $(target).html());
-        }
-        index = dataSets.feedbackdetails.findIndex((ele) => ele == $(target).html());
-        if (index == -1) {
-          dataSets.feedbackdetails.push($(target).html());
-        }
-      } else {
-        $(target).removeClass('active-chip');
-        target.dataset.chipClick = 'false';
-        dataSets.feedbackdetails?.forEach((ele, i) => {
-          if (ele == $(target).html()) {
-            delete dataSets.feedbackdetails[i]
-          }
-        })
-      }
-      let activeChipCount = $(`#${target.parentElement.id} .btn-chip-negtive.active-chip`);
-      if (activeChipCount.length > 0) {
-        $(`#feedbackHelpfulContainer-${id.join('-')} .title-improve`).addClass('hide');
-        $(`#feedbackHelpfulContainer-${id.join('-')} .submit-btn`).removeAttr('disabled');
-      } else {
-        if (dataSets.comment.length == 0) {
-          $(`#feedbackHelpfulContainer-${id.join('-')} .title-improve`).removeClass('hide');
-        }
-      }
-      $(`#feedbackHelpfulContainer-${id.join('-')} .ast-thumbdown`).attr('data-feedbackdetails', dataSets.feedbackdetails)
-    }
-    if (target.id == 'feedbackSubmit') {
-      let id = target.parentElement.firstElementChild.id.split('-');
-      id.shift();
-      let feedbackComment = $(`#feedbackHelpfulContainer-${id.join('-')} #feedBackComment-${id.join('-')}`).val();
-      let aaa = $(`#feedbackHelpfulContainer-${id.join('-')} .btn-chip-negtive.active-chip`);
-      let arrayOfChips = [];
-      aaa.each((i, ele) => {
-        arrayOfChips.push($(ele).html())
-      });
+    //   if (target.dataset.chipClick == 'false') {
+    //     $(target).addClass('active-chip');
+    //     target.dataset.chipClick = 'true';
+    //     let index;
+    //     if (typeof dataSets.feedbackdetails == 'string') {
+    //       dataSets.feedbackdetails = dataSets.feedbackdetails?.split(',');
+    //       index = dataSets.feedbackdetails.findIndex((ele) => ele == $(target).html());
+    //     }
+    //     index = dataSets.feedbackdetails.findIndex((ele) => ele == $(target).html());
+    //     if (index == -1) {
+    //       dataSets.feedbackdetails.push($(target).html());
+    //     }
+    //   } else {
+    //     $(target).removeClass('active-chip');
+    //     target.dataset.chipClick = 'false';
+    //     dataSets.feedbackdetails?.forEach((ele, i) => {
+    //       if (ele == $(target).html()) {
+    //         delete dataSets.feedbackdetails[i]
+    //       }
+    //     })
+    //   }
+    //   let activeChipCount = $(`#${target.parentElement.id} .btn-chip-negtive.active-chip`);
+    //   if (activeChipCount.length > 0) {
+    //     $(`#feedbackHelpfulContainer-${id.join('-')} .title-improve`).addClass('hide');
+    //     $(`#feedbackHelpfulContainer-${id.join('-')} .submit-btn`).removeAttr('disabled');
+    //   } else {
+    //     if (dataSets.comment.length == 0) {
+    //       $(`#feedbackHelpfulContainer-${id.join('-')} .title-improve`).removeClass('hide');
+    //     }
+    //   }
+    //   $(`#feedbackHelpfulContainer-${id.join('-')} .ast-thumbdown`).attr('data-feedbackdetails', dataSets.feedbackdetails)
+    // }
+    // if (target.id == 'feedbackSubmit') {
+    //   let id = target.parentElement.firstElementChild.id.split('-');
+    //   id.shift();
+    //   let feedbackComment = $(`#feedbackHelpfulContainer-${id.join('-')} #feedBackComment-${id.join('-')}`).val();
+    //   let aaa = $(`#feedbackHelpfulContainer-${id.join('-')} .btn-chip-negtive.active-chip`);
+    //   let arrayOfChips = [];
+    //   aaa.each((i, ele) => {
+    //     arrayOfChips.push($(ele).html())
+    //   });
 
-      let dataSets = $(`#feedbackdown-${id.join('-')} .ast-thumbdown`).data();
-      dataSets.comment = feedbackComment;
-      dataSets.feedbackdetails = arrayOfChips;
-      if (typeof dataSets.feedbackdetails == 'string' && dataSets.feedbackdetails.indexOf(',') > -1) {
-        dataSets.feedbackdetails = dataSets.feedbackdetails.split(',');
-      }
-      this.feedbackLoop(dataSets, true);
-      $(`#feedbackHelpfulContainer-${id.join('-')} .thanks-update`).css('right', '34px').removeClass('hide');
-      setTimeout(() => {
-        $(`#feedbackHelpfulContainer-${id.join('-')} .thanks-update`).css('right', '25px').addClass('hide');
-      }, 3000)
-      $(`#feedbackHelpfulContainer-${id.join('-')} .explore-more-negtive-data`).addClass('hide');
-      $(`#feedbackHelpfulContainer-${id.join('-')} #dropdownArrowFeedBackIcon-${id.join('-')}`).attr('data-feedback-drop-down-opened', 'true');
-      $(`#feedbackHelpfulContainer-${id.join('-')} #dropdownArrowFeedBack-${id.join('-')}`).attr('data-feedback-drop-down-opened', 'true');
-      target.dataset.updateflag = 'true';
-      $(`#feedbackHelpfulContainer-${id.join('-')}.submit-btn`).attr('disabled', 'disabled');
+    //   let dataSets = $(`#feedbackdown-${id.join('-')} .ast-thumbdown`).data();
+    //   dataSets.comment = feedbackComment;
+    //   dataSets.feedbackdetails = arrayOfChips;
+    //   if (typeof dataSets.feedbackdetails == 'string' && dataSets.feedbackdetails.indexOf(',') > -1) {
+    //     dataSets.feedbackdetails = dataSets.feedbackdetails.split(',');
+    //   }
+    //   this.feedbackLoop(dataSets, true);
+    //   $(`#feedbackHelpfulContainer-${id.join('-')} .thanks-update`).css('right', '34px').removeClass('hide');
+    //   setTimeout(() => {
+    //     $(`#feedbackHelpfulContainer-${id.join('-')} .thanks-update`).css('right', '25px').addClass('hide');
+    //   }, 3000)
+    //   $(`#feedbackHelpfulContainer-${id.join('-')} .explore-more-negtive-data`).addClass('hide');
+    //   $(`#feedbackHelpfulContainer-${id.join('-')} #dropdownArrowFeedBackIcon-${id.join('-')}`).attr('data-feedback-drop-down-opened', 'true');
+    //   $(`#feedbackHelpfulContainer-${id.join('-')} #dropdownArrowFeedBack-${id.join('-')}`).attr('data-feedback-drop-down-opened', 'true');
+    //   target.dataset.updateflag = 'true';
+    //   $(`#feedbackHelpfulContainer-${id.join('-')}.submit-btn`).attr('disabled', 'disabled');
 
-      $(`#feedbackHelpfulContainer-${id.join('-')} .ast-thumbdown`).attr('data-comment', ``)
-      $(`#feedbackHelpfulContainer-${id.join('-')} .ast-thumbdown`).attr('data-feedbackdetails', '[]')
-      dataSets.comment = "";
-      dataSets.feedbackdetails = [];
-      $(`#feedbackHelpfulContainer-${id.join('-')} .btn-chip-negtive.active-chip`).removeClass('active-chip');
-      $(`#feedbackHelpfulContainer-${id.join('-')} #feedBackComment-${id.join('-')}`).val('');
-      this.commonService.isUpdateFeedBackDetailsFlag = false;
-    }
-    if (target.id.split("-")[0] == 'elipseIcon' || target.id.split("-")[0] == 'overflowIcon') {
+    //   $(`#feedbackHelpfulContainer-${id.join('-')} .ast-thumbdown`).attr('data-comment', ``)
+    //   $(`#feedbackHelpfulContainer-${id.join('-')} .ast-thumbdown`).attr('data-feedbackdetails', '[]')
+    //   dataSets.comment = "";
+    //   dataSets.feedbackdetails = [];
+    //   $(`#feedbackHelpfulContainer-${id.join('-')} .btn-chip-negtive.active-chip`).removeClass('active-chip');
+    //   $(`#feedbackHelpfulContainer-${id.join('-')} #feedBackComment-${id.join('-')}`).val('');
+    //   this.commonService.isUpdateFeedBackDetailsFlag = false;
+    // }
+    // if (target.id.split("-")[0] == 'elipseIcon' || target.id.split("-")[0] == 'overflowIcon') {
 
-       if(!this.showSearchSuggestions){
+    //    if(!this.showSearchSuggestions){
 
-         if ($('.dropdown-content-elipse').length !== 0) {
-           $('.dropdown-content-elipse').addClass('hide');
-         }
-         let elementClicked;
-         if (target.id.split("-")[0] == 'elipseIcon') {
-           evt.stopPropagation();
-           (target.nextElementSibling)?.classList.remove('hide');
-           elementClicked = target.parentElement;
+    //      if ($('.dropdown-content-elipse').length !== 0) {
+    //        $('.dropdown-content-elipse').addClass('hide');
+    //      }
+    //      let elementClicked;
+    //      if (target.id.split("-")[0] == 'elipseIcon') {
+    //        evt.stopPropagation();
+    //        (target.nextElementSibling)?.classList.remove('hide');
+    //        elementClicked = target.parentElement;
 
-         } else if (target.id.split("-")[0] == 'overflowIcon') {
-           elementClicked = target.parentElement.parentElement;
-           (target.parentElement.nextElementSibling)?.classList.remove('hide');
-         }
-         if (this.activeTab != this.projConstants.LIBRARY) {
-           $('.elipse-dropdown-info').each((i, ele) => {
-             $(ele).attr('class').includes('active-elipse') ? $(ele).removeClass('active-elipse') : elementClicked.classList.add('active-elipse');
-           });
-           $(`#overLaySearch .type-info-run-send`).find(elementClicked).length > 0 ? elementClicked.classList.add('active-elipse') : '';
-         }
-       }
+    //      } else if (target.id.split("-")[0] == 'overflowIcon') {
+    //        elementClicked = target.parentElement.parentElement;
+    //        (target.parentElement.nextElementSibling)?.classList.remove('hide');
+    //      }
+    //      if (this.activeTab != this.projConstants.LIBRARY) {
+    //        $('.elipse-dropdown-info').each((i, ele) => {
+    //          $(ele).attr('class').includes('active-elipse') ? $(ele).removeClass('active-elipse') : elementClicked.classList.add('active-elipse');
+    //        });
+    //        $(`#overLaySearch .type-info-run-send`).find(elementClicked).length > 0 ? elementClicked.classList.add('active-elipse') : '';
+    //      }
+    //    }
 
-    }
-    if(target.id.split('-').includes('overRideBtn')){
-      let overrideObject : any = {
-        override : true,
-        cancelOverride : false,
-        data : target
-      }
-      this.handleSubjectService.setOverridebtnClickEvent(overrideObject);
-    }
-    if(target.id.split('-').includes('cancelOverRideBtn')){
-      let overrideObject : any = {
-        override : false,
-        cancelOverride : true,
-        data : target
-      }
-      this.handleSubjectService.setOverridebtnClickEvent(overrideObject);
-    }
-    if (target.id.split('-')[0] === 'dropDownHeader' || target.id.split('-')[0] === 'dropDownTitle' || target.id.split('-')[0] === 'dialogueArrow') {
-      let targetIDs = (target.id).split('-');
-      targetIDs.shift();
-      let targetsss = targetIDs.join('-');
-      let dropdownDataElement = $(`#dropDownData-${targetsss}`);
-      if ($(dropdownDataElement).hasClass('hide')) {
-        $(dropdownDataElement).removeClass('hide');
-        $(`#dropDownHeader-${targetsss}`).find('.ast-carrotup').addClass('rotate-carrot');
-        $(`#endTaks-${targetsss}`).removeClass('hide');
-      } else {
-        $(dropdownDataElement).addClass('hide')
-        $(`#dropDownHeader-${targetsss}`).find('.ast-carrotup').removeClass('rotate-carrot');
-        $(`#endTaks-${targetsss}`).removeClass('hide');
-      }
+    // }
+    // if(target.id.split('-').includes('overRideBtn')){
+    //   let overrideObject : any = {
+    //     override : true,
+    //     cancelOverride : false,
+    //     data : target
+    //   }
+    //   this.handleSubjectService.setOverridebtnClickEvent(overrideObject);
+    // }
+    // if(target.id.split('-').includes('cancelOverRideBtn')){
+    //   let overrideObject : any = {
+    //     override : false,
+    //     cancelOverride : true,
+    //     data : target
+    //   }
+    //   this.handleSubjectService.setOverridebtnClickEvent(overrideObject);
+    // }
+    // if (target.id.split('-')[0] === 'dropDownHeader' || target.id.split('-')[0] === 'dropDownTitle' || target.id.split('-')[0] === 'dialogueArrow') {
+    //   let targetIDs = (target.id).split('-');
+    //   targetIDs.shift();
+    //   let targetsss = targetIDs.join('-');
+    //   let dropdownDataElement = $(`#dropDownData-${targetsss}`);
+    //   if ($(dropdownDataElement).hasClass('hide')) {
+    //     $(dropdownDataElement).removeClass('hide');
+    //     $(`#dropDownHeader-${targetsss}`).find('.ast-carrotup').addClass('rotate-carrot');
+    //     $(`#endTaks-${targetsss}`).removeClass('hide');
+    //   } else {
+    //     $(dropdownDataElement).addClass('hide')
+    //     $(`#dropDownHeader-${targetsss}`).find('.ast-carrotup').removeClass('rotate-carrot');
+    //     $(`#endTaks-${targetsss}`).removeClass('hide');
+    //   }
 
-    }
-    if(target.id.split('-')[0] === 'run'){
-      if(target.dataset?.dialogRun){
-        let data = JSON.parse(target.dataset?.dialogRun);
-        let runEventObj: any = {
-          agentRunButton: false,
-          intentName: data.name,
-          childBotId : data.childBotId,
-          childBotName : data.childBotName
-        }
-        this.handleSubjectService.setRunButtonClickEvent(runEventObj);
-      }
-    }
-    if(target.id.split('-')[0] === 'agentSelect'){
-      if(target.dataset?.dialogRun){
-        let data = JSON.parse(target.dataset?.dialogRun);
-        let runDialogueObject: any = {
-          agentRunButton: true,
-          name: data.name,
-          intentName: data.name,
-          searchFrom: this.projConstants.ASSIST,
-          positionId: this.randomUUIDPipe.transform(IdReferenceConst.positionId),
-          childBotId : data?.childBotId,
-          childBotName : data?.childBotName,
-          botId : this.connectionDetails?.botId
-        }
-        this.handleSubjectService.setActiveTab(this.projConstants.MYBOT);
-        this.commonService.agent_run_click(runDialogueObject, false);
-        this.handleSubjectService.setRunButtonClickEvent(runDialogueObject);
-      }
-    }
+    // }
+    // if(target.id.split('-')[0] === 'run'){
+    //   if(target.dataset?.dialogRun){
+    //     let data = JSON.parse(target.dataset?.dialogRun);
+    //     let runEventObj: any = {
+    //       agentRunButton: false,
+    //       intentName: data.name,
+    //       childBotId : data.childBotId,
+    //       childBotName : data.childBotName
+    //     }
+    //     this.handleSubjectService.setRunButtonClickEvent(runEventObj);
+    //   }
+    // }
+    // if(target.id.split('-')[0] === 'agentSelect'){
+    //   if(target.dataset?.dialogRun){
+    //     let data = JSON.parse(target.dataset?.dialogRun);
+    //     let runDialogueObject: any = {
+    //       agentRunButton: true,
+    //       name: data.name,
+    //       intentName: data.name,
+    //       searchFrom: this.projConstants.ASSIST,
+    //       positionId: this.randomUUIDPipe.transform(IdReferenceConst.positionId),
+    //       childBotId : data?.childBotId,
+    //       childBotName : data?.childBotName,
+    //       botId : this.connectionDetails?.botId
+    //     }
+    //     this.handleSubjectService.setActiveTab(this.projConstants.MYBOT);
+    //     this.commonService.agent_run_click(runDialogueObject, false);
+    //     this.handleSubjectService.setRunButtonClickEvent(runDialogueObject);
+    //   }
+    // }
   }
 
   // send and copy click operations.
   btnInit() {
-    document.addEventListener("keyup", (evt: any) => {
-      let target = evt.target;
-      let targetids = target.id.split('-');
-      if(target.dataset.feedbackComment) {
-        targetids.shift();
-        let aaa = $(`#feedbackHelpfulContainer-${targetids.join('-')} .btn-chip-negtive.active-chip`);
-        let arrayOfChips = [];
-        aaa.each((i, ele) => {
-          arrayOfChips.push($(ele).html())
-        });
-        let dataSets = $(`#feedbackdown-${targetids.join('-')} .ast-thumbdown`).data();
-        dataSets.feedbackdetails = arrayOfChips;
-        dataSets.comment = target.value;
-        if (target.value.length > 0) {
-          $(`#feedbackHelpfulContainer-${targetids.join('-')} .submit-btn`).removeAttr('disabled');
-          $(`#feedbackHelpfulContainer-${targetids.join('-')} .title-improve`).addClass('hide');
-        }
-        $(`#feedbackHelpfulContainer-${targetids.join('-')} .input-block-optional .input-text`).attr('value', target.value);
-        $(`#feedbackdown-${targetids.join('-')} .ast-thumbdown`).attr('data-comment', target.value);
-      }
-    })
+    // document.addEventListener("keyup", (evt: any) => {
+    //   let target = evt.target;
+    //   let targetids = target.id.split('-');
+      // if(target.dataset.feedbackComment) {
+      //   targetids.shift();
+      //   let aaa = $(`#feedbackHelpfulContainer-${targetids.join('-')} .btn-chip-negtive.active-chip`);
+      //   let arrayOfChips = [];
+      //   aaa.each((i, ele) => {
+      //     arrayOfChips.push($(ele).html())
+      //   });
+      //   let dataSets = $(`#feedbackdown-${targetids.join('-')} .ast-thumbdown`).data();
+      //   dataSets.feedbackdetails = arrayOfChips;
+      //   dataSets.comment = target.value;
+      //   if (target.value.length > 0) {
+      //     $(`#feedbackHelpfulContainer-${targetids.join('-')} .submit-btn`).removeAttr('disabled');
+      //     $(`#feedbackHelpfulContainer-${targetids.join('-')} .title-improve`).addClass('hide');
+      //   }
+      //   $(`#feedbackHelpfulContainer-${targetids.join('-')} .input-block-optional .input-text`).attr('value', target.value);
+      //   $(`#feedbackdown-${targetids.join('-')} .ast-thumbdown`).attr('data-comment', target.value);
+      // }
+    // })
   }
 
-  feedbackLoop(evt, isSubmit = false) {
-    if (isSubmit) {
-      this.AgentAssist_feedback_click(evt, true);
-    } else {
-      this.AgentAssist_feedback_click(evt);
-    }
+  // feedbackLoop(evt, isSubmit = false) {
+  //   if (isSubmit) {
+  //     this.AgentAssist_feedback_click(evt, true);
+  //   } else {
+  //     this.AgentAssist_feedback_click(evt);
+  //   }
 
-  }
+  // }
 
-  AgentAssist_feedback_click(e, isSubmit = false) {
-    let convId, botId, feedback, userInput, dialogId, comment, feedbackdetails, dialogName, taskId, feedDetailsArray;
-    if (isSubmit) {
-      convId = e.convId;
-      botId = e.botId;
-      feedback = e.feedback;
-      userInput = e.userInput;
-      dialogName = e.dialogName;
-      dialogId = e.dialogid;
-      comment = e.comment;
-      feedbackdetails = e.feedbackdetails;
-      taskId = e.taskId
-    } else {
-      convId = e.target.dataset.convId;
-      botId = e.target.dataset.botId;
-      feedback = e.target.dataset.feedback;
-      userInput = e.target.dataset.userInput;
-      dialogName = e.target.dataset.dialogName;
-      dialogId = e.target.dataset.dialogid;
-      comment = e.target.dataset.comment;
-      feedbackdetails = e.target.dataset.feedbackdetails;
-      taskId = e.target.dataset.taskId
-    }
+  // AgentAssist_feedback_click(e, isSubmit = false) {
+  //   let convId, botId, feedback, userInput, dialogId, comment, feedbackdetails, dialogName, taskId, feedDetailsArray;
+  //   if (isSubmit) {
+  //     convId = e.convId;
+  //     botId = e.botId;
+  //     feedback = e.feedback;
+  //     userInput = e.userInput;
+  //     dialogName = e.dialogName;
+  //     dialogId = e.dialogid;
+  //     comment = e.comment;
+  //     feedbackdetails = e.feedbackdetails;
+  //     taskId = e.taskId
+  //   } else {
+  //     convId = e.target.dataset.convId;
+  //     botId = e.target.dataset.botId;
+  //     feedback = e.target.dataset.feedback;
+  //     userInput = e.target.dataset.userInput;
+  //     dialogName = e.target.dataset.dialogName;
+  //     dialogId = e.target.dataset.dialogid;
+  //     comment = e.target.dataset.comment;
+  //     feedbackdetails = e.target.dataset.feedbackdetails;
+  //     taskId = e.target.dataset.taskId
+  //   }
 
-    feedDetailsArray = typeof feedbackdetails == 'string' ? [] : feedbackdetails?.filter(ele => ele !== null);
-    this.agent_feedback_usage({
-      comment: comment, feedbackDetails: feedDetailsArray, userInput: userInput, dialogName: dialogName, conversationId: convId, botId: botId, feedback: feedback, eventName: 'agent_usage_feedback', dialogId: dialogId,
-      taskId: taskId
-    });
+  //   feedDetailsArray = typeof feedbackdetails == 'string' ? [] : feedbackdetails?.filter(ele => ele !== null);
+  //   this.agent_feedback_usage({
+  //     comment: comment, feedbackDetails: feedDetailsArray, userInput: userInput, dialogName: dialogName, conversationId: convId, botId: botId, feedback: feedback, eventName: 'agent_usage_feedback', dialogId: dialogId,
+  //     taskId: taskId
+  //   });
 
-  }
+  // }
 
-  agent_feedback_usage(data) {
-    var agent_assist_request = {
-      "feedback": data.feedback,
-      "botId": data.botId,
-      "conversationId": data.conversationId,
-      userInput: data.userInput,
-      taskName: data.dialogName,
-      "event": data.eventName,
-      positionId: data.dialogId,
-      taskId: data.taskId,
-      comment: data.comment,
-      feedbackDetails: data.feedbackDetails,
-      'experience': (this.commonService.configObj.isCall && this.commonService.configObj.isCall == 'true') ? ProjConstants.VOICE : ProjConstants.CHAT,
-      "interactionType": this.activeTab == 'Assist' ? 'assist' : 'mybot'
-    }
-    this.websocketService.emitEvents(EVENTS.agent_usage_feedback, agent_assist_request);
-  }
+  // agent_feedback_usage(data) {
+  //   var agent_assist_request = {
+  //     "feedback": data.feedback,
+  //     "botId": data.botId,
+  //     "conversationId": data.conversationId,
+  //     userInput: data.userInput,
+  //     taskName: data.dialogName,
+  //     "event": data.eventName,
+  //     positionId: data.dialogId,
+  //     taskId: data.taskId,
+  //     comment: data.comment,
+  //     feedbackDetails: data.feedbackDetails,
+  //     'experience': (this.commonService.configObj.isCall && this.commonService.configObj.isCall == 'true') ? ProjConstants.VOICE : ProjConstants.CHAT,
+  //     "interactionType": this.activeTab == 'Assist' ? 'assist' : 'mybot'
+  //   }
+  //   this.websocketService.emitEvents(EVENTS.agent_usage_feedback, agent_assist_request);
+  // }
 
-  AgentAssist_feedBack_Update_Request(e) {
-    let agent_assist_feedback_request = {
-      conversationId: e.convId,
-      agentId: '',
-      botId: e.botId,
-      orgId: '',
-      taskId: e.taskId,
-      positionId: e.dialogid,
-      'experience': (this.commonService.configObj.isCall && this.commonService.configObj.isCall == 'true') ? ProjConstants.VOICE : ProjConstants.CHAT,
-      "interactionType": this.activeTab == 'Assist' ? 'assist' : 'mybot'
-    }
+  // AgentAssist_feedBack_Update_Request(e) {
+  //   let agent_assist_feedback_request = {
+  //     conversationId: e.convId,
+  //     agentId: '',
+  //     botId: e.botId,
+  //     orgId: '',
+  //     taskId: e.taskId,
+  //     positionId: e.dialogid,
+  //     'experience': (this.commonService.configObj.isCall && this.commonService.configObj.isCall == 'true') ? ProjConstants.VOICE : ProjConstants.CHAT,
+  //     "interactionType": this.activeTab == 'Assist' ? 'assist' : 'mybot'
+  //   }
 
-    this.websocketService.emitEvents(EVENTS.agent_feedback_request, agent_assist_feedback_request);
+  //   this.websocketService.emitEvents(EVENTS.agent_feedback_request, agent_assist_feedback_request);
 
-  }
+  // }
 
   scrollToTranscriptElement(top){
     if(top > 0){

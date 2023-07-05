@@ -23,6 +23,7 @@ export class HandleSubjectService {
   public autoBotIdSubject$ = new Subject<object>();
   public userHistoryDataSubject$ = new BehaviorSubject<object>(null);
   public userAgentTranscriptionConversationHistory$ = new BehaviorSubject<object>(null);
+  public faqAmbiguitySubject$ = new Subject<object>();
   public userBotConversationDetails;
 
   constructor() { }
@@ -119,5 +120,9 @@ export class HandleSubjectService {
 
   getUserBotConvosDataDetails() {
     return this.userBotConversationDetails;
+  }
+
+  setFaqAmbiguitySubject(obj){
+    this.faqAmbiguitySubject$.next(obj);
   }
 }

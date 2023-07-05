@@ -17,7 +17,7 @@ import { KoreGenerateuuidPipe } from './pipes/kore-generateuuid.pipe';
 import { HtmlEntityPipe } from './pipes/html-entity.pipe';
 import { EmptyObjectCheckPipe } from './pipes/empty-object-check.pipe';
 import { FormatAMPMPipe } from './pipes/format-ampm.pipe';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoaderComponent } from './components/loader/loader.component';
 import { TypeaheadComponent } from './components/typeahead/typeahead.component';
 import { RemoveTagFromStringPipe } from './pipes/remove-tag-from-string.pipe';
@@ -25,13 +25,19 @@ import { ReplaceTextWithTagPipe } from './pipes/replace-text-with-tag.pipe';
 import { UserBotHistoryComponent } from './components/user-bot-history/user-bot-history.component';
 import { ConverTimestampToDatePipe } from './pipes/conver-timestamp-to-date.pipe';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
+import { SuggestionsComponent } from './render-comp/suggestions/suggestions.component';
+import { SmalltalkComponent } from './render-comp/smalltalk/smalltalk.component';
+import { AutomationComponent } from './render-comp/automation/automation.component';
+import { FeedbackComponent } from './render-comp/feedback/feedback.component';
 
 
 @NgModule({
-  declarations: [OverlaysearchComponent, InterruptPopupComponent, RestorePopupComponent, SummaryPopupComponent, TerminateComponent, RandomUUIDPipe, RemoveSpecialCharPipe, ReplaceQuotStringWithDoubleQuotPipe, SanitizeHtmlPipe, RawHtmlPipe, KoreGenerateuuidPipe, HtmlEntityPipe, EmptyObjectCheckPipe, FormatAMPMPipe, LoaderComponent, TypeaheadComponent, RemoveTagFromStringPipe, ReplaceTextWithTagPipe, UserBotHistoryComponent, ConverTimestampToDatePipe, SafeHtmlPipe],
+  declarations: [OverlaysearchComponent, InterruptPopupComponent, RestorePopupComponent, SummaryPopupComponent, TerminateComponent, RandomUUIDPipe, RemoveSpecialCharPipe, ReplaceQuotStringWithDoubleQuotPipe, SanitizeHtmlPipe, RawHtmlPipe, KoreGenerateuuidPipe, HtmlEntityPipe, EmptyObjectCheckPipe, FormatAMPMPipe, LoaderComponent, TypeaheadComponent, RemoveTagFromStringPipe, ReplaceTextWithTagPipe, UserBotHistoryComponent, ConverTimestampToDatePipe, SafeHtmlPipe,
+    SmalltalkComponent,SuggestionsComponent, AutomationComponent, FeedbackComponent],
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
     PerfectScrollbarModule
   ],
@@ -40,6 +46,6 @@ import { SafeHtmlPipe } from './pipes/safe-html.pipe';
   exports : [OverlaysearchComponent, InterruptPopupComponent, RestorePopupComponent, SummaryPopupComponent, TerminateComponent, RandomUUIDPipe,
     RemoveSpecialCharPipe,ReplaceQuotStringWithDoubleQuotPipe, SanitizeHtmlPipe, RawHtmlPipe, KoreGenerateuuidPipe, HtmlEntityPipe, EmptyObjectCheckPipe,
     FormatAMPMPipe, LoaderComponent, TypeaheadComponent,RemoveTagFromStringPipe, ReplaceTextWithTagPipe, UserBotHistoryComponent, ConverTimestampToDatePipe,
-    SafeHtmlPipe]
+    SafeHtmlPipe,SmalltalkComponent,SuggestionsComponent, AutomationComponent, FeedbackComponent]
 })
 export class SharedModule { }

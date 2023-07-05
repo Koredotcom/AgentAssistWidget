@@ -65,7 +65,7 @@ export class DesignAlterService {
     let beforeLastElementArray: any = document.getElementById(blockId).querySelectorAll('.last-msg-white-bg');
     for (let ele of beforeLastElementArray) {
       if (ele && scrollAtEnd) {
-        $(ele).removeClass("last-msg-white-bg");
+        // $(ele).removeClass("last-msg-white-bg");
       }
     }
     let lastElement = this.getLastElement(dynamicBlockId);
@@ -166,6 +166,7 @@ export class DesignAlterService {
             index++;
           }
           lastElement = Array.from(listOfNodes).pop();
+          
         }
       }
     }
@@ -196,7 +197,7 @@ export class DesignAlterService {
     if (elem) {
       let parentRec = document.getElementById(IdReferenceConst.HOMESCROLLBAR).getBoundingClientRect();
       let childRec = elem.getBoundingClientRect();
-      if (childRec.top == 0 && $(elem).parent().attr('class')?.includes('hide')) {
+      if (childRec.top == 0 && $(elem)?.parent()?.attr('class')?.includes('hide')) {
         if ($(elem).parent().parent().length) {
           elem = $(elem).parent().parent()[0];
         }

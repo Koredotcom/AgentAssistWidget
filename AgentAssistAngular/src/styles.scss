@@ -1020,8 +1020,8 @@ html, body{
 
 
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .override-input-div {
-    position: absolute;
-    bottom: -40px;
+    // position: absolute;
+    // bottom: -40px;
 }
 
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data::before {
@@ -1166,7 +1166,7 @@ pointer-events: all;
 /* background: #BDC1C6; */
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data:not(.last-msg-white-bg) .run-info-content .agent-utt.enter-details-block .title-data .input-text{
-    pointer-events: none;
+    // pointer-events: none;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data .run-info-content .agent-utt.enter-details-block .title-data .input-text:focus{
 box-shadow: none !important;
@@ -3261,7 +3261,14 @@ border: 1px solid transparent !important;
     margin-left: 6px;
     padding: 3px;
     cursor: pointer;
+    padding-right: 30px;
 }
+
+.feedback-helpul-container .titles-content .help-improve-arrow .arrow-icon.rotate-carrot {
+    transform: rotate(180deg);
+    margin-right: 23px;
+ }
+
 
 /* scroll bottom button */
 

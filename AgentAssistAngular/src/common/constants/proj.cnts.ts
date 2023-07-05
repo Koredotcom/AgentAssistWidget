@@ -58,6 +58,8 @@ export const ProjConstants = {
     PS_SCROLL_UP : 'ps-scroll-up',
     PROACTIVE_INITIAL_MODE : 'proactive_initial_mode',
     SMARTASSIST_SOURCE : 'smartassist-color-scheme',
+    ASK_CUSTOMER : 'Ask Customer',
+    TELL_CUSTOMER : 'Tell Customer',
     jToken : "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NjUzODYxNzgyMjMsImV4cCI6MTY2NTM4NjE3OTEyMywiYXVkIjoiIiwiaXNzIjoiY3MtZTRhMmI0YjYtM2RiZC01NWQwLWIwMjUtNDY2ZTVkMDRjOTgxIiwic3ViIjoiYy00NzJhNjYyLTQ5ZDYtNDM5Ny1hMjY1LTViNzE4ZDQ0MWNiNCIsImlzQW5vbnltb3VzIjpmYWxzZX0.1SN5BIEaQ4Rr6XpyKXR1AerNcIEmyDcnK6P0cpPkQzM"
 }
 
@@ -147,4 +149,20 @@ export const storageConst = {
     FAQ_LIST : 'faqList',
     SEARCH_VALUE : 'search',
     PROACTIVE_MODE : 'proactiveMode'
+}
+
+
+export const RenderResponseType = {
+    SUGGESTIONS : 'SUGGESTIONS',
+    SMALLTALK : 'SMALLTALK',
+    AUTOMATION : 'AUTOMATION',
+    USERMSG : 'USERMSG',
+    ASSISTRESPONSE : 'ASSISTRESPONSE',
+    FEEDBACK : 'FEEDBACK'
+}
+
+export const FeebackConst = {
+    LIKE : 'like',
+    DISLIKE : 'dislike',
+    DISLIKE_LIST : ['Wrong suggestions', 'Incorrect intent', 'Accidental click', 'Time taking', 'Other']
 }

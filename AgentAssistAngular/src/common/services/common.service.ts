@@ -38,6 +38,8 @@ export class CommonService {
   currentPositionId;
   currentPositionIdOfMyBot;
 
+  suggestionsAnswerPlaceableIDs : any = [];
+
   clickEventObjectsBeforeTabShift : any = [];
   tabNamevsId : any = {
     [ProjConstants.ASSIST] : IdReferenceConst.DYNAMICBLOCK,
@@ -495,6 +497,15 @@ export class CommonService {
     ;
   }
 
+  getTemplateHtml(isTemplateRender, result){
+    let renderedMessage = isTemplateRender ? this.templateRenderClassService?.AgentChatInitialize?.renderMessage(result) : '';
+    if (renderedMessage && renderedMessage[0]) {
+      let obj =  $(this.templateRenderClassService.AgentChatInitialize.renderMessage(result))[0].outerHTML
+      return (obj);
+    }
+    return null;
+  }
+
   confirmationNodeRenderDataTransform(data){
     if((data.componentType == 'dialogAct' || data.entityType == 'list_of_values')  && data.buttons && data.buttons.length > 0){
       if(!data.applyDefaultTemplate){
@@ -944,6 +955,8 @@ export class CommonService {
     let seeLessElement = $('#seeLess-' + id);
     let snippetsendMsg;
     let viewLinkElement;
+    console.log(descElement, "descELement********", id);
+    
     if (type == ProjConstants.SNIPPET) {
       titleElement = $("#snippettitleLib-" + id);
       descElement = $("#snippetdescLib-" + id);
@@ -1052,7 +1065,7 @@ export class CommonService {
 
   handleEmptyLine(answer, quotflag){
     let eleanswer = '';
-    if(answer != undefined && answer != null){
+    if(typeof answer === 'string'){
         eleanswer = answer.replace(/(\r\n|\n|\r)/gm, "<br>");
         eleanswer = this.replaceLtGt(eleanswer, quotflag)
         eleanswer = this.aaHelpers.convertMDtoHTML(eleanswer, "bot", eleanswer)
