@@ -100,6 +100,7 @@ export class AdherenceComponent implements OnInit {
 
   formatUtterArray(text) {
     if(!this.cs.metaForUtternace?.integration){
+      this.loaded = true;
       return;
     }
     let params: any = {
