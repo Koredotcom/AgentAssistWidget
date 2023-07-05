@@ -1,0 +1,133 @@
+<div class="dialog-task-accordiaon-info" attr.id="addRemoveDropDown-{{automationData.uuid}}">
+    <div class="accordion-header" attr.id="dropDownHeader-{{automationData.uuid}}" (click)="toggleAutomation(!automationData.showAutomation)">
+        <div class="icon-info">
+            <i class="ast-rule"></i>
+        </div>
+        <div class="header-text" attr.id="dropDownTitle-{{automationData.uuid}}">{{automationData.data.intentName}}
+        </div>
+        <i class="ast-carrotup rotate-carrot" attr.id="dialogueArrow-{{automationData.uuid}}"></i>
+        <button class="btn-danger" attr.id="terminateAgentDialog-{{automationData.uuid}}" (click)="terminateButtonClick()" *ngIf="!automationData.endAutomation">Terminate</button>
+    </div>
+    <div class="collapse-acc-data" attr.id="dropDownData-{{automationData.uuid}}" *ngIf="automationData.showAutomation">
+
+        <ng-container *ngFor="let automation of automationData.automationsArray; let i =index">
+
+            <ng-container *ngIf="automation.responseType == renderResponseType.ASSISTRESPONSE">
+                <ng-container *ngIf="automation.data.isPrompt">
+                    <div class="steps-run-data" attr.id="{{automation.stepRunId}}" [ngClass]="{'last-msg-white-bg' : (agentassistArrayIndex == agentassistResponseArrayLength-1) && (i == automationData.automationsArray.length-1)}">
+                        <div class="icon_block">
+                            <i class="ast-agent"></i>
+                        </div>
+                        <div class="run-info-content">
+                            <div class="title">Ask customer</div>
+                            <div class="agent-utt">
+                                <div class="title-data" attr.id="displayData-{{automation.uuid}}"
+                                    *ngIf="!automation.templateRender && automation?.data?.buttons && automation?.data?.buttons[0]?.value">
+                                    {{automation.data.buttons[0].value}}</div>
+                                <div class="title-data" *ngIf="automation.templateRender && automation.template">
+                                    <ul class="chat-container" attr.id="{{automation.uuid}}"
+                                        [innerHTML]="automation.template | safeHtml"></ul>
+                                </div>
+                                <ng-container
+                                    *ngTemplateOutlet="automation.templateRender ? askultemplate : asknormalText; context: { $implicit: automation }">
+                                </ng-container>
+                                <div class="action-links">
+                                    <button class="send-run-btn" id="sendMsg" (click)="handleSendCopyButton(projConstants.SEND, automation.sendData)" *ngIf="automation.showSend">Send</button>
+                                    <div class="copy-btn" (click)="handleSendCopyButton(projConstants.COPY, automation.sendData)" *ngIf="automation.showCopy">
+                                        <i class="ast-copy"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+    
+                <ng-container *ngIf="!automation.data.isPrompt">
+                    <div class="steps-run-data" attr.id="{{automation.stepRunId}}"
+                     [ngClass]="{'last-msg-white-bg' : (agentassistArrayIndex == agentassistResponseArrayLength-1) && (i == automationData.automationsArray.length-1)}">
+                        <div class="icon_block">
+                            <i class="ast-agent"></i>
+                        </div>
+                        <div class="run-info-content">
+                            <div class="title">Tell Customer</div>
+                            <div class="agent-utt">
+                                <div class="title-data" attr.id="displayData-{{automation.uuid}}"
+                                    *ngIf="!automation.templateRender && automation?.data?.buttons && automation?.data?.buttons[0]?.value">
+                                    {{automation.data.buttons[0].value}}</div>
+                                <div class="title-data" *ngIf="automation.templateRender && automation.template">
+                                    <ul class="chat-container" attr.id="{{automation.uuid}}"
+                                        [innerHTML]="automation.template | safeHtml"></ul>
+                                </div>
+                                <div class="action-links">
+                                    <button class="send-run-btn" attr.id="sendMsg" (click)="handleSendCopyButton(projConstants.SEND, automation.sendData)" *ngIf="automation.showSend">Send</button>
+                                    <div class="copy-btn" (click)="handleSendCopyButton(projConstants.COPY, automation.sendData)" *ngIf="automation.showCopy">
+                                        <i class="ast-copy"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+    
+                <div class="steps-run-data" attr.id="inputFieldForAgent-{{automationData.uuid}}"
+                    *ngIf="automation.toggleOverride"
+                    [ngClass]="{'last-msg-white-bg' : (agentassistArrayIndex == agentassistResponseArrayLength-1) && (i == automationData.automationsArray.length-1)}">
+                    <div class="icon_block">
+                        <i class="ast-agent"></i>
+                    </div>
+                    <div class="run-info-content">
+                        <div class="title">Input overridden. Please provide the input</div>
+                        <div class="agent-utt enter-details-block">
+                            <div class="title-data"><span
+                                    class="enter-details-title">{{automation.agentInputEntityName}}</span>
+                                <input type="text" placeholder="Enter Value" class="input-text chat-container"
+                                    attr.id="agentInput-{{automation.agentInputId}}"
+                                    (keydown.enter)="handleAgentInput($event,automation)">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="override-input-div" attr.id="overRideDiv-{{automationData.uuid}}"
+                    *ngIf="automation.showOverrideDiv">
+                    <button class="override-input-btn" attr.id="overRideBtn-{{automationData.uuid}}"
+                        *ngIf="!automation.toggleOverride"
+                        (click)="toggleOverrideMode(automation, idReferenceConst.OVERRIDE_BTN, automationData.dialogId)">Override
+                        Input</button>
+                    <button class="cancel-override-input-btn" attr.id="cancelOverRideBtn-{{automationData.uuid}}"
+                        *ngIf="automation.toggleOverride"
+                        (click)="toggleOverrideMode(automation, idReferenceConst.CANCEL_OVERRIDE_BTN, automationData.dialogId)">Cancel
+                        Override</button>
+                </div>
+            </ng-container>
+
+            <ng-container *ngIf="automation.responseType == renderResponseType.USERMSG">
+                <div class="steps-run-data">
+                    <div class="icon_block_img">
+                        <img src="{{imageFilePath+imageFileNames['USERICON']}}">
+                    </div>
+                    <div class="run-info-content" attr.id="userInput-{{automation.uuid}}">
+                        <div class="title">{{automation.titleText}}</div>
+                        <div class="agent-utt">
+                            <div class="title-data">{{automation?.data?.userInput}}</div>
+                        </div>
+                        <div class="order-number-info" *ngIf="(automation.data.entityValue && !automation.data.isErrorPrompt && automation.entityDisplayName); else userIpErr">{{automation.entityDisplayName}} : {{automation.data.userInput}}</div>
+                        <ng-template #userIpErr>
+                            <ng-container *ngIf="automation.data.isErrorPrompt && automation.entityDisplayName">
+                                <div class="order-number-info">{{automation.entityDisplayName}} : 
+                                    <span style="color:red">Value unidentified</span>
+                                </div>
+                                <div>
+                                    <img src="{{imageFilePath+imageFileNames['WARNING']}}" style="padding-right: 8px;">
+                                    <span style="font-size: 12px; line-height: 18px; color: #202124;">Incorrect input format</span>
+                                </div>
+                            </ng-container>
+                        </ng-template>
+                    </div>
+                </div>
+            </ng-container>
+
+        </ng-container>
+    </div>
+
+</div>

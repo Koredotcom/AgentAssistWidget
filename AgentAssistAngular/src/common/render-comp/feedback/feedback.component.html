@@ -1,0 +1,38 @@
+
+<div class="dilog-task-end" attr.id="endTaks-{{feedbackData.uuid}}">
+    <div class="text-dialog-task-end">Dialog Task ended</div>
+</div>
+<form [formGroup]="feedbackForm" (keydown.enter)="$event.preventDefault()">
+    <div class="feedback-helpul-container" attr.id="feedbackHelpfulContainer-{{feedbackData.uuid}}">
+        <div class="titles-content">
+            <div class="title">Helpful?</div>
+            <div class="btn-positive" (click)="addFeedback(feedbackConst.LIKE)" [ngClass]="{'active-feedback' : feedbackData?.feedback == feedbackConst.LIKE}">
+                <i class="ast-thumbup"></i>
+                <span class="tootltip-tabs">Like</span>
+            </div>
+            <div class="btn-negtive" (click)="addFeedback(feedbackConst.DISLIKE)" [ngClass]="{'active-feedback' : feedbackData?.feedback == feedbackConst.DISLIKE}">
+                <i class="ast-thumbdown" ></i>
+                <span class="tootltip-tabs">Dislike</span>
+            </div>
+            <div class="thanks-update" *ngIf="feedbackData?.feedback == feedbackConst.LIKE">Thanks for the feedback!</div>
+            <div class="help-improve-arrow" *ngIf="feedbackData?.feedback == feedbackConst.DISLIKE">
+                <div class="title-improve" *ngIf="(feedbackData.feedbackDetails.length == 0 && !feedbackForm.controls.comment.value) ">Help us improve (optional)</div>
+                <div class="arrow-icon" attr.id="dropdownArrowFeedBack-{{feedbackData.uuid}}" [ngClass]="{'rotate-carrot' : feedbackData.arrowToggle}" (click)="dislikeFeedbackArrowToggle()">
+                    <i class="ast-carrotup"  attr.id="dropdownArrowFeedBackIcon-{{feedbackData.uuid}}"></i>
+                </div>
+            </div>
+        </div>
+        <div class="explore-more-negtive-data" *ngIf="feedbackData.arrowToggle">
+            <div class="btns-group-negtive-chips"  attr.id="feedBackOptions-{{feedbackData.uuid}}">
+                <div class="btn-chip-negtive" [ngClass]="{'active-chip' : feedbackData.feedbackDetails.includes(suggestion)}"
+                *ngFor="let suggestion of feedbackConst.DISLIKE_LIST" 
+                (click)="addDislikeSuggestion(suggestion)">{{suggestion}}</div>
+            </div>
+            <div class="input-block-optional">
+                <div class="label-text">Additional comments (Optional) {{feedbackForm.invalid}} {{formTouched}}</div>
+                <input type="text" placeholder="Type to add comment" class="input-text" attr.id="feedBackComment-{{feedbackData.uuid}}" formControlName="comment">
+            </div>
+            <button class="submit-btn" id="feedbackSubmit" [disabled]="!formTouched" (click)="submitFeedback()">{{feedbackData?.submitForm ? 'Update' : 'Save'}}</button>
+        </div>
+    </div>
+</form>

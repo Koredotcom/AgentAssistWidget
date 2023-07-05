@@ -1,0 +1,81 @@
+<ng-container *ngIf="smallTalkData.responseType == renderResponseType.ASSISTRESPONSE">
+    <div class="collapse-acc-data before-none" attr.id="smallTalk-{{smallTalkData.uuid}}"
+        [ngClass]="{'last-msg-white-bg' : (agentassistArrayIndex == agentassistResponseArrayLength-1)}">
+        <div class="steps-run-data">
+            <div class="icon_block">
+                <i class="ast-agent"></i>
+            </div>
+            <div class="run-info-content">
+                <div class="title">{{smallTalkData.title}}</div>
+                <div class="agent-utt">
+                    <div class="title-data" attr.id="displayData-{{smallTalkData.uuid}}"
+                        *ngIf="!smallTalkData.isTemplateRender">{{smallTalkData.value}}</div>
+                    <div class="title-data">
+                        <ul class="chat-container" attr.id="displayData-{{smallTalkData.uuid}}"
+                            *ngIf="smallTalkData.isTemplateRender" [innerHTML]="smallTalkData.template | safeHtml"></ul>
+                    </div>
+                    <div class="action-links">
+                        <button class="send-run-btn" id="sendMsg"
+                            (click)="handleSendCopyButton(projConstants.SEND, smallTalkData.sendData)">Send</button>
+                        <div class="copy-btn"
+                            (click)="handleSendCopyButton(projConstants.COPY, smallTalkData.sendData)">
+                            <i class="ast-copy"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="steps-run-data" attr.id="inputFieldForAgent-{{smallTalkData.uuid}}"
+            *ngIf="smallTalkData.toggleOverride">
+            <div class="icon_block">
+                <i class="ast-agent"></i>
+            </div>
+            <div class="run-info-content">
+                <div class="title">Input overridden. Please provide the input</div>
+                <div class="agent-utt enter-details-block">
+                    <div class="title-data"><span
+                            class="enter-details-title">{{smallTalkData.agentInputEntityName}}</span>
+                        <input type="text" placeholder="Enter Value" class="input-text chat-container"
+                            (keydown.enter)="handleAgentInput($event)">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="override-input-div" attr.id="overRideDiv-{{smallTalkData.uuid}}"
+            *ngIf="smallTalkData.showOverrideDiv && smallTalkData.data.isPrompt">
+            <button class="override-input-btn" attr.id="overRideBtn-{{smallTalkData.uuid}}"
+                *ngIf="!smallTalkData.toggleOverride" (click)="toggleOverrideMode(idReferenceConst.OVERRIDE_BTN)">
+                Override Input
+            </button>
+            <button class="cancel-override-input-btn hide" attr.id="cancelOverRideBtn-{{smallTalkData.uuid}}"
+                *ngIf="smallTalkData.toggleOverride" (click)="toggleOverrideMode(idReferenceConst.CANCEL_OVERRIDE_BTN)">
+                Cancel Override
+            </button>
+        </div>
+    </div>
+</ng-container>
+
+<ng-container *ngIf="smallTalkData.responseType == renderResponseType.USERMSG">
+    <div class="collapse-acc-data before-none" id='smallTalk-{{smallTalkData.uuid}}'>
+        <div class="steps-run-data">
+            <div class="icon_block">
+                <i class="ast-agent"></i>
+            </div>
+            <div class="run-info-content">
+                <div class="title">{{smallTalkData.titleText}} </div>
+                <div class="agent-utt">
+                    <div class="title-data" id="displayData-{{smallTalkData.uuid}}">{{smallTalkData?.data?.userInput}}</div>
+                    <div class="action-links">
+                        <button class="send-run-btn" id="sendMsg"
+                            (click)="handleSendCopyButton(projConstants.SEND, smallTalkData?.data?.userInput)">Send</button>
+                        <div class="copy-btn"
+                            (click)="handleSendCopyButton(projConstants.COPY, smallTalkData?.data?.userInput)">
+                            <i class="ast-copy"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-container>
+
