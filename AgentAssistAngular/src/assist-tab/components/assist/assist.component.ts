@@ -55,6 +55,7 @@ export class AssistComponent implements OnInit {
   smallTalkOverrideBtnId : string;
   faqManualClick : boolean = false;
   userBotSessionDetails;
+  interactiveLangaugeDetails = 'en';
 
 
 
@@ -75,9 +76,12 @@ export class AssistComponent implements OnInit {
   ngOnInit(): void {
     this.subscribeEvents();
     this.scrollToBottom();
-    
+    if(this.connectionDetails.interactiveLanguage !== '') {
+      this.interactiveLangaugeDetails = this.connectionDetails.interactiveLanguage;
+    }
+
   }
- 
+
   ngOnDestroy() {
     this.subscriptionsList.forEach((subscription) => {
       subscription.unsubscribe();

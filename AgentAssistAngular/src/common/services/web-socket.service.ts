@@ -29,6 +29,15 @@ export class WebSocketService {
   isWelcomeResonse = false;
   LoaderTimeout: number = 10000;
 
+  loaderEvents = {
+    'welcome_message_request' : true,
+    'agent_assist_request' : true,
+    'agent_menu_request': true,
+    'agent_feedback_request' : true,
+    'agent_assist_agent_request' : true,
+    'request_resolution_comments' : true,
+  }
+
 
   constructor(private handleSubjectService : HandleSubjectService,
     private sanitizeHTMLPipe : SanitizeHtmlPipe, private localStorageService : LocalStorageService,
@@ -66,7 +75,10 @@ export class WebSocketService {
       requestParams.source = this.connectionDetails.source;
       requestParams.experience = (this.connectionDetails.isCall && this.connectionDetails.isCall == "true") ?  ProjConstants.VOICE : ProjConstants.CHAT
     }
-    this.loaderOnTimer()
+    if(this.loaderEvents[eventName]) {
+      this.loaderOnTimer()
+    }
+
     this._agentAsisstSocket.emit(eventName, requestParams);
   }
 

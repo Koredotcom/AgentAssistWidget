@@ -8,7 +8,10 @@
                 <i class="ast-agent"></i>
             </div>
             <div class="run-info-content" *ngFor="let ele of welcomeMsgResponse?.buttons; let i=index">
+              <div class="title" *ngIf="(i === 0 && interactiveLangaugeDetails === 'es') else enRef">El cliente ha esperado a un agente durante unos segundos.<br/>Aquí hay algunas líneas de apertura apropiadas.</div>
+              <ng-template #enRef>
                 <div class="title" *ngIf="i === 0">Customer has waited for an agent for few seconds.<br/>Here are some appropriate opening lines.</div>
+              </ng-template>
                 <div class="agent-utt">
                  <div class="title-data" id="displayData-{{uuids}}">{{ele.value}}</div>
                  <div class="action-links" *ngIf="!commonService.isCallConversation">
