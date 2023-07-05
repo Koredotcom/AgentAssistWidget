@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
@@ -22,7 +22,7 @@ import { SubSink } from 'subsink';
   templateUrl: './coaching.component.html',
   styleUrls: ['./coaching.component.scss']
 })
-export class CoachingComponent implements OnInit {
+export class CoachingComponent implements OnInit, OnDestroy {
 
   modalRef:any;
   modalFlowCreateRef:any;
@@ -57,6 +57,10 @@ export class CoachingComponent implements OnInit {
     private authService: AuthService,
     private cs: CoachingService
     ) { }
+
+  ngOnDestroy(): void {
+    this.subs.unsubscribe();
+  }
 
   ngOnInit(): void {
     this.subs.sink = this.workflowService.updateBotDetails$.subscribe((ele)=>{
