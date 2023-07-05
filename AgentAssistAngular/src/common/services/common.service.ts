@@ -1197,7 +1197,7 @@ export class CommonService {
     });
   }
 
-  getInitialSentiChartOptions(object): EChartsOption {
+  getInitialSentiChartOptions(object): EChartsOption | any {
     return {
       xAxis: {
         splitLine: { show: false },
@@ -1258,7 +1258,7 @@ export class CommonService {
     };
   }
 
-  getSentiAnalysisChartOptions(object): EChartsOption {
+  getSentiAnalysisChartOptions(object): EChartsOption | any {
     return {
       xAxis: {
         splitLine: { show: false },
