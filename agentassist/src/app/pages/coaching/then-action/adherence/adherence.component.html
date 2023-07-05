@@ -157,13 +157,19 @@
                 <div class="data-loaded-searched-utt">
                     <perfect-scrollbar>
                         <div class="scroll-data">
-                            <div class="skelton-load-empty">
+                            <div class="skelton-load-empty" *ngIf="false">
                                 <ng-container *ngFor="let item of [].constructor(12)">
                                     <div class="loading-skelton">
                                         <div class="bg-1"></div>
                                         <div class="bg-2"></div>
                                     </div>
                                 </ng-container>
+                            </div>
+                            <div class="empty-search">
+                                <div class="img-block-empty">
+                                    <img src="assets/icons/empty-search-add.svg">
+                                </div>
+                                <p>No conversation history found.</p>
                             </div>
                             <div class="chat-conv-utterance d-none">
                                 <div class="conversations-type">
