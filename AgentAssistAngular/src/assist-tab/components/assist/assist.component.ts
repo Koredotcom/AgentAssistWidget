@@ -387,7 +387,7 @@ export class AssistComponent implements OnInit {
         entityDisplayName = this.agentAssistResponse.newEntityDisplayName ? this.agentAssistResponse.newEntityDisplayName : this.agentAssistResponse.newEntityName;
       }
       if (data.entityValue && !data.isErrorPrompt && entityDisplayName) {
-        entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${this.sanitizeHtmlPipe.transform(data.userInput)}</div>`);
+        entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${this.sanitizeHtmlPipe.transform(data.entityValue)}</div>`);
       } else {
         if (data.isErrorPrompt && entityDisplayName) {
           let entityHtmls = this.assisttabService.errorTemplate(this.imageFilePath, this.imageFileNames, entityDisplayName);
