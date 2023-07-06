@@ -1206,6 +1206,7 @@ border: 1px solid transparent !important;
     line-height: 15px;
     color: var(--default-text-color);
     font-style: italic;
+    word-break: break-word;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data.last-msg-white-bg .run-info-content .agent-utt .title-data{
     font-size: 14px;
@@ -1278,6 +1279,7 @@ border: 1px solid transparent !important;
     font-size: 12px;
     line-height: 15px;
     color: var(--default-text-color2);
+    word-break: break-word;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .feedback-data {
     padding-left: 28px;
@@ -1797,7 +1799,7 @@ border: 1px solid transparent !important;
     color: var(--default-text-color);
 }
 .agent-assist-chat-container .body-data-container .library-search-data-container .dynamic-searchlibrary-data .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .action-links .elipse-dropdown-info .dropdown-content-elipse {
-    z-index: 1;
+    z-index: 2;
     position: absolute;
     right: 0;
     background: var(--default-white-color);
