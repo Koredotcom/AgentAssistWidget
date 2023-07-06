@@ -2035,7 +2035,7 @@
     "COACHING.RULEDELETE_SUCCESS" : "Rule Deleted Successfully",
     "COACHING.RULEDELETE_FAILURE" : "Failed to delete the Rule",
     "COACHING.PUBLISH_SUCCESS" : "Published Successfully",
-    "COACHING.PUBLISH_FAILURE" : "Failed to publish",
+    "COACHING.PUBLISH_FAILURE" : "Publish failed. Please try again",
     "SUCCESSFULLY.UPDATED": "Successfully updated",
     "VALID.NAME": "Please enter a valid name",
     "QUOTA_EXCEEDED": "You exceeded your current quota.",
