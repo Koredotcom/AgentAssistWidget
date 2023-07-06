@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
@@ -15,13 +15,14 @@ import { TranslateService } from '@ngx-translate/core';
 import { FormControl } from '@angular/forms';
 import { AuthService } from '@kore.services/auth.service';
 import { CoachingService } from './coaching.service';
+import { SubSink } from 'subsink';
 
 @Component({
   selector: 'app-coaching',
   templateUrl: './coaching.component.html',
   styleUrls: ['./coaching.component.scss']
 })
-export class CoachingComponent implements OnInit {
+export class CoachingComponent implements OnInit, OnDestroy {
 
   modalRef:any;
   modalFlowCreateRef:any;
@@ -44,7 +45,7 @@ export class CoachingComponent implements OnInit {
   publishInprogress : boolean = false;
   rulePresent : boolean = false;
   selAcc = this.local.getSelectedAccount();
-
+  subs = new SubSink();
   @ViewChild('ps') ps: PerfectScrollbarComponent;
   @ViewChild('newCoachingGroup', { static: true }) newCoachingGroup: SliderComponentComponent;
 
@@ -57,12 +58,25 @@ export class CoachingComponent implements OnInit {
     private cs: CoachingService
     ) { }
 
+  ngOnDestroy(): void {
+    this.subs.unsubscribe();
+  }
+
   ngOnInit(): void {
+    this.subs.sink = this.workflowService.updateBotDetails$.subscribe((ele)=>{
+      if(ele){
+        this.initApiCalls();
+      } 
+    });
+    this.initApiCalls();
+  }
+
+  initApiCalls(){
     this.getAgentCoachingGroupData();
     this.subscribeEvents();
     this.getConfigDetails();
   }
-
+  
   ngAfterViewInit(){
   }
 
