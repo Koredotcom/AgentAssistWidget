@@ -115,17 +115,16 @@
 				<img src="assets/icons/leftmenu/new/agent-status.svg"><span class="link-name">Agent Status</span>
 			</div>
 		</div> -->
-
-		<div class="group-links">
-			<div class="group-heading">{{ 'NAV.COACH_TITLE' | translate }}</div>
-			<div class="link-router disabled">
-				<!-- [routerLink]="['coaching']" routerLinkActive="active" *hasPermission="['admin']" -->
-				<!-- <img src="assets/icons/leftmenu/new/network.svg"> -->
-				<i class="icon-coaching-menu-icon"></i>
-				<span class="link-name">{{'NAV.COACHING' | translate}}</span>
-				<span class="beta-tag">Beta</span>
+		<ng-container *ngIf="isCoachingDisable">
+			<div class="group-links">
+				<div class="group-heading">{{ 'NAV.COACH_TITLE' | translate }}</div>
+				<div class="link-router" [routerLink]="['coaching']" routerLinkActive="active" *hasPermission="['admin']">
+					<i class="icon-coaching-menu-icon"></i>
+					<span class="link-name">{{'NAV.COACHING' | translate}}</span>
+					<span class="beta-tag">Beta</span>
+				</div>
 			</div>
-		</div>
+		</ng-container>
 
 		<div class="group-links">
 			<div class="group-heading">System SETUP</div>
