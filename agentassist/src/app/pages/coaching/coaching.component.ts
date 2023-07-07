@@ -16,7 +16,7 @@ import { FormControl } from '@angular/forms';
 import { AuthService } from '@kore.services/auth.service';
 import { CoachingService } from './coaching.service';
 import { SubSink } from 'subsink';
-
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-coaching',
   templateUrl: './coaching.component.html',
@@ -46,6 +46,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
   rulePresent : boolean = false;
   selAcc = this.local.getSelectedAccount();
   subs = new SubSink();
+  isCoachingDisable = false;
   @ViewChild('ps') ps: PerfectScrollbarComponent;
   @ViewChild('newCoachingGroup', { static: true }) newCoachingGroup: SliderComponentComponent;
 
@@ -55,7 +56,8 @@ export class CoachingComponent implements OnInit, OnDestroy {
     private notificationService : NotificationService, private translate: TranslateService,
     private auth: AuthService, private local: LocalStoreService,
     private authService: AuthService,
-    private cs: CoachingService
+    private cs: CoachingService,
+    private router: Router
     ) { }
 
   ngOnDestroy(): void {
@@ -63,12 +65,19 @@ export class CoachingComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.subs.sink = this.workflowService.updateBotDetails$.subscribe((ele)=>{
-      if(ele){
-        this.initApiCalls();
-      } 
+    this.subs.sink = this.authService.isAgentCoachongEnable$.subscribe(isEnabled => {
+      this.isCoachingDisable = isEnabled;
     });
-    this.initApiCalls();
+    if(!this.isCoachingDisable){
+      this.router.navigate(['/config/usecases']); 
+    }else{
+      this.subs.sink = this.workflowService.updateBotDetails$.subscribe((ele)=>{
+        if(ele){
+          this.initApiCalls();
+        } 
+      });
+      this.initApiCalls();
+    }
   }
 
   initApiCalls(){
