@@ -1,4 +1,5 @@
 import { Component, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService } from '@kore.services/auth.service';
 import { NotificationService } from '@kore.services/notification.service';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
@@ -83,6 +84,7 @@ export class AiConfigComponent implements OnInit, OnDestroy {
   openAiConfig = {};
   azureAiConfig = {};
   subs = new SubSink();
+  isCoachingDisable = false;
   constructor(
     private modalService: NgbModal,
     private authService: AuthService,
@@ -90,6 +92,7 @@ export class AiConfigComponent implements OnInit, OnDestroy {
     private service: ServiceInvokerService,
     private notificationService: NotificationService,
     private translate: TranslateService,
+    private router: Router
   ) { }
 
   ngOnDestroy(): void {
@@ -101,12 +104,19 @@ export class AiConfigComponent implements OnInit, OnDestroy {
   // }
 
   ngOnInit(): void {
-    this.subs.sink = this.workflowService.updateBotDetails$.subscribe((ele)=>{
-      if(ele){
-        this.getConfigDetails();
-      } 
+    this.subs.sink = this.authService.isAgentCoachongEnable$.subscribe(isEnabled => {
+      this.isCoachingDisable = isEnabled;
     });
-    this.getConfigDetails();
+    if(!this.isCoachingDisable){
+      this.router.navigate(['/config/usecases']); 
+    }else{
+      this.subs.sink = this.workflowService.updateBotDetails$.subscribe((ele)=>{
+        if(ele){
+          this.getConfigDetails();
+        } 
+      });
+      this.getConfigDetails();
+    }
   }
 
   openAzureConf(){

@@ -152,9 +152,11 @@
 				*hasPermission="['admin']" (click)="getAdvSettings()">
 				<i class="icon-sa-search"></i><span class="link-name">SearchAssist</span>
 			</div>
-			<div class="link-router" [routerLink]="['advanced-nlu']" routerLinkActive="active" *hasPermission="['admin']">
-				<i class="icon-sa-settings"></i><span class="link-name">Advanced NLU</span>
-			</div>
+			<ng-container *ngIf="isCoachingDisable">
+				<div class="link-router" [routerLink]="['advanced-nlu']" routerLinkActive="active" *hasPermission="['admin']">
+					<i class="icon-sa-settings"></i><span class="link-name">Advanced NLU</span>
+				</div>
+			</ng-container>
 			<!-- <div class="link-router" [routerLink]="['agent-assist']" routerLinkActive="active" *hasPermission="['STANDARD_RESPONSE_VIEW']">
 				<img src="assets/icons/leftmenu/agent-assist.svg"><span class="link-name">{{'ONBOARDING.STD_RESPONSE' | translate}}</span>
 			</div>
