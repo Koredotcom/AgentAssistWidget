@@ -1,4 +1,5 @@
-import { Component, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService } from '@kore.services/auth.service';
 import { NotificationService } from '@kore.services/notification.service';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
@@ -6,13 +7,14 @@ import { workflowService } from '@kore.services/workflow.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
+import { SubSink } from 'subsink';
 
 @Component({
   selector: 'app-ai-config',
   templateUrl: './ai-config.component.html',
   styleUrls: ['./ai-config.component.scss']
 })
-export class AiConfigComponent implements OnInit {
+export class AiConfigComponent implements OnInit, OnDestroy {
   features = [
     {
       name: 'Training Utterance Suggestions',
@@ -30,6 +32,7 @@ export class AiConfigComponent implements OnInit {
       enable: false
     }
   ];
+  featuresObj = JSON.parse(JSON.stringify(this.features));
   srcs = {
     azure: 'https://qa-static.kore.ai/integrations/32/azureOpenAI.png',
     openai: 'https://qa-static.kore.ai/integrations/32/openai.png'
@@ -80,21 +83,40 @@ export class AiConfigComponent implements OnInit {
   isOpenAi = '';
   openAiConfig = {};
   azureAiConfig = {};
+  subs = new SubSink();
+  isCoachingDisable = false;
   constructor(
     private modalService: NgbModal,
     private authService: AuthService,
     private workflowService: workflowService,
     private service: ServiceInvokerService,
     private notificationService: NotificationService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private router: Router
   ) { }
+
+  ngOnDestroy(): void {
+    this.subs.unsubscribe()
+  }
 
   // ngOnChanges(changes: SimpleChanges): void {
   //   this.getConfigDetails();
   // }
 
   ngOnInit(): void {
-    this.getConfigDetails();
+    this.subs.sink = this.authService.isAgentCoachongEnable$.subscribe(isEnabled => {
+      this.isCoachingDisable = isEnabled;
+    });
+    if(!this.isCoachingDisable){
+      this.router.navigate(['/config/usecases']); 
+    }else{
+      this.subs.sink = this.workflowService.updateBotDetails$.subscribe((ele)=>{
+        if(ele){
+          this.getConfigDetails();
+        } 
+      });
+      this.getConfigDetails();
+    }
   }
 
   openAzureConf(){
@@ -212,12 +234,21 @@ export class AiConfigComponent implements OnInit {
 
   integrations:any = {}
   getConfigDetails(){
+    this.configOpts = [];
     let params: any = {
       userId: this.authService.getUserId(),
       streamId: this.workflowService.getCurrentBt(true)._id
     };
     this.service.invoke('get.AIconfigs', params)
       .subscribe(res => {
+        if(!res){
+          this.features = JSON.parse(JSON.stringify(this.featuresObj));
+          this.integrations = {};
+          this.configOpts= [];
+          this.openAiConfig = {};
+          this.azureAiConfig = {};
+          return;
+        }
         this.id = res[0]._id;
         this.configArr = res[0].featureList?.length ? res[0].featureList  : this.configArr;
         this.integrations = res[0].integrations;
