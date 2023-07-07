@@ -35,7 +35,7 @@ const routes: Routes = [
           { path: 'conversationalLogs', component: ConversationalLogsComponent },
           { path: 'languages', component: LanguagesSpeechComponent },
           { path: 'searchAssist', component: SearchAssistComponent},
-          { path: 'coaching', loadChildren: () => import('./pages/coaching/coaching.module').then(m => m.CoachingModule)},
+          // { path: 'coaching', loadChildren: () => import('./pages/coaching/coaching.module').then(m => m.CoachingModule)},
           { path: 'advanced-nlu', loadChildren: () => import('./pages/ai-config/ai-config.module').then(m => m.AiConfigModule)},
           { path: '**', redirectTo: 'usecases' },
         ]
