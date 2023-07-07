@@ -1,4 +1,5 @@
-import { Component, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService } from '@kore.services/auth.service';
 import { NotificationService } from '@kore.services/notification.service';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
@@ -6,6 +7,7 @@ import { workflowService } from '@kore.services/workflow.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
+import { SubSink } from 'subsink';
 
 @Component({
   selector: 'app-ai-config',
@@ -80,13 +82,16 @@ export class AiConfigComponent implements OnInit {
   isOpenAi = '';
   openAiConfig = {};
   azureAiConfig = {};
+  subs = new SubSink();
+  isCoachingDisable = false;
   constructor(
     private modalService: NgbModal,
     private authService: AuthService,
     private workflowService: workflowService,
     private service: ServiceInvokerService,
     private notificationService: NotificationService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private router: Router
   ) { }
 
   // ngOnChanges(changes: SimpleChanges): void {
@@ -94,7 +99,19 @@ export class AiConfigComponent implements OnInit {
   // }
 
   ngOnInit(): void {
-    this.getConfigDetails();
+    this.subs.sink = this.authService.isAgentCoachongEnable$.subscribe(isEnabled => {
+      this.isCoachingDisable = isEnabled;
+    });
+    if(!this.isCoachingDisable){
+      this.router.navigate(['/config/usecases']); 
+    }else{
+      this.subs.sink = this.workflowService.updateBotDetails$.subscribe((ele)=>{
+        if(ele){
+          this.getConfigDetails();
+        } 
+      });
+      this.getConfigDetails();
+    }
   }
 
   openAzureConf(){
