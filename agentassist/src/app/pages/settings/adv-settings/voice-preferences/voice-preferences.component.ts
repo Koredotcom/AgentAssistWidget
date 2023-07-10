@@ -10,6 +10,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { UcDeleteConfirmComponent } from 'src/app/helpers/components/uc-delete-confirm/uc-delete-confirm.component';
 import { DockStatusService } from '@kore.services/dockstatusService/dock-status.service';
 import { AuthService } from '@kore.services/auth.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 declare const $: any;
 @Component({
@@ -54,7 +55,8 @@ export class VoicePreferencesComponent implements OnInit {
     private translate: TranslateService,
     private dialog: MatDialog,
     private dockService: DockStatusService,
-    private authService: AuthService
+    private authService: AuthService,
+    private modalService: NgbModal,
   ) { }
 
   ngOnInit(): void {
@@ -84,6 +86,12 @@ export class VoicePreferencesComponent implements OnInit {
     this.getDafaultWelcomeMsg();
   }
 
+  openCallControlParameter(newCallControlParameter) {
+    this.modalService.open(newCallControlParameter, {backdropClass: 'adjust-zindex-above-slider', windowClass: 'call-control-param-modal', centered: true, backdrop: 'static', keyboard: false});
+  }
+  closeCallControlParameter() {
+    this.modalService.dismissAll();
+  }
   getDafaultWelcomeMsg() {
     this.selectedApp = this.workflowService.deflectApps();
     const _params = {

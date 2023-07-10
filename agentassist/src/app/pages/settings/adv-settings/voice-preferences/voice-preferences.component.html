@@ -11,38 +11,86 @@
     <div *ngIf="!loading" [@fadeInAnimation]>
         <perfect-scrollbar class="scroll-content">
             <div class="row m-0 col-12 voice-preference-container">
-                <div class="col-6 pr-0 left-sec">
-                    <div class="kr-sg-dropdowns">
-                        <div class="label-text font-weight-bold show-info-icon">{{'SETTINGS.SPEECH_RECOGNITION_PREFERENCE' | translate}}</div>
-                        <div class="dropdown dropdown-open">
-                              <button class="dropdown-toggle dropdown-input" data-toggle="dropdown">{{ voicePreferences.asrPreference || "select"}}</button>
-                              <ul class="dropdown-menu content-menu">
-                                <li class="search-box">
-                                    <input type="text" placeholder="{{'PLACEHOLDERS.SEARCH' | translate}}" class="seach-input" name="preferenceCodeSearchTerm" #preferenceCodeSearchTerm (input)="preferenceCodeSearchTerm.value = $event.target.value">
-                                </li>
-                                <ng-container *ngFor="let preference of asrPreferences | filter: [ preferenceCodeSearchTerm.value, 'asrProvider']">
-                                    <li (click) ="selectedSpeechPreferences(preference); preferenceCodeSearchTerm.value=''" *ngIf="preference.asrProvider !== voicePreferences.asrPreference"><a>{{preference.asrProvider}}</a></li>
+                <div class="kr-sg-dropdowns">
+                    <div class="label-text font-weight-bold show-info-icon">{{'SETTINGS.SPEECH_RECOGNITION_PREFERENCE' | translate}}</div>
+                    <div class="dropdown dropdown-open">
+                          <button class="dropdown-toggle dropdown-input" data-toggle="dropdown">{{ voicePreferences.asrPreference || "select"}}</button>
+                          <ul class="dropdown-menu content-menu">
+                            <li class="search-box">
+                                <input type="text" placeholder="{{'PLACEHOLDERS.SEARCH' | translate}}" class="seach-input" name="preferenceCodeSearchTerm" #preferenceCodeSearchTerm (input)="preferenceCodeSearchTerm.value = $event.target.value">
+                            </li>
+                            <ng-container *ngFor="let preference of asrPreferences | filter: [ preferenceCodeSearchTerm.value, 'asrProvider']">
+                                <li (click) ="selectedSpeechPreferences(preference); preferenceCodeSearchTerm.value=''" *ngIf="preference.asrProvider !== voicePreferences.asrPreference"><a>{{preference.asrProvider}}</a></li>
+                            </ng-container>
+                          </ul>
+                    </div>
+                </div>
+                <div class="kr-sg-dropdowns">
+                    <div class="label-text show-info-icon">Dialect</div>
+                    <div class="dropdown dropdown-open dialectDropDown">
+                          <button class="dropdown-toggle dropdown-input" data-toggle="dropdown" [disabled]="!dialects.length">{{ selectedDialect || "select"}}</button>
+                          <ul class="dropdown-menu content-menu">
+                            <li class="search-box">
+                                <input type="text" placeholder="{{'PLACEHOLDERS.SEARCH' | translate}}" class="seach-input" name="dialectSearchTerm" #dialectSearchTerm (input)="dialectSearchTerm.value = $event.target.value">
+                            </li>
+                            <perfect-scrollbar class="mx-h-200">
+                                <ng-container *ngFor="let dialect of dialects | filter: [ dialectSearchTerm.value, 'name']">
+                                    <li (click) ="selectedDialect = dialect.name; dialectSearchTerm.value=''" *ngIf="dialect.name !== selectedDialect"><a>{{dialect.name}}</a></li>
                                 </ng-container>
-                              </ul>
-                        </div>
+                            </perfect-scrollbar>
+                          </ul>
                     </div>
-
-                    <div class="kr-sg-dropdowns">
-                        <div class="label-text show-info-icon">Dialect</div>
-                        <div class="dropdown dropdown-open dialectDropDown">
-                              <button class="dropdown-toggle dropdown-input" data-toggle="dropdown" [disabled]="!dialects.length">{{ selectedDialect || "select"}}</button>
-                              <ul class="dropdown-menu content-menu">
-                                <li class="search-box">
-                                    <input type="text" placeholder="{{'PLACEHOLDERS.SEARCH' | translate}}" class="seach-input" name="dialectSearchTerm" #dialectSearchTerm (input)="dialectSearchTerm.value = $event.target.value">
-                                </li>
-                                <perfect-scrollbar>
-                                    <ng-container *ngFor="let dialect of dialects | filter: [ dialectSearchTerm.value, 'name']">
-                                        <li (click) ="selectedDialect = dialect.name; dialectSearchTerm.value=''" *ngIf="dialect.name !== selectedDialect"><a>{{dialect.name}}</a></li>
-                                    </ng-container>
-                                </perfect-scrollbar>
-                              </ul>
+                </div>
+                <div class="call-control-parameters">
+                    <button class="kr-sg-button-primary btn_lg" (click)="openCallControlParameter(newCallControlParameter)">Add</button>
+                    <div class="heading-text">Call Control Parameters <i class="icon-sa-help"></i></div>
+                    <div class="desc-text">Define the parameters to control call behavior</div>
+                    <ng-container>
+                        <div class="added-parameters-data">
+                            <div class="kr-sg-input-text">
+                                <div class="label-text">Name</div>
+                                <input type="text" placeholder="Placeholder text" class="input-text">
+                            </div>
+                            <div class="kr-sg-input-text">
+                                <div class="label-text">Value</div>
+                                <input type="text" placeholder="Placeholder text" class="input-text">
+                            </div>
+                            <button class="delete-parameter">
+                                <i class="icon-sa-delete"></i>
+                            </button>
                         </div>
-                    </div>
+                        <div class="added-parameters-data">
+                            <div class="kr-sg-dropdowns m-0">
+                                <div class="label-text">Name</div>
+                                <div class="dropdown dropdown-open dialectDropDown">
+                                      <button class="dropdown-toggle dropdown-input" data-toggle="dropdown">Select Parameter</button>
+                                      <ul class="dropdown-menu content-menu">
+                                        <perfect-scrollbar class="mx-h-200">
+                                            <ng-container>
+                                                <li>
+                                                    <a>Option 1</a>
+                                                </li>
+                                                <li>
+                                                    <a>Option 1</a>
+                                                </li>
+                                                <li>
+                                                    <a>Option 1</a>
+                                                </li>
+                                                <li>
+                                                    <a>Option 1</a>
+                                                </li>
+                                            </ng-container>
+                                        </perfect-scrollbar>
+                                      </ul>
+                                </div>
+                            </div>
+                            <div class="kr-sg-input-text">
+                                <div class="label-text">Value</div>
+                                <input type="text" placeholder="Placeholder text" class="input-text">
+                                <div class="press-enter-text">Press [Enter] to save</div>
+                            </div>
+                        </div>
+                    </ng-container>
                 </div>
             </div>
         </perfect-scrollbar>   
@@ -54,8 +102,9 @@
                 <button class="kr-sg-button-secondary btn_lg ml-1" (click)="showConfirmation = false">{{"BUTTONS.CANCEL" | translate}}</button>        
             </div>
         </div>
-        <div class="footer-sec" *ngIf="workflowService.appState !== 'published'">
-            <button class="kr-sg-button-primary btn_lg mr-2" [disabled]="saveInProgress" (click)="configureVoicePreferenaces()">{{(saveInProgress? 'BUTTONS.SAVING': 'BUTTONS.DONE') | translate}}</button>        
+        <div class="footer-sec" *ngIf="workflowService.appState !== 'published'">            
+            <button class="kr-sg-button-secondary-two btn_lg mr-2">Cancel</button>    
+            <button class="kr-sg-button-primary btn_lg" [disabled]="saveInProgress" (click)="configureVoicePreferenaces()">{{(saveInProgress? 'BUTTONS.SAVING': 'BUTTONS.DONE') | translate}}</button>    
         </div>
     </div>
 
@@ -66,3 +115,25 @@
     
 </div>
 
+
+
+
+<ng-template #newCallControlParameter let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">New Call Control Parameter</h4>
+    </div>
+    <div class="modal-body">
+        <div class="kr-sg-input-text m-b-15">
+            <div class="label-text">Value</div>
+            <input type="text" placeholder="Placeholder text" class="input-text">
+        </div>
+        <div class="kr-sg-input-text">
+            <div class="label-text">Value</div>
+            <input type="text" placeholder="Placeholder text" class="input-text">
+        </div>
+    </div>
+    <div class="modal-footer">
+      <button class="kr-sg-button-secondary-two btn_lg" (click)="closeCallControlParameter()">Cancel</button>
+      <button class="kr-sg-button-primary btn_lg">Confirm</button>
+    </div>
+</ng-template>
