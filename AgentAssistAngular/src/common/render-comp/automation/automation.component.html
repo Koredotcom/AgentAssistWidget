@@ -24,6 +24,9 @@
                                 <div class="title-data" attr.id="displayData-{{automation.uuid}}"
                                     *ngIf="!automation.templateRender && automation?.data?.buttons && automation?.data?.buttons[0]?.value">
                                     {{automation.data.buttons[0].value}}</div>
+                                <div class="title-data" attr.id="displayData-{{automation.uuid}}"
+                                *ngIf="!automation.templateRender && automation?.data?.components && automation?.data?.components[0]?.data?.text">
+                                {{automation.data.components[0].data.text}}</div>
                                 <div class="title-data" *ngIf="automation.templateRender && automation.template">
                                     <ul class="chat-container" attr.id="{{automation.uuid}}"
                                         [innerHTML]="automation.template | safeHtml"></ul>
@@ -54,6 +57,11 @@
                                 <div class="title-data" attr.id="displayData-{{automation.uuid}}"
                                     *ngIf="!automation.templateRender && automation?.data?.buttons && automation?.data?.buttons[0]?.value">
                                     {{automation.data.buttons[0].value}}</div>
+
+                                <div class="title-data" attr.id="displayData-{{automation.uuid}}"
+                                *ngIf="!automation.templateRender && automation?.data?.components && automation?.data?.components[0]?.data?.text">
+                                {{automation.data.components[0].data.text}}</div>
+                                
                                 <div class="title-data" *ngIf="automation.templateRender && automation.template">
                                     <ul class="chat-container" attr.id="{{automation.uuid}}"
                                         [innerHTML]="automation.template | safeHtml"></ul>

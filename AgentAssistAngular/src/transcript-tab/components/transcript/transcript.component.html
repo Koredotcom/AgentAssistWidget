@@ -10,15 +10,49 @@
         <div class="transcript-history-scroll-bottom" *ngIf="commonService.isCallConversation && historyResponse && historyResponse?.length" id="transcriptTabHistoryText">
             <span>{{transcriptScrollTopText}}</span>
         </div>
+        <ng-container *ngFor="let trans of transcriptArray">
+            <div class="unread-msg last-msg-white-bg" *ngIf="unreadUUID == trans.uuid">
+                <div class="text-dialog-task-end">Unread Messages</div>
+            </div>
+            <div class="current-user-bubble" attr.id="currentUser-{{trans.uuid}}" *ngIf="trans.type == projConstants.OUTGOING">
+                <div class="name-with-time">
+                    <div class="u-time">{{trans.timeStr}}</div>
+                    <div class="u-name">You</div>
+                </div>
+                <div class="bubble-data">
+                    <div class="b-text">{{trans.data.value}}</div>
+                </div>
+            </div>
+            
+            <div class="other-user-bubble" id="otherBubble-{{trans.uuid}}" *ngIf="trans.type == projConstants.INCOMING">
+                <div class="name-with-time">
+                    <div class="u-name">{{parsedCustomData?.userName || (parsedCustomData?.fName + this.parsedCustomData?.lName) ||
+                        'Customer'}}</div>
+                    <div class="u-time">{{trans.timeStr}}</div>
+                </div>
+                <div class="bubble-data" id="userInputMsg">
+                    <div class="b-text">{{trans.data.value}}</div>
+                    <div class="buld-count-utt" id="buldCount-{{trans.uuid}}" *ngIf="trans.data.count" (click)="buldClick(trans)" ngClass="{'buld-count-utt-after-click' : trans.data.bulbClick}">
+                        <i class="ast-bulb" id="buldCountAst-{{trans.uuid}}"></i>
+                        <span class="count-number" id="buldCountNumber-{{trans.uuid}}" *ngIf="!trans.data.bulbClick">{{trans.data.count}}</span>
+                        <span class="count-number" id="buldCountNumber-{{trans.uuid}}" *ngIf="trans.data.bulbClick"> &#10003; </span>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
         <!-- <app-transcript-history></app-transcript-history> -->
     </div>
-    <div class="scroll-bottom-show-btn hiddenEle">
-        <button id="scrollButtonTranscript" class="scroll-bottom-btn">
+    <div class="scroll-bottom-show-btn" *ngIf="!commonService.scrollContent[projConstants.TRANSCRIPT].scrollAtEnd">
+        <button id="scrollButtonTranscript" class="scroll-bottom-btn"
+         [ngClass]="{'new-messages' : commonService.scrollContent[projConstants.TRANSCRIPT].numberOfNewMessages}"
+          (click)="scrollToBottom(true)">
             <i class="ast-carrotup"></i>
-            <span>Scroll to bottom</span>
+            <span *ngIf="!commonService.scrollContent[projConstants.TRANSCRIPT].numberOfNewMessages">Scroll to bottom</span>
+            <span *ngIf="commonService.scrollContent[projConstants.TRANSCRIPT].numberOfNewMessages">{{commonService.scrollContent[projConstants.TRANSCRIPT].numberOfNewMessages}} new</span>
+
         </button>
     </div>
-    <div class="empty-data-no-agents" *ngIf="!historyResponse || !historyResponse?.length">
+    <div class="empty-data-no-agents" *ngIf="showEmptyScreen">
         <div class="title">Voice based utterances from customer and Agent will render on this screen.</div>
     </div>
 </div>

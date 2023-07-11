@@ -29,6 +29,7 @@ export class SuggestionsComponent implements OnInit, OnDestroy{
   projConstants: any = ProjConstants;
   imageFilePath: string = ImageFilePath;
   imageFileNames: any = ImageFileNames;
+  idRefConst = IdReferenceConst
   searchResponse: any = {};
   faqViewCount: number;
   articleViewCount: number;
@@ -363,6 +364,12 @@ export class SuggestionsComponent implements OnInit, OnDestroy{
           type : this.projConstants.FAQ
         }
         // this.handleSeeMoreLessClickEventsForFaq(id, dataObj)
+    }
+  }
+
+  entityClick(type, entity){
+    if(type == this.idRefConst.ENTITY_EDIT){
+      entity.editMode = true;
     }
   }
 

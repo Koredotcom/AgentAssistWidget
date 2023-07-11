@@ -30,7 +30,7 @@ export class HomeComponent implements OnInit {
   projConstants: any = ProjConstants;
 
   activeTab: string; // call conversation make transcript as active tab.
-  scrollContainer: any;
+  // scrollContainer: any;
   searchConentObject: any;
   searchText: string = '';
   summaryText: string = '';
@@ -56,7 +56,6 @@ export class HomeComponent implements OnInit {
     private cdRef : ChangeDetectorRef,
     private randomUUIDPipe : RandomUUIDPipe) { }
   ngOnInit(): void {
-
     this.subscribeEvents();
   }
 
@@ -67,7 +66,7 @@ export class HomeComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.scrollContainer = document.getElementById(IdReferenceConst.HOMESCROLLBAR);
+    // this.scrollContainer = document.getElementById(IdReferenceConst.HOMESCROLLBAR);
   }
 
   subscribeEvents() {
@@ -91,7 +90,7 @@ export class HomeComponent implements OnInit {
         this.connectionDetails = urlParams;
         this.eventListenerFromParent();
         this.updateUIState(this.connectionDetails.conversationId, urlParams.isCall);
-        this.btnInit();
+        // this.btnInit();
       }
     });
 
@@ -160,12 +159,12 @@ export class HomeComponent implements OnInit {
 
   // update state based on local storage.
   updateUIState(_convId, _isCallConv) {
-    $('#dynamicBlock .empty-data-no-agents').addClass('hide');
+    // $('#dynamicBlock .empty-data-no-agents').addClass('hide');
     let appState = this.localStorageService.getLocalStorageState();
     let activeTab: any;
-    if (_isCallConv == 'true') {
-      $(`#scriptContainer .empty-data-no-agents`).removeClass('hide');
-    }
+    // if (_isCallConv == 'true') {
+    //   $(`#scriptContainer .empty-data-no-agents`).removeClass('hide');
+    // }
     if (appState[_convId] && !appState[_convId][storageConst.CURRENT_TAB]) {
       let storageObject: any = {};
       if (_isCallConv == 'true') {
@@ -284,7 +283,7 @@ export class HomeComponent implements OnInit {
 
   //tab change code
   changeActiveTab(tab) {
-    $(".scroll-bottom-show-btn").addClass('hiddenEle');
+    // $(".scroll-bottom-show-btn").addClass('hiddenEle');
     this.handleSubjectService.setActiveTab(tab);
     let storageObject: any = {
       [storageConst.CURRENT_TAB]: tab
@@ -456,8 +455,8 @@ setProactiveMode(){
       if (this.psBottom) {
         $(window).trigger('resize');
         this.psBottom.directiveRef.scrollToTop(this.homescroll.nativeElement.scrollHeight);
-        $(".scroll-bottom-btn span").text('Scroll to bottom');
-        $(".scroll-bottom-btn").removeClass("new-messages");
+        // $(".scroll-bottom-btn span").text('Scroll to bottom');
+        // $(".scroll-bottom-btn").removeClass("new-messages");
         setTimeout(() => {
           this.psBottom.directiveRef.update();
         }, this.scrollbottomwaitingTime);
@@ -467,67 +466,78 @@ setProactiveMode(){
 
   onScrollEvent(event) {
     if (this.activeTab == this.projConstants.ASSIST || this.activeTab == this.projConstants.MYBOT || this.activeTab == this.projConstants.TRANSCRIPT || this.activeTab == this.projConstants.HISTORY) {
-      if (event && event?.type) {
-        if (event.type == this.projConstants.PS_Y_REACH_END) {
-          this.commonService.scrollContent[this.activeTab].scrollAtEnd = true;
-          this.commonService.checkDropdownCollapaseState(this.commonService.scrollContent[this.activeTab].lastElementBeforeNewMessage, this.activeTab);
-          if (this.commonService.scrollContent[this.activeTab].scrollAtEnd) {
-            this.commonService.updateScrollAtEndVariables(this.activeTab);
-          } else {
-            $(".scroll-bottom-show-btn").removeClass('hiddenEle');
-          }
-          let dynamicBlockId = this.commonService.tabNamevsId[this.activeTab];
-          this.commonService.scrollContent[this.activeTab].lastElementBeforeNewMessage = this.designAlterService.getLastElement(dynamicBlockId);
-          this.designAlterService.addWhiteBackgroundClassToNewMessage(this.commonService.scrollContent[this.activeTab].scrollAtEnd, dynamicBlockId);
-        } else if (event.type == this.projConstants.PS_SCROLL_DOWN) {
-          let dynamicBlockId = this.commonService.tabNamevsId[this.activeTab];
-          let lastelement = this.designAlterService.getLastElement(dynamicBlockId);
-          this.commonService.updateNewMessageCount(this.commonService.scrollContent[this.activeTab].lastElementBeforeNewMessage, this.activeTab);
-          let scrollAtEnd = !this.designAlterService.isScrolledIntoView(lastelement) ? true : false;
-          this.commonService.scrollContent[this.activeTab].scrollAtEnd = scrollAtEnd;
-          if (scrollAtEnd) {
-            $(".scroll-bottom-show-btn").addClass('hiddenEle');
-            this.commonService.updateScrollAtEndVariables(this.activeTab);
-            this.commonService.scrollContent[this.activeTab].lastElementBeforeNewMessage = this.designAlterService.getLastElement(dynamicBlockId);
-            this.designAlterService.addWhiteBackgroundClassToNewMessage(scrollAtEnd, dynamicBlockId);
-          }
-        } else if (event.type == this.projConstants.PS_SCROLL_UP) {
-          setTimeout(() => {
-            this.updateScrollButton()
-          }, 10);
+      // if (event && event?.type) {
+      //   if (event.type == this.projConstants.PS_Y_REACH_END) {
+      //     this.commonService.scrollContent[this.activeTab].scrollAtEnd = true;
+      //     this.commonService.checkDropdownCollapaseState(this.commonService.scrollContent[this.activeTab].lastElementBeforeNewMessage, this.activeTab);
+      //     if (this.commonService.scrollContent[this.activeTab].scrollAtEnd) {
+      //       this.commonService.updateScrollAtEndVariables(this.activeTab);
+      //     } else {
+      //       // $(".scroll-bottom-show-btn").removeClass('hiddenEle');
+      //     }
+      //     let dynamicBlockId = this.commonService.tabNamevsId[this.activeTab];
+      //     this.commonService.scrollContent[this.activeTab].lastElementBeforeNewMessage = this.designAlterService.getLastElement(dynamicBlockId);
+      //     this.designAlterService.addWhiteBackgroundClassToNewMessage(this.commonService.scrollContent[this.activeTab].scrollAtEnd, dynamicBlockId);
+      //   } else if (event.type == this.projConstants.PS_SCROLL_DOWN) {
+      //     let dynamicBlockId = this.commonService.tabNamevsId[this.activeTab];
+      //     let lastelement = this.designAlterService.getLastElement(dynamicBlockId);
+      //     this.commonService.updateNewMessageCount(this.commonService.scrollContent[this.activeTab].lastElementBeforeNewMessage, this.activeTab);
+      //     let scrollAtEnd = !this.designAlterService.isScrolledIntoView(lastelement) ? true : false;
+      //     this.commonService.scrollContent[this.activeTab].scrollAtEnd = scrollAtEnd;
+      //     if (scrollAtEnd) {
+      //       // $(".scroll-bottom-show-btn").addClass('hiddenEle');
+      //       this.commonService.updateScrollAtEndVariables(this.activeTab);
+      //       this.commonService.scrollContent[this.activeTab].lastElementBeforeNewMessage = this.designAlterService.getLastElement(dynamicBlockId);
+      //       this.designAlterService.addWhiteBackgroundClassToNewMessage(scrollAtEnd, dynamicBlockId);
+      //     }
+      //   } else if (event.type == this.projConstants.PS_SCROLL_UP) {
+      //     setTimeout(() => {
+      //       this.updateScrollButton()
+      //     }, 10);
 
-        }
+      //   }
+      // }
+      // console.log(event.target.offsetHeight, event.target.scrollTop, event.target.scrollHeight -100, 'offset');
+      
+      if (event.target.offsetHeight + event.target.scrollTop >= event.target.scrollHeight - 120) {
+        this.commonService.scrollContent[this.activeTab].scrollAtEnd = true;
+        this.commonService.updateScrollAtEndVariables(this.activeTab);
+      }else{
+        this.commonService.scrollContent[this.activeTab].scrollAtEnd = false;
       }
+      this.cdRef.detectChanges();
     }
 
   }
 
-  scrollClickEvents(emit) {
-    let scrollbuttonId = this.commonService.tabNamevsScrollId[this.activeTab];
-    document.getElementById(scrollbuttonId).removeEventListener('click', () => {
-    });
-    setTimeout(() => {
-      document.getElementById(scrollbuttonId).addEventListener('click', (event) => {
-        console.log("click event *************" );
+  // scrollClickEvents(emit) {
+  //   let scrollbuttonId = this.commonService.tabNamevsScrollId[this.activeTab];
+  //   document.getElementById(scrollbuttonId).removeEventListener('click', () => {
+  //   });
+  //   setTimeout(() => {
+  //     document.getElementById(scrollbuttonId).addEventListener('click', (event) => {
+  //       console.log("click event *************" );
 
-        this.scrollToBottom(true);
-      }, { once: true });
-    }, 10);
-  }
+  //       this.scrollToBottom(true);
+  //     }, { once: true });
+  //   }, 10);
+  // }
 
-  updateScrollButton() {
-    let dynamicBlockId = this.commonService.tabNamevsId[this.activeTab];
-    let lastelement = this.designAlterService.getLastElement(dynamicBlockId);
-    let scrollAtEnd = !this.designAlterService.isScrolledIntoView(lastelement) ? true : false;
-    this.commonService.scrollContent[this.activeTab].scrollAtEnd = scrollAtEnd;
-    if (!scrollAtEnd) {
-      $(".scroll-bottom-show-btn").removeClass('hiddenEle');
-      this.scrollClickEvents(true);
-    } else {
-      $(".scroll-bottom-show-btn").addClass('hiddenEle');
-    }
-    this.cdRef.detectChanges();
-  }
+  // updateScrollButton() {
+  //   let dynamicBlockId = this.commonService.tabNamevsId[this.activeTab];
+  //   let lastelement = this.designAlterService.getLastElement(dynamicBlockId);
+  //   let scrollAtEnd = !this.designAlterService.isScrolledIntoView(lastelement) ? true : false;
+  //   this.commonService.scrollContent[this.activeTab].scrollAtEnd = scrollAtEnd;
+  //   console.log(scrollAtEnd, 'scroll at end*********');
+    
+  //   if (!scrollAtEnd) {
+  //     // $(".scroll-bottom-show-btn").removeClass('hiddenEle');
+  //     // this.scrollClickEvents(true);
+  //   } else {
+  //     // $(".scroll-bottom-show-btn").addClass('hiddenEle');
+  //   }
+  //   this.cdRef.detectChanges();
+  // }
 
   @HostListener('click', ['$event'])
   onClick(evt) {
@@ -549,29 +559,29 @@ setProactiveMode(){
     //   this.commonService.preparePostMessageForSendAndCopy(evt, data, IdReferenceConst.COPYMSG, this.connectionDetails);
     //   }
     //   }
-    if (target.id.split('-')[0] == 'buldCount' || target.className == 'ast-bulb' || target.className == 'count-number') {
-      let bulbDiv;
-      if ($('#scriptContainer .other-user-bubble .bubble-data .buld-count-utt').length > 0) {
-        bulbDiv = $('#scriptContainer .other-user-bubble .bubble-data').find('.buld-count-utt, .buld-count-utt-after-click');
-      } else {
-        bulbDiv = $('#scriptContainer .other-user-bubble .bubble-data .buld-count-utt-after-click');
-      }
-      let bulbid = target.id.split('-');
-      bulbid.shift();
-      let idOfBuld = $(bulbDiv).last().attr('id').split('-');
-      idOfBuld.shift();
-      if (idOfBuld.join('-') === bulbid.join('-')) {
-        this.handleSubjectService.setActiveTab(this.projConstants.ASSIST)
-        this.designAlterService.scrollToEle(`automationSuggestions-${idOfBuld.join('-')}`)
-      } else {
-        this.handleSubjectService.setActiveTab(this.projConstants.ASSIST)
-        let theElement = `automationSuggestions-${bulbid.join('-')}`;
-        this.designAlterService.scrollToEle(theElement);
-      }
-      $(`#scriptContainer #buldCount-${bulbid.join('-')}`).removeClass('buld-count-utt').addClass('buld-count-utt-after-click');
-      $(`#scriptContainer #buldCountNumber-${bulbid.join('-')}`).html(`<span>&#10003;</span>`);
-    }
-    let targetIds = (target.id).split('-');
+    // if (target.id.split('-')[0] == 'buldCount' || target.className == 'ast-bulb' || target.className == 'count-number') {
+    //   let bulbDiv;
+    //   if ($('#scriptContainer .other-user-bubble .bubble-data .buld-count-utt').length > 0) {
+    //     bulbDiv = $('#scriptContainer .other-user-bubble .bubble-data').find('.buld-count-utt, .buld-count-utt-after-click');
+    //   } else {
+    //     bulbDiv = $('#scriptContainer .other-user-bubble .bubble-data .buld-count-utt-after-click');
+    //   }
+    //   let bulbid = target.id.split('-');
+    //   bulbid.shift();
+    //   let idOfBuld = $(bulbDiv).last().attr('id').split('-');
+    //   idOfBuld.shift();
+    //   if (idOfBuld.join('-') === bulbid.join('-')) {
+    //     this.handleSubjectService.setActiveTab(this.projConstants.ASSIST)
+    //     this.designAlterService.scrollToEle(`automationSuggestions-${idOfBuld.join('-')}`)
+    //   } else {
+    //     this.handleSubjectService.setActiveTab(this.projConstants.ASSIST)
+    //     let theElement = `automationSuggestions-${bulbid.join('-')}`;
+    //     this.designAlterService.scrollToEle(theElement);
+    //   }
+    //   $(`#scriptContainer #buldCount-${bulbid.join('-')}`).removeClass('buld-count-utt').addClass('buld-count-utt-after-click');
+    //   $(`#scriptContainer #buldCountNumber-${bulbid.join('-')}`).html(`<span>&#10003;</span>`);
+    // }
+    // let targetIds = (target.id).split('-');
     // if (['feedbackup', 'feedbackdown'].includes(targetIds[0])) {
 
     //   let cloneTargtIds = [...targetIds]
@@ -821,7 +831,7 @@ setProactiveMode(){
   }
 
   // send and copy click operations.
-  btnInit() {
+  // btnInit() {
     // document.addEventListener("keyup", (evt: any) => {
     //   let target = evt.target;
     //   let targetids = target.id.split('-');
@@ -843,7 +853,7 @@ setProactiveMode(){
       //   $(`#feedbackdown-${targetids.join('-')} .ast-thumbdown`).attr('data-comment', target.value);
       // }
     // })
-  }
+  // }
 
   // feedbackLoop(evt, isSubmit = false) {
   //   if (isSubmit) {

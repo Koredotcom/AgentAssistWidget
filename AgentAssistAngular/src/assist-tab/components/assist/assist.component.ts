@@ -58,6 +58,7 @@ export class AssistComponent implements OnInit {
   userBotSessionDetails;
 
   assistResponseArray : any = [];
+  unreadUUID : any;
 
   constructor(private templateRenderClassService: TemplateRenderClassService,
     public handleSubjectService: HandleSubjectService,
@@ -190,18 +191,18 @@ export class AssistComponent implements OnInit {
       }
     });
 
-    let subscription12 = this.handleSubjectService.overridebtnClickEventSubject.subscribe((response: any) => {
-      if (response && response.data) {
-        let actualId = response.data.id.split('-');
-        actualId.shift();
-        let id = actualId.join('-');
-        if (response.override) {
-          this.clickEvents(IdReferenceConst.OVERRIDE_BTN, id, this.dialogPositionId);
-        } else if (response.cancelOverride) {
-          this.clickEvents(IdReferenceConst.CANCEL_OVERRIDE_BTN, id, this.dialogPositionId);
-        }
-      }
-    });
+    // let subscription12 = this.handleSubjectService.overridebtnClickEventSubject.subscribe((response: any) => {
+    //   if (response && response.data) {
+    //     let actualId = response.data.id.split('-');
+    //     actualId.shift();
+    //     let id = actualId.join('-');
+    //     if (response.override) {
+    //       this.clickEvents(IdReferenceConst.OVERRIDE_BTN, id, this.dialogPositionId);
+    //     } else if (response.cancelOverride) {
+    //       this.clickEvents(IdReferenceConst.CANCEL_OVERRIDE_BTN, id, this.dialogPositionId);
+    //     }
+    //   }
+    // });
 
     let subscription13 = this.handleSubjectService.proactiveModeSubject.subscribe((response: any) => {
       console.log("proactive mode subject", response);
@@ -209,29 +210,6 @@ export class AssistComponent implements OnInit {
         this.proactiveModeStatus = response;
         this.handleProactiveDisableEvent(this.dialogPositionId);
         this.handleAutomationSmallTalkOverrideMode();
-
-        
-        // let dropdownHeaderUuids = this.smallTalkOverrideBtnId ? this.smallTalkOverrideBtnId : this.dropdownHeaderUuids;
-        // console.log(dropdownHeaderUuids, 'dropdown header uuids');
-
-        // if (response) {
-        //   $(`.override-input-div`).removeClass('hide');
-        //   this.handleCancelOverrideBtnClick(dropdownHeaderUuids, this.dialogPositionId);
-        //   $(`#overRideBtn-${dropdownHeaderUuids}`).removeClass('hide');
-        // } else {
-        //   if (document.getElementById(`overRideBtn-${dropdownHeaderUuids}`)) {
-        //     if (document.getElementById(`inputFieldForAgent`)) {
-        //       $(`#inputFieldForAgent`).remove();
-        //     }
-        //     if (document.getElementById(`overRideBtn-${dropdownHeaderUuids}`)) {
-        //       $(`#overRideBtn-${dropdownHeaderUuids}`).addClass('hide');
-        //       $(`#cancelOverRideBtn-${dropdownHeaderUuids}`).addClass('hide');
-        //     }
-        //     this.handleOverridBtnClick(dropdownHeaderUuids, this.dialogPositionId);
-        //   }else{
-        //     this.handleProactiveDisableEvent(this.dialogPositionId);
-        //   }
-        // }
       }
     });
 
@@ -246,7 +224,7 @@ export class AssistComponent implements OnInit {
     this.subscriptionsList.push(subscription9);
     this.subscriptionsList.push(subscription10);
     this.subscriptionsList.push(subscription11);
-    this.subscriptionsList.push(subscription12);
+    // this.subscriptionsList.push(subscription12);
     this.subscriptionsList.push(subscription13);
   }
 
@@ -277,7 +255,7 @@ export class AssistComponent implements OnInit {
     respons.then((res) => {
       if(res && res.messages){
         this.handleSubjectService.setLoader(false);
-        // this.renderHistoryMessages(res.messages, res.feedbackDetails)
+        this.renderHistoryMessages(res.messages, res.feedbackDetails)
       }
       if (res && res.messages && res.messages.length > 0 && this.connectionDetails.conversationId) {
         shouldProcessResponse = false;
@@ -373,19 +351,19 @@ export class AssistComponent implements OnInit {
    
     // this.assisttabService._createRunTemplateContiner(uuids, data.intentName);
     
-    if (idTarget) {
-      let ids = idTarget.split('-');
-      ids.shift();
-      let joinedIds = ids.join('-');
-      let dialogID = document.getElementById(`suggestionId-${joinedIds}`);
-      if (dialogID) {
-        dialogID.style.borderStyle = "solid";
-      }
-    }
+    // if (idTarget) {
+    //   let ids = idTarget.split('-');
+    //   ids.shift();
+    //   let joinedIds = ids.join('-');
+    //   let dialogID = document.getElementById(`suggestionId-${joinedIds}`);
+    //   if (dialogID) {
+    //     dialogID.style.borderStyle = "solid";
+    //   }
+    // }
 
-    let addRemoveDropDown = document.getElementById(`addRemoveDropDown-${uuids}`);
-    addRemoveDropDown?.classList.remove('hide');
-    $(`#endTaks-${uuids}`).removeClass('hide');
+    // let addRemoveDropDown = document.getElementById(`addRemoveDropDown-${uuids}`);
+    // addRemoveDropDown?.classList.remove('hide');
+    // $(`#endTaks-${uuids}`).removeClass('hide');
     if (!runInitent) {
       this.AgentAssist_run_click(data, this.dialogPositionId, this.projConstants.INTENT);
     }
@@ -402,7 +380,10 @@ export class AssistComponent implements OnInit {
     if (this.agentAssistResponse.newEntityDisplayName || this.agentAssistResponse.newEntityName) {
       entityDisplayName = this.agentAssistResponse.newEntityDisplayName ? this.agentAssistResponse.newEntityDisplayName : this.agentAssistResponse.newEntityName;
     }
+    this.prepareUserMessageResponse(data,entityDisplayName); 
+  }
 
+  prepareUserMessageResponse(data,entityDisplayName){
     if(this.commonService.isAutomationOnGoing){
       let renderResponse = {
         uuid : this.randomUUIDPipe.transform(),
@@ -417,48 +398,24 @@ export class AssistComponent implements OnInit {
        } 
        
       this.assistResponseArray.map(arrEle => {
+        console.log(arrEle, 'arrElement');
+        
         if(arrEle.uuid && arrEle.uuid == this.dropdownHeaderUuids){
+          console.log("inside if");
+          
            arrEle.automationsArray = arrEle.automationsArray ? arrEle.automationsArray : [];
            if(arrEle.automationsArray[arrEle.automationsArray.length -1] && arrEle.automationsArray[arrEle.automationsArray.length -1]?.data?.isPrompt){
              arrEle.automationsArray[arrEle.automationsArray.length -1].hideOverrideDiv = true;
+             arrEle.automationsArray[arrEle.automationsArray.length -1].toggleOverride = false; 
            }
            arrEle.automationsArray = [...arrEle.automationsArray, renderResponse];
         }
       });
       this.assistResponseArray = structuredClone(this.assistResponseArray)
-      // this.assistResponseArray = [...this.assistResponseArray];
-      console.log("assistResponseArray", this.assistResponseArray)
-
-
-      // let _id = this.randomUUIDPipe.transform();
-      // let resultMsgResponse = this.templateRenderClassService.getMessageResponseForUserMessages(data, botId)
-      // let titleText = '';
-      // let userQueryHtml = '';
-      // $("#inputFieldForAgent").remove();
-      // if (this.commonService.OverRideMode) {
-      //   titleText = "YouEntered -";
-      //   userQueryHtml = this.assisttabService.userQueryTemplate(titleText, this.imageFilePath, this.imageFileNames, _id, data);
-      // } else {
-      //   titleText = "Customer Said -"
-      //   userQueryHtml = this.assisttabService.userQueryTemplate(titleText, this.imageFilePath, this.imageFileNames, _id, data);
-      // }
-      // let addUserQueryTodropdownData = document.getElementById(`dropDownData-${this.dropdownHeaderUuids}`);
-      // addUserQueryTodropdownData.innerHTML = addUserQueryTodropdownData.innerHTML + userQueryHtml;
-      // let entityHtml = $(`#dropDownData-${this.dropdownHeaderUuids}`).find(`#userInput-${_id}`);
-     
-      // if (data.entityValue && !data.isErrorPrompt && entityDisplayName) {
-      //   entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${this.sanitizeHtmlPipe.transform(data.userInput)}</div>`);
-      // } else {
-      //   if (data.isErrorPrompt && entityDisplayName) {
-      //     let entityHtmls = this.assisttabService.errorTemplate(this.imageFilePath, this.imageFileNames, entityDisplayName);
-      //     entityHtml.append(entityHtmls);
-      //   }
-      // }
 
       if (this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd) {
         this.scrollToBottom();
       }
-      // let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(resultMsgResponse)[0].innerHTML;
       this.commonService.removingSendCopyBtnForCall(this.connectionDetails);
     }else{
       let renderResponse = {
@@ -475,38 +432,15 @@ export class AssistComponent implements OnInit {
        if(this.assistResponseArray?.length > 1 && this.assistResponseArray[this.assistResponseArray.length-1]?.type == this.renderResponseType.SMALLTALK
         &&  this.assistResponseArray[this.assistResponseArray.length-1]?.data?.isPrompt){
          this.assistResponseArray[this.assistResponseArray.length-1].hideOverrideDiv = true;
+         this.assistResponseArray[this.assistResponseArray.length-1].toggleOverride = false;
        }
 
       this.assistResponseArray.push(renderResponse);
       this.assistResponseArray = [...this.assistResponseArray];
-       
-      // $("#inputFieldForAgent").remove();
-      // let dynamicBlockDiv = $('#dynamicBlock');
-      // let uuids = this.koreGenerateuuidPipe.transform();
-      // let botResHtml = this.assisttabService.getUserMsgSmallTalkTemplate(uuids,data);
-      // let titleData = `<div class="title-data" id="displayData-${uuids}">${this.sanitizeHtmlPipe.transform(data.userInput)}</div>`
-      // dynamicBlockDiv.append(botResHtml);
-      // $(`#smallTalk-${uuids} .agent-utt`).append(titleData);
     }
   }
 
   updateAgentAssistResponse(data, botId, conversationId) {
-    // let shouldProcessResponse = false;
-    // let appState = this.localStorageService.getLocalStorageState();
-    // if (appState[this.connectionDetails.conversationId]) {
-    //   // if incoming data belongs to welcome message do nothing
-    //   if (!data.suggestions && data.buttons?.length > 1) {
-    //     if (appState[this.connectionDetails.conversationId][storageConst.IS_WELCOMEMSG_PROCESSED]  && document.getElementsByClassName('.welcome-msg').length > 0) {
-    //       return;
-    //     }
-    //   }
-    //   shouldProcessResponse = true;
-    // } else {
-    //   shouldProcessResponse = true;
-    // }
-    // if (!shouldProcessResponse) {
-    //   return;
-    // }
     if (!(this.commonService.isAutomationOnGoing && data.suggestions)) {
       this.updateNumberOfMessages();
     }
@@ -523,26 +457,36 @@ export class AssistComponent implements OnInit {
       this.websocketService.emitEvents(EVENTS.enable_override_userinput, overRideObj)
       this.commonService.OverRideMode = false;
     }
-    // this.designAlterService.displayCustomerFeels(data, conversationId, botId, this.connectionDetails.source);
-
     this.commonService.updateAgentAssistState(conversationId, this.projConstants.ASSIST, data);
     this.processAgentAssistResponse(data, botId);
   }
 
-  uuids = this.koreGenerateuuidPipe.transform();
+  removeOverRideDivForPreviousResponse(){
+
+    if(this.assistResponseArray?.length > 1 && this.assistResponseArray[this.assistResponseArray.length-1]?.type == this.renderResponseType.SMALLTALK
+      &&  this.assistResponseArray[this.assistResponseArray.length-1]?.data?.isPrompt){
+       this.assistResponseArray[this.assistResponseArray.length-1].toggleOverride = false;
+       this.assistResponseArray[this.assistResponseArray.length-1].hideOverrideDiv = true;
+       this.assistResponseArray = structuredClone(this.assistResponseArray);
+    }
+
+  }
+
   processAgentAssistResponse(data, botId) {
     let renderResponse : any = {};
-    console.log("process agent assist response", data, this.proactiveModeStatus);
     this.smallTalkOverrideBtnId = null;
     let isTemplateRender = false;
+
     data = this.commonService.confirmationNodeRenderDataTransform(data);
+
     if(this.commonService.isAutomationOnGoing && this.dropdownHeaderUuids && data.suggestions?.dialogs?.length > 0) {
       this.dialogTerminatedOrIntruppted();
     }
     if (!this.commonService.isAutomationOnGoing && !this.proactiveModeStatus && !data.sendMenuRequest) {
       return;
     }
-    let automationSuggestions = $('#dynamicBlock .dialog-task-accordiaon-info');
+
+    this.removeOverRideDivForPreviousResponse();
 
     if (data.suggestions && Array.isArray(data.suggestions) && data.suggestions.length == 0) {
       data.suggestions = false;
@@ -564,19 +508,26 @@ export class AssistComponent implements OnInit {
       }
     }
     if (this.commonService.isCallConversation === true && data.suggestions) {
-      let buldHtml = `
-        <div class="buld-count-utt" id="buldCount-${uuids}">
-                    <i class="ast-bulb" id="buldCountAst-${uuids}"></i>
-                    <span class="count-number" id="buldCountNumber-${uuids}">${(data.suggestions.dialogs?.length || 0) + (data.suggestions.faqs?.length || 0) + (data.suggestions.searchassist?.snippets?.length || 0) + (this.commonService.formatSearchResponse(data)?.articles?.length || 0)}</span>
-                </div>`;
+      this.handleSubjectService.setCallConversationSuggestions({data : data, uuid : uuids});
+      // let buldHtml = `
+      //   <div class="buld-count-utt" id="buldCount-${uuids}">
+      //               <i class="ast-bulb" id="buldCountAst-${uuids}"></i>
+      //               <span class="count-number" id="buldCountNumber-${uuids}">${(data.suggestions.dialogs?.length || 0) + (data.suggestions.faqs?.length || 0) + (data.suggestions.searchassist?.snippets?.length || 0) + (this.commonService.formatSearchResponse(data)?.articles?.length || 0)}</span>
+      //           </div>`;
 
-      let attrs = $('#scriptContainer .other-user-bubble .bubble-data');
-      $(attrs).last().attr('id', uuids)
-      attrs.each((i, data) => {
-        if (data.id === uuids) {
-          $(`#${data.id}`).append(buldHtml);
-        }
-      });
+      // let attrs = $('#scriptContainer .other-user-bubble .bubble-data');
+      // console.log(attrs, '*********atrs');
+      
+      // $(attrs).last().attr('id', uuids)
+      
+      // attrs.each((i, data) => {
+      //   console.log(i, '*************', data);
+        
+      //   if (data.id === uuids) {
+      //     $(`#${data.id}`).append(buldHtml);
+      //   }
+      // });
+
     }
     
     if (!this.commonService.isAutomationOnGoing && data.suggestions) {
@@ -593,9 +544,9 @@ export class AssistComponent implements OnInit {
         }
         this.assistResponseArray.push(renderResponse);
         this.assistResponseArray = structuredClone(this.assistResponseArray);
-        setTimeout(() => {
-          this.updateNewMessageUUIDList(responseId);
-        }, this.waitingTimeForUUID);
+        // setTimeout(() => {
+        //   this.updateNewMessageUUIDList(responseId);
+        // }, this.waitingTimeForUUID);
         this.collapseOldDialoguesInAssist();
       }else{
         let faqAnswerIdsPlace = this.commonService.suggestionsAnswerPlaceableIDs.find(ele => ele.input == data.suggestions?.faqs[0].question);
@@ -636,70 +587,30 @@ export class AssistComponent implements OnInit {
         if(arrEle.uuid && arrEle.uuid == this.dropdownHeaderUuids){
            arrEle.automationsArray = arrEle.automationsArray ? arrEle.automationsArray : [];
            if(arrEle.automationsArray[arrEle.automationsArray.length -1] && arrEle.automationsArray[arrEle.automationsArray.length -1]?.data?.isPrompt){
-             arrEle.automationsArray[arrEle.automationsArray.length -1].toggleOverride = false;
+             arrEle.automationsArray[arrEle.automationsArray.length -1].hideOverrideDiv = true;
+             arrEle.automationsArray[arrEle.automationsArray.length -1].toggleOverride = false; 
            }
            arrEle.automationsArray = [...arrEle.automationsArray, renderResponse];
         }
       });
 
       this.assistResponseArray = structuredClone(this.assistResponseArray)
-      // this.assistResponseArray = [...this.assistResponseArray];
-      console.log("assistResponseArray", this.assistResponseArray)
-
-
-      // if (this.proactiveModeStatus) {
-      //   $(`#overRideBtn-${this.dropdownHeaderUuids}`).removeClass('hide');
-      // } else {
-      //   $(`#overRideBtn-${this.dropdownHeaderUuids}`).addClass('hide');
-      // }
-      // $(`#cancelOverRideBtn-${this.dropdownHeaderUuids}`).addClass('hide');
-      // $("#inputFieldForAgent").remove();
-      // let runInfoContent = $(`#dropDownData-${this.dropdownHeaderUuids}`);
-      // if (this.isFirstMessagOfDialog) {
-      //   $(`#dropDownData-${this.dropdownHeaderUuids}`).attr('data-task-id', data.uniqueTaskId)
-      // }
       this.isFirstMessagOfDialog = false;
       setTimeout(() => {
         if (data.entityName) {
           this.agentAssistResponse = {};
           this.agentAssistResponse = Object.assign({}, data);
         }
+        // this.updateNewMessageUUIDList(this.dropdownHeaderUuids);
       }, 10);
-      // let askToUserHtml = this.assisttabService.askUserTemplate(uuids, newTemp, this.dialogPositionId, data.srcChannel, data.buttons[0].value, data.componentType)
-      // let tellToUserHtml = this.assisttabService.tellToUserTemplate(uuids, newTemp, this.dialogPositionId, data.srcChannel, data.buttons[0].value, data.componentType)
-      // if (data.isPrompt) {
-      //   runInfoContent.append(askToUserHtml);
-      //   if (!this.proactiveModeStatus) {
-      //     this.handleOverridBtnClick('overRideBtn-' + this.dropdownHeaderUuids, this.dialogPositionId, true);
-      //   } else {
-      //     $(`.override-input-div`).removeClass('hide');
-      //   }
-      //   this.commonService.hideSendOrCopyButtons(result.parsedPayload, runInfoContent, false, data.componentType);
-      // } else {
-      //   $(`.override-input-div`).addClass('hide');
-      //   $(runInfoContent).append(tellToUserHtml);
-      //   this.commonService.hideSendOrCopyButtons(result.parsedPayload, runInfoContent, false, data.componentType);
-      // }
-      // if(data && data.componentType == 'dialogAct' && (data.srcChannel != 'msteams' && data.srcChannel != 'rtm')){
-      //   console.log("inside dialogact and channel");
-      //   isTemplateRender = true;
-      // }else{
-      //   isTemplateRender = false;
-      //   this.commonService.hideSendOrCopyButtons(result.parsedPayload, runInfoContent, false, data.componentType);
-      // }
-      setTimeout(() => {
-        this.updateNewMessageUUIDList(this.dropdownHeaderUuids);
-      }, this.waitingTimeForUUID);
     }
 
-    if (this.commonService.isAutomationOnGoing && !data.suggestions && !result.parsePayLoad) {
-//      this.welcomeMsgResponse = data;
-      if (this.commonService.scrollContent[ProjConstants.ASSIST].numberOfNewMessages == 1) {
-        this.commonService.scrollContent[ProjConstants.ASSIST].numberOfNewMessages = 0;
-      }
-      this.scrollToBottom();
-    }
-
+    // if (this.commonService.isAutomationOnGoing && !data.suggestions && !result.parsePayLoad) {
+    //   if (this.commonService.scrollContent[ProjConstants.ASSIST].numberOfNewMessages == 1) {
+    //     this.commonService.scrollContent[ProjConstants.ASSIST].numberOfNewMessages = 0;
+    //   }
+    //   this.scrollToBottom();
+    // }
       // small talk with templates
     if (!this.commonService.isAutomationOnGoing && this.dropdownHeaderUuids && data.buttons && !data.value.includes('Customer has waited') && (this.dialogPositionId && !data.positionId || data.positionId == this.dialogPositionId)) {
       let msgStringify = JSON.stringify(result);
@@ -733,49 +644,14 @@ export class AssistComponent implements OnInit {
       }
 
       setTimeout(() => {
-            if (data.entityName) {
-              this.agentAssistResponse = {};
-              this.agentAssistResponse = Object.assign({}, data);
-            }
+        if (data.entityName) {
+          this.agentAssistResponse = {};
+          this.agentAssistResponse = Object.assign({}, data);
+        }
       }, 10);
-      
+
       this.assistResponseArray.push(renderResponse);
       this.assistResponseArray = [...this.assistResponseArray];
-      console.log("assistResponseArray", this.assistResponseArray);
-      // $('#dynamicBlock .empty-data-no-agents').addClass('hide');
-      // let msgStringify = JSON.stringify(result);
-      // let newTemp = encodeURI(msgStringify);
-      // let dynamicBlockDiv = $('#dynamicBlock');
-      // data.buttons?.forEach((ele, i) => {
-      //   let botResHtml = this.assisttabService.smallTalkTemplateForTemplatePayload(ele, uuids,data, result,newTemp);
-      //   let titleData = ``;
-      //   let actionLinkTemplate = ``;
-      //   if(this.smallTalkTemplateRenderCheck(data, result)){
-      //       isTemplateRender = false;
-      //       titleData = `<div class="title-data" ><ul class="chat-container" id="displayData-${uuids}"></ul></div>`;
-      //       let sendData = result?.parsedPayload ? newTemp : data.buttons[0].value;
-      //       actionLinkTemplate = this.smallTalkActionLinkTemplate(uuids, sendData);
-      //   }else{
-      //       titleData = `<div class="title-data" id="displayData-${uuids}">${ele.value}</div>`;
-      //       actionLinkTemplate = this.smallTalkActionLinkTemplate(uuids, data.buttons[0].value)
-      //       isTemplateRender = true;
-      //       result.parsedPayload = null;
-      //   }
-      //   dynamicBlockDiv.append(botResHtml);
-      //   $(`#smallTalk-${uuids} .agent-utt`).append(titleData);
-      //   $(`#smallTalk-${uuids} .agent-utt`).append(actionLinkTemplate);
-      //   setTimeout(() => {
-      //     if (data.entityName) {
-      //       this.agentAssistResponse = {};
-      //       this.agentAssistResponse = Object.assign({}, data);
-      //     }
-      //   }, 10);
-      //   $(`.override-input-div`).remove();
-      //   if (data.isPrompt) {
-      //     this.smallTalkOverrideButtonTemplate(uuids);
-      //   }
-      //   this.commonService.hideSendOrCopyButtons(result.parsedPayload, `#smallTalk-${uuids} .agent-utt`, 'smallTalk')
-      // });
     }
       // small talk with templates end
 
@@ -814,39 +690,6 @@ export class AssistComponent implements OnInit {
         this.assistResponseArray = [...this.assistResponseArray];
         console.log("assistResponseArray", this.assistResponseArray)
       }
-
-      // $('#dynamicBlock .empty-data-no-agents').addClass('hide');
-      // let msgStringify = JSON.stringify(result);
-      // let newTemp = encodeURI(msgStringify);
-      // let dynamicBlockDiv = $('#dynamicBlock');
-      // if(data?.buttons?.length == 1){
-      //   let botResHtml = this.assisttabService.smallTalkTemplateForTemplatePayload(data.buttons[0], uuids, data, result,newTemp);
-      //   let titleData = ``;
-      //   let actionLinkTemplate = ``;
-      //   if(this.smallTalkTemplateRenderCheck(data, result)){
-      //       isTemplateRender = false;
-      //       titleData = `<div class="title-data" ><ul class="chat-container" id="displayData-${uuids}"></ul></div>`;
-      //       let sendData = result?.parsedPayload ? newTemp : data.buttons[0].value;
-      //       actionLinkTemplate = this.smallTalkActionLinkTemplate(uuids, sendData);
-      //   }else{
-      //       actionLinkTemplate = this.smallTalkActionLinkTemplate(uuids, data.buttons[0].value)
-      //       titleData = `<div class="title-data" id="displayData-${uuids}">${data.buttons[0].value}</div>`
-      //       isTemplateRender = true;
-      //       result.parsedPayload = null;
-      //   }
-      //   dynamicBlockDiv.append(botResHtml);
-      //   $(`#smallTalk-${uuids} .agent-utt`).append(titleData);
-      //   $(`#smallTalk-${uuids} .agent-utt`).append(actionLinkTemplate);
-      //   $(`.override-input-div`).remove();
-      //   if (data.isPrompt) {
-      //     this.smallTalkOverrideButtonTemplate(uuids);
-      //   }
-      //   this.commonService.hideSendOrCopyButtons(result.parsedPayload, `#smallTalk-${uuids} .agent-utt`, 'smallTalk')
-      // }
-
-      // setTimeout(() => {
-      //   this.updateNewMessageUUIDList(uuids);
-      // }, this.waitingTimeForUUID);
     }
 
     if (data.buttons?.length > 1 && data.sendMenuRequest) {
@@ -865,32 +708,8 @@ export class AssistComponent implements OnInit {
     if (this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd) {
       this.scrollToBottom();
     }
-    // setTimeout(() => {
-    //   this.commonService.removingSendCopyBtnForCall(this.connectionDetails);
-    //   this.designAlterService.addWhiteBackgroundClassToNewMessage(this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd, IdReferenceConst.DYNAMICBLOCK);
-    // }, 100);
+    this.updateNewMessageUUIDList(responseId);
   }
-
-  smallTalkActionLinkTemplate(uuids,sendData){
-    let actionLinkTemplate =  ` <div class="action-links">
-    <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data="${sendData}">Send</button>
-    <div class="copy-btn hide" data-msg-id="${uuids}" data-msg-data="${sendData}">
-        <i class="ast-copy" data-msg-id="${uuids}" data-msg-data="${sendData}"></i>
-    </div>
-  </div>`;
-  return actionLinkTemplate;
-  }
-
-  // smallTalkOverrideButtonTemplate(uuids){
-  //   this.smallTalkOverrideBtnId = uuids;
-  //   let overrideTemplate = this.assisttabService.overrideTemplate(uuids);
-  //   $(`#smallTalk-${uuids}`).append(overrideTemplate);
-  //   if (!this.proactiveModeStatus) {
-  //     this.handleOverridBtnClick('overRideBtn-' + this.dropdownHeaderUuids, this.dialogPositionId, true);
-  //   } else {
-  //     $(`.override-input-div`).removeClass('hide');
-  //   }
-  // }
 
   smallTalkTemplateRenderCheck(data,result){
     if(result.parsedPayload && ((data?.componentType === 'dialogAct' && (data?.srcChannel == 'msteams' || data?.srcChannel == 'rtm')) || (data?.componentType != 'dialogAct'))){
@@ -928,7 +747,7 @@ export class AssistComponent implements OnInit {
     // this.dropdownHeaderUuids = undefined;
   }
 
-  prepareFeedbackData(){
+  prepareFeedbackData(feedbackData?){
     let renderResponse : any = {
       type : this.renderResponseType.FEEDBACK,
       uuid : this.dropdownHeaderUuids,
@@ -936,9 +755,11 @@ export class AssistComponent implements OnInit {
       dialogName : this.dialogName,
       dialogPositionId : this.dialogPositionId,
       userIntentInput : this.commonService.userIntentInput,
-      feedbackDetails : [],
-      submitForm : false
+      submitForm : feedbackData?.feedback ? true : false,
+      feedback : feedbackData?.feedback ? feedbackData.feedback : '',
+      feedbackDetails : feedbackData?.feedbackDetails?.length ? feedbackData.feedbackDetails : []
     } 
+    
     this.assistResponseArray.push(renderResponse);
     this.assistResponseArray = [...this.assistResponseArray];
     console.log("assistResponseArray", this.assistResponseArray)
@@ -953,65 +774,6 @@ export class AssistComponent implements OnInit {
     this.assistResponseArray = structuredClone(this.assistResponseArray);
   }
 
-  handleSeeMoreButtonForAmbiguityFAQ(responseId,faq, type){
-    if (faq.answer) {
-      let dataObj : any = {
-        question : faq.question,
-        answer : faq.answer,
-        type : type
-      }
-      setTimeout(() => {
-        this.clickEvents(IdReferenceConst.SEEMORE_BTN, responseId, '', dataObj)
-      }, 1000);
-    }
-  }
-
-  // handling seemoe button
-  handleSeeMoreButton(responseId, array, type) {
-
-    if (array && responseId && type) {
-      let index = 0;
-      for (let item of array) {
-        let id = responseId + index;
-        this.commonService.updateSeeMoreButtonForAssist(id, type, (type == ProjConstants.FAQ) ? item.answer : []);
-        index++;
-        if (item.answer) {
-          let dataObj : any = {
-            question : item.question,
-            answer : item.answer,
-            type : type
-          }
-          setTimeout(() => {
-            this.clickEvents(IdReferenceConst.SEEMORE_BTN, id, '', dataObj)
-          }, 1000);
-        }
-      }
-    }
-  }
-
-  handleSeeMoreButtonForHistory(responseId, array, type) {
-
-    if (array && responseId && type) {
-      let index = 0;
-      for (let item of array) {
-        let id = responseId + index;
-        // item.answer = item.components[0].text;
-        this.commonService.updateSeeMoreButtonForAssist(id, type, (type == ProjConstants.FAQ) ? item.answer : []);
-        index++;
-        if (item.answer) {
-          let dataObj : any = {
-            question : item.question,
-            answer : item.answer,
-            type : type
-          }
-          setTimeout(() => {
-            this.clickEvents(IdReferenceConst.SEEMORE_BTN, id, '', dataObj)
-          }, 1000);
-        }
-      }
-    }
-  }
-
   // new messages count and rendering code
   updateNewMessageUUIDList(responseId) {
     if (!this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd) {
@@ -1022,8 +784,10 @@ export class AssistComponent implements OnInit {
         } else {
           this.commonService.scrollContent[ProjConstants.ASSIST].newlyAddedIdList = this.getActualRenderedIdList()
         }
+        this.addUnreadMessageHtml();
       }
-      this.addUnreadMessageHtml();
+    }else{
+      this.unreadUUID = null;
     }
   }
 
@@ -1044,32 +808,39 @@ export class AssistComponent implements OnInit {
     return actualRenderedIdList;
   }
 
+  // addUnreadMessageHtml() {
+  //   if (!this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd && this.commonService.scrollContent[ProjConstants.ASSIST].numberOfNewMessages) {
+  //     $('.unread-msg').remove();
+  //     let unreadHtml = ` <div class="unread-msg last-msg-white-bg">
+  //       <div class="text-dialog-task-end">Unread Messages</div>
+  //                  </div>`;
+  //     // this.designAlterService.UnCollapseDropdownForLastElement(this.commonService.scrollContent[ProjConstants.ASSIST].lastElementBeforeNewMessage);
+  //     for (let i = 0; i < this.commonService.scrollContent[ProjConstants.ASSIST].newlyAddedIdList.length; i++) {
+  //       if (document.getElementById(this.commonService.scrollContent[ProjConstants.ASSIST].newlyAddedIdList[i])) {
+  //         let elements: any = document.getElementById(this.commonService.scrollContent[ProjConstants.ASSIST].newlyAddedIdList[i]);
+  //         if (elements.className == 'content-dialog-task-type' && (elements.id.includes('dialogSuggestions') || elements.id.includes('faqsSuggestions') || elements.id.includes('articleSuggestions'))) {
+  //           let agentUttInfoId = this.commonService.scrollContent[ProjConstants.ASSIST].newlyAddedIdList[i].split('-');
+  //           agentUttInfoId.shift();
+  //           agentUttInfoId = 'agentUttInfo-' + agentUttInfoId.join('-');
+  //           if (document.getElementById(agentUttInfoId)) {
+  //             elements = document.getElementById(agentUttInfoId);
+  //           }
+  //           elements?.insertAdjacentHTML('beforeBegin', unreadHtml);
+  //         } else if (elements.id.includes('stepsrundata') && this.commonService.scrollContent[ProjConstants.ASSIST]?.lastElementBeforeNewMessage?.id?.includes('stepsrundata')) {
+  //           elements = document.getElementById(this.commonService.scrollContent[ProjConstants.ASSIST]?.lastElementBeforeNewMessage?.id);
+  //           elements?.insertAdjacentHTML('afterend', unreadHtml);
+  //         }
+  //         break;
+  //       }
+  //     }
+  //   }
+    
+  // }
+
   addUnreadMessageHtml() {
-    if (!this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd && this.commonService.scrollContent[ProjConstants.ASSIST].numberOfNewMessages) {
-      $('.unread-msg').remove();
-      let unreadHtml = ` <div class="unread-msg last-msg-white-bg">
-        <div class="text-dialog-task-end">Unread Messages</div>
-                   </div>`;
-      this.designAlterService.UnCollapseDropdownForLastElement(this.commonService.scrollContent[ProjConstants.ASSIST].lastElementBeforeNewMessage);
-      for (let i = 0; i < this.commonService.scrollContent[ProjConstants.ASSIST].newlyAddedIdList.length; i++) {
-        if (document.getElementById(this.commonService.scrollContent[ProjConstants.ASSIST].newlyAddedIdList[i])) {
-          let elements: any = document.getElementById(this.commonService.scrollContent[ProjConstants.ASSIST].newlyAddedIdList[i]);
-          if (elements.className == 'content-dialog-task-type' && (elements.id.includes('dialogSuggestions') || elements.id.includes('faqsSuggestions') || elements.id.includes('articleSuggestions'))) {
-            let agentUttInfoId = this.commonService.scrollContent[ProjConstants.ASSIST].newlyAddedIdList[i].split('-');
-            agentUttInfoId.shift();
-            agentUttInfoId = 'agentUttInfo-' + agentUttInfoId.join('-');
-            if (document.getElementById(agentUttInfoId)) {
-              elements = document.getElementById(agentUttInfoId);
-            }
-            elements?.insertAdjacentHTML('beforeBegin', unreadHtml);
-          } else if (elements.id.includes('stepsrundata') && this.commonService.scrollContent[ProjConstants.ASSIST]?.lastElementBeforeNewMessage?.id?.includes('stepsrundata')) {
-            elements = document.getElementById(this.commonService.scrollContent[ProjConstants.ASSIST]?.lastElementBeforeNewMessage?.id);
-            elements?.insertAdjacentHTML('afterend', unreadHtml);
-          }
-          break;
-        }
-      }
-    }
+    this.UnCollapseDropdownForLastElement();
+    let newAddedMsgUuid = this.commonService.scrollContent[ProjConstants.ASSIST]?.newlyAddedMessagesUUIDlist[0];
+    this.unreadUUID = newAddedMsgUuid ? newAddedMsgUuid : null;
   }
 
   getChildRenderedIdList(id, uuid, name) {
@@ -1117,12 +888,12 @@ export class AssistComponent implements OnInit {
     if (this.commonService.activeTab == this.projConstants.ASSIST) {
       if (this.proactiveModeStatus) {
         this.commonService.scrollContent[ProjConstants.ASSIST].numberOfNewMessages += 1;
-        $(".scroll-bottom-btn").addClass("new-messages");
-        $(".scroll-bottom-btn span").text(this.commonService.scrollContent[ProjConstants.ASSIST].numberOfNewMessages + ' new');
+        // $(".scroll-bottom-btn").addClass("new-messages");
+        // $(".scroll-bottom-btn span").text(this.commonService.scrollContent[ProjConstants.ASSIST].numberOfNewMessages + ' new');
         if (this.commonService.scrollContent[ProjConstants.ASSIST].numberOfNewMessages == 1) {
           this.removeWhiteBackgroundToSeenMessages();
         }
-        this.newButtonScrollClickEvents.emit(true);
+        // this.newButtonScrollClickEvents.emit(true);
       }
     }
   }
@@ -1137,19 +908,33 @@ export class AssistComponent implements OnInit {
 
   collapseOldDialoguesInAssist() {
     if (this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd && this.commonService.activeTab == this.projConstants.ASSIST) {
-      if ($(`#dynamicBlocksData .collapse-acc-data`).length > 0) {
-        let listItems = $("#dynamicBlocksData .collapse-acc-data");
-        listItems.each(function (idx, collapseElement) {
-          if (!collapseElement.id.includes('smallTalk') && collapseElement.id.includes('dropDownData')) {
-            collapseElement.classList.add('hide');
-          }
-        });
-      }
+       this.assistResponseArray.forEach(response => {
+        if(response.type == this.renderResponseType.AUTOMATION){
+          response.showAutomation = false;
+        }
+      });
+      this.assistResponseArray = structuredClone(this.assistResponseArray);
+      
+      // if ($(`#dynamicBlocksData .collapse-acc-data`).length > 0) {
+      //   let listItems = $("#dynamicBlocksData .collapse-acc-data");
+      //   listItems.each(function (idx, collapseElement) {
+      //     if (!collapseElement.id.includes('smallTalk') && collapseElement.id.includes('dropDownData')) {
+      //       collapseElement.classList.add('hide');
+      //     }
+      //   });
+      // }
     }
   }
 
-  scrollToBottom() {
-    if (this.commonService.activeTab == this.projConstants.ASSIST) {
+  UnCollapseDropdownForLastElement(){
+    if(this.assistResponseArray.length && this.assistResponseArray[this.assistResponseArray.length-1].type == this.renderResponseType.AUTOMATION){
+      this.assistResponseArray[this.assistResponseArray.length-1].showAutomation = true;
+      this.assistResponseArray = structuredClone(this.assistResponseArray);
+    }
+  }
+
+  scrollToBottom(flag?) {
+    if (flag || (this.commonService.activeTab == this.projConstants.ASSIST && this.commonService.scrollContent[this.projConstants.ASSIST].scrollAtEnd)) {
       this.scrollToBottomEvent.emit(true);
     }
   }
@@ -1204,51 +989,12 @@ export class AssistComponent implements OnInit {
       } else if (eventName == IdReferenceConst.AGENT_RUN_BTN) {
         // this.handleMybotRunClick(uuid, data);
       } else if (eventName == IdReferenceConst.SEEMORE_BTN) {
-        this.handleSeeMoreLessClickEvents(uuid, data);
+        // this.handleSeeMoreLessClickEvents(uuid, data);
       } else if (eventName == IdReferenceConst.CHECK){
-          setTimeout(() => {
-            this.handleFaqArrowClick(uuid, dialogId, data);
-          }, 500);
+          // setTimeout(() => {
+          //   this.handleFaqArrowClick(uuid, dialogId, data);
+          // }, 500);
       }
-    }
-  }
-
-  handleFaqArrowClick(uuid, positionId, data){
-    let target : any = {
-      id : 'check-' + uuid
-    }
-    let checkElement = document.getElementById(IdReferenceConst.CHECK + '-' + uuid);
-    if(checkElement){
-      checkElement.addEventListener('click', (event) => {
-        if (!$(`#${target.id}`).attr("data-answer-render")) {
-            let faq = $(`#dynamicBlock .type-info-run-send #faqSection-${uuid}`);
-            let answerHtml = `<div class="desc-text" id="desc-${uuid}"></div>`
-            faq.append(answerHtml);
-            $(`#dynamicBlock #${target.id}`).attr('data-answer-render', 'false');
-            // faqDiv.append(faqaction);
-            this.answerPlaceableIDs.push({id:`desc-${uuid}`, input: data.intentName, inputQuestion: data.question, positionId: data.positionId});
-            $(`#dynamicBlock #${target.id}`).addClass('rotate-carrot');
-            $(`#dynamicBlock #faqDiv-${uuid}`).addClass('is-dropdown-open');
-            this.AgentAssist_run_click(data, data.positionId);
-            return
-        }
-        if ($(`#dynamicBlock .type-info-run-send #faqSection-${uuid} .ast-carrotup.rotate-carrot`).length <= 0) {
-            $(`#dynamicBlock #${target.id}`).addClass('rotate-carrot');
-            $(`#dynamicBlock #faqDiv-${uuid}`).addClass('is-dropdown-open');
-            $(`#dynamicBlock #faqDiv-${uuid} .action-links`).removeClass('hide');
-            $(`#dynamicBlock #desc-${uuid}`).removeClass('hide');
-            setTimeout(() => {
-              this.commonService.updateSeeMoreButtonForAssist(uuid);
-            }, 1000);
-        } else {
-            $(`#dynamicBlock #${target.id}`).removeClass('rotate-carrot');
-            $(`#dynamicBlock #faqDiv-${uuid} .action-links`).addClass('hide');
-            $(`#dynamicBlock #faqDiv-${uuid}`).removeClass('is-dropdown-open');
-            $(`#dynamicBlock #desc-${uuid}`).addClass('hide');
-            $(`#dynamicBlock #seeMore-${uuid}`).addClass('hide');
-            $(`#dynamicBlock #seeLess-${uuid}`).addClass('hide');
-        }
-      });
     }
   }
 
@@ -1300,63 +1046,6 @@ export class AssistComponent implements OnInit {
     this.websocketService.emitEvents(EVENTS.enable_override_userinput, overRideObj);
   }
 
-  // handleOverridBtnClick(uuid, dialogId, noEmit?) {
-  //   this.handleProactiveDisableEvent(dialogId, noEmit);
-  //   let runInfoContent: any = document.getElementById(`dropDownData-${this.dropdownHeaderUuids}`);
-  //   if(document.getElementById(`smallTalk-${uuid}`)){
-  //     runInfoContent = document.getElementById(`smallTalk-${uuid}`);
-  //   }
-  //   let agentInputId = this.randomUUIDPipe.transform();
-  //   let agentInputEntityName = 'EnterDetails';
-  //   if (this.agentAssistResponse.newEntityDisplayName || this.agentAssistResponse.newEntityName) {
-  //     agentInputEntityName = this.agentAssistResponse.newEntityDisplayName ? this.agentAssistResponse.newEntityDisplayName : this.agentAssistResponse.newEntityName;
-  //   } else if (this.agentAssistResponse.entityDisplayName || this.agentAssistResponse.entityName) {
-  //     agentInputEntityName = this.agentAssistResponse.entityDisplayName ? this.agentAssistResponse.entityDisplayName : this.agentAssistResponse.entityName;
-  //   }
-  //   $('#inputFieldForAgent').remove();
-  //   let agentInputToBotHtml = this.assisttabService.agentInputToBotTemplate(agentInputEntityName, agentInputId);
-  //   if(document.getElementById(`smallTalk-${uuid}`)){
-  //     document.getElementById(`overRideDiv-${uuid}`).insertAdjacentHTML('beforebegin', agentInputToBotHtml);
-  //   }else{
-  //     $(runInfoContent).append(agentInputToBotHtml);
-  //   }
-  //   if (document.getElementById('agentInput-' + agentInputId)) {
-  //     document.getElementById('agentInput-' + agentInputId).focus();
-  //     runInfoContent.querySelector(`#agentInput-${agentInputId}`).addEventListener('keypress', (e: any) => {
-  //       let key = e.which || e.keyCode || 0;
-  //       if (key === 13) {
-  //         this.AgentAssist_run_click({ intentName: this.sanitizeHtmlPipe.transform(e.target.value) }, this.dialogPositionId);
-  //       }
-  //     });
-  //   }
-  //   if (this.proactiveModeStatus) {
-  //     $(`#overRideBtn-${uuid}`).addClass('hide');
-  //     $(`#cancelOverRideBtn-${uuid}`).removeClass('hide');
-  //   }
-  //   this.commonService.OverRideMode = true;
-  //   // this.designAlterService.addWhiteBackgroundClassToNewMessage(this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd, IdReferenceConst.DYNAMICBLOCK);
-  //   this.scrollToBottom();
-  // }
-
-  // handleCancelOverrideBtnClick(uuid, dialogId) {
-  //   let overRideObj: any = {
-  //     "agentId": "",
-  //     "botId": this.connectionDetails.botId,
-  //     "conversationId": this.connectionDetails.conversationId,
-  //     "query": "",
-  //     "enable_override_userinput": false,
-  //     'experience': this.commonService.isCallConversation === true ? 'voice' : 'chat',
-  //     "positionId": dialogId
-  //   }
-  //   this.websocketService.emitEvents(EVENTS.enable_override_userinput, overRideObj);
-  //   $(`#overRideBtn-${uuid}`).removeClass('hide');
-  //   $(`#cancelOverRideBtn-${uuid}`).addClass('hide');
-  //   $('#inputFieldForAgent').remove();
-  //   this.commonService.OverRideMode = false;
-  //   // this.designAlterService.addWhiteBackgroundClassToNewMessage(this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd, IdReferenceConst.DYNAMICBLOCK);
-  //   this.scrollToBottom();
-  // }
-
   handleRunButtonClick(uuid, data) {
     document.getElementById(IdReferenceConst.ASSIST_RUN_BUTTON + '-' + uuid)?.addEventListener('click', (event) => {
       let runEventObj: any = {
@@ -1366,107 +1055,6 @@ export class AssistComponent implements OnInit {
         childBotName : data.childBotName
       }
       this.handleSubjectService.setRunButtonClickEvent(runEventObj);
-    });
-  }
-
-  updateSeeMoreButtonForFAQAgent(actualId, answerArray){
-    let index = 0;
-    for(let ans of answerArray){
-        let id = actualId+index;
-        let faqSourceTypePixel = 5;
-        let descElement =  $("#desc-faq-" + id);
-        let seeMoreElement = $('#seeMore-' + id);
-        let seeLessElement = $('#seeLess-' + id);
-        $(descElement).css({"display" : "block"});
-        if(descElement){
-            let divSectionHeight = $(descElement).css("height")  || '0px';
-            divSectionHeight = parseInt(divSectionHeight?.slice(0,divSectionHeight.length-2));
-            if(divSectionHeight > (24 + faqSourceTypePixel)){
-                $(seeMoreElement).removeClass('hide');
-                $(seeLessElement).addClass('hide');
-            }else{
-                $(seeMoreElement).addClass('hide');
-            }
-            $(descElement).css({"display" : "-webkit-box"});
-        }
-        index++;
-        let dataObj : any = {
-          answer : [ans],
-          type : this.projConstants.FAQ
-        }
-        this.handleSeeMoreLessClickEventsForFaq(id, dataObj)
-    }
-}
-
-  handleSeeMoreLessClickEventsForFaq(id, data){
-    let seeMoreElement = document.getElementById('seeMore-' + id);
-    let seeLessElement = document.getElementById('seeLess-' + id);
-    let descElement = document.getElementById("desc-faq-" + id);
-    seeMoreElement.addEventListener('click', (event: any) => {
-      event.target.classList.add('hide');
-      seeLessElement.classList.remove('hide');
-      $(descElement).css({"display" : "block"})
-    });
-    seeLessElement.addEventListener('click', (event: any) => {
-      event.target.classList.add('hide');
-      seeMoreElement.classList.remove('hide');
-      $(descElement).css({"display" : "-webkit-box"})
-    });
-  }
-
-  handleSeeMoreLessClickEvents(id, data) {
-    let seeMoreElement = document.getElementById('seeMore-' + id);
-    let seeLessElement = document.getElementById('seeLess-' + id);
-    let titleElement = document.getElementById("title-" + id);
-    let descElement = document.getElementById("desc-" + id);
-    let seeMoreWrapper = document.getElementById("seeMoreWrapper-" + id);
-    let faqDiv = $(`.type-info-run-send#faqDiv-${id}`)
-
-    if (data.type == this.projConstants.ARTICLE) {
-      seeMoreElement = document.getElementById('articleseeMore-' + id);
-      seeLessElement = document.getElementById('articleseeLess-' + id);
-      titleElement = document.getElementById("articletitle-" + id);
-      descElement = document.getElementById("articledesc-" + id);
-    }
-    seeMoreElement.addEventListener('click', (event: any) => {
-      event.target.classList.add('hide');
-      seeLessElement.classList.remove('hide');
-      if(titleElement){
-        titleElement.classList.add('no-text-truncate');
-      }
-      if (data.type == this.projConstants.FAQ && seeMoreWrapper && data.answer && data.answer.length > 1) {
-          descElement.classList.add('hide');
-          seeMoreWrapper.classList.remove('hide');
-          seeLessElement.classList.add('show-less-btn');
-          seeLessElement.innerText = this.projConstants.CLOSE;
-          titleElement.innerText = data.question;
-          faqDiv.find(`#sendMsg, .copy-btn`).each((i, ele) => {
-            ele.classList.add('hide')
-          });
-          setTimeout(() => {
-            this.updateSeeMoreButtonForFAQAgent(id, data.answer);
-          }, 100);
-
-      } else {
-        descElement.classList.add('no-text-truncate');
-      }
-    });
-    seeLessElement.addEventListener('click', (event: any) => {
-      event.target.classList.add('hide');
-      seeMoreElement.classList.remove('hide');
-      if(titleElement){
-        titleElement.classList.remove('no-text-truncate');
-      }
-      if (data.type == this.projConstants.FAQ && seeMoreWrapper && data.answer && data.answer.length > 1) {
-          if(seeMoreWrapper) seeMoreWrapper.classList.add('hide');
-          descElement.classList.remove('hide');
-          titleElement.innerText = data.question + " 1/" + data.answer.length;
-          faqDiv.find(`#sendMsg, .copy-btn`).each((i, ele) => {
-            ele.classList.remove('hide')
-        });
-      } else {
-        if(descElement) descElement.classList.remove('no-text-truncate');
-      }
     });
   }
 
@@ -1534,490 +1122,316 @@ export class AssistComponent implements OnInit {
     });
   }
 
+  updateOverrideStatusOfAutomation(previousId){
+    this.assistResponseArray.map(arrEle => {
+      if (arrEle.uuid && arrEle.uuid == previousId) {
+        arrEle.automationsArray = arrEle.automationsArray ? arrEle.automationsArray : [];
+        if (arrEle.automationsArray[arrEle.automationsArray.length - 1] && arrEle.automationsArray[arrEle.automationsArray.length - 1]?.data?.isPrompt) {
+          arrEle.automationsArray[arrEle.automationsArray.length - 1].hideOverrideDiv = true;
+          arrEle.automationsArray[arrEle.automationsArray.length - 1].toggleOverride = false;
+        }
+      }
+    });
+    this.assistResponseArray = structuredClone(this.assistResponseArray);
+  }
+
+
   renderHistoryMessages(response, feedBackResult) {
-    let historyFaqIDs = [];
 
     let previousId;
     let previousTaskPositionId, currentTaskPositionId, currentTaskName, previousTaskName;
     let resp = response.length > 0 ? response : undefined;
+    let renderResponse: any = {};
 
     resp = this.commonService.formatHistoryResponseForFAQ(resp);
     resp?.forEach((res, index) => {
+
       res = this.commonService.confirmationNodeRenderForHistoryDataTransform(res);
-      if ((res.agentAssistDetails?.suggestions || res.agentAssistDetails?.ambiguityList) && res.type == 'outgoing' && !res.agentAssistDetails?.faqResponse) {
-        let uniqueID = res._id;
-        let historyDataHtml = $('#dynamicBlock');
-
-        let htmls = `
-                        <div class="agent-utt-info" id="agentUttInfo-${uniqueID}">
-                            <div class="user-img">
-                                <img src="${this.imageFilePath}${this.imageFileNames['USERICON']}">
-                            </div>
-                            <div class="text-user" >${res.agentAssistDetails.userInput}</div>
-                        </div>
-                        <div class="dialog-task-run-sec" id="automationSuggestions-${uniqueID}">
-                        </div>`;
-
-        historyDataHtml.append(htmls);
-        let automationSuggestions = document.getElementById(`automationSuggestions-${uniqueID}`);
-        if (res.agentAssistDetails?.ambiguityList?.dialogs?.length > 0 || res.agentAssistDetails?.suggestions?.dialogs?.length > 0) {
 
 
-          let dialogAreaHtml = `<div class="task-type" id="dialoguesArea">
-              <div class="img-block-info">
-                  <img src="${this.imageFilePath}${this.imageFileNames['DIALOG_TASK']}">
-              </div>
-              <div class="content-dialog-task-type" id="dialogSuggestions-${uniqueID}">
-                <div class="type-with-img-title">Dialog task (${res.agentAssistDetails?.suggestions ? res.agentAssistDetails?.suggestions.dialogs?.length : res.agentAssistDetails?.ambiguityList.dialogs?.length})</div>
-              </div>
-            </div>`;
-          automationSuggestions.innerHTML += dialogAreaHtml;
-        }
-        if (res.agentAssistDetails?.ambiguityList?.faqs?.length > 0 || res.agentAssistDetails?.suggestions?.faqs?.length > 0) {
-          let dialogAreaHtml = `<div class="task-type" id="faqssArea">
-            <div class="img-block-info">
-                <img src="${this.imageFilePath}${this.imageFileNames['FAQ_SUGGESTION']}">
-            </div>
-            <div class="content-dialog-task-type" id="faqsSuggestions-${uniqueID}">
-                <div class="type-with-img-title">FAQ (${res.agentAssistDetails?.suggestions ? res.agentAssistDetails?.suggestions.faqs.length : res.agentAssistDetails.ambiguityList.faqs.length})</div>
+      res = this.commonService.formatHistoryResonseToNormalRender(res);
 
-            </div>
-        </div>`;
-          automationSuggestions.innerHTML += dialogAreaHtml;
-        }
-        let dialogsss = (res.agentAssistDetails?.suggestions) ? (res.agentAssistDetails?.suggestions?.dialogs) : (res.agentAssistDetails?.ambiguityList?.dialogs);
-        dialogsss?.forEach((ele, index) => {
+      console.log(currentTaskPositionId, previousTaskPositionId, res, "current previous and res");
 
-          let dialogSuggestions = document.getElementById(`dialogSuggestions-${uniqueID}`);
-          let dialogsHtml = `
-                <div class="type-info-run-send">
-                    <div class="left-content">
-                        <div class="title-text" id="automation-${uniqueID + index}">${ele.name}</div>
-                    </div>
-                    <div class="action-links">
-                        <button class="send-run-btn" data-conv-id="${this.commonService.configObj.conversationid}"
-                        data-bot-id="${res.botId}" data-intent-name="${ele.name}"
-                        data-history-run="true" id="run-${uniqueID + index}" data-child-bot-id="${ele.childBotId}" data-child-bot-name="${ele.childBotName}"
-                        data-dialog-run='${JSON.stringify(ele)}'>RUN</button>
-                        <div class="elipse-dropdown-info" id="showRunForAgentBtn-${uniqueID + index}">
-                            <div class="elipse-icon" id="elipseIcon-${uniqueID + index}">
-                                <i class="ast-overflow" id="overflowIcon-${uniqueID + index}"></i>
-                            </div>
-                            <div class="dropdown-content-elipse" id="runAgtBtn-${uniqueID + index}" data-dialog-run='${JSON.stringify(ele)}'>
-                                <div class="list-option" data-conv-id="${this.commonService.configObj.conversationid}"
-                                data-bot-id="${res.botId}" data-intent-name="${ele.name}" data-child-bot-id="${ele.childBotId}" data-child-bot-name="${ele.childBotName}"
-                                 id="agentSelect-${uniqueID + index}"
-                                data-exhaustivelist-run="true" data-dialog-run='${JSON.stringify(ele)}'>Run with Agent Inputs</div>
-                            </div>
-                    </div>
-                </div>`;
-          dialogSuggestions.innerHTML += dialogsHtml;
-          this.clickEvents(IdReferenceConst.ASSIST_RUN_BUTTON, uniqueID + index, this.dialogPositionId, ele);
-          this.clickEvents(IdReferenceConst.AGENT_RUN_BTN, uniqueID + index, this.dialogPositionId, ele);
+      this.removeOverRideDivForPreviousResponse();
+      
+      if ((res.suggestions || res.ambiguityList) && res.type == 'outgoing' && res.faqResponse) {
+
+        res.suggestions.faqs.forEach(faq => {
+          faq.answer = res?.components[0]?.data?.text
         });
-        let faqss = (res.agentAssistDetails?.suggestions) ? (res.agentAssistDetails?.suggestions?.faqs) : (res.agentAssistDetails?.ambiguityList?.faqs);
-        faqss?.forEach((ele, index) => {
 
-          let faqsSuggestions = document.getElementById(`faqsSuggestions-${uniqueID}`);
-          historyFaqIDs.push(uniqueID + index);
-          let faqHtml = `
-                <div class="type-info-run-send" id="faqDiv-${uniqueID + index}">
-                    <div class="left-content" id="faqSection-${uniqueID + index}">
-                        <div class="title-text" id="title-${uniqueID + index}" title="${ele.displayName ? ele.displayName : ele.question}">${ ele.displayName ? ele.displayName : ele.question}</div>
+        res.suggestions.faqs = this.commonService.formatFAQResponse(res.suggestions.faqs);
 
+        let faqQuestionList = res?.suggestions?.faqs?.reduce((acc, faq) => {
+          acc[faq.question] = faq;
+          return acc;
+        }, {});
 
-                    </div>
+        let inx = null;
+        this.assistResponseArray.forEach((assistResp, index) => {
+          if (assistResp.type == this.renderResponseType.SUGGESTIONS && assistResp?.searchResponse?.faqs) {
+            assistResp.searchResponse.faqs.forEach(faq => {
 
-                </div>`;
-
-          faqsSuggestions.innerHTML += faqHtml;
-          let faqs = $(`.type-info-run-send #faqSection-${uniqueID + index}`);
-          if (!ele.answer) {
-            let checkHtml = `
-                    <i class="ast-carrotup" data-conv-id="${this.commonService.configObj.conversationid}"
-                    data-bot-id="${res.botId}" data-intent-name="${ele.displayName}"
-                    data-check="true" id="check-${uniqueID + index}" data-position-id="${uniqueID + index}"></i>`;
-            // faqs.append(checkHtml);
-            // $(`#title-${uniqueID}`).addClass('noPadding');
-            $(`#faqDiv-${uniqueID + index}`).addClass('is-dropdown-show-default');
-            document.getElementById(`title-${uniqueID + index}`).insertAdjacentHTML('beforeend', checkHtml);
-            this.clickEvents(IdReferenceConst.CHECK, uniqueID + index, uniqueID + index, {intentName : ele.question, positionID : uniqueID + index, question : ele.question});
-
-          } else {
-            let a = $(`#faqDiv-${uniqueID + index}`);
-            let answerSanitized = this.commonService.handleEmptyLine(ele.answer[0], true);
-
-            let faqActionHtml = `<div class="action-links">
-                    <button class="send-run-btn" id="sendMsg" data-msg-id="${uniqueID + index}"  data-msg-data="${answerSanitized}">Send</button>
-                    <div class="copy-btn" data-msg-id="${uniqueID + index}" data-msg-data="${answerSanitized}">
-                        <i class="ast-copy" data-msg-id="${uniqueID + index}" data-msg-data="${answerSanitized}"></i>
-                    </div>
-                </div>`;
-            a.append(faqActionHtml);
-            faqs.append(`<div class="desc-text" id="desc-${uniqueID + index}">${this.commonService.handleEmptyLine(ele.answer[0], false)}</div>`);
-
-            if(ele.answer && ele.answer.length > 1){
-              this.commonService.appendSeeMoreWrapper(faqs, ele, uniqueID+index, uniqueID+index);
+              if (faqQuestionList[faq.question]) {
+                if (!faq.answer) {
+                  faq.answer = faqQuestionList[faq.question].answer;
+                  faq.toggle = true;
+                  faq.showMoreButton = false,
+                    faq.showLessButton = false,
+                    inx = index;
+                }
+              }
+            });
           }
-
-            let faqstypeInfo = $(`.type-info-run-send #faqSection-${uniqueID + index}`);
-            let seeMoreButtonHtml = `
-                          <button class="ghost-btn hide" id="seeMore-${uniqueID + index}" data-see-more="true">${ele.answer?.length > 1 ? (this.projConstants.READ_MORE_EXPAND) : this.projConstants.READ_MORE}</button>
-                          <button class="ghost-btn hide" id="seeLess-${uniqueID + index}" data-see-less="true">${this.projConstants.READ_LESS}</button>
-                          `;
-            faqstypeInfo.append(seeMoreButtonHtml);
-            setTimeout(() => {
-              this.commonService.updateSeeMoreButtonForAssist(uniqueID, this.projConstants.FAQ, ele.answer);
-            }, 1000);
-            // this.clickEvents(IdReferenceConst.CHECK, uniqueID + index, uniqueID + index, {intentName : ele.question, positionID : uniqueID + index});
-          }
-
         });
-        this.handleSeeMoreButtonForHistory(uniqueID, faqss, this.projConstants.FAQ);
-        uniqueID = undefined;
-      }
-      if ((res.agentAssistDetails?.suggestions || res.agentAssistDetails?.ambiguityList) && res.type == 'outgoing' && res.agentAssistDetails?.faqResponse && res.agentAssistDetails?.positionId) {
-        historyFaqIDs?.forEach((ele, i) => {
-          let eleid = ele.slice(0, ele.length - 1);
-          res.agentAssistDetails.suggestions?.faqs?.forEach((eles, j) => {
-            if ($(`#faqsSuggestions-${eleid} #title-${ele}`).text().trim() == eles.question) {
-              let valOfDiv = $(`#faqsSuggestions-${eleid} #desc-${ele}`).text().trim();
-              if (valOfDiv == '' && !valOfDiv)
-                this.assisttabService.historyFaqSuggestionsContainer(eleid, ele, res);
-            }
-          });
-          this.handleSeeMoreButtonForHistory(eleid, res.agentAssistDetails.suggestions?.faqs, this.projConstants.FAQ);
-        })
+
+        if (typeof inx == 'number') {
+          this.assistResponseArray[inx].faqArrowClickResponse = true;
+        }
+        this.assistResponseArray = structuredClone(this.assistResponseArray);
+        console.log(this.assistResponseArray, "assist response array");
       }
 
-      if ((res.agentAssistDetails?.suggestions || res.agentAssistDetails?.ambiguityList) && res.type == 'outgoing' && res.agentAssistDetails?.faqResponse && !res.agentAssistDetails?.positionId) {
-        let historyDataHtml = $('#dynamicBlock');
-        let uniqueID = res._id;
-        let htmls = `
-                     <div class="agent-utt-info" id="agentUttInfo-${uniqueID}">
-                         <div class="user-img">
-                             <img src="${this.imageFilePath}${this.imageFileNames['USERICON']}">
-                         </div>
-                         <div class="text-user" >${res.agentAssistDetails.userInput}</div>
-                     </div>
-                     <div class="dialog-task-run-sec" id="automationSuggestions-${uniqueID}">
-                     </div>`;
+      if ((res.suggestions || res.ambiguityList) && res.type == 'outgoing' && !res.faqResponse) {
+        console.log(res, "result **********");
 
-        historyDataHtml.append(htmls);
-        let automationSuggestions = document.getElementById(`automationSuggestions-${uniqueID}`);
-        if (res.agentAssistDetails?.ambiguityList?.faqs?.length > 0 || res.agentAssistDetails?.suggestions?.faqs?.length > 0) {
-          let dialogAreaHtml = `<div class="task-type" id="faqssArea">
-    <div class="img-block-info">
-        <img src="${this.imageFilePath}${this.imageFileNames['FAQ_SUGGESTION']}">
-    </div>
-    <div class="content-dialog-task-type" id="faqsSuggestions-${uniqueID}">
-        <div class="type-with-img-title">FAQ (${res.agentAssistDetails?.suggestions ? res.agentAssistDetails?.suggestions.faqs.length : res.agentAssistDetails.ambiguityList.faqs.length})</div>
-
-    </div>
-</div>`;
-          automationSuggestions.innerHTML += dialogAreaHtml;
+        renderResponse = {
+          data: res,
+          type: this.renderResponseType.SUGGESTIONS,
+          uuid: res._id,
+          searchResponse: this.commonService.formatSearchResponse(res),
+          connectionDetails: this.connectionDetails
         }
-        let faqss = (res.agentAssistDetails?.suggestions) ? (res.agentAssistDetails?.suggestions?.faqs) : (res.agentAssistDetails?.ambiguityList?.faqs);
-        faqss?.forEach((ele, index) => {
-          ele.answer = res.components[0].data.text;
-          let faqsSuggestions = document.getElementById(`faqsSuggestions-${uniqueID}`);
-          let faqHtml = `
-                <div class="type-info-run-send" id="faqDiv-${uniqueID + index}">
-                    <div class="left-content" id="faqSection-${uniqueID + index}">
-                        <div class="title-text" id="title-${uniqueID + index}" title="${ele.displayName ? ele.displayName : ele.question}">${ ele.displayName ? ele.displayName : ele.question}</div>
-                    </div>
-                </div>`;
-          faqsSuggestions.innerHTML += faqHtml;
-          let faqs = $(`.type-info-run-send #faqSection-${uniqueID + index}`);
-          let a = $(`#faqDiv-${uniqueID + index}`);
-          let answerSanitized = this.commonService.handleEmptyLine(res.components[0].data.text[0], true);
-          let faqActionHtml = `<div class="action-links">
-                    <button class="send-run-btn" id="sendMsg" data-msg-id="${uniqueID + index}"  data-msg-data="${answerSanitized}">Send</button>
-                    <div class="copy-btn" data-msg-id="${uniqueID + index}" data-msg-data="${answerSanitized}">
-                        <i class="ast-copy" data-msg-id="${uniqueID + index}" data-msg-data="${answerSanitized}"></i>
-                    </div>
-                </div>`;
-
-          a.append(faqActionHtml);
-          faqs.append(`<div class="desc-text" id="desc-${uniqueID + index}">${this.commonService.handleEmptyLine(res.components[0].data.text[0], false)}</div>`);
-
-          if(res.components[0].data.text && res.components[0].data.text.length > 1){
-            this.commonService.appendSeeMoreWrapper(faqs, ele, uniqueID + index, uniqueID + index);
-        }
-
-          let faqstypeInfo = $(`.type-info-run-send #faqSection-${uniqueID + index}`);
-          let seeMoreButtonHtml = `
-                          <button class="ghost-btn hide" id="seeMore-${uniqueID + index}" data-see-more="true">${res.components[0].data.text?.length > 1 ? (this.projConstants.READ_MORE_EXPAND) : this.projConstants.READ_MORE}</button>
-                          <button class="ghost-btn hide" id="seeLess-${uniqueID + index}" data-see-less="true">${this.projConstants.READ_LESS}</button>
-                          `;
-          faqstypeInfo.append(seeMoreButtonHtml);
-          setTimeout(() => {
-            this.commonService.updateSeeMoreButtonForAssist(uniqueID + index, this.projConstants.FAQ,res.components[0].data.text);
-          }, 1000);
-          this.clickEvents(IdReferenceConst.CHECK, uniqueID + index, uniqueID + index, {intentName : ele.question, positionID : uniqueID + index});
-        })
-        this.handleSeeMoreButtonForHistory(uniqueID, faqss, this.projConstants.FAQ);
-
-        setTimeout(() => {
-          uniqueID = undefined;
-        }, 1000)
-
+        this.assistResponseArray.push(renderResponse);
+        this.assistResponseArray = structuredClone(this.assistResponseArray);
       }
 
-      if ((!res.agentAssistDetails?.suggestions && !res.agentAssistDetails?.ambiguityList && !res.agentAssistDetails?.ambiguity) && res.type == 'outgoing') {
+      console.log(res, "inside hisotyr");
 
-        let positionID = 'dg-'+ this.koreGenerateuuidPipe.transform();
-        currentTaskPositionId = res?.agentAssistDetails?.positionId ?  res?.agentAssistDetails?.positionId : ((res.tN != currentTaskName) ? positionID : currentTaskPositionId);
-        currentTaskName = (res.tN) ? res.tN  : currentTaskName;
+      if ((!res.suggestions && !res.ambiguityList && !res.ambiguity) && res.type == 'outgoing') {
 
+        let positionID = this.randomUUIDPipe.transform(IdReferenceConst.positionId);
 
-        let historyData = $('#dynamicBlock');
-        let userInputHtml;
-        if (res.agentAssistDetails.userInput && res?.agentAssistDetails?.positionId) {
-          userInputHtml = `<div class="agent-utt-info" id="agentUttInfo-${res._id}">
-                            <div class="user-img">
-                                <img src="${this.imageFilePath}${this.imageFileNames['USERICON']}">
-                            </div>
-                            <div class="text-user" >${res.agentAssistDetails.userInput}</div>
-                        </div>`;
-        }
-        let dropdownHtml = `
+        currentTaskPositionId = res.positionId ? res.positionId : ((res.intentName != currentTaskName) ? positionID : currentTaskPositionId);
+        currentTaskName = (res.intentName) ? res.intentName : currentTaskName;
+        let uuids = this.koreGenerateuuidPipe.transform();
 
-                                    <div class="dialog-task-accordiaon-info" id="addRemoveDropDown-${res._id}" >
-                                        <div class="accordion-header" id="dropDownHeader-${res._id}"
-                                        data-drop-down-opened="true">
-                                            <div class="icon-info">
-                                                <i class="ast-rule"></i>
-                                            </div>
-                                            <div class="header-text" id="dropDownTitle-${res._id}">${res.tN}</div>
-                                            <i class="ast-carrotup" id="dialogueArrow-${res._id}"></i>
-                                            <button class="btn-danger hide" id="terminateAgentDialog-${res._id}">Terminate</button>
-                                        </div>
-                                        <div class="collapse-acc-data hide" id="dropDownData-${res._id}">
-                                        <div class="override-input-div hide" id="overRideDiv-${res._id}">
-                                        <button class="override-input-btn hide" id="overRideBtn-${res._id}">Override Input</button>
-                                        <button class="cancel-override-input-btn hide" id="cancelOverRideBtn-${res._id}">Cancel Override</button>
-                                        </div>
-
-                                        </div>
-                                    `;
-
-        if ((previousTaskPositionId && currentTaskPositionId !== previousTaskPositionId) ||  (currentTaskPositionId == previousTaskPositionId && currentTaskName != previousTaskName)) {
+        // feedback                            
+        if ((previousTaskPositionId && currentTaskPositionId !== previousTaskPositionId) || (currentTaskPositionId == previousTaskPositionId && currentTaskName != previousTaskName && previousId)) {
           let previousIdFeedBackDetails = feedBackResult.find((ele) => ele.positionId === previousTaskPositionId);
-          this.commonService.addFeedbackHtmlToDomForHistory(res, res.botId, res?.agentAssistDetails?.userInput, previousId, false, previousTaskPositionId);
-          if (previousIdFeedBackDetails) {
-            this.commonService.UpdateFeedBackDetails(previousIdFeedBackDetails, 'dynamicBlock');
-            if (previousIdFeedBackDetails.feedback == 'dislike' && (previousIdFeedBackDetails.feedbackDetails.length == 0 && previousIdFeedBackDetails.comment.length == 0)) {
-              $(`#feedbackHelpfulContainer-${previousId} .explore-more-negtive-data`).removeClass('hide');
-            } else {
-              $(`#feedbackHelpfulContainer-${previousId} .explore-more-negtive-data`).addClass('hide');
-            }
-          }
+          console.log(previousIdFeedBackDetails, "previous id feedback details");
+          
+          this.filterAutomationByPositionId();
+          this.prepareFeedbackData(previousIdFeedBackDetails);
+          this.automationFlagUpdate(previousId,false);
 
-          if((currentTaskPositionId == previousTaskPositionId && currentTaskName != previousTaskName)){
+          this.updateOverrideStatusOfAutomation(previousId);
+          
+          if ((currentTaskPositionId == previousTaskPositionId && currentTaskName != previousTaskName)) {
             previousId = undefined;
-          }else{
+          } else {
             previousId = undefined;
             previousTaskPositionId = undefined;
             previousTaskName = undefined;
           }
-
-        }
-        if (res.tN && !previousId && previousTaskPositionId !== currentTaskPositionId) {
-          let divExist = $(`#addRemoveDropDown-${res._id}`);
-          previousTaskPositionId = currentTaskPositionId;
-          previousTaskName = currentTaskName;
-          if (divExist.length >= 1) {
-            console.log("---->>>>>>>>>>>>>>>>>>>>>already exsit===in the dom");
-          } else {
-            historyData.append(userInputHtml);
-            historyData.append(dropdownHtml);
-            previousId = res._id;
-            previousTaskPositionId = currentTaskPositionId;
-            // setTimeout(()=>{
-
-            // this.clickEvents(IdReferenceConst.DROPDOWN_HEADER, previousId);
-            this.clickEvents(IdReferenceConst.ASSISTTERMINATE, previousId);
-            // }, 10000)
-
-          }
-        }
-        if (res.agentAssistDetails.entityName && res.agentAssistDetails.entityResponse && res.agentAssistDetails.entityValue && res.agentAssistDetails.userInput) {
-          let runInfoContent = $(`#dropDownData-${previousId}`);
-          let userQueryHtml = `
-                            <div class="steps-run-data">
-                                <div class="icon_block_img">
-                                    <img src="${this.imageFilePath}${this.imageFileNames['USERICON']}">
-                                </div>
-                                <div class="run-info-content" id="userInput-${res._id}">
-                                    <div class="title">Customer Said - </div>
-                                    <div class="agent-utt">
-                                        <div class="title-data">"${this.sanitizeHtmlPipe.transform(res.agentAssistDetails.userInput)}"</div>
-                                    </div>
-
-                                </div>
-                            </div>`;
-          runInfoContent.append(userQueryHtml);
-          let entityHtml = $(`#dropDownData-${previousId}`).find(`#userInput-${res._id}`);
-          let entityDisplayName = this.agentAssistResponse.newEntityDisplayName ? this.agentAssistResponse.newEntityDisplayName : this.agentAssistResponse.newEntityName;
-          if (res.agentAssistDetails.entityValue && !res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
-            let entityValueType = typeof res.agentAssistDetails.entityValue;
-            let entityValue = (entityValueType == 'object') ? JSON.stringify(res.agentAssistDetails.entityValue) : this.sanitizeHtmlPipe.transform(res.agentAssistDetails.entityValue);
-            entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${entityValue}</div>`);
-          } else {
-            if (res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
-              let entityHtmls = `<div class="order-number-info">${entityDisplayName} :
-                                            <span style="color:red">Value unidentified</span>
-                                        </div>
-                                        <div>
-                                            <img src="${this.imageFilePath}${this.imageFileNames['WARNING']}" style="padding-right: 8px;">
-                                            <span style="font-size: 12px; line-height: 18px; color: #202124;">Incorrect input format<span>
-                                        </div>`
-              entityHtml.append(entityHtmls);
-            }
-          }
-        }
-        if (res.agentAssistDetails?.entityName) {
-          this.agentAssistResponse = res.agentAssistDetails;
         }
 
-
-        let _msgsResponse : any = this.templateRenderClassService.getResponseUsingTemplateForHistory(res);
-        let parsedPayload : any = _msgsResponse.parsedPayload;
-        if(_msgsResponse.message.length > 0){
-          let msgStringify = JSON.stringify(_msgsResponse);
-          let newTemp = encodeURI(msgStringify);
-          if((previousTaskName != currentTaskName && previousTaskPositionId == currentTaskPositionId)){
-            let dynamicBlockDiv = $('#dynamicBlock');
-
-            let botResHtml = this.assisttabService.smallTalkTemplateForTemplatePayload(res, res._id,res, {parsedPayload : parsedPayload},newTemp);
-            let titleData = ``;
-            let actionLinkTemplate = ``;
-            if(this.smallTalkHistoryRenderCheck(parsedPayload,res)){
-                // isTemplateRender = false;
-                titleData = `<div class="title-data" ><ul class="chat-container" id="displayData-${res._id}"></ul></div>`;
-                let sendData = _msgsResponse?.parsedPayload ? newTemp : res.components[0].data.text;
-                actionLinkTemplate = this.smallTalkActionLinkTemplate(res._id, sendData);
-                dynamicBlockDiv.append(botResHtml);
-                $(`#smallTalk-${res._id} .agent-utt`).append(titleData);
-                $(`#smallTalk-${res._id} .agent-utt`).append(actionLinkTemplate);
-
-                let obj = this.templateRenderClassService.AgentChatInitialize.renderMessage(_msgsResponse)[0]
-                let a = document.getElementById(IdReferenceConst.displayData + `-${res._id}`);
-                a.appendChild(obj);
-            }else{
-                // isTemplateRender = true;
-                titleData = `<div class="title-data" id="displayData-${res._id}">${res.components[0].data.text}</div>`;
-                actionLinkTemplate = this.smallTalkActionLinkTemplate(res._id, res.components[0].data.text);
-                dynamicBlockDiv.append(botResHtml);
-                $(`#smallTalk-${res._id} .agent-utt`).append(titleData);
-                $(`#smallTalk-${res._id} .agent-utt`).append(actionLinkTemplate);
-                parsedPayload = null;
-            }
-            this.commonService.hideSendOrCopyButtons(parsedPayload, `#smallTalk-${res._id} .agent-utt`, 'smallTalk')
-          }
-
-          if ((res.agentAssistDetails?.isPrompt === true || res.agentAssistDetails?.isPrompt === false) && previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) {
-            let runInfoContent = $(`#dropDownData-${previousId}`);
-
-            let askToUserHtml = this.assisttabService.askUserTemplate(res._id, newTemp, previousTaskPositionId,res.agentAssistDetails?.srcChannel, res.components[0].data.text, res.agentAssistDetails?.componentType);
-            let tellToUserHtml = this.assisttabService.tellToUserTemplate(res._id, newTemp, previousTaskPositionId, res.agentAssistDetails?.srcChannel, res.components[0].data.text, res.agentAssistDetails?.componentType);
-
-            if (this.localStorageService.checkStorageItemWithInConvId(this.connectionDetails.conversationId, storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH)) {
-              this.commonService.isAutomationOnGoing = true;
-              this.dropdownHeaderUuids = previousId;
-              let storageObject: any = {
-                [storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH]: this.commonService.isAutomationOnGoing
-              }
-              this.localStorageService.setLocalStorageItem(storageObject);
-            }
-            if (res.agentAssistDetails.isPrompt || res.agentAssistDetails.entityRequest) {
-              if (this.localStorageService.checkStorageItemWithInConvId(this.connectionDetails.conversationId, storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH)) {
-                $(`#overRideBtn-${previousId}`).removeClass('hide');
-                $(`#cancelOverRideBtn-${previousId}`).addClass('hide');
-                $("#inputFieldForAgent").remove();
-                $(`#terminateAgentDialog-${previousId}`).removeClass('hide');
-                $('#dynamicBlock .override-input-div').addClass('hide');
-                $(`#overRideDiv-${previousId}`).removeClass('hide');
-                $(`#overRideBtn-${previousId}`).attr('data-position-id', previousTaskPositionId);
-                $(`#terminateAgentDialog-${previousId}`).attr('data-position-id', previousTaskPositionId);
-                this.dialogPositionId = previousTaskPositionId;
-              }
-              runInfoContent.append(askToUserHtml);
-
-              this.commonService.hideSendOrCopyButtons(parsedPayload, runInfoContent, false, res.agentAssistDetails?.componentType)
-            } else {
-              runInfoContent.append(tellToUserHtml);
-              this.commonService.hideSendOrCopyButtons(parsedPayload, runInfoContent, false, res.agentAssistDetails?.componentType)
-            }
-            if(res && res.agentAssistDetails && res.agentAssistDetails.componentType == 'dialogAct' && (res.agentAssistDetails?.srcChannel != 'msteams' && res.agentAssistDetails?.srcChannel != 'rtm')){
-              // console.log("inside dialogact and channel");
-
-            }else{
-              let obj = this.templateRenderClassService.AgentChatInitialize.renderMessage(_msgsResponse)[0]
-              let a = document.getElementById(IdReferenceConst.displayData + `-${res._id}`);
-              a.appendChild(obj);
-              this.commonService.hideSendOrCopyButtons(parsedPayload, runInfoContent, false, res.agentAssistDetails?.componentType)
-            }
-          }
-        }
-        let shouldProcessResponse = false;
-        var appStateStr = localStorage.getItem('agentAssistState') || '{}';
-        var appState = JSON.parse(appStateStr);
-        // if (appState[_conversationId]) {
-        //     // if incoming data belongs to welcome message do nothing
-        //     // if (!data.suggestions && data.buttons?.length > 1) {
-        //         if (appState[_conversationId].isWelcomeProcessed) {
-        //             shouldProcessResponse = false;
-
-        //         }else {
-        //             shouldProcessResponse = true;
-        //         }
-        //     // }
-
-        // }
-        let isPromtFlag;
-        if ((res.agentAssistDetails?.isPrompt == true)) {
-          isPromtFlag = "true";
-        } else if (res.agentAssistDetails?.isPrompt == false) {
-          isPromtFlag = "false";
-        }
-        if (!parsedPayload && !res.tN && !shouldProcessResponse && !isPromtFlag) {
-          let dynamicBlockDiv = $('#dynamicBlock');
-          res.components?.forEach((ele, i) => {
-            if (res.components?.length > 1) {
-              this.welcomeMsgResponse = res.components;
-            } else {
-              let botResHtml = this.assisttabService.historySmallTalkTemplate(res.components[0], res._id);
-              dynamicBlockDiv.append(botResHtml);
+        // update postionids
+        if (res.intentName && !previousId && previousTaskPositionId !== currentTaskPositionId) {
+          let automationUUIDCheck = this.assistResponseArray.findIndex((automation) => {
+            if (automation.uuid == res._id) {
+              return true;
             }
           });
+          console.log(automationUUIDCheck, 'automation uuid check');
+
+
+          // let divExist = $(`#addRemoveDropDown-${res._id}`);
+          // if (divExist.length >= 1) {
+          //   console.log("---->>>>>>>>>>>>>>>>>>>>>already exsit===in the dom");
+          // } 
+          previousTaskPositionId = currentTaskPositionId;
+          previousTaskName = currentTaskName;
+
+          if (automationUUIDCheck == -1) {
+            previousId = res._id;
+            previousTaskPositionId = currentTaskPositionId;
+            let renderResponse = {
+              data: res,
+              type: this.renderResponseType.AUTOMATION,
+              uuid: previousId,
+              dialogId: currentTaskPositionId,
+              dialogName: currentTaskName,
+              connectionDetails: this.connectionDetails,
+              showAutomation: true
+            }
+            this.assistResponseArray.push(renderResponse);
+            this.assistResponseArray = [...this.assistResponseArray];
+          }
+        }
+
+        //process user messages
+        if (res.entityName && res.entityResponse && res.entityValue && res.userInput) {
+
+          let entityDisplayName = this.agentAssistResponse.newEntityDisplayName ? this.agentAssistResponse.newEntityDisplayName : this.agentAssistResponse.newEntityName;
+          if (this.agentAssistResponse.newEntityDisplayName || this.agentAssistResponse.newEntityName) {
+            entityDisplayName = this.agentAssistResponse.newEntityDisplayName ? this.agentAssistResponse.newEntityDisplayName : this.agentAssistResponse.newEntityName;
+          }
+          this.prepareUserMessageResponse(res,entityDisplayName); 
+        }
+
+        if (res.entityName) {
+          this.agentAssistResponse = res;
+        }
+
+        let result: any = this.templateRenderClassService.getResponseUsingTemplateForHistory(res);
+        this.commonService.currentPositionId = currentTaskPositionId;
+        let msgStringify = JSON.stringify(result);
+        let newTemp = encodeURI(msgStringify);
+
+        if (result.message.length > 0) {
+
+          //small talk after dialogue terminate
+          if((previousTaskName != currentTaskName && previousTaskPositionId == currentTaskPositionId)){
+            renderResponse = {
+              data: res,
+              type: this.renderResponseType.SMALLTALK,
+              uuid: uuids,
+              result: result,
+              temp: newTemp,
+              connectionDetails: this.connectionDetails,
+              proactiveModeStatus: this.proactiveModeStatus,
+              toggleOverride: false,
+              title: res.isPrompt ? ProjConstants.ASK_CUSTOMER : ProjConstants.TELL_CUSTOMER,
+              isTemplateRender: this.smallTalkTemplateRenderCheck(res, result),
+              value: res?.components[0]?.data?.text,
+              sendData: result?.parsedPayload ? newTemp : res?.components[0]?.data?.text,
+              responseType: this.renderResponseType.ASSISTRESPONSE
+            }
+            renderResponse.template = this.commonService.getTemplateHtml(renderResponse.isTemplateRender, result);
+
+            // if (res.isPrompt && !this.proactiveModeStatus) {
+            //   renderResponse.toggleOverride = true;
+            //   renderResponse.hideOverrideDiv = true;
+            // }
+
+            this.assistResponseArray.push(renderResponse);
+            this.assistResponseArray = [...this.assistResponseArray];
+            console.log("assistResponseArray", this.assistResponseArray)
+          }
+
+          console.log(res, "before if conditon");
+
+          // automation
+          if ((res.isPrompt === true || res.isPrompt === false) && previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) {
+
+            this.automationFlagUpdate(previousId,true)
+
+            if (res.isPrompt || res.entityRequest) {
+              if (this.localStorageService.checkStorageItemWithInConvId(this.connectionDetails.conversationId, storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH)) {
+                this.dialogPositionId = previousTaskPositionId;
+              }
+            }
+            
+            renderResponse = {
+              data: res,
+              type: this.renderResponseType.AUTOMATION,
+              uuid: res.components && res.components[0]?._id ? (res.components && res.components[0]?._id) : uuids,
+              result: result,
+              temp: newTemp,
+              connectionDetails: this.connectionDetails,
+              proactiveModeStatus: this.proactiveModeStatus,
+              toggleOverride: false,
+              responseType: this.renderResponseType.ASSISTRESPONSE
+            }
+
+            if (res.isPrompt && !this.proactiveModeStatus) {
+              renderResponse.toggleOverride = true;
+              renderResponse.hideOverrideDiv = true;
+            }
+
+            this.assistResponseArray.map(arrEle => {
+              if (arrEle.uuid && arrEle.uuid == previousId) {
+                arrEle.automationsArray = arrEle.automationsArray ? arrEle.automationsArray : [];
+                if (arrEle.automationsArray[arrEle.automationsArray.length - 1] && arrEle.automationsArray[arrEle.automationsArray.length - 1]?.data?.isPrompt) {
+                  arrEle.automationsArray[arrEle.automationsArray.length - 1].hideOverrideDiv = true;
+                  arrEle.automationsArray[arrEle.automationsArray.length - 1].toggleOverride = false;
+                }
+                arrEle.automationsArray = [...arrEle.automationsArray, renderResponse];
+              }
+            });
+
+            this.assistResponseArray = structuredClone(this.assistResponseArray);
+            console.log(this.assistResponseArray, "assist response array inside automaiton");
+
+          }
+
+          // small talk outside automation ---------------------->
+          let shouldProcessResponse = false;
+          if (!result.parsedPayload && !res.intentName && !shouldProcessResponse && typeof res.isPrompt != 'boolean') {
+            res.components?.forEach((ele, i) => {
+              if (res.components?.length > 1) {
+                this.welcomeMsgResponse = res.components;
+              } else {
+                renderResponse = {
+                  data: res,
+                  type: this.renderResponseType.SMALLTALK,
+                  uuid: uuids,
+                  result: result,
+                  temp: newTemp,
+                  connectionDetails: this.connectionDetails,
+                  proactiveModeStatus: this.proactiveModeStatus,
+                  toggleOverride: false,
+                  title: res.isPrompt ? ProjConstants.ASK_CUSTOMER : ProjConstants.TELL_CUSTOMER,
+                  isTemplateRender: this.smallTalkTemplateRenderCheck(res, result),
+                  value: res?.components[0]?.data?.text,
+                  sendData: result?.parsedPayload ? newTemp : res?.components[0]?.data?.text,
+                  responseType: this.renderResponseType.ASSISTRESPONSE
+                }
+                renderResponse.template = this.commonService.getTemplateHtml(renderResponse.isTemplateRender, result);
+
+                // if (res.isPrompt && !this.proactiveModeStatus) {
+                //   renderResponse.toggleOverride = true;
+                //   renderResponse.hideOverrideDiv = true;
+                // }
+
+                this.assistResponseArray.push(renderResponse);
+                this.assistResponseArray = [...this.assistResponseArray];
+                console.log("assistResponseArray", this.assistResponseArray)
+              }
+            });
+          }
         }
       }
 
-      if ((resp.length - 1 == index && (!res.agentAssistDetails?.entityRequest && !res.agentAssistDetails?.entityResponse) && currentTaskPositionId == previousTaskPositionId)) {
+      // feedback
+      if ((resp.length - 1 == index && (!res.entityRequest && !res.entityResponse) && currentTaskPositionId == previousTaskPositionId && previousTaskPositionId)) {
         let previousIdFeedBackDetails = feedBackResult.find((ele) => ele.positionId === currentTaskPositionId);
-        this.commonService.addFeedbackHtmlToDomForHistory(res, res.botId, res?.agentAssistDetails?.userInput, previousId, false, previousTaskPositionId);
-        if (previousIdFeedBackDetails) {
-          this.commonService.UpdateFeedBackDetails(previousIdFeedBackDetails, 'dynamicBlock');
-          if (previousIdFeedBackDetails.feedback == 'dislike' && (previousIdFeedBackDetails.feedbackDetails.length == 0 && previousIdFeedBackDetails.comment.length == 0)) {
-            $(`#feedbackHelpfulContainer-${previousId} .explore-more-negtive-data`).removeClass('hide');
-          } else {
-            $(`#feedbackHelpfulContainer-${previousId} .explore-more-negtive-data`).addClass('hide');
-          }
-        }
+        this.filterAutomationByPositionId();
+        this.prepareFeedbackData(previousIdFeedBackDetails);
+        this.automationFlagUpdate(previousId,false)
+        this.updateOverrideStatusOfAutomation(previousId);
         previousId = undefined;
         previousTaskPositionId = undefined;
         previousTaskName = undefined;
       }
 
     });
-    if (this.commonService.isAutomationOnGoing) {
-      $(`#dynamicBlock .collapse-acc-data.hide`)[$(`#dynamicBlock .collapse-acc-data.hide`).length - 1]?.classList.remove('hide');
-    }
+   
     this.scrollToBottom();
     // this.designAlterService.addWhiteBackgroundClassToNewMessage(this.commonService.scrollContent[ProjConstants.ASSIST].scrollAtEnd, IdReferenceConst.DYNAMICBLOCK);
+  }
 
+  automationFlagUpdate(previousId,flag){
+    if (this.localStorageService.checkStorageItemWithInConvId(this.connectionDetails.conversationId, storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH)) {
+      this.commonService.isAutomationOnGoing = flag;
+      this.dropdownHeaderUuids = previousId;
+      let storageObject: any = {
+        [storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH]: this.commonService.isAutomationOnGoing
+      }
+      this.localStorageService.setLocalStorageItem(storageObject);
+    }
   }
 
   viewCustomTempAttachment(){
@@ -2059,6 +1473,8 @@ export class AssistComponent implements OnInit {
 
     this.assistResponseArray[faqAnswerIdsPlace.assistSuggestion].faqArrowClickResponse = true;
 
-    this.assistResponseArray = structuredClone(this.assistResponseArray)    
+    this.assistResponseArray = structuredClone(this.assistResponseArray);
+    console.log(this.assistResponseArray, 'inside update search response');
+        
   }
 }

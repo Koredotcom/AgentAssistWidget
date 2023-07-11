@@ -51,8 +51,8 @@ export class FeedbackComponent implements OnInit{
         "taskId" : new FormControl(this.feedbackData.uuid),
         "taskName" : new FormControl(this.feedbackData.dialogName),
         "comment" : new FormControl(this.feedbackData.comment),
-        "feedback" : new FormControl('',[Validators.required]),
-        "feedbackDetails" : new FormControl([])
+        "feedback" : new FormControl(this.feedbackData.feedback,[Validators.required]),
+        "feedbackDetails" : new FormControl(this.feedbackData.feedbackDetails)
       }
     );
     
@@ -73,9 +73,7 @@ export class FeedbackComponent implements OnInit{
 
   addFeedback(feedBackFlag){
     this.feedbackData.feedback = feedBackFlag;
-    if(feedBackFlag == this.feedbackConst.DISLIKE){
-      this.feedbackData.arrowToggle = true;
-    }
+    this.feedbackData.arrowToggle = (feedBackFlag == this.feedbackConst.DISLIKE) ? true : false;
     (this.feedbackForm.controls.feedback).setValue(feedBackFlag);
     this.formTouched = false;
     this.commonService.isUpdateFeedBackDetailsFlag = false;

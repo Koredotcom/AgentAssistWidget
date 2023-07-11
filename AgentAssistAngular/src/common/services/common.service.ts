@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 import { EVENTS } from '../helper/events';
 import { WebSocketService } from './web-socket.service';
 import * as $ from 'jquery';
-import { IdReferenceConst, ProjConstants, storageConst } from '../constants/proj.cnts';
+import { IdReferenceConst, ProjConstants, RenderResponseType, storageConst } from '../constants/proj.cnts';
 import { DesignAlterService } from './design-alter.service';
 import { LocalStorageService } from './local-storage.service';
 import { TemplateRenderClassService } from './template-render-class.service';
@@ -106,9 +106,9 @@ export class CommonService {
   }
 
   updateScrollAtEndVariables(tabType) {
-    $(".scroll-bottom-btn span").text('Scroll to bottom');
-    $(".scroll-bottom-btn").removeClass("new-messages");
-    $(".scroll-bottom-show-btn").addClass('hiddenEle');
+    // $(".scroll-bottom-btn span").text('Scroll to bottom');
+    // $(".scroll-bottom-btn").removeClass("new-messages");
+    // $(".scroll-bottom-show-btn").addClass('hiddenEle');
     this.scrollContent[tabType].numberOfNewMessages = 0;
     this.scrollContent[tabType].newlyAddedMessagesUUIDlist = [];
     this.scrollContent[tabType].newlyAddedIdList = [];
@@ -269,12 +269,12 @@ export class CommonService {
             lastElementBeforeNewMessage = this.designAlterService.getLastElement(id);
           }
 
-          if (this.scrollContent[tabType].numberOfNewMessages) {
-            $(".scroll-bottom-btn").addClass("new-messages");
-            $(".scroll-bottom-btn span").text(this.scrollContent[tabType].numberOfNewMessages + ' new');
-          } else {
-            $(".scroll-bottom-btn span").text('Scroll to bottom');
-          }
+          // if (this.scrollContent[tabType].numberOfNewMessages) {
+          //   $(".scroll-bottom-btn").addClass("new-messages");
+          //   $(".scroll-bottom-btn span").text(this.scrollContent[tabType].numberOfNewMessages + ' new');
+          // } else {
+          //   $(".scroll-bottom-btn span").text('Scroll to bottom');
+          // }
         }
       }
     }
@@ -659,9 +659,16 @@ export class CommonService {
     }
 
     for (let dialog of dialoguesArray) {
+      if(dialog.entities && dialog.entities?.length > 0){
+        dialog.entities.forEach(entity => {
+          entity.editMode = false;
+        });
+      }
       searchResponse.dialogs.push({ name: dialog.name, agentRunButton: false, childBotId : dialog.childBotId,
-        childBotName : dialog.childBotName });
+        childBotName : dialog.childBotName, entities : dialog.entities });
     }
+
+
     console.log(searchResponse, "searchresponse");
 
     return searchResponse;
@@ -698,7 +705,10 @@ export class CommonService {
   async renderHistoryFeedBack(url) {
     const response = await $.ajax({
       method: 'GET',
-      url: url
+      url: url,
+      headers :  {
+        'iid' : this.configObj.botId ? this.configObj.botId : 'st-1c3a28c8-335d-5322-bd21-f5753dc7f1f9'
+     }
     });
     if (response.results) {
       return response.results;
@@ -824,7 +834,7 @@ export class CommonService {
   }
 
   async getAgentHistoryData(url = '', data = {}) {
-    let headersVal = {};
+    let headersVal : any = {};
     if(this.configObj.fromSAT) {
         headersVal = {
             'Authorization': 'bearer' + ' ' + this.configObj.token,
@@ -836,6 +846,7 @@ export class CommonService {
             'Authorization': this.grantResponseObj?.authorization.token_type + ' ' + this.getAccessToken()
         }
     }
+    headersVal.iid = this.configObj.botId ? this.configObj.botId : 'st-1c3a28c8-335d-5322-bd21-f5753dc7f1f9'
     const response = await $.ajax({
         method: 'GET',
         url: url,
@@ -1174,5 +1185,24 @@ export class CommonService {
     $('.agent-assist-chat-container.kore-chat-window').off('click', '.advanced-list-wrapper .button_,.advanced-list-wrapper .inner-btns-acc .button_,.advanced-list-wrapper .tags-data .tag-name,.advanced-list-wrapper .btn_group .submitBtn,.advanced-list-wrapper .btn_group .cancelBtn,.advanced-list-wrapper .details-content .text-info,.advancelisttemplate .inner-btns-acc .button_,.advancelisttemplate .filter-icon .button_').on("click", '.advanced-list-wrapper .button_,.advanced-list-wrapper .inner-btns-acc .button_,.advanced-list-wrapper .tags-data .tag-name,.advanced-list-wrapper .btn_group .submitBtn,.advanced-list-wrapper .btn_group .cancelBtn,.advanced-list-wrapper .details-content .text-info,.advancelisttemplate .inner-btns-acc .button_,.advancelisttemplate .filter-icon .button_', function (e) {
       mythis.HandleClickAndSendRequest(tab, connectionObj, e)
     });
+  }
+
+  //history 
+
+  formatHistoryResonseToNormalRender(res){
+    let result : any = {};
+
+    result = Object.assign({},res.agentAssistDetails);
+
+    result.type = res.type;
+    result.components = res.components;
+    result.intentName = res.tN;
+    result._id = res._id;
+    if((result.suggestions || result.ambiguityList)){
+      result.suggestions = (result.suggestions) ? (result.suggestions) : (result.ambiguityList);
+      result.faqResponse = res.agentAssistDetails.faqResponse;
+    }
+
+    return result;
   }
 }

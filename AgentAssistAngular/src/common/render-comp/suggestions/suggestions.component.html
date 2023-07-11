@@ -67,6 +67,36 @@
                     </div>
                 </div>
             </div>
+            <!-- <ng-container *ngFor="let dialog of searchResponse.dialogs; let i = index">
+                <div class="entity-values-container" attr.id="entitesDiv-{{suggestionResponse.uuid}}" *ngIf=" dialog.entities && dialog.entities?.length > 0" 
+                    >
+                    <fieldset class="fieldsets">
+                        <legend>ENTITY VALUES</legend>
+                        <div class="entity-row-data" attr.id="enityNameAndValue-{{suggestionResponse.uuid + index}}" *ngFor="let entity of dialog.entities; let inx = index">
+                            <div class="label-data">{{entity.name}}</div>
+                            <div class="edited-status hide">
+                                <i class="ast-edited"></i>
+                                <span>edited</span>
+                            </div>
+                            <div class="entity-input-content-data">
+                                <div class="entity-value" attr.id="initialentityValue-{{suggestionResponse.uuid + index}}">{{entity.value}}</div>
+                                <div class="entity-input">
+                                    <input type="text" attr.id="entityValue-{{suggestionResponse.uuid + index}}" [value]='entity.value'>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="save-reset-cancel hide" attr.id='saveAndCancel-{{suggestionResponse.uuid}}'>
+                            <div class="save-reset-disabled" (click)="entityClick(idRefConst.SAVE_BTN, entity)">
+                                <i class="ast-check-right  disabled-color"></i>
+                                <span attr.id='savebtn-{{suggestionResponse.uuid}}'>Save</span>
+                            </div>
+                            <div class="cancel-btn" attr.id="cancelBtn-{{suggestionResponse.uuid}}" (click)="entityClick(idRefConst.EDIT_CANCEL_BTN, entity)">Cancel</div>
+                        </div>
+                    </fieldset>
+                <div class="edit-values-btn" attr.id="entityEdit-{{suggestionResponse.uuid}}" (click)="entityClick(idRefConst.ENTITY_EDIT, entity)">Edit Values</div>
+                <div class="edit-values-btn restore hide" attr.id="restorebtn-{{suggestionResponse.uuid}}" (click)="entityClick(idRefConst.RESTORE_BTN, entity)">Restore Values</div>
+            </div>
+            </ng-container> -->
         </div>
     </div>
     <div class="task-type" id="faqssAreas" *ngIf="searchResponse.faqs?.length > 0">

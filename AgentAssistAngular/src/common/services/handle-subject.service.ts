@@ -25,6 +25,7 @@ export class HandleSubjectService {
   public userAgentTranscriptionConversationHistory$ = new BehaviorSubject<object>(null);
   public faqAmbiguitySubject$ = new Subject<object>();
   public userBotConversationDetails;
+  public callConversationSuggestions$ = new Subject<object>();
 
   constructor() { }
 
@@ -124,5 +125,13 @@ export class HandleSubjectService {
 
   setFaqAmbiguitySubject(obj){
     this.faqAmbiguitySubject$.next(obj);
+  }
+
+  setCallConversationSuggestions(obj){
+    this.callConversationSuggestions$.next(obj);
+  }
+
+  getCallConversationSuggestions(){
+    return this.callConversationSuggestions$;
   }
 }
