@@ -80,10 +80,28 @@ handleOverridBtnClick(connectionDetails, dialogId, toggleOverride) {
   this.commonService.OverRideMode = toggleOverride;
 }
 
-handleAgentInput(event){
+
+handleAgentInput(event, automation){
   this.smallTalkData.hideOverrideDiv = true;
-  this.AgentAssist_run_click(event.target.value);
+  if(this.commonService.activeTab == ProjConstants.ASSIST){
+    this.AgentAssist_run_click(event.target.value);
+  }else{
+    this.getAgentInputValue(event.target.value);
+  }
 }
+
+getAgentInputValue(value) {
+  if (value) {
+    this.commonService.isMybotInputResponseClick = true;
+    let connectionDetails: any = Object.assign({}, this.smallTalkData.connectionDetails);
+    connectionDetails.value = value;
+    connectionDetails.isSearch = false;
+    connectionDetails.positionId = this.smallTalkData.dialogId;
+    let agent_assist_agent_request_params = this.commonService.prepareAgentAssistAgentRequestParams(connectionDetails);
+    this.websocketService.emitEvents(EVENTS.agent_assist_agent_request, agent_assist_agent_request_params);
+  }
+}
+
 
 AgentAssist_run_click(inputValue) {
   let connectionDetails = Object.assign({}, this.smallTalkData.connectionDetails);

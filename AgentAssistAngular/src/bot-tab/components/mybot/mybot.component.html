@@ -1,11 +1,40 @@
 <div class="agent-body-data-container" id="agentAutoContainer">
     <div class="dynamic-block-content" id="myBotAutomationBlock" #mybotautomation>
+
+        <ng-container *ngFor="let res of mybotResponseArray; let i = index">
+           
+           
+            <ng-container *ngIf="res.type == renderResponseType.SMALLTALK">
+                <app-smalltalk [smallTalkData]="res" [agentassistArrayIndex]="i"
+                    [agentassistResponseArrayLength]="mybotResponseArray.length"
+                    [agentAssistResp]="myBotDataResponse"></app-smalltalk>
+            </ng-container>
+            <ng-container *ngIf="res.type == renderResponseType.AUTOMATION">
+                <app-automation [automationData]="res" (scrollBottom)="scrollToBottom($event)"
+                    (handlePopupEvent)="handleTerminatePopup(event)" [agentassistArrayIndex]="i"
+                    [agentassistResponseArrayLength]="mybotResponseArray.length"></app-automation>
+            </ng-container>
+            <ng-container *ngIf="res.type == renderResponseType.FEEDBACK">
+                <app-feedback [feedbackData]="res" (updateFeedbackProperties)="updateFeedbackProperties($event,i)"
+                    [agentassistArrayIndex]="i" [agentassistResponseArrayLength]="mybotResponseArray.length">
+                </app-feedback>
+            </ng-container>
+          
+        </ng-container>
+
         <div id="agentTab-custSentimentAnalysis" class="customer-feeling-text">
         </div>
-        <div class="scroll-bottom-show-btn hiddenEle">
-            <button class="scroll-bottom-btn" id="scrollButtonMybot">
+        <div class="scroll-bottom-show-btn" *ngIf="!commonService.scrollContent[projConstants.MYBOT].scrollAtEnd">
+            <button id="scrollButtonTranscript" class="scroll-bottom-btn"
+                [ngClass]="{'new-messages' : commonService.scrollContent[projConstants.MYBOT].numberOfNewMessages}"
+                (click)="scrollToBottom(true)">
                 <i class="ast-carrotup"></i>
-                <span>Scroll to bottom</span>
+                <span *ngIf="!commonService.scrollContent[projConstants.MYBOT].numberOfNewMessages">Scroll to
+                    bottom</span>
+                <span
+                    *ngIf="commonService.scrollContent[projConstants.MYBOT].numberOfNewMessages">{{commonService.scrollContent[projConstants.MYBOT].numberOfNewMessages}}
+                    new</span>
+
             </button>
         </div>
         <div class="empty-data-no-agents" id="noAutoRunning" *ngIf="mybotEmptyState">

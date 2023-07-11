@@ -35,6 +35,7 @@ export class CommonService {
   isAgentSentRequestOnClick: boolean = false;
   isMyBotAgentSentRequestOnClick: boolean = false;
   isUpdateFeedBackDetailsFlag : boolean = false;
+  isMybotInputResponseClick : boolean = false;
   currentPositionId;
   currentPositionIdOfMyBot;
 

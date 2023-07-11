@@ -510,18 +510,18 @@ setProactiveMode(){
 
   }
 
-  // scrollClickEvents(emit) {
-  //   let scrollbuttonId = this.commonService.tabNamevsScrollId[this.activeTab];
-  //   document.getElementById(scrollbuttonId).removeEventListener('click', () => {
-  //   });
-  //   setTimeout(() => {
-  //     document.getElementById(scrollbuttonId).addEventListener('click', (event) => {
-  //       console.log("click event *************" );
+  scrollClickEvents(emit) {
+    // let scrollbuttonId = this.commonService.tabNamevsScrollId[this.activeTab];
+    // document.getElementById(scrollbuttonId).removeEventListener('click', () => {
+    // });
+    // setTimeout(() => {
+    //   document.getElementById(scrollbuttonId).addEventListener('click', (event) => {
+    //     console.log("click event *************" );
 
-  //       this.scrollToBottom(true);
-  //     }, { once: true });
-  //   }, 10);
-  // }
+    //     this.scrollToBottom(true);
+    //   }, { once: true });
+    // }, 10);
+  }
 
   // updateScrollButton() {
   //   let dynamicBlockId = this.commonService.tabNamevsId[this.activeTab];
