@@ -46,7 +46,7 @@
                     <div class="heading-text">Call Control Parameters <i class="icon-sa-help"></i></div>
                     <div class="desc-text">Define the parameters to control call behavior</div>
                     <ng-container>
-                        <div class="added-parameters-data">
+                        <!-- <div class="added-parameters-data">
                             <div class="kr-sg-input-text">
                                 <div class="label-text">Name</div>
                                 <input type="text" placeholder="Placeholder text" class="input-text">
@@ -58,7 +58,34 @@
                             <button class="delete-parameter">
                                 <i class="icon-sa-delete"></i>
                             </button>
-                        </div>
+                        </div> -->
+                        <ng-container *ngFor="let item of addedParams; let i = index">
+                            <div class="added-parameters-data">
+                                <div class="kr-sg-dropdowns m-0">
+                                    <div class="label-text">Name</div>
+                                    <div class="dropdown dropdown-open dialectDropDown">
+                                          <button class="dropdown-toggle dropdown-input" data-toggle="dropdown">{{item.name}}</button>
+                                          <ul class="dropdown-menu content-menu">
+                                            <perfect-scrollbar class="mx-h-200">
+                                                <ng-container *ngFor="let item of alreadyAdded; let cI = index">
+                                                    <li (click)="replace(i, cI)">
+                                                        <a>{{item.name}}</a>
+                                                    </li>
+                                                </ng-container>
+                                            </perfect-scrollbar>
+                                          </ul>
+                                    </div>
+                                </div>
+                                <div class="kr-sg-input-text">
+                                    <div class="label-text">Value</div>
+                                    <input type="text" placeholder="Enter Value" [(ngModel)]="item.value" (keyup.enter)="entered(i, $event.target.value)" class="input-text">
+                                    <!-- <div class="press-enter-text">Press [Enter] to save</div> -->
+                                </div>
+                                <button class="delete-parameter" (click)="deleteParam(i)">
+                                    <i class="icon-sa-delete"></i>
+                                </button>
+                            </div>
+                        </ng-container>
                         <div class="added-parameters-data">
                             <div class="kr-sg-dropdowns m-0">
                                 <div class="label-text">Name</div>
@@ -66,18 +93,9 @@
                                       <button class="dropdown-toggle dropdown-input" data-toggle="dropdown">Select Parameter</button>
                                       <ul class="dropdown-menu content-menu">
                                         <perfect-scrollbar class="mx-h-200">
-                                            <ng-container>
-                                                <li>
-                                                    <a>Option 1</a>
-                                                </li>
-                                                <li>
-                                                    <a>Option 1</a>
-                                                </li>
-                                                <li>
-                                                    <a>Option 1</a>
-                                                </li>
-                                                <li>
-                                                    <a>Option 1</a>
+                                            <ng-container *ngFor="let item of alreadyAdded; let i = index">
+                                                <li (click)="template(i)">
+                                                    <a>{{item.name}}</a>
                                                 </li>
                                             </ng-container>
                                         </perfect-scrollbar>
@@ -86,9 +104,12 @@
                             </div>
                             <div class="kr-sg-input-text">
                                 <div class="label-text">Value</div>
-                                <input type="text" placeholder="Placeholder text" class="input-text">
-                                <div class="press-enter-text">Press [Enter] to save</div>
+                                <input type="text" placeholder="Enter Value" class="input-text">
+                                <!-- <div class="press-enter-text">Press [Enter] to save</div> -->
                             </div>
+                            <!-- <button class="delete-parameter">
+                                <i class="icon-sa-delete"></i>
+                            </button> -->
                         </div>
                     </ng-container>
                 </div>
@@ -104,7 +125,7 @@
         </div>
         <div class="footer-sec" *ngIf="workflowService.appState !== 'published'">            
             <button class="kr-sg-button-secondary-two btn_lg mr-2">Cancel</button>    
-            <button class="kr-sg-button-primary btn_lg" [disabled]="saveInProgress" (click)="configureVoicePreferenaces()">{{(saveInProgress? 'BUTTONS.SAVING': 'BUTTONS.DONE') | translate}}</button>    
+            <button class="kr-sg-button-primary btn_lg" [disabled]="saveInProgress" (click)="configureVoicePreferenaces()">{{(saveInProgress? 'BUTTONS.SAVING': 'BUTTONS.SAVE') | translate}}</button>    
         </div>
     </div>
 
@@ -122,18 +143,18 @@
     <div class="modal-header">
         <h4 class="modal-title">New Call Control Parameter</h4>
     </div>
-    <div class="modal-body">
+    <div class="modal-body" [formGroup]="newKeyValueForm">
         <div class="kr-sg-input-text m-b-15">
             <div class="label-text">Value</div>
-            <input type="text" placeholder="Placeholder text" class="input-text">
+            <input type="text" formControlName="name" placeholder="Enter Parameter" class="input-text">
         </div>
         <div class="kr-sg-input-text">
             <div class="label-text">Value</div>
-            <input type="text" placeholder="Placeholder text" class="input-text">
+            <input type="text" formControlName="value" placeholder="Enter Parameter" class="input-text">
         </div>
     </div>
     <div class="modal-footer">
       <button class="kr-sg-button-secondary-two btn_lg" (click)="closeCallControlParameter()">Cancel</button>
-      <button class="kr-sg-button-primary btn_lg">Confirm</button>
+      <button class="kr-sg-button-primary btn_lg" [disabled]="!newKeyValueForm.valid || !newKeyValueForm.value?.name?.trim() || !newKeyValueForm.value?.value?.trim()" (click)="save()">Confirm</button>
     </div>
 </ng-template>

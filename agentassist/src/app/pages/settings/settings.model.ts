@@ -98,11 +98,12 @@ export interface ConfiguredAddressModel {
 
 
 export interface VoicePreferencesModel {
-	"asrPreference": string,
-	"ttsPreference": string,
-	"voicePreference": string,
-	"languagePreference"?: string
-	"dialectPreference"?: string
+	"asrPreference": string;
+	"ttsPreference": string;
+	"voicePreference": string;
+	"languagePreference"?: string;
+	"dialectPreference"?: string;
+	"callControlParameters"?: any
 }
 
 

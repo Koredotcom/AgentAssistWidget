@@ -11,6 +11,7 @@ import { UcDeleteConfirmComponent } from 'src/app/helpers/components/uc-delete-c
 import { DockStatusService } from '@kore.services/dockstatusService/dock-status.service';
 import { AuthService } from '@kore.services/auth.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 declare const $: any;
 @Component({
@@ -44,7 +45,13 @@ export class VoicePreferencesComponent implements OnInit {
   selectedApp: any;
   voiceWelcomeMessage: string;
   previewText: string = '';
-
+  addedParams = [];
+  alreadyAdded = [];
+  @Output() getNewData = new EventEmitter();
+  newKeyValueForm = new FormGroup({
+    name: new FormControl('', [Validators.required]),
+    value: new FormControl('', [Validators.required])
+  })
   @Input() voicePreferences: VoicePreferencesModel;
   @Output() closed = new EventEmitter();
   @ViewChild('audioPlayerRef') audioPlayerRef: ElementRef;
@@ -57,9 +64,14 @@ export class VoicePreferencesComponent implements OnInit {
     private dockService: DockStatusService,
     private authService: AuthService,
     private modalService: NgbModal,
+    private fb: FormBuilder
   ) { }
 
   ngOnInit(): void {
+    if(this.voicePreferences?.callControlParameters){      
+      this.addedParams = JSON.parse(JSON.stringify(this.voicePreferences?.callControlParameters)) || [];
+      this.alreadyAdded = JSON.parse(JSON.stringify(this.voicePreferences?.callControlParameters)) || [];
+    }
     this.streamId = this.workflowService.getCurrentBt()._id;
 
     const voicePref = {
@@ -87,6 +99,10 @@ export class VoicePreferencesComponent implements OnInit {
   }
 
   openCallControlParameter(newCallControlParameter) {
+    this.newKeyValueForm = new FormGroup({
+      name: new FormControl('', [Validators.required]),
+      value: new FormControl('', [Validators.required])
+    })
     this.modalService.open(newCallControlParameter, {backdropClass: 'adjust-zindex-above-slider', windowClass: 'call-control-param-modal', centered: true, backdrop: 'static', keyboard: false});
   }
   closeCallControlParameter() {
@@ -240,12 +256,25 @@ export class VoicePreferencesComponent implements OnInit {
     this.saveInProgress = true;
     this.voicePreferences.languagePreference = this.selectedTTSLanguage.languagePreference;
     this.voicePreferences.dialectPreference = this.selectedDialect;
+    for(let i=0; i<this.addedParams.length; i++){
+      if(!this.addedParams[i].name.trim() || !this.addedParams[i].value.trim()){
+        this.notificationService.showError({}, this.translate.instant('AGENTS.FORM_INVALID'))
+        this.saveInProgress = false
+        return;
+      }
+    }
+    this.voicePreferences.callControlParameters = this.addedParams.map((item)=>{
+      let obj = {};
+      obj[item.name] = item.value;
+      return obj;
+    });
     this.service.invoke('post.settings.voicePreferences', _params, this.voicePreferences)
       .pipe(finalize(() => this.saveInProgress = false))
       .subscribe(res => {
         this.notificationService.notify(this.translate.instant('NOTIFY.CONFIGURED_SUCCESSFULLY'), "success");
         this.close(this.voicePreferences);
         this.dockService.publisAndHold();
+        this.getNewData.emit()
       }, err => {
         this.notificationService.showError(err, this.translate.instant('NOTIFY.VOICE_PREFERENACES_CONFIGURE_ERROR'))
       })
@@ -258,5 +287,27 @@ export class VoicePreferencesComponent implements OnInit {
   close(data?: any) {
     this.closed.emit(data);
   }
+  
+  save(){
+    this.closeCallControlParameter();
+    let keyValue = this.newKeyValueForm.value;
+    this.addedParams.push({...keyValue});
+    this.alreadyAdded.push({...keyValue});
+  }
 
+  deleteParam(i){
+    this.addedParams.splice(i,1);
+  }
+
+  replace(i, cI){
+    this.addedParams.splice(i, 1, {...this.alreadyAdded[cI]})
+  }
+
+  entered(i, val){
+    console.log(i, val);
+  }
+
+  template(i){
+    this.addedParams.push({...this.alreadyAdded[i]});
+  }
 }

@@ -168,4 +168,7 @@ export class AdvSettingsComponent implements OnInit, OnDestroy {
     this.destroyed$.complete();
     this.subs.unsubscribe();
   }
+  getNewData(){
+    this.getAdvSettings()
+  }
 }
