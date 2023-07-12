@@ -4,14 +4,15 @@
     <div class="heading-actions-block">
         <div class="left-content">
             <div class="arrow-back" (click)="closeRuleScreen()">
-                <i class="icon-sa-arrow-down"></i>
+                <i class="icon-coaching--left-arrow"></i>
             </div>
+            <div class="border-divider"></div>
             <div class="kr-sg-input-text">
                 <input type="text" maxlength="100" placeholder="new coaching rule" class="input-text" formControlName="name">
             </div>
         </div>
         <div class="middle-content">
-            <div class="utt-name">{{groupDetails?.name}} / </div>
+            <!-- <div class="utt-name">{{groupDetails?.name}} / </div>
             <div class="dropdown-adherence" ngbDropdown placement="bottom-center" #ruleSelection="ngbDropdown">
                 <button class="dropdown-toggle btn-toggle" ngbDropdownToggle>{{ruleForm.get('name')?.value}}<i *ngIf="groupDetails?.rules?.length > 1 && createOrEdit == coachingCnst.EDIT" class="icon-sa-arrow-down"></i></button>
                 <ul class="dropdown_menu-wrapper" ngbDropdownMenu id="ruleSelectionMenu" *ngIf="groupDetails?.rules?.length > 1 && createOrEdit == coachingCnst.EDIT">
@@ -24,9 +25,37 @@
                         </ng-container>
                     </perfect-scrollbar>
                 </ul>
+            </div> -->
+            <div class="kr-sg-dropdowns tags-info-dropdown" ngbDropdown>
+                <div class="dropdown dropdown-open">
+                  <button class="dropdown-toggle dropdown-input before-none" ngbDropdownToggle>Pricing</button>
+                  <ul class="dropdown-menu content-menu header_in_development_drpdown p-0" ngbDropdownMenu>
+                    <li ngbDropdownItem class="p-0">
+                        <a>Pricing tag</a>
+                    </li>
+                    <li ngbDropdownItem class="p-0">
+                        <a>Pricing tag</a>
+                    </li>
+                    <li ngbDropdownItem class="p-0">
+                        <a>Pricing tag</a>
+                    </li>
+                  </ul>
+                </div>
+            </div>
+            <div class="channels-info">
+                <span class="title">Channels</span>
+                <button class="speak-chat-icon">
+                    <i class="icon-sa-welcome-voice"></i>
+                </button>
+                <button class="speak-chat-icon">
+                    <i class="icon-sa-message"></i>
+                </button>
             </div>
         </div>
         <div class="btn-actions">
+            <button class="settings-actions">
+                <i class="icon-sa-settings"></i>
+            </button>
             <button class="kr-sg-button-secondary btn_lg" (click)="closeRuleScreen()">Cancel</button>
             <!-- <button class="kr-sg-button-secondary-two btn_lg">Publish</button> -->
             <button class="kr-sg-button-primary btn_lg" [disabled]="ruleForm.invalid || (createOrEdit == coachingCnst.EDIT && !formTouched) || loading" (click)="saveRule()">{{loading ? 'Saving...' : 'Save'}}</button>
