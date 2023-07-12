@@ -77,7 +77,7 @@
                                 <span class="m-r-5" *ngFor="let ele of data?.automations?.slice(0,2)" >{{ele}}</span>
                                 <span class="link-others" *ngIf="data?.automations?.length>2" ngbTooltip="{{ data.automations.slice(2).join(',')}}">+{{data?.automations?.length-2}} others</span>
                             </div> -->
-                            <div class="title-text w-15">{{data.channel}}</div>
+                            <div class="title-text w-15">{{data.channel | lowercase}}</div>
                             <div class="title-text w-15">{{durationCalc(data.duration)}}</div>
                         </div>
                         <!-- {{onScroll}} -->
