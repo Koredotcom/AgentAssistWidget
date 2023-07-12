@@ -351,4 +351,15 @@ export class CoachingComponent implements OnInit, OnDestroy {
         // this.notificationService.showError(err, this.translate.instant("USECASES.FAILED_CREATE_CATE"));
     });
   }
+
+  newRule(newRuleModal: any) {
+    this.modalService.open(newRuleModal, {
+      windowClass: 'modal-ngb-wrapper-window',
+      centered: true,
+      backdrop: 'static',
+    });
+  }
+  closeRule() {
+    this.modalService.dismissAll();
+  }
 }

@@ -4,7 +4,8 @@
         <div class="right-action-btns">
             <!-- tooltipClass="tooltip-global-styles" ngbTooltip="2 Rules ready for Publish"  -->
             <button class="kr-sg-button-secondary-two btn_lg mr-2" (click)="publishCoaching()" [disabled]="publishInprogress || !(rulePresent)"><i class="icon-coaching-publish mr-2"></i>Publish</button>
-           <button class="kr-sg-button-primary btn_lg" (click)="openCoachingGroup(coachingConst.CREATE, {})">+ New Coaching Group</button>
+            <!-- <button class="kr-sg-button-primary btn_lg" (click)="openCoachingGroup(coachingConst.CREATE, {})">+ New Coaching Group</button> -->
+            <button class="kr-sg-button-primary btn_lg" (click)="newRule(newRuleModal)">+ New Rule</button>
         </div>
     </div>
 
@@ -19,7 +20,7 @@
             <div class='init-loading' *ngIf="isLoading">
                 <mat-spinner diameter="25" strokeWidth="3"></mat-spinner>
             </div>
-            <div class="agents-grid-data-table" cdkDropListGroup *ngIf="searchedData?.results?.length != 0">
+            <div class="agents-grid-data-table d-none" cdkDropListGroup *ngIf="searchedData?.results?.length != 0">
                 <perfect-scrollbar class="scroll-data" #ps>
                     <div id="accordion" class="agent-groups-table-container">
                         <div class="scrolltopdiv" [ngClass]="{'addIndex': dragStart}" (mouseleave)="clearInterVal()" (mouseenter)="topMouseOver()">
@@ -81,7 +82,7 @@
                                                     <!-- <div class="title-text w-20">{{rule.description}}</div> -->
                                                     <div class="title-text w-14">{{'All Agents'}}</div>
                                                     <div class="title-text w-16">{{rule.lModOn | date : 'MMM dd, yyyy h:mm a'}}</div>
-                                                    <div class="title-text last-updated-toggle w-10">
+                                                    <div class="last-updated-toggle w-10">
                                                         <label class="kr-sg-toggle">
                                                             <input type="checkbox" [checked]="rule.isActive" (click)="changeRuleStatus(rule, res._id, i)">
                                                             <div class="slider"></div>
@@ -91,6 +92,240 @@
                                                         <i class="icon-coaching--move1"></i>
                                                     </div>                                              
                                                 </div>
+                                            </div>
+                                        </div>
+                                    </perfect-scrollbar>
+                                </div>                     
+                            </div>
+                        </ng-container>
+                    </div>
+                </perfect-scrollbar>
+            </div>
+
+            <div class="agents-grid-data-table">
+                <perfect-scrollbar class="scroll-data" #ps>
+                    <div id="accordion" class="agent-groups-table-container">                        
+                        <ng-container>
+                            <div class="card_content">
+                                <div class="card_header">
+                                    <div data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="card_link collapsed" aria-expanded="true">
+                                        <div class="accordion-content-header">
+                                            <div class="left-title text-truncate">
+                                                <div class="left-content-info">
+                                                    <div class="title-info">
+                                                        <span>Pre-Build</span>
+                                                        <span class="normal-text">Pre-build coaching options & intent identification management. </span>
+                                                    </div>
+                                                </div>                                                                                                 
+                                            </div>
+                                            <div class="right-info">                                                
+                                                <div class="arrow-rotate">
+                                                    <i class="icon-sa-arrow-down"></i>
+                                                </div>
+                                            </div>                                               
+                                        </div>
+                                    </div>
+                                </div> 
+                                <div id="collapseOne" class="inside-accordioncontent collapse">
+                                    <perfect-scrollbar class="mx-h-300">
+                                        <div class="card-body inner-accordion-table">
+                                            <div class="content-scroll-data-agents">
+                                                <div class="shadow-freeze"></div>
+                                                <div class="header-table-agents">
+                                                    <div class="titles-data w-35">
+                                                        <div class="title-header">Coaching Rule</div>
+                                                    </div>
+                                                    <div class="titles-data w-12">Actions</div>
+                                                    <div class="titles-data w-25">Description</div>
+                                                    <div class="titles-data w-18">Last UPDATED</div>
+                                                    <div class="titles-data w-10">Enabled</div>
+                                                </div>
+                                                <ng-container>
+                                                    <div class="body-data-table-wrapper-coaching">
+                                                        <div class="coaching-rule w-35">
+                                                            <div class="title">Interest Rate</div>
+                                                            <div class="desc-text">All Agents</div>
+                                                        </div>
+                                                        <div class="actions-info w-12">
+                                                            <button class="edit-btn">
+                                                                <i class="icon-sa-welcome-edit"></i>
+                                                            </button>
+                                                            <!-- <button class="delete-btn">
+                                                                <i class="icon-sa-welcome-delete"></i>
+                                                            </button> -->
+                                                        </div>
+                                                        <div class="desc-text-info w-25">Coaching to guide agents when customer asks about Price Objection</div>
+                                                        <div class="title-text w-18 last-updated-text">1 Jul, 23 - 9:15 pm</div>
+                                                        <div class="last-updated-toggle w-10">
+                                                            <label class="kr-sg-toggle">
+                                                                <input type="checkbox">
+                                                                <div class="slider"></div>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="body-data-table-wrapper-coaching">
+                                                        <div class="coaching-rule w-35">
+                                                            <div class="title">Interest Rate</div>
+                                                            <div class="desc-text">All Agents</div>
+                                                        </div>
+                                                        <div class="actions-info w-12">
+                                                            <button class="edit-btn">
+                                                                <i class="icon-sa-welcome-edit"></i>
+                                                            </button>
+                                                            <!-- <button class="delete-btn">
+                                                                <i class="icon-sa-welcome-delete"></i>
+                                                            </button> -->
+                                                        </div>
+                                                        <div class="title-text w-25">Coaching to guide agents when customer asks about Price Objection</div>
+                                                        <div class="title-text w-18 last-updated-text">1 Jul, 23 - 9:15 pm</div>
+                                                        <div class="last-updated-toggle w-10">
+                                                            <span>Always Enabled</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="body-data-table-wrapper-coaching">
+                                                        <div class="coaching-rule w-35">
+                                                            <div class="title">Interest Rate</div>
+                                                            <div class="desc-text">All Agents</div>
+                                                        </div>
+                                                        <div class="actions-info w-12">
+                                                            <button class="edit-btn">
+                                                                <i class="icon-sa-welcome-edit"></i>
+                                                            </button>
+                                                            <!-- <button class="delete-btn">
+                                                                <i class="icon-sa-welcome-delete"></i>
+                                                            </button> -->
+                                                        </div>
+                                                        <div class="title-text w-25">Coaching to guide agents when customer asks about Price Objection</div>
+                                                        <div class="title-text w-18 last-updated-text">1 Jul, 23 - 9:15 pm</div>
+                                                        <div class="last-updated-toggle w-10">
+                                                            <span>Always Enabled</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="body-data-table-wrapper-coaching">
+                                                        <div class="coaching-rule w-35">
+                                                            <div class="title">Interest Rate</div>
+                                                            <div class="desc-text">All Agents</div>
+                                                        </div>
+                                                        <div class="actions-info w-12">
+                                                            <button class="edit-btn">
+                                                                <i class="icon-sa-welcome-edit"></i>
+                                                            </button>
+                                                            <!-- <button class="delete-btn">
+                                                                <i class="icon-sa-welcome-delete"></i>
+                                                            </button> -->
+                                                        </div>
+                                                        <div class="title-text w-25">Coaching to guide agents when customer asks about Price Objection</div>
+                                                        <div class="title-text w-18 last-updated-text">1 Jul, 23 - 9:15 pm</div>
+                                                        <div class="last-updated-toggle w-10">
+                                                            <span>Always Enabled</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="body-data-table-wrapper-coaching">
+                                                        <div class="coaching-rule w-35">
+                                                            <div class="title">Interest Rate</div>
+                                                            <div class="desc-text">All Agents</div>
+                                                        </div>
+                                                        <div class="actions-info w-12">
+                                                            <button class="edit-btn">
+                                                                <i class="icon-sa-welcome-edit"></i>
+                                                            </button>
+                                                            <!-- <button class="delete-btn">
+                                                                <i class="icon-sa-welcome-delete"></i>
+                                                            </button> -->
+                                                        </div>
+                                                        <div class="title-text w-25">Coaching to guide agents when customer asks about Price Objection</div>
+                                                        <div class="title-text w-18 last-updated-text">1 Jul, 23 - 9:15 pm</div>
+                                                        <div class="last-updated-toggle w-10">
+                                                            <span>Always Enabled</span>
+                                                        </div>
+                                                    </div>
+                                                </ng-container>
+                                            </div>
+                                        </div>
+                                    </perfect-scrollbar>
+                                </div>                     
+                            </div>
+                            <div class="card_content">
+                                <div class="card_header">
+                                    <div data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" class="card_link collapsed" aria-expanded="true">
+                                        <div class="accordion-content-header">
+                                            <div class="left-title text-truncate">
+                                                <div class="left-content-info">
+                                                    <div class="title-info">
+                                                        <span>Pre-Build</span>
+                                                        <span class="normal-text">Pre-build coaching options & intent identification management. </span>
+                                                    </div>
+                                                </div>                                                                                                 
+                                            </div>
+                                            <div class="right-info">                                                
+                                                <div class="arrow-rotate">
+                                                    <i class="icon-sa-arrow-down"></i>
+                                                </div>
+                                            </div>                                               
+                                        </div>
+                                    </div>
+                                </div> 
+                                <div id="collapseTwo" class="inside-accordioncontent collapse">
+                                    <perfect-scrollbar class="mx-h-300">
+                                        <div class="card-body inner-accordion-table">
+                                            <div class="content-scroll-data-agents">
+                                                <div class="shadow-freeze w-20"></div>
+                                                <div class="header-table-agents">
+                                                    <div class="titles-data w-20">
+                                                        <div class="title-header">Coaching Rule</div>
+                                                    </div>
+                                                    <div class="titles-data w-11">Actions</div>
+                                                    <div class="titles-data w-14">Description</div>
+                                                    <div class="titles-data w-16">Tags</div>
+                                                    <div class="titles-data w-16">Channels</div>
+                                                    <div class="titles-data w-13">Last UPDATED</div>
+                                                    <div class="titles-data w-10">Enabled</div>
+                                                </div>
+                                                <ng-container>
+                                                    <div class="body-data-table-wrapper-coaching">
+                                                        <div class="coaching-rule w-20">
+                                                            <div class="title">Interest Rate</div>
+                                                            <div class="desc-text">All Agents</div>
+                                                        </div>
+                                                        <div class="actions-info w-11">
+                                                            <button class="edit-btn">
+                                                                <i class="icon-sa-welcome-edit"></i>
+                                                            </button>
+                                                            <button class="delete-btn">
+                                                                <i class="icon-sa-welcome-delete"></i>
+                                                            </button>
+                                                        </div>
+                                                        <div class="desc-text-info w-14">Coaching to guide agents when customer asks about Price Objection</div>
+                                                        <div class="tags-info w-16">
+                                                            <span class="tag-name">Intrest</span>
+                                                            <span class="tag-name">Transaction</span>
+                                                            <div class="kr-sg-dropdowns" ngbDropdown container="body">
+                                                                <div class="dropdown dropdown-open">
+                                                                  <button class="dropdown-toggle dropdown-input before-none" ngbDropdownToggle>+ 2 More</button>
+                                                                  <ul class="dropdown-menu content-menu more-dropdown-tags" ngbDropdownMenu>
+                                                                    <li ngbDropdownItem>
+                                                                        <span>Intrest</span>
+                                                                    </li>
+                                                                    <li ngbDropdownItem>
+                                                                        <span>Intrest</span>
+                                                                    </li>
+                                                                  </ul>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="channel-info w-16">
+                                                            <span class="channel-name">Voice</span>
+                                                            <span class="channel-name">Live Chat</span>
+                                                        </div>
+                                                        <div class="title-text w-13 last-updated-text">1 Jul, 23 - 9:15 pm</div>
+                                                        <div class="last-updated-toggle w-10">
+                                                            <label class="kr-sg-toggle">
+                                                                <input type="checkbox">
+                                                                <div class="slider"></div>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </ng-container>
                                             </div>
                                         </div>
                                     </perfect-scrollbar>
@@ -135,4 +370,72 @@
 
 <ng-template #flowCreation>
     <app-coaching-rule-create (onCloseRule)="closeFLowCreation($event)" [createOrEdit]="createOrEdit" [currentRule]="currentRule" [groupDetails]="selectedRuleGroup" [groupIndex]="selectedRuleGroupIndex"></app-coaching-rule-create>
+</ng-template>
+
+
+
+
+
+
+
+<ng-template #newRuleModal let-modal>
+    <div class="modal-wrapper-coaching">
+      <div class="header-wrapper">
+        <div class="title-heading">New Rule</div>
+        <div class="close-modal" (click)="closeRule()">
+          <i class="icon-sa-close"></i>
+        </div>
+      </div>
+      <div class="body-wrapper"> 
+        <div class="kr-sg-input-text m-b-15">
+            <div class="label-text">Add Name</div>
+            <input type="text" placeholder="Placeholder text" class="input-text">
+        </div>   
+        <div class="kr-sg-input-text-area m-b-15">
+            <div class="label-text">Description</div>
+            <textarea placeholder="Rule Purpose" class="input-text"></textarea>                                
+        </div>
+
+        <div class="kr-sg-dropdowns m-b-15" ngbDropdown>
+            <div class="label-text">Tags</div>
+            <div class="editable-div" contenteditable="true" ngbDropdownToggle placeholder="Select">
+                <div class="chip-name">
+                    <span>Pricing</span>
+                    <i class="icon-sa-close"></i>
+                </div>
+            </div>
+            <ul class="dropdown-menu content-menu" ngbDropdownMenu>
+                <div class="kr-sg-checkbox">
+                    <input id="checkbox1" class="checkbox-custom" type="checkbox">
+                    <label for="checkbox1" class="checkbox-custom-label">
+                        <span>General</span>
+                    </label>
+                </div>
+                <div class="kr-sg-checkbox">
+                    <input id="checkbox11" class="checkbox-custom" type="checkbox">
+                    <label for="checkbox11" class="checkbox-custom-label">
+                        <span>General</span>
+                    </label>
+                </div>
+              </ul>
+        </div>
+        <div class="channels-tags">
+            <div class="label-text">Channels</div>
+            <div class="channels-check">
+                <div class="check-item">
+                    <input id="checkbox-1" type="checkbox">
+                    <span for="checkbox-1">Voice</span>
+                </div>
+                <div class="check-item">
+                    <input id="checkbox-2" type="checkbox">
+                    <span for="checkbox-2">Live Chat</span>
+                </div>
+            </div>
+        </div>
+      </div>
+      <div class="footer-wrapper">
+        <button class="kr-sg-button-secondary-two btn_lg" (click)="closeRule()">Cancel</button>
+        <button class="kr-sg-button-primary btn_lg">Apply</button>
+      </div>
+    </div>
 </ng-template>
