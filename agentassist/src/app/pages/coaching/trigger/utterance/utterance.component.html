@@ -45,7 +45,7 @@
             </perfect-scrollbar>
         </ul>
     </div>
-    <div class="dropdown-occurences no_border" ngbDropdown [placement]="'bottom'" container="body" #utteranceTimer="ngbDropdown">
+    <!-- <div class="dropdown-occurences no_border" ngbDropdown [placement]="'bottom'" container="body" #utteranceTimer="ngbDropdown">
         <button class="dropdown-toggle btn-toggle" ngbDropdownToggle (click)="showTimer = timer">in {{timer}} seconds</button>
         <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
             <div class="seconds-input">
@@ -53,6 +53,83 @@
                     <input type="number" digitOnly placeholder="Enter Seconds here" (keyup.enter)="onEnterTime(showTimer);utteranceTimer.close()" class="input-text" [(ngModel)]="showTimer">
                 </div>
                 <div class="s-title">seconds</div>
+            </div>
+        </ul>
+    </div> -->
+    <div class="dropdown-occurences in-conversations-dropdown" ngbDropdown [placement]="'bottom'" container="body" #utteranceTimer="ngbDropdown">
+        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle (click)="showTimer = timer">in conversation</button>
+        <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
+            <li ngbDropdownItem class="list-item-li">
+                <span class="title">Any time in conversation</span>
+                <i class="icon-sa-conv-check"></i>
+            </li>
+            <li class="list-item-li" data-toggle="collapse" href="#bytime">
+                <span class="title">By time</span>
+                <i class="icon-sa-conv-check"></i>
+            </li>
+            <div class="inside-conv-time-dropdown collapse" id="bytime">
+                <div class="content-info-data">
+                    <div ngbDropdown class="drpdown-time">
+                        <button type="button" id="dropdownBasic1" ngbDropdownToggle>
+                            <span>First</span>
+                            <i class="icon-sa-arrow-down"></i>
+                        </button>
+                        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                            <li ngbDropdownItem class="list-item-li">
+                                <span class="title">Any time in conversation</span>
+                                <i class="icon-sa-conv-check"></i>
+                            </li>
+                            <li ngbDropdownItem class="list-item-li">
+                                <span class="title">Any time in conversation</span>
+                                <i class="icon-sa-conv-check"></i>
+                            </li>
+                            <li ngbDropdownItem class="list-item-li">
+                                <span class="title">Any time in conversation</span>
+                                <i class="icon-sa-conv-check"></i>
+                            </li>
+                        </div>
+                    </div>
+                    <div class="seconds-input">
+                        <div class="kr-sg-input-text">
+                            <input type="text" placeholder="Placeholder text" class="input-text">
+                        </div>
+                        <div class="s-title">seconds</div>
+                    </div>
+                </div>
+            </div>
+            <li class="list-item-li" data-toggle="collapse" href="#numofmsg">
+                <span class="title">By number of messages</span>
+                <i class="icon-sa-conv-check"></i>
+            </li>
+            <div class="inside-conv-time-dropdown collapse" id="numofmsg">
+                <div class="content-info-data">
+                    <div ngbDropdown class="drpdown-time">
+                        <button type="button" id="dropdownBasic1" ngbDropdownToggle>
+                            <span>First</span>
+                            <i class="icon-sa-arrow-down"></i>
+                        </button>
+                        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                            <li ngbDropdownItem class="list-item-li">
+                                <span class="title">Any time in conversation</span>
+                                <i class="icon-sa-conv-check"></i>
+                            </li>
+                            <li ngbDropdownItem class="list-item-li">
+                                <span class="title">Any time in conversation</span>
+                                <i class="icon-sa-conv-check"></i>
+                            </li>
+                            <li ngbDropdownItem class="list-item-li">
+                                <span class="title">Any time in conversation</span>
+                                <i class="icon-sa-conv-check"></i>
+                            </li>
+                        </div>
+                    </div>
+                    <div class="seconds-input">
+                        <div class="kr-sg-input-text">
+                            <input type="text" placeholder="Placeholder text" class="input-text">
+                        </div>
+                        <div class="s-title">seconds</div>
+                    </div>
+                </div>
             </div>
         </ul>
     </div>

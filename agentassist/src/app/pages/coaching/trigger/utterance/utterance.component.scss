@@ -16,6 +16,9 @@
         display: flex;
         align-items: center;
         cursor: pointer;
+        &[aria-expanded="true"]{
+            background: #F9FAFB;
+        }
         .bg-action{
             width: 8px;
             height: 8px;
@@ -82,7 +85,56 @@
             margin-left: 10px;
         }
     }
-
+    .inside-conv-time-dropdown{
+        .content-info-data{
+            display: flex;
+            align-items: center;
+            background: #F9FAFB;
+            padding: 13px 20px;
+            gap: 12px;
+            .drpdown-time{
+                width: auto;
+                &.show{
+                    .dropdown-toggle{
+                        .icon-sa-arrow-down{
+                            transform: rotate(180deg);
+                        }
+                    }   
+                }
+                .dropdown-toggle{
+                    border-radius: 8px;
+                    border: 1px solid var(--gray-300, #D0D5DD);
+                    background: var(--base-white, #FFF);
+                    box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+                    outline: 0;
+                    display: flex;
+                    padding: 8px 12px;
+                    align-items: center;
+                    gap: 8px;
+                    align-self: stretch;
+                    height: 40px;
+                }
+                .dropdown-menu{
+                    background: rgb(255, 255, 255);
+                    box-shadow: rgba(16, 24, 40, 0.08) 0px 12px 16px -4px, rgba(16, 24, 40, 0.03) 0px 4px 6px -2px;
+                    border-radius: 8px;
+                    margin: 0px;
+                    border: 0px;
+                    padding: 4px;
+                    min-width: 320px;
+                }
+            }
+            .seconds-input {
+                padding: 0;
+                .kr-sg-input-text{
+                    input{
+                        min-width: auto;
+                        width: 100px;
+                    }
+                }
+            }
+        }
+    }
     .variable-value-input{
         padding: 8px;
         display: inline-block;
@@ -267,6 +319,12 @@
     height: 30px;
     padding: 0 5px;
     border-bottom: 1px dashed #98A2B3;
+    &.show{
+        .btn-toggle{
+            background: var(--orange-50, #FEF6EE);
+            border: 2px solid var(--orange-dark-400, #FF692E);
+        }
+    }
     .btn-toggle{
         padding: 2px 8px;
         margin: 0 2px;
@@ -284,6 +342,7 @@
         outline: 0;
         margin-top: 4px;
         white-space: normal;
+        border: 2px solid transparent;
         i{
             color: #EF6820;
             font-size: 10px;
