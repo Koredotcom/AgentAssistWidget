@@ -635,6 +635,10 @@ setProactiveMode(){
       //   }
       // }
       // console.log(event.target.offsetHeight, event.target.scrollTop, event.target.scrollHeight -100, 'offset');
+
+      if(event.type == this.projConstants.PS_SCROLL_DOWN){
+        this.commonService.updateNewMessageCount(this.commonService.scrollContent[this.activeTab].lastElementBeforeNewMessage, this.activeTab);
+      }
       
       if (event.target.offsetHeight + event.target.scrollTop >= event.target.scrollHeight - 120) {
         this.commonService.scrollContent[this.activeTab].scrollAtEnd = true;

@@ -14,7 +14,7 @@
 
             <ng-container *ngIf="automation.responseType == renderResponseType.ASSISTRESPONSE">
                 <ng-container *ngIf="automation.data.isPrompt">
-                    <div class="steps-run-data" attr.id="{{automation.stepRunId}}" [ngClass]="{'last-msg-white-bg' : (agentassistArrayIndex == agentassistResponseArrayLength-1) && (i == automationData.automationsArray.length-1)}">
+                    <div class="steps-run-data" attr.id="{{automation.stepRunId}}" [ngClass]="{'last-msg-white-bg last-child-step-run' : (agentassistArrayIndex == agentassistResponseArrayLength-1) && (i == automationData.automationsArray.length-1)}">
                         <div class="icon_block">
                             <i class="ast-agent"></i>
                         </div>

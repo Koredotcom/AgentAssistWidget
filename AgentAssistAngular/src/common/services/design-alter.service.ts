@@ -60,118 +60,118 @@ export class DesignAlterService {
   }
 
   // new message arrival code
-  addWhiteBackgroundClassToNewMessage(scrollAtEnd, blockId) {
-    let dynamicBlockId = blockId;
-    let beforeLastElementArray: any = document.getElementById(blockId).querySelectorAll('.last-msg-white-bg');
-    for (let ele of beforeLastElementArray) {
-      if (ele && scrollAtEnd) {
-        // $(ele).removeClass("last-msg-white-bg");
-      }
-    }
-    let lastElement = this.getLastElement(dynamicBlockId);
-    if (lastElement && lastElement.className.includes('welcome-msg')) {
-      $(lastElement).addClass('welcome-msg-last');
-      return
-    } else {
-      $('.welcome-msg').removeClass('welcome-msg-last');
-    }
+  // addWhiteBackgroundClassToNewMessage(scrollAtEnd, blockId) {
+  //   let dynamicBlockId = blockId;
+  //   let beforeLastElementArray: any = document.getElementById(blockId).querySelectorAll('.last-msg-white-bg');
+  //   for (let ele of beforeLastElementArray) {
+  //     if (ele && scrollAtEnd) {
+  //       // $(ele).removeClass("last-msg-white-bg");
+  //     }
+  //   }
+  //   let lastElement = this.getLastElement(dynamicBlockId);
+  //   if (lastElement && lastElement.className.includes('welcome-msg')) {
+  //     $(lastElement).addClass('welcome-msg-last');
+  //     return
+  //   } else {
+  //     $('.welcome-msg').removeClass('welcome-msg-last');
+  //   }
 
-    if (lastElement) {
-      $(lastElement).addClass("last-msg-white-bg");
-      $(lastElement).parent().css('opacity', 1);
-      if (!scrollAtEnd) {
-        if (lastElement.id.includes('automationSuggestions')) {
-          let agentUttInfoId = lastElement.id.split('-');
-          agentUttInfoId.shift();
-          agentUttInfoId = 'agentUttInfo-' + agentUttInfoId.join('-');
-          if (document.getElementById(agentUttInfoId)) {
-            $('#' + agentUttInfoId).addClass("last-msg-white-bg");
-          }
-        }
-      }
-      let newElementsHeight = lastElement.clientHeight;
-      // addBlurToOldMessage(newElementsHeight);
-      if (lastElement.nextElementSibling && lastElement.nextElementSibling.className.includes('feedback-data')) {
-        lastElement.nextElementSibling.classList.add("last-msg-white-bg");
-      }
-      let lastElementId = $(lastElement).parent().attr('id');
-      if (lastElementId) {
-        let uuid = lastElementId.split('-');
-        uuid.shift();
-        uuid = uuid.join('-');
-        let endofTaskId = 'endTaks-' + uuid;
-        if (document.getElementById(endofTaskId)) {
-          document.getElementById(endofTaskId).classList.add('last-msg-white-bg');
-        }
-        let overridebtnId = 'overRideBtn-' + uuid;
-        if (document.getElementById(overridebtnId)) {
-          $('#' + overridebtnId).parent().addClass('last-msg-white-bg');
-        }
-      }
-    }
-    this.RemoveVerticalLineForLastResponse();
-  }
+  //   if (lastElement) {
+  //     $(lastElement).addClass("last-msg-white-bg");
+  //     $(lastElement).parent().css('opacity', 1);
+  //     if (!scrollAtEnd) {
+  //       if (lastElement.id.includes('automationSuggestions')) {
+  //         let agentUttInfoId = lastElement.id.split('-');
+  //         agentUttInfoId.shift();
+  //         agentUttInfoId = 'agentUttInfo-' + agentUttInfoId.join('-');
+  //         if (document.getElementById(agentUttInfoId)) {
+  //           $('#' + agentUttInfoId).addClass("last-msg-white-bg");
+  //         }
+  //       }
+  //     }
+  //     let newElementsHeight = lastElement.clientHeight;
+  //     // addBlurToOldMessage(newElementsHeight);
+  //     if (lastElement.nextElementSibling && lastElement.nextElementSibling.className.includes('feedback-data')) {
+  //       lastElement.nextElementSibling.classList.add("last-msg-white-bg");
+  //     }
+  //     let lastElementId = $(lastElement).parent().attr('id');
+  //     if (lastElementId) {
+  //       let uuid = lastElementId.split('-');
+  //       uuid.shift();
+  //       uuid = uuid.join('-');
+  //       let endofTaskId = 'endTaks-' + uuid;
+  //       if (document.getElementById(endofTaskId)) {
+  //         document.getElementById(endofTaskId).classList.add('last-msg-white-bg');
+  //       }
+  //       let overridebtnId = 'overRideBtn-' + uuid;
+  //       if (document.getElementById(overridebtnId)) {
+  //         $('#' + overridebtnId).parent().addClass('last-msg-white-bg');
+  //       }
+  //     }
+  //   }
+  //   this.RemoveVerticalLineForLastResponse();
+  // }
 
-  RemoveVerticalLineForLastResponse() {
-    let accordionInfoList: any = document.querySelectorAll('.dialog-task-accordiaon-info');
-    for (let info of accordionInfoList) {
-      let stepsrunList = info.querySelectorAll('.steps-run-data');
-      for (let node of stepsrunList) {
-        $(node).removeClass('last-child-step-run');
-      }
-      let lastStepNode = stepsrunList[stepsrunList.length - 1];
-      $(lastStepNode).addClass('last-child-step-run');
-    }
-  }
+  // RemoveVerticalLineForLastResponse() {
+  //   let accordionInfoList: any = document.querySelectorAll('.dialog-task-accordiaon-info');
+  //   for (let info of accordionInfoList) {
+  //     let stepsrunList = info.querySelectorAll('.steps-run-data');
+  //     for (let node of stepsrunList) {
+  //       $(node).removeClass('last-child-step-run');
+  //     }
+  //     let lastStepNode = stepsrunList[stepsrunList.length - 1];
+  //     $(lastStepNode).addClass('last-child-step-run');
+  //   }
+  // }
 
-  getLastElement(id) {
-    let lastElement: any = ''
-    let dynamicBlockElements = document.getElementById(id);
-    if (id.includes('smallTalk') && dynamicBlockElements) {
-      lastElement = dynamicBlockElements;
-    } else if ((id.includes(IdReferenceConst.SCRIPTCONTAINER) || id.includes(IdReferenceConst.HISTORY_CONTAINER)) && dynamicBlockElements){
-      let className = id.includes(IdReferenceConst.SCRIPTCONTAINER) ? 'data-contnet' : 'history-content';
-      let numOfdynamicBlockElements = dynamicBlockElements.getElementsByClassName(className);
+  // getLastElement(id) {
+  //   let lastElement: any = ''
+  //   let dynamicBlockElements = document.getElementById(id);
+  //   if (id.includes('smallTalk') && dynamicBlockElements) {
+  //     lastElement = dynamicBlockElements;
+  //   } else if ((id.includes(IdReferenceConst.SCRIPTCONTAINER) || id.includes(IdReferenceConst.HISTORY_CONTAINER)) && dynamicBlockElements){
+  //     let className = id.includes(IdReferenceConst.SCRIPTCONTAINER) ? 'data-contnet' : 'history-content';
+  //     let numOfdynamicBlockElements = dynamicBlockElements.getElementsByClassName(className);
 
-      let childElements = numOfdynamicBlockElements[0]?.children;
-      if (childElements) {
-        for (let i = 0; i < childElements.length; i++) {
-          lastElement = childElements[i];
-        }
-      }
+  //     let childElements = numOfdynamicBlockElements[0]?.children;
+  //     if (childElements) {
+  //       for (let i = 0; i < childElements.length; i++) {
+  //         lastElement = childElements[i];
+  //       }
+  //     }
 
-    }else if (dynamicBlockElements) {
-      let numOfdynamicBlockElements = dynamicBlockElements.children;
-      if (numOfdynamicBlockElements) {
-        for (let i = 0; i < numOfdynamicBlockElements.length; i++) {
-          lastElement = numOfdynamicBlockElements[i];
-        }
-        // if (lastElement.className == 'dialog-task-run-sec') {
-        //     let numOfdynamicBlockElements = lastElement.children;
-        //     for (let i = 0; i < numOfdynamicBlockElements.length; i++) {
-        //         lastElement = numOfdynamicBlockElements[i];
-        //         if ($(lastElement).attr("id") == 'dialoguesArea') {
-        //             let typeInfoRunNodes = lastElement.querySelectorAll('.content-dialog-task-type');
-        //             lastElement = typeInfoRunNodes[typeInfoRunNodes.length - 1];
-        //         }
-        //     }
-        // } else
-        if (lastElement.className == 'dialog-task-accordiaon-info') {
-          let listOfNodes = lastElement.querySelectorAll('.steps-run-data');
-          let index = 0;
-          for (let node of listOfNodes) {
-            if (!($(node).attr('id'))) {
-              $(node).attr('id', 'stepsrundata-' + this.getUUIDFromId(lastElement.id) + '*' + index);
-            }
-            index++;
-          }
-          lastElement = Array.from(listOfNodes).pop();
+  //   }else if (dynamicBlockElements) {
+  //     let numOfdynamicBlockElements = dynamicBlockElements.children;
+  //     if (numOfdynamicBlockElements) {
+  //       for (let i = 0; i < numOfdynamicBlockElements.length; i++) {
+  //         lastElement = numOfdynamicBlockElements[i];
+  //       }
+  //       // if (lastElement.className == 'dialog-task-run-sec') {
+  //       //     let numOfdynamicBlockElements = lastElement.children;
+  //       //     for (let i = 0; i < numOfdynamicBlockElements.length; i++) {
+  //       //         lastElement = numOfdynamicBlockElements[i];
+  //       //         if ($(lastElement).attr("id") == 'dialoguesArea') {
+  //       //             let typeInfoRunNodes = lastElement.querySelectorAll('.content-dialog-task-type');
+  //       //             lastElement = typeInfoRunNodes[typeInfoRunNodes.length - 1];
+  //       //         }
+  //       //     }
+  //       // } else
+  //       if (lastElement.className == 'dialog-task-accordiaon-info') {
+  //         let listOfNodes = lastElement.querySelectorAll('.steps-run-data');
+  //         let index = 0;
+  //         for (let node of listOfNodes) {
+  //           if (!($(node).attr('id'))) {
+  //             $(node).attr('id', 'stepsrundata-' + this.getUUIDFromId(lastElement.id) + '*' + index);
+  //           }
+  //           index++;
+  //         }
+  //         lastElement = Array.from(listOfNodes).pop();
           
-        }
-      }
-    }
-    return lastElement;
-  }
+  //       }
+  //     }
+  //   }
+  //   return lastElement;
+  // }
 
   getUUIDFromId(id) {
     if (id) {
