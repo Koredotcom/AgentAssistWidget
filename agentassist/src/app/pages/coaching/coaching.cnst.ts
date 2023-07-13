@@ -115,7 +115,7 @@ export const COACHINGCNST = {
     TRIGGER_BYTIME : 'byTime',
     TRIGGER_BYMEESAGECOUNT : 'byMessageCount',
     TRIGGER_FIRST : 'first',
-    TRIGGER_WITHIN : 'within',
+    TRIGGER_WITHIN : 'withIn',
     SPEECH_DEFAULT_BY : 'agent',
     SPEECH_DEADAIR_USERLIST : ['agent', 'customer', 'both'],
     SPEECH_SPEED_USERLIST : ['agent', 'customer'],
