@@ -178,6 +178,9 @@ export class CommonService {
     if (data.intentName && data.userInput) {
       agent_assist_agent_request_params['query'] = data.userInput
     }
+    if (data?.interactiveLanguage) {
+      agent_assist_agent_request_params['language'] = data.interactiveLanguage; // Return the default value for null, undefined, or "''"
+    }
     return agent_assist_agent_request_params;
   }
 
