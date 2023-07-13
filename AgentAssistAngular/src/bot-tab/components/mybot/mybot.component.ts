@@ -182,22 +182,22 @@ export class MybotComponent implements OnInit {
 
   //running dialogue and mybot data response code.
   processMybotDataResponse(data) {
-    let isTemplateRender = false;
+    // let isTemplateRender = false;
     data = this.commonService.confirmationNodeRenderDataTransform(data);
     let results: any = this.templateRenderClassService.getResponseUsingTemplate(data, this.commonService.configObj);
     let msgStringify = JSON.stringify(results);
     let newTemp = encodeURI(msgStringify);
 
     this.commonService.currentPositionIdOfMyBot = this.myBotDialogPositionId;
-    let sendMsgData = encodeURI(JSON.stringify(results));
+    // let sendMsgData = encodeURI(JSON.stringify(results));
     let myBotuuids = this.koreGenerateuuidPipe.transform();
-    let agentInputId = this.randomUUIDPipe.transform();
+    // let agentInputId = this.randomUUIDPipe.transform();
     if (this.commonService.isMyBotAutomationOnGoing && data.buttons && !data.value.includes('Customer has waited') && (this.myBotDialogPositionId && !data.positionId || (data.positionId == this.myBotDialogPositionId))) {
       // if (this.isFirstMessagOfDialogInMyBot) {
       //   $(`#dropDownData-${this.myBotDropdownHeaderUuids}`).attr('data-task-id', data.uniqueTaskId)
       // }
       // this.isFirstMessagOfDialogInMyBot = false;
-      let runInfoContent = document.getElementById(IdReferenceConst.DROPDOWNDATA + `-${this.myBotDropdownHeaderUuids}`);
+      // let runInfoContent = document.getElementById(IdReferenceConst.DROPDOWNDATA + `-${this.myBotDropdownHeaderUuids}`);
       // $('#inputFieldForMyBot').remove();
       // on enter value in input
       if (this.commonService.isMybotInputResponseClick) {
@@ -469,37 +469,37 @@ export class MybotComponent implements OnInit {
 
   }
 
-  smallTalkActionLinkTemplate(uuids, sendData) {
-    let actionLinkTemplate = ` <div class="action-links">
-    <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data="${sendData}">Send</button>
-    <div class="copy-btn hide" data-msg-id="${uuids}" data-msg-data="${sendData}">
-        <i class="ast-copy" data-msg-id="${uuids}" data-msg-data="${sendData}"></i>
-    </div>
-  </div>`;
-    return actionLinkTemplate;
-  }
+  // smallTalkActionLinkTemplate(uuids, sendData) {
+  //   let actionLinkTemplate = ` <div class="action-links">
+  //   <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data="${sendData}">Send</button>
+  //   <div class="copy-btn hide" data-msg-id="${uuids}" data-msg-data="${sendData}">
+  //       <i class="ast-copy" data-msg-id="${uuids}" data-msg-data="${sendData}"></i>
+  //   </div>
+  // </div>`;
+  //   return actionLinkTemplate;
+  // }
 
-  smallTalkInputTemplate(myBotuuids, data) {
-    let agentInputEntityName = ProjConstants.ENTER_DETAILS;
-    if (data.entityDisplayName || data.entityName) {
-      agentInputEntityName = data.entityDisplayName ? data.entityDisplayName : data.entityName
-    }
-    let agentInputToBotHtml = this.mybotDataService.agentInputToBotTemplate(agentInputEntityName, myBotuuids, this.connectionDetails, this.myBotDialogPositionId);
-    if (document.getElementById(`smallTalk-${myBotuuids}`)) {
-      let runInfoContent = document.getElementById(`smallTalk-${myBotuuids}`);
-      $(runInfoContent).append(agentInputToBotHtml);
-      document.getElementById(`agentInput-${myBotuuids}`).focus();
-      runInfoContent.querySelector(`#agentInput-${myBotuuids}`).addEventListener('keypress', (e: any) => {
-        let key = e.which || e.keyCode || 0;
-        if (key === 13) {
-          this.getAgentInputValue(e.target.value);
-          this.isMybotInputResponseClick = true;
-        }
-      });
-      $(`#smallTalk-${myBotuuids}`).append(runInfoContent);
-    }
+  // smallTalkInputTemplate(myBotuuids, data) {
+  //   let agentInputEntityName = ProjConstants.ENTER_DETAILS;
+  //   if (data.entityDisplayName || data.entityName) {
+  //     agentInputEntityName = data.entityDisplayName ? data.entityDisplayName : data.entityName
+  //   }
+  //   let agentInputToBotHtml = this.mybotDataService.agentInputToBotTemplate(agentInputEntityName, myBotuuids, this.connectionDetails, this.myBotDialogPositionId);
+  //   if (document.getElementById(`smallTalk-${myBotuuids}`)) {
+  //     let runInfoContent = document.getElementById(`smallTalk-${myBotuuids}`);
+  //     $(runInfoContent).append(agentInputToBotHtml);
+  //     document.getElementById(`agentInput-${myBotuuids}`).focus();
+  //     runInfoContent.querySelector(`#agentInput-${myBotuuids}`).addEventListener('keypress', (e: any) => {
+  //       let key = e.which || e.keyCode || 0;
+  //       if (key === 13) {
+  //         this.getAgentInputValue(e.target.value);
+  //         this.isMybotInputResponseClick = true;
+  //       }
+  //     });
+  //     $(`#smallTalk-${myBotuuids}`).append(runInfoContent);
+  //   }
 
-  }
+  // }
 
   smallTalkTemplateRenderCheck(data, results) {
     if (results.parsedPayload && ((data?.componentType === 'dialogAct' && (data?.srcChannel == 'msteams' || data?.srcChannel == 'rtm')) || (data?.componentType != 'dialogAct'))) {
@@ -551,14 +551,14 @@ export class MybotComponent implements OnInit {
 
   }
 
-  _createRunTemplateContainerForMyTab(agentBotuuids, intentName, dialogId) {
-    this.dialogName = intentName;
-    let dynamicBlock = document.getElementById(IdReferenceConst.MYBOTAUTOMATIONBLOCK);
-    let dropdownHtml = this.mybotDataService.createDialogTaskAccordionTemplate(agentBotuuids, intentName);
-    this.mybotautomation.nativeElement.innerHTML += dropdownHtml;
-    this.clickEvents(IdReferenceConst.MYBOTTERMINATE, agentBotuuids);
-    // this.clickEvents(IdReferenceConst.DROPDOWN_HEADER, agentBotuuids);
-  }
+  // _createRunTemplateContainerForMyTab(agentBotuuids, intentName, dialogId) {
+  //   this.dialogName = intentName;
+  //   let dynamicBlock = document.getElementById(IdReferenceConst.MYBOTAUTOMATIONBLOCK);
+  //   let dropdownHtml = this.mybotDataService.createDialogTaskAccordionTemplate(agentBotuuids, intentName);
+  //   this.mybotautomation.nativeElement.innerHTML += dropdownHtml;
+  //   this.clickEvents(IdReferenceConst.MYBOTTERMINATE, agentBotuuids);
+  //   // this.clickEvents(IdReferenceConst.DROPDOWN_HEADER, agentBotuuids);
+  // }
 
   //input value from mybot
   getAgentInputValue(value, intent?) {
@@ -646,13 +646,13 @@ export class MybotComponent implements OnInit {
     this.handlePopupEvent.emit({ status: true, type: this.projConstants.TERMINATE });
   }
 
-  clickEvents(eventName, uuid?) {
-    if (eventName == IdReferenceConst.MYBOTTERMINATE) {
-      // this.terminateButtonClick(uuid)
-    } else if (eventName == IdReferenceConst.DROPDOWN_HEADER) {
-      // this.designAlterService.handleDropdownToggle(uuid);
-    }
-  }
+  // clickEvents(eventName, uuid?) {
+  //   if (eventName == IdReferenceConst.MYBOTTERMINATE) {
+  //     // this.terminateButtonClick(uuid)
+  //   } else if (eventName == IdReferenceConst.DROPDOWN_HEADER) {
+  //     // this.designAlterService.handleDropdownToggle(uuid);
+  //   }
+  // }
 
   removeOverRideDivForPreviousResponse() {
 

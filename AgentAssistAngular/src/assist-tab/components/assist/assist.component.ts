@@ -1023,11 +1023,11 @@ export class AssistComponent implements OnInit {
     })
   }
 
-  terminateButtonClick(uuid) {
-    document.getElementById(IdReferenceConst.ASSISTTERMINATE + '-' + uuid)?.addEventListener('click', (event) => {
-      this.handlePopupEvent.emit({ status: true, type: this.projConstants.TERMINATE });
-    });
-  }
+  // terminateButtonClick(uuid) {
+  //   document.getElementById(IdReferenceConst.ASSISTTERMINATE + '-' + uuid)?.addEventListener('click', (event) => {
+  //     this.handlePopupEvent.emit({ status: true, type: this.projConstants.TERMINATE });
+  //   });
+  // }
 
   handleTerminatePopup(){
     this.handlePopupEvent.emit({ status: true, type: this.projConstants.TERMINATE });
