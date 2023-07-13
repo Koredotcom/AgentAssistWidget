@@ -173,7 +173,7 @@
                         </div>
                     </div>
                     <div class="seconds-input">
-                        <ng-container *ngIf="selectedSpeechType == coachingCnst.DEADAIR">
+                        <ng-container *ngIf="selectedSpeechType == coachingCnst.DEADAIR || selectedSpeechType == coachingCnst.CROSSTALK">
                             <span tooltipClass="tooltip-global-styles" ngbTooltip="Input time should be greater than configured time" class="m-l-6" placement="bottom"> 
                                <ng-container  *ngTemplateOutlet="bytimeinput"></ng-container>
                             </span>
