@@ -45,12 +45,9 @@ export class MybotComponent implements OnInit {
   mybotEmptyState: boolean = true;
   dialogName: string;
   isHistoryApiCalled = false;
-<<<<<<< HEAD
   mybotResponseArray: any = [];
   renderResponseType: any = RenderResponseType
-=======
   interruptDialogFlag = false;
->>>>>>> 4367b405311180c63fb1a402143db23faee64361
 
   constructor(public handleSubjectService: HandleSubjectService,
     public randomUUIDPipe: RandomUUIDPipe,
