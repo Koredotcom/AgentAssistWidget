@@ -96,7 +96,7 @@ export class OverlaysearchComponent implements OnInit {
     connectionDetails.value = searchObj.value;
     connectionDetails.isSearch = isSearchFlag;
     connectionDetails.positionId = searchObj?.positionId;
-    if (this.connectionDetails?.interactiveLanguage !== null && typeof this.connectionDetails?.interactiveLanguage !== 'undefined' && this.connectionDetails?.interactiveLanguage !== "''") {
+    if (this.connectionDetails?.interactiveLanguage && typeof this.connectionDetails?.interactiveLanguage == 'string' && this.connectionDetails?.interactiveLanguage != "''") {
       connectionDetails['language'] = this.connectionDetails?.interactiveLanguage; // Return the default value for null, undefined, or "''"
     }
     if(!isSearchFlag && !faqToggle){
