@@ -51,9 +51,9 @@ export const COACHINGCNST = {
     RULE : "rule",
     GROUP : "group",
     VALIDATORS : {
-        'cross_talk' : ['nOccurrences'],
-        'deadair' : ['nOccurrences','timeTaken'],
-        'speech_speed' : ['nOccurrences', 'nWords']
+        'cross_talk' : ['nOccurrences', 'duration'],
+        'deadair' : ['nOccurrences','timeTaken', 'duration'],
+        'speech_speed' : ['nOccurrences', 'nWords', 'duration']
     },
     HINT_NUDGE_VALIDATORS : {
         'utterance' : ['session', 'utteranceCount']
@@ -100,5 +100,28 @@ export const COACHINGCNST = {
     },
     IMMEDIATELY : 'immediately',
     GOT_IT : 'Ok, Got it',
-    ADHERENCE_DATA: 'adherence'
+    ADHERENCE_DATA: 'adherence',
+    UTTERANCE_CONV_REMOVE_LIST : {
+        'anyTime' : [],
+        'byTime' : ['period', 'nSeconds'],
+        'byMessageCount' : ['period', 'nMessages']
+    },
+    UTTERANCE_CONV_DEFAULT_SELECTION : {
+        period : 'first',
+        nSeconds : 30,
+        nMessages : 5
+    },
+    TRIGGER_ANYTIME : 'anyTime',
+    TRIGGER_BYTIME : 'byTime',
+    TRIGGER_BYMEESAGECOUNT : 'byMessageCount',
+    TRIGGER_FIRST : 'first',
+    TRIGGER_WITHIN : 'within',
+    SPEECH_DEFAULT_BY : 'agent',
+    SPEECH_DEADAIR_USERLIST : ['agent', 'customer', 'both'],
+    SPEECH_SPEED_USERLIST : ['agent', 'customer'],
+    SPEECH_USER_LIST: {
+        'agent': 'Agent',
+        'both': 'Agent and Customer',
+        'customer': 'Customer'
+    }
 }

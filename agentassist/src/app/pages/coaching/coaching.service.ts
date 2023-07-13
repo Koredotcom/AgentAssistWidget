@@ -62,13 +62,13 @@ export class CoachingService {
       }),
       frequency: this.fb.group({
         nOccurrences: [1, Validators.required],
-        every: [30, Validators.required]
+        duration : ['', [Validators.required]]
       })
     }
   }
 
   setUtteranceForm(obj){
-    return {
+    let utteranceObj : any =  {
       _id: [obj._id, [Validators.required]],
       type: this.coachingCnst.UTTERANCE,
       by: [obj.by, [Validators.required]],
@@ -79,10 +79,26 @@ export class CoachingService {
         utteranceCount: [obj.when?.utteranceCount,[Validators.required]]
       }),
       frequency: this.fb.group({
-        nOccurrences: [obj.frequency?.nOccurrences, Validators.required],
-        every: [obj.frequency?.every, Validators.required],
+        nOccurrences: [obj.frequency?.nOccurrences, Validators.required]
       })
     } 
+
+    if(obj.frequency){
+
+      if(obj.frequency?.duration){
+        (<FormGroup> utteranceObj.frequency).addControl('duration', new FormControl(obj.frequency?.duration))
+      }
+      if(obj.frequency?.period){
+        (<FormGroup> utteranceObj.frequency).addControl('period', new FormControl(obj.frequency?.period))
+      }
+      if(obj.frequency?.nSeconds){
+        (<FormGroup> utteranceObj.frequency).addControl('nSeconds', new FormControl(obj.frequency?.nSeconds))
+      }
+      if(obj.frequency?.nMessages){
+        (<FormGroup> utteranceObj.frequency).addControl('nMessages', new FormControl(obj.frequency?.nMessages))
+      }
+    }
+    return utteranceObj;
   }
 
   getSpeechAnalysisFormControlObject(){
@@ -93,12 +109,13 @@ export class CoachingService {
       operator : ['and', [Validators.required]],
       frequency: this.fb.group({
         nOccurrences: [1, Validators.required],
+        duration : ['', [Validators.required]]
       })
     };
   }
 
   setSpeechAnalysisForm(obj){
-    let objC = {
+    let objC : any = {
       _id: [obj._id, [Validators.required]],
       type: this.coachingCnst.SPEECH_ANALYSIS,
       subType: [obj.subType, [Validators.required]],
@@ -107,11 +124,29 @@ export class CoachingService {
         nOccurrences: [obj.frequency?.nOccurrences],
       })
     };
-    if(obj.frequency?.nWords){
-      (<FormGroup> objC.frequency).addControl('nWords', new FormControl(obj.frequency?.nWords))
+
+    if(obj.by) {
+      objC.by = [obj.by, [Validators.required]]
     }
-    if(obj.frequency?.timeTaken){
-      (<FormGroup> objC.frequency).addControl('timeTaken', new FormControl(obj.frequency?.timeTaken))
+
+    if(obj.frequency){
+
+      if(obj.frequency?.nWords){
+        (<FormGroup> objC.frequency).addControl('nWords', new FormControl(obj.frequency?.nWords))
+      }
+      if(obj.frequency?.timeTaken){
+        (<FormGroup> objC.frequency).addControl('timeTaken', new FormControl(obj.frequency?.timeTaken))
+      }
+
+      if(obj.frequency?.duration){
+        (<FormGroup> objC.frequency).addControl('duration', new FormControl(obj.frequency?.duration))
+      }
+      if(obj.frequency?.period){
+        (<FormGroup> objC.frequency).addControl('period', new FormControl(obj.frequency?.period))
+      }
+      if(obj.frequency?.nSeconds){
+        (<FormGroup> objC.frequency).addControl('nSeconds', new FormControl(obj.frequency?.nSeconds))
+      }
     }
     return objC;
   }
