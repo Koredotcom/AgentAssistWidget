@@ -4,11 +4,12 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 import { EVENTS } from '../helper/events';
 import { WebSocketService } from './web-socket.service';
 import * as $ from 'jquery';
-import { IdReferenceConst, ProjConstants, RenderResponseType, storageConst } from '../constants/proj.cnts';
+import { coachingConst, IdReferenceConst, ProjConstants, storageConst, RenderResponseType } from '../constants/proj.cnts';
 import { DesignAlterService } from './design-alter.service';
 import { LocalStorageService } from './local-storage.service';
 import { TemplateRenderClassService } from './template-render-class.service';
 import { SanitizeHtmlPipe } from '../pipes/sanitize-html.pipe';
+import { EChartsOption } from 'echarts';
 
 declare var $: any;
 declare const agentAssistHelpers: any;
@@ -38,6 +39,10 @@ export class CommonService {
   isMybotInputResponseClick : boolean = false;
   currentPositionId;
   currentPositionIdOfMyBot;
+  childBotDetails = {
+    childBotName : '',
+    childBotId : ''
+  }
 
   suggestionsAnswerPlaceableIDs : any = [];
 
@@ -57,6 +62,7 @@ export class CommonService {
     [ProjConstants.HISTORY] : IdReferenceConst.SCROLLBUTTON_HISTORY
   }
   aaHelpers = null;
+  realtimeSentiData : any = {};
   constructor(private route: ActivatedRoute, private webSocketService: WebSocketService, private designAlterService: DesignAlterService,
     private localStorageService: LocalStorageService,private templateRenderClassService: TemplateRenderClassService) {
     this.setScrollContent();
@@ -139,10 +145,12 @@ export class CommonService {
       agent_assist_request['childBotName'] = data.childBotName;
     }
     if(this.configObj?.autoBotId && this.configObj?.autoBotId !== 'undefined') {
-      console.log(this.configObj);
       agent_assist_request['autoBotId'] = this.configObj.autoBotId;
     } else {
       agent_assist_request['autoBotId'] = '';
+    }
+    if (data.intentName && data.userInput) {
+      agent_assist_request['query'] = data.userInput
     }
     return agent_assist_request;
   }
@@ -154,20 +162,24 @@ export class CommonService {
       'query': data.value,
       'botId': data.botId,
       'experience': this.isCallConversation === true ? 'voice' : 'chat',
-      'positionId': data?.positionId
+      'positionId': data?.positionId,
+      'childBotId': data?.childBotId || '',
+      'childBotName': data?.childBotName || ''
     }
     if (data.intentName) {
       agent_assist_agent_request_params.intentName = data.intentName;
     }
-    if(data.childBotId) {
-      agent_assist_agent_request_params['childBotId'] = data.childBotId;
-      agent_assist_agent_request_params['childBotName'] = data.childBotName;
-    }
+    // if(data.childBotId) {
+    //   agent_assist_agent_request_params['childBotId'] = data.childBotId;
+    //   agent_assist_agent_request_params['childBotName'] = data.childBotName;
+    // }
     if(this.configObj?.autoBotId && this.configObj?.autoBotId !== 'undefined') {
-      console.log(this.configObj);
       agent_assist_agent_request_params['autoBotId'] = this.configObj.autoBotId;
     } else {
       agent_assist_agent_request_params['autoBotId'] = '';
+    }
+    if (data.intentName && data.userInput) {
+      agent_assist_agent_request_params['query'] = data.userInput
     }
     return agent_assist_agent_request_params;
   }
@@ -519,9 +531,9 @@ export class CommonService {
 
   confirmationNodeRenderForHistoryDataTransform(res){
     if(res && res.agentAssistDetails && (res.agentAssistDetails.componentType == 'dialogAct' || res.agentAssistDetails.entityType == 'list_of_values' || res.agentAssistDetails.newEntityType == 'list_of_values')  && res.components && res.components.length > 0 && res.components[0].data && res.components[0].data.text){
-      
+
       if(!res.agentAssistDetails.applyDefaultTemplate){
-        
+
         res.agentAssistDetails.componentType = '';
         res.agentAssistDetails.newEntityType = '';
       }
@@ -666,7 +678,7 @@ export class CommonService {
         });
       }
       searchResponse.dialogs.push({ name: dialog.name, agentRunButton: false, childBotId : dialog.childBotId,
-        childBotName : dialog.childBotName, entities : dialog.entities });
+        childBotName : dialog.childBotName, entities : dialog.entities, userInput : dialog.userInput });
     }
 
 
@@ -709,7 +721,7 @@ export class CommonService {
       url: url,
       headers :  {
         'iid' : this.configObj.botId ? this.configObj.botId : 'st-1c3a28c8-335d-5322-bd21-f5753dc7f1f9'
-     }
+    }
     });
     if (response.results) {
       return response.results;
@@ -733,7 +745,7 @@ export class CommonService {
         }
       }
     }
-    
+
     for(let resObj of response){
       if(resObj && resObj.agentAssistDetails && resObj.agentAssistDetails.suggestions && resObj.agentAssistDetails.suggestions.faqs){
         if(resObj.channels && resObj.channels[0] && resObj.channels[0].reqId){
@@ -751,8 +763,8 @@ export class CommonService {
   }
 
   async renderingAgentHistoryMessage(connectionDetails) {
-    console.log(this.configObj.autoBotId, connectionDetails.autoBotId,"agent history-----",this.configObj, connectionDetails);
-    
+    // console.log(this.configObj.autoBotId, connectionDetails.autoBotId,"agent history-----",this.configObj, connectionDetails);
+
     let url = `${this.configObj.agentassisturl}/agentassist/api/v1/agent-feedback/${this.configObj.conversationId}?interaction=mybot`;
     let feedBackResult = await this.renderHistoryFeedBack(url);
     if(this.configObj.fromSAT) {
@@ -771,8 +783,8 @@ export class CommonService {
           console.log("error", err)
           return err;
         });
-      
-     
+
+
     }
     // return this.getAgentHistoryData(`${this.configObj.agentassisturl}/api/1.1/botmessages/agentassist/${this.configObj.botid}/history?convId=${this.configObj.conversationId}&agentHistory=true`)
     //   .then(response => {
@@ -830,7 +842,7 @@ export class CommonService {
           return err;
         });
 
-    
+
     }
   }
 
@@ -854,6 +866,14 @@ export class CommonService {
         headers: headersVal
     }) // parses JSON response into native JavaScript objects
     return response;
+  }
+
+  hideSendAndCopyBtnsforCallconversation(contanier) {
+    let lastchild = $(contanier).children().last();
+    if(this.isCallConversation == true){
+      $(lastchild).find('.copy-btn').addClass('hide')
+      $(lastchild).find('.send-run-btn').addClass('hide')
+    }
   }
 
   hideSendOrCopyButtons(parsedPayload, conatiner, smallTalk?, componentType?){
@@ -1016,7 +1036,7 @@ export class CommonService {
     if (JSON.parse(localStorage.getItem('innerTextValue'))) {
       if (this.activeTab == ProjConstants.ASSIST) {
 
-        let assistRequestParams = 
+        let assistRequestParams =
         {
           "conversationId": connectionObj.conversationId,
           "query": JSON.parse(localStorage.getItem('innerTextValue')),
@@ -1034,7 +1054,7 @@ export class CommonService {
         this.currentPositionId = "";
       } else if (this.activeTab == ProjConstants.MYBOT) {
 
-        let agent_assist_agent_request_params = 
+        let agent_assist_agent_request_params =
         {
           "isSearch": false,
           "conversationId": connectionObj.conversationId,
@@ -1043,6 +1063,9 @@ export class CommonService {
           "experience": this.isCallConversation === true ? 'voice' : 'chat',
           "positionId": this.currentPositionIdOfMyBot,
           "autoBotId": connectionObj.autoBotId
+      }
+      if(connectionObj.userInput && connectionObj.intentName) {
+        agent_assist_agent_request_params['query'] = connectionObj.userInput;
       }
         this.webSocketService.emitEvents(EVENTS.agent_assist_agent_request, agent_assist_agent_request_params);
         this.isMyBotAgentSentRequestOnClick = true;
@@ -1060,9 +1083,12 @@ export class CommonService {
   }
 
   replaceDoubleQuot(val) {
-    val = val.replaceAll('"', "&quot;");
-    // val = encodeURI(val);
-    return val;
+    if(typeof val !== 'object') {
+      val = val.replaceAll('"', "&quot;");
+      // val = encodeURI(val);
+      return val;
+    }
+
   }
 
   replaceLtGt(htmlString, quotflag) {
@@ -1099,7 +1125,7 @@ export class CommonService {
 
   handleEmptyLine2(answer){
     let eleanswer = '';
-    if(answer != undefined && answer != null){
+    if(answer != undefined && answer != null && typeof answer !== 'object'){
         eleanswer = answer.replace(/(\r\n|\n|\r)/gm, "<br>");
         // eleanswer = this.replaceLtGt2(eleanswer);
         eleanswer = this.aaHelpers.convertMDtoHTML(eleanswer, "bot", eleanswer)
@@ -1118,9 +1144,13 @@ export class CommonService {
         connectionDetails.intentName = dialog.intentName;
         connectionDetails.botId = dialog.botId;
       }
+      if(dialog.userInput && !isSearchFlag && dialog.intentName) {
+        connectionDetails.value = dialog.intentName;
+      }
       connectionDetails.positionId = dialog.positionId;
       connectionDetails.childBotId = dialog.childBotId;
       connectionDetails.childBotName = dialog.childBotName;
+
       let agent_assist_agent_request_params = this.prepareAgentAssistAgentRequestParams(connectionDetails);
       this.webSocketService.emitEvents(EVENTS.agent_assist_agent_request, agent_assist_agent_request_params);
     }
@@ -1206,4 +1236,138 @@ export class CommonService {
 
     return result;
   }
+  getInitialSentiChartOptions(object): EChartsOption | any {
+    return {
+      xAxis: {
+        splitLine: { show: false },
+        axisLine: { show: false },
+        axisTick: { show: false },
+        axisLabel: { show: false }
+      },
+      yAxis: {
+        type: 'value',
+        data: [-2, -1, 0, 1, 2],
+        nameLocation: 'middle',
+        axisLabel: { show: false },
+        axisTick: { show: false },
+        splitLine: { show: false },
+        axisLine: { show: false },
+        min: -2
+      },
+      legend: {
+        show: false
+      },
+      visualMap: {
+        show: false,
+        dimension: 1,
+        pieces: [
+          {
+            lt: -0.25,
+            color: 'red'
+          },
+          {
+            lt: 0,
+            gte: -0.25,
+            color: 'grey'
+          },
+          {
+            gt: 0,
+            color: 'green'
+          }
+        ],
+
+      },
+      grid: {
+        left: '0%',
+        bottom: '1%',
+        right: '0%',
+        top: '3%'
+      },
+      series: [
+        {
+          data: [[0,0]],
+          type: 'line',
+          smooth: true,
+          showSymbol: false,
+          lineStyle: {
+           width : 2
+          }
+        }
+      ],
+    };
+  }
+
+  getSentiAnalysisChartOptions(object): EChartsOption | any {
+    return {
+      xAxis: {
+        splitLine: { show: false },
+        axisLine: { show: false },
+        axisTick: { show: false },
+        axisLabel: { show: false }
+      },
+      yAxis: {
+        type: 'value',
+        data: [-2, 0, 2],
+        nameLocation: 'middle',
+        axisLabel: {
+          formatter: val => this.showExtrems(val),
+          show: true
+        },
+        axisTick: { show: false },
+        splitLine: { show: true },
+        axisLine: { show: false },
+        min: -2
+      },
+      grid : {
+        left: '0%',
+        bottom: '3%',
+        right: '0%',
+        top: '7%',
+        containLabel : true
+      },
+      visualMap: {
+        show: false,
+        dimension: 1,
+        pieces: [
+          {
+            lt: -0.25,
+            color: 'red',
+            label : '< (-0.25 Neg)'
+          },
+          {
+            lt: 0,
+            gte: -0.25,
+            color: 'grey',
+            label : '0 - (-0.25 Neu)'
+          },
+          {
+            gt: 0,
+            color: 'green',
+            label : '> 0 (Pos)'
+          }
+        ]
+      },
+    
+      series: [
+        { 
+          data: [[0,0]],
+          type: 'line',
+          smooth: true,
+          showSymbol: false,
+          lineStyle: {
+            width : 2
+          }
+        }
+      ],
+    };
+  }
+
+  showExtrems(val){
+    if(val == 0 || val == 2 || val == -2){
+      return coachingConst.SENTI_CHART_YAXIS_LIST[val];
+    }else {
+      return '';
+    }
+  }
+
 }

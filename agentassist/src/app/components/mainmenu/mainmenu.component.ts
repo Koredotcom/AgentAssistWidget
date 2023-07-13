@@ -45,7 +45,7 @@ export class MainmenuComponent implements OnInit, OnDestroy {
   loading: boolean = false;
   voicePreferences: VoicePreferencesModel;
   filteredSmartABots : any = {};
-
+  isCoachingDisable = false;
   @ViewChild('wUpdateBot', { static: false }) private wUpdateBot;
   @ViewChild('wSContent', { static: false }) private wSContent;
   @ViewChild(NgbDropdown) private dropdown: NgbDropdown;
@@ -73,6 +73,9 @@ export class MainmenuComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subs.sink = this.authService.isAgentDesktopEnabled$.subscribe(isEnabled => {
       this.isAgentDesktopEnabled = isEnabled;
+    });
+    this.subs.sink = this.authService.isAgentCoachongEnable$.subscribe(isEnabled => {
+      this.isCoachingDisable = isEnabled;
     });
 
     // this.workflowService.botChange.subscribe((bot : any)=>{

@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'AgentAssist-icons';
-  src:  url('fonts/AgentAssist-icons.eot?xdlhgm');
-  src:  url('fonts/AgentAssist-icons.eot?xdlhgm#iefix') format('embedded-opentype'),
-    url('fonts/AgentAssist-icons.ttf?xdlhgm') format('truetype'),
-    url('fonts/AgentAssist-icons.woff?xdlhgm') format('woff'),
-    url('fonts/AgentAssist-icons.svg?xdlhgm#AgentAssist-icons') format('svg');
+  src:  url('fonts/AgentAssist-icons.eot?raejxo');
+  src:  url('fonts/AgentAssist-icons.eot?raejxo#iefix') format('embedded-opentype'),
+    url('fonts/AgentAssist-icons.ttf?raejxo') format('truetype'),
+    url('fonts/AgentAssist-icons.woff?raejxo') format('woff'),
+    url('fonts/AgentAssist-icons.svg?raejxo#AgentAssist-icons') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,21 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.ast-hand-drag-solid:before {
+  content: "\e917";
+}
+.ast-positive-nudge:before {
+  content: "\e918";
+}
+.ast-warning-nudge:before {
+  content: "\e919";
+}
+.ast-close-nudge:before {
+  content: "\e91a";
+}
+.ast-hand-drag:before {
+  content: "\e91b";
+}
 .ast-ast-send:before {
   content: "\e916";
 }

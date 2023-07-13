@@ -1,6 +1,6 @@
-import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { ProjConstants, ImageFilePath, ImageFileNames, IdReferenceConst, storageConst, RenderResponseType } from 'src/common/constants/proj.cnts';
+import { ProjConstants, ImageFilePath, ImageFileNames, IdReferenceConst, storageConst, coachingConst, RenderResponseType } from 'src/common/constants/proj.cnts';
 import { RandomUUIDPipe } from 'src/common/pipes/random-uuid.pipe';
 import { RawHtmlPipe } from 'src/common/pipes/raw-html.pipe';
 import { RemoveSpecialCharPipe } from 'src/common/pipes/remove-special-char.pipe';
@@ -56,6 +56,10 @@ export class AssistComponent implements OnInit {
   smallTalkOverrideBtnId : string;
   faqManualClick : boolean = false;
   userBotSessionDetails;
+  interactiveLangaugeDetails = 'en';
+
+
+
 
   assistResponseArray : any = [];
   unreadUUID : any;
@@ -76,6 +80,10 @@ export class AssistComponent implements OnInit {
   ngOnInit(): void {
     this.subscribeEvents();
     this.scrollToBottom();
+    if(this.connectionDetails.interactiveLanguage !== '') {
+      this.interactiveLangaugeDetails = this.connectionDetails.interactiveLanguage;
+    }
+
   }
 
   ngOnDestroy() {
@@ -282,12 +290,15 @@ export class AssistComponent implements OnInit {
       'sendMenuRequest': true,
       'uId': this.userBotSessionDetails?.userId || '',
       'sId': this.userBotSessionDetails?.sessionId || '',
-      'experience' : (this.connectionDetails.isCall && this.connectionDetails.isCall === "true") ?  ProjConstants.VOICE : ProjConstants.CHAT
+      'experience' : (this.connectionDetails.isCall && this.connectionDetails.isCall === "true") ?  ProjConstants.VOICE : ProjConstants.CHAT,
     }
     if(this.connectionDetails?.autoBotId && this.connectionDetails?.autoBotId !== 'undefined') {
       welcomeMessageParams['autoBotId'] = this.connectionDetails.autoBotId;
     } else {
       welcomeMessageParams['autoBotId'] = '';
+    }
+    if (this.connectionDetails?.interactiveLanguage !== null && typeof this.connectionDetails?.interactiveLanguage !== 'undefined' && this.connectionDetails?.interactiveLanguage !== "''") {
+      welcomeMessageParams['language'] = this.connectionDetails?.interactiveLanguage; // Return the default value for null, undefined, or "''"
     }
     this.websocketService.emitEvents(EVENTS.welcome_message_request, welcomeMessageParams);
   }
@@ -314,6 +325,9 @@ export class AssistComponent implements OnInit {
     connectionDetails.entities = this.commonService.isRestore ? JSON.parse(this.commonService.previousEntitiesValue) : this.commonService.entitiestValueArray
     connectionDetails.childBotId = dialog.childBotId;
     connectionDetails.childBotName = dialog.childBotName;
+    if(dialog.userInput){
+     connectionDetails.userInput = dialog.userInput;
+    }
     let assistRequestParams = this.commonService.prepareAgentAssistRequestParams(connectionDetails);
     this.websocketService.emitEvents(EVENTS.agent_assist_request, assistRequestParams);
   }

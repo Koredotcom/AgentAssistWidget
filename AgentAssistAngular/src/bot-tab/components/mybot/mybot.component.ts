@@ -45,8 +45,12 @@ export class MybotComponent implements OnInit {
   mybotEmptyState: boolean = true;
   dialogName: string;
   isHistoryApiCalled = false;
+<<<<<<< HEAD
   mybotResponseArray: any = [];
   renderResponseType: any = RenderResponseType
+=======
+  interruptDialogFlag = false;
+>>>>>>> 4367b405311180c63fb1a402143db23faee64361
 
   constructor(public handleSubjectService: HandleSubjectService,
     public randomUUIDPipe: RandomUUIDPipe,
@@ -102,6 +106,10 @@ export class MybotComponent implements OnInit {
         this.dialogTerminatedOrIntrupptedInMyBot();
         this.viewCustomTempAttachment();
       }
+      if(this.interruptDialogFlag) {
+        this.getAgentInputValue(this.interruptDialog.name, this.projConstants.INTENT);
+        this.interruptDialogFlag = false;
+    }
     })
 
     let subscription4 = this.handleSubjectService.terminateClickEventSubject.subscribe((response: any) => {
@@ -116,9 +124,11 @@ export class MybotComponent implements OnInit {
         this.getAgentInputValue(this.projConstants.DISCARD_ALL);
         this.dialogTerminatedOrIntrupptedInMyBot();
         this.runDialogFormyBotTab(this.interruptDialog);
-        this.getAgentInputValue(this.interruptDialog.name, this.projConstants.INTENT);
+        this.interruptDialogFlag = true;
       }
     });
+
+
 
     let subscription6 = this.handleSubjectService.connectDetailsSubject.subscribe((response: any) => {
       if (response) {
@@ -567,8 +577,12 @@ export class MybotComponent implements OnInit {
       connectionDetails.value = value;
       connectionDetails.isSearch = false;
       connectionDetails.positionId = this.myBotDialogPositionId;
+      connectionDetails.childBotName = this.commonService.childBotDetails.childBotName;
+      connectionDetails.childBotId = this.commonService.childBotDetails.childBotId;
       if (intent) {
         connectionDetails.intentName = value;
+        connectionDetails.childBotName = this.commonService.childBotDetails.childBotName;
+      connectionDetails.childBotId = this.commonService.childBotDetails.childBotId;
       }
       let agent_assist_agent_request_params = this.commonService.prepareAgentAssistAgentRequestParams(connectionDetails);
       this.websocketService.emitEvents(EVENTS.agent_assist_agent_request, agent_assist_agent_request_params);

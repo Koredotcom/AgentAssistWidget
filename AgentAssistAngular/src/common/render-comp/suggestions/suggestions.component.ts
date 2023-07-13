@@ -96,6 +96,7 @@ export class SuggestionsComponent implements OnInit, OnDestroy{
     }
     connectionDetails.childBotId = searchObj.childBotId;
     connectionDetails.childBotName = searchObj.childBotName;
+    connectionDetails.userInput = searchObj.userInput;
     let requestName : string;
     let agent_assist_request_params : any = {};
     if(assistTab){

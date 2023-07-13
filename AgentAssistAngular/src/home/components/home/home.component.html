@@ -24,7 +24,8 @@
                         <div class="custom-tootltip-tabs">{{projConstants.HISTORY}}</div>
                     </div>
                     <div class="tab-icon" id="transcriptIcon" (click)="changeActiveTab(projConstants.TRANSCRIPT)"
-                        [ngClass]="{'active-tab': activeTab == projConstants.TRANSCRIPT}" [class.hide]="!commonService.isCallConversation">
+                        [ngClass]="{'active-tab': activeTab == projConstants.TRANSCRIPT}"
+                        [class.hide]="!commonService.isCallConversation">
                         <i class="ast-transcipt font-15" id="scriptIcon"></i>
                         <div class="title-tab" id="transcriptLabel">{{projConstants.TRANSCRIPT}}</div>
                         <div class="custom-tootltip-tabs">{{projConstants.TRANSCRIPT}}</div>
@@ -52,56 +53,80 @@
                     <div class="t-title">Proactive</div>
                     <label class="kr-sg-toggle">
                         <div class="hover-tooltip">Proactive</div>
-                        <input #proactiveMode 
-                            type="checkbox" 
-                            id="checkProActive" 
-                            [checked]="proactiveModeEnabled"  
-                            (change)="proactiveToggle(proactiveMode.checked)" 
+                        <input #proactiveMode
+                            type="checkbox"
+                            id="checkProActive"
+                            [checked]="proactiveModeEnabled"
+                            (change)="proactiveToggle(proactiveMode.checked)"
                             [disabled]="connectionDetails.source === projConstants.SMARTASSIST_SOURCE && connectionDetails.isProactiveAgentAssistEnabled === false"
                         >
-                        <div class="slider"  
+                        <div class="slider"
                             [ngClass]="{'cursor-notallowed' : connectionDetails.source === projConstants.SMARTASSIST_SOURCE && connectionDetails.isProactiveAgentAssistEnabled === false}">
                         </div>
                     </label>
                 </div>
             </div>
         </div>
-
-        <perfect-scrollbar id="homeScrollBar" class="home-scroll-bar" #psBottom (psYReachEnd)="onScrollEvent($event)" (psYReachStart)="onScrollEvent($event)" (psScrollUp)="onScrollEvent($event)">
-            <div class="body-data-container if-suggestion-search" id="bodyContainer" #tabBody>
-                <div class="dialog-task-data" id="dynamicBlocksData">
-                  <ng-container *ngIf = "sourceDesktop !== 'smartassist-color-scheme'">
-                    <div class="transcipt-only-calls-data" id="historyContainer" [class.hide]="activeTab != projConstants.HISTORY">
-                        <div class="data-contnet">
-                            <app-user-bot-history></app-user-bot-history>
-                        </div>
-                        <div class="scroll-bottom-show-btn hiddenEle">
-                            <button id="scrollButtonHistory" class="scroll-bottom-btn">
-                                <i class="ast-carrotup"></i>
-                                <span>Scroll to bottom</span>
-                            </button>
+        <div class="sentiment-analysis" *ngIf="showSentiChart && currentPolarity && activeTab == projConstants.ASSIST">
+            <!-- <div class="title">Current Sentiment</div> -->
+            <div class="positive-negtive-wrapper-analysis">
+                <div echarts [options]="initChartOption" class="chart-container-small" (click)="toggleSentiChart()" [merge]="mergeSentiOptions"></div>
+                <span class="title-info" [ngClass]="coachingConst.POLARITY_VS_STYLES[currentPolarity]?.className">
+                    <i [ngClass]="coachingConst.POLARITY_VS_STYLES[currentPolarity]?.icon"></i>
+                    <span>{{currentPolarity}}</span>
+                </span>
+                <div class="tooltip-analysis" *ngIf="showFullSentiChart">
+                    <div class="header-title-close">
+                        <div class="title-text">Sentiment Analysis</div>
+                        <div class="close-sentiment-anly" (click)="showFullSentiChart = false">
+                            <i class="ast-close"></i>
                         </div>
                     </div>
-                </ng-container>
+                    <div echarts [options]="chartOption" class="chart-container" [merge]="mergeSentiOptions"></div>
+                </div>
+            </div>
+        </div>
+        <perfect-scrollbar id="homeScrollBar" class="home-scroll-bar" #psBottom (psYReachEnd)="onScrollEvent($event)"
+            (psYReachStart)="onScrollEvent($event)" (psScrollUp)="onScrollEvent($event)" [ngClass]="{'if-sentiment-analysis-added' : showSentiChart}">
+            <div class="body-data-container if-suggestion-search" id="bodyContainer" #tabBody>
+                <div class="dialog-task-data" id="dynamicBlocksData">
+                    <ng-container *ngIf = "sourceDesktop !== 'smartassist-color-scheme'">
+                        <div class="transcipt-only-calls-data" id="historyContainer" [class.hide]="activeTab != projConstants.HISTORY">
+                            <div class="data-contnet">
+                                <app-user-bot-history></app-user-bot-history>
+                            </div>
+                            <div class="scroll-bottom-show-btn hiddenEle">
+                                <button id="scrollButtonHistory" class="scroll-bottom-btn">
+                                    <i class="ast-carrotup"></i>
+                                    <span>Scroll to bottom</span>
+                                </button>
+                            </div>
+                        </div>
+                    </ng-container>
                     <ng-container>
-                        <app-transcript [class.hide]="activeTab != projConstants.TRANSCRIPT"  (scrollToBottomEvent)="scrollToBottom($event)" (scrollToTranscriptElement)="scrollToTranscriptElement($event)"></app-transcript>
+                        <app-transcript [class.hide]="activeTab != projConstants.TRANSCRIPT"
+                            (scrollToBottomEvent)="scrollToBottom($event)"
+                            (newButtonScrollClickEvents)="scrollClickEvents($event)"
+                            (scrollToTranscriptElement)="scrollToTranscriptElement($event)"></app-transcript>
                     </ng-container>
                     <ng-container>
                         <div [class.hide]="activeTab != projConstants.ASSIST">
 
-                            <app-assist  (handlePopupEvent)="handlePopupEvent($event)" (scrollToBottomEvent)="scrollToBottom($event)" (newButtonScrollClickEvents)="scrollClickEvents($event)"
-                            ></app-assist>
+                            <app-assist (handlePopupEvent)="handlePopupEvent($event)"
+                                (scrollToBottomEvent)="scrollToBottom($event)"
+                                (newButtonScrollClickEvents)="scrollClickEvents($event)"></app-assist>
                         </div>
                     </ng-container>
                     <ng-container>
                         <div [class.hide]="activeTab != projConstants.LIBRARY">
 
-                            <app-library
-                                (handleSearchClickEvent)="handleSearchClickEvent($event)"></app-library>
+                            <app-library (handleSearchClickEvent)="handleSearchClickEvent($event)"></app-library>
                         </div>
                     </ng-container>
                     <ng-container>
-                        <app-mybot [class.hide]="activeTab != projConstants.MYBOT" (handlePopupEvent)="handlePopupEvent($event)" (scrollToBottomEvent)="scrollToBottom($event)"></app-mybot>
+                        <app-mybot [class.hide]="activeTab != projConstants.MYBOT"
+                            (handlePopupEvent)="handlePopupEvent($event)"
+                            (scrollToBottomEvent)="scrollToBottom($event)"></app-mybot>
                     </ng-container>
                 </div>
             </div>
@@ -113,25 +138,31 @@
         <div class="sugestions-info-data" *ngIf="activeTab != projConstants.LIBRARY">
             <!-- <input type="text" class="suggestion-input typeahead" id="agentSearch" placeholder="Ask AgentAssist"
                 (keyup.enter)="getSearchResults()" [(ngModel)]="searchText" (ngModelChange)="emptySearchTextCheck()"> -->
-                <app-typeahead [isNotLibraryTab]="true"
-        (typeahead)="emptySearchTextCheck($event)"  (typeaheadEntered)="getSearchResults($event)" [connectionData]="connectionDetails"></app-typeahead>
+            <app-typeahead [isNotLibraryTab]="true" (typeahead)="emptySearchTextCheck($event)"
+                (typeaheadEntered)="getSearchResults($event)" [connectionData]="connectionDetails"></app-typeahead>
             <i class="ast-search search-icon"></i>
             <i class="ast-close close-search" id="cancelAgentSearch" (click)="clearSearchText()"></i>
         </div>
-        <div class="overlay-suggestions" style="bottom:0" *ngIf="showSearchSuggestions && (activeTab == projConstants.ASSIST || activeTab == projConstants.MYBOT)" id="overLaySuggestions">
+        <div class="overlay-suggestions" style="bottom:0"
+            *ngIf="showSearchSuggestions && (activeTab == projConstants.ASSIST || activeTab == projConstants.MYBOT)"
+            id="overLaySuggestions">
             <div class="suggestion-content" id="overLaySearch">
                 <perfect-scrollbar class="overlaysearch-scroll-bar" #overlayps id="overlaySearchScroll">
                     <app-overlaysearch [searchType]="projConstants.AGENT_SEARCH"
                         (handleSearchClickEvent)="handleSearchClickEvent($event)"
-                        (closeSearchSuggestions)="closeSearchSuggestions($event)" (overlayScrollTop)="overlayScrollTop($event)"></app-overlaysearch>
+                        (closeSearchSuggestions)="closeSearchSuggestions($event)"
+                        (overlayScrollTop)="overlayScrollTop($event)"></app-overlaysearch>
                 </perfect-scrollbar>
             </div>
         </div>
 
         <app-terminate [class.hide]="!showTerminatePopup" (handlePopupEvent)="handlePopupEvent($event)"></app-terminate>
-        <app-interrupt-popup [class.hide]="!showInterruptPopup" (handlePopupEvent)="handlePopupEvent($event)"></app-interrupt-popup>
-        <app-summary-popup [class.hide]="!showSummaryPopup" (handlePopupEvent)="handlePopupEvent($event)" [summaryText]="summaryText"></app-summary-popup>
-        <app-restore-popup [class.hide]="!showRestorePopup" (handlePopupEvent)="handlePopupEvent($event)"></app-restore-popup>
+        <app-interrupt-popup [class.hide]="!showInterruptPopup"
+            (handlePopupEvent)="handlePopupEvent($event)"></app-interrupt-popup>
+        <app-summary-popup [class.hide]="!showSummaryPopup" (handlePopupEvent)="handlePopupEvent($event)"
+            [summaryText]="summaryText"></app-summary-popup>
+        <app-restore-popup [class.hide]="!showRestorePopup"
+            (handlePopupEvent)="handlePopupEvent($event)"></app-restore-popup>
         <!-- end -->
         <div class="footer-info" id="cust-feeling">
             <div class="event-bucket">
@@ -140,4 +171,42 @@
         </div>
         <app-loader *ngIf="isLoader"></app-loader>
     </div>
+</div>
+<div class="nudge-exp-toast-msg-wrapper">
+    <ng-container *ngFor="let item of coachingNudges; let i = index">
+        <div class="nudge-exp-toast-msg" *ngIf="item" [ngClass]="coachingConst.NUDGE_DATA[item?.expression]?.className">
+            <div class="icon_blcok" *ngIf="coachingConst.NUDGE_DATA[item?.expression]?.icon">
+                <i [ngClass]="coachingConst.NUDGE_DATA[item?.expression]?.icon"></i>
+            </div>
+            <div class="title-toast">{{item?.message?.title}}</div>
+            <div class="close-toast" (click)="coachingNudges.splice(i, 1, null)">
+                <i class="ast-close"></i>
+            </div>
+        </div>
+    </ng-container>
+</div>
+<div class="hint-experience-nudge">
+    <perfect-scrollbar class="hint-overlay" #overlayhint id="coachingHintScroll">
+        <ng-container *ngFor="let item of coachingHints; let i = index">
+            <div class="hint-blck" *ngIf="item" [ngClass]="coachingConst.HINT_DATA[item?.expression]?.className">
+                <!-- <div class="hint-bg-progress">
+                    <div class="bg-progress"></div>
+                </div> -->
+                <div class="icon_blcok" *ngIf="coachingConst.HINT_DATA[item?.expression]?.icon">
+                    <i [ngClass]="coachingConst.HINT_DATA[item?.expression]?.icon"></i>
+                </div>
+                <div class="content-data">
+                    <div class="title">{{item?.message?.title}}</div>
+                    <div class="text-desc">{{item?.message?.body}}</div>
+                    <div class="btn_okay">
+                        <button class="ok-btn" (click)="hintAckPressed(item);coachingHints.splice(i, 1, null);" *ngIf="item?.adherence?.adType === 'ack'">{{item?.adherence?.ackText}}</button>
+                    </div>
+                </div>
+                <div class="close-hint" (click)="coachingHints.splice(i, 1, null)">
+                    <i class="ast-close"></i>
+                </div>
+            </div>
+        </ng-container>
+    </perfect-scrollbar>
+
 </div>

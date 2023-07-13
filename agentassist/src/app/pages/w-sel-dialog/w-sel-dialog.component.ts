@@ -943,7 +943,7 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
         this.workflowService.deflectApps(this.appsData);
         this.notificationService.notify(this.translate.instant("ONBOARDING.BT_CREATION_SUCCESS"), 'success');
         setTimeout(() => {
-          // this.router.navigate(['/config/usecases']);
+          this.router.navigate(['/config/usecases']);
           this.workflowService.switchBt$.next(res);
           this.wSel.emit();
           this.isNewBot = false;

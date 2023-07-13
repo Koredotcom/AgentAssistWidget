@@ -188,6 +188,207 @@ and open the template in the editor.
     }
 }
 
+
+.kr-sg-new-toggle {
+    position: relative;
+    display: block;
+    margin: 0;
+    &.large{
+        .slider{
+            .slide-parent{
+                position: relative;
+                width: 40px;
+                height: 20px;
+                .slider-btn{
+                    position: absolute;
+                    cursor: pointer;
+                    width: 100%;
+                    height: 100%;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background-color: #ffffff;
+                    -webkit-transition: .4s;
+                    transition: .4s;
+                    border-radius: 18px;
+                    border: 1px solid #BDC1C6;
+                    &::before{
+                        position: absolute;
+                        content: "";
+                        height: 12px;
+                        top: 3px;
+                        width: 12px;
+                        left: 3px;
+                        right: 0;
+                        background-color: #BDC1C6;
+                        transition: .4s;
+                        border-radius: 50%;
+                    }
+                }
+            }
+        }
+        input{
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            z-index: 9;
+            font-size: 0;
+            cursor: pointer;
+            width: 40px;
+            height: 20px;
+            &:checked{
+                + .slider{
+                    .slide-parent{
+                        .slider-btn{
+                            &::before{
+                                -webkit-transform: translateX(20px);
+                                -ms-transform: translateX(20px);
+                                transform: translateX(20px);
+                                background-color: #ffffff;
+                            }
+                        }
+                    }
+                }
+            }  
+        }
+    }
+    input{
+        opacity: 0;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        z-index: 9;
+        font-size: 0;
+        cursor: pointer;
+        width: 30px;
+        height: 14px;
+        &:checked{
+            + .slider{
+                .slide-parent{
+                    .slider-btn{
+                        background-color: #2B75E4;
+                        box-shadow: 0 0 1px #2B75E4;
+                        border: 1px solid #2B75E4;
+                        &::before{
+                            -webkit-transform: translateX(15px);
+                            -ms-transform: translateX(15px);
+                            transform: translateX(15px);
+                            background-color: #ffffff;
+                        }
+                    }
+                }
+                span{
+                    font-size: 12px;
+                    color: #9AA0A6;
+                    &.yes{
+                        color: #202124;
+                        margin-left: 10px;
+                    }  
+                    &.no{
+                        color: #9AA0A6;
+                        margin-right: 10px;
+                    }    
+                    &.enabled{
+                        color: #202124;
+                        display: block;
+                        margin-left: 10px;
+                    }  
+                    &.disabled{
+                        display: none;
+                    }                                                        
+                }
+            }
+            &:disabled{
+                + .slider{
+                    .slide-parent{
+                        .slider-btn{
+                            background-color: #E7F1FF;
+                            // opacity: 0.3;
+                            box-shadow: 0 0 1px #E7F1FF;
+                            border: 1px solid #E7F1FF;
+                            cursor: default !important;
+                        }
+                    }
+                }
+            }
+        }  
+        &:disabled{
+            cursor: auto;  
+            + .slider{
+                .slide-parent{
+                    .slider-btn{
+                        background-color: #E7F1FF !important;
+                        // opacity: 0.3;
+                        box-shadow: 0 0 1px #E7F1FF !important;
+                        border: 1px solid #E7F1FF !important;
+                    }
+                }
+            }
+        }
+    }
+    .slider{
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        .slide-parent{
+            position: relative;
+            width: 30px;
+            height: 14px;
+            .slider-btn{
+                position: absolute;
+                cursor: pointer;
+                width: 100%;
+                height: 100%;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: #ffffff;
+                -webkit-transition: .4s;
+                transition: .4s;
+                border-radius: 18px;
+                border: 1px solid #BDC1C6;
+                &::before{
+                    position: absolute;
+                    content: "";
+                    height: 8px;
+                    top: 2px;
+                    width: 8px;
+                    left: 3px;
+                    right: 0;
+                    background-color: #BDC1C6;
+                    transition: .4s;
+                    border-radius: 50%;
+                }
+            }
+        }
+        span{
+            font-size: 12px;
+            color: #9AA0A6;
+            cursor: pointer;
+            &.yes{
+                color: #9AA0A6;
+                margin-left: 10px;
+            }  
+            &.no{
+                color: #202124;
+                margin-right: 10px;
+            }    
+            &.enabled{
+                color: #202124;
+                display: none;
+                margin-left: 10px;
+            }  
+            &.disabled{
+                margin-left: 10px;
+                display: block;
+            }                                                        
+        }
+    }
+}
+
 /*---- TOGGLE ENDS HERE---*/
 
 /*---- BUTTON STYLES START HERE---*/
@@ -218,7 +419,6 @@ and open the template in the editor.
     }
     &.btn_md{
         height: 30px;
-        font-size: 14px;
     }
     &.btn_lg{
         height: 34px;
@@ -298,7 +498,6 @@ and open the template in the editor.
     }
     &.btn_md{
         height: 30px;
-        font-size: 14px;
     }
     &.btn_lg{
         height: 34px;
@@ -336,7 +535,6 @@ and open the template in the editor.
     }
     &.btn_md{
         height: 30px;
-        font-size: 14px;
     }
     &.btn_lg{
         height: 34px;
@@ -381,7 +579,6 @@ and open the template in the editor.
     }
     &.btn_md{
         height: 30px;
-        font-size: 14px;
     }
     &.btn_lg{
         height: 34px;
@@ -419,7 +616,6 @@ and open the template in the editor.
     }
     &.btn_md{
         height: 30px;
-        font-size: 14px;
     }
     &.btn_lg{
         height: 34px;
@@ -465,7 +661,6 @@ and open the template in the editor.
     }
     &.btn_md{
         height: 30px;
-        font-size: 14px;
         img{
             width: 16px;
             height: 16px;

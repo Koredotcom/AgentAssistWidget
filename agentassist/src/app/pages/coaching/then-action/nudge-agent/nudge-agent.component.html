@@ -1,0 +1,95 @@
+<div class="utterance-triggers">
+    <span class="utt-name-desc">Nudge agent with this  </span>
+    <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body">
+        <button class="dropdown-toggle btn-toggle" [ngClass]="{'text-choosen': !!selMsgType}" ngbDropdownToggle>
+            <span class="choose-text">{{selMsgType ? selMsgType : '{ Choose }'}}</span>
+        </button>
+        <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
+            <ng-container *ngFor="let type of msgTypes">
+                <li ngbDropdownItem class="list-item-li" (click)="selectMsgType(type.type)">
+                    <span class="bg-action {{type.class}}"></span>
+                    <span class="title">{{type.type | titlecase}}</span>
+                </li>
+            </ng-container>
+        </ul>
+    </div>
+
+    <span class="utt-name-desc">message</span>
+
+    <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body" #nudgeMessage="ngbDropdown">
+        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!showNudgeMsg}" (click)="nudgeMsg = showNudgeMsg">
+            <span class="choose-text">{{showNudgeMsg ? showNudgeMsg : '{ Choose }'}}</span>
+        </button>
+        <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
+            <div class="variable-value-input with-check-icon">
+                <div class="input-variable-sec">
+                    <div class="label-text">Nudge Message</div>
+                    <div class="kr-sg-input-text">
+                        <!-- <span class="info-tip" tooltipClass="tooltip-global-styles" ngbTooltip="Tooltip info">
+                            <i class="icon-sa-help"></i>
+                        </span> -->
+                        <input type="text" placeholder="Enter Nudge Message"
+                            class="input-text" maxlength="42" [(ngModel)]="nudgeMsg">
+                    </div>
+                    <div class="count-char">{{nudgeMsg.length}}/42</div>
+                </div>
+                <div class="check-icon-block" (click)="submitnudgeMsg();nudgeMessage.close()">
+                    <i class="icon-sa-conv-check"></i>
+                </div>
+            </div>
+        </ul>
+    </div>
+    <div class="add-adherence" *ngIf="!selectedAdherence">
+        <!-- <button class="add-adherence-btn" (click)="openAdherence()">
+            <span class="choose-text"> {{(form?.value?.adherence?.utteranceCount) ? form?.value?.adherence?.utteranceCount + ' utterance(s)' : '+ Add Adherence'}}</span>
+        </button> -->
+        <div class="add-trgigger-dropdown" ngbDropdown placement="bottom">
+            <button class="add-triggers-btn" ngbDropdownToggle> + Add Adherence</button>
+            <div class="drop-add-trigger" ngbDropdownMenu>
+                <ng-container *ngTemplateOutlet="addAdherenceTemplate;"></ng-container> 
+            </div>
+        </div>
+    </div>
+    <div class="delete-row" (click)="deleteActionRule()"> 
+        <i class="icon-sa-welcome-delete"></i>
+    </div>
+</div>
+
+
+<ng-template #hintActions>
+
+</ng-template>
+
+<!-- adherence selection starts -->
+<ng-container *ngIf="selectedAdherence">
+    <app-adherence-selection [adherenceForm]="form" [createOrEdit]="createOrEdit" [adherenceSelection]="selectedAdherence" (deleteAdherence)="deleteAdherenceClick($event)" [adhereClick]=" adherenceClick" ></app-adherence-selection>
+</ng-container>
+
+<!-- COmmon trigger template -->
+<ng-template #addAdherenceTemplate>
+    <div class="add-triggers">
+        <!-- <div class="line-indicator"></div> -->
+        <div class="choose-triggers-block">
+            <div class="heading-title">Choose a Trigger</div>
+            <div class="choose-t-block-bg">
+                <div class="choose-t-block">
+                    <ng-container *ngFor="let adherence of allAdherences">
+
+                        <div class="inner-card-choose" [ngClass]="{'disableTrigger' : adherence.disable?.nudge}">
+                            <div class="content-choose-triggers" ngbDropdownItem (click)="selectAdherenceClick(adherence.type)">
+                                <div class="icon_blk">
+                                    <img src="{{adherence.icon}}">
+                                </div>
+                                <div class="info-data-content">
+                                    <div class="title-choose">{{adherence.title}}</div>
+                                    <div class="desc-text">{{adherence.desc}}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template> 

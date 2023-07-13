@@ -168,3 +168,94 @@ export const FeebackConst = {
     DISLIKE : 'dislike',
     DISLIKE_LIST : ['Wrong suggestions', 'Incorrect intent', 'Accidental click', 'Time taking', 'Other']
 }
+export const coachingConst = {
+    NUDGE_DATA: {
+        positive: {
+            color: '#22C55E',
+            icon: 'ast-positive-nudge'
+        },
+        neutral: {
+            color: '#E5E5E5',
+            className : 'neutral-nudge'
+        },
+        alert: {
+            color: '#F59E0B',
+            icon: 'ast-warning-nudge',
+            className : 'warning-nudge'
+        },
+        critical: {
+            color: '#EF4444',
+            icon: 'ast-hand-drag-solid',
+            className : 'critical-nudge'
+        }
+    },
+
+    HINT_DATA: {
+        positive: {
+            color: '#22C55E',
+            icon: 'ast-positive-nudge'
+        },
+        neutral: {
+            color: '#E5E5E5',
+            className : 'natural-hint'
+        },
+        alert: {
+            color: '#F59E0B',
+            icon: 'ast-warning-nudge',
+            className : 'warning-hint'
+        },
+        critical: {
+            color: '#EF4444',
+            icon: 'ast-hand-drag-solid',
+            className : 'critical-hint'
+        }
+    },
+    SENTIMENT_ANALYSIS : {
+        negative : {
+            color : "#EF4444",
+            title : "Negative",
+            percentage : "20%"
+        },
+        neutral : {
+            color : "#FBBF24",
+            title : "Neutral",
+            percentage : "40%"
+        },
+        positive : {
+            color : "#47B39C",
+            title : "Positive",
+            percentage : "40%"
+        },
+    },
+    SENTI_CHART_YAXIS_LIST : {
+        [-2] : '-Neg',
+        0 : 'Neu',
+        2 : '+Pos'
+    },
+    SENTI_POLARITY_MAP : {
+        1 : -2,
+        2 : -1,
+        3 : -1,
+        4 : 0,
+        5 : 0,
+        6 : 0,
+        7 : 1,
+        8 : 1,
+        9 : 2,
+        10 : 2
+    },
+    POLARITY_VS_STYLES : {
+        'Positive' : {
+            className : 'positive-title',
+            icon : 'ast-thumbup'
+        },
+        'Neutral' : {
+            className : 'neutral-title',
+            icon : 'ast-thumbup'
+        },
+        'Negative' : {
+            className : 'negative-title',
+            icon : 'ast-thumbdown'
+        }
+    }
+}

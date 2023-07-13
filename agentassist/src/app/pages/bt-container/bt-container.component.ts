@@ -74,7 +74,7 @@ export class BTContainerComponent implements OnInit, AfterViewInit, OnDestroy {
     return new Promise((resolve, reject) => {
       interval = setInterval(() => {
         doc = this.iframe.nativeElement.contentDocument;
-        var btns = doc.querySelectorAll(".btnSolidBlue");
+        var btns = doc?.querySelectorAll(".btnSolidBlue");
         if (btns && btns.length > 0) {
           for (var i = 0; i < btns.length; i++) {
             if (btns[i] && btns[i].getAttribute("ng-click") === `showForm($event, 'dialogTasks')`) {

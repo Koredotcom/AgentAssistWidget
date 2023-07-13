@@ -99,6 +99,7 @@ import { SearchAssistComponent } from './pages/search-assist/search-assist.compo
 import { SaDeleteConfirmComponent } from './helpers/components/sa-delete-confirm/sa-delete-confirm.component';
 import { ConvsHistoryLogsComponent } from './pages/conversational-logs/convs-history-logs/convs-history-logs.component';
 import { CommonModule } from '@angular/common';
+
 @NgModule({
   declarations: [
     AppComponent,

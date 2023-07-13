@@ -1,0 +1,221 @@
+<div class="add-addherence-slider-wrapper">
+    <div class="header-sec">
+        <div class="left-sec">
+            <div class="icon_block">
+                <i class="icon-sa-welcome-chat"></i>
+            </div>
+            <div class="utt-name">Utterance</div>
+            <!-- <div class="dropdown-adherence" ngbDropdown #utteranceTrigger="ngbDropdown">
+                <button class="dropdown-toggle btn-toggle" ngbDropdownToggle>Utterance Trigger <i class="icon-sa-arrow-down"></i></button>
+                <ul class="dropdown_menu-wrapper" ngbDropdownMenu id="utteranceTriggerMenu">
+                    <perfect-scrollbar class="mx-h-300">
+                        <li ngbDropdownItem class="list-item-li">
+                            <span class="title">Options</span>
+                        </li>
+                        <li ngbDropdownItem class="list-item-li">
+                            <span class="title">Options</span>
+                        </li>
+                        <li ngbDropdownItem class="list-item-li">
+                            <span class="title">Options</span>
+                        </li>
+                        <li ngbDropdownItem class="list-item-li">
+                            <span class="title">Options</span>
+                        </li>
+                    </perfect-scrollbar>
+                </ul>
+            </div> -->
+        </div>
+        <div class="close-slider" (click)="closeAdherence()">
+            <i class="icon-sa-close"></i>
+        </div>
+    </div>
+    <div class="adherence-body-data">
+        <div class="inner-data-content">
+            <div class="left-sec-addherence">
+                <perfect-scrollbar>
+                    <div class="scrol-data">
+                        <div class="add-utterences-drp">
+                            <div class="label-text">Utterances</div>
+                            <div class="dropdown-adherence" ngbDropdown #utteranceDropdown="ngbDropdown">
+                                <input type="text" class="drp-input-search"  ngbDropdownToggle [formControl]="searchKey">
+                                <div class="text_info">Type an utterance that the person might say...</div>
+                                <ul class="dropdown_menu-wrapper" ngbDropdownMenu id="utteranceDropdownMenu">
+                                    <div class="body-dropdown">
+                                        <ng-container *ngIf="loaded; else loading">
+                                            <div class="searchedutt" *ngIf="searchKey.value">
+                                                <div class="kr-sg-checkbox">
+                                                    <input id="checkbox-1" #searchRef class="checkbox-custom" type="checkbox">
+                                                    <label for="checkbox-1" class="checkbox-custom-label">{{searchKey.value}}</label>
+                                                </div>
+                                                <div class="percentage-colr">
+                                                    <!-- <span class="percentage">12%</span>
+                                                    <span class="bgcolor"></span> -->
+                                                </div>
+                                            </div>
+                                            <div class="found-details-info" *ngIf="searchKey.value?.length > 0 && cs.metaForUtternace?.integration">
+                                                <div class="found-ai-count">
+                                                    <i class="icon-coaching--ai"></i>
+                                                    <span>Found {{openAiUtteranceArray?.length}}</span>
+                                                </div>
+                                                <div class="found-desc">Similar utterances with the same meaning</div>
+                                                <perfect-scrollbar>
+                                                    <div class="found-items-scroll">
+                                                        <ng-container *ngFor="let utter of openAiUtteranceArray;let i = index">
+                                                            <div class="item-data-found" >
+                                                                <div class="kr-sg-checkbox">
+                                                                    <input id="'checkbox-' + {{i}}" class="checkbox-custom" type="checkbox" [checked]="utter.enabled" (click)="changeUtterActiveStatus(utter)">
+                                                                    <label for="'checkbox-' + {{i}}" class="checkbox-custom-label">{{utter.sentence}}</label>
+                                                                </div>
+                                                                <div class="percentage-colr">
+                                                                    <!-- <span class="percentage">12%</span>
+                                                                    <span class="bgcolor"></span> -->
+                                                                </div>
+                                                            </div>
+                                                        </ng-container>
+                                                        <!-- <div class="ai-working-loader">
+                                                            <div class="loader-round"></div>
+                                                        </div> -->
+                                                    </div>
+                                                </perfect-scrollbar>
+                                            </div>
+                                        </ng-container>
+                                        <ng-template #loading>
+                                            <ng-container>
+                                                <div class="ai-itassist-wrapper">
+                                                    <div class="label-heading"><i class="icon-coaching--ai"></i> Assistant</div>
+                                                    <div class="no-data-loader">
+                                                        <div class="sk-fading-circle">
+                                                            <div class="sk-circle1 sk-circle"></div>
+                                                            <div class="sk-circle2 sk-circle"></div>
+                                                            <div class="sk-circle3 sk-circle"></div>
+                                                            <div class="sk-circle4 sk-circle"></div>
+                                                            <div class="sk-circle5 sk-circle"></div>
+                                                            <div class="sk-circle6 sk-circle"></div>
+                                                            <div class="sk-circle7 sk-circle"></div>
+                                                            <div class="sk-circle8 sk-circle"></div>
+                                                            <div class="sk-circle9 sk-circle"></div>
+                                                            <div class="sk-circle10 sk-circle"></div>
+                                                            <div class="sk-circle11 sk-circle"></div>
+                                                            <div class="sk-circle12 sk-circle"></div>
+                                                        </div>
+                                                        <div class="thinking-text">Working...</div>
+                                                    </div>
+                                                </div>
+                                            </ng-container>
+                                        </ng-template>
+                                    </div>
+                                    <div class="footer-add">
+                                        <button class="kr-sg-button-secondary btn_lg" (click)="clearAIsuggestions(utteranceDropdown)">Clear</button>
+                                        <button class="kr-sg-button-primary btn_lg" (click)="saveUtterances();clearAIsuggestions(utteranceDropdown)" [disabled]="addButtonClick">Add</button>
+                                    </div>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="protip-hint-info" *ngIf="selectedUtterancesArray.length == 0 && selectedNewUtterances?.length == 0">
+                            <i class="icon-sa-welcome-bulb"></i>
+                            <div class="content-data-hint">
+                                <div class="title">New! Enhanced module</div>
+                                <div class="desc-hint">The utterance module is now enhanced with generative AI functionality that will simplify the need for utterance additions. </div>
+                            </div>
+                        </div>
+                        <div class="saved-utterances" *ngIf="selectedUtterancesArray?.length > 0 || selectedNewUtterances?.length > 0">
+                            <div class="heading-saved">Saved Utterances</div>
+                            <!-- Repeat Data -->
+                            <ng-container *ngFor="let utter of selectedUtterancesArray; let iD = index">
+                                <div class="saved-utt-body-sec">
+                                    <div class="saved-title-utt">{{utter?.utterance}}</div>
+                                    <div class="percentage-colr">
+                                        <!-- <span class="percentage">12%</span>
+                                        <span class="bgcolor"></span> -->
+                                    </div>
+                                    <div class="delete-saved-utt" (click)="deleteUtternce(utter, iD)">
+                                        <i class="icon-sa-welcome-delete"></i>
+                                    </div>
+                                </div>
+                            </ng-container>
+                            <ng-container *ngFor="let utter of selectedNewUtterances;let iDx = index">
+                                <div class="saved-utt-body-sec">
+                                    <div class="saved-title-utt">{{utter?.utterance}}</div>
+                                    <div class="percentage-colr">
+                                        <!-- <span class="percentage">12%</span>
+                                        <span class="bgcolor"></span> -->
+                                    </div>
+                                    <div class="delete-saved-utt" (click)="deleteUtternceNew(utter?.utterance, iDx)">
+                                        <i class="icon-sa-welcome-delete"></i>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </div>
+                </perfect-scrollbar>
+            </div>
+            <div class="found-utternaces">
+                <!-- <div class="loading-data-sec">
+                    <div class="empty-loader"></div>
+                    <div class="empty-text">Waiting for utterance</div>
+                </div> -->
+                <div class="data-loaded-searched-utt">
+                    <perfect-scrollbar>
+                        <div class="scroll-data">
+                            <div class="skelton-load-empty" *ngIf="false">
+                                <ng-container *ngFor="let item of [].constructor(12)">
+                                    <div class="loading-skelton">
+                                        <div class="bg-1"></div>
+                                        <div class="bg-2"></div>
+                                    </div>
+                                </ng-container>
+                            </div>
+                            <div class="empty-search">
+                                <div class="img-block-empty">
+                                    <img src="assets/icons/empty-search-add.svg">
+                                </div>
+                                <p>No conversation history found.</p>
+                            </div>
+                            <div class="chat-conv-utterance d-none">
+                                <div class="conversations-type">
+                                    <div class="top-info-conv">
+                                        <span class="u-name">Eddison Tom</span>
+                                        <span class="date-time">Jun 01, 2022 at 2:45:22AM</span>
+                                    </div>
+                                    <div class="conv-msg">Yeah, No. This price is too expensive for me.</div>
+                                </div>
+                                <div class="conversations-type">
+                                    <div class="top-info-conv">
+                                        <span class="u-name">Eddison Tom</span>
+                                        <span class="date-time">Jun 01, 2022 at 2:45:22AM</span>
+                                    </div>
+                                    <div class="conv-msg">Yeah, No. This price is too expensive for me.</div>
+                                </div>
+                                <div class="conversations-type">
+                                    <div class="top-info-conv">
+                                        <span class="u-name">Eddison Tom</span>
+                                        <span class="date-time">Jun 01, 2022 at 2:45:22AM</span>
+                                    </div>
+                                    <div class="conv-msg">Yeah, No. This price is too expensive for me.</div>
+                                </div>
+                                <div class="conversations-type">
+                                    <div class="top-info-conv">
+                                        <span class="u-name">Eddison Tom</span>
+                                        <span class="date-time">Jun 01, 2022 at 2:45:22AM</span>
+                                    </div>
+                                    <div class="conv-msg">Yeah, No. This price is too expensive for me.</div>
+                                </div>
+                                <div class="conversations-type">
+                                    <div class="top-info-conv">
+                                        <span class="u-name">Eddison Tom</span>
+                                        <span class="date-time">Jun 01, 2022 at 2:45:22AM</span>
+                                    </div>
+                                    <div class="conv-msg">Yeah, No. This price is too expensive for me.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </perfect-scrollbar>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer-actions">
+        <button class="kr-sg-button-secondary btn_lg" (click)="closeAdherence('utterance')">Cancel</button>
+        <button class="kr-sg-button-primary btn_lg" (click)="saveUtteranceStrings()" [disabled]="selectedUtterancesArray?.length === 0 && selectedNewUtterances?.length === 0">Okay</button>
+    </div>
+</div>

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from "rxjs";
+import { BehaviorSubject, Observable, Subject } from "rxjs";
 import { ProjConstants, storageConst } from '../constants/proj.cnts';
 import { EVENTS } from '../helper/events';
 import { SanitizeHtmlPipe } from '../pipes/sanitize-html.pipe';
@@ -24,8 +24,19 @@ export class WebSocketService {
   agentAssistUserMessageResponse$ : BehaviorSubject<any[]> = new BehaviorSubject(null);
   agentFeedbackResponse$ : BehaviorSubject<any[]> = new BehaviorSubject(null);
   responseResolutionCommentsResponse$ : BehaviorSubject<any[]> = new BehaviorSubject(null);
+  agentCoachingResponse$ = new Subject<any>();
+  realtimeSentimeResponse$ = new Subject<any>();
   isWelcomeResonse = false;
   LoaderTimeout: number = 10000;
+
+  loaderEvents = {
+    'welcome_message_request' : true,
+    'agent_assist_request' : true,
+    'agent_menu_request': true,
+    'agent_feedback_request' : true,
+    'agent_assist_agent_request' : true,
+    'request_resolution_comments' : true,
+  }
 
 
   constructor(private handleSubjectService : HandleSubjectService,
@@ -64,7 +75,10 @@ export class WebSocketService {
       requestParams.source = this.connectionDetails.source;
       requestParams.experience = (this.connectionDetails.isCall && this.connectionDetails.isCall == "true") ?  ProjConstants.VOICE : ProjConstants.CHAT
     }
-    this.loaderOnTimer()
+    if(this.loaderEvents[eventName]) {
+      this.loaderOnTimer()
+    }
+
     this._agentAsisstSocket.emit(eventName, requestParams);
   }
 
@@ -102,6 +116,16 @@ export class WebSocketService {
 
     this._agentAsisstSocket.on(EVENTS.agent_menu_response, (data) => {
       this.agentMenuResponse$.next(data);
+      this.addOrRemoveLoader(false);
+    });
+
+    this._agentAsisstSocket.on(EVENTS.agent_coaching_response, (data)=>{
+      this.agentCoachingResponse$.next(data);
+      this.addOrRemoveLoader(false);
+    });
+
+    this._agentAsisstSocket.on(EVENTS.realtime_sentiment_response, (data) => {
+      this.realtimeSentimeResponse$.next(data);
       this.addOrRemoveLoader(false);
     });
 
