@@ -5,7 +5,7 @@
             <!-- tooltipClass="tooltip-global-styles" ngbTooltip="2 Rules ready for Publish"  -->
             <button class="kr-sg-button-secondary-two btn_lg mr-2" (click)="publishCoaching()" [disabled]="publishInprogress || !(rulePresent)"><i class="icon-coaching-publish mr-2"></i>Publish</button>
             <!-- <button class="kr-sg-button-primary btn_lg" (click)="openCoachingGroup(coachingConst.CREATE, {})">+ New Coaching Group</button> -->
-            <button class="kr-sg-button-primary btn_lg" (click)="newRule(newRuleModal)">+ New Rule</button>
+            <button class="kr-sg-button-primary btn_lg" (click)="openFLowCreation(flowCreation, {},'create')">+ New Rule</button>
         </div>
     </div>
 
@@ -46,7 +46,7 @@
                                             </div>
                                             <div class="right-info">
                                                 <div class="items-count">{{res.rules?.length}} Item(s)</div>
-                                                <button class="new-rule-btn" (click)="$event.stopPropagation();openFLowCreation(flowCreation, res, i, {}, 'create')">+ New Rule</button>
+                                                <!-- <button class="new-rule-btn" (click)="$event.stopPropagation();openFLowCreation(flowCreation, res, i, {}, 'create')">+ New Rule</button> -->
                                                 <div class="arrow-rotate">
                                                     <i class="icon-sa-arrow-down"></i>
                                                 </div>
@@ -72,7 +72,7 @@
                                                 <div class="body-data-table-wrapper-coaching" *ngFor="let rule of res?.rules; let inx = index" cdkDrag (cdkDragStarted)="dragStart=true" (cdkDragEnded)="dragStart=false;clearInterVal()">
                                                     <div class="title-text rule-text w-25" [title]="rule.name">{{rule.name}}</div>
                                                     <div class="actions-info w-15">
-                                                        <button class="edit-btn" (click)="openFLowCreation(flowCreation, res, i, rule, 'edit', inx);">
+                                                        <button class="edit-btn" (click)="openFLowCreation(flowCreation, {}, 'edit');">
                                                             <i class="icon-sa-welcome-edit"></i>
                                                         </button>
                                                         <button class="delete-btn" (click)="openDeleteRule(rule, res._id, i)">
@@ -369,73 +369,5 @@
 
 
 <ng-template #flowCreation>
-    <app-coaching-rule-create (onCloseRule)="closeFLowCreation($event)" [createOrEdit]="createOrEdit" [currentRule]="currentRule" [groupDetails]="selectedRuleGroup" [groupIndex]="selectedRuleGroupIndex"></app-coaching-rule-create>
-</ng-template>
-
-
-
-
-
-
-
-<ng-template #newRuleModal let-modal>
-    <div class="modal-wrapper-coaching">
-      <div class="header-wrapper">
-        <div class="title-heading">New Rule</div>
-        <div class="close-modal" (click)="closeRule()">
-          <i class="icon-sa-close"></i>
-        </div>
-      </div>
-      <div class="body-wrapper"> 
-        <div class="kr-sg-input-text m-b-15">
-            <div class="label-text">Add Name</div>
-            <input type="text" placeholder="Placeholder text" class="input-text">
-        </div>   
-        <div class="kr-sg-input-text-area m-b-15">
-            <div class="label-text">Description</div>
-            <textarea placeholder="Rule Purpose" class="input-text"></textarea>                                
-        </div>
-
-        <div class="kr-sg-dropdowns m-b-15" ngbDropdown>
-            <div class="label-text">Tags</div>
-            <div class="editable-div" contenteditable="true" ngbDropdownToggle placeholder="Select">
-                <div class="chip-name">
-                    <span>Pricing</span>
-                    <i class="icon-sa-close"></i>
-                </div>
-            </div>
-            <ul class="dropdown-menu content-menu" ngbDropdownMenu>
-                <div class="kr-sg-checkbox">
-                    <input id="checkbox1" class="checkbox-custom" type="checkbox">
-                    <label for="checkbox1" class="checkbox-custom-label">
-                        <span>General</span>
-                    </label>
-                </div>
-                <div class="kr-sg-checkbox">
-                    <input id="checkbox11" class="checkbox-custom" type="checkbox">
-                    <label for="checkbox11" class="checkbox-custom-label">
-                        <span>General</span>
-                    </label>
-                </div>
-              </ul>
-        </div>
-        <div class="channels-tags">
-            <div class="label-text">Channels</div>
-            <div class="channels-check">
-                <div class="check-item">
-                    <input id="checkbox-1" type="checkbox">
-                    <span for="checkbox-1">Voice</span>
-                </div>
-                <div class="check-item">
-                    <input id="checkbox-2" type="checkbox">
-                    <span for="checkbox-2">Live Chat</span>
-                </div>
-            </div>
-        </div>
-      </div>
-      <div class="footer-wrapper">
-        <button class="kr-sg-button-secondary-two btn_lg" (click)="closeRule()">Cancel</button>
-        <button class="kr-sg-button-primary btn_lg">Apply</button>
-      </div>
-    </div>
+    <app-coaching-rule-create (onCloseRule)="closeFLowCreation($event)" [createOrEdit]="createOrEdit" [currentRule]="currentRule"></app-coaching-rule-create>
 </ng-template>

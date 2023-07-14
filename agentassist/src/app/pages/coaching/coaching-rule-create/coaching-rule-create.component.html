@@ -1,5 +1,5 @@
 
-<form [formGroup]="ruleForm" (keydown.enter)="$event.preventDefault()">
+<form (keydown.enter)="$event.preventDefault()" [formGroup]="ruleForm">
 <div class="flow-creation-wrapper-container">
     <div class="heading-actions-block">
         <div class="left-content">
@@ -51,9 +51,9 @@
                     <i class="icon-sa-message"></i>
                 </button>
             </div>
-        </div>
+        </div> 
         <div class="btn-actions">
-            <button class="settings-actions">
+            <button class="settings-actions" (click)="openSettings()">
                 <i class="icon-sa-settings"></i>
             </button>
             <button class="kr-sg-button-secondary btn_lg" (click)="closeRuleScreen()">Cancel</button>
@@ -259,6 +259,96 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #newRuleModal>
+    <div class="modal-wrapper-coaching">
+        <div class="header-wrapper">
+            <div class="title-heading">New Rule</div>
+            <div class="close-modal" (click)="closeBasicRule()">
+                <i class="icon-sa-close"></i>
+            </div>
+        </div>
+        <div class="body-wrapper">
+            <div class="kr-sg-input-text m-b-15">
+                <div class="label-text">Add Name</div>
+                <input type="text" [(ngModel)]="name" placeholder="Placeholder text" class="input-text">
+            </div>
+            <div class="kr-sg-input-text-area m-b-15">
+                <div class="label-text">Description</div>
+                <textarea [(ngModel)]="description" placeholder="Rule Purpose" class="input-text"></textarea>
+            </div>
+
+            <!-- <div class="kr-sg-dropdowns m-b-15" ngbDropdown>
+                <div class="label-text">Tags</div>
+                <div class="editable-div" contenteditable="true" ngbDropdownToggle placeholder="Select">
+                    <div class="chip-name">
+                        <span>Pricing</span>
+                        <i class="icon-sa-close"></i>
+                    </div>
+                </div>
+                <ul class="dropdown-menu content-menu" ngbDropdownMenu>
+                    <div class="kr-sg-checkbox">
+                        <input id="checkbox1" class="checkbox-custom" type="checkbox">
+                        <label for="checkbox1" class="checkbox-custom-label">
+                            <span>General</span>
+                        </label>
+                    </div>
+                    <div class="kr-sg-checkbox">
+                        <input id="checkbox11" class="checkbox-custom" type="checkbox">
+                        <label for="checkbox11" class="checkbox-custom-label">
+                            <span>General</span>
+                        </label>
+                    </div>
+                </ul>
+            </div> -->
+
+            <mat-form-field class="example-chip-list" appearance="fill">
+                <mat-label>Favorite Fruits</mat-label>
+                <mat-chip-list #chipList aria-label="Fruit selection">
+                  <mat-chip
+                    *ngFor="let fruit of filteredFruits"
+                    >
+                    {{fruit}}
+                    <button matChipRemove>
+                      <mat-icon>cancel</mat-icon>
+                    </button>
+                  </mat-chip>
+                  <input
+                    placeholder="New fruit..."
+                    #fruitInput
+                    [matAutocomplete]="auto"
+                    [matChipInputFor]="chipList"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                    (matChipInputTokenEnd)="add($event)">
+                </mat-chip-list>
+                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+                  <mat-option *ngFor="let fruit of filteredFruits" [value]="fruit">
+                    {{fruit}}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+
+
+            <div class="channels-tags">
+                <div class="label-text">Channels</div>
+                <div class="channels-check">
+                    <div class="check-item">
+                        <input id="checkbox-1" type="checkbox">
+                        <span for="checkbox-1">Voice</span>
+                    </div>
+                    <div class="check-item">
+                        <input id="checkbox-2" type="checkbox">
+                        <span for="checkbox-2">Live Chat</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-wrapper">
+            <button class="kr-sg-button-secondary-two btn_lg" (click)="closeBasicRule()">Cancel</button>
+            <button class="kr-sg-button-primary btn_lg" (click)="submitForm()">Apply</button>
         </div>
     </div>
 </ng-template>

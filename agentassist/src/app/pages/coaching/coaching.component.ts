@@ -152,10 +152,10 @@ export class CoachingComponent implements OnInit, OnDestroy {
 
 
   // Create or Edit Rule Flow Starts
-    openFLowCreation(flowCreation, group,index, rule, type, ruleIndex?) {
-      this.selectedRuleGroup = group;
-      this.selectedRuleGroupIndex = index;
-      this.selectedRuleIndex = ruleIndex;
+    openFLowCreation(flowCreation, rule?, type=COACHINGCNST.EDIT) {
+      // this.selectedRuleGroup = group;
+      // this.selectedRuleGroupIndex = index;
+      // this.selectedRuleIndex = ruleIndex;
       if(type === COACHINGCNST.EDIT){
         this.createOrEdit = COACHINGCNST.EDIT;
         this.currentRule = rule;

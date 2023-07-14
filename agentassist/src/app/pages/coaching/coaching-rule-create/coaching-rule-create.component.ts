@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, HostListener, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { COACHINGCNST } from '../coaching.cnst';
 import { CoachingService } from '../coaching.service';
@@ -12,6 +12,8 @@ import { AuthService } from '@kore.services/auth.service';
 import { LocalStoreService } from '@kore.services/localstore.service';
 import { NotificationService } from '@kore.services/notification.service';
 import { TranslateService } from '@ngx-translate/core';
+import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 @Component({
   selector: 'app-coaching-rule-create',
   templateUrl: './coaching-rule-create.component.html',
@@ -24,14 +26,20 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
   @Output() onCloseRule = new EventEmitter();
   @Input() createOrEdit = '';
   @Input() currentRule:any;
+  @ViewChild('newRuleModal', { static: true }) newRuleModal;
   loading = false;
-  ruleForm :FormGroup;
+  ruleForm: FormGroup;
+  // ruleBasic: FormGroup;
   modalRef : any;
   formTouched : boolean = false;
   selAcc = this.local.getSelectedAccount();
 
   coachingCnst : any = COACHINGCNST
   triggerClick : boolean = false;
+  modalFlowCreateRef:any;
+  name = '';
+  description = '';
+  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   allTriggers = [
     {
       type: this.coachingCnst.UTTERANCE,
@@ -124,6 +132,9 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
     }
     if(changes?.createOrEdit?.currentValue === COACHINGCNST.CREATE){
       this.createForm();
+      setTimeout(() => {
+        this.newRule(this.newRuleModal);
+      }, 1000);
       // this.subscribeValChanges();
     };
     setTimeout(() => {
@@ -181,11 +192,18 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
   }
 
   createForm(){
+    
+    // this.ruleBasic = new FormGroup({
+
+    // });
+
     this.ruleForm = new FormGroup(
       {
-        "botId": new FormControl(this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id, [Validators.required]),
         "name": new FormControl('',[Validators.required]),
-        // "description": new FormControl('',[Validators.required]),
+        "description": new FormControl(''),
+        "tags": this.fb.array([]),
+        "channels": this.fb.array([]),
+        "botId": new FormControl(this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id, [Validators.required]),
         "triggers": this.fb.array([]),
         "actions": this.fb.array([]),
         "assignees": this.fb.array([]),
@@ -291,13 +309,12 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
   deleteAction(index){
     if(this.createOrEdit === COACHINGCNST.EDIT){
       let id = (<FormArray>this.ruleForm.controls["actions"]).at(index)?.value?._id;
-      // (<FormArray>this.ruleForm.controls["deleteActions"]).push(id);
       this.ruleForm.controls["deleteActions"].value.push(id);
     }
     (<FormArray>this.ruleForm.controls["actions"]).removeAt(index);
   }
 
-  closeRuleScreen(rule?) {        
+  closeRuleScreen(rule?) {      
     if(this.formTouched){
       this.modalRef = this.modalService.open(CoachingConfirmationComponent, { centered: true, keyboard: false, windowClass: 'delete-uc-rule-modal', backdrop: 'static' });
       this.modalRef.result.then(emitedValue => {
@@ -311,4 +328,50 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
     }
   }
 
+  newRule(newRuleModal: any) {
+    this.modalFlowCreateRef = this.modalService.open(newRuleModal, {
+      windowClass: 'modal-ngb-wrapper-window',
+      centered: true,
+      backdrop: 'static',
+    });
+  }
+  isSettings = false;
+  closeBasicRule(){
+    if(this.createOrEdit == COACHINGCNST.CREATE && !this.isSettings){
+      this.modalFlowCreateRef.close();
+      this.closeRule();
+    }else{
+      this.modalFlowCreateRef.close();
+      this.isSettings = false;
+    }
+  }
+
+  submitForm(){
+    this.ruleForm.controls['name'].patchValue(this.name);
+    this.ruleForm.controls['description'].patchValue(this.description);
+    console.log("description", this.ruleForm.value)
+    this.modalFlowCreateRef.close();
+  }
+  
+  openSettings(){
+    this.isSettings = true;
+    this.newRule(this.newRuleModal);
+    this.name = this.ruleForm.value?.name;
+    this.description = this.ruleForm.value?.description;
+  }
+
+  OnDidNumberUpdated(e){
+
+  }
+  didNumbers: any[] = ["abc", "def"];
+  onDIDNumberRemove(e){
+
+  }
+  filteredFruits = ["abc", "def"]
+  onDidNumberFocus(e){
+
+  }
+  selected($event){
+    
+  }
 }
