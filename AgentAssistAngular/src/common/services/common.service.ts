@@ -946,7 +946,6 @@ export class CommonService {
       descElement.classList.add('no-text-truncate');
       let divSectionHeight = descElement.clientHeight || 0;
       if (divSectionHeight > (24 + faqSourceTypePixel)) {
-        debugger;
         $(seeMoreElement).removeClass('hide');
       } else {
         $(seeMoreElement).addClass('hide');
