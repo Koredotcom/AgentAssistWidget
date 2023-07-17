@@ -3,7 +3,15 @@
         <div class="header-text summary-header">Summary</div>
             <div class="input-block-optional">
             <div class="label-text">Remarks</div>
-            <textarea class="input-text" id="summaryText" rows="4" cols="50" [(ngModel)]="editedSummaryText"></textarea>
+                <textarea class="input-text" id="summaryText" rows="4" cols="50" [(ngModel)]="editedSummaryText"></textarea>
+                
+                <div class="copy-links">
+                    <div class="copy-btn-summary" (click)="handleCopyButton(editedSummaryText)">
+                        <i class="ast-copy"></i>
+                    </div>
+                    <div class="copy-tooltip">{{tooltipText}}
+                    </div>
+                </div>
         </div>
         <button class="submit-btn" id="summarySubmit" (click)="summaryButtonClick(true)">Submit</button>
     </div>
