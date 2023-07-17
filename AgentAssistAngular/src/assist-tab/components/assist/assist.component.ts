@@ -584,66 +584,6 @@ export class AssistComponent implements OnInit {
           automationSuggestions.innerHTML += faqAreaHtml;
         }
 
-        if (data?.suggestions?.searchassist && Object.keys(data.suggestions.searchassist).length > 0) {
-          data.suggestions = this.commonService.formatSearchResponse(data);
-          if (data.suggestions.articles?.length > 0) {
-            let automationSuggestions = document.getElementById(`automationSuggestions-${responseId}`);
-            let articleAreaHtml = this.assisttabService.getArticleAreaTemplate(responseId, data, this.imageFilePath, this.imageFileNames);
-            automationSuggestions.innerHTML += articleAreaHtml;
-          }
-
-          data.suggestions.articles?.forEach((ele, index) => {
-            let articleSuggestions = document.getElementById(`articleSuggestions-${responseId}`);
-
-            let articleHtml = this.assisttabService.articleTypeInfoTemplate(uuids, index, ele);
-
-            articleSuggestions.innerHTML += articleHtml;
-            let articles = $(`.type-info-run-send #articleSection-${uuids + index}`);
-            // if (!ele.content) {
-            //   let checkHtml = `
-            //             <i class="ast-carrotup" data-conv-id="${data.conversationId}"
-            //             data-bot-id="${botId}" data-intent-name="${ele.title}"
-            //             data-check="true" id="articlecheck-${uuids + index}"></i>`;
-            //   articles.append(checkHtml);
-            // } else {
-              ele.content = this.removeTagFromString.transform(ele.content);
-              let a = $(`#articleDiv-${uuids + index}`);
-              let answerSanitized = this.commonService.handleEmptyLine(ele.content, true);
-              let articleActionHtml = `<div class="action-links">
-                            <button class="send-run-btn" id="sendMsg" data-msg-id="article-${uuids + index}" data-msg-data="${answerSanitized}">Send</button>
-                            <div class="copy-btn" data-msg-id="article-${uuids + index}" data-msg-data="${answerSanitized}">
-                                <i class="ast-copy" data-msg-id="article-${uuids + index}" data-msg-data="${answerSanitized}"></i>
-                            </div>
-                        </div>`;
-              if(ele.content){
-                a.append(articleActionHtml);
-                this.commonService.hideSendAndCopyBtnsforCallconversation(a)
-              }
-              if(data.userInput){
-                ele.content = this.replaceTextwithTag.transform(ele.content, data.userInput);
-              }
-              articles.append(`<div class="desc-text" id="articledesc-${uuids + index}">${ele.content}</div>`);
-              if (ele.link) {
-                let fullArticleLinkHtml = `<div class="link-view-full-article hide" id="articleViewLink-${uuids + index}"><a href="${ele.link}" target="_blank">View Full Article</a></div>`
-                document.getElementById(`articledesc-${uuids + index}`).insertAdjacentHTML('beforeend', fullArticleLinkHtml);
-              }
-
-              let articlestypeInfo = $(`.type-info-run-send #articleSection-${uuids + index}`);
-              let seeMoreButtonHtml = `
-                    <button class="ghost-btn hide" id="articleseeMore-${uuids + index}" data-article-see-more="true">${this.projConstants.READ_MORE}</button>
-                    <button class="ghost-btn hide" id="articleseeLess-${uuids + index}" data-article-see-less="true">${this.projConstants.READ_LESS}</button>
-                    `;
-              articlestypeInfo.append(seeMoreButtonHtml);
-              ele.answer = ele.content;
-              ele.question = ele.title;
-              setTimeout(() => {
-                this.commonService.updateSeeMoreButtonForAssist(uuids + index, this.projConstants.ARTICLE);
-              }, 100);
-            // }
-          })
-
-        }
-
         data.suggestions.dialogs?.forEach((ele, index) => {
           ele.entities?.length > 0 ? (this.commonService.entitiestValueArray = ele.entities) : '';
           ele.name = ele.name || ele.usecaseName;
@@ -759,6 +699,67 @@ export class AssistComponent implements OnInit {
           // this.clickEvents(IdReferenceConst.SENDMSG, uuids + index, this.dialogPositionId, ele);
           // this.clickEvents(IdReferenceConst.COPYMSG, uuids + index, this.dialogPositionId, ele);
         });
+
+        if (data?.suggestions?.searchassist && Object.keys(data.suggestions.searchassist).length > 0) {
+          data.suggestions = this.commonService.formatSearchResponse(data);
+          if (data.suggestions.articles?.length > 0) {
+            let automationSuggestions = document.getElementById(`automationSuggestions-${responseId}`);
+            let articleAreaHtml = this.assisttabService.getArticleAreaTemplate(responseId, data, this.imageFilePath, this.imageFileNames);
+            automationSuggestions.innerHTML += articleAreaHtml;
+          }
+
+          data.suggestions.articles?.forEach((ele, index) => {
+            let articleSuggestions = document.getElementById(`articleSuggestions-${responseId}`);
+
+            let articleHtml = this.assisttabService.articleTypeInfoTemplate(uuids, index, ele);
+
+            articleSuggestions.innerHTML += articleHtml;
+            let articles = $(`.type-info-run-send #articleSection-${uuids + index}`);
+            // if (!ele.content) {
+            //   let checkHtml = `
+            //             <i class="ast-carrotup" data-conv-id="${data.conversationId}"
+            //             data-bot-id="${botId}" data-intent-name="${ele.title}"
+            //             data-check="true" id="articlecheck-${uuids + index}"></i>`;
+            //   articles.append(checkHtml);
+            // } else {
+              ele.content = this.removeTagFromString.transform(ele.content);
+              let a = $(`#articleDiv-${uuids + index}`);
+              let answerSanitized = this.commonService.handleEmptyLine(ele.content, true);
+              let articleActionHtml = `<div class="action-links">
+                            <button class="send-run-btn" id="sendMsg" data-msg-id="article-${uuids + index}" data-msg-data="${answerSanitized}">Send</button>
+                            <div class="copy-btn" data-msg-id="article-${uuids + index}" data-msg-data="${answerSanitized}">
+                                <i class="ast-copy" data-msg-id="article-${uuids + index}" data-msg-data="${answerSanitized}"></i>
+                            </div>
+                        </div>`;
+              if(ele.content){
+                a.append(articleActionHtml);
+                this.commonService.hideSendAndCopyBtnsforCallconversation(a)
+              }
+              if(data.userInput){
+                ele.content = this.replaceTextwithTag.transform(ele.content, data.userInput);
+              }
+              articles.append(`<div class="desc-text" id="articledesc-${uuids + index}">${ele.content}</div>`);
+              if (ele.link) {
+                let fullArticleLinkHtml = `<div class="link-view-full-article hide" id="articleViewLink-${uuids + index}"><a href="${ele.link}" target="_blank">View Full Article</a></div>`
+                document.getElementById(`articledesc-${uuids + index}`).insertAdjacentHTML('beforeend', fullArticleLinkHtml);
+              }
+
+              let articlestypeInfo = $(`.type-info-run-send #articleSection-${uuids + index}`);
+              let seeMoreButtonHtml = `
+                    <button class="ghost-btn hide" id="articleseeMore-${uuids + index}" data-article-see-more="true">${this.projConstants.READ_MORE}</button>
+                    <button class="ghost-btn hide" id="articleseeLess-${uuids + index}" data-article-see-less="true">${this.projConstants.READ_LESS}</button>
+                    `;
+              articlestypeInfo.append(seeMoreButtonHtml);
+              ele.answer = ele.content;
+              ele.question = ele.title;
+              setTimeout(() => {
+                this.commonService.updateSeeMoreButtonForAssist(uuids + index, this.projConstants.ARTICLE);
+              }, 100);
+            // }
+          })
+
+        }
+       
         this.handleSeeMoreButton(responseId, data.suggestions.articles, this.projConstants.ARTICLE);
         this.handleSeeMoreButton(responseId, data.suggestions.faqs, this.projConstants.FAQ);
 
