@@ -45,6 +45,70 @@ export class CoachingService {
       }
     ]
   }
+  createRuleTriggerList : any = [
+    {
+      type: this.coachingCnst.UTTERANCE,
+      title: "Utterance",
+      desc: "Agent/Customer utterances",
+      icon: "assets/icons/coaching/coaching--message-check-square.svg",
+      disable : false
+    },    {
+      type: this.coachingCnst.SPEECH_ANALYSIS,
+      title: "Speech Analysis",
+      desc: "Agent speech patterns",
+      icon: "assets/icons/coaching/coaching--trigger-speech.svg",
+      disable : false
+    },    {
+      type: this.coachingCnst.VARIABLE,
+      title: "Variable",
+      desc: "Monitor context variable",
+      icon: "assets/icons/coaching/coaching--trigger-variable.svg",
+      disable : true
+    },    {
+      type: this.coachingCnst.DIALOG,
+      title: "Dialog",
+      desc: "Monitor dialog execution",
+      icon: "assets/icons/coaching/coaching--trigger-dialog.svg",
+      disable : true
+    }
+  ];
+
+  createRuleActionList : any = [
+    {
+      type: this.coachingCnst.NUDGE_AGENT,
+      title: "Nudge Agent",
+      desc: "A simple toast message",
+      icon: "assets/icons/coaching/coaching--nudge-agent.svg"
+    },    {
+      type: this.coachingCnst.HINT_AGENT,
+      title: "Hint Agent",
+      desc: "A hint notification box",
+      icon: "assets/icons/coaching/coaching--hint-agent.svg"
+    },    {
+      type: this.coachingCnst.ALERT_MANAGER,
+      title: "Alert Manager",
+      desc: "Push notification to Manager",
+      icon: "assets/icons/coaching/coaching--aleart-manager.svg",
+      disable : true
+    },    {
+      type: this.coachingCnst.EMAIL_MANAGER,
+      title: "Email Manager",
+      desc: "Send email to manager",
+      icon: "assets/icons/coaching/coaching--email-manager.svg"
+    },{
+      type: this.coachingCnst.DIALOG,
+      title: "Dialog",
+      desc: "Trigger dialog for agent",
+      icon: "assets/icons/coaching/coaching--trigger-dialog.svg",
+      disable : true
+    },    {
+      type: this.coachingCnst.FAQ,
+      title: "FAQ",
+      desc: "Trigger FAQ for agent",
+      icon: "assets/icons/coaching/coaching--faq.svg",
+      disable : true
+    }
+  ]
     
   
   constructor(private fb: FormBuilder) { }

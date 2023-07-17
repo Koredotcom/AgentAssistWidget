@@ -20,13 +20,14 @@ import { CoachingGroupRuleDeleteComponent } from './coaching-group-rule-delete/c
 import { CoachingConfirmationComponent } from './coaching-confirmation/coaching-confirmation.component';
 import { AdherenceComponent } from './then-action/adherence/adherence.component';
 import { AdherenceSelectionComponent } from './then-action/adherence-selection/adherence-selection.component';
+import { CreateRuleComponent } from './coaching-rule-create/create-rule/create-rule.component';
 
 const routes: Routes = [
   { path: '', component:  CoachingComponent}
 ];
 
 @NgModule({
-  declarations: [CoachingGroupCreateComponent, CoachingRuleCreateComponent, CoachingComponent, UtteranceComponent, SpeechAnalysisComponent, VariableComponent, DialogComponent, NudgeAgentComponent, HintAgentComponent, AlertManagerComponent, EmailManagerComponent, FaqComponent, UtteranceAdherenceComponent, CoachingGroupRuleDeleteComponent, CoachingConfirmationComponent, AdherenceComponent, AdherenceSelectionComponent],
+  declarations: [CoachingGroupCreateComponent, CoachingRuleCreateComponent, CoachingComponent, UtteranceComponent, SpeechAnalysisComponent, VariableComponent, DialogComponent, NudgeAgentComponent, HintAgentComponent, AlertManagerComponent, EmailManagerComponent, FaqComponent, UtteranceAdherenceComponent, CoachingGroupRuleDeleteComponent, CoachingConfirmationComponent, AdherenceComponent, AdherenceSelectionComponent, CreateRuleComponent],
   imports: [
     DragDropModule,
     CommonModule,

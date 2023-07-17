@@ -119,12 +119,15 @@ export class CoachingComponent implements OnInit, OnDestroy {
 
   // get or update GroupData Starts
   getAgentCoachingGroupData(){
+    let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
     let params : any = {
-      botId : this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id,
+      botId,
       isExpand : true
     }
     this.isLoading = true;
-    this.service.invoke('get.allagentCoachingGroup',params).pipe(finalize(() => {
+    this.service.invoke('get.allagentCoachingRule',params, {
+      botId, 
+    }).pipe(finalize(() => {
       this.isLoading = false;
     })).subscribe(data => {
       if (data) {
@@ -174,9 +177,9 @@ export class CoachingComponent implements OnInit, OnDestroy {
       //   this.respData?.results[this.selectedRuleGroupIndex]?.rules.splice(this.selectedRuleIndex, 1, rule);
       //   this.respData = {...this.respData};
       // }
-      if(!rule){
-        return;
-      }
+      // if(!rule){
+      //   return;
+      // }
       this.getAgentCoachingGroupData();
       this.selectedRuleGroup = null;
       this.selectedRuleGroupIndex = null;
@@ -192,7 +195,6 @@ export class CoachingComponent implements OnInit, OnDestroy {
       this.publishInprogress = false;
     })).subscribe(data => {
       if (data) {
-        console.log(data, 'data inside publish');
         this.notificationService.notify(this.translate.instant("COACHING.PUBLISH_SUCCESS"), 'success');
       }
     },(error)=>{

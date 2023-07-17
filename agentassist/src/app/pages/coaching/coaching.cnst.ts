@@ -123,5 +123,8 @@ export const COACHINGCNST = {
         'agent': 'Agent',
         'both': 'Agent and Customer',
         'customer': 'Customer'
-    }
+    },
+    voice : 'Voice',
+    chat : 'Live Chat',
+    channelList : ['voice', 'chat'],
 }
