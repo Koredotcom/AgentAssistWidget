@@ -453,6 +453,38 @@
             }
         }
     }
+    .tags-info{
+        padding: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        .tag-name{
+            padding: 2px 10px;
+            border-radius: 24px;
+            background: var(--primary-50, #EAF1FC);
+            color: var(--primary-500-main, #2B75E4);
+            text-align: center;
+            font-size: 12px;
+            font-weight: 500;
+            line-height: 18px;
+        }
+        .kr-sg-dropdowns {
+            width: auto;
+            .dropdown-open {
+                .dropdown-input{
+                    border: 0;
+                    padding: 0;
+                    background: transparent;
+                    line-height: normal;
+                    height: auto;
+                    color: var(--primary-500-main, #2B75E4);
+                    text-align: center;
+                    font-size: 12px;
+                    font-weight: 500;
+                }
+            }
+        }
+    }
 }
 // .example-list {
 //     width: 500px;

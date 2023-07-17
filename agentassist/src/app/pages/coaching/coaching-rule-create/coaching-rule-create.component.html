@@ -12,25 +12,27 @@
             </div>
         </div>
         <div class="middle-content">
-            <div class="kr-sg-dropdowns tags-info-dropdown" ngbDropdown *ngIf="filteredTagsOriginal?.length > 0">
-                <div class="dropdown dropdown-open">
-                
-                  <button class="dropdown-toggle dropdown-input before-none" ngbDropdownToggle *ngIf="filteredTagsOriginal?.length > 1">
-                    <span>{{filteredTagsOriginal[0]}}</span> +{{filteredTagsOriginal.length - 1 + ' more'}}
-                  </button>
-                  <ul class="dropdown-menu content-menu header_in_development_drpdown p-0" ngbDropdownMenu>
-                    <li ngbDropdownItem class="p-0" *ngFor="let item of filteredTagsOriginal | slice:1; let i = index;">
-                        <a>{{item}}</a>
-                    </li>
-                  </ul>
+
+            <div class="tags-info w-16" *ngIf="filteredTagsOriginal?.length > 0">
+                <span class="tag-name">{{filteredTagsOriginal[0]}}</span>
+                <div class="kr-sg-dropdowns" ngbDropdown container="body" *ngIf="filteredTagsOriginal?.length > 1">
+                    <div class="dropdown dropdown-open">
+                      <button class="dropdown-toggle dropdown-input before-none" ngbDropdownToggle>+{{filteredTagsOriginal.length - 1 + ' More'}}</button>
+                      <ul class="dropdown-menu content-menu more-dropdown-tags" ngbDropdownMenu>
+                        <li ngbDropdownItem class="p-0" *ngFor="let item of filteredTagsOriginal | slice:1; let i = index;">
+                            <a>{{item}}</a>
+                        </li>
+                      </ul>
+                    </div>
                 </div>
             </div>
+
             <div class="channels-info" *ngIf="channelList?.length > 0">
                 <span class="title">Channels</span>
-                <button class="speak-chat-icon" *ngIf="channelList.indexOf('voice')">
+                <button class="speak-chat-icon" *ngIf="channelList.indexOf('voice') >=0">
                     <i class="icon-sa-welcome-voice"></i>
                 </button>
-                <button class="speak-chat-icon" *ngIf="channelList.indexOf('chat')">
+                <button class="speak-chat-icon" *ngIf="channelList.indexOf('chat') >= 0">
                     <i class="icon-sa-message"></i>
                 </button>
             </div>
