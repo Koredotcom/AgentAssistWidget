@@ -205,13 +205,13 @@ export class IvrComponent implements OnInit {
     const input = event.input;
     const value = event.value;
     if ((value || '').trim()) {
-     
+
       this.didLengthSet = true;
-      if (this.didNumbers.length >= 1) {
-        
-        this.notificationService.notify("SIP doesn't support more than 1 number", 'warning');
-        return;
-      }
+      // if (this.didNumbers.length >= 1) {
+
+      //   this.notificationService.notify("SIP doesn't support more than 1 number", 'warning');
+      //   return;
+      // }
 
       if (this.didNumbers.indexOf(value.trim()) > -1) {
         return;
