@@ -12,42 +12,25 @@
             </div>
         </div>
         <div class="middle-content">
-            <!-- <div class="utt-name">{{groupDetails?.name}} / </div>
-            <div class="dropdown-adherence" ngbDropdown placement="bottom-center" #ruleSelection="ngbDropdown">
-                <button class="dropdown-toggle btn-toggle" ngbDropdownToggle>{{ruleForm.get('name')?.value}}<i *ngIf="groupDetails?.rules?.length > 1 && createOrEdit == coachingCnst.EDIT" class="icon-sa-arrow-down"></i></button>
-                <ul class="dropdown_menu-wrapper" ngbDropdownMenu id="ruleSelectionMenu" *ngIf="groupDetails?.rules?.length > 1 && createOrEdit == coachingCnst.EDIT">
-                    <perfect-scrollbar class="mx-h-300">
-                        <ng-container *ngFor="let rule of groupDetails?.rules">
-                            <li ngbDropdownItem class="list-item-li" *ngIf="rule.name !== currentRule?.name"
-                                (click)="closeRuleScreen(rule)">
-                                <span class="title">{{rule.name}}</span>
-                            </li>
-                        </ng-container>
-                    </perfect-scrollbar>
-                </ul>
-            </div> -->
-            <div class="kr-sg-dropdowns tags-info-dropdown" ngbDropdown>
+            <div class="kr-sg-dropdowns tags-info-dropdown" ngbDropdown *ngIf="filteredTagsOriginal?.length > 0">
                 <div class="dropdown dropdown-open">
-                  <button class="dropdown-toggle dropdown-input before-none" ngbDropdownToggle>Pricing</button>
+                
+                  <button class="dropdown-toggle dropdown-input before-none" ngbDropdownToggle *ngIf="filteredTagsOriginal?.length > 1">
+                    <span>{{filteredTagsOriginal[0]}}</span> +{{filteredTagsOriginal.length - 1 + ' more'}}
+                  </button>
                   <ul class="dropdown-menu content-menu header_in_development_drpdown p-0" ngbDropdownMenu>
-                    <li ngbDropdownItem class="p-0">
-                        <a>Pricing tag</a>
-                    </li>
-                    <li ngbDropdownItem class="p-0">
-                        <a>Pricing tag</a>
-                    </li>
-                    <li ngbDropdownItem class="p-0">
-                        <a>Pricing tag</a>
+                    <li ngbDropdownItem class="p-0" *ngFor="let item of filteredTagsOriginal | slice:1; let i = index;">
+                        <a>{{item}}</a>
                     </li>
                   </ul>
                 </div>
             </div>
-            <div class="channels-info">
+            <div class="channels-info" *ngIf="channelList?.length > 0">
                 <span class="title">Channels</span>
-                <button class="speak-chat-icon">
+                <button class="speak-chat-icon" *ngIf="channelList.indexOf('voice')">
                     <i class="icon-sa-welcome-voice"></i>
                 </button>
-                <button class="speak-chat-icon">
+                <button class="speak-chat-icon" *ngIf="channelList.indexOf('chat')">
                     <i class="icon-sa-message"></i>
                 </button>
             </div>

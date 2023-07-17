@@ -43,7 +43,8 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
   description = '';
   allTriggers = this.coachingService.createRuleTriggerList;
   allActions = this.coachingCnst.createRuleActionList;
-  filteredTagsOriginal : any = ['Lemon', 'Lime', 'Apple'];
+  filteredTagsOriginal : any = [];
+  channelList : any = [];
 
   
 
@@ -97,8 +98,11 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
     // this.currentRule.channels = ['voice']
     setTimeout(() => {
       this.ruleForm.controls["name"].patchValue(this.currentRule?.name);  
+      this.ruleForm.controls["description"].patchValue(this.currentRule?.description);
       this.ruleForm.setControl('channels', this.fb.array(this.currentRule?.channels));
       this.ruleForm.setControl('tags', this.fb.array(this.currentRule?.tags));
+      this.filteredTagsOriginal = this.currentRule?.tags;
+      this.channelList = this.currentRule?.channels;
   
       (this.currentRule?.triggers || []).forEach(element => {
         (<FormArray>this.ruleForm?.controls["triggers"])
@@ -174,7 +178,7 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
     this.onCloseRule.emit(rule);
   }
  
-  saveRule(closeRule = true){
+  saveRule(closeRule = true){    
     if((this.ruleForm.controls.name.value as string).trim() === ''){
       this.notificationService.showError({}, this.translate.instant('VALID.NAME'));
       return;
@@ -184,7 +188,7 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
     // payload["addToGroup"] = true;
     // payload["groupId"] = this.groupDetails._id;
     let methodName = this.createOrEdit == COACHINGCNST.CREATE ? "post.agentcoachingrule" : "put.agentcoachingrule"
-    this.service.invoke(methodName, {ruleId : this.currentRule?.ruleId}, payload)
+    this.service.invoke(methodName, {ruleId : this.currentRule?._id}, payload)
     .pipe(finalize(()=>{
       this.loading = false;
     }))

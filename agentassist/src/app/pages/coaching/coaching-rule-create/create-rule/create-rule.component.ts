@@ -32,6 +32,11 @@ export class CreateRuleComponent implements OnInit {
 
   ngOnInit(): void {
     this.filteredTagsDisplay = JSON.parse(JSON.stringify(this.filteredTagsOriginal));
+    this.subscribeValues();
+    this.updateVariables();
+  }
+
+  subscribeValues(){
     this.tagControl.valueChanges.subscribe((value)=> {
       if(value){
         this.assignOriginalToDisplayList();
@@ -43,6 +48,10 @@ export class CreateRuleComponent implements OnInit {
     this.ruleForm.valueChanges.subscribe(val =>{
       this.ruleForm.patchValue(val,{emitEvent:false})
     })
+  }
+
+  updateVariables(){
+    this.tags = this.filteredTagsOriginal.map((str, index) => ({ name: str}));    
   }
 
   selectedOption(event, item){    

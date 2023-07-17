@@ -1,55 +1,30 @@
-<form [formGroup]="ruleForm">
+<form [formGroup]="ruleForm" (keydown.enter)="$event.preventDefault()" >
     <div class="modal-wrapper-coaching">
         <div class="header-wrapper">
-            <div class="title-heading">New Rule {{ruleForm.controls?.tags.value | json}}</div>
+            <div class="title-heading">New Rule</div>
             <div class="close-modal" (click)="closeRule()">
                 <i class="icon-sa-close"></i>
             </div>
         </div>
         <div class="body-wrapper">
             <div class="kr-sg-input-text m-b-15">
-                <div class="label-text">Add Name</div>
-                <input type="text" placeholder="Placeholder text" class="input-text" formControlName="name">
+                <div class="label-text">Name</div>
+                <input type="text" placeholder="Add Name" class="input-text" formControlName="name">
             </div>
             <div class="kr-sg-input-text-area m-b-15">
                 <div class="label-text">Description</div>
                 <textarea placeholder="Rule Purpose" class="input-text" formControlName="description"></textarea>
             </div>
 
-            <!-- <div class="kr-sg-dropdowns m-b-15" ngbDropdown>
-                <div class="label-text">Tags</div>
-                <div class="editable-div" contenteditable="true" ngbDropdownToggle placeholder="Select">
-                    <div class="chip-name">
-                        <span>Pricing</span>
-                        <i class="icon-sa-close"></i>
-                    </div>
-                </div>
-                <ul class="dropdown-menu content-menu" ngbDropdownMenu>
-                    <div class="kr-sg-checkbox">
-                        <input id="checkbox1" class="checkbox-custom" type="checkbox">
-                        <label for="checkbox1" class="checkbox-custom-label">
-                            <span>General</span>
-                        </label>
-                    </div>
-                    <div class="kr-sg-checkbox">
-                        <input id="checkbox11" class="checkbox-custom" type="checkbox">
-                        <label for="checkbox11" class="checkbox-custom-label">
-                            <span>General</span>
-                        </label>
-                    </div>
-                </ul>
-            </div> -->
-
-
               <mat-form-field class="example-chip-list">
-                <mat-label>Favorite Fruits</mat-label>
+                <mat-label>Tags</mat-label>
                 <mat-chip-list #chipList>
-                  <mat-chip *ngFor="let fruit of tags" [selectable]="true"
-                           [removable]="true" (removed)="remove(fruit.name)">
-                    {{fruit.name}}
+                  <mat-chip *ngFor="let tag of tags" [selectable]="true"
+                           [removable]="true" (removed)="remove(tag.name)">
+                    {{tag.name}}
                     <mat-icon matChipRemove *ngIf="true">cancel</mat-icon>
                   </mat-chip>
-                  <input placeholder="New fruit..."
+                  <input placeholder="Add Tags"
                          #tagInput
                          [matChipInputFor]="chipList"
                          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
@@ -60,10 +35,10 @@
                           #trigger="matAutocompleteTrigger" >
                 </mat-chip-list>
                 <mat-autocomplete #auto="matAutocomplete">
-                    <mat-option *ngFor="let fruit of filteredTagsDisplay;let i = index" (click)="selectedOption({target:{checked : ruleForm.controls?.tags.value.indexOf(fruit) >=0 ? false : true}}, fruit);$event.stopPropagation();trigger.openPanel()">
-                        <input id="checkbox-{{i}}" type="checkbox" (click)="selectedOption($event,fruit);trigger.openPanel();$event.stopPropagation();" [value]="fruit"
-                        [checked]="ruleForm.controls?.tags.value.indexOf(fruit) >= 0">
-                        <span for="checkbox-{{i}}">{{fruit}}</span>
+                    <mat-option *ngFor="let tag of filteredTagsDisplay;let i = index" (click)="selectedOption({target:{checked : ruleForm.controls?.tags.value.indexOf(tag) >=0 ? false : true}}, tag);$event.stopPropagation();trigger.openPanel()">
+                        <input id="checkbox-{{i}}" type="checkbox" (click)="selectedOption($event,tag);trigger.openPanel();$event.stopPropagation();" [value]="tag"
+                        [checked]="ruleForm.controls?.tags.value.indexOf(tag) >= 0">
+                        <span for="checkbox-{{i}}">{{tag}}</span>
                     </mat-option>
                 </mat-autocomplete>
               </mat-form-field>
@@ -74,7 +49,7 @@
                 <div class="label-text">Channels</div>
                 <div class="channels-check">
                     <div class="check-item" *ngFor="let item of coachingCnst.channelList; let i = index">
-                        <input id="checkbox-{{i}}" type="checkbox" (click)="channelSelection($event,item)" [checked]="item == ruleForm.controls?.channels?.controls[i]?.value">
+                        <input id="checkbox-{{i}}" type="checkbox" (click)="channelSelection($event,item)" [checked]="ruleForm.controls?.channels.value.indexOf(item) >= 0">
                         <span for="checkbox-{{i}}">{{coachingCnst[item]}}</span>
                     </div>
                    
