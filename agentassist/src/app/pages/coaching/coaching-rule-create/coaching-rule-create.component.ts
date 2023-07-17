@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { COACHINGCNST } from '../coaching.cnst';
 import { CoachingService } from '../coaching.service';
@@ -13,7 +13,8 @@ import { LocalStoreService } from '@kore.services/localstore.service';
 import { NotificationService } from '@kore.services/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { MatChipInputEvent } from '@angular/material/chips';
+import { CreateRuleComponent } from './create-rule/create-rule.component';
 @Component({
   selector: 'app-coaching-rule-create',
   templateUrl: './coaching-rule-create.component.html',
@@ -26,7 +27,8 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
   @Output() onCloseRule = new EventEmitter();
   @Input() createOrEdit = '';
   @Input() currentRule:any;
-  @ViewChild('newRuleModal', { static: true }) newRuleModal;
+  // @ViewChild('newRuleModal', { static: true }) newRuleModal;
+
   loading = false;
   ruleForm: FormGroup;
   // ruleBasic: FormGroup;
@@ -39,70 +41,11 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
   modalFlowCreateRef:any;
   name = '';
   description = '';
-  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
-  allTriggers = [
-    {
-      type: this.coachingCnst.UTTERANCE,
-      title: "Utterance",
-      desc: "Agent/Customer utterances",
-      icon: "assets/icons/coaching/coaching--message-check-square.svg",
-      disable : false
-    },    {
-      type: this.coachingCnst.SPEECH_ANALYSIS,
-      title: "Speech Analysis",
-      desc: "Agent speech patterns",
-      icon: "assets/icons/coaching/coaching--trigger-speech.svg",
-      disable : false
-    },    {
-      type: this.coachingCnst.VARIABLE,
-      title: "Variable",
-      desc: "Monitor context variable",
-      icon: "assets/icons/coaching/coaching--trigger-variable.svg",
-      disable : true
-    },    {
-      type: this.coachingCnst.DIALOG,
-      title: "Dialog",
-      desc: "Monitor dialog execution",
-      icon: "assets/icons/coaching/coaching--trigger-dialog.svg",
-      disable : true
-    }
-  ];
-  allActions = [
-    {
-      type: this.coachingCnst.NUDGE_AGENT,
-      title: "Nudge Agent",
-      desc: "A simple toast message",
-      icon: "assets/icons/coaching/coaching--nudge-agent.svg"
-    },    {
-      type: this.coachingCnst.HINT_AGENT,
-      title: "Hint Agent",
-      desc: "A hint notification box",
-      icon: "assets/icons/coaching/coaching--hint-agent.svg"
-    },    {
-      type: this.coachingCnst.ALERT_MANAGER,
-      title: "Alert Manager",
-      desc: "Push notification to Manager",
-      icon: "assets/icons/coaching/coaching--aleart-manager.svg",
-      disable : true
-    },    {
-      type: this.coachingCnst.EMAIL_MANAGER,
-      title: "Email Manager",
-      desc: "Send email to manager",
-      icon: "assets/icons/coaching/coaching--email-manager.svg"
-    },{
-      type: this.coachingCnst.DIALOG,
-      title: "Dialog",
-      desc: "Trigger dialog for agent",
-      icon: "assets/icons/coaching/coaching--trigger-dialog.svg",
-      disable : true
-    },    {
-      type: this.coachingCnst.FAQ,
-      title: "FAQ",
-      desc: "Trigger FAQ for agent",
-      icon: "assets/icons/coaching/coaching--faq.svg",
-      disable : true
-    }
-  ]
+  allTriggers = this.coachingService.createRuleTriggerList;
+  allActions = this.coachingCnst.createRuleActionList;
+  filteredTagsOriginal : any = ['Lemon', 'Lime', 'Apple'];
+
+  
 
   // triggerFormControlsArray : any = [];
 
@@ -133,7 +76,7 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
     if(changes?.createOrEdit?.currentValue === COACHINGCNST.CREATE){
       this.createForm();
       setTimeout(() => {
-        this.newRule(this.newRuleModal);
+        this.newRule();
       }, 1000);
       // this.subscribeValChanges();
     };
@@ -143,7 +86,7 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
   }
 
   subscribeValChanges(){
-    this.ruleForm?.valueChanges.subscribe((_change)=>{
+    this.ruleForm?.valueChanges.subscribe((_change)=>{      
       this.formTouched = true;
     })
   }
@@ -151,8 +94,12 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
   }
 
   updateRuleForm(){
+    // this.currentRule.channels = ['voice']
     setTimeout(() => {
-      this.ruleForm.controls["name"].patchValue(this.currentRule?.name);      
+      this.ruleForm.controls["name"].patchValue(this.currentRule?.name);  
+      this.ruleForm.setControl('channels', this.fb.array(this.currentRule?.channels));
+      this.ruleForm.setControl('tags', this.fb.array(this.currentRule?.tags));
+  
       (this.currentRule?.triggers || []).forEach(element => {
         (<FormArray>this.ruleForm?.controls["triggers"])
         .push(this.getFormGroupObject(element));
@@ -191,6 +138,15 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
     }, 10);
   }
 
+  updateRule(rule){
+    this.createOrEdit = COACHINGCNST.EDIT;
+    this.currentRule = rule;
+    this.updateRuleForm();
+    setTimeout(() => {
+      this.formTouched = false;      
+    }, 10);
+  }
+
   createForm(){
     
     // this.ruleBasic = new FormGroup({
@@ -209,6 +165,7 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
         "assignees": this.fb.array([]),
         "deleteTriggers": new FormControl([]),
         "deleteActions": new FormControl([]),
+        "isActive" : new FormControl(false, [Validators.required])
       }
     );
   }
@@ -217,17 +174,17 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
     this.onCloseRule.emit(rule);
   }
  
-  saveRule(){
+  saveRule(closeRule = true){
     if((this.ruleForm.controls.name.value as string).trim() === ''){
       this.notificationService.showError({}, this.translate.instant('VALID.NAME'));
       return;
     }
     this.loading = true;
     let payload : any = this.ruleForm.value;
-    payload["addToGroup"] = true;
-    payload["groupId"] = this.groupDetails._id;
+    // payload["addToGroup"] = true;
+    // payload["groupId"] = this.groupDetails._id;
     let methodName = this.createOrEdit == COACHINGCNST.CREATE ? "post.agentcoachingrule" : "put.agentcoachingrule"
-    this.service.invoke(methodName, {addToGroup : true, groupId : this.groupDetails._id, ruleId : this.currentRule?.ruleId}, payload)
+    this.service.invoke(methodName, {ruleId : this.currentRule?.ruleId}, payload)
     .pipe(finalize(()=>{
       this.loading = false;
     }))
@@ -235,8 +192,12 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
       if (data && (data._id || data.id)) {
         data._id = data.id ? data.id : data._id;
         data.ruleId = data._id;
-        data.isActive = true;
-        this.closeRule(data);
+        data.isActive = data.isActive;
+        if(closeRule){
+          this.closeRule(data);
+        }else{
+          this.updateRule(data);
+        }
         this.notificationService.notify(this.translate.instant("RULE.SUCCESS"), 'success');
       }
     },
@@ -328,14 +289,35 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
     }
   }
 
-  newRule(newRuleModal: any) {
-    this.modalFlowCreateRef = this.modalService.open(newRuleModal, {
+  newRule() {
+    this.modalFlowCreateRef = this.modalService.open(CreateRuleComponent, {
       windowClass: 'modal-ngb-wrapper-window',
       centered: true,
-      backdrop: 'static',
+      backdrop: 'static'
     });
+    this.modalFlowCreateRef.componentInstance.ruleForm = this.ruleForm;
+    this.modalFlowCreateRef.componentInstance.filteredTagsOriginal = this.filteredTagsOriginal; 
+    this.modalFlowCreateRef.componentInstance.closeBasicRule.subscribe(value => {      
+      if(value){
+        this.closeBasicRule();
+      }
+    });
+
+    this.modalFlowCreateRef.result.then((list)=> {
+      // if(list && typeof list == 'object'){
+      //   this.filteredTagsOriginal = list;
+      //   console.log(this.filteredTagsOriginal, 'filtered tags origins');
+        
+      // }
+      if(list){
+        this.saveRule(false);
+      }
+    });
+
   }
+
   isSettings = false;
+
   closeBasicRule(){
     if(this.createOrEdit == COACHINGCNST.CREATE && !this.isSettings){
       this.modalFlowCreateRef.close();
@@ -346,32 +328,16 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
     }
   }
 
-  submitForm(){
-    this.ruleForm.controls['name'].patchValue(this.name);
-    this.ruleForm.controls['description'].patchValue(this.description);
-    console.log("description", this.ruleForm.value)
-    this.modalFlowCreateRef.close();
-  }
+ 
   
   openSettings(){
     this.isSettings = true;
-    this.newRule(this.newRuleModal);
-    this.name = this.ruleForm.value?.name;
+    this.newRule();
+    // this.name = this.ruleForm.value?.name;
     this.description = this.ruleForm.value?.description;
   }
 
-  OnDidNumberUpdated(e){
-
-  }
-  didNumbers: any[] = ["abc", "def"];
-  onDIDNumberRemove(e){
-
-  }
-  filteredFruits = ["abc", "def"]
-  onDidNumberFocus(e){
-
-  }
-  selected($event){
-    
-  }
+ 
+ 
+  
 }
