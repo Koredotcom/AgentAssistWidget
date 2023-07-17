@@ -68,9 +68,16 @@ export class VoicePreferencesComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    if(this.voicePreferences?.callControlParameters){      
-      this.addedParams = JSON.parse(JSON.stringify(this.voicePreferences?.callControlParameters)) || [];
-      // this.alreadyAdded = JSON.parse(JSON.stringify(this.voicePreferences?.callControlParameters)) || [];
+    if(true){      
+      let callControlParameters = [];
+      let params = this.voicePreferences?.callControlParameters;
+      for(let key in params){
+        let obj = {}
+        obj['name'] = key;
+        obj['value'] = params[key];
+        callControlParameters.push(obj);
+      }
+      this.addedParams = JSON.parse(JSON.stringify(callControlParameters)) || [];
     }
     this.streamId = this.workflowService.getCurrentBt()._id;
 
@@ -290,12 +297,13 @@ export class VoicePreferencesComponent implements OnInit {
   }
 
   checkDuplcate(control){
-    console.log(control, this.addedParams);
-    const obj = this.addedParams.find(item => item.name === control.value);
-    if(obj){
-      return {'error': true};
-    }else{
-      return null;
+    if(control.value){
+      const obj = this.addedParams.find(item => item.name === control.value);
+      if(obj){
+        return {'error': true};
+      }else{
+        return null;
+      }
     }
   }
 }
