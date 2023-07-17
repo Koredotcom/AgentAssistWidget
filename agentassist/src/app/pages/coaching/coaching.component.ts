@@ -122,7 +122,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
     let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
     let params : any = {
       botId,
-      isExpand : true
+      // isExpand : true
     }
     this.isLoading = true;
     this.service.invoke('get.allagentCoachingRule',params, {
@@ -132,21 +132,19 @@ export class CoachingComponent implements OnInit, OnDestroy {
     })).subscribe(data => {
       if (data) {
         this.respData = Object.assign(data) || {"results":[]};
-        this.searchedData.results = JSON.parse(JSON.stringify(data?.results)) || [];
-        this.checkRulePresence(this.respData);
-        if(this.searchField.value?.trim()){
-          this.serachRules(this.searchField.value.trim());
-        }
+        // this.searchedData.results = JSON.parse(JSON.stringify(data?.results)) || [];
+        // this.checkRulePresence(this.respData);
+        // if(this.searchField.value?.trim()){
+        //   this.serachRules(this.searchField.value.trim());
+        // }
         this.cdRef.detectChanges();
       }
     });
   }
 
-  checkRulePresence(respData){
-    this.rulePresent = respData.results.some(group => {
-      return (group.rules.length > 0)
-    });
-  }
+  // checkRulePresence(respData){
+  //   this.rulePresent = respData.results.length > 0;
+  // }
 
   updateGroupData(updateObj){
     this.getAgentCoachingGroupData();
