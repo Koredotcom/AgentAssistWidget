@@ -46,7 +46,7 @@ export class VoicePreferencesComponent implements OnInit {
   voiceWelcomeMessage: string;
   previewText: string = '';
   addedParams = [];
-  alreadyAdded = [];
+  // alreadyAdded = [];
   @Output() getNewData = new EventEmitter();
   newKeyValueForm = new FormGroup({
     name: new FormControl('', [Validators.required]),
@@ -70,7 +70,7 @@ export class VoicePreferencesComponent implements OnInit {
   ngOnInit(): void {
     if(this.voicePreferences?.callControlParameters){      
       this.addedParams = JSON.parse(JSON.stringify(this.voicePreferences?.callControlParameters)) || [];
-      this.alreadyAdded = JSON.parse(JSON.stringify(this.voicePreferences?.callControlParameters)) || [];
+      // this.alreadyAdded = JSON.parse(JSON.stringify(this.voicePreferences?.callControlParameters)) || [];
     }
     this.streamId = this.workflowService.getCurrentBt()._id;
 
@@ -100,7 +100,7 @@ export class VoicePreferencesComponent implements OnInit {
 
   openCallControlParameter(newCallControlParameter) {
     this.newKeyValueForm = new FormGroup({
-      name: new FormControl('', [Validators.required]),
+      name: new FormControl('', [Validators.required, this.checkDuplcate.bind(this)]),
       value: new FormControl('', [Validators.required])
     })
     this.modalService.open(newCallControlParameter, {backdropClass: 'adjust-zindex-above-slider', windowClass: 'call-control-param-modal', centered: true, backdrop: 'static', keyboard: false});
@@ -197,11 +197,6 @@ export class VoicePreferencesComponent implements OnInit {
 
   selectedVoiceNamePreferences(voicename) {
     this.voicePreferences.voicePreference = voicename.name;
-    // this.voiceNames.forEach(v=>{
-    //   if(v.name === voicename.name) {
-    //     v.isPlaying = true;
-    //   }
-    // })
     setTimeout(() => {
       const ele = $('#speechSampleInput');
       if (!ele || !ele[0]) return;
@@ -248,11 +243,6 @@ export class VoicePreferencesComponent implements OnInit {
 
   configureVoicePreferenaces() {
     let _params: any = { streamId:this.workflowService.getCurrentBt(true)._id,'isAgentAssist':true };
-    // let _params: any = { streamId:this.authService.smartAssistBots.map(x=>x._id),'isAgentAssist':true };
-    // if (!this.voicePreferences?.voicePreference) {
-    //   this.notificationService.notify(this.translate.instant('SELECT_VOICE_NAME'), 'warning');
-    //   return;
-    // }
     this.saveInProgress = true;
     this.voicePreferences.languagePreference = this.selectedTTSLanguage.languagePreference;
     this.voicePreferences.dialectPreference = this.selectedDialect;
@@ -263,11 +253,12 @@ export class VoicePreferencesComponent implements OnInit {
         return;
       }
     }
-    this.voicePreferences.callControlParameters = this.addedParams.map((item)=>{
-      let obj = {};
+    let obj = {};
+    this.addedParams.map((item)=>{
       obj[item.name] = item.value;
-      return obj;
+      // return obj;
     });
+    this.voicePreferences.callControlParameters = {...obj}
     this.service.invoke('post.settings.voicePreferences', _params, this.voicePreferences)
       .pipe(finalize(() => this.saveInProgress = false))
       .subscribe(res => {
@@ -292,22 +283,19 @@ export class VoicePreferencesComponent implements OnInit {
     this.closeCallControlParameter();
     let keyValue = this.newKeyValueForm.value;
     this.addedParams.push({...keyValue});
-    this.alreadyAdded.push({...keyValue});
   }
 
   deleteParam(i){
     this.addedParams.splice(i,1);
   }
 
-  replace(i, cI){
-    this.addedParams.splice(i, 1, {...this.alreadyAdded[cI]})
-  }
-
-  entered(i, val){
-    console.log(i, val);
-  }
-
-  template(i){
-    this.addedParams.push({...this.alreadyAdded[i]});
+  checkDuplcate(control){
+    console.log(control, this.addedParams);
+    const obj = this.addedParams.find(item => item.name === control.value);
+    if(obj){
+      return {'error': true};
+    }else{
+      return null;
+    }
   }
 }
