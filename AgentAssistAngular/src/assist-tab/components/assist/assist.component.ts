@@ -566,7 +566,7 @@ export class AssistComponent implements OnInit {
                     articlestypeInfo.append(seeMoreButtonHtml);
                     setTimeout(() => {
                         this.commonService.updateSeeMoreButtonForAssist(uuids + index,'snippet');
-                    }, 100);
+                    }, 1000);
             })
           }
 
@@ -754,12 +754,12 @@ export class AssistComponent implements OnInit {
               ele.question = ele.title;
               setTimeout(() => {
                 this.commonService.updateSeeMoreButtonForAssist(uuids + index, this.projConstants.ARTICLE);
-              }, 100);
+              }, 1000);
             // }
           })
 
         }
-       
+
         this.handleSeeMoreButton(responseId, data.suggestions.articles, this.projConstants.ARTICLE);
         this.handleSeeMoreButton(responseId, data.suggestions.faqs, this.projConstants.FAQ);
 
