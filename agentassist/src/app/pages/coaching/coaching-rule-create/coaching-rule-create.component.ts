@@ -39,12 +39,13 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
   coachingCnst : any = COACHINGCNST
   triggerClick : boolean = false;
   modalFlowCreateRef:any;
-  name = '';
-  description = '';
   allTriggers = this.coachingService.createRuleTriggerList;
   allActions = this.coachingCnst.createRuleActionList;
+  createdRule : any;
   filteredTagsOriginal : any = [];
   channelList : any = [];
+  allTagList : any = [];
+  isSettings = false;
 
   
 
@@ -79,8 +80,8 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
       setTimeout(() => {
         this.newRule();
       }, 1000);
-      // this.subscribeValChanges();
     };
+    this.createdRule = null;
     setTimeout(() => {
       this.subscribeValChanges();
     }, 10);
@@ -95,26 +96,38 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
   }
 
   updateRuleForm(){
-    // this.currentRule.channels = ['voice']
     setTimeout(() => {
       this.ruleForm.controls["name"].patchValue(this.currentRule?.name);  
       this.ruleForm.controls["description"].patchValue(this.currentRule?.description);
       this.ruleForm.setControl('channels', this.fb.array(this.currentRule?.channels));
       this.ruleForm.setControl('tags', this.fb.array(this.currentRule?.tags));
       this.filteredTagsOriginal = this.currentRule?.tags;
+      this.getRuleTags()
       this.channelList = this.currentRule?.channels;
   
       (this.currentRule?.triggers || []).forEach(element => {
         (<FormArray>this.ruleForm?.controls["triggers"])
         .push(this.getFormGroupObject(element));
-        // this.cd.detectChanges();
       });
       (this.currentRule?.actions || []).forEach(element => {
         (<FormArray>this.ruleForm?.controls["actions"])
         .push(this.getFormGroupObject(element));
-        // this.cd.detectChanges();
       });
       this.cd.detectChanges();
+    });
+  }
+
+  getRuleTags(){
+    let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
+    let params : any = {
+      botId
+    }
+    this.service.invoke('get.agentcoachingruletags',params, {
+      botId, 
+    }).subscribe(data => {
+      if (data && data.tags?.length > 0) {
+        this.allTagList = data.tags;
+      }
     });
   }
 
@@ -152,11 +165,6 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
   }
 
   createForm(){
-    
-    // this.ruleBasic = new FormGroup({
-
-    // });
-
     this.ruleForm = new FormGroup(
       {
         "name": new FormControl('',[Validators.required]),
@@ -175,7 +183,8 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
   }
 
   closeRule(rule?) {
-    this.onCloseRule.emit(rule);
+    let sendRule = this.createdRule ? this.createdRule : rule;
+    this.onCloseRule.emit(sendRule);
   }
  
   saveRule(closeRule = true){    
@@ -200,7 +209,9 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
         if(closeRule){
           this.closeRule(data);
         }else{
+          this.createdRule = data;
           this.updateRule(data);
+          this.closeBasicRule();
         }
         this.notificationService.notify(this.translate.instant("RULE.SUCCESS"), 'success');
       }
@@ -300,27 +311,34 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
       backdrop: 'static'
     });
     this.modalFlowCreateRef.componentInstance.ruleForm = this.ruleForm;
-    this.modalFlowCreateRef.componentInstance.filteredTagsOriginal = this.filteredTagsOriginal; 
+    this.modalFlowCreateRef.componentInstance.filteredTagsOriginal= this.filteredTagsOriginal;
+    this.modalFlowCreateRef.componentInstance.allTagList = this.allTagList;
+    this.modalFlowCreateRef.componentInstance.submitRuleForm.subscribe(data => {
+      console.log(data, 'data');
+      if(data){
+        this.saveRule(false);
+      }
+    })
     this.modalFlowCreateRef.componentInstance.closeBasicRule.subscribe(value => {      
       if(value){
         this.closeBasicRule();
       }
     });
 
-    this.modalFlowCreateRef.result.then((list)=> {
-      // if(list && typeof list == 'object'){
-      //   this.filteredTagsOriginal = list;
-      //   console.log(this.filteredTagsOriginal, 'filtered tags origins');
+    // this.modalFlowCreateRef.result.then((list)=> {
+    //   // if(list && typeof list == 'object'){
+    //   //   this.filteredTagsOriginal = list;
+    //   //   console.log(this.filteredTagsOriginal, 'filtered tags origins');
         
-      // }
-      if(list){
-        this.saveRule(false);
-      }
-    });
+    //   // }
+    //   if(list){
+    //     this.saveRule(false);
+    //   }
+    // });
 
   }
 
-  isSettings = false;
+  
 
   closeBasicRule(){
     if(this.createOrEdit == COACHINGCNST.CREATE && !this.isSettings){
@@ -337,8 +355,6 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
   openSettings(){
     this.isSettings = true;
     this.newRule();
-    // this.name = this.ruleForm.value?.name;
-    this.description = this.ruleForm.value?.description;
   }
 
  

@@ -175,9 +175,9 @@ export class CoachingComponent implements OnInit, OnDestroy {
       //   this.respData?.results[this.selectedRuleGroupIndex]?.rules.splice(this.selectedRuleIndex, 1, rule);
       //   this.respData = {...this.respData};
       // }
-      // if(!rule){
-      //   return;
-      // }
+      if(!rule){
+        return;
+      }
       this.getAgentCoachingGroupData();
       this.selectedRuleGroup = null;
       this.selectedRuleGroupIndex = null;

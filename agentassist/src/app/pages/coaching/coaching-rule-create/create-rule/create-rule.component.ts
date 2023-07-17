@@ -17,8 +17,12 @@ export class CreateRuleComponent implements OnInit {
   @ViewChild('trigger', {static : false}) trigger : MatAutocompleteTrigger;
 
   @Input() ruleForm: FormGroup;
+  @Input() allTagList : string[];
   @Input() filteredTagsOriginal;
+  
+  @Output() submitRuleForm = new EventEmitter();
   @Output() closeBasicRule = new EventEmitter();
+
   coachingCnst : any = COACHINGCNST
   tags:any = [];
   filteredTagsDisplay : any;
@@ -31,7 +35,7 @@ export class CreateRuleComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
-    this.filteredTagsDisplay = JSON.parse(JSON.stringify(this.filteredTagsOriginal));
+    this.filteredTagsDisplay = JSON.parse(JSON.stringify(this.allTagList));
     this.subscribeValues();
     this.updateVariables();
   }
@@ -80,8 +84,8 @@ export class CreateRuleComponent implements OnInit {
         this.tags.push({ name: value });
       }
       
-      if(this.filteredTagsOriginal.indexOf(value) == -1){
-        this.filteredTagsOriginal.push(value);
+      if(this.allTagList.indexOf(value) == -1){
+        this.allTagList.push(value);
       }
       // this.filteredTagsOriginal = this.filteredTagsOriginal.filter(item => item !== value);
     }
@@ -108,7 +112,7 @@ export class CreateRuleComponent implements OnInit {
   }
 
   assignOriginalToDisplayList(){
-    this.filteredTagsDisplay = JSON.parse(JSON.stringify(this.filteredTagsOriginal));
+    this.filteredTagsDisplay = JSON.parse(JSON.stringify(this.allTagList));
   }
 
   channelSelection(event, item){
@@ -128,7 +132,8 @@ export class CreateRuleComponent implements OnInit {
   submitForm(){
     // this.ruleForm.controls['name'].patchValue(this.name);
     // this.ruleForm.controls['description'].patchValue(this.description);    
-    this.activeModal.close(true);
+    // this.activeModal.close(true);
+    this.submitRuleForm.emit(true);
   }
 
 }

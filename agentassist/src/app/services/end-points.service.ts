@@ -1613,6 +1613,12 @@ export class EndPointsService {
       method : 'put'
     }
 
+    this.serviceList['get.agentcoachingruletags'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule/:botId/tags',
+      method : 'get'
+    }
+
+
     this.serviceList['post.agentcoachingutterance'] = {
       endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingutterance/:refId/utterances',
       method : 'post'
