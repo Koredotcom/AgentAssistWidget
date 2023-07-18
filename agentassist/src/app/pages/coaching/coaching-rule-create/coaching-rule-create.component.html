@@ -19,9 +19,11 @@
                     <div class="dropdown dropdown-open">
                       <button class="dropdown-toggle dropdown-input before-none" ngbDropdownToggle>+{{filteredTagsOriginal.length - 1 + ' More'}}</button>
                       <ul class="dropdown-menu content-menu more-dropdown-tags" ngbDropdownMenu>
-                        <li ngbDropdownItem class="p-0" *ngFor="let item of filteredTagsOriginal | slice:1; let i = index;">
-                            <a>{{item}}</a>
-                        </li>
+                        <ng-container *ngFor="let item of filteredTagsOriginal | slice:1; let i = index;">
+                            <li ngbDropdownItem class="p-0" >
+                                <a>{{item}}</a>
+                            </li>
+                        </ng-container>
                       </ul>
                     </div>
                 </div>

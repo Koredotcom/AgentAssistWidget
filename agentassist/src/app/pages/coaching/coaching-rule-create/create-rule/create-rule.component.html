@@ -35,25 +35,13 @@
                           #trigger="matAutocompleteTrigger" >
                 </mat-chip-list>
                 <mat-autocomplete #auto="matAutocomplete">
-                    <mat-option *ngFor="let tag of filteredTagsDisplay;let i = index" (click)="selectedOption({target:{checked : ruleForm.controls?.tags.value.indexOf(tag) >=0 ? false : true}}, tag);$event.stopPropagation();trigger.openPanel()">
-                        <input id="checkbox-{{i}}" type="checkbox" (click)="selectedOption($event,tag);trigger.openPanel();$event.stopPropagation();" [value]="tag"
-                        [checked]="ruleForm.controls?.tags.value.indexOf(tag) >= 0">
-                        <span for="checkbox-{{i}}">{{tag}}</span>
-                    </mat-option>
-                    <div class="mat-checkboxs">
-                        <div class="kr-sg-checkbox">
-                            <input id="checkbox-1" class="checkbox-custom" type="checkbox">
-                            <label for="checkbox-1" class="checkbox-custom-label">
-                                <span>General</span>
-                            </label>
-                        </div>   
-                        <div class="kr-sg-checkbox">
-                            <input id="checkbox-11" class="checkbox-custom" type="checkbox">
-                            <label for="checkbox-11" class="checkbox-custom-label">
-                                <span>General</span>
-                            </label>
-                        </div> 
-                    </div>
+                        <div class="mat-checkboxs">
+                            <mat-option *ngFor="let tag of filteredTagsDisplay;let i = index" (click)="selectedOption(tag);$event.stopPropagation();trigger.openPanel()">
+                                <input id="checkbox-{{i}}" type="checkbox" (click)="selectedOption(tag);trigger.openPanel();$event.stopPropagation();" [value]="tag"
+                                [checked]="ruleForm.controls?.tags.value.indexOf(tag) >= 0">
+                                <span for="checkbox-{{i}}">{{tag}}</span>
+                            </mat-option>
+                        </div>
                 </mat-autocomplete>
               </mat-form-field>
               

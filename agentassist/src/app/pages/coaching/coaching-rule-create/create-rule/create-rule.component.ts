@@ -58,11 +58,13 @@ export class CreateRuleComponent implements OnInit {
     this.tags = this.filteredTagsOriginal.map((str, index) => ({ name: str}));    
   }
 
-  selectedOption(event, item){    
+  selectedOption(item){
+    let checked = this.ruleForm.controls?.tags.value.indexOf(item) >=0 ? false : true
+      
     let tags = this.ruleForm.value.tags;    
-    if(event.target.checked && tags.indexOf(item) == -1){
+    if(checked && tags.indexOf(item) == -1){
       this.AddOrSelectTagNames(item);
-    }else if(!event.target.checked){
+    }else if(!checked){
       this.remove(item)
     }
   }
