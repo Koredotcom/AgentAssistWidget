@@ -189,6 +189,9 @@
                         </ng-template>
                     </div>
                 </div>
+                <div class="title-error" *ngIf="form?.controls?.frequency?.controls?.nSeconds.invalid"><span>
+                    Input time should be greater than configured time
+                </span></div>
             </div>
            
         </ul>

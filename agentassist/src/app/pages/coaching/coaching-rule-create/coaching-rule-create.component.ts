@@ -83,8 +83,6 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
     if(changes?.createOrEdit?.currentValue === COACHINGCNST.CREATE){
       this.createForm();
       this.getRuleTags(true);
-      // setTimeout(() => {
-      // }, 900);
     };
     this.createdRule = null;
     setTimeout(() => {
