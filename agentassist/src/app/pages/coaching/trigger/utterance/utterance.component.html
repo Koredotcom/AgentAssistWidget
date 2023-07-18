@@ -143,7 +143,7 @@
     </div> -->
     <ng-container *ngIf="openSetUtterance"> 
     <app-slider-component id="adherenceSlider" #adherenceSlider='app-slider'>
-            <app-utterance-adherence [createOrEdit]="createOrEdit" (onClose)="closeAdherence($event)" [form]="form"></app-utterance-adherence>
+            <app-utterance-adherence [isDefault]="isDefault" [createOrEdit]="createOrEdit" (onClose)="closeAdherence($event)" [form]="form"></app-utterance-adherence>
         </app-slider-component>
     </ng-container>
 </div>

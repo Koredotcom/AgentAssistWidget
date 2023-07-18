@@ -21,9 +21,10 @@ export class UtteranceAdherenceComponent implements OnInit {
 
   @Input() form: FormGroup;
   @Input() createOrEdit = '';
+  @Input() isDefault = true;
   @Output() onClose = new EventEmitter();
   @Output() saveUtterance = new EventEmitter();
-  @ViewChild('searchRef') searchRef : ElementRef;
+  // @ViewChild('searchRef') searchRef : ElementRef;
   color: ThemePalette = 'primary';
   // createOrEdit = false; //true on edit, false on create;
   mode: ProgressSpinnerMode = 'determinate';
@@ -154,7 +155,7 @@ export class UtteranceAdherenceComponent implements OnInit {
   }
 
   saveUtterances() {
-    if(this.searchRef?.nativeElement?.checked){
+    if(this.customUtt){
       this.utterances[this.searchKey?.value] = true;
     }
     this.selectedNewUtterances = Object.keys(this.utterances).map((item) => {
