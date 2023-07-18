@@ -12,7 +12,8 @@ export class SummaryPopupComponent implements OnInit {
   @Output() handlePopupEvent = new EventEmitter();
 
   editedSummaryText : any;
-  tooltipText : string = 'copy';
+  projCnst : any = ProjConstants;
+  tooltipText : string = ProjConstants.COPY;
 
   constructor() { }
 
@@ -32,17 +33,17 @@ export class SummaryPopupComponent implements OnInit {
     }
   }
 
-  handleCopyButton(copyText){
+  handleCopyButton(copyText){    
     var dummy = document.createElement("textarea");
     document.body.appendChild(dummy);
     dummy.value = copyText;
     dummy.select();
     document.execCommand("copy");
     document.body.removeChild(dummy);
-    this.tooltipText = 'copied';
+    this.tooltipText = this.projCnst.COPIED;
     setTimeout(() => {
-      this.tooltipText = 'copy';
-    }, 5000);
+      this.tooltipText = this.projCnst.COPY;
+    }, 3000);
   }
 
 }
