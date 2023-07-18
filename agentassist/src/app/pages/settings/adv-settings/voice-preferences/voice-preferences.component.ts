@@ -68,7 +68,7 @@ export class VoicePreferencesComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    if(true){      
+    if(this.voicePreferences?.callControlParameters){      
       let callControlParameters = [];
       let params = this.voicePreferences?.callControlParameters;
       for(let key in params){
