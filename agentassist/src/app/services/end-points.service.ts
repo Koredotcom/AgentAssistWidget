@@ -1572,6 +1572,11 @@ export class EndPointsService {
       method : 'post'
     }
 
+    this.serviceList['get.allagentCoachingpreBuiltRules'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule/preBuildRules/:botId',
+      method : 'get'
+    }
+
     this.serviceList['post.agentCoachingGroup'] = {
       endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachinggroup',
       method : 'post'

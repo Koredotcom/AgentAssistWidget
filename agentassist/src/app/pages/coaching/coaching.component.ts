@@ -47,6 +47,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
   page = 1;
   hasMore = false;
   searchText = '';
+  preBuilt = [];
 
   constructor(
     private modalService: NgbModal, private service: ServiceInvokerService,
@@ -79,6 +80,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
   }
 
   initApiCalls() {
+    this.getCoachingPreBuiltRules();
     this.getAgentCoachingRules();
     this.subscribeEvents();
     this.getConfigDetails();
@@ -103,10 +105,34 @@ export class CoachingComponent implements OnInit, OnDestroy {
 
   serachRules() {
     this.getAgentCoachingRules(true);
+    this.serachInPreBuilt();
   }
+
+  serachInPreBuilt(){
+    if(this.searchText){
+      this.respData.preBuilt = this.respData.preBuilt.filter((rule)=>rule.name?.toLowerCase()?.includes(this.searchText))
+    }else{
+      this.respData.preBuilt = JSON.parse(JSON.stringify(this.preBuilt));
+    }
+  }
+
+  getCoachingPreBuiltRules(){
+    let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
+    let params: any = {
+      botId,
+    };
+    this.service.invoke('get.allagentCoachingpreBuiltRules', params)
+    .subscribe((data)=>{
+      this.respData.preBuilt = data.results;
+      this.preBuilt = JSON.parse(JSON.stringify(data.results));
+    })
+  };
+
 
   getAgentCoachingRules(empty= false) {
     // let this = this;
+    this.isLoading = true;
+    this.cdRef.detectChanges();
     if(empty){
       this.page = 1;
       this.limit = 10;        
@@ -123,8 +149,6 @@ export class CoachingComponent implements OnInit, OnDestroy {
     if(this.searchText){
       body['searchText'] = this.searchText;
     }
-    this.isLoading = true;
-    this.cdRef.detectChanges();
     this.service.invoke('get.allagentCoachingRule', params, body).pipe(finalize(() => {
       this.isLoading = false;
       this.cdRef.detectChanges();
@@ -137,17 +161,6 @@ export class CoachingComponent implements OnInit, OnDestroy {
         this.page = this.page+1;
         this.hasMore = data.hasMore;
         this.respData.results.push(...data.results);
-        
-        let resultss = JSON.parse(JSON.stringify(data.results));
-        resultss.forEach((element, i) => {
-          element["default"] = true;
-          if(i%2 === 0){
-            element["deletable"] = true;
-          }else{
-            element["deletable"] = false;
-          }
-        });
-        this.respData.preBuilt = resultss;
         this.cdRef.detectChanges();
       }
     });

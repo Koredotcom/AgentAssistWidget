@@ -19,20 +19,20 @@
         <div class='init-loading' *ngIf="isLoading">
             <mat-spinner diameter="25" strokeWidth="3"></mat-spinner>
         </div>
-        <ng-container *ngIf="respData.results?.length">
+        <ng-container *ngIf="respData.preBuilt?.length || respData.results?.length">
 
             <div class="agents-grid-data-table">
                 <perfect-scrollbar class="scroll-data" #ps>
                     <div id="accordion" class="agent-groups-table-container">                        
                             <!-- pre built -->
-                            <div class="card_content">
+                            <div class="card_content" *ngIf="respData.preBuilt?.length">
                                 <div class="card_header">
-                                    <div data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="card_link collapsed" aria-expanded="true">
+                                    <div data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="card_link" aria-expanded="true">
                                         <div class="accordion-content-header">
                                             <div class="left-title text-truncate">
                                                 <div class="left-content-info">
                                                     <div class="title-info">
-                                                        <span>Pre-Build</span>
+                                                        <span>Pre-build</span>
                                                         <span class="normal-text">Pre-build coaching options & intent identification management. </span>
                                                     </div>
                                                 </div>                                                                                                 
@@ -46,41 +46,65 @@
                                     </div>
                                 </div> 
                                 <div id="collapseOne" class="inside-accordioncontent collapse show">
-                                    <perfect-scrollbar class="mx-h-300">
+                                    <perfect-scrollbar class="mx-h-300" (psYReachEnd)="onReachEnd($event)">
                                         <div class="card-body inner-accordion-table">
                                             <div class="content-scroll-data-agents">
-                                                <div class="shadow-freeze"></div>
+                                                <div class="shadow-freeze w-20"></div>
                                                 <div class="header-table-agents">
-                                                    <div class="titles-data w-35">
+                                                    <div class="titles-data w-20">
                                                         <div class="title-header">Coaching Rule</div>
                                                     </div>
-                                                    <div class="titles-data w-12">Actions</div>
-                                                    <div class="titles-data w-25">Description</div>
-                                                    <div class="titles-data w-18">Last UPDATED</div>
+                                                    <div class="titles-data w-11">Actions</div>
+                                                    <div class="titles-data w-14">Description</div>
+                                                    <div class="titles-data w-16">Tags</div>
+                                                    <div class="titles-data w-16">Channels</div>
+                                                    <div class="titles-data w-13">Last UPDATED</div>
                                                     <div class="titles-data w-10">Enabled</div>
                                                 </div>
-                                                <ng-container *ngFor="let pre of respData.preBuilt">
+                                                <ng-container *ngFor="let rule of respData.preBuilt">
                                                     <div class="body-data-table-wrapper-coaching">
-                                                        <div class="coaching-rule w-35">
-                                                            <div class="title">{{pre.name}}</div>
+                                                        <div class="coaching-rule w-20">
+                                                            <div class="title">{{rule.name}}</div>
                                                             <div class="desc-text">All Agents</div>
                                                         </div>
-                                                        <div class="actions-info w-12">
-                                                            <button class="edit-btn">
+                                                        <div class="actions-info w-11">
+                                                            <button class="edit-btn" (click)="openFLowCreation(flowCreation, rule, 'edit')">
                                                                 <i class="icon-sa-welcome-edit"></i>
                                                             </button>
-                                                            <button class="delete-btn" *ngIf="pre.deletable">
+                                                            <button class="delete-btn" *ngIf="rule.deletable" (click)="openDeleteRule(rule)">
                                                                 <i class="icon-sa-welcome-delete"></i>
                                                             </button>
                                                         </div>
-                                                        <div class="desc-text-info w-25">{{pre.description}}</div>
-                                                        <div class="title-text w-18 last-updated-text">{{pre.lModOn | date : 'MMM dd, yyyy h:mm a'}}</div>
+                                                        <div class="desc-text-info w-14">{{rule.description}}</div>
+                                                        <div class="tags-info w-16">
+                                                            <ng-container *ngFor="let tag of rule.tags.slice(0,2);">
+                                                                <span class="tag-name">{{tag}}</span>
+                                                            </ng-container>
+                                                            <div class="kr-sg-dropdowns" ngbDropdown container="body" *ngIf="rule.tags?.length > 2">
+                                                                <div class="dropdown dropdown-open">
+                                                                  <button class="dropdown-toggle dropdown-input before-none" ngbDropdownToggle>+ {{rule.tags?.length - 2}} More</button>
+                                                                  <ul class="dropdown-menu content-menu more-dropdown-tags" ngbDropdownMenu>
+                                                                    <ng-container *ngFor="let iTag of rule.tags | slice : 2">
+                                                                        <li ngbDropdownItem>
+                                                                            <span>{{iTag}}</span>
+                                                                        </li>
+                                                                    </ng-container>
+                                                                  </ul>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="channel-info w-16">
+                                                            <ng-container *ngFor="let channel of rule.channels">
+                                                                <span class="channel-name">{{channel}}</span>
+                                                            </ng-container>
+                                                        </div>
+                                                        <div class="title-text w-13 last-updated-text">{{rule.lModOn | date : 'MMM dd, yyyy h:mm a'}}</div>
                                                         <div class="last-updated-toggle w-10">
-                                                            <label class="kr-sg-toggle" *ngIf="pre.deletable">
-                                                                <input type="checkbox" [disabled]="!pre.deletable">
+                                                            <label class="kr-sg-toggle" *ngIf="rule.deletable">
+                                                                <input type="checkbox" [checked]="rule.isActive" (click)="changeRuleStatus(rule, rule._id)">
                                                                 <div class="slider"></div>
                                                             </label>
-                                                            <span *ngIf="!pre.deletable">Always Enabled</span>
+                                                            <span *ngIf="!rule.deletable">Always Enabled</span>
                                                         </div>
                                                     </div>
                                                 </ng-container>
@@ -88,10 +112,9 @@
                                         </div>
                                     </perfect-scrollbar>
                                 </div>                     
-                            </div>
-                            
+                            </div>            
                             <!-- new rules -->
-                            <div class="card_content">
+                            <div class="card_content" *ngIf="respData.results?.length">
                                 <div class="card_header">
                                     <div data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" class="card_link" aria-expanded="true">
                                         <div class="accordion-content-header">
@@ -99,7 +122,7 @@
                                                 <div class="left-content-info">
                                                     <div class="title-info">
                                                         <span>New Rules</span>
-                                                        <span class="normal-text">Pre-build coaching options & intent identification management. </span>
+                                                        <span class="normal-text">Configure your coaching moment here. </span>
                                                     </div>
                                                 </div>                                                                                                 
                                             </div>
@@ -183,7 +206,7 @@
                 </perfect-scrollbar>
             </div>
         </ng-container>
-        <ng-container *ngIf="respData.results?.length == 0 && !isLoading && !searchField?.value?.trim()">
+        <ng-container *ngIf="!respData.results?.length && !respData?.preBuilt?.length && !isLoading && !searchField?.value?.trim()">
             <div class="empty-coaching-wrapper">
                 <div class="empty-content">
                     <div class="img-block">
@@ -195,7 +218,7 @@
                 </div>
             </div>
         </ng-container>
-        <ng-container *ngIf="respData.results?.length == 0 && searchField?.value?.trim()">
+        <ng-container *ngIf="!respData.results?.length && !respData?.preBuilt?.length && searchField?.value?.trim() && !isLoading">
             <div class="empty-coaching-wrapper">
                 <div class="empty-content">
                     <div class="img-block">

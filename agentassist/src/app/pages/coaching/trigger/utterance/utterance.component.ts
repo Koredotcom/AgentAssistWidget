@@ -31,6 +31,7 @@ export class UtteranceComponent implements OnInit {
   inconvList : any = {}
   periodList : any = [COACHINGCNST.TRIGGER_FIRST, COACHINGCNST.TRIGGER_WITHIN]
   @Input() createOrEdit: string = '';
+  @Input() isDefault = true;
   private adherenceSlider: SliderComponentComponent;
   @ViewChild('adherenceSlider') set content(content: SliderComponentComponent) {
      if(content) { // initially setter gets called with undefined
@@ -90,7 +91,7 @@ export class UtteranceComponent implements OnInit {
         (<FormGroup>this.form.controls.frequency).addControl(param, new FormControl(COACHINGCNST.UTTERANCE_CONV_DEFAULT_SELECTION[param], [Validators.required]));
         this.selectedList[param] = COACHINGCNST.UTTERANCE_CONV_DEFAULT_SELECTION[param];
       }
-      (this.form.controls.frequency as FormGroup).controls?.duration.setValue(type);
+      (this.form.controls.frequency as FormGroup).controls?.duration?.setValue(type);
       this.resetFormValuesBasedOnConvSelection(type);
     }
   }

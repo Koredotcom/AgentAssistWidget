@@ -52,7 +52,7 @@
                                         <ng-container *ngIf="loaded; else loading">
                                             <div class="searchedutt" *ngIf="searchKey.value">
                                                 <div class="kr-sg-checkbox">
-                                                    <input id="checkbox-1" #searchRef class="checkbox-custom" type="checkbox">
+                                                    <input id="checkbox-1" #searchRef [checked]="customUtt" (change)="customUttChange($event.target.checked)" class="checkbox-custom" type="checkbox">
                                                     <label for="checkbox-1" class="checkbox-custom-label">{{searchKey.value}}</label>
                                                 </div>
                                                 <div class="percentage-colr">
