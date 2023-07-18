@@ -20,7 +20,7 @@ import { CreateRuleComponent } from './create-rule/create-rule.component';
   templateUrl: './coaching-rule-create.component.html',
   styleUrls: ['./coaching-rule-create.component.scss']
 })
-export class CoachingRuleCreateComponent implements OnInit, OnChanges {
+export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterViewInit {
 
   @Input() groupDetails : any;
   @Input() groupIndex : number;
@@ -40,7 +40,7 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
   triggerClick : boolean = false;
   modalFlowCreateRef:any;
   allTriggers = this.coachingService.createRuleTriggerList;
-  allActions = this.coachingCnst.createRuleActionList;
+  allActions = this.coachingService.createRuleActionList;
   createdRule : any;
   filteredTagsOriginal : any = [];
   channelList : any = [];
@@ -64,6 +64,10 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
     private translate: TranslateService
   ) { }
 
+  ngAfterViewInit(): void {
+
+  }
+
     @HostListener("window:beforeunload", ["$event"]) unloadHandler(event: Event) {
       if(this.formTouched){
         event.returnValue = false;
@@ -74,12 +78,13 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
     if(changes?.createOrEdit?.currentValue === COACHINGCNST.EDIT){
       this.createForm();
       this.updateRuleForm();
+      this.getRuleTags();
     }
     if(changes?.createOrEdit?.currentValue === COACHINGCNST.CREATE){
       this.createForm();
-      setTimeout(() => {
-        this.newRule();
-      }, 1000);
+      this.getRuleTags(true);
+      // setTimeout(() => {
+      // }, 900);
     };
     this.createdRule = null;
     setTimeout(() => {
@@ -102,7 +107,6 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
       this.ruleForm.setControl('channels', this.fb.array(this.currentRule?.channels));
       this.ruleForm.setControl('tags', this.fb.array(this.currentRule?.tags));
       this.filteredTagsOriginal = this.currentRule?.tags;
-      this.getRuleTags()
       this.channelList = this.currentRule?.channels;
   
       (this.currentRule?.triggers || []).forEach(element => {
@@ -117,7 +121,7 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
     });
   }
 
-  getRuleTags(){
+  getRuleTags(create=false){
     let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
     let params : any = {
       botId
@@ -127,6 +131,9 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges {
     }).subscribe(data => {
       if (data && data.tags?.length > 0) {
         this.allTagList = data.tags;
+      };
+      if(create){
+        this.newRule();
       }
     });
   }

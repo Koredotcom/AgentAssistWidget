@@ -1593,13 +1593,13 @@ export class EndPointsService {
     }
 
 
-    this.serviceList['put.agentCoachingRule'] = {
-      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachinggroup/:groupId/rule/:ruleId',
-      method : 'put'
-    }
+    // this.serviceList['put.agentCoachingRule'] = {
+    //   endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachinggroup/:groupId/rule/:ruleId',
+    //   method : 'put'
+    // }
 
     this.serviceList['delete.agentCoachingRule'] = {
-      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachinggroup/:groupId/rule/:ruleId',
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule/:ruleId',
       method : 'delete'
     }
 
@@ -1657,6 +1657,11 @@ export class EndPointsService {
     this.serviceList['get.utternaces'] = {
       endpoint : this.API_SERVER_URL + '/users/:userId/builder/streams/:streamId/aa_utterance/generate',
       method : 'post'
+    }
+
+    this.serviceList['get.ruleById'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule/:ruleId',
+      method : 'get'
     }
   }
 }

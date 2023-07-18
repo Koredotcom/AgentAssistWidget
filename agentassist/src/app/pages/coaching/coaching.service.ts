@@ -108,7 +108,7 @@ export class CoachingService {
       icon: "assets/icons/coaching/coaching--faq.svg",
       disable : true
     }
-  ]
+  ];
     
   
   constructor(private fb: FormBuilder) { }
