@@ -40,6 +40,7 @@ export class UtteranceAdherenceComponent implements OnInit {
   deletedUtter = [];
   selectedNewUtterances = [];
   deletedUIds = {};
+  selectAll = false;
   public utteranceDropdown: NgbDropdown;
 
   constructor(
@@ -160,11 +161,42 @@ export class UtteranceAdherenceComponent implements OnInit {
     });
   }
 
+  selectAllSearchUttereances(event) {
+    if(event.target.checked === true) {
+      this.openAiUtteranceArray.map(utter => {
+        utter.enabled = true;
+        this.utterances[utter.sentence] = true;
+        this.selectAll = true;
+      })
+    } else {
+      this.openAiUtteranceArray.map(utter => {
+        utter.enabled = false
+        this.selectAll = false;
+        delete this.utterances[utter.sentence];
+      })
+    }
+  }
+
+  checkUtterActiveStatus() {
+    for(let utterences of this.openAiUtteranceArray) {
+      if(utterences.enabled === false) {
+        return false
+      }
+    }
+    return true;
+  }
+
   changeUtterActiveStatus(utter) {
     utter.enabled = !utter.enabled;
     if (utter.enabled) {
       this.utterances[utter.sentence] = true;
+      if(this.checkUtterActiveStatus()) {
+        this.selectAll = true;
+      }
     } else {
+      if(this.selectAll) {
+        this.selectAll = !this.selectAll;
+      }
       delete this.utterances[utter.sentence];
     }
   }
