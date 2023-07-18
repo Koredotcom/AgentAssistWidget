@@ -860,3 +860,105 @@ input[type=number]::-webkit-outer-spin-button {
         }
     }
 }
+
+::ng-deep .example-chip-list{
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid var(--gray-300, #D0D5DD);
+    background: var(--base-white, #FFF);
+    box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+    display: flex;
+    padding: 4px 0px;
+    align-items: center;
+    gap: 8px;
+    align-self: stretch;
+    .mat-form-field-flex{
+        padding: 0 12px;
+    }
+    .mat-form-field-wrapper{
+        padding: 0;
+        width: 100%;
+        .mat-form-field-infix{
+            padding: 0;
+            margin: 0;
+            border: 0;
+        }
+    }
+    .mat-input-element{
+        margin: 0 !important;
+        height: 31px;
+    }
+    .mat-form-field-label-wrapper{
+        top: -13px;
+        padding-top: 10px;
+        color: var(--neutral-700, #404040);
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 400;
+    }
+    .mat-form-field-underline{
+        display: none;
+    }
+    .mat-chip-list-wrapper{
+        gap: 4px;
+        margin: 0 !important;
+        .mat-chip{
+            display: flex;
+            align-items: center;
+            margin: 0;
+            border-radius: 16px;
+            background: var(--blue-50, #EFF8FF) !important;
+            padding: 4px 10px 4px 12px;
+            justify-content: center;
+            gap: 4px;
+            height: auto;
+            min-height: auto;
+            &::after{
+                display: none;
+            }
+            .chip-name{
+                color: var(--blue-700, #175CD3);
+                text-align: center;
+                font-size: 14px;
+                font-weight: 500;
+                line-height: 20px;
+            }
+            .mat-chip-remove{
+                width: auto;
+                height: auto;
+                font-size: 11px;
+                opacity: 1 !important;
+                margin: 0 !important;
+                color: #2E90FA !important;
+                cursor: pointer;
+            }
+        }
+    }
+}
+
+::ng-deep .cdk-overlay-pane{
+    .mat-autocomplete-panel{
+        .mat-checkboxs{
+            .kr-sg-checkbox {
+                margin: 0 !important;
+                padding: 12px 20px;
+                width: 100%;
+                border-bottom: 1px solid var(--gray-200, #EAECF0);
+                .checkbox-custom {
+                    + .checkbox-custom-label{
+                        span{
+                            border-radius: 16px;
+                            background: var(--blue-50, #EFF8FF);
+                            padding: 4px 12px;
+                            color: var(--blue-700, #175CD3);
+                            text-align: center;
+                            font-size: 14px;
+                            font-weight: 500;
+                            line-height: 20px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
