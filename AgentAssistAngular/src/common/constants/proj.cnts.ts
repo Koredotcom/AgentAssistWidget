@@ -26,6 +26,7 @@ export const ProjConstants = {
     AGENTASSIST_RUN : 'Run with Agent Inputs',
     SEND : 'Send',
     COPY : 'Copy',
+    COPIED : 'Copied',
     SHOW_MORE : 'Show more',
     SHOW_LESS : 'Show less',
     READ_MORE : 'Read more',
