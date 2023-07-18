@@ -41,6 +41,14 @@
                                 <div class="text_info">Type an utterance that the person might say...</div>
                                 <ul class="dropdown_menu-wrapper" ngbDropdownMenu id="utteranceDropdownMenu">
                                     <div class="body-dropdown">
+                                      <ng-container *ngIf="searchKey.value?.length > 0">
+                                        <div>
+                                          <div class="kr-sg-checkbox">
+                                            <input id="checkbox-all" class="checkbox-custom" type="checkbox" [checked]="selectAll" (change)="selectAllSearchUttereances($event)">
+                                            <label for="checkbox-all" class="checkbox-custom-label">{{"AGENTASSIST.ALL" | translate}}</label>
+                                        </div>
+                                        </div>
+                                      </ng-container>
                                         <ng-container *ngIf="loaded; else loading">
                                             <div class="searchedutt" *ngIf="searchKey.value">
                                                 <div class="kr-sg-checkbox">
