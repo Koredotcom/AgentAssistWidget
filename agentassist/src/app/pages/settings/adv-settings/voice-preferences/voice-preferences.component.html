@@ -149,7 +149,7 @@
             <div class="label-text">Name</div>
             <input type="text" formControlName="name" placeholder="Enter Parameter" class="input-text">
             <!-- {{newKeyValueForm.controls['name'].errors | json}} -->
-            <p *ngIf="newKeyValueForm.controls['name'].errors?.error" style="color: red;">Name is already exists.</p>
+            <p *ngIf="newKeyValueForm.controls['name'].errors?.error" class="error">Name already exists.</p>
         </div>
         <div class="kr-sg-input-text">
             <div class="label-text">Value</div>
