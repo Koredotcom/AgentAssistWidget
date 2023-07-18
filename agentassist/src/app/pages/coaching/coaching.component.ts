@@ -166,6 +166,10 @@ export class CoachingComponent implements OnInit, OnDestroy {
           if (data) {
             this.currentRule = data;
             this.modalFlowCreateRef = this.modalService.open(flowCreation, { centered: true, keyboard: false, windowClass: 'flow-creation-full-modal', backdrop: 'static' });
+            setTimeout(() => {
+              window.dispatchEvent(new Event('resize'));
+              this.cdRef.detectChanges();
+            }, 0);
           }
         }, (error) => {
           this.notificationService.showError(error, this.translate.instant("COACHING.PUBLISH_FAILURE"));
