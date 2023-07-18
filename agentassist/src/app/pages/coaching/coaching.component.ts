@@ -46,6 +46,8 @@ export class CoachingComponent implements OnInit, OnDestroy {
   limit = 10;
   page = 1;
   hasMore = false;
+  searchText = '';
+
   constructor(
     private modalService: NgbModal, private service: ServiceInvokerService,
     private workflowService: workflowService, private cdRef: ChangeDetectorRef,
@@ -83,27 +85,32 @@ export class CoachingComponent implements OnInit, OnDestroy {
   }
 
   subscribeEvents() {
-    this.searchField.valueChanges.pipe(tap(() => { this.isLoading = true; }), debounceTime(300))
+    this.searchField.valueChanges.pipe(debounceTime(300), tap(() => { this.isLoading = true; }))
       .subscribe(term => {
         term = term.trim()
         if (term.trim()) {
-          this.serachRules(term);
-        } else if (term == '') {
-          this.serachRules(term);
+          this.searchText = term;
+          this.serachRules();
+          return;
+        } else if (term == '' && this.searchText) {
+          this.searchText = term;
+          this.serachRules();
+          return;
         }
-        // this.isLoading = false;
+        this.isLoading = false;
       });
   }
 
-  serachRules(term) {
-    this.hasMore = false;
-    this.page = 1;
-    this.limit = 10;
-    this.getAgentCoachingRules(term);
+  serachRules() {
+    this.getAgentCoachingRules(true);
   }
 
-  // get or update GroupData Starts
-  getAgentCoachingRules(searchText='') {
+  getAgentCoachingRules(empty= false) {
+    // let this = this;
+    if(empty){
+      this.page = 1;
+      this.limit = 10;        
+    }
     let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
     let params: any = {
       botId,
@@ -113,8 +120,8 @@ export class CoachingComponent implements OnInit, OnDestroy {
       limit: this.limit,
       page: this.page,
     }
-    if(searchText){
-      body['searchText'] = searchText;
+    if(this.searchText){
+      body['searchText'] = this.searchText;
     }
     this.isLoading = true;
     this.cdRef.detectChanges();
@@ -123,9 +130,24 @@ export class CoachingComponent implements OnInit, OnDestroy {
       this.cdRef.detectChanges();
     })).subscribe(data => {
       if (data) {
+        if(empty){
+          this.respData.results = [...[]];
+          // this.cdRef.detectChanges();
+        }
         this.page = this.page+1;
         this.hasMore = data.hasMore;
         this.respData.results.push(...data.results);
+        
+        let resultss = JSON.parse(JSON.stringify(data.results));
+        resultss.forEach((element, i) => {
+          element["default"] = true;
+          if(i%2 === 0){
+            element["deletable"] = true;
+          }else{
+            element["deletable"] = false;
+          }
+        });
+        this.respData.preBuilt = resultss;
         this.cdRef.detectChanges();
       }
     });
@@ -161,7 +183,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
     if (!rule) {
       return;
     }
-    this.getAgentCoachingRules();
+    this.getAgentCoachingRules(true);
     this.selectedRuleGroup = null;
     this.selectedRuleGroupIndex = null;
     this.selectedRuleIndex = null;
@@ -220,7 +242,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
       if (emitedValue) {
         this.service.invoke('delete.agentCoachingRule', { ruleId: rule._id }).subscribe(_data => {
           this.notificationService.notify(this.translate.instant("COACHING.RULEDELETE_SUCCESS"), 'success');
-          this.getAgentCoachingRules();
+          this.getAgentCoachingRules(true);
         }, (error) => {
           this.notificationService.showError(this.translate.instant("COACHING.RULEDELETE_FAILURE"));
         });

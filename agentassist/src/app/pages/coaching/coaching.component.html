@@ -24,8 +24,8 @@
             <div class="agents-grid-data-table">
                 <perfect-scrollbar class="scroll-data" #ps>
                     <div id="accordion" class="agent-groups-table-container">                        
-                        
-                            <div class="card_content d-none">
+                            <!-- pre built -->
+                            <div class="card_content">
                                 <div class="card_header">
                                     <div data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="card_link collapsed" aria-expanded="true">
                                         <div class="accordion-content-header">
@@ -45,7 +45,7 @@
                                         </div>
                                     </div>
                                 </div> 
-                                <div id="collapseOne" class="inside-accordioncontent collapse">
+                                <div id="collapseOne" class="inside-accordioncontent collapse show">
                                     <perfect-scrollbar class="mx-h-300">
                                         <div class="card-body inner-accordion-table">
                                             <div class="content-scroll-data-agents">
@@ -59,103 +59,28 @@
                                                     <div class="titles-data w-18">Last UPDATED</div>
                                                     <div class="titles-data w-10">Enabled</div>
                                                 </div>
-                                                <ng-container>
+                                                <ng-container *ngFor="let pre of respData.preBuilt">
                                                     <div class="body-data-table-wrapper-coaching">
                                                         <div class="coaching-rule w-35">
-                                                            <div class="title">Interest Rate</div>
+                                                            <div class="title">{{pre.name}}</div>
                                                             <div class="desc-text">All Agents</div>
                                                         </div>
                                                         <div class="actions-info w-12">
                                                             <button class="edit-btn">
                                                                 <i class="icon-sa-welcome-edit"></i>
                                                             </button>
-                                                            <!-- <button class="delete-btn">
+                                                            <button class="delete-btn" *ngIf="pre.deletable">
                                                                 <i class="icon-sa-welcome-delete"></i>
-                                                            </button> -->
+                                                            </button>
                                                         </div>
-                                                        <div class="desc-text-info w-25">Coaching to guide agents when customer asks about Price Objection</div>
-                                                        <div class="title-text w-18 last-updated-text">1 Jul, 23 - 9:15 pm</div>
+                                                        <div class="desc-text-info w-25">{{pre.description}}</div>
+                                                        <div class="title-text w-18 last-updated-text">{{pre.lModOn | date : 'MMM dd, yyyy h:mm a'}}</div>
                                                         <div class="last-updated-toggle w-10">
-                                                            <label class="kr-sg-toggle">
-                                                                <input type="checkbox">
+                                                            <label class="kr-sg-toggle" *ngIf="pre.deletable">
+                                                                <input type="checkbox" [disabled]="!pre.deletable">
                                                                 <div class="slider"></div>
                                                             </label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="body-data-table-wrapper-coaching">
-                                                        <div class="coaching-rule w-35">
-                                                            <div class="title">Interest Rate</div>
-                                                            <div class="desc-text">All Agents</div>
-                                                        </div>
-                                                        <div class="actions-info w-12">
-                                                            <button class="edit-btn">
-                                                                <i class="icon-sa-welcome-edit"></i>
-                                                            </button>
-                                                            <!-- <button class="delete-btn">
-                                                                <i class="icon-sa-welcome-delete"></i>
-                                                            </button> -->
-                                                        </div>
-                                                        <div class="title-text w-25">Coaching to guide agents when customer asks about Price Objection</div>
-                                                        <div class="title-text w-18 last-updated-text">1 Jul, 23 - 9:15 pm</div>
-                                                        <div class="last-updated-toggle w-10">
-                                                            <span>Always Enabled</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="body-data-table-wrapper-coaching">
-                                                        <div class="coaching-rule w-35">
-                                                            <div class="title">Interest Rate</div>
-                                                            <div class="desc-text">All Agents</div>
-                                                        </div>
-                                                        <div class="actions-info w-12">
-                                                            <button class="edit-btn">
-                                                                <i class="icon-sa-welcome-edit"></i>
-                                                            </button>
-                                                            <!-- <button class="delete-btn">
-                                                                <i class="icon-sa-welcome-delete"></i>
-                                                            </button> -->
-                                                        </div>
-                                                        <div class="title-text w-25">Coaching to guide agents when customer asks about Price Objection</div>
-                                                        <div class="title-text w-18 last-updated-text">1 Jul, 23 - 9:15 pm</div>
-                                                        <div class="last-updated-toggle w-10">
-                                                            <span>Always Enabled</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="body-data-table-wrapper-coaching">
-                                                        <div class="coaching-rule w-35">
-                                                            <div class="title">Interest Rate</div>
-                                                            <div class="desc-text">All Agents</div>
-                                                        </div>
-                                                        <div class="actions-info w-12">
-                                                            <button class="edit-btn">
-                                                                <i class="icon-sa-welcome-edit"></i>
-                                                            </button>
-                                                            <!-- <button class="delete-btn">
-                                                                <i class="icon-sa-welcome-delete"></i>
-                                                            </button> -->
-                                                        </div>
-                                                        <div class="title-text w-25">Coaching to guide agents when customer asks about Price Objection</div>
-                                                        <div class="title-text w-18 last-updated-text">1 Jul, 23 - 9:15 pm</div>
-                                                        <div class="last-updated-toggle w-10">
-                                                            <span>Always Enabled</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="body-data-table-wrapper-coaching">
-                                                        <div class="coaching-rule w-35">
-                                                            <div class="title">Interest Rate</div>
-                                                            <div class="desc-text">All Agents</div>
-                                                        </div>
-                                                        <div class="actions-info w-12">
-                                                            <button class="edit-btn">
-                                                                <i class="icon-sa-welcome-edit"></i>
-                                                            </button>
-                                                            <!-- <button class="delete-btn">
-                                                                <i class="icon-sa-welcome-delete"></i>
-                                                            </button> -->
-                                                        </div>
-                                                        <div class="title-text w-25">Coaching to guide agents when customer asks about Price Objection</div>
-                                                        <div class="title-text w-18 last-updated-text">1 Jul, 23 - 9:15 pm</div>
-                                                        <div class="last-updated-toggle w-10">
-                                                            <span>Always Enabled</span>
+                                                            <span *ngIf="!pre.deletable">Always Enabled</span>
                                                         </div>
                                                     </div>
                                                 </ng-container>
@@ -164,6 +89,8 @@
                                     </perfect-scrollbar>
                                 </div>                     
                             </div>
+                            
+                            <!-- new rules -->
                             <div class="card_content">
                                 <div class="card_header">
                                     <div data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" class="card_link" aria-expanded="true">
