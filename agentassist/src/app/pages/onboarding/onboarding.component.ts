@@ -6,6 +6,8 @@ import { NotificationService } from '@kore.services/notification.service';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { SubSink } from 'subsink';
 import { OnboardingDialogComponent } from './onboarding-dialog/onboarding-dialog.component';
+import { TranslateService } from '@ngx-translate/core';
+import { AccWarningDialogComponent } from 'src/app/helpers/components/acc-warning-dialog/acc-warning-dialog.component';
 
 @Component({
   selector: 'app-onboarding',
@@ -20,15 +22,47 @@ export class OnboardingComponent implements OnInit, OnDestroy {
     private service: ServiceInvokerService,
     private notificationService: NotificationService,
     private appService: AppService,
-    private router: Router
+    private router: Router,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
+    if(this.appService.selectedInstanceApp$.value) {
+      this.showWarningMessage();
+    } else {
+
+    }
     if (this.appService.instanceApps.length && !this.appService.isMigrated) {
       this.router.navigate(['home']);
     } else {
       this.initDialog();
     }
+  }
+
+  showWarningMessage() {
+    let dialogRef = this.dialog.open(AccWarningDialogComponent, {
+      width: '446px',
+      panelClass: "warning-account",
+      data: {
+        title: this.translate.instant("Account_Error"),
+        text: this.translate.instant("Account_Error_MSG"),
+        buttons: [{ key: 'login', label: this.translate.instant("LOGIN_BTN") }, { key: 'create', label: this.translate.instant("CREATE_ACCOUNT_BTN") }]
+      }
+    });
+
+    dialogRef.componentInstance.onSelect.subscribe(result => {
+      if (result === 'login') {
+        // redirect to login page
+        dialogRef.close();
+      } else if (result === 'create') {
+        // redirect to sign up page
+        dialogRef.close();
+      }
+    })
+
+    dialogRef.afterClosed().subscribe(result => {
+      // logic for redirecting
+    })
   }
 
   initDialog() {

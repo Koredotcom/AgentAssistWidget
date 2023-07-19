@@ -1,0 +1,37 @@
+@import './../../../scss/variables/variables.scss';
+.new-delete-popup{
+    background: $whiteColor;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    padding: 30px;
+    height: 100%;
+    .header-sec{
+        // align-items: center;
+        .title {
+            color: $primaryFontColor;
+            font-weight: normal;
+            font-size: 22px;
+            line-height: 34px;
+        }
+        .close-popup{
+            text-align: right;
+            img{
+                cursor: pointer;
+                position: relative;
+                top: 6px;
+            }
+        }
+    }
+    .body-info{
+        color: #605E5C;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 24px;
+        margin: 15px 0 30px 0;
+    }
+    .btns-data{
+        button{
+             margin-right: 10px;
+        }
+    }
+}
