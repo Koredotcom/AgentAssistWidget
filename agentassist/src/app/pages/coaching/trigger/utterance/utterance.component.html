@@ -113,7 +113,7 @@
         </ul>
     </div>
 
-    <div class="delete-row" (click)="deleteTriggerRule()" *ngIf="deletable"> 
+    <div class="delete-row" (click)="deleteTriggerRule()" *ngIf="!isDefault"> 
         <i class="icon-sa-welcome-delete"></i>
     </div>
     <!-- <div class="add-adherence">
