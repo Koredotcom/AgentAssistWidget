@@ -141,7 +141,9 @@
                                                 <div class="shadow-freeze w-20"></div>
                                                 <div class="header-table-agents">
                                                     <div class="titles-data w-20">
-                                                        <div class="title-header">Coaching Rule</div>
+                                                        <div class="title-header sort-header" (click)="sortOnClick()">Coaching Rule
+                                                            <img [src]="sortOrder == 'asc'? 'assets/icons/sort-up.svg' : 'assets/icons/use-case/SortDown.svg'" class="ml-1">
+                                                        </div>
                                                     </div>
                                                     <div class="titles-data w-11">Actions</div>
                                                     <div class="titles-data w-14">Description</div>
