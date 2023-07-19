@@ -153,6 +153,9 @@ export class SpeechAnalysisComponent implements OnInit {
       (this.form.controls.frequency as FormGroup).controls?.duration.setValue(type);
       this.resetFormValuesBasedOnConvSelection(type);
     }
+    if(type == this.coachingCnst.TRIGGER_BYTIME){
+      this.utteranceTimer.open();
+    }
   }
 
   resetFormValuesBasedOnConvSelection(type){
@@ -175,8 +178,11 @@ export class SpeechAnalysisComponent implements OnInit {
     // if(this.selectedSpeechType == this.coachingCnst.DEADAIR && (!e || e <= this.timer)){
     //   e = this.timer;
     // }else 
-    if(this.selectedSpeechType == this.coachingCnst.SPEECHSPEED && !e){
-      e = 1;
+    if(this.selectedSpeechType == this.coachingCnst.SPEECHSPEED){
+      if(!e){
+        e = 1;
+      }
+      this.utteranceTimer?.close();
     }
     this.inconvList.nSeconds = e;
     this.selectedList.nSeconds = e;
