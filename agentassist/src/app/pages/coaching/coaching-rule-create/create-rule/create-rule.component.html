@@ -34,7 +34,9 @@
                         <input id="checkbox-{{i}}" type="checkbox"
                             (click)="selectedOption(tag);trigger.openPanel();$event.stopPropagation();" [value]="tag"
                             [checked]="ruleForm.controls?.tags.value.indexOf(tag) >= 0">
-                        <span for="checkbox-{{i}}">{{tag}}</span>
+                            <div class="label-check" for="checkbox-{{i}}">
+                                <span>{{tag}}</span>
+                            </div>                            
                     </mat-option>
                 </div>
             </mat-autocomplete>
