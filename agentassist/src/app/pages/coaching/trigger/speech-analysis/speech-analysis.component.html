@@ -184,7 +184,7 @@
                         <div class="s-title">seconds</div>
                         <ng-template #bytimeinput>
                             <div class="kr-sg-input-text">
-                                <input type="number" digitOnly placeholder="Enter Seconds" class="input-text" (keyup.enter)="onEnterSeconds(selectedList.nSeconds);utteranceTimer.close()" [(ngModel)]="selectedList.nSeconds">
+                                <input type="number" digitOnly placeholder="Enter Seconds" class="input-text" (keyup.enter)="onEnterSeconds(selectedList.nSeconds);" [(ngModel)]="selectedList.nSeconds">
                             </div>
                         </ng-template>
                     </div>

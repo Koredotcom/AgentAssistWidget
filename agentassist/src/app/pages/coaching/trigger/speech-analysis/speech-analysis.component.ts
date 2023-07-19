@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChange } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChange, ViewChild } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
+import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
 import { COACHINGCNST } from '../../coaching.cnst';
 
 @Component({
@@ -14,6 +15,8 @@ export class SpeechAnalysisComponent implements OnInit {
   @Input() length : number;
   @Input() createOrEdit: string = '';
   @Output() deleteTrigger = new EventEmitter();
+
+  @ViewChild('utteranceTimer') private utteranceTimer: NgbDropdown;
 
   coachingCnst = COACHINGCNST;
   speechType = COACHINGCNST.SPEECH_TYPE;
@@ -43,8 +46,10 @@ export class SpeechAnalysisComponent implements OnInit {
     let inConvTime = (this.form.controls.frequency as FormGroup).value?.nSeconds as number;
 
     if (enteredTime <= inConvTime) {
+      this.utteranceTimer?.close();
       return null;
     }
+    this.utteranceTimer?.open();
     return { valueMisMatch: true };;
 
   };
@@ -148,6 +153,9 @@ export class SpeechAnalysisComponent implements OnInit {
       (this.form.controls.frequency as FormGroup).controls?.duration.setValue(type);
       this.resetFormValuesBasedOnConvSelection(type);
     }
+    if(type == this.coachingCnst.TRIGGER_BYTIME){
+      this.utteranceTimer.open();
+    }
   }
 
   resetFormValuesBasedOnConvSelection(type){
@@ -170,8 +178,11 @@ export class SpeechAnalysisComponent implements OnInit {
     // if(this.selectedSpeechType == this.coachingCnst.DEADAIR && (!e || e <= this.timer)){
     //   e = this.timer;
     // }else 
-    if(this.selectedSpeechType == this.coachingCnst.SPEECHSPEED && !e){
-      e = 1;
+    if(this.selectedSpeechType == this.coachingCnst.SPEECHSPEED){
+      if(!e){
+        e = 1;
+      }
+      this.utteranceTimer?.close();
     }
     this.inconvList.nSeconds = e;
     this.selectedList.nSeconds = e;
