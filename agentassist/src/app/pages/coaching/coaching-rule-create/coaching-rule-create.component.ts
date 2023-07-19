@@ -111,11 +111,11 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
       console.log("this.currentRule?.triggers", this.currentRule?.triggers);
       (this.currentRule?.triggers || []).forEach(element => {
         (<FormArray>this.ruleForm?.controls["triggers"])
-        .push(this.getFormGroupObject(element));
+        .push(this.getFormGroupObject(element, this.currentRule));
       });
       (this.currentRule?.actions || []).forEach(element => {
         (<FormArray>this.ruleForm?.controls["actions"])
-        .push(this.getFormGroupObject(element));
+        .push(this.getFormGroupObject(element, this.currentRule));
       });
       this.cd.detectChanges();
     });
@@ -138,9 +138,9 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
     });
   }
 
-  getFormGroupObject(element){
+  getFormGroupObject(element, rule){
     if(element.type == this.coachingCnst.UTTERANCE){
-      return this.fb.group(this.coachingService.setUtteranceForm(element))
+      return this.fb.group(this.coachingService.setUtteranceForm(element, rule))
     }else if(element.type == this.coachingCnst.SPEECH_ANALYSIS){
       return this.fb.group(this.coachingService.setSpeechAnalysisForm(element))
     }else if(element.type == this.coachingCnst.NUDGE_AGENT){
@@ -203,6 +203,9 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
     let payload : any = this.ruleForm.value;
     // payload["addToGroup"] = true;
     // payload["groupId"] = this.groupDetails._id;
+    if(!closeRule){
+      payload.isActive = true;
+    }
     let methodName = this.createOrEdit == COACHINGCNST.CREATE ? "post.agentcoachingrule" : "put.agentcoachingrule"
     this.service.invoke(methodName, {ruleId : this.currentRule?._id}, payload)
     .pipe(finalize(()=>{
