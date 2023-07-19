@@ -13,15 +13,15 @@
         </div>
         <div class="middle-content">
 
-            <div class="tags-info w-16" *ngIf="filteredTagsOriginal?.length > 0">
-                <span class="tag-name">{{filteredTagsOriginal[0]}}</span>
+            <div class="tags-info" *ngIf="filteredTagsOriginal?.length > 0">
+                <span class="tag-name" [title]="filteredTagsOriginal[0]">{{filteredTagsOriginal[0]}}</span>
                 <div class="kr-sg-dropdowns" ngbDropdown container="body" *ngIf="filteredTagsOriginal?.length > 1">
                     <div class="dropdown dropdown-open">
                       <button class="dropdown-toggle dropdown-input before-none" ngbDropdownToggle>+{{filteredTagsOriginal.length - 1 + ' More'}}</button>
                       <ul class="dropdown-menu content-menu more-dropdown-tags" ngbDropdownMenu>
                         <ng-container *ngFor="let item of filteredTagsOriginal | slice:1; let i = index;">
-                            <li ngbDropdownItem class="p-0" >
-                                <span>{{item}}</span>
+                            <li ngbDropdownItem class="p-0" [title]="item">
+                                <span class="mx-w-100 text-truncate">{{item}}</span>
                             </li>
                         </ng-container>
                       </ul>
