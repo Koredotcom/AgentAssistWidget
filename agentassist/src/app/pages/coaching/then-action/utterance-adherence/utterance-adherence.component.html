@@ -51,13 +51,13 @@
                                       </ng-container> -->
                                         <ng-container *ngIf="loaded; else loading">
                                             <div class="searchedutt" *ngIf="searchKey.value">
-                                                
-                                                <div class="kr-sg-checkbox">
+
+                                                <div class="check-list kr-sg-checkbox" *ngIf="openAiUtteranceArray?.length">
                                                     <input id="checkbox-all" class="checkbox-custom" type="checkbox" [checked]="selectAll" (change)="selectAllSearchUttereances($event)">
-                                                    <label for="checkbox-all" class="checkbox-custom-label">{{"AGENTASSIST.ALL" | translate}}</label>
+                                                    <label for="checkbox-all" class="checkbox-custom-label">{{"PLACEHOLDERS.SELECT_ALL" | translate}}</label>
                                                 </div>
 
-                                                <div class="kr-sg-checkbox">
+                                                <div class="check-list kr-sg-checkbox">
                                                     <input id="checkbox-1" [checked]="customUtt" (change)="customUttChange($event.target.checked)" class="checkbox-custom" type="checkbox">
                                                     <label for="checkbox-1" class="checkbox-custom-label">{{searchKey.value}}</label>
                                                 </div>
@@ -126,7 +126,7 @@
                             </div>
                         </div>
                         <ng-container *ngIf="selectedUtterancesArray.length == 0 && selectedNewUtterances?.length == 0">
-                            <div *ngIf="!isDefault" class="protip-hint-info">
+                            <div *ngIf="isDefault" class="protip-hint-info">
                                 <i class="icon-sa-welcome-bulb"></i>
                                 <div class="content-data-hint">
                                     <div class="title">Message!</div>

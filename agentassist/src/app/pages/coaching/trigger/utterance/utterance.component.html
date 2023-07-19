@@ -19,10 +19,10 @@
             </ng-container>
         </ul>
     </div>
-    <span class="utt-name-desc">when they use any of these</span>
+    <span class="utt-name-desc">when they use any of these {{isDefault}}</span>
     <div class="dropdown-custom-flows" container="body">
         <button class="dropdown-toggle btn-toggle text-choosen" (click)="openAdherence()">
-            <span class="choose-text"> {{(form?.value?.when?.utteranceCount || !isDefault) ? ((form?.value?.when?.utteranceCount ? form?.value?.when?.utteranceCount : '') + ' utterance(s)') : '{ set utterances }'}}</span>
+            <span class="choose-text"> {{(form?.value?.when?.utteranceCount || isDefault) ? ((form?.value?.when?.utteranceCount ? form?.value?.when?.utteranceCount : '') + ' utterance(s)') : '{ set utterances }'}}</span>
         </button>
     </div>
     
@@ -113,7 +113,7 @@
         </ul>
     </div>
 
-    <div class="delete-row" (click)="deleteTriggerRule()" *ngIf="isDefault"> 
+    <div class="delete-row" (click)="deleteTriggerRule()" *ngIf="deletable"> 
         <i class="icon-sa-welcome-delete"></i>
     </div>
     <!-- <div class="add-adherence">
@@ -143,7 +143,7 @@
     </div> -->
     <ng-container *ngIf="openSetUtterance"> 
     <app-slider-component id="adherenceSlider" #adherenceSlider='app-slider'>
-            <app-utterance-adherence [isDefault]="isDefault" [createOrEdit]="createOrEdit" (onClose)="closeAdherence($event)" [form]="form"></app-utterance-adherence>
+            <app-utterance-adherence [isDefault]="isDefault"  [createOrEdit]="createOrEdit" (onClose)="closeAdherence($event)" [form]="form"></app-utterance-adherence>
         </app-slider-component>
     </ng-container>
 </div>

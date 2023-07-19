@@ -393,6 +393,9 @@
                               text-overflow: ellipsis;
                               white-space: nowrap;
                             }
+                            .sort-header {
+                                cursor: pointer;
+                            }
                           }
                         }
                         .body-data-table-wrapper-coaching{

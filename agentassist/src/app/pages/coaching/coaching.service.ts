@@ -131,7 +131,7 @@ export class CoachingService {
     }
   }
 
-  setUtteranceForm(obj){
+  setUtteranceForm(obj, rule){
     let utteranceObj : any =  {
       _id: [obj._id, [Validators.required]],
       type: this.coachingCnst.UTTERANCE,
@@ -140,7 +140,7 @@ export class CoachingService {
       when : this.fb.group({
         addUtterances: [[]],
         deleteUtterances: [[]],
-        utteranceCount: [obj.when?.utteranceCount,[Validators.required]]
+        utteranceCount: [obj.when?.utteranceCount, rule.default ? '' : [Validators.required]]
       }),
       frequency: this.fb.group({
         nOccurrences: [obj.frequency?.nOccurrences, Validators.required]
