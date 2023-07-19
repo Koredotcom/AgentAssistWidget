@@ -41,6 +41,6 @@
 
 <!-- <button class="kr-sg-button-secondary-two btn_lg mt-3" (click)="openVPSlider()">Voice Preferances</button> -->
 <app-slider-component id="voicePreferenace" #vpSlider='app-slider'>
-    <app-voice-preferences *ngIf="showVPSlider" [voicePreferences]="voicePreferences" (closed)="closeVPSlider($event)"></app-voice-preferences>
+    <app-voice-preferences *ngIf="showVPSlider" [voicePreferences]="voicePreferences" (getNewData)="getNewData()" (closed)="closeVPSlider($event)"></app-voice-preferences>
 </app-slider-component>
 
