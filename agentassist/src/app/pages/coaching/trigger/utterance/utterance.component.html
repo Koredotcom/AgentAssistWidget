@@ -5,7 +5,7 @@
             <button class="and-or-btn" (click)="changeOperator(operator)" [ngClass]="{'active-btn' : selectedOperator === operator}">{{operator | titlecase}}</button>
         </ng-container>
     </div>
-    <!-- <span class="utt-name-desc">...a</span> -->
+    <span class="utt-name-desc">Triggered by utterance by </span>
     <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body">
         <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!selUser}">
             <span class="choose-text">{{selUser ? (selUser | titlecase) : '{ select person }'}}</span>
@@ -19,44 +19,101 @@
             </ng-container>
         </ul>
     </div>
-    <span class="utt-name-desc">uses any of these</span>
+    <span class="utt-name-desc">when they use any of these</span>
     <div class="dropdown-custom-flows" container="body">
         <button class="dropdown-toggle btn-toggle text-choosen" (click)="openAdherence()">
-            <span class="choose-text"> {{(form?.value?.when?.utteranceCount) ? form?.value?.when?.utteranceCount + ' utterance(s)' : '{ set utterances }'}}</span>
+            <span class="choose-text"> {{(form?.value?.when?.utteranceCount || !isDefault) ? ((form?.value?.when?.utteranceCount ? form?.value?.when?.utteranceCount : '') + ' utterance(s)') : '{ set utterances }'}}</span>
         </button>
-        <!-- <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
-            <li ngbDropdownItem class="list-item-li">
-                <span class="title">Agent</span>
-                <i class="icon-sa-conv-check"></i>
-            </li>
-        </ul> -->
     </div>
     
     <div class="dropdown-occurences" ngbDropdown [placement]="'bottom'" container="body">
-        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle><i class="icon-sa-conv-refreshten"></i> {{selOcc}}x</button>
+        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle><i class="icon-sa-conv-refreshten"></i> {{selOcc}} {{selOcc == 1 ? ' time' : ' times'}}</button>
         <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
             <perfect-scrollbar class="mx-h-220">
-                <ng-container *ngFor="let occ of occurances">
+                <ng-container *ngFor="let occ of occurances;let i = index">
                     <li ngbDropdownItem class="list-item-li" (click)="clickOcc(occ)">
-                        <span class="title">Each Occurrence <span>{{occ}}x</span></span>
+                        <!-- <span class="title">Each Occurrence  -->
+                            <span *ngIf="i == 0">{{occ}} time</span>
+                            <span *ngIf="i != 0">{{occ}} times</span>
+                        <!-- </span> -->
                         <i [ngClass]="{'icon-sa-conv-check': occ === selOcc}"></i>
                     </li>
                 </ng-container>
             </perfect-scrollbar>
         </ul>
     </div>
-    <div class="dropdown-occurences no_border" ngbDropdown [placement]="'bottom'" container="body" #utteranceTimer="ngbDropdown">
-        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle (click)="showTimer = timer">in {{timer}} seconds</button>
+
+    <div class="dropdown-occurences in-conversations-dropdown" ngbDropdown [placement]="'bottom'" container="body" #utteranceTimer="ngbDropdown">
+        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle *ngIf="!selectedConvType">in conversation</button>
+        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle *ngIf="selectedConvType == coachingCnst.TRIGGER_ANYTIME">any time</button>
+        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle *ngIf="selectedConvType == coachingCnst.TRIGGER_BYTIME" (click)="selectedList.period = inconvList.period;selectedList.nSeconds = inconvList.nSeconds">{{inconvList.period}} {{inconvList.nSeconds}} second(s)</button>
+        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle *ngIf="selectedConvType == coachingCnst.TRIGGER_BYMEESAGECOUNT" (click)="selectedList.period = inconvList.period;selectedList.nMessages = inconvList.nMessages">{{inconvList.period}} {{inconvList.nMessages}} message(s)</button>
+       
         <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
-            <div class="seconds-input">
-                <div class="kr-sg-input-text">
-                    <input type="number" digitOnly placeholder="Enter Seconds here" (keyup.enter)="onEnterTime(showTimer);utteranceTimer.close()" class="input-text" [(ngModel)]="showTimer">
+            <li ngbDropdownItem class="list-item-li" (click)="clickOnType(coachingCnst.TRIGGER_ANYTIME)">
+                <span class="title">Any time in conversation</span>
+                <i class="icon-sa-conv-check" *ngIf="selectedConvType == coachingCnst.TRIGGER_ANYTIME"></i>
+            </li>
+            <li class="list-item-li" data-toggle="collapse" href="#bytime" (click)="clickOnType(coachingCnst.TRIGGER_BYTIME);">
+                <span class="title">By time</span>
+                <i class="icon-sa-conv-check" *ngIf="selectedConvType == coachingCnst.TRIGGER_BYTIME"></i>
+            </li>
+
+            <div class="inside-conv-time-dropdown collapse" id="bytime" *ngIf="selectedConvType == coachingCnst.TRIGGER_BYTIME">
+                <div class="content-info-data">
+                    <div ngbDropdown class="drpdown-time" #byTimeDropdown="ngbDropdown">
+                        <button type="button" id="dropdownBasic1" ngbDropdownToggle>
+                            <span>{{selectedList.period}}</span>
+                            <i class="icon-sa-arrow-down"></i>
+                        </button>
+                        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                            <li class="list-item-li" *ngFor="let period of periodList" (click)="onEnterPeriod(period);byTimeDropdown.close()">
+                                <span class="title">{{period}}</span>
+                                <i class="icon-sa-conv-check" *ngIf="this.selectedList.period == period"></i>
+                            </li>
+                        </div>
+                    </div>
+                    <div class="seconds-input">
+                        <div class="kr-sg-input-text">
+                            <input type="number" digitOnly placeholder="Enter Seconds" class="input-text" (keyup.enter)="onEnterTime(selectedList.nSeconds);utteranceTimer.close()" [(ngModel)]="selectedList.nSeconds">
+                        </div>
+                        <div class="s-title">seconds</div>
+                    </div>
                 </div>
-                <div class="s-title">seconds</div>
             </div>
+           
+            <li class="list-item-li" data-toggle="collapse" href="#numofmsg" (click)="clickOnType(coachingCnst.TRIGGER_BYMEESAGECOUNT);">
+                <span class="title">By number of messages</span>
+                <i class="icon-sa-conv-check" *ngIf="selectedConvType == coachingCnst.TRIGGER_BYMEESAGECOUNT"></i>
+            </li>
+
+            <div class="inside-conv-time-dropdown collapse" id="numofmsg" *ngIf="selectedConvType == coachingCnst.TRIGGER_BYMEESAGECOUNT">
+                <div class="content-info-data">
+                    <div ngbDropdown class="drpdown-time" #byMessageDropdown="ngbDropdown">
+                        <button type="button" id="dropdownBasic1" ngbDropdownToggle>
+                            <span>{{selectedList.period}}</span>
+                            <i class="icon-sa-arrow-down"></i>
+                        </button>
+                        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                            <li class="list-item-li" *ngFor="let period of periodList" (click)="onEnterPeriod(period);byMessageDropdown.close()">
+                                <span class="title">{{period}}</span>
+                                <i class="icon-sa-conv-check" *ngIf="this.selectedList.period == period"></i>
+                            </li>
+                        </div>
+                    </div>
+                    <div class="seconds-input">
+                        <div class="kr-sg-input-text">
+                            <input type="number" digitOnly placeholder="Enter Message Count" class="input-text" (keyup.enter)="onEnterMessages(selectedList.nMessages);utteranceTimer.close()" [(ngModel)]="selectedList.nMessages">
+                        </div>
+                        <div class="s-title">messages</div>
+                    </div>
+                </div>
+            </div>
+           
         </ul>
     </div>
-    <div class="delete-row" (click)="deleteTriggerRule()"> 
+
+    <div class="delete-row" (click)="deleteTriggerRule()" *ngIf="isDefault"> 
         <i class="icon-sa-welcome-delete"></i>
     </div>
     <!-- <div class="add-adherence">
@@ -86,7 +143,7 @@
     </div> -->
     <ng-container *ngIf="openSetUtterance"> 
     <app-slider-component id="adherenceSlider" #adherenceSlider='app-slider'>
-            <app-utterance-adherence [createOrEdit]="createOrEdit" (onClose)="closeAdherence($event)" [form]="form"></app-utterance-adherence>
+            <app-utterance-adherence [isDefault]="isDefault" [createOrEdit]="createOrEdit" (onClose)="closeAdherence($event)" [form]="form"></app-utterance-adherence>
         </app-slider-component>
     </ng-container>
 </div>

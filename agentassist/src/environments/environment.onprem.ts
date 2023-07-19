@@ -1,11 +1,11 @@
 export const environment = {
   production: true,
   tag: "onprem",
-  API_SERVER_URL: 'https://bots.kore.ai',
+  API_SERVER_URL: 'https://huddl-agentassist-dev.kore.ai',
   USE_SESSION_STORE: false,
   ON_PREMISE: true,
   INLINE_MANUAL_SITE_KEY: "8c0da373990588f43a6e20d8d22228ee",
-  SUPPORT_API_SERVER_URL: 'https://smartassist.kore.ai',
+  SUPPORT_API_SERVER_URL: 'https://huddl-agentassist-dev.kore.ai',
   BOT_NAME: "Kore.ai Platform Support Bot",
   BOT_ID: "st-72138e03-61d4-58c1-bace-21beb50939b8",
   CLIENT_ID: "cs-8598b4a0-e2b6-50e5-9f48-d8a48b5c8084",

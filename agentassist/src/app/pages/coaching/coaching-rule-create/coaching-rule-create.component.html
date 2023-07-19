@@ -1,32 +1,48 @@
 
-<form [formGroup]="ruleForm" (keydown.enter)="$event.preventDefault()">
+<form (keydown.enter)="$event.preventDefault()" [formGroup]="ruleForm">
 <div class="flow-creation-wrapper-container">
     <div class="heading-actions-block">
         <div class="left-content">
             <div class="arrow-back" (click)="closeRuleScreen()">
-                <i class="icon-sa-arrow-down"></i>
+                <i class="icon-coaching--left-arrow"></i>
             </div>
+            <div class="border-divider"></div>
             <div class="kr-sg-input-text">
                 <input type="text" maxlength="100" placeholder="new coaching rule" class="input-text" formControlName="name">
             </div>
         </div>
         <div class="middle-content">
-            <div class="utt-name">{{groupDetails?.name}} / </div>
-            <div class="dropdown-adherence" ngbDropdown placement="bottom-center" #ruleSelection="ngbDropdown">
-                <button class="dropdown-toggle btn-toggle" ngbDropdownToggle>{{ruleForm.get('name')?.value}}<i *ngIf="groupDetails?.rules?.length > 1 && createOrEdit == coachingCnst.EDIT" class="icon-sa-arrow-down"></i></button>
-                <ul class="dropdown_menu-wrapper" ngbDropdownMenu id="ruleSelectionMenu" *ngIf="groupDetails?.rules?.length > 1 && createOrEdit == coachingCnst.EDIT">
-                    <perfect-scrollbar class="mx-h-300">
-                        <ng-container *ngFor="let rule of groupDetails?.rules">
-                            <li ngbDropdownItem class="list-item-li" *ngIf="rule.name !== currentRule?.name"
-                                (click)="closeRuleScreen(rule)">
-                                <span class="title">{{rule.name}}</span>
+
+            <div class="tags-info w-16" *ngIf="filteredTagsOriginal?.length > 0">
+                <span class="tag-name">{{filteredTagsOriginal[0]}}</span>
+                <div class="kr-sg-dropdowns" ngbDropdown container="body" *ngIf="filteredTagsOriginal?.length > 1">
+                    <div class="dropdown dropdown-open">
+                      <button class="dropdown-toggle dropdown-input before-none" ngbDropdownToggle>+{{filteredTagsOriginal.length - 1 + ' More'}}</button>
+                      <ul class="dropdown-menu content-menu more-dropdown-tags" ngbDropdownMenu>
+                        <ng-container *ngFor="let item of filteredTagsOriginal | slice:1; let i = index;">
+                            <li ngbDropdownItem class="p-0" >
+                                <span>{{item}}</span>
                             </li>
                         </ng-container>
-                    </perfect-scrollbar>
-                </ul>
+                      </ul>
+                    </div>
+                </div>
             </div>
-        </div>
+
+            <div class="channels-info" *ngIf="channelList?.length > 0">
+                <span class="title">Channels</span>
+                <button class="speak-chat-icon" *ngIf="channelList.indexOf('voice') >=0">
+                    <i class="icon-sa-welcome-voice"></i>
+                </button>
+                <button class="speak-chat-icon" *ngIf="channelList.indexOf('chat') >= 0">
+                    <i class="icon-sa-message"></i>
+                </button>
+            </div>
+        </div> 
         <div class="btn-actions">
+            <button class="settings-actions" (click)="openSettings()">
+                <i class="icon-sa-settings"></i>
+            </button>
             <button class="kr-sg-button-secondary btn_lg" (click)="closeRuleScreen()">Cancel</button>
             <!-- <button class="kr-sg-button-secondary-two btn_lg">Publish</button> -->
             <button class="kr-sg-button-primary btn_lg" [disabled]="ruleForm.invalid || (createOrEdit == coachingCnst.EDIT && !formTouched) || loading" (click)="saveRule()">{{loading ? 'Saving...' : 'Save'}}</button>
@@ -48,7 +64,7 @@
                                 <div class="drag-content" cdkDragHandle>
                                     <i class="icon-coaching--move1"></i>
                                 </div>
-                                <app-utterance [createOrEdit]="createOrEdit" class="comp" [form]="triggertype" *ngIf="triggertype?.controls?.type?.value == coachingCnst.UTTERANCE" [index]="i+1" [length]="ruleForm.controls['triggers']['controls']?.length" (deleteTrigger)="deleteTrigger($event)"></app-utterance>
+                                <app-utterance [isDefault]="currentRule?.deletable" [createOrEdit]="createOrEdit" class="comp" [form]="triggertype" *ngIf="triggertype?.controls?.type?.value == coachingCnst.UTTERANCE" [index]="i+1" [length]="ruleForm.controls['triggers']['controls']?.length" (deleteTrigger)="deleteTrigger($event)"></app-utterance>
                                 <app-speech-analysis class="comp" [form]="triggertype" *ngIf="triggertype?.controls?.type?.value == coachingCnst.SPEECH_ANALYSIS"  [createOrEdit]="createOrEdit" [index]="i+1" [length]="ruleForm.controls['triggers']['controls']?.length" (deleteTrigger)="deleteTrigger($event)"></app-speech-analysis>
                                 <app-variable [form]="triggertype" class="comp" *ngIf="triggertype?.controls?.type?.value == coachingCnst.VARIABLE" [index]="i+1" [length]="ruleForm.controls['triggers']['controls']?.length" (deleteTrigger)="deleteTrigger($event)"></app-variable>
                                 <app-dialog [form]="triggertype" class="comp" *ngIf="triggertype?.controls?.type?.value == coachingCnst.DIALOG" [index]="i+1" [length]="ruleForm.controls['triggers']['controls']?.length" (deleteTrigger)="deleteTrigger($event)"></app-dialog>
@@ -60,8 +76,8 @@
                         <!-- <div class="add-triggers" *ngIf="!triggerClick">
                             <button class="add-triggers-btn" (click)="addTriggerClick()"> + Add a trigger</button>
                         </div> -->
-                        <div class="add-trgigger-dropdown" ngbDropdown placement="right-top">
-                            <button class="add-triggers-btn" ngbDropdownToggle> + Add a trigger</button>
+                        <div class="add-trgigger-dropdown" ngbDropdown placement="right-top" [ngClass]="{'disabled': !currentRule?.deletable}">
+                            <button class="add-triggers-btn" ngbDropdownToggle [disabled]="!currentRule?.deletable"> + Add a trigger</button>
                             <div class="drop-add-trigger" ngbDropdownMenu>
                                 <ng-container *ngTemplateOutlet="addTriggerTemplate;"></ng-container> 
                             </div>
@@ -233,3 +249,6 @@
         </div>
     </div>
 </ng-template>
+
+
+
