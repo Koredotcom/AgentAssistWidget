@@ -19,7 +19,7 @@ export class CreateRuleComponent implements OnInit {
   @Input() ruleForm: FormGroup;
   @Input() allTagList : string[];
   @Input() filteredTagsOriginal;
-  
+  @Input() default = false;
   @Output() submitRuleForm = new EventEmitter();
   @Output() closeBasicRule = new EventEmitter();
 
