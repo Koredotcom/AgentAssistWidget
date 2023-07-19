@@ -2391,6 +2391,8 @@ body{
 // iframe load in smartassist styles
 
 .init-smartassist{
+  min-width: 100% !important;
+  width: 100% !important;
   app-header{
     display: none;
   }
