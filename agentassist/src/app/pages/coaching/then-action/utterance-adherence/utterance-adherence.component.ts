@@ -21,7 +21,7 @@ export class UtteranceAdherenceComponent implements OnInit {
 
   @Input() form: FormGroup;
   @Input() createOrEdit = '';
-  @Input() isDefault = true;
+  @Input() isDefault = false;
   @Output() onClose = new EventEmitter();
   @Output() saveUtterance = new EventEmitter();
   // @ViewChild('searchRef') searchRef : ElementRef;
