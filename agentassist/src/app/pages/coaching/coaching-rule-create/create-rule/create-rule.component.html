@@ -8,18 +8,18 @@
     <div class="body-wrapper">
         <div class="kr-sg-input-text m-b-15">
             <div class="label-text">Name</div>
-            <input type="text" placeholder="Add Name" class="input-text" [(ngModel)]="ruleName">
+            <input type="text" maxlength="100" placeholder="Add Name" class="input-text" [(ngModel)]="ruleName">
         </div>
         <div class="kr-sg-input-text-area m-b-15">
             <div class="label-text">Description</div>
-            <textarea placeholder="Rule Purpose" class="input-text" [(ngModel)]="ruleDesc"></textarea>
+            <textarea placeholder="Rule Purpose" maxlength="300" class="input-text" [(ngModel)]="ruleDesc"></textarea>
         </div>
-        <div class="label-text m-b-5">Name</div>
+        <div class="label-text m-b-5">Tags</div>
         <mat-form-field class="example-chip-list m-b-15">
-            <mat-label>Tags</mat-label>
+            <mat-label>Add Tags</mat-label>
             <mat-chip-list #chipList>
                 <mat-chip *ngFor="let tag of tags" [selectable]="true" [removable]="true" (removed)="remove(tag.name)">
-                    <span class="chip-name">{{tag.name}}</span>
+                    <span class="chip-name text-truncate mx-w-100" title="{{tag.name}}">{{tag.name}}</span>
                     <span class="icon-sa-close" matChipRemove *ngIf="true"></span>
                 </mat-chip>
                 <input placeholder="Add Tags" #tagInput [matChipInputFor]="chipList"
@@ -29,12 +29,12 @@
             </mat-chip-list>
             <mat-autocomplete #auto="matAutocomplete">
                 <div class="mat-checkboxs">
-                    <mat-option *ngFor="let tag of filteredTagsDisplay;let i = index"
+                    <mat-option *ngFor="let tag of filteredTagsDisplay;let i = index" [title]="tag"
                         (click)="selectedOption(tag);$event.stopPropagation();trigger.openPanel()">
                         <input id="checkbox-{{i}}" type="checkbox"
                             (click)="selectedOption(tag);trigger.openPanel();$event.stopPropagation();" [value]="tag"
                             [checked]="ruleForm.controls?.tags.value.indexOf(tag) >= 0">
-                            <div class="label-check" for="checkbox-{{i}}">
+                            <div class="label-check text-truncate" for="checkbox-{{i}}">
                                 <span>{{tag}}</span>
                             </div>                            
                     </mat-option>

@@ -3589,6 +3589,9 @@ $numbers: 1000;
     .width-#{$i} {
         width: #{$i+'px'} !important;
     }
+    .mx-w-#{$i} {
+        max-width: #{$i+'px'} !important;
+    }
     .h-#{$i} {
         height: #{$i+'%'} !important;
     }
