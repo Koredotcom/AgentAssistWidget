@@ -2413,6 +2413,29 @@ border: 1px solid transparent !important;
   transform: translateY(1px);
 }
 
+.btn-secondary-button {
+    border-radius: 4px;
+    height: 35px;
+    outline: 0;
+    padding: 7px 20px;
+    margin-left: 5px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    cursor: pointer;
+    border: 1px solid #EAF1FC;
+    background: #EAF1FC;
+    color: #2B75E4;
+}
+.btn-secondary-button:disabled{
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.btn-secondary-button:hover 
+{background-color: #EAF1FC}
+
+
 /* #loader {
     position: absolute;
     left: 56%;
@@ -3527,6 +3550,7 @@ input.no-autofill-bkg:-webkit-autofill {
     font-weight: normal;
     padding-bottom: 16px;
 }
+
 .summary-box-content .submit-btn {
     background: #0077D2;
     border: 1px solid #0077D2;
@@ -3555,6 +3579,7 @@ input.no-autofill-bkg:-webkit-autofill {
     display: inline-block;
     width: 100%;
     padding-bottom: 16px;
+    position: relative;
 }
 .summary-box-content .input-block-optional .label-text {
     font-weight: 500;
@@ -3921,7 +3946,6 @@ input.no-autofill-bkg:-webkit-autofill {
 .cursor-notallowed {
     cursor: not-allowed !important;
 }
-
 
 
 .sentiment-analysis{
