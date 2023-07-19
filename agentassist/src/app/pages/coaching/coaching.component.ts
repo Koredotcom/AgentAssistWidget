@@ -48,6 +48,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
   hasMore = false;
   searchText = '';
   preBuilt = [];
+  sortOrder : 'desc' | 'asc' = 'asc';
 
   constructor(
     private modalService: NgbModal, private service: ServiceInvokerService,
@@ -110,7 +111,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
 
   serachInPreBuilt(){
     if(this.searchText){
-      this.respData.preBuilt = this.respData.preBuilt.filter((rule)=>rule.name?.toLowerCase()?.includes(this.searchText))
+      this.respData.preBuilt = this.respData.preBuilt.filter((rule)=>rule.name?.toLowerCase()?.includes(this.searchText?.toLowerCase()))
     }else{
       this.respData.preBuilt = JSON.parse(JSON.stringify(this.preBuilt));
     }
@@ -145,6 +146,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
       botId,
       limit: this.limit,
       page: this.page,
+      sortBy : this.sortOrder
     }
     if(this.searchText){
       body['searchText'] = this.searchText;
@@ -297,5 +299,10 @@ export class CoachingComponent implements OnInit, OnDestroy {
   }
   closeRule() {
     this.modalService.dismissAll();
+  }
+
+  sortOnClick(){
+    this.sortOrder = this.sortOrder == 'desc' ? 'asc' : 'desc';
+    this.getAgentCoachingRules(true);
   }
 }

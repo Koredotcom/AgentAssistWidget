@@ -14,6 +14,9 @@ export class UtteranceComponent implements OnInit {
   @Input() form:FormGroup;
   @Input() index : number;
   @Input() length : number;
+  @Input() createOrEdit: string = '';
+  @Input() isDefault = false;
+  @Input() deletable = true;
   @Output() deleteTrigger = new EventEmitter();
 
   coachingCnst : any = COACHINGCNST
@@ -30,8 +33,7 @@ export class UtteranceComponent implements OnInit {
   selectedList : any = {}
   inconvList : any = {}
   periodList : any = [COACHINGCNST.TRIGGER_FIRST, COACHINGCNST.TRIGGER_WITHIN]
-  @Input() createOrEdit: string = '';
-  @Input() isDefault = true;
+
   private adherenceSlider: SliderComponentComponent;
   @ViewChild('adherenceSlider') set content(content: SliderComponentComponent) {
      if(content) { // initially setter gets called with undefined
