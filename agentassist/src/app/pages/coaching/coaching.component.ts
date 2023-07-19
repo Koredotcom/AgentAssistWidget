@@ -110,7 +110,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
 
   serachInPreBuilt(){
     if(this.searchText){
-      this.respData.preBuilt = this.respData.preBuilt.filter((rule)=>rule.name?.toLowerCase()?.includes(this.searchText))
+      this.respData.preBuilt = this.respData.preBuilt.filter((rule)=>rule.name?.toLowerCase()?.includes(this.searchText?.toLowerCase()))
     }else{
       this.respData.preBuilt = JSON.parse(JSON.stringify(this.preBuilt));
     }
