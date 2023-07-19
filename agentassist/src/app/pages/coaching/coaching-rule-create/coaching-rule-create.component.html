@@ -8,7 +8,10 @@
             </div>
             <div class="border-divider"></div>
             <div class="kr-sg-input-text">
-                <input type="text" maxlength="100" placeholder="new coaching rule" class="input-text" formControlName="name">
+                <input *ngIf="this.currentRule?.default; else ip" [disabled]="true" type="text" maxlength="100" placeholder="new coaching rule" class="input-text" [value]="ruleForm?.value?.name">
+                <ng-template #ip>
+                    <input type="text" maxlength="100" placeholder="new coaching rule" class="input-text" formControlName="name">
+                </ng-template>
             </div>
         </div>
         <div class="middle-content">

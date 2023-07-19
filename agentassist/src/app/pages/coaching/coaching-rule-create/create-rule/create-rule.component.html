@@ -8,7 +8,7 @@
     <div class="body-wrapper">
         <div class="kr-sg-input-text m-b-15">
             <div class="label-text">Name</div>
-            <input type="text" maxlength="100" placeholder="Add Name" class="input-text" [(ngModel)]="ruleName">
+            <input [disabled]="default" type="text" maxlength="100" placeholder="Add Name" class="input-text" [(ngModel)]="ruleName">
         </div>
         <div class="kr-sg-input-text-area m-b-15">
             <div class="label-text">Description</div>
