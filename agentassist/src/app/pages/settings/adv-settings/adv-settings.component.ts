@@ -136,7 +136,7 @@ export class AdvSettingsComponent implements OnInit, OnDestroy {
       this.showVPSlider = false;
     }
     if (this.incomingSetupConfigured) {
-      this.vpSlider.openSlider("#voicePreferenace", "width940");
+      this.vpSlider.openSlider("#voicePreferenace", "width550");
       this.showVPSlider = true;
     }
   }
@@ -167,5 +167,8 @@ export class AdvSettingsComponent implements OnInit, OnDestroy {
     this.destroyed$.next();
     this.destroyed$.complete();
     this.subs.unsubscribe();
+  }
+  getNewData(){
+    this.getAdvSettings()
   }
 }
