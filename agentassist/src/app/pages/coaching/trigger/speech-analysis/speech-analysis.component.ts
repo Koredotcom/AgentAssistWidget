@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChange } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChange, ViewChild } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
+import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
 import { COACHINGCNST } from '../../coaching.cnst';
 
 @Component({
@@ -14,6 +15,8 @@ export class SpeechAnalysisComponent implements OnInit {
   @Input() length : number;
   @Input() createOrEdit: string = '';
   @Output() deleteTrigger = new EventEmitter();
+
+  @ViewChild('utteranceTimer') private utteranceTimer: NgbDropdown;
 
   coachingCnst = COACHINGCNST;
   speechType = COACHINGCNST.SPEECH_TYPE;
@@ -43,8 +46,10 @@ export class SpeechAnalysisComponent implements OnInit {
     let inConvTime = (this.form.controls.frequency as FormGroup).value?.nSeconds as number;
 
     if (enteredTime <= inConvTime) {
+      this.utteranceTimer?.close();
       return null;
     }
+    this.utteranceTimer?.open();
     return { valueMisMatch: true };;
 
   };
