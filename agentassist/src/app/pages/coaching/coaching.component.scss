@@ -14,6 +14,7 @@
         border: 0;
     }
     .coaching-rule{
+        z-index: 2;
         padding: 5px 15px;
         .title{
             color: var(--neutral-700, #404040);
@@ -107,6 +108,10 @@
             font-size: 12px;
             font-weight: 500;
             line-height: 18px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            max-width: 120px;
         }
         .kr-sg-dropdowns {
             width: auto;
