@@ -28,6 +28,8 @@ export class CreateRuleComponent implements OnInit {
   filteredTagsDisplay : any;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   tagControl :  FormControl = new FormControl();
+  ruleName : string;
+  ruleDesc : string;
   
   constructor(private cdRef : ChangeDetectorRef,
     private fb: FormBuilder, 
@@ -55,6 +57,8 @@ export class CreateRuleComponent implements OnInit {
   }
 
   updateVariables(){
+    this.ruleName = this.ruleForm.value.name;
+    this.ruleDesc = this.ruleForm.value.description;
     this.tags = this.filteredTagsOriginal.map((str, index) => ({ name: str}));    
   }
 
@@ -132,8 +136,8 @@ export class CreateRuleComponent implements OnInit {
   }
 
   submitForm(){
-    // this.ruleForm.controls['name'].patchValue(this.name);
-    // this.ruleForm.controls['description'].patchValue(this.description);    
+    this.ruleForm.controls['name'].patchValue(this.ruleName);
+    this.ruleForm.controls['description'].patchValue(this.ruleDesc);    
     // this.activeModal.close(true);
     this.submitRuleForm.emit(true);
   }
