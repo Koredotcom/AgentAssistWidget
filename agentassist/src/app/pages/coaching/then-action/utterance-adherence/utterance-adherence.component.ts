@@ -70,7 +70,10 @@ export class UtteranceAdherenceComponent implements OnInit {
     }
     this.searchKey.valueChanges
       .pipe(
-        debounceTime(300)
+        debounceTime(300),
+        tap(()=>{
+          this.utterances = {};
+        })
       )
       .subscribe((val) => {
         this.loaded = false;
@@ -116,7 +119,12 @@ export class UtteranceAdherenceComponent implements OnInit {
           "model": this.cs.metaForUtternace?.defaultModel
       }
     }
-    this.service.invoke("get.utternaces", params, body).subscribe((data) => {
+    this.service.invoke("get.utternaces", params, body)
+    .pipe(finalize(()=>{
+      this.customUtt = false;
+      this.selectAll = false;
+    }))
+    .subscribe((data) => {
       this.loaded = true;
       this.openAiUtteranceArray = (data || []).map((item)=>{
         return {...item, enabled: false}
@@ -158,8 +166,8 @@ export class UtteranceAdherenceComponent implements OnInit {
     if(this.customUtt){
       this.utterances[this.searchKey?.value] = true;
     }
-    this.selectedNewUtterances = Object.keys(this.utterances).map((item) => {
-      return { utterance: item, language: 'english' };
+    Object.keys(this.utterances).forEach((item) => {
+      this.selectedNewUtterances.push({ utterance: item, language: 'english' });
     });
   }
 
@@ -254,4 +262,22 @@ export class UtteranceAdherenceComponent implements OnInit {
   // get getAddedCount(): number{
   //   return Object.keys(this.utterances)?.length + (this.searchRef?.nativeElement?.checked ? 1 : 0) || 0;
   // }
+  copy(val, i, arr){
+    const selBox = document.createElement('textarea');
+    selBox.style.position = 'fixed';
+    selBox.style.left = '0';
+    selBox.style.top = '0';
+    selBox.style.opacity = '0';
+    selBox.value = val;
+    document.body.appendChild(selBox);
+    selBox.focus();
+    selBox.select();
+    document.execCommand('copy');
+    document.body.removeChild(selBox);
+    arr[i].copied = 'Copied';
+    setTimeout(() => {
+      arr[i].copied = 'Copy';
+    },1000);
+
+  }
 }

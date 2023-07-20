@@ -157,12 +157,12 @@ export class VoicePreferencesComponent implements OnInit {
     this.voicePreferences.ttsPreference = ttsPreference.ttsProvider;
 
     this.ttsLanguages = ttsPreference.languages || [];
-    this.selectedTTSLanguage = this.ttsLanguages.find(f => f.languagePreference === this.selectedTTSLanguage.languagePreference) || this.ttsLanguages.find(f => f.languagePreference === 'en');
-    this.voiceNames = this.ttsLanguages.find(f => f.languagePreference === this.selectedTTSLanguage.languagePreference)?.voicePreferences.map(o => { return { name: o } }) || [];
+    this.selectedTTSLanguage = this.ttsLanguages.find(f => f.languagePreference === this.selectedTTSLanguage?.languagePreference) || this.ttsLanguages.find(f => f.languagePreference === 'en');
+    this.voiceNames = this.ttsLanguages.find(f => f.languagePreference === this.selectedTTSLanguage?.languagePreference)?.voicePreferences.map(o => { return { name: o } }) || [];
   }
 
   selectedVoiceLanguage(lang) {
-    if (lang.languagePreference === this.selectedTTSLanguage.languagePreference) return;
+    if (lang.languagePreference === this.selectedTTSLanguage?.languagePreference) return;
 
     // dialog
 
@@ -197,7 +197,7 @@ export class VoicePreferencesComponent implements OnInit {
     this.voicePreferences.voicePreference = '';
     this.selectedTTSLanguage = lang;
     this.voiceNames = this.selectedTTSLanguage.voicePreferences.map(o => { return { name: o } }) || [];
-    this.previewText = this.selectedTTSLanguage.languagePreference === this.voicePreferences.languagePreference ? this.voiceWelcomeMessage : '';
+    this.previewText = this.selectedTTSLanguage?.languagePreference === this.voicePreferences.languagePreference ? this.voiceWelcomeMessage : '';
 
     this.resetDialectPreference();
   }
@@ -228,7 +228,7 @@ export class VoicePreferencesComponent implements OnInit {
       "ttsPreference": this.voicePreferences.ttsPreference,
       "previewText": previewText,
       "voicePreference": this.voicePreferences.voicePreference,
-      "languagePreference": this.selectedTTSLanguage.languagePreference
+      "languagePreference": this.selectedTTSLanguage?.languagePreference
     }
     this.voicePreviewInProgress = true;
     this.service.invoke('post.previewVoice', _params, _payload)
@@ -251,7 +251,7 @@ export class VoicePreferencesComponent implements OnInit {
   configureVoicePreferenaces() {
     let _params: any = { streamId:this.workflowService.getCurrentBt(true)._id,'isAgentAssist':true };
     this.saveInProgress = true;
-    this.voicePreferences.languagePreference = this.selectedTTSLanguage.languagePreference;
+    this.voicePreferences.languagePreference = this.selectedTTSLanguage?.languagePreference;
     this.voicePreferences.dialectPreference = this.selectedDialect;
     for(let i=0; i<this.addedParams.length; i++){
       if(!this.addedParams[i].name.trim() || !this.addedParams[i].value.trim()){
