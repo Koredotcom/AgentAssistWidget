@@ -323,7 +323,7 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
     this.modalFlowCreateRef.componentInstance.ruleForm = this.ruleForm;
     this.modalFlowCreateRef.componentInstance.filteredTagsOriginal= this.filteredTagsOriginal;
     this.modalFlowCreateRef.componentInstance.allTagList = this.allTagList;
-    this.modalFlowCreateRef.componentInstance.default = this.currentRule.default;
+    this.modalFlowCreateRef.componentInstance.default = this.currentRule?.default;
     this.modalFlowCreateRef.componentInstance.submitRuleForm.subscribe(data => {
       console.log(data, 'data');
       if(data){
