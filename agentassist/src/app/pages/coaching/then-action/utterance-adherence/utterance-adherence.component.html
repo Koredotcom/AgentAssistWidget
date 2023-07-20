@@ -59,12 +59,12 @@
 
                                                 <div class="check-list kr-sg-checkbox">
                                                     <input id="checkbox-1" [checked]="customUtt" (change)="customUttChange($event.target.checked)" class="checkbox-custom" type="checkbox">
-                                                    <label for="checkbox-1" class="checkbox-custom-label">{{searchKey.value}}</label>
+                                                    <label for="checkbox-1" class="checkbox-custom-label" [title]="searchKey.value">{{searchKey.value}}</label>
                                                 </div>
-                                                <div class="percentage-colr">
-                                                    <!-- <span class="percentage">12%</span>
-                                                    <span class="bgcolor"></span> -->
-                                                </div>
+                                                <!-- <div class="percentage-colr">
+                                                    <span class="percentage">12%</span>
+                                                    <span class="bgcolor"></span>
+                                                </div> -->
                                             </div>
                                             <div class="found-details-info" *ngIf="searchKey.value?.length > 0 && cs.metaForUtternace?.integration">
                                                 <div class="found-ai-count">
@@ -78,12 +78,12 @@
                                                             <div class="item-data-found" >
                                                                 <div class="kr-sg-checkbox">
                                                                     <input id="'checkbox-' + {{i}}" class="checkbox-custom" type="checkbox" [checked]="utter.enabled" (click)="changeUtterActiveStatus(utter)">
-                                                                    <label for="'checkbox-' + {{i}}" class="checkbox-custom-label">{{utter.sentence}}</label>
+                                                                    <label for="'checkbox-' + {{i}}" class="checkbox-custom-label" [title]="utter.sentence">{{utter.sentence}}</label>
                                                                 </div>
-                                                                <div class="percentage-colr">
-                                                                    <!-- <span class="percentage">12%</span>
-                                                                    <span class="bgcolor"></span> -->
-                                                                </div>
+                                                                <!-- <div class="percentage-colr">
+                                                                    <span class="percentage">12%</span>
+                                                                    <span class="bgcolor"></span>
+                                                                </div> -->
                                                             </div>
                                                         </ng-container>
                                                         <!-- <div class="ai-working-loader">
@@ -146,26 +146,49 @@
                             <!-- Repeat Data -->
                             <ng-container *ngFor="let utter of selectedUtterancesArray; let iD = index">
                                 <div class="saved-utt-body-sec">
-                                    <div class="saved-title-utt">{{utter?.utterance}}</div>
-                                    <div class="percentage-colr">
-                                        <!-- <span class="percentage">12%</span>
-                                        <span class="bgcolor"></span> -->
-                                    </div>
-                                    <div class="delete-saved-utt" (click)="deleteUtternce(utter, iD)">
-                                        <i class="icon-sa-welcome-delete"></i>
+                                    <div class="saved-title-utt" [title]="utter?.utterance">{{utter?.utterance}}</div>
+                                    <!-- <div class="percentage-colr">
+                                        <span class="percentage">12%</span>
+                                        <span class="bgcolor"></span>
+                                    </div> -->
+                                    <div class="delete-saved-utt">
+                                        <i class="icon-sa-copy" 
+                                        (mouseover)="t.open()"
+                                        (mouseleave)="t.close()"
+                                        [ngbTooltip]="tolTemplate"
+                                        #t="ngbTooltip"
+                                        (click)="copy(utter?.utterance, iD, selectedUtterancesArray);">
+                                    </i>
+                                    <ng-template #tolTemplate>{{ utter.copied ? utter.copied : 'copy' }}</ng-template>
+                                        <i class="icon-sa-welcome-delete" (click)="deleteUtternce(utter, iD)"></i>
                                     </div>
                                 </div>
                             </ng-container>
                             <ng-container *ngFor="let utter of selectedNewUtterances;let iDx = index">
                                 <div class="saved-utt-body-sec">
-                                    <div class="saved-title-utt">{{utter?.utterance}}</div>
-                                    <div class="percentage-colr">
-                                        <!-- <span class="percentage">12%</span>
-                                        <span class="bgcolor"></span> -->
+                                    <div class="saved-title-utt" [title]="utter?.utterance">{{utter?.utterance}}</div>
+                                    <!-- <div class="percentage-colr">
+                                        <span class="percentage">12%</span>
+                                        <span class="bgcolor"></span>
+                                    </div> -->
+                                    <div class="delete-saved-utt">
+                                        <i class="icon-sa-copy" 
+                                        (mouseover)="t.open()"
+                                        (mouseleave)="t.close()"
+                                        [ngbTooltip]="tolTemplate"
+                                        #t="ngbTooltip"
+                                        (click)="copy(utter?.utterance, iDx, selectedNewUtterances);">
+                                    </i>
+                                    <ng-template #tolTemplate>{{ utter.copied ? utter.copied : 'copy' }}</ng-template>
+                                        <i class="icon-sa-welcome-delete" (click)="deleteUtternceNew(utter?.utterance, iDx)"></i>
+                                    </div>
+                                    <!-- <div class="abc">
+                                        <i class="icon-sa-copy"></i>
+                                        <i class="icon-sa-welcome-delete"></i>
                                     </div>
                                     <div class="delete-saved-utt" (click)="deleteUtternceNew(utter?.utterance, iDx)">
                                         <i class="icon-sa-welcome-delete"></i>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </ng-container>
                         </div>
