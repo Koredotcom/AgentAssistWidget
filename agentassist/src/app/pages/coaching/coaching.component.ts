@@ -203,7 +203,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
     if (!rule) {
       return;
     };
-    this.sortOrder = 'asc'
+    // this.sortOrder = 'asc'
     this.getAgentCoachingRules(true);
     this.getCoachingPreBuiltRules();
     this.selectedRuleGroup = null;
