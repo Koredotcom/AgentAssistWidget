@@ -161,6 +161,9 @@ export class CoachingService {
       if(obj.frequency?.nMessages){
         (<FormGroup> utteranceObj.frequency).addControl('nMessages', new FormControl(obj.frequency?.nMessages))
       }
+      if(obj?.default){
+        utteranceObj['default'] = [obj.default];
+      }
     }
     return utteranceObj;
   }

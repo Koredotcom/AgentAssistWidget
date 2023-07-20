@@ -85,8 +85,8 @@
                                                                   <button class="dropdown-toggle dropdown-input before-none" ngbDropdownToggle>+ {{rule.tags?.length - 2}} More</button>
                                                                   <ul class="dropdown-menu content-menu more-dropdown-tags" ngbDropdownMenu>
                                                                     <ng-container *ngFor="let iTag of rule.tags | slice : 2">
-                                                                        <li ngbDropdownItem>
-                                                                            <span>{{iTag}}</span>
+                                                                        <li [title]="iTag" ngbDropdownItem class="mx-w-200">
+                                                                            <span class="text-truncate">{{iTag}}</span>
                                                                         </li>
                                                                     </ng-container>
                                                                   </ul>
