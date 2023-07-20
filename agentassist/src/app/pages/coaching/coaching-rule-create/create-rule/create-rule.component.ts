@@ -22,6 +22,7 @@ export class CreateRuleComponent implements OnInit {
   @Input() createOrEdit : string;
   @Input() disableApplyButton : boolean;
   
+  @Input() default = false;
   @Output() submitRuleForm = new EventEmitter();
   @Output() closeBasicRule = new EventEmitter();
 

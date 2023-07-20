@@ -65,7 +65,7 @@
                                                     <div class="body-data-table-wrapper-coaching">
                                                         <div class="coaching-rule w-20">
                                                             <div class="title">{{rule.name}}</div>
-                                                            <div class="desc-text">All Agents</div>
+                                                            <div class="desc-text" title="All Agents">All Agents</div>
                                                         </div>
                                                         <div class="actions-info w-11">
                                                             <button class="edit-btn" (click)="openFLowCreation(flowCreation, rule, 'edit')">
@@ -155,7 +155,7 @@
                                                 <ng-container *ngFor="let rule of respData.results">
                                                     <div class="body-data-table-wrapper-coaching">
                                                         <div class="coaching-rule w-20">
-                                                            <div class="title">{{rule.name}}</div>
+                                                            <div class="title" [title]="rule.name">{{rule.name}}</div>
                                                             <div class="desc-text">All Agents</div>
                                                         </div>
                                                         <div class="actions-info w-11">
@@ -166,18 +166,18 @@
                                                                 <i class="icon-sa-welcome-delete"></i>
                                                             </button>
                                                         </div>
-                                                        <div class="desc-text-info w-14">{{rule.description}}</div>
+                                                        <div class="desc-text-info w-14" [title]="rule.description">{{rule.description}}</div>
                                                         <div class="tags-info w-16">
                                                             <ng-container *ngFor="let tag of rule.tags.slice(0,2);">
-                                                                <span class="tag-name">{{tag}}</span>
+                                                                <span class="tag-name" [title]="tag">{{tag}}</span>
                                                             </ng-container>
                                                             <div class="kr-sg-dropdowns" ngbDropdown container="body" *ngIf="rule.tags?.length > 2">
                                                                 <div class="dropdown dropdown-open">
                                                                   <button class="dropdown-toggle dropdown-input before-none" ngbDropdownToggle>+ {{rule.tags?.length - 2}} More</button>
                                                                   <ul class="dropdown-menu content-menu more-dropdown-tags" ngbDropdownMenu>
                                                                     <ng-container *ngFor="let iTag of rule.tags | slice : 2">
-                                                                        <li ngbDropdownItem>
-                                                                            <span>{{iTag}}</span>
+                                                                        <li ngbDropdownItem class="mx-w-200">
+                                                                            <span [title]="iTag" class="text-truncate">{{iTag}}</span>
                                                                         </li>
                                                                     </ng-container>
                                                                   </ul>
@@ -186,10 +186,10 @@
                                                         </div>
                                                         <div class="channel-info w-16">
                                                             <ng-container *ngFor="let channel of coachingConst.channelList">
-                                                                <span class="channel-name" *ngIf="rule.channels?.indexOf(channel) >= 0">{{channel}}</span>
+                                                                <span class="channel-name" *ngIf="rule.channels?.indexOf(channel) >= 0" [title]="channel">{{channel}}</span>
                                                             </ng-container>
                                                         </div>
-                                                        <div class="title-text w-13 last-updated-text">{{rule.lModOn | date : 'MMM dd, yyyy h:mm a'}}</div>
+                                                        <div class="title-text w-13 last-updated-text" [title]="(rule.lModOn | date : 'MMM dd, yyyy h:mm a')">{{rule.lModOn | date : 'MMM dd, yyyy h:mm a'}}</div>
                                                         <div class="last-updated-toggle w-10">
                                                             <label class="kr-sg-toggle">
                                                                 <input type="checkbox" [checked]="rule.isActive" (click)="changeRuleStatus(rule, rule._id)">
