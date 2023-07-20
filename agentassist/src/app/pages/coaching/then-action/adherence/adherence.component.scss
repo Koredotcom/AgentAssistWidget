@@ -457,7 +457,7 @@
                         background: #FFFFFF;
                         border-bottom: 1px solid #EAECF0;
                         min-height: 72px;
-                        padding: 16px 36px 16px 24px;
+                        padding: 16px 65px 16px 24px;
                         position: relative;
                         .saved-title-utt{
                             max-width: 100%;
@@ -495,9 +495,19 @@
                             top: auto;
                             cursor: pointer;
                             line-height: normal;
-                            color: #F04438;
+                            // color: #F04438;
                             font-size: 16px;
                             z-index: 1;
+                            display: flex;
+                            align-items: center;
+                            gap: 8px;
+                            i{  
+                                color: var(--gray-modern-400, #9AA4B2);
+                                cursor: pointer;
+                                &.icon-sa-welcome-delete{
+                                    color: #F04438;
+                                }
+                            }
                         }
                     }
                 }

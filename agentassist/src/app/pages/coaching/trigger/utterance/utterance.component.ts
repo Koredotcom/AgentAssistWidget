@@ -15,8 +15,7 @@ export class UtteranceComponent implements OnInit {
   @Input() index : number;
   @Input() length : number;
   @Input() createOrEdit: string = '';
-  @Input() isDefault = false;
-  @Input() deletable = true;
+  // @Input() isDefault = false;
   @Output() deleteTrigger = new EventEmitter();
 
   coachingCnst : any = COACHINGCNST

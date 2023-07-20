@@ -192,6 +192,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
 
     }
     if (type === COACHINGCNST.CREATE) {
+      this.currentRule = {...{}};
       this.createOrEdit = COACHINGCNST.CREATE;
       this.modalFlowCreateRef = this.modalService.open(flowCreation, { centered: true, keyboard: false, windowClass: 'flow-creation-full-modal', backdrop: 'static' });
     }
@@ -201,8 +202,10 @@ export class CoachingComponent implements OnInit, OnDestroy {
     this.modalFlowCreateRef.close();
     if (!rule) {
       return;
-    }
+    };
+    this.sortOrder = 'asc'
     this.getAgentCoachingRules(true);
+    this.getCoachingPreBuiltRules();
     this.selectedRuleGroup = null;
     this.selectedRuleGroupIndex = null;
     this.selectedRuleIndex = null;
