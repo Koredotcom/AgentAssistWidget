@@ -1,6 +1,6 @@
 <div class="modal-wrapper-coaching">
     <div class="header-wrapper">
-        <div class="title-heading">New Rule</div>
+        <div class="title-heading">{{createOrEdit == coachingCnst.CREATE ? 'New Rule' : 'Rule Settings'}}</div>
         <div class="close-modal" (click)="closeRule()">
             <i class="icon-sa-close"></i>
         </div>
@@ -56,6 +56,6 @@
     </div>
     <div class="footer-wrapper">
         <button class="kr-sg-button-secondary-two btn_lg" (click)="closeRule()">Cancel</button>
-        <button class="kr-sg-button-primary btn_lg" (click)="submitForm()">Apply</button>
+        <button class="kr-sg-button-primary btn_lg" (click)="submitForm()" [disabled]="disableApplyButton">Apply</button>
     </div>
 </div>

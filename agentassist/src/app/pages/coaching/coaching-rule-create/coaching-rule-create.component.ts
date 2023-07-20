@@ -219,14 +219,17 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
         if(closeRule){
           this.closeRule(data);
         }else{
+          let notification = (this.createOrEdit == this.coachingCnst.CREATE) ? 'RULE.SUCCESS' :'RULE.UPDATE_SUCCESS';
+          this.notificationService.notify(this.translate.instant(notification), 'success');
+          // notification should be before updating createoredit variable.
           this.createdRule = data;
           this.updateRule(data);
           this.closeBasicRule();
         }
-        this.notificationService.notify(this.translate.instant("RULE.SUCCESS"), 'success');
       }
     },
     (err)=>{
+      this.modalFlowCreateRef.componentInstance.disableApplyButton = false;
       this.notificationService.showError(err, this.translate.instant("QUOTA_EXCEEDED"));
     });
   }
@@ -323,6 +326,8 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
     this.modalFlowCreateRef.componentInstance.ruleForm = this.ruleForm;
     this.modalFlowCreateRef.componentInstance.filteredTagsOriginal= this.filteredTagsOriginal;
     this.modalFlowCreateRef.componentInstance.allTagList = this.allTagList;
+    this.modalFlowCreateRef.componentInstance.createOrEdit = this.createOrEdit;
+    this.modalFlowCreateRef.componentInstance.disableApplyButton = false;
     this.modalFlowCreateRef.componentInstance.submitRuleForm.subscribe(data => {
       console.log(data, 'data');
       if(data){

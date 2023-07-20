@@ -19,6 +19,8 @@ export class CreateRuleComponent implements OnInit {
   @Input() ruleForm: FormGroup;
   @Input() allTagList : string[];
   @Input() filteredTagsOriginal;
+  @Input() createOrEdit : string;
+  @Input() disableApplyButton : boolean;
   
   @Output() submitRuleForm = new EventEmitter();
   @Output() closeBasicRule = new EventEmitter();
@@ -136,6 +138,7 @@ export class CreateRuleComponent implements OnInit {
   }
 
   submitForm(){
+    this.disableApplyButton = true;
     this.ruleForm.controls['name'].patchValue(this.ruleName);
     this.ruleForm.controls['description'].patchValue(this.ruleDesc);    
     // this.activeModal.close(true);
