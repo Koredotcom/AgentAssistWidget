@@ -102,13 +102,14 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
     setTimeout(() => {
       this.ruleForm.controls["name"].patchValue(this.currentRule?.name);  
       this.ruleForm.controls["description"].patchValue(this.currentRule?.description);
+      this.ruleForm.controls['isActive'].patchValue(this.currentRule?.isActive);
+
       this.ruleForm.setControl('channels', this.fb.array(this.currentRule?.channels));
       this.ruleForm.setControl('tags', this.fb.array(this.currentRule?.tags));
       this.filteredTagsOriginal = this.currentRule?.tags;
       this.channelList = this.currentRule?.channels;
       (<FormArray>this.ruleForm?.controls["triggers"]).clear();
       (<FormArray>this.ruleForm?.controls["actions"]).clear();
-      console.log("this.currentRule?.triggers", this.currentRule?.triggers);
       (this.currentRule?.triggers || []).forEach(element => {
         (<FormArray>this.ruleForm?.controls["triggers"])
         .push(this.getFormGroupObject(element, this.currentRule));
@@ -177,7 +178,7 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
         "name": new FormControl('',[Validators.required]),
         "description": new FormControl(''),
         "tags": this.fb.array([]),
-        "channels": this.fb.array([]),
+        "channels": this.fb.array([], [Validators.required]),
         "botId": new FormControl(this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id, [Validators.required]),
         "triggers": this.fb.array([]),
         "actions": this.fb.array([]),
@@ -330,7 +331,6 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
     this.modalFlowCreateRef.componentInstance.disableApplyButton = false;
     this.modalFlowCreateRef.componentInstance.default = this.currentRule?.default;
     this.modalFlowCreateRef.componentInstance.submitRuleForm.subscribe(data => {
-      console.log(data, 'data');
       if(data){
         this.saveRule(false);
       }

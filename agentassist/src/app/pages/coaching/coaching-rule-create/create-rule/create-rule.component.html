@@ -30,12 +30,12 @@
             <mat-autocomplete #auto="matAutocomplete">
                 <div class="mat-checkboxs">
                     <mat-option *ngFor="let tag of filteredTagsDisplay;let i = index" [title]="tag"
-                        (click)="selectedOption(tag);$event.stopPropagation();trigger.openPanel()">
+                        (click)="selectedOption(tag.name, i);$event.stopPropagation();trigger.openPanel()">
                         <input id="checkbox-{{i}}" type="checkbox"
-                            (click)="selectedOption(tag);trigger.openPanel();$event.stopPropagation();" [value]="tag"
-                            [checked]="ruleForm.controls?.tags.value.indexOf(tag) >= 0">
+                            (click)="selectedOption(tag.name, i);trigger.openPanel();$event.stopPropagation();" [value]="tag.name"
+                            [checked]="tag.checked">
                             <div class="label-check text-truncate" for="checkbox-{{i}}">
-                                <span>{{tag}}</span>
+                                <span>{{tag.name}}</span>
                             </div>                            
                     </mat-option>
                 </div>
@@ -47,7 +47,7 @@
             <div class="channels-check">
                 <div class="check-item" *ngFor="let item of coachingCnst.channelList; let i = index">
                     <input id="checkbox-{{i}}" type="checkbox" (click)="channelSelection($event,item)"
-                        [checked]="ruleForm.controls?.channels.value.indexOf(item) >= 0">
+                        [checked]="channelList.indexOf(item) >= 0">
                     <span for="checkbox-{{i}}">{{coachingCnst[item]}}</span>
                 </div>
 
@@ -56,6 +56,6 @@
     </div>
     <div class="footer-wrapper">
         <button class="kr-sg-button-secondary-two btn_lg" (click)="closeRule()">Cancel</button>
-        <button class="kr-sg-button-primary btn_lg" (click)="submitForm()" [disabled]="disableApplyButton">Apply</button>
+        <button class="kr-sg-button-primary btn_lg" (click)="submitForm()" [disabled]="disableApplyButton || !(this.ruleName && this.channelList?.length)">Apply</button>
     </div>
 </div>
