@@ -118,6 +118,7 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
         (<FormArray>this.ruleForm?.controls["actions"])
         .push(this.getFormGroupObject(element, this.currentRule));
       });
+      this.updateSpeechAnalysisTrigger();
       this.cd.detectChanges();
     });
   }
@@ -364,6 +365,7 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
       this.modalFlowCreateRef.close();
       this.isSettings = false;
     }
+    this.updateSpeechAnalysisTrigger();
   }
 
  
@@ -374,6 +376,11 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
   }
 
  
- 
+  updateSpeechAnalysisTrigger(){
+    this.allTriggers[1].disable = false;
+    if(this.ruleForm.value?.channels.indexOf('voice') == -1){
+      this.allTriggers[1].disable = true;
+    }
+  }
   
 }
