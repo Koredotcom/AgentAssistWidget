@@ -47,6 +47,7 @@
                 <ng-container *ngFor="let item of sessionList | keyvalue">
                     <li ngbDropdownItem class="list-item-li" (click)="clickOnSessionSelection(item.key)">
                         <span class="title">{{item.value}}</span>
+                        <i [ngClass]="{'icon-sa-conv-check' : item.key === selectedSession}"></i>
                     </li>
                 </ng-container>
             </ul>

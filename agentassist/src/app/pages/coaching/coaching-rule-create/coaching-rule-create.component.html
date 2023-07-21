@@ -35,10 +35,10 @@
             <div class="channels-info" *ngIf="channelList?.length > 0">
                 <span class="title">Channels</span>
                 <button class="speak-chat-icon" *ngIf="channelList.indexOf('voice') >=0">
-                    <i class="icon-sa-welcome-voice"></i>
+                    <i class="icon-sa-welcome-voice" ngbTooltip ="voice"></i>
                 </button>
                 <button class="speak-chat-icon" *ngIf="channelList.indexOf('chat') >= 0">
-                    <i class="icon-sa-message"></i>
+                    <i class="icon-sa-message"  ngbTooltip ="chat"></i>
                 </button>
             </div>
         </div> 

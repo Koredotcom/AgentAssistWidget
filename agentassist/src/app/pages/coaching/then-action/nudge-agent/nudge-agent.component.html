@@ -9,6 +9,7 @@
                 <li ngbDropdownItem class="list-item-li" (click)="selectMsgType(type.type)">
                     <span class="bg-action {{type.class}}"></span>
                     <span class="title">{{type.type | titlecase}}</span>
+                    <i [ngClass]="{'icon-sa-conv-check' : type.type === selMsgType}"></i>
                 </li>
             </ng-container>
         </ul>
