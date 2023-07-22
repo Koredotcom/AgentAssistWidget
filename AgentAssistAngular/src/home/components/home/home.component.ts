@@ -116,6 +116,7 @@ export class HomeComponent implements OnInit {
       this.coachingHints = [];
     };
     this.coachingHints.unshift(hintObject);
+    this.hintScrollBottom(true);
     if(hintObject?.message?.postAction !== 'doesnot_auto_close'){
       setTimeout(() => {
         let inx = this.coachingHints.findIndex((item)=> item.actionId === uQ);
@@ -612,10 +613,10 @@ setProactiveMode(){
 
   hintScrollBottom(flag){
     if(flag && this.overlayhint){
-      this.overlayhint.directiveRef.scrollToBottom(0);
+      this.overlayhint.directiveRef.scrollToTop(0);
       setTimeout(() => {
         this.overlayhint.directiveRef.update();
-      }, 10);
+      });
     }
   }
 
