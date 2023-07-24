@@ -131,14 +131,10 @@
                                 <div class="saved-utt-body-sec">
                                     <div class="saved-title-utt">{{utter?.utterance}}</div>
                                     <div class="delete-saved-utt">
-                                        <i class="icon-sa-copy" 
-                                        (mouseover)="t.open()"
-                                        (mouseleave)="t.close()"
-                                        [ngbTooltip]="tolTemplate"
-                                        #t="ngbTooltip"
-                                        (click)="copy(utter?.utterance, iD, selectedUtterancesArray);">
-                                    </i>
-                                    <ng-template #tolTemplate>{{ utter.copied ? utter.copied : 'copy' }}</ng-template>
+                                        <i class="icon-sa-copy"
+                                            [ngbTooltip]="utter.copied ? utter.copied : 'copy'"
+                                            (click)="copy(utter?.utterance, iD, selectedUtterancesArray);">
+                                        </i>
                                         <i class="icon-sa-welcome-delete" (click)="deleteUtternce(utter, iD)"></i>
                                     </div>
                                 </div>
@@ -147,14 +143,10 @@
                                 <div class="saved-utt-body-sec">
                                     <div class="saved-title-utt">{{utter?.utterance}}</div>
                                     <div class="delete-saved-utt">
-                                        <i class="icon-sa-copy" 
-                                        (mouseover)="t.open()"
-                                        (mouseleave)="t.close()"
-                                        [ngbTooltip]="tolTemplate"
-                                        #t="ngbTooltip"
-                                        (click)="copy(utter?.utterance, iDx, selectedNewUtterances);">
-                                    </i>
-                                    <ng-template #tolTemplate>{{ utter.copied ? utter.copied : 'copy' }}</ng-template>
+                                        <i class="icon-sa-copy"
+                                            [ngbTooltip]="utter.copied ? utter.copied : 'copy'"
+                                            (click)="copy(utter?.utterance, iDx, selectedNewUtterances);">
+                                        </i>
                                         <i class="icon-sa-welcome-delete" (click)="deleteUtternceNew(utter?.utterance, iDx)"></i>
                                     </div>
                                 </div>
