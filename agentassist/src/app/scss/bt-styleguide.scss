@@ -1459,6 +1459,11 @@ and open the template in the editor.
             background-color: $whiteColor;
             padding: 0 30px 0 10px;       
             text-align: left;  
+            &.before-none{
+                &::before{
+                    display: none;
+                }
+            }
             .multi-selected-items{
                 background: $borderColor;
                 padding: 4px 8px;
@@ -1528,7 +1533,8 @@ and open the template in the editor.
                     border-bottom: 1px solid $primaryActionHoverColor;
                 }
                 &:focus{
-                    border: solid 1px #1372ff;
+                    border: solid 1px #80ACEF;
+                    box-shadow: 0px 0px 0px 4px #E1E1FE;
                 }
                 &:disabled{
                     border:0;
@@ -1544,7 +1550,8 @@ and open the template in the editor.
                 border: solid 1px #ccd1d7;
             }
             &:focus{
-                border: solid 1px #1372ff;
+                border: solid 1px #80ACEF;
+                box-shadow: 0px 0px 0px 4px #E1E1FE;
             }
             &:disabled{
                 // border: solid 1px $bg-color-primary;
@@ -2015,8 +2022,9 @@ and open the template in the editor.
             font-weight: normal;   
         }
         &:focus{
-            border: solid 1px #1372ff;
             outline: 0;
+            border: solid 1px #80ACEF;
+            box-shadow: 0px 0px 0px 4px #E1E1FE;
         }
         &:active{
             border: solid 1px $primaryActionHoverColor;
@@ -3580,6 +3588,9 @@ $numbers: 1000;
     }
     .width-#{$i} {
         width: #{$i+'px'} !important;
+    }
+    .mx-w-#{$i} {
+        max-width: #{$i+'px'} !important;
     }
     .h-#{$i} {
         height: #{$i+'%'} !important;

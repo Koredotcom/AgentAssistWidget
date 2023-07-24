@@ -45,7 +45,7 @@ export class MainmenuComponent implements OnInit, OnDestroy {
   loading: boolean = false;
   voicePreferences: VoicePreferencesModel;
   filteredSmartABots : any = {};
-  isCoachingDisable = false;
+  isCoachingDisable = true;
   @ViewChild('wUpdateBot', { static: false }) private wUpdateBot;
   @ViewChild('wSContent', { static: false }) private wSContent;
   @ViewChild(NgbDropdown) private dropdown: NgbDropdown;
@@ -295,8 +295,10 @@ export class MainmenuComponent implements OnInit, OnDestroy {
      this.subs.sink = this.service.invoke('get.voiceList', params, 's').subscribe(voiceList => {
        channelList = voiceList;
        if(channelList.sipTransfers.length > 0){
-        const _params = { streamId:this.authService.getAgentAssistStreamId(),
-                        'isAgentAssist':true }
+        const _params = { 
+          streamId: this.authService.getAgentAssistStreamId(),
+          'isAgentAssist':true 
+        }
         this.loading = true;
         this.subs.sink = this.service.invoke('get.settings.voicePreferences', _params)
         .pipe(finalize(() => this.loading = false))

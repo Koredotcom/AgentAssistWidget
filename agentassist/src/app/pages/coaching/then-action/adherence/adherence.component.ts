@@ -24,7 +24,7 @@ export class AdherenceComponent implements OnInit {
   @Input() createOrEdit = '';
   @Output() onClose = new EventEmitter();
   @Output() saveUtterance = new EventEmitter();
-  @ViewChild('searchRef') searchRef : ElementRef;
+  // @ViewChild('searchRef') searchRef : ElementRef;
 
   color: ThemePalette = 'primary';
   // createOrEdit = false; //true on edit, false on create;
@@ -42,6 +42,8 @@ export class AdherenceComponent implements OnInit {
   deletedUtter = [];
   selectedNewUtterances = [];
   deletedUIds = {};
+  selectAll = false;
+  customUtt = false;
   public utteranceDropdown: NgbDropdown;
 
   constructor(
@@ -69,7 +71,10 @@ export class AdherenceComponent implements OnInit {
     }
     this.searchKey.valueChanges
       .pipe(
-        debounceTime(300)
+        debounceTime(300),
+        tap(()=>{
+          this.utterances = {};
+        })
       )
       .subscribe((val) => {
         this.loaded = false;
@@ -115,7 +120,11 @@ export class AdherenceComponent implements OnInit {
           "model": this.cs.metaForUtternace?.defaultModel
       }
   }
-    this.service.invoke("get.utternaces", params, body).subscribe((data) => {
+    this.service.invoke("get.utternaces", params, body)
+    .pipe(finalize(()=>{
+      this.customUtt = false;
+      this.selectAll = false;
+    })).subscribe((data) => {
       this.loaded = true;
       this.openAiUtteranceArray = (data || []).map((item)=>{
         return {...item, enabled: false}
@@ -147,7 +156,7 @@ export class AdherenceComponent implements OnInit {
     const le = this.selectedNewUtterances?.length + this.selectedUtterancesArray?.length;
     (this.form.controls.adherence as FormGroup).controls?.utteranceCount?.setValue(le > 0 ? le : '');
     this.closeAdherence(COACHINGCNST.UTTERANCE);
-    
+
   }
 
   getSelectedUtterance() {
@@ -155,19 +164,64 @@ export class AdherenceComponent implements OnInit {
   }
 
   saveUtterances() {
-    if(this.searchRef?.nativeElement?.checked){
+    if(this.customUtt){
       this.utterances[this.searchKey?.value] = true;
     }
-    this.selectedNewUtterances = Object.keys(this.utterances).map((item) => {
-      return { utterance: item, language: 'english' };
+    Object.keys(this.utterances).forEach((item) => {
+      this.selectedNewUtterances.push({ utterance: item, language: 'english' });
     });
+  }
+
+  selectAllSearchUttereances(event) {
+    if(event.target.checked) {
+      this.customUtt = true;
+      this.openAiUtteranceArray.forEach(utter => {
+        utter.enabled = true;
+        this.utterances[utter.sentence] = true;
+        this.selectAll = true;
+      })
+    } else {
+      this.customUtt = false;
+      this.openAiUtteranceArray.forEach(utter => {
+        utter.enabled = false
+        this.selectAll = false;
+        delete this.utterances[utter.sentence];
+      })
+    }
+  }
+
+  checkUtterActiveStatus() {
+    // for(let utterences of this.openAiUtteranceArray) {
+    //   if(!utterences.enabled) {
+    //     return false;
+    //   }
+    // }
+    // return true;
+    return (this.openAiUtteranceArray.every((utterence)=>utterence.enabled) && this.customUtt);
+  }
+
+  customUttChange(checked){
+    this.customUtt = checked;
+    if(checked){
+      if(this.checkUtterActiveStatus()) {
+        this.selectAll = true;
+      }
+    }else{
+      this.selectAll = false;
+    }
   }
 
   changeUtterActiveStatus(utter) {
     utter.enabled = !utter.enabled;
     if (utter.enabled) {
       this.utterances[utter.sentence] = true;
+      if(this.checkUtterActiveStatus()) {
+        this.selectAll = true;
+      }
     } else {
+      if(this.selectAll) {
+        this.selectAll = !this.selectAll;
+      }
       delete this.utterances[utter.sentence];
     }
   }
@@ -175,6 +229,8 @@ export class AdherenceComponent implements OnInit {
   clearAIsuggestions(ref) {
     this.clearSeachVal();
     ref.close();
+    this.customUtt = false;
+    this.selectAll = false;
   }
 
   clearSeachVal() {
@@ -206,4 +262,22 @@ export class AdherenceComponent implements OnInit {
   // get getAddedCount(): number{
   //   return Object.keys(this.utterances)?.length || 0;
   // }
+  copy(val, i, arr){
+    const selBox = document.createElement('textarea');
+    selBox.style.position = 'fixed';
+    selBox.style.left = '0';
+    selBox.style.top = '0';
+    selBox.style.opacity = '0';
+    selBox.value = val;
+    document.body.appendChild(selBox);
+    selBox.focus();
+    selBox.select();
+    document.execCommand('copy');
+    document.body.removeChild(selBox);
+    arr[i].copied = 'Copied';
+    setTimeout(() => {
+      delete arr[i].copied;
+    },1000);
+
+  }
 }

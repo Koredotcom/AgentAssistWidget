@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
 import { workflowService } from '@kore.services/workflow.service';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
@@ -46,7 +46,8 @@ export class AdvSettingsComponent implements OnInit, OnDestroy {
     private settingsService: SettingsService,
     private agentSettingsService: AgentSettingsService,
     private translate: TranslateService,
-    private authService: AuthService
+    private authService: AuthService,
+    private cd: ChangeDetectorRef,
   ) { }
 
   ngOnInit(): void {
@@ -96,7 +97,8 @@ export class AdvSettingsComponent implements OnInit, OnDestroy {
          this.subs.sink = this.service.invoke('get.settings.voicePreferences', _params)
          .pipe(finalize(() => this.loading = false))
          .subscribe(res => {
-           this.voicePreferences = res;
+           this.voicePreferences = {...res};
+           this.cd.detectChanges();
          }, err => {
            this.notificationService.showError(err, 'Failed to fetch voice preferences')
          })
@@ -136,7 +138,7 @@ export class AdvSettingsComponent implements OnInit, OnDestroy {
       this.showVPSlider = false;
     }
     if (this.incomingSetupConfigured) {
-      this.vpSlider.openSlider("#voicePreferenace", "width940");
+      this.vpSlider.openSlider("#voicePreferenace", "width550");
       this.showVPSlider = true;
     }
   }
@@ -167,5 +169,8 @@ export class AdvSettingsComponent implements OnInit, OnDestroy {
     this.destroyed$.next();
     this.destroyed$.complete();
     this.subs.unsubscribe();
+  }
+  getNewData(){
+    this.getAdvSettings()
   }
 }

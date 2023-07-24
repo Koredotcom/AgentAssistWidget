@@ -1567,8 +1567,13 @@ export class EndPointsService {
 
     // agent coaching 
 
-    this.serviceList['get.allagentCoachingGroup'] = {
-      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachinggroup/?botId=:botId&isExpand=:isExpand',
+    this.serviceList['get.allagentCoachingRule'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule/:botId',
+      method : 'post'
+    }
+
+    this.serviceList['get.allagentCoachingpreBuiltRules'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule/prebuildrules/:botId',
       method : 'get'
     }
 
@@ -1593,13 +1598,13 @@ export class EndPointsService {
     }
 
 
-    this.serviceList['put.agentCoachingRule'] = {
-      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachinggroup/:groupId/rule/:ruleId',
-      method : 'put'
-    }
+    // this.serviceList['put.agentCoachingRule'] = {
+    //   endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachinggroup/:groupId/rule/:ruleId',
+    //   method : 'put'
+    // }
 
     this.serviceList['delete.agentCoachingRule'] = {
-      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachinggroup/:groupId/rule/:ruleId',
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule/:ruleId',
       method : 'delete'
     }
 
@@ -1612,6 +1617,12 @@ export class EndPointsService {
       endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule/:ruleId',
       method : 'put'
     }
+
+    this.serviceList['get.agentcoachingruletags'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule/:botId/tags',
+      method : 'get'
+    }
+
 
     this.serviceList['post.agentcoachingutterance'] = {
       endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingutterance/:refId/utterances',
@@ -1651,6 +1662,11 @@ export class EndPointsService {
     this.serviceList['get.utternaces'] = {
       endpoint : this.API_SERVER_URL + '/users/:userId/builder/streams/:streamId/aa_utterance/generate',
       method : 'post'
+    }
+
+    this.serviceList['get.ruleById'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule/:ruleId',
+      method : 'get'
     }
   }
 }

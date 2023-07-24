@@ -10,6 +10,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { UcDeleteConfirmComponent } from 'src/app/helpers/components/uc-delete-confirm/uc-delete-confirm.component';
 import { DockStatusService } from '@kore.services/dockstatusService/dock-status.service';
 import { AuthService } from '@kore.services/auth.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 declare const $: any;
 @Component({
@@ -43,7 +45,13 @@ export class VoicePreferencesComponent implements OnInit {
   selectedApp: any;
   voiceWelcomeMessage: string;
   previewText: string = '';
-
+  addedParams = [];
+  // alreadyAdded = [];
+  @Output() getNewData = new EventEmitter();
+  newKeyValueForm = new FormGroup({
+    name: new FormControl('', [Validators.required]),
+    value: new FormControl('', [Validators.required])
+  })
   @Input() voicePreferences: VoicePreferencesModel;
   @Output() closed = new EventEmitter();
   @ViewChild('audioPlayerRef') audioPlayerRef: ElementRef;
@@ -54,10 +62,23 @@ export class VoicePreferencesComponent implements OnInit {
     private translate: TranslateService,
     private dialog: MatDialog,
     private dockService: DockStatusService,
-    private authService: AuthService
+    private authService: AuthService,
+    private modalService: NgbModal,
+    private fb: FormBuilder
   ) { }
 
   ngOnInit(): void {
+    if(this.voicePreferences?.callControlParameters){      
+      let callControlParameters = [];
+      let params = this.voicePreferences?.callControlParameters;
+      for(let key in params){
+        let obj = {}
+        obj['name'] = key;
+        obj['value'] = params[key];
+        callControlParameters.push(obj);
+      }
+      this.addedParams = JSON.parse(JSON.stringify(callControlParameters)) || [];
+    }
     this.streamId = this.workflowService.getCurrentBt()._id;
 
     const voicePref = {
@@ -84,6 +105,16 @@ export class VoicePreferencesComponent implements OnInit {
     this.getDafaultWelcomeMsg();
   }
 
+  openCallControlParameter(newCallControlParameter) {
+    this.newKeyValueForm = new FormGroup({
+      name: new FormControl('', [Validators.required, this.checkDuplcate.bind(this)]),
+      value: new FormControl('', [Validators.required])
+    })
+    this.modalService.open(newCallControlParameter, {backdropClass: 'adjust-zindex-above-slider', windowClass: 'call-control-param-modal', centered: true, backdrop: 'static', keyboard: false});
+  }
+  closeCallControlParameter() {
+    this.modalService.dismissAll();
+  }
   getDafaultWelcomeMsg() {
     this.selectedApp = this.workflowService.deflectApps();
     const _params = {
@@ -126,12 +157,12 @@ export class VoicePreferencesComponent implements OnInit {
     this.voicePreferences.ttsPreference = ttsPreference.ttsProvider;
 
     this.ttsLanguages = ttsPreference.languages || [];
-    this.selectedTTSLanguage = this.ttsLanguages.find(f => f.languagePreference === this.selectedTTSLanguage.languagePreference) || this.ttsLanguages.find(f => f.languagePreference === 'en');
-    this.voiceNames = this.ttsLanguages.find(f => f.languagePreference === this.selectedTTSLanguage.languagePreference)?.voicePreferences.map(o => { return { name: o } }) || [];
+    this.selectedTTSLanguage = this.ttsLanguages.find(f => f.languagePreference === this.selectedTTSLanguage?.languagePreference) || this.ttsLanguages.find(f => f.languagePreference === 'en');
+    this.voiceNames = this.ttsLanguages.find(f => f.languagePreference === this.selectedTTSLanguage?.languagePreference)?.voicePreferences.map(o => { return { name: o } }) || [];
   }
 
   selectedVoiceLanguage(lang) {
-    if (lang.languagePreference === this.selectedTTSLanguage.languagePreference) return;
+    if (lang.languagePreference === this.selectedTTSLanguage?.languagePreference) return;
 
     // dialog
 
@@ -166,18 +197,13 @@ export class VoicePreferencesComponent implements OnInit {
     this.voicePreferences.voicePreference = '';
     this.selectedTTSLanguage = lang;
     this.voiceNames = this.selectedTTSLanguage.voicePreferences.map(o => { return { name: o } }) || [];
-    this.previewText = this.selectedTTSLanguage.languagePreference === this.voicePreferences.languagePreference ? this.voiceWelcomeMessage : '';
+    this.previewText = this.selectedTTSLanguage?.languagePreference === this.voicePreferences.languagePreference ? this.voiceWelcomeMessage : '';
 
     this.resetDialectPreference();
   }
 
   selectedVoiceNamePreferences(voicename) {
     this.voicePreferences.voicePreference = voicename.name;
-    // this.voiceNames.forEach(v=>{
-    //   if(v.name === voicename.name) {
-    //     v.isPlaying = true;
-    //   }
-    // })
     setTimeout(() => {
       const ele = $('#speechSampleInput');
       if (!ele || !ele[0]) return;
@@ -202,7 +228,7 @@ export class VoicePreferencesComponent implements OnInit {
       "ttsPreference": this.voicePreferences.ttsPreference,
       "previewText": previewText,
       "voicePreference": this.voicePreferences.voicePreference,
-      "languagePreference": this.selectedTTSLanguage.languagePreference
+      "languagePreference": this.selectedTTSLanguage?.languagePreference
     }
     this.voicePreviewInProgress = true;
     this.service.invoke('post.previewVoice', _params, _payload)
@@ -224,20 +250,29 @@ export class VoicePreferencesComponent implements OnInit {
 
   configureVoicePreferenaces() {
     let _params: any = { streamId:this.workflowService.getCurrentBt(true)._id,'isAgentAssist':true };
-    // let _params: any = { streamId:this.authService.smartAssistBots.map(x=>x._id),'isAgentAssist':true };
-    // if (!this.voicePreferences?.voicePreference) {
-    //   this.notificationService.notify(this.translate.instant('SELECT_VOICE_NAME'), 'warning');
-    //   return;
-    // }
     this.saveInProgress = true;
-    this.voicePreferences.languagePreference = this.selectedTTSLanguage.languagePreference;
+    this.voicePreferences.languagePreference = this.selectedTTSLanguage?.languagePreference;
     this.voicePreferences.dialectPreference = this.selectedDialect;
+    for(let i=0; i<this.addedParams.length; i++){
+      if(!this.addedParams[i].name.trim() || !this.addedParams[i].value.trim()){
+        this.notificationService.showError({}, this.translate.instant('AGENTS.FORM_INVALID'))
+        this.saveInProgress = false
+        return;
+      }
+    }
+    let obj = {};
+    this.addedParams.map((item)=>{
+      obj[item.name] = item.value;
+      // return obj;
+    });
+    this.voicePreferences.callControlParameters = {...obj}
     this.service.invoke('post.settings.voicePreferences', _params, this.voicePreferences)
       .pipe(finalize(() => this.saveInProgress = false))
       .subscribe(res => {
         this.notificationService.notify(this.translate.instant('NOTIFY.CONFIGURED_SUCCESSFULLY'), "success");
         this.close(this.voicePreferences);
         this.dockService.publisAndHold();
+        this.getNewData.emit()
       }, err => {
         this.notificationService.showError(err, this.translate.instant('NOTIFY.VOICE_PREFERENACES_CONFIGURE_ERROR'))
       })
@@ -250,5 +285,25 @@ export class VoicePreferencesComponent implements OnInit {
   close(data?: any) {
     this.closed.emit(data);
   }
+  
+  save(){
+    this.closeCallControlParameter();
+    let keyValue = this.newKeyValueForm.value;
+    this.addedParams.push({...keyValue});
+  }
 
+  deleteParam(i){
+    this.addedParams.splice(i,1);
+  }
+
+  checkDuplcate(control){
+    if(control.value){
+      const obj = this.addedParams.find(item => item.name === control.value);
+      if(obj){
+        return {'error': true};
+      }else{
+        return null;
+      }
+    }
+  }
 }
