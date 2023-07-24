@@ -276,7 +276,7 @@ export class UtteranceAdherenceComponent implements OnInit {
     document.body.removeChild(selBox);
     arr[i].copied = 'Copied';
     setTimeout(() => {
-      arr[i].copied = 'Copy';
+      delete arr[i].copied;
     },1000);
 
   }

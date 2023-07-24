@@ -147,19 +147,10 @@
                             <ng-container *ngFor="let utter of selectedUtterancesArray; let iD = index">
                                 <div class="saved-utt-body-sec">
                                     <div class="saved-title-utt" [title]="utter?.utterance">{{utter?.utterance}}</div>
-                                    <!-- <div class="percentage-colr">
-                                        <span class="percentage">12%</span>
-                                        <span class="bgcolor"></span>
-                                    </div> -->
                                     <div class="delete-saved-utt">
-                                        <i class="icon-sa-copy" 
-                                        (mouseover)="t.open()"
-                                        (mouseleave)="t.close()"
-                                        [ngbTooltip]="tolTemplate"
-                                        #t="ngbTooltip"
-                                        (click)="copy(utter?.utterance, iD, selectedUtterancesArray);">
-                                    </i>
-                                    <ng-template #tolTemplate>{{ utter.copied ? utter.copied : 'copy' }}</ng-template>
+                                        <i class="icon-sa-copy" [ngbTooltip]="utter.copied ? utter.copied : 'copy'"
+                                            (click)="copy(utter?.utterance, iD, selectedUtterancesArray);">
+                                        </i>
                                         <i class="icon-sa-welcome-delete" (click)="deleteUtternce(utter, iD)"></i>
                                     </div>
                                 </div>
@@ -167,28 +158,12 @@
                             <ng-container *ngFor="let utter of selectedNewUtterances;let iDx = index">
                                 <div class="saved-utt-body-sec">
                                     <div class="saved-title-utt" [title]="utter?.utterance">{{utter?.utterance}}</div>
-                                    <!-- <div class="percentage-colr">
-                                        <span class="percentage">12%</span>
-                                        <span class="bgcolor"></span>
-                                    </div> -->
                                     <div class="delete-saved-utt">
-                                        <i class="icon-sa-copy" 
-                                        (mouseover)="t.open()"
-                                        (mouseleave)="t.close()"
-                                        [ngbTooltip]="tolTemplate"
-                                        #t="ngbTooltip"
-                                        (click)="copy(utter?.utterance, iDx, selectedNewUtterances);">
-                                    </i>
-                                    <ng-template #tolTemplate>{{ utter.copied ? utter.copied : 'copy' }}</ng-template>
+                                        <i class="icon-sa-copy" [ngbTooltip]="utter.copied ? utter.copied : 'copy'"
+                                            (click)="copy(utter?.utterance, iDx, selectedNewUtterances);">
+                                        </i>
                                         <i class="icon-sa-welcome-delete" (click)="deleteUtternceNew(utter?.utterance, iDx)"></i>
                                     </div>
-                                    <!-- <div class="abc">
-                                        <i class="icon-sa-copy"></i>
-                                        <i class="icon-sa-welcome-delete"></i>
-                                    </div>
-                                    <div class="delete-saved-utt" (click)="deleteUtternceNew(utter?.utterance, iDx)">
-                                        <i class="icon-sa-welcome-delete"></i>
-                                    </div> -->
                                 </div>
                             </ng-container>
                         </div>
