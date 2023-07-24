@@ -89,15 +89,11 @@ export class HomeComponent implements OnInit {
 
   handleNudgeData(data){
     let uQ = data.actionId;
-    let a = (this.coachingNudges || []).every((item)=> item === false );
-    if(a){
-      this.coachingNudges = [];
-    };
     this.coachingNudges.unshift(data);
     setTimeout(() => {
       let inx = this.coachingNudges.findIndex((item)=> item.actionId === uQ);
       if(inx >= 0){
-        this.coachingNudges.splice(inx, 1, false);
+        this.coachingNudges.splice(inx, 1);
       }
     }, 7000);
   }
@@ -105,23 +101,19 @@ export class HomeComponent implements OnInit {
   closeNudge(uQ){
     let inx = this.coachingNudges.findIndex((item)=> item.actionId === uQ);
     if(inx >= 0){
-      this.coachingNudges.splice(inx, 1, false);
+      this.coachingNudges.splice(inx, 1);
     }
   }
 
   handleHintData(hintObject){
     let uQ = hintObject.actionId;
-    let a = (this.coachingHints || []).every((item)=> item === false);
-    if(a){
-      this.coachingHints = [];
-    };
     this.coachingHints.unshift(hintObject);
     this.hintScrollBottom(true);
     if(hintObject?.message?.postAction !== 'doesnot_auto_close'){
       setTimeout(() => {
         let inx = this.coachingHints.findIndex((item)=> item.actionId === uQ);
         if(inx >= 0){
-          this.coachingHints.splice(inx, 1, false);
+          this.coachingHints.splice(inx, 1);
         }
       }, (hintObject.message?.time < 900 ? hintObject.message?.time : 900) * 1000);
     }
@@ -130,7 +122,7 @@ export class HomeComponent implements OnInit {
   closeHint(uQ){
     let inx = this.coachingHints.findIndex((item)=> item.actionId === uQ);
     if(inx >= 0){
-      this.coachingHints.splice(inx, 1, false);
+      this.coachingHints.splice(inx, 1);
     }
   }
 
