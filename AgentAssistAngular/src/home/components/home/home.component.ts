@@ -88,36 +88,55 @@ export class HomeComponent implements OnInit {
   }
 
   handleNudgeData(data){
+    let uQ = data.actionId;
+    let a = (this.coachingNudges || []).every((item)=> item === false );
+    if(a){
+      this.coachingNudges = [];
+    };
     this.coachingNudges.unshift(data);
     setTimeout(() => {
-      for(let i = 0; i < this.coachingNudges.length; i++){
-        if(this.coachingNudges[i]){
-          this.coachingNudges.splice(i,1, null);
-          break;
-        }
+      let inx = this.coachingNudges.findIndex((item)=> item.actionId === uQ);
+      if(inx >= 0){
+        this.coachingNudges.splice(inx, 1, false);
       }
-    }, 5000);
+    }, 7000);
+  }
+
+  closeNudge(uQ){
+    let inx = this.coachingNudges.findIndex((item)=> item.actionId === uQ);
+    if(inx >= 0){
+      this.coachingNudges.splice(inx, 1, false);
+    }
+  }
+
+  handleHintData(hintObject){
+    let uQ = hintObject.actionId;
+    let a = (this.coachingHints || []).every((item)=> item === false);
+    if(a){
+      this.coachingHints = [];
+    };
+    this.coachingHints.unshift(hintObject);
+    this.hintScrollBottom(true);
+    if(hintObject?.message?.postAction !== 'doesnot_auto_close'){
+      setTimeout(() => {
+        let inx = this.coachingHints.findIndex((item)=> item.actionId === uQ);
+        if(inx >= 0){
+          this.coachingHints.splice(inx, 1, false);
+        }
+      }, (hintObject.message?.time < 900 ? hintObject.message?.time : 900) * 1000);
+    }
+  }
+
+  closeHint(uQ){
+    let inx = this.coachingHints.findIndex((item)=> item.actionId === uQ);
+    if(inx >= 0){
+      this.coachingHints.splice(inx, 1, false);
+    }
   }
 
   hintAckPressed(data) {
     data["ackPressed"] = true;
     this.websocketService.emitEvents(EVENTS.agent_coaching_ackpress, data);
-  }
-
-  handleHintData(hintObject){
-    this.coachingHints.unshift(hintObject);
-    if(hintObject?.message?.postAction !== 'doesnot_auto_close'){
-      setTimeout(() => {
-        for(let i = 0; i < this.coachingHints.length; i++){
-          if(this.coachingHints[i] && this.coachingHints[i]?.message?.postAction !== 'doesnot_auto_close'){
-            this.coachingHints.splice(i,1, null);
-            this.hintScrollBottom(true);
-            break;
-          }
-        }
-      }, (hintObject.message?.time) * 1000);
-    }
-    // this.hintScrollBottom(true);
   }
 
   subscribeEvents() {
@@ -594,10 +613,10 @@ setProactiveMode(){
 
   hintScrollBottom(flag){
     if(flag && this.overlayhint){
-      this.overlayhint.directiveRef.scrollToBottom(0);
+      this.overlayhint.directiveRef.scrollToTop(0);
       setTimeout(() => {
         this.overlayhint.directiveRef.update();
-      }, 10);
+      });
     }
   }
 
