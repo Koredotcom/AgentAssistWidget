@@ -1,4 +1,4 @@
-import { Component, ViewChild, forwardRef, Renderer2, Attribute, Input, Output, EventEmitter, ElementRef, NgZone, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, ViewChild, forwardRef, Renderer2, Attribute, Input, Output, EventEmitter, ElementRef, NgZone, Inject, PLATFORM_ID, SecurityContext } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor, NG_VALIDATORS, Validator, AbstractControl, ValidationErrors } from '@angular/forms';
 import { isPlatformBrowser } from '@angular/common';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -397,6 +397,7 @@ export class CustomMarkdownEditorComponent implements ControlValueAccessor, Vali
           this.previewHtml = this._domSanitizer.bypassSecurityTrustHtml(parsedHtml);
           if (this.previewContainer && this.previewContainer.nativeElement) {
             this._ngZone.runOutsideAngular(() => {
+              parsedHtml = this._domSanitizer.sanitize(SecurityContext.HTML, parsedHtml);
               this._renderer2.setProperty(this.previewContainer.nativeElement, 'innerHTML', parsedHtml);
               setTimeout(() => { this.onPreviewDomChanged.next(this.previewContainer.nativeElement); }, 100);
             });
