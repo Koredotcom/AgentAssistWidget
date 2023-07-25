@@ -46,7 +46,8 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
   channelList : any = [];
   allTagList : any = [];
   isSettings = false;
-  settingsList : any = ['name', 'description', 'tags', 'channels', 'botId']
+  settingsList : any = ['name', 'description', 'tags', 'channels', 'botId'];
+  settingsChange : boolean = false;
 
   
 
@@ -199,7 +200,7 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
   }
 
   closeRule(rule?) {
-    let sendRule = this.createdRule ? this.createdRule : rule;
+    let sendRule = (this.createdRule ||this.settingsChange || rule) ? true : false;
     this.onCloseRule.emit(sendRule);
   }
 
@@ -233,6 +234,7 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
         this.loading = false;
       }))
       .subscribe(data => {
+        this.settingsChange = true;
         if (data && (data._id || data.id)) {
           data._id = data.id ? data.id : data._id;
           data.ruleId = data._id;
