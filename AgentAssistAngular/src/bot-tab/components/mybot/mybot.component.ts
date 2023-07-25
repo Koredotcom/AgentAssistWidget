@@ -569,13 +569,14 @@ export class MybotComponent implements OnInit {
 
   //input value from mybot
   getAgentInputValue(value, intent?) {
+
     if (value) {
       let connectionDetails: any = Object.assign({}, this.connectionDetails);
       connectionDetails.value = value;
       connectionDetails.isSearch = false;
       connectionDetails.positionId = this.myBotDialogPositionId;
-      connectionDetails.childBotName = this.commonService.childBotDetails.childBotName;
-      connectionDetails.childBotId = this.commonService.childBotDetails.childBotId;
+      connectionDetails.childBotName = this.commonService?.childBotDetails.childBotName;
+      connectionDetails.childBotId = this.commonService?.childBotDetails.childBotId;
       if (this.connectionDetails?.interactiveLanguage && typeof this.connectionDetails?.interactiveLanguage == 'string' && this.connectionDetails?.interactiveLanguage != "''") {
         connectionDetails['language'] = this.connectionDetails?.interactiveLanguage; // Return the default value for null, undefined, or "''"
       }
