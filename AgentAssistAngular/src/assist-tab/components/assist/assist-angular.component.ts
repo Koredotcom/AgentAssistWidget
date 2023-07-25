@@ -20,12 +20,12 @@ import { LocalStorageService } from 'src/common/services/local-storage.service';
 import { ReplaceTextWithTagPipe } from 'src/common/pipes/replace-text-with-tag.pipe';
 import { RemoveTagFromStringPipe } from 'src/common/pipes/remove-tag-from-string.pipe';
 @Component({
-  selector: 'app-assist-js',
+  selector: 'app-assist',
   templateUrl: './assist.component.html',
   styleUrls: ['./assist.component.scss'],
   providers: [RandomUUIDPipe]
 })
-export class AssistJSComponent implements OnInit {
+export class AssistComponent implements OnInit {
 
   @Output() scrollToBottomEvent = new EventEmitter();
   @ViewChild('dynamicBlockRef') dynamicBlockRef: ElementRef;
