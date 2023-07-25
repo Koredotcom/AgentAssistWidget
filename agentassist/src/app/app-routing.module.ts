@@ -43,6 +43,7 @@ const routes: Routes = [
           { path: 'languages', component: LanguagesSpeechComponent },
           { path: 'searchAssist', component: SearchAssistComponent},
           { path: 'coaching', loadChildren: () => import('./pages/coaching/coaching.module').then(m => m.CoachingModule)},
+          { path: 'guided-checklist', loadChildren: () => import('./pages/guided-checklist/guided-checklist.module').then(m => m.GuidedChecklistModule)},
           { path: 'advanced-nlu', loadChildren: () => import('./pages/ai-config/ai-config.module').then(m => m.AiConfigModule)},
           { path: '**', redirectTo: (isSmartassist ? 'coaching' : 'usecases') },
         ]

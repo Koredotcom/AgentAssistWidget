@@ -2040,5 +2040,6 @@
     "VALID.NAME": "Please enter a valid name",
     "QUOTA_EXCEEDED": "You exceeded your current quota.",
     "RULE.SUCCESS": "Rule has been created",
-    "RULE.UPDATE_SUCCESS" : "Rule has been updated" 
+    "RULE.UPDATE_SUCCESS" : "Rule has been updated",
+    "NAV.CHECKLIST.TITLE": "Checklist"
 }
