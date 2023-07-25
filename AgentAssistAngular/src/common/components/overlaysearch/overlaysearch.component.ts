@@ -91,6 +91,10 @@ export class OverlaysearchComponent implements OnInit {
   }
 
   emitSearchRequest(searchObj, isSearchFlag, faqToggle = false) {
+    if(searchObj.childBotId !== '') {
+      this.commonService.childBotDetails.childBotId = searchObj.childBotId;
+      this.commonService.childBotDetails.childBotName = searchObj.childBotName;
+    }
     this.handleSubjectService.setLoader(true);
     let connectionDetails: any = Object.assign({}, this.connectionDetails);
     connectionDetails.value = searchObj.value;
