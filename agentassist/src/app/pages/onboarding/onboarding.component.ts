@@ -9,6 +9,7 @@ import { OnboardingDialogComponent } from './onboarding-dialog/onboarding-dialog
 import { TranslateService } from '@ngx-translate/core';
 import { AccWarningDialogComponent } from 'src/app/helpers/components/acc-warning-dialog/acc-warning-dialog.component';
 import { LocalStoreService } from '@kore.services/localstore.service';
+import { AuthService } from '@kore.services/auth.service';
 
 @Component({
   selector: 'app-onboarding',
@@ -26,7 +27,8 @@ export class OnboardingComponent implements OnInit, OnDestroy {
     private appService: AppService,
     private router: Router,
     private translate: TranslateService,
-    public localstore: LocalStoreService
+    public localstore: LocalStoreService,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
@@ -68,15 +70,10 @@ export class OnboardingComponent implements OnInit, OnDestroy {
         dialogRef.close();
       } else if (result === 'create') {
         // redirect to sign up page
-        let userInfo:any = {};
-        const jStorage = JSON.parse(window.localStorage.getItem('jStorage'));
-        if (jStorage  && jStorage.currentAccount && jStorage.currentAccount.userInfo) {
-          userInfo = jStorage.currentAccount.userInfo;
-        }
+        let userInfo:any = this.authService.getAuthInfo()?.currentAccount?.userInfo || {};
         let redirectedUrl = this.completeAppPath();
-
         dialogRef.close();
-        window.location.href =  this.marketURL()+'/?email=' + userInfo.emailId + '/?return_to=' + redirectedUrl + '&showLogin=true&hideSSOButtons=true&hideResourcesPageLink=true&comingFromKey=isAgentAssistApp#login' + window.location.search.replace('?', '&');
+        window.location.href =  this.marketURL()+'/?email=' + userInfo?.emailId + '/?return_to=' + redirectedUrl + '&showLogin=true&hideSSOButtons=true&hideResourcesPageLink=true&comingFromKey=isAgentAssistApp#login';
       }
     })
 
@@ -95,7 +92,7 @@ export class OnboardingComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      //  
+      //
     });
   }
 
