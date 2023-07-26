@@ -192,6 +192,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
 
     }
     if (type === COACHINGCNST.CREATE) {
+      this.currentRule = {...{}};
       this.createOrEdit = COACHINGCNST.CREATE;
       this.modalFlowCreateRef = this.modalService.open(flowCreation, { centered: true, keyboard: false, windowClass: 'flow-creation-full-modal', backdrop: 'static' });
     }
@@ -201,8 +202,10 @@ export class CoachingComponent implements OnInit, OnDestroy {
     this.modalFlowCreateRef.close();
     if (!rule) {
       return;
-    }
+    };
+    // this.sortOrder = 'asc'
     this.getAgentCoachingRules(true);
+    this.getCoachingPreBuiltRules();
     this.selectedRuleGroup = null;
     this.selectedRuleGroupIndex = null;
     this.selectedRuleIndex = null;
@@ -262,6 +265,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
         this.service.invoke('delete.agentCoachingRule', { ruleId: rule._id }).subscribe(_data => {
           this.notificationService.notify(this.translate.instant("COACHING.RULEDELETE_SUCCESS"), 'success');
           this.getAgentCoachingRules(true);
+          this.getCoachingPreBuiltRules();
         }, (error) => {
           this.notificationService.showError(this.translate.instant("COACHING.RULEDELETE_FAILURE"));
         });
@@ -292,8 +296,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
     });
   }
   onReachEnd(event){
-    console.log("onReachEnd", event);
-    if(!this.isLoading && this.hasMore && event.target.clientHeight > 15){
+    if(!this.isLoading && this.hasMore && event.target.scrollTop > 0){
       this.getAgentCoachingRules();
     }
   }

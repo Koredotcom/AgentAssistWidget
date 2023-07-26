@@ -51,7 +51,7 @@
 
                                                 <div class="check-list kr-sg-checkbox">
                                                     <input id="checkbox-1" [checked]="customUtt" (change)="customUttChange($event.target.checked)" class="checkbox-custom" type="checkbox">
-                                                    <label for="checkbox-1" class="checkbox-custom-label">{{searchKey.value}}</label>
+                                                    <label for="checkbox-1" class="checkbox-custom-label" [title]="searchKey.value">{{searchKey.value}}</label>
                                                 </div>
                                                 <div class="percentage-colr">
                                                     <!-- <span class="percentage">12%</span>
@@ -70,7 +70,7 @@
                                                             <div class="item-data-found" >
                                                                 <div class="kr-sg-checkbox">
                                                                     <input id="'checkbox-' + {{i}}" class="checkbox-custom" type="checkbox" [checked]="utter.enabled" (click)="changeUtterActiveStatus(utter)">
-                                                                    <label for="'checkbox-' + {{i}}" class="checkbox-custom-label">{{utter.sentence}}</label>
+                                                                    <label for="'checkbox-' + {{i}}" class="checkbox-custom-label" [title]="utter.sentence">{{utter.sentence}}</label>
                                                                 </div>
                                                                 <div class="percentage-colr">
                                                                     <!-- <span class="percentage">12%</span>
@@ -130,24 +130,24 @@
                             <ng-container *ngFor="let utter of selectedUtterancesArray; let iD = index">
                                 <div class="saved-utt-body-sec">
                                     <div class="saved-title-utt">{{utter?.utterance}}</div>
-                                    <div class="percentage-colr">
-                                        <!-- <span class="percentage">12%</span>
-                                        <span class="bgcolor"></span> -->
-                                    </div>
-                                    <div class="delete-saved-utt" (click)="deleteUtternce(utter, iD)">
-                                        <i class="icon-sa-welcome-delete"></i>
+                                    <div class="delete-saved-utt">
+                                        <i class="icon-sa-copy"
+                                            [ngbTooltip]="utter.copied ? utter.copied : 'copy'"
+                                            (click)="copy(utter?.utterance, iD, selectedUtterancesArray);">
+                                        </i>
+                                        <i class="icon-sa-welcome-delete" (click)="deleteUtternce(utter, iD)"></i>
                                     </div>
                                 </div>
                             </ng-container>
                             <ng-container *ngFor="let utter of selectedNewUtterances;let iDx = index">
                                 <div class="saved-utt-body-sec">
                                     <div class="saved-title-utt">{{utter?.utterance}}</div>
-                                    <div class="percentage-colr">
-                                        <!-- <span class="percentage">12%</span>
-                                        <span class="bgcolor"></span> -->
-                                    </div>
-                                    <div class="delete-saved-utt" (click)="deleteUtternceNew(utter?.utterance, iDx)">
-                                        <i class="icon-sa-welcome-delete"></i>
+                                    <div class="delete-saved-utt">
+                                        <i class="icon-sa-copy"
+                                            [ngbTooltip]="utter.copied ? utter.copied : 'copy'"
+                                            (click)="copy(utter?.utterance, iDx, selectedNewUtterances);">
+                                        </i>
+                                        <i class="icon-sa-welcome-delete" (click)="deleteUtternceNew(utter?.utterance, iDx)"></i>
                                     </div>
                                 </div>
                             </ng-container>

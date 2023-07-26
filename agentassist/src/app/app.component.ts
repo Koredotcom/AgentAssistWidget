@@ -61,7 +61,7 @@ export class AppComponent implements OnDestroy {
 
   ngOnInit() {
     if(window.location.href.includes('smartassist')){
-      document.getElementsByTagName('body')[0].classList.add('init-smartassist');
+      document.getElementsByTagName('html')[0].classList.add('init-smartassist');
     }
     // the lang to use, if the lang isn't available, it will use the current loader to get them
     const self = this;

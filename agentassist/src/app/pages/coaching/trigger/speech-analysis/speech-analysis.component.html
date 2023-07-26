@@ -25,7 +25,8 @@
         </div>
         <span class="utt-name-desc" *ngIf="!selectedSpeechType">is...</span>
         <span class="utt-name-desc" *ngIf="selectedSpeechType && selectedSpeechType == coachingCnst.CROSSTALK">of</span>
-        <div class="dropdown-occurences no_border" ngbDropdown [placement]="'bottom'" container="body"  #deadairtimerdropdownct = "ngbDropdown">
+        <div [ngClass]="{'blink_me': form?.controls?.frequency?.controls?.nSeconds?.invalid}" class="dropdown-occurences no_border" ngbDropdown [placement]="'bottom'" container="body"  #deadairtimerdropdownct = "ngbDropdown"
+        *ngIf="selectedSpeechType && selectedSpeechType == coachingCnst.CROSSTALK">
             <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!timer}" (click)="showTimerCT = timer">{{timer}}</button>
             <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
                 <div class="seconds-input">
@@ -54,8 +55,7 @@
         </ul>
     </div>
     <span class="utt-name-desc">of </span>
-
-    <div class="dropdown-occurences no_border" ngbDropdown [placement]="'bottom'" container="body"  #deadairtimerdropdown = "ngbDropdown">
+    <div [ngClass]="{'blink_me': form?.controls?.frequency?.controls?.nSeconds?.invalid}" class="dropdown-occurences no_border" ngbDropdown [placement]="'bottom'" container="body"  #deadairtimerdropdown = "ngbDropdown">
         <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!timer}" (click)="showTimer = timer">{{timer}}</button>
         <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
             <div class="seconds-input">

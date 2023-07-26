@@ -102,13 +102,14 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
     setTimeout(() => {
       this.ruleForm.controls["name"].patchValue(this.currentRule?.name);  
       this.ruleForm.controls["description"].patchValue(this.currentRule?.description);
+      this.ruleForm.controls['isActive'].patchValue(this.currentRule?.isActive);
+
       this.ruleForm.setControl('channels', this.fb.array(this.currentRule?.channels));
       this.ruleForm.setControl('tags', this.fb.array(this.currentRule?.tags));
       this.filteredTagsOriginal = this.currentRule?.tags;
       this.channelList = this.currentRule?.channels;
       (<FormArray>this.ruleForm?.controls["triggers"]).clear();
       (<FormArray>this.ruleForm?.controls["actions"]).clear();
-      console.log("this.currentRule?.triggers", this.currentRule?.triggers);
       (this.currentRule?.triggers || []).forEach(element => {
         (<FormArray>this.ruleForm?.controls["triggers"])
         .push(this.getFormGroupObject(element, this.currentRule));
@@ -117,6 +118,7 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
         (<FormArray>this.ruleForm?.controls["actions"])
         .push(this.getFormGroupObject(element, this.currentRule));
       });
+      this.updateSpeechAnalysisTrigger();
       this.cd.detectChanges();
     });
   }
@@ -177,7 +179,7 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
         "name": new FormControl('',[Validators.required]),
         "description": new FormControl(''),
         "tags": this.fb.array([]),
-        "channels": this.fb.array([]),
+        "channels": this.fb.array([], [Validators.required]),
         "botId": new FormControl(this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id, [Validators.required]),
         "triggers": this.fb.array([]),
         "actions": this.fb.array([]),
@@ -219,14 +221,17 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
         if(closeRule){
           this.closeRule(data);
         }else{
+          let notification = (this.createOrEdit == this.coachingCnst.CREATE) ? 'RULE.SUCCESS' :'RULE.UPDATE_SUCCESS';
+          this.notificationService.notify(this.translate.instant(notification), 'success');
+          // notification should be before updating createoredit variable.
           this.createdRule = data;
           this.updateRule(data);
           this.closeBasicRule();
         }
-        this.notificationService.notify(this.translate.instant("RULE.SUCCESS"), 'success');
       }
     },
     (err)=>{
+      this.modalFlowCreateRef.componentInstance.disableApplyButton = false;
       this.notificationService.showError(err, this.translate.instant("QUOTA_EXCEEDED"));
     });
   }
@@ -323,8 +328,10 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
     this.modalFlowCreateRef.componentInstance.ruleForm = this.ruleForm;
     this.modalFlowCreateRef.componentInstance.filteredTagsOriginal= this.filteredTagsOriginal;
     this.modalFlowCreateRef.componentInstance.allTagList = this.allTagList;
+    this.modalFlowCreateRef.componentInstance.createOrEdit = this.createOrEdit;
+    this.modalFlowCreateRef.componentInstance.disableApplyButton = false;
+    this.modalFlowCreateRef.componentInstance.default = this.currentRule?.default;
     this.modalFlowCreateRef.componentInstance.submitRuleForm.subscribe(data => {
-      console.log(data, 'data');
       if(data){
         this.saveRule(false);
       }
@@ -358,6 +365,7 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
       this.modalFlowCreateRef.close();
       this.isSettings = false;
     }
+    this.updateSpeechAnalysisTrigger();
   }
 
  
@@ -368,6 +376,11 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
   }
 
  
- 
+  updateSpeechAnalysisTrigger(){
+    this.allTriggers[1].disable = false;
+    if(this.ruleForm.value?.channels.indexOf('voice') == -1){
+      this.allTriggers[1].disable = true;
+    }
+  }
   
 }

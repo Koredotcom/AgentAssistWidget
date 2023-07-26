@@ -8,20 +8,23 @@
             </div>
             <div class="border-divider"></div>
             <div class="kr-sg-input-text">
-                <input type="text" maxlength="100" placeholder="new coaching rule" class="input-text" formControlName="name">
+                <input *ngIf="this.currentRule?.default; else ip" [disabled]="true" type="text" maxlength="100" placeholder="new coaching rule" class="input-text" [value]="ruleForm?.value?.name">
+                <ng-template #ip>
+                    <input type="text" maxlength="100" placeholder="new coaching rule" class="input-text" formControlName="name">
+                </ng-template>
             </div>
         </div>
         <div class="middle-content">
 
-            <div class="tags-info w-16" *ngIf="filteredTagsOriginal?.length > 0">
-                <span class="tag-name">{{filteredTagsOriginal[0]}}</span>
+            <div class="tags-info" *ngIf="filteredTagsOriginal?.length > 0">
+                <span class="tag-name" [title]="filteredTagsOriginal[0]">{{filteredTagsOriginal[0]}}</span>
                 <div class="kr-sg-dropdowns" ngbDropdown container="body" *ngIf="filteredTagsOriginal?.length > 1">
                     <div class="dropdown dropdown-open">
                       <button class="dropdown-toggle dropdown-input before-none" ngbDropdownToggle>+{{filteredTagsOriginal.length - 1 + ' More'}}</button>
                       <ul class="dropdown-menu content-menu more-dropdown-tags" ngbDropdownMenu>
                         <ng-container *ngFor="let item of filteredTagsOriginal | slice:1; let i = index;">
-                            <li ngbDropdownItem class="p-0" >
-                                <span>{{item}}</span>
+                            <li ngbDropdownItem class="p-0" [title]="item">
+                                <span class="mx-w-100 text-truncate">{{item}}</span>
                             </li>
                         </ng-container>
                       </ul>
@@ -32,10 +35,10 @@
             <div class="channels-info" *ngIf="channelList?.length > 0">
                 <span class="title">Channels</span>
                 <button class="speak-chat-icon" *ngIf="channelList.indexOf('voice') >=0">
-                    <i class="icon-sa-welcome-voice"></i>
+                    <i class="icon-sa-welcome-voice" ngbTooltip ="voice"></i>
                 </button>
                 <button class="speak-chat-icon" *ngIf="channelList.indexOf('chat') >= 0">
-                    <i class="icon-sa-message"></i>
+                    <i class="icon-sa-message"  ngbTooltip ="chat"></i>
                 </button>
             </div>
         </div> 
@@ -64,7 +67,7 @@
                                 <div class="drag-content" cdkDragHandle>
                                     <i class="icon-coaching--move1"></i>
                                 </div>
-                                <app-utterance [isDefault]="currentRule?.default"  [deletable]="currentRule?.deletable" [createOrEdit]="createOrEdit" class="comp" [form]="triggertype" *ngIf="triggertype?.controls?.type?.value == coachingCnst.UTTERANCE" [index]="i+1" [length]="ruleForm.controls['triggers']['controls']?.length" (deleteTrigger)="deleteTrigger($event)"></app-utterance>
+                                <app-utterance  [deletable]="currentRule?.deletable" [createOrEdit]="createOrEdit" class="comp" [form]="triggertype" *ngIf="triggertype?.controls?.type?.value == coachingCnst.UTTERANCE" [index]="i+1" [length]="ruleForm.controls['triggers']['controls']?.length" (deleteTrigger)="deleteTrigger($event)"></app-utterance>
                                 <app-speech-analysis class="comp" [form]="triggertype" *ngIf="triggertype?.controls?.type?.value == coachingCnst.SPEECH_ANALYSIS"  [createOrEdit]="createOrEdit" [index]="i+1" [length]="ruleForm.controls['triggers']['controls']?.length" (deleteTrigger)="deleteTrigger($event)"></app-speech-analysis>
                                 <app-variable [form]="triggertype" class="comp" *ngIf="triggertype?.controls?.type?.value == coachingCnst.VARIABLE" [index]="i+1" [length]="ruleForm.controls['triggers']['controls']?.length" (deleteTrigger)="deleteTrigger($event)"></app-variable>
                                 <app-dialog [form]="triggertype" class="comp" *ngIf="triggertype?.controls?.type?.value == coachingCnst.DIALOG" [index]="i+1" [length]="ruleForm.controls['triggers']['controls']?.length" (deleteTrigger)="deleteTrigger($event)"></app-dialog>

@@ -1,1 +1,8 @@
 
+.example-chip-list{
+    ::ng-deep{
+        .mat-form-field-label{
+            margin-top: 3px;
+        }
+    }
+}

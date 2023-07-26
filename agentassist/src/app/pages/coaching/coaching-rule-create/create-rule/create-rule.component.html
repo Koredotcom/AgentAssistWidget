@@ -1,6 +1,6 @@
 <div class="modal-wrapper-coaching">
     <div class="header-wrapper">
-        <div class="title-heading">New Rule</div>
+        <div class="title-heading">{{createOrEdit == coachingCnst.CREATE ? 'New Rule' : 'Rule Settings'}}</div>
         <div class="close-modal" (click)="closeRule()">
             <i class="icon-sa-close"></i>
         </div>
@@ -8,18 +8,18 @@
     <div class="body-wrapper">
         <div class="kr-sg-input-text m-b-15">
             <div class="label-text">Name</div>
-            <input type="text" placeholder="Add Name" class="input-text" [(ngModel)]="ruleName">
+            <input [disabled]="default" type="text" maxlength="100" placeholder="Add Name" class="input-text" [(ngModel)]="ruleName">
         </div>
         <div class="kr-sg-input-text-area m-b-15">
             <div class="label-text">Description</div>
-            <textarea placeholder="Rule Purpose" class="input-text" [(ngModel)]="ruleDesc"></textarea>
+            <textarea placeholder="Rule Purpose" maxlength="1000" class="input-text" [(ngModel)]="ruleDesc"></textarea>
         </div>
-        <div class="label-text m-b-5">Name</div>
+        <div class="label-text m-b-5">Tags</div>
         <mat-form-field class="example-chip-list m-b-15">
-            <mat-label>Tags</mat-label>
+            <mat-label>Add Tags</mat-label>
             <mat-chip-list #chipList>
                 <mat-chip *ngFor="let tag of tags" [selectable]="true" [removable]="true" (removed)="remove(tag.name)">
-                    <span class="chip-name">{{tag.name}}</span>
+                    <span class="chip-name text-truncate mx-w-100" title="{{tag.name}}">{{tag.name}}</span>
                     <span class="icon-sa-close" matChipRemove *ngIf="true"></span>
                 </mat-chip>
                 <input placeholder="Add Tags" #tagInput [matChipInputFor]="chipList"
@@ -29,12 +29,14 @@
             </mat-chip-list>
             <mat-autocomplete #auto="matAutocomplete">
                 <div class="mat-checkboxs">
-                    <mat-option *ngFor="let tag of filteredTagsDisplay;let i = index"
-                        (click)="selectedOption(tag);$event.stopPropagation();trigger.openPanel()">
+                    <mat-option *ngFor="let tag of filteredTagsDisplay;let i = index" [title]="tag"
+                        (click)="selectedOption(tag.name, i);$event.stopPropagation();trigger.openPanel()">
                         <input id="checkbox-{{i}}" type="checkbox"
-                            (click)="selectedOption(tag);trigger.openPanel();$event.stopPropagation();" [value]="tag"
-                            [checked]="ruleForm.controls?.tags.value.indexOf(tag) >= 0">
-                        <span for="checkbox-{{i}}">{{tag}}</span>
+                            (click)="selectedOption(tag.name, i);trigger.openPanel();$event.stopPropagation();" [value]="tag.name"
+                            [checked]="tag.checked">
+                            <div class="label-check text-truncate" for="checkbox-{{i}}">
+                                <span>{{tag.name}}</span>
+                            </div>                            
                     </mat-option>
                 </div>
             </mat-autocomplete>
@@ -45,7 +47,7 @@
             <div class="channels-check">
                 <div class="check-item" *ngFor="let item of coachingCnst.channelList; let i = index">
                     <input id="checkbox-{{i}}" type="checkbox" (click)="channelSelection($event,item)"
-                        [checked]="ruleForm.controls?.channels.value.indexOf(item) >= 0">
+                        [checked]="channelList.indexOf(item) >= 0">
                     <span for="checkbox-{{i}}">{{coachingCnst[item]}}</span>
                 </div>
 
@@ -54,6 +56,6 @@
     </div>
     <div class="footer-wrapper">
         <button class="kr-sg-button-secondary-two btn_lg" (click)="closeRule()">Cancel</button>
-        <button class="kr-sg-button-primary btn_lg" (click)="submitForm()">Apply</button>
+        <button class="kr-sg-button-primary btn_lg" (click)="submitForm()" [disabled]="disableApplyButton || !(this.ruleName && this.channelList?.length)">Apply</button>
     </div>
 </div>

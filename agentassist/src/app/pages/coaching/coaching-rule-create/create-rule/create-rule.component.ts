@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { COACHINGCNST } from '../../coaching.cnst';
@@ -19,7 +19,10 @@ export class CreateRuleComponent implements OnInit {
   @Input() ruleForm: FormGroup;
   @Input() allTagList : string[];
   @Input() filteredTagsOriginal;
+  @Input() createOrEdit : string;
+  @Input() disableApplyButton : boolean;
   
+  @Input() default = false;
   @Output() submitRuleForm = new EventEmitter();
   @Output() closeBasicRule = new EventEmitter();
 
@@ -30,6 +33,7 @@ export class CreateRuleComponent implements OnInit {
   tagControl :  FormControl = new FormControl();
   ruleName : string;
   ruleDesc : string;
+  channelList : any[] = [];
   
   constructor(private cdRef : ChangeDetectorRef,
     private fb: FormBuilder, 
@@ -37,7 +41,9 @@ export class CreateRuleComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
-    this.filteredTagsDisplay = JSON.parse(JSON.stringify(this.allTagList));
+    this.filteredTagsDisplay = this.allTagList.map((item) => {
+      return {name : item, checked : this.ruleForm?.value?.tags.indexOf(item) >= 0 ? true : false}
+    });
     this.subscribeValues();
     this.updateVariables();
   }
@@ -47,28 +53,26 @@ export class CreateRuleComponent implements OnInit {
       if(value){
         this.assignOriginalToDisplayList();
         this.filteredTagsDisplay = this.filteredTagsDisplay.filter(
-          (fruit) => fruit.indexOf(value) !== -1
+          (tag) => (tag.name).indexOf(value) !== -1
         );
+      }else{
+        this.assignOriginalToDisplayList();
       }
     });
-    this.ruleForm.valueChanges.subscribe(val =>{
-      this.ruleForm.patchValue(val,{emitEvent:false})
-    })
   }
 
-  updateVariables(){
+  updateVariables(){    
     this.ruleName = this.ruleForm.value.name;
     this.ruleDesc = this.ruleForm.value.description;
-    this.tags = this.filteredTagsOriginal.map((str, index) => ({ name: str}));    
+    this.tags = this.filteredTagsOriginal.map((str, index) => ({ name: str}));   
+    this.channelList = (this.ruleForm?.controls['channels'] as FormArray).getRawValue(); 
   }
 
-  selectedOption(item){
-    let checked = this.ruleForm.controls?.tags.value.indexOf(item) >=0 ? false : true
-      
-    let tags = this.ruleForm.value.tags;    
-    if(checked && tags.indexOf(item) == -1){
+  selectedOption(item, index){
+    let checked = this.filteredTagsDisplay[index].checked;
+    if(!checked){
       this.AddOrSelectTagNames(item);
-    }else if(!checked){
+    }else{
       this.remove(item)
     }
   }
@@ -93,10 +97,8 @@ export class CreateRuleComponent implements OnInit {
       if(this.allTagList.indexOf(value) == -1){
         this.allTagList.push(value);
       }
-      // this.filteredTagsOriginal = this.filteredTagsOriginal.filter(item => item !== value);
     }
-    
-    this.ruleForm.setControl('tags', this.fb.array(this.tags.map(a => a.name) || []));  
+  
     this.trigger.openPanel();  
     this.assignOriginalToDisplayList();
     this.tagInput.nativeElement.value = '';
@@ -105,30 +107,30 @@ export class CreateRuleComponent implements OnInit {
     }, 0);
   }
 
-  remove(fruit): void {
+  remove(tag): void {    
     const index = this.tags.findIndex(item =>{
-      return item.name == fruit;
-    });
+      return item.name == tag;
+    });    
     if (index >= 0) {
       this.tags.splice(index, 1);
-    }
+    }    
     this.assignOriginalToDisplayList();
-    this.ruleForm.setControl('tags', this.fb.array(this.tags.map(a => a.name) || []));
     this.trigger.openPanel();  
   }
 
-  assignOriginalToDisplayList(){
-    this.filteredTagsDisplay = JSON.parse(JSON.stringify(this.allTagList));
-  }
+  assignOriginalToDisplayList(){    
+    this.filteredTagsDisplay = this.allTagList.map((item) => {      
+      return {name : item, checked : (this.tags.findIndex((tag) => {return tag.name == item})) >= 0 ? true : false}
+    });    
+  } 
 
   channelSelection(event, item){
-    let channelList = this.ruleForm.value.channels;
-    if(event.target.checked && channelList.indexOf(item) == -1){
-      channelList.push(item);
-    }else if(!event.target.checked){
-      channelList = channelList.filter(channel => channel != item);
+    let index = this.channelList.indexOf(item);
+    if(event.target.checked && index == -1){
+      this.channelList.push(item);
+    }else if(!event.target.checked && index >= 0){
+      this.channelList.splice(index, 1);
     }
-    this.ruleForm.setControl('channels', this.fb.array(channelList));
   }
 
   closeRule(){
@@ -136,9 +138,11 @@ export class CreateRuleComponent implements OnInit {
   }
 
   submitForm(){
+    this.disableApplyButton = true;
     this.ruleForm.controls['name'].patchValue(this.ruleName);
-    this.ruleForm.controls['description'].patchValue(this.ruleDesc);    
-    // this.activeModal.close(true);
+    this.ruleForm.controls['description'].patchValue(this.ruleDesc); 
+    this.ruleForm.setControl('channels', this.fb.array([...this.channelList]));   
+    this.ruleForm.setControl('tags', this.fb.array(this.tags.map(a => a.name) || []));  
     this.submitRuleForm.emit(true);
   }
 

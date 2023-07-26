@@ -140,7 +140,7 @@ export class CoachingService {
       when : this.fb.group({
         addUtterances: [[]],
         deleteUtterances: [[]],
-        utteranceCount: [obj.when?.utteranceCount, rule.default ? '' : [Validators.required]]
+        utteranceCount: [obj.when?.utteranceCount, rule?.default ? '' : [Validators.required]]
       }),
       frequency: this.fb.group({
         nOccurrences: [obj.frequency?.nOccurrences, Validators.required]
@@ -160,6 +160,9 @@ export class CoachingService {
       }
       if(obj.frequency?.nMessages){
         (<FormGroup> utteranceObj.frequency).addControl('nMessages', new FormControl(obj.frequency?.nMessages))
+      }
+      if(obj?.default){
+        utteranceObj['default'] = [obj.default];
       }
     }
     return utteranceObj;
