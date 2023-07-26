@@ -5,7 +5,7 @@
   </div>
   <div class="body-info">{{data.text}}</div>
   <div class="btns-data" *ngIf="data?.buttons?.length > 1">
-    <button (click)="onClickOption(data.buttons[0])"  class="kr-sg-button-secondary border-0 btn_lg mr-10">{{data.buttons[0].label}}</button>
+    <!-- <button (click)="onClickOption(data.buttons[0])"  class="kr-sg-button-secondary border-0 btn_lg mr-10">{{data.buttons[0].label}}</button> -->
     <button (click)="onClickOption(data.buttons[1])"  class="kr-sg-button-secondary border-0 btn_lg mr-10">{{data.buttons[1].label}}</button>
   </div>
   <div class="btns-data" *ngIf="data?.buttons?.length == 1">

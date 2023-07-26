@@ -8,6 +8,7 @@ import { SubSink } from 'subsink';
 import { OnboardingDialogComponent } from './onboarding-dialog/onboarding-dialog.component';
 import { TranslateService } from '@ngx-translate/core';
 import { AccWarningDialogComponent } from 'src/app/helpers/components/acc-warning-dialog/acc-warning-dialog.component';
+import { LocalStoreService } from '@kore.services/localstore.service';
 
 @Component({
   selector: 'app-onboarding',
@@ -17,13 +18,15 @@ import { AccWarningDialogComponent } from 'src/app/helpers/components/acc-warnin
 export class OnboardingComponent implements OnInit, OnDestroy {
   subs = new SubSink();
   instance: any;
+  public WINDOW = window;
   constructor(
     private dialog: MatDialog,
     private service: ServiceInvokerService,
     private notificationService: NotificationService,
     private appService: AppService,
     private router: Router,
-    private translate: TranslateService
+    private translate: TranslateService,
+    public localstore: LocalStoreService
   ) { }
 
   ngOnInit(): void {
@@ -39,6 +42,14 @@ export class OnboardingComponent implements OnInit, OnDestroy {
     }
   }
 
+  marketURL(){
+    return  this.WINDOW.location.protocol+"//"+this.WINDOW.location.host+"/accounts"
+  }
+
+  completeAppPath(){
+    return this.WINDOW.location.href;
+  }
+
   showWarningMessage() {
     let dialogRef = this.dialog.open(AccWarningDialogComponent, {
       width: '446px',
@@ -51,12 +62,21 @@ export class OnboardingComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.componentInstance.onSelect.subscribe(result => {
+      console.log('sandeep: ', result);
       if (result === 'login') {
         // redirect to login page
         dialogRef.close();
       } else if (result === 'create') {
         // redirect to sign up page
+        let userInfo:any = {};
+        const jStorage = JSON.parse(window.localStorage.getItem('jStorage'));
+        if (jStorage  && jStorage.currentAccount && jStorage.currentAccount.userInfo) {
+          userInfo = jStorage.currentAccount.userInfo;
+        }
+        let redirectedUrl = this.completeAppPath();
+
         dialogRef.close();
+        window.location.href =  this.marketURL()+'/?email=' + userInfo.emailId + '/?return_to=' + redirectedUrl + '&showLogin=true&hideSSOButtons=true&hideResourcesPageLink=true&comingFromKey=isAgentAssistApp#login' + window.location.search.replace('?', '&');
       }
     })
 
