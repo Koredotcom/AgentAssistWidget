@@ -265,6 +265,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
         this.service.invoke('delete.agentCoachingRule', { ruleId: rule._id }).subscribe(_data => {
           this.notificationService.notify(this.translate.instant("COACHING.RULEDELETE_SUCCESS"), 'success');
           this.getAgentCoachingRules(true);
+          this.getCoachingPreBuiltRules();
         }, (error) => {
           this.notificationService.showError(this.translate.instant("COACHING.RULEDELETE_FAILURE"));
         });
@@ -295,7 +296,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
     });
   }
   onReachEnd(event){
-    if(!this.isLoading && this.hasMore && event.target.clientHeight > 150){
+    if(!this.isLoading && this.hasMore && event.target.scrollTop > 0){
       this.getAgentCoachingRules();
     }
   }
