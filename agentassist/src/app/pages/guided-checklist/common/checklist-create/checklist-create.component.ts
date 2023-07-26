@@ -4,7 +4,7 @@ import { AuthService } from '@kore.services/auth.service';
 import { LocalStoreService } from '@kore.services/localstore.service';
 import { workflowService } from '@kore.services/workflow.service';
 import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
-
+import { v4 as uuid } from 'uuid';
 @Component({
   selector: 'app-checklist-create',
   templateUrl: './checklist-create.component.html',
@@ -17,6 +17,7 @@ export class ChecklistCreateComponent implements OnInit {
   
   checkListForm : FormGroup;
   stageForm : FormGroup;
+  stepForm : FormGroup;
   selAcc = this.local.getSelectedAccount();
   
 
@@ -50,10 +51,22 @@ export class ChecklistCreateComponent implements OnInit {
 
   createGroupForm(){
     this.stageForm = new FormGroup({
+      "_id": new FormControl('aclg-'+uuid(), [Validators.required]),
       "botId": new FormControl(this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id, [Validators.required]),
       "name": new FormControl('',[Validators.required]),
       "color" : new FormControl(''),
-      "triggerBy" : new FormControl('')
+      "triggerBy" : new FormControl(''),
+      "steps": this.fb.array([], Validators.required),
+    })
+  }
+
+  createStepForm(){
+    this.stepForm = new FormGroup({
+      "stepId": new FormControl('', [Validators.required]),
+      "name": new FormControl('', [Validators.required]),
+      "details": new FormControl('', [Validators.required]),
+      "confirmButtons": this.fb.array([]),
+      "adherence": new FormControl('')
     })
   }
 
