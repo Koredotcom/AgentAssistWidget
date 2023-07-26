@@ -295,7 +295,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
     });
   }
   onReachEnd(event){
-    if(!this.isLoading && this.hasMore && event.target.clientHeight > 150){
+    if(!this.isLoading && this.hasMore && event.target.scrollTop > 0){
       this.getAgentCoachingRules();
     }
   }
