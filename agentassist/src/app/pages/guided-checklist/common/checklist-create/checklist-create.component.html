@@ -6,5 +6,18 @@
             </div>
             <div class="border-divider"></div>
         </div>
+        <div class="btn-actions">
+            <button class="settings-actions" (click)="openSettings()">
+                <i class="icon-sa-settings"></i>
+            </button>
+          
+        </div>
     </div>
 </div>
+<app-slider-component id="checklistCreate" #checklistCreateSlider='app-slider'>
+    <div class="slider-sec-data">
+        <div class="header-sec row m-0">
+            <div class="close-link col-3 p-0"><img src="assets/images/close.svg" (click)="closeSettings()"></div>
+        </div>
+    </div>
+</app-slider-component>

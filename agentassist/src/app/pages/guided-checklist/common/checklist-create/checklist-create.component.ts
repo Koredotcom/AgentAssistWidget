@@ -1,4 +1,5 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
 
 @Component({
   selector: 'app-checklist-create',
@@ -8,6 +9,8 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 export class ChecklistCreateComponent implements OnInit {
 
   @Output() closeCheckList = new EventEmitter();
+  @ViewChild('checklistCreateSlider', { static: true }) checklistCreateSlider: SliderComponentComponent;
+
 
 
   constructor() { }
@@ -17,6 +20,14 @@ export class ChecklistCreateComponent implements OnInit {
 
   closeCheckListScreen(){
     this.closeCheckList.emit(true);
+  }
+
+  openSettings(){
+    this.checklistCreateSlider.openSlider("#checklistCreate", "width940");
+  }
+
+  closeSettings(){
+    this.checklistCreateSlider.closeSlider('#checklistCreate');
   }
 
 }
