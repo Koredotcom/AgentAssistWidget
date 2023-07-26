@@ -8,6 +8,7 @@ import { ChecklistCreateComponent } from './common/checklist-create/checklist-cr
 import { StageCreateComponent } from './common/stage-create/stage-create.component';
 import { StepCreateComponent } from './common/step-create/step-create.component';
 import { ChecklistService } from './checklist.service';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 const routes: Routes = [
   { path: '', component:  GuidedChecklistComponent}
@@ -24,6 +25,7 @@ const routes: Routes = [
   ],
   imports: [
     CommonModule,
+    SharedModule,
     RouterModule.forChild(routes)
   ],
   providers: [ChecklistService]

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ChecklistService } from '../checklist.service';
 
 @Component({
@@ -8,9 +9,19 @@ import { ChecklistService } from '../checklist.service';
 })
 export class GuidedChecklistComponent implements OnInit {
 
-  constructor() { }
+  modalFlowCreateRef: any;
+
+  constructor(private modalService : NgbModal) { }
 
   ngOnInit(): void {
   }
 
+  createCheckList(checklistCreation){
+    this.modalFlowCreateRef = this.modalService.open(checklistCreation, { centered: true, keyboard: false, windowClass: 'flow-creation-full-modal', backdrop: 'static' });
+  }
+
+
+  closeCheckListScreen(event) {
+    this.modalFlowCreateRef.close();
+  }
 }

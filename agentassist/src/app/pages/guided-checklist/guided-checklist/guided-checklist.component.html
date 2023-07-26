@@ -1,5 +1,8 @@
 Devender you need to work from here.
 
+<button class="kr-sg-button-secondary-two btn_lg mr-2" (click)="createCheckList(checklistCreation)" >New Checklist</button>
+
+
 <app-primary-checklist></app-primary-checklist>
 <app-dynamic-checklist class="d-none"></app-dynamic-checklist>
 
@@ -7,4 +10,6 @@ Devender you need to work from here.
 
 
 the below component for create checklist modal
-<app-checklist-create></app-checklist-create>
+<ng-template #checklistCreation>
+    <app-checklist-create (closeCheckList)="closeCheckListScreen($event)"></app-checklist-create>
+</ng-template>
