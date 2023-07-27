@@ -127,6 +127,54 @@
         <span class="utt-name-desc">WPM is detected for  </span>
    </ng-container>
 
+   <ng-container *ngIf="selectedSpeechType && selectedSpeechType == coachingCnst.TALKRATIO">
+    <span class="utt-name-desc">Agent to Customer </span>
+    <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body" #speechspeedDropdown = "ngbDropdown">
+        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!selectedSpeechType}">
+            <span class="choose-text">{{selectedSpeechType ? coachingCnst.SPEECH_TYPE[selectedSpeechType] : '{ speech type }'}}</span>
+        </button>
+        <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
+            <ng-container *ngFor="let type of speechType | keyvalue" >
+                <li ngbDropdownItem class="list-item-li" (click)="clickOnType(type.key)">
+                    <span class="title">{{type.value}}</span>
+                    <i [ngClass]="{'icon-sa-conv-check' : type.key === selectedSpeechType}"></i>
+                </li>
+            </ng-container>
+        </ul>
+    </div>
+    <span class="utt-name-desc"> is</span>
+
+
+    <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body">
+        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!selectedCompator}">
+            <span class="choose-text">{{selectedCompator ? (coachingCnst.comparator_map[selectedCompator]) : '{ Comparator }'}}</span>
+        </button>
+        <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
+            <ng-container *ngFor="let comp of coachingCnst.comparator_acutal_list">
+                <li ngbDropdownItem class="list-item-li" (click)="clickOnComparator(comp)">
+                    <span class="title">{{coachingCnst.comparator_map[comp]}}</span>
+                    <i [ngClass]="{'icon-sa-conv-check' : comp === selectedCompator}" ></i>
+                </li>
+            </ng-container>
+        </ul>
+    </div>
+
+    <div  class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body"  #talkrationpercentagedropdown = "ngbDropdown">
+        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!selectedPercentage}" (click)="showPercentage = selectedPercentage">
+            <span class="choose-text">{{selectedPercentage ? selectedPercentage + '%' : '{ Value }'}}</span>
+        </button>
+        <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
+            <div class="seconds-input">
+                <div class="kr-sg-input-text">
+                    <input type="number" digitOnly placeholder="Enter Percentage" class="input-text" (keyup.enter)="onEnterPercentage(showPercentage);talkrationpercentagedropdown.close()" [(ngModel)]="showPercentage">
+                </div>
+                <!-- <div class="s-title">seconds</div> -->
+            </div>
+        </ul>
+    </div>
+
+   </ng-container>
+
     <div class="dropdown-occurences" ngbDropdown [placement]="'bottom'" container="body">
         <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!selOcc}"><i class="icon-sa-conv-refreshten"></i>  {{selOcc}} {{selOcc == 1 ? ' time' : ' times'}}</button>
         <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
@@ -147,6 +195,8 @@
         <button class="dropdown-toggle btn-toggle" ngbDropdownToggle *ngIf="!selectedConvType">in conversation</button>
         <button class="dropdown-toggle btn-toggle" ngbDropdownToggle *ngIf="selectedConvType == coachingCnst.TRIGGER_ANYTIME">any time</button>
         <button class="dropdown-toggle btn-toggle" ngbDropdownToggle *ngIf="selectedConvType == coachingCnst.TRIGGER_BYTIME" (click)="selectedList.period = inconvList.period;selectedList.nSeconds = inconvList.nSeconds">{{inconvList.period}} {{inconvList.nSeconds}} second(s)</button>
+        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle *ngIf="selectedConvType == coachingCnst.TRIGGER_BYMEESAGECOUNT && selectedSpeechType == coachingCnst.TALKRATIO" (click)="selectedList.period = inconvList.period;selectedList.nMessages = inconvList.nMessages">{{inconvList.period}} {{inconvList.nMessages}} message(s)</button>
+
        
         <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
             <li ngbDropdownItem class="list-item-li" (click)="clickOnConvType(coachingCnst.TRIGGER_ANYTIME)">
@@ -178,7 +228,7 @@
                                <ng-container  *ngTemplateOutlet="bytimeinput"></ng-container>
                             </span>
                         </ng-container>
-                        <ng-container *ngIf="selectedSpeechType == coachingCnst.SPEECHSPEED">
+                        <ng-container *ngIf="selectedSpeechType == coachingCnst.SPEECHSPEED || selectedSpeechType == coachingCnst.TALKRATIO">
                            <ng-contaner *ngTemplateOutlet="bytimeinput"></ng-contaner>
                         </ng-container>
                         <div class="s-title">seconds</div>
@@ -191,6 +241,37 @@
                 </div>
                 <div class="error-text" *ngIf="form?.controls?.frequency?.controls?.nSeconds.invalid">Input time should be greater than configured time</div>
             </div>
+
+            <ng-container *ngIf="selectedSpeechType == coachingCnst.TALKRATIO">
+
+                <li class="list-item-li" data-toggle="collapse" href="#numofmsg" (click)="clickOnConvType(coachingCnst.TRIGGER_BYMEESAGECOUNT);">
+                    <span class="title">By number of messages</span>
+                    <i class="icon-sa-conv-check" *ngIf="selectedConvType == coachingCnst.TRIGGER_BYMEESAGECOUNT"></i>
+                </li>
+    
+                <div class="inside-conv-time-dropdown collapse" id="numofmsg" *ngIf="selectedConvType == coachingCnst.TRIGGER_BYMEESAGECOUNT">
+                    <div class="content-info-data">
+                        <div ngbDropdown class="drpdown-time" #byMessageDropdown="ngbDropdown">
+                            <button type="button" id="dropdownBasic1" ngbDropdownToggle>
+                                <span>{{selectedList.period}}</span>
+                                <i class="icon-sa-arrow-down"></i>
+                            </button>
+                            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                                <li class="list-item-li" *ngFor="let period of periodList" (click)="onEnterPeriod(period);byMessageDropdown.close()">
+                                    <span class="title">{{period}}</span>
+                                    <i class="icon-sa-conv-check" *ngIf="this.selectedList.period == period"></i>
+                                </li>
+                            </div>
+                        </div>
+                        <div class="seconds-input">
+                            <div class="kr-sg-input-text">
+                                <input type="number" digitOnly placeholder="Enter Message Count" class="input-text" (keyup.enter)="onEnterMessages(selectedList.nMessages);" [(ngModel)]="selectedList.nMessages">
+                            </div>
+                            <div class="s-title">messages</div>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
            
         </ul>
     </div>

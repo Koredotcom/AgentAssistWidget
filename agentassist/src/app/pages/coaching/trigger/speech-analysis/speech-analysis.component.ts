@@ -32,13 +32,16 @@ export class SpeechAnalysisComponent implements OnInit {
   selectedSpeechType : string = '';
   selectedOperator : string;
   selectedConvType : string;
+  selectedCompator : string;
+  selectedPercentage : number;
+  showPercentage : number;
   selectedList : any = {}
   inconvList : any = {}
   selUser: '';
 
   validatePasswordMatch = (control: AbstractControl): { [key: string]: any } | null => {
 
-    if (this.selectedSpeechType == this.coachingCnst.SPEECHSPEED) {
+    if (this.selectedSpeechType == this.coachingCnst.SPEECHSPEED || this.selectedSpeechType == this.coachingCnst.TALKRATIO) {
       return null;
     }
 
@@ -78,6 +81,9 @@ export class SpeechAnalysisComponent implements OnInit {
       this.wordcount = formVal.frequency.nWords;
       this.showWordcount = formVal.frequency.nWords;
       this.selUser = formVal.by;
+      this.selectedPercentage = formVal.frequency.percentage;
+      this.showPercentage = formVal.frequency.percentage;
+      this.selectedCompator = formVal.frequency.comparator;
       this.resetFormValidators(this.selectedSpeechType);
       this.updateInConversationVariables(formVal);
     }
@@ -93,8 +99,11 @@ export class SpeechAnalysisComponent implements OnInit {
     this.selectedConvType = formVal.frequency.duration;
     this.selectedList.period = formVal.frequency.period ? formVal.frequency.period : COACHINGCNST.UTTERANCE_CONV_DEFAULT_SELECTION.period;
     this.selectedList.nSeconds = formVal.frequency.nSeconds ? formVal.frequency.nSeconds : COACHINGCNST.UTTERANCE_CONV_DEFAULT_SELECTION.nSeconds;
+    this.selectedList.nMessages = formVal.frequency.nMessages ? formVal.frequency.nMessages : COACHINGCNST.UTTERANCE_CONV_DEFAULT_SELECTION.nMessages;
     this.inconvList.period = formVal.frequency.period ? formVal.frequency.period : COACHINGCNST.UTTERANCE_CONV_DEFAULT_SELECTION.period;
     this.inconvList.nSeconds = formVal.frequency.nSeconds ? formVal.frequency.nSeconds : COACHINGCNST.UTTERANCE_CONV_DEFAULT_SELECTION.nSeconds;
+    this.inconvList.nMessages = formVal.frequency.nMessages ? formVal.frequency.nMessages : COACHINGCNST.UTTERANCE_CONV_DEFAULT_SELECTION.nMessages;    
+
   }
 
   clickOnUser(user){
@@ -102,28 +111,42 @@ export class SpeechAnalysisComponent implements OnInit {
     this.form.controls.by.setValue(user);
   }
 
-  clickOnType(type){
-    this.selectedSpeechType = type;
-    if(type === this.coachingCnst.SPEECHSPEED){
-      this.wordcount = COACHINGCNST.SELECTED_WORDCOUNT;
-      (<FormGroup>this.form.controls.frequency).addControl('nWords', new FormControl(COACHINGCNST.SELECTED_WORDCOUNT));
-      (<FormGroup>this.form.controls.frequency).removeControl('timeTaken');
-    }else{
-      this.timer = COACHINGCNST.SELECTED_TIMER;
-      (<FormGroup>this.form.controls.frequency).addControl('timeTaken', new FormControl(COACHINGCNST.SELECTED_TIMER));
-      (<FormGroup>this.form.controls.frequency).removeControl('nWords');
-    };
+  clickOnComparator(comp){
+    this.selectedCompator = comp;
+    (this.form.controls.frequency as FormGroup).controls?.comparator.setValue(this.selectedCompator);
+  }
 
-    this.setDefaultBy(type);
-    this.form.controls.subType.setValue(type);
-    this.resetFormValuesBasedOnSpeechSelection(type);
-    this.onEnterSeconds(COACHINGCNST.UTTERANCE_CONV_DEFAULT_SELECTION.nSeconds);
+  clickOnType(type){
+    if(this.selectedSpeechType != type){
+      this.selectedSpeechType = type;
+
+      (<FormGroup>this.form.controls.frequency).removeControl('comparator');
+      (<FormGroup>this.form.controls.frequency).removeControl('percentage');
+      (<FormGroup>this.form.controls.frequency).removeControl('nWords');
+      (<FormGroup>this.form.controls.frequency).removeControl('timeTaken');
+
+      if(type === this.coachingCnst.SPEECHSPEED){
+        this.wordcount = COACHINGCNST.SELECTED_WORDCOUNT;
+        (<FormGroup>this.form.controls.frequency).addControl('nWords', new FormControl(COACHINGCNST.SELECTED_WORDCOUNT));
+      }else if(type === this.coachingCnst.CROSSTALK || type === this.coachingCnst.DEADAIR){
+        this.timer = COACHINGCNST.SELECTED_TIMER;
+        (<FormGroup>this.form.controls.frequency).addControl('timeTaken', new FormControl(COACHINGCNST.SELECTED_TIMER));
+      }else if(type == this.coachingCnst.TALKRATIO){
+        (<FormGroup>this.form.controls.frequency).addControl('comparator',new FormControl(''));
+        (<FormGroup>this.form.controls.frequency).addControl('percentage',new FormControl(''));
+      }
+      this.setDefaultBy(type);
+      this.form.controls.subType.setValue(type);
+      this.resetFormValuesBasedOnSpeechSelection(type);
+      this.onEnterSeconds(COACHINGCNST.UTTERANCE_CONV_DEFAULT_SELECTION.nSeconds);
+    }
+
   }
 
   setDefaultBy(type, value?){
     this.selUser = value ? value : '';
     this.form.removeControl('by');
-    if(type != COACHINGCNST.CROSSTALK){
+    if(type != COACHINGCNST.CROSSTALK && type != COACHINGCNST.TALKRATIO){
       this.form.addControl('by', new FormControl(this.selUser, [Validators.required]))
     }
   }
@@ -156,12 +179,15 @@ export class SpeechAnalysisComponent implements OnInit {
     if(type == this.coachingCnst.TRIGGER_BYTIME){
       this.utteranceTimer.open();
     }
+    console.log(this.form, 'form');
+    
   }
 
   resetFormValuesBasedOnConvSelection(type){
     if(type){
       this.onEnterPeriod(this.coachingCnst.UTTERANCE_CONV_DEFAULT_SELECTION.period);
       this.onEnterSeconds(this.coachingCnst.UTTERANCE_CONV_DEFAULT_SELECTION.nSeconds);
+      this.onEnterMessages(this.coachingCnst.UTTERANCE_CONV_DEFAULT_SELECTION.nMessages);
     }
   }
 
@@ -178,7 +204,7 @@ export class SpeechAnalysisComponent implements OnInit {
     // if(this.selectedSpeechType == this.coachingCnst.DEADAIR && (!e || e <= this.timer)){
     //   e = this.timer;
     // }else 
-    if(this.selectedSpeechType == this.coachingCnst.SPEECHSPEED){
+    if(this.selectedSpeechType == this.coachingCnst.SPEECHSPEED || this.selectedSpeechType == this.coachingCnst.TALKRATIO){
       if(!e){
         e = 1;
       }
@@ -192,14 +218,44 @@ export class SpeechAnalysisComponent implements OnInit {
     }
   }
 
+  onEnterMessages(e){
+    if(!e){
+      e = 1;
+    }
+    this.inconvList.nMessages = e;
+    this.selectedList.nMessages = e;
+    if((this.form.controls.frequency as FormGroup).controls?.nMessages){
+      (this.form.controls.frequency as FormGroup).controls?.nMessages.setValue(this.inconvList.nMessages);
+    }
+  }
+
   resetFormValuesBasedOnSpeechSelection(type){
     if(type){
       this.clickOcc(1);
       this.onEnterTime(30);
       this.onEnterWords(180); 
       this.changeOperator(this.coachingCnst.AND_OPERATOR);
-      this.resetFormValidators(type);   
+      this.resetFormValidators(type);  
+      this.clearConvType();
+      this.clearPercentage();
+      this.clearComparator();
     }
+  }
+
+  clearComparator(){
+    this.selectedCompator = null;
+    (this.form.controls.frequency as FormGroup).controls?.comparator?.setValue('');
+
+  }
+
+  clearPercentage(){
+    this.selectedPercentage = null;
+    (this.form.controls.frequency as FormGroup).controls?.percentage?.setValue('');
+  }
+
+  clearConvType(){
+    this.selectedConvType = null;
+    (this.form.controls.frequency as FormGroup).controls?.duration?.setValue('');
   }
 
   changeOperator(op){
@@ -229,6 +285,11 @@ export class SpeechAnalysisComponent implements OnInit {
     //   this.onEnterSeconds(this.timer);
     // }
     (this.form.controls.frequency as FormGroup).controls?.nSeconds?.updateValueAndValidity();
+  }
+
+  onEnterPercentage(e){
+    this.selectedPercentage = e ? e : 1;
+    (this.form.controls.frequency as FormGroup).controls?.percentage?.setValue(this.selectedPercentage);
   }
 
   onEnterWords(e){
