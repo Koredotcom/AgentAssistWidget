@@ -193,10 +193,8 @@
 
     <div class="dropdown-occurences in-conversations-dropdown" ngbDropdown [placement]="'bottom'" container="body" #utteranceTimer="ngbDropdown" *ngIf="selectedSpeechType">
         <button class="dropdown-toggle btn-toggle" ngbDropdownToggle *ngIf="!selectedConvType">in conversation</button>
-        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle *ngIf="selectedConvType == coachingCnst.TRIGGER_ANYTIME">any time</button>
-        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle *ngIf="selectedConvType == coachingCnst.TRIGGER_BYTIME" (click)="selectedList.period = inconvList.period;selectedList.nSeconds = inconvList.nSeconds">{{inconvList.period}} {{inconvList.nSeconds}} second(s)</button>
-        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle *ngIf="selectedConvType == coachingCnst.TRIGGER_BYMEESAGECOUNT && selectedSpeechType == coachingCnst.TALKRATIO" (click)="selectedList.period = inconvList.period;selectedList.nMessages = inconvList.nMessages">{{inconvList.period}} {{inconvList.nMessages}} message(s)</button>
-
+        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle *ngIf="selectedConvType == coachingCnst.TRIGGER_ANYTIME">in conversation</button>
+        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle *ngIf="selectedConvType == coachingCnst.TRIGGER_BYTIME" (click)="selectedList.period = inconvList.period;selectedList.nSeconds = inconvList.nSeconds"> {{inconvList.period === 'withIn' ? '' : 'in'}}  {{inconvList.period.toLowerCase()}} {{inconvList.nSeconds}} second(s)</button>
        
         <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
             <li ngbDropdownItem class="list-item-li" (click)="clickOnConvType(coachingCnst.TRIGGER_ANYTIME)">

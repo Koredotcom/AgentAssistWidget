@@ -14,7 +14,12 @@
             <div class="label-text">Description</div>
             <textarea placeholder="Rule Purpose" maxlength="1000" class="input-text" [(ngModel)]="ruleDesc"></textarea>
         </div>
-        <div class="label-text m-b-5">Tags</div>
+        <div class="label-text m-b-5">Tags
+            <span class="info-tip" tooltipClass="tooltip-global-styles" ngbTooltip="Press Enter to Add">
+                <i class="icon-sa-info"></i>
+            </span>
+        </div>
+                               
         <mat-form-field class="example-chip-list m-b-15">
             <mat-label>Add Tags</mat-label>
             <mat-chip-list #chipList>
