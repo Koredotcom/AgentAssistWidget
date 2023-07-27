@@ -173,7 +173,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
   // Create or Edit Rule Flow Starts
   openFLowCreation(flowCreation, rule?, type = COACHINGCNST.EDIT) {
     if(!rule.deletable){
-      this.noneIntent.openSlider("#nonIntent", "width550");
+      this.noneIntent.openSlider("#nonIntent", "non-intent-slider");
       this.showNoneIntent = true;
       return;
     }
