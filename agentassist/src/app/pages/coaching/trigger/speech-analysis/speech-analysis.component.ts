@@ -99,11 +99,8 @@ export class SpeechAnalysisComponent implements OnInit {
     this.selectedConvType = formVal.frequency.duration;
     this.selectedList.period = formVal.frequency.period ? formVal.frequency.period : COACHINGCNST.UTTERANCE_CONV_DEFAULT_SELECTION.period;
     this.selectedList.nSeconds = formVal.frequency.nSeconds ? formVal.frequency.nSeconds : COACHINGCNST.UTTERANCE_CONV_DEFAULT_SELECTION.nSeconds;
-    this.selectedList.nMessages = formVal.frequency.nMessages ? formVal.frequency.nMessages : COACHINGCNST.UTTERANCE_CONV_DEFAULT_SELECTION.nMessages;
     this.inconvList.period = formVal.frequency.period ? formVal.frequency.period : COACHINGCNST.UTTERANCE_CONV_DEFAULT_SELECTION.period;
     this.inconvList.nSeconds = formVal.frequency.nSeconds ? formVal.frequency.nSeconds : COACHINGCNST.UTTERANCE_CONV_DEFAULT_SELECTION.nSeconds;
-    this.inconvList.nMessages = formVal.frequency.nMessages ? formVal.frequency.nMessages : COACHINGCNST.UTTERANCE_CONV_DEFAULT_SELECTION.nMessages;    
-
   }
 
   clickOnUser(user){
@@ -187,7 +184,6 @@ export class SpeechAnalysisComponent implements OnInit {
     if(type){
       this.onEnterPeriod(this.coachingCnst.UTTERANCE_CONV_DEFAULT_SELECTION.period);
       this.onEnterSeconds(this.coachingCnst.UTTERANCE_CONV_DEFAULT_SELECTION.nSeconds);
-      this.onEnterMessages(this.coachingCnst.UTTERANCE_CONV_DEFAULT_SELECTION.nMessages);
     }
   }
 
@@ -218,16 +214,6 @@ export class SpeechAnalysisComponent implements OnInit {
     }
   }
 
-  onEnterMessages(e){
-    if(!e){
-      e = 1;
-    }
-    this.inconvList.nMessages = e;
-    this.selectedList.nMessages = e;
-    if((this.form.controls.frequency as FormGroup).controls?.nMessages){
-      (this.form.controls.frequency as FormGroup).controls?.nMessages.setValue(this.inconvList.nMessages);
-    }
-  }
 
   resetFormValuesBasedOnSpeechSelection(type){
     if(type){

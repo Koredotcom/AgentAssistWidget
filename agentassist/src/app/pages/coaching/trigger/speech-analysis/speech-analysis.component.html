@@ -241,38 +241,6 @@
                 </div>
                 <div class="error-text" *ngIf="form?.controls?.frequency?.controls?.nSeconds.invalid">Input time should be greater than configured time</div>
             </div>
-
-            <ng-container *ngIf="selectedSpeechType == coachingCnst.TALKRATIO">
-
-                <li class="list-item-li" data-toggle="collapse" href="#numofmsg" (click)="clickOnConvType(coachingCnst.TRIGGER_BYMEESAGECOUNT);">
-                    <span class="title">By number of messages</span>
-                    <i class="icon-sa-conv-check" *ngIf="selectedConvType == coachingCnst.TRIGGER_BYMEESAGECOUNT"></i>
-                </li>
-    
-                <div class="inside-conv-time-dropdown collapse" id="numofmsg" *ngIf="selectedConvType == coachingCnst.TRIGGER_BYMEESAGECOUNT">
-                    <div class="content-info-data">
-                        <div ngbDropdown class="drpdown-time" #byMessageDropdown="ngbDropdown">
-                            <button type="button" id="dropdownBasic1" ngbDropdownToggle>
-                                <span>{{selectedList.period}}</span>
-                                <i class="icon-sa-arrow-down"></i>
-                            </button>
-                            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                                <li class="list-item-li" *ngFor="let period of periodList" (click)="onEnterPeriod(period);byMessageDropdown.close()">
-                                    <span class="title">{{period}}</span>
-                                    <i class="icon-sa-conv-check" *ngIf="this.selectedList.period == period"></i>
-                                </li>
-                            </div>
-                        </div>
-                        <div class="seconds-input">
-                            <div class="kr-sg-input-text">
-                                <input type="number" digitOnly placeholder="Enter Message Count" class="input-text" (keyup.enter)="onEnterMessages(selectedList.nMessages);" [(ngModel)]="selectedList.nMessages">
-                            </div>
-                            <div class="s-title">messages</div>
-                        </div>
-                    </div>
-                </div>
-            </ng-container>
-           
         </ul>
     </div>
 
