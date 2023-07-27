@@ -14,6 +14,7 @@ import { AuthService } from '@kore.services/auth.service';
 import { CoachingService } from './coaching.service';
 import { SubSink } from 'subsink';
 import { Router } from '@angular/router';
+import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
 @Component({
   selector: 'app-coaching',
   templateUrl: './coaching.component.html',
@@ -49,7 +50,8 @@ export class CoachingComponent implements OnInit, OnDestroy {
   searchText = '';
   preBuilt = [];
   sortOrder : 'desc' | 'asc' = 'asc';
-
+  showNoneIntent = false;
+  @ViewChild('noneIntent', { static: true }) noneIntent: SliderComponentComponent;
   constructor(
     private modalService: NgbModal, private service: ServiceInvokerService,
     private workflowService: workflowService, private cdRef: ChangeDetectorRef,
@@ -170,6 +172,12 @@ export class CoachingComponent implements OnInit, OnDestroy {
 
   // Create or Edit Rule Flow Starts
   openFLowCreation(flowCreation, rule?, type = COACHINGCNST.EDIT) {
+    if(!rule.deletable){
+      this.noneIntent.openSlider("#nonIntent", "width550");
+      this.showNoneIntent = true;
+      return;
+    }
+
     if (type === COACHINGCNST.EDIT) {
       this.isLoading = true;
       this.createOrEdit = COACHINGCNST.EDIT;
@@ -308,4 +316,9 @@ export class CoachingComponent implements OnInit, OnDestroy {
     this.sortOrder = this.sortOrder == 'desc' ? 'asc' : 'desc';
     this.getAgentCoachingRules(true);
   }
+
+  closeNoneIntent(e){
+    
+  }
+
 }

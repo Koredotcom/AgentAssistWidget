@@ -237,3 +237,8 @@
 <ng-template #flowCreation>
     <app-coaching-rule-create (onCloseRule)="closeFLowCreation($event)" [createOrEdit]="createOrEdit" [currentRule]="currentRule"></app-coaching-rule-create>
 </ng-template>
+
+
+<app-slider-component id="nonIntent" #noneIntent='app-slider'>
+    <app-none-intent *ngIf="showNoneIntent" (closed)="closeNoneIntent($event)"></app-none-intent>
+</app-slider-component>
