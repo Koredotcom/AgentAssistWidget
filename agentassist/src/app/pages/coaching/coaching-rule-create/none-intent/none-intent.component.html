@@ -70,9 +70,7 @@
                     </div> 
                     <div class="add-rule-block">
                         <div class="label-text">Add Rules</div>
-                        <!-- <input type="text" placeholder="Select Rules"> -->
-
-                        <mat-form-field class="example-chip-list m-b-15">
+                        <mat-form-field class="add-rules-chip-list">
                             <!-- <mat-label>Add Tags</mat-label> -->
                             <mat-chip-list #chipList>
                                 <mat-chip *ngFor="let tag of tags" [selectable]="true" [removable]="true" (removed)="remove(tag.name)">
@@ -85,7 +83,7 @@
                                     #trigger="matAutocompleteTrigger">
                             </mat-chip-list>
                             <mat-autocomplete #auto="matAutocomplete">
-                                <div class="mat-checkboxs">
+                                <!-- <div class="mat-checkboxs">
                                     <mat-option *ngFor="let tag of filteredTagsDisplay;let i = index" [title]="tag"
                                         (click)="selectedOption(tag.name, i);$event.stopPropagation();trigger.openPanel()">
                                         <input id="checkbox-{{i}}" type="checkbox"
@@ -95,6 +93,54 @@
                                                 <span>{{tag.name}}</span>
                                             </div>                            
                                     </mat-option>
+                                </div> -->
+                                <div class="content-scroll">
+                                    <div class="search-block">
+                                        <div class="kr-sg-input-text">
+                                            <input type="text" placeholder="Search" class="input-text">
+                                            <i class="icon-coaching--search"></i>
+                                        </div>
+                                    </div>
+                                    <ng-container>
+                                        <div class="tags-data">
+                                            <div class="title">tags</div>
+                                            <div class="select-all">Select All</div>
+                                        </div>
+                                        <ng-container>
+                                            <mat-option *ngFor="let tag of filteredTagsDisplay;let i = index" [title]="tag"
+                                                    (click)="selectedOption(tag.name, i);$event.stopPropagation();trigger.openPanel()">
+                                                    <input id="checkbox-{{i}}" type="checkbox"
+                                                        (click)="selectedOption(tag.name, i);trigger.openPanel();$event.stopPropagation();" [value]="tag.name"
+                                                        [checked]="tag.checked">
+                                                        <div class="label-check text-truncate" for="checkbox-{{i}}">
+                                                            <span>{{tag.name}}</span>
+                                                            <div class="desc-text">14 rules</div>
+                                                        </div>                            
+                                                </mat-option>
+                                        </ng-container>
+                                    </ng-container>
+                                    <ng-container>
+                                        <div class="tags-data">
+                                            <div class="title">rULeS</div>
+                                            <div class="select-all">Select All</div>
+                                        </div>
+                                        <ng-container>
+                                            <mat-option *ngFor="let tag of filteredTagsDisplay;let i = index" [title]="tag"
+                                                    (click)="selectedOption(tag.name, i);$event.stopPropagation();trigger.openPanel()">
+                                                    <input id="checkbox-{{i}}" type="checkbox"
+                                                        (click)="selectedOption(tag.name, i);trigger.openPanel();$event.stopPropagation();" [value]="tag.name"
+                                                        [checked]="tag.checked">
+                                                        <div class="label-check text-truncate" for="checkbox-{{i}}">
+                                                            <span>{{tag.name}}</span>
+                                                            <div class="desc-text">14 rules</div>
+                                                        </div>                            
+                                                </mat-option>
+                                        </ng-container>
+                                    </ng-container>
+                                </div>
+                                <div class="footer-add-cler">
+                                    <button class="kr-sg-button-secondary-two btn_lg">Clear</button>
+                                    <button class="kr-sg-button-primary btn_lg">Add</button>
                                 </div>
                             </mat-autocomplete>
                         </mat-form-field>
@@ -111,7 +157,7 @@
                     </div> 
                     <div class="add-rule-block">
                         <div class="label-text">Utterances</div>
-                        <input type="text" placeholder="Utterances">
+                        <input type="text" placeholder="Utterances" class="input-text">
                     </div> 
                 </div>
             </div>
