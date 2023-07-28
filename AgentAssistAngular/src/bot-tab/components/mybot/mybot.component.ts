@@ -192,7 +192,8 @@ export class MybotComponent implements OnInit {
           $(entityHtml).append(`<div class="order-number-info">${entityDisplayName} : ${this.sanitizeHtmlPipe.transform(data.userInput)}</div>`);
         } else {
           if (data.isErrorPrompt && entityDisplayName) {
-            let errorTemplate = this.mybotDataService.mybotErrorTemplate(this.imageFilePath, this.imageFileNames, entityDisplayName);
+            let entityType = data.entityType;
+            let errorTemplate = this.mybotDataService.mybotErrorTemplate(this.imageFilePath, this.imageFileNames, entityDisplayName, entityType);
             $(entityHtml).append(errorTemplate);
           }
         }
