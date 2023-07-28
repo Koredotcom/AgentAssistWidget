@@ -172,7 +172,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
 
   // Create or Edit Rule Flow Starts
   openFLowCreation(flowCreation, rule?, type = COACHINGCNST.EDIT) {
-    if(!rule.deletable){
+    if(rule && !rule.deletable && type == COACHINGCNST.EDIT){
       this.noneIntent.openSlider("#nonIntent", "non-intent-slider");
       this.showNoneIntent = true;
       return;
@@ -318,7 +318,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
   }
 
   closeNoneIntent(e){
-    
+    this.noneIntent.closeSlider("#nonIntent");
   }
 
 }

@@ -4,45 +4,36 @@
             <img src="assets/icons/coaching/coaching--message-check-square.svg">
             <span>Pre-Build</span>
         </div>
-        <div class="close-slider">
+        <div class="close-slider" (click)="cancel()">
             <i class="icon-sa-close"></i>
         </div>
     </div>
     <div class="body-wrapper">
-        <div class="utterance-block">
+        <div class="utterance-block" *ngIf="!clickTypes.addRules">
             <div class="top-heading-info">
                 <p>None intent utterances are used to prevent false positives while doing intent recognition....</p>
                 <div class="seach-block">
                     <div class="kr-sg-input-text">
-                        <input type="text" placeholder="Search" class="input-text">
+                        <input type="text" placeholder="Search" class="input-text" [formControl]="searchControl">
                         <i class="icon-coaching--search"></i>
                         <span class="press-enter">Press Enter to confirm search</span>
                     </div>
-                    <button class="kr-sg-button-primary btn_lg">Add Utterance(s)</button>
+                    <button class="kr-sg-button-primary btn_lg" 
+                    *ngIf="clickTypes.initial || clickTypes.addSelected"
+                    (click)="noneIntentButtonClick(coachingConst.clickTypeNames.addUtterance)">Add Utterance(s)</button>
                 </div>
             </div>
             <div class="added-uterances-blk">
                 <perfect-scrollbar>
                     <div class="pading-blk">
                         <ng-container *ngIf="true">
-                            <div class="utt-text">
-                                <span>How much does it cost.</span>
-                                <div class="delete-utt">
+                            <div class="utt-text" *ngFor="let utter of selectedUtterancesArray; let ID = index">
+                                <span>{{utter.utterance}}</span>
+                                <div class="delete-utt" (click)="deleteUtternce(utter, iD)">
                                     <i class="icon-sa-welcome-delete"></i>
                                 </div>
                             </div>
-                            <div class="utt-text">
-                                <span>How much does it cost.</span>
-                                <div class="delete-utt">
-                                    <i class="icon-sa-welcome-delete"></i>
-                                </div>
-                            </div>
-                            <div class="utt-text">
-                                <span>How much does it cost.</span>
-                                <div class="delete-utt">
-                                    <i class="icon-sa-welcome-delete"></i>
-                                </div>
-                            </div>
+                          
                         </ng-container>
                         <ng-container *ngIf="false">
                             <div class="empty-search">
@@ -57,7 +48,7 @@
                 </perfect-scrollbar>
             </div>
         </div>
-        <div class="add-utterance-block">
+        <div class="add-utterance-block" *ngIf="clickTypes.addUtterance || clickTypes.addRules">
             <h1>Add Utterances</h1>
             <div class="utt-radio-block">
                 <div class="radio-block-content active-check">
@@ -97,7 +88,7 @@
                                 <div class="content-scroll">
                                     <div class="search-block">
                                         <div class="kr-sg-input-text">
-                                            <input type="text" placeholder="Search" class="input-text">
+                                            <input type="text" placeholder="Search" class="input-text" [formControl]="searchControl">
                                             <i class="icon-coaching--search"></i>
                                         </div>
                                     </div>
@@ -140,10 +131,11 @@
                                 </div>
                                 <div class="footer-add-cler">
                                     <button class="kr-sg-button-secondary-two btn_lg">Clear</button>
-                                    <button class="kr-sg-button-primary btn_lg">Add</button>
+                                    <button class="kr-sg-button-primary btn_lg" (click)="noneIntentButtonClick(coachingConst.clickTypeNames.addRules);trigger.openPanel()">Add</button>
                                 </div>
                             </mat-autocomplete>
                         </mat-form-field>
+
 
                     </div> 
                 </div>
@@ -162,7 +154,7 @@
                 </div>
             </div>
         </div>
-        <div class="found-details-info d-none">
+        <div class="found-details-info" *ngIf="clickTypes.addRules">
             <div class="seach-block">
                 <div class="kr-sg-input-text">
                     <input type="text" placeholder="Search" class="input-text">
@@ -202,7 +194,14 @@
         </div>
     </div>
     <div class="footer-wraper">
-        <button class="kr-sg-button-secondary btn_lg">Cancel</button>
-        <button class="kr-sg-button-primary btn_lg">Add Selected</button>
+        <ng-container *ngIf="clickTypes.initial || clickTypes.addSelected">
+            <button class="kr-sg-button-secondary btn_lg" (click)="cancel()">Cancel</button>
+            <button class="kr-sg-button-primary btn_lg">Save</button>
+        </ng-container>
+        <ng-container *ngIf="clickTypes.addUtterance || clickTypes.addRules">
+            <button class="kr-sg-button-secondary btn_lg" (click)="cancel()">Cancel</button>
+            <button class="kr-sg-button-primary btn_lg"  (click)="noneIntentButtonClick(coachingConst.clickTypeNames.addSelected)">Add Selected</button>
+        </ng-container>
+       
     </div>
 </div>

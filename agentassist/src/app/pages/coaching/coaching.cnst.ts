@@ -127,4 +127,16 @@ export const COACHINGCNST = {
     voice : 'Voice',
     chat : 'Live Chat',
     channelList : ['voice', 'chat'],
+    clickType : {
+        initial : true,
+        addUtterance : false,
+        addRules : false,
+        addSelected : false
+    },
+    clickTypeNames : {
+        initial : 'initial',
+        addUtterance : 'addUtterance',
+        addRules : 'addRules',
+        addSelected : 'addSelected'
+    }
 }
