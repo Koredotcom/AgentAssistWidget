@@ -29,6 +29,7 @@ export class NoneIntentComponent implements OnInit {
     this.filteredTagsDisplay = this.allTagList.map((item) => {
       return {name : item, checked : false}
     });
+    this.subscribeValues();
   }
 
   subscribeValues(){
