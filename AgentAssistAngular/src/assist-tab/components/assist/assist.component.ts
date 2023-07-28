@@ -390,7 +390,8 @@ export class AssistComponent implements OnInit {
         entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${this.sanitizeHtmlPipe.transform(data.entityValue)}</div>`);
       } else {
         if (data.isErrorPrompt && entityDisplayName) {
-          let entityHtmls = this.assisttabService.errorTemplate(this.imageFilePath, this.imageFileNames, entityDisplayName);
+          let entityType = data.entityType;
+          let entityHtmls = this.assisttabService.errorTemplate(this.imageFilePath, this.imageFileNames, entityDisplayName, entityType);
           entityHtml.append(entityHtmls);
         }
       }
@@ -1950,13 +1951,15 @@ export class AssistComponent implements OnInit {
             entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${entityValue}</div>`);
           } else {
             if (res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
+              let entityType = this.agentAssistResponse.newEntityType;
               let entityHtmls = `<div class="order-number-info">${entityDisplayName} :
                                             <span style="color:red">Value unidentified</span>
-                                        </div>
-                                        <div>
-                                            <img src="${this.imageFilePath}${this.imageFileNames['WARNING']}" style="padding-right: 8px;">
-                                            <span style="font-size: 12px; line-height: 18px; color: #202124;">Incorrect input format<span>
+                                            <span style="font-size: 12px; line-height: 18px; color: #202124; padding-left: 10px"> { Expected Format: ${entityType} }<span>
                                         </div>`
+                                        // <div>
+                                        //     <img src="${this.imageFilePath}${this.imageFileNames['WARNING']}" style="padding-right: 8px;">
+                                        //     <span style="font-size: 12px; line-height: 18px; color: #202124;">Incorrect input format<span>
+                                        // </div>`
               entityHtml.append(entityHtmls);
             }
           }

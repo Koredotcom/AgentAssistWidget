@@ -196,26 +196,28 @@ export class MybotDataService {
                         <div class="agent-utt">
                             <div class="title-data">${this.sanitizeHtmlPipe.transform(data.userInput)}</div>
                         </div>
-                        
+
                     </div>
                 </div>`;
         return template
     }
 
-    mybotErrorTemplate(imageFilePath,imageFileNames,entityDisplayName) {
+    mybotErrorTemplate(imageFilePath,imageFileNames,entityDisplayName, entityType) {
         let template = `
-                <div class="order-number-info">${entityDisplayName} : 
-                        <span style="color:red">Value unidentified</span>
-                </div>
-                <div>
-                    <img src="${imageFilePath}${imageFileNames['WARNING']}" style="padding-right: 8px;">
-                    <span style="font-size: 12px; line-height: 18px; color: #202124;">Incorrect input format<span>
-                </div>`;
+                <div class="order-number-info">${entityDisplayName} :
+                  <span style="color:red">Value unidentified</span>
+                  <span style="font-size: 12px; line-height: 18px; color: #202124; padding-left: 10px"> { Expected Format: ${entityType} }<span>
+                </div>`
+                // <div>
+                //     <img src="${imageFilePath}${imageFileNames['WARNING']}" style="padding-right: 8px;">
+                //     <span style="font-size: 12px; line-height: 18px; color: #202124;">Incorrect input format<span>
+                // </div>`
+                ;
         return template;
     }
 
     agentInputToBotTemplate(agentInputEntityName, agentInputId, connectionDetails, myBotDialogPositionId) {
-        
+
         let template = `
                 <div class="steps-run-data" id="inputFieldForMyBot">
                     <div class="icon_block">
