@@ -54,8 +54,9 @@ export class OnboardingComponent implements OnInit, OnDestroy {
 
   showWarningMessage() {
     let dialogRef = this.dialog.open(AccWarningDialogComponent, {
-      width: '446px',
-      panelClass: "warning-account",
+      width: '1050px',
+      panelClass: "warning-account-popup",
+      disableClose: true,
       data: {
         title: this.translate.instant("Account_Error"),
         text: this.translate.instant("Account_Error_MSG"),
