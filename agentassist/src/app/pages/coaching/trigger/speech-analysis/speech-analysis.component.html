@@ -159,21 +159,62 @@
         </ul>
     </div>
 
-    <div  class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body"  #talkrationpercentagedropdown = "ngbDropdown">
-        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!selectedPercentage}" (click)="showPercentage = selectedPercentage">
-            <span class="choose-text">{{selectedPercentage ? selectedPercentage + '%' : '{ Value }'}}</span>
+    <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body"
+        #talkrationpercentagedropdown="ngbDropdown">
+        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!selectedPercentage}"
+            (click)="clonePercentage()">
+            <span class="choose-text">{{selectedPercentage?.length ? selectedPercentage[0] + '%' : '{ Value }'}}</span>
         </button>
         <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
-            <div class="seconds-input">
-                <div class="kr-sg-input-text">
-                    <input type="number" digitOnly placeholder="Enter Percentage" class="input-text" (keyup.enter)="onEnterPercentage(showPercentage);talkrationpercentagedropdown.close()" [(ngModel)]="showPercentage">
-                </div>
-                <!-- <div class="s-title">seconds</div> -->
-            </div>
+            <ng-template [ngTemplateOutlet]="percentageTemplate"></ng-template>
         </ul>
     </div>
 
+    <ng-container *ngIf = "selectedCompator == coachingCnst.RANGE">
+        <span class="utt-name-desc"> and </span>
+        <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body"
+        #talkrationpercentagedropdown="ngbDropdown">
+        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!selectedPercentage}"
+        (click)="clonePercentage()">
+            <span class="choose-text">{{selectedPercentage[1] ? selectedPercentage[1] + '%' : '{ Value }'}}</span>
+        </button>
+        <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
+            <ng-template [ngTemplateOutlet]="percentageTemplate"></ng-template>
+        </ul>
+        </div>
+    </ng-container>
+
+    <ng-template #percentageTemplate>
+        <div class="seconds-input" *ngIf="selectedCompator != coachingCnst.RANGE">
+            <div class="kr-sg-input-text">
+                <input type="number" digitOnly placeholder="Enter Percentage" class="input-text"
+                    (keyup.enter)="onEnterPercentage(showPercentage[0]);"
+                    [(ngModel)]="showPercentage[0]">
+            </div>
+            <!-- <div class="s-title">seconds</div> -->
+        </div>
+
+        <div class="seconds-input" *ngIf="selectedCompator == coachingCnst.RANGE">
+            <div class="kr-sg-input-text">
+                From <input type="number" digitOnly placeholder="Enter Percentage" class="input-text"
+                    [(ngModel)]="showPercentage[0]">
+            </div>
+            <div class="kr-sg-input-text m-l-6">
+                To <input type="number" digitOnly placeholder="Enter Percentage" class="input-text"
+                    [(ngModel)]="showPercentage[1]">
+            </div>
+            <div class="check-icon-block" 
+            (click)="(showPercentage.length > 1 && showPercentage[1] <= showPercentage[0]) ? $event.stopPropagation() : submitPercentage();">
+                <i class="icon-sa-conv-check"></i>
+            </div>
+            
+            <!-- <div class="s-title">seconds</div> -->
+        </div>
+        <div class="error-text" *ngIf="selectedCompator == coachingCnst.RANGE && showPercentage.length > 1 && showPercentage[1] <= showPercentage[0]">From percentage should always be greater to To percentage</div>
+    
+    </ng-template>
    </ng-container>
+
 
     <div class="dropdown-occurences" ngbDropdown [placement]="'bottom'" container="body">
         <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!selOcc}"><i class="icon-sa-conv-refreshten"></i>  {{selOcc}} {{selOcc == 1 ? ' time' : ' times'}}</button>

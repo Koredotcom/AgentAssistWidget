@@ -17,6 +17,7 @@ export class SpeechAnalysisComponent implements OnInit {
   @Output() deleteTrigger = new EventEmitter();
 
   @ViewChild('utteranceTimer') private utteranceTimer: NgbDropdown;
+  @ViewChild('talkrationpercentagedropdown') private trdropdown :NgbDropdown;
 
   coachingCnst = COACHINGCNST;
   speechType = COACHINGCNST.SPEECH_TYPE;
@@ -33,8 +34,8 @@ export class SpeechAnalysisComponent implements OnInit {
   selectedOperator : string;
   selectedConvType : string;
   selectedCompator : string;
-  selectedPercentage : number;
-  showPercentage : number;
+  selectedPercentage : any = [];
+  showPercentage : any = [];
   selectedList : any = {}
   inconvList : any = {}
   selUser: '';
@@ -82,9 +83,9 @@ export class SpeechAnalysisComponent implements OnInit {
       this.showWordcount = formVal.frequency.nWords;
       this.selUser = formVal.by;
 
-      this.selectedPercentage = formVal.condition?.value;
-      this.showPercentage = formVal.condition?.value;
-      this.selectedCompator = formVal.condition?.operator;
+      this.selectedPercentage = formVal.conditions?.value || [];
+      this.showPercentage = formVal.conditions?.value || [];
+      this.selectedCompator = formVal.conditions?.operator;
 
       this.resetFormValidators(this.selectedSpeechType);
       this.updateInConversationVariables(formVal);
@@ -111,15 +112,19 @@ export class SpeechAnalysisComponent implements OnInit {
   }
 
   clickOnComparator(comp){
-    this.selectedCompator = comp;
-    (this.form.controls.condition as FormGroup)?.controls?.operator.setValue(this.selectedCompator);
+    if(this.selectedCompator != comp){
+      this.showPercentage = [];
+      this.selectedPercentage = [];
+      this.selectedCompator = comp;
+      (this.form.controls.conditions as FormGroup)?.controls?.operator.setValue(this.selectedCompator);
+    }
   }
 
   clickOnType(type){
     if(this.selectedSpeechType != type){
       this.selectedSpeechType = type;
 
-      this.form.removeControl('condition');
+      this.form.removeControl('conditions');
 
       (<FormGroup>this.form.controls.frequency).removeControl('nWords');
       (<FormGroup>this.form.controls.frequency).removeControl('timeTaken');
@@ -131,7 +136,7 @@ export class SpeechAnalysisComponent implements OnInit {
         this.timer = COACHINGCNST.SELECTED_TIMER;
         (<FormGroup>this.form.controls.frequency).addControl('timeTaken', new FormControl(COACHINGCNST.SELECTED_TIMER));
       }else if(type == this.coachingCnst.TALKRATIO){
-        this.form.addControl('condition', new FormGroup({
+        this.form.addControl('conditions', new FormGroup({
           'operator' : new FormControl('', [Validators.required]),
           'value' : new FormControl('', [Validators.required])
         }));
@@ -234,13 +239,13 @@ export class SpeechAnalysisComponent implements OnInit {
 
   clearComparator(){
     this.selectedCompator = null;
-    (this.form.controls.condition as FormGroup)?.controls?.operator?.setValue('');
+    (this.form.controls.conditions as FormGroup)?.controls?.operator?.setValue('');
 
   }
 
   clearPercentage(){
-    this.selectedPercentage = null;
-    (this.form.controls.condition as FormGroup)?.controls?.value?.setValue('');
+    this.selectedPercentage = [];
+    (this.form.controls.conditions as FormGroup)?.controls?.value?.setValue([]);
   }
 
   clearConvType(){
@@ -278,8 +283,16 @@ export class SpeechAnalysisComponent implements OnInit {
   }
 
   onEnterPercentage(e){
-    this.selectedPercentage = e ? e : 1;
-    (this.form.controls.condition as FormGroup)?.controls?.value?.setValue(this.selectedPercentage);
+    this.selectedPercentage[0] = (e ? e : 1);
+    (this.form.controls.conditions as FormGroup)?.controls?.value?.setValue(this.selectedPercentage);
+    this.trdropdown.close();
+  }
+
+  submitPercentage(){
+    this.selectedPercentage = Object.assign([],this.showPercentage);
+    (this.form.controls.conditions as FormGroup)?.controls?.value?.setValue(this.selectedPercentage);
+    this.trdropdown.close();
+    console.log(this.selectedPercentage, 'selected percentage');
   }
 
   onEnterWords(e){
@@ -301,6 +314,10 @@ export class SpeechAnalysisComponent implements OnInit {
         (this.form.controls?.frequency as FormGroup)?.controls[key].updateValueAndValidity();
       }
     }    
+  }
+
+  clonePercentage(){
+    this.showPercentage = Object.assign([],this.selectedPercentage)
   }
 
 }

@@ -196,10 +196,10 @@ export class CoachingService {
       objC.by = [obj.by, [Validators.required]]
     }
 
-    if(obj.condition){
-      objC.condition = this.fb.group({
-        operator : [obj.condition.operator, [Validators.required]],
-        value : [obj.condition.value, [Validators.required]]
+    if(obj.conditions){
+      objC.conditions = this.fb.group({
+        operator : [obj.conditions.operator, [Validators.required]],
+        value : [obj.conditions.value, [Validators.required]]
       })
     }
 

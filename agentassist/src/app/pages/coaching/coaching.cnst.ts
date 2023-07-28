@@ -139,5 +139,6 @@ export const COACHINGCNST = {
         'gt' : 'Greater than',
         'gte' : 'Greater than or equal to',
         'range' : 'In between'
-    }
+    },
+    RANGE : 'range'
 }
