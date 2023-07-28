@@ -196,6 +196,13 @@ export class CoachingService {
       objC.by = [obj.by, [Validators.required]]
     }
 
+    if(obj.condition){
+      objC.condition = this.fb.group({
+        operator : [obj.condition.operator, [Validators.required]],
+        value : [obj.condition.value, [Validators.required]]
+      })
+    }
+
     if(obj.frequency){
 
       if(obj.frequency?.nWords){
@@ -219,13 +226,13 @@ export class CoachingService {
         (<FormGroup> objC.frequency).addControl('nMessages', new FormControl(obj.frequency?.nMessages))
       }
       
-      if(obj.frequency?.comparator){
-        (<FormGroup> objC.frequency).addControl('comparator', new FormControl(obj.frequency?.comparator))
-      }
+      // if(obj.frequency?.comparator){
+      //   (<FormGroup> objC.frequency).addControl('comparator', new FormControl(obj.frequency?.comparator))
+      // }
 
-      if(obj.frequency?.percentage){
-        (<FormGroup> objC.frequency).addControl('percentage', new FormControl(obj.frequency?.percentage))
-      }
+      // if(obj.frequency?.percentage){
+      //   (<FormGroup> objC.frequency).addControl('percentage', new FormControl(obj.frequency?.percentage))
+      // }
     }
     return objC;
   }
