@@ -81,6 +81,10 @@ export class CoachingComponent implements OnInit, OnDestroy {
   }
 
   initApiCalls() {
+    this.respData = {
+      preBuilt : [],
+      results: []
+    }
     this.getCoachingPreBuiltRules();
     this.getAgentCoachingRules();
     this.subscribeEvents();
