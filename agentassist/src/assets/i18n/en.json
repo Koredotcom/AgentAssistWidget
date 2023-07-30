@@ -592,7 +592,7 @@
     "SETTINGS.UPLOAD_YOUR_BOT_ICON": "Upload your bot icon",
     "SETTINGS.ADVANCED_SETTINGS_SUBHEADING": "Advanced Settings",
     "SETTINGS.VOICE_PREFERENCES": "Voice Preferences",
-    "SETTINGS.SPEECH_RECOGNITION": "Speech Recognition", 
+    "SETTINGS.SPEECH_RECOGNITION": "Speech Recognition",
     "SETTINGS.VOICE_PREFERENCES_DESC": "Personalize the ASR Engine and the voice selection for your text to speech.",
     "SETTINGS.SPEECH_PREFERENCES_DESC": "Configure your voice channels and personalise the ASR Engine.",
     "SETTINGS.SPEECH_RECOGNITION_PREFERENCE": "Speech Recognition Preference",
@@ -2040,5 +2040,9 @@
     "VALID.NAME": "Please enter a valid name",
     "QUOTA_EXCEEDED": "You exceeded your current quota.",
     "RULE.SUCCESS": "Rule has been created",
-    "RULE.UPDATE_SUCCESS" : "Rule has been updated" 
+    "Account_Error": "Account Error",
+    "Account_Error_MSG": "You have logged in using SmartAssist account details. To access AgentAssist, please log in with your AgentAssist credentials or create a fresh account.",
+    "LOGIN_BTN": "Login With AgentAssist",
+    "CREATE_ACCOUNT_BTN": "Create a New Account",
+    "RULE.UPDATE_SUCCESS" : "Rule has been updated"
 }
