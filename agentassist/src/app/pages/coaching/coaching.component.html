@@ -240,5 +240,5 @@
 
 
 <app-slider-component id="nonIntent" #noneIntent='app-slider'>
-    <app-none-intent *ngIf="showNoneIntent" (closed)="closeNoneIntent($event)"></app-none-intent>
+    <app-none-intent *ngIf="showNoneIntent" (closeSlide)="closeSlide($event)" [currentRule]="currentRule"></app-none-intent>
 </app-slider-component>

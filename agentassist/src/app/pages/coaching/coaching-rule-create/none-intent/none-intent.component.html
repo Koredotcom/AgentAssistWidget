@@ -4,7 +4,7 @@
             <img src="assets/icons/coaching/coaching--message-check-square.svg">
             <span>Pre-Build</span>
         </div>
-        <div class="close-slider">
+        <div (click)="closeSlider()" class="close-slider">
             <i class="icon-sa-close"></i>
         </div>
     </div>
@@ -14,50 +14,46 @@
                 <p>None intent utterances are used to prevent false positives while doing intent recognition....</p>
                 <div class="seach-block">
                     <div class="kr-sg-input-text">
-                        <input type="text" placeholder="Search" class="input-text">
+                        <input type="text" placeholder="Search" class="input-text" [(ngModel)]="selectedUtterSeach">
                         <i class="icon-coaching--search"></i>
-                        <span class="press-enter">Press Enter to confirm search</span>
+                        <!-- <span class="press-enter">Press Enter to confirm search</span> -->
                     </div>
-                    <button class="kr-sg-button-primary btn_lg">Add Utterance(s)</button>
+                    <button *ngIf="!clickAddUtter" class="kr-sg-button-primary btn_lg" (click)="clickAddUtter = true;">Add Utterance(s)</button>
                 </div>
             </div>
             <div class="added-uterances-blk">
                 <perfect-scrollbar>
                     <div class="pading-blk">
-                        <ng-container *ngIf="true">
+                        <ng-container *ngFor="let utter of selectedUtterances | filter: [ selectedUtterSeach, 'utterance']; let i = index">
                             <div class="utt-text">
-                                <span>How much does it cost.</span>
-                                <div class="delete-utt">
-                                    <i class="icon-sa-welcome-delete"></i>
-                                </div>
-                            </div>
-                            <div class="utt-text">
-                                <span>How much does it cost.</span>
-                                <div class="delete-utt">
-                                    <i class="icon-sa-welcome-delete"></i>
-                                </div>
-                            </div>
-                            <div class="utt-text">
-                                <span>How much does it cost.</span>
-                                <div class="delete-utt">
+                                <span [title]="utter?.utterance">{{utter?.utterance}}</span>
+                                <div class="delete-utt" (click)="deleteUtterance(utter)">
                                     <i class="icon-sa-welcome-delete"></i>
                                 </div>
                             </div>
                         </ng-container>
-                        <ng-container *ngIf="false">
+                        <ng-container *ngFor="let utter of newUtterances | filter: [ selectedUtterSeach] ; let i = index">
+                            <div class="utt-text">
+                                <span [title]="utter">{{utter}}</span>
+                                <div class="delete-utt" (click)="deleteNewUtterance(utter)">
+                                    <i class="icon-sa-welcome-delete"></i>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <ng-container *ngIf="!(selectedUtterances | filter: [ selectedUtterSeach, 'utterance'])?.length && !(newUtterances | filter: [ selectedUtterSeach])?.length">
                             <div class="empty-search">
                                 <div class="img-block-empty">
                                     <img src="assets/icons/empty-search-add.svg">
                                 </div>
                                 <h1>No results found</h1>
-                                <p>No results found for your query “How”</p>
+                                <p>No results found for your query "{{selectedUtterSeach}}"</p>
                             </div>
                         </ng-container>
                     </div>
                 </perfect-scrollbar>
             </div>
         </div>
-        <div class="add-utterance-block">
+        <div class="add-utterance-block" [ngClass]="{'d-none': !clickAddUtter}">
             <h1>Add Utterances</h1>
             <div class="utt-radio-block">
                 <div class="radio-block-content active-check">
@@ -107,7 +103,7 @@
                                             <div class="select-all">Select All</div>
                                         </div>
                                         <ng-container>
-                                            <mat-option *ngFor="let tag of filteredTagsDisplay;let i = index" [title]="tag"
+                                            <mat-option *ngFor="let tag of allTags;let i = index" [title]="tag"
                                                     (click)="selectedOption(tag.name, i);$event.stopPropagation();trigger.openPanel()">
                                                     <input id="checkbox-{{i}}" type="checkbox"
                                                         (click)="selectedOption(tag.name, i);trigger.openPanel();$event.stopPropagation();" [value]="tag.name"
@@ -125,7 +121,7 @@
                                             <div class="select-all">Select All</div>
                                         </div>
                                         <ng-container>
-                                            <mat-option *ngFor="let tag of filteredTagsDisplay;let i = index" [title]="tag"
+                                            <mat-option *ngFor="let tag of allRules;let i = index" [title]="tag"
                                                     (click)="selectedOption(tag.name, i);$event.stopPropagation();trigger.openPanel()">
                                                     <input id="checkbox-{{i}}" type="checkbox"
                                                         (click)="selectedOption(tag.name, i);trigger.openPanel();$event.stopPropagation();" [value]="tag.name"
@@ -157,7 +153,7 @@
                     </div> 
                     <div class="add-rule-block">
                         <div class="label-text">Utterances</div>
-                        <input type="text" placeholder="Utterances" class="input-text">
+                        <input type="text" (keydown.enter)="onEnter()" [(ngModel)]="customUtterance" placeholder="Utterances" class="input-text">
                     </div> 
                 </div>
             </div>
@@ -202,7 +198,7 @@
         </div>
     </div>
     <div class="footer-wraper">
-        <button class="kr-sg-button-secondary btn_lg">Cancel</button>
-        <button class="kr-sg-button-primary btn_lg">Add Selected</button>
+        <button class="kr-sg-button-secondary btn_lg" (click)="closeSlider()">Cancel</button>
+        <button class="kr-sg-button-primary btn_lg" (click)="save()">Add Selected</button>
     </div>
 </div>

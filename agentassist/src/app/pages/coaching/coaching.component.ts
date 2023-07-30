@@ -86,7 +86,9 @@ export class CoachingComponent implements OnInit, OnDestroy {
     this.respData = {
       preBuilt : [],
       results: []
-    }
+    };
+    this.page = 1;
+    this.limit = 10;
     this.getCoachingPreBuiltRules();
     this.getAgentCoachingRules();
     this.subscribeEvents();
@@ -142,7 +144,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
     this.cdRef.detectChanges();
     if(empty){
       this.page = 1;
-      this.limit = 10;        
+      this.limit = 10;
     }
     let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
     let params: any = {
@@ -176,12 +178,6 @@ export class CoachingComponent implements OnInit, OnDestroy {
 
   // Create or Edit Rule Flow Starts
   openFLowCreation(flowCreation, rule?, type = COACHINGCNST.EDIT) {
-    if(!rule.deletable){
-      this.noneIntent.openSlider("#nonIntent", "non-intent-slider");
-      this.showNoneIntent = true;
-      return;
-    }
-
     if (type === COACHINGCNST.EDIT) {
       this.isLoading = true;
       this.createOrEdit = COACHINGCNST.EDIT;
@@ -192,7 +188,12 @@ export class CoachingComponent implements OnInit, OnDestroy {
       .subscribe(data => {
           if (data) {
             this.currentRule = data;
-            this.modalFlowCreateRef = this.modalService.open(flowCreation, { centered: true, keyboard: false, windowClass: 'flow-creation-full-modal', backdrop: 'static' });
+            if(rule?.name === "No Intent"){
+              this.noneIntent.openSlider("#nonIntent", "non-intent-slider");
+              this.showNoneIntent = true;
+            }else{
+              this.modalFlowCreateRef = this.modalService.open(flowCreation, { centered: true, keyboard: false, windowClass: 'flow-creation-full-modal', backdrop: 'static' });
+            }
             setTimeout(() => {
               window.dispatchEvent(new Event('resize'));
               this.cdRef.detectChanges();
@@ -295,11 +296,11 @@ export class CoachingComponent implements OnInit, OnDestroy {
         if (res) {
           this.cs.metaForUtternace = (res[0].featureList || [])
             .find(item => item.name === "aa_utterance")
-        };
+          };
       }, err => {
       });
   }
-
+  
   newRule(newRuleModal: any) {
     this.modalService.open(newRuleModal, {
       windowClass: 'modal-ngb-wrapper-window',
@@ -321,8 +322,9 @@ export class CoachingComponent implements OnInit, OnDestroy {
     this.getAgentCoachingRules(true);
   }
 
-  closeNoneIntent(e){
-    
+  closeSlide(e){
+    this.noneIntent.closeSlider("#nonIntent");
+    this.showNoneIntent = false;
   }
 
 }
