@@ -127,6 +127,95 @@
         <span class="utt-name-desc">WPM is detected for  </span>
    </ng-container>
 
+   <ng-container *ngIf="selectedSpeechType && selectedSpeechType == coachingCnst.TALKRATIO">
+    <span class="utt-name-desc">Agent to Customer </span>
+    <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body" #speechspeedDropdown = "ngbDropdown">
+        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!selectedSpeechType}">
+            <span class="choose-text">{{selectedSpeechType ? coachingCnst.SPEECH_TYPE[selectedSpeechType] : '{ speech type }'}}</span>
+        </button>
+        <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
+            <ng-container *ngFor="let type of speechType | keyvalue" >
+                <li ngbDropdownItem class="list-item-li" (click)="clickOnType(type.key)">
+                    <span class="title">{{type.value}}</span>
+                    <i [ngClass]="{'icon-sa-conv-check' : type.key === selectedSpeechType}"></i>
+                </li>
+            </ng-container>
+        </ul>
+    </div>
+    <span class="utt-name-desc"> is</span>
+
+
+    <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body">
+        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!selectedCompator}">
+            <span class="choose-text">{{selectedCompator ? (coachingCnst.comparator_map[selectedCompator]) : '{ Comparator }'}}</span>
+        </button>
+        <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
+            <ng-container *ngFor="let comp of coachingCnst.comparator_acutal_list">
+                <li ngbDropdownItem class="list-item-li" (click)="clickOnComparator(comp)">
+                    <span class="title">{{coachingCnst.comparator_map[comp]}}</span>
+                    <i [ngClass]="{'icon-sa-conv-check' : comp === selectedCompator}" ></i>
+                </li>
+            </ng-container>
+        </ul>
+    </div>
+
+    <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body"
+        #talkrationpercentagedropdown="ngbDropdown">
+        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!selectedPercentage}"
+            (click)="clonePercentage()">
+            <span class="choose-text">{{selectedPercentage?.length ? selectedPercentage[0] + '%' : '{ Value }'}}</span>
+        </button>
+        <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
+            <ng-template [ngTemplateOutlet]="percentageTemplate"></ng-template>
+        </ul>
+    </div>
+
+    <ng-container *ngIf = "selectedCompator == coachingCnst.RANGE">
+        <span class="utt-name-desc"> and </span>
+        <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body"
+        #talkrationpercentagedropdown="ngbDropdown">
+        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!selectedPercentage}"
+        (click)="clonePercentage()">
+            <span class="choose-text">{{selectedPercentage[1] ? selectedPercentage[1] + '%' : '{ Value }'}}</span>
+        </button>
+        <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
+            <ng-template [ngTemplateOutlet]="percentageTemplate"></ng-template>
+        </ul>
+        </div>
+    </ng-container>
+
+    <ng-template #percentageTemplate>
+        <div class="seconds-input" *ngIf="selectedCompator != coachingCnst.RANGE">
+            <div class="kr-sg-input-text">
+                <input type="number" digitOnly placeholder="Enter Percentage" class="input-text"
+                    (keyup.enter)="onEnterPercentage(showPercentage[0]);"
+                    [(ngModel)]="showPercentage[0]">
+            </div>
+            <!-- <div class="s-title">seconds</div> -->
+        </div>
+
+        <div class="seconds-input" *ngIf="selectedCompator == coachingCnst.RANGE">
+            <div class="kr-sg-input-text">
+                From <input type="number" digitOnly placeholder="Enter Percentage" class="input-text"
+                    [(ngModel)]="showPercentage[0]">
+            </div>
+            <div class="kr-sg-input-text m-l-6">
+                To <input type="number" digitOnly placeholder="Enter Percentage" class="input-text"
+                    [(ngModel)]="showPercentage[1]">
+            </div>
+            <div class="check-icon-block" 
+            (click)="(showPercentage.length > 1 && showPercentage[1] <= showPercentage[0]) ? $event.stopPropagation() : submitPercentage();">
+                <i class="icon-sa-conv-check"></i>
+            </div>
+            
+            <!-- <div class="s-title">seconds</div> -->
+        </div>
+        <div class="error-text" *ngIf="selectedCompator == coachingCnst.RANGE && showPercentage.length > 1 && showPercentage[1] <= showPercentage[0]">From percentage should always be greater to To percentage</div>
+    
+    </ng-template>
+   </ng-container>
+
+
     <div class="dropdown-occurences" ngbDropdown [placement]="'bottom'" container="body">
         <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!selOcc}"><i class="icon-sa-conv-refreshten"></i>  {{selOcc}} {{selOcc == 1 ? ' time' : ' times'}}</button>
         <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
@@ -178,7 +267,7 @@
                                <ng-container  *ngTemplateOutlet="bytimeinput"></ng-container>
                             </span>
                         </ng-container>
-                        <ng-container *ngIf="selectedSpeechType == coachingCnst.SPEECHSPEED">
+                        <ng-container *ngIf="selectedSpeechType == coachingCnst.SPEECHSPEED || selectedSpeechType == coachingCnst.TALKRATIO">
                            <ng-contaner *ngTemplateOutlet="bytimeinput"></ng-contaner>
                         </ng-container>
                         <div class="s-title">seconds</div>
@@ -191,7 +280,6 @@
                 </div>
                 <div class="error-text" *ngIf="form?.controls?.frequency?.controls?.nSeconds.invalid">Input time should be greater than configured time</div>
             </div>
-           
         </ul>
     </div>
 
