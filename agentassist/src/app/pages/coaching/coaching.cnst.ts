@@ -134,8 +134,8 @@ export const COACHINGCNST = {
     comparator_map : {
         'eq' : 'Equal to',
         'neq' : 'Not Equal to',
-        'lt' : 'Ltss than',
-        'lte' : 'Ltss than or equal to',
+        'lt' : 'Less than',
+        'lte' : 'Less than or equal to',
         'gt' : 'Greater than',
         'gte' : 'Greater than or equal to',
         'range' : 'In between'
