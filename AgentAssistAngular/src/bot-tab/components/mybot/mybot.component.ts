@@ -244,28 +244,32 @@ export class MybotComponent implements OnInit {
       if (this.commonService.isMyBotAgentSentRequestOnClick && !this.myBotDropdownHeaderUuids) {
         let mybotContainer = $('#myBotAutomationBlock');
         let botResHtml = `
-                <div class="collapse-acc-data before-none" id='smallTalk-${myBotuuids}'>
-             <div class="steps-run-data">
-             <div class="icon_block">
-                 <i class="ast-agent"></i>
-             </div>
-             <div class="run-info-content" >
-             <div class="title">Tell Customer</div>
-             <div class="agent-utt">
-                 <div class="title-data" id="displayData-${myBotuuids}">${data.buttons[0].value}</div>
-                 <div class="action-links">
-                     <button class="send-run-btn" id="sendMsg" data-msg-id="${myBotuuids}"  data-msg-data="${data.buttons[0].value}">Send</button>
-                     <div class="copy-btn" data-msg-id="${myBotuuids}" data-msg-data="${data.buttons[0].value}">
-                         <i class="ast-copy" data-msg-id="${myBotuuids}" data-msg-data="${data.buttons[0].value}"></i>
-                     </div>
-                 </div>
-             </div>
-             </div>
-         </div>
+            <div class="collapse-acc-data before-none" id='smallTalk-${myBotuuids}'>
+              <div class="steps-run-data">
+                  <div class="icon_block">
+                      <i class="ast-agent"></i>
+                  </div>
+                <div class="run-info-content" >
+                  <div class="title">Tell Customer</div>
+                  <div class="agent-utt">
+                      <div class="title-data" id="displayData-${myBotuuids}">${data.buttons[0].value}</div>
+                      <div class="action-links">
+                          <button class="send-run-btn" id="sendMsg" data-msg-id="${myBotuuids}"  data-msg-data="${data.buttons[0].value}">Send</button>
+                          <div class="copy-btn" data-msg-id="${myBotuuids}" data-msg-data="${data.buttons[0].value}">
+                              <i class="ast-copy" data-msg-id="${myBotuuids}" data-msg-data="${data.buttons[0].value}"></i>
+                          </div>
+                      </div>
+                      <div class="warning-template hide"  id="warningTemp">
+                          <img src="${this.imageFilePath}${this.imageFileNames['infoIcon']}" style="padding-right: 8px;">
+                          <span class="warning-text">Templates are not supported, visit your bot builder to disable it.</span>
+                      </div>
+                  </div>
+                </div>
+          </div>
          </div>`;
         mybotContainer.append(botResHtml);
         this.commonService.isMyBotAgentSentRequestOnClick = false;
-      } 
+      }
     }
 
     if (!this.commonService.isMyBotAutomationOnGoing && this.myBotDropdownHeaderUuids && data.buttons && (this.myBotDialogPositionId && !data.positionId || data.positionId == this.myBotDialogPositionId)) {

@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 import { RawHtmlPipe } from 'src/common/pipes/raw-html.pipe';
 import { SanitizeHtmlPipe } from 'src/common/pipes/sanitize-html.pipe';
+import { ProjConstants, ImageFileNames, ImageFilePath } from 'src/common/constants/proj.cnts';
 
 @Injectable({
     providedIn: 'root'
 })
 export class MybotDataService {
+  imageFileNames: any = ImageFileNames;
+  imageFilePath: string = ImageFilePath;
 
     constructor(private sanitizeHtmlPipe: SanitizeHtmlPipe, private rawHtmPipe : RawHtmlPipe) { }
 
@@ -157,11 +160,15 @@ export class MybotDataService {
                   </div>
               </div>
           </div>
+          <div class="warning-template hide"  id="warningTemp">
+              <img src="${this.imageFilePath}${this.imageFileNames['infoIcon']}" style="padding-right: 8px;">
+              <span class="warning-text">Templates are not supported, visit your bot builder to disable it.</span>
+          </div>
           </div>
       </div>
       `;
-           
-        }else{ 
+
+        }else{
             template = `
                 <div class="steps-run-data">
                    <div class="icon_block">
@@ -177,6 +184,10 @@ export class MybotDataService {
                                <i class="ast-copy" data-msg-id="${myBotuuids}" data-position-id="${positionID}"></i>
                            </div>
                        </div>
+                       <div class="warning-template hide"  id="warningTemp">
+                          <img src="${this.imageFilePath}${this.imageFileNames['infoIcon']}" style="padding-right: 8px;">
+                          <span class="warning-text">Templates are not supported, visit your bot builder to disable it.</span>
+                      </div>
                    </div>
                    </div>
                </div>
