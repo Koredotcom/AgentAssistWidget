@@ -574,7 +574,8 @@ export class MybotComponent implements OnInit {
             entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${entityValue}</div>`);
           } else {
             if (res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
-              let entityHtmls = this.mybotDataService.mybotErrorTemplate(this.imageFilePath, this.imageFileNames, entityDisplayName);
+              let entityType = res.agentAssistDetails.entityType;
+              let entityHtmls = this.mybotDataService.mybotErrorTemplate(this.imageFilePath, this.imageFileNames, entityDisplayName, entityType);
               entityHtml.append(entityHtmls);
             }
           }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ProjConstants } from 'src/common/constants/proj.cnts';
+import { ProjConstants, ImageFileNames, ImageFilePath } from 'src/common/constants/proj.cnts';
 import { SanitizeHtmlPipe } from 'src/common/pipes/sanitize-html.pipe';
 import * as $ from 'jquery';
 import { CommonService } from 'src/common/services/common.service';
@@ -9,6 +9,8 @@ import { CommonService } from 'src/common/services/common.service';
 })
 export class AssistService {
   projConstants: any = ProjConstants;
+  imageFilePath: string = ImageFilePath;
+  imageFileNames: any = ImageFileNames;
   constructor(public sanitizeHtmlPipe: SanitizeHtmlPipe,
     public commonService : CommonService) { }
 
@@ -155,45 +157,51 @@ export class AssistService {
     if(componentType && componentType == 'dialogAct' && (srcChannel != 'msteams' && srcChannel != 'rtm') ){
       template = `
       <div class="steps-run-data">
-      <div class="icon_block">
-          <i class="ast-agent"></i>
-      </div>
-      <div class="run-info-content" >
-      <div class="title">Tell Customer</div>
-      <div class="agent-utt">
-      <div class="title-data" id="displayData-${uuids}">${value}</div>
-          <div class="action-links">
-              <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data="${newTemp}" data-position-id="${positionID}">Send</button>
-              <div class="copy-btn" data-msg-id="${uuids}" data-position-id="${positionID}">
-                  <i class="ast-copy" data-msg-id="${uuids}" data-position-id="${positionID}"></i>
-              </div>
+        <div class="icon_block">
+            <i class="ast-agent"></i>
+        </div>
+        <div class="run-info-content" >
+          <div class="title">Tell Customer</div>
+          <div class="agent-utt">
+            <div class="title-data" id="displayData-${uuids}">${value}</div>
+            <div class="action-links">
+                <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data="${newTemp}" data-position-id="${positionID}">Send</button>
+                <div class="copy-btn" data-msg-id="${uuids}" data-position-id="${positionID}">
+                    <i class="ast-copy" data-msg-id="${uuids}" data-position-id="${positionID}"></i>
+                </div>
+            </div>
+            <div class="warning-template hide"  id="warningTemp">
+                <img src="${this.imageFilePath}${this.imageFileNames['infoIcon']}" style="padding-right: 8px;">
+                <span class="warning-text">Templates are not supported, visit your bot builder to disable it.</span>
+            </div>
           </div>
-      </div>
-      </div>
-  </div>
-  `;
-       
+        </div>
+      </div>`;
+
     }else{
       template = `
       <div class="steps-run-data">
-      <div class="icon_block">
-          <i class="ast-agent"></i>
-      </div>
-      <div class="run-info-content" >
-      <div class="title">Tell Customer</div>
-      <div class="agent-utt">
-          <div class="title-data" ><ul class="chat-container" id="displayData-${uuids}" data-msg-id="${uuids}"></ul></div>
-          <div class="action-links">
+        <div class="icon_block">
+            <i class="ast-agent"></i>
+        </div>
+        <div class="run-info-content" >
+          <div class="title">Tell Customer</div>
+          <div class="agent-utt">
+            <div class="title-data" ><ul class="chat-container" id="displayData-${uuids}" data-msg-id="${uuids}"></ul></div>
+            <div class="action-links">
               <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data="${newTemp}" data-position-id="${positionID}">Send</button>
               <div class="copy-btn hide" data-msg-id="${uuids}" data-position-id="${positionID}">
                   <i class="ast-copy" data-msg-id="${uuids}" data-position-id="${positionID}"></i>
               </div>
-          </div>
+            </div>
+            <div class="warning-template hide"  id="warningTemp">
+                <img src="${this.imageFilePath}${this.imageFileNames['infoIcon']}" style="padding-right: 8px;">
+                <span class="warning-text">Templates are not supported, visit your bot builder to disable it.</span>
+            </div>
+        </div>
       </div>
-      </div>
-  </div>
   `;
-    }    
+    }
     return template;
   }
 

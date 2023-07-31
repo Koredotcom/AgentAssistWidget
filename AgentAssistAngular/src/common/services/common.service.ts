@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 import { EVENTS } from '../helper/events';
 import { WebSocketService } from './web-socket.service';
 import * as $ from 'jquery';
-import { coachingConst, IdReferenceConst, ProjConstants, storageConst } from '../constants/proj.cnts';
+import { coachingConst, IdReferenceConst, ProjConstants, storageConst, ImageFileNames, ImageFilePath } from '../constants/proj.cnts';
 import { DesignAlterService } from './design-alter.service';
 import { LocalStorageService } from './local-storage.service';
 import { TemplateRenderClassService } from './template-render-class.service';
@@ -60,6 +60,9 @@ export class CommonService {
   }
   aaHelpers = null;
   realtimeSentiData : any = {};
+
+  imageFilePath: string = ImageFilePath;
+  imageFileNames: any = ImageFileNames;
   constructor(private route: ActivatedRoute, private webSocketService: WebSocketService, private designAlterService: DesignAlterService,
     private localStorageService: LocalStorageService,private templateRenderClassService: TemplateRenderClassService) {
     this.setScrollContent();
@@ -871,6 +874,7 @@ export class CommonService {
     }
     if((!this.configObj.source || this.configObj.source !== ProjConstants.SMARTASSIST_SOURCE) && parsedPayload){
         $(lastchild).find('.send-run-btn').addClass('hide')
+        $(lastchild).find('.warning-template').removeClass('hide')
     }
 
     if(this.isCallConversation == true){

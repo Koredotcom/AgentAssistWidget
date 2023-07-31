@@ -1252,6 +1252,12 @@ border: 1px solid transparent !important;
     text-transform: uppercase;
     opacity: 1;
 }
+
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data .run-info-content .agent-utt .warning-template .warning-text {
+  color: #F59E0B;
+}
+
+
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data .run-info-content .agent-utt .action-links .copy-btn {
     background: var(--bg-color-containers);
     box-shadow: 0px 2px 8px rgba(0,0,0,0.05);
