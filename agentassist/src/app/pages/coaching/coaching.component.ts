@@ -91,6 +91,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
     };
     this.page = 1;
     this.limit = 10;
+    this.sortOrder = 'asc';
     this.getCoachingPreBuiltRules();
     this.getAgentCoachingRules();
     this.subscribeEvents();

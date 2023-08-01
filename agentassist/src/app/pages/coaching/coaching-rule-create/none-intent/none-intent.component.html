@@ -32,7 +32,7 @@
                                 </div>
                             </div>
                         </ng-container>
-                        <ng-container *ngFor="let utter of newUtterances ; let i = index">
+                        <ng-container *ngFor="let utter of newUtterances | filter: [ selectedUtterSeach] ; let i = index">
                             <div class="utt-text">
                                 <span [title]="utter">{{utter}}</span>
                                 <div class="delete-utt" (click)="deleteNewUtterance(utter)">
@@ -56,7 +56,7 @@
         <div class="add-utterance-block" [ngClass]="{'d-none': !clickAddUtter}">
             <h1>Add Utterances</h1>
             <div class="utt-radio-block">
-                <div class="radio-block-content active-check">
+                <div class="radio-block-content" [ngClass]="{'active-check': utteranceType === coachingCnst.AIASSIST}">
                     <div class="kr-sg-radiobutton" 
                     [ngbTooltip]="!openapiEnable ? 'Configure Open AI to use AI Assist to Add Utterances' : ''"
                     [ngClass]="{'disable' : !openapiEnable}">
@@ -77,7 +77,7 @@
                                     <span class="chip-name text-truncate mx-w-100" title="{{tag.name}}">{{tag.name}}</span>
                                     <span class="icon-sa-close" matChipRemove *ngIf="true"></span>
                                 </mat-chip>
-                                <input placeholder="Add Tags" #tagInput [matChipInputFor]="chipList"
+                                <input placeholder="Select Rules" #tagInput [matChipInputFor]="chipList"
                                     [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="false"
                                     [matAutocomplete]="auto"
                                     #trigger="matAutocompleteTrigger">
@@ -91,24 +91,26 @@
                                         </div>
                                     </div>
                                     <div class="tags-data" *ngIf="checkTagPresent() ? true : false">
-                                        <div class="title">tags</div>
+                                        <div class="title">Tags</div>
                                         <div class="select-all" (click)="selectAllUtteranceType(coachingCnst.TAG)">Select All</div>
                                     </div>
                                     <ng-container *ngFor="let tag of filteredTagsDisplay;let i = index">
-                                        <mat-option [title]="tag" *ngIf="tag.type == coachingCnst.TAG"
-                                            (click)="selectedOption(tag, i);trigger.openPanel();$event.stopPropagation();">
-                                
-                                            <input id="checkbox-{{i}}" type="checkbox"
-                                                (click)="selectedOption(tag, i);trigger.openPanel();$event.stopPropagation();" [value]="tag.name"
-                                                [checked]="tag.checked">
-                                            <div class="label-check text-truncate" for="checkbox-{{i}}">
-                                                <span>{{tag?.name}}</span>
-                                                <div class="desc-text">{{tag?.value?.length}} rules</div>
-                                            </div>
-                                        </mat-option>
+                                        <ng-container *ngIf="tag?.name">
+                                            <mat-option [title]="tag" *ngIf="tag.type == coachingCnst.TAG"
+                                                (click)="selectedOption(tag, i);trigger.openPanel();$event.stopPropagation();">
+                                    
+                                                <input id="checkbox-{{i}}" type="checkbox"
+                                                    (click)="selectedOption(tag, i);trigger.openPanel();$event.stopPropagation();" [value]="tag.name"
+                                                    [checked]="tag.checked">
+                                                <div class="label-check text-truncate" for="checkbox-{{i}}">
+                                                    <span>{{tag?.name}}</span>
+                                                    <div class="desc-text">{{tag?.value?.length}} rules</div>
+                                                </div>
+                                            </mat-option>
+                                        </ng-container>
                                     </ng-container>
                                     <div class="tags-data" *ngIf="checkRulePresent() ? true  : false">
-                                        <div class="title">rULeS</div>
+                                        <div class="title">Rules</div>
                                         <div class="select-all" (click)="selectAllUtteranceType(coachingCnst.RULE)">Select All</div>
                                     </div>
                                     <ng-container *ngFor="let tag of filteredTagsDisplay;let i = index">
@@ -137,7 +139,7 @@
 
                     </div> 
                 </div>
-                <div class="radio-block-content">
+                <div class="radio-block-content" [ngClass]="{'active-check': utteranceType === coachingCnst.MANUAL}">
                     <div class="kr-sg-radiobutton">
                         <input id="radio-11" name="radio" class="radio-custom" type="radio"
                         (change)="changeUtteranceSelectionType(coachingCnst.MANUAL)" [checked]="utteranceType === coachingCnst.MANUAL">
