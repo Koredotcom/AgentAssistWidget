@@ -1940,8 +1940,8 @@ and open the template in the editor.
             line-height: 18px;   
         }
         &:focus{
-            border: solid 1px #80ACEF;
-            box-shadow: 0px 0px 0px 4px #E1E1FE;
+            border: solid 1px #80ACEF !important;
+            box-shadow: 0px 0px 0px 4px #E1E1FE !important;
         }
         &:active{
             border: solid 1px $primaryActionHoverColor;
