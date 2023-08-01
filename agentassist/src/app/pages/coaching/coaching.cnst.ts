@@ -10,9 +10,11 @@ export const COACHINGCNST = {
     SPEECH_TYPE : {
         cross_talk: 'Cross Talk', 
         deadair: 'Dead Air', 
-        speech_speed: 'Speech Speed'
+        speech_speed: 'Speech Speed',
+        talk_ratio : 'Talk Ratio'
     },
     CROSSTALK : 'cross_talk',
+    TALKRATIO : 'talk_ratio',
     DEADAIR : 'deadair',
     SPEECHSPEED : 'speech_speed',
     OCCURENCES : [1,2,3,4,5],
@@ -53,7 +55,8 @@ export const COACHINGCNST = {
     VALIDATORS : {
         'cross_talk' : ['nOccurrences', 'duration'],
         'deadair' : ['nOccurrences','timeTaken', 'duration'],
-        'speech_speed' : ['nOccurrences', 'nWords', 'duration']
+        'speech_speed' : ['nOccurrences', 'nWords', 'duration'],
+        'talk_ratio' : ['duration']
     },
     HINT_NUDGE_VALIDATORS : {
         'utterance' : ['session', 'utteranceCount']
@@ -127,4 +130,15 @@ export const COACHINGCNST = {
     voice : 'Voice',
     chat : 'Live Chat',
     channelList : ['voice', 'chat'],
+    comparator_acutal_list : ['eq', 'neq', 'lt', 'lte', 'gt', 'gte','range'],
+    comparator_map : {
+        'eq' : 'Equal to',
+        'neq' : 'Not Equal to',
+        'lt' : 'Less than',
+        'lte' : 'Less than or equal to',
+        'gt' : 'Greater than',
+        'gte' : 'Greater than or equal to',
+        'range' : 'In between'
+    },
+    RANGE : 'range'
 }

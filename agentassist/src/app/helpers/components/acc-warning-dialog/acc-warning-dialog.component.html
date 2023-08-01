@@ -1,0 +1,18 @@
+<div class="warning-wrpper-data">
+  <!-- <div class="close-warning" (click)="dialogRef.close()">
+    <i class="icon-sa-close"></i>
+  </div> -->
+  <div class="img-block">
+    <img src="assets/icons/sammy-no-connection.svg">
+  </div>
+  <div class="content-block">
+    <h1>{{data.title}}</h1>
+    <p>{{data.text}}</p>
+    <ng-container *ngIf="data?.buttons?.length > 1">
+      <button (click)="onClickOption(data.buttons[1])"  class="kr-sg-button-primary btn_lg">{{data.buttons[1].label}}</button>
+    </ng-container>
+    <ng-container *ngIf="data?.buttons?.length == 1">
+      <button (click)="onClickOption(data.buttons[0])"  class="kr-sg-button-primary btn_lg">{{data.buttons[0].label}}</button>
+    </ng-container>
+  </div>
+</div>

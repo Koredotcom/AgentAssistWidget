@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 import { RawHtmlPipe } from 'src/common/pipes/raw-html.pipe';
 import { SanitizeHtmlPipe } from 'src/common/pipes/sanitize-html.pipe';
+import { ProjConstants, ImageFileNames, ImageFilePath } from 'src/common/constants/proj.cnts';
 
 @Injectable({
     providedIn: 'root'
 })
 export class MybotDataService {
+  imageFileNames: any = ImageFileNames;
+  imageFilePath: string = ImageFilePath;
 
     constructor(private sanitizeHtmlPipe: SanitizeHtmlPipe, private rawHtmPipe : RawHtmlPipe) { }
 
@@ -157,11 +160,15 @@ export class MybotDataService {
                   </div>
               </div>
           </div>
+          <div class="warning-template hide"  id="warningTemp">
+              <img src="${this.imageFilePath}${this.imageFileNames['infoIcon']}">
+              <span class="warning-text">Templates are not supported, visit your bot builder to disable it.</span>
+          </div>
           </div>
       </div>
       `;
-           
-        }else{ 
+
+        }else{
             template = `
                 <div class="steps-run-data">
                    <div class="icon_block">
@@ -177,6 +184,10 @@ export class MybotDataService {
                                <i class="ast-copy" data-msg-id="${myBotuuids}" data-position-id="${positionID}"></i>
                            </div>
                        </div>
+                       <div class="warning-template hide"  id="warningTemp">
+                          <img src="${this.imageFilePath}${this.imageFileNames['infoIcon']}">
+                          <span class="warning-text">Templates are not supported, visit your bot builder to disable it.</span>
+                      </div>
                    </div>
                    </div>
                </div>
@@ -196,26 +207,28 @@ export class MybotDataService {
                         <div class="agent-utt">
                             <div class="title-data">${this.sanitizeHtmlPipe.transform(data.userInput)}</div>
                         </div>
-                        
+
                     </div>
                 </div>`;
         return template
     }
 
-    mybotErrorTemplate(imageFilePath,imageFileNames,entityDisplayName) {
+    mybotErrorTemplate(imageFilePath,imageFileNames,entityDisplayName, entityType) {
         let template = `
-                <div class="order-number-info">${entityDisplayName} : 
-                        <span style="color:red">Value unidentified</span>
-                </div>
-                <div>
-                    <img src="${imageFilePath}${imageFileNames['WARNING']}" style="padding-right: 8px;">
-                    <span style="font-size: 12px; line-height: 18px; color: #202124;">Incorrect input format<span>
-                </div>`;
+                <div class="order-number-info">${entityDisplayName} :
+                  <span style="color:red">Value unidentified</span>
+                  <span style="font-size: 12px; line-height: 18px; color: #202124; padding-left: 10px"> { Expected Format: ${entityType} }<span>
+                </div>`
+                // <div>
+                //     <img src="${imageFilePath}${imageFileNames['WARNING']}" style="padding-right: 8px;">
+                //     <span style="font-size: 12px; line-height: 18px; color: #202124;">Incorrect input format<span>
+                // </div>`
+                ;
         return template;
     }
 
     agentInputToBotTemplate(agentInputEntityName, agentInputId, connectionDetails, myBotDialogPositionId) {
-        
+
         let template = `
                 <div class="steps-run-data" id="inputFieldForMyBot">
                     <div class="icon_block">

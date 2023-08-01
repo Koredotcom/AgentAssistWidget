@@ -196,6 +196,13 @@ export class CoachingService {
       objC.by = [obj.by, [Validators.required]]
     }
 
+    if(obj.conditions && obj.subType == COACHINGCNST.TALKRATIO){
+      objC.conditions = this.fb.group({
+        operator : [obj.conditions.operator, [Validators.required]],
+        value : [obj.conditions.value, [Validators.required]]
+      })
+    }
+
     if(obj.frequency){
 
       if(obj.frequency?.nWords){
@@ -214,6 +221,18 @@ export class CoachingService {
       if(obj.frequency?.nSeconds){
         (<FormGroup> objC.frequency).addControl('nSeconds', new FormControl(obj.frequency?.nSeconds))
       }
+
+      if(obj.frequency?.nMessages){
+        (<FormGroup> objC.frequency).addControl('nMessages', new FormControl(obj.frequency?.nMessages))
+      }
+      
+      // if(obj.frequency?.comparator){
+      //   (<FormGroup> objC.frequency).addControl('comparator', new FormControl(obj.frequency?.comparator))
+      // }
+
+      // if(obj.frequency?.percentage){
+      //   (<FormGroup> objC.frequency).addControl('percentage', new FormControl(obj.frequency?.percentage))
+      // }
     }
     return objC;
   }
