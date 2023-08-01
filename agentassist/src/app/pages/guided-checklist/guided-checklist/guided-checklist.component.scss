@@ -1,20 +1,152 @@
+@import './../../../scss/variables/variables.scss';
+
+@mixin table-body-coaching-mixin {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #E5E7EB;
+    min-height: 53px;
+    position: relative;
+    background: #FFFFFF;
+    &:nth-child(odd){
+        background: #F9FAFB;
+    }
+    &:last-child{
+        border: 0;
+    }
+    .coaching-rule{
+        z-index: 2;
+        padding: 5px 15px;
+        color: var(--neutral-700, #404040);
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .title-text{
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 18px;
+        color: #404040;
+        position: relative;
+        padding: 0 10px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    
+    .actions-info{
+        padding: 0 10px;
+        display: flex;
+        align-items: center;
+        .edit-btn{
+            width: 36px;
+            height: 36px;
+            background: #FFFFFF;
+            border: 1px solid #E5E7EB;
+            border-radius: 6px;
+            outline: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #404040;
+            cursor: pointer;
+        }
+        .delete-btn{
+            @extend .edit-btn;
+            margin-left: 10px;
+            color: #EF4444;
+            border: 1px solid #FCA5A5;
+        }
+    }
+    .last-updated-toggle{
+        text-align: left;
+        padding: 0 10px;
+    }
+}
+
+.checklist-container-wrapper{
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 60px);
+    .header-sec-top{
+        display: flex;
+        align-items: center;
+        padding: 30px 40px 20px 40px;
+        .left-actions{
+            display: flex;
+            align-items: center;
+            width: 100%;
+            gap: 40px;
+            .main-heading {
+                font-weight: 600;
+                font-size: 20px;
+                line-height: 28px;
+                color: #171717;
+            }
+            .nav-tabs{
+                border: 0;
+                margin: 0;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                li{
+                    a{
+                        margin: 0;
+                        border: 0;
+                        display: flex;
+                        padding: 16px;
+                        justify-content: center;
+                        align-items: center;
+                        gap: 8px;
+                        color: var(--neutral-700, #404040);
+                        text-align: center;
+                        font-size: 12px;
+                        font-weight: 600;
+                        line-height: 18px;
+                        border-bottom: 1px solid transparent;
+                        &:hover{
+                            border-bottom: 1px solid var(--primary-500-main, #2B75E4);
+                            color: var(--primary-600, #225EB6);
+                        }
+                        &.active{
+                            border-bottom: 1px solid var(--primary-500-main, #2B75E4);
+                            color: var(--primary-600, #225EB6);
+                        }
+                    }
+                }
+            }
+        }        
+        .right-action-btns{
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            flex-shrink: 0;
+        }
+
+    }    
+}
+
+
+
 ::ng-deep .flow-creation-full-modal{
-    -webkit-animation-name: slideInUp;
-    animation-name: slideInUp;
+    -webkit-animation-name: slideInUpModal;
+    animation-name: slideInUpModal;
     -webkit-animation-duration: 1s;
     animation-duration: 1s;
     -webkit-animation-fill-mode: both;
     animation-fill-mode: both;
     &.fade:not(.show){
-        -webkit-animation-name: slideOutDown;
-        animation-name: slideOutDown;
+        -webkit-animation-name: slideOutDownModal;
+        animation-name: slideOutDownModal;
         -webkit-animation-duration: 1s;
         animation-duration: 1s;
         -webkit-animation-fill-mode: both;
         animation-fill-mode: both;
         opacity: 1 !important;
     }
-    @-webkit-keyframes slideInUp {
+    @-webkit-keyframes slideInUpModal {
         0% {
             -webkit-transform: translateY(100%);
             transform: translateY(100%);
@@ -27,7 +159,7 @@
         }
     }
 
-    @keyframes slideInUp {
+    @keyframes slideInUpModal {
         0% {
             -webkit-transform: translateY(100%);
             transform: translateY(100%);
@@ -40,7 +172,7 @@
         }
     }
 
-    @-webkit-keyframes slideOutDown {
+    @-webkit-keyframes slideOutDownModal {
         0% {
             -webkit-transform: translateY(0);
             transform: translateY(0);
@@ -53,7 +185,7 @@
         }
     }
 
-    @keyframes slideOutDown {
+    @keyframes slideOutDownModal {
         0% {
             -webkit-transform: translateY(0);
             transform: translateY(0);
