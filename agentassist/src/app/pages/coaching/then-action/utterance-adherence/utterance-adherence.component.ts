@@ -103,7 +103,7 @@ export class UtteranceAdherenceComponent implements OnInit {
   }
 
   formatUtterArray(text) {
-    if(!this.cs.metaForUtternace?.integration){
+    if(!this.cs.metaForUtternace?.enable){
       this.loaded = true;
       return;
     }

@@ -10,6 +10,8 @@ import { AuthService } from '@kore.services/auth.service';
 import { workflowService } from '@kore.services/workflow.service';
 import { COACHINGCNST } from '../../coaching.cnst';
 import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { CoachingConfirmationComponent } from '../../coaching-confirmation/coaching-confirmation.component';
 
 @Component({
   selector: 'app-none-intent',
@@ -53,7 +55,7 @@ export class NoneIntentComponent implements OnInit {
   selectedUtterances = [];
   originalRuleUtterances = [];
   filteredTagsDisplay: any = [];
-
+  modalRef : any;
   preVal = '';
   customUtterance = '';
   selectedUtterSeach = '';
@@ -67,7 +69,8 @@ export class NoneIntentComponent implements OnInit {
     private service: ServiceInvokerService,
     private local: LocalStoreService,
     private auth: AuthService,
-    private workflowService: workflowService
+    private workflowService: workflowService,
+    private modalService : NgbModal, 
     // private cd: ChangeDetectorRef
   ) { }
 
@@ -125,21 +128,21 @@ export class NoneIntentComponent implements OnInit {
     })).subscribe(data => {
       if (data) {
         data.forEach(item => {
-
-          let ruleIdList = [];
-          item.values.forEach(element => {
-            ruleIdList.push(element._id);
-          });
-
-          let obj: any = {
-            name: item.tag,
-            value: ruleIdList,
-            checked: false,
-            type: 'tag'
+          if(item.tag){
+            let ruleIdList = [];
+            item.values.forEach(element => {
+              ruleIdList.push(element._id);
+            });
+  
+            let obj: any = {
+              name: item.tag,
+              value: ruleIdList,
+              checked: false,
+              type: 'tag'
+            }
+            this.filteredTagsDisplay.push(obj);
+            this.allTagList.push(item.tag);
           }
-
-          this.filteredTagsDisplay.push(obj);
-          this.allTagList.push(item.tag);
         });
         this.allTagsRules = JSON.parse(JSON.stringify(this.filteredTagsDisplay));
       }
@@ -201,7 +204,16 @@ export class NoneIntentComponent implements OnInit {
   }
 
   closeSlider() {
-    this.closeSlide.emit();
+    if(this.newUtterances.length || this.deletedUtterances.length){
+      this.modalRef = this.modalService.open(CoachingConfirmationComponent, { centered: true, keyboard: false, windowClass: 'delete-uc-rule-modal', backdrop: 'static' });
+      this.modalRef.result.then(emitedValue => {
+        if(emitedValue){
+          this.closeSlide.emit();
+        }
+      });
+    }else{
+      this.closeSlide.emit();
+    }
   }
 
   // add Utterance page methods start
@@ -340,6 +352,8 @@ export class NoneIntentComponent implements OnInit {
   }
 
   clearChipData() {
+    this.selectAllRuleFlag = false;
+    this.selectAllTagFlag = false;
     this.tags = [];
     this.assignOriginalToDisplayList();
   }
@@ -362,10 +376,16 @@ export class NoneIntentComponent implements OnInit {
     this.tags.forEach(element => {
       ruleIdList = [...ruleIdList, ...element.value];
     });
+
+    ruleIdList = ruleIdList.reduce((a, it)=>{
+      a[it] = true;
+      return a;
+    }, {});
+
     let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
 
     let payload: any = {
-      selectedRules: ruleIdList,
+      selectedRules: Object.keys(ruleIdList),
       botId,
       userId: this.auth.getUserId(),
     };

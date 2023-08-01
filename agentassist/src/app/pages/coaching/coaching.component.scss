@@ -462,6 +462,7 @@
     }
 }
 ::ng-deep .delete-uc-rule-modal{
+    z-index: 9999;
     .modal-dialog{
         margin: 0 auto;
         height: 100%;
