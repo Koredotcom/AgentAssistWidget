@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
 import { COACHINGCNST } from './coaching.cnst';
@@ -59,7 +59,8 @@ export class CoachingComponent implements OnInit, OnDestroy {
     private auth: AuthService, private local: LocalStoreService,
     private authService: AuthService,
     private cs: CoachingService,
-    private router: Router
+    private router: Router,
+    private zone : NgZone
   ) { }
 
   ngOnDestroy(): void {
@@ -310,7 +311,9 @@ export class CoachingComponent implements OnInit, OnDestroy {
   }
   onReachEnd(event){
     if(!this.isLoading && this.hasMore && event.target.scrollTop > 0){
-      this.getAgentCoachingRules();
+      this.zone.run(()=>{
+        this.getAgentCoachingRules();
+      })
     }
   }
   closeRule() {
