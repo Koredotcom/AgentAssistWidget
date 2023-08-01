@@ -22,8 +22,8 @@
                 </div>
             </div>
             <div class="added-uterances-blk">
-                <perfect-scrollbar>
-                    <div class="pading-blk">
+                <perfect-scrollbar #newUtteranceScroll>
+                    <div class="pading-blk" #tabBody>
                         <ng-container *ngFor="let utter of selectedUtterances | filter: [ selectedUtterSeach, 'utterance']; let i = index">
                             <div class="utt-text">
                                 <span [title]="utter?.utterance">{{utter?.utterance}}</span>
@@ -92,7 +92,7 @@
                                     </div>
                                     <div class="tags-data" *ngIf="checkTagPresent() ? true : false">
                                         <div class="title">Tags</div>
-                                        <div class="select-all" (click)="selectAllUtteranceType(coachingCnst.TAG)">Select All</div>
+                                        <div class="select-all" (click)="selectAllUtteranceType(coachingCnst.TAG, selectAllTagFlag);selectAllTagFlag = !selectAllTagFlag">{{ selectAllTagFlag ? 'Unselect All' : 'Select All' }}</div>
                                     </div>
                                     <ng-container *ngFor="let tag of filteredTagsDisplay;let i = index">
                                         <ng-container *ngIf="tag?.name">
@@ -111,7 +111,7 @@
                                     </ng-container>
                                     <div class="tags-data" *ngIf="checkRulePresent() ? true  : false">
                                         <div class="title">Rules</div>
-                                        <div class="select-all" (click)="selectAllUtteranceType(coachingCnst.RULE)">Select All</div>
+                                        <div class="select-all" (click)="selectAllUtteranceType(coachingCnst.RULE, selectAllRuleFlag);selectAllRuleFlag = !selectAllRuleFlag">{{ selectAllRuleFlag ? 'Unselect All' : 'Select All' }}</div>
                                     </div>
                                     <ng-container *ngFor="let tag of filteredTagsDisplay;let i = index">
                                         <mat-option [title]="tag" *ngIf="tag.type == coachingCnst.RULE"
@@ -175,7 +175,7 @@
                         <div class="found-items-scroll">
                             <div class="select-all" *ngIf="ruleUtterances.length > 0">
                                 <div class="kr-sg-checkbox">
-                                    <input id="one" class="checkbox-custom" type="checkbox" [checked]="checkSelectedUtterance() ? true : false" (change)="selectAllUtterances()">
+                                    <input id="one" class="checkbox-custom" type="checkbox" [checked]="checkSelectedUtterance() ? true : false" (change)="selectAllUtterances($event)">
                                     <label for="one" class="checkbox-custom-label">SELECT ALL</label>
                                 </div>                            
                             </div>
@@ -208,6 +208,6 @@
         <button class="kr-sg-button-secondary btn_lg" (click)="closeSlider()">Cancel</button>
         <button class="kr-sg-button-primary btn_lg" (click)="save()" [disabled]="newUtterances.length <= 0 && deletedUtterances.length <=0" *ngIf="!clickSelectedUtter">Save</button>
 
-        <button class="kr-sg-button-primary btn_lg" (click)="addSelectedUtteranceList()" [disabled]="ruleUtterances?.length <= 0" *ngIf="clickSelectedUtter && utteranceType === coachingCnst.AIASSIST">Add Selected</button>
+        <button class="kr-sg-button-primary btn_lg" (click)="addSelectedUtteranceList()" [disabled]="!checkAddSelectedButtonState() ? true : false" *ngIf="clickSelectedUtter && utteranceType === coachingCnst.AIASSIST">Add Selected</button>
     </div>
 </div>

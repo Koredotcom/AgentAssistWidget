@@ -9,6 +9,7 @@ import { LocalStoreService } from '@kore.services/localstore.service';
 import { AuthService } from '@kore.services/auth.service';
 import { workflowService } from '@kore.services/workflow.service';
 import { COACHINGCNST } from '../../coaching.cnst';
+import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
 
 @Component({
   selector: 'app-none-intent',
@@ -19,6 +20,9 @@ export class NoneIntentComponent implements OnInit {
 
   @ViewChild('tagInput', { static: true }) tagInput: ElementRef;
   @ViewChild('trigger', { static: false }) trigger: MatAutocompleteTrigger;
+  @ViewChild('newUtteranceScroll') newUtteranceScroll : PerfectScrollbarComponent;
+  @ViewChild('tabBody', { read: ElementRef }) public homescroll: ElementRef<any>;
+
 
   @Output() closeSlide = new EventEmitter();
   @Input() currentRule: any = {};
@@ -32,24 +36,30 @@ export class NoneIntentComponent implements OnInit {
   selAcc = this.local.getSelectedAccount();
   coachingCnst: any = COACHINGCNST;
 
-  clickSelectedUtter = false;
-  loading: boolean = false;
   clickAddUtter = false;
+  loading: boolean = false;
+  clickSelectedUtter = false;
+  openapiEnable : boolean = false;
+  selectAllTagFlag : boolean = false;
+  selectAllRuleFlag : boolean = false;
 
   tags: any = [];
   newUtterances = [];
   ruleUtterances = [];
+  allTagList : any = [];
+  allRuleList : any = [];
   allTagsRules: any = [];
   deletedUtterances = [];
   selectedUtterances = [];
-  filteredTagsDisplay: any = [];
   originalRuleUtterances = [];
+  filteredTagsDisplay: any = [];
 
   preVal = '';
   customUtterance = '';
   selectedUtterSeach = '';
   utteranceType: any = '';
-  openapiEnable : boolean = false;
+
+ 
   // allTagList : any = [];
   // newUtterancesSearch = [];
   // selectedUtterSeach = new FormControl();
@@ -129,6 +139,7 @@ export class NoneIntentComponent implements OnInit {
           }
 
           this.filteredTagsDisplay.push(obj);
+          this.allTagList.push(item.tag);
         });
         this.allTagsRules = JSON.parse(JSON.stringify(this.filteredTagsDisplay));
       }
@@ -158,6 +169,7 @@ export class NoneIntentComponent implements OnInit {
             type: 'rule'
           }
           this.filteredTagsDisplay.push(obj);
+          this.allRuleList.push(item.name);
         });
         this.allTagsRules = JSON.parse(JSON.stringify(this.filteredTagsDisplay));
       }
@@ -205,6 +217,10 @@ export class NoneIntentComponent implements OnInit {
     this.newUtterances.push(this.customUtterance);
     this.newUtterances = [...this.newUtterances]
     this.customUtterance = '';
+    setTimeout(() => {
+      this.newUtteranceScroll.directiveRef.scrollToTop(this.homescroll.nativeElement.scrollHeight);
+      this.newUtteranceScroll.directiveRef.update();
+    });
   }
 
   deleteNewUtterance(utter) {
@@ -254,21 +270,43 @@ export class NoneIntentComponent implements OnInit {
     }
   }
 
-  selectAllUtteranceType(type) {
+  selectAllUtteranceType(type, flag) {
     this.filteredTagsDisplay.map(obj => {
       if (obj.type == type) {
-        this.AddOrSelectTagNames(obj);
+        let checkStatFlag : any = flag ? this.remove(obj, false) : this.AddOrSelectTagNames(obj, false);
       }
     });
   }
 
-  AddOrSelectTagNames(tagOrrule) {
+  checkSelectAllStatus(tagOrRule, type){
+    if(type == this.coachingCnst.REMOVE){
+      if(tagOrRule.type == this.coachingCnst.TAG){
+        this.selectAllTagFlag = false;
+      }else{
+        this.selectAllRuleFlag = false;
+      }  
+    }else if(type == this.coachingCnst.ADD){  
+
+      let tags = this.tags.reduce((acc,item)=> {
+        acc[item.name] = true;
+        return acc;
+      }, {});
+
+      if(tagOrRule.type == this.coachingCnst.TAG){
+        this.selectAllTagFlag = this.allTagList.every(item => tags[item]);        
+      }else{
+        this.selectAllRuleFlag = this.allRuleList.every(item => tags[item]);
+      }
+    }
+  }
+
+  AddOrSelectTagNames(tagOrrule, checkStatus = true) {
     if ((tagOrrule.name || '')) {
       let filterIndex = this.tags.findIndex((item) => {
         return item.name == tagOrrule.name;
       });
       if (filterIndex == -1) {
-        this.tags.push({ name: tagOrrule.name, value: tagOrrule.value });
+        this.tags.push({ name: tagOrrule.name, value: tagOrrule.value, type : tagOrrule.type });
       }
     }
     this.trigger.openPanel();
@@ -276,9 +314,12 @@ export class NoneIntentComponent implements OnInit {
     setTimeout(() => {
       this.tagControl.setValue('');
     }, 0);
+    if(checkStatus){
+      this.checkSelectAllStatus(tagOrrule, this.coachingCnst.ADD);
+    }
   }
 
-  remove(tagOrrule): void {
+  remove(tagOrrule, checkStatus = true): void {
     const index = this.tags.findIndex(item => {
       return item.name == tagOrrule.name;
     });
@@ -287,6 +328,9 @@ export class NoneIntentComponent implements OnInit {
     }
     this.assignOriginalToDisplayList();
     this.trigger.openPanel();
+    if(checkStatus){
+      this.checkSelectAllStatus(tagOrrule, this.coachingCnst.REMOVE);
+    }
   }
 
   assignOriginalToDisplayList() {
@@ -379,15 +423,19 @@ export class NoneIntentComponent implements OnInit {
     this.originalRuleUtterances[index].checked = checked;
   }
 
-  selectAllUtterances() {
+  selectAllUtterances(event) {
     this.originalRuleUtterances.forEach(item => {
-      item.checked = true;
+      item.checked = event.target.checked;;
     });
     this.assignOriginalRuleToDisplayUtteranceList();
   }
 
   assignOriginalRuleToDisplayUtteranceList() {
     this.ruleUtterances = JSON.parse(JSON.stringify(this.originalRuleUtterances));
+  }
+
+  checkAddSelectedButtonState(){
+    return this.ruleUtterances.some(item => item.checked);
   }
 
   // utterance selection page methods end
