@@ -300,7 +300,7 @@ export class NoneIntentComponent implements OnInit {
   }
 
   addRuleData() {
-    // this.loading = true;
+    this.loading = true;
     this.clickSelectedUtter = true;
     this.ruleUtterances = [];
     this.trigger.closePanel();
@@ -317,34 +317,18 @@ export class NoneIntentComponent implements OnInit {
       botId,
       userId: this.auth.getUserId(),
     };
-
-    // let addRuleData = [
-    //   {
-    //     "entities": [],
-    //     "sentence": "I don't need any help with my order."
-    //   },
-    //   {
-    //     "entities": [],
-    //     "sentence": "Cancel my order immediately."
-    //   },
-    //   {
-    //     "entities": [],
-    //     "sentence": "I don't want assistance with my order."
-    //   },
-    // ];
-
     
     
     this.service.invoke('post.noneIntentUtterances', {}, payload)
-    .pipe(finalize(() => {
-      // this.loading = false;
-    }))
     .subscribe(data => {
+      this.loading = false;
       console.log(data, 'from none intent api');
       if(data){
         this.formatRuleSentenceData(data);
         this.ruleUtterances = JSON.parse(JSON.stringify(this.originalRuleUtterances));
       }
+      },(err)=> {
+        this.loading = false;
       });
   }
 

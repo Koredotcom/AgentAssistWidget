@@ -159,7 +159,7 @@
             </div>
             <div class="found-body-utterances">
                 <perfect-scrollbar>
-                    <ng-container>
+                    <ng-container *ngIf="!loading;else loaded">
                         <div class="found-text-block">
                             <div class="found-ai-count">
                                 <i class="icon-coaching--ai"></i>
@@ -184,7 +184,7 @@
                             </ng-container>
                         </div>
                     </ng-container>
-                    <ng-template #loading>
+                    <ng-template #loaded>
                         <div class="found-text-block">
                             <div class="found-ai-count">
                                 <i class="icon-coaching--ai"></i>
