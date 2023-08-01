@@ -143,5 +143,7 @@ export const COACHINGCNST = {
     RANGE : 'range',
     AIASSIST : 'AIASSIST',
     MANUAL : 'MANUAL',
-    TAG : 'tag'
+    TAG : 'tag',
+    ADD : 'ADD',
+    REMOVE : 'REMOVE'
 }
