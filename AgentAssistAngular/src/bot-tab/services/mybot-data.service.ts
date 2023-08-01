@@ -161,7 +161,7 @@ export class MybotDataService {
               </div>
           </div>
           <div class="warning-template hide"  id="warningTemp">
-              <img src="${this.imageFilePath}${this.imageFileNames['infoIcon']}" style="padding-right: 8px;">
+              <img src="${this.imageFilePath}${this.imageFileNames['infoIcon']}">
               <span class="warning-text">Templates are not supported, visit your bot builder to disable it.</span>
           </div>
           </div>
@@ -185,7 +185,7 @@ export class MybotDataService {
                            </div>
                        </div>
                        <div class="warning-template hide"  id="warningTemp">
-                          <img src="${this.imageFilePath}${this.imageFileNames['infoIcon']}" style="padding-right: 8px;">
+                          <img src="${this.imageFilePath}${this.imageFileNames['infoIcon']}">
                           <span class="warning-text">Templates are not supported, visit your bot builder to disable it.</span>
                       </div>
                    </div>
