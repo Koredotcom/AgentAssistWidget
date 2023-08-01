@@ -196,7 +196,7 @@ export class CoachingService {
       objC.by = [obj.by, [Validators.required]]
     }
 
-    if(obj.conditions){
+    if(obj.conditions && obj.subType == COACHINGCNST.TALKRATIO){
       objC.conditions = this.fb.group({
         operator : [obj.conditions.operator, [Validators.required]],
         value : [obj.conditions.value, [Validators.required]]
