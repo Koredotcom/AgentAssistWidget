@@ -179,7 +179,7 @@ export class SpeechAnalysisComponent implements OnInit {
         (<FormGroup>this.form.controls.frequency).addControl(param, new FormControl(COACHINGCNST.UTTERANCE_CONV_DEFAULT_SELECTION[param], validatorList));
         this.selectedList[param] = COACHINGCNST.UTTERANCE_CONV_DEFAULT_SELECTION[param];
       }
-      (this.form.controls.frequency as FormGroup).controls?.duration.setValue(type);
+      (this.form.controls.frequency as FormGroup).controls?.duration?.setValue(type);
       this.resetFormValuesBasedOnConvSelection(type);
     }
     if(type == this.coachingCnst.TRIGGER_BYTIME){

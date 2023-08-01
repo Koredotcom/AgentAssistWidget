@@ -60,6 +60,7 @@ export class CommonService {
   }
   aaHelpers = null;
   realtimeSentiData : any = {};
+
   constructor(private route: ActivatedRoute, private webSocketService: WebSocketService, private designAlterService: DesignAlterService,
     private localStorageService: LocalStorageService,private templateRenderClassService: TemplateRenderClassService) {
     this.setScrollContent();
@@ -871,6 +872,7 @@ export class CommonService {
     }
     if((!this.configObj.source || this.configObj.source !== ProjConstants.SMARTASSIST_SOURCE) && parsedPayload){
         $(lastchild).find('.send-run-btn').addClass('hide')
+        $(lastchild).find('.warning-template').removeClass('hide')
     }
 
     if(this.isCallConversation == true){
