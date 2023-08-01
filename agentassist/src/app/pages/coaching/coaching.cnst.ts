@@ -140,5 +140,8 @@ export const COACHINGCNST = {
         'gte' : 'Greater than or equal to',
         'range' : 'In between'
     },
-    RANGE : 'range'
+    RANGE : 'range',
+    AIASSIST : 'AIASSIST',
+    MANUAL : 'MANUAL',
+    TAG : 'tag'
 }

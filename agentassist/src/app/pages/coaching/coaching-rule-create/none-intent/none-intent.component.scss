@@ -209,6 +209,9 @@
                                 }
                             }
                         }
+                        &.disable {
+                            opacity: 0.3 !important;
+                        }
                     }
                     .add-rule-block{
                         width: 100%;
