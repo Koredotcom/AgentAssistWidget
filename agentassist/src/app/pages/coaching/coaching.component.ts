@@ -51,6 +51,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
   preBuilt = [];
   sortOrder : 'desc' | 'asc' = 'asc';
   showNoneIntent = false;
+  configFeatures : any;
   @ViewChild('noneIntent', { static: true }) noneIntent: SliderComponentComponent;
   constructor(
     private modalService: NgbModal, private service: ServiceInvokerService,
@@ -294,6 +295,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
     this.service.invoke('get.AIconfigs', params)
       .subscribe(res => {
         if (res) {
+          this.configFeatures = res[0]?.featureList || [];
           this.cs.metaForUtternace = (res[0].featureList || [])
             .find(item => item.name === "aa_utterance")
           };
