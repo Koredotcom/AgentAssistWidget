@@ -22,6 +22,7 @@ export class NoneIntentComponent implements OnInit {
 
   @Output() closeSlide = new EventEmitter();
   @Input() currentRule: any = {};
+  @Input() configFeatures : any;
 
   tagControl: FormControl = new FormControl();
   selUtteranceControl: FormControl = new FormControl();
@@ -48,6 +49,7 @@ export class NoneIntentComponent implements OnInit {
   customUtterance = '';
   selectedUtterSeach = '';
   utteranceType: any = '';
+  openapiEnable : boolean = false;
   // allTagList : any = [];
   // newUtterancesSearch = [];
   // selectedUtterSeach = new FormControl();
@@ -89,6 +91,12 @@ export class NoneIntentComponent implements OnInit {
     // })
     this.getTags();
     this.getRules();
+    this.checkOpenAiConfig();
+  }
+
+  checkOpenAiConfig(){
+    this.openapiEnable = this.configFeatures
+    .find(item => item.name === "aa_noneintent" && item.enable)
   }
 
   getTags() {

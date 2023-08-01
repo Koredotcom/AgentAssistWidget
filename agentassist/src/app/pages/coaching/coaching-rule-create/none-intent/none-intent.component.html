@@ -57,9 +57,12 @@
             <h1>Add Utterances</h1>
             <div class="utt-radio-block">
                 <div class="radio-block-content active-check">
-                    <div class="kr-sg-radiobutton">
+                    <div class="kr-sg-radiobutton" 
+                    [ngbTooltip]="!openapiEnable ? 'Configure Open AI to use AI Assist to Add Utterances' : ''"
+                    [ngClass]="{'disable' : !openapiEnable}">
                         <input id="radio-1" name="radio" class="radio-custom" type="radio"
-                         (change)="changeUtteranceSelectionType(coachingCnst.AIASSIST)" [checked]="utteranceType === coachingCnst.AIASSIST">
+                         (change)="changeUtteranceSelectionType(coachingCnst.AIASSIST)" [checked]="utteranceType === coachingCnst.AIASSIST" 
+                         [disabled]="!openapiEnable" >
                         <label for="radio-1" class="radio-custom-label">
                             <div class="title">AI Assist</div>
                             <div class="desc-text">Select rules and generate more utterances for the rule with AI</div>
