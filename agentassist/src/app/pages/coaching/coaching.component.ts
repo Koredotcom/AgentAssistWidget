@@ -173,9 +173,22 @@ export class CoachingComponent implements OnInit, OnDestroy {
     });
   }
 
+  checkLockScreen(rule){
+    let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
+    let params : any = {
+      botId,
+      ruleId : rule._id,
+      userId : this.authService.getUserId()
+    }
+    this.service.invoke('get.checkLock', params).subscribe(data => {
+      console.log(data, "data inside check lock screen");
+    })
+  }
+
   // Create or Edit Rule Flow Starts
   openFLowCreation(flowCreation, rule?, type = COACHINGCNST.EDIT) {
     if (type === COACHINGCNST.EDIT) {
+      this.checkLockScreen(rule);
       this.isLoading = true;
       this.createOrEdit = COACHINGCNST.EDIT;
       this.service.invoke('get.ruleById', { ruleId: rule._id })

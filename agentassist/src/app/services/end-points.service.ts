@@ -1668,5 +1668,16 @@ export class EndPointsService {
       endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule/:ruleId',
       method : 'get'
     }
+
+    this.serviceList['get.checkLock'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule/:botId/users/:userId/:ruleId/actions',
+      method : 'get'
+    }
+
+    this.serviceList['post.checkLock'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule/:botId/users/:userId/:ruleId/actions',
+      method : 'post'
+    }
+
   }
 }

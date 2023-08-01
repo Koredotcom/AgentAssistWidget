@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { COACHINGCNST } from '../coaching.cnst';
 import { CoachingService } from '../coaching.service';
@@ -20,7 +20,7 @@ import { CreateRuleComponent } from './create-rule/create-rule.component';
   templateUrl: './coaching-rule-create.component.html',
   styleUrls: ['./coaching-rule-create.component.scss']
 })
-export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterViewInit {
+export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy{
 
   @Input() groupDetails : any;
   @Input() groupIndex : number;
@@ -78,6 +78,7 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
 
   ngOnChanges(changes: SimpleChanges): void {
     if(changes?.createOrEdit?.currentValue === COACHINGCNST.EDIT){
+      this.updateLockOnRule(true);
       this.createForm();
       this.updateRuleForm();
       this.getRuleTags();
@@ -98,6 +99,22 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
     })
   }
   ngOnInit(): void {
+  }
+
+  ngOnDestroy(): void {
+    this.updateLockOnRule(false);
+  }
+
+  updateLockOnRule(flag){
+    let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
+    let params : any = {
+      botId,
+      ruleId : this.currentRule._id,
+      userId : this.auth.getUserId()
+    }
+    this.service.invoke('post.checkLock', params, {actions : {lock : flag}}).subscribe(data => {
+      console.log(data, "data inside check lock screen");
+    })
   }
 
   updateBasicRuleForm(){
