@@ -104,7 +104,7 @@ export class AdherenceComponent implements OnInit {
   }
 
   formatUtterArray(text) {
-    if(!this.cs.metaForUtternace?.integration){
+    if(!this.cs.metaForUtternace?.enable){
       this.loaded = true;
       return;
     }
@@ -118,7 +118,8 @@ export class AdherenceComponent implements OnInit {
           params: this.cs.metaForUtternace?.params,
           "integration": this.cs.metaForUtternace?.integration,
           "model": this.cs.metaForUtternace?.defaultModel
-      }
+      },
+      "description": this.cs.ruleDesc
   }
     this.service.invoke("get.utternaces", params, body)
     .pipe(finalize(()=>{

@@ -22,6 +22,18 @@ app-slider-component{
             .sliderDialogComponent{
                 position: absolute;
                 box-shadow: 0 2px 20px 0 rgba(138, 149, 159, 0.45);
+                &.non-intent-slider{
+                    min-width: 506px;
+                    height: 100%;
+                    .sliderContent{
+                        height: 100%;
+                        app-none-intent{
+                            display: inline-block;
+                            width: 100%;
+                            height: 100%;
+                        }
+                    }
+                }
             }
         }
         .sliderDialogComponent{
