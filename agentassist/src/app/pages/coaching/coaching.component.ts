@@ -99,6 +99,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
           this.initApiCalls();
         }
       }
+      this.modalService.dismissAll();
     })
   }
 
