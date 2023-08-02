@@ -82,6 +82,24 @@ export class CoachingComponent implements OnInit, OnDestroy {
       });
       this.initApiCalls();
     }
+    window.addEventListener("message", (event:any) => {
+      console.log('sandeep Tester', event);
+      if(event.data.action === 'reloadCoaching') {
+        this.subs.sink = this.authService.isAgentCoachongEnable$.subscribe(isEnabled => {
+          this.isCoachingDisable = isEnabled;
+        });
+        if (!this.isCoachingDisable) {
+          this.router.navigate(['/config/usecases']);
+        } else {
+          this.subs.sink = this.workflowService.updateBotDetails$.subscribe((ele) => {
+            if (ele) {
+              this.initApiCalls();
+            }
+          });
+          this.initApiCalls();
+        }
+      }
+    })
   }
 
   initApiCalls() {
