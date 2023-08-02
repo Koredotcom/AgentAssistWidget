@@ -161,6 +161,27 @@
                     }
                 }
             }
+            .ai-working-loader{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: calc(100vh - 270px);
+                .loader-round{
+                    border-radius: 50%;
+                    -webkit-animation: spin 2s linear infinite;
+                    animation: spin 2s linear infinite;
+                    width: 42px;
+                    height: 42px;
+                    border: 6px solid #EAECF0;
+                    border-top: 6px solid #2970FF;
+                    &.dotted-round{
+                        -webkit-animation: spinRound 2s linear infinite;
+                        animation: spinRound 2s linear infinite;
+                        border: 6px dotted #7f56d9;
+                        border-top: 6px dotted #7f56d9;
+                    }
+                }
+            }
         }
         .add-utterance-block{
             width: 500px;

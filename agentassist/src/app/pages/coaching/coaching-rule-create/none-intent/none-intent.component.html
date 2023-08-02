@@ -42,13 +42,26 @@
                         </ng-container>
                         <ng-container *ngIf="!(selectedUtterances | filter: [ selectedUtterSeach, 'utterance'])?.length && !(newUtterances | filter: [ selectedUtterSeach])?.length">
                             <div class="empty-search">
-                                <div class="img-block-empty">
-                                    <img src="assets/icons/empty-search-add.svg">
-                                </div>
-                                <h1>No results found</h1>
-                                <p>No results found for your query "{{selectedUtterSeach}}"</p>
+                                <ng-container *ngIf="!dataloaded">
+                                    <div class="ai-working-loader">
+                                        <div class="loader-round"></div>
+                                    </div>
+                                </ng-container>
+                                <ng-container *ngIf="dataloaded">
+                                    <div class="img-block-empty">
+                                        <img src="assets/icons/empty-search-add.svg">
+                                    </div>
+                                    <ng-container *ngIf="selectedUtterSeach">
+                                        <h1>No results found</h1>
+                                        <p>No results found for your query "{{selectedUtterSeach}}"</p>
+                                    </ng-container>
+                                    <ng-container *ngIf="!selectedUtterSeach">
+                                        <h1>No Data found</h1>
+                                    </ng-container>
+                                </ng-container>
                             </div>
                         </ng-container>
+                      
                     </div>
                 </perfect-scrollbar>
             </div>
