@@ -203,8 +203,8 @@ export class NoneIntentComponent implements OnInit {
     });
   }
 
-  closeSlider() {
-    if(this.newUtterances.length || this.deletedUtterances.length){
+  closeSlider(isSave?) {
+    if((this.newUtterances.length || this.deletedUtterances.length) && !isSave){
       this.modalRef = this.modalService.open(CoachingConfirmationComponent, { centered: true, keyboard: false, windowClass: 'delete-uc-rule-modal', backdrop: 'static' });
       this.modalRef.result.then(emitedValue => {
         if(emitedValue){
@@ -259,7 +259,7 @@ export class NoneIntentComponent implements OnInit {
         // this.loading = false;
       }))
       .subscribe((data) => {
-        this.closeSlider();
+        this.closeSlider(true);
       }, (err) => {
 
       })
@@ -433,6 +433,7 @@ export class NoneIntentComponent implements OnInit {
         this.newUtterances.push(item.name);
       }
     });
+    this.newUtterances = [...this.newUtterances];
     this.clickSelectedUtter = false;
     this.clickAddUtter = false;
   }

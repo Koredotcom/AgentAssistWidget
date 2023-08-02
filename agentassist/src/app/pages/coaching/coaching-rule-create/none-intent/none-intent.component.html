@@ -84,12 +84,12 @@
                             </mat-chip-list>
                             <mat-autocomplete #auto="matAutocomplete">
                                 <div class="content-scroll-ni">
-                                    <!-- <div class="search-block">
+                                    <div class="search-block">
                                         <div class="kr-sg-input-text">
                                             <input type="text" placeholder="Search" class="input-text"  [formControl]="tagControl" name="search">
                                             <i class="icon-coaching--search"></i>
                                         </div>
-                                    </div> -->
+                                    </div>
                                     <div class="tags-data" *ngIf="checkTagPresent() ? true : false">
                                         <div class="title">Tags</div>
                                         <div class="select-all" (click)="selectAllUtteranceType(coachingCnst.TAG, selectAllTagFlag);selectAllTagFlag = !selectAllTagFlag">{{ selectAllTagFlag ? 'Unselect All' : 'Select All' }}</div>
