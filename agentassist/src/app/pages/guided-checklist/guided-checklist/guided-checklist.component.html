@@ -1,15 +1,39 @@
-Devender you need to work from here.
+<!-- Devender you need to work from here.
 
 <button class="kr-sg-button-secondary-two btn_lg mr-2" (click)="createCheckList(checklistCreation)" >New Checklist</button>
 
 
 <app-primary-checklist></app-primary-checklist>
-<app-dynamic-checklist class="d-none"></app-dynamic-checklist>
+<app-dynamic-checklist class="d-none"></app-dynamic-checklist> -->
+
+<div class="checklist-container-wrapper">
+    <div class="header-sec-top">
+        <div class="left-actions">
+            <div class="main-heading">Checklist</div>
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                  <a class="nav-link active" data-toggle="tab" href="#static">STATIC</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" data-toggle="tab" href="#dynamicintent">DYNAMIC INTENT</a>
+                </li>
+            </ul>
+        </div>
+        <div class="right-action-btns">            
+            <button class="kr-sg-button-primary btn_lg" (click)="createCheckList(checklistCreation)">+ New Checklist</button>
+        </div>
+    </div>
+    <div class="tab-content tab-content-details">
+        <div class="tab-pane active" id="static">
+            <app-primary-checklist></app-primary-checklist>           
+        </div>
+        <div class="tab-pane fade" id="dynamicintent">
+            <app-dynamic-checklist></app-dynamic-checklist>
+        </div>
+    </div>
+</div>
 
 
-
-
-the below component for create checklist modal
 <ng-template #checklistCreation>
     <app-checklist-create (closeCheckList)="closeCheckListScreen($event)"></app-checklist-create>
 </ng-template>
