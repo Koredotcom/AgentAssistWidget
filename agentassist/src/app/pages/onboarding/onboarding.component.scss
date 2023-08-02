@@ -1,0 +1,14 @@
+
+::ng-deep .cdk-overlay-dark-backdrop{
+    background: rgba(0, 0, 0, 0.20);
+}
+::ng-deep .warning-account-popup{
+    height: 100%;
+    padding: 40px 0;
+    max-height: 680px;
+    .mat-dialog-container{
+        border-radius: 6px;
+        background: var(--generic-white, #FFF);
+        box-shadow: 0px 8px 10px -6px rgba(16, 24, 40, 0.10), 0px 20px 25px -5px rgba(16, 24, 40, 0.10);        
+    }
+}

@@ -46,6 +46,8 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
   channelList : any = [];
   allTagList : any = [];
   isSettings = false;
+  settingsList : any = ['name', 'description', 'tags', 'channels', 'botId'];
+  settingsChange : boolean = false;
 
   
 
@@ -98,8 +100,19 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
   ngOnInit(): void {
   }
 
+  updateBasicRuleForm(){
+    this.coachingService.ruleDesc = this.currentRule?.description;
+    this.ruleForm.controls["name"].patchValue(this.currentRule?.name, {emitEvent : false});  
+    this.ruleForm.controls["description"].patchValue(this.currentRule?.description, {emitEvent : false});
+    this.ruleForm.setControl('channels', this.fb.array(this.currentRule?.channels));
+    this.ruleForm.setControl('tags', this.fb.array(this.currentRule?.tags));
+    this.filteredTagsOriginal = this.currentRule?.tags;
+    this.channelList = this.currentRule?.channels;
+  }
+
   updateRuleForm(){
     setTimeout(() => {
+      this.coachingService.ruleDesc = this.currentRule?.description;
       this.ruleForm.controls["name"].patchValue(this.currentRule?.name);  
       this.ruleForm.controls["description"].patchValue(this.currentRule?.description);
       this.ruleForm.controls['isActive'].patchValue(this.currentRule?.isActive);
@@ -167,17 +180,14 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
   updateRule(rule){
     this.createOrEdit = COACHINGCNST.EDIT;
     this.currentRule = rule;
-    this.updateRuleForm();
-    setTimeout(() => {
-      this.formTouched = false;      
-    }, 10);
+    this.updateBasicRuleForm();
   }
 
   createForm(){
     this.ruleForm = new FormGroup(
       {
         "name": new FormControl('',[Validators.required]),
-        "description": new FormControl(''),
+        "description": new FormControl('', [Validators.required]),
         "tags": this.fb.array([]),
         "channels": this.fb.array([], [Validators.required]),
         "botId": new FormControl(this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id, [Validators.required]),
@@ -192,48 +202,83 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
   }
 
   closeRule(rule?) {
-    let sendRule = this.createdRule ? this.createdRule : rule;
+    let sendRule = (this.createdRule ||this.settingsChange || rule) ? true : false;
     this.onCloseRule.emit(sendRule);
   }
- 
-  saveRule(closeRule = true){    
-    if((this.ruleForm.controls.name.value as string).trim() === ''){
+
+  formatRuleDataForEdit(data) {
+    for (let key in this.ruleForm?.value) {
+      if (this.settingsList.indexOf(key) == -1) {
+        data[key] = this.ruleForm.value[key];
+      }
+    }
+    return data;
+  }
+
+  saveSettings(payloadSettings) {
+
+    if ((this.ruleForm.controls.name.value as string).trim() === '') {
+      this.notificationService.showError({}, this.translate.instant('VALID.NAME'));
+      return;
+    }
+
+    this.loading = true;
+    let payload: any = payloadSettings && Object.keys(payloadSettings).length ? payloadSettings : this.ruleForm.value;
+
+    if (this.createOrEdit == this.coachingCnst.CREATE) {
+      payload.isActive = true;
+    }
+
+    let methodName = (this.createOrEdit == COACHINGCNST.CREATE) ? "post.agentcoachingrule" : "put.agentcoachingrule";
+
+    this.service.invoke(methodName, { ruleId: this.currentRule?._id }, payload)
+      .pipe(finalize(() => {
+        this.loading = false;
+      }))
+      .subscribe(data => {
+        this.settingsChange = true;
+        if (data && (data._id || data.id)) {
+          data._id = data.id ? data.id : data._id;
+          data.ruleId = data._id;
+          let notification = (this.createOrEdit == this.coachingCnst.CREATE) ? 'RULE.SUCCESS' : 'RULE.UPDATE_SUCCESS';
+          this.notificationService.notify(this.translate.instant(notification), 'success');
+          data = (this.createOrEdit == this.coachingCnst.EDIT) ? this.formatRuleDataForEdit(data) : data;
+          // notification should be before updating createoredit variable.
+          this.updateRule(data);
+          this.closeBasicRule();
+        }
+      },
+        (err) => {
+          this.modalFlowCreateRef.componentInstance.disableApplyButton = false;
+          this.notificationService.showError(err, this.translate.instant("QUOTA_EXCEEDED"));
+        });
+  }
+
+  saveRule() {
+    if ((this.ruleForm.controls.name.value as string).trim() === '') {
       this.notificationService.showError({}, this.translate.instant('VALID.NAME'));
       return;
     }
     this.loading = true;
-    let payload : any = this.ruleForm.value;
-    // payload["addToGroup"] = true;
-    // payload["groupId"] = this.groupDetails._id;
-    if(!closeRule){
-      payload.isActive = true;
-    }
-    let methodName = this.createOrEdit == COACHINGCNST.CREATE ? "post.agentcoachingrule" : "put.agentcoachingrule"
-    this.service.invoke(methodName, {ruleId : this.currentRule?._id}, payload)
-    .pipe(finalize(()=>{
-      this.loading = false;
-    }))
-    .subscribe(data => {
-      if (data && (data._id || data.id)) {
-        data._id = data.id ? data.id : data._id;
-        data.ruleId = data._id;
-        data.isActive = data.isActive;
-        if(closeRule){
+    let payload: any = this.ruleForm.value;
+    let methodName = this.createOrEdit == COACHINGCNST.CREATE ? "post.agentcoachingrule" : "put.agentcoachingrule";
+
+    this.service.invoke(methodName, { ruleId: this.currentRule?._id }, payload)
+      .pipe(finalize(() => {
+        this.loading = false;
+      }))
+      .subscribe(data => {
+        if (data && (data._id || data.id)) {
+          data._id = data.id ? data.id : data._id;
+          data.ruleId = data._id;
+          this.notificationService.notify(this.translate.instant('RULE.UPDATE_SUCCESS'), 'success');
           this.closeRule(data);
-        }else{
-          let notification = (this.createOrEdit == this.coachingCnst.CREATE) ? 'RULE.SUCCESS' :'RULE.UPDATE_SUCCESS';
-          this.notificationService.notify(this.translate.instant(notification), 'success');
-          // notification should be before updating createoredit variable.
-          this.createdRule = data;
-          this.updateRule(data);
-          this.closeBasicRule();
         }
-      }
-    },
-    (err)=>{
-      this.modalFlowCreateRef.componentInstance.disableApplyButton = false;
-      this.notificationService.showError(err, this.translate.instant("QUOTA_EXCEEDED"));
-    });
+      },
+        (err) => {
+          this.modalFlowCreateRef.componentInstance.disableApplyButton = false;
+          this.notificationService.showError(err, this.translate.instant("QUOTA_EXCEEDED"));
+        });
   }
 
   selectTriggerClick(clickType){
@@ -333,7 +378,11 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
     this.modalFlowCreateRef.componentInstance.default = this.currentRule?.default;
     this.modalFlowCreateRef.componentInstance.submitRuleForm.subscribe(data => {
       if(data){
-        this.saveRule(false);
+        let payload : any = {};
+        if(this.createOrEdit == this.coachingCnst.EDIT){
+          payload = (({name, description, tags, channels, botId}) => ({ name, description, tags, channels, botId }))(this.ruleForm.value);
+        }
+        this.saveSettings(payload);
       }
     })
     this.modalFlowCreateRef.componentInstance.closeBasicRule.subscribe(value => {      
