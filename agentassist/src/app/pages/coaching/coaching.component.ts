@@ -99,7 +99,9 @@ export class CoachingComponent implements OnInit, OnDestroy {
           this.initApiCalls();
         }
       }
-      this.modalService.dismissAll();
+      if(event.data.action === 'destroyed') {
+        this.modalService.dismissAll();
+      }
     })
   }
 
@@ -206,7 +208,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
       this.service.invoke('get.ruleById', { ruleId: rule._id })
       .pipe(finalize(()=>{
         this.isLoading = false;
-      }))  
+      }))
       .subscribe(data => {
           if (data) {
             this.currentRule = data;
@@ -323,7 +325,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
       }, err => {
       });
   }
-  
+
   newRule(newRuleModal: any) {
     this.modalService.open(newRuleModal, {
       windowClass: 'modal-ngb-wrapper-window',
