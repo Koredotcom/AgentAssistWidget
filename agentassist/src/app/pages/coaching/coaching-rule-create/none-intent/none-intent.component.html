@@ -83,20 +83,20 @@
                                     #trigger="matAutocompleteTrigger">
                             </mat-chip-list>
                             <mat-autocomplete #auto="matAutocomplete">
-                                <div class="content-scroll">
-                                    <div class="search-block">
+                                <div class="content-scroll-ni">
+                                    <!-- <div class="search-block">
                                         <div class="kr-sg-input-text">
                                             <input type="text" placeholder="Search" class="input-text"  [formControl]="tagControl" name="search">
                                             <i class="icon-coaching--search"></i>
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <div class="tags-data" *ngIf="checkTagPresent() ? true : false">
                                         <div class="title">Tags</div>
                                         <div class="select-all" (click)="selectAllUtteranceType(coachingCnst.TAG, selectAllTagFlag);selectAllTagFlag = !selectAllTagFlag">{{ selectAllTagFlag ? 'Unselect All' : 'Select All' }}</div>
                                     </div>
                                     <ng-container *ngFor="let tag of filteredTagsDisplay;let i = index">
                                         <ng-container *ngIf="tag?.name">
-                                            <mat-option [title]="tag" *ngIf="tag.type == coachingCnst.TAG"
+                                            <mat-option class="mat-option-ni" [title]="tag?.name" *ngIf="tag.type == coachingCnst.TAG"
                                                 (click)="selectedOption(tag, i);trigger.openPanel();$event.stopPropagation();">
                                     
                                                 <input id="checkbox-{{i}}" type="checkbox"
@@ -114,7 +114,7 @@
                                         <div class="select-all" (click)="selectAllUtteranceType(coachingCnst.RULE, selectAllRuleFlag);selectAllRuleFlag = !selectAllRuleFlag">{{ selectAllRuleFlag ? 'Unselect All' : 'Select All' }}</div>
                                     </div>
                                     <ng-container *ngFor="let tag of filteredTagsDisplay;let i = index">
-                                        <mat-option [title]="tag" *ngIf="tag.type == coachingCnst.RULE"
+                                        <mat-option class="mat-option-ni" [title]="tag.name" *ngIf="tag.type == coachingCnst.RULE"
                                             (click)="selectedOption(tag, i);$event.stopPropagation();trigger.openPanel()">
                                 
                                             <input id="checkbox-{{i}}" type="checkbox"
@@ -130,7 +130,7 @@
 
                                     </mat-option>
                                 </div>
-                                <div class="footer-add-cler">
+                                <div class="footer-add-cler-ni">
                                     <button class="kr-sg-button-secondary-two btn_lg" (click)="clearChipData()">Clear</button>
                                     <button class="kr-sg-button-primary btn_lg" (click)="addRuleData()">Add</button>
                                 </div>
