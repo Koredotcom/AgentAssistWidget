@@ -56,6 +56,8 @@ export class NoneIntentComponent implements OnInit {
   originalRuleUtterances = [];
   filteredTagsDisplay: any = [];
   modalRef : any;
+  dataloaded : boolean = false;
+
   preVal = '';
   customUtterance = '';
   selectedUtterSeach = '';
@@ -77,16 +79,19 @@ export class NoneIntentComponent implements OnInit {
   ngOnInit(): void {
 
     this.subscribeValues();
-
+    this.dataloaded = false;
     if (this.currentRule) {
       this.service.invoke("get.agentcoachingutteranceByRef",
         {
           refId: this.currentRule?.triggers[0]._id,
         }).subscribe((data) => {
+          this.dataloaded = true;
           this.selectedUtterances = data.filter(utter => !utter.default);
           // this.cd.markForCheck();
           // this.selectedUtterances = JSON.parse(JSON.stringify(data));
           // this.serachedUtterances = JSON.parse(JSON.stringify(this.selectedUtterances));
+        }, (err)=> {
+          this.dataloaded = true;
         })
     }
     // this.selectedUtterSeach.valueChanges

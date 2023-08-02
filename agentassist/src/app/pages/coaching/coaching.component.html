@@ -77,7 +77,7 @@
                                                         </div>
                                                         <div class="desc-text-info w-14">{{rule.description}}</div>
                                                         <div class="tags-info w-16">
-                                                            <ng-container *ngFor="let tag of rule.tags.slice(0,2);">
+                                                            <ng-container *ngFor="let tag of rule.tags?.slice(0,2);">
                                                                 <span class="tag-name">{{tag}}</span>
                                                             </ng-container>
                                                             <div class="kr-sg-dropdowns" ngbDropdown container="body" *ngIf="rule.tags?.length > 2">
@@ -168,7 +168,7 @@
                                                         </div>
                                                         <div class="desc-text-info w-14" [title]="rule.description">{{rule.description}}</div>
                                                         <div class="tags-info w-16">
-                                                            <ng-container *ngFor="let tag of rule.tags.slice(0,2);">
+                                                            <ng-container *ngFor="let tag of rule.tags?.slice(0,2);">
                                                                 <span class="tag-name" [title]="tag">{{tag}}</span>
                                                             </ng-container>
                                                             <div class="kr-sg-dropdowns" ngbDropdown container="body" *ngIf="rule.tags?.length > 2">
