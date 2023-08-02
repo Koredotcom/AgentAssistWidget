@@ -192,7 +192,8 @@ export class MybotComponent implements OnInit {
           $(entityHtml).append(`<div class="order-number-info">${entityDisplayName} : ${this.sanitizeHtmlPipe.transform(data.userInput)}</div>`);
         } else {
           if (data.isErrorPrompt && entityDisplayName) {
-            let errorTemplate = this.mybotDataService.mybotErrorTemplate(this.imageFilePath, this.imageFileNames, entityDisplayName);
+            let entityType = data.entityType;
+            let errorTemplate = this.mybotDataService.mybotErrorTemplate(this.imageFilePath, this.imageFileNames, entityDisplayName, entityType);
             $(entityHtml).append(errorTemplate);
           }
         }
@@ -243,28 +244,32 @@ export class MybotComponent implements OnInit {
       if (this.commonService.isMyBotAgentSentRequestOnClick && !this.myBotDropdownHeaderUuids) {
         let mybotContainer = $('#myBotAutomationBlock');
         let botResHtml = `
-                <div class="collapse-acc-data before-none" id='smallTalk-${myBotuuids}'>
-             <div class="steps-run-data">
-             <div class="icon_block">
-                 <i class="ast-agent"></i>
-             </div>
-             <div class="run-info-content" >
-             <div class="title">Tell Customer</div>
-             <div class="agent-utt">
-                 <div class="title-data" id="displayData-${myBotuuids}">${data.buttons[0].value}</div>
-                 <div class="action-links">
-                     <button class="send-run-btn" id="sendMsg" data-msg-id="${myBotuuids}"  data-msg-data="${data.buttons[0].value}">Send</button>
-                     <div class="copy-btn" data-msg-id="${myBotuuids}" data-msg-data="${data.buttons[0].value}">
-                         <i class="ast-copy" data-msg-id="${myBotuuids}" data-msg-data="${data.buttons[0].value}"></i>
-                     </div>
-                 </div>
-             </div>
-             </div>
-         </div>
+            <div class="collapse-acc-data before-none" id='smallTalk-${myBotuuids}'>
+              <div class="steps-run-data">
+                  <div class="icon_block">
+                      <i class="ast-agent"></i>
+                  </div>
+                <div class="run-info-content" >
+                  <div class="title">Tell Customer</div>
+                  <div class="agent-utt">
+                      <div class="title-data" id="displayData-${myBotuuids}">${data.buttons[0].value}</div>
+                      <div class="action-links">
+                          <button class="send-run-btn" id="sendMsg" data-msg-id="${myBotuuids}"  data-msg-data="${data.buttons[0].value}">Send</button>
+                          <div class="copy-btn" data-msg-id="${myBotuuids}" data-msg-data="${data.buttons[0].value}">
+                              <i class="ast-copy" data-msg-id="${myBotuuids}" data-msg-data="${data.buttons[0].value}"></i>
+                          </div>
+                      </div>
+                      <div class="warning-template hide"  id="warningTemp">
+                          <img src="${this.imageFilePath}${this.imageFileNames['infoIcon']}">
+                          <span class="warning-text">Templates are not supported, visit your bot builder to disable it.</span>
+                      </div>
+                  </div>
+                </div>
+          </div>
          </div>`;
         mybotContainer.append(botResHtml);
         this.commonService.isMyBotAgentSentRequestOnClick = false;
-      } 
+      }
     }
 
     if (!this.commonService.isMyBotAutomationOnGoing && this.myBotDropdownHeaderUuids && data.buttons && (this.myBotDialogPositionId && !data.positionId || data.positionId == this.myBotDialogPositionId)) {
@@ -403,13 +408,14 @@ export class MybotComponent implements OnInit {
 
   //input value from mybot
   getAgentInputValue(value, intent?) {
+
     if (value) {
       let connectionDetails: any = Object.assign({}, this.connectionDetails);
       connectionDetails.value = value;
       connectionDetails.isSearch = false;
       connectionDetails.positionId = this.myBotDialogPositionId;
-      connectionDetails.childBotName = this.commonService.childBotDetails.childBotName;
-      connectionDetails.childBotId = this.commonService.childBotDetails.childBotId;
+      connectionDetails.childBotName = this.commonService?.childBotDetails.childBotName;
+      connectionDetails.childBotId = this.commonService?.childBotDetails.childBotId;
       if (this.connectionDetails?.interactiveLanguage && typeof this.connectionDetails?.interactiveLanguage == 'string' && this.connectionDetails?.interactiveLanguage != "''") {
         connectionDetails['language'] = this.connectionDetails?.interactiveLanguage; // Return the default value for null, undefined, or "''"
       }
@@ -572,7 +578,8 @@ export class MybotComponent implements OnInit {
             entityHtml.append(`<div class="order-number-info">${entityDisplayName} : ${entityValue}</div>`);
           } else {
             if (res.agentAssistDetails.isErrorPrompt && entityDisplayName) {
-              let entityHtmls = this.mybotDataService.mybotErrorTemplate(this.imageFilePath, this.imageFileNames, entityDisplayName);
+              let entityType = res.agentAssistDetails.entityType;
+              let entityHtmls = this.mybotDataService.mybotErrorTemplate(this.imageFilePath, this.imageFileNames, entityDisplayName, entityType);
               entityHtml.append(entityHtmls);
             }
           }

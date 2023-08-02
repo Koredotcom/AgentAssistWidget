@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ProjConstants } from 'src/common/constants/proj.cnts';
+import { ProjConstants, ImageFileNames, ImageFilePath } from 'src/common/constants/proj.cnts';
 import { SanitizeHtmlPipe } from 'src/common/pipes/sanitize-html.pipe';
 import * as $ from 'jquery';
 import { CommonService } from 'src/common/services/common.service';
@@ -9,6 +9,8 @@ import { CommonService } from 'src/common/services/common.service';
 })
 export class AssistService {
   projConstants: any = ProjConstants;
+  imageFilePath: string = ImageFilePath;
+  imageFileNames: any = ImageFileNames;
   constructor(public sanitizeHtmlPipe: SanitizeHtmlPipe,
     public commonService : CommonService) { }
 
@@ -155,45 +157,51 @@ export class AssistService {
     if(componentType && componentType == 'dialogAct' && (srcChannel != 'msteams' && srcChannel != 'rtm') ){
       template = `
       <div class="steps-run-data">
-      <div class="icon_block">
-          <i class="ast-agent"></i>
-      </div>
-      <div class="run-info-content" >
-      <div class="title">Tell Customer</div>
-      <div class="agent-utt">
-      <div class="title-data" id="displayData-${uuids}">${value}</div>
-          <div class="action-links">
-              <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data="${newTemp}" data-position-id="${positionID}">Send</button>
-              <div class="copy-btn" data-msg-id="${uuids}" data-position-id="${positionID}">
-                  <i class="ast-copy" data-msg-id="${uuids}" data-position-id="${positionID}"></i>
-              </div>
+        <div class="icon_block">
+            <i class="ast-agent"></i>
+        </div>
+        <div class="run-info-content" >
+          <div class="title">Tell Customer</div>
+          <div class="agent-utt">
+            <div class="title-data" id="displayData-${uuids}">${value}</div>
+            <div class="action-links">
+                <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data="${newTemp}" data-position-id="${positionID}">Send</button>
+                <div class="copy-btn" data-msg-id="${uuids}" data-position-id="${positionID}">
+                    <i class="ast-copy" data-msg-id="${uuids}" data-position-id="${positionID}"></i>
+                </div>
+            </div>
+            <div class="warning-template hide"  id="warningTemp">
+                <img class="warning-icon" src="${this.imageFilePath}${this.imageFileNames['infoIcon']}">
+                <span class="warning-text">Templates are not supported, visit your bot builder to disable it.</span>
+            </div>
           </div>
-      </div>
-      </div>
-  </div>
-  `;
-       
+        </div>
+      </div>`;
+
     }else{
       template = `
       <div class="steps-run-data">
-      <div class="icon_block">
-          <i class="ast-agent"></i>
-      </div>
-      <div class="run-info-content" >
-      <div class="title">Tell Customer</div>
-      <div class="agent-utt">
-          <div class="title-data" ><ul class="chat-container" id="displayData-${uuids}" data-msg-id="${uuids}"></ul></div>
-          <div class="action-links">
+        <div class="icon_block">
+            <i class="ast-agent"></i>
+        </div>
+        <div class="run-info-content" >
+          <div class="title">Tell Customer</div>
+          <div class="agent-utt">
+            <div class="title-data" ><ul class="chat-container" id="displayData-${uuids}" data-msg-id="${uuids}"></ul></div>
+            <div class="action-links">
               <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data="${newTemp}" data-position-id="${positionID}">Send</button>
               <div class="copy-btn hide" data-msg-id="${uuids}" data-position-id="${positionID}">
                   <i class="ast-copy" data-msg-id="${uuids}" data-position-id="${positionID}"></i>
               </div>
-          </div>
+            </div>
+            <div class="warning-template hide"  id="warningTemp">
+                <img src="${this.imageFilePath}${this.imageFileNames['infoIcon']}">
+                <span class="warning-text">Templates are not supported, visit your bot builder to disable it.</span>
+            </div>
+        </div>
       </div>
-      </div>
-  </div>
   `;
-    }    
+    }
     return template;
   }
 
@@ -393,20 +401,21 @@ export class AssistService {
               <div class="agent-utt">
                   <div class="title-data">"${this.sanitizeHtmlPipe.transform(data.userInput)}"</div>
               </div>
-              
+
           </div>
       </div>`;
       return template
   }
 
-  errorTemplate(imageFilePath, imageFileNames, entityDisplayName) {
-    let template = `<div class="order-number-info">${entityDisplayName} : 
+  errorTemplate(imageFilePath, imageFileNames, entityDisplayName, entityType) {
+    let template = `<div class="order-number-info">${entityDisplayName} :
       <span style="color:red">Value unidentified</span>
-  </div>
-  <div>
-      <img src="${imageFilePath}${imageFileNames['WARNING']}" style="padding-right: 8px;">
-      <span style="font-size: 12px; line-height: 18px; color: #202124;">Incorrect input format<span>
+      <span style="font-size: 12px; line-height: 18px; color: #202124; padding-left: 10px"> { Expected Format: ${entityType} }<span>
   </div>`
+  // <div>
+  //     <img src="${imageFilePath}${imageFileNames['WARNING']}" style="padding-right: 8px;">
+  //     <span style="font-size: 12px; line-height: 18px; color: #202124;">Incorrect input format<span>
+  // </div>`
     return template;
   }
 
