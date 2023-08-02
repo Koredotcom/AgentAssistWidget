@@ -240,6 +240,9 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
         if (data && (data._id || data.id)) {
           data._id = data.id ? data.id : data._id;
           data.ruleId = data._id;
+          data.tags = data.tags || [];
+          data.channels = data.channels || [];
+
           let notification = (this.createOrEdit == this.coachingCnst.CREATE) ? 'RULE.SUCCESS' : 'RULE.UPDATE_SUCCESS';
           this.notificationService.notify(this.translate.instant(notification), 'success');
           data = (this.createOrEdit == this.coachingCnst.EDIT) ? this.formatRuleDataForEdit(data) : data;
@@ -271,6 +274,9 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
         if (data && (data._id || data.id)) {
           data._id = data.id ? data.id : data._id;
           data.ruleId = data._id;
+          data.tags = data.tags || [];
+          data.channels = data.channels || [];
+
           this.notificationService.notify(this.translate.instant('RULE.UPDATE_SUCCESS'), 'success');
           this.closeRule(data);
         }

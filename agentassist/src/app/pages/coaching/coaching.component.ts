@@ -135,6 +135,10 @@ export class CoachingComponent implements OnInit, OnDestroy {
     };
     this.service.invoke('get.allagentCoachingpreBuiltRules', params)
     .subscribe((data)=>{
+      data.results?.map(obj => {
+        obj.tags = obj.tags || [];
+        obj.channels = obj.channels || [];
+      })
       this.respData.preBuilt = data.results;
       this.preBuilt = JSON.parse(JSON.stringify(data.results));
     })
@@ -167,6 +171,10 @@ export class CoachingComponent implements OnInit, OnDestroy {
       this.cdRef.detectChanges();
     })).subscribe(data => {
       if (data) {
+        data.results?.map(obj => {
+          obj.tags = obj.tags || [];
+          obj.channels = obj.channels || [];
+        })
         if(empty){
           this.respData.results = [...[]];
           // this.cdRef.detectChanges();
@@ -190,6 +198,8 @@ export class CoachingComponent implements OnInit, OnDestroy {
       }))  
       .subscribe(data => {
           if (data) {
+            data.tags = data.tags || [];
+            data.channels = data.channels || [];
             this.currentRule = data;
             if(rule?.name === "No Intent"){
               this.noneIntent.openSlider("#nonIntent", "non-intent-slider");
