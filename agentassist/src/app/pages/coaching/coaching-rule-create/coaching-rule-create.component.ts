@@ -101,6 +101,7 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
   }
 
   updateBasicRuleForm(){
+    this.coachingService.ruleDesc = this.currentRule?.description;
     this.ruleForm.controls["name"].patchValue(this.currentRule?.name, {emitEvent : false});  
     this.ruleForm.controls["description"].patchValue(this.currentRule?.description, {emitEvent : false});
     this.ruleForm.setControl('channels', this.fb.array(this.currentRule?.channels));
@@ -111,6 +112,7 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
 
   updateRuleForm(){
     setTimeout(() => {
+      this.coachingService.ruleDesc = this.currentRule?.description;
       this.ruleForm.controls["name"].patchValue(this.currentRule?.name);  
       this.ruleForm.controls["description"].patchValue(this.currentRule?.description);
       this.ruleForm.controls['isActive'].patchValue(this.currentRule?.isActive);
@@ -185,7 +187,7 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
     this.ruleForm = new FormGroup(
       {
         "name": new FormControl('',[Validators.required]),
-        "description": new FormControl(''),
+        "description": new FormControl('', [Validators.required]),
         "tags": this.fb.array([]),
         "channels": this.fb.array([], [Validators.required]),
         "botId": new FormControl(this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id, [Validators.required]),

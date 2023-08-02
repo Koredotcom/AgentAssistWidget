@@ -109,7 +109,7 @@ export class CoachingService {
       disable : true
     }
   ];
-    
+  ruleDesc = '';
   
   constructor(private fb: FormBuilder) { }
 
