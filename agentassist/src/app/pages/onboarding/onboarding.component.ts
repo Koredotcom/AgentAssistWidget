@@ -74,7 +74,8 @@ export class OnboardingComponent implements OnInit, OnDestroy {
         let userInfo:any = this.authService.getAuthInfo()?.currentAccount?.userInfo || {};
         let redirectedUrl = this.completeAppPath();
         dialogRef.close();
-        window.location.href =  this.marketURL()+'/?email=' + userInfo?.emailId + '/?return_to=' + redirectedUrl + '&showLogin=true&hideSSOButtons=true&hideResourcesPageLink=true&comingFromKey=isAgentAssistApp#login';
+        // window.location.href =  this.marketURL()+'/?email=' + userInfo?.emailId + '&return_to=' + redirectedUrl + '&showLogin=true&hideSSOButtons=true&hideResourcesPageLink=true&comingFromKey=isAgentAssistApp#login';
+        window.location.href =  this.marketURL()+'/?return_to='+redirectedUrl+'&showLogin=true&hideSSOButtons=true&hideResourcesPageLink=true&comingFromKey=isAgentAssistApp'
       }
     })
 
