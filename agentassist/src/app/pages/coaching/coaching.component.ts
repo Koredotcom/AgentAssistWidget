@@ -221,7 +221,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
             data.tags = data.tags || [];
             data.channels = data.channels || [];
             this.currentRule = data;
-            if(rule?.name === "No Intent"){
+            if(rule?.name?.toLowerCase() === "no intent" || rule?.name?.toLowerCase() === "none intent"){
               this.noneIntent.openSlider("#nonIntent", "non-intent-slider");
               this.showNoneIntent = true;
             }else{

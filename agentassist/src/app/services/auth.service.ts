@@ -34,7 +34,7 @@ export class AuthService {
   userAccIdDetail: any;
   public isLoadingOnSm = window.location.href.includes('smartassist') ? true : false;
   public isAgentDesktopEnabled$ = new BehaviorSubject(false);
-  public isAgentCoachongEnable$ = new BehaviorSubject(false);
+  public isAgentCoachongEnable$ = new BehaviorSubject(true);
 
   constructor(
     private localstore: LocalStoreService,
