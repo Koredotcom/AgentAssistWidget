@@ -16,9 +16,7 @@ import { OnboardingComponent } from './pages/onboarding/onboarding.component';
 import { SearchAssistComponent } from './pages/search-assist/search-assist.component';
 
 let isSmartassist = false;
-console.log(window.location.href);
 if(window.location.href.includes('smartassist')){
-  console.log(window.location.href);
   isSmartassist = true;
 }
 

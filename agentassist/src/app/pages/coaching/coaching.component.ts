@@ -82,6 +82,26 @@ export class CoachingComponent implements OnInit, OnDestroy {
       });
       this.initApiCalls();
     }
+    window.addEventListener("message", (event:any) => {
+      if(event.data.action === 'reloadCoaching') {
+        this.subs.sink = this.authService.isAgentCoachongEnable$.subscribe(isEnabled => {
+          this.isCoachingDisable = isEnabled;
+        });
+        if (!this.isCoachingDisable) {
+          this.router.navigate(['/config/usecases']);
+        } else {
+          this.subs.sink = this.workflowService.updateBotDetails$.subscribe((ele) => {
+            if (ele) {
+              this.initApiCalls();
+            }
+          });
+          this.initApiCalls();
+        }
+      }
+      if(event.data.action === 'destroyed') {
+        this.modalService.dismissAll();
+      }
+    })
   }
 
   initApiCalls() {
@@ -135,6 +155,10 @@ export class CoachingComponent implements OnInit, OnDestroy {
     };
     this.service.invoke('get.allagentCoachingpreBuiltRules', params)
     .subscribe((data)=>{
+      data.results?.map(obj => {
+        obj.tags = obj.tags || [];
+        obj.channels = obj.channels || [];
+      })
       this.respData.preBuilt = data.results;
       this.preBuilt = JSON.parse(JSON.stringify(data.results));
     })
@@ -167,6 +191,10 @@ export class CoachingComponent implements OnInit, OnDestroy {
       this.cdRef.detectChanges();
     })).subscribe(data => {
       if (data) {
+        data.results?.map(obj => {
+          obj.tags = obj.tags || [];
+          obj.channels = obj.channels || [];
+        })
         if(empty){
           this.respData.results = [...[]];
           // this.cdRef.detectChanges();
@@ -187,11 +215,13 @@ export class CoachingComponent implements OnInit, OnDestroy {
       this.service.invoke('get.ruleById', { ruleId: rule._id })
       .pipe(finalize(()=>{
         this.isLoading = false;
-      }))  
+      }))
       .subscribe(data => {
           if (data) {
+            data.tags = data.tags || [];
+            data.channels = data.channels || [];
             this.currentRule = data;
-            if(rule?.name === "No Intent"){
+            if(rule?.name?.toLowerCase() === "no intent" || rule?.name?.toLowerCase() === "none intent"){
               this.noneIntent.openSlider("#nonIntent", "non-intent-slider");
               this.showNoneIntent = true;
             }else{
@@ -304,7 +334,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
       }, err => {
       });
   }
-  
+
   newRule(newRuleModal: any) {
     this.modalService.open(newRuleModal, {
       windowClass: 'modal-ngb-wrapper-window',

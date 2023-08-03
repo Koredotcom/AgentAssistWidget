@@ -27,6 +27,14 @@
                 font-weight: 500;
                 line-height: 20px;
             }
+            .sub-title{
+                font-weight: 400;
+                line-height: 25px;
+                color: #667085;
+                border-bottom: 1px dashed #98a2b3;
+                padding: 0 2px 4px;
+                min-height: 30px;
+            }
         }
         .close-slider{
             flex-shrink: 0;
@@ -490,6 +498,9 @@
         font-size: 12px;
         font-style: normal;
         font-weight: 400;
+    }
+    .mat-form-field-label{
+        margin-top: 3px;
     }
     .mat-form-field-underline{
         display: none;
