@@ -83,7 +83,6 @@ export class CoachingComponent implements OnInit, OnDestroy {
       this.initApiCalls();
     }
     window.addEventListener("message", (event:any) => {
-      console.log('sandeep Tester', event);
       if(event.data.action === 'reloadCoaching') {
         this.subs.sink = this.authService.isAgentCoachongEnable$.subscribe(isEnabled => {
           this.isCoachingDisable = isEnabled;
