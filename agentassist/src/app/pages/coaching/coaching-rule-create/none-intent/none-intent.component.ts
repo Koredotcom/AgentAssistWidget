@@ -188,7 +188,7 @@ export class NoneIntentComponent implements OnInit {
       if (value) {
         this.assignOriginalToDisplayList();
         this.filteredTagsDisplay = this.filteredTagsDisplay.filter(
-          (tag) => (tag.name).indexOf(value) !== -1
+          (tag) => (tag?.name?.toLowerCase()).indexOf(value?.toLowerCase()) !== -1
         );
       } else {
         this.assignOriginalToDisplayList();
@@ -199,7 +199,7 @@ export class NoneIntentComponent implements OnInit {
       if (value) {
         this.assignOriginalRuleToDisplayUtteranceList();
         this.ruleUtterances = this.ruleUtterances.filter(
-          (utter) => (utter.name).indexOf(value) !== -1
+          (utter) => (utter?.name?.toLowerCase()).indexOf(value?.toLowerCase()) !== -1
         );
       } else {
         this.assignOriginalRuleToDisplayUtteranceList();
@@ -319,17 +319,14 @@ export class NoneIntentComponent implements OnInit {
   AddOrSelectTagNames(tagOrrule, checkStatus = true) {
     if ((tagOrrule.name || '')) {
       let filterIndex = this.tags.findIndex((item) => {
-        return item.name == tagOrrule.name;
+        return item.name == tagOrrule.name && item.type == tagOrrule.type;
       });
       if (filterIndex == -1) {
         this.tags.push({ name: tagOrrule.name, value: tagOrrule.value, type : tagOrrule.type });
       }
     }
     this.trigger.openPanel();
-    this.assignOriginalToDisplayList();
-    setTimeout(() => {
-      this.tagControl.setValue('');
-    }, 0);
+    // this.assignOriginalToDisplayList();
     if(checkStatus){
       this.checkSelectAllStatus(tagOrrule, this.coachingCnst.ADD);
     }
@@ -337,16 +334,24 @@ export class NoneIntentComponent implements OnInit {
 
   remove(tagOrrule, checkStatus = true): void {
     const index = this.tags.findIndex(item => {
-      return item.name == tagOrrule.name;
+      return item.name == tagOrrule.name && item.type == tagOrrule.type;
     });
     if (index >= 0) {
       this.tags.splice(index, 1);
+      this.unselectCheckList(tagOrrule);
     }
-    this.assignOriginalToDisplayList();
+    // this.assignOriginalToDisplayList();
     this.trigger.openPanel();
     if(checkStatus){
       this.checkSelectAllStatus(tagOrrule, this.coachingCnst.REMOVE);
     }
+  }
+
+  unselectCheckList(tagOrrule){
+    let index = this.filteredTagsDisplay.findIndex(item => {
+      return item.name == tagOrrule.name && item.type == tagOrrule.type;
+    });
+    this.filteredTagsDisplay[index].checked = false;
   }
 
   assignOriginalToDisplayList() {
@@ -398,7 +403,6 @@ export class NoneIntentComponent implements OnInit {
     this.service.invoke('post.noneIntentUtterances', {}, payload)
     .subscribe(data => {
       this.loading = false;
-      console.log(data, 'from none intent api');
       if(data){
         this.formatRuleSentenceData(data);
         this.ruleUtterances = JSON.parse(JSON.stringify(this.originalRuleUtterances));
@@ -428,7 +432,7 @@ export class NoneIntentComponent implements OnInit {
   }
 
   checkSelectedUtterance() {
-    return this.ruleUtterances.every(item => item.checked);
+    return this.originalRuleUtterances.every(item => item.checked);
   }
 
   addSelectedUtteranceList() {
