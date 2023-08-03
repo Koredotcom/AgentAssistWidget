@@ -1981,6 +1981,16 @@ and open the template in the editor.
         color: #202124;
         cursor: pointer;
     }
+    .count-char{
+        color: var(--gray-500, #667085);
+        text-align: right;
+        text-shadow: 0px 0px 0px 4px #EFF4FF, 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 20px;
+        margin-top: 4px;
+    }
 }
 
 /*---- TEXT-INPUT ENDS HERE---*/
@@ -2049,6 +2059,16 @@ and open the template in the editor.
         margin-top: 5px;
         color: $warningRed;
         line-height: 1.17;
+    }
+    .count-char{
+        color: var(--gray-500, #667085);
+        text-align: right;
+        text-shadow: 0px 0px 0px 4px #EFF4FF, 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 20px;
+        margin-top: 4px;
     }
 }
 

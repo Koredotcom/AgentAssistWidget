@@ -75,7 +75,7 @@ export class ChecklistCreateComponent implements OnInit {
   }
 
   openSettings(){
-    this.checklistCreateSlider.openSlider("#checklistCreate", "width940");
+    this.checklistCreateSlider.openSlider("#checklistCreate", "");
   }
 
   closeSettings(){
