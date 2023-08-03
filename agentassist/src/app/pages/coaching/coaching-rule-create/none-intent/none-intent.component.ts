@@ -113,8 +113,7 @@ export class NoneIntentComponent implements OnInit {
   }
 
   checkOpenAiConfig(){
-    this.openapiEnable = this.configFeatures
-    .find(item => item.name === "aa_noneintent" && item.enable)
+    this.openapiEnable = this.configFeatures?.find(item => item.name === "aa_noneintent" && item.enable)
   }
 
   getTags() {

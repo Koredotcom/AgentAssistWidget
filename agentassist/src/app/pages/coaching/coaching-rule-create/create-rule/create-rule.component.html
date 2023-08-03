@@ -11,11 +11,20 @@
             <input [disabled]="default" type="text" maxlength="100" placeholder="Add Name" class="input-text" [(ngModel)]="ruleName">
         </div>
         <div class="kr-sg-input-text-area m-b-15">
-            <div class="label-text">Description</div>
+            <div class="description-info m-b-8">
+                <div class="label-text">Description</div>
+                <span class="info-tip" placement="bottom-center" tooltipClass="tooltip-global-styles"
+                    ngbTooltip="Please provide concise description including keywords and conditions. This trains our AI for real-time assistance.
+                        For example(Competitor Mention): This rule identifies and analyses customer messages that mention our competitors and helps respond with relevant information to address any concerns or comparisons.">
+                    <i class="icon-sa-info"></i>
+                </span>
+                <span class="tag">LLM</span>
+            </div>
             <textarea placeholder="Rule Purpose" maxlength="1000" class="input-text" [(ngModel)]="ruleDesc"></textarea>
         </div>
         <div class="label-text m-b-5">Tags
-            <span class="info-tip" tooltipClass="tooltip-global-styles" ngbTooltip="Press Enter to Add">
+            <span class="info-tip" placement="bottom-center" tooltipClass="tooltip-global-styles"
+                ngbTooltip="Press Enter to Add">
                 <i class="icon-sa-info"></i>
             </span>
         </div>

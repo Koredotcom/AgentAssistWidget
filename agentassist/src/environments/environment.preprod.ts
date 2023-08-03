@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
   tag:"prod",
-  API_SERVER_URL:'https://preprod-smartassist.korebots.com/',
+  API_SERVER_URL:'https://preprod-smartassist.korebots.com',
   USE_SESSION_STORE:false,
   ON_PREMISE: false,
   //API_SERVER_URL: 'http://192.168.10.101:5000'

@@ -2,7 +2,7 @@
     <div class="header-sec">
         <div class="left-sec">
             <img src="assets/icons/coaching/coaching--message-check-square.svg">
-            <span>Pre-Build</span>
+            <span>Pre-Build/ <span class="sub-title">None Intent</span> </span>
         </div>
         <div (click)="closeSlider()" class="close-slider">
             <i class="icon-sa-close"></i>
@@ -11,7 +11,7 @@
     <div class="body-wrapper">
         <div class="utterance-block" [ngClass]="{'d-none' : clickSelectedUtter}">
             <div class="top-heading-info">
-                <p>None intent utterances are used to prevent false positives while doing intent recognition....</p>
+                <p>None intent utterances are used to prevent false positives while doing intent recognition.</p>
                 <div class="seach-block">
                     <div class="kr-sg-input-text">
                         <input type="text" placeholder="Search" class="input-text" [(ngModel)]="selectedUtterSeach">
