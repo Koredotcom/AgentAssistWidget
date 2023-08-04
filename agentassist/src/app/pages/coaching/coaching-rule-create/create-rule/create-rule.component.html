@@ -70,6 +70,6 @@
     </div>
     <div class="footer-wrapper">
         <button class="kr-sg-button-secondary-two btn_lg" (click)="closeRule()">Cancel</button>
-        <button class="kr-sg-button-primary btn_lg" (click)="submitForm()" [disabled]="disableApplyButton || !(ruleName.trim() && ruleDesc.trim() && channelList?.length)">Apply</button>
+        <button class="kr-sg-button-primary btn_lg" (click)="submitForm()" [disabled]="disableApplyButton || !(ruleName?.trim() && ruleDesc?.trim() && channelList?.length)">Apply</button>
     </div>
 </div>
