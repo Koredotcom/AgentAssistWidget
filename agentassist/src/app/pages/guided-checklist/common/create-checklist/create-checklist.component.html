@@ -1,9 +1,9 @@
 <div class="stage-creation-slider-data">
     <div class="left-tabs">
-        <button class="tab-btn active-btn">
+        <button class="tab-btn" [ngClass]="{'active-btn': isBasic}" (click)="isBasic = true">
             <i class="icon-coaching--settings"></i>
         </button>
-        <button class="tab-btn">
+        <button class="tab-btn" [ngClass]="{'active-btn': !isBasic}" (click)="isBasic = false">
             <i class="icon-coaching--thendo"></i>
         </button>
     </div>
@@ -17,7 +17,7 @@
         <div class="body-data">
             <perfect-scrollbar>
                 <div class="inner-content-data">
-                    <ng-container *ngIf="false">
+                    <ng-container *ngIf="isBasic">
                         <div class="kr-sg-input-text m-b-12">
                             <div class="label-text">Name</div>
                             <input type="text" maxlength="100" placeholder="Add Name" class="input-text">
@@ -85,7 +85,7 @@
                             </div>
                         </div>
                     </ng-container>
-                    <ng-container *ngIf="true">
+                    <ng-container *ngIf="!isBasic">
                         <div class="add-utterance-block">
                             <div class="utt-radio-block">
                                 <div class="radio-block-content active-check">
@@ -105,13 +105,13 @@
                                             <div class="desc-text">Checklist shows only to selected Agents</div>
                                         </label>
                                     </div>
-                                    <div class="add-rule-block" *ngIf="false">
+                                    <div class="add-rule-block" *ngIf="true">
                                         <div class="label-text">Add Rules</div>
                                         <mat-form-field class="add-rules-chip-list">
                                             <mat-chip-list #chipList>
-                                                <mat-chip *ngFor="let tag of tags" [selectable]="true" [removable]="true" (removed)="remove(tag)">
-                                                    <span class="chip-name text-truncate mx-w-100" title="{{tag.name}}">{{tag.name}}</span>
-                                                    <span class="icon-sa-close" matChipRemove *ngIf="true"></span>
+                                                <mat-chip *ngFor="let tag of []" [selectable]="true" [removable]="true" (removed)="remove(tag)">
+                                                    <span class="chip-name text-truncate mx-w-100" title="{{tag?.name}}">{{tag?.name}}</span>
+                                                    <span class="icon-sa-close" matChipRemove></span>
                                                 </mat-chip>
                                                 <input placeholder="Select Rules" #tagInput [matChipInputFor]="chipList"
                                                     [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="false"
@@ -126,18 +126,16 @@
                                                             <i class="icon-coaching--search"></i>
                                                         </div>
                                                     </div>
-                                                    <div class="tags-data" *ngIf="checkTagPresent() ? true : false">
+                                                    <div class="tags-data" *ngIf="true">
                                                         <div class="title">Tags</div>
-                                                        <div class="select-all" (click)="selectAllUtteranceType(coachingCnst.TAG, selectAllTagFlag);selectAllTagFlag = !selectAllTagFlag">{{ selectAllTagFlag ? 'Unselect All' : 'Select All' }}</div>
+                                                        <div class="select-all">'Select All'</div>
                                                     </div>
-                                                    <ng-container *ngFor="let tag of filteredTagsDisplay;let i = index">
-                                                        <ng-container *ngIf="tag?.name">
-                                                            <mat-option class="mat-option-ni" [title]="tag?.name" *ngIf="tag.type == coachingCnst.TAG"
-                                                                (click)="selectedOption(tag, i);trigger.openPanel();$event.stopPropagation();">
-                                                    
+                                                    <ng-container *ngFor="let tag of [];let i = index">
+                                                        <ng-container>
+                                                            <mat-option class="mat-option-ni">
                                                                 <input id="checkbox-{{i}}" type="checkbox"
                                                                     (click)="selectedOption(tag, i);trigger.openPanel();$event.stopPropagation();" [value]="tag.name"
-                                                                    [checked]="tag.checked">
+                                                                    [checked]="tag?.checked">
                                                                 <div class="label-check text-truncate" for="checkbox-{{i}}">
                                                                     <span>{{tag?.name}}</span>
                                                                     <div class="desc-text">{{tag?.value?.length}} rules</div>
@@ -145,19 +143,19 @@
                                                             </mat-option>
                                                         </ng-container>
                                                     </ng-container>
-                                                    <div class="tags-data" *ngIf="checkRulePresent() ? true  : false">
+                                                    <div class="tags-data" *ngIf="true">
                                                         <div class="title">Rules</div>
-                                                        <div class="select-all" (click)="selectAllUtteranceType(coachingCnst.RULE, selectAllRuleFlag);selectAllRuleFlag = !selectAllRuleFlag">{{ selectAllRuleFlag ? 'Unselect All' : 'Select All' }}</div>
+                                                        <div class="select-all" >'Select All'</div>
                                                     </div>
-                                                    <ng-container *ngFor="let tag of filteredTagsDisplay;let i = index">
-                                                        <mat-option class="mat-option-ni" [title]="tag.name" *ngIf="tag.type == coachingCnst.RULE"
+                                                    <ng-container *ngFor="let tag of [];let i = index">
+                                                        <mat-option class="mat-option-ni"
                                                             (click)="selectedOption(tag, i);$event.stopPropagation();trigger.openPanel()">
                                                 
                                                             <input id="checkbox-{{i}}" type="checkbox"
                                                                 (click)="selectedOption(tag, i);trigger.openPanel();$event.stopPropagation();" [value]="tag.name"
                                                                 [checked]="tag.checked">
                                                             <div class="label-check text-truncate" for="checkbox-{{i}}">
-                                                                <span>{{tag.name}}</span>
+                                                                <span>{{tag?.name}}</span>
                                                             </div>
                                                         </mat-option>
                                                     </ng-container>

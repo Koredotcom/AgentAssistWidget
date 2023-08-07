@@ -8,8 +8,14 @@ import { Component, OnInit } from '@angular/core';
 export class StageCreateComponent implements OnInit {
 
   constructor() { }
-
+  isBasic = true;
   ngOnInit(): void {
   }
+  remove(e){
 
+  }
+
+  selectedOption(a, b){
+    
+  }
 }
