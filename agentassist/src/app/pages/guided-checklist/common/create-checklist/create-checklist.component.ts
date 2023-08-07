@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-stage-create',
-  templateUrl: './stage-create.component.html',
-  styleUrls: ['./stage-create.component.scss']
+  selector: 'app-create-checklist',
+  templateUrl: './create-checklist.component.html',
+  styleUrls: ['./create-checklist.component.scss']
 })
 export class StageCreateComponent implements OnInit {
 

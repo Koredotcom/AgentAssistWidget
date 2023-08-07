@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { StageCreateComponent } from './stage-create.component';
+import { StageCreateComponent } from './create-checklist.component';
 
 describe('StageCreateComponent', () => {
   let component: StageCreateComponent;

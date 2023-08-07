@@ -7,8 +7,8 @@ import { DynamicChecklistComponent } from './dynamic-checklist/dynamic-checklist
 import { StepCreateComponent } from './common/step-create/step-create.component';
 import { ChecklistService } from './checklist.service';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { ChecklistCreateComponent } from './common/stages-list/checklist-create.component';
-import { StageCreateComponent } from './common/create-checklist/stage-create.component';
+import { ChecklistCreateComponent } from './common/stages-list/stages-list.component';
+import { StageCreateComponent } from './common/create-checklist/create-checklist.component';
 
 const routes: Routes = [
   { path: '', component:  GuidedChecklistComponent}

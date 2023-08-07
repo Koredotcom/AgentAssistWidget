@@ -6,9 +6,9 @@ import { workflowService } from '@kore.services/workflow.service';
 import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
 import { v4 as uuid } from 'uuid';
 @Component({
-  selector: 'app-checklist-create',
-  templateUrl: './checklist-create.component.html',
-  styleUrls: ['./checklist-create.component.scss']
+  selector: 'app-stages-list',
+  templateUrl: './stages-list.component.html',
+  styleUrls: ['./stages-list.component.scss']
 })
 export class ChecklistCreateComponent implements OnInit {
 
