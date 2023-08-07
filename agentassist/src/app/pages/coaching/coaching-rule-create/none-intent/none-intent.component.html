@@ -99,15 +99,15 @@
                                 <div class="content-scroll-ni">
                                     <div class="search-block">
                                         <div class="kr-sg-input-text">
-                                            <input type="text" placeholder="Search" class="input-text"  [formControl]="tagControl" name="search">
+                                            <input type="text" placeholder="Search" class="input-text"  [(ngModel)]="tagRuleSearch" name="search">
                                             <i class="icon-coaching--search"></i>
                                         </div>
                                     </div>
                                     <div class="tags-data" *ngIf="checkTagPresent() ? true : false">
                                         <div class="title">Tags</div>
-                                        <div class="select-all" (click)="selectAllUtteranceType(coachingCnst.TAG, selectAllTagFlag);selectAllTagFlag = !selectAllTagFlag">{{ selectAllTagFlag ? 'Unselect All' : 'Select All' }}</div>
+                                        <div class="select-all" (click)="selectAllUtteranceType(coachingCnst.TAG, selectAllTagFlag);selectAllTagFlag = !selectAllTagFlag">{{ this.checkSelectedAllTags() ? 'Unselect All' : 'Select All' }}</div>
                                     </div>
-                                    <ng-container *ngFor="let tag of filteredTagsDisplay;let i = index">
+                                    <ng-container *ngFor="let tag of filteredTagsDisplay | filter : [ tagRuleSearch, 'name'];let i = index">
                                         <ng-container *ngIf="tag?.name">
                                             <mat-option class="mat-option-ni" [title]="tag?.name" *ngIf="tag.type == coachingCnst.TAG"
                                                 (click)="selectedOption(tag, i);trigger.openPanel();$event.stopPropagation();">
@@ -124,9 +124,9 @@
                                     </ng-container>
                                     <div class="tags-data" *ngIf="checkRulePresent() ? true  : false">
                                         <div class="title">Rules</div>
-                                        <div class="select-all" (click)="selectAllUtteranceType(coachingCnst.RULE, selectAllRuleFlag);selectAllRuleFlag = !selectAllRuleFlag">{{ selectAllRuleFlag ? 'Unselect All' : 'Select All' }}</div>
+                                        <div class="select-all" (click)="selectAllUtteranceType(coachingCnst.RULE, selectAllRuleFlag);selectAllRuleFlag = !selectAllRuleFlag">{{ this.checkSelectedAllRules() ? 'Unselect All' : 'Select All' }}</div>
                                     </div>
-                                    <ng-container *ngFor="let tag of filteredTagsDisplay;let i = index">
+                                    <ng-container *ngFor="let tag of filteredTagsDisplay  | filter : [ tagRuleSearch, 'name'];let i = index">
                                         <mat-option class="mat-option-ni" [title]="tag.name" *ngIf="tag.type == coachingCnst.RULE"
                                             (click)="selectedOption(tag, i);$event.stopPropagation();trigger.openPanel()">
                                 
@@ -171,7 +171,7 @@
         <div class="found-details-info" [ngClass]="{'d-none' : !clickSelectedUtter || utteranceType === coachingCnst.MANUAL}">
             <div class="seach-block">
                 <div class="kr-sg-input-text">
-                    <input type="text" placeholder="Search" class="input-text" [formControl]="selUtteranceControl">
+                    <input type="text" placeholder="Search" class="input-text" [(ngModel)]="listedUtterSearch">
                     <i class="icon-coaching--search"></i>
                 </div>
             </div>
@@ -192,7 +192,7 @@
                                     <label for="one" class="checkbox-custom-label">SELECT ALL</label>
                                 </div>                            
                             </div>
-                            <ng-container *ngFor="let item of ruleUtterances; let i = index">
+                            <ng-container *ngFor="let item of ruleUtterances | filter: [ listedUtterSearch, 'name'] ; let i = index">
                                 <div class="item-data-found">
                                     <div class="kr-sg-checkbox">
                                         <input id="one-{{i}}" class="checkbox-custom" type="checkbox" [checked]="item.checked" (change)="removeSelectedUtterances(item, i)">

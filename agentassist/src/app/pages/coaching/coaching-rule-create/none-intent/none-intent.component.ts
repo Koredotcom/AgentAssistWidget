@@ -12,6 +12,7 @@ import { COACHINGCNST } from '../../coaching.cnst';
 import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CoachingConfirmationComponent } from '../../coaching-confirmation/coaching-confirmation.component';
+import { FilterPipe } from 'src/app/helpers/filters/filter.pipe';
 
 @Component({
   selector: 'app-none-intent',
@@ -29,9 +30,6 @@ export class NoneIntentComponent implements OnInit {
   @Output() closeSlide = new EventEmitter();
   @Input() currentRule: any = {};
   @Input() configFeatures : any;
-
-  tagControl: FormControl = new FormControl();
-  selUtteranceControl: FormControl = new FormControl();
 
 
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
@@ -53,7 +51,6 @@ export class NoneIntentComponent implements OnInit {
   allTagsRules: any = [];
   deletedUtterances = [];
   selectedUtterances = [];
-  originalRuleUtterances = [];
   filteredTagsDisplay: any = [];
   modalRef : any;
   dataloaded : boolean = false;
@@ -62,6 +59,8 @@ export class NoneIntentComponent implements OnInit {
   customUtterance = '';
   selectedUtterSeach = '';
   utteranceType: any = '';
+  listedUtterSearch = '';
+  tagRuleSearch = '';
 
  
   // allTagList : any = [];
@@ -73,12 +72,12 @@ export class NoneIntentComponent implements OnInit {
     private auth: AuthService,
     private workflowService: workflowService,
     private modalService : NgbModal, 
+    private filterPipe : FilterPipe
     // private cd: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
 
-    this.subscribeValues();
     this.dataloaded = false;
     if (this.currentRule) {
       this.service.invoke("get.agentcoachingutteranceByRef",
@@ -183,29 +182,6 @@ export class NoneIntentComponent implements OnInit {
     });
   }
 
-  subscribeValues() {
-    this.tagControl.valueChanges.subscribe((value) => {
-      if (value) {
-        this.assignOriginalToDisplayList();
-        this.filteredTagsDisplay = this.filteredTagsDisplay.filter(
-          (tag) => (tag.name).indexOf(value) !== -1
-        );
-      } else {
-        this.assignOriginalToDisplayList();
-      }
-    });
-
-    this.selUtteranceControl.valueChanges.subscribe((value) => {
-      if (value) {
-        this.assignOriginalRuleToDisplayUtteranceList();
-        this.ruleUtterances = this.ruleUtterances.filter(
-          (utter) => (utter.name).indexOf(value) !== -1
-        );
-      } else {
-        this.assignOriginalRuleToDisplayUtteranceList();
-      }
-    });
-  }
 
   closeSlider(isSave?) {
     if((this.newUtterances.length || this.deletedUtterances.length) && !isSave){
@@ -276,23 +252,53 @@ export class NoneIntentComponent implements OnInit {
   // utterance type selection page methods starts
 
   selectedOption(item, index) {
-    let checked = this.filteredTagsDisplay[index].checked;
+    let checkIndex = this.filteredTagsDisplay.findIndex(el => {
+      return el.name == item.name && el.type == item.type;
+    });
+    let checked = this.filteredTagsDisplay[checkIndex].checked;
     if (!checked) {
-      this.filteredTagsDisplay[index].checked = true;
+      this.filteredTagsDisplay[checkIndex].checked = true;
       this.AddOrSelectTagNames(item);
     } else {
-      this.filteredTagsDisplay[index].checked = false;
+      this.filteredTagsDisplay[checkIndex].checked = false;
       this.remove(item)
     }
   }
 
   selectAllUtteranceType(type, flag) {
-    this.filteredTagsDisplay.map(obj => {
-      if (obj.type == type) {
-        let checkStatFlag : any = flag ? this.remove(obj, false) : this.AddOrSelectTagNames(obj, false);
+    let selectedUtterances = this.filterSearchData(type);
+    let selectedUtteranceObj : any = selectedUtterances.reduce((acc,item)=> {
+      if(item.type == type){
+        acc[item.name] = item;
       }
-    });
+      return acc;
+    },{});
+
+    for(let key in selectedUtteranceObj){
+      if(flag){
+        this.remove(selectedUtteranceObj[key], false);
+      }else{
+        this.AddOrSelectTagNames(selectedUtteranceObj[key], false);
+      }
+    }
   }
+
+  filterSearchData(type){
+    let filterTags = this.filteredTagsDisplay.filter(item => item.type == type);
+    let selectedUtterances = this.filterPipe.transform(filterTags,[this.tagRuleSearch, 'name']);
+    return selectedUtterances;
+  }
+
+  checkSelectedAllTags() {
+    let selectedUtterances = this.filterSearchData(this.coachingCnst.TAG);
+    return selectedUtterances.every(item => item.checked);
+  }
+
+  checkSelectedAllRules() {
+    let selectedUtterances = this.filterSearchData(this.coachingCnst.RULE);
+    return selectedUtterances.every(item => item.checked);
+  }
+
 
   checkSelectAllStatus(tagOrRule, type){
     if(type == this.coachingCnst.REMOVE){
@@ -302,16 +308,19 @@ export class NoneIntentComponent implements OnInit {
         this.selectAllRuleFlag = false;
       }  
     }else if(type == this.coachingCnst.ADD){  
-
       let tags = this.tags.reduce((acc,item)=> {
-        acc[item.name] = true;
+        if(item.type == type){
+          acc[item.name] = true;
+        }
         return acc;
       }, {});
-
       if(tagOrRule.type == this.coachingCnst.TAG){
-        this.selectAllTagFlag = this.allTagList.every(item => tags[item]);        
+        let selectedUtterances = this.filterSearchData(this.coachingCnst.TAG);
+        this.selectAllTagFlag = selectedUtterances.every(item => tags[item]);        
       }else{
-        this.selectAllRuleFlag = this.allRuleList.every(item => tags[item]);
+        let selectedUtterances = this.filterSearchData(this.coachingCnst.RULE);
+        this.selectAllRuleFlag = selectedUtterances.every(item => tags[item]);  
+        // this.selectAllRuleFlag = this.allRuleList.every(item => tags[item]);
       }
     }
   }
@@ -319,17 +328,14 @@ export class NoneIntentComponent implements OnInit {
   AddOrSelectTagNames(tagOrrule, checkStatus = true) {
     if ((tagOrrule.name || '')) {
       let filterIndex = this.tags.findIndex((item) => {
-        return item.name == tagOrrule.name;
+        return item.name == tagOrrule.name && item.type == tagOrrule.type;
       });
       if (filterIndex == -1) {
         this.tags.push({ name: tagOrrule.name, value: tagOrrule.value, type : tagOrrule.type });
+        this.selectOrUnselectCheckList(tagOrrule, true);
       }
     }
     this.trigger.openPanel();
-    this.assignOriginalToDisplayList();
-    setTimeout(() => {
-      this.tagControl.setValue('');
-    }, 0);
     if(checkStatus){
       this.checkSelectAllStatus(tagOrrule, this.coachingCnst.ADD);
     }
@@ -337,25 +343,33 @@ export class NoneIntentComponent implements OnInit {
 
   remove(tagOrrule, checkStatus = true): void {
     const index = this.tags.findIndex(item => {
-      return item.name == tagOrrule.name;
+      return item.name == tagOrrule.name && item.type == tagOrrule.type;
     });
     if (index >= 0) {
       this.tags.splice(index, 1);
+      this.selectOrUnselectCheckList(tagOrrule, false);
     }
-    this.assignOriginalToDisplayList();
     this.trigger.openPanel();
     if(checkStatus){
       this.checkSelectAllStatus(tagOrrule, this.coachingCnst.REMOVE);
     }
   }
 
+  selectOrUnselectCheckList(tagOrrule, check){
+    let index = this.filteredTagsDisplay.findIndex(item => {
+      return item.name == tagOrrule.name && item.type == tagOrrule.type;
+    });
+    this.filteredTagsDisplay[index].checked = check;
+  }
+
   assignOriginalToDisplayList() {
     this.filteredTagsDisplay = this.allTagsRules.map((item) => {
-      return { name: item.name, value: item.value, type: item.type, checked: (this.tags.findIndex((tag) => { return tag.name == item.name })) >= 0 ? true : false }
+      return { name: item.name, value: item.value, type: item.type, checked: false }
     });
   }
 
   clearChipData() {
+    this.tagRuleSearch = '';
     this.selectAllRuleFlag = false;
     this.selectAllTagFlag = false;
     this.tags = [];
@@ -398,10 +412,8 @@ export class NoneIntentComponent implements OnInit {
     this.service.invoke('post.noneIntentUtterances', {}, payload)
     .subscribe(data => {
       this.loading = false;
-      console.log(data, 'from none intent api');
       if(data){
         this.formatRuleSentenceData(data);
-        this.ruleUtterances = JSON.parse(JSON.stringify(this.originalRuleUtterances));
       }
       },(err)=> {
         this.loading = false;
@@ -423,12 +435,13 @@ export class NoneIntentComponent implements OnInit {
 
   formatRuleSentenceData(data) {
     data.forEach(element => {
-      this.originalRuleUtterances.push({ name: element.sentence, checked: true });
+      this.ruleUtterances.push({ name: element.sentence, checked: true });
     });
   }
 
   checkSelectedUtterance() {
-    return this.ruleUtterances.every(item => item.checked);
+    let selectedUtterances = this.filterPipe.transform(this.ruleUtterances,[this.listedUtterSearch, 'name']);
+    return selectedUtterances.every(item => item.checked);
   }
 
   addSelectedUtteranceList() {
@@ -444,19 +457,27 @@ export class NoneIntentComponent implements OnInit {
 
   removeSelectedUtterances(item, index) {
     let checked = item.checked ? false : true;
-    this.ruleUtterances[index].checked = checked;
-    this.originalRuleUtterances[index].checked = checked;
+    this.ruleUtterances.forEach((ele) => {
+      if(ele.name == item.name){
+        ele.checked = checked;
+      }
+    });    
+    this.ruleUtterances = [...this.ruleUtterances];
   }
 
   selectAllUtterances(event) {
-    this.originalRuleUtterances.forEach(item => {
-      item.checked = event.target.checked;;
-    });
-    this.assignOriginalRuleToDisplayUtteranceList();
-  }
+    let selectedUtterances = this.filterPipe.transform(this.ruleUtterances,[this.listedUtterSearch, 'name']);
+    let selectedUtteranceObj : any = selectedUtterances.reduce((acc,item)=> {
+      acc[item.name] = true;
+      return acc;
+    },{});
 
-  assignOriginalRuleToDisplayUtteranceList() {
-    this.ruleUtterances = JSON.parse(JSON.stringify(this.originalRuleUtterances));
+    this.ruleUtterances.forEach(item => {
+      if(selectedUtteranceObj[item.name]){
+        item.checked = event.target.checked;
+      }
+    });
+    this.ruleUtterances = [...this.ruleUtterances];
   }
 
   checkAddSelectedButtonState(){
