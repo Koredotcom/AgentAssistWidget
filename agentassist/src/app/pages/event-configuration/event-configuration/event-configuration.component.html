@@ -1,0 +1,76 @@
+<div class="agents-container-wrapper">
+    <div class="header-sec-top">
+        <div class="main-heading">Event Configuration<span class="beta-tag">Beta</span></div>
+        <div class="right-action-btns">
+          
+            <button class="kr-sg-button-primary btn_lg" (click)="openNewService()">+ New Service Level</button>
+        </div>
+    </div>
+
+    <div class="tab-sec-details-wrapper">
+        <!-- <div class="search-data-input">
+            <div class="kr-sg-input-inline-search">
+                <input type="text" placeholder="Search" class="input-search" [formControl]="searchField" name="searchRule">
+                <i class="icon-sa-conv-search search-icon"></i>
+            </div>
+        </div> -->
+        <div class='init-loading' *ngIf="isLoading">
+            <mat-spinner diameter="25" strokeWidth="3"></mat-spinner>
+        </div>
+        <ng-container *ngIf="respData.results?.length">
+
+            <div class="agents-grid-data-table">
+                <perfect-scrollbar class="scroll-data" #ps>
+                    <div id="accordion" class="agent-groups-table-container">  
+                        
+                            <div class="card_content" *ngIf="respData.results?.length">
+                                
+                                <div id="collapseTwo" class="inside-accordioncontent collapse show">
+                                    <perfect-scrollbar class="mx-h-300">
+                                        <div class="card-body inner-accordion-table">
+                                            <div class="content-scroll-data-agents">
+                                                <div class="shadow-freeze w-20"></div>
+                                                <div class="header-table-agents">
+                                                    <div class="titles-data w-20">SERVICE LEVEL NAME</div>
+                                                    <div class="titles-data w-11">ACTIONS</div>
+                                                    <div class="titles-data w-14">DESCRIPTION</div>
+                                                    <div class="titles-data w-10">STATUS</div>
+                                                </div>
+                                                <ng-container *ngFor="let rule of respData.results">
+                                                    <div class="body-data-table-wrapper-coaching">
+                                                        <div class="coaching-rule w-20">
+                                                            <div class="title" [title]="rule.name">{{rule.name}}</div>
+                                                        </div>
+                                                        <div class="actions-info w-11">
+                                                            <button class="edit-btn" (click)="openFLowCreation(flowCreation)">
+                                                                <i class="icon-sa-welcome-edit"></i>
+                                                            </button>
+                                                            <button class="delete-btn">
+                                                                <i class="icon-sa-welcome-delete"></i>
+                                                            </button>
+                                                        </div>
+                                                        <div class="desc-text-info w-14" [title]="rule.description">{{rule.description}}</div>
+                                                        <div class="last-updated-toggle w-10">
+                                                            <label class="kr-sg-toggle">
+                                                                <input type="checkbox" [checked]="rule.isActive">
+                                                                <div class="slider"></div>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </ng-container>
+                                            </div>
+                                        </div>
+                                    </perfect-scrollbar>
+                                </div>                     
+                            </div>
+                        <!-- </ng-container> -->
+                    </div>
+                </perfect-scrollbar>
+            </div>
+        </ng-container>
+    </div>
+</div>
+
+<ng-template #flowCreation>
+    <app-edit-service (onCloseService)="closeFLowCreation($event)"></app-edit-service>
+</ng-template>

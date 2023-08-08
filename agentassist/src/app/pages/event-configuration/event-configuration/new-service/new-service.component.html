@@ -1,0 +1,25 @@
+<div class="modal-wrapper-coaching">
+    <div class="header-wrapper">
+        <div class="title-heading">New Service Level Rule</div>
+        <div class="close-modal" (click)="closeService()">
+            <i class="icon-sa-close"></i>
+        </div>
+    </div>
+    <div class="body-wrapper">
+        <div class="kr-sg-input-text m-b-15">
+            <div class="label-text">Name</div>
+            <input  type="text" maxlength="100" placeholder="Add Name" class="input-text">
+        </div>
+        <div class="kr-sg-input-text-area m-b-15">
+            <div class="description-info m-b-8">
+                <div class="label-text">Description</div>
+            </div>
+            <textarea placeholder="Rule Purpose" maxlength="1000" class="input-text"></textarea>
+        </div>
+
+    </div>
+    <div class="footer-wrapper">
+        <button class="kr-sg-button-secondary-two btn_lg" (click)="closeService()">Cancel</button>
+        <button class="kr-sg-button-primary btn_lg" (click)="submitForm()" >Apply</button>
+    </div>
+</div>

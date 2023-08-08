@@ -123,6 +123,11 @@
 					<span class="link-name">{{'NAV.COACHING' | translate}}</span>
 					<span class="beta-tag">Beta</span>
 				</div>
+				<div class="link-router" [routerLink]="['configuration']" routerLinkActive="active" *hasPermission="['admin']">
+					<i class="icon-coaching-menu-icon"></i>
+					<span class="link-name">{{'NAV.CONFIGURATION' | translate}}</span>
+					<span class="beta-tag">Beta</span>
+				</div>
 			</div>
 		</ng-container>
 
