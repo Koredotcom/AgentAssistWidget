@@ -1673,5 +1673,15 @@ export class EndPointsService {
       endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule/noneintent',
       method : 'post'
     }
+
+    this.serviceList['post.acchecklists'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/acchecklists',
+      method : 'post'
+    }
+    
+    this.serviceList['get.acchecklists'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/acchecklists/:botId',
+      method : 'post'
+    }
   }
 }

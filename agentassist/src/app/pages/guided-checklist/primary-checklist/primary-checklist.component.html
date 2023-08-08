@@ -1,5 +1,5 @@
 <div class="primary-checklist-data">
-    <ng-container *ngIf="true">
+    <ng-container>
         <div class="search-data-input">
             <div class="kr-sg-input-inline-search">
                 <input type="text" placeholder="Search" class="input-search">
@@ -21,9 +21,9 @@
                             <div class="titles-data w-17">Last UPDATED</div>
                             <div class="titles-data w-12">STATUS</div>
                         </div>
-                        <ng-container>
+                        <ng-container *ngFor="let checkList of primaryCheckList">
                             <div class="body-data-table-wrapper-coaching">
-                                <div class="coaching-rule w-24">Main Checklist</div>
+                                <div class="coaching-rule w-24">{{checkList.name}}</div>
                                 <div class="actions-info w-13">
                                     <button class="edit-btn">
                                         <i class="icon-sa-welcome-edit"></i>
@@ -32,9 +32,9 @@
                                         <i class="icon-sa-welcome-delete"></i>
                                     </button>
                                 </div>
-                                <div class="title-text w-17">Main checklist for All Agent</div>
+                                <div class="title-text w-17">{{checkList.description}}</div>
                                 <div class="title-text w-17">All Agents</div>
-                                <div class="title-text w-17">1st Mar, 2023 AT 09:15PM</div>
+                                <div class="title-text w-17">{{checkList.lModOn | date : 'MMM dd, yyyy h:mm a'}}</div>
                                 <div class="last-updated-toggle w-12">
                                     <label class="kr-sg-toggle">
                                         <input type="checkbox">

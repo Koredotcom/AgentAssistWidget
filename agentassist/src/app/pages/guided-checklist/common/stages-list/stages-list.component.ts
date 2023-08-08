@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '@kore.services/auth.service';
 import { LocalStoreService } from '@kore.services/localstore.service';
@@ -14,7 +14,7 @@ export class ChecklistCreateComponent implements OnInit {
 
   @Output() closeCheckList = new EventEmitter();
   @ViewChild('checklistCreateSlider', { static: true }) checklistCreateSlider: SliderComponentComponent;
-  
+  @Input() checkListType = 'primary';
   checkListForm : FormGroup;
   stageForm : FormGroup;
   stepForm : FormGroup;
@@ -78,7 +78,11 @@ export class ChecklistCreateComponent implements OnInit {
     this.checklistCreateSlider.openSlider("#checklistCreate", "");
   }
 
-  closeSettings(){
+  // closeSettings(){
+  //   this.checklistCreateSlider.closeSlider('#checklistCreate');
+  // }
+
+  close(){
     this.checklistCreateSlider.closeSlider('#checklistCreate');
   }
 

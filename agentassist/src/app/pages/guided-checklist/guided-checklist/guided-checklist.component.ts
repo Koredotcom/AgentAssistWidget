@@ -10,7 +10,7 @@ import { ChecklistService } from '../checklist.service';
 export class GuidedChecklistComponent implements OnInit {
 
   modalFlowCreateRef: any;
-
+  checkListType = 'primary';
   constructor(private modalService : NgbModal) { }
 
   ngOnInit(): void {

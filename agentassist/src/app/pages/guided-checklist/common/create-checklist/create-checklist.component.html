@@ -10,334 +10,362 @@
     <div class="tab-content-data">
         <div class="header-sec">
             <div class="title">General Settings</div>
-            <div class="close-slider">
+            <div class="close-slider" (click)="close()">
                 <i class="icon-sa-close"></i>
             </div>
         </div>
-        <div class="body-data">
+        <div class="body-data" [formGroup]="checkListForm">
             <perfect-scrollbar>
                 <div class="inner-content-data">
-                    <ng-container *ngIf="isBasic">
-                        <div class="kr-sg-input-text m-b-12">
-                            <div class="label-text">Name</div>
-                            <input type="text" maxlength="100" placeholder="Add Name" class="input-text">
-                            <div class="count-char">0/48</div>
-                        </div>
-                        <div class="kr-sg-input-text-area m-b-12">
-                            <div class="label-text">Description</div>
-                            <textarea placeholder="Rule Purpose" maxlength="1000" class="input-text"></textarea>
-                            <div class="count-char">0/200</div>
-                        </div>
-                        <div class="label-text m-b-5">Tags</div>
-                        <mat-form-field class="example-chip-list m-b-15">
-                            <mat-label>Add Tags</mat-label>
-                            <mat-chip-list #chipList>
-                                <mat-chip [selectable]="true" [removable]="true">
-                                    <span class="chip-name text-truncate mx-w-100" title="">Tag1</span>
-                                    <span class="icon-sa-close" matChipRemove *ngIf="true"></span>
-                                </mat-chip>
-                                <!-- <input placeholder="Add Tags" #tagInput [matChipInputFor]="chipList"
-                                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="false"
-                                    (matChipInputTokenEnd)="add($event)" [matAutocomplete]="auto" [formControl]="tagControl"
-                                    #trigger="matAutocompleteTrigger"> -->
-                                    <input/>
-                            </mat-chip-list>
-                            <mat-autocomplete #auto="matAutocomplete">
-                                <div class="mat-checkboxs">
-                                    <!-- <mat-option *ngFor="let tag of filteredTagsDisplay;let i = index" [title]="tag"
-                                        (click)="selectedOption(tag.name, i);$event.stopPropagation();trigger.openPanel()">
-                                        <input id="checkbox-{{i}}" type="checkbox"
-                                            (click)="selectedOption(tag.name, i);trigger.openPanel();$event.stopPropagation();" [value]="tag.name"
-                                            [checked]="tag.checked">
-                                            <div class="label-check text-truncate" for="checkbox-{{i}}">
-                                                <span>{{tag.name}}</span>
-                                            </div>                            
-                                    </mat-option> -->
-                                    <mat-option></mat-option>
-                                </div>
-                            </mat-autocomplete>
-                        </mat-form-field>
-                        <div class="label-text">Step Progression</div>
-                        <div class="kr-sg-dropdowns m-b-12" ngbDropdown>
-                            <div class="dropdown dropdown-open">
-                              <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>Sequential</button>
-                              <ul class="dropdown-menu content-menu header_in_development_drpdown p-0" ngbDropdownMenu>
-                                <li ngbDropdownItem class="p-0">
-                                    <a>Sequential</a>
-                                </li>
-                                <li ngbDropdownItem class="p-0">
-                                    <a>Sequential</a>
-                                </li>
-                              </ul>
+                    <div [ngClass]="{'d-none': !isBasic}">
+                        <ng-container>
+                            <div class="kr-sg-input-text m-b-12">
+                                <div class="label-text">Name</div>
+                                <input type="text" formControlName="name" maxlength="48" placeholder="Add Name" class="input-text">
+                                <div class="count-char">{{checkListForm.value?.name?.length}}/48</div>
                             </div>
-                        </div>
-                        <div class="channels-tags">
-                            <div class="label-text">Channels</div>
-                            <div class="channels-check">
-                                <div class="check-item">
-                                    <input id="checkbox-1" type="checkbox">
-                                    <span for="checkbox-1">voice</span>
-                                </div>
-                                <div class="check-item">
-                                    <input id="checkbox-1" type="checkbox">
-                                    <span for="checkbox-1">chat</span>
-                                </div>
+                            <div class="kr-sg-input-text-area m-b-12">
+                                <div class="label-text">Description</div>
+                                <textarea formControlName="description" placeholder="Rule Purpose" maxlength="200"
+                                    class="input-text"></textarea>
+                                <div class="count-char">{{checkListForm.value?.description?.length}}/200</div>
                             </div>
-                        </div>
-                    </ng-container>
-                    <ng-container *ngIf="!isBasic">
-                        <div class="add-utterance-block">
-                            <div class="utt-radio-block">
-                                <div class="radio-block-content active-check">
-                                    <div class="kr-sg-radiobutton">
-                                        <input id="radio-1" name="radio" class="radio-custom" type="radio">
-                                        <label for="radio-1" class="radio-custom-label">
-                                            <div class="title">Trigger for all interactions</div>
-                                            <div class="desc-text">checklist shows for all interactions</div>
-                                        </label>
-                                    </div> 
-                                </div>
-                                <div class="radio-block-content">
-                                    <div class="kr-sg-radiobutton">
-                                        <input id="radio-11" name="radio" class="radio-custom" type="radio">
-                                        <label for="radio-11" class="radio-custom-label">
-                                            <div class="title">Trigger for Selected Agent</div>
-                                            <div class="desc-text">Checklist shows only to selected Agents</div>
-                                        </label>
-                                    </div>
-                                    <div class="add-rule-block" *ngIf="true">
-                                        <div class="label-text">Add Rules</div>
-                                        <mat-form-field class="add-rules-chip-list">
-                                            <mat-chip-list #chipList>
-                                                <mat-chip *ngFor="let tag of []" [selectable]="true" [removable]="true" (removed)="remove(tag)">
-                                                    <span class="chip-name text-truncate mx-w-100" title="{{tag?.name}}">{{tag?.name}}</span>
-                                                    <span class="icon-sa-close" matChipRemove></span>
-                                                </mat-chip>
-                                                <input placeholder="Select Rules" #tagInput [matChipInputFor]="chipList"
+                            <div class="label-text m-b-5">Tags</div>
+                            <mat-form-field class="example-chip-list m-b-15">
+                                <mat-label>Add Tags</mat-label>
+                                <mat-chip-list #chipList>
+                                    <mat-chip [selectable]="true" [removable]="true">
+                                        <span class="chip-name text-truncate mx-w-100" title="">Tag1</span>
+                                        <span class="icon-sa-close" matChipRemove *ngIf="true"></span>
+                                    </mat-chip>
+                                    <!-- <input placeholder="Add Tags" #tagInput [matChipInputFor]="chipList"
                                                     [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="false"
-                                                    [matAutocomplete]="auto"
-                                                    #trigger="matAutocompleteTrigger">
-                                            </mat-chip-list>
-                                            <mat-autocomplete #auto="matAutocomplete">
-                                                <div class="content-scroll-ni">
-                                                    <div class="search-block">
-                                                        <div class="kr-sg-input-text">
-                                                            <input type="text" placeholder="Search" class="input-text"  [formControl]="tagControl" name="search">
-                                                            <i class="icon-coaching--search"></i>
-                                                        </div>
-                                                    </div>
-                                                    <div class="tags-data" *ngIf="true">
-                                                        <div class="title">Tags</div>
-                                                        <div class="select-all">'Select All'</div>
-                                                    </div>
-                                                    <ng-container *ngFor="let tag of [];let i = index">
-                                                        <ng-container>
-                                                            <mat-option class="mat-option-ni">
-                                                                <input id="checkbox-{{i}}" type="checkbox"
-                                                                    (click)="selectedOption(tag, i);trigger.openPanel();$event.stopPropagation();" [value]="tag.name"
-                                                                    [checked]="tag?.checked">
-                                                                <div class="label-check text-truncate" for="checkbox-{{i}}">
-                                                                    <span>{{tag?.name}}</span>
-                                                                    <div class="desc-text">{{tag?.value?.length}} rules</div>
-                                                                </div>
-                                                            </mat-option>
-                                                        </ng-container>
-                                                    </ng-container>
-                                                    <div class="tags-data" *ngIf="true">
-                                                        <div class="title">Rules</div>
-                                                        <div class="select-all" >'Select All'</div>
-                                                    </div>
-                                                    <ng-container *ngFor="let tag of [];let i = index">
-                                                        <mat-option class="mat-option-ni"
-                                                            (click)="selectedOption(tag, i);$event.stopPropagation();trigger.openPanel()">
-                                                
-                                                            <input id="checkbox-{{i}}" type="checkbox"
-                                                                (click)="selectedOption(tag, i);trigger.openPanel();$event.stopPropagation();" [value]="tag.name"
-                                                                [checked]="tag.checked">
-                                                            <div class="label-check text-truncate" for="checkbox-{{i}}">
-                                                                <span>{{tag?.name}}</span>
-                                                            </div>
-                                                        </mat-option>
-                                                    </ng-container>
-                
-                                                    <mat-option class="d-none">avoid closing matautocomplete on search
-                
-                                                    </mat-option>
-                                                </div>
-                                                <div class="footer-add-cler-ni">
-                                                    <button class="kr-sg-button-secondary-two btn_lg" (click)="clearChipData()">Clear</button>
-                                                    <button class="kr-sg-button-primary btn_lg" (click)="addRuleData()">Add</button>
-                                                </div>
-                                            </mat-autocomplete>
-                                        </mat-form-field>
-                
-                                    </div> 
-                                </div>
-                                <div class="radio-block-content">
-                                    <div class="kr-sg-radiobutton">
-                                        <input id="radio-11" name="radio" class="radio-custom" type="radio">
-                                        <label for="radio-11" class="radio-custom-label">
-                                            <div class="title">Trigger for Selected Queues</div>
-                                            <div class="desc-text">Checklist shows only for certain Queues</div>
-                                        </label>
-                                    </div>
-                                    <div class="add-rule-block" *ngIf="false">
-                                        <div class="label-text">Add Rules</div>
-                                        <mat-form-field class="add-rules-chip-list">
-                                            <mat-chip-list #chipList>
-                                                <mat-chip *ngFor="let tag of tags" [selectable]="true" [removable]="true" (removed)="remove(tag)">
-                                                    <span class="chip-name text-truncate mx-w-100" title="{{tag.name}}">{{tag.name}}</span>
-                                                    <span class="icon-sa-close" matChipRemove *ngIf="true"></span>
-                                                </mat-chip>
-                                                <input placeholder="Select Rules" #tagInput [matChipInputFor]="chipList"
-                                                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="false"
-                                                    [matAutocomplete]="auto"
-                                                    #trigger="matAutocompleteTrigger">
-                                            </mat-chip-list>
-                                            <mat-autocomplete #auto="matAutocomplete">
-                                                <div class="content-scroll-ni">
-                                                    <div class="search-block">
-                                                        <div class="kr-sg-input-text">
-                                                            <input type="text" placeholder="Search" class="input-text"  [formControl]="tagControl" name="search">
-                                                            <i class="icon-coaching--search"></i>
-                                                        </div>
-                                                    </div>
-                                                    <div class="tags-data" *ngIf="checkTagPresent() ? true : false">
-                                                        <div class="title">Tags</div>
-                                                        <div class="select-all" (click)="selectAllUtteranceType(coachingCnst.TAG, selectAllTagFlag);selectAllTagFlag = !selectAllTagFlag">{{ selectAllTagFlag ? 'Unselect All' : 'Select All' }}</div>
-                                                    </div>
-                                                    <ng-container *ngFor="let tag of filteredTagsDisplay;let i = index">
-                                                        <ng-container *ngIf="tag?.name">
-                                                            <mat-option class="mat-option-ni" [title]="tag?.name" *ngIf="tag.type == coachingCnst.TAG"
-                                                                (click)="selectedOption(tag, i);trigger.openPanel();$event.stopPropagation();">
-                                                    
-                                                                <input id="checkbox-{{i}}" type="checkbox"
-                                                                    (click)="selectedOption(tag, i);trigger.openPanel();$event.stopPropagation();" [value]="tag.name"
-                                                                    [checked]="tag.checked">
-                                                                <div class="label-check text-truncate" for="checkbox-{{i}}">
-                                                                    <span>{{tag?.name}}</span>
-                                                                    <div class="desc-text">{{tag?.value?.length}} rules</div>
-                                                                </div>
-                                                            </mat-option>
-                                                        </ng-container>
-                                                    </ng-container>
-                                                    <div class="tags-data" *ngIf="checkRulePresent() ? true  : false">
-                                                        <div class="title">Rules</div>
-                                                        <div class="select-all" (click)="selectAllUtteranceType(coachingCnst.RULE, selectAllRuleFlag);selectAllRuleFlag = !selectAllRuleFlag">{{ selectAllRuleFlag ? 'Unselect All' : 'Select All' }}</div>
-                                                    </div>
-                                                    <ng-container *ngFor="let tag of filteredTagsDisplay;let i = index">
-                                                        <mat-option class="mat-option-ni" [title]="tag.name" *ngIf="tag.type == coachingCnst.RULE"
-                                                            (click)="selectedOption(tag, i);$event.stopPropagation();trigger.openPanel()">
-                                                
-                                                            <input id="checkbox-{{i}}" type="checkbox"
-                                                                (click)="selectedOption(tag, i);trigger.openPanel();$event.stopPropagation();" [value]="tag.name"
-                                                                [checked]="tag.checked">
+                                                    (matChipInputTokenEnd)="add($event)" [matAutocomplete]="auto" [formControl]="tagControl"
+                                                    #trigger="matAutocompleteTrigger"> -->
+                                    <input />
+                                </mat-chip-list>
+                                <mat-autocomplete #auto="matAutocomplete">
+                                    <div class="mat-checkboxs">
+                                        <!-- <mat-option *ngFor="let tag of filteredTagsDisplay;let i = index" [title]="tag"
+                                                        (click)="selectedOption(tag.name, i);$event.stopPropagation();trigger.openPanel()">
+                                                        <input id="checkbox-{{i}}" type="checkbox"
+                                                            (click)="selectedOption(tag.name, i);trigger.openPanel();$event.stopPropagation();" [value]="tag.name"
+                                                            [checked]="tag.checked">
                                                             <div class="label-check text-truncate" for="checkbox-{{i}}">
                                                                 <span>{{tag.name}}</span>
-                                                            </div>
-                                                        </mat-option>
-                                                    </ng-container>
-                
-                                                    <mat-option class="d-none">avoid closing matautocomplete on search
-                
-                                                    </mat-option>
-                                                </div>
-                                                <div class="footer-add-cler-ni">
-                                                    <button class="kr-sg-button-secondary-two btn_lg" (click)="clearChipData()">Clear</button>
-                                                    <button class="kr-sg-button-primary btn_lg" (click)="addRuleData()">Add</button>
-                                                </div>
-                                            </mat-autocomplete>
-                                        </mat-form-field>
-                
-                                    </div> 
-                                </div>
-                                <div class="radio-block-content">
-                                    <div class="kr-sg-radiobutton">
-                                        <input id="radio-11" name="radio" class="radio-custom" type="radio">
-                                        <label for="radio-11" class="radio-custom-label">
-                                            <div class="title">Trigger for Selected Skills</div>
-                                            <div class="desc-text">Checklist shows only for certain Skills</div>
-                                        </label>
+                                                            </div>                            
+                                                    </mat-option> -->
+                                        <mat-option></mat-option>
                                     </div>
-                                    <div class="add-rule-block" *ngIf="false">
-                                        <div class="label-text">Add Rules</div>
-                                        <mat-form-field class="add-rules-chip-list">
-                                            <mat-chip-list #chipList>
-                                                <mat-chip *ngFor="let tag of tags" [selectable]="true" [removable]="true" (removed)="remove(tag)">
-                                                    <span class="chip-name text-truncate mx-w-100" title="{{tag.name}}">{{tag.name}}</span>
-                                                    <span class="icon-sa-close" matChipRemove *ngIf="true"></span>
-                                                </mat-chip>
-                                                <input placeholder="Select Rules" #tagInput [matChipInputFor]="chipList"
-                                                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="false"
-                                                    [matAutocomplete]="auto"
-                                                    #trigger="matAutocompleteTrigger">
-                                            </mat-chip-list>
-                                            <mat-autocomplete #auto="matAutocomplete">
-                                                <div class="content-scroll-ni">
-                                                    <div class="search-block">
-                                                        <div class="kr-sg-input-text">
-                                                            <input type="text" placeholder="Search" class="input-text"  [formControl]="tagControl" name="search">
-                                                            <i class="icon-coaching--search"></i>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                            <div class="label-text">Step Progression</div>
+                            <div class="kr-sg-dropdowns m-b-12" ngbDropdown>
+                                <div class="dropdown dropdown-open">
+                                    <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{checkListForm.value?.order[0] |
+                                        titlecase}}</button>
+                                    <ul class="dropdown-menu content-menu header_in_development_drpdown p-0" ngbDropdownMenu>
+                                        <li ngbDropdownItem class="p-0" (click)="chekProgressionType('Sequential')">
+                                            <a>Sequential</a>
+                                        </li>
+                                        <li ngbDropdownItem class="p-0" (click)="chekProgressionType('Random')">
+                                            <a>Random</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="channels-tags">
+                                <div class="label-text">Channels</div>
+                                <div class="channels-check">
+                                    <div class="check-item">
+                                        <input id="checkbox-1" (change)="channelVoice($event.target.checked)" type="checkbox">
+                                        <span for="checkbox-1">voice</span>
+                                    </div>
+                                    <div class="check-item">
+                                        <input id="checkbox-1" (change)="channelChat($event.target.checked)" type="checkbox">
+                                        <span for="checkbox-1">chat</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </div>
+                    <div [ngClass]="{'d-none': isBasic}">
+                            <div class="add-utterance-block">
+                                <div class="utt-radio-block">
+                                    <div class="radio-block-content" [ngClass]="{'active-check': assignType === 'all'}">
+                                        <div class="kr-sg-radiobutton">
+                                            <input value="all" [(ngModel)]="assignType"  [ngModelOptions]="{standalone: true}" (change)="changeAssigne()" id="radio-1" name="radio" class="radio-custom" type="radio">
+                                            <label for="radio-1" class="radio-custom-label">
+                                                <div class="title">Trigger for all interactions</div>
+                                                <div class="desc-text">checklist shows for all interactions</div>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="radio-block-content" [ngClass]="{'active-check': assignType === 'a'}">
+                                        <div class="kr-sg-radiobutton">
+                                            <input  [ngModelOptions]="{standalone: true}" value="a" [(ngModel)]="assignType" id="radio-11" name="radio" class="radio-custom" type="radio">
+                                            <label for="radio-11" class="radio-custom-label">
+                                                <div class="title">Trigger for Selected Agent</div>
+                                                <div class="desc-text">Checklist shows only to selected Agents</div>
+                                            </label>
+                                        </div>
+                                        <div class="add-rule-block" *ngIf="true">
+                                            <div class="label-text">Add Rules</div>
+                                            <mat-form-field class="add-rules-chip-list">
+                                                <mat-chip-list #chipList>
+                                                    <mat-chip *ngFor="let tag of []" [selectable]="true" [removable]="true"
+                                                        (removed)="remove(tag)">
+                                                        <span class="chip-name text-truncate mx-w-100"
+                                                            title="{{tag?.name}}">{{tag?.name}}</span>
+                                                        <span class="icon-sa-close" matChipRemove></span>
+                                                    </mat-chip>
+                                                    <input placeholder="Select Rules" #tagInput [matChipInputFor]="chipList"
+                                                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                                        [matChipInputAddOnBlur]="false" [matAutocomplete]="auto"
+                                                        #trigger="matAutocompleteTrigger">
+                                                </mat-chip-list>
+                                                <mat-autocomplete #auto="matAutocomplete">
+                                                    <div class="content-scroll-ni">
+                                                        <div class="search-block">
+                                                            <div class="kr-sg-input-text">
+                                                                <input type="text" placeholder="Search" class="input-text"
+                                                                     name="search">
+                                                                <i class="icon-coaching--search"></i>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="tags-data" *ngIf="checkTagPresent() ? true : false">
-                                                        <div class="title">Tags</div>
-                                                        <div class="select-all" (click)="selectAllUtteranceType(coachingCnst.TAG, selectAllTagFlag);selectAllTagFlag = !selectAllTagFlag">{{ selectAllTagFlag ? 'Unselect All' : 'Select All' }}</div>
-                                                    </div>
-                                                    <ng-container *ngFor="let tag of filteredTagsDisplay;let i = index">
-                                                        <ng-container *ngIf="tag?.name">
-                                                            <mat-option class="mat-option-ni" [title]="tag?.name" *ngIf="tag.type == coachingCnst.TAG"
-                                                                (click)="selectedOption(tag, i);trigger.openPanel();$event.stopPropagation();">
-                                                    
+                                                        <div class="tags-data" *ngIf="true">
+                                                            <div class="title">Tags</div>
+                                                            <div class="select-all">'Select All'</div>
+                                                        </div>
+                                                        <ng-container *ngFor="let tag of [];let i = index">
+                                                            <ng-container>
+                                                                <mat-option class="mat-option-ni">
+                                                                    <input id="checkbox-{{i}}" type="checkbox"
+                                                                        (click)="selectedOption(tag, i);trigger.openPanel();$event.stopPropagation();"
+                                                                        [value]="tag.name" [checked]="tag?.checked">
+                                                                    <div class="label-check text-truncate" for="checkbox-{{i}}">
+                                                                        <span>{{tag?.name}}</span>
+                                                                        <div class="desc-text">{{tag?.value?.length}} rules</div>
+                                                                    </div>
+                                                                </mat-option>
+                                                            </ng-container>
+                                                        </ng-container>
+                                                        <div class="tags-data" *ngIf="true">
+                                                            <div class="title">Rules</div>
+                                                            <div class="select-all">'Select All'</div>
+                                                        </div>
+                                                        <ng-container *ngFor="let tag of [];let i = index">
+                                                            <mat-option class="mat-option-ni"
+                                                                (click)="selectedOption(tag, i);$event.stopPropagation();trigger.openPanel()">
+                
                                                                 <input id="checkbox-{{i}}" type="checkbox"
-                                                                    (click)="selectedOption(tag, i);trigger.openPanel();$event.stopPropagation();" [value]="tag.name"
-                                                                    [checked]="tag.checked">
+                                                                    (click)="selectedOption(tag, i);trigger.openPanel();$event.stopPropagation();"
+                                                                    [value]="tag.name" [checked]="tag.checked">
                                                                 <div class="label-check text-truncate" for="checkbox-{{i}}">
                                                                     <span>{{tag?.name}}</span>
-                                                                    <div class="desc-text">{{tag?.value?.length}} rules</div>
                                                                 </div>
                                                             </mat-option>
                                                         </ng-container>
-                                                    </ng-container>
-                                                    <div class="tags-data" *ngIf="checkRulePresent() ? true  : false">
-                                                        <div class="title">Rules</div>
-                                                        <div class="select-all" (click)="selectAllUtteranceType(coachingCnst.RULE, selectAllRuleFlag);selectAllRuleFlag = !selectAllRuleFlag">{{ selectAllRuleFlag ? 'Unselect All' : 'Select All' }}</div>
-                                                    </div>
-                                                    <ng-container *ngFor="let tag of filteredTagsDisplay;let i = index">
-                                                        <mat-option class="mat-option-ni" [title]="tag.name" *ngIf="tag.type == coachingCnst.RULE"
-                                                            (click)="selectedOption(tag, i);$event.stopPropagation();trigger.openPanel()">
-                                                
-                                                            <input id="checkbox-{{i}}" type="checkbox"
-                                                                (click)="selectedOption(tag, i);trigger.openPanel();$event.stopPropagation();" [value]="tag.name"
-                                                                [checked]="tag.checked">
-                                                            <div class="label-check text-truncate" for="checkbox-{{i}}">
-                                                                <span>{{tag.name}}</span>
-                                                            </div>
+                
+                                                        <mat-option class="d-none">avoid closing matautocomplete on search
+                
                                                         </mat-option>
-                                                    </ng-container>
+                                                    </div>
+                                                    <div class="footer-add-cler-ni">
+                                                        <button class="kr-sg-button-secondary-two btn_lg"
+                                                            (click)="clearChipData()">Clear</button>
+                                                        <button class="kr-sg-button-primary btn_lg" (click)="addRuleData()">Add</button>
+                                                    </div>
+                                                </mat-autocomplete>
+                                            </mat-form-field>
                 
-                                                    <mat-option class="d-none">avoid closing matautocomplete on search
+                                        </div>
+                                    </div>
+                                    <div class="radio-block-content" [ngClass]="{'active-check': assignType === 'q'}">
+                                        <div class="kr-sg-radiobutton">
+                                            <input  [ngModelOptions]="{standalone: true}" value="q" [(ngModel)]="assignType" id="radio-13" name="radio" class="radio-custom" type="radio">
+                                            <label for="radio-13" class="radio-custom-label">
+                                                <div class="title">Trigger for Selected Queues</div>
+                                                <div class="desc-text">Checklist shows only for certain Queues</div>
+                                            </label>
+                                        </div>
+                                        <div class="add-rule-block" *ngIf="false">
+                                            <div class="label-text">Add Rules</div>
+                                            <mat-form-field class="add-rules-chip-list">
+                                                <mat-chip-list #chipList>
+                                                    <mat-chip *ngFor="let tag of tags" [selectable]="true" [removable]="true"
+                                                        (removed)="remove(tag)">
+                                                        <span class="chip-name text-truncate mx-w-100"
+                                                            title="{{tag.name}}">{{tag.name}}</span>
+                                                        <span class="icon-sa-close" matChipRemove *ngIf="true"></span>
+                                                    </mat-chip>
+                                                    <input placeholder="Select Rules" #tagInput [matChipInputFor]="chipList"
+                                                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                                        [matChipInputAddOnBlur]="false" [matAutocomplete]="auto"
+                                                        #trigger="matAutocompleteTrigger">
+                                                </mat-chip-list>
+                                                <mat-autocomplete #auto="matAutocomplete">
+                                                    <div class="content-scroll-ni">
+                                                        <div class="search-block">
+                                                            <div class="kr-sg-input-text">
+                                                                <input type="text" placeholder="Search" class="input-text"
+                                                                    [formControl]="tagControl" name="search">
+                                                                <i class="icon-coaching--search"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="tags-data" *ngIf="checkTagPresent() ? true : false">
+                                                            <div class="title">Tags</div>
+                                                            <div class="select-all"
+                                                                (click)="selectAllUtteranceType(coachingCnst.TAG, selectAllTagFlag);selectAllTagFlag = !selectAllTagFlag">
+                                                                {{ selectAllTagFlag ? 'Unselect All' : 'Select All' }}</div>
+                                                        </div>
+                                                        <ng-container *ngFor="let tag of filteredTagsDisplay;let i = index">
+                                                            <ng-container *ngIf="tag?.name">
+                                                                <mat-option class="mat-option-ni" [title]="tag?.name"
+                                                                    *ngIf="tag.type == coachingCnst.TAG"
+                                                                    (click)="selectedOption(tag, i);trigger.openPanel();$event.stopPropagation();">
                 
-                                                    </mat-option>
-                                                </div>
-                                                <div class="footer-add-cler-ni">
-                                                    <button class="kr-sg-button-secondary-two btn_lg" (click)="clearChipData()">Clear</button>
-                                                    <button class="kr-sg-button-primary btn_lg" (click)="addRuleData()">Add</button>
-                                                </div>
-                                            </mat-autocomplete>
-                                        </mat-form-field>
+                                                                    <input id="checkbox-{{i}}" type="checkbox"
+                                                                        (click)="selectedOption(tag, i);trigger.openPanel();$event.stopPropagation();"
+                                                                        [value]="tag.name" [checked]="tag.checked">
+                                                                    <div class="label-check text-truncate" for="checkbox-{{i}}">
+                                                                        <span>{{tag?.name}}</span>
+                                                                        <div class="desc-text">{{tag?.value?.length}} rules</div>
+                                                                    </div>
+                                                                </mat-option>
+                                                            </ng-container>
+                                                        </ng-container>
+                                                        <div class="tags-data" *ngIf="checkRulePresent() ? true  : false">
+                                                            <div class="title">Rules</div>
+                                                            <div class="select-all"
+                                                                (click)="selectAllUtteranceType(coachingCnst.RULE, selectAllRuleFlag);selectAllRuleFlag = !selectAllRuleFlag">
+                                                                {{ selectAllRuleFlag ? 'Unselect All' : 'Select All' }}</div>
+                                                        </div>
+                                                        <ng-container *ngFor="let tag of filteredTagsDisplay;let i = index">
+                                                            <mat-option class="mat-option-ni" [title]="tag.name"
+                                                                *ngIf="tag.type == coachingCnst.RULE"
+                                                                (click)="selectedOption(tag, i);$event.stopPropagation();trigger.openPanel()">
                 
-                                    </div> 
+                                                                <input id="checkbox-{{i}}" type="checkbox"
+                                                                    (click)="selectedOption(tag, i);trigger.openPanel();$event.stopPropagation();"
+                                                                    [value]="tag.name" [checked]="tag.checked">
+                                                                <div class="label-check text-truncate" for="checkbox-{{i}}">
+                                                                    <span>{{tag.name}}</span>
+                                                                </div>
+                                                            </mat-option>
+                                                        </ng-container>
+                
+                                                        <mat-option class="d-none">avoid closing matautocomplete on search
+                
+                                                        </mat-option>
+                                                    </div>
+                                                    <div class="footer-add-cler-ni">
+                                                        <button class="kr-sg-button-secondary-two btn_lg"
+                                                            (click)="clearChipData()">Clear</button>
+                                                        <button class="kr-sg-button-primary btn_lg" (click)="addRuleData()">Add</button>
+                                                    </div>
+                                                </mat-autocomplete>
+                                            </mat-form-field>
+                
+                                        </div>
+                                    </div>
+                                    <div class="radio-block-content" [ngClass]="{'active-check': assignType === 's'}">
+                                        <div class="kr-sg-radiobutton">
+                                            <input  [ngModelOptions]="{standalone: true}" value="s" [(ngModel)]="assignType" id="radio-12" name="radio" class="radio-custom" type="radio">
+                                            <label for="radio-12" class="radio-custom-label">
+                                                <div class="title">Trigger for Selected Skills</div>
+                                                <div class="desc-text">Checklist shows only for certain Skills</div>
+                                            </label>
+                                        </div>
+                                        <div class="add-rule-block" *ngIf="false">
+                                            <div class="label-text">Add Rules</div>
+                                            <mat-form-field class="add-rules-chip-list">
+                                                <mat-chip-list #chipList>
+                                                    <mat-chip *ngFor="let tag of tags" [selectable]="true" [removable]="true"
+                                                        (removed)="remove(tag)">
+                                                        <span class="chip-name text-truncate mx-w-100"
+                                                            title="{{tag.name}}">{{tag.name}}</span>
+                                                        <span class="icon-sa-close" matChipRemove *ngIf="true"></span>
+                                                    </mat-chip>
+                                                    <input placeholder="Select Rules" #tagInput [matChipInputFor]="chipList"
+                                                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                                        [matChipInputAddOnBlur]="false" [matAutocomplete]="auto"
+                                                        #trigger="matAutocompleteTrigger">
+                                                </mat-chip-list>
+                                                <mat-autocomplete #auto="matAutocomplete">
+                                                    <div class="content-scroll-ni">
+                                                        <div class="search-block">
+                                                            <div class="kr-sg-input-text">
+                                                                <input type="text" placeholder="Search" class="input-text"
+                                                                    [formControl]="tagControl" name="search">
+                                                                <i class="icon-coaching--search"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="tags-data" *ngIf="checkTagPresent() ? true : false">
+                                                            <div class="title">Tags</div>
+                                                            <div class="select-all"
+                                                                (click)="selectAllUtteranceType(coachingCnst.TAG, selectAllTagFlag);selectAllTagFlag = !selectAllTagFlag">
+                                                                {{ selectAllTagFlag ? 'Unselect All' : 'Select All' }}</div>
+                                                        </div>
+                                                        <ng-container *ngFor="let tag of filteredTagsDisplay;let i = index">
+                                                            <ng-container *ngIf="tag?.name">
+                                                                <mat-option class="mat-option-ni" [title]="tag?.name"
+                                                                    *ngIf="tag.type == coachingCnst.TAG"
+                                                                    (click)="selectedOption(tag, i);trigger.openPanel();$event.stopPropagation();">
+                
+                                                                    <input id="checkbox-{{i}}" type="checkbox"
+                                                                        (click)="selectedOption(tag, i);trigger.openPanel();$event.stopPropagation();"
+                                                                        [value]="tag.name" [checked]="tag.checked">
+                                                                    <div class="label-check text-truncate" for="checkbox-{{i}}">
+                                                                        <span>{{tag?.name}}</span>
+                                                                        <div class="desc-text">{{tag?.value?.length}} rules</div>
+                                                                    </div>
+                                                                </mat-option>
+                                                            </ng-container>
+                                                        </ng-container>
+                                                        <div class="tags-data" *ngIf="checkRulePresent() ? true  : false">
+                                                            <div class="title">Rules</div>
+                                                            <div class="select-all"
+                                                                (click)="selectAllUtteranceType(coachingCnst.RULE, selectAllRuleFlag);selectAllRuleFlag = !selectAllRuleFlag">
+                                                                {{ selectAllRuleFlag ? 'Unselect All' : 'Select All' }}</div>
+                                                        </div>
+                                                        <ng-container *ngFor="let tag of filteredTagsDisplay;let i = index">
+                                                            <mat-option class="mat-option-ni" [title]="tag.name"
+                                                                *ngIf="tag.type == coachingCnst.RULE"
+                                                                (click)="selectedOption(tag, i);$event.stopPropagation();trigger.openPanel()">
+                
+                                                                <input id="checkbox-{{i}}" type="checkbox"
+                                                                    (click)="selectedOption(tag, i);trigger.openPanel();$event.stopPropagation();"
+                                                                    [value]="tag.name" [checked]="tag.checked">
+                                                                <div class="label-check text-truncate" for="checkbox-{{i}}">
+                                                                    <span>{{tag.name}}</span>
+                                                                </div>
+                                                            </mat-option>
+                                                        </ng-container>
+                
+                                                        <mat-option class="d-none">avoid closing matautocomplete on search
+                
+                                                        </mat-option>
+                                                    </div>
+                                                    <div class="footer-add-cler-ni">
+                                                        <button class="kr-sg-button-secondary-two btn_lg"
+                                                            (click)="clearChipData()">Clear</button>
+                                                        <button class="kr-sg-button-primary btn_lg" (click)="addRuleData()">Add</button>
+                                                    </div>
+                                                </mat-autocomplete>
+                                            </mat-form-field>
+                
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </ng-container>
+                    </div>
                 </div>
             </perfect-scrollbar>
         </div>
         <div class="footer-actions">
-            <button class="kr-sg-button-secondary btn_lg">Cancel</button>
-            <button class="kr-sg-button-primary btn_lg">Apply</button>
+            <button class="kr-sg-button-secondary btn_lg" (click)="close()">Cancel</button>
+            <button class="kr-sg-button-primary btn_lg" [disabled]="!checkListForm.valid || loading" (click)="save()">Apply</button>
         </div>
     </div>
 </div>
