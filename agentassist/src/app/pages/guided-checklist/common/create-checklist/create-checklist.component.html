@@ -39,11 +39,10 @@
                                         <span class="chip-name text-truncate mx-w-100" title="">Tag1</span>
                                         <span class="icon-sa-close" matChipRemove *ngIf="true"></span>
                                     </mat-chip>
-                                    <!-- <input placeholder="Add Tags" #tagInput [matChipInputFor]="chipList"
+                                    <input placeholder="Add Tags" #tagInput [matChipInputFor]="chipList"
                                                     [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="false"
                                                     (matChipInputTokenEnd)="add($event)" [matAutocomplete]="auto" [formControl]="tagControl"
-                                                    #trigger="matAutocompleteTrigger"> -->
-                                    <input />
+                                                    #trigger="matAutocompleteTrigger">
                                 </mat-chip-list>
                                 <mat-autocomplete #auto="matAutocomplete">
                                     <div class="mat-checkboxs">

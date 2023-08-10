@@ -1,3 +1,4 @@
+import { ENTER, COMMA } from '@angular/cdk/keycodes';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '@kore.services/auth.service';
@@ -21,6 +22,8 @@ export class StageCreateComponent implements OnInit {
     private workflowService: workflowService
   ) { };
 
+  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
+  tagControl :  FormControl = new FormControl();
   isBasic = true;
   @Input() checkListForm: FormGroup;
   triggerBy: FormGroup;
@@ -88,5 +91,8 @@ export class StageCreateComponent implements OnInit {
       .subscribe((data) => {
         this.saveEvent.emit(data);
       });
+  }
+  add(e){
+
   }
 }
