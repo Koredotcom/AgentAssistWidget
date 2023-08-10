@@ -491,6 +491,7 @@
                     }
                 }
                 .add-stage-block{
+                    opacity: 0.5;
                     display: flex;
                     align-items: center;
                     gap: 10px;
@@ -516,6 +517,9 @@
                         cursor: pointer;
                         flex-shrink: 0;
                     }
+                }
+                .add-stage-block:hover{
+                    opacity: unset !important;
                 }
             }
         }

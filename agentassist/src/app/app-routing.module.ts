@@ -48,10 +48,9 @@ const routes: Routes = [
       },
       {
         path: 'onboarding', component: OnboardingComponent
-        },
+      },
       { path: 'bt', component: AutomationComponent },
       { path: 'bt/:type', component: BTContainerComponent },
-
       {
         path: 'history', component: HistoryComponent, children: [
           { path: '', redirectTo: 'conversationalLogs', pathMatch: 'full' },

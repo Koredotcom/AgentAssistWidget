@@ -1683,5 +1683,31 @@ export class EndPointsService {
       endpoint : this.SMARTASSIST_API_SERVER_URL + '/acchecklists/:botId',
       method : 'post'
     }
+
+    this.serviceList['post.stage'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/acclstages?clId=:clId',
+      method : 'post'
+    }
+
+    this.serviceList['put.stage'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/acclstages/:botId/stage/:clsId?clId=:clId',
+      method : 'put'
+    }
+    
+    this.serviceList['get.checklistbyid'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/acchecklists/:botId/checklist/:clId',
+      method : 'get'
+    }
+
+    this.serviceList['put.checklist'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/acchecklists/:botId/checklist/:clId',
+      method : 'put'
+    }
+
+    this.serviceList['post.step'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/acclsteps',
+      method : 'post'
+    }
+    
   }
 }

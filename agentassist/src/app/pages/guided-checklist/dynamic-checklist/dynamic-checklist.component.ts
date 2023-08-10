@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { AuthService } from '@kore.services/auth.service';
 import { LocalStoreService } from '@kore.services/localstore.service';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
@@ -14,6 +14,9 @@ export class DynamicChecklistComponent implements OnInit, OnChanges {
   selAcc = this.local.getSelectedAccount();
   loading = false;
   @Input() checkListType;
+  dynamicList = [];
+  @Output() update = new EventEmitter();
+
   constructor(
     private service: ServiceInvokerService,
     private auth: AuthService,
@@ -40,15 +43,20 @@ export class DynamicChecklistComponent implements OnInit, OnChanges {
       botId,
       searchText: '',
       limit: -1,
-      sortBy: "asc"
+      sortBy: "asc",
+      type: 'dynamic'
     };
     this.service.invoke('get.acchecklists', {botId}, body)
     .pipe(finalize(() => {
       this.loading = false;
     }))
     .subscribe((data)=>{
-      console.log("datadatadata", data);
+      this.dynamicList = data.results;
     })
+  }
+
+  updateCl(e){
+    this.update.emit(e);
   }
 
 }

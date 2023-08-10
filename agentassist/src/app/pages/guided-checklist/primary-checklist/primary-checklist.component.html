@@ -23,9 +23,9 @@
                         </div>
                         <ng-container *ngFor="let checkList of primaryCheckList">
                             <div class="body-data-table-wrapper-coaching">
-                                <div class="coaching-rule w-24">{{checkList.name}}</div>
+                                <div class="coaching-rule w-24">{{checkList.name | uppercase}}</div>
                                 <div class="actions-info w-13">
-                                    <button class="edit-btn">
+                                    <button class="edit-btn" (click)="updateCl(checkList)">
                                         <i class="icon-sa-welcome-edit"></i>
                                     </button>
                                     <button class="delete-btn">

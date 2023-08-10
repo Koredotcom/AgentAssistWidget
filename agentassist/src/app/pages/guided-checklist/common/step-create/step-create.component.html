@@ -1,5 +1,5 @@
 
-<div class="step-creation-slider-data">
+<div class="step-creation-slider-data" >
     <div class="left-tabs">
         <button class="tab-btn active-btn">
             <i class="icon-coaching--settings"></i>
@@ -11,22 +11,22 @@
     <div class="tab-content-data">
         <div class="header-sec">
             <div class="title">Step Configuration</div>
-            <div class="close-slider">
+            <div class="close-slider" (click)="close()">
                 <i class="icon-sa-close"></i>
             </div>
         </div>
         <div class="body-data">
             <perfect-scrollbar>
-                <div class="inner-content-data">
+                <div class="inner-content-data" [formGroup]="stepForm">
                     <ng-container *ngIf="true">
                         <div class="kr-sg-input-text m-b-12">
                             <div class="label-text">Step Title</div>
-                            <input type="text" maxlength="100" placeholder="Name of Checklist" class="input-text">
+                            <input type="text" formControlName="name" maxlength="100" placeholder="Name of Checklist" class="input-text">
                             <div class="count-char">0/48</div>
                         </div>
                         <div class="kr-sg-input-text-area">
                             <div class="label-text">Step Detail</div>
-                            <textarea placeholder="Rule Purpose" maxlength="1000" class="input-text"></textarea>
+                            <textarea formControlName="description" placeholder="Rule Purpose" maxlength="1000" class="input-text"></textarea>
                             <div class="count-char">0/200</div>
                         </div>
                         <div class="confirmation-buttons-wrapper">
@@ -229,8 +229,8 @@
             </perfect-scrollbar>
         </div>
         <div class="footer-actions">
-            <button class="kr-sg-button-secondary btn_lg">Cancel</button>
-            <button class="kr-sg-button-primary btn_lg">Apply</button>
+            <button class="kr-sg-button-secondary btn_lg" (click)="close()">Cancel</button>
+            <button class="kr-sg-button-primary btn_lg" (click)="save()">Apply</button>
         </div>
     </div>
 </div>

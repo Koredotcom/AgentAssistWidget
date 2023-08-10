@@ -21,7 +21,7 @@ export class StageCreateComponent implements OnInit {
     private workflowService: workflowService
   ) { }
   isBasic = true;
-  checkListForm: FormGroup;
+  @Input() checkListForm: FormGroup;
   triggerBy: FormGroup;
   assignType= 'all';
   loading = false;
@@ -30,34 +30,34 @@ export class StageCreateComponent implements OnInit {
   @Output() closeE = new EventEmitter();
 
   ngOnInit(): void {
-    let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
-    this.checkListForm = this.fb.group({
-      'botId': [botId, [Validators.required]],
-      'name': ['', [Validators.required]],
-      'description': ['', [Validators.required]],
-      'tags': this.fb.array([]),
-      'order': this.fb.array(['sequential'], [Validators.required]),
-      'channels': this.fb.array([], [Validators.required]),
-      'type': [this.checkListType, [Validators.required]],
-      'assignedTo': this.fb.group({
-        'isAllInteractions': [true],
-        'assignees': this.fb.group({
-          'groups': this.fb.array([]),
-          'agents': this.fb.array([]),
-        }),
-        'queues': this.fb.array([]),
-        'skills': this.fb.array([]),
-      }),
-      'stages': this.fb.array([]),
-      'isActive': [true, [Validators.required]],
-    });
-    this.triggerBy = this.fb.group({
-      'type': ['', [Validators.required]],
-      'botId': ['', [Validators.required]],
-      'taskId': ['', [Validators.required]],
-      'when': ['', [Validators.required]],
-      'addUtterances': this.fb.array([]),
-    })
+    // let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
+    // this.checkListForm = this.fb.group({
+    //   'botId': [botId, [Validators.required]],
+    //   'name': ['', [Validators.required]],
+    //   'description': ['', [Validators.required]],
+    //   'tags': this.fb.array([]),
+    //   'order': this.fb.array(['sequential'], [Validators.required]),
+    //   'channels': this.fb.array([], [Validators.required]),
+    //   'type': [this.checkListType, [Validators.required]],
+    //   'assignedTo': this.fb.group({
+    //     'isAllInteractions': [true],
+    //     'assignees': this.fb.group({
+    //       'groups': this.fb.array([]),
+    //       'agents': this.fb.array([]),
+    //     }),
+    //     'queues': this.fb.array([]),
+    //     'skills': this.fb.array([]),
+    //   }),
+    //   'stages': this.fb.array([]),
+    //   'isActive': [true, [Validators.required]],
+    // });
+    // this.triggerBy = this.fb.group({
+    //   'type': ['', [Validators.required]],
+    //   'botId': ['', [Validators.required]],
+    //   'taskId': ['', [Validators.required]],
+    //   'when': ['', [Validators.required]],
+    //   'addUtterances': this.fb.array([]),
+    // })
   }
   remove(e){
 
@@ -68,7 +68,7 @@ export class StageCreateComponent implements OnInit {
   }
 
   chekProgressionType(pType){
-    (this.checkListForm.controls['order'] as FormArray).value.splice(0, 1, pType?.toLowerCase());
+    (this.checkListForm.controls['order']).patchValue(pType?.toLowerCase());
   }
 
   channelVoice(checked){
@@ -93,8 +93,12 @@ export class StageCreateComponent implements OnInit {
     console.log("this.assignType", this.assignType);
   }
 
-  close(){
-   this.closeE.emit(); 
+  close(checkListClose?, relaod?, isSaved?){
+   this.closeE.emit({
+    checkListClose,
+    relaod,
+    isSaved
+   }); 
   }
 
   save(){
@@ -104,7 +108,7 @@ export class StageCreateComponent implements OnInit {
       this.loading = false;
     }))
     .subscribe((data)=>{
-      this.close();
-    })
+      this.close(true, true, true);
+    });
   }
 }

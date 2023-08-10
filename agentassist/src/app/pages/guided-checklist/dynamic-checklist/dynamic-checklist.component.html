@@ -22,21 +22,21 @@
                             <div class="titles-data w-15">Last UPDATED</div>
                             <div class="titles-data w-10">Enable</div>
                         </div>
-                        <ng-container>
+                        <ng-container *ngFor="let dyn of dynamicList">
                             <div class="body-data-table-wrapper-coaching">
-                                <div class="coaching-rule w-20">Main Checklist</div>
+                                <div class="coaching-rule w-20">{{dyn.name | uppercase}}</div>
                                 <div class="actions-info w-12">
-                                    <button class="edit-btn">
+                                    <button class="edit-btn" (click)="updateCl(dyn)">
                                         <i class="icon-sa-welcome-edit"></i>
                                     </button>
                                     <button class="delete-btn">
                                         <i class="icon-sa-welcome-delete"></i>
                                     </button>
                                 </div>
-                                <div class="title-text w-15">Main checklist for All Agent</div>
+                                <div class="title-text w-15">{{dyn.description}}</div>
                                 <div class="title-text w-14">All Agents</div>
-                                <div class="title-text w-14">Utterance</div>
-                                <div class="title-text w-15">1st Mar, 2023 AT 09:15PM</div>
+                                <div class="title-text w-14">{{dyn.name}}</div>
+                                <div class="title-text w-15">{{dyn.lModOn | date : 'MMM dd, yyyy h:mm a'}}</div>
                                 <div class="last-updated-toggle w-10">
                                     <label class="kr-sg-toggle">
                                         <input type="checkbox">

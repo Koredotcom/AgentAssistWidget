@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { AuthService } from '@kore.services/auth.service';
 import { LocalStoreService } from '@kore.services/localstore.service';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
@@ -19,6 +19,7 @@ export class PrimaryChecklistComponent implements OnInit, OnChanges {
     private service: ServiceInvokerService
   ) { }
   @Input() checkListType;
+  @Output() update = new EventEmitter();
   loading = false;
   selAcc = this.local.getSelectedAccount();
   primaryCheckList = []
@@ -38,7 +39,8 @@ export class PrimaryChecklistComponent implements OnInit, OnChanges {
       botId,
       searchText: '',
       limit: -1,
-      sortBy: "asc"
+      sortBy: "asc",
+      type: 'primary'
     };
     this.service.invoke('get.acchecklists', {botId}, body)
     .pipe(finalize(() => {
@@ -47,6 +49,10 @@ export class PrimaryChecklistComponent implements OnInit, OnChanges {
     .subscribe((data)=>{
       this.primaryCheckList = data.results;
     })
+  }
+
+  updateCl(e){
+    this.update.emit(e);
   }
 
 }

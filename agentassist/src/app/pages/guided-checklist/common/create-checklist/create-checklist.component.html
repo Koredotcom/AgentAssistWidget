@@ -10,7 +10,7 @@
     <div class="tab-content-data">
         <div class="header-sec">
             <div class="title">General Settings</div>
-            <div class="close-slider" (click)="close()">
+            <div class="close-slider" (click)="close(true, false, false)">
                 <i class="icon-sa-close"></i>
             </div>
         </div>
@@ -62,7 +62,7 @@
                             <div class="label-text">Step Progression</div>
                             <div class="kr-sg-dropdowns m-b-12" ngbDropdown>
                                 <div class="dropdown dropdown-open">
-                                    <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{checkListForm.value?.order[0] |
+                                    <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{checkListForm.value?.order |
                                         titlecase}}</button>
                                     <ul class="dropdown-menu content-menu header_in_development_drpdown p-0" ngbDropdownMenu>
                                         <li ngbDropdownItem class="p-0" (click)="chekProgressionType('Sequential')">
@@ -364,7 +364,7 @@
             </perfect-scrollbar>
         </div>
         <div class="footer-actions">
-            <button class="kr-sg-button-secondary btn_lg" (click)="close()">Cancel</button>
+            <button class="kr-sg-button-secondary btn_lg" (click)="close(true, false, false)">Cancel</button>
             <button class="kr-sg-button-primary btn_lg" [disabled]="!checkListForm.valid || loading" (click)="save()">Apply</button>
         </div>
     </div>

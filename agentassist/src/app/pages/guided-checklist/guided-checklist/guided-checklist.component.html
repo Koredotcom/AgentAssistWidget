@@ -12,7 +12,7 @@
             <div class="main-heading">Checklist</div>
             <ul class="nav nav-tabs">
                 <li class="nav-item">
-                  <a class="nav-link active" data-toggle="tab" href="#static" (click)="checkListType = 'static'">STATIC</a>
+                  <a class="nav-link active" data-toggle="tab" href="#static" (click)="checkListType = 'primary'">STATIC</a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" data-toggle="tab" href="#dynamicintent" (click)="checkListType = 'dynamic'">DYNAMIC INTENT</a>
@@ -25,15 +25,20 @@
     </div>
     <div class="tab-content tab-content-details">
         <div class="tab-pane active" id="static">
-            <app-primary-checklist [checkListType]="checkListType"></app-primary-checklist>           
+            <app-primary-checklist #checkList1 (update)="updatePrimaryChecklist($event)" [checkListType]="checkListType"></app-primary-checklist>           
         </div>
         <div class="tab-pane fade" id="dynamicintent">
-            <app-dynamic-checklist [checkListType]="checkListType"></app-dynamic-checklist>
+            <app-dynamic-checklist #checkList2 (update)="updatePrimaryChecklist($event)" [checkListType]="checkListType"></app-dynamic-checklist>
         </div>
     </div>
 </div>
 
 
 <ng-template #checklistCreation>
-    <app-stages-list (closeCheckList)="closeCheckListScreen($event)" [checkListType]="checkListType"></app-stages-list>
+    <app-stages-list class="d-inline-block w-100 h-100"
+        [createOrUpdate]="createOrUpdate" 
+        [currentCheckList]="currentCheckList" 
+        (closeCheckList)="closeCheckListScreen($event)" 
+        [checkListType]="checkListType">
+    </app-stages-list>
 </ng-template>
