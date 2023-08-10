@@ -1679,5 +1679,9 @@ export class EndPointsService {
       method : 'post'
     }
 
+    this.serviceList['post.noneIntentUtterances'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule/noneintent',
+      method : 'post'
+    }
   }
 }
