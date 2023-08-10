@@ -73,12 +73,14 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
     @HostListener("window:beforeunload", ["$event"]) unloadHandler(event: Event) {
       if(this.formTouched){
         event.returnValue = false;
+      }else{
+        this.coachingService.updateLockOnRule(false, this.currentRule, this.selAcc);
       }
    }
 
   ngOnChanges(changes: SimpleChanges): void {
     if(changes?.createOrEdit?.currentValue === COACHINGCNST.EDIT){
-      this.updateLockOnRule(true);
+      this.coachingService.updateLockOnRule(true, this.currentRule,this.selAcc);
       this.createForm();
       this.updateRuleForm();
       this.getRuleTags();
@@ -102,19 +104,7 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
   }
 
   ngOnDestroy(): void {
-    this.updateLockOnRule(false);
-  }
-
-  updateLockOnRule(flag){
-    let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
-    let params : any = {
-      botId,
-      ruleId : this.currentRule._id,
-      userId : this.auth.getUserId()
-    }
-    this.service.invoke('post.checkLock', params, {actions : {lock : flag}}).subscribe(data => {
-      console.log(data, "data inside check lock screen");
-    })
+    this.coachingService.updateLockOnRule(false, this.currentRule, this.selAcc);
   }
 
   updateBasicRuleForm(){
@@ -248,7 +238,7 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
 
     let methodName = (this.createOrEdit == COACHINGCNST.CREATE) ? "post.agentcoachingrule" : "put.agentcoachingrule";
 
-    this.service.invoke(methodName, { ruleId: this.currentRule?._id }, payload)
+    this.service.invoke(methodName, { ruleId: this.currentRule?._id, userId : this.auth.getUserId() }, payload)
       .pipe(finalize(() => {
         this.loading = false;
       }))
@@ -283,7 +273,7 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
     let payload: any = this.ruleForm.value;
     let methodName = this.createOrEdit == COACHINGCNST.CREATE ? "post.agentcoachingrule" : "put.agentcoachingrule";
 
-    this.service.invoke(methodName, { ruleId: this.currentRule?._id }, payload)
+    this.service.invoke(methodName, { ruleId: this.currentRule?._id, userId : this.auth.getUserId() }, payload)
       .pipe(finalize(() => {
         this.loading = false;
       }))

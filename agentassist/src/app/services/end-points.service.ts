@@ -1604,17 +1604,17 @@ export class EndPointsService {
     // }
 
     this.serviceList['delete.agentCoachingRule'] = {
-      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule/:ruleId',
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule/:ruleId/uid=:userId',
       method : 'delete'
     }
 
     this.serviceList['post.agentcoachingrule'] = {
-      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule',
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule/?uid=:userId',
       method : 'post'
     }
 
     this.serviceList['put.agentcoachingrule'] = {
-      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule/:ruleId',
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule/:ruleId/?uid=:userId',
       method : 'put'
     }
 
