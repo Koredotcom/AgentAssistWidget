@@ -1708,6 +1708,11 @@ export class EndPointsService {
       endpoint : this.SMARTASSIST_API_SERVER_URL + '/acclsteps',
       method : 'post'
     }
+
+    this.serviceList['put.step'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/acclsteps/:botId/step/:clstId?clsId=:clsId',
+      method : 'put'
+    }
     
   }
 }

@@ -74,14 +74,20 @@
                                 </div>
                             </div>
                             <!-- <div> -->
-                                <ng-container *ngFor="let step of item.steps">
-                                    <div class="added-check-item">
+                                <ng-container *ngFor="let step of item.steps; let si = index">
+                                    <div class="added-check-item" (click)="openEditStep(item, step, i, si)">
                                         <div class="drag-item" >
                                             <i class="icon-coaching--move1"></i>
                                         </div>
                                         <div class="content-info">
                                             <div class="title">{{step.name}}</div>
                                             <div class="desc-text">{{step.description}}</div>
+                                            <div class="tags-info">
+                                                <div class="tag_name">
+                                                    <i class="icon-coaching--adherence-set"></i>
+                                                    <span>Utterance</span>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="delete-item">
                                             <i class="icon-sa-welcome-delete"></i>
@@ -127,7 +133,7 @@
 
 
 
-            <perfect-scrollbar>
+            <!-- <perfect-scrollbar>
                 <div class="content-info-wrapper">
                     <div class="list-datachecked">
                         <div class="check-list-title-block">
@@ -330,7 +336,7 @@
                         </div>
                     </div>
                 </div>
-            </perfect-scrollbar>
+            </perfect-scrollbar> -->
         </div>
     </div>
 </div>
@@ -338,7 +344,8 @@
     <app-create-checklist 
         [checkListForm]="checkListForm" 
         [checkListType]="checkListType" 
-        (closeE)="close($event)">
+        (closeE)="close($event)"
+        (saveEvent)="saveCheckList($event)">
     </app-create-checklist>
 </app-slider-component>
 <app-slider-component 
@@ -348,6 +355,8 @@
         *ngIf="isStepOpen"
         [stepForm]="stepForm"
         (closeE)="closeStep($event)"
-        (saveStep)="saveStep($event)">
+        (saveStep)="saveStep($event)"
+        [createOrUpdateStep]="createOrUpdateStep"
+        (updateStep)="updateStep($event)">
     </app-step-create>
 </app-slider-component>

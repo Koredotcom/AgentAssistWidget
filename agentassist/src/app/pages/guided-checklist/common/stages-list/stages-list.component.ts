@@ -35,16 +35,17 @@ export class StagesListComponent implements OnInit, OnChanges {
     steps: [],
     edit: false,
     isNew: true,
-  }
+  };
+  createOrUpdateStep = 'create';
   stages = [];
   checklistConst = CHECKLISTCNST.COLORS;
   relaod = false;
-  currentStage = {};
+  currentStage:any = {};
   constructor(private fb: FormBuilder,
     private auth: AuthService,
     private local: LocalStoreService,
     private workflowService: workflowService,
-    private service: ServiceInvokerService
+    private service: ServiceInvokerService,
   ) { }
 
   ngOnInit(): void {
@@ -191,6 +192,7 @@ export class StagesListComponent implements OnInit, OnChanges {
   }
   currentInx;
   stepCreate(item, i){
+    this.createOrUpdateStep = 'create';
     this.isStepOpen = true;
     this.currentInx = i;
     this.currentStage = item;
@@ -227,5 +229,49 @@ export class StagesListComponent implements OnInit, OnChanges {
   currDragStg;
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.stages[this.currDragStg].steps, event.previousIndex, event.currentIndex);
+  }
+
+  saveCheckList(event){
+    // if(event.type === 'primary'){
+      let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
+      this.service.invoke('get.checklistbyid', {botId, clId: event._id})
+      .subscribe((data)=>{
+        this.currentCheckList = {...data[0]};
+        if(event.type === 'primary'){
+          this.stages = data[0]?.stages;
+        }
+        this.checklistCreateSlider.closeSlider('#checklistCreate');
+      });
+    // }else if(event.type === 'dynamic'){
+    //   this.checklistCreateSlider.closeSlider('#checklistCreate');
+    // }
+  }
+  currentStep;
+  stepIndex;
+  openEditStep(item, step, i, si){
+    this.isStepOpen = true;
+    this.createOrUpdateStep = 'update';
+    this.currentInx = i;
+    this.currentStage = item;
+    this.currentStep = step;
+    this.stepIndex = si;
+    this.createStepForm();
+    this.stepForm.patchValue(step);
+    setTimeout(() => {
+      this.stepForm.controls['clsId'].patchValue(item._id)
+      this.stepCreateSlider.openSlider("#stepCreate", "");
+    },);
+  }
+
+  updateStep(event){
+    let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
+    if(this.stepForm.valid && event){
+      this.service.invoke('put.step', {clstId: this.currentStep._id, botId, clsId: this.currentStage._id}, this.stepForm.value)
+      .subscribe((data) => {
+        this.stages[this.currentInx].steps.splice(this.stepIndex, 1, data);
+        this.saveStageApi(this.stages[this.currentInx], false);
+        this.closeStepModal();
+      });
+    }
   }
 }

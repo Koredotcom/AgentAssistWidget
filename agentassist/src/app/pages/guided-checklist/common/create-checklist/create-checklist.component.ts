@@ -19,96 +19,74 @@ export class StageCreateComponent implements OnInit {
     private auth: AuthService,
     private local: LocalStoreService,
     private workflowService: workflowService
-  ) { }
+  ) { };
+
   isBasic = true;
   @Input() checkListForm: FormGroup;
   triggerBy: FormGroup;
-  assignType= 'all';
+  assignType = 'all';
+  @Input() checkListType = 'primary';
   loading = false;
   selAcc = this.local.getSelectedAccount();
-  @Input() checkListType = 'primary';
   @Output() closeE = new EventEmitter();
-
+  @Output() saveEvent = new EventEmitter();
   ngOnInit(): void {
-    // let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
-    // this.checkListForm = this.fb.group({
-    //   'botId': [botId, [Validators.required]],
-    //   'name': ['', [Validators.required]],
-    //   'description': ['', [Validators.required]],
-    //   'tags': this.fb.array([]),
-    //   'order': this.fb.array(['sequential'], [Validators.required]),
-    //   'channels': this.fb.array([], [Validators.required]),
-    //   'type': [this.checkListType, [Validators.required]],
-    //   'assignedTo': this.fb.group({
-    //     'isAllInteractions': [true],
-    //     'assignees': this.fb.group({
-    //       'groups': this.fb.array([]),
-    //       'agents': this.fb.array([]),
-    //     }),
-    //     'queues': this.fb.array([]),
-    //     'skills': this.fb.array([]),
-    //   }),
-    //   'stages': this.fb.array([]),
-    //   'isActive': [true, [Validators.required]],
-    // });
-    // this.triggerBy = this.fb.group({
-    //   'type': ['', [Validators.required]],
-    //   'botId': ['', [Validators.required]],
-    //   'taskId': ['', [Validators.required]],
-    //   'when': ['', [Validators.required]],
-    //   'addUtterances': this.fb.array([]),
-    // })
   }
-  remove(e){
+
+  remove(e) {
 
   }
 
-  selectedOption(a, b){
-    
+  selectedOption(a, b) {
+
   }
 
-  chekProgressionType(pType){
+  chekProgressionType(pType) {
     (this.checkListForm.controls['order']).patchValue(pType?.toLowerCase());
   }
 
-  channelVoice(checked){
-    if(checked){
+  channelVoice(checked) {
+    if (checked) {
       (this.checkListForm.controls['channels'] as FormArray).push(new FormControl('voice'));
-    }else{
-      let inx = (this.checkListForm.controls['channels'] as FormArray).value.findIndex((item)=> item === 'voice');
+    } else {
+      let inx = (this.checkListForm.controls['channels'] as FormArray).value.findIndex((item) => item === 'voice');
       (this.checkListForm.controls['channels'] as FormArray).removeAt(inx);
     }
   }
 
-  channelChat(checked){
-    if(checked){
+  channelChat(checked) {
+    if (checked) {
       (this.checkListForm.controls['channels'] as FormArray).value.push(new FormControl('chat'));
-    }else{
-      let inx = (this.checkListForm.controls['channels'] as FormArray).value.findIndex((item)=> item === 'chat');
+    } else {
+      let inx = (this.checkListForm.controls['channels'] as FormArray).value.findIndex((item) => item === 'chat');
       (this.checkListForm.controls['channels'] as FormArray).removeAt(inx);
     }
   }
 
-  changeAssigne(){
+  changeAssigne() {
     console.log("this.assignType", this.assignType);
   }
 
-  close(checkListClose?, relaod?, isSaved?){
-   this.closeE.emit({
-    checkListClose,
-    relaod,
-    isSaved
-   }); 
+  close(checkListClose?, relaod?, isSaved?) {
+    this.closeE.emit({
+      checkListClose,
+      relaod,
+      isSaved
+    });
   }
 
-  save(){
+  saveCheckList(){
+
+  }
+
+  save() {
     this.loading = true;
     this.service.invoke('post.acchecklists', {}, this.checkListForm.getRawValue())
-    .pipe(finalize(() => {
-      this.loading = false;
-    }))
-    .subscribe((data)=>{
-      this.close(true, true, true);
-    });
+      .pipe(finalize(() => {
+        this.loading = false;
+      }))
+      .subscribe((data) => {
+        this.saveEvent.emit(data);
+      });
   }
 }

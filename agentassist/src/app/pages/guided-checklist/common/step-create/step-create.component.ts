@@ -10,6 +10,9 @@ export class StepCreateComponent implements OnInit, OnChanges {
   @Output() closeE = new EventEmitter();
   @Output() saveStep = new EventEmitter();
   @Input() stepForm: FormGroup;
+  @Input() createOrUpdateStep = 'create';
+  @Output() updateStep = new EventEmitter();
+  showButtons = false;
   constructor() { }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -26,5 +29,9 @@ export class StepCreateComponent implements OnInit, OnChanges {
 
   save(){
     this.saveStep.emit(true);
+  }
+
+  update(){
+    this.updateStep.next(true);
   }
 }
