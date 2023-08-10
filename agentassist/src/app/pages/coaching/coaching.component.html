@@ -25,7 +25,7 @@
                 <perfect-scrollbar class="scroll-data" #ps>
                     <div id="accordion" class="agent-groups-table-container">                        
                             <!-- pre built -->
-                            <div class="card_content" *ngIf="respData.preBuilt?.length">
+                            <!-- <div class="card_content" *ngIf="respData.preBuilt?.length">
                                 <div class="card_header">
                                     <div data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="card_link" aria-expanded="true">
                                         <div class="accordion-content-header">
@@ -64,7 +64,7 @@
                                                 <ng-container *ngFor="let rule of respData.preBuilt">
                                                     <div class="body-data-table-wrapper-coaching">
                                                         <div class="coaching-rule w-20">
-                                                            <div class="title">{{rule.name}}</div>
+                                                            <div class="title" [ngbTooltip]="rule.name">{{rule.name}}</div>
                                                             <div class="desc-text" title="All Agents">All Agents</div>
                                                         </div>
                                                         <div class="actions-info w-11">
@@ -75,7 +75,7 @@
                                                                 <i class="icon-sa-welcome-delete"></i>
                                                             </button>
                                                         </div>
-                                                        <div class="desc-text-info w-14">{{rule.description}}</div>
+                                                        <div class="desc-text-info w-14" [ngbTooltip]="rule.description">{{rule.description}}</div>
                                                         <div class="tags-info w-16">
                                                             <ng-container *ngFor="let tag of rule.tags?.slice(0,2);">
                                                                 <span class="tag-name">{{tag}}</span>
@@ -112,10 +112,10 @@
                                         </div>
                                     </perfect-scrollbar>
                                 </div>                     
-                            </div>            
+                            </div>             -->
                             <!-- new rules -->
                             <div class="card_content" *ngIf="respData.results?.length">
-                                <div class="card_header">
+                                <!-- <div class="card_header">
                                     <div data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" class="card_link" aria-expanded="true">
                                         <div class="accordion-content-header">
                                             <div class="left-title text-truncate">
@@ -133,7 +133,7 @@
                                             </div>                                               
                                         </div>
                                     </div>
-                                </div> 
+                                </div>  -->
                                 <div id="collapseTwo" class="inside-accordioncontent collapse show">
                                     <perfect-scrollbar class="mx-h-300" (psYReachEnd)="onReachEnd($event)">
                                         <div class="card-body inner-accordion-table">
@@ -152,10 +152,57 @@
                                                     <div class="titles-data w-13">Last UPDATED</div>
                                                     <div class="titles-data w-10">Enabled</div>
                                                 </div>
+                                                <ng-container *ngFor="let rule of respData.preBuilt">
+                                                    <div class="body-data-table-wrapper-coaching">
+                                                        <div class="coaching-rule w-20">
+                                                            <div class="title" [ngbTooltip]="rule.name">{{rule.name}}</div>
+                                                            <div class="desc-text" title="All Agents">All Agents</div>
+                                                        </div>
+                                                        <div class="actions-info w-11">
+                                                            <button class="edit-btn" (click)="openFLowCreation(flowCreation, rule, 'edit')">
+                                                                <i class="icon-sa-welcome-edit"></i>
+                                                            </button>
+                                                            <button class="delete-btn" *ngIf="rule.deletable" (click)="openDeleteRule(rule)">
+                                                                <i class="icon-sa-welcome-delete"></i>
+                                                            </button>
+                                                        </div>
+                                                        <div class="desc-text-info w-14" [ngbTooltip]="rule.description">{{rule.description}}</div>
+                                                        <div class="tags-info w-16">
+                                                            <ng-container *ngFor="let tag of rule.tags?.slice(0,2);">
+                                                                <span class="tag-name">{{tag}}</span>
+                                                            </ng-container>
+                                                            <div class="kr-sg-dropdowns" ngbDropdown container="body" *ngIf="rule.tags?.length > 2">
+                                                                <div class="dropdown dropdown-open">
+                                                                  <button class="dropdown-toggle dropdown-input before-none" ngbDropdownToggle>+ {{rule.tags?.length - 2}} More</button>
+                                                                  <ul class="dropdown-menu content-menu more-dropdown-tags" ngbDropdownMenu>
+                                                                    <ng-container *ngFor="let iTag of rule.tags | slice : 2">
+                                                                        <li [title]="iTag" ngbDropdownItem class="mx-w-200">
+                                                                            <span class="text-truncate">{{iTag}}</span>
+                                                                        </li>
+                                                                    </ng-container>
+                                                                  </ul>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="channel-info w-16">
+                                                            <ng-container *ngFor="let channel of coachingConst.channelList">
+                                                                <span class="channel-name" *ngIf="rule.channels && rule.channels?.indexOf(channel) >= 0">{{channel}}</span>
+                                                            </ng-container>
+                                                        </div>
+                                                        <div class="title-text w-13 last-updated-text">{{rule.lModOn | date : 'MMM dd, yyyy h:mm a'}}</div>
+                                                        <div class="last-updated-toggle w-10">
+                                                            <label class="kr-sg-toggle" *ngIf="rule.deletable">
+                                                                <input type="checkbox" [checked]="rule.isActive" (click)="changeRuleStatus(rule, rule._id)">
+                                                                <div class="slider"></div>
+                                                            </label>
+                                                            <span *ngIf="!rule.deletable">Always Enabled</span>
+                                                        </div>
+                                                    </div>
+                                                </ng-container>
                                                 <ng-container *ngFor="let rule of respData.results">
                                                     <div class="body-data-table-wrapper-coaching">
                                                         <div class="coaching-rule w-20">
-                                                            <div class="title" [title]="rule.name">{{rule.name}}</div>
+                                                            <div class="title" [title]="rule.name" [ngbTooltip]="rule.name">{{rule.name}}</div>
                                                             <div class="desc-text">All Agents</div>
                                                         </div>
                                                         <div class="actions-info w-11">
@@ -166,7 +213,7 @@
                                                                 <i class="icon-sa-welcome-delete"></i>
                                                             </button>
                                                         </div>
-                                                        <div class="desc-text-info w-14" [title]="rule.description">{{rule.description}}</div>
+                                                        <div class="desc-text-info w-14" [title]="rule.description" [ngbTooltip]="rule.description">{{rule.description}}</div>
                                                         <div class="tags-info w-16">
                                                             <ng-container *ngFor="let tag of rule.tags?.slice(0,2);">
                                                                 <span class="tag-name" [title]="tag">{{tag}}</span>
