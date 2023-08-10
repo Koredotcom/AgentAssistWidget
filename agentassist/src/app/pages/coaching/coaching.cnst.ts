@@ -11,7 +11,7 @@ export const COACHINGCNST = {
         cross_talk: 'Cross Talk', 
         deadair: 'Dead Air', 
         speech_speed: 'Speech Speed',
-        // talk_ratio : 'Talk Ratio'
+        talk_ratio : 'Talk Ratio'
     },
     CROSSTALK : 'cross_talk',
     TALKRATIO : 'talk_ratio',
