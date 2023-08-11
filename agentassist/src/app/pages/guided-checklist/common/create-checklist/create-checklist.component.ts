@@ -26,7 +26,6 @@ export class StageCreateComponent implements OnInit {
 
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   tagControl :  FormControl = new FormControl();
-  isBasic = true;
   triggerBy: FormGroup;
   assignType = 'all';
   loading = false;
@@ -34,6 +33,7 @@ export class StageCreateComponent implements OnInit {
   filteredTagsDisplay : any = [];
   selAcc = this.local.getSelectedAccount();
   selectedchannelList : any = [];
+  tab = 'basic';
   channelList : any = ['voice', 'chat'];
   @Input() checkListForm: FormGroup;
   @Input() checkListType = 'primary';
