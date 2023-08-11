@@ -1,10 +1,10 @@
 
 <div class="step-creation-slider-data" >
     <div class="left-tabs">
-        <button class="tab-btn active-btn">
+        <button class="tab-btn" [ngClass]="{'active-btn': basic}" (click)="basic = true">
             <i class="icon-coaching--settings"></i>
         </button>
-        <button class="tab-btn">
+        <button class="tab-btn" [ngClass]="{'active-btn': !basic}" (click)="basic = false">
             <i class="icon-coaching--adherence-set"></i>
         </button>
     </div>
@@ -18,7 +18,7 @@
         <div class="body-data">
             <perfect-scrollbar>
                 <div class="inner-content-data" [formGroup]="stepForm">
-                    <ng-container *ngIf="true">
+                    <ng-container *ngIf="basic">
                         <div class="kr-sg-input-text m-b-12">
                             <div class="label-text">Step Title</div>
                             <input type="text" formControlName="name" maxlength="100" placeholder="Name of Checklist" class="input-text">
@@ -222,8 +222,8 @@
                             </div>
                         </div>
                     </ng-container>
-                    <ng-container *ngIf="false">
-
+                    <ng-container *ngIf="!basic">
+                        second tab
                     </ng-container>
                 </div>
             </perfect-scrollbar>

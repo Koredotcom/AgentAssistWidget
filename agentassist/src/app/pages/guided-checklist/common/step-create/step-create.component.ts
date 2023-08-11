@@ -12,6 +12,7 @@ export class StepCreateComponent implements OnInit, OnChanges {
   @Input() stepForm: FormGroup;
   @Input() createOrUpdateStep = 'create';
   @Output() updateStep = new EventEmitter();
+  basic = true;
   showButtons = false;
   constructor() { }
 
