@@ -67,7 +67,7 @@
                                             <div class="body-btn-table" *ngFor="let item of stepConfirmationButtonList">
                                                 <div class="btn-name" >
                                                     <div class="btn-tag">
-                                                        <span class="btn-name-text" [ngStyle]="{'background': item.color}">{{item.name | titlecase}}</span>
+                                                        <span class="btn-name-text" [ngStyle]="{'background': item.bgcolor, 'color' : item.color}">{{item.name | titlecase}}</span>
                                                         <span class="bg-color"></span>
                                                     </div>
                                                 </div>
@@ -75,15 +75,15 @@
                                                 <div class="actions">
                                                     <div class="choose-bg-color-dropdown" ngbDropdown placement="top">
                                                         <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>
-                                                            <span [ngStyle]="{'border': '1px solid '+ selectedConfirmationColorCode[item.name]}"></span>
+                                                            <span [ngStyle]="{'border': '1px solid '+ item.color}"></span>
                                                         </button>
                                                         <ul class="dropdown-menu" ngbDropdownMenu>
                                                             <div class="select-colors">
                                                                 <ng-container *ngFor="let color of checklistConst | keyvalue">
                                                                     <li ngbDropdownItem
                                                                         [ngClass]="{'selected-color': color.value === item.color}"
-                                                                        (click)="item.color = color.value;colorUpdate(item, color.key);">
-                                                                        <span [ngStyle]="{'border': '1px solid '+color.key}"></span>
+                                                                        (click)="item.color = color.key; item.bgcolor = color.value; colorUpdate(item);">
+                                                                        <span [ngStyle]="{'border': '1px solid '+ color.key}"></span>
                                                                     </li>
                                                                 </ng-container>
                                                             </div>
@@ -109,7 +109,7 @@
                                             <div class="body-btn-table">
                                                 <div class="btn-name" >
                                                     <div class="btn-tag">
-                                                        <span class="btn-name-text" [ngStyle]="{'background': selectedRunColorCodeValue}">Run</span>
+                                                        <span class="btn-name-text" [ngStyle]="{'background': selectedRunColorCodeValue, 'color' : selectedRunColorCodeKey}">Run</span>
                                                         <span class="bg-color"></span>
                                                     </div>
                                                 </div>

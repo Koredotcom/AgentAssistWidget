@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { CHECKLISTCNST } from '../checklist.const';
 
@@ -31,11 +31,13 @@ export class StepCreateComponent implements OnInit, OnChanges {
   stepConfirmationButtonList : any = [
     {
       name : 'yes',
-      color : '#F0F9FF'
+      color : '#0BA5EC',
+      bgcolor : '#F0F9FF'
     },
     {
       name : 'no',
-      color : '#F0F9FF'
+      color : '#0BA5EC',
+      bgcolor : '#F0F9FF'
     }
   ]
 
@@ -64,7 +66,7 @@ export class StepCreateComponent implements OnInit, OnChanges {
     }
   ]
 
-  constructor() { }
+  constructor(private cdRef : ChangeDetectorRef) { }
 
   ngOnChanges(changes: SimpleChanges): void {
     console.log("this.stepForm", this.stepForm);
@@ -92,12 +94,13 @@ export class StepCreateComponent implements OnInit, OnChanges {
 
   colorUpdate(confirmationNode, color) {
    this.selectedConfirmationColorCode[confirmationNode.name] = color;
-   
+   this.cdRef.detectChanges();
   }
 
   colorUpdateRun(color){    
     this.selectedRunColorCodeKey = color.key;
     this.selectedRunColorCodeValue = color.value;
+    this.cdRef.detectChanges();
     
   }
 }
