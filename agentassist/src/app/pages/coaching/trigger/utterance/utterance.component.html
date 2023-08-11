@@ -5,7 +5,8 @@
             <button class="and-or-btn" (click)="changeOperator(operator)" [ngClass]="{'active-btn' : selectedOperator === operator}">{{operator | titlecase}}</button>
         </ng-container>
     </div>
-    <span class="utt-name-desc">Triggered by utterance by </span>
+    <span class="utt-name-desc" *ngIf="!selUser || selUser == 'customer'">a </span>
+    <span class="utt-name-desc" *ngIf="selUser && selUser == 'agent'">an </span>
     <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body">
         <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!selUser}">
             <span class="choose-text">{{selUser ? (selUser | titlecase) : '{ select person }'}}</span>
@@ -19,7 +20,7 @@
             </ng-container>
         </ul>
     </div>
-    <span class="utt-name-desc">when they use any of these </span>
+    <span class="utt-name-desc">uses any of these </span>
     <div class="dropdown-custom-flows" container="body">
         <button class="dropdown-toggle btn-toggle text-choosen" (click)="openAdherence()">
             <span class="choose-text"> {{(form?.value?.when?.utteranceCount || form.value?.default) ? ((form?.value?.when?.utteranceCount ? form?.value?.when?.utteranceCount : '') + ' utterance(s)') : '{ set utterances }'}}</span>
