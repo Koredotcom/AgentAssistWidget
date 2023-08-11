@@ -13,9 +13,7 @@ export class StepCreateComponent implements OnInit, OnChanges {
   @Input() stepForm: FormGroup;
   @Input() createOrUpdateStep = 'create';
   @Output() updateStep = new EventEmitter();
-
   checklistConst = CHECKLISTCNST.COLORS;
-
   showButtons = false;
   selectedStepButton : any = '';
   selectedRunDialog : any = '';

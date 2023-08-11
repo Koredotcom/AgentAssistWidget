@@ -1,25 +1,34 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from '@kore.services/auth.service';
-import { LocalStoreService } from '@kore.services/localstore.service';
-import { workflowService } from '@kore.services/workflow.service';
-import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
-import { CHECKLISTCNST } from '../checklist.const';
-import { ServiceInvokerService } from '@kore.services/service-invoker.service';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from "@angular/core";
+import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
+import { AuthService } from "@kore.services/auth.service";
+import { LocalStoreService } from "@kore.services/localstore.service";
+import { workflowService } from "@kore.services/workflow.service";
+import { SliderComponentComponent } from "src/app/shared/slider-component/slider-component.component";
+import { CHECKLISTCNST } from "../checklist.const";
+import { ServiceInvokerService } from "@kore.services/service-invoker.service";
+import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
+import { ChecklistService } from "../../checklist.service";
 
 @Component({
-  selector: 'app-stages-list',
-  templateUrl: './stages-list.component.html',
-  styleUrls: ['./stages-list.component.scss']
+  selector: "app-stages-list",
+  templateUrl: "./stages-list.component.html",
+  styleUrls: ["./stages-list.component.scss"],
 })
 export class StagesListComponent implements OnInit {
-
   @Output() closeCheckList = new EventEmitter();
-  @ViewChild('checklistCreateSlider', { static: true }) checklistCreateSlider: SliderComponentComponent;
-  @ViewChild('stepCreateSlider', { static: true }) stepCreateSlider: SliderComponentComponent;
-  @Input() checkListType = 'primary';
-  @Input() createOrUpdate = 'create';
+  @ViewChild("checklistCreateSlider", { static: true })
+  checklistCreateSlider: SliderComponentComponent;
+  @ViewChild("stepCreateSlider", { static: true })
+  stepCreateSlider: SliderComponentComponent;
+  @Input() checkListType = "primary";
+  @Input() createOrUpdate = "create";
   @Input() currentCheckList: any = {};
   isStepOpen = false;
   isCheckListOpen = false;
@@ -28,160 +37,109 @@ export class StagesListComponent implements OnInit {
   stepForm: FormGroup;
   selAcc = this.local.getSelectedAccount();
   triggerBy: FormGroup;
-  name = new FormControl('');
+  name = new FormControl("");
   stage = {
-    name: '',
-    runTimeName: '',
-    color: '#F0F9FF',
+    name: "",
+    runTimeName: "",
+    color: "#F0F9FF",
     steps: [],
     edit: false,
     isNew: true,
   };
-  createOrUpdateStep = 'create';
+  createOrUpdateStep = "create";
   stages = [];
   checklistConst = CHECKLISTCNST.COLORS;
   relaod = false;
-  currentStage:any = {};
-  isCheckListCreateOrUpdate = 'create';
-  allTagList : any = [];
-  constructor(private fb: FormBuilder,
+  currentStage: any = {};
+  isCheckListCreateOrUpdate = "create";
+  allTagList: any = [];
+  stageInx;
+  currDragStg;
+  currentStep;
+  stepIndex;
+  botId =
+    this.auth.isLoadingOnSm && this.selAcc
+      ? this.selAcc["instanceBots"][0]?.instanceBotId
+      : this.workflowService.getCurrentBt(true)._id;
+
+  constructor(
+    private fb: FormBuilder,
     private auth: AuthService,
     private local: LocalStoreService,
     private workflowService: workflowService,
     private service: ServiceInvokerService,
-  ) { }
+    private clS: ChecklistService
+  ) {}
 
   ngOnInit(): void {
-    let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
-    this.checkListForm = this.fb.group({
-      'botId': [botId, [Validators.required]],
-      'name': ['', [Validators.required]],
-      'description': ['', [Validators.required]],
-      'tags': this.fb.array([]),
-      'order': ['', [Validators.required]],
-      'channels': this.fb.array([], [Validators.required]),
-      'type': [this.checkListType, [Validators.required]],
-      'assignedTo': this.fb.group({
-        'isAllInteractions': [true],
-        'assignees': this.fb.group({
-          'groups': this.fb.array([]),
-          'agents': this.fb.array([]),
-        }),
-        'queues': this.fb.array([]),
-        'skills': this.fb.array([]),
-      }),
-      'stages': this.fb.array([]),
-      'isActive': [true, [Validators.required]],
-    });
-    this.triggerBy = this.fb.group({
-      'type': ['', [Validators.required]],
-      'botId': ['', [Validators.required]],
-      'taskId': ['', [Validators.required]],
-      'when': ['', [Validators.required]],
-      'addUtterances': this.fb.array([]),
-    });
+    this.checkListForm = this.fb.group(
+      this.clS.getCheckListForm(this.botId, this.checkListType)
+    );
+    this.triggerBy = this.fb.group(this.clS.getTriggerBy());
     this.name.valueChanges.subscribe((val) => {
-      this.checkListForm.controls['name'].patchValue(val);
+      this.checkListForm.controls["name"].patchValue(val);
     });
-    if(this.createOrUpdate === 'create'){
+    if (this.createOrUpdate === "create") {
       this.openCheckList();
-      this.stages.push({...this.stage});
-    }else{
-      console.log("this.currentCheckList?.stages", this.currentCheckList?.stages);
+      this.stages.push(JSON.parse(JSON.stringify(this.stage)));
+    } else {
+      this.name.patchValue(this.currentCheckList.name);
       this.stages = this.currentCheckList?.stages || [];
     }
   }
 
-  // ngOnChanges(changes: SimpleChanges): void {
-  //   if (changes?.createOrUpdate?.currentValue === 'create') {
-  //     this.openCheckList();
-  //     this.stages.push({...this.stage});
-  //   } else {
-  //     this.stages = this.currentCheckList?.stages || [];
-  //   }
-  // }
-
-  createStepForm(){
-    let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
-    this.stepForm = new FormGroup({
-      "botId": new FormControl(botId, [Validators.required]),
-      "name": new FormControl('', [Validators.required]),
-      "description": new FormControl('', [Validators.required]),
-      "confirmButtons": this.fb.array([]),
-      "Adherence": new FormGroup({}),
-      "clsId": new FormControl(''),
-    })
+  createStepForm() {
+    this.stepForm = this.fb.group(this.clS.getStepForm(this.botId));
   }
-
 
   closeCheckListScreen(e?) {
     this.closeCheckList.emit(this.relaod ? this.relaod : e);
   }
 
   openSettings() {
-    // this.isCheckListOpen = true;
-    this.isCheckListCreateOrUpdate = 'update';
-    if(this.currentCheckList){
-      console.log(this.currentCheckList, 'current check list');
-      
+    this.isCheckListCreateOrUpdate = "update";
+    if (this.currentCheckList) {
       this.patchSettings(this.currentCheckList);
     }
     this.getRuleTags();
-    // this.checklistCreateSlider.openSlider("#checklistCreate", "");
   }
 
-  patchSettings(obj){    
-    this.checkListForm = this.fb.group({
-      'botId': [obj.botId, [Validators.required]],
-      'name': [obj.name, [Validators.required]],
-      'description': [obj.description, [Validators.required]],
-      'tags': this.fb.array(obj.tags),
-      'order': [obj.order, [Validators.required]],
-      'channels': this.fb.array(obj.channels, [Validators.required]),
-      'type': [obj.type, [Validators.required]],
-      'assignedTo': this.fb.group({
-        'isAllInteractions': [obj.assignedTo?.isAllInteractions || true],
-        'assignees': this.fb.group({
-          'groups': this.fb.array(obj.assignedTo?.assignees?.groups || []),
-          'agents': this.fb.array(obj.assignedTo?.assignees?.agents || []),
-        }),
-        'queues': this.fb.array(obj.queues || []),
-        'skills': this.fb.array(obj.skills || []),
-      }),
-      'stages': this.fb.array(obj.stages),
-      'isActive': [obj.isActive, [Validators.required]],
-    });
+  patchSettings(obj) {
+    this.checkListForm = this.fb.group(this.clS.setCheckListForm(obj));
   }
 
-  openCheckList(){
-    this.isCheckListCreateOrUpdate = 'create';
-    this.getRuleTags(true);
+  openCheckList() {
+    this.isCheckListCreateOrUpdate = "create";
+    this.getRuleTags();
   }
 
-  getRuleTags(create=false){
-    let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
-    let params : any = {
-      botId
-    }
-    this.service.invoke('get.agentcoachingruletags',params, {
-      botId,
-    }).subscribe(data => {
-      if (data && data.tags?.length > 0) {
-        this.allTagList = data.tags;
-      };
-      this.isCheckListOpen = true;
-      this.checklistCreateSlider.openSlider("#checklistCreate", "");
-    });
+  getRuleTags() {
+    let params: any = {
+      botId: this.botId,
+    };
+    this.service
+      .invoke("get.agentcoachingruletags", params, {
+        botId: this.botId,
+      })
+      .subscribe((data) => {
+        if (data && data.tags?.length > 0) {
+          this.allTagList = data.tags;
+        }
+        this.isCheckListOpen = true;
+        this.checklistCreateSlider.openSlider("#checklistCreate", "");
+      });
   }
 
   close(e) {
     if (e.checkListClose) {
       this.dismisCheckList();
-    } if (e.relaod && e.isSaved) {
+    }
+    if (e.relaod && e.isSaved) {
       this.relaod = e.relaod;
       this.name.patchValue(this.checkListForm.value.name);
       this.checkListForm.updateValueAndValidity();
-    } if (!e.isSaved && this.createOrUpdate !== 'update') {
+    }
+    if (!e.isSaved && this.createOrUpdate !== "update") {
       this.closeCheckListScreen(!e.isSaved);
     }
   }
@@ -197,67 +155,57 @@ export class StagesListComponent implements OnInit {
   }
 
   saveStageApi(stage, isStageUpdate = true) {
-    let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
-    stage.botId = botId;
-    let params = {}
-    let method = 'post.stage';
+    let params = {};
+    let method = "post.stage";
     if (!stage.isNew) {
-      method = 'put.stage';
+      method = "put.stage";
       params = {
-        botId,
+        botId: this.botId,
         clsId: stage._id,
-        clId: this.currentCheckList._id
-      }
+        clId: this.currentCheckList._id,
+      };
     } else {
       params = {
-        clId: this.currentCheckList._id
+        clId: this.currentCheckList._id,
       };
     }
     let obj = {
-      botId,
-      name: stage.name,
-      color: stage.color,
-      steps: stage.steps.map((step)=>step._id)
+      botId: this.botId,
+      steps: stage.steps.map((step) => step._id),
+    };
+    if (stage.isNew) {
+      obj["color"] = stage.color;
+      obj["name"] = stage.name;
     }
-    this.service.invoke(method, params, obj)
-      .subscribe((data) => {
-        if (data) {
-          stage.edit = false;
-          stage.isNew = false;
-          stage._id = data._id;
-          if (isStageUpdate) {
-            this.updateStagesOrder();
-          }
+    this.service.invoke(method, params, obj).subscribe((data) => {
+      if (data) {
+        stage.edit = false;
+        stage.isNew = false;
+        stage._id = data._id;
+        if (isStageUpdate) {
+          this.updateStagesOrder();
         }
-      });
+      }
+    });
   }
 
-  // updateStages() {
-  //   let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
-  //   this.currentCheckList.stages = this.stages.map((item) => {
-  //     if (item._id) {
-  //       return item._id;
-  //     }
-  //   });
-  //   this.service.invoke('put.checklist', { botId, clId: this.currentCheckList._id }, this.currentCheckList)
-  //     .subscribe((data) => {
-  //   });
-  // }
-
-  updateStagesOrder(){
-    let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
+  updateStagesOrder() {
     this.currentCheckList.stages = this.stages.map((item) => {
       if (item._id) {
         return item._id;
       }
     });
     const payload = {
-      botId,
-      stages: [...this.currentCheckList.stages]
-    }
-    this.service.invoke('put.checklist.order', { botId, clId: this.currentCheckList._id }, payload)
-      .subscribe((data) => {
-    });
+      botId: this.botId,
+      stages: [...this.currentCheckList.stages],
+    };
+    this.service
+      .invoke(
+        "put.checklist.order",
+        { botId: this.botId, clId: this.currentCheckList._id },
+        payload
+      )
+      .subscribe((data) => {});
   }
 
   colorUpdate(stage) {
@@ -265,99 +213,105 @@ export class StagesListComponent implements OnInit {
   }
 
   addStages(i) {
-    this.stages.splice(i + 1, 0, { ...this.stage });
+    this.stages.splice(i + 1, 0, JSON.parse(JSON.stringify(this.stage)));
   }
-  currentInx;
-  stepCreate(item, i){
-    this.createOrUpdateStep = 'create';
+
+  stepCreate(item, i) {
+    this.createOrUpdateStep = "create";
     this.isStepOpen = true;
-    this.currentInx = i;
+    this.stageInx = i;
     this.currentStage = item;
     this.createStepForm();
     setTimeout(() => {
-      this.stepForm.controls['clsId'].patchValue(item._id)
+      this.stepForm.controls["clsId"].patchValue(item._id);
       this.stepCreateSlider.openSlider("#stepCreate", "");
-    },);
+    });
   }
 
-  closeStepModal(){
-    this.stepCreateSlider.closeSlider('#stepCreate');
+  closeStepModal() {
+    this.stepCreateSlider.closeSlider("#stepCreate");
     this.isStepOpen = false;
   }
 
-  closeStep(e){
+  closeStep(e) {
     this.closeStepModal();
-    if(!e){
-      this.stages[this.currentInx].newStep = false;
+    if (!e) {
+      this.stages[this.stageInx].newStep = false;
     }
   }
 
-  saveStep(event){
-    if(this.stepForm.valid){
-      this.service.invoke('post.step', {}, this.stepForm.value)
-      .subscribe((data) => {
-        this.stages[this.currentInx].steps.push(data)
-        this.stages[this.currentInx].newStep = false;
-        this.saveStageApi(this.stages[this.currentInx], false);
-        this.closeStepModal();
-      });
+  saveStep(event = false) {
+    if (this.stepForm.valid) {
+      this.service
+        .invoke("post.step", {}, this.stepForm.value)
+        .subscribe((data) => {
+          this.stages[this.stageInx].steps.push(data);
+          this.stages[this.stageInx].newStep = false;
+          this.saveStageApi(this.stages[this.stageInx], false);
+          this.closeStepModal();
+        });
     }
   }
-  currDragStg;
+
   drop(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this.stages[this.currDragStg].steps, event.previousIndex, event.currentIndex);
+    moveItemInArray(
+      this.stages[this.currDragStg].steps,
+      event.previousIndex,
+      event.currentIndex
+    );
   }
 
-  saveCheckList(event){
-    // if(event.type === 'primary'){
-      let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
-      this.service.invoke('get.checklistbyid', {botId, clId: event._id})
-      .subscribe((data)=>{
-        this.currentCheckList = {...data[0]};
-        if(event.type === 'primary'){
+  saveCheckList(event) {
+    this.service
+      .invoke("get.checklistbyid", { botId: this.botId, clId: event._id })
+      .subscribe((data) => {
+        this.currentCheckList = { ...data[0] };
+        if (event.type === "primary") {
           this.stages = data[0]?.stages;
         }
-        this.checklistCreateSlider.closeSlider('#checklistCreate');
+        this.checklistCreateSlider.closeSlider("#checklistCreate");
       });
-    // }else if(event.type === 'dynamic'){
-    //   this.checklistCreateSlider.closeSlider('#checklistCreate');
-    // }
   }
-  currentStep;
-  stepIndex;
-  openEditStep(item, step, i, si){
-    this.isStepOpen = true;
-    this.createOrUpdateStep = 'update';
-    this.currentInx = i;
+
+  openEditStep(item, step, i, si) {
+    this.createOrUpdateStep = "update";
+    this.stageInx = i;
     this.currentStage = item;
     this.currentStep = step;
     this.stepIndex = si;
     this.createStepForm();
     this.stepForm.patchValue(step);
+    this.isStepOpen = true;
     setTimeout(() => {
-      this.stepForm.controls['clsId'].patchValue(item._id)
+      this.stepForm.controls["clsId"].patchValue(item._id);
       this.stepCreateSlider.openSlider("#stepCreate", "");
-    },);
+    });
   }
 
-  updateStep(event){
-    let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
-    if(this.stepForm.valid && event){
-      this.service.invoke('put.step', {clstId: this.currentStep._id, botId, clsId: this.currentStage._id}, this.stepForm.value)
-      .subscribe((data) => {
-        this.stages[this.currentInx].steps.splice(this.stepIndex, 1, data);
-        this.saveStageApi(this.stages[this.currentInx], false);
-        this.closeStepModal();
-      });
+  updateStep(event) {
+    if (this.stepForm.valid && event) {
+      this.service
+        .invoke(
+          "put.step",
+          {
+            clstId: this.currentStep._id,
+            botId: this.botId,
+            clsId: this.currentStage._id,
+          },
+          this.stepForm.value
+        )
+        .subscribe((data) => {
+          this.stages[this.stageInx].steps.splice(this.stepIndex, 1, data);
+          this.closeStepModal();
+        });
     }
   }
 
-  dismisCheckList(data?){
-    if(data){
+  dismisCheckList(data?) {
+    if (data) {
       this.currentCheckList = data;
     }
     this.isCheckListOpen = false;
-    this.checklistCreateSlider.closeSlider('#checklistCreate');
+    this.checklistCreateSlider.closeSlider("#checklistCreate");
   }
-  
 }

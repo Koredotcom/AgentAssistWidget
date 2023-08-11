@@ -1,9 +1,12 @@
 <div class="stage-creation-slider-data">
     <div class="left-tabs">
-        <button class="tab-btn" [ngClass]="{'active-btn': isBasic}" (click)="isBasic = true">
+        <button class="tab-btn" [ngClass]="{'active-btn': tab === 'basic'}" (click)="tab = 'basic'">
             <i class="icon-coaching--settings"></i>
         </button>
-        <button class="tab-btn" [ngClass]="{'active-btn': !isBasic}" (click)="isBasic = false">
+        <button class="tab-btn" [ngClass]="{'active-btn': tab === 'trigger'}" (click)="tab = 'trigger'">
+            <i class="icon-coaching--thendo"></i>
+        </button>
+        <button class="tab-btn" [ngClass]="{'active-btn': tab === 'assignment'}" (click)="tab = 'assignment'">
             <i class="icon-coaching--thendo"></i>
         </button>
     </div>
@@ -17,7 +20,7 @@
         <div class="body-data" [formGroup]="checkListForm">
             <perfect-scrollbar>
                 <div class="inner-content-data">
-                    <div [ngClass]="{'d-none': !isBasic}">
+                    <div [ngClass]="{'d-none': tab !== 'basic'}">
                         <ng-container>
                             <div class="kr-sg-input-text m-b-12">
                                 <div class="label-text">Name</div>
@@ -87,7 +90,7 @@
                             </div>
                         </ng-container>
                     </div>
-                    <div [ngClass]="{'d-none': isBasic}">
+                    <div [ngClass]="{'d-none': tab !== 'trigger'}">
                         <div class="add-utterance-block">
                             <div class="utt-radio-block">
                                 <div class="radio-block-content" [ngClass]="{'active-check': assignType === 'all'}">
@@ -373,6 +376,10 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div [ngClass]="{'d-none': tab !== 'assignment'}">
+                        <!-- trigger -->
+                        <app-trigger-by></app-trigger-by>
                     </div>
                 </div>
             </perfect-scrollbar>

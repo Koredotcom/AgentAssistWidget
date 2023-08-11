@@ -1,367 +1,196 @@
 <div class="checklist-creation-wrapper-container">
-    <div class="heading-actions-block">
-        <div class="left-content">
-            <div class="arrow-back" (click)="closeCheckListScreen()">
-                <i class="icon-coaching--left-arrow"></i>
-            </div>
-            <div class="border-divider"></div>
-            <div class="kr-sg-input-text">
-                <input type="text" maxlength="100" [formControl]="name" placeholder="new coaching rule"
-                    class="input-text">
-            </div>
-        </div>
-        <div class="middle-content">
-
-            <div class="tags-info">
-                <span class="tag-name">price</span>
-                <div class="kr-sg-dropdowns" ngbDropdown container="body">
-                    <div class="dropdown dropdown-open">
-                        <button class="dropdown-toggle dropdown-input before-none" ngbDropdownToggle>+2 More</button>
-                        <ul class="dropdown-menu content-menu more-dropdown-tags" ngbDropdownMenu>
-                            <ng-container>
-                                <li ngbDropdownItem class="p-0">
-                                    <span class="mx-w-100">Option</span>
-                                </li>
-                            </ng-container>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="btn-actions">
-            <button class="settings-actions" (click)="openSettings()">
-                <i class="icon-sa-settings"></i>
+  <div class="heading-actions-block">
+    <div class="left-content">
+      <div class="arrow-back" (click)="closeCheckListScreen()">
+        <i class="icon-coaching--left-arrow"></i>
+      </div>
+      <div class="border-divider"></div>
+      <div class="kr-sg-input-text">
+        <input
+          type="text"
+          maxlength="100"
+          [formControl]="name"
+          placeholder="new coaching rule"
+          class="input-text"
+        />
+      </div>
+    </div>
+    <div class="middle-content">
+      <div class="tags-info">
+        <span class="tag-name">price</span>
+        <div class="kr-sg-dropdowns" ngbDropdown container="body">
+          <div class="dropdown dropdown-open">
+            <button
+              class="dropdown-toggle dropdown-input before-none"
+              ngbDropdownToggle
+            >
+              +2 More
             </button>
-            <button class="kr-sg-button-secondary-two btn_lg">Publish</button>
-            <button class="kr-sg-button-primary btn_lg">Save</button>
+            <ul
+              class="dropdown-menu content-menu more-dropdown-tags"
+              ngbDropdownMenu
+            >
+              <ng-container>
+                <li ngbDropdownItem class="p-0">
+                  <span class="mx-w-100">Option</span>
+                </li>
+              </ng-container>
+            </ul>
+          </div>
         </div>
+      </div>
     </div>
-    <div class="checklist-body-wrapper">
-        <div class="check-list-data">
-            <perfect-scrollbar>
-
-                <div class="content-info-wrapper">
-                    <ng-container *ngFor="let item of stages; let i = index">
-                        <div class="list-datachecked" [ngStyle]="{'background': item.color}">
-                            <div class="check-list-title-block"
-                                [ngClass]="{'edit-mode-title': item.edit || item.isNew}">
-                                <div class="title">{{item.name}}</div>
-                                <input type="text" [(ngModel)]="item.runTimeName" class="add-title-input"
-                                    placeholder="New group">
-                                <div class="hover-actions">
-                                    <div class="choose-bg-color-dropdown" ngbDropdown>
-                                        <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>
-                                            <span></span>
-                                        </button>
-                                        <ul class="dropdown-menu" ngbDropdownMenu>
-                                            <div class="select-colors">
-                                                <ng-container *ngFor="let color of checklistConst | keyvalue">
-                                                    <li ngbDropdownItem
-                                                        [ngClass]="{'selected-color': color.value === item.color}"
-                                                        (click)="item.color = color.value;colorUpdate(item);">
-                                                        <span [ngStyle]="{'border': '1px solid '+color.key}"></span>
-                                                    </li>
-                                                </ng-container>
-                                            </div>
-                                        </ul>
-                                    </div>
-                                    <div class="edit-title">
-                                        <i class="icon-sa-welcome-edit" (click)="editStage(item)"></i>
-                                    </div>
-                                    <div class="check-item">
-                                        <i class="icon-coaching--check" (click)="saveStage(item)"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- <div> -->
-                                <ng-container *ngFor="let step of item.steps; let si = index">
-                                    <div class="added-check-item" (click)="openEditStep(item, step, i, si)">
-                                        <div class="drag-item" >
-                                            <i class="icon-coaching--move1"></i>
-                                        </div>
-                                        <div class="content-info">
-                                            <div class="title">{{step.name}}</div>
-                                            <div class="desc-text">{{step.description}}</div>
-                                            <div class="tags-info">
-                                                <div class="tag_name">
-                                                    <i class="icon-coaching--adherence-set"></i>
-                                                    <span>Utterance</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="delete-item">
-                                            <i class="icon-sa-welcome-delete"></i>
-                                        </div>
-                                    </div>
-                                </ng-container>
-                            <!-- </div> -->
-                            <ng-container *ngIf="item.newStep">
-                                <div class="new-step-add">
-                                    <div class="drag-item">
-                                        <i class="icon-coaching--move1"></i>
-                                    </div>
-                                    <input type="text" placeholder="New Step">
-                                    <div class="delete-item">
-                                        <i class="icon-sa-welcome-delete"></i>
-                                    </div>
-                                </div>
-                            </ng-container>
-                            <div class="add-step">
-                                <button (click)="item.newStep = true; stepCreate(item, i)">
-                                    <i class="icon-coaching--plus"></i>
-                                    <span>Add Step</span>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="add-stage-block">
-                            <div class="line-block"></div>
-                            <button (click)="addStages(i)">
-                                <i class="icon-coaching--plus"></i>
-                                <span>Add Stage</span>
-                            </button>
-                            <div class="line-block"></div>
-                        </div>
-                    </ng-container>
+    <div class="btn-actions">
+      <button class="settings-actions" (click)="openSettings()">
+        <i class="icon-sa-settings"></i>
+      </button>
+      <button class="kr-sg-button-secondary-two btn_lg">Publish</button>
+      <button class="kr-sg-button-primary btn_lg">Save</button>
+    </div>
+  </div>
+  <div class="checklist-body-wrapper">
+    <div class="check-list-data">
+      <perfect-scrollbar>
+        <div class="content-info-wrapper">
+          <ng-container *ngFor="let item of stages; let i = index">
+            <div
+              class="list-datachecked"
+              [ngStyle]="{ background: item.color }"
+            >
+              <div
+                class="check-list-title-block"
+                [ngClass]="{ 'edit-mode-title': item.edit || item.isNew }"
+              >
+                <div class="title">{{ item.name }}</div>
+                <input
+                  type="text"
+                  [(ngModel)]="item.runTimeName"
+                  class="add-title-input"
+                  placeholder="New group"
+                />
+                <div class="hover-actions">
+                  <div class="choose-bg-color-dropdown" ngbDropdown>
+                    <button
+                      class="dropdown-toggle dropdown-input"
+                      ngbDropdownToggle
+                    >
+                      <span></span>
+                    </button>
+                    <ul class="dropdown-menu" ngbDropdownMenu>
+                      <div class="select-colors">
+                        <ng-container
+                          *ngFor="let color of checklistConst | keyvalue"
+                        >
+                          <li
+                            ngbDropdownItem
+                            [ngClass]="{
+                              'selected-color': color.value === item.color
+                            }"
+                            (click)="
+                              item.color = color.value; colorUpdate(item)
+                            "
+                          >
+                            <span
+                              [ngStyle]="{ border: '1px solid ' + color.key }"
+                            ></span>
+                          </li>
+                        </ng-container>
+                      </div>
+                    </ul>
+                  </div>
+                  <div class="edit-title">
+                    <i
+                      class="icon-sa-welcome-edit"
+                      (click)="editStage(item)"
+                    ></i>
+                  </div>
+                  <div class="check-item">
+                    <i
+                      class="icon-coaching--check"
+                      (click)="saveStage(item)"
+                    ></i>
+                  </div>
                 </div>
-            </perfect-scrollbar>
-
-
-
-
-
-
-
-
-            <!-- <perfect-scrollbar>
-                <div class="content-info-wrapper">
-                    <div class="list-datachecked">
-                        <div class="check-list-title-block">
-                            <div class="title">Open</div>
-                            <input type="text" class="add-title-input" placeholder="New group">
-                            <div class="hover-actions">
-                                <div class="choose-bg-color-dropdown" ngbDropdown>
-                                    <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>
-                                        <span></span>
-                                    </button>
-                                    <ul class="dropdown-menu" ngbDropdownMenu>
-                                        <div class="select-colors">
-                                            <li ngbDropdownItem class="selected-color">
-                                                <span></span>
-                                            </li>
-                                            <li ngbDropdownItem>
-                                                <span></span>
-                                            </li>
-                                            <li ngbDropdownItem>
-                                                <span></span>
-                                            </li>
-                                            <li ngbDropdownItem>
-                                                <span></span>
-                                            </li>
-                                            <li ngbDropdownItem>
-                                                <span></span>
-                                            </li>
-                                            <li ngbDropdownItem>
-                                                <span></span>
-                                            </li>
-                                            <li ngbDropdownItem>
-                                                <span></span>
-                                            </li>
-                                            <li ngbDropdownItem>
-                                                <span></span>
-                                            </li>
-                                            <li ngbDropdownItem>
-                                                <span></span>
-                                            </li>
-                                            <li ngbDropdownItem>
-                                                <span></span>
-                                            </li>
-                                        </div>
-                                    </ul>
-                                </div>
-                                <div class="edit-title">
-                                    <i class="icon-sa-welcome-edit"></i>
-                                </div>
-                                <div class="check-item">
-                                    <i class="icon-coaching--check"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="added-check-item">
-                            <div class="drag-item">
-                                <i class="icon-coaching--move1"></i>
-                            </div>
-                            <div class="content-info">
-                                <div class="title">Greet the customer</div>
-                                <div class="desc-text">Greet the customer with an cheerful and personalized greeting
-                                </div>
-                            </div>
-                            <div class="delete-item">
-                                <i class="icon-sa-welcome-delete"></i>
-                            </div>
-                        </div>
-                        <div class="new-step-add">
-                            <div class="drag-item">
-                                <i class="icon-coaching--move1"></i>
-                            </div>
-                            <input type="text" placeholder="New Step">
-                            <div class="delete-item">
-                                <i class="icon-sa-welcome-delete"></i>
-                            </div>
-                        </div>
-                        <div class="add-step">
-                            <button>
-                                <i class="icon-coaching--plus"></i>
-                                <span>Add Step</span>
-                            </button>
-                        </div>
+              </div>
+              <ng-container *ngFor="let step of item.steps; let si = index">
+                <div
+                  class="added-check-item"
+                  (click)="openEditStep(item, step, i, si)"
+                >
+                  <div class="drag-item">
+                    <i class="icon-coaching--move1"></i>
+                  </div>
+                  <div class="content-info">
+                    <div class="title">{{ step.name }}</div>
+                    <div class="desc-text">{{ step.description }}</div>
+                    <div class="tags-info">
+                      <div class="tag_name">
+                        <i class="icon-coaching--adherence-set"></i>
+                        <span>Utterance</span>
+                      </div>
                     </div>
-                    <div class="add-stage-block">
-                        <div class="line-block"></div>
-                        <button>
-                            <i class="icon-coaching--plus"></i>
-                            <span>Add Stage</span>
-                        </button>
-                        <div class="line-block"></div>
-                    </div>
-                    <div class="list-datachecked">
-                        <div class="check-list-title-block edit-mode-title">
-                            <div class="title">Resolve</div>
-                            <input type="text" class="add-title-input" placeholder="New group">
-                            <div class="hover-actions">
-                                <div class="choose-bg-color-dropdown" ngbDropdown>
-                                    <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>
-                                        <span></span>
-                                    </button>
-                                    <ul class="dropdown-menu" ngbDropdownMenu>
-                                        <div class="select-colors">
-                                            <li ngbDropdownItem class="selected-color">
-                                                <span></span>
-                                            </li>
-                                            <li ngbDropdownItem>
-                                                <span></span>
-                                            </li>
-                                            <li ngbDropdownItem>
-                                                <span></span>
-                                            </li>
-                                            <li ngbDropdownItem>
-                                                <span></span>
-                                            </li>
-                                            <li ngbDropdownItem>
-                                                <span></span>
-                                            </li>
-                                            <li ngbDropdownItem>
-                                                <span></span>
-                                            </li>
-                                            <li ngbDropdownItem>
-                                                <span></span>
-                                            </li>
-                                            <li ngbDropdownItem>
-                                                <span></span>
-                                            </li>
-                                            <li ngbDropdownItem>
-                                                <span></span>
-                                            </li>
-                                            <li ngbDropdownItem>
-                                                <span></span>
-                                            </li>
-                                        </div>
-                                    </ul>
-                                </div>
-                                <div class="edit-title">
-                                    <i class="icon-sa-welcome-edit"></i>
-                                </div>
-                                <div class="check-item">
-                                    <i class="icon-coaching--check"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="added-check-item">
-                            <div class="drag-item">
-                                <i class="icon-coaching--move1"></i>
-                            </div>
-                            <div class="content-info">
-                                <div class="title">Greet the customer</div>
-                                <div class="desc-text">Greet the customer with an cheerful and personalized greeting
-                                </div>
-                            </div>
-                            <div class="delete-item">
-                                <i class="icon-sa-welcome-delete"></i>
-                            </div>
-                        </div>
-                        <div class="add-step">
-                            <button>
-                                <i class="icon-coaching--plus"></i>
-                                <span>Add Step</span>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="add-stage-block">
-                        <div class="line-block"></div>
-                        <button>
-                            <i class="icon-coaching--plus"></i>
-                            <span>Add Stage</span>
-                        </button>
-                        <div class="line-block"></div>
-                    </div>
-                    <div class="list-datachecked">
-                        <div class="check-list-title-block">
-                            <div class="title">Close</div>
-                            <input type="text" class="add-title-input" placeholder="New group">
-                        </div>
-                        <div class="added-check-item">
-                            <div class="drag-item">
-                                <i class="icon-coaching--move1"></i>
-                            </div>
-                            <div class="content-info">
-                                <div class="title">Greet the customer</div>
-                                <div class="desc-text">Greet the customer with an cheerful and personalized greeting
-                                </div>
-                                <div class="tags-info">
-                                    <div class="tag_name">
-                                        <i class="icon-coaching--adherence-set"></i>
-                                        <span>Utterance</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="delete-item">
-                                <i class="icon-sa-welcome-delete"></i>
-                            </div>
-                        </div>
-                        <div class="add-step">
-                            <button>
-                                <i class="icon-coaching--plus"></i>
-                                <span>Add Step</span>
-                            </button>
-                        </div>
-                    </div>
+                  </div>
+                  <div class="delete-item">
+                    <i class="icon-sa-welcome-delete"></i>
+                  </div>
                 </div>
-            </perfect-scrollbar> -->
+              </ng-container>
+              <!-- </div> -->
+              <ng-container *ngIf="item.newStep">
+                <div class="new-step-add">
+                  <div class="drag-item">
+                    <i class="icon-coaching--move1"></i>
+                  </div>
+                  <input type="text" placeholder="New Step" />
+                  <div class="delete-item">
+                    <i class="icon-sa-welcome-delete"></i>
+                  </div>
+                </div>
+              </ng-container>
+              <div class="add-step">
+                <button (click)="item.newStep = true; stepCreate(item, i)">
+                  <i class="icon-coaching--plus"></i>
+                  <span>Add Step</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="add-stage-block">
+              <div class="line-block"></div>
+              <button (click)="addStages(i)">
+                <i class="icon-coaching--plus"></i>
+                <span>Add Stage</span>
+              </button>
+              <div class="line-block"></div>
+            </div>
+          </ng-container>
         </div>
+      </perfect-scrollbar>
     </div>
+  </div>
 </div>
-<app-slider-component id="checklistCreate" #checklistCreateSlider='app-slider'>
-    <app-create-checklist 
-        *ngIf="isCheckListOpen"
-        [createOrUpdate]="isCheckListCreateOrUpdate"
-        [checkListForm]="checkListForm" 
-        [checkListType]="checkListType" 
-        (closeE)="close($event)"
-        (saveEvent)="saveCheckList($event)"
-        (closeChecklist)="dismisCheckList($event)"
-        [currentCheckList]="currentCheckList"
-        [allTagList]="allTagList">
-    </app-create-checklist>
+<app-slider-component id="checklistCreate" #checklistCreateSlider="app-slider">
+  <app-create-checklist
+    *ngIf="isCheckListOpen"
+    [createOrUpdate]="isCheckListCreateOrUpdate"
+    [checkListForm]="checkListForm"
+    [checkListType]="checkListType"
+    (closeE)="close($event)"
+    (saveEvent)="saveCheckList($event)"
+    (closeChecklist)="dismisCheckList($event)"
+    [currentCheckList]="currentCheckList"
+    [allTagList]="allTagList"
+  >
+  </app-create-checklist>
 </app-slider-component>
-<app-slider-component 
-    id="stepCreate" 
-    #stepCreateSlider='app-slider'>
-    <app-step-create
-        *ngIf="isStepOpen"
-        [stepForm]="stepForm"
-        (closeE)="closeStep($event)"
-        (saveStep)="saveStep($event)"
-        [createOrUpdateStep]="createOrUpdateStep"
-        (updateStep)="updateStep($event)">
-    </app-step-create>
+<app-slider-component id="stepCreate" #stepCreateSlider="app-slider">
+  <app-step-create
+    *ngIf="isStepOpen"
+    [stepForm]="stepForm"
+    (closeE)="closeStep($event)"
+    (saveStep)="saveStep($event)"
+    [createOrUpdateStep]="createOrUpdateStep"
+    (updateStep)="updateStep($event)"
+  >
+  </app-step-create>
 </app-slider-component>

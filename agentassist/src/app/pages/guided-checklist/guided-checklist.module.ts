@@ -9,6 +9,7 @@ import { ChecklistService } from './checklist.service';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { StagesListComponent } from './common/stages-list/stages-list.component';
 import { StageCreateComponent } from './common/create-checklist/create-checklist.component';
+import { TriggerByComponent } from './common/trigger-by/trigger-by.component';
 
 const routes: Routes = [
   { path: '', component:  GuidedChecklistComponent}
@@ -21,7 +22,8 @@ const routes: Routes = [
     DynamicChecklistComponent,
     StagesListComponent,
     StageCreateComponent,
-    StepCreateComponent
+    StepCreateComponent,
+    TriggerByComponent
   ],
   imports: [
     CommonModule,
