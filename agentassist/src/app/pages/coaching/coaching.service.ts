@@ -120,15 +120,17 @@ export class CoachingService {
     private service : ServiceInvokerService) { }
 
   updateLockOnRule(flag, currentRule, selAcc){
-    let botId = this.auth.isLoadingOnSm && selAcc ? selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
-    let params : any = {
-      botId,
-      ruleId : currentRule._id,
-      userId : this.auth.getUserId()
+    if(currentRule && currentRule._id){
+      let botId = this.auth.isLoadingOnSm && selAcc ? selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
+      let params : any = {
+        botId,
+        ruleId : currentRule._id,
+        userId : this.auth.getUserId()
+      }
+      this.service.invoke('post.checkLock', params, {actions : {isLocked : flag}}).subscribe(data => {
+        console.log(data, "data inside check lock screen");
+      })
     }
-    this.service.invoke('post.checkLock', params, {actions : {isLocked : flag}}).subscribe(data => {
-      console.log(data, "data inside check lock screen");
-    })
   }
 
   getUtteranceFormControlObject(){
