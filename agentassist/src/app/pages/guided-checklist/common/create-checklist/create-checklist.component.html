@@ -35,27 +35,26 @@
                             <mat-form-field class="example-chip-list m-b-15">
                                 <mat-label>Add Tags</mat-label>
                                 <mat-chip-list #chipList>
-                                    <mat-chip [selectable]="true" [removable]="true">
-                                        <span class="chip-name text-truncate mx-w-100" title="">Tag1</span>
+                                    <mat-chip *ngFor="let tag of checkListForm.value?.tags" [selectable]="true" [removable]="true" (removed)="remove(tag.name)">
+                                        <span class="chip-name text-truncate mx-w-100" title="{{tag.name}}">{{tag.name}}</span>
                                         <span class="icon-sa-close" matChipRemove *ngIf="true"></span>
                                     </mat-chip>
                                     <input placeholder="Add Tags" #tagInput [matChipInputFor]="chipList"
-                                                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="false"
-                                                    (matChipInputTokenEnd)="add($event)" [matAutocomplete]="auto" [formControl]="tagControl"
-                                                    #trigger="matAutocompleteTrigger">
+                                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="false"
+                                        (matChipInputTokenEnd)="add($event)" [matAutocomplete]="auto" [formControl]="tagControl"
+                                        #trigger="matAutocompleteTrigger">
                                 </mat-chip-list>
                                 <mat-autocomplete #auto="matAutocomplete">
                                     <div class="mat-checkboxs">
-                                        <!-- <mat-option *ngFor="let tag of filteredTagsDisplay;let i = index" [title]="tag"
-                                                        (click)="selectedOption(tag.name, i);$event.stopPropagation();trigger.openPanel()">
-                                                        <input id="checkbox-{{i}}" type="checkbox"
-                                                            (click)="selectedOption(tag.name, i);trigger.openPanel();$event.stopPropagation();" [value]="tag.name"
-                                                            [checked]="tag.checked">
-                                                            <div class="label-check text-truncate" for="checkbox-{{i}}">
-                                                                <span>{{tag.name}}</span>
-                                                            </div>                            
-                                                    </mat-option> -->
-                                        <mat-option></mat-option>
+                                        <mat-option *ngFor="let tag of filteredTagsDisplay;let i = index" [title]="tag"
+                                            (click)="selectedOption(tag.name, i);$event.stopPropagation();trigger.openPanel()">
+                                            <input id="checkbox-{{i}}" type="checkbox"
+                                                (click)="selectedOption(tag.name, i);trigger.openPanel();$event.stopPropagation();" [value]="tag.name"
+                                                [checked]="tag.checked">
+                                                <div class="label-check text-truncate" for="checkbox-{{i}}">
+                                                    <span>{{tag.name}}</span>
+                                                </div>                            
+                                        </mat-option>
                                     </div>
                                 </mat-autocomplete>
                             </mat-form-field>
@@ -79,15 +78,10 @@
                             <div class="channels-tags">
                                 <div class="label-text">Channels</div>
                                 <div class="channels-check">
-                                    <div class="check-item">
-                                        <input id="checkbox-1" (change)="channelVoice($event.target.checked)"
-                                            type="checkbox">
-                                        <span for="checkbox-1">voice</span>
-                                    </div>
-                                    <div class="check-item">
-                                        <input id="checkbox-1" (change)="channelChat($event.target.checked)"
-                                            type="checkbox">
-                                        <span for="checkbox-1">chat</span>
+                                    <div class="check-item" *ngFor="let item of channelList; let i = index">
+                                        <input id="checkbox-{{i}}" type="checkbox" (click)="channelSelection($event,item)"
+                                            [checked]="selectedchannelList.indexOf(item) >= 0">
+                                        <span for="checkbox-{{i}}">{{item}}</span>
                                     </div>
                                 </div>
                             </div>

@@ -348,8 +348,9 @@
         [checkListType]="checkListType" 
         (closeE)="close($event)"
         (saveEvent)="saveCheckList($event)"
-        (closeChecklist)="dismisCheckList()"
-        [currentCheckList]="currentCheckList">
+        (closeChecklist)="dismisCheckList($event)"
+        [currentCheckList]="currentCheckList"
+        [allTagList]="allTagList">
     </app-create-checklist>
 </app-slider-component>
 <app-slider-component 

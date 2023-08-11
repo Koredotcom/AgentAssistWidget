@@ -43,6 +43,7 @@ export class StagesListComponent implements OnInit {
   relaod = false;
   currentStage:any = {};
   isCheckListCreateOrUpdate = 'create';
+  allTagList : any = [];
   constructor(private fb: FormBuilder,
     private auth: AuthService,
     private local: LocalStoreService,
@@ -118,18 +119,59 @@ export class StagesListComponent implements OnInit {
   }
 
   openSettings() {
-    this.isCheckListOpen = true;
+    // this.isCheckListOpen = true;
     this.isCheckListCreateOrUpdate = 'update';
     if(this.currentCheckList){
-      this.checkListForm?.patchValue(this.currentCheckList);
+      console.log(this.currentCheckList, 'current check list');
+      
+      this.patchSettings(this.currentCheckList);
     }
-    this.checklistCreateSlider.openSlider("#checklistCreate", "");
+    this.getRuleTags();
+    // this.checklistCreateSlider.openSlider("#checklistCreate", "");
+  }
+
+  patchSettings(obj){    
+    this.checkListForm = this.fb.group({
+      'botId': [obj.botId, [Validators.required]],
+      'name': [obj.name, [Validators.required]],
+      'description': [obj.description, [Validators.required]],
+      'tags': this.fb.array(obj.tags),
+      'order': [obj.order, [Validators.required]],
+      'channels': this.fb.array(obj.channels, [Validators.required]),
+      'type': [obj.type, [Validators.required]],
+      'assignedTo': this.fb.group({
+        'isAllInteractions': [obj.assignedTo?.isAllInteractions || true],
+        'assignees': this.fb.group({
+          'groups': this.fb.array(obj.assignedTo?.assignees?.groups || []),
+          'agents': this.fb.array(obj.assignedTo?.assignees?.agents || []),
+        }),
+        'queues': this.fb.array(obj.queues || []),
+        'skills': this.fb.array(obj.skills || []),
+      }),
+      'stages': this.fb.array(obj.stages),
+      'isActive': [obj.isActive, [Validators.required]],
+    });
   }
 
   openCheckList(){
-    this.isCheckListOpen = true;
     this.isCheckListCreateOrUpdate = 'create';
-    this.checklistCreateSlider.openSlider("#checklistCreate", "");
+    this.getRuleTags(true);
+  }
+
+  getRuleTags(create=false){
+    let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
+    let params : any = {
+      botId
+    }
+    this.service.invoke('get.agentcoachingruletags',params, {
+      botId,
+    }).subscribe(data => {
+      if (data && data.tags?.length > 0) {
+        this.allTagList = data.tags;
+      };
+      this.isCheckListOpen = true;
+      this.checklistCreateSlider.openSlider("#checklistCreate", "");
+    });
   }
 
   close(e) {
