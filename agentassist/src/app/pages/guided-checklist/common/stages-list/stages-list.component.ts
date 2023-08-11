@@ -184,23 +184,38 @@ export class StagesListComponent implements OnInit {
           stage.isNew = false;
           stage._id = data._id;
           if (isStageUpdate) {
-            this.updateStages();
+            this.updateStagesOrder();
           }
         }
       });
   }
 
-  updateStages() {
+  // updateStages() {
+  //   let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
+  //   this.currentCheckList.stages = this.stages.map((item) => {
+  //     if (item._id) {
+  //       return item._id;
+  //     }
+  //   });
+  //   this.service.invoke('put.checklist', { botId, clId: this.currentCheckList._id }, this.currentCheckList)
+  //     .subscribe((data) => {
+  //   });
+  // }
+
+  updateStagesOrder(){
     let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
     this.currentCheckList.stages = this.stages.map((item) => {
       if (item._id) {
         return item._id;
       }
     });
-    this.service.invoke('put.checklist', { botId, clId: this.currentCheckList._id }, this.currentCheckList)
+    const payload = {
+      botId,
+      stages: [...this.currentCheckList.stages]
+    }
+    this.service.invoke('put.checklist.order', { botId, clId: this.currentCheckList._id }, payload)
       .subscribe((data) => {
-
-      });
+    });
   }
 
   colorUpdate(stage) {

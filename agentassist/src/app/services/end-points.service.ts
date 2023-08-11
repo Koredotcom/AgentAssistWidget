@@ -1714,6 +1714,11 @@ export class EndPointsService {
       method : 'put'
     }
 
+    this.serviceList['put.checklist.order'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/acchecklists/:botId/checklist/:clId',
+      method : 'put'
+    }
+
     this.serviceList['post.step'] = {
       endpoint : this.SMARTASSIST_API_SERVER_URL + '/acclsteps',
       method : 'post'
