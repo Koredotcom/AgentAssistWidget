@@ -25,19 +25,25 @@ export class StageCreateComponent implements OnInit {
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   tagControl :  FormControl = new FormControl();
   isBasic = true;
-  @Input() checkListForm: FormGroup;
   triggerBy: FormGroup;
   assignType = 'all';
-  @Input() checkListType = 'primary';
   loading = false;
   selAcc = this.local.getSelectedAccount();
+  @Input() checkListForm: FormGroup;
+  @Input() checkListType = 'primary';
+  @Input() createOrUpdate = 'create';
+  @Input() currentCheckList:any = {};
   @Output() closeE = new EventEmitter();
+  @Output() closeChecklist = new EventEmitter();
   @Output() saveEvent = new EventEmitter();
   ngOnInit(): void {
+    if(this.currentCheckList){
+      this.currentCheckList.assignedTo
+    }
   }
 
   remove(e) {
-
+    
   }
 
   selectedOption(a, b) {
@@ -78,10 +84,6 @@ export class StageCreateComponent implements OnInit {
     });
   }
 
-  saveCheckList(){
-
-  }
-
   save() {
     this.loading = true;
     this.service.invoke('post.acchecklists', {}, this.checkListForm.getRawValue())
@@ -94,5 +96,20 @@ export class StageCreateComponent implements OnInit {
   }
   add(e){
 
+  }
+
+  update(){
+    this.loading = true;
+    let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
+    let payload = this.checkListForm.getRawValue();
+    delete payload.stages;
+    this.service.invoke('put.checklist', {botId, clId: this.currentCheckList._id}, payload)
+    .pipe(finalize(() => {
+      this.loading = false;
+    }))
+    .subscribe((data) => {
+      // this.currentCheckList = data;
+      this.closeChecklist.emit(data);
+    });
   }
 }

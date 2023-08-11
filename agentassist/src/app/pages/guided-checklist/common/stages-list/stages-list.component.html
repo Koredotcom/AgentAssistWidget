@@ -342,10 +342,14 @@
 </div>
 <app-slider-component id="checklistCreate" #checklistCreateSlider='app-slider'>
     <app-create-checklist 
+        *ngIf="isCheckListOpen"
+        [createOrUpdate]="isCheckListCreateOrUpdate"
         [checkListForm]="checkListForm" 
         [checkListType]="checkListType" 
         (closeE)="close($event)"
-        (saveEvent)="saveCheckList($event)">
+        (saveEvent)="saveCheckList($event)"
+        (closeChecklist)="dismisCheckList()"
+        [currentCheckList]="currentCheckList">
     </app-create-checklist>
 </app-slider-component>
 <app-slider-component 

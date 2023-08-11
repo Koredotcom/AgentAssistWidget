@@ -35,7 +35,9 @@
 
 
 <ng-template #checklistCreation>
-    <app-stages-list class="d-inline-block w-100 h-100"
+    <app-stages-list 
+        *ngIf="isStageListOpen"
+        class="d-inline-block w-100 h-100"
         [createOrUpdate]="createOrUpdate" 
         [currentCheckList]="currentCheckList" 
         (closeCheckList)="closeCheckListScreen($event)" 

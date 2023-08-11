@@ -13,7 +13,7 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
   templateUrl: './stages-list.component.html',
   styleUrls: ['./stages-list.component.scss']
 })
-export class StagesListComponent implements OnInit, OnChanges {
+export class StagesListComponent implements OnInit {
 
   @Output() closeCheckList = new EventEmitter();
   @ViewChild('checklistCreateSlider', { static: true }) checklistCreateSlider: SliderComponentComponent;
@@ -22,6 +22,7 @@ export class StagesListComponent implements OnInit, OnChanges {
   @Input() createOrUpdate = 'create';
   @Input() currentCheckList: any = {};
   isStepOpen = false;
+  isCheckListOpen = false;
   checkListForm: FormGroup;
   stageForm: FormGroup;
   stepForm: FormGroup;
@@ -41,6 +42,7 @@ export class StagesListComponent implements OnInit, OnChanges {
   checklistConst = CHECKLISTCNST.COLORS;
   relaod = false;
   currentStage:any = {};
+  isCheckListCreateOrUpdate = 'create';
   constructor(private fb: FormBuilder,
     private auth: AuthService,
     private local: LocalStoreService,
@@ -80,16 +82,23 @@ export class StagesListComponent implements OnInit, OnChanges {
     this.name.valueChanges.subscribe((val) => {
       this.checkListForm.controls['name'].patchValue(val);
     });
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes?.createOrUpdate?.currentValue === 'create') {
-      this.openSettings();
+    if(this.createOrUpdate === 'create'){
+      this.openCheckList();
       this.stages.push({...this.stage});
-    } else {
+    }else{
+      console.log("this.currentCheckList?.stages", this.currentCheckList?.stages);
       this.stages = this.currentCheckList?.stages || [];
     }
   }
+
+  // ngOnChanges(changes: SimpleChanges): void {
+  //   if (changes?.createOrUpdate?.currentValue === 'create') {
+  //     this.openCheckList();
+  //     this.stages.push({...this.stage});
+  //   } else {
+  //     this.stages = this.currentCheckList?.stages || [];
+  //   }
+  // }
 
   createStepForm(){
     let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
@@ -109,12 +118,23 @@ export class StagesListComponent implements OnInit, OnChanges {
   }
 
   openSettings() {
+    this.isCheckListOpen = true;
+    this.isCheckListCreateOrUpdate = 'update';
+    if(this.currentCheckList){
+      this.checkListForm?.patchValue(this.currentCheckList);
+    }
+    this.checklistCreateSlider.openSlider("#checklistCreate", "");
+  }
+
+  openCheckList(){
+    this.isCheckListOpen = true;
+    this.isCheckListCreateOrUpdate = 'create';
     this.checklistCreateSlider.openSlider("#checklistCreate", "");
   }
 
   close(e) {
     if (e.checkListClose) {
-      this.checklistCreateSlider.closeSlider('#checklistCreate');
+      this.dismisCheckList();
     } if (e.relaod && e.isSaved) {
       this.relaod = e.relaod;
       this.name.patchValue(this.checkListForm.value.name);
@@ -274,4 +294,13 @@ export class StagesListComponent implements OnInit, OnChanges {
       });
     }
   }
+
+  dismisCheckList(data?){
+    if(data){
+      this.currentCheckList = data;
+    }
+    this.isCheckListOpen = false;
+    this.checklistCreateSlider.closeSlider('#checklistCreate');
+  }
+  
 }

@@ -230,8 +230,8 @@
         </div>
         <div class="footer-actions">
             <button class="kr-sg-button-secondary btn_lg" (click)="close()">Cancel</button>
-            <button class="kr-sg-button-primary btn_lg" (click)="save()" *ngIf="createOrUpdateStep === 'create'" [disabled]="!stepForm.valid || stepForm.touched">Save</button>
-            <button class="kr-sg-button-primary btn_lg" (click)="update()" *ngIf="createOrUpdateStep === 'update'" [disabled]="!stepForm.valid || stepForm.touched">Update</button>
+            <button class="kr-sg-button-primary btn_lg" (click)="save()" *ngIf="createOrUpdateStep === 'create'" [disabled]="!stepForm.valid">Save</button>
+            <button class="kr-sg-button-primary btn_lg" (click)="update()" *ngIf="createOrUpdateStep === 'update'" [disabled]="!stepForm.valid">Update</button>
         </div>
     </div>
 </div>

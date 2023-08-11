@@ -385,8 +385,8 @@
         </div>
         <div class="footer-actions">
             <button class="kr-sg-button-secondary btn_lg" (click)="close(true, false, false)">Cancel</button>
-            <button class="kr-sg-button-primary btn_lg" [disabled]="!checkListForm.valid || loading"
-                (click)="save()">Apply</button>
+            <button class="kr-sg-button-primary btn_lg" [disabled]="!checkListForm.valid || loading" (click)="save()" *ngIf="createOrUpdate === 'create'">Save</button>
+            <button class="kr-sg-button-primary btn_lg" [disabled]="!checkListForm.valid || loading" (click)="update()" *ngIf="createOrUpdate === 'update'">Update</button>
         </div>
     </div>
 </div>

@@ -19,6 +19,7 @@ export class GuidedChecklistComponent implements OnInit {
   modalFlowCreateRef: any;
   checkListType = 'primary';
   currentCheckList = {};
+  isStageListOpen = false;
   @ViewChild('checkList1') checkList1: PrimaryChecklistComponent;
   @ViewChild('checkList2') checkList2: DynamicChecklistComponent;
   selAcc = this.local.getSelectedAccount();
@@ -34,6 +35,7 @@ export class GuidedChecklistComponent implements OnInit {
   }
 
   createCheckList(checklistCreation){
+    this.isStageListOpen = true;
     this.currentCheckList = {};
     this.createOrUpdate = 'create';
     this.modalFlowCreateRef = this.modalService.open(checklistCreation, { centered: true, keyboard: false, windowClass: 'flow-creation-full-modal', backdrop: 'static' });
@@ -49,19 +51,21 @@ export class GuidedChecklistComponent implements OnInit {
       }
     }
     this.modalFlowCreateRef.close();
+    this.isStageListOpen = false;
   }
 
   updatePrimaryChecklist(event){
-    this.getCheckListById(event._id)
-    this.createOrUpdate = 'update';
-    this.modalFlowCreateRef = this.modalService.open(this.checklistCreation, { centered: true, keyboard: false, windowClass: 'flow-creation-full-modal', backdrop: 'static' });
+    this.getCheckListById(event._id);
   }
 
   getCheckListById(clId){
     let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
     this.service.invoke('get.checklistbyid', {botId, clId})
     .subscribe((data)=>{
-      this.currentCheckList = data[0];
+      this.isStageListOpen = true;
+      this.createOrUpdate = 'update';
+      this.modalFlowCreateRef = this.modalService.open(this.checklistCreation, { centered: true, keyboard: false, windowClass: 'flow-creation-full-modal', backdrop: 'static' });
+      this.currentCheckList = {...data[0]};
     })
   }
   
