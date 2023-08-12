@@ -1,1 +1,203 @@
-<p>trigger-by works!</p>
+<div class="step-addherence-block">
+    <div class="adherence-left-block">
+        <perfect-scrollbar>
+            <div class="scroll-data">
+                <div class="toggle-block">
+                    <label class="kr-sg-toggle">
+                        <input type="checkbox" checked>
+                        <div class="slider"></div>
+                    </label>
+                    <div class="content-block">
+                        <div class="title">Check Agent’s Adherence</div>
+                        <div class="desc-text">Check for agent’s compliance with this step dynamically using Utterances, Dialogs or Context Variables.  </div>
+                    </div>
+                </div>
+                <div class="utt-radio-block">
+                    <div class="radio-block-content active-check">
+                        <div class="kr-sg-radiobutton">
+                            <input value="all" id="radio-1" name="radio" class="radio-custom" type="radio">
+                            <label for="radio-1" class="radio-custom-label">
+                                <div class="title">By Agent’s Utterance</div>
+                                <div class="desc-text">Listen for specific utterances by the agent to mark as completed</div>
+                            </label>
+                        </div>
+                        <div class="radio-checked-content">
+                            <div class="utterances-add-manually-block">
+                                <div class="add-rule-block">
+                                    <div class="label-text">Utterances</div>
+                                    <input type="text" placeholder="Some utterance entered here" class="input-text">
+                                    <div class="input-desc">Type an utterance that the customer might say...</div>
+                                </div>
+                                <div class="no-utt-found">No utterances saved</div>
+                                <div class="saved-utt-block">
+                                    <div class="saved-header">Saved Utterances</div>
+                                    <ng-container>
+                                        <div class="saved-utt-text-block">
+                                            <div class="saved-title">Some utterance entered here</div>
+                                            <div class="percentage-colr">
+                                                <span class="bgcolor"></span>
+                                                <span class="percentage">12%</span>
+                                            </div>
+                                            <div class="delete-saved-utt">
+                                                <i class="icon-sa-welcome-delete"></i>
+                                            </div>
+                                        </div>
+                                        <div class="saved-utt-text-block">
+                                            <div class="saved-title">Some utterance entered here</div>
+                                            <div class="percentage-colr">
+                                                <span class="bgcolor"></span>
+                                                <span class="percentage">12%</span>
+                                            </div>
+                                            <div class="delete-saved-utt">
+                                                <i class="icon-sa-welcome-delete"></i>
+                                            </div>
+                                        </div>
+                                        <div class="saved-utt-text-block">
+                                            <div class="saved-title">Some utterance entered here</div>
+                                            <div class="percentage-colr">
+                                                <span class="bgcolor"></span>
+                                                <span class="percentage">12%</span>
+                                            </div>
+                                            <div class="delete-saved-utt">
+                                                <i class="icon-sa-welcome-delete"></i>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="radio-block-content active-check">
+                        <div class="kr-sg-radiobutton">
+                            <input value="all" id="radio-12" name="radio" class="radio-custom" type="radio">
+                            <label for="radio-12" class="radio-custom-label">
+                                <div class="title">By Dialog Execution</div>
+                                <div class="desc-text">Watch for a dialog execution run by the agent</div>
+                            </label>
+                        </div>
+                        <div class="radio-checked-content">
+                            <div class="label-text">Bot</div>
+                            <div class="kr-sg-dropdowns m-b-10" ngbDropdown placement="bottom">
+                                <div class="dropdown dropdown-open">
+                                    <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>Sales Bot</button>
+                                    <ul class="dropdown-menu content-menu" ngbDropdownMenu>
+                                        <perfect-scrollbar class="mx-h-200">
+                                            <li ngbDropdownItem class="p-0">
+                                                <a>Sequential</a>
+                                            </li>
+                                            <li ngbDropdownItem class="p-0">
+                                                <a>Random</a>
+                                            </li>
+                                        </perfect-scrollbar>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="label-text">Automation</div>
+                            <div class="kr-sg-dropdowns m-b-30" ngbDropdown placement="bottom">
+                                <div class="dropdown dropdown-open">
+                                    <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>Features & Upsales</button>
+                                    <ul class="dropdown-menu content-menu" ngbDropdownMenu>
+                                        <perfect-scrollbar class="mx-h-200">
+                                            <li ngbDropdownItem class="p-0">
+                                                <a>Sequential</a>
+                                            </li>
+                                            <li ngbDropdownItem class="p-0">
+                                                <a>Random</a>
+                                            </li>
+                                        </perfect-scrollbar>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="label-text">Wait for Dialog Execution for...</div>
+                            <div class="two-column-layout m-b-10">
+                                <div class="kr-sg-dropdowns" ngbDropdown placement="bottom">
+                                    <div class="dropdown dropdown-open">
+                                        <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>Features & Upsales</button>
+                                        <ul class="dropdown-menu content-menu" ngbDropdownMenu>
+                                            <perfect-scrollbar class="mx-h-200">
+                                                <li ngbDropdownItem class="p-0">
+                                                    <a>Sequential</a>
+                                                </li>
+                                                <li ngbDropdownItem class="p-0">
+                                                    <a>Random</a>
+                                                </li>
+                                            </perfect-scrollbar>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="kr-sg-input-text">
+                                    <input type="text" placeholder="Placeholder text" class="input-text">
+                                </div>
+                            </div>
+                            <div class="info-text-dilog">If adherence checker does not detect the selected automation being run by the agent in the next 3 minutes, this step will be marked incomplete.</div>
+                        </div>
+                    </div>
+                    <div class="radio-block-content active-check">
+                        <div class="kr-sg-radiobutton">
+                            <input value="all" id="radio-112" name="radio" class="radio-custom" type="radio">
+                            <label for="radio-112" class="radio-custom-label">
+                                <div class="title">By Variable Change</div>
+                                <div class="desc-text">Watch for a context variable change</div>
+                            </label>
+                        </div>
+                        <div class="radio-checked-content">
+                            <div class="kr-sg-input-text m-b-10">
+                                <input type="text" placeholder="Placeholder text" class="input-text">
+                            </div>
+                            <div class="two-column-layout m-b-35">
+                                <div class="kr-sg-dropdowns" ngbDropdown placement="bottom">
+                                    <div class="dropdown dropdown-open">
+                                        <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>Features & Upsales</button>
+                                        <ul class="dropdown-menu content-menu" ngbDropdownMenu>
+                                            <perfect-scrollbar class="mx-h-200">
+                                                <li ngbDropdownItem class="p-0">
+                                                    <a>Sequential</a>
+                                                </li>
+                                                <li ngbDropdownItem class="p-0">
+                                                    <a>Random</a>
+                                                </li>
+                                            </perfect-scrollbar>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="kr-sg-input-text">
+                                    <input type="text" placeholder="Placeholder text" class="input-text">
+                                </div>
+                            </div>
+                            <div class="label-text">Wait for Dialog Execution for...</div>
+                            <div class="two-column-layout m-b-10">
+                                <div class="kr-sg-dropdowns" ngbDropdown placement="bottom">
+                                    <div class="dropdown dropdown-open">
+                                        <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>Features & Upsales</button>
+                                        <ul class="dropdown-menu content-menu" ngbDropdownMenu>
+                                            <perfect-scrollbar class="mx-h-200">
+                                                <li ngbDropdownItem class="p-0">
+                                                    <a>Sequential</a>
+                                                </li>
+                                                <li ngbDropdownItem class="p-0">
+                                                    <a>Random</a>
+                                                </li>
+                                            </perfect-scrollbar>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="kr-sg-input-text">
+                                    <input type="text" placeholder="Placeholder text" class="input-text">
+                                </div>
+                            </div>
+                            <div class="info-text-dilog">If adherence checker does not detect the selected automation being run by the agent in the next 3 minutes, this step will be marked incomplete.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </perfect-scrollbar>
+    </div>
+    <div class="utterance-right-block d-none">
+        <div class="empty-search">
+            <div class="img-block-empty">
+                <img src="assets/icons/empty-search-add.svg">
+            </div>
+            <p>No conversation history found.</p>
+        </div>
+    </div>
+</div>

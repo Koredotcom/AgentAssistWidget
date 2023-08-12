@@ -18,7 +18,7 @@
         <div class="body-data">
             <perfect-scrollbar>
                 <div class="inner-content-data" [formGroup]="stepForm">
-                    <ng-container *ngIf="basic">
+                    <div *ngIf="basic" class="p-22">
                         <div class="kr-sg-input-text m-b-12">
                             <div class="label-text">Step Title</div>
                             <input type="text" formControlName="name" maxlength="100" placeholder="Name of Checklist" class="input-text">
@@ -31,7 +31,7 @@
                         </div>
                         <div class="confirmation-buttons-wrapper">
                             <div class="kr-sg-checkbox">
-                                <input id="checkbox-16" class="checkbox-custom" type="checkbox" [checked]="showButtons" (click)="showButtons = !showButtons;">
+                                <input id="checkbox-16" class="checkbox-custom" type="checkbox" [checked]="showButtons" (change)="showButtons = !showButtons;">
                                 <label for="checkbox-16" class="checkbox-custom-label">
                                     <div class="title">Add Buttons</div>
                                     <div class="desc-desc">Add one or more confirmation buttons for the agent to select.</div>
@@ -156,7 +156,7 @@
                                 </div>
                             </div>
                         </div>
-                    </ng-container>
+                    </div>
                     <ng-container *ngIf="!basic">
                         <app-trigger-by></app-trigger-by>
                     </ng-container>
