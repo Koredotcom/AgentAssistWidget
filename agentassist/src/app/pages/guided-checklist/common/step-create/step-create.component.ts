@@ -13,7 +13,7 @@ export class StepCreateComponent implements OnInit, OnChanges {
   @Input() stepForm: FormGroup;
   @Input() createOrUpdateStep = 'create';
   @Output() updateStep = new EventEmitter();
-  basic = false;
+  basic = true;
   checklistConst = CHECKLISTCNST.COLORS;
   showButtons = false;
   selectedStepButton : any = '';
@@ -24,27 +24,27 @@ export class StepCreateComponent implements OnInit, OnChanges {
     'runDialog' : "Run Dialog"
   }
 
-  selectedRunColorCodeKey : any = '#0BA5EC';
-  selectedRunColorCodeValue : any = '#F0F9FF';
+  selectedRunColorCodeKey : any = '#16B364';
+  selectedRunColorCodeValue : any = '#EDFCF2';
 
   stepConfirmationButtonList : any = [
     {
       name : 'yes',
-      color : '#0BA5EC',
-      bgcolor : '#F0F9FF'
+      color : '#16B364',
+      bgcolor : '#EDFCF2'
     },
     {
       name : 'no',
-      color : '#0BA5EC',
-      bgcolor : '#F0F9FF'
+      color : '#F63D68',
+      bgcolor : '#FFF1F3'
     }
   ]
 
  
-  selectedConfirmationColorCode : any = {
-    'yes' : '#0BA5EC',
-    'no' : '#0BA5EC'
-  };
+  // selectedConfirmationColorCode : any = {
+  //   'yes' : '#0BA5EC',
+  //   'no' : '#0BA5EC'
+  // };
   
 
   runDialogList : any = [
@@ -92,8 +92,8 @@ export class StepCreateComponent implements OnInit, OnChanges {
   }
 
   colorUpdate(confirmationNode, color) {
-   this.selectedConfirmationColorCode[confirmationNode.name] = color;
-   this.cdRef.detectChanges();
+  //  this.selectedConfirmationColorCode[confirmationNode.name] = color;
+  //  this.cdRef.detectChanges();
   }
 
   colorUpdateRun(color){    
