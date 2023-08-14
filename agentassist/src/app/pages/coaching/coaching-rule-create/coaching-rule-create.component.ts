@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { COACHINGCNST } from '../coaching.cnst';
 import { CoachingService } from '../coaching.service';
@@ -20,7 +20,7 @@ import { CreateRuleComponent } from './create-rule/create-rule.component';
   templateUrl: './coaching-rule-create.component.html',
   styleUrls: ['./coaching-rule-create.component.scss']
 })
-export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy{
+export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterViewInit {
 
   @Input() groupDetails : any;
   @Input() groupIndex : number;
@@ -73,14 +73,11 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
     @HostListener("window:beforeunload", ["$event"]) unloadHandler(event: Event) {
       if(this.formTouched){
         event.returnValue = false;
-      }else{
-        this.coachingService.updateLockOnRule(false, this.currentRule, this.selAcc);
       }
    }
 
   ngOnChanges(changes: SimpleChanges): void {
     if(changes?.createOrEdit?.currentValue === COACHINGCNST.EDIT){
-      this.coachingService.updateLockOnRule(true, this.currentRule,this.selAcc);
       this.createForm();
       this.updateRuleForm();
       this.getRuleTags();
@@ -101,10 +98,6 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
     })
   }
   ngOnInit(): void {
-  }
-
-  ngOnDestroy(): void {
-    this.coachingService.updateLockOnRule(false, this.currentRule, this.selAcc);
   }
 
   updateBasicRuleForm(){
@@ -238,7 +231,7 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
 
     let methodName = (this.createOrEdit == COACHINGCNST.CREATE) ? "post.agentcoachingrule" : "put.agentcoachingrule";
 
-    this.service.invoke(methodName, { ruleId: this.currentRule?._id, userId : this.auth.getUserId() }, payload)
+    this.service.invoke(methodName, { ruleId: this.currentRule?._id }, payload)
       .pipe(finalize(() => {
         this.loading = false;
       }))
@@ -273,7 +266,7 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
     let payload: any = this.ruleForm.value;
     let methodName = this.createOrEdit == COACHINGCNST.CREATE ? "post.agentcoachingrule" : "put.agentcoachingrule";
 
-    this.service.invoke(methodName, { ruleId: this.currentRule?._id, userId : this.auth.getUserId() }, payload)
+    this.service.invoke(methodName, { ruleId: this.currentRule?._id }, payload)
       .pipe(finalize(() => {
         this.loading = false;
       }))
