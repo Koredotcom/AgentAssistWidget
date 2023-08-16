@@ -112,7 +112,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
     this.page = 1;
     this.limit = 10;
     this.sortOrder = 'asc';
-    this.getCoachingPreBuiltRules();
+    // this.getCoachingPreBuiltRules();
     this.getAgentCoachingRules();
     this.subscribeEvents();
     this.getConfigDetails();
@@ -137,7 +137,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
 
   serachRules() {
     this.getAgentCoachingRules(true);
-    this.serachInPreBuilt();
+    // this.serachInPreBuilt();
   }
 
   serachInPreBuilt(){
@@ -251,7 +251,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
     };
     // this.sortOrder = 'asc'
     this.getAgentCoachingRules(true);
-    this.getCoachingPreBuiltRules();
+    // this.getCoachingPreBuiltRules();
     this.selectedRuleGroup = null;
     this.selectedRuleGroupIndex = null;
     this.selectedRuleIndex = null;
@@ -311,7 +311,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
         this.service.invoke('delete.agentCoachingRule', { ruleId: rule._id }).subscribe(_data => {
           this.notificationService.notify(this.translate.instant("COACHING.RULEDELETE_SUCCESS"), 'success');
           this.getAgentCoachingRules(true);
-          this.getCoachingPreBuiltRules();
+          // this.getCoachingPreBuiltRules();
         }, (error) => {
           this.notificationService.showError(this.translate.instant("COACHING.RULEDELETE_FAILURE"));
         });
@@ -356,6 +356,29 @@ export class CoachingComponent implements OnInit, OnDestroy {
   sortOnClick(){
     this.sortOrder = this.sortOrder == 'desc' ? 'asc' : 'desc';
     this.getAgentCoachingRules(true);
+    // this.sortPreBuilt();
+  }
+
+  sortPreBuilt(){
+    this.respData.preBuilt = this.respData.preBuilt.sort(this.sortName.bind(this));
+    console.log("this.respData.preBuilt.sort(this.sortName)", this.respData.preBuilt.sort(this.sortName.bind(this)));
+    this.cdRef.detectChanges();
+  }
+
+  sortName(a, b){
+    let sortOrder = this.sortOrder
+    const name1 = a.name.toUpperCase();
+    const name2 = b.name.toUpperCase();
+
+    let comparison = 0;
+
+    if (name1 > name2) {
+        comparison = sortOrder === 'desc' ? -1 : 1;
+    } else if (name1 < name2) {
+      comparison = sortOrder === 'desc' ? 1 : -1;
+    }
+
+    return comparison;
   }
 
   closeSlide(e){
