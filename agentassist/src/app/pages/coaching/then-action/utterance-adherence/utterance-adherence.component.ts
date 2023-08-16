@@ -43,6 +43,10 @@ export class UtteranceAdherenceComponent implements OnInit {
   deletedUIds = {};
   selectAll = false;
   customUtt = false;
+  editUtterance : boolean = false;
+  editUtter : any = {};
+  editIndex : number;
+
   public utteranceDropdown: NgbDropdown;
 
   constructor(
@@ -94,6 +98,9 @@ export class UtteranceAdherenceComponent implements OnInit {
           });
         } else {
           this.selectedUtterancesArray = [...data];
+          this.selectedUtterancesArray.forEach((item)=>{
+            item.edit = false;
+          })
         };
         this.selectedNewUtterances.push(...form?.when.addUtterances);
         this.selectedNewUtterances.forEach((item)=>{
@@ -241,11 +248,32 @@ export class UtteranceAdherenceComponent implements OnInit {
     this.onClose.emit(e);
   }
 
-  deleteUtternce(utter, i) {
+  editUtteranceClick(utter,i){
+    this.editUtter = JSON.parse(JSON.stringify(utter || {}));
+    this.editUtterance = true;
+    this.editIndex = i;
+    console.log("edit utterance", event);
+    // this.selectedUtterancesArray[i] = utter;
+  }
+
+  editedUtterance(){
+    console.log(this.editIndex, 'edit index', this.editUtter, 'edit utter', this.selectedUtterancesArray);
+    
+    this.deleteUtternce(this.selectedUtterancesArray[this.editIndex].utterance, this.editIndex, this.editUtter);
+    this.selectedNewUtterances.push({ utterance: this.editUtter.utterance, language: 'english' });
+    this.editUtterance = false;
+    this.selectedUtterancesArray = [...this.selectedUtterancesArray];
+  }
+
+  deleteUtternce(utter, i, editedUtter = null) {
     if (utter._id) {
       this.deletedUIds[utter._id] = true;
     }
-    this.selectedUtterancesArray.splice(i, 1);
+    if(editedUtter){
+      this.selectedUtterancesArray.splice(i, 1, editedUtter);
+    }else{
+      this.selectedUtterancesArray.splice(i, 1);
+    }
   }
 
   deleteUtternceNew(utter, i) {
@@ -280,5 +308,8 @@ export class UtteranceAdherenceComponent implements OnInit {
       delete arr[i].copied;
     },1000);
 
+  }
+  enter(utter){
+    utter.edit = false;
   }
 }

@@ -35,7 +35,7 @@
                 <perfect-scrollbar>
                     <div class="scrol-data">
                         <div class="add-utterences-drp">
-                            <div class="label-text">Utterances</div>
+                            <div class="label-text">Utterances <span class="tag">Powered by LLM</span> </div>
                             <div class="dropdown-adherence" ngbDropdown #utteranceDropdown="ngbDropdown">
                                 <input type="text" class="drp-input-search"  ngbDropdownToggle [formControl]="searchKey">
                                 <div class="text_info">Type an utterance that the person might say.</div>
@@ -146,15 +146,30 @@
                             <!-- Repeat Data -->
                             <ng-container *ngFor="let utter of selectedUtterancesArray; let iD = index">
                                 <div class="saved-utt-body-sec">
-                                    <div class="saved-title-utt" [title]="utter?.utterance">{{utter?.utterance}}</div>
+                                    <div class="saved-title-utt" [title]="utter?.utterance"  [ngbTooltip]="utter?.utterance">{{utter?.utterance}}</div>
+                                    <ng-container *ngIf="utter.edit">
+                                        <input type="text" placeholder="Enter Utterance here" class="input-text" [(ngModel)]="utter.utterance" (keyup.enter)="enter(utter)">
+                                    </ng-container>
                                     <div class="delete-saved-utt">
+                                        <i class="icon-sa-welcome-edit" (click)="utter.edit = true"></i>
                                         <i class="icon-sa-copy" [ngbTooltip]="utter.copied ? utter.copied : 'copy'"
                                             (click)="copy(utter?.utterance, iD, selectedUtterancesArray);">
                                         </i>
                                         <i class="icon-sa-welcome-delete" (click)="deleteUtternce(utter, iD)"></i>
                                     </div>
+    
+                                    
                                 </div>
                             </ng-container>
+                            <!-- <ng-container *ngIf="editUtterance">
+                                <div class="seconds-input">
+                                    <div class="kr-sg-input-text">
+                                        <input type="text" placeholder="Enter Utterance here" class="input-text" [(ngModel)]="editUtter.utterance" (keyup.enter)="editedUtterance()">
+                                    </div>
+                                </div>
+                            </ng-container> -->
+                            <!-- <div class="s-title">seconds</div> -->
+
                             <ng-container *ngFor="let utter of selectedNewUtterances;let iDx = index">
                                 <div class="saved-utt-body-sec">
                                     <div class="saved-title-utt" [title]="utter?.utterance">{{utter?.utterance}}</div>

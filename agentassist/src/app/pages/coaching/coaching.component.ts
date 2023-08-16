@@ -156,7 +156,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
     this.service.invoke('get.allagentCoachingpreBuiltRules', params)
     .subscribe((data)=>{
       data.results?.map(obj => {
-        obj.tags = obj.tags || [];
+        obj.tags = obj.tags && obj.tags.length > 0 ? obj.tags :  ['Pre-build'];
         obj.channels = obj.channels || [];
       })
       this.respData.preBuilt = data.results;
