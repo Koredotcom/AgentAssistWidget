@@ -112,7 +112,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
     this.page = 1;
     this.limit = 10;
     this.sortOrder = 'asc';
-    this.getCoachingPreBuiltRules();
+    // this.getCoachingPreBuiltRules();
     this.getAgentCoachingRules();
     this.subscribeEvents();
     this.getConfigDetails();
@@ -137,32 +137,32 @@ export class CoachingComponent implements OnInit, OnDestroy {
 
   serachRules() {
     this.getAgentCoachingRules(true);
-    this.serachInPreBuilt();
+    // this.serachInPreBuilt();
   }
 
-  serachInPreBuilt(){
-    if(this.searchText){
-      this.respData.preBuilt = this.respData.preBuilt.filter((rule)=>rule.name?.toLowerCase()?.includes(this.searchText?.toLowerCase()))
-    }else{
-      this.respData.preBuilt = JSON.parse(JSON.stringify(this.preBuilt));
-    }
-  }
+  // serachInPreBuilt(){
+  //   if(this.searchText){
+  //     this.respData.preBuilt = this.respData.preBuilt.filter((rule)=>rule.name?.toLowerCase()?.includes(this.searchText?.toLowerCase()))
+  //   }else{
+  //     this.respData.preBuilt = JSON.parse(JSON.stringify(this.preBuilt));
+  //   }
+  // }
 
-  getCoachingPreBuiltRules(){
-    let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
-    let params: any = {
-      botId,
-    };
-    this.service.invoke('get.allagentCoachingpreBuiltRules', params)
-    .subscribe((data)=>{
-      data.results?.map(obj => {
-        obj.tags = obj.tags || [];
-        obj.channels = obj.channels || [];
-      })
-      this.respData.preBuilt = data.results;
-      this.preBuilt = JSON.parse(JSON.stringify(data.results));
-    })
-  };
+  // getCoachingPreBuiltRules(){
+  //   let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
+  //   let params: any = {
+  //     botId,
+  //   };
+  //   this.service.invoke('get.allagentCoachingpreBuiltRules', params)
+  //   .subscribe((data)=>{
+  //     data.results?.map(obj => {
+  //       obj.tags = obj.tags || [];
+  //       obj.channels = obj.channels || [];
+  //     })
+  //     this.respData.preBuilt = data.results;
+  //     this.preBuilt = JSON.parse(JSON.stringify(data.results));
+  //   })
+  // };
 
 
   getAgentCoachingRules(empty= false) {
@@ -251,7 +251,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
     };
     // this.sortOrder = 'asc'
     this.getAgentCoachingRules(true);
-    this.getCoachingPreBuiltRules();
+    // this.getCoachingPreBuiltRules();
     this.selectedRuleGroup = null;
     this.selectedRuleGroupIndex = null;
     this.selectedRuleIndex = null;
@@ -311,7 +311,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
         this.service.invoke('delete.agentCoachingRule', { ruleId: rule._id }).subscribe(_data => {
           this.notificationService.notify(this.translate.instant("COACHING.RULEDELETE_SUCCESS"), 'success');
           this.getAgentCoachingRules(true);
-          this.getCoachingPreBuiltRules();
+          // this.getCoachingPreBuiltRules();
         }, (error) => {
           this.notificationService.showError(this.translate.instant("COACHING.RULEDELETE_FAILURE"));
         });
