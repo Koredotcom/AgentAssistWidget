@@ -36,7 +36,7 @@
                     <span class="chip-name text-truncate mx-w-100" title="{{tag.name}}">{{tag.name}}</span>
                     <span class="icon-sa-close" matChipRemove *ngIf="true"></span>
                 </mat-chip>
-                <input placeholder="Add Tags" #tagInput [matChipInputFor]="chipList"
+                <input placeholder="Add Tags" maxlength="25" #tagInput [matChipInputFor]="chipList"
                     [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="false"
                     (matChipInputTokenEnd)="add($event)" [matAutocomplete]="auto" [formControl]="tagControl"
                     #trigger="matAutocompleteTrigger">
@@ -46,6 +46,7 @@
                     <mat-option *ngFor="let tag of filteredTagsDisplay;let i = index" [title]="tag"
                         (click)="selectedOption(tag.name, i);$event.stopPropagation();trigger.openPanel()">
                         <input id="checkbox-{{i}}" type="checkbox"
+                        
                             (click)="selectedOption(tag.name, i);trigger.openPanel();$event.stopPropagation();" [value]="tag.name"
                             [checked]="tag.checked">
                             <div class="label-check text-truncate" for="checkbox-{{i}}">

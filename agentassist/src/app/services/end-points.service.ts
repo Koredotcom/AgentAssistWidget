@@ -1604,17 +1604,17 @@ export class EndPointsService {
     // }
 
     this.serviceList['delete.agentCoachingRule'] = {
-      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule/:ruleId/uid=:userId',
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule/:ruleId',
       method : 'delete'
     }
 
     this.serviceList['post.agentcoachingrule'] = {
-      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule/?uid=:userId',
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule',
       method : 'post'
     }
 
     this.serviceList['put.agentcoachingrule'] = {
-      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule/:ruleId/?uid=:userId',
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule/:ruleId',
       method : 'put'
     }
 
@@ -1667,16 +1667,6 @@ export class EndPointsService {
     this.serviceList['get.ruleById'] = {
       endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule/:ruleId',
       method : 'get'
-    }
-
-    this.serviceList['get.checkLock'] = {
-      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule/:botId/users/:userId/:ruleId/actions',
-      method : 'get'
-    }
-
-    this.serviceList['post.checkLock'] = {
-      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule/:botId/users/:userId/:ruleId/actions',
-      method : 'post'
     }
 
     this.serviceList['post.noneIntentUtterances'] = {

@@ -220,7 +220,7 @@
         <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!selOcc}"><i class="icon-sa-conv-refreshten"></i>  {{selOcc}} {{selOcc == 1 ? ' time' : ' times'}}</button>
         <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
             <perfect-scrollbar class="mx-h-220">
-                <ng-container *ngFor="let occ of occurances; let i = index">
+                <ng-container *ngFor="let occ of ( selectedSpeechType == coachingCnst.TALKRATIO ? occurances.slice(0,1) : occurances ); let i = index">
                     <li ngbDropdownItem class="list-item-li" (click)="clickOcc(occ)">
                             <span *ngIf="i == 0" class="title">{{occ}} time</span>
                             <span *ngIf="i != 0" class="title">{{occ}} times</span>
@@ -255,10 +255,12 @@
                             <i class="icon-sa-arrow-down"></i>
                         </button>
                         <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                            <li class="list-item-li" *ngFor="let period of periodList" (click)="onEnterPeriod(period);byTimeDropdown.close()">
-                                <span class="title">{{period}}</span>
-                                <i class="icon-sa-conv-check" *ngIf="this.selectedList.period == period"></i>
-                            </li>
+                            <ng-container *ngFor="let period of (selectedSpeechType == coachingCnst.TALKRATIO ? periodList.slice(0,1) : periodList)">
+                                <li class="list-item-li" (click)="onEnterPeriod(period);byTimeDropdown.close()">
+                                    <span class="title">{{period}}</span>
+                                    <i class="icon-sa-conv-check" *ngIf="this.selectedList.period == period"></i>
+                                </li>
+                            </ng-container>
                         </div>
                     </div>
                     <div class="seconds-input">
