@@ -5,8 +5,8 @@
             <button class="and-or-btn" (click)="changeOperator(operator)" [ngClass]="{'active-btn' : selectedOperator === operator}">{{operator | titlecase}}</button>
         </ng-container>
     </div>
-    <span class="utt-name-desc" *ngIf="!selUser || selUser == 'customer'">a </span>
-    <span class="utt-name-desc" *ngIf="selUser && selUser == 'agent'">an </span>
+    <span class="utt-name-desc" *ngIf="!selUser || selUser == 'customer'">A </span>
+    <span class="utt-name-desc" *ngIf="selUser && selUser == 'agent'">An </span>
     <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body">
         <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!selUser}">
             <span class="choose-text">{{selUser ? (selUser | titlecase) : '{ select person }'}}</span>

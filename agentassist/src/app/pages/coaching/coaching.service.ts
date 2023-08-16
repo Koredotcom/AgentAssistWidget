@@ -2,9 +2,6 @@ import { Injectable } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { COACHINGCNST } from './coaching.cnst';
 import { v4 as uuid } from 'uuid';
-import { AuthService } from '@kore.services/auth.service';
-import { workflowService } from '@kore.services/workflow.service';
-import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 
 @Injectable({
   providedIn: 'root'
@@ -114,24 +111,7 @@ export class CoachingService {
   ];
   ruleDesc = '';
   
-  constructor(private fb: FormBuilder,
-    private auth : AuthService,
-    private workflowService : workflowService,
-    private service : ServiceInvokerService) { }
-
-  updateLockOnRule(flag, currentRule, selAcc){
-    if(currentRule && currentRule._id){
-      let botId = this.auth.isLoadingOnSm && selAcc ? selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
-      let params : any = {
-        botId,
-        ruleId : currentRule._id,
-        userId : this.auth.getUserId()
-      }
-      this.service.invoke('post.checkLock', params, {actions : {isLocked : flag}}).subscribe(data => {
-        console.log(data, "data inside check lock screen");
-      })
-    }
-  }
+  constructor(private fb: FormBuilder) { }
 
   getUtteranceFormControlObject(){
     return {
