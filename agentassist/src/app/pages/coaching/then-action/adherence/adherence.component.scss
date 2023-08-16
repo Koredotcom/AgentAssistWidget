@@ -81,7 +81,22 @@
                         font-size: 14px;
                         line-height: 20px;
                         color: #344054;
-                        margin-bottom: 4px;
+                        margin-bottom: 8px;
+                        display: flex;
+                        align-items: center;
+                        .pbl{
+                            color: var(--primary-500-main, #2B75E4);
+                            text-align: center;
+                            font-family: Inter;
+                            font-size: 7px;
+                            font-style: normal;
+                            font-weight: 400;
+                            line-height: 16px;
+                            margin-left: 6px;
+                            background: #EAF1FC;
+                            /* margin-top: 0px; */
+                            padding: 2px 6px;
+                        }
                     }
                     .dropdown-adherence{
                         width: 100%;

@@ -39,6 +39,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            max-width: max-content;
         }
         .desc-text{
             color: var(--neutral-700, #404040);

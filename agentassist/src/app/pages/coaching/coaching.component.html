@@ -37,24 +37,24 @@
                                                             <img [src]="sortOrder == 'asc'? 'assets/icons/sort-up.svg' : 'assets/icons/use-case/SortDown.svg'" class="ml-1">
                                                         </div>
                                                     </div>
-                                                    <div class="titles-data w-11">Actions</div>
-                                                    <div class="titles-data w-14">Description</div>
+                                                    <div class="titles-data w-12">Actions</div>
+                                                    <div class="titles-data w-24">Description</div>
                                                     <div class="titles-data w-16">Tags</div>
-                                                    <div class="titles-data w-16">Channels</div>
-                                                    <div class="titles-data w-13">Last UPDATED</div>
+                                                    <!-- <div class="titles-data w-16">Channels</div> -->
+                                                    <div class="titles-data w-18">Last UPDATED</div>
                                                     <div class="titles-data w-10">Enabled</div>
                                                 </div>
                                                 <ng-container *ngFor="let rule of respData.results">
                                                     <div class="body-data-table-wrapper-coaching">
                                                         <div class="coaching-rule w-20">
-                                                            <div class="title" [title]="rule.name" tooltipClass="tooltip-global-styles" ngbTooltip="{{rule.name}}" container="body">{{rule.name}}</div>
+                                                            <div class="title" [title]="rule.name" placement="bottom-center" tooltipClass="tooltip-global-styles" ngbTooltip="{{rule.name}}" container="body">{{rule.name}}</div>
                                                             <div class="desc-text">All Agents</div>
                                                             <div class="voice-msg-icons">
-                                                                <i class="icon-sa-welcome-voice"></i>
-                                                                <i class="icon-sa-welcome-chat"></i>
+                                                                <i class="icon-sa-welcome-voice" placement="bottom-center" tooltipClass="tooltip-global-styles" ngbTooltip="voice" *ngIf="rule.channels.includes('voice')"></i>
+                                                                <i class="icon-sa-welcome-chat" placement="bottom-center" tooltipClass="tooltip-global-styles" ngbTooltip="chat" *ngIf="rule.channels.includes('chat')"></i>
                                                             </div>
                                                         </div>
-                                                        <div class="actions-info w-11">
+                                                        <div class="actions-info w-12">
                                                             <button class="edit-btn" (click)="openFLowCreation(flowCreation, rule, 'edit')">
                                                                 <i class="icon-sa-welcome-edit"></i>
                                                             </button>
@@ -62,7 +62,7 @@
                                                                 <i class="icon-sa-welcome-delete"></i>
                                                             </button>
                                                         </div>
-                                                        <div class="desc-text-info w-14" tooltipClass="tooltip-global-styles" ngbTooltip="{{rule.description}}" container="body">{{rule.description}}</div>
+                                                        <div class="desc-text-info w-24" placement="bottom-center" tooltipClass="tooltip-global-styles" ngbTooltip="{{rule.description}}" container="body">{{rule.description}}</div>
                                                         <div class="tags-info w-16">
                                                             <ng-container *ngFor="let tag of rule.tags?.slice(0,2);">
                                                                 <span class="tag-name" [title]="tag">{{tag}}</span>
@@ -80,12 +80,12 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="channel-info w-16">
+                                                        <!-- <div class="channel-info w-16">
                                                             <ng-container *ngFor="let channel of coachingConst.channelList">
                                                                 <span class="channel-name" *ngIf="rule.channels?.indexOf(channel) >= 0" [title]="channel">{{channel}}</span>
                                                             </ng-container>
-                                                        </div>
-                                                        <div class="title-text w-13 last-updated-text" [title]="(rule.lModOn | date : 'MMM dd, yyyy h:mm a')">{{rule.lModOn | date : 'MMM dd, yyyy h:mm a'}}</div>
+                                                        </div> -->
+                                                        <div class="title-text w-18 last-updated-text" placement="bottom-center" tooltipClass="tooltip-global-styles" ngbTooltip="{{(rule.lModOn | date : 'MMM dd, yyyy h:mm a')}}">{{rule.lModOn | date : 'MMM dd, yyyy h:mm a'}}</div>
                                                         <div class="last-updated-toggle w-10">
                                                             <label class="kr-sg-toggle">
                                                                 <input type="checkbox" [checked]="rule.isActive" (click)="changeRuleStatus(rule, rule._id)">
