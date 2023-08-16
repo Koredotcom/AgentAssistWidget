@@ -47,8 +47,12 @@
                                                 <ng-container *ngFor="let rule of respData.results">
                                                     <div class="body-data-table-wrapper-coaching">
                                                         <div class="coaching-rule w-20">
-                                                            <div class="title" [title]="rule.name">{{rule.name}}</div>
+                                                            <div class="title" [title]="rule.name" tooltipClass="tooltip-global-styles" ngbTooltip="{{rule.name}}" container="body">{{rule.name}}</div>
                                                             <div class="desc-text">All Agents</div>
+                                                            <div class="voice-msg-icons">
+                                                                <i class="icon-sa-welcome-voice"></i>
+                                                                <i class="icon-sa-welcome-chat"></i>
+                                                            </div>
                                                         </div>
                                                         <div class="actions-info w-11">
                                                             <button class="edit-btn" (click)="openFLowCreation(flowCreation, rule, 'edit')">
@@ -58,7 +62,7 @@
                                                                 <i class="icon-sa-welcome-delete"></i>
                                                             </button>
                                                         </div>
-                                                        <div class="desc-text-info w-14" [title]="rule.description">{{rule.description}}</div>
+                                                        <div class="desc-text-info w-14" tooltipClass="tooltip-global-styles" ngbTooltip="{{rule.description}}" container="body">{{rule.description}}</div>
                                                         <div class="tags-info w-16">
                                                             <ng-container *ngFor="let tag of rule.tags?.slice(0,2);">
                                                                 <span class="tag-name" [title]="tag">{{tag}}</span>
