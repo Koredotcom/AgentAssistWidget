@@ -294,7 +294,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
       }
     }, (error) => {
       rule.isActive = !rule.isActive;
-      this.notificationService.showError(this.translate.instant(error, "COACHING.GROUPUPDATED_FAILURE"));
+      this.notificationService.showError(error, this.translate.instant("COACHING.GROUPUPDATED_FAILURE"));
     });
   }
 
