@@ -59,13 +59,31 @@
                     </div>
                     <div class="row-data">
                         <div class="label-text">Client Secret</div>
+                        
                         <div class="kr-sg-input-text">
-                            <input type="text" placeholder="Placeholder text" class="input-text" [(ngModel)]="chatList.cS" readonly>
-                                <button class="copy-btn" (click)="copyInputMessage(chatList.cS)" value="click to copy">
+                            <input [attr.type]="showOpenEyeIcon ? 'password' : 'text'" placeholder="Placeholder text" class="input-text" [(ngModel)]="chatList.cS" readonly autocomplete="new-password">
+                            <div class="eye-copy">
+                                <div class="eye" placement="bottom-left" (click)="showOpenEyeIcon = !showOpenEyeIcon">
+                                    <i class="icon-sa-eye" *ngIf="showOpenEyeIcon"></i>
+                                    <i class="icon-sa-eye-open" *ngIf="!showOpenEyeIcon"></i>
+                                </div>
+                            </div>
+                            <button class="copy-btn" (click)="copyInputMessage(chatList.cS)" value="click to copy">
                                 <img src="assets/icons/copyblue.svg">
                                 Copy
-                                </button> 
+                            </button> 
+                              
                         </div>
+                    </div>
+                    <div class='init-loading' *ngIf="isLoading">
+                        <mat-spinner diameter="25" strokeWidth="3"></mat-spinner>
+                    </div>
+                    <div class="row-data">
+                        <div class="kr-sg-checkbox">
+                            <input id="checkbox-1" class="checkbox-custom" type="checkbox" name="markDefaultBot"  [checked]="markDefaultBot" (change)="EnableDefaultSelection($event,contentConfirmChatChannel)">
+                            <label for="checkbox-1" class="checkbox-custom-label">Mark as connected AgentAssist Bot </label>
+                            <span tooltipClass="tooltip-global-styles" ngbTooltip="Marking the bot is just to inform the config manager about which bot is being used in third party agent desktop. It doesn't affect the working of bot in any way" class="m-l-6"> <i class="icon-sa-help"></i></span>
+                        </div>     
                     </div>
                 </div>
                 <div class="input-box-data">
@@ -85,6 +103,26 @@
         </perfect-scrollbar>
     </div>
 </div>
+
+<ng-template #contentConfirmChatChannel let-modal>
+	<div class="delete-comp-wrapper">
+        <div class="icon_block"  [ngClass]="markDefaultBot ? 'icon_block_red' : 'icon_block_blue'">
+            <i class="icon-sa-info"></i>
+        </div>
+        <div class="close-delete" (click)="modal.dismiss()">
+            <i class="icon-sa-close"></i>
+        </div>
+        <div class="body-data-delete">
+            <div class="t-heading">Confirm Changes</div>
+            <div class="d-desc" *ngIf="!markDefaultBot">This bot will be your default automation bot</div>
+            <div class="d-desc" *ngIf="markDefaultBot">Are you Sure, you want to remove this bot as your default automation bot?</div>
+        </div>
+        <div class="footer-btns-data">
+            <button class="kr-sg-button-secondary btn_lg" (click)="confirmDefaultBot('no')">No</button>
+            <button class="kr-sg-button-primary btn_lg" (click)="confirmDefaultBot('yes')">Yes</button>
+        </div>
+    </div>
+</ng-template>
 
 
 

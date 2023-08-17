@@ -24,6 +24,7 @@ export class SearchAssistComponent implements OnInit {
   editClick: boolean = false;
   createForm: boolean = true;
   saveStatus : boolean = true;
+  editEnabled : boolean = false;
   actualConfigDetailsObj: any = {};
   showOpenEyeIcon : boolean = true;
   disableSearchForm: boolean = false;
@@ -57,13 +58,14 @@ export class SearchAssistComponent implements OnInit {
     };
     this.actualConfigDetailsObj = {};
     this.searchAssistConfigDetailsObj = {};
+    this.editEnabled = false; 
     this.service.invoke('get.searchaccounts', params).subscribe(data => {
       if (data) {
         this.updateSearchConfDetailsFromDb(data);
         this.getFormValueStatus();
         this.createForm = false;
         this.searchConv.isEnabled = data.isEnabled;
-        this.createFormStatus = true;
+        this.createFormStatus = this.searchConv.isEnabled ? true : undefined;
       } else {
         this.createSearchFormActivity();
       }
@@ -95,29 +97,30 @@ export class SearchAssistComponent implements OnInit {
 
   handleSaveFailureCase(){
     this.saveStatus = true;
-    this.createFormStatus = false;
-    this.createForm = this.createForm ? true : false;
-    this.disableSearchForm = this.createForm ? false : true;
+    this.createFormStatus = this.searchConv.isEnabled ? false : undefined;
+    this.createForm = true;
+    this.disableSearchForm = false;
     this.actualConfigDetailsObj = Object.assign({},this.searchAssistConfigDetailsObj);
+    this.searchFormChangeMode();
   }
 
   updateSearchConfDetails(type) {
     let payLoad: any = Object.assign({}, this.searchAssistConfigDetailsObj);
     payLoad.isEnabled = this.searchConv.isEnabled;
+    this.createFormStatus = undefined;
     if (type == 'save') {
       this.saveStatus = false;
       this.disableSearchForm = true;
       this.searchFormChangeMode();
-      let methodType = this.createForm ? 'post.searchaccounts' : 'put.searchaccounts';
-      let notificationSuccessCase = this.createForm ? "SEARCHASSIST.HAS_SAVED" : "SEARCHASSIST.HAS_UPDATED";
-      // let notificationFailureCase = this.createForm ? "SEARCHASSIST.FAILED_SAVE" : "SEARCHASSIST.FAILED_UPDATE";
+      let methodType = this.editEnabled ? 'put.searchaccounts' : 'post.searchaccounts';
       this.service.invoke(methodType, { accountId: this.accountId }, payLoad).subscribe((data) => {
         if(data && data.statusCode == 401){
           this.handleSaveFailureCase();
         }else if(data){
-          this.createFormStatus = true;
+          this.editEnabled = false; 
+          this.createFormStatus = this.searchConv.isEnabled ? true : undefined;
           this.updateSearchConfDetailsFromDb(data);
-          this.notificationService.notify(this.translate.instant(notificationSuccessCase), 'success');
+          // this.notificationService.notify(this.translate.instant(notificationSuccessCase), 'success');
           this.saveStatus = true;
         }
       }, (error) => {
@@ -126,9 +129,11 @@ export class SearchAssistComponent implements OnInit {
       });
       
     } else if(type == 'edit') {
+      this.editEnabled = true;
       this.disableSearchForm = false;
       this.searchFormChangeMode();
     } else{
+      this.editEnabled = false; 
       this.updateSearchConfDetailsFromDb(this.actualConfigDetailsObj);
     }
   }

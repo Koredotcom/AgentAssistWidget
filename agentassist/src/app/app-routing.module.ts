@@ -16,6 +16,11 @@ import { OnboardingComponent } from './pages/onboarding/onboarding.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { SearchAssistComponent } from './pages/search-assist/search-assist.component';
 
+let isSmartassist = false;
+if(window.location.href.includes('smartassist')){
+  isSmartassist = true;
+}
+
 const routes: Routes = [
   {
     path: '',
@@ -27,14 +32,18 @@ const routes: Routes = [
       { path: '', redirectTo: 'config', pathMatch: 'full' },
       {
         path: 'config', component: ConfigurationsComponent, children: [
-          { path: '', redirectTo: 'usecases', pathMatch: 'full' },
+          { path: '', redirectTo: (isSmartassist ? 'coaching' : 'usecases'), pathMatch: 'full' },
           { path: 'agents', component: AgentsComponent },
           { path: 'roleManagement', component: UserManagementComponent },
           { path: 'usecases', loadChildren: () => import('./pages/agent-usecases/agent-usecases.module').then(m => m.AgentUsecasesModule) },
+          { path: 'welcomeEvents', loadChildren: () => import('./pages/welcomeEvents/welcomeevent.module').then(m => m.WelcomeeventModule) },
           { path: 'channels', component: AutomationChannelsComponent },
+          { path: 'conversationalLogs', component: ConversationalLogsComponent },
           { path: 'languages', component: LanguagesSpeechComponent },
           { path: 'searchAssist', component: SearchAssistComponent},
-          { path: '**', redirectTo: 'usecases' },
+          { path: 'coaching', loadChildren: () => import('./pages/coaching/coaching.module').then(m => m.CoachingModule)},
+          { path: 'advanced-nlu', loadChildren: () => import('./pages/ai-config/ai-config.module').then(m => m.AiConfigModule)},
+          { path: '**', redirectTo: (isSmartassist ? 'coaching' : 'usecases') },
         ]
       },
       {
@@ -46,7 +55,6 @@ const routes: Routes = [
       {
         path: 'history', component: HistoryComponent, children: [
           { path: '', redirectTo: 'conversationalLogs', pathMatch: 'full' },
-          { path: 'conversationalLogs', component: ConversationalLogsComponent },
           { path: '**', redirectTo: 'sessiontrends' },
         ]
       },

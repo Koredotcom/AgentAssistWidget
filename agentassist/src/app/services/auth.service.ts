@@ -25,14 +25,16 @@ export class AuthService {
   private selectedAccount = null;
   public deflectApps = new BehaviorSubject<any>(null);
   public smartAssistBots: any[];
+  public universalBot : any = {};
   public hasToken = false;
   public userProfile: any;
   public btStoreQp = null
   public fromToken_tokenId = null;
   public externalQp: any;
   userAccIdDetail: any;
-
-  public isAgentDesktopEnabled$ =  new BehaviorSubject(false);
+  public isLoadingOnSm = window.location.href.includes('smartassist') ? true : false;
+  public isAgentDesktopEnabled$ = new BehaviorSubject(false);
+  public isAgentCoachongEnable$ = new BehaviorSubject(true);
 
   constructor(
     private localstore: LocalStoreService,
@@ -246,6 +248,7 @@ export class AuthService {
     let param = {'accountId': _id};
     this.service.invoke('get.agentDesktopEnabled.info', param).subscribe(res => {
       this.isAgentDesktopEnabled$.next(res.isAgentDesktopEnabled);
+      this.isAgentCoachongEnable$.next(res.isAgentCoachingEnabled);
     }
     , error => {
       console.log(error);
@@ -262,12 +265,37 @@ export class AuthService {
     })
   }
 
+  public getUniversalBotDetails(res){
+    for(let obj of res){
+      if(obj.type == 'universalbot'){
+        return obj;
+        break;
+      }
+    }
+    return {};
+  }
+
+  public getAgentAssistStreamId(){
+    // if(this.universalBot && this.universalBot._id){
+    //   return (this.universalBot._id);
+    // }else{
+      return this.workflowService.getCurrentBt(true)?._id;
+    // }
+  }
+
+
+
   public getDeflectApps() {
-    this.service.invoke('get.automationbots').subscribe(res => {
-      // res = [];
+    let isAgentAssist:any = true;
+    if(window.location.href.includes('smartassist')){
+      isAgentAssist = '';
+    }
+
+    this.service.invoke('get.automationbots', {isAgentAssist}).subscribe(res => {
       if (res && res.length) {
         this.workflowService.showAppCreationHeader(false);
         this.smartAssistBots = res;
+        this.universalBot = this.getUniversalBotDetails(res);
       }
       this.deflectApps.next(res);
       this.workflowService.deflectApps(res);

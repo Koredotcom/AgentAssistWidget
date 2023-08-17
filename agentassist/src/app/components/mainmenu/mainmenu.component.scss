@@ -15,6 +15,76 @@ app-mainmenu{
 		&.is-upgrade-true{
 			height: calc(100vh - 170px);
 		}
+		.automationBotDD{
+			padding-top: 15px;
+			.automationBot{
+			  // margin-top: 15px;
+			  display: flex;
+			  align-items: center;
+			  padding: 10px;
+			  // border-radius: 4px;
+			  margin-bottom: 6px !important;
+			  transition: 0.2s all ease-in;
+			  cursor: pointer;
+			  outline: 0 !important;
+			  min-height: 56px;
+			  position: relative;
+			  width: auto !important;
+			  background: #fff !important;
+			  width: 100% !important;
+			  border: 0;
+			  border-radius: 0;
+			  text-align: left;
+			  box-shadow: none !important;
+			  &::before{
+				display: none;
+			  }
+			  img{
+				position: relative;
+				// left: 12px;
+				// top: auto;
+				width: 26px;
+				height: 26px;
+				flex-shrink: 0;
+				border-radius: 6px;
+			  }
+			  .link-name{
+				color: #262626;
+				font-weight: 400;
+				font-size: $font-s-14;
+				line-height: 17px;
+				width: 100%;
+				padding-left: 10px;
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			  }
+			  .icon-sa-arrow-down{
+				width: 26px;
+				flex-shrink: 0;
+				font-size: 12px;
+				display: flex;
+				justify-content: center;
+				color: #202124;
+				transform: rotate(-90deg);
+			  }
+			  &:hover{
+				// background: var(--leftmenubg);
+				font-weight: 500;
+				// box-shadow: inset 0px 1px 4px rgba(0, 0, 0, 0.05);
+				border-radius: 4px;
+			  }
+			  &.active{
+				background: var(--whiteColor);
+				font-weight: 500;
+				// box-shadow: inset 0px 1px 4px rgba(0, 0, 0, 0.05);
+				border-radius: 4px;
+				.link-name{
+				  font-weight: 500;
+				}
+			  }
+			}
+		  }
 		.regular-user-bots-dropdown{
 			&.kr-sg-dropdowns {
 				// &.show {
@@ -120,6 +190,23 @@ app-mainmenu{
 					font-weight: normal;
 					font-size: 14px;
 					line-height: 14px;
+					width: 100%;
+				}
+				.beta-tag{
+					border-radius: 5px;
+					border: 1px solid #CDD5DF;
+					display: flex;
+					padding: 2px 5px;
+					justify-content: center;
+					align-items: center;
+					gap: 6px;
+					height: 20px;
+					color: #697586;
+					text-align: center;
+					font-size: 11px;
+					font-weight: 500;
+					line-height: 16px;
+					background: #fff;
 				}
 				&:hover{
 					// background: $leftmenubg;

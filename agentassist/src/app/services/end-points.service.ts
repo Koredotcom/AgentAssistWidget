@@ -10,6 +10,7 @@ export class EndPointsService {
   private SERVER_URL: String;
   private API_SERVER_URL: String;
   private SUPPORT_API_SERVER_URL: String;
+  private SMARTASSIST_API_SERVER_URL : String;
 
   private serviceList: Object = {};
 
@@ -22,6 +23,7 @@ export class EndPointsService {
       this.API_SERVER_URL = environment['API_SERVER_URL'] + this.API_URL_PREFIX + this.API_VERSION_PREFIX;
     }
     this.SUPPORT_API_SERVER_URL = environment['SUPPORT_API_SERVER_URL'] + this.API_URL_PREFIX + this.API_VERSION_PREFIX;
+    this.SMARTASSIST_API_SERVER_URL = environment['API_SERVER_URL'] + '/agentassist' + this.API_URL_PREFIX + '/v1'
     this.init();
   }
 
@@ -29,6 +31,20 @@ export class EndPointsService {
     return this.serviceList[serviceId] || {};
   }
   public init() {
+    this.serviceList['conversation.history'] = {
+     // ${connectionDetails.envinormentUrl}/api/1.1/botmessages/agentassist/${_botId}/history?convId=${_conversationId}&agentHistory=false
+      endpoint: this.SERVER_URL + '/agentassist/api/v1/agentassistconversations/:convId/conversation?limit=:limit&page=:page',
+      method: 'get'
+    }
+    this.serviceList['conversation.userbot'] = {
+      // ${connectionDetails.envinormentUrl}/api/1.1/botmessages/agentassist/${_botId}/history?convId=${_conversationId}&agentHistory=false
+       endpoint: this.API_SERVER_URL + '/botmessages/chathistorytoagentassist?botId=:botId&userId=:userId&sessionId=:sessionId',
+       method: 'get'
+    }
+    this.serviceList['conversation.logs'] = {
+      endpoint: this.SERVER_URL + '/agentassist/api/v1/agentassistconversationslogs/accounts/:accountId',
+      method: 'post'
+    }
     this.serviceList['sales.signout'] = {
       endpoint: this.API_SERVER_URL + '/oAuth/signout',
       method: 'delete'
@@ -515,7 +531,7 @@ export class EndPointsService {
 
     /** ONBOARDING START **/
     this.serviceList['get.existingbots'] = {
-      endpoint: this.API_SERVER_URL + '/smartassist/apps/automationbots/existingbots',
+      endpoint: this.API_SERVER_URL + '/smartassist/apps/automationbots/existingbots?isAgentAssist=true',
       method: 'get'
     };
 
@@ -1437,7 +1453,7 @@ export class EndPointsService {
     }
 
     this.serviceList['get.automationbots'] = {
-      endpoint: this.API_SERVER_URL + '/smartassist/apps/automationbots?isAgentAssist=true',
+      endpoint: this.API_SERVER_URL + '/smartassist/apps/automationbots?isAgentAssist=:isAgentAssist',
       method: 'get'
     }
 
@@ -1529,5 +1545,138 @@ export class EndPointsService {
       method: 'post'
     }
 
+    this.serviceList['get.welcomeevent'] = {
+      endpoint : this.API_SERVER_URL + '/smartassist/apps/instances/:streamId/events?isAgentAssist=true',
+      method: 'get'
+    }
+
+    this.serviceList['post.welcomeevent'] = {
+      endpoint : this.API_SERVER_URL + '/smartassist/apps/instances/:streamId/events?isAgentAssist=true',
+      method: 'post'
+    }
+
+    this.serviceList['post.markDefault'] = {
+      endpoint : this.API_SERVER_URL + '/smartassist/apps/:streamId/markconnectedbot',
+      method : 'post'
+    }
+
+    this.serviceList['get.universalLinkedBots'] = {
+      endpoint : this.API_SERVER_URL + '/users/:userId/builder/streams/:streamId',
+      method : 'get'
+    }
+
+    this.serviceList['get.LinkedBotUsecase'] = {
+      endpoint: this.API_SERVER_URL + '/smartassist/apps/:streamId/usecases?limit=:limit&offset=:offset&search=:search&filterby=:filterby&usecaseType=:usecaseType&status=:status&parentBotId=:parentBotId&isAgentAssist=true',
+      method : 'get'
+    }
+
+    // agent coaching
+
+    this.serviceList['get.allagentCoachingRule'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule/:botId',
+      method : 'post'
+    }
+
+    this.serviceList['get.allagentCoachingpreBuiltRules'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule/prebuildrules/:botId',
+      method : 'get'
+    }
+
+    this.serviceList['post.agentCoachingGroup'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachinggroup',
+      method : 'post'
+    }
+
+    this.serviceList['get.agentCoachingGroupById'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachinggroup/:groupId',
+      method : 'get'
+    }
+
+    this.serviceList['put.agentCoachingGroup'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachinggroup/:groupId',
+      method : 'put'
+    }
+
+    this.serviceList['delete.agentCoachingGroup'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachinggroup/:groupId',
+      method : 'delete'
+    }
+
+
+    // this.serviceList['put.agentCoachingRule'] = {
+    //   endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachinggroup/:groupId/rule/:ruleId',
+    //   method : 'put'
+    // }
+
+    this.serviceList['delete.agentCoachingRule'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule/:ruleId',
+      method : 'delete'
+    }
+
+    this.serviceList['post.agentcoachingrule'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule',
+      method : 'post'
+    }
+
+    this.serviceList['put.agentcoachingrule'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule/:ruleId',
+      method : 'put'
+    }
+
+    this.serviceList['get.agentcoachingruletags'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule/:botId/tags',
+      method : 'get'
+    }
+
+
+    this.serviceList['post.agentcoachingutterance'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingutterance/:refId/utterances',
+      method : 'post'
+    }
+
+    this.serviceList['get.agentcoachingutteranceByRef'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingutterance/:refId/utterances',
+      method : 'get'
+    }
+
+    this.serviceList['post.publishcoaching'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachinggroup/publishCoachingGroups',
+      method : 'post'
+    }
+
+    this.serviceList['post.openApi'] = {
+      endpoint : this.API_SERVER_URL + '/users/:userId/builder/streams/:streamId/llmconfigs/integration/openai',
+      method : 'post'
+    }
+
+    this.serviceList['post.azure'] = {
+      endpoint : this.API_SERVER_URL + '/users/:userId/builder/streams/:streamId/llmconfigs/integration/azure',
+      method : 'post'
+    }
+
+    this.serviceList['get.AIconfigs'] = {
+      endpoint : this.API_SERVER_URL + '/users/:userId/builder/streams/:streamId/llmconfigs',
+      method : 'get'
+    }
+
+    this.serviceList['post.features'] = {
+      endpoint : this.API_SERVER_URL + '/users/:userId/builder/streams/:streamId/llmconfigs/:llmId',
+      method : 'post'
+    }
+
+    this.serviceList['get.utternaces'] = {
+      endpoint : this.API_SERVER_URL + '/users/:userId/builder/streams/:streamId/aa_utterance/generate',
+      method : 'post'
+    }
+
+    this.serviceList['get.ruleById'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule/:ruleId',
+      method : 'get'
+    }
+
+    this.serviceList['post.noneIntentUtterances'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule/noneintent',
+      method : 'post'
+    }
   }
 }

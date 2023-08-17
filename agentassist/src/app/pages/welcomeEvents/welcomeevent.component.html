@@ -1,0 +1,185 @@
+<div class="welcome-events-wrapper">
+    <div class="header-block">
+        <div class="left-sec">
+            <div class="title">Welcome Event</div>
+            <div class="tabs-list">
+                <!-- <div class="tab-name" [ngClass]="{'active-tab' : activeTab == welcomeMsg}" (click)="changeActiveTab(welcomeMsg)">Welcome Message</div> -->
+                <!-- <div class="tab-name" [ngClass]="{'active-tab' : activeTab == welcomeTask}" (click)="changeActiveTab(welcomeTask)">Welcome Task</div> -->
+            </div>
+        </div>
+        <button class="kr-sg-button-primary btn_lg" (click)="openWelcomeEvent()" *ngIf="activeTab == welcomeMsg">New Welcome Message</button>
+    </div>
+    <div class="events-block-wrapper">
+        <perfect-scrollbar>
+            <div class="inner-wrapper-details">
+                <!-- <div class="box-wrapper" [hidden]="activeTab != welcomeMsg">
+                    <div class="heading-events">
+                        <div class="icon_block">
+                            <i class="icon-sa-call-welcome"></i>
+                        </div>
+                        <div class="left-titles">
+                            <div class="title">Welcome</div>
+                            <div class="desc-title">Hanndling begining of  conversation</div>
+                        </div>
+                        <div class="toggle-display">
+                            <i class="icon-sa-help" ngbTooltip="Welcome Messages are displayed randomly on the agent console" container='body' tooltipClass="tooltip-global-styles"></i>
+                            <span>Display Randomly</span>
+                            <label class="kr-sg-toggle">
+                                <input type="checkbox" checked>
+                                <div class="slider"></div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="table-wrapper-info-padding">
+                        <div class="body-data-table-info">
+                            <div class="shadow-freeze"></div>
+                            <div class="col-12 d-flex table-status-header">
+                                <div class="col-4 title p-l-20">Title</div>
+                                <div class="col-3 title">ACTIONS</div>
+                                <div class="col-3 title">REsponses</div>
+                                <div class="col-2 title">Status</div>
+                            </div>
+                            <ng-container>
+                                <div class="col-12 d-flex table-status-body">
+                                    <div class="col-4 available">Default Message 1</div>
+                                    <div class="actions-data col-3">
+                                        <button class="edit-btn">
+                                            <i class="icon-sa-welcome-edit"></i>
+                                        </button>
+                                        <button class="edit-btn" (click)="deleteWelcomeEvent(contentDeleteWelcomeEvents)">
+                                            <i class="icon-sa-welcome-delete"></i>
+                                        </button>
+                                    </div>
+                                    <div class="col-3 status-type">
+                                        <i class="icon-sa-welcome-chat"></i>
+                                        <i class="icon-sa-welcome-voice"></i>
+                                    </div>
+                                    <div class="col-2 desc-text">
+                                        <label class="kr-sg-toggle">
+                                            <input type="checkbox" checked>
+                                            <div class="slider"></div>
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                            </ng-container>
+                        </div>
+                        <div class="note-info-wrapper">
+                            <div class="bulb_icon">
+                                <i class="icon-sa-welcome-bulb"></i>
+                            </div>
+                            <div class="content-info">
+                                <div class="title-note">note</div>
+                                <div class="text_desc">Only 3 Welcome message can be turned on, Also maximum welcome message that a user can have is 10 including the Default Messages</div>
+                            </div>
+                            <div class="close-icon">
+                                <i class="icon-sa-close"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+
+                <div class="box-wrapper" [hidden]="activeTab != welcomeTask">                    
+                    <div class="heading-events">
+                        <div class="icon_block">
+                            <i class="icon-sa-settings"></i>
+                        </div>
+                        <div class="left-titles">
+                            <div class="title">Configure Welcome Event</div>
+                            <div class="desc-title">Configure how welcome events are being handled in the agent Desktop</div>
+                        </div>
+                    </div>
+                    <div class="table-wrapper-info-padding">
+                        <div class="chat-voice-tabs">
+                            <div class="name-tab" [ngClass]="{'active-tab-name' : taskActive == chatTab}" (click)="changeTaskActive(chatTab)">Chat</div>
+                            <div class="name-tab"  [ngClass]="{'active-tab-name' : taskActive == voiceTab}" (click)="changeTaskActive(voiceTab)">Voice</div>
+                        </div>
+                        <div class='init-loading' *ngIf="showSpinner">
+                            <mat-spinner diameter="25" strokeWidth="3"></mat-spinner>
+                            </div>
+                            <div class="radio-info-block">
+                                <div class="kr-sg-radiobutton">
+                                    <input id="radio-1" name="taskEnable" class="radio-custom" type="radio" [(ngModel)]="taskEnable" [value]="false">
+                                    <label for="radio-1" class="radio-custom-label">
+                                        <span class="bold_text">Disabled: </span>
+                                        <span>Stop welcome events</span>
+                                    </label>
+                                </div> 
+                                <div class="kr-sg-radiobutton">
+                                    <input id="radio-11" name="taskEnable" class="radio-custom" type="radio" [(ngModel)]="taskEnable" [value]="true">
+                                    <label for="radio-11" class="radio-custom-label">
+                                        <span class="bold_text">Select Dialog: </span>
+                                        <span>Make a choice among the bots and select the dialog task you are interested in</span>
+                                    </label>
+                                </div> 
+                                <ng-container *ngIf="taskEnable">
+                                    <div class="d-flex">
+                                        <div class="col-6" *ngIf="currentBt?.type == universalBot">
+                                            <div class="label-text">Select Bot</div>
+                                            <div class="kr-sg-dropdowns" ngbDropdown>
+                                                <div class="dropdown dropdown-open">
+                                                    <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{selectedBot?.botName ? selectedBot?.botName : 'Select bot'}}</button>
+                                                    <ul class="dropdown-menu content-menu" ngbDropdownMenu>
+                                                        <perfect-scrollbar>
+                                                            <div class="scroll-ul">
+                                                                <li ngbDropdownItem (click)="changeBot(bot)" *ngFor="let bot of linkedBots"><a>{{bot.botName}}</a></li>
+                                                            </div>
+                                                        </perfect-scrollbar>
+                                                    </ul>
+                                                </div>
+                                            </div> 
+                                        </div>
+                                        <div class="col-6" [ngClass]="{'col-12' : currentBt?.type != universalBot}">
+                                            <div class="label-text">Automation</div>
+                                            <div class="kr-sg-dropdowns" ngbDropdown>
+                                                <div class="dropdown dropdown-open">
+                                                    <button class="dropdown-toggle dropdown-input" ngbDropdownToggle [disabled]="currentBt.type == universalBot && !selectedBot?.botName">{{selectedUseCase?.usecaseName ? selectedUseCase?.usecaseName : 'Select Use Cases'}}</button>
+                                                    <ul class="dropdown-menu content-menu" ngbDropdownMenu>
+                                                        <perfect-scrollbar>
+                                                            <div class="scroll-ul">
+                                                                <li ngbDropdownItem (click)="changeUseCase(conv)" *ngFor="let conv of conversations"><a>{{conv.usecaseName}}</a></li>
+                                                            </div>
+                                                        </perfect-scrollbar>
+                                                    </ul>
+                                                </div>
+                                            </div> 
+                                        </div>
+                                    </div>
+                                </ng-container>
+                                <div class="msg-note">Note : Make sure to publish the bot in order to reflect the changes in realtime</div>
+                            </div>
+                    </div>
+                    <div class="save-cancel-info">
+                        <button class="kr-sg-button-secondary-two btn_lg" type="submit" (click)="updateDetails(cancel)" [disabled]="checkFieldChange() || showSpinner" >Cancel</button>
+                        <button class="kr-sg-button-primary btn_lg" type="submit" (click)="updateDetails(save)" [disabled]="(taskEnable && !selectedUseCase?.usecaseName) || checkFieldChange() || showSpinner">Save</button>
+                    </div>
+                </div>
+            </div>
+        </perfect-scrollbar>
+    </div>
+</div>
+
+<app-slider-component id="newWelcome" #newWelcomeEvent='app-slider'>
+    <app-new-welcome-event (close)="closeWelcomeEvent()"></app-new-welcome-event>
+</app-slider-component>
+
+
+<ng-template #contentDeleteWelcomeEvents let-modal>
+	<div class="delete-comp-wrapper">
+        <div class="icon_block">
+            <i class="icon-sa-welcome-delete"></i>
+        </div>
+        <div class="close-delete" (click)="modal.dismiss()">
+            <i class="icon-sa-close"></i>
+        </div>
+        <div class="body-data-delete">
+            <div class="t-heading">Delete Welcome Message</div>
+            <div class="d-desc">Are you sure you want to delete Delay “welcome” message?</div>
+        </div>
+        <div class="footer-btns-data">
+            <button class="kr-sg-button-secondary btn_lg">No</button>
+            <button class="kr-sg-button-danger btn_lg">Yes</button>
+        </div>
+    </div>
+</ng-template>

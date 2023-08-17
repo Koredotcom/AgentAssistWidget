@@ -4,7 +4,7 @@ import { NgbDropdown, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { workflowService } from '@kore.services/workflow.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { BillingPlan } from '../../data/billing.model';
 import { NotificationService } from '@kore.services/notification.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -36,7 +36,7 @@ export class MainmenuComponent implements OnInit, OnDestroy {
   availBal: Subscription;
   upBtSub: Subscription;
   swtchBot: Subscription;
-  smartABots: string[];
+  smartABots: any[];
   currentBt: any;
   searchBt = "";
   isAgentDesktopEnabled: boolean;
@@ -44,7 +44,8 @@ export class MainmenuComponent implements OnInit, OnDestroy {
   channelList: any;
   loading: boolean = false;
   voicePreferences: VoicePreferencesModel;
-
+  filteredSmartABots : any = {};
+  isCoachingDisable = true;
   @ViewChild('wUpdateBot', { static: false }) private wUpdateBot;
   @ViewChild('wSContent', { static: false }) private wSContent;
   @ViewChild(NgbDropdown) private dropdown: NgbDropdown;
@@ -73,21 +74,19 @@ export class MainmenuComponent implements OnInit, OnDestroy {
     this.subs.sink = this.authService.isAgentDesktopEnabled$.subscribe(isEnabled => {
       this.isAgentDesktopEnabled = isEnabled;
     });
-    let _id = this.localStoreService.getSelectedAccount()?.accountId || this.authService.getSelectedAccount()?.accountId;
-    console.log('header', _id);
+    this.subs.sink = this.authService.isAgentCoachongEnable$.subscribe(isEnabled => {
+      this.isCoachingDisable = isEnabled;
+    });
 
-    if (this.appService.selectedInstanceApp$.value) {
-      this.getBalance();
-    }
-    if (this.workflowService.deflectAppsData.length || this.workflowService.deflectAppsData._id) {
-     
-      this.smartABots = this.authService.smartAssistBots || [];
-      this.smartABots.forEach((v: any) => {
-        v.name = v.name.replaceAll('&lt;', '<').replaceAll('&gt;', '>');
-      });
-      this.currentBt = _.findWhere(this.authService.smartAssistBots, { _id: this.workflowService.deflectApps()._id || this.workflowService.deflectApps()[0]._id });
-      this.workflowService.setCurrentBt(this.currentBt);
-    }
+    // this.workflowService.botChange.subscribe((bot : any)=>{
+    //   console.log(bot, "inside udpate use case");
+    //   if(bot && bot.name){
+    //     this.choosedBot = bot.name;
+    //   } 
+    // });
+
+    // this.getCurrentBotFromAutomationBotList();
+    
     this.availBal = this.workflowService.updateAvailBal$.subscribe(
       res => {
         this.getBalance();
@@ -105,6 +104,64 @@ export class MainmenuComponent implements OnInit, OnDestroy {
         this.switchBots(res);
       }
     );
+
+    this.subs.sink = this.authService.deflectApps.subscribe( (res : any) => {
+      if(res){
+        console.log("inside subscribe", res);
+        
+        this.getCurrentBotFromAutomationBotList();
+      }
+    });
+  }
+
+  getCurrentBotFromAutomationBotList(){
+    let _id = this.localStoreService.getSelectedAccount()?.accountId || this.authService.getSelectedAccount()?.accountId;
+  
+    if (this.appService.selectedInstanceApp$.value) {
+      this.getBalance();
+    }
+    if (this.workflowService.deflectAppsData.length || this.workflowService.deflectAppsData._id) {
+     
+      this.smartABots = this.authService.smartAssistBots || [];
+      this.smartABots.forEach((v: any) => {
+        v.name = v.name.replaceAll('&lt;', '<').replaceAll('&gt;', '>');
+      });
+      
+      this.currentBt = this.workflowService.getCurrentBt(true) && Object.keys(this.workflowService.getCurrentBt(true)).length > 0 ? this.workflowService.getCurrentBt(true) : _.findWhere(this.authService.smartAssistBots, { _id: this.workflowService.deflectApps()._id || this.workflowService.deflectApps()[0]._id });
+      this.workflowService.setCurrentBt(this.currentBt);
+    }
+    this.filterLinkedBotIds();
+  }
+
+  filterLinkedBotIds(){
+    this.filteredSmartABots = {};
+    this.smartABots.forEach((bot) => {
+      if(bot._id){
+        this.filteredSmartABots[bot._id] = bot;
+      }
+    });
+
+    
+    for(let bot of this.smartABots){
+      let filterdBot = this.filteredSmartABots[bot._id];
+      if(bot.type == 'universalbot'){
+
+        let linkedBots = [];
+        let linkedBotIds = {};
+
+        let config_publish_bot_array = [...bot?.configuredBots, ...bot.publishedBots];
+
+        config_publish_bot_array.forEach((config_publish_bot) => {
+          linkedBotIds[config_publish_bot._id] = true;
+        });  
+   
+        linkedBots = this.smartABots.filter(element => linkedBotIds[element._id]); 
+        filterdBot.linkedBots = Object.assign([], linkedBots);
+        for(let botId in linkedBotIds){
+          delete this.filteredSmartABots[botId]
+        }        
+      }
+    }        
   }
 
   getBalance() {
@@ -195,9 +252,16 @@ export class MainmenuComponent implements OnInit, OnDestroy {
     // } else {
     //   this.navigateToLiveBoard();
     // }
-    this.navigateToUc();
+    // this.navigateToUc();
     this.workflowService.updateAvailBal$.next();
     this.workflowService.headerInitCalls$.next();
+    this.changeBot(this.currentBt);
+  }
+
+
+  changeBot(res){
+    console.log("----- get use cases----")
+    this.workflowService.updateBotDetails$.next(res);
   }
 
   navigateToUc() {
@@ -224,15 +288,17 @@ export class MainmenuComponent implements OnInit, OnDestroy {
 
   getAdvSettings() {
     const params = {
-      instanceId:this.authService.smartAssistBots.map(x=>x._id),
+      instanceId:this.authService.getAgentAssistStreamId(),
        'isAgentAssist':true
      }
      let channelList;
      this.subs.sink = this.service.invoke('get.voiceList', params, 's').subscribe(voiceList => {
        channelList = voiceList;
        if(channelList.sipTransfers.length > 0){
-        const _params = { streamId:this.authService.smartAssistBots.map(x=>x._id),
-                        'isAgentAssist':true }
+        const _params = { 
+          streamId: this.authService.getAgentAssistStreamId(),
+          'isAgentAssist':true 
+        }
         this.loading = true;
         this.subs.sink = this.service.invoke('get.settings.voicePreferences', _params)
         .pipe(finalize(() => this.loading = false))

@@ -103,8 +103,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.selectedApp = this.authService.smartAssistBots.map(x=>x._id);
-    this.initCalls();
+    this.selectedApp = this.workflowService.getCurrentBt(true)._id;
+    // this.selectedApp = this.authService.smartAssistBots.map(x=>x._id);
+    // this.initCalls();
     this.getWidget();
     this.subs.sink = this.authService.isAgentDesktopEnabled$.subscribe(isEnabled => {
       this.isAgentDesktopEnabled = isEnabled;
@@ -123,11 +124,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.ref.detectChanges();
     });
 
-    if (this.authService.smartAssistBots.map(x=>x._id)) {
+    // if (this.authService.smartAssistBots.map(x=>x._id)) {
+    //   this.initCalls();
+    // }
+    if(this.workflowService.getCurrentBt(true) && this.workflowService.getCurrentBt(true)._id){
       this.initCalls();
     }
     this.initSub = this.workflowService.headerInitCalls$.subscribe(() => {
-      this.initCalls();
+      if(this.workflowService.getCurrentBt(true)._id){
+        this.initCalls();
+      }
     });
     this.showSwichAccountOption = this.localStoreService.getAssociatedAccounts().length > 1;
     this.kgService.kgTrainingInProgess$.subscribe((res: boolean) => {
@@ -151,7 +157,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     let params;
      params = {
         userId: this.authService.getUserId(),
-        streamId: this.authService.smartAssistBots.map(x=>x._id)
+        streamId: this.authService.getAgentAssistStreamId()
       }
 
       this.service.invoke('get.shared.developers', params).subscribe(
@@ -177,7 +183,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
       paramsEmail = {
         userId: this.authService.getUserId(),
-        streamId: this.authService.smartAssistBots.map(x=>x._id),
+        streamId : this.workflowService.getCurrentBt(true)._id,
+        // streamId: this.authService.smartAssistBots.map(x=>x._id),
         orgId: this.authService.getOrgId()
       }
 
@@ -253,16 +260,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   inviteDialog() {
+    this.inviteDevelopers();
+    this.workflowService.headerInitCalls$.next();
     const dialogRef = this.dialog.open(InviteDialogComponent);
     const params = {
       userId: this.authService.getUserId(),
-      streamId: this.authService.smartAssistBots.map(x=>x._id),
+      streamId : this.workflowService.getCurrentBt(true)._id,
+      // streamId: this.authService.smartAssistBots.map(x=>x._id),
       'isAgentAssistApp':true
 
     }
     dialogRef.afterClosed().subscribe(res => {
       let usersList = [];
-      _.each(this.sharedToList.users, function (val) {
+      _.each(this.sharedToList?.users, function (val) {
         usersList.push({
           userId: val._id,
           roleId: val.roleInfo[0]._id
@@ -312,6 +322,28 @@ export class HeaderComponent implements OnInit, OnDestroy {
     });
   }
 
+  inviteDevelopers(){
+    const params = {
+      userId: this.authService.getUserId(),
+      streamId : this.workflowService.getCurrentBt(true)._id,
+      // streamId: this.authService.smartAssistBots.map(x=>x._id),
+      'isAgentAssistApp':true
+
+    }
+    this.service.invoke('get.shared.developers', params).subscribe(
+      res => {
+        this.isSharedDeveloper = true;
+        this.sharedToList = res;
+        this.isSharedDevError = false;
+      },
+      err => {
+        this.isSharedDeveloper = true;
+        this.workflowService.showError(err, this.translate.instant("HEADER.FAILED_FETCH"));
+        this.isSharedDevError = true;
+      }
+    )
+  }
+
   langSwitchDialog() {
     const dialogRef = this.dialog.open(LangSwitchDialogComponent, {
       width: '530px',
@@ -344,7 +376,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   navigateToDoc() {
-    window.open('https://docs.kore.ai/smartassist/');
+    window.open('https://docs.kore.ai/agentassist/');
     this.mixPanel.postEvent('SG - Help doc viewed', this.mixPanel.events['SG - Help doc viewed']);
   }
 

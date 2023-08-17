@@ -6,6 +6,10 @@ import { NotificationService } from '@kore.services/notification.service';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { SubSink } from 'subsink';
 import { OnboardingDialogComponent } from './onboarding-dialog/onboarding-dialog.component';
+import { TranslateService } from '@ngx-translate/core';
+import { AccWarningDialogComponent } from 'src/app/helpers/components/acc-warning-dialog/acc-warning-dialog.component';
+import { LocalStoreService } from '@kore.services/localstore.service';
+import { AuthService } from '@kore.services/auth.service';
 
 @Component({
   selector: 'app-onboarding',
@@ -15,20 +19,69 @@ import { OnboardingDialogComponent } from './onboarding-dialog/onboarding-dialog
 export class OnboardingComponent implements OnInit, OnDestroy {
   subs = new SubSink();
   instance: any;
+  public WINDOW = window;
   constructor(
     private dialog: MatDialog,
     private service: ServiceInvokerService,
     private notificationService: NotificationService,
     private appService: AppService,
-    private router: Router
+    private router: Router,
+    private translate: TranslateService,
+    public localstore: LocalStoreService,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
+    if(this.appService.selectedInstanceApp$.value) {
+      this.showWarningMessage();
+    } else {
+
+    }
     if (this.appService.instanceApps.length && !this.appService.isMigrated) {
       this.router.navigate(['home']);
     } else {
       this.initDialog();
     }
+  }
+
+  marketURL(){
+    return  this.WINDOW.location.protocol+"//"+this.WINDOW.location.host+"/accounts"
+  }
+
+  completeAppPath(){
+    return this.WINDOW.location.href;
+  }
+
+  showWarningMessage() {
+    let dialogRef = this.dialog.open(AccWarningDialogComponent, {
+      width: '1050px',
+      panelClass: "warning-account-popup",
+      disableClose: true,
+      data: {
+        title: this.translate.instant("Account_Error"),
+        text: this.translate.instant("Account_Error_MSG"),
+        buttons: [{ key: 'login', label: this.translate.instant("LOGIN_BTN") }, { key: 'create', label: this.translate.instant("CREATE_ACCOUNT_BTN") }]
+      }
+    });
+
+    dialogRef.componentInstance.onSelect.subscribe(result => {
+      console.log('sandeep: ', result);
+      if (result === 'login') {
+        // redirect to login page
+        dialogRef.close();
+      } else if (result === 'create') {
+        // redirect to sign up page
+        let userInfo:any = this.authService.getAuthInfo()?.currentAccount?.userInfo || {};
+        let redirectedUrl = this.completeAppPath();
+        dialogRef.close();
+        // window.location.href =  this.marketURL()+'/?email=' + userInfo?.emailId + '&return_to=' + redirectedUrl + '&showLogin=true&hideSSOButtons=true&hideResourcesPageLink=true&comingFromKey=isAgentAssistApp#login';
+        window.location.href =  this.marketURL()+'/?return_to='+redirectedUrl+'&showLogin=true&hideSSOButtons=true&hideResourcesPageLink=true&comingFromKey=isAgentAssistApp'
+      }
+    })
+
+    dialogRef.afterClosed().subscribe(result => {
+      // logic for redirecting
+    })
   }
 
   initDialog() {
@@ -41,7 +94,7 @@ export class OnboardingComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      //  
+      //
     });
   }
 

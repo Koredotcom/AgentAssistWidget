@@ -74,7 +74,7 @@ export class BTContainerComponent implements OnInit, AfterViewInit, OnDestroy {
     return new Promise((resolve, reject) => {
       interval = setInterval(() => {
         doc = this.iframe.nativeElement.contentDocument;
-        var btns = doc.querySelectorAll(".btnSolidBlue");
+        var btns = doc?.querySelectorAll(".btnSolidBlue");
         if (btns && btns.length > 0) {
           for (var i = 0; i < btns.length; i++) {
             if (btns[i] && btns[i].getAttribute("ng-click") === `showForm($event, 'dialogTasks')`) {
@@ -293,6 +293,10 @@ export class BTContainerComponent implements OnInit, AfterViewInit, OnDestroy {
     }, 500);
   }
   unHideAppMenu() {
+    var appMenuParentDiv = document.getElementsByClassName("left-menu-builder");
+    if (appMenuParentDiv && appMenuParentDiv.length) {
+      (<HTMLElement> appMenuParentDiv[0]).style.display = 'block';
+    }
     var appMenu = document.getElementsByTagName("APP-MAINMENU");
     var doc = this.iframe.nativeElement.contentDocument;
     var closeAction = doc.getElementsByClassName("closeBtn");
@@ -308,6 +312,10 @@ export class BTContainerComponent implements OnInit, AfterViewInit, OnDestroy {
 
   }
   hideAppMenu() {
+    var appMenuParentDiv = document.getElementsByClassName("left-menu-builder");
+    if (appMenuParentDiv && appMenuParentDiv.length) {
+      (<HTMLElement> appMenuParentDiv[0]).style.display = 'none';
+    }
     var appMenu = document.getElementsByTagName("APP-MAINMENU");
     if (appMenu && appMenu.length) {
       (<HTMLElement> appMenu[0]).style.display = 'none';

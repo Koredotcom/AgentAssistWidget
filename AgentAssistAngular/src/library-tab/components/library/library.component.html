@@ -1,0 +1,63 @@
+<div class="library-search-data-container" id="LibraryContainer">
+    <div class="search-block">
+        <div class="input-text-search library-search-div" id="search-block">
+            <!-- <input type="text" placeholder="Ask AgentAssist" class="input-text" id="librarySearch" (keyup.enter)="getSearchResults()" [(ngModel)]="searchText"
+            (ngModelChange)="emptySearchTextCheck()"> -->
+            <app-typeahead
+            (typeahead)="emptySearchTextCheck($event)"  (typeaheadEntered)="getSearchResults($event)" [connectionData]="connectionDetails"></app-typeahead>
+            <i class="ast-search"></i>
+            <i class="ast-close close-search" id="cancelLibrarySearch" (click)="librarySearchClose()"></i>
+        </div>
+    </div>
+
+    <div class="show-back-recommendation-block" id="backButton" *ngIf="searchFromAgentSearchBar" (click)="handleBackButtonClick()">
+        <button id="backToPreviousTab" class="ghost-btn">
+            <span class="back-icon">
+                <i class="ast-carrotup"></i>
+            </span>
+            Back
+        </button>
+    </div>
+
+    <div class="dynamic-searchlibrary-data">
+        <div class="empty-library-data hide" id="noLibraryList">
+            <div class="img-block">
+                <img [src]="imageFilePath + imageFileNames['EMPTY_LIBRARY']">
+            </div>
+            <div class="title-empty">No items found</div>
+            <div class="desc-text">No usecases are configured for the bot.</div>
+        </div>
+        <div id="frequently-exhaustive" *ngIf="!showSearchSuggestions">
+            <div class="frequently-asked" id="allAutomations-Exhaustivelist">
+                <div class="heading-title">All Automations</div>
+                <div class="dialog-task-run-sec" id="dialogs-list">
+                    <div class="task-type" id="usecases-list">
+                        <div class="content-dialog-task-type p1-0" id="usecases-suggestions" >
+                            <div class="type-info-run-send" [id]="'useCaseList-' + i" *ngFor="let dialogue of menuResponse | keyvalue;let i = index">
+                                <div class="left-content">
+                                    <div class="title-text" [id]="'automation-' + i">{{dialogue.value.intentName}}</div>
+                                </div>
+                                <div class="action-links">
+                                    <button class="send-run-btn" [id]="'useCase-' + i" (click)="dialogueRunClick(dialogue,projConstants.ASSIST)">{{projConstants.RUN}}</button>
+                                    <div class="elipse-dropdown-info" [id]="'showRunForAgentBtn-' + i">
+                                        <div class="elipse-icon" [id]="'elipseIcon-' + i" (click)="handleRunAgent(dialogue.key, $event)">
+                                            <i class="ast-overflow" [id]="'overflowIcon-' + i"></i>
+                                        </div>
+                                        <div class="dropdown-content-elipse" [id]="'runAgtBtn-' + i" *ngIf="dialogue.value.agentRunButton" (click)="$event.stopPropagation()">
+                                            <div class="list-option" [id]="'agentSelect-' + i" (click)="dialogueRunClick(dialogue,projConstants.MYBOT)">{{projConstants.AGENTASSIST_RUN}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="intent-based-search" id="searchResults" *ngIf="showSearchSuggestions && commonService.activeTab == projConstants.LIBRARY">
+            <app-overlaysearch [searchType]="projConstants.LIBRARY_SEARCH"></app-overlaysearch>
+        </div>
+    </div>
+    <div id="dialogs-faqs">
+    </div>
+</div>

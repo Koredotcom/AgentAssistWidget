@@ -18,10 +18,10 @@ export class AppDataResolver implements Resolve<any> {
     return Observable.create(observer => {
       var _promise1 = this.authService.getApplictionControlsFromServer();
       const instanceOb$ = this.appService.getInstaceApps();
-      const versionOb$ = this.appService.getAppVersion();
+      //const versionOb$ = this.appService.getAppVersion();
 
-      //observer.zip(_promise1)       
-      forkJoin([_promise1, instanceOb$, versionOb$]).subscribe(result => {
+      //observer.zip(_promise1)
+      forkJoin([_promise1, instanceOb$]).subscribe(result => {
         //var _accountPromise = this.loadSelectedAccount();
         //_accountPromise.subscribe(res => {
         const res: any = result[0];

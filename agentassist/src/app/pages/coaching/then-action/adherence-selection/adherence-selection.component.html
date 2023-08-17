@@ -1,0 +1,101 @@
+<div class="utterance-triggers bg-triggers-info">
+    <span class="adherence-tag-text">
+        <span>Adherence</span>
+    </span>
+    <ng-container *ngIf="selectedAdherenceType == coachingConst.ACKNOWLEDGE_PRESSED">
+        <span class="utt-name-desc">Agent pressed the </span>
+
+        <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body" #ackButton="ngbDropdown">
+            <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!selectedAckButtonText}" (click)="ackButtonText = selectedAckButtonText">
+                <span class="choose-text">{{selectedAckButtonText ? selectedAckButtonText : '{ Choose }'}}</span>
+            </button>
+            <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
+                <div class="variable-value-input with-check-icon">
+                    <div class="input-variable-sec">
+                        <div class="label-text">Acknowledge Button</div>
+                        <div class="kr-sg-input-text">
+                            <input type="text" placeholder="Enter Nudge Message"
+                                class="input-text" maxlength="15" [(ngModel)]="ackButtonText">
+                        </div>
+                        <div class="count-char">{{ackButtonText.length}}/15</div>
+                    </div>
+                    <div class="check-icon-block" (click)="submitAckButtonText();ackButton.close()">
+                        <i class="icon-sa-conv-check"></i>
+                    </div>
+                </div>
+            </ul>
+        </div>
+        <span class="utt-name-desc"> button in the hint </span>
+        <!-- <span class="utt-name-desc">Agent pressed the "Ok, Got it" button in the hint </span> -->
+
+    </ng-container>
+    <ng-container *ngIf="selectedAdherenceType == coachingConst.UTTERANCE">
+        <span class="utt-name-desc">Agent says one of these </span>
+        <div class="dropdown-custom-flows" container="body">
+            <button class="dropdown-toggle btn-toggle text-choosen" (click)="openAdherence()">
+                <span class="choose-text"> {{(adherenceForm?.value?.adherence?.utteranceCount) ? adherenceForm?.value?.adherence?.utteranceCount + ' utterance(s).' : '{ set utterances }.'}}</span>
+            </button>
+        </div>
+
+        <span class="utt-name-desc">Can be completed</span>
+
+        <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body">
+            <button class="dropdown-toggle btn-toggle" [ngClass]="{'text-choosen': !!selectedSession}" ngbDropdownToggle>
+                <span class="choose-text">{{selectedSession ? coachingConst?.UI_SESSION_LIST[selectedSession] : '{ Choose }'}}</span>
+            </button>
+            <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
+                <ng-container *ngFor="let item of sessionList | keyvalue">
+                    <li ngbDropdownItem class="list-item-li" (click)="clickOnSessionSelection(item.key)">
+                        <span class="title">{{item.value}}</span>
+                        <i [ngClass]="{'icon-sa-conv-check' : item.key === selectedSession}"></i>
+                    </li>
+                </ng-container>
+            </ul>
+        </div>
+
+        <ng-container *ngIf="selectedSession == coachingConst.ACTION_SESSION_ANYTIME">
+            <span class="utt-name-desc">during the session</span>
+        </ng-container>
+
+        <ng-container *ngIf="selectedSession == coachingConst.ACTION_SESSION_NMESSAGES">
+            <span class="utt-name-desc">the next</span>
+            <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body" #closeMessage="ngbDropdown">
+                <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!selectedMessages}" (click)="variableMessage = selectedMessages">{{selectedMessages}}</button>
+                <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
+                    <div class="seconds-input">
+                        <div class="kr-sg-input-text">
+                            <input type="number" digitOnly placeholder="Enter Message Count" (keyup.enter)="onEnterMinOrMessages(variableMessage);closeMessage.close()" class="input-text" [(ngModel)]="variableMessage">
+                        </div>
+                    </div>
+                </ul>
+            </div>
+            <span class="utt-name-desc">Message(s)</span>
+        </ng-container>
+
+        <ng-container *ngIf="selectedSession == coachingConst.ACTION_SESSION_NMINS">
+            <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body" #closeMinute="ngbDropdown">
+                <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!selectedMinutes}" (click)="VariableMinute = selectedMinutes">{{selectedMinutes}}</button>
+                <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
+                    <div class="seconds-input">
+                        <div class="kr-sg-input-text">
+                            <input type="number" digitOnly placeholder="Enter Minute count" (keyup.enter)="onEnterMinOrMessages(VariableMinute);closeMinute.close()" class="input-text" [(ngModel)]="VariableMinute">
+                        </div>
+                    </div>
+                </ul>
+            </div>
+            <span class="utt-name-desc">Minute(s)</span>
+        </ng-container>
+    
+       
+    </ng-container>
+
+    <div class="delete-row" (click)="deleteAdherenceClick()"> 
+        <i class="icon-sa-welcome-delete"></i>
+    </div>
+</div>
+
+<ng-container *ngIf="openAdherenceSlider"> 
+    <app-slider-component id="adherenceSlider" #adherenceSlider='app-slider'>
+            <app-adherence [createOrEdit]="createOrEdit" (onClose)="closeAdherence($event)" [form]="adherenceForm"></app-adherence>
+        </app-slider-component>
+</ng-container>

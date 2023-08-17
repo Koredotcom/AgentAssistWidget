@@ -57,6 +57,7 @@ import { JsEditorComponent } from './js-editor/js-editor.component';
 import { AceEditorModule } from 'ng2-ace-editor';
 import { PlaceHolderDirective } from '../helpers/directives/placeholder.directive';
 import { LookupPipe } from '../helpers/filters/lookup.pipe';
+import { UbEmptyScreensComponent } from '../pages/usecases/uc-main/uc-table-main/uc-table-view/ub-empty-screens/ub-empty-screens.component';
 
 const COMPONENTS = [
   SliderComponentComponent,
@@ -95,6 +96,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     CustomMarkdownEditorComponent,
     AgentGpMatchComponent,
     EmptyScreensComponent,
+    UbEmptyScreensComponent,
     HasPermissionDirective,
     PlaceHolderDirective,
     SkillsDdComponent,
@@ -132,7 +134,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     NgxDaterangepickerMd.forRoot(),
     AceEditorModule
   ],
-  providers: [TitleCasePipe],
+  providers: [TitleCasePipe, FilterPipe],
   exports: [
     ...COMPONENTS,
     ...DIRECTIVES,
@@ -158,6 +160,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     NgxDaterangepickerMd,
     AgentGpMatchComponent,
     EmptyScreensComponent,
+    UbEmptyScreensComponent,
     TitleCasePipe,
     HasPermissionDirective,
     PlaceHolderDirective,

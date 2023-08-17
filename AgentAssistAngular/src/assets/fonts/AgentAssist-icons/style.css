@@ -1,0 +1,111 @@
+@font-face {
+  font-family: 'AgentAssist-icons';
+  src:  url('fonts/AgentAssist-icons.eot?raejxo');
+  src:  url('fonts/AgentAssist-icons.eot?raejxo#iefix') format('embedded-opentype'),
+    url('fonts/AgentAssist-icons.ttf?raejxo') format('truetype'),
+    url('fonts/AgentAssist-icons.woff?raejxo') format('woff'),
+    url('fonts/AgentAssist-icons.svg?raejxo#AgentAssist-icons') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="ast-"], [class*=" ast-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'AgentAssist-icons' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.ast-hand-drag-solid:before {
+  content: "\e917";
+}
+.ast-positive-nudge:before {
+  content: "\e918";
+}
+.ast-warning-nudge:before {
+  content: "\e919";
+}
+.ast-close-nudge:before {
+  content: "\e91a";
+}
+.ast-hand-drag:before {
+  content: "\e91b";
+}
+.ast-ast-send:before {
+  content: "\e916";
+}
+.ast-thumb-new:before {
+  content: "\e915";
+}
+.ast-edited:before {
+  content: "\e914";
+}
+.ast-check-right:before {
+  content: "\e90c";
+}
+.ast-reset:before {
+  content: "\e912";
+}
+.ast-close:before {
+  content: "\e911";
+}
+.ast-agentlogo:before {
+  content: "\e910";
+}
+.ast-library:before {
+  content: "\e90f";
+}
+.ast-bulb:before {
+  content: "\e90e";
+}
+.ast-thumbup:before {
+  content: "\e908";
+}
+.ast-thumbdown:before {
+  content: "\e909";
+}
+.ast-search:before {
+  content: "\e90a";
+}
+.ast-agent:before {
+  content: "\e90b";
+}
+.ast-rule:before {
+  content: "\e913";
+}
+.ast-carrotup:before {
+  content: "\e90d";
+}
+.ast-copy:before {
+  content: "\e907";
+}
+.ast-overflow:before {
+  content: "\e906";
+}
+.ast-entity-rule:before {
+  content: "\e905";
+}
+.ast-move-arrow:before {
+  content: "\e904";
+}
+.ast-breadcum:before {
+  content: "\e900";
+}
+.ast-automation:before {
+  content: "\e901";
+}
+.ast-transcipt:before {
+  content: "\e902";
+}
+.ast-bot:before {
+  content: "\e903";
+}

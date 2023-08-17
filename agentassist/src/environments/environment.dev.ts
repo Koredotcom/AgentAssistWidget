@@ -5,7 +5,7 @@
 export const environment = {
     production: false,
     tag:"dev",
-    API_SERVER_URL:'https://dev-smartassist.kore.ai',
+    API_SERVER_URL:'https://dev-agentassist.kore.ai',
     USE_SESSION_STORE:false,
     ON_PREMISE: false,
     SUPPORT_API_SERVER_URL:'https://uat-smartassist.kore.ai',
@@ -19,7 +19,7 @@ export const environment = {
     MIX_PANEL_DEV: true
     //API_SERVER_URL: 'http://192.168.10.101:5000'
   };
-  
+
   /*
    * For easier debugging in development mode, you can import the following file
    * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
@@ -28,4 +28,3 @@ export const environment = {
    * on performance if an error is thrown.
    */
   // import 'zone.js/dist/zone-error';  // Included with Angular CLI
-  

@@ -1,21 +1,32 @@
 @import './../../scss/variables/variables.scss';
-.bt-container  {
-    height: calc(100vh - 60px);
-    position: relative;
-    overflow-y: scroll;
-    .bg-load {
-        opacity: 1 !important;
+
+.builder-load-container{
+    height: 100vh;
+    display: flex;
+    .left-menu-builder{
+        width: 250px;
+        flex-shrink: 0;
     }
-    .classname1 {
-        opacity: 0 !important;
+    .bt-container-wrapper {
+        position: relative;
+        width: 100%;
+        height: calc(100vh - 60px);
+        // overflow: scroll;
+        .bg-load {
+            opacity: 1 !important;
+        }
+        .classname1 {
+            opacity: 0 !important;
+        }
+        .classname2 {
+            opacity: 1 !important;
+        }
     }
-    .classname2 {
-        opacity: 1 !important;
-        height: calc(100vh - 160px);
-    }
-    
 }
 
 
-  
- 
+
+
+
+
+

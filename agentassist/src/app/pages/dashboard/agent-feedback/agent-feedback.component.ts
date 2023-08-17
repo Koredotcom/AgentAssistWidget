@@ -13,7 +13,7 @@ export class AgentFeedbackComponent implements OnInit {
 
   @Input() viewType : string;
   @Output() openSliderChild = new EventEmitter();
-  
+
   public DASHBORADCOMPONENTTYPELIST = DASHBORADCOMPONENTTYPE;
   public VIEWTYPELIST = VIEWTYPE;
   streamId : string;
@@ -21,7 +21,7 @@ export class AgentFeedbackComponent implements OnInit {
   agentFeedbackTableData : any = [];
 
   constructor(private dashboardService : DashboardService,
-    private service : ServiceInvokerService, 
+    private service : ServiceInvokerService,
     private workflowService : workflowService) { }
 
   ngOnInit(): void {
@@ -33,8 +33,21 @@ export class AgentFeedbackComponent implements OnInit {
 
   updateAgentFeedbackData(){
     this.streamId  = this.workflowService.deflectApps()._id || this.workflowService.deflectApps()[0]._id;
-    this.service.invoke('post.agentfeedback', {botId : this.streamId}).subscribe((data : any) => {
-      if(data){
+    // this.service.invoke('post.agentfeedback', {botId : this.streamId}).subscribe((data : any) => {
+    //   if(data){
+    //     this.agentFeedbackData = Object.assign({}, data);
+    //     if(data.usecases){
+    //       if(this.viewType == VIEWTYPE.PARTIAL_VIEW){
+    //         this.agentFeedbackTableData = data.usecases.length <= 3 ? data.usecases : data.usecases.slice(0,3);
+    //       }else {
+    //         this.agentFeedbackTableData = data.usecases;
+    //       }
+    //     }
+    //   }
+    // });
+
+    this.dashboardService.getAgentFeedbackData().subscribe((data : any) => {
+     if(data){
         this.agentFeedbackData = Object.assign({}, data);
         if(data.usecases){
           if(this.viewType == VIEWTYPE.PARTIAL_VIEW){
@@ -45,9 +58,6 @@ export class AgentFeedbackComponent implements OnInit {
         }
       }
     });
-    // this.dashboardService.getAgentFeedbackData().subscribe((data : any) => {
-     
-    // });
   }
 
   openSlider(componentName){

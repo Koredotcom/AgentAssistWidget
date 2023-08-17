@@ -1,7 +1,11 @@
-<app-mainmenu *ngIf="hideMenu == false" class="toShowAppHeader" type="bt"></app-mainmenu>
-<div class="bt-container">
-    <div class="loaderContainer bg-load"  *ngIf="loading">
-        <img src="assets/images/logoIcon.png" class="loaderLogoImage" >
-    </div>
-    <iframe [ngClass]="hideClicks ? 'classname1' : 'classname2'" id="btiframe" #btiframe [src]="builderSafeUrl"  width="100%" height="100%" frameBorder=0 *ngIf="builderSafeUrl"></iframe>
+<div class="builder-load-container">
+  <div *ngIf="hideMenu == false" class="left-menu-builder">
+      <app-mainmenu class="toShowAppHeader" type="bt"></app-mainmenu>
+  </div>
+  <div class="bt-container-wrapper">
+      <div class="loaderContainer bg-load"  *ngIf="loading">
+          <img src="assets/images/logoIcon.png" class="loaderLogoImage" >
+      </div>
+      <iframe [ngClass]="hideClicks ? 'classname1' : 'classname2'" id="btiframe" #btiframe [src]="builderSafeUrl"  width="100%" height="100%" frameBorder=0 *ngIf="builderSafeUrl"></iframe>
+  </div>
 </div>

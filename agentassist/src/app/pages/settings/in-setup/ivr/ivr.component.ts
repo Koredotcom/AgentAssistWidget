@@ -105,7 +105,7 @@ export class IvrComponent implements OnInit {
          }
         else {
           const params = {
-            instanceId:this.authService.smartAssistBots.map(x=>x._id),
+            instanceId:this.authService.getAgentAssistStreamId(),
             'isAgentAssist':true
            }
           this.voiceListSub = this.service.invoke('get.voiceList', params).subscribe(voiceList => {
@@ -291,7 +291,9 @@ export class IvrComponent implements OnInit {
   }
   onSave() {
     this.saveInProgress = true;
-    const _params = { streamId: this.authService.smartAssistBots.map(x=>x._id),
+    const _params = { 
+      // streamId: this.authService.smartAssistBots.map(x=>x._id),
+      streamId : this.workflowService.getCurrentBt(true)._id,
       'isAgentAssist':true }
       this.sipValue = this.model.sipURI.split(/[:]/);
       this.sipMerge = this.didNumbers[0] +'@';
@@ -335,7 +337,7 @@ export class IvrComponent implements OnInit {
    
     this.saveInProgress = true;
     const params = {
-      instanceId: this.authService.smartAssistBots.map(x=>x._id),
+      instanceId: this.authService.getAgentAssistStreamId(),
       'isAgentAssist':true
     }
     

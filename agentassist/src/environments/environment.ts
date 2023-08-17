@@ -5,10 +5,10 @@
 export const environment = {
   production: false,
   tag:"dev",
-  API_SERVER_URL:'https://dev-smartassist.kore.ai',
+  API_SERVER_URL:'https://huddl-agentassist-dev.kore.ai',
   USE_SESSION_STORE:false,
   ON_PREMISE: false,
-  SUPPORT_API_SERVER_URL:'https://uat-smartassist.kore.ai',
+  SUPPORT_API_SERVER_URL:'https://dev-smartassist.kore.ai',
   BOT_NAME: "Kore Support",
   BOT_ID: "st-dfac6407-04dc-50a1-8b4f-51f22f615b5a",
   CLIENT_ID: "cs-158e5c08-98d9-5a6f-a799-84a0bf260a58",

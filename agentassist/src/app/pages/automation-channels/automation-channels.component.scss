@@ -2,6 +2,11 @@
 
 .settings-wrapper {
     padding: 0 30px;
+    .init-loading{
+        position: absolute;
+        left: 50%;
+        top: 180px;
+        }
     header {
         display: flex;
         // padding: 40px 50px 0px;
@@ -183,6 +188,87 @@
                         img{
                             margin-right: 6px;
                         }
+                    }
+                }
+                .eye-copy{
+                    position: absolute;
+                    right: 110px;
+                    top: auto;
+                    z-index: 1;
+                    cursor: pointer;
+                    font-size: 14px;
+                }
+            }
+        }
+    }
+}
+
+::ng-deep .delete-welcome-events-dialog{
+    .modal-dialog{
+        width: 512px;
+        max-width: 512px;
+        .modal-content{
+            background: #FFFFFF;
+            box-shadow: 0px 20px 25px -5px rgba(16, 24, 40, 0.1), 0px 8px 10px -6px rgba(16, 24, 40, 0.1);
+            border-radius: 6px;
+            border: 0;
+            .delete-comp-wrapper{
+                border-radius: 6px;
+                display: inline-block;
+                width: 100%;
+                padding: 24px;
+                position: relative;
+                .icon_block{
+                    width: 48px;
+                    height: 48px;
+                    border-radius: 24px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 16px;
+                    margin-bottom: 20px;
+                }
+                .icon_block_red{
+                    background: #FEF2F2;
+                    color: #EF4444;
+                }
+                .icon_block_blue{
+                    color: #225EB6;
+                    background: #EAF1FC;
+                }
+                .close-delete{
+                    position: absolute;
+                    right: 20px;
+                    top: 20px;
+                    color: #737373;
+                    z-index: 1;
+                    cursor: pointer;
+                    font-size: 12px;
+                    line-height: normal;
+                }
+                .body-data-delete{
+                    .t-heading{
+                        font-weight: 500;
+                        font-size: 18px;
+                        line-height: 28px;
+                        color: #171717;
+                        margin-bottom: 5px;
+                    }
+                    .d-desc{
+                        font-weight: 400;
+                        font-size: 14px;
+                        line-height: 20px;
+                        color: #737373;
+                    }
+                }
+                .footer-btns-data{
+                    margin-top: 30px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-end;
+                    button{
+                        height: 40px;
+                        margin-left: 12px;
                     }
                 }
             }
