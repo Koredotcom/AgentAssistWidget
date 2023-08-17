@@ -235,7 +235,7 @@
     <div class="dropdown-occurences in-conversations-dropdown" ngbDropdown [placement]="'bottom'" container="body" #utteranceTimer="ngbDropdown" *ngIf="selectedSpeechType">
         <button class="dropdown-toggle btn-toggle" ngbDropdownToggle *ngIf="!selectedConvType">in conversation</button>
         <button class="dropdown-toggle btn-toggle" ngbDropdownToggle *ngIf="selectedConvType == coachingCnst.TRIGGER_ANYTIME">in conversation</button>
-        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle *ngIf="selectedConvType == coachingCnst.TRIGGER_BYTIME" (click)="selectedList.period = inconvList.period;selectedList.nSeconds = inconvList.nSeconds"> {{inconvList.period === 'withIn' ? '' : 'in'}}  {{inconvList.period.toLowerCase()}} {{inconvList.nSeconds}} second(s)</button>
+        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle *ngIf="selectedConvType == coachingCnst.TRIGGER_BYTIME" (click)="selectedList.period = inconvList.period;selectedList.nSeconds = inconvList.nSeconds"> {{inconvList.period === 'withIn' ? '' : 'in'}}  {{inconvList.period.toLowerCase()}} {{inconvList.nSeconds}} {{selectedSpeechType == coachingCnst.TALKRATIO ? 'minute(s)' : 'second(s)'}}</button>
        
         <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
             <li ngbDropdownItem class="list-item-li" (click)="clickOnConvType(coachingCnst.TRIGGER_ANYTIME)">
@@ -272,10 +272,10 @@
                         <ng-container *ngIf="selectedSpeechType == coachingCnst.SPEECHSPEED || selectedSpeechType == coachingCnst.TALKRATIO">
                            <ng-contaner *ngTemplateOutlet="bytimeinput"></ng-contaner>
                         </ng-container>
-                        <div class="s-title">seconds</div>
+                        <div class="s-title">{{selectedSpeechType == coachingCnst.TALKRATIO ? 'minutes' : 'seconds'}}</div>
                         <ng-template #bytimeinput>
                             <div class="kr-sg-input-text">
-                                <input type="number" digitOnly placeholder="Enter Seconds" class="input-text" (keyup.enter)="onEnterSeconds(selectedList.nSeconds);" [(ngModel)]="selectedList.nSeconds">
+                                <input type="number" digitOnly [placeholder]="(selectedSpeechType !== coachingCnst.TALKRATIO ? 'Enter Seconds' : 'Enter Minutes')" class="input-text" (keyup.enter)="onEnterSeconds(selectedList.nSeconds);" [(ngModel)]="selectedList.nSeconds">
                             </div>
                         </ng-template>
                     </div>
