@@ -46,7 +46,7 @@
                                 
                                                         <div class="check-list kr-sg-checkbox">
                                                             <input id="checkbox-11" [checked]="customUtt" (change)="customUttChange($event.target.checked)" class="checkbox-custom" type="checkbox">
-                                                            <label for="checkbox-11" class="checkbox-custom-label">That's not how it works!</label>
+                                                            <label for="checkbox-11" class="checkbox-custom-label">{{searchKey.value}}</label>
                                                         </div>
                                                     </div>
                                                     <ng-container *ngIf="clS?.metaForUtternace.name === 'aa_utterance'">
@@ -62,7 +62,7 @@
                                                                     <div class="item-data-found" >
                                                                         <div class="kr-sg-checkbox">
                                                                             <input id="'checkbox-'+ {{i}}" class="checkbox-custom" type="checkbox" [checked]="utter.enabled" (click)="changeUtterActiveStatus(utter)">
-                                                                            <label for="'checkbox-'+ {{i}}" class="checkbox-custom-label">That's not how it works!</label>
+                                                                            <label for="'checkbox-'+ {{i}}" class="checkbox-custom-label">{{utter.sentence}}</label>
                                                                         </div>
                                                                         <!-- <div class="percentage-colr">
                                                                             <span class="percentage">12%</span>
