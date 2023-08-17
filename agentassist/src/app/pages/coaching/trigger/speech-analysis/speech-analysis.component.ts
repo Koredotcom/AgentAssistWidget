@@ -101,9 +101,15 @@ export class SpeechAnalysisComponent implements OnInit {
   updateInConversationVariables(formVal){
     this.selectedConvType = formVal.frequency.duration;
     this.selectedList.period = formVal.frequency.period ? formVal.frequency.period : COACHINGCNST.UTTERANCE_CONV_DEFAULT_SELECTION.period;
-    this.selectedList.nSeconds = formVal.frequency.nSeconds ? formVal.frequency.nSeconds : COACHINGCNST.UTTERANCE_CONV_DEFAULT_SELECTION.nSeconds;
+    if(formVal.subType === this.coachingCnst.TALKRATIO){
+      const val = formVal.frequency.nSeconds/60
+      this.selectedList.nSeconds = formVal.frequency.nSeconds ? (val < 1 ? 1 : val) : 1;
+      this.inconvList.nSeconds = formVal.frequency.nSeconds ? (val < 1 ? 1 : val) : 1;
+    }else{
+      this.selectedList.nSeconds = formVal.frequency.nSeconds ? formVal.frequency.nSeconds : COACHINGCNST.UTTERANCE_CONV_DEFAULT_SELECTION.nSeconds;
+      this.inconvList.nSeconds = formVal.frequency.nSeconds ? formVal.frequency.nSeconds : COACHINGCNST.UTTERANCE_CONV_DEFAULT_SELECTION.nSeconds;
+    }
     this.inconvList.period = formVal.frequency.period ? formVal.frequency.period : COACHINGCNST.UTTERANCE_CONV_DEFAULT_SELECTION.period;
-    this.inconvList.nSeconds = formVal.frequency.nSeconds ? formVal.frequency.nSeconds : COACHINGCNST.UTTERANCE_CONV_DEFAULT_SELECTION.nSeconds;
   }
 
   clickOnUser(user){
@@ -144,7 +150,11 @@ export class SpeechAnalysisComponent implements OnInit {
       this.setDefaultBy(type);
       this.form.controls.subType.setValue(type);
       this.resetFormValuesBasedOnSpeechSelection(type);
-      this.onEnterSeconds(COACHINGCNST.UTTERANCE_CONV_DEFAULT_SELECTION.nSeconds);
+      let val = 1;
+      if(type !== this.coachingCnst.TALKRATIO){
+        val = COACHINGCNST.UTTERANCE_CONV_DEFAULT_SELECTION.nSeconds;
+      }
+      this.onEnterSeconds(val);
     }
 
   }
@@ -185,14 +195,17 @@ export class SpeechAnalysisComponent implements OnInit {
     if(type == this.coachingCnst.TRIGGER_BYTIME){
       this.utteranceTimer.open();
     }
-    console.log(this.form, 'form');
     
   }
 
   resetFormValuesBasedOnConvSelection(type){
     if(type){
       this.onEnterPeriod(this.coachingCnst.UTTERANCE_CONV_DEFAULT_SELECTION.period);
-      this.onEnterSeconds(this.coachingCnst.UTTERANCE_CONV_DEFAULT_SELECTION.nSeconds);
+      let val = 1;
+      if(this.selectedSpeechType !== this.coachingCnst.TALKRATIO){
+        val = COACHINGCNST.UTTERANCE_CONV_DEFAULT_SELECTION.nSeconds;
+      }
+      this.onEnterSeconds(val);
     }
   }
 
@@ -218,7 +231,7 @@ export class SpeechAnalysisComponent implements OnInit {
     this.inconvList.nSeconds = e;
     this.selectedList.nSeconds = e;
     if((this.form.controls.frequency as FormGroup).controls?.nSeconds){
-      (this.form.controls.frequency as FormGroup).controls?.nSeconds.setValue(this.inconvList.nSeconds);
+      (this.form.controls.frequency as FormGroup).controls?.nSeconds.setValue(this.inconvList.nSeconds * (this.selectedSpeechType == this.coachingCnst.TALKRATIO ? 60 : 1));
       (this.form.controls.frequency as FormGroup).controls?.nSeconds.updateValueAndValidity();
     }
   }
@@ -292,7 +305,6 @@ export class SpeechAnalysisComponent implements OnInit {
     this.selectedPercentage = Object.assign([],this.showPercentage);
     (this.form.controls.conditions as FormGroup)?.controls?.value?.setValue(this.selectedPercentage);
     this.trdropdown.close();
-    console.log(this.selectedPercentage, 'selected percentage');
   }
 
   onEnterWords(e){
