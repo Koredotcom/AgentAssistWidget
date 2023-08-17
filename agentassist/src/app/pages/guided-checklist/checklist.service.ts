@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { GuidedChecklistModule } from './guided-checklist.module';
 
 @Injectable()
@@ -7,7 +7,7 @@ export class ChecklistService {
   constructor(
     private fb: FormBuilder
   ) { }
-
+  metaForUtternace:any = {};
   getCheckListForm(botId, checkListType){
     return {
       'botId': [botId, [Validators.required]],
@@ -60,7 +60,11 @@ export class ChecklistService {
       "name": ['', [Validators.required]],
       "description": ['', [Validators.required]],
       "confirmButtons": this.fb.array([]),
-      "Adherence": this.fb.group({}),
+      "adherence": this.fb.group({
+        'isAdherenceActive': new FormControl(false, [Validators.required]),
+        "type": new FormControl('', [Validators.required]),
+        "botId": new FormControl('', [Validators.required]),
+      }),
       "clsId": ['', [Validators.required]],
     }
   }

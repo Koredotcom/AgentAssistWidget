@@ -28,10 +28,27 @@ export class GuidedChecklistComponent implements OnInit {
     private auth: AuthService,
     private local: LocalStoreService,
     private service: ServiceInvokerService,
-    private workflowService: workflowService
+    private workflowService: workflowService,
+    private clS: ChecklistService
   ) { }
   @ViewChild('checklistCreation') checklistCreation: ElementRef;
   ngOnInit(): void {
+    this.getConfigDetails();
+  }
+
+  getConfigDetails() {
+    let params: any = {
+      userId: this.auth.getUserId(),
+      streamId: this.workflowService.getCurrentBt(true)._id
+    };
+    this.service.invoke('get.AIconfigs', params)
+      .subscribe(res => {
+        if (res) {
+          this.clS.metaForUtternace = (res[0].featureList || [])
+            .find(item => item.name === "aa_utterance")
+          };
+      }, err => {
+      });
   }
 
   createCheckList(checklistCreation){

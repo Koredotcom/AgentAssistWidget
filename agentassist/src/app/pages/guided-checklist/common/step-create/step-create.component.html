@@ -18,7 +18,7 @@
         <div class="body-data">
             <perfect-scrollbar>
                 <div class="inner-content-data" [formGroup]="stepForm">
-                    <div *ngIf="basic" class="p-22">
+                    <div [ngClass]="{'d-none': !basic}" class="p-22">
                         <div class="kr-sg-input-text m-b-12">
                             <div class="label-text">Step Title</div>
                             <input type="text" formControlName="name" maxlength="100" placeholder="Name of Checklist" class="input-text">
@@ -156,16 +156,14 @@
                             </div>
                         </div>
                     </div>
-                    <ng-container *ngIf="!basic">
-                        <app-trigger-by></app-trigger-by>
-                    </ng-container>
+                    <app-trigger-by [ngClass]="{'d-none': basic}" [adherenceForm]="stepForm"></app-trigger-by>
                 </div>
             </perfect-scrollbar>
         </div>
         <div class="footer-actions">
             <button class="kr-sg-button-secondary btn_lg" (click)="close()">Cancel</button>
-            <button class="kr-sg-button-primary btn_lg" (click)="save()" *ngIf="createOrUpdateStep === 'create'" [disabled]="!stepForm.valid">Save</button>
-            <button class="kr-sg-button-primary btn_lg" (click)="update()" *ngIf="createOrUpdateStep === 'update'" [disabled]="!stepForm.valid">Update</button>
+            <button class="kr-sg-button-primary btn_lg" (click)="save()" *ngIf="createOrUpdateStep === 'create'" [disabled]="!stepForm?.valid">Save</button>
+            <button class="kr-sg-button-primary btn_lg" (click)="update()" *ngIf="createOrUpdateStep === 'update'" [disabled]="!stepForm?.valid">Update</button>
         </div>
     </div>
 </div>
