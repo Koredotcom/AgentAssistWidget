@@ -15,7 +15,21 @@
     }
     .coaching-rule{
         z-index: 2;
-        padding: 5px 15px;
+        padding: 5px 55px 5px 15px;
+        position: relative;
+        .voice-msg-icons{
+            position: absolute;
+            display: flex;
+            align-items: center;
+            top: 16px;
+            right: 15px;
+            color: #28A745;
+            gap: 5px;
+            font-size: 14px;
+            i{
+                cursor: pointer;
+            }
+        }
         .title{
             color: var(--neutral-700, #404040);
             font-size: 11px;
@@ -25,6 +39,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            max-width: max-content;
         }
         .desc-text{
             color: var(--neutral-700, #404040);

@@ -2,7 +2,11 @@
     <div class="header-sec">
         <div class="left-sec">
             <img src="assets/icons/coaching/coaching--message-check-square.svg">
-            <span>Pre-Build/ <span class="sub-title">None Intent</span> </span>
+            <span class="sub-title">None Intent</span>
+            <span class="info-tip" placement="bottom-center" tooltipClass="tooltip-global-styles"
+                ngbTooltip="None intent utterances are used to prevent false positives while doing intent recognition">
+                <i class="icon-sa-help"></i>
+            </span>
         </div>
         <div (click)="closeSlider()" class="close-slider">
             <i class="icon-sa-close"></i>
@@ -13,12 +17,12 @@
             <div class="top-heading-info">
                 <p>None intent utterances are used to prevent false positives while doing intent recognition.</p>
                 <div class="seach-block">
-                    <div class="kr-sg-input-text">
+                    <div class="kr-sg-input-text" *ngIf="newUtterances.length || selectedUtterances.length">
                         <input type="text" placeholder="Search" class="input-text" [(ngModel)]="selectedUtterSeach">
                         <i class="icon-coaching--search"></i>
                         <!-- <span class="press-enter">Press Enter to confirm search</span> -->
                     </div>
-                    <button *ngIf="!clickAddUtter" class="kr-sg-button-primary btn_lg" (click)="clickAddUtter = true;">Add Utterance(s)</button>
+                    <button [ngClass]="{'w-100': !(newUtterances.length || selectedUtterances.length)}" *ngIf="!clickAddUtter" class="kr-sg-button-primary btn_lg" (click)="clickAddUtter = true;">Add Utterance(s)</button>
                 </div>
             </div>
             <div class="added-uterances-blk">
@@ -49,14 +53,14 @@
                                 </ng-container>
                                 <ng-container *ngIf="dataloaded">
                                     <div class="img-block-empty">
-                                        <img src="assets/icons/empty-search-add.svg">
+                                        <img [src]="selectedUtterSeach ? 'assets/icons/empty-search-add.svg' : 'assets/icons/Comments.svg'">
                                     </div>
                                     <ng-container *ngIf="selectedUtterSeach">
                                         <h1>No results found</h1>
                                         <p>No results found for your query "{{selectedUtterSeach}}"</p>
                                     </ng-container>
                                     <ng-container *ngIf="!selectedUtterSeach">
-                                        <h1>No Data found</h1>
+                                        <h1>There are no utterances added</h1>
                                     </ng-container>
                                 </ng-container>
                             </div>
