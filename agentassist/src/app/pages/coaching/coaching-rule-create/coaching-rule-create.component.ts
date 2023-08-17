@@ -283,7 +283,7 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
         }
       },
         (err) => {
-          this.modalFlowCreateRef.componentInstance.disableApplyButton = false;
+          // this.modalFlowCreateRef.componentInstance.disableApplyButton = false;
           this.notificationService.showError(err, this.translate.instant("QUOTA_EXCEEDED"));
         });
   }
