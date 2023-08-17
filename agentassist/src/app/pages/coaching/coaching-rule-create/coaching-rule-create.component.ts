@@ -108,6 +108,7 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
     this.ruleForm.setControl('tags', this.fb.array(this.currentRule?.tags));
     this.filteredTagsOriginal = this.currentRule?.tags;
     this.channelList = this.currentRule?.channels;
+    this.formTouched = false;
   }
 
   updateRuleForm(){
