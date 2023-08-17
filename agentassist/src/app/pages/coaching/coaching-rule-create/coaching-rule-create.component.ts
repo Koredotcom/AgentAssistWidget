@@ -250,7 +250,9 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
           data.ruleId = data._id;
           data.tags = data.tags || [];
           data.channels = data.channels || [];
-
+          if(this.createOrEdit == COACHINGCNST.CREATE){
+            this.coachingService.updateLockOnRule(true, data,this.selAcc);
+          }
           let notification = (this.createOrEdit == this.coachingCnst.CREATE) ? 'RULE.SUCCESS' : 'RULE.UPDATE_SUCCESS';
           this.notificationService.notify(this.translate.instant(notification), 'success');
           data = (this.createOrEdit == this.coachingCnst.EDIT) ? this.formatRuleDataForEdit(data) : data;
