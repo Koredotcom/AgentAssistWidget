@@ -110,48 +110,70 @@
                                         </ul>
                                     </div>
                                 </div>
-                                <div class="no-utt-found">No utterances saved</div>
-                                <div class="saved-utt-block">
-                                    <div class="saved-header">Saved Utterances</div>
-                                    
-                                    <!-- <div class="percentage-colr">
-                                        <span class="bgcolor"></span>
-                                        <span class="percentage">12%</span>
-                                    </div> -->
-                                    <!-- <ng-container>
-                                        <div class="saved-utt-text-block">
-                                            <div class="saved-title">Some utterance entered here</div>
-                                            <div class="delete-saved-utt">
-                                                <i class="icon-sa-welcome-delete"></i>
+                                <!-- *ngIf="!(selectedUtterancesArray.length && selectedNewUtterances.length); else data" -->
+                                <div class="no-utt-found" *ngIf="!(selectedUtterancesArray.length || selectedNewUtterances.length); else data">No utterances saved</div>
+                                <ng-template #data>
+                                    <div class="saved-utt-block">
+                                        <div class="saved-header">Saved Utterances</div>
+                                        
+                                        <!-- <div class="percentage-colr">
+                                            <span class="bgcolor"></span>
+                                            <span class="percentage">12%</span>
+                                        </div> -->
+                                        <!-- <ng-container>
+                                            <div class="saved-utt-text-block">
+                                                <div class="saved-title">Some utterance entered here</div>
+                                                <div class="delete-saved-utt">
+                                                    <i class="icon-sa-welcome-delete"></i>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </ng-container> -->
+                                        </ng-container> -->
+                                        <!-- <i class="icon-sa-copy" [ngbTooltip]="utter.copied ? utter.copied : 'copy'"
+                                            (click)="copy(utter?.utterance, iDx, selectedNewUtterances);">
+                                        </i> -->
+                                        <!-- <i class="icon-sa-copy" [ngbTooltip]="utter.copied ? utter.copied : 'copy'"
+                                            (click)="copy(utter?.utterance, iD, selectedUtterancesArray);">
+                                        </i> -->
 
-                                    <ng-container *ngFor="let utter of selectedUtterancesArray; let iD = index">
-                                        <div class="saved-utt-body-sec">
-                                            <div class="saved-title-utt" [title]="utter?.utterance">{{utter?.utterance}}</div>
-                                            <div class="delete-saved-utt">
-                                                <!-- <i class="icon-sa-copy" [ngbTooltip]="utter.copied ? utter.copied : 'copy'"
-                                                    (click)="copy(utter?.utterance, iD, selectedUtterancesArray);">
-                                                </i> -->
-                                                <i class="icon-sa-welcome-delete" (click)="deleteUtternce(utter, iD)"></i>
-                                            </div>
-                                        </div>
-                                    </ng-container>
 
-                                    <ng-container *ngFor="let utter of selectedNewUtterances;let iDx = index">
-                                        <div class="saved-utt-body-sec">
-                                            <div class="saved-title-utt" [title]="utter?.utterance">{{utter?.utterance}}</div>
-                                            <div class="delete-saved-utt">
-                                                <!-- <i class="icon-sa-copy" [ngbTooltip]="utter.copied ? utter.copied : 'copy'"
-                                                    (click)="copy(utter?.utterance, iDx, selectedNewUtterances);">
-                                                </i> -->
-                                                <i class="icon-sa-welcome-delete" (click)="deleteUtternceNew(utter?.utterance, iDx)"></i>
+                                        <ng-container *ngFor="let utter of selectedUtterancesArray; let iD = index">
+                                            <div class="saved-utt-text-block">
+                                                <div class="saved-title" [title]="utter?.utterance">{{utter?.utterance}}</div>
+                                                <div class="delete-saved-utt">
+                                                    <i class="icon-sa-welcome-delete" (click)="deleteUtternce(utter, iD)"></i>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </ng-container>
-                                    
-                                </div>
+                                        </ng-container>
+
+                                        <ng-container *ngFor="let utter of selectedNewUtterances; let iD = index">
+                                            <div class="saved-utt-text-block">
+                                                <div class="saved-title" [title]="utter?.utterance">{{utter?.utterance}}</div>
+                                                <div class="delete-saved-utt">
+                                                    <i class="icon-sa-welcome-delete" (click)="deleteUtternceNew(utter, iD)"></i>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+
+                                        <!-- <ng-container *ngFor="let utter of selectedUtterancesArray; let iD = index">
+                                            <div class="saved-utt-body-sec">
+                                                <div class="saved-title-utt" [title]="utter?.utterance">{{utter?.utterance}}</div>
+                                                <div class="delete-saved-utt">
+                                                    <i class="icon-sa-welcome-delete" (click)="deleteUtternce(utter, iD)"></i>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+
+                                        <ng-container *ngFor="let utter of selectedNewUtterances;let iDx = index">
+                                            <div class="saved-utt-body-sec">
+                                                <div class="saved-title-utt" [title]="utter?.utterance">{{utter?.utterance}}</div>
+                                                <div class="delete-saved-utt">
+                                                    <i class="icon-sa-welcome-delete" (click)="deleteUtternceNew(utter?.utterance, iDx)"></i>
+                                                </div>
+                                            </div>
+                                        </ng-container> -->
+                                        
+                                    </div>
+                                 </ng-template>
                             </div>
                         </div>
                     </div>
