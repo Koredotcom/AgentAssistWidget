@@ -1678,6 +1678,11 @@ export class EndPointsService {
       endpoint : this.SMARTASSIST_API_SERVER_URL + '/acchecklists',
       method : 'post'
     }
+
+    this.serviceList['put.acchecklists'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/acchecklists/:botId/checklist/:clId',
+      method : 'put'
+    }
     
     this.serviceList['get.acchecklists'] = {
       endpoint : this.SMARTASSIST_API_SERVER_URL + '/acchecklists/:botId',

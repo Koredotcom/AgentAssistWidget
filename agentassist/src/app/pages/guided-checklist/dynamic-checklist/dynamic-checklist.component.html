@@ -2,12 +2,12 @@
     <ng-container *ngIf="true">
         <div class="search-data-input">
             <div class="kr-sg-input-inline-search">
-                <input type="text" placeholder="Search" class="input-search">
+                <input type="text" placeholder="Search" class="input-search" [formControl]="searchField">
                 <i class="icon-sa-conv-search search-icon"></i>
             </div>
         </div>
         <div class="table-wrapper-checklist-scroll">
-            <perfect-scrollbar>
+            <perfect-scrollbar (psYReachEnd)="onReachEnd($event)">
                 <div class="inner-content-data">
                     <div class="content-scroll-data-checklist">
                         <div class="shadow-freeze w-20"></div>
@@ -39,7 +39,7 @@
                                 <div class="title-text w-15">{{dyn.lModOn | date : 'MMM dd, yyyy h:mm a'}}</div>
                                 <div class="last-updated-toggle w-10">
                                     <label class="kr-sg-toggle">
-                                        <input type="checkbox">
+                                        <input type="checkbox" [checked]="dyn.isActive" (click)="updateStatus(dyn)">
                                         <div class="slider"></div>
                                     </label>               
                                 </div>
