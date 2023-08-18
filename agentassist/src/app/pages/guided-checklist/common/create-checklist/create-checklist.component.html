@@ -379,7 +379,7 @@
                     </div>
                     <div [ngClass]="{'d-none': tab !== 'assignment'}" *ngIf="checkListType !== 'primary'">
                         <!-- trigger -->
-                        <app-trigger-by [adherenceForm]="checkListForm"></app-trigger-by>
+                        <app-trigger-by [isChecklist]="true" [adherenceForm]="checkListForm"></app-trigger-by>
                     </div>
                 </div>
             </perfect-scrollbar>

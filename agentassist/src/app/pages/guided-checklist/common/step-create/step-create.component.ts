@@ -1,6 +1,7 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { CHECKLISTCNST } from '../checklist.const';
+import { TriggerByComponent } from '../trigger-by/trigger-by.component';
 
 @Component({
   selector: 'app-step-create',
@@ -13,6 +14,7 @@ export class StepCreateComponent implements OnInit, OnChanges {
   @Input() stepForm: FormGroup;
   @Input() createOrUpdateStep = 'create';
   @Output() updateStep = new EventEmitter();
+  @ViewChild('triggerBy') triggerBy : TriggerByComponent;
   basic = true;
   checklistConst = CHECKLISTCNST.COLORS;
   showButtons = false;
@@ -84,7 +86,10 @@ export class StepCreateComponent implements OnInit, OnChanges {
   }
 
   update(){
-    this.updateStep.next(true);
+    this.triggerBy.upadateAllObjects();
+    setTimeout(() => {
+      this.updateStep.next(true);
+    },);
   }
 
   changeStepButton(key){

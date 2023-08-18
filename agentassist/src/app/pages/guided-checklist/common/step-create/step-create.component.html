@@ -156,13 +156,13 @@
                             </div>
                         </div>
                     </div>
-                    <app-trigger-by [ngClass]="{'d-none': basic}" [adherenceForm]="stepForm"></app-trigger-by>
+                    <app-trigger-by #triggerBy [basic]="basic" [ngClass]="{'d-none': basic}" [adherenceForm]="stepForm"></app-trigger-by>
                 </div>
             </perfect-scrollbar>
         </div>
         <div class="footer-actions">
             <button class="kr-sg-button-secondary btn_lg" (click)="close()">Cancel</button>
-            <button class="kr-sg-button-primary btn_lg" (click)="save()" *ngIf="createOrUpdateStep === 'create'" [disabled]="!stepForm?.valid">Save</button>
+            <button class="kr-sg-button-primary btn_lg" (click)="save()" *ngIf="createOrUpdateStep === 'create'" [disabled]="!stepForm?.valid && !stepForm?.dirty">Save</button>
             <button class="kr-sg-button-primary btn_lg" (click)="update()" *ngIf="createOrUpdateStep === 'update'" [disabled]="!stepForm?.valid">Update</button>
         </div>
     </div>

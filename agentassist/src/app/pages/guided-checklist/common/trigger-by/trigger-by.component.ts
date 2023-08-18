@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { NotificationService } from '@kore.services/notification.service';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
@@ -12,9 +12,11 @@ import { ChecklistService } from '../../checklist.service';
   templateUrl: './trigger-by.component.html',
   styleUrls: ['./trigger-by.component.scss']
 })
-export class TriggerByComponent implements OnInit {
+export class TriggerByComponent implements OnInit, OnChanges {
 
   @Input() adherenceForm: FormGroup;
+  @Input() isChecklist = false;
+  @Input() basic: boolean;
   searchKey = new FormControl('');
   loaded = false;
   utterances = {};
@@ -25,6 +27,7 @@ export class TriggerByComponent implements OnInit {
   selectedNewUtterances = [];
   selectedUtterancesArray = [];
   deletedUIds:any = {};
+  utterApiDone = false;
   constructor(
     private workflowService: workflowService,
     public clS: ChecklistService,
@@ -34,6 +37,37 @@ export class TriggerByComponent implements OnInit {
     private cdRef: ChangeDetectorRef,
     private fb: FormBuilder
   ) { }
+
+
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log("basic", changes);
+    if(!changes?.basic?.currentValue && !this.utterApiDone){
+      this.getAddedUtterances();
+    }
+  }
+
+  getAddedUtterances() {
+    let formVal = this.adherenceForm?.value;
+    this.service.invoke("get.agentcoachingutteranceByRef",
+      {
+        refId: formVal._id,
+      }).subscribe((data) => {
+        this.utterApiDone = true;
+        // let deletedItem = formVal?.adherence?.deleteUtterances;
+        // if (deletedItem?.length > 0) {
+        //   this.selectedUtterancesArray = (data || []).filter((item) => {
+        //     return !deletedItem.includes(item._id)
+        //   });
+        // } else {
+          this.selectedUtterancesArray = [...data];
+        // };
+        // this.selectedNewUtterances.push(...formVal?.adherence.addUtterances);
+        // this.selectedNewUtterances.forEach((item)=>{
+        //   this.utterances[item.utterance] = true;
+        // });
+      })
+  }
+
   ngOnInit(): void {
     this.searchKey.valueChanges
       .pipe(
@@ -159,7 +193,14 @@ export class TriggerByComponent implements OnInit {
     Object.keys(this.utterances).forEach((item) => {
       this.selectedNewUtterances.push({ utterance: item, language: 'english' });
     });
-    (this.adherenceForm.controls['adherence'] as FormGroup).controls?.deleteUtterances?.setValue([...Object.keys(this.deletedUIds), ...this.adherenceForm.controls['adherence'].value.deleteUtterances]);
+  }
+
+  upadateAllObjects(){
+    (Object.keys(this.deletedUIds)).forEach((item)=>{
+      ((this.adherenceForm.controls['adherence'] as FormGroup).controls['deleteUtterances'] as FormArray)
+      .push(new FormControl(item));
+    });
+    // ((this.adherenceForm.controls['adherence'] as FormGroup).controls['deleteUtterances'] as FormArray)?.setValue([...Object.keys(this.deletedUIds)]);
     ((this.adherenceForm.controls['adherence'] as FormGroup).controls['addUtterances'] as FormArray)?.clear();
     (this.selectedNewUtterances || []).forEach(element => {
       ((this.adherenceForm.controls['adherence'] as FormGroup).controls['addUtterances'] as FormArray)
@@ -200,6 +241,10 @@ export class TriggerByComponent implements OnInit {
 
   isActive(event){
 
+  }
+
+  get onlyAdhreForm(): FormGroup{
+    return this.adherenceForm?.controls['adherence'] as FormGroup;
   }
   // getUtteranceForm
 

@@ -78,20 +78,25 @@ export class ChecklistService {
     }
   }
 
-  setStepForm(obj){
-    return {
-      "botId": ['', [Validators.required]],
-      "name": [obj.name, [Validators.required]],
-      "description": [obj.description, [Validators.required]],
+  setStepForm(step, botId){
+    let obj = {
+      "_id": step._id,
+      "botId": [botId, [Validators.required]],
+      "name": [step.name, [Validators.required]],
+      "description": [botId.description, [Validators.required]],
       "confirmButtons": this.fb.array([]),
-      'isAdherenceActive': [obj.isAdherenceActive, [Validators.required]],
-      "adherence": this.fb.group({
+      'isAdherenceActive': [botId.isAdherenceActive, [Validators.required]],
+      "clsId": [step.clsId, [Validators.required]],
+      "adherence": this.fb.group({})
+    };
+    if(step.adherence?.type === 'utterance'){
+      obj['adherence'] = this.fb.group({
         type: ['utterance'],
         addUtterances: this.fb.array([]),
         deleteUtterances: this.fb.array([])
-      }),
-      "clsId": [obj.clsId, [Validators.required]],
-    }
+      })
+    };
+    return obj;
   }
 
   getTriggerBy(){

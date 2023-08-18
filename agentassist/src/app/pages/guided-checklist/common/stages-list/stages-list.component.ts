@@ -273,13 +273,17 @@ export class StagesListComponent implements OnInit {
       });
   }
 
+  updateForm(step){
+    this.stepForm = this.fb.group(this.clS.setStepForm(step, this.botId));
+  }
+
   openEditStep(item, step, i, si) {
     this.createOrUpdateStep = "update";
     this.stageInx = i;
     this.currentStage = item;
     this.currentStep = step;
     this.stepIndex = si;
-    this.createStepForm();
+    this.updateForm(step);
     this.stepForm.patchValue(step);
     this.isStepOpen = true;
     setTimeout(() => {
