@@ -9,7 +9,7 @@ export class ChecklistService {
   ) { }
   metaForUtternace:any = {};
   getCheckListForm(botId, checkListType){
-    return {
+    let obj = {
       'botId': [botId, [Validators.required]],
       'name': ['', [Validators.required]],
       'description': ['', [Validators.required]],
@@ -29,6 +29,14 @@ export class ChecklistService {
       'stages': this.fb.array([]),
       'isActive': [true, [Validators.required]],
     }
+    if(checkListType === 'dynamic'){
+      obj["adherence"]= this.fb.group({
+        type: ['utterance'],
+        addUtterances: this.fb.array([]),
+        deleteUtterances: this.fb.array([])
+      })
+    }
+    return obj;
   }
 
   setCheckListForm(obj){
@@ -60,12 +68,29 @@ export class ChecklistService {
       "name": ['', [Validators.required]],
       "description": ['', [Validators.required]],
       "confirmButtons": this.fb.array([]),
+      'isAdherenceActive': [false, [Validators.required]],
       "adherence": this.fb.group({
-        'isAdherenceActive': new FormControl(false, [Validators.required]),
-        "type": new FormControl('', [Validators.required]),
-        "botId": new FormControl('', [Validators.required]),
+        type: ['utterance'],
+        addUtterances: this.fb.array([]),
+        deleteUtterances: this.fb.array([])
       }),
       "clsId": ['', [Validators.required]],
+    }
+  }
+
+  setStepForm(obj){
+    return {
+      "botId": ['', [Validators.required]],
+      "name": [obj.name, [Validators.required]],
+      "description": [obj.description, [Validators.required]],
+      "confirmButtons": this.fb.array([]),
+      'isAdherenceActive': [obj.isAdherenceActive, [Validators.required]],
+      "adherence": this.fb.group({
+        type: ['utterance'],
+        addUtterances: this.fb.array([]),
+        deleteUtterances: this.fb.array([])
+      }),
+      "clsId": [obj.clsId, [Validators.required]],
     }
   }
 
@@ -78,4 +103,12 @@ export class ChecklistService {
       'addUtterances': this.fb.array([]),
     }
   };
+
+  getUtteranceForm(){
+    return {
+      type: ['', [Validators.required]],
+      addUtterances: this.fb.array([], [Validators.required]),
+      deleteUtterances: this.fb.array([]),
+    }
+  }
 }

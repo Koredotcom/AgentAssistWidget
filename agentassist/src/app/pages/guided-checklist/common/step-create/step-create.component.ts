@@ -72,7 +72,7 @@ export class StepCreateComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-
+    console.log("step form", this.stepForm);
   }
 
   close(){

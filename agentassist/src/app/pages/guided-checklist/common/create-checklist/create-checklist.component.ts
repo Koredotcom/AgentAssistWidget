@@ -181,7 +181,7 @@ export class StageCreateComponent implements OnInit {
       }
     }
   
-    this.trigger.openPanel();  
+    this.trigger?.openPanel();  
     this.assignOriginalToDisplayList();
     this.tagInput.nativeElement.value = '';
     setTimeout(() => {

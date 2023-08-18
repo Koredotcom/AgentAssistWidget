@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { NotificationService } from '@kore.services/notification.service';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { workflowService } from '@kore.services/workflow.service';
@@ -24,13 +24,15 @@ export class TriggerByComponent implements OnInit {
   addButtonClick = false;
   selectedNewUtterances = [];
   selectedUtterancesArray = [];
+  deletedUIds:any = {};
   constructor(
     private workflowService: workflowService,
-    private clS: ChecklistService,
+    public clS: ChecklistService,
     private service: ServiceInvokerService,
     private notificationService: NotificationService,
     private translate: TranslateService,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private fb: FormBuilder
   ) { }
   ngOnInit(): void {
     this.searchKey.valueChanges
@@ -69,7 +71,6 @@ export class TriggerByComponent implements OnInit {
     }))
     .subscribe((data) => {
       this.loaded = true;
-      console.log("translatetranslate", data);
       this.openAiUtteranceArray = (data || []).map((item)=>{
         return {...item, enabled: false}
       });
@@ -84,10 +85,6 @@ export class TriggerByComponent implements OnInit {
         this.notificationService.showError(this.translate.instant("QUOTA_EXCEEDED"));
       }
     });
-  }
-
-  get aForm(){
-    return this.adherenceForm.controls['adherence'];
   }
 
   checkUtterActiveStatus() {
@@ -162,7 +159,19 @@ export class TriggerByComponent implements OnInit {
     Object.keys(this.utterances).forEach((item) => {
       this.selectedNewUtterances.push({ utterance: item, language: 'english' });
     });
+    (this.adherenceForm.controls['adherence'] as FormGroup).controls?.deleteUtterances?.setValue([...Object.keys(this.deletedUIds), ...this.adherenceForm.controls['adherence'].value.deleteUtterances]);
+    ((this.adherenceForm.controls['adherence'] as FormGroup).controls['addUtterances'] as FormArray)?.clear();
+    (this.selectedNewUtterances || []).forEach(element => {
+      ((this.adherenceForm.controls['adherence'] as FormGroup).controls['addUtterances'] as FormArray)
+      .push(
+        this.fb.group({
+          utterance: new FormControl(element.utterance),
+          language: new FormControl(element.language),
+        })
+      )
+    });
   }
+
 
   deleteUtternceNew(utter, i) {
     this.selectedNewUtterances.splice(i, 1);
@@ -171,10 +180,27 @@ export class TriggerByComponent implements OnInit {
   }
 
   deleteUtternce(utter, i) {
-    // if (utter._id) {
-    //   this.deletedUIds[utter._id] = true;
-    // }
-    // this.selectedUtterancesArray.splice(i, 1);
+    if (utter._id) {
+      this.deletedUIds[utter._id] = true;
+    }
+    this.selectedUtterancesArray.splice(i, 1);
   }
+
+  changeRadio(event){
+    if(event === 'utterance'){
+      (this.adherenceForm.controls['adherence'] as FormGroup).setValue(
+        this.fb.group(this.clS.getUtteranceForm())
+      )
+    }else if(event === 'dialog'){
+
+    }else if(event === 'varibale'){
+
+    }
+  }
+
+  isActive(event){
+
+  }
+  // getUtteranceForm
 
 }

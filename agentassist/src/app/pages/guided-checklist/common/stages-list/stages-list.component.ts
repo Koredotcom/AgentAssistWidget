@@ -75,7 +75,7 @@ export class StagesListComponent implements OnInit {
     this.checkListForm = this.fb.group(
       this.clS.getCheckListForm(this.botId, this.checkListType)
     );
-    this.triggerBy = this.fb.group(this.clS.getTriggerBy());
+    // this.triggerBy = this.fb.group(this.clS.getTriggerBy());
     this.name.valueChanges.subscribe((val) => {
       this.checkListForm.controls["name"].patchValue(val);
     });

@@ -6,7 +6,7 @@
         <button class="tab-btn" [ngClass]="{'active-btn': tab === 'trigger'}" (click)="tab = 'trigger'">
             <i class="icon-coaching--thendo"></i>
         </button>
-        <button class="tab-btn" [ngClass]="{'active-btn': tab === 'assignment'}" (click)="tab = 'assignment'">
+        <button class="tab-btn" *ngIf="checkListType !== 'primary'" [ngClass]="{'active-btn': tab === 'assignment'}" (click)="tab = 'assignment'">
             <i class="icon-coaching--thendo"></i>
         </button>
     </div>
@@ -104,7 +104,7 @@
                                         </label>
                                     </div>
                                 </div>
-                                <div class="radio-block-content" [ngClass]="{'active-check': assignType === 'a'}">
+                                <div class="radio-block-content disabled" [ngClass]="{'active-check': assignType === 'a'}">
                                     <div class="kr-sg-radiobutton">
                                         <input [ngModelOptions]="{standalone: true}" value="a" [(ngModel)]="assignType"
                                             id="radio-11" name="radio" class="radio-custom" type="radio">
@@ -188,7 +188,7 @@
 
                                     </div>
                                 </div>
-                                <div class="radio-block-content" [ngClass]="{'active-check': assignType === 'q'}">
+                                <div class="radio-block-content disabled" [ngClass]="{'active-check': assignType === 'q'}">
                                     <div class="kr-sg-radiobutton">
                                         <input [ngModelOptions]="{standalone: true}" value="q" [(ngModel)]="assignType"
                                             id="radio-13" name="radio" class="radio-custom" type="radio">
@@ -281,7 +281,7 @@
 
                                     </div>
                                 </div>
-                                <div class="radio-block-content" [ngClass]="{'active-check': assignType === 's'}">
+                                <div class="radio-block-content disabled" [ngClass]="{'active-check': assignType === 's'}">
                                     <div class="kr-sg-radiobutton">
                                         <input [ngModelOptions]="{standalone: true}" value="s" [(ngModel)]="assignType"
                                             id="radio-12" name="radio" class="radio-custom" type="radio">
@@ -377,9 +377,9 @@
                             </div>
                         </div>
                     </div>
-                    <div [ngClass]="{'d-none': tab !== 'assignment'}">
+                    <div [ngClass]="{'d-none': tab !== 'assignment'}" *ngIf="checkListType !== 'primary'">
                         <!-- trigger -->
-                        <app-trigger-by></app-trigger-by>
+                        <app-trigger-by [adherenceForm]="checkListForm"></app-trigger-by>
                     </div>
                 </div>
             </perfect-scrollbar>

@@ -21,12 +21,12 @@
                     <div [ngClass]="{'d-none': !basic}" class="p-22">
                         <div class="kr-sg-input-text m-b-12">
                             <div class="label-text">Step Title</div>
-                            <input type="text" formControlName="name" maxlength="100" placeholder="Name of Checklist" class="input-text">
+                            <input type="text" formControlName="name" maxlength="48" placeholder="Name of Checklist" class="input-text">
                             <div class="count-char">0/48</div>
                         </div>
                         <div class="kr-sg-input-text-area">
                             <div class="label-text">Step Detail</div>
-                            <textarea formControlName="description" placeholder="Rule Purpose" maxlength="1000" class="input-text"></textarea>
+                            <textarea formControlName="description" placeholder="Rule Purpose" maxlength="200" class="input-text"></textarea>
                             <div class="count-char">0/200</div>
                         </div>
                         <div class="confirmation-buttons-wrapper">

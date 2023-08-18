@@ -1,11 +1,10 @@
-<div class="step-addherence-block" [formGroup]="adherenceForm.controls['adherence']">
+<div class="step-addherence-block" [formGroup]="adherenceForm">
     <div class="adherence-left-block">
         <perfect-scrollbar>
             <div class="scroll-data">
                 <div class="toggle-block">
-                    {{adherenceForm?.value | json}}
                     <label class="kr-sg-toggle">
-                        <input type="checkbox" formControlName="isAdherenceActive">
+                        <input type="checkbox" formControlName="isAdherenceActive" (change)="isActive($event)">
                         <div class="slider"></div>
                     </label>
                     <div class="content-block">
@@ -13,10 +12,10 @@
                         <div class="desc-text">Check for agent’s compliance with this step dynamically using Utterances, Dialogs or Context Variables.  </div>
                     </div>
                 </div>
-                <div class="utt-radio-block" [ngClass]="{'disabled': !aForm?.value?.isAdherenceActive}">
+                <div [formGroup]="adherenceForm?.controls['adherence']" class="utt-radio-block" [ngClass]="{'disabled': !adherenceForm?.value?.isAdherenceActive}">
                     <div class="radio-block-content active-check">
                         <div class="kr-sg-radiobutton">
-                            <input formControlName="type" value="utterance" id="radio-1" name="utterance" class="radio-custom" type="radio">
+                            <input formControlName="type" value="utterance" id="radio-1" name="type" class="radio-custom" type="radio" (change)="changeRadio('utterance')">
                             <label for="radio-1" class="radio-custom-label">
                                 <div class="title">By Agent’s Utterance</div>
                                 <div class="desc-text">Listen for specific utterances by the agent to mark as completed</div>
@@ -49,8 +48,8 @@
                                                             <label for="checkbox-11" class="checkbox-custom-label">{{searchKey.value}}</label>
                                                         </div>
                                                     </div>
-                                                    <ng-container *ngIf="clS?.metaForUtternace.name === 'aa_utterance'">
-                                                    <div class="found-details-info">
+                                                    <ng-container>
+                                                    <div class="found-details-info" *ngIf="searchKey.value?.length > 0 && clS.metaForUtternace?.integration">
                                                         <div class="found-ai-count">
                                                             <i class="icon-coaching--ai"></i>
                                                             <span>Found {{openAiUtteranceArray?.length}}</span>
@@ -179,7 +178,7 @@
                     </div>
                     <div class="radio-block-content active-check">
                         <div class="kr-sg-radiobutton">
-                            <input formControlName="type" value="dialog" id="radio-12" name="dialog" class="radio-custom" type="radio">
+                            <input formControlName="type" value="dialog" id="radio-12" name="type" class="radio-custom" type="radio">
                             <label for="radio-12" class="radio-custom-label">
                                 <div class="title">By Dialog Execution</div>
                                 <div class="desc-text">Watch for a dialog execution run by the agent</div>
@@ -244,7 +243,7 @@
                     </div>
                     <div class="radio-block-content active-check disabled">
                         <div class="kr-sg-radiobutton">
-                            <input formControlName="type" value="variable" id="radio-112" name="variable" class="radio-custom" type="radio">
+                            <input formControlName="type" value="variable" id="radio-112" name="type" class="radio-custom" type="radio">
                             <label for="radio-112" class="radio-custom-label">
                                 <div class="title">By Variable Change</div>
                                 <div class="desc-text">Watch for a context variable change</div>
