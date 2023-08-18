@@ -62,6 +62,8 @@ export class StagesListComponent implements OnInit {
       ? this.selAcc["instanceBots"][0]?.instanceBotId
       : this.workflowService.getCurrentBt(true)._id;
 
+  filteredTags : any = [];
+
   constructor(
     private fb: FormBuilder,
     private auth: AuthService,
@@ -85,6 +87,16 @@ export class StagesListComponent implements OnInit {
     } else {
       this.name.patchValue(this.currentCheckList.name);
       this.stages = this.currentCheckList?.stages || [];
+    }
+    this.updateFilteredTags(this.currentCheckList.tags);
+  }
+
+  updateFilteredTags(tags){
+    this.filteredTags = [];
+    if(tags && tags.length > 0){
+      tags.forEach(element => {
+        this.filteredTags.push(element.name);
+      });
     }
   }
 
@@ -114,16 +126,21 @@ export class StagesListComponent implements OnInit {
   }
 
   getRuleTags() {
+    this.allTagList = [];
     let params: any = {
       botId: this.botId,
     };
     this.service
-      .invoke("get.agentcoachingruletags", params, {
+      .invoke("get.checklisttags", params, {
         botId: this.botId,
       })
       .subscribe((data) => {
         if (data && data.tags?.length > 0) {
-          this.allTagList = data.tags;
+          data.tags.forEach(element => {
+            if(element.name){
+              this.allTagList.push(element.name);
+            }
+          });
         }
         this.isCheckListOpen = true;
         this.checklistCreateSlider.openSlider("#checklistCreate", "");
@@ -310,6 +327,7 @@ export class StagesListComponent implements OnInit {
   dismisCheckList(data?) {
     if (data) {
       this.currentCheckList = data;
+      this.updateFilteredTags(this.currentCheckList?.tags);
     }
     this.isCheckListOpen = false;
     this.checklistCreateSlider.closeSlider("#checklistCreate");

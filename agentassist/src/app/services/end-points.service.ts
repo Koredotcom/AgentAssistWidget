@@ -1718,6 +1718,11 @@ export class EndPointsService {
       endpoint : this.SMARTASSIST_API_SERVER_URL + '/acclsteps/:botId/step/:clstId?clsId=:clsId',
       method : 'put'
     }
+
+    this.serviceList['get.checklisttags'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/acchecklists/:botId/tags',
+      method : 'get'
+    }
     
   }
 }

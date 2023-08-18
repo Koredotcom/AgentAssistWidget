@@ -16,29 +16,24 @@
       </div>
     </div>
     <div class="middle-content">
-      <div class="tags-info">
-        <span class="tag-name">price</span>
-        <div class="kr-sg-dropdowns" ngbDropdown container="body">
-          <div class="dropdown dropdown-open">
-            <button
-              class="dropdown-toggle dropdown-input before-none"
-              ngbDropdownToggle
-            >
-              +2 More
-            </button>
-            <ul
-              class="dropdown-menu content-menu more-dropdown-tags"
-              ngbDropdownMenu
-            >
-              <ng-container>
-                <li ngbDropdownItem class="p-0">
-                  <span class="mx-w-100">Option</span>
-                </li>
-              </ng-container>
-            </ul>
-          </div>
+     
+
+      <div class="tags-info" *ngIf="filteredTags?.length > 0">
+        <span class="tag-name" [title]="filteredTags[0]">{{filteredTags[0]}}</span>
+        <div class="kr-sg-dropdowns" ngbDropdown container="body" *ngIf="filteredTags?.length > 1">
+            <div class="dropdown dropdown-open">
+              <button class="dropdown-toggle dropdown-input before-none" ngbDropdownToggle>+{{filteredTags.length - 1 + ' More'}}</button>
+              <ul class="dropdown-menu content-menu more-dropdown-tags" ngbDropdownMenu>
+                <ng-container *ngFor="let item of filteredTags | slice:1; let i = index;">
+                    <li ngbDropdownItem class="p-0" [title]="item">
+                        <span class="mx-w-100 text-truncate">{{item}}</span>
+                    </li>
+                </ng-container>
+              </ul>
+            </div>
         </div>
-      </div>
+    </div>
+
     </div>
     <div class="btn-actions">
       <button class="settings-actions" (click)="openSettings()">
