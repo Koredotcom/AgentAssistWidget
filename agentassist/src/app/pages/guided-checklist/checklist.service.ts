@@ -27,7 +27,7 @@ export class ChecklistService {
         'skills': this.fb.array([]),
       }),
       'stages': this.fb.array([]),
-      'isActive': [true, [Validators.required]],
+      'isActive': [false, [Validators.required]],
     }
     if(checkListType === 'dynamic'){
       obj["adherence"]= this.fb.group({
