@@ -755,7 +755,7 @@ export class AssistComponent implements OnInit {
               ele.question = ele.title;
               setTimeout(() => {
                 this.commonService.updateSeeMoreButtonForAssist(uuids + index, this.projConstants.ARTICLE);
-              }, 1000);
+              }, 100);
             // }
           })
 

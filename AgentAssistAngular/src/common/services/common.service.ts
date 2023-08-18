@@ -946,20 +946,22 @@ export class CommonService {
     }else if(titleElement && descElement && divElement) {
       titleElement.classList.add('no-text-truncate');
       descElement.classList.add('no-text-truncate');
-      let divSectionHeight = descElement.clientHeight || 0;
-      if (divSectionHeight > (24 + faqSourceTypePixel)) {
-        $(seeMoreElement).removeClass('hide');
-      } else {
-        $(seeMoreElement).addClass('hide');
-        if (type == ProjConstants.ARTICLE && viewLinkElement) {
-          viewLinkElement.classList.remove('hide');
+      setTimeout(() => {
+        let divSectionHeight = descElement.clientHeight || 0;
+        if (divSectionHeight > (24 + faqSourceTypePixel)) {
+          $(seeMoreElement).removeClass('hide');
+        } else {
+          $(seeMoreElement).addClass('hide');
+          if (type == ProjConstants.ARTICLE && viewLinkElement) {
+            viewLinkElement.classList.remove('hide');
+          }
+          if(type == ProjConstants.SNIPPET && snippetviewMsg){
+            snippetviewMsg.classList.remove('hide');
+          }
         }
-        if(type == ProjConstants.SNIPPET && snippetviewMsg){
-          snippetviewMsg.classList.remove('hide');
-        }
-      }
-      titleElement.classList.remove('no-text-truncate');
-      descElement.classList.remove('no-text-truncate');
+        titleElement.classList.remove('no-text-truncate');
+        descElement.classList.remove('no-text-truncate');
+      }, 100);
     }
   }
 
