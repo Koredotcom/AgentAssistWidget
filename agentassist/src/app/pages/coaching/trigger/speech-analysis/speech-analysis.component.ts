@@ -69,7 +69,7 @@ export class SpeechAnalysisComponent implements OnInit {
   }
 
   ngOnChanges(changes : any){
-    if(changes["index"]?.currentValue ==  length){
+    if(changes["index"]?.currentValue ==  this.length){
       this.changeOperator(COACHINGCNST.AND_OPERATOR);
     }  
     if(changes?.createOrEdit?.currentValue === COACHINGCNST.EDIT){
