@@ -2046,5 +2046,6 @@
     "Account_Error_MSG": "You have logged in using SmartAssist account details. To access AgentAssist, please log in with your AgentAssist credentials or create a fresh account.",
     "LOGIN_BTN": "Login With AgentAssist",
     "CREATE_ACCOUNT_BTN": "Create a New Account",
-    "RULE.LOCKED" : "Rule has been locked by someone"
+    "RULE.LOCKED" : "Rule has been locked by someone",
+    "CHECKLIST_STATUS_FAILURE" : "Active checklist already present"
 }
