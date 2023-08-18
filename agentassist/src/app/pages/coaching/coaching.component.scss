@@ -242,9 +242,6 @@
     }
     .agents-grid-data-table{
         height: calc(100vh - 189px);
-        .scroll-data{
-
-        }
         .agent-groups-table-container{
             padding: 0 40px;
             display: inline-block;
@@ -391,6 +388,9 @@
                           border-bottom: 1px solid #E5E7EB;
                           position: relative;
                           display: flex;
+                          position: sticky;
+                            top: 0;
+                            z-index: 9;
                           .titles-data {
                             padding: 0 10px;
                             color: var(--neutral-700, #404040);

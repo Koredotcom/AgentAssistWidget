@@ -44,7 +44,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
   selAcc = this.local.getSelectedAccount();
   subs = new SubSink();
   isCoachingDisable = false;
-  limit = 10;
+  limit = 30;
   page = 1;
   hasMore = false;
   searchText = '';
@@ -110,7 +110,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
       results: []
     };
     this.page = 1;
-    this.limit = 10;
+    this.limit = 30;
     this.sortOrder = 'asc';
     // this.getCoachingPreBuiltRules();
     this.getAgentCoachingRules();
@@ -171,7 +171,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
     this.cdRef.detectChanges();
     if(empty){
       this.page = 1;
-      this.limit = 10;
+      this.limit = 30;
     }
     let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
     let params: any = {
