@@ -24,7 +24,6 @@ export class HandleSubjectService {
   public userHistoryDataSubject$ = new BehaviorSubject<object>(null);
   public userAgentTranscriptionConversationHistory$ = new BehaviorSubject<object>(null);
   public userBotConversationDetails;
-  public guidedChecklistData$ = new BehaviorSubject<object>(null);
 
   constructor() { }
 

@@ -304,9 +304,8 @@ export class AssistComponent implements OnInit {
     this.websocketService.emitEvents(EVENTS.welcome_message_request, welcomeMessageParams);
 
 
-    if(shouldProcessResponse && this.commonService.primaryChecklist.length > 0) {
+    if(!this.isGuidedChecklistApiSuccess && this.commonService.primaryChecklist.length > 0) {
       this.sendChecklistEvent();
-      this.isGuidedChecklistApiSuccess = true;
     }
   }
 
@@ -326,7 +325,6 @@ export class AssistComponent implements OnInit {
         if(data.checklists.length > 0 ) {
           this.commonService.primaryChecklist = data.checklists.filter(check => check.type === "primary");
           this.commonService.dynamicChecklist = data.checklists.filter(check => check.type === "dynamic");
-          this.handleSubjectService.setChecklistData(data);
         }
         if(!this.isGuidedChecklistApiSuccess && this.commonService.primaryChecklist.length > 0) {
           this.sendChecklistEvent();
@@ -366,6 +364,7 @@ export class AssistComponent implements OnInit {
           "context": {}
       }
   }
+  this.isGuidedChecklistApiSuccess = true;
   this.websocketService.emitEvents(EVENTS.checklist_opened, checklistParams);
 
   }
