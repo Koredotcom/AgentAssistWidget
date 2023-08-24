@@ -98,16 +98,19 @@
                       </div>
                     </ul>
                   </div>
-                  <div class="edit-title">
+                  <div class="edit-title" *ngIf="!item.isDefault">
                     <i
                       class="icon-sa-welcome-edit"
                       (click)="editStage(item)"
                     ></i>
                   </div>
-                  <div class="check-item">
+                  <div class="delete-item" *ngIf="!item.isDefault" (click)="deleteStage(i);$event.stopPropagation()">
+                    <i class="icon-sa-welcome-delete"></i>
+                  </div>
+                  <div class="check-item" (click)="saveStage(item)">
                     <i
                       class="icon-coaching--check"
-                      (click)="saveStage(item)"
+                      
                     ></i>
                   </div>
                 </div>
@@ -124,13 +127,13 @@
                     <div class="title">{{ step.name }}</div>
                     <div class="desc-text">{{ step.description }}</div>
                     <div class="tags-info">
-                      <div class="tag_name">
+                      <div class="tag_name" *ngIf="step?.isAdherenceActive">
                         <i class="icon-coaching--adherence-set"></i>
-                        <span>Utterance</span>
+                        <span>{{step.adherence?.type | titlecase}}</span>
                       </div>
                     </div>
                   </div>
-                  <div class="delete-item">
+                  <div class="delete-item" (click)="deleteStep(i, si, step, item);$event.stopPropagation()">
                     <i class="icon-sa-welcome-delete"></i>
                   </div>
                 </div>
@@ -148,13 +151,23 @@
                 </div>
               </ng-container>
               <div class="add-step">
-                <button (click)="item.newStep = true; stepCreate(item, i)">
+                <button [disabled]="!item.name" [ngClass]="{'disabled': !item.name}" (click)="item.newStep = true; stepCreate(item, i)">
                   <i class="icon-coaching--plus"></i>
                   <span>Add Step</span>
                 </button>
               </div>
             </div>
 
+            <div class="add-stage-block">
+              <div class="line-block"></div>
+              <button (click)="addStages(i)">
+                <i class="icon-coaching--plus"></i>
+                <span>Add Stage</span>
+              </button>
+              <div class="line-block"></div>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="stages?.length === 0">
             <div class="add-stage-block">
               <div class="line-block"></div>
               <button (click)="addStages(i)">
@@ -175,7 +188,7 @@
     [createOrUpdate]="isCheckListCreateOrUpdate"
     [checkListForm]="checkListForm"
     [checkListType]="checkListType"
-    (closeE)="close($event)"
+    (closeE)="close()"
     (saveEvent)="saveCheckList($event)"
     (closeChecklist)="dismisCheckList($event)"
     [currentCheckList]="currentCheckList"

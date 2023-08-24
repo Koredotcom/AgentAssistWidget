@@ -10,5 +10,7 @@ export const CHECKLISTCNST = {
         '#669F2A': '#F5FBEE',
         '#16B364': '#EDFCF2',
         '#FF4405': '#FFF4ED'
-    }
+    },
+    primary: 'primary',
+    dynamic: 'dynamic'
 }

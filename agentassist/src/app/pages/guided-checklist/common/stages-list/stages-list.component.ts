@@ -1,4 +1,5 @@
 import {
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
@@ -11,7 +12,7 @@ import { AuthService } from "@kore.services/auth.service";
 import { LocalStoreService } from "@kore.services/localstore.service";
 import { workflowService } from "@kore.services/workflow.service";
 import { SliderComponentComponent } from "src/app/shared/slider-component/slider-component.component";
-import { CHECKLISTCNST } from "../checklist.const";
+import { CHECKLISTCNST } from "../../checklist.const";
 import { ServiceInvokerService } from "@kore.services/service-invoker.service";
 import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 import { ChecklistService } from "../../checklist.service";
@@ -27,7 +28,7 @@ export class StagesListComponent implements OnInit {
   checklistCreateSlider: SliderComponentComponent;
   @ViewChild("stepCreateSlider", { static: true })
   stepCreateSlider: SliderComponentComponent;
-  @Input() checkListType = "primary";
+  @Input() checkListType = CHECKLISTCNST.primary;
   @Input() createOrUpdate = "create";
   @Input() currentCheckList: any = {};
   isStepOpen = false;
@@ -68,7 +69,8 @@ export class StagesListComponent implements OnInit {
     private local: LocalStoreService,
     private workflowService: workflowService,
     private service: ServiceInvokerService,
-    private clS: ChecklistService
+    private clS: ChecklistService,
+    private cd: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -92,8 +94,8 @@ export class StagesListComponent implements OnInit {
     this.stepForm = this.fb.group(this.clS.getStepForm(this.botId));
   }
 
-  closeCheckListScreen(e?) {
-    this.closeCheckList.emit(this.relaod ? this.relaod : e);
+  closeCheckListScreen() {
+    this.closeCheckList.emit();
   }
 
   openSettings() {
@@ -130,17 +132,14 @@ export class StagesListComponent implements OnInit {
       });
   }
 
-  close(e) {
-    if (e.checkListClose) {
-      this.dismisCheckList();
-    }
-    if (e.relaod && e.isSaved) {
-      this.relaod = e.relaod;
-      this.name.patchValue(this.checkListForm.value.name);
-      this.checkListForm.updateValueAndValidity();
-    }
-    if (!e.isSaved && this.createOrUpdate !== "update") {
-      this.closeCheckListScreen(!e.isSaved);
+  close() {
+    // if (e.checkListClose) {
+    //   
+    // }
+    // this.name.patchValue(this.checkListForm.value.name);
+    this.dismisCheckList();
+    if(this.createOrUpdate !== 'update'){
+      this.closeCheckListScreen();
     }
   }
 
@@ -173,10 +172,10 @@ export class StagesListComponent implements OnInit {
       botId: this.botId,
       steps: stage.steps.map((step) => step._id),
     };
-    if (stage.isNew) {
+    // if (stage.isNew) {
       obj["color"] = stage.color;
       obj["name"] = stage.name;
-    }
+    // }
     this.service.invoke(method, params, obj).subscribe((data) => {
       if (data) {
         stage.edit = false;
@@ -242,8 +241,12 @@ export class StagesListComponent implements OnInit {
 
   saveStep(event = false) {
     if (this.stepForm.valid) {
+      let val = this.stepForm.value;
+      if(!val.isAdherenceActive){
+        val['adherence'] = {};
+      }
       this.service
-        .invoke("post.step", {}, this.stepForm.value)
+        .invoke("post.step", {}, val)
         .subscribe((data) => {
           this.stages[this.stageInx].steps.push(data);
           this.stages[this.stageInx].newStep = false;
@@ -262,6 +265,7 @@ export class StagesListComponent implements OnInit {
   }
 
   saveCheckList(event) {
+    this.createOrUpdate = 'update';
     this.service
       .invoke("get.checklistbyid", { botId: this.botId, clId: event._id })
       .subscribe((data) => {
@@ -294,6 +298,11 @@ export class StagesListComponent implements OnInit {
 
   updateStep(event) {
     if (this.stepForm.valid && event) {
+      let payload = this.stepForm.value;
+      if(!payload.isAdherenceActive && payload.adherence.type === ''){
+        payload['adherence'] = {};
+      }
+
       this.service
         .invoke(
           "put.step",
@@ -302,7 +311,7 @@ export class StagesListComponent implements OnInit {
             botId: this.botId,
             clsId: this.currentStage._id,
           },
-          this.stepForm.value
+          payload
         )
         .subscribe((data) => {
           this.stages[this.stageInx].steps.splice(this.stepIndex, 1, data);
@@ -311,11 +320,41 @@ export class StagesListComponent implements OnInit {
     }
   }
 
-  dismisCheckList(data?) {
-    if (data) {
-      this.currentCheckList = data;
-    }
+  dismisCheckList() {
+    // if (data) {
+    //   this.currentCheckList = data;
+    // }
     this.isCheckListOpen = false;
     this.checklistCreateSlider.closeSlider("#checklistCreate");
+  }
+
+  deleteStep(i, si, step, stage){
+    this.service
+    .invoke(
+      "delete.step",
+      {
+        clstId: step._id,
+        botId: this.botId,
+        clsId: stage._id
+      }
+    )
+    .subscribe((data) => {
+      (this.stages[i]?.steps || []).splice(si, 1);
+    });
+  }
+
+  deleteStage(i){
+    this.service
+    .invoke(
+      "delete.stage",
+      {
+        clId: this.currentCheckList._id,
+        botId: this.botId,
+        clsId: this.stages[i]?._id,
+      }
+    )
+    .subscribe((data) => {
+      (this.stages || []).splice(i, 1);
+    });
   }
 }

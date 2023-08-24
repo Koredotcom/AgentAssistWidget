@@ -13,15 +13,15 @@
                     </div>
                 </div>
                 <div [formGroup]="onlyAdhreForm" class="utt-radio-block" [ngClass]="{'disabled': !adherenceForm?.value?.isAdherenceActive && !isChecklist}">
-                    <div class="radio-block-content" [ngClass]="{'active-check': onlyAdhreForm.value.type === 'utterance'}">
+                    <div class="radio-block-content" [ngClass]="{'active-check': onlyAdhreForm?.value?.type === 'utterance'}">
                         <div class="kr-sg-radiobutton">
-                            <input formControlName="type" value="utterance" id="radio-1" name="type" class="radio-custom" type="radio" (change)="changeRadio('utterance')">
+                            <input formControlName="type" [checked]="onlyAdhreForm?.value?.type === 'utterance'" value="utterance" id="radio-1" name="type" class="radio-custom" type="radio" (change)="changeRadio('utterance')">
                             <label for="radio-1" class="radio-custom-label">
                                 <div class="title">By Agent’s Utterance</div>
                                 <div class="desc-text">Listen for specific utterances by the agent to mark as completed</div>
                             </label>
                         </div>
-                        <div class="radio-checked-content">
+                        <div class="radio-checked-content" [ngClass]="{'disabled': onlyAdhreForm?.value?.type !== 'utterance'}">
                             <div class="utterances-add-manually-block">
                                 <!-- <div class="add-rule-block">
                                     <div class="label-text">Utterances</div>
@@ -110,7 +110,7 @@
                                     </div>
                                 </div>
                                 <!-- *ngIf="!(selectedUtterancesArray.length && selectedNewUtterances.length); else data" -->
-                                <div class="no-utt-found" *ngIf="!(selectedUtterancesArray.length || selectedNewUtterances.length); else data">No utterances saved</div>
+                                <div class="no-utt-found" *ngIf="!(selectedUtterancesArray.length || adherenceForm?.value?.adherence?.addUtterances?.length); else data">No utterances saved</div>
                                 <ng-template #data>
                                     <div class="saved-utt-block">
                                         <div class="saved-header">Saved Utterances</div>
@@ -143,8 +143,7 @@
                                                 </div>
                                             </div>
                                         </ng-container>
-
-                                        <ng-container *ngFor="let utter of selectedNewUtterances; let iD = index">
+                                        <ng-container *ngFor="let utter of (this.adherenceForm?.value?.adherence?.addUtterances); let iD = index">
                                             <div class="saved-utt-text-block">
                                                 <div class="saved-title" [title]="utter?.utterance">{{utter?.utterance}}</div>
                                                 <div class="delete-saved-utt">
@@ -176,9 +175,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="radio-block-content" [ngClass]="{'active-check': onlyAdhreForm.value.type === 'dialog'}">
+                    <div class="radio-block-content disabled" [ngClass]="{'active-check': onlyAdhreForm?.value?.type === 'dialog'}">
                         <div class="kr-sg-radiobutton">
-                            <input formControlName="type" value="dialog" id="radio-12" name="type" class="radio-custom" type="radio">
+                            <input [checked]="onlyAdhreForm?.value?.type === 'dialog'" formControlName="type" value="dialog" id="radio-12" name="type" class="radio-custom" type="radio" (change)="changeRadio('utterance')">
                             <label for="radio-12" class="radio-custom-label">
                                 <div class="title">By Dialog Execution</div>
                                 <div class="desc-text">Watch for a dialog execution run by the agent</div>
@@ -241,9 +240,9 @@
                             <div class="info-text-dilog">If adherence checker does not detect the selected automation being run by the agent in the next 3 minutes, this step will be marked incomplete.</div>
                         </div>
                     </div>
-                    <div class="radio-block-content disabled" [ngClass]="{'active-check': onlyAdhreForm.value.type === 'variable'}">
+                    <div class="radio-block-content disabled" [ngClass]="{'active-check': onlyAdhreForm?.value?.type === 'variable'}">
                         <div class="kr-sg-radiobutton">
-                            <input formControlName="type" value="variable" id="radio-112" name="type" class="radio-custom" type="radio">
+                            <input [checked]="onlyAdhreForm?.value?.type === 'variable'" formControlName="type" value="variable" id="radio-112" name="type" class="radio-custom" type="radio" (change)="changeRadio('utterance')">
                             <label for="radio-112" class="radio-custom-label">
                                 <div class="title">By Variable Change</div>
                                 <div class="desc-text">Watch for a context variable change</div>

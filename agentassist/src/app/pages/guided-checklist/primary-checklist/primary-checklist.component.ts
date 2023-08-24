@@ -7,6 +7,9 @@ import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { workflowService } from '@kore.services/workflow.service';
 import { TranslateService } from '@ngx-translate/core';
 import { finalize, debounceTime, tap } from 'rxjs/operators';
+import { CHECKLISTCNST } from '../checklist.const';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { DeleteComponent } from '../common/delete/delete.component';
 @Component({
   selector: 'app-primary-checklist',
   templateUrl: './primary-checklist.component.html',
@@ -22,9 +25,11 @@ export class PrimaryChecklistComponent implements OnInit, OnChanges {
     private zone : NgZone,
     private cdRef : ChangeDetectorRef,
     private notificationService: NotificationService, private translate: TranslateService,
+    private modalService: NgbModal
   ) { }
   @Input() checkListType;
   @Output() update = new EventEmitter();
+  modalRef:any;
 
   searchField = new FormControl();
   loading = false;
@@ -108,7 +113,8 @@ export class PrimaryChecklistComponent implements OnInit, OnChanges {
     let clId = currentCheckList._id;
     let payload : any = {
       "isActive" : currentCheckList.isActive,
-      botId
+      botId,
+      type: CHECKLISTCNST.primary,
     };
     this.loading = true;
     this.service.invoke('put.acchecklists', {botId, clId}, payload) .pipe(finalize(() => {
@@ -134,6 +140,29 @@ export class PrimaryChecklistComponent implements OnInit, OnChanges {
         this.getPrimaryList();
       })
     }
+  }
+
+  openDeleteCl(dyn){
+    let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
+    let deleteRule = {
+      title: "Delete Rule",
+      desc: "Are you sure, you want to delete checklist '" + dyn.name + "'.",
+      type: "rule",
+      _id: dyn._id
+    }
+    this.modalRef = this.modalService.open(DeleteComponent, { centered: true, keyboard: false, windowClass: 'delete-uc-rule-modal', backdrop: 'static' });
+    this.modalRef.componentInstance.data = deleteRule;
+    this.modalRef.result.then(emitedValue => {
+      if (emitedValue) {
+        this.service.invoke('delete.checklist', { clId: dyn._id, botId }).subscribe(_data => {
+          this.notificationService.notify(this.translate.instant("CHECKLIST.CLDELETE_SUCCESS"), 'success');
+          this.getPrimaryList(true);
+          // this.getCoachingPreBuiltRules();
+        }, (error) => {
+          this.notificationService.showError(error, this.translate.instant("CHECKLIST.FAILED_DELETE"));
+        });
+      }
+    });
   }
 
 }

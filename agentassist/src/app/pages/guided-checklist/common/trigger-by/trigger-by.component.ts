@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NotificationService } from '@kore.services/notification.service';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { workflowService } from '@kore.services/workflow.service';
@@ -48,24 +48,17 @@ export class TriggerByComponent implements OnInit, OnChanges {
 
   getAddedUtterances() {
     let formVal = this.adherenceForm?.value;
-    this.service.invoke("get.agentcoachingutteranceByRef",
-      {
-        refId: formVal._id,
-      }).subscribe((data) => {
-        this.utterApiDone = true;
-        // let deletedItem = formVal?.adherence?.deleteUtterances;
-        // if (deletedItem?.length > 0) {
-        //   this.selectedUtterancesArray = (data || []).filter((item) => {
-        //     return !deletedItem.includes(item._id)
-        //   });
-        // } else {
+    if(formVal.adherence?.type === 'utterance'){
+      this.service.invoke("get.agentcoachingutteranceByRef",
+        {
+          refId: formVal._id,
+        }).subscribe((data) => {
+          this.utterApiDone = true;
           this.selectedUtterancesArray = [...data];
-        // };
-        // this.selectedNewUtterances.push(...formVal?.adherence.addUtterances);
-        // this.selectedNewUtterances.forEach((item)=>{
-        //   this.utterances[item.utterance] = true;
-        // });
-      })
+          (this.adherenceForm.controls['adherence'] as FormGroup)
+          .controls['uttCount'].patchValue(this.selectedUtterancesArray.length);
+        })
+    }
   }
 
   ngOnInit(): void {
@@ -190,34 +183,49 @@ export class TriggerByComponent implements OnInit, OnChanges {
     if(this.customUtt){
       this.utterances[this.searchKey?.value] = true;
     }
-    Object.keys(this.utterances).forEach((item) => {
-      this.selectedNewUtterances.push({ utterance: item, language: 'english' });
-    });
-  }
-
-  upadateAllObjects(){
-    (Object.keys(this.deletedUIds)).forEach((item)=>{
-      ((this.adherenceForm.controls['adherence'] as FormGroup).controls['deleteUtterances'] as FormArray)
-      .push(new FormControl(item));
-    });
-    // ((this.adherenceForm.controls['adherence'] as FormGroup).controls['deleteUtterances'] as FormArray)?.setValue([...Object.keys(this.deletedUIds)]);
-    ((this.adherenceForm.controls['adherence'] as FormGroup).controls['addUtterances'] as FormArray)?.clear();
-    (this.selectedNewUtterances || []).forEach(element => {
+    Object.keys(this.utterances).forEach((item: any) => {
       ((this.adherenceForm.controls['adherence'] as FormGroup).controls['addUtterances'] as FormArray)
-      .push(
+      ?.push(
         this.fb.group({
-          utterance: new FormControl(element.utterance),
-          language: new FormControl(element.language),
+          utterance: new FormControl(item),
+          language: new FormControl('english'),
         })
       )
     });
+    this.patchCount();
   }
+
+  // upadateAllObjects(){
+  //   // (Object.keys(this.deletedUIds)).forEach((item)=>{
+  //   //   ((this.adherenceForm.controls['adherence'] as FormGroup).controls['deleteUtterances'] as FormArray)
+  //   //   ?.push(new FormControl(item));
+  //   // });
+  //   // ((this.adherenceForm.controls['adherence'] as FormGroup).controls['deleteUtterances'] as FormArray)?.setValue([...Object.keys(this.deletedUIds)]);
+  //   // ((this.adherenceForm.controls['adherence'] as FormGroup).controls['addUtterances'] as FormArray)?.clear();
+  //   // (this.selectedNewUtterances || []).forEach(element => {
+  //   //   ((this.adherenceForm.controls['adherence'] as FormGroup).controls['addUtterances'] as FormArray)
+  //   //   ?.push(
+  //   //     this.fb.group({
+  //   //       utterance: new FormControl(element.utterance),
+  //   //       language: new FormControl(element.language),
+  //   //     })
+  //   //   )
+  //   // });
+  // }
 
 
   deleteUtternceNew(utter, i) {
-    this.selectedNewUtterances.splice(i, 1);
+    // this.selectedNewUtterances.splice(i, 1);
     this.cdRef.detectChanges();
     delete this.utterances[utter];
+    ((this.adherenceForm.controls['adherence'] as FormGroup).controls['addUtterances'] as FormArray)
+      ?.removeAt(i);
+    this.patchCount();
+  }
+
+  patchCount(){
+    (this.adherenceForm.controls['adherence'] as FormGroup)
+    .controls['uttCount'].patchValue(this.selectedUtterancesArray.length + (this.adherenceForm.controls['adherence'].value?.addUtterances?.length));
   }
 
   deleteUtternce(utter, i) {
@@ -225,27 +233,39 @@ export class TriggerByComponent implements OnInit, OnChanges {
       this.deletedUIds[utter._id] = true;
     }
     this.selectedUtterancesArray.splice(i, 1);
+      ((this.adherenceForm.controls['adherence'] as FormGroup).controls['deleteUtterances'] as FormArray)
+      ?.push(new FormControl(utter._id));
+    this.patchCount();
   }
 
   changeRadio(event){
     if(event === 'utterance'){
-      (this.adherenceForm.controls['adherence'] as FormGroup).setValue(
-        this.fb.group(this.clS.getUtteranceForm())
-      )
+      this.getAddedUtterances();
+      (this.adherenceForm as FormGroup).removeControl('adherence');
+      (this.adherenceForm as FormGroup).addControl(
+          'adherence', this.fb.group(this.clS.getUtteranceForm('utterance', true))
+      );
+      this.patchCount();
+      this.adherenceForm.updateValueAndValidity();
     }else if(event === 'dialog'){
 
     }else if(event === 'varibale'){
-
     }
   }
 
   isActive(event){
-
+    if(event.target.checked){
+      (this.adherenceForm as FormGroup).removeControl('adherence');
+      (this.adherenceForm as FormGroup)
+      .addControl('adherence', this.fb.group(this.clS.getUtteranceForm('', true)));
+    }else {
+      (this.adherenceForm as FormGroup).removeControl('adherence');
+      (this.adherenceForm as FormGroup).addControl('adherence', this.fb.group({}));
+    }
   }
 
   get onlyAdhreForm(): FormGroup{
     return this.adherenceForm?.controls['adherence'] as FormGroup;
   }
-  // getUtteranceForm
 
 }

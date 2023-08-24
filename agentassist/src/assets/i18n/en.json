@@ -2047,5 +2047,7 @@
     "LOGIN_BTN": "Login With AgentAssist",
     "CREATE_ACCOUNT_BTN": "Create a New Account",
     "RULE.LOCKED" : "Rule has been locked by someone",
-    "CHECKLIST_STATUS_FAILURE" : "Active checklist already present"
+    "CHECKLIST_STATUS_FAILURE" : "Active checklist already present",
+    "CHECKLIST.CLDELETE_SUCCESS": "Checklist deleted successfully",
+    "CHECKLIST.FAILED_DELETE": "Failed to delete checklist"
 }

@@ -1,0 +1,55 @@
+.dlete-rule-common-dialg{
+    border-radius: 6px;
+    background: #FFFFFF;
+    padding: 34px 36px;
+    position: relative;
+    .close-rule-modal{
+        position: absolute;
+        right: 36px;
+        top: 34px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+    .content-data{
+        display: flex;
+        align-items: flex-start;
+        .delete-icon{
+            width: 48px;
+            height: 48px;
+            flex-shrink: 0;
+            margin-right: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #FEF2F2;
+            border-radius: 24px;
+            padding: 8px;
+            color: #DC2626;
+            font-size: 16px;
+        }
+        .info-titles{
+            width: 100%;
+            .title{
+                font-weight: 500;
+                font-size: 18px;
+                line-height: 28px;
+                color: #171717;
+            }
+            .desc-text{
+                font-weight: 400;
+                font-size: 14px;
+                line-height: 20px;
+                color: #737373;
+                margin-top: 8px;
+            }
+        }
+    }
+    .btn-actions-footer{
+        margin-top: 32px;
+        text-align: right;
+        button{
+            margin-left: 10px;
+            height: 40px;
+        }
+    }
+}

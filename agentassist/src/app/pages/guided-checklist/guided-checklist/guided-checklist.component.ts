@@ -59,13 +59,11 @@ export class GuidedChecklistComponent implements OnInit {
   }
 
 
-  closeCheckListScreen(event) {
-    if(event){
-      if(this.checkListType === 'primary'){
-        this.checkList1.getPrimaryList();
-      }else{
-        this.checkList2.getDynamicList();
-      }
+  closeCheckListScreen() {
+    if(this.checkListType === 'primary'){
+      this.checkList1.getPrimaryList(true);
+    }else{
+      this.checkList2.getDynamicList(true);
     }
     this.modalFlowCreateRef.close();
     this.isStageListOpen = false;

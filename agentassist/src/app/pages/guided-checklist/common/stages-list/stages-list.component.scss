@@ -291,6 +291,10 @@
                                 color: #0BA5EC;
                                 cursor: pointer;
                             }
+                            .delete-item{
+                                @extend .edit-title;
+                                color: #DD3646;
+                            }
                             .check-item{
                                 display: none;
                                 width: 20px;

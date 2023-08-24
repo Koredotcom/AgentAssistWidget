@@ -1723,6 +1723,21 @@ export class EndPointsService {
       endpoint : this.SMARTASSIST_API_SERVER_URL + '/acclsteps/:botId/step/:clstId?clsId=:clsId',
       method : 'put'
     }
-    
+
+    this.serviceList['delete.step'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/acclsteps/:botId/step/:clstId?clsId=:clsId',
+      method : 'delete'
+    }
+
+    this.serviceList['delete.stage'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/acclstages/:botId/stage/:clsId?clId=:clId',
+      method : 'delete'
+    }
+
+    this.serviceList['delete.checklist'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/acchecklists/:botId/checklist/:clId',
+      method : 'delete'
+    }
+
   }
 }

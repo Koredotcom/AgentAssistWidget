@@ -1,5 +1,5 @@
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChange, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChange, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
@@ -8,13 +8,14 @@ import { LocalStoreService } from '@kore.services/localstore.service';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { workflowService } from '@kore.services/workflow.service';
 import { finalize } from 'rxjs/operators';
+import { TriggerByComponent } from '../trigger-by/trigger-by.component';
 
 @Component({
   selector: 'app-create-checklist',
   templateUrl: './create-checklist.component.html',
   styleUrls: ['./create-checklist.component.scss']
 })
-export class StageCreateComponent implements OnInit {
+export class StageCreateComponent implements OnInit, AfterViewInit {
 
   constructor(
     private fb: FormBuilder,
@@ -22,7 +23,15 @@ export class StageCreateComponent implements OnInit {
     private auth: AuthService,
     private local: LocalStoreService,
     private workflowService: workflowService
-  ) { };
+  ) { }
+  
+  ngAfterViewInit(): void {
+    if(this.createOrUpdate === 'update'){
+      setTimeout(() => {
+        this.loadtrigger = true;
+      });
+    }
+  };
 
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   tagControl :  FormControl = new FormControl();
@@ -34,7 +43,10 @@ export class StageCreateComponent implements OnInit {
   selAcc = this.local.getSelectedAccount();
   selectedchannelList : any = [];
   tab = 'basic';
+  basic = false;
+  loadtrigger = false;
   channelList : any = ['voice', 'chat'];
+  @ViewChild('triggerByComp') triggerByComp: TriggerByComponent;
   @Input() checkListForm: FormGroup;
   @Input() checkListType = 'primary';
   @Input() createOrUpdate = 'create';
@@ -108,39 +120,50 @@ export class StageCreateComponent implements OnInit {
     console.log("this.assignType", this.assignType);
   }
 
-  close(checkListClose?, relaod?, isSaved?) {
-    this.closeE.emit({
-      checkListClose,
-      relaod,
-      isSaved
-    });
+  close() {
+    this.closeE.emit();
   }
 
   save() {
     this.loading = true;
-    this.service.invoke('post.acchecklists', {}, this.checkListForm.getRawValue())
-      .pipe(finalize(() => {
-        this.loading = false;
-      }))
-      .subscribe((data) => {
-        this.saveEvent.emit(data);
-      });
+    if(this.checkListType !== 'primary'){
+      // this.triggerByComp.upadateAllObjects();
+    }
+    setTimeout(() => {      
+      let payload = this.checkListForm.getRawValue()
+      payload['triggerBy'] = payload['adherence'];
+      delete payload['adherence']
+      this.service.invoke('post.acchecklists', {}, payload)
+        .pipe(finalize(() => {
+          this.loading = false;
+        }))
+        .subscribe((data) => {
+          this.saveEvent.emit(data);
+        });
+    });
   }
 
 
   update(){
     this.loading = true;
-    let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
-    let payload = this.checkListForm.getRawValue();
-    delete payload.stages;
-    this.service.invoke('put.checklist', {botId, clId: this.currentCheckList._id}, payload)
-    .pipe(finalize(() => {
-      this.loading = false;
-    }))
-    .subscribe((data) => {
-      // this.currentCheckList = data;
-      this.closeChecklist.emit(data);
-    });
+    if(this.checkListType !== 'primary'){
+      // this.triggerByComp.upadateAllObjects();
+    }
+    setTimeout(() => {      
+      let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
+      let payload = this.checkListForm.getRawValue();
+      payload['triggerBy'] = payload['adherence'];
+      delete payload['adherence']
+      delete payload.stages;
+      this.service.invoke('put.checklist', {botId, clId: this.currentCheckList._id}, payload)
+      .pipe(finalize(() => {
+        this.loading = false;
+      }))
+      .subscribe((data) => {
+        // this.currentCheckList = data;
+        this.closeChecklist.emit(data);
+      });
+    },);
   }
 
 

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { GuidedChecklistModule } from './guided-checklist.module';
+import { CHECKLISTCNST } from './checklist.const';
 
 @Injectable()
 export class ChecklistService {
@@ -14,7 +15,7 @@ export class ChecklistService {
       'name': ['', [Validators.required]],
       'description': ['', [Validators.required]],
       'tags': this.fb.array([]),
-      'order': ['seqential', [Validators.required]],
+      'order': ['sequential', [Validators.required]],
       'channels': this.fb.array([], [Validators.required]),
       'type': [checkListType, [Validators.required]],
       'assignedTo': this.fb.group({
@@ -27,20 +28,19 @@ export class ChecklistService {
         'skills': this.fb.array([]),
       }),
       'stages': this.fb.array([]),
-      'isActive': [false, [Validators.required]],
+      'isActive': [checkListType === CHECKLISTCNST.dynamic ? true : false, [Validators.required]],
     }
-    if(checkListType === 'dynamic'){
-      obj["adherence"]= this.fb.group({
-        type: ['utterance'],
-        addUtterances: this.fb.array([]),
-        deleteUtterances: this.fb.array([])
-      })
+    if(checkListType === CHECKLISTCNST.dynamic){
+      obj["adherence"]= this.fb.group(
+        this.getUtteranceForm('', false)
+      )
     }
     return obj;
   }
 
   setCheckListForm(obj){
-    return {
+    let setForm = {
+      '_id': [obj._id, [Validators.required]],
       'botId': [obj.botId, [Validators.required]],
       'name': [obj.name, [Validators.required]],
       'description': [obj.description, [Validators.required]],
@@ -60,20 +60,23 @@ export class ChecklistService {
       'stages': this.fb.array(obj.stages),
       'isActive': [obj.isActive, [Validators.required]],
     }
+    if(obj.type === CHECKLISTCNST.dynamic){
+      setForm["adherence"]= this.fb.group(this.getUtteranceForm(obj.triggerBy.type, true))
+    }
+    return setForm;
   }
 
   getStepForm(botId){
     return {
       "botId": [botId, [Validators.required]],
       "name": ['', [Validators.required]],
-      "description": ['', [Validators.required]],
+      "description": [''],
       "confirmButtons": this.fb.array([]),
       'isAdherenceActive': [false, [Validators.required]],
-      "adherence": this.fb.group({
-        type: ['utterance'],
-        addUtterances: this.fb.array([]),
-        deleteUtterances: this.fb.array([])
-      }),
+      "adherence": this.fb.group(
+        this.getUtteranceForm('', false)
+        // {}
+      ),
       "clsId": ['', [Validators.required]],
     }
   }
@@ -83,18 +86,23 @@ export class ChecklistService {
       "_id": step._id,
       "botId": [botId, [Validators.required]],
       "name": [step.name, [Validators.required]],
-      "description": [botId.description, [Validators.required]],
+      "description": [step.description],
       "confirmButtons": this.fb.array([]),
-      'isAdherenceActive': [botId.isAdherenceActive, [Validators.required]],
+      'isAdherenceActive': [step.isAdherenceActive, [Validators.required]],
       "clsId": [step.clsId, [Validators.required]],
       "adherence": this.fb.group({})
     };
+    if(step?.confirmButtons?.length){
+      obj['confirmButtons'] = this.fb.array([...step?.confirmButtons], [Validators.required])
+    }
     if(step.adherence?.type === 'utterance'){
-      obj['adherence'] = this.fb.group({
-        type: ['utterance'],
-        addUtterances: this.fb.array([]),
-        deleteUtterances: this.fb.array([])
-      })
+      obj['adherence'] = this.fb.group(
+        this.getUtteranceForm(step.adherence?.type, true)
+      )
+    }else{
+      obj['adherence'] = this.fb.group(
+        this.getUtteranceForm('', false)
+      );
     };
     return obj;
   }
@@ -109,11 +117,12 @@ export class ChecklistService {
     }
   };
 
-  getUtteranceForm(){
+  getUtteranceForm(val, req=false){
     return {
-      type: ['', [Validators.required]],
-      addUtterances: this.fb.array([], [Validators.required]),
+      type: [val ? val : '', req ? [Validators.required] : []],
+      addUtterances: this.fb.array([]),
       deleteUtterances: this.fb.array([]),
+      uttCount: [0, req ? [Validators.required, Validators.min(1)] : []]
     }
   }
 }

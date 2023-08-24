@@ -10,6 +10,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { StagesListComponent } from './common/stages-list/stages-list.component';
 import { StageCreateComponent } from './common/create-checklist/create-checklist.component';
 import { TriggerByComponent } from './common/trigger-by/trigger-by.component';
+import { DeleteComponent } from './common/delete/delete.component';
 
 const routes: Routes = [
   { path: '', component:  GuidedChecklistComponent}
@@ -23,7 +24,8 @@ const routes: Routes = [
     StagesListComponent,
     StageCreateComponent,
     StepCreateComponent,
-    TriggerByComponent
+    TriggerByComponent,
+    DeleteComponent
   ],
   imports: [
     CommonModule,
