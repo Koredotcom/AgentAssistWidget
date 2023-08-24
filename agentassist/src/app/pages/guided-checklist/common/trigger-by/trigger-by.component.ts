@@ -6,6 +6,7 @@ import { workflowService } from '@kore.services/workflow.service';
 import { TranslateService } from '@ngx-translate/core';
 import { debounceTime, finalize, tap } from 'rxjs/operators';
 import { ChecklistService } from '../../checklist.service';
+import { AuthService } from '@kore.services/auth.service';
 
 @Component({
   selector: 'app-trigger-by',
@@ -35,7 +36,8 @@ export class TriggerByComponent implements OnInit, OnChanges {
     private notificationService: NotificationService,
     private translate: TranslateService,
     private cdRef: ChangeDetectorRef,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private auth: AuthService
   ) { }
 
 
@@ -73,6 +75,7 @@ export class TriggerByComponent implements OnInit, OnChanges {
         this.loaded = false;
         this.formatUtterArray(this.searchKey.value?.trim());
       });
+      console.log("🚀 ~ file: trigger-by.component.ts:77 ~ TriggerByComponent ~ ngOnInit ~ .:", this.auth.smartAssistBots)
   }
 
   formatUtterArray(text) {
