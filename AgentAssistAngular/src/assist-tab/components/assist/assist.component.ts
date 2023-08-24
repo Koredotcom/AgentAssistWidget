@@ -56,7 +56,7 @@ export class AssistComponent implements OnInit {
   faqManualClick : boolean = false;
   userBotSessionDetails;
   interactiveLangaugeDetails = 'en';
-
+  isGuidedChecklistApiSuccess = false;
 
 
 
@@ -234,6 +234,12 @@ export class AssistComponent implements OnInit {
       }
     });
 
+    let subscription14 = this.websocketService.socketConnectFlag$.subscribe((response) => {
+      if (response) {
+        this.guidedListAPICall(this.commonService.configObj.agentassisturl, this.commonService.configObj.botid, this.commonService.configObj.accessToken, this.commonService.configObj.accountId)
+      }
+    });
+
     this.subscriptionsList.push(subscription1);
     this.subscriptionsList.push(subscription2);
     this.subscriptionsList.push(subscription3);
@@ -247,6 +253,7 @@ export class AssistComponent implements OnInit {
     this.subscriptionsList.push(subscription11);
     this.subscriptionsList.push(subscription12);
     this.subscriptionsList.push(subscription13);
+    this.subscriptionsList.push(subscription14);
   }
 
   callHistoryApi(){
@@ -295,6 +302,72 @@ export class AssistComponent implements OnInit {
       welcomeMessageParams['language'] = this.connectionDetails?.interactiveLanguage; // Return the default value for null, undefined, or "''"
     }
     this.websocketService.emitEvents(EVENTS.welcome_message_request, welcomeMessageParams);
+
+
+    if(shouldProcessResponse && this.commonService.primaryChecklist.length > 0) {
+      this.sendChecklistEvent();
+      this.isGuidedChecklistApiSuccess = true;
+    }
+  }
+
+
+  guidedListAPICall(agentAssistUrl, botId, accessToken, accountId) {
+    let headersVal = {
+      'Authorization': 'bearer' + ' ' + accessToken,
+      "AccountId": accountId !== '' ? accountId : '',
+      'iid' : botId
+  }
+    $.ajax({
+      url: `${agentAssistUrl}/agentassist/api/v1/agentcoachingconfiguration/checklist/${botId}/activeChecklists`,
+      type: 'get',
+      headers: headersVal,
+      dataType: 'json',
+      success:  (data) => {
+        if(data.checklists.length > 0 ) {
+          this.commonService.primaryChecklist = data.checklists.filter(check => check.type === "primary");
+          this.commonService.dynamicChecklist = data.checklists.filter(check => check.type === "dynamic");
+          this.handleSubjectService.setChecklistData(data);
+        }
+        if(!this.isGuidedChecklistApiSuccess && this.commonService.primaryChecklist.length > 0) {
+          this.sendChecklistEvent();
+        }
+      },
+      error:  (err)=> {
+          console.error("Unable to fetch the details with the provided data", err);
+      }
+  });
+  }
+
+  sendChecklistEvent() {
+    // checklist_opened
+    let checklistArr = [];
+    this.handleSubjectService.userHistoryDataSubject$.subscribe((res : any) => {
+      console.log(res, "response inside checklist");
+      if(res && res.length > 0){
+        checklistArr = res;
+      }
+    });
+    let checklistParams: any = {
+      "payload": {
+          "event": "checklist_opened",
+          "conversationId": this.connectionDetails.conversationId,
+          "ccVersion": checklistArr[0]?.ccVersion,
+          "accountId": checklistArr[0]?.accountId,
+          "botId": this.connectionDetails.botId,
+          "agentInfo": {
+              "agentId": "", // mendatory field
+              //any other fields
+          },
+          "checklist": {
+            "_id": checklistArr[0]._id,
+              //any other fields
+          },
+          "timestamp": 0,
+          "context": {}
+      }
+  }
+  this.websocketService.emitEvents(EVENTS.checklist_opened, checklistParams);
+
   }
 
 
