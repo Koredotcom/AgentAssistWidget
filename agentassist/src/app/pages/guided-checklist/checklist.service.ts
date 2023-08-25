@@ -98,14 +98,26 @@ export class ChecklistService {
       "adherence": this.fb.group({})
     };
     if(step?.confirmButtons?.length){
-      obj['confirmButtons'] = this.fb.array([...step?.confirmButtons], [Validators.required])
+      obj['confirmButtons'] = this.fb.array([], [Validators.required]);
+      (step?.confirmButtons || [])
+      .forEach((item)=>{
+        obj['confirmButtons'].push(
+          this.fb.group(item)
+        );
+      });
     }
-    if(step.adherence?.type === 'utterance'){
+    if(step?.isAdherenceActive){
+      if(step.adherence?.type === 'utterance'){
+        obj['adherence'] = this.fb.group(
+          this.getUtteranceForm(step.adherence?.type, true)
+        );
+      }else if(step.adherence?.type === 'dialog'){
+        obj["adherence"]= this.fb.group(this.getDialogForm(step.adherence));
+      }
+    }else{
       obj['adherence'] = this.fb.group(
-        this.getUtteranceForm(step.adherence?.type, true)
-      )
-    }else if(step.adherence?.type === 'dialog'){
-      obj["adherence"]= this.fb.group(this.getDialogForm(step.adherence));
+        this.getUtteranceForm('', false)
+      );
     }
     return obj;
   }
@@ -134,6 +146,45 @@ export class ChecklistService {
       type: [obj ? obj.type : '', [Validators.required]],
       taskId: [obj ? obj.taskId :'', [Validators.required]],
       when: [obj ? obj.when :'', [Validators.required]],
+    }
+  }
+
+  getConfirmationBtns(){
+    return [
+      {          
+        title: ['Yes', [Validators.required]],
+        value: ['yun', [Validators.required]],
+        color: ['#16B364', [Validators.required]],
+        stepStatus: ['in_progress', [Validators.required]],
+      },{          
+        title: ['No', [Validators.required]],
+        value: ['no', [Validators.required]],
+        color: ['#F63D68', [Validators.required]],
+        stepStatus: ['in_progress', [Validators.required]],
+      }
+    ];
+  }
+
+  setConfirmationBtns(btn){
+      let obj = {          
+        title: [btn.title, [Validators.required]],
+        value: [btn.value, [Validators.required]],
+        color: [btn.color, [Validators.required]],
+        stepStatus: [btn.stepStatus, [Validators.required]],
+      };
+      if(btn?.dialogId){
+        obj['dialogId'] = ['', [Validators.required]]
+      };
+      return obj;
+  }
+
+  getRunBtn(){
+    return {          
+      title: ['Run', [Validators.required]],
+      value: ['run', [Validators.required]],
+      color: ['#16B364', [Validators.required]],
+      stepStatus: ['in_progress', [Validators.required]],
+      dialogId: ['', [Validators.required]],
     }
   }
 }

@@ -17,19 +17,19 @@
         />
       </div>
     </div>
-    <div class="middle-content" *ngIf="currentCheckList.tags?.length">
-      <div class="tags-info">
+    <div class="middle-content" >
+      <div class="tags-info" *ngIf="currentCheckList.tags?.length">
         <span class="tag-name">{{currentCheckList.tags[0].name}}</span>
         <div class="kr-sg-dropdowns" ngbDropdown container="body" *ngIf="currentCheckList.tags?.length > 1">
           <div class="dropdown dropdown-open">
             <button
               class="dropdown-toggle dropdown-input before-none"
-              ngbDropdownToggle>+({{currentCheckList.tags?.length - 1}}) More
+              ngbDropdownToggle>+{{currentCheckList.tags?.length - 1}} More
             </button>
             <ul
               class="dropdown-menu content-menu more-dropdown-tags"
               ngbDropdownMenu>
-              <ng-container *ngFor="let tag of currentCheckList.tags.slice(1, currentCheckList.tags.length-1)">
+              <ng-container *ngFor="let tag of currentCheckList.tags.slice(1, currentCheckList.tags.length)">
                 <li ngbDropdownItem class="p-0">
                   <span class="mx-w-100">{{tag.name}}</span>
                 </li>
@@ -115,29 +115,31 @@
                   </div>
                 </div>
               </div>
-              <ng-container *ngFor="let step of item.steps; let si = index">
-                <div
-                  class="added-check-item"
-                  (click)="openEditStep(item, step, i, si)"
-                >
-                  <div class="drag-item">
-                    <i class="icon-coaching--move1"></i>
-                  </div>
-                  <div class="content-info">
-                    <div class="title">{{ step.name }}</div>
-                    <div class="desc-text">{{ step.description }}</div>
-                    <div class="tags-info">
-                      <div class="tag_name" *ngIf="step?.isAdherenceActive">
-                        <i class="icon-coaching--adherence-set"></i>
-                        <span>{{step.adherence?.type | titlecase}}</span>
+              <!-- <div cdkDropList (cdkDropListDropped)="drop($event, i)"> -->
+                <ng-container *ngFor="let step of item.steps; let si = index">
+                  <div 
+                    class="added-check-item"
+                    (click)="openEditStep(item, step, i, si)"
+                  >
+                    <div class="drag-item">
+                      <i class="icon-coaching--move1"></i>
+                    </div>
+                    <div class="content-info">
+                      <div class="title">{{ step.name }}</div>
+                      <div class="desc-text">{{ step.description }}</div>
+                      <div class="tags-info">
+                        <div class="tag_name" *ngIf="step?.isAdherenceActive">
+                          <i class="icon-coaching--adherence-set"></i>
+                          <span>{{step.adherence?.type | titlecase}}</span>
+                        </div>
                       </div>
                     </div>
+                    <div class="delete-item" (click)="deleteStep(i, si, step, item);$event.stopPropagation()">
+                      <i class="icon-sa-welcome-delete"></i>
+                    </div>
                   </div>
-                  <div class="delete-item" (click)="deleteStep(i, si, step, item);$event.stopPropagation()">
-                    <i class="icon-sa-welcome-delete"></i>
-                  </div>
-                </div>
-              </ng-container>
+                </ng-container>
+              <!-- </div> -->
               <!-- </div> -->
               <ng-container *ngIf="item.newStep">
                 <div class="new-step-add">

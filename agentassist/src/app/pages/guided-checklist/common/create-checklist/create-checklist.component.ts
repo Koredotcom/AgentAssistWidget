@@ -98,13 +98,35 @@ export class StageCreateComponent implements OnInit, AfterViewInit {
   // }
 
   channelSelection(event, item){
-    let index = this.selectedchannelList.indexOf(item);
-    if(event.target.checked && index == -1){
-      this.selectedchannelList.push(item);
-    }else if(!event.target.checked && index >= 0){
-      this.selectedchannelList.splice(index, 1);
+    if(event.target.checked){
+      (this.checkListForm.controls['channels'] as FormArray)
+      .push(
+        new FormControl(item)
+        );
+      }else{
+      let addedCl = (this.checkListForm.controls['channels']).value;
+      let inx = (addedCl || []).indexOf(item);
+      if(inx >= 0){
+        (this.checkListForm.controls['channels'] as FormArray)
+        .removeAt(inx);
+      }
     }
-    this.checkListForm.setControl('channels', this.fb.array([...this.selectedchannelList]));   
+    // let index = this.selectedchannelList.indexOf(item);
+    // if(event.target.checked){
+    //   if(index == -1){
+    //     this.selectedchannelList.push(item);
+    //     (this.checkListForm.controls['channels'] as FormArray)?.push(item);
+    //   }else{
+    //     this.selectedchannelList.splice(index, 1);
+    //     (this.checkListForm.controls['channels'] as FormArray)?.removeAt(index);
+    //   }
+    // }else{
+    //   let index = this.selectedchannelList.indexOf(item);
+    //   this.selectedchannelList.splice(index, 1);
+    //   (this.checkListForm.controls['channels'] as FormArray)?.removeAt(index);
+    // }
+    // this.checkListForm.controls['channels'].patchValue([...this.selectedchannelList]);
+    // this.checkListForm.setControl('channels', this.fb.array([...this.selectedchannelList]));   
   }
 
   channelChat(checked) {

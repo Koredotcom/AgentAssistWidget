@@ -269,13 +269,13 @@ export class StagesListComponent implements OnInit {
     }
   }
 
-  drop(event: CdkDragDrop<string[]>) {
-    moveItemInArray(
-      this.stages[this.currDragStg].steps,
-      event.previousIndex,
-      event.currentIndex
-    );
-  }
+  // drop(event: CdkDragDrop<string[]>) {
+  //   moveItemInArray(
+  //     this.stages[this.currDragStg].steps,
+  //     event.previousIndex,
+  //     event.currentIndex
+  //   );
+  // }
 
   saveCheckList(event) {
     this.createOrUpdate = 'update';
@@ -370,5 +370,9 @@ export class StagesListComponent implements OnInit {
     .subscribe((data) => {
       (this.stages || []).splice(i, 1);
     });
+  }
+
+  drop(event: CdkDragDrop<string[]>, i) {
+    moveItemInArray(this.stages[i].steps, event.previousIndex, event.currentIndex);
   }
 }

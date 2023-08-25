@@ -65,10 +65,10 @@
                                             <div class="title-btn"></div>
                                         </div>
                                         <ng-container>
-                                            <div class="body-btn-table" *ngFor="let item of stepForm.controls['confirmButtons'].value">
+                                            <div class="body-btn-table" *ngFor="let item of stepForm.controls['confirmButtons']?.value; let inx = index">
                                                 <div class="btn-name" >
                                                     <div class="btn-tag">
-                                                        <span class="btn-name-text" [ngStyle]="{'background': item.bgcolor, 'color' : item.color}">{{item.title | titlecase}}</span>
+                                                        <span class="btn-name-text" [ngStyle]="{'background': checklistConst[item.color], 'color' : item.color}">{{item.title | titlecase}}</span>
                                                         <span class="bg-color"></span>
                                                     </div>
                                                 </div>
@@ -95,14 +95,14 @@
                                                                 <ng-container *ngFor="let color of checklistConst | keyvalue">
                                                                     <li ngbDropdownItem
                                                                         [ngClass]="{'selected-color': color.value === item.color}"
-                                                                        (click)="item.color = color.key; item.bgcolor = color.value; colorUpdate(item);">
+                                                                        (click)="item.color = color.key; colorUpdate(color, inx);">
                                                                         <span [ngStyle]="{'border': '1px solid '+ color.key}"></span>
                                                                     </li>
                                                                 </ng-container>
                                                             </div>
                                                         </ul>
                                                     </div>
-                                                    <button class="delete-btn">
+                                                    <button class="delete-btn" [disabled]="stepForm.value?.confirmButtons?.length === 1" (click)="deleteButtons(inx)">
                                                         <i class="icon-sa-welcome-delete"></i>
                                                     </button>
                                                 </div>

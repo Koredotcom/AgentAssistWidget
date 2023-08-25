@@ -6,6 +6,7 @@ import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { AuthService } from '@kore.services/auth.service';
 import { LocalStoreService } from '@kore.services/localstore.service';
 import { workflowService } from '@kore.services/workflow.service';
+import { ChecklistService } from '../../checklist.service';
 
 @Component({
   selector: 'app-step-create',
@@ -82,7 +83,8 @@ export class StepCreateComponent implements OnInit, OnChanges, AfterViewInit {
     private auth: AuthService,
     private local: LocalStoreService,
     private workflowService: workflowService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private clS: ChecklistService
   ) { }
 
   ngAfterViewInit(): void {
@@ -99,12 +101,15 @@ export class StepCreateComponent implements OnInit, OnChanges, AfterViewInit {
   ngOnInit(): void {
     this.getUseCases();
     let formVal = this.stepForm.value;
-
     if(formVal['confirmButtons']?.length){
       this.showButtons = true;
       if(formVal['confirmButtons']?.length === 1){
-        this.selectedStepButton = 'runDialog';
-        this.dialogId = formVal['confirmButtons'][0].dialogId;
+        if(formVal['confirmButtons'][0]?.dialogId){
+          this.selectedStepButton = 'runDialog';
+          this.dialogId = formVal['confirmButtons'][0].dialogId;
+        }else{
+          this.selectedStepButton = 'confirmation';
+        }
       }else if(formVal['confirmButtons']?.length === 2){
         this.selectedStepButton = 'confirmation';
       }
@@ -116,14 +121,12 @@ export class StepCreateComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   save(){
-    // this.triggerBy.upadateAllObjects();
     setTimeout(() => {
       this.saveStep.emit(true);
     },);
   }
 
   update(){
-    // this.triggerBy.upadateAllObjects();
     setTimeout(() => {
       this.updateStep.next(true);
     },);
@@ -134,19 +137,7 @@ export class StepCreateComponent implements OnInit, OnChanges, AfterViewInit {
     this.selectedStepButton = key;
     (this.stepForm.controls['confirmButtons'] as FormArray).clear();
     if(this.selectedStepButton === 'confirmation'){
-      let buttons = [
-        {          
-          title: ['Yes', [Validators.required]],
-          value: ['yun', [Validators.required]],
-          color: ['#16B364', [Validators.required]],
-          stepStatus: ['in_progress', [Validators.required]],
-        },{          
-          title: ['No', [Validators.required]],
-          value: ['no', [Validators.required]],
-          color: ['#F63D68', [Validators.required]],
-          stepStatus: ['in_progress', [Validators.required]],
-        }
-      ];
+      let buttons = this.clS.getConfirmationBtns();
       buttons.forEach((item)=>{
         (this.stepForm.controls['confirmButtons'] as FormArray)
         .push(this.fb.group(
@@ -154,24 +145,19 @@ export class StepCreateComponent implements OnInit, OnChanges, AfterViewInit {
         ))
       })
     }else{
-      let buttons = [{          
-        title: ['Run', [Validators.required]],
-        value: ['run', [Validators.required]],
-        color: ['#16B364', [Validators.required]],
-        stepStatus: ['in_progress', [Validators.required]],
-        dialogId: ['', [Validators.required]],
-      }];
+      let button = this.clS.getRunBtn();
       (this.stepForm.controls['confirmButtons'] as FormArray)
         .push(this.fb.group(
-          buttons[0],
+          button,
         ))
     }
     
   }
 
-  colorUpdate(confirmationNode, color) {
-  //  this.selectedConfirmationColorCode[confirmationNode.name] = color;
-  //  this.cdRef.detectChanges();
+  colorUpdate(color, index) {
+    ((this.stepForm.controls['confirmButtons'] as FormArray)
+    .at(index) as FormGroup)
+    .controls['color'].patchValue(color.key);
   }
 
   colorUpdateRun(color){    
@@ -204,20 +190,24 @@ export class StepCreateComponent implements OnInit, OnChanges, AfterViewInit {
 
   confirmButtons(event){
     this.showButtons = !this.showButtons;
+    this.dialogId = '';
+    this.selectedStepButton = '';
+    this.stepForm.removeControl('confirmButtons');
     if(event.target.checked){
-      this.stepForm.removeControl('confirmButtons');
       this.stepForm.addControl('confirmButtons', this.fb.array([], [Validators.required]));
       setTimeout(() => {
         this.stepForm.updateValueAndValidity();
       },);
-    }else{
-      this.stepForm.removeControl('confirmButtons');
-    }
+    };
   }
 
   selectedDiaog(item){
     this.selectedRunDialog = item.value;
     this.dialogId= item.key;
     ((this.stepForm.controls['confirmButtons'] as FormArray).at(0) as FormGroup).controls['dialogId'].patchValue(item.key);
+  }
+
+  deleteButtons(inx){
+    ((this.stepForm.controls['confirmButtons'] as FormArray).removeAt(inx));
   }
 }
