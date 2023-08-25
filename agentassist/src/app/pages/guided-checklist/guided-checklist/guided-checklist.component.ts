@@ -8,6 +8,9 @@ import { AuthService } from '@kore.services/auth.service';
 import { LocalStoreService } from '@kore.services/localstore.service';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { workflowService } from '@kore.services/workflow.service';
+import { NotificationService } from '@kore.services/notification.service';
+import { TranslateService } from '@ngx-translate/core';
+import { SubSink } from 'subsink';
 
 @Component({
   selector: 'app-guided-checklist',
@@ -22,6 +25,7 @@ export class GuidedChecklistComponent implements OnInit {
   isStageListOpen = false;
   @ViewChild('checkList1') checkList1: PrimaryChecklistComponent;
   @ViewChild('checkList2') checkList2: DynamicChecklistComponent;
+  subs = new SubSink();
   selAcc = this.local.getSelectedAccount();
   constructor(
     private modalService : NgbModal,
@@ -29,11 +33,23 @@ export class GuidedChecklistComponent implements OnInit {
     private local: LocalStoreService,
     private service: ServiceInvokerService,
     private workflowService: workflowService,
-    private clS: ChecklistService
+    private clS: ChecklistService,
+    private notificationService: NotificationService,
+    private translate: TranslateService
   ) { }
   @ViewChild('checklistCreation') checklistCreation: ElementRef;
   ngOnInit(): void {
     this.getConfigDetails();
+    this.subs.sink = this.workflowService.updateBotDetails$.subscribe((ele) => {
+      if (ele) {
+        this.getConfigDetails();
+        if(this.checkListType === 'primary'){
+          this.checkList1.getPrimaryList(true);
+        }else{
+          this.checkList2.getDynamicList(true);
+        }
+      }
+    });
   }
 
   getConfigDetails() {
@@ -81,7 +97,17 @@ export class GuidedChecklistComponent implements OnInit {
       this.createOrUpdate = 'update';
       this.modalFlowCreateRef = this.modalService.open(this.checklistCreation, { centered: true, keyboard: false, windowClass: 'flow-creation-full-modal', backdrop: 'static' });
       this.currentCheckList = {...data[0]};
-    })
+    });
+  }
+
+  publush(){
+    let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
+    this.service.invoke('publish.checklist', {}, {botId})
+    .subscribe((data)=>{
+      this.notificationService.notify(this.translate.instant('COACHING.PUBLISH_SUCCESS'), 'success');
+    },(err)=>{
+      this.notificationService.showError(err, this.translate.instant("COACHING.PUBLISH_FAILURE"));
+    });
   }
   
 }

@@ -7,6 +7,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { debounceTime, finalize, tap } from 'rxjs/operators';
 import { ChecklistService } from '../../checklist.service';
 import { AuthService } from '@kore.services/auth.service';
+import { LocalStoreService } from '@kore.services/localstore.service';
 
 @Component({
   selector: 'app-trigger-by',
@@ -29,6 +30,13 @@ export class TriggerByComponent implements OnInit, OnChanges {
   selectedUtterancesArray = [];
   deletedUIds:any = {};
   utterApiDone = false;
+  selAcc = this.local.getSelectedAccount();
+  currentBot:any = {};
+  executeState:any = {
+    'taskStart': 'Initiated',
+    'taskEnd': 'Completed'  
+  };
+  botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
   constructor(
     private workflowService: workflowService,
     public clS: ChecklistService,
@@ -37,7 +45,8 @@ export class TriggerByComponent implements OnInit, OnChanges {
     private translate: TranslateService,
     private cdRef: ChangeDetectorRef,
     private fb: FormBuilder,
-    private auth: AuthService
+    private auth: AuthService,
+    private local: LocalStoreService
   ) { }
 
 
@@ -75,7 +84,12 @@ export class TriggerByComponent implements OnInit, OnChanges {
         this.loaded = false;
         this.formatUtterArray(this.searchKey.value?.trim());
       });
-      console.log("🚀 ~ file: trigger-by.component.ts:77 ~ TriggerByComponent ~ ngOnInit ~ .:", this.auth.smartAssistBots)
+      this.currentBot = this.workflowService.getCurrentBt(true);
+      if(this.currentBot.type === 'universalbot'){
+        this.getLinkedBots();
+      }else{
+        this.selectBot(this.currentBot);
+      }
   }
 
   formatUtterArray(text) {
@@ -84,7 +98,7 @@ export class TriggerByComponent implements OnInit, OnChanges {
       return;
     }
     let params: any = {
-      streamId: this.workflowService.getCurrentBt(true)._id
+      streamId: this.botId
     };
     let body = {
       "intentName": text,
@@ -251,7 +265,12 @@ export class TriggerByComponent implements OnInit, OnChanges {
       this.patchCount();
       this.adherenceForm.updateValueAndValidity();
     }else if(event === 'dialog'){
-
+      (this.adherenceForm as FormGroup).removeControl('adherence');
+      (this.adherenceForm as FormGroup).addControl(
+        'adherence', this.fb.group(this.clS.getDialogForm()
+      ));
+      ((this.adherenceForm as FormGroup).controls['adherence'] as FormGroup)
+      .controls['type'].patchValue('dialog');
     }else if(event === 'varibale'){
     }
   }
@@ -270,5 +289,48 @@ export class TriggerByComponent implements OnInit, OnChanges {
   get onlyAdhreForm(): FormGroup{
     return this.adherenceForm?.controls['adherence'] as FormGroup;
   }
+  standardBots = [];
+  useCases = {};
+  getLinkedBots(){
+    const params = {
+      userId: this.auth.getUserId(),
+      streamId: this.botId
+    }
+    this.service.invoke('get.bt.stream', params).subscribe(res => {
+      this.standardBots = res.publishedBots;
+    });
+  }
+
+  selectBot(bot){
+    this.service.invoke('get.usecases', {
+      streamId: bot._id,
+      search: '',
+      filterby: '',
+      status: '',
+      usecaseType: 'dialog',
+      offset: 0,
+      limit: -1,
+
+    }).subscribe((data) => {
+      if (data) {
+        this.useCases = (data?.usecases || [])
+        .reduce((acc, item)=>{
+          acc[item._id] = item.usecaseName;
+          return acc;
+        }, {});
+      }
+    });
+  }
+
+  selectUc(uc){
+    ((this.adherenceForm as FormGroup).controls['adherence'] as FormGroup)
+    .controls['taskId'].patchValue(uc.key);
+  }
+
+  dialogExec(ec){
+    ((this.adherenceForm as FormGroup).controls['adherence'] as FormGroup)
+      .controls['when'].patchValue(ec.key);
+  }
+
 
 }

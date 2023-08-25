@@ -32,7 +32,7 @@ export class ChecklistService {
     }
     if(checkListType === CHECKLISTCNST.dynamic){
       obj["adherence"]= this.fb.group(
-        this.getUtteranceForm('', false)
+        this.getUtteranceForm('', true)
       )
     }
     return obj;
@@ -61,8 +61,13 @@ export class ChecklistService {
       'isActive': [obj.isActive, [Validators.required]],
     }
     if(obj.type === CHECKLISTCNST.dynamic){
-      setForm["adherence"]= this.fb.group(this.getUtteranceForm(obj.triggerBy.type, true))
+      if(obj.triggerBy?.type === 'utterance'){
+        setForm["adherence"]= this.fb.group(this.getUtteranceForm(obj.triggerBy.type, true))
+      }else if(obj.triggerBy?.type === 'dialog'){
+        setForm["adherence"]= this.fb.group(this.getDialogForm(obj.triggerBy))
+      }
     }
+    
     return setForm;
   }
 
@@ -99,11 +104,9 @@ export class ChecklistService {
       obj['adherence'] = this.fb.group(
         this.getUtteranceForm(step.adherence?.type, true)
       )
-    }else{
-      obj['adherence'] = this.fb.group(
-        this.getUtteranceForm('', false)
-      );
-    };
+    }else if(step.adherence?.type === 'dialog'){
+      obj["adherence"]= this.fb.group(this.getDialogForm(step.adherence));
+    }
     return obj;
   }
 
@@ -123,6 +126,14 @@ export class ChecklistService {
       addUtterances: this.fb.array([]),
       deleteUtterances: this.fb.array([]),
       uttCount: [0, req ? [Validators.required, Validators.min(1)] : []]
+    }
+  }
+
+  getDialogForm(obj=null){
+    return {
+      type: [obj ? obj.type : '', [Validators.required]],
+      taskId: [obj ? obj.taskId :'', [Validators.required]],
+      when: [obj ? obj.when :'', [Validators.required]],
     }
   }
 }

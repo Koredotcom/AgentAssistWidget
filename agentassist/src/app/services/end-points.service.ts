@@ -1739,5 +1739,9 @@ export class EndPointsService {
       method : 'delete'
     }
 
+    this.serviceList['publish.checklist'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/acchecklists/publishCoachingChecklists',
+      method : 'post'
+    }
   }
 }

@@ -38,7 +38,7 @@ export class StagesListComponent implements OnInit {
   stepForm: FormGroup;
   selAcc = this.local.getSelectedAccount();
   triggerBy: FormGroup;
-  name = new FormControl("");
+  // name = new FormControl("");
   stage = {
     name: "",
     runTimeName: "",
@@ -78,14 +78,14 @@ export class StagesListComponent implements OnInit {
       this.clS.getCheckListForm(this.botId, this.checkListType)
     );
     // this.triggerBy = this.fb.group(this.clS.getTriggerBy());
-    this.name.valueChanges.subscribe((val) => {
-      this.checkListForm.controls["name"].patchValue(val);
-    });
+    // this.name.valueChanges.subscribe((val) => {
+    //   this.checkListForm.controls["name"].patchValue(val);
+    // });
     if (this.createOrUpdate === "create") {
       this.openCheckList();
       this.stages.push(JSON.parse(JSON.stringify(this.stage)));
     } else {
-      this.name.patchValue(this.currentCheckList.name);
+      // this.name.patchValue(this.currentCheckList.name);
       this.stages = this.currentCheckList?.stages || [];
     }
   }
@@ -99,11 +99,24 @@ export class StagesListComponent implements OnInit {
   }
 
   openSettings() {
+    this.getCheckListById();
+  }
+
+  updateAndGetTags(){
     this.isCheckListCreateOrUpdate = "update";
     if (this.currentCheckList) {
       this.patchSettings(this.currentCheckList);
     }
     this.getRuleTags();
+  }
+
+  getCheckListById(){
+    let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
+    this.service.invoke('get.checklistbyid', {botId, clId: this.currentCheckList._id})
+    .subscribe((data)=>{
+      this.currentCheckList = {...data[0]};
+      this.updateAndGetTags();
+    })
   }
 
   patchSettings(obj) {
@@ -270,9 +283,10 @@ export class StagesListComponent implements OnInit {
       .invoke("get.checklistbyid", { botId: this.botId, clId: event._id })
       .subscribe((data) => {
         this.currentCheckList = { ...data[0] };
-        if (event.type === "primary") {
-          this.stages = data[0]?.stages;
-        }
+        // if (event.type === "primary") {
+        // }
+        this.stages = data[0]?.stages;
+        this.isCheckListOpen = false;
         this.checklistCreateSlider.closeSlider("#checklistCreate");
       });
   }
@@ -320,10 +334,10 @@ export class StagesListComponent implements OnInit {
     }
   }
 
-  dismisCheckList() {
-    // if (data) {
-    //   this.currentCheckList = data;
-    // }
+  dismisCheckList(data?) {
+    if (data) {
+      this.currentCheckList = data;
+    }
     this.isCheckListOpen = false;
     this.checklistCreateSlider.closeSlider("#checklistCreate");
   }

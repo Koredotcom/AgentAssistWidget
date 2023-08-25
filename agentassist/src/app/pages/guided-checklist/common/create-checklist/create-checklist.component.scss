@@ -76,6 +76,13 @@
             background: var(--gray-25, #FCFCFD);
             height: 100%;
             .inner-content-data{
+                ::ng-deep{
+                    app-trigger-by{
+                        .utt-radio-block{
+                            padding: unset
+                        }
+                    }
+                }
                 // padding: 22px;
                 .label-text {
                     color: var(--gray-700, #344054);

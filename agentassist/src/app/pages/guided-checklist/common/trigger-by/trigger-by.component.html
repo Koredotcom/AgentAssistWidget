@@ -15,8 +15,8 @@
                 <div [formGroup]="onlyAdhreForm" class="utt-radio-block" [ngClass]="{'disabled': !adherenceForm?.value?.isAdherenceActive && !isChecklist}">
                     <div class="radio-block-content" [ngClass]="{'active-check': onlyAdhreForm?.value?.type === 'utterance'}">
                         <div class="kr-sg-radiobutton">
-                            <input formControlName="type" [checked]="onlyAdhreForm?.value?.type === 'utterance'" value="utterance" id="radio-1" name="type" class="radio-custom" type="radio" (change)="changeRadio('utterance')">
-                            <label for="radio-1" class="radio-custom-label">
+                            <input formControlName="type" [checked]="onlyAdhreForm?.value?.type === 'utterance'" value="utterance" id="radio-1au" name="type" class="radio-custom" type="radio" (change)="changeRadio('utterance')">
+                            <label for="radio-1au" class="radio-custom-label">
                                 <div class="title">By Agent’s Utterance</div>
                                 <div class="desc-text">Listen for specific utterances by the agent to mark as completed</div>
                             </label>
@@ -175,49 +175,64 @@
                             </div>
                         </div>
                     </div>
-                    <div class="radio-block-content disabled" [ngClass]="{'active-check': onlyAdhreForm?.value?.type === 'dialog'}">
+                    <div class="radio-block-content" [ngClass]="{'active-check': onlyAdhreForm?.value?.type === 'dialog'}">
                         <div class="kr-sg-radiobutton">
-                            <input [checked]="onlyAdhreForm?.value?.type === 'dialog'" formControlName="type" value="dialog" id="radio-12" name="type" class="radio-custom" type="radio" (change)="changeRadio('utterance')">
-                            <label for="radio-12" class="radio-custom-label">
+                            <input [checked]="onlyAdhreForm?.value?.type === 'dialog'" formControlName="type" value="dialog" id="radio-1cd" name="type" class="radio-custom" type="radio" (change)="changeRadio('dialog')">
+                            <label for="radio-1cd" class="radio-custom-label">
                                 <div class="title">By Dialog Execution</div>
                                 <div class="desc-text">Watch for a dialog execution run by the agent</div>
                             </label>
                         </div>
-                        <div class="radio-checked-content">
+                        <div class="radio-checked-content" [ngClass]="{'disabled': onlyAdhreForm?.value?.type !== 'dialog'}">
                             <div class="label-text">Bot</div>
-                            <div class="kr-sg-dropdowns m-b-10" ngbDropdown placement="bottom">
-                                <div class="dropdown dropdown-open">
-                                    <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>Sales Bot</button>
-                                    <ul class="dropdown-menu content-menu" ngbDropdownMenu>
-                                        <perfect-scrollbar class="mx-h-200">
-                                            <li ngbDropdownItem class="p-0">
-                                                <a>Sequential</a>
-                                            </li>
-                                            <li ngbDropdownItem class="p-0">
-                                                <a>Random</a>
-                                            </li>
-                                        </perfect-scrollbar>
-                                    </ul>
+                            <ng-container *ngIf="currentBot.type === 'universalbot'; else Standarad">
+                                <div class="kr-sg-dropdowns m-b-10" ngbDropdown placement="bottom">
+                                    <div class="dropdown dropdown-open">
+                                        <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>Sales Bot</button>
+                                        <ul class="dropdown-menu content-menu" ngbDropdownMenu>
+                                            <perfect-scrollbar class="mx-h-200">
+                                                <li ngbDropdownItem class="p-0" *ngFor="let bot of standardBots" (click)="selectBot(bot)">
+                                                    <a>{{bot.botName}}</a>
+                                                </li>
+                                            </perfect-scrollbar>
+                                        </ul>
+                                    </div>
                                 </div>
-                            </div>
+                            </ng-container>
+                            <ng-template #Standarad>
+                                <div class="kr-sg-dropdowns m-b-10" placement="bottom">
+                                    <div class="dropdown dropdown-open">
+                                        <button disabled class="disabled dropdown-toggle dropdown-input">{{currentBot.name}}</button>
+                                    </div>
+                                </div>
+                            </ng-template>
                             <div class="label-text">Automation</div>
                             <div class="kr-sg-dropdowns m-b-30" ngbDropdown placement="bottom">
                                 <div class="dropdown dropdown-open">
-                                    <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>Features & Upsales</button>
+                                    <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{ useCases[onlyAdhreForm.value?.taskId] ? useCases[onlyAdhreForm.value?.taskId] : 'Select Option'}}</button>
                                     <ul class="dropdown-menu content-menu" ngbDropdownMenu>
                                         <perfect-scrollbar class="mx-h-200">
-                                            <li ngbDropdownItem class="p-0">
-                                                <a>Sequential</a>
-                                            </li>
-                                            <li ngbDropdownItem class="p-0">
-                                                <a>Random</a>
+                                            <li ngbDropdownItem class="p-0" *ngFor="let uc of useCases | keyvalue" (click)="selectUc(uc)">
+                                                <a>{{uc.value}}</a>
                                             </li>
                                         </perfect-scrollbar>
                                     </ul>
                                 </div>
                             </div>
                             <div class="label-text">Wait for Dialog Execution for...</div>
-                            <div class="two-column-layout m-b-10">
+                            <div class="kr-sg-dropdowns m-b-30" ngbDropdown placement="bottom">
+                                <div class="dropdown dropdown-open">
+                                    <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{executeState[onlyAdhreForm.value?.when] ? executeState[onlyAdhreForm.value?.when] : 'Select Option'}}</button>
+                                    <ul class="dropdown-menu content-menu" ngbDropdownMenu>
+                                        <perfect-scrollbar class="mx-h-200">
+                                            <li ngbDropdownItem class="p-0" *ngFor="let ec of executeState | keyvalue" (click)="dialogExec(ec)">
+                                                <a>{{ec.value}}</a>
+                                            </li>
+                                        </perfect-scrollbar>
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- <div class="two-column-layout m-b-10">
                                 <div class="kr-sg-dropdowns" ngbDropdown placement="bottom">
                                     <div class="dropdown dropdown-open">
                                         <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>Features & Upsales</button>
@@ -236,14 +251,14 @@
                                 <div class="kr-sg-input-text">
                                     <input type="text" placeholder="Placeholder text" class="input-text">
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="info-text-dilog">If adherence checker does not detect the selected automation being run by the agent in the next 3 minutes, this step will be marked incomplete.</div>
                         </div>
                     </div>
                     <div class="radio-block-content disabled" [ngClass]="{'active-check': onlyAdhreForm?.value?.type === 'variable'}">
                         <div class="kr-sg-radiobutton">
-                            <input [checked]="onlyAdhreForm?.value?.type === 'variable'" formControlName="type" value="variable" id="radio-112" name="type" class="radio-custom" type="radio" (change)="changeRadio('utterance')">
-                            <label for="radio-112" class="radio-custom-label">
+                            <input [checked]="onlyAdhreForm?.value?.type === 'variable'" formControlName="type" value="variable" id="radio-1cv" name="type" class="radio-custom" type="radio" (change)="changeRadio('utterance')">
+                            <label for="radio-1cv" class="radio-custom-label">
                                 <div class="title">By Variable Change</div>
                                 <div class="desc-text">Watch for a context variable change</div>
                             </label>

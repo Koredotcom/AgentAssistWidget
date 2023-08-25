@@ -6,33 +6,32 @@
       </div>
       <div class="border-divider"></div>
       <div class="kr-sg-input-text">
+        <!-- [formControl]="name" -->
         <input
           type="text"
           maxlength="100"
-          [formControl]="name"
           placeholder="new coaching rule"
           class="input-text"
+          [(ngModel)]="currentCheckList.name"
+          disabled
         />
       </div>
     </div>
-    <div class="middle-content">
+    <div class="middle-content" *ngIf="currentCheckList.tags?.length">
       <div class="tags-info">
-        <span class="tag-name">price</span>
-        <div class="kr-sg-dropdowns" ngbDropdown container="body">
+        <span class="tag-name">{{currentCheckList.tags[0].name}}</span>
+        <div class="kr-sg-dropdowns" ngbDropdown container="body" *ngIf="currentCheckList.tags?.length > 1">
           <div class="dropdown dropdown-open">
             <button
               class="dropdown-toggle dropdown-input before-none"
-              ngbDropdownToggle
-            >
-              +2 More
+              ngbDropdownToggle>+({{currentCheckList.tags?.length - 1}}) More
             </button>
             <ul
               class="dropdown-menu content-menu more-dropdown-tags"
-              ngbDropdownMenu
-            >
-              <ng-container>
+              ngbDropdownMenu>
+              <ng-container *ngFor="let tag of currentCheckList.tags.slice(1, currentCheckList.tags.length-1)">
                 <li ngbDropdownItem class="p-0">
-                  <span class="mx-w-100">Option</span>
+                  <span class="mx-w-100">{{tag.name}}</span>
                 </li>
               </ng-container>
             </ul>
@@ -41,11 +40,12 @@
       </div>
     </div>
     <div class="btn-actions">
-      <button class="settings-actions" (click)="openSettings()">
-        <i class="icon-sa-settings"></i>
+      <button class="settings-actions kr-sg-button-secondary" (click)="openSettings()">
+        <!-- <i class="icon-sa-settings"></i> -->
+        Settings
       </button>
-      <button class="kr-sg-button-secondary-two btn_lg">Publish</button>
-      <button class="kr-sg-button-primary btn_lg">Save</button>
+      <!-- <button class="kr-sg-button-secondary-two btn_lg">Publish</button> -->
+      <!-- <button class="kr-sg-button-primary btn_lg">Save</button> -->
     </div>
   </div>
   <div class="checklist-body-wrapper">
