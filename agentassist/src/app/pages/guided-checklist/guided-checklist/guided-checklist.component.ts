@@ -50,6 +50,18 @@ export class GuidedChecklistComponent implements OnInit {
         }
       }
     });
+    window.addEventListener("message", (event:any) => {
+      if(event.data.action === 'reloadChecklist') {
+        this.getConfigDetails();
+        if(this.checkListType === 'primary'){
+          this.checkList1.getPrimaryList(true);
+        }else{
+          this.checkList2.getDynamicList(true);
+        }
+      }
+      if(event.data.action === 'destroyedChecklist') {
+      }
+    })
   }
 
   getConfigDetails() {
@@ -109,5 +121,5 @@ export class GuidedChecklistComponent implements OnInit {
       this.notificationService.showError(err, this.translate.instant("COACHING.PUBLISH_FAILURE"));
     });
   }
-  
+
 }
