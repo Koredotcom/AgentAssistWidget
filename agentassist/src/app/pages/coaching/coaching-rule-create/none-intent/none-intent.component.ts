@@ -163,6 +163,7 @@ export class NoneIntentComponent implements OnInit {
       limit: -1,
       page: 1,
       sortBy: 'asc',
+      default: false,
     }
     this.service.invoke('get.allagentCoachingRule', params, body).pipe(finalize(() => {
     })).subscribe(data => {
