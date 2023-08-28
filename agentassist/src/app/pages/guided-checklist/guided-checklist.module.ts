@@ -11,6 +11,7 @@ import { StagesListComponent } from './common/stages-list/stages-list.component'
 import { StageCreateComponent } from './common/create-checklist/create-checklist.component';
 import { TriggerByComponent } from './common/trigger-by/trigger-by.component';
 import { DeleteComponent } from './common/delete/delete.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 const routes: Routes = [
   { path: '', component:  GuidedChecklistComponent}
@@ -30,7 +31,8 @@ const routes: Routes = [
   imports: [
     CommonModule,
     SharedModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    DragDropModule
   ],
   providers: [ChecklistService]
 })
