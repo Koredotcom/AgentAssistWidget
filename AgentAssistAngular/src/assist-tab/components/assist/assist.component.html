@@ -1,4 +1,4 @@
-<app-checklists></app-checklists>
+<app-checklists *ngIf="isChecklistOpened" [checklists]="checklists"></app-checklists>
 
 <div class="dynamic-block-content">
     <!-- <div class="sentiment-analysis">

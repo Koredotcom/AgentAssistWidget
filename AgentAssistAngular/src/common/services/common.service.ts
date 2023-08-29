@@ -20,6 +20,7 @@ export class CommonService {
   configObj;
   primaryChecklist: any = [];
   dynamicChecklist: any = [];
+  guidedChecklistObj: any;
   grantResponseObj;
   activeTab : string;
   userIntentInput: string;

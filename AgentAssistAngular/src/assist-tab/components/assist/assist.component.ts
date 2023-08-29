@@ -57,8 +57,8 @@ export class AssistComponent implements OnInit {
   userBotSessionDetails;
   interactiveLangaugeDetails = 'en';
   isGuidedChecklistApiSuccess = false;
-
-
+  isChecklistOpened = false;
+  checklists= [];
 
   constructor(private templateRenderClassService: TemplateRenderClassService,
     public handleSubjectService: HandleSubjectService,
@@ -236,7 +236,13 @@ export class AssistComponent implements OnInit {
 
     let subscription14 = this.websocketService.socketConnectFlag$.subscribe((response) => {
       if (response) {
-        this.guidedListAPICall(this.commonService.configObj.agentassisturl, this.commonService.configObj.botid, this.commonService.configObj.accessToken, this.commonService.configObj.accountId)
+        this.guidedListAPICall(
+          this.commonService.configObj.agentassisturl, 
+          this.commonService.configObj.instanceBotId ? 
+            this.commonService.configObj.instanceBotId : 
+            this.commonService.configObj.botid, 
+          this.commonService.configObj.accessToken, 
+          this.commonService.configObj.accountId)
       }
     });
 
@@ -309,7 +315,7 @@ export class AssistComponent implements OnInit {
     }
   }
 
-
+  checkListData:any = {}
   guidedListAPICall(agentAssistUrl, botId, accessToken, accountId) {
     let headersVal = {
       'Authorization': 'bearer' + ' ' + accessToken,
@@ -323,8 +329,10 @@ export class AssistComponent implements OnInit {
       dataType: 'json',
       success:  (data) => {
         if(data.checklists.length > 0 ) {
+          this.checkListData = data;
           this.commonService.primaryChecklist = data.checklists.filter(check => check.type === "primary");
           this.commonService.dynamicChecklist = data.checklists.filter(check => check.type === "dynamic");
+          // this.commonService.guidedChecklistObj = data;
         }
         if(!this.isGuidedChecklistApiSuccess && this.commonService.primaryChecklist.length > 0) {
           this.sendChecklistEvent();
@@ -338,37 +346,37 @@ export class AssistComponent implements OnInit {
 
   sendChecklistEvent() {
     // checklist_opened
-    let checklistArr = [];
+    // let checklistArr = [];
     this.handleSubjectService.userHistoryDataSubject$.subscribe((res : any) => {
       console.log(res, "response inside checklist");
-      if(res && res.length > 0){
-        checklistArr = res;
-      }
+      // if(res && res.length > 0){
+      //   checklistArr = res;
+      // }
     });
     let checklistParams: any = {
       "payload": {
           "event": "checklist_opened",
           "conversationId": this.connectionDetails.conversationId,
-          "ccVersion": checklistArr[0]?.ccVersion,
-          "accountId": checklistArr[0]?.accountId,
-          "botId": this.connectionDetails.botId,
+          "ccVersion": this.checkListData?.ccVersion,
+          "accountId": this.checkListData?.accountId,
+          "botId": this.commonService.configObj.instanceBotId,
           "agentInfo": {
               "agentId": "", // mendatory field
               //any other fields
           },
           "checklist": {
-            "_id": checklistArr[0]._id,
+            "_id": this.commonService.primaryChecklist[0]._id,
               //any other fields
           },
           "timestamp": 0,
           "context": {}
       }
+    }
+    this.isGuidedChecklistApiSuccess = true;
+    this.websocketService.emitEvents(EVENTS.checklist_opened, checklistParams);
+    this.isChecklistOpened = true;
+    this.checklists.push(this.commonService.primaryChecklist[0]);
   }
-  this.isGuidedChecklistApiSuccess = true;
-  this.websocketService.emitEvents(EVENTS.checklist_opened, checklistParams);
-
-  }
-
 
 
   //dialogue click and agent response handling code.
