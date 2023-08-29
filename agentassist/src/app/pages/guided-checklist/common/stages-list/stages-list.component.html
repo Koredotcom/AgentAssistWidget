@@ -107,7 +107,7 @@
                   <div class="delete-item" *ngIf="!item.isDefault" (click)="deleteStage(i);$event.stopPropagation()">
                     <i class="icon-sa-welcome-delete"></i>
                   </div>
-                  <div class="check-item" (click)="saveStage(item)">
+                  <div class="check-item" (click)="saveStage(item)" [ngClass]="{'disabled': !item.runTimeName}">
                     <i
                       class="icon-coaching--check"
                       

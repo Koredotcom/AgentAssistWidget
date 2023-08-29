@@ -1,12 +1,15 @@
 <div class="dynamic-checklist-data">
-    <ng-container *ngIf="true">
+    <ng-container >
         <div class="search-data-input">
             <div class="kr-sg-input-inline-search">
                 <input type="text" placeholder="Search" class="input-search" [formControl]="searchField">
                 <i class="icon-sa-conv-search search-icon"></i>
             </div>
         </div>
-        <div class="table-wrapper-checklist-scroll">
+        <div class='init-loading' *ngIf="loading">
+            <mat-spinner diameter="25" strokeWidth="3"></mat-spinner>
+        </div>
+        <div class="table-wrapper-checklist-scroll" *ngIf="dynamicList.length;else NoData">
             <perfect-scrollbar (psYReachEnd)="onReachEnd($event)">
                 <div class="inner-content-data">
                     <div class="content-scroll-data-checklist">
@@ -50,15 +53,28 @@
             </perfect-scrollbar>
         </div>
     </ng-container>   
-    <ng-container *ngIf="false">
-        <div class="empty-coaching-wrapper">
-            <div class="empty-content">
-                <div class="img-block">
-                    <img src="assets/images/coaching/empty-checklist.svg">
+    <ng-template #NoData>
+        <ng-container *ngIf="!searchField.value && !loading">
+            <div class="empty-coaching-wrapper">
+                <div class="empty-content">
+                    <div class="img-block">
+                        <img src="assets/images/coaching/empty-checklist.svg">
+                    </div>
+                    <div class="empty-title">Create your first guided checklist</div>
+                    <div class="desc-text">Checklists allow agents to follow a guided path to success. <br/>Get started by creating your <span>first checklist</span></div>
                 </div>
-                <div class="empty-title">Create your first guided checklist</div>
-                <div class="desc-text">Checklists allow agents to follow a guided path to success. <br/>Get started by creating your <span>first checklist</span></div>
             </div>
-        </div>
-    </ng-container>
+        </ng-container>
+        <ng-container *ngIf="searchField.value && !loading">
+            <div class="empty-coaching-wrapper">
+                <div class="empty-content">
+                    <div class="img-block">
+                        <img src="assets/images/coaching/empty-coaching.png">
+                    </div>
+                    <div class="empty-title">No Search Results found.</div>
+                   
+                </div>
+            </div>
+        </ng-container>
+    </ng-template>
 </div>

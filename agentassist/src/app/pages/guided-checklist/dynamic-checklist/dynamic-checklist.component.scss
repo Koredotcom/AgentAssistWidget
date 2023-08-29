@@ -182,3 +182,15 @@
         }
     }   
 }
+.init-loading{
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    width: 100%;
+    align-items: center;
+    z-index: 1;
+    height: calc(100vh - 190px);
+}
