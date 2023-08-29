@@ -19,6 +19,7 @@ import { EVENTS } from 'src/common/helper/events';
 import { LocalStorageService } from 'src/common/services/local-storage.service';
 import { ReplaceTextWithTagPipe } from 'src/common/pipes/replace-text-with-tag.pipe';
 import { RemoveTagFromStringPipe } from 'src/common/pipes/remove-tag-from-string.pipe';
+import { CoachingActionStoreService } from 'src/app/coaching-action-store.service';
 @Component({
   selector: 'app-assist',
   templateUrl: './assist.component.html',
@@ -70,7 +71,9 @@ export class AssistComponent implements OnInit {
     public designAlterService: DesignAlterService, public rawHtmlPipe: RawHtmlPipe,
     public koreGenerateuuidPipe: KoreGenerateuuidPipe, public assisttabService: AssistService,
     public htmlEntityPipe: HtmlEntityPipe, private localStorageService: LocalStorageService,
-    private removeTagFromString : RemoveTagFromStringPipe, private replaceTextwithTag : ReplaceTextWithTagPipe) {
+    private removeTagFromString : RemoveTagFromStringPipe, private replaceTextwithTag : ReplaceTextWithTagPipe,
+    // private coachingActionStore: CoachingActionStoreService
+    ) {
   }
 
   ngOnInit(): void {
@@ -238,7 +241,7 @@ export class AssistComponent implements OnInit {
       if (response) {
         this.guidedListAPICall(
           this.commonService.configObj.agentassisturl, 
-          this.commonService.configObj.instanceBotId ? 
+          this.commonService.configObj.fromSAT ? 
             this.commonService.configObj.instanceBotId : 
             this.commonService.configObj.botid, 
           this.commonService.configObj.accessToken, 
@@ -353,13 +356,15 @@ export class AssistComponent implements OnInit {
       //   checklistArr = res;
       // }
     });
+    console.log("🚀 ~ file: assist.component.ts:358 ~ AssistComponent ~ this.commonService.configObj ~ ;:", this.commonService.configObj);
+    
     let checklistParams: any = {
       "payload": {
           "event": "checklist_opened",
           "conversationId": this.connectionDetails.conversationId,
           "ccVersion": this.checkListData?.ccVersion,
           "accountId": this.checkListData?.accountId,
-          "botId": this.commonService.configObj.instanceBotId,
+          "botId": (this.commonService.configObj?.fromSAT) ?  this.commonService.configObj.instanceBotId : this.commonService.configObj.botid,
           "agentInfo": {
               "agentId": "", // mendatory field
               //any other fields
