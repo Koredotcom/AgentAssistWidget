@@ -115,13 +115,13 @@
                   </div>
                 </div>
               </div>
-              <!-- <div cdkDropList (cdkDropListDropped)="drop($event, i)"> -->
-                <ng-container *ngFor="let step of item.steps; let si = index">
+              <div class="example-list" cdkDropList (cdkDropListDropped)="drop($event, i)"> -->
+                <div class="example-box" *ngFor="let step of item.steps; let si = index" cdkDrag>
                   <div 
                     class="added-check-item"
                     (click)="openEditStep(item, step, i, si)"
                   >
-                    <div class="drag-item">
+                    <div class="drag-item" cdkDragHandle>
                       <i class="icon-coaching--move1"></i>
                     </div>
                     <div class="content-info">
@@ -138,8 +138,8 @@
                       <i class="icon-sa-welcome-delete"></i>
                     </div>
                   </div>
-                </ng-container>
-              <!-- </div> -->
+                </div>
+              </div>
               <!-- </div> -->
               <ng-container *ngIf="item.newStep">
                 <div class="new-step-add">
