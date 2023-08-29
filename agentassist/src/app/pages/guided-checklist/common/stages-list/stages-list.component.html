@@ -7,28 +7,19 @@
       <div class="border-divider"></div>
       <div class="kr-sg-input-text">
         <!-- [formControl]="name" -->
-        <input
-          type="text"
-          maxlength="100"
-          placeholder="new coaching rule"
-          class="input-text"
-          [(ngModel)]="currentCheckList.name"
-          disabled
-        />
+        <input type="text" maxlength="100" placeholder="new coaching rule" class="input-text"
+          [(ngModel)]="currentCheckList.name" disabled />
       </div>
     </div>
-    <div class="middle-content" >
+    <div class="middle-content">
       <div class="tags-info" *ngIf="currentCheckList.tags?.length">
         <span class="tag-name">{{currentCheckList.tags[0].name}}</span>
         <div class="kr-sg-dropdowns" ngbDropdown container="body" *ngIf="currentCheckList.tags?.length > 1">
           <div class="dropdown dropdown-open">
-            <button
-              class="dropdown-toggle dropdown-input before-none"
+            <button class="dropdown-toggle dropdown-input before-none"
               ngbDropdownToggle>+{{currentCheckList.tags?.length - 1}} More
             </button>
-            <ul
-              class="dropdown-menu content-menu more-dropdown-tags"
-              ngbDropdownMenu>
+            <ul class="dropdown-menu content-menu more-dropdown-tags" ngbDropdownMenu>
               <ng-container *ngFor="let tag of currentCheckList.tags.slice(1, currentCheckList.tags.length)">
                 <li ngbDropdownItem class="p-0">
                   <span class="mx-w-100">{{tag.name}}</span>
@@ -53,93 +44,64 @@
       <perfect-scrollbar>
         <div class="content-info-wrapper">
           <ng-container *ngFor="let item of stages; let i = index">
-            <div
-              class="list-datachecked"
-              [ngStyle]="{ background: item.color }"
-            >
-              <div
-                class="check-list-title-block"
-                [ngClass]="{ 'edit-mode-title': item.edit || item.isNew }"
-              >
+            <div class="list-datachecked" [ngStyle]="{ background: item.color }">
+              <div class="check-list-title-block" [ngClass]="{ 'edit-mode-title': item.edit || item.isNew }">
                 <div class="title">{{ item.name }}</div>
-                <input
-                  type="text"
-                  [(ngModel)]="item.runTimeName"
-                  class="add-title-input"
-                  placeholder="New group"
-                />
+                <input type="text" [(ngModel)]="item.runTimeName" class="add-title-input" placeholder="New group" />
                 <div class="hover-actions">
                   <div class="choose-bg-color-dropdown" ngbDropdown>
-                    <button
-                      class="dropdown-toggle dropdown-input"
-                      ngbDropdownToggle
-                    >
+                    <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>
                       <span></span>
                     </button>
                     <ul class="dropdown-menu" ngbDropdownMenu>
                       <div class="select-colors">
-                        <ng-container
-                          *ngFor="let color of checklistConst | keyvalue"
-                        >
-                          <li
-                            ngbDropdownItem
-                            [ngClass]="{
+                        <ng-container *ngFor="let color of checklistConst | keyvalue">
+                          <li ngbDropdownItem [ngClass]="{
                               'selected-color': color.value === item.color
-                            }"
-                            (click)="
+                            }" (click)="
                               item.color = color.value; colorUpdate(item)
-                            "
-                          >
-                            <span
-                              [ngStyle]="{ border: '1px solid ' + color.key }"
-                            ></span>
+                            ">
+                            <span [ngStyle]="{ border: '1px solid ' + color.key }"></span>
                           </li>
                         </ng-container>
                       </div>
                     </ul>
                   </div>
                   <div class="edit-title" *ngIf="!item.isDefault">
-                    <i
-                      class="icon-sa-welcome-edit"
-                      (click)="editStage(item)"
-                    ></i>
+                    <i class="icon-sa-welcome-edit" (click)="editStage(item)"></i>
                   </div>
                   <div class="delete-item" *ngIf="!item.isDefault" (click)="deleteStage(i);$event.stopPropagation()">
                     <i class="icon-sa-welcome-delete"></i>
                   </div>
                   <div class="check-item" (click)="saveStage(item)" [ngClass]="{'disabled': !item.runTimeName}">
-                    <i
-                      class="icon-coaching--check"
-                      
-                    ></i>
+                    <i class="icon-coaching--check"></i>
                   </div>
                 </div>
               </div>
-              <div class="example-list" cdkDropList (cdkDropListDropped)="drop($event, i)"> -->
-                <div class="example-box" *ngFor="let step of item.steps; let si = index" cdkDrag>
-                  <div 
-                    class="added-check-item"
-                    (click)="openEditStep(item, step, i, si)"
-                  >
-                    <div class="drag-item" cdkDragHandle>
-                      <i class="icon-coaching--move1"></i>
-                    </div>
-                    <div class="content-info">
-                      <div class="title">{{ step.name }}</div>
-                      <div class="desc-text">{{ step.description }}</div>
-                      <div class="tags-info">
-                        <div class="tag_name" *ngIf="step?.isAdherenceActive">
-                          <i class="icon-coaching--adherence-set"></i>
-                          <span>{{step.adherence?.type | titlecase}}</span>
-                        </div>
+              <!-- <div class="example-list" cdkDropList (cdkDropListDropped)="drop($event, i)"> -->
+              <!-- <div class="example-box"  cdkDrag> -->
+              <ng-container *ngFor="let step of item.steps; let si = index">
+                <div class="added-check-item" (click)="openEditStep(item, step, i, si)">
+                  <div class="drag-item" cdkDragHandle>
+                    <i class="icon-coaching--move1"></i>
+                  </div>
+                  <div class="content-info">
+                    <div class="title">{{ step.name }}</div>
+                    <div class="desc-text">{{ step.description }}</div>
+                    <div class="tags-info">
+                      <div class="tag_name" *ngIf="step?.isAdherenceActive">
+                        <i class="icon-coaching--adherence-set"></i>
+                        <span>{{step.adherence?.type | titlecase}}</span>
                       </div>
                     </div>
-                    <div class="delete-item" (click)="deleteStep(i, si, step, item);$event.stopPropagation()">
-                      <i class="icon-sa-welcome-delete"></i>
-                    </div>
+                  </div>
+                  <div class="delete-item" (click)="deleteStep(i, si, step, item);$event.stopPropagation()">
+                    <i class="icon-sa-welcome-delete"></i>
                   </div>
                 </div>
-              </div>
+              </ng-container>
+              <!-- </div> -->
+              <!-- </div> -->
               <!-- </div> -->
               <ng-container *ngIf="item.newStep">
                 <div class="new-step-add">
@@ -153,7 +115,8 @@
                 </div>
               </ng-container>
               <div class="add-step">
-                <button [disabled]="!item.name" [ngClass]="{'disabled': !item.name}" (click)="item.newStep = true; stepCreate(item, i)">
+                <button [disabled]="!item.name" [ngClass]="{'disabled': !item.name}"
+                  (click)="item.newStep = true; stepCreate(item, i)">
                   <i class="icon-coaching--plus"></i>
                   <span>Add Step</span>
                 </button>
@@ -185,27 +148,14 @@
   </div>
 </div>
 <app-slider-component id="checklistCreate" #checklistCreateSlider="app-slider">
-  <app-create-checklist
-    *ngIf="isCheckListOpen"
-    [createOrUpdate]="isCheckListCreateOrUpdate"
-    [checkListForm]="checkListForm"
-    [checkListType]="checkListType"
-    (closeE)="close()"
-    (saveEvent)="saveCheckList($event)"
-    (closeChecklist)="dismisCheckList($event)"
-    [currentCheckList]="currentCheckList"
-    [allTagList]="allTagList"
-  >
+  <app-create-checklist *ngIf="isCheckListOpen" [createOrUpdate]="isCheckListCreateOrUpdate"
+    [checkListForm]="checkListForm" [checkListType]="checkListType" (closeE)="close()"
+    (saveEvent)="saveCheckList($event)" (closeChecklist)="dismisCheckList($event)" [currentCheckList]="currentCheckList"
+    [allTagList]="allTagList">
   </app-create-checklist>
 </app-slider-component>
 <app-slider-component id="stepCreate" #stepCreateSlider="app-slider">
-  <app-step-create
-    *ngIf="isStepOpen"
-    [stepForm]="stepForm"
-    (closeE)="closeStep($event)"
-    (saveStep)="saveStep($event)"
-    [createOrUpdateStep]="createOrUpdateStep"
-    (updateStep)="updateStep($event)"
-  >
+  <app-step-create *ngIf="isStepOpen" [stepForm]="stepForm" (closeE)="closeStep($event)" (saveStep)="saveStep($event)"
+    [createOrUpdateStep]="createOrUpdateStep" (updateStep)="updateStep($event)">
   </app-step-create>
 </app-slider-component>
