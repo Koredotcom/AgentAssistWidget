@@ -185,27 +185,25 @@
                         </div>
                         <div class="radio-checked-content" [ngClass]="{'disabled': onlyAdhreForm?.value?.type !== 'dialog'}">
                             <div class="label-text">Bot</div>
-                            <ng-container *ngIf="currentBot.type === 'universalbot'; else Standarad">
-                                <div class="kr-sg-dropdowns m-b-10" ngbDropdown placement="bottom">
-                                    <div class="dropdown dropdown-open">
-                                        <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>Sales Bot</button>
-                                        <ul class="dropdown-menu content-menu" ngbDropdownMenu>
-                                            <perfect-scrollbar class="mx-h-200">
-                                                <li ngbDropdownItem class="p-0" *ngFor="let bot of standardBots" (click)="selectBot(bot)">
-                                                    <a>{{bot.botName}}</a>
-                                                </li>
-                                            </perfect-scrollbar>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </ng-container>
-                            <ng-template #Standarad>
                                 <div class="kr-sg-dropdowns m-b-10" placement="bottom">
                                     <div class="dropdown dropdown-open">
                                         <button disabled class="disabled dropdown-toggle dropdown-input">{{currentBot.name}}</button>
                                     </div>
                                 </div>
-                            </ng-template>
+                                <ng-container *ngIf="currentBot.type === 'universalbot';">
+                                    <div class="kr-sg-dropdowns m-b-10" ngbDropdown placement="bottom">
+                                        <div class="dropdown dropdown-open">
+                                            <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{ standardBotsOj[onlyAdhreForm.value?.lBId] ? standardBotsOj[onlyAdhreForm.value?.lBId] : 'Select Option'}}</button>
+                                            <ul class="dropdown-menu content-menu" ngbDropdownMenu>
+                                                <perfect-scrollbar class="mx-h-200">
+                                                    <li ngbDropdownItem class="p-0" *ngFor="let bot of standardBots" (click)="selectBot(bot, true)">
+                                                        <a>{{bot.botName}}</a>
+                                                    </li>
+                                                </perfect-scrollbar>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </ng-container>
                             <div class="label-text">Automation</div>
                             <div class="kr-sg-dropdowns m-b-30" ngbDropdown placement="bottom">
                                 <div class="dropdown dropdown-open">

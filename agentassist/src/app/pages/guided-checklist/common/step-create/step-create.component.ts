@@ -99,6 +99,9 @@ export class StepCreateComponent implements OnInit, OnChanges, AfterViewInit {
   }
   dialogId= ''
   ngOnInit(): void {
+    if(this.auth.isLoadingOnSm){
+      delete this.stepButtons['runDialog']
+    }
     this.getUseCases();
     let formVal = this.stepForm.value;
     if(formVal['confirmButtons']?.length){

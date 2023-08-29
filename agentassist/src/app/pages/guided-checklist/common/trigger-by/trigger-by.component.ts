@@ -36,6 +36,8 @@ export class TriggerByComponent implements OnInit, OnChanges {
     'taskStart': 'Initiated',
     'taskEnd': 'Completed'  
   };
+  standardBotsOj:any = {};
+  childBotId = '';
   botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
   constructor(
     private workflowService: workflowService,
@@ -87,6 +89,9 @@ export class TriggerByComponent implements OnInit, OnChanges {
       this.currentBot = this.workflowService.getCurrentBt(true);
       if(this.currentBot.type === 'universalbot'){
         this.getLinkedBots();
+        if(this.onlyAdhreForm.value.lBId){
+          this.selectBot({_id : this.onlyAdhreForm.value.lBId});
+        }
       }else{
         this.selectBot(this.currentBot);
       }
@@ -267,10 +272,14 @@ export class TriggerByComponent implements OnInit, OnChanges {
     }else if(event === 'dialog'){
       (this.adherenceForm as FormGroup).removeControl('adherence');
       (this.adherenceForm as FormGroup).addControl(
-        'adherence', this.fb.group(this.clS.getDialogForm()
+        'adherence', this.fb.group(this.clS.getDialogForm(this.botId)
       ));
       ((this.adherenceForm as FormGroup).controls['adherence'] as FormGroup)
       .controls['type'].patchValue('dialog');
+      if(this.currentBot.type === 'universalbot'){
+        (this.adherenceForm.controls['adherence'] as FormGroup)
+        .addControl('lBId', new FormControl('', [Validators.required]));
+      }
     }else if(event === 'varibale'){
     }
   }
@@ -298,10 +307,24 @@ export class TriggerByComponent implements OnInit, OnChanges {
     }
     this.service.invoke('get.bt.stream', params).subscribe(res => {
       this.standardBots = res.publishedBots;
+      this.standardBotsOj = (res.publishedBots || [])
+      .reduce((acc, item)=>{
+        acc[item._id] = item.botName;
+        return acc;
+      }, {})
     });
   }
 
-  selectBot(bot){
+  selectBot(bot, click=false){
+    // this.childBotId = bot._id;
+    if(click && (bot._id === this.onlyAdhreForm.value?.lBId)){
+      return;
+    }else if(click){
+        this.useCases = {};
+        this.onlyAdhreForm.controls['lBId'].patchValue('');
+        this.onlyAdhreForm.controls['taskId'].patchValue('');
+    }
+    this.onlyAdhreForm.controls['lBId'].patchValue(bot._id);
     this.service.invoke('get.usecases', {
       streamId: bot._id,
       search: '',
@@ -332,5 +355,8 @@ export class TriggerByComponent implements OnInit, OnChanges {
       .controls['when'].patchValue(ec.key);
   }
 
+  // selectBot(bot){
+    
+  // }
 
 }

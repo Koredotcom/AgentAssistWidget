@@ -64,7 +64,7 @@ export class ChecklistService {
       if(obj.triggerBy?.type === 'utterance'){
         setForm["adherence"]= this.fb.group(this.getUtteranceForm(obj.triggerBy.type, true))
       }else if(obj.triggerBy?.type === 'dialog'){
-        setForm["adherence"]= this.fb.group(this.getDialogForm(obj.triggerBy))
+        setForm["adherence"]= this.fb.group(this.getDialogForm('', obj.triggerBy))
       }
     }
     
@@ -112,7 +112,7 @@ export class ChecklistService {
           this.getUtteranceForm(step.adherence?.type, true)
         );
       }else if(step.adherence?.type === 'dialog'){
-        obj["adherence"]= this.fb.group(this.getDialogForm(step.adherence));
+        obj["adherence"]= this.fb.group(this.getDialogForm('', step.adherence));
       }
     }else{
       obj['adherence'] = this.fb.group(
@@ -141,12 +141,17 @@ export class ChecklistService {
     }
   }
 
-  getDialogForm(obj=null){
-    return {
+  getDialogForm(botId='',obj=null){
+    let dialog = {
       type: [obj ? obj.type : '', [Validators.required]],
       taskId: [obj ? obj.taskId :'', [Validators.required]],
       when: [obj ? obj.when :'', [Validators.required]],
+      botId: [botId ? botId : obj.botId, [Validators.required]],
+    };
+    if(obj?.lBId){
+      dialog['lBId'] = [obj.lBId, [Validators.required]]
     }
+    return dialog;
   }
 
   getConfirmationBtns(){
