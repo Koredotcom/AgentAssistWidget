@@ -30,13 +30,13 @@ export const COMPONENTVSSUBTITLE = {
 }
 
 export const actualvsDisplayTitle = {
-    CUSTOMER_ASPECT_DROPDOWN_LIST : ['All','Agent_Initiated', 'Agent_Suggested'],
-    CUSTOMER_ASPECT_TABS_LIST : ['All', 'Articles', 'Faqs', 'Automations'],
+    CUSTOMER_ASPECT_DROPDOWN_LIST : ['all','agent', 'customer'],
+    CUSTOMER_ASPECT_TABS_LIST : ['all', 'article', 'faq', 'dialog'],
     CUSTOMER_ASPECT_TYPE_VS_IMAGE : {
-        'Articles' : 'assets/icons/dashboard/articles.svg',
-        'Faqs' : 'assets/icons/dashboard/faqs.svg',
-        'Automations' : 'assets/icons/dashboard/automation.svg' 
+        'article' : 'assets/icons/dashboard/articles.svg',
+        'faq' : 'assets/icons/dashboard/faqs.svg',
+        'dialog' : 'assets/icons/dashboard/automation.svg' 
     }
 }
 
-export const CHANNELS = ['ALL','WHATSAPP','SLACK', 'MIS_TEAMS', 'TWILIO']
+export const CHANNELS = ['all', 'chat', 'voice']

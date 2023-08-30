@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { SubSink } from 'subsink';
+import { IDashboardFilter } from '../dashboard-filters/dateFilter.model';
 import { DASHBORADCOMPONENTTYPE, VIEWTYPE } from '../dashboard.cnst';
 import { DashboardService } from '../dashboard.service';
 
@@ -11,6 +12,8 @@ import { DashboardService } from '../dashboard.service';
 export class AutomationOverrideReportComponent implements OnInit {
 
   @Input() viewType : string;
+  @Input() filters : IDashboardFilter;
+  @Input() widgetData : any;
   @Output() openSliderChild = new EventEmitter();
 
 
@@ -53,7 +56,7 @@ export class AutomationOverrideReportComponent implements OnInit {
   }
 
   openSlider(componentName){
-    this.openSliderChild.emit(componentName);
+    this.openSliderChild.emit({componentName : componentName, data : {}});
   }
 
 }

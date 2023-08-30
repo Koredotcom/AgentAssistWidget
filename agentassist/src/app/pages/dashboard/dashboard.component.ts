@@ -21,7 +21,8 @@ export class DashboardComponent implements OnInit {
   openComponentId : string;
   kpiData : any = {};
   customerAspectDropdownList : any = actualvsDisplayTitle.CUSTOMER_ASPECT_DROPDOWN_LIST;
-  customerAspectDropdownSelection : string = "Agent_Initiated";
+  customerAspectDropdownSelection : string = "agent";
+  filterData : any = {};
 
   subs = new SubSink();
 
@@ -32,22 +33,25 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.subscribeEvents();
-   this.updateKPIData();
+    // this.updateKPIData();
   }
 
   updateKPIData(){
     this.dashboardService.getKPIData().subscribe(data => {
       this.kpiData = {};
-      if(data && data.dashboardkpi){
-        this.kpiData = data.dashboardkpi;
+      if(data && Object.keys(data).length > 0){
+        this.kpiData = data;
       }
     });
   }
 
   subscribeEvents(){
     this.subs.sink = this.dashboardService.getDashboardFilterUpdated().subscribe((filters : any) => {
-      console.log(filters, "filters");
-      
+      // console.log(filters, "filters");
+      if(filters && Object.keys(filters).length > 0){
+        this.filterData = Object.assign({}, filters);
+        this.updateKPIData();
+      }
     });
   }
 
@@ -56,10 +60,12 @@ export class DashboardComponent implements OnInit {
   }
 
 
-  openSlider(id) {
+  openSlider(event) {
+    console.log(event, "event");
+    
     this.sliderStatus = true;
-    this.openComponentId = id;
-    this.dashboardService.setExhaustiveRep(true, this.openComponentId);
+    this.openComponentId = event.componentName;
+    this.dashboardService.setExhaustiveRep(true, this.openComponentId, event.data);
     this.newConvSlider.openSlider("#" + this.sliderId, "width940");
   }
 

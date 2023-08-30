@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { SubSink } from 'subsink';
+import { IDashboardFilter } from '../dashboard-filters/dateFilter.model';
 import { COMPONENTVSSUBTITLE, COMPONENTVSTITLE, DASHBORADCOMPONENTTYPE, VIEWTYPE } from '../dashboard.cnst';
 import { DashboardService } from '../dashboard.service';
 
@@ -15,6 +16,7 @@ export class ExhaustiveRepresentationComponent implements OnInit {
   @Output() onClose = new EventEmitter();
   @Input() componentType: string = '';
   @Input() customerDropdownSelection : string;
+  @Input() filters : IDashboardFilter;
 
   public DASHBORADCOMPONENTTYPE = DASHBORADCOMPONENTTYPE;
   public VIEWTYPE = VIEWTYPE;
@@ -23,6 +25,7 @@ export class ExhaustiveRepresentationComponent implements OnInit {
   sliderStatus: boolean;
   componentTitle : string;
   componentSubTitle : string;
+  compData : any;
 
   constructor(public dashboardService: DashboardService) { }
 
@@ -33,6 +36,7 @@ export class ExhaustiveRepresentationComponent implements OnInit {
         this.componentType = response.type;
         this.componentTitle = COMPONENTVSTITLE[response.type];
         this.componentSubTitle = COMPONENTVSSUBTITLE[response.type];
+        this.compData = response.data;
       }
     })
   }

@@ -1,5 +1,5 @@
 <app-slider-component [id]="sliderId" #newConvSlider='app-slider'>
-    <app-exhaustive-representation (onClose)="closeSlider($event)" [componentType]="sliderId" [customerDropdownSelection]="customerAspectDropdownSelection" *ngIf="sliderStatus">
+    <app-exhaustive-representation [filters]="filterData" (onClose)="closeSlider($event)" [componentType]="sliderId" [customerDropdownSelection]="customerAspectDropdownSelection" *ngIf="sliderStatus">
 
     </app-exhaustive-representation>
 </app-slider-component>
@@ -43,7 +43,7 @@
                         <div class="count-heading" [ngClass]="{'empty-count': !kpiData?.avgSuggestions?.count}">{{kpiData?.avgSuggestions?.count}}</div>
                     </div>
                 </div>
-                <div class="card-sec">
+                <!-- <div class="card-sec">
                     <div class="inner-data-sec">
                         <div class="title-text-info">
                             <span class="heading-text">{{"DASHBOARD.ACCUARY" | translate}}</span>
@@ -54,7 +54,7 @@
                         </div>
                         <div class="count-heading" [ngClass]="{'empty-count': !kpiData?.accuracy?.count}">{{kpiData?.accuracy?.count}}%</div>
                     </div>
-                </div>
+                </div> -->
             </div>
             <div class="charts-data-containers row">
                 <div class="chart-box-info col-6">
@@ -80,7 +80,7 @@
                             <div class="tag-title">{{"DASHBOARD.CUSTOMER_ASPECT_SUBTITLE" | translate}}</div>
                         </div>
                         <div class="main-heading-title">{{"DASHBOARD.CUSTOMER_ASPECT_TITLE" | translate}}<i class="icon-sa-help" ngbTooltip='{{"DASHBOARD.CUSTOMER_ASPECT_TOOLTIP" | translate}}' placement="bottom-left" tooltipClass="tooltip_dashboard"></i></div>
-                        <app-customer-aspect [viewType]="VIEWTYPE.PARTIAL_VIEW" [customerDropdownSelection]="customerAspectDropdownSelection" (openSliderChild)="openSlider($event)"></app-customer-aspect>
+                        <app-customer-aspect [widgetData]="null" [viewType]="VIEWTYPE.PARTIAL_VIEW" [filters]="filterData" [customerDropdownSelection]="customerAspectDropdownSelection" (openSliderChild)="openSlider($event)"></app-customer-aspect>
                     </div>
                 </div>
                 <div class="chart-box-info col-6">
@@ -97,7 +97,7 @@
                             <div class="tag-title">{{"DASHBOARD.AGENT_ASPECT_SUBTITLE" | translate}}</div>
                         </div>
                         <div class="main-heading-title">{{"DASHBOARD.AGENT_ASPECT_TITLE" | translate}}<i class="icon-sa-help" ngbTooltip='{{"DASHBOARD.AGENT_ASPECT_TOOLTIP" | translate}}' placement="bottom-left" tooltipClass="tooltip_dashboard"></i></div>
-                        <app-agent-aspect [viewType]="VIEWTYPE.PARTIAL_VIEW" (openSliderChild)="openSlider($event)"></app-agent-aspect>
+                        <app-agent-aspect [widgetData]="null" [viewType]="VIEWTYPE.PARTIAL_VIEW"  [filters]="filterData" (openSliderChild)="openSlider($event)"></app-agent-aspect>
                     </div>
                 </div>
                 <div class="chart-box-info col-6">
@@ -115,16 +115,16 @@
                             <div class="tag-title">{{"DASHBOARD.AGENT_FEEDBACK_SUBTITLE" | translate}}</div>
                         </div>
                         <div class="main-heading-title">{{"DASHBOARD.AGENT_FEEDBACK_TITLE" | translate}}<i class="icon-sa-help" ngbTooltip='{{"DASHBOARD.AGENT_FEEDBACK_TOOLTIP" | translate}}' placement="bottom-left" tooltipClass="tooltip_dashboard"></i></div>
-                        <app-agent-feedback [viewType]="VIEWTYPE.PARTIAL_VIEW"  (openSliderChild)="openSlider($event)"></app-agent-feedback>
+                        <app-agent-feedback [widgetData]="null" [viewType]="VIEWTYPE.PARTIAL_VIEW"  [filters]="filterData" (openSliderChild)="openSlider($event)"></app-agent-feedback>
                     </div>
                 </div>
-                <div class="chart-box-info col-6" id="lastele">
+                <div class="chart-box-info col-6 d-none" id="lastele">
                     <div class="chart-inner-data">
                         <div class="heading-data-wrapper">
                             <div class="tag-title">{{"DASHBOARD.AUTOMATION_OVERRIDE_SUBTITLE" | translate}}</div>
                         </div>
                         <div class="main-heading-title">{{"DASHBOARD.AUTOMATION_OVERRIDE_TITLE" | translate}}<i class="icon-sa-help" ngbTooltip='{{"DASHBOARD.AUTOMATION_OVERRIDE_TOOLTIP" | translate}}' placement="bottom-left" tooltipClass="tooltip_dashboard"></i></div>
-                        <app-automation-override-report [viewType]="VIEWTYPE.PARTIAL_VIEW" (openSliderChild)="openSlider($event)"></app-automation-override-report>
+                        <app-automation-override-report [widgetData]="null" [viewType]="VIEWTYPE.PARTIAL_VIEW"  [filters]="filterData" (openSliderChild)="openSlider($event)"></app-automation-override-report>
                     </div>
                 </div>
             </div>

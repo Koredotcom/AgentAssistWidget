@@ -42,13 +42,13 @@
                     <div class="col-5 like-dislike">
                         <div class="like-count">
                             <i class="icon-ast_thumbsup"></i>
-                            <span class="count">{{obj.like.count | number: '1.0-0'}}</span>
-                            <span class="percentage">({{obj.like.percent | number: '1.0-0'}}%)</span>
+                            <span class="count">{{obj.liked | number: '1.0-0'}}</span>
+                            <span class="percentage">({{obj.likedPercent | number: '1.0-0'}}%)</span>
                         </div>
                         <div class="like-count">
                             <i class="icon-sat_thumsdown"></i>
-                            <span class="count">{{obj.dislike.count | number: '1.0-0'}}</span>
-                            <span class="percentage">({{obj.dislike.percent | number: '1.0-0'}}%)</span>
+                            <span class="count">{{obj.disliked | number: '1.0-0'}}</span>
+                            <span class="percentage">({{obj.dislikedPercent | number: '1.0-0'}}%)</span>
                         </div>
                     </div>
                 </div>
@@ -116,8 +116,8 @@
                 <ng-container>
                     <div class="table-body-feedback row" *ngFor="let obj of agentFeedbackTableData">
                         <div class="col-4 title">{{obj.intentName}}</div>
-                        <div class="col-4 title">{{obj.like.percent | number: '1.0-0'}}%</div>
-                        <div class="col-4 title text-right">{{obj.dislike.percent | number: '1.0-0'}}%</div>
+                        <div class="col-4 title">{{obj.likedPercent | number: '1.0-0'}}%</div>
+                        <div class="col-4 title text-right">{{obj.dislikedPercent | number: '1.0-0'}}%</div>
                     </div>
                    
                     

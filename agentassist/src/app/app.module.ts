@@ -104,7 +104,7 @@ import { CustomerAspectComponent } from './pages/dashboard/customer-aspect/custo
 import { ExhaustiveRepresentationComponent } from './pages/dashboard/exhaustive-representation/exhaustive-representation.component';
 import { DashboardFiltersComponent } from './pages/dashboard/dashboard-filters/dashboard-filters.component';
 import { DashboardKpiComponent } from './pages/dashboard/dashboard-kpi/dashboard-kpi.component';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SearchAssistComponent } from './pages/search-assist/search-assist.component';
 import { SaDeleteConfirmComponent } from './helpers/components/sa-delete-confirm/sa-delete-confirm.component';
@@ -237,7 +237,7 @@ import { AccWarningDialogComponent } from './helpers/components/acc-warning-dial
       useClass: RefreshTokenInterceptor,
       multi: true,
     },
-    AuthGuard, AppDataResolver, AccountsDataService, SideBarService, CanDeactivateGuard, channelsConfigService
+    AuthGuard, AppDataResolver, AccountsDataService, SideBarService, CanDeactivateGuard, channelsConfigService,DecimalPipe
   ],
   exports: [NgbdDatepickerRange],
   bootstrap: [AppComponent]

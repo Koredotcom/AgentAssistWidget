@@ -4,7 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Moment } from 'moment';
 import * as moment from 'moment';
 import { DaterangepickerDirective } from 'ngx-daterangepicker-material';
-import { IAnalyticsFilters } from './dateFilter.model';
+import { IDashboardFilter } from './dateFilter.model';
 import { Subject } from 'rxjs';
 import { DashboardService } from '../dashboard.service';
 import { CHANNELS } from '../dashboard.cnst';
@@ -18,7 +18,7 @@ export class DashboardFiltersComponent implements OnInit {
 
   @Output() exportPdf = new EventEmitter();
 
-  private filters: IAnalyticsFilters;
+  private filters: IDashboardFilter;
 
   //Calender
   selected: { startDate: Moment, endDate: Moment };
@@ -32,7 +32,7 @@ export class DashboardFiltersComponent implements OnInit {
     ;
   calendarLocale: any;
   channelList : any = CHANNELS;
-  selectedChannel : string = 'ALL';
+  selectedChannel : string = 'all';
 
 
   @ViewChild(DaterangepickerDirective) pickerDirective: DaterangepickerDirective;
@@ -50,7 +50,7 @@ export class DashboardFiltersComponent implements OnInit {
     }
 
     this.selected = { startDate: moment().subtract(6, 'days').startOf('day'), endDate: moment() }
-    this.filters = { startDate: this.selected.startDate.toISOString(), endDate: this.selected.endDate.toISOString() }
+    this.filters = { startDate: this.selected.startDate.toISOString(), endDate: this.selected.endDate.toISOString(), experience : this.selectedChannel }
     this.updateFilters(this.filters);
   }
 
@@ -68,12 +68,12 @@ export class DashboardFiltersComponent implements OnInit {
 
   }
 
-  updateFilters(filters: IAnalyticsFilters) {
+  updateFilters(filters: IDashboardFilter) {
     this.filters = filters;
     this.dashboardService.setDashboardFilterUpdated(this.filters);
   }
 
-  getFilters(): IAnalyticsFilters {
+  getFilters(): IDashboardFilter {
     return this.filters;
   }
 
@@ -82,6 +82,7 @@ export class DashboardFiltersComponent implements OnInit {
   }
 
   changeChannel(channel){
+    this.filters = { ... this.filters, experience : channel }
     this.selectedChannel = channel;
   }
 

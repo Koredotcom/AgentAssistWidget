@@ -13,9 +13,9 @@
             <div class="row-data" *ngFor="let data of customerAspectData">
                 <div class="title-with-count">
                     <img [src]="customerAspectTabvsImage[data.type]">
-                    <span class="title">{{data.intentName}} </span>    
+                    <span class="title">{{data.name}} </span>    
                     <div class="count-percentage">
-                        <span class="percentage">{{data.percent}}%</span>
+                        <span class="percentage">{{data.percent | number : '2.2-2'}}%</span>
                         <span class="count-">({{data.count}})</span>
                     </div>                               
                 </div>
@@ -23,7 +23,7 @@
                     <div class="data-percentage" [style.width.%]="data.percent"></div>
                 </div>
             </div>
-            <div class="view-all-btn" (click)="openSlider(DASHBORADCOMPONENTTYPELIST.CUSTOMER_ASPECT)">{{"DASHBOARD.WIDGET_VIEWALL" | translate}}</div>
+            <div class="view-all-btn" *ngIf="viewType == VIEWTYPELIST.PARTIAL_VIEW" (click)="openSlider(DASHBORADCOMPONENTTYPELIST.CUSTOMER_ASPECT)">{{"DASHBOARD.WIDGET_VIEWALL" | translate}}</div>
         </ng-container>
         <div class="empty-cust-aspects-data" *ngIf="!customerAspectData || customerAspectData.length == 0">
             <div class="details-empty" *ngFor="let item of [1,2,3,4,5]">

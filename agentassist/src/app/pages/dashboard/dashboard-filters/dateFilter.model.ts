@@ -3,3 +3,10 @@ export interface IAnalyticsFilters {
     endDate: string,
     type?: string
 }
+
+export interface IDashboardFilter{
+    startDate: string,
+    endDate: string,
+    experience: string,
+    botId?:string
+}

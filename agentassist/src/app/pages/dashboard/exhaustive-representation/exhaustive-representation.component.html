@@ -11,19 +11,19 @@
     <perfect-scrollbar class="scroll-content">
         <div class="body-scroll-data">
             <ng-container *ngIf="componentType === DASHBORADCOMPONENTTYPE.CUSTOMER_ASPECT">
-                <app-customer-aspect [viewType]="VIEWTYPE.EXHAUSTIVE_VIEW" [customerDropdownSelection]="customerDropdownSelection"></app-customer-aspect>
+                <app-customer-aspect [filters]="filters" [viewType]="VIEWTYPE.EXHAUSTIVE_VIEW" [customerDropdownSelection]="customerDropdownSelection" [widgetData]="compData"></app-customer-aspect>
             </ng-container>
 
             <ng-container *ngIf="componentType === DASHBORADCOMPONENTTYPE.AGENT_FEEDBACK">
-                <app-agent-feedback [viewType]="VIEWTYPE.EXHAUSTIVE_VIEW"></app-agent-feedback>
+                <app-agent-feedback [filters]="filters"  [viewType]="VIEWTYPE.EXHAUSTIVE_VIEW" [widgetData]="compData"></app-agent-feedback>
             </ng-container>
 
             <ng-container *ngIf="componentType === DASHBORADCOMPONENTTYPE.AGENT_ASPECT">
-                <app-agent-aspect [viewType]="VIEWTYPE.EXHAUSTIVE_VIEW"></app-agent-aspect>
+                <app-agent-aspect  [filters]="filters" [viewType]="VIEWTYPE.EXHAUSTIVE_VIEW" [widgetData]="compData"></app-agent-aspect>
             </ng-container>
 
             <ng-container *ngIf="componentType === DASHBORADCOMPONENTTYPE.AUTOMATION_OVERRIDE">
-               <app-automation-override-report [viewType]="VIEWTYPE.EXHAUSTIVE_VIEW"></app-automation-override-report>
+               <app-automation-override-report  [filters]="filters" [viewType]="VIEWTYPE.EXHAUSTIVE_VIEW" [widgetData]="compData"></app-automation-override-report>
             </ng-container>
         </div>
     </perfect-scrollbar>

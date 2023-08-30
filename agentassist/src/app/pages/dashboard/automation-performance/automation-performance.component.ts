@@ -1,3 +1,4 @@
+import { DecimalPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { EChartOption } from 'echarts';
 import { DashboardService } from '../dashboard.service';
@@ -12,7 +13,7 @@ export class AutomationPerformanceComponent implements OnInit {
   chartOption: EChartOption;
   automationPerformanceChartData : any = [];
 
-  constructor(public dashboardService : DashboardService) { }
+  constructor(public dashboardService : DashboardService, private decimalPipe : DecimalPipe) { }
 
   ngOnInit(): void {
     this.updateAutomationPerformanceData();
@@ -50,6 +51,7 @@ export class AutomationPerformanceComponent implements OnInit {
   setDonutChartOptions(chartData) {
     this.chartOption = {
       tooltip: {
+        position : 'right',
         trigger: 'item',
         backgroundColor: '#fff',
         textStyle : {
@@ -59,75 +61,29 @@ export class AutomationPerformanceComponent implements OnInit {
           fontSize: 15,
         },
         formatter : (params : any) => {
-          let tooltipString  = params.marker  + ' ' + params.data.name  + " : " + params.data.percent + "%" + '</br>';
+          console.log(params, 'params');
+          
+          let tooltipString  = '';
           // let tooltipSeriesList = this.dashboardService.formatterData[params.data.name];
           tooltipString = tooltipString + `<div class="automation-per-tooltip">
             <div class="title-indication">
               <div class="left-title">
                 <span class="bg"></span>
-                <span class="h-text">Terminated</span>
+                <span class="h-text">${params.data.name}</span>
               </div>
-              <div class="right-title">25%</div>
+              <div class="right-title">${this.decimalPipe.transform(params.data.percent,'2.2-2')}%</div>
             </div>
-            <div class="lable-heading">TOP 3</div>
-            <div class="row-labels">
-              <div class="left-title">Book Flight</div>
-              <div class="right-title">33%</div>
-            </div>
-            <div class="row-labels">
-              <div class="left-title">Reschedule</div>
-              <div class="right-title">32%</div>
-            </div>
-            <div class="row-labels">
-              <div class="left-title">Cancel</div>
-              <div class="right-title">31%</div>
-            </div>
-            <div class="row-labels">
-              <div class="left-title">Others</div>
-              <div class="right-title">04%</div>
-            </div>
-          </div>`
-          // for(let item of params.data.series){
-          //   tooltipString = tooltipString + `<div style="display:flex;
-          //    align-items:center;
-          //    justify-content:space-between;">`
-          //   tooltipString += `<span style = "
-          //   font-weight: 400;
-          //   font-size: 12px;
-          //   line-height: 5px;
-          //   color: #121314;
-          //   width: 65%;
-          //   padding-left: 17px;">` + item.key + `</span>`;
-          //   tooltipString += `<span style="
-          //   font-weight: 400;
-          //   font-size: 12px;
-          //   line-height: 5px;
-          //   color: #121314;
-          //   width: 35%;
-          //   text-align: right;">` + item.value + "%" + `</span></div>` + "</br>"
-          // } 
+            <div class="lable-heading">TOP 3</div>`
+            for(let item of params.data.series){
+              tooltipString = tooltipString +  `<div class="row-labels">
+              <div class="left-title">${item.key}</div>
+              <div class="right-title">${item.value}%</div>
+            </div>`
+            }
+          
           return tooltipString
         }
       },
-      // legend: {
-      //   orient: 'vertical',
-      //   top: 'center',
-      //   left: 400,
-      //   icon: 'circle',
-      //   textStyle: {
-      //     fontSize: 15,
-      //   },
-      //   formatter:function (name) {
-      //     let itemValue = chartData.filter(item => item.name === name);
-      //     let returnString = `${name}`;
-      //     let emptySpaceCount = 'successfully completed '.length - name.length;          
-      //     for(let i=0; i<=emptySpaceCount; i++){
-      //       returnString = returnString + '  ';
-      //     }
-      //     returnString += `${itemValue[0].value}` + ' | ' + `${itemValue[0].percent}%`;
-      //     return returnString;
-      //   }
-      // },
       series: [
         {
           type: 'pie',

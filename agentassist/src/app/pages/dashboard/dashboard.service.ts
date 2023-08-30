@@ -89,9 +89,9 @@ export class DashboardService {
     ]
   }
 
-  setExhaustiveRep(flag, component?) {
+  setExhaustiveRep(flag, component?, data?) {
     let type = component ? component : null;
-    this.exhaustiveRepresentation.next({ status: flag, type: type });
+    this.exhaustiveRepresentation.next({ status: flag, type: type, data : data });
   }
 
   getExhaustiveRep(): Observable<{}> {
@@ -146,456 +146,157 @@ export class DashboardService {
 
   getKPIData() {
     return of({
-      "dashboardkpi": {
-        totalSessions: {
-          count: 7535,
-          percent: 2.3,
-          increment: false
-        },
-        totalSuggestions: {
-          count: 7537,
-          percent: 2.3,
-          increment: true
-        },
-        avgSuggestions: {
-          count: 3.2
-        },
-        accuracy: {
-          count: 63,
-          percent: 2.3,
-          increment: true
-        }
+      "totalSessions": {
+          "count": 1,
+          "percent": 10,
+          "increment": false
+      },
+      "totalSuggestions": {
+          "count": 1,
+          "percent": 10,
+          "increment": true
+      },
+      "avgSuggestions": {
+          "count": 1
       }
-    })
+   });
   }
 
   getCustomerAspectData(selection, type) {
-    let customerData: any = {
-      Agent_Initiated: {
-        All: [
+    return of({
+      "hasMore": true,
+      "totalCount": 9,
+      "fetched": 5,
+      "all": [
           {
-            intentName: "Reschedule Flight",
-            count: 234,
-            percent: 32,
-            type : 'Automations'
+              "name": "submit form",
+              "type": "dialog",
+              "count": 2,
+              "percent": 33.333333333333336
           },
           {
-            intentName: "Cancel Flight",
-            count: 180,
-            percent: 18,
-            type : 'Articles'
+              "name": "Mobile Enquiry",
+              "type": "dialog",
+              "count": 2,
+              "percent": 33.333333333333336
           },
           {
-            intentName: "Reschedule Flight",
-            count: 234,
-            percent: 32,
-            type : 'Faqs',
-          },
-          {
-            intentName: "Cancel Flight",
-            count: 180,
-            percent: 18,
-            type : 'Automations'
-          },
-          {
-            intentName: "Reschedule Flight",
-            count: 234,
-            percent: 32,
-            type : 'Articles'
-          },
-          {
-            intentName: "Cancel Flight",
-            count: 180,
-            percent: 18,
-            type : 'Faqs'
+              "name": "Book Ticket",
+              "type": "dialog",
+              "count": 1,
+              "percent": 16.666666666666668
           }
-        ],
-        Articles: [
-          {
-            intentName: "Reschedule Flight",
-            count: 234,
-            percent: 32,
-            type : 'Articles'
-          },
-          {
-            intentName: "Cancel Flight",
-            count: 180,
-            percent: 18,
-            type : 'Articles'
-          },
-          {
-            intentName: "Reschedule Flight",
-            count: 234,
-            percent: 32,
-            type : 'Articles'
-          },
-          {
-            intentName: "Cancel Flight",
-            count: 180,
-            percent: 18,
-            type : 'Articles'
-          },
-          {
-            intentName: "Reschedule Flight",
-            count: 234,
-            percent: 32,
-            type : 'Articles'
-          },
-          {
-            intentName: "Cancel Flight",
-            count: 180,
-            percent: 18,
-            type : 'Articles'
-          }
-        ],
-        Faqs: [
-          {
-            intentName: "Reschedule Flight",
-            count: 234,
-            percent: 32,
-            type : 'Faqs'
-          },
-          {
-            intentName: "Cancel Flight",
-            count: 180,
-            percent: 18,
-            type : 'Faqs'
-          },
-          {
-            intentName: "Reschedule Flight",
-            count: 234,
-            percent: 32,
-            type : 'Faqs'
-          },
-          {
-            intentName: "Cancel Flight",
-            count: 180,
-            percent: 18,
-            type : 'Faqs'
-          },
-          {
-            intentName: "Reschedule Flight",
-            count: 234,
-            percent: 32,
-            type : 'Faqs'
-          },
-          {
-            intentName: "Cancel Flight",
-            count: 180,
-            percent: 18,
-            type : 'Faqs'
-          }
-        ],
-        Automations: [
-          {
-            intentName: "Reschedule Flight",
-            count: 234,
-            percent: 32,
-            type : 'Automations'
-          },
-          {
-            intentName: "Cancel Flight",
-            count: 180,
-            percent: 18,
-            type : 'Automations'
-          },
-          {
-            intentName: "Reschedule Flight",
-            count: 234,
-            percent: 32,
-            type : 'Automations'
-          },
-          {
-            intentName: "Cancel Flight",
-            count: 180,
-            percent: 18,
-            type : 'Automations'
-          },
-          {
-            intentName: "Reschedule Flight",
-            count: 234,
-            percent: 32,
-            type : 'Automations'
-          },
-          {
-            intentName: "Cancel Flight",
-            count: 180,
-            percent: 18,
-            type : 'Automations'
-          }
-        ]
-
-      },
-      Agent_Suggested: {
-
-        All: [
-          {
-            intentName: "Reschedule Flight",
-            count: 234,
-            percent: 32,
-            type : 'Articles'
-          },
-          {
-            intentName: "Cancel Flight",
-            count: 180,
-            percent: 18,
-            type : 'Faqs'
-          }
-        ],
-        Articles: [
-          {
-            intentName: "Reschedule Flight",
-            count: 234,
-            percent: 32,
-            type : 'Articles'
-          },
-          {
-            intentName: "Cancel Flight",
-            count: 180,
-            percent: 18,
-            type : 'Articles'
-          }
-        ],
-        Faqs: [
-          {
-            intentName: "Reschedule Flight",
-            count: 234,
-            percent: 32,
-            type : 'Faqs'
-          },
-          {
-            intentName: "Cancel Flight",
-            count: 180,
-            percent: 18,
-            type : 'Faqs'
-          }
-        ],
-        Automations: [
-          {
-            intentName: "Reschedule Flight",
-            count: 234,
-            percent: 32,
-            type : 'Automations'
-          },
-          {
-            intentName: "Cancel Flight",
-            count: 180,
-            percent: 18,
-            type : 'Automations'
-          }
-        ]
-
-      },
-      All: {
-
-        All: [
-          {
-            intentName: "Reschedule Flight",
-            count: 234,
-            percent: 32,
-            type : 'Articles'
-          },
-          {
-            intentName: "Cancel Flight",
-            count: 180,
-            percent: 18,
-            type : 'Automations'
-          }
-        ],
-        Articles: [
-          {
-            intentName: "Reschedule Flight",
-            count: 234,
-            percent: 32,
-            type : 'Articles'
-          },
-          {
-            intentName: "Cancel Flight",
-            count: 180,
-            percent: 18,
-            type : 'Articles'
-          }
-        ],
-        Faqs: [
-          {
-            intentName: "Reschedule Flight",
-            count: 234,
-            percent: 32,
-            type : 'Faqs'
-          },
-          {
-            intentName: "Cancel Flight",
-            count: 180,
-            percent: 18,
-            type : 'Faqs'
-          }
-        ],
-        Automations: [
-          {
-            intentName: "Reschedule Flight",
-            count: 234,
-            percent: 32,
-            type : 'Automations'
-          },
-          {
-            intentName: "Cancel Flight",
-            count: 180,
-            percent: 18,
-            type : 'Automations'
-          }
-        ]
-
-      }
-    }
-    return of(customerData[selection][type]);
+      ]
+   });
   }
 
   getAgentAspectData() {
+
     return of({
-      totalSearchReq: {
-        count: 2345,
-        percent: 2.3,
-        increment: false
+      "totalReq": 1,
+      "fetched": 1,
+      "hasMore": false,
+      "totalSearchReq": {
+          "count": 1,
+          "percent": 1,
+          "increment": true
       },
-      searchResultsUsed: {
-        count: 23,
-        percent: 2.3,
-        increment: true
+      "searchResultsUsed": {
+          "count": 2,
+          "percent": 4,
+          "increment": false
       },
-      actualData: [
-        {
-          intentName: "Book Flight",
-          count: 1320,
-          percent: 50
-        },
-        {
-          intentName: "Cancel Flight",
-          count: 1000,
-          percent: 30
-        },
-        {
-          intentName: "Reschedule Flight",
-          count: 700,
-          percent: 20
-        },
-        {
-          intentName: "Rearrange Flight",
-          count: 1320,
-          percent: 50
-        },
-        {
-          intentName: "Rebook Flight",
-          count: 1000,
-          percent: 30
-        },
-        {
-          intentName: "schedule Flight",
-          count: 700,
-          percent: 20
-        }
+      "actualData": [
+          {
+              "input": "mobile enquiry",
+              "count": 1
+          },
+          {
+            input: "Book Flight",
+            count: 1320,
+            percent: 50
+          },
+          {
+            input: "Cancel Flight",
+            count: 1000,
+            percent: 50
+          },
+          {
+            input: "Reschedule Flight",
+            count: 700,
+            percent: 50
+          },
+          {
+            input: "Rearrange Flight",
+            count: 1320,
+            percent: 50
+          },
+          {
+            input: "Rebook Flight",
+            count: 1000,
+            percent: 50
+          },
+          {
+            input: "schedule Flight",
+            count: 700,
+            percent: 50
+          }
       ]
-    })
+   });
   }
 
   getAutomationPerformanceData() {
-    return of({
-      total: 21474,
-      actualData: [
-        {
-          name: "Successfully Completed",
-          count: 7000,
-          percent: 70,
-          seriesData: [
-            {
-              key: "Book Ticket",
-              value: "33"
-            },
-            {
-              key: "Reschedule",
-              value: "23"
-            },
-            {
-              key: "Cancel",
-              value: "31"
-            },
-            {
-              key: "Others",
-              value: "4"
-            }
-          ]
-        },
-        {
-          name: "Terminated",
-          count: 2500,
-          percent: 25,
-          seriesData: [
-            {
-              key: "Book Ticket",
-              value: "33"
-            },
-            {
-              key: "Reschedule",
-              value: "23"
-            },
-            {
-              key: "Cancel",
-              value: "31"
-            },
-            {
-              key: "Others",
-              value: "4"
-            }
-          ]
-        },
-        {
-          name: "Error",
-          count: 500,
-          percent: 5,
-          seriesData: [
-            {
-              key: "Book Ticket",
-              value: "33"
-            },
-            {
-              key: "Reschedule",
-              value: "23"
-            },
-            {
-              key: "Cancel",
-              value: "31"
-            },
-            {
-              key: "Others",
-              value: "4"
-            }
-          ]
-        },
-        {
-          name: "Other",
-          count: 500,
-          percent: 5,
-          seriesData: [
-            {
-              key: "Book Ticket",
-              value: "33"
-            },
-            {
-              key: "Reschedule",
-              value: "23"
-            },
-            {
-              key: "Cancel",
-              value: "31"
-            },
-            {
-              key: "Others",
-              value: "4"
-            }
-          ]
-        },
 
+    return of({
+      "total": 17,
+      "actualData": [
+        {
+          "name": "Successfully Completed",
+          "count": 12,
+          "percent": 70.58823529411765,
+          "seriesData": [
+            {
+              "key": "EndOfTheDialog",
+              "value": 7
+            },
+            {
+              "key": "entCheck",
+              "value": 3
+            },
+            {
+              "key": "informationInput",
+              "value": 2
+            }
+          ]
+        },
+        {
+          "name": "Terminated or Error",
+          "count": 2,
+          "percent": 11.764705882352942,
+          "seriesData": [
+            {
+              "key": "form",
+              "value": 2
+            }
+          ]
+        },
+        {
+          "name": "Other",
+          "count": 3,
+          "percent": 70.58823529411765,
+          "seriesData": [
+            {
+              "key": "informationInput",
+              "value": 2
+            },
+            {
+              "key": "entCheck",
+              "value": 1
+            }
+          ]
+        }
       ]
-    })
+    });
   }
 
   getAutomationOverrideReportData() {
@@ -763,63 +464,64 @@ export class DashboardService {
   }
 
   getAgentFeedbackData() {
-    return of(
-      {
-        "totalResp": 10,
-        "helpfulResp": 50,
-        "nothelpfulResp": 50,
-        "usecases": [
-        {
-        "intentName": "Book Ticket",
-        "responses": 6,
-        "like": {
-        "count": 3,
-        "percent": 50
-        },
-        "dislike": {
-        "count": 1,
-        "percent": 16.666666666666664
-        }
-        },
-        {
-        "intentName": "customersaidtest1",
-        "responses": 1,
-        "like": {
-        "count": 1,
-        "percent": 100
-        },
-        "dislike": {
-        "count": 0,
-        "percent": 0
-        }
-        },
-        {
-        "intentName": "Show Balance",
-        "responses": 2,
-        "like": {
-        "count": 0,
-        "percent": 0
-        },
-        "dislike": {
-        "count": 2,
-        "percent": 100
-        }
+
+    return of({
+      "hasMore": false,
+      "fetched": 4,
+      "totalResp": 4,
+      "helpfulResp": 2,
+      "nothelpfulResp": 2,
+      "usecases": [
+          {
+              "intentName": "entCheck",
+              "responses": 2,
+              "liked": 1,
+              "disliked": 1,
+              "likedPercent": "50.0",
+              "dislikedPercent": "50.0"
+          },
+          {
+              "intentName": "undefined",
+              "responses": 1,
+              "liked": 1,
+              "disliked": 0,
+              "likedPercent": "100.0",
+              "dislikedPercent": "0.0"
+          },
+          {
+              "intentName": "form",
+              "responses": 1,
+              "liked": 0,
+              "disliked": 1,
+              "likedPercent": "0.0",
+              "dislikedPercent": "100.0"
+          },
+          {
+            "intentName": "book ticket",
+            "responses": 2,
+            "liked": 1,
+            "disliked": 1,
+            "likedPercent": "50.0",
+            "dislikedPercent": "50.0"
         },
         {
-        "intentName": "Book Flight",
-        "responses": 1,
-        "like": {
-        "count": 1,
-        "percent": 100
+            "intentName": "show balance",
+            "responses": 1,
+            "liked": 1,
+            "disliked": 0,
+            "likedPercent": "100.0",
+            "dislikedPercent": "0.0"
         },
-        "dislike": {
-        "count": 0,
-        "percent": 0
+        {
+            "intentName": "book flight",
+            "responses": 1,
+            "liked": 0,
+            "disliked": 1,
+            "likedPercent": "0.0",
+            "dislikedPercent": "100.0"
         }
-        }
-        ]
-        }
-    )
+      ]
+   })
   }
 
 }
