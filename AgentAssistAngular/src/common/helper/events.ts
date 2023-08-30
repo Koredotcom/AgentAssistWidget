@@ -31,5 +31,6 @@ export enum EVENTS {
     'agent_coaching_response' = 'agent_coaching_response',
     'realtime_sentiment_response' = 'realtime_sentiment_response',
     'agent_coaching_ackpress' = 'agent_coaching_ackpress',
-    'checklist_opened' = 'checklist_opened'
+    'checklist_opened' = 'checklist_opened',
+    'checklist_step_closed' = 'checklist_step_closed'
 }

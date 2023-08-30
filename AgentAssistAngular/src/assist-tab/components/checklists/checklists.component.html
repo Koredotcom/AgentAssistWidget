@@ -72,7 +72,7 @@
                             <div class="check-list-type-info" [ngClass]="{'selected-check-item': step.position}">
                                 <div class="title-block">
                                     <h5  [ngClass]="{'text-strike': step.complete}">{{step.name}}</h5>
-                                    <div class="icon-indication" [ngClass]="{'not-checked': !step.complete}" (click)="step.complete = true">
+                                    <div class="icon-indication" [ngClass]="{'not-checked': !step.complete}" (click)="clickStep(cl, ac, step)">
                                         <i class="ast-check-new"></i>
                                     </div>
                                 </div>

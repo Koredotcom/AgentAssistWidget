@@ -1,4 +1,8 @@
-<app-checklists *ngIf="isChecklistOpened" [checklists]="checklists"></app-checklists>
+<app-checklists *ngIf="isChecklistOpened" 
+    [connectionDetails]="connectionDetails" 
+    [checklists]="checklists"
+    [ccVersion]="this.checkListData?.ccVersion">
+</app-checklists>
 
 <div class="dynamic-block-content">
     <!-- <div class="sentiment-analysis">
