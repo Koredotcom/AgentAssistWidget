@@ -129,7 +129,7 @@
                     }
                 }
                 .drp-down-conetnt-checklist{
-                    display: none;
+                    // display: none;
                     position: absolute;
                     z-index: 1;
                     padding: 8px 12px;
@@ -262,7 +262,7 @@
                         flex: 1;
                         height: 100%;
                         background: var(--gray-200, #EAECF0);
-                        &:first-child{
+                        &.completed{
                             background: var(--green-500, #16B364);
                         }
                     }

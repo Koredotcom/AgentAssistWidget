@@ -318,7 +318,8 @@ export class AssistComponent implements OnInit {
     }
   }
 
-  checkListData:any = {}
+  checkListData:any = {};
+  // dynClObjs:any = {};
   guidedListAPICall(agentAssistUrl, botId, accessToken, accountId) {
     let headersVal = {
       'Authorization': 'bearer' + ' ' + accessToken,

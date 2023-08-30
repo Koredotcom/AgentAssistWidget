@@ -5,26 +5,26 @@
                 <h1>Playbook</h1>
                 <button class="more-check-tag">
                     <i class="ast-light-bulb"></i>
-                    <span>2</span>
+                    <span>{{triggeredDynCheckLists.length}}</span>
                 </button>
-                <h2>Laptop Sales</h2>
+                <!-- <h2>Laptop Sales</h2> -->
                 <div class="checklist-dropdown">
-                    <div class="toggle-checklist">
-                        <p>Insurance Coverage</p>
+                    <div class="toggle-checklist" (click)="showDropDown = !showDropDown;">
+                        <p>Dynamic PLaybooks</p>
                         <i class="ast-carrotup"></i>
                     </div>
-                    <div class="drp-down-conetnt-checklist">
-                        <ng-container>
-                            <div class="heading-text">
-                                <h3>RECOMENDED PLAYBOOKS</h3>
-                                <i class="ast-light-bulb"></i>
-                            </div>
-                            <li>
-                                <p>Laptop Recommendation</p>
-                                <span>4 steps</span>
+                    <div class="drp-down-conetnt-checklist" [ngClass]="{'d-none': !showDropDown}">
+                        <div class="heading-text">
+                            <h3>RECOMENDED PLAYBOOKS</h3>
+                            <i class="ast-light-bulb"></i>
+                        </div>
+                        <ng-container *ngFor="let clT of triggeredDynCheckLists; let int = index">
+                            <li (click)="selectDynCl(clT, int)">
+                                <p>{{clT.name}}</p>
+                                <span>{{clT.stages?.length}} steps</span>
                             </li>
                         </ng-container>
-                        <ng-container>
+                        <!-- <ng-container>
                             <div class="heading-text">
                                 <h3>PRIMARY PLAYBOOKS</h3>
                                 <i class="ast-light-bulb"></i>
@@ -41,38 +41,38 @@
                                 <p>Laptop Sales</p>
                                 <i class="ast-check-new"></i>
                             </li>
-                        </ng-container>
+                        </ng-container> -->
                     </div>
                 </div>
             </div>
-            <button class="proceed-toclise-btn">
+            <button class="proceed-toclise-btn" (click)="proceedToClose()">
                 <div class="circle">
                     <i class="ast-check-new"></i>
                 </div>
                 <span>Proceed to close</span>
             </button>
         </div>
-        <ng-container *ngFor="let cl of checklists">
-            <ng-container *ngFor="let ac of cl.stages">
+        <ng-container *ngFor="let cl of checklists; let i = index">
+            <ng-container *ngFor="let ac of cl.stages; let si = index">
                 <div class="acc-info-data" [ngClass]="{'open-acc-show': ac.opened}">
                     <div class="acc-heading-block" (click)="ac.opened = !ac.opened">
                         <div class="top-title-block">
                             <h4>{{ac.name}}</h4>
-                            <p>3/{{ac.steps?.length}} steps</p>
+                            <p>{{ getSelectedCount(ac)}} / {{ac.steps?.length}} steps</p>
                             <i class="ast-carrotup"></i>
                         </div>
                         <div class="steps-check">
-                            <div class="step-div"></div>
-                            <div class="step-div"></div>
-                            <div class="step-div"></div>
+                            <ng-container *ngFor="let stp of ac.steps">
+                                <div class="step-div" [ngClass]="{'completed' : stp.complete}"></div>
+                            </ng-container>
                         </div>
                     </div>
                     <div class="acc-body-data">
-                        <ng-container *ngFor="let step of ac.steps">
-                            <div class="check-list-type-info" [ngClass]="{'selected-check-item': step.position}">
+                        <ng-container *ngFor="let step of ac.steps; let sti = index">
+                            <div class="check-list-type-info" [ngClass]="{'selected-check-item': step?.position}">
                                 <div class="title-block">
-                                    <h5  [ngClass]="{'text-strike': step.complete}">{{step.name}}</h5>
-                                    <div class="icon-indication" [ngClass]="{'not-checked': !step.complete}" (click)="clickStep(cl, ac, step)">
+                                    <h5  [ngClass]="{'text-strike': step?.complete}">{{step.name}}</h5>
+                                    <div class="icon-indication" [ngClass]="{'not-checked': !step?.complete}" (click)="clickStep(cl, ac, step, i, si, sti)">
                                         <i class="ast-check-new"></i>
                                     </div>
                                 </div>

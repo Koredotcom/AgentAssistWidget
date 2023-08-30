@@ -1,7 +1,8 @@
 <app-checklists *ngIf="isChecklistOpened" 
     [connectionDetails]="connectionDetails" 
     [checklists]="checklists"
-    [ccVersion]="this.checkListData?.ccVersion">
+    [ccVersion]="this.checkListData?.ccVersion"
+    [dynamicChecklist]="commonService.dynamicChecklist">
 </app-checklists>
 
 <div class="dynamic-block-content">
