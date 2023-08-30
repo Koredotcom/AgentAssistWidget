@@ -110,7 +110,7 @@ export class AdherenceComponent implements OnInit {
     }
     let params: any = {
       userId: this.authService.getUserId(),
-      streamId: this.workflowService.getCurrentBt(true)._id
+      streamId: this.workflowService.getCurrentBtSmt(true)._id
     };
     let body = {
       "intentName": text,

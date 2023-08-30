@@ -34,11 +34,11 @@ export class TriggerByComponent implements OnInit, OnChanges {
   currentBot:any = {};
   executeState:any = {
     'taskStart': 'Initiated',
-    'taskEnd': 'Completed'  
+    'taskEnd': 'Completed'
   };
   standardBotsOj:any = {};
   childBotId = '';
-  botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
+  botId = this.workflowService.getCurrentBtSmt(true)._id;
   constructor(
     private workflowService: workflowService,
     public clS: ChecklistService,

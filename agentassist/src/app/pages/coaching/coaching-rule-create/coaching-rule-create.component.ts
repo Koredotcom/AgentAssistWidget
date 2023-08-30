@@ -138,7 +138,7 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
   }
 
   getRuleTags(create=false){
-    let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
+    let botId = this.workflowService.getCurrentBtSmt(true)._id;
     let params : any = {
       botId
     }
@@ -191,7 +191,7 @@ export class CoachingRuleCreateComponent implements OnInit, OnChanges, AfterView
         "description": new FormControl('', [Validators.required]),
         "tags": this.fb.array([]),
         "channels": this.fb.array([], [Validators.required]),
-        "botId": new FormControl(this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id, [Validators.required]),
+        "botId": new FormControl(this.workflowService.getCurrentBtSmt(true)._id, [Validators.required]),
         "triggers": this.fb.array([]),
         "actions": this.fb.array([]),
         "assignees": this.fb.array([]),

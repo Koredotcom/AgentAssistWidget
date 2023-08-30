@@ -58,10 +58,7 @@ export class StagesListComponent implements OnInit {
   currDragStg;
   currentStep;
   stepIndex;
-  botId =
-    this.auth.isLoadingOnSm && this.selAcc
-      ? this.selAcc["instanceBots"][0]?.instanceBotId
-      : this.workflowService.getCurrentBt(true)._id;
+  botId = this.workflowService.getCurrentBtSmt(true)._id
 
   constructor(
     private fb: FormBuilder,
@@ -111,7 +108,7 @@ export class StagesListComponent implements OnInit {
   }
 
   getCheckListById(){
-    let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
+    let botId = this.workflowService.getCurrentBtSmt(true)._id;
     this.service.invoke('get.checklistbyid', {botId, clId: this.currentCheckList._id})
     .subscribe((data)=>{
       this.currentCheckList = {...data[0]};

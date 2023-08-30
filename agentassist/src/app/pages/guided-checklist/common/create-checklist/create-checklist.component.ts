@@ -171,8 +171,8 @@ export class StageCreateComponent implements OnInit, AfterViewInit {
     if(this.checkListType !== 'primary'){
       // this.triggerByComp.upadateAllObjects();
     }
-    setTimeout(() => {      
-      let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
+    setTimeout(() => {
+      let botId = this.workflowService.getCurrentBtSmt(true)._id;
       let payload = this.checkListForm.getRawValue();
       payload['triggerBy'] = payload['adherence'];
       delete payload['adherence']

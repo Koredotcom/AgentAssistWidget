@@ -55,7 +55,7 @@ export class GuidedChecklistComponent implements OnInit {
   getConfigDetails() {
     let params: any = {
       userId: this.auth.getUserId(),
-      streamId: this.workflowService.getCurrentBt(true)._id
+      streamId: this.workflowService.getCurrentBtSmt(true)._id
     };
     this.service.invoke('get.AIconfigs', params)
       .subscribe(res => {
@@ -90,7 +90,7 @@ export class GuidedChecklistComponent implements OnInit {
   }
 
   getCheckListById(clId){
-    let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
+    let botId = this.workflowService.getCurrentBtSmt(true)._id;
     this.service.invoke('get.checklistbyid', {botId, clId})
     .subscribe((data)=>{
       this.isStageListOpen = true;
@@ -101,7 +101,7 @@ export class GuidedChecklistComponent implements OnInit {
   }
 
   publush(){
-    let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
+    let botId = this.workflowService.getCurrentBtSmt(true)._id;
     this.service.invoke('publish.checklist', {}, {botId})
     .subscribe((data)=>{
       this.notificationService.notify(this.translate.instant('COACHING.PUBLISH_SUCCESS'), 'success');

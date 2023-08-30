@@ -5,6 +5,7 @@ import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { NotificationService } from '@kore.services/notification.service';
 import { environment } from '@kore.environment';
 import { AppService } from './app.service';
+import { LocalStoreService } from './localstore.service';
 
 @Injectable({
   providedIn: 'root'
@@ -77,7 +78,8 @@ export class workflowService {
   constructor(
     private service: ServiceInvokerService,
     private notificationService: NotificationService,
-    private appService: AppService
+    private appService: AppService,
+    private local: LocalStoreService
   ) {
     this.onPremise = environment.ON_PREMISE;
     this.registerEventsFromParent();
@@ -167,6 +169,19 @@ export class workflowService {
       return { ...this.currentBtDetails };
     } else {
       return { ...this.appService.selectedInstanceApp$.value };
+    }
+  }
+
+  getCurrentBtSmt(automationBot?: boolean) {
+    if (automationBot) {
+      if(!window.location.href.includes('smartassist')) {
+        return { ...this.currentBtDetails };
+      } else {
+        let selAcc = this.local.getSelectedAccount();
+        let _id = selAcc['instanceBots'][0]?.instanceBotId;
+        console.log('Sandeep Tester: ',_id)
+        return _id;
+      }
     }
   }
 
