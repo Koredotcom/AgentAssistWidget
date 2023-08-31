@@ -69,7 +69,7 @@
                     </div>
                     <div class="acc-body-data">
                         <ng-container *ngFor="let step of ac.steps; let sti = index">
-                            <div class="check-list-type-info" [ngClass]="{'selected-check-item': step?.position}">
+                            <div class="check-list-type-info" [ngClass]="{'selected-check-item': ((ac.steps[sti - 1]?.complete && !step.complete) || (sti === 0 && !ac.steps[sti + 1]?.complete))}">
                                 <div class="title-block">
                                     <h5  [ngClass]="{'text-strike': step?.complete}">{{step.name}}</h5>
                                     <div class="icon-indication" [ngClass]="{'not-checked': !step?.complete}" (click)="clickStep(cl, ac, step, i, si, sti)">

@@ -64,7 +64,22 @@ export class ChecklistsComponent implements OnInit, OnDestroy {
 
   ngOnInit(){
     this.subscription1 = this.websocketService.checkListStepResponse$.subscribe((data)=>{
-      console.log("🚀 ~ file: checklists.component.ts:63 ~ ChecklistsComponent ~ this.subscription1=this.websocketService.checkListResponses$.subscribe ~ data:", data)  
+      let clObj = data?.checklistStepsIdentified;
+      [
+        {
+            "id": "acl-a5b97c92-e7b9-5256-98d3-0c545fff6ef3",
+            "checklistId": "acl-a5b97c92-e7b9-5256-98d3-0c545fff6ef3",
+            "stageId": "acs-fe3b0f54-ab5b-5b5a-899d-ded3280a8a21",
+            "stepId": "acst-11b1caad-731c-57ea-8cc7-c465f3773f3a"
+        }
+      ];
+      (clObj || [])
+      .forEach((item)=>{
+        let clInx = this.checklists.findIndex((cl)=>cl._id === item.checklistId);
+        let sInx = (this.checklists[clInx].stages || []).findIndex((s)=>s._id === item.stageId);
+        let sTInx = (this.checklists[clInx].stages[sInx].steps || []).findIndex((st)=>st._id === item.stepId);
+        this.checklists[clInx].stages[sInx].steps[sTInx]['complete'] = true
+      })
     });
 
     this.subscription2 = this.websocketService.checkListResponse$.subscribe((data)=>{
