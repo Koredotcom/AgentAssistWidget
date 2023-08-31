@@ -82,6 +82,17 @@ export class AssistComponent implements OnInit {
     if(this.connectionDetails.interactiveLanguage !== '') {
       this.interactiveLangaugeDetails = this.connectionDetails.interactiveLanguage;
     }
+    this.websocketService.sendCheckListOpened$.subscribe((data)=>{
+      if(data){
+        this.guidedListAPICall(
+          this.commonService.configObj.agentassisturl, 
+          this.commonService.configObj.fromSAT ? 
+            this.commonService.configObj.instanceBotId : 
+            this.commonService.configObj.botid, 
+          this.commonService.configObj.accessToken, 
+          this.commonService.configObj.accountId)
+      }
+    })
 
   }
 
@@ -239,13 +250,7 @@ export class AssistComponent implements OnInit {
 
     let subscription14 = this.websocketService.socketConnectFlag$.subscribe((response) => {
       if (response) {
-        this.guidedListAPICall(
-          this.commonService.configObj.agentassisturl, 
-          this.commonService.configObj.fromSAT ? 
-            this.commonService.configObj.instanceBotId : 
-            this.commonService.configObj.botid, 
-          this.commonService.configObj.accessToken, 
-          this.commonService.configObj.accountId)
+
       }
     });
 
@@ -311,11 +316,6 @@ export class AssistComponent implements OnInit {
       welcomeMessageParams['language'] = this.connectionDetails?.interactiveLanguage; // Return the default value for null, undefined, or "''"
     }
     this.websocketService.emitEvents(EVENTS.welcome_message_request, welcomeMessageParams);
-
-
-    if(!this.isGuidedChecklistApiSuccess && this.commonService.primaryChecklist.length > 0) {
-      this.sendChecklistEvent();
-    }
   }
 
   checkListData:any = {};
@@ -338,9 +338,10 @@ export class AssistComponent implements OnInit {
           this.commonService.dynamicChecklist = data.checklists.filter(check => check.type === "dynamic");
           // this.commonService.guidedChecklistObj = data;
         }
-        if(!this.isGuidedChecklistApiSuccess && this.commonService.primaryChecklist.length > 0) {
-          this.sendChecklistEvent();
-        }
+        // if(!this.isGuidedChecklistApiSuccess && this.commonService.primaryChecklist.length > 0) {
+        //   this.sendChecklistEvent();
+        // }
+        this.sendOpenCheckLIstEvent();
       },
       error:  (err)=> {
           console.error("Unable to fetch the details with the provided data", err);
@@ -2201,4 +2202,10 @@ export class AssistComponent implements OnInit {
     this.commonService.CustomTempClickEvents(this.projConstants.ASSIST, this.connectionDetails)
   }
 
+  sendOpenCheckLIstEvent(){
+    if(!this.isGuidedChecklistApiSuccess && this.commonService.primaryChecklist.length > 0) {
+      this.sendChecklistEvent();
+    }
+  }
 }
+

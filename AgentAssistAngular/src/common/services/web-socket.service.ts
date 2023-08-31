@@ -28,6 +28,7 @@ export class WebSocketService {
   checkListStepResponse$ = new Subject<any>();
   checkListResponse$ = new Subject<any>();
   realtimeSentimeResponse$ = new Subject<any>();
+  sendCheckListOpened$ = new Subject<any>();
   isWelcomeResonse = false;
   LoaderTimeout: number = 10000;
 
@@ -114,6 +115,7 @@ export class WebSocketService {
       if(data.sendMenuRequest && !this.isWelcomeResonse){
         this.isWelcomeResonse = true;
         this.emitEvents(EVENTS.agent_menu_request, menu_request_params);
+        this.sendCheckListOpened$.next(true);
       }
       this.agentAssistResponse$.next(data);
       this.addOrRemoveLoader(false);
