@@ -150,7 +150,6 @@ export class HomeComponent implements OnInit {
         this.commonService.isCallConversation = (urlParams.isCall && urlParams.isCall == "true") ? true : false;
         this.localStorageService.initializeLocalStorageState();
         this.connectionDetails = urlParams;
-        this.coachingActionStore.connectionObj = urlParams;
         this.eventListenerFromParent();
         this.updateUIState(this.connectionDetails.conversationId, urlParams.isCall);
         this.btnInit();

@@ -371,7 +371,7 @@ export class AssistComponent implements OnInit {
               //any other fields
           },
           "checklist": {
-            "_id": this.commonService.primaryChecklist[0]._id,
+            "id": this.commonService.primaryChecklist[0]._id,
               //any other fields
           },
           "timestamp": 0,

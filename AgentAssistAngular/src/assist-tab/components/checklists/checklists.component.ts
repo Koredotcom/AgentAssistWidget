@@ -107,7 +107,7 @@ export class ChecklistsComponent implements OnInit, OnDestroy {
               "agentId": "",
           },
           "checklist": {
-            "_id": clT._id
+            "id": clT._id
           },
           "timestamp": 0,
           "context": {}
