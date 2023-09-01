@@ -281,6 +281,30 @@ export class OverlaysearchComponent implements OnInit {
       };
       parent.postMessage(message, '*');
     }
+    this.faqArticleSendorCopyEvent(actionType, faq_or_article_obj, selectType, message)
+  }
+
+  faqArticleSendorCopyEvent(actionType, faq_or_article_obj, selectType, message) {
+    let data: any = {
+      botId: this.connectionDetails.botId,
+      conversationId: this.connectionDetails.conversationId,
+      sessionId: this.handleSubjectService.myBotTabSessionId,
+      experience: 'chat',
+      source: this.connectionDetails.source,
+      usedType: message.method,
+      type: selectType,
+      input : '',
+      name: message.name,
+      payload : message.payload
+    };
+    if(selectType === 'Article') {
+      data.title = faq_or_article_obj.title;
+      data.contentId = faq_or_article_obj?.contentId;
+    } else {
+      data.title = faq_or_article_obj.title;
+      data.contentId = faq_or_article_obj?.taskRefId;
+    }
+    this.websocketService.emitEvents(EVENTS.agent_send_or_copy, data);
   }
 
   handleSeeMoreButton(array, type) {

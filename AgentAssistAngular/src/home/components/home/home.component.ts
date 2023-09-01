@@ -683,7 +683,15 @@ setProactiveMode(){
     if (target.id === 'sendMsg' || target.className === 'ast-ast-send' || target.className == 'send-icon') {
       let ele = document.getElementById(`displayData-${target.dataset.msgId}`) ? document.getElementById(`displayData-${target.dataset.msgId}`) : document.getElementById(target.dataset.msgId);
       let data = target.dataset?.msgData && target.dataset?.msgData !== '' ? target.dataset?.msgData : (target.parentNode.dataset?.msgData && target.parentNode.dataset?.msgData !== '' ? target.parentNode.dataset?.msgData : ele?.innerText);
-
+      if(target.dataset?.textType === 'sentence') {
+        this.connectionDetails.type = target.dataset?.type;
+      } else if(target.dataset?.textType === 'article') {
+        this.connectionDetails.title = target.dataset?.title;
+        this.connectionDetails.contentId = target.dataset?.contentId;
+      } else if (target.dataset?.textType === 'faq') {
+        this.connectionDetails.title = target.dataset?.title;
+        this.connectionDetails.contentId = target.dataset?.contentId;
+      }
       if(data && data != 'Send'){
         data = this.commonService.replaceLtGt(data, true);
       this.commonService.preparePostMessageForSendAndCopy(evt, data, IdReferenceConst.SENDMSG, this.connectionDetails);

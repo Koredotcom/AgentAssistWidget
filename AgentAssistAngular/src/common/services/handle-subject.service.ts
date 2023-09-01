@@ -25,6 +25,9 @@ export class HandleSubjectService {
   public userAgentTranscriptionConversationHistory$ = new BehaviorSubject<object>(null);
   public userBotConversationDetails;
 
+  assistTabSessionId = '';
+  myBotTabSessionId = '';
+
   constructor() { }
 
   setActiveTab(activeTab) {
