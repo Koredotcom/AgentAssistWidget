@@ -32,6 +32,7 @@ export class AssistComponent implements OnInit {
   @ViewChild('dynamicBlockRef') dynamicBlockRef: ElementRef;
   @Output() handlePopupEvent = new EventEmitter();
   @Output() newButtonScrollClickEvents = new EventEmitter();
+  selectedPlayBook = '';
 
   subscriptionsList: Subscription[] = [];
 
@@ -376,6 +377,7 @@ export class AssistComponent implements OnInit {
       this.commonService.primaryChecklist[0].stages[0].opened = true;
     }
     this.checklists.push(this.commonService.primaryChecklist[0]);
+    this.selectedPlayBook = this.commonService.primaryChecklist[0]?.name;
   }
 
 

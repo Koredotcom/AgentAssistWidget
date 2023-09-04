@@ -2,15 +2,15 @@
     <div class="checked-list-content">
         <div class="heading-block-check">
             <div class="left-sec-data">
-                <h1>Playbook</h1>
+                <!-- <h1>Playbook</h1> -->
                 <button class="more-check-tag">
                     <i class="ast-light-bulb"></i>
-                    <span>{{triggeredDynCheckLists.length}}</span>
+                    <span *ngIf="triggeredDynCheckLists.length">{{triggeredDynCheckLists.length}}</span>
                 </button>
-                <h2>Laptop Sales</h2>
+                <!-- <h2>Laptop Sales</h2> -->
                 <div class="checklist-dropdown">
                     <div class="toggle-checklist" (click)="showDropDown = !showDropDown;">
-                        <p>Dynamic PLaybooks</p>
+                        <p>{{selectedPlayBook}}</p>
                         <i class="ast-carrotup"></i>
                     </div>
                     <div class="drp-down-conetnt-checklist" [ngClass]="{'d-none': !showDropDown}">

@@ -21,6 +21,7 @@ export class ChecklistsComponent implements OnInit, OnDestroy {
   @Input() ccVersion: any;
   @Input() dynamicChecklist = [];
   triggeredDynCheckLists = [];
+  @Input() selectedPlayBook = '';
   dynClObjs: any = {};
   showDropDown = false;
   clickStep(cl, ac, step, i, si, sti) {
@@ -58,18 +59,43 @@ export class ChecklistsComponent implements OnInit, OnDestroy {
     this.websocketService.emitEvents(EVENTS.checklist_step_closed, checklistParams);
   }
 
+  stepComplete(id, stageId, stepId){
+    let checklistParams: any = {
+      payload: {
+        "event": "checklist_step_closed",
+        "conversationId": this.connectionDetails.conversationId,
+        "ccVersion": this.ccVersion, //checklist Configuration version
+        "accountId": "",
+        "botId": (this.commonService.configObj?.fromSAT) ? this.commonService.configObj.instanceBotId : this.commonService.configObj.botid,
+        "botName": "",
+        "agentInfo": {
+          "agentId": ""
+        },
+        "checklistStep": {
+          id,
+          stageId,
+          stepId,
+          "adheredBy": "manual" // coachingEngine / manual
+        },
+        "timestamp": 0,
+        "context": {}
+      }
+    }
+    this.websocketService.emitEvents(EVENTS.checklist_step_closed, checklistParams);
+  };
+
   ngOnInit() {
     this.subscription1 = this.websocketService.checkListStepResponse$.subscribe((data) => {
       let clObj = data?.checklistStepsIdentified;
       (clObj || [])
         .forEach((item) => {
-          let clInx = this.checklists.findIndex((cl) => cl._id === item.checklistId);
+          let clInx = this.checklists.findIndex((cl) => cl._id === item.id);
           let sInx = (this.checklists[clInx].stages || []).findIndex((s) => s._id === item.stageId);
           let sTInx = (this.checklists[clInx].stages[sInx].steps || []).findIndex((st) => st._id === item.stepId);
-          this.checklists[clInx].stages[sInx].steps[sTInx]['complete'] = true
+          this.checklists[clInx].stages[sInx].steps[sTInx]['complete'] = true;
+          this.stepComplete(item.id, item.stageId, item.stepId);
         })
     });
-
     this.subscription2 = this.websocketService.checkListResponse$.subscribe((data) => {
       if (data && data.checklistsIdentified) {
         (data.checklistsIdentified || []).forEach((item) => {
@@ -96,6 +122,7 @@ export class ChecklistsComponent implements OnInit, OnDestroy {
   }
 
   selectDynCl(clT, i) {
+    this.selectedPlayBook = clT?.name;
     this.showDropDown = false;
     this.triggeredDynCheckLists.splice(i, 1);
     this.closeAllCheckLists();
