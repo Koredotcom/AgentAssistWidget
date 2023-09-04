@@ -186,7 +186,7 @@ export class NoneIntentComponent implements OnInit {
 
   closeSlider(isSave?) {
     if((this.newUtterances.length || this.deletedUtterances.length) && !isSave){
-      this.modalRef = this.modalService.open(CoachingConfirmationComponent, { centered: true, keyboard: false, windowClass: 'delete-uc-rule-modal', backdrop: 'static' });
+      this.modalRef = this.modalService.open(CoachingConfirmationComponent, { centered: true, keyboard: false, windowClass: 'delete-uc-rule-modal', backdrop: 'static', backdropClass: 'backdrop-z-index9999' });
       this.modalRef.result.then(emitedValue => {
         if(emitedValue){
           this.closeSlide.emit();
