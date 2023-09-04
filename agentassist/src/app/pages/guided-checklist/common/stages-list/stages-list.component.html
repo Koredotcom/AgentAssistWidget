@@ -30,12 +30,12 @@
         </div>
       </div>
     </div>
+    <!-- <i class="icon-sa-settings"></i> -->
+    <!-- <button class="kr-sg-button-secondary-two btn_lg">Publish</button> -->
     <div class="btn-actions">
       <button class="settings-actions kr-sg-button-secondary" (click)="openSettings()">
-        <!-- <i class="icon-sa-settings"></i> -->
         Settings
       </button>
-      <!-- <button class="kr-sg-button-secondary-two btn_lg">Publish</button> -->
       <button class="kr-sg-button-primary btn_lg" (click)="closeCheckListScreen()">Done</button>
     </div>
   </div>
@@ -123,14 +123,15 @@
               </div>
             </div>
 
-            <div class="add-stage-block">
+            <!-- <div class="add-stage-block">
               <div class="line-block"></div>
               <button (click)="addStages(i)">
                 <i class="icon-coaching--plus"></i>
                 <span>Add Stage</span>
               </button>
               <div class="line-block"></div>
-            </div>
+            </div> -->
+            
           </ng-container>
           <ng-container *ngIf="stages?.length === 0">
             <div class="add-stage-block">

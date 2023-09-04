@@ -165,6 +165,9 @@ export class StageCreateComponent implements OnInit, AfterViewInit {
         }))
         .subscribe((data) => {
           this.saveEvent.emit(data);
+        },
+        (err)=>{
+          this.notificationService.showError(err, this.translate.instant('CHECKLIST.CLUPDATE_FAILURE'));
         });
     });
   }

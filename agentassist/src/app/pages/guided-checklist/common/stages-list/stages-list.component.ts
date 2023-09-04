@@ -288,6 +288,9 @@ export class StagesListComponent implements OnInit {
           this.stages[this.stageInx].newStep = false;
           this.saveStageApi(this.stages[this.stageInx], false, true);
           this.closeStepModal();
+        }, 
+        (err)=>{
+          this.notificationService.showError(err, this.translate.instant('CHECKLIST.STEPCREATEFAILURE'));
         });
     }
   }

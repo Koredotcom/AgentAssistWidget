@@ -2066,5 +2066,8 @@
     "CHECKLIST.STAGEUPDATE_FAILURE" : "Failed to update Stage",
     "CHECKLIST.STEPUPDATE_SUCCESS" : "Step updated successfully",
     "CHECKLIST.STEPUPDATE_FAILURE" : "Failed to update Step",
-    "CHECKLIST.CLDUPDATE_SUCCESS": "Status updated successfully"
+    "CHECKLIST.CLDUPDATE_SUCCESS": "Status updated successfully",
+    "CHECKLIST.CLSAVE_FAILURE": "Failed to save checklist",
+    "CHECKLIST.STEPCREATEFAILURE": "Failed to save step",
+    "CHECKLIST.STEPUPDATEFAILURE": "Failed to update step"
 }
