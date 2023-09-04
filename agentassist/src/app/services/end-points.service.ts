@@ -1673,5 +1673,75 @@ export class EndPointsService {
       endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule/noneintent',
       method : 'post'
     }
+
+    this.serviceList['post.acchecklists'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/acchecklists',
+      method : 'post'
+    }
+
+    this.serviceList['put.acchecklists'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/acchecklists/:botId/checklist/:clId',
+      method : 'put'
+    }
+    
+    this.serviceList['get.acchecklists'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/acchecklists/:botId',
+      method : 'post'
+    }
+
+    this.serviceList['post.stage'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/acclstages?clId=:clId',
+      method : 'post'
+    }
+
+    this.serviceList['put.stage'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/acclstages/:botId/stage/:clsId?clId=:clId',
+      method : 'put'
+    }
+    
+    this.serviceList['get.checklistbyid'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/acchecklists/:botId/checklist/:clId',
+      method : 'get'
+    }
+
+    this.serviceList['put.checklist'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/acchecklists/:botId/checklist/:clId',
+      method : 'put'
+    }
+
+    this.serviceList['put.checklist.order'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/acchecklists/:botId/checklist/:clId',
+      method : 'put'
+    }
+
+    this.serviceList['post.step'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/acclsteps',
+      method : 'post'
+    }
+
+    this.serviceList['put.step'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/acclsteps/:botId/step/:clstId?clsId=:clsId',
+      method : 'put'
+    }
+
+    this.serviceList['delete.step'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/acclsteps/:botId/step/:clstId?clsId=:clsId',
+      method : 'delete'
+    }
+
+    this.serviceList['delete.stage'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/acclstages/:botId/stage/:clsId?clId=:clId',
+      method : 'delete'
+    }
+
+    this.serviceList['delete.checklist'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/acchecklists/:botId/checklist/:clId',
+      method : 'delete'
+    }
+
+    this.serviceList['publish.checklist'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/acchecklists/publishCoachingChecklists',
+      method : 'post'
+    }
   }
 }
