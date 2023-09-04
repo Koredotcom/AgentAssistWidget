@@ -287,6 +287,12 @@
                         animation-fill-mode: both;
                         .content-info-sec{
                             padding-left: 15px;
+                            display: block;
+                        }
+                        .title-block{
+                            h5{
+                                opacity: 1;
+                            }
                         }
                     }
                     .title-block{
@@ -295,6 +301,7 @@
                         gap: 8px;
                         cursor: pointer;
                         h5{
+                            opacity: 0.3;
                             width: 100%;
                             color: var(--blue-700, #175CD3);
                             font-size: 14px;
@@ -350,6 +357,7 @@
                                 padding: 5px;
                             }
                         }
+                        display: none;
                     }
                 }
             }
@@ -395,11 +403,18 @@
 
 
 .text-strike{
-    text-decoration: line-through;
+    h5{
+        text-decoration: line-through;
+    }
+    .content-info-sec{
+        display: none;
+    }
 }
 .disabled-click-text{
-    pointer-events: none;
-    opacity: 0.6;
+    h5{
+        pointer-events: none;
+        opacity: 0.6;
+    }
 }
 
 @-webkit-keyframes slideInUpCheck {
@@ -430,4 +445,26 @@
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+.resume-btn{
+    display: flex;
+    padding: 2px 8px 2px 6px;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    border-radius: 16px;
+    background: var(--success-50, #ECFDF3);
+    border: 1px solid green;
+    color: var(--success-700, #027A48);
+    text-align: center;
+    font-family: Inter;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 18px;
+}
+
+.text-strike-label{
+    text-decoration: line-through;
 }

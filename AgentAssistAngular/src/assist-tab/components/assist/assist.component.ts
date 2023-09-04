@@ -350,16 +350,6 @@ export class AssistComponent implements OnInit {
   }
 
   sendChecklistEvent() {
-    // checklist_opened
-    // let checklistArr = [];
-    this.handleSubjectService.userHistoryDataSubject$.subscribe((res : any) => {
-      console.log(res, "response inside checklist");
-      // if(res && res.length > 0){
-      //   checklistArr = res;
-      // }
-    });
-    console.log("🚀 ~ file: assist.component.ts:358 ~ AssistComponent ~ this.commonService.configObj ~ ;:", this.commonService.configObj);
-    
     let checklistParams: any = {
       "payload": {
           "event": "checklist_opened",
@@ -382,6 +372,9 @@ export class AssistComponent implements OnInit {
     this.isGuidedChecklistApiSuccess = true;
     this.websocketService.emitEvents(EVENTS.checklist_opened, checklistParams);
     this.isChecklistOpened = true;
+    if(this.commonService.primaryChecklist[0]?.stages[0]){
+      this.commonService.primaryChecklist[0].stages[0].opened = true;
+    }
     this.checklists.push(this.commonService.primaryChecklist[0]);
   }
 
