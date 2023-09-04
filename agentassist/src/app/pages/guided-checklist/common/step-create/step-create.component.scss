@@ -449,7 +449,15 @@
     }
 }
 
-
+.kr-sg-input-text-area{
+    .kr-sg-checkbox{
+        margin: 0;
+        padding: 0;
+        position: absolute;
+        bottom: 40px;
+        left: 12px;
+    }
+}
 .kr-sg-dropdowns {
     .dropdown-open {
         .dropdown-input{

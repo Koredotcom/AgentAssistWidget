@@ -3615,6 +3615,9 @@ $numbers: 1000;
     .h-#{$i} {
         height: #{$i+'%'} !important;
     }
+    .height_#{$i} {
+        height: #{$i+'px'} !important;
+    }
     .min-h-#{$i} {
         min-height: #{$i+'px'};
     }
