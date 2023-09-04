@@ -2049,5 +2049,22 @@
     "RULE.LOCKED" : "Rule has been locked by someone",
     "CHECKLIST_STATUS_FAILURE" : "Active checklist already present",
     "CHECKLIST.CLDELETE_SUCCESS": "Checklist deleted successfully",
-    "CHECKLIST.FAILED_DELETE": "Failed to delete checklist"
+    "CHECKLIST.FAILED_DELETE": "Failed to delete checklist",
+    "CHECKLIST.CLCREATE_SUCCESS": "Checklist created successfully",
+    "CHECKLIST.CLCREATE_FAILURE": "Failed to create checklist",
+    "CHECKLIST.CLUPDATE_SUCCESS": "Checklist Updated successfully",
+    "CHECKLIST.CLUPDATE_FAILURE": "Failed to update checklist",
+    "CHECKLIST.STAGEDELETE_SUCCESS" : "Stage deleted successfully",
+    "CHECKLIST.STAGEDELETE_FAILURE" : "Failed to delete Stage",
+    "CHECKLIST.STEPDELETE_SUCCESS" : "Step deleted successfully",
+    "CHECKLIST.STEPDELETE_FAILURE" : "Failed to delete Step",
+    "CHECKLIST.STAGECREATE_SUCCESS" : "Stage created successfully",
+    "CHECKLIST.STAGECREATE_FAILURE" : "Failed to create Stage",
+    "CHECKLIST.STEPCREATE_SUCCESS" : "Step created successfully",
+    "CHECKLIST.STEPCREATE_FAILURE" : "Failed to create Step",
+    "CHECKLIST.STAGEUPDATE_SUCCESS" : "Stage updated successfully",
+    "CHECKLIST.STAGEUPDATE_FAILURE" : "Failed to update Stage",
+    "CHECKLIST.STEPUPDATE_SUCCESS" : "Step updated successfully",
+    "CHECKLIST.STEPUPDATE_FAILURE" : "Failed to update Step"
+
 }
