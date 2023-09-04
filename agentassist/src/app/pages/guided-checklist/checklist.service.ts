@@ -78,6 +78,7 @@ export class ChecklistService {
       "description": [''],
       "confirmButtons": this.fb.array([]),
       'isAdherenceActive': [false, [Validators.required]],
+      'isSendCopy': [false],
       "adherence": this.fb.group(
         this.getUtteranceForm('', false)
         // {}
@@ -95,6 +96,7 @@ export class ChecklistService {
       "confirmButtons": this.fb.array([]),
       'isAdherenceActive': [step.isAdherenceActive, [Validators.required]],
       "clsId": [step.clsId, [Validators.required]],
+      'isSendCopy': [step.isSendCopy],
       "adherence": this.fb.group({})
     };
     if(step?.confirmButtons?.length){
