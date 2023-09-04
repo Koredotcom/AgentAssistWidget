@@ -1,0 +1,273 @@
+<div class="checklist-wrapper-info">
+    <div class="checked-list-content">
+        <div class="heading-block-check">
+            <div class="left-sec-data">
+                <h1>Playbook</h1>
+                <button class="more-check-tag">
+                    <i class="ast-light-bulb"></i>
+                    <span>{{triggeredDynCheckLists.length}}</span>
+                </button>
+                <h2>Laptop Sales</h2>
+                <div class="checklist-dropdown">
+                    <div class="toggle-checklist" (click)="showDropDown = !showDropDown;">
+                        <p>Dynamic PLaybooks</p>
+                        <i class="ast-carrotup"></i>
+                    </div>
+                    <div class="drp-down-conetnt-checklist" [ngClass]="{'d-none': !showDropDown}">
+                        <div class="heading-text">
+                            <h3>RECOMENDED PLAYBOOKS</h3>
+                            <i class="ast-light-bulb"></i>
+                        </div>
+                        <ng-container *ngFor="let clT of triggeredDynCheckLists; let int = index">
+                            <li (click)="selectDynCl(clT, int)">
+                                <p>{{clT.name}}</p>
+                                <span>{{clT.stages?.length}} steps</span>
+                            </li>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+            <button class="proceed-toclise-btn" (click)="proceedToClose()">
+                <div class="circle">
+                    <i class="ast-check-new"></i>
+                </div>
+                <span>Proceed to close</span>
+            </button>
+        </div>
+
+        <ng-container *ngFor="let cl of checklists; let i = index">
+            <ng-container *ngFor="let ac of cl.stages; let si = index">
+                <div class="acc-info-data" [ngClass]="{'open-acc-show': ac.opened}">
+                    <div class="acc-heading-block" (click)="ac.opened = !ac.opened">
+                        <div class="top-title-block">
+                            <h4 [ngClass]="{'text-strike-label' : getSelectedCount(ac) === ac.steps?.length}">{{ac.name}}</h4>
+                            <!-- && (cl.type === 'primary' && ac.name.toLowerCase() !== 'close') -->
+                            <button class="resume-btn" 
+                                *ngIf="(getSelectedCount(ac) !== ac.steps?.length)" 
+                                (click)="checkListResume($event, cl, i, si)">Resume
+                            </button>
+                            <p>{{ getSelectedCount(ac)}} / {{ac.steps?.length}} steps</p>
+                            <i class="ast-carrotup"></i>
+                        </div>
+                        <div class="steps-check">
+                            <ng-container *ngFor="let stp of ac.steps">
+                                <div class="step-div" [ngClass]="{'completed' : stp.complete}"></div>
+                            </ng-container>
+                        </div>
+                    </div>
+                    <div class="acc-body-data">
+                        <ng-container *ngFor="let step of ac.steps; let sti = index">
+                            <div class="check-list-type-info" [ngClass]="{'selected-check-item': ((ac.steps[sti - 1]?.complete && !step.complete) || (sti === 0 && !step.complete && !ac.steps[sti + 1]?.complete)), 'text-strike disabled-click-text': step?.complete}">
+                                <div class="title-block">
+                                    <h5>{{step.name}}</h5>
+                                    <div class="icon-indication" [ngClass]="{'not-checked': !step?.complete}" (click)="clickStep(cl, ac, step, i, si, sti)">
+                                        <i class="ast-check-new"></i>
+                                    </div>
+                                </div>
+                                <div *ngIf="step.description" class="content-info-sec">
+                                    <p>{{step.description}}</p>
+                                    <div class="adherece-type">
+                                        <!-- <h6>Adherence Type</h6>
+                                        <span>3/3 count</span> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+            </ng-container>
+        </ng-container>
+    </div>
+</div>
+
+
+
+
+<!-- Needs to show on completion of Checklist -->
+<!-- <ng-container>
+    <div class="empty-checked-info">
+        <div class="icon-block">
+            <i class="ast-positive-nudge"></i>
+        </div>
+        <div class="info-empty">
+            <h1>Fantastic job!</h1>
+            <p>Great job completing 100% of this playbook. Thank you for your hard work with this customer.</p>
+        </div>
+    </div>
+</ng-container> -->
+
+
+
+
+<!-- <div class="checklist-wrapper-info">
+    <div class="checked-list-content">
+        <div class="heading-block-check">
+            <div class="left-sec-data">
+                <h1>Playbook</h1>
+                <button class="more-check-tag">
+                    <i class="ast-light-bulb"></i>
+                    <span>2</span>
+                </button>
+                <h2>Laptop Sales</h2>
+                <div class="checklist-dropdown">
+                    <div class="toggle-checklist">
+                        <p>Insurance Coverage</p>
+                        <i class="ast-carrotup"></i>
+                    </div>
+                    <div class="drp-down-conetnt-checklist">
+                        <ng-container>
+                            <div class="heading-text">
+                                <h3>RECOMENDED PLAYBOOKS</h3>
+                                <i class="ast-light-bulb"></i>
+                            </div>
+                            <li>
+                                <p>Laptop Recommendation</p>
+                                <span>4 steps</span>
+                            </li>
+                        </ng-container>
+                        <ng-container>
+                            <div class="heading-text">
+                                <h3>PRIMARY PLAYBOOKS</h3>
+                                <i class="ast-light-bulb"></i>
+                            </div>
+                            <li>
+                                <p>New Customer Sales</p>
+                                <span>15 steps</span>
+                            </li>
+                            <li>
+                                <p>General Support</p>
+                                <span>6 steps</span>
+                            </li>
+                            <li>
+                                <p>Laptop Sales</p>
+                                <i class="ast-check-new"></i>
+                            </li>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+            <button class="proceed-toclise-btn">
+                <div class="circle">
+                    <i class="ast-check-new"></i>
+                </div>
+                <span>Proceed to close</span>
+            </button>
+        </div>
+        <ng-container>
+            <div class="acc-info-data open-acc-show">
+                <div class="acc-heading-block">
+                    <div class="top-title-block">
+                        <h4>Open</h4>
+                        <p>3/3 steps</p>
+                        <i class="ast-carrotup"></i>
+                    </div>
+                    <div class="steps-check">
+                        <div class="step-div"></div>
+                        <div class="step-div"></div>
+                        <div class="step-div"></div>
+                    </div>
+                </div>
+                <div class="acc-body-data">
+                    <div class="check-list-type-info">
+                        <div class="title-block">
+                            <h5>Warm Greeting</h5>
+                            <div class="icon-indication">
+                                <i class="ast-check-new"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="check-list-type-info">
+                        <div class="title-block disabled-click-text">
+                            <h5>Inform call is getting recorded</h5>
+                            <div class="icon-indication">
+                                <i class="ast-check-new"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="check-list-type-info selected-check-item">
+                        <div class="title-block">
+                            <h5 class="text-strike">Information about issue</h5>
+                            <div class="icon-indication">
+                                <i class="ast-check-new"></i>
+                            </div>
+                        </div>
+                        <div class="content-info-sec">
+                            <p>Get more information about issues. Ask question about when they have been facing issue and other related questions</p>
+                            <div class="adherece-type">
+                                <h6>Adherence Type</h6>
+                                <span>3/3 count</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="check-list-type-info">
+                        <div class="title-block disabled-click-text">
+                            <h5>Inform call is getting recorded</h5>
+                            <div class="icon-indication">
+                                <i class="ast-check-new"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="acc-info-data">
+                <div class="acc-heading-block">
+                    <div class="top-title-block">
+                        <h4>Close</h4>
+                        <p>3/3 steps</p>
+                        <i class="ast-carrotup"></i>
+                    </div>
+                    <div class="steps-check">
+                        <div class="step-div"></div>
+                        <div class="step-div"></div>
+                        <div class="step-div"></div>
+                    </div>
+                </div>
+                <div class="acc-body-data">
+                    <div class="check-list-type-info">
+                        <div class="title-block">
+                            <h5>Warm Greeting</h5>
+                            <div class="icon-indication">
+                                <i class="ast-check-new"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="check-list-type-info">
+                        <div class="title-block disabled-click-text">
+                            <h5>Inform call is getting recorded</h5>
+                            <div class="icon-indication">
+                                <i class="ast-check-new"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="check-list-type-info selected-check-item">
+                        <div class="title-block">
+                            <h5 class="text-strike">Information about issue</h5>
+                            <div class="icon-indication not-checked">
+                                <i class="ast-check-new"></i>
+                            </div>
+                        </div>
+                        <div class="content-info-sec">
+                            <p>Get more information about issues. Ask question about when they have been facing issue and other related questions</p>
+                            <div class="adherece-type">
+                                <h6>Adherence Type</h6>
+                                <span>3/3 count</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+
+        <ng-container>
+            <div class="empty-checked-info">
+                <div class="icon-block">
+                    <i class="ast-positive-nudge"></i>
+                </div>
+                <div class="info-empty">
+                    <h1>Fantastic job!</h1>
+                    <p>Great job completing 100% of this playbook. Thank you for your hard work with this customer.</p>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+</div> -->
