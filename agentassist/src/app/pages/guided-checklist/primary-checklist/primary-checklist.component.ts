@@ -122,11 +122,10 @@ export class PrimaryChecklistComponent implements OnInit, OnChanges {
     }))
     .subscribe((data)=>{
       console.log(data, 'data');
-      
+      this.notificationService.notify(this.translate.instant("CHECKLIST.CLDUPDATE_SUCCESS"), 'success');
     },(err)=> {
       currentCheckList.isActive = false;
-      this.notificationService.showError(err, this.translate.instant("COACHING.PUBLISH_FAILURE"));
-
+      this.notificationService.showError(err, this.translate.instant("COACHING.CLUPDATE_FAILURE"));
     });
   }
 
