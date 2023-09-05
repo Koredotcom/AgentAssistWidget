@@ -121,13 +121,20 @@ export class ChecklistsComponent implements OnInit, OnDestroy {
       completed = (this.checklists[i].stages[0]?.steps || [])
       .every(item=> item.complete);
       if(completed){
+        this.checklists[i].stages[0].opened = false;
         this.sendCheckListCompleteEvent(id);
       }
     }else{
       let open = (this.checklists[i].stages[0]?.steps || [])
       .every(item=> item.complete);
+      if(open){
+        this.checklists[i].stages[0].opened = false;
+      }
       let close = (this.checklists[i].stages[1]?.steps || [])
       .every(item=> item.complete);
+      if(close){
+        this.checklists[i].stages[1].opened = false;
+      }
       if(open && close){
         completed = true;
       }

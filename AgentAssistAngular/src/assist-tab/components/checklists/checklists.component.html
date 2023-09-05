@@ -43,7 +43,7 @@
                             <h4 >{{ac.name}}</h4>
                             <!-- && (cl.type === 'primary' && ac.name.toLowerCase() !== 'close') -->
                             <button class="resume-btn" 
-                                *ngIf="(getSelectedCount(ac) !== ac.steps?.length) && selectedPlayBook != cl.name" 
+                                *ngIf="(getSelectedCount(ac) !== ac.steps?.length) && selectedPlayBook !== cl.name" 
                                 (click)="checkListResume($event, cl, i, si)">Resume
                             </button>
                             <p>{{ getSelectedCount(ac)}} / {{ac.steps?.length}} steps</p>
