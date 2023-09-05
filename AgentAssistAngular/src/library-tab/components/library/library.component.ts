@@ -190,7 +190,7 @@ export class LibraryComponent implements OnInit {
       this.agent_run_click(runDialogueObject, false)
     }
     this.handleSubjectService.setRunButtonClickEvent(runDialogueObject);
-    this.assistTabDialogforDashboard(dialog, true, runDialogueObject.name)
+    // this.assistTabDialogforDashboard(dialog, true, runDialogueObject.name)
   }
 
   assistTabDialogforDashboard(dialog, flag, intent?) {

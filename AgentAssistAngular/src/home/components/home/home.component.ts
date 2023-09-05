@@ -684,7 +684,7 @@ setProactiveMode(){
       let ele = document.getElementById(`displayData-${target.dataset.msgId}`) ? document.getElementById(`displayData-${target.dataset.msgId}`) : document.getElementById(target.dataset.msgId);
       let data = target.dataset?.msgData && target.dataset?.msgData !== '' ? target.dataset?.msgData : (target.parentNode.dataset?.msgData && target.parentNode.dataset?.msgData !== '' ? target.parentNode.dataset?.msgData : ele?.innerText);
       if(target.dataset?.textType === 'sentence') {
-        this.connectionDetails.type = target.dataset?.type;
+        this.connectionDetails['type'] = target.dataset?.textType;
       } else if(target.dataset?.textType === 'article') {
         this.connectionDetails.title = target.dataset?.title;
         this.connectionDetails.contentId = target.dataset?.contentId;
@@ -692,6 +692,7 @@ setProactiveMode(){
         this.connectionDetails.title = target.dataset?.title;
         this.connectionDetails.contentId = target.dataset?.contentId;
       }
+      this.connectionDetails.sessionId = this.handleSubjectService.assistTabSessionId;
       if(data && data != 'Send'){
         data = this.commonService.replaceLtGt(data, true);
       this.commonService.preparePostMessageForSendAndCopy(evt, data, IdReferenceConst.SENDMSG, this.connectionDetails);
