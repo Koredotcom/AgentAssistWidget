@@ -27,7 +27,7 @@
                     </div>
                 </div>
             </div>
-            <button class="proceed-toclise-btn" (click)="proceedToClose()">
+            <button *ngIf="isProceedToClose" class="proceed-toclise-btn" (click)="proceedToClose()">
                 <div class="circle">
                     <i class="ast-check-new"></i>
                 </div>
@@ -37,13 +37,13 @@
 
         <ng-container *ngFor="let cl of checklists; let i = index">
             <ng-container *ngFor="let ac of cl.stages; let si = index">
-                <div class="acc-info-data" [ngClass]="{'open-acc-show': ac.opened}">
-                    <div class="acc-heading-block" (click)="ac.opened = !ac.opened">
+                <div class="acc-info-data" [ngStyle]="{'background': ac.color}" [ngClass]="{'open-acc-show': ac.opened}">
+                    <div class="acc-heading-block" [ngStyle]="{'background': ac.color}" (click)="ac.opened = !ac.opened" [ngClass]="{'disabled-txt' : getSelectedCount(ac) === ac.steps?.length}">
                         <div class="top-title-block">
-                            <h4 [ngClass]="{'text-strike-label' : getSelectedCount(ac) === ac.steps?.length}">{{ac.name}}</h4>
+                            <h4 >{{ac.name}}</h4>
                             <!-- && (cl.type === 'primary' && ac.name.toLowerCase() !== 'close') -->
                             <button class="resume-btn" 
-                                *ngIf="(getSelectedCount(ac) !== ac.steps?.length)" 
+                                *ngIf="(getSelectedCount(ac) !== ac.steps?.length) && selectedPlayBook != cl.name" 
                                 (click)="checkListResume($event, cl, i, si)">Resume
                             </button>
                             <p>{{ getSelectedCount(ac)}} / {{ac.steps?.length}} steps</p>
@@ -59,7 +59,7 @@
                         <ng-container *ngFor="let step of ac.steps; let sti = index">
                             <div class="check-list-type-info" [ngClass]="{'selected-check-item': ((ac.steps[sti - 1]?.complete && !step.complete) || (sti === 0 && !step.complete && !ac.steps[sti + 1]?.complete)), 'text-strike disabled-click-text': step?.complete}">
                                 <div class="title-block">
-                                    <h5>{{step.name}}</h5>
+                                    <h5 [ngClass]="{'random': cl.type === 'random'}">{{step.name}}</h5>
                                     <div class="icon-indication" [ngClass]="{'not-checked': !step?.complete}" (click)="clickStep(cl, ac, step, i, si, sti)">
                                         <i class="ast-check-new"></i>
                                     </div>

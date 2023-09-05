@@ -1,9 +1,10 @@
 <app-checklists *ngIf="isChecklistOpened" 
     [connectionDetails]="connectionDetails" 
     [checklists]="checklists"
-    [ccVersion]="this.checkListData?.ccVersion"
+    [ccVersion]="checkListData?.ccVersion"
     [dynamicChecklist]="commonService.dynamicChecklist"
-    [selectedPlayBook]="selectedPlayBook">
+    [selectedPlayBook]="selectedPlayBook"
+    [clObjs]="clObjs">
 </app-checklists>
 
 <div class="dynamic-block-content">

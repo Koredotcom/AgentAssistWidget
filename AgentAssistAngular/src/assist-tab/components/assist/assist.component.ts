@@ -94,7 +94,6 @@ export class AssistComponent implements OnInit {
           this.commonService.configObj.accountId)
       }
     })
-
   }
 
   ngOnDestroy() {
@@ -320,6 +319,7 @@ export class AssistComponent implements OnInit {
   }
 
   checkListData:any = {};
+  clObjs: any = {};
   // dynClObjs:any = {};
   guidedListAPICall(agentAssistUrl, botId, accessToken, accountId) {
     let headersVal = {
@@ -337,11 +337,14 @@ export class AssistComponent implements OnInit {
           this.checkListData = data;
           this.commonService.primaryChecklist = data.checklists.filter(check => check.type === "primary");
           this.commonService.dynamicChecklist = data.checklists.filter(check => check.type === "dynamic");
-          // this.commonService.guidedChecklistObj = data;
-        }
-        // if(!this.isGuidedChecklistApiSuccess && this.commonService.primaryChecklist.length > 0) {
-        //   this.sendChecklistEvent();
-        // }
+          (data?.checklists || [])
+          .forEach((item)=>{
+            (item.stages || [])
+            .forEach((stage)=>{
+              this.clObjs[stage._id] = stage;
+            }) 
+          });
+        };
         this.sendOpenCheckLIstEvent();
       },
       error:  (err)=> {
@@ -375,7 +378,14 @@ export class AssistComponent implements OnInit {
     this.isChecklistOpened = true;
     if(this.commonService.primaryChecklist[0]?.stages[0]){
       this.commonService.primaryChecklist[0].stages[0].opened = true;
-    }
+    };
+    (this.commonService.primaryChecklist[0]?.stages)
+    .forEach((item)=>{
+      item.color = this.clObjs[item._id]?.color
+    });
+    // if(this.clObjs[this.commonService.primaryChecklist[0]._id]){
+    //   this.commonService.primaryChecklist[0].color = this.clObjs[this.commonService.primaryChecklist[0]._id];
+    // }
     this.checklists.push(this.commonService.primaryChecklist[0]);
     this.selectedPlayBook = this.commonService.primaryChecklist[0]?.name;
   }

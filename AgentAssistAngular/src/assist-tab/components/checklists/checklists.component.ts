@@ -20,12 +20,16 @@ export class ChecklistsComponent implements OnInit, OnDestroy {
   @Input() connectionDetails: any;
   @Input() ccVersion: any;
   @Input() dynamicChecklist = [];
-  triggeredDynCheckLists = [];
   @Input() selectedPlayBook = '';
+  @Input() clObjs: any;
+  triggeredDynCheckLists = [];
+  isProceedToClose = true;
+  primaryObj:any = {};
   dynClObjs: any = {};
   showDropDown = false;
+  currentCl:any = {};
   clickStep(cl, ac, step, i, si, sti) {
-    if ((this.checklists[i].stages)[si].steps[sti]?.complete) {
+    if ((this.checklists[i]?.stages)[si]?.steps[sti]?.complete) {
       return;
     }
     else if (cl.order === "sequential" && ((this.checklists[i].stages)[si].steps[sti - 1]?.complete || sti === 0)) {
@@ -57,6 +61,31 @@ export class ChecklistsComponent implements OnInit, OnDestroy {
       }
     }
     this.websocketService.emitEvents(EVENTS.checklist_step_closed, checklistParams);
+    this.checkAllStagesCompleted(cl._id);
+  }
+
+  sendCheckListCompleteEvent(id){
+    let checklistParams: any = {
+      "payload": {
+          "event": "checklist_closed",
+          "conversationId": this.connectionDetails.conversationId,
+          "ccVersion": this.ccVersion, // Optional: checklist Configuration version
+          "accountId": "",
+          "botId": (this.commonService.configObj?.fromSAT) ? this.commonService.configObj.instanceBotId : this.commonService.configObj.botid,
+          "botName": "",
+          "agentInfo": {
+              "agentId": "",
+              //any other fields
+          },
+          "checklist": {
+              "id": id,
+              //any other fields
+          },
+          "timestamp": 0,
+          "context": {}
+      }
+    };
+    this.websocketService.emitEvents(EVENTS.checklist_closed, checklistParams);
   }
 
   stepComplete(id, stageId, stepId){
@@ -82,7 +111,31 @@ export class ChecklistsComponent implements OnInit, OnDestroy {
       }
     }
     this.websocketService.emitEvents(EVENTS.checklist_step_closed, checklistParams);
+    this.checkAllStagesCompleted(id);
   };
+
+  checkAllStagesCompleted(id){
+    let completed = false;
+    let i = (this.checklists || []).findIndex(item => item._id === id);
+    if(this.checklists[i]?.type !== 'primary'){
+      completed = (this.checklists[i].stages[0]?.steps || [])
+      .every(item=> item.complete);
+      if(completed){
+        this.sendCheckListCompleteEvent(id);
+      }
+    }else{
+      let open = (this.checklists[i].stages[0]?.steps || [])
+      .every(item=> item.complete);
+      let close = (this.checklists[i].stages[1]?.steps || [])
+      .every(item=> item.complete);
+      if(open && close){
+        completed = true;
+      }
+      if(completed){
+        this.sendCheckListCompleteEvent(id);
+      }
+    }
+  }
 
   ngOnInit() {
     this.subscription1 = this.websocketService.checkListStepResponse$.subscribe((data) => {
@@ -111,8 +164,7 @@ export class ChecklistsComponent implements OnInit, OnDestroy {
       .reduce((acc, item) => {
         acc[item._id] = item;
         return acc;
-      }, {});
-
+    }, {});
   }
 
   getSelectedCount(stp) {
@@ -127,6 +179,7 @@ export class ChecklistsComponent implements OnInit, OnDestroy {
     this.triggeredDynCheckLists.splice(i, 1);
     this.closeAllCheckLists();
     clT.stages[0].opened = true;
+    clT.stages[0].color = this.clObjs[clT.stages[0]._id];
     this.checklists.push(clT);
     let checklistParams: any = {
       "payload": {
@@ -149,6 +202,8 @@ export class ChecklistsComponent implements OnInit, OnDestroy {
   }
 
   checkListResume(event, cl, i, si) {
+    this.selectedPlayBook = cl.name;
+    this.isProceedToClose = true;
     event.stopPropagation();
     this.closeAllCheckLists();
     this.checklists[i].stages[si].opened = true;
@@ -193,6 +248,7 @@ export class ChecklistsComponent implements OnInit, OnDestroy {
   }
 
   proceedToClose(){
+    this.isProceedToClose = false;
     let obj = this.closeAllCheckLists(true);
     let checklistParams: any = {
       "payload": {

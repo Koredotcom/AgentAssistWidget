@@ -37,5 +37,5 @@ export enum EVENTS {
     'checklist_step_response' = 'checklist_step_response',
     'checklist_response' = 'checklist_response',
     'checklist_resume' = 'checklist_resume',
-    'checklist_proceed_to_closed' = 'checklist_proceed_to_closed',
+    'checklist_proceed_to_closed' = 'checklist_proceed_to_closed'
 }
