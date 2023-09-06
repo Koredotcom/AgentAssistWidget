@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { workflowService } from '@kore.services/workflow.service';
 import { IDashboardFilter } from '../dashboard-filters/dateFilter.model';
@@ -24,7 +24,9 @@ export class AgentFeedbackComponent implements OnInit {
   agentFeedbackData: any = {};
   agentFeedbackTableData: any = [];
   onChangeCall: boolean = false;
-  params: any;
+  params ={
+    streamId : ''
+  };
   payload = {
     "startTime": "",
     "endTime":"",
@@ -43,7 +45,7 @@ export class AgentFeedbackComponent implements OnInit {
     this.params.streamId = this.authService.smartAssistBots[0]._id;
   }
 
-  ngOnChanges() {
+  ngOnChanges(changes : SimpleChanges) {
     if (this.viewType && this.filters && Object.keys(this.filters).length > 0 && !this.onChangeCall) {
       this.handleOnChangeCall();
       this.updateAgentFeedbackData();

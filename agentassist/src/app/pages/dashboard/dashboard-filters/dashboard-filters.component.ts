@@ -93,8 +93,9 @@ export class DashboardFiltersComponent implements OnInit {
   }
 
   changeBot(bot) {
-    this.filters = {... this.filters, botId: bot._id}
+    this.filters = { ... this.filters, botId: bot._id}
     this.selectedBot = bot.name;
+    this.updateFilters(this.filters);
   }
 
 }

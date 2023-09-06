@@ -1,8 +1,11 @@
 import { DecimalPipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, SimpleChanges, Input } from '@angular/core';
 import { EChartOption } from 'echarts';
 import { DashboardService } from '../dashboard.service';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
+import { IDashboardFilter } from '../dashboard-filters/dateFilter.model';
+import { DASHBORADCOMPONENTTYPE, VIEWTYPE } from '../dashboard.cnst';
+import { AuthService } from '@kore.services/auth.service';
 
 @Component({
   selector: 'app-automation-performance',
@@ -12,26 +15,38 @@ import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 export class AutomationPerformanceComponent implements OnInit {
 
   chartOption: EChartOption;
+  @Input() filters : IDashboardFilter;
+  @Input() viewType : string;
+  onChangeCall : boolean = false;
   automationPerformanceChartData : any = [];
+  payload = {
+    "startTime": " ",
+    "endTime":" ",
+    "experience" : " "  // CHAT OR VOICE
+  }
 
-  constructor(public dashboardService : DashboardService, private decimalPipe : DecimalPipe, private service : ServiceInvokerService) { }
+  params ={
+    streamId : ''
+  };
+
+  public DASHBORADCOMPONENTTYPE = DASHBORADCOMPONENTTYPE;
+  public VIEWTYPE = VIEWTYPE;
+
+  constructor(public dashboardService : DashboardService, private decimalPipe : DecimalPipe, private service : ServiceInvokerService, private authService : AuthService) { }
 
   ngOnInit(): void {
+    this.params.streamId = this.authService.smartAssistBots[0]._id;
     this.updateAutomationPerformanceData();
   }
 
+  ngOnChanges(changes : SimpleChanges){
+    if( this.filters && Object.keys(this.filters).length > 0 && !this.onChangeCall){
+      this.updateAutomationPerformanceData();
+    }
+  }
+
   updateAutomationPerformanceData(){
-    let payload = {
-      "startTime": " ",
-      "endTime":" ",
-      "experience" : " "  // CHAT OR VOICE
-    }
-
-    let params = {
-      streamId : ""
-    }
-
-    this.service.invoke('automationPerformance', params, payload).subscribe((data : any) => {
+    this.service.invoke('automationPerformance', this.params, this.payload).subscribe((data : any) => {
       this.automationPerformanceChartData = [];
       let colorObj : any = {
         "Successfully Completed" : '#47B39C',

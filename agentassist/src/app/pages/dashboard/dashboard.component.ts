@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild, SimpleChange, Input } from '@angular/core';
 import jsPDF from 'jspdf';
 import html2canvas, { Options } from 'html2canvas';
 import { actualvsDisplayTitle, DASHBORADCOMPONENTTYPE, VIEWTYPE } from './dashboard.cnst';
@@ -6,6 +6,8 @@ import { SliderComponentComponent } from 'src/app/shared/slider-component/slider
 import { DashboardService } from './dashboard.service';
 import { SubSink } from 'subsink';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
+import { AuthService } from '@kore.services/auth.service';
+import { IDashboardFilter } from './dashboard-filters/dateFilter.model';
 
 
 @Component({
@@ -17,6 +19,9 @@ export class DashboardComponent implements OnInit {
 
   @ViewChild('newConvSlider', { static: true }) newConvSlider: SliderComponentComponent;
   @ViewChild('pdfTable') pdfTable: ElementRef;
+  @Input() filters : IDashboardFilter;
+  @Input() viewType : string;
+  onChangeCall : boolean = false;
 
   sliderId : string = "dashboardSlider";
   sliderStatus: boolean;
@@ -25,29 +30,36 @@ export class DashboardComponent implements OnInit {
   customerAspectDropdownList : any = actualvsDisplayTitle.CUSTOMER_ASPECT_DROPDOWN_LIST;
   customerAspectDropdownSelection : string = "agent";
   filterData : any = {};
+  params ={
+    streamId : ''
+  };
+  payload = {
+    "startTime": " ",
+    "endTime":" ",
+    "experience" : " ",
+  }
 
   subs = new SubSink();
 
   public DASHBORADCOMPONENTTYPE = DASHBORADCOMPONENTTYPE;
   public VIEWTYPE = VIEWTYPE;
 
-  constructor(public dashboardService : DashboardService, public cdRef : ChangeDetectorRef, private service : ServiceInvokerService) { }
+  constructor(public dashboardService : DashboardService, public cdRef : ChangeDetectorRef, private service : ServiceInvokerService, private authService : AuthService) { }
 
   ngOnInit(): void {
+    this.params.streamId = this.authService.smartAssistBots[0]._id;
     this.subscribeEvents();
     this.updateKPIData();
   }
 
-  updateKPIData(){
-     let params = {
-      streamId: ""
-      }
-    let payload = {
-      "startTime": " ",
-      "endTime":" ",
-      "experience" : " ",
+  ngOnChanges(changes : SimpleChange){
+    if( this.filters && Object.keys(this.filters).length > 0 && !this.onChangeCall ){
+      this.updateKPIData();
     }
-      this.service.invoke('sessions', params, payload).subscribe(
+  }
+
+  updateKPIData(){
+      this.service.invoke('sessions', this.params, this.payload).subscribe(
         res => {
           this.kpiData = {};
           if(res && Object.keys(res).length > 0){

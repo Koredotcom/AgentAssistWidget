@@ -32,7 +32,9 @@ export class AgentAspectComponent implements OnInit, AfterViewInit {
   agentAspectData : any;
   agentAspectTableData : any = [];
   onChangeCall : boolean = false;
-  params;
+  params ={
+    streamId : ''
+  };
   payload = {
     "startTime": "",
     "endTime":"",

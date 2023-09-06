@@ -29,26 +29,39 @@ export class CustomerAspectComponent implements OnInit {
   customerAspectAcutalData : any;
   onChangeCall: boolean = false;
   botId:any;
+  params = {
+    streamId: ''
+  }
+  payload = {
+    "startTime": "",
+    "endTime":"",
+    "sessionType" : "all", // agent or customer or all
+    "dataType" : "all", // all or faqs or articles or automations
+    "experience" : "",  // chat or voice
+    "skip":0,  // pages to skip (default 0)
+    "limit":3, // number of record to be fetched
+    "fetched":0  // count of previously fetched responses (default 0)
 
+  }
 
   constructor(private dashboardService : DashboardService, private service : ServiceInvokerService, private authService : AuthService) { }
 
   ngOnInit(): void {
     this.updateCustomerAspectData();
-    this.botId = this.authService.smartAssistBots[0]._id;
+    this.params.streamId = this.authService.smartAssistBots[0]._id;
   }
 
   ngOnChanges(changes : SimpleChanges){
     console.log("🚀 ~ file: customer-aspect.component.ts:42 ~ CustomerAspectComponent ~ ngOnChanges ~ changes:", changes)
-    // if(this.viewType && this.filters && Object.keys(this.filters).length > 0 && this.customerDropdownSelection && !this.onChangeCall){
-    //   console.log("🚀 ~ file: customer-aspect.component.ts:43 ~ CustomerAspectComponent ~ ngOnChanges ~ this.filters:", this.filters)
-    //   this.handleOnChangeCall();
-    //   this.updateCustomerAspectData();
-    // }
-    if(changes.customerDropdownSelection) {
+    if(this.viewType && this.filters && Object.keys(this.filters).length > 0 && this.customerDropdownSelection && !this.onChangeCall){
+      console.log("🚀 ~ file: customer-aspect.component.ts:43 ~ CustomerAspectComponent ~ ngOnChanges ~ this.filters:", this.filters)
       this.handleOnChangeCall();
       this.updateCustomerAspectData();
     }
+    // if(changes.customerDropdownSelection) {
+    //   this.handleOnChangeCall();
+    //   this.updateCustomerAspectData();
+    // }
 
   }
 
@@ -68,21 +81,8 @@ export class CustomerAspectComponent implements OnInit {
       //     this.updateViewData(resp);
       //   }
       // });
-      let params = {
-        streamId: this.botId
-      }
-      let payload = {
-        "startTime": "",
-        "endTime":"",
-        "sessionType" : "all", // agent or customer or all
-        "dataType" : "all", // all or faqs or articles or automations
-        "experience" : "",  // chat or voice
-        "skip":0,  // pages to skip (default 0)
-        "limit":3, // number of record to be fetched
-        "fetched":0  // count of previously fetched responses (default 0)
 
-      }
-      this.service.invoke('customersLookingfor', params, payload).subscribe((data : any) => {
+      this.service.invoke('customersLookingfor', this.params, this.payload).subscribe((data : any) => {
         this.updateViewData(data);
       });
     }
