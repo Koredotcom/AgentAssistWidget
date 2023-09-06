@@ -49,7 +49,7 @@ export class DashboardFiltersComponent implements OnInit {
   ngOnInit(): void {
     this.botList = this.authService.smartAssistBots || [];
     this.selectedBot = this.authService.smartAssistBots[0].name;
-    this.dashboardService.setSelectedBotDetails(this.selectedBot)
+    this.dashboardService.setSelectedBotDetails(this.authService.smartAssistBots[0]);
     this.calendarLocale = {
       applyLabel: this.translate.instant('BUTTONS.APPLY'),
       cancelLabel: this.translate.instant('BUTTONS.CANCEL'),

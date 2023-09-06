@@ -56,9 +56,10 @@ export class CustomerAspectComponent implements OnInit {
   }
 
   ngOnChanges(changes : SimpleChanges){
+    console.log("🚀 ~ file: customer-aspect.component.ts:59 ~ CustomerAspectComponent ~ ngOnChanges ~ changes:", changes)
     if(this.viewType && this.filters && Object.keys(this.filters).length > 0 && this.customerDropdownSelection && !this.onChangeCall){
       this.payload = { ... this.filters}
-      this.params.streamId = this.filters?.botId !== '' ? this.filters.botId : this.params.streamId;
+      this.params.streamId = this.filters?.botId !== '' ? this.filters.botId : this.dashboardService.getSelectedBotDetails()._id;
       this.handleOnChangeCall();
       this.updateCustomerAspectData();
     }
