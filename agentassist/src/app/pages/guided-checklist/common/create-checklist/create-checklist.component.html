@@ -23,14 +23,14 @@
                     <div [ngClass]="{'d-none': tab !== 'basic'}" class="p-22">
                         <ng-container>
                             <div class="kr-sg-input-text m-b-12">
-                                <div class="label-text">Name</div>
-                                <input type="text" formControlName="name" maxlength="48" placeholder="Add Name"
+                                <div class="label-text">Playbook Name</div>
+                                <input type="text" formControlName="name" maxlength="48" placeholder="Playbook Name"
                                     class="input-text">
                                 <div class="count-char">{{checkListForm.value?.name?.length}}/48</div>
                             </div>
                             <div class="kr-sg-input-text-area m-b-12">
                                 <div class="label-text">Description</div>
-                                <textarea formControlName="description" placeholder="Rule Purpose" maxlength="200"
+                                <textarea formControlName="description" placeholder="Description" maxlength="200"
                                     class="input-text"></textarea>
                                 <div class="count-char">{{checkListForm.value?.description?.length}}/200</div>
                             </div>

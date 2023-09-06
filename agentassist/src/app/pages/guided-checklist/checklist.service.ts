@@ -75,7 +75,7 @@ export class ChecklistService {
     return {
       "botId": [botId, [Validators.required]],
       "name": ['', [Validators.required]],
-      "description": [''],
+      "description": ['', [Validators.required]],
       "confirmButtons": this.fb.array([]),
       'isAdherenceActive': [false, [Validators.required]],
       'isSendCopy': [false],
@@ -92,7 +92,7 @@ export class ChecklistService {
       "_id": step._id,
       "botId": [botId, [Validators.required]],
       "name": [step.name, [Validators.required]],
-      "description": [step.description],
+      "description": [step.description, [Validators.required]],
       "confirmButtons": this.fb.array([]),
       'isAdherenceActive': [step.isAdherenceActive, [Validators.required]],
       "clsId": [step.clsId, [Validators.required]],

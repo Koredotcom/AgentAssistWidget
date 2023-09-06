@@ -27,7 +27,13 @@
                         </div>
                         <ng-container *ngFor="let dyn of dynamicList">
                             <div class="body-data-table-wrapper-coaching">
-                                <div class="coaching-rule w-20">{{dyn.name | uppercase}}</div>
+                                <div class="coaching-rule w-20">
+                                    <div class="title" [title]="dyn.name" placement="bottom-center" tooltipClass="tooltip-global-styles" ngbTooltip="{{dyn.name | titlecase}}" container="body">{{dyn.name | uppercase}}</div>
+                                    <div class="voice-msg-icons">
+                                        <i class="icon-sa-welcome-voice" placement="bottom-center" tooltipClass="tooltip-global-styles" ngbTooltip="voice" *ngIf="dyn.channels.includes('voice')"></i>
+                                        <i class="icon-sa-welcome-chat" placement="bottom-center" tooltipClass="tooltip-global-styles" ngbTooltip="chat" *ngIf="dyn.channels.includes('chat')"></i>
+                                    </div>
+                                </div>
                                 <div class="actions-info w-12">
                                     <button class="edit-btn" (click)="updateCl(dyn)">
                                         <i class="icon-sa-welcome-edit"></i>

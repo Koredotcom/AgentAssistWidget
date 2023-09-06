@@ -29,15 +29,38 @@
           </div>
         </div>
       </div>
+      
+      <div class="channels-info" *ngIf="currentCheckList.channels?.length > 0">
+        <span class="title">Channels</span>
+        <button class="speak-chat-icon" *ngIf="currentCheckList.channels?.indexOf('voice') >=0">
+            <i class="icon-sa-welcome-voice" ngbTooltip ="voice"></i>
+        </button>
+        <button class="speak-chat-icon" *ngIf="currentCheckList.channels?.indexOf('chat') >= 0">
+            <i class="icon-sa-message"  ngbTooltip ="chat"></i>
+        </button>
+      </div>
+      
+
     </div>
     <!-- <i class="icon-sa-settings"></i> -->
     <!-- <button class="kr-sg-button-secondary-two btn_lg">Publish</button> -->
-    <div class="btn-actions">
+    
+    <!-- <div class="btn-actions">
       <button class="settings-actions kr-sg-button-secondary" (click)="openSettings()">
         Settings
       </button>
       <button class="kr-sg-button-primary btn_lg" (click)="closeCheckListScreen()">Done</button>
-    </div>
+    </div> -->
+
+    <div class="btn-actions">
+      <button class="settings-actions" (click)="openSettings()">
+          <i class="icon-sa-settings"></i>
+      </button>
+      <button class="kr-sg-button-secondary btn_lg" (click)="closeCheckListScreen()">Cancel</button>
+      <!-- <button class="kr-sg-button-secondary-two btn_lg">Publish</button> -->
+      <button class="kr-sg-button-primary btn_lg" (click)="closeCheckListScreen()">Done</button>
+  </div>
+
   </div>
   <div class="checklist-body-wrapper">
     <div class="check-list-data">
