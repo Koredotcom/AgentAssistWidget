@@ -6,6 +6,7 @@ import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { IDashboardFilter } from '../dashboard-filters/dateFilter.model';
 import { DASHBORADCOMPONENTTYPE, VIEWTYPE } from '../dashboard.cnst';
 import { AuthService } from '@kore.services/auth.service';
+import { SubSink } from 'subsink';
 
 @Component({
   selector: 'app-automation-performance',
@@ -29,6 +30,8 @@ export class AutomationPerformanceComponent implements OnInit {
     streamId : ''
   };
 
+  subs = new SubSink();
+
   public DASHBORADCOMPONENTTYPE = DASHBORADCOMPONENTTYPE;
   public VIEWTYPE = VIEWTYPE;
 
@@ -45,6 +48,17 @@ export class AutomationPerformanceComponent implements OnInit {
       this.payload = {...this.filters}
       this.updateAutomationPerformanceData();
     }
+  }
+
+  subscribeEvents(){
+    this.subs.sink = this.dashboardService.getDashboardFilterUpdated().subscribe((filters : any) => {
+      // console.log(filters, "filters");
+      if(filters && Object.keys(filters).length > 0){
+        this.payload = Object.assign({}, filters);
+        this.params.streamId = this.filters?.botId ? this.filters?.botId : this.params.streamId;
+        this.updateAutomationPerformanceData();
+      }
+    });
   }
 
   updateAutomationPerformanceData(){
