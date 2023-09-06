@@ -39,7 +39,8 @@ export class AutomationPerformanceComponent implements OnInit {
 
   ngOnInit(): void {
     this.params.streamId = this.authService.smartAssistBots[0]._id;
-    this.updateAutomationPerformanceData();
+    this.subscribeEvents();
+    // this.updateAutomationPerformanceData();
   }
 
   ngOnChanges(changes : SimpleChanges){
