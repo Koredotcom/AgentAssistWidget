@@ -76,7 +76,7 @@ export class DashboardComponent implements OnInit {
       if(filters && Object.keys(filters).length > 0){
         this.filterData = Object.assign({}, filters);
         this.payload = this.filterData;
-        this.params.streamId = this.filters?.botId ? this.filters?.botId : this.params.streamId;
+        this.params.streamId = this.filters?.botId ? this.filters?.botId : this.dashboardService.getSelectedBotDetails();
         this.updateKPIData();
       }
     });

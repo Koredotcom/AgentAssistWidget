@@ -10,6 +10,7 @@ export class DashboardService {
   private exhaustiveRepresentation: BehaviorSubject<{}> = new BehaviorSubject(null);
   public agentAspectView: string = VIEWTYPE.WORDCLOUD;
   public dashboardfilterUpdated$ = new Subject();
+  public dashboardSelectedBot;
 
 
   constructor() { }
@@ -106,6 +107,13 @@ export class DashboardService {
     return this.dashboardfilterUpdated$.asObservable();
   }
 
+  setSelectedBotDetails(botDetails) {
+    this.dashboardSelectedBot = botDetails
+  }
+
+  getSelectedBotDetails() {
+    return this.dashboardSelectedBot;
+  }
 
   getWordCloudOptions(actualData) {
     return {
