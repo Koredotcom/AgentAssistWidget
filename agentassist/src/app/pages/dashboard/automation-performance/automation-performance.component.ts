@@ -42,7 +42,7 @@ export class AutomationPerformanceComponent implements OnInit {
   ngOnChanges(changes : SimpleChanges){
     if( this.filters && Object.keys(this.filters).length > 0 && !this.onChangeCall){
       this.params.streamId = this.filters?.botId !== '' ? this.filters.botId : this.params.streamId;
-      this.payload = this.filters
+      this.payload = {...this.filters}
       this.updateAutomationPerformanceData();
     }
   }
