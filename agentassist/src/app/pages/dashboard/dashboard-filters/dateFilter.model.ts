@@ -1,12 +1,12 @@
 export interface IAnalyticsFilters {
-    startTime: string,
-    endTime: string,
+    startDate: string,
+    endDate: string,
     type?: string
 }
 
 export interface IDashboardFilter{
-    startTime: string,
-    endTime: string,
+    startDate: string,
+    endDate: string,
     experience: string,
     botId?:string
 }

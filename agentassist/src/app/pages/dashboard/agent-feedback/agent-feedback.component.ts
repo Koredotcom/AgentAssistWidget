@@ -28,8 +28,8 @@ export class AgentFeedbackComponent implements OnInit {
     streamId : ''
   };
   payload: any = {
-    "startTime": "",
-    "endTime":"",
+    "startDate": "",
+    "endDate":"",
     "experience" : "",  // chat or voice
     "skip":0,  // pages to skip (default 0)
     "limit":3, // number of record to be fetched

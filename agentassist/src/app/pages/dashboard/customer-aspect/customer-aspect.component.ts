@@ -33,8 +33,8 @@ export class CustomerAspectComponent implements OnInit {
     streamId: ''
   }
   payload: any = {
-    "startTime": "",
-    "endTime":"",
+    "startDate": "",
+    "endDate":"",
     "sessionType" : "all", // agent or customer or all
     "dataType" : "all", // all or faqs or articles or automations
     "experience" : "",  // chat or voice

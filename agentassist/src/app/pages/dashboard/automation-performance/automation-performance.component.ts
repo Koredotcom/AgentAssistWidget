@@ -20,8 +20,8 @@ export class AutomationPerformanceComponent implements OnInit {
   onChangeCall : boolean = false;
   automationPerformanceChartData : any = [];
   payload: any = {
-    "startTime": " ",
-    "endTime":" ",
+    "startDate": " ",
+    "endDate":" ",
     "experience" : " "  // CHAT OR VOICE
   }
 

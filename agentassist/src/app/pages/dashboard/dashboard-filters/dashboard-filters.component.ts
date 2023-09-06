@@ -22,7 +22,7 @@ export class DashboardFiltersComponent implements OnInit {
   private filters: IDashboardFilter;
 
   //Calender
-  selected: { startTime: Moment, endTime: Moment };
+  selected: { startDate: Moment, endDate: Moment };
   ranges: any = {
     [this.translate.instant('CALENDAR.TODAY')]: [moment().startOf('day'), moment()],
     [this.translate.instant('CALENDAR.YESTERDAY')]: [moment().subtract(1, 'days').startOf('day'), moment().subtract(1, 'days').endOf('day')],
@@ -55,13 +55,13 @@ export class DashboardFiltersComponent implements OnInit {
       customRangeLabel: this.translate.instant('CALENDAR.CUSTOM_RANGE')
     }
 
-    this.selected = { startTime: moment().subtract(6, 'days').startOf('day'), endTime: moment() }
-    this.filters = { startTime: this.selected.startTime.toISOString(), endTime: this.selected.endTime.toISOString(), experience : this.selectedChannel }
+    this.selected = { startDate: moment().subtract(6, 'days').startOf('day'), endDate: moment() }
+    this.filters = { startDate: this.selected.startDate.toISOString(), endDate: this.selected.endDate.toISOString(), experience : this.selectedChannel }
     this.updateFilters(this.filters);
   }
 
   onDatesUpdated($event) {
-    this.filters = { ... this.filters, startTime: this.selected.startTime.toISOString(), endTime: this.selected.endTime.toISOString() }
+    this.filters = { ... this.filters, startDate: this.selected.startDate.toISOString(), endDate: this.selected.endDate.toISOString() }
     this.updateFilters(this.filters);
   }
 

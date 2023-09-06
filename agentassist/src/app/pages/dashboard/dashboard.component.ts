@@ -34,8 +34,8 @@ export class DashboardComponent implements OnInit {
     streamId : ''
   };
   payload: any = {
-    "startTime": " ",
-    "endTime":" ",
+    "startDate": " ",
+    "endDate":" ",
     "experience" : " ",
   }
 
