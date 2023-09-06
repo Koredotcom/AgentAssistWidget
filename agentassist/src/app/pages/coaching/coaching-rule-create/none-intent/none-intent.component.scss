@@ -545,7 +545,8 @@
 
 ::ng-deep .cdk-overlay-pane{
     .mat-autocomplete-panel{
-        display: flex;
+        &.mat-auto-complete-wrapper-intent{
+            display: flex;
         border-radius: 8px;
         border: 1px solid var(--gray-100, #F2F4F7);
         background: var(--base-white, #FFF);
@@ -711,7 +712,7 @@
                 }                    
             }
         }
-
+        }
     }
 }
 
