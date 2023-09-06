@@ -144,8 +144,8 @@ export class PrimaryChecklistComponent implements OnInit, OnChanges {
   openDeleteCl(dyn){
     let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
     let deleteRule = {
-      title: "Delete Rule",
-      desc: "Are you sure, you want to delete checklist '" + dyn.name + "'.",
+      title: "Delete Playbook",
+      desc: "Are you sure, you want to delete playbook '" + dyn.name + "'.",
       type: "rule",
       _id: dyn._id
     }

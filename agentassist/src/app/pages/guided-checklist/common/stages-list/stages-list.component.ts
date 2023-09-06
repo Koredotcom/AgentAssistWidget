@@ -141,7 +141,7 @@ export class StagesListComponent implements OnInit {
       botId: this.botId,
     };
     this.service
-      .invoke("get.agentcoachingruletags", params, {
+      .invoke("get.agentchecklisttags", params, {
         botId: this.botId,
       })
       .subscribe((data) => {

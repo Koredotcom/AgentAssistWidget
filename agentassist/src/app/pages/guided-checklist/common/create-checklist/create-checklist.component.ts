@@ -261,8 +261,8 @@ export class StageCreateComponent implements OnInit, AfterViewInit {
   assignOriginalToDisplayList(){  
     console.log(this.allTagList, 'all tag list');
       
-    this.filteredTagsDisplay = this.allTagList.map((item) => {      
-      return {name : item, checked : (this.checkListForm.value?.tags?.findIndex((tag) => {return tag.name == item})) >= 0 ? true : false}
+    this.filteredTagsDisplay = this.allTagList.map((item:any) => {      
+      return {name : item.name, checked : (this.checkListForm.value?.tags?.findIndex((tag) => {return tag.name == item.name})) >= 0 ? true : false}
     });    
     console.log(this.filteredTagsDisplay, 'filtered tags display');
     

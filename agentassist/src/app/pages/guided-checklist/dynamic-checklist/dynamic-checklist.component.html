@@ -26,8 +26,8 @@
                             <div class="titles-data w-10">Enable</div>
                         </div>
                         <ng-container *ngFor="let dyn of dynamicList">
-                            <div class="body-data-table-wrapper-coaching">
-                                <div class="coaching-rule w-20">
+                            <div class="body-data-table-wrapper-cl">
+                                <div class="cheklist w-20">
                                     <div class="title" [title]="dyn.name" placement="bottom-center" tooltipClass="tooltip-global-styles" ngbTooltip="{{dyn.name | titlecase}}" container="body">{{dyn.name | uppercase}}</div>
                                     <div class="voice-msg-icons">
                                         <i class="icon-sa-welcome-voice" placement="bottom-center" tooltipClass="tooltip-global-styles" ngbTooltip="voice" *ngIf="dyn.channels.includes('voice')"></i>

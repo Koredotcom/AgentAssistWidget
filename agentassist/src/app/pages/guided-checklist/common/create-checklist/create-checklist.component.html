@@ -49,13 +49,13 @@
                                 </mat-chip-list>
                                 <mat-autocomplete #auto="matAutocomplete">
                                     <div class="mat-checkboxs">
-                                        <mat-option *ngFor="let tag of filteredTagsDisplay;let i = index" [title]="tag"
-                                            (click)="selectedOption(tag.name, i);$event.stopPropagation();trigger.openPanel()">
+                                        <mat-option *ngFor="let tag of filteredTagsDisplay;let i = index" [title]="tag?.name"
+                                            (click)="selectedOption(tag?.name, i);$event.stopPropagation();trigger.openPanel()">
                                             <input id="checkbox-{{i}}" type="checkbox"
-                                                (click)="selectedOption(tag.name, i);trigger.openPanel();$event.stopPropagation();" [value]="tag.name"
+                                                (click)="selectedOption(tag?.name, i);trigger.openPanel();$event.stopPropagation();" [value]="tag?.name"
                                                 [checked]="tag.checked">
                                                 <div class="label-check text-truncate" for="checkbox-{{i}}">
-                                                    <span>{{tag.name}}</span>
+                                                    <span>{{tag?.name}}</span>
                                                 </div>                            
                                         </mat-option>
                                     </div>

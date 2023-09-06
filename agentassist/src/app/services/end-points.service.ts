@@ -1753,5 +1753,10 @@ export class EndPointsService {
       endpoint : this.SMARTASSIST_API_SERVER_URL + '/acchecklists/publishCoachingChecklists',
       method : 'post'
     }
+
+    this.serviceList['get.agentchecklisttags'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/acchecklists/:botId/tags',
+      method : 'get'
+    }
   }
 }

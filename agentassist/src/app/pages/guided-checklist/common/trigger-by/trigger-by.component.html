@@ -21,7 +21,7 @@
                                 <div class="desc-text">Listen for specific utterances by the agent to mark as completed</div>
                             </label>
                         </div>
-                        <div class="radio-checked-content" [ngClass]="{'disabled': onlyAdhreForm?.value?.type !== 'utterance'}">
+                        <div class="radio-checked-content" [ngClass]="{'disabled': onlyAdhreForm?.value?.type !== 'utterance', 'd-none': onlyAdhreForm?.value?.type !== 'utterance'}">
                             <div class="utterances-add-manually-block">
                                 <!-- <div class="add-rule-block">
                                     <div class="label-text">Utterances</div>
@@ -183,7 +183,7 @@
                                 <div class="desc-text">Watch for a dialog execution run by the agent</div>
                             </label>
                         </div>
-                        <div class="radio-checked-content" [ngClass]="{'disabled': onlyAdhreForm?.value?.type !== 'dialog'}">
+                        <div class="radio-checked-content" [ngClass]="{'disabled': onlyAdhreForm?.value?.type !== 'dialog', 'd-none': onlyAdhreForm?.value?.type !== 'dialog'}">
                             <div class="label-text">Bot</div>
                                 <div class="kr-sg-dropdowns m-b-10" placement="bottom">
                                     <div class="dropdown dropdown-open">
