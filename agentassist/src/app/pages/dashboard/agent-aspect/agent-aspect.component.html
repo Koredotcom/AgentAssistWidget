@@ -3,8 +3,8 @@
     <div [hidden]="((viewType == VIEWTYPELIST.EXHAUSTIVE_VIEW) || (dashboardService.agentAspectView == VIEWTYPELIST.TABLE)) || agentAspectTableData.length == 0">
         <div #wordCloud class="echart-wordCloudContainer" [ngClass]="{'echart-wordCloudContainer-hide' : (viewType == VIEWTYPELIST.EXHAUSTIVE_VIEW) && (dashboardService.agentAspectView == VIEWTYPELIST.TABLE)}"></div>
     </div>
-    
-    
+
+
     <ng-container *ngIf="(viewType == VIEWTYPELIST.PARTIAL_VIEW) && (dashboardService.agentAspectView == VIEWTYPELIST.TABLE)">
         <div class="cards-data-boards agent-feedback-cards">
             <div class="card-sec max_width_50">
@@ -12,11 +12,11 @@
                     <div class="title-text-info">
                         <span class="heading-text">{{"DASHBOARD.AGENT_ASPECT_TOTAL_SEARCH_REQ" | translate}}</span>
                         <div class="value-data" [ngClass]="{'negtive': !agentAspectData?.totalSearchReq?.increment}">
-                            <i [ngClass]="agentAspectData.totalSearchReq.increment ? 'icon-ast_sortup' : 'icon-ast_sortdown' "></i>
-                            <span>{{agentAspectData.totalSearchReq.percent}}%</span>
+                            <i [ngClass]="agentAspectData?.totalSearchReq?.increment ? 'icon-ast_sortup' : 'icon-ast_sortdown' "></i>
+                            <span>{{agentAspectData?.totalSearchReq?.percent}}%</span>
                         </div>
                     </div>
-                    <div class="count-heading" [ngClass]="{'empty-count': !agentAspectData.totalSearchReq.count}">{{agentAspectData.totalSearchReq.count}}</div>
+                    <div class="count-heading" [ngClass]="{'empty-count': !agentAspectData?.totalSearchReq?.count}">{{agentAspectData?.totalSearchReq?.count}}</div>
                 </div>
             </div>
             <div class="card-sec max_width_50">
@@ -24,11 +24,11 @@
                     <div class="title-text-info">
                         <span class="heading-text">{{"DASHBOARD.AGENT_ASPECT_SEARCH_RESULTS_USED" | translate}}</span>
                         <div class="value-data" [ngClass]="{'negtive': !agentAspectData?.searchResultsUsed?.increment}">
-                            <i [ngClass]="agentAspectData.searchResultsUsed.increment ? 'icon-ast_sortup' : 'icon-ast_sortdown' "></i>
-                            <span>{{agentAspectData.searchResultsUsed.percent}}%</span>
+                            <i [ngClass]="agentAspectData?.searchResultsUsed?.increment ? 'icon-ast_sortup' : 'icon-ast_sortdown' "></i>
+                            <span>{{agentAspectData?.searchResultsUsed?.percent}}%</span>
                         </div>
                     </div>
-                    <div class="count-heading" [ngClass]="{'empty-count': !agentAspectData.searchResultsUsed.count}">{{agentAspectData.searchResultsUsed.count}}%</div>
+                    <div class="count-heading" [ngClass]="{'empty-count': !agentAspectData?.searchResultsUsed?.count}">{{agentAspectData?.searchResultsUsed?.count}}%</div>
                 </div>
             </div>
         </div>
@@ -45,9 +45,9 @@
             </ng-container>
         </div>
     </ng-container>
-    
-    
-    
+
+
+
     <ng-container *ngIf="(viewType == VIEWTYPELIST.EXHAUSTIVE_VIEW) && (dashboardService.agentAspectView == VIEWTYPELIST.TABLE)">
         <div class="cards-data-boards agent-feedback-cards">
             <div class="card-sec max_width_50">
@@ -88,7 +88,7 @@
             </ng-container>
         </div>
     </ng-container>
-    
+
     <div [hidden]="((viewType == VIEWTYPELIST.PARTIAL_VIEW) || (dashboardService.agentAspectView == VIEWTYPELIST.TABLE)) || agentAspectTableData.length == 0 ">
         <div #wordCloudExhaustive [ngClass]="(viewType == VIEWTYPELIST.PARTIAL_VIEW) && (dashboardService.agentAspectView == VIEWTYPELIST.TABLE) ? 'echart-wordCloudContainer-hide' : 'echart-wordCloudContainer'"></div>
     </div>

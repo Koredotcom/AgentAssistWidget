@@ -2,6 +2,8 @@ import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@
 import { IDashboardFilter } from '../dashboard-filters/dateFilter.model';
 import { actualvsDisplayTitle, DASHBORADCOMPONENTTYPE, VIEWTYPE } from '../dashboard.cnst';
 import { DashboardService } from '../dashboard.service';
+import { ServiceInvokerService } from '@kore.services/service-invoker.service';
+import { AuthService } from '@kore.services/auth.service';
 
 @Component({
   selector: 'app-customer-aspect',
@@ -26,36 +28,62 @@ export class CustomerAspectComponent implements OnInit {
   customerAspectData : any = [];
   customerAspectAcutalData : any;
   onChangeCall: boolean = false;
-  
-  
-  constructor(private dashboardService : DashboardService) { }
+  botId:any;
+
+
+  constructor(private dashboardService : DashboardService, private service : ServiceInvokerService, private authService : AuthService) { }
 
   ngOnInit(): void {
-    // this.updateCustomerAspectData();
+    this.updateCustomerAspectData();
+    this.botId = this.authService.smartAssistBots[0]._id;
   }
 
   ngOnChanges(changes : SimpleChanges){
-    if(this.viewType && this.filters && Object.keys(this.filters).length > 0 && this.customerDropdownSelection && !this.onChangeCall){
+    console.log("🚀 ~ file: customer-aspect.component.ts:42 ~ CustomerAspectComponent ~ ngOnChanges ~ changes:", changes)
+    // if(this.viewType && this.filters && Object.keys(this.filters).length > 0 && this.customerDropdownSelection && !this.onChangeCall){
+    //   console.log("🚀 ~ file: customer-aspect.component.ts:43 ~ CustomerAspectComponent ~ ngOnChanges ~ this.filters:", this.filters)
+    //   this.handleOnChangeCall();
+    //   this.updateCustomerAspectData();
+    // }
+    if(changes.customerDropdownSelection) {
       this.handleOnChangeCall();
       this.updateCustomerAspectData();
     }
+
   }
 
   handleOnChangeCall(){
-    this.onChangeCall = true; 
+    this.onChangeCall = true;
     setTimeout(() => {
       this.onChangeCall = false;
-    }, 10);   
+    }, 10);
   }
 
   updateCustomerAspectData() {
-    if (this.viewType == VIEWTYPE.EXHAUSTIVE_VIEW && this.widgetData) {      
+    if (this.viewType == VIEWTYPE.EXHAUSTIVE_VIEW && this.widgetData) {
       this.updateViewData(this.widgetData);
     } else {
-      this.dashboardService.getCustomerAspectData(this.customerDropdownSelection, this.customerTabSelection).subscribe(resp => {
-        if (resp) {
-          this.updateViewData(resp);
-        }
+      // this.dashboardService.getCustomerAspectData(this.customerDropdownSelection, this.customerTabSelection).subscribe(resp => {
+      //   if (resp) {
+      //     this.updateViewData(resp);
+      //   }
+      // });
+      let params = {
+        streamId: this.botId
+      }
+      let payload = {
+        "startTime": "",
+        "endTime":"",
+        "sessionType" : "all", // agent or customer or all
+        "dataType" : "all", // all or faqs or articles or automations
+        "experience" : "",  // chat or voice
+        "skip":0,  // pages to skip (default 0)
+        "limit":3, // number of record to be fetched
+        "fetched":0  // count of previously fetched responses (default 0)
+
+      }
+      this.service.invoke('customersLookingfor', params, payload).subscribe((data : any) => {
+        this.updateViewData(data);
       });
     }
   }
@@ -70,7 +98,7 @@ export class CustomerAspectComponent implements OnInit {
       }else {
         this.customerAspectData = data;
       }
-    }  
+    }
   }
 
   changeTabSelection(tabSelection){

@@ -8,6 +8,7 @@ import { IDashboardFilter } from './dateFilter.model';
 import { Subject } from 'rxjs';
 import { DashboardService } from '../dashboard.service';
 import { CHANNELS } from '../dashboard.cnst';
+import { AuthService } from '@kore.services/auth.service';
 
 @Component({
   selector: 'app-dashboard-filters',
@@ -33,16 +34,21 @@ export class DashboardFiltersComponent implements OnInit {
   calendarLocale: any;
   channelList : any = CHANNELS;
   selectedChannel : string = 'all';
+  botList: any = {};
+  selectedBot: any;
 
 
   @ViewChild(DaterangepickerDirective) pickerDirective: DaterangepickerDirective;
   constructor(
     private translate: TranslateService,
     private route: ActivatedRoute,
-    private dashboardService : DashboardService
+    private dashboardService : DashboardService,
+    private authService : AuthService
   ) { }
 
   ngOnInit(): void {
+    this.botList = this.authService.smartAssistBots || [];
+    this.selectedBot = this.authService.smartAssistBots[0].name;
     this.calendarLocale = {
       applyLabel: this.translate.instant('BUTTONS.APPLY'),
       cancelLabel: this.translate.instant('BUTTONS.CANCEL'),
@@ -84,6 +90,11 @@ export class DashboardFiltersComponent implements OnInit {
   changeChannel(channel){
     this.filters = { ... this.filters, experience : channel }
     this.selectedChannel = channel;
+  }
+
+  changeBot(bot) {
+    this.filters = {... this.filters, botId: bot._id}
+    this.selectedBot = bot.name;
   }
 
 }

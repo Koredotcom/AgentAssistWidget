@@ -2,6 +2,7 @@ import { DecimalPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { EChartOption } from 'echarts';
 import { DashboardService } from '../dashboard.service';
+import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 
 @Component({
   selector: 'app-automation-performance',
@@ -13,14 +14,24 @@ export class AutomationPerformanceComponent implements OnInit {
   chartOption: EChartOption;
   automationPerformanceChartData : any = [];
 
-  constructor(public dashboardService : DashboardService, private decimalPipe : DecimalPipe) { }
+  constructor(public dashboardService : DashboardService, private decimalPipe : DecimalPipe, private service : ServiceInvokerService) { }
 
   ngOnInit(): void {
     this.updateAutomationPerformanceData();
   }
 
   updateAutomationPerformanceData(){
-    this.dashboardService.getAutomationPerformanceData().subscribe((data : any) => {
+    let payload = {
+      "startTime": " ",
+      "endTime":" ",
+      "experience" : " "  // CHAT OR VOICE
+    }
+
+    let params = {
+      streamId : ""
+    }
+
+    this.service.invoke('automationPerformance', params, payload).subscribe((data : any) => {
       this.automationPerformanceChartData = [];
       let colorObj : any = {
         "Successfully Completed" : '#47B39C',
@@ -44,10 +55,37 @@ export class AutomationPerformanceComponent implements OnInit {
         }
       }
       this.setDonutChartOptions(this.automationPerformanceChartData);
+    });
+    // this.dashboardService.getAutomationPerformanceData().subscribe((data : any) => {
+    //   this.automationPerformanceChartData = [];
+    //   let colorObj : any = {
+    //     "Successfully Completed" : '#47B39C',
+    //     "Terminated" : "#FFC154",
+    //     "Error" : '#EC6B56',
+    //     "Other" : '#003F5C'
+    //   }
+    //   if(data && data.actualData){
+    //     for(let automation of data.actualData){
+    //       let obj : any = {
+    //         name : automation.name,
+    //         value : automation.count,
+    //         percent : automation.percent,
+    //         series : automation.seriesData,
+    //         total : data.total,
+    //         itemStyle : {
+    //           color : colorObj[automation.name]
+    //         }
+    //       }
+    //       this.automationPerformanceChartData.push(obj);
+    //     }
+    //   }
+    //   this.setDonutChartOptions(this.automationPerformanceChartData);
 
-    })
+    // })
+
+
   }
-  
+
   setDonutChartOptions(chartData) {
     this.chartOption = {
       tooltip: {
@@ -62,7 +100,7 @@ export class AutomationPerformanceComponent implements OnInit {
         },
         formatter : (params : any) => {
           console.log(params, 'params');
-          
+
           let tooltipString  = '';
           // let tooltipSeriesList = this.dashboardService.formatterData[params.data.name];
           tooltipString = tooltipString + `<div class="automation-per-tooltip">
@@ -80,7 +118,7 @@ export class AutomationPerformanceComponent implements OnInit {
               <div class="right-title">${item.value}%</div>
             </div>`
             }
-          
+
           return tooltipString
         }
       },

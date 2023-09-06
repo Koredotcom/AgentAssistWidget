@@ -5,6 +5,8 @@ import * as echarts from 'echarts';
 import 'echarts-wordcloud';
 import { DASHBORADCOMPONENTTYPE, VIEWTYPE } from '../dashboard.cnst';
 import { IDashboardFilter } from '../dashboard-filters/dateFilter.model';
+import { ServiceInvokerService } from '@kore.services/service-invoker.service';
+import { AuthService } from '@kore.services/auth.service';
 
 @Component({
   selector: 'app-agent-aspect',
@@ -30,30 +32,40 @@ export class AgentAspectComponent implements OnInit, AfterViewInit {
   agentAspectData : any;
   agentAspectTableData : any = [];
   onChangeCall : boolean = false;
+  params;
+  payload = {
+    "startTime": "",
+    "endTime":"",
+    "experience" : "",  // chat or voice
+    "skip":0,  // pages to skip (default 0)
+    "limit":3, // number of record to be fetched
+    "fetched":0  // count of previously fetched responses (default 0)
+  }
 
 
   constructor(public dashboardService: DashboardService, private cdr: ChangeDetectorRef,
-    private renderer : Renderer2) { }
+    private renderer : Renderer2, private service : ServiceInvokerService, private authService: AuthService) { }
 
   ngOnInit(): void {
+    this.params.streamId = this.authService.smartAssistBots[0]._id;
   }
 
-  ngOnChanges(changes : SimpleChange){    
-    if(this.viewType && this.filters && Object.keys(this.filters).length > 0 && !this.onChangeCall ){        
+  ngOnChanges(changes : SimpleChange){
+    if(this.viewType && this.filters && Object.keys(this.filters).length > 0 && !this.onChangeCall ){
       this.handleOnChangeCall()
       this.updateAgentAspectData();
     }
   }
 
   handleOnChangeCall(){
-    this.onChangeCall = true; 
+    this.onChangeCall = true;
     setTimeout(() => {
       this.onChangeCall = false;
-    }, 10);   
+    }, 10);
   }
 
   ngAfterViewInit() {
-    this.wordCloudChart = ''; 
+    this.wordCloudChart = '';
     this.initializeDefaultValues();
     // this.setWordCloudOptions();
   }
@@ -70,10 +82,10 @@ export class AgentAspectComponent implements OnInit, AfterViewInit {
     }else{
       this.wordCloudChart = echarts.init(this.wordCloudExhaustiveDiv.nativeElement);
     }
-    this.cdr.detectChanges(); 
+    this.cdr.detectChanges();
   }
 
-  setWordCloudOptions(data) { 
+  setWordCloudOptions(data) {
     this.wordCloudOptions = this.dashboardService.getWordCloudOptions(data);
     setTimeout(() => {
       this.wordCloudChart.resize();
@@ -84,12 +96,16 @@ export class AgentAspectComponent implements OnInit, AfterViewInit {
   updateAgentAspectData(){
     if(this.viewType == VIEWTYPE.EXHAUSTIVE_VIEW && this.widgetData){
       this.updateViewData(this.widgetData);
-    }else{      
-      this.dashboardService.getAgentAspectData().subscribe((data : any) => {
-        if(data){
-          this.updateViewData(data);
-        } 
-      })
+    }else{
+      // this.dashboardService.getAgentAspectData().subscribe((data : any) => {
+      //   if(data){
+      //     this.updateViewData(data);
+      //   }
+      // })
+
+      this.service.invoke('agentsLookingfor', this.params, this.payload).subscribe((data : any) => {
+        this.updateViewData(data);
+      });
     }
   }
 
@@ -124,7 +140,7 @@ export class AgentAspectComponent implements OnInit, AfterViewInit {
     }
     this.setWordCloudOptions(worldCloudData);
   }
-  
+
   openSlider(componentName){
     this.openSliderChild.emit({componentName : componentName, data : this.agentAspectData});
   }

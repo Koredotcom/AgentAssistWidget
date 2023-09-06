@@ -4,6 +4,7 @@ import { workflowService } from '@kore.services/workflow.service';
 import { IDashboardFilter } from '../dashboard-filters/dateFilter.model';
 import { DASHBORADCOMPONENTTYPE, VIEWTYPE } from '../dashboard.cnst';
 import { DashboardService } from '../dashboard.service';
+import { AuthService } from '@kore.services/auth.service';
 
 @Component({
   selector: 'app-agent-feedback',
@@ -23,12 +24,23 @@ export class AgentFeedbackComponent implements OnInit {
   agentFeedbackData: any = {};
   agentFeedbackTableData: any = [];
   onChangeCall: boolean = false;
+  params: any;
+  payload = {
+    "startTime": "",
+    "endTime":"",
+    "experience" : "",  // chat or voice
+    "skip":0,  // pages to skip (default 0)
+    "limit":3, // number of record to be fetched
+    "fetched":0  // count of previously fetched responses (default 0)
+  }
 
   constructor(private dashboardService: DashboardService,
     private service: ServiceInvokerService,
-    private workflowService: workflowService) { }
+    private workflowService: workflowService,
+    private authService: AuthService) { }
 
   ngOnInit(): void {
+    this.params.streamId = this.authService.smartAssistBots[0]._id;
   }
 
   ngOnChanges() {
@@ -49,27 +61,17 @@ export class AgentFeedbackComponent implements OnInit {
   }
 
   updateAgentFeedbackData() {
-    this.streamId = this.workflowService.deflectApps()._id || this.workflowService.deflectApps()[0]._id;
-    // this.service.invoke('post.agentfeedback', {botId : this.streamId}).subscribe((data : any) => {
-    //   if(data){
-    //     this.agentFeedbackData = Object.assign({}, data);
-    //     if(data.usecases){
-    //       if(this.viewType == VIEWTYPE.PARTIAL_VIEW){
-    //         this.agentFeedbackTableData = data.usecases.length <= 3 ? data.usecases : data.usecases.slice(0,3);
-    //       }else {
-    //         this.agentFeedbackTableData = data.usecases;
-    //       }
-    //     }
-    //   }
-    // });
-
-    if (this.viewType == VIEWTYPE.EXHAUSTIVE_VIEW && this.widgetData) {      
+    if (this.viewType == VIEWTYPE.EXHAUSTIVE_VIEW && this.widgetData) {
       this.updateViewData(this.widgetData);
-    } else {      
-      this.dashboardService.getAgentFeedbackData().subscribe((data: any) => {
-        if (data) {
-          this.updateViewData(data);
-        }
+    } else {
+      // this.dashboardService.getAgentFeedbackData().subscribe((data: any) => {
+      //   if (data) {
+      //     this.updateViewData(data);
+      //   }
+      // });
+
+      this.service.invoke('agentFeedbacks', this.params, this.payload).subscribe((data : any) => {
+        this.updateViewData(data);
       });
     }
   }

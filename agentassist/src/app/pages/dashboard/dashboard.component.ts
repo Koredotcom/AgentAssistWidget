@@ -5,6 +5,8 @@ import { actualvsDisplayTitle, DASHBORADCOMPONENTTYPE, VIEWTYPE } from './dashbo
 import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
 import { DashboardService } from './dashboard.service';
 import { SubSink } from 'subsink';
+import { ServiceInvokerService } from '@kore.services/service-invoker.service';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -12,7 +14,7 @@ import { SubSink } from 'subsink';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
-  
+
   @ViewChild('newConvSlider', { static: true }) newConvSlider: SliderComponentComponent;
   @ViewChild('pdfTable') pdfTable: ElementRef;
 
@@ -29,20 +31,29 @@ export class DashboardComponent implements OnInit {
   public DASHBORADCOMPONENTTYPE = DASHBORADCOMPONENTTYPE;
   public VIEWTYPE = VIEWTYPE;
 
-  constructor(public dashboardService : DashboardService, public cdRef : ChangeDetectorRef) { }
+  constructor(public dashboardService : DashboardService, public cdRef : ChangeDetectorRef, private service : ServiceInvokerService) { }
 
   ngOnInit(): void {
     this.subscribeEvents();
-    // this.updateKPIData();
+    this.updateKPIData();
   }
 
   updateKPIData(){
-    this.dashboardService.getKPIData().subscribe(data => {
-      this.kpiData = {};
-      if(data && Object.keys(data).length > 0){
-        this.kpiData = data;
+     let params = {
+      streamId: ""
       }
-    });
+    let payload = {
+      "startTime": " ",
+      "endTime":" ",
+      "experience" : " ",
+    }
+      this.service.invoke('sessions', params, payload).subscribe(
+        res => {
+          this.kpiData = {};
+          if(res && Object.keys(res).length > 0){
+            this.kpiData = res;
+          }
+        });
   }
 
   subscribeEvents(){
@@ -62,7 +73,7 @@ export class DashboardComponent implements OnInit {
 
   openSlider(event) {
     console.log(event, "event");
-    
+
     this.sliderStatus = true;
     this.openComponentId = event.componentName;
     this.dashboardService.setExhaustiveRep(true, this.openComponentId, event.data);
@@ -81,11 +92,11 @@ export class DashboardComponent implements OnInit {
      document.getElementById('scrollContainer').style.height = "auto";
      document.getElementById('innerScroll').style.height = "auto";
      this.cdRef.detectChanges();
-  
+
     var currentPosition = document.getElementById("pdfTable").scrollTop;
       var w = document.getElementById("pdfTable").offsetWidth;
       var h = document.getElementById("pdfTable").offsetHeight;
-     
+
 
      const opts: Partial<Options> = {
       scale: 3, // Adjusts your resolution
@@ -108,7 +119,7 @@ export class DashboardComponent implements OnInit {
     this.dashboardService.agentAspectView = viewType
   }
 
-  changeCustomerAspectDropdown(selection){    
+  changeCustomerAspectDropdown(selection){
     this.customerAspectDropdownSelection = selection;
   }
 
