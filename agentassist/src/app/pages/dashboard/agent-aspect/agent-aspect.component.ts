@@ -35,7 +35,7 @@ export class AgentAspectComponent implements OnInit, AfterViewInit {
   params ={
     streamId : ''
   };
-  payload = {
+  payload: any = {
     "startTime": "",
     "endTime":"",
     "experience" : "",  // chat or voice
@@ -50,10 +50,13 @@ export class AgentAspectComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.params.streamId = this.authService.smartAssistBots[0]._id;
+    this.updateAgentAspectData();
   }
 
   ngOnChanges(changes : SimpleChange){
     if(this.viewType && this.filters && Object.keys(this.filters).length > 0 && !this.onChangeCall ){
+      this.params.streamId = this.filters?.botId !== '' ? this.filters.botId : this.params.streamId;
+      this.payload = {... this.filters}
       this.handleOnChangeCall()
       this.updateAgentAspectData();
     }

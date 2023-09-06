@@ -27,7 +27,7 @@ export class AgentFeedbackComponent implements OnInit {
   params ={
     streamId : ''
   };
-  payload = {
+  payload: any = {
     "startTime": "",
     "endTime":"",
     "experience" : "",  // chat or voice
@@ -43,10 +43,17 @@ export class AgentFeedbackComponent implements OnInit {
 
   ngOnInit(): void {
     this.params.streamId = this.authService.smartAssistBots[0]._id;
+    if(this.params.streamId !== '') {
+      this.updateAgentFeedbackData();
+    }
+
   }
 
   ngOnChanges(changes : SimpleChanges) {
     if (this.viewType && this.filters && Object.keys(this.filters).length > 0 && !this.onChangeCall) {
+      console.log("🚀 ~ file: agent-feedback.component.ts:54 ~ AgentFeedbackComponent ~ ngOnChanges ~ this.filters:", this.filters)
+      this.params.streamId = this.filters?.botId !== '' ? this.filters.botId : this.params.streamId;
+      this.payload = {... this.filters}
       this.handleOnChangeCall();
       this.updateAgentFeedbackData();
     }

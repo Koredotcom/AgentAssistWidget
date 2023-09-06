@@ -1682,31 +1682,31 @@ export class EndPointsService {
     // // Dashboard Apis Starts // //
     // Agent feedback
     this.serviceList['agentFeedbacks'] = {
-      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentassistanalytics/:streamId/feedbacks',
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/analytics/aadashboard/:streamId/feedbacks',
       method : 'post'
     }
 
     // Automation performance
     this.serviceList['automationPerformance'] = {
-      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentassistanalytics/:streamId/automationperformance',
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/analytics/aadashboard/:streamId/automationperformance',
       method : 'post'
     }
 
     // Sessions
     this.serviceList['sessions'] = {
-      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentassistanalytics/:streamId/sessiondetails',
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/analytics/aadashboard/:streamId/sessiondetails',
       method : 'post'
     }
 
     //  CUSTOMERS ARE LOOKING FOR
     this.serviceList['customersLookingfor'] = {
-      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentassistanalytics/:streamId/customerslooking',
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/analytics/aadashboard/:streamId/customerslooking',
       method : 'post'
     }
 
     // AGENTS ARE LOOKING FOR
     this.serviceList['agentsLookingfor'] = {
-      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentassistanalytics/:streamId/customerslooking',
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/analytics/aadashboard/:streamId/agentslooking',
       method : 'post'
     }
     // // Dashboard Apis Stops // //

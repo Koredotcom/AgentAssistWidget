@@ -32,7 +32,7 @@ export class CustomerAspectComponent implements OnInit {
   params = {
     streamId: ''
   }
-  payload = {
+  payload: any = {
     "startTime": "",
     "endTime":"",
     "sessionType" : "all", // agent or customer or all
@@ -47,14 +47,18 @@ export class CustomerAspectComponent implements OnInit {
   constructor(private dashboardService : DashboardService, private service : ServiceInvokerService, private authService : AuthService) { }
 
   ngOnInit(): void {
-    this.updateCustomerAspectData();
     this.params.streamId = this.authService.smartAssistBots[0]._id;
+    if(this.params.streamId !== '') {
+      this.updateCustomerAspectData();
+    }
+
+
   }
 
   ngOnChanges(changes : SimpleChanges){
-    console.log("🚀 ~ file: customer-aspect.component.ts:42 ~ CustomerAspectComponent ~ ngOnChanges ~ changes:", changes)
     if(this.viewType && this.filters && Object.keys(this.filters).length > 0 && this.customerDropdownSelection && !this.onChangeCall){
-      console.log("🚀 ~ file: customer-aspect.component.ts:43 ~ CustomerAspectComponent ~ ngOnChanges ~ this.filters:", this.filters)
+      this.payload = { ... this.filters}
+      this.params.streamId = this.filters?.botId !== '' ? this.filters.botId : this.params.streamId;
       this.handleOnChangeCall();
       this.updateCustomerAspectData();
     }
@@ -81,10 +85,10 @@ export class CustomerAspectComponent implements OnInit {
       //     this.updateViewData(resp);
       //   }
       // });
+        this.service.invoke('customersLookingfor', this.params, this.payload).subscribe((data : any) => {
+          this.updateViewData(data);
+        });
 
-      this.service.invoke('customersLookingfor', this.params, this.payload).subscribe((data : any) => {
-        this.updateViewData(data);
-      });
     }
   }
 
