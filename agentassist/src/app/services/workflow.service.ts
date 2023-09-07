@@ -178,9 +178,9 @@ export class workflowService {
         return { ...this.currentBtDetails };
       } else {
         let selAcc = this.local.getSelectedAccount();
-        let _id = selAcc['instanceBots'][0]?.instanceBotId;
-        console.log('Sandeep Tester: ',_id)
-        return _id;
+        let smBotObj = selAcc['instanceBots'][0];
+        smBotObj._id = smBotObj.instanceBotId;
+        return smBotObj;
       }
     }
   }
