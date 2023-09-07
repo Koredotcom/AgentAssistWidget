@@ -334,7 +334,9 @@ export class AssistService {
     let template = `
     <div class="type-info-run-send" id="suggestionId-${uuids}">
         <div class="left-content">
-            <div class="title-text" id="automation-${uuids}">${ele.name}</div>
+            <div class="title-text" id="automation-${uuids + index}">
+              <div class="desc-text-bot" title="${ele.name}">${ele.name}</div> 
+            </div>
         </div>
         <div class="action-links">
             <button class="send-run-btn" id="run-${uuids + index}" data-child-bot-id="${ele.childBotId}" data-child-bot-name="${ele.childBotName}"
@@ -356,7 +358,9 @@ export class AssistService {
     let template = `
     <div class="type-info-run-send" id="faqDiv-${uuids + index}">
         <div class="left-content" id="faqSection-${uuids + index}">
-            <div class="title-text" id="title-${uuids + index}" title="${ele.displayName ? ele.displayName : ele.question}">${(ele.answer && ele.answer.length > 1) ? (ele.displayName ? ele.displayName : ele.question + ' 1/' + ele.answer.length) : ele.displayName ? ele.displayName : ele.question}</div>
+            <div class="title-text" id="title-${uuids + index}" >
+            <div class="desc-text-bot" title="${ele.displayName ? ele.displayName : ele.question}"> ${(ele.answer && ele.answer.length > 1) ? (ele.displayName ? ele.displayName : ele.question + ' 1/' + ele.answer.length) : ele.displayName ? ele.displayName : ele.question}</div> 
+            </div>
         </div>
     </div>`;
     return template;

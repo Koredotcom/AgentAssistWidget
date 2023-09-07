@@ -684,6 +684,11 @@ export class AssistComponent implements OnInit {
           let dialogSuggestions = document.getElementById(`dialogSuggestions-${responseId}`);
           let dialogsHtml = this.assisttabService.dialogTypeInfoTemplate(uuids, index, ele);
           dialogSuggestions.innerHTML += dialogsHtml;
+          if(ele.childBotName){
+            let dialogHeader = document.getElementById(`automation-${uuids + index}`);
+            dialogHeader.innerHTML += `<span class="bot-name-text" title="${ele.childBotName}"> (${ele.childBotName}) </span>`;
+            
+          }
           if (ele.entities?.length > 0) {
             this.commonService.previousEntitiesValue = JSON.stringify(ele.entities);
             let entitesDiv = `<div class="entity-values-container" id="entitesDiv-${uuids}">
@@ -740,6 +745,12 @@ export class AssistComponent implements OnInit {
           let faqHtml = this.assisttabService.faqTypeInfoTemplate(uuids, index, ele)
 
           faqsSuggestions.innerHTML += faqHtml;
+
+          if(ele.childBotName){
+            let faqHeader = document.getElementById(`title-${uuids + index}`);
+            faqHeader.innerHTML += `<span class="bot-name-text" title="${ele.childBotName}"> (${ele.childBotName}) </span>`;
+          }
+
           let faqs = $(`.type-info-run-send #faqSection-${uuids + index}`);
           let positionID = 'dg-' + this.koreGenerateuuidPipe.transform();
 
@@ -1767,7 +1778,9 @@ export class AssistComponent implements OnInit {
           let dialogsHtml = `
                 <div class="type-info-run-send">
                     <div class="left-content">
-                        <div class="title-text" id="automation-${uniqueID + index}">${ele.name}</div>
+                        <div class="title-text" id="automation-${uniqueID + index}">
+                        <div class="desc-text-bot" title="${ele.name}">${ele.name}</div> 
+                      </div>
                     </div>
                     <div class="action-links">
                         <button class="send-run-btn" data-conv-id="${this.commonService.configObj.conversationid}"
@@ -1787,6 +1800,11 @@ export class AssistComponent implements OnInit {
                     </div>
                 </div>`;
           dialogSuggestions.innerHTML += dialogsHtml;
+          if(ele.childBotName){
+            let dialogHeader = document.getElementById(`automation-${uniqueID + index}`);
+            dialogHeader.innerHTML += `<span class="bot-name-text" title="${ele.childBotName}"> (${ele.childBotName}) </span>`;
+          }
+
           this.clickEvents(IdReferenceConst.ASSIST_RUN_BUTTON, uniqueID + index, this.dialogPositionId, ele);
           this.clickEvents(IdReferenceConst.AGENT_RUN_BTN, uniqueID + index, this.dialogPositionId, ele);
         });
@@ -1798,14 +1816,20 @@ export class AssistComponent implements OnInit {
           let faqHtml = `
                 <div class="type-info-run-send" id="faqDiv-${uniqueID + index}">
                     <div class="left-content" id="faqSection-${uniqueID + index}">
-                        <div class="title-text" id="title-${uniqueID + index}" title="${ele.displayName ? ele.displayName : ele.question}">${ ele.displayName ? ele.displayName : ele.question}</div>
-
-
+                        <div class="title-text" id="title-${uniqueID + index}">
+                        <div class="desc-text-bot" title="${ele.displayName ? ele.displayName : ele.question}"> ${ ele.displayName ? ele.displayName : ele.question}</div> 
+                        </div>
                     </div>
 
                 </div>`;
 
           faqsSuggestions.innerHTML += faqHtml;
+
+          if(ele.childBotName){
+            let faqHeader = document.getElementById(`title-${uniqueID + index}`);
+            faqHeader.innerHTML += `<span class="bot-name-text" title="${ele.childBotName}"> (${ele.childBotName}) </span>`;
+          }
+
           let faqs = $(`.type-info-run-send #faqSection-${uniqueID + index}`);
           if (!ele.answer) {
             let checkHtml = `

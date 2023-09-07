@@ -642,7 +642,9 @@ export class CommonService {
         answer: (faq.answer && faq.answer.length > 0) ? [] : false,
         showMoreButton: false,
         showLessButton: false,
-        answerRender : faq.answer || false
+        answerRender : faq.answer || false,
+        childBotId : faq.childBotId,
+        childBotName : faq.childBotName
       }
       if(faq.answer && faq.answer.length > 0){
         for(let ans of faq.answer){
