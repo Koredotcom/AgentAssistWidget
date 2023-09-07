@@ -122,11 +122,10 @@ export class PrimaryChecklistComponent implements OnInit, OnChanges {
     }))
     .subscribe((data)=>{
       console.log(data, 'data');
-      
+      this.notificationService.notify(this.translate.instant("CHECKLIST.CLDUPDATE_SUCCESS"), 'success');
     },(err)=> {
       currentCheckList.isActive = false;
-      this.notificationService.showError(err, this.translate.instant("COACHING.PUBLISH_FAILURE"));
-
+      this.notificationService.showError(err, this.translate.instant("COACHING.CLUPDATE_FAILURE"));
     });
   }
 
@@ -145,8 +144,8 @@ export class PrimaryChecklistComponent implements OnInit, OnChanges {
   openDeleteCl(dyn){
     let botId = this.workflowService.getCurrentBtSmt(true)._id;
     let deleteRule = {
-      title: "Delete Rule",
-      desc: "Are you sure, you want to delete checklist '" + dyn.name + "'.",
+      title: "Delete Playbook",
+      desc: "Are you sure, you want to delete playbook '" + dyn.name + "'.",
       type: "rule",
       _id: dyn._id
     }

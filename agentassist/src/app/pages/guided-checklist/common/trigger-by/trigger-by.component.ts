@@ -309,7 +309,7 @@ export class TriggerByComponent implements OnInit, OnChanges {
       this.standardBots = res.publishedBots;
       this.standardBotsOj = (res.publishedBots || [])
       .reduce((acc, item)=>{
-        acc[item._id] = item.botName;
+        acc[item.dialogId] = item.botName;
         return acc;
       }, {})
     });
@@ -324,7 +324,9 @@ export class TriggerByComponent implements OnInit, OnChanges {
         this.onlyAdhreForm.controls['lBId'].patchValue('');
         this.onlyAdhreForm.controls['taskId'].patchValue('');
     }
-    this.onlyAdhreForm.controls['lBId'].patchValue(bot._id);
+    if(click){
+      this.onlyAdhreForm.controls['lBId'].patchValue(bot._id);
+    }
     this.service.invoke('get.usecases', {
       streamId: bot._id,
       search: '',

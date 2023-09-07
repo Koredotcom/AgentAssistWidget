@@ -16,6 +16,10 @@ import { CHECKLISTCNST } from "../../checklist.const";
 import { ServiceInvokerService } from "@kore.services/service-invoker.service";
 import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 import { ChecklistService } from "../../checklist.service";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { DeleteComponent } from "../delete/delete.component";
+import { NotificationService } from "@kore.services/notification.service";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: "app-stages-list",
@@ -67,7 +71,10 @@ export class StagesListComponent implements OnInit {
     private workflowService: workflowService,
     private service: ServiceInvokerService,
     private clS: ChecklistService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private modalService: NgbModal,
+    private notificationService: NotificationService,
+     private translate: TranslateService,
   ) {}
 
   ngOnInit(): void {
@@ -130,7 +137,7 @@ export class StagesListComponent implements OnInit {
       botId: this.botId,
     };
     this.service
-      .invoke("get.agentcoachingruletags", params, {
+      .invoke("get.agentchecklisttags", params, {
         botId: this.botId,
       })
       .subscribe((data) => {
@@ -144,7 +151,7 @@ export class StagesListComponent implements OnInit {
 
   close() {
     // if (e.checkListClose) {
-    //   
+    //
     // }
     // this.name.patchValue(this.checkListForm.value.name);
     this.dismisCheckList();
@@ -163,7 +170,7 @@ export class StagesListComponent implements OnInit {
     this.saveStageApi(stage);
   }
 
-  saveStageApi(stage, isStageUpdate = true) {
+  saveStageApi(stage, isStageUpdate = true, step = false) {
     let params = {};
     let method = "post.stage";
     if (!stage.isNew) {
@@ -189,12 +196,27 @@ export class StagesListComponent implements OnInit {
     this.service.invoke(method, params, obj).subscribe((data) => {
       if (data) {
         stage.edit = false;
-        stage.isNew = false;
         stage._id = data._id;
         if (isStageUpdate) {
           this.updateStagesOrder();
         }
+        let notificationMsg = '';
+        if(step){
+          notificationMsg = (this.createOrUpdateStep == 'create') ? 'CHECKLIST.STEPCREATE_SUCCESS' : 'CHECKLIST.STEPUPDATE_SUCCESS';
+        }else{
+          notificationMsg = stage.isNew ? 'CHECKLIST.STAGECREATE_SUCCESS' : 'CHECKLIST.STAGEUPDATE_SUCCESS';
+        }
+        stage.isNew = false;
+        this.notificationService.notify(this.translate.instant(notificationMsg), 'success');
       }
+    },(error) => {
+      let notificationMsg = '';
+      if(step){
+        notificationMsg = (this.createOrUpdateStep == 'create') ? 'CHECKLIST.STEPCREATE_FAILURE' : 'CHECKLIST.STEPUPDATE_FAILURE';
+      }else{
+        notificationMsg = stage.isNew ? 'CHECKLIST.STAGECREATE_FAILURE' : 'CHECKLIST.STAGEUPDATE_FAILURE'
+      }
+      this.notificationService.showError(error, this.translate.instant(notificationMsg));
     });
   }
 
@@ -260,8 +282,11 @@ export class StagesListComponent implements OnInit {
         .subscribe((data) => {
           this.stages[this.stageInx].steps.push(data);
           this.stages[this.stageInx].newStep = false;
-          this.saveStageApi(this.stages[this.stageInx], false);
+          this.saveStageApi(this.stages[this.stageInx], false, true);
           this.closeStepModal();
+        },
+        (err)=>{
+          this.notificationService.showError(err, this.translate.instant('CHECKLIST.STEPCREATEFAILURE'));
         });
     }
   }
@@ -285,6 +310,15 @@ export class StagesListComponent implements OnInit {
         this.stages = data[0]?.stages;
         this.isCheckListOpen = false;
         this.checklistCreateSlider.closeSlider("#checklistCreate");
+        let notificationMsg = '';
+        notificationMsg = (this.isCheckListCreateOrUpdate == 'create') ? "CHECKLIST.CLCREATE_SUCCESS" : "CHECKLIST.CLUPDATE_SUCCESS";
+        this.notificationService.notify(this.translate.instant(notificationMsg), 'success');
+
+      },(error)=> {
+        let notificationMsg = '';
+        notificationMsg = (this.isCheckListCreateOrUpdate == 'create') ? "CHECKLIST.CLCREATE_FAILURE" : "CHECKLIST.CLUPDATE_FAILURE";
+        this.notificationService.showError(error, this.translate.instant('CHECKLIST.STEPUPDATE_FAILURE'));
+
       });
   }
 
@@ -327,6 +361,10 @@ export class StagesListComponent implements OnInit {
         .subscribe((data) => {
           this.stages[this.stageInx].steps.splice(this.stepIndex, 1, data);
           this.closeStepModal();
+          this.notificationService.notify(this.translate.instant('CHECKLIST.STEPUPDATE_SUCCESS'), 'success');
+
+        },(error) => {
+          this.notificationService.showError(error, this.translate.instant('CHECKLIST.STEPUPDATE_FAILURE'));
         });
     }
   }
@@ -339,33 +377,72 @@ export class StagesListComponent implements OnInit {
     this.checklistCreateSlider.closeSlider("#checklistCreate");
   }
 
+
   deleteStep(i, si, step, stage){
-    this.service
-    .invoke(
-      "delete.step",
-      {
-        clstId: step._id,
-        botId: this.botId,
-        clsId: stage._id
+
+    let deleteStep = {
+      title: "Delete Step",
+      desc: "Are you sure, you want to delete Step '" + step.name + "'.",
+      type: "step",
+      _id : step.name
+    }
+
+    this.modalRef = this.modalService.open(DeleteComponent, { centered: true, keyboard: false, windowClass: 'delete-uc-rule-modal', backdrop: 'static' });
+    this.modalRef.componentInstance.data = deleteStep;
+
+    this.modalRef.result.then(emitedValue => {
+      if (emitedValue) {
+        this.service
+        .invoke(
+          "delete.step",
+          {
+            clstId: step._id,
+            botId: this.botId,
+            clsId: stage._id
+          }
+        )
+        .subscribe((data) => {
+          (this.stages[i]?.steps || []).splice(si, 1);
+          this.notificationService.notify(this.translate.instant("CHECKLIST.STEPDELETE_SUCCESS"), 'success');
+        },(error)=> {
+          this.notificationService.showError(error, this.translate.instant("CHECKLIST.STEPDELETE_FAILURE"));
+
+        });
       }
-    )
-    .subscribe((data) => {
-      (this.stages[i]?.steps || []).splice(si, 1);
     });
+
   }
 
   deleteStage(i){
-    this.service
-    .invoke(
-      "delete.stage",
-      {
-        clId: this.currentCheckList._id,
-        botId: this.botId,
-        clsId: this.stages[i]?._id,
+
+    let deleteStage = {
+      title: "Delete Stage",
+      desc: "Are you sure, you want to delete Stage '" + this.stages[i].name + "'.",
+      type: "stage",
+      _id : this.stages[i].name
+    }
+
+    this.modalRef = this.modalService.open(DeleteComponent, { centered: true, keyboard: false, windowClass: 'delete-uc-rule-modal', backdrop: 'static' });
+    this.modalRef.componentInstance.data = deleteStage;
+    this.modalRef.result.then(emitedValue => {
+      if (emitedValue) {
+        this.service
+        .invoke(
+          "delete.stage",
+          {
+            clId: this.currentCheckList._id,
+            botId: this.botId,
+            clsId: this.stages[i]?._id,
+          }
+        )
+        .subscribe((data) => {
+          (this.stages || []).splice(i, 1);
+          this.notificationService.notify(this.translate.instant("CHECKLIST.STAGEDELETE_SUCCESS"), 'success');
+        },(error)=> {
+          this.notificationService.showError(error, this.translate.instant("CHECKLIST.STAGEDELETE_FAILURE"));
+
+        });
       }
-    )
-    .subscribe((data) => {
-      (this.stages || []).splice(i, 1);
     });
   }
 

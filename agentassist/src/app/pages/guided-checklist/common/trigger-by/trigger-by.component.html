@@ -21,7 +21,7 @@
                                 <div class="desc-text">Listen for specific utterances by the agent to mark as completed</div>
                             </label>
                         </div>
-                        <div class="radio-checked-content" [ngClass]="{'disabled': onlyAdhreForm?.value?.type !== 'utterance'}">
+                        <div class="radio-checked-content" [ngClass]="{'disabled': onlyAdhreForm?.value?.type !== 'utterance', 'd-none': onlyAdhreForm?.value?.type !== 'utterance'}">
                             <div class="utterances-add-manually-block">
                                 <!-- <div class="add-rule-block">
                                     <div class="label-text">Utterances</div>
@@ -183,7 +183,7 @@
                                 <div class="desc-text">Watch for a dialog execution run by the agent</div>
                             </label>
                         </div>
-                        <div class="radio-checked-content" [ngClass]="{'disabled': onlyAdhreForm?.value?.type !== 'dialog'}">
+                        <div class="radio-checked-content" [ngClass]="{'disabled': onlyAdhreForm?.value?.type !== 'dialog', 'd-none': onlyAdhreForm?.value?.type !== 'dialog'}">
                             <div class="label-text">Bot</div>
                                 <div class="kr-sg-dropdowns m-b-10" placement="bottom">
                                     <div class="dropdown dropdown-open">
@@ -250,7 +250,7 @@
                                     <input type="text" placeholder="Placeholder text" class="input-text">
                                 </div>
                             </div> -->
-                            <div class="info-text-dilog">If adherence checker does not detect the selected automation being run by the agent in the next 3 minutes, this step will be marked incomplete.</div>
+                            <!-- <div class="info-text-dilog">If adherence checker does not detect the selected automation being run by the agent in the next 3 minutes, this step will be marked incomplete.</div> -->
                         </div>
                     </div>
                     <div class="radio-block-content disabled" [ngClass]="{'active-check': onlyAdhreForm?.value?.type === 'variable'}">

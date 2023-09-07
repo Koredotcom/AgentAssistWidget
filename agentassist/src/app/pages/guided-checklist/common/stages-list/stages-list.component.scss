@@ -88,6 +88,30 @@
             }
         }
         .middle-content{
+            .channels-info{
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                .title{
+                    color: var(--gray-700, #344054);
+                    font-size: 12px;
+                    font-weight: 500;
+                    line-height: 18px;
+                }
+                .speak-chat-icon{
+                    width: 16px;
+                    height: 16px;
+                    border: 0;
+                    padding: 0;
+                    background: transparent;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 15px;
+                    color: #171717;
+                    cursor: pointer;
+                }
+            }
             width: 100%;
             text-align: center;
             padding: 0 15px;
@@ -146,7 +170,7 @@
                 border: 1px solid var(--gray-300, #D0D5DD);
                 background: var(--base-white, #FFF);
                 box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
-                width: 90px;
+                width: 34px;
                 height: 34px;
                 flex-shrink: 0;
                 display: flex;

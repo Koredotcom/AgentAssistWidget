@@ -146,8 +146,8 @@ export class DynamicChecklistComponent implements OnInit, OnChanges {
   openDeleteCl(dyn){
     let botId = this.workflowService.getCurrentBtSmt(true)._id;
     let deleteRule = {
-      title: "Delete Rule",
-      desc: "Are you sure, you want to delete checklist '" + dyn.name + "'.",
+      title: "Delete Playbook",
+      desc: "Are you sure, you want to delete playbook '" + dyn.name + "'.",
       type: "rule",
       _id: dyn._id
     }

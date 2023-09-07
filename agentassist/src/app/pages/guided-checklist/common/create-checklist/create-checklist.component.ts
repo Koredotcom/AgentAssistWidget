@@ -5,8 +5,10 @@ import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { AuthService } from '@kore.services/auth.service';
 import { LocalStoreService } from '@kore.services/localstore.service';
+import { NotificationService } from '@kore.services/notification.service';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { workflowService } from '@kore.services/workflow.service';
+import { TranslateService } from '@ngx-translate/core';
 import { finalize } from 'rxjs/operators';
 import { TriggerByComponent } from '../trigger-by/trigger-by.component';
 
@@ -22,7 +24,9 @@ export class StageCreateComponent implements OnInit, AfterViewInit {
     private service: ServiceInvokerService,
     private auth: AuthService,
     private local: LocalStoreService,
-    private workflowService: workflowService
+    private workflowService: workflowService,
+    private notificationService: NotificationService,
+    private translate: TranslateService,
   ) { }
   
   ngAfterViewInit(): void {
@@ -161,6 +165,9 @@ export class StageCreateComponent implements OnInit, AfterViewInit {
         }))
         .subscribe((data) => {
           this.saveEvent.emit(data);
+        },
+        (err)=>{
+          this.notificationService.showError(err, this.translate.instant('CHECKLIST.CLUPDATE_FAILURE'));
         });
     });
   }
@@ -184,6 +191,11 @@ export class StageCreateComponent implements OnInit, AfterViewInit {
       .subscribe((data) => {
         // this.currentCheckList = data;
         this.closeChecklist.emit(data);
+        this.notificationService.notify(this.translate.instant('CHECKLIST.CLUPDATE_SUCCESS'), 'success');
+
+      },(error) => {
+        this.notificationService.showError(error, this.translate.instant('CHECKLIST.CLUPDATE_FAILURE'));
+
       });
     },);
   }
@@ -249,8 +261,8 @@ export class StageCreateComponent implements OnInit, AfterViewInit {
   assignOriginalToDisplayList(){  
     console.log(this.allTagList, 'all tag list');
       
-    this.filteredTagsDisplay = this.allTagList.map((item) => {      
-      return {name : item, checked : (this.checkListForm.value?.tags?.findIndex((tag) => {return tag.name == item})) >= 0 ? true : false}
+    this.filteredTagsDisplay = this.allTagList.map((item:any) => {      
+      return {name : item.name, checked : (this.checkListForm.value?.tags?.findIndex((tag) => {return tag.name == item.name})) >= 0 ? true : false}
     });    
     console.log(this.filteredTagsDisplay, 'filtered tags display');
     

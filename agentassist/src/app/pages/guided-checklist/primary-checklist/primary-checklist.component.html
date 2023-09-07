@@ -25,8 +25,14 @@
                             <div class="titles-data w-12">STATUS</div>
                         </div>
                         <ng-container *ngFor="let checkList of primaryCheckList">
-                            <div class="body-data-table-wrapper-coaching">
-                                <div class="coaching-rule w-24">{{checkList.name | uppercase}}</div>
+                            <div class="body-data-table-wrapper-cl-dyn">
+                                <div class="cheklist1 w-24">
+                                    <div class="title" [title]="checkList.name" placement="bottom-center" tooltipClass="tooltip-global-styles" ngbTooltip="{{checkList.name | titlecase}}" container="body">{{checkList.name | uppercase}}</div>
+                                    <div class="voice-msg-icons">
+                                        <i class="icon-sa-welcome-voice" placement="bottom-center" tooltipClass="tooltip-global-styles" ngbTooltip="voice" *ngIf="checkList.channels.includes('voice')"></i>
+                                        <i class="icon-sa-welcome-chat" placement="bottom-center" tooltipClass="tooltip-global-styles" ngbTooltip="chat" *ngIf="checkList.channels.includes('chat')"></i>
+                                    </div>
+                                </div>
                                 <div class="actions-info w-13">
                                     <button class="edit-btn" (click)="updateCl(checkList)">
                                         <i class="icon-sa-welcome-edit"></i>
