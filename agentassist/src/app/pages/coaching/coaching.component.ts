@@ -210,7 +210,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
   }
 
   checkLockScreen(rule, flowCreation) {
-    let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
+    let botId = this.workflowService.getCurrentBtSmt(true)._id
     let params: any = {
       botId,
       ruleId: rule._id,

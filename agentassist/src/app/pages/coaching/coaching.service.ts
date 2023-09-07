@@ -121,7 +121,7 @@ export class CoachingService {
 
   updateLockOnRule(flag, currentRule, selAcc){
     if(currentRule && currentRule._id){
-      let botId = this.auth.isLoadingOnSm && selAcc ? selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
+      let botId = this.workflowService.getCurrentBtSmt(true)._id;
       let params : any = {
         botId,
         ruleId : currentRule._id,
