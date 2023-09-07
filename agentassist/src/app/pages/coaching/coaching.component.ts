@@ -70,6 +70,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.workflowService.getCurrentBtSmt(true)._id
     this.subs.sink = this.authService.isAgentCoachongEnable$.subscribe(isEnabled => {
       this.isCoachingDisable = isEnabled;
     });
@@ -174,7 +175,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
       this.page = 1;
       this.limit = 30;
     }
-    let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
+    let botId = this.workflowService.getCurrentBtSmt(true)._id
     let params: any = {
       botId,
     };
@@ -278,7 +279,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
 
   publishCoaching() {
     this.publishInprogress = true;
-    this.service.invoke('post.publishcoaching', {}, { botId: this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id }).pipe(finalize(() => {
+    this.service.invoke('post.publishcoaching', {}, { botId: this.workflowService.getCurrentBtSmt(true)._id }).pipe(finalize(() => {
       this.publishInprogress = false;
     })).subscribe(data => {
       if (data) {
@@ -298,7 +299,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
   // rule activities like active or inactive and delete rule starts
   changeRuleStatus(rule) {
     rule.isActive = !rule.isActive;
-    let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
+    let botId = this.workflowService.getCurrentBtSmt(true)._id;
     let params: any = {
       ruleId: rule._id,
     }
@@ -339,7 +340,8 @@ export class CoachingComponent implements OnInit, OnDestroy {
   getConfigDetails() {
     let params: any = {
       userId: this.authService.getUserId(),
-      streamId: this.workflowService.getCurrentBt(true)._id
+      // streamId: this.workflowService.getCurrentBt(true)._id
+      streamId: this.workflowService.getCurrentBtSmt(true)._id
     };
     this.service.invoke('get.AIconfigs', params)
       .subscribe(res => {

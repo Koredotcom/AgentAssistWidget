@@ -62,11 +62,7 @@ export class StagesListComponent implements OnInit {
   currDragStg;
   currentStep;
   stepIndex;
-  botId =
-    this.auth.isLoadingOnSm && this.selAcc
-      ? this.selAcc["instanceBots"][0]?.instanceBotId
-      : this.workflowService.getCurrentBt(true)._id;
-  modalRef:any;
+  botId = this.workflowService.getCurrentBtSmt(true)._id
 
   constructor(
     private fb: FormBuilder,
@@ -119,7 +115,7 @@ export class StagesListComponent implements OnInit {
   }
 
   getCheckListById(){
-    let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
+    let botId = this.workflowService.getCurrentBtSmt(true)._id;
     this.service.invoke('get.checklistbyid', {botId, clId: this.currentCheckList._id})
     .subscribe((data)=>{
       this.currentCheckList = {...data[0]};
@@ -155,7 +151,7 @@ export class StagesListComponent implements OnInit {
 
   close() {
     // if (e.checkListClose) {
-    //   
+    //
     // }
     // this.name.patchValue(this.checkListForm.value.name);
     this.dismisCheckList();
@@ -288,7 +284,7 @@ export class StagesListComponent implements OnInit {
           this.stages[this.stageInx].newStep = false;
           this.saveStageApi(this.stages[this.stageInx], false, true);
           this.closeStepModal();
-        }, 
+        },
         (err)=>{
           this.notificationService.showError(err, this.translate.instant('CHECKLIST.STEPCREATEFAILURE'));
         });
@@ -414,7 +410,7 @@ export class StagesListComponent implements OnInit {
         });
       }
     });
-  
+
   }
 
   deleteStage(i){
@@ -447,7 +443,7 @@ export class StagesListComponent implements OnInit {
 
         });
       }
-    });    
+    });
   }
 
   drop(event: CdkDragDrop<string[]>, i) {

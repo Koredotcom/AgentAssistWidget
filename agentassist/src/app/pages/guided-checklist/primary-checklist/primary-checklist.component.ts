@@ -79,7 +79,7 @@ export class PrimaryChecklistComponent implements OnInit, OnChanges {
       this.hasMore = false;
     }
     this.loading = true;
-    let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
+    let botId = this.workflowService.getCurrentBtSmt(true)._id;
     let body = {
       botId,
       searchText: '',
@@ -109,7 +109,7 @@ export class PrimaryChecklistComponent implements OnInit, OnChanges {
 
   updateStatus(currentCheckList){
     currentCheckList.isActive = !currentCheckList.isActive;
-    let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
+    let botId = this.workflowService.getCurrentBtSmt(true)._id;
     let clId = currentCheckList._id;
     let payload : any = {
       "isActive" : currentCheckList.isActive,
@@ -142,7 +142,7 @@ export class PrimaryChecklistComponent implements OnInit, OnChanges {
   }
 
   openDeleteCl(dyn){
-    let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
+    let botId = this.workflowService.getCurrentBtSmt(true)._id;
     let deleteRule = {
       title: "Delete Playbook",
       desc: "Are you sure, you want to delete playbook '" + dyn.name + "'.",

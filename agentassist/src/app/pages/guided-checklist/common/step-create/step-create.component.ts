@@ -31,10 +31,7 @@ export class StepCreateComponent implements OnInit, OnChanges, AfterViewInit {
     // 'runDialog' : "Run Dialog"
   };
   selAcc = this.local.getSelectedAccount();
-  botId =
-  this.auth.isLoadingOnSm && this.selAcc
-    ? this.selAcc["instanceBots"][0]?.instanceBotId
-    : this.workflowService.getCurrentBt(true)._id;
+  botId = this.workflowService.getCurrentBtSmt(true)._id
 
   selectedRunColorCodeKey : any = '#16B364';
   selectedRunColorCodeValue : any = '#EDFCF2';
