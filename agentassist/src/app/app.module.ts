@@ -95,14 +95,6 @@ import { ExternalWidgetComponent } from './pages/agent-settings/external-widget/
 import { AddWidgetComponent } from './pages/agent-settings/external-widget/add-widget/add-widget.component';
 import { OnboardingComponent } from './pages/onboarding/onboarding.component';
 import { OnboardingDialogComponent } from './pages/onboarding/onboarding-dialog/onboarding-dialog.component';
-import { DashboardComponent } from './pages/dashboard/dashboard.component';
-import { AutomationPerformanceComponent } from './pages/dashboard/automation-performance/automation-performance.component';
-import { AgentFeedbackComponent } from './pages/dashboard/agent-feedback/agent-feedback.component';
-import { AutomationOverrideReportComponent } from './pages/dashboard/automation-override-report/automation-override-report.component';
-import { AgentAspectComponent } from './pages/dashboard/agent-aspect/agent-aspect.component';
-import { CustomerAspectComponent } from './pages/dashboard/customer-aspect/customer-aspect.component';
-import { ExhaustiveRepresentationComponent } from './pages/dashboard/exhaustive-representation/exhaustive-representation.component';
-import { DashboardFiltersComponent } from './pages/dashboard/dashboard-filters/dashboard-filters.component';
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SearchAssistComponent } from './pages/search-assist/search-assist.component';
@@ -181,14 +173,6 @@ import { AccWarningDialogComponent } from './helpers/components/acc-warning-dial
     AddWidgetComponent,
     OnboardingComponent,
     OnboardingDialogComponent,
-    DashboardComponent,
-    AutomationPerformanceComponent,
-    AgentFeedbackComponent,
-    AutomationOverrideReportComponent,
-    AgentAspectComponent,
-    CustomerAspectComponent,
-    ExhaustiveRepresentationComponent,
-    DashboardFiltersComponent,
     SearchAssistComponent,
     SaDeleteConfirmComponent,
     AutomationIntentvsEntityStringPipe,
