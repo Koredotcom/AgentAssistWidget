@@ -2209,7 +2209,10 @@ export class AssistComponent implements OnInit {
 
   sendOpenCheckLIstEvent(){
     if(!this.isGuidedChecklistApiSuccess && this.commonService.primaryChecklist.length > 0) {
-      this.sendChecklistEvent();
+      let channel = this.commonService.isCallConversation ? 'voice' : 'chat'
+      if(this.commonService.primaryChecklist[0]?.channels?.includes(channel)){
+        this.sendChecklistEvent();
+      }
     }
   }
 }
