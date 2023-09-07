@@ -1339,4 +1339,19 @@ export class CommonService {
     }
   }
 
+  sendAndCopyForPlaybook(eventName, conversationId, payload){
+    let message : any = {
+      method: (eventName == IdReferenceConst.SENDMSG) ? IdReferenceConst.SEND_METHOD : IdReferenceConst.COPY_METHOD,
+      name: (eventName == IdReferenceConst.SENDMSG) ? IdReferenceConst.SENDMSG_REQUEST : IdReferenceConst.COPYMSG_REQUEST,
+      conversationId,
+      payload,
+    };
+
+    if (eventName == IdReferenceConst.SENDMSG) {
+      window.parent.postMessage(message, '*');
+    } else if (eventName == IdReferenceConst.COPYMSG) {
+      parent.postMessage(message, '*');
+    }
+  }
+
 }

@@ -28,6 +28,18 @@ export class ChecklistsComponent implements OnInit, OnDestroy {
   dynClObjs: any = {};
   showDropDown = false;
   currentCl:any = {};
+  colors = {
+    '#0BA5EC': '#F0F9FF',
+    '#06AED4': '#ECFDFF',
+    '#2E90FA': '#EFF4FF',
+    '#6172F3': '#EEF4FF',
+    '#6172F3f': '#F5F3FF',
+    '#EE46BC': '#FDF4FF',
+    '#F63D68': '#FFF1F3',
+    '#669F2A': '#F5FBEE',
+    '#16B364': '#EDFCF2',
+    '#FF4405': '#FFF4ED'
+};
   clickStep(cl, ac, step, i, si, sti) {
     if ((this.checklists[i]?.stages)[si]?.steps[sti]?.complete) {
       return;
@@ -273,13 +285,16 @@ export class ChecklistsComponent implements OnInit, OnDestroy {
           "timestamp": 0,
           "context": {}
       }
-  }
-  ;
-    this.websocketService.emitEvents(EVENTS.checklist_proceed_to_closed, checklistParams);
+  };
+  this.websocketService.emitEvents(EVENTS.checklist_proceed_to_closed, checklistParams);
   }
 
   ngOnDestroy() {
     this.subscription1.unsubscribe();
     this.subscription2.unsubscribe();
+  }
+
+  sendOrCopy(type, msg){
+    this.commonService.sendAndCopyForPlaybook(type, this.connectionDetails.conversationId, msg)
   }
 }
