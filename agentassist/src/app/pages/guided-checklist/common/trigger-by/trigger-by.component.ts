@@ -309,7 +309,7 @@ export class TriggerByComponent implements OnInit, OnChanges {
       this.standardBots = res.publishedBots;
       this.standardBotsOj = (res.publishedBots || [])
       .reduce((acc, item)=>{
-        acc[item._id] = item.botName;
+        acc[item.dialogId] = item.botName;
         return acc;
       }, {})
     });
