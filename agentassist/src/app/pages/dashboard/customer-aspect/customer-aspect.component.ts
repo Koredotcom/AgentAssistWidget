@@ -25,7 +25,7 @@ export class CustomerAspectComponent implements OnInit {
   public DASHBORADCOMPONENTTYPELIST = DASHBORADCOMPONENTTYPE;
   public VIEWTYPELIST = VIEWTYPE;
 
-  customerTabSelection : string = "All";
+  customerTabSelection : string = "all";
   customerAspectData : any = [];
   customerAspectAcutalData : any;
   onChangeCall: boolean = false;
@@ -84,6 +84,11 @@ export class CustomerAspectComponent implements OnInit {
   updateCustomerAspectData() {
     if (this.viewType == VIEWTYPE.EXHAUSTIVE_VIEW && this.widgetData) {
       this.updateViewData(this.widgetData);
+      this.payload.dataType = this.customerTabSelection;
+        this.payload.sessionType = this.customerDropdownSelection;
+        this.service.invoke('customersLookingfor', this.params, this.payload).subscribe((data : any) => {
+          this.updateViewData(data);
+        });
     } else {
       // this.dashboardService.getCustomerAspectData(this.customerDropdownSelection, this.customerTabSelection).subscribe(resp => {
       //   if (resp) {

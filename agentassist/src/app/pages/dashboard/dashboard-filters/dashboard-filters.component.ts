@@ -56,7 +56,7 @@ export class DashboardFiltersComponent implements OnInit {
       customRangeLabel: this.translate.instant('CALENDAR.CUSTOM_RANGE')
     }
 
-    this.selected = { startDate: moment().subtract(6, 'days').startOf('day'), endDate: moment() }
+    this.selected = { startDate: moment(), endDate: moment() }
     this.filters = { startDate: this.selected.startDate.toISOString(), endDate: this.selected.endDate.toISOString(), experience : this.selectedChannel }
     this.updateFilters(this.filters);
   }
