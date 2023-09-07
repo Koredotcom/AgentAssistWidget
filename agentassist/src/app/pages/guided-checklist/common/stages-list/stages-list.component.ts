@@ -62,7 +62,8 @@ export class StagesListComponent implements OnInit {
   currDragStg;
   currentStep;
   stepIndex;
-  botId = this.workflowService.getCurrentBtSmt(true)._id
+  botId = this.workflowService.getCurrentBtSmt(true)._id;
+  modalRef:any;
 
   constructor(
     private fb: FormBuilder,
