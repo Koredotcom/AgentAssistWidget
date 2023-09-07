@@ -19,188 +19,83 @@
         <div class='init-loading' *ngIf="isLoading">
             <mat-spinner diameter="25" strokeWidth="3"></mat-spinner>
         </div>
-        <ng-container *ngIf="respData.preBuilt?.length || respData.results?.length">
+        <ng-container *ngIf="respData.results?.length">
 
             <div class="agents-grid-data-table">
-                <perfect-scrollbar class="scroll-data" #ps>
+                <perfect-scrollbar class="scroll-data" #ps (psYReachEnd)="onReachEnd($event)">
                     <div id="accordion" class="agent-groups-table-container">                        
-                            <!-- pre built -->
-                            <div class="card_content" *ngIf="respData.preBuilt?.length">
-                                <div class="card_header">
-                                    <div data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="card_link" aria-expanded="true">
-                                        <div class="accordion-content-header">
-                                            <div class="left-title text-truncate">
-                                                <div class="left-content-info">
-                                                    <div class="title-info">
-                                                        <span>Pre-built</span>
-                                                        <span class="normal-text">Pre-built coaching options & intent identification management. </span>
-                                                    </div>
-                                                </div>                                                                                                 
-                                            </div>
-                                            <div class="right-info">                                                
-                                                <div class="arrow-rotate">
-                                                    <i class="icon-sa-arrow-down"></i>
-                                                </div>
-                                            </div>                                               
-                                        </div>
-                                    </div>
-                                </div> 
-                                <div id="collapseOne" class="inside-accordioncontent collapse show">
-                                    <perfect-scrollbar class="mx-h-300" (psYReachEnd)="onReachEnd($event)">
-                                        <div class="card-body inner-accordion-table">
-                                            <div class="content-scroll-data-agents">
-                                                <div class="shadow-freeze w-20"></div>
-                                                <div class="header-table-agents">
-                                                    <div class="titles-data w-20">
-                                                        <div class="title-header">Coaching Rule</div>
-                                                    </div>
-                                                    <div class="titles-data w-11">Actions</div>
-                                                    <div class="titles-data w-14">Description</div>
-                                                    <div class="titles-data w-16">Tags</div>
-                                                    <div class="titles-data w-16">Channels</div>
-                                                    <div class="titles-data w-13">Last UPDATED</div>
-                                                    <div class="titles-data w-10">Enabled</div>
-                                                </div>
-                                                <ng-container *ngFor="let rule of respData.preBuilt">
-                                                    <div class="body-data-table-wrapper-coaching">
-                                                        <div class="coaching-rule w-20">
-                                                            <div class="title">{{rule.name}}</div>
-                                                            <div class="desc-text" title="All Agents">All Agents</div>
-                                                        </div>
-                                                        <div class="actions-info w-11">
-                                                            <button class="edit-btn" (click)="openFLowCreation(flowCreation, rule, 'edit')">
-                                                                <i class="icon-sa-welcome-edit"></i>
-                                                            </button>
-                                                            <button class="delete-btn" *ngIf="rule.deletable" (click)="openDeleteRule(rule)">
-                                                                <i class="icon-sa-welcome-delete"></i>
-                                                            </button>
-                                                        </div>
-                                                        <div class="desc-text-info w-14">{{rule.description}}</div>
-                                                        <div class="tags-info w-16">
-                                                            <ng-container *ngFor="let tag of rule.tags?.slice(0,2);">
-                                                                <span class="tag-name">{{tag}}</span>
-                                                            </ng-container>
-                                                            <div class="kr-sg-dropdowns" ngbDropdown container="body" *ngIf="rule.tags?.length > 2">
-                                                                <div class="dropdown dropdown-open">
-                                                                  <button class="dropdown-toggle dropdown-input before-none" ngbDropdownToggle>+ {{rule.tags?.length - 2}} More</button>
-                                                                  <ul class="dropdown-menu content-menu more-dropdown-tags" ngbDropdownMenu>
-                                                                    <ng-container *ngFor="let iTag of rule.tags | slice : 2">
-                                                                        <li [title]="iTag" ngbDropdownItem class="mx-w-200">
-                                                                            <span class="text-truncate">{{iTag}}</span>
-                                                                        </li>
-                                                                    </ng-container>
-                                                                  </ul>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="channel-info w-16">
-                                                            <ng-container *ngFor="let channel of coachingConst.channelList">
-                                                                <span class="channel-name" *ngIf="rule.channels && rule.channels?.indexOf(channel) >= 0">{{channel}}</span>
-                                                            </ng-container>
-                                                        </div>
-                                                        <div class="title-text w-13 last-updated-text">{{rule.lModOn | date : 'MMM dd, yyyy h:mm a'}}</div>
-                                                        <div class="last-updated-toggle w-10">
-                                                            <label class="kr-sg-toggle" *ngIf="rule.deletable">
-                                                                <input type="checkbox" [checked]="rule.isActive" (click)="changeRuleStatus(rule, rule._id)">
-                                                                <div class="slider"></div>
-                                                            </label>
-                                                            <span *ngIf="!rule.deletable">Always Enabled</span>
-                                                        </div>
-                                                    </div>
-                                                </ng-container>
-                                            </div>
-                                        </div>
-                                    </perfect-scrollbar>
-                                </div>                     
-                            </div>            
                             <!-- new rules -->
                             <div class="card_content" *ngIf="respData.results?.length">
-                                <div class="card_header">
-                                    <div data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" class="card_link" aria-expanded="true">
-                                        <div class="accordion-content-header">
-                                            <div class="left-title text-truncate">
-                                                <div class="left-content-info">
-                                                    <div class="title-info">
-                                                        <span>New Rules</span>
-                                                        <span class="normal-text">Configure your coaching moment here. </span>
-                                                    </div>
-                                                </div>                                                                                                 
-                                            </div>
-                                            <div class="right-info">                                                
-                                                <div class="arrow-rotate">
-                                                    <i class="icon-sa-arrow-down"></i>
-                                                </div>
-                                            </div>                                               
-                                        </div>
-                                    </div>
-                                </div> 
                                 <div id="collapseTwo" class="inside-accordioncontent collapse show">
-                                    <perfect-scrollbar class="mx-h-300" (psYReachEnd)="onReachEnd($event)">
-                                        <div class="card-body inner-accordion-table">
-                                            <div class="content-scroll-data-agents">
-                                                <div class="shadow-freeze w-20"></div>
-                                                <div class="header-table-agents">
-                                                    <div class="titles-data w-20">
-                                                        <div class="title-header sort-header" (click)="sortOnClick()">Coaching Rule
-                                                            <img [src]="sortOrder == 'asc'? 'assets/icons/sort-up.svg' : 'assets/icons/use-case/SortDown.svg'" class="ml-1">
+                                    <div class="card-body inner-accordion-table">
+                                        <div class="content-scroll-data-agents">
+                                            <div class="shadow-freeze w-20"></div>
+                                            <div class="header-table-agents">
+                                                <div class="titles-data w-20">
+                                                    <div class="title-header sort-header" (click)="sortOnClick()">Coaching Rule
+                                                        <img [src]="sortOrder == 'asc'? 'assets/icons/sort-up.svg' : 'assets/icons/use-case/SortDown.svg'" class="ml-1">
+                                                    </div>
+                                                </div>
+                                                <div class="titles-data w-12">Actions</div>
+                                                <div class="titles-data w-24">Description</div>
+                                                <div class="titles-data w-16">Tags</div>
+                                                <!-- <div class="titles-data w-16">Channels</div> -->
+                                                <div class="titles-data w-18">Last UPDATED</div>
+                                                <div class="titles-data w-10">Enabled</div>
+                                            </div>
+                                            <ng-container *ngFor="let rule of respData.results">
+                                                <div class="body-data-table-wrapper-coaching">
+                                                    <div class="coaching-rule w-20">
+                                                        <div class="title" [title]="rule.name" placement="bottom-center" tooltipClass="tooltip-global-styles" ngbTooltip="{{rule.name | titlecase}}" container="body">{{rule.name | titlecase}}</div>
+                                                        <div class="desc-text">All Agents</div>
+                                                        <div class="voice-msg-icons">
+                                                            <i class="icon-sa-welcome-voice" placement="bottom-center" tooltipClass="tooltip-global-styles" ngbTooltip="voice" *ngIf="rule.channels.includes('voice')"></i>
+                                                            <i class="icon-sa-welcome-chat" placement="bottom-center" tooltipClass="tooltip-global-styles" ngbTooltip="chat" *ngIf="rule.channels.includes('chat')"></i>
                                                         </div>
                                                     </div>
-                                                    <div class="titles-data w-11">Actions</div>
-                                                    <div class="titles-data w-14">Description</div>
-                                                    <div class="titles-data w-16">Tags</div>
-                                                    <div class="titles-data w-16">Channels</div>
-                                                    <div class="titles-data w-13">Last UPDATED</div>
-                                                    <div class="titles-data w-10">Enabled</div>
-                                                </div>
-                                                <ng-container *ngFor="let rule of respData.results">
-                                                    <div class="body-data-table-wrapper-coaching">
-                                                        <div class="coaching-rule w-20">
-                                                            <div class="title" [title]="rule.name">{{rule.name}}</div>
-                                                            <div class="desc-text">All Agents</div>
-                                                        </div>
-                                                        <div class="actions-info w-11">
-                                                            <button class="edit-btn" (click)="openFLowCreation(flowCreation, rule, 'edit')">
-                                                                <i class="icon-sa-welcome-edit"></i>
-                                                            </button>
-                                                            <button class="delete-btn" (click)="openDeleteRule(rule)">
-                                                                <i class="icon-sa-welcome-delete"></i>
-                                                            </button>
-                                                        </div>
-                                                        <div class="desc-text-info w-14" [title]="rule.description">{{rule.description}}</div>
-                                                        <div class="tags-info w-16">
-                                                            <ng-container *ngFor="let tag of rule.tags?.slice(0,2);">
-                                                                <span class="tag-name" [title]="tag">{{tag}}</span>
-                                                            </ng-container>
-                                                            <div class="kr-sg-dropdowns" ngbDropdown container="body" *ngIf="rule.tags?.length > 2">
-                                                                <div class="dropdown dropdown-open">
-                                                                  <button class="dropdown-toggle dropdown-input before-none" ngbDropdownToggle>+ {{rule.tags?.length - 2}} More</button>
-                                                                  <ul class="dropdown-menu content-menu more-dropdown-tags" ngbDropdownMenu>
-                                                                    <ng-container *ngFor="let iTag of rule.tags | slice : 2">
-                                                                        <li ngbDropdownItem class="mx-w-200">
-                                                                            <span [title]="iTag" class="text-truncate">{{iTag}}</span>
-                                                                        </li>
-                                                                    </ng-container>
-                                                                  </ul>
-                                                                </div>
+                                                    <div class="actions-info w-12">
+                                                        <button class="edit-btn" (click)="openFLowCreation(flowCreation, rule, 'edit')">
+                                                            <i class="icon-sa-welcome-edit"></i>
+                                                        </button>
+                                                        <button class="delete-btn" [disabled]="!rule.deletable" [ngClass]="{'disabled': !rule.deletable}" (click)="openDeleteRule(rule)">
+                                                            <i class="icon-sa-welcome-delete"></i>
+                                                        </button>
+                                                    </div>
+                                                    <div class="desc-text-info w-24" placement="bottom-center" tooltipClass="tooltip-global-styles" ngbTooltip="{{rule.description}}" container="body">{{rule.description}}</div>
+                                                    <div class="tags-info w-16">
+                                                        <ng-container *ngFor="let tag of rule.tags?.slice(0,2);">
+                                                            <span class="tag-name" [title]="tag">{{tag}}</span>
+                                                        </ng-container>
+                                                        <div class="kr-sg-dropdowns" ngbDropdown container="body" *ngIf="rule.tags?.length > 2">
+                                                            <div class="dropdown dropdown-open">
+                                                              <button class="dropdown-toggle dropdown-input before-none" ngbDropdownToggle>+ {{rule.tags?.length - 2}} More</button>
+                                                              <ul class="dropdown-menu content-menu more-dropdown-tags" ngbDropdownMenu>
+                                                                <ng-container *ngFor="let iTag of rule.tags | slice : 2">
+                                                                    <li ngbDropdownItem class="mx-w-200">
+                                                                        <span [title]="iTag" class="text-truncate">{{iTag}}</span>
+                                                                    </li>
+                                                                </ng-container>
+                                                              </ul>
                                                             </div>
                                                         </div>
-                                                        <div class="channel-info w-16">
-                                                            <ng-container *ngFor="let channel of coachingConst.channelList">
-                                                                <span class="channel-name" *ngIf="rule.channels?.indexOf(channel) >= 0" [title]="channel">{{channel}}</span>
-                                                            </ng-container>
-                                                        </div>
-                                                        <div class="title-text w-13 last-updated-text" [title]="(rule.lModOn | date : 'MMM dd, yyyy h:mm a')">{{rule.lModOn | date : 'MMM dd, yyyy h:mm a'}}</div>
-                                                        <div class="last-updated-toggle w-10">
-                                                            <label class="kr-sg-toggle">
-                                                                <input type="checkbox" [checked]="rule.isActive" (click)="changeRuleStatus(rule, rule._id)">
-                                                                <div class="slider"></div>
-                                                            </label>
-                                                        </div>
                                                     </div>
-                                                </ng-container>
-                                            </div>
+                                                    <!-- <div class="channel-info w-16">
+                                                        <ng-container *ngFor="let channel of coachingConst.channelList">
+                                                            <span class="channel-name" *ngIf="rule.channels?.indexOf(channel) >= 0" [title]="channel">{{channel}}</span>
+                                                        </ng-container>
+                                                    </div> -->
+                                                    <div class="title-text w-18 last-updated-text" placement="bottom-center" tooltipClass="tooltip-global-styles" ngbTooltip="{{(rule.lModOn | date:'mediumDate')}}">{{rule.lModOn | date:'mediumDate'}}</div>
+                                                    <div class="last-updated-toggle w-10">
+                                                        <label class="kr-sg-toggle" *ngIf="rule.deletable">
+                                                            <input type="checkbox" [checked]="rule.isActive" (click)="changeRuleStatus(rule, rule._id)">
+                                                            <div class="slider"></div>
+                                                        </label>
+                                                        <span *ngIf="!rule.deletable" placement="bottom-center" tooltipClass="tooltip-global-styles" ngbTooltip="Always Enabled">Always Enabled</span>
+                                                    </div>
+                                                </div>
+                                            </ng-container>
                                         </div>
-                                    </perfect-scrollbar>
+                                    </div>
                                 </div>                     
                             </div>
                         <!-- </ng-container> -->
@@ -208,7 +103,7 @@
                 </perfect-scrollbar>
             </div>
         </ng-container>
-        <ng-container *ngIf="!respData.results?.length && !respData?.preBuilt?.length && !isLoading && !searchField?.value?.trim()">
+        <ng-container *ngIf="!respData.results?.length && !isLoading && !searchField?.value?.trim()">
             <div class="empty-coaching-wrapper">
                 <div class="empty-content">
                     <div class="img-block">
@@ -220,7 +115,7 @@
                 </div>
             </div>
         </ng-container>
-        <ng-container *ngIf="!respData.results?.length && !respData?.preBuilt?.length && searchField?.value?.trim() && !isLoading">
+        <ng-container *ngIf="!respData.results?.length && searchField?.value?.trim() && !isLoading">
             <div class="empty-coaching-wrapper">
                 <div class="empty-content">
                     <div class="img-block">
