@@ -1,9 +1,10 @@
 dist/**
 *.bak
 
+KoreAnalytics/node_modules/**
+
 buildernew/dist/**
-buildernew/node_modules/**
-AgentAssistAngular/node_modules/**
+agentassist-widget-sdk/UI/node_modules/**
 
 builder/dist/**
 builder/node_modules/**
@@ -20,5 +21,7 @@ buildernew/nbproject/project.properties
 buildernew/nbproject/project.xml
 buildernew/npm-debug.log
 buildernew/sh.exe.stackdump
-node_modules
-.vscode/settings.json
+buildernew/.vscode
+buildernew/../partial
+workflows/nbproject
+storyboard/node_modules/**
