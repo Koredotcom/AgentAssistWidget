@@ -103,7 +103,6 @@ import { AgentAspectComponent } from './pages/dashboard/agent-aspect/agent-aspec
 import { CustomerAspectComponent } from './pages/dashboard/customer-aspect/customer-aspect.component';
 import { ExhaustiveRepresentationComponent } from './pages/dashboard/exhaustive-representation/exhaustive-representation.component';
 import { DashboardFiltersComponent } from './pages/dashboard/dashboard-filters/dashboard-filters.component';
-import { DashboardKpiComponent } from './pages/dashboard/dashboard-kpi/dashboard-kpi.component';
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SearchAssistComponent } from './pages/search-assist/search-assist.component';
@@ -190,7 +189,6 @@ import { AccWarningDialogComponent } from './helpers/components/acc-warning-dial
     CustomerAspectComponent,
     ExhaustiveRepresentationComponent,
     DashboardFiltersComponent,
-    DashboardKpiComponent,
     SearchAssistComponent,
     SaDeleteConfirmComponent,
     AutomationIntentvsEntityStringPipe,

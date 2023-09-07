@@ -59,7 +59,7 @@ export class CustomerAspectComponent implements OnInit {
   }
 
   ngOnChanges(changes : any){
-    if(changes.viewType || changes.filters || changes.customerDropdownSelection || !this.onChangeCall) {
+    if(changes.viewType || changes.filters || changes.customerDropdownSelection || changes.customerTabSelection || !this.onChangeCall) {
       this.payload = { ... this.filters}
       this.params.streamId = this.dashboardService.getSelectedBotDetails()._id;
       this.handleOnChangeCall();
