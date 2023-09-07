@@ -333,6 +333,7 @@ export class AssistComponent implements OnInit {
       headers: headersVal,
       dataType: 'json',
       success:  (data) => {
+        this.isChecklistOpened = true;
         if(data.checklists.length > 0 ) {
           this.checkListData = data;
           this.commonService.primaryChecklist = data.checklists.filter(check => check.type === "primary");
@@ -375,7 +376,6 @@ export class AssistComponent implements OnInit {
     }
     this.isGuidedChecklistApiSuccess = true;
     this.websocketService.emitEvents(EVENTS.checklist_opened, checklistParams);
-    this.isChecklistOpened = true;
     if(this.commonService.primaryChecklist[0]?.stages[0]){
       this.commonService.primaryChecklist[0].stages[0].opened = true;
     };

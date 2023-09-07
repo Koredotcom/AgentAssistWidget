@@ -1,6 +1,6 @@
 <!-- <h1>Playbook</h1> -->
 <!-- <h2>Laptop Sales</h2> -->
-<div class="checklist-wrapper-info">
+<div class="checklist-wrapper-info" *ngIf="triggeredDynCheckLists?.length || checklists?.length">
     <div class="checked-list-content">
         <div class="heading-block-check">
             <div class="left-sec-data">
@@ -27,7 +27,7 @@
                     </div>
                 </div>
             </div>
-            <button *ngIf="isProceedToClose" class="proceed-toclise-btn" (click)="proceedToClose()">
+            <button *ngIf="isProceedToClose && checklists?.length" class="proceed-toclise-btn" (click)="proceedToClose()">
                 <div class="circle">
                     <i class="ast-check-new"></i>
                 </div>
