@@ -13,6 +13,7 @@ import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CoachingConfirmationComponent } from '../../coaching-confirmation/coaching-confirmation.component';
 import { FilterPipe } from 'src/app/helpers/filters/filter.pipe';
+import { CoachingService } from '../../coaching.service';
 
 @Component({
   selector: 'app-none-intent',
@@ -72,7 +73,8 @@ export class NoneIntentComponent implements OnInit {
     private auth: AuthService,
     private workflowService: workflowService,
     private modalService : NgbModal, 
-    private filterPipe : FilterPipe
+    private filterPipe : FilterPipe,
+    private coachingService : CoachingService
     // private cd: ChangeDetectorRef
   ) { }
 
@@ -106,6 +108,7 @@ export class NoneIntentComponent implements OnInit {
     //     this.serachedUtterances = [...this.selectedUtterances]
     //   }
     // })
+    this.coachingService.updateLockOnRule(true, this.currentRule, this.selAcc);
     this.getTags();
     this.getRules();
     this.checkOpenAiConfig();
@@ -163,6 +166,7 @@ export class NoneIntentComponent implements OnInit {
       limit: -1,
       page: 1,
       sortBy: 'asc',
+      default: false,
     }
     this.service.invoke('get.allagentCoachingRule', params, body).pipe(finalize(() => {
     })).subscribe(data => {
@@ -185,7 +189,7 @@ export class NoneIntentComponent implements OnInit {
 
   closeSlider(isSave?) {
     if((this.newUtterances.length || this.deletedUtterances.length) && !isSave){
-      this.modalRef = this.modalService.open(CoachingConfirmationComponent, { centered: true, keyboard: false, windowClass: 'delete-uc-rule-modal', backdrop: 'static' });
+      this.modalRef = this.modalService.open(CoachingConfirmationComponent, { centered: true, keyboard: false, windowClass: 'delete-uc-rule-modal', backdrop: 'static', backdropClass: 'backdrop-z-index9999' });
       this.modalRef.result.then(emitedValue => {
         if(emitedValue){
           this.closeSlide.emit();
@@ -194,6 +198,7 @@ export class NoneIntentComponent implements OnInit {
     }else{
       this.closeSlide.emit();
     }
+    this.coachingService.updateLockOnRule(false, this.currentRule, this.selAcc);
   }
 
   // add Utterance page methods start
@@ -234,7 +239,7 @@ export class NoneIntentComponent implements OnInit {
     when['deleteUtterances'] = this.deletedUtterances;
     this.currentRule['triggers'][0]['when'] = { ...when };
     delete this.currentRule['state'];
-    this.service.invoke('put.agentcoachingrule', { ruleId: this.currentRule?._id }, this.currentRule)
+    this.service.invoke('put.agentcoachingrule', { ruleId: this.currentRule?._id, userId : this.auth.getUserId() }, this.currentRule)
       .pipe(finalize(() => {
         // this.loading = false;
       }))

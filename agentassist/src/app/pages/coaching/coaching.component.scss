@@ -15,7 +15,21 @@
     }
     .coaching-rule{
         z-index: 2;
-        padding: 5px 15px;
+        padding: 5px 55px 5px 15px;
+        position: relative;
+        .voice-msg-icons{
+            position: absolute;
+            display: flex;
+            align-items: center;
+            top: 16px;
+            right: 15px;
+            color: #28A745;
+            gap: 5px;
+            font-size: 14px;
+            i{
+                cursor: pointer;
+            }
+        }
         .title{
             color: var(--neutral-700, #404040);
             font-size: 11px;
@@ -25,6 +39,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            max-width: max-content;
         }
         .desc-text{
             color: var(--neutral-700, #404040);
@@ -227,9 +242,6 @@
     }
     .agents-grid-data-table{
         height: calc(100vh - 189px);
-        .scroll-data{
-
-        }
         .agent-groups-table-container{
             padding: 0 40px;
             display: inline-block;
@@ -376,6 +388,9 @@
                           border-bottom: 1px solid #E5E7EB;
                           position: relative;
                           display: flex;
+                          position: sticky;
+                            top: 0;
+                            z-index: 9;
                           .titles-data {
                             padding: 0 10px;
                             color: var(--neutral-700, #404040);
@@ -806,56 +821,6 @@ input[type=number]::-webkit-outer-spin-button {
                             }
                         }
                     }
-                    .kr-sg-dropdowns{
-                        .editable-div{
-                            border-radius: 8px;
-                            border: 1px solid var(--gray-300, #D0D5DD);
-                            background: var(--base-white, #FFF);
-                            box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
-                            white-space: normal;
-                            padding: 8px 12px;
-                            height: 40px;
-                            font-size: 16px;
-                            font-weight: 400;
-                            line-height: 24px;
-                            outline: 0;
-                            color: #101828;
-                            &[placeholder]:empty:before {
-                                content: attr(placeholder);
-                                color: var(--gray-300, #D0D5DD);
-                                font-size: 100%;
-                            }
-                            &:focus{
-                                border: 1px solid var(--primary-300, #84ADFF);
-                                background: var(--base-white, #FFF);
-                                box-shadow: 0px 0px 0px 4px #EFF4FF, 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
-                            }
-                        }
-                        .content-menu {
-                            .kr-sg-checkbox{
-                                padding: 10px 16px;
-                                width: 100%;
-                                border-bottom: 1px solid #EAECF0;
-                                &:last-child{
-                                    border: 0;
-                                }
-                                .checkbox-custom {
-                                    + .checkbox-custom-label{
-                                        span{
-                                            border-radius: 16px;
-                                            background: var(--blue-50, #EFF8FF);
-                                            padding: 4px 12px;
-                                            color: var(--blue-700, #175CD3);
-                                            text-align: center;
-                                            font-size: 14px;
-                                            font-weight: 500;
-                                            line-height: 20px;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
                 }
 
                 .footer-wrapper {
@@ -1030,6 +995,9 @@ input[type=number]::-webkit-outer-spin-button {
                             font-size: 14px;
                             font-weight: 500;
                             line-height: 20px;
+                            overflow: hidden;
+                            white-space: nowrap;
+                            text-overflow: ellipsis;
                         }
                     }                    
                 }

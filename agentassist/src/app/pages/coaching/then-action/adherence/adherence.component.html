@@ -35,7 +35,10 @@
                 <perfect-scrollbar>
                     <div class="scrol-data">
                         <div class="add-utterences-drp">
-                            <div class="label-text">Utterances</div>
+                            <div class="label-text">
+                                <span>Utterances</span>
+                                <span class="pbl">Powered by LLM</span>
+                            </div>
                             <div class="dropdown-adherence" ngbDropdown #utteranceDropdown="ngbDropdown">
                                 <input type="text" class="drp-input-search"  ngbDropdownToggle [formControl]="searchKey">
                                 <div class="text_info">Type an utterance that the person might say.</div>

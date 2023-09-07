@@ -652,6 +652,7 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
     if(this.workflowService.deflectApps() && this.workflowService.deflectApps().length) {
       this.workflowService.switchBt$.next(_.findWhere(this.workflowService.deflectApps(), {_id: this.importedBtStreamId}));
       this.wSel.emit();
+      this.router.navigate(['/config/usecases']);
     } else {
       this.notificationService.notify(this.translate.instant('ONBOARDING.PLEASE_WAIT_LOADING'), 'warning');
       return;
