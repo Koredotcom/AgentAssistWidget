@@ -55,11 +55,11 @@
                     <div class="title-text-info">
                         <span class="heading-text">{{"DASHBOARD.AGENT_ASPECT_TOTAL_SEARCH_REQ" | translate}}</span>
                         <div class="value-data negtive">
-                            <i [ngClass]="agentAspectData.totalSearchReq.increment ? 'icon-ast_sortup' : 'icon-ast_sortdown' "></i>
-                            <span>{{agentAspectData.totalSearchReq.percent}}%</span>
+                            <i [ngClass]="agentAspectData?.totalSearchReq?.increment ? 'icon-ast_sortup' : 'icon-ast_sortdown' "></i>
+                            <span>{{agentAspectData?.totalSearchReq?.percent}}%</span>
                         </div>
                     </div>
-                    <div class="count-heading">{{agentAspectData.totalSearchReq.count}}</div>
+                    <div class="count-heading">{{agentAspectData?.totalSearchReq?.count}}</div>
                 </div>
             </div>
             <div class="card-sec max_width_50">
@@ -67,11 +67,11 @@
                     <div class="title-text-info">
                         <span class="heading-text">{{"DASHBOARD.AGENT_ASPECT_SEARCH_RESULTS_USED" | translate}}</span>
                         <div class="value-data">
-                            <i [ngClass]="agentAspectData.searchResultsUsed.increment ? 'icon-ast_sortup' : 'icon-ast_sortdown' "></i>
-                            <span>{{agentAspectData.searchResultsUsed.percent}}%</span>
+                            <i [ngClass]="agentAspectData?.searchResultsUsed?.increment ? 'icon-ast_sortup' : 'icon-ast_sortdown' "></i>
+                            <span>{{agentAspectData?.searchResultsUsed?.percent}}%</span>
                         </div>
                     </div>
-                    <div class="count-heading">{{agentAspectData.searchResultsUsed.count}}%</div>
+                    <div class="count-heading">{{agentAspectData?.searchResultsUsed?.count}}%</div>
                 </div>
             </div>
         </div>

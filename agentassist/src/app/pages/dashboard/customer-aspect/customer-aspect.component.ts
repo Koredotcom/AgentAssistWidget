@@ -4,6 +4,7 @@ import { actualvsDisplayTitle, DASHBORADCOMPONENTTYPE, VIEWTYPE } from '../dashb
 import { DashboardService } from '../dashboard.service';
 import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { AuthService } from '@kore.services/auth.service';
+import { SubSink } from 'subsink';
 
 @Component({
   selector: 'app-customer-aspect',
@@ -44,6 +45,8 @@ export class CustomerAspectComponent implements OnInit {
 
   }
 
+  subs = new SubSink();
+
   constructor(private dashboardService : DashboardService, private service : ServiceInvokerService, private authService : AuthService) { }
 
   ngOnInit(): void {
@@ -55,14 +58,15 @@ export class CustomerAspectComponent implements OnInit {
 
   }
 
-  ngOnChanges(changes : SimpleChanges){
-    console.log("🚀 ~ file: customer-aspect.component.ts:59 ~ CustomerAspectComponent ~ ngOnChanges ~ changes:", changes)
-    if(this.viewType && this.filters && Object.keys(this.filters).length > 0 && this.customerDropdownSelection && !this.onChangeCall){
+  ngOnChanges(changes : any){
+    if(changes.viewType || changes.filters || changes.customerDropdownSelection || !this.onChangeCall) {
       this.payload = { ... this.filters}
-      this.params.streamId = this.filters?.botId !== '' ? this.filters.botId : this.dashboardService.getSelectedBotDetails()._id;
+      this.params.streamId = this.dashboardService.getSelectedBotDetails()._id;
       this.handleOnChangeCall();
       this.updateCustomerAspectData();
     }
+    // if(this.viewType && this.filters && Object.keys(this.filters).length > 0 && this.customerDropdownSelection && !this.onChangeCall){
+    // }
     // if(changes.customerDropdownSelection) {
     //   this.handleOnChangeCall();
     //   this.updateCustomerAspectData();
@@ -86,6 +90,8 @@ export class CustomerAspectComponent implements OnInit {
       //     this.updateViewData(resp);
       //   }
       // });
+        this.payload.dataType = this.customerTabSelection;
+        this.payload.sessionType = this.customerDropdownSelection;
         this.service.invoke('customersLookingfor', this.params, this.payload).subscribe((data : any) => {
           this.updateViewData(data);
         });

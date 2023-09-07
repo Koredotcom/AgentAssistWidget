@@ -43,17 +43,21 @@ export class AutomationPerformanceComponent implements OnInit {
     // this.updateAutomationPerformanceData();
   }
 
-  ngOnChanges(changes : SimpleChanges){
-    if( this.filters && Object.keys(this.filters).length > 0 && !this.onChangeCall){
+  ngOnChanges(changes : any){
+    if(changes.filters && Object.keys(this.filters).length > 0) {
       this.params.streamId = this.filters?.botId !== '' ? this.filters.botId : this.params.streamId;
       this.payload = {...this.filters}
       this.updateAutomationPerformanceData();
     }
+    // if( this.filters && Object.keys(this.filters).length > 0 && !this.onChangeCall){
+    //   this.params.streamId = this.filters?.botId !== '' ? this.filters.botId : this.params.streamId;
+    //   this.payload = {...this.filters}
+    //   this.updateAutomationPerformanceData();
+    // }
   }
 
   subscribeEvents(){
     this.subs.sink = this.dashboardService.getDashboardFilterUpdated().subscribe((filters : any) => {
-      // console.log(filters, "filters");
       if(filters && Object.keys(filters).length > 0){
         this.payload = Object.assign({}, filters);
         this.params.streamId = this.filters?.botId ? this.filters?.botId : this.params.streamId;

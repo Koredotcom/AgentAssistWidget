@@ -49,15 +49,20 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     this.params.streamId = this.authService.smartAssistBots[0]._id;
     this.subscribeEvents();
-    this.updateKPIData();
+    // this.updateKPIData();
   }
 
-  ngOnChanges(changes : SimpleChange){
-    if( this.filters && Object.keys(this.filters).length > 0 && !this.onChangeCall ){
+  ngOnChanges(changes : any){
+    if( changes.filters) {
       this.params.streamId = this.filters?.botId !== '' ? this.filters.botId : this.params.streamId;
       this.payload = {... this.filters}
       this.updateKPIData();
     }
+    // if( this.filters && Object.keys(this.filters).length > 0 && !this.onChangeCall ){
+    //   this.params.streamId = this.filters?.botId !== '' ? this.filters.botId : this.params.streamId;
+    //   this.payload = {... this.filters}
+    //   this.updateKPIData();
+    // }
   }
 
   updateKPIData(){
@@ -76,7 +81,7 @@ export class DashboardComponent implements OnInit {
       if(filters && Object.keys(filters).length > 0){
         this.filterData = Object.assign({}, filters);
         this.payload = this.filterData;
-        this.params.streamId = this.filters?.botId ? this.filters?.botId : this.dashboardService.getSelectedBotDetails()._id;
+        this.params.streamId = this.dashboardService.getSelectedBotDetails()._id;
         this.updateKPIData();
       }
     });
