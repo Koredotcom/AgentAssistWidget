@@ -171,9 +171,10 @@ export class ChecklistsComponent implements OnInit, OnDestroy {
     this.subscription2 = this.websocketService.checkListResponse$.subscribe((data) => {
       if (data && data.checklistsIdentified) {
         (data.checklistsIdentified || []).forEach((item) => {
-          let inx = this.triggeredDynCheckLists.findIndex(cl => cl._id === item.checklistId);
+          let id = (item.checklistId || item.id || item._id);
+          let inx = this.triggeredDynCheckLists.findIndex(cl => cl._id === id);
           if (inx < 0) {
-            this.triggeredDynCheckLists.push(this.dynClObjs[item.checklistId]);
+            this.triggeredDynCheckLists.push(this.dynClObjs[id]);
           }
         })
       }
