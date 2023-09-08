@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
 import { COACHINGCNST } from './coaching.cnst';
@@ -14,6 +14,7 @@ import { AuthService } from '@kore.services/auth.service';
 import { CoachingService } from './coaching.service';
 import { SubSink } from 'subsink';
 import { Router } from '@angular/router';
+import { SliderComponentComponent } from 'src/app/shared/slider-component/slider-component.component';
 @Component({
   selector: 'app-coaching',
   templateUrl: './coaching.component.html',
@@ -43,13 +44,15 @@ export class CoachingComponent implements OnInit, OnDestroy {
   selAcc = this.local.getSelectedAccount();
   subs = new SubSink();
   isCoachingDisable = false;
-  limit = 10;
+  limit = 30;
   page = 1;
   hasMore = false;
   searchText = '';
   preBuilt = [];
   sortOrder : 'desc' | 'asc' = 'asc';
-
+  showNoneIntent = false;
+  configFeatures : any;
+  @ViewChild('noneIntent', { static: true }) noneIntent: SliderComponentComponent;
   constructor(
     private modalService: NgbModal, private service: ServiceInvokerService,
     private workflowService: workflowService, private cdRef: ChangeDetectorRef,
@@ -57,7 +60,8 @@ export class CoachingComponent implements OnInit, OnDestroy {
     private auth: AuthService, private local: LocalStoreService,
     private authService: AuthService,
     private cs: CoachingService,
-    private router: Router
+    private router: Router,
+    private zone : NgZone
   ) { }
 
   ngOnDestroy(): void {
@@ -78,10 +82,37 @@ export class CoachingComponent implements OnInit, OnDestroy {
       });
       this.initApiCalls();
     }
+    window.addEventListener("message", (event:any) => {
+      if(event.data.action === 'reloadCoaching') {
+        this.subs.sink = this.authService.isAgentCoachongEnable$.subscribe(isEnabled => {
+          this.isCoachingDisable = isEnabled;
+        });
+        if (!this.isCoachingDisable) {
+          this.router.navigate(['/config/usecases']);
+        } else {
+          this.subs.sink = this.workflowService.updateBotDetails$.subscribe((ele) => {
+            if (ele) {
+              this.initApiCalls();
+            }
+          });
+          this.initApiCalls();
+        }
+      }
+      if(event.data.action === 'destroyed') {
+        this.modalService.dismissAll();
+      }
+    })
   }
 
   initApiCalls() {
-    this.getCoachingPreBuiltRules();
+    this.respData = {
+      preBuilt : [],
+      results: []
+    };
+    this.page = 1;
+    this.limit = 30;
+    this.sortOrder = 'asc';
+    // this.getCoachingPreBuiltRules();
     this.getAgentCoachingRules();
     this.subscribeEvents();
     this.getConfigDetails();
@@ -106,28 +137,32 @@ export class CoachingComponent implements OnInit, OnDestroy {
 
   serachRules() {
     this.getAgentCoachingRules(true);
-    this.serachInPreBuilt();
+    // this.serachInPreBuilt();
   }
 
-  serachInPreBuilt(){
-    if(this.searchText){
-      this.respData.preBuilt = this.respData.preBuilt.filter((rule)=>rule.name?.toLowerCase()?.includes(this.searchText?.toLowerCase()))
-    }else{
-      this.respData.preBuilt = JSON.parse(JSON.stringify(this.preBuilt));
-    }
-  }
+  // serachInPreBuilt(){
+  //   if(this.searchText){
+  //     this.respData.preBuilt = this.respData.preBuilt.filter((rule)=>rule.name?.toLowerCase()?.includes(this.searchText?.toLowerCase()))
+  //   }else{
+  //     this.respData.preBuilt = JSON.parse(JSON.stringify(this.preBuilt));
+  //   }
+  // }
 
-  getCoachingPreBuiltRules(){
-    let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
-    let params: any = {
-      botId,
-    };
-    this.service.invoke('get.allagentCoachingpreBuiltRules', params)
-    .subscribe((data)=>{
-      this.respData.preBuilt = data.results;
-      this.preBuilt = JSON.parse(JSON.stringify(data.results));
-    })
-  };
+  // getCoachingPreBuiltRules(){
+  //   let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
+  //   let params: any = {
+  //     botId,
+  //   };
+  //   this.service.invoke('get.allagentCoachingpreBuiltRules', params)
+  //   .subscribe((data)=>{
+  //     data.results?.map(obj => {
+  //       obj.tags = obj.tags || [];
+  //       obj.channels = obj.channels || [];
+  //     })
+  //     this.respData.preBuilt = data.results;
+  //     this.preBuilt = JSON.parse(JSON.stringify(data.results));
+  //   })
+  // };
 
 
   getAgentCoachingRules(empty= false) {
@@ -136,7 +171,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
     this.cdRef.detectChanges();
     if(empty){
       this.page = 1;
-      this.limit = 10;        
+      this.limit = 30;
     }
     let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
     let params: any = {
@@ -156,6 +191,10 @@ export class CoachingComponent implements OnInit, OnDestroy {
       this.cdRef.detectChanges();
     })).subscribe(data => {
       if (data) {
+        data.results?.map(obj => {
+          obj.tags = obj.tags || [];
+          obj.channels = obj.channels || [];
+        })
         if(empty){
           this.respData.results = [...[]];
           // this.cdRef.detectChanges();
@@ -176,11 +215,18 @@ export class CoachingComponent implements OnInit, OnDestroy {
       this.service.invoke('get.ruleById', { ruleId: rule._id })
       .pipe(finalize(()=>{
         this.isLoading = false;
-      }))  
+      }))
       .subscribe(data => {
           if (data) {
+            data.tags = data.tags || [];
+            data.channels = data.channels || [];
             this.currentRule = data;
-            this.modalFlowCreateRef = this.modalService.open(flowCreation, { centered: true, keyboard: false, windowClass: 'flow-creation-full-modal', backdrop: 'static' });
+            if(rule?.name?.toLowerCase() === "no intent" || rule?.name?.toLowerCase() === "none intent"){
+              this.noneIntent.openSlider("#nonIntent", "non-intent-slider");
+              this.showNoneIntent = true;
+            }else{
+              this.modalFlowCreateRef = this.modalService.open(flowCreation, { centered: true, keyboard: false, windowClass: 'flow-creation-full-modal', backdrop: 'static' });
+            }
             setTimeout(() => {
               window.dispatchEvent(new Event('resize'));
               this.cdRef.detectChanges();
@@ -205,7 +251,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
     };
     // this.sortOrder = 'asc'
     this.getAgentCoachingRules(true);
-    this.getCoachingPreBuiltRules();
+    // this.getCoachingPreBuiltRules();
     this.selectedRuleGroup = null;
     this.selectedRuleGroupIndex = null;
     this.selectedRuleIndex = null;
@@ -247,7 +293,8 @@ export class CoachingComponent implements OnInit, OnDestroy {
         this.notificationService.notify(this.translate.instant("COACHING.GROUPUPDATED_SUCCESS"), 'success');
       }
     }, (error) => {
-      this.notificationService.showError(this.translate.instant("COACHING.GROUPUPDATED_FAILURE"));
+      rule.isActive = !rule.isActive;
+      this.notificationService.showError(error, this.translate.instant("COACHING.GROUPUPDATED_FAILURE"));
     });
   }
 
@@ -265,6 +312,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
         this.service.invoke('delete.agentCoachingRule', { ruleId: rule._id }).subscribe(_data => {
           this.notificationService.notify(this.translate.instant("COACHING.RULEDELETE_SUCCESS"), 'success');
           this.getAgentCoachingRules(true);
+          // this.getCoachingPreBuiltRules();
         }, (error) => {
           this.notificationService.showError(this.translate.instant("COACHING.RULEDELETE_FAILURE"));
         });
@@ -280,9 +328,10 @@ export class CoachingComponent implements OnInit, OnDestroy {
     this.service.invoke('get.AIconfigs', params)
       .subscribe(res => {
         if (res) {
+          this.configFeatures = res[0]?.featureList || [];
           this.cs.metaForUtternace = (res[0].featureList || [])
             .find(item => item.name === "aa_utterance")
-        };
+          };
       }, err => {
       });
   }
@@ -295,8 +344,10 @@ export class CoachingComponent implements OnInit, OnDestroy {
     });
   }
   onReachEnd(event){
-    if(!this.isLoading && this.hasMore && event.target.clientHeight > 150){
-      this.getAgentCoachingRules();
+    if(!this.isLoading && this.hasMore && event.target.scrollTop > 0){
+      this.zone.run(()=>{
+        this.getAgentCoachingRules();
+      })
     }
   }
   closeRule() {
@@ -307,4 +358,10 @@ export class CoachingComponent implements OnInit, OnDestroy {
     this.sortOrder = this.sortOrder == 'desc' ? 'asc' : 'desc';
     this.getAgentCoachingRules(true);
   }
+
+  closeSlide(e){
+    this.noneIntent.closeSlider("#nonIntent");
+    this.showNoneIntent = false;
+  }
+
 }

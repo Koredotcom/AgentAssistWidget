@@ -139,8 +139,8 @@ export class CreateRuleComponent implements OnInit {
 
   submitForm(){
     this.disableApplyButton = true;
-    this.ruleForm.controls['name'].patchValue(this.ruleName);
-    this.ruleForm.controls['description'].patchValue(this.ruleDesc); 
+    this.ruleForm.controls['name'].patchValue(this.ruleName.trim());
+    this.ruleForm.controls['description'].patchValue(this.ruleDesc.trim()); 
     this.ruleForm.setControl('channels', this.fb.array([...this.channelList]));   
     this.ruleForm.setControl('tags', this.fb.array(this.tags.map(a => a.name) || []));  
     this.submitRuleForm.emit(true);

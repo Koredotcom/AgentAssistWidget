@@ -134,7 +134,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     NgxDaterangepickerMd.forRoot(),
     AceEditorModule
   ],
-  providers: [TitleCasePipe],
+  providers: [TitleCasePipe, FilterPipe],
   exports: [
     ...COMPONENTS,
     ...DIRECTIVES,

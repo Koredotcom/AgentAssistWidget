@@ -5,7 +5,8 @@
             <button class="and-or-btn" (click)="changeOperator(operator)" [ngClass]="{'active-btn' : selectedOperator === operator}">{{operator | titlecase}}</button>
         </ng-container>
     </div>
-    <span class="utt-name-desc">Triggered by utterance by </span>
+    <span class="utt-name-desc" *ngIf="!selUser || selUser == 'customer'">A </span>
+    <span class="utt-name-desc" *ngIf="selUser && selUser == 'agent'">An </span>
     <div class="dropdown-custom-flows" ngbDropdown [placement]="'bottom'" container="body">
         <button class="dropdown-toggle btn-toggle" ngbDropdownToggle [ngClass]="{'text-choosen': !!selUser}">
             <span class="choose-text">{{selUser ? (selUser | titlecase) : '{ select person }'}}</span>
@@ -19,7 +20,7 @@
             </ng-container>
         </ul>
     </div>
-    <span class="utt-name-desc">when they use any of these </span>
+    <span class="utt-name-desc">uses any of these </span>
     <div class="dropdown-custom-flows" container="body">
         <button class="dropdown-toggle btn-toggle text-choosen" (click)="openAdherence()">
             <span class="choose-text"> {{(form?.value?.when?.utteranceCount || form.value?.default) ? ((form?.value?.when?.utteranceCount ? form?.value?.when?.utteranceCount : '') + ' utterance(s)') : '{ set utterances }'}}</span>
@@ -45,9 +46,9 @@
 
     <div class="dropdown-occurences in-conversations-dropdown" ngbDropdown [placement]="'bottom'" container="body" #utteranceTimer="ngbDropdown">
         <button class="dropdown-toggle btn-toggle" ngbDropdownToggle *ngIf="!selectedConvType">in conversation</button>
-        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle *ngIf="selectedConvType == coachingCnst.TRIGGER_ANYTIME">any time</button>
-        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle *ngIf="selectedConvType == coachingCnst.TRIGGER_BYTIME" (click)="selectedList.period = inconvList.period;selectedList.nSeconds = inconvList.nSeconds">{{inconvList.period}} {{inconvList.nSeconds}} second(s)</button>
-        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle *ngIf="selectedConvType == coachingCnst.TRIGGER_BYMEESAGECOUNT" (click)="selectedList.period = inconvList.period;selectedList.nMessages = inconvList.nMessages">{{inconvList.period}} {{inconvList.nMessages}} message(s)</button>
+        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle *ngIf="selectedConvType == coachingCnst.TRIGGER_ANYTIME">in conversation</button>
+        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle *ngIf="selectedConvType == coachingCnst.TRIGGER_BYTIME" (click)="selectedList.period = inconvList.period;selectedList.nSeconds = inconvList.nSeconds">{{inconvList.period === 'withIn' ? '' : 'in'}} {{inconvList.period.toLowerCase()}} {{inconvList.nSeconds}} second(s)</button>
+        <button class="dropdown-toggle btn-toggle" ngbDropdownToggle *ngIf="selectedConvType == coachingCnst.TRIGGER_BYMEESAGECOUNT" (click)="selectedList.period = inconvList.period;selectedList.nMessages = inconvList.nMessages">{{inconvList.period === 'withIn' ? '' : 'in'}} {{inconvList.period.toLowerCase()}} {{inconvList.nMessages}} message(s)</button>
        
         <ul class="dropdown_menu-wrapper" ngbDropdownMenu>
             <li ngbDropdownItem class="list-item-li" (click)="clickOnType(coachingCnst.TRIGGER_ANYTIME)">

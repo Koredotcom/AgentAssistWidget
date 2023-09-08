@@ -265,7 +265,7 @@
     .flow-wrapper-body-scroll{
         height: calc(100% - 61px);
         .inner-scroll-data-flows{
-            padding: 20px 80px 20px 200px;
+            padding: 20px 60px 20px 60px;
             .block-data-triggers{
                 display: inline-block;
                 width: 100%;
@@ -539,6 +539,9 @@
     transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
   }
   .example-box{
+    .warning-icon{
+        margin: 2px  6px 0 0;
+    }
     display: flex;
     .drag-content{
         height: max-content;

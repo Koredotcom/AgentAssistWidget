@@ -15,7 +15,21 @@
     }
     .coaching-rule{
         z-index: 2;
-        padding: 5px 15px;
+        padding: 5px 55px 5px 15px;
+        position: relative;
+        .voice-msg-icons{
+            position: absolute;
+            display: flex;
+            align-items: center;
+            top: 16px;
+            right: 15px;
+            color: #28A745;
+            gap: 5px;
+            font-size: 14px;
+            i{
+                cursor: pointer;
+            }
+        }
         .title{
             color: var(--neutral-700, #404040);
             font-size: 11px;
@@ -25,6 +39,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            max-width: max-content;
         }
         .desc-text{
             color: var(--neutral-700, #404040);
@@ -227,9 +242,6 @@
     }
     .agents-grid-data-table{
         height: calc(100vh - 189px);
-        .scroll-data{
-
-        }
         .agent-groups-table-container{
             padding: 0 40px;
             display: inline-block;
@@ -376,6 +388,9 @@
                           border-bottom: 1px solid #E5E7EB;
                           position: relative;
                           display: flex;
+                          position: sticky;
+                            top: 0;
+                            z-index: 9;
                           .titles-data {
                             padding: 0 10px;
                             color: var(--neutral-700, #404040);
@@ -462,6 +477,7 @@
     }
 }
 ::ng-deep .delete-uc-rule-modal{
+    z-index: 9999;
     .modal-dialog{
         margin: 0 auto;
         height: 100%;

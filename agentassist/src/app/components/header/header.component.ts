@@ -270,7 +270,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
     dialogRef.afterClosed().subscribe(res => {
       let usersList = [];
-      _.each(this.sharedToList.users, function (val) {
+      _.each(this.sharedToList?.users, function (val) {
         usersList.push({
           userId: val._id,
           roleId: val.roleInfo[0]._id
