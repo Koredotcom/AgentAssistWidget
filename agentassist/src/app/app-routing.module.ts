@@ -57,7 +57,7 @@ const routes: Routes = [
           { path: '**', redirectTo: 'sessiontrends' },
         ]
       },
-
+      { path: 'dashboard', loadChildren: () => import('./pages/dashboard/agentassist-dashboard/agentassist-dashboard.module').then(m => m.AgentassistDashboardModule)},
     ]
   },
 

@@ -4,7 +4,7 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 */
-/* 
+/*
     Created on : Mar 23, 2020, 14:44:00 PM
     Author     : Ravi Kiran Maddi
 */
@@ -21,14 +21,14 @@ and open the template in the editor.
     font-weight: 600;
     font-size: 14px;
     line-height: 17px;
-    margin-bottom: 5px;  
+    margin-bottom: 5px;
     .optional{
         color: $optionalText;
         font-weight: 500;
         font-size: 12px;
         line-height: 15px;
         padding-left: 5px;
-    } 
+    }
 }
 .desc-info-text{
     font-size: 12px;
@@ -54,7 +54,7 @@ and open the template in the editor.
                     &.yes{
                         padding-left: 58px;
                     }
-                }                
+                }
             }
         }
     }
@@ -63,16 +63,16 @@ and open the template in the editor.
         height: 20px;
         input{
             &:checked{
-                + .slider{                    
+                + .slider{
                     &::before{
                         -webkit-transform: translateX(25px);
                         -ms-transform: translateX(25px);
                         transform: translateX(25px);
                     }
                     + span{
-                        color:$primaryFontColor;                                        
-                    }                   
-                }             
+                        color:$primaryFontColor;
+                    }
+                }
             }
         }
         .slider{
@@ -106,17 +106,17 @@ and open the template in the editor.
                 span{
                     &.yes{
                         color:$primaryFontColor;
-                    }                                                            
+                    }
                 }
                 span{
                     &.enabled{
                         color:$primaryFontColor;
                         display: block;
-                    }  
+                    }
                     &.disabled{
                         display: none;
-                    }                                                          
-                }                
+                    }
+                }
             }
             &:disabled{
                 + .slider{
@@ -127,14 +127,14 @@ and open the template in the editor.
             }
         }
         &:focus{
-            + .slider{                
+            + .slider{
                 // box-shadow: 0 0 1px $primaryActionHoverColor;
                 border: 1px solid #1372ff;
             }
-        }   
+        }
         &:disabled{
-            cursor: auto;            
-        }   
+            cursor: auto;
+        }
     }
     .slider{
         position: absolute;
@@ -151,12 +151,12 @@ and open the template in the editor.
         span{
             font-size: 12px;
             color: $secondaryFontColor;
-            &.yes{                
+            &.yes{
                 padding-left: 37px;
                 position: absolute;
                 top: -2px;
             }
-            &.no{                
+            &.no{
                 position: absolute;
                 top: -2px;
                 margin-left: -25px;
@@ -166,12 +166,12 @@ and open the template in the editor.
                 position: absolute;
                 top: -2px;
                 display: none;
-            }  
+            }
             &.disabled{
                 padding-left: 37px;
                 position: absolute;
                 top: -2px;
-            }            
+            }
         }
         &::before{
             position: absolute;
@@ -251,7 +251,7 @@ and open the template in the editor.
                         }
                     }
                 }
-            }  
+            }
         }
     }
     input{
@@ -285,19 +285,19 @@ and open the template in the editor.
                     &.yes{
                         color: #202124;
                         margin-left: 10px;
-                    }  
+                    }
                     &.no{
                         color: #9AA0A6;
                         margin-right: 10px;
-                    }    
+                    }
                     &.enabled{
                         color: #202124;
                         display: block;
                         margin-left: 10px;
-                    }  
+                    }
                     &.disabled{
                         display: none;
-                    }                                                        
+                    }
                 }
             }
             &:disabled{
@@ -313,9 +313,9 @@ and open the template in the editor.
                     }
                 }
             }
-        }  
+        }
         &:disabled{
-            cursor: auto;  
+            cursor: auto;
             + .slider{
                 .slide-parent{
                     .slider-btn{
@@ -371,20 +371,20 @@ and open the template in the editor.
             &.yes{
                 color: #9AA0A6;
                 margin-left: 10px;
-            }  
+            }
             &.no{
                 color: #202124;
                 margin-right: 10px;
-            }    
+            }
             &.enabled{
                 color: #202124;
                 display: none;
                 margin-left: 10px;
-            }  
+            }
             &.disabled{
                 margin-left: 10px;
                 display: block;
-            }                                                        
+            }
         }
     }
 }
@@ -396,7 +396,7 @@ and open the template in the editor.
     border: 1px solid transparent;
     background: $primaryActionColor;;
     padding: 0px 20px;
-    height: 26px;    
+    height: 26px;
     font-size: 12px;
     border-radius: 4px;
     color: $whiteColor;
@@ -433,7 +433,7 @@ and open the template in the editor.
     border: 1px solid #BDBDBD;
     background: $whiteColor;
     padding: 0px 20px;
-    height: 26px;    
+    height: 26px;
     font-size: 12px;
     border-radius: 4px;
     color: #828282;
@@ -512,7 +512,7 @@ and open the template in the editor.
     border: 1px solid transparent;
     background: $secondaryFontColor;
     padding: 0px 20px;
-    height: 26px;    
+    height: 26px;
     font-size: 12px;
     border-radius: 4px;
     color: $whiteColor;
@@ -549,17 +549,17 @@ and open the template in the editor.
     border: 1px solid transparent;
     background: $whiteColor;
     padding: 0px 20px;
-    height: 26px;    
+    height: 26px;
     font-size: 12px;
     border-radius: 4px;
     color:$primaryActionColor;;
     min-width: 60px;
     text-align: center;
     transition: 0.2s all ease-in;
-    &:hover{            
+    &:hover{
         span{
             border-bottom: 1px solid $primaryActionHoverColor;
-        }           
+        }
     }
     &:active{
         color:#007d88;
@@ -571,10 +571,10 @@ and open the template in the editor.
         color: #a9e1e5;
         border-bottom: 0 !important;
         opacity: 1;
-        &:hover{            
+        &:hover{
             span{
                 border-bottom: 0px solid $primaryActionHoverColor;
-            }           
+            }
         }
     }
     &.btn_md{
@@ -593,7 +593,7 @@ and open the template in the editor.
     border: 1px solid transparent;
     background: #d2000d;
     padding: 0px 20px;
-    height: 26px;    
+    height: 26px;
     font-size: 12px;
     border-radius: 4px;
     color: $whiteColor;
@@ -630,7 +630,7 @@ and open the template in the editor.
     border: 1px solid transparent;
     background: $primaryActionColor;;
     padding: 0px 15px;
-    height: 26px;    
+    height: 26px;
     font-size: 12px;
     border-radius: 4px;
     color: $whiteColor;
@@ -683,7 +683,7 @@ and open the template in the editor.
 
 .kr-sg-buttonicon-secondary{
     border: 1px solid $borderColor;
-    background: $whiteColor;    
+    background: $whiteColor;
     height: 26px;
     padding: 0px 15px;
     font-size: 12px;
@@ -744,7 +744,7 @@ and open the template in the editor.
     border: solid 1px rgba(0, 157, 171, 0.4);
     background: rgba(0, 157, 171, 0.1);
     padding: 0px 15px;
-    height: 26px;    
+    height: 26px;
     font-size: 12px;
     border-radius: 4px;
     color:$primaryActionColor;
@@ -764,7 +764,7 @@ and open the template in the editor.
         background-color: rgba(0, 157, 171, 0.3);
         border: solid 1px rgba(0, 157, 171, 0.7);
     }
-    &:focus{        
+    &:focus{
         border: solid 1px #1372ff;
     }
     &:disabled{
@@ -803,7 +803,7 @@ and open the template in the editor.
     border: 1px solid transparent;
     background: $secondaryFontColor;
     padding: 0px 15px;
-    height: 26px;    
+    height: 26px;
     font-size: 12px;
     border-radius: 4px;
     color: $whiteColor;
@@ -859,7 +859,7 @@ and open the template in the editor.
     border: 1px solid transparent;
     background: $whiteColor;
     padding: 0px 15px;
-    height: 26px;    
+    height: 26px;
     font-size: 12px;
     border-radius: 4px;
     color:$primaryActionHoverColor;
@@ -871,10 +871,10 @@ and open the template in the editor.
         height: 14px;
         margin-right: 13px;
     }
-    &:hover{            
+    &:hover{
         span{
             border-bottom: 1px solid $primaryActionHoverColor;
-        }           
+        }
     }
     &:active{
         color:#007d88;
@@ -889,10 +889,10 @@ and open the template in the editor.
         img{
             opacity: .5;
         }
-        &:hover{            
+        &:hover{
             span{
                 border-bottom: 0px solid $primaryActionHoverColor;
-            }           
+            }
         }
     }
     &.btn_md{
@@ -922,7 +922,7 @@ and open the template in the editor.
     border: 1px solid transparent;
     background: #d2000d;
     padding: 0px 15px;
-    height: 26px;    
+    height: 26px;
     font-size: 12px;
     border-radius: 4px;
     color: $whiteColor;
@@ -1000,7 +1000,7 @@ and open the template in the editor.
     }
     .checkbox-custom{
         opacity: 0;
-        position: absolute;          
+        position: absolute;
         cursor: pointer;
         margin: 0;
         height: auto;
@@ -1032,27 +1032,27 @@ and open the template in the editor.
         &:hover{
             &:not([disabled]):checked{
                 + .checkbox-custom-label{
-                    color:$primaryFontColor; 
+                    color:$primaryFontColor;
                     &::before{
                         border: solid 1px $borderColor;
                     }
                 }
-            }  
+            }
             &:not([disabled]){
                 + .checkbox-custom-label{
-                    color:$primaryActionColor; 
+                    color:$primaryActionColor;
                     &::before{
                         border: solid 1px #1372ff;
                     }
                 }
-            }            
+            }
         }
-        
+
         &:checked{
             + .checkbox-custom-label{
                 &::before{
-                    content: "";                   
-                    background-color:$primaryActionColor;                    
+                    content: "";
+                    background-color:$primaryActionColor;
                     background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4NCjxzdmcgd2lkdGg9IjE2cHgiIGhlaWdodD0iMTJweCIgdmlld0JveD0iMCAwIDE2IDEyIiB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiPg0KICAgIDwhLS0gR2VuZXJhdG9yOiBTa2V0Y2ggNTMuMiAoNzI2NDMpIC0gaHR0cHM6Ly9za2V0Y2hhcHAuY29tIC0tPg0KICAgIDx0aXRsZT5jaGVjay13aGl0ZTwvdGl0bGU+DQogICAgPGRlc2M+Q3JlYXRlZCB3aXRoIFNrZXRjaC48L2Rlc2M+DQogICAgPGcgaWQ9IlBhZ2UtMSIgc3Ryb2tlPSJub25lIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCI+DQogICAgICAgIDxnIGlkPSJjaGVjay13aGl0ZSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMC4wMDAwMDAsIC0yLjAwMDAwMCkiIGZpbGwtcnVsZT0ibm9uemVybyI+DQogICAgICAgICAgICA8cG9seWdvbiBpZD0iUGF0aCIgZmlsbC1vcGFjaXR5PSIwIiBmaWxsPSIjRDhEOEQ4IiBwb2ludHM9IjAgMCAxNiAwIDE2IDE2IDAgMTYiPjwvcG9seWdvbj4NCiAgICAgICAgICAgIDxwYXRoIGQ9Ik0xNC4yLDIuODM1IEMxNC40LDIuNjIgMTQuNzMzLDIuNjEgMTQuOTQ1LDIuODExIEMxNS4xNDUsMyAxNS4xNjUsMy4zMDkgMTUuMDAyLDMuNTIzIEwxNC45NjksMy41NjMgTDYuMDQ5LDEzLjE2NSBDNS44NTksMTMuMzcgNS41NDUsMTMuMzg5IDUuMzMzLDEzLjIxNSBMNS4yOTUsMTMuMTggTDEuMDQ1LDguOTUzIEMwLjg0LDguNzQ3IDAuODM3LDguNDEgMS4wNCw4LjIgQzEuMjMzLDguMDAzIDEuNTQsNy45ODkgMS43NDgsOC4xNiBMMS43ODUsOC4xOTQgTDUuNjUsMTIuMDQgTDE0LjIsMi44MzUgWiIgaWQ9IlBhdGgiIGZpbGw9IiNGRkZGRkYiPjwvcGF0aD4NCiAgICAgICAgPC9nPg0KICAgIDwvZz4NCjwvc3ZnPg==');
                     color: $whiteColor;
                     font-size: 12px;
@@ -1069,8 +1069,8 @@ and open the template in the editor.
             }
             &:disabled{
                 + .checkbox-custom-label{
-                    &::before{                        
-                        background-color: #a6dce1;                        
+                    &::before{
+                        background-color: #a6dce1;
                     }
                 }
             }
@@ -1084,13 +1084,13 @@ and open the template in the editor.
         }
         &:focus{
             + .checkbox-custom-label{
-                color:$primaryActionColor;  
+                color:$primaryActionColor;
                 &::before{
-                    border: 1px solid #1372ff; 
+                    border: 1px solid #1372ff;
                 }
             }
         }
-    }   
+    }
 }
 .group-checkbox{
     .heading-title{
@@ -1149,12 +1149,12 @@ and open the template in the editor.
             }
         }
     }
-    &.accordion-table{        
+    &.accordion-table{
         header{
-            &.table-header{               
+            &.table-header{
                 .col{
                     flex: 1;
-                    display: flex;                    
+                    display: flex;
                     align-items: center;
                     padding: 0px 10px;
                 }
@@ -1165,13 +1165,13 @@ and open the template in the editor.
                 > *{
                     display: flex;
                     justify-content: space-between;
-                }               
+                }
                 .col{
                     // flex: 1;
                     width: 100%;
-                    display: flex;                    
+                    display: flex;
                     align-items: center;
-                    padding: 0px 10px;                    
+                    padding: 0px 10px;
                 }
                 .collapse{
                     display: none !important;
@@ -1220,8 +1220,8 @@ and open the template in the editor.
                             line-height: 50px;
                             font-size: 18px;
                             height: 100%;
-                            left: 10px;    
-                            color:$primaryFontColor;                        
+                            left: 10px;
+                            color:$primaryFontColor;
                         }
                     }
                 }
@@ -1263,7 +1263,7 @@ and open the template in the editor.
                 color:$primaryActionColor;
                 line-height: 1;
                 font-size: 14px;
-            }            
+            }
         }
     }
     section {
@@ -1295,7 +1295,7 @@ and open the template in the editor.
                         width: 32px;
                         display: inline-block;
                         text-align: center;
-                        background: transparent;                        
+                        background: transparent;
                         height: 32px;
                         line-height: 32px;
                         .dropdown{
@@ -1313,7 +1313,7 @@ and open the template in the editor.
                         }
                         .dropdown-menu{
                             right: 0;
-                            top: 32px;                            
+                            top: 32px;
                             left: auto;
                             box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2);
                             background-color: $whiteColor;
@@ -1344,16 +1344,16 @@ and open the template in the editor.
                                 }
                             }
                         }
-                    }                   
-                }               
+                    }
+                }
             }
             .table-header{
                 .col{
-                    border-bottom: 1px solid $secondaryFontColor;                    
+                    border-bottom: 1px solid $secondaryFontColor;
                     font-size: 12px;
                     color: $secondaryFontColor;
                     text-transform: uppercase;
-                }                
+                }
             }
             .content-body{
                 transition: all 0.3s ease;
@@ -1373,8 +1373,8 @@ and open the template in the editor.
                 &:focus{
                     outline: 1px solid #1372ff;
                 }
-            }             
-        }           
+            }
+        }
     }
 }
 /*---- DATA TABLE STYLES ENDS HERE---*/
@@ -1382,13 +1382,13 @@ and open the template in the editor.
 
 /*---- DATA TABLE STYLES START HERE---*/
 
-.kr-sg-dropdowns{    
+.kr-sg-dropdowns{
     width: 100%;
     &.show {
         .dropdown-open{
             .dropdown-input{
                 &::before{
-                    content: "";                  
+                    content: "";
                     position: absolute;
                     line-height: 34px;
                     font-size: 18px;
@@ -1396,12 +1396,12 @@ and open the template in the editor.
                     right: 10px;
                     color:$primaryFontColor;
                     transition: all 0.3s ease-in;
-                    z-index: 99;   
-                    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAAMFBMVEUAAABAQEAgQEAcOVUmMksnMkkmNUgnNUomNEklMkonNEomNEomNEkmNEomNUr////Xn6YCAAAAD3RSTlMABAgJPUJDSElMT+vs7e7jOQpJAAAAAWJLR0QPGLoA2QAAADxJREFUCNdjYCAOsCZAGfNeQmj2q74LwIzeAJZbIJrjKQMDWKgPqBQkxPEMJAwUsgkAm7CJgRGiVQCPPQBKVAxGAi5YewAAAABJRU5ErkJggg==');                
+                    z-index: 99;
+                    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAAMFBMVEUAAABAQEAgQEAcOVUmMksnMkkmNUgnNUomNEklMkonNEomNEomNEkmNEomNUr////Xn6YCAAAAD3RSTlMABAgJPUJDSElMT+vs7e7jOQpJAAAAAWJLR0QPGLoA2QAAADxJREFUCNdjYCAOsCZAGfNeQmj2q74LwIzeAJZbIJrjKQMDWKgPqBQkxPEMJAwUsgkAm7CJgRGiVQCPPQBKVAxGAi5YewAAAABJRU5ErkJggg==');
                     background-size: 14px;
-                    background-repeat: no-repeat; 
+                    background-repeat: no-repeat;
                     background-position: center;
-                    width: 14px;                     
+                    width: 14px;
                 }
             }
         }
@@ -1428,11 +1428,11 @@ and open the template in the editor.
         padding: 3px 0px;
     }
     .dropdown-open{
-        position: relative;              
+        position: relative;
         &.show{
             .dropdown-input{
                 &::before{
-                    content: "";                  
+                    content: "";
                     position: absolute;
                     line-height: 34px;
                     font-size: 18px;
@@ -1440,14 +1440,14 @@ and open the template in the editor.
                     right: 10px;
                     color:$primaryFontColor;
                     transition: all 0.3s ease-in;
-                    z-index: 99;   
-                    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAAMFBMVEUAAABAQEAgQEAcOVUmMksnMkkmNUgnNUomNEklMkonNEomNEomNEkmNEomNUr////Xn6YCAAAAD3RSTlMABAgJPUJDSElMT+vs7e7jOQpJAAAAAWJLR0QPGLoA2QAAADxJREFUCNdjYCAOsCZAGfNeQmj2q74LwIzeAJZbIJrjKQMDWKgPqBQkxPEMJAwUsgkAm7CJgRGiVQCPPQBKVAxGAi5YewAAAABJRU5ErkJggg==');                
+                    z-index: 99;
+                    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAAMFBMVEUAAABAQEAgQEAcOVUmMksnMkkmNUgnNUomNEklMkonNEomNEomNEkmNEomNUr////Xn6YCAAAAD3RSTlMABAgJPUJDSElMT+vs7e7jOQpJAAAAAWJLR0QPGLoA2QAAADxJREFUCNdjYCAOsCZAGfNeQmj2q74LwIzeAJZbIJrjKQMDWKgPqBQkxPEMJAwUsgkAm7CJgRGiVQCPPQBKVAxGAi5YewAAAABJRU5ErkJggg==');
                     background-size: 14px;
-                    background-repeat: no-repeat; 
+                    background-repeat: no-repeat;
                     background-position: center;
-                    width: 14px;                     
+                    width: 14px;
                 }
-            }       
+            }
         }
         .dropdown-input{
             position: relative;
@@ -1457,9 +1457,10 @@ and open the template in the editor.
             border-radius: 4px;
             border: solid 1px $borderColor;
             background-color: $whiteColor;
-            padding: 0 30px 0 10px;       
-            text-align: left;  
+            padding: 0 30px 0 10px;
+            text-align: left;
             &.before-none{
+                padding-right: 10px;
                 &::before{
                     display: none;
                 }
@@ -1468,7 +1469,7 @@ and open the template in the editor.
                 background: $borderColor;
                 padding: 4px 8px;
                 border-radius: 12px;
-                min-width: 40px;                                  
+                min-width: 40px;
                 margin-right: 10px;
                 .length-count{
                     font-size: 12px;
@@ -1488,7 +1489,7 @@ and open the template in the editor.
                     img{
                         width: 10px;
                         height: 10px;
-                        vertical-align: inherit;                      
+                        vertical-align: inherit;
                         position: absolute;
                         top: 3px;
                         left: 3px;
@@ -1505,7 +1506,7 @@ and open the template in the editor.
                 }
             }
             &::before{
-                content: "";              
+                content: "";
                 position: absolute;
                 line-height: 34px;
                 font-size: 18px;
@@ -1514,11 +1515,11 @@ and open the template in the editor.
                 color:$primaryFontColor;
                 transition: all 0.3s ease-in;
                 z-index: 99;
-                background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAAMFBMVEUAAAAAAIAAVVUzMzMaM00uLkYnO04nNEkmNEonNEomNEomNEonNEomNEomNEv///+Hq7iTAAAAD3RSTlMAAgMFCgsNcKasrb7AwcPabH95AAAAAWJLR0QPGLoA2QAAAENJREFUCNdjYCACmBuASOZiBt3JIIblJQaWXUAhpr4EBgbvxQwMGs+AokAhsABICCzAwMB6c24AxISYq1CjGAXwWwUAs0YNanqQzygAAAAASUVORK5CYII=');                
+                background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAAMFBMVEUAAAAAAIAAVVUzMzMaM00uLkYnO04nNEkmNEonNEomNEomNEonNEomNEomNEv///+Hq7iTAAAAD3RSTlMAAgMFCgsNcKasrb7AwcPabH95AAAAAWJLR0QPGLoA2QAAAENJREFUCNdjYCACmBuASOZiBt3JIIblJQaWXUAhpr4EBgbvxQwMGs+AokAhsABICCzAwMB6c24AxISYq1CjGAXwWwUAs0YNanqQzygAAAAASUVORK5CYII=');
                 background-size: 14px;
-                background-repeat: no-repeat; 
+                background-repeat: no-repeat;
                 background-position: center;
-                width: 14px;   
+                width: 14px;
             }
             &::after{
                 border: 0;
@@ -1542,11 +1543,11 @@ and open the template in the editor.
                     color:$primaryFontColor;
                     opacity: 0.3;
                 }
-            } 
+            }
             &.error{
                 border: solid 1px #ff001f !important;
             }
-            &:hover{               
+            &:hover{
                 border: solid 1px #ccd1d7;
             }
             &:focus{
@@ -1555,9 +1556,9 @@ and open the template in the editor.
             }
             &:disabled{
                 // border: solid 1px $bg-color-primary;
-                color:$primaryFontColor;	
-                // opacity: 0.3;	
-                cursor: not-allowed;	
+                color:$primaryFontColor;
+                // opacity: 0.3;
+                cursor: not-allowed;
                 pointer-events: none;
             }
         }
@@ -1577,18 +1578,18 @@ and open the template in the editor.
                 padding: 0 10px;
                 position: relative;
                 &::before{
-                    content: "";                  
+                    content: "";
                     position: absolute;
                     line-height: 34px;
                     font-size: 12px;
                     height: 100%;
                     left: 10px;
-                    color: $secondaryFontColor;  
-                    background-image: url('../../assets/icons/search.svg');                                
+                    color: $secondaryFontColor;
+                    background-image: url('../../assets/icons/search.svg');
                     background-size: 14px;
-                    background-repeat: no-repeat; 
+                    background-repeat: no-repeat;
                     background-position: center;
-                    width: 14px;   
+                    width: 14px;
                 }
                 .seach-input{
                     width: 100%;
@@ -1605,7 +1606,7 @@ and open the template in the editor.
                         color:$placeholderColor;
                     }
                 }
-            }            
+            }
             li{
                 &.dropdown-item{
                     padding: 0;
@@ -1625,7 +1626,7 @@ and open the template in the editor.
                     padding: 10px;
                     color:$primaryFontColor !important;
                     font-size: 14px;
-                    text-decoration: none !important;	
+                    text-decoration: none !important;
                     display: block;
                     cursor: pointer;
                     &.selected{
@@ -1633,13 +1634,13 @@ and open the template in the editor.
                         background-color:$primaryHoverColor;
                         &::before{
                             content: "";
-                            background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAeFBMVEUAAAAAAIArK1UgQEAmM00mOUwoNkooM0onMkgmNkwoMksmNEwkNkwnNEknM0skM0koMksnM0slM0onNEknNEsmM0omNEolNEomNEslNEomNEomNEomM0omNEomM0omM0omNEomNUomNEkmNEomNUomNEomNEr////SMoFCAAAAJ3RSTlMAAgYIFBsmLS4vMzY5O0FGR1VaYmNka3WFl6jL1dbf5Ojp7O3u7/3xM/UwAAAAAWJLR0QnLQ+oIwAAAFVJREFUGNNjYCARcKPxxeSZUfhCypwofH5VXhQ+j4oACp9DSRBMM8uwg2k2BWGojKgiB5BklROHqxVV4mJgkZVA0i2ixCctiWKeqJoUI6oLuZhI8B4AqNQDaSUV+AIAAAAASUVORK5CYII=') no-repeat;                            
+                            background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAeFBMVEUAAAAAAIArK1UgQEAmM00mOUwoNkooM0onMkgmNkwoMksmNEwkNkwnNEknM0skM0koMksnM0slM0onNEknNEsmM0omNEolNEomNEslNEomNEomNEomM0omNEomM0omM0omNEomNUomNEkmNEomNUomNEomNEr////SMoFCAAAAJ3RSTlMAAgYIFBsmLS4vMzY5O0FGR1VaYmNka3WFl6jL1dbf5Ojp7O3u7/3xM/UwAAAAAWJLR0QnLQ+oIwAAAFVJREFUGNNjYCARcKPxxeSZUfhCypwofH5VXhQ+j4oACp9DSRBMM8uwg2k2BWGojKgiB5BklROHqxVV4mJgkZVA0i2ixCctiWKeqJoUI6oLuZhI8B4AqNQDaSUV+AIAAAAASUVORK5CYII=') no-repeat;
                             position: absolute;
                             line-height: normal;
                             height: 100%;
                             right: 16px;
                             transition: all 0.3s ease-in;
-                            z-index: 99;                        
+                            z-index: 99;
                             height: 100%;
                             width: 14px;
                             background-position: center;
@@ -1647,7 +1648,7 @@ and open the template in the editor.
                             top: 0;
                         }
                     }
-                    &:hover{               
+                    &:hover{
                         background-color:$primaryHoverColor;
                     }
                 }
@@ -1671,18 +1672,18 @@ and open the template in the editor.
             padding: 0 10px;
             position: relative;
             &::before{
-                content: "";                  
+                content: "";
                 position: absolute;
                 line-height: 34px;
                 font-size: 12px;
                 height: 100%;
                 left: 10px;
-                color: $secondaryFontColor;  
-                background-image: url('../../assets/icons/search.svg');               
+                color: $secondaryFontColor;
+                background-image: url('../../assets/icons/search.svg');
                 background-size: 14px;
-                background-repeat: no-repeat; 
+                background-repeat: no-repeat;
                 background-position: center;
-                width: 14px;   
+                width: 14px;
             }
             .seach-input{
                 width: 100%;
@@ -1699,7 +1700,7 @@ and open the template in the editor.
                     color:$placeholderColor;
                 }
             }
-        }            
+        }
         li{
             &.dropdown-item{
                 padding: 0 !important;
@@ -1718,28 +1719,34 @@ and open the template in the editor.
                 padding: 0 10px;
                 color:$primaryFontColor !important;
                 font-size: 14px;
-                text-decoration: none !important;	
+                text-decoration: none !important;
                 display: block;
                 cursor: pointer;
                 &.selected{
                     position: relative;
                     background-color:$primaryHoverColor;
+                    padding-right: 35px;
                     &::before{
-                        content: "";
-                        background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAeFBMVEUAAAAAAIArK1UgQEAmM00mOUwoNkooM0onMkgmNkwoMksmNEwkNkwnNEknM0skM0koMksnM0slM0onNEknNEsmM0omNEolNEomNEslNEomNEomNEomM0omNEomM0omM0omNEomNUomNEkmNEomNUomNEomNEr////SMoFCAAAAJ3RSTlMAAgYIFBsmLS4vMzY5O0FGR1VaYmNka3WFl6jL1dbf5Ojp7O3u7/3xM/UwAAAAAWJLR0QnLQ+oIwAAAFVJREFUGNNjYCARcKPxxeSZUfhCypwofH5VXhQ+j4oACp9DSRBMM8uwg2k2BWGojKgiB5BklROHqxVV4mJgkZVA0i2ixCctiWKeqJoUI6oLuZhI8B4AqNQDaSUV+AIAAAAASUVORK5CYII=') no-repeat;                            
+                        content: "\e93a";
                         position: absolute;
-                        line-height: 40px;
-                        height: 100%;
-                        right: 16px;
-                        transition: all 0.3s ease-in;
-                        z-index: 99;                        
-                        height: 100%;
-                        width: 14px;
-                        background-position: center;
-                        background-size: 100%;
+                        right: 10px;
+                        top: 13px;
+                        color: #0D6EFD;
+                        font-size: 13px;
+                        font-family: 'icomoon' !important;
+                        speak: never;
+                        font-style: normal;
+                        font-weight: normal;
+                        font-variant: normal;
+                        text-transform: none;
+                        line-height: 1;
+
+                        /* Better Font Rendering =========== */
+                        -webkit-font-smoothing: antialiased;
+                        -moz-osx-font-smoothing: grayscale;
                     }
                 }
-                &:hover{               
+                &:hover{
                     background-color:$primaryHoverColor;
                 }
             }
@@ -1816,7 +1823,7 @@ and open the template in the editor.
                 display: block;
                 height: 100%;
                 color: $whiteColor;
-                background-color:$primaryActionColor;                            
+                background-color:$primaryActionColor;
                 font-size: 14px;
                 text-align: center;
                 line-height: 34px;
@@ -1852,7 +1859,7 @@ and open the template in the editor.
                 &.close-file{
                     height: 11px;
                     width: 11px;
-                    position: relative;                  
+                    position: relative;
                     margin-right: 12px;
                 }
             }
@@ -1870,7 +1877,7 @@ and open the template in the editor.
                 height: 11px;
                 width: 11px;
             }
-        }       
+        }
     }
     .error-text{
         margin-top: 7px;
@@ -1907,11 +1914,11 @@ and open the template in the editor.
         //font-weight: bold;
         color:$primaryFontColor;
         margin-bottom: 4px;
-        span{	
-            color:$primaryActionColor;	
-            float: right;	
-            cursor: pointer;	
-            font-weight: normal;	
+        span{
+            color:$primaryActionColor;
+            float: right;
+            cursor: pointer;
+            font-weight: normal;
         }
         .optional{
             color: $borderTabs;
@@ -1934,10 +1941,10 @@ and open the template in the editor.
         margin: 0 !important;
         box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
         &::placeholder{
-            color: $placeholderColor;      
+            color: $placeholderColor;
             font-weight: normal;
             font-size: 14px;
-            line-height: 18px;   
+            line-height: 18px;
         }
         &:focus{
             border: solid 1px #80ACEF !important;
@@ -1953,19 +1960,19 @@ and open the template in the editor.
         &.error{
             border: solid 1px #ff001f;
             &::placeholder{
-                color:$placeholderColor;   
-                opacity: 1;      
+                color:$placeholderColor;
+                opacity: 1;
             }
         }
         &.ng-invalid.ng-touched {
             border: solid 1px #ff001f;
         }
-        &:read-only{	
-            background-color:$bg-secondary-color;	
-        }	
-        &:-moz-read-only{	
-            background-color:$primaryBackgroundColor;	
-        } 
+        &:read-only{
+            background-color:$bg-secondary-color;
+        }
+        &:-moz-read-only{
+            background-color:$primaryBackgroundColor;
+        }
     }
     .error-msg{
         font-size: 12px;
@@ -2028,8 +2035,8 @@ and open the template in the editor.
         width: 100%;
         line-height: normal;
         &::placeholder{
-            color: $placeholderColor;      
-            font-weight: normal;   
+            color: $placeholderColor;
+            font-weight: normal;
         }
         &:focus{
             outline: 0;
@@ -2046,8 +2053,8 @@ and open the template in the editor.
         &.error{
             border: solid 1px $warningRed;
             &::placeholder{
-                color:$primaryFontColor;   
-                opacity: 1;      
+                color:$primaryFontColor;
+                opacity: 1;
             }
         }
         &.ng-invalid.ng-touched {
@@ -2078,7 +2085,7 @@ and open the template in the editor.
 /*---- RADIO BUTTON STYLES START HERE---*/
 .kr-sg-radiobutton{
     display: inline-flex;
-    padding-right: 32px;    
+    padding-right: 32px;
     position: relative;
     &.d-block{
         display: block;
@@ -2086,7 +2093,7 @@ and open the template in the editor.
     }
     .radio-custom{
         opacity: 0;
-        position: absolute;          
+        position: absolute;
         cursor: pointer;
         height: auto;
         margin: 0;
@@ -2123,26 +2130,26 @@ and open the template in the editor.
         &:hover{
             &:not([disabled]):checked{
                 + .radio-custom-label{
-                    color:$primaryFontColor; 
+                    color:$primaryFontColor;
                     &::before{
                         border: solid 1px $secondaryFontColor;
                     }
                 }
-            }  
+            }
             &:not([disabled]){
                 + .radio-custom-label{
-                    color:$primaryActionColor; 
+                    color:$primaryActionColor;
                     &::before{
                         border: solid 1px #1372ff;
                     }
                 }
-            }            
+            }
         }
-        
+
         &:checked{
             + .radio-custom-label{
                 &::before{
-                    content: "";              
+                    content: "";
                     color: $whiteColor;
                     font-size: 12px;
                     background-color:$primaryActionColor;
@@ -2158,10 +2165,10 @@ and open the template in the editor.
             &:disabled{
                 + .radio-custom-label{
                     color: #dde1e7;
-                    &::before{                        
+                    &::before{
                         border: solid 1px #a6dce1;
-                        box-shadow: inset 0 0 0 3px $whiteColor;      
-                        background-color: #a6dce1;                  
+                        box-shadow: inset 0 0 0 3px $whiteColor;
+                        background-color: #a6dce1;
                     }
                 }
             }
@@ -2171,20 +2178,20 @@ and open the template in the editor.
                 color: #dde1e7;
                 &::before{
                     border: solid 1px #a6dce1;
-                    // box-shadow: inset 0 0 0 3px $whiteColor;    
-                    // background-color: #a6dce1;  
+                    // box-shadow: inset 0 0 0 3px $whiteColor;
+                    // background-color: #a6dce1;
                 }
             }
         }
         &:focus{
             + .radio-custom-label{
-                color:$primaryActionColor;  
+                color:$primaryActionColor;
                 &::before{
-                    border: 1px solid #1372ff; 
+                    border: 1px solid #1372ff;
                 }
             }
         }
-    }   
+    }
 }
 .group-radiobutton{
     .heading-title{
@@ -2239,7 +2246,7 @@ and open the template in the editor.
             height: 14px;
         }
     }
-    .tost-text{        
+    .tost-text{
         display: inline-block;
         font-size: 14px;
         color:$primaryFontColor;
@@ -2290,7 +2297,7 @@ and open the template in the editor.
     }
     .tost-text{
         font-size: 14px;
-        color: #1372ff;   
+        color: #1372ff;
     }
 }
 
@@ -2307,7 +2314,7 @@ and open the template in the editor.
         }
         .tost-text{
             color: $warningRed;
-        }        
+        }
     }
     &.link-warning-notification{
         border: solid 1px #f3d19b;
@@ -2317,7 +2324,7 @@ and open the template in the editor.
         }
         .tost-text{
             color: $orange;
-        }        
+        }
     }
     &.link-success-notification{
         border: solid 1px #bde0c4;
@@ -2327,7 +2334,7 @@ and open the template in the editor.
         }
         .tost-text{
             color: #09a624;
-        }        
+        }
     }
     .main-heading{
         color: #1372ff;
@@ -2349,18 +2356,18 @@ and open the template in the editor.
 
 .kr-sg-inline-notification{
     display: flex;
-    align-items: center;    
-    &.error-notification{        
+    align-items: center;
+    &.error-notification{
         .tost-text{
             color: $warningRed;
         }
     }
-    &.warning-notification{       
+    &.warning-notification{
         .tost-text{
             color: $orange;
         }
     }
-    &.success-notification{        
+    &.success-notification{
         .tost-text{
             color: #09a624;
         }
@@ -2373,7 +2380,7 @@ and open the template in the editor.
     }
     .tost-text{
         font-size: 14px;
-        color: #1372ff;   
+        color: #1372ff;
     }
 }
 
@@ -2466,46 +2473,46 @@ and open the template in the editor.
 
 /*---- TAGS STYLES STARTS HERE---*/
 .kr-sg-tags{
-    font-weight: bold;    
+    font-weight: bold;
     img{
         margin-left: 7px;
         width: 12px;
         height: 12px;
-    } 
+    }
     &.blue{
-        color: #1372ff;      
-        background-color: #e7f0ff;  
-        transition: all 0.3s ease;  
-        border: 1px solid transparent;    
+        color: #1372ff;
+        background-color: #e7f0ff;
+        transition: all 0.3s ease;
+        border: 1px solid transparent;
         &.disable{
-            background-color: #f3f7ff;           
+            background-color: #f3f7ff;
             pointer-events: none;
             span{
-                opacity: 0.3;                    
+                opacity: 0.3;
             }
         }
         span{
             &.fa{
                 padding-left: 7px;
-            }  
+            }
             &.tag-name{
                 color: #1372ff;
-            }                     
+            }
         }
         &.small{
             padding: 4px 12px;
-            border-radius: 4px;   
-            font-size: 12px;     
+            border-radius: 4px;
+            font-size: 12px;
         }
         &.medium{
             padding: 4px 12px;
             border-radius: 4px;
-            font-size: 14px;              
+            font-size: 14px;
         }
         &.large{
             padding: 5px 12px;
             border-radius: 4px;
-            font-size: 16px;            
+            font-size: 16px;
         }
         &:hover{
             cursor: pointer;
@@ -2516,39 +2523,39 @@ and open the template in the editor.
         }
     }
     &.green{
-        color: #09a624;      
-        background-color: #e6f6e9;  
-        transition: all 0.3s ease;  
-        border: 1px solid transparent;    
+        color: #09a624;
+        background-color: #e6f6e9;
+        transition: all 0.3s ease;
+        border: 1px solid transparent;
         &.disable{
-            background-color: #f2faf4;           
+            background-color: #f2faf4;
             pointer-events: none;
             span{
-                opacity: 0.3;                    
+                opacity: 0.3;
             }
         }
         span{
             &.fa{
                 padding-left: 7px;
-            }  
+            }
             &.tag-name{
                 color: #09a624;
-            }                     
+            }
         }
         &.small{
             padding: 4px 12px;
-            border-radius: 4px;   
-            font-size: 12px;     
+            border-radius: 4px;
+            font-size: 12px;
         }
         &.medium{
             padding: 4px 12px;
             border-radius: 4px;
-            font-size: 14px;              
+            font-size: 14px;
         }
         &.large{
             padding: 5px 12px;
             border-radius: 4px;
-            font-size: 16px;            
+            font-size: 16px;
         }
         &:hover{
             cursor: pointer;
@@ -2560,39 +2567,39 @@ and open the template in the editor.
     }
 
     &.grey{
-        color: $secondaryFontColor;      
-        background-color: $borderColor;  
-        transition: all 0.3s ease;  
-        border: 1px solid transparent;    
+        color: $secondaryFontColor;
+        background-color: $borderColor;
+        transition: all 0.3s ease;
+        border: 1px solid transparent;
         &.disable{
-            background-color:$primaryBackgroundColor;           
+            background-color:$primaryBackgroundColor;
             pointer-events: none;
             span{
-                opacity: 0.3;                    
+                opacity: 0.3;
             }
         }
         span{
             &.fa{
                 padding-left: 7px;
-            }  
+            }
             &.tag-name{
                 color: $secondaryFontColor;
-            }                     
+            }
         }
         &.small{
             padding: 4px 12px;
-            border-radius: 4px;   
-            font-size: 12px;     
+            border-radius: 4px;
+            font-size: 12px;
         }
         &.medium{
             padding: 4px 12px;
             border-radius: 4px;
-            font-size: 14px;              
+            font-size: 14px;
         }
         &.large{
             padding: 5px 12px;
             border-radius: 4px;
-            font-size: 16px;            
+            font-size: 16px;
         }
         &:hover{
             cursor: pointer;
@@ -2604,39 +2611,39 @@ and open the template in the editor.
     }
 
     &.red{
-        color: $warningRed;      
-        background-color: #ffe5e8;  
-        transition: all 0.3s ease;  
-        border: 1px solid transparent;    
+        color: $warningRed;
+        background-color: #ffe5e8;
+        transition: all 0.3s ease;
+        border: 1px solid transparent;
         &.disable{
-            background-color: #fff2f3;           
+            background-color: #fff2f3;
             pointer-events: none;
             span{
-                opacity: 0.3;                    
+                opacity: 0.3;
             }
         }
         span{
             &.fa{
                 padding-left: 7px;
-            }  
+            }
             &.tag-name{
                 color: $warningRed;
-            }                     
+            }
         }
         &.small{
             padding: 4px 12px;
-            border-radius: 4px;   
-            font-size: 12px;     
+            border-radius: 4px;
+            font-size: 12px;
         }
         &.medium{
             padding: 4px 12px;
             border-radius: 4px;
-            font-size: 14px;              
+            font-size: 14px;
         }
         &.large{
             padding: 5px 12px;
             border-radius: 4px;
-            font-size: 16px;            
+            font-size: 16px;
         }
         &:hover{
             cursor: pointer;
@@ -2648,39 +2655,39 @@ and open the template in the editor.
     }
 
     &.orange{
-        color: #fc8500;      
-        background-color: #fef5e6;  
-        transition: all 0.3s ease;  
-        border: 1px solid transparent;    
+        color: #fc8500;
+        background-color: #fef5e6;
+        transition: all 0.3s ease;
+        border: 1px solid transparent;
         &.disable{
-            background-color: #fefaf2;           
+            background-color: #fefaf2;
             pointer-events: none;
             span{
-                opacity: 0.3;                    
+                opacity: 0.3;
             }
         }
         span{
             &.fa{
                 padding-left: 7px;
-            }  
+            }
             &.tag-name{
                 color: #fc8500;
-            }                     
+            }
         }
         &.small{
             padding: 4px 12px;
-            border-radius: 4px;   
-            font-size: 12px;     
+            border-radius: 4px;
+            font-size: 12px;
         }
         &.medium{
             padding: 4px 12px;
             border-radius: 4px;
-            font-size: 14px;              
+            font-size: 14px;
         }
         &.large{
             padding: 5px 12px;
             border-radius: 4px;
-            font-size: 16px;            
+            font-size: 16px;
         }
         &:hover{
             cursor: pointer;
@@ -2702,10 +2709,10 @@ and open the template in the editor.
     overflow: hidden !important;
     .modal-dialog{
         width: 446px;
-        border-radius: 4px;    
+        border-radius: 4px;
         height: 100%;
         display: flex;
-        align-items: center; 
+        align-items: center;
         .modal-content{
             box-shadow: none;
             border: 0px;
@@ -2723,7 +2730,7 @@ and open the template in the editor.
             }
             .modal-body{
                 padding: 62px 50px;
-                text-align: center;                
+                text-align: center;
                 p{
                     line-height: 1.57;
                     margin: 0;
@@ -2771,7 +2778,7 @@ and open the template in the editor.
             .panel-heading{
                 padding: 0;
                 border: 0;
-                background-color: $whiteColor;                  
+                background-color: $whiteColor;
                 h4{
                     margin: 0;
                     a{
@@ -2795,10 +2802,10 @@ and open the template in the editor.
                                 width: 10px;
                                 right: 15px;
                                 font-size: 18px;
-                                height: 100%;   
+                                height: 100%;
                                 top: 0;
-                                display: flex;                                
-                                align-items: center;                            
+                                display: flex;
+                                align-items: center;
                             }
                             &.disabled{
                                 pointer-events: none;
@@ -2817,10 +2824,10 @@ and open the template in the editor.
                                     width: 10px;
                                     right: 15px;
                                     font-size: 18px;
-                                    height: 100%;   
+                                    height: 100%;
                                     top: 0;
-                                    display: flex;                                
-                                    align-items: center; 
+                                    display: flex;
+                                    align-items: center;
                                 }
                             }
                             &[aria-expanded="true"]{
@@ -2834,10 +2841,10 @@ and open the template in the editor.
                                     width: 10px;
                                     right: 15px;
                                     font-size: 18px;
-                                    height: 100%;   
+                                    height: 100%;
                                     top: 0;
-                                    display: flex;                                
-                                    align-items: center; 
+                                    display: flex;
+                                    align-items: center;
                                 }
                             }
                         }
@@ -2851,16 +2858,16 @@ and open the template in the editor.
                         &:focus{
                             text-decoration: none;
                             outline: 2px solid #1372ff;
-                        }                    
+                        }
                     }
                 }
-                &.active{                    
+                &.active{
                     h4{
                         a{
                             border-bottom: 0px;
                             &::before{
                                 content: "";
-                                background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAAMFBMVEUAAABAQEAgQEAcOVUmMksnMkkmNUgnNUomNEklMkonNEomNEomNEkmNEomNUr////Xn6YCAAAAD3RSTlMABAgJPUJDSElMT+vs7e7jOQpJAAAAAWJLR0QPGLoA2QAAADxJREFUCNdjYCAOsCZAGfNeQmj2q74LwIzeAJZbIJrjKQMDWKgPqBQkxPEMJAwUsgkAm7CJgRGiVQCPPQBKVAxGAi5YewAAAABJRU5ErkJggg==');                              
+                                background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAAMFBMVEUAAABAQEAgQEAcOVUmMksnMkkmNUgnNUomNEklMkonNEomNEomNEkmNEomNUr////Xn6YCAAAAD3RSTlMABAgJPUJDSElMT+vs7e7jOQpJAAAAAWJLR0QPGLoA2QAAADxJREFUCNdjYCAOsCZAGfNeQmj2q74LwIzeAJZbIJrjKQMDWKgPqBQkxPEMJAwUsgkAm7CJgRGiVQCPPQBKVAxGAi5YewAAAABJRU5ErkJggg==');
                             }
                         }
                     }
@@ -2900,15 +2907,15 @@ and open the template in the editor.
                 padding: 9px 10px;
                 min-width: 125px;
                 text-align: center;
-                // max-width: 125px;            
+                // max-width: 125px;
                 border-bottom: 2px solid $borderColor;
                 overflow: hidden;
                 white-space: nowrap;
-                text-overflow: ellipsis;   
+                text-overflow: ellipsis;
                 font-size: 14px;
                 border-radius: 0;
-                cursor: pointer;     
-                color:$primaryFontColor;           
+                cursor: pointer;
+                color:$primaryFontColor;
                 &.disabled{
                     border-bottom: 2px solid $borderColor;
                     pointer-events: none;
@@ -2955,7 +2962,7 @@ and open the template in the editor.
                     background: none;
                 }
             }
-        }        
+        }
     }
 }
 
@@ -2992,12 +2999,12 @@ and open the template in the editor.
 .kr-sg-progress-indicator{
     margin: 0;
     padding: 0;
-    li{        
+    li{
         list-style: none;
         float: left;
         width: 100px;
         position: relative;
-        transition: all 0.5s ease;   
+        transition: all 0.5s ease;
         span{
             &.active-text-img{
                 position: absolute;
@@ -3008,7 +3015,7 @@ and open the template in the editor.
                 text-align: center;
                 line-height: 20px;
                 img{
-                    position: relative;                    
+                    position: relative;
                 }
             }
         }
@@ -3018,7 +3025,7 @@ and open the template in the editor.
                     display: none;
                 }
             }
-        }    
+        }
         &.in-progress{
             span{
                 &.active-text-img{
@@ -3055,12 +3062,12 @@ and open the template in the editor.
             border-radius: 100px;
             left: 8px;
         }
-        a{           
-            position: relative; 
+        a{
+            position: relative;
             color:$primaryFontColor;
             display: inline-block;
             text-decoration: none !important;
-            &.disable{               
+            &.disable{
                 pointer-events: none;
                 span{
                     opacity: 0.3;
@@ -3088,8 +3095,8 @@ and open the template in the editor.
                 margin-top: 30px;
                 white-space: nowrap;
                 text-overflow: ellipsis;
-                max-width: 85px;   
-                overflow: hidden;         
+                max-width: 85px;
+                overflow: hidden;
             }
         }
     }
@@ -3098,11 +3105,11 @@ and open the template in the editor.
 .kr-sg-progress-indicator-block{
     margin: 0;
     padding: 0;
-    li{        
-        list-style: none;              
+    li{
+        list-style: none;
         position: relative;
-        transition: all 0.5s ease; 
-        padding-bottom: 30px; 
+        transition: all 0.5s ease;
+        padding-bottom: 30px;
         padding-left: 18px;
         span{
             &.active-text-img{
@@ -3113,7 +3120,7 @@ and open the template in the editor.
                 top: 3px;
                 text-align: center;
                 img{
-                    position: relative;                  
+                    position: relative;
                 }
             }
         }
@@ -3123,7 +3130,7 @@ and open the template in the editor.
                     display: none;
                 }
             }
-        }    
+        }
         &.in-progress{
             span{
                 &.active-text-img{
@@ -3151,7 +3158,7 @@ and open the template in the editor.
             }
         }
         &::before{
-            content: "";           
+            content: "";
             position: absolute;
             height: 20px;
             width: 20p;
@@ -3161,12 +3168,12 @@ and open the template in the editor.
             border-radius: 100%;
             left: -10px;
             top: 1px;
-        } 
-        a{           
+        }
+        a{
             color:$primaryFontColor;
             display: inline-block;
             text-decoration: none !important;
-            &.disable{               
+            &.disable{
                 pointer-events: none;
                 span{
                     opacity: 0.3;
@@ -3187,8 +3194,8 @@ and open the template in the editor.
                 left: 0;
                 top: 20px;
                 z-index: -1;
-            } 
-        }       
+            }
+        }
     }
 }
 
@@ -3196,11 +3203,11 @@ and open the template in the editor.
 
 /*---- OVERFLOW MENU STYLES STARTS HERE---*/
 
-.kr-sg-overflow-menu{    
+.kr-sg-overflow-menu{
     display: inline-block;
     margin-left: 15px;
     text-align: center;
-    background: transparent;                        
+    background: transparent;
     height: 34px;
     width: 34px;
     line-height: 32px;
@@ -3211,7 +3218,7 @@ and open the template in the editor.
         display: inline-block;
         .dropdown-toggle{
             margin: 0;
-            padding: 0;            
+            padding: 0;
             cursor: pointer;
             height: 100%;
             &::after{
@@ -3233,7 +3240,7 @@ and open the template in the editor.
         transform: translate3d(0px, 34px, 0px) !important;
         background-color: $whiteColor;
         width: 100px !important;
-        min-width: 100px;        
+        min-width: 100px;
         border: 0px;
         margin: 0;
         padding: 0;
@@ -3267,19 +3274,19 @@ and open the template in the editor.
             }
         }
     }
-}   
+}
 
 /*---- OVERFLOW MENU STYLES ENDS HERE---*/
 
 /*---- FILE UPLOAD DRAG AND DROP STYLES STARTS HERE---*/
 
-.kr-sg-file-drag-drop{     
+.kr-sg-file-drag-drop{
     .label_text{
         font-size: 14px;
         font-weight: bold;
         color:$primaryFontColor;
         margin-bottom: 5px;
-    }       
+    }
     .drag-drop-sec{
         border-radius: 2px;
         border: solid 1px $borderColor;
@@ -3288,12 +3295,12 @@ and open the template in the editor.
         text-align: center;
         .drag-text{
             font-size: 18px;
-            color:$primaryFontColor; 
+            color:$primaryFontColor;
             font-weight: bold;
             line-height: 20px;
         }
         .divider-text{
-            font-size: 18px; 
+            font-size: 18px;
             color: $secondaryFontColor;
             font-weight: bold;
             line-height: 22px;
@@ -3324,14 +3331,14 @@ and open the template in the editor.
                 border-radius: 2px;
                 width: 100%;
                 margin: 0;
-                background-color: $whiteColor; 
+                background-color: $whiteColor;
                 span{
                     color:$primaryActionColor;
                     font-size: 18px;
                     line-height: 1;
                     font-weight: bold;
                     border-bottom: 1px solid $primaryActionHoverColor;
-                }              
+                }
             }
         }
     }
@@ -3382,7 +3389,7 @@ and open the template in the editor.
                 height: 11px;
                 width: 11px;
             }
-        }       
+        }
     }
     .error-text{
         margin-top: 7px;
@@ -3391,14 +3398,14 @@ and open the template in the editor.
     }
     .long-info-text{
         font-size: 14px;
-        color:$primaryFontColor;        
+        color:$primaryFontColor;
     }
 }
 
 .custom-mat-select{
     width: 100%;
     margin-bottom: 15px;
-    &.drp-down-mat{        
+    &.drp-down-mat{
         .mat-form-field-wrapper{
             .mat-form-field-flex{
                 border: 0;
@@ -3424,18 +3431,18 @@ and open the template in the editor.
                 border: 0;
                 padding: 0 !important;
                 .mat-select{
-                    font-family: 'inter' !important;                 
+                    font-family: 'inter' !important;
                     .mat-select-arrow-wrapper{
                         .mat-select-arrow{
                             border: 0;
                             &::before{
-                                content: "";                              
+                                content: "";
                                 background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAAMFBMVEUAAAAAAIAAVVUzMzMaM00uLkYnO04nNEkmNEonNEomNEomNEonNEomNEomNEv///+Hq7iTAAAAD3RSTlMAAgMFCgsNcKasrb7AwcPabH95AAAAAWJLR0QPGLoA2QAAAENJREFUCNdjYCACmBuASOZiBt3JIIblJQaWXUAhpr4EBgbvxQwMGs+AokAhsABICCzAwMB6c24AxISYq1CjGAXwWwUAs0YNanqQzygAAAAASUVORK5CYII=');
                                 background-size: 14px;
                                 background-repeat: no-repeat;
                                 background-position: center;
-                                width: 14px;                       
-                                position: absolute;                            
+                                width: 14px;
+                                position: absolute;
                                 font-size: 18px;
                                 height: 100%;
                                 right: 0px;
@@ -3464,22 +3471,22 @@ and open the template in the editor.
         }
         .mat-form-field-underline{
             display: none !important;
-        }       
+        }
     }
 }
 
 .mat-select{
     font-family: 'inter' !important;
     color:$primaryFontColor !important;
-    font-size: 14px !important; 
+    font-size: 14px !important;
 }
 .mat-option{
     font-family: 'inter' !important;
     color:$primaryFontColor !important;
-    font-size: 14px !important; 
+    font-size: 14px !important;
     height: auto !important;
     padding: 10px !important;
-    line-height: normal !important;    
+    line-height: normal !important;
 }
 .mat-form-field{
     font-family: 'inter' !important;
@@ -3570,6 +3577,22 @@ $numbers: 1000;
 
 @mixin padding-magin-width {
   @for $i from 1 through $numbers {
+    .p_#{$i} {
+      padding: #{$i+'px'} !important;
+    }
+    .p_t_#{$i} {
+      padding-top: #{$i+'px'} !important;
+    }
+    .p_b_#{$i} {
+      padding-bottom:  #{$i+'px'} !important;
+    }
+    .p_l_#{$i} {
+      padding-left:  #{$i+'px'} !important;
+    }
+    .p_r_#{$i} {
+      padding-right:  #{$i+'px'} !important;
+    }
+
     .p-#{$i} {
       padding: #{$i+'px'} !important;
     }
@@ -3588,6 +3611,47 @@ $numbers: 1000;
     .p_r_#{$i} {
         padding-right:  #{$i+'px'} !important;
     }
+
+    .m_#{$i} {
+      margin: #{$i+'px'} !important;
+    }
+    .m_t_#{$i} {
+      margin-top: #{$i+'px'} !important;
+    }
+    .m_b_#{$i} {
+      margin-bottom: #{$i+'px'} !important;
+    }
+    .m_r_#{$i} {
+      margin-right: #{$i+'px'} !important;
+    }
+    .m_l_#{$i} {
+      margin-left: #{$i+'px'} !important;
+    }
+    .w_#{$i} {
+      width: #{$i+'%'} !important;
+    }
+    .width_#{$i} {
+        width: #{$i+'px'} !important;
+    }
+    .max_width_#{$i} {
+        max-width: #{$i+'%'} !important;
+    }
+    .h_#{$i} {
+        height: #{$i+'%'} !important;
+    }
+    .min_h_#{$i} {
+        min-height: #{$i+'px'};
+    }
+    .mx_h_#{$i} {
+        max-height: #{$i+'px'} !important;
+    }
+    .f_s_#{$i} {
+      font-size: #{$i+'px'} !important;
+    }
+    .f_w_#{$i} {
+      font-weight: #{$i} !important;
+    }
+
     .m-#{$i} {
       margin: #{$i+'px'} !important;
     }
@@ -3653,5 +3717,4 @@ $numbers: 1000;
         color: #FFFFFF;
     }
 }
-
 

@@ -1540,6 +1540,11 @@ export class EndPointsService {
       method: 'delete'
     }
 
+    this.serviceList['post.agentfeedback'] = {
+      endpoint: this.SERVER_URL + '/agentassist/api/v1/dashboard/agentFeedback/streams/:botId',
+      method: 'post'
+    }
+
     this.serviceList['get.welcomeevent'] = {
       endpoint : this.API_SERVER_URL + '/smartassist/apps/instances/:streamId/events?isAgentAssist=true',
       method: 'get'
@@ -1565,7 +1570,7 @@ export class EndPointsService {
       method : 'get'
     }
 
-    // agent coaching 
+    // agent coaching
 
     this.serviceList['get.allagentCoachingRule'] = {
       endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule/:botId',
@@ -1684,6 +1689,38 @@ export class EndPointsService {
       method : 'post'
     }
 
+    // // Dashboard Apis Starts // //
+    // Agent feedback
+    this.serviceList['agentFeedbacks'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/analytics/aadashboard/:streamId/feedbacks',
+      method : 'post'
+    }
+
+    // Automation performance
+    this.serviceList['automationPerformance'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/analytics/aadashboard/:streamId/automationperformance',
+      method : 'post'
+    }
+
+    // Sessions
+    this.serviceList['sessions'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/analytics/aadashboard/:streamId/sessiondetails',
+      method : 'post'
+    }
+
+    //  CUSTOMERS ARE LOOKING FOR
+    this.serviceList['customersLookingfor'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/analytics/aadashboard/:streamId/customerslooking',
+      method : 'post'
+    }
+
+    // AGENTS ARE LOOKING FOR
+    this.serviceList['agentsLookingfor'] = {
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/analytics/aadashboard/:streamId/agentslooking',
+      method : 'post'
+    }
+    // // Dashboard Apis Stops // //
+    
     this.serviceList['post.acchecklists'] = {
       endpoint : this.SMARTASSIST_API_SERVER_URL + '/acchecklists',
       method : 'post'
