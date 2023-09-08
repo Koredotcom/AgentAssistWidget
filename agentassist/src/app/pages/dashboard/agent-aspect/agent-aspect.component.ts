@@ -53,8 +53,8 @@ export class AgentAspectComponent implements OnInit, AfterViewInit {
     this.updateAgentAspectData();
   }
 
-  ngOnChanges(changes:any){
-    if( changes.viewType || changes.filters && Object.keys(this.filters).length > 0 || !this.onChangeCall) {
+  ngOnChanges(changes : any){
+    if( changes.viewType || changes.filters || !this.onChangeCall) {
       this.params.streamId = this.dashboardService.getSelectedBotDetails()._id;
       this.payload = {... this.filters}
       this.handleOnChangeCall()
