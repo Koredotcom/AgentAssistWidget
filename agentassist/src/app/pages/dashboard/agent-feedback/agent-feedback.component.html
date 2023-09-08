@@ -7,7 +7,7 @@
                     <div class="title-text-info">
                         <span class="heading-text">{{"DASHBOARD.AGENT_FEEDBACK_KPI_TOTAL_RESPONSE" | translate}}</span>
                     </div>
-                    <div class="count-heading" [ngClass]="{'empty-count': !agentFeedbackData.totalResp}">{{agentFeedbackData.totalResp}}</div>
+                    <div class="count-heading" [ngClass]="{'empty-count': !agentFeedbackData.totalResp}">{{agentFeedbackData.totalResp ? agentFeedbackData.totalResp : '0'}}</div>
                 </div>
             </div>
             <div class="card-sec max_width_100">
@@ -16,7 +16,7 @@
                         <span class="heading-text">{{"DASHBOARD.AGENT_FEEDBACK_KPI_HELPFUL" | translate}}</span>
                         <i class="icon-ast_thumbsup"></i>
                     </div>
-                    <div class="count-heading" [ngClass]="{'empty-count': !agentFeedbackData.helpfulResp}">{{agentFeedbackData.helpfulResp | number: '1.0-0'}}%</div>
+                    <div class="count-heading" [ngClass]="{'empty-count': !agentFeedbackData.helpfulResp}">{{(agentFeedbackData.helpfulResp ? agentFeedbackData.helpfulResp : '0') | number: '1.0-0'}}%</div>
                 </div>
             </div>
             <div class="card-sec max_width_100">
@@ -25,7 +25,7 @@
                         <span class="heading-text">{{"DASHBOARD.AGENT_FEEDBACK_KPI_NOT_HELPFUL" | translate}}</span>
                         <i class="icon-sat_thumsdown"></i>
                     </div>
-                    <div class="count-heading" [ngClass]="{'empty-count': !agentFeedbackData.nothelpfulResp}">{{agentFeedbackData.nothelpfulResp | number: '1.0-0'}}%</div>
+                    <div class="count-heading" [ngClass]="{'empty-count': !agentFeedbackData.nothelpfulResp}">{{(agentFeedbackData.nothelpfulResp ? agentFeedbackData.nothelpfulResp : '0') | number: '1.0-0'}}%</div>
                 </div>
             </div>
         </div>
@@ -119,11 +119,11 @@
                         <div class="col-4 title">{{obj.likedPercent | number: '1.0-0'}}%</div>
                         <div class="col-4 title text-right">{{obj.dislikedPercent | number: '1.0-0'}}%</div>
                     </div>
-                   
-                    
+
+
                 </ng-container>
             </div>
         </div>
     </ng-conatiner>
-    
+
 </div>

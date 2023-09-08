@@ -15,24 +15,28 @@
                     <div class="inner-data-sec">
                         <div class="title-text-info">
                             <span class="heading-text">{{"DASHBOARD.TOTAL_SESSIONS" | translate}}</span>
-                            <div class="value-data" *ngIf="kpiData?.totalSessions?.percent" [ngClass]="{'negtive': !kpiData?.totalSessions?.increment}">
+                            <div class="value-data" [ngClass]="{'negtive': !kpiData?.totalSessions?.increment}">
                                 <i [ngClass]="kpiData?.totalSessions?.increment ? 'icon-ast_sortup' : 'icon-ast_sortdown' "></i>
-                                <span>{{kpiData?.totalSessions?.percent}}%</span>
+                                <span>{{kpiData?.totalSessions?.percent ? kpiData?.totalSessions?.percent : '0'}}%</span>
                             </div>
                         </div>
-                        <div class="count-heading" [ngClass]="{'empty-count': !kpiData?.totalSessions?.count}">{{kpiData?.totalSessions?.count}}</div>
+                        <div>
+                          <div class="count-heading"  [ngClass]="{'empty-count': !kpiData?.totalSessions?.count}">{{kpiData?.totalSessions?.count ? kpiData?.totalSessions?.count : '0'}}</div>
+
+                        </div>
+
                     </div>
                 </div>
                 <div class="card-sec">
                     <div class="inner-data-sec">
                         <div class="title-text-info">
                             <span class="heading-text">{{"DASHBOARD.TOTAL_SUGGESTIONS" | translate}}</span>
-                            <div class="value-data" *ngIf="kpiData?.totalSuggestions?.percent" [ngClass]="{'negtive': !kpiData?.totalSuggestions?.increment}">
+                            <div class="value-data" [ngClass]="{'negtive': !kpiData?.totalSuggestions?.increment}">
                                 <i [ngClass]="kpiData?.totalSuggestions?.increment ? 'icon-ast_sortup' : 'icon-ast_sortdown' "></i>
-                                <span>{{kpiData?.totalSuggestions?.percent}}%</span>
+                                <span>{{kpiData?.totalSuggestions?.percent ? kpiData?.totalSuggestions?.percent : '0'}}%</span>
                             </div>
                         </div>
-                        <div class="count-heading" [ngClass]="{'empty-count': !kpiData?.totalSuggestions?.count}">{{kpiData?.totalSuggestions?.count}}</div>
+                        <div class="count-heading" [ngClass]="{'empty-count': !kpiData?.totalSuggestions?.count}">{{kpiData?.totalSuggestions?.count ? kpiData?.totalSuggestions?.count : '0'}}</div>
                     </div>
                 </div>
                 <div class="card-sec">
@@ -40,19 +44,19 @@
                         <div class="title-text-info">
                             <span class="heading-text">{{"DASHBOARD.AVG_SUGGESTIONS" | translate}}</span>
                         </div>
-                        <div class="count-heading" [ngClass]="{'empty-count': !kpiData?.avgSuggestions?.count}">{{kpiData?.avgSuggestions?.count}}</div>
+                        <div class="count-heading" [ngClass]="{'empty-count': !kpiData?.avgSuggestions?.count}">{{kpiData?.avgSuggestions?.count ? kpiData?.avgSuggestions?.count : '0'}}</div>
                     </div>
                 </div>
                 <!-- <div class="card-sec">
                     <div class="inner-data-sec">
                         <div class="title-text-info">
                             <span class="heading-text">{{"DASHBOARD.ACCUARY" | translate}}</span>
-                            <div class="value-data" *ngIf="kpiData?.accuracy?.percent" [ngClass]="{'negtive': !kpiData?.accuracy?.increment}">
+                            <div class="value-data" [ngClass]="{'negtive': !kpiData?.accuracy?.increment}">
                                 <i [ngClass]="kpiData?.accuracy?.increment ? 'icon-ast_sortup' : 'icon-ast_sortdown' "></i>
-                                <span>{{kpiData?.accuracy?.percent}}%</span>
+                                <span>{{kpiData?.accuracy?.percent ? kpiData?.accuracy?.percent : '0'}}%</span>
                             </div>
                         </div>
-                        <div class="count-heading" [ngClass]="{'empty-count': !kpiData?.accuracy?.count}">{{kpiData?.accuracy?.count}}%</div>
+                        <div class="count-heading" [ngClass]="{'empty-count': !kpiData?.accuracy?.count}">{{kpiData?.accuracy?.count ? kpiData?.accuracy?.count : '0'}}%</div>
                     </div>
                 </div> -->
             </div>
