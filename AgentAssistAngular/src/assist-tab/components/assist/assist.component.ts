@@ -86,11 +86,11 @@ export class AssistComponent implements OnInit {
     this.websocketService.sendCheckListOpened$.subscribe((data)=>{
       if(data){
         this.guidedListAPICall(
-          this.commonService.configObj.agentassisturl, 
-          this.commonService.configObj.fromSAT ? 
-            this.commonService.configObj.instanceBotId : 
-            this.commonService.configObj.botid, 
-          this.commonService.configObj.accessToken, 
+          this.commonService.configObj.agentassisturl,
+          this.commonService.configObj.fromSAT ?
+            this.commonService.configObj.instanceBotId :
+            this.commonService.configObj.botid,
+          this.commonService.configObj.accessToken,
           this.commonService.configObj.accountId)
       }
     })
@@ -393,6 +393,7 @@ export class AssistComponent implements OnInit {
 
   //dialogue click and agent response handling code.
   AgentAssist_run_click(dialog, dialogPositionId, intent?) {
+    this.assistTabDialogforDashboard(dialog, intent);
     let connectionDetails: any = Object.assign({}, this.connectionDetails);
     connectionDetails.value = dialog.intentName;
     if (dialog.intentName && intent) {
@@ -407,6 +408,19 @@ export class AssistComponent implements OnInit {
     }
     let assistRequestParams = this.commonService.prepareAgentAssistRequestParams(connectionDetails);
     this.websocketService.emitEvents(EVENTS.agent_assist_request, assistRequestParams);
+  }
+
+  assistTabDialogforDashboard(dialog, intent?) {
+    console.log('Sandeep Tester: ', dialog, intent, this.connectionDetails);
+    let payloadForBE:any = Object.assign({}, this.connectionDetails);
+    if (dialog.intentName && intent) {
+      payloadForBE.intentName = dialog.intentName;
+      payloadForBE.title = dialog.intentName;
+    }
+    payloadForBE.type = 'dialog';
+    payloadForBE.input = dialog.userInput;
+    payloadForBE.sessionId = this.handleSubjectService.assistTabSessionId;
+    this.websocketService.emitEvents(EVENTS.agent_send_or_copy, payloadForBE)
   }
 
   runDialogForAssistTab(data, idTarget?, runInitent?) {
@@ -753,12 +767,14 @@ export class AssistComponent implements OnInit {
           } else {
             let a = $(`#faqDiv-${uuids + index}`);
             let answerSanitized = (ele.answer[0]);
+            console.log('sandeep Answer Sanitized:',answerSanitized);
+            // data-conent-id="${contentId}
             // if text only not template cond need to add
             answerSanitized = this.commonService.replaceDoubleQuot(answerSanitized);
             let faqActionHtml = `<div class="action-links">
-            <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids+index}" data-msg-data="${answerSanitized}" data-position-id="${positionID}">Send</button>
-            <div class="copy-btn" data-msg-id="${uuids+index}" data-msg-data="${answerSanitized}" data-position-id="${positionID}">
-                <i class="ast-copy" data-msg-id="${uuids+index}" data-msg-data="${answerSanitized}" data-position-id="${positionID}"></i>
+            <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids+index}" data-msg-data="${answerSanitized}" data-position-id="${positionID}" data-text-type="faq" data-title="${ele?.displayName}" data-content-id="${ele?.taskRefId}">Send</button>
+            <div class="copy-btn" data-msg-id="${uuids+index}" data-msg-data="${answerSanitized}" data-position-id="${positionID}" data-text-type="faq" data-title="${ele?.displayName}" data-content-id="${ele?.taskRefId}">
+                <i class="ast-copy" data-msg-id="${uuids+index}" data-msg-data="${answerSanitized}" data-position-id="${positionID}" data-text-type="faq" data-title="${ele?.displayName}" data-content-id="${ele?.taskRefId}"></i>
             </div>
             </div>`;
             a.append(faqActionHtml);
@@ -802,6 +818,7 @@ export class AssistComponent implements OnInit {
           }
 
           data.suggestions.articles?.forEach((ele, index) => {
+            console.log("🚀 ~ file: assist.component.ts:816 ~ AssistComponent ~ data.suggestions.articles?.forEach ~ ele:", ele)
             let articleSuggestions = document.getElementById(`articleSuggestions-${responseId}`);
 
             let articleHtml = this.assisttabService.articleTypeInfoTemplate(uuids, index, ele);
@@ -819,9 +836,9 @@ export class AssistComponent implements OnInit {
               let a = $(`#articleDiv-${uuids + index}`);
               let answerSanitized = this.commonService.handleEmptyLine(ele.content, true);
               let articleActionHtml = `<div class="action-links">
-                            <button class="send-run-btn" id="sendMsg" data-msg-id="article-${uuids + index}" data-msg-data="${answerSanitized}">Send</button>
-                            <div class="copy-btn" data-msg-id="article-${uuids + index}" data-msg-data="${answerSanitized}">
-                                <i class="ast-copy" data-msg-id="article-${uuids + index}" data-msg-data="${answerSanitized}"></i>
+                            <button class="send-run-btn" id="sendMsg" data-msg-id="article-${uuids + index}" data-msg-data="${answerSanitized}" data-text-type="article" data-title="${ele?.title}" data-content-id="${ele?.contentId}">Send</button>
+                            <div class="copy-btn" data-msg-id="article-${uuids + index}" data-msg-data="${answerSanitized}" data-text-type="article" data-title="${ele?.title}" data-content-id="${ele?.contentId}">
+                                <i class="ast-copy" data-msg-id="article-${uuids + index}" data-msg-data="${answerSanitized}" data-text-type="article" data-title="${ele?.title}" data-content-id="${ele?.contentId}"></i>
                             </div>
                         </div>`;
               if(ele.content){
@@ -877,9 +894,9 @@ export class AssistComponent implements OnInit {
             let faqSection = $(`#dynamicBlock #faqSection-${splitedanswerPlaceableID.join('-')}`);
             let answerSanitized = this.commonService.handleEmptyLine(ele.answer[0], true);
             let faqaction = `<div class="action-links">
-            <button class="send-run-btn" id="sendMsg" data-msg-id="${splitedanswerPlaceableID.join('-')}"  data-msg-data="${answerSanitized}">Send</button>
-            <div class="copy-btn" data-msg-id="${splitedanswerPlaceableID.join('-')}" data-msg-data="${answerSanitized}">
-            <i class="ast-copy" data-msg-id="${splitedanswerPlaceableID.join('-')}" data-msg-data="${answerSanitized}"></i>
+            <button class="send-run-btn" id="sendMsg" data-msg-id="${splitedanswerPlaceableID.join('-')}"  data-msg-data="${answerSanitized}" data-text-type="faq" data-title="${ele?.inputQuestion}" data-content-id="${ele?.taskRefId}">Send</button>
+            <div class="copy-btn" data-msg-id="${splitedanswerPlaceableID.join('-')}" data-msg-data="${answerSanitized}" data-text-type="faq" data-title="${ele?.inputQuestion}" data-content-id="${ele?.taskRefId}">
+            <i class="ast-copy" data-msg-id="${splitedanswerPlaceableID.join('-')}" data-msg-data="${answerSanitized}" data-text-type="faq" data-title="${ele?.inputQuestion}" data-content-id="${ele?.taskRefId}"></i>
                 </div>
                 </div>`;
 
@@ -1075,9 +1092,9 @@ export class AssistComponent implements OnInit {
 
   smallTalkActionLinkTemplate(uuids,sendData){
     let actionLinkTemplate =  ` <div class="action-links">
-    <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data="${sendData}">Send</button>
-    <div class="copy-btn hide" data-msg-id="${uuids}" data-msg-data="${sendData}">
-        <i class="ast-copy" data-msg-id="${uuids}" data-msg-data="${sendData}"></i>
+    <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data="${sendData}" data-text-type="sentence">Send</button>
+    <div class="copy-btn hide" data-msg-id="${uuids}" data-msg-data="${sendData}" data-text-type="sentence">
+        <i class="ast-copy" data-msg-id="${uuids}" data-msg-data="${sendData}" data-text-type="sentence"></i>
     </div>
   </div>`;
   return actionLinkTemplate;
@@ -1823,9 +1840,9 @@ export class AssistComponent implements OnInit {
             let answerSanitized = this.commonService.handleEmptyLine(ele.answer[0], true);
 
             let faqActionHtml = `<div class="action-links">
-                    <button class="send-run-btn" id="sendMsg" data-msg-id="${uniqueID + index}"  data-msg-data="${answerSanitized}">Send</button>
-                    <div class="copy-btn" data-msg-id="${uniqueID + index}" data-msg-data="${answerSanitized}">
-                        <i class="ast-copy" data-msg-id="${uniqueID + index}" data-msg-data="${answerSanitized}"></i>
+                    <button class="send-run-btn" id="sendMsg" data-msg-id="${uniqueID + index}"  data-msg-data="${answerSanitized}" data-text-type="faq" data-content-id="${ele?.taskRefId} data-title="${ele?.question}">Send</button>
+                    <div class="copy-btn" data-msg-id="${uniqueID + index}" data-msg-data="${answerSanitized}" data-text-type="faq" data-content-id="${ele?.taskRefId} data-title="${ele?.question}">
+                        <i class="ast-copy" data-msg-id="${uniqueID + index}" data-msg-data="${answerSanitized}" data-text-type="faq" data-content-id="${ele?.taskRefId} data-title="${ele?.question}"></i>
                     </div>
                 </div>`;
             a.append(faqActionHtml);
@@ -1908,9 +1925,9 @@ export class AssistComponent implements OnInit {
           let a = $(`#faqDiv-${uniqueID + index}`);
           let answerSanitized = this.commonService.handleEmptyLine(res.components[0].data.text[0], true);
           let faqActionHtml = `<div class="action-links">
-                    <button class="send-run-btn" id="sendMsg" data-msg-id="${uniqueID + index}"  data-msg-data="${answerSanitized}">Send</button>
-                    <div class="copy-btn" data-msg-id="${uniqueID + index}" data-msg-data="${answerSanitized}">
-                        <i class="ast-copy" data-msg-id="${uniqueID + index}" data-msg-data="${answerSanitized}"></i>
+                    <button class="send-run-btn" id="sendMsg" data-msg-id="${uniqueID + index}"  data-msg-data="${answerSanitized}" data-text-type="faq" data-title="${ele?.display}" data-content-id="${ele?.taskRefId}">Send</button>
+                    <div class="copy-btn" data-msg-id="${uniqueID + index}" data-msg-data="${answerSanitized}" data-text-type="faq" data-title="${ele?.display}" data-content-id="${ele?.taskRefId}">
+                        <i class="ast-copy" data-msg-id="${uniqueID + index}" data-msg-data="${answerSanitized}" data-text-type="faq" data-title="${ele?.display}" data-content-id="${ele?.taskRefId}"></i>
                     </div>
                 </div>`;
 

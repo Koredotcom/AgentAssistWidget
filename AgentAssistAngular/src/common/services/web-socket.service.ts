@@ -109,6 +109,10 @@ export class WebSocketService {
     // });
 
     this._agentAsisstSocket.on(EVENTS.agent_assist_response, (data) => {
+      this.handleSubjectService.assistTabSessionId = '';
+      if(data.sessionId) {
+        this.handleSubjectService.assistTabSessionId = data?.sessionId;
+      }
       if (this.connectionDetails?.interactiveLanguage && typeof this.connectionDetails?.interactiveLanguage == 'string' && this.connectionDetails?.interactiveLanguage != "''") {
         menu_request_params['language'] = this.connectionDetails?.interactiveLanguage; // Return the default value for null, undefined, or "''"
       }
@@ -147,6 +151,10 @@ export class WebSocketService {
     });
 
     this._agentAsisstSocket.on(EVENTS.agent_assist_agent_response, (data)=>{
+      this.handleSubjectService.myBotTabSessionId = '';
+      if(data.sessionId) {
+        this.handleSubjectService.myBotTabSessionId = data?.sessionId;
+      }
       this.agentAssistAgentResponse$.next(data);
       this.addOrRemoveLoader(false);
     });

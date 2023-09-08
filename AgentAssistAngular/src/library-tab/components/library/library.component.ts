@@ -181,6 +181,7 @@ export class LibraryComponent implements OnInit {
     runDialogueObject.searchFrom = this.projConstants.LIBRARY;
     runDialogueObject.name = dialog.value.intentName;
     runDialogueObject.agentRunButton = dialog.value.agentRunButton;
+    console.log("🚀 ~ file: library.component.ts:184 ~ LibraryComponent ~ dialogueRunClick ~:")
     if (clickType == this.projConstants.ASSIST) {
       this.handleSubjectService.setActiveTab(this.projConstants.ASSIST);
       // this.AgentAssist_run_click(runDialogueObject);
@@ -189,6 +190,25 @@ export class LibraryComponent implements OnInit {
       this.agent_run_click(runDialogueObject, false)
     }
     this.handleSubjectService.setRunButtonClickEvent(runDialogueObject);
+    // this.assistTabDialogforDashboard(dialog, true, runDialogueObject.name)
+  }
+
+  assistTabDialogforDashboard(dialog, flag, intent?) {
+    console.log('Sandeep Tester: ', dialog, intent, this.connectionDetails);
+    let payloadForBE:any = Object.assign({}, this.connectionDetails);
+    if (dialog.intentName && intent) {
+      payloadForBE.intentName = dialog.intentName;
+      payloadForBE.title = dialog.intentName;
+    }
+    payloadForBE.type = 'dialog';
+    // payloadForBE.input = dialog.userInput;
+    if(flag) {
+      payloadForBE.sessionId = this.handleSubjectService.assistTabSessionId;
+    } else {
+      payloadForBE.sessionId = this.handleSubjectService.myBotTabSessionId;
+    }
+
+    this.websocketService.emitEvents(EVENTS.agent_send_or_copy, payloadForBE)
   }
 
   agent_run_click(dialog, isSearchFlag) {
@@ -198,6 +218,7 @@ export class LibraryComponent implements OnInit {
       connectionDetails.isSearch = isSearchFlag;
       if (!isSearchFlag) {
         connectionDetails.intentName = dialog.intentName;
+        this.assistTabDialogforDashboard(dialog, false, dialog.intentName, );
       }
       if(!isSearchFlag && dialog.intentName && dialog.userInput) {
         connectionDetails.value = dialog.userInput;
@@ -214,5 +235,6 @@ export class LibraryComponent implements OnInit {
       this.commonService.childBotDetails.childBotName = dialog.childBotName;
     }
   }
+
 
 }
