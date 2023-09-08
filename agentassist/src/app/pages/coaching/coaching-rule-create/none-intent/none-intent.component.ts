@@ -119,7 +119,7 @@ export class NoneIntentComponent implements OnInit {
   }
 
   getTags() {
-    let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
+    let botId = this.workflowService.getCurrentBtSmt(true)._id;
     let params: any = {
       botId,
     };
@@ -157,7 +157,7 @@ export class NoneIntentComponent implements OnInit {
   }
 
   getRules() {
-    let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
+    let botId = this.workflowService.getCurrentBtSmt(true)._id;
     let params: any = {
       botId,
     };
@@ -405,15 +405,15 @@ export class NoneIntentComponent implements OnInit {
       return a;
     }, {});
 
-    let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
+    let botId = this.workflowService.getCurrentBtSmt(true)._id;
 
     let payload: any = {
       selectedRules: Object.keys(ruleIdList),
       botId,
       userId: this.auth.getUserId(),
     };
-    
-    
+
+
     this.service.invoke('post.noneIntentUtterances', {}, payload)
     .subscribe(data => {
       this.loading = false;
