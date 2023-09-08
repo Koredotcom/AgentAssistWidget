@@ -1,15 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?sbqqoi');
-  src:  url('fonts/icomoon.eot?sbqqoi#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?sbqqoi') format('truetype'),
-    url('fonts/icomoon.woff?sbqqoi') format('woff'),
-    url('fonts/icomoon.svg?sbqqoi#icomoon') format('svg');
-  src:  url('fonts/icomoon.eot?jgecgc');
-  src:  url('fonts/icomoon.eot?jgecgc#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?jgecgc') format('truetype'),
-    url('fonts/icomoon.woff?jgecgc') format('woff'),
-    url('fonts/icomoon.svg?jgecgc#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?8nsprc');
+  src:  url('fonts/icomoon.eot?8nsprc#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?8nsprc') format('truetype'),
+    url('fonts/icomoon.woff?8nsprc') format('woff'),
+    url('fonts/icomoon.svg?8nsprc#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -30,14 +25,38 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-sa-eye:before {
-  content: "\e943";
+.icon-ast_thumbsup:before {
+  content: "\e984";
 }
-.icon-sa-eye-open:before {
-  content: "\e944";
+.icon-ast_sortdown:before {
+  content: "\e985";
 }
-.icon-sa-copy:before {
-  content: "\e945";
+.icon-ast_sortup:before {
+  content: "\e986";
+}
+.icon-ast_sortupdown:before {
+  content: "\e987";
+}
+.icon-ast_key:before {
+  content: "\e988";
+}
+.icon-ast_alpha:before {
+  content: "\e989";
+}
+.icon-ast_export:before {
+  content: "\e98a";
+}
+.icon-ast_calendar:before {
+  content: "\e98b";
+}
+.icon-ast_channels:before {
+  content: "\e98c";
+}
+.icon-ast_checkright:before {
+  content: "\e98d";
+}
+.icon-sat_thumsdown:before {
+  content: "\e98e";
 }
 .icon-coaching-publish:before {
   content: "\e982";
@@ -306,68 +325,34 @@
   content: "\e950";
 }
 .icon-sa-ext-link:before {
-  content: "\e946";
-  color: #2b75e4;
-}
-.icon-ast_sortupdown:before {
-  content: "\e942";
-}
-.icon-ast_sortup:before {
-  content: "\e940";
-}
-.icon-ast_sortdown:before {
-  content: "\e941";
-}
-.icon-ast_thumbsup:before {
   content: "\e938";
-  color: #2b75e4;
 }
-.icon-sat_thumsdown:before {
+.icon-sa-eye-open:before {
   content: "\e939";
-  color: #ffc46a;
 }
-.icon-ast_checkright:before {
+.icon-sa-eye:before {
   content: "\e93a";
-  color: #0d6efd;
 }
-.icon-ast_channels:before {
+.icon-sa-copy:before {
   content: "\e93b";
-}
-.icon-ast_calendar:before {
-  content: "\e93c";
-}
-.icon-ast_export:before {
-  content: "\e93d";
-}
-.icon-ast_alpha:before {
-  content: "\e93e";
-  color: #fff;
-}
-.icon-ast_key:before {
-  content: "\e93f";
 }
 .icon-sa-info:before {
   content: "\e937";
-  color: #07377f;
 }
 .icon-sa-square-bg:before {
   content: "\e936";
-  color: #f00;
 }
 .icon-sa-check-gray:before {
   content: "\e934";
-  color: #64717c;
 }
 .icon-sa-video-play:before {
   content: "\e931";
-  color: #009dab;
 }
 .icon-sa-check-round:before {
   content: "\e932";
 }
 .icon-sa-help:before {
   content: "\e933";
-  color: #009dab;
 }
 .icon-sa-waves:before {
   content: "\e935";
@@ -377,7 +362,6 @@
 }
 .icon-sa-deflect-call:before {
   content: "\e92f";
-  color: #fff;
 }
 .icon-sa-split-down:before {
   content: "\e92e";
@@ -387,15 +371,12 @@
 }
 .icon-sa-chat:before {
   content: "\e901";
-  color: #009dab;
 }
 .icon-sa-close:before {
   content: "\e902";
-  color: #fff;
 }
 .icon-sa-comment:before {
   content: "\e903";
-  color: #fff;
 }
 .icon-sa-common-properties:before {
   content: "\e904";
@@ -408,7 +389,6 @@
 }
 .icon-sa-delete:before {
   content: "\e907";
-  color: #dd3646;
 }
 .icon-sa-elipse:before {
   content: "\e908";
@@ -436,7 +416,6 @@
 }
 .icon-sa-minimize:before {
   content: "\e910";
-  color: #fff;
 }
 .icon-sa-minus:before {
   content: "\e911";
@@ -446,7 +425,6 @@
 }
 .icon-sa-play:before {
   content: "\e913";
-  color: #fff;
 }
 .icon-sa-publish:before {
   content: "\e914";
@@ -456,7 +434,6 @@
 }
 .icon-sa-round-check:before {
   content: "\e916";
-  color: #135423;
 }
 .icon-sa-script-node:before {
   content: "\e917";
@@ -466,7 +443,6 @@
 }
 .icon-sa-service-node:before {
   content: "\e919";
-  color: #fff;
 }
 .icon-sa-settings:before {
   content: "\e91a";
@@ -479,14 +455,12 @@
 }
 .icon-sa-start-point:before {
   content: "\e91d";
-  color: #fff;
 }
 .icon-sa-survey:before {
   content: "\e91e";
 }
 .icon-sa-testing-icon:before {
   content: "\e91f";
-  color: #fff;
 }
 .icon-sa-time:before {
   content: "\e920";
@@ -529,6 +503,4 @@
 }
 .icon-sa-call:before {
   content: "\e92d";
-  color: #009dab;
 }
-
