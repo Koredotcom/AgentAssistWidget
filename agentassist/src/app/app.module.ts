@@ -175,7 +175,7 @@ import { AccWarningDialogComponent } from './helpers/components/acc-warning-dial
     OnboardingDialogComponent,
     SearchAssistComponent,
     SaDeleteConfirmComponent,
-    AutomationIntentvsEntityStringPipe,
+    // AutomationIntentvsEntityStringPipe,
     ConvsHistoryLogsComponent,
     AccWarningDialogComponent
   ],

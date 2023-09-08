@@ -2030,7 +2030,7 @@
     "DASHBOARD.OVERRIDE_RATE" : "Override rate",
     "DASHBOARD.CUSTOMER_ASPECT_DROPDOWN_all" : "All",
     "DASHBOARD.CUSTOMER_ASPECT_DROPDOWN_agent" : "Agent Initiated",
-    "DASHBOARD.CUSTOMER_ASPECT_DROPDOWN_customer" : "Agent Suggested",
+    "DASHBOARD.CUSTOMER_ASPECT_DROPDOWN_agentassist" : "AgentAssist Suggested",
     "DASHBOARD.CUSTOMER_ASPECT_TABS_all" : "All",
     "DASHBOARD.CUSTOMER_ASPECT_TABS_article" : "Articles",
     "DASHBOARD.CUSTOMER_ASPECT_TABS_faq" : "Faqs",

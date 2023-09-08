@@ -28,7 +28,7 @@ export class DashboardComponent implements OnInit {
   openComponentId : string;
   kpiData : any = {};
   customerAspectDropdownList : any = actualvsDisplayTitle.CUSTOMER_ASPECT_DROPDOWN_LIST;
-  customerAspectDropdownSelection : string = "agent";
+  customerAspectDropdownSelection : string = "all";
   filterData : any = {};
   params ={
     streamId : ''
