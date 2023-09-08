@@ -32,6 +32,7 @@ export class AssistComponent implements OnInit {
   @ViewChild('dynamicBlockRef') dynamicBlockRef: ElementRef;
   @Output() handlePopupEvent = new EventEmitter();
   @Output() newButtonScrollClickEvents = new EventEmitter();
+  selectedPlayBook = '';
 
   subscriptionsList: Subscription[] = [];
 
@@ -93,7 +94,6 @@ export class AssistComponent implements OnInit {
           this.commonService.configObj.accountId)
       }
     })
-
   }
 
   ngOnDestroy() {
@@ -319,6 +319,7 @@ export class AssistComponent implements OnInit {
   }
 
   checkListData:any = {};
+  clObjs: any = {};
   // dynClObjs:any = {};
   guidedListAPICall(agentAssistUrl, botId, accessToken, accountId) {
     let headersVal = {
@@ -332,15 +333,19 @@ export class AssistComponent implements OnInit {
       headers: headersVal,
       dataType: 'json',
       success:  (data) => {
+        this.isChecklistOpened = true;
         if(data.checklists.length > 0 ) {
           this.checkListData = data;
           this.commonService.primaryChecklist = data.checklists.filter(check => check.type === "primary");
           this.commonService.dynamicChecklist = data.checklists.filter(check => check.type === "dynamic");
-          // this.commonService.guidedChecklistObj = data;
-        }
-        // if(!this.isGuidedChecklistApiSuccess && this.commonService.primaryChecklist.length > 0) {
-        //   this.sendChecklistEvent();
-        // }
+          (data?.checklists || [])
+          .forEach((item)=>{
+            (item.stages || [])
+            .forEach((stage)=>{
+              this.clObjs[stage._id] = stage;
+            }) 
+          });
+        };
         this.sendOpenCheckLIstEvent();
       },
       error:  (err)=> {
@@ -350,16 +355,6 @@ export class AssistComponent implements OnInit {
   }
 
   sendChecklistEvent() {
-    // checklist_opened
-    // let checklistArr = [];
-    this.handleSubjectService.userHistoryDataSubject$.subscribe((res : any) => {
-      console.log(res, "response inside checklist");
-      // if(res && res.length > 0){
-      //   checklistArr = res;
-      // }
-    });
-    console.log("🚀 ~ file: assist.component.ts:358 ~ AssistComponent ~ this.commonService.configObj ~ ;:", this.commonService.configObj);
-
     let checklistParams: any = {
       "payload": {
           "event": "checklist_opened",
@@ -381,8 +376,18 @@ export class AssistComponent implements OnInit {
     }
     this.isGuidedChecklistApiSuccess = true;
     this.websocketService.emitEvents(EVENTS.checklist_opened, checklistParams);
-    this.isChecklistOpened = true;
+    if(this.commonService.primaryChecklist[0]?.stages[0]){
+      this.commonService.primaryChecklist[0].stages[0].opened = true;
+    };
+    (this.commonService.primaryChecklist[0]?.stages)
+    .forEach((item)=>{
+      item.color = this.clObjs[item._id]?.color
+    });
+    // if(this.clObjs[this.commonService.primaryChecklist[0]._id]){
+    //   this.commonService.primaryChecklist[0].color = this.clObjs[this.commonService.primaryChecklist[0]._id];
+    // }
     this.checklists.push(this.commonService.primaryChecklist[0]);
+    this.selectedPlayBook = this.commonService.primaryChecklist[0]?.name;
   }
 
 
@@ -2221,7 +2226,10 @@ export class AssistComponent implements OnInit {
 
   sendOpenCheckLIstEvent(){
     if(!this.isGuidedChecklistApiSuccess && this.commonService.primaryChecklist.length > 0) {
-      this.sendChecklistEvent();
+      let channel = this.commonService.isCallConversation ? 'voice' : 'chat'
+      if(this.commonService.primaryChecklist[0]?.channels?.includes(channel)){
+        this.sendChecklistEvent();
+      }
     }
   }
 }

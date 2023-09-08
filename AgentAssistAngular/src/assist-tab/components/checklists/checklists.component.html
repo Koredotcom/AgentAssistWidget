@@ -1,16 +1,16 @@
-<div class="checklist-wrapper-info">
+<!-- <h1>Playbook</h1> -->
+<!-- <h2>Laptop Sales</h2> -->
+<div class="checklist-wrapper-info" *ngIf="triggeredDynCheckLists?.length || checklists?.length">
     <div class="checked-list-content">
         <div class="heading-block-check">
             <div class="left-sec-data">
-                <h1>Playbook</h1>
                 <button class="more-check-tag">
                     <i class="ast-light-bulb"></i>
-                    <span>{{triggeredDynCheckLists.length}}</span>
+                    <span *ngIf="triggeredDynCheckLists.length">{{triggeredDynCheckLists.length}}</span>
                 </button>
-                <!-- <h2>Laptop Sales</h2> -->
                 <div class="checklist-dropdown">
                     <div class="toggle-checklist" (click)="showDropDown = !showDropDown;">
-                        <p>Dynamic PLaybooks</p>
+                        <p>{{selectedPlayBook}}</p>
                         <i class="ast-carrotup"></i>
                     </div>
                     <div class="drp-down-conetnt-checklist" [ngClass]="{'d-none': !showDropDown}">
@@ -24,40 +24,28 @@
                                 <span>{{clT.stages?.length}} steps</span>
                             </li>
                         </ng-container>
-                        <!-- <ng-container>
-                            <div class="heading-text">
-                                <h3>PRIMARY PLAYBOOKS</h3>
-                                <i class="ast-light-bulb"></i>
-                            </div>
-                            <li>
-                                <p>New Customer Sales</p>
-                                <span>15 steps</span>
-                            </li>
-                            <li>
-                                <p>General Support</p>
-                                <span>6 steps</span>
-                            </li>
-                            <li>
-                                <p>Laptop Sales</p>
-                                <i class="ast-check-new"></i>
-                            </li>
-                        </ng-container> -->
                     </div>
                 </div>
             </div>
-            <button class="proceed-toclise-btn" (click)="proceedToClose()">
+            <button *ngIf="isProceedToClose && checklists?.length" class="proceed-toclise-btn" (click)="proceedToClose()">
                 <div class="circle">
                     <i class="ast-check-new"></i>
                 </div>
                 <span>Proceed to close</span>
             </button>
         </div>
+
         <ng-container *ngFor="let cl of checklists; let i = index">
             <ng-container *ngFor="let ac of cl.stages; let si = index">
-                <div class="acc-info-data" [ngClass]="{'open-acc-show': ac.opened}">
-                    <div class="acc-heading-block" (click)="ac.opened = !ac.opened">
+            <ng-container *ngIf="!(cl.type === 'primary' && ac.name?.toLowerCase() === 'close')">
+                <div class="acc-info-data" [ngStyle]="{'background': ac.color}" [ngClass]="{'open-acc-show': ac.opened}">
+                    <div class="acc-heading-block" [ngStyle]="{'background': ac.color}" (click)="ac.opened = !ac.opened" [ngClass]="{'disabled-txt' : getSelectedCount(ac) === ac.steps?.length}">
                         <div class="top-title-block">
-                            <h4>{{ac.name}}</h4>
+                            <h4 >{{ac.name}}</h4>
+                            <button class="resume-btn" 
+                                *ngIf="(getSelectedCount(ac) !== ac.steps?.length) && selectedPlayBook !== cl.name" 
+                                (click)="checkListResume($event, cl, i, si)">Resume
+                            </button>
                             <p>{{ getSelectedCount(ac)}} / {{ac.steps?.length}} steps</p>
                             <i class="ast-carrotup"></i>
                         </div>
@@ -69,40 +57,117 @@
                     </div>
                     <div class="acc-body-data">
                         <ng-container *ngFor="let step of ac.steps; let sti = index">
-                            <div class="check-list-type-info" [ngClass]="{'selected-check-item': ((ac.steps[sti - 1]?.complete && !step.complete) || (sti === 0 && !ac.steps[sti + 1]?.complete))}">
+                            <div class="check-list-type-info" [ngClass]="{'selected-check-item': ((ac.steps[sti - 1]?.complete && !step.complete) || (sti === 0 && !step.complete && !ac.steps[sti + 1]?.complete)), 'text-strike disabled-click-text': step?.complete}">
                                 <div class="title-block">
-                                    <h5  [ngClass]="{'text-strike': step?.complete}">{{step.name}}</h5>
+                                    <h5 [ngClass]="{'random': cl.type === 'random'}">{{step.name}}</h5>
                                     <div class="icon-indication" [ngClass]="{'not-checked': !step?.complete}" (click)="clickStep(cl, ac, step, i, si, sti)">
                                         <i class="ast-check-new"></i>
                                     </div>
                                 </div>
-                                <!-- <div class="content-info-sec">
-                                    <p>Get more information about issues. Ask question about when they have been facing issue and other related questions</p>
+                                <div *ngIf="step.description" class="content-info-sec">
+                                    <p>{{step.description}}</p>
                                     <div class="adherece-type">
-                                        <h6>Adherence Type</h6>
-                                        <span>3/3 count</span>
+                                        <h6></h6>
+                                        <div class="btn-yes-no">
+                                            <ng-container *ngFor="let btn of step?.confirmButtons">
+                                                <button class="btn-yes-no-click" [ngStyle]="{'background-color': colors[btn.color], 'color': btn.color}" (click)="clickStep(cl, ac, step, i, si, sti)">{{btn.title}}</button>
+                                            </ng-container>
+                                       </div>
                                     </div>
-                                </div> -->
+                                </div>
+                                <div class="btn-hover-actions" *ngIf="step.isSendCopy">
+                                    <button class="btn-copy-send" (click)="sendOrCopy('copyMsg', step.description); clickStep(cl, ac, step, i, si, sti)">
+                                        <i class="ast-copy"></i>
+                                    </button>
+                                    <button class="btn-copy-send" (click)="sendOrCopy('sendMsg', step.description); clickStep(cl, ac, step, i, si, sti)">
+                                        <i class="ast-ast-send"></i>
+                                    </button>
+                                </div>
                             </div>
                         </ng-container>
                     </div>
                 </div>
             </ng-container>
+            </ng-container>
         </ng-container>
-        <!-- Needs to show on completion of Checklist -->
-        <!-- <ng-container>
-            <div class="empty-checked-info">
-                <div class="icon-block">
-                    <i class="ast-positive-nudge"></i>
-                </div>
-                <div class="info-empty">
-                    <h1>Fantastic job!</h1>
-                    <p>Great job completing 100% of this playbook. Thank you for your hard work with this customer.</p>
-                </div>
-            </div>
-        </ng-container> -->
+        <ng-container *ngFor="let cl of checklists; let i = index">
+            <ng-container>
+                <ng-container *ngFor="let ac of cl.stages; let si = index">
+                <ng-container *ngIf="cl.type === 'primary' && ac.name?.toLowerCase() === 'close'">
+                    <div class="acc-info-data" [ngStyle]="{'background': ac.color}" [ngClass]="{'open-acc-show': ac.opened}">
+                        <div class="acc-heading-block" [ngStyle]="{'background': ac.color}" (click)="ac.opened = !ac.opened" [ngClass]="{'disabled-txt' : getSelectedCount(ac) === ac.steps?.length}">
+                            <div class="top-title-block">
+                                <h4 >{{ac.name}}</h4>
+                                <button class="resume-btn" 
+                                    *ngIf="(getSelectedCount(ac) !== ac.steps?.length) && selectedPlayBook !== cl.name" 
+                                    (click)="checkListResume($event, cl, i, si)">Resume
+                                </button>
+                                <p>{{ getSelectedCount(ac)}} / {{ac.steps?.length}} steps</p>
+                                <i class="ast-carrotup"></i>
+                            </div>
+                            <div class="steps-check">
+                                <ng-container *ngFor="let stp of ac.steps">
+                                    <div class="step-div" [ngClass]="{'completed' : stp.complete}"></div>
+                                </ng-container>
+                            </div>
+                        </div>
+                        <div class="acc-body-data">
+                            <ng-container *ngFor="let step of ac.steps; let sti = index">
+                                <div class="check-list-type-info" [ngClass]="{'selected-check-item': ((ac.steps[sti - 1]?.complete && !step.complete) || (sti === 0 && !step.complete && !ac.steps[sti + 1]?.complete)), 'text-strike disabled-click-text': step?.complete}">
+                                    <div class="title-block">
+                                        <h5 [ngClass]="{'random': cl.type === 'random'}">{{step.name}}</h5>
+                                        <div class="icon-indication" [ngClass]="{'not-checked': !step?.complete}" (click)="clickStep(cl, ac, step, i, si, sti)">
+                                            <i class="ast-check-new"></i>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="step.description" class="content-info-sec">
+                                        <p>{{step.description}}</p>
+                                        <div class="adherece-type">
+                                            <h6></h6>
+                                            <div class="btn-yes-no">
+                                                <ng-container *ngFor="let btn of step?.confirmButtons">
+                                                    <button class="btn-yes-no-click" [ngStyle]="{'background-color': colors[btn.color], 'color': btn.color}" (click)="clickStep(cl, ac, step, i, si, sti)">{{btn.title}}</button>
+                                                </ng-container>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    <div class="btn-hover-actions" *ngIf="step.isSendCopy">
+                                        <button class="btn-copy-send" (click)="sendOrCopy('copyMsg', step.description); clickStep(cl, ac, step, i, si, sti)">
+                                            <i class="ast-copy"></i>
+                                        </button>
+                                        <button class="btn-copy-send" (click)="sendOrCopy('sendMsg', step.description); clickStep(cl, ac, step, i, si, sti)">
+                                            <i class="ast-ast-send"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </div>
+                </ng-container>
+                </ng-container>
+            </ng-container>
+        </ng-container>
     </div>
 </div>
+
+
+                            <!-- && (cl.type === 'primary' && ac.name.toLowerCase() !== 'close') -->
+
+
+<!-- Needs to show on completion of Checklist -->
+<!-- <ng-container>
+    <div class="empty-checked-info">
+        <div class="icon-block">
+            <i class="ast-positive-nudge"></i>
+        </div>
+        <div class="info-empty">
+            <h1>Fantastic job!</h1>
+            <p>Great job completing 100% of this playbook. Thank you for your hard work with this customer.</p>
+        </div>
+    </div>
+</ng-container> -->
+
+
 
 
 <!-- <div class="checklist-wrapper-info">
@@ -201,7 +266,26 @@
                             <p>Get more information about issues. Ask question about when they have been facing issue and other related questions</p>
                             <div class="adherece-type">
                                 <h6>Adherence Type</h6>
-                                <span>3/3 count</span>
+                                <div class="btn-yes-no">
+                                    <button class="btn-yes-no-click">Yes</button>
+                                    <button class="btn-yes-no-click">Yes</button>
+                               </div>
+                            </div>
+                        </div>
+                        <div class="btn-hover-actions">
+                            <button class="btn-copy-send">
+                                <i class="ast-copy"></i>
+                            </button>
+                            <button class="btn-copy-send">
+                                <i class="ast-ast-send"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="check-list-type-info">
+                        <div class="title-block disabled-click-text">
+                            <h5>Inform call is getting recorded</h5>
+                            <div class="icon-indication">
+                                <i class="ast-check-new"></i>
                             </div>
                         </div>
                     </div>
@@ -248,7 +332,10 @@
                             <p>Get more information about issues. Ask question about when they have been facing issue and other related questions</p>
                             <div class="adherece-type">
                                 <h6>Adherence Type</h6>
-                                <span>3/3 count</span>
+                               <div class="btn-yes-no">
+                                    <button class="btn-yes-no-click">Yes</button>
+                                    <button class="btn-yes-no-click">Yes</button>
+                               </div>
                             </div>
                         </div>
                     </div>
