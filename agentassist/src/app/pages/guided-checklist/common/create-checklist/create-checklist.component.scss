@@ -1,5 +1,11 @@
 @import './.././../../../scss/variables/variables.scss';
-
+.example-chip-list{
+    ::ng-deep{
+        .mat-form-field-label{
+            margin-top: 3px;
+        }
+    }
+}
 .stage-creation-slider-data{
     min-width: 670px;
     max-width: 670px;
