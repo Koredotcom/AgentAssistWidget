@@ -91,6 +91,9 @@ export class TriggerByComponent implements OnInit, OnChanges {
       /* Get the current bot in case of SmartAssist */
       this.isSm = window.location.href.includes('smartassist')
       if(this.isSm){
+        if(this.onlyAdhreForm.value.botId){
+          this.selectSMBot(this.onlyAdhreForm.value.botId);
+        }
         let selAcc = this.local.getSelectedAccount();
         let smBotObj = selAcc['instanceBots'][0];
         let instanceBotId = smBotObj.instanceBotId;

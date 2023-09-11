@@ -211,7 +211,7 @@
                                             <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{ standardBotsOj[onlyAdhreForm.value?.lBId] ? standardBotsOj[onlyAdhreForm.value?.lBId] : 'Select Option'}}</button>
                                             <ul class="dropdown-menu content-menu" ngbDropdownMenu>
                                                 <perfect-scrollbar class="mx-h-200">
-                                                    <li ngbDropdownItem class="p-0" *ngFor="let bot of standardBots" (click)="selectBot(bot, true)">
+                                                    <li ngbDropdownItem class="p-0" *ngFor="let bot of standardBots" (click)="selectSMBot(bot, true)">
                                                         <a>{{bot.name}}</a>
                                                     </li>
                                                 </perfect-scrollbar>
