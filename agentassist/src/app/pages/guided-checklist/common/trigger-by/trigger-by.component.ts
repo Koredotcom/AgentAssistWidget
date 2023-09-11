@@ -350,10 +350,10 @@ export class TriggerByComponent implements OnInit, OnChanges {
   }
   childBotsObj= {};
   childBots = [];
-  getLinkedBotsSM(){
+  getLinkedBotsSM(botId){
     const params = {
       userId: this.auth.getUserId(),
-      streamId: this.botId
+      streamId: botId
     }
     this.service.invoke('get.bt.stream', params).subscribe(res => {
       this.childBots = res.publishedBots;
@@ -408,10 +408,9 @@ export class TriggerByComponent implements OnInit, OnChanges {
     }
     if(bot.type === 'universalbot'){
       this.isUniversalSM = true;
-      this.getLinkedBotsSM();
+      this.getLinkedBotsSM(bot._id);
       (this.adherenceForm.controls['adherence'] as FormGroup)
       .addControl('lBId', new FormControl('', [Validators.required]));
-      return;
     }else{
       this.isUniversalSM = false;
       (this.adherenceForm.controls['adherence'] as FormGroup)
@@ -420,23 +419,25 @@ export class TriggerByComponent implements OnInit, OnChanges {
     if(click){
       this.onlyAdhreForm.controls['botId'].patchValue(bot._id);
     }
-    this.service.invoke('get.usecases', {
-      streamId: bot._id,
-      search: '',
-      filterby: '',
-      status: '',
-      usecaseType: 'dialog',
-      offset: 0,
-      limit: -1,
-    }).subscribe((data) => {
-      if (data) {
-        this.useCases = (data?.usecases || [])
-        .reduce((acc, item)=>{
-          acc[item.dialogId] = item.usecaseName;
-          return acc;
-        }, {});
-      }
-    });
+    if(bot.type !== 'universalbot'){
+      this.service.invoke('get.usecases', {
+        streamId: bot._id,
+        search: '',
+        filterby: '',
+        status: '',
+        usecaseType: 'dialog',
+        offset: 0,
+        limit: -1,
+      }).subscribe((data) => {
+        if (data) {
+          this.useCases = (data?.usecases || [])
+          .reduce((acc, item)=>{
+            acc[item.dialogId] = item.usecaseName;
+            return acc;
+          }, {});
+        }
+      });
+    }
   }
 
   selectUc(uc){
