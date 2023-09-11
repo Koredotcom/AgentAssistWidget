@@ -407,7 +407,12 @@ export class TriggerByComponent implements OnInit, OnChanges {
     }
     if(bot.type === 'universalbot'){
       this.getLinkedBotsSM();
+      (this.adherenceForm.controls['adherence'] as FormGroup)
+      .addControl('lBId', new FormControl('', [Validators.required]));
       return;
+    }else{
+      (this.adherenceForm.controls['adherence'] as FormGroup)
+      .removeControl('lBId');
     }
     if(click){
       this.onlyAdhreForm.controls['botId'].patchValue(bot._id);
