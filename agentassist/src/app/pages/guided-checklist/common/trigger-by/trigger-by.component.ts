@@ -92,7 +92,16 @@ export class TriggerByComponent implements OnInit, OnChanges {
       this.currentBot = this.workflowService.getCurrentBt(true);
       /* Get the current bot in case of SmartAssist */
       if(this.isSm){
-        this.service.invoke("get.automationbots", {isAgentAssist:false})
+        let selAcc = this.local.getSelectedAccount();
+        let smBotObj = selAcc['instanceBots'][0];
+        let instanceBotId = smBotObj.instanceBotId;
+        this.service.invoke("get.automationbots-sm", 
+          {
+            instanceBotId,
+            includeInstanceBot: true,
+            skipLinkCheck: true
+          }
+        )
         .subscribe((bots)=>{
           this.standardBots = bots;
           this.standardBotsOj = (bots || [])

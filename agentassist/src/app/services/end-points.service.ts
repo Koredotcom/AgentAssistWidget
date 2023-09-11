@@ -1795,5 +1795,10 @@ export class EndPointsService {
       endpoint : this.SMARTASSIST_API_SERVER_URL + '/acchecklists/:botId/tags',
       method : 'get'
     }
+
+    this.serviceList['get.automationbots-sm'] = {
+      endpoint: this.API_SERVER_URL + '/smartassist/apps/automationbots?instanceBotId=:instanceBotId&includeInstanceBot=:includeInstanceBot&skipLinkCheck:skipLinkCheck',
+      method: 'get'
+    }
   }
 }
