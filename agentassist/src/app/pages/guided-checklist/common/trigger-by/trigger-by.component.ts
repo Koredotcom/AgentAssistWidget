@@ -94,6 +94,9 @@ export class TriggerByComponent implements OnInit, OnChanges {
         if(this.onlyAdhreForm.value.botId){
           this.selectSMBot(this.onlyAdhreForm.value.botId);
         }
+        if(this.onlyAdhreForm.value.lBId){
+          this.selectBot({_id: this.onlyAdhreForm.value.lBId}, false);
+        }
         let selAcc = this.local.getSelectedAccount();
         let smBotObj = selAcc['instanceBots'][0];
         let instanceBotId = smBotObj.instanceBotId;
@@ -306,7 +309,7 @@ export class TriggerByComponent implements OnInit, OnChanges {
       ));
       ((this.adherenceForm as FormGroup).controls['adherence'] as FormGroup)
       .controls['type'].patchValue('dialog');
-      if(this.currentBot.type === 'universalbot'){
+      if(this.currentBot.type === 'universalbot' && !this.isSm){
         (this.adherenceForm.controls['adherence'] as FormGroup)
         .addControl('lBId', new FormControl('', [Validators.required]));
       }
@@ -338,6 +341,22 @@ export class TriggerByComponent implements OnInit, OnChanges {
     this.service.invoke('get.bt.stream', params).subscribe(res => {
       this.standardBots = res.publishedBots;
       this.standardBotsOj = (res.publishedBots || [])
+      .reduce((acc, item)=>{
+        acc[item._id] = item.botName;
+        return acc;
+      }, {});
+    });
+  }
+  childBotsObj= {};
+  childBots = [];
+  getLinkedBotsSM(){
+    const params = {
+      userId: this.auth.getUserId(),
+      streamId: this.botId
+    }
+    this.service.invoke('get.bt.stream', params).subscribe(res => {
+      this.childBots = res.publishedBots;
+      this.childBotsObj = (res.publishedBots || [])
       .reduce((acc, item)=>{
         acc[item._id] = item.botName;
         return acc;
@@ -385,6 +404,10 @@ export class TriggerByComponent implements OnInit, OnChanges {
       this.useCases = {};
       // this.onlyAdhreForm.controls['lBId']?.patchValue('');
       this.onlyAdhreForm.controls['taskId']?.patchValue('');
+    }
+    if(bot.type === 'universalbot'){
+      this.getLinkedBotsSM();
+      return;
     }
     if(click){
       this.onlyAdhreForm.controls['botId'].patchValue(bot._id);
