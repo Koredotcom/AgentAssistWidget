@@ -217,12 +217,12 @@ export class CoachingComponent implements OnInit, OnDestroy {
       userId: this.authService.getUserId()
     }
     this.service.invoke('get.checkLock', params).subscribe(data => {
-      if (data.isLocked == true) {
+      if (data.isLocked == true && params.userId != data.lBy) {
         this.notificationService.showError({},this.translate.instant("RULE.LOCKED"));
       } else {
         this.isLoading = true;
         this.createOrEdit = COACHINGCNST.EDIT;
-        this.service.invoke('get.ruleById', { ruleId: rule._id })
+        this.service.invoke('get.ruleById', { ruleId: rule._id, userId : this.authService.getUserId() })
           .pipe(finalize(() => {
             this.isLoading = false;
           }))
