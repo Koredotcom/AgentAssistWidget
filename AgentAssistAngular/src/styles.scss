@@ -755,10 +755,27 @@ html, body{
     overflow: hidden !important;
     white-space: nowrap !important;
     text-overflow: ellipsis !important;
-    display: inline-block;
     max-width: 100%;
     position: relative;
     text-align: justify;
+    display: flex;
+    align-items: center;
+    padding-right: 80px;
+    gap: 6px;
+}
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content .title-text .desc-text-bot{
+    max-width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content .title-text .bot-name-text{
+    flex-shrink: 0;
+    max-width: 30%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: #0D6EFD;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content .ast-carrotup{
     display: inline-block;
@@ -768,8 +785,8 @@ html, body{
     cursor: pointer;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send.is-dropdown-show-default .left-content .ast-carrotup{
-    position: absolute;
-    top: 6px;
+    position: relative;
+    top: 0px;
     right: 0;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send.is-dropdown-show-default.is-dropdown-open .left-content .ast-carrotup{
@@ -807,7 +824,6 @@ html, body{
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send:hover .title-text{
     white-space: nowrap !important;
-    padding-right: 80px;
     text-align: justify;
     word-break: break-word;
 }
@@ -827,6 +843,7 @@ html, body{
     overflow: inherit !important;
     white-space: nowrap !important;
     padding: 0 !important;
+    display: flex !important
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send.is-dropdown-show-default.is-dropdown-open:hover .left-content .title-text{
     overflow: inherit !important;
@@ -2119,6 +2136,24 @@ border: 1px solid transparent !important;
     display: inline-block;
     max-width: 100%;
     text-align: justify;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding-right: 80px;
+}
+.overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content .title-text .desc-text-bot{
+    max-width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content .title-text .bot-name-text{
+    flex-shrink: 0;
+    max-width: 30%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: #0D6EFD;
 }
 .overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send.is-dropdown-show-default .left-content .title-text{
     position: relative;
@@ -2137,6 +2172,7 @@ border: 1px solid transparent !important;
     white-space: nowrap !important;
     padding: 0 !important;
     margin-right: 80px;
+    display: flex !important
 }
 .overlay-suggestions .suggestion-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send .left-content .ast-carrotup{
     display: inline-block;
