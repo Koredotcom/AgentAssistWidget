@@ -220,7 +220,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="kr-sg-dropdowns m-b-10" ngbDropdown placement="bottom">
+                                    <div class="kr-sg-dropdowns m-b-10" *ngIf="isUniversalSM" ngbDropdown placement="bottom">
                                         <div class="dropdown dropdown-open">
                                             <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{ childBotsObj[onlyAdhreForm.value?.lBId] ? childBotsObj[onlyAdhreForm.value?.lBId] : 'Select Option'}}</button>
                                             <ul class="dropdown-menu content-menu" ngbDropdownMenu>

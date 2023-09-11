@@ -30,6 +30,7 @@ export class TriggerByComponent implements OnInit, OnChanges {
   selectedUtterancesArray = [];
   deletedUIds:any = {};
   utterApiDone = false;
+  isUniversalSM = false;
   selAcc = this.local.getSelectedAccount();
   currentBot:any = {};
   executeState:any = {
@@ -406,11 +407,13 @@ export class TriggerByComponent implements OnInit, OnChanges {
       this.onlyAdhreForm.controls['taskId']?.patchValue('');
     }
     if(bot.type === 'universalbot'){
+      this.isUniversalSM = true;
       this.getLinkedBotsSM();
       (this.adherenceForm.controls['adherence'] as FormGroup)
       .addControl('lBId', new FormControl('', [Validators.required]));
       return;
     }else{
+      this.isUniversalSM = false;
       (this.adherenceForm.controls['adherence'] as FormGroup)
       .removeControl('lBId');
     }
