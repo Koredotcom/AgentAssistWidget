@@ -411,7 +411,6 @@ export class TriggerByComponent implements OnInit, OnChanges {
       this.getLinkedBotsSM();
       (this.adherenceForm.controls['adherence'] as FormGroup)
       .addControl('lBId', new FormControl('', [Validators.required]));
-      return;
     }else{
       this.isUniversalSM = false;
       (this.adherenceForm.controls['adherence'] as FormGroup)
@@ -420,23 +419,25 @@ export class TriggerByComponent implements OnInit, OnChanges {
     if(click){
       this.onlyAdhreForm.controls['botId'].patchValue(bot._id);
     }
-    this.service.invoke('get.usecases', {
-      streamId: bot._id,
-      search: '',
-      filterby: '',
-      status: '',
-      usecaseType: 'dialog',
-      offset: 0,
-      limit: -1,
-    }).subscribe((data) => {
-      if (data) {
-        this.useCases = (data?.usecases || [])
-        .reduce((acc, item)=>{
-          acc[item.dialogId] = item.usecaseName;
-          return acc;
-        }, {});
-      }
-    });
+    if(bot.type !== 'universalbot'){
+      this.service.invoke('get.usecases', {
+        streamId: bot._id,
+        search: '',
+        filterby: '',
+        status: '',
+        usecaseType: 'dialog',
+        offset: 0,
+        limit: -1,
+      }).subscribe((data) => {
+        if (data) {
+          this.useCases = (data?.usecases || [])
+          .reduce((acc, item)=>{
+            acc[item.dialogId] = item.usecaseName;
+            return acc;
+          }, {});
+        }
+      });
+    }
   }
 
   selectUc(uc){
