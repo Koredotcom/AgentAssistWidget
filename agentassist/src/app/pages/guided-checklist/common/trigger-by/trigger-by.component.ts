@@ -38,6 +38,7 @@ export class TriggerByComponent implements OnInit, OnChanges {
   };
   standardBotsOj:any = {};
   childBotId = '';
+  isSm = window.location.href.includes('smartassist');
   botId = this.workflowService.getCurrentBtSmt(true)._id;
   constructor(
     private workflowService: workflowService,
@@ -75,6 +76,7 @@ export class TriggerByComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
+    /* search */
     this.searchKey.valueChanges
       .pipe(
         debounceTime(300),
@@ -86,14 +88,29 @@ export class TriggerByComponent implements OnInit, OnChanges {
         this.loaded = false;
         this.formatUtterArray(this.searchKey.value?.trim());
       });
+      /* Get the current bot in case of AgentAssist */
       this.currentBot = this.workflowService.getCurrentBt(true);
-      if(this.currentBot.type === 'universalbot'){
-        this.getLinkedBots();
-        if(this.onlyAdhreForm.value.lBId){
-          this.selectBot({_id : this.onlyAdhreForm.value.lBId});
-        }
+      /* Get the current bot in case of SmartAssist */
+      if(this.isSm){
+        this.service.invoke("get.automationbots", {isAgentAssist:false})
+        .subscribe((bots)=>{
+          this.standardBots = bots;
+          this.standardBotsOj = (bots || [])
+          .reduce((acc, item)=>{
+            acc[item._id] = item.botName;
+            return acc;
+          }, {});
+        });
+        this.selectSMBot({_id : this.onlyAdhreForm.value.botId});
       }else{
-        this.selectBot(this.currentBot);
+        if(this.currentBot.type === 'universalbot'){
+          this.getLinkedBots();
+          if(this.onlyAdhreForm.value.lBId){
+            this.selectBot({_id : this.onlyAdhreForm.value.lBId});
+          }
+        }else{
+          this.selectBot(this.currentBot);
+        };
       }
   }
 
@@ -311,7 +328,7 @@ export class TriggerByComponent implements OnInit, OnChanges {
       .reduce((acc, item)=>{
         acc[item._id] = item.botName;
         return acc;
-      }, {})
+      }, {});
     });
   }
 
@@ -336,6 +353,37 @@ export class TriggerByComponent implements OnInit, OnChanges {
       offset: 0,
       limit: -1,
 
+    }).subscribe((data) => {
+      if (data) {
+        this.useCases = (data?.usecases || [])
+        .reduce((acc, item)=>{
+          acc[item.dialogId] = item.usecaseName;
+          return acc;
+        }, {});
+      }
+    });
+  }
+
+  selectSMBot(bot, click=false){
+    // this.childBotId = bot._id;
+    if(click && (bot._id === this.onlyAdhreForm.value?.botId)){
+      return;
+    }else if(click){
+      this.useCases = {};
+      // this.onlyAdhreForm.controls['lBId']?.patchValue('');
+      this.onlyAdhreForm.controls['taskId']?.patchValue('');
+    }
+    if(click){
+      this.onlyAdhreForm.controls['botId'].patchValue(bot._id);
+    }
+    this.service.invoke('get.usecases', {
+      streamId: bot._id,
+      search: '',
+      filterby: '',
+      status: '',
+      usecaseType: 'dialog',
+      offset: 0,
+      limit: -1,
     }).subscribe((data) => {
       if (data) {
         this.useCases = (data?.usecases || [])

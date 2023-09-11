@@ -185,12 +185,27 @@
                         </div>
                         <div class="radio-checked-content" [ngClass]="{'disabled': onlyAdhreForm?.value?.type !== 'dialog', 'd-none': onlyAdhreForm?.value?.type !== 'dialog'}">
                             <div class="label-text">Bot</div>
-                                <div class="kr-sg-dropdowns m-b-10" placement="bottom">
+                                <div class="kr-sg-dropdowns m-b-10" placement="bottom" *ngIf="!isSm;">
                                     <div class="dropdown dropdown-open">
                                         <button disabled class="disabled dropdown-toggle dropdown-input">{{currentBot.name}}</button>
                                     </div>
                                 </div>
-                                <ng-container *ngIf="currentBot.type === 'universalbot';">
+                                <ng-container *ngIf="currentBot.type === 'universalbot' && !isSm;">
+                                    <div class="kr-sg-dropdowns m-b-10" ngbDropdown placement="bottom">
+                                        <div class="dropdown dropdown-open">
+                                            <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{ standardBotsOj[onlyAdhreForm.value?.botId] ? standardBotsOj[onlyAdhreForm.value?.botId] : 'Select Option'}}</button>
+                                            <ul class="dropdown-menu content-menu" ngbDropdownMenu>
+                                                <perfect-scrollbar class="mx-h-200">
+                                                    <li ngbDropdownItem class="p-0" *ngFor="let bot of standardBots" (click)="selectBot(bot, true)">
+                                                        <a>{{bot.botName}}</a>
+                                                    </li>
+                                                </perfect-scrollbar>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="isSm">
                                     <div class="kr-sg-dropdowns m-b-10" ngbDropdown placement="bottom">
                                         <div class="dropdown dropdown-open">
                                             <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{ standardBotsOj[onlyAdhreForm.value?.lBId] ? standardBotsOj[onlyAdhreForm.value?.lBId] : 'Select Option'}}</button>
