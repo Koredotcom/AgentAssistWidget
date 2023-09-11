@@ -254,9 +254,9 @@ export class MybotComponent implements OnInit {
                   <div class="agent-utt">
                       <div class="title-data" id="displayData-${myBotuuids}">${data.buttons[0].value}</div>
                       <div class="action-links">
-                          <button class="send-run-btn" id="sendMsg" data-msg-id="${myBotuuids}"  data-msg-data="${data.buttons[0].value}">Send</button>
-                          <div class="copy-btn" data-msg-id="${myBotuuids}" data-msg-data="${data.buttons[0].value}">
-                              <i class="ast-copy" data-msg-id="${myBotuuids}" data-msg-data="${data.buttons[0].value}"></i>
+                          <button class="send-run-btn" id="sendMsg" data-msg-id="${myBotuuids}"  data-msg-data="${data.buttons[0].value}" data-text-type="sentence">Send</button>
+                          <div class="copy-btn" data-msg-id="${myBotuuids}" data-msg-data="${data.buttons[0].value}" data-text-type="sentence">
+                              <i class="ast-copy" data-msg-id="${myBotuuids}" data-msg-data="${data.buttons[0].value}" data-text-type="sentence"></i>
                           </div>
                       </div>
                       <div class="warning-template hide"  id="warningTemp">
@@ -334,9 +334,9 @@ export class MybotComponent implements OnInit {
 
   smallTalkActionLinkTemplate(uuids,sendData){
     let actionLinkTemplate =  ` <div class="action-links">
-    <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data="${sendData}">Send</button>
-    <div class="copy-btn hide" data-msg-id="${uuids}" data-msg-data="${sendData}">
-        <i class="ast-copy" data-msg-id="${uuids}" data-msg-data="${sendData}"></i>
+    <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data="${sendData}" data-text-type="sentence">Send</button>
+    <div class="copy-btn hide" data-msg-id="${uuids}" data-msg-data="${sendData}" data-text-type="sentence">
+        <i class="ast-copy" data-msg-id="${uuids}" data-msg-data="${sendData}" data-text-type="sentence"></i>
     </div>
   </div>`;
   return actionLinkTemplate;
@@ -525,7 +525,7 @@ export class MybotComponent implements OnInit {
                       </div>
 
                   `
-                          
+
         if ((previousTaskPositionId && currentTaskPositionId !== previousTaskPositionId) ||  (currentTaskPositionId == previousTaskPositionId && currentTaskName != previousTaskName)) {
           let previousIdFeedBackDetails = feedBackResult.find((ele) => ele.positionId === previousTaskPositionId);
           this.commonService.addFeedbackHtmlToDomForHistory(res, res.botId, res?.agentAssistDetails?.userInput, previousId, true, previousTaskPositionId);
@@ -563,7 +563,7 @@ export class MybotComponent implements OnInit {
             // this.clickEvents(IdReferenceConst.DROPDOWN_HEADER, previousId);
           }
         }
-       
+
         if (res.agentAssistDetails.entityName && res.agentAssistDetails.entityResponse && res.agentAssistDetails.entityValue) {
           let runInfoContent = $(`#dropDownData-${previousId}`);
           let data = {};
@@ -631,8 +631,8 @@ export class MybotComponent implements OnInit {
             let runInfoContent = $(`#dropDownData-${previousId}`);
             let askToUserHtml = this.mybotDataService.askUserTemplate(res._id, newTemp, currentTaskPositionId, res.agentAssistDetails?.srcChannel, res.components[0].data.text, res.agentAssistDetails?.componentType);
             let tellToUserHtml = this.mybotDataService.tellToUserTemplate(res._id, newTemp, currentTaskPositionId, res.agentAssistDetails?.srcChannel, res.components[0].data.text, res.agentAssistDetails?.componentType);
-  
-  
+
+
             if (this.localStorageService.checkStorageItemWithInConvId(this.connectionDetails.conversationId, storageConst.AUTOMATION_GOING_ON_AFTER_REFRESH_MYBOT)) {
               this.commonService.isMyBotAutomationOnGoing = true;
               this.commonService.noAutomationrunninginMyBot = false;
@@ -647,7 +647,7 @@ export class MybotComponent implements OnInit {
               terminateButtonElement.classList.remove('hide');
               this.myBotDialogPositionId = previousTaskPositionId;
             }
-  
+
             let agentInputEntityName = 'EnterDetails';
             if (res.agentAssistDetails?.newEntityDisplayName || res.agentAssistDetails?.newEntityName) {
               agentInputEntityName = res.agentAssistDetails.newEntityDisplayName ? res.agentAssistDetails.newEntityDisplayName : res.agentAssistDetails.newEntityName
@@ -667,8 +667,8 @@ export class MybotComponent implements OnInit {
                             </div>
                             </div>
                         </div>`;
-  
-  
+
+
             let nextResponse = resp[index + 1];
             if (res.agentAssistDetails.isPrompt || res.agentAssistDetails.entityRequest) {
 
@@ -692,15 +692,15 @@ export class MybotComponent implements OnInit {
                   }
                 });
               }
-  
+
             } else {
               runInfoContent.append(tellToUserHtml);
               this.commonService.hideSendOrCopyButtons(parsedPayload, runInfoContent);
             }
-  
+
             if(res && res.agentAssistDetails && res.agentAssistDetails.componentType == 'dialogAct' && (res.agentAssistDetails?.srcChannel != 'msteams' && res.agentAssistDetails?.srcChannel != 'rtm')){
               // console.log("inside dialogact and channel");
-  
+
             }else{
               // let html = this.templateRenderClassService.AgentChatInitialize.renderMessage(_msgsResponse)[0].innerHTML;
               // let a = document.getElementById(IdReferenceConst.displayData + `-${res._id}`);
@@ -710,7 +710,7 @@ export class MybotComponent implements OnInit {
               a.appendChild(obj);
               this.commonService.hideSendOrCopyButtons(parsedPayload, runInfoContent, false, res.agentAssistDetails?.componentType)
             }
-  
+
           }
         }
 

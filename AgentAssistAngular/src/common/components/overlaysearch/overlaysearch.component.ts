@@ -39,6 +39,7 @@ export class OverlaysearchComponent implements OnInit {
   showOverLay : boolean = false;
   connectionDetails : any = {};
   answerPlaceableIDs : any = [];
+  searchedResultData: any = {};
 
   constructor(public handleSubjectService: HandleSubjectService, public commonService: CommonService,
     public randomUUIDPipe: RandomUUIDPipe, public websocketService: WebSocketService, public cdRef : ChangeDetectorRef,
@@ -73,6 +74,7 @@ export class OverlaysearchComponent implements OnInit {
       takeUntil(this.destroySubject))
     .subscribe((agentResponse: any) => {
       if(agentResponse){
+        this.searchedResultData = agentResponse
         this.handleSearchResponse(agentResponse);
         this.showOverLay = true;
         if(document.getElementById(IdReferenceConst.overLaySuggestions)){
@@ -148,7 +150,19 @@ export class OverlaysearchComponent implements OnInit {
     }
     this.closeSearchSuggestions.emit(true);
     this.handleSubjectService.setRunButtonClickEvent(runDialogueObject);
+    let data: any = {
+      botId: this.connectionDetails.botId,
+      conversationId: this.connectionDetails.conversationId,
+      experience: 'chat',
+      source: this.connectionDetails.source,
+      type: 'dialog',
+      input : this.searchedResultData?.userInput,
+      title: dialog.intentName,
+      sessionId: searchType == this.projConstants.ASSIST ? this.handleSubjectService.assistTabSessionId : this.handleSubjectService.myBotTabSessionId,
+      intentName: dialog.intentName
 
+    };
+    this.websocketService.emitEvents(EVENTS.agent_send_or_copy, data);
   }
 
   AgentAssist_agent_run_click(dialog){
@@ -281,6 +295,30 @@ export class OverlaysearchComponent implements OnInit {
       };
       parent.postMessage(message, '*');
     }
+    this.faqArticleSendorCopyEvent(actionType, faq_or_article_obj, selectType, message)
+  }
+
+  faqArticleSendorCopyEvent(actionType, faq_or_article_obj, selectType, message) {
+    let data: any = {
+      botId: this.connectionDetails.botId,
+      conversationId: this.connectionDetails.conversationId,
+      sessionId: this.handleSubjectService.myBotTabSessionId,
+      experience: 'chat',
+      source: this.connectionDetails.source,
+      usedType: message.method,
+      type: selectType,
+      input : this.searchedResultData?.userInput,
+      name: message.name,
+      payload : message.payload
+    };
+    if(selectType === 'Article') {
+      data.title = faq_or_article_obj.title;
+      data.contentId = faq_or_article_obj?.contentId;
+    } else {
+      data.title = faq_or_article_obj.title;
+      data.contentId = faq_or_article_obj?.taskRefId;
+    }
+    this.websocketService.emitEvents(EVENTS.agent_send_or_copy, data);
   }
 
   handleSeeMoreButton(array, type) {
