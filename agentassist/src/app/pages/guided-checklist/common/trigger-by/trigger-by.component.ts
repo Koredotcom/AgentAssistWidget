@@ -350,10 +350,10 @@ export class TriggerByComponent implements OnInit, OnChanges {
   }
   childBotsObj= {};
   childBots = [];
-  getLinkedBotsSM(){
+  getLinkedBotsSM(botId){
     const params = {
       userId: this.auth.getUserId(),
-      streamId: this.botId
+      streamId: botId
     }
     this.service.invoke('get.bt.stream', params).subscribe(res => {
       this.childBots = res.publishedBots;
@@ -408,7 +408,7 @@ export class TriggerByComponent implements OnInit, OnChanges {
     }
     if(bot.type === 'universalbot'){
       this.isUniversalSM = true;
-      this.getLinkedBotsSM();
+      this.getLinkedBotsSM(bot._id);
       (this.adherenceForm.controls['adherence'] as FormGroup)
       .addControl('lBId', new FormControl('', [Validators.required]));
     }else{
