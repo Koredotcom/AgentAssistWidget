@@ -218,7 +218,8 @@ export class CoachingComponent implements OnInit, OnDestroy {
     }
     this.service.invoke('get.checkLock', params).subscribe(data => {
       if (data.isLocked == true && params.userId != data.lBy) {
-        this.notificationService.showError({},this.translate.instant("RULE.LOCKED"));
+        let errorMsg = "This rule is currently being edited by "+ data?.uInfo?.name +". Please try again later."
+        this.notificationService.showError({}, errorMsg);
       } else {
         this.isLoading = true;
         this.createOrEdit = COACHINGCNST.EDIT;
