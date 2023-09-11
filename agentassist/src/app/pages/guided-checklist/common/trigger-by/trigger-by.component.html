@@ -209,7 +209,7 @@
                                 <ng-container *ngIf="isSm">
                                     <div class="kr-sg-dropdowns m-b-10" ngbDropdown placement="bottom">
                                         <div class="dropdown dropdown-open">
-                                            <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{ standardBotsOj[onlyAdhreForm.value?.lBId] ? standardBotsOj[onlyAdhreForm.value?.lBId] : 'Select Option'}}</button>
+                                            <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{ standardBotsOj[onlyAdhreForm.value?.botId] ? standardBotsOj[onlyAdhreForm.value?.botId] : 'Select Option'}}</button>
                                             <ul class="dropdown-menu content-menu" ngbDropdownMenu>
                                                 <perfect-scrollbar class="mx-h-200">
                                                     <li ngbDropdownItem class="p-0" *ngFor="let bot of standardBots" (click)="selectSMBot(bot, true)">
