@@ -260,6 +260,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   inviteDialog() {
+    this.inviteDevelopers();
+    this.workflowService.headerInitCalls$.next();
     const dialogRef = this.dialog.open(InviteDialogComponent);
     const params = {
       userId: this.authService.getUserId(),
@@ -318,6 +320,28 @@ export class HeaderComponent implements OnInit, OnDestroy {
         //   });
       }
     });
+  }
+
+  inviteDevelopers(){
+    const params = {
+      userId: this.authService.getUserId(),
+      streamId : this.workflowService.getCurrentBt(true)._id,
+      // streamId: this.authService.smartAssistBots.map(x=>x._id),
+      'isAgentAssistApp':true
+
+    }
+    this.service.invoke('get.shared.developers', params).subscribe(
+      res => {
+        this.isSharedDeveloper = true;
+        this.sharedToList = res;
+        this.isSharedDevError = false;
+      },
+      err => {
+        this.isSharedDeveloper = true;
+        this.workflowService.showError(err, this.translate.instant("HEADER.FAILED_FETCH"));
+        this.isSharedDevError = true;
+      }
+    )
   }
 
   langSwitchDialog() {

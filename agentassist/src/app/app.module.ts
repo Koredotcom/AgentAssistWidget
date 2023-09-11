@@ -95,10 +95,12 @@ import { ExternalWidgetComponent } from './pages/agent-settings/external-widget/
 import { AddWidgetComponent } from './pages/agent-settings/external-widget/add-widget/add-widget.component';
 import { OnboardingComponent } from './pages/onboarding/onboarding.component';
 import { OnboardingDialogComponent } from './pages/onboarding/onboarding-dialog/onboarding-dialog.component';
+import { CommonModule, DecimalPipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { SearchAssistComponent } from './pages/search-assist/search-assist.component';
 import { SaDeleteConfirmComponent } from './helpers/components/sa-delete-confirm/sa-delete-confirm.component';
+import { AutomationIntentvsEntityStringPipe } from './helpers/filters/automation-intentvs-entity-string.pipe';
 import { ConvsHistoryLogsComponent } from './pages/conversational-logs/convs-history-logs/convs-history-logs.component';
-import { CommonModule } from '@angular/common';
 import { AccWarningDialogComponent } from './helpers/components/acc-warning-dialog/acc-warning-dialog.component';
 
 @NgModule({
@@ -173,10 +175,12 @@ import { AccWarningDialogComponent } from './helpers/components/acc-warning-dial
     OnboardingDialogComponent,
     SearchAssistComponent,
     SaDeleteConfirmComponent,
+    // AutomationIntentvsEntityStringPipe,
     ConvsHistoryLogsComponent,
     AccWarningDialogComponent
   ],
   imports: [
+    CommonModule,
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
@@ -189,6 +193,7 @@ import { AccWarningDialogComponent } from './helpers/components/acc-warning-dial
     MatPaginatorModule,
     FlexLayoutModule,
     BrowserAnimationsModule,
+    FormsModule,
     ToastrModule.forRoot({
       timeOut: 5000,
       autoDismiss: false,
@@ -214,7 +219,7 @@ import { AccWarningDialogComponent } from './helpers/components/acc-warning-dial
       useClass: RefreshTokenInterceptor,
       multi: true,
     },
-    AuthGuard, AppDataResolver, AccountsDataService, SideBarService, CanDeactivateGuard, channelsConfigService
+    AuthGuard, AppDataResolver, AccountsDataService, SideBarService, CanDeactivateGuard, channelsConfigService,DecimalPipe
   ],
   exports: [NgbdDatepickerRange],
   bootstrap: [AppComponent]

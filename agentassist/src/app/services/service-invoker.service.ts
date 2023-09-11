@@ -29,7 +29,7 @@ export class ServiceInvokerService {
           responseType : conf.responseType
         });
       }
-     
+
     return this.http[conf.method].apply(this.http,_args);
   }
   private prepareHttpCall(serviceId, qParams, payload, headers, response) {
@@ -37,7 +37,7 @@ export class ServiceInvokerService {
       HTTP_VERB_POST = 'post',
       HTTP_VERB_PUT = 'put',
       HTTP_VERB_DELETE = 'delete';
-      
+
     let serviceConf = this.endpoints.getServiceInfo(serviceId);
     let _url, _verb, _headers = JSON.parse(JSON.stringify(this.DEFAULT_HEADERS));
     if (serviceId === 'post.uploadfaqfile' || serviceId === 'post.channel.fileUpload') {

@@ -733,7 +733,7 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
     this.importedVariablesData = JSON.parse(this.importedVariablesData);
     this.importedBotData = JSON.parse(this.importedBotData);
 
-    if(this.checkConversionPropertyValue('isAgentAssist') && this.checkConversionPropertyValue('isLinkedSmartAssist')){
+    if((!this.importedBotData.hasOwnProperty('isLinkedSmartAssist')) || (this.importedBotData.hasOwnProperty('isLinkedSmartAssist') && !this.importedBotData.isLinkedSmartAssist)) {
       this.conversionNeeded = true;
     } else {
       this.conversionNeeded = false;
@@ -784,14 +784,6 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
       }
     );
   }
-
-  checkConversionPropertyValue(propName){
-    if(!this.importedBotData.hasOwnProperty(propName) || (this.importedBotData.hasOwnProperty(propName) && !this.importedBotData[propName])){
-      return true
-    }
-    return false
-  }
-
 
   getConvStatus(convId: string) {
     const params = {
@@ -932,9 +924,6 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
     // payload.deflectAppStatus.virtualAssistant.enabled = !!this.config.deflectAppStatus.virtualAssistant.type;
     this.service.invoke('post.automationbots',{params:{'isAgentAssist':true}}, payload).subscribe(
       res => {
-        if(!res.name){
-              res.name = payload.name
-        }
         if(_.isArray(this.appsData)) {
           this.appsData.unshift(res);
         }
@@ -944,10 +933,10 @@ export class WSelDialogComponent implements OnInit, OnDestroy {
         this.workflowService.deflectApps(this.appsData);
         this.notificationService.notify(this.translate.instant("ONBOARDING.BT_CREATION_SUCCESS"), 'success');
         setTimeout(() => {
-          this.router.navigate(['/config/usecases']);
-          this.workflowService.switchBt$.next(res);
-          this.wSel.emit();
-          this.isNewBot = false;
+             this.workflowService.switchBt$.next(res);
+             this.router.navigate(['/config/usecases']);
+             this.wSel.emit();
+             this.isNewBot = false;
         }, 500);
       },
       errRes => {

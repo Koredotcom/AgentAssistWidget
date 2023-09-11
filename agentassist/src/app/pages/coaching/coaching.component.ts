@@ -65,10 +65,12 @@ export class CoachingComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnDestroy(): void {
+    this.cs.updateLockOnRule(false, this.currentRule, this.selAcc);
     this.subs.unsubscribe();
   }
 
   ngOnInit(): void {
+    this.workflowService.getCurrentBtSmt(true)._id
     this.subs.sink = this.authService.isAgentCoachongEnable$.subscribe(isEnabled => {
       this.isCoachingDisable = isEnabled;
     });
@@ -173,7 +175,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
       this.page = 1;
       this.limit = 30;
     }
-    let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
+    let botId = this.workflowService.getCurrentBtSmt(true)._id
     let params: any = {
       botId,
     };
@@ -207,35 +209,50 @@ export class CoachingComponent implements OnInit, OnDestroy {
     });
   }
 
+  checkLockScreen(rule, flowCreation) {
+    let botId = this.workflowService.getCurrentBtSmt(true)._id
+    let params: any = {
+      botId,
+      ruleId: rule._id,
+      userId: this.authService.getUserId()
+    }
+    this.service.invoke('get.checkLock', params).subscribe(data => {
+      if (data.isLocked == true) {
+        this.notificationService.showError({},this.translate.instant("RULE.LOCKED"));
+      } else {
+        this.isLoading = true;
+        this.createOrEdit = COACHINGCNST.EDIT;
+        this.service.invoke('get.ruleById', { ruleId: rule._id })
+          .pipe(finalize(() => {
+            this.isLoading = false;
+          }))
+          .subscribe(data => {
+            if (data) {
+              data.tags = data.tags || [];
+              data.channels = data.channels || [];
+              this.currentRule = data;
+              if (rule?.name?.toLowerCase() === "no intent" || rule?.name?.toLowerCase() === "none intent") {
+                this.noneIntent.openSlider("#nonIntent", "non-intent-slider");
+                this.showNoneIntent = true;
+              } else {
+                this.modalFlowCreateRef = this.modalService.open(flowCreation, { centered: true, keyboard: false, windowClass: 'flow-creation-full-modal', backdrop: 'static' });
+              }
+              setTimeout(() => {
+                window.dispatchEvent(new Event('resize'));
+                this.cdRef.detectChanges();
+              }, 0);
+            }
+          }, (error) => {
+            this.notificationService.showError(error, this.translate.instant("COACHING.PUBLISH_FAILURE"));
+          });
+      }
+    })
+  }
+
   // Create or Edit Rule Flow Starts
   openFLowCreation(flowCreation, rule?, type = COACHINGCNST.EDIT) {
     if (type === COACHINGCNST.EDIT) {
-      this.isLoading = true;
-      this.createOrEdit = COACHINGCNST.EDIT;
-      this.service.invoke('get.ruleById', { ruleId: rule._id })
-      .pipe(finalize(()=>{
-        this.isLoading = false;
-      }))
-      .subscribe(data => {
-          if (data) {
-            data.tags = data.tags || [];
-            data.channels = data.channels || [];
-            this.currentRule = data;
-            if(rule?.name?.toLowerCase() === "no intent" || rule?.name?.toLowerCase() === "none intent"){
-              this.noneIntent.openSlider("#nonIntent", "non-intent-slider");
-              this.showNoneIntent = true;
-            }else{
-              this.modalFlowCreateRef = this.modalService.open(flowCreation, { centered: true, keyboard: false, windowClass: 'flow-creation-full-modal', backdrop: 'static' });
-            }
-            setTimeout(() => {
-              window.dispatchEvent(new Event('resize'));
-              this.cdRef.detectChanges();
-            }, 0);
-          }
-        }, (error) => {
-          this.notificationService.showError(error, this.translate.instant("COACHING.PUBLISH_FAILURE"));
-        });
-
+      this.checkLockScreen(rule, flowCreation);
     }
     if (type === COACHINGCNST.CREATE) {
       this.currentRule = {...{}};
@@ -262,7 +279,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
 
   publishCoaching() {
     this.publishInprogress = true;
-    this.service.invoke('post.publishcoaching', {}, { botId: this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id }).pipe(finalize(() => {
+    this.service.invoke('post.publishcoaching', {}, { botId: this.workflowService.getCurrentBtSmt(true)._id }).pipe(finalize(() => {
       this.publishInprogress = false;
     })).subscribe(data => {
       if (data) {
@@ -282,11 +299,11 @@ export class CoachingComponent implements OnInit, OnDestroy {
   // rule activities like active or inactive and delete rule starts
   changeRuleStatus(rule) {
     rule.isActive = !rule.isActive;
-    let botId = this.auth.isLoadingOnSm && this.selAcc ? this.selAcc['instanceBots'][0]?.instanceBotId : this.workflowService.getCurrentBt(true)._id;
+    let botId = this.workflowService.getCurrentBtSmt(true)._id;
     let params: any = {
       ruleId: rule._id,
     }
-    this.service.invoke('put.agentcoachingrule', params, { isActive: rule.isActive, botId }).pipe(finalize(() => {
+    this.service.invoke('put.agentcoachingrule', params, { isActive: rule.isActive, botId, userId : this.auth.getUserId() }).pipe(finalize(() => {
       this.isLoading = false;
     })).subscribe(data => {
       if (data) {
@@ -309,7 +326,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
     this.modalRef.componentInstance.data = deleteRule;
     this.modalRef.result.then(emitedValue => {
       if (emitedValue) {
-        this.service.invoke('delete.agentCoachingRule', { ruleId: rule._id }).subscribe(_data => {
+        this.service.invoke('delete.agentCoachingRule', { ruleId: rule._id, userId : this.auth.getUserId() }).subscribe(_data => {
           this.notificationService.notify(this.translate.instant("COACHING.RULEDELETE_SUCCESS"), 'success');
           this.getAgentCoachingRules(true);
           // this.getCoachingPreBuiltRules();
@@ -323,7 +340,8 @@ export class CoachingComponent implements OnInit, OnDestroy {
   getConfigDetails() {
     let params: any = {
       userId: this.authService.getUserId(),
-      streamId: this.workflowService.getCurrentBt(true)._id
+      // streamId: this.workflowService.getCurrentBt(true)._id
+      streamId: this.workflowService.getCurrentBtSmt(true)._id
     };
     this.service.invoke('get.AIconfigs', params)
       .subscribe(res => {

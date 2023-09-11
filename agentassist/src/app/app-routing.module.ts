@@ -41,23 +41,23 @@ const routes: Routes = [
           { path: 'languages', component: LanguagesSpeechComponent },
           { path: 'searchAssist', component: SearchAssistComponent},
           { path: 'coaching', loadChildren: () => import('./pages/coaching/coaching.module').then(m => m.CoachingModule)},
+          { path: 'guided-checklist', loadChildren: () => import('./pages/guided-checklist/guided-checklist.module').then(m => m.GuidedChecklistModule)},
           { path: 'advanced-nlu', loadChildren: () => import('./pages/ai-config/ai-config.module').then(m => m.AiConfigModule)},
           { path: '**', redirectTo: (isSmartassist ? 'coaching' : 'usecases') },
         ]
       },
       {
         path: 'onboarding', component: OnboardingComponent
-        },
+      },
       { path: 'bt', component: AutomationComponent },
       { path: 'bt/:type', component: BTContainerComponent },
-
       {
         path: 'history', component: HistoryComponent, children: [
           { path: '', redirectTo: 'conversationalLogs', pathMatch: 'full' },
           { path: '**', redirectTo: 'sessiontrends' },
         ]
       },
-
+      { path: 'dashboard', loadChildren: () => import('./pages/dashboard/agentassist-dashboard/agentassist-dashboard.module').then(m => m.AgentassistDashboardModule)},
     ]
   },
 
