@@ -87,8 +87,8 @@ export class MybotDataService {
                         <button class="btn-danger" id="myBotTerminateAgentDialog-${agentBotuuids}">Terminate</button>
                     </div>
                     <div class="collapse-acc-data" id="dropDownData-${agentBotuuids}">
-                
-                
+
+
                     </div>
                 </div>`;
         return dialogTaskAccordion;
@@ -107,17 +107,17 @@ export class MybotDataService {
           <div class="agent-utt">
           <div class="title-data" id="displayData-${myBotuuids}">${value}</div>
               <div class="action-links">
-                  <button class="send-run-btn" id="sendMsg" data-msg-id="${myBotuuids}" data-msg-data="${newTemp}" data-position-id="${positionID}">Send</button>
-                  <div class="copy-btn" data-msg-id="${myBotuuids}" data-position-id="${positionID}">
-                      <i class="ast-copy" data-msg-id="${myBotuuids}" data-position-id="${positionID}"></i>
+                  <button class="send-run-btn" id="sendMsg" data-msg-id="${myBotuuids}" data-msg-data="${newTemp}" data-position-id="${positionID}" data-text-type="sentence">Send</button>
+                  <div class="copy-btn" data-msg-id="${myBotuuids}" data-position-id="${positionID}" data-text-type="sentence">
+                      <i class="ast-copy" data-msg-id="${myBotuuids}" data-position-id="${positionID}" data-text-type="sentence"></i>
                   </div>
               </div>
           </div>
           </div>
       </div>
       `;
-          
-        }else{ 
+
+        }else{
             template = `
                 <div class="steps-run-data">
                    <div class="icon_block">
@@ -128,9 +128,9 @@ export class MybotDataService {
                    <div class="agent-utt">
                        <div class="title-data"><ul class="chat-container" id="displayData-${myBotuuids}"></ul></div>
                        <div class="action-links">
-                           <button class="send-run-btn" id="sendMsg" data-msg-id="${myBotuuids}" data-msg-data="${newTemp}" data-position-id="${positionID}">Send</button>
-                           <div class="copy-btn hide" data-msg-id="${myBotuuids}" data-position-id="${positionID}">
-                               <i class="ast-copy" data-msg-id="${myBotuuids}" data-position-id="${positionID}"></i>
+                           <button class="send-run-btn" id="sendMsg" data-msg-id="${myBotuuids}" data-msg-data="${newTemp}" data-position-id="${positionID}" data-text-type="sentence">Send</button>
+                           <div class="copy-btn hide" data-msg-id="${myBotuuids}" data-position-id="${positionID}" data-text-type="sentence">
+                               <i class="ast-copy" data-msg-id="${myBotuuids}" data-position-id="${positionID}" data-text-type="sentence"></i>
                            </div>
                        </div>
                    </div>
@@ -154,9 +154,9 @@ export class MybotDataService {
           <div class="agent-utt">
           <div class="title-data" id="displayData-${myBotuuids}">${value}</div>
               <div class="action-links">
-                  <button class="send-run-btn" id="sendMsg" data-msg-id="${myBotuuids}" data-msg-data="${newTemp}" data-position-id="${positionID}">Send</button>
-                  <div class="copy-btn" data-msg-id="${myBotuuids}" data-position-id="${positionID}">
-                      <i class="ast-copy" data-msg-id="${myBotuuids}" data-position-id="${positionID}"></i>
+                  <button class="send-run-btn" id="sendMsg" data-msg-id="${myBotuuids}" data-msg-data="${newTemp}" data-position-id="${positionID}" data-text-type="sentence">Send</button>
+                  <div class="copy-btn" data-msg-id="${myBotuuids}" data-position-id="${positionID}" data-text-type="sentence">
+                      <i class="ast-copy" data-msg-id="${myBotuuids}" data-position-id="${positionID}" data-text-type="sentence"></i>
                   </div>
               </div>
           </div>
@@ -179,9 +179,9 @@ export class MybotDataService {
                    <div class="agent-utt">
                        <div class="title-data" ><ul class="chat-container" id="displayData-${myBotuuids}"></ul></div>
                        <div class="action-links">
-                           <button class="send-run-btn" id="sendMsg" data-msg-id="${myBotuuids}" data-msg-data="${newTemp}" data-position-id="${positionID}">Send</button>
-                           <div class="copy-btn hide" data-msg-id="${myBotuuids}" data-position-id="${positionID}">
-                               <i class="ast-copy" data-msg-id="${myBotuuids}" data-position-id="${positionID}"></i>
+                           <button class="send-run-btn" id="sendMsg" data-msg-id="${myBotuuids}" data-msg-data="${newTemp}" data-position-id="${positionID}" data-text-type="sentence">Send</button>
+                           <div class="copy-btn hide" data-msg-id="${myBotuuids}" data-position-id="${positionID}" data-text-type="sentence">
+                               <i class="ast-copy" data-msg-id="${myBotuuids}" data-position-id="${positionID}" data-text-type="sentence"></i>
                            </div>
                        </div>
                        <div class="warning-template hide"  id="warningTemp">

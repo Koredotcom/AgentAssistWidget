@@ -19,6 +19,7 @@ import { EVENTS } from 'src/common/helper/events';
 import { LocalStorageService } from 'src/common/services/local-storage.service';
 import { ReplaceTextWithTagPipe } from 'src/common/pipes/replace-text-with-tag.pipe';
 import { RemoveTagFromStringPipe } from 'src/common/pipes/remove-tag-from-string.pipe';
+import { CoachingActionStoreService } from 'src/app/coaching-action-store.service';
 @Component({
   selector: 'app-assist',
   templateUrl: './assist.component.html',
@@ -31,6 +32,7 @@ export class AssistComponent implements OnInit {
   @ViewChild('dynamicBlockRef') dynamicBlockRef: ElementRef;
   @Output() handlePopupEvent = new EventEmitter();
   @Output() newButtonScrollClickEvents = new EventEmitter();
+  selectedPlayBook = '';
 
   subscriptionsList: Subscription[] = [];
 
@@ -56,9 +58,9 @@ export class AssistComponent implements OnInit {
   faqManualClick : boolean = false;
   userBotSessionDetails;
   interactiveLangaugeDetails = 'en';
-
-
-
+  isGuidedChecklistApiSuccess = false;
+  isChecklistOpened = false;
+  checklists= [];
 
   constructor(private templateRenderClassService: TemplateRenderClassService,
     public handleSubjectService: HandleSubjectService,
@@ -70,7 +72,9 @@ export class AssistComponent implements OnInit {
     public designAlterService: DesignAlterService, public rawHtmlPipe: RawHtmlPipe,
     public koreGenerateuuidPipe: KoreGenerateuuidPipe, public assisttabService: AssistService,
     public htmlEntityPipe: HtmlEntityPipe, private localStorageService: LocalStorageService,
-    private removeTagFromString : RemoveTagFromStringPipe, private replaceTextwithTag : ReplaceTextWithTagPipe) {
+    private removeTagFromString : RemoveTagFromStringPipe, private replaceTextwithTag : ReplaceTextWithTagPipe,
+    // private coachingActionStore: CoachingActionStoreService
+    ) {
   }
 
   ngOnInit(): void {
@@ -79,7 +83,17 @@ export class AssistComponent implements OnInit {
     if(this.connectionDetails.interactiveLanguage !== '') {
       this.interactiveLangaugeDetails = this.connectionDetails.interactiveLanguage;
     }
-
+    this.websocketService.sendCheckListOpened$.subscribe((data)=>{
+      if(data){
+        this.guidedListAPICall(
+          this.commonService.configObj.agentassisturl,
+          this.commonService.configObj.fromSAT ?
+            this.commonService.configObj.instanceBotId :
+            this.commonService.configObj.botid,
+          this.commonService.configObj.accessToken,
+          this.commonService.configObj.accountId)
+      }
+    })
   }
 
   ngOnDestroy() {
@@ -234,6 +248,12 @@ export class AssistComponent implements OnInit {
       }
     });
 
+    let subscription14 = this.websocketService.socketConnectFlag$.subscribe((response) => {
+      if (response) {
+
+      }
+    });
+
     this.subscriptionsList.push(subscription1);
     this.subscriptionsList.push(subscription2);
     this.subscriptionsList.push(subscription3);
@@ -247,6 +267,7 @@ export class AssistComponent implements OnInit {
     this.subscriptionsList.push(subscription11);
     this.subscriptionsList.push(subscription12);
     this.subscriptionsList.push(subscription13);
+    this.subscriptionsList.push(subscription14);
   }
 
   callHistoryApi(){
@@ -297,10 +318,82 @@ export class AssistComponent implements OnInit {
     this.websocketService.emitEvents(EVENTS.welcome_message_request, welcomeMessageParams);
   }
 
+  checkListData:any = {};
+  clObjs: any = {};
+  // dynClObjs:any = {};
+  guidedListAPICall(agentAssistUrl, botId, accessToken, accountId) {
+    let headersVal = {
+      'Authorization': 'bearer' + ' ' + accessToken,
+      "AccountId": accountId !== '' ? accountId : '',
+      'iid' : botId
+  }
+    $.ajax({
+      url: `${agentAssistUrl}/agentassist/api/v1/agentcoachingconfiguration/checklist/${botId}/activeChecklists`,
+      type: 'get',
+      headers: headersVal,
+      dataType: 'json',
+      success:  (data) => {
+        this.isChecklistOpened = true;
+        if(data.checklists.length > 0 ) {
+          this.checkListData = data;
+          this.commonService.primaryChecklist = data.checklists.filter(check => check.type === "primary");
+          this.commonService.dynamicChecklist = data.checklists.filter(check => check.type === "dynamic");
+          (data?.checklists || [])
+          .forEach((item)=>{
+            (item.stages || [])
+            .forEach((stage)=>{
+              this.clObjs[stage._id] = stage;
+            }) 
+          });
+        };
+        this.sendOpenCheckLIstEvent();
+      },
+      error:  (err)=> {
+          console.error("Unable to fetch the details with the provided data", err);
+      }
+  });
+  }
+
+  sendChecklistEvent() {
+    let checklistParams: any = {
+      "payload": {
+          "event": "checklist_opened",
+          "conversationId": this.connectionDetails.conversationId,
+          "ccVersion": this.checkListData?.ccVersion,
+          "accountId": this.checkListData?.accountId,
+          "botId": (this.commonService.configObj?.fromSAT) ?  this.commonService.configObj.instanceBotId : this.commonService.configObj.botid,
+          "agentInfo": {
+              "agentId": "", // mendatory field
+              //any other fields
+          },
+          "checklist": {
+            "id": this.commonService.primaryChecklist[0]._id,
+              //any other fields
+          },
+          "timestamp": 0,
+          "context": {}
+      }
+    }
+    this.isGuidedChecklistApiSuccess = true;
+    this.websocketService.emitEvents(EVENTS.checklist_opened, checklistParams);
+    if(this.commonService.primaryChecklist[0]?.stages[0]){
+      this.commonService.primaryChecklist[0].stages[0].opened = true;
+    };
+    (this.commonService.primaryChecklist[0]?.stages)
+    .forEach((item)=>{
+      item.color = this.clObjs[item._id]?.color
+    });
+    // if(this.clObjs[this.commonService.primaryChecklist[0]._id]){
+    //   this.commonService.primaryChecklist[0].color = this.clObjs[this.commonService.primaryChecklist[0]._id];
+    // }
+    this.checklists.push(this.commonService.primaryChecklist[0]);
+    this.selectedPlayBook = this.commonService.primaryChecklist[0]?.name;
+  }
 
 
   //dialogue click and agent response handling code.
   AgentAssist_run_click(dialog, dialogPositionId, intent?) {
+    this.assistTabDialogforDashboard(dialog, intent);
     let connectionDetails: any = Object.assign({}, this.connectionDetails);
     connectionDetails.value = dialog.intentName;
     if (dialog.intentName && intent) {
@@ -315,6 +408,19 @@ export class AssistComponent implements OnInit {
     }
     let assistRequestParams = this.commonService.prepareAgentAssistRequestParams(connectionDetails);
     this.websocketService.emitEvents(EVENTS.agent_assist_request, assistRequestParams);
+  }
+
+  assistTabDialogforDashboard(dialog, intent?) {
+    console.log('Sandeep Tester: ', dialog, intent, this.connectionDetails);
+    let payloadForBE:any = Object.assign({}, this.connectionDetails);
+    if (dialog.intentName && intent) {
+      payloadForBE.intentName = dialog.intentName;
+      payloadForBE.title = dialog.intentName;
+    }
+    payloadForBE.type = 'dialog';
+    payloadForBE.input = dialog.userInput;
+    payloadForBE.sessionId = this.handleSubjectService.assistTabSessionId;
+    this.websocketService.emitEvents(EVENTS.agent_send_or_copy, payloadForBE)
   }
 
   runDialogForAssistTab(data, idTarget?, runInitent?) {
@@ -592,6 +698,11 @@ export class AssistComponent implements OnInit {
           let dialogSuggestions = document.getElementById(`dialogSuggestions-${responseId}`);
           let dialogsHtml = this.assisttabService.dialogTypeInfoTemplate(uuids, index, ele);
           dialogSuggestions.innerHTML += dialogsHtml;
+          if(ele.childBotName){
+            let dialogHeader = document.getElementById(`automation-${uuids + index}`);
+            dialogHeader.innerHTML += `<span class="bot-name-text" title="${ele.childBotName}"> (${ele.childBotName}) </span>`;
+            
+          }
           if (ele.entities?.length > 0) {
             this.commonService.previousEntitiesValue = JSON.stringify(ele.entities);
             let entitesDiv = `<div class="entity-values-container" id="entitesDiv-${uuids}">
@@ -648,6 +759,12 @@ export class AssistComponent implements OnInit {
           let faqHtml = this.assisttabService.faqTypeInfoTemplate(uuids, index, ele)
 
           faqsSuggestions.innerHTML += faqHtml;
+
+          if(ele.childBotName){
+            let faqHeader = document.getElementById(`title-${uuids + index}`);
+            faqHeader.innerHTML += `<span class="bot-name-text" title="${ele.childBotName}"> (${ele.childBotName}) </span>`;
+          }
+
           let faqs = $(`.type-info-run-send #faqSection-${uuids + index}`);
           let positionID = 'dg-' + this.koreGenerateuuidPipe.transform();
 
@@ -661,12 +778,14 @@ export class AssistComponent implements OnInit {
           } else {
             let a = $(`#faqDiv-${uuids + index}`);
             let answerSanitized = (ele.answer[0]);
+            console.log('sandeep Answer Sanitized:',answerSanitized);
+            // data-conent-id="${contentId}
             // if text only not template cond need to add
             answerSanitized = this.commonService.replaceDoubleQuot(answerSanitized);
             let faqActionHtml = `<div class="action-links">
-            <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids+index}" data-msg-data="${answerSanitized}" data-position-id="${positionID}">Send</button>
-            <div class="copy-btn" data-msg-id="${uuids+index}" data-msg-data="${answerSanitized}" data-position-id="${positionID}">
-                <i class="ast-copy" data-msg-id="${uuids+index}" data-msg-data="${answerSanitized}" data-position-id="${positionID}"></i>
+            <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids+index}" data-msg-data="${answerSanitized}" data-position-id="${positionID}" data-text-type="faq" data-title="${ele?.displayName}" data-content-id="${ele?.taskRefId}">Send</button>
+            <div class="copy-btn" data-msg-id="${uuids+index}" data-msg-data="${answerSanitized}" data-position-id="${positionID}" data-text-type="faq" data-title="${ele?.displayName}" data-content-id="${ele?.taskRefId}">
+                <i class="ast-copy" data-msg-id="${uuids+index}" data-msg-data="${answerSanitized}" data-position-id="${positionID}" data-text-type="faq" data-title="${ele?.displayName}" data-content-id="${ele?.taskRefId}"></i>
             </div>
             </div>`;
             a.append(faqActionHtml);
@@ -710,6 +829,7 @@ export class AssistComponent implements OnInit {
           }
 
           data.suggestions.articles?.forEach((ele, index) => {
+            console.log("🚀 ~ file: assist.component.ts:816 ~ AssistComponent ~ data.suggestions.articles?.forEach ~ ele:", ele)
             let articleSuggestions = document.getElementById(`articleSuggestions-${responseId}`);
 
             let articleHtml = this.assisttabService.articleTypeInfoTemplate(uuids, index, ele);
@@ -727,9 +847,9 @@ export class AssistComponent implements OnInit {
               let a = $(`#articleDiv-${uuids + index}`);
               let answerSanitized = this.commonService.handleEmptyLine(ele.content, true);
               let articleActionHtml = `<div class="action-links">
-                            <button class="send-run-btn" id="sendMsg" data-msg-id="article-${uuids + index}" data-msg-data="${answerSanitized}">Send</button>
-                            <div class="copy-btn" data-msg-id="article-${uuids + index}" data-msg-data="${answerSanitized}">
-                                <i class="ast-copy" data-msg-id="article-${uuids + index}" data-msg-data="${answerSanitized}"></i>
+                            <button class="send-run-btn" id="sendMsg" data-msg-id="article-${uuids + index}" data-msg-data="${answerSanitized}" data-text-type="article" data-title="${ele?.title}" data-content-id="${ele?.contentId}">Send</button>
+                            <div class="copy-btn" data-msg-id="article-${uuids + index}" data-msg-data="${answerSanitized}" data-text-type="article" data-title="${ele?.title}" data-content-id="${ele?.contentId}">
+                                <i class="ast-copy" data-msg-id="article-${uuids + index}" data-msg-data="${answerSanitized}" data-text-type="article" data-title="${ele?.title}" data-content-id="${ele?.contentId}"></i>
                             </div>
                         </div>`;
               if(ele.content){
@@ -785,9 +905,9 @@ export class AssistComponent implements OnInit {
             let faqSection = $(`#dynamicBlock #faqSection-${splitedanswerPlaceableID.join('-')}`);
             let answerSanitized = this.commonService.handleEmptyLine(ele.answer[0], true);
             let faqaction = `<div class="action-links">
-            <button class="send-run-btn" id="sendMsg" data-msg-id="${splitedanswerPlaceableID.join('-')}"  data-msg-data="${answerSanitized}">Send</button>
-            <div class="copy-btn" data-msg-id="${splitedanswerPlaceableID.join('-')}" data-msg-data="${answerSanitized}">
-            <i class="ast-copy" data-msg-id="${splitedanswerPlaceableID.join('-')}" data-msg-data="${answerSanitized}"></i>
+            <button class="send-run-btn" id="sendMsg" data-msg-id="${splitedanswerPlaceableID.join('-')}"  data-msg-data="${answerSanitized}" data-text-type="faq" data-title="${ele?.inputQuestion}" data-content-id="${ele?.taskRefId}">Send</button>
+            <div class="copy-btn" data-msg-id="${splitedanswerPlaceableID.join('-')}" data-msg-data="${answerSanitized}" data-text-type="faq" data-title="${ele?.inputQuestion}" data-content-id="${ele?.taskRefId}">
+            <i class="ast-copy" data-msg-id="${splitedanswerPlaceableID.join('-')}" data-msg-data="${answerSanitized}" data-text-type="faq" data-title="${ele?.inputQuestion}" data-content-id="${ele?.taskRefId}"></i>
                 </div>
                 </div>`;
 
@@ -983,9 +1103,9 @@ export class AssistComponent implements OnInit {
 
   smallTalkActionLinkTemplate(uuids,sendData){
     let actionLinkTemplate =  ` <div class="action-links">
-    <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data="${sendData}">Send</button>
-    <div class="copy-btn hide" data-msg-id="${uuids}" data-msg-data="${sendData}">
-        <i class="ast-copy" data-msg-id="${uuids}" data-msg-data="${sendData}"></i>
+    <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data="${sendData}" data-text-type="sentence">Send</button>
+    <div class="copy-btn hide" data-msg-id="${uuids}" data-msg-data="${sendData}" data-text-type="sentence">
+        <i class="ast-copy" data-msg-id="${uuids}" data-msg-data="${sendData}" data-text-type="sentence"></i>
     </div>
   </div>`;
   return actionLinkTemplate;
@@ -1675,7 +1795,9 @@ export class AssistComponent implements OnInit {
           let dialogsHtml = `
                 <div class="type-info-run-send">
                     <div class="left-content">
-                        <div class="title-text" id="automation-${uniqueID + index}">${ele.name}</div>
+                        <div class="title-text" id="automation-${uniqueID + index}">
+                        <div class="desc-text-bot" title="${ele.name}">${ele.name}</div> 
+                      </div>
                     </div>
                     <div class="action-links">
                         <button class="send-run-btn" data-conv-id="${this.commonService.configObj.conversationid}"
@@ -1695,6 +1817,11 @@ export class AssistComponent implements OnInit {
                     </div>
                 </div>`;
           dialogSuggestions.innerHTML += dialogsHtml;
+          if(ele.childBotName){
+            let dialogHeader = document.getElementById(`automation-${uniqueID + index}`);
+            dialogHeader.innerHTML += `<span class="bot-name-text" title="${ele.childBotName}"> (${ele.childBotName}) </span>`;
+          }
+
           this.clickEvents(IdReferenceConst.ASSIST_RUN_BUTTON, uniqueID + index, this.dialogPositionId, ele);
           this.clickEvents(IdReferenceConst.AGENT_RUN_BTN, uniqueID + index, this.dialogPositionId, ele);
         });
@@ -1706,14 +1833,20 @@ export class AssistComponent implements OnInit {
           let faqHtml = `
                 <div class="type-info-run-send" id="faqDiv-${uniqueID + index}">
                     <div class="left-content" id="faqSection-${uniqueID + index}">
-                        <div class="title-text" id="title-${uniqueID + index}" title="${ele.displayName ? ele.displayName : ele.question}">${ ele.displayName ? ele.displayName : ele.question}</div>
-
-
+                        <div class="title-text" id="title-${uniqueID + index}">
+                        <div class="desc-text-bot" title="${ele.displayName ? ele.displayName : ele.question}"> ${ ele.displayName ? ele.displayName : ele.question}</div> 
+                        </div>
                     </div>
 
                 </div>`;
 
           faqsSuggestions.innerHTML += faqHtml;
+
+          if(ele.childBotName){
+            let faqHeader = document.getElementById(`title-${uniqueID + index}`);
+            faqHeader.innerHTML += `<span class="bot-name-text" title="${ele.childBotName}"> (${ele.childBotName}) </span>`;
+          }
+
           let faqs = $(`.type-info-run-send #faqSection-${uniqueID + index}`);
           if (!ele.answer) {
             let checkHtml = `
@@ -1731,9 +1864,9 @@ export class AssistComponent implements OnInit {
             let answerSanitized = this.commonService.handleEmptyLine(ele.answer[0], true);
 
             let faqActionHtml = `<div class="action-links">
-                    <button class="send-run-btn" id="sendMsg" data-msg-id="${uniqueID + index}"  data-msg-data="${answerSanitized}">Send</button>
-                    <div class="copy-btn" data-msg-id="${uniqueID + index}" data-msg-data="${answerSanitized}">
-                        <i class="ast-copy" data-msg-id="${uniqueID + index}" data-msg-data="${answerSanitized}"></i>
+                    <button class="send-run-btn" id="sendMsg" data-msg-id="${uniqueID + index}"  data-msg-data="${answerSanitized}" data-text-type="faq" data-content-id="${ele?.taskRefId} data-title="${ele?.question}">Send</button>
+                    <div class="copy-btn" data-msg-id="${uniqueID + index}" data-msg-data="${answerSanitized}" data-text-type="faq" data-content-id="${ele?.taskRefId} data-title="${ele?.question}">
+                        <i class="ast-copy" data-msg-id="${uniqueID + index}" data-msg-data="${answerSanitized}" data-text-type="faq" data-content-id="${ele?.taskRefId} data-title="${ele?.question}"></i>
                     </div>
                 </div>`;
             a.append(faqActionHtml);
@@ -1816,9 +1949,9 @@ export class AssistComponent implements OnInit {
           let a = $(`#faqDiv-${uniqueID + index}`);
           let answerSanitized = this.commonService.handleEmptyLine(res.components[0].data.text[0], true);
           let faqActionHtml = `<div class="action-links">
-                    <button class="send-run-btn" id="sendMsg" data-msg-id="${uniqueID + index}"  data-msg-data="${answerSanitized}">Send</button>
-                    <div class="copy-btn" data-msg-id="${uniqueID + index}" data-msg-data="${answerSanitized}">
-                        <i class="ast-copy" data-msg-id="${uniqueID + index}" data-msg-data="${answerSanitized}"></i>
+                    <button class="send-run-btn" id="sendMsg" data-msg-id="${uniqueID + index}"  data-msg-data="${answerSanitized}" data-text-type="faq" data-title="${ele?.display}" data-content-id="${ele?.taskRefId}">Send</button>
+                    <div class="copy-btn" data-msg-id="${uniqueID + index}" data-msg-data="${answerSanitized}" data-text-type="faq" data-title="${ele?.display}" data-content-id="${ele?.taskRefId}">
+                        <i class="ast-copy" data-msg-id="${uniqueID + index}" data-msg-data="${answerSanitized}" data-text-type="faq" data-title="${ele?.display}" data-content-id="${ele?.taskRefId}"></i>
                     </div>
                 </div>`;
 
@@ -2115,4 +2248,13 @@ export class AssistComponent implements OnInit {
     this.commonService.CustomTempClickEvents(this.projConstants.ASSIST, this.connectionDetails)
   }
 
+  sendOpenCheckLIstEvent(){
+    if(!this.isGuidedChecklistApiSuccess && this.commonService.primaryChecklist.length > 0) {
+      let channel = this.commonService.isCallConversation ? 'voice' : 'chat'
+      if(this.commonService.primaryChecklist[0]?.channels?.includes(channel)){
+        this.sendChecklistEvent();
+      }
+    }
+  }
 }
+

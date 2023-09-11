@@ -25,7 +25,10 @@ export class WebSocketService {
   agentFeedbackResponse$ : BehaviorSubject<any[]> = new BehaviorSubject(null);
   responseResolutionCommentsResponse$ : BehaviorSubject<any[]> = new BehaviorSubject(null);
   agentCoachingResponse$ = new Subject<any>();
+  checkListStepResponse$ = new Subject<any>();
+  checkListResponse$ = new Subject<any>();
   realtimeSentimeResponse$ = new Subject<any>();
+  sendCheckListOpened$ = new Subject<any>();
   isWelcomeResonse = false;
   LoaderTimeout: number = 10000;
 
@@ -106,12 +109,17 @@ export class WebSocketService {
     // });
 
     this._agentAsisstSocket.on(EVENTS.agent_assist_response, (data) => {
+      this.handleSubjectService.assistTabSessionId = '';
+      if(data.sessionId) {
+        this.handleSubjectService.assistTabSessionId = data?.sessionId;
+      }
       if (this.connectionDetails?.interactiveLanguage && typeof this.connectionDetails?.interactiveLanguage == 'string' && this.connectionDetails?.interactiveLanguage != "''") {
         menu_request_params['language'] = this.connectionDetails?.interactiveLanguage; // Return the default value for null, undefined, or "''"
       }
       if(data.sendMenuRequest && !this.isWelcomeResonse){
         this.isWelcomeResonse = true;
         this.emitEvents(EVENTS.agent_menu_request, menu_request_params);
+        this.sendCheckListOpened$.next(true);
       }
       this.agentAssistResponse$.next(data);
       this.addOrRemoveLoader(false);
@@ -127,12 +135,26 @@ export class WebSocketService {
       this.addOrRemoveLoader(false);
     });
 
+    this._agentAsisstSocket.on(EVENTS.checklist_step_response, (data)=>{
+      this.checkListStepResponse$.next(data);
+      this.addOrRemoveLoader(false);
+    });
+
+    this._agentAsisstSocket.on(EVENTS.checklist_response, (data)=>{
+      this.checkListResponse$.next(data);
+      this.addOrRemoveLoader(false);
+    });
+
     this._agentAsisstSocket.on(EVENTS.realtime_sentiment_response, (data) => {
       this.realtimeSentimeResponse$.next(data);
       this.addOrRemoveLoader(false);
     });
 
     this._agentAsisstSocket.on(EVENTS.agent_assist_agent_response, (data)=>{
+      this.handleSubjectService.myBotTabSessionId = '';
+      if(data.sessionId) {
+        this.handleSubjectService.myBotTabSessionId = data?.sessionId;
+      }
       this.agentAssistAgentResponse$.next(data);
       this.addOrRemoveLoader(false);
     });
