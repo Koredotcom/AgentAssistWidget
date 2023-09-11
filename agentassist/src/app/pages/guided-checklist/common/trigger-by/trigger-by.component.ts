@@ -309,7 +309,7 @@ export class TriggerByComponent implements OnInit, OnChanges {
       this.standardBots = res.publishedBots;
       this.standardBotsOj = (res.publishedBots || [])
       .reduce((acc, item)=>{
-        acc[item.dialogId] = item.botName;
+        acc[item._id] = item.botName;
         return acc;
       }, {})
     });
@@ -340,7 +340,7 @@ export class TriggerByComponent implements OnInit, OnChanges {
       if (data) {
         this.useCases = (data?.usecases || [])
         .reduce((acc, item)=>{
-          acc[item._id] = item.usecaseName;
+          acc[item.dialogId] = item.usecaseName;
           return acc;
         }, {});
       }
