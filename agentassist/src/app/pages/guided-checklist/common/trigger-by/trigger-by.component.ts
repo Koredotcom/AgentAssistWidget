@@ -38,7 +38,7 @@ export class TriggerByComponent implements OnInit, OnChanges {
   };
   standardBotsOj:any = {};
   childBotId = '';
-  isSm = window.location.href.includes('smartassist');
+  isSm = false;
   botId = this.workflowService.getCurrentBtSmt(true)._id;
   constructor(
     private workflowService: workflowService,
@@ -86,11 +86,10 @@ export class TriggerByComponent implements OnInit, OnChanges {
       )
       .subscribe((val) => {
         this.loaded = false;
-        this.formatUtterArray(this.searchKey.value?.trim());
+        this.formatUtterArray(val?.trim());
       });
-      /* Get the current bot in case of AgentAssist */
-      this.currentBot = this.workflowService.getCurrentBt(true);
       /* Get the current bot in case of SmartAssist */
+      this.isSm = window.location.href.includes('smartassist')
       if(this.isSm){
         let selAcc = this.local.getSelectedAccount();
         let smBotObj = selAcc['instanceBots'][0];
@@ -106,12 +105,14 @@ export class TriggerByComponent implements OnInit, OnChanges {
           this.standardBots = bots;
           this.standardBotsOj = (bots || [])
           .reduce((acc, item)=>{
-            acc[item._id] = item.botName;
+            acc[item._id] = item.name;
             return acc;
           }, {});
         });
         this.selectSMBot({_id : this.onlyAdhreForm.value.botId});
       }else{
+        /* Get the current bot in case of AgentAssist */
+        this.currentBot = this.workflowService.getCurrentBt(true);
         if(this.currentBot.type === 'universalbot'){
           this.getLinkedBots();
           if(this.onlyAdhreForm.value.lBId){
