@@ -93,10 +93,16 @@ export class TriggerByComponent implements OnInit, OnChanges {
       this.isSm = window.location.href.includes('smartassist')
       if(this.isSm){
         if(this.onlyAdhreForm.value.botId){
-          this.selectSMBot(this.onlyAdhreForm.value.botId);
+          let obj =             {
+            _id: this.onlyAdhreForm.value.botId,
+          };
+          if(this.onlyAdhreForm.value.lBId){
+            obj['type'] = 'universalbot'
+          }
+          this.selectSMBot(obj);
         }
         if(this.onlyAdhreForm.value.lBId){
-          this.selectSMChildBot({_id: this.onlyAdhreForm.value.lBId}, false);
+          this.selectSMChildBot({_id: this.onlyAdhreForm.value.lBId});
         }
         let selAcc = this.local.getSelectedAccount();
         let smBotObj = selAcc['instanceBots'][0];
