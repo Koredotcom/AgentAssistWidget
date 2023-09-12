@@ -93,10 +93,16 @@ export class TriggerByComponent implements OnInit, OnChanges {
       this.isSm = window.location.href.includes('smartassist')
       if(this.isSm){
         if(this.onlyAdhreForm.value.botId){
-          this.selectSMBot(this.onlyAdhreForm.value.botId);
+          let obj =             {
+            _id: this.onlyAdhreForm.value.botId,
+          };
+          if(this.onlyAdhreForm.value.lBId){
+            obj['type'] = 'universalbot';
+          }
+          this.selectSMBot(obj);
         }
         if(this.onlyAdhreForm.value.lBId){
-          this.selectSMChildBot({_id: this.onlyAdhreForm.value.lBId}, false);
+          this.selectSMChildBot({_id: this.onlyAdhreForm.value.lBId});
         }
         let selAcc = this.local.getSelectedAccount();
         let smBotObj = selAcc['instanceBots'][0];
@@ -116,7 +122,7 @@ export class TriggerByComponent implements OnInit, OnChanges {
             return acc;
           }, {});
         });
-        this.selectSMBot({_id : this.onlyAdhreForm.value.botId});
+        // this.selectSMBot({_id : this.onlyAdhreForm.value.botId});
       }else{
         /* Get the current bot in case of AgentAssist */
         this.currentBot = this.workflowService.getCurrentBt(true);
@@ -414,7 +420,7 @@ export class TriggerByComponent implements OnInit, OnChanges {
     }else{
       this.isUniversalSM = false;
       (this.adherenceForm.controls['adherence'] as FormGroup)
-      .removeControl('lBId');
+      ?.removeControl('lBId');
     }
     if(click){
       this.onlyAdhreForm.controls['botId'].patchValue(bot._id);
