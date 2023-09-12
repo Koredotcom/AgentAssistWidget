@@ -96,7 +96,7 @@ export class TriggerByComponent implements OnInit, OnChanges {
           this.selectSMBot(this.onlyAdhreForm.value.botId);
         }
         if(this.onlyAdhreForm.value.lBId){
-          this.selectBot({_id: this.onlyAdhreForm.value.lBId}, false);
+          this.selectSMChildBot({_id: this.onlyAdhreForm.value.lBId}, false);
         }
         let selAcc = this.local.getSelectedAccount();
         let smBotObj = selAcc['instanceBots'][0];
@@ -403,7 +403,7 @@ export class TriggerByComponent implements OnInit, OnChanges {
       return;
     }else if(click){
       this.useCases = {};
-      // this.onlyAdhreForm.controls['lBId']?.patchValue('');
+      this.onlyAdhreForm.controls['lBId']?.patchValue('');
       this.onlyAdhreForm.controls['taskId']?.patchValue('');
     }
     if(bot.type === 'universalbot'){
@@ -438,6 +438,51 @@ export class TriggerByComponent implements OnInit, OnChanges {
         }
       });
     }
+  }
+
+  selectSMChildBot(bot, click=false){
+    // this.childBotId = bot._id;
+    if(click && (bot._id === this.onlyAdhreForm.value?.lBId)){
+      return;
+    }else if(click){
+      this.useCases = {};
+      this.onlyAdhreForm.controls['lBId']?.patchValue('');
+      this.onlyAdhreForm.controls['taskId']?.patchValue('');
+      this.onlyAdhreForm.controls['lBId']?.patchValue(bot._id);
+    };
+    this.service.invoke('get.usecases', {
+      streamId: bot._id,
+      search: '',
+      filterby: '',
+      status: '',
+      usecaseType: 'dialog',
+      offset: 0,
+      limit: -1,
+    }).subscribe((data) => {
+      if (data) {
+        this.useCases = (data?.usecases || [])
+        .reduce((acc, item)=>{
+          acc[item.dialogId] = item.usecaseName;
+          return acc;
+        }, {});
+      }
+    });
+/*     if(bot.type === 'universalbot'){
+      this.isUniversalSM = true;
+      this.getLinkedBotsSM(bot._id);
+      (this.adherenceForm.controls['adherence'] as FormGroup)
+      .addControl('lBId', new FormControl('', [Validators.required]));
+    }else{ */
+/*       this.isUniversalSM = false;
+      (this.adherenceForm.controls['adherence'] as FormGroup)
+      .removeControl('lBId'); */
+    /* } */
+/*     if(click){
+      this.onlyAdhreForm.controls['botId'].patchValue(bot._id);
+    }
+    if(bot.type !== 'universalbot'){
+
+    } */
   }
 
   selectUc(uc){

@@ -193,12 +193,12 @@ export class StepCreateComponent implements OnInit, OnChanges, AfterViewInit {
     this.dialogId = '';
     this.selectedStepButton = '';
     this.stepForm.removeControl('confirmButtons');
-    if(event.target.checked){
-      this.stepForm.addControl('confirmButtons', this.fb.array([], [Validators.required]));
+    // if(){
+    // };
+      this.stepForm.addControl('confirmButtons', this.fb.array([], event.target.checked? [Validators.required]: []));
       setTimeout(() => {
         this.stepForm.updateValueAndValidity();
       },);
-    };
   }
 
   selectedDiaog(item){
