@@ -78,7 +78,6 @@ export class TriggerByComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     /* search */
-    console.log("onlyAdherence", this.onlyAdhreForm.value, this.isSm);
     this.searchKey.valueChanges
       .pipe(
         debounceTime(300),
