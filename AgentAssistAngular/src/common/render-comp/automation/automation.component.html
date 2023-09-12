@@ -10,16 +10,17 @@
     </div>
     <div class="collapse-acc-data" attr.id="dropDownData-{{automationData.uuid}}" *ngIf="automationData.showAutomation">
 
-        <ng-container *ngFor="let automation of automationData.automationsArray; let i =index">
+        <ng-container *ngFor="let automation of automationData.automationsArray; let i = index">
 
             <ng-container *ngIf="automation.responseType == renderResponseType.ASSISTRESPONSE">
                 <ng-container *ngIf="automation.data.isPrompt">
-                    <div class="steps-run-data" attr.id="{{automation.stepRunId}}" [ngClass]="{'last-msg-white-bg last-child-step-run' : (agentassistArrayIndex == agentassistResponseArrayLength-1) && (i == automationData.automationsArray.length-1)}">
+                    <div class="steps-run-data" attr.id="{{automation.stepRunId}}" 
+                    [ngClass]="{'last-child-step-run last-msg-white-bg' : (agentassistArrayIndex === agentassistResponseArrayLength-1) && (i === automationData.automationsArray.length-1) && !automation.toggleOverride}">
                         <div class="icon_block">
                             <i class="ast-agent"></i>
                         </div>
                         <div class="run-info-content">
-                            <div class="title">Ask customer</div>
+                            <div class="title">Ask customer{{agentassistArrayIndex}}{{agentassistResponseArrayLength-1}}{{i}}{{automationData.automationsArray.length-1}}{{automation.toggleOverride}}</div>
                             <div class="agent-utt">
                                 <div class="title-data" attr.id="displayData-{{automation.uuid}}"
                                     *ngIf="!automation.templateRender && automation?.data?.buttons && automation?.data?.buttons[0]?.value">
@@ -29,7 +30,7 @@
                                 {{automation.data.components[0].data.text}}</div>
                                 <div class="title-data" *ngIf="automation.templateRender && automation.template">
                                     <ul class="chat-container" attr.id="{{automation.uuid}}"
-                                        [innerHTML]="automation.template | safeHtml"></ul>
+                                        [innerHTML]="automation.template"></ul>
                                 </div>
                                 <ng-container
                                     *ngTemplateOutlet="automation.templateRender ? askultemplate : asknormalText; context: { $implicit: automation }">
@@ -47,7 +48,7 @@
     
                 <ng-container *ngIf="!automation.data.isPrompt">
                     <div class="steps-run-data" attr.id="{{automation.stepRunId}}"
-                     [ngClass]="{'last-msg-white-bg' : (agentassistArrayIndex == agentassistResponseArrayLength-1) && (i == automationData.automationsArray.length-1)}">
+                     [ngClass]="{'last-msg-white-bg' : (agentassistArrayIndex == agentassistResponseArrayLength-1) && (i == automationData?.automationsArray?.length-1)}">
                         <div class="icon_block">
                             <i class="ast-agent"></i>
                         </div>
@@ -64,7 +65,7 @@
                                 
                                 <div class="title-data" *ngIf="automation.templateRender && automation.template">
                                     <ul class="chat-container" attr.id="{{automation.uuid}}"
-                                        [innerHTML]="automation.template | safeHtml"></ul>
+                                        [innerHTML]="automation.template"></ul>
                                 </div>
                                 <div class="action-links">
                                     <button class="send-run-btn" attr.id="sendMsg" (click)="handleSendCopyButton(projConstants.SEND, automation.sendData)" *ngIf="automation.showSend">Send</button>
@@ -79,7 +80,7 @@
     
                 <div class="steps-run-data" attr.id="inputFieldForAgent-{{automationData.uuid}}"
                     *ngIf="automation.toggleOverride"
-                    [ngClass]="{'last-msg-white-bg' : (agentassistArrayIndex == agentassistResponseArrayLength-1) && (i == automationData.automationsArray.length-1)}">
+                    [ngClass]="{'last-msg-white-bg' : (agentassistArrayIndex == agentassistResponseArrayLength-1) && (i == automationData?.automationsArray?.length-1)}">
                     <div class="icon_block">
                         <i class="ast-agent"></i>
                     </div>
@@ -97,7 +98,7 @@
                 </div>
     
                 <div class="override-input-div" attr.id="overRideDiv-{{automationData.uuid}}"
-                    *ngIf="automation.showOverrideDiv">
+                    *ngIf="automation.showOverrideDiv" [ngClass]="{'override-last-bg' : (agentassistArrayIndex == agentassistResponseArrayLength-1) && (i == automationData.automationsArray.length-1)}">
                     <button class="override-input-btn" attr.id="overRideBtn-{{automationData.uuid}}"
                         *ngIf="!automation.toggleOverride"
                         (click)="toggleOverrideMode(automation, idReferenceConst.OVERRIDE_BTN, automationData.dialogId)">Override

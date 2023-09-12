@@ -12,7 +12,7 @@
                         *ngIf="!smallTalkData.isTemplateRender">{{smallTalkData.value}}</div>
                     <div class="title-data">
                         <ul class="chat-container" attr.id="displayData-{{smallTalkData.uuid}}"
-                            *ngIf="smallTalkData.isTemplateRender" [innerHTML]="smallTalkData.template | safeHtml"></ul>
+                            *ngIf="smallTalkData.isTemplateRender" [innerHTML]="smallTalkData.template"></ul>
                     </div>
                     <div class="action-links">
                         <button class="send-run-btn" id="sendMsg"

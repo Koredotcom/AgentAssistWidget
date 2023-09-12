@@ -28,7 +28,7 @@
     </div>
     <div id="dynamicBlock">
         <ng-container *ngFor="let res of assistResponseArray; let i = index">
-            <div class="unread-msg last-msg-white-bg" *ngIf="unreadUUID == res.uuid && !commonService.isAutomationOnGoing">
+            <div class="unread-msg last-msg-white-bg" *ngIf="unreadUUID && unreadUUID == res.uuid && !commonService.isAutomationOnGoing">
                 <div class="text-dialog-task-end">Unread Messages</div>
             </div>
             <ng-container *ngIf="res.type == renderResponseType.SUGGESTIONS">

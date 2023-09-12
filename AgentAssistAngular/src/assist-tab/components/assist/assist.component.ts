@@ -62,7 +62,7 @@ export class AssistJSComponent implements OnInit {
 
 
   assistResponseArray : any = [];
-  unreadUUID : any;
+  unreadUUID : any = null;
 
   constructor(private templateRenderClassService: TemplateRenderClassService,
     public handleSubjectService: HandleSubjectService,

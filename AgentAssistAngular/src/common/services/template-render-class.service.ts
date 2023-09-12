@@ -166,7 +166,6 @@ export class TemplateRenderClassService {
         elem.value = elem.value.replace(/(^(&quot\;)|(&quot\;)$)/g, '');
       }
       let payloadType = (elem.value).replace(/(&quot\;)/g, "\"");
-      console.log(payloadType, "payload type", elem.value);
 
 
       try {
@@ -220,7 +219,6 @@ export class TemplateRenderClassService {
       }
       _msgsResponse.message[0] = body;
       _msgsResponse.parsedPayload = parsedPayload;
-      console.log(parsedPayload, "parsed payload inside template render");
 
     });
     if (res.srcChannel && res.srcChannel !== 'msteams') {
@@ -323,8 +321,9 @@ export class TemplateRenderClassService {
         _msgsResponse.parsedPayload = parsedPayload;
       }
     });
-    if(res.agentAssistDetails?.srcChannel && res.agentAssistDetails?.srcChannel !== 'msteams'){
-      if (res.agentAssistDetails?.componentType === 'dialogAct') {
+    
+    if(res?.srcChannel && res?.srcChannel !== 'msteams'){
+      if (res?.componentType === 'dialogAct') {
         let actualStringFromBE = '';
         if (res.components[0].data.text.includes('text')) {
           let str = res.components[0].data.text.replace(/^\s+|\s+$/g, "");
@@ -335,7 +334,7 @@ export class TemplateRenderClassService {
         }
         _msgsResponse = this.formatMsgResponseForConfirmationNode(actualStringFromBE, _msgsResponse);
 
-      } else if (res.agentAssistDetails?.newEntityType === "list_of_values" && !res.components[0].data.text.includes('payload')) {
+      } else if (res?.newEntityType === "list_of_values" && !res.components[0].data.text.includes('payload')) {
         let arr = [];
         if (res.components[0].data.text.includes('text')) {
           let str = res.components[0].data.text.replace(/^\s+|\s+$/g, "");

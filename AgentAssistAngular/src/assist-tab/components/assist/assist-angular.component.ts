@@ -192,7 +192,6 @@ export class AssistComponent implements OnInit {
     })
 
     let subscription11 = this.websocketService.agentFeedbackResponse$.subscribe((data) => {
-      console.log(data, "inside agent feedback");
       if(this.commonService.isUpdateFeedBackDetailsFlag){
 
         this.updateFeedbackComponentData(data);
@@ -213,7 +212,6 @@ export class AssistComponent implements OnInit {
     // });
 
     let subscription13 = this.handleSubjectService.proactiveModeSubject.subscribe((response: any) => {
-      console.log("proactive mode subject", response);
       if (response != null && response != undefined) {
         this.proactiveModeStatus = response;
         this.handleProactiveDisableEvent(this.dialogPositionId);
@@ -411,12 +409,8 @@ export class AssistComponent implements OnInit {
         noTemplateRender : true
        } 
        
-      this.assistResponseArray.map(arrEle => {
-        console.log(arrEle, 'arrElement');
-        
-        if(arrEle.uuid && arrEle.uuid == this.dropdownHeaderUuids){
-          console.log("inside if");
-          
+      this.assistResponseArray.map(arrEle => {        
+        if(arrEle.uuid && arrEle.uuid == this.dropdownHeaderUuids){          
            arrEle.automationsArray = arrEle.automationsArray ? arrEle.automationsArray : [];
            if(arrEle.automationsArray[arrEle.automationsArray.length -1] && arrEle.automationsArray[arrEle.automationsArray.length -1]?.data?.isPrompt){
              arrEle.automationsArray[arrEle.automationsArray.length -1].hideOverrideDiv = true;
@@ -544,9 +538,7 @@ export class AssistComponent implements OnInit {
 
     }
     
-    if (!this.commonService.isAutomationOnGoing && data.suggestions) {
-      console.log(this.commonService.suggestionsAnswerPlaceableIDs, "sugges answer placeable ids");
-      
+    if (!this.commonService.isAutomationOnGoing && data.suggestions) {      
       if(this.commonService.suggestionsAnswerPlaceableIDs.length == 0){
 
         renderResponse = {
@@ -702,7 +694,6 @@ export class AssistComponent implements OnInit {
 
         this.assistResponseArray.push(renderResponse);
         this.assistResponseArray = [...this.assistResponseArray];
-        console.log("assistResponseArray", this.assistResponseArray)
       }
     }
 
@@ -776,7 +767,6 @@ export class AssistComponent implements OnInit {
     
     this.assistResponseArray.push(renderResponse);
     this.assistResponseArray = [...this.assistResponseArray];
-    console.log("assistResponseArray", this.assistResponseArray)
   }
 
   filterAutomationByPositionId(){
@@ -905,7 +895,7 @@ export class AssistComponent implements OnInit {
         // $(".scroll-bottom-btn").addClass("new-messages");
         // $(".scroll-bottom-btn span").text(this.commonService.scrollContent[ProjConstants.ASSIST].numberOfNewMessages + ' new');
         if (this.commonService.scrollContent[ProjConstants.ASSIST].numberOfNewMessages == 1) {
-          this.removeWhiteBackgroundToSeenMessages();
+          // this.removeWhiteBackgroundToSeenMessages();
         }
         // this.newButtonScrollClickEvents.emit(true);
       }
@@ -1165,7 +1155,6 @@ export class AssistComponent implements OnInit {
 
       res = this.commonService.formatHistoryResonseToNormalRender(res);
 
-      console.log(currentTaskPositionId, previousTaskPositionId, res, "current previous and res");
 
       this.removeOverRideDivForPreviousResponse();
       
@@ -1204,12 +1193,9 @@ export class AssistComponent implements OnInit {
           this.assistResponseArray[inx].faqArrowClickResponse = true;
         }
         this.assistResponseArray = structuredClone(this.assistResponseArray);
-        console.log(this.assistResponseArray, "assist response array");
       }
 
       if ((res.suggestions || res.ambiguityList) && res.type == 'outgoing' && !res.faqResponse) {
-        console.log(res, "result **********");
-
         renderResponse = {
           data: res,
           type: this.renderResponseType.SUGGESTIONS,
@@ -1221,7 +1207,6 @@ export class AssistComponent implements OnInit {
         this.assistResponseArray = structuredClone(this.assistResponseArray);
       }
 
-      console.log(res, "inside hisotyr");
 
       if ((!res.suggestions && !res.ambiguityList && !res.ambiguity) && res.type == 'outgoing') {
 
@@ -1231,10 +1216,11 @@ export class AssistComponent implements OnInit {
         currentTaskName = (res.intentName) ? res.intentName : currentTaskName;
         let uuids = this.koreGenerateuuidPipe.transform();
 
+
+
         // feedback                            
         if ((previousTaskPositionId && currentTaskPositionId !== previousTaskPositionId) || (currentTaskPositionId == previousTaskPositionId && currentTaskName != previousTaskName && previousId)) {
           let previousIdFeedBackDetails = feedBackResult.find((ele) => ele.positionId === previousTaskPositionId);
-          console.log(previousIdFeedBackDetails, "previous id feedback details");
           
           this.filterAutomationByPositionId();
           this.prepareFeedbackData(previousIdFeedBackDetails);
@@ -1246,8 +1232,8 @@ export class AssistComponent implements OnInit {
             previousId = undefined;
           } else {
             previousId = undefined;
-            previousTaskPositionId = undefined;
-            previousTaskName = undefined;
+            // previousTaskPositionId = undefined;
+            // previousTaskName = undefined;
           }
         }
 
@@ -1258,7 +1244,6 @@ export class AssistComponent implements OnInit {
               return true;
             }
           });
-          console.log(automationUUIDCheck, 'automation uuid check');
 
 
           // let divExist = $(`#addRemoveDropDown-${res._id}`);
@@ -1294,15 +1279,22 @@ export class AssistComponent implements OnInit {
           }
           this.prepareUserMessageResponse(res,entityDisplayName); 
         }
+        
 
         if (res.entityName) {
-          this.agentAssistResponse = res;
+          this.agentAssistResponse = Object.assign({}, res);
         }
+        
 
         let result: any = this.templateRenderClassService.getResponseUsingTemplateForHistory(res);
+        
         this.commonService.currentPositionId = currentTaskPositionId;
         let msgStringify = JSON.stringify(result);
         let newTemp = encodeURI(msgStringify);
+
+        console.log(result, "result **", previousTaskName, currentTaskName, previousTaskPositionId, currentTaskPositionId);
+        
+
 
         if (result.message.length > 0) {
 
@@ -1332,10 +1324,8 @@ export class AssistComponent implements OnInit {
 
             this.assistResponseArray.push(renderResponse);
             this.assistResponseArray = [...this.assistResponseArray];
-            console.log("assistResponseArray", this.assistResponseArray)
           }
 
-          console.log(res, "before if conditon");
 
           // automation
           if ((res.isPrompt === true || res.isPrompt === false) && previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) {
@@ -1377,7 +1367,6 @@ export class AssistComponent implements OnInit {
             });
 
             this.assistResponseArray = structuredClone(this.assistResponseArray);
-            console.log(this.assistResponseArray, "assist response array inside automaiton");
 
           }
 
@@ -1412,7 +1401,6 @@ export class AssistComponent implements OnInit {
 
                 this.assistResponseArray.push(renderResponse);
                 this.assistResponseArray = [...this.assistResponseArray];
-                console.log("assistResponseArray", this.assistResponseArray)
               }
             });
           }
@@ -1459,8 +1447,6 @@ export class AssistComponent implements OnInit {
   updateSearchResponse(response, faqAnswerIdsPlace){
     response.suggestions.faqs = this.commonService.formatFAQResponse(response.suggestions.faqs);
 
-    console.log(faqAnswerIdsPlace, "faq answer id place");
-
     let index = this.commonService.suggestionsAnswerPlaceableIDs.findIndex(suggestion =>{
       return suggestion.input == faqAnswerIdsPlace.input
     });
@@ -1488,7 +1474,6 @@ export class AssistComponent implements OnInit {
     this.assistResponseArray[faqAnswerIdsPlace.assistSuggestion].faqArrowClickResponse = true;
 
     this.assistResponseArray = structuredClone(this.assistResponseArray);
-    console.log(this.assistResponseArray, 'inside update search response');
         
   }
 }

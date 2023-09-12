@@ -41,7 +41,7 @@ export class AutomationComponent implements OnInit {
  }
 
  ngOnChanges(changes : any){
-  console.log(changes, 'change **************88');
+  console.log(changes, 'change **************88', this.automationData, this.agentassistArrayIndex, this.agentassistResponseArrayLength);
   if(this.automationData && changes?.automationData?.currentValue && changes.automationData.currentValue?.automationsArray){
     this.automationData = changes.automationData.currentValue;
     this.toggleAutomation(this.automationData.showAutomation);
@@ -72,7 +72,6 @@ export class AutomationComponent implements OnInit {
     i++;
 
   }
-  console.log(automationsArray, 'automations array &&&&&&&&&&&&&&&&&');
   setTimeout(() => {
     this.scrollBottom.emit(true);
   }, 100);
@@ -132,17 +131,13 @@ AgentAssist_run_click(automation, inputValue) {
   connectionDetails.positionId = this.automationData.dialogId;
   connectionDetails.entities = this.commonService.isRestore ? JSON.parse(this.commonService.previousEntitiesValue) : this.commonService.entitiestValueArray
   connectionDetails.childBotId = automation.data.childBotId;
-  connectionDetails.childBotName = automation.data.childBotName;
-  console.log(connectionDetails, "connection details **************");
-  
-  let assistRequestParams = this.commonService.prepareAgentAssistRequestParams(connectionDetails);
-  console.log(assistRequestParams, "assit request parsm");
-  
+  connectionDetails.childBotName = automation.data.childBotName;  
+  let assistRequestParams = this.commonService.prepareAgentAssistRequestParams(connectionDetails);  
   this.websocketService.emitEvents(EVENTS.agent_assist_request, assistRequestParams);
 }
 
 terminateButtonClick(){
-  if(this.automationData?.automationsArray[this.automationData.automationsArray.length-1] && this.automationData?.automationsArray[this.automationData.automationsArray.length-1]?.data?.isPrompt){
+  if(this.automationData?.automationsArray[this.automationData?.automationsArray?.length-1] && this.automationData?.automationsArray[this.automationData?.automationsArray?.length-1]?.data?.isPrompt){
     this.automationData.automationsArray[this.automationData.automationsArray.length-1].toggleOverride = false;
     this.automationData.automationsArray[this.automationData.automationsArray.length-1].hideOverrideDiv = true;
   }

@@ -225,10 +225,8 @@ export class MybotComponent implements OnInit {
         }
 
         this.mybotResponseArray.map(arrEle => {
-          console.log(arrEle, 'arrElement');
 
           if (arrEle.uuid && arrEle.uuid == this.myBotDropdownHeaderUuids) {
-            console.log("inside if");
 
             arrEle.automationsArray = arrEle.automationsArray ? arrEle.automationsArray : [];
             if (arrEle.automationsArray[arrEle.automationsArray.length - 1] && arrEle.automationsArray[arrEle.automationsArray.length - 1]?.data?.isPrompt) {
@@ -324,7 +322,6 @@ export class MybotComponent implements OnInit {
       });
 
       this.mybotResponseArray = structuredClone(this.mybotResponseArray);
-      console.log(this.myBotDataResponse, "my bot response array");
 
 
       // let result = this.templateRenderClassService.getResponseUsingTemplate(data);
@@ -630,7 +627,6 @@ export class MybotComponent implements OnInit {
 
     this.mybotResponseArray.push(renderResponse);
     this.mybotResponseArray = [...this.mybotResponseArray];
-    console.log("mybotResponseArray", this.mybotResponseArray)
   }
 
   //old dialogues styling
@@ -700,8 +696,6 @@ export class MybotComponent implements OnInit {
 
       res = this.commonService.formatHistoryResonseToNormalRender(res);
 
-      console.log(currentTaskPositionId, previousTaskPositionId, res, "current previous and res");
-
       this.removeOverRideDivForPreviousResponse();
 
       if ((res.suggestions || res.ambiguityList) && res.type == 'outgoing' && res.faqResponse) {
@@ -739,11 +733,9 @@ export class MybotComponent implements OnInit {
           this.mybotResponseArray[inx].faqArrowClickResponse = true;
         }
         this.mybotResponseArray = structuredClone(this.mybotResponseArray);
-        console.log(this.mybotResponseArray, "assist response array");
       }
 
       if ((res.suggestions || res.ambiguityList) && res.type == 'outgoing' && !res.faqResponse) {
-        console.log(res, "result **********");
 
         renderResponse = {
           data: res,
@@ -756,7 +748,6 @@ export class MybotComponent implements OnInit {
         this.mybotResponseArray = structuredClone(this.mybotResponseArray);
       }
 
-      console.log(res, "inside hisotyr");
 
       if ((!res.suggestions && !res.ambiguityList && !res.ambiguity) && res.type == 'outgoing') {
 
@@ -769,7 +760,6 @@ export class MybotComponent implements OnInit {
         // feedback                            
         if ((previousTaskPositionId && currentTaskPositionId !== previousTaskPositionId) || (currentTaskPositionId == previousTaskPositionId && currentTaskName != previousTaskName && previousId)) {
           let previousIdFeedBackDetails = feedBackResult.find((ele) => ele.positionId === previousTaskPositionId);
-          console.log(previousIdFeedBackDetails, "previous id feedback details");
 
           this.filterAutomationByPositionId();
           this.prepareFeedbackData(previousIdFeedBackDetails);
@@ -793,7 +783,6 @@ export class MybotComponent implements OnInit {
               return true;
             }
           });
-          console.log(automationUUIDCheck, 'automation uuid check');
 
 
           // let divExist = $(`#addRemoveDropDown-${res._id}`);
@@ -867,10 +856,7 @@ export class MybotComponent implements OnInit {
 
             this.mybotResponseArray.push(renderResponse);
             this.mybotResponseArray = [...this.mybotResponseArray];
-            console.log("mybotResponseArray", this.mybotResponseArray)
           }
-
-          console.log(res, "before if conditon");
 
           // automation
           if ((res.isPrompt === true || res.isPrompt === false) && previousTaskName === currentTaskName && previousTaskPositionId == currentTaskPositionId) {
@@ -912,8 +898,6 @@ export class MybotComponent implements OnInit {
             });
 
             this.mybotResponseArray = structuredClone(this.mybotResponseArray);
-            console.log(this.mybotResponseArray, "assist response array inside automaiton");
-
           }
 
           // small talk outside automation ---------------------->
@@ -947,7 +931,6 @@ export class MybotComponent implements OnInit {
 
                 this.mybotResponseArray.push(renderResponse);
                 this.mybotResponseArray = [...this.mybotResponseArray];
-                console.log("mybotResponseArray", this.mybotResponseArray)
               }
             });
           }
@@ -1013,11 +996,7 @@ export class MybotComponent implements OnInit {
       }
 
       this.mybotResponseArray.map(arrEle => {
-        console.log(arrEle, 'arrElement');
-
         if (arrEle.uuid && arrEle.uuid == this.myBotDropdownHeaderUuids) {
-          console.log("inside if");
-
           arrEle.automationsArray = arrEle.automationsArray ? arrEle.automationsArray : [];
           if (arrEle.automationsArray[arrEle.automationsArray.length - 1] && arrEle.automationsArray[arrEle.automationsArray.length - 1]?.data?.isPrompt) {
             arrEle.automationsArray[arrEle.automationsArray.length - 1].hideOverrideDiv = true;

@@ -651,14 +651,16 @@ export class CommonService {
         answer: (faq.answer && faq.answer.length > 0) ? [] : false,
         showMoreButton: false,
         showLessButton: false,
-        answerRender : faq.answer || false
+        answerRender : faq.answer || false,
+        childBotId : faq.childBotId,
+        childBotName : faq.childBotName
       }
       if(faq.answer && faq.answer.length > 0){
         for(let ans of faq.answer){
           let object : any = {
             ans : ans,
             showMoreButton : false,
-            showLessButton : false
+            showLessButton : false,
           }
           faqObject.answer.push(object);
         }
@@ -684,10 +686,6 @@ export class CommonService {
       searchResponse.dialogs.push({ name: dialog.name, agentRunButton: false, childBotId : dialog.childBotId,
         childBotName : dialog.childBotName, entities : dialog.entities, userInput : dialog.userInput });
     }
-
-
-    console.log(searchResponse, "searchresponse");
-
     return searchResponse;
   }
 
@@ -735,35 +733,37 @@ export class CommonService {
   }
 
   formatHistoryResponseForFAQ(response){
-    let referenceObjvsAnswer : any = {};
-    let historyResp : any = [];
-    for(let resObj of response){
-      if(resObj && resObj.agentAssistDetails && resObj.agentAssistDetails.suggestions && resObj.agentAssistDetails.suggestions.faqs){
-        if(resObj.channels && resObj.channels[0] && resObj.channels[0].reqId){
-          if(!referenceObjvsAnswer[resObj.channels[0].reqId]){
-            referenceObjvsAnswer[resObj.channels[0].reqId] = [];
-          }
-          if(resObj.components && resObj.components[0] && resObj.components[0].data && resObj.components[0].data.text){
-            referenceObjvsAnswer[resObj.channels[0].reqId].push(resObj.components[0].data.text);
+    if(response){
+      let referenceObjvsAnswer : any = {};
+      let historyResp : any = [];
+      for(let resObj of response){
+        if(resObj && resObj.agentAssistDetails && resObj.agentAssistDetails.suggestions && resObj.agentAssistDetails.suggestions.faqs){
+          if(resObj.channels && resObj.channels[0] && resObj.channels[0].reqId){
+            if(!referenceObjvsAnswer[resObj.channels[0].reqId]){
+              referenceObjvsAnswer[resObj.channels[0].reqId] = [];
+            }
+            if(resObj.components && resObj.components[0] && resObj.components[0].data && resObj.components[0].data.text){
+              referenceObjvsAnswer[resObj.channels[0].reqId].push(resObj.components[0].data.text);
+            }
           }
         }
       }
-    }
-
-    for(let resObj of response){
-      if(resObj && resObj.agentAssistDetails && resObj.agentAssistDetails.suggestions && resObj.agentAssistDetails.suggestions.faqs){
-        if(resObj.channels && resObj.channels[0] && resObj.channels[0].reqId){
-          if(referenceObjvsAnswer[resObj.channels[0].reqId]){
-            resObj.components[0].data.text = referenceObjvsAnswer[resObj.channels[0].reqId];
-            historyResp.push(resObj);
-            referenceObjvsAnswer[resObj.channels[0].reqId] = false;
+  
+      for(let resObj of response){
+        if(resObj && resObj.agentAssistDetails && resObj.agentAssistDetails.suggestions && resObj.agentAssistDetails.suggestions.faqs){
+          if(resObj.channels && resObj.channels[0] && resObj.channels[0].reqId){
+            if(referenceObjvsAnswer[resObj.channels[0].reqId]){
+              resObj.components[0].data.text = referenceObjvsAnswer[resObj.channels[0].reqId];
+              historyResp.push(resObj);
+              referenceObjvsAnswer[resObj.channels[0].reqId] = false;
+            }
           }
+        }else{
+          historyResp.push(resObj);
         }
-      }else{
-        historyResp.push(resObj);
       }
+      return historyResp;
     }
-    return historyResp;
   }
 
   async renderingAgentHistoryMessage(connectionDetails) {
@@ -992,7 +992,6 @@ export class CommonService {
     let seeLessElement = $('#seeLess-' + id);
     let snippetsendMsg;
     let viewLinkElement;
-    console.log(descElement, "descELement********", id);
     
     if (type == ProjConstants.SNIPPET) {
       titleElement = $("#snippettitleLib-" + id);
@@ -1232,6 +1231,7 @@ export class CommonService {
 
     result.type = res.type;
     result.components = res.components;
+    // result.buttons = res.components;
     result.intentName = res.tN;
     result._id = res._id;
     if((result.suggestions || result.ambiguityList)){
