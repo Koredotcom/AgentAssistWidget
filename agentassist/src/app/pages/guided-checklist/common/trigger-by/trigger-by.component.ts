@@ -78,6 +78,7 @@ export class TriggerByComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     /* search */
+    console.log("onlyAdherence", this.onlyAdhreForm.value, this.isSm);
     this.searchKey.valueChanges
       .pipe(
         debounceTime(300),
@@ -97,7 +98,7 @@ export class TriggerByComponent implements OnInit, OnChanges {
             _id: this.onlyAdhreForm.value.botId,
           };
           if(this.onlyAdhreForm.value.lBId){
-            obj['type'] = 'universalbot'
+            obj['type'] = 'universalbot';
           }
           this.selectSMBot(obj);
         }
@@ -122,7 +123,7 @@ export class TriggerByComponent implements OnInit, OnChanges {
             return acc;
           }, {});
         });
-        this.selectSMBot({_id : this.onlyAdhreForm.value.botId});
+        // this.selectSMBot({_id : this.onlyAdhreForm.value.botId});
       }else{
         /* Get the current bot in case of AgentAssist */
         this.currentBot = this.workflowService.getCurrentBt(true);
@@ -420,7 +421,7 @@ export class TriggerByComponent implements OnInit, OnChanges {
     }else{
       this.isUniversalSM = false;
       (this.adherenceForm.controls['adherence'] as FormGroup)
-      .removeControl('lBId');
+      ?.removeControl('lBId');
     }
     if(click){
       this.onlyAdhreForm.controls['botId'].patchValue(bot._id);
