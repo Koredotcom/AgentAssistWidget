@@ -276,15 +276,23 @@ export class OverlaysearchComponent implements OnInit {
     }, 10);
   }
 
-  handleSendCopyButton(actionType, faq_or_article_obj, selectType) {
+  handleSendCopyButton(actionType, faq_or_article_obj, selectType, faq) {
     let message = {};
     if (actionType == this.projConstants.SEND) {
       message = {
         method: 'send',
         name: "agentAssist.SendMessage",
         conversationId: this.connectionDetails.conversationId,
+
         payload: selectType == this.projConstants.FAQ ? (faq_or_article_obj.answer || faq_or_article_obj.ans) : faq_or_article_obj.content
       };
+      if(selectType === 'Article') {
+        message['title'] = faq_or_article_obj.title;
+        message['contentId'] = faq_or_article_obj.contentId;
+      } else {
+        message['title'] = faq.displayName;
+        message['contentId'] = faq_or_article_obj.taskRefId
+      }
       window.parent.postMessage(message, '*');
     } else {
       message = {
@@ -293,6 +301,13 @@ export class OverlaysearchComponent implements OnInit {
         conversationId: this.connectionDetails.conversationId,
         payload: selectType == this.projConstants.FAQ ? (faq_or_article_obj.answer || faq_or_article_obj.ans) : faq_or_article_obj.content
       };
+      if(selectType === 'Article') {
+        message['title'] = faq_or_article_obj.title;
+        message['contentId'] = faq_or_article_obj.contentId;
+      } else {
+        message['title'] = faq.displayName;
+        message['contentId'] = faq_or_article_obj.taskRefId
+      }
       parent.postMessage(message, '*');
     }
     this.faqArticleSendorCopyEvent(actionType, faq_or_article_obj, selectType, message)
@@ -309,15 +324,10 @@ export class OverlaysearchComponent implements OnInit {
       type: selectType,
       input : this.searchedResultData?.userInput,
       name: message.name,
-      payload : message.payload
+      payload : message.payload,
+      title: message.title,
+      contentId : message.contentId
     };
-    if(selectType === 'Article') {
-      data.title = faq_or_article_obj.title;
-      data.contentId = faq_or_article_obj?.contentId;
-    } else {
-      data.title = faq_or_article_obj.title;
-      data.contentId = faq_or_article_obj?.taskRefId;
-    }
     this.websocketService.emitEvents(EVENTS.agent_send_or_copy, data);
   }
 

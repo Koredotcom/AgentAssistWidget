@@ -638,6 +638,7 @@ export class CommonService {
         article.showMoreButton = false;
         article.showLessButton = false;
         article.content = article.content ? article.content : '';
+        article.contentId = article.contentId;
         article.userInput = response.userInput;
       }
     }
@@ -645,6 +646,7 @@ export class CommonService {
       let faqObject : any = {
         question: faq.question,
         displayName: faq.displayName,
+        taskRefId: faq?.taskRefId,
         answer: (faq.answer && faq.answer.length > 0) ? [] : false,
         showMoreButton: false,
         showLessButton: false,
@@ -656,6 +658,7 @@ export class CommonService {
         for(let ans of faq.answer){
           let object : any = {
             ans : ans,
+            taskRefId: faq.taskRefId,
             showMoreButton : false,
             showLessButton : false
           }
@@ -688,11 +691,13 @@ export class CommonService {
     for (let faq of faqArray) {
       let faqObject : any = {
         question: faq.question,
+        taskRefId : faq?.taskRefId,
         answer: (faq.answer && faq.answer.length > 0) ? [] : false
       }
       if(faq.answer && faq.answer.length > 0){
         for(let ans of faq.answer){
           let object : any = {
+            taskRefId: faq.taskRefId,
             ans : ans
           }
           faqObject.answer.push(object);
