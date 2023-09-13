@@ -277,10 +277,10 @@ export class AuthService {
   }
 
   public getAgentAssistBotsDetails(res) {
-    let agentAssistBotsList = []
-    for(let obj of res) {
-      if(obj.includes('isAgentAssist') && obj.isAgentAssist === true) {
-        agentAssistBotsList.push(obj);
+    let agentAssistBotsList = [];
+    for(let botDetails of res) {
+      if(botDetails.hasOwnProperty('isAgentAssist') && botDetails?.isAgentAssist ) {
+        agentAssistBotsList.push(botDetails);
       }
     }
     return agentAssistBotsList;
