@@ -93,9 +93,9 @@ export class AssistService {
     <div class="title">Customer Said - </div>
     <div class="agent-utt">
         <div class="action-links">
-            <button class="send-run-btn hide" id="sendMsg" data-msg-id="${uuids}"  data-msg-data="${this.sanitizeHtmlPipe.transform(data.userInput)}">Send</button>
-            <div class="copy-btn hide" data-msg-id="${uuids}" data-msg-data="${this.sanitizeHtmlPipe.transform(data.userInput)}">
-                <i class="ast-copy" data-msg-id="${uuids}" data-msg-data="${this.sanitizeHtmlPipe.transform(data.userInput)}"></i>
+            <button class="send-run-btn hide" id="sendMsg" data-msg-id="${uuids}"  data-msg-data="${this.sanitizeHtmlPipe.transform(data.userInput)}" data-text-type="sentence">Send</button>
+            <div class="copy-btn hide" data-msg-id="${uuids}" data-msg-data="${this.sanitizeHtmlPipe.transform(data.userInput)}" data-text-type="sentence">
+                <i class="ast-copy" data-msg-id="${uuids}" data-msg-data="${this.sanitizeHtmlPipe.transform(data.userInput)}" data-text-type="sentence"></i>
             </div>
         </div>
     </div>
@@ -118,16 +118,16 @@ export class AssistService {
       <div class="agent-utt">
       <div class="title-data" id="displayData-${uuids}">${value}</div>
           <div class="action-links">
-              <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data="${newTemp}" data-position-id="${positionID}">Send</button>
-              <div class="copy-btn" data-msg-id="${uuids}" data-position-id="${positionID}">
-                  <i class="ast-copy" data-msg-id="${uuids}" data-position-id="${positionID}"></i>
+              <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data="${newTemp}" data-position-id="${positionID}" data-text-type="sentence">Send</button>
+              <div class="copy-btn" data-msg-id="${uuids}" data-position-id="${positionID}" data-text-type="sentence">
+                  <i class="ast-copy" data-msg-id="${uuids}" data-position-id="${positionID}" data-text-type="sentence"></i>
               </div>
           </div>
       </div>
       </div>
   </div>
   `;
-      
+
     }else{
       template = `
       <div class="steps-run-data">
@@ -139,9 +139,9 @@ export class AssistService {
       <div class="agent-utt">
           <div class="title-data"><ul class="chat-container" id="displayData-${uuids}" data-msg-id="${uuids}"></ul></div>
           <div class="action-links">
-              <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data="${newTemp}" data-position-id="${positionID}">Send</button>
-              <div class="copy-btn hide" data-msg-id="${uuids}" data-position-id="${positionID}">
-                  <i class="ast-copy" data-msg-id="${uuids}" data-position-id="${positionID}"></i>
+              <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data="${newTemp}" data-position-id="${positionID}" data-text-type="sentence">Send</button>
+              <div class="copy-btn hide" data-msg-id="${uuids}" data-position-id="${positionID}" data-text-type="sentence">
+                  <i class="ast-copy" data-msg-id="${uuids}" data-position-id="${positionID}" data-text-type="sentence"></i>
               </div>
           </div>
       </div>
@@ -165,9 +165,9 @@ export class AssistService {
           <div class="agent-utt">
             <div class="title-data" id="displayData-${uuids}">${value}</div>
             <div class="action-links">
-                <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data="${newTemp}" data-position-id="${positionID}">Send</button>
-                <div class="copy-btn" data-msg-id="${uuids}" data-position-id="${positionID}">
-                    <i class="ast-copy" data-msg-id="${uuids}" data-position-id="${positionID}"></i>
+                <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data="${newTemp}" data-position-id="${positionID}" data-text-type="sentence">Send</button>
+                <div class="copy-btn" data-msg-id="${uuids}" data-position-id="${positionID}" data-text-type="sentence">
+                    <i class="ast-copy" data-msg-id="${uuids}" data-position-id="${positionID}" data-text-type="sentence"></i>
                 </div>
             </div>
             <div class="warning-template hide"  id="warningTemp">
@@ -189,9 +189,9 @@ export class AssistService {
           <div class="agent-utt">
             <div class="title-data" ><ul class="chat-container" id="displayData-${uuids}" data-msg-id="${uuids}"></ul></div>
             <div class="action-links">
-              <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data="${newTemp}" data-position-id="${positionID}">Send</button>
-              <div class="copy-btn hide" data-msg-id="${uuids}" data-position-id="${positionID}">
-                  <i class="ast-copy" data-msg-id="${uuids}" data-position-id="${positionID}"></i>
+              <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-msg-data="${newTemp}" data-position-id="${positionID}" data-text-type="sentence">Send</button>
+              <div class="copy-btn hide" data-msg-id="${uuids}" data-position-id="${positionID}" data-text-type="sentence">
+                  <i class="ast-copy" data-msg-id="${uuids}" data-position-id="${positionID}" data-text-type="sentence"></i>
               </div>
             </div>
             <div class="warning-template hide"  id="warningTemp">
@@ -243,9 +243,9 @@ export class AssistService {
     <div class="agent-utt">
         <div class="title-data" id="displayData-${_id}">${ele.data.text}</div>
         <div class="action-links">
-            <button class="send-run-btn" id="sendMsg" data-msg-id="${_id}"  data-msg-data="${ele.data.text}">Send</button>
-            <div class="copy-btn" data-msg-id="${_id}" data-msg-data="${ele.data.text}">
-                <i class="ast-copy" data-msg-id="${_id}" data-msg-data="${ele.data.text}"></i>
+            <button class="send-run-btn" id="sendMsg" data-msg-id="${_id}"  data-msg-data="${ele.data.text}" data-text-type="sentence">Send</button>
+            <div class="copy-btn" data-msg-id="${_id}" data-msg-data="${ele.data.text}" data-text-type="sentence">
+                <i class="ast-copy" data-msg-id="${_id}" data-msg-data="${ele.data.text}" data-text-type="sentence"></i>
             </div>
         </div>
     </div>
@@ -267,9 +267,9 @@ export class AssistService {
           <div class="agent-utt">
               <div class="title-data" id="displayData-${uuids}" data-msg-id="${uuids}">${ele.value}</div>
               <div class="action-links">
-                  <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}">Send</button>
-                  <div class="copy-btn" data-msg-id="${uuids}">
-                      <i class="ast-copy" data-msg-id="${uuids}"></i>
+                  <button class="send-run-btn" id="sendMsg" data-msg-id="${uuids}" data-text-type="sentence">Send</button>
+                  <div class="copy-btn" data-msg-id="${uuids}" data-text-type="sentence">
+                      <i class="ast-copy" data-msg-id="${uuids}" data-text-type="sentence"></i>
                   </div>
               </div>
           </div>
@@ -298,7 +298,7 @@ export class AssistService {
     </div>
     <div class="content-dialog-task-type" id="faqsSuggestions-${responseId}">
         <div class="type-with-img-title">FAQ (${data.suggestions.faqs.length})</div>
-        
+
     </div>
     </div>`;
     return template;
@@ -311,7 +311,7 @@ export class AssistService {
     </div>
     <div class="content-dialog-task-type" id="articleSuggestions-${responseId}">
         <div class="type-with-img-title">Articles (${data.suggestions.articles.length})</div>
-        
+
     </div>
     </div>`;
     return template;
@@ -324,7 +324,7 @@ export class AssistService {
     </div>
     <div class="content-dialog-task-type" id="snippetsSuggestions-${responseId}">
         <div class="type-with-img-title">Snippets (${data.suggestions?.searchassist?.snippets?.length})</div>
-        
+
     </div>
 </div>`;
     return template;
@@ -334,7 +334,9 @@ export class AssistService {
     let template = `
     <div class="type-info-run-send" id="suggestionId-${uuids}">
         <div class="left-content">
-            <div class="title-text" id="automation-${uuids}">${ele.name}</div>
+            <div class="title-text" id="automation-${uuids + index}">
+              <div class="desc-text-bot" title="${ele.name}">${ele.name}</div> 
+            </div>
         </div>
         <div class="action-links">
             <button class="send-run-btn" id="run-${uuids + index}" data-child-bot-id="${ele.childBotId}" data-child-bot-name="${ele.childBotName}"
@@ -356,7 +358,9 @@ export class AssistService {
     let template = `
     <div class="type-info-run-send" id="faqDiv-${uuids + index}">
         <div class="left-content" id="faqSection-${uuids + index}">
-            <div class="title-text" id="title-${uuids + index}" title="${ele.displayName ? ele.displayName : ele.question}">${(ele.answer && ele.answer.length > 1) ? (ele.displayName ? ele.displayName : ele.question + ' 1/' + ele.answer.length) : ele.displayName ? ele.displayName : ele.question}</div>
+            <div class="title-text" id="title-${uuids + index}" >
+            <div class="desc-text-bot" title="${ele.displayName ? ele.displayName : ele.question}"> ${(ele.answer && ele.answer.length > 1) ? (ele.displayName ? ele.displayName : ele.question + ' 1/' + ele.answer.length) : ele.displayName ? ele.displayName : ele.question}</div> 
+            </div>
         </div>
     </div>`;
     return template;
@@ -368,7 +372,7 @@ export class AssistService {
         <div class="left-content" id="articleSection-${uuids + index}">
             <div class="title-text" id="articletitle-${uuids + index}" title="${ele.title}">${ele.title}</div>
         </div>
-        
+
     </div>`;
     return template;
   }
@@ -443,7 +447,7 @@ export class AssistService {
   //                 <div class="title">Input</div>
   //                 <div class="agent-utt enter-details-block">
   //                 <div class="title-data" ><span class="enter-details-title">${agentInputEntityName} : </span>
-  //                 <input #agentInput type="text" placeholder="Enter Value" class="input-text chat-container" id="agentInput-${agentInputId}" 
+  //                 <input #agentInput type="text" placeholder="Enter Value" class="input-text chat-container" id="agentInput-${agentInputId}"
   //                 >
   //                 </div>
   //                 </div>
@@ -457,9 +461,9 @@ export class AssistService {
     let faqs = $(`#faqsSuggestions-${eleid} .type-info-run-send #faqSection-${ele}`);
     let a = $(`#faqsSuggestions-${eleid} #faqDiv-${ele}`);
     let faqActionHtml = `<div class="action-links">
-        <button class="send-run-btn" id="sendMsg" data-msg-id="${ele}"  data-msg-data="${res.components[0].data.text[0]}">Send</button>
-        <div class="copy-btn" data-msg-id="${ele}" data-msg-data="${res.components[0].data.text[0]}">
-        <i class="ast-copy" data-msg-id="${ele}" data-msg-data="${res.components[0].data.text[0]}"></i>
+        <button class="send-run-btn" id="sendMsg" data-msg-id="${ele}"  data-msg-data="${res.components[0].data.text[0]}" data-text-type="faq" data-title="${res.components[0].data.title}" data-content-id="${res.Component[0].data.taskRefId}">Send</button>
+        <div class="copy-btn" data-msg-id="${ele}" data-msg-data="${res.components[0].data.text[0]}" data-text-type="faq" data-title="${res.components[0].data.title}" data-content-id="${res.Component[0].data.taskRefId}">
+        <i class="ast-copy" data-msg-id="${ele}" data-msg-data="${res.components[0].data.text[0]}" data-text-type="faq" data-title="${res.components[0].data.title}" data-content-id="${res.Component[0].data.taskRefId}"></i>
         </div>
         </div>`;
     a.append(faqActionHtml);
@@ -494,7 +498,7 @@ export class AssistService {
       <button class="ghost-btn hide" id="seeLess-${ele}" data-see-less="true">Show less</button>
       `;
     faqstypeInfo.append(seeMoreButtonHtml);
-    setTimeout(() => {                                                    
+    setTimeout(() => {
         this.commonService.updateSeeMoreButtonForAssist(ele, this.projConstants.FAQ);
     }, 1000);
   }

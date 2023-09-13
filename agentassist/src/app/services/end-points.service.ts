@@ -1670,17 +1670,17 @@ export class EndPointsService {
     }
 
     this.serviceList['get.ruleById'] = {
-      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule/:ruleId',
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule/:ruleId/?uid=:userId',
       method : 'get'
     }
 
     this.serviceList['get.checkLock'] = {
-      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule/:botId/users/:userId/:ruleId/actions',
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule/:botId/users/:userId/:ruleId/actions/?uid=:userId',
       method : 'get'
     }
 
     this.serviceList['post.checkLock'] = {
-      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule/:botId/users/:userId/:ruleId/actions',
+      endpoint : this.SMARTASSIST_API_SERVER_URL + '/agentcoachingrule/:botId/users/:userId/:ruleId/actions/?uid=:userId',
       method : 'post'
     }
 
@@ -1720,7 +1720,7 @@ export class EndPointsService {
       method : 'post'
     }
     // // Dashboard Apis Stops // //
-    
+
     this.serviceList['post.acchecklists'] = {
       endpoint : this.SMARTASSIST_API_SERVER_URL + '/acchecklists',
       method : 'post'
@@ -1730,7 +1730,7 @@ export class EndPointsService {
       endpoint : this.SMARTASSIST_API_SERVER_URL + '/acchecklists/:botId/checklist/:clId',
       method : 'put'
     }
-    
+
     this.serviceList['get.acchecklists'] = {
       endpoint : this.SMARTASSIST_API_SERVER_URL + '/acchecklists/:botId',
       method : 'post'
@@ -1745,7 +1745,7 @@ export class EndPointsService {
       endpoint : this.SMARTASSIST_API_SERVER_URL + '/acclstages/:botId/stage/:clsId?clId=:clId',
       method : 'put'
     }
-    
+
     this.serviceList['get.checklistbyid'] = {
       endpoint : this.SMARTASSIST_API_SERVER_URL + '/acchecklists/:botId/checklist/:clId',
       method : 'get'
@@ -1794,6 +1794,11 @@ export class EndPointsService {
     this.serviceList['get.agentchecklisttags'] = {
       endpoint : this.SMARTASSIST_API_SERVER_URL + '/acchecklists/:botId/tags',
       method : 'get'
+    }
+
+    this.serviceList['get.automationbots-sm'] = {
+      endpoint: this.API_SERVER_URL + '/smartassist/apps/automationbots?instanceBotId=:instanceBotId&includeInstanceBot=:includeInstanceBot&skipLinkCheck:skipLinkCheck',
+      method: 'get'
     }
   }
 }

@@ -18,6 +18,9 @@ declare const agentAssistHelpers: any;
 })
 export class CommonService {
   configObj;
+  primaryChecklist: any = [];
+  dynamicChecklist: any = [];
+  guidedChecklistObj: any;
   grantResponseObj;
   activeTab : string;
   userIntentInput: string;
@@ -535,6 +538,7 @@ export class CommonService {
 
   // send and copy button related code
   preparePostMessageForSendAndCopy(evt, data, eventName, connectionDetails) {
+    console.log("🚀 ~ file: common.service.ts:541 ~ CommonService ~ preparePostMessageForSendAndCopy ~ connectionDetails:", connectionDetails)
     if(eventName == IdReferenceConst.COPYMSG){
       let ele = document.getElementById(`displayData-${evt.target.dataset.msgId}`) ? document.getElementById(`displayData-${evt.target.dataset.msgId}`) : document.getElementById(evt.target.dataset.msgId);
       data = (data && data !== '') ? data : (evt.target.parentNode.dataset.msgData && evt.target.parentNode.dataset.msgData !== '' ? evt.target.parentNode.dataset.msgData : ele.innerText)
@@ -556,13 +560,18 @@ export class CommonService {
     }
 
     let payloadForBE : any = {
-      type: (eventName == IdReferenceConst.SENDMSG) ? IdReferenceConst.SEND_METHOD : IdReferenceConst.COPY_METHOD,
+      usedType: (eventName == IdReferenceConst.SENDMSG) ? IdReferenceConst.SEND_METHOD : IdReferenceConst.COPY_METHOD,
       name: (eventName == IdReferenceConst.SENDMSG) ? IdReferenceConst.SENDMSG_REQUEST : IdReferenceConst.COPYMSG_REQUEST,
       conversationId: connectionDetails.conversationId,
       payload: payload,
       botId: connectionDetails.botId,
-      positionId: evt.target.dataset?.positionId
-    };
+      positionId: evt.target.dataset?.positionId,
+      type: connectionDetails.type,
+      title: connectionDetails.title,
+      input: connectionDetails?.input || '',
+      sessionId: connectionDetails.sessionId,
+      contentId: connectionDetails.contentId,
+    };console.log('Sandeep Before send or copy event: ',data, connectionDetails, payloadForBE);
     this.webSocketService.emitEvents(EVENTS.agent_send_or_copy, payloadForBE);
     this.highLightAndStoreFaqId(evt, data, connectionDetails);
   }
@@ -639,7 +648,9 @@ export class CommonService {
         answer: (faq.answer && faq.answer.length > 0) ? [] : false,
         showMoreButton: false,
         showLessButton: false,
-        answerRender : faq.answer || false
+        answerRender : faq.answer || false,
+        childBotId : faq.childBotId,
+        childBotName : faq.childBotName
       }
       if(faq.answer && faq.answer.length > 0){
         for(let ans of faq.answer){
@@ -1313,9 +1324,9 @@ export class CommonService {
           }
         ]
       },
-    
+
       series: [
-        { 
+        {
           data: [[0,0]],
           type: 'line',
           smooth: true,
@@ -1333,6 +1344,21 @@ export class CommonService {
       return coachingConst.SENTI_CHART_YAXIS_LIST[val];
     }else {
       return '';
+    }
+  }
+
+  sendAndCopyForPlaybook(eventName, conversationId, payload){
+    let message : any = {
+      method: (eventName == IdReferenceConst.SENDMSG) ? IdReferenceConst.SEND_METHOD : IdReferenceConst.COPY_METHOD,
+      name: (eventName == IdReferenceConst.SENDMSG) ? IdReferenceConst.SENDMSG_REQUEST : IdReferenceConst.COPYMSG_REQUEST,
+      conversationId,
+      payload,
+    };
+
+    if (eventName == IdReferenceConst.SENDMSG) {
+      window.parent.postMessage(message, '*');
+    } else if (eventName == IdReferenceConst.COPYMSG) {
+      parent.postMessage(message, '*');
     }
   }
 

@@ -30,6 +30,7 @@ export class TriggerByComponent implements OnInit, OnChanges {
   selectedUtterancesArray = [];
   deletedUIds:any = {};
   utterApiDone = false;
+  isUniversalSM = false;
   selAcc = this.local.getSelectedAccount();
   currentBot:any = {};
   executeState:any = {
@@ -38,6 +39,7 @@ export class TriggerByComponent implements OnInit, OnChanges {
   };
   standardBotsOj:any = {};
   childBotId = '';
+  isSm = false;
   botId = this.workflowService.getCurrentBtSmt(true)._id;
   constructor(
     private workflowService: workflowService,
@@ -75,6 +77,7 @@ export class TriggerByComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
+    /* search */
     this.searchKey.valueChanges
       .pipe(
         debounceTime(300),
@@ -84,16 +87,53 @@ export class TriggerByComponent implements OnInit, OnChanges {
       )
       .subscribe((val) => {
         this.loaded = false;
-        this.formatUtterArray(this.searchKey.value?.trim());
+        this.formatUtterArray(val?.trim());
       });
-      this.currentBot = this.workflowService.getCurrentBt(true);
-      if(this.currentBot.type === 'universalbot'){
-        this.getLinkedBots();
-        if(this.onlyAdhreForm.value.lBId){
-          this.selectBot({_id : this.onlyAdhreForm.value.lBId});
+      /* Get the current bot in case of SmartAssist */
+      this.isSm = window.location.href.includes('smartassist')
+      if(this.isSm){
+        if(this.onlyAdhreForm.value.botId){
+          let obj =             {
+            _id: this.onlyAdhreForm.value.botId,
+          };
+          if(this.onlyAdhreForm.value.lBId){
+            obj['type'] = 'universalbot';
+          }
+          this.selectSMBot(obj);
         }
+        if(this.onlyAdhreForm.value.lBId){
+          this.selectSMChildBot({_id: this.onlyAdhreForm.value.lBId});
+        }
+        let selAcc = this.local.getSelectedAccount();
+        let smBotObj = selAcc['instanceBots'][0];
+        let instanceBotId = smBotObj.instanceBotId;
+        this.service.invoke("get.automationbots-sm",
+          {
+            instanceBotId,
+            includeInstanceBot: true,
+            skipLinkCheck: true
+          }
+        )
+        .subscribe((bots)=>{
+          this.standardBots = bots;
+          this.standardBotsOj = (bots || [])
+          .reduce((acc, item)=>{
+            acc[item._id] = item.name;
+            return acc;
+          }, {});
+        });
+        // this.selectSMBot({_id : this.onlyAdhreForm.value.botId});
       }else{
-        this.selectBot(this.currentBot);
+        /* Get the current bot in case of AgentAssist */
+        this.currentBot = this.workflowService.getCurrentBt(true);
+        if(this.currentBot.type === 'universalbot'){
+          this.getLinkedBots();
+          if(this.onlyAdhreForm.value.lBId){
+            this.selectBot({_id : this.onlyAdhreForm.value.lBId});
+          }
+        }else{
+          this.selectBot(this.currentBot);
+        };
       }
   }
 
@@ -276,7 +316,7 @@ export class TriggerByComponent implements OnInit, OnChanges {
       ));
       ((this.adherenceForm as FormGroup).controls['adherence'] as FormGroup)
       .controls['type'].patchValue('dialog');
-      if(this.currentBot.type === 'universalbot'){
+      if(this.currentBot.type === 'universalbot' && !this.isSm){
         (this.adherenceForm.controls['adherence'] as FormGroup)
         .addControl('lBId', new FormControl('', [Validators.required]));
       }
@@ -309,9 +349,25 @@ export class TriggerByComponent implements OnInit, OnChanges {
       this.standardBots = res.publishedBots;
       this.standardBotsOj = (res.publishedBots || [])
       .reduce((acc, item)=>{
-        acc[item.dialogId] = item.botName;
+        acc[item._id] = item.botName;
         return acc;
-      }, {})
+      }, {});
+    });
+  }
+  childBotsObj= {};
+  childBots = [];
+  getLinkedBotsSM(botId){
+    const params = {
+      userId: this.auth.getUserId(),
+      streamId: botId
+    }
+    this.service.invoke('get.bt.stream', params).subscribe(res => {
+      this.childBots = res.publishedBots;
+      this.childBotsObj = (res.publishedBots || [])
+      .reduce((acc, item)=>{
+        acc[item._id] = item.botName;
+        return acc;
+      }, {});
     });
   }
 
@@ -340,11 +396,99 @@ export class TriggerByComponent implements OnInit, OnChanges {
       if (data) {
         this.useCases = (data?.usecases || [])
         .reduce((acc, item)=>{
-          acc[item._id] = item.usecaseName;
+          acc[item.dialogId] = item.usecaseName;
           return acc;
         }, {});
       }
     });
+  }
+
+  selectSMBot(bot, click=false){
+    // this.childBotId = bot._id;
+    if(click && (bot._id === this.onlyAdhreForm.value?.botId)){
+      return;
+    }else if(click){
+      this.useCases = {};
+      this.onlyAdhreForm.controls['lBId']?.patchValue('');
+      this.onlyAdhreForm.controls['taskId']?.patchValue('');
+    }
+    if(bot.type === 'universalbot'){
+      this.isUniversalSM = true;
+      this.getLinkedBotsSM(bot._id);
+      (this.adherenceForm.controls['adherence'] as FormGroup)
+      .addControl('lBId', new FormControl('', [Validators.required]));
+    }else{
+      this.isUniversalSM = false;
+      (this.adherenceForm.controls['adherence'] as FormGroup)
+      ?.removeControl('lBId');
+    }
+    if(click){
+      this.onlyAdhreForm.controls['botId'].patchValue(bot._id);
+    }
+    if(bot.type !== 'universalbot'){
+      this.service.invoke('get.usecases', {
+        streamId: bot._id,
+        search: '',
+        filterby: '',
+        status: '',
+        usecaseType: 'dialog',
+        offset: 0,
+        limit: -1,
+      }).subscribe((data) => {
+        if (data) {
+          this.useCases = (data?.usecases || [])
+          .reduce((acc, item)=>{
+            acc[item.dialogId] = item.usecaseName;
+            return acc;
+          }, {});
+        }
+      });
+    }
+  }
+
+  selectSMChildBot(bot, click=false){
+    // this.childBotId = bot._id;
+    if(click && (bot._id === this.onlyAdhreForm.value?.lBId)){
+      return;
+    }else if(click){
+      this.useCases = {};
+      this.onlyAdhreForm.controls['lBId']?.patchValue('');
+      this.onlyAdhreForm.controls['taskId']?.patchValue('');
+      this.onlyAdhreForm.controls['lBId']?.patchValue(bot._id);
+    };
+    this.service.invoke('get.usecases', {
+      streamId: bot._id,
+      search: '',
+      filterby: '',
+      status: '',
+      usecaseType: 'dialog',
+      offset: 0,
+      limit: -1,
+    }).subscribe((data) => {
+      if (data) {
+        this.useCases = (data?.usecases || [])
+        .reduce((acc, item)=>{
+          acc[item.dialogId] = item.usecaseName;
+          return acc;
+        }, {});
+      }
+    });
+/*     if(bot.type === 'universalbot'){
+      this.isUniversalSM = true;
+      this.getLinkedBotsSM(bot._id);
+      (this.adherenceForm.controls['adherence'] as FormGroup)
+      .addControl('lBId', new FormControl('', [Validators.required]));
+    }else{ */
+/*       this.isUniversalSM = false;
+      (this.adherenceForm.controls['adherence'] as FormGroup)
+      .removeControl('lBId'); */
+    /* } */
+/*     if(click){
+      this.onlyAdhreForm.controls['botId'].patchValue(bot._id);
+    }
+    if(bot.type !== 'universalbot'){
+
+    } */
   }
 
   selectUc(uc){
@@ -358,7 +502,7 @@ export class TriggerByComponent implements OnInit, OnChanges {
   }
 
   // selectBot(bot){
-    
+
   // }
 
 }

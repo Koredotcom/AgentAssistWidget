@@ -7,7 +7,11 @@
                         <input type="checkbox" formControlName="isAdherenceActive" (change)="isActive($event)">
                         <div class="slider"></div>
                     </label>
-                    <div class="content-block">
+                    <div class="content-block" *ngIf="isChecklist">
+                        <div class="title">Check Customer's Adherence</div>
+                        <div class="desc-text">Check for Customer's compliance with this step dynamically using Utterances, Dialogs or Context Variables.  </div>
+                    </div>
+                    <div class="content-block" *ngIf="!isChecklist">
                         <div class="title">Check Agent’s Adherence</div>
                         <div class="desc-text">Check for agent’s compliance with this step dynamically using Utterances, Dialogs or Context Variables.  </div>
                     </div>
@@ -17,7 +21,8 @@
                         <div class="kr-sg-radiobutton">
                             <input formControlName="type" [checked]="onlyAdhreForm?.value?.type === 'utterance'" value="utterance" id="radio-1au" name="type" class="radio-custom" type="radio" (change)="changeRadio('utterance')">
                             <label for="radio-1au" class="radio-custom-label">
-                                <div class="title">By Agent’s Utterance</div>
+                                <div class="title" *ngIf="!isChecklist">By Agent’s Utterance</div>
+                                <div class="title" *ngIf="isChecklist">By Customer's Utterance</div>
                                 <div class="desc-text">Listen for specific utterances by the agent to mark as completed</div>
                             </label>
                         </div>
@@ -32,17 +37,18 @@
                                     <div class="label-text">Utterances</div>
                                     <div class="dropdown-adherence" ngbDropdown #utteranceDropdown="ngbDropdown">
                                         <input [formControl]="searchKey" type="text" class="drp-input-search"  ngbDropdownToggle>
-                                        <div class="text_info">Type an utterance that the customer might say...</div>
+                                        <div class="text_info" *ngIf="isChecklist">Type an utterance that the agent might say...</div>
+                                        <div class="text_info" *ngIf="!isChecklist">Type an utterance that the customer might say...</div>
                                         <ul class="dropdown_menu-wrapper" ngbDropdownMenu id="utteranceDropdownMenu">
                                             <div class="body-dropdown">
                                                 <ng-container *ngIf="loaded; else loading">
                                                     <div class="searchedutt" *ngIf="searchKey.value">
-                                
+
                                                       <div class="check-list kr-sg-checkbox">
                                                         <input id="checkbox-all" class="checkbox-custom" type="checkbox" [checked]="selectAll" (change)="selectAllSearchUttereances($event)">
                                                         <label for="checkbox-all" class="checkbox-custom-label">{{"PLACEHOLDERS.SELECT_ALL" | translate}}</label>
                                                       </div>
-                                
+
                                                         <div class="check-list kr-sg-checkbox">
                                                             <input id="checkbox-11" [checked]="customUtt" (change)="customUttChange($event.target.checked)" class="checkbox-custom" type="checkbox">
                                                             <label for="checkbox-11" class="checkbox-custom-label">{{searchKey.value}}</label>
@@ -114,7 +120,7 @@
                                 <ng-template #data>
                                     <div class="saved-utt-block">
                                         <div class="saved-header">Saved Utterances</div>
-                                        
+
                                         <!-- <div class="percentage-colr">
                                             <span class="bgcolor"></span>
                                             <span class="percentage">12%</span>
@@ -169,7 +175,7 @@
                                                 </div>
                                             </div>
                                         </ng-container> -->
-                                        
+
                                     </div>
                                  </ng-template>
                             </div>
@@ -185,15 +191,16 @@
                         </div>
                         <div class="radio-checked-content" [ngClass]="{'disabled': onlyAdhreForm?.value?.type !== 'dialog', 'd-none': onlyAdhreForm?.value?.type !== 'dialog'}">
                             <div class="label-text">Bot</div>
+                            <ng-container *ngIf="!isSm;">
                                 <div class="kr-sg-dropdowns m-b-10" placement="bottom">
                                     <div class="dropdown dropdown-open">
                                         <button disabled class="disabled dropdown-toggle dropdown-input">{{currentBot.name}}</button>
                                     </div>
                                 </div>
-                                <ng-container *ngIf="currentBot.type === 'universalbot';">
+                                <ng-container *ngIf="currentBot.type === 'universalbot'">
                                     <div class="kr-sg-dropdowns m-b-10" ngbDropdown placement="bottom">
                                         <div class="dropdown dropdown-open">
-                                            <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{ standardBotsOj[onlyAdhreForm.value?.lBId] ? standardBotsOj[onlyAdhreForm.value?.lBId] : 'Select Option'}}</button>
+                                            <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{ standardBotsOj[onlyAdhreForm.value?.botId] ? standardBotsOj[onlyAdhreForm.value?.botId] : 'Select Option'}}</button>
                                             <ul class="dropdown-menu content-menu" ngbDropdownMenu>
                                                 <perfect-scrollbar class="mx-h-200">
                                                     <li ngbDropdownItem class="p-0" *ngFor="let bot of standardBots" (click)="selectBot(bot, true)">
@@ -203,6 +210,35 @@
                                             </ul>
                                         </div>
                                     </div>
+                                </ng-container>
+                            </ng-container>
+                                <ng-container *ngIf="isSm">
+                                    <div class="kr-sg-dropdowns m-b-10" ngbDropdown placement="bottom">
+                                        <div class="dropdown dropdown-open">
+                                            <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{ standardBotsOj[onlyAdhreForm.value?.botId] ? standardBotsOj[onlyAdhreForm.value?.botId] : 'Select Option'}}</button>
+                                            <ul class="dropdown-menu content-menu" ngbDropdownMenu>
+                                                <perfect-scrollbar class="mx-h-200">
+                                                    <li ngbDropdownItem class="p-0" *ngFor="let bot of standardBots" (click)="selectSMBot(bot, true)">
+                                                        <a>{{bot.name}}</a>
+                                                    </li>
+                                                </perfect-scrollbar>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <div class="kr-sg-dropdowns m-b-10" *ngIf="isUniversalSM" ngbDropdown placement="bottom">
+                                        <div class="dropdown dropdown-open">
+                                            <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{ childBotsObj[onlyAdhreForm.value?.lBId] ? childBotsObj[onlyAdhreForm.value?.lBId] : 'Select Option'}}</button>
+                                            <ul class="dropdown-menu content-menu" ngbDropdownMenu>
+                                                <perfect-scrollbar class="mx-h-200">
+                                                    <li ngbDropdownItem class="p-0" *ngFor="let bot of childBots" (click)="selectSMChildBot(bot, true)">
+                                                        <a>{{bot.botName}}</a>
+                                                    </li>
+                                                </perfect-scrollbar>
+                                            </ul>
+                                        </div>
+                                    </div>
+
                                 </ng-container>
                             <div class="label-text">Automation</div>
                             <div class="kr-sg-dropdowns m-b-30" ngbDropdown placement="bottom">
