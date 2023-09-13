@@ -690,7 +690,7 @@ setProactiveMode(){
         this.connectionDetails.contentId = target.dataset?.contentId;
       } else if (target.dataset?.textType === 'faq') {
         this.connectionDetails.title = target.dataset?.title;
-        this.connectionDetails.contentId = target.dataset?.contentId;
+        this.connectionDetails.contentId = target.dataset?.taskRefId;
       }
       this.connectionDetails.sessionId = this.handleSubjectService.assistTabSessionId;
       if(data && data != 'Send'){
