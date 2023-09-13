@@ -5,6 +5,7 @@ import { ServiceInvokerService } from '@kore.services/service-invoker.service';
 import { NotificationService } from '@kore.services/notification.service';
 import { environment } from '@kore.environment';
 import { AppService } from './app.service';
+import { LocalStoreService } from './localstore.service';
 
 @Injectable({
   providedIn: 'root'
@@ -77,7 +78,8 @@ export class workflowService {
   constructor(
     private service: ServiceInvokerService,
     private notificationService: NotificationService,
-    private appService: AppService
+    private appService: AppService,
+    private local: LocalStoreService
   ) {
     this.onPremise = environment.ON_PREMISE;
     this.registerEventsFromParent();
@@ -170,6 +172,19 @@ export class workflowService {
     }
   }
 
+  getCurrentBtSmt(automationBot?: boolean) {
+    if (automationBot) {
+      if(!window.location.href.includes('smartassist')) {
+        return { ...this.currentBtDetails };
+      } else {
+        let selAcc = this.local.getSelectedAccount();
+        let smBotObj = selAcc['instanceBots'][0];
+        smBotObj._id = smBotObj.instanceBotId;
+        return smBotObj;
+      }
+    }
+  }
+
   selectedCallflowStep(value?) {
     if (value) {
       this.callflowStep = value;
@@ -233,6 +248,7 @@ export class workflowService {
     if (url === 'https://demo-app.smartassist.ai' || url === 'https://demo-app-smartassist.kore.ai') return 'https://uat-demo.kore.ai';
     if (url === 'https://app.deflect.ai' || url === 'https://app.smartassist.ai' || url === 'https://smartassist.kore.ai') return 'https://bots.kore.ai';
     if (url === 'https://smartassist-jp.kore.ai') return 'https://jp-bots.kore.ai';
+    if(url === 'http://localhost:4201') return 'https://dev-agentassist.kore.ai';
     return url;
   }
 

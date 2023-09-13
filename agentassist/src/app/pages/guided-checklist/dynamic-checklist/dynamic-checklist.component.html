@@ -1,0 +1,86 @@
+<div class="dynamic-checklist-data">
+    <ng-container >
+        <div class="search-data-input">
+            <div class="kr-sg-input-inline-search">
+                <input type="text" placeholder="Search" class="input-search" [formControl]="searchField">
+                <i class="icon-sa-conv-search search-icon"></i>
+            </div>
+        </div>
+        <div class='init-loading' *ngIf="loading">
+            <mat-spinner diameter="25" strokeWidth="3"></mat-spinner>
+        </div>
+        <div class="table-wrapper-checklist-scroll" *ngIf="dynamicList.length;else NoData">
+            <perfect-scrollbar (psYReachEnd)="onReachEnd($event)">
+                <div class="inner-content-data">
+                    <div class="content-scroll-data-checklist">
+                        <div class="shadow-freeze w-20"></div>
+                        <div class="header-table-checklist">
+                            <div class="titles-data w-20">
+                                <div class="title-header">name</div>
+                            </div>
+                            <div class="titles-data w-12">Actions</div>
+                            <div class="titles-data w-15">Description</div>
+                            <div class="titles-data w-14">Triggers for</div>
+                            <div class="titles-data w-14">Triggers BY</div>
+                            <div class="titles-data w-15">Last UPDATED</div>
+                            <div class="titles-data w-10">Enable</div>
+                        </div>
+                        <ng-container *ngFor="let dyn of dynamicList">
+                            <div class="body-data-table-wrapper-cl">
+                                <div class="cheklist w-20">
+                                    <div class="title" [title]="dyn.name" placement="bottom-center" tooltipClass="tooltip-global-styles" ngbTooltip="{{dyn.name | titlecase}}" container="body">{{dyn.name | uppercase}}</div>
+                                    <div class="voice-msg-icons">
+                                        <i class="icon-sa-welcome-voice" placement="bottom-center" tooltipClass="tooltip-global-styles" ngbTooltip="voice" *ngIf="dyn.channels.includes('voice')"></i>
+                                        <i class="icon-sa-welcome-chat" placement="bottom-center" tooltipClass="tooltip-global-styles" ngbTooltip="chat" *ngIf="dyn.channels.includes('chat')"></i>
+                                    </div>
+                                </div>
+                                <div class="actions-info w-12">
+                                    <button class="edit-btn" (click)="updateCl(dyn)">
+                                        <i class="icon-sa-welcome-edit"></i>
+                                    </button>
+                                    <button class="delete-btn" (click)="openDeleteCl(dyn)">
+                                        <i class="icon-sa-welcome-delete"></i>
+                                    </button>
+                                </div>
+                                <div class="title-text w-15">{{dyn.description}}</div>
+                                <div class="title-text w-14">All Agents</div>
+                                <div class="title-text w-14">{{dyn.triggerBy?.type}}</div>
+                                <div class="title-text w-15">{{dyn.lModOn | date : 'MMM dd, yyyy h:mm a'}}</div>
+                                <div class="last-updated-toggle w-10">
+                                    <label class="kr-sg-toggle">
+                                        <input type="checkbox" [checked]="dyn.isActive" (click)="updateStatus(dyn)">
+                                        <div class="slider"></div>
+                                    </label>               
+                                </div>
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+            </perfect-scrollbar>
+        </div>
+    </ng-container>   
+    <ng-template #NoData>
+        <ng-container *ngIf="!searchField.value && !loading">
+            <div class="empty-coaching-wrapper">
+                <div class="empty-content">
+                    <div class="img-block">
+                        <img src="assets/images/coaching/empty-checklist.svg">
+                    </div>
+                    <div class="empty-title">Create your first guided checklist</div>
+                    <div class="desc-text">Checklists allow agents to follow a guided path to success. <br/>Get started by creating your <span>first checklist</span></div>
+                </div>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="searchField.value && !loading">
+            <div class="empty-coaching-wrapper">
+                <div class="empty-content">
+                    <div class="img-block">
+                        <img src="assets/images/coaching/empty-coaching.png">
+                    </div>
+                    <div class="empty-title">No Search Results found.</div>
+                   
+                </div>
+            </div>
+        </ng-container>
+    </ng-template>
+</div>

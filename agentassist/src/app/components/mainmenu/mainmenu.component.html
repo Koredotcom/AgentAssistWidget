@@ -115,16 +115,21 @@
 				<img src="assets/icons/leftmenu/new/agent-status.svg"><span class="link-name">Agent Status</span>
 			</div>
 		</div> -->
-		<ng-container *ngIf="isCoachingDisable">
-			<div class="group-links">
-				<div class="group-heading">{{ 'NAV.COACH_TITLE' | translate }}</div>
+		<div class="group-links">
+			<div class="group-heading">{{ 'NAV.COACH_TITLE' | translate }}</div>
+			<ng-container *ngIf="isCoachingDisable">
 				<div class="link-router" [routerLink]="['coaching']" routerLinkActive="active" *hasPermission="['admin']">
 					<i class="icon-coaching-menu-icon"></i>
 					<span class="link-name">{{'NAV.COACHING' | translate}}</span>
 					<span class="beta-tag">Beta</span>
 				</div>
+			</ng-container>
+			<div class="link-router" [routerLink]="['guided-checklist']" routerLinkActive="active" *hasPermission="['admin']">
+				<i class="icon-coaching-menu-icon"></i>
+				<span class="link-name">{{'NAV.CHECKLIST.TITLE' | translate}}</span>
+				<span class="beta-tag">Beta</span>
 			</div>
-		</ng-container>
+		</div>
 
 		<div class="group-links">
 			<div class="group-heading">System SETUP</div>

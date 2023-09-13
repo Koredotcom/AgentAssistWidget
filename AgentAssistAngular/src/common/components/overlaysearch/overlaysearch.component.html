@@ -47,7 +47,10 @@
         
                     <div class="type-info-run-send" *ngFor="let dialog of searchResponse.dialogs; let i = index">
                         <div class="left-content">
-                            <div class="title-text" [id]="'automation-' + i">{{dialog.name}}</div>
+                            <div class="title-text" [id]="'automation-' + i">
+                                <div class="desc-text-bot" title="{{dialog.name}}">{{dialog.name}}</div>                                
+                                <span class="bot-name-text" *ngIf="dialog.childBotName" title="{{dialog.childBotName}}">({{dialog.childBotName}})</span>
+                            </div>
                         </div>
                         <div class="action-links">
                             <button class="send-run-btn" [id]="'run-' + i" (click)="dialogueRunClick(dialog,projConstants.ASSIST)">{{projConstants.RUN}}</button>
@@ -72,8 +75,11 @@
                     <div class="type-with-img-title">FAQ ({{searchResponse.faqs?.length}})</div>
                     <div class="type-info-run-send is-dropdown-show-default is-dropdown-open" [id]="'faqDivLib-' + i" *ngFor="let faq of searchResponse.faqs | slice : 0 : faqViewCount; let i = index">
                         <div class="left-content" [id]="'faqSectionLib-' + i">
-                            <div class="title-text" [title]="faq.displayName ? faq.displayName : faq.question" [id]="'titleLib-' + i"
-                                >{{faq.displayName ? faq.displayName : faq.question}}<span *ngIf="faq.answer && faq.answer.length > 1 && ((!faq.seeMoreWrapper && faq.answerRender) || (faq.toggle && !faq.answerRender && !faq.seeMoreWrapper))"> 1/{{faq.answer.length}}</span>
+                            <div class="title-text" [id]="'titleLib-' + i"
+                                >
+                                <div class="desc-text-bot" title="{{faq.displayName ? faq.displayName : faq.question}}">{{faq.displayName ? faq.displayName : faq.question}}</div>
+                                <span *ngIf="faq.childBotName" class="bot-name-text" title="{{faq.childBotName}}">({{faq.childBotName}})</span>
+                                <span *ngIf="faq.answer && faq.answer.length > 1 && ((!faq.seeMoreWrapper && faq.answerRender) || (faq.toggle && !faq.answerRender && !faq.seeMoreWrapper))"> 1/{{faq.answer.length}}</span>
                                 <i class="ast-carrotup" [id]="'checkLib-' + i" *ngIf="!faq.answerRender && !faq.toggle" (click)="getFaqAnswerAndtoggle(faq)"></i>
                                 <i class="ast-carrotup rotate-carrot" [id]="'checkLib-' + i" *ngIf="!faq.answerRender && faq.toggle" (click)="getFaqAnswerAndtoggle(faq)"></i>
                             </div>

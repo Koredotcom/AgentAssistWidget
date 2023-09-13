@@ -1,0 +1,47 @@
+<!-- Devender you need to work from here.
+
+<button class="kr-sg-button-secondary-two btn_lg mr-2" (click)="createCheckList(checklistCreation)" >New Checklist</button>
+
+
+<app-primary-checklist></app-primary-checklist>
+<app-dynamic-checklist class="d-none"></app-dynamic-checklist> -->
+
+<div class="checklist-container-wrapper">
+    <div class="header-sec-top">
+        <div class="left-actions">
+            <div class="main-heading">Playbook</div>
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                  <a class="nav-link active" data-toggle="tab" href="#static" (click)="checkListType = 'primary'">STATIC</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" data-toggle="tab" href="#dynamicintent" (click)="checkListType = 'dynamic'">DYNAMIC</a>
+                </li>
+            </ul>
+        </div>
+        <div class="right-action-btns">            
+            <button class="kr-sg-button-secondary-two btn_lg publish" (click)="publush()" [disabled]="!(checkList1?.primaryCheckList?.length || checkList2?.dynamicList?.length)">Publish</button>
+            <button class="kr-sg-button-primary btn_lg" (click)="createCheckList(checklistCreation)">+ New Playbook</button>
+        </div>
+    </div>
+    <div class="tab-content tab-content-details">
+        <div class="tab-pane active" id="static">
+            <app-primary-checklist #checkList1 (update)="updatePrimaryChecklist($event)" [checkListType]="checkListType"></app-primary-checklist>           
+        </div>
+        <div class="tab-pane fade" id="dynamicintent">
+            <app-dynamic-checklist #checkList2 (update)="updatePrimaryChecklist($event)" [checkListType]="checkListType"></app-dynamic-checklist>
+        </div>
+    </div>
+</div>
+
+
+<ng-template #checklistCreation>
+    <app-stages-list 
+        *ngIf="isStageListOpen"
+        class="d-inline-block w-100 h-100"
+        [createOrUpdate]="createOrUpdate" 
+        [currentCheckList]="currentCheckList" 
+        (closeCheckList)="closeCheckListScreen($event)" 
+        [checkListType]="checkListType">
+    </app-stages-list>
+</ng-template>
