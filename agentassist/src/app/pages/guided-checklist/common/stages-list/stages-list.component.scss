@@ -376,6 +376,14 @@
                             }
                         }
                     }
+                    .example-list{
+                        display: flex;
+                        flex-direction: column;
+                        gap: 5px;
+                        width: 100%;
+                        .example-box{
+                        }
+                    }
                     .added-check-item{
                         width: 100%;
                         display: flex;
