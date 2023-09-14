@@ -123,12 +123,12 @@
 					<span class="link-name">{{'NAV.COACHING' | translate}}</span>
 					<span class="beta-tag">Beta</span>
 				</div>
+				<div class="link-router" [routerLink]="['guided-checklist']" routerLinkActive="active" *hasPermission="['admin']">
+					<i class="icon-coaching-menu-icon"></i>
+					<span class="link-name">{{'NAV.CHECKLIST.TITLE' | translate}}</span>
+					<span class="beta-tag">Beta</span>
+				</div>
 			</ng-container>
-			<div class="link-router" [routerLink]="['guided-checklist']" routerLinkActive="active" *hasPermission="['admin']">
-				<i class="icon-coaching-menu-icon"></i>
-				<span class="link-name">{{'NAV.CHECKLIST.TITLE' | translate}}</span>
-				<span class="beta-tag">Beta</span>
-			</div>
 		</div>
 
 		<div class="group-links">
