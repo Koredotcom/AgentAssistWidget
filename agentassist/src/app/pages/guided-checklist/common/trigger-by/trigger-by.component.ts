@@ -107,7 +107,7 @@ export class TriggerByComponent implements OnInit, OnChanges {
         let selAcc = this.local.getSelectedAccount();
         let smBotObj = selAcc['instanceBots'][0];
         let instanceBotId = smBotObj.instanceBotId;
-        this.service.invoke("get.automationbots-sm", 
+        this.service.invoke("get.automationbots-sm",
           {
             instanceBotId,
             includeInstanceBot: true,
@@ -502,7 +502,7 @@ export class TriggerByComponent implements OnInit, OnChanges {
   }
 
   // selectBot(bot){
-    
+
   // }
 
 }
