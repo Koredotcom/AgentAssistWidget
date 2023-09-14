@@ -135,23 +135,24 @@ export class AutomationPerformanceComponent implements OnInit {
           fontSize: 15,
         },
         formatter : (params : any) => {
-          console.log(params, 'params');
-
           let tooltipString  = '';
           // let tooltipSeriesList = this.dashboardService.formatterData[params.data.name];
           tooltipString = tooltipString + `<div class="automation-per-tooltip">
             <div class="title-indication">
-              <div class="left-title">
-                <span class="bg"></span>
-                <span class="h-text">${params.data.name}</span>
+              <div class="left-title">`
+              +
+                `<span class="bg" style="background:`+params.color+`"></span>
+                 <span class="h-text">${params.data.name}</span>`
+              + 
+              `
               </div>
-              <div class="right-title">${this.decimalPipe.transform(params.data.percent,'2.2-2')}%</div>
+              <div class="right-title">${this.decimalPipe.transform((params.data.percent),'2.2-2')}%</div>
             </div>
             <div class="lable-heading">TOP 3</div>`
             for(let item of params.data.series){
               tooltipString = tooltipString +  `<div class="row-labels">
               <div class="left-title">${item.key}</div>
-              <div class="right-title">${item.value}%</div>
+              <div class="right-title">${(item.value * 100) / params.data.value}%</div>
             </div>`
             }
 
