@@ -41,10 +41,22 @@
             &:hover{
                 color: #FFFFFF;
                 background: var(--kora-blue-blue-highlight, #0D6EFD);
+                svg{
+                    stroke: #FFFFFF;
+                    path{
+                        stroke: #FFFFFF;
+                    }
+                }
             }
             &.active-btn{
                 color: #FFFFFF;
                 background: var(--kora-blue-blue-highlight, #0D6EFD);
+                svg{
+                    stroke: #FFFFFF;
+                    path{
+                        stroke: #FFFFFF;
+                    }
+                }
             }
         }
     }

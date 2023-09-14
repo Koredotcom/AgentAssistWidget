@@ -449,5 +449,29 @@ export class StagesListComponent implements OnInit {
 
   drop(event: CdkDragDrop<string[]>, i) {
     moveItemInArray(this.stages[i].steps, event.previousIndex, event.currentIndex);
+    if(event.previousIndex != event.currentIndex){
+      let steps = this.stages[i].steps.map(step=> step._id);
+      this.updateStepOrderInStage(this.stages[i]._id, steps);
+    }
+  }
+
+  updateStepOrderInStage(clsId, steps){
+    let method = "put.stage";
+    let params = {
+      clsId,
+      clId: this.currentCheckList._id,
+      botId: this.botId,
+    };
+    let obj = {
+      botId: this.botId,
+      steps
+    }
+    this.service.invoke(method, params, obj).subscribe((data) => {
+      if (data) {
+        this.notificationService.notify(this.translate.instant("NOTIFY.UPDATED_SUCCESSFULLY"), 'success');
+      }
+    },(error) => {
+      this.notificationService.showError(error, this.translate.instant("COMMON.SOMETHING_WENT_WRONG"));
+    });
   }
 }
