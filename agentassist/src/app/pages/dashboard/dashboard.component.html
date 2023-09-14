@@ -11,17 +11,17 @@
     <perfect-scrollbar class="scroll-container" id="scrollContainer">
         <div class="inner-scroll-data" id="innerScroll">
             <div class="cards-data-boards">
-                <div class="card-sec" (click)="openSlider(DASHBORADCOMPONENTTYPE.AGENT_ASPECT)">
+                <div class="card-sec" >
                     <div class="inner-data-sec">
                         <div class="title-text-info">
                             <span class="heading-text">{{"DASHBOARD.TOTAL_SESSIONS" | translate}}</span>
                             <div class="value-data" [ngClass]="{'negtive': !kpiData?.totalSessions?.increment}">
                                 <i [ngClass]="kpiData?.totalSessions?.increment ? 'icon-ast_sortup' : 'icon-ast_sortdown' "></i>
-                                <span>{{kpiData?.totalSessions?.percent ? kpiData?.totalSessions?.percent : '0'}}%</span>
+                                <span>{{kpiData?.totalSessions?.percent ? (kpiData?.totalSessions?.percent | number : '1.2-2') : '0'}}%</span>
                             </div>
                         </div>
                         <div>
-                          <div class="count-heading"  [ngClass]="{'empty-count': !kpiData?.totalSessions?.count}">{{kpiData?.totalSessions?.count ? kpiData?.totalSessions?.count : '0'}}</div>
+                          <div class="count-heading"  [ngClass]="{'empty-count': !kpiData?.totalSessions?.count}">{{kpiData?.totalSessions?.count ? (kpiData?.totalSessions?.count | number : '1.2-2') : '0'}}</div>
 
                         </div>
 
@@ -33,10 +33,10 @@
                             <span class="heading-text">{{"DASHBOARD.TOTAL_SUGGESTIONS" | translate}}</span>
                             <div class="value-data" [ngClass]="{'negtive': !kpiData?.totalSuggestions?.increment}">
                                 <i [ngClass]="kpiData?.totalSuggestions?.increment ? 'icon-ast_sortup' : 'icon-ast_sortdown' "></i>
-                                <span>{{kpiData?.totalSuggestions?.percent ? kpiData?.totalSuggestions?.percent : '0'}}%</span>
+                                <span>{{kpiData?.totalSuggestions?.percent ? (kpiData?.totalSuggestions?.percent | number : '1.2-2') : '0'}}%</span>
                             </div>
                         </div>
-                        <div class="count-heading" [ngClass]="{'empty-count': !kpiData?.totalSuggestions?.count}">{{kpiData?.totalSuggestions?.count ? kpiData?.totalSuggestions?.count : '0'}}</div>
+                        <div class="count-heading" [ngClass]="{'empty-count': !kpiData?.totalSuggestions?.count}">{{kpiData?.totalSuggestions?.count ? (kpiData?.totalSuggestions?.count | number : '1.2-2') : '0'}}</div>
                     </div>
                 </div>
                 <div class="card-sec">
@@ -44,7 +44,7 @@
                         <div class="title-text-info">
                             <span class="heading-text">{{"DASHBOARD.AVG_SUGGESTIONS" | translate}}</span>
                         </div>
-                        <div class="count-heading" [ngClass]="{'empty-count': !kpiData?.avgSuggestions?.count}">{{kpiData?.avgSuggestions?.count ? kpiData?.avgSuggestions?.count : '0'}}</div>
+                        <div class="count-heading" [ngClass]="{'empty-count': !kpiData?.avgSuggestions?.count}">{{kpiData?.avgSuggestions?.count ? (kpiData?.avgSuggestions?.count | number : '1.2-2') : '0'}}</div>
                     </div>
                 </div>
                 <!-- <div class="card-sec">
@@ -69,7 +69,7 @@
                                     <span class="title-text">{{("DASHBOARD.CUSTOMER_ASPECT_DROPDOWN_" + customerAspectDropdownSelection) | translate}}</span>
                                     <i class="icon-sa-arrow-down"></i>
                                 </button>
-                                <ul class="content-menu" aria-labelledby="repdropdown" ngbDropdownMenu>
+                                <ul class="content-menu width-200" aria-labelledby="repdropdown" ngbDropdownMenu>
                                     <perfect-scrollbar>
                                         <div class="scroll-data mx-h-280">
                                             <li ngbDropdownItem class="channel-name m_b_2" *ngFor="let type of customerAspectDropdownList" (click)="changeCustomerAspectDropdown(type)">
