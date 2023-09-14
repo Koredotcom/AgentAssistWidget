@@ -1720,7 +1720,7 @@ export class EndPointsService {
       method : 'post'
     }
     // // Dashboard Apis Stops // //
-    
+
     this.serviceList['post.acchecklists'] = {
       endpoint : this.SMARTASSIST_API_SERVER_URL + '/acchecklists',
       method : 'post'
@@ -1730,7 +1730,7 @@ export class EndPointsService {
       endpoint : this.SMARTASSIST_API_SERVER_URL + '/acchecklists/:botId/checklist/:clId',
       method : 'put'
     }
-    
+
     this.serviceList['get.acchecklists'] = {
       endpoint : this.SMARTASSIST_API_SERVER_URL + '/acchecklists/:botId',
       method : 'post'
@@ -1745,7 +1745,7 @@ export class EndPointsService {
       endpoint : this.SMARTASSIST_API_SERVER_URL + '/acclstages/:botId/stage/:clsId?clId=:clId',
       method : 'put'
     }
-    
+
     this.serviceList['get.checklistbyid'] = {
       endpoint : this.SMARTASSIST_API_SERVER_URL + '/acchecklists/:botId/checklist/:clId',
       method : 'get'
