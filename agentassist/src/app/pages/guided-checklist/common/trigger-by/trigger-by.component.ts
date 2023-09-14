@@ -8,6 +8,7 @@ import { debounceTime, finalize, tap } from 'rxjs/operators';
 import { ChecklistService } from '../../checklist.service';
 import { AuthService } from '@kore.services/auth.service';
 import { LocalStoreService } from '@kore.services/localstore.service';
+import { CHECKLISTCNST } from '../../checklist.const';
 
 @Component({
   selector: 'app-trigger-by',
@@ -41,6 +42,7 @@ export class TriggerByComponent implements OnInit, OnChanges {
   childBotId = '';
   isSm = false;
   botId = this.workflowService.getCurrentBtSmt(true)._id;
+  checkListCnst : any = CHECKLISTCNST
   constructor(
     private workflowService: workflowService,
     public clS: ChecklistService,
