@@ -13,10 +13,10 @@
                         <span class="heading-text">{{"DASHBOARD.AGENT_ASPECT_TOTAL_SEARCH_REQ" | translate}}</span>
                         <div class="value-data" [ngClass]="{'negtive': !agentAspectData?.totalSearchReq?.increment}">
                             <i [ngClass]="agentAspectData?.totalSearchReq?.increment ? 'icon-ast_sortup' : 'icon-ast_sortdown' "></i>
-                            <span>{{agentAspectData?.totalSearchReq?.percent ? agentAspectData?.totalSearchReq?.percent : '0'}}%</span>
+                            <span>{{agentAspectData?.totalSearchReq?.percent ? (agentAspectData?.totalSearchReq?.percent | number : '1.2-2') : '0'}}%</span>
                         </div>
                     </div>
-                    <div class="count-heading" [ngClass]="{'empty-count': !agentAspectData?.totalSearchReq?.count}">{{agentAspectData?.totalSearchReq?.count ? agentAspectData?.totalSearchReq?.count : '0'}}</div>
+                    <div class="count-heading" [ngClass]="{'empty-count': !agentAspectData?.totalSearchReq?.count}">{{agentAspectData?.totalSearchReq?.count ? (agentAspectData?.totalSearchReq?.count | number : '1.2-2') : '0'}}</div>
                 </div>
             </div>
             <div class="card-sec max_width_50">
@@ -25,10 +25,10 @@
                         <span class="heading-text">{{"DASHBOARD.AGENT_ASPECT_SEARCH_RESULTS_USED" | translate}}</span>
                         <div class="value-data" [ngClass]="{'negtive': !agentAspectData?.searchResultsUsed?.increment}">
                             <i [ngClass]="agentAspectData?.searchResultsUsed?.increment ? 'icon-ast_sortup' : 'icon-ast_sortdown' "></i>
-                            <span>{{agentAspectData?.searchResultsUsed?.percent ? agentAspectData?.searchResultsUsed?.percent : '0'}}%</span>
+                            <span>{{agentAspectData?.searchResultsUsed?.percent ? (agentAspectData?.searchResultsUsed?.percent | number : '1.2-2') : '0'}}%</span>
                         </div>
                     </div>
-                    <div class="count-heading" [ngClass]="{'empty-count': !agentAspectData?.searchResultsUsed?.count}">{{agentAspectData?.searchResultsUsed?.count ? agentAspectData?.searchResultsUsed?.count : '0'}}%</div>
+                    <div class="count-heading" [ngClass]="{'empty-count': !agentAspectData?.searchResultsUsed?.count}">{{agentAspectData?.searchResultsUsed?.count ? (agentAspectData?.searchResultsUsed?.count | number : '1.2-2') : '0'}}%</div>
                 </div>
             </div>
         </div>
@@ -40,7 +40,7 @@
             <ng-container>
                 <div class="table-body-feedback row" *ngFor="let obj of agentAspectTableData.slice(0,3)">
                     <div class="col-6 title">{{obj.input}}</div>
-                    <div class="col-6 title text-right f_w_600">{{obj.percent}}% ({{obj.count}})</div>
+                    <div class="col-6 title text-right f_w_600">{{obj.percent | number : '1.2-2'}}% ({{obj.count}})</div>
                 </div>
             </ng-container>
         </div>
@@ -56,10 +56,10 @@
                         <span class="heading-text">{{"DASHBOARD.AGENT_ASPECT_TOTAL_SEARCH_REQ" | translate}}</span>
                         <div class="value-data negtive">
                             <i [ngClass]="agentAspectData?.totalSearchReq?.increment ? 'icon-ast_sortup' : 'icon-ast_sortdown' "></i>
-                            <span>{{agentAspectData?.totalSearchReq?.percent}}%</span>
+                            <span>{{ agentAspectData?.totalSearchReq?.percent ? (agentAspectData?.totalSearchReq?.percent | number : '1.2-2') : '0'}}%</span>
                         </div>
                     </div>
-                    <div class="count-heading">{{agentAspectData?.totalSearchReq?.count}}</div>
+                    <div class="count-heading">{{agentAspectData?.totalSearchReq?.count ? (agentAspectData?.totalSearchReq?.count | number : '1.2-2') : '0'}}</div>
                 </div>
             </div>
             <div class="card-sec max_width_50">
@@ -68,10 +68,10 @@
                         <span class="heading-text">{{"DASHBOARD.AGENT_ASPECT_SEARCH_RESULTS_USED" | translate}}</span>
                         <div class="value-data">
                             <i [ngClass]="agentAspectData?.searchResultsUsed?.increment ? 'icon-ast_sortup' : 'icon-ast_sortdown' "></i>
-                            <span>{{agentAspectData?.searchResultsUsed?.percent}}%</span>
+                            <span>{{agentAspectData?.searchResultsUsed?.percent ? (agentAspectData?.searchResultsUsed?.percent | number : '1.2-2') : '0'}}%</span>
                         </div>
                     </div>
-                    <div class="count-heading">{{agentAspectData?.searchResultsUsed?.count}}%</div>
+                    <div class="count-heading">{{agentAspectData?.searchResultsUsed?.count ? (agentAspectData?.searchResultsUsed?.count | number : '1.2-2') : '0'}}%</div>
                 </div>
             </div>
         </div>
@@ -83,7 +83,7 @@
             <ng-container>
                 <div class="table-body-feedback row" *ngFor="let obj of agentAspectTableData">
                     <div class="col-6 title">{{obj.input}}</div>
-                    <div class="col-6 title text-right f_w_500">{{obj.count}} | {{obj.percent}}%</div>
+                    <div class="col-6 title text-right f_w_500">{{obj.count}} | {{(obj.percent | number : '1.2-2')}}%</div>
                 </div>
             </ng-container>
         </div>
