@@ -49,12 +49,12 @@ export class StepCreateComponent implements OnInit, OnChanges, AfterViewInit {
     }
   ]
 
- 
+
   // selectedConfirmationColorCode : any = {
   //   'yes' : '#0BA5EC',
   //   'no' : '#0BA5EC'
   // };
-  
+
 
   runDialogList : any = [
     {
@@ -151,7 +151,7 @@ export class StepCreateComponent implements OnInit, OnChanges, AfterViewInit {
           button,
         ))
     }
-    
+
   }
 
   colorUpdate(color, index) {
@@ -160,11 +160,11 @@ export class StepCreateComponent implements OnInit, OnChanges, AfterViewInit {
     .controls['color'].patchValue(color.key);
   }
 
-  colorUpdateRun(color){    
+  colorUpdateRun(color){
     this.selectedRunColorCodeKey = color.key;
     this.selectedRunColorCodeValue = color.value;
     this.cdRef.detectChanges();
-    
+
   }
   getUseCases(){
     // /smartassist/apps/:streamId/usecases?
@@ -183,7 +183,7 @@ export class StepCreateComponent implements OnInit, OnChanges, AfterViewInit {
         this.useCases = (data?.usecases || []).reduce((acc, item)=>{
           acc[item.dialogId] = item.usecaseName;
           return acc;
-        }, {});      
+        }, {});
       }
     });
   }
