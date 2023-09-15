@@ -46,4 +46,8 @@ export class SummaryPopupComponent implements OnInit {
     }, 3000);
   }
 
+  closeSummary(){
+    this.handlePopupEvent.emit({status : false, summary : false, type : ProjConstants.SUMMARY})
+  }
+
 }
