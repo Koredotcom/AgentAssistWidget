@@ -1,15 +1,19 @@
 <div class="automation-perforamce-wrapper">
-    <div echarts [options]="chartOption" class="chart-container"></div>
-    <div class="legend-wrapper">
-        <div class="legends-info" *ngFor="let obj of automationPerformanceChartData">
-            <div class="legend-name">
-                <span class="bg" [ngClass]="obj.name | lowercase"></span>
-                <span class="lname">{{obj.name}}</span>
-            </div>
-            <div class="value-text">{{obj.value}} | {{obj.percent | number : '2.2-2'}}%</div>
+    <ng-container *ngIf="automationPerformanceChartData.length > 0; else elseNoData">
+      <div echarts [options]="chartOption" class="chart-container"></div>
+      <div class="legend-wrapper">
+          <div class="legends-info" *ngFor="let obj of automationPerformanceChartData">
+              <div class="legend-name">
+                  <span class="bg" [ngClass]="obj.name | lowercase"></span>
+                  <span class="lname">{{obj.name}}</span>
+              </div>
+              <div class="value-text">{{obj.value}} | {{obj.percent | number : '2.2-2'}}%</div>
+          </div>
+      </div>
+    </ng-container>
+    <ng-template #elseNoData>        
+        <div class="empty-img">
+            <img src="assets/icons/dashboard/empty-automation-per.svg">
         </div>
-    </div>
-    <div class="empty-img d-none">
-        <img src="assets/icons/dashboard/empty-automation-per.svg">
-    </div>
+    </ng-template>
 </div>
