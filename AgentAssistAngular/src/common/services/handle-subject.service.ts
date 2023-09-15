@@ -27,6 +27,9 @@ export class HandleSubjectService {
   public userBotConversationDetails;
   public callConversationSuggestions$ = new Subject<object>();
 
+  assistTabSessionId = '';
+  myBotTabSessionId = '';
+
   constructor() { }
 
   setActiveTab(activeTab) {

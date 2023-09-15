@@ -1,0 +1,137 @@
+<app-slider-component [id]="sliderId" #newConvSlider='app-slider'>
+    <app-exhaustive-representation [filters]="filterData" (onClose)="closeSlider($event)" [componentType]="sliderId" [customerDropdownSelection]="customerAspectDropdownSelection" *ngIf="sliderStatus">
+
+    </app-exhaustive-representation>
+</app-slider-component>
+
+<div class="dashboard-wraaper-container" id="pdfTable" #pdfTable>
+    <div class="header-titles">
+        <app-dashboard-filters (exportPdf)="exportPdf($event)"></app-dashboard-filters>
+    </div>
+    <perfect-scrollbar class="scroll-container" id="scrollContainer">
+        <div class="inner-scroll-data" id="innerScroll">
+            <div class="cards-data-boards">
+                <div class="card-sec" >
+                    <div class="inner-data-sec">
+                        <div class="title-text-info">
+                            <span class="heading-text">{{"DASHBOARD.TOTAL_SESSIONS" | translate}}</span>
+                            <div class="value-data" [ngClass]="{'negtive': !kpiData?.totalSessions?.increment}">
+                                <i [ngClass]="kpiData?.totalSessions?.increment ? 'icon-ast_sortup' : 'icon-ast_sortdown' "></i>
+                                <span>{{kpiData?.totalSessions?.percent ? (kpiData?.totalSessions?.percent | number : '1.2-2') : '0'}}%</span>
+                            </div>
+                        </div>
+                        <div>
+                          <div class="count-heading"  [ngClass]="{'empty-count': !kpiData?.totalSessions?.count}">{{kpiData?.totalSessions?.count ? (kpiData?.totalSessions?.count | number : '1.2-2') : '0'}}</div>
+
+                        </div>
+
+                    </div>
+                </div>
+                <div class="card-sec">
+                    <div class="inner-data-sec">
+                        <div class="title-text-info">
+                            <span class="heading-text">{{"DASHBOARD.TOTAL_SUGGESTIONS" | translate}}</span>
+                            <div class="value-data" [ngClass]="{'negtive': !kpiData?.totalSuggestions?.increment}">
+                                <i [ngClass]="kpiData?.totalSuggestions?.increment ? 'icon-ast_sortup' : 'icon-ast_sortdown' "></i>
+                                <span>{{kpiData?.totalSuggestions?.percent ? (kpiData?.totalSuggestions?.percent | number : '1.2-2') : '0'}}%</span>
+                            </div>
+                        </div>
+                        <div class="count-heading" [ngClass]="{'empty-count': !kpiData?.totalSuggestions?.count}">{{kpiData?.totalSuggestions?.count ? (kpiData?.totalSuggestions?.count | number : '1.2-2') : '0'}}</div>
+                    </div>
+                </div>
+                <div class="card-sec">
+                    <div class="inner-data-sec">
+                        <div class="title-text-info">
+                            <span class="heading-text">{{"DASHBOARD.AVG_SUGGESTIONS" | translate}}</span>
+                        </div>
+                        <div class="count-heading" [ngClass]="{'empty-count': !kpiData?.avgSuggestions?.count}">{{kpiData?.avgSuggestions?.count ? (kpiData?.avgSuggestions?.count | number : '1.2-2') : '0'}}</div>
+                    </div>
+                </div>
+                <!-- <div class="card-sec">
+                    <div class="inner-data-sec">
+                        <div class="title-text-info">
+                            <span class="heading-text">{{"DASHBOARD.ACCUARY" | translate}}</span>
+                            <div class="value-data" [ngClass]="{'negtive': !kpiData?.accuracy?.increment}">
+                                <i [ngClass]="kpiData?.accuracy?.increment ? 'icon-ast_sortup' : 'icon-ast_sortdown' "></i>
+                                <span>{{kpiData?.accuracy?.percent ? kpiData?.accuracy?.percent : '0'}}%</span>
+                            </div>
+                        </div>
+                        <div class="count-heading" [ngClass]="{'empty-count': !kpiData?.accuracy?.count}">{{kpiData?.accuracy?.count ? kpiData?.accuracy?.count : '0'}}%</div>
+                    </div>
+                </div> -->
+            </div>
+            <div class="charts-data-containers row">
+                <div class="chart-box-info col-6">
+                    <div class="chart-inner-data">
+                        <div class="kr-sg-dropdowns agent-intiated-dropdown" ngbDropdown placement="bottom">
+                            <div class="dropdown-open">
+                                <button type="button" class="dropdown-toggle before-none dropdown-input" id="repdropdown" ngbDropdownToggle>
+                                    <span class="title-text">{{("DASHBOARD.CUSTOMER_ASPECT_DROPDOWN_" + customerAspectDropdownSelection) | translate}}</span>
+                                    <i class="icon-sa-arrow-down"></i>
+                                </button>
+                                <ul class="content-menu width-200" aria-labelledby="repdropdown" ngbDropdownMenu>
+                                    <perfect-scrollbar>
+                                        <div class="scroll-data mx-h-280">
+                                            <li ngbDropdownItem class="channel-name m_b_2" *ngFor="let type of customerAspectDropdownList" (click)="changeCustomerAspectDropdown(type)">
+                                                <a  [ngClass]="{'selected': type === customerAspectDropdownSelection}">{{("DASHBOARD.CUSTOMER_ASPECT_DROPDOWN_" + type) | translate}}</a>
+                                            </li>
+                                        </div>
+                                    </perfect-scrollbar>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="heading-data-wrapper">
+                            <div class="tag-title">{{"DASHBOARD.CUSTOMER_ASPECT_SUBTITLE" | translate}}</div>
+                        </div>
+                        <div class="main-heading-title">{{"DASHBOARD.CUSTOMER_ASPECT_TITLE" | translate}}<i class="icon-sa-help" ngbTooltip='{{"DASHBOARD.CUSTOMER_ASPECT_TOOLTIP" | translate}}' placement="bottom-left" tooltipClass="tooltip_dashboard"></i></div>
+                        <app-customer-aspect [widgetData]="null" [viewType]="VIEWTYPE.PARTIAL_VIEW" [filters]="filterData" [customerDropdownSelection]="customerAspectDropdownSelection" (openSliderChild)="openSlider($event)"></app-customer-aspect>
+                    </div>
+                </div>
+                <div class="chart-box-info col-6">
+                    <div class="chart-inner-data">
+                        <div class="keyborad-view-tabs">
+                            <div class="tab-name-text" (click)="changeAgentAspectView(VIEWTYPE.WORDCLOUD)" [ngClass]="{'active-key': dashboardService.agentAspectView == VIEWTYPE.WORDCLOUD}">
+                                <i class="icon-ast_alpha"></i>
+                            </div>
+                            <div class="tab-name-text" (click)="changeAgentAspectView(VIEWTYPE.TABLE)" [ngClass]="{'active-key': dashboardService.agentAspectView == VIEWTYPE.TABLE}">
+                                <i class="icon-ast_key"></i>
+                            </div>
+                        </div>
+                        <div class="heading-data-wrapper">
+                            <div class="tag-title">{{"DASHBOARD.AGENT_ASPECT_SUBTITLE" | translate}}</div>
+                        </div>
+                        <div class="main-heading-title">{{"DASHBOARD.AGENT_ASPECT_TITLE" | translate}}<i class="icon-sa-help" ngbTooltip='{{"DASHBOARD.AGENT_ASPECT_TOOLTIP" | translate}}' placement="bottom-left" tooltipClass="tooltip_dashboard"></i></div>
+                        <app-agent-aspect [widgetData]="null" [viewType]="VIEWTYPE.PARTIAL_VIEW"  [filters]="filterData" (openSliderChild)="openSlider($event)"></app-agent-aspect>
+                    </div>
+                </div>
+                <div class="chart-box-info col-6">
+                    <div class="chart-inner-data">
+                        <div class="heading-data-wrapper">
+                            <div class="tag-title">{{"DASHBOARD.AUTOMATION_PERFORMANCE_SUBTITLE" | translate}}</div>
+                        </div>
+                        <div class="main-heading-title">{{"DASHBOARD.AUTOMATION_PERFORMANCE_TITLE" | translate}}<i class="icon-sa-help" ngbTooltip='{{"DASHBOARD.AUTOMATION_PERFORMANCE_TOOLTIP" | translate}}' placement="bottom-left" tooltipClass="tooltip_dashboard"></i></div>
+                        <app-automation-performance></app-automation-performance>
+                    </div>
+                </div>
+                <div class="chart-box-info col-6">
+                    <div class="chart-inner-data">
+                        <div class="heading-data-wrapper">
+                            <div class="tag-title">{{"DASHBOARD.AGENT_FEEDBACK_SUBTITLE" | translate}}</div>
+                        </div>
+                        <div class="main-heading-title">{{"DASHBOARD.AGENT_FEEDBACK_TITLE" | translate}}<i class="icon-sa-help" ngbTooltip='{{"DASHBOARD.AGENT_FEEDBACK_TOOLTIP" | translate}}' placement="bottom-left" tooltipClass="tooltip_dashboard"></i></div>
+                        <app-agent-feedback [widgetData]="null" [viewType]="VIEWTYPE.PARTIAL_VIEW"  [filters]="filterData" (openSliderChild)="openSlider($event)"></app-agent-feedback>
+                    </div>
+                </div>
+                <div class="chart-box-info col-6 d-none" id="lastele">
+                    <div class="chart-inner-data">
+                        <div class="heading-data-wrapper">
+                            <div class="tag-title">{{"DASHBOARD.AUTOMATION_OVERRIDE_SUBTITLE" | translate}}</div>
+                        </div>
+                        <div class="main-heading-title">{{"DASHBOARD.AUTOMATION_OVERRIDE_TITLE" | translate}}<i class="icon-sa-help" ngbTooltip='{{"DASHBOARD.AUTOMATION_OVERRIDE_TOOLTIP" | translate}}' placement="bottom-left" tooltipClass="tooltip_dashboard"></i></div>
+                        <app-automation-override-report [widgetData]="null" [viewType]="VIEWTYPE.PARTIAL_VIEW"  [filters]="filterData" (openSliderChild)="openSlider($event)"></app-automation-override-report>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </perfect-scrollbar>
+</div>

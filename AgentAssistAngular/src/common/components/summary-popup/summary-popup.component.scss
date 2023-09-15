@@ -1,0 +1,24 @@
+.input-text{
+    resize: both;
+    min-height: 120px;
+    max-width: 100%;
+}
+.delete-box-content{
+    position: relative;
+    .btn-close-summary{
+        position: absolute;
+        background: transparent;
+        padding : 0;
+        border: 0;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        right: 20px;
+        top : 20px;
+        z-index: 1;
+        cursor: pointer;
+        font-size: 14px;
+    }
+}

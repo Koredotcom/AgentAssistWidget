@@ -42,6 +42,9 @@ app-slider-component{
             // display: table;
             height: 100%;
             position: absolute;
+            .sliderContent{
+                height: 100%;
+            }
             &.width100{
                 width: 100%;
                 max-width: 100%;

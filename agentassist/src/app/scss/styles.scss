@@ -1155,18 +1155,71 @@ body{
     }
 }
 
+
+.tooltip_dashboard{
+    opacity: 1 !important;
+    .arrow{
+        display: block !important;
+        &::before{
+            border-bottom-color:#ffffff !important;
+        }
+    }
+    .tooltip-inner{
+        max-width: 227px !important;
+        padding: 15px !important;
+        background: #FFFFFF;
+        border-radius: 8px;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 18px;
+        color: #404040;
+        text-align: left;
+        box-shadow: 0px -2px 25px -5px rgba(16, 24, 40, 0.1), 0px 8px 10px -6px rgba(16, 24, 40, 0.1);
+    }
+}
 .z-index-2{
     z-index: 2;
 }
 
 .custom_date_picker_sec{
+    position: relative;
     padding: 6px 10px;
     background: #FFFFFF;
     border: 1px solid #E5E5E5;
     border-radius: 4px;
     text-align: left;
     cursor: pointer;
-    position: relative;
+    &.date-sec-info{
+        background: #FFFFFF;
+        border: 1px solid #D1D5DB;
+        box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
+        border-radius: 6px;
+        height: 34px;
+        display: flex;
+        align-items: center;
+        padding: 0 20px;
+        cursor: pointer;
+        .icon-ast_calendar{
+            margin-right: 10px;
+        }
+        .input-date-custom{
+            width: 120px;
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 24px;
+            color: #121314;
+            cursor: pointer;
+        }
+        .md-drppicker.drops-down-auto{
+            right: 0 !important;
+            left: auto !important;
+        }
+        .md-drppicker{
+            .ranges{
+                display: block !important;
+            }
+        }
+    }
     &.date-sec{
         img.calendar{
             margin-right: 10px;
@@ -2218,6 +2271,111 @@ body{
     }
 }
 
+//echart word cloud container
+.echart-wordCloudContainer{
+    height: 300px;
+    width: 100%;
+}
+
+.echart-wordCloudContainer-hide{
+    height: 0px !important;
+    width: 0px !important;
+}
+
+
+
+.automation-per-tooltip{
+    box-shadow: 0 5px 5px -3px rgba(189, 189, 189, 0.2), 0 8px 10px 1px rgba(189, 189, 189, 0.2), 0 3px 14px 2px rgba(189, 189, 189, 0.2) !important;
+    border-radius: 5px;
+    min-width: 250px;
+    padding: 15px;
+    .title-indication{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .left-title{
+            display: flex;
+            align-items: center;
+            .bg{
+                width: 8px;
+                height: 8px;
+                // background: #FFC154;
+                border-radius: 100%;
+                // margin-right: 4px;
+            }
+            .h-text{
+                font-weight: 600;
+                font-size: 12px;
+                line-height: 20px;
+            }
+        }
+        .right-title{
+            flex-shrink: 0;
+            font-weight: 600;
+            font-size: 11px;
+            line-height: 20px;
+            color: #44474C;
+            margin-left: 6px;
+        }
+    }
+    .lable-heading{
+        font-weight: 600;
+        font-size: 10px;
+        line-height: 12px;
+        letter-spacing: 0.03em;
+        color: #777A80;
+        margin: 4px 0;
+    }
+    .row-labels{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 3px 0;
+        .left-title{
+            font-weight: 400;
+            font-size: 12px;
+            line-height: 20px;
+            color: #44474C;
+        }
+        .right-title{
+            flex-shrink: 0;
+            font-weight: 600;
+            font-size: 11px;
+            line-height: 20px;
+            color: #44474C;
+            margin-left: 6px;
+        }
+    }
+}
+
+.word-tooltip-info{
+    display: flex;
+    align-items: flex-start;
+    .bg{
+        width: 8px;
+        height: 8px;
+        flex-shrink: 0;
+        background: red;
+        border-radius: 100%;
+        position: relative;
+        top: 4px;
+        margin-right: 5px;
+    }
+    .contnet-tip{
+        width: 100%;
+        line-height: normal;
+        .title{
+            font-weight: 600;
+            font-size: 11px;
+            line-height: normal;
+        }
+        .count{
+            font-weight: 400;
+            font-size: 10px;
+            line-height: 20px;
+        }
+    }
+}
 
 .tooltip-global-styles{
     opacity: 1 !important;
@@ -2414,7 +2572,7 @@ body{
     }
     animation: blinker 1s linear forwards;
   }
-  
+
   @keyframes blinker {
     50% {
       opacity: 0;

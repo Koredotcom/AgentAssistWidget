@@ -1,0 +1,63 @@
+.tooltip-name{
+    font-size: 50px;
+}
+
+
+.automation-perforamce-wrapper{
+    display: flex;
+    align-items: center;
+    .chart-container{
+        flex-shrink: 0;
+        width: 284px !important;
+        height: 250px !important;
+    }
+    .legend-wrapper{
+        width: 100%;
+        .legends-info{
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            .legend-name{
+                display: flex;
+                align-items: center;
+                width: 100%;
+                .bg{
+                    width: 10px;
+                    height: 10px;
+                    flex-shrink: 0;
+                    background: #47B39C;
+                    margin-right: 6px;
+                    border-radius: 100%;
+                    &.terminated{
+                        background: #FFC154;
+                    }
+                    &.error{
+                        background: #EC6B56;
+                    }
+                    &.other{
+                        background: #003F5C;
+                    }
+                }
+                .lname{
+                    font-weight: 400;
+                    font-size: 14px;
+                    line-height: 21px;
+                    color: #2D2F33;
+                }
+            }
+            .value-text{
+                font-weight: 400;
+                font-size: 14px;
+                line-height: 17px;
+                color: #2D2F33;
+                flex-shrink: 0;
+                padding-left: 10px;
+            }
+        }
+    }
+    .empty-img{
+        padding: 60px 0;
+        text-align: center;
+        width: 100%;
+    }
+}

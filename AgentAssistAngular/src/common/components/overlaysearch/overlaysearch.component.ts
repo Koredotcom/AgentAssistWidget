@@ -39,6 +39,7 @@ export class OverlaysearchComponent implements OnInit {
   showOverLay : boolean = false;
   connectionDetails : any = {};
   answerPlaceableIDs : any = [];
+  searchedResultData: any = {};
 
   constructor(public handleSubjectService: HandleSubjectService, public commonService: CommonService,
     public randomUUIDPipe: RandomUUIDPipe, public websocketService: WebSocketService, public cdRef : ChangeDetectorRef,
@@ -73,6 +74,7 @@ export class OverlaysearchComponent implements OnInit {
       takeUntil(this.destroySubject))
     .subscribe((agentResponse: any) => {
       if(agentResponse){
+        this.searchedResultData = agentResponse
         this.handleSearchResponse(agentResponse);
         this.showOverLay = true;
         if(document.getElementById(IdReferenceConst.overLaySuggestions)){
@@ -148,7 +150,19 @@ export class OverlaysearchComponent implements OnInit {
     }
     this.closeSearchSuggestions.emit(true);
     this.handleSubjectService.setRunButtonClickEvent(runDialogueObject);
+    let data: any = {
+      botId: this.connectionDetails.botId,
+      conversationId: this.connectionDetails.conversationId,
+      experience: 'chat',
+      source: this.connectionDetails.source,
+      type: 'dialog',
+      input : this.searchedResultData?.userInput,
+      title: dialog.intentName,
+      sessionId: searchType == this.projConstants.ASSIST ? this.handleSubjectService.assistTabSessionId : this.handleSubjectService.myBotTabSessionId,
+      intentName: dialog.intentName
 
+    };
+    this.websocketService.emitEvents(EVENTS.agent_send_or_copy, data);
   }
 
   AgentAssist_agent_run_click(dialog){
@@ -262,15 +276,23 @@ export class OverlaysearchComponent implements OnInit {
     }, 10);
   }
 
-  handleSendCopyButton(actionType, faq_or_article_obj, selectType) {
+  handleSendCopyButton(actionType, faq_or_article_obj, selectType, faq) {
     let message = {};
     if (actionType == this.projConstants.SEND) {
       message = {
         method: 'send',
         name: "agentAssist.SendMessage",
         conversationId: this.connectionDetails.conversationId,
+
         payload: selectType == this.projConstants.FAQ ? (faq_or_article_obj.answer || faq_or_article_obj.ans) : faq_or_article_obj.content
       };
+      if(selectType === 'Article') {
+        message['title'] = faq_or_article_obj.title;
+        message['contentId'] = faq_or_article_obj.contentId;
+      } else {
+        message['title'] = faq.displayName;
+        message['contentId'] = faq_or_article_obj.taskRefId
+      }
       window.parent.postMessage(message, '*');
     } else {
       message = {
@@ -279,8 +301,34 @@ export class OverlaysearchComponent implements OnInit {
         conversationId: this.connectionDetails.conversationId,
         payload: selectType == this.projConstants.FAQ ? (faq_or_article_obj.answer || faq_or_article_obj.ans) : faq_or_article_obj.content
       };
+      if(selectType === 'Article') {
+        message['title'] = faq_or_article_obj.title;
+        message['contentId'] = faq_or_article_obj.contentId;
+      } else {
+        message['title'] = faq.displayName;
+        message['contentId'] = faq_or_article_obj.taskRefId
+      }
       parent.postMessage(message, '*');
     }
+    this.faqArticleSendorCopyEvent(actionType, faq_or_article_obj, selectType, message)
+  }
+
+  faqArticleSendorCopyEvent(actionType, faq_or_article_obj, selectType, message) {
+    let data: any = {
+      botId: this.connectionDetails.botId,
+      conversationId: this.connectionDetails.conversationId,
+      sessionId: this.handleSubjectService.myBotTabSessionId,
+      experience: 'chat',
+      source: this.connectionDetails.source,
+      usedType: message.method,
+      type: selectType,
+      input : this.searchedResultData?.userInput,
+      name: message.name,
+      payload : message.payload,
+      title: message.title,
+      contentId : message.contentId
+    };
+    this.websocketService.emitEvents(EVENTS.agent_send_or_copy, data);
   }
 
   handleSeeMoreButton(array, type) {
