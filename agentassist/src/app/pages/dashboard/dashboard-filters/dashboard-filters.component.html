@@ -6,12 +6,13 @@
             <i class="icon-ast_calendar"></i>
             <i class="icon-sa-calendar ngx-daterangepicker-action" (click)="openPicker()"></i>
             <input type="text"
+                readonly
                 ngxDaterangepickerMd
-                [showCustomRangeLabel]="true"
-                [timePicker]="false"
+                [timePicker]="true"
                 [alwaysShowCalendars]="true"
                 [keepCalendarOpeningWithRange]="true"
                 [ranges]="ranges"
+                [showCustomRangeLabel]="true"
                 [showRangeLabelOnInput]="true"
                 [linkedCalendars]="true"
                 showCancel="true"

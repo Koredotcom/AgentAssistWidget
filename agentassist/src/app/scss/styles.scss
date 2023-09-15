@@ -2285,8 +2285,10 @@ body{
 
 
 .automation-per-tooltip{
-    min-width: 150px;
-    padding: 2px;
+    box-shadow: 0 5px 5px -3px rgba(189, 189, 189, 0.2), 0 8px 10px 1px rgba(189, 189, 189, 0.2), 0 3px 14px 2px rgba(189, 189, 189, 0.2) !important;
+    border-radius: 5px;
+    min-width: 250px;
+    padding: 15px;
     .title-indication{
         display: flex;
         align-items: center;
@@ -2297,9 +2299,9 @@ body{
             .bg{
                 width: 8px;
                 height: 8px;
-                background: #FFC154;
+                // background: #FFC154;
                 border-radius: 100%;
-                margin-right: 4px;
+                // margin-right: 4px;
             }
             .h-text{
                 font-weight: 600;

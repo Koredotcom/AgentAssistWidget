@@ -55,6 +55,18 @@ export class DashboardFiltersComponent implements OnInit {
       cancelLabel: this.translate.instant('BUTTONS.CANCEL'),
       customRangeLabel: this.translate.instant('CALENDAR.CUSTOM_RANGE')
     }
+    // this.ranges = {
+    //   [('Today')]: [moment().startOf('day'), moment()],
+    //   [('Yesterday')]: [moment().subtract(1, 'days').startOf('day'), moment().subtract(1, 'days').endOf('day')],
+    //   [('Last 7 Days')]: [moment().subtract(6, 'days').startOf('day'), moment()],
+    //   [('Last 15 Days')]: [moment().subtract(15, 'days').startOf('day'), moment()],
+    //   [('Last 30 Days')]: [moment().subtract(30, 'days').startOf('day'), moment()]
+    // }
+    // this.calendarLocale = {
+    //   applyLabel: ('Apply'),
+    //   cancelLabel: ('Cancel'),
+    //   customRangeLabel: ('Custom Range')
+    // }
     this.selected = { startDate:moment().startOf('day'), endDate:moment() }
     this.filters = { startDate: this.selected.startDate.toISOString(), endDate: this.selected.endDate.toISOString(), experience : this.selectedChannel }
     this.updateFilters(this.filters);

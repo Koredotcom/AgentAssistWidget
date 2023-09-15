@@ -5,8 +5,8 @@ export interface IAnalyticsFilters {
 }
 
 export interface IDashboardFilter{
-    startDate: string,
-    endDate: string,
+    startDate: string | any,
+    endDate: string | any,
     experience: string,
     botId?:string
 }
