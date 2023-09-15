@@ -87,7 +87,15 @@
             </div>
         </div>
         <div class="app-checklist-wrapper">
-            <app-checklists></app-checklists>
+            <app-checklists 
+                *ngIf="isChecklistOpened" 
+                [connectionDetails]="connectionDetails" 
+                [checklists]="checklists"
+                [ccVersion]="checkListData?.ccVersion"
+                [dynamicChecklist]="commonService.dynamicChecklist"
+                [selectedPlayBook]="selectedPlayBook"
+                [clObjs]="clObjs">
+            </app-checklists>
         </div>
         <div class="line-seperator-resize">
             <span></span>

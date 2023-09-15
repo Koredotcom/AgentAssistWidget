@@ -225,7 +225,7 @@ html, body{
     flex-direction: column;
     height: 100% !important;
     .app-checklist-wrapper{
-        max-height: 50%;
+        max-height: calc(50% - 80px);
         overflow: auto;
         flex-shrink: 0;
     }

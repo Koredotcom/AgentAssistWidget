@@ -31,7 +31,7 @@ export class HomeComponent implements OnInit {
   imageFilePath: string = ImageFilePath;
   imageFileNames: any = ImageFileNames;
   projConstants: any = ProjConstants;
-
+  isChecklistOpened = false;
   activeTab: string; // call conversation make transcript as active tab.
   scrollContainer: any;
   searchConentObject: any;
@@ -62,7 +62,11 @@ export class HomeComponent implements OnInit {
   showSentiChart : boolean = false;
   mergeSentiOptions : any = {};
   currentPolarity : string;
-
+  checkListData:any = {};
+  clObjs: any = {};
+  isGuidedChecklistApiSuccess = false;
+  checklists= [];
+  selectedPlayBook = '';
 
   constructor(public handleSubjectService: HandleSubjectService, public websocketService: WebSocketService,
     public sanitizeHTMLPipe: SanitizeHtmlPipe, public commonService: CommonService, private koregenerateUUIDPipe: KoreGenerateuuidPipe,
@@ -74,6 +78,17 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.subscribeEvents();
+    this.websocketService.sendCheckListOpened$.subscribe((data)=>{
+      if(data){
+        this.guidedListAPICall(
+          this.commonService.configObj.agentassisturl,
+          this.commonService.configObj.fromSAT ?
+            this.commonService.configObj.instanceBotId :
+            this.commonService.configObj.botid,
+          this.commonService.configObj.accessToken,
+          this.commonService.configObj.accountId)
+      }
+    })
   }
 
   ngOnDestroy() {
@@ -1091,6 +1106,84 @@ setProactiveMode(){
   scrollToTranscriptElement(top){
     if(top > 0){
       this.psBottom.directiveRef.scrollToTop(top);
+    }
+  }
+
+  guidedListAPICall(agentAssistUrl, botId, accessToken, accountId) {
+    let headersVal = {
+      'Authorization': 'bearer' + ' ' + accessToken,
+      "AccountId": accountId !== '' ? accountId : '',
+      'iid' : botId
+  }
+    $.ajax({
+      url: `${agentAssistUrl}/agentassist/api/v1/agentcoachingconfiguration/checklist/${botId}/activeChecklists`,
+      type: 'get',
+      headers: headersVal,
+      dataType: 'json',
+      success:  (data) => {
+        this.isChecklistOpened = true;
+        if(data.checklists.length > 0 ) {
+          this.checkListData = data;
+          this.commonService.primaryChecklist = data.checklists.filter(check => check.type === "primary");
+          this.commonService.dynamicChecklist = data.checklists.filter(check => check.type === "dynamic");
+          (data?.checklists || [])
+          .forEach((item)=>{
+            (item.stages || [])
+            .forEach((stage)=>{
+              this.clObjs[stage._id] = stage;
+            }) 
+          });
+        };
+        this.sendOpenCheckLIstEvent();
+      },
+      error:  (err)=> {
+          console.error("Unable to fetch the details with the provided data", err);
+      }
+    });
+  }
+
+  sendChecklistEvent() {
+    let checklistParams: any = {
+      "payload": {
+          "event": "checklist_opened",
+          "conversationId": this.connectionDetails.conversationId,
+          "ccVersion": this.checkListData?.ccVersion,
+          "accountId": this.checkListData?.accountId,
+          "botId": (this.commonService.configObj?.fromSAT) ?  this.commonService.configObj.instanceBotId : this.commonService.configObj.botid,
+          "agentInfo": {
+              "agentId": "", // mendatory field
+              //any other fields
+          },
+          "checklist": {
+            "id": this.commonService.primaryChecklist[0]._id,
+              //any other fields
+          },
+          "timestamp": 0,
+          "context": {}
+      }
+    }
+    this.isGuidedChecklistApiSuccess = true;
+    this.websocketService.emitEvents(EVENTS.checklist_opened, checklistParams);
+    if(this.commonService.primaryChecklist[0]?.stages[0]){
+      this.commonService.primaryChecklist[0].stages[0].opened = true;
+    };
+    (this.commonService.primaryChecklist[0]?.stages)
+    .forEach((item)=>{
+      item.color = this.clObjs[item._id]?.color
+    });
+    // if(this.clObjs[this.commonService.primaryChecklist[0]._id]){
+    //   this.commonService.primaryChecklist[0].color = this.clObjs[this.commonService.primaryChecklist[0]._id];
+    // }
+    this.checklists.push(this.commonService.primaryChecklist[0]);
+    this.selectedPlayBook = this.commonService.primaryChecklist[0]?.name;
+  }
+
+  sendOpenCheckLIstEvent(){
+    if(!this.isGuidedChecklistApiSuccess && this.commonService.primaryChecklist.length > 0) {
+      let channel = this.commonService.isCallConversation ? 'voice' : 'chat'
+      if(this.commonService.primaryChecklist[0]?.channels?.includes(channel)){
+        this.sendChecklistEvent();
+      }
     }
   }
 
