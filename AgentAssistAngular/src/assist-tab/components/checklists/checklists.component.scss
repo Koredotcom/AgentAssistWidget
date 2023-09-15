@@ -280,6 +280,14 @@
                     margin: 1px 0;
                     position: relative;
                     transition: 0.2s all ease;
+                    &:not(.selected-check-item){
+                        &:hover{
+                            .content-info-sec{
+                                display: block !important;
+                                opacity: 0.3 !important;
+                            }
+                        }
+                    }
                     &.selected-check-item{
                         padding: 8px 12px;
                         background: var(--base-white, #FFF);
