@@ -285,6 +285,12 @@
                             .content-info-sec{
                                 display: block !important;
                                 opacity: 0.3 !important;
+                                -webkit-animation-name: slideInUpCheck;
+                                animation-name: slideInUpCheck;
+                                -webkit-animation-duration: 1s;
+                                animation-duration: 1s;
+                                -webkit-animation-fill-mode: both;
+                                animation-fill-mode: both;
                             }
                         }
                     }
