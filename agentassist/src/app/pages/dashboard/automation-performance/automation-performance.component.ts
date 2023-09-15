@@ -142,17 +142,17 @@ export class AutomationPerformanceComponent implements OnInit {
               <div class="left-title">`
               +
                 `<span class="bg" style="background:`+params.color+`"></span>
-                 <span class="h-text">${params.data.name}</span>`
+                 <span class="h-text">${params.data?.name}</span>`
               + 
               `
               </div>
-              <div class="right-title">${this.decimalPipe.transform((params.data.percent),'2.2-2')}%</div>
+              <div class="right-title">${this.decimalPipe.transform((params.data?.percent),'2.2-2')}%</div>
             </div>
             <div class="lable-heading">TOP 3</div>`
-            for(let item of params.data.series){
+            for(let item of params.data?.series){
               tooltipString = tooltipString +  `<div class="row-labels">
               <div class="left-title">${item.key}</div>
-              <div class="right-title">${(item.value * 100) / params.data.value}%</div>
+              <div class="right-title">${(item.value * 100) / params.data?.value}%</div>
             </div>`
             }
 
