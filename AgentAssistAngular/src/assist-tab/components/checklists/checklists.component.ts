@@ -125,7 +125,7 @@ export class ChecklistsComponent implements OnInit, OnDestroy {
     this.websocketService.emitEvents(EVENTS.checklist_step_closed, checklistParams);
     this.checkAllStagesCompleted(id);
   };
-
+  isCloseCompleted = false;
   checkAllStagesCompleted(id){
     let completed = false;
     let i = (this.checklists || []).findIndex(item => item._id === id);
@@ -146,6 +146,10 @@ export class ChecklistsComponent implements OnInit, OnDestroy {
       .every(item=> item.complete);
       if(close){
         this.checklists[i].stages[1].opened = false;
+        this.isCloseCompleted = true;
+        setTimeout(() => {
+          this.isCloseCompleted = false;
+        }, 3000);
       }
       if(open && close){
         completed = true;
