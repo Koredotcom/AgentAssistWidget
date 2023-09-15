@@ -86,6 +86,13 @@
                 </div>
             </div>
         </div>
+        <div class="app-checklist-wrapper">
+            <app-checklists></app-checklists>
+        </div>
+        <div class="line-seperator-resize">
+            <span></span>
+        </div>
+        <div class="scroll-dynamic-data">
         <perfect-scrollbar id="homeScrollBar" class="home-scroll-bar" #psBottom (psYReachEnd)="onScrollEvent($event)"
             (psYReachStart)="onScrollEvent($event)" (psScrollUp)="onScrollEvent($event)" [ngClass]="{'if-sentiment-analysis-added' : showSentiChart}">
             <div class="body-data-container if-suggestion-search" id="bodyContainer" #tabBody>
@@ -131,6 +138,7 @@
                 </div>
             </div>
         </perfect-scrollbar>
+        </div>
 
         <!-- searchbar -->
 
