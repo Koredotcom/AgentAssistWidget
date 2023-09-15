@@ -60,7 +60,7 @@
                             <ng-container *ngFor="let step of ac.steps; let sti = index">
                                 <div class="check-list-type-info" [ngClass]="{'selected-check-item': ((ac.steps[sti - 1]?.complete && !step.complete) || (sti === 0 && !step.complete && !ac.steps[sti + 1]?.complete)), 'text-strike disabled-click-text': step?.complete}">
                                     <div class="title-block">
-                                        <h5 [ngClass]="{'random': cl.type === 'random'}">{{step.name}}</h5>
+                                        <h5 [ngClass]="{'random': cl.type === 'random'}" (click)="clickStep(cl, ac, step, i, si, sti)">{{step.name}}</h5>
                                         <div class="icon-indication" [ngClass]="{'not-checked': !step?.complete}" (click)="clickStep(cl, ac, step, i, si, sti)">
                                             <i class="ast-check-new"></i>
                                         </div>
@@ -116,7 +116,7 @@
                                 <ng-container *ngFor="let step of ac.steps; let sti = index">
                                     <div class="check-list-type-info" [ngClass]="{'selected-check-item': ((ac.steps[sti - 1]?.complete && !step.complete) || (sti === 0 && !step.complete && !ac.steps[sti + 1]?.complete)), 'text-strike disabled-click-text': step?.complete}">
                                         <div class="title-block">
-                                            <h5 [ngClass]="{'random': cl.type === 'random'}">{{step.name}}</h5>
+                                            <h5 [ngClass]="{'random': cl.type === 'random'}" (click)="clickStep(cl, ac, step, i, si, sti)">{{step.name}}</h5>
                                             <div class="icon-indication" [ngClass]="{'not-checked': !step?.complete}" (click)="clickStep(cl, ac, step, i, si, sti)">
                                                 <i class="ast-check-new"></i>
                                             </div>

@@ -126,6 +126,7 @@ export class ChecklistsComponent implements OnInit, OnDestroy {
     this.checkAllStagesCompleted(id);
   };
   isCloseCompleted = false;
+  openAck = false;
   checkAllStagesCompleted(id){
     let completed = false;
     let i = (this.checklists || []).findIndex(item => item._id === id);
@@ -146,10 +147,13 @@ export class ChecklistsComponent implements OnInit, OnDestroy {
       .every(item=> item.complete);
       if(close){
         this.checklists[i].stages[1].opened = false;
-        this.isCloseCompleted = true;
-        setTimeout(() => {
-          this.isCloseCompleted = false;
-        }, 3000);
+        if(!this.openAck){
+          this.isCloseCompleted = true;
+          setTimeout(() => {
+            this.isCloseCompleted = false;
+            this.openAck = true;
+          }, 3000);
+        }
       }
       if(open && close){
         completed = true;
