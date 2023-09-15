@@ -19,6 +19,7 @@ import { EVENTS } from 'src/common/helper/events';
 import { LocalStorageService } from 'src/common/services/local-storage.service';
 import { ReplaceTextWithTagPipe } from 'src/common/pipes/replace-text-with-tag.pipe';
 import { RemoveTagFromStringPipe } from 'src/common/pipes/remove-tag-from-string.pipe';
+import { CoachingActionStoreService } from 'src/app/coaching-action-store.service';
 @Component({
   selector: 'app-assist',
   templateUrl: './assist.component.html',
@@ -31,6 +32,7 @@ export class AssistComponent implements OnInit {
   @ViewChild('dynamicBlockRef') dynamicBlockRef: ElementRef;
   @Output() handlePopupEvent = new EventEmitter();
   @Output() newButtonScrollClickEvents = new EventEmitter();
+  selectedPlayBook = '';
 
   subscriptionsList: Subscription[] = [];
 
@@ -57,12 +59,12 @@ export class AssistComponent implements OnInit {
   faqManualClick : boolean = false;
   userBotSessionDetails;
   interactiveLangaugeDetails = 'en';
-
-
-
+  isGuidedChecklistApiSuccess = false;
+  isChecklistOpened = false;
+  checklists= [];
 
   assistResponseArray : any = [];
-  unreadUUID : any;
+  unreadUUID : any = null;
 
   constructor(private templateRenderClassService: TemplateRenderClassService,
     public handleSubjectService: HandleSubjectService,
@@ -74,7 +76,9 @@ export class AssistComponent implements OnInit {
     public designAlterService: DesignAlterService, public rawHtmlPipe: RawHtmlPipe,
     public koreGenerateuuidPipe: KoreGenerateuuidPipe, public assisttabService: AssistService,
     public htmlEntityPipe: HtmlEntityPipe, private localStorageService: LocalStorageService,
-    private removeTagFromString : RemoveTagFromStringPipe, private replaceTextwithTag : ReplaceTextWithTagPipe) {
+    private removeTagFromString : RemoveTagFromStringPipe, private replaceTextwithTag : ReplaceTextWithTagPipe,
+    // private coachingActionStore: CoachingActionStoreService
+    ) {
   }
 
   ngOnInit(): void {
@@ -83,7 +87,17 @@ export class AssistComponent implements OnInit {
     if(this.connectionDetails.interactiveLanguage !== '') {
       this.interactiveLangaugeDetails = this.connectionDetails.interactiveLanguage;
     }
-
+    this.websocketService.sendCheckListOpened$.subscribe((data)=>{
+      if(data){
+        this.guidedListAPICall(
+          this.commonService.configObj.agentassisturl,
+          this.commonService.configObj.fromSAT ?
+            this.commonService.configObj.instanceBotId :
+            this.commonService.configObj.botid,
+          this.commonService.configObj.accessToken,
+          this.commonService.configObj.accountId)
+      }
+    })
   }
 
   ngOnDestroy() {
@@ -219,6 +233,12 @@ export class AssistComponent implements OnInit {
       }
     });
 
+    let subscription14 = this.websocketService.socketConnectFlag$.subscribe((response) => {
+      if (response) {
+
+      }
+    });
+
     this.subscriptionsList.push(subscription1);
     this.subscriptionsList.push(subscription2);
     this.subscriptionsList.push(subscription3);
@@ -232,6 +252,7 @@ export class AssistComponent implements OnInit {
     this.subscriptionsList.push(subscription11);
     // this.subscriptionsList.push(subscription12);
     this.subscriptionsList.push(subscription13);
+    this.subscriptionsList.push(subscription14);
   }
 
   handleAutomationSmallTalkOverrideMode(){
@@ -300,7 +321,6 @@ export class AssistComponent implements OnInit {
     }
     this.websocketService.emitEvents(EVENTS.welcome_message_request, welcomeMessageParams);
   }
-
   updateFeedbackComponentData(feedbackData){
     this.assistResponseArray.map(resp => {
       if(resp.type == this.renderResponseType.FEEDBACK && resp?.uuid == feedbackData?.taskId && resp?.dialogPositionId == feedbackData?.positionId){
@@ -310,10 +330,93 @@ export class AssistComponent implements OnInit {
       }
     });
     this.assistResponseArray = structuredClone(this.assistResponseArray);
+  };
+  
+  checkListData:any = {};
+  clObjs: any = {};
+  // dynClObjs:any = {};
+  guidedListAPICall(agentAssistUrl, botId, accessToken, accountId) {
+    let headersVal = {
+      'Authorization': 'bearer' + ' ' + accessToken,
+      "AccountId": accountId !== '' ? accountId : '',
+      'iid' : botId
   }
+    $.ajax({
+      url: `${agentAssistUrl}/agentassist/api/v1/agentcoachingconfiguration/checklist/${botId}/activeChecklists`,
+      type: 'get',
+      headers: headersVal,
+      dataType: 'json',
+      success:  (data) => {
+        this.isChecklistOpened = true;
+        if(data.checklists.length > 0 ) {
+          this.checkListData = data;
+          this.commonService.primaryChecklist = data.checklists.filter(check => check.type === "primary");
+          this.commonService.dynamicChecklist = data.checklists.filter(check => check.type === "dynamic");
+          (data?.checklists || [])
+          .forEach((item)=>{
+            (item.stages || [])
+            .forEach((stage)=>{
+              this.clObjs[stage._id] = stage;
+            }) 
+          });
+        };
+        this.sendOpenCheckLIstEvent();
+      },
+      error:  (err)=> {
+          console.error("Unable to fetch the details with the provided data", err);
+      }
+  });
+  }
+
+  sendOpenCheckLIstEvent(){
+    if(!this.isGuidedChecklistApiSuccess && this.commonService.primaryChecklist.length > 0) {
+      let channel = this.commonService.isCallConversation ? 'voice' : 'chat'
+      if(this.commonService.primaryChecklist[0]?.channels?.includes(channel)){
+        this.sendChecklistEvent();
+      }
+    }
+  }
+
+  sendChecklistEvent() {
+    let checklistParams: any = {
+      "payload": {
+          "event": "checklist_opened",
+          "conversationId": this.connectionDetails.conversationId,
+          "ccVersion": this.checkListData?.ccVersion,
+          "accountId": this.checkListData?.accountId,
+          "botId": (this.commonService.configObj?.fromSAT) ?  this.commonService.configObj.instanceBotId : this.commonService.configObj.botid,
+          "agentInfo": {
+              "agentId": "", // mendatory field
+              //any other fields
+          },
+          "checklist": {
+            "id": this.commonService.primaryChecklist[0]._id,
+              //any other fields
+          },
+          "timestamp": 0,
+          "context": {}
+      }
+    }
+    this.isGuidedChecklistApiSuccess = true;
+    this.websocketService.emitEvents(EVENTS.checklist_opened, checklistParams);
+    if(this.commonService.primaryChecklist[0]?.stages[0]){
+      this.commonService.primaryChecklist[0].stages[0].opened = true;
+    };
+    (this.commonService.primaryChecklist[0]?.stages)
+    .forEach((item)=>{
+      item.color = this.clObjs[item._id]?.color
+    });
+    // if(this.clObjs[this.commonService.primaryChecklist[0]._id]){
+    //   this.commonService.primaryChecklist[0].color = this.clObjs[this.commonService.primaryChecklist[0]._id];
+    // }
+    this.checklists.push(this.commonService.primaryChecklist[0]);
+    this.selectedPlayBook = this.commonService.primaryChecklist[0]?.name;
+  }
+
 
   //dialogue click and agent response handling code.
   AgentAssist_run_click(dialog, dialogPositionId, intent?) {
+    this.assistTabDialogforDashboard(dialog, intent);
     let connectionDetails: any = Object.assign({}, this.connectionDetails);
     connectionDetails.value = dialog.intentName;
     if (dialog.intentName && intent) {
@@ -328,6 +431,19 @@ export class AssistComponent implements OnInit {
     }
     let assistRequestParams = this.commonService.prepareAgentAssistRequestParams(connectionDetails);
     this.websocketService.emitEvents(EVENTS.agent_assist_request, assistRequestParams);
+  }
+
+  assistTabDialogforDashboard(dialog, intent?) {
+    console.log('Sandeep Tester: ', dialog, intent, this.connectionDetails);
+    let payloadForBE:any = Object.assign({}, this.connectionDetails);
+    if (dialog.intentName && intent) {
+      payloadForBE.intentName = dialog.intentName;
+      payloadForBE.title = dialog.intentName;
+    }
+    payloadForBE.type = 'dialog';
+    payloadForBE.input = dialog.userInput;
+    payloadForBE.sessionId = this.handleSubjectService.assistTabSessionId;
+    this.websocketService.emitEvents(EVENTS.agent_send_or_copy, payloadForBE)
   }
 
   runDialogForAssistTab(data, idTarget?, runInitent?) {
