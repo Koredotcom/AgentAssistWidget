@@ -35,6 +35,7 @@ export class AuthService {
   public isLoadingOnSm = window.location.href.includes('smartassist') ? true : false;
   public isAgentDesktopEnabled$ = new BehaviorSubject(false);
   public isAgentCoachongEnable$ = new BehaviorSubject(true);
+  public agentAssistAutomationBots: any = [];
 
   constructor(
     private localstore: LocalStoreService,
@@ -275,6 +276,16 @@ export class AuthService {
     return {};
   }
 
+  public getAgentAssistBotsDetails(res) {
+    let agentAssistBotsList = [];
+    for(let botDetails of res) {
+      if(botDetails.hasOwnProperty('isAgentAssist') && botDetails?.isAgentAssist ) {
+        agentAssistBotsList.push(botDetails);
+      }
+    }
+    return agentAssistBotsList;
+  }
+
   public getAgentAssistStreamId(){
     // if(this.universalBot && this.universalBot._id){
     //   return (this.universalBot._id);
@@ -296,6 +307,7 @@ export class AuthService {
         this.workflowService.showAppCreationHeader(false);
         this.smartAssistBots = res;
         this.universalBot = this.getUniversalBotDetails(res);
+        this.agentAssistAutomationBots = this.getAgentAssistBotsDetails(res);
       }
       this.deflectApps.next(res);
       this.workflowService.deflectApps(res);
