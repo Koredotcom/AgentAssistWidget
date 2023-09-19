@@ -280,6 +280,12 @@
                     margin: 1px 0;
                     position: relative;
                     transition: 0.2s all ease;
+                    -webkit-animation-name: slideInDownCheck;
+                    animation-name: slideInDownCheck;
+                    -webkit-animation-duration: 1s;
+                    animation-duration: 1s;
+                    -webkit-animation-fill-mode: both;
+                    animation-fill-mode: both;
                     &:not(.selected-check-item){
                         &:hover{
                             .content-info-sec{
@@ -296,7 +302,7 @@
                     }
                     &.selected-check-item{
                         padding: 8px 12px;
-                        // box-shadow: 0px 2px 4px -2px rgba(16, 24, 40, 0.06), 0px 4px 8px -2px rgba(16, 24, 40, 0.10);
+                        box-shadow: none;
                         border-radius: 0px 8px 0px 0px;
                         border: 1px solid var(--gray-modern-300, #CDD5DF);
                         background: var(--base-white, #FFF);
@@ -499,6 +505,37 @@
     }
 }
 
+@-webkit-keyframes slideInDownCheck {
+    0% {
+        -webkit-transform: translateY(-20%);
+        transform: translateY(-20%);
+        opacity: 0.6;
+        visibility: visible;
+    }
+
+    100% {
+        -webkit-transform: translateY(0);
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInDownCheck {
+    0% {
+        -webkit-transform: translateY(-20%);
+        transform: translateY(-20%);
+        opacity: 0.6;
+        visibility: visible;
+    }
+
+    100% {
+        -webkit-transform: translateY(0);
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
 @-webkit-keyframes slideInUpCheck {
     0% {
         -webkit-transform: translateY(20%);
@@ -549,4 +586,7 @@
 
 .text-strike-label{
     text-decoration: line-through;
+}
+.rotateUp{
+    transform: rotate(180deg);
 }
