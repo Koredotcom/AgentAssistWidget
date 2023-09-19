@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'AgentAssist-icons';
-  src:  url('fonts/AgentAssist-icons.eot?ycxv');
-  src:  url('fonts/AgentAssist-icons.eot?ycxv#iefix') format('embedded-opentype'),
-    url('fonts/AgentAssist-icons.ttf?ycxv') format('truetype'),
-    url('fonts/AgentAssist-icons.woff?ycxv') format('woff'),
-    url('fonts/AgentAssist-icons.svg?ycxv#AgentAssist-icons') format('svg');
+  src:  url('fonts/AgentAssist-icons.eot?pqsano');
+  src:  url('fonts/AgentAssist-icons.eot?pqsano#iefix') format('embedded-opentype'),
+    url('fonts/AgentAssist-icons.ttf?pqsano') format('truetype'),
+    url('fonts/AgentAssist-icons.woff?pqsano') format('woff'),
+    url('fonts/AgentAssist-icons.svg?pqsano#AgentAssist-icons') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.ast-tick-solid:before {
+  content: "\e91e";
+  color: #a3a3a3;
+}
 .ast-check-new:before {
   content: "\e91c";
 }
