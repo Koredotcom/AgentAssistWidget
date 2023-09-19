@@ -31,7 +31,7 @@
                             <div class="kr-sg-checkbox">
                                 <input id="checkbox-122" formControlName="isSendCopy" class="checkbox-custom" type="checkbox">
                                 <label for="checkbox-122" class="checkbox-custom-label">Enable send, copy button</label>
-                            </div>    
+                            </div>
                         </div>
                         <div class="confirmation-buttons-wrapper">
                             <div class="kr-sg-checkbox">
@@ -61,7 +61,7 @@
                                         <!-- <button class="add-btn">Add</button> -->
                                     </div>
                                     <!-- *ngIf="selectedStepButton == 'confirmation'" -->
-                                    
+
                                     <ng-container >
                                         <div class="header-btn-table">
                                             <div class="title-btn">Button Name</div>
@@ -81,9 +81,9 @@
                                                         <div class="dropdown dropdown-open">
                                                             <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{  useCases[dialogId] ? useCases[dialogId] : 'Select a Dialog'}}</button>
                                                             <ul class="dropdown-menu content-menu" ngbDropdownMenu>
-                                                               
+
                                                                 <ng-container  *ngFor="let item of useCases | keyvalue">
-                                                                    <li ngbDropdownItem [ngClass]="{'selected-item' : selectedRunDialog == item.value}"  (click)="selectedDiaog(item)" title="{{item.value}}">{{item.value}}</li>   
+                                                                    <li ngbDropdownItem [ngClass]="{'selected-item' : selectedRunDialog == item.value}"  (click)="selectedDiaog(item)" title="{{item.value}}">{{item.value}}</li>
                                                                 </ng-container>
                                                             </ul>
                                                         </div>
@@ -136,15 +136,15 @@
                                                         <div class="dropdown dropdown-open">
                                                             <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>{{selectedRunDialog ? selectedRunDialog : 'Select a Dialog'}}</button>
                                                             <ul class="dropdown-menu content-menu" ngbDropdownMenu>
-                                                               
+
                                                                 <ng-container  *ngFor="let item of runDialogList">
-                                                                    <li ngbDropdownItem [ngClass]="{'selected-item' : selectedRunDialog == item.name}"  (click)="selectedRunDialog = item.name" title="{{item.name}}">{{item.name}}</li>   
+                                                                    <li ngbDropdownItem [ngClass]="{'selected-item' : selectedRunDialog == item.name}"  (click)="selectedRunDialog = item.name" title="{{item.name}}">{{item.name}}</li>
                                                                 </ng-container>
                                                             </ul>
                                                         </div>
                                                     </div>
                                                 </div>
-                                               
+
                                                 <div class="actions">
                                                     <div class="choose-bg-color-dropdown" ngbDropdown placement="top">
                                                         <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>
@@ -180,17 +180,17 @@
         </div>
         <div class="footer-actions">
             <button class="kr-sg-button-secondary btn_lg" (click)="close()">Cancel</button>
-            <button 
-                class="kr-sg-button-primary btn_lg" 
-                (click)="save()" 
-                *ngIf="createOrUpdateStep === 'create'" 
+            <button
+                class="kr-sg-button-primary btn_lg"
+                (click)="save()"
+                *ngIf="createOrUpdateStep === 'create'"
                 [disabled]="!stepForm?.valid">
                 Save
             </button>
-            <button 
-                class="kr-sg-button-primary btn_lg" 
-                (click)="update()" 
-                *ngIf="createOrUpdateStep === 'update'" 
+            <button
+                class="kr-sg-button-primary btn_lg"
+                (click)="update()"
+                *ngIf="createOrUpdateStep === 'update'"
                 [disabled]="!stepForm?.valid">
                 Update
             </button>

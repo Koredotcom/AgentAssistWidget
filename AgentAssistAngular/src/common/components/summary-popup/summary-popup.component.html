@@ -1,6 +1,7 @@
 <div class="overlay-delete-popup" id="summary">
     <div class="delete-box-content summary-box-content">
         <div class="header-text summary-header">Summary</div>
+        <button class="btn-close-summary" (click)="closeSummary()"><i class="ast-close"></i></button>
         <div class="input-block-optional">
             <div class="label-text">Remarks</div>
             <textarea class="input-text" id="summaryText" rows="4" cols="50" [(ngModel)]="editedSummaryText"></textarea>
