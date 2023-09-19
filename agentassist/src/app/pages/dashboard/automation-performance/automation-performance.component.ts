@@ -152,7 +152,7 @@ export class AutomationPerformanceComponent implements OnInit {
             for(let item of params.data?.series){
               tooltipString = tooltipString +  `<div class="row-labels">
               <div class="left-title">${item.key}</div>
-              <div class="right-title">${(item.value * 100) / params.data?.value}%</div>
+              <div class="right-title">${((item.value * 100) / params.data?.value), '2.2-2'}%</div>
             </div>`
             }
 
