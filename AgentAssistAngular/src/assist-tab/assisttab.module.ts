@@ -6,7 +6,7 @@ import { AssistComponent } from './components/assist/assist-angular.component';
 import { ChecklistsComponent } from './components/checklists/checklists.component';
 
 @NgModule({
-  declarations: [AssistComponent, ChecklistsComponent],
+  declarations: [AssistComponent],
   imports: [
     CommonModule,
     SharedModule,

@@ -8,11 +8,12 @@ import { LibrarytabModule } from 'src/library-tab/librarytab.module';
 import { BottabModule } from 'src/bot-tab/bottab.module';
 import { FormsModule } from '@angular/forms';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { ChecklistsComponent } from 'src/assist-tab/components/checklists/checklists.component';
 
 
 
 @NgModule({
-  declarations: [HomeComponent],
+  declarations: [HomeComponent,ChecklistsComponent],
   imports: [
     CommonModule,
     FormsModule,
