@@ -61,9 +61,9 @@
             <div class="label-text">Channels</div>
             <div class="channels-check">
                 <div class="check-item" *ngFor="let item of coachingCnst.channelList; let i = index">
-                    <input id="checkboxt-{{i}}" type="checkbox" (change)="channelSelection($event,item)"
+                    <input class="input" id="checkboxtd-{{i}}" type="checkbox" (change)="channelSelection($event,item)"
                         [checked]="channelList.indexOf(item) >= 0">
-                    <span for="checkboxt-{{i}}">{{coachingCnst[item]}}</span>
+                    <span for="checkboxtd-{{i}}">{{coachingCnst[item]}}</span>
                 </div>
 
             </div>
