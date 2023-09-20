@@ -17,11 +17,11 @@
                             <span class="heading-text">{{"DASHBOARD.TOTAL_SESSIONS" | translate}}</span>
                             <div class="value-data" [ngClass]="{'negtive': !kpiData?.totalSessions?.increment}">
                                 <i [ngClass]="kpiData?.totalSessions?.increment ? 'icon-ast_sortup' : 'icon-ast_sortdown' "></i>
-                                <span>{{kpiData?.totalSessions?.percent ? (kpiData?.totalSessions?.percent | number : '1.0-2') : '0'}}%</span>
+                                <span>{{kpiData?.totalSessions?.percent ? (kpiData?.totalSessions?.percent | number : '1.0') : '0'}}%</span>
                             </div>
                         </div>
                         <div>
-                          <div class="count-heading"  [ngClass]="{'empty-count': !kpiData?.totalSessions?.count}">{{kpiData?.totalSessions?.count ? (kpiData?.totalSessions?.count | number : '1.0-2') : '0'}}</div>
+                          <div class="count-heading"  [ngClass]="{'empty-count': !kpiData?.totalSessions?.count}">{{kpiData?.totalSessions?.count ? (kpiData?.totalSessions?.count | number : '1.0') : '0'}}</div>
                         </div>
 
                     </div>
