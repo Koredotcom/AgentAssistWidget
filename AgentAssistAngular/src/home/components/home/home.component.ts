@@ -1186,11 +1186,4 @@ setProactiveMode(){
       }
     }
   }
-  expand(e){
-    console.log("🚀 ~ file: home.component.ts:1190 ~ HomeComponent ~ expand ~ e:", e)
-  }
-
-  squeeze(e){
-    console.log("🚀 ~ file: home.component.ts:1194 ~ HomeComponent ~ squeeze ~ e:", e)
-  }
 }
