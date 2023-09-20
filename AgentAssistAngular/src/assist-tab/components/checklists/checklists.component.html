@@ -59,22 +59,26 @@
                             </div>
                             <div class="acc-body-data">
                                 <ng-container *ngFor="let step of ac.steps; let sti = index">
-                                    <div class="check-list-type-info" [ngClass]="{'selected-check-item': ((ac.steps[sti - 1]?.complete && !step.complete) || (sti === 0 && !step.complete && !ac.steps[sti + 1]?.complete)), 'text-strike disabled-click-text': step?.complete}">
+                                    <div class="check-list-type-info" [ngClass]="{
+                                            'selected-check-item': ((ac.steps[sti - 1]?.complete && !step.complete) || (sti === 0 && !step.complete && !ac.steps[sti + 1]?.complete)), 
+                                            'text-strike disabled-click-text': step?.complete,
+                                            'hide-desc': step?.hideDesc
+                                        }">
                                         <div class="title-block">
                                             <h5 [ngClass]="{'random': cl.type === 'random'}" (click)="clickStep(cl, ac, step, i, si, sti)">{{step.name}}</h5>
                                             <div class="icon-indication" [ngClass]="{'not-checked': !step?.complete}" (click)="clickStep(cl, ac, step, i, si, sti)">
                                                 <i class="ast-tick-solid"></i>
                                             </div>
                                         </div>
-                                        <div *ngIf="step.description" class="content-info-sec">
-                                            <p>{{step.description}}</p>
+                                        <div class="content-info-sec">
+                                            <p *ngIf="step.description">{{step.description}}</p>
                                             <div class="adherece-type">
                                                 <h6></h6>
                                                 <div class="btn-yes-no">
                                                     <ng-container *ngFor="let btn of step?.confirmButtons">
                                                         <button class="btn-yes-no-click" [ngStyle]="{'background-color': colors[btn.color], 'color': btn.color}" (click)="clickStep(cl, ac, step, i, si, sti)">{{btn.title}}</button>
                                                     </ng-container>
-                                            </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="btn-hover-actions" *ngIf="step.isSendCopy">
@@ -104,8 +108,8 @@
                                             *ngIf="(getSelectedCount(ac) !== ac.steps?.length) && selectedPlayBook !== cl.name" 
                                             (click)="checkListResume($event, cl, i, si)">Resume
                                         </button>
-                                        <p>{{ getSelectedCount(ac)}} / {{ac.steps?.length}} steps</p>
-                                        <i class="ast-carrotup"></i>
+                                        <p>{{ getSelectedCount(ac)}}/{{ac.steps?.length}} steps</p>
+                                        <i class="ast-carrotup" [ngClass]="{'rotateUp': ac.opened}"></i>
                                     </div>
                                     <div class="steps-check">
                                         <ng-container *ngFor="let stp of ac.steps; let ix = index">
@@ -115,15 +119,19 @@
                                 </div>
                                 <div class="acc-body-data">
                                     <ng-container *ngFor="let step of ac.steps; let sti = index">
-                                        <div class="check-list-type-info" [ngClass]="{'selected-check-item': ((ac.steps[sti - 1]?.complete && !step.complete) || (sti === 0 && !step.complete && !ac.steps[sti + 1]?.complete)), 'text-strike disabled-click-text': step?.complete}">
+                                        <div class="check-list-type-info" [ngClass]="{
+                                                'selected-check-item': ((ac.steps[sti - 1]?.complete && !step.complete) || (sti === 0 && !step.complete && !ac.steps[sti + 1]?.complete)), 
+                                                'text-strike disabled-click-text': step?.complete,
+                                                'hide-desc': step?.hideDesc
+                                            }">
                                             <div class="title-block">
                                                 <h5 [ngClass]="{'random': cl.type === 'random'}" (click)="clickStep(cl, ac, step, i, si, sti)">{{step.name}}</h5>
                                                 <div class="icon-indication" [ngClass]="{'not-checked': !step?.complete}" (click)="clickStep(cl, ac, step, i, si, sti)">
                                                     <i class="ast-tick-solid"></i>
                                                 </div>
                                             </div>
-                                            <div *ngIf="step.description" class="content-info-sec">
-                                                <p>{{step.description}}</p>
+                                            <div class="content-info-sec">
+                                                <p *ngIf="step.description">{{step.description}}</p>
                                                 <div class="adherece-type">
                                                     <h6></h6>
                                                     <div class="btn-yes-no">

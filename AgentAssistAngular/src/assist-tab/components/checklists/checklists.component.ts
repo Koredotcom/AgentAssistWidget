@@ -41,6 +41,10 @@ export class ChecklistsComponent implements OnInit, OnDestroy {
     '#FF4405': '#FFF4ED'
 };
   clickStep(cl, ac, step, i, si, sti) {
+    step['hideDesc'] = true;
+    setTimeout(() => {
+      step['hideDesc'] = false;
+    }, 3000);
     if ((this.checklists[i]?.stages)[si]?.steps[sti]?.complete) {
       return;
     }

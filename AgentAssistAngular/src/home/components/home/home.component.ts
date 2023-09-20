@@ -54,7 +54,6 @@ export class HomeComponent implements OnInit {
   coachingNudges : any = [];
   coachingHints : any = [];
   sourceDesktop : any = this.commonService?.configObj?.source;
-
   chartOption: EChartsOption;
   initChartOption : EChartsOption;
   showFullSentiChart : boolean = false;
@@ -67,7 +66,8 @@ export class HomeComponent implements OnInit {
   isGuidedChecklistApiSuccess = false;
   checklists= [];
   selectedPlayBook = '';
-
+  avgHeight = 400;
+  isGrab = false;
   constructor(public handleSubjectService: HandleSubjectService, public websocketService: WebSocketService,
     public sanitizeHTMLPipe: SanitizeHtmlPipe, public commonService: CommonService, private koregenerateUUIDPipe: KoreGenerateuuidPipe,
     private designAlterService: DesignAlterService, private localStorageService: LocalStorageService,

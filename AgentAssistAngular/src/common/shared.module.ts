@@ -27,9 +27,10 @@ import { ConverTimestampToDatePipe } from './pipes/conver-timestamp-to-date.pipe
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { NgxEchartsModule } from 'ngx-echarts';
 import * as echarts from 'echarts';
+import { ResizeDirective } from './resize.directive';
 
 @NgModule({
-  declarations: [OverlaysearchComponent, InterruptPopupComponent, RestorePopupComponent, SummaryPopupComponent, TerminateComponent, RandomUUIDPipe, RemoveSpecialCharPipe, ReplaceQuotStringWithDoubleQuotPipe, SanitizeHtmlPipe, RawHtmlPipe, KoreGenerateuuidPipe, HtmlEntityPipe, EmptyObjectCheckPipe, FormatAMPMPipe, LoaderComponent, TypeaheadComponent, RemoveTagFromStringPipe, ReplaceTextWithTagPipe, UserBotHistoryComponent, ConverTimestampToDatePipe, SafeHtmlPipe],
+  declarations: [OverlaysearchComponent, InterruptPopupComponent, RestorePopupComponent, SummaryPopupComponent, TerminateComponent, RandomUUIDPipe, RemoveSpecialCharPipe, ReplaceQuotStringWithDoubleQuotPipe, SanitizeHtmlPipe, RawHtmlPipe, KoreGenerateuuidPipe, HtmlEntityPipe, EmptyObjectCheckPipe, FormatAMPMPipe, LoaderComponent, TypeaheadComponent, RemoveTagFromStringPipe, ReplaceTextWithTagPipe, UserBotHistoryComponent, ConverTimestampToDatePipe, SafeHtmlPipe, ResizeDirective],
   imports: [
     CommonModule,
     FormsModule,
@@ -42,6 +43,6 @@ import * as echarts from 'echarts';
   exports : [OverlaysearchComponent, InterruptPopupComponent, RestorePopupComponent, SummaryPopupComponent, TerminateComponent, RandomUUIDPipe,
     RemoveSpecialCharPipe,ReplaceQuotStringWithDoubleQuotPipe, SanitizeHtmlPipe, RawHtmlPipe, KoreGenerateuuidPipe, HtmlEntityPipe, EmptyObjectCheckPipe,
     FormatAMPMPipe, LoaderComponent, TypeaheadComponent,RemoveTagFromStringPipe, ReplaceTextWithTagPipe, UserBotHistoryComponent, ConverTimestampToDatePipe,
-    SafeHtmlPipe,NgxEchartsModule]
+    SafeHtmlPipe,NgxEchartsModule, ResizeDirective]
 })
 export class SharedModule { }

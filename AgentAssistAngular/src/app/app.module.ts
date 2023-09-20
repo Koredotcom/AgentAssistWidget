@@ -9,7 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { WebSocketService } from '../common/services/web-socket.service';
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,
