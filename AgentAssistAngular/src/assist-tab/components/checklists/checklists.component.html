@@ -12,7 +12,7 @@
                     <div class="checklist-dropdown">
                         <div class="toggle-checklist" (click)="showDropDown = !showDropDown;">
                             <p>{{selectedPlayBook}}</p>
-                            <i class="ast-carrotup"></i>
+                            <i class="ast-carrotup" [ngClass]="{'rotateUp': showDropDown}"></i>
                         </div>
                         <div class="drp-down-conetnt-checklist" [ngClass]="{'d-none': !showDropDown}">
                             <div class="heading-text">
