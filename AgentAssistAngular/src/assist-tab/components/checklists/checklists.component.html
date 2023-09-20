@@ -49,7 +49,7 @@
                                         (click)="checkListResume($event, cl, i, si)">Resume
                                     </button>
                                     <p>{{ getSelectedCount(ac)}}/{{ac.steps?.length}} steps</p>
-                                    <i class="ast-carrotup"></i>
+                                    <i class="ast-carrotup" [ngClass]="{'rotateUp': ac.opened}"></i>
                                 </div>
                                 <div class="steps-check">
                                     <ng-container *ngFor="let stp of ac.steps; let ix = index">

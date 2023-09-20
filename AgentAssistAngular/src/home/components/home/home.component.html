@@ -1,4 +1,4 @@
-<div class="smartassist-color-scheme" (click)="isGrab = false;">
+<div class="smartassist-color-scheme">
     <div id="agent-assist-chat-container" class="agent-assist-chat-container kore-chat-window">
         <div class="header-top-bar">
             <div class="header-data hide">
@@ -86,7 +86,7 @@
                 </div>
             </div>
         </div>
-        <div class="app-checklist-wrapper" [style.height.px]="avgHeight">
+        <div class="app-checklist-wrapper">
             <app-checklists
                 *ngIf="isChecklistOpened" 
                 [connectionDetails]="connectionDetails" 
