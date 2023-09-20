@@ -72,7 +72,7 @@
                 <div class="title">{{ item.name }}</div>
                 <input type="text" [(ngModel)]="item.runTimeName" (keyup.enter)="saveStage(item)" class="add-title-input" placeholder="New group" />
                 <div class="hover-actions">
-                  <div class="choose-bg-color-dropdown" ngbDropdown>
+                  <!-- <div class="choose-bg-color-dropdown" ngbDropdown>
                     <button class="dropdown-toggle dropdown-input" ngbDropdownToggle>
                       <span></span>
                     </button>
@@ -89,7 +89,7 @@
                         </ng-container>
                       </div>
                     </ul>
-                  </div>
+                  </div> -->
                   <div class="edit-title" *ngIf="!item.isDefault">
                     <i class="icon-sa-welcome-edit" (click)="editStage(item)"></i>
                   </div>

@@ -60,6 +60,7 @@ export class GuidedChecklistComponent implements OnInit {
         }
       }
       if(event.data.action === 'destroyedChecklist') {
+        this.modalService.dismissAll();
       }
     })
   }
