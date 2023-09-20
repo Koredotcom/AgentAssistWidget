@@ -56,7 +56,7 @@
             </ng-container>
 
             <ng-container *ngIf="!agentFeedbackTableData || agentFeedbackTableData.length == 0">
-                <div class="table-body-feedback row empty-data" *ngFor="let item of [1,2,3,4]">
+                <!-- <div class="table-body-feedback row empty-data" *ngFor="let item of [1,2,3,4]">
                     <div class="col-4 title">
                         <span></span>
                     </div>
@@ -73,7 +73,8 @@
                             <span></span>
                         </div>
                     </div>
-                </div>
+                </div> -->
+                <div class="table-body-feedback empty-title"> Not enough data Available</div>
             </ng-container>
         </div>
     </ng-container>
