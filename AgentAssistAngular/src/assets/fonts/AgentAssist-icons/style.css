@@ -27,7 +27,6 @@
 
 .ast-tick-solid:before {
   content: "\e91e";
-  color: #a3a3a3;
 }
 .ast-check-new:before {
   content: "\e91c";
