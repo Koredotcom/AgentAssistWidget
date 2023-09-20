@@ -40,8 +40,8 @@
                 <ng-container *ngFor="let cl of checklists; let i = index">
                     <ng-container *ngFor="let ac of cl.stages; let si = index">
                     <ng-container *ngIf="!(cl.type === 'primary' && ac.name?.toLowerCase() === 'close')">
-                        <div class="acc-info-data" [ngStyle]="{'background': ac.color}" [ngClass]="{'open-acc-show': ac.opened}">
-                            <div class="acc-heading-block" [ngStyle]="{'background': ac.color}" (click)="ac.opened = !ac.opened" [ngClass]="{'disabled-txt' : getSelectedCount(ac) === ac.steps?.length}">
+                        <div class="acc-info-data" [ngClass]="{'open-acc-show': ac.opened}">
+                            <div class="acc-heading-block" (click)="ac.opened = !ac.opened" [ngClass]="{'disabled-txt' : getSelectedCount(ac) === ac.steps?.length}">
                                 <div class="top-title-block">
                                     <h4 >{{ac.name}}</h4>
                                     <button class="resume-btn" 
@@ -100,8 +100,8 @@
                     <ng-container>
                         <ng-container *ngFor="let ac of cl.stages; let si = index">
                         <ng-container *ngIf="cl.type === 'primary' && ac.name?.toLowerCase() === 'close'">
-                            <div class="acc-info-data" [ngStyle]="{'background': ac.color}" [ngClass]="{'open-acc-show': ac.opened}">
-                                <div class="acc-heading-block" [ngStyle]="{'background': ac.color}" (click)="ac.opened = !ac.opened" [ngClass]="{'disabled-txt' : getSelectedCount(ac) === ac.steps?.length}">
+                            <div class="acc-info-data" [ngClass]="{'open-acc-show': ac.opened}">
+                                <div class="acc-heading-block" (click)="ac.opened = !ac.opened" [ngClass]="{'disabled-txt' : getSelectedCount(ac) === ac.steps?.length}">
                                     <div class="top-title-block">
                                         <h4 >{{ac.name}}</h4>
                                         <button class="resume-btn" 
