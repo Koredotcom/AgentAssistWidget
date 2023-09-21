@@ -232,8 +232,8 @@ export class StageCreateComponent implements OnInit, AfterViewInit {
         (<FormArray>this.checkListForm?.controls["tags"]).push(this.fb.group({ name: value }))
         // this.tags.push({ name: value });
       }
-     
-      if(this.allTagList.indexOf(value) == -1){
+      let flag = this.allTagList.findIndex(item => item.name === value);
+      if(flag < 0){
         this.allTagList.push({name : value, checked : true});
       }
     }
