@@ -186,7 +186,9 @@ export class ChecklistsComponent implements OnInit, OnDestroy {
           let id = (item.checklistId || item.id || item._id);
           let inx = this.triggeredDynCheckLists.findIndex(cl => cl._id === id);
           if (inx < 0) {
-            this.triggeredDynCheckLists.push(JSON.parse(JSON.stringify(this.dynClObjs[id])));
+            if(this.dynClObjs[id]){
+              this.triggeredDynCheckLists.push(JSON.parse(JSON.stringify(this.dynClObjs[id])));
+            }
           }
         })
       }
