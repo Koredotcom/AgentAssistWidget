@@ -86,20 +86,21 @@
                 </div>
             </div>
         </div>
-        <div class="app-checklist-wrapper">
-            <app-checklists
-                *ngIf="isChecklistOpened" 
-                [connectionDetails]="connectionDetails" 
-                [checklists]="checklists"
-                [ccVersion]="checkListData?.ccVersion"
-                [dynamicChecklist]="commonService.dynamicChecklist"
-                [selectedPlayBook]="selectedPlayBook"
-                [clObjs]="clObjs">
-            </app-checklists>
-        </div>
-        <div class="line-seperator-resize">
-            <span></span>
-        </div>
+        <ng-container *ngIf="isChecklistOpened && activeTab === projConstants.ASSIST">
+            <div class="app-checklist-wrapper">
+                <app-checklists 
+                    [connectionDetails]="connectionDetails" 
+                    [checklists]="checklists"
+                    [ccVersion]="checkListData?.ccVersion"
+                    [dynamicChecklist]="commonService.dynamicChecklist"
+                    [selectedPlayBook]="selectedPlayBook"
+                    [clObjs]="clObjs">
+                </app-checklists>
+            </div>
+            <div class="line-seperator-resize">
+                <span></span>
+            </div>
+        </ng-container>
         <div class="scroll-dynamic-data">
         <perfect-scrollbar id="homeScrollBar" class="home-scroll-bar" #psBottom (psYReachEnd)="onScrollEvent($event)"
             (psYReachStart)="onScrollEvent($event)" (psScrollUp)="onScrollEvent($event)" [ngClass]="{'if-sentiment-analysis-added' : showSentiChart}">
