@@ -20,7 +20,7 @@
                             <i class="ast-agent"></i>
                         </div>
                         <div class="run-info-content">
-                            <div class="title">Ask customer{{agentassistArrayIndex}}{{agentassistResponseArrayLength-1}}{{i}}{{automationData.automationsArray.length-1}}{{automation.toggleOverride}}</div>
+                            <div class="title">Ask customer</div>
                             <div class="agent-utt">
                                 <div class="title-data" attr.id="displayData-{{automation.uuid}}"
                                     *ngIf="!automation.templateRender && automation?.data?.buttons && automation?.data?.buttons[0]?.value">
@@ -127,8 +127,9 @@
                                     <span style="color:red">Value unidentified</span>
                                 </div>
                                 <div>
-                                    <img src="{{imageFilePath+imageFileNames['WARNING']}}" style="padding-right: 8px;">
-                                    <span style="font-size: 12px; line-height: 18px; color: #202124;">Incorrect input format</span>
+                                    <!-- <img src="{{imageFilePath+imageFileNames['WARNING']}}" style="padding-right: 8px;">
+                                    <span style="font-size: 12px; line-height: 18px; color: #202124;">Incorrect input format</span> -->
+                                    <span style="font-size: 12px; line-height: 18px; color: #202124; padding-left: 10px"> Expected Format: {{automation.data.entityType}}</span>
                                 </div>
                             </ng-container>
                         </ng-template>

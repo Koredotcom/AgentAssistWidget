@@ -873,7 +873,12 @@ html, body{
     padding: 0 !important;
     display: flex !important
 }
-
+.agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send.is-dropdown-show-default.is-dropdown-open:hover .left-content .title-text{
+    overflow: inherit !important;
+    white-space: nowrap !important;
+    padding: 0 !important;
+    margin-right: 80px;
+}
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-run-sec .task-type .content-dialog-task-type .type-info-run-send:hover .action-links {
     display: flex;
     z-index: 1;
@@ -1206,7 +1211,7 @@ pointer-events: all;
 /* background: #BDC1C6; */
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data:not(.last-msg-white-bg) .run-info-content .agent-utt.enter-details-block .title-data .input-text{
-    // pointer-events: none;
+    pointer-events: none;
 }
 .agent-assist-chat-container .body-data-container .dialog-task-data .dynamic-block-content .dialog-task-accordiaon-info .collapse-acc-data .steps-run-data .run-info-content .agent-utt.enter-details-block .title-data .input-text:focus{
 box-shadow: none !important;
