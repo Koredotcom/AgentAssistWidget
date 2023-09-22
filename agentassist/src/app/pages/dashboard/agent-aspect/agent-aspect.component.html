@@ -54,7 +54,7 @@
                 <div class="inner-data-sec">
                     <div class="title-text-info">
                         <span class="heading-text">{{"DASHBOARD.AGENT_ASPECT_TOTAL_SEARCH_REQ" | translate}}</span>
-                        <div class="value-data negtive">
+                        <div class="value-data" [ngClass]="{'negtive': !agentAspectData?.totalSearchReq?.increment}">
                             <i [ngClass]="agentAspectData?.totalSearchReq?.increment ? 'icon-ast_sortup' : 'icon-ast_sortdown' "></i>
                             <span>{{ agentAspectData?.totalSearchReq?.percent ? (agentAspectData?.totalSearchReq?.percent | number : '1.1-1') : '0'}}%</span>
                         </div>
