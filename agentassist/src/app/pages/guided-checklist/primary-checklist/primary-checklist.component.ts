@@ -29,6 +29,7 @@ export class PrimaryChecklistComponent implements OnInit, OnChanges {
   ) { }
   @Input() checkListType;
   @Output() update = new EventEmitter();
+  @Output() createCl = new EventEmitter();
   modalRef:any;
 
   searchField = new FormControl();
@@ -162,6 +163,10 @@ export class PrimaryChecklistComponent implements OnInit, OnChanges {
         });
       }
     });
+  }
+
+  createChecklist(){
+    this.createCl.emit('primary');
   }
 
 }
