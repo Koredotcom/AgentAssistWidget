@@ -227,8 +227,10 @@ export class HomeComponent implements OnInit {
       this.commonService.realtimeSentiData[this.connectionDetails.conversationId] = [];
     }
     let polarity = coachingConst.SENTI_POLARITY_MAP[data.polarity];
-    this.commonService.realtimeSentiData[this.connectionDetails.conversationId].push(polarity);
-    this.formatRealtimeSentiChartData();
+    if(typeof polarity == 'number'){
+      this.commonService.realtimeSentiData[this.connectionDetails.conversationId].push(polarity);
+      this.formatRealtimeSentiChartData();
+    }
   }
 
   formatRealtimeSentiChartData(){
