@@ -304,7 +304,7 @@ export class CoachingComponent implements OnInit, OnDestroy {
     let params: any = {
       ruleId: rule._id,
     }
-    this.service.invoke('put.agentcoachingrule', params, { isActive: rule.isActive, botId, userId : this.auth.getUserId() }).pipe(finalize(() => {
+    this.service.invoke('put.agentcoachingrule.status', params, { isActive: rule.isActive, botId, userId : this.auth.getUserId() }).pipe(finalize(() => {
       this.isLoading = false;
     })).subscribe(data => {
       if(data && data.lockStatus === 'expired'){
