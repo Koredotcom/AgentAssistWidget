@@ -67,7 +67,9 @@ export class StageCreateComponent implements OnInit, AfterViewInit {
     if(this.currentCheckList){
       this.currentCheckList.assignedTo
     }
-  
+    this.checkListForm.value?.tags.forEach(value => {
+      this.tags.push({name : value})
+    });
     this.subscribeValues();
     this.assignOriginalToDisplayList();
     this.selectedchannelList = (this.checkListForm?.controls['channels'] as FormArray).getRawValue(); 
@@ -155,6 +157,7 @@ export class StageCreateComponent implements OnInit, AfterViewInit {
     if(this.checkListType !== 'primary'){
       // this.triggerByComp.upadateAllObjects();
     }
+    this.checkListForm.setControl('tags', this.fb.array(this.tags.map(a => a.name) || []));  
     setTimeout(() => {      
       let payload = this.checkListForm.getRawValue()
       payload['triggerBy'] = payload['adherence'];
@@ -178,6 +181,7 @@ export class StageCreateComponent implements OnInit, AfterViewInit {
     if(this.checkListType !== 'primary'){
       // this.triggerByComp.upadateAllObjects();
     }
+    this.checkListForm.setControl('tags', this.fb.array(this.tags.map(a => a.name) || []));  
     setTimeout(() => {
       let botId = this.workflowService.getCurrentBtSmt(true)._id;
       let payload = this.checkListForm.getRawValue();
@@ -213,8 +217,6 @@ export class StageCreateComponent implements OnInit, AfterViewInit {
   }
   
   add(event: MatChipInputEvent): void {
-    console.log(this.checkListForm, "check list form");
-    
     const input = event.input;
     const value = event.value?.trim();
     this.AddOrSelectTagNames(value);
@@ -224,21 +226,20 @@ export class StageCreateComponent implements OnInit, AfterViewInit {
   AddOrSelectTagNames(value) {
     // Add our fruit
     if ((value || '')) {
-      let filterIndex = this.checkListForm.value?.tags?.findIndex((item) => {
+      let filterIndex = this.tags?.findIndex((item) => {
         return item.name == value;
       });
-      if (filterIndex == -1) {
 
-        (<FormArray>this.checkListForm?.controls["tags"]).push(this.fb.group({ name: value }))
-        // this.tags.push({ name: value });
+      if (filterIndex == -1) {
+        this.tags.push({ name: value });
       }
-      let flag = this.allTagList.findIndex(item => item.name === value);
-      if(flag < 0){
-        this.allTagList.push({name : value, checked : true});
+      
+      if(this.allTagList.indexOf(value) == -1){
+        this.allTagList.push(value);
       }
     }
   
-    this.trigger?.openPanel();  
+    this.trigger.openPanel();  
     this.assignOriginalToDisplayList();
     this.tagInput.nativeElement.value = '';
     setTimeout(() => {
@@ -247,24 +248,20 @@ export class StageCreateComponent implements OnInit, AfterViewInit {
   }
 
   remove(tag): void {    
-    const index = this.checkListForm?.value?.tags.findIndex(item =>{
+    const index = this.tags.findIndex(item =>{
       return item.name == tag;
     });    
     if (index >= 0) {
-      (<FormArray>this.checkListForm.controls["tags"]).removeAt(index);
-      // this.tags.splice(index, 1);
+      this.tags.splice(index, 1);
     }    
     this.assignOriginalToDisplayList();
     this.trigger.openPanel();  
   }
 
-  assignOriginalToDisplayList(){  
-    console.log(this.allTagList, 'all tag list');
-      
-    this.filteredTagsDisplay = this.allTagList.map((item:any) => {      
-      return {name : item.name, checked : (this.checkListForm.value?.tags?.findIndex((tag) => {return tag.name == item.name})) >= 0 ? true : false}
+
+  assignOriginalToDisplayList(){    
+    this.filteredTagsDisplay = this.allTagList.map((item) => {      
+      return {name : item, checked : (this.tags.findIndex((tag) => {return tag.name == item})) >= 0 ? true : false}
     });    
-    console.log(this.filteredTagsDisplay, 'filtered tags display');
-    
   } 
 }

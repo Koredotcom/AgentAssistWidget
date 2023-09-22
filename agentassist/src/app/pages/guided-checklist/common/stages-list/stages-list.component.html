@@ -13,7 +13,7 @@
     </div>
     <div class="middle-content">
       <div class="tags-info" *ngIf="currentCheckList.tags?.length">
-        <span class="tag-name">{{currentCheckList.tags[0].name}}</span>
+        <span class="tag-name">{{currentCheckList.tags[0]}}</span>
         <div class="kr-sg-dropdowns" ngbDropdown container="body" *ngIf="currentCheckList.tags?.length > 1">
           <div class="dropdown dropdown-open">
             <button class="dropdown-toggle dropdown-input before-none"
@@ -22,7 +22,7 @@
             <ul class="dropdown-menu content-menu more-dropdown-tags" ngbDropdownMenu>
               <ng-container *ngFor="let tag of currentCheckList.tags.slice(1, currentCheckList.tags.length)">
                 <li ngbDropdownItem class="p-0">
-                  <span class="mx-w-100">{{tag.name}}</span>
+                  <span class="mx-w-100">{{tag}}</span>
                 </li>
               </ng-container>
             </ul>
