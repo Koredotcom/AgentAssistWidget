@@ -80,7 +80,13 @@ export class AutomationComponent implements OnInit {
  updateSendCopyParams(automation){
   automation.showSend = (this.commonService.isCallConversation || ((!automation.connectionDetails.source || automation.connectionDetails.source !== ProjConstants.SMARTASSIST_SOURCE) && automation.template)) ? false : true; 
   automation.showCopy = (this.commonService.isCallConversation) ? false : ((!automation.template && automation.data?.componentType != 'dialogAct') ? true : false);
-  automation.sendData = automation.result?.parsedPayload ? automation.temp : ((automation.data?.buttons && automation.data?.buttons[0]?.value) ? automation.data?.buttons[0]?.value : null);
+  let sendData = null;
+  if((automation.data?.buttons && automation.data?.buttons[0]?.value)){
+    sendData = automation.data?.buttons[0].value
+  }else if((automation.data?.components && automation.data?.components[0] && automation.data?.components[0]?.data?.text)){
+    sendData = automation.data?.components[0].data.text;
+  }
+  automation.sendData = automation.result?.parsedPayload ? automation.temp : sendData;
  }
 
 toggleOverrideMode(automation,eventName, dialogId){
